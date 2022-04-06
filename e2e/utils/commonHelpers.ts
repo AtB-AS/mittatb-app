@@ -1,5 +1,5 @@
 import {by, element, expect} from 'detox';
-import {tapById} from './interactionHelpers';
+import {scrollToId, tapById} from './interactionHelpers';
 
 // Go to the given tab
 export async function goToTab(
@@ -38,6 +38,7 @@ export const clearInputById = async (id: string) => {
 };
 
 export const chooseSearchResult = async (id: string) => {
+  await scrollToId('historyAndResultsScrollView', id, 'down', 100);
   await tapById(id);
 };
 
@@ -85,11 +86,22 @@ export const getNumberOfHierarchyIds = async (
 
 // true: id or idHierarchy exists
 // false: id or idHierarchy does not exists
-export const idExists = async (elementMatcher: Detox.NativeMatcher) => {
-  return await expect(element(elementMatcher))
-    .toExist()
-    .then((e) => true)
-    .catch((e) => false);
+export const idExists = async (
+  elementMatcher: Detox.NativeMatcher,
+  withWaiting: boolean = false,
+) => {
+  if (withWaiting) {
+    return await waitFor(element(elementMatcher))
+      .toExist()
+      .withTimeout(10000)
+      .then((e) => true)
+      .catch((e) => false);
+  } else {
+    return await expect(element(elementMatcher))
+      .toExist()
+      .then((e) => true)
+      .catch((e) => false);
+  }
 };
 
 // Get current time
