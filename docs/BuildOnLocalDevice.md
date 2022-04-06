@@ -12,10 +12,10 @@ You will need XCode installed on your Mac to be able to test the app on an iOS d
 
 A team admin will need to:
 
-At developer.apple.com:
+At [developer.apple.com](https://developer.apple.com/):
 - Give your iCloud account status as a developer in the AtB Apple Developer team
 
-At appstoreconnect.apple.com:
+At [appstoreconnect.apple.com](https://appstoreconnect.apple.com/):
 - Click `Users and Access`
 - Click the user account of the developer.
 - Navigate to `Developer Resources`.
