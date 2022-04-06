@@ -45,7 +45,9 @@ export default function PlaceScreen({
     date: new Date().toISOString(),
   });
 
-  const {state} = useStopsDetailsData([place.id]);
+  const {state} = useStopsDetailsData(
+    place.quays === undefined ? [place.id] : undefined,
+  );
 
   if (state.data && place.quays === undefined) {
     place = state.data.stopPlaces[0];
@@ -87,7 +89,7 @@ export default function PlaceScreen({
         ListHeaderComponent={
           <>
             {isMissingQuays ? (
-              <ActivityIndicator size="large"></ActivityIndicator>
+              <ActivityIndicator size="large" />
             ) : (
               <Button
                 onPress={() => {

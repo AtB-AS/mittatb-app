@@ -117,14 +117,11 @@ const reducer: ReducerWithSideEffects<
 export function useStopsDetailsData(locationIds?: Array<string>) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
 
-  const refresh = useCallback(
-    () =>
-      dispatch({
-        type: 'LOAD_DETAILS',
-        locations: locationIds,
-      }),
-    [locationIds],
-  );
+  const refresh = () =>
+    dispatch({
+      type: 'LOAD_DETAILS',
+      locations: locationIds,
+    });
 
   useEffect(refresh, [JSON.stringify(locationIds)]);
 
