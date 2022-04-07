@@ -73,7 +73,11 @@ const RecentTicketsScrollView = ({topElement}: RecentTicketsProps) => {
                   accessibilityRole={'button'}
                   style={styles.ticketInfoButton}
                 >
-                  <TicketInfoView {...ticket} status="recent" />
+                  <TicketInfoView
+                    {...ticket}
+                    status="recent"
+                    testID={'recentTicket' + index}
+                  />
                 </TouchableOpacity>
               </Sections.GenericItem>
             ))}

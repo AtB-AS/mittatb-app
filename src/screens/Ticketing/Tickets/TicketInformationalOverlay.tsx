@@ -79,7 +79,7 @@ export default function TicketInformationalOverlay() {
             iconPosition="right"
             color="primary_2"
             onPress={onAccept}
-            testID="confirmButton"
+            testID="acceptTicketingButton"
           />
         </View>
       </ScrollView>

@@ -86,6 +86,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
               setSelectedToken(travelCardToken);
             }}
             style={styles.leftRadioBox}
+            testID="selectTravelcard"
           />
           <RadioBox
             title={t(TravelTokenTexts.toggleToken.radioBox.phone.title)}
@@ -105,6 +106,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
                 setSelectedToken(activatedMobileTokens?.[0]);
               }
             }}
+            testID="selectMobile"
           />
         </View>
 
@@ -165,6 +167,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
             text={t(TravelTokenTexts.toggleToken.saveButton)}
             color="primary_2"
             disabled={!selectedToken}
+            testID="confirmSelectionButton"
           />
         )}
       </ScrollView>

@@ -52,10 +52,14 @@ export default function TravelTokenBox({
       style={styles.container}
       accessible={true}
       accessibilityLabel={a11yLabel}
+      testID="travelTokenBox"
     >
       <TravelDeviceTitle inspectableToken={inspectableToken} />
       <View style={{display: 'flex', flexDirection: 'row'}}>
-        <View style={{alignItems: 'center'}}>
+        <View
+          style={{alignItems: 'center'}}
+          testID={inspectableToken.type + 'Icon'}
+        >
           {inspectableToken.type === 'travelCard' ? (
             <TravelTokenCard />
           ) : (
@@ -102,7 +106,11 @@ const TravelDeviceTitle = ({
           <ThemeText color="primary_2" style={styles.transparent}>
             {' XXXX XX'}
           </ThemeText>
-          <ThemeText type="heading__title" color="primary_2">
+          <ThemeText
+            type="heading__title"
+            color="primary_2"
+            testID="travelCardNumber"
+          >
             {inspectableToken.travelCardId?.substring(0, 2) +
               ' ' +
               inspectableToken.travelCardId?.substring(2)}
@@ -114,7 +122,12 @@ const TravelDeviceTitle = ({
       );
     case 'mobile':
       return (
-        <ThemeText type="heading__title" color="primary_2" style={styles.title}>
+        <ThemeText
+          type="heading__title"
+          color="primary_2"
+          style={styles.title}
+          testID="mobileTokenName"
+        >
           {inspectableToken.name || t(TravelTokenBoxTexts.mobile.unnamedDevice)}
         </ThemeText>
       );

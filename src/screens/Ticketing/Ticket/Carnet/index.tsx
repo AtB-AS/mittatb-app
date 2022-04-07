@@ -84,6 +84,7 @@ const CarnetTicketInfo: React.FC<Props> = ({
           status={fareContractValidityStatus}
           isInspectable={isInspectable}
           omitUserProfileCount={true}
+          testID={testID}
         />
       </Sections.GenericItem>
       <Sections.GenericItem>
