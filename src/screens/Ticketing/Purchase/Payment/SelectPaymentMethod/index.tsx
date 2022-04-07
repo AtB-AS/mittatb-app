@@ -27,7 +27,6 @@ import hexToRgba from 'hex-to-rgba';
 import LinearGradient from 'react-native-linear-gradient';
 import PaymentBrand from '../PaymentBrand';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-const {paymentTypes} = useFirestoreConfiguration();
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
@@ -76,15 +75,6 @@ function isRecurring(option: PaymentMethod): option is {
   );
 }
 
-const defaultPaymentOptions: SavedPaymentOption[] = paymentTypes.map(
-  (paymentType) => {
-    return {
-      paymentType: paymentType,
-      savedType: 'normal',
-    };
-  },
-);
-
 const remotePaymentOptions: SavedPaymentOption[] = [];
 
 const SelectPaymentMethod: React.FC<Props> = ({
@@ -99,6 +89,16 @@ const SelectPaymentMethod: React.FC<Props> = ({
 
   const {user} = useAuthState();
   const {theme} = useTheme();
+  const {paymentTypes} = useFirestoreConfiguration();
+
+  const defaultPaymentOptions: SavedPaymentOption[] = paymentTypes.map(
+    (paymentType) => {
+      return {
+        paymentType: paymentType,
+        savedType: 'normal',
+      };
+    },
+  );
 
   const [selectedOption, setSelectedOption] = useState<
     PaymentMethod | undefined
