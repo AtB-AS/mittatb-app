@@ -18,18 +18,21 @@ import {
   defaultPreassignedFareProducts,
   defaultTariffZones,
   defaultUserProfiles,
+  defaultModesWeSellTicketsFor
 } from '@atb/reference-data/defaults';
 
 type ConfigurationContextState = {
   preassignedFareproducts: PreassignedFareProduct[];
   tariffZones: TariffZone[];
   userProfiles: UserProfile[];
+  modesWeSellTicketsFor: string[]
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
   preassignedFareproducts: [],
   tariffZones: [],
   userProfiles: [],
+  modesWeSellTicketsFor: []
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
@@ -42,6 +45,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   );
   const [tariffZones, setTariffZones] = useState(defaultTariffZones);
   const [userProfiles, setUserProfiles] = useState(defaultUserProfiles);
+  const [modesWeSellTicketsFor, setModesWeSellTicketsFor] = useState(defaultModesWeSellTicketsFor);
 
   useEffect(() => {
     firestore()
@@ -63,6 +67,11 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (userProfiles) {
             setUserProfiles(userProfiles);
           }
+
+          const modesWeSellTicketsFor = getModesWeSellTicketsForFromSnapshot(snapshot);
+          if (modesWeSellTicketsFor) {
+            setModesWeSellTicketsFor(modesWeSellTicketsFor);
+          }
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -78,8 +87,9 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       preassignedFareproducts,
       tariffZones,
       userProfiles,
+      modesWeSellTicketsFor
     };
-  }, [preassignedFareproducts, tariffZones, userProfiles]);
+  }, [preassignedFareproducts, tariffZones, userProfiles, modesWeSellTicketsFor]);
 
   return (
     <FirestoreConfigurationContext.Provider value={memoizedState}>
@@ -145,6 +155,19 @@ function getUserProfilesFromSnapshot(
     if (userProfilesFromFirestore) {
       return JSON.parse(userProfilesFromFirestore) as UserProfile[];
     }
+  } catch (error: any) {
+    Bugsnag.notify(error);
+  }
+  return undefined;
+}
+
+function getModesWeSellTicketsForFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): string[] | undefined {
+  try {
+    return snapshot.docs
+      .find((doc) => doc.id == 'other')
+      ?.get<string[]>('modesWeSellTicketsFor');
   } catch (error: any) {
     Bugsnag.notify(error);
   }
