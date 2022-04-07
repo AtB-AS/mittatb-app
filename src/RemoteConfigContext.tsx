@@ -4,7 +4,6 @@ import {
   RemoteConfig,
   defaultRemoteConfig,
   getConfig,
-  defaultModesWeSellTicketsFor,
 } from './remote-config';
 import Bugsnag from '@bugsnag/react-native';
 
@@ -12,7 +11,6 @@ import {useAppState} from './AppContext';
 
 export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
-  modes_we_sell_tickets_for: string[];
 };
 
 const RemoteConfigContext = createContext<RemoteConfigContextState | undefined>(
@@ -101,10 +99,6 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
     <RemoteConfigContext.Provider
       value={{
         ...config,
-        modes_we_sell_tickets_for: parseJson(
-          config.modes_we_sell_tickets_for,
-          defaultModesWeSellTicketsFor,
-        ),
         refresh,
       }}
     >
