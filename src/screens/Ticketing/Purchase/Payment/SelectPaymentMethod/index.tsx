@@ -26,6 +26,8 @@ import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import hexToRgba from 'hex-to-rgba';
 import LinearGradient from 'react-native-linear-gradient';
 import PaymentBrand from '../PaymentBrand';
+import { useFirestoreConfiguration } from '@atb/configuration/FirestoreConfigurationContext';
+const {paymentTypes} = useFirestoreConfiguration();
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
@@ -74,20 +76,12 @@ function isRecurring(option: PaymentMethod): option is {
   );
 }
 
-const defaultPaymentOptions: SavedPaymentOption[] = [
-  {
-    paymentType: PaymentType.Vipps,
+const defaultPaymentOptions: SavedPaymentOption[] = paymentTypes.map(paymentType => {
+  return {
+    paymentType: paymentType,
     savedType: 'normal',
-  },
-  {
-    paymentType: PaymentType.VISA,
-    savedType: 'normal',
-  },
-  {
-    paymentType: PaymentType.MasterCard,
-    savedType: 'normal',
-  },
-];
+  }
+});
 
 const remotePaymentOptions: SavedPaymentOption[] = [];
 
