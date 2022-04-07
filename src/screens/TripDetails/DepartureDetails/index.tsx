@@ -42,7 +42,7 @@ import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {TripPattern} from '@atb/api/types/trips';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
-import { useFirestoreConfiguration } from '@atb/configuration/FirestoreConfigurationContext';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];

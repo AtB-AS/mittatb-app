@@ -1,10 +1,6 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import remoteConfig from '@react-native-firebase/remote-config';
-import {
-  RemoteConfig,
-  defaultRemoteConfig,
-  getConfig,
-} from './remote-config';
+import {RemoteConfig, defaultRemoteConfig, getConfig} from './remote-config';
 import Bugsnag from '@bugsnag/react-native';
 
 import {useAppState} from './AppContext';
