@@ -42,6 +42,7 @@ import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {TripPattern} from '@atb/api/types/trips';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import { useFirestoreConfiguration } from '@atb/configuration/FirestoreConfigurationContext';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -65,7 +66,7 @@ export default function DepartureDetails({navigation, route}: Props) {
   const {activeItemIndex = 0, items} = route.params;
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useTheme();
-  const {modes_we_sell_tickets_for} = useRemoteConfig();
+  const {modesWeSellTicketsFor} = useFirestoreConfiguration();
 
   const activeItem: ServiceJourneyDeparture | undefined =
     items[activeItemIndexState];
@@ -83,7 +84,7 @@ export default function DepartureDetails({navigation, route}: Props) {
 
   const canSellTicketsForDeparture = canSellTicketsForSubMode(
     subMode,
-    modes_we_sell_tickets_for,
+    modesWeSellTicketsFor,
   );
 
   const someLegsAreByTrain = mode === TransportMode.RAIL;
