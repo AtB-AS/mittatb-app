@@ -12,6 +12,7 @@ import {
   PreassignedFareProduct,
   TariffZone,
   UserProfile,
+  DistributionChannel,
 } from '@atb/reference-data/types';
 import Bugsnag from '@bugsnag/react-native';
 import {
@@ -107,9 +108,13 @@ function getPreassignedFarecontractsFromSnapshot(
 
   try {
     if (preassignedFareproductsFromFirestore) {
-      return JSON.parse(
+      const fareProducts = JSON.parse(
         preassignedFareproductsFromFirestore,
       ) as PreassignedFareProduct[];
+
+      return fareProducts.filter((fareProduct) =>
+        fareProduct.distributionChannel.some((channel) => channel === 'app'),
+      );
     }
   } catch (error: any) {
     Bugsnag.notify(error);
