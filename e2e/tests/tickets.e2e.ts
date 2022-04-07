@@ -1,16 +1,26 @@
 import {device} from 'detox';
-import {goToTab} from '../utils/commonHelpers';
+import { goToTab, idExists } from "../utils/commonHelpers";
 import {tapById, tapByText} from '../utils/interactionHelpers';
 import {
   expectToBeVisibleById,
   expectToBeVisibleByText,
   expectIdToHaveText,
-  expectToBeVisibleByPartOfText,
-} from '../utils/expectHelpers';
+  expectToBeVisibleByPartOfText, expectToExistsById
+} from "../utils/expectHelpers";
 import {skipOnboarding} from '../utils/onboarding';
 import setLocation from '../utils';
+import { ensureTicketingIsAccepted, newTicketExists } from "../utils/tickets";
+import { logIn, logOut } from "../utils/account";
+import {userInfo, ticketInfo} from "../utils/testData";
 
-describe('Tickets', () => {
+/*
+  Two test suites:
+    - Tickets anonymous
+    - Tickets authorized (only if login works, i.e. no recaptcha)
+      - Necessities for test data is described in ../utils/testData.ts
+ */
+
+describe('Tickets anonymous', () => {
   beforeAll(async () => {
     await device.launchApp({
       permissions: {
@@ -26,17 +36,20 @@ describe('Tickets', () => {
 
     // Accept ticket limitations
     await goToTab('tickets');
-    await expectToBeVisibleByText('Try buying tickets');
-    await tapById('confirmButton');
+    await ensureTicketingIsAccepted();
   });
 
   beforeEach(async () => {
-    await device.reloadReactNative();
+    //TODO
+    //await device.reloadReactNative();
   });
 
-  it('should be able to buy a single ticket', async () => {
-    const ticketPrice = '42 kr';
+  afterAll(async () => {
+    //TODO
+    //await device.reloadReactNative();
+  })
 
+  xit('should get an offer for a single ticket', async () => {
     await goToTab('tickets');
 
     await expectToBeVisibleByText('Buy');
@@ -52,62 +65,22 @@ describe('Tickets', () => {
     await expectToBeVisibleByText('Starting now');
     //Zone is either A or C3 during the tests
     await expectToBeVisibleByPartOfText('Travel in 1 zone');
-    await expectIdToHaveText('offerTotalPriceText', `Total: ${ticketPrice}`);
+    await expectIdToHaveText('offerTotalPriceText', `Total: ${ticketInfo.singleTicketPrice}`);
 
     await tapById('goToPaymentButton');
 
     await expectToBeVisibleByText('Single ticket');
     await expectToBeVisibleByText('1 Adult');
-    await expectToBeVisibleByText(ticketPrice);
+    await expectToBeVisibleByText(ticketInfo.singleTicketPrice);
     await expectToBeVisibleByText('Single ticket bus/tram');
     //Zone is either A or C3 during the tests
     await expectToBeVisibleByPartOfText('Valid in zone');
     await expectToBeVisibleByText('Starting now');
-
-    // Check the payment cards
-    for (let paymentMethod of ['Vipps', 'Visa', 'MasterCard']) {
-      await tapById('choosePaymentOptionButton');
-
-      await expectToBeVisibleByText('Select payment option');
-      await expectToBeVisibleByText('Vipps');
-      await expectToBeVisibleByText('Visa');
-      await expectToBeVisibleByText('MasterCard');
-
-      // Test disabled confirm button (Detox does not have a 'isEnabled' method)
-      await expectToBeVisibleById('MasterCardButton');
-      await tapById('confirmButton');
-      await expectToBeVisibleById('MasterCardButton');
-
-      // Choose payment and enable confirm button
-      await tapById(paymentMethod + 'Button');
-
-      /*
-        // DISABLED - success before
-        // After confirming, the app waits on something that makes next command hang
-        // With 'await device.disableSynchronization()' the 'Cancel' button is found, but is then not visible for
-        // interactions.
-
-        await tapById('confirmButton');
-
-        // Validate loading of external payment component
-        //await waitFor(element(by.text('Loading payment terminal…'))).toBeVisible();
-        //await waitFor(element(by.type('AXRemoteElement'))).toExist();
-
-        // Cancel
-        await tapByText('Cancel');
-        await expectToBeVisibleByText('Single ticket');
-       */
-      /*
-        Testing the Vipps integration is even harder due to no Vipps installed on the simulator. Ideas:
-        - Pick up that the app is using a deep link?
-        - Integrate a local physical Mac to the GH action and run the tests on an attached mobile device with Vipps
-        */
-
-      await tapByText('Cancel');
-    }
   });
 
-  it('should be able to buy a period ticket', async () => {
+  xit('should be able to change travellers and zone', async () => {});
+
+  xit('should not be able to buy a periodic ticket as anonymous', async () => {
     await goToTab('tickets');
 
     await expectToBeVisibleByText('Buy');
@@ -126,7 +99,112 @@ describe('Tickets', () => {
     await expectToBeVisibleByText('Take me to login');
     await expectToBeVisibleById('loginLaterButton');
     await expectToBeVisibleByText('I want to log in later');
-
-    // *** TODO Handle log in - must have a cron, or equal, to remove created mobile tokens
   });
+});
+
+// NOTE! Due to recaptcha during the login process, tests may not run
+xdescribe('Tickets authorized', () => {
+  let isLoggedIn: boolean = false;
+
+  beforeAll(async () => {
+    await device.launchApp({
+      permissions: {
+        location: 'inuse',
+      },
+      languageAndLocale: {
+        language: 'en',
+        locale: 'US',
+      },
+    });
+    await setLocation(62.4305, 9.3951);
+    await skipOnboarding();
+
+    // Accept ticket limitations
+    await goToTab('tickets');
+    await ensureTicketingIsAccepted();
+
+    // Log in before all tests
+    await goToTab('profile');
+    isLoggedIn = await logIn(userInfo.phoneNumber, userInfo.otp, userInfo.customerNumber);
+  });
+
+  beforeEach(async () => {
+    //TODO
+    //await device.reloadReactNative();
+  });
+
+  afterAll(async () => {
+    // Log out after all tests
+    if (isLoggedIn) {
+      await logOut();
+    } else {
+      console.log(
+        'WARNING: Tests not run due to recaptcha during the login process'
+      );
+    }
+  });
+
+  xit('should buy a single ticket', async () => {
+    if (isLoggedIn) {
+      await goToTab('tickets');
+
+      // Choose single ticket
+      await expectToBeVisibleByText('New single ticket');
+      await tapById('singleTicketBuyButton');
+
+      await expectToBeVisibleByText('Single ticket bus/tram');
+      await expectIdToHaveText('offerTotalPriceText', `Total: ${ticketInfo.singleTicketPrice}`);
+
+      await tapById('goToPaymentButton');
+
+      await expectToBeVisibleByText('Single ticket');
+      await expectToBeVisibleByText(ticketInfo.singleTicketPrice);
+      await expectToBeVisibleByText('Single ticket bus/tram');
+      await expectToBeVisibleByText('Starting now');
+
+      // Go to payment
+      await tapById('choosePaymentOptionButton');
+
+      await expectToBeVisibleByText('Select payment option');
+      await expectToBeVisibleByText('Vipps');
+      await expectToBeVisibleByText('Visa');
+      await expectToBeVisibleByText('MasterCard');
+      await expectToExistsById('recurringPayment0')
+      await expectIdToHaveText('recurringPaymentNumber', userInfo.recurringPaymentCardNumber)
+
+      // Test disabled confirm button (Detox does not have a 'isEnabled' method)
+      await expectToBeVisibleById('MasterCardButton');
+      await tapById('confirmButton');
+      await expectToBeVisibleById('MasterCardButton');
+
+      /*
+        Only using stored payment card to buy a ticket. Interaction with Visa and MasterCard is shaky test-wise.
+        Testing the Vipps integration is even harder due to no Vipps installed on the simulator. Ideas:
+        - Pick up that the app is using a deep link?
+        - Integrate a local physical Mac to the GH action and run the tests on an attached mobile device with Vipps
+      */
+
+      // Choose stored payment card
+      await tapById('recurringPayment0')
+      await tapById('confirmButton');
+
+      // Check if ticket exists
+      await newTicketExists()
+    }
+  });
+
+  //Note: Not including the actual buy to reduce the number of long-living tickets
+  xit('should be able to buy a period ticket', async () => {
+    if (isLoggedIn) {
+      await goToTab('tickets');
+
+      // Choose period ticket
+      await expectToBeVisibleByText('New periodic ticket');
+      await tapById('periodTicketBuyButton');
+
+      //TODO
+    }
+  });
+
+
 });
