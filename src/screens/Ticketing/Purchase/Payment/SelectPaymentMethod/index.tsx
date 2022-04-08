@@ -35,11 +35,14 @@ type Props = {
 };
 
 function getSelectedPaymentMethod(
+  paymentTypes: PaymentType[],
   previousPaymentMethod?: SavedPaymentOption,
 ): PaymentMethod | undefined {
   if (!previousPaymentMethod) return undefined;
-  const {savedType} = previousPaymentMethod;
-
+  const {savedType, paymentType} = previousPaymentMethod;
+  if (!paymentTypes.includes(paymentType)) {
+    return undefined;
+  }
   switch (savedType) {
     case 'normal':
       const {paymentType} = previousPaymentMethod;
@@ -49,8 +52,8 @@ function getSelectedPaymentMethod(
             paymentType,
           };
         default:
-        case PaymentType.MasterCard:
-        case PaymentType.VISA:
+        case PaymentType.Mastercard:
+        case PaymentType.Visa:
           return {
             paymentType,
             save: false,
@@ -65,12 +68,12 @@ function getSelectedPaymentMethod(
 }
 
 function isRecurring(option: PaymentMethod): option is {
-  paymentType: PaymentType.VISA | PaymentType.MasterCard;
+  paymentType: PaymentType.Visa | PaymentType.Mastercard;
   recurringPaymentId: number;
 } {
   return (
-    (option.paymentType === PaymentType.VISA ||
-      option.paymentType === PaymentType.MasterCard) &&
+    (option.paymentType === PaymentType.Visa ||
+      option.paymentType === PaymentType.Mastercard) &&
     'recurringPaymentId' in option
   );
 }
@@ -102,7 +105,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
 
   const [selectedOption, setSelectedOption] = useState<
     PaymentMethod | undefined
-  >(getSelectedPaymentMethod(previousPaymentMethod));
+  >(getSelectedPaymentMethod(paymentTypes, previousPaymentMethod));
   const [remoteOptions, setRemoteOptions] = useState(remotePaymentOptions);
   const styles = useStyles();
 
@@ -434,9 +437,9 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
 
 function getPaymentTypeName(paymentType: PaymentType) {
   switch (paymentType) {
-    case PaymentType.VISA:
+    case PaymentType.Visa:
       return 'Visa';
-    case PaymentType.MasterCard:
+    case PaymentType.Mastercard:
       return 'MasterCard';
     case PaymentType.Vipps:
       return 'Vipps';

@@ -33,6 +33,7 @@ import {CardPaymentMethod, PaymentMethod, SavedPaymentOption} from '../types';
 import {useAuthState} from '@atb/auth';
 import {usePreviousPaymentMethod} from '../saved-payment-utils';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -53,8 +54,12 @@ export type ConfirmationProps = {
 
 function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
+  paymentTypes: PaymentType[],
 ): PaymentMethod | undefined {
   if (!previousPaymentMethod) return undefined;
+
+  if (!paymentTypes.includes(previousPaymentMethod.paymentType))
+    return undefined;
 
   switch (previousPaymentMethod.savedType) {
     case 'normal':
@@ -83,10 +88,14 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
   const {user} = useAuthState();
+  const {paymentTypes} = useFirestoreConfiguration();
 
   const previousPaymentMethod = usePreviousPaymentMethod(user?.uid);
 
-  const previousMethod = getPreviousPaymentMethod(previousPaymentMethod);
+  const previousMethod = getPreviousPaymentMethod(
+    previousPaymentMethod,
+    paymentTypes,
+  );
 
   const {enable_creditcard: enableCreditCard, vat_percent: vatPercent} =
     useRemoteConfig();
@@ -173,10 +182,10 @@ const Confirmation: React.FC<ConfirmationProps> = ({
       case PaymentType.Vipps:
         str = t(PurchaseConfirmationTexts.payWithVipps.text);
         break;
-      case PaymentType.VISA:
+      case PaymentType.Visa:
         str = t(PurchaseConfirmationTexts.payWithVisa.text);
         break;
-      case PaymentType.MasterCard:
+      case PaymentType.Mastercard:
         str = t(PurchaseConfirmationTexts.payWithMasterCard.text);
         break;
     }
@@ -336,7 +345,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   disabled={!!error || !previousMethod}
                   iconPosition="right"
                   icon={
-                    previousMethod.paymentType === PaymentType.MasterCard
+                    previousMethod.paymentType === PaymentType.Mastercard
                       ? MasterCard
                       : previousMethod.paymentType === PaymentType.Vipps
                       ? Vipps

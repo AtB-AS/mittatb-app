@@ -206,17 +206,13 @@ function mapPaymentTypeStringsToEnums(
   arrayOfPaymentTypes: string[],
 ): PaymentType[] {
   var paymentTypes: PaymentType[] = [];
-  for (const paymentType of arrayOfPaymentTypes) {
-    switch (paymentType) {
-      case 'vipps':
-        paymentTypes.push(PaymentType.Vipps);
-        break;
-      case 'visa':
-        paymentTypes.push(PaymentType.VISA);
-        break;
-      case 'mastercard':
-        paymentTypes.push(PaymentType.MasterCard);
-        break;
+  for (const option of arrayOfPaymentTypes) {
+    const typeName =
+      option.charAt(0).toUpperCase() + option.slice(1).toLocaleLowerCase();
+    const paymentType: PaymentType =
+      PaymentType[typeName as keyof typeof PaymentType];
+    if (paymentType != undefined) {
+      paymentTypes.push(paymentType);
     }
   }
   return paymentTypes;
