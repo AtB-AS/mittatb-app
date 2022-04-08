@@ -45,7 +45,6 @@ function getSelectedPaymentMethod(
   }
   switch (savedType) {
     case 'normal':
-      const {paymentType} = previousPaymentMethod;
       switch (paymentType) {
         case PaymentType.Vipps:
           return {
