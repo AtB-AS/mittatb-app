@@ -10,7 +10,7 @@ import {
   TransitionPresets,
 } from '@react-navigation/stack';
 import React, {useRef} from 'react';
-import {Location, LocationWithMetadata} from '../favorites/types';
+import {Location} from '../favorites/types';
 import {RootStackParamList} from '../navigation';
 import LocationSearch, {
   RouteParams as LocationSearchRouteParams,
@@ -91,15 +91,15 @@ export function useOnlySingleLocation<
 >(
   callerRouteParam: keyof T['params'],
   defaultLocation?: Location,
-): LocationWithMetadata | undefined {
+): Location | undefined {
   const selectable = useLocationSearchValue(callerRouteParam, defaultLocation);
 
   if (!selectable) return undefined;
   switch (selectable.resultType) {
     case 'journey': {
       return {
-        resultType: 'search',
         ...selectable.journeyData[0],
+        resultType: 'search',
       };
     }
   }

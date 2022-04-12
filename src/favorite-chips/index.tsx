@@ -12,7 +12,7 @@ import {screenReaderPause} from '../components/accessible-text';
 import Button, {ButtonProps} from '../components/button';
 import {FavoriteIcon} from '../favorites';
 import {useFavorites} from '../favorites/FavoritesContext';
-import {LocationWithMetadata} from '../favorites/types';
+import {Location} from '../favorites/types';
 import {useReverseGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
@@ -24,7 +24,7 @@ import {ThemeColor} from '@atb/theme/colors';
 const themeColor: ThemeColor = 'primary_2';
 
 type Props = {
-  onSelectLocation: (location: LocationWithMetadata) => void;
+  onSelectLocation: (location: Location) => void;
   onMapSelection?: () => void;
   containerStyle?: StyleProp<ViewStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
@@ -154,7 +154,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 }));
 
 function useCurrentLocationChip(
-  onSelectLocation: (location: LocationWithMetadata) => void,
+  onSelectLocation: (location: Location) => void,
 ) {
   const {location, requestPermission} = useGeolocationState();
   const {closestLocation: currentLocation} = useReverseGeocoder(

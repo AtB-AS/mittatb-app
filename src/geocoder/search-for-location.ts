@@ -1,12 +1,12 @@
 import {getFeatureFromVenue} from '@atb/api/geocoder';
-import {LocationWithMetadata} from '@atb/favorites/types';
+import {Location} from '@atb/favorites/types';
 import {mapFeatureToLocation} from './utils';
 import {StopPlace} from '@entur/sdk';
 import {StopPlace as StopPlace_v2} from '@atb/api/types/trips';
 
 export async function searchByStopPlace(
   stopPlace?: StopPlace | StopPlace_v2,
-): Promise<LocationWithMetadata | undefined> {
+): Promise<Location | undefined> {
   if (!stopPlace || !stopPlace?.latitude || !stopPlace?.longitude) {
     return;
   }
@@ -24,8 +24,5 @@ export async function searchByStopPlace(
     return;
   }
 
-  return {
-    ...mapFeatureToLocation(location),
-    resultType: 'search',
-  };
+  return mapFeatureToLocation(location, 'search');
 }

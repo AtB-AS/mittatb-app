@@ -1,9 +1,5 @@
 import {JourneySearchHistoryEntry} from '@atb/search-history/types';
-import {
-  Location,
-  LocationWithMetadata,
-  StoredLocationFavorite,
-} from '../favorites/types';
+import {Location, StoredLocationFavorite} from '../favorites/types';
 
 export type LocationSearchResult = {
   location: Location;
@@ -11,7 +7,7 @@ export type LocationSearchResult = {
 };
 
 export type SelectableLocationData =
-  | LocationWithMetadata
+  | Location
   | {
       resultType: 'journey';
       journeyData: JourneySearchHistoryEntry;

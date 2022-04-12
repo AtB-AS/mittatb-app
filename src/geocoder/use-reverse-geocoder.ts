@@ -27,7 +27,9 @@ export default function useReverseGeocoder(
 
           dispatch({
             type: 'SET_LOCATIONS',
-            locations: response?.data?.map(mapFeatureToLocation),
+            locations: response?.data?.map((f) =>
+              mapFeatureToLocation(f, 'geolocation'),
+            ),
           });
         } catch (err) {
           if (!isCancel(err)) {

@@ -11,7 +11,7 @@ import ScreenReaderAnnouncement from '../components/screen-reader-announcement';
 import {TextInput} from '../components/sections';
 import FavoriteChips, {ChipTypeGroup} from '../favorite-chips';
 import {useFavorites} from '../favorites';
-import {LocationWithMetadata} from '../favorites/types';
+import {Location} from '../favorites/types';
 import {useGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
@@ -40,7 +40,7 @@ export type RouteParams = {
   callerRouteParam: string;
   label: string;
   favoriteChipTypes?: ChipTypeGroup[];
-  initialLocation?: LocationWithMetadata;
+  initialLocation?: Location;
   includeJourneyHistory?: boolean;
 };
 

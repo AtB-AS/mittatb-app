@@ -1,5 +1,5 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {LocationWithMetadata} from '@atb/favorites/types';
+import {Location} from '@atb/favorites/types';
 import {LocationSearchContent} from '@atb/location-search/LocationSearch';
 import {StyleSheet} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
@@ -15,7 +15,7 @@ export default function SearchStopPlace({navigation}: SearchStopPlaceProps) {
   const {t} = useTranslation();
   const styles = useThemeStyles();
 
-  const onSelect = (location: LocationWithMetadata) => {
+  const onSelect = (location: Location) => {
     Keyboard.dismiss();
     navigation.navigate('AddEditFavorite', {
       screen: 'AddEditForm',

@@ -5,7 +5,7 @@ import {
   Tickets,
 } from '@atb/assets/svg/mono-icons/tab-bar';
 import ThemeText from '@atb/components/text';
-import {LocationWithMetadata} from '@atb/favorites/types';
+import {Location} from '@atb/favorites/types';
 import {usePreferenceItems} from '@atb/preferences';
 import Assistant from '@atb/screens/Assistant';
 import NearbyScreen, {NearbyStackParams} from '@atb/screens/Nearby';
@@ -31,8 +31,8 @@ type SubNavigator<T extends ParamListBase> = {
 
 export type TabNavigatorParams = {
   Assistant: {
-    fromLocation: LocationWithMetadata;
-    toLocation: LocationWithMetadata;
+    fromLocation: Location;
+    toLocation: Location;
   };
   Nearest: NavigatorScreenParams<NearbyStackParams>;
   Ticketing: undefined;

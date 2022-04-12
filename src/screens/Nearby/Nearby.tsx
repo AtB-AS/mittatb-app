@@ -8,7 +8,7 @@ import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement
 import {ActionItem, LocationInput, Section} from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
 import DeparturesList from '@atb/departure-list/DeparturesList';
-import {Location, LocationWithMetadata} from '@atb/favorites/types';
+import {Location} from '@atb/favorites/types';
 import {useReverseGeocoder} from '@atb/geocoder';
 import {
   RequestPermissionFn,
@@ -49,7 +49,7 @@ export type NearbyScreenNavigationProp = CompositeNavigationProp<
 >;
 
 export type NearbyScreenParams = {
-  location: LocationWithMetadata;
+  location: Location;
 };
 
 export type NearbyScreenProp = RouteProp<NearbyStackParams, NearbyRouteName>;
@@ -99,7 +99,7 @@ const NearbyOverview: React.FC<Props> = ({
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
   const styles = useNearbyStyles();
 
-  const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
+  const currentSearchLocation = useMemo<Location | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
     [currentLocation],
   );
@@ -280,7 +280,7 @@ const NearbyOverview: React.FC<Props> = ({
 
 type HeaderProps = {
   updatingLocation: boolean;
-  fromLocation?: LocationWithMetadata;
+  fromLocation?: Location;
   openLocationSearch: () => void;
   setCurrentLocationOrRequest(): Promise<void>;
   onNowPress: () => void;

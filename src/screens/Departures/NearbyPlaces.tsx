@@ -4,7 +4,7 @@ import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement
 import {LocationInput, Section} from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
 import FavoriteChips from '@atb/favorite-chips';
-import {Location, LocationWithMetadata} from '@atb/favorites/types';
+import {Location} from '@atb/favorites/types';
 import {useReverseGeocoder} from '@atb/geocoder';
 import {
   RequestPermissionFn,
@@ -44,7 +44,7 @@ export type DepartureScreenNavigationProp = CompositeNavigationProp<
 >;
 
 export type NearbyPlacesParams = {
-  location: LocationWithMetadata;
+  location: Location;
 };
 
 export type DeparturesProps = RouteProp<
@@ -98,7 +98,7 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
 
   const searchedFromLocation =
     useOnlySingleLocation<DeparturesProps>('location');
-  const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
+  const currentSearchLocation = useMemo<Location | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
     [currentLocation],
   );
@@ -194,7 +194,7 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
           updatingLocation={updatingLocation}
           openLocationSearch={openLocationSearch}
           setCurrentLocationOrRequest={setCurrentLocationOrRequest}
-          setLocation={(location: LocationWithMetadata) => {
+          setLocation={(location: Location) => {
             navigation.setParams({
               location,
             });
@@ -233,10 +233,10 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
 
 type HeaderProps = {
   updatingLocation: boolean;
-  fromLocation?: LocationWithMetadata;
+  fromLocation?: Location;
   openLocationSearch: () => void;
   setCurrentLocationOrRequest(): Promise<void>;
-  setLocation: (location: LocationWithMetadata) => void;
+  setLocation: (location: Location) => void;
 };
 
 const Header = React.memo(function Header({

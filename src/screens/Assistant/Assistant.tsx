@@ -11,7 +11,6 @@ import FavoriteChips from '@atb/favorite-chips';
 import {useFavorites} from '@atb/favorites';
 import {
   Location,
-  LocationWithMetadata,
   UserFavorites,
 } from '@atb/favorites/types';
 import {useReverseGeocoder} from '@atb/geocoder';
@@ -186,7 +185,7 @@ const Assistant: React.FC<Props> = ({
     navigation.setParams({fromLocation: to, toLocation: from});
   }
 
-  function fillNextAvailableLocation(selectedLocation: LocationWithMetadata) {
+  function fillNextAvailableLocation(selectedLocation: Location) {
     if (!from) {
       navigation.setParams({
         fromLocation: selectedLocation,
@@ -228,7 +227,7 @@ const Assistant: React.FC<Props> = ({
   const isSearching = searchState === 'searching';
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
-    initialLocation: LocationWithMetadata | undefined,
+    initialLocation: Location | undefined,
   ) =>
     navigation.navigate('LocationSearch', {
       label:
@@ -570,8 +569,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 }));
 
 type SearchForLocations = {
-  from?: LocationWithMetadata;
-  to?: LocationWithMetadata;
+  from?: Location;
+  to?: Location;
 };
 
 function computeNoResultReasons(
@@ -609,7 +608,7 @@ function useLocations(
 ): SearchForLocations {
   const {favorites} = useFavorites();
 
-  const memoedCurrentLocation = useMemo<LocationWithMetadata | undefined>(
+  const memoedCurrentLocation = useMemo<Location | undefined>(
     () => currentLocation && {...currentLocation, resultType: 'geolocation'},
     [
       currentLocation?.coordinates.latitude,
@@ -633,11 +632,11 @@ function useLocations(
 function useUpdatedLocation(
   searchedFromLocation: SelectableLocationData | undefined,
   searchedToLocation: SelectableLocationData | undefined,
-  currentLocation: LocationWithMetadata | undefined,
+  currentLocation: Location | undefined,
   favorites: UserFavorites,
 ): SearchForLocations {
-  const [from, setFrom] = useState<LocationWithMetadata | undefined>();
-  const [to, setTo] = useState<LocationWithMetadata | undefined>();
+  const [from, setFrom] = useState<Location | undefined>();
+  const [to, setTo] = useState<Location | undefined>();
 
   const setLocation = useCallback(
     (direction: 'from' | 'to', searchedLocation?: SelectableLocationData) => {
@@ -650,7 +649,7 @@ function useUpdatedLocation(
         case 'geolocation':
           return updater(currentLocation);
         case 'journey': {
-          const toSearch = (i: number): LocationWithMetadata => ({
+          const toSearch = (i: number): Location => ({
             ...searchedLocation.journeyData[i],
             resultType: 'search',
           });
