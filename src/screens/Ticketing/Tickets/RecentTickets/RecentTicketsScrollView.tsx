@@ -13,6 +13,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import {TicketingStackParams} from '../../Purchase';
 import {TicketInfoView} from '../../Ticket/TicketInfo';
 import useRecentTickets, {RecentTicket} from '../use-recent-tickets';
+import {NewRecentTickets} from './NewRecentTickets';
+import {RecentTicketComponent} from './RecentTicketComponent';
 
 type NavigationProp = CompositeNavigationProp<
   StackNavigationProp<TicketingStackParams>,
@@ -59,25 +61,29 @@ const RecentTicketsScrollView = ({topElement}: RecentTicketsProps) => {
           </ThemeText>
         )}
         {!!recentTickets?.length && (
-          <Sections.Section>
-            <Sections.GenericItem>
-              <View>
-                <ThemeText>{t(TicketsTexts.recentTickets.title)}</ThemeText>
-              </View>
-            </Sections.GenericItem>
-            {recentTickets.map((ticket, index) => (
-              <Sections.GenericItem key={'ticket' + index}>
-                <TouchableOpacity
-                  onPress={() => selectTicket(ticket)}
-                  accessibilityHint={t(TicketsTexts.recentTickets.a11yHint)}
-                  accessibilityRole={'button'}
-                  style={styles.ticketInfoButton}
-                >
-                  <TicketInfoView {...ticket} status="recent" />
-                </TouchableOpacity>
+          <>
+            <NewRecentTickets navigation={navigation} />
+
+            <Sections.Section>
+              <Sections.GenericItem>
+                <View>
+                  <ThemeText>{t(TicketsTexts.recentTickets.title)}</ThemeText>
+                </View>
               </Sections.GenericItem>
-            ))}
-          </Sections.Section>
+              {recentTickets.map((ticket, index) => (
+                <Sections.GenericItem key={'ticket' + index}>
+                  <TouchableOpacity
+                    onPress={() => selectTicket(ticket)}
+                    accessibilityHint={t(TicketsTexts.recentTickets.a11yHint)}
+                    accessibilityRole={'button'}
+                    style={styles.ticketInfoButton}
+                  >
+                    <TicketInfoView {...ticket} status="recent" />
+                  </TouchableOpacity>
+                </Sections.GenericItem>
+              ))}
+            </Sections.Section>
+          </>
         )}
       </ScrollView>
       <LinearGradient
