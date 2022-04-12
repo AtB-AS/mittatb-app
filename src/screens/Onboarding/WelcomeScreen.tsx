@@ -10,7 +10,7 @@ import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {OnboardingStackParams} from '@atb/screens/Onboarding/index';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {Onboarding1} from '@atb/assets/svg/color/illustrations';
+import {Onboarding1} from '@atb/assets/svg/color/images/';
 import Illustration from '@atb/screens/Onboarding/components/Illustration';
 import {ThemeColor} from '@atb/theme/colors';
 

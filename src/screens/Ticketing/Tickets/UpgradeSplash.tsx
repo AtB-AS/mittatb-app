@@ -1,4 +1,4 @@
-import {TicketingSplash} from '@atb/assets/svg/color/illustrations';
+import {TicketSplash} from '@atb/assets/svg/color/images';
 import MessageBox from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';
 import {UpgradeSplashTexts, useTranslation} from '@atb/translations';
@@ -14,10 +14,7 @@ export default function UpgradeSplash() {
   return (
     <View style={styles.container}>
       <View style={styles.bannerContainer}>
-        <TicketingSplash
-          width={windowWidth}
-          height={windowWidth / 2}
-        ></TicketingSplash>
+        <TicketSplash width={windowWidth} height={windowWidth / 2} />
       </View>
       <MessageBox
         type="warning"

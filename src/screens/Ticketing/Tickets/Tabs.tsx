@@ -16,7 +16,7 @@ import {TouchableOpacity, View} from 'react-native';
 import RecentTicketsScrollView from './RecentTicketsScrollView';
 import TicketsScrollView from './TicketsScrollView';
 import UpgradeSplash from './UpgradeSplash';
-import {AddTicket} from '@atb/assets/svg/mono-icons/ticketing';
+import {TicketAdd} from '@atb/assets/svg/mono-icons/ticketing';
 import ThemeText from '@atb/components/text';
 import MessageBox from '@atb/components/message-box';
 import {useAppState} from '@atb/AppContext';
@@ -123,7 +123,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
               TicketsTexts.buyTicketsTab.button.single.a11yHint,
             )}
             onPress={onBuySingleTicket}
-            icon={AddTicket}
+            icon={TicketAdd}
             iconPosition={'right'}
             testID="singleTicketBuyButton"
           />
@@ -137,7 +137,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
               )}
               onPress={onBuyPeriodTicket}
               viewContainerStyle={styles.buyPeriodTicketButton}
-              icon={AddTicket}
+              icon={TicketAdd}
               iconPosition={'right'}
               testID="periodTicketBuyButton"
             />

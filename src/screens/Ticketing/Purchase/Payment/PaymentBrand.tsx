@@ -1,9 +1,7 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import {PaymentType} from '@atb/tickets';
-import MasterCard from '@atb/assets/svg/mono-icons/ticketing/MasterCard';
-import Vipps from '@atb/assets/svg/mono-icons/ticketing/Vipps';
-import Visa from '@atb/assets/svg/mono-icons/ticketing/Visa';
+import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
 import useFontScale from '@atb/utils/use-font-scale';
 
 export type Brand = {

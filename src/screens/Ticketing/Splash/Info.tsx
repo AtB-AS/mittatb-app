@@ -1,4 +1,4 @@
-import {TicketingSplash} from '@atb/assets/svg/color/illustrations';
+import {TicketSplash} from '@atb/assets/svg/color/images';
 import Button from '@atb/components/button';
 import Header from '@atb/components/screen-header';
 import ThemeText from '@atb/components/text';
@@ -27,10 +27,7 @@ export default function SplashInfo({navigation}: Props) {
         color="primary_2"
       />
       <View style={styles.bannerContainer}>
-        <TicketingSplash
-          width={windowWidth}
-          height={windowWidth / 2}
-        ></TicketingSplash>
+        <TicketSplash width={windowWidth} height={windowWidth / 2} />
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.contentContainer}>
