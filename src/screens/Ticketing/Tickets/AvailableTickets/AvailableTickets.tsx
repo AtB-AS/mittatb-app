@@ -1,11 +1,16 @@
 import {View} from 'react-native';
 import Button from '@atb/components/button';
 import {TicketsTexts, useTranslation} from '@atb/translations';
-import {TicketAdd} from '@atb/assets/svg/mono-icons/ticketing';
 import React from 'react';
 import {useAuthState} from '@atb/auth';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import * as Sections from '@atb/components/sections';
+import {ScrollView} from 'react-native-gesture-handler';
+
+import ThemeIcon from '@atb/components/theme-icon';
+import ThemeText from '@atb/components/text';
+import single from '@atb/assets/svg/color/illustrations/ticket-type/Single';
 
 export const AvailableTickets = ({
   onBuySingleTicket,
@@ -25,34 +30,39 @@ export const AvailableTickets = ({
   return (
     <View style={styles.container}>
       {isSignedInAsAbtCustomer && (
-        <View style={{padding: theme.spacings.medium}}>
-          <Button
-            mode="primary"
-            color="primary_2"
-            text={t(TicketsTexts.buyTicketsTab.button.single.text)}
-            accessibilityHint={t(
-              TicketsTexts.buyTicketsTab.button.single.a11yHint,
-            )}
-            onPress={onBuySingleTicket}
-            icon={TicketAdd}
-            iconPosition={'right'}
-            testID="singleTicketBuyButton"
-          />
-          {hasEnabledMobileToken && (
-            <Button
-              mode="primary"
-              color="primary_2"
-              text={t(TicketsTexts.buyTicketsTab.button.period.text)}
-              accessibilityHint={t(
-                TicketsTexts.buyTicketsTab.button.period.a11yHint,
-              )}
-              onPress={onBuyPeriodTicket}
-              viewContainerStyle={styles.buyPeriodTicketButton}
-              icon={TicketAdd}
-              iconPosition={'right'}
-              testID="periodTicketBuyButton"
-            />
-          )}
+        <View>
+          <ScrollView>
+            <View style={styles.ticketsContainer}>
+              <View style={styles.ticket_small}>
+                <Sections.GenericItem>
+                  <ThemeText
+                    type="body__primary--bold"
+                    key={'enkeltbillett'}
+                    accessibilityLabel={'Enkeltbillett'}
+                  >
+                    {'Enkeltbillett'}
+                  </ThemeText>
+                  <ThemeText>{'Varighet mellom 90 min og 5 timer'}</ThemeText>
+
+                  <ThemeIcon svg={single} size={'large'} />
+                </Sections.GenericItem>
+              </View>
+              <View style={styles.ticket_small}>
+                <Sections.GenericItem>
+                  <ThemeText
+                    type="body__primary--bold"
+                    key={'enkeltbillett'}
+                    accessibilityLabel={'Enkeltbillett'}
+                  >
+                    {'Enkeltbillett'}
+                  </ThemeText>
+                  <ThemeText>{'Varighet mellom 90 min og 5 timer'}</ThemeText>
+
+                  <ThemeIcon svg={single} size={'large'} />
+                </Sections.GenericItem>
+              </View>
+            </View>
+          </ScrollView>
         </View>
       )}
     </View>
@@ -66,5 +76,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   buyPeriodTicketButton: {
     marginTop: theme.spacings.medium,
+  },
+
+  ticketsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingRight: theme.spacings.medium,
+  },
+  ticket_small: {
+    flexShrink: 1,
+    marginLeft: theme.spacings.medium,
   },
 }));
