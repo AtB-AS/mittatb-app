@@ -1,4 +1,4 @@
-import {Expand, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
+import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {
   SectionItem,
@@ -111,7 +111,7 @@ type MoveIconProps = Changeset & {
 
 function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
   const isDown = direction === 'down';
-  const Icon = isDown ? Expand : ExpandLess;
+  const Icon = isDown ? ExpandMore : ExpandLess;
   const diretion = isDown ? 'ned' : 'opp';
   const label = `Flytt  ${name(item)} ${diretion} ${screenReaderPause}`;
   const hint = `Aktivér for å flytte favoritten  ${name(

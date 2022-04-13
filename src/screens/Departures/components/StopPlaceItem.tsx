@@ -4,7 +4,7 @@ import React from 'react';
 import {View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import * as Sections from '@atb/components/sections';
-import {BusSide} from '@atb/assets/svg/mono-icons/transportation';
+import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import {Place, StopPlacePosition} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
@@ -61,8 +61,8 @@ export default function StopPlaceItem({
               key={mode}
               style={styles.stopPlaceIcon}
               size="large"
-              svg={getTransportModeSvg(mode) || BusSide}
-            ></ThemeIcon>
+              svg={getTransportModeSvg(mode) || Bus}
+            />
           ))}
         </View>
       </Sections.GenericClickableItem>

@@ -247,7 +247,7 @@ const DisappearingHeader: React.FC<Props> = ({
             ]}
           >
             <ImageBackground
-              source={require('../../../assets/design-assets/colors/images/photo-background.jpg')}
+              source={require('../../../assets/design-assets/colors/images/PhotoBackground.jpg')}
               style={styles.backgroundImage}
             >
               <View style={{flex: 1}}>

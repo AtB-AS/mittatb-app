@@ -1,5 +1,5 @@
 import {ErrorType} from '@atb/api/utils';
-import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
+import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import AccessibleText from '@atb/components/accessible-text';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
@@ -310,7 +310,7 @@ const Header = React.memo(function Header({
           location={fromLocation}
           onPress={openLocationSearch}
           accessibilityLabel={t(NearbyTexts.location.departurePicker.a11yLabel)}
-          icon={<ThemeIcon svg={CurrentLocationArrow} />}
+          icon={<ThemeIcon svg={LocationIcon} />}
           onIconPress={setCurrentLocationOrRequest}
           iconAccessibility={{
             accessible: true,

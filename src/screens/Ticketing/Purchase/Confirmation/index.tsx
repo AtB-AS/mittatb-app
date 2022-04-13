@@ -1,4 +1,4 @@
-import {MasterCard, Vipps, Visa} from '@atb/assets/svg/mono-icons/ticketing';
+import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
 import {LeftButtonProps} from '@atb/components/screen-header';

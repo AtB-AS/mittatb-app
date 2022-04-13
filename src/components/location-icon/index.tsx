@@ -1,11 +1,6 @@
-import {MapPointPin} from '@atb/assets/svg/mono-icons/places';
-import {
-  BusSide,
-  FerrySide,
-  PlaneSide,
-  TrainSide,
-  TramSide,
-} from '@atb/assets/svg/mono-icons/transportation';
+import {Pin} from '@atb/assets/svg/mono-icons/map';
+import * as TransportationIcons from '@atb/assets/svg/mono-icons/transportation';
+import * as EnturTransportationIcons from '@atb/assets/svg/mono-icons/transportation-entur';
 import {Location} from '@atb/favorites/types';
 import {FeatureCategory} from '@atb/sdk';
 import React from 'react';
@@ -22,14 +17,14 @@ const LocationIcon = ({
 }) => {
   switch (location.layer) {
     case 'address':
-      return <ThemeIcon svg={MapPointPin} />;
+      return <ThemeIcon svg={Pin} />;
     case 'venue':
       const venueIconTypes = location.category
         .map(mapCategoryToVenueIconType)
         .filter((v, i, arr) => arr.indexOf(v) === i); // get distinct values
 
       if (!venueIconTypes.length) {
-        return <ThemeIcon svg={MapPointPin} />;
+        return <ThemeIcon svg={Pin} />;
       }
 
       return multiple ? (
@@ -39,7 +34,7 @@ const LocationIcon = ({
       );
 
     default:
-      return <ThemeIcon svg={MapPointPin} />;
+      return <ThemeIcon svg={Pin} />;
   }
 };
 
@@ -48,7 +43,7 @@ const mapTypeToIconComponent = (iconType: VenueIconType) => {
     case 'bus':
       return (
         <ThemeIcon
-          svg={BusSide}
+          svg={TransportationIcons.Bus}
           accessibilityLabel="Bussholdeplass"
           key="bus"
         />
@@ -56,35 +51,39 @@ const mapTypeToIconComponent = (iconType: VenueIconType) => {
     case 'tram':
       return (
         <ThemeIcon
-          svg={TramSide}
+          svg={TransportationIcons.Tram}
           accessibilityLabel="Trikkeholdeplass"
           key="tram"
         />
       );
     case 'rail':
       return (
-        <ThemeIcon svg={TrainSide} accessibilityLabel="Togstasjon" key="rail" />
+        <ThemeIcon
+          svg={TransportationIcons.Train}
+          accessibilityLabel="Togstasjon"
+          key="rail"
+        />
       );
     case 'airport':
       return (
         <ThemeIcon
-          svg={PlaneSide}
+          svg={EnturTransportationIcons.Plane}
           accessibilityLabel="Flyplass"
           key="airport"
         />
       );
     case 'boat':
       return (
-        <ThemeIcon svg={FerrySide} accessibilityLabel="Fergeleie" key="boat" />
+        <ThemeIcon
+          svg={TransportationIcons.Ferry}
+          accessibilityLabel="Fergeleie"
+          key="boat"
+        />
       );
     case 'unknown':
     default:
       return (
-        <ThemeIcon
-          svg={MapPointPin}
-          accessibilityLabel="Lokasjon"
-          key="unknown"
-        />
+        <ThemeIcon svg={Pin} accessibilityLabel="Lokasjon" key="unknown" />
       );
   }
 };

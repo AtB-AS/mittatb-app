@@ -10,7 +10,8 @@ import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ThemeColor} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
-import {TicketIcon, Psst} from '@atb/assets/svg/color/illustrations';
+import {Psst} from '@atb/assets/svg/color/illustrations';
+import {Periodebillett} from '@atb/assets/svg/color/images';
 import {TouchableOpacity} from 'react-native';
 import {
   filterActiveOrCanBeUsedFareContracts,
@@ -64,7 +65,7 @@ export default function LoginOnboarding({
             {t(LoginTexts.onboarding.description)}
           </ThemeText>
         </View>
-        <TicketIcon style={styles.illustation}></TicketIcon>
+        <Periodebillett style={styles.illustation} />
         <View style={styles.buttonView}>
           <Button
             color={'primary_2'}

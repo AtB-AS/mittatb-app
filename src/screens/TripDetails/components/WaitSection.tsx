@@ -1,4 +1,4 @@
-import {Wait} from '@atb/assets/svg/mono-icons/transportation';
+import {Time} from '@atb/assets/svg/mono-icons/time';
 import {Info} from '@atb/assets/svg/color/situations';
 import ThemeText from '@atb/components/text';
 import {TinyMessageBox} from '@atb/components/message-box';
@@ -36,7 +36,7 @@ const WaitSection: React.FC<WaitDetails> = (wait) => {
           />
         </TripRow>
       )}
-      <TripRow rowLabel={<ThemeIcon svg={Wait} fill={iconColor} />}>
+      <TripRow rowLabel={<ThemeIcon svg={Time} fill={iconColor} />}>
         <ThemeText type="body__secondary" color="secondary">
           {t(TripDetailsTexts.trip.leg.wait.label(waitTime))}
         </ThemeText>

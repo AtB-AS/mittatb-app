@@ -13,10 +13,7 @@ import {animateNextChange} from '@atb/utils/animation';
 import MessageBox from '@atb/components/message-box';
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import RadioBox from '@atb/components/radio-icon/radio-box';
-import {
-  TravelTokenCard,
-  TravelTokenPhone,
-} from '@atb/assets/svg/color/illustrations';
+import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 
 type RouteName = 'SelectTravelToken';
 
@@ -78,7 +75,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
             a11yHint={t(TravelTokenTexts.toggleToken.radioBox.tCard.a11yHint)}
             disabled={false}
             selected={selectedType === 'travelCard'}
-            icon={<TravelTokenCard />}
+            icon={<ThemedTokenTravelCard />}
             type="spacious"
             onPress={() => {
               animateNextChange();
@@ -96,7 +93,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
             a11yHint={t(TravelTokenTexts.toggleToken.radioBox.phone.a11yHint)}
             disabled={false}
             selected={selectedType === 'mobile'}
-            icon={<TravelTokenPhone />}
+            icon={<ThemedTokenPhone />}
             type="spacious"
             onPress={() => {
               if (selectedToken?.type !== 'mobile') {

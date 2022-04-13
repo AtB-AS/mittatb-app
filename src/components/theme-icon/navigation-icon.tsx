@@ -6,7 +6,7 @@ import {
   ArrowUpLeft,
   ChevronLeft,
   ChevronRight,
-  Expand,
+  ExpandMore,
   ExpandLess,
   UnfoldLess,
   UnfoldMore,
@@ -54,7 +54,7 @@ function mapMode(mode: NavigationIconTypes) {
     case 'expand-less':
       return ExpandLess;
     case 'expand-more':
-      return Expand;
+      return ExpandMore;
     case 'unfold-less':
       return UnfoldLess;
     case 'unfold-more':
