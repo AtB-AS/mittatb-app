@@ -56,6 +56,7 @@ import {
 import {
   addFavouriteLocation,
   deleteFavouriteLocation,
+  removeSearchHistory,
 } from '../utils/myprofile';
 
 describe('Travel Search', () => {
@@ -110,11 +111,7 @@ describe('Travel Search', () => {
     await expectToBeVisibleByPartOfText('Trip time');
 
     // Show intermediate stops - and expect a specific intermediate stop
-    await scrollContentToId(
-      'tripDetailsContentView',
-      'intermediateStops',
-      'up',
-    );
+    await scrollContent('tripDetailsContentView', 'top');
     await tapById('intermediateStops');
     // Note space at the end
     await scrollContentToText(
@@ -499,6 +496,11 @@ describe('Travel Search', () => {
   it('should be able to reset the travel search', async () => {
     const departure = 'Prinsens gate';
     const arrival = 'Melhus skysstasjon';
+
+    // Remove the search history
+    await goToTab('profile');
+    await removeSearchHistory();
+    await goToTab('assistant');
 
     // Do a travel search
     await travelSearch(departure, arrival);

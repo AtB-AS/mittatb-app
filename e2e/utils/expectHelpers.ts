@@ -54,6 +54,11 @@ export const expectIdToHaveText = async (id: string, text: string) => {
   await expect(element(by.id(id))).toHaveText(text);
 };
 
+export const expectIdToNotHaveText = async (id: string, text: string) => {
+  await expectExists(element(by.id(id)));
+  await expect(element(by.id(id))).not.toHaveText(text);
+};
+
 export const expectIdToHaveLabel = async (id: string, label: string) => {
   await expect(element(by.id(id).and(by.label(label)))).toExist();
 };
