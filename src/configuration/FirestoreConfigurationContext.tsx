@@ -110,6 +110,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     tariffZones,
     userProfiles,
     modesWeSellTicketsFor,
+    paymentTypes,
   ]);
 
   return (
