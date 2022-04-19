@@ -4,7 +4,7 @@ import {tapById, tapByText} from '../utils/interactionHelpers';
 import {
   expectToBeVisibleById,
   expectToBeVisibleByText,
-  expectTextById,
+  expectIdToHaveText,
   expectToBeVisibleByPartOfText,
 } from '../utils/expectHelpers';
 import {skipOnboarding} from '../utils/onboarding';
@@ -52,7 +52,7 @@ describe('Tickets', () => {
     await expectToBeVisibleByText('Starting now');
     //Zone is either A or C3 during the tests
     await expectToBeVisibleByPartOfText('Travel in 1 zone');
-    await expectTextById('offerTotalPriceText', `Total: ${ticketPrice}`);
+    await expectIdToHaveText('offerTotalPriceText', `Total: ${ticketPrice}`);
 
     await tapById('goToPaymentButton');
 
@@ -107,7 +107,7 @@ describe('Tickets', () => {
     }
   });
 
-  xit('should be able to buy a period ticket', async () => {
+  it('should be able to buy a period ticket', async () => {
     await goToTab('tickets');
 
     await expectToBeVisibleByText('Buy');

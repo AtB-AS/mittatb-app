@@ -9,7 +9,7 @@ import {
 import {
   expectToBeVisibleById,
   expectToBeVisibleByText,
-  expectTextById,
+  expectIdToHaveText,
   expectToExistsById,
   expectNotToExistsByText,
   expectNotToBeVisibleById,
@@ -60,7 +60,7 @@ describe('Departures v1', () => {
 
     await expectToBeVisibleByText('Departures');
     await expectToExistsById('quaySection0');
-    await expectTextById('quaySection0Title', departureQuay0);
+    await expectIdToHaveText('quaySection0Title', departureQuay0);
 
     // ** Quay 0 **
 
@@ -83,7 +83,7 @@ describe('Departures v1', () => {
     // ** Quay 1 **
 
     await scrollContentToId('stopDeparture0', 'quaySection1', 'down');
-    await expectTextById('quaySection1Title', departureQuay1);
+    await expectIdToHaveText('quaySection1Title', departureQuay1);
 
     // Departures exists
     await expectToBeVisibleById('lineItem0Title', 1);
@@ -111,7 +111,7 @@ describe('Departures v1', () => {
 
     // Choose a stop place on the line
     await tapByText(nextDepartureStop + ' ');
-    await expectTextById('quaySection0Title', nextDepartureStop);
+    await expectIdToHaveText('quaySection0Title', nextDepartureStop);
 
     // Go back
     await goBack();

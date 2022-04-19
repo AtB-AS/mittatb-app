@@ -10,10 +10,10 @@ import {
 import {
   expectToBeVisibleById,
   expectToBeVisibleByText,
-  expectElementToContainText,
+  expectIdToHaveChildText,
   expectNotToExistsByText,
-  expectElementToContainId,
-  expectElementNotToContainId,
+  expectIdToHaveChildId,
+  expectIdNotToHaveChildId,
 } from '../utils/expectHelpers';
 import {skipOnboarding} from '../utils/onboarding';
 import {
@@ -215,29 +215,29 @@ describe('My profile', () => {
     await expectToBeVisibleByText(favLocationName2);
 
     // Validate
-    await expectElementToContainText('favorite0', favLocationName1);
-    await expectElementToContainText('favorite1', favLocationName2);
+    await expectIdToHaveChildText('favorite0', favLocationName1);
+    await expectIdToHaveChildText('favorite1', favLocationName2);
     await expectNumberOfFavourites(2);
 
     // Sort and validate
     await tapById('changeOrderButton');
     await expectToBeVisibleByText('Reorder favourites');
 
-    await expectElementToContainId('favoriteItem0', 'down');
-    await expectElementNotToContainId('favoriteItem0', 'up');
-    await expectElementToContainText('favoriteItem0', favLocationName1);
-    await expectElementToContainId('favoriteItem1', 'up');
-    await expectElementNotToContainId('favoriteItem1', 'down');
-    await expectElementToContainText('favoriteItem1', favLocationName2);
+    await expectIdToHaveChildId('favoriteItem0', 'down');
+    await expectIdNotToHaveChildId('favoriteItem0', 'up');
+    await expectIdToHaveChildText('favoriteItem0', favLocationName1);
+    await expectIdToHaveChildId('favoriteItem1', 'up');
+    await expectIdNotToHaveChildId('favoriteItem1', 'down');
+    await expectIdToHaveChildText('favoriteItem1', favLocationName2);
 
     await tapById('down');
-    await expectElementToContainText('favoriteItem0', favLocationName2);
-    await expectElementToContainText('favoriteItem1', favLocationName1);
+    await expectIdToHaveChildText('favoriteItem0', favLocationName2);
+    await expectIdToHaveChildText('favoriteItem1', favLocationName1);
     await tapByText('Save');
 
     // Validate
-    await expectElementToContainText('favorite0', favLocationName2);
-    await expectElementToContainText('favorite1', favLocationName1);
+    await expectIdToHaveChildText('favorite0', favLocationName2);
+    await expectIdToHaveChildText('favorite1', favLocationName1);
     await expectNumberOfFavourites(2);
 
     await goBack();

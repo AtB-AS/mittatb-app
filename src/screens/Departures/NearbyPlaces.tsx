@@ -119,6 +119,17 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
       initialLocation: fromLocation,
     });
 
+  useEffect(() => {
+    if (
+      fromLocation?.resultType == 'search' &&
+      fromLocation?.layer === 'venue'
+    ) {
+      navigation.navigate('PlaceScreen', {
+        place: fromLocation,
+      });
+    }
+  }, [fromLocation?.id]);
+
   function setCurrentLocationAsFrom() {
     navigation.setParams({
       location: currentLocation && {
@@ -189,9 +200,13 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
           openLocationSearch={openLocationSearch}
           setCurrentLocationOrRequest={setCurrentLocationOrRequest}
           setLocation={(location: Location) => {
-            navigation.setParams({
-              location,
-            });
+            location.resultType === 'search' && location.layer === 'venue'
+              ? navigation.navigate('PlaceScreen', {
+                  place: location as Place,
+                })
+              : navigation.setParams({
+                  location,
+                });
           }}
         />
       }
@@ -269,7 +284,7 @@ const Header = React.memo(function Header({
         }}
         chipTypes={['favorites', 'add-favorite']}
         contentContainerStyle={styles.favoriteChips}
-      ></FavoriteChips>
+      />
     </>
   );
 });

@@ -36,6 +36,11 @@ Match certificates
 fastlane ios build
 ```
 Build the iOS application.
+### ios pods
+```
+fastlane ios pods
+```
+Install pods.
 ### ios firebase_distribution_staging
 ```
 fastlane ios firebase_distribution_staging
@@ -68,6 +73,11 @@ Upload the build to AppCenter
 ### android firebase_distribution_staging
 ```
 fastlane android firebase_distribution_staging
+```
+
+### android playstore_internal
+```
+fastlane android playstore_internal
 ```
 
 ### android appcenter_staging
