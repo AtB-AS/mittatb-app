@@ -19,7 +19,10 @@ import {
 } from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
-import {getReferenceDataName} from '@atb/reference-data/utils';
+import {
+  getReferenceDataName,
+  productIsSellableInApp,
+} from '@atb/reference-data/utils';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
@@ -73,9 +76,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const {preassignedFareproducts} = useFirestoreConfiguration();
 
-  const selectableProducts = preassignedFareproducts.filter(
-    (product) => product.type === params.selectableProductType,
-  );
+  const selectableProducts = preassignedFareproducts
+    .filter(productIsSellableInApp)
+    .filter((product) => product.type === params.selectableProductType);
 
   const [preassignedFareProduct, setPreassignedFareProduct] = useState(
     selectableProducts[0],
