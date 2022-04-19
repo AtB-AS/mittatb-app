@@ -181,8 +181,12 @@ const GeolocationContextProvider: React.FC = ({children}) => {
   const appStatus = useAppStateStatus();
   useEffect(() => {
     if (!!currentLocationError && appStatus === 'active') {
-      Geolocation.getCurrentPosition((location) => {
-        dispatch({type: 'LOCATION_CHANGED', location});
+      Geolocation.getCurrentPosition((position) => {
+        dispatch({
+          type: 'LOCATION_CHANGED',
+          position,
+          locationName: geoLocationName,
+        });
       }, handleLocationError);
     }
   }, [currentLocationError, appStatus]);
