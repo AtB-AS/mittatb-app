@@ -112,15 +112,11 @@ function getPreassignedFarecontractsFromSnapshot(
         preassignedFareproductsFromFirestore,
       ) as PreassignedFareProduct[];
 
-      console.log('>> Firestore raw parsed', fareProducts);
-
       const filtered = fareProducts.filter((fareProduct) => {
         return fareProduct.distributionChannel.some(
           (channel) => channel == 'app',
         );
       });
-
-      console.log('>> Firestore filtered fareproducts', filtered);
       return filtered;
     }
   } catch (error: any) {
