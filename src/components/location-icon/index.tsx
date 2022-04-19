@@ -1,4 +1,7 @@
-import {CurrentLocationArrow, MapPointPin} from '@atb/assets/svg/mono-icons/places';
+import {
+  CurrentLocationArrow,
+  MapPointPin,
+} from '@atb/assets/svg/mono-icons/places';
 import {
   BusSide,
   FerrySide,
@@ -6,7 +9,7 @@ import {
   TrainSide,
   TramSide,
 } from '@atb/assets/svg/mono-icons/transportation';
-import {Location, SearchLocation} from '@atb/favorites/types';
+import {Location} from '@atb/favorites/types';
 import {FeatureCategory} from '@atb/sdk';
 import React from 'react';
 import ThemeIcon from '@atb/components/theme-icon';
