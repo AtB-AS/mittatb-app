@@ -10,7 +10,8 @@ import {ScrollView} from 'react-native-gesture-handler';
 
 import ThemeIcon from '@atb/components/theme-icon';
 import ThemeText from '@atb/components/text';
-import single from '@atb/assets/svg/color/illustrations/ticket-type/Single';
+import SingleTicketIcon from '@atb/assets/svg/color/illustrations/ticket-type/Single';
+import PeriodTicketIcon from '@atb/assets/svg/color/illustrations/ticket-type/Period';
 
 export const AvailableTickets = ({
   onBuySingleTicket,
@@ -35,6 +36,7 @@ export const AvailableTickets = ({
             <View style={styles.ticketsContainer}>
               <View style={styles.ticket_small}>
                 <Sections.GenericItem>
+                  <ThemeText>{'Buss/Trikk'}</ThemeText>
                   <ThemeText
                     type="body__primary--bold"
                     key={'enkeltbillett'}
@@ -44,21 +46,25 @@ export const AvailableTickets = ({
                   </ThemeText>
                   <ThemeText>{'Varighet mellom 90 min og 5 timer'}</ThemeText>
 
-                  <ThemeIcon svg={single} size={'large'} />
+                  <View style={styles.ticketIllustration}>
+                    {<SingleTicketIcon height="100%" width="100%" />}
+                  </View>
                 </Sections.GenericItem>
               </View>
               <View style={styles.ticket_small}>
                 <Sections.GenericItem>
+                  <ThemeText>{'Buss/Trikk'}</ThemeText>
                   <ThemeText
                     type="body__primary--bold"
                     key={'enkeltbillett'}
                     accessibilityLabel={'Enkeltbillett'}
                   >
-                    {'Enkeltbillett'}
+                    {'Periodebillett'}
                   </ThemeText>
                   <ThemeText>{'Varighet mellom 90 min og 5 timer'}</ThemeText>
-
-                  <ThemeIcon svg={single} size={'large'} />
+                  <View style={styles.ticketIllustration}>
+                    {<PeriodTicketIcon height="100%" width="100%" />}
+                  </View>
                 </Sections.GenericItem>
               </View>
             </View>
@@ -86,5 +92,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   ticket_small: {
     flexShrink: 1,
     marginLeft: theme.spacings.medium,
+  },
+  ticketIllustration: {
+    width: '50%',
+    aspectRatio: 1,
   },
 }));
