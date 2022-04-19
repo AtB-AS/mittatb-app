@@ -12,6 +12,7 @@ import ThemeIcon from '@atb/components/theme-icon';
 import ThemeText from '@atb/components/text';
 import SingleTicketIcon from '@atb/assets/svg/color/illustrations/ticket-type/Single';
 import PeriodTicketIcon from '@atb/assets/svg/color/illustrations/ticket-type/Period';
+import {SvgProps} from 'react-native-svg';
 
 export const AvailableTickets = ({
   onBuySingleTicket,
@@ -34,43 +35,61 @@ export const AvailableTickets = ({
         <View>
           <ScrollView>
             <View style={styles.ticketsContainer}>
-              <View style={styles.ticket_small}>
-                <Sections.GenericItem>
-                  <ThemeText>{'Buss/Trikk'}</ThemeText>
-                  <ThemeText
-                    type="body__primary--bold"
-                    key={'enkeltbillett'}
-                    accessibilityLabel={'Enkeltbillett'}
-                  >
-                    {'Enkeltbillett'}
-                  </ThemeText>
-                  <ThemeText>{'Varighet mellom 90 min og 5 timer'}</ThemeText>
-
-                  <View style={styles.ticketIllustration}>
-                    {<SingleTicketIcon height="100%" width="100%" />}
-                  </View>
-                </Sections.GenericItem>
-              </View>
-              <View style={styles.ticket_small}>
-                <Sections.GenericItem>
-                  <ThemeText>{'Buss/Trikk'}</ThemeText>
-                  <ThemeText
-                    type="body__primary--bold"
-                    key={'enkeltbillett'}
-                    accessibilityLabel={'Enkeltbillett'}
-                  >
-                    {'Periodebillett'}
-                  </ThemeText>
-                  <ThemeText>{'Varighet mellom 90 min og 5 timer'}</ThemeText>
-                  <View style={styles.ticketIllustration}>
-                    {<PeriodTicketIcon height="100%" width="100%" />}
-                  </View>
-                </Sections.GenericItem>
-              </View>
+              <Ticket
+                key={'enkeltbillett'}
+                title={'Enkeltbillett'}
+                description={'Varighet mellom 90 min og 5 timer'}
+                icon={<SingleTicketIcon height="100%" width="100%" />}
+              />
+              <Ticket
+                key={'periodebillett'}
+                title={'Enkeltbillett'}
+                description={
+                  'Velg mellom 7, 30 eller 180 dager eller kanskje du vil reise evig?'
+                }
+                icon={<PeriodTicketIcon height="100%" width="100%" />}
+              />
+            </View>
+            <View style={styles.ticketsContainer}>
+              <Ticket
+                title={'Sommerpass'}
+                description={
+                  'Reis hvor du vil, så mye du vil med buss, tog, hurtigbåt, ferge og trikk i Trøndelag i sju dager'
+                }
+                icon={<PeriodTicketIcon width="100%" height="100%" />}
+                key={'sommerpass'}
+              />
             </View>
           </ScrollView>
         </View>
       )}
+    </View>
+  );
+};
+
+const Ticket = ({
+  title,
+  description,
+  icon,
+  key,
+}: {
+  title: string;
+  description: string;
+  icon: JSX.Element;
+  key: string;
+}) => {
+  const styles = useStyles();
+  return (
+    <View style={styles.ticket} key={key}>
+      <Sections.GenericItem>
+        <ThemeText>{'Buss/Trikk'}</ThemeText>
+        <ThemeText type="body__primary--bold" accessibilityLabel={title}>
+          {title}
+        </ThemeText>
+        <ThemeText>{description}</ThemeText>
+
+        <View style={styles.ticketIllustration}>{icon}</View>
+      </Sections.GenericItem>
     </View>
   );
 };
@@ -87,14 +106,17 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   ticketsContainer: {
     flex: 1,
     flexDirection: 'row',
-    paddingRight: theme.spacings.medium,
+    paddingLeft: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
   },
-  ticket_small: {
+  ticket: {
+    width: '100%',
     flexShrink: 1,
-    marginLeft: theme.spacings.medium,
+    marginRight: theme.spacings.medium,
   },
   ticketIllustration: {
-    width: '50%',
+    width: 100,
+    overflow: 'hidden',
     aspectRatio: 1,
   },
 }));
