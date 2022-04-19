@@ -64,5 +64,8 @@ export async function reverse(
     lon: coordinates?.longitude,
   });
 
-  return await client.get<Feature[]>(stringifyUrl(url, query), config);
+  return await client.get<Feature[]>(stringifyUrl(url, query), {
+    ...config,
+    baseURL: 'http://10.0.2.2:8080',
+  });
 }
