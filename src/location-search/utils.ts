@@ -1,6 +1,11 @@
-import {Location, UserFavorites} from '@atb/favorites/types';
+import {
+  SearchLocation,
+  StoredLocationFavorite,
+  UserFavorites,
+} from '@atb/favorites/types';
 import {useSearchHistory} from '@atb/search-history';
 import {LocationSearchResult} from './types';
+import {getLocationLayer} from '@atb/utils/location';
 
 export function useFilteredJourneySearch(searchText?: string) {
   const {journeyHistory} = useSearchHistory();
@@ -16,7 +21,7 @@ export function useFilteredJourneySearch(searchText?: string) {
 
 export const filterPreviousLocations = (
   searchText: string,
-  previousLocations: Location[],
+  previousLocations: SearchLocation[],
   favorites?: UserFavorites,
   onlyAtbVenues: boolean = false,
 ): LocationSearchResult[] => {
@@ -35,10 +40,15 @@ export const filterPreviousLocations = (
 
   const filteredFavorites: LocationSearchResult[] = (favorites ?? [])
     .filter(
-      (favorite) =>
-        (matchText(searchText, favorite.location?.name) ||
+      (
+        favorite,
+      ): favorite is Omit<StoredLocationFavorite, 'location'> & {
+        location: SearchLocation;
+      } =>
+        (matchText(searchText, favorite.location.name) ||
           matchText(searchText, favorite.name)) &&
-        (!onlyAtbVenues || favorite.location.layer == 'venue'),
+        (!onlyAtbVenues || getLocationLayer(favorite.location) == 'venue') &&
+        favorite.location.resultType === 'search',
     )
     .map(({location, ...favoriteInfo}) => ({
       location,
@@ -51,12 +61,12 @@ export const filterPreviousLocations = (
 };
 
 const matchText = (searchText: string, text?: string) =>
-  text?.toLowerCase()?.startsWith(searchText.toLowerCase());
-const matchLocation = (searchText: string, location: Location) =>
+  text?.toLowerCase()?.startsWith(searchText.toLowerCase()) || false;
+const matchLocation = (searchText: string, location: SearchLocation) =>
   matchText(searchText, location.name);
 
 export const filterCurrentLocation = (
-  locations: Location[] | null,
+  locations: SearchLocation[] | null,
   previousLocations: LocationSearchResult[] | null,
 ): LocationSearchResult[] => {
   if (!previousLocations?.length || !locations)

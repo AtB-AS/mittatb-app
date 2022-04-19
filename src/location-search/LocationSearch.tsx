@@ -75,7 +75,7 @@ const LocationSearch: React.FC<Props> = ({
     } = initialLocation
       ? {...initialLocation.coordinates, zoomLevel: 12}
       : geolocation
-      ? {...geolocation.coords, zoomLevel: 12}
+      ? {...geolocation.coordinates, zoomLevel: 12}
       : {...FOCUS_ORIGIN, zoomLevel: 6};
 
     navigation.navigate('MapSelection', {
@@ -101,7 +101,11 @@ const LocationSearch: React.FC<Props> = ({
         label={label}
         favoriteChipTypes={favoriteChipTypes}
         placeholder={t(LocationSearchTexts.searchField.placeholder)}
-        defaultText={initialLocation?.name}
+        defaultText={
+          initialLocation?.resultType === 'search'
+            ? initialLocation.name
+            : undefined
+        }
         includeJourneyHistory={includeJourneyHistory}
       />
     </View>
@@ -151,7 +155,7 @@ export function LocationSearchContent({
 
   const {locations, error} = useGeocoder(
     debouncedText,
-    geolocation?.coords ?? null,
+    geolocation?.coordinates ?? null,
     onlyAtbVenues,
   );
 

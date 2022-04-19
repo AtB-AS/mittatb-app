@@ -1,8 +1,12 @@
 import {JourneySearchHistoryEntry} from '@atb/search-history/types';
-import {Location, StoredLocationFavorite} from '../favorites/types';
+import {
+  Location,
+  SearchLocation,
+  StoredLocationFavorite,
+} from '../favorites/types';
 
 export type LocationSearchResult = {
-  location: Location;
+  location: SearchLocation;
   favoriteInfo?: Omit<StoredLocationFavorite, 'location'>;
 };
 

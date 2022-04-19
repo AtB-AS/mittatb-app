@@ -1,4 +1,4 @@
-import {MapPointPin} from '@atb/assets/svg/mono-icons/places';
+import {CurrentLocationArrow, MapPointPin} from '@atb/assets/svg/mono-icons/places';
 import {
   BusSide,
   FerrySide,
@@ -6,10 +6,9 @@ import {
   TrainSide,
   TramSide,
 } from '@atb/assets/svg/mono-icons/transportation';
-import {Location} from '@atb/favorites/types';
+import {Location, SearchLocation} from '@atb/favorites/types';
 import {FeatureCategory} from '@atb/sdk';
 import React from 'react';
-import {SvgProps} from 'react-native-svg';
 import ThemeIcon from '@atb/components/theme-icon';
 
 const LocationIcon = ({
@@ -20,6 +19,9 @@ const LocationIcon = ({
   fill?: string;
   multiple?: boolean;
 }) => {
+  if (location.resultType === 'geolocation') {
+    return <ThemeIcon svg={CurrentLocationArrow} />;
+  }
   switch (location.layer) {
     case 'address':
       return <ThemeIcon svg={MapPointPin} />;

@@ -4,8 +4,7 @@ import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement
 import {LocationInput, Section} from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
 import FavoriteChips from '@atb/favorite-chips';
-import {Location} from '@atb/favorites/types';
-import {useReverseGeocoder} from '@atb/geocoder';
+import {GeoLocation, Location} from '@atb/favorites/types';
 import {
   RequestPermissionFn,
   useGeolocationState,
@@ -61,10 +60,6 @@ export default function NearbyPlacesScreen({navigation}: RootProps) {
   const {status, location, locationEnabled, requestPermission} =
     useGeolocationState();
 
-  const {closestLocation: currentLocation} = useReverseGeocoder(
-    location?.coords ?? null,
-  );
-
   if (!status) {
     return <Loading />;
   }
@@ -73,14 +68,14 @@ export default function NearbyPlacesScreen({navigation}: RootProps) {
     <PlacesOverview
       requestGeoPermission={requestPermission}
       hasLocationPermission={locationEnabled && status === 'granted'}
-      currentLocation={currentLocation}
+      currentLocation={location || undefined}
       navigation={navigation}
     />
   );
 }
 
 type PlacesOverviewProps = {
-  currentLocation?: Location;
+  currentLocation?: GeoLocation;
   hasLocationPermission: boolean;
   requestGeoPermission: RequestPermissionFn;
   navigation: DepartureScreenNavigationProp;
@@ -99,7 +94,7 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
   const searchedFromLocation =
     useOnlySingleLocation<DeparturesProps>('location');
   const currentSearchLocation = useMemo<Location | undefined>(
-    () => currentLocation && {...currentLocation, resultType: 'geolocation'},
+    () => currentLocation,
     [currentLocation],
   );
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
@@ -145,15 +140,14 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
   }
 
   const getListDescription = () => {
-    if (!fromLocation || !fromLocation.name) return;
-    switch (fromLocation?.resultType) {
+    if (!fromLocation) return;
+    switch (fromLocation.resultType) {
       case 'geolocation':
         return t(DeparturesTexts.stopPlaceList.listDescription.geoLoc);
-      case 'favorite':
       case 'search':
         return (
           t(DeparturesTexts.stopPlaceList.listDescription.address) +
-          fromLocation?.name
+          fromLocation.name
         );
       case undefined:
         return;

@@ -247,7 +247,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
   };
 
   const startCoordinates = geolocation
-    ? [geolocation.coords.longitude, geolocation.coords.latitude]
+    ? [geolocation.coordinates.longitude, geolocation.coordinates.latitude]
     : [FOCUS_ORIGIN.longitude, FOCUS_ORIGIN.latitude];
 
   const onSave = () => {
@@ -293,14 +293,14 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
   async function flyToCurrentLocation() {
     geolocation &&
       mapCameraRef.current?.flyTo(
-        [geolocation.coords.longitude, geolocation.coords.latitude],
+        [geolocation.coordinates.longitude, geolocation.coordinates.latitude],
         750,
       );
 
     if (mapViewRef.current && geolocation) {
       let point = await mapViewRef.current.getPointInView([
-        geolocation.coords.longitude,
-        geolocation.coords.latitude,
+        geolocation.coordinates.longitude,
+        geolocation.coordinates.latitude,
       ]);
       if (Platform.OS == 'android') {
         // Necessary hack (https://github.com/react-native-mapbox-gl/maps/issues/1085)

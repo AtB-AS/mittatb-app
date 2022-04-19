@@ -27,9 +27,7 @@ export default function useGeocoder(
           source.token.throwIfRequested();
           dispatch({
             type: 'SET_LOCATIONS',
-            locations: response?.data?.map((f) =>
-              mapFeatureToLocation(f, 'search'),
-            ),
+            locations: response?.data?.map(mapFeatureToLocation),
           });
         } catch (err) {
           if (!isCancel(err)) {

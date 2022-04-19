@@ -117,6 +117,7 @@ const reducer: ReducerWithSideEffects<
   switch (action.type) {
     case 'LOAD_INITIAL_DEPARTURES': {
       if (!action.location) return NoUpdate();
+      const location = action.location;
 
       // Update input data with new date as this
       // is a fresh fetch. We should fetch the latest information.
@@ -145,7 +146,13 @@ const reducer: ReducerWithSideEffects<
             // Fresh fetch, reset paging and use new query input with new startTime
             const result = await getDepartureGroups(
               {
-                location: action.location!,
+                location:
+                  location.resultType === 'search'
+                    ? location
+                    : {
+                        layer: 'address',
+                        coordinates: location.coordinates,
+                      },
                 favorites: state.showOnlyFavorites
                   ? action.favoriteDepartures
                   : undefined,
@@ -155,13 +162,13 @@ const reducer: ReducerWithSideEffects<
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
-              locationId: action.location?.id,
+              locationId: location.id,
               result,
             });
           } catch (e) {
             dispatch({
               type: 'SET_ERROR',
-              reset: action.location?.id !== state.locationId,
+              reset: location.id !== state.locationId,
               loadType: 'initial',
               error: getAxiosErrorType(e),
             });
@@ -174,6 +181,7 @@ const reducer: ReducerWithSideEffects<
 
     case 'LOAD_MORE_DEPARTURES': {
       if (!action.location || !state.cursorInfo?.hasNextPage) return NoUpdate();
+      const location = action.location;
       if (state.isFetchingMore) return NoUpdate();
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -184,7 +192,13 @@ const reducer: ReducerWithSideEffects<
             // to ensure that we get the same departures.
             const result = await getNextDepartureGroups(
               {
-                location: action.location!,
+                location:
+                  location.resultType === 'search'
+                    ? location
+                    : {
+                        layer: 'address',
+                        coordinates: location.coordinates,
+                      },
                 favorites: state.showOnlyFavorites
                   ? action.favoriteDepartures
                   : undefined,

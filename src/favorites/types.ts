@@ -6,7 +6,14 @@ import {
 } from '@entur/sdk';
 import {StoredType} from './storage';
 
-export type Location = {
+export type GeoLocation = {
+  id: string;
+  name: string;
+  coordinates: Coordinates;
+  resultType: 'geolocation';
+};
+
+export type SearchLocation = {
   id: string;
   name: string;
   layer: 'venue' | 'address';
@@ -17,14 +24,17 @@ export type Location = {
   postalcode?: string;
   tariff_zones?: string[];
 } & (
+  | {resultType: 'search'}
   | {
-      resultType: 'search' | 'geolocation';
+      resultType: 'favorite';
+      favoriteId: string;
     }
-  | {resultType: 'favorite'; favoriteId: string}
 );
 
+export type Location = GeoLocation | SearchLocation;
+
 export type LocationFavorite = {
-  location: Location;
+  location: SearchLocation;
   emoji?: string;
   name?: string;
 };

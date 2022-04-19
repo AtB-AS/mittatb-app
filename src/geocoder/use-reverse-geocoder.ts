@@ -5,9 +5,9 @@ import {reverse} from '../api';
 import {mapFeatureToLocation} from './utils';
 import useGeocoderReducer, {GeocoderState} from './use-geocoder-reducer';
 import {getAxiosErrorType} from '../api/utils';
-import {Location} from '../favorites/types';
+import {SearchLocation} from '../favorites/types';
 
-type ReverseGeocoderState = GeocoderState & {closestLocation?: Location};
+type ReverseGeocoderState = GeocoderState & {closestLocation?: SearchLocation};
 
 export default function useReverseGeocoder(
   coords: Coordinates | null,
@@ -27,9 +27,7 @@ export default function useReverseGeocoder(
 
           dispatch({
             type: 'SET_LOCATIONS',
-            locations: response?.data?.map((f) =>
-              mapFeatureToLocation(f, 'geolocation'),
-            ),
+            locations: response?.data?.map(mapFeatureToLocation),
           });
         } catch (err) {
           if (!isCancel(err)) {

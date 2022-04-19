@@ -70,7 +70,7 @@ export function useLocationSearchValue<
   const firstTimeRef = useRef(true);
   const [location, setLocation] = React.useState<
     SelectableLocationData | undefined
-  >(defaultLocation && {...defaultLocation, resultType: 'search'});
+  >(defaultLocation);
 
   React.useEffect(() => {
     if (

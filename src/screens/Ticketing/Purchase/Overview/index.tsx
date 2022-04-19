@@ -456,7 +456,7 @@ export const useTariffZoneFromLocation = (tariffZones: TariffZone[]) => {
   const {location} = useGeolocationState();
   return useMemo(() => {
     if (location) {
-      const {longitude, latitude} = location.coords;
+      const {longitude, latitude} = location.coordinates;
       return tariffZones.find((t) =>
         turfBooleanPointInPolygon([longitude, latitude], t.geometry),
       );

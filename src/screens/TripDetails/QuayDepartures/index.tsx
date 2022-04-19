@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, RefreshControl, ScrollView} from 'react-native';
-import {Location} from '@atb/favorites/types';
+import {GeoLocation, Location, SearchLocation} from '@atb/favorites/types';
 import {StyleSheet} from '@atb/theme';
 import DeparturesList from '@atb/departure-list/DeparturesList';
 import {useDepartureData} from '@atb/screens/Nearby/state';
@@ -15,7 +15,7 @@ export type QuayDeparturesRouteProp = RouteProp<
 >;
 
 export type QuayDeparturesRouteParams = {
-  location: Location;
+  location: SearchLocation;
 };
 
 type RootProps = {
