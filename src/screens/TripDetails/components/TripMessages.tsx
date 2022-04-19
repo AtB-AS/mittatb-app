@@ -11,7 +11,7 @@ import React from 'react';
 import {ViewStyle} from 'react-native';
 import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
 import {TripPattern} from '@atb/api/types/trips';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {hasShortWaitTime} from '@atb/screens/TripDetails/components/utils';
 
@@ -26,10 +26,10 @@ const TripMessages: React.FC<TripMessagesProps> = ({
   messageStyle,
 }) => {
   const {t} = useTranslation();
-  const {modes_we_sell_tickets_for} = useRemoteConfig();
+  const {modesWeSellTicketsFor} = useFirestoreConfiguration();
   const someTicketsAreUnavailableInApp = hasLegsWeCantSellTicketsFor(
     tripPattern,
-    modes_we_sell_tickets_for,
+    modesWeSellTicketsFor,
   );
   const canUseCollabTicket = someLegsAreByTrain(tripPattern);
   const shortWaitTime = hasShortWaitTime(tripPattern.legs);
