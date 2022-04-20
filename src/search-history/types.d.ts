@@ -1,7 +1,7 @@
-import {Location} from '../favorites/types';
+import {SearchLocation} from '../favorites/types';
 
-export type SearchHistoryEntry = Location;
+export type SearchHistoryEntry = SearchLocation;
 export type SearchHistory = SearchHistoryEntry[];
 
-export type JourneySearchHistoryEntry = [Location, Location];
+export type JourneySearchHistoryEntry = [SearchLocation, SearchLocation];
 export type JourneySearchHistory = JourneySearchHistoryEntry[];

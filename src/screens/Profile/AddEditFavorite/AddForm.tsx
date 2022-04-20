@@ -8,12 +8,11 @@ import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
-import {StoredLocationFavorite} from '@atb/favorites/types';
+import {SearchLocation, StoredLocationFavorite} from '@atb/favorites/types';
 import {useOnlySingleLocation} from '@atb/location-search';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, Theme} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
-import {Location} from '@entur/sdk';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useState} from 'react';
@@ -29,7 +28,7 @@ const AddEditRouteNameStatic: AddEditRouteName = 'AddEditForm';
 
 export type AddEditParams = {
   editItem?: StoredLocationFavorite;
-  searchLocation?: Location;
+  searchLocation?: SearchLocation;
 };
 
 export type AddEditNavigationProp = CompositeNavigationProp<
@@ -79,7 +78,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   // in favorites, or some lookup to set selected item inside emoji panel.
 
   const save = async () => {
-    if (!location) {
+    if (!location || location.resultType === 'geolocation') {
       setErrorMessage(t(AddEditFavoriteTexts.save.notSelectedFromError));
       return;
     }
