@@ -70,9 +70,11 @@ export const RecentTicketComponent = ({
           <View style={styles.horizontalFlex}>
             <View style={styles.section}>
               <ThemeText type="body__tertiary">Reisende</ThemeText>
-              <FloatingLabel text="1 voksen" />
-              <FloatingLabel text="2 biler" />
-              <FloatingLabel text="1 voksen" />
+              {userProfilesWithCount.map((u) => (
+                <FloatingLabel
+                  text={`${u.count} ${getReferenceDataName(u, language)}`}
+                />
+              ))}
             </View>
 
             <View style={styles.section}>
