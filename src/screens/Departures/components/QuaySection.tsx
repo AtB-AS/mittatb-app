@@ -6,7 +6,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {useTranslation} from '@atb/translations';
-import {Expand, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
+import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
 import {EstimatedCall, Quay} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import EstimatedCallItem from './EstimatedCallItem';
@@ -79,7 +79,7 @@ export default function QuaySection({
                 </ThemeText>
               )}
             </View>
-            <ThemeIcon svg={isHidden ? Expand : ExpandLess}></ThemeIcon>
+            <ThemeIcon svg={isHidden ? ExpandMore : ExpandLess} />
           </View>
         </Sections.GenericClickableItem>
         {!isHidden && (

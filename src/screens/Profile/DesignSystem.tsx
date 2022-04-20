@@ -1,6 +1,6 @@
 import {Delete, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {Check} from '@atb/assets/svg/mono-icons/status';
-import {BlankTicket} from '@atb/assets/svg/mono-icons/ticketing';
+import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import Button, {ButtonGroup} from '@atb/components/button';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
@@ -48,8 +48,8 @@ export default function DesignSystem() {
               <ThemeIcon svg={Check} colorType="info" />
               <ThemeIcon svg={Check} colorType="warning" />
 
-              <ThemeIcon svg={BlankTicket} colorType="error" />
-              <ThemeIcon svg={BlankTicket} colorType="disabled" size="small" />
+              <ThemeIcon svg={Ticket} colorType="error" />
+              <ThemeIcon svg={Ticket} colorType="disabled" size="small" />
             </View>
             <View style={style.icons}>
               <TransportationIcon

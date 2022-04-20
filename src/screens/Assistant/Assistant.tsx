@@ -1,5 +1,5 @@
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
-import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
+import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import Button from '@atb/components/button';
 import DisappearingHeader from '@atb/components/disappearing-header';
@@ -60,7 +60,7 @@ import {SearchTime, useSearchTimeValue} from './journey-date-picker';
 import NewsBanner from './NewsBanner';
 import Results from './Results';
 import {ThemeColor} from '@atb/theme/colors';
-import * as navIcons from '@atb/assets/svg/mono-icons/navigation';
+import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import useTripsQuery from '@atb/screens/Assistant/use-trips-query';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 
@@ -264,7 +264,7 @@ const Assistant: React.FC<Props> = ({
               location={from}
               label={t(AssistantTexts.location.departurePicker.label)}
               onPress={() => openLocationSearch('fromLocation', from)}
-              icon={<ThemeIcon svg={CurrentLocationArrow} />}
+              icon={<ThemeIcon svg={LocationIcon} />}
               onIconPress={setCurrentLocationOrRequest}
               iconAccessibility={{
                 accessible: true,
@@ -510,7 +510,7 @@ const Assistant: React.FC<Props> = ({
                   <ThemeText testID="resultsLoaded">
                     {t(AssistantTexts.results.fetchMore)}{' '}
                   </ThemeText>
-                  <ThemeIcon svg={navIcons.Expand} size={'normal'} />
+                  <ThemeIcon svg={ExpandMore} size={'normal'} />
                 </>
               ) : null}
             </>

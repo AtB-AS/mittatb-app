@@ -1,16 +1,14 @@
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {View} from 'react-native';
 import ThemeText from '@atb/components/text';
-import {
-  TravelTokenCard,
-  TravelTokenPhone,
-} from '@atb/assets/svg/color/illustrations';
+
 import React from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
 import {TravelToken} from '@atb/mobile-token/types';
 import {useTranslation} from '@atb/translations';
 import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
 import MessageBox from '@atb/components/message-box';
+import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 
 export default function TravelTokenBox({
   showIfThisDevice,
@@ -57,9 +55,9 @@ export default function TravelTokenBox({
       <View style={{display: 'flex', flexDirection: 'row'}}>
         <View style={{alignItems: 'center'}}>
           {inspectableToken.type === 'travelCard' ? (
-            <TravelTokenCard />
+            <ThemedTokenTravelCard />
           ) : (
-            <TravelTokenPhone />
+            <ThemedTokenPhone />
           )}
         </View>
         <View style={styles.description}>

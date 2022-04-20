@@ -100,7 +100,7 @@ export function useFirestoreConfiguration() {
 
 function getPreassignedFarecontractsFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): PreassignedFareProduct[] | null {
+): PreassignedFareProduct[] | undefined {
   const preassignedFareproductsFromFirestore = snapshot.docs
     .find((doc) => doc.id == 'referenceData')
     ?.get<string>('preassignedFareProducts_v2');
@@ -111,18 +111,15 @@ function getPreassignedFarecontractsFromSnapshot(
         preassignedFareproductsFromFirestore,
       ) as PreassignedFareProduct[];
     }
-  } catch (error) {
-    Bugsnag.leaveBreadcrumb(
-      'Error parsing preassignedFareproducts from FireStore',
-      {preassignedFareproductsFromFirestore},
-    );
+  } catch (error: any) {
+    Bugsnag.notify(error);
   }
-  return null;
+  return undefined;
 }
 
 function getTariffZonesFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): TariffZone[] | null {
+): TariffZone[] | undefined {
   const tariffZonesFromFirestore = snapshot.docs
     .find((doc) => doc.id == 'referenceData')
     ?.get<string>('tariffZones');
@@ -131,18 +128,15 @@ function getTariffZonesFromSnapshot(
     if (tariffZonesFromFirestore) {
       return JSON.parse(tariffZonesFromFirestore) as TariffZone[];
     }
-  } catch (error) {
-    Bugsnag.leaveBreadcrumb(
-      'Error parsing preassignedFareproducts from FireStore',
-      {tariffZonesFromFirestore},
-    );
+  } catch (error: any) {
+    Bugsnag.notify(error);
   }
-  return null;
+  return undefined;
 }
 
 function getUserProfilesFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): UserProfile[] | null {
+): UserProfile[] | undefined {
   const userProfilesFromFirestore = snapshot.docs
     .find((doc) => doc.id == 'referenceData')
     ?.get<string>('userProfiles');
@@ -151,11 +145,8 @@ function getUserProfilesFromSnapshot(
     if (userProfilesFromFirestore) {
       return JSON.parse(userProfilesFromFirestore) as UserProfile[];
     }
-  } catch (error) {
-    Bugsnag.leaveBreadcrumb(
-      'Error parsing preassignedFareproducts from FireStore',
-      {userProfilesFromFirestore},
-    );
+  } catch (error: any) {
+    Bugsnag.notify(error);
   }
-  return null;
+  return undefined;
 }

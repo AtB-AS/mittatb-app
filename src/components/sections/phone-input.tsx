@@ -18,7 +18,7 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {SectionItem, useSectionItem} from './section-utils';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import composeRefs from '@seznam/compose-react-refs';
-import {Expand, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
+import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
 import {ScrollView} from 'react-native-gesture-handler';
 import {countryPhoneData} from 'phone';
 import {Section, GenericClickableItem} from '@atb/components/sections';
@@ -160,7 +160,7 @@ const PhoneInput = forwardRef<InternalTextInput, TextProps>(
                 <ThemeText>+{prefix}</ThemeText>
                 <ThemeIcon
                   style={styles.expandIcon}
-                  svg={isSelectingPrefix ? ExpandLess : Expand}
+                  svg={isSelectingPrefix ? ExpandLess : ExpandMore}
                   size="normal"
                 />
               </TouchableOpacity>

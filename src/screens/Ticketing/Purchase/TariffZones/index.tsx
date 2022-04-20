@@ -1,5 +1,5 @@
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
-import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
+import {Location} from '@atb/assets/svg/mono-icons/places';
 import Button from '@atb/components/button';
 import {
   MapCameraConfig,
@@ -351,7 +351,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
             onPress={() => onVenueSearchClick('fromTariffZone')}
             icon={
               selectedZones.from.resultType === 'geolocation' ? (
-                <ThemeIcon svg={CurrentLocationArrow} />
+                <ThemeIcon svg={Location} />
               ) : undefined
             }
             highlighted={selectedZones.selectNext === 'from'}
@@ -376,7 +376,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
             onPress={() => onVenueSearchClick('toTariffZone')}
             icon={
               selectedZones.to.resultType === 'geolocation' ? (
-                <ThemeIcon svg={CurrentLocationArrow} />
+                <ThemeIcon svg={Location} />
               ) : undefined
             }
             highlighted={selectedZones.selectNext === 'to'}
