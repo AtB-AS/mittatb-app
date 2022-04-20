@@ -10,9 +10,10 @@ import {ScrollView} from 'react-native-gesture-handler';
 
 import ThemeIcon from '@atb/components/theme-icon';
 import ThemeText from '@atb/components/text';
-import SingleTicketIcon from '@atb/assets/svg/color/illustrations/ticket-type/Single';
-import PeriodTicketIcon from '@atb/assets/svg/color/illustrations/ticket-type/Period';
+import * as TicketIcons from '@atb/assets/svg/color/illustrations/ticket-type';
 import {SvgProps} from 'react-native-svg';
+import {Transition} from 'react-native-reanimated';
+import {TransitionIOSSpec} from '@react-navigation/stack/lib/typescript/src/TransitionConfigs/TransitionSpecs';
 
 export const AvailableTickets = ({
   onBuySingleTicket,
@@ -38,25 +39,31 @@ export const AvailableTickets = ({
               <Ticket
                 key={'enkeltbillett'}
                 title={'Enkeltbillett'}
+                transportationModeTexts={{no: 'Buss/Trikk', en: 'Bus/Tram'}}
+                transportationModeIcons={[]}
                 description={'Varighet mellom 90 min og 5 timer'}
-                icon={<SingleTicketIcon height="100%" width="100%" />}
+                icon={TicketIcons.Single}
               />
               <Ticket
                 key={'periodebillett'}
                 title={'Enkeltbillett'}
+                transportationModeTexts={{no: 'Buss/Trikk', en: 'Bus/Tram'}}
+                transportationModeIcons={['bus']}
                 description={
                   'Velg mellom 7, 30 eller 180 dager eller kanskje du vil reise evig?'
                 }
-                icon={<PeriodTicketIcon height="100%" width="100%" />}
+                icon={TicketIcons.Period}
               />
             </View>
             <View style={styles.ticketsContainer}>
               <Ticket
                 title={'Sommerpass'}
+                transportationModeTexts={{no: 'Buss/Trikk', en: 'Bus/Tram'}}
+                transportationModeIcons={['bus']}
                 description={
                   'Reis hvor du vil, så mye du vil med buss, tog, hurtigbåt, ferge og trikk i Trøndelag i sju dager'
                 }
-                icon={<PeriodTicketIcon width="100%" height="100%" />}
+                icon={TicketIcons.Single}
                 key={'sommerpass'}
               />
             </View>
@@ -67,29 +74,44 @@ export const AvailableTickets = ({
   );
 };
 
+type TransportationModeIcon = (props: SvgProps) => JSX.Element;
+
 const Ticket = ({
   title,
   description,
+  transportationModeIcons,
+  transportationModeTexts,
   icon,
   key,
 }: {
   title: string;
   description: string;
-  icon: JSX.Element;
+  transportationModeIcons: TransportationModeIcon[];
+  transportationModeTexts: {no: string; en: string};
+  icon: (props: SvgProps) => JSX.Element;
   key: string;
 }) => {
   const styles = useStyles();
   return (
     <View style={styles.ticket} key={key}>
-      <Sections.GenericItem>
-        <ThemeText>{'Buss/Trikk'}</ThemeText>
-        <ThemeText type="body__primary--bold" accessibilityLabel={title}>
+      <View style={{flexShrink: 1}}>
+        <ThemeText type="body__tertiary" style={styles.transportation_label}>
+          {'Buss/Trikk'}
+        </ThemeText>
+        <ThemeText
+          type="body__secondary--bold"
+          style={styles.ticket_name}
+          accessibilityLabel={title}
+        >
           {title}
         </ThemeText>
-        <ThemeText>{description}</ThemeText>
-
-        <View style={styles.ticketIllustration}>{icon}</View>
-      </Sections.GenericItem>
+        <ThemeText type="body__tertiary" style={styles.description}>
+          {description}
+        </ThemeText>
+      </View>
+      <View style={styles.ticketIllustrationContainer}>
+        <View style={styles.ticketIllustration}>{icon({})}</View>
+      </View>
     </View>
   );
 };
@@ -108,15 +130,33 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     paddingLeft: theme.spacings.medium,
     paddingBottom: theme.spacings.medium,
+    alignItems: 'stretch',
   },
   ticket: {
     width: '100%',
     flexShrink: 1,
+    alignSelf: 'stretch',
     marginRight: theme.spacings.medium,
+    padding: theme.spacings.xLarge,
+    borderRadius: theme.border.radius.regular,
+    backgroundColor: theme.colors.background_0.backgroundColor,
+  },
+  ticketIllustrationContainer: {
+    flexGrow: 1,
+    flexDirection: 'row',
+    marginTop: theme.spacings.small,
   },
   ticketIllustration: {
-    width: 100,
-    overflow: 'hidden',
-    aspectRatio: 1,
+    alignSelf: 'flex-end',
+    opacity: 0.6,
   },
+  label_uppercase: {
+    // TODO: this will be paert of design system
+  },
+  transportation_label: {},
+  ticket_name: {
+    marginBottom: theme.spacings.small,
+    marginTop: theme.spacings.small,
+  },
+  description: {},
 }));
