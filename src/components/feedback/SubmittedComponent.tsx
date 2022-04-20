@@ -6,6 +6,7 @@ import ThemeText from '@atb/components/text';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Intercom from 'react-native-intercom';
+import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {Chat, Support} from '@atb/assets/svg/mono-icons/actions';
 import {FeedbackQuestionsViewContext} from './FeedbackContext';
 import {Opinions} from '.';
@@ -27,6 +28,7 @@ const SubmittedComponent = ({
 }: SubmittedComponentProps) => {
   const styles = useSubmittedComponentStyles();
   const {t} = useTranslation();
+  const focusRef = useFocusOnLoad();
   const {customer_service_url, enable_intercom} = useRemoteConfig();
 
   const handleButtonClick = () => {
@@ -47,13 +49,20 @@ const SubmittedComponent = ({
   };
 
   return (
-    <View style={[styles.container, style]}>
-      <ThemeText type="body__primary--bold" style={styles.questionText}>
-        {t(FeedbackTexts.submittedText.thanks)}
-      </ThemeText>
-      <ThemeText style={styles.centerText}>
-        {t(FeedbackTexts.additionalFeedback.text)}
-      </ThemeText>
+    <View style={styles.container}>
+      <View accessible={true} accessibilityRole="header" ref={focusRef}>
+        <ThemeText
+          type="body__primary--bold"
+          style={[styles.questionText, styles.centerText]}
+        >
+          {t(FeedbackTexts.submittedText.thanks)}
+        </ThemeText>
+      </View>
+      <View accessible={true}>
+        <ThemeText style={styles.centerText}>
+          {t(FeedbackTexts.additionalFeedback.text)}
+        </ThemeText>
+      </View>
       <View style={styles.button}>
         {enable_intercom ? (
           <Button
