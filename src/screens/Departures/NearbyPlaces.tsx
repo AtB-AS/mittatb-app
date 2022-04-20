@@ -4,8 +4,7 @@ import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement
 import {LocationInput, Section} from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
 import FavoriteChips from '@atb/favorite-chips';
-import {Location, LocationWithMetadata} from '@atb/favorites/types';
-import {useReverseGeocoder} from '@atb/geocoder';
+import {GeoLocation, Location} from '@atb/favorites/types';
 import {
   RequestPermissionFn,
   useGeolocationState,
@@ -44,7 +43,7 @@ export type DepartureScreenNavigationProp = CompositeNavigationProp<
 >;
 
 export type NearbyPlacesParams = {
-  location: LocationWithMetadata;
+  location: Location;
 };
 
 export type DeparturesProps = RouteProp<
@@ -61,10 +60,6 @@ export default function NearbyPlacesScreen({navigation}: RootProps) {
   const {status, location, locationEnabled, requestPermission} =
     useGeolocationState();
 
-  const {closestLocation: currentLocation} = useReverseGeocoder(
-    location?.coords ?? null,
-  );
-
   if (!status) {
     return <Loading />;
   }
@@ -73,14 +68,14 @@ export default function NearbyPlacesScreen({navigation}: RootProps) {
     <PlacesOverview
       requestGeoPermission={requestPermission}
       hasLocationPermission={locationEnabled && status === 'granted'}
-      currentLocation={currentLocation}
+      currentLocation={location || undefined}
       navigation={navigation}
     />
   );
 }
 
 type PlacesOverviewProps = {
-  currentLocation?: Location;
+  currentLocation?: GeoLocation;
   hasLocationPermission: boolean;
   requestGeoPermission: RequestPermissionFn;
   navigation: DepartureScreenNavigationProp;
@@ -98,8 +93,8 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
 
   const searchedFromLocation =
     useOnlySingleLocation<DeparturesProps>('location');
-  const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
-    () => currentLocation && {...currentLocation, resultType: 'geolocation'},
+  const currentSearchLocation = useMemo<Location | undefined>(
+    () => currentLocation,
     [currentLocation],
   );
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
@@ -124,6 +119,17 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
       initialLocation: fromLocation,
     });
 
+  useEffect(() => {
+    if (
+      fromLocation?.resultType == 'search' &&
+      fromLocation?.layer === 'venue'
+    ) {
+      navigation.navigate('PlaceScreen', {
+        place: fromLocation,
+      });
+    }
+  }, [fromLocation?.id]);
+
   function setCurrentLocationAsFrom() {
     navigation.setParams({
       location: currentLocation && {
@@ -145,15 +151,14 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
   }
 
   const getListDescription = () => {
-    if (!fromLocation || !fromLocation.name) return;
-    switch (fromLocation?.resultType) {
+    if (!fromLocation) return;
+    switch (fromLocation.resultType) {
       case 'geolocation':
         return t(DeparturesTexts.stopPlaceList.listDescription.geoLoc);
-      case 'favorite':
       case 'search':
         return (
           t(DeparturesTexts.stopPlaceList.listDescription.address) +
-          fromLocation?.name
+          fromLocation.name
         );
       case undefined:
         return;
@@ -194,10 +199,14 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
           updatingLocation={updatingLocation}
           openLocationSearch={openLocationSearch}
           setCurrentLocationOrRequest={setCurrentLocationOrRequest}
-          setLocation={(location: LocationWithMetadata) => {
-            navigation.setParams({
-              location,
-            });
+          setLocation={(location: Location) => {
+            location.resultType === 'search' && location.layer === 'venue'
+              ? navigation.navigate('PlaceScreen', {
+                  place: location as Place,
+                })
+              : navigation.setParams({
+                  location,
+                });
           }}
         />
       }
@@ -233,10 +242,10 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
 
 type HeaderProps = {
   updatingLocation: boolean;
-  fromLocation?: LocationWithMetadata;
+  fromLocation?: Location;
   openLocationSearch: () => void;
   setCurrentLocationOrRequest(): Promise<void>;
-  setLocation: (location: LocationWithMetadata) => void;
+  setLocation: (location: Location) => void;
 };
 
 const Header = React.memo(function Header({
@@ -275,7 +284,7 @@ const Header = React.memo(function Header({
         }}
         chipTypes={['favorites', 'add-favorite']}
         contentContainerStyle={styles.favoriteChips}
-      ></FavoriteChips>
+      />
     </>
   );
 });

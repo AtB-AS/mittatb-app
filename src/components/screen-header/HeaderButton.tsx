@@ -105,10 +105,11 @@ const useIconButton = (
       };
     }
     case 'status-disruption': {
-      const {type, color, onPress, ...accessibilityProps} = buttonProps;
+      const {type, color, onPress, testID, ...accessibilityProps} = buttonProps;
       return {
         icon: <ThemeIcon colorType={color} svg={ServiceDisruption} />,
         onPress: onPress,
+        testID: 'serviceDisruptionButton',
         accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
         ...accessibilityProps,
       };

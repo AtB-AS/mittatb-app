@@ -89,8 +89,8 @@ export type Reservation = {
 
 export enum PaymentType {
   Vipps = 2,
-  VISA = 3,
-  MasterCard = 4,
+  Visa = 3,
+  Mastercard = 4,
 }
 
 export type RecurringPayment = {

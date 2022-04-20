@@ -40,6 +40,7 @@ const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
                   leg.interchangeTo?.toServiceJourney?.id,
                 )}
                 leg={leg}
+                testID={'legContainer' + index}
               />
             );
           })}

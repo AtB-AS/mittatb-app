@@ -16,7 +16,7 @@ const ContactSheetTexts = {
       'Activate to contact customer service',
     ),
   },
-  intercom: {
+  customer_feedback: {
     title: _('Tilbakemelding om appen', 'Feedback about the app'),
     body: _(
       'Vil du foreslå forbedringer til appen?',

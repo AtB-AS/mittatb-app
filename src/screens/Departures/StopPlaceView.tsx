@@ -78,8 +78,6 @@ export default function StopPlaceView({
                 <Feedback
                   viewContext="departures"
                   metadata={quayListData}
-                  allowList={[2, 8, 24, 96, 255]}
-                  onlyOneFeedbackForEachAppVersionInThisViewContext
                   avoidResetOnMetadataUpdate
                 />
               )}

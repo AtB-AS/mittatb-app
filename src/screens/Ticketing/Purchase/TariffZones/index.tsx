@@ -15,7 +15,6 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   Language,
@@ -37,6 +36,7 @@ import {TicketingStackParams} from '../';
 import TariffZoneResults from '@atb/screens/Ticketing/Purchase/TariffZones/search/TariffZoneResults';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import hexToRgba from 'hex-to-rgba';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -205,7 +205,7 @@ const destinationPickerValue = (
 const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
   const {fromTariffZone, toTariffZone} = params;
   const [regionEvent, setRegionEvent] = useState<RegionEvent>();
-  const {tariff_zones: tariffZones} = useRemoteConfig();
+  const {tariffZones} = useFirestoreConfiguration();
   const [selectedZones, setSelectedZones] = useState<TariffZoneSelection>({
     from: fromTariffZone,
     to: toTariffZone,
@@ -234,7 +234,9 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
     tariffZoneId: string,
     resultType: TariffZoneResultType = 'zone',
   ) => {
-    const clickedTariffZone = tariffZones.find((t) => tariffZoneId === t.id)!;
+    const clickedTariffZone = tariffZones.find(
+      (tariffZone) => tariffZoneId === tariffZone.id,
+    )!;
     const newZoneSelection: TariffZoneSelection = {
       ...selectedZones,
       [selectedZones.selectNext]: {
@@ -247,7 +249,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
   };
 
   const startCoordinates = geolocation
-    ? [geolocation.coords.longitude, geolocation.coords.latitude]
+    ? [geolocation.coordinates.longitude, geolocation.coordinates.latitude]
     : [FOCUS_ORIGIN.longitude, FOCUS_ORIGIN.latitude];
 
   const onSave = () => {
@@ -293,14 +295,14 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
   async function flyToCurrentLocation() {
     geolocation &&
       mapCameraRef.current?.flyTo(
-        [geolocation.coords.longitude, geolocation.coords.latitude],
+        [geolocation.coordinates.longitude, geolocation.coordinates.latitude],
         750,
       );
 
     if (mapViewRef.current && geolocation) {
       let point = await mapViewRef.current.getPointInView([
-        geolocation.coords.longitude,
-        geolocation.coords.latitude,
+        geolocation.coordinates.longitude,
+        geolocation.coordinates.latitude,
       ]);
       if (Platform.OS == 'android') {
         // Necessary hack (https://github.com/react-native-mapbox-gl/maps/issues/1085)

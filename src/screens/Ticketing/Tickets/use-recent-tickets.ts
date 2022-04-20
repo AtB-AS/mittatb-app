@@ -5,16 +5,13 @@ import {
 } from '@atb/reference-data/types';
 import {findReferenceDataById} from '@atb/reference-data/utils';
 import {
-  RemoteConfigContextState,
-  useRemoteConfig,
-} from '@atb/RemoteConfigContext';
-import {
   listRecentFareContracts,
   RecentFareContract,
   useTicketState,
 } from '@atb/tickets';
 import {useEffect, useMemo, useReducer} from 'react';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 export type RecentTicket = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -92,14 +89,12 @@ const mapUsers = (
 
 const mapRecentFareContractToRecentTicket = (
   recentFareContract: RecentFareContract,
-  {
-    tariff_zones: tariffZones,
-    user_profiles: userProfiles,
-    preassigned_fare_products: preassignedFareProducts,
-  }: RemoteConfigContextState,
+  preassignedFareproducts: PreassignedFareProduct[],
+  tariffZones: TariffZone[],
+  userProfiles: UserProfile[],
 ): RecentTicket | null => {
   const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
+    preassignedFareproducts,
     recentFareContract.products[0],
   );
 
@@ -176,14 +171,18 @@ const containsTicket = (
  */
 const mapToLastThreeUniqueTickets = (
   recentFareContracts: RecentFareContract[],
-  remoteConfigState: RemoteConfigContextState,
+  preassignedFareproducts: PreassignedFareProduct[],
+  tariffZones: TariffZone[],
+  userProfiles: UserProfile[],
 ): RecentTicket[] => {
   return recentFareContracts
     .sort((fc1, fc2) => fc2.created_at.localeCompare(fc1.created_at))
-    .reduce<RecentTicket[]>((mappedTickets, fc) => {
+    .reduce<RecentTicket[]>((mappedTickets, recentFarecontract) => {
       const maybeTicket = mapRecentFareContractToRecentTicket(
-        fc,
-        remoteConfigState,
+        recentFarecontract,
+        preassignedFareproducts,
+        tariffZones,
+        userProfiles,
       );
       return maybeTicket ? mappedTickets.concat(maybeTicket) : mappedTickets;
     }, [])
@@ -197,8 +196,9 @@ const mapToLastThreeUniqueTickets = (
 
 export default function useRecentTickets() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const remoteConfigState = useRemoteConfig();
   const {fareContracts} = useTicketState();
+  const {preassignedFareproducts, tariffZones, userProfiles} =
+    useFirestoreConfiguration();
 
   const fetchRecentFareContracts = async () => {
     dispatch({type: 'FETCH'});
@@ -221,8 +221,18 @@ export default function useRecentTickets() {
 
   const recentTickets = useMemo(
     () =>
-      mapToLastThreeUniqueTickets(state.recentFareContracts, remoteConfigState),
-    [state.recentFareContracts, remoteConfigState],
+      mapToLastThreeUniqueTickets(
+        state.recentFareContracts,
+        preassignedFareproducts,
+        tariffZones,
+        userProfiles,
+      ),
+    [
+      state.recentFareContracts,
+      preassignedFareproducts,
+      tariffZones,
+      userProfiles,
+    ],
   );
 
   return {

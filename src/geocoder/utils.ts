@@ -1,5 +1,5 @@
 import {Feature} from '../sdk';
-import {Location} from '../favorites/types';
+import {SearchLocation} from '../favorites/types';
 
 // IMPORTANT: Feature coordinate-array is [long, lat] :sadface:. Mapping to lat/long object for less bugs downstream.
 export const mapFeatureToLocation = ({
@@ -7,7 +7,8 @@ export const mapFeatureToLocation = ({
     coordinates: [longitude, latitude],
   },
   properties,
-}: Feature): Location => ({
+}: Feature): SearchLocation => ({
   ...properties,
   coordinates: {latitude, longitude},
+  resultType: 'search',
 });

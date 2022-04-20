@@ -1,13 +1,12 @@
 import {ErrorType} from '@atb/api/utils';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {TextInput} from '@atb/components/sections';
-import {Location} from '@atb/favorites/types';
+import {SearchLocation} from '@atb/favorites/types';
 import {useGeocoder} from '@atb/geocoder';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {TariffZone} from '@atb/reference-data/types';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet} from '@atb/theme';
 import {
   TariffZoneSearchTexts,
@@ -27,6 +26,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {TicketingStackParams} from '../..';
 import TariffZoneResults from './TariffZoneResults';
 import VenueResults, {LocationAndTariffZone} from './VenueResults';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 type TariffZonesSearchName = 'TariffZones';
 
@@ -38,7 +38,6 @@ export type RouteParams = {
   callerRouteName: string;
   callerRouteParam: string;
   label: string;
-  initialLocation?: string;
 };
 
 type TariffZoneSearchRouteName = 'TariffZoneSearch';
@@ -53,21 +52,23 @@ export type Props = {
 const Index: React.FC<Props> = ({
   navigation,
   route: {
-    params: {callerRouteName, callerRouteParam, label, initialLocation},
+    params: {callerRouteName, callerRouteParam, label},
   },
 }) => {
   const styles = useThemeStyles();
 
-  const [text, setText] = useState<string>(initialLocation || '');
+  const [text, setText] = useState('');
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const debouncedText = useDebounce(text, 200);
   const {t} = useTranslation();
 
-  const {tariff_zones: tariffZones} = useRemoteConfig();
+  const {tariffZones} = useFirestoreConfiguration();
 
-  const getMatchingTariffZone = (location: Location) =>
-    tariffZones.find((tf) => location.tariff_zones?.includes(tf.id));
+  const getMatchingTariffZone = (location: SearchLocation) =>
+    tariffZones.find((tariffZone) =>
+      location.tariff_zones?.includes(tariffZone.id),
+    );
 
   const onSelectZone = (tariffZone: TariffZone) => {
     navigation.navigate(callerRouteName as any, {
@@ -78,7 +79,7 @@ const Index: React.FC<Props> = ({
     });
   };
 
-  const onSelectVenue = (location: Location) => {
+  const onSelectVenue = (location: SearchLocation) => {
     const tariffZone = getMatchingTariffZone(location);
     navigation.navigate(callerRouteName as any, {
       [callerRouteParam]: {
@@ -104,7 +105,7 @@ const Index: React.FC<Props> = ({
   const {location: geolocation} = useGeolocationState();
 
   const {locations, isSearching, error} =
-    useGeocoder(debouncedText, geolocation?.coords ?? null, true) ?? [];
+    useGeocoder(debouncedText, geolocation?.coordinates ?? null, true) ?? [];
 
   useEffect(() => {
     if (error) {
@@ -115,6 +116,7 @@ const Index: React.FC<Props> = ({
   const locationsAndTariffZones: LocationAndTariffZone[] = useMemo(
     () =>
       (locations || [])
+        ?.filter((l): l is SearchLocation => l.resultType === 'search')
         ?.map((location) => ({
           location,
           tariffZone: getMatchingTariffZone(location),

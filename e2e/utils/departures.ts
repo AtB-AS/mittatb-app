@@ -1,6 +1,6 @@
 import {by, element, expect} from 'detox';
 import {tapById} from './interactionHelpers';
-import {expectTextById, expectToBeVisibleByText} from './expectHelpers';
+import {expectIdToHaveText, expectToBeVisibleByText} from './expectHelpers';
 import {chooseSearchResult, setInputById} from './commonHelpers';
 
 // Do a departure search
@@ -14,7 +14,7 @@ export const departureSearch = async (departure: string) => {
 
 // v2: Choose bus stop
 export const chooseBusStop = async (itemId: string, departureStop: string) => {
-  await expectTextById(itemId + 'Name', departureStop);
+  await expectIdToHaveText(itemId + 'Name', departureStop);
   await tapById(itemId);
   await expectToBeVisibleByText(departureStop);
 };
@@ -131,8 +131,8 @@ export const getLineTitleV2 = async (quayId: string, itemId: string) => {
       .withAncestor(by.id(itemId).withAncestor(by.id(quayId))),
   )
     .getAttributes()
-    .then((e) => (!('elements' in e) ? e.text : 'NA: then1'))
-    .catch((error) => 'NA: error1 ' + error.toString());
+    .then((e) => (!('elements' in e) ? e.text : 'NA'))
+    .catch((error) => 'Error ' + error.toString());
 
   let title = await element(
     by
@@ -140,8 +140,8 @@ export const getLineTitleV2 = async (quayId: string, itemId: string) => {
       .withAncestor(by.id(itemId).withAncestor(by.id(quayId))),
   )
     .getAttributes()
-    .then((e) => (!('elements' in e) ? e.text : 'NA: then2'))
-    .catch((error) => 'NA: error2 ' + error.toString());
+    .then((e) => (!('elements' in e) ? e.text : 'NA'))
+    .catch((error) => 'Error ' + error.toString());
 
   return title !== undefined || publicCode !== undefined
     ? `${publicCode} ${title}`

@@ -11,7 +11,7 @@ import ScreenReaderAnnouncement from '../components/screen-reader-announcement';
 import {TextInput} from '../components/sections';
 import FavoriteChips, {ChipTypeGroup} from '../favorite-chips';
 import {useFavorites} from '../favorites';
-import {LocationWithMetadata} from '../favorites/types';
+import {Location} from '../favorites/types';
 import {useGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
 import {RootStackParamList} from '../navigation';
@@ -40,7 +40,7 @@ export type RouteParams = {
   callerRouteParam: string;
   label: string;
   favoriteChipTypes?: ChipTypeGroup[];
-  initialLocation?: LocationWithMetadata;
+  initialLocation?: Location;
   includeJourneyHistory?: boolean;
 };
 
@@ -75,7 +75,7 @@ const LocationSearch: React.FC<Props> = ({
     } = initialLocation
       ? {...initialLocation.coordinates, zoomLevel: 12}
       : geolocation
-      ? {...geolocation.coords, zoomLevel: 12}
+      ? {...geolocation.coordinates, zoomLevel: 12}
       : {...FOCUS_ORIGIN, zoomLevel: 6};
 
     navigation.navigate('MapSelection', {
@@ -101,7 +101,11 @@ const LocationSearch: React.FC<Props> = ({
         label={label}
         favoriteChipTypes={favoriteChipTypes}
         placeholder={t(LocationSearchTexts.searchField.placeholder)}
-        defaultText={initialLocation?.name}
+        defaultText={
+          initialLocation?.resultType === 'search'
+            ? initialLocation.name
+            : undefined
+        }
         includeJourneyHistory={includeJourneyHistory}
       />
     </View>
@@ -151,7 +155,7 @@ export function LocationSearchContent({
 
   const {locations, error} = useGeocoder(
     debouncedText,
-    geolocation?.coords ?? null,
+    geolocation?.coordinates ?? null,
     onlyAtbVenues,
   );
 
@@ -237,6 +241,7 @@ export function LocationSearchContent({
           contentContainerStyle={styles.contentBlock}
           keyboardShouldPersistTaps="handled"
           onScrollBeginDrag={() => Keyboard.dismiss()}
+          testID="historyAndResultsScrollView"
         >
           {includeJourneyHistory && (
             <JourneyHistory
