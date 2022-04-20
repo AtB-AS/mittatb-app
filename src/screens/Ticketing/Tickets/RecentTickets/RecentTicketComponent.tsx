@@ -70,11 +70,26 @@ export const RecentTicketComponent = ({
           <View style={styles.horizontalFlex}>
             <View style={styles.section}>
               <ThemeText type="body__tertiary">Reisende</ThemeText>
-              {userProfilesWithCount.map((u) => (
-                <FloatingLabel
-                  text={`${u.count} ${getReferenceDataName(u, language)}`}
-                />
-              ))}
+              {userProfilesWithCount.length < 2 &&
+                userProfilesWithCount.map((u) => (
+                  <FloatingLabel
+                    text={`${u.count} ${getReferenceDataName(u, language)}`}
+                  />
+                ))}
+              {userProfilesWithCount.length >= 2 && (
+                <>
+                  {userProfilesWithCount.slice(0, 1).map((u) => (
+                    <FloatingLabel
+                      text={`${u.count} ${getReferenceDataName(u, language)}`}
+                    />
+                  ))}
+                  <View style={styles.additionalCategories}>
+                    <ThemeText>
+                      + {userProfilesWithCount.slice(1).length} andre kategorier
+                    </ThemeText>
+                  </View>
+                </>
+              )}
             </View>
 
             <View style={styles.section}>
@@ -126,5 +141,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingVertical: theme.spacings.small,
     backgroundColor: theme.colors.primary_3.backgroundColor,
     borderRadius: theme.border.radius.regular,
+  },
+  additionalCategories: {
+    marginHorizontal: theme.spacings.medium,
+    marginVertical: theme.spacings.small,
   },
 }));
