@@ -4,9 +4,11 @@ import {RemoteConfig, defaultRemoteConfig, getConfig} from './remote-config';
 import Bugsnag from '@bugsnag/react-native';
 
 import {useAppState} from './AppContext';
+import {FeedbackConfiguration} from './components/feedback/FeedbackContext';
 
 export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
+  feedback_questions: FeedbackConfiguration[];
 };
 
 const RemoteConfigContext = createContext<RemoteConfigContextState | undefined>(
@@ -95,6 +97,7 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
     <RemoteConfigContext.Provider
       value={{
         ...config,
+        feedback_questions: parseJson(config.feedback_questions, []),
         refresh,
       }}
     >
