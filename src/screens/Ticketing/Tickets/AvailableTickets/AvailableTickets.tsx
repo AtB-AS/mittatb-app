@@ -48,7 +48,7 @@ export const AvailableTickets = ({
                 key={'periodebillett'}
                 title={'Enkeltbillett'}
                 transportationModeTexts={{no: 'Buss/Trikk', en: 'Bus/Tram'}}
-                transportationModeIcons={['bus']}
+                transportationModeIcons={[]}
                 description={
                   'Velg mellom 7, 30 eller 180 dager eller kanskje du vil reise evig?'
                 }
@@ -59,7 +59,7 @@ export const AvailableTickets = ({
               <Ticket
                 title={'Sommerpass'}
                 transportationModeTexts={{no: 'Buss/Trikk', en: 'Bus/Tram'}}
-                transportationModeIcons={['bus']}
+                transportationModeIcons={[]}
                 description={
                   'Reis hvor du vil, så mye du vil med buss, tog, hurtigbåt, ferge og trikk i Trøndelag i sju dager'
                 }
