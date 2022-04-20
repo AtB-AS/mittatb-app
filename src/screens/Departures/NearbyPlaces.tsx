@@ -297,8 +297,8 @@ function sortAndFilterStopPlaces(
 
   // Sort StopPlaces on distance from search location
   const sortedEdges = edges?.sort((edgeA, edgeB) => {
-    if (!edgeA.node?.distance) return 1;
-    if (!edgeB.node?.distance) return -1;
+    if (edgeA.node?.distance === undefined) return 1;
+    if (edgeB.node?.distance === undefined) return -1;
     return edgeA.node?.distance > edgeB.node?.distance ? 1 : -1;
   });
 
