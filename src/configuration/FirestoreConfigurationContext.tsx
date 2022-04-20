@@ -20,6 +20,7 @@ import {
   defaultUserProfiles,
   defaultModesWeSellTicketsFor,
   defaultPaymentTypes,
+  defaultVatPercent,
 } from '@atb/reference-data/defaults';
 import {PaymentType} from '@atb/tickets';
 
@@ -29,6 +30,7 @@ type ConfigurationContextState = {
   userProfiles: UserProfile[];
   modesWeSellTicketsFor: string[];
   paymentTypes: PaymentType[];
+  vatPercent: number;
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
@@ -37,6 +39,7 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   userProfiles: [],
   modesWeSellTicketsFor: [],
   paymentTypes: [],
+  vatPercent: 0,
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
@@ -55,6 +58,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [paymentTypes, setPaymentTypes] = useState(
     mapPaymentTypeStringsToEnums(defaultPaymentTypes),
   );
+  const [vatPercent, setVatPercent] = useState(defaultVatPercent);
 
   useEffect(() => {
     firestore()
@@ -87,6 +91,11 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (paymentTypes) {
             setPaymentTypes(paymentTypes);
           }
+
+          const vatPercent = getVatPercentFromSnapshot(snapshot);
+          if (vatPercent) {
+            setVatPercent(vatPercent);
+          }
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -104,6 +113,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       userProfiles,
       modesWeSellTicketsFor,
       paymentTypes,
+      vatPercent,
     };
   }, [
     preassignedFareproducts,
@@ -111,6 +121,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     userProfiles,
     modesWeSellTicketsFor,
     paymentTypes,
+    vatPercent,
   ]);
 
   return (
@@ -189,6 +200,14 @@ function getModesWeSellTicketsForFromSnapshot(
   return snapshot.docs
     .find((doc) => doc.id == 'other')
     ?.get<string[]>('modesWeSellTicketsFor');
+}
+
+function getVatPercentFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): number | undefined {
+  return snapshot.docs
+    .find((doc) => doc.id == 'other')
+    ?.get<number>('vatPercent');
 }
 
 function getPaymentTypesFromSnapshot(

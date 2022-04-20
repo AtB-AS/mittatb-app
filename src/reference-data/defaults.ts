@@ -17,3 +17,4 @@ export const defaultModesWeSellTicketsFor: string[] = [
   'shuttleBus',
 ];
 export const defaultPaymentTypes: string[] = ['vipps', 'visa', 'mastercard'];
+export const defaultVatPercent: number = 12;

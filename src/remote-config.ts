@@ -15,7 +15,6 @@ export type RemoteConfig = {
   news_text: string;
   news_link_text: string;
   news_link_url: string;
-  vat_percent: number;
   customer_service_url: string;
   customer_feedback_url: string;
   tripsSearch_target_number_of_initial_hits: number;
@@ -39,7 +38,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   news_text: '',
   news_link_text: 'Les mer',
   news_link_url: '',
-  vat_percent: 6,
   customer_service_url: 'https://www.atb.no/kontakt/',
   customer_feedback_url: '',
   tripsSearch_target_number_of_initial_hits: 8,
@@ -75,8 +73,6 @@ export function getConfig(): RemoteConfig {
   const news_text = values['news_text']?.asString() ?? '';
   const news_link_text = values['news_link_text']?.asString() ?? 'Les mer';
   const news_link_url = values['news_link_url']?.asString() ?? '';
-  const vat_percent =
-    values['vat_percent']?.asNumber() ?? defaultRemoteConfig.vat_percent;
   const customer_service_url =
     values['customer_service_url']?.asString() ??
     defaultRemoteConfig.customer_service_url;
@@ -115,7 +111,6 @@ export function getConfig(): RemoteConfig {
     news_text,
     news_link_url,
     news_link_text,
-    vat_percent,
     customer_service_url,
     customer_feedback_url,
     tripsSearch_target_number_of_initial_hits,

@@ -88,7 +88,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
   const {user} = useAuthState();
-  const {paymentTypes} = useFirestoreConfiguration();
+  const {paymentTypes, vatPercent} = useFirestoreConfiguration();
 
   const previousPaymentMethod = usePreviousPaymentMethod(user?.uid);
 
@@ -97,8 +97,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     paymentTypes,
   );
 
-  const {enable_creditcard: enableCreditCard, vat_percent: vatPercent} =
-    useRemoteConfig();
+  const {enable_creditcard: enableCreditCard} = useRemoteConfig();
 
   const {
     fromTariffZone,
