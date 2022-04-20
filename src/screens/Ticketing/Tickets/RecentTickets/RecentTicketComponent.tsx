@@ -64,7 +64,10 @@ export const RecentTicketComponent = ({
           </View>
 
           <View style={styles.section}>
-            <ThemeText type="body__secondary">{`Enkeltbillett - ${returnModes()}`}</ThemeText>
+            <ThemeText type="body__secondary">{`${getReferenceDataName(
+              preassignedFareProduct,
+              language,
+            )}`}</ThemeText>
           </View>
 
           <View style={styles.horizontalFlex}>
