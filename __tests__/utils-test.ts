@@ -79,13 +79,15 @@ describe('Short wait time evaluator', () => {
 
 describe('Default Fareproducts', () => {
   it('can be filtered by distribution channel', () => {
-    const defaultsHaveAppChannel = defaultPreassignedFareProducts.some(
-      (product) => {
-        return product.distributionChannel.some((channel) => channel === 'web');
-      },
-    );
+    const defaultsHaveproductsWithoutAppChannel =
+      defaultPreassignedFareProducts.some((product) => {
+        const productHasAppChannel = product.distributionChannel.some(
+          (channel) => channel === 'app',
+        );
+        return !productHasAppChannel;
+      });
 
-    expect(defaultsHaveAppChannel).toBe(true);
+    expect(defaultsHaveproductsWithoutAppChannel).toBe(true);
 
     const filteredByAppChannel = defaultPreassignedFareProducts.filter(
       productIsSellableInApp,
