@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {GenericItem, LinkItem, Section} from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
@@ -15,6 +15,15 @@ type recentTicketProps = {
     transportModes: transportMode[];
   };
   selectTicket: (ticketData: RecentTicket) => void;
+};
+
+export const FloatingLabel = ({text}: {text: string}) => {
+  const styles = useStyles();
+  return (
+    <View style={styles.blueLabel}>
+      <ThemeText>{text}</ThemeText>
+    </View>
+  );
 };
 
 export const RecentTicketComponent = ({
@@ -61,16 +70,18 @@ export const RecentTicketComponent = ({
           <View style={styles.horizontalFlex}>
             <View style={styles.section}>
               <ThemeText type="body__tertiary">Reisende</ThemeText>
-              <ThemeText>1 voksen</ThemeText>
+              <FloatingLabel text="1 voksen" />
+              <FloatingLabel text="2 biler" />
+              <FloatingLabel text="1 voksen" />
             </View>
 
             <View style={styles.section}>
               <ThemeText type="body__tertiary">Sone</ThemeText>
-              <ThemeText>
-                {fromZone === toZone
-                  ? `${fromZone}`
-                  : `${fromZone} - ${toZone}`}
-              </ThemeText>
+              {fromZone === toZone ? (
+                <FloatingLabel text={`${fromZone}`} />
+              ) : (
+                <FloatingLabel text={`${fromZone} - ${toZone}`} />
+              )}
             </View>
           </View>
         </View>
@@ -105,5 +116,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  blueLabel: {
+    marginVertical: theme.spacings.xSmall,
+    alignSelf: 'flex-start',
+    paddingHorizontal: theme.spacings.medium,
+    paddingVertical: theme.spacings.small,
+    backgroundColor: theme.colors.primary_3.backgroundColor,
+    borderRadius: theme.border.radius.regular,
   },
 }));
