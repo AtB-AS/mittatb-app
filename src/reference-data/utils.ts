@@ -4,7 +4,7 @@ import {
   TariffZone,
   UserProfile,
 } from './types';
-import {Language} from '../translations';
+import {Language} from '../translations/commons';
 
 enum ReferenceDataLanguage {
   'nob' = 'nob',
@@ -56,3 +56,7 @@ export const findReferenceDataById = <
   elements: T[],
   id: string,
 ) => elements.find((p) => p.id === id);
+
+export const productIsSellableInApp = (product: PreassignedFareProduct) => {
+  return product.distributionChannel.some((channel) => channel === 'app');
+};
