@@ -36,6 +36,10 @@ const AddEditFavoriteTexts = {
       'Du må velge et sted du vil ha som favoritt',
       'Please select a location for your favourite',
     ),
+    geopositionWithoutNameError: _(
+      'Du må velge et navn om du vil bruke din nåværende posisjon som favoritt',
+      'Please select a name if you want use your current location for your favourite',
+    ),
   },
   delete: {
     label: _('Slett favorittsted', 'Delete favourite location'),

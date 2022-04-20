@@ -18,18 +18,25 @@ import {
   defaultPreassignedFareProducts,
   defaultTariffZones,
   defaultUserProfiles,
+  defaultModesWeSellTicketsFor,
+  defaultPaymentTypes,
 } from '@atb/reference-data/defaults';
+import {PaymentType} from '@atb/tickets';
 
 type ConfigurationContextState = {
   preassignedFareproducts: PreassignedFareProduct[];
   tariffZones: TariffZone[];
   userProfiles: UserProfile[];
+  modesWeSellTicketsFor: string[];
+  paymentTypes: PaymentType[];
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
   preassignedFareproducts: [],
   tariffZones: [],
   userProfiles: [],
+  modesWeSellTicketsFor: [],
+  paymentTypes: [],
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
@@ -42,6 +49,12 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   );
   const [tariffZones, setTariffZones] = useState(defaultTariffZones);
   const [userProfiles, setUserProfiles] = useState(defaultUserProfiles);
+  const [modesWeSellTicketsFor, setModesWeSellTicketsFor] = useState(
+    defaultModesWeSellTicketsFor,
+  );
+  const [paymentTypes, setPaymentTypes] = useState(
+    mapPaymentTypeStringsToEnums(defaultPaymentTypes),
+  );
 
   useEffect(() => {
     firestore()
@@ -63,6 +76,17 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (userProfiles) {
             setUserProfiles(userProfiles);
           }
+
+          const modesWeSellTicketsFor =
+            getModesWeSellTicketsForFromSnapshot(snapshot);
+          if (modesWeSellTicketsFor) {
+            setModesWeSellTicketsFor(modesWeSellTicketsFor);
+          }
+
+          const paymentTypes = getPaymentTypesFromSnapshot(snapshot);
+          if (paymentTypes) {
+            setPaymentTypes(paymentTypes);
+          }
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -78,8 +102,16 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       preassignedFareproducts,
       tariffZones,
       userProfiles,
+      modesWeSellTicketsFor,
+      paymentTypes,
     };
-  }, [preassignedFareproducts, tariffZones, userProfiles]);
+  }, [
+    preassignedFareproducts,
+    tariffZones,
+    userProfiles,
+    modesWeSellTicketsFor,
+    paymentTypes,
+  ]);
 
   return (
     <FirestoreConfigurationContext.Provider value={memoizedState}>
@@ -149,4 +181,40 @@ function getUserProfilesFromSnapshot(
     Bugsnag.notify(error);
   }
   return undefined;
+}
+
+function getModesWeSellTicketsForFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): string[] | undefined {
+  return snapshot.docs
+    .find((doc) => doc.id == 'other')
+    ?.get<string[]>('modesWeSellTicketsFor');
+}
+
+function getPaymentTypesFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): PaymentType[] | undefined {
+  let paymentTypesField = snapshot.docs
+    .find((doc) => doc.id == 'paymentTypes')
+    ?.get<string[]>('app');
+  if (paymentTypesField != undefined) {
+    return mapPaymentTypeStringsToEnums(paymentTypesField);
+  }
+  return undefined;
+}
+
+function mapPaymentTypeStringsToEnums(
+  arrayOfPaymentTypes: string[],
+): PaymentType[] {
+  var paymentTypes: PaymentType[] = [];
+  for (const option of arrayOfPaymentTypes) {
+    const typeName =
+      option.charAt(0).toUpperCase() + option.slice(1).toLocaleLowerCase();
+    const paymentType: PaymentType =
+      PaymentType[typeName as keyof typeof PaymentType];
+    if (paymentType != undefined) {
+      paymentTypes.push(paymentType);
+    }
+  }
+  return paymentTypes;
 }

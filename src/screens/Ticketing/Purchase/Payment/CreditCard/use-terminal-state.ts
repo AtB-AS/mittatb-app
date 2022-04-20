@@ -102,7 +102,7 @@ const initialState: TerminalReducerState = {
 
 export default function useTerminalState(
   offers: ReserveOffer[],
-  paymentType: PaymentType.VISA | PaymentType.MasterCard,
+  paymentType: PaymentType.Visa | PaymentType.Mastercard,
   recurringPaymentId: number | undefined,
   saveRecurringCard: boolean,
   cancelTerminal: () => void,

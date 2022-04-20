@@ -34,6 +34,11 @@ export const GoodOrBadButton = ({
         }
         accessibilityRole="radio"
         accessibilityState={{selected: checked}}
+        accessibilityHint={
+          checked
+            ? t(FeedbackTexts.alternatives.a11yHints.checked)
+            : t(FeedbackTexts.alternatives.a11yHints.unchecked)
+        }
       >
         <View
           style={

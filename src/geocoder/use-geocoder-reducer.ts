@@ -1,16 +1,16 @@
-import {Location} from '../favorites/types';
+import {SearchLocation} from '../favorites/types';
 import {useReducer} from 'react';
 import {ErrorType} from '../api/utils';
 
 export type GeocoderState = {
-  locations: Location[] | null;
+  locations: SearchLocation[] | null;
   isSearching: boolean;
   error?: ErrorType;
 };
 
 type GeocoderReducerAction =
   | {
-      locations: Location[] | null;
+      locations: SearchLocation[] | null;
       type: 'SET_LOCATIONS';
     }
   | {

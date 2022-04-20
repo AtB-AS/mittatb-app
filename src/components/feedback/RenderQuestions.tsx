@@ -1,7 +1,7 @@
 import React from 'react';
 import {Opinions} from '.';
 import {QuestionType, AlternativeType} from './FeedbackContext';
-import {useTranslation} from '@atb/translations';
+import {useTranslation, FeedbackTexts} from '@atb/translations';
 import ThemeText from '@atb/components/text';
 import {View} from 'react-native';
 import {TouchableOpacity} from 'react-native';
@@ -72,7 +72,7 @@ function AlternativeItem({
   handleAnswerPress,
   ...props
 }: AlternativeItemProps) {
-  const {language} = useTranslation();
+  const {language, t} = useTranslation();
   const styles = useAlternativeStyle();
   const {topContainer} = useSectionItem({...props});
   const isChecked = selectedAlternativeIds.includes(alternative.alternativeId);
@@ -82,6 +82,11 @@ function AlternativeItem({
       onPress={() => handleAnswerPress(alternative.alternativeId)}
       accessibilityRole="checkbox"
       accessibilityState={{checked: isChecked}}
+      accessibilityHint={
+        isChecked
+          ? t(FeedbackTexts.alternatives.a11yHints.checked)
+          : t(FeedbackTexts.alternatives.a11yHints.unchecked)
+      }
     >
       <View
         style={

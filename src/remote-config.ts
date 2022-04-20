@@ -2,7 +2,6 @@ import remoteConfig from '@react-native-firebase/remote-config';
 import {PRIVACY_POLICY_URL, ENABLE_TICKETING} from '@env';
 
 export type RemoteConfig = {
-  modes_we_sell_tickets_for: string;
   enable_network_logging: boolean;
   enable_ticketing: boolean;
   enable_intercom: boolean;
@@ -26,17 +25,7 @@ export type RemoteConfig = {
   service_disruption_url: string;
 };
 
-export const defaultModesWeSellTicketsFor: string[] = [
-  'cityTram',
-  'expressBus',
-  'localBus',
-  'localTram',
-  'regionalBus',
-  'shuttleBus',
-];
-
 export const defaultRemoteConfig: RemoteConfig = {
-  modes_we_sell_tickets_for: JSON.stringify(defaultModesWeSellTicketsFor),
   enable_network_logging: true,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
   enable_intercom: true,
@@ -88,9 +77,6 @@ export function getConfig(): RemoteConfig {
   const news_link_url = values['news_link_url']?.asString() ?? '';
   const vat_percent =
     values['vat_percent']?.asNumber() ?? defaultRemoteConfig.vat_percent;
-  const modes_we_sell_tickets_for =
-    values['modes_we_sell_tickets_for']?.asString() ??
-    defaultRemoteConfig.modes_we_sell_tickets_for;
   const customer_service_url =
     values['customer_service_url']?.asString() ??
     defaultRemoteConfig.customer_service_url;
@@ -116,7 +102,6 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.service_disruption_url;
 
   return {
-    modes_we_sell_tickets_for,
     enable_network_logging,
     enable_ticketing,
     enable_intercom,

@@ -84,7 +84,7 @@ const LocationText: React.FC<{
   return (
     <>
       <ThemeText type="body__secondary">{title}</ThemeText>
-      <ThemeText type="body__tertiary">{subtitle}</ThemeText>
+      {subtitle && <ThemeText type="body__tertiary">{subtitle}</ThemeText>}
     </>
   );
 };
@@ -93,13 +93,15 @@ function getLocationText(
   t: TranslateFunction,
   location?: Location,
   error?: ErrorType,
-): {title: string; subtitle: string} {
+): {title: string; subtitle?: string} {
   if (location) {
     return {
       title: location.name,
       subtitle:
-        (location.postalcode ? location.postalcode + ', ' : '') +
-        location.locality,
+        location.resultType === 'geolocation'
+          ? undefined
+          : (location.postalcode ? location.postalcode + ', ' : '') +
+            location.locality,
     };
   }
 
