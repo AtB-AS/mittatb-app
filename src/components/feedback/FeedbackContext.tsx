@@ -4,14 +4,19 @@ import Bugsnag from '@bugsnag/react-native';
 
 export type FeedbackQuestionsViewContext = 'departures' | 'assistant';
 
-export type CategoryType = {
+export type FeedbackConfiguration = {
   viewContext: FeedbackQuestionsViewContext;
+  alwaysShow: boolean;
+  dismissable: boolean;
+  surveyVersion: number;
+  gracePeriodDisplayCount: number;
+  repromptDisplayCount: number;
   introText: LanguageString;
   question: QuestionType;
 };
 
 export type QuestionCategories = Partial<
-  Record<FeedbackQuestionsViewContext, CategoryType>
+  Record<FeedbackQuestionsViewContext, FeedbackConfiguration>
 >;
 
 type LanguageString = {
@@ -63,7 +68,7 @@ const FeedbackQuestionsProvider: React.FC = ({children}) => {
               fetchedQuestions,
             )) {
               newQuestions[viewContext as FeedbackQuestionsViewContext] =
-                JSON.parse(questions) as CategoryType;
+                JSON.parse(questions) as FeedbackConfiguration;
             }
             setCategories(newQuestions);
           } catch (error: any) {

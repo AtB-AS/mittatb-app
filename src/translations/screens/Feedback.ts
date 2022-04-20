@@ -1,9 +1,25 @@
 import {translation as _} from '../commons';
 
 const FeedbackTexts = {
+  alternatives: {
+    a11yHints: {
+      checked: _(
+        'Alternativet er valgt. Aktivér for å fjerne markeringen på dette alternativet.',
+        'This alternative is already selected. Activate to uncheck this alternative.',
+      ),
+      unchecked: _(
+        'Alternativet er ikke valgt. Aktivér for å velge dette alternativet.',
+        'This alternative is not selected. Activate to check this alternative.',
+      ),
+    },
+  },
   goodOrBadTexts: {
     good: _('Bra', 'Good'),
     bad: _('Dårlig', 'Bad'),
+    doNotShowAgain: _(
+      'Ikke vis dette spørsmålet igjen',
+      'Do not show this question again',
+    ),
   },
   submitText: {
     submitFeedback: _('Send tilbakemelding', 'Submit feedback'),
