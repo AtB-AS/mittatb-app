@@ -108,10 +108,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   transportationIcon: {
     display: 'flex',
     flexDirection: 'row',
-    paddingVertical: theme.spacings.xSmall,
+    paddingVertical: theme.spacings.small,
     paddingHorizontal: theme.spacings.small,
-    borderRadius: theme.border.radius.regular,
-    marginHorizontal: theme.spacings.xSmall,
+    borderRadius: theme.border.radius.small,
+    marginRight: theme.spacings.xSmall,
   },
   lineNumberText: {
     marginLeft: theme.spacings.xSmall,
