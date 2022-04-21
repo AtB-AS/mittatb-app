@@ -1,19 +1,20 @@
-import {View} from 'react-native';
-import Button from '@atb/components/button';
+import {TouchableOpacity, View} from 'react-native';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {useAuthState} from '@atb/auth';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
-import * as Sections from '@atb/components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
-
-import ThemeIcon from '@atb/components/theme-icon';
 import ThemeText from '@atb/components/text';
 import * as TicketIcons from '@atb/assets/svg/color/illustrations/ticket-type';
 import {SvgProps} from 'react-native-svg';
-import {Transition} from 'react-native-reanimated';
-import {TransitionIOSSpec} from '@react-navigation/stack/lib/typescript/src/TransitionConfigs/TransitionSpecs';
+import TransportationIcon from '@atb/components/transportation-icon';
+import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {
+  Mode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 export const AvailableTickets = ({
   onBuySingleTicket,
@@ -26,9 +27,12 @@ export const AvailableTickets = ({
   const {theme} = useTheme();
   const {abtCustomerId, authenticationType} = useAuthState();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
+  const {preassignedFareproducts} = useFirestoreConfiguration();
   const {t} = useTranslation();
 
   const isSignedInAsAbtCustomer = !!abtCustomerId;
+
+  // TODO check firestore for availability
 
   return (
     <View style={styles.container}>
@@ -37,34 +41,69 @@ export const AvailableTickets = ({
           <ScrollView>
             <View style={styles.ticketsContainer}>
               <Ticket
-                key={'enkeltbillett'}
-                title={'Enkeltbillett'}
-                transportationModeTexts={{no: 'Buss/Trikk', en: 'Bus/Tram'}}
-                transportationModeIcons={[]}
-                description={'Varighet mellom 90 min og 5 timer'}
+                title={t(TicketsTexts.availableTickets.singleTicket.title)}
+                transportationModeTexts={t(
+                  TicketsTexts.availableTickets.singleTicket.transportModes,
+                )}
+                transportationModeIcons={[
+                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+                ]}
+                description={t(
+                  TicketsTexts.availableTickets.singleTicket.description,
+                )}
                 icon={TicketIcons.Single}
+                onPress={onBuySingleTicket}
               />
               <Ticket
-                key={'periodebillett'}
-                title={'Enkeltbillett'}
-                transportationModeTexts={{no: 'Buss/Trikk', en: 'Bus/Tram'}}
-                transportationModeIcons={[]}
-                description={
-                  'Velg mellom 7, 30 eller 180 dager eller kanskje du vil reise evig?'
-                }
+                title={t(TicketsTexts.availableTickets.periodTicket.title)}
+                transportationModeTexts={t(
+                  TicketsTexts.availableTickets.periodTicket.transportModes,
+                )}
+                transportationModeIcons={[
+                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+                ]}
+                description={t(
+                  TicketsTexts.availableTickets.periodTicket.description,
+                )}
                 icon={TicketIcons.Period}
+                onPress={onBuyPeriodTicket}
               />
             </View>
             <View style={styles.ticketsContainer}>
               <Ticket
-                title={'Sommerpass'}
-                transportationModeTexts={{no: 'Buss/Trikk', en: 'Bus/Tram'}}
-                transportationModeIcons={[]}
-                description={
-                  'Reis hvor du vil, så mye du vil med buss, tog, hurtigbåt, ferge og trikk i Trøndelag i sju dager'
-                }
-                icon={TicketIcons.Single}
-                key={'sommerpass'}
+                title={t(TicketsTexts.availableTickets.summerPass.title)}
+                transportationModeTexts={t(
+                  TicketsTexts.availableTickets.summerPass.transportModes,
+                )}
+                transportationModeIcons={[
+                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+                  {mode: Mode.Rail},
+                  {mode: Mode.Water},
+                ]}
+                description={t(
+                  TicketsTexts.availableTickets.summerPass.description,
+                )}
+                icon={TicketIcons.Summer}
+                onPress={onBuyPeriodTicket}
+              />
+            </View>
+            <View style={styles.ticketsContainer}>
+              <Ticket
+                title={t(TicketsTexts.availableTickets.summerPass.title)}
+                transportationModeTexts={t(
+                  TicketsTexts.availableTickets.summerPass.transportModes,
+                )}
+                transportationModeIcons={[
+                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+                  {mode: Mode.Rail},
+                  {mode: Mode.Water},
+                ]}
+                description={t(
+                  TicketsTexts.availableTickets.summerPass.description,
+                )}
+                icon={TicketIcons.Summer}
+                accented={true}
+                onPress={onBuyPeriodTicket}
               />
             </View>
           </ScrollView>
@@ -74,7 +113,10 @@ export const AvailableTickets = ({
   );
 };
 
-type TransportationModeIcon = (props: SvgProps) => JSX.Element;
+type TransportationModeIconProperties = {
+  mode: Mode;
+  subMode?: TransportSubmode;
+};
 
 const Ticket = ({
   title,
@@ -82,36 +124,59 @@ const Ticket = ({
   transportationModeIcons,
   transportationModeTexts,
   icon,
-  key,
+  accented = false,
+  onPress,
 }: {
   title: string;
   description: string;
-  transportationModeIcons: TransportationModeIcon[];
-  transportationModeTexts: {no: string; en: string};
+  transportationModeIcons: TransportationModeIconProperties[];
+  transportationModeTexts: string;
   icon: (props: SvgProps) => JSX.Element;
-  key: string;
+  accented?: boolean;
+  onPress: () => void;
 }) => {
   const styles = useStyles();
+  const ticketTheme = accented ? styles.ticket_accented : styles.ticket_normal;
+  const textColor = accented ? 'primary_2' : 'primary';
+
   return (
-    <View style={styles.ticket} key={key}>
-      <View style={{flexShrink: 1}}>
-        <ThemeText type="body__tertiary" style={styles.transportation_label}>
-          {'Buss/Trikk'}
-        </ThemeText>
-        <ThemeText
-          type="body__secondary--bold"
-          style={styles.ticket_name}
-          accessibilityLabel={title}
-        >
-          {title}
-        </ThemeText>
-        <ThemeText type="body__tertiary" style={styles.description}>
-          {description}
-        </ThemeText>
-      </View>
-      <View style={styles.ticketIllustrationContainer}>
-        <View style={styles.ticketIllustration}>{icon({})}</View>
-      </View>
+    <View style={[styles.ticket, ticketTheme]}>
+      <TouchableOpacity onPress={onPress}>
+        <View style={{flexShrink: 1}}>
+          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+            {transportationModeIcons.map((icon) => {
+              return (
+                <TransportationIcon mode={icon.mode} subMode={icon.subMode} />
+              );
+            })}
+            <ThemeText
+              type="body__tertiary"
+              style={styles.transportation_label}
+              color={textColor}
+            >
+              {transportationModeTexts}
+            </ThemeText>
+          </View>
+          <ThemeText
+            type="body__secondary--bold"
+            style={styles.ticket_name}
+            accessibilityLabel={title}
+            color={textColor}
+          >
+            {title}
+          </ThemeText>
+          <ThemeText
+            type="body__tertiary"
+            style={styles.description}
+            color={textColor}
+          >
+            {description}
+          </ThemeText>
+        </View>
+        <View style={styles.ticketIllustrationContainer}>
+          <View style={styles.ticketIllustration}>{icon({})}</View>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -139,8 +204,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginRight: theme.spacings.medium,
     padding: theme.spacings.xLarge,
     borderRadius: theme.border.radius.regular,
+  },
+
+  ticket_normal: {
     backgroundColor: theme.colors.background_0.backgroundColor,
   },
+  ticket_accented: {
+    backgroundColor: theme.colors.primary_2.backgroundColor,
+    textColor: theme.colors.primary_2.color,
+  },
+
   ticketIllustrationContainer: {
     flexGrow: 1,
     flexDirection: 'row',
