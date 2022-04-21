@@ -3,6 +3,8 @@ import {addMinutes} from 'date-fns';
 import {Leg} from '@atb/api/types/trips';
 import {TIME_LIMIT_IN_MINUTES} from '../src/screens/TripDetails/Details/utils';
 import {hasShortWaitTime} from '../src/screens/TripDetails/components/utils';
+import {defaultPreassignedFareProducts} from '@atb/reference-data/defaults';
+import {productIsSellableInApp} from '@atb/reference-data/utils';
 
 describe('IterateWithNext', () => {
   it('iterates correctly', () => {
@@ -72,5 +74,27 @@ describe('Short wait time evaluator', () => {
   it('passes with empty array', () => {
     const isShortWait = hasShortWaitTime([]);
     expect(isShortWait).toBe(false);
+  });
+});
+
+describe('Default Fareproducts', () => {
+  it('can be filtered by distribution channel', () => {
+    const defaultsHaveproductsWithoutAppChannel =
+      defaultPreassignedFareProducts.some((product) => {
+        const productHasAppChannel = product.distributionChannel.some(
+          (channel) => channel === 'app',
+        );
+        return !productHasAppChannel;
+      });
+
+    expect(defaultsHaveproductsWithoutAppChannel).toBe(true);
+
+    const filteredByAppChannel = defaultPreassignedFareProducts.filter(
+      productIsSellableInApp,
+    );
+
+    expect(
+      defaultPreassignedFareProducts.length - filteredByAppChannel.length,
+    ).toBeGreaterThan(0);
   });
 });

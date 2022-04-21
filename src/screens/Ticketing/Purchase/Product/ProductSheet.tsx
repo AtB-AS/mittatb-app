@@ -9,7 +9,10 @@ import {
   useTranslation,
 } from '@atb/translations';
 import Button from '@atb/components/button';
-import {getReferenceDataName} from '@atb/reference-data/utils';
+import {
+  getReferenceDataName,
+  productIsSellableInApp,
+} from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
@@ -33,9 +36,9 @@ const ProductSheet = forwardRef<ScrollView, Props>(
       preassignedFareProduct,
     );
 
-    const selectableProducts = preassignedFareproducts.filter(
-      (p) => p.type === selectedProduct.type,
-    );
+    const selectableProducts = preassignedFareproducts
+      .filter(productIsSellableInApp)
+      .filter((p) => p.type === selectedProduct.type);
 
     return (
       <BottomSheetContainer>

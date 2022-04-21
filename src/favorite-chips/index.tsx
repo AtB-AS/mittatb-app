@@ -22,7 +22,7 @@ import {ThemeColor} from '@atb/theme/colors';
 const themeColor: ThemeColor = 'primary_2';
 
 type Props = {
-  onSelectLocation: (location: LocationWithMetadata) => void;
+  onSelectLocation: (location: Location) => void;
   onMapSelection?: () => void;
   containerStyle?: StyleProp<ViewStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
@@ -152,22 +152,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 }));
 
 function useCurrentLocationChip(
-  onSelectLocation: (location: LocationWithMetadata) => void,
+  onSelectLocation: (location: GeoLocation) => void,
 ) {
   const {location, requestPermission} = useGeolocationState();
-  const {closestLocation: currentLocation} = useReverseGeocoder(
-    location?.coords ?? null,
-  );
 
   const [recentlyAllowedGeo, setsetRecentlyAllowedGeo] = useState(false);
 
   const onCurrentLocation = useCallback(
     async function () {
-      if (currentLocation) {
-        onSelectLocation({
-          ...currentLocation,
-          resultType: 'geolocation',
-        });
+      if (location) {
+        onSelectLocation(location);
       } else {
         const status = await requestPermission();
         if (status === 'granted') {
@@ -175,17 +169,14 @@ function useCurrentLocationChip(
         }
       }
     },
-    [currentLocation, onSelectLocation, requestPermission],
+    [location, onSelectLocation, requestPermission],
   );
 
   useEffect(() => {
-    if (recentlyAllowedGeo && currentLocation) {
-      onSelectLocation({
-        ...currentLocation,
-        resultType: 'geolocation',
-      });
+    if (recentlyAllowedGeo && location) {
+      onSelectLocation(location);
     }
-  }, [recentlyAllowedGeo, currentLocation]);
+  }, [recentlyAllowedGeo, location]);
 
   return {onCurrentLocation};
 }

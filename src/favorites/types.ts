@@ -1,14 +1,19 @@
-import {Feature} from '../sdk';
 import {
   Coordinates,
   TransportMode,
   TransportSubmode,
-  Location as LocationSDK,
   FeatureCategory,
 } from '@entur/sdk';
 import {StoredType} from './storage';
 
-export type Location = {
+export type GeoLocation = {
+  id: string;
+  name: string;
+  coordinates: Coordinates;
+  resultType: 'geolocation';
+};
+
+export type SearchLocation = {
   id: string;
   name: string;
   layer: 'venue' | 'address';
@@ -18,24 +23,24 @@ export type Location = {
   label?: string;
   postalcode?: string;
   tariff_zones?: string[];
-};
+} & (
+  | {resultType: 'search'}
+  | {
+      resultType: 'favorite';
+      favoriteId: string;
+    }
+);
+
+export type Location = GeoLocation | SearchLocation;
 
 export type LocationFavorite = {
-  location: Location;
+  location: SearchLocation;
   emoji?: string;
   name?: string;
 };
 
 export type StoredLocationFavorite = StoredType<LocationFavorite>;
 export type UserFavorites = StoredLocationFavorite[];
-
-export type LocationWithMetadata = Location &
-  (
-    | {
-        resultType: 'search' | 'geolocation';
-      }
-    | {resultType: 'favorite'; favoriteId: string}
-  );
 
 export type FavoriteDepartureId = {
   stopId: string;
