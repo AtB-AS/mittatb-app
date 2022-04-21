@@ -1,6 +1,13 @@
 import {translation as _} from '../../commons';
 
 const RecentTicketsTexts = {
+  titles: {
+    travellers: _('Reisende', 'Travellers'),
+    zone: _('Sone', 'Zone'),
+    duration: _('Varighet', 'Duration'),
+    days: _('dager', 'days'),
+    hours: _('timer', 'hours'),
+  },
   transportModes: {
     bus: _('buss', 'bus'),
     rail: _('tog', 'train'),
@@ -16,5 +23,10 @@ const RecentTicketsTexts = {
     futureDate: _('Fremtidig starttidspunkt', 'Future start time'),
   },
   primaryButton: _('Bekreft valg', 'Confirm selection'),
+  ticketTypes: {
+    carnet: _('Klippekort', 'Carnet'),
+    period: _('Periodebillett', 'Period ticket'),
+    single: _('Enkeltbilett', 'Single ticket'),
+  },
 };
 export default RecentTicketsTexts;

@@ -3,13 +3,18 @@ import {GenericItem, LinkItem, Section} from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
 import RecentTicketsTexts from '@atb/translations/screens/subscreens/RecentTicketsTexts';
-import useRecentTickets, {RecentTicket} from '../use-recent-tickets';
+import {RecentTicket} from '../use-recent-tickets';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {View} from 'react-native';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useSectionItem} from '@atb/components/sections/section-utils';
+import SvgBus from '@atb/assets/svg/mono-icons/transportation/Bus';
+import SvgTram from '@atb/assets/svg/mono-icons/transportation/Tram';
+import SvgBoat from '@atb/assets/svg/mono-icons/transportation/Boat';
+import SvgTrain from '@atb/assets/svg/mono-icons/transportation/Train';
+import {PreassignedFareProduct} from '@atb/reference-data/types';
 
-type transportMode = 'bus' | 'tram' | 'rail';
+type transportMode = 'bus' | 'tram' | 'rail' | 'boat';
 type recentTicketProps = {
   ticketData: RecentTicket;
   transportModes: transportMode[];
@@ -44,7 +49,7 @@ export const RecentTicketComponent = ({
   const toZone = toTariffZone.name.value;
   const {topContainer} = useSectionItem({type: 'inline'});
 
-  const returnModes = (capitalized?: boolean) => {
+  const returnModeNames = (capitalized?: boolean) => {
     return transportModes
       .map((mode) =>
         capitalized
@@ -54,31 +59,88 @@ export const RecentTicketComponent = ({
       .join(' / ');
   };
 
+  const returnModeIcons = (modes: transportMode[]) => {
+    let colorRef = '';
+
+    return modes.map((mode) => (
+      <View
+        style={[
+          styles.iconFrame,
+          {
+            backgroundColor: theme.colors.transport_boat.backgroundColor,
+          },
+        ]}
+      >
+        {mode === 'bus' && <SvgBus />}
+        {mode === 'tram' && <SvgTram />}
+        {mode === 'boat' && <SvgBoat />}
+        {mode === 'rail' && <SvgTrain />}
+      </View>
+    ));
+  };
+
+  const returnTicketType = (preassignedFareProduct: PreassignedFareProduct) => {
+    return t(RecentTicketsTexts.ticketTypes[preassignedFareProduct.type]);
+  };
+
+  const returnDuration = (preassignedFareProduct: PreassignedFareProduct) => {
+    const {durationDays} = preassignedFareProduct;
+
+    if (durationDays === 1)
+      return (
+        <FloatingLabel text={`24 ${t(RecentTicketsTexts.titles.hours)}`} />
+      );
+    else {
+      return (
+        <FloatingLabel
+          text={`${durationDays} ${t(RecentTicketsTexts.titles.days)}`}
+        />
+      );
+    }
+  };
+
   return (
     <View style={[topContainer, styles.container]}>
       <Section>
         <GenericItem>
           <View style={styles.tileWrapperView}>
-            <View style={styles.section}>
-              <ThemeText type="body__tertiary">{returnModes(true)}</ThemeText>
+            <View style={styles.travelModesWrapper}>
+              <View style={styles.travelModeIcons}>
+                {returnModeIcons(transportModes)}
+              </View>
+              <ThemeText type="body__tertiary">
+                {returnModeNames(true)}
+              </ThemeText>
             </View>
 
             <View style={styles.section}>
-              <ThemeText type="body__secondary">{`${getReferenceDataName(
-                preassignedFareProduct,
-                language,
-              )}`}</ThemeText>
+              <ThemeText type="body__secondary--bold">
+                {returnTicketType(preassignedFareProduct)}
+              </ThemeText>
             </View>
 
             <View style={styles.horizontalFlex}>
               <View style={styles.section}>
-                <ThemeText type="body__tertiary">Reisende</ThemeText>
+                <ThemeText type="body__tertiary">
+                  {t(RecentTicketsTexts.titles.travellers)}
+                </ThemeText>
+
                 {userProfilesWithCount.length < 2 &&
                   userProfilesWithCount.map((u) => (
                     <FloatingLabel
                       text={`${u.count} ${getReferenceDataName(u, language)}`}
                     />
                   ))}
+
+                {preassignedFareProduct.durationDays && (
+                  <View>
+                    <ThemeText type="body__tertiary">
+                      {t(RecentTicketsTexts.titles.duration)}
+                    </ThemeText>
+                    {returnDuration(preassignedFareProduct)}
+                  </View>
+                )}
+
                 {userProfilesWithCount.length >= 2 && (
                   <>
                     {userProfilesWithCount.slice(0, 1).map((u) => (
@@ -97,7 +159,9 @@ export const RecentTicketComponent = ({
               </View>
 
               <View style={styles.section}>
-                <ThemeText type="body__tertiary">Sone</ThemeText>
+                <ThemeText type="body__tertiary">
+                  {t(RecentTicketsTexts.titles.zone)}
+                </ThemeText>
                 {fromZone === toZone ? (
                   <FloatingLabel text={`${fromZone}`} />
                 ) : (
@@ -136,6 +200,21 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   tileWrapperView: {
     minWidth: 250,
     padding: theme.spacings.medium,
+  },
+  travelModesWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  travelModeIcons: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginRight: theme.spacings.medium,
+    marginBottom: theme.spacings.large,
+  },
+  iconFrame: {
+    padding: theme.spacings.xSmall,
+    marginRight: theme.spacings.xSmall,
   },
   section: {
     marginBottom: theme.spacings.small,
