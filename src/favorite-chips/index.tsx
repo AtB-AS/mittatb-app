@@ -5,13 +5,11 @@ import {StyleProp, View, ViewStyle} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import {Pin} from '@atb/assets/svg/mono-icons/map';
-import {Location} from '@atb/assets/svg/mono-icons/places';
+import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import Button, {ButtonProps} from '@atb/components/button';
-import {FavoriteIcon} from '@atb/favorites';
-import {useFavorites} from '@atb/favorites/FavoritesContext';
-import {LocationWithMetadata} from '@atb/favorites/types';
-import {useReverseGeocoder} from '@atb/geocoder';
+import {FavoriteIcon, useFavorites} from '../favorites';
+import {GeoLocation, Location} from '../favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -61,7 +59,7 @@ const FavoriteChips: React.FC<Props> = ({
               text={t(FavoriteTexts.chips.currentLocation)}
               accessibilityRole="button"
               accessibilityHint={chipActionHint ?? ''}
-              icon={Location}
+              icon={LocationIcon}
               onPress={onCurrentLocation}
               testID="currentLocationChip"
             />

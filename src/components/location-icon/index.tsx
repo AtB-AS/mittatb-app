@@ -1,4 +1,5 @@
 import {Pin} from '@atb/assets/svg/mono-icons/map';
+import {Location as LocationMonoIcon} from '@atb/assets/svg/mono-icons/places';
 import * as TransportationIcons from '@atb/assets/svg/mono-icons/transportation';
 import * as EnturTransportationIcons from '@atb/assets/svg/mono-icons/transportation-entur';
 import {Location} from '@atb/favorites/types';
@@ -15,7 +16,7 @@ const LocationIcon = ({
   multiple?: boolean;
 }) => {
   if (location.resultType === 'geolocation') {
-    return <ThemeIcon svg={CurrentLocationArrow} />;
+    return <ThemeIcon svg={LocationMonoIcon} />;
   }
   switch (location.layer) {
     case 'address':

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Location} from '@atb/assets/svg/mono-icons/places';
+import {Location as LocationMonoIcon} from '@atb/assets/svg/mono-icons/places';
 import {FavoriteIcon} from '@atb/favorites';
 import LocationIcon from '@atb/components/location-icon';
 import {useFavorites} from '@atb/favorites/FavoritesContext';
@@ -15,7 +15,7 @@ export default function SearchLocationIcon({
   const {favorites} = useFavorites();
   switch (location?.resultType) {
     case 'geolocation':
-      return <Location />;
+      return <LocationMonoIcon />;
     case 'favorite':
       return (
         <FavoriteIcon

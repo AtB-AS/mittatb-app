@@ -1,7 +1,7 @@
 import {View} from 'react-native';
 import Button from '@atb/components/button';
 import {TicketsTexts, useTranslation} from '@atb/translations';
-import {AddTicket} from '@atb/assets/svg/mono-icons/ticketing';
+import {TicketAdd} from '@atb/assets/svg/mono-icons/ticketing';
 import React from 'react';
 import {useAuthState} from '@atb/auth';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -34,7 +34,7 @@ export const AvailableTickets = ({
               TicketsTexts.buyTicketsTab.button.single.a11yHint,
             )}
             onPress={onBuySingleTicket}
-            icon={AddTicket}
+            icon={TicketAdd}
             iconPosition={'right'}
             testID="singleTicketBuyButton"
           />
@@ -48,7 +48,7 @@ export const AvailableTickets = ({
               )}
               onPress={onBuyPeriodTicket}
               viewContainerStyle={styles.buyPeriodTicketButton}
-              icon={AddTicket}
+              icon={TicketAdd}
               iconPosition={'right'}
               testID="periodTicketBuyButton"
             />
