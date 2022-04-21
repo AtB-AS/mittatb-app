@@ -36,9 +36,9 @@ type ConfigurationContextState = {
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
-  preassignedFareproducts: [],
-  tariffZones: [],
-  userProfiles: [],
+  preassignedFareproducts: defaultPreassignedFareProducts,
+  tariffZones: defaultTariffZones,
+  userProfiles: defaultUserProfiles,
   modesWeSellTicketsFor: defaultModesWeSellTicketsFor,
   paymentTypes: defaultPaymentTypes,
   vatPercent: defaultVatPercent,
