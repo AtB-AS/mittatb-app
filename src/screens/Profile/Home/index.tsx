@@ -17,6 +17,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileStackParams} from '..';
 import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
+import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {
   filterActiveOrCanBeUsedFareContracts,
@@ -27,6 +28,7 @@ import analytics from '@react-native-firebase/analytics';
 import {updateMetadata} from '@atb/chat/metadata';
 import parsePhoneNumber from 'libphonenumber-js';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import {utils} from '@react-native-firebase/app';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -106,7 +108,14 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               <ThemeText style={style.customerNumberHeading}>
                 {t(ProfileTexts.sections.account.infoItems.customerNumber)}
               </ThemeText>
-              <ThemeText type="body__secondary" color="secondary">
+              <ThemeText
+                type="body__secondary"
+                color="secondary"
+                accessibilityLabel={numberToAccessibilityString(
+                  t,
+                  customerNumber,
+                )}
+              >
                 {customerNumber}
               </ThemeText>
             </Sections.GenericItem>
