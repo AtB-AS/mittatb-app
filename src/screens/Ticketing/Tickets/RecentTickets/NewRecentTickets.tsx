@@ -34,13 +34,19 @@ export const NewRecentTickets = ({
       contentContainerStyle={contentContainerStyle}
       style={styles.horizontalScrollView}
     >
-      {recentTickets.map((ticket, index) => (
-        <RecentTicketComponent
-          ticketData={ticket}
-          transportModes={['bus', 'tram']}
-          selectTicket={selectTicket}
-        />
-      ))}
+      {recentTickets
+        .filter((recentTicket) => {
+          const t = recentTicket.preassignedFareProduct.type;
+          if (t === 'single' || t === 'period' || t === 'carnet') return true;
+          else return false;
+        })
+        .map((ticket, index) => (
+          <RecentTicketComponent
+            ticketData={ticket}
+            transportModes={['bus', 'tram']}
+            selectTicket={selectTicket}
+          />
+        ))}
     </ScrollView>
   );
 };
