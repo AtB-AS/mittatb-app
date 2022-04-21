@@ -7,13 +7,12 @@ import useRecentTickets, {RecentTicket} from '../use-recent-tickets';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {View} from 'react-native';
 import {getReferenceDataName} from '@atb/reference-data/utils';
+import {useSectionItem} from '@atb/components/sections/section-utils';
 
 type transportMode = 'bus' | 'tram' | 'rail';
 type recentTicketProps = {
   ticketData: RecentTicket;
-  extraData: {
-    transportModes: transportMode[];
-  };
+  transportModes: transportMode[];
   selectTicket: (ticketData: RecentTicket) => void;
 };
 
@@ -28,7 +27,7 @@ export const FloatingLabel = ({text}: {text: string}) => {
 
 export const RecentTicketComponent = ({
   ticketData,
-  extraData,
+  transportModes,
   selectTicket,
 }: recentTicketProps) => {
   const {
@@ -37,13 +36,13 @@ export const RecentTicketComponent = ({
     toTariffZone,
     userProfilesWithCount,
   } = ticketData;
-  const {transportModes} = extraData;
   const {language} = useTranslation();
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
   const fromZone = fromTariffZone.name.value;
   const toZone = toTariffZone.name.value;
+  const {topContainer} = useSectionItem({type: 'inline'});
 
   const returnModes = (capitalized?: boolean) => {
     return transportModes
@@ -56,56 +55,60 @@ export const RecentTicketComponent = ({
   };
 
   return (
-    <Section style={styles.container}>
-      <GenericItem>
-        <View style={styles.tileWrapperView}>
-          <View style={styles.section}>
-            <ThemeText type="body__tertiary">{returnModes(true)}</ThemeText>
-          </View>
-
-          <View style={styles.section}>
-            <ThemeText type="body__secondary">{`${getReferenceDataName(
-              preassignedFareProduct,
-              language,
-            )}`}</ThemeText>
-          </View>
-
-          <View style={styles.horizontalFlex}>
+    <View style={[topContainer, styles.container]}>
+      <Section>
+        <GenericItem>
+          <View style={styles.tileWrapperView}>
             <View style={styles.section}>
-              <ThemeText type="body__tertiary">Reisende</ThemeText>
-              {userProfilesWithCount.length < 2 &&
-                userProfilesWithCount.map((u) => (
-                  <FloatingLabel
-                    text={`${u.count} ${getReferenceDataName(u, language)}`}
-                  />
-                ))}
-              {userProfilesWithCount.length >= 2 && (
-                <>
-                  {userProfilesWithCount.slice(0, 1).map((u) => (
+              <ThemeText type="body__tertiary">{returnModes(true)}</ThemeText>
+            </View>
+
+            <View style={styles.section}>
+              <ThemeText type="body__secondary">{`${getReferenceDataName(
+                preassignedFareProduct,
+                language,
+              )}`}</ThemeText>
+            </View>
+
+            <View style={styles.horizontalFlex}>
+              <View style={styles.section}>
+                <ThemeText type="body__tertiary">Reisende</ThemeText>
+                {userProfilesWithCount.length < 2 &&
+                  userProfilesWithCount.map((u) => (
                     <FloatingLabel
                       text={`${u.count} ${getReferenceDataName(u, language)}`}
                     />
                   ))}
-                  <View style={styles.additionalCategories}>
-                    <ThemeText>
-                      + {userProfilesWithCount.slice(1).length} andre kategorier
-                    </ThemeText>
-                  </View>
-                </>
-              )}
-            </View>
+                {userProfilesWithCount.length >= 2 && (
+                  <>
+                    {userProfilesWithCount.slice(0, 1).map((u) => (
+                      <FloatingLabel
+                        text={`${u.count} ${getReferenceDataName(u, language)}`}
+                      />
+                    ))}
+                    <View style={styles.additionalCategories}>
+                      <ThemeText>
+                        + {userProfilesWithCount.slice(1).length} andre
+                        kategorier
+                      </ThemeText>
+                    </View>
+                  </>
+                )}
+              </View>
 
-            <View style={styles.section}>
-              <ThemeText type="body__tertiary">Sone</ThemeText>
-              {fromZone === toZone ? (
-                <FloatingLabel text={`${fromZone}`} />
-              ) : (
-                <FloatingLabel text={`${fromZone} - ${toZone}`} />
-              )}
+              <View style={styles.section}>
+                <ThemeText type="body__tertiary">Sone</ThemeText>
+                {fromZone === toZone ? (
+                  <FloatingLabel text={`${fromZone}`} />
+                ) : (
+                  <FloatingLabel text={`${fromZone} - ${toZone}`} />
+                )}
+              </View>
             </View>
           </View>
-        </View>
-      </GenericItem>
+        </GenericItem>
+      </Section>
+
       <LinkItem
         backgroundColor={theme.colors.primary_2.backgroundColor}
         contentColor={theme.colors.primary_2.color}
@@ -113,20 +116,25 @@ export const RecentTicketComponent = ({
         onPress={() => selectTicket(ticketData)}
         overrideContainerStyles={{
           paddingHorizontal: theme.spacings.xLarge,
+          borderBottomLeftRadius: theme.border.radius.regular,
+          borderBottomRightRadius: theme.border.radius.regular,
         }}
       />
-    </Section>
+    </View>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    width: '67%',
-    marginBottom: theme.spacings.small,
-    marginRight: theme.spacings.medium,
-    borderRadius: theme.border.radius.circle,
+    display: 'flex',
+    padding: 0,
+    borderRadius: theme.border.radius.regular,
+    justifyContent: 'space-between',
+    marginHorizontal: theme.spacings.small,
+    height: '100%',
   },
   tileWrapperView: {
+    minWidth: 250,
     padding: theme.spacings.medium,
   },
   section: {

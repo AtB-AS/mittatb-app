@@ -37,7 +37,7 @@ export const NewRecentTickets = ({
       {recentTickets.map((ticket, index) => (
         <RecentTicketComponent
           ticketData={ticket}
-          extraData={{transportModes: ['bus', 'tram']}}
+          transportModes={['bus', 'tram']}
           selectTicket={selectTicket}
         />
       ))}
