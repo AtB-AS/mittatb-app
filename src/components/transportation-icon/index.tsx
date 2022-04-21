@@ -73,7 +73,7 @@ export function getTransportModeSvg(mode?: AnyMode) {
     case 'air':
       return EnturTransportIcons.Plane;
     case 'water':
-      return TransportIcons.Ferry;
+      return TransportIcons.Boat;
     case 'foot':
       return TransportIcons.Walk;
     case 'metro':
