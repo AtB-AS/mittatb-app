@@ -52,9 +52,6 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
           body={t(ContactSheetTexts.customer_service.body)}
           buttonText={t(ContactSheetTexts.customer_service.button)}
           focusRef={focusRef}
-          icon={() => (
-            <ThemeIcon colorType="primary_2" svg={Support}></ThemeIcon>
-          )}
           accessibilityHint={t(ContactSheetTexts.customer_service.a11yHint)}
           onPress={() => {
             Linking.openURL(customer_service_url);
@@ -64,10 +61,12 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
 
         {showWebsiteFeedback ? (
           <ContactItem
-            title={t(ContactSheetTexts.customer_feedback.title)}
-            body={t(ContactSheetTexts.customer_feedback.body)}
-            buttonText={t(ContactSheetTexts.customer_feedback.button)}
-            accessibilityHint={t(ContactSheetTexts.customer_feedback.a11yHint)}
+            title={t(ContactSheetTexts.customer_feedback_website.title)}
+            body={t(ContactSheetTexts.customer_feedback_website.body)}
+            buttonText={t(ContactSheetTexts.customer_feedback_website.button)}
+            accessibilityHint={t(
+              ContactSheetTexts.customer_feedback_website.a11yHint,
+            )}
             onPress={() => {
               Linking.openURL(customer_feedback_url);
               close();
