@@ -88,7 +88,7 @@ const TicketsTexts = {
     periodTicket: {
       title: _('Periodebillett', 'Period ticket'),
       description: _(
-        'Velg mellom 7, 30 eller 180 dagaer',
+        'Velg mellom 7, 30 eller 180 dager',
         'Choose between 7, 30 or 180 days',
       ),
       transportModes: _('Buss/trikk', 'Bus/tram'),
