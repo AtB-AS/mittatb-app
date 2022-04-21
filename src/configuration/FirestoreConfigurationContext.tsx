@@ -18,10 +18,12 @@ import {
   defaultPreassignedFareProducts,
   defaultTariffZones,
   defaultUserProfiles,
-  defaultModesWeSellTicketsFor,
-  defaultPaymentTypes,
 } from '@atb/reference-data/defaults';
-import {defaultVatPercent} from '@atb/configuration/defaults';
+import {
+  defaultVatPercent,
+  defaultPaymentTypes,
+  defaultModesWeSellTicketsFor,
+} from '@atb/configuration/defaults';
 import {PaymentType} from '@atb/tickets';
 
 type ConfigurationContextState = {
@@ -37,8 +39,8 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   preassignedFareproducts: [],
   tariffZones: [],
   userProfiles: [],
-  modesWeSellTicketsFor: [],
-  paymentTypes: [],
+  modesWeSellTicketsFor: defaultModesWeSellTicketsFor,
+  paymentTypes: defaultPaymentTypes,
   vatPercent: defaultVatPercent,
 };
 
@@ -55,9 +57,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [modesWeSellTicketsFor, setModesWeSellTicketsFor] = useState(
     defaultModesWeSellTicketsFor,
   );
-  const [paymentTypes, setPaymentTypes] = useState(
-    mapPaymentTypeStringsToEnums(defaultPaymentTypes),
-  );
+  const [paymentTypes, setPaymentTypes] = useState(defaultPaymentTypes);
   const [vatPercent, setVatPercent] = useState(defaultVatPercent);
 
   useEffect(() => {
