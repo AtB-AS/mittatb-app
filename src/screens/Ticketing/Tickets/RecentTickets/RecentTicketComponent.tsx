@@ -50,13 +50,16 @@ export const RecentTicketComponent = ({
   const {topContainer} = useSectionItem({type: 'inline'});
 
   const returnModeNames = (capitalized?: boolean) => {
-    return transportModes
-      .map((mode) =>
-        capitalized
-          ? t(RecentTicketsTexts.transportModes[mode]).toUpperCase()
-          : t(RecentTicketsTexts.transportModes[mode]),
-      )
-      .join(' / ');
+    if (transportModes.length > 2)
+      return t(RecentTicketsTexts.transportModes.several);
+    else
+      return transportModes
+        .map((mode) =>
+          capitalized
+            ? t(RecentTicketsTexts.transportModes[mode]).toUpperCase()
+            : t(RecentTicketsTexts.transportModes[mode]),
+        )
+        .join(' / ');
   };
 
   const returnModeIcons = (modes: transportMode[]) => {
@@ -121,20 +124,6 @@ export const RecentTicketComponent = ({
 
             <View style={styles.horizontalFlex}>
               <View style={styles.section}>
-                <ThemeText type="body__tertiary">
-                  {t(RecentTicketsTexts.titles.travellers)}
-                </ThemeText>
-
-                {userProfilesWithCount.length < 2 &&
-                  userProfilesWithCount.map((u) => (
-                    <FloatingLabel
-                      text={`${u.count} ${getReferenceDataName(
-                        u,
-                        language,
-                      ).toLowerCase()}`}
-                    />
-                  ))}
-
                 {preassignedFareProduct.durationDays && (
                   <View>
                     <ThemeText type="body__tertiary">
@@ -144,6 +133,18 @@ export const RecentTicketComponent = ({
                   </View>
                 )}
 
+                <ThemeText type="body__tertiary">
+                  {t(RecentTicketsTexts.titles.travellers)}
+                </ThemeText>
+                {userProfilesWithCount.length < 2 &&
+                  userProfilesWithCount.map((u) => (
+                    <FloatingLabel
+                      text={`${u.count} ${getReferenceDataName(
+                        u,
+                        language,
+                      ).toLowerCase()}`}
+                    />
+                  ))}
                 {userProfilesWithCount.length >= 2 && (
                   <>
                     {userProfilesWithCount.slice(0, 1).map((u) => (
@@ -231,7 +232,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.xSmall,
     alignSelf: 'flex-start',
     paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.small,
+    paddingVertical: theme.spacings.xSmall,
     backgroundColor: theme.colors.primary_3.backgroundColor,
     borderRadius: theme.border.radius.regular,
   },

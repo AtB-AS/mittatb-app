@@ -17,6 +17,7 @@ const RecentTicketsTexts = {
     foot: _('gange', 'walk'),
     metro: _('T-bane', 'metro'),
     unknown: _('ukjent transportmiddel', 'unknown transport'),
+    several: _('Flere reisemåter', 'Several transport modes'),
   },
   options: {
     now: _('Nå', 'Now'),
