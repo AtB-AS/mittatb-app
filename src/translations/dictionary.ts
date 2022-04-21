@@ -62,18 +62,6 @@ const dictionary = {
     km: _('km', 'km'),
     m: _('m', 'm'),
   },
-  numbers: {
-    zero: _('null', 'zero'),
-    one: _('en', 'one'),
-    two: _('to', 'two'),
-    three: _('tre', 'three'),
-    four: _('fire', 'four'),
-    five: _('fem', 'five'),
-    six: _('seks', 'six'),
-    seven: _('syv', 'seven'),
-    eight: _('åtte', 'eight'),
-    nine: _('ni', 'nine'),
-  },
 };
 
 export default orgSpecificTranslations(dictionary, {

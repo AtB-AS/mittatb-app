@@ -111,10 +111,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               <ThemeText
                 type="body__secondary"
                 color="secondary"
-                accessibilityLabel={numberToAccessibilityString(
-                  t,
-                  customerNumber,
-                )}
+                accessibilityLabel={numberToAccessibilityString(customerNumber)}
               >
                 {customerNumber}
               </ThemeText>
