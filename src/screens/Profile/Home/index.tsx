@@ -28,7 +28,6 @@ import analytics from '@react-native-firebase/analytics';
 import {updateMetadata} from '@atb/chat/metadata';
 import parsePhoneNumber from 'libphonenumber-js';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
-import {utils} from '@react-native-firebase/app';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
