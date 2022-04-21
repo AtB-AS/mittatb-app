@@ -20,8 +20,8 @@ import {
   defaultUserProfiles,
   defaultModesWeSellTicketsFor,
   defaultPaymentTypes,
-  defaultVatPercent,
 } from '@atb/reference-data/defaults';
+import {defaultVatPercent} from '@atb/configuration/defaults';
 import {PaymentType} from '@atb/tickets';
 
 type ConfigurationContextState = {
@@ -39,7 +39,7 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   userProfiles: [],
   modesWeSellTicketsFor: [],
   paymentTypes: [],
-  vatPercent: 0,
+  vatPercent: defaultVatPercent,
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
