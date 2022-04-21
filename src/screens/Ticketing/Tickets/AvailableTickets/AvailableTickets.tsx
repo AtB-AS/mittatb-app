@@ -9,7 +9,6 @@ import ThemeText from '@atb/components/text';
 import * as TicketIcons from '@atb/assets/svg/color/illustrations/ticket-type';
 import {SvgProps} from 'react-native-svg';
 import TransportationIcon from '@atb/components/transportation-icon';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {
   Mode,
   TransportSubmode,
@@ -37,77 +36,75 @@ export const AvailableTickets = ({
   return (
     <View style={styles.container}>
       {isSignedInAsAbtCustomer && (
-        <View>
-          <ScrollView>
-            <View style={styles.ticketsContainer}>
-              <Ticket
-                title={t(TicketsTexts.availableTickets.singleTicket.title)}
-                transportationModeTexts={t(
-                  TicketsTexts.availableTickets.singleTicket.transportModes,
-                )}
-                transportationModeIcons={[
-                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
-                ]}
-                description={t(
-                  TicketsTexts.availableTickets.singleTicket.description,
-                )}
-                icon={TicketIcons.Single}
-                onPress={onBuySingleTicket}
-              />
-              <Ticket
-                title={t(TicketsTexts.availableTickets.periodTicket.title)}
-                transportationModeTexts={t(
-                  TicketsTexts.availableTickets.periodTicket.transportModes,
-                )}
-                transportationModeIcons={[
-                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
-                ]}
-                description={t(
-                  TicketsTexts.availableTickets.periodTicket.description,
-                )}
-                icon={TicketIcons.Period}
-                onPress={onBuyPeriodTicket}
-              />
-            </View>
-            <View style={styles.ticketsContainer}>
-              <Ticket
-                title={t(TicketsTexts.availableTickets.summerPass.title)}
-                transportationModeTexts={t(
-                  TicketsTexts.availableTickets.summerPass.transportModes,
-                )}
-                transportationModeIcons={[
-                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
-                  {mode: Mode.Rail},
-                  {mode: Mode.Water},
-                ]}
-                description={t(
-                  TicketsTexts.availableTickets.summerPass.description,
-                )}
-                icon={TicketIcons.Summer}
-                onPress={onBuyPeriodTicket}
-              />
-            </View>
-            <View style={styles.ticketsContainer}>
-              <Ticket
-                title={t(TicketsTexts.availableTickets.summerPass.title)}
-                transportationModeTexts={t(
-                  TicketsTexts.availableTickets.summerPass.transportModes,
-                )}
-                transportationModeIcons={[
-                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
-                  {mode: Mode.Rail},
-                  {mode: Mode.Water},
-                ]}
-                description={t(
-                  TicketsTexts.availableTickets.summerPass.description,
-                )}
-                icon={TicketIcons.Summer}
-                accented={true}
-                onPress={onBuyPeriodTicket}
-              />
-            </View>
-          </ScrollView>
-        </View>
+        <ScrollView>
+          <View style={styles.ticketsContainer}>
+            <Ticket
+              title={t(TicketsTexts.availableTickets.singleTicket.title)}
+              transportationModeTexts={t(
+                TicketsTexts.availableTickets.singleTicket.transportModes,
+              )}
+              transportationModeIcons={[
+                {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+              ]}
+              description={t(
+                TicketsTexts.availableTickets.singleTicket.description,
+              )}
+              icon={TicketIcons.Single}
+              onPress={onBuySingleTicket}
+            />
+            <Ticket
+              title={t(TicketsTexts.availableTickets.periodTicket.title)}
+              transportationModeTexts={t(
+                TicketsTexts.availableTickets.periodTicket.transportModes,
+              )}
+              transportationModeIcons={[
+                {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+              ]}
+              description={t(
+                TicketsTexts.availableTickets.periodTicket.description,
+              )}
+              icon={TicketIcons.Period}
+              onPress={onBuyPeriodTicket}
+            />
+          </View>
+          <View style={styles.ticketsContainer}>
+            <Ticket
+              title={t(TicketsTexts.availableTickets.summerPass.title)}
+              transportationModeTexts={t(
+                TicketsTexts.availableTickets.summerPass.transportModes,
+              )}
+              transportationModeIcons={[
+                {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+                {mode: Mode.Rail},
+                {mode: Mode.Water},
+              ]}
+              description={t(
+                TicketsTexts.availableTickets.summerPass.description,
+              )}
+              icon={TicketIcons.Summer}
+              onPress={onBuyPeriodTicket}
+            />
+          </View>
+          <View style={styles.ticketsContainer}>
+            <Ticket
+              title={t(TicketsTexts.availableTickets.summerPass.title)}
+              transportationModeTexts={t(
+                TicketsTexts.availableTickets.summerPass.transportModes,
+              )}
+              transportationModeIcons={[
+                {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+                {mode: Mode.Rail},
+                {mode: Mode.Water},
+              ]}
+              description={t(
+                TicketsTexts.availableTickets.summerPass.description,
+              )}
+              icon={TicketIcons.Summer}
+              accented={true}
+              onPress={onBuyPeriodTicket}
+            />
+          </View>
+        </ScrollView>
       )}
     </View>
   );
