@@ -4,9 +4,10 @@ const RecentTicketsTexts = {
   titles: {
     travellers: _('Reisende', 'Travellers'),
     zone: _('Sone', 'Zone'),
-    duration: _('Varighet', 'Duration'),
+    duration: _('Gyldighet', 'Validity'),
     days: _('dager', 'days'),
     hours: _('timer', 'hours'),
+    moreTravelers: _('andre', 'others'),
   },
   transportModes: {
     bus: _('buss', 'bus'),

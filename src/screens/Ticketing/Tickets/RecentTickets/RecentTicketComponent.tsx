@@ -5,7 +5,7 @@ import {useTranslation} from '@atb/translations';
 import RecentTicketsTexts from '@atb/translations/screens/subscreens/RecentTicketsTexts';
 import {RecentTicket} from '../use-recent-tickets';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {View} from 'react-native';
+import {View, ViewStyle} from 'react-native';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useSectionItem} from '@atb/components/sections/section-utils';
 import SvgBus from '@atb/assets/svg/mono-icons/transportation/Bus';
@@ -21,10 +21,22 @@ type recentTicketProps = {
   selectTicket: (ticketData: RecentTicket) => void;
 };
 
-export const FloatingLabel = ({text}: {text: string}) => {
+export const FloatingLabel = ({
+  text,
+  additionalStyles,
+}: {
+  text: string;
+  additionalStyles?: ViewStyle;
+}) => {
   const styles = useStyles();
   return (
-    <View style={styles.blueLabel}>
+    <View
+      style={
+        additionalStyles
+          ? [styles.blueLabel, additionalStyles]
+          : styles.blueLabel
+      }
+    >
       <ThemeText>{text}</ThemeText>
     </View>
   );
@@ -87,19 +99,19 @@ export const RecentTicketComponent = ({
   };
 
   const returnDuration = (preassignedFareProduct: PreassignedFareProduct) => {
-    const {durationDays} = preassignedFareProduct;
+    const {durationDays, type} = preassignedFareProduct;
+    let textString = ``;
 
-    if (durationDays === 1)
-      return (
-        <FloatingLabel text={`24 ${t(RecentTicketsTexts.titles.hours)}`} />
-      );
-    else {
-      return (
-        <FloatingLabel
-          text={`${durationDays} ${t(RecentTicketsTexts.titles.days)}`}
-        />
-      );
+    if (type === 'single') textString = 'Minst 90 min';
+    if (type === 'carnet') textString = '10 klipp';
+    if (type === 'period') {
+      if (durationDays === 1)
+        textString = `24 ${t(RecentTicketsTexts.titles.hours)}`;
+      else {
+        textString = `${durationDays} ${t(RecentTicketsTexts.titles.days)}`;
+      }
     }
+    return <FloatingLabel text={textString} />;
   };
 
   return (
@@ -123,29 +135,43 @@ export const RecentTicketComponent = ({
             </View>
 
             <View style={styles.horizontalFlex}>
-              <View style={styles.section}>
-                {preassignedFareProduct.durationDays && (
-                  <View>
-                    <ThemeText type="body__tertiary">
-                      {t(RecentTicketsTexts.titles.duration)}
-                    </ThemeText>
-                    {returnDuration(preassignedFareProduct)}
-                  </View>
-                )}
-
+              <View>
                 <ThemeText type="body__tertiary">
-                  {t(RecentTicketsTexts.titles.travellers)}
+                  {t(RecentTicketsTexts.titles.duration)}
                 </ThemeText>
-                {userProfilesWithCount.length < 2 &&
+                {returnDuration(preassignedFareProduct)}
+              </View>
+
+              <View>
+                <ThemeText type="body__tertiary">
+                  {t(RecentTicketsTexts.titles.zone)}
+                </ThemeText>
+                {fromZone === toZone ? (
+                  <FloatingLabel text={`${fromZone}`} />
+                ) : (
+                  <FloatingLabel text={`${fromZone} - ${toZone}`} />
+                )}
+              </View>
+            </View>
+
+            <View style={styles.travellersWrapper}>
+              <ThemeText type="body__tertiary">
+                {t(RecentTicketsTexts.titles.travellers)}
+              </ThemeText>
+              <View style={styles.travellersTileWrapper}>
+                {userProfilesWithCount.length <= 2 &&
                   userProfilesWithCount.map((u) => (
                     <FloatingLabel
                       text={`${u.count} ${getReferenceDataName(
                         u,
                         language,
                       ).toLowerCase()}`}
+                      additionalStyles={{
+                        marginRight: theme.spacings.xSmall,
+                      }}
                     />
                   ))}
-                {userProfilesWithCount.length >= 2 && (
+                {userProfilesWithCount.length > 2 && (
                   <>
                     {userProfilesWithCount.slice(0, 1).map((u) => (
                       <FloatingLabel
@@ -154,22 +180,11 @@ export const RecentTicketComponent = ({
                     ))}
                     <View style={styles.additionalCategories}>
                       <ThemeText>
-                        + {userProfilesWithCount.slice(1).length} andre
-                        kategorier
+                        + {userProfilesWithCount.slice(1).length}{' '}
+                        {t(RecentTicketsTexts.titles.moreTravelers)}
                       </ThemeText>
                     </View>
                   </>
-                )}
-              </View>
-
-              <View style={styles.section}>
-                <ThemeText type="body__tertiary">
-                  {t(RecentTicketsTexts.titles.zone)}
-                </ThemeText>
-                {fromZone === toZone ? (
-                  <FloatingLabel text={`${fromZone}`} />
-                ) : (
-                  <FloatingLabel text={`${fromZone} - ${toZone}`} />
                 )}
               </View>
             </View>
@@ -203,7 +218,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   tileWrapperView: {
     minWidth: 250,
-    padding: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
+    paddingVertical: theme.spacings.medium,
   },
   travelModesWrapper: {
     display: 'flex',
@@ -223,6 +239,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   section: {
     marginBottom: theme.spacings.small,
   },
+  travellersWrapper: {
+    marginTop: theme.spacings.medium,
+    paddingHorizontal: 0,
+  },
+  travellersTileWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
   horizontalFlex: {
     display: 'flex',
     flexDirection: 'row',
@@ -237,7 +261,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
   },
   additionalCategories: {
-    marginHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacings.small,
     marginVertical: theme.spacings.small,
   },
 }));
