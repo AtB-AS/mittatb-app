@@ -62,7 +62,7 @@ export default function PlaceScreen({
     fromQuayId?: string,
   ) => {
     if (!serviceJourneyId || !date) return;
-    navigation.navigate('DepartureDetails', {
+    navigation.push('DepartureDetails', {
       items: [
         {
           serviceJourneyId,

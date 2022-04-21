@@ -339,8 +339,13 @@ function TripItem({
     if (!location) {
       return;
     }
-    navigation.navigate('QuayDepartures', {
-      location,
+    navigation.push('PlaceScreen', {
+      place: {
+        id: location.id,
+        name: location.name,
+      },
+      // @TODO: Should the arrival quay be pre-selected?
+      // selectedQuay: quay,
     });
   }
 }
