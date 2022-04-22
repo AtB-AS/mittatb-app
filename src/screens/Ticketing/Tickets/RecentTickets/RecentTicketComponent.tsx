@@ -8,16 +8,15 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {View, ViewStyle} from 'react-native';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useSectionItem} from '@atb/components/sections/section-utils';
-import SvgBus from '@atb/assets/svg/mono-icons/transportation/Bus';
-import SvgTram from '@atb/assets/svg/mono-icons/transportation/Tram';
-import SvgBoat from '@atb/assets/svg/mono-icons/transportation/Boat';
-import SvgTrain from '@atb/assets/svg/mono-icons/transportation/Train';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
+import {getTransportModeSvg} from '@atb/components/transportation-icon';
 
-type transportMode = 'bus' | 'tram' | 'rail' | 'boat';
+type TicketMode = 'bus' | 'foot' | 'rail' | 'tram';
+
 type recentTicketProps = {
   ticketData: RecentTicket;
-  transportModes: transportMode[];
+  transportModes: TicketMode[];
   selectTicket: (ticketData: RecentTicket) => void;
 };
 
@@ -74,7 +73,7 @@ export const RecentTicketComponent = ({
         .join(' / ');
   };
 
-  const returnModeIcons = (modes: transportMode[]) => {
+  const returnModeIcons = (modes: TicketMode[]) => {
     let colorRef = '';
 
     return modes.map((mode) => (
@@ -82,14 +81,12 @@ export const RecentTicketComponent = ({
         style={[
           styles.iconFrame,
           {
-            backgroundColor: theme.colors.transport_boat.backgroundColor,
+            backgroundColor:
+              theme.colors[useThemeColorForTransportMode(mode)].backgroundColor,
           },
         ]}
       >
-        {mode === 'bus' && <SvgBus />}
-        {mode === 'tram' && <SvgTram />}
-        {mode === 'boat' && <SvgBoat />}
-        {mode === 'rail' && <SvgTrain />}
+        {getTransportModeSvg(mode)}
       </View>
     ));
   };
