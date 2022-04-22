@@ -12,7 +12,7 @@ import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 
-type TicketMode = 'bus' | 'foot' | 'rail' | 'tram';
+type TicketMode = 'bus' | 'rail' | 'tram';
 
 type recentTicketProps = {
   ticketData: RecentTicket;
@@ -74,21 +74,36 @@ export const RecentTicketComponent = ({
   };
 
   const returnModeIcons = (modes: TicketMode[]) => {
-    let colorRef = '';
+    return modes.map((mode) => {
+      let modeColor = '';
 
-    return modes.map((mode) => (
-      <View
-        style={[
-          styles.iconFrame,
-          {
-            backgroundColor:
-              theme.colors[useThemeColorForTransportMode(mode)].backgroundColor,
-          },
-        ]}
-      >
-        {getTransportModeSvg(mode)}
-      </View>
-    ));
+      switch (mode) {
+        case 'bus':
+          modeColor = 'transport_city';
+          break;
+        case 'rail':
+          modeColor = 'transport_train';
+          break;
+        case 'tram':
+          modeColor = 'transport_city';
+          break;
+        default:
+          modeColor = 'transport_city';
+      }
+
+      return (
+        <View
+          style={[
+            styles.iconFrame,
+            {
+              backgroundColor: theme.colors[modeColor].backgroundColor,
+            },
+          ]}
+        >
+          {getTransportModeSvg(mode)}
+        </View>
+      );
+    });
   };
 
   const returnTicketType = (preassignedFareProduct: PreassignedFareProduct) => {
