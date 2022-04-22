@@ -17,6 +17,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileStackParams} from '..';
 import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
+import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {
   filterActiveOrCanBeUsedFareContracts,
@@ -106,7 +107,11 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               <ThemeText style={style.customerNumberHeading}>
                 {t(ProfileTexts.sections.account.infoItems.customerNumber)}
               </ThemeText>
-              <ThemeText type="body__secondary" color="secondary">
+              <ThemeText
+                type="body__secondary"
+                color="secondary"
+                accessibilityLabel={numberToAccessibilityString(customerNumber)}
+              >
                 {customerNumber}
               </ThemeText>
             </Sections.GenericItem>
