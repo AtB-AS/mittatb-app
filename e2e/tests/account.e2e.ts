@@ -1,5 +1,5 @@
 import {device} from 'detox';
-import {goBack, goToTab, setInputById} from '../utils/commonHelpers';
+import { getNumberOfIncreasedIds, goBack, goToTab, setInputById } from "../utils/commonHelpers";
 import {
   tap,
   tapById,
@@ -26,6 +26,7 @@ import {
 } from '../utils/account';
 import {ensureTicketingIsAccepted} from '../utils/tickets';
 import {userInfo} from "../utils/testData";
+import { expectGreaterThan } from "../utils/jestAssertions";
 
 /*
   Necessities for test data in this test suite is described in ../utils/testData.ts
@@ -88,7 +89,7 @@ describe('Account', () => {
     }
   });
 
-  it('should switch the ticket bearer', async () => {
+  xit('should switch the ticket bearer', async () => {
     // ** Switch > travelcard **
     const switchMobileToTravelcard = async () => {
       await expectToBeVisibleById('travelTokenBox');
@@ -192,11 +193,29 @@ describe('Account', () => {
   });
 
   xit('should have expired tickets', async () => {
-    await tapById('expiredTicketButton')
-    //TODO
+    if (isLoggedIn) {
+      await tapById('expiredTicketsButton')
+
+      // Verify
+      await expectToBeVisibleById('ticket0')
+      const noExpired = await getNumberOfIncreasedIds('ticket')
+      expectGreaterThan(noExpired, 1)
+
+      // Show details of first ticket
+      await tapById('ticket0Details')
+
+      // Verify
+      await expectToBeVisibleById('detailsProduct')
+      await expectToBeVisibleById('detailsUserAndCount')
+      await expectToBeVisibleById('receiptButton')
+
+      await goBack()
+      await goBack()
+    }
   });
 
   xit('should show correct user id in debug menu', async () => {
     //TODO
+    //debug menu > id: userId > debugValue == userInfo.user_id
   });
 });
