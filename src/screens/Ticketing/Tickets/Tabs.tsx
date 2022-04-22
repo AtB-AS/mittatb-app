@@ -18,8 +18,9 @@ type Props = {
 
 export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const {must_upgrade_ticketing} = useRemoteConfig();
-  const {authenticationType} = useAuthState();
   const appContext = useAppState();
+  const {abtCustomerId, authenticationType} = useAuthState();
+  const isSignedInAsAbtCustomer = !!abtCustomerId;
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -56,10 +57,12 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   return (
     <>
       <RecentTickets />
-      <AvailableTickets
-        onBuySingleTicket={onBuySingleTicket}
-        onBuyPeriodTicket={onBuyPeriodTicket}
-      />
+      {isSignedInAsAbtCustomer && (
+        <AvailableTickets
+          onBuySingleTicket={onBuySingleTicket}
+          onBuyPeriodTicket={onBuyPeriodTicket}
+        />
+      )}
     </>
   );
 };

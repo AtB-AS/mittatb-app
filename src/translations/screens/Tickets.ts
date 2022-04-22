@@ -80,24 +80,25 @@ const TicketsTexts = {
     singleTicket: {
       title: _('Enkeltbillett', 'Single ticket'),
       description: _(
-        'Varighet mellom 90 min og 5 timer',
-        'Duration between 90 min and 5 hours.',
+        'Gyldig i 90 minutter og opp til 5 timer',
+        'Valid for 90 minutes up to 5 hours',
       ),
       transportModes: _('Buss/trikk', 'Bus/tram'),
     },
     periodTicket: {
-      title: _('Periodebillett', 'Period ticket'),
+      title: _('Periodebillett', 'Periodic ticket'),
       description: _(
-        'Velg mellom 7, 30 eller 180 dager',
-        'Choose between 7, 30 or 180 days',
+        'Velg mellom 7, 30, 60 og 90 dager',
+        'Choose between 7, 30, 60 and 90 days',
       ),
+      pilot_description: _('', ''),
       transportModes: _('Buss/trikk', 'Bus/tram'),
     },
     summerPass: {
-      title: _('Sommerpass', 'Summer pass'),
+      title: _('AtB SommerPass', 'Summer pass'),
       description: _(
-        'Reis hvor du vil, så mye du vil med buss, tog, hurtigbåt, ferge og trikk i Trøndelag i sju dager',
-        'Travel as much as you like with bus, train, boat, ferry and tram in Trøndelag for seven days',
+        'Utforsk Trøndelag med buss, tog, hurtigbåt, ferge og trikk i sju dager. Reis så mye du vil! ',
+        'Explore Trøndelag by bus, train, tram, passenger boat or ferry, for 7 days. Travel as much as you like!',
       ),
       transportModes: _('Flere reisemåter', 'Several travel modes'),
     },
