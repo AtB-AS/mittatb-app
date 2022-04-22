@@ -1,9 +1,11 @@
 import React from 'react';
 import {
   AccessibilityProps,
+  ColorValue,
   GestureResponderEvent,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
 import ThemeText from '@atb/components/text';
 import NavigationIcon, {
@@ -24,6 +26,9 @@ export type LinkItemProps = SectionItem<{
   disabled?: boolean;
   accessibility?: AccessibilityProps;
   textType?: TextNames;
+  backgroundColor?: ColorValue;
+  contentColor?: ColorValue;
+  overrideContainerStyles?: ViewStyle;
 }>;
 export default function LinkItem({
   text,
@@ -35,11 +40,15 @@ export default function LinkItem({
   disabled,
   textType,
   testID,
+  backgroundColor,
+  contentColor,
+  overrideContainerStyles,
   ...props
 }: LinkItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
   const linkItemStyle = useStyles();
+  const {theme} = useTheme();
   const iconEl =
     isNavigationIcon(icon) || !icon ? <NavigationIcon mode={icon} /> : icon;
   const disabledStyle = disabled ? linkItemStyle.disabled : undefined;
@@ -53,12 +62,27 @@ export default function LinkItem({
       onPress={disabled ? undefined : onPress}
       disabled={disabled}
       accessibilityState={{disabled}}
-      style={topContainer}
+      style={
+        backgroundColor
+          ? [
+              topContainer,
+              {backgroundColor: backgroundColor},
+              overrideContainerStyles,
+            ]
+          : topContainer
+      }
       testID={testID}
       {...accessibilityWithOverrides}
     >
       <View style={[style.spaceBetween, disabledStyle]}>
-        <ThemeText style={contentContainer} type={textType}>
+        <ThemeText
+          style={
+            contentColor
+              ? [contentContainer, {color: contentColor}]
+              : contentContainer
+          }
+          type={textType}
+        >
           {text}
         </ThemeText>
         {flag && (
@@ -68,7 +92,8 @@ export default function LinkItem({
             </ThemeText>
           </View>
         )}
-        {iconEl}
+        {/* Her må vi støtte riktig farge på et vis */}
+        {contentColor ? iconEl : iconEl}
       </View>
       {subtitle && (
         <ThemeText color="secondary" type="body__secondary">

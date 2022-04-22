@@ -5,14 +5,11 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import hexToRgba from 'hex-to-rgba';
 import React from 'react';
-import {RefreshControl, TouchableOpacity, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import LinearGradient from 'react-native-linear-gradient';
+import {View} from 'react-native';
 import {TicketingStackParams} from '../../Purchase';
-import {TicketInfoView} from '../../Ticket/TicketInfo';
 import useRecentTickets, {RecentTicket} from '../use-recent-tickets';
+import {NewRecentTickets} from './NewRecentTickets';
 
 type NavigationProp = CompositeNavigationProp<
   StackNavigationProp<TicketingStackParams>,
@@ -42,59 +39,18 @@ const RecentTicketsScrollView = ({topElement}: RecentTicketsProps) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        refreshControl={
-          <RefreshControl
-            refreshing={loading}
-            onRefresh={refresh}
-            tintColor={theme.text.colors.primary}
-          />
-        }
-      >
-        {topElement}
-        {!recentTickets?.length && loading && (
-          <ThemeText style={styles.noTicketsText}>
-            {t(TicketsTexts.recentTickets.loading)}
-          </ThemeText>
-        )}
-        {!!recentTickets?.length && (
-          <Sections.Section>
-            <Sections.GenericItem>
-              <View>
-                <ThemeText>{t(TicketsTexts.recentTickets.title)}</ThemeText>
-              </View>
-            </Sections.GenericItem>
-            {recentTickets.map((ticket, index) => (
-              <Sections.GenericItem key={'ticket' + index}>
-                <TouchableOpacity
-                  onPress={() => selectTicket(ticket)}
-                  accessibilityHint={t(TicketsTexts.recentTickets.a11yHint)}
-                  accessibilityRole={'button'}
-                  style={styles.ticketInfoButton}
-                >
-                  <TicketInfoView {...ticket} status="recent" />
-                </TouchableOpacity>
-              </Sections.GenericItem>
-            ))}
-          </Sections.Section>
-        )}
-      </ScrollView>
-      <LinearGradient
-        style={styles.gradient}
-        colors={[
-          hexToRgba(theme.colors.background_1.backgroundColor, 0.1),
-          hexToRgba(theme.colors.background_1.backgroundColor, 1),
-        ]}
-        pointerEvents={'none'}
-      />
+      {!!recentTickets?.length && <NewRecentTickets navigation={navigation} />}
     </View>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1, marginBottom: theme.spacings.small},
-  scrollView: {flex: 1, padding: theme.spacings.medium},
+  container: {
+    flex: 1,
+    marginVertical: theme.spacings.medium,
+    marginHorizontal: theme.spacings.xSmall,
+  },
+  scrollView: {},
   noTicketsText: {
     textAlign: 'center',
   },
