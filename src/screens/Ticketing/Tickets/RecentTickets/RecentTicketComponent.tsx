@@ -9,14 +9,7 @@ import {View, ViewStyle} from 'react-native';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useSectionItem} from '@atb/components/sections/section-utils';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
-import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
-import TransportationIcon, {
-  getTransportModeSvg,
-} from '@atb/components/transportation-icon';
-import {
-  Mode,
-  TransportSubmode,
-} from '@atb/api/types/generated/journey_planner_v3_types';
+import TransportationIcon from '@atb/components/transportation-icon';
 import {TransportationModeIconProperties} from '../AvailableTickets/Ticket';
 
 type recentTicketProps = {
@@ -61,11 +54,12 @@ export const RecentTicketComponent = ({
   } = ticketData;
   const {language} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
   const {t} = useTranslation();
   const fromZone = fromTariffZone.name.value;
   const toZone = toTariffZone.name.value;
   const {topContainer} = useSectionItem({type: 'inline'});
+  const darkMode = themeName === 'dark';
 
   const returnModeNames = (
     modes: TransportationModeIconProperties[],
@@ -200,7 +194,7 @@ export const RecentTicketComponent = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   container: {
     display: 'flex',
     padding: 0,
@@ -220,10 +214,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginBottom: theme.spacings.medium,
-  },
-  iconFrame: {
-    padding: theme.spacings.xSmall,
-    marginRight: theme.spacings.xSmall,
   },
   section: {
     marginBottom: theme.spacings.small,
@@ -246,7 +236,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'flex-start',
     paddingHorizontal: theme.spacings.medium,
     paddingVertical: theme.spacings.xSmall,
-    backgroundColor: theme.colors.primary_3.backgroundColor,
+    backgroundColor:
+      themeName === 'dark'
+        ? theme.colors.secondary_3.backgroundColor
+        : theme.colors.primary_3.backgroundColor,
     borderRadius: theme.border.radius.regular,
   },
   additionalCategories: {
