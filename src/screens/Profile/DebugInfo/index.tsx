@@ -77,7 +77,7 @@ export default function DebugInfo() {
         rightButton={{type: 'chat'}}
       />
 
-      <ScrollView>
+      <ScrollView testID="debugInfoScrollView">
         <Sections.Section withPadding withTopPadding>
           <Sections.ActionItem
             mode="toggle"
@@ -271,7 +271,11 @@ function mapValue(value: any) {
 
   switch (type) {
     case 'string':
-      return <ThemeText onPress={() => setClipboard(value)}>{value}</ThemeText>;
+      return (
+        <ThemeText testID="debugValue" onPress={() => setClipboard(value)}>
+          {value}
+        </ThemeText>
+      );
     case 'object':
       const entries = Object.entries(value);
       if (entries.length) {
@@ -305,14 +309,18 @@ function mapEntry(key: string, value: any) {
     );
   } else {
     return (
-      <View key={key} style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+      <View
+        key={key}
+        style={{flexDirection: 'row', flexWrap: 'wrap'}}
+        testID={key === 'user_id' ? 'userId' : ''}
+      >
         <ThemeText type="body__primary--bold">{key}: </ThemeText>
         {mapValue(value)}
       </View>
     );
   }
 }
-
+//TODO gå inn i mapValue() over og sett testID på verdien av userId -> deretter test på denne i account.e2e.ts
 function LabeledSlider({
   label,
   min = 0,
