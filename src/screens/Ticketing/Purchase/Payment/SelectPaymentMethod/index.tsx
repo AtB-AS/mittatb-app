@@ -26,6 +26,7 @@ import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import hexToRgba from 'hex-to-rgba';
 import LinearGradient from 'react-native-linear-gradient';
 import PaymentBrand from '../PaymentBrand';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
@@ -34,22 +35,24 @@ type Props = {
 };
 
 function getSelectedPaymentMethod(
+  paymentTypes: PaymentType[],
   previousPaymentMethod?: SavedPaymentOption,
 ): PaymentMethod | undefined {
   if (!previousPaymentMethod) return undefined;
-  const {savedType} = previousPaymentMethod;
-
+  const {savedType, paymentType} = previousPaymentMethod;
+  if (!paymentTypes.includes(paymentType)) {
+    return undefined;
+  }
   switch (savedType) {
     case 'normal':
-      const {paymentType} = previousPaymentMethod;
       switch (paymentType) {
         case PaymentType.Vipps:
           return {
             paymentType,
           };
         default:
-        case PaymentType.MasterCard:
-        case PaymentType.VISA:
+        case PaymentType.Mastercard:
+        case PaymentType.Visa:
           return {
             paymentType,
             save: false,
@@ -64,30 +67,15 @@ function getSelectedPaymentMethod(
 }
 
 function isRecurring(option: PaymentMethod): option is {
-  paymentType: PaymentType.VISA | PaymentType.MasterCard;
+  paymentType: PaymentType.Visa | PaymentType.Mastercard;
   recurringPaymentId: number;
 } {
   return (
-    (option.paymentType === PaymentType.VISA ||
-      option.paymentType === PaymentType.MasterCard) &&
+    (option.paymentType === PaymentType.Visa ||
+      option.paymentType === PaymentType.Mastercard) &&
     'recurringPaymentId' in option
   );
 }
-
-const defaultPaymentOptions: SavedPaymentOption[] = [
-  {
-    paymentType: PaymentType.Vipps,
-    savedType: 'normal',
-  },
-  {
-    paymentType: PaymentType.VISA,
-    savedType: 'normal',
-  },
-  {
-    paymentType: PaymentType.MasterCard,
-    savedType: 'normal',
-  },
-];
 
 const remotePaymentOptions: SavedPaymentOption[] = [];
 
@@ -103,10 +91,20 @@ const SelectPaymentMethod: React.FC<Props> = ({
 
   const {user} = useAuthState();
   const {theme} = useTheme();
+  const {paymentTypes} = useFirestoreConfiguration();
+
+  const defaultPaymentOptions: SavedPaymentOption[] = paymentTypes.map(
+    (paymentType) => {
+      return {
+        paymentType: paymentType,
+        savedType: 'normal',
+      };
+    },
+  );
 
   const [selectedOption, setSelectedOption] = useState<
     PaymentMethod | undefined
-  >(getSelectedPaymentMethod(previousPaymentMethod));
+  >(getSelectedPaymentMethod(paymentTypes, previousPaymentMethod));
   const [remoteOptions, setRemoteOptions] = useState(remotePaymentOptions);
   const styles = useStyles();
 
@@ -438,9 +436,9 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
 
 function getPaymentTypeName(paymentType: PaymentType) {
   switch (paymentType) {
-    case PaymentType.VISA:
+    case PaymentType.Visa:
       return 'Visa';
-    case PaymentType.MasterCard:
+    case PaymentType.Mastercard:
       return 'MasterCard';
     case PaymentType.Vipps:
       return 'Vipps';

@@ -15,12 +15,12 @@ export default async function search(
     url,
     {
       from: {
-        place: from.id,
+        place: from.resultType === 'geolocation' ? undefined : from.id,
         name: from.name,
         coordinates: from.coordinates,
       },
       to: {
-        place: to.id,
+        place: to.resultType === 'geolocation' ? undefined : to.id,
         name: to.name,
         coordinates: to.coordinates,
       },

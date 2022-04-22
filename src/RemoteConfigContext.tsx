@@ -1,18 +1,14 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import remoteConfig from '@react-native-firebase/remote-config';
-import {
-  RemoteConfig,
-  defaultRemoteConfig,
-  getConfig,
-  defaultModesWeSellTicketsFor,
-} from './remote-config';
+import {RemoteConfig, defaultRemoteConfig, getConfig} from './remote-config';
 import Bugsnag from '@bugsnag/react-native';
 
 import {useAppState} from './AppContext';
+import {FeedbackConfiguration} from './components/feedback/FeedbackContext';
 
 export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
-  modes_we_sell_tickets_for: string[];
+  feedback_questions: FeedbackConfiguration[];
 };
 
 const RemoteConfigContext = createContext<RemoteConfigContextState | undefined>(
@@ -101,10 +97,7 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
     <RemoteConfigContext.Provider
       value={{
         ...config,
-        modes_we_sell_tickets_for: parseJson(
-          config.modes_we_sell_tickets_for,
-          defaultModesWeSellTicketsFor,
-        ),
+        feedback_questions: parseJson(config.feedback_questions, []),
         refresh,
       }}
     >

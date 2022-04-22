@@ -15,9 +15,9 @@ const PaymentBrand: React.FC<Brand> = ({icon, size = 40, fill = 'black'}) => {
   const BrandLogo =
     icon == PaymentType.Vipps ? (
       <Vipps height="100%" width="100%" />
-    ) : icon == PaymentType.VISA ? (
+    ) : icon == PaymentType.Visa ? (
       <Visa height="100%" width="100%" />
-    ) : icon == PaymentType.MasterCard ? (
+    ) : icon == PaymentType.Mastercard ? (
       <MasterCard height="100%" width="100%" />
     ) : null;
 

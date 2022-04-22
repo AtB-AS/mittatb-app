@@ -5,13 +5,11 @@ import {StyleProp, View, ViewStyle} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import {Pin} from '@atb/assets/svg/mono-icons/map';
-import {Location} from '@atb/assets/svg/mono-icons/places';
+import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import Button, {ButtonProps} from '@atb/components/button';
-import {FavoriteIcon} from '@atb/favorites';
-import {useFavorites} from '@atb/favorites/FavoritesContext';
-import {LocationWithMetadata} from '@atb/favorites/types';
-import {useReverseGeocoder} from '@atb/geocoder';
+import {FavoriteIcon, useFavorites} from '../favorites';
+import {GeoLocation, Location} from '../favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -22,7 +20,7 @@ import {ThemeColor} from '@atb/theme/colors';
 const themeColor: ThemeColor = 'primary_2';
 
 type Props = {
-  onSelectLocation: (location: LocationWithMetadata) => void;
+  onSelectLocation: (location: Location) => void;
   onMapSelection?: () => void;
   containerStyle?: StyleProp<ViewStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
@@ -61,7 +59,7 @@ const FavoriteChips: React.FC<Props> = ({
               text={t(FavoriteTexts.chips.currentLocation)}
               accessibilityRole="button"
               accessibilityHint={chipActionHint ?? ''}
-              icon={Location}
+              icon={LocationIcon}
               onPress={onCurrentLocation}
               testID="currentLocationChip"
             />
@@ -152,22 +150,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 }));
 
 function useCurrentLocationChip(
-  onSelectLocation: (location: LocationWithMetadata) => void,
+  onSelectLocation: (location: GeoLocation) => void,
 ) {
   const {location, requestPermission} = useGeolocationState();
-  const {closestLocation: currentLocation} = useReverseGeocoder(
-    location?.coords ?? null,
-  );
 
   const [recentlyAllowedGeo, setsetRecentlyAllowedGeo] = useState(false);
 
   const onCurrentLocation = useCallback(
     async function () {
-      if (currentLocation) {
-        onSelectLocation({
-          ...currentLocation,
-          resultType: 'geolocation',
-        });
+      if (location) {
+        onSelectLocation(location);
       } else {
         const status = await requestPermission();
         if (status === 'granted') {
@@ -175,17 +167,14 @@ function useCurrentLocationChip(
         }
       }
     },
-    [currentLocation, onSelectLocation, requestPermission],
+    [location, onSelectLocation, requestPermission],
   );
 
   useEffect(() => {
-    if (recentlyAllowedGeo && currentLocation) {
-      onSelectLocation({
-        ...currentLocation,
-        resultType: 'geolocation',
-      });
+    if (recentlyAllowedGeo && location) {
+      onSelectLocation(location);
     }
-  }, [recentlyAllowedGeo, currentLocation]);
+  }, [recentlyAllowedGeo, location]);
 
   return {onCurrentLocation};
 }

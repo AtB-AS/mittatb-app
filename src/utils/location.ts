@@ -1,5 +1,6 @@
 import haversine from 'haversine-distance';
 import {Location} from '../favorites/types';
+import {Coordinates} from '@entur/sdk';
 
 type SortedLocation = {
   location: Location;
@@ -18,14 +19,11 @@ export function sortNearestLocations(
     }))
     .sort((a, b) => a.distance - b.distance);
 }
-export function locationsAreEqual(l1: Location, l2: Location) {
-  return (
-    l1.coordinates.latitude === l2.coordinates.latitude &&
-    l1.coordinates.longitude === l2.coordinates.longitude
-  );
+export function coordinatesAreEqual(c1: Coordinates, c2: Coordinates) {
+  return c1.latitude === c2.latitude && c1.longitude === c2.longitude;
 }
-export function locationDistanceInMetres(l1: Location, l2: Location) {
-  return haversine(l1.coordinates, l2.coordinates);
+export function coordinatesDistanceInMetres(c1: Coordinates, c2: Coordinates) {
+  return haversine(c1, c2);
 }
 
 export function primitiveLocationDistanceInMetres(
@@ -44,8 +42,14 @@ export function primitiveLocationDistanceInMetres(
 
 export function isValidTripLocations(from?: Location, to?: Location): boolean {
   if (!from || !to) return false;
-  if (locationsAreEqual(from, to)) return false;
-  if (locationDistanceInMetres(from, to) < LOCATIONS_REALLY_CLOSE_THRESHOLD)
+  if (coordinatesAreEqual(from.coordinates, to.coordinates)) return false;
+  if (
+    coordinatesDistanceInMetres(from.coordinates, to.coordinates) <
+    LOCATIONS_REALLY_CLOSE_THRESHOLD
+  )
     return false;
   return true;
 }
+
+export const getLocationLayer = (l: Location) =>
+  l.resultType === 'geolocation' ? undefined : l.layer;

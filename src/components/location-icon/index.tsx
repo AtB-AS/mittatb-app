@@ -1,10 +1,10 @@
 import {Pin} from '@atb/assets/svg/mono-icons/map';
+import {Location as LocationMonoIcon} from '@atb/assets/svg/mono-icons/places';
 import * as TransportationIcons from '@atb/assets/svg/mono-icons/transportation';
 import * as EnturTransportationIcons from '@atb/assets/svg/mono-icons/transportation-entur';
 import {Location} from '@atb/favorites/types';
 import {FeatureCategory} from '@atb/sdk';
 import React from 'react';
-import {SvgProps} from 'react-native-svg';
 import ThemeIcon from '@atb/components/theme-icon';
 
 const LocationIcon = ({
@@ -15,6 +15,9 @@ const LocationIcon = ({
   fill?: string;
   multiple?: boolean;
 }) => {
+  if (location.resultType === 'geolocation') {
+    return <ThemeIcon svg={LocationMonoIcon} />;
+  }
   switch (location.layer) {
     case 'address':
       return <ThemeIcon svg={Pin} />;
