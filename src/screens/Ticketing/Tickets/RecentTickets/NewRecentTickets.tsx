@@ -3,6 +3,10 @@ import {StyleSheet} from '@atb/theme';
 import {ScrollView, StyleProp, ViewStyle} from 'react-native';
 import useRecentTickets, {RecentTicket} from '../use-recent-tickets';
 import {RecentTicketComponent} from './RecentTicketComponent';
+import {
+  Mode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type NewRecentTicketsProps = {
   navigation: any;
@@ -44,7 +48,17 @@ export const NewRecentTickets = ({
           <RecentTicketComponent
             key={index}
             ticketData={ticket}
-            transportModes={['bus', 'tram', 'rail']}
+            transportModeTexts={[
+              {
+                mode: Mode.Bus,
+              },
+              {
+                mode: Mode.Tram,
+              },
+            ]}
+            transportModeIcons={[
+              {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+            ]}
             selectTicket={selectTicket}
           />
         ))}

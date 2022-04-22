@@ -10,13 +10,19 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useSectionItem} from '@atb/components/sections/section-utils';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
-import {getTransportModeSvg} from '@atb/components/transportation-icon';
-
-type TicketMode = 'bus' | 'rail' | 'tram';
+import TransportationIcon, {
+  getTransportModeSvg,
+} from '@atb/components/transportation-icon';
+import {
+  Mode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
+import {TransportationModeIconProperties} from '../AvailableTickets/Ticket';
 
 type recentTicketProps = {
   ticketData: RecentTicket;
-  transportModes: TicketMode[];
+  transportModeTexts: TransportationModeIconProperties[];
+  transportModeIcons: TransportationModeIconProperties[];
   selectTicket: (ticketData: RecentTicket) => void;
 };
 
@@ -43,7 +49,8 @@ export const FloatingLabel = ({
 
 export const RecentTicketComponent = ({
   ticketData,
-  transportModes,
+  transportModeIcons,
+  transportModeTexts,
   selectTicket,
 }: recentTicketProps) => {
   const {
@@ -60,50 +67,20 @@ export const RecentTicketComponent = ({
   const toZone = toTariffZone.name.value;
   const {topContainer} = useSectionItem({type: 'inline'});
 
-  const returnModeNames = (capitalized?: boolean) => {
-    if (transportModes.length > 2)
-      return t(RecentTicketsTexts.transportModes.several);
+  const returnModeNames = (
+    modes: TransportationModeIconProperties[],
+    capitalized?: boolean,
+  ) => {
+    if (!modes) return null;
+    if (modes.length > 2) return t(RecentTicketsTexts.transportModes.several);
     else
-      return transportModes
+      return modes
         .map((mode) =>
           capitalized
-            ? t(RecentTicketsTexts.transportModes[mode]).toUpperCase()
-            : t(RecentTicketsTexts.transportModes[mode]),
+            ? t(RecentTicketsTexts.transportModes[mode.mode]).toUpperCase()
+            : t(RecentTicketsTexts.transportModes[mode.mode]),
         )
-        .join(' / ');
-  };
-
-  const returnModeIcons = (modes: TicketMode[]) => {
-    return modes.map((mode) => {
-      let modeColor = '';
-
-      switch (mode) {
-        case 'bus':
-          modeColor = 'transport_city';
-          break;
-        case 'rail':
-          modeColor = 'transport_train';
-          break;
-        case 'tram':
-          modeColor = 'transport_city';
-          break;
-        default:
-          modeColor = 'transport_city';
-      }
-
-      return (
-        <View
-          style={[
-            styles.iconFrame,
-            {
-              backgroundColor: theme.colors[modeColor].backgroundColor,
-            },
-          ]}
-        >
-          {getTransportModeSvg(mode)}
-        </View>
-      );
-    });
+        .join('/');
   };
 
   const returnTicketType = (preassignedFareProduct: PreassignedFareProduct) => {
@@ -131,12 +108,16 @@ export const RecentTicketComponent = ({
       <Section>
         <GenericItem>
           <View style={styles.tileWrapperView}>
-            <View style={styles.travelModesWrapper}>
-              <View style={styles.travelModeIcons}>
-                {returnModeIcons(transportModes)}
-              </View>
-              <ThemeText type="body__tertiary">
-                {returnModeNames(true)}
+            <View style={styles.travelModeWrapper}>
+              {transportModeIcons.map((icon) => (
+                <TransportationIcon mode={icon.mode} subMode={icon.subMode} />
+              ))}
+              <ThemeText
+                type="body__tertiary"
+                style={styles.upperCase}
+                color={'primary'}
+              >
+                {returnModeNames(transportModeTexts)}
               </ThemeText>
             </View>
 
@@ -148,14 +129,14 @@ export const RecentTicketComponent = ({
 
             <View style={styles.horizontalFlex}>
               <View>
-                <ThemeText type="body__tertiary">
+                <ThemeText type="body__tertiary" style={styles.upperCase}>
                   {t(RecentTicketsTexts.titles.duration)}
                 </ThemeText>
                 {returnDuration(preassignedFareProduct)}
               </View>
 
               <View>
-                <ThemeText type="body__tertiary">
+                <ThemeText type="body__tertiary" style={styles.upperCase}>
                   {t(RecentTicketsTexts.titles.zone)}
                 </ThemeText>
                 {fromZone === toZone ? (
@@ -167,7 +148,7 @@ export const RecentTicketComponent = ({
             </View>
 
             <View style={styles.travellersWrapper}>
-              <ThemeText type="body__tertiary">
+              <ThemeText type="body__tertiary" style={styles.upperCase}>
                 {t(RecentTicketsTexts.titles.travellers)}
               </ThemeText>
               <View style={styles.travellersTileWrapper}>
@@ -233,16 +214,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.medium,
     paddingVertical: theme.spacings.medium,
   },
-  travelModesWrapper: {
-    display: 'flex',
+  travelModeWrapper: {
+    flexShrink: 1,
     flexDirection: 'row',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-  },
-  travelModeIcons: {
-    display: 'flex',
-    flexDirection: 'row',
-    marginRight: theme.spacings.medium,
-    marginBottom: theme.spacings.large,
+    marginBottom: theme.spacings.medium,
   },
   iconFrame: {
     padding: theme.spacings.xSmall,
@@ -275,5 +252,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   additionalCategories: {
     marginHorizontal: theme.spacings.small,
     marginVertical: theme.spacings.small,
+  },
+  upperCase: {
+    textTransform: 'uppercase',
   },
 }));
