@@ -72,11 +72,19 @@ export const themes = createExtendedThemes<AppThemeExtension>(mainThemes, {
 export type Themes = typeof themes;
 export type Theme = Themes['light'];
 
-export type ThemeColor = keyof Theme['colors'];
+export type StaticColor = keyof Theme['static'];
+export type InteractiveColor = keyof Theme['interactive'];
 
-export const isThemeColor = (
+export const isStaticColor = (
   theme: Theme,
   color?: string,
-): color is ThemeColor => {
-  return !!color && color in theme.colors;
+): color is StaticColor => {
+  return !!color && color in theme.static;
+};
+
+export const isInteractiveColor = (
+  theme: Theme,
+  color?: string,
+): color is StaticColor => {
+  return !!color && color in theme.interactive;
 };
