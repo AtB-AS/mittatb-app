@@ -8,6 +8,7 @@ import {useAppState} from '@atb/AppContext';
 import {RecentTickets} from '@atb/screens/Ticketing/Tickets/RecentTickets/RecentTickets';
 import {AvailableTickets} from '@atb/screens/Ticketing/Tickets/AvailableTickets/AvailableTickets';
 import {ActiveTickets} from './ActiveTickets/ActiveTickets';
+import {ScrollView} from 'react-native';
 
 export type TicketingScreenNavigationProp =
   StackNavigationProp<RootStackParamList>;
@@ -55,14 +56,14 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   };
 
   return (
-    <>
-      <RecentTickets />
-      {isSignedInAsAbtCustomer && (
+    isSignedInAsAbtCustomer && (
+      <ScrollView>
+        <RecentTickets />
         <AvailableTickets
           onBuySingleTicket={onBuySingleTicket}
           onBuyPeriodTicket={onBuyPeriodTicket}
         />
-      )}
-    </>
+      </ScrollView>
+    )
   );
 };

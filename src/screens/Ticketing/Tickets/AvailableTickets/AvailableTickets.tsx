@@ -28,6 +28,7 @@ export const AvailableTickets = ({
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {preassignedFareproducts} = useFirestoreConfiguration();
   const {t} = useTranslation();
+  const {theme} = useTheme();
 
   const shouldShowSingleTicket = preassignedFareproducts
     .filter(productIsSellableInApp)
@@ -44,65 +45,76 @@ export const AvailableTickets = ({
   const shouldShowSummerPass = false;
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        <View style={styles.ticketsContainer}>
-          {shouldShowSingleTicket && (
-            <Ticket
-              title={t(TicketsTexts.availableTickets.singleTicket.title)}
-              transportationModeTexts={t(
-                TicketsTexts.availableTickets.singleTicket.transportModes,
-              )}
-              transportationModeIcons={[
-                {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
-              ]}
-              description={t(
-                TicketsTexts.availableTickets.singleTicket.description,
-              )}
-              icon={TicketIcons.Single}
-              onPress={onBuySingleTicket}
-            />
-          )}
-          {shouldShowPeriodTicket && (
-            <Ticket
-              title={t(TicketsTexts.availableTickets.periodTicket.title)}
-              transportationModeTexts={t(
-                TicketsTexts.availableTickets.periodTicket.transportModes,
-              )}
-              transportationModeIcons={[
-                {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
-              ]}
-              description={t(
-                TicketsTexts.availableTickets.periodTicket.description,
-              )}
-              icon={TicketIcons.Period}
-              onPress={onBuyPeriodTicket}
-            />
-          )}
-        </View>
-        {shouldShowSummerPass && (
+    <>
+      <ThemeText
+        type="body__secondary"
+        style={{
+          marginLeft: theme.spacings.xLarge,
+          marginBottom: theme.spacings.medium,
+        }}
+      >
+        {t(TicketsTexts.availableTickets.allTickets)}
+      </ThemeText>
+      <View style={styles.container}>
+        <ScrollView>
           <View style={styles.ticketsContainer}>
-            <Ticket
-              title={t(TicketsTexts.availableTickets.summerPass.title)}
-              transportationModeTexts={t(
-                TicketsTexts.availableTickets.summerPass.transportModes,
-              )}
-              transportationModeIcons={[
-                {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
-                {mode: Mode.Rail},
-                {mode: Mode.Water},
-              ]}
-              description={t(
-                TicketsTexts.availableTickets.summerPass.description,
-              )}
-              icon={TicketIcons.Summer}
-              accented={true}
-              onPress={onBuyPeriodTicket}
-            />
+            {shouldShowSingleTicket && (
+              <Ticket
+                title={t(TicketsTexts.availableTickets.singleTicket.title)}
+                transportationModeTexts={t(
+                  TicketsTexts.availableTickets.singleTicket.transportModes,
+                )}
+                transportationModeIcons={[
+                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+                ]}
+                description={t(
+                  TicketsTexts.availableTickets.singleTicket.description,
+                )}
+                icon={TicketIcons.Single}
+                onPress={onBuySingleTicket}
+              />
+            )}
+            {shouldShowPeriodTicket && (
+              <Ticket
+                title={t(TicketsTexts.availableTickets.periodTicket.title)}
+                transportationModeTexts={t(
+                  TicketsTexts.availableTickets.periodTicket.transportModes,
+                )}
+                transportationModeIcons={[
+                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+                ]}
+                description={t(
+                  TicketsTexts.availableTickets.periodTicket.description,
+                )}
+                icon={TicketIcons.Period}
+                onPress={onBuyPeriodTicket}
+              />
+            )}
           </View>
-        )}
-      </ScrollView>
-    </View>
+          {shouldShowSummerPass && (
+            <View style={styles.ticketsContainer}>
+              <Ticket
+                title={t(TicketsTexts.availableTickets.summerPass.title)}
+                transportationModeTexts={t(
+                  TicketsTexts.availableTickets.summerPass.transportModes,
+                )}
+                transportationModeIcons={[
+                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+                  {mode: Mode.Rail},
+                  {mode: Mode.Water},
+                ]}
+                description={t(
+                  TicketsTexts.availableTickets.summerPass.description,
+                )}
+                icon={TicketIcons.Summer}
+                accented={true}
+                onPress={onBuyPeriodTicket}
+              />
+            </View>
+          )}
+        </ScrollView>
+      </View>
+    </>
   );
 };
 

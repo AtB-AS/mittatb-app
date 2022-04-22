@@ -77,6 +77,7 @@ const TicketsTexts = {
     ),
   },
   availableTickets: {
+    allTickets: _('Alle billetter', 'All tickets'),
     singleTicket: {
       title: _('Enkeltbillett', 'Single ticket'),
       description: _(
