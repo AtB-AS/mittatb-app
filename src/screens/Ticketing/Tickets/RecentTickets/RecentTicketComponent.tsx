@@ -90,18 +90,23 @@ export const RecentTicketComponent = ({
 
   const returnDuration = (preassignedFareProduct: PreassignedFareProduct) => {
     const {durationDays, type} = preassignedFareProduct;
-    let textString = ``;
 
-    if (type === 'single') textString = 'Minst 90 min';
-    if (type === 'carnet') textString = '10 klipp';
     if (type === 'period') {
+      let textString = ``;
       if (durationDays === 1)
         textString = `24 ${t(RecentTicketsTexts.titles.hours)}`;
       else {
         textString = `${durationDays} ${t(RecentTicketsTexts.titles.days)}`;
       }
+      return (
+        <View>
+          <ThemeText type="body__tertiary" style={styles.upperCase}>
+            {t(RecentTicketsTexts.titles.duration)}
+          </ThemeText>
+          <FloatingLabel text={textString} />
+        </View>
+      );
     }
-    return <FloatingLabel text={textString} />;
   };
 
   return (
@@ -134,18 +139,52 @@ export const RecentTicketComponent = ({
 
             <View style={styles.section}>
               <ThemeText type="body__secondary--bold">
-                {returnTicketType(preassignedFareProduct)}
+                {/*returnTicketType(preassignedFareProduct)*/}
+                {getReferenceDataName(preassignedFareProduct, language)}
               </ThemeText>
             </View>
 
             <View style={styles.horizontalFlex}>
+              {/*returnDuration(preassignedFareProduct)*/}
               <View>
-                <ThemeText type="body__tertiary" style={styles.upperCase}>
-                  {t(RecentTicketsTexts.titles.duration)}
-                </ThemeText>
-                {returnDuration(preassignedFareProduct)}
+                <View>
+                  <ThemeText type="body__tertiary" style={styles.upperCase}>
+                    {t(RecentTicketsTexts.titles.travellers)}
+                  </ThemeText>
+                  <View style={styles.travellersTileWrapper}>
+                    {userProfilesWithCount.length <= 2 &&
+                      userProfilesWithCount.map((u) => (
+                        <FloatingLabel
+                          text={`${u.count} ${getReferenceDataName(
+                            u,
+                            language,
+                          ).toLowerCase()}`}
+                          additionalStyles={{
+                            marginRight: theme.spacings.xSmall,
+                          }}
+                        />
+                      ))}
+                    {userProfilesWithCount.length > 2 && (
+                      <>
+                        {userProfilesWithCount.slice(0, 1).map((u) => (
+                          <FloatingLabel
+                            text={`${u.count} ${getReferenceDataName(
+                              u,
+                              language,
+                            )}`}
+                          />
+                        ))}
+                        <View style={styles.additionalCategories}>
+                          <ThemeText>
+                            + {userProfilesWithCount.slice(1).length}{' '}
+                            {t(RecentTicketsTexts.titles.moreTravelers)}
+                          </ThemeText>
+                        </View>
+                      </>
+                    )}
+                  </View>
+                </View>
               </View>
-
               <View>
                 <ThemeText type="body__tertiary" style={styles.upperCase}>
                   {t(RecentTicketsTexts.titles.zone)}
@@ -154,41 +193,6 @@ export const RecentTicketComponent = ({
                   <FloatingLabel text={`${fromZone}`} />
                 ) : (
                   <FloatingLabel text={`${fromZone} - ${toZone}`} />
-                )}
-              </View>
-            </View>
-
-            <View style={styles.travellersWrapper}>
-              <ThemeText type="body__tertiary" style={styles.upperCase}>
-                {t(RecentTicketsTexts.titles.travellers)}
-              </ThemeText>
-              <View style={styles.travellersTileWrapper}>
-                {userProfilesWithCount.length <= 2 &&
-                  userProfilesWithCount.map((u) => (
-                    <FloatingLabel
-                      text={`${u.count} ${getReferenceDataName(
-                        u,
-                        language,
-                      ).toLowerCase()}`}
-                      additionalStyles={{
-                        marginRight: theme.spacings.xSmall,
-                      }}
-                    />
-                  ))}
-                {userProfilesWithCount.length > 2 && (
-                  <>
-                    {userProfilesWithCount.slice(0, 1).map((u) => (
-                      <FloatingLabel
-                        text={`${u.count} ${getReferenceDataName(u, language)}`}
-                      />
-                    ))}
-                    <View style={styles.additionalCategories}>
-                      <ThemeText>
-                        + {userProfilesWithCount.slice(1).length}{' '}
-                        {t(RecentTicketsTexts.titles.moreTravelers)}
-                      </ThemeText>
-                    </View>
-                  </>
                 )}
               </View>
             </View>
@@ -229,13 +233,9 @@ const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   section: {
     marginBottom: theme.spacings.small,
   },
-  travellersWrapper: {
-    marginTop: theme.spacings.medium,
-    paddingHorizontal: 0,
-  },
   travellersTileWrapper: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
   },
   horizontalFlex: {
     display: 'flex',
