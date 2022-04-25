@@ -61,13 +61,13 @@ export default function TravelTokenBox({
           )}
         </View>
         <View style={styles.description}>
-          <ThemeText color="primary_2">{description}</ThemeText>
+          <ThemeText color="background_accent_3">{description}</ThemeText>
         </View>
       </View>
       {showHowToChangeHint && (
         <ThemeText
           style={styles.howToChange}
-          color="primary_2"
+          color="background_accent_3"
           type={'body__tertiary'}
           isMarkdown={true}
         >
@@ -92,27 +92,31 @@ const TravelDeviceTitle = ({
         <View style={styles.travelCardTitleContainer}>
           <ThemeText
             type="heading__title"
-            color="primary_2"
+            color="background_accent_3"
             style={styles.title}
           >
             {t(TravelTokenBoxTexts.tcard.title)}
           </ThemeText>
-          <ThemeText color="primary_2" style={styles.transparent}>
+          <ThemeText color="background_accent_3" style={styles.transparent}>
             {' XXXX XX'}
           </ThemeText>
-          <ThemeText type="heading__title" color="primary_2">
+          <ThemeText type="heading__title" color="background_accent_3">
             {inspectableToken.travelCardId?.substring(0, 2) +
               ' ' +
               inspectableToken.travelCardId?.substring(2)}
           </ThemeText>
-          <ThemeText color="primary_2" style={styles.transparent}>
+          <ThemeText color="background_accent_3" style={styles.transparent}>
             {'X'}
           </ThemeText>
         </View>
       );
     case 'mobile':
       return (
-        <ThemeText type="heading__title" color="primary_2" style={styles.title}>
+        <ThemeText
+          type="heading__title"
+          color="background_accent_3"
+          style={styles.title}
+        >
           {inspectableToken.name || t(TravelTokenBoxTexts.mobile.unnamedDevice)}
         </ThemeText>
       );
@@ -169,7 +173,7 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     marginBottom: theme.spacings.medium,
   },
   container: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_3.background,
     padding: theme.spacings.xLarge,
     borderRadius: theme.border.radius.regular,
     marginBottom: theme.spacings.medium,

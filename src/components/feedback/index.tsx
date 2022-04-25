@@ -338,7 +338,7 @@ export const Feedback = ({
               text={t(FeedbackTexts.submitText.submitFeedback)}
               onPress={submitFeedbackWithAlternatives}
               mode="primary"
-              color="background_accent"
+              interactiveColor="interactive_1"
             />
           </View>
         )}
@@ -359,7 +359,7 @@ export const Feedback = ({
 
 const useFeedbackStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     borderRadius: theme.border.radius.regular,
     padding: theme.spacings.xLarge,
   },

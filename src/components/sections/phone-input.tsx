@@ -226,9 +226,9 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     flexGrow: 1,
   },
   container: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
     borderWidth: theme.border.width.slim,
-    borderColor: theme.colors.background_0.backgroundColor,
+    borderColor: theme.static.background.background_0.background,
     marginVertical: theme.spacings.xSmall,
   },
   containerInline: {

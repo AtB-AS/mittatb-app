@@ -1,6 +1,5 @@
 import {useTheme} from '@atb/theme';
 import {
-  Statuses,
   TextColor,
   Theme,
   Mode,
@@ -11,7 +10,7 @@ import {
 import {SvgProps} from 'react-native-svg';
 import useFontScale from '@atb/utils/use-font-scale';
 
-type ColorType = TextColor | Statuses | StaticColor;
+type ColorType = TextColor | StaticColor;
 
 type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;

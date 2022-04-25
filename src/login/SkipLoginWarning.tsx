@@ -11,9 +11,9 @@ import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {OnboardingStackParams} from '@atb/screens/Onboarding';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
 
-const themeColor: ThemeColor = 'primary_2';
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export type SkipLoginWarningProps = {
   navigation: StackNavigationProp<OnboardingStackParams>;
@@ -43,7 +43,7 @@ export default function SkipLoginWarning({navigation}: SkipLoginWarningProps) {
       </ScrollView>
       <FullScreenFooter>
         <Button
-          color={'secondary_1'}
+          interactiveColor="interactive_0"
           onPress={finishOnboarding}
           text={t(LoginTexts.skipLoginWarning.mainButton)}
           icon={ArrowRight}
@@ -69,7 +69,7 @@ export default function SkipLoginWarning({navigation}: SkipLoginWarningProps) {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
     flex: 1,
   },
   mainView: {

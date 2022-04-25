@@ -33,7 +33,7 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
   const {t} = useTranslation();
   const {theme} = useTheme();
   const themeColor = useThemeColorForTransportMode(mode, subMode);
-  const backgroundColor = theme.colors[themeColor].backgroundColor;
+  const backgroundColor = theme.static.transport[themeColor].background;
   const svg = getTransportModeSvg(mode);
   const styles = useStyles();
 
@@ -86,7 +86,7 @@ export function getTransportModeSvg(mode?: AnyMode) {
 export const CollapsedLegs = ({legs}: {legs: any[]}) => {
   const styles = useStyles();
   const {theme} = useTheme();
-  const backgroundColor = theme.colors.transport_other.backgroundColor;
+  const backgroundColor = theme.static.transport.transport_other.background;
 
   if (!legs.length) return null;
 

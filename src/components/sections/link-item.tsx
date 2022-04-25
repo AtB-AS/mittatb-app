@@ -63,7 +63,7 @@ export default function LinkItem({
         </ThemeText>
         {flag && (
           <View style={linkItemStyle.flag}>
-            <ThemeText color="primary_2" type={'body__tertiary'}>
+            <ThemeText color="background_accent_3" type="body__tertiary">
               {flag}
             </ThemeText>
           </View>
@@ -82,7 +82,7 @@ export default function LinkItem({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   disabled: {opacity: 0.2},
   flag: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_3.background,
     marginRight: theme.spacings.medium,
     paddingHorizontal: theme.spacings.small,
     paddingVertical: theme.spacings.xSmall,
