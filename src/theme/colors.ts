@@ -129,6 +129,10 @@ export const isStaticColor = (color?: string): color is StaticColor => {
   return !!color && color in flatStaticColors.light;
 };
 
+export const getStaticColor = (mode: Mode, color: StaticColor) => {
+  return flatStaticColors[mode][color];
+};
+
 export const getStaticColorType = (color: StaticColor): StaticColorType => {
   return Object.keys(themes.light.static).find(
     (colorType) => color in themes.light.static[colorType as StaticColorType],
