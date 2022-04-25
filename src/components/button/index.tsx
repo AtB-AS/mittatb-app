@@ -16,17 +16,15 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 
 export {default as ButtonGroup} from './group';
 
-type ButtonMode = 'primary' | 'secondary' | 'tertiary' | 'destructive';
+type ButtonMode = 'primary' | 'secondary' | 'tertiary';
 
 type ButtonSettings = {
-  themeColor?: InteractiveColor;
   withBackground: boolean;
   visibleBorder: boolean;
 };
 
 const DefaultModeStyles: {[key in ButtonMode]: ButtonSettings} = {
   primary: {
-    themeColor: 'interactive_0',
     withBackground: true,
     visibleBorder: false,
   },
@@ -36,11 +34,6 @@ const DefaultModeStyles: {[key in ButtonMode]: ButtonSettings} = {
   },
   tertiary: {
     withBackground: false,
-    visibleBorder: false,
-  },
-  destructive: {
-    themeColor: 'interactive_destructive',
-    withBackground: true,
     visibleBorder: false,
   },
 };
@@ -54,7 +47,7 @@ type ButtonTypeAwareProps =
 
 export type ButtonProps = {
   onPress(): void;
-  color?: InteractiveColor;
+  interactiveColor?: InteractiveColor;
   mode?: ButtonMode;
   viewContainerStyle?: StyleProp<ViewStyle>;
   textContainerStyle?: StyleProp<ViewStyle>;
@@ -68,7 +61,7 @@ const DISABLED_OPACITY = 0.2;
 
 const Button: React.FC<ButtonProps> = ({
   onPress,
-  color,
+  interactiveColor = 'interactive_0',
   mode = 'primary',
   type = 'block',
   icon: Icon,
@@ -82,7 +75,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const modeData = DefaultModeStyles[mode];
-  const themeColor = color ?? modeData.themeColor;
+  const themeColor = interactiveColor;
   const css = useButtonStyle();
   const {theme} = useTheme();
   const fadeAnim = useRef(
