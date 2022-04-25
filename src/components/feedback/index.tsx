@@ -291,15 +291,15 @@ export const Feedback = ({
   if (!currentVersionStats) return null;
   if (currentVersionStats.doNotShowAgain) return null;
 
-  if (
-    feedbackConfig.gracePeriodDisplayCount &&
-    feedbackConfig.gracePeriodDisplayCount + 1 >
-      currentVersionStats.displayCount
-  ) {
-    return null;
-  }
-
   if (!feedbackConfig.alwaysShow) {
+    if (
+      feedbackConfig.gracePeriodDisplayCount &&
+      feedbackConfig.gracePeriodDisplayCount + 1 >
+        currentVersionStats.displayCount
+    ) {
+      return null;
+    }
+
     if (feedbackConfig.repromptDisplayCount) {
       if (currentVersionStats.answeredAtDisplayCount) {
         const shouldReprompt =
