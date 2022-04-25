@@ -67,7 +67,10 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
         title={t(TravelTokenTexts.toggleToken.title)}
         leftButton={{type: 'back'}}
       />
-      <ScrollView contentContainerStyle={styles.scrollView}>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        testID="selectTokenScrollView"
+      >
         <View style={styles.radioArea}>
           <RadioBox
             title={t(TravelTokenTexts.toggleToken.radioBox.tCard.title)}

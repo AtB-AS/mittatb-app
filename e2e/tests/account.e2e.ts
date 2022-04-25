@@ -1,21 +1,15 @@
-import {device} from 'detox';
-import { getNumberOfIncreasedIds, goBack, goToTab, setInputById } from "../utils/commonHelpers";
-import {
-  tap,
-  tapById,
-  tapByText,
-  waitToExistById,
-} from '../utils/interactionHelpers';
+import {device, by} from 'detox';
+import {getNumberOfIncreasedIds, goBack, goToTab} from '../utils/commonHelpers';
+import {scroll, scrollToId, tapById} from '../utils/interactionHelpers';
 import {
   expectToBeVisibleById,
   expectToBeVisibleByText,
   expectIdToHaveText,
-  expectToBeVisibleByPartOfText,
-  expectToBeEnabled,
-  expectNotToBeEnabled,
   expectNotToBeVisibleByText,
-  expectIdToHaveChildId, expectNotToExistsById
-} from "../utils/expectHelpers";
+  expectIdToHaveChildId,
+  expectNotToExistsById,
+  expectToExistsByIdHierarchy,
+} from '../utils/expectHelpers';
 import {skipOnboarding} from '../utils/onboarding';
 import setLocation from '../utils';
 import {
@@ -25,8 +19,8 @@ import {
   logOut,
 } from '../utils/account';
 import {ensureTicketingIsAccepted} from '../utils/tickets';
-import {userInfo} from "../utils/testData";
-import { expectGreaterThan } from "../utils/jestAssertions";
+import {userInfo} from '../utils/testData';
+import {expectGreaterThan} from '../utils/jestAssertions';
 
 /*
   Necessities for test data in this test suite is described in ../utils/testData.ts
@@ -51,12 +45,15 @@ describe('Account', () => {
 
     // Log in before all tests
     await goToTab('profile');
-    isLoggedIn = await logIn(userInfo.phoneNumber, userInfo.otp, userInfo.customerNumber);
+    isLoggedIn = await logIn(
+      userInfo.phoneNumber,
+      userInfo.otp,
+      userInfo.customerNumber,
+    );
   });
 
   beforeEach(async () => {
-    //TODO Activate when more tests
-    //await device.reloadReactNative();
+    await device.reloadReactNative();
   });
 
   afterAll(async () => {
@@ -70,26 +67,7 @@ describe('Account', () => {
     }
   });
 
-  xit('should show that another mobile has the inspectable token', async () => {
-    if (isLoggedIn) {
-      await goToTab('tickets');
-
-      // Accept ticket limitations
-      await ensureTicketingIsAccepted();
-
-      await tapById('validTicketsTab');
-
-      // Verify
-      await expectToBeVisibleById('travelTokenBox');
-      await expectToBeVisibleById('mobileIcon');
-      await deviceNameIsDefined();
-      await expectToBeVisibleByText(
-        'Remember to bring your phone while travelling.',
-      );
-    }
-  });
-
-  xit('should switch the ticket bearer', async () => {
+  it('should switch the ticket bearer', async () => {
     // ** Switch > travelcard **
     const switchMobileToTravelcard = async () => {
       await expectToBeVisibleById('travelTokenBox');
@@ -109,6 +87,11 @@ describe('Account', () => {
       await expectIdToHaveChildId('selectTravelcard', 'radioChecked');
       await expectIdToHaveChildId('selectMobile', 'radioNotChecked');
       await expectNotToBeVisibleByText('Select device');
+      await scrollToId(
+        'selectTokenScrollView',
+        'confirmSelectionButton',
+        'down',
+      );
       await tapById('confirmSelectionButton');
 
       // Verify
@@ -125,10 +108,10 @@ describe('Account', () => {
         'Remember to bring your t:card when you travel.',
       );
 
-      await tapById('ticket0Details')
-      await expectNotToExistsById('paperQRCode')
-      await expectNotToExistsById('mobileTokenQRCode')
-      await goBack()
+      await tapById('ticket0Details');
+      await expectNotToExistsById('paperQRCode');
+      await expectNotToExistsById('mobileTokenQRCode');
+      await goBack();
     };
 
     // ** Switch > mobile **
@@ -145,6 +128,11 @@ describe('Account', () => {
       await tapById('selectMobile');
       await expectIdToHaveChildId('selectTravelcard', 'radioNotChecked');
       await expectIdToHaveChildId('selectMobile', 'radioChecked');
+      await scrollToId(
+        'selectTokenScrollView',
+        'confirmSelectionButton',
+        'down',
+      );
       await tapById('confirmSelectionButton');
 
       // Verify
@@ -161,10 +149,10 @@ describe('Account', () => {
         'Remember to bring your phone while travelling.',
       );
 
-      await tapById('ticket0Details')
-      await expectNotToExistsById('paperQRCode')
-      await expectNotToExistsById('mobileTokenQRCode')
-      await goBack()
+      await tapById('ticket0Details');
+      await expectNotToExistsById('paperQRCode');
+      await expectNotToExistsById('mobileTokenQRCode');
+      await goBack();
     };
 
     // ** The test **
@@ -192,30 +180,42 @@ describe('Account', () => {
     }
   });
 
-  xit('should have expired tickets', async () => {
+  it('should have expired tickets', async () => {
     if (isLoggedIn) {
-      await tapById('expiredTicketsButton')
+      await goToTab('profile');
+      await scroll('profileHomeScrollView', 'top');
+      await tapById('expiredTicketsButton');
 
       // Verify
-      await expectToBeVisibleById('ticket0')
-      const noExpired = await getNumberOfIncreasedIds('ticket')
-      expectGreaterThan(noExpired, 1)
+      await expectToBeVisibleById('ticket0');
+      const noExpired = await getNumberOfIncreasedIds('ticket');
+      expectGreaterThan(noExpired, 1);
 
       // Show details of first ticket
-      await tapById('ticket0Details')
+      await tapById('ticket0Details');
 
       // Verify
-      await expectToBeVisibleById('detailsProduct')
-      await expectToBeVisibleById('detailsUserAndCount')
-      await expectToBeVisibleById('receiptButton')
+      await expectToBeVisibleById('detailsProduct');
+      await expectToBeVisibleById('detailsUserAndCount');
+      await expectToBeVisibleById('receiptButton');
 
-      await goBack()
-      await goBack()
+      await goBack();
+      await goBack();
     }
   });
 
-  xit('should show correct user id in debug menu', async () => {
-    //TODO
-    //debug menu > id: userId > debugValue == userInfo.user_id
+  it('should show correct user id in debug menu', async () => {
+    if (isLoggedIn) {
+      await goToTab('profile');
+      await scrollToId('profileHomeScrollView', 'debugButton', 'down');
+      await tapById('debugButton');
+
+      // Verify
+      await scrollToId('debugInfoScrollView', 'userId', 'down');
+      await expectToExistsByIdHierarchy(
+        by.text(userInfo.user_id).withAncestor(by.id('userId')),
+      );
+      await goBack();
+    }
   });
 });

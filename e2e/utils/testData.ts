@@ -13,6 +13,7 @@ export const userInfo = {
   customerNumber: '3577544',
   travelCardNumber: '69 2548964',
   recurringPaymentCardNumber: '**** 0004',
+  user_id: 'uZt1Jkv9qfTuKO26RXi5ZVUCsZn1',
 };
 
 export const ticketInfo = {

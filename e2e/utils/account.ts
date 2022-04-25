@@ -1,18 +1,7 @@
-import {by, element, expect} from 'detox';
-import {
-  scrollToId,
-  tapById,
-  tapByText,
-  waitToExistById,
-} from './interactionHelpers';
+import {by} from 'detox';
+import {scroll, tapById} from './interactionHelpers';
 import {expectIdToNotHaveText, expectToBeVisibleByText} from './expectHelpers';
-import {
-  chooseSearchResult,
-  goBack,
-  goToTab,
-  idExists,
-  setInputById,
-} from './commonHelpers';
+import {goBack, goToTab, idExists, setInputById} from './commonHelpers';
 
 // Log in to the app
 export const logIn = async (
@@ -43,6 +32,7 @@ export const logOut = async () => {
   if (await idExists(by.id('lhb'))) {
     await goBack();
   }
+  await scroll('profileHomeScrollView', 'top');
   await tapById('logoutButton');
 };
 
