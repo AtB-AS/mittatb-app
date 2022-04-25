@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ScrollView, View, ActivityIndicator, Dimensions} from 'react-native';
 import useRecentTickets, {RecentTicket} from '../use-recent-tickets';
@@ -37,6 +37,45 @@ export const RecentTickets = () => {
     });
   };
 
+  const returnRecentTickets = (recentTicketsArray: RecentTicket[]) =>
+    recentTicketsArray
+      .filter((recentTicket) => {
+        const ticketType = recentTicket.preassignedFareProduct.type;
+        if (
+          ticketType === 'single' ||
+          ticketType === 'period' ||
+          ticketType === 'carnet'
+        )
+          return true;
+        else return false;
+      })
+      .filter((recentTicket) =>
+        productIsSellableInApp(recentTicket.preassignedFareProduct),
+      )
+      .map((ticket, index) => (
+        <RecentTicketComponent
+          key={index}
+          ticketData={ticket}
+          transportModeTexts={[
+            {
+              mode: Mode.Bus,
+            },
+            {
+              mode: Mode.Tram,
+            },
+          ]}
+          transportModeIcons={[
+            {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+          ]}
+          selectTicket={selectTicket}
+        />
+      ));
+
+  const memoizedRecentTickets = useMemo(
+    () => returnRecentTickets(recentTickets),
+    [recentTickets],
+  );
+
   return (
     <View>
       {loading && (
@@ -66,38 +105,7 @@ export const RecentTickets = () => {
           }}
           style={styles.horizontalScrollView}
         >
-          {recentTickets
-            .filter((recentTicket) => {
-              const ticketType = recentTicket.preassignedFareProduct.type;
-              if (
-                ticketType === 'single' ||
-                ticketType === 'period' ||
-                ticketType === 'carnet'
-              )
-                return true;
-              else return false;
-            })
-            .filter((recentTicket) =>
-              productIsSellableInApp(recentTicket.preassignedFareProduct),
-            )
-            .map((ticket, index) => (
-              <RecentTicketComponent
-                key={index}
-                ticketData={ticket}
-                transportModeTexts={[
-                  {
-                    mode: Mode.Bus,
-                  },
-                  {
-                    mode: Mode.Tram,
-                  },
-                ]}
-                transportModeIcons={[
-                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
-                ]}
-                selectTicket={selectTicket}
-              />
-            ))}
+          {memoizedRecentTickets}
         </ScrollView>
       )}
     </View>
