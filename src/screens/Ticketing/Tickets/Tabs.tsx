@@ -54,15 +54,13 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
     }
   };
 
-  return (
-    isSignedInAsAbtCustomer && (
-      <ScrollView>
-        {enable_recent_tickets && <RecentTickets />}
-        <AvailableTickets
-          onBuySingleTicket={onBuySingleTicket}
-          onBuyPeriodTicket={onBuyPeriodTicket}
-        />
-      </ScrollView>
-    )
-  );
+  return isSignedInAsAbtCustomer ? (
+    <ScrollView>
+      {enable_recent_tickets && <RecentTickets />}
+      <AvailableTickets
+        onBuySingleTicket={onBuySingleTicket}
+        onBuyPeriodTicket={onBuyPeriodTicket}
+      />
+    </ScrollView>
+  ) : null;
 };

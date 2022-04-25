@@ -71,9 +71,15 @@ export const RecentTicketComponent = ({
     else
       return modes
         .map((mode) =>
-          capitalized
-            ? t(RecentTicketsTexts.transportModes[mode.mode]).toUpperCase()
-            : t(RecentTicketsTexts.transportModes[mode.mode]),
+          mode.mode === 'bus' ||
+          mode.mode === 'rail' ||
+          mode.mode === 'tram' ||
+          mode.mode === 'water' ||
+          mode.mode === 'air' ||
+          mode.mode === 'foot' ||
+          mode.mode === 'metro'
+            ? t(RecentTicketsTexts.transportModes[mode.mode])
+            : t(RecentTicketsTexts.transportModes['unknown']),
         )
         .join('/');
   };
