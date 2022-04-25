@@ -13,6 +13,7 @@ import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {TicketingStackParams} from '../../Purchase';
 import ThemeText from '@atb/components/text';
+import {TicketsTexts, useTranslation} from '@atb/translations';
 
 type NavigationProp = CompositeNavigationProp<
   StackNavigationProp<TicketingStackParams>,
@@ -23,8 +24,8 @@ export const RecentTickets = () => {
   const navigation = useNavigation<NavigationProp>();
   const styles = useStyles();
   const {theme} = useTheme();
+  const {t} = useTranslation();
   const {recentTickets, loading, refresh} = useRecentTickets();
-  const {width} = Dimensions.get('window');
 
   const selectTicket = (ticket: RecentTicket) => {
     navigation.navigate('TicketPurchase', {
@@ -48,7 +49,7 @@ export const RecentTickets = () => {
             type="body__primary"
             style={{textAlign: 'center', marginBottom: theme.spacings.large}}
           >
-            Laster tidligere billettkjøp...
+            {t(TicketsTexts.recentTickets.loading)}
           </ThemeText>
           <ActivityIndicator color={theme.colors.primary_1.color} />
         </View>
