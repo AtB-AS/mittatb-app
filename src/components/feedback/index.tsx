@@ -289,9 +289,9 @@ export const Feedback = ({
   const currentVersionStats = findCurrentVersionStats(versionStatsList);
 
   if (!currentVersionStats) return null;
-  if (currentVersionStats.doNotShowAgain) return null;
 
   if (!feedbackConfig.alwaysShow) {
+    if (currentVersionStats.doNotShowAgain) return null;
     if (
       feedbackConfig.gracePeriodDisplayCount &&
       feedbackConfig.gracePeriodDisplayCount + 1 >
