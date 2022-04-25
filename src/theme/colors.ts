@@ -100,7 +100,7 @@ export type StaticColorType = keyof StaticColorsObj;
  * Names of static colors, for a given static color type:
  * E.g. 'background_0' | 'background_1' | ... for StaticColor<'background'>
  */
-type StaticColorByType<Key extends StaticColorType> =
+export type StaticColorByType<Key extends StaticColorType> =
   keyof StaticColorsObj[Key];
 
 /**
@@ -127,6 +127,12 @@ export const flatStaticColors: FlatStaticColorObj = {
 
 export const isStaticColor = (color?: string): color is StaticColor => {
   return !!color && color in flatStaticColors.light;
+};
+
+export const getStaticColorType = (color: StaticColor): StaticColorType => {
+  return Object.keys(themes.light.static).find(
+    (colorType) => color in themes.light.static[colorType as StaticColorType],
+  ) as StaticColorType;
 };
 
 export const isStaticColorByType = (
