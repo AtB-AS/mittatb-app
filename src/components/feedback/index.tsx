@@ -343,7 +343,8 @@ export const Feedback = ({
           </View>
         )}
         {selectedOpinion === Opinions.NotClickedYet &&
-          feedbackConfig.dismissable && (
+          feedbackConfig.dismissable &&
+          !feedbackConfig.alwaysShow && (
             <Button
               style={styles.submitButtonView}
               onPress={setDoNotShowAgain}
