@@ -5,7 +5,7 @@ import {useTranslation} from '@atb/translations';
 import RecentTicketsTexts from '@atb/translations/screens/subscreens/RecentTicketsTexts';
 import {RecentTicket} from '../use-recent-tickets';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {View, ViewStyle} from 'react-native';
+import {Dimensions, View, ViewStyle} from 'react-native';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useSectionItem} from '@atb/components/sections/section-utils';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
@@ -60,6 +60,7 @@ export const RecentTicketComponent = ({
   const toZone = toTariffZone.name.value;
   const {topContainer} = useSectionItem({type: 'inline'});
   const darkMode = themeName === 'dark';
+  const {width} = Dimensions.get('window');
 
   const returnModeNames = (
     modes: TransportationModeIconProperties[],
@@ -101,7 +102,13 @@ export const RecentTicketComponent = ({
     <View style={[topContainer, styles.container]}>
       <Section>
         <GenericItem>
-          <View style={styles.tileWrapperView}>
+          <View
+            style={{
+              minWidth: width * 0.6,
+              paddingHorizontal: theme.spacings.medium,
+              paddingVertical: theme.spacings.medium,
+            }}
+          >
             <View style={styles.travelModeWrapper}>
               {transportModeIcons.map((icon) => (
                 <TransportationIcon mode={icon.mode} subMode={icon.subMode} />
@@ -201,12 +208,6 @@ const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
     borderRadius: theme.border.radius.regular,
     justifyContent: 'space-between',
     marginHorizontal: theme.spacings.small,
-    height: '100%',
-  },
-  tileWrapperView: {
-    minWidth: 250,
-    paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.medium,
   },
   travelModeWrapper: {
     flexShrink: 1,

@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {ScrollView, StyleProp, ViewStyle, View} from 'react-native';
+import {ScrollView, View, ActivityIndicator, Dimensions} from 'react-native';
 import useRecentTickets, {RecentTicket} from '../use-recent-tickets';
 import {RecentTicketComponent} from './RecentTicketComponent';
 import {
@@ -12,6 +12,7 @@ import {RootStackParamList} from '@atb/navigation';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {TicketingStackParams} from '../../Purchase';
+import ThemeText from '@atb/components/text';
 
 type NavigationProp = CompositeNavigationProp<
   StackNavigationProp<TicketingStackParams>,
@@ -23,6 +24,7 @@ export const RecentTickets = () => {
   const styles = useStyles();
   const {theme} = useTheme();
   const {recentTickets, loading, refresh} = useRecentTickets();
+  const {width} = Dimensions.get('window');
 
   const selectTicket = (ticket: RecentTicket) => {
     navigation.navigate('TicketPurchase', {
@@ -35,44 +37,69 @@ export const RecentTickets = () => {
   };
 
   return (
-    <ScrollView
-      horizontal={true}
-      showsHorizontalScrollIndicator={false}
-      keyboardShouldPersistTaps="handled"
-      contentContainerStyle={{
-        marginVertical: theme.spacings.medium,
-        paddingHorizontal: theme.spacings.xSmall,
-      }}
-      style={styles.horizontalScrollView}
-    >
-      {recentTickets
-        .filter((recentTicket) => {
-          const t = recentTicket.preassignedFareProduct.type;
-          if (t === 'single' || t === 'period' || t === 'carnet') return true;
-          else return false;
-        })
-        .filter((recentTicket) =>
-          productIsSellableInApp(recentTicket.preassignedFareProduct),
-        )
-        .map((ticket, index) => (
-          <RecentTicketComponent
-            key={index}
-            ticketData={ticket}
-            transportModeTexts={[
-              {
-                mode: Mode.Bus,
-              },
-              {
-                mode: Mode.Tram,
-              },
-            ]}
-            transportModeIcons={[
-              {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
-            ]}
-            selectTicket={selectTicket}
-          />
-        ))}
-    </ScrollView>
+    <View>
+      {loading && (
+        <View
+          style={{
+            paddingVertical: theme.spacings.xLarge,
+          }}
+        >
+          <ThemeText
+            type="body__primary"
+            style={{textAlign: 'center', marginBottom: theme.spacings.large}}
+          >
+            Laster tidligere billettkjøp...
+          </ThemeText>
+          <ActivityIndicator color={theme.colors.primary_1.color} />
+        </View>
+      )}
+
+      {!loading && recentTickets && (
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{
+            marginVertical: theme.spacings.medium,
+            paddingHorizontal: theme.spacings.xSmall,
+          }}
+          style={styles.horizontalScrollView}
+        >
+          {recentTickets
+            .filter((recentTicket) => {
+              const ticketType = recentTicket.preassignedFareProduct.type;
+              if (
+                ticketType === 'single' ||
+                ticketType === 'period' ||
+                ticketType === 'carnet'
+              )
+                return true;
+              else return false;
+            })
+            .filter((recentTicket) =>
+              productIsSellableInApp(recentTicket.preassignedFareProduct),
+            )
+            .map((ticket, index) => (
+              <RecentTicketComponent
+                key={index}
+                ticketData={ticket}
+                transportModeTexts={[
+                  {
+                    mode: Mode.Bus,
+                  },
+                  {
+                    mode: Mode.Tram,
+                  },
+                ]}
+                transportModeIcons={[
+                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+                ]}
+                selectTicket={selectTicket}
+              />
+            ))}
+        </ScrollView>
+      )}
+    </View>
   );
 };
 
