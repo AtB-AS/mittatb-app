@@ -7,6 +7,7 @@ import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
+import {productIsSellableInApp} from '@atb/reference-data/utils';
 
 type NewRecentTicketsProps = {
   navigation: any;
@@ -44,6 +45,9 @@ export const NewRecentTickets = ({
           if (t === 'single' || t === 'period' || t === 'carnet') return true;
           else return false;
         })
+        .filter((recentTicket) =>
+          productIsSellableInApp(recentTicket.preassignedFareProduct),
+        )
         .map((ticket, index) => (
           <RecentTicketComponent
             key={index}
