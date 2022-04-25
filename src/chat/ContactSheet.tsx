@@ -135,7 +135,7 @@ const ContactItem: React.FC<ContactProps> = ({
         <ThemeText>{body}</ThemeText>
       </View>
       <Button
-        color="primary_2"
+        color="interactive_0"
         text={buttonText}
         accessibilityHint={accessibilityHint}
         onPress={onPress}
