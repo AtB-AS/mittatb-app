@@ -289,17 +289,17 @@ export const Feedback = ({
   const currentVersionStats = findCurrentVersionStats(versionStatsList);
 
   if (!currentVersionStats) return null;
-  if (currentVersionStats.doNotShowAgain) return null;
-
-  if (
-    feedbackConfig.gracePeriodDisplayCount &&
-    feedbackConfig.gracePeriodDisplayCount + 1 >
-      currentVersionStats.displayCount
-  ) {
-    return null;
-  }
 
   if (!feedbackConfig.alwaysShow) {
+    if (currentVersionStats.doNotShowAgain) return null;
+    if (
+      feedbackConfig.gracePeriodDisplayCount &&
+      feedbackConfig.gracePeriodDisplayCount + 1 >
+        currentVersionStats.displayCount
+    ) {
+      return null;
+    }
+
     if (feedbackConfig.repromptDisplayCount) {
       if (currentVersionStats.answeredAtDisplayCount) {
         const shouldReprompt =
@@ -343,7 +343,8 @@ export const Feedback = ({
           </View>
         )}
         {selectedOpinion === Opinions.NotClickedYet &&
-          feedbackConfig.dismissable && (
+          feedbackConfig.dismissable &&
+          !feedbackConfig.alwaysShow && (
             <Button
               style={styles.submitButtonView}
               onPress={setDoNotShowAgain}
