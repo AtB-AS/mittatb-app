@@ -34,10 +34,17 @@ const Ticket = ({
   const styles = useStyles();
   const ticketTheme = accented ? styles.ticket_accented : styles.ticket_normal;
   const textColor = accented ? 'primary_2' : 'primary';
+  const accessibilityLabel = [title, description, transportationModeTexts].join(
+    '. ',
+  );
 
   return (
     <View style={[styles.ticket, ticketTheme]}>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity
+        onPress={onPress}
+        accessible={true}
+        accessibilityLabel={accessibilityLabel}
+      >
         <View style={{flexShrink: 1}}>
           <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
             {transportationModeIcons.map((icon) => {
