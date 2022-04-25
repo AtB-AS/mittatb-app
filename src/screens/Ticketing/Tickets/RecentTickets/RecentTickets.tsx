@@ -54,7 +54,7 @@ export const RecentTickets = () => {
       )
       .map((ticket, index) => (
         <RecentTicketComponent
-          key={index}
+          key={ticket.preassignedFareProduct.id + index}
           ticketData={ticket}
           transportModeTexts={[
             {

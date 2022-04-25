@@ -111,7 +111,11 @@ export const RecentTicketComponent = ({
           >
             <View style={styles.travelModeWrapper}>
               {transportModeIcons.map((icon) => (
-                <TransportationIcon mode={icon.mode} subMode={icon.subMode} />
+                <TransportationIcon
+                  mode={icon.mode}
+                  subMode={icon.subMode}
+                  key={icon.mode + icon.subMode}
+                />
               ))}
               <ThemeText
                 type="body__tertiary"
