@@ -218,6 +218,7 @@ export const RecentTicketComponent = ({
 const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   container: {
     display: 'flex',
+    alignSelf: 'stretch',
     padding: 0,
     borderRadius: theme.border.radius.regular,
     justifyContent: 'space-between',
