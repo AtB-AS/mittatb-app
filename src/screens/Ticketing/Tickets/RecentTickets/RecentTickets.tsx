@@ -90,7 +90,9 @@ export const RecentTickets = () => {
           >
             {t(TicketsTexts.recentTickets.loading)}
           </ThemeText>
-          <ActivityIndicator color={theme.colors.primary_1.color} />
+          <ActivityIndicator
+            color={theme.static.background.background_accent_3.text}
+          />
         </View>
       )}
 

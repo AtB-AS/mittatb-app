@@ -33,7 +33,10 @@ const Ticket = ({
 }) => {
   const styles = useStyles();
   const ticketTheme = accented ? styles.ticket_accented : styles.ticket_normal;
-  const textColor = accented ? 'primary_2' : 'primary';
+
+  // @TODO: Update to support new design system
+  // const textColor = accented ? 'primary_2' : 'primary';
+  const textColor = 'primary';
   const accessibilityLabel = [title, description, transportationModeTexts].join(
     '. ',
   );
@@ -95,11 +98,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 
   ticket_normal: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   ticket_accented: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
-    textColor: theme.colors.primary_2.color,
+    backgroundColor: theme.static.background.background_accent_3.background,
+    textColor: theme.static.background.background_accent_3.text,
   },
 
   ticketIllustrationContainer: {
