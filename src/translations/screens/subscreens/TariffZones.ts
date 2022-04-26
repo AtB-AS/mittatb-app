@@ -16,6 +16,31 @@ const TariffZonesTexts = {
         ),
     },
   },
+  zoneTitle: {
+    a11yLabelPrefix: _(`Sonevalget er`, `The zone selection is`),
+    text: (numberOfZones: number) => {
+      if (numberOfZones > 1) {
+        return _(
+          `Reise i ${numberOfZones} soner`,
+          `Travel in ${numberOfZones} zones`,
+        );
+      }
+
+      return _(`Reise i 1 sone`, `Travel in 1 zone`);
+    },
+  },
+  zoneDescription: {
+    a11yLabelPrefix: _(`Sonevalget er`, `The zone selection is`),
+    text: {
+      singleZone: (zoneName: string) =>
+        _(`Sone ${zoneName}`, `Zone ${zoneName}`),
+      multipleZone: (zoneNameFrom: string, zoneNameTo: string) =>
+        _(
+          `Sone ${zoneNameFrom} til sone ${zoneNameTo}`,
+          `Zone ${zoneNameFrom} to zone ${zoneNameTo}`,
+        ),
+    },
+  },
 
   location: {
     departurePicker: {

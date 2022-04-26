@@ -37,6 +37,7 @@ import TariffZoneResults from '@atb/screens/Ticketing/Purchase/TariffZones/searc
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import hexToRgba from 'hex-to-rgba';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import runTiming from '@atb/utils/run-timing';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -98,6 +99,38 @@ export const tariffZonesSummary = (
   } else {
     return t(
       TariffZonesTexts.zoneSummary.text.multipleZone(
+        getReferenceDataName(fromTariffZone, language),
+        getReferenceDataName(toTariffZone, language),
+      ),
+    );
+  }
+};
+
+export const tariffZonesTitle = (
+  fromTariffZone: TariffZone,
+  toTariffZone: TariffZone,
+  language: Language,
+  t: TranslateFunction,
+): string => {
+  const numberOfZones = fromTariffZone.id === toTariffZone.id ? 1 : 2;
+  return t(TariffZonesTexts.zoneTitle.text(numberOfZones));
+};
+
+export const tariffZonesDescription = (
+  fromTariffZone: TariffZone,
+  toTariffZone: TariffZone,
+  language: Language,
+  t: TranslateFunction,
+): string => {
+  if (fromTariffZone.id === toTariffZone.id) {
+    return t(
+      TariffZonesTexts.zoneDescription.text.singleZone(
+        getReferenceDataName(fromTariffZone, language),
+      ),
+    );
+  } else {
+    return t(
+      TariffZonesTexts.zoneDescription.text.multipleZone(
         getReferenceDataName(fromTariffZone, language),
         getReferenceDataName(toTariffZone, language),
       ),
