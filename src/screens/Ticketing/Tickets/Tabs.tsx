@@ -2,12 +2,12 @@ import {useAuthState} from '@atb/auth';
 import {RootStackParamList} from '@atb/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useState} from 'react';
+import React from 'react';
+import {ScrollView} from 'react-native';
 import UpgradeSplash from './UpgradeSplash';
 import {useAppState} from '@atb/AppContext';
-import {RecentTickets} from '@atb/screens/Ticketing/Tickets/RecentTickets/RecentTickets';
 import {AvailableTickets} from '@atb/screens/Ticketing/Tickets/AvailableTickets/AvailableTickets';
-import {ActiveTickets} from './ActiveTickets/ActiveTickets';
+import {RecentTickets} from './RecentTickets/RecentTickets';
 
 export type TicketingScreenNavigationProp =
   StackNavigationProp<RootStackParamList>;
@@ -17,7 +17,7 @@ type Props = {
 };
 
 export const BuyTickets: React.FC<Props> = ({navigation}) => {
-  const {must_upgrade_ticketing} = useRemoteConfig();
+  const {must_upgrade_ticketing, enable_recent_tickets} = useRemoteConfig();
   const appContext = useAppState();
   const {abtCustomerId, authenticationType} = useAuthState();
   const isSignedInAsAbtCustomer = !!abtCustomerId;
@@ -54,15 +54,13 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
     }
   };
 
-  return (
-    <>
-      <RecentTickets />
-      {isSignedInAsAbtCustomer && (
-        <AvailableTickets
-          onBuySingleTicket={onBuySingleTicket}
-          onBuyPeriodTicket={onBuyPeriodTicket}
-        />
-      )}
-    </>
-  );
+  return isSignedInAsAbtCustomer ? (
+    <ScrollView>
+      {enable_recent_tickets && <RecentTickets />}
+      <AvailableTickets
+        onBuySingleTicket={onBuySingleTicket}
+        onBuyPeriodTicket={onBuyPeriodTicket}
+      />
+    </ScrollView>
+  ) : null;
 };

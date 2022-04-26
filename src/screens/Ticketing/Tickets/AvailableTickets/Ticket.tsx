@@ -9,7 +9,7 @@ import ThemeText from '@atb/components/text';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 
-type TransportationModeIconProperties = {
+export type TransportationModeIconProperties = {
   mode: Mode;
   subMode?: TransportSubmode;
 };
