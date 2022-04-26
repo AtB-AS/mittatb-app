@@ -16,6 +16,7 @@ import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 
 export type ButtonInputProps = SectionItem<{
   label: string;
+  subLabel?: string;
   onPress(): void;
   onIconPress?(): void;
   iconAccessibility?: AccessibilityProps;
@@ -33,6 +34,7 @@ export default function ButtonInput({
   value,
   placeholder,
   label,
+  subLabel,
   highlighted,
 
   icon,
@@ -86,24 +88,32 @@ export default function ButtonInput({
       value
     );
 
+  const subLabelEl = subLabel && (
+    <ThemeText
+      color="primary"
+      type="body__primary--bold"
+      style={styles.subLabelStyle}
+    >
+      {subLabel}
+    </ThemeText>
+  );
+
   const containerPadding = hasIcon ? {paddingRight: 60} : undefined;
 
   return (
     <View style={wrapperStyle}>
       <TouchableOpacity
         onPress={onPress}
-        style={[
-          topContainer,
-          sectionStyles.spaceBetween,
-          styles.container,
-          containerPadding,
-        ]}
+        style={[topContainer, styles.container, containerPadding]}
         {...props}
       >
-        <ThemeText type="body__secondary" style={styles.label}>
-          {label}
-        </ThemeText>
-        <View style={[contentContainer, containerStyle]}>{valueEl}</View>
+        <View style={sectionStyles.spaceBetween}>
+          <ThemeText type="body__secondary" style={styles.label}>
+            {label}
+          </ThemeText>
+          <View style={[contentContainer, containerStyle]}>{valueEl}</View>
+        </View>
+        {subLabelEl}
         {handlerWithoutPress}
       </TouchableOpacity>
       {handlerWithPress}
@@ -132,5 +142,8 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   },
   faded: {
     color: theme.text.colors.secondary,
+  },
+  subLabelStyle: {
+    paddingTop: theme.spacings.xSmall,
   },
 }));
