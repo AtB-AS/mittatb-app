@@ -37,7 +37,6 @@ import TariffZoneResults from '@atb/screens/Ticketing/Purchase/TariffZones/searc
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import hexToRgba from 'hex-to-rgba';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import runTiming from '@atb/utils/run-timing';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
