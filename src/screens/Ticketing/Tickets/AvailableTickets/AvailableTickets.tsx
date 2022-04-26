@@ -1,11 +1,21 @@
-import {View} from 'react-native';
-import Button from '@atb/components/button';
+import {TouchableOpacity, View} from 'react-native';
 import {TicketsTexts, useTranslation} from '@atb/translations';
-import {TicketAdd} from '@atb/assets/svg/mono-icons/ticketing';
 import React from 'react';
 import {useAuthState} from '@atb/auth';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import {ScrollView} from 'react-native-gesture-handler';
+import ThemeText from '@atb/components/text';
+import * as TicketIcons from '@atb/assets/svg/color/illustrations/ticket-type';
+import {SvgProps} from 'react-native-svg';
+import TransportationIcon from '@atb/components/transportation-icon';
+import {
+  Mode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {productIsSellableInApp} from '@atb/reference-data/utils';
+import Ticket from '@atb/screens/Ticketing/Tickets/AvailableTickets/Ticket';
 
 export const AvailableTickets = ({
   onBuySingleTicket,
@@ -15,56 +25,110 @@ export const AvailableTickets = ({
   onBuyPeriodTicket: () => void;
 }) => {
   const styles = useStyles();
-  const {theme} = useTheme();
-  const {abtCustomerId, authenticationType} = useAuthState();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
+  const {preassignedFareproducts} = useFirestoreConfiguration();
   const {t} = useTranslation();
+  const {theme} = useTheme();
 
-  const isSignedInAsAbtCustomer = !!abtCustomerId;
+  const shouldShowSingleTicket = preassignedFareproducts
+    .filter(productIsSellableInApp)
+    .some((product) => {
+      return product.type === 'single';
+    });
+
+  const shouldShowPeriodTicket =
+    hasEnabledMobileToken &&
+    preassignedFareproducts.filter(productIsSellableInApp).some((product) => {
+      return product.type === 'period';
+    });
+
+  const shouldShowSummerPass = false;
 
   return (
-    <View style={styles.container}>
-      {isSignedInAsAbtCustomer && (
-        <View style={{padding: theme.spacings.medium}}>
-          <Button
-            mode="primary"
-            interactiveColor="interactive_0"
-            text={t(TicketsTexts.buyTicketsTab.button.single.text)}
-            accessibilityHint={t(
-              TicketsTexts.buyTicketsTab.button.single.a11yHint,
+    <>
+      <ThemeText
+        type="body__secondary"
+        style={{
+          marginLeft: theme.spacings.xLarge,
+          marginBottom: theme.spacings.medium,
+        }}
+      >
+        {t(TicketsTexts.availableTickets.allTickets)}
+      </ThemeText>
+      <View style={styles.container}>
+        <ScrollView>
+          <View style={styles.ticketsContainer}>
+            {shouldShowSingleTicket && (
+              <Ticket
+                title={t(TicketsTexts.availableTickets.singleTicket.title)}
+                transportationModeTexts={t(
+                  TicketsTexts.availableTickets.singleTicket.transportModes,
+                )}
+                transportationModeIcons={[
+                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+                ]}
+                description={t(
+                  TicketsTexts.availableTickets.singleTicket.description,
+                )}
+                icon={TicketIcons.Single}
+                onPress={onBuySingleTicket}
+              />
             )}
-            onPress={onBuySingleTicket}
-            icon={TicketAdd}
-            iconPosition={'right'}
-            testID="singleTicketBuyButton"
-          />
-          {hasEnabledMobileToken && (
-            <Button
-              mode="primary"
-              interactiveColor="interactive_0"
-              text={t(TicketsTexts.buyTicketsTab.button.period.text)}
-              accessibilityHint={t(
-                TicketsTexts.buyTicketsTab.button.period.a11yHint,
-              )}
-              onPress={onBuyPeriodTicket}
-              viewContainerStyle={styles.buyPeriodTicketButton}
-              icon={TicketAdd}
-              iconPosition={'right'}
-              testID="periodTicketBuyButton"
-            />
+            {shouldShowPeriodTicket && (
+              <Ticket
+                title={t(TicketsTexts.availableTickets.periodTicket.title)}
+                transportationModeTexts={t(
+                  TicketsTexts.availableTickets.periodTicket.transportModes,
+                )}
+                transportationModeIcons={[
+                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+                ]}
+                description={t(
+                  TicketsTexts.availableTickets.periodTicket.description,
+                )}
+                icon={TicketIcons.Period}
+                onPress={onBuyPeriodTicket}
+              />
+            )}
+          </View>
+          {shouldShowSummerPass && (
+            <View style={styles.ticketsContainer}>
+              <Ticket
+                title={t(TicketsTexts.availableTickets.summerPass.title)}
+                transportationModeTexts={t(
+                  TicketsTexts.availableTickets.summerPass.transportModes,
+                )}
+                transportationModeIcons={[
+                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+                  {mode: Mode.Rail},
+                  {mode: Mode.Water},
+                ]}
+                description={t(
+                  TicketsTexts.availableTickets.summerPass.description,
+                )}
+                icon={TicketIcons.Summer}
+                accented={true}
+                onPress={onBuyPeriodTicket}
+              />
+            </View>
           )}
-        </View>
-      )}
-    </View>
+        </ScrollView>
+      </View>
+    </>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.colors.background_1.backgroundColor,
   },
-  buyPeriodTicketButton: {
-    marginTop: theme.spacings.medium,
+
+  ticketsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingLeft: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
+    alignItems: 'stretch',
   },
 }));

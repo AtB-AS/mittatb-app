@@ -10,7 +10,7 @@ import {
 import {skipOnboarding} from '../utils/onboarding';
 import setLocation from '../utils';
 
-describe('Tickets', () => {
+xdescribe('Tickets', () => {
   beforeAll(async () => {
     await device.launchApp({
       permissions: {

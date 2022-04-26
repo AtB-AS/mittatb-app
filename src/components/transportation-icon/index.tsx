@@ -74,7 +74,7 @@ export function getTransportModeSvg(mode?: AnyMode) {
     case 'air':
       return EnturTransportIcons.Plane;
     case 'water':
-      return TransportIcons.Ferry;
+      return TransportIcons.Boat;
     case 'foot':
       return TransportIcons.Walk;
     case 'metro':
@@ -109,10 +109,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   transportationIcon: {
     display: 'flex',
     flexDirection: 'row',
-    paddingVertical: theme.spacings.xSmall,
+    paddingVertical: theme.spacings.small,
     paddingHorizontal: theme.spacings.small,
-    borderRadius: theme.border.radius.regular,
-    marginHorizontal: theme.spacings.xSmall,
+    borderRadius: theme.border.radius.small,
+    marginRight: theme.spacings.xSmall,
   },
   lineNumberText: {
     marginLeft: theme.spacings.xSmall,
