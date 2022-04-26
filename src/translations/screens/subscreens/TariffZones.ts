@@ -17,7 +17,6 @@ const TariffZonesTexts = {
     },
   },
   zoneTitle: {
-    a11yLabelPrefix: _(`Sonevalget er`, `The zone selection is`),
     text: (numberOfZones: number) => {
       if (numberOfZones > 1) {
         return _(
@@ -30,7 +29,6 @@ const TariffZonesTexts = {
     },
   },
   zoneDescription: {
-    a11yLabelPrefix: _(`Sonevalget er`, `The zone selection is`),
     text: {
       singleZone: (zoneName: string) =>
         _(`Sone ${zoneName}`, `Zone ${zoneName}`),

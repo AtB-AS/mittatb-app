@@ -310,6 +310,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             });
           }}
           accessibility={{
+            accessibilityRole: 'button',
             accessibilityLabel:
               tariffZonesSummary(fromTariffZone, toTariffZone, language, t) +
               screenReaderPause,
