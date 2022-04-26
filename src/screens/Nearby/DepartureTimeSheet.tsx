@@ -85,7 +85,7 @@ const DepartureTimeSheet = forwardRef<ScrollView, Props>(
 
           <Button
             onPress={onSelect}
-            color="primary_2"
+            interactiveColor="interactive_3"
             text={t(NearbyTexts.dateInput.confirm)}
             icon={Confirm}
             accessibilityHint={t(NearbyTexts.dateInput.a11yInPastHint)}

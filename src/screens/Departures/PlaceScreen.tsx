@@ -96,7 +96,9 @@ export default function PlaceScreen({
                   navigation.setParams({selectedQuay: undefined});
                 }}
                 text={t(DeparturesTexts.quayChips.allStops)}
-                color={selectedQuay ? 'secondary_2' : 'secondary_3'}
+                interactiveColor={
+                  selectedQuay ? 'interactive_1' : 'interactive_2'
+                }
                 style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
                 accessibilityHint={t(
                   DeparturesTexts.quayChips.a11yAllStopsHint,
@@ -112,7 +114,9 @@ export default function PlaceScreen({
               navigation.setParams({selectedQuay: item});
             }}
             text={getQuayName(item)}
-            color={selectedQuay?.id === item.id ? 'secondary_3' : 'secondary_2'}
+            interactiveColor={
+              selectedQuay?.id === item.id ? 'interactive_2' : 'interactive_1'
+            }
             style={styles.quayChip}
             accessibilityHint={
               t(DeparturesTexts.quayChips.a11yHint) + getQuayName(item)
@@ -149,11 +153,11 @@ function getQuayName(quay: Quay): string {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
   quayChipContainer: {
-    backgroundColor: theme.colors.background_accent.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_0.background,
     paddingVertical: theme.spacings.medium,
     flexShrink: 0,
     flexGrow: 0,

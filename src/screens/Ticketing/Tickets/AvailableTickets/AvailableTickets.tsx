@@ -28,7 +28,7 @@ export const AvailableTickets = ({
         <View style={{padding: theme.spacings.medium}}>
           <Button
             mode="primary"
-            color="primary_2"
+            interactiveColor="interactive_0"
             text={t(TicketsTexts.buyTicketsTab.button.single.text)}
             accessibilityHint={t(
               TicketsTexts.buyTicketsTab.button.single.a11yHint,
@@ -41,7 +41,7 @@ export const AvailableTickets = ({
           {hasEnabledMobileToken && (
             <Button
               mode="primary"
-              color="primary_2"
+              interactiveColor="interactive_0"
               text={t(TicketsTexts.buyTicketsTab.button.period.text)}
               accessibilityHint={t(
                 TicketsTexts.buyTicketsTab.button.period.a11yHint,
@@ -62,7 +62,7 @@ export const AvailableTickets = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
   },
   buyPeriodTicketButton: {
     marginTop: theme.spacings.medium,

@@ -89,7 +89,7 @@ const TravelDate = forwardRef<ScrollView, Props>(
         <FullScreenFooter>
           <Button
             onPress={onSave}
-            color="primary_2"
+            interactiveColor="interactive_0"
             text={t(TravelDateTexts.primaryButton)}
             style={styles.saveButton}
             testID="confirmTimeButton"
@@ -103,7 +103,7 @@ const TravelDate = forwardRef<ScrollView, Props>(
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
   },
   contentContainer: {
     padding: theme.spacings.medium,

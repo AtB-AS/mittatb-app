@@ -397,10 +397,10 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
 const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   header: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_3.background,
   },
   startPlace: {
     marginTop: theme.spacings.large,
@@ -421,7 +421,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.small,
   },
   allGroups: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
     marginBottom: theme.spacings.xLarge,
   },
   spinner: {

@@ -24,7 +24,7 @@ export default function SplashInfo({navigation}: Props) {
       <Header
         title={t(TicketSplashTexts.header.title)}
         rightButton={{type: 'chat'}}
-        color="primary_2"
+        color="background_accent_3"
       />
       <View style={styles.bannerContainer}>
         <TicketSplash width={windowWidth} height={windowWidth / 2} />
@@ -32,10 +32,13 @@ export default function SplashInfo({navigation}: Props) {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.contentContainer}>
           <View style={styles.textContent}>
-            <ThemeText color="primary_2" style={[styles.text, styles.bold]}>
+            <ThemeText
+              color="background_accent_3"
+              style={[styles.text, styles.bold]}
+            >
               {t(TicketSplashTexts.splash.title)}
             </ThemeText>
-            <ThemeText color="primary_2" style={styles.text}>
+            <ThemeText color="background_accent_3" style={styles.text}>
               {t(TicketSplashTexts.splash.paragraph1)}
             </ThemeText>
           </View>
@@ -46,7 +49,10 @@ export default function SplashInfo({navigation}: Props) {
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1, backgroundColor: theme.colors.primary_2.backgroundColor},
+  container: {
+    flex: 1,
+    backgroundColor: theme.static.background.background_accent_3.background,
+  },
   scrollContainer: {
     flexGrow: 1,
   },
