@@ -14,11 +14,14 @@ import {StyleSheet} from '@atb/theme';
 import {
   Language,
   PurchaseOverviewTexts,
+  TariffZonesTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
+import ZoneItem from './components/zone-item';
+
 import {
   getReferenceDataName,
   productIsSellableInApp,
@@ -27,7 +30,12 @@ import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {TicketingStackParams} from '../';
-import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
+import {
+  tariffZonesSummary,
+  tariffZonesTitle,
+  tariffZonesDescription,
+  TariffZoneWithMetadata,
+} from '../TariffZones';
 import useOfferState from './use-offer-state';
 import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 import {formatToLongDateTime} from '@atb/utils/date';
@@ -285,6 +293,30 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             )}
           </Sections.GenericItem>
         </Sections.Section>
+
+        <ZoneItem
+          title={t(TariffZonesTexts.header.title)}
+          label={tariffZonesTitle(fromTariffZone, toTariffZone, language, t)}
+          subLabel={tariffZonesDescription(
+            fromTariffZone,
+            toTariffZone,
+            language,
+            t,
+          )}
+          onPress={() => {
+            navigation.push('TariffZones', {
+              fromTariffZone,
+              toTariffZone,
+            });
+          }}
+          accessibility={{
+            accessibilityLabel:
+              tariffZonesSummary(fromTariffZone, toTariffZone, language, t) +
+              screenReaderPause,
+            accessibilityHint: t(PurchaseOverviewTexts.tariffZones.a11yHint),
+          }}
+          testID="selectZonesButton"
+        />
       </View>
 
       {showProfileTravelcardWarning && (
