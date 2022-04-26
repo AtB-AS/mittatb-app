@@ -10,23 +10,25 @@ import {
 import {SvgProps} from 'react-native-svg';
 import useFontScale from '@atb/utils/use-font-scale';
 
-type ColorType = TextColor | StaticColor;
+type IconColor = StaticColor | TextColor;
 
 type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
-  colorType?: ColorType;
+  colorType?: IconColor;
   size?: keyof Theme['icon']['size'];
+  useTextColor?: boolean;
 } & SvgProps;
 
 const ThemeIcon = ({
   svg,
   colorType,
   size = 'normal',
+  useTextColor,
   ...props
 }: ThemeIconProps): JSX.Element => {
   const {theme, themeName} = useTheme();
 
-  const fill = getFill(theme, themeName, colorType);
+  const fill = getFill(theme, themeName, colorType, useTextColor);
 
   const fontScale = useFontScale();
   const iconSize = theme.icon.size[size] * fontScale;
@@ -41,9 +43,16 @@ const ThemeIcon = ({
 };
 export default ThemeIcon;
 
-function getFill(theme: Theme, themeType: Mode, colorType?: ColorType): string {
+function getFill(
+  theme: Theme,
+  themeType: Mode,
+  colorType?: IconColor,
+  useTextColor?: boolean,
+): string {
   if (isStaticColor(colorType)) {
-    return flatStaticColors[themeType][colorType].background;
+    return flatStaticColors[themeType][colorType][
+      useTextColor ? 'text' : 'background'
+    ];
   } else {
     return theme.text.colors[colorType ?? 'primary'];
   }
