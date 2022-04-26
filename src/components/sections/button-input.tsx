@@ -16,12 +16,12 @@ import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 
 export type ButtonInputProps = SectionItem<{
   label: string;
-  subLabel?: string;
   onPress(): void;
   onIconPress?(): void;
   iconAccessibility?: AccessibilityProps;
   placeholder?: string;
   value?: string | JSX.Element;
+  inlineValue?: boolean;
   highlighted?: boolean;
   icon?: NavigationIconTypes | JSX.Element;
   containerStyle?: ViewStyle;
@@ -32,9 +32,9 @@ export type ButtonInputProps = SectionItem<{
 export default function ButtonInput({
   onPress,
   value,
+  inlineValue = true,
   placeholder,
   label,
-  subLabel,
   highlighted,
 
   icon,
@@ -88,16 +88,6 @@ export default function ButtonInput({
       value
     );
 
-  const subLabelEl = subLabel && (
-    <ThemeText
-      color="primary"
-      type="body__primary--bold"
-      style={styles.subLabelStyle}
-    >
-      {subLabel}
-    </ThemeText>
-  );
-
   const containerPadding = hasIcon ? {paddingRight: 60} : undefined;
 
   return (
@@ -111,9 +101,11 @@ export default function ButtonInput({
           <ThemeText type="body__secondary" style={styles.label}>
             {label}
           </ThemeText>
-          <View style={[contentContainer, containerStyle]}>{valueEl}</View>
+          {inlineValue && (
+            <View style={[contentContainer, containerStyle]}>{valueEl}</View>
+          )}
         </View>
-        {subLabelEl}
+        {!inlineValue && <View style={styles.inlineValueStyle}>{valueEl}</View>}
         {handlerWithoutPress}
       </TouchableOpacity>
       {handlerWithPress}
@@ -134,7 +126,10 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   },
   iconContainer: {
     position: 'absolute',
+    justifyContent: 'center',
     right: 0,
+    top: 0,
+    bottom: 0,
   },
   label: {
     // @TODO Find a better way to do this.
@@ -143,7 +138,7 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   faded: {
     color: theme.text.colors.secondary,
   },
-  subLabelStyle: {
+  inlineValueStyle: {
     paddingTop: theme.spacings.xSmall,
   },
 }));

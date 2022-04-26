@@ -35,7 +35,9 @@ export default function ZoneItem({
       <Sections.Section {...accessibility}>
         <Sections.ButtonInput
           label={label}
-          subLabel={subLabel}
+          value={subLabel}
+          highlighted={true}
+          inlineValue={false}
           onPress={onPress}
           testID={testID}
         />
