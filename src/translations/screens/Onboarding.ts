@@ -45,5 +45,13 @@ export default orgSpecificTranslations(OnboardingTexts, {
         ),
       },
     },
+    intercom: {
+      title: _('Bidra til å gjøre appen bedre', 'Help us make the app better'),
+      description: _(
+        'Vi ønsker dine innspill for å gjøre appen bedre. Trykk på ikonet oppe til høyre for å gi tilbakemelding.',
+        'We appreciate your feedback to make the app better. Press the icon in the upper right corner to give feedback.',
+      ),
+      mainButton: _('Begynn å bruk appen', 'Start using the app'),
+    },
   },
 });
