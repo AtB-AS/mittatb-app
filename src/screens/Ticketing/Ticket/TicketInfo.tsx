@@ -22,7 +22,7 @@ import {TicketAdd, TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {Warning} from '@atb/assets/svg/color/situations';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
-import {ThemeColor} from '@atb/theme/colors';
+import {flatStaticColors, StaticColor} from '@atb/theme/colors';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 
@@ -181,12 +181,12 @@ const TicketInspectionSymbol = ({
   isInspectable = true,
 }: TicketInfoViewProps) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
   const {language} = useTranslation();
   if (!fromTariffZone || !toTariffZone) return null;
-  const themeColor: ThemeColor | undefined =
+  const themeColor: StaticColor | undefined =
     preassignedFareProduct?.type === 'period' && isInspectable
-      ? 'primary_1'
+      ? 'valid'
       : undefined;
   const icon = IconForStatus(status, isInspectable, themeColor);
   if (!icon) return null;
@@ -199,13 +199,13 @@ const TicketInspectionSymbol = ({
         isValid && {
           ...styles.symbolContainerCircle,
           backgroundColor: themeColor
-            ? theme.colors[themeColor].backgroundColor
+            ? flatStaticColors[themeName][themeColor].background
             : undefined,
         },
         isValid &&
           !isInspectable && {
             ...styles.textContainer,
-            borderColor: theme.status.warning.main.backgroundColor,
+            borderColor: theme.static.status.warning.background,
           },
       ]}
       accessibilityElementsHidden={isInspectable}
@@ -232,7 +232,7 @@ const TicketInspectionSymbol = ({
 const IconForStatus = (
   status: TicketInfoProps['status'],
   isInspectable: boolean,
-  themeColor?: ThemeColor,
+  themeColor?: StaticColor,
 ): ReactElement | null => {
   const {t} = useTranslation();
   switch (status) {
@@ -313,7 +313,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   symbolContainerCircle: {
     borderRadius: 1000,
-    borderColor: theme.colors.primary_1.backgroundColor,
+    borderColor: theme.static.status.valid.background,
     borderWidth: 5,
   },
   symbolZones: {

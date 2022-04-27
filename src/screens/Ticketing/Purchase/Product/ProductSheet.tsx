@@ -68,7 +68,7 @@ const ProductSheet = forwardRef<ScrollView, Props>(
 
         <FullScreenFooter>
           <Button
-            color="primary_2"
+            interactiveColor="interactive_0"
             text={t(ProductTexts.primaryButton.text)}
             onPress={() => {
               save(selectedProduct);

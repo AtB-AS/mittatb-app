@@ -8,7 +8,7 @@ import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native';
 import {
@@ -17,7 +17,7 @@ import {
 } from '@atb/tickets';
 import SimpleTicket from '@atb/screens/Ticketing/Ticket';
 
-const themeColor: ThemeColor = 'background_accent';
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export default function ActiveTicketPrompt({
   headerLeftButton,
@@ -80,7 +80,7 @@ export default function ActiveTicketPrompt({
           )}
         </View>
         <Button
-          color={'primary_2'}
+          interactiveColor="interactive_0"
           onPress={navigation.goBack}
           text={t(LoginTexts.activeTicketPrompt.laterButton)}
           icon={ArrowRight}
@@ -106,7 +106,7 @@ export default function ActiveTicketPrompt({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
     flex: 1,
   },
   mainView: {

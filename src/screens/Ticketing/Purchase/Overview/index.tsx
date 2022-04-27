@@ -318,7 +318,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
       <View style={styles.toPaymentButton}>
         <Button
-          color="primary_2"
+          interactiveColor="interactive_0"
           text={t(PurchaseOverviewTexts.primaryButton)}
           disabled={isSearchingOffer || !totalPrice || !!error}
           onPress={() => {
@@ -469,7 +469,7 @@ export const useTariffZoneFromLocation = (tariffZones: TariffZone[]) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
   },
   errorMessage: {
     marginBottom: theme.spacings.medium,

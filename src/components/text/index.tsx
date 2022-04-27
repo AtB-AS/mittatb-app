@@ -1,9 +1,10 @@
 import {useTheme} from '@atb/theme';
 import {
-  isThemeColor,
   TextColor,
   TextNames,
-  ThemeColor,
+  StaticColor,
+  isStaticColor,
+  getStaticColor,
 } from '@atb/theme/colors';
 import React from 'react';
 import {Platform, Text, TextProps, TextStyle} from 'react-native';
@@ -13,7 +14,7 @@ export const MAX_FONT_SCALE = 2;
 
 export type ThemeTextProps = TextProps & {
   type?: TextNames;
-  color?: TextColor | ThemeColor;
+  color?: TextColor | StaticColor;
   isMarkdown?: boolean;
 };
 
@@ -25,12 +26,12 @@ const ThemeText: React.FC<ThemeTextProps> = ({
   children,
   ...props
 }) => {
-  const {theme, useAndroidSystemFont} = useTheme();
+  const {theme, useAndroidSystemFont, themeName} = useTheme();
 
   const typeStyle = {
     ...theme.typography[fontType],
-    color: isThemeColor(theme, color)
-      ? theme.colors[color].color
+    color: isStaticColor(color)
+      ? getStaticColor(themeName, color).text
       : theme.text.colors[color],
   };
 

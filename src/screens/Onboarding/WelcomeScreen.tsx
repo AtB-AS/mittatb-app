@@ -12,9 +12,10 @@ import {OnboardingStackParams} from '@atb/screens/Onboarding/index';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {Onboarding1} from '@atb/assets/svg/color/images/';
 import Illustration from '@atb/screens/Onboarding/components/Illustration';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
 
-export const themeColor: ThemeColor = 'primary_2';
+export const themeColor: StaticColorByType<'background'> =
+  'background_accent_3';
 
 export type WelcomeScreenProps = {
   navigation: StackNavigationProp<OnboardingStackParams>;
@@ -82,7 +83,7 @@ const WelcomeScreen = ({
       <View style={styles.bottomView}>
         <FullScreenFooter>
           <Button
-            color={'secondary_1'}
+            interactiveColor="interactive_1"
             onPress={onNext}
             text={t(OnboardingTexts.welcome.mainButton)}
             icon={ArrowRight}
@@ -97,7 +98,7 @@ const WelcomeScreen = ({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
     flex: 1,
     justifyContent: 'flex-end',
   },

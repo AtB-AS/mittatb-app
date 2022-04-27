@@ -27,7 +27,9 @@ const ValidityLine = (props: Props): ReactElement => {
     case 'reserving':
       return (
         <LineWithVerticalBars
-          backgroundColor={theme.colors.primary_2.backgroundColor}
+          backgroundColor={
+            theme.static.background.background_accent_3.background
+          }
         />
       );
     case 'valid':
@@ -35,7 +37,7 @@ const ValidityLine = (props: Props): ReactElement => {
       const validityPercent = getValidityPercent(now, validFrom, validTo);
       return isInspectable ? (
         <LineWithVerticalBars
-          backgroundColor={theme.colors.primary_1.backgroundColor}
+          backgroundColor={theme.static.status.valid.background}
           validityPercent={validityPercent}
         />
       ) : (
@@ -54,7 +56,7 @@ const ValidityLine = (props: Props): ReactElement => {
     case 'unknown':
       return (
         <LineWithVerticalBars
-          backgroundColor={theme.colors.secondary_2.backgroundColor}
+          backgroundColor={theme.static.background.background_0.background}
         />
       );
   }
@@ -93,7 +95,7 @@ const LineWithVerticalBars = ({
         dashGap={0}
         dashLength={1}
         dashThickness={8}
-        dashColor={theme.colors.background_1.backgroundColor}
+        dashColor={theme.static.background.background_1.background}
       />
     </View>
   );
@@ -178,8 +180,8 @@ const VerticalLine = ({
       locations={[0.25, 0.25, 0.75, 0.75]}
       colors={[
         'transparent',
-        theme.colors.background_accent.backgroundColor,
-        theme.colors.background_accent.backgroundColor,
+        theme.static.background.background_accent_0.background,
+        theme.static.background.background_accent_0.background,
         'transparent',
       ]}
       pointerEvents={'none'}

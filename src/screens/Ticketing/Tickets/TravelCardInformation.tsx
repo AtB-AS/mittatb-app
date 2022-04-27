@@ -1,6 +1,6 @@
 import ThemeText from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {isThemeColor, ThemeColor} from '@atb/theme/colors';
+import {flatStaticColors, StaticColor} from '@atb/theme/colors';
 import {TravelCard} from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -32,7 +32,7 @@ const TravelCardInformation: React.FC<Props> = ({travelCard}) => {
       </ThemeText>
       <ActiveTicketCard
         cardId={travelCard.id?.toString()}
-        color="primary_3"
+        color="background_accent_2"
       ></ActiveTicketCard>
       {/* <ThemeText
         type="body__tertiary"
@@ -47,14 +47,14 @@ const TravelCardInformation: React.FC<Props> = ({travelCard}) => {
 
 type ActiveTicketCardProps = {
   cardId: string;
-  color: ThemeColor;
+  color: StaticColor;
 };
 
 export function ActiveTicketCard(props: ActiveTicketCardProps): JSX.Element {
-  const {cardId = '000000000', color = 'primary_3'} = props;
+  const {cardId = '000000000', color = 'background_accent_2'} = props;
   const formatedTravelCardId = cardId.substr(0, 2) + ' ' + cardId.substr(2);
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
 
   const {t} = useTranslation();
 
@@ -62,7 +62,7 @@ export function ActiveTicketCard(props: ActiveTicketCardProps): JSX.Element {
     <View
       style={[
         styles.activeTicketCard,
-        {backgroundColor: theme.colors[color].backgroundColor},
+        {backgroundColor: flatStaticColors[themeName][color].background},
       ]}
       accessible={true}
       accessibilityLabel={t(
@@ -93,7 +93,7 @@ export function ActiveTicketCard(props: ActiveTicketCardProps): JSX.Element {
       <View>
         <ThemeText
           type="body__tertiary"
-          color="primary_1"
+          color="background_accent_2"
           style={styles.tcardicon}
         >
           {'\n'}
@@ -108,7 +108,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     marginBottom: theme.spacings.large,
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
     padding: theme.spacings.xLarge,
     borderRadius: theme.border.radius.regular,
   },
@@ -123,7 +123,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.small,
   },
   gradient: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
   },
 
   transparentText: {
@@ -145,7 +145,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.small,
     alignSelf: 'flex-end',
     marginTop: theme.spacings.small,
-    backgroundColor: theme.colors.primary_2.color,
+    backgroundColor: theme.static.background.background_accent_3.text,
     textAlign: 'center',
   },
 }));

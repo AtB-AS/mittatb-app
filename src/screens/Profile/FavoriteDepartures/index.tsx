@@ -73,7 +73,7 @@ export default function FavoriteDepartures() {
 }
 const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-start',

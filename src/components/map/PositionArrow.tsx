@@ -14,7 +14,7 @@ const PositionArrow: React.FC<
   return (
     <Button
       type="compact"
-      color="primary_2"
+      interactiveColor="interactive_0"
       onPress={flyToCurrentLocation}
       hitSlop={insets.symmetric(12, 20)}
       icon={Location}

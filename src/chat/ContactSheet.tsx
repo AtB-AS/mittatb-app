@@ -54,7 +54,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
           buttonText={t(ContactSheetTexts.customer_service.button)}
           focusRef={focusRef}
           icon={() => (
-            <ThemeIcon colorType="primary_2" svg={Support}></ThemeIcon>
+            <ThemeIcon colorType="background_accent_3" svg={Support} />
           )}
           accessibilityHint={t(ContactSheetTexts.customer_service.a11yHint)}
           onPress={() => {
@@ -91,7 +91,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
             }}
             icon={() =>
               unreadCount ? (
-                <ThemeIcon colorType="primary_2" svg={ChatUnread} />
+                <ThemeIcon colorType="background_accent_3" svg={ChatUnread} />
               ) : (
                 <></>
               )
@@ -135,7 +135,7 @@ const ContactItem: React.FC<ContactProps> = ({
         <ThemeText>{body}</ThemeText>
       </View>
       <Button
-        color="primary_2"
+        interactiveColor="interactive_0"
         text={buttonText}
         accessibilityHint={accessibilityHint}
         onPress={onPress}

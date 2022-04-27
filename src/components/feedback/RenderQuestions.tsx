@@ -110,14 +110,17 @@ const useAlternativeStyle = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.medium,
     marginBottom: theme.spacings.small,
     paddingVertical: theme.spacings.medium,
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
     borderWidth: theme.border.width.medium,
     borderRadius: theme.border.radius.regular,
-    borderColor: theme.colors.background_0.backgroundColor,
+    borderColor: theme.static.background.background_0.background,
   },
   checked: {
-    backgroundColor: hexToRgba(theme.colors.primary_2.backgroundColor, 0.2),
-    borderColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: hexToRgba(
+      theme.static.background.background_accent_3.background,
+      0.2,
+    ),
+    borderColor: theme.static.background.background_accent_3.background,
   },
   questionTitleView: {
     marginTop: theme.spacings.xLarge,

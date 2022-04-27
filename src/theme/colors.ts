@@ -14,6 +14,7 @@ import {
   textNames,
   ThemeVariant,
 } from '@atb-as/theme';
+import {Flattened, flattenObject} from '@atb/utils/object';
 
 export type {Statuses, Mode, TextColor, ContrastColor, RadiusSizes, TextNames};
 export {textNames};
@@ -69,14 +70,77 @@ export const themes = createExtendedThemes<AppThemeExtension>(mainThemes, {
   },
 });
 
+// @TODO: Make part of @AtB-as/theme
+
 export type Themes = typeof themes;
 export type Theme = Themes['light'];
 
-export type ThemeColor = keyof Theme['colors'];
+export type InteractiveColor = keyof Theme['interactive'];
 
-export const isThemeColor = (
+export const isInteractiveColor = (
   theme: Theme,
   color?: string,
-): color is ThemeColor => {
-  return !!color && color in theme.colors;
+): color is InteractiveColor => {
+  return !!color && color in theme.interactive;
+};
+
+/**
+ * Static colors object structure:
+ * {background: {...}, transport: {...}, status: {...}}
+ */
+type StaticColorsObj = Theme['static'];
+
+/**
+ * Names of static color categories:
+ * 'background' | 'transport' | 'status'
+ */
+export type StaticColorType = keyof StaticColorsObj;
+
+/**
+ * Names of static colors, for a given static color type:
+ * E.g. 'background_0' | 'background_1' | ... for StaticColor<'background'>
+ */
+export type StaticColorByType<Key extends StaticColorType> =
+  keyof StaticColorsObj[Key];
+
+/**
+ * Flat object with every static color:
+ * {background_0: ..., background_1: ..., valid: ...}
+ */
+export type FlatStaticColors = Flattened<StaticColorsObj>;
+
+/**
+ * Names of every static color:
+ * 'background_0' | 'background_1' | 'valid' ...
+ */
+export type StaticColor = keyof FlatStaticColors;
+
+export type FlatStaticColorObj = {
+  light: Flattened<StaticColorsObj>;
+  dark: Flattened<StaticColorsObj>;
+};
+
+export const flatStaticColors: FlatStaticColorObj = {
+  light: flattenObject(themes.light.static) as FlatStaticColors,
+  dark: flattenObject(themes.dark.static) as FlatStaticColors,
+};
+
+export const isStaticColor = (color?: string): color is StaticColor => {
+  return !!color && color in flatStaticColors.light;
+};
+
+export const getStaticColor = (mode: Mode, color: StaticColor) => {
+  return flatStaticColors[mode][color];
+};
+
+export const getStaticColorType = (color: StaticColor): StaticColorType => {
+  return Object.keys(themes.light.static).find(
+    (colorType) => color in themes.light.static[colorType as StaticColorType],
+  ) as StaticColorType;
+};
+
+export const isStatusColor = (
+  color?: string,
+): color is StaticColorByType<'status'> => {
+  return !!color && color in themes.light.static.status;
 };

@@ -118,7 +118,7 @@ function LineChip({
   const transportTextColor = useTransportationColor(
     transportMode as Mode_v2 | undefined,
     transportSubmode,
-    'color',
+    'text',
   );
   return (
     <View style={[styles.lineChip, {backgroundColor: transportColor}]}>
@@ -162,7 +162,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
   },
   lineChipText: {
-    color: theme.colors.primary_2.color,
+    color: theme.static.background.background_accent_3.text,
     textAlign: 'center',
   },
 }));

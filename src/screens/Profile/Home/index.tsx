@@ -194,7 +194,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 {t(ProfileTexts.sections.newFeatures.heading)}
               </ThemeText>
               <View style={style.betaLabel}>
-                <ThemeText color="primary_2" style={style.betaLabelText}>
+                <ThemeText
+                  color="background_accent_3"
+                  style={style.betaLabelText}
+                >
                   BETA
                 </ThemeText>
               </View>
@@ -380,7 +383,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
   customerNumberHeading: {
@@ -398,7 +401,7 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
   },
   betaLabel: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_3.background,
     marginHorizontal: theme.spacings.small,
     paddingHorizontal: theme.spacings.small,
     paddingVertical: theme.spacings.small,

@@ -6,13 +6,13 @@ import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
 import useChatUnreadCount from './use-chat-unread-count';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColor, TextColor} from '@atb/theme/colors';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import ContactSheet from '@atb/chat/ContactSheet';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 
 export default function useChatIcon(
-  color?: ThemeColor,
+  color?: StaticColor | TextColor,
   testID?: string,
 ): IconButton | undefined {
   const unreadCount = useChatUnreadCount();

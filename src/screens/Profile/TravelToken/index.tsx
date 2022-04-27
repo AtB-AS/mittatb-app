@@ -93,7 +93,7 @@ const FaqSection = () => {
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.colors.background_accent.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_0.background,
     flex: 1,
   },
   scrollView: {

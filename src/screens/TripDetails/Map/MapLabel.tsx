@@ -20,8 +20,9 @@ const MapLabel: React.FC<{
         <MapboxGL.SymbolLayer
           id={id + '-label'}
           style={{
-            textColor: theme.colors.background_accent.color,
-            textHaloColor: theme.colors.background_accent.backgroundColor,
+            textColor: theme.static.background.background_accent_0.text,
+            textHaloColor:
+              theme.static.background.background_accent_0.background,
             textHaloWidth: 2,
             textField: text,
           }}
