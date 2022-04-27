@@ -1,6 +1,6 @@
 {
   "name": "atb",
-  "version": "1.17.0",
+  "version": "1.18.0",
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
@@ -101,7 +101,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@atb-as/generate-assets": "^4.0.0-alpha.0",
+    "@atb-as/generate-assets": "next",
     "@babel/core": "^7.12.13",
     "@babel/runtime": "^7.12.13",
     "@svgr/cli": "^6.2.0",

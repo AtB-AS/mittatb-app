@@ -1,14 +1,11 @@
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {useAuthState} from '@atb/auth';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import {ScrollView} from 'react-native-gesture-handler';
 import ThemeText from '@atb/components/text';
-import * as TicketIcons from '@atb/assets/svg/color/illustrations/ticket-type';
-import {SvgProps} from 'react-native-svg';
-import TransportationIcon from '@atb/components/transportation-icon';
+import * as TicketIcons from '@atb/assets/svg/color/illustrations/ticket-type/dark';
 import {
   Mode,
   TransportSubmode,
