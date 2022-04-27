@@ -16,19 +16,17 @@ type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
   colorType?: IconColor;
   size?: keyof Theme['icon']['size'];
-  useTextColor?: boolean;
 } & SvgProps;
 
 const ThemeIcon = ({
   svg,
   colorType,
   size = 'normal',
-  useTextColor,
   ...props
 }: ThemeIconProps): JSX.Element => {
   const {theme, themeName} = useTheme();
 
-  const fill = getFill(theme, themeName, colorType, useTextColor);
+  const fill = getFill(theme, themeName, colorType);
 
   const fontScale = useFontScale();
   const iconSize = theme.icon.size[size] * fontScale;
@@ -43,16 +41,9 @@ const ThemeIcon = ({
 };
 export default ThemeIcon;
 
-function getFill(
-  theme: Theme,
-  themeType: Mode,
-  colorType?: IconColor,
-  useTextColor?: boolean,
-): string {
+function getFill(theme: Theme, themeType: Mode, colorType?: IconColor): string {
   if (isStaticColor(colorType)) {
-    return flatStaticColors[themeType][colorType][
-      useTextColor ? 'text' : 'background'
-    ];
+    return flatStaticColors[themeType][colorType].text;
   } else {
     return theme.text.colors[colorType ?? 'primary'];
   }

@@ -25,7 +25,7 @@ export default function useServiceDisruptionModal(): {
     type: 'status-disruption',
     // This should always be in header and thus background_accent_3
     // hardcoded from before, but we should at some point see how to better handle it.
-    color: 'primary',
+    color: 'background_accent_3',
     onPress: openServiceDistruptionSheet,
     accessibilityLabel: '',
     testID: 'lhb',

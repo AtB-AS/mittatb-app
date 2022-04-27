@@ -52,7 +52,6 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
       <ThemeIcon
         svg={svg}
         colorType={themeColor}
-        useTextColor={true}
         accessibilityLabel={t(getTranslatedModeName(mode))}
       />
       {lineNumberElement}
