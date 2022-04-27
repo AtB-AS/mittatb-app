@@ -109,6 +109,8 @@ export const RecentTicketComponent = ({
     }
   };
 
+  const travelModesInText = returnModeNames(transportModeTexts);
+
   return (
     <View style={[topContainer, styles.container]}>
       <Section>
@@ -120,7 +122,13 @@ export const RecentTicketComponent = ({
               paddingVertical: theme.spacings.medium,
             }}
           >
-            <View style={styles.travelModeWrapper}>
+            <View
+              style={styles.travelModeWrapper}
+              accessible={true}
+              accessibilityLabel={`${t(
+                RecentTicketsTexts.a11yPreLabels.transportModes,
+              )} ${travelModesInText}`}
+            >
               {transportModeIcons.map((icon) => (
                 <TransportationIcon
                   mode={icon.mode}
@@ -133,11 +141,11 @@ export const RecentTicketComponent = ({
                 style={styles.upperCase}
                 color={'primary'}
               >
-                {returnModeNames(transportModeTexts)}
+                {travelModesInText}
               </ThemeText>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.section} accessible={true}>
               <ThemeText type="body__secondary--bold">
                 {/*returnTicketType(preassignedFareProduct)*/}
                 {getReferenceDataName(preassignedFareProduct, language)}
@@ -147,7 +155,12 @@ export const RecentTicketComponent = ({
             <View style={styles.horizontalFlex}>
               {/*returnDuration(preassignedFareProduct)*/}
               <View>
-                <View>
+                <View
+                  accessible={true}
+                  accessibilityLabel={`Travellers: ${userProfilesWithCount
+                    .map((u) => '1' + getReferenceDataName(u, language))
+                    .join(', ')}`}
+                >
                   <ThemeText type="body__tertiary" style={styles.upperCase}>
                     {t(RecentTicketsTexts.titles.travellers)}
                   </ThemeText>
@@ -185,7 +198,18 @@ export const RecentTicketComponent = ({
                   </View>
                 </View>
               </View>
-              <View>
+              <View
+                accessible={true}
+                accessibilityLabel={
+                  fromZone === toZone
+                    ? `${t(
+                        RecentTicketsTexts.a11yPreLabels.zones.oneZone,
+                      )} ${fromZone}`
+                    : `${t(
+                        RecentTicketsTexts.a11yPreLabels.zones.oneZone,
+                      )} ${fromZone}, ${toZone}`
+                }
+              >
                 <ThemeText type="body__tertiary" style={styles.upperCase}>
                   {t(RecentTicketsTexts.titles.zone)}
                 </ThemeText>

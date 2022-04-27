@@ -9,6 +9,22 @@ const RecentTicketsTexts = {
     hours: _('timer', 'hours'),
     moreTravelers: _('andre', 'others'),
   },
+  a11yPreLabels: {
+    zones: {
+      oneZone: _(
+        'Billetten vil være gyldig i sone: ',
+        'The ticket will be valid in zone:',
+      ),
+      multipleZones: _(
+        'Billetten vil være i gyldig mellom følgende soner:',
+        'The ticket will be valid in the following zones:',
+      ),
+    },
+    transportModes: _(
+      'Billetten vil være gyldig for følgende reisemåter: ',
+      'The ticket will be valid for the following transport modes: ',
+    ),
+  },
   transportModes: {
     bus: _('buss', 'bus'),
     rail: _('tog', 'train'),
