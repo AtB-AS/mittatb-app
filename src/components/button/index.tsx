@@ -54,6 +54,7 @@ export type ButtonProps = {
   textStyle?: StyleProp<TextStyle>;
   icon?: ({fill}: {fill: string}) => JSX.Element;
   iconPosition?: 'left' | 'right';
+  active?: boolean;
 } & ButtonTypeAwareProps &
   TouchableOpacityProps;
 
@@ -68,6 +69,7 @@ const Button: React.FC<ButtonProps> = ({
   iconPosition = 'left',
   text,
   disabled,
+  active,
   style,
   viewContainerStyle,
   textContainerStyle,
@@ -100,7 +102,7 @@ const Button: React.FC<ButtonProps> = ({
     Icon && iconPosition === 'right' ? spacing : undefined;
 
   const {background: backgroundColor, text: textColor} = themeColor
-    ? theme.interactive[themeColor].default
+    ? theme.interactive[themeColor][active ? 'active' : 'default']
     : {
         background: 'transparent',
         text: theme.text.colors.primary,

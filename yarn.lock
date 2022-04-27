@@ -29,10 +29,10 @@
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^1.0.7"
 
-"@atb-as/theme@^6.0.0-alpha.0":
-  version "6.0.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-6.0.0-alpha.0.tgz#5ba68b332df46a5ec563ff4677071b21ca822bfa"
-  integrity sha512-iFFBJEkra/V/ePnqOxAHcug/ANJfWJ4/fSjGuHdvfRf05lmXgrYYlCZ6d4lrmRfI0ODCdUi/EW7u3qkUpCbr+A==
+"@atb-as/theme@^6.0.0-alpha.1":
+  version "6.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-6.0.0-alpha.1.tgz#acc0a97f14dad7dbe1286d7435dc60097c28641e"
+  integrity sha512-BrFEEwxptvT1aGIUdk95DyvPqKGOIuDIUHegxGyWoff2alu/9AS2geL4ky6DWLJi77x40gDkBDcNitO5wBXCCQ==
   dependencies:
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^1.0.7"

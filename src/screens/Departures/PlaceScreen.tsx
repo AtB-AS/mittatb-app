@@ -96,9 +96,8 @@ export default function PlaceScreen({
                   navigation.setParams({selectedQuay: undefined});
                 }}
                 text={t(DeparturesTexts.quayChips.allStops)}
-                interactiveColor={
-                  selectedQuay ? 'interactive_1' : 'interactive_2'
-                }
+                interactiveColor="interactive_1"
+                active={!selectedQuay}
                 style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
                 accessibilityHint={t(
                   DeparturesTexts.quayChips.a11yAllStopsHint,
@@ -114,9 +113,8 @@ export default function PlaceScreen({
               navigation.setParams({selectedQuay: item});
             }}
             text={getQuayName(item)}
-            interactiveColor={
-              selectedQuay?.id === item.id ? 'interactive_2' : 'interactive_1'
-            }
+            interactiveColor="interactive_1"
+            active={selectedQuay?.id === item.id}
             style={styles.quayChip}
             accessibilityHint={
               t(DeparturesTexts.quayChips.a11yHint) + getQuayName(item)
