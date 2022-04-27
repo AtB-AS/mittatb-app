@@ -203,7 +203,7 @@ export const RecentTicketComponent = ({
       <LinkItem
         backgroundColor={theme.colors.primary_2.backgroundColor}
         contentColor={theme.colors.primary_2.color}
-        text="Gjenta kjøp"
+        text={t(RecentTicketsTexts.repeatPurchase)}
         onPress={() => selectTicket(ticketData)}
         overrideContainerStyles={{
           paddingHorizontal: theme.spacings.xLarge,
