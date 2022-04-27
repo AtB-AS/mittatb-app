@@ -35,7 +35,7 @@ export const FloatingLabel = ({
           : styles.blueLabel
       }
     >
-      <ThemeText>{text}</ThemeText>
+      <ThemeText color="background_accent_2">{text}</ThemeText>
     </View>
   );
 };
@@ -248,7 +248,6 @@ const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
     alignSelf: 'flex-start',
     paddingHorizontal: theme.spacings.medium,
     paddingVertical: theme.spacings.xSmall,
-    // @TODO: verify color
     backgroundColor: theme.static.background.background_accent_2.background,
     borderRadius: theme.border.radius.regular,
   },
