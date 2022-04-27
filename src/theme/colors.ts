@@ -139,10 +139,8 @@ export const getStaticColorType = (color: StaticColor): StaticColorType => {
   ) as StaticColorType;
 };
 
-export const isStaticColorByType = (
-  theme: Theme,
+export const isStatusColor = (
   color?: string,
-  colorType?: StaticColorType,
-): color is StaticColorByType<StaticColorType> => {
-  return !!color && !!colorType && color in theme.static[colorType];
+): color is StaticColorByType<'status'> => {
+  return !!color && color in themes.light.static.status;
 };
