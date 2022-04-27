@@ -1,4 +1,4 @@
-import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
+import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {LocationInput, Section} from '@atb/components/sections';
@@ -267,7 +267,7 @@ const Header = React.memo(function Header({
           location={fromLocation}
           onPress={openLocationSearch}
           accessibilityLabel={t(NearbyTexts.location.departurePicker.a11yLabel)}
-          icon={<ThemeIcon svg={CurrentLocationArrow} />}
+          icon={<ThemeIcon svg={LocationIcon} />}
           onIconPress={setCurrentLocationOrRequest}
           iconAccessibility={{
             accessible: true,

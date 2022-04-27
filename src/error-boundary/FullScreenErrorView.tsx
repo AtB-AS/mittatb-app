@@ -1,4 +1,4 @@
-import {Crash} from '@atb/assets/svg/color/illustrations';
+import {Crash} from '@atb/assets/svg/color/images';
 import Button from '@atb/components/button';
 import ScreenHeader from '@atb/components/screen-header';
 import ThemeText from '@atb/components/text';

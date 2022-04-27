@@ -1,4 +1,4 @@
-import {BlankTicket} from '@atb/assets/svg/mono-icons/ticketing';
+import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
@@ -38,7 +38,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
         <View style={styles.validityContainer}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={styles.iconContainer}>
-              <ThemeIcon svg={BlankTicket} />
+              <ThemeIcon svg={Ticket} />
             </View>
             <ThemeText type="body__secondary" color="secondary">
               {reservation.paymentStatus !== 'CAPTURE'

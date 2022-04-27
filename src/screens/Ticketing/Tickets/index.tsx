@@ -8,7 +8,8 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import React from 'react';
 import {View} from 'react-native';
 import TabBar from './TabBar';
-import {ActiveTickets, BuyTickets} from './Tabs';
+import {BuyTickets} from './Tabs';
+import {ActiveTickets} from './ActiveTickets/ActiveTickets';
 import TicketInformationalOverlay from '@atb/screens/Ticketing/Tickets/TicketInformationalOverlay';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 

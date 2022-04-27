@@ -1,6 +1,6 @@
 import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
-import {MapPointPin} from '@atb/assets/svg/mono-icons/places';
+import {Pin} from '@atb/assets/svg/mono-icons/map';
 import Button, {ButtonGroup} from '@atb/components/button';
 import MessageBox from '@atb/components/message-box';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
@@ -214,7 +214,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
             type="inline"
             value={
               !emoji ? (
-                <ThemeIcon svg={MapPointPin} />
+                <ThemeIcon svg={Pin} />
               ) : (
                 <ThemeText type="body__primary">{emoji}</ThemeText>
               )

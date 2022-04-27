@@ -1,10 +1,10 @@
-import {InvalidTicket, ValidTicket} from '@atb/assets/svg/mono-icons/ticketing';
+import {TicketInvalid, TicketValid} from '@atb/assets/svg/mono-icons/ticketing';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {useTheme} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
 import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
-import {Wait} from '@atb/assets/svg/mono-icons/transportation';
+import {Time} from '@atb/assets/svg/mono-icons/time';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 
@@ -35,7 +35,7 @@ const ValidityIconSvg = ({
       if (isInspectable)
         return (
           <ThemeIcon
-            svg={ValidTicket}
+            svg={TicketValid}
             colorType="valid"
             accessibilityLabel={a11yLabel}
           />
@@ -43,7 +43,7 @@ const ValidityIconSvg = ({
       else
         return (
           <ThemeIcon
-            svg={ValidTicket}
+            svg={TicketValid}
             colorType="secondary"
             accessibilityLabel={a11yLabel}
           />
@@ -51,7 +51,7 @@ const ValidityIconSvg = ({
     case 'reserving':
       return (
         <ThemeIcon
-          svg={ValidTicket}
+          svg={TicketValid}
           colorType="info"
           accessibilityLabel={a11yLabel}
         />
@@ -59,7 +59,7 @@ const ValidityIconSvg = ({
     case 'unknown':
       return (
         <ThemeIcon
-          svg={ValidTicket}
+          svg={TicketValid}
           colorType="primary"
           accessibilityLabel={a11yLabel}
         />
@@ -68,7 +68,7 @@ const ValidityIconSvg = ({
     case 'refunded':
       return (
         <ThemeIcon
-          svg={InvalidTicket}
+          svg={TicketInvalid}
           colorType="error"
           accessibilityLabel={a11yLabel}
         />
@@ -76,7 +76,7 @@ const ValidityIconSvg = ({
     case 'upcoming':
       return (
         <ThemeIcon
-          svg={Wait}
+          svg={Time}
           colorType="primary"
           accessibilityLabel={a11yLabel}
         />

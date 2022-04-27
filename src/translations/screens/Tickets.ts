@@ -76,6 +76,34 @@ const TicketsTexts = {
       'Activate to purchase this ticket',
     ),
   },
+  availableTickets: {
+    allTickets: _('Alle billetter', 'All tickets'),
+    singleTicket: {
+      title: _('Enkeltbillett', 'Single ticket'),
+      description: _(
+        'Gyldig i 90 minutter og opp til 5 timer',
+        'Valid for 90 minutes up to 5 hours',
+      ),
+      transportModes: _('Buss/trikk', 'Bus/tram'),
+    },
+    periodTicket: {
+      title: _('Periodebillett', 'Periodic ticket'),
+      description: _(
+        'Velg mellom 7, 30, 60 og 90 dager',
+        'Choose between 7, 30, 60 and 90 days',
+      ),
+      pilot_description: _('', ''),
+      transportModes: _('Buss/trikk', 'Bus/tram'),
+    },
+    summerPass: {
+      title: _('AtB SommerPass', 'Summer pass'),
+      description: _(
+        'Utforsk Trøndelag med buss, tog, hurtigbåt, ferge og trikk i sju dager. Reis så mye du vil! ',
+        'Explore Trøndelag by bus, train, tram, passenger boat or ferry, for 7 days. Travel as much as you like!',
+      ),
+      transportModes: _('Flere reisemåter', 'Several travel modes'),
+    },
+  },
   reservation: {
     processing: _(
       'Prosesseres... ikke gyldig enda',

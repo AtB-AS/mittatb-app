@@ -1,4 +1,5 @@
-import {Chat, ChatUnread} from '@atb/assets/svg/mono-icons/actions';
+import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import {ChatUnread} from '@atb/assets/svg/color/icons/actions';
 import {IconButton} from '@atb/components/screen-header/HeaderButton';
 import ThemeIcon from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';

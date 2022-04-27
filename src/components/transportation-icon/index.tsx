@@ -1,14 +1,8 @@
 import React from 'react';
 import {View} from 'react-native';
-import {
-  BusSide,
-  TramSide,
-  TrainSide,
-  PlaneSide,
-  FerrySide,
-  WalkingPerson,
-  Subway,
-} from '@atb/assets/svg/mono-icons/transportation';
+
+import * as TransportIcons from '@atb/assets/svg/mono-icons/transportation';
+import * as EnturTransportIcons from '@atb/assets/svg/mono-icons/transportation-entur';
 import {LegMode, TransportSubmode, TransportMode} from '@atb/sdk';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
@@ -71,19 +65,19 @@ export function getTransportModeSvg(mode?: AnyMode) {
   switch (mode) {
     case 'bus':
     case 'coach':
-      return BusSide;
+      return TransportIcons.Bus;
     case 'tram':
-      return TramSide;
+      return TransportIcons.Tram;
     case 'rail':
-      return TrainSide;
+      return TransportIcons.Train;
     case 'air':
-      return PlaneSide;
+      return EnturTransportIcons.Plane;
     case 'water':
-      return FerrySide;
+      return TransportIcons.Boat;
     case 'foot':
-      return WalkingPerson;
+      return TransportIcons.Walk;
     case 'metro':
-      return Subway;
+      return EnturTransportIcons.Subway;
     default:
       return null;
   }
@@ -114,10 +108,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   transportationIcon: {
     display: 'flex',
     flexDirection: 'row',
-    paddingVertical: theme.spacings.xSmall,
+    paddingVertical: theme.spacings.small,
     paddingHorizontal: theme.spacings.small,
-    borderRadius: theme.border.radius.regular,
-    marginHorizontal: theme.spacings.xSmall,
+    borderRadius: theme.border.radius.small,
+    marginRight: theme.spacings.xSmall,
   },
   lineNumberText: {
     marginLeft: theme.spacings.xSmall,

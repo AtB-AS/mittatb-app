@@ -237,8 +237,8 @@ async function doSearch(
   };
 
   Bugsnag.leaveBreadcrumb('searching', {
-    fromLocation: stringifyLocation(fromLocation),
-    toLocation: stringifyLocation(toLocation),
+    fromLocation: query.from,
+    toLocation: query.to,
     arriveBy: query.arriveBy,
     when: query.when || '',
     cursor: query.cursor || '',

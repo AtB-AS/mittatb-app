@@ -1,4 +1,4 @@
-import {Expand, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
+import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
 import {Info, Warning} from '@atb/assets/svg/color/situations';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
 import MessageBox, {TinyMessageBox} from '@atb/components/message-box';
@@ -364,7 +364,7 @@ function CollapseButtonRow({
   const child = collapsed ? (
     <>
       {text}
-      <ThemeIcon svg={Expand} />
+      <ThemeIcon svg={ExpandMore} />
     </>
   ) : (
     <>
