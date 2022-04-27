@@ -14,7 +14,6 @@ import {StyleSheet} from '@atb/theme';
 import {
   Language,
   PurchaseOverviewTexts,
-  TariffZonesTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
@@ -30,12 +29,7 @@ import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {TicketingStackParams} from '../';
-import {
-  tariffZonesSummary,
-  tariffZonesTitle,
-  tariffZonesDescription,
-  TariffZoneWithMetadata,
-} from '../TariffZones';
+import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
 import useOfferState from './use-offer-state';
 import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 import {formatToLongDateTime} from '@atb/utils/date';
