@@ -57,11 +57,13 @@ import {useTicketState} from '@atb/tickets';
 import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
+export type OverviewNavigationProp = DismissableStackNavigationProp<
+  TicketingStackParams,
+  'PurchaseOverview'
+>;
+
 export type OverviewProps = {
-  navigation: DismissableStackNavigationProp<
-    TicketingStackParams,
-    'PurchaseOverview'
-  >;
+  navigation: OverviewNavigationProp;
   route: RouteProp<TicketingStackParams, 'PurchaseOverview'>;
 };
 
@@ -294,30 +296,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           </Sections.GenericItem>
         </Sections.Section>
 
-        <ZoneItem
-          title={t(TariffZonesTexts.header.title)}
-          label={tariffZonesTitle(fromTariffZone, toTariffZone, language, t)}
-          subLabel={tariffZonesDescription(
-            fromTariffZone,
-            toTariffZone,
-            language,
-            t,
-          )}
-          onPress={() => {
-            navigation.push('TariffZones', {
-              fromTariffZone,
-              toTariffZone,
-            });
-          }}
-          accessibility={{
-            accessibilityRole: 'button',
-            accessibilityLabel:
-              tariffZonesSummary(fromTariffZone, toTariffZone, language, t) +
-              screenReaderPause,
-            accessibilityHint: t(PurchaseOverviewTexts.tariffZones.a11yHint),
-          }}
-          testID="selectZonesButton"
-        />
+        <ZoneItem fromTariffZone={fromTariffZone} toTariffZone={toTariffZone} />
       </View>
 
       {showProfileTravelcardWarning && (
