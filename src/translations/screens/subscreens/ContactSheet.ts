@@ -15,7 +15,7 @@ const ContactSheetTexts = {
       'Contact customer service (opens in browser)',
     ),
     a11yHint: _(
-      'Aktiver for å kontakte kundeservicem, åpner side i nettleser',
+      'Aktivér for å kontakte kundeservice, åpner side i nettleser',
       'Activate to contact customer service, opens page in browser',
     ),
   },
@@ -30,7 +30,7 @@ const ContactSheetTexts = {
       'Improve the app (opens in browser)',
     ),
     a11yHint: _(
-      'Aktiver for å foreslå forbedringer, åpner side i nettleser',
+      'Aktivér for å foreslå forbedringer, åpner side i nettleser',
       'Activate to suggest improvements, opens page in browser',
     ),
   },
@@ -42,7 +42,7 @@ const ContactSheetTexts = {
     ),
     button: _('Forbedre appen', 'Improve the app'),
     a11yHint: _(
-      'Aktiver for å foreslå forbedringer',
+      'Aktivér for å foreslå forbedringer',
       'Activate to suggest improvements',
     ),
   },
