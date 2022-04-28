@@ -25,7 +25,6 @@ export const AvailableTickets = ({
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {preassignedFareproducts} = useFirestoreConfiguration();
   const {t} = useTranslation();
-  const {theme} = useTheme();
 
   const shouldShowSingleTicket = preassignedFareproducts
     .filter(productIsSellableInApp)

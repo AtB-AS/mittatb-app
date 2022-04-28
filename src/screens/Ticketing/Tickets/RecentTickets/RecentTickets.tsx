@@ -26,8 +26,7 @@ export const RecentTickets = () => {
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const {loading, refresh} = useRecentTickets();
-  const recentTickets: RecentTicket[] = [];
+  const {recentTickets, loading} = useRecentTickets();
 
   const selectTicket = (ticket: RecentTicket) => {
     navigation.navigate('TicketPurchase', {
