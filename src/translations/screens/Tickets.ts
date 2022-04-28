@@ -78,6 +78,10 @@ const TicketsTexts = {
   },
   availableTickets: {
     allTickets: _('Alle billetter', 'All tickets'),
+    navigateToBuy: _(
+      'Aktiver for å gå til kjøp',
+      'Activate to go to purchasing',
+    ),
     singleTicket: {
       title: _('Enkeltbillett', 'Single ticket'),
       description: _(

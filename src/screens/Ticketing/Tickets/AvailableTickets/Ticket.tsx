@@ -11,6 +11,7 @@ import {StyleSheet} from '@atb/theme';
 import ThemedTicketIllustration, {
   TicketIllustration,
 } from '@atb/components/ticket-illustration';
+import {TicketsTexts, TicketTexts, useTranslation} from '@atb/translations';
 
 export type TransportationModeIconProperties = {
   mode: Mode;
@@ -35,12 +36,13 @@ const Ticket = ({
   onPress: () => void;
 }) => {
   const styles = useStyles();
+  const {t} = useTranslation();
   const ticketTheme = accented ? styles.ticket_accented : styles.ticket_normal;
 
   // @TODO: Update to support new design system
   // const textColor = accented ? 'primary_2' : 'primary';
   const textColor = 'primary';
-  const accessibilityLabel = [title, description, transportationModeTexts].join(
+  const accessibilityLabel = [title, transportationModeTexts, description].join(
     '. ',
   );
 
@@ -50,6 +52,7 @@ const Ticket = ({
         onPress={onPress}
         accessible={true}
         accessibilityLabel={accessibilityLabel}
+        accessibilityHint={t(TicketsTexts.availableTickets.navigateToBuy)}
       >
         <View style={{flexShrink: 1}}>
           <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
