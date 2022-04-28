@@ -62,11 +62,7 @@ const Ticket = ({
                 />
               );
             })}
-            <ThemeText
-              type="body__tertiary"
-              style={styles.transportation_label}
-              color={textColor}
-            >
+            <ThemeText type="label__uppercase">
               {transportationModeTexts}
             </ThemeText>
           </View>
@@ -122,12 +118,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   ticketIllustration: {
     alignSelf: 'flex-end',
     opacity: 0.6,
-  },
-  label_uppercase: {
-    // TODO: this will be part of design system
-  },
-  transportation_label: {
-    textTransform: 'uppercase',
   },
   ticket_name: {
     marginBottom: theme.spacings.small,
