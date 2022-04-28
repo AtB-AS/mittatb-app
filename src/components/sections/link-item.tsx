@@ -81,7 +81,6 @@ export default function LinkItem({
             </ThemeText>
           </View>
         )}
-        {/* Her må vi støtte riktig farge på et vis */}
         {iconEl}
       </View>
       {subtitle && (
