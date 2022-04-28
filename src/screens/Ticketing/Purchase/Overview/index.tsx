@@ -258,23 +258,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             }}
             testID="selectStartTimeButton"
           />
-          <Sections.LinkItem
-            text={tariffZonesSummary(fromTariffZone, toTariffZone, language, t)}
-            onPress={() => {
-              navigation.push('TariffZones', {
-                fromTariffZone,
-                toTariffZone,
-              });
-            }}
-            icon={<ThemeIcon svg={Edit} />}
-            accessibility={{
-              accessibilityLabel:
-                tariffZonesSummary(fromTariffZone, toTariffZone, language, t) +
-                screenReaderPause,
-              accessibilityHint: t(PurchaseOverviewTexts.tariffZones.a11yHint),
-            }}
-            testID="selectZonesButton"
-          />
           <Sections.GenericItem>
             {isSearchingOffer ? (
               <ActivityIndicator style={styles.totalSection} />
