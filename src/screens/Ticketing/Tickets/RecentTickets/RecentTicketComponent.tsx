@@ -191,7 +191,6 @@ export const RecentTicketComponent = ({
         <LinkItem
           text="Gjenta kjøp"
           onPress={() => selectTicket(ticketData)}
-          type="spacious"
           interactiveColor="interactive_0"
         />
       </Section>
