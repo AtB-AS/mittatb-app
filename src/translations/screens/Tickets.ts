@@ -77,7 +77,7 @@ const TicketsTexts = {
     ),
   },
   availableTickets: {
-    allTickets: _('Alle billetter', 'All tickets'),
+    allTickets: _('Alle billetter', 'All products'),
     navigateToBuy: _(
       'Aktiver for å gå til kjøp',
       'Activate to go to purchasing',
@@ -85,16 +85,16 @@ const TicketsTexts = {
     singleTicket: {
       title: _('Enkeltbillett', 'Single ticket'),
       description: _(
-        'Gyldig i 90 minutter og opp til 5 timer',
-        'Valid for 90 minutes up to 5 hours',
+        'Når du skal reise av og til',
+        'When you travel occasionally',
       ),
       transportModes: _('Buss/trikk', 'Bus/tram'),
     },
     periodTicket: {
       title: _('Periodebillett', 'Periodic ticket'),
       description: _(
-        'Velg mellom 7, 30, 60 og 90 dager',
-        'Choose between 7, 30, 60 and 90 days',
+        'Når du reiser litt oftere',
+        'When you travel more frequently',
       ),
       pilot_description: _('', ''),
       transportModes: _('Buss/trikk', 'Bus/tram'),
