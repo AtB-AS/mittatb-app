@@ -14,7 +14,7 @@ import NavigationIcon, {
 } from '@atb/components/theme-icon/navigation-icon';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {TextNames} from '@atb/theme/colors';
+import {InteractiveColor, TextNames} from '@atb/theme/colors';
 
 export type LinkItemProps = SectionItem<{
   text: string;
@@ -26,9 +26,7 @@ export type LinkItemProps = SectionItem<{
   disabled?: boolean;
   accessibility?: AccessibilityProps;
   textType?: TextNames;
-  backgroundColor?: ColorValue;
-  contentColor?: ColorValue;
-  overrideContainerStyles?: ViewStyle;
+  interactiveColor?: InteractiveColor;
 }>;
 export default function LinkItem({
   text,
@@ -40,17 +38,20 @@ export default function LinkItem({
   disabled,
   textType,
   testID,
-  backgroundColor,
-  contentColor,
-  overrideContainerStyles,
+  interactiveColor = 'interactive_2',
   ...props
 }: LinkItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
   const linkItemStyle = useStyles();
   const {theme} = useTheme();
+  const themeColor = theme.interactive[interactiveColor].default;
   const iconEl =
-    isNavigationIcon(icon) || !icon ? <NavigationIcon mode={icon} /> : icon;
+    isNavigationIcon(icon) || !icon ? (
+      <NavigationIcon mode={icon} fill={themeColor.text} />
+    ) : (
+      icon
+    );
   const disabledStyle = disabled ? linkItemStyle.disabled : undefined;
   const accessibilityWithOverrides = disabled
     ? {...accessibility, accessibilityHint: undefined}
@@ -62,25 +63,13 @@ export default function LinkItem({
       onPress={disabled ? undefined : onPress}
       disabled={disabled}
       accessibilityState={{disabled}}
-      style={
-        backgroundColor
-          ? [
-              topContainer,
-              {backgroundColor: backgroundColor},
-              overrideContainerStyles,
-            ]
-          : topContainer
-      }
+      style={[topContainer, {backgroundColor: themeColor.background}]}
       testID={testID}
       {...accessibilityWithOverrides}
     >
       <View style={[style.spaceBetween, disabledStyle]}>
         <ThemeText
-          style={
-            contentColor
-              ? [contentContainer, {color: contentColor}]
-              : contentContainer
-          }
+          style={[contentContainer, {color: themeColor.text}]}
           type={textType}
         >
           {text}
@@ -93,7 +82,7 @@ export default function LinkItem({
           </View>
         )}
         {/* Her må vi støtte riktig farge på et vis */}
-        {contentColor ? iconEl : iconEl}
+        {iconEl}
       </View>
       {subtitle && (
         <ThemeText color="secondary" type="body__secondary">

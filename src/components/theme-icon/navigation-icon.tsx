@@ -11,6 +11,7 @@ import {
   UnfoldLess,
   UnfoldMore,
 } from '@atb/assets/svg/mono-icons/navigation';
+import {SvgProps} from 'react-native-svg';
 
 const navigationTypes = [
   'arrow-left',
@@ -28,11 +29,12 @@ export type NavigationIconTypes = typeof navigationTypes[number];
 
 type NavigationIconProps = {
   mode?: NavigationIconTypes;
-};
+} & SvgProps;
 export default function NavigationIcon({
   mode = 'arrow-right',
+  ...props
 }: NavigationIconProps) {
-  return <ThemeIcon svg={mapMode(mode)} />;
+  return <ThemeIcon svg={mapMode(mode)} {...props} />;
 }
 
 export function isNavigationIcon(a: any): a is NavigationIconTypes {
