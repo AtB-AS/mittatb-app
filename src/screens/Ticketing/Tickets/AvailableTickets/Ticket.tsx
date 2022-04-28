@@ -2,8 +2,7 @@ import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {SvgProps} from 'react-native-svg';
-import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import TransportationIcon from '@atb/components/transportation-icon';
 import ThemeText from '@atb/components/text';
 import React from 'react';
@@ -26,7 +25,6 @@ const Ticket = ({
   ticketIllustration,
   accented = false,
   onPress,
-  style,
 }: {
   title: string;
   description: string;
@@ -35,7 +33,6 @@ const Ticket = ({
   ticketIllustration: TicketIllustration;
   accented?: boolean;
   onPress: () => void;
-  style?: StyleProp<ViewStyle>;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -49,7 +46,7 @@ const Ticket = ({
   );
 
   return (
-    <View style={[styles.ticket, ticketTheme, style]}>
+    <View style={[styles.ticket, ticketTheme]}>
       <TouchableOpacity
         onPress={onPress}
         accessible={true}
@@ -102,6 +99,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
     flexShrink: 1,
     alignSelf: 'stretch',
+    marginRight: theme.spacings.medium,
     padding: theme.spacings.xLarge,
     borderRadius: theme.border.radius.regular,
   },

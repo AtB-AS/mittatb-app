@@ -1,11 +1,10 @@
 import {View} from 'react-native';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import {ScrollView} from 'react-native-gesture-handler';
 import ThemeText from '@atb/components/text';
-import * as TicketIcons from '@atb/assets/svg/color/illustrations/ticket-type/dark';
 import {
   Mode,
   TransportSubmode,
@@ -61,7 +60,6 @@ export const AvailableTickets = ({
               )}
               ticketIllustration="Single"
               onPress={onBuySingleTicket}
-              style={styles.singleTicket}
             />
           )}
           {shouldShowPeriodTicket && (
@@ -110,15 +108,17 @@ export const AvailableTickets = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.static.background.background_2.background,
-    padding: theme.spacings.medium,
     flex: 1,
   },
   heading: {
     margin: theme.spacings.medium,
+    marginLeft: theme.spacings.xLarge,
   },
   ticketsContainer: {
     flex: 1,
     flexDirection: 'row',
+    paddingLeft: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
     alignItems: 'stretch',
   },
   singleTicket: {
