@@ -59,7 +59,6 @@ export const RecentTicketComponent = ({
   const fromZone = fromTariffZone.name.value;
   const toZone = toTariffZone.name.value;
   const {topContainer} = useSectionItem({type: 'inline'});
-  const darkMode = themeName === 'dark';
   const {width} = Dimensions.get('window');
 
   const returnModeNames = (
