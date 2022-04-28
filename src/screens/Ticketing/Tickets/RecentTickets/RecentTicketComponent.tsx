@@ -171,6 +171,7 @@ export const RecentTicketComponent = ({
                     {userProfilesWithCount.length <= 2 &&
                       userProfilesWithCount.map((u) => (
                         <FloatingLabel
+                          key={u.id}
                           text={`${u.count} ${getReferenceDataName(
                             u,
                             language,
