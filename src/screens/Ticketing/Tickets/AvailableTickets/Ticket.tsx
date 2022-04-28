@@ -6,11 +6,12 @@ import {TouchableOpacity, View} from 'react-native';
 import TransportationIcon from '@atb/components/transportation-icon';
 import ThemeText from '@atb/components/text';
 import React from 'react';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import ThemedTicketIllustration, {
   TicketIllustration,
 } from '@atb/components/ticket-illustration';
 import {TicketsTexts, useTranslation} from '@atb/translations';
+import {getStaticColor, StaticColor} from '@atb/theme/colors';
 
 export type TransportationModeIconProperties = {
   mode: Mode;
@@ -36,17 +37,16 @@ const Ticket = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const ticketTheme = accented ? styles.ticket_accented : styles.ticket_normal;
+  const {themeName} = useTheme();
+  const color: StaticColor = accented ? 'background_accent_3' : 'background_0';
+  const themeColor = getStaticColor(themeName, color);
 
-  // @TODO: Update to support new design system
-  // const textColor = accented ? 'primary_2' : 'primary';
-  const textColor = 'primary';
   const accessibilityLabel = [title, transportationModeTexts, description].join(
     '. ',
   );
 
   return (
-    <View style={[styles.ticket, ticketTheme]}>
+    <View style={[styles.ticket, {backgroundColor: themeColor.background}]}>
       <TouchableOpacity
         onPress={onPress}
         accessible={true}
@@ -65,7 +65,11 @@ const Ticket = ({
                 />
               );
             })}
-            <ThemeText type="label__uppercase" style={styles.label}>
+            <ThemeText
+              type="label__uppercase"
+              style={styles.label}
+              color={themeColor}
+            >
               {transportationModeTexts}
             </ThemeText>
           </View>
@@ -73,6 +77,7 @@ const Ticket = ({
             type="body__secondary--bold"
             style={styles.ticket_name}
             accessibilityLabel={title}
+            color={themeColor}
           >
             {title}
           </ThemeText>
@@ -102,13 +107,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginRight: theme.spacings.medium,
     padding: theme.spacings.xLarge,
     borderRadius: theme.border.radius.regular,
-  },
-  ticket_normal: {
-    backgroundColor: theme.static.background.background_0.background,
-  },
-  ticket_accented: {
-    backgroundColor: theme.static.background.background_accent_3.background,
-    textColor: theme.static.background.background_accent_3.text,
   },
   ticketIconContainer: {
     flex: 1,
