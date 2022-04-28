@@ -102,7 +102,7 @@ export const RecentTicketComponent = ({
     const modeInfo = `${getReferenceDataName(
       preassignedFareProduct,
       language,
-    )}${t(RecentTicketsTexts.a11yPreLabels.transportModes)} ${returnModeNames({
+    )}${t(RecentTicketsTexts.a11yPreLabels.transportModes)} ${modeNames({
       modes: transportModeTexts,
       joinSymbol: t(RecentTicketsTexts.a11yPreLabels.and),
     })}`;
