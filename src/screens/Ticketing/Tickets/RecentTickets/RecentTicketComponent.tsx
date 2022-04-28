@@ -7,7 +7,6 @@ import {RecentTicket} from '../use-recent-tickets';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Dimensions, View, ViewStyle} from 'react-native';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import {useSectionItem} from '@atb/components/sections/section-utils';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {TransportationModeIconProperties} from '../AvailableTickets/Ticket';
@@ -58,30 +57,19 @@ export const RecentTicketComponent = ({
   const {t} = useTranslation();
   const fromZone = fromTariffZone.name.value;
   const toZone = toTariffZone.name.value;
-  const {topContainer} = useSectionItem({type: 'inline'});
   const {width} = Dimensions.get('window');
 
-  type returnModeProps = {
+  type modeNameProps = {
     modes: TransportationModeIconProperties[];
     joinSymbol?: string;
   };
 
-  const returnModeNames = ({modes, joinSymbol = '/'}: returnModeProps) => {
+  const modeNames = ({modes, joinSymbol = '/'}: modeNameProps) => {
     if (!modes) return null;
-    if (modes.length > 2) return t(RecentTicketsTexts.transportModes.several);
+    if (modes.length > 2) return t(RecentTicketsTexts.severalTransportModes);
     else
       return modes
-        .map((mode) =>
-          mode.mode === 'bus' ||
-          mode.mode === 'rail' ||
-          mode.mode === 'tram' ||
-          mode.mode === 'water' ||
-          mode.mode === 'air' ||
-          mode.mode === 'foot' ||
-          mode.mode === 'metro'
-            ? t(RecentTicketsTexts.transportModes[mode.mode])
-            : t(RecentTicketsTexts.transportModes['unknown']),
-        )
+        .map((mode) => t(RecentTicketsTexts.transportMode(mode.mode)))
         .join(joinSymbol);
   };
 
@@ -139,7 +127,7 @@ export const RecentTicketComponent = ({
   const currentAccessabilityLabel = returnAccessabilityLabel();
 
   return (
-    <View style={[topContainer, styles.container]}>
+    <View style={styles.container}>
       <Section>
         <GenericItem>
           <View
@@ -159,8 +147,9 @@ export const RecentTicketComponent = ({
                   key={icon.mode + icon.subMode}
                 />
               ))}
+
               <ThemeText type="label__uppercase">
-                {returnModeNames({modes: transportModeTexts})}
+                {modeNames({modes: transportModeTexts})}
               </ThemeText>
             </View>
 
@@ -225,19 +214,12 @@ export const RecentTicketComponent = ({
             </View>
           </View>
         </GenericItem>
+        <LinkItem
+          text="Gjenta kjøp"
+          onPress={() => selectTicket(ticketData)}
+          interactiveColor="interactive_0"
+        />
       </Section>
-
-      <LinkItem
-        backgroundColor={theme.static.background.background_accent_3.background}
-        contentColor={theme.static.background.background_accent_3.text}
-        text={t(RecentTicketsTexts.repeatPurchase)}
-        onPress={() => selectTicket(ticketData)}
-        overrideContainerStyles={{
-          paddingHorizontal: theme.spacings.xLarge,
-          borderBottomLeftRadius: theme.border.radius.regular,
-          borderBottomRightRadius: theme.border.radius.regular,
-        }}
-      />
     </View>
   );
 };

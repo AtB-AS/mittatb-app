@@ -55,17 +55,18 @@ const Ticket = ({
         accessibilityHint={t(TicketsTexts.availableTickets.navigateToBuy)}
       >
         <View style={{flexShrink: 1}}>
-          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+          <View style={styles.ticketIconContainer}>
             {transportationModeIcons.map((icon) => {
               return (
                 <TransportationIcon
+                  size={'small'}
                   mode={icon.mode}
                   subMode={icon.subMode}
                   key={icon.mode + icon.subMode}
                 />
               );
             })}
-            <ThemeText type="label__uppercase">
+            <ThemeText type="label__uppercase" style={styles.label}>
               {transportationModeTexts}
             </ThemeText>
           </View>
@@ -73,14 +74,13 @@ const Ticket = ({
             type="body__secondary--bold"
             style={styles.ticket_name}
             accessibilityLabel={title}
-            color={textColor}
           >
             {title}
           </ThemeText>
           <ThemeText
             type="body__tertiary"
             style={styles.description}
-            color={textColor}
+            color={'secondary'}
           >
             {description}
           </ThemeText>
@@ -104,7 +104,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.xLarge,
     borderRadius: theme.border.radius.regular,
   },
-
   ticket_normal: {
     backgroundColor: theme.static.background.background_0.background,
   },
@@ -112,7 +111,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background.background_accent_3.background,
     textColor: theme.static.background.background_accent_3.text,
   },
-
+  ticketIconContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  label: {marginLeft: theme.spacings.xSmall},
   ticketIllustrationContainer: {
     flexGrow: 1,
     flexDirection: 'row',
@@ -120,13 +124,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   ticketIllustration: {
     alignSelf: 'flex-end',
-    opacity: 0.6,
   },
   ticket_name: {
     marginBottom: theme.spacings.small,
-    marginTop: theme.spacings.small,
+    marginTop: theme.spacings.medium,
   },
-  description: {},
+  description: {marginBottom: theme.spacings.small},
 }));
 
 export default Ticket;
