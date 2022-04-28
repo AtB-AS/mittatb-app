@@ -1,15 +1,16 @@
 import React from 'react';
-import {GenericItem, LinkItem, Section} from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
 import RecentTicketsTexts from '@atb/translations/screens/subscreens/RecentTicketsTexts';
 import {RecentTicket} from '../use-recent-tickets';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Dimensions, View, ViewStyle} from 'react-native';
+import {Dimensions, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {TransportationModeIconProperties} from '../AvailableTickets/Ticket';
+import ThemeIcon from '@atb/components/theme-icon';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
 type recentTicketProps = {
   ticketData: RecentTicket;
@@ -126,102 +127,93 @@ export const RecentTicketComponent = ({
 
   const currentAccessabilityLabel = returnAccessabilityLabel();
 
+  const buttonColor = theme.interactive.interactive_0.default;
+
   return (
     <View style={styles.container}>
-      <Section>
-        <GenericItem>
-          <View
-            style={{
-              minWidth: width * 0.6,
-              paddingHorizontal: theme.spacings.medium,
-              paddingVertical: theme.spacings.medium,
-            }}
-            accessible={true}
-            accessibilityLabel={currentAccessabilityLabel}
-          >
-            <View style={styles.travelModeWrapper}>
-              {transportModeIcons.map((icon) => (
-                <TransportationIcon
-                  mode={icon.mode}
-                  subMode={icon.subMode}
-                  key={icon.mode + icon.subMode}
-                  size="small"
-                />
-              ))}
+      <View
+        style={[styles.upperPart, {minWidth: width * 0.6}]}
+        accessible={true}
+        accessibilityLabel={currentAccessabilityLabel}
+      >
+        <View style={styles.travelModeWrapper}>
+          {transportModeIcons.map((icon) => (
+            <TransportationIcon
+              mode={icon.mode}
+              subMode={icon.subMode}
+              key={icon.mode + icon.subMode}
+              size="small"
+            />
+          ))}
 
-              <ThemeText type="label__uppercase">
-                {modeNames({modes: transportModeTexts})}
+          <ThemeText type="label__uppercase">
+            {modeNames({modes: transportModeTexts})}
+          </ThemeText>
+        </View>
+
+        <View style={styles.productName}>
+          <ThemeText type="body__secondary--bold">
+            {/*returnTicketType(preassignedFareProduct)*/}
+            {getReferenceDataName(preassignedFareProduct, language)}
+          </ThemeText>
+        </View>
+
+        <View style={styles.horizontalFlex}>
+          {/*returnDuration(preassignedFareProduct)*/}
+          <View>
+            <View>
+              <ThemeText type="label__uppercase" color="secondary">
+                {t(RecentTicketsTexts.titles.travellers)}
               </ThemeText>
-            </View>
-
-            <View style={styles.productName}>
-              <ThemeText type="body__secondary--bold">
-                {/*returnTicketType(preassignedFareProduct)*/}
-                {getReferenceDataName(preassignedFareProduct, language)}
-              </ThemeText>
-            </View>
-
-            <View style={styles.horizontalFlex}>
-              {/*returnDuration(preassignedFareProduct)*/}
-              <View>
-                <View>
-                  <ThemeText type="label__uppercase" color="secondary">
-                    {t(RecentTicketsTexts.titles.travellers)}
-                  </ThemeText>
-                  <View style={styles.travellersTileWrapper}>
-                    {userProfilesWithCount.length <= 2 &&
-                      userProfilesWithCount.map((u) => (
-                        <FloatingLabel
-                          key={u.id}
-                          text={`${u.count} ${getReferenceDataName(
-                            u,
-                            language,
-                          )}`}
-                          additionalStyles={{
-                            marginRight: theme.spacings.xSmall,
-                          }}
-                        />
-                      ))}
-                    {userProfilesWithCount.length > 2 && (
-                      <>
-                        {userProfilesWithCount.slice(0, 1).map((u) => (
-                          <FloatingLabel
-                            text={`${u.count} ${getReferenceDataName(
-                              u,
-                              language,
-                            )}`}
-                          />
-                        ))}
-                        <View style={styles.additionalCategories}>
-                          <ThemeText>
-                            + {userProfilesWithCount.slice(1).length}{' '}
-                            {t(RecentTicketsTexts.titles.moreTravelers)}
-                          </ThemeText>
-                        </View>
-                      </>
-                    )}
-                  </View>
-                </View>
-              </View>
-              <View>
-                <ThemeText type="label__uppercase" color="secondary">
-                  {t(RecentTicketsTexts.titles.zone)}
-                </ThemeText>
-                {fromZone === toZone ? (
-                  <FloatingLabel text={`${fromZone}`} />
-                ) : (
-                  <FloatingLabel text={`${fromZone} - ${toZone}`} />
+              <View style={styles.travellersTileWrapper}>
+                {userProfilesWithCount.length <= 2 &&
+                  userProfilesWithCount.map((u) => (
+                    <FloatingLabel
+                      key={u.id}
+                      text={`${u.count} ${getReferenceDataName(u, language)}`}
+                      additionalStyles={{
+                        marginRight: theme.spacings.xSmall,
+                      }}
+                    />
+                  ))}
+                {userProfilesWithCount.length > 2 && (
+                  <>
+                    {userProfilesWithCount.slice(0, 1).map((u) => (
+                      <FloatingLabel
+                        text={`${u.count} ${getReferenceDataName(u, language)}`}
+                      />
+                    ))}
+                    <View style={styles.additionalCategories}>
+                      <ThemeText>
+                        + {userProfilesWithCount.slice(1).length}{' '}
+                        {t(RecentTicketsTexts.titles.moreTravelers)}
+                      </ThemeText>
+                    </View>
+                  </>
                 )}
               </View>
             </View>
           </View>
-        </GenericItem>
-        <LinkItem
-          text="Gjenta kjøp"
-          onPress={() => selectTicket(ticketData)}
-          interactiveColor="interactive_0"
-        />
-      </Section>
+          <View>
+            <ThemeText type="label__uppercase" color="secondary">
+              {t(RecentTicketsTexts.titles.zone)}
+            </ThemeText>
+            {fromZone === toZone ? (
+              <FloatingLabel text={`${fromZone}`} />
+            ) : (
+              <FloatingLabel text={`${fromZone} - ${toZone}`} />
+            )}
+          </View>
+        </View>
+      </View>
+      <TouchableOpacity
+        onPress={() => selectTicket(ticketData)}
+        style={[styles.buyButton, {backgroundColor: buttonColor.background}]}
+        accessible={true}
+      >
+        <ThemeText color={buttonColor}>{'Gjenta kjøp'}</ThemeText>
+        <ThemeIcon svg={ArrowRight} fill={buttonColor.text} />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -229,6 +221,13 @@ export const RecentTicketComponent = ({
 const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   container: {
     marginHorizontal: theme.spacings.small,
+    backgroundColor: theme.static.background.background_0.background,
+    borderRadius: theme.border.radius.regular,
+    overflow: 'hidden',
+  },
+  upperPart: {
+    padding: theme.spacings.xLarge,
+    flexGrow: 1,
   },
   travelModeWrapper: {
     flexShrink: 1,
@@ -260,5 +259,11 @@ const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   additionalCategories: {
     marginHorizontal: theme.spacings.small,
     marginVertical: theme.spacings.small,
+  },
+  buyButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: theme.spacings.xLarge,
+    paddingVertical: theme.spacings.medium,
   },
 }));
