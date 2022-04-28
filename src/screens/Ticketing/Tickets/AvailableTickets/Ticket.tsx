@@ -3,7 +3,7 @@ import {
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {SvgProps} from 'react-native-svg';
-import {TouchableOpacity, View} from 'react-native';
+import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
 import TransportationIcon from '@atb/components/transportation-icon';
 import ThemeText from '@atb/components/text';
 import React from 'react';
@@ -11,7 +11,7 @@ import {StyleSheet} from '@atb/theme';
 import ThemedTicketIllustration, {
   TicketIllustration,
 } from '@atb/components/ticket-illustration';
-import {TicketsTexts, TicketTexts, useTranslation} from '@atb/translations';
+import {TicketsTexts, useTranslation} from '@atb/translations';
 
 export type TransportationModeIconProperties = {
   mode: Mode;
@@ -26,6 +26,7 @@ const Ticket = ({
   ticketIllustration,
   accented = false,
   onPress,
+  style,
 }: {
   title: string;
   description: string;
@@ -34,6 +35,7 @@ const Ticket = ({
   ticketIllustration: TicketIllustration;
   accented?: boolean;
   onPress: () => void;
+  style?: StyleProp<ViewStyle>;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -47,7 +49,7 @@ const Ticket = ({
   );
 
   return (
-    <View style={[styles.ticket, ticketTheme]}>
+    <View style={[styles.ticket, ticketTheme, style]}>
       <TouchableOpacity
         onPress={onPress}
         accessible={true}
@@ -100,7 +102,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
     flexShrink: 1,
     alignSelf: 'stretch',
-    marginRight: theme.spacings.medium,
     padding: theme.spacings.xLarge,
     borderRadius: theme.border.radius.regular,
   },

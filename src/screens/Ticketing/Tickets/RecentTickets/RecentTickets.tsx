@@ -26,7 +26,8 @@ export const RecentTickets = () => {
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const {recentTickets, loading, refresh} = useRecentTickets();
+  const {loading, refresh} = useRecentTickets();
+  const recentTickets: RecentTicket[] = [];
 
   const selectTicket = (ticket: RecentTicket) => {
     navigation.navigate('TicketPurchase', {
@@ -99,7 +100,7 @@ export const RecentTickets = () => {
         </View>
       )}
 
-      {!loading && recentTickets && (
+      {!loading && !!recentTickets.length && (
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
