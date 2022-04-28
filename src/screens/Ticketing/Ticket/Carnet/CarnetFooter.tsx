@@ -135,7 +135,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height: 16,
   },
   dot__unused: {
-    backgroundColor: theme.static.background.background_accent_1.text,
+    backgroundColor: theme.static.background.background_0.background,
   },
   dotFill__active: {
     borderTopRightRadius: 20,
@@ -143,7 +143,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height: '100%',
     width: '50%',
     marginLeft: '50%',
-    backgroundColor: theme.static.background.background_accent_1.text,
+    backgroundColor: theme.static.background.background_0.background,
   },
 }));
 
