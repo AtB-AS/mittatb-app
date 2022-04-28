@@ -145,6 +145,7 @@ export const RecentTicketComponent = ({
                   mode={icon.mode}
                   subMode={icon.subMode}
                   key={icon.mode + icon.subMode}
+                  size="small"
                 />
               ))}
 
