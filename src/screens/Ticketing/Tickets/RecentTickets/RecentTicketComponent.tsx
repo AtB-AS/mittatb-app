@@ -7,7 +7,6 @@ import {RecentTicket} from '../use-recent-tickets';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Dimensions, View, ViewStyle} from 'react-native';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import {useSectionItem} from '@atb/components/sections/section-utils';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {TransportationModeIconProperties} from '../AvailableTickets/Ticket';
@@ -58,7 +57,6 @@ export const RecentTicketComponent = ({
   const {t} = useTranslation();
   const fromZone = fromTariffZone.name.value;
   const toZone = toTariffZone.name.value;
-  const {topContainer} = useSectionItem({type: 'inline'});
   const {width} = Dimensions.get('window');
 
   const modeNames = (modes: TransportationModeIconProperties[]) => {
@@ -96,7 +94,7 @@ export const RecentTicketComponent = ({
   };
 
   return (
-    <View style={[topContainer, styles.container]}>
+    <View style={styles.container}>
       <Section>
         <GenericItem>
           <View
@@ -181,19 +179,12 @@ export const RecentTicketComponent = ({
             </View>
           </View>
         </GenericItem>
+        <LinkItem
+          text="Gjenta kjøp"
+          onPress={() => selectTicket(ticketData)}
+          interactiveColor="interactive_0"
+        />
       </Section>
-
-      <LinkItem
-        backgroundColor={theme.static.background.background_accent_3.background}
-        contentColor={theme.static.background.background_accent_3.text}
-        text="Gjenta kjøp"
-        onPress={() => selectTicket(ticketData)}
-        overrideContainerStyles={{
-          paddingHorizontal: theme.spacings.xLarge,
-          borderBottomLeftRadius: theme.border.radius.regular,
-          borderBottomRightRadius: theme.border.radius.regular,
-        }}
-      />
     </View>
   );
 };
