@@ -164,7 +164,7 @@ export const RecentTicketComponent = ({
               {/*returnDuration(preassignedFareProduct)*/}
               <View>
                 <View>
-                  <ThemeText type="label__uppercase">
+                  <ThemeText type="label__uppercase" color="secondary">
                     {t(RecentTicketsTexts.titles.travellers)}
                   </ThemeText>
                   <View style={styles.travellersTileWrapper}>
@@ -203,7 +203,7 @@ export const RecentTicketComponent = ({
                 </View>
               </View>
               <View>
-                <ThemeText type="label__uppercase">
+                <ThemeText type="label__uppercase" color="secondary">
                   {t(RecentTicketsTexts.titles.zone)}
                 </ThemeText>
                 {fromZone === toZone ? (
