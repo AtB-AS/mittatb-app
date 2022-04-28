@@ -82,11 +82,11 @@ function AlternativeItem({
       onPress={() => handleAnswerPress(alternative.alternativeId)}
       accessibilityRole="checkbox"
       accessibilityState={{checked: isChecked}}
-      accessibilityHint={
+      accessibilityHint={`${alternative.alternativeText[language]} ${
         isChecked
           ? t(FeedbackTexts.alternatives.a11yHints.checked)
           : t(FeedbackTexts.alternatives.a11yHints.unchecked)
-      }
+      }`}
     >
       <View
         style={
