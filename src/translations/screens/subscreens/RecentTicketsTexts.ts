@@ -11,23 +11,18 @@ const RecentTicketsTexts = {
   },
   a11yPreLabels: {
     zones: {
-      oneZone: _(
-        'Billetten vil være gyldig i sone: ',
-        'The ticket will be valid in zone:',
-      ),
+      oneZone: _('i sone: ', 'in zone:'),
       multipleZones: _(
-        'Billetten vil være i gyldig mellom følgende soner:',
-        'The ticket will be valid in the following zones:',
+        'mellom følgende soner:',
+        'between the following zones:',
       ),
     },
     transportModes: _(
-      'Billetten vil være gyldig for følgende reisemåter: ',
-      'The ticket will be valid for the following transport modes: ',
+      'vil være gyldig for transportmidlene: ',
+      'will be valid for the transport modes: ',
     ),
-    travellers: _(
-      'Billetten vil være gyldig for følgende reisende: ',
-      'The ticket will be valid for the following travellers: ',
-    ),
+    travellers: _('for følgende reisende: ', 'for the following travellers: '),
+    and: _(' og ', ' and '),
   },
   transportModes: {
     bus: _('buss', 'bus'),
