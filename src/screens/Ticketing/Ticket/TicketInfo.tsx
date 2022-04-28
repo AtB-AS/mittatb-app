@@ -22,7 +22,7 @@ import {TicketAdd, TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {Warning} from '@atb/assets/svg/color/situations';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
-import {flatStaticColors, StaticColor} from '@atb/theme/colors';
+import {flatStaticColors, getStaticColor, StaticColor} from '@atb/theme/colors';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 
@@ -235,10 +235,16 @@ const IconForStatus = (
   themeColor?: StaticColor,
 ): ReactElement | null => {
   const {t} = useTranslation();
+  const {themeName} = useTheme();
+  const fillColor = getStaticColor(
+    themeName,
+    themeColor || 'background_0',
+  ).text;
+
   switch (status) {
     case 'valid':
       if (isInspectable)
-        return <ThemeIcon svg={Bus} colorType={themeColor} size={'large'} />;
+        return <ThemeIcon svg={Bus} fill={fillColor} size={'large'} />;
       else
         return (
           <ThemeText
