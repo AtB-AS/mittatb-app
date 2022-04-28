@@ -54,12 +54,11 @@ export const RecentTicketComponent = ({
   } = ticketData;
   const {language} = useTranslation();
   const styles = useStyles();
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
   const {t} = useTranslation();
   const fromZone = fromTariffZone.name.value;
   const toZone = toTariffZone.name.value;
   const {topContainer} = useSectionItem({type: 'inline'});
-  const darkMode = themeName === 'dark';
   const {width} = Dimensions.get('window');
 
   type returnModeProps = {
@@ -102,7 +101,7 @@ export const RecentTicketComponent = ({
       }
       return (
         <View>
-          <ThemeText type="body__tertiary" style={styles.upperCase}>
+          <ThemeText type="label__uppercase">
             {t(RecentTicketsTexts.titles.duration)}
           </ThemeText>
           <FloatingLabel text={textString} />
@@ -160,11 +159,7 @@ export const RecentTicketComponent = ({
                   key={icon.mode + icon.subMode}
                 />
               ))}
-              <ThemeText
-                type="body__tertiary"
-                style={styles.upperCase}
-                color={'primary'}
-              >
+              <ThemeText type="label__uppercase">
                 {returnModeNames({modes: transportModeTexts})}
               </ThemeText>
             </View>
@@ -180,7 +175,7 @@ export const RecentTicketComponent = ({
               {/*returnDuration(preassignedFareProduct)*/}
               <View>
                 <View>
-                  <ThemeText type="body__tertiary" style={styles.upperCase}>
+                  <ThemeText type="label__uppercase">
                     {t(RecentTicketsTexts.titles.travellers)}
                   </ThemeText>
                   <View style={styles.travellersTileWrapper}>
@@ -218,7 +213,7 @@ export const RecentTicketComponent = ({
                 </View>
               </View>
               <View>
-                <ThemeText type="body__tertiary" style={styles.upperCase}>
+                <ThemeText type="label__uppercase">
                   {t(RecentTicketsTexts.titles.zone)}
                 </ThemeText>
                 {fromZone === toZone ? (
@@ -286,8 +281,5 @@ const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   additionalCategories: {
     marginHorizontal: theme.spacings.small,
     marginVertical: theme.spacings.small,
-  },
-  upperCase: {
-    textTransform: 'uppercase',
   },
 }));

@@ -35,11 +35,15 @@ export const GoodOrBadButton = ({
         }
         accessibilityRole="radio"
         accessibilityState={{selected: checked}}
-        accessibilityHint={
+        accessibilityHint={`${
+          opinion === Opinions.Good && t(FeedbackTexts.goodOrBadTexts.good)
+        }
+        ${opinion === Opinions.Bad && t(FeedbackTexts.goodOrBadTexts.bad)}
+        ${
           checked
             ? t(FeedbackTexts.alternatives.a11yHints.checked)
             : t(FeedbackTexts.alternatives.a11yHints.unchecked)
-        }
+        }`}
       >
         <View
           style={
