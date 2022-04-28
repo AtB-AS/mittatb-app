@@ -111,6 +111,34 @@ export const RecentTicketComponent = ({
     }
   };
 
+  const returnAccessabilityLabel = () => {
+    const modeInfo = `${getReferenceDataName(
+      preassignedFareProduct,
+      language,
+    )}${t(RecentTicketsTexts.a11yPreLabels.transportModes)} ${returnModeNames({
+      modes: transportModeTexts,
+      joinSymbol: t(RecentTicketsTexts.a11yPreLabels.and),
+    })}`;
+
+    const travellerInfo = `${t(
+      RecentTicketsTexts.a11yPreLabels.travellers,
+    )}: ${userProfilesWithCount
+      .map((u) => '1' + getReferenceDataName(u, language))
+      .join(', ')}`;
+
+    const zoneInfo = `${
+      fromZone === toZone
+        ? `${t(RecentTicketsTexts.a11yPreLabels.zones.oneZone)} ${fromZone}`
+        : `${t(
+            RecentTicketsTexts.a11yPreLabels.zones.multipleZones,
+          )} ${fromZone}, ${toZone}`
+    }`;
+
+    return `${modeInfo} ${travellerInfo} ${zoneInfo}`;
+  };
+
+  const currentAccessabilityLabel = returnAccessabilityLabel();
+
   return (
     <View style={[topContainer, styles.container]}>
       <Section>
@@ -122,28 +150,7 @@ export const RecentTicketComponent = ({
               paddingVertical: theme.spacings.medium,
             }}
             accessible={true}
-            accessibilityLabel={`${getReferenceDataName(
-              preassignedFareProduct,
-              language,
-            )}${t(
-              RecentTicketsTexts.a11yPreLabels.transportModes,
-            )} ${returnModeNames({
-              modes: transportModeTexts,
-              joinSymbol: t(RecentTicketsTexts.a11yPreLabels.and),
-            })} ${t(
-              RecentTicketsTexts.a11yPreLabels.travellers,
-            )}: ${userProfilesWithCount
-              .map((u) => '1' + getReferenceDataName(u, language))
-              .join(', ')}
-              ${
-                fromZone === toZone
-                  ? `${t(
-                      RecentTicketsTexts.a11yPreLabels.zones.oneZone,
-                    )} ${fromZone}`
-                  : `${t(
-                      RecentTicketsTexts.a11yPreLabels.zones.multipleZones,
-                    )} ${fromZone}, ${toZone}`
-              }`}
+            accessibilityLabel={currentAccessabilityLabel}
           >
             <View style={styles.travelModeWrapper}>
               {transportModeIcons.map((icon) => (
