@@ -6,7 +6,7 @@ import {Opinions} from '.';
 import {useSectionItem} from '../sections/section-utils';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
 import hexToRgba from 'hex-to-rgba';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColor, StaticColorByType} from '@atb/theme/colors';
 
 export type GoodOrBadButtonProps = {
   opinion: Opinions;
@@ -14,8 +14,9 @@ export type GoodOrBadButtonProps = {
   setSelectedOpinion: (value: Opinions) => void;
 };
 
-const themeColor: ThemeColor = 'background_0';
-const selectedThemeColor: ThemeColor = 'primary_2';
+const themeColor: StaticColorByType<'background'> = 'background_0';
+const selectedThemeColor: StaticColorByType<'background'> =
+  'background_accent_3';
 
 export const GoodOrBadButton = ({
   checked,
@@ -34,11 +35,15 @@ export const GoodOrBadButton = ({
         }
         accessibilityRole="radio"
         accessibilityState={{selected: checked}}
-        accessibilityHint={
+        accessibilityHint={`${
+          opinion === Opinions.Good && t(FeedbackTexts.goodOrBadTexts.good)
+        }
+        ${opinion === Opinions.Bad && t(FeedbackTexts.goodOrBadTexts.bad)}
+        ${
           checked
             ? t(FeedbackTexts.alternatives.a11yHints.checked)
             : t(FeedbackTexts.alternatives.a11yHints.unchecked)
-        }
+        }`}
       >
         <View
           style={
@@ -75,21 +80,21 @@ const useButtonStyle = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.xLarge,
   },
   button: {
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
     flex: 1,
     padding: theme.spacings.xLarge,
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderWidth: theme.border.width.medium,
     borderRadius: theme.border.radius.regular,
-    borderColor: theme.colors[themeColor].backgroundColor,
+    borderColor: theme.static.background[themeColor].background,
   },
   selectedButton: {
     backgroundColor: hexToRgba(
-      theme.colors[selectedThemeColor].backgroundColor,
+      theme.static.background[selectedThemeColor].background,
       0.2,
     ),
-    borderColor: theme.colors[selectedThemeColor].backgroundColor,
+    borderColor: theme.static.background[selectedThemeColor].background,
   },
 }));
 

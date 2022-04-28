@@ -121,7 +121,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingVertical: theme.spacings.small,
   },
   toggleText: {
-    textShadowColor: theme.colors.background_0.backgroundColor,
+    textShadowColor: theme.static.background.background_0.background,
     textShadowOffset: {height: 1, width: 1},
     textShadowRadius: 1,
   },

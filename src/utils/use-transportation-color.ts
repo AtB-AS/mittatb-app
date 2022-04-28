@@ -1,21 +1,21 @@
 import {useTheme} from '@atb/theme';
 import {AnyMode, AnySubMode} from '@atb/components/transportation-icon';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
 
 export function useTransportationColor(
   mode?: AnyMode,
   subMode?: AnySubMode,
-  colorType: 'color' | 'backgroundColor' = 'backgroundColor',
+  colorType: 'background' | 'text' = 'background',
 ): string {
   const themeColor = useThemeColorForTransportMode(mode, subMode);
   const {theme} = useTheme();
-  return theme.colors[themeColor][colorType];
+  return theme.static.transport[themeColor][colorType];
 }
 
 export const useThemeColorForTransportMode = (
   mode?: AnyMode,
   subMode?: AnySubMode,
-): ThemeColor => {
+): StaticColorByType<'transport'> => {
   switch (mode) {
     case 'bus':
     case 'coach':

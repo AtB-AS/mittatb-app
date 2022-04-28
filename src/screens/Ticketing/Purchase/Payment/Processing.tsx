@@ -20,7 +20,7 @@ const Processing: React.FC<{message: string}> = ({message}) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
     paddingHorizontal: theme.spacings.medium,
     paddingVertical: theme.spacings.large,
     borderRadius: theme.border.radius.regular,

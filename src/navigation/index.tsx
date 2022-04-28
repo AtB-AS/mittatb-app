@@ -82,14 +82,14 @@ const NavigationRoot = () => {
   }
 
   const statusBarColor = onboarded
-    ? theme.colors.background_accent.backgroundColor
-    : theme.colors.primary_2.backgroundColor;
+    ? theme.static.background.background_accent_0.background
+    : theme.static.background.background_accent_3.background;
 
   const ReactNavigationTheme = {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: theme.colors.background_1.backgroundColor,
+      background: theme.static.background.background_1.background,
     },
   };
 

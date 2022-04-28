@@ -1,4 +1,4 @@
-import {Crash} from '@atb/assets/svg/color/illustrations';
+import {Crash} from '@atb/assets/svg/color/images';
 import Button from '@atb/components/button';
 import ScreenHeader from '@atb/components/screen-header';
 import ThemeText from '@atb/components/text';
@@ -62,7 +62,7 @@ export default function FullScreenErrorView({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   safearea: {
     flex: 1,
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
   },
   svgContainer: {
     aspectRatio: 1,

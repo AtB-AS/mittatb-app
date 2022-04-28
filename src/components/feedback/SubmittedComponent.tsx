@@ -69,7 +69,7 @@ const SubmittedComponent = ({
             onPress={handleButtonClick}
             text={t(FeedbackTexts.additionalFeedback.intercomButton)}
             icon={Chat}
-            color="primary_2"
+            interactiveColor="interactive_0"
             iconPosition="right"
           />
         ) : (
@@ -77,7 +77,7 @@ const SubmittedComponent = ({
             onPress={handleButtonClick}
             text={t(FeedbackTexts.additionalFeedback.contactsheetButton)}
             icon={Support}
-            color="primary_2"
+            interactiveColor="interactive_0"
             iconPosition="right"
           />
         )}
@@ -88,7 +88,7 @@ const SubmittedComponent = ({
 
 const useSubmittedComponentStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     borderRadius: theme.border.radius.regular,
     padding: theme.spacings.xLarge,
   },

@@ -15,15 +15,16 @@ import React, {ReactElement} from 'react';
 import {View} from 'react-native';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
 import {tariffZonesSummary} from '@atb/screens/Ticketing/Purchase/TariffZones';
-import {BusSide, Wait} from '@atb/assets/svg/mono-icons/transportation';
+import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
-import {AddTicket, InvalidTicket} from '@atb/assets/svg/mono-icons/ticketing';
+import {TicketAdd, TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {Warning} from '@atb/assets/svg/color/situations';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
-import {ThemeColor} from '@atb/theme/colors';
+import {flatStaticColors, getStaticColor, StaticColor} from '@atb/theme/colors';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {Time} from '@atb/assets/svg/mono-icons/time';
 
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -180,12 +181,12 @@ const TicketInspectionSymbol = ({
   isInspectable = true,
 }: TicketInfoViewProps) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
   const {language} = useTranslation();
   if (!fromTariffZone || !toTariffZone) return null;
-  const themeColor: ThemeColor | undefined =
+  const themeColor: StaticColor | undefined =
     preassignedFareProduct?.type === 'period' && isInspectable
-      ? 'primary_1'
+      ? 'valid'
       : undefined;
   const icon = IconForStatus(status, isInspectable, themeColor);
   if (!icon) return null;
@@ -198,13 +199,13 @@ const TicketInspectionSymbol = ({
         isValid && {
           ...styles.symbolContainerCircle,
           backgroundColor: themeColor
-            ? theme.colors[themeColor].backgroundColor
+            ? flatStaticColors[themeName][themeColor].background
             : undefined,
         },
         isValid &&
           !isInspectable && {
             ...styles.textContainer,
-            borderColor: theme.status.warning.main.backgroundColor,
+            borderColor: theme.static.status.warning.background,
           },
       ]}
       accessibilityElementsHidden={isInspectable}
@@ -231,15 +232,19 @@ const TicketInspectionSymbol = ({
 const IconForStatus = (
   status: TicketInfoProps['status'],
   isInspectable: boolean,
-  themeColor?: ThemeColor,
+  themeColor?: StaticColor,
 ): ReactElement | null => {
   const {t} = useTranslation();
+  const {themeName} = useTheme();
+  const fillColor = getStaticColor(
+    themeName,
+    themeColor || 'background_0',
+  ).text;
+
   switch (status) {
     case 'valid':
       if (isInspectable)
-        return (
-          <ThemeIcon svg={BusSide} colorType={themeColor} size={'large'} />
-        );
+        return <ThemeIcon svg={Bus} fill={fillColor} size={'large'} />;
       else
         return (
           <ThemeText
@@ -256,11 +261,11 @@ const IconForStatus = (
         );
     case 'expired':
     case 'refunded':
-      return <ThemeIcon svg={InvalidTicket} colorType="error" size={'large'} />;
+      return <ThemeIcon svg={TicketInvalid} colorType="error" size={'large'} />;
     case 'recent':
-      return <ThemeIcon svg={AddTicket} colorType="primary" size={'large'} />;
+      return <ThemeIcon svg={TicketAdd} colorType="primary" size={'large'} />;
     case 'upcoming':
-      return <ThemeIcon svg={Wait} colorType="primary" size={'large'} />;
+      return <ThemeIcon svg={Time} colorType="primary" size={'large'} />;
     case 'reserving':
     case 'unknown':
       return null;
@@ -314,7 +319,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   symbolContainerCircle: {
     borderRadius: 1000,
-    borderColor: theme.colors.primary_1.backgroundColor,
+    borderColor: theme.static.status.valid.background,
     borderWidth: 5,
   },
   symbolZones: {

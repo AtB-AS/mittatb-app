@@ -12,7 +12,6 @@ import {
   WelcomeScreenLogin,
   WelcomeScreenWithoutLogin,
 } from '@atb/screens/Onboarding/WelcomeScreen';
-import {ThemeColor} from '@atb/theme/colors';
 
 export type OnboardingStackParams = {
   WelcomeScreenLogin: undefined;

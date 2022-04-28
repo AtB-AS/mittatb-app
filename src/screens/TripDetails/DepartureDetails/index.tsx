@@ -1,4 +1,4 @@
-import {Expand, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
+import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
 import {Info, Warning} from '@atb/assets/svg/color/situations';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
 import MessageBox, {TinyMessageBox} from '@atb/components/message-box';
@@ -364,7 +364,7 @@ function CollapseButtonRow({
   const child = collapsed ? (
     <>
       {text}
-      <ThemeIcon svg={Expand} />
+      <ThemeIcon svg={ExpandMore} />
     </>
   ) : (
     <>
@@ -397,10 +397,10 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
 const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   header: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_3.background,
   },
   startPlace: {
     marginTop: theme.spacings.large,
@@ -421,7 +421,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.small,
   },
   allGroups: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
     marginBottom: theme.spacings.xLarge,
   },
   spinner: {

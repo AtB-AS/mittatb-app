@@ -76,6 +76,38 @@ const TicketsTexts = {
       'Activate to purchase this ticket',
     ),
   },
+  availableTickets: {
+    allTickets: _('Alle billetter', 'All products'),
+    navigateToBuy: _(
+      'Aktiver for å gå til kjøp',
+      'Activate to go to purchasing',
+    ),
+    singleTicket: {
+      title: _('Enkeltbillett', 'Single ticket'),
+      description: _(
+        'Når du skal reise av og til',
+        'When you travel occasionally',
+      ),
+      transportModes: _('Buss/trikk', 'Bus/tram'),
+    },
+    periodTicket: {
+      title: _('Periodebillett', 'Periodic ticket'),
+      description: _(
+        'Når du reiser litt oftere',
+        'When you travel more frequently',
+      ),
+      pilot_description: _('', ''),
+      transportModes: _('Buss/trikk', 'Bus/tram'),
+    },
+    summerPass: {
+      title: _('AtB SommerPass', 'Summer pass'),
+      description: _(
+        'Utforsk Trøndelag med buss, tog, hurtigbåt, ferge og trikk i sju dager. Reis så mye du vil! ',
+        'Explore Trøndelag by bus, train, tram, passenger boat or ferry, for 7 days. Travel as much as you like!',
+      ),
+      transportModes: _('Flere reisemåter', 'Several travel modes'),
+    },
+  },
   reservation: {
     processing: _(
       'Prosesseres... ikke gyldig enda',

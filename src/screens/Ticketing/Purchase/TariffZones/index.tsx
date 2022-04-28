@@ -1,5 +1,5 @@
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
-import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
+import {Location} from '@atb/assets/svg/mono-icons/places';
 import Button from '@atb/components/button';
 import {
   MapCameraConfig,
@@ -351,7 +351,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
             onPress={() => onVenueSearchClick('fromTariffZone')}
             icon={
               selectedZones.from.resultType === 'geolocation' ? (
-                <ThemeIcon svg={CurrentLocationArrow} />
+                <ThemeIcon svg={Location} />
               ) : undefined
             }
             highlighted={selectedZones.selectNext === 'from'}
@@ -376,7 +376,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
             onPress={() => onVenueSearchClick('toTariffZone')}
             icon={
               selectedZones.to.resultType === 'geolocation' ? (
-                <ThemeIcon svg={CurrentLocationArrow} />
+                <ThemeIcon svg={Location} />
               ) : undefined
             }
             highlighted={selectedZones.selectNext === 'to'}
@@ -399,7 +399,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
           >
             <Button
               onPress={onSave}
-              color="primary_2"
+              interactiveColor="interactive_0"
               text={t(TariffZonesTexts.saveButton.text)}
               accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
               testID="saveZonesButton"
@@ -435,9 +435,9 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                     // Mapbox Expression syntax
                     'case',
                     ['==', selectedZones.from.id, ['id']],
-                    hexToRgba(theme.status.valid.main.backgroundColor, 0.6),
+                    hexToRgba(theme.static.status.valid.background, 0.6),
                     ['==', selectedZones.to.id, ['id']],
-                    hexToRgba(theme.status.info.main.backgroundColor, 0.6),
+                    hexToRgba(theme.static.status.info.background, 0.6),
                     'transparent',
                   ],
                 }}
@@ -485,7 +485,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
             <View style={styles.saveButton}>
               <Button
                 onPress={onSave}
-                color="primary_2"
+                interactiveColor="interactive_0"
                 text={t(TariffZonesTexts.saveButton.text)}
                 accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
                 testID="saveZonesButton"
@@ -519,10 +519,10 @@ const mapZonesToFeatureCollection = (
 const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
   },
   headerContainer: {
-    backgroundColor: theme.colors.background_accent.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_0.background,
   },
   pinContainer: {
     position: 'absolute',

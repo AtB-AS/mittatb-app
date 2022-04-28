@@ -1,8 +1,6 @@
 import {TripPattern} from '@atb/api/types/trips';
-import {
-  Duration,
-  WalkingPerson,
-} from '@atb/assets/svg/mono-icons/transportation';
+import {Walk} from '@atb/assets/svg/mono-icons/transportation-entur';
+import {Duration} from '@atb/assets/svg/mono-icons/time/';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 
@@ -37,11 +35,7 @@ const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
         </ThemeText>
       </View>
       <View style={styles.summaryDetail}>
-        <ThemeIcon
-          colorType="secondary"
-          style={styles.leftIcon}
-          svg={WalkingPerson}
-        />
+        <ThemeIcon colorType="secondary" style={styles.leftIcon} svg={Walk} />
         <ThemeText
           color="secondary"
           accessible={true}
@@ -64,7 +58,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   summary: {
     marginVertical: theme.spacings.medium,
     borderTopWidth: theme.border.width.slim,
-    borderColor: theme.colors.background_1.backgroundColor,
+    borderColor: theme.static.background.background_1.background,
   },
   summaryDetail: {
     padding: theme.spacings.medium,

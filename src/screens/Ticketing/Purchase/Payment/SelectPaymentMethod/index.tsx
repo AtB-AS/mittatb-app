@@ -224,8 +224,8 @@ const SelectPaymentMethod: React.FC<Props> = ({
           <LinearGradient
             style={styles.gradient}
             colors={[
-              hexToRgba(theme.colors.background_2.backgroundColor, 0),
-              hexToRgba(theme.colors.background_2.backgroundColor, 1),
+              hexToRgba(theme.static.background.background_2.background, 0),
+              hexToRgba(theme.static.background.background_2.background, 1),
             ]}
             pointerEvents={'none'}
           />
@@ -233,7 +233,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
         <FullScreenFooter>
           <Button
             style={styles.confirmButton}
-            color="primary_2"
+            interactiveColor="interactive_0"
             text={t(SelectPaymentMethodTexts.confirm_button.text)}
             accessibilityHint={t(
               SelectPaymentMethodTexts.confirm_button.a11yhint,
@@ -501,7 +501,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   card: {
     marginVertical: theme.spacings.xSmall,
     borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   saveOptionSection: {
     paddingHorizontal: theme.spacings.xLarge,
@@ -509,7 +509,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
     paddingHorizontal: theme.spacings.medium,
   },
   rowJustifyEnd: {flex: 1, flexDirection: 'row', justifyContent: 'flex-end'},
@@ -528,10 +528,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   radioSelected: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_3.background,
   },
   radioBlank: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   radio: {
     marginRight: theme.spacings.medium,
@@ -539,7 +539,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     width: 24,
     borderRadius: 12,
     borderWidth: theme.border.width.medium,
-    borderColor: theme.colors.primary_2.backgroundColor,
+    borderColor: theme.static.background.background_accent_3.background,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -547,7 +547,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height: 12,
     width: 12,
     borderRadius: 6,
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   saveCheckbox: {
     marginRight: theme.spacings.medium,
@@ -555,15 +555,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     width: 24,
     borderRadius: 4,
     borderWidth: 2,
-    borderColor: theme.colors.primary_2.backgroundColor,
+    borderColor: theme.static.background.background_accent_3.background,
     alignItems: 'center',
     justifyContent: 'center',
   },
   saveCheckboxChecked: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_3.background,
   },
   saveCheckboxDefault: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   saveButton: {
     alignItems: 'center',

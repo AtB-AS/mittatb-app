@@ -12,7 +12,8 @@ import {AccessibilityProps, Linking, View} from 'react-native';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {Support, ChatUnread} from '@atb/assets/svg/mono-icons/actions';
+import {Support} from '@atb/assets/svg/mono-icons/actions';
+import {ChatUnread} from '@atb/assets/svg/color/icons/actions';
 import useChatUnreadCount from './use-chat-unread-count';
 import Intercom from 'react-native-intercom';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
@@ -52,6 +53,9 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
           body={t(ContactSheetTexts.customer_service.body)}
           buttonText={t(ContactSheetTexts.customer_service.button)}
           focusRef={focusRef}
+          icon={() => (
+            <ThemeIcon colorType="background_accent_3" svg={Support} />
+          )}
           accessibilityHint={t(ContactSheetTexts.customer_service.a11yHint)}
           onPress={() => {
             Linking.openURL(customer_service_url);
@@ -89,7 +93,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
             }}
             icon={() =>
               unreadCount ? (
-                <ThemeIcon colorType="primary_2" svg={ChatUnread} />
+                <ThemeIcon colorType="background_accent_3" svg={ChatUnread} />
               ) : (
                 <></>
               )
@@ -133,7 +137,7 @@ const ContactItem: React.FC<ContactProps> = ({
         <ThemeText>{body}</ThemeText>
       </View>
       <Button
-        color="primary_2"
+        interactiveColor="interactive_0"
         text={buttonText}
         accessibilityHint={accessibilityHint}
         onPress={onPress}

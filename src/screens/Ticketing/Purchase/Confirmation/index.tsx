@@ -1,4 +1,4 @@
-import {MasterCard, Vipps, Visa} from '@atb/assets/svg/mono-icons/ticketing';
+import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
 import {LeftButtonProps} from '@atb/components/screen-header';
@@ -88,7 +88,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
   const {user} = useAuthState();
-  const {paymentTypes} = useFirestoreConfiguration();
+  const {paymentTypes, vatPercent} = useFirestoreConfiguration();
 
   const previousPaymentMethod = usePreviousPaymentMethod(user?.uid);
 
@@ -97,8 +97,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     paymentTypes,
   );
 
-  const {enable_creditcard: enableCreditCard, vat_percent: vatPercent} =
-    useRemoteConfig();
+  const {enable_creditcard: enableCreditCard} = useRemoteConfig();
 
   const {
     fromTariffZone,
@@ -341,7 +340,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               <View style={styles.flexColumn}>
                 <Button
                   text={getPaymentOptionTexts(previousMethod)}
-                  color="primary_2"
+                  interactiveColor="interactive_0"
                   disabled={!!error || !previousMethod}
                   iconPosition="right"
                   icon={
@@ -377,7 +376,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               </View>
             ) : (
               <Button
-                color="primary_2"
+                interactiveColor="interactive_0"
                 text={t(PurchaseConfirmationTexts.choosePaymentOption.text)}
                 disabled={!!error}
                 accessibilityHint={t(
@@ -398,7 +397,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
   },
   flexColumn: {
     flex: 1,
@@ -413,11 +412,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: 24,
   },
   ticketsContainer: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
     borderTopEndRadius: theme.border.radius.regular,
     borderTopLeftRadius: theme.border.radius.regular,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.background_1.backgroundColor,
+    borderBottomColor: theme.static.background.background_1.background,
     padding: theme.spacings.medium,
     marginTop: theme.spacings.small,
   },
@@ -435,7 +434,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     padding: theme.spacings.medium,
     marginVertical: theme.spacings.medium,
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
     borderRadius: theme.border.radius.regular,
   },
   totalContainerHeadings: {
