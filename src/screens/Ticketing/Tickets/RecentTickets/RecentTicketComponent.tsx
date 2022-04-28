@@ -59,13 +59,18 @@ export const RecentTicketComponent = ({
   const toZone = toTariffZone.name.value;
   const {width} = Dimensions.get('window');
 
-  const modeNames = (modes: TransportationModeIconProperties[]) => {
+  type modeNameProps = {
+    modes: TransportationModeIconProperties[];
+    joinSymbol?: string;
+  };
+
+  const modeNames = ({modes, joinSymbol = '/'}: modeNameProps) => {
     if (!modes) return null;
     if (modes.length > 2) return t(RecentTicketsTexts.severalTransportModes);
     else
       return modes
         .map((mode) => t(RecentTicketsTexts.transportMode(mode.mode)))
-        .join('/');
+        .join(joinSymbol);
   };
 
   const returnTicketType = (preassignedFareProduct: PreassignedFareProduct) => {
@@ -93,6 +98,34 @@ export const RecentTicketComponent = ({
     }
   };
 
+  const returnAccessabilityLabel = () => {
+    const modeInfo = `${getReferenceDataName(
+      preassignedFareProduct,
+      language,
+    )}${t(RecentTicketsTexts.a11yPreLabels.transportModes)} ${modeNames({
+      modes: transportModeTexts,
+      joinSymbol: t(RecentTicketsTexts.a11yPreLabels.and),
+    })}`;
+
+    const travellerInfo = `${t(
+      RecentTicketsTexts.a11yPreLabels.travellers,
+    )}: ${userProfilesWithCount
+      .map((u) => '1' + getReferenceDataName(u, language))
+      .join(', ')}`;
+
+    const zoneInfo = `${
+      fromZone === toZone
+        ? `${t(RecentTicketsTexts.a11yPreLabels.zones.oneZone)} ${fromZone}`
+        : `${t(
+            RecentTicketsTexts.a11yPreLabels.zones.multipleZones,
+          )} ${fromZone}, ${toZone}`
+    }`;
+
+    return `${modeInfo} ${travellerInfo} ${zoneInfo}`;
+  };
+
+  const currentAccessabilityLabel = returnAccessabilityLabel();
+
   return (
     <View style={styles.container}>
       <Section>
@@ -103,6 +136,8 @@ export const RecentTicketComponent = ({
               paddingHorizontal: theme.spacings.medium,
               paddingVertical: theme.spacings.medium,
             }}
+            accessible={true}
+            accessibilityLabel={currentAccessabilityLabel}
           >
             <View style={styles.travelModeWrapper}>
               {transportModeIcons.map((icon) => (
@@ -114,7 +149,7 @@ export const RecentTicketComponent = ({
               ))}
 
               <ThemeText type="label__uppercase">
-                {modeNames(transportModeTexts)}
+                {modeNames({modes: transportModeTexts})}
               </ThemeText>
             </View>
 
@@ -139,7 +174,7 @@ export const RecentTicketComponent = ({
                           text={`${u.count} ${getReferenceDataName(
                             u,
                             language,
-                          ).toLowerCase()}`}
+                          )}`}
                           additionalStyles={{
                             marginRight: theme.spacings.xSmall,
                           }}

@@ -9,6 +9,22 @@ const RecentTicketsTexts = {
     days: _('dager', 'days'),
     hours: _('timer', 'hours'),
     moreTravelers: _('andre', 'others'),
+    loading: _('Laster tidligere kjøp', 'Loading recent purchases'),
+  },
+  a11yPreLabels: {
+    zones: {
+      oneZone: _('i sone: ', 'in zone:'),
+      multipleZones: _(
+        'mellom følgende soner:',
+        'between the following zones:',
+      ),
+    },
+    transportModes: _(
+      'vil være gyldig for transportmidlene: ',
+      'will be valid for the transport modes: ',
+    ),
+    travellers: _('for følgende reisende: ', 'for the following travellers: '),
+    and: _(' og ', ' and '),
   },
   transportMode: (mode: Mode) => {
     switch (mode) {
@@ -47,6 +63,7 @@ const RecentTicketsTexts = {
     futureDate: _('Fremtidig starttidspunkt', 'Future start time'),
   },
   primaryButton: _('Bekreft valg', 'Confirm selection'),
+  repeatPurchase: _('Gjenta kjøp', 'Repeat purchase'),
   ticketTypes: {
     carnet: _('Klippekort', 'Carnet'),
     period: _('Periodebillett', 'Period ticket'),
