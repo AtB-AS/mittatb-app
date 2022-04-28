@@ -103,34 +103,6 @@ export const Feedback = ({
   const [versionStatsList, setVersionStatsList] = useState<VersionStats[]>([]);
   const [firebaseId, setFirebaseId] = useState<string>();
 
-  useEffect(() => {
-    incrementCounterAndSetDisplayStats();
-  }, []);
-
-  useEffect(() => {
-    // Reset state whenever metadata changes, unless the data is periodically refreshed
-    if (!avoidResetOnMetadataUpdate) {
-      setSelectedAlternativeIds([]);
-      setSelectedOpinion(Opinions.NotClickedYet);
-      setSubmitted(false);
-    }
-  }, [metadata]);
-
-  const toggleSelectedAlternativeId = useCallback(
-    (alternativeId: number) => {
-      if (selectedAlternativeIds.includes(alternativeId)) {
-        setSelectedAlternativeIds(
-          selectedAlternativeIds.filter((id) => id !== alternativeId),
-        );
-      } else {
-        setSelectedAlternativeIds([...selectedAlternativeIds, alternativeId]);
-      }
-    },
-    [selectedAlternativeIds],
-  );
-
-  if (!feedbackConfig) return null;
-
   const incrementCounterAndSetDisplayStats = async () => {
     if (feedbackConfig) {
       const defaultDisplayStatObject: VersionStats = {
@@ -166,6 +138,34 @@ export const Feedback = ({
       );
     }
   };
+
+  useEffect(() => {
+    incrementCounterAndSetDisplayStats();
+  }, []);
+
+  useEffect(() => {
+    // Reset state whenever metadata changes, unless the data is periodically refreshed
+    if (!avoidResetOnMetadataUpdate) {
+      setSelectedAlternativeIds([]);
+      setSelectedOpinion(Opinions.NotClickedYet);
+      setSubmitted(false);
+    }
+  }, [metadata]);
+
+  const toggleSelectedAlternativeId = useCallback(
+    (alternativeId: number) => {
+      if (selectedAlternativeIds.includes(alternativeId)) {
+        setSelectedAlternativeIds(
+          selectedAlternativeIds.filter((id) => id !== alternativeId),
+        );
+      } else {
+        setSelectedAlternativeIds([...selectedAlternativeIds, alternativeId]);
+      }
+    },
+    [selectedAlternativeIds],
+  );
+
+  if (!feedbackConfig) return null;
 
   const filterOutOldSurveyVersionStats = (versionStatsList: VersionStats[]) => {
     const numberOfSurveyVersionsToKeep = 3;
