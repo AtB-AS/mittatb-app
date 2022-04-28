@@ -62,25 +62,12 @@ export const RecentTicketComponent = ({
   const darkMode = themeName === 'dark';
   const {width} = Dimensions.get('window');
 
-  const returnModeNames = (
-    modes: TransportationModeIconProperties[],
-    capitalized?: boolean,
-  ) => {
+  const modeNames = (modes: TransportationModeIconProperties[]) => {
     if (!modes) return null;
-    if (modes.length > 2) return t(RecentTicketsTexts.transportModes.several);
+    if (modes.length > 2) return t(RecentTicketsTexts.severalTransportModes);
     else
       return modes
-        .map((mode) =>
-          mode.mode === 'bus' ||
-          mode.mode === 'rail' ||
-          mode.mode === 'tram' ||
-          mode.mode === 'water' ||
-          mode.mode === 'air' ||
-          mode.mode === 'foot' ||
-          mode.mode === 'metro'
-            ? t(RecentTicketsTexts.transportModes[mode.mode])
-            : t(RecentTicketsTexts.transportModes['unknown']),
-        )
+        .map((mode) => t(RecentTicketsTexts.transportMode(mode.mode)))
         .join('/');
   };
 
@@ -133,7 +120,7 @@ export const RecentTicketComponent = ({
                 style={styles.upperCase}
                 color={'primary'}
               >
-                {returnModeNames(transportModeTexts)}
+                {modeNames(transportModeTexts)}
               </ThemeText>
             </View>
 
