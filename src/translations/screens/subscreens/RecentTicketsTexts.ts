@@ -24,6 +24,10 @@ const RecentTicketsTexts = {
       'Billetten vil være gyldig for følgende reisemåter: ',
       'The ticket will be valid for the following transport modes: ',
     ),
+    travellers: _(
+      'Billetten vil være gyldig for følgende reisende: ',
+      'The ticket will be valid for the following travellers: ',
+    ),
   },
   transportModes: {
     bus: _('buss', 'bus'),
