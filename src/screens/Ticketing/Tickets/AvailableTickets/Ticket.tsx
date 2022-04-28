@@ -8,6 +8,9 @@ import TransportationIcon from '@atb/components/transportation-icon';
 import ThemeText from '@atb/components/text';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
+import ThemedTicketIllustration, {
+  TicketIllustration,
+} from '@atb/components/ticket-illustration';
 
 export type TransportationModeIconProperties = {
   mode: Mode;
@@ -19,7 +22,7 @@ const Ticket = ({
   description,
   transportationModeIcons,
   transportationModeTexts,
-  icon,
+  ticketIllustration,
   accented = false,
   onPress,
 }: {
@@ -27,7 +30,7 @@ const Ticket = ({
   description: string;
   transportationModeIcons: TransportationModeIconProperties[];
   transportationModeTexts: string;
-  icon: (props: SvgProps) => JSX.Element;
+  ticketIllustration: TicketIllustration;
   accented?: boolean;
   onPress: () => void;
 }) => {
@@ -52,7 +55,11 @@ const Ticket = ({
           <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
             {transportationModeIcons.map((icon) => {
               return (
-                <TransportationIcon mode={icon.mode} subMode={icon.subMode} />
+                <TransportationIcon
+                  mode={icon.mode}
+                  subMode={icon.subMode}
+                  key={icon.mode + icon.subMode}
+                />
               );
             })}
             <ThemeText
@@ -80,7 +87,9 @@ const Ticket = ({
           </ThemeText>
         </View>
         <View style={styles.ticketIllustrationContainer}>
-          <View style={styles.ticketIllustration}>{icon({})}</View>
+          <View style={styles.ticketIllustration}>
+            <ThemedTicketIllustration name={ticketIllustration} />
+          </View>
         </View>
       </TouchableOpacity>
     </View>
