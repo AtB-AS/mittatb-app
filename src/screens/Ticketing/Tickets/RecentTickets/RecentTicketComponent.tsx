@@ -203,7 +203,7 @@ export const RecentTicketComponent = ({
                             text={`${u.count} ${getReferenceDataName(
                               u,
                               language,
-                            )}`}
+                            ).toLowerCase()}`}
                           />
                         ))}
                         <View style={styles.additionalCategories}>
