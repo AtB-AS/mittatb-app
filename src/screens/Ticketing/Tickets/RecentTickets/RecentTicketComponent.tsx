@@ -153,7 +153,7 @@ export const RecentTicketComponent = ({
               </ThemeText>
             </View>
 
-            <View style={styles.section}>
+            <View style={styles.productName}>
               <ThemeText type="body__secondary--bold">
                 {/*returnTicketType(preassignedFareProduct)*/}
                 {getReferenceDataName(preassignedFareProduct, language)}
@@ -240,8 +240,8 @@ const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
     alignItems: 'center',
     marginBottom: theme.spacings.medium,
   },
-  section: {
-    marginBottom: theme.spacings.small,
+  productName: {
+    marginBottom: theme.spacings.medium,
   },
   travellersTileWrapper: {
     display: 'flex',
