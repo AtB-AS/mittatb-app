@@ -8,6 +8,7 @@ const RecentTicketsTexts = {
     days: _('dager', 'days'),
     hours: _('timer', 'hours'),
     moreTravelers: _('andre', 'others'),
+    loading: _('Laster tidligere kjøp', 'Loading previous purchases'),
   },
   a11yPreLabels: {
     zones: {

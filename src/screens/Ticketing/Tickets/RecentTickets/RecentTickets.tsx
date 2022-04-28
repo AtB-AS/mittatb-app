@@ -14,6 +14,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {TicketingStackParams} from '../../Purchase';
 import ThemeText from '@atb/components/text';
 import {TicketsTexts, useTranslation} from '@atb/translations';
+import RecentTicketsTexts from '@atb/translations/screens/subscreens/RecentTicketsTexts';
 
 type NavigationProp = CompositeNavigationProp<
   StackNavigationProp<TicketingStackParams>,
@@ -83,6 +84,8 @@ export const RecentTickets = () => {
           style={{
             paddingVertical: theme.spacings.xLarge,
           }}
+          accessible={true}
+          accessibilityLabel={t(RecentTicketsTexts.titles.loading)}
         >
           <ThemeText
             type="body__primary"
