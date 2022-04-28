@@ -61,7 +61,6 @@ export const RecentTicketComponent = ({
   const {topContainer} = useSectionItem({type: 'inline'});
   const {width} = Dimensions.get('window');
 
-
   const modeNames = (modes: TransportationModeIconProperties[]) => {
     if (!modes) return null;
     if (modes.length > 2) return t(RecentTicketsTexts.severalTransportModes);
@@ -115,8 +114,7 @@ export const RecentTicketComponent = ({
                   key={icon.mode + icon.subMode}
                 />
               ))}
-              
-              
+
               <ThemeText type="label__uppercase">
                 {modeNames(transportModeTexts)}
               </ThemeText>
