@@ -135,7 +135,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
             />
           )}
           <Button
-            color="secondary_1"
+            interactiveColor="interactive_1"
             onPress={() => navigateBackFromTerminal()}
             text={t(PaymentCreditCardTexts.buttons.goBack)}
           />
@@ -177,7 +177,7 @@ const translateError = (
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
   },
   center: {flex: 1, justifyContent: 'center', padding: theme.spacings.medium},
   messageBox: {marginBottom: theme.spacings.small},

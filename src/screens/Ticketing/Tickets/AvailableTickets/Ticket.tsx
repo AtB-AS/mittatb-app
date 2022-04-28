@@ -8,6 +8,10 @@ import TransportationIcon from '@atb/components/transportation-icon';
 import ThemeText from '@atb/components/text';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
+import ThemedTicketIllustration, {
+  TicketIllustration,
+} from '@atb/components/ticket-illustration';
+import {TicketsTexts, TicketTexts, useTranslation} from '@atb/translations';
 
 export type TransportationModeIconProperties = {
   mode: Mode;
@@ -19,7 +23,7 @@ const Ticket = ({
   description,
   transportationModeIcons,
   transportationModeTexts,
-  icon,
+  ticketIllustration,
   accented = false,
   onPress,
 }: {
@@ -27,14 +31,18 @@ const Ticket = ({
   description: string;
   transportationModeIcons: TransportationModeIconProperties[];
   transportationModeTexts: string;
-  icon: (props: SvgProps) => JSX.Element;
+  ticketIllustration: TicketIllustration;
   accented?: boolean;
   onPress: () => void;
 }) => {
   const styles = useStyles();
+  const {t} = useTranslation();
   const ticketTheme = accented ? styles.ticket_accented : styles.ticket_normal;
-  const textColor = accented ? 'primary_2' : 'primary';
-  const accessibilityLabel = [title, description, transportationModeTexts].join(
+
+  // @TODO: Update to support new design system
+  // const textColor = accented ? 'primary_2' : 'primary';
+  const textColor = 'primary';
+  const accessibilityLabel = [title, transportationModeTexts, description].join(
     '. ',
   );
 
@@ -44,19 +52,20 @@ const Ticket = ({
         onPress={onPress}
         accessible={true}
         accessibilityLabel={accessibilityLabel}
+        accessibilityHint={t(TicketsTexts.availableTickets.navigateToBuy)}
       >
         <View style={{flexShrink: 1}}>
           <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
             {transportationModeIcons.map((icon) => {
               return (
-                <TransportationIcon mode={icon.mode} subMode={icon.subMode} />
+                <TransportationIcon
+                  mode={icon.mode}
+                  subMode={icon.subMode}
+                  key={icon.mode + icon.subMode}
+                />
               );
             })}
-            <ThemeText
-              type="body__tertiary"
-              style={styles.transportation_label}
-              color={textColor}
-            >
+            <ThemeText type="label__uppercase">
               {transportationModeTexts}
             </ThemeText>
           </View>
@@ -77,7 +86,9 @@ const Ticket = ({
           </ThemeText>
         </View>
         <View style={styles.ticketIllustrationContainer}>
-          <View style={styles.ticketIllustration}>{icon({})}</View>
+          <View style={styles.ticketIllustration}>
+            <ThemedTicketIllustration name={ticketIllustration} />
+          </View>
         </View>
       </TouchableOpacity>
     </View>
@@ -95,11 +106,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 
   ticket_normal: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   ticket_accented: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
-    textColor: theme.colors.primary_2.color,
+    backgroundColor: theme.static.background.background_accent_3.background,
+    textColor: theme.static.background.background_accent_3.text,
   },
 
   ticketIllustrationContainer: {
@@ -110,12 +121,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   ticketIllustration: {
     alignSelf: 'flex-end',
     opacity: 0.6,
-  },
-  label_uppercase: {
-    // TODO: this will be part of design system
-  },
-  transportation_label: {
-    textTransform: 'uppercase',
   },
   ticket_name: {
     marginBottom: theme.spacings.small,

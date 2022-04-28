@@ -160,7 +160,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
           <Button
             onPress={onSave}
             text={t(TravelTokenTexts.toggleToken.saveButton)}
-            color="primary_2"
+            interactiveColor="interactive_0"
             disabled={!selectedToken}
           />
         )}
@@ -171,7 +171,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.colors.background_accent.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_0.background,
     flex: 1,
   },
   scrollView: {

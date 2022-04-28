@@ -7,7 +7,7 @@ import React from 'react';
 import {AccessibilityProps, TouchableOpacity} from 'react-native';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColor, TextColor} from '@atb/theme/colors';
 import ServiceDisruption from '@atb/assets/svg/mono-icons/status/ServiceDisruption';
 
 export type ButtonModes =
@@ -21,7 +21,7 @@ export type ButtonModes =
 export type HeaderButtonProps = {
   type: ButtonModes;
   onPress?: () => void;
-  color?: ThemeColor;
+  color?: StaticColor | TextColor;
   text?: string;
   testID?: string;
 } & AccessibilityProps;
@@ -42,7 +42,7 @@ const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
 export type HeaderButtonWithoutNavigationProps = {
   text: string;
   onPress: () => void;
-  color?: ThemeColor;
+  color?: StaticColor | TextColor;
   testID?: string;
 } & AccessibilityProps;
 

@@ -260,7 +260,7 @@ function DepartureTimeItem({
     <Button
       key={departure.serviceJourneyId}
       type="compact"
-      color="secondary_4"
+      interactiveColor="interactive_2"
       onPress={() => onPress(departure)}
       text={formatTimeText(departure, searchDate, language, t)}
       style={styles.departure}
@@ -327,7 +327,7 @@ const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
     paddingLeft: theme.spacings.medium,
   },
   departure: {
-    backgroundColor: theme.content.subtle_primary.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     borderWidth: 0,
     marginRight: theme.spacings.small,
   },

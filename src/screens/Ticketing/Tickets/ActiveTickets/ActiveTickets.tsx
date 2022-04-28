@@ -59,7 +59,7 @@ export const ActiveTickets = () => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
   },
   buyPeriodTicketButton: {
     marginTop: theme.spacings.medium,

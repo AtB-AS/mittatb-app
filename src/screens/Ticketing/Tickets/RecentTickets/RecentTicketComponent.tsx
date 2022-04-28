@@ -35,7 +35,7 @@ export const FloatingLabel = ({
           : styles.blueLabel
       }
     >
-      <ThemeText>{text}</ThemeText>
+      <ThemeText color="background_accent_2">{text}</ThemeText>
     </View>
   );
 };
@@ -226,8 +226,8 @@ export const RecentTicketComponent = ({
       </Section>
 
       <LinkItem
-        backgroundColor={theme.colors.primary_2.backgroundColor}
-        contentColor={theme.colors.primary_2.color}
+        backgroundColor={theme.static.background.background_accent_3.background}
+        contentColor={theme.static.background.background_accent_3.text}
         text={t(RecentTicketsTexts.repeatPurchase)}
         onPress={() => selectTicket(ticketData)}
         overrideContainerStyles={{
@@ -273,10 +273,7 @@ const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
     alignSelf: 'flex-start',
     paddingHorizontal: theme.spacings.medium,
     paddingVertical: theme.spacings.xSmall,
-    backgroundColor:
-      themeName === 'dark'
-        ? theme.colors.secondary_3.backgroundColor
-        : theme.colors.primary_3.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_2.background,
     borderRadius: theme.border.radius.regular,
   },
   additionalCategories: {

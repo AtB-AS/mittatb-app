@@ -67,7 +67,7 @@ export const AvailableTickets = ({
                 description={t(
                   TicketsTexts.availableTickets.singleTicket.description,
                 )}
-                icon={TicketIcons.Single}
+                ticketIllustration="Single"
                 onPress={onBuySingleTicket}
               />
             )}
@@ -83,7 +83,7 @@ export const AvailableTickets = ({
                 description={t(
                   TicketsTexts.availableTickets.periodTicket.description,
                 )}
-                icon={TicketIcons.Period}
+                ticketIllustration="Period"
                 onPress={onBuyPeriodTicket}
               />
             )}
@@ -103,7 +103,7 @@ export const AvailableTickets = ({
                 description={t(
                   TicketsTexts.availableTickets.summerPass.description,
                 )}
-                icon={TicketIcons.Summer}
+                ticketIllustration="Summer"
                 accented={true}
                 onPress={onBuyPeriodTicket}
               />
@@ -118,7 +118,7 @@ export const AvailableTickets = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
   },
 
   ticketsContainer: {

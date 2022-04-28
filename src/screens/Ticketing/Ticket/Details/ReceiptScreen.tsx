@@ -100,7 +100,7 @@ export default function ReceiptScreen({navigation, route}: Props) {
           text={t(TicketTexts.receipt.sendButton)}
           onPress={onSend}
           disabled={state === 'loading'}
-          color="primary_2"
+          interactiveColor="interactive_0"
         />
       </View>
     </View>
@@ -145,7 +145,7 @@ function translateStateToMessage(
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
   },
   content: {
     padding: theme.spacings.medium,

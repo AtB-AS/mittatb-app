@@ -99,7 +99,7 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
 
         <Button
           onPress={onSelect}
-          color="primary_2"
+          interactiveColor="interactive_0"
           text={t(JourneyDatePickerTexts.searchButton.text)}
           testID="searchButton"
         ></Button>
@@ -111,7 +111,7 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
   },
   contentContainer: {
     padding: theme.spacings.medium,

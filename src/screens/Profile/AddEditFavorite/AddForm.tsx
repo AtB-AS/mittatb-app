@@ -229,7 +229,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           {editItem && (
             <Button
               onPress={deleteItem}
-              mode="destructive"
+              interactiveColor="interactive_destructive"
               icon={SvgDelete}
               iconPosition="right"
               text={t(AddEditFavoriteTexts.delete.label)}
@@ -237,7 +237,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
             />
           )}
           <Button
-            color="primary_2"
+            interactiveColor="interactive_0"
             onPress={save}
             icon={SvgConfirm}
             iconPosition="right"
@@ -252,7 +252,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
 const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_3.backgroundColor,
+    backgroundColor: theme.static.background.background_3.background,
   },
   innerContainer: {
     flex: 1,

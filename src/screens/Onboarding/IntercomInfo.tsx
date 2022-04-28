@@ -11,9 +11,9 @@ import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding
 import Illustration from '@atb/screens/Onboarding/components/Illustration';
 import {Onboarding2} from '@atb/assets/svg/color/images';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
 
-const themeColor: ThemeColor = 'primary_2';
+const themeColor: StaticColorByType<'background'> = 'background_accent_3';
 
 export default function IntercomInfo() {
   const {t} = useTranslation();
@@ -42,7 +42,7 @@ export default function IntercomInfo() {
       <View style={styles.bottomView}>
         <FullScreenFooter>
           <Button
-            color={'secondary_1'}
+            interactiveColor="interactive_1"
             onPress={finishOnboarding}
             text={t(OnboardingTexts.intercom.mainButton)}
             icon={Confirm}
@@ -57,7 +57,7 @@ export default function IntercomInfo() {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
     flex: 1,
     justifyContent: 'flex-end',
   },

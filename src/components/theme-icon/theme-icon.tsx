@@ -1,19 +1,21 @@
 import {useTheme} from '@atb/theme';
 import {
-  isThemeColor,
-  Statuses,
   TextColor,
   Theme,
-  ThemeColor,
+  Mode,
+  StaticColor,
+  isStaticColor,
+  flatStaticColors,
+  isStatusColor,
 } from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 import useFontScale from '@atb/utils/use-font-scale';
 
-type ColorType = TextColor | Statuses | ThemeColor;
+type IconColor = StaticColor | TextColor;
 
 type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
-  colorType?: ColorType;
+  colorType?: IconColor;
   size?: keyof Theme['icon']['size'];
 } & SvgProps;
 
@@ -23,9 +25,9 @@ const ThemeIcon = ({
   size = 'normal',
   ...props
 }: ThemeIconProps): JSX.Element => {
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
 
-  const fill = getFill(theme, colorType);
+  const fill = getFill(theme, themeName, colorType);
 
   const fontScale = useFontScale();
   const iconSize = theme.icon.size[size] * fontScale;
@@ -40,16 +42,12 @@ const ThemeIcon = ({
 };
 export default ThemeIcon;
 
-function getFill(theme: Theme, colorType?: ColorType): string {
-  if (isThemeColor(theme, colorType)) {
-    return theme.colors[colorType].color;
-  } else if (isStatuses(colorType, theme)) {
-    return theme.status[colorType].main.backgroundColor;
+function getFill(theme: Theme, themeType: Mode, colorType?: IconColor): string {
+  if (isStatusColor(colorType)) {
+    return theme.static.status[colorType].background;
+  } else if (isStaticColor(colorType)) {
+    return flatStaticColors[themeType][colorType].text;
   } else {
     return theme.text.colors[colorType ?? 'primary'];
   }
-}
-
-function isStatuses(a: any, theme: Theme): a is Statuses {
-  return a in theme.status;
 }

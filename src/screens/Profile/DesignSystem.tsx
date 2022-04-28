@@ -8,7 +8,7 @@ import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import MessageBox from '@atb/components/message-box';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {textNames, TextNames, ThemeColor} from '@atb/theme/colors';
+import {InteractiveColor, textNames, TextNames} from '@atb/theme/colors';
 import React from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -19,16 +19,20 @@ export default function DesignSystem() {
   const style = useProfileHomeStyle();
   const {theme} = useTheme();
 
-  const buttons = Object.keys(theme.colors).map((themeName) => (
+  const buttons = Object.keys(theme.interactive).map((color) => (
     <Button
-      key={themeName}
-      text={themeName}
+      key={color}
+      text={color}
       onPress={() =>
-        Alert.alert(theme.colors[themeName as ThemeColor].backgroundColor)
+        Alert.alert(
+          theme.interactive[color as InteractiveColor].default.background,
+        )
       }
-      color={themeName as ThemeColor}
+      interactiveColor={color as InteractiveColor}
     />
   ));
+
+  // @TODO: add display of static colors
 
   return (
     <View style={style.container}>
@@ -115,25 +119,12 @@ export default function DesignSystem() {
 
         <View style={style.buttons}>
           <ButtonGroup>
-            <Button text="Press me" onPress={presser} mode="primary" />
+            <Button text="primary" onPress={presser} mode="primary" />
+            <Button text="secondary" onPress={presser} mode="secondary" />
+            <Button text="tertiary" onPress={presser} mode="tertiary" />
             <Button
               text="Press me"
               onPress={presser}
-              mode="primary"
-              color="secondary_1"
-            />
-            <Button text="Press me" onPress={presser} mode="secondary" />
-            <Button text="Press me" onPress={presser} mode="destructive" />
-            <Button
-              text="Press me"
-              onPress={presser}
-              mode="destructive"
-              icon={Delete}
-            />
-            <Button
-              text="Press me"
-              onPress={presser}
-              mode="destructive"
               icon={Delete}
               iconPosition="right"
             />
@@ -256,7 +247,7 @@ function presser() {
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
   icons: {

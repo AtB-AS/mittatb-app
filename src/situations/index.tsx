@@ -26,7 +26,7 @@ export default function SituationMessages({
   return (
     <MessageBox type="warning" icon={icon} containerStyle={containerStyle}>
       {Object.entries(uniqueSituations).map(([id, situation]) => (
-        <ThemeText key={id} style={{color: theme.status.warning.main.color}}>
+        <ThemeText key={id} style={{color: theme.static.status.warning.text}}>
           {situation}
         </ThemeText>
       ))}

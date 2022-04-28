@@ -83,7 +83,7 @@ function getUsedAccessValidityText(
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   iconContainer: {marginRight: theme.spacings.medium},
   ticketContainer: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
     borderRadius: theme.border.radius.regular,
     marginBottom: theme.spacings.medium,
   },
