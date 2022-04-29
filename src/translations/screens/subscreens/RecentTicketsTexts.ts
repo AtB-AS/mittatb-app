@@ -8,7 +8,7 @@ const RecentTicketsTexts = {
     duration: _('Gyldighet', 'Validity'),
     days: _('dager', 'days'),
     hours: _('timer', 'hours'),
-    moreTravelers: _('andre', 'others'),
+    moreTravelers: _('andre kategorier', 'other categories'),
     loading: _('Laster tidligere kjøp', 'Loading recent purchases'),
   },
   a11yPreLabels: {
