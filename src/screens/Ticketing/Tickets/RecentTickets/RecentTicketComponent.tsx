@@ -76,31 +76,6 @@ export const RecentTicketComponent = ({
         .join(joinSymbol);
   };
 
-  const returnTicketType = (preassignedFareProduct: PreassignedFareProduct) => {
-    return t(RecentTicketsTexts.ticketTypes[preassignedFareProduct.type]);
-  };
-
-  const returnDuration = (preassignedFareProduct: PreassignedFareProduct) => {
-    const {durationDays, type} = preassignedFareProduct;
-
-    if (type === 'period') {
-      let textString = ``;
-      if (durationDays === 1)
-        textString = `24 ${t(RecentTicketsTexts.titles.hours)}`;
-      else {
-        textString = `${durationDays} ${t(RecentTicketsTexts.titles.days)}`;
-      }
-      return (
-        <View>
-          <ThemeText type="label__uppercase">
-            {t(RecentTicketsTexts.titles.duration)}
-          </ThemeText>
-          <FloatingLabel text={textString} />
-        </View>
-      );
-    }
-  };
-
   const returnAccessabilityLabel = () => {
     const modeInfo = `${getReferenceDataName(
       preassignedFareProduct,
@@ -155,13 +130,11 @@ export const RecentTicketComponent = ({
 
         <View style={styles.productName}>
           <ThemeText type="body__secondary--bold">
-            {/*returnTicketType(preassignedFareProduct)*/}
             {getReferenceDataName(preassignedFareProduct, language)}
           </ThemeText>
         </View>
 
         <View style={styles.horizontalFlex}>
-          {/*returnDuration(preassignedFareProduct)*/}
           <View>
             <View>
               <ThemeText type="label__uppercase" color="secondary">

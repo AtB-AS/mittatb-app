@@ -38,7 +38,7 @@ export const RecentTickets = () => {
     });
   };
 
-  const returnRecentTickets = (recentTicketsArray: RecentTicket[]) =>
+  const filterRecentTickets = (recentTicketsArray: RecentTicket[]) =>
     recentTicketsArray
       .filter((recentTicket) => {
         const ticketType = recentTicket.preassignedFareProduct.type;
@@ -52,28 +52,10 @@ export const RecentTickets = () => {
       })
       .filter((recentTicket) =>
         productIsSellableInApp(recentTicket.preassignedFareProduct),
-      )
-      .map((ticket, index) => (
-        <RecentTicketComponent
-          key={ticket.preassignedFareProduct.id + index}
-          ticketData={ticket}
-          transportModeTexts={[
-            {
-              mode: Mode.Bus,
-            },
-            {
-              mode: Mode.Tram,
-            },
-          ]}
-          transportModeIcons={[
-            {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
-          ]}
-          selectTicket={selectTicket}
-        />
-      ));
+      );
 
   const memoizedRecentTickets = useMemo(
-    () => returnRecentTickets(recentTickets),
+    () => filterRecentTickets(recentTickets),
     [recentTickets],
   );
 
@@ -110,7 +92,33 @@ export const RecentTickets = () => {
           }}
           style={styles.horizontalScrollView}
         >
-          {memoizedRecentTickets}
+          {memoizedRecentTickets.map((ticket) => {
+            const componentKey =
+              ticket.preassignedFareProduct.id +
+              ticket.userProfilesWithCount
+                .map((traveller) => {
+                  return traveller.count + traveller.userTypeString;
+                })
+                .join();
+            return (
+              <RecentTicketComponent
+                key={componentKey}
+                ticketData={ticket}
+                transportModeTexts={[
+                  {
+                    mode: Mode.Bus,
+                  },
+                  {
+                    mode: Mode.Tram,
+                  },
+                ]}
+                transportModeIcons={[
+                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+                ]}
+                selectTicket={selectTicket}
+              />
+            );
+          })}
         </ScrollView>
       )}
     </View>
