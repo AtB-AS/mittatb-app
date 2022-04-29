@@ -159,7 +159,7 @@ export const RecentTicketComponent = ({
                       />
                     ))}
                     <View style={styles.additionalCategories}>
-                      <ThemeText>
+                      <ThemeText type="body__tertiary">
                         + {userProfilesWithCount.slice(1).length}{' '}
                         {t(RecentTicketsTexts.titles.moreTravelers)}
                       </ThemeText>
@@ -235,7 +235,7 @@ const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   },
   additionalCategories: {
     marginHorizontal: theme.spacings.small,
-    marginVertical: theme.spacings.small,
+    marginVertical: theme.spacings.xSmall,
   },
   buyButton: {
     flexDirection: 'row',
