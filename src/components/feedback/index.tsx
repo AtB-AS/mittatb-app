@@ -349,7 +349,8 @@ export const Feedback = ({
               style={styles.submitButtonView}
               onPress={setDoNotShowAgain}
               text={t(FeedbackTexts.goodOrBadTexts.doNotShowAgain)}
-              mode={'tertiary'}
+              mode="tertiary"
+              interactiveColor="interactive_2"
             />
           )}
       </View>
