@@ -52,8 +52,9 @@ const Ticket = ({
         accessible={true}
         accessibilityLabel={accessibilityLabel}
         accessibilityHint={t(TicketsTexts.availableTickets.navigateToBuy)}
+        style={styles.spreadContent}
       >
-        <View style={{flexShrink: 1}}>
+        <View style={styles.contentContainer}>
           <View style={styles.ticketIconContainer}>
             {transportationModeIcons.map((icon) => {
               return (
@@ -90,9 +91,7 @@ const Ticket = ({
           </ThemeText>
         </View>
         <View style={styles.ticketIllustrationContainer}>
-          <View style={styles.ticketIllustration}>
-            <ThemedTicketIllustration name={ticketIllustration} />
-          </View>
+          <ThemedTicketIllustration name={ticketIllustration} />
         </View>
       </TouchableOpacity>
     </View>
@@ -108,19 +107,21 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.xLarge,
     borderRadius: theme.border.radius.regular,
   },
+  contentContainer: {
+    flexShrink: 1,
+  },
   ticketIconContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
+  spreadContent: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
   label: {marginLeft: theme.spacings.xSmall},
   ticketIllustrationContainer: {
-    flexGrow: 1,
-    flexDirection: 'row',
     marginTop: theme.spacings.small,
-  },
-  ticketIllustration: {
-    alignSelf: 'flex-end',
   },
   ticket_name: {
     marginBottom: theme.spacings.small,
