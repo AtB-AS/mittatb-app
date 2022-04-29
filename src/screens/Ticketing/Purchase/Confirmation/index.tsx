@@ -409,7 +409,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
   },
   buttonTopSpacing: {
-    marginTop: 24,
+    marginTop: theme.spacings.xLarge,
   },
   ticketsContainer: {
     backgroundColor: theme.static.background.background_0.background,

@@ -55,7 +55,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   };
 
   return isSignedInAsAbtCustomer ? (
-    <ScrollView>
+    <ScrollView contentContainerStyle={{flex: 1}}>
       {enable_recent_tickets && <RecentTickets />}
       <AvailableTickets
         onBuySingleTicket={onBuySingleTicket}

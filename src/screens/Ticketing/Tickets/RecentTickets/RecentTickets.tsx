@@ -26,7 +26,7 @@ export const RecentTickets = () => {
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const {recentTickets, loading, refresh} = useRecentTickets();
+  const {recentTickets, loading} = useRecentTickets();
 
   const selectTicket = (ticket: RecentTicket) => {
     navigation.navigate('TicketPurchase', {
@@ -94,12 +94,12 @@ export const RecentTickets = () => {
             {t(TicketsTexts.recentTickets.loading)}
           </ThemeText>
           <ActivityIndicator
-            color={theme.static.background.background_accent_3.text}
+            color={theme.static.background.background_0.text}
           />
         </View>
       )}
 
-      {!loading && recentTickets && (
+      {!loading && !!recentTickets.length && (
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
