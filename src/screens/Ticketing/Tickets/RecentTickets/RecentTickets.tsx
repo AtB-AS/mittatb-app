@@ -60,7 +60,9 @@ export const RecentTickets = () => {
   );
 
   return (
-    <View>
+    <View
+      style={{backgroundColor: theme.static.background.background_1.background}}
+    >
       {loading && (
         <View
           style={{
