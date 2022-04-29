@@ -88,7 +88,7 @@ export const RecentTicketComponent = ({
     const travellerInfo = `${t(
       RecentTicketsTexts.a11yPreLabels.travellers,
     )}: ${userProfilesWithCount
-      .map((u) => '1' + getReferenceDataName(u, language))
+      .map((u) => u.count + ' ' + getReferenceDataName(u, language))
       .join(', ')}`;
 
     const zoneInfo = `${
