@@ -113,6 +113,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
     margin: theme.spacings.medium,
     marginLeft: theme.spacings.xLarge,
+    marginTop: theme.spacings.xLarge,
   },
   ticketsContainer: {
     flex: 1,
