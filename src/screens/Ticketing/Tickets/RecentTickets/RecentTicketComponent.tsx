@@ -88,6 +88,7 @@ export const RecentTicketComponent = ({
       else {
         textString = `${durationDays} ${t(RecentTicketsTexts.titles.days)}`;
       }
+
       return (
         <View>
           <ThemeText type="label__uppercase">
