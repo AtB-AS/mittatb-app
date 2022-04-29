@@ -108,11 +108,10 @@ export const RecentTicketComponent = ({
   const buttonColor = theme.interactive.interactive_0.default;
 
   return (
-    <View
+    <TouchableOpacity
       style={styles.container}
       accessible={true}
-      accessibilityRole="button"
-      onAccessibilityAction={() => selectTicket(ticketData)}
+      onPress={() => selectTicket(ticketData)}
       accessibilityLabel={currentAccessabilityLabel}
       accessibilityHint={t(RecentTicketsTexts.repeatPurchase.a11yHint)}
     >
@@ -185,16 +184,15 @@ export const RecentTicketComponent = ({
           </View>
         </View>
       </View>
-      <TouchableOpacity
-        onPress={() => selectTicket(ticketData)}
+      <View
         style={[styles.buyButton, {backgroundColor: buttonColor.background}]}
       >
         <ThemeText color={buttonColor}>
           {t(RecentTicketsTexts.repeatPurchase.label)}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} fill={buttonColor.text} />
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 };
 
