@@ -99,7 +99,7 @@ export const RecentTicketComponent = ({
     }`;
 
     return `${t(
-      RecentTicketsTexts.repeatPurchase,
+      RecentTicketsTexts.repeatPurchase.label,
     )} ${modeInfo} ${travellerInfo} ${zoneInfo}`;
   };
 
@@ -114,6 +114,7 @@ export const RecentTicketComponent = ({
       accessibilityRole="button"
       onAccessibilityAction={() => selectTicket(ticketData)}
       accessibilityLabel={currentAccessabilityLabel}
+      accessibilityHint={t(RecentTicketsTexts.repeatPurchase.a11yHint)}
     >
       <View style={[styles.upperPart, {minWidth: width * 0.6}]}>
         <View style={styles.travelModeWrapper}>
@@ -189,7 +190,7 @@ export const RecentTicketComponent = ({
         style={[styles.buyButton, {backgroundColor: buttonColor.background}]}
       >
         <ThemeText color={buttonColor}>
-          {t(RecentTicketsTexts.repeatPurchase)}
+          {t(RecentTicketsTexts.repeatPurchase.label)}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} fill={buttonColor.text} />
       </TouchableOpacity>
