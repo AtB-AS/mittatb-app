@@ -35,7 +35,9 @@ export const FloatingLabel = ({
           : styles.blueLabel
       }
     >
-      <ThemeText color="background_accent_2">{text}</ThemeText>
+      <ThemeText color="background_accent_2" type={'body__tertiary'}>
+        {text}
+      </ThemeText>
     </View>
   );
 };
