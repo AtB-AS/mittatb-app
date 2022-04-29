@@ -211,7 +211,9 @@ export const RecentTicketComponent = ({
         style={[styles.buyButton, {backgroundColor: buttonColor.background}]}
         accessible={true}
       >
-        <ThemeText color={buttonColor}>{'Gjenta kjøp'}</ThemeText>
+        <ThemeText color={buttonColor}>
+          {t(RecentTicketsTexts.repeatPurchase)}
+        </ThemeText>
         <ThemeIcon svg={ArrowRight} fill={buttonColor.text} />
       </TouchableOpacity>
     </View>
