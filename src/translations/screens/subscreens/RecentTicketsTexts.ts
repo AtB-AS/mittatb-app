@@ -63,7 +63,10 @@ const RecentTicketsTexts = {
     futureDate: _('Fremtidig starttidspunkt', 'Future start time'),
   },
   primaryButton: _('Bekreft valg', 'Confirm selection'),
-  repeatPurchase: _('Gjenta kjøp', 'Repeat purchase'),
+  repeatPurchase: {
+    label: _('Gjenta kjøp', 'Repeat purchase'),
+    a11yHint: _('Aktivér for å gjenta kjøp', 'Activate to repeat purchase'),
+  },
   ticketTypes: {
     carnet: _('Klippekort', 'Carnet'),
     period: _('Periodebillett', 'Period ticket'),

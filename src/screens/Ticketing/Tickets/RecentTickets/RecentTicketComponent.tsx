@@ -6,7 +6,6 @@ import {RecentTicket} from '../use-recent-tickets';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Dimensions, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {TransportationModeIconProperties} from '../AvailableTickets/Ticket';
 import ThemeIcon from '@atb/components/theme-icon';
@@ -99,7 +98,9 @@ export const RecentTicketComponent = ({
           )} ${fromZone}, ${toZone}`
     }`;
 
-    return `${modeInfo} ${travellerInfo} ${zoneInfo}`;
+    return `${t(
+      RecentTicketsTexts.repeatPurchase.label,
+    )} ${modeInfo} ${travellerInfo} ${zoneInfo}`;
   };
 
   const currentAccessabilityLabel = returnAccessabilityLabel();
@@ -107,12 +108,15 @@ export const RecentTicketComponent = ({
   const buttonColor = theme.interactive.interactive_0.default;
 
   return (
-    <View style={styles.container}>
-      <View
-        style={[styles.upperPart, {minWidth: width * 0.6}]}
-        accessible={true}
-        accessibilityLabel={currentAccessabilityLabel}
-      >
+    <View
+      style={styles.container}
+      accessible={true}
+      accessibilityRole="button"
+      onAccessibilityAction={() => selectTicket(ticketData)}
+      accessibilityLabel={currentAccessabilityLabel}
+      accessibilityHint={t(RecentTicketsTexts.repeatPurchase.a11yHint)}
+    >
+      <View style={[styles.upperPart, {minWidth: width * 0.6}]}>
         <View style={styles.travelModeWrapper}>
           {transportModeIcons.map((icon) => (
             <TransportationIcon
@@ -184,10 +188,9 @@ export const RecentTicketComponent = ({
       <TouchableOpacity
         onPress={() => selectTicket(ticketData)}
         style={[styles.buyButton, {backgroundColor: buttonColor.background}]}
-        accessible={true}
       >
         <ThemeText color={buttonColor}>
-          {t(RecentTicketsTexts.repeatPurchase)}
+          {t(RecentTicketsTexts.repeatPurchase.label)}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} fill={buttonColor.text} />
       </TouchableOpacity>
