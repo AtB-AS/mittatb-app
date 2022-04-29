@@ -8,6 +8,7 @@ import UpgradeSplash from './UpgradeSplash';
 import {useAppState} from '@atb/AppContext';
 import {AvailableTickets} from '@atb/screens/Ticketing/Tickets/AvailableTickets/AvailableTickets';
 import {RecentTickets} from './RecentTickets/RecentTickets';
+import {useTheme} from '@atb/theme';
 
 export type TicketingScreenNavigationProp =
   StackNavigationProp<RootStackParamList>;
@@ -21,6 +22,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const appContext = useAppState();
   const {abtCustomerId, authenticationType} = useAuthState();
   const isSignedInAsAbtCustomer = !!abtCustomerId;
+  const {theme} = useTheme();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -55,7 +57,9 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   };
 
   return isSignedInAsAbtCustomer ? (
-    <ScrollView contentContainerStyle={{flex: 1}}>
+    <ScrollView
+      style={{backgroundColor: theme.static.background.background_2.background}}
+    >
       {enable_recent_tickets && <RecentTickets />}
       <AvailableTickets
         onBuySingleTicket={onBuySingleTicket}
