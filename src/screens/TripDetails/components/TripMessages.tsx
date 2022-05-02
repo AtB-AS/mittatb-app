@@ -35,6 +35,8 @@ const TripMessages: React.FC<TripMessagesProps> = ({
   const canUseCollabTicket = someLegsAreByTrain(tripPattern);
   const shortWaitTime = hasShortWaitTime(tripPattern.legs);
   const {enable_ticketing} = useRemoteConfig();
+  const isTicketingEnabledAndSomeTicketsAreUnavailableInApp =
+    enable_ticketing && someTicketsAreUnavailableInApp;
 
   return (
     <>
@@ -45,7 +47,7 @@ const TripMessages: React.FC<TripMessagesProps> = ({
           message={t(TripDetailsTexts.messages.shortTime)}
         />
       )}
-      {enable_ticketing && someTicketsAreUnavailableInApp && (
+      {isTicketingEnabledAndSomeTicketsAreUnavailableInApp && (
         <MessageBox
           containerStyle={messageStyle}
           type="warning"
