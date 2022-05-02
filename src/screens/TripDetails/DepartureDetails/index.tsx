@@ -67,6 +67,7 @@ export default function DepartureDetails({navigation, route}: Props) {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useTheme();
   const {modesWeSellTicketsFor} = useFirestoreConfiguration();
+  const {enable_ticketing} = useRemoteConfig();
 
   const activeItem: ServiceJourneyDeparture | undefined =
     items[activeItemIndexState];
@@ -149,7 +150,7 @@ export default function DepartureDetails({navigation, route}: Props) {
             </View>
           )}
 
-          {!canSellTicketsForDeparture && (
+          {enable_ticketing && !canSellTicketsForDeparture && (
             <MessageBox
               containerStyle={styles.ticketMessage}
               type="warning"
