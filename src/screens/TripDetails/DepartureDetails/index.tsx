@@ -89,6 +89,8 @@ export default function DepartureDetails({navigation, route}: Props) {
   );
 
   const someLegsAreByTrain = mode === TransportMode.RAIL;
+  const isTicketingEnabledAndWeCantSellTicketForDeparture =
+    enable_ticketing && !canSellTicketsForDeparture;
 
   const onPaginactionPress = (newPage: number) => {
     animateNextChange();
@@ -150,7 +152,7 @@ export default function DepartureDetails({navigation, route}: Props) {
             </View>
           )}
 
-          {enable_ticketing && !canSellTicketsForDeparture && (
+          {isTicketingEnabledAndWeCantSellTicketForDeparture && (
             <MessageBox
               containerStyle={styles.ticketMessage}
               type="warning"
