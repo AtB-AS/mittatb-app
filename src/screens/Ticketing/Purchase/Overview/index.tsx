@@ -1,5 +1,4 @@
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
-import Button from '@atb/components/button';
 import * as Sections from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
 import {useGeolocationState} from '@atb/GeolocationContext';
@@ -27,13 +26,11 @@ import {
 } from '@atb/reference-data/utils';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {TicketingStackParams} from '../';
 import {TariffZoneWithMetadata} from '../TariffZones';
 import useOfferState from './use-offer-state';
 import {formatToLongDateTime} from '@atb/utils/date';
-import ThemeText from '@atb/components/text';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {usePreferences} from '@atb/preferences';
 import {screenReaderPause} from '@atb/components/accessible-text';
@@ -46,6 +43,7 @@ import {
 } from '@atb/mobile-token/MobileTokenContext';
 import {useTicketState} from '@atb/tickets';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import Summary from './components/Summary';
 import DurationSelection from './components/DurationSelection';
 import StartTimeSelection from './components/StartTimeSelection';
 
@@ -216,19 +214,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
               }}
               testID="selectTravellersButton"
             />
-            <Sections.GenericItem>
-              {isSearchingOffer ? (
-                <ActivityIndicator style={styles.totalSection} />
-              ) : (
-                <ThemeText
-                  style={styles.totalSection}
-                  type="body__primary--bold"
-                  testID="offerTotalPriceText"
-                >
-                  {t(PurchaseOverviewTexts.totalPrice(totalPrice))}
-                </ThemeText>
-              )}
-            </Sections.GenericItem>
           </Sections.Section>
 
           <Zones
@@ -275,26 +260,17 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           />
         )}
 
-        <View style={styles.toPaymentButton}>
-          <Button
-            interactiveColor="interactive_0"
-            text={t(PurchaseOverviewTexts.primaryButton)}
-            disabled={isSearchingOffer || !totalPrice || !!error}
-            onPress={() => {
-              navigation.navigate('Confirmation', {
-                fromTariffZone,
-                toTariffZone,
-                userProfilesWithCount,
-                preassignedFareProduct,
-                travelDate,
-                headerLeftButton: {type: 'back'},
-              });
-            }}
-            icon={ArrowRight}
-            iconPosition="right"
-            testID="goToPaymentButton"
-          />
-        </View>
+        <Summary
+          isLoading={isSearchingOffer}
+          isError={!!error}
+          price={totalPrice}
+          fromTariffZone={fromTariffZone}
+          toTariffZone={toTariffZone}
+          userProfilesWithCount={userProfilesWithCount}
+          preassignedFareProduct={preassignedFareProduct}
+          travelDate={travelDate}
+          style={styles.summary}
+        />
       </ScrollView>
     </View>
   );
@@ -441,6 +417,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
+  summary: {marginHorizontal: theme.spacings.medium},
 }));
 
 export default PurchaseOverview;

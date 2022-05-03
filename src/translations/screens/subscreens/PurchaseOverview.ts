@@ -1,5 +1,6 @@
 import {translation as _} from '../../commons';
 import orgSpecificTranslations from '@atb/translations/utils';
+import {formatDecimalNumber} from '@atb/utils/numbers';
 
 const PurchaseOverviewTexts = {
   header: {
@@ -43,9 +44,6 @@ const PurchaseOverviewTexts = {
       'Activate to select ticket type',
     ),
   },
-  totalPrice: (totalPrice: number) =>
-    _(`Totalt: ${totalPrice} kr`, `Total: ${totalPrice} kr`),
-  primaryButton: _('Gå til betaling', 'Go to payment'),
   warning: _(
     'Når du er ute og reiser må du ha med t:kortet som er registrert på din profil.',
     'When traveling, you need to bring the t:card registered on your profile.',
@@ -87,6 +85,15 @@ const PurchaseOverviewTexts = {
       'Aktiver for å sette oppstartstidspunkt til nå.',
       'Activate to set ticket start time to now.',
     ),
+  },
+  summary: {
+    price: (priceString: string) =>
+      _(`Total ${priceString} kr`, `Total ${priceString} kr`),
+    message: _(
+      `Gjelder for buss/trikk i valgte soner`,
+      `Applies for bus/tram in selected zones`,
+    ),
+    button: _('Til betaling', 'To payment'),
   },
 };
 
