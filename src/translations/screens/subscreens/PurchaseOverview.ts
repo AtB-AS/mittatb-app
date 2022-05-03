@@ -64,6 +64,9 @@ const PurchaseOverviewTexts = {
     'Du kan ikke reise med denne mobilen. Du kan bytte hvor du bruker billetten din fra **Min profil**.',
     `You can't travel with this phone. Go to **My profile** to switch where your tickets are used.`,
   ),
+  zones: {
+    label: _('Velg sone(r)', 'Select zone(s)'),
+  },
 };
 
 export default orgSpecificTranslations(PurchaseOverviewTexts, {
