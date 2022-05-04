@@ -1,5 +1,5 @@
 import React from 'react';
-import {useTranslation} from '@atb/translations';
+import {DurationSelectionTexts, useTranslation} from '@atb/translations';
 import {
   getReferenceDataName,
   productIsSellableInApp,
@@ -35,7 +35,7 @@ export default function DurationSelection({
   return (
     <>
       <ThemeText type="body__secondary" color="secondary">
-        Velg varighet
+        {t(DurationSelectionTexts.title)}
       </ThemeText>
       <ScrollView
         style={styles.container}
@@ -43,12 +43,13 @@ export default function DurationSelection({
         horizontal={true}
         showsHorizontalScrollIndicator={false}
       >
-        {selectableProducts.map((fp) => (
+        {selectableProducts.map((fp, i) => (
           <DurationChip
             color={color}
             text={getReferenceDataName(fp, language)}
             selected={selectedProduct == fp}
             onPress={() => setSelectedProduct(fp)}
+            key={i}
           />
         ))}
       </ScrollView>
@@ -87,6 +88,10 @@ function DurationChip({color, text, selected, onPress}: DurationChipProps) {
         },
       ]}
       onPress={onPress}
+      accessible={true}
+      accessibilityRole="radio"
+      accessibilityState={{selected}}
+      accessibilityHint="Activate to select duration"
     >
       <ThemeText
         style={{
