@@ -67,6 +67,7 @@ type DurationChipProps = {
 function DurationChip({color, text, selected, onPress}: DurationChipProps) {
   const styles = useStyles();
   const {theme} = useTheme();
+  const {t} = useTranslation();
 
   const currentColor =
     theme.interactive[color][selected ? 'active' : 'default'];
@@ -91,7 +92,7 @@ function DurationChip({color, text, selected, onPress}: DurationChipProps) {
       accessible={true}
       accessibilityRole="radio"
       accessibilityState={{selected}}
-      accessibilityHint="Activate to select duration"
+      accessibilityHint={t(DurationSelectionTexts.chipHint)}
     >
       <ThemeText
         style={{
