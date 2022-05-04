@@ -197,11 +197,13 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             />
           )}
 
-          <DurationSelection
-            color="interactive_2"
-            selectedProduct={preassignedFareProduct}
-            setSelectedProduct={setPreassignedFareProduct}
-          />
+          {preassignedFareProduct.type === 'period' && (
+            <DurationSelection
+              color="interactive_2"
+              selectedProduct={preassignedFareProduct}
+              setSelectedProduct={setPreassignedFareProduct}
+            />
+          )}
 
           <Sections.Section>
             <Sections.LinkItem
