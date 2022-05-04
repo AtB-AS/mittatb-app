@@ -38,7 +38,7 @@ export default function ZoneItem({
   };
 
   return (
-    <View>
+    <View style={itemStyle.container}>
       <ThemeText
         type="body__secondary"
         color="secondary"
@@ -71,6 +71,9 @@ export default function ZoneItem({
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    marginVertical: theme.spacings.medium,
+  },
   subtitleStyle: {
     paddingTop: theme.spacings.xSmall,
   },

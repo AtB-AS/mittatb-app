@@ -6,7 +6,7 @@ import {
 } from '@atb/reference-data/utils';
 import ThemeText from '@atb/components/text';
 import {InteractiveColor} from '@atb/theme/colors';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ScrollView} from 'react-native';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
@@ -33,7 +33,7 @@ export default function DurationSelection({
     .filter((p) => p.type === selectedProduct.type);
 
   return (
-    <>
+    <View style={styles.container}>
       <ThemeText type="body__secondary" color="secondary">
         {t(DurationSelectionTexts.title)}
       </ThemeText>
@@ -53,7 +53,7 @@ export default function DurationSelection({
           />
         ))}
       </ScrollView>
-    </>
+    </View>
   );
 }
 
@@ -107,6 +107,9 @@ function DurationChip({color, text, selected, onPress}: DurationChipProps) {
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    marginVertical: theme.spacings.medium,
+  },
   durationScrollView: {
     marginTop: theme.spacings.medium,
     marginBottom: theme.spacings.xLarge,
