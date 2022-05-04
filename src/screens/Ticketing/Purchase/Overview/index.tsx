@@ -50,6 +50,7 @@ import {
 import {useTicketState} from '@atb/tickets';
 import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import DurationSelection from './components/DurationSelection';
 
 export type OverviewNavigationProp = DismissableStackNavigationProp<
   TicketingStackParams,
@@ -207,6 +208,12 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             containerStyle={styles.errorMessage}
           />
         )}
+
+        <DurationSelection
+          color="interactive_2"
+          selectedProduct={preassignedFareProduct}
+          setSelectedProduct={setPreassignedFareProduct}
+        />
 
         <Sections.Section>
           <Sections.LinkItem
