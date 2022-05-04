@@ -72,9 +72,9 @@ function DurationChip({color, text, selected, onPress}: DurationChipProps) {
   const currentColor =
     theme.interactive[color][selected ? 'active' : 'default'];
 
-  // Reduce width and heigh by 2x border width to ensure that selected chips are
-  // the same size as chips without a border.
-  const borderOffset = selected ? theme.border.width.medium * 2 : 0;
+  // To make items with and without border the same size, we subtract the border
+  // width from the padding when there is a border.
+  const borderOffset = selected ? theme.border.width.medium : 0;
 
   return (
     <TouchableOpacity
