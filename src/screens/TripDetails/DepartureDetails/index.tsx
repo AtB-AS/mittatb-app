@@ -1,4 +1,4 @@
-import {Expand, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
+import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
 import {Info, Warning} from '@atb/assets/svg/color/situations';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
 import MessageBox, {TinyMessageBox} from '@atb/components/message-box';
@@ -42,6 +42,7 @@ import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {TripPattern} from '@atb/api/types/trips';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -65,7 +66,8 @@ export default function DepartureDetails({navigation, route}: Props) {
   const {activeItemIndex = 0, items} = route.params;
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useTheme();
-  const {modes_we_sell_tickets_for} = useRemoteConfig();
+  const {modesWeSellTicketsFor} = useFirestoreConfiguration();
+  const {enable_ticketing} = useRemoteConfig();
 
   const activeItem: ServiceJourneyDeparture | undefined =
     items[activeItemIndexState];
@@ -83,10 +85,12 @@ export default function DepartureDetails({navigation, route}: Props) {
 
   const canSellTicketsForDeparture = canSellTicketsForSubMode(
     subMode,
-    modes_we_sell_tickets_for,
+    modesWeSellTicketsFor,
   );
 
   const someLegsAreByTrain = mode === TransportMode.RAIL;
+  const isTicketingEnabledAndWeCantSellTicketForDeparture =
+    enable_ticketing && !canSellTicketsForDeparture;
 
   const onPaginactionPress = (newPage: number) => {
     animateNextChange();
@@ -148,7 +152,7 @@ export default function DepartureDetails({navigation, route}: Props) {
             </View>
           )}
 
-          {!canSellTicketsForDeparture && (
+          {isTicketingEnabledAndWeCantSellTicketForDeparture && (
             <MessageBox
               containerStyle={styles.ticketMessage}
               type="warning"
@@ -363,7 +367,7 @@ function CollapseButtonRow({
   const child = collapsed ? (
     <>
       {text}
-      <ThemeIcon svg={Expand} />
+      <ThemeIcon svg={ExpandMore} />
     </>
   ) : (
     <>
@@ -396,10 +400,10 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
 const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   header: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_3.background,
   },
   startPlace: {
     marginTop: theme.spacings.large,
@@ -420,7 +424,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.small,
   },
   allGroups: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
     marginBottom: theme.spacings.xLarge,
   },
   spinner: {

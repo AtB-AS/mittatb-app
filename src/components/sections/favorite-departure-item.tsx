@@ -81,7 +81,9 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
         </ThemeText>
       </View>
       {icon ?? (
-        <SvgDelete fill={theme.colors.primary_destructive.backgroundColor} />
+        <SvgDelete
+          fill={theme.interactive.interactive_destructive.default.background}
+        />
       )}
     </View>
   );

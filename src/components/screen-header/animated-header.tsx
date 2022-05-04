@@ -7,7 +7,7 @@ import HeaderButton from './HeaderButton';
 import {LeftButtonProps, RightButtonProps} from '.';
 import useFontScale from '@atb/utils/use-font-scale';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
 
 type ScreenHeaderProps = ViewProps & {
   leftButton?: LeftButtonProps;
@@ -19,7 +19,7 @@ type ScreenHeaderProps = ViewProps & {
   setFocusOnLoad?: boolean;
 };
 
-const themeColor: ThemeColor = 'background_accent';
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 const BASE_HEADER_HEIGHT = 20;
 
@@ -101,7 +101,7 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: theme.spacings.medium,
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
   },
   buttonsContainer: {
     flexDirection: 'row',

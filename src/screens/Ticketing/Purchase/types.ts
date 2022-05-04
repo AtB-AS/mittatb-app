@@ -1,9 +1,9 @@
 import {PaymentType} from '@atb/tickets';
 
 export type CardPaymentMethod =
-  | {paymentType: PaymentType.VISA | PaymentType.MasterCard; save: boolean}
+  | {paymentType: PaymentType.Visa | PaymentType.Mastercard; save: boolean}
   | {
-      paymentType: PaymentType.VISA | PaymentType.MasterCard;
+      paymentType: PaymentType.Visa | PaymentType.Mastercard;
       recurringPaymentId: number;
     };
 
@@ -26,7 +26,7 @@ export type DefaultPaymentOption = {
 };
 export type RecurringPaymentOption = {
   savedType: 'recurring';
-  paymentType: PaymentType.VISA | PaymentType.MasterCard;
+  paymentType: PaymentType.Visa | PaymentType.Mastercard;
   recurringCard: SavedRecurringPayment;
 };
 

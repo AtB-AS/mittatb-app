@@ -19,12 +19,17 @@ import {
 } from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
-import {getReferenceDataName} from '@atb/reference-data/utils';
+import ZoneItem from './components/zone-item';
+
+import {
+  getReferenceDataName,
+  productIsSellableInApp,
+} from '@atb/reference-data/utils';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {TicketingStackParams} from '../';
-import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
+import {TariffZoneWithMetadata} from '../TariffZones';
 import useOfferState from './use-offer-state';
 import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 import {formatToLongDateTime} from '@atb/utils/date';
@@ -46,11 +51,13 @@ import {useTicketState} from '@atb/tickets';
 import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
+export type OverviewNavigationProp = DismissableStackNavigationProp<
+  TicketingStackParams,
+  'PurchaseOverview'
+>;
+
 export type OverviewProps = {
-  navigation: DismissableStackNavigationProp<
-    TicketingStackParams,
-    'PurchaseOverview'
-  >;
+  navigation: OverviewNavigationProp;
   route: RouteProp<TicketingStackParams, 'PurchaseOverview'>;
 };
 
@@ -73,9 +80,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const {preassignedFareproducts} = useFirestoreConfiguration();
 
-  const selectableProducts = preassignedFareproducts.filter(
-    (product) => product.type === params.selectableProductType,
-  );
+  const selectableProducts = preassignedFareproducts
+    .filter(productIsSellableInApp)
+    .filter((product) => product.type === params.selectableProductType);
 
   const [preassignedFareProduct, setPreassignedFareProduct] = useState(
     selectableProducts[0],
@@ -251,23 +258,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             }}
             testID="selectStartTimeButton"
           />
-          <Sections.LinkItem
-            text={tariffZonesSummary(fromTariffZone, toTariffZone, language, t)}
-            onPress={() => {
-              navigation.push('TariffZones', {
-                fromTariffZone,
-                toTariffZone,
-              });
-            }}
-            icon={<ThemeIcon svg={Edit} />}
-            accessibility={{
-              accessibilityLabel:
-                tariffZonesSummary(fromTariffZone, toTariffZone, language, t) +
-                screenReaderPause,
-              accessibilityHint: t(PurchaseOverviewTexts.tariffZones.a11yHint),
-            }}
-            testID="selectZonesButton"
-          />
           <Sections.GenericItem>
             {isSearchingOffer ? (
               <ActivityIndicator style={styles.totalSection} />
@@ -282,6 +272,8 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             )}
           </Sections.GenericItem>
         </Sections.Section>
+
+        <ZoneItem fromTariffZone={fromTariffZone} toTariffZone={toTariffZone} />
       </View>
 
       {showProfileTravelcardWarning && (
@@ -315,7 +307,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
       <View style={styles.toPaymentButton}>
         <Button
-          color="primary_2"
+          interactiveColor="interactive_0"
           text={t(PurchaseOverviewTexts.primaryButton)}
           disabled={isSearchingOffer || !totalPrice || !!error}
           onPress={() => {
@@ -455,7 +447,7 @@ export const useTariffZoneFromLocation = (tariffZones: TariffZone[]) => {
   const {location} = useGeolocationState();
   return useMemo(() => {
     if (location) {
-      const {longitude, latitude} = location.coords;
+      const {longitude, latitude} = location.coordinates;
       return tariffZones.find((t) =>
         turfBooleanPointInPolygon([longitude, latitude], t.geometry),
       );
@@ -466,7 +458,7 @@ export const useTariffZoneFromLocation = (tariffZones: TariffZone[]) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
   },
   errorMessage: {
     marginBottom: theme.spacings.medium,

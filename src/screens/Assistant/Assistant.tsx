@@ -1,5 +1,5 @@
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
-import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
+import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import Button from '@atb/components/button';
 import DisappearingHeader from '@atb/components/disappearing-header';
@@ -9,12 +9,7 @@ import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import FavoriteChips from '@atb/favorite-chips';
 import {useFavorites} from '@atb/favorites';
-import {
-  Location,
-  LocationWithMetadata,
-  UserFavorites,
-} from '@atb/favorites/types';
-import {useReverseGeocoder} from '@atb/geocoder';
+import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
 import {
   RequestPermissionFn,
   useGeolocationState,
@@ -31,9 +26,9 @@ import {
 } from '@atb/translations';
 import {formatToLongDateTime, isInThePast} from '@atb/utils/date';
 import {
-  locationDistanceInMetres as distanceInMetres,
+  coordinatesDistanceInMetres as distanceInMetres,
   LOCATIONS_REALLY_CLOSE_THRESHOLD,
-  locationsAreEqual,
+  coordinatesAreEqual,
   isValidTripLocations,
 } from '@atb/utils/location';
 import {useLayout} from '@atb/utils/use-layout';
@@ -44,6 +39,7 @@ import {
   CompositeNavigationProp,
   RouteProp,
   useIsFocused,
+  useNavigation,
 } from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
@@ -59,12 +55,12 @@ import FadeBetween from './FadeBetween';
 import {SearchTime, useSearchTimeValue} from './journey-date-picker';
 import NewsBanner from './NewsBanner';
 import Results from './Results';
-import {ThemeColor} from '@atb/theme/colors';
-import * as navIcons from '@atb/assets/svg/mono-icons/navigation';
+import {StaticColorByType} from '@atb/theme/colors';
+import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import useTripsQuery from '@atb/screens/Assistant/use-trips-query';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 
-const themeColor: ThemeColor = 'background_accent';
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type AssistantRouteName = 'AssistantRoot';
 const AssistantRouteNameStatic: AssistantRouteName = 'AssistantRoot';
@@ -89,17 +85,13 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
     requestPermission: requestGeoPermission,
   } = useGeolocationState();
 
-  const {closestLocation: currentLocation} = useReverseGeocoder(
-    location?.coords ?? null,
-  );
-
   if (!status) {
     return <Loading />;
   }
 
   return (
     <Assistant
-      currentLocation={currentLocation}
+      currentLocation={location || undefined}
       hasLocationPermission={locationEnabled && status === 'granted'}
       navigation={navigation}
       requestGeoPermission={requestGeoPermission}
@@ -108,7 +100,7 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
 };
 
 type Props = {
-  currentLocation?: Location;
+  currentLocation?: GeoLocation;
   hasLocationPermission: boolean;
   requestGeoPermission: RequestPermissionFn;
   navigation: AssistantScreenNavigationProp;
@@ -186,7 +178,7 @@ const Assistant: React.FC<Props> = ({
     navigation.setParams({fromLocation: to, toLocation: from});
   }
 
-  function fillNextAvailableLocation(selectedLocation: LocationWithMetadata) {
+  function fillNextAvailableLocation(selectedLocation: Location) {
     if (!from) {
       navigation.setParams({
         fromLocation: selectedLocation,
@@ -228,7 +220,7 @@ const Assistant: React.FC<Props> = ({
   const isSearching = searchState === 'searching';
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
-    initialLocation: LocationWithMetadata | undefined,
+    initialLocation: Location | undefined,
   ) =>
     navigation.navigate('LocationSearch', {
       label:
@@ -264,7 +256,7 @@ const Assistant: React.FC<Props> = ({
               location={from}
               label={t(AssistantTexts.location.departurePicker.label)}
               onPress={() => openLocationSearch('fromLocation', from)}
-              icon={<ThemeIcon svg={CurrentLocationArrow} />}
+              icon={<ThemeIcon svg={LocationIcon} />}
               onIconPress={setCurrentLocationOrRequest}
               iconAccessibility={{
                 accessible: true,
@@ -331,7 +323,7 @@ const Assistant: React.FC<Props> = ({
                 language,
               )}
               accessibilityHint={t(AssistantTexts.dateInput.a11yHint)}
-              color="secondary_3"
+              interactiveColor="interactive_1"
               onPress={onSearchTimePress}
               testID="assistantDateTimePicker"
             />
@@ -510,7 +502,7 @@ const Assistant: React.FC<Props> = ({
                   <ThemeText testID="resultsLoaded">
                     {t(AssistantTexts.results.fetchMore)}{' '}
                   </ThemeText>
-                  <ThemeIcon svg={navIcons.Expand} size={'normal'} />
+                  <ThemeIcon svg={ExpandMore} size={'normal'} />
                 </>
               ) : null}
             </>
@@ -570,8 +562,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 }));
 
 type SearchForLocations = {
-  from?: LocationWithMetadata;
-  to?: LocationWithMetadata;
+  from?: Location;
+  to?: Location;
 };
 
 function computeNoResultReasons(
@@ -583,11 +575,14 @@ function computeNoResultReasons(
   let reasons = [];
 
   if (!!from && !!to) {
-    if (locationsAreEqual(from, to)) {
+    if (coordinatesAreEqual(from.coordinates, to.coordinates)) {
       reasons.push(
         t(AssistantTexts.searchState.noResultReason.IdenticalLocations),
       );
-    } else if (distanceInMetres(from, to) < LOCATIONS_REALLY_CLOSE_THRESHOLD) {
+    } else if (
+      distanceInMetres(from.coordinates, to.coordinates) <
+      LOCATIONS_REALLY_CLOSE_THRESHOLD
+    ) {
       reasons.push(t(AssistantTexts.searchState.noResultReason.CloseLocations));
     }
   }
@@ -605,12 +600,12 @@ function computeNoResultReasons(
 }
 
 function useLocations(
-  currentLocation: Location | undefined,
+  currentLocation: GeoLocation | undefined,
 ): SearchForLocations {
   const {favorites} = useFavorites();
 
-  const memoedCurrentLocation = useMemo<LocationWithMetadata | undefined>(
-    () => currentLocation && {...currentLocation, resultType: 'geolocation'},
+  const memoedCurrentLocation = useMemo<GeoLocation | undefined>(
+    () => currentLocation,
     [
       currentLocation?.coordinates.latitude,
       currentLocation?.coordinates.longitude,
@@ -633,11 +628,12 @@ function useLocations(
 function useUpdatedLocation(
   searchedFromLocation: SelectableLocationData | undefined,
   searchedToLocation: SelectableLocationData | undefined,
-  currentLocation: LocationWithMetadata | undefined,
+  currentLocation: GeoLocation | undefined,
   favorites: UserFavorites,
 ): SearchForLocations {
-  const [from, setFrom] = useState<LocationWithMetadata | undefined>();
-  const [to, setTo] = useState<LocationWithMetadata | undefined>();
+  const [from, setFrom] = useState<Location | undefined>();
+  const [to, setTo] = useState<Location | undefined>();
+  const navigation = useNavigation<AssistantScreenNavigationProp>();
 
   const setLocation = useCallback(
     (direction: 'from' | 'to', searchedLocation?: SelectableLocationData) => {
@@ -650,14 +646,16 @@ function useUpdatedLocation(
         case 'geolocation':
           return updater(currentLocation);
         case 'journey': {
-          const toSearch = (i: number): LocationWithMetadata => ({
+          const toSearch = (i: number): Location => ({
             ...searchedLocation.journeyData[i],
             resultType: 'search',
           });
 
           // Set both states when journey is passed.
-          setFrom(toSearch(0));
-          setTo(toSearch(1));
+          navigation.setParams({
+            fromLocation: toSearch(0),
+            toLocation: toSearch(1),
+          });
           return;
         }
         case 'favorite': {
@@ -666,11 +664,7 @@ function useUpdatedLocation(
           );
 
           if (favorite) {
-            return updater({
-              ...favorite.location,
-              resultType: 'favorite',
-              favoriteId: favorite.id,
-            });
+            return updater(favorite.location);
           }
         }
       }
@@ -709,6 +703,9 @@ function log(message: string, metadata?: {[key: string]: string}) {
 
 function translateLocation(location: Location | undefined): string {
   if (!location) return 'Undefined location';
+  if (location.resultType === 'geolocation') {
+    return location.id;
+  }
   return `${location.id}--${location.name}--${location.locality}`;
 }
 

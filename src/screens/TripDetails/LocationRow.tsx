@@ -56,7 +56,7 @@ const LocationRow: React.FC<{
             iconContainerStyle,
             {
               backgroundColor: !dashThroughIcon
-                ? theme.colors.background_2.backgroundColor
+                ? theme.static.background.background_2.background
                 : 'transparent',
             },
           ]}

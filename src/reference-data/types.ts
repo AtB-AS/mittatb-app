@@ -17,6 +17,7 @@ export type PreassignedFareProduct = {
   distributionChannel: DistributionChannel[];
   version: string;
   type: PreassignedFareProductType;
+  durationDays: 1 | 7 | 30 | 60 | 90 | 120 | 150 | 180 | 360;
   limitations: {
     userProfileRefs: string[];
   };

@@ -1,5 +1,5 @@
 import {ErrorType} from '@atb/api/utils';
-import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
+import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import AccessibleText from '@atb/components/accessible-text';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
@@ -8,8 +8,7 @@ import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement
 import {ActionItem, LocationInput, Section} from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
 import DeparturesList from '@atb/departure-list/DeparturesList';
-import {Location, LocationWithMetadata} from '@atb/favorites/types';
-import {useReverseGeocoder} from '@atb/geocoder';
+import {GeoLocation, Location} from '@atb/favorites/types';
 import {
   RequestPermissionFn,
   useGeolocationState,
@@ -19,7 +18,7 @@ import {RootStackParamList} from '@atb/navigation';
 import {usePreferences} from '@atb/preferences';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 import {StyleSheet} from '@atb/theme';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
 import {
   Language,
   NearbyTexts,
@@ -38,7 +37,7 @@ import DepartureTimeSheet from './DepartureTimeSheet';
 import {useDepartureData} from './state';
 import {SearchTime} from './types';
 
-const themeColor: ThemeColor = 'background_accent';
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type NearbyRouteName = 'NearbyRoot';
 const NearbyRouteNameStatic: NearbyRouteName = 'NearbyRoot';
@@ -49,7 +48,7 @@ export type NearbyScreenNavigationProp = CompositeNavigationProp<
 >;
 
 export type NearbyScreenParams = {
-  location: LocationWithMetadata;
+  location: Location;
 };
 
 export type NearbyScreenProp = RouteProp<NearbyStackParams, NearbyRouteName>;
@@ -63,10 +62,6 @@ export default function NearbyScreen({navigation}: RootProps) {
   const {status, location, locationEnabled, requestPermission} =
     useGeolocationState();
 
-  const {closestLocation: currentLocation} = useReverseGeocoder(
-    location?.coords ?? null,
-  );
-
   if (!status) {
     return <Loading />;
   }
@@ -75,14 +70,14 @@ export default function NearbyScreen({navigation}: RootProps) {
     <NearbyOverview
       requestGeoPermission={requestPermission}
       hasLocationPermission={locationEnabled && status === 'granted'}
-      currentLocation={currentLocation}
+      currentLocation={location || undefined}
       navigation={navigation}
     />
   );
 }
 
 type Props = {
-  currentLocation?: Location;
+  currentLocation?: GeoLocation;
   hasLocationPermission: boolean;
   requestGeoPermission: RequestPermissionFn;
   navigation: NearbyScreenNavigationProp;
@@ -99,8 +94,8 @@ const NearbyOverview: React.FC<Props> = ({
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
   const styles = useNearbyStyles();
 
-  const currentSearchLocation = useMemo<LocationWithMetadata | undefined>(
-    () => currentLocation && {...currentLocation, resultType: 'geolocation'},
+  const currentSearchLocation = useMemo<GeoLocation | undefined>(
+    () => currentLocation,
     [currentLocation],
   );
   const fromLocation = searchedFromLocation ?? currentSearchLocation;
@@ -280,7 +275,7 @@ const NearbyOverview: React.FC<Props> = ({
 
 type HeaderProps = {
   updatingLocation: boolean;
-  fromLocation?: LocationWithMetadata;
+  fromLocation?: Location;
   openLocationSearch: () => void;
   setCurrentLocationOrRequest(): Promise<void>;
   onNowPress: () => void;
@@ -310,7 +305,7 @@ const Header = React.memo(function Header({
           location={fromLocation}
           onPress={openLocationSearch}
           accessibilityLabel={t(NearbyTexts.location.departurePicker.a11yLabel)}
-          icon={<ThemeIcon svg={CurrentLocationArrow} />}
+          icon={<ThemeIcon svg={LocationIcon} />}
           onIconPress={setCurrentLocationOrRequest}
           iconAccessibility={{
             accessible: true,
@@ -325,7 +320,7 @@ const Header = React.memo(function Header({
       <View style={styles.paddedContainer} key="dateInput">
         <Button
           mode={searchTime.option == 'now' ? 'primary' : 'tertiary'}
-          color={'primary_2'}
+          interactiveColor="interactive_0"
           text={t(NearbyTexts.search.now.label)}
           accessibilityLabel={t(NearbyTexts.search.now.a11yLabel)}
           accessibilityHint={t(NearbyTexts.search.now.a11yHint)}
@@ -336,7 +331,7 @@ const Header = React.memo(function Header({
         />
         <Button
           mode={searchTime.option == 'now' ? 'tertiary' : 'primary'}
-          color={'primary_2'}
+          interactiveColor="interactive_0"
           text={
             searchTime.option == 'now'
               ? t(NearbyTexts.search.later.label)
@@ -365,7 +360,7 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     alignContent: 'space-between',
     borderStyle: 'solid',
-    borderColor: theme.colors.primary_2.backgroundColor,
+    borderColor: theme.static.background.background_accent_3.background,
     borderWidth: 2,
     padding: 2,
     borderRadius: 12,
@@ -374,7 +369,7 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
     width: '50%',
   },
   dateInputButton: {
-    color: theme.colors.primary_2.backgroundColor,
+    color: theme.static.background.background_accent_3.background,
     padding: theme.spacings.small,
   },
 }));

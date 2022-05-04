@@ -5,7 +5,7 @@ import {
   LeftButtonProps,
 } from '@atb/components/screen-header';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import throttle from '@atb/utils/throttle';
 import useConditionalMemo from '@atb/utils/use-conditional-memo';
@@ -67,7 +67,7 @@ type Props = {
 
 const SCROLLED_TOP_THRESHOLD = 30;
 
-const themeColor: ThemeColor = 'background_accent';
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type Scrollable = {
   scrollTo(opts: {y: number}): void;
@@ -247,7 +247,7 @@ const DisappearingHeader: React.FC<Props> = ({
             ]}
           >
             <ImageBackground
-              source={require('../../../assets/design-assets/colors/images/photo-background.jpg')}
+              source={require('../../../assets/design-assets/colors/images/PhotoBackground.jpg')}
               style={styles.backgroundImage}
             >
               <View style={{flex: 1}}>
@@ -258,7 +258,7 @@ const DisappearingHeader: React.FC<Props> = ({
                     'transparent',
                     'transparent',
                     hexToRgba(
-                      theme.colors.background_accent.backgroundColor,
+                      theme.static.background.background_accent_0.background,
                       1,
                     ),
                   ]}
@@ -339,18 +339,18 @@ const hasReachedEnd = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   screen: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     flexGrow: 1,
   },
   alertBoxContainer: {
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
   },
   alertBox: {
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
   topBorder: {
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
   },
   bannerContainer: {
     position: 'absolute',
@@ -379,7 +379,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     position: 'relative',
   },
   headerContent: {
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
   },
   header: {
     position: 'absolute',
@@ -389,11 +389,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     overflow: 'hidden',
     zIndex: 2,
     elevated: 1,
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
     justifyContent: 'space-between',
   },
   container: {
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
     paddingBottom: 0,
     flexGrow: 1,
   },

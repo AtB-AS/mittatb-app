@@ -54,7 +54,7 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
   async function flyToCurrentLocation() {
     geolocation &&
       mapCameraRef.current?.flyTo(
-        [geolocation?.coords.longitude, geolocation?.coords.latitude],
+        [geolocation?.coordinates.longitude, geolocation?.coordinates.latitude],
         750,
       );
   }

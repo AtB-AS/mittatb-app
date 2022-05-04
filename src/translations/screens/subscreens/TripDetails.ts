@@ -48,7 +48,9 @@ const TripDetailsTexts = {
         label: (count: number, duration: string) =>
           _(
             `${count} mellomstopp \n${duration}`,
-            `${count} intermediate stop \n${duration}`,
+            count > 1
+              ? `${count} intermediate stops \n${duration}`
+              : `${count} intermediate stop \n${duration}`,
           ),
         a11yHint: _(
           'Aktivér for å vise alle mellomstopp.',

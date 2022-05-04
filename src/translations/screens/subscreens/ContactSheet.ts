@@ -10,10 +10,28 @@ const ContactSheetTexts = {
       'Har du spørsmål eller trenger hjelp?',
       'Do you have questions or need help?',
     ),
-    button: _('Kontakt kundeservice', 'Contact customer service'),
+    button: _(
+      'Kontakt kundeservice (åpnes i nettleser)',
+      'Contact customer service (opens in browser)',
+    ),
     a11yHint: _(
-      'Aktiver for å kontakte kundeservice',
-      'Activate to contact customer service',
+      'Aktivér for å kontakte kundeservice, åpner side i nettleser',
+      'Activate to contact customer service, opens page in browser',
+    ),
+  },
+  customer_feedback_website: {
+    title: _('Tilbakemelding om appen', 'Feedback about the app'),
+    body: _(
+      'Vil du foreslå forbedringer til appen?',
+      'Do you have suggestions on how we can improve the app?',
+    ),
+    button: _(
+      'Forbedre appen (åpnes i nettleser)',
+      'Improve the app (opens in browser)',
+    ),
+    a11yHint: _(
+      'Aktivér for å foreslå forbedringer, åpner side i nettleser',
+      'Activate to suggest improvements, opens page in browser',
     ),
   },
   customer_feedback: {
@@ -24,7 +42,7 @@ const ContactSheetTexts = {
     ),
     button: _('Forbedre appen', 'Improve the app'),
     a11yHint: _(
-      'Aktiver for å foreslå forbedringer',
+      'Aktivér for å foreslå forbedringer',
       'Activate to suggest improvements',
     ),
   },

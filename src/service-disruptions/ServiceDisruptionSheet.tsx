@@ -44,7 +44,7 @@ const ServiceDisruptionSheet = forwardRef<View, Props>(
 
         <FullScreenFooter>
           <Button
-            color="primary_2"
+            interactiveColor="interactive_0"
             text={t(ServiceDisruptionsTexts.button.text)}
             accessibilityHint={t(ServiceDisruptionsTexts.button.a11yHint)}
             onPress={() => {

@@ -1,11 +1,11 @@
 import {
   Assistant as AssistantIcon,
-  Nearby,
+  Departures,
   Profile,
-  Tickets,
+  Ticketing,
 } from '@atb/assets/svg/mono-icons/tab-bar';
 import ThemeText from '@atb/components/text';
-import {LocationWithMetadata} from '@atb/favorites/types';
+import {Location} from '@atb/favorites/types';
 import {usePreferenceItems} from '@atb/preferences';
 import Assistant from '@atb/screens/Assistant';
 import NearbyScreen, {NearbyStackParams} from '@atb/screens/Nearby';
@@ -31,8 +31,8 @@ type SubNavigator<T extends ParamListBase> = {
 
 export type TabNavigatorParams = {
   Assistant: {
-    fromLocation: LocationWithMetadata;
-    toLocation: LocationWithMetadata;
+    fromLocation: Location;
+    toLocation: Location;
   };
   Nearest: NavigatorScreenParams<NearbyStackParams>;
   Ticketing: undefined;
@@ -50,10 +50,10 @@ const NavigationRoot = () => {
     <Tab.Navigator
       tabBarOptions={{
         labelPosition: 'below-icon',
-        activeTintColor: theme.colors.primary_2.backgroundColor,
+        activeTintColor: theme.static.background.background_accent_3.background,
         inactiveTintColor: theme.text.colors.secondary,
         style: {
-          backgroundColor: theme.colors.background_0.backgroundColor,
+          backgroundColor: theme.static.background.background_0.background,
           ...useBottomNavigationStyles(),
         },
       }}
@@ -76,7 +76,7 @@ const NavigationRoot = () => {
         options={tabSettings(
           t(dictionary.navigation.nearby),
           t(dictionary.navigation.nearby),
-          Nearby,
+          Departures,
           lineHeight,
           'departuresTab',
         )}
@@ -87,7 +87,7 @@ const NavigationRoot = () => {
         options={tabSettings(
           t(dictionary.navigation.ticketing),
           t(dictionary.navigation.ticketing),
-          Tickets,
+          Ticketing,
           lineHeight,
           'ticketsTab',
         )}

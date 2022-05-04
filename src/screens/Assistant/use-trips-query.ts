@@ -89,8 +89,12 @@ export default function useTripsQuery(
             }
 
             try {
-              // Fire and forget add journey search entry
-              await addJourneySearchEntry([fromLocation, toLocation]);
+              // Fire and forget add journey search entry if both locations are not from geo
+              if (
+                fromLocation.resultType !== 'geolocation' &&
+                toLocation.resultType !== 'geolocation'
+              )
+                await addJourneySearchEntry([fromLocation, toLocation]);
             } catch (e) {}
 
             let nextPageAvailable = true;
@@ -207,11 +211,17 @@ async function doSearch(
 ) {
   const from = {
     ...fromLocation,
-    place: fromLocation.layer === 'venue' ? fromLocation.id : undefined,
+    place:
+      fromLocation.resultType === 'search' && fromLocation.layer === 'venue'
+        ? fromLocation.id
+        : undefined,
   };
   const to = {
     ...toLocation,
-    place: toLocation.layer === 'venue' ? toLocation.id : undefined,
+    place:
+      toLocation.resultType === 'search' && toLocation.layer === 'venue'
+        ? toLocation.id
+        : undefined,
   };
 
   const query: TripsQueryVariables = {
@@ -227,8 +237,8 @@ async function doSearch(
   };
 
   Bugsnag.leaveBreadcrumb('searching', {
-    fromLocation: stringifyLocation(fromLocation),
-    toLocation: stringifyLocation(toLocation),
+    fromLocation: query.from,
+    toLocation: query.to,
     arriveBy: query.arriveBy,
     when: query.when || '',
     cursor: query.cursor || '',
@@ -243,9 +253,14 @@ async function doSearch(
   });
 }
 
-const stringifyLocation = (location: Location | undefined) => {
+const stringifyLocation = (location: Location | undefined): string => {
   if (!location) return 'Undefined location';
-  return `${location.id}--${location.name}--${location.locality}`;
+  switch (location.resultType) {
+    case 'geolocation':
+      return `${location.id}--${location.name}`;
+    default:
+      return `${location.id}--${location.name}--${location.locality}`;
+  }
 };
 
 function generateKeyFromTripPattern(tripPattern: TripPattern) {

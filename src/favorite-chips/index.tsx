@@ -3,28 +3,24 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Add} from '../assets/svg/mono-icons/actions';
-import {
-  CurrentLocationArrow,
-  MapPointPin,
-} from '../assets/svg/mono-icons/places';
-import {screenReaderPause} from '../components/accessible-text';
-import Button, {ButtonProps} from '../components/button';
-import {FavoriteIcon} from '../favorites';
-import {useFavorites} from '../favorites/FavoritesContext';
-import {LocationWithMetadata} from '../favorites/types';
-import {useReverseGeocoder} from '../geocoder';
-import {useGeolocationState} from '../GeolocationContext';
-import {RootStackParamList} from '../navigation';
-import {StyleSheet, useTheme} from '../theme';
-import {FavoriteTexts, useTranslation} from '../translations';
-import useDisableMapCheck from '../utils/use-disable-map-check';
-import {ThemeColor} from '@atb/theme/colors';
+import {Add} from '@atb/assets/svg/mono-icons/actions';
+import {Pin} from '@atb/assets/svg/mono-icons/map';
+import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
+import {screenReaderPause} from '@atb/components/accessible-text';
+import Button, {ButtonProps} from '@atb/components/button';
+import {FavoriteIcon, useFavorites} from '../favorites';
+import {GeoLocation, Location} from '../favorites/types';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import {RootStackParamList} from '@atb/navigation';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {FavoriteTexts, useTranslation} from '@atb/translations';
+import useDisableMapCheck from '@atb/utils/use-disable-map-check';
+import {InteractiveColor} from '@atb/theme/colors';
 
-const themeColor: ThemeColor = 'primary_2';
+const themeColor: InteractiveColor = 'interactive_0';
 
 type Props = {
-  onSelectLocation: (location: LocationWithMetadata) => void;
+  onSelectLocation: (location: Location) => void;
   onMapSelection?: () => void;
   containerStyle?: StyleProp<ViewStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
@@ -58,12 +54,12 @@ const FavoriteChips: React.FC<Props> = ({
         <View style={[styles.staticChipsContainer, contentContainerStyle]}>
           {activeType('location') && (
             <FavoriteChip
-              color={themeColor}
+              interactiveColor={themeColor}
               mode="secondary"
               text={t(FavoriteTexts.chips.currentLocation)}
               accessibilityRole="button"
               accessibilityHint={chipActionHint ?? ''}
-              icon={CurrentLocationArrow}
+              icon={LocationIcon}
               onPress={onCurrentLocation}
               testID="currentLocationChip"
             />
@@ -72,9 +68,9 @@ const FavoriteChips: React.FC<Props> = ({
             <FavoriteChip
               text={t(FavoriteTexts.chips.mapLocation)}
               accessibilityRole="button"
-              icon={MapPointPin}
+              icon={Pin}
               onPress={onMapSelection}
-              color={themeColor}
+              interactiveColor={themeColor}
               mode="secondary"
               testID="mapLocationChip"
             />
@@ -90,7 +86,7 @@ const FavoriteChips: React.FC<Props> = ({
         {activeType('favorites') &&
           favorites.map((fav, i) => (
             <FavoriteChip
-              color={themeColor}
+              interactiveColor={themeColor}
               key={fav.name}
               text={fav.name ?? ''}
               accessibilityLabel={'Favoritt: ' + fav.name + screenReaderPause}
@@ -114,7 +110,7 @@ const FavoriteChips: React.FC<Props> = ({
           ))}
         {activeType('add-favorite') && (
           <FavoriteChip
-            color={themeColor}
+            interactiveColor={themeColor}
             mode="secondary"
             text={t(FavoriteTexts.chips.addFavorite)}
             accessibilityRole="button"
@@ -154,22 +150,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 }));
 
 function useCurrentLocationChip(
-  onSelectLocation: (location: LocationWithMetadata) => void,
+  onSelectLocation: (location: GeoLocation) => void,
 ) {
   const {location, requestPermission} = useGeolocationState();
-  const {closestLocation: currentLocation} = useReverseGeocoder(
-    location?.coords ?? null,
-  );
 
   const [recentlyAllowedGeo, setsetRecentlyAllowedGeo] = useState(false);
 
   const onCurrentLocation = useCallback(
     async function () {
-      if (currentLocation) {
-        onSelectLocation({
-          ...currentLocation,
-          resultType: 'geolocation',
-        });
+      if (location) {
+        onSelectLocation(location);
       } else {
         const status = await requestPermission();
         if (status === 'granted') {
@@ -177,17 +167,14 @@ function useCurrentLocationChip(
         }
       }
     },
-    [currentLocation, onSelectLocation, requestPermission],
+    [location, onSelectLocation, requestPermission],
   );
 
   useEffect(() => {
-    if (recentlyAllowedGeo && currentLocation) {
-      onSelectLocation({
-        ...currentLocation,
-        resultType: 'geolocation',
-      });
+    if (recentlyAllowedGeo && location) {
+      onSelectLocation(location);
     }
-  }, [recentlyAllowedGeo, currentLocation]);
+  }, [recentlyAllowedGeo, location]);
 
   return {onCurrentLocation};
 }

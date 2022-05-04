@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, RefreshControl, ScrollView} from 'react-native';
-import {LocationWithMetadata} from '@atb/favorites/types';
+import {GeoLocation, Location, SearchLocation} from '@atb/favorites/types';
 import {StyleSheet} from '@atb/theme';
 import DeparturesList from '@atb/departure-list/DeparturesList';
 import {useDepartureData} from '@atb/screens/Nearby/state';
@@ -15,7 +15,7 @@ export type QuayDeparturesRouteProp = RouteProp<
 >;
 
 export type QuayDeparturesRouteParams = {
-  location: LocationWithMetadata;
+  location: SearchLocation;
 };
 
 type RootProps = {
@@ -62,7 +62,7 @@ export default QuayDepartures;
 
 const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
   screen: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     flexGrow: 1,
     flex: 1,
   },
