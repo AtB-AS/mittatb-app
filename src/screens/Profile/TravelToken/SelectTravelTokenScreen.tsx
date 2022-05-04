@@ -13,10 +13,7 @@ import {animateNextChange} from '@atb/utils/animation';
 import MessageBox from '@atb/components/message-box';
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import RadioBox from '@atb/components/radio-icon/radio-box';
-import {
-  TravelTokenCard,
-  TravelTokenPhone,
-} from '@atb/assets/svg/color/illustrations';
+import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 
 type RouteName = 'SelectTravelToken';
 
@@ -67,7 +64,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
         title={t(TravelTokenTexts.toggleToken.title)}
         leftButton={{type: 'back'}}
       />
-      <ScrollView style={styles.scrollView}>
+      <ScrollView contentContainerStyle={styles.scrollView}>
         <View style={styles.radioArea}>
           <RadioBox
             title={t(TravelTokenTexts.toggleToken.radioBox.tCard.title)}
@@ -78,7 +75,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
             a11yHint={t(TravelTokenTexts.toggleToken.radioBox.tCard.a11yHint)}
             disabled={false}
             selected={selectedType === 'travelCard'}
-            icon={<TravelTokenCard />}
+            icon={<ThemedTokenTravelCard />}
             type="spacious"
             onPress={() => {
               animateNextChange();
@@ -96,7 +93,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
             a11yHint={t(TravelTokenTexts.toggleToken.radioBox.phone.a11yHint)}
             disabled={false}
             selected={selectedType === 'mobile'}
-            icon={<TravelTokenPhone />}
+            icon={<ThemedTokenPhone />}
             type="spacious"
             onPress={() => {
               if (selectedToken?.type !== 'mobile') {
@@ -132,7 +129,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
               items={activatedMobileTokens}
               keyExtractor={(tt) => tt.id}
               itemToText={(tt) =>
-                tt.name +
+                (tt.name || t(TravelTokenTexts.toggleToken.unnamedDevice)) +
                 (tt.isThisDevice
                   ? t(
                       TravelTokenTexts.toggleToken.radioBox.phone.selection
@@ -163,7 +160,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
           <Button
             onPress={onSave}
             text={t(TravelTokenTexts.toggleToken.saveButton)}
-            color="primary_2"
+            interactiveColor="interactive_0"
             disabled={!selectedToken}
           />
         )}
@@ -174,7 +171,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.colors.background_accent.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_0.background,
     flex: 1,
   },
   scrollView: {

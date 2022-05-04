@@ -33,7 +33,7 @@ export default function useDepartureData(
     async function getServiceJourneyDepartures(): Promise<DepartureData> {
       const deps = await getDepartures(
         activeItem.serviceJourneyId,
-        parseISO(activeItem.serviceDate),
+        new Date(activeItem.serviceDate),
       );
       const callGroups = groupAllCallsByQuaysInLeg(
         deps,

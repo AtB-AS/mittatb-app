@@ -1,8 +1,6 @@
-import {getSingleTripPattern} from '@atb/api/trips';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
 import PaginatedDetailsHeader from '@atb/components/pagination';
 import Header from '@atb/components/screen-header';
-import {TripPattern} from '@atb/sdk';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import usePollableResource from '@atb/utils/use-pollable-resource';
@@ -18,12 +16,13 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DetailsStackParams} from '..';
 import Trip from '../components/Trip';
 import CompactMap from '../Map/CompactMap';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
+import {singleTripSearch} from '@atb/api/trips_v2';
+import {TripPattern} from '@atb/api/types/trips';
 
-const themeColor: ThemeColor = 'background_accent';
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export type DetailsRouteParams = {
-  tripPatternId?: string;
   tripPatterns?: TripPattern[];
   startIndex?: number;
 };
@@ -38,7 +37,7 @@ type Props = {
 };
 const Details: React.FC<Props> = (props) => {
   const {
-    params: {tripPatternId, tripPatterns: initialTripPatterns, startIndex},
+    params: {tripPatterns: initialTripPatterns, startIndex},
   } = props.route;
   const {theme} = useTheme();
   const {t} = useTranslation();
@@ -52,7 +51,6 @@ const Details: React.FC<Props> = (props) => {
   );
   const [updatedTripPattern, , loading, error] = useTripPattern(
     currentIndex,
-    tripPatternId,
     initialTripPatterns ? initialTripPatterns[currentIndex] : undefined,
     !isFocused,
   );
@@ -64,7 +62,8 @@ const Details: React.FC<Props> = (props) => {
     const initialPatternForPage = tripPatterns[currentIndex];
     if (initialPatternForPage) {
       setTripPattern(
-        updatedTripPattern?.id === initialPatternForPage.id
+        updatedTripPattern?.compressedQuery ===
+          initialPatternForPage.compressedQuery
           ? updatedTripPattern
           : initialPatternForPage,
       );
@@ -94,7 +93,7 @@ const Details: React.FC<Props> = (props) => {
       </View>
       <ContentWithDisappearingHeader
         header={
-          tripPattern && (
+          tripPattern?.legs && (
             <CompactMap
               mapLegs={tripPattern.legs}
               fromPlace={tripPattern.legs[0].fromPlace}
@@ -120,7 +119,7 @@ const Details: React.FC<Props> = (props) => {
           />
         )}
         {tripPattern && (
-          <View style={styles.paddedContainer}>
+          <View style={styles.paddedContainer} testID="tripDetailsContentView">
             {tripPatterns.length > 1 && (
               <PaginatedDetailsHeader
                 page={currentIndex + 1}
@@ -140,13 +139,15 @@ const Details: React.FC<Props> = (props) => {
 
 function useTripPattern(
   currentIndex: number,
-  id?: string,
-  initialTripPattern?: TripPattern,
+  tripPattern?: TripPattern,
   disabled?: boolean,
 ) {
   const fetchTripPattern = useCallback(
     async function reload() {
-      return await getSingleTripPattern(id ?? initialTripPattern?.id ?? '');
+      const tripQuery = await singleTripSearch(
+        tripPattern?.compressedQuery ?? null,
+      );
+      return tripQuery?.trip?.tripPatterns[0] ?? undefined;
     },
     [currentIndex],
   );
@@ -154,7 +155,7 @@ function useTripPattern(
   return usePollableResource<TripPattern | undefined, AxiosError>(
     fetchTripPattern,
     {
-      initialValue: initialTripPattern,
+      initialValue: tripPattern,
       pollingTimeInSeconds: 30,
       filterError: (err) => !Axios.isCancel(err),
       disabled,
@@ -163,11 +164,11 @@ function useTripPattern(
 }
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   header: {
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
   },
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   paddedContainer: {
     paddingHorizontal: theme.spacings.medium,

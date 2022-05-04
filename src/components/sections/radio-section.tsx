@@ -31,7 +31,7 @@ export default function RadioSectionGroup<T>({
           checked={item == selected}
           text={itemToText(item, index)}
           onPress={() => onSelect?.(item, index)}
-          testID={'radioButton' + index}
+          testID={'radioButton' + itemToText(item, index)}
         />
       ))}
     </SectionGroup>

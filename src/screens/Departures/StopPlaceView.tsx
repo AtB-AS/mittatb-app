@@ -18,6 +18,7 @@ type StopPlaceViewProps = {
   ) => void;
   searchTime: SearchTime;
   setSearchTime: (searchTime: SearchTime) => void;
+  testID?: string;
 };
 
 export default function StopPlaceView({
@@ -26,6 +27,7 @@ export default function StopPlaceView({
   navigateToDetails,
   searchTime,
   setSearchTime,
+  testID,
 }: StopPlaceViewProps) {
   const {state, refresh} = useStopPlaceData(
     stopPlace,
@@ -61,6 +63,7 @@ export default function StopPlaceView({
             <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
           }
           sections={quayListData}
+          testID={testID}
           keyExtractor={(item) => item.id}
           renderItem={({item, index}) => (
             <>
@@ -69,9 +72,14 @@ export default function StopPlaceView({
                 data={state.data}
                 navigateToDetails={navigateToDetails}
                 navigateToQuay={navigateToQuay}
+                testID={'quaySection' + index}
               />
               {index === 0 && (
-                <Feedback mode="departures" quayListData={quayListData} />
+                <Feedback
+                  viewContext="departures"
+                  metadata={quayListData}
+                  avoidResetOnMetadataUpdate
+                />
               )}
             </>
           )}

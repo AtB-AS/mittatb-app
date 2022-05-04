@@ -1,7 +1,7 @@
 import {screenReaderPause} from '@atb/components/accessible-text';
 import LocationIcon from '@atb/components/location-icon';
 import ThemeText from '@atb/components/text';
-import {Location} from '@atb/favorites/types';
+import {SearchLocation} from '@atb/favorites/types';
 import {TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
@@ -11,13 +11,13 @@ import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
 export type LocationAndTariffZone = {
-  location: Location;
+  location: SearchLocation;
   tariffZone: TariffZone;
 };
 
 type Props = {
   locationsAndTariffZones: LocationAndTariffZone[];
-  onSelect: (l: Location) => void;
+  onSelect: (l: SearchLocation) => void;
 };
 
 const VenueResults: React.FC<Props> = ({locationsAndTariffZones, onSelect}) => {

@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = addTokenHandler;
 
+var _logger = require("../../../logger");
+
 var _native = require("../../../native");
 
 var _HandlerFactory = require("../HandlerFactory");
@@ -12,14 +14,25 @@ var _HandlerFactory = require("../HandlerFactory");
 function addTokenHandler() {
   return (0, _HandlerFactory.stateHandlerFactory)(['AddToken'], async s => {
     const {
-      certificate,
+      activatedData: {
+        certificate,
+        tokenId,
+        tokenValidityEnd,
+        tokenValidityStart
+      },
+      accountId,
+      state
+    } = s;
+
+    _logger.logger.info('mobiletoken_status_change', undefined, {
+      accountId,
       tokenId,
-      tokenValidityEnd,
-      tokenValidityStart
-    } = s.activatedData;
-    await (0, _native.addToken)(s.accountId, tokenId, certificate, tokenValidityStart, tokenValidityEnd);
+      state
+    });
+
+    await (0, _native.addToken)(accountId, tokenId, certificate, tokenValidityStart, tokenValidityEnd);
     return {
-      accountId: s.accountId,
+      accountId,
       state: 'VerifyInspectionAction',
       tokenId
     };

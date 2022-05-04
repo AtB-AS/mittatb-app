@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
-import type { ActivateTokenRequest } from './types';
-import { attest, attestLegacy } from '../native';
+import type { ActivateTokenRequest, Attestation } from './types';
+import { attest, attestLegacy, reattest } from '../native';
 
 enum AttestationType {
   SafetyNet = 'SafetyNet',
@@ -105,5 +105,19 @@ const getActivateTokenRequestBodyIos14 = async (
       keyId: keyId,
       deviceAttestationData: deviceAttestationData,
     },
+  };
+};
+
+export const getReattestation = async (
+  accountId: string,
+  tokenId: string,
+  nonce: string
+): Promise<Attestation> => {
+  const { attestationObject } = await reattest(accountId, tokenId, nonce);
+  return {
+    attestationType: 'SafetyNet',
+    safetyNetJws: attestationObject,
+    signaturePublicKeyAttestation: [],
+    encryptionPublicKeyAttestation: [],
   };
 };

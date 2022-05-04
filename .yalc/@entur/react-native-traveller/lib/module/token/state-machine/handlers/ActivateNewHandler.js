@@ -1,11 +1,22 @@
 import { verifyCorrectTokenId } from '../utils';
 import { stateHandlerFactory } from '../HandlerFactory';
+import { logger } from '../../../logger';
 export default function activateNewHandler(abtTokensService) {
   return stateHandlerFactory(['ActivateNew'], async s => {
-    const activateTokenResponse = await abtTokensService.activateToken(s.tokenId, s.attestationData);
-    verifyCorrectTokenId(s.tokenId, activateTokenResponse.tokenId);
+    const {
+      tokenId,
+      accountId,
+      state
+    } = s;
+    logger.info('mobiletoken_status_change', undefined, {
+      tokenId,
+      accountId,
+      state
+    });
+    const activateTokenResponse = await abtTokensService.activateToken(tokenId, s.attestationData);
+    verifyCorrectTokenId(tokenId, activateTokenResponse.tokenId);
     return {
-      accountId: s.accountId,
+      accountId: accountId,
       state: 'AddToken',
       tokenId: s.tokenId,
       activatedData: activateTokenResponse

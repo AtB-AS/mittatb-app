@@ -1,4 +1,4 @@
-import {TicketingSplash} from '@atb/assets/svg/color/illustrations';
+import {TicketSplash} from '@atb/assets/svg/color/images';
 import Button from '@atb/components/button';
 import Header from '@atb/components/screen-header';
 import ThemeText from '@atb/components/text';
@@ -24,22 +24,21 @@ export default function SplashInfo({navigation}: Props) {
       <Header
         title={t(TicketSplashTexts.header.title)}
         rightButton={{type: 'chat'}}
-        leftButton={{type: 'home'}}
-        color="primary_2"
+        color="background_accent_3"
       />
       <View style={styles.bannerContainer}>
-        <TicketingSplash
-          width={windowWidth}
-          height={windowWidth / 2}
-        ></TicketingSplash>
+        <TicketSplash width={windowWidth} height={windowWidth / 2} />
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.contentContainer}>
           <View style={styles.textContent}>
-            <ThemeText color="primary_2" style={[styles.text, styles.bold]}>
+            <ThemeText
+              color="background_accent_3"
+              style={[styles.text, styles.bold]}
+            >
               {t(TicketSplashTexts.splash.title)}
             </ThemeText>
-            <ThemeText color="primary_2" style={styles.text}>
+            <ThemeText color="background_accent_3" style={styles.text}>
               {t(TicketSplashTexts.splash.paragraph1)}
             </ThemeText>
           </View>
@@ -50,7 +49,10 @@ export default function SplashInfo({navigation}: Props) {
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1, backgroundColor: theme.colors.primary_2.backgroundColor},
+  container: {
+    flex: 1,
+    backgroundColor: theme.static.background.background_accent_3.background,
+  },
   scrollContainer: {
     flexGrow: 1,
   },

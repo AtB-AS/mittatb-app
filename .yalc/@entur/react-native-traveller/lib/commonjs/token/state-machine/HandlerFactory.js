@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.stateHandlerFactory = stateHandlerFactory;
 
+var _logger = require("../../logger");
+
 var _utils = require("./utils");
 
 function stateHandlerFactory(forStates, handlerFunction) {
@@ -21,6 +23,8 @@ function stateHandlerFactory(forStates, handlerFunction) {
     try {
       return await handlerFunction(storedState);
     } catch (err) {
+      _logger.logger.error(undefined, err, undefined);
+
       let missingNet = false;
 
       try {

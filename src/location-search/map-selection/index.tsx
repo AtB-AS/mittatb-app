@@ -20,6 +20,13 @@ import {TouchableOpacity, View} from 'react-native';
 import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
 import LocationBar from './LocationBar';
 import SelectionPin, {PinMode} from './SelectionPin';
+import {coordinatesDistanceInMetres} from '@atb/utils/location';
+
+/**
+ * How many meters from the current location GPS coordinates can the map arrow
+ * icon be and still be considered "My position"
+ */
+const CURRENT_LOCATION_THRESHOLD_METERS = 30;
 
 export type RouteParams = {
   callerRouteName: string;
@@ -70,10 +77,23 @@ const MapSelection: React.FC<Props> = ({
 
   const {location: geolocation} = useGeolocationState();
 
+  const selectedLocation = useMemo(() => {
+    if (!centeredCoordinates) return undefined;
+    if (!geolocation) return location;
+
+    const pinIsCloseToGeolocation =
+      coordinatesDistanceInMetres(
+        geolocation.coordinates,
+        centeredCoordinates,
+      ) < CURRENT_LOCATION_THRESHOLD_METERS;
+
+    return pinIsCloseToGeolocation ? geolocation : location;
+  }, [geolocation, location]);
+
   const onSelect = () => {
     location &&
       navigation.navigate(callerRouteName as any, {
-        [callerRouteParam]: {...location, resultType: 'search'},
+        [callerRouteParam]: selectedLocation,
       });
   };
 
@@ -93,7 +113,7 @@ const MapSelection: React.FC<Props> = ({
   async function flyToCurrentLocation() {
     geolocation &&
       mapCameraRef.current?.flyTo(
-        [geolocation?.coords.longitude, geolocation?.coords.latitude],
+        [geolocation.coordinates.longitude, geolocation.coordinates.latitude],
         750,
       );
   }
@@ -116,7 +136,7 @@ const MapSelection: React.FC<Props> = ({
         />
 
         <LocationBar
-          location={location}
+          location={selectedLocation}
           onSelect={onSelect}
           isSearching={!!regionEvent?.isMoving || isSearching}
           error={error}

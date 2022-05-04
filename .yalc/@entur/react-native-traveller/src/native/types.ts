@@ -18,6 +18,10 @@ export type AttestationData = {
   encryptionChain: string[];
 };
 
+export type ReattestationData = {
+  attestationObject: string;
+};
+
 export type LegacyAttestationData = {
   attestation: string;
   attestationEncryptionKey: string;

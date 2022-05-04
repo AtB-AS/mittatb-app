@@ -4,103 +4,102 @@ const SelectTravelTokenTexts = {
     header: {
       title: _(
         'Bruk billett på mobil / t:kort',
-        'Use ticket on mobile / t:card',
+        'Use ticket on phone / t:card',
       ),
     },
     changeTokenButton: _(
       'Bytt mellom mobil / t:kort',
-      'Switch between mobile / t:card',
+      'Switch between phone / t:card',
     ),
     faq: {
       title: _('Ofte stilte spørsmål', 'Frequently asked questions'),
     },
     faqs: [
       {
-        question: _('Hva om jeg mister mobilen eller t:kortet?', ''), // TODO
+        question: _(
+          'Hva skjer om jeg mister mobilen eller t:kortet?',
+          'What happens if I lose my phone or t:card?',
+        ),
         answer: _(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', // TODO
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', // TODO
+          'Du kan enkelt velge å bruke billetten din på et annet t:kort eller mobil. Det gjør du på **Min profil**.',
+          'You can easily head over to **My profile** to switch and use your ticket on another t:card or phone.',
         ),
       },
       {
-        question: _('Kan jeg reise med t:kort og mobil samtidig?', ''), // TODO
+        question: _(
+          'Kan jeg bruke billetten på både t:kort og mobil samtidig?',
+          'Can I use the ticket on both t:card and phone at the same time?',
+        ),
         answer: _(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', // TODO
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', // TODO
+          'Nei. Billetten kan bare brukes på en dings om gangen, og billetten kan ikke deles med andre.',
+          'No. You can only use the ticket on one gadget at a time and the ticket can not be shared with others.',
         ),
       },
       {
-        question: _('Kan jeg reise uten mobil eller t:kort?', ''), // TODO
+        question: _(
+          'Kan jeg reise uten t:kort eller mobil?',
+          'Can I travel without my t:card or phone?',
+        ),
         answer: _(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', // TODO
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', // TODO
+          'Nei. Du må alltid ha med deg den dingsen du har valgt å bruke billetten på.',
+          'No. You must always bring the gadget you have chosen to use your ticket on.',
+        ),
+      },
+      {
+        question: _(
+          `Har du flere spørsmål om billettkjøp?`,
+          `Do you have any other questions about ticket purchases?`,
+        ),
+        answer: _(
+          `Se flere måter å kontakte oss på atb.no/kontakt`,
+          `See how to contact us at atb.no/en/contact`,
         ),
       },
     ],
-    errorMessages: {
-      tokensNotLoaded: _(
-        'Vi får ikke hentet ut informasjon om enten t:kortet eller mobilen din. Sjekk at du har tilgang på nett der du er.',
-        '', // TODO
-      ),
-      emptyTokens: _(
-        'Vi finner ingen t:kort eller mobiler tilknyttet profilen din. Sjekk at du har tilgang på nett.' +
-          '\n\n' +
-          'Hvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.' +
-          '\n\n' +
-          'Om problemet vedvarer kan du ta kontakt med AtB kundesenter.',
-        '', // TODO
-      ),
-      noInspectableToken: _(
-        'Du har ikke valgt å bruke billett på enten t:kort eller mobil. Gå til *Bytt mellom mobil / t:kort* for å velge.',
-        '', // TODO
-      ),
-    },
   },
   toggleToken: {
-    title: _('Bytt mellom mobil / t:kort', 'Switch between mobile / t:card'), // TODO
+    title: _('Bytt mellom mobil / t:kort', 'Switch between phone / t:card'),
     radioBox: {
       tCard: {
         title: _('T:kort', 'T:card'),
         description: _(
-          'Les av t:kortet ditt på holdeplass eller ombord. Kortet leses av ved kontroll.',
-          '', // TODO
+          'Les av t:kortet ditt på holdeplass eller om bord. Kortet leses av ved kontroll.',
+          'Validate your t:card at the bus stop or on board. The card will be scanned in a ticket inspection.',
         ),
         a11yLabel: _(
           'T:kort. Les av t-kortet ditt på holdeplass eller om bord. Kortet leses av ved kontroll.',
-          '', // TODO
+          't:card. Validate your t:card at the bus stop or on board. The card will be scanned in a ticket inspection.',
         ),
         a11yHint: _('Aktivér for å velge t:kort.', 'Activate to select t:card'),
       },
       phone: {
         title: _('Mobil', 'Phone'),
         description: _(
-          'Gå ombord med mobilen. Mobilen vises frem ved kontroll.',
-          '', // TODO
+          'Gå om bord med mobilen. Mobilen vises frem ved kontroll.',
+          'Board with your phone. Present the phone for ticket inspection.',
         ),
         a11yLabel: _(
-          'Mobil. Gå ombord med mobilen. Mobilen vises frem ved kontroll.',
-          'Phone. ', // TODO
+          'Mobil. Gå om bord med mobilen. Mobilen vises frem ved kontroll.',
+          'Board with your phone. Present the phone for ticket inspection.',
         ),
-        a11yHint: _(
-          'Aktivér for å velge mobil.',
-          '', // TODO
-        ),
+        a11yHint: _('Aktivér for å velge mobil.', 'Activate to select phone'),
         selection: {
-          heading: _('Velg enhet', 'Select device'), // TODO
+          heading: _('Velg enhet', 'Select device'),
           thisDeviceSuffix: _(' (denne enheten)', ' (this device)'),
         },
       },
     },
-    saveButton: _('Lagre valg', 'Confirm selection'), // TODO
-    errorMessage: _('Noe gikk galt', 'Something went wrong'), // TODO
+    saveButton: _('Lagre valg', 'Confirm selection'),
+    errorMessage: _('Noe gikk galt', 'Something went wrong'),
     noTravelCard: _(
-      'Du har ikke et t:kort registrert. Hvis du ønsker å bruke t:kort kan du legge til dette på din profil i [nettbutikken](https://nettbutikk.atb.no).', // TODO
+      'Du har ikke et t:kort registrert. Hvis du ønsker å bruke t:kort kan du legge til dette på din profil i [nettbutikken](https://nettbutikk.atb.no).',
       'You have no t:card registered, If you wish to use t:card as travel token you may add this to your profile in the [webshop](https://nettbutikk.atb.no).',
     ),
     noMobileToken: _(
-      'Vi forsøker å klargjøre din mobil til å kunne bruke billettene på den, men det ser ut som det tar litt tid. Du kan sjekke om du har nettilgang og hvis ikke så vil appen forsøke på nytt neste gang du får tilgang.', // TODO
-      'We are trying to make your mobile phone ready to be used for the tickets, but it seems it is taking some time. Check that your device is connected to the Internet and if not the phone will try again when the Internet connection is back.',
+      'Vi forsøker å klargjøre din mobil til å kunne bruke billettene på den, men det ser ut som det tar litt tid. Du kan sjekke om du har nettilgang og hvis ikke så vil appen forsøke på nytt neste gang du får tilgang.',
+      `We're trying to get your phone ready for ticket usage, but it seems like it's taking some time. Check that your device is connected to the internet, if not we'll try again once the internet connection is restored.`,
     ),
+    unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },
 };
 export default SelectTravelTokenTexts;

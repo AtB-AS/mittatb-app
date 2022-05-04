@@ -23,8 +23,8 @@ export type TokenLifecycleState =
 
 export type TokenType =
   | 'TOKEN_TYPE_UNSPECIFIED'
-  | 'TOKEN_TYPE_QR_SMARTPHONE'
-  | 'TOKEN_TYPE_QR_PAPER'
+  | 'TOKEN_TYPE_MOBILE'
+  | 'TOKEN_TYPE_STATIC_BARCODE'
   | 'TOKEN_TYPE_TRAVELCARD'
   | 'TOKEN_TYPE_REFERENCE_CODE'
   | 'TOKEN_TYPE_PLAIN_UNSIGNED'
@@ -72,36 +72,44 @@ export type AttestationIOSDeviceCheck = {
   attestationEncryptionEncryptedKey: string;
 };
 
+export type AndroidSafetyNetAttestation = {
+  attestationType: 'SafetyNet';
+  /** SafetyNet JWS from client */
+  safetyNetJws: string;
+  /** base64 encoded attestations for public key, for attestation type 'SafetyNet'. */
+  signaturePublicKeyAttestation: string[];
+  /** base64 encoded attestations for encryption public key, for attestation type 'SafetyNet'. */
+  encryptionPublicKeyAttestation: string[];
+};
+
+export type IosDeviceCheckAttestation = {
+  attestationType: 'iOS_Device_Check';
+  /** base64 encoded data from iOS DeviceCheck API */
+  encryptedIosDeviceCheckData: string;
+  /** base64 encoded RSA encrypted AES key, for attestation type 'iOS_Device_Check'. Encrypted with the attestationEncryptionPublicKey from InitializeTokenResponse. */
+  attestationEncryptionEncryptedKey: string;
+};
+
+export type IosDeviceAttestAttestation = {
+  attestationType: 'iOS_Device_Attestation';
+  /** base64 encoded object from API, should be created with serialized DeviceAttestationData as a challeng */
+  attestationObject: string;
+  /** base64 encoded key id, from generated iOS app attest data. */
+  keyId: string;
+  /** base64 encoded serialized DeviceAttestationData protobuf */
+  deviceAttestationData: string;
+};
+
+export type Attestation =
+  | AndroidSafetyNetAttestation
+  | IosDeviceCheckAttestation
+  | IosDeviceAttestAttestation;
+
 export type ActivateTokenRequest = {
   /** base64 encoded token public key */
   signaturePublicKey?: string;
   encryptionPublicKey?: string;
-  attestation:
-    | {
-        attestationType: 'iOS_Device_Check';
-        /** base64 encoded data from iOS DeviceCheck API */
-        encryptedIosDeviceCheckData: string;
-        /** base64 encoded RSA encrypted AES key, for attestation type 'iOS_Device_Check'. Encrypted with the attestationEncryptionPublicKey from InitializeTokenResponse. */
-        attestationEncryptionEncryptedKey: string;
-      }
-    | {
-        attestationType: 'SafetyNet';
-        /** SafetyNet JWS from client */
-        safetyNetJws: string;
-        /** base64 encoded attestations for public key, for attestation type 'SafetyNet'. */
-        signaturePublicKeyAttestation: string[];
-        /** base64 encoded attestations for encryption public key, for attestation type 'SafetyNet'. */
-        encryptionPublicKeyAttestation: string[];
-      }
-    | {
-        attestationType: 'iOS_Device_Attestation';
-        /** base64 encoded object from API, should be created with serialized DeviceAttestationData as a challeng */
-        attestationObject: string;
-        /** base64 encoded key id, from generated iOS app attest data. */
-        keyId: string;
-        /** base64 encoded serialized DeviceAttestationData protobuf */
-        deviceAttestationData: string;
-      };
+  attestation: Attestation;
 };
 
 export type ActivateTokenResponse = {

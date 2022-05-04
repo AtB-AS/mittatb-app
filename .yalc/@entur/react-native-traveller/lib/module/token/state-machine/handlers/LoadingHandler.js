@@ -1,22 +1,31 @@
 import { getToken } from '../../../native';
 import { stateHandlerFactory } from '../HandlerFactory';
+import { logger } from '../../../logger';
 const secondsIn48Hours = 48 * 60 * 60;
 export default function loadingHandler() {
   return stateHandlerFactory(['Loading', 'Valid'], async s => {
-    const token = await getToken(s.accountId);
+    const {
+      accountId,
+      state
+    } = s;
+    logger.info('mobiletoken_status_change', undefined, {
+      state,
+      accountId
+    });
+    const token = await getToken(accountId);
 
     if (!token) {
       return {
-        accountId: s.accountId,
+        accountId,
         state: 'InitiateNew'
       };
     } else {
       return tokenNeedsRenewal(token) ? {
-        accountId: s.accountId,
+        accountId,
         tokenId: token.tokenId,
         state: 'InitiateRenewal'
       } : {
-        accountId: s.accountId,
+        accountId,
         state: 'Validating',
         tokenId: token.tokenId
       };

@@ -63,7 +63,10 @@ const LocationResults: React.FC<Props> = ({
                   )}
                 </View>
                 <View style={styles.locationTextContainer}>
-                  <ThemeText style={styles.locationName}>
+                  <ThemeText
+                    style={styles.locationName}
+                    testID={testIDItemPrefix + idx + 'Name'}
+                  >
                     {searchResult.text}
                   </ThemeText>
                   <ThemeText style={styles.locality}>

@@ -1,7 +1,5 @@
-import {CancelToken, isCancel, searchTrip} from '@atb/api';
-import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
-import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
+import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import Button from '@atb/components/button';
 import DisappearingHeader from '@atb/components/disappearing-header';
@@ -11,12 +9,7 @@ import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import FavoriteChips from '@atb/favorite-chips';
 import {useFavorites} from '@atb/favorites';
-import {
-  Location,
-  LocationWithMetadata,
-  UserFavorites,
-} from '@atb/favorites/types';
-import {useReverseGeocoder} from '@atb/geocoder';
+import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
 import {
   RequestPermissionFn,
   useGeolocationState,
@@ -24,8 +17,6 @@ import {
 import {useLocationSearchValue} from '@atb/location-search';
 import {SelectableLocationData} from '@atb/location-search/types';
 import {RootStackParamList} from '@atb/navigation';
-import {TripPattern} from '@atb/sdk';
-import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   AssistantTexts,
@@ -35,9 +26,10 @@ import {
 } from '@atb/translations';
 import {formatToLongDateTime, isInThePast} from '@atb/utils/date';
 import {
-  locationDistanceInMetres as distanceInMetres,
-  locationsAreEqual,
+  coordinatesDistanceInMetres as distanceInMetres,
   LOCATIONS_REALLY_CLOSE_THRESHOLD,
+  coordinatesAreEqual,
+  isValidTripLocations,
 } from '@atb/utils/location';
 import {useLayout} from '@atb/utils/use-layout';
 import Bugsnag from '@bugsnag/react-native';
@@ -47,28 +39,31 @@ import {
   CompositeNavigationProp,
   RouteProp,
   useIsFocused,
+  useNavigation,
 } from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {BackHandler, View} from 'react-native';
+import {
+  ActivityIndicator,
+  TouchableOpacity,
+  View,
+  BackHandler,
+} from 'react-native';
 import {AssistantParams} from '.';
 import Loading from '../Loading';
 import FadeBetween from './FadeBetween';
 import {SearchTime, useSearchTimeValue} from './journey-date-picker';
 import NewsBanner from './NewsBanner';
 import Results from './Results';
-import {SearchStateType} from './types';
-import {ThemeColor} from '@atb/theme/colors';
-import useInterval from '@atb/utils/use-interval';
-import {differenceInMinutes, parseISO} from 'date-fns';
+import {StaticColorByType} from '@atb/theme/colors';
+import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
+import useTripsQuery from '@atb/screens/Assistant/use-trips-query';
+import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 
-const themeColor: ThemeColor = 'background_accent';
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type AssistantRouteName = 'AssistantRoot';
 const AssistantRouteNameStatic: AssistantRouteName = 'AssistantRoot';
-
-// Used to re-trigger refresh of search time if set to 'now' after 60 minutes.
-const REFRESH_NOW_SEARCH_TIME_LIMIT_IN_MINUTES = 60;
 
 export type AssistantScreenNavigationProp = CompositeNavigationProp<
   StackNavigationProp<AssistantParams>,
@@ -90,17 +85,13 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
     requestPermission: requestGeoPermission,
   } = useGeolocationState();
 
-  const {closestLocation: currentLocation} = useReverseGeocoder(
-    location?.coords ?? null,
-  );
-
   if (!status) {
     return <Loading />;
   }
 
   return (
     <Assistant
-      currentLocation={currentLocation}
+      currentLocation={location || undefined}
       hasLocationPermission={locationEnabled && status === 'granted'}
       navigation={navigation}
       requestGeoPermission={requestGeoPermission}
@@ -109,7 +100,7 @@ const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
 };
 
 type Props = {
-  currentLocation?: Location;
+  currentLocation?: GeoLocation;
   hasLocationPermission: boolean;
   requestGeoPermission: RequestPermissionFn;
   navigation: AssistantScreenNavigationProp;
@@ -142,27 +133,42 @@ const Assistant: React.FC<Props> = ({
     date: new Date().toISOString(),
   });
 
-  const screenHasFocus = useIsFocused();
+  const setCurrentLocationAsFrom = useCallback(
+    function setCurrentLocationAsFrom() {
+      log('set_current_location_as_from');
+      navigation.setParams({
+        fromLocation: currentLocation && {
+          ...currentLocation,
+          resultType: 'geolocation',
+        },
+        toLocation: to,
+      });
+    },
+    [navigation, currentLocation, to],
+  );
 
-  useInterval(
-    () => {
-      if (searchTime.option === 'now') {
-        const now = new Date();
-        const diff = differenceInMinutes(now, parseISO(searchTime.date));
-
-        // Update "now" date if it has been more than 60 minutes
-        // since last time now has been updated
-        if (diff >= REFRESH_NOW_SEARCH_TIME_LIMIT_IN_MINUTES) {
-          navigation.setParams({
-            searchTime: {option: 'now', date: now.toISOString()},
-          });
+  const setCurrentLocationOrRequest = useCallback(
+    async function setCurrentLocationOrRequest() {
+      if (currentLocation) {
+        setCurrentLocationAsFrom();
+      } else {
+        const status = await requestGeoPermission();
+        if (status === 'granted') {
+          setCurrentLocationAsFrom();
         }
       }
     },
-    1000,
-    [searchTime.option, searchTime.date],
-    !screenHasFocus || searchTime.option !== 'now',
+    [currentLocation, setCurrentLocationAsFrom, requestGeoPermission],
   );
+  const resetView = useCallback(() => {
+    analytics().logEvent('click_logo_reset');
+    log('reset');
+    setCurrentLocationOrRequest();
+
+    navigation.setParams({
+      toLocation: undefined,
+    });
+  }, [navigation, setCurrentLocationOrRequest]);
 
   function swap() {
     log('swap', {
@@ -172,7 +178,7 @@ const Assistant: React.FC<Props> = ({
     navigation.setParams({fromLocation: to, toLocation: from});
   }
 
-  function fillNextAvailableLocation(selectedLocation: LocationWithMetadata) {
+  function fillNextAvailableLocation(selectedLocation: Location) {
     if (!from) {
       navigation.setParams({
         fromLocation: selectedLocation,
@@ -184,17 +190,6 @@ const Assistant: React.FC<Props> = ({
         toLocation: selectedLocation,
       });
     }
-  }
-
-  function setCurrentLocationAsFrom() {
-    log('set_current_location_as_from');
-    navigation.setParams({
-      fromLocation: currentLocation && {
-        ...currentLocation,
-        resultType: 'geolocation',
-      },
-      toLocation: to,
-    });
   }
 
   function setCurrentLocationAsFromIfEmpty() {
@@ -212,39 +207,20 @@ const Assistant: React.FC<Props> = ({
     });
   }
 
-  async function setCurrentLocationOrRequest() {
-    if (currentLocation) {
-      setCurrentLocationAsFrom();
-    } else {
-      const status = await requestGeoPermission();
-      if (status === 'granted') {
-        setCurrentLocationAsFrom();
-      }
-    }
-  }
-
-  function resetView() {
-    analytics().logEvent('click_logo_reset');
-    log('reset');
-    setCurrentLocationOrRequest();
-
-    navigation.setParams({
-      toLocation: undefined,
-    });
-  }
-
-  const [
+  const {
     tripPatterns,
     timeOfLastSearch,
-    reload,
-    clearPatterns,
+    refresh,
+    loadMore,
+    clear,
     searchState,
     error,
-  ] = useTripPatterns(from, to, searchTime);
+  } = useTripsQuery(from, to, searchTime);
+
   const isSearching = searchState === 'searching';
   const openLocationSearch = (
     callerRouteParam: keyof AssistantRouteProp['params'],
-    initialLocation: LocationWithMetadata | undefined,
+    initialLocation: Location | undefined,
   ) =>
     navigation.navigate('LocationSearch', {
       label:
@@ -259,7 +235,7 @@ const Assistant: React.FC<Props> = ({
 
   const showEmptyScreen = !tripPatterns && !isSearching && !error;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
-  const useScroll = (!showEmptyScreen && !isEmptyResult) || !!error;
+  const useScroll = !showEmptyScreen || !!error;
   const isHeaderFullHeight = !from || !to;
 
   const renderHeader = useCallback(
@@ -280,7 +256,7 @@ const Assistant: React.FC<Props> = ({
               location={from}
               label={t(AssistantTexts.location.departurePicker.label)}
               onPress={() => openLocationSearch('fromLocation', from)}
-              icon={<ThemeIcon svg={CurrentLocationArrow} />}
+              icon={<ThemeIcon svg={LocationIcon} />}
               onIconPress={setCurrentLocationOrRequest}
               iconAccessibility={{
                 accessible: true,
@@ -347,9 +323,9 @@ const Assistant: React.FC<Props> = ({
                 language,
               )}
               accessibilityHint={t(AssistantTexts.dateInput.a11yHint)}
-              color="primary_2"
+              interactiveColor="interactive_1"
               onPress={onSearchTimePress}
-              testID="datePickerButton"
+              testID="assistantDateTimePicker"
             />
           </View>
         </FadeBetween>
@@ -401,11 +377,11 @@ const Assistant: React.FC<Props> = ({
     </View>
   );
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
+  const isValidLocations = isValidTripLocations(from, to);
 
   const onPressed = useCallback(
-    (tripPatternId, tripPatterns, startIndex) =>
+    (tripPatterns, startIndex) =>
       navigation.navigate('TripDetails', {
-        tripPatternId,
         tripPatterns,
         startIndex,
       }),
@@ -417,6 +393,10 @@ const Assistant: React.FC<Props> = ({
   const [searchStateMessage, setSearchStateMessage] = useState<
     string | undefined
   >();
+
+  const screenHasFocus = useIsFocused();
+
+  const {leftButton} = useServiceDisruptionSheet();
 
   useEffect(() => {
     if (!screenHasFocus) return;
@@ -455,38 +435,80 @@ const Assistant: React.FC<Props> = ({
     <DisappearingHeader
       renderHeader={renderHeader}
       highlightComponent={newsBanner}
-      onRefresh={reload}
-      isRefreshing={isSearching}
+      onRefresh={refresh}
+      isRefreshing={searchState === 'searching' && !tripPatterns.length}
       useScroll={useScroll}
       headerTitle={t(AssistantTexts.header.title)}
-      headerMargin={24}
       isFullHeight={isHeaderFullHeight}
       alternativeTitleComponent={altHeaderComp}
       showAlterntativeTitle={Boolean(from && to)}
-      leftButton={{
-        type: 'home',
-        color: themeColor,
-        onPress: resetView,
-        accessibilityLabel: t(AssistantTexts.header.accessibility.logo),
-        testID: 'lhb',
-      }}
+      leftButton={leftButton}
+      tabPressBehaviour={{navigation, onTabPressOnTopScroll: resetView}}
       onFullscreenTransitionEnd={(fullHeight) => {
         if (fullHeight) {
-          clearPatterns();
+          clear();
         }
       }}
       alertContext="travel"
     >
       <ScreenReaderAnnouncement message={searchStateMessage} />
-      <Results
-        tripPatterns={tripPatterns}
-        isSearching={isSearching}
-        showEmptyScreen={showEmptyScreen}
-        isEmptyResult={isEmptyResult}
-        resultReasons={noResultReasons}
-        onDetailsPressed={onPressed}
-        errorType={error}
-      />
+      {isValidLocations && (
+        <Results
+          tripPatterns={tripPatterns}
+          isSearching={isSearching}
+          showEmptyScreen={showEmptyScreen}
+          isEmptyResult={isEmptyResult}
+          resultReasons={noResultReasons}
+          onDetailsPressed={onPressed}
+          errorType={error}
+          searchTime={searchTime}
+        />
+      )}
+      {!error && isValidLocations && (
+        <TouchableOpacity
+          onPress={loadMore}
+          disabled={searchState === 'searching'}
+          style={styles.loadMoreButton}
+          testID="loadMoreButton"
+        >
+          {searchState === 'searching' ? (
+            <View style={styles.loadingIndicator}>
+              {tripPatterns.length ? (
+                <>
+                  <ActivityIndicator
+                    color={theme.text.colors.secondary}
+                    style={{
+                      marginRight: theme.spacings.medium,
+                    }}
+                  />
+                  <ThemeText color="secondary" testID="searchingForResults">
+                    {t(AssistantTexts.results.fetchingMore)}
+                  </ThemeText>
+                </>
+              ) : (
+                <ThemeText
+                  color="secondary"
+                  style={styles.loadingText}
+                  testID="searchingForResults"
+                >
+                  {t(AssistantTexts.searchState.searching)}
+                </ThemeText>
+              )}
+            </View>
+          ) : (
+            <>
+              {loadMore ? (
+                <>
+                  <ThemeText testID="resultsLoaded">
+                    {t(AssistantTexts.results.fetchMore)}{' '}
+                  </ThemeText>
+                  <ThemeIcon svg={ExpandMore} size={'normal'} />
+                </>
+              ) : null}
+            </>
+          )}
+        </TouchableOpacity>
+      )}
     </DisappearingHeader>
   );
 };
@@ -523,11 +545,25 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   fadeChild: {
     marginVertical: theme.spacings.medium,
   },
+  loadingIndicator: {
+    marginTop: theme.spacings.xLarge,
+    flexDirection: 'row',
+  },
+  loadingText: {
+    marginTop: theme.spacings.xLarge * 2,
+  },
+  loadMoreButton: {
+    paddingVertical: theme.spacings.medium,
+    marginBottom: theme.spacings.xLarge,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
 }));
 
 type SearchForLocations = {
-  from?: LocationWithMetadata;
-  to?: LocationWithMetadata;
+  from?: Location;
+  to?: Location;
 };
 
 function computeNoResultReasons(
@@ -539,11 +575,14 @@ function computeNoResultReasons(
   let reasons = [];
 
   if (!!from && !!to) {
-    if (locationsAreEqual(from, to)) {
+    if (coordinatesAreEqual(from.coordinates, to.coordinates)) {
       reasons.push(
         t(AssistantTexts.searchState.noResultReason.IdenticalLocations),
       );
-    } else if (distanceInMetres(from, to) < LOCATIONS_REALLY_CLOSE_THRESHOLD) {
+    } else if (
+      distanceInMetres(from.coordinates, to.coordinates) <
+      LOCATIONS_REALLY_CLOSE_THRESHOLD
+    ) {
       reasons.push(t(AssistantTexts.searchState.noResultReason.CloseLocations));
     }
   }
@@ -561,12 +600,12 @@ function computeNoResultReasons(
 }
 
 function useLocations(
-  currentLocation: Location | undefined,
+  currentLocation: GeoLocation | undefined,
 ): SearchForLocations {
   const {favorites} = useFavorites();
 
-  const memoedCurrentLocation = useMemo<LocationWithMetadata | undefined>(
-    () => currentLocation && {...currentLocation, resultType: 'geolocation'},
+  const memoedCurrentLocation = useMemo<GeoLocation | undefined>(
+    () => currentLocation,
     [
       currentLocation?.coordinates.latitude,
       currentLocation?.coordinates.longitude,
@@ -589,11 +628,12 @@ function useLocations(
 function useUpdatedLocation(
   searchedFromLocation: SelectableLocationData | undefined,
   searchedToLocation: SelectableLocationData | undefined,
-  currentLocation: LocationWithMetadata | undefined,
+  currentLocation: GeoLocation | undefined,
   favorites: UserFavorites,
 ): SearchForLocations {
-  const [from, setFrom] = useState<LocationWithMetadata | undefined>();
-  const [to, setTo] = useState<LocationWithMetadata | undefined>();
+  const [from, setFrom] = useState<Location | undefined>();
+  const [to, setTo] = useState<Location | undefined>();
+  const navigation = useNavigation<AssistantScreenNavigationProp>();
 
   const setLocation = useCallback(
     (direction: 'from' | 'to', searchedLocation?: SelectableLocationData) => {
@@ -606,14 +646,16 @@ function useUpdatedLocation(
         case 'geolocation':
           return updater(currentLocation);
         case 'journey': {
-          const toSearch = (i: number): LocationWithMetadata => ({
+          const toSearch = (i: number): Location => ({
             ...searchedLocation.journeyData[i],
             resultType: 'search',
           });
 
           // Set both states when journey is passed.
-          setFrom(toSearch(0));
-          setTo(toSearch(1));
+          navigation.setParams({
+            fromLocation: toSearch(0),
+            toLocation: toSearch(1),
+          });
           return;
         }
         case 'favorite': {
@@ -622,11 +664,7 @@ function useUpdatedLocation(
           );
 
           if (favorite) {
-            return updater({
-              ...favorite.location,
-              resultType: 'favorite',
-              favoriteId: favorite.id,
-            });
+            return updater(favorite.location);
           }
         }
       }
@@ -649,104 +687,6 @@ function useUpdatedLocation(
 
 export default AssistantRoot;
 
-function useTripPatterns(
-  fromLocation: Location | undefined,
-  toLocation: Location | undefined,
-  searchTime: SearchTime | undefined,
-): [
-  TripPattern[] | null,
-  string,
-  () => {},
-  () => void,
-  SearchStateType,
-  ErrorType?,
-] {
-  const [timeOfSearch, setTimeOfSearch] = useState<string>(
-    new Date().toISOString(),
-  );
-  const [tripPatterns, setTripPatterns] = useState<TripPattern[] | null>(null);
-  const [errorType, setErrorType] = useState<ErrorType>();
-  const [searchState, setSearchState] = useState<SearchStateType>('idle');
-  const {addJourneySearchEntry} = useSearchHistory();
-
-  const clearPatterns = () => setTripPatterns(null);
-  const reload = useCallback(() => {
-    const source = CancelToken.source();
-
-    async function search() {
-      if (!fromLocation || !toLocation) {
-        setSearchState('idle');
-        return;
-      }
-
-      setSearchState('searching');
-      setErrorType(undefined);
-      try {
-        const arriveBy = searchTime?.option === 'arrival';
-        const searchDate =
-          searchTime && searchTime?.option !== 'now'
-            ? searchTime.date
-            : new Date().toISOString();
-
-        log('searching', {
-          fromLocation: translateLocation(fromLocation),
-          toLocation: translateLocation(toLocation),
-          searchDate: searchDate,
-        });
-
-        try {
-          // Fire and forget add journey search entry
-          await addJourneySearchEntry([fromLocation, toLocation]);
-        } catch (e) {}
-
-        const response = await searchTrip(
-          fromLocation,
-          toLocation,
-          searchDate,
-          arriveBy,
-          {
-            cancelToken: source.token,
-          },
-        );
-        source.token.throwIfRequested();
-        setTimeOfSearch(searchDate);
-        if (Array.isArray(response.data)) {
-          setTripPatterns(response.data);
-          setSearchState(
-            response.data.length >= 1
-              ? 'search-success'
-              : 'search-empty-result',
-          );
-        }
-      } catch (e) {
-        if (!isCancel(e)) {
-          setErrorType(getAxiosErrorType(e));
-          console.warn(e);
-          setTripPatterns(null);
-          setSearchState('search-empty-result');
-        }
-      }
-    }
-
-    search();
-    return () => {
-      if (!fromLocation || !toLocation) return;
-      source.cancel('New search to replace previous search');
-    };
-  }, [fromLocation, toLocation, searchTime]);
-
-  useEffect(reload, [reload]);
-
-  return [
-    tripPatterns,
-    timeOfSearch,
-    reload,
-    clearPatterns,
-    searchState,
-    errorType,
-  ];
-}
-
 function useDoOnceWhen(fn: () => void, condition: boolean) {
   const firstTimeRef = useRef(true);
   useEffect(() => {
@@ -763,6 +703,9 @@ function log(message: string, metadata?: {[key: string]: string}) {
 
 function translateLocation(location: Location | undefined): string {
   if (!location) return 'Undefined location';
+  if (location.resultType === 'geolocation') {
+    return location.id;
+  }
   return `${location.id}--${location.name}--${location.locality}`;
 }
 

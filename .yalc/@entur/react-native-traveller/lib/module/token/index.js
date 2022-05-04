@@ -13,6 +13,7 @@ import startingHandler from './state-machine/handlers/StartingHandler';
 import notSupportedHandler from './state-machine/handlers/NotSupportedHandler';
 import { getStoreKey } from './state-machine/utils';
 import verifyInspectionActionHandler from './state-machine/handlers/VerifyInspectionActionHandler';
+import { logger } from '../logger';
 export const startTokenStateMachine = async (abtTokensService, setStatus, safetyNetApiKey, forceRestart = false, accountId) => {
   if (!accountId) {
     setStatus(undefined);
@@ -32,6 +33,7 @@ export const startTokenStateMachine = async (abtTokensService, setStatus, safety
         setStatus(currentState);
       }
     } catch (err) {
+      logger.error(undefined, err, undefined);
       console.warn('Unexpected error', err);
       setStatus({ ...currentState,
         error: {

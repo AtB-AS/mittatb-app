@@ -9,11 +9,15 @@ import {
   useTranslation,
 } from '@atb/translations';
 import Button from '@atb/components/button';
-import {getReferenceDataName} from '@atb/reference-data/utils';
+import {
+  getReferenceDataName,
+  productIsSellableInApp,
+} from '@atb/reference-data/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 type Props = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -26,16 +30,15 @@ const ProductSheet = forwardRef<ScrollView, Props>(
     const styles = useStyles();
     const {t, language} = useTranslation();
 
-    const {preassigned_fare_products: preassignedFareProducts} =
-      useRemoteConfig();
+    const {preassignedFareproducts} = useFirestoreConfiguration();
 
     const [selectedProduct, setSelectedProduct] = useState(
       preassignedFareProduct,
     );
 
-    const selectableProducts = preassignedFareProducts.filter(
-      (p) => p.type === selectedProduct.type,
-    );
+    const selectableProducts = preassignedFareproducts
+      .filter(productIsSellableInApp)
+      .filter((p) => p.type === selectedProduct.type);
 
     return (
       <BottomSheetContainer>
@@ -65,7 +68,7 @@ const ProductSheet = forwardRef<ScrollView, Props>(
 
         <FullScreenFooter>
           <Button
-            color="primary_2"
+            interactiveColor="interactive_0"
             text={t(ProductTexts.primaryButton.text)}
             onPress={() => {
               save(selectedProduct);

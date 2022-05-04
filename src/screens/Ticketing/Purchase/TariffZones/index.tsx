@@ -1,5 +1,5 @@
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
-import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
+import {Location} from '@atb/assets/svg/mono-icons/places';
 import Button from '@atb/components/button';
 import {
   MapCameraConfig,
@@ -15,7 +15,6 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   Language,
@@ -37,6 +36,7 @@ import {TicketingStackParams} from '../';
 import TariffZoneResults from '@atb/screens/Ticketing/Purchase/TariffZones/search/TariffZoneResults';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import hexToRgba from 'hex-to-rgba';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -98,6 +98,38 @@ export const tariffZonesSummary = (
   } else {
     return t(
       TariffZonesTexts.zoneSummary.text.multipleZone(
+        getReferenceDataName(fromTariffZone, language),
+        getReferenceDataName(toTariffZone, language),
+      ),
+    );
+  }
+};
+
+export const tariffZonesTitle = (
+  fromTariffZone: TariffZone,
+  toTariffZone: TariffZone,
+  language: Language,
+  t: TranslateFunction,
+): string => {
+  const numberOfZones = fromTariffZone.id === toTariffZone.id ? 1 : 2;
+  return t(TariffZonesTexts.zoneTitle.text(numberOfZones));
+};
+
+export const tariffZonesDescription = (
+  fromTariffZone: TariffZone,
+  toTariffZone: TariffZone,
+  language: Language,
+  t: TranslateFunction,
+): string => {
+  if (fromTariffZone.id === toTariffZone.id) {
+    return t(
+      TariffZonesTexts.zoneDescription.text.singleZone(
+        getReferenceDataName(fromTariffZone, language),
+      ),
+    );
+  } else {
+    return t(
+      TariffZonesTexts.zoneDescription.text.multipleZone(
         getReferenceDataName(fromTariffZone, language),
         getReferenceDataName(toTariffZone, language),
       ),
@@ -205,7 +237,7 @@ const destinationPickerValue = (
 const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
   const {fromTariffZone, toTariffZone} = params;
   const [regionEvent, setRegionEvent] = useState<RegionEvent>();
-  const {tariff_zones: tariffZones} = useRemoteConfig();
+  const {tariffZones} = useFirestoreConfiguration();
   const [selectedZones, setSelectedZones] = useState<TariffZoneSelection>({
     from: fromTariffZone,
     to: toTariffZone,
@@ -234,7 +266,9 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
     tariffZoneId: string,
     resultType: TariffZoneResultType = 'zone',
   ) => {
-    const clickedTariffZone = tariffZones.find((t) => tariffZoneId === t.id)!;
+    const clickedTariffZone = tariffZones.find(
+      (tariffZone) => tariffZoneId === tariffZone.id,
+    )!;
     const newZoneSelection: TariffZoneSelection = {
       ...selectedZones,
       [selectedZones.selectNext]: {
@@ -247,7 +281,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
   };
 
   const startCoordinates = geolocation
-    ? [geolocation.coords.longitude, geolocation.coords.latitude]
+    ? [geolocation.coordinates.longitude, geolocation.coordinates.latitude]
     : [FOCUS_ORIGIN.longitude, FOCUS_ORIGIN.latitude];
 
   const onSave = () => {
@@ -293,14 +327,14 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
   async function flyToCurrentLocation() {
     geolocation &&
       mapCameraRef.current?.flyTo(
-        [geolocation.coords.longitude, geolocation.coords.latitude],
+        [geolocation.coordinates.longitude, geolocation.coordinates.latitude],
         750,
       );
 
     if (mapViewRef.current && geolocation) {
       let point = await mapViewRef.current.getPointInView([
-        geolocation.coords.longitude,
-        geolocation.coords.latitude,
+        geolocation.coordinates.longitude,
+        geolocation.coordinates.latitude,
       ]);
       if (Platform.OS == 'android') {
         // Necessary hack (https://github.com/react-native-mapbox-gl/maps/issues/1085)
@@ -349,7 +383,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
             onPress={() => onVenueSearchClick('fromTariffZone')}
             icon={
               selectedZones.from.resultType === 'geolocation' ? (
-                <ThemeIcon svg={CurrentLocationArrow} />
+                <ThemeIcon svg={Location} />
               ) : undefined
             }
             highlighted={selectedZones.selectNext === 'from'}
@@ -374,7 +408,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
             onPress={() => onVenueSearchClick('toTariffZone')}
             icon={
               selectedZones.to.resultType === 'geolocation' ? (
-                <ThemeIcon svg={CurrentLocationArrow} />
+                <ThemeIcon svg={Location} />
               ) : undefined
             }
             highlighted={selectedZones.selectNext === 'to'}
@@ -397,7 +431,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
           >
             <Button
               onPress={onSave}
-              color="primary_2"
+              interactiveColor="interactive_0"
               text={t(TariffZonesTexts.saveButton.text)}
               accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
               testID="saveZonesButton"
@@ -433,9 +467,9 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                     // Mapbox Expression syntax
                     'case',
                     ['==', selectedZones.from.id, ['id']],
-                    hexToRgba(theme.status.valid.main.backgroundColor, 0.6),
+                    hexToRgba(theme.static.status.valid.background, 0.6),
                     ['==', selectedZones.to.id, ['id']],
-                    hexToRgba(theme.status.info.main.backgroundColor, 0.6),
+                    hexToRgba(theme.static.status.info.background, 0.6),
                     'transparent',
                   ],
                 }}
@@ -483,7 +517,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
             <View style={styles.saveButton}>
               <Button
                 onPress={onSave}
-                color="primary_2"
+                interactiveColor="interactive_0"
                 text={t(TariffZonesTexts.saveButton.text)}
                 accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
                 testID="saveZonesButton"
@@ -517,10 +551,10 @@ const mapZonesToFeatureCollection = (
 const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
   },
   headerContainer: {
-    backgroundColor: theme.colors.background_accent.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_0.background,
   },
   pinContainer: {
     position: 'absolute',

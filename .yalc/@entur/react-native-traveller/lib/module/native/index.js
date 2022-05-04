@@ -3,6 +3,7 @@ export const {
   start,
   attest,
   attestLegacy,
+  reattest,
   addToken,
   getToken,
   deleteToken,

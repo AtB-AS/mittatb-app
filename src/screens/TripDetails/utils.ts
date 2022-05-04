@@ -1,5 +1,4 @@
-import {EstimatedCall} from '@atb/sdk';
-import {secondsBetween, formatToClock} from '@atb/utils/date';
+import {secondsBetween} from '@atb/utils/date';
 
 // @TODO should be in external configuration at some point, or at least estimeted better.
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;

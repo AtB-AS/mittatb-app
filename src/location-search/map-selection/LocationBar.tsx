@@ -84,7 +84,7 @@ const LocationText: React.FC<{
   return (
     <>
       <ThemeText type="body__secondary">{title}</ThemeText>
-      <ThemeText type="body__tertiary">{subtitle}</ThemeText>
+      {subtitle && <ThemeText type="body__tertiary">{subtitle}</ThemeText>}
     </>
   );
 };
@@ -93,13 +93,15 @@ function getLocationText(
   t: TranslateFunction,
   location?: Location,
   error?: ErrorType,
-): {title: string; subtitle: string} {
+): {title: string; subtitle?: string} {
   if (location) {
     return {
       title: location.name,
       subtitle:
-        (location.postalcode ? location.postalcode + ', ' : '') +
-        location.locality,
+        location.resultType === 'geolocation'
+          ? undefined
+          : (location.postalcode ? location.postalcode + ', ' : '') +
+            location.locality,
     };
   }
 
@@ -136,13 +138,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     padding: theme.spacings.medium,
-    backgroundColor: theme.colors.background_accent.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_0.background,
   },
   innerContainer: {
     paddingRight: theme.spacings.small,
     paddingVertical: theme.spacings.small,
     borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
     flexDirection: 'row',
     flexGrow: 1,
     justifyContent: 'space-between',

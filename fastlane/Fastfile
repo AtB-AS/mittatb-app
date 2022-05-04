@@ -200,6 +200,20 @@ platform :android do
     )
   end
 
+
+  lane :playstore_internal do
+    ensure_env_vars(
+      env_vars: ['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH','APK_FILE_NAME','ANDROID_PACKAGE_NAME']
+    )
+
+    upload_to_play_store(
+      track: "internal",
+      json_key:ENV['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH'],
+      apk: ENV['APK_FILE_NAME'],
+      package_name: ENV['ANDROID_PACKAGE_NAME']
+    )
+  end
+
   lane :appcenter_staging do
     ensure_env_vars(
       env_vars: ['APPCENTER_API_KEY','APK_FILE_NAME']

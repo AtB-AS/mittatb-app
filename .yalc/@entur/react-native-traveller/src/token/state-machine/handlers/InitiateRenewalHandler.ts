@@ -3,18 +3,26 @@ import type { AbtTokensService } from '../../abt-tokens-service';
 import { PayloadAction } from '../../../native/types';
 import type { StateHandler } from '../HandlerFactory';
 import { stateHandlerFactory } from '../HandlerFactory';
+import { logger } from '../../../logger';
 
 export default function initiateRenewalHandler(
   abtTokensService: AbtTokensService
 ): StateHandler {
   return stateHandlerFactory(['InitiateRenewal'], async (s) => {
-    const signedToken = await getSecureToken(s.accountId, s.tokenId, true, [
+    const { accountId, tokenId, state } = s;
+    logger.info('mobiletoken_status_change', undefined, {
+      state,
+      accountId,
+      tokenId,
+    });
+
+    const signedToken = await getSecureToken(accountId, tokenId, true, [
       PayloadAction.addRemoveToken,
     ]);
     const renewTokenResponse = await abtTokensService.renewToken(signedToken);
     return {
-      accountId: s.accountId,
-      oldTokenId: s.tokenId,
+      accountId,
+      oldTokenId: tokenId,
       state: 'AttestRenewal',
       initiatedData: renewTokenResponse,
     };

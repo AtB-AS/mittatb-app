@@ -13,6 +13,7 @@ import storage from '@atb/storage';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import Slider from '@react-native-community/slider';
 import {TripSearchPreferences, usePreferences} from '@atb/preferences';
+import {get, keys} from 'lodash';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -26,7 +27,7 @@ export default function DebugInfo() {
   const [idToken, setIdToken] = useState<
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
-  const {tokenStatus, retry} = useMobileTokenContextState();
+  const {tokenStatus, retry, travelTokens} = useMobileTokenContextState();
 
   useEffect(() => {
     async function run() {
@@ -102,6 +103,11 @@ export default function DebugInfo() {
           <Sections.LinkItem
             text="Force refresh id token"
             onPress={() => auth().currentUser?.getIdToken(true)}
+          />
+
+          <Sections.LinkItem
+            text="Reset feedback displayStats"
+            onPress={() => storage.set('@ATB_feedback_display_stats', '')}
           />
         </Sections.Section>
 
@@ -226,6 +232,16 @@ export default function DebugInfo() {
                 }`}</ThemeText>
               </View>
             </Sections.GenericItem>
+            <Sections.HeaderItem text="Travel tokens" />
+            {travelTokens?.map((token) => (
+              <Sections.GenericItem>
+                {keys(token).map((k) => (
+                  <ThemeText>
+                    {k + ': ' + JSON.stringify(get(token, k))}
+                  </ThemeText>
+                ))}
+              </Sections.GenericItem>
+            ))}
             {retry && (
               <>
                 <Sections.LinkItem text="Retry" onPress={() => retry(false)} />
@@ -345,7 +361,7 @@ function LabeledSlider({
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
   icons: {

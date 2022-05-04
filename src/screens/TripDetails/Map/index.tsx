@@ -7,10 +7,8 @@ import {
   useControlPositionsStyle,
 } from '@atb/components/map';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {MapLeg} from '@atb/sdk';
 import {MapTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
-import {Coordinates} from '@entur/sdk';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {RouteProp} from '@react-navigation/native';
 import {Position} from 'geojson';
@@ -21,6 +19,7 @@ import {DetailScreenNavigationProp} from '../Details';
 import MapLabel from './MapLabel';
 import MapRoute from './MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
+import {Coordinates, MapLeg} from '@atb/screens/TripDetails/Map/types';
 
 export type MapDetailRouteParams = {
   legs: MapLeg[];
@@ -55,7 +54,7 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
   async function flyToCurrentLocation() {
     geolocation &&
       mapCameraRef.current?.flyTo(
-        [geolocation?.coords.longitude, geolocation?.coords.latitude],
+        [geolocation?.coordinates.longitude, geolocation?.coordinates.latitude],
         750,
       );
   }

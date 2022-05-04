@@ -50,7 +50,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   const {theme} = useTheme();
   const styles = useBoxStyle();
   const {t} = useTranslation();
-  const textColor = theme.status[type].main.color;
+  const textColor = theme.static.status[type].text;
   const iconElement =
     typeof icon !== 'undefined' ? (
       icon
@@ -79,7 +79,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({
     children
   );
   const colorStyle = {
-    backgroundColor: theme.status[type].main.backgroundColor,
+    backgroundColor: theme.static.status[type].background,
   };
   const paddedStyle = withMargin ? styles.container__padded : undefined;
   return (
@@ -91,7 +91,10 @@ const MessageBox: React.FC<MessageBoxProps> = ({
       </View>
       <View style={styles.content}>
         {title && (
-          <ThemeText style={{...styles.title, color: textColor}}>
+          <ThemeText
+            type="body__primary--bold"
+            style={{...styles.title, color: textColor}}
+          >
             {title}
           </ThemeText>
         )}
@@ -109,7 +112,8 @@ export const TinyMessageBox: React.FC<TinyMessageProps> = ({
   const {theme} = useTheme();
   const styles = useBoxStyle();
   const colorStyle = {
-    ...theme.status[type].main,
+    color: theme.static.status[type].text,
+    backgroundColor: theme.static.status[type].background,
   };
   return (
     <View style={[styles.container, colorStyle]}>
@@ -150,8 +154,7 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
   },
   title: {
-    fontSize: 16,
-    fontWeight: '600',
+    marginBottom: theme.spacings.small,
   },
 }));
 

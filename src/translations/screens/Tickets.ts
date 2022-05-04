@@ -43,8 +43,8 @@ const TicketsTexts = {
     a11yLabel: _('Aktive billetter', 'Active tickets'),
     noTickets: _('Du har ingen aktive billetter', 'No valid tickets right now'),
     noTicketsExpiredHelpText: _(
-      'Du har ingen aktive billetter. Utløpte billetter finner du under Mitt AtB-fanen.',
-      'You have no valid tickets right now. Expired tickets can be found under the My AtB tab.',
+      'Du har ingen aktive billetter. Utløpte billetter finner du under Min profil-fanen.',
+      'You have no valid tickets right now. Expired tickets can be found under the My profile tab.',
     ),
   },
   expiredTicketsTab: {
@@ -75,6 +75,38 @@ const TicketsTexts = {
       'Aktivér for å kjøpe denne billetten',
       'Activate to purchase this ticket',
     ),
+  },
+  availableTickets: {
+    allTickets: _('Alle billetter', 'All products'),
+    navigateToBuy: _(
+      'Aktivér for å gå til kjøp',
+      'Activate to go to purchasing',
+    ),
+    singleTicket: {
+      title: _('Enkeltbillett', 'Single ticket'),
+      description: _(
+        'Når du skal reise av og til',
+        'When you travel occasionally',
+      ),
+      transportModes: _('Buss/trikk', 'Bus/tram'),
+    },
+    periodTicket: {
+      title: _('Periodebillett', 'Periodic ticket'),
+      description: _(
+        'Når du reiser litt oftere',
+        'When you travel more frequently',
+      ),
+      pilot_description: _('', ''),
+      transportModes: _('Buss/trikk', 'Bus/tram'),
+    },
+    summerPass: {
+      title: _('AtB SommerPass', 'Summer pass'),
+      description: _(
+        'Utforsk Trøndelag med buss, tog, hurtigbåt, ferge og trikk i sju dager. Reis så mye du vil! ',
+        'Explore Trøndelag by bus, train, tram, passenger boat or ferry, for 7 days. Travel as much as you like!',
+      ),
+      transportModes: _('Flere reisemåter', 'Several travel modes'),
+    },
   },
   reservation: {
     processing: _(
@@ -117,8 +149,8 @@ const TicketsTexts = {
       'In the event of an inspection, please present your t:card',
     ),
     changeInstructions: _(
-      'Kan endres fra "Mitt AtB"',
-      'Can be changed from "My AtB"',
+      'Kan endres fra "Min profil"',
+      'Can be changed from "My profile"',
     ),
     cardType: _('t:kort', 't:card'),
     illustrationa11yLabel: (travelCardId: string) =>

@@ -40,6 +40,7 @@ const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
               icon={ArrowLeft}
               onPress={() => onNavigate(page - 1)}
               text={t(PaginationTexts.previous.label)}
+              testID="previousTripButton"
               accessibilityHint={t(PaginationTexts.previous.a11yHint)}
             />
           </View>
@@ -49,6 +50,7 @@ const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
             accessibilityLabel={t(
               PaginationTexts.current.a11yLabel(page, totalPages),
             )}
+            testID="tripPagination"
           >
             {t(PaginationTexts.current.label(page, totalPages))}
           </ThemeText>
@@ -61,6 +63,7 @@ const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
               icon={ArrowRight}
               onPress={() => onNavigate(page + 1)}
               text={t(PaginationTexts.next.label)}
+              testID="nextTripButton"
               accessibilityHint={t(PaginationTexts.next.a11yHint)}
             />
           </View>
@@ -75,6 +78,7 @@ const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
                 fullDateTime(currentDate, language),
               ),
             )}
+            testID="tripStartTime"
           >
             {fullDateTime(currentDate, language)}
           </ThemeText>
@@ -92,7 +96,7 @@ const usePaginateStyles = StyleSheet.createThemeHook((theme) => ({
   },
   wrapper: {
     borderBottomWidth: theme.border.width.slim,
-    borderColor: theme.colors.background_1.backgroundColor,
+    borderColor: theme.static.background.background_1.background,
   },
   buttonLeft: {
     position: 'absolute',

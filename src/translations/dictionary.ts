@@ -5,14 +5,19 @@ import orgSpecificTranslations from './utils';
 const softhyphen = Platform.OS === 'ios' ? '\u00AD' : '\u200B';
 
 const dictionary = {
+  myPosition: _('Min posisjon', 'My current position'),
   fromPlace: _('Avreisested', 'Place of departure'),
   toPlace: _('Destinasjon', 'Destination'),
   navigation: {
     assistant: _(`Reise${softhyphen}søk`, 'Assistant'),
+    assistant_a11y: _(
+      `Aktiver for reisesøk. Aktiver to ganger for å nullstille søket.`,
+      'Activate for search assistant. Activate twice to reset search.',
+    ),
     nearby: _(`Av${softhyphen}ganger`, 'Departures'),
     ticketing: _('Billetter', 'Tickets'),
-    profile: _('Mitt AtB', 'My AtB'),
-    profile_a11y: _('Mitt ATB', 'My ATB'),
+    profile: _('Min profil', 'My profile'),
+    profile_a11y: _('Min profil', 'My profile'),
   },
   missingRealTimePrefix: _('ca. ', 'ca. '),
   a11yMissingRealTimePrefix: _('cirka ', 'circa '),

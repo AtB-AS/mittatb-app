@@ -11,12 +11,26 @@ var _types = require("../../../native/types");
 
 var _HandlerFactory = require("../HandlerFactory");
 
+var _logger = require("../../../logger");
+
 function getTokenCertificateHandler(abtTokensService) {
   return (0, _HandlerFactory.stateHandlerFactory)(['GettingTokenCertificate'], async s => {
-    const signedToken = await (0, _native.getSecureToken)(s.accountId, s.tokenId, false, [_types.PayloadAction.addRemoveToken]);
+    const {
+      accountId,
+      tokenId,
+      state
+    } = s;
+
+    _logger.logger.info('mobiletoken_status_change', undefined, {
+      state,
+      accountId,
+      tokenId
+    });
+
+    const signedToken = await (0, _native.getSecureToken)(accountId, tokenId, false, [_types.PayloadAction.addRemoveToken]);
     const tokenCertificateResponse = await abtTokensService.getTokenCertificate(signedToken);
     return {
-      accountId: s.accountId,
+      accountId,
       state: 'AddToken',
       tokenId: s.tokenId,
       activatedData: tokenCertificateResponse

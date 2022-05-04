@@ -1,12 +1,24 @@
+import { logger } from '../../../logger';
 import { getActivateTokenRequestBody } from '../../attest';
 import type { StateHandler } from '../HandlerFactory';
 import { stateHandlerFactory } from '../HandlerFactory';
 
 export default function attestHandler(): StateHandler {
   return stateHandlerFactory(['AttestNew', 'AttestRenewal'], async (s) => {
-    const { tokenId, nonce, attestationEncryptionPublicKey } = s.initiatedData;
+    const {
+      initiatedData: { tokenId, nonce, attestationEncryptionPublicKey },
+      accountId,
+      state,
+    } = s;
+
+    logger.info('mobiletoken_status_change', undefined, {
+      accountId,
+      tokenId,
+      state,
+    });
+
     const activateTokenRequestBody = await getActivateTokenRequestBody(
-      s.accountId,
+      accountId,
       tokenId,
       nonce,
       attestationEncryptionPublicKey
@@ -14,7 +26,7 @@ export default function attestHandler(): StateHandler {
 
     if (s.state !== 'AttestNew') {
       return {
-        accountId: s.accountId,
+        accountId: accountId,
         state: 'ActivateRenewal',
         oldTokenId: s.oldTokenId,
         tokenId: tokenId,
@@ -23,7 +35,7 @@ export default function attestHandler(): StateHandler {
     }
 
     return {
-      accountId: s.accountId,
+      accountId: accountId,
       state: 'ActivateNew',
       tokenId: tokenId,
       attestationData: activateTokenRequestBody,

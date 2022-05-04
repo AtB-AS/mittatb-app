@@ -3,25 +3,35 @@ import type { AbtTokensService } from '../../abt-tokens-service';
 import { PayloadAction } from '../../../native/types';
 import { verifyCorrectTokenId } from '../utils';
 import { StateHandler, stateHandlerFactory } from '../HandlerFactory';
+import { logger } from '../../../logger';
 
 export default function activateRenewalHandler(
   abtTokensService: AbtTokensService
 ): StateHandler {
   return stateHandlerFactory(['ActivateRenewal'], async (s) => {
-    const signedToken = await getSecureToken(s.accountId, s.oldTokenId, true, [
+    const { accountId, oldTokenId, tokenId, state } = s;
+
+    logger.info('mobiletoken_status_change', undefined, {
+      accountId,
+      oldTokenId,
+      tokenId,
+      state,
+    });
+
+    const signedToken = await getSecureToken(accountId, oldTokenId, true, [
       PayloadAction.addRemoveToken,
     ]);
 
     try {
       const activateTokenResponse = await abtTokensService.activateToken(
-        s.tokenId,
+        tokenId,
         s.attestationData,
         signedToken
       );
-      verifyCorrectTokenId(s.tokenId, activateTokenResponse.tokenId);
+      verifyCorrectTokenId(tokenId, activateTokenResponse.tokenId);
 
       return {
-        accountId: s.accountId,
+        accountId: accountId,
         state: 'AddToken',
         tokenId: s.tokenId,
         activatedData: activateTokenResponse,
@@ -30,8 +40,8 @@ export default function activateRenewalHandler(
       if (err?.response?.status === 409) {
         // The token has already been renewed. May happen if retrying after timeout.
         return {
-          accountId: s.accountId,
-          tokenId: s.tokenId,
+          accountId: accountId,
+          tokenId: tokenId,
           state: 'GettingTokenCertificate',
         };
       }

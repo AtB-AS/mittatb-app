@@ -1,6 +1,6 @@
 import {Delete, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {Check} from '@atb/assets/svg/mono-icons/status';
-import {BlankTicket} from '@atb/assets/svg/mono-icons/ticketing';
+import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import Button, {ButtonGroup} from '@atb/components/button';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
@@ -8,7 +8,7 @@ import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import MessageBox from '@atb/components/message-box';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {textNames, TextNames, ThemeColor} from '@atb/theme/colors';
+import {InteractiveColor, textNames, TextNames} from '@atb/theme/colors';
 import React from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -19,16 +19,20 @@ export default function DesignSystem() {
   const style = useProfileHomeStyle();
   const {theme} = useTheme();
 
-  const buttons = Object.keys(theme.colors).map((themeName) => (
+  const buttons = Object.keys(theme.interactive).map((color) => (
     <Button
-      key={themeName}
-      text={themeName}
+      key={color}
+      text={color}
       onPress={() =>
-        Alert.alert(theme.colors[themeName as ThemeColor].backgroundColor)
+        Alert.alert(
+          theme.interactive[color as InteractiveColor].default.background,
+        )
       }
-      color={themeName as ThemeColor}
+      interactiveColor={color as InteractiveColor}
     />
   ));
+
+  // @TODO: add display of static colors
 
   return (
     <View style={style.container}>
@@ -48,8 +52,8 @@ export default function DesignSystem() {
               <ThemeIcon svg={Check} colorType="info" />
               <ThemeIcon svg={Check} colorType="warning" />
 
-              <ThemeIcon svg={BlankTicket} colorType="error" />
-              <ThemeIcon svg={BlankTicket} colorType="disabled" size="small" />
+              <ThemeIcon svg={Ticket} colorType="error" />
+              <ThemeIcon svg={Ticket} colorType="disabled" size="small" />
             </View>
             <View style={style.icons}>
               <TransportationIcon
@@ -98,6 +102,14 @@ export default function DesignSystem() {
               onPress={presser}
             />
           </Sections.GenericItem>
+
+          <Sections.GenericItem>
+            <MessageBox
+              isMarkdown={true}
+              title="Markdown"
+              message={`This is a message with markdown,\nSupporting **bold** and *italics*\nand special characters like ', " + æøå`}
+            />
+          </Sections.GenericItem>
         </Sections.Section>
 
         <MessageBox
@@ -107,25 +119,12 @@ export default function DesignSystem() {
 
         <View style={style.buttons}>
           <ButtonGroup>
-            <Button text="Press me" onPress={presser} mode="primary" />
+            <Button text="primary" onPress={presser} mode="primary" />
+            <Button text="secondary" onPress={presser} mode="secondary" />
+            <Button text="tertiary" onPress={presser} mode="tertiary" />
             <Button
               text="Press me"
               onPress={presser}
-              mode="primary"
-              color="secondary_1"
-            />
-            <Button text="Press me" onPress={presser} mode="secondary" />
-            <Button text="Press me" onPress={presser} mode="destructive" />
-            <Button
-              text="Press me"
-              onPress={presser}
-              mode="destructive"
-              icon={Delete}
-            />
-            <Button
-              text="Press me"
-              onPress={presser}
-              mode="destructive"
               icon={Delete}
               iconPosition="right"
             />
@@ -248,7 +247,7 @@ function presser() {
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
   icons: {

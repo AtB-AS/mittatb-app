@@ -1,3 +1,4 @@
+import { logger } from '../../logger';
 import type { StoredState, TokenState } from '../types';
 import { missingNetConnection } from './utils';
 
@@ -22,7 +23,9 @@ export function stateHandlerFactory<S extends TokenState>(
 
     try {
       return await handlerFunction(storedState as StoredState & { state: S });
-    } catch (err) {
+    } catch (err: any) {
+      logger.error(undefined, err, undefined);
+
       let missingNet = false;
       try {
         missingNet = await missingNetConnection();

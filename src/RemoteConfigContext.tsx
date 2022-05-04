@@ -1,30 +1,14 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import remoteConfig from '@react-native-firebase/remote-config';
-import {
-  RemoteConfig,
-  defaultRemoteConfig,
-  getConfig,
-  defaultModesWeSellTicketsFor,
-} from './remote-config';
+import {RemoteConfig, defaultRemoteConfig, getConfig} from './remote-config';
 import Bugsnag from '@bugsnag/react-native';
-import {
-  PreassignedFareProduct,
-  TariffZone,
-  UserProfile,
-} from './reference-data/types';
-import {
-  defaultPreassignedFareProducts,
-  defaultTariffZones,
-  defaultUserProfiles,
-} from './reference-data/defaults';
+
 import {useAppState} from './AppContext';
+import {FeedbackConfiguration} from './components/feedback/FeedbackContext';
 
 export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
-  modes_we_sell_tickets_for: string[];
-  preassigned_fare_products: PreassignedFareProduct[];
-  tariff_zones: TariffZone[];
-  user_profiles: UserProfile[];
+  feedback_questions: FeedbackConfiguration[];
 };
 
 const RemoteConfigContext = createContext<RemoteConfigContextState | undefined>(
@@ -113,16 +97,7 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
     <RemoteConfigContext.Provider
       value={{
         ...config,
-        modes_we_sell_tickets_for: parseJson(
-          config.modes_we_sell_tickets_for,
-          defaultModesWeSellTicketsFor,
-        ),
-        preassigned_fare_products: parseJson(
-          config.preassigned_fare_products,
-          defaultPreassignedFareProducts,
-        ),
-        tariff_zones: parseJson(config.tariff_zones, defaultTariffZones),
-        user_profiles: parseJson(config.user_profiles, defaultUserProfiles),
+        feedback_questions: parseJson(config.feedback_questions, []),
         refresh,
       }}
     >

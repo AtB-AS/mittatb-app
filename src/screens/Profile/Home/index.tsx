@@ -17,6 +17,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileStackParams} from '..';
 import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
+import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {
   filterActiveOrCanBeUsedFareContracts,
@@ -67,7 +68,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
   const {
     setPreference,
-    preferences: {useExperimentalTripSearch, newDepartures},
+    preferences: {newDepartures},
   } = usePreferences();
 
   function copyInstallId() {
@@ -80,8 +81,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
     <View style={style.container}>
       <FullScreenHeader
         title={t(ProfileTexts.header.title)}
-        titleA11yLabel={t(ProfileTexts.header.title_a11y)}
-        leftButton={{type: 'home'}}
         rightButton={{type: 'chat'}}
       />
 
@@ -108,7 +107,11 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               <ThemeText style={style.customerNumberHeading}>
                 {t(ProfileTexts.sections.account.infoItems.customerNumber)}
               </ThemeText>
-              <ThemeText type="body__secondary" color="secondary">
+              <ThemeText
+                type="body__secondary"
+                color="secondary"
+                accessibilityLabel={numberToAccessibilityString(customerNumber)}
+              >
                 {customerNumber}
               </ThemeText>
             </Sections.GenericItem>
@@ -191,7 +194,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 {t(ProfileTexts.sections.newFeatures.heading)}
               </ThemeText>
               <View style={style.betaLabel}>
-                <ThemeText color="primary_2" style={style.betaLabelText}>
+                <ThemeText
+                  color="background_accent_3"
+                  style={style.betaLabelText}
+                >
                   BETA
                 </ThemeText>
               </View>
@@ -210,23 +216,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 'AtB-Beta-Departures': newDepartures ? 'enabled' : 'disabled',
               });
               setPreference({newDepartures});
-            }}
-          />
-          <Sections.ActionItem
-            mode="toggle"
-            text={t(ProfileTexts.sections.newFeatures.assistant)}
-            checked={useExperimentalTripSearch}
-            testID="newAssistantToggle"
-            onPress={(useExperimentalTripSearch) => {
-              analytics().logEvent('toggle_beta_tripsearch', {
-                toggle: useExperimentalTripSearch ? 'enable' : 'disable',
-              });
-              updateMetadata({
-                'AtB-Beta-TripSearch': useExperimentalTripSearch
-                  ? 'enabled'
-                  : 'disabled',
-              });
-              setPreference({useExperimentalTripSearch});
             }}
           />
           <Sections.LinkItem
@@ -394,7 +383,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
   customerNumberHeading: {
@@ -412,7 +401,7 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
   },
   betaLabel: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_3.background,
     marginHorizontal: theme.spacings.small,
     paddingHorizontal: theme.spacings.small,
     paddingVertical: theme.spacings.small,

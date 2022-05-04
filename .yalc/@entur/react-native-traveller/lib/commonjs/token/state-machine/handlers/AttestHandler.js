@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = attestHandler;
 
+var _logger = require("../../../logger");
+
 var _attest = require("../../attest");
 
 var _HandlerFactory = require("../HandlerFactory");
@@ -12,15 +14,26 @@ var _HandlerFactory = require("../HandlerFactory");
 function attestHandler() {
   return (0, _HandlerFactory.stateHandlerFactory)(['AttestNew', 'AttestRenewal'], async s => {
     const {
+      initiatedData: {
+        tokenId,
+        nonce,
+        attestationEncryptionPublicKey
+      },
+      accountId,
+      state
+    } = s;
+
+    _logger.logger.info('mobiletoken_status_change', undefined, {
+      accountId,
       tokenId,
-      nonce,
-      attestationEncryptionPublicKey
-    } = s.initiatedData;
-    const activateTokenRequestBody = await (0, _attest.getActivateTokenRequestBody)(s.accountId, tokenId, nonce, attestationEncryptionPublicKey);
+      state
+    });
+
+    const activateTokenRequestBody = await (0, _attest.getActivateTokenRequestBody)(accountId, tokenId, nonce, attestationEncryptionPublicKey);
 
     if (s.state !== 'AttestNew') {
       return {
-        accountId: s.accountId,
+        accountId: accountId,
         state: 'ActivateRenewal',
         oldTokenId: s.oldTokenId,
         tokenId: tokenId,
@@ -29,7 +42,7 @@ function attestHandler() {
     }
 
     return {
-      accountId: s.accountId,
+      accountId: accountId,
       state: 'ActivateNew',
       tokenId: tokenId,
       attestationData: activateTokenRequestBody

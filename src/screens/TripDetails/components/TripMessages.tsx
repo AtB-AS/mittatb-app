@@ -9,34 +9,50 @@ import {
 import {AxiosError} from 'axios';
 import React from 'react';
 import {ViewStyle} from 'react-native';
+import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
+import {TripPattern} from '@atb/api/types/trips';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {hasShortWaitTime} from '@atb/screens/TripDetails/components/utils';
 
 type TripMessagesProps = {
-  shortTime: boolean;
-  noTicketsAvailable: boolean;
+  tripPattern: TripPattern;
   error?: AxiosError;
   messageStyle?: ViewStyle;
 };
 const TripMessages: React.FC<TripMessagesProps> = ({
+  tripPattern,
   error,
-  shortTime,
-  noTicketsAvailable,
   messageStyle,
 }) => {
   const {t} = useTranslation();
+  const {modesWeSellTicketsFor} = useFirestoreConfiguration();
+  const someTicketsAreUnavailableInApp = hasLegsWeCantSellTicketsFor(
+    tripPattern,
+    modesWeSellTicketsFor,
+  );
+  const canUseCollabTicket = someLegsAreByTrain(tripPattern);
+  const shortWaitTime = hasShortWaitTime(tripPattern.legs);
+
   return (
     <>
-      {shortTime && (
+      {shortWaitTime && (
         <MessageBox
           containerStyle={messageStyle}
           type="info"
           message={t(TripDetailsTexts.messages.shortTime)}
         />
       )}
-      {noTicketsAvailable && (
+      {someTicketsAreUnavailableInApp && (
         <MessageBox
           containerStyle={messageStyle}
           type="warning"
-          message={t(TripDetailsTexts.messages.ticketsWeDontSell)}
+          message={
+            t(TripDetailsTexts.messages.ticketsWeDontSell) +
+            (canUseCollabTicket
+              ? t(TripDetailsTexts.messages.collabTicketInfo)
+              : ``)
+          }
         />
       )}
       {error && (
@@ -63,3 +79,7 @@ function translatedError(error: AxiosError, t: TranslateFunction): string {
   }
 }
 export default TripMessages;
+
+function someLegsAreByTrain(tripPattern: TripPattern): boolean {
+  return tripPattern.legs.some((leg) => leg.mode === Mode.Rail);
+}

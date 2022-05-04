@@ -1,5 +1,4 @@
-import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
-import {Expand, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
+import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
 import {Info, Warning} from '@atb/assets/svg/color/situations';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
 import MessageBox, {TinyMessageBox} from '@atb/components/message-box';
@@ -11,7 +10,6 @@ import {searchByStopPlace} from '@atb/geocoder/search-for-location';
 import {
   EstimatedCall,
   Quay,
-  ServiceJourneyMapInfoData,
   Situation,
   TransportMode,
   TransportSubmode,
@@ -40,6 +38,11 @@ import useDepartureData, {CallListGroup} from './use-departure-data';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
+import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
+import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
+import {TripPattern} from '@atb/api/types/trips';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -63,7 +66,7 @@ export default function DepartureDetails({navigation, route}: Props) {
   const {activeItemIndex = 0, items} = route.params;
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useTheme();
-  const {modes_we_sell_tickets_for} = useRemoteConfig();
+  const {modesWeSellTicketsFor} = useFirestoreConfiguration();
 
   const activeItem: ServiceJourneyDeparture | undefined =
     items[activeItemIndexState];
@@ -81,8 +84,10 @@ export default function DepartureDetails({navigation, route}: Props) {
 
   const canSellTicketsForDeparture = canSellTicketsForSubMode(
     subMode,
-    modes_we_sell_tickets_for,
+    modesWeSellTicketsFor,
   );
+
+  const someLegsAreByTrain = mode === TransportMode.RAIL;
 
   const onPaginactionPress = (newPage: number) => {
     animateNextChange();
@@ -95,6 +100,7 @@ export default function DepartureDetails({navigation, route}: Props) {
         leftButton={{type: 'back'}}
         title={title ?? t(DepartureDetailsTexts.header.notFound)}
       />
+
       <ContentWithDisappearingHeader
         header={
           mapData && (
@@ -112,9 +118,11 @@ export default function DepartureDetails({navigation, route}: Props) {
             />
           )
         }
-        //
       >
-        <View style={styles.scrollView__content}>
+        <View
+          style={styles.scrollView__content}
+          testID="departureDetailsContentView"
+        >
           <PaginatedDetailsHeader
             page={activeItemIndexState + 1}
             totalPages={items.length}
@@ -145,7 +153,12 @@ export default function DepartureDetails({navigation, route}: Props) {
             <MessageBox
               containerStyle={styles.ticketMessage}
               type="warning"
-              message={t(DepartureDetailsTexts.messages.ticketsWeDontSell)}
+              message={
+                t(DepartureDetailsTexts.messages.ticketsWeDontSell) +
+                (someLegsAreByTrain
+                  ? `\n\n` + t(DepartureDetailsTexts.messages.collabTicketInfo)
+                  : ``)
+              }
             />
           )}
 
@@ -288,8 +301,9 @@ function TripItem({
         alignChildren={isStart ? 'flex-start' : isEnd ? 'flex-end' : 'center'}
         style={[styles.row, isBetween && styles.middleRow]}
         onPress={() => handleQuayPress(call.quay)}
+        testID={'legType_' + type}
       >
-        <ThemeText>{getQuayName(call.quay)} </ThemeText>
+        <ThemeText testID="quayName">{getQuayName(call.quay)} </ThemeText>
       </TripRow>
       {showSituations && (
         <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
@@ -350,7 +364,7 @@ function CollapseButtonRow({
   const child = collapsed ? (
     <>
       {text}
-      <ThemeIcon svg={Expand} />
+      <ThemeIcon svg={ExpandMore} />
     </>
   ) : (
     <>
@@ -383,10 +397,10 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
 const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   header: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_3.background,
   },
   startPlace: {
     marginTop: theme.spacings.large,
@@ -407,7 +421,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.small,
   },
   allGroups: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
     marginBottom: theme.spacings.xLarge,
   },
   spinner: {
@@ -423,7 +437,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
 }));
 
 function useMapData(activeItem: ServiceJourneyDeparture) {
-  const [mapData, setMapData] = useState<ServiceJourneyMapInfoData>();
+  const [mapData, setMapData] = useState<ServiceJourneyMapInfoData_v3>();
   useEffect(() => {
     const getData = async () => {
       if (!activeItem) {

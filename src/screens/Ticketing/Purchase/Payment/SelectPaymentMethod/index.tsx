@@ -26,6 +26,7 @@ import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import hexToRgba from 'hex-to-rgba';
 import LinearGradient from 'react-native-linear-gradient';
 import PaymentBrand from '../PaymentBrand';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
@@ -34,22 +35,24 @@ type Props = {
 };
 
 function getSelectedPaymentMethod(
+  paymentTypes: PaymentType[],
   previousPaymentMethod?: SavedPaymentOption,
 ): PaymentMethod | undefined {
   if (!previousPaymentMethod) return undefined;
-  const {savedType} = previousPaymentMethod;
-
+  const {savedType, paymentType} = previousPaymentMethod;
+  if (!paymentTypes.includes(paymentType)) {
+    return undefined;
+  }
   switch (savedType) {
     case 'normal':
-      const {paymentType} = previousPaymentMethod;
       switch (paymentType) {
         case PaymentType.Vipps:
           return {
             paymentType,
           };
         default:
-        case PaymentType.MasterCard:
-        case PaymentType.VISA:
+        case PaymentType.Mastercard:
+        case PaymentType.Visa:
           return {
             paymentType,
             save: false,
@@ -64,30 +67,15 @@ function getSelectedPaymentMethod(
 }
 
 function isRecurring(option: PaymentMethod): option is {
-  paymentType: PaymentType.VISA | PaymentType.MasterCard;
+  paymentType: PaymentType.Visa | PaymentType.Mastercard;
   recurringPaymentId: number;
 } {
   return (
-    (option.paymentType === PaymentType.VISA ||
-      option.paymentType === PaymentType.MasterCard) &&
+    (option.paymentType === PaymentType.Visa ||
+      option.paymentType === PaymentType.Mastercard) &&
     'recurringPaymentId' in option
   );
 }
-
-const defaultPaymentOptions: SavedPaymentOption[] = [
-  {
-    paymentType: PaymentType.Vipps,
-    savedType: 'normal',
-  },
-  {
-    paymentType: PaymentType.VISA,
-    savedType: 'normal',
-  },
-  {
-    paymentType: PaymentType.MasterCard,
-    savedType: 'normal',
-  },
-];
 
 const remotePaymentOptions: SavedPaymentOption[] = [];
 
@@ -103,10 +91,20 @@ const SelectPaymentMethod: React.FC<Props> = ({
 
   const {user} = useAuthState();
   const {theme} = useTheme();
+  const {paymentTypes} = useFirestoreConfiguration();
+
+  const defaultPaymentOptions: SavedPaymentOption[] = paymentTypes.map(
+    (paymentType) => {
+      return {
+        paymentType: paymentType,
+        savedType: 'normal',
+      };
+    },
+  );
 
   const [selectedOption, setSelectedOption] = useState<
     PaymentMethod | undefined
-  >(getSelectedPaymentMethod(previousPaymentMethod));
+  >(getSelectedPaymentMethod(paymentTypes, previousPaymentMethod));
   const [remoteOptions, setRemoteOptions] = useState(remotePaymentOptions);
   const styles = useStyles();
 
@@ -226,8 +224,8 @@ const SelectPaymentMethod: React.FC<Props> = ({
           <LinearGradient
             style={styles.gradient}
             colors={[
-              hexToRgba(theme.colors.background_2.backgroundColor, 0),
-              hexToRgba(theme.colors.background_2.backgroundColor, 1),
+              hexToRgba(theme.static.background.background_2.background, 0),
+              hexToRgba(theme.static.background.background_2.background, 1),
             ]}
             pointerEvents={'none'}
           />
@@ -235,7 +233,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
         <FullScreenFooter>
           <Button
             style={styles.confirmButton}
-            color="primary_2"
+            interactiveColor="interactive_0"
             text={t(SelectPaymentMethodTexts.confirm_button.text)}
             accessibilityHint={t(
               SelectPaymentMethodTexts.confirm_button.a11yhint,
@@ -438,9 +436,9 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
 
 function getPaymentTypeName(paymentType: PaymentType) {
   switch (paymentType) {
-    case PaymentType.VISA:
+    case PaymentType.Visa:
       return 'Visa';
-    case PaymentType.MasterCard:
+    case PaymentType.Mastercard:
       return 'MasterCard';
     case PaymentType.Vipps:
       return 'Vipps';
@@ -503,7 +501,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   card: {
     marginVertical: theme.spacings.xSmall,
     borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   saveOptionSection: {
     paddingHorizontal: theme.spacings.xLarge,
@@ -511,7 +509,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
     paddingHorizontal: theme.spacings.medium,
   },
   rowJustifyEnd: {flex: 1, flexDirection: 'row', justifyContent: 'flex-end'},
@@ -530,10 +528,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   radioSelected: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_3.background,
   },
   radioBlank: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   radio: {
     marginRight: theme.spacings.medium,
@@ -541,7 +539,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     width: 24,
     borderRadius: 12,
     borderWidth: theme.border.width.medium,
-    borderColor: theme.colors.primary_2.backgroundColor,
+    borderColor: theme.static.background.background_accent_3.background,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -549,7 +547,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height: 12,
     width: 12,
     borderRadius: 6,
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   saveCheckbox: {
     marginRight: theme.spacings.medium,
@@ -557,15 +555,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     width: 24,
     borderRadius: 4,
     borderWidth: 2,
-    borderColor: theme.colors.primary_2.backgroundColor,
+    borderColor: theme.static.background.background_accent_3.background,
     alignItems: 'center',
     justifyContent: 'center',
   },
   saveCheckboxChecked: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_3.background,
   },
   saveCheckboxDefault: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   saveButton: {
     alignItems: 'center',

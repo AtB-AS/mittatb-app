@@ -7,21 +7,21 @@ import React from 'react';
 import {AccessibilityProps, TouchableOpacity} from 'react-native';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
-import {ThemeColor} from '@atb/theme/colors';
-import BlackMonoLogo from '@atb/assets/svg/mono-icons/logo/Logo';
+import {StaticColor, TextColor} from '@atb/theme/colors';
+import ServiceDisruption from '@atb/assets/svg/mono-icons/status/ServiceDisruption';
 
 export type ButtonModes =
   | 'back'
   | 'cancel'
   | 'close'
-  | 'home'
   | 'chat'
   | 'skip'
+  | 'status-disruption'
   | 'custom';
 export type HeaderButtonProps = {
   type: ButtonModes;
   onPress?: () => void;
-  color?: ThemeColor;
+  color?: StaticColor | TextColor;
   text?: string;
   testID?: string;
 } & AccessibilityProps;
@@ -42,7 +42,7 @@ const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
 export type HeaderButtonWithoutNavigationProps = {
   text: string;
   onPress: () => void;
-  color?: ThemeColor;
+  color?: StaticColor | TextColor;
   testID?: string;
 } & AccessibilityProps;
 
@@ -104,11 +104,12 @@ const useIconButton = (
         ...accessibilityProps,
       };
     }
-    case 'home': {
-      const {type, color, onPress, ...accessibilityProps} = buttonProps;
+    case 'status-disruption': {
+      const {type, color, onPress, testID, ...accessibilityProps} = buttonProps;
       return {
-        icon: <ThemeIcon colorType={color} svg={BlackMonoLogo} />,
-        onPress: onPress || navigateHome,
+        icon: <ThemeIcon colorType={color} svg={ServiceDisruption} />,
+        onPress: onPress,
+        testID: 'serviceDisruptionButton',
         accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
         ...accessibilityProps,
       };

@@ -79,6 +79,7 @@ export default function DateNavigation({
   return (
     <View style={styles.dateNavigator}>
       <Button
+        interactiveColor="interactive_2"
         onPress={() => {
           setSearchTime(changeDay(searchTime, -1));
         }}
@@ -95,8 +96,10 @@ export default function DateNavigation({
         textStyle={{
           marginLeft: theme.spacings.xSmall,
         }}
+        testID="previousDayButton"
       ></Button>
       <Button
+        interactiveColor="interactive_2"
         onPress={onLaterTimePress}
         text={searchTimeText}
         accessibilityLabel={t(
@@ -113,8 +116,10 @@ export default function DateNavigation({
           textAlign: 'center',
           marginRight: theme.spacings.xSmall,
         }}
+        testID="setDateButton"
       ></Button>
       <Button
+        interactiveColor="interactive_2"
         onPress={() => {
           setSearchTime(changeDay(searchTime, 1));
         }}
@@ -127,6 +132,7 @@ export default function DateNavigation({
           marginRight: theme.spacings.xSmall,
         }}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yNextDayHint)}
+        testID="nextDayButton"
       ></Button>
     </View>
   );

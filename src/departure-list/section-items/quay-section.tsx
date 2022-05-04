@@ -1,6 +1,5 @@
 import {QuayGroup, StopPlaceInfo} from '@atb/api/departures/types';
 import {Section} from '@atb/components/sections';
-import {Location} from '@atb/sdk';
 import {useTheme} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import haversineDistance from 'haversine-distance';
@@ -11,6 +10,7 @@ import {hasNoGroupsWithDepartures, isValidDeparture} from '../utils';
 import LineItem from './line';
 import MoreItem from './more';
 import QuayHeaderItem from './quay-header';
+import {Location} from '@atb/favorites/types';
 
 const LIMIT_SIZE = 5;
 
@@ -57,6 +57,7 @@ const QuaySection = React.memo(function QuaySection({
         <QuayHeaderItem
           quay={quayGroup.quay}
           distance={getDistanceInfo(quayGroup, currentLocation)}
+          testID={testID}
         />
 
         {sorted.map((group, i) => (

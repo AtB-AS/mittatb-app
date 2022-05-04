@@ -2,7 +2,7 @@ import {TFunc} from '@leile/lobo-t';
 import React from 'react';
 import {View} from 'react-native';
 import {QuayInfo} from '@atb/api/departures/types';
-import {WalkingPerson} from '@atb/assets/svg/mono-icons/transportation';
+import {Walk} from '@atb/assets/svg/mono-icons/transportation';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {
   SectionItem,
@@ -27,6 +27,7 @@ export type QuayHeaderItemProps = SectionItem<{
 export default function QuayHeaderItem({
   quay,
   distance,
+  testID,
   ...props
 }: QuayHeaderItemProps) {
   const styles = useItemStyles();
@@ -64,7 +65,7 @@ export default function QuayHeaderItem({
         accessibilityLabel={`${accessibilityLabel} ${label} ${screenReaderPause}`}
         accessibilityRole="header"
       >
-        <ThemeText>{title}</ThemeText>
+        <ThemeText testID={testID + 'Title'}>{title}</ThemeText>
         <Distance distance={humanized} />
       </View>
 
@@ -89,7 +90,7 @@ function Distance({distance}: DistanceProps) {
   return (
     <View style={styles.itemStyle}>
       <ThemeText>{distance}</ThemeText>
-      <ThemeIcon svg={WalkingPerson} style={styles.icon} />
+      <ThemeIcon svg={Walk} style={styles.icon} />
     </View>
   );
 }

@@ -37,7 +37,7 @@ export default function useSectionItem({
     ...mapToBorderRadius(theme, radiusSize, radius),
     backgroundColor: transparent
       ? undefined
-      : theme.colors.background_0.backgroundColor,
+      : theme.static.background.background_0.background,
   };
   const contentContainer: ViewStyle = {
     flex: isInline ? undefined : 1,

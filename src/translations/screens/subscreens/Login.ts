@@ -34,12 +34,15 @@ const LoginTexts = {
     title: _('Logg inn', 'Log in'),
     description: _(
       'Logg inn med engangskode sendt til din mobil',
-      'Log in with a one-time code sent to your mobile',
+      'Log in with a one-time code sent to your phone',
     ),
     input: {
-      heading: _('Mobilnummer', 'Mobile number'),
+      heading: _('Mobilnummer', 'phone number'),
       label: _('+47', '+47'),
-      placeholder: _('Skriv inn ditt telefonnummer', 'Type your mobile number'),
+      placeholder: _(
+        'Skriv inn ditt telefonnummer',
+        'Type in your phone number',
+      ),
     },
     mainButton: _('Send engangskode', 'Send one-time code'),
     errors: {
@@ -84,8 +87,8 @@ const LoginTexts = {
   skipLoginWarning: {
     title: _('Er du sikker?', 'Are you sure?'),
     description: _(
-      'Hvis du bytter eller mister telefonen vil vi ikke kunne finne fram billettene dine igjen.\n\nDu kan også logge inn senere under "Mitt AtB"',
-      'If you switch or lose your phone your tickets will be lost.\n\nYou can also sign in at a later time under "My AtB"',
+      'Hvis du bytter eller mister telefonen vil vi ikke kunne finne fram billettene dine igjen.\n\nDu kan også logge inn senere under "Min profil"',
+      'If you switch or lose your phone your tickets will be lost.\n\nYou can also sign in at a later time under "My profile"',
     ),
     mainButton: _('Godta og gå videre', 'Accept and continue'),
     wantToLoginButton: _('Jeg vil logge inn likevel', 'I want to sign in'),

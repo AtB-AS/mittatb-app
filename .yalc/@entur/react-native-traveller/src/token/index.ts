@@ -16,6 +16,7 @@ import startingHandler from './state-machine/handlers/StartingHandler';
 import notSupportedHandler from './state-machine/handlers/NotSupportedHandler';
 import { getStoreKey } from './state-machine/utils';
 import verifyInspectionActionHandler from './state-machine/handlers/VerifyInspectionActionHandler';
+import { logger } from '../logger';
 
 export const startTokenStateMachine = async (
   abtTokensService: AbtTokensService,
@@ -42,7 +43,8 @@ export const startTokenStateMachine = async (
         await AsyncStorage.setItem(storeKey, JSON.stringify(currentState));
         setStatus(currentState);
       }
-    } catch (err) {
+    } catch (err: any) {
+      logger.error(undefined, err, undefined);
       console.warn('Unexpected error', err);
       setStatus({
         ...currentState,

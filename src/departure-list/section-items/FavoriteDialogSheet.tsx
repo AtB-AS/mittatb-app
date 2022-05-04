@@ -49,7 +49,7 @@ const FavoriteDialogSheet = forwardRef<View, Props>(
         <FullScreenFooter>
           <ButtonGroup>
             <Button
-              color="primary_2"
+              interactiveColor="interactive_0"
               onPress={() => {
                 close();
                 addFavorite(true);
@@ -64,7 +64,7 @@ const FavoriteDialogSheet = forwardRef<View, Props>(
               iconPosition={'right'}
             />
             <Button
-              color="primary_2"
+              interactiveColor="interactive_0"
               onPress={() => {
                 close();
                 addFavorite(false);

@@ -1,26 +1,18 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import firestore, {
-  FirebaseFirestoreTypes,
-} from '@react-native-firebase/firestore';
-import Bugsnag from '@bugsnag/react-native';
+import React, {createContext, useContext, useEffect, useState} from 'react';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
-export type FeedbackQuestionsMode = 'departures' | 'assistant';
+export type FeedbackQuestionsViewContext = 'departures' | 'assistant';
 
-export type CategoryType = {
-  mode: FeedbackQuestionsMode;
+export type FeedbackConfiguration = {
+  viewContext: FeedbackQuestionsViewContext;
+  alwaysShow: boolean;
+  dismissable: boolean;
+  surveyVersion: number;
+  gracePeriodDisplayCount: number;
+  repromptDisplayCount: number;
   introText: LanguageString;
   question: QuestionType;
 };
-
-export type QuestionCategories = Partial<
-  Record<FeedbackQuestionsMode, CategoryType>
->;
 
 type LanguageString = {
   nb: string;
@@ -31,7 +23,7 @@ export type QuestionType = {
   questionText: LanguageString;
   questionId: number;
   alternatives: AlternativeType[];
-  mode: FeedbackQuestionsMode;
+  viewContext: FeedbackQuestionsViewContext;
 };
 
 export type AlternativeType = {
@@ -39,58 +31,24 @@ export type AlternativeType = {
   alternativeText: LanguageString;
 };
 
-export type FeedbackQuestionsContextState = {
-  categories: QuestionCategories;
-};
-
-const defaultFeedbackQuestionsState = {
-  categories: {},
-};
-
-const FeedbackQuestionsContext = createContext<FeedbackQuestionsContextState>(
-  defaultFeedbackQuestionsState,
-);
+const FeedbackQuestionsContext = createContext<FeedbackConfiguration[]>([]);
 
 const FeedbackQuestionsProvider: React.FC = ({children}) => {
-  const [categories, setCategories] = useState<QuestionCategories>({});
+  const [categories, setCategories] = useState<FeedbackConfiguration[]>([]);
+  const {feedback_questions} = useRemoteConfig();
 
   useEffect(() => {
-    firestore()
-      .collection('configuration')
-      .doc('feedbackQuestions')
-      .onSnapshot(
-        (snapshot) => {
-          const fetchedQuestions = snapshot.data() as Record<
-            FeedbackQuestionsMode,
-            string
-          >;
-
-          let newQuestions: QuestionCategories = {};
-          try {
-            for (let [mode, questions] of Object.entries(fetchedQuestions)) {
-              newQuestions[mode as FeedbackQuestionsMode] = JSON.parse(
-                questions,
-              ) as CategoryType;
-            }
-            setCategories(newQuestions);
-          } catch (error: any) {
-            Bugsnag.notify(error);
-          }
-        },
-        (err) => {
-          Bugsnag.notify(err);
-        },
-      );
-  }, []);
+    setCategories(feedback_questions ? feedback_questions : []);
+  }, [feedback_questions]);
 
   return (
-    <FeedbackQuestionsContext.Provider value={{categories}}>
+    <FeedbackQuestionsContext.Provider value={categories}>
       {children}
     </FeedbackQuestionsContext.Provider>
   );
 };
 
-export function useFeedbackQuestionsState() {
+function useFeedbackQuestionsState() {
   const context = useContext(FeedbackQuestionsContext);
   if (context === undefined) {
     throw new Error(
@@ -100,9 +58,9 @@ export function useFeedbackQuestionsState() {
   return context;
 }
 
-export function useFeedbackQuestion(mode: FeedbackQuestionsMode) {
-  const {categories} = useFeedbackQuestionsState();
-  return categories[mode];
+export function useFeedbackQuestion(viewContext: FeedbackQuestionsViewContext) {
+  const allCategories = useFeedbackQuestionsState();
+  return allCategories.find((category) => category.viewContext === viewContext);
 }
 
 export default FeedbackQuestionsProvider;

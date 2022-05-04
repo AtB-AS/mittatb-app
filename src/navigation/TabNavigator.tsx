@@ -1,14 +1,13 @@
 import {
   Assistant as AssistantIcon,
-  Nearby,
+  Departures,
   Profile,
-  Tickets,
+  Ticketing,
 } from '@atb/assets/svg/mono-icons/tab-bar';
 import ThemeText from '@atb/components/text';
-import {LocationWithMetadata} from '@atb/favorites/types';
+import {Location} from '@atb/favorites/types';
 import {usePreferenceItems} from '@atb/preferences';
-import Assistant_v2 from '@atb/screens/Assistant_v2/';
-import Assistant from '@atb/screens/Assistant/';
+import Assistant from '@atb/screens/Assistant';
 import NearbyScreen, {NearbyStackParams} from '@atb/screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '@atb/screens/Profile';
 import TicketingScreen from '@atb/screens/Ticketing';
@@ -32,8 +31,8 @@ type SubNavigator<T extends ParamListBase> = {
 
 export type TabNavigatorParams = {
   Assistant: {
-    fromLocation: LocationWithMetadata;
-    toLocation: LocationWithMetadata;
+    fromLocation: Location;
+    toLocation: Location;
   };
   Nearest: NavigatorScreenParams<NearbyStackParams>;
   Ticketing: undefined;
@@ -44,18 +43,17 @@ const Tab = createBottomTabNavigator<TabNavigatorParams>();
 const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const {startScreen, useExperimentalTripSearch, newDepartures} =
-    usePreferenceItems();
+  const {startScreen, newDepartures} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
   return (
     <Tab.Navigator
       tabBarOptions={{
         labelPosition: 'below-icon',
-        activeTintColor: theme.colors.primary_2.backgroundColor,
+        activeTintColor: theme.static.background.background_accent_3.background,
         inactiveTintColor: theme.text.colors.secondary,
         style: {
-          backgroundColor: theme.colors.background_0.backgroundColor,
+          backgroundColor: theme.static.background.background_0.background,
           ...useBottomNavigationStyles(),
         },
       }}
@@ -63,10 +61,10 @@ const NavigationRoot = () => {
     >
       <Tab.Screen
         name="Assistant"
-        component={useExperimentalTripSearch ? Assistant_v2 : Assistant}
+        component={Assistant}
         options={tabSettings(
           t(dictionary.navigation.assistant),
-          t(dictionary.navigation.assistant),
+          t(dictionary.navigation.assistant_a11y),
           AssistantIcon,
           lineHeight,
           'assistantTab',
@@ -78,7 +76,7 @@ const NavigationRoot = () => {
         options={tabSettings(
           t(dictionary.navigation.nearby),
           t(dictionary.navigation.nearby),
-          Nearby,
+          Departures,
           lineHeight,
           'departuresTab',
         )}
@@ -89,7 +87,7 @@ const NavigationRoot = () => {
         options={tabSettings(
           t(dictionary.navigation.ticketing),
           t(dictionary.navigation.ticketing),
-          Tickets,
+          Ticketing,
           lineHeight,
           'ticketsTab',
         )}

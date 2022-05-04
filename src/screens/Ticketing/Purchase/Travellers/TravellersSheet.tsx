@@ -90,7 +90,7 @@ const TravellersSheet = forwardRef<ScrollView, Props>(
 
         <FullScreenFooter>
           <Button
-            color="primary_2"
+            interactiveColor="interactive_0"
             text={t(TravellersTexts.primaryButton.text)}
             accessibilityHint={t(TravellersTexts.primaryButton.a11yHint)}
             disabled={

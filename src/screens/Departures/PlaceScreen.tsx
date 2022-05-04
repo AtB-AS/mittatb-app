@@ -1,6 +1,6 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import React, {useState} from 'react';
 import {FlatList} from 'react-native-gesture-handler';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -13,6 +13,7 @@ import {DeparturesStackParams} from '.';
 import QuayView from './QuayView';
 import StopPlaceView from './StopPlaceView';
 import {SearchTime} from './NearbyPlaces';
+import {useStopsDetailsData} from './state/stop-place-details-state';
 
 export type PlaceScreenParams = {
   place: Place;
@@ -44,6 +45,16 @@ export default function PlaceScreen({
     date: new Date().toISOString(),
   });
 
+  const {state} = useStopsDetailsData(
+    place.quays === undefined ? [place.id] : undefined,
+  );
+
+  if (state.data && place.quays === undefined) {
+    place = state.data.stopPlaces[0];
+  }
+
+  const isMissingQuays = place.quays === undefined;
+
   const navigateToDetails = (
     serviceJourneyId: string,
     serviceDate: string,
@@ -72,19 +83,29 @@ export default function PlaceScreen({
       <FlatList
         data={place.quays}
         style={styles.quayChipContainer}
-        horizontal={true}
+        horizontal={!isMissingQuays}
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
-          <Button
-            onPress={() => {
-              navigation.setParams({selectedQuay: undefined});
-            }}
-            text={t(DeparturesTexts.quayChips.allStops)}
-            color={selectedQuay ? 'secondary_2' : 'secondary_3'}
-            style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
-            accessibilityHint={t(DeparturesTexts.quayChips.a11yAllStopsHint)}
-          ></Button>
+          <>
+            {isMissingQuays ? (
+              <ActivityIndicator size="large" />
+            ) : (
+              <Button
+                onPress={() => {
+                  navigation.setParams({selectedQuay: undefined});
+                }}
+                text={t(DeparturesTexts.quayChips.allStops)}
+                interactiveColor="interactive_1"
+                active={!selectedQuay}
+                style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
+                accessibilityHint={t(
+                  DeparturesTexts.quayChips.a11yAllStopsHint,
+                )}
+                testID="allStopsSelectionButton"
+              ></Button>
+            )}
+          </>
         }
         renderItem={({item}: quayChipData) => (
           <Button
@@ -92,11 +113,13 @@ export default function PlaceScreen({
               navigation.setParams({selectedQuay: item});
             }}
             text={getQuayName(item)}
-            color={selectedQuay?.id === item.id ? 'secondary_3' : 'secondary_2'}
+            interactiveColor="interactive_1"
+            active={selectedQuay?.id === item.id}
             style={styles.quayChip}
             accessibilityHint={
               t(DeparturesTexts.quayChips.a11yHint) + getQuayName(item)
             }
+            testID="quaySelectionButton"
           ></Button>
         )}
       />
@@ -106,6 +129,7 @@ export default function PlaceScreen({
           navigateToDetails={navigateToDetails}
           searchTime={searchTime}
           setSearchTime={setSearchTime}
+          testID="departuresContentView"
         />
       ) : (
         <StopPlaceView
@@ -114,6 +138,7 @@ export default function PlaceScreen({
           navigateToQuay={navigateToQuay}
           searchTime={searchTime}
           setSearchTime={setSearchTime}
+          testID="departuresContentView"
         />
       )}
     </View>
@@ -126,11 +151,11 @@ function getQuayName(quay: Quay): string {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
   quayChipContainer: {
-    backgroundColor: theme.colors.background_accent.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_0.background,
     paddingVertical: theme.spacings.medium,
     flexShrink: 0,
     flexGrow: 0,

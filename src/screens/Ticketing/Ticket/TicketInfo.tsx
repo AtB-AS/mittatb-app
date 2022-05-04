@@ -8,20 +8,23 @@ import {
   findReferenceDataById,
   getReferenceDataName,
 } from '@atb/reference-data/utils';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {PreactivatedTicket} from '@atb/tickets';
+import {PreactivatedTicket, useTicketState} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import React, {ReactElement} from 'react';
 import {View} from 'react-native';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
 import {tariffZonesSummary} from '@atb/screens/Ticketing/Purchase/TariffZones';
-import {BusSide, Wait} from '@atb/assets/svg/mono-icons/transportation';
+import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
-import {AddTicket, InvalidTicket} from '@atb/assets/svg/mono-icons/ticketing';
+import {TicketAdd, TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {Warning} from '@atb/assets/svg/color/situations';
+import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import {flatStaticColors, getStaticColor, StaticColor} from '@atb/theme/colors';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {Time} from '@atb/assets/svg/mono-icons/time';
 
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -36,11 +39,8 @@ const TicketInfo = ({
   isInspectable,
   omitUserProfileCount,
 }: TicketInfoProps) => {
-  const {
-    tariff_zones: tariffZones,
-    preassigned_fare_products: preassignedFareProducts,
-    user_profiles: userProfiles,
-  } = useRemoteConfig();
+  const {tariffZones, userProfiles, preassignedFareproducts} =
+    useFirestoreConfiguration();
 
   const firstTravelRight = travelRights[0];
   const {fareProductRef: productRef, tariffZoneRefs} = firstTravelRight;
@@ -48,7 +48,7 @@ const TicketInfo = ({
   const [lastZone] = tariffZoneRefs.slice(-1);
 
   const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
+    preassignedFareproducts,
     productRef,
   );
   const fromTariffZone = findReferenceDataById(tariffZones, firstZone);
@@ -119,6 +119,17 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
       ? `${getReferenceDataName(u, language)}`
       : `${u.count} ${getReferenceDataName(u, language)}`;
 
+  const tokensEnabled = useHasEnabledMobileToken();
+  const {customerProfile} = useTicketState();
+  const hasTravelCard = !!customerProfile?.travelcard;
+
+  // show warning to use inspectable t:card for travellers still not on tokens, for tickets that are valid
+  const showTravelCardActiveWarning =
+    !tokensEnabled &&
+    hasTravelCard &&
+    status !== 'expired' &&
+    status !== 'refunded';
+
   return (
     <View style={styles.textsContainer} accessible={true}>
       <View>
@@ -150,16 +161,14 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
           {tariffZoneSummary}
         </ThemeText>
       )}
-      {isInspectable === false &&
-        status !== 'expired' &&
-        status !== 'refunded' && (
-          <View style={styles.notInspectableWarning}>
-            <ThemeIcon svg={Warning} style={styles.notInspectableWarningIcon} />
-            <ThemeText isMarkdown={true}>
-              {t(TicketTexts.ticketInfo.notInspectableWarning)}
-            </ThemeText>
-          </View>
-        )}
+      {showTravelCardActiveWarning && (
+        <View style={styles.notInspectableWarning}>
+          <ThemeIcon svg={Warning} style={styles.notInspectableWarningIcon} />
+          <ThemeText isMarkdown={true}>
+            {t(TicketTexts.ticketInfo.travelcardIsActive)}
+          </ThemeText>
+        </View>
+      )}
     </View>
   );
 };
@@ -172,10 +181,14 @@ const TicketInspectionSymbol = ({
   isInspectable = true,
 }: TicketInfoViewProps) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
   const {language} = useTranslation();
   if (!fromTariffZone || !toTariffZone) return null;
-  const icon = IconForStatus(status, isInspectable);
+  const themeColor: StaticColor | undefined =
+    preassignedFareProduct?.type === 'period' && isInspectable
+      ? 'valid'
+      : undefined;
+  const icon = IconForStatus(status, isInspectable, themeColor);
   if (!icon) return null;
   const showAsInspectable = isInspectable || status !== 'valid';
   const isValid = status === 'valid';
@@ -185,15 +198,14 @@ const TicketInspectionSymbol = ({
         showAsInspectable && styles.symbolContainer,
         isValid && {
           ...styles.symbolContainerCircle,
-          backgroundColor:
-            preassignedFareProduct?.type === 'period' && isInspectable
-              ? theme.colors.primary_1.backgroundColor
-              : undefined,
+          backgroundColor: themeColor
+            ? flatStaticColors[themeName][themeColor].background
+            : undefined,
         },
         isValid &&
           !isInspectable && {
             ...styles.textContainer,
-            borderColor: theme.status.warning.main.backgroundColor,
+            borderColor: theme.static.status.warning.background,
           },
       ]}
       accessibilityElementsHidden={isInspectable}
@@ -204,6 +216,7 @@ const TicketInspectionSymbol = ({
             type="body__primary--bold"
             allowFontScaling={false}
             style={styles.symbolZones}
+            color={themeColor}
           >
             {getReferenceDataName(fromTariffZone, language)}
             {fromTariffZone.id !== toTariffZone.id &&
@@ -219,12 +232,19 @@ const TicketInspectionSymbol = ({
 const IconForStatus = (
   status: TicketInfoProps['status'],
   isInspectable: boolean,
+  themeColor?: StaticColor,
 ): ReactElement | null => {
   const {t} = useTranslation();
+  const {themeName} = useTheme();
+  const fillColor = getStaticColor(
+    themeName,
+    themeColor || 'background_0',
+  ).text;
+
   switch (status) {
     case 'valid':
       if (isInspectable)
-        return <ThemeIcon svg={BusSide} colorType="primary" size={'large'} />;
+        return <ThemeIcon svg={Bus} fill={fillColor} size={'large'} />;
       else
         return (
           <ThemeText
@@ -241,11 +261,11 @@ const IconForStatus = (
         );
     case 'expired':
     case 'refunded':
-      return <ThemeIcon svg={InvalidTicket} colorType="error" size={'large'} />;
+      return <ThemeIcon svg={TicketInvalid} colorType="error" size={'large'} />;
     case 'recent':
-      return <ThemeIcon svg={AddTicket} colorType="primary" size={'large'} />;
+      return <ThemeIcon svg={TicketAdd} colorType="primary" size={'large'} />;
     case 'upcoming':
-      return <ThemeIcon svg={Wait} colorType="primary" size={'large'} />;
+      return <ThemeIcon svg={Time} colorType="primary" size={'large'} />;
     case 'reserving':
     case 'unknown':
       return null;
@@ -299,7 +319,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   symbolContainerCircle: {
     borderRadius: 1000,
-    borderColor: theme.colors.primary_1.backgroundColor,
+    borderColor: theme.static.status.valid.background,
     borderWidth: 5,
   },
   symbolZones: {

@@ -6,6 +6,14 @@ Object.defineProperty(exports, "__esModule", {
 exports.createFetcher = createFetcher;
 exports.RequestError = void 0;
 
+var _base = _interopRequireDefault(require("base-64"));
+
+var _utf = _interopRequireDefault(require("utf8"));
+
+var _logger = require("./logger");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 class RequestError extends Error {
@@ -44,13 +52,44 @@ function createInternalFetcher(config) {
   };
 }
 
-function createFetcher(config) {
+function createFetcher(config, reattest) {
   const fetcher = createInternalFetcher(config);
 
   const handleRequest = async (request, allowRetry = true) => {
     try {
       return await fetcher(request);
     } catch (error) {
+      var _error$response;
+
+      const errorResponseData = error === null || error === void 0 ? void 0 : (_error$response = error.response) === null || _error$response === void 0 ? void 0 : _error$response.data;
+
+      if (isReattestationError(errorResponseData)) {
+        var _request$headers;
+
+        const {
+          token_id,
+          nonce
+        } = errorResponseData.metadata;
+
+        _logger.logger.info('mobiletoken_reattestation_required', undefined, {
+          tokenId: token_id
+        });
+
+        const reattestBody = await reattest(token_id, nonce);
+        const jsonBody = JSON.stringify(reattestBody);
+
+        const utf8value = _utf.default.encode(jsonBody);
+
+        const headerValue = _base.default.encode(utf8value);
+
+        const headers = (_request$headers = request.headers) !== null && _request$headers !== void 0 ? _request$headers : {};
+        headers['X-Attestation-Data'] = headerValue;
+        request.headers = headers;
+        return handleRequest(request, true);
+      }
+
+      _logger.logger.error(undefined, error, undefined);
+
       if (error instanceof RequestError) {
         if (allowRetry) {
           return handleRequest(request, false);
@@ -67,4 +106,8 @@ function createFetcher(config) {
 function isOk(response) {
   return response.status > 199 && response.status < 300;
 }
+
+const isReattestationError = data => {
+  return (data === null || data === void 0 ? void 0 : data.code) === 'REATTESTATION_REQUIRED';
+};
 //# sourceMappingURL=fetcher.js.map
