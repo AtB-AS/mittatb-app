@@ -19,7 +19,7 @@ import {
 } from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
-import ZoneItem from './components/zone-item';
+import Zones from './components/Zones';
 
 import {
   getReferenceDataName,
@@ -273,7 +273,11 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           </Sections.GenericItem>
         </Sections.Section>
 
-        <ZoneItem fromTariffZone={fromTariffZone} toTariffZone={toTariffZone} />
+        <Zones
+          fromTariffZone={fromTariffZone}
+          toTariffZone={toTariffZone}
+          style={styles.zones}
+        />
       </View>
 
       {showProfileTravelcardWarning && (
@@ -465,6 +469,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   selectionLinks: {margin: theme.spacings.medium},
   totalSection: {flex: 1, textAlign: 'center'},
+  zones: {marginTop: theme.spacings.medium},
   toPaymentButton: {marginHorizontal: theme.spacings.medium},
   warning: {
     marginHorizontal: theme.spacings.medium,
