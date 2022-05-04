@@ -8,7 +8,7 @@ import ThemeText from '@atb/components/text';
 import {InteractiveColor} from '@atb/theme/colors';
 import {TouchableOpacity} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 

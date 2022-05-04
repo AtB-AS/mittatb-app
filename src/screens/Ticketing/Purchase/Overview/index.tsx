@@ -27,7 +27,7 @@ import {
 } from '@atb/reference-data/utils';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {TicketingStackParams} from '../';
 import {TariffZoneWithMetadata} from '../TariffZones';
 import useOfferState from './use-offer-state';
@@ -184,128 +184,133 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         alertContext="ticketing"
       />
 
-      <View style={styles.selectionLinks}>
-        {error && (
+      <ScrollView>
+        <View style={styles.selectionLinks}>
+          {error && (
+            <MessageBox
+              type="error"
+              title={t(PurchaseOverviewTexts.errorMessageBox.title)}
+              message={t(PurchaseOverviewTexts.errorMessageBox.message)}
+              onPress={refreshOffer}
+              onPressText={t(MessageBoxTexts.tryAgainButton)}
+              containerStyle={styles.errorMessage}
+            />
+          )}
+
+          <DurationSelection
+            color="interactive_2"
+            selectedProduct={preassignedFareProduct}
+            setSelectedProduct={setPreassignedFareProduct}
+          />
+
+          <Sections.Section>
+            <Sections.LinkItem
+              text={createTravellersText(
+                userProfilesWithCount,
+                true,
+                false,
+                t,
+                language,
+              )}
+              onPress={openTravellersSheet}
+              icon={<ThemeIcon svg={Edit} />}
+              accessibility={{
+                accessibilityLabel:
+                  createTravellersText(
+                    userProfilesWithCount,
+                    false,
+                    false,
+                    t,
+                    language,
+                  ) + screenReaderPause,
+                accessibilityHint: t(PurchaseOverviewTexts.travellers.a11yHint),
+              }}
+              testID="selectTravellersButton"
+            />
+            <Sections.LinkItem
+              text={createTravelDateText(t, language, travelDate)}
+              disabled={!travelDateSelectionEnabled}
+              onPress={openTravelDateSheet}
+              icon={<ThemeIcon svg={Edit} />}
+              accessibility={{
+                accessibilityLabel:
+                  createTravelDateText(t, language, travelDate) +
+                  screenReaderPause,
+                accessibilityHint: t(PurchaseOverviewTexts.travelDate.a11yHint),
+              }}
+              testID="selectStartTimeButton"
+            />
+            <Sections.GenericItem>
+              {isSearchingOffer ? (
+                <ActivityIndicator style={styles.totalSection} />
+              ) : (
+                <ThemeText
+                  style={styles.totalSection}
+                  type="body__primary--bold"
+                  testID="offerTotalPriceText"
+                >
+                  {t(PurchaseOverviewTexts.totalPrice(totalPrice))}
+                </ThemeText>
+              )}
+            </Sections.GenericItem>
+          </Sections.Section>
+
+          <ZoneItem
+            fromTariffZone={fromTariffZone}
+            toTariffZone={toTariffZone}
+          />
+        </View>
+
+        {showProfileTravelcardWarning && (
           <MessageBox
-            type="error"
-            title={t(PurchaseOverviewTexts.errorMessageBox.title)}
-            message={t(PurchaseOverviewTexts.errorMessageBox.message)}
-            onPress={refreshOffer}
-            onPressText={t(MessageBoxTexts.tryAgainButton)}
-            containerStyle={styles.errorMessage}
+            containerStyle={styles.warning}
+            message={t(PurchaseOverviewTexts.warning)}
+            type="warning"
           />
         )}
 
-        <DurationSelection
-          color="interactive_2"
-          selectedProduct={preassignedFareProduct}
-          setSelectedProduct={setPreassignedFareProduct}
-        />
-
-        <Sections.Section>
-          <Sections.LinkItem
-            text={createTravellersText(
-              userProfilesWithCount,
-              true,
-              false,
-              t,
-              language,
-            )}
-            onPress={openTravellersSheet}
-            icon={<ThemeIcon svg={Edit} />}
-            accessibility={{
-              accessibilityLabel:
-                createTravellersText(
-                  userProfilesWithCount,
-                  false,
-                  false,
-                  t,
-                  language,
-                ) + screenReaderPause,
-              accessibilityHint: t(PurchaseOverviewTexts.travellers.a11yHint),
-            }}
-            testID="selectTravellersButton"
+        {showNotInspectableTokenWarning && (
+          <MessageBox
+            isMarkdown={true}
+            containerStyle={styles.warning}
+            message={t(PurchaseOverviewTexts.notInspectableTokenDeviceWarning)}
+            type="warning"
           />
-          <Sections.LinkItem
-            text={createTravelDateText(t, language, travelDate)}
-            disabled={!travelDateSelectionEnabled}
-            onPress={openTravelDateSheet}
-            icon={<ThemeIcon svg={Edit} />}
-            accessibility={{
-              accessibilityLabel:
-                createTravelDateText(t, language, travelDate) +
-                screenReaderPause,
-              accessibilityHint: t(PurchaseOverviewTexts.travelDate.a11yHint),
-            }}
-            testID="selectStartTimeButton"
+        )}
+
+        {shouldShowValidTrainTicketNotice && (
+          <MessageBox
+            containerStyle={styles.warning}
+            message={
+              preassignedFareProduct.type === 'single'
+                ? t(PurchaseOverviewTexts.samarbeidsbillettenInfo.single)
+                : t(PurchaseOverviewTexts.samarbeidsbillettenInfo.period)
+            }
+            type="info"
           />
-          <Sections.GenericItem>
-            {isSearchingOffer ? (
-              <ActivityIndicator style={styles.totalSection} />
-            ) : (
-              <ThemeText
-                style={styles.totalSection}
-                type="body__primary--bold"
-                testID="offerTotalPriceText"
-              >
-                {t(PurchaseOverviewTexts.totalPrice(totalPrice))}
-              </ThemeText>
-            )}
-          </Sections.GenericItem>
-        </Sections.Section>
+        )}
 
-        <ZoneItem fromTariffZone={fromTariffZone} toTariffZone={toTariffZone} />
-      </View>
-
-      {showProfileTravelcardWarning && (
-        <MessageBox
-          containerStyle={styles.warning}
-          message={t(PurchaseOverviewTexts.warning)}
-          type="warning"
-        />
-      )}
-
-      {showNotInspectableTokenWarning && (
-        <MessageBox
-          isMarkdown={true}
-          containerStyle={styles.warning}
-          message={t(PurchaseOverviewTexts.notInspectableTokenDeviceWarning)}
-          type="warning"
-        />
-      )}
-
-      {shouldShowValidTrainTicketNotice && (
-        <MessageBox
-          containerStyle={styles.warning}
-          message={
-            preassignedFareProduct.type === 'single'
-              ? t(PurchaseOverviewTexts.samarbeidsbillettenInfo.single)
-              : t(PurchaseOverviewTexts.samarbeidsbillettenInfo.period)
-          }
-          type="info"
-        />
-      )}
-
-      <View style={styles.toPaymentButton}>
-        <Button
-          interactiveColor="interactive_0"
-          text={t(PurchaseOverviewTexts.primaryButton)}
-          disabled={isSearchingOffer || !totalPrice || !!error}
-          onPress={() => {
-            navigation.navigate('Confirmation', {
-              fromTariffZone,
-              toTariffZone,
-              userProfilesWithCount,
-              preassignedFareProduct,
-              travelDate,
-              headerLeftButton: {type: 'back'},
-            });
-          }}
-          icon={ArrowRight}
-          iconPosition="right"
-          testID="goToPaymentButton"
-        />
-      </View>
+        <View style={styles.toPaymentButton}>
+          <Button
+            interactiveColor="interactive_0"
+            text={t(PurchaseOverviewTexts.primaryButton)}
+            disabled={isSearchingOffer || !totalPrice || !!error}
+            onPress={() => {
+              navigation.navigate('Confirmation', {
+                fromTariffZone,
+                toTariffZone,
+                userProfilesWithCount,
+                preassignedFareProduct,
+                travelDate,
+                headerLeftButton: {type: 'back'},
+              });
+            }}
+            icon={ArrowRight}
+            iconPosition="right"
+            testID="goToPaymentButton"
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };
