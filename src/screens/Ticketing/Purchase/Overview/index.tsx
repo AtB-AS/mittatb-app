@@ -417,7 +417,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
-  summary: {marginHorizontal: theme.spacings.medium},
+  summary: {margin: theme.spacings.medium},
 }));
 
 export default PurchaseOverview;
