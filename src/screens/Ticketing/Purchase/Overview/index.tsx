@@ -36,7 +36,6 @@ import {formatToLongDateTime} from '@atb/utils/date';
 import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import ProductSheet from '@atb/screens/Ticketing/Purchase/Product/ProductSheet';
 import {usePreferences} from '@atb/preferences';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
@@ -48,7 +47,6 @@ import {
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
 import {useTicketState} from '@atb/tickets';
-import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import DurationSelection from './components/DurationSelection';
 
@@ -150,17 +148,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const {open: openBottomSheet} = useBottomSheet();
 
-  const openProductSheet = () => {
-    openBottomSheet((close, focusRef) => (
-      <ProductSheet
-        close={close}
-        save={setPreassignedFareProduct}
-        preassignedFareProduct={preassignedFareProduct}
-        ref={focusRef}
-      />
-    ));
-  };
-
   const openTravellersSheet = () => {
     openBottomSheet((close, focusRef) => (
       <TravellersSheet
@@ -216,19 +203,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         />
 
         <Sections.Section>
-          <Sections.LinkItem
-            text={getReferenceDataName(preassignedFareProduct, language)}
-            onPress={openProductSheet}
-            disabled={selectableProducts.length <= 1}
-            icon={<ThemeIcon svg={Edit} />}
-            accessibility={{
-              accessibilityLabel:
-                getReferenceDataName(preassignedFareProduct, language) +
-                screenReaderPause,
-              accessibilityHint: t(PurchaseOverviewTexts.product.a11yHint),
-            }}
-            testID="selectProductButton"
-          />
           <Sections.LinkItem
             text={createTravellersText(
               userProfilesWithCount,
