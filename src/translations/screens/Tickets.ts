@@ -79,7 +79,7 @@ const TicketsTexts = {
   availableTickets: {
     allTickets: _('Alle billetter', 'All products'),
     navigateToBuy: _(
-      'Aktiver for å gå til kjøp',
+      'Aktivér for å gå til kjøp',
       'Activate to go to purchasing',
     ),
     singleTicket: {
