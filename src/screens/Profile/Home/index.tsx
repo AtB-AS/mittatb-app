@@ -28,6 +28,7 @@ import analytics from '@react-native-firebase/analytics';
 import {updateMetadata} from '@atb/chat/metadata';
 import parsePhoneNumber from 'libphonenumber-js';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import deleteProfile from '@atb/api/delete_profile';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -77,6 +78,12 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
   const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
 
+  function delProf() {
+    deleteProfile().then((res) => {
+      Alert.alert('answer is ' + res.data.available);
+    });
+  }
+
   return (
     <View style={style.container}>
       <FullScreenHeader
@@ -116,6 +123,13 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               </ThemeText>
             </Sections.GenericItem>
           )}
+          <Sections.LinkItem
+            text={t(
+              ProfileTexts.sections.account.linkItems.expiredTickets.label,
+            )}
+            onPress={() => navigation.navigate('ExpiredTickets')}
+            testID="expiredTicketsButton"
+          />
           {authenticationType !== 'phone' && (
             <Sections.LinkItem
               text={t(ProfileTexts.sections.account.linkItems.login.label)}
@@ -134,18 +148,17 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           )}
           {authenticationType === 'phone' && (
             <Sections.LinkItem
+              text={' # Slett bruker'}
+              onPress={() => delProf()}
+            />
+          )}
+          {authenticationType === 'phone' && (
+            <Sections.LinkItem
               text={t(ProfileTexts.sections.account.linkItems.logout.label)}
               onPress={signOut}
               testID="logoutButton"
             />
           )}
-          <Sections.LinkItem
-            text={t(
-              ProfileTexts.sections.account.linkItems.expiredTickets.label,
-            )}
-            onPress={() => navigation.navigate('ExpiredTickets')}
-            testID="expiredTicketsButton"
-          />
         </Sections.Section>
 
         <Sections.Section withPadding>
