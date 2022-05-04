@@ -87,5 +87,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
   },
   message: {textAlign: 'center'},
-  button: {marginTop: theme.spacings.medium},
+  button: {marginTop: theme.spacings.xLarge},
 }));
