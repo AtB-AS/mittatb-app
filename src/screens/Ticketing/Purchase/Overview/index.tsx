@@ -19,6 +19,8 @@ import {
 } from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
+import ZoneItem from './components/zone-item';
+
 import {
   getReferenceDataName,
   productIsSellableInApp,
@@ -27,7 +29,7 @@ import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {TicketingStackParams} from '../';
-import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
+import {TariffZoneWithMetadata} from '../TariffZones';
 import useOfferState from './use-offer-state';
 import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 import {formatToLongDateTime} from '@atb/utils/date';
@@ -49,11 +51,13 @@ import {useTicketState} from '@atb/tickets';
 import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
+export type OverviewNavigationProp = DismissableStackNavigationProp<
+  TicketingStackParams,
+  'PurchaseOverview'
+>;
+
 export type OverviewProps = {
-  navigation: DismissableStackNavigationProp<
-    TicketingStackParams,
-    'PurchaseOverview'
-  >;
+  navigation: OverviewNavigationProp;
   route: RouteProp<TicketingStackParams, 'PurchaseOverview'>;
 };
 
@@ -254,23 +258,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             }}
             testID="selectStartTimeButton"
           />
-          <Sections.LinkItem
-            text={tariffZonesSummary(fromTariffZone, toTariffZone, language, t)}
-            onPress={() => {
-              navigation.push('TariffZones', {
-                fromTariffZone,
-                toTariffZone,
-              });
-            }}
-            icon={<ThemeIcon svg={Edit} />}
-            accessibility={{
-              accessibilityLabel:
-                tariffZonesSummary(fromTariffZone, toTariffZone, language, t) +
-                screenReaderPause,
-              accessibilityHint: t(PurchaseOverviewTexts.tariffZones.a11yHint),
-            }}
-            testID="selectZonesButton"
-          />
           <Sections.GenericItem>
             {isSearchingOffer ? (
               <ActivityIndicator style={styles.totalSection} />
@@ -285,6 +272,8 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             )}
           </Sections.GenericItem>
         </Sections.Section>
+
+        <ZoneItem fromTariffZone={fromTariffZone} toTariffZone={toTariffZone} />
       </View>
 
       {showProfileTravelcardWarning && (
