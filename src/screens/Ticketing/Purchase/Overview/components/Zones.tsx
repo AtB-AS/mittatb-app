@@ -42,8 +42,9 @@ export default function Zones({
         type="body__secondary"
         color="secondary"
         style={itemStyle.sectionText}
+        accessibilityLabel={t(PurchaseOverviewTexts.zones.label.a11yLabel)}
       >
-        {t(PurchaseOverviewTexts.zones.label)}
+        {t(PurchaseOverviewTexts.zones.label.text)}
       </ThemeText>
       <Sections.Section {...accessibility}>
         <Sections.ButtonInput

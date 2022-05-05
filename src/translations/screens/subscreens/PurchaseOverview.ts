@@ -65,7 +65,10 @@ const PurchaseOverviewTexts = {
     `You can't travel with this phone. Go to **My profile** to switch where your tickets are used.`,
   ),
   zones: {
-    label: _('Velg sone(r)', 'Select zone(s)'),
+    label: {
+      text: _('Velg sone(r)', 'Select zone(s)'),
+      a11yLabel: _('Velg soner', 'Select zones'),
+    },
   },
   duration: {
     title: _('Velg varighet', 'Select duration'),
