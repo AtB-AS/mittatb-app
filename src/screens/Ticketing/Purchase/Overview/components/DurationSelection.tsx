@@ -92,6 +92,7 @@ function DurationChip({color, text, selected, onPress}: DurationChipProps) {
       accessible={true}
       accessibilityRole="radio"
       accessibilityState={{selected}}
+      accessibilityLabel={text}
       accessibilityHint={t(PurchaseOverviewTexts.duration.chipHint)}
     >
       <ThemeText
