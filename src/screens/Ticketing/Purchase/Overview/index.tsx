@@ -257,6 +257,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             travelDate={travelDate}
             setTravelDate={setTravelDate}
             validFromTime={travelDate}
+            style={styles.selectionComponent}
           />
         </View>
 
