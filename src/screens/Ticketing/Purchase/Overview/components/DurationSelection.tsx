@@ -1,5 +1,5 @@
 import React from 'react';
-import {DurationSelectionTexts, useTranslation} from '@atb/translations';
+import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {productIsSellableInApp} from '@atb/reference-data/utils';
 import ThemeText from '@atb/components/text';
 import {InteractiveColor} from '@atb/theme/colors';
@@ -33,7 +33,7 @@ export default function DurationSelection({
   return (
     <View style={style}>
       <ThemeText type="body__secondary" color="secondary">
-        {t(DurationSelectionTexts.title)}
+        {t(PurchaseOverviewTexts.duration.title)}
       </ThemeText>
       <ScrollView
         style={styles.durationScrollView}
@@ -44,7 +44,9 @@ export default function DurationSelection({
         {selectableProducts.map((fp, i) => (
           <DurationChip
             color={color}
-            text={fp.durationDays + ' ' + t(DurationSelectionTexts.days)}
+            text={
+              fp.durationDays + ' ' + t(PurchaseOverviewTexts.duration.days)
+            }
             selected={selectedProduct == fp}
             onPress={() => setSelectedProduct(fp)}
             key={i}
@@ -90,7 +92,7 @@ function DurationChip({color, text, selected, onPress}: DurationChipProps) {
       accessible={true}
       accessibilityRole="radio"
       accessibilityState={{selected}}
-      accessibilityHint={t(DurationSelectionTexts.chipHint)}
+      accessibilityHint={t(PurchaseOverviewTexts.duration.chipHint)}
     >
       <ThemeText
         color={currentColor}
