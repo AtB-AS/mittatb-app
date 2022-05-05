@@ -19,7 +19,7 @@ import {
 } from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
-import ZoneItem from './components/zone-item';
+import Zones from './components/Zones';
 
 import {
   getReferenceDataName,
@@ -27,7 +27,7 @@ import {
 } from '@atb/reference-data/utils';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {TicketingStackParams} from '../';
 import {TariffZoneWithMetadata} from '../TariffZones';
 import useOfferState from './use-offer-state';
@@ -36,7 +36,6 @@ import {formatToLongDateTime} from '@atb/utils/date';
 import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import ProductSheet from '@atb/screens/Ticketing/Purchase/Product/ProductSheet';
 import {usePreferences} from '@atb/preferences';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
@@ -48,8 +47,8 @@ import {
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
 import {useTicketState} from '@atb/tickets';
-import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import DurationSelection from './components/DurationSelection';
 
 export type OverviewNavigationProp = DismissableStackNavigationProp<
   TicketingStackParams,
@@ -149,17 +148,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const {open: openBottomSheet} = useBottomSheet();
 
-  const openProductSheet = () => {
-    openBottomSheet((close, focusRef) => (
-      <ProductSheet
-        close={close}
-        save={setPreassignedFareProduct}
-        preassignedFareProduct={preassignedFareProduct}
-        ref={focusRef}
-      />
-    ));
-  };
-
   const openTravellersSheet = () => {
     openBottomSheet((close, focusRef) => (
       <TravellersSheet
@@ -196,135 +184,137 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         alertContext="ticketing"
       />
 
-      <View style={styles.selectionLinks}>
-        {error && (
+      <ScrollView>
+        <View style={styles.selectionLinks}>
+          {error && (
+            <MessageBox
+              type="error"
+              title={t(PurchaseOverviewTexts.errorMessageBox.title)}
+              message={t(PurchaseOverviewTexts.errorMessageBox.message)}
+              onPress={refreshOffer}
+              onPressText={t(MessageBoxTexts.tryAgainButton)}
+              containerStyle={styles.selectionComponent}
+            />
+          )}
+
+          {preassignedFareProduct.type === 'period' && (
+            <DurationSelection
+              color="interactive_2"
+              selectedProduct={preassignedFareProduct}
+              setSelectedProduct={setPreassignedFareProduct}
+              style={styles.selectionComponent}
+            />
+          )}
+
+          <Sections.Section style={styles.selectionComponent}>
+            <Sections.LinkItem
+              text={createTravellersText(
+                userProfilesWithCount,
+                true,
+                false,
+                t,
+                language,
+              )}
+              onPress={openTravellersSheet}
+              icon={<ThemeIcon svg={Edit} />}
+              accessibility={{
+                accessibilityLabel:
+                  createTravellersText(
+                    userProfilesWithCount,
+                    false,
+                    false,
+                    t,
+                    language,
+                  ) + screenReaderPause,
+                accessibilityHint: t(PurchaseOverviewTexts.travellers.a11yHint),
+              }}
+              testID="selectTravellersButton"
+            />
+            <Sections.LinkItem
+              text={createTravelDateText(t, language, travelDate)}
+              disabled={!travelDateSelectionEnabled}
+              onPress={openTravelDateSheet}
+              icon={<ThemeIcon svg={Edit} />}
+              accessibility={{
+                accessibilityLabel:
+                  createTravelDateText(t, language, travelDate) +
+                  screenReaderPause,
+                accessibilityHint: t(PurchaseOverviewTexts.travelDate.a11yHint),
+              }}
+              testID="selectStartTimeButton"
+            />
+            <Sections.GenericItem>
+              {isSearchingOffer ? (
+                <ActivityIndicator style={styles.totalSection} />
+              ) : (
+                <ThemeText
+                  style={styles.totalSection}
+                  type="body__primary--bold"
+                  testID="offerTotalPriceText"
+                >
+                  {t(PurchaseOverviewTexts.totalPrice(totalPrice))}
+                </ThemeText>
+              )}
+            </Sections.GenericItem>
+          </Sections.Section>
+
+          <Zones
+            fromTariffZone={fromTariffZone}
+            toTariffZone={toTariffZone}
+            style={styles.selectionComponent}
+          />
+        </View>
+
+        {showProfileTravelcardWarning && (
           <MessageBox
-            type="error"
-            title={t(PurchaseOverviewTexts.errorMessageBox.title)}
-            message={t(PurchaseOverviewTexts.errorMessageBox.message)}
-            onPress={refreshOffer}
-            onPressText={t(MessageBoxTexts.tryAgainButton)}
-            containerStyle={styles.errorMessage}
+            containerStyle={styles.warning}
+            message={t(PurchaseOverviewTexts.warning)}
+            type="warning"
           />
         )}
 
-        <Sections.Section>
-          <Sections.LinkItem
-            text={getReferenceDataName(preassignedFareProduct, language)}
-            onPress={openProductSheet}
-            disabled={selectableProducts.length <= 1}
-            icon={<ThemeIcon svg={Edit} />}
-            accessibility={{
-              accessibilityLabel:
-                getReferenceDataName(preassignedFareProduct, language) +
-                screenReaderPause,
-              accessibilityHint: t(PurchaseOverviewTexts.product.a11yHint),
-            }}
-            testID="selectProductButton"
+        {showNotInspectableTokenWarning && (
+          <MessageBox
+            isMarkdown={true}
+            containerStyle={styles.warning}
+            message={t(PurchaseOverviewTexts.notInspectableTokenDeviceWarning)}
+            type="warning"
           />
-          <Sections.LinkItem
-            text={createTravellersText(
-              userProfilesWithCount,
-              true,
-              false,
-              t,
-              language,
-            )}
-            onPress={openTravellersSheet}
-            icon={<ThemeIcon svg={Edit} />}
-            accessibility={{
-              accessibilityLabel:
-                createTravellersText(
-                  userProfilesWithCount,
-                  false,
-                  false,
-                  t,
-                  language,
-                ) + screenReaderPause,
-              accessibilityHint: t(PurchaseOverviewTexts.travellers.a11yHint),
-            }}
-            testID="selectTravellersButton"
+        )}
+
+        {shouldShowValidTrainTicketNotice && (
+          <MessageBox
+            containerStyle={styles.warning}
+            message={
+              preassignedFareProduct.type === 'single'
+                ? t(PurchaseOverviewTexts.samarbeidsbillettenInfo.single)
+                : t(PurchaseOverviewTexts.samarbeidsbillettenInfo.period)
+            }
+            type="info"
           />
-          <Sections.LinkItem
-            text={createTravelDateText(t, language, travelDate)}
-            disabled={!travelDateSelectionEnabled}
-            onPress={openTravelDateSheet}
-            icon={<ThemeIcon svg={Edit} />}
-            accessibility={{
-              accessibilityLabel:
-                createTravelDateText(t, language, travelDate) +
-                screenReaderPause,
-              accessibilityHint: t(PurchaseOverviewTexts.travelDate.a11yHint),
+        )}
+
+        <View style={styles.toPaymentButton}>
+          <Button
+            interactiveColor="interactive_0"
+            text={t(PurchaseOverviewTexts.primaryButton)}
+            disabled={isSearchingOffer || !totalPrice || !!error}
+            onPress={() => {
+              navigation.navigate('Confirmation', {
+                fromTariffZone,
+                toTariffZone,
+                userProfilesWithCount,
+                preassignedFareProduct,
+                travelDate,
+                headerLeftButton: {type: 'back'},
+              });
             }}
-            testID="selectStartTimeButton"
+            icon={ArrowRight}
+            iconPosition="right"
+            testID="goToPaymentButton"
           />
-          <Sections.GenericItem>
-            {isSearchingOffer ? (
-              <ActivityIndicator style={styles.totalSection} />
-            ) : (
-              <ThemeText
-                style={styles.totalSection}
-                type="body__primary--bold"
-                testID="offerTotalPriceText"
-              >
-                {t(PurchaseOverviewTexts.totalPrice(totalPrice))}
-              </ThemeText>
-            )}
-          </Sections.GenericItem>
-        </Sections.Section>
-
-        <ZoneItem fromTariffZone={fromTariffZone} toTariffZone={toTariffZone} />
-      </View>
-
-      {showProfileTravelcardWarning && (
-        <MessageBox
-          containerStyle={styles.warning}
-          message={t(PurchaseOverviewTexts.warning)}
-          type="warning"
-        />
-      )}
-
-      {showNotInspectableTokenWarning && (
-        <MessageBox
-          isMarkdown={true}
-          containerStyle={styles.warning}
-          message={t(PurchaseOverviewTexts.notInspectableTokenDeviceWarning)}
-          type="warning"
-        />
-      )}
-
-      {shouldShowValidTrainTicketNotice && (
-        <MessageBox
-          containerStyle={styles.warning}
-          message={
-            preassignedFareProduct.type === 'single'
-              ? t(PurchaseOverviewTexts.samarbeidsbillettenInfo.single)
-              : t(PurchaseOverviewTexts.samarbeidsbillettenInfo.period)
-          }
-          type="info"
-        />
-      )}
-
-      <View style={styles.toPaymentButton}>
-        <Button
-          interactiveColor="interactive_0"
-          text={t(PurchaseOverviewTexts.primaryButton)}
-          disabled={isSearchingOffer || !totalPrice || !!error}
-          onPress={() => {
-            navigation.navigate('Confirmation', {
-              fromTariffZone,
-              toTariffZone,
-              userProfilesWithCount,
-              preassignedFareProduct,
-              travelDate,
-              headerLeftButton: {type: 'back'},
-            });
-          }}
-          icon={ArrowRight}
-          iconPosition="right"
-          testID="goToPaymentButton"
-        />
-      </View>
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -460,8 +450,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.static.background.background_2.background,
   },
-  errorMessage: {
-    marginBottom: theme.spacings.medium,
+  selectionComponent: {
+    marginVertical: theme.spacings.medium,
   },
   selectionLinks: {margin: theme.spacings.medium},
   totalSection: {flex: 1, textAlign: 'center'},

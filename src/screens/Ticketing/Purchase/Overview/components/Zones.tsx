@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, AccessibilityProps} from 'react-native';
+import {View, AccessibilityProps, StyleProp, ViewStyle} from 'react-native';
 import ThemeText from '@atb/components/text';
 import * as Sections from '@atb/components/sections';
 import {StyleSheet} from '@atb/theme';
@@ -11,25 +11,24 @@ import {
   tariffZonesDescription,
   TariffZoneWithMetadata,
 } from '../../TariffZones';
-import {
-  PurchaseOverviewTexts,
-  TariffZonesTexts,
-  useTranslation,
-} from '@atb/translations';
+import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {useNavigation} from '@react-navigation/native';
-export type ZoneItemProps = {
+type ZonesProps = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
+  style?: StyleProp<ViewStyle>;
 };
 
-export default function ZoneItem({
+export default function Zones({
   fromTariffZone,
   toTariffZone,
-}: ZoneItemProps) {
+  style,
+}: ZonesProps) {
   const itemStyle = useStyles();
   const {t, language} = useTranslation();
   const navigation = useNavigation<OverviewNavigationProp>();
   const accessibility: AccessibilityProps = {
+    accessible: true,
     accessibilityRole: 'button',
     accessibilityLabel:
       tariffZonesSummary(fromTariffZone, toTariffZone, language, t) +
@@ -38,13 +37,14 @@ export default function ZoneItem({
   };
 
   return (
-    <View>
+    <View style={style}>
       <ThemeText
         type="body__secondary"
         color="secondary"
         style={itemStyle.sectionText}
+        accessibilityLabel={t(PurchaseOverviewTexts.zones.label.a11yLabel)}
       >
-        {t(TariffZonesTexts.header.title)}
+        {t(PurchaseOverviewTexts.zones.label.text)}
       </ThemeText>
       <Sections.Section {...accessibility}>
         <Sections.ButtonInput
@@ -75,7 +75,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingTop: theme.spacings.xSmall,
   },
   sectionText: {
-    marginTop: theme.spacings.xLarge,
     marginBottom: theme.spacings.medium,
   },
 }));
