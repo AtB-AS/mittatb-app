@@ -2,7 +2,7 @@ import React from 'react';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import ThemeText from '@atb/components/text';
 import {InteractiveColor} from '@atb/theme/colors';
-import {TouchableOpacity, View} from 'react-native';
+import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {formatToShortDateTimeWithoutYear} from '@atb/utils/date';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
@@ -10,19 +10,20 @@ import TravelDateSheet from '@atb/screens/Ticketing/Purchase/TravelDate/TravelDa
 
 type StartTimeSelectionProps = {
   color: InteractiveColor;
+  setTravelDate: (date?: string) => void;
+  style?: StyleProp<ViewStyle>;
   validFromTime?: string;
   travelDate?: string;
-  setTravelDate: (date?: string) => void;
 };
 
 export default function StartTimeSelection({
   color,
+  setTravelDate,
+  style,
   validFromTime,
   travelDate,
-  setTravelDate,
 }: StartTimeSelectionProps) {
   const {t, language} = useTranslation();
-  const styles = useStyles();
   const {open: openBottomSheet} = useBottomSheet();
 
   const openTravelDateSheet = () => {
@@ -37,7 +38,7 @@ export default function StartTimeSelection({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={style}>
       <ThemeText type="body__secondary" color="secondary">
         {t(PurchaseOverviewTexts.startTime.title)}
       </ThemeText>
@@ -92,10 +93,7 @@ function MultiSelector({color, options}: MultiSelectorProps) {
       {options.map((option) => {
         const currentColor =
           theme.interactive[color][option.selected ? 'active' : 'default'];
-
-        // To make items with and without border the same size, we subtract
-        // the border width from the padding when there is a border.
-        const borderOffset = option.selected ? theme.border.width.medium : 0;
+        const borderWidth = option.selected ? theme.border.width.medium : 0;
 
         return (
           <TouchableOpacity
@@ -109,8 +107,10 @@ function MultiSelector({color, options}: MultiSelectorProps) {
               {
                 backgroundColor: currentColor.background,
                 borderColor: theme.interactive[color].outline.background,
-                borderWidth: option.selected ? theme.border.width.medium : 0,
-                padding: theme.spacings.medium - borderOffset,
+                borderWidth,
+                // To make items with and without border the same size, we
+                // subtract the border width from the padding.
+                padding: theme.spacings.medium - borderWidth,
               },
             ]}
           >
@@ -138,9 +138,6 @@ function MultiSelector({color, options}: MultiSelectorProps) {
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    marginVertical: theme.spacings.medium,
-  },
   multiSelectContainer: {
     marginTop: theme.spacings.medium,
     borderRadius: 12,
@@ -148,14 +145,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
   },
   optionBox: {
-    margin: theme.spacings.xSmall,
-    flexBasis: 0,
     flexGrow: 1,
-    flexShrink: 1,
-    textAlign: 'center',
-    justifyContent: 'center',
-    borderRadius: theme.border.radius.regular,
     width: 0,
+    justifyContent: 'center',
+    margin: theme.spacings.xSmall,
+    borderRadius: theme.border.radius.regular,
   },
   optionText: {
     textAlign: 'center',
