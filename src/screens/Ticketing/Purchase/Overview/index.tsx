@@ -49,6 +49,7 @@ import {
 import {useTicketState} from '@atb/tickets';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import DurationSelection from './components/DurationSelection';
+import StartTimeSelection from './components/StartTimeSelection';
 
 export type OverviewNavigationProp = DismissableStackNavigationProp<
   TicketingStackParams,
@@ -230,19 +231,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
               }}
               testID="selectTravellersButton"
             />
-            <Sections.LinkItem
-              text={createTravelDateText(t, language, travelDate)}
-              disabled={!travelDateSelectionEnabled}
-              onPress={openTravelDateSheet}
-              icon={<ThemeIcon svg={Edit} />}
-              accessibility={{
-                accessibilityLabel:
-                  createTravelDateText(t, language, travelDate) +
-                  screenReaderPause,
-                accessibilityHint: t(PurchaseOverviewTexts.travelDate.a11yHint),
-              }}
-              testID="selectStartTimeButton"
-            />
             <Sections.GenericItem>
               {isSearchingOffer ? (
                 <ActivityIndicator style={styles.totalSection} />
@@ -262,6 +250,13 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             fromTariffZone={fromTariffZone}
             toTariffZone={toTariffZone}
             style={styles.selectionComponent}
+          />
+
+          <StartTimeSelection
+            color="interactive_2"
+            travelDate={travelDate}
+            setTravelDate={setTravelDate}
+            validFromTime={travelDate}
           />
         </View>
 
