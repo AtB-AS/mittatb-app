@@ -67,6 +67,11 @@ const PurchaseOverviewTexts = {
   zones: {
     label: _('Velg sone(r)', 'Select zone(s)'),
   },
+  duration: {
+    title: _('Velg varighet', 'Select duration'),
+    days: _('dager', 'days'),
+    chipHint: _('Aktiver for å velge varighet', 'Activate to select duration'),
+  },
 };
 
 export default orgSpecificTranslations(PurchaseOverviewTexts, {
