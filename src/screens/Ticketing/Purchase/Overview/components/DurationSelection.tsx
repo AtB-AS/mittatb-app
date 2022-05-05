@@ -1,12 +1,9 @@
 import React from 'react';
 import {DurationSelectionTexts, useTranslation} from '@atb/translations';
-import {
-  getReferenceDataName,
-  productIsSellableInApp,
-} from '@atb/reference-data/utils';
+import {productIsSellableInApp} from '@atb/reference-data/utils';
 import ThemeText from '@atb/components/text';
 import {InteractiveColor} from '@atb/theme/colors';
-import {TouchableOpacity, View} from 'react-native';
+import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ScrollView} from 'react-native';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
@@ -16,16 +13,17 @@ type DurationSelectionProps = {
   color: InteractiveColor;
   selectedProduct: PreassignedFareProduct;
   setSelectedProduct: (product: PreassignedFareProduct) => void;
+  style?: StyleProp<ViewStyle>;
 };
 
 export default function DurationSelection({
   color,
   selectedProduct,
   setSelectedProduct,
+  style,
 }: DurationSelectionProps) {
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const styles = useStyles();
-
   const {preassignedFareproducts} = useFirestoreConfiguration();
 
   const selectableProducts = preassignedFareproducts
@@ -33,7 +31,7 @@ export default function DurationSelection({
     .filter((p) => p.type === selectedProduct.type);
 
   return (
-    <View style={styles.container}>
+    <View style={style}>
       <ThemeText type="body__secondary" color="secondary">
         {t(DurationSelectionTexts.title)}
       </ThemeText>
@@ -46,7 +44,7 @@ export default function DurationSelection({
         {selectableProducts.map((fp, i) => (
           <DurationChip
             color={color}
-            text={getReferenceDataName(fp, language)}
+            text={fp.durationDays + ' ' + t(DurationSelectionTexts.days)}
             selected={selectedProduct == fp}
             onPress={() => setSelectedProduct(fp)}
             key={i}
@@ -83,7 +81,7 @@ function DurationChip({color, text, selected, onPress}: DurationChipProps) {
         {
           backgroundColor: currentColor.background,
           borderColor: theme.interactive[color].outline.background,
-          borderWidth: selected ? theme.border.width.medium : 0,
+          borderWidth: borderOffset,
           paddingVertical: theme.spacings.medium - borderOffset,
           paddingHorizontal: theme.spacings.xLarge - borderOffset,
         },
@@ -95,9 +93,7 @@ function DurationChip({color, text, selected, onPress}: DurationChipProps) {
       accessibilityHint={t(DurationSelectionTexts.chipHint)}
     >
       <ThemeText
-        style={{
-          color: currentColor.text,
-        }}
+        color={currentColor}
         type={selected ? 'body__secondary--bold' : 'body__secondary'}
       >
         {text}
@@ -107,9 +103,6 @@ function DurationChip({color, text, selected, onPress}: DurationChipProps) {
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    marginVertical: theme.spacings.medium,
-  },
   durationScrollView: {
     marginTop: theme.spacings.medium,
     marginBottom: theme.spacings.xLarge,
