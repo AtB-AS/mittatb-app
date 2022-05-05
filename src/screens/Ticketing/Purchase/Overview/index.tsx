@@ -193,7 +193,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
               message={t(PurchaseOverviewTexts.errorMessageBox.message)}
               onPress={refreshOffer}
               onPressText={t(MessageBoxTexts.tryAgainButton)}
-              containerStyle={styles.errorMessage}
+              containerStyle={styles.selectionComponent}
             />
           )}
 
@@ -202,10 +202,11 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
               color="interactive_2"
               selectedProduct={preassignedFareProduct}
               setSelectedProduct={setPreassignedFareProduct}
+              style={styles.selectionComponent}
             />
           )}
 
-          <Sections.Section>
+          <Sections.Section style={styles.selectionComponent}>
             <Sections.LinkItem
               text={createTravellersText(
                 userProfilesWithCount,
@@ -260,7 +261,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           <Zones
             fromTariffZone={fromTariffZone}
             toTariffZone={toTariffZone}
-            style={styles.zones}
+            style={styles.selectionComponent}
           />
         </View>
 
@@ -449,12 +450,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.static.background.background_2.background,
   },
-  errorMessage: {
-    marginBottom: theme.spacings.medium,
+  selectionComponent: {
+    marginVertical: theme.spacings.medium,
   },
   selectionLinks: {margin: theme.spacings.medium},
   totalSection: {flex: 1, textAlign: 'center'},
-  zones: {marginTop: theme.spacings.medium},
   toPaymentButton: {marginHorizontal: theme.spacings.medium},
   warning: {
     marginHorizontal: theme.spacings.medium,

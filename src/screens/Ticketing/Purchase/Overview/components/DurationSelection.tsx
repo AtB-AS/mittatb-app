@@ -107,7 +107,6 @@ function DurationChip({color, text, selected, onPress}: DurationChipProps) {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   durationScrollView: {
     marginTop: theme.spacings.medium,
-    marginBottom: theme.spacings.xLarge,
     marginLeft: -theme.spacings.medium,
     marginRight: -theme.spacings.medium,
   },
