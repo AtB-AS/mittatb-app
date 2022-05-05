@@ -31,7 +31,6 @@ import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {TicketingStackParams} from '../';
 import {TariffZoneWithMetadata} from '../TariffZones';
 import useOfferState from './use-offer-state';
-import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 import {formatToLongDateTime} from '@atb/utils/date';
 import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -40,7 +39,6 @@ import {usePreferences} from '@atb/preferences';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import TravellersSheet from '@atb/screens/Ticketing/Purchase/Travellers/TravellersSheet';
-import TravelDateSheet from '@atb/screens/Ticketing/Purchase/TravelDate/TravelDateSheet';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {
   useHasEnabledMobileToken,
@@ -87,8 +85,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const [preassignedFareProduct, setPreassignedFareProduct] = useState(
     selectableProducts[0],
   );
-
-  const {travelDateSelectionEnabled} = getPurchaseFlow(preassignedFareProduct);
 
   const defaultUserProfilesWithCount = useDefaultUserProfilesWithCount(
     userProfiles,
@@ -156,17 +152,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         save={setUserProfilesWithCount}
         preassignedFareProduct={preassignedFareProduct}
         userProfilesWithCount={selectableUserProfiles}
-        ref={focusRef}
-      />
-    ));
-  };
-
-  const openTravelDateSheet = () => {
-    openBottomSheet((close, focusRef) => (
-      <TravelDateSheet
-        close={close}
-        save={setTravelDate}
-        travelDate={travelDate}
         ref={focusRef}
       />
     ));
