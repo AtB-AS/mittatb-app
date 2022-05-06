@@ -109,7 +109,7 @@ export default function DeleteProfile({navigation}: DeleteProfileScreenProps) {
             subtitle={`${customerNumber}`}
             text={t(DeleteProfileTexts.customerNumber)}
             onPress={() => doDeleteProfile()}
-            disabled={false}
+            disabled={activeFareContracts}
             icon={<ThemeIcon svg={Delete} colorType="error" />}
           />
         </Sections.Section>
