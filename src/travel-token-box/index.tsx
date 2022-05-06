@@ -104,7 +104,11 @@ const TravelDeviceTitle = ({
           <ThemeText color="background_accent_3" style={styles.transparent}>
             {' XXXX XX'}
           </ThemeText>
-          <ThemeText type="heading__title" color="background_accent_3">
+          <ThemeText
+            type="heading__title"
+            color="background_accent_3"
+            testID="travelCardNumber"
+          >
             {inspectableToken.travelCardId?.substring(0, 2) +
               ' ' +
               inspectableToken.travelCardId?.substring(2)}
@@ -120,6 +124,7 @@ const TravelDeviceTitle = ({
           type="heading__title"
           color="background_accent_3"
           style={styles.title}
+          testID="mobileTokenName"
         >
           {inspectableToken.name || t(TravelTokenBoxTexts.mobile.unnamedDevice)}
         </ThemeText>

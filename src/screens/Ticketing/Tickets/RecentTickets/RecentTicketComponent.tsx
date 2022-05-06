@@ -16,14 +16,17 @@ type recentTicketProps = {
   transportModeTexts: TransportationModeIconProperties[];
   transportModeIcons: TransportationModeIconProperties[];
   selectTicket: (ticketData: RecentTicket) => void;
+  testID: string;
 };
 
 export const FloatingLabel = ({
   text,
   additionalStyles,
+  testID = '',
 }: {
   text: string;
   additionalStyles?: ViewStyle;
+  testID?: string;
 }) => {
   const styles = useStyles();
   return (
@@ -34,7 +37,11 @@ export const FloatingLabel = ({
           : styles.blueLabel
       }
     >
-      <ThemeText type="body__tertiary" color="background_accent_2">
+      <ThemeText
+        type="body__tertiary"
+        color="background_accent_2"
+        testID={testID}
+      >
         {text}
       </ThemeText>
     </View>
@@ -46,6 +53,7 @@ export const RecentTicketComponent = ({
   transportModeIcons,
   transportModeTexts,
   selectTicket,
+  testID,
 }: recentTicketProps) => {
   const {
     preassignedFareProduct,
@@ -114,6 +122,7 @@ export const RecentTicketComponent = ({
       onPress={() => selectTicket(ticketData)}
       accessibilityLabel={currentAccessabilityLabel}
       accessibilityHint={t(RecentTicketsTexts.repeatPurchase.a11yHint)}
+      testID={testID}
     >
       <View style={[styles.upperPart, {minWidth: width * 0.6}]}>
         <View style={styles.travelModeWrapper}>
@@ -131,7 +140,7 @@ export const RecentTicketComponent = ({
           </ThemeText>
         </View>
 
-        <View style={styles.productName}>
+        <View style={styles.productName} testID={testID + 'Title'}>
           <ThemeText type="body__secondary--bold">
             {getReferenceDataName(preassignedFareProduct, language)}
           </ThemeText>
@@ -152,6 +161,7 @@ export const RecentTicketComponent = ({
                       additionalStyles={{
                         marginRight: theme.spacings.xSmall,
                       }}
+                      testID={'travellers' + userProfilesWithCount.indexOf(u)}
                     />
                   ))}
                 {userProfilesWithCount.length > 2 && (
@@ -159,10 +169,14 @@ export const RecentTicketComponent = ({
                     {userProfilesWithCount.slice(0, 1).map((u) => (
                       <FloatingLabel
                         text={`${u.count} ${getReferenceDataName(u, language)}`}
+                        testID={'travellers' + userProfilesWithCount.indexOf(u)}
                       />
                     ))}
                     <View style={styles.additionalCategories}>
-                      <ThemeText type="body__tertiary">
+                      <ThemeText
+                        type="body__tertiary"
+                        testID="travellersOthers"
+                      >
                         + {userProfilesWithCount.slice(1).length}{' '}
                         {t(RecentTicketsTexts.titles.moreTravelers)}
                       </ThemeText>
@@ -177,15 +191,16 @@ export const RecentTicketComponent = ({
               {t(RecentTicketsTexts.titles.zone)}
             </ThemeText>
             {fromZone === toZone ? (
-              <FloatingLabel text={`${fromZone}`} />
+              <FloatingLabel text={`${fromZone}`} testID="zone" />
             ) : (
-              <FloatingLabel text={`${fromZone} - ${toZone}`} />
+              <FloatingLabel text={`${fromZone} - ${toZone}`} testID="zones" />
             )}
           </View>
         </View>
       </View>
       <View
         style={[styles.buyButton, {backgroundColor: buttonColor.background}]}
+        testID={testID + 'BuyButton'}
       >
         <ThemeText color={buttonColor}>
           {t(RecentTicketsTexts.repeatPurchase.label)}

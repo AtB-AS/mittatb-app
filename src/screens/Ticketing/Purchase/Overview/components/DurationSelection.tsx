@@ -40,6 +40,7 @@ export default function DurationSelection({
         contentContainerStyle={styles.durationContentContainer}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
+        testID={'selectDurationScrollView'}
       >
         {selectableProducts.map((fp, i) => (
           <DurationChip
@@ -93,6 +94,7 @@ function DurationChip({color, text, selected, onPress}: DurationChipProps) {
       accessibilityRole="radio"
       accessibilityState={{selected}}
       accessibilityHint={t(PurchaseOverviewTexts.duration.chipHint)}
+      testID={'chip' + text.replace(' ', '')}
     >
       <ThemeText
         color={currentColor}

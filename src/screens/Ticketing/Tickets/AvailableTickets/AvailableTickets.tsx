@@ -60,6 +60,7 @@ export const AvailableTickets = ({
             )}
             ticketIllustration="Single"
             onPress={onBuySingleTicket}
+            testID="singleTicket"
           />
         )}
         {shouldShowPeriodTicket && (
@@ -76,6 +77,7 @@ export const AvailableTickets = ({
             )}
             ticketIllustration="Period"
             onPress={onBuyPeriodTicket}
+            testID="periodicTicket"
           />
         )}
       </View>
@@ -97,6 +99,7 @@ export const AvailableTickets = ({
             ticketIllustration="Summer"
             accented={true}
             onPress={onBuyPeriodTicket}
+            testID="summerTicket"
           />
         </View>
       )}
