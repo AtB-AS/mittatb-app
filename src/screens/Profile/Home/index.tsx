@@ -28,7 +28,7 @@ import analytics from '@react-native-firebase/analytics';
 import {updateMetadata} from '@atb/chat/metadata';
 import parsePhoneNumber from 'libphonenumber-js';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
-import deleteProfile from '@atb/api/delete_profile';
+import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -77,12 +77,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   }
 
   const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
-
-  function delProf() {
-    deleteProfile().then((res) => {
-      Alert.alert('answer is ' + res.data.available);
-    });
-  }
 
   return (
     <View style={style.container}>
@@ -148,8 +142,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           )}
           {authenticationType === 'phone' && (
             <Sections.LinkItem
-              text={' # Slett bruker'}
-              onPress={() => delProf()}
+              text={t(DeleteProfileTexts.header.title)}
+              onPress={() => navigation.navigate('DeleteProfile')}
             />
           )}
           {authenticationType === 'phone' && (
