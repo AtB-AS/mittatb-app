@@ -1,11 +1,6 @@
 import React, {forwardRef, useState} from 'react';
 import {StyleSheet} from '@atb/theme';
-import {
-  DateInputItem,
-  RadioSection,
-  Section,
-  TimeInputItem,
-} from '@atb/components/sections';
+import {DateInputItem, Section, TimeInputItem} from '@atb/components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
   ScreenHeaderTexts,
@@ -14,18 +9,16 @@ import {
 } from '@atb/translations';
 import Button from '@atb/components/button';
 import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
-import {View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import useKeyboardHeight from '@atb/utils/use-keyboard-height';
 
 type Props = {
   travelDate?: string;
   close: () => void;
   save: (dateString?: string) => void;
 };
-
-type TravelDateOptions = 'now' | 'futureDate';
 
 const TravelDate = forwardRef<ScrollView, Props>(
   ({travelDate, close, save}, focusRef) => {
@@ -38,18 +31,11 @@ const TravelDate = forwardRef<ScrollView, Props>(
       formatLocaleTime(defaultDate, language),
     );
 
-    const [option, setOption] = useState<TravelDateOptions>(
-      travelDate ? 'futureDate' : 'now',
-    );
-
     const onSave = () => {
-      save(
-        option === 'futureDate'
-          ? dateWithReplacedTime(dateString, timeString).toISOString()
-          : undefined,
-      );
+      save(dateWithReplacedTime(dateString, timeString).toISOString());
       close();
     };
+    const keyboardHeight = useKeyboardHeight();
 
     return (
       <BottomSheetContainer>
@@ -68,30 +54,19 @@ const TravelDate = forwardRef<ScrollView, Props>(
         <ScrollView
           contentContainerStyle={styles.contentContainer}
           ref={focusRef}
+          centerContent={true}
         >
-          <RadioSection<TravelDateOptions>
-            selected={option}
-            keyExtractor={(s: string) => s}
-            items={['now', 'futureDate']}
-            onSelect={setOption}
-            itemToText={(i) => t(TravelDateTexts.options[i])}
-          />
-
-          {option !== 'now' && (
-            <View style={styles.dateSelection}>
-              <Section>
-                <DateInputItem value={dateString} onChange={setDate} />
-                <TimeInputItem value={timeString} onChange={setTime} />
-              </Section>
-            </View>
-          )}
+          <Section>
+            <DateInputItem value={dateString} onChange={setDate} />
+            <TimeInputItem value={timeString} onChange={setTime} />
+          </Section>
         </ScrollView>
         <FullScreenFooter>
           <Button
             onPress={onSave}
             interactiveColor="interactive_0"
             text={t(TravelDateTexts.primaryButton)}
-            style={styles.saveButton}
+            style={[styles.saveButton, {marginBottom: keyboardHeight}]}
             testID="confirmTimeButton"
           />
         </FullScreenFooter>
@@ -107,9 +82,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   contentContainer: {
     padding: theme.spacings.medium,
-  },
-  dateSelection: {
-    marginTop: theme.spacings.medium,
   },
   saveButton: {
     marginTop: theme.spacings.medium,
