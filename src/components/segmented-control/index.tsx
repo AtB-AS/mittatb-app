@@ -47,7 +47,7 @@ export default function SegmentedControl({
           <TouchableOpacity
             onPress={option.onPress}
             accessible={true}
-            accessibilityRole="radio"
+            accessibilityRole="button"
             accessibilityState={{selected}}
             accessibilityLabel={
               option.subtext ? option.text + '. ' + option.subtext : option.text
