@@ -31,7 +31,6 @@ import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {TicketingStackParams} from '../';
 import {TariffZoneWithMetadata} from '../TariffZones';
 import useOfferState from './use-offer-state';
-import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 import {formatToLongDateTime} from '@atb/utils/date';
 import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -40,7 +39,6 @@ import {usePreferences} from '@atb/preferences';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import TravellersSheet from '@atb/screens/Ticketing/Purchase/Travellers/TravellersSheet';
-import TravelDateSheet from '@atb/screens/Ticketing/Purchase/TravelDate/TravelDateSheet';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {
   useHasEnabledMobileToken,
@@ -49,6 +47,7 @@ import {
 import {useTicketState} from '@atb/tickets';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import DurationSelection from './components/DurationSelection';
+import StartTimeSelection from './components/StartTimeSelection';
 
 export type OverviewNavigationProp = DismissableStackNavigationProp<
   TicketingStackParams,
@@ -86,8 +85,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const [preassignedFareProduct, setPreassignedFareProduct] = useState(
     selectableProducts[0],
   );
-
-  const {travelDateSelectionEnabled} = getPurchaseFlow(preassignedFareProduct);
 
   const defaultUserProfilesWithCount = useDefaultUserProfilesWithCount(
     userProfiles,
@@ -160,17 +157,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     ));
   };
 
-  const openTravelDateSheet = () => {
-    openBottomSheet((close, focusRef) => (
-      <TravelDateSheet
-        close={close}
-        save={setTravelDate}
-        travelDate={travelDate}
-        ref={focusRef}
-      />
-    ));
-  };
-
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -230,19 +216,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
               }}
               testID="selectTravellersButton"
             />
-            <Sections.LinkItem
-              text={createTravelDateText(t, language, travelDate)}
-              disabled={!travelDateSelectionEnabled}
-              onPress={openTravelDateSheet}
-              icon={<ThemeIcon svg={Edit} />}
-              accessibility={{
-                accessibilityLabel:
-                  createTravelDateText(t, language, travelDate) +
-                  screenReaderPause,
-                accessibilityHint: t(PurchaseOverviewTexts.travelDate.a11yHint),
-              }}
-              testID="selectStartTimeButton"
-            />
             <Sections.GenericItem>
               {isSearchingOffer ? (
                 <ActivityIndicator style={styles.totalSection} />
@@ -261,6 +234,14 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           <Zones
             fromTariffZone={fromTariffZone}
             toTariffZone={toTariffZone}
+            style={styles.selectionComponent}
+          />
+
+          <StartTimeSelection
+            color="interactive_2"
+            travelDate={travelDate}
+            setTravelDate={setTravelDate}
+            validFromTime={travelDate}
             style={styles.selectionComponent}
           />
         </View>

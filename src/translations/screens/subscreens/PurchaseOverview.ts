@@ -75,6 +75,19 @@ const PurchaseOverviewTexts = {
     days: _('dager', 'days'),
     chipHint: _('Aktiver for å velge varighet', 'Activate to select duration'),
   },
+  startTime: {
+    title: _('Velg oppstartstidspunkt', 'Select start time'),
+    now: _('Oppstart nå', 'Start now'),
+    later: _('Senere', 'Later'),
+    a11yLaterHint: _(
+      'Aktiver for å velge et senere oppstartstidspunkt',
+      'Activate to select a later start time',
+    ),
+    a11yNowHint: _(
+      'Aktiver for å sette oppstartstidspunkt til nå.',
+      'Activate to set ticket start time to now.',
+    ),
+  },
 };
 
 export default orgSpecificTranslations(PurchaseOverviewTexts, {
