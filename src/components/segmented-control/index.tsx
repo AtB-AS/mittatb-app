@@ -49,6 +49,9 @@ export default function SegmentedControl({
             accessible={true}
             accessibilityRole="radio"
             accessibilityState={{selected}}
+            accessibilityLabel={
+              option.subtext ? option.text + '. ' + option.subtext : option.text
+            }
             accessibilityHint={option.accessibilityHint}
             style={[
               styles.optionBox,
