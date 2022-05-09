@@ -89,19 +89,18 @@ export default function DeleteProfile({navigation}: DeleteProfileScreenProps) {
       />
 
       <ScrollView>
-        <Sections.Section withPadding withTopPadding>
-          <MessageBox
-            message={t(DeleteProfileTexts.deleteInfo)}
-            type={'info'}
-          />
-        </Sections.Section>
+        <MessageBox
+          message={t(DeleteProfileTexts.deleteInfo)}
+          type={'info'}
+          containerStyle={style.contentMargin}
+        />
+
         {activeFareContracts && (
-          <Sections.Section withPadding>
-            <MessageBox
-              message={t(DeleteProfileTexts.unableToDeleteWithTickets)}
-              type="warning"
-            />
-          </Sections.Section>
+          <MessageBox
+            message={t(DeleteProfileTexts.unableToDeleteWithTickets)}
+            type="warning"
+            containerStyle={{...style.contentMargin, marginTop: 0}}
+          />
         )}
 
         <Sections.Section withPadding>
@@ -122,5 +121,8 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     backgroundColor: theme.static.background.background_1.background,
     flex: 1,
+  },
+  contentMargin: {
+    margin: theme.spacings.medium,
   },
 }));
