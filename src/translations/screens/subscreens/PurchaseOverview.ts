@@ -1,6 +1,5 @@
 import {translation as _} from '../../commons';
 import orgSpecificTranslations from '@atb/translations/utils';
-import {formatDecimalNumber} from '@atb/utils/numbers';
 
 const PurchaseOverviewTexts = {
   header: {
