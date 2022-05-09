@@ -237,13 +237,15 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             style={styles.selectionComponent}
           />
 
-          <StartTimeSelection
-            color="interactive_2"
-            travelDate={travelDate}
-            setTravelDate={setTravelDate}
-            validFromTime={travelDate}
-            style={styles.selectionComponent}
-          />
+          {preassignedFareProduct.type === 'period' && (
+            <StartTimeSelection
+              color="interactive_2"
+              travelDate={travelDate}
+              setTravelDate={setTravelDate}
+              validFromTime={travelDate}
+              style={styles.selectionComponent}
+            />
+          )}
         </View>
 
         {showProfileTravelcardWarning && (
