@@ -13,6 +13,7 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import useKeyboardHeight from '@atb/utils/use-keyboard-height';
+import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
 
 type Props = {
   travelDate?: string;
@@ -68,6 +69,8 @@ const TravelDate = forwardRef<ScrollView, Props>(
             text={t(TravelDateTexts.primaryButton)}
             style={[styles.saveButton, {marginBottom: keyboardHeight}]}
             testID="confirmTimeButton"
+            icon={SvgConfirm}
+            iconPosition="right"
           />
         </FullScreenFooter>
       </BottomSheetContainer>
