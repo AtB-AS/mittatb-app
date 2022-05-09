@@ -52,7 +52,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
     setTokenStatus(status);
   };
 
-  const hasEnabledMobileToken = false;
+  const hasEnabledMobileToken = useHasEnabledMobileToken();
 
   const client = useMemo(
     () =>
