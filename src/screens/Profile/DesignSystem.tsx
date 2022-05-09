@@ -9,15 +9,18 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import MessageBox from '@atb/components/message-box';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {InteractiveColor, textNames, TextNames} from '@atb/theme/colors';
-import React from 'react';
+import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {LegMode, TransportSubmode} from '@atb/sdk';
 import TransportationIcon from '@atb/components/transportation-icon';
+import SegmentedControl from '@atb/components/segmented-control';
 
 export default function DesignSystem() {
   const style = useProfileHomeStyle();
   const {theme} = useTheme();
+
+  const [segmentedSelection, setSegmentedSelection] = useState(0);
 
   const buttons = Object.keys(theme.interactive).map((color) => (
     <Button
@@ -29,29 +32,6 @@ export default function DesignSystem() {
         )
       }
       interactiveColor={color as InteractiveColor}
-    />
-  ));
-
-  const segmentedControls = Object.keys(theme.interactive).map((color) => (
-    <SegmentedControl
-      activeIndex={segmentedSelection}
-      style={{
-        marginTop: theme.spacings.small,
-      }}
-      color={color as InteractiveColor}
-      options={[
-        {text: 'Option 1', onPress: () => setSegmentedSelection(0)},
-        {
-          text: 'Option 2',
-          onPress: () => setSegmentedSelection(1),
-          subtext: 'Subtext',
-        },
-        {
-          text: 'Option 3',
-          onPress: () => setSegmentedSelection(2),
-          subtext: 'Subtext',
-        },
-      ]}
     />
   ));
 
@@ -260,7 +240,48 @@ export default function DesignSystem() {
           <ButtonGroup>{buttons}</ButtonGroup>
         </View>
 
-        <View style={{margin: theme.spacings.medium}}>{segmentedControls}</View>
+        <View style={{margin: theme.spacings.medium}}>
+          <SegmentedControl
+            activeIndex={segmentedSelection}
+            style={{
+              marginTop: theme.spacings.small,
+            }}
+            color="interactive_2"
+            options={[
+              {text: 'Option 1', onPress: () => setSegmentedSelection(0)},
+              {
+                text: 'Option 2',
+                onPress: () => setSegmentedSelection(1),
+                subtext: 'Subtext',
+              },
+              {
+                text: 'Option 3',
+                onPress: () => setSegmentedSelection(2),
+                subtext: 'Subtext',
+              },
+            ]}
+          />
+          <SegmentedControl
+            activeIndex={segmentedSelection}
+            style={{
+              marginTop: theme.spacings.small,
+            }}
+            enabled={false}
+            color="interactive_2"
+            options={[
+              {text: 'Option 1', onPress: () => setSegmentedSelection(0)},
+              {
+                text: 'Option 2',
+                onPress: () => setSegmentedSelection(1),
+              },
+              {
+                text: 'Option 3',
+                onPress: () => setSegmentedSelection(2),
+                subtext: 'Subtext',
+              },
+            ]}
+          />
+        </View>
       </ScrollView>
     </View>
   );
