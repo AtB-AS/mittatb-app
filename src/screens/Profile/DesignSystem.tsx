@@ -32,6 +32,29 @@ export default function DesignSystem() {
     />
   ));
 
+  const segmentedControls = Object.keys(theme.interactive).map((color) => (
+    <SegmentedControl
+      activeIndex={segmentedSelection}
+      style={{
+        marginTop: theme.spacings.small,
+      }}
+      color={color as InteractiveColor}
+      options={[
+        {text: 'Option 1', onPress: () => setSegmentedSelection(0)},
+        {
+          text: 'Option 2',
+          onPress: () => setSegmentedSelection(1),
+          subtext: 'Subtext',
+        },
+        {
+          text: 'Option 3',
+          onPress: () => setSegmentedSelection(2),
+          subtext: 'Subtext',
+        },
+      ]}
+    />
+  ));
+
   // @TODO: add display of static colors
 
   return (
@@ -236,6 +259,8 @@ export default function DesignSystem() {
         <View style={style.buttons}>
           <ButtonGroup>{buttons}</ButtonGroup>
         </View>
+
+        <View style={{margin: theme.spacings.medium}}>{segmentedControls}</View>
       </ScrollView>
     </View>
   );

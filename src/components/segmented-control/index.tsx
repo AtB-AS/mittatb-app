@@ -16,6 +16,7 @@ type SegmentedControlProps = {
   color: InteractiveColor;
   activeIndex: number;
   options: SegmentOptions[];
+  enabled?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -23,6 +24,7 @@ export default function SegmentedControl({
   color,
   activeIndex,
   options,
+  enabled = true,
   style,
 }: SegmentedControlProps) {
   const styles = useStyles();
@@ -34,18 +36,25 @@ export default function SegmentedControl({
     <View
       style={[
         styles.segmentedControl,
-        {backgroundColor: interactiveColor.default.background},
+        {
+          backgroundColor:
+            interactiveColor[enabled ? 'default' : 'disabled'].background,
+        },
         style,
       ]}
     >
       {options.map((option, i) => {
         const selected = activeIndex === i;
         const currentColor = interactiveColor[selected ? 'active' : 'default'];
-        const borderWidth = selected ? theme.border.width.medium : 0;
+        const textColor = enabled
+          ? currentColor.text
+          : theme.text.colors.disabled;
+        const borderWidth = selected && enabled ? theme.border.width.medium : 0;
 
         return (
           <TouchableOpacity
             onPress={option.onPress}
+            disabled={!enabled}
             accessible={true}
             accessibilityRole="button"
             accessibilityState={{selected}}
@@ -56,7 +65,7 @@ export default function SegmentedControl({
             style={[
               styles.optionBox,
               {
-                backgroundColor: currentColor.background,
+                backgroundColor: enabled ? currentColor.background : undefined,
                 borderColor: interactiveColor.outline.background,
                 borderWidth,
                 // To make items with and without border the same size, we
@@ -67,14 +76,14 @@ export default function SegmentedControl({
           >
             <ThemeText
               type={selected ? 'body__secondary--bold' : 'body__secondary'}
-              style={[styles.optionText, {color: currentColor.text}]}
+              style={[styles.optionText, {color: textColor}]}
             >
               {option.text}
             </ThemeText>
             {option.subtext && (
               <ThemeText
                 type="body__secondary"
-                style={[styles.optionText, {color: currentColor.text}]}
+                style={[styles.optionText, {color: textColor}]}
               >
                 {option.subtext}
               </ThemeText>
