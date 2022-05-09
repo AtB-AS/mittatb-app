@@ -35,6 +35,30 @@ export default function DesignSystem() {
     />
   ));
 
+  const segmentedControlOptions = [
+    {text: 'Option 1', onPress: () => setSegmentedSelection(0)},
+    {
+      text: 'Option 2',
+      onPress: () => setSegmentedSelection(1),
+    },
+    {
+      text: 'Option 3',
+      onPress: () => setSegmentedSelection(2),
+      subtext: 'Subtext',
+    },
+  ];
+
+  const segmentedControls = Object.keys(theme.interactive).map((color) => (
+    <SegmentedControl
+      activeIndex={segmentedSelection}
+      style={{
+        marginTop: theme.spacings.small,
+      }}
+      color={color as InteractiveColor}
+      options={segmentedControlOptions}
+    />
+  ));
+
   // @TODO: add display of static colors
 
   return (
@@ -241,46 +265,8 @@ export default function DesignSystem() {
         </View>
 
         <View style={{margin: theme.spacings.medium}}>
-          <SegmentedControl
-            activeIndex={segmentedSelection}
-            style={{
-              marginTop: theme.spacings.small,
-            }}
-            color="interactive_2"
-            options={[
-              {text: 'Option 1', onPress: () => setSegmentedSelection(0)},
-              {
-                text: 'Option 2',
-                onPress: () => setSegmentedSelection(1),
-                subtext: 'Subtext',
-              },
-              {
-                text: 'Option 3',
-                onPress: () => setSegmentedSelection(2),
-                subtext: 'Subtext',
-              },
-            ]}
-          />
-          <SegmentedControl
-            activeIndex={segmentedSelection}
-            style={{
-              marginTop: theme.spacings.small,
-            }}
-            enabled={false}
-            color="interactive_2"
-            options={[
-              {text: 'Option 1', onPress: () => setSegmentedSelection(0)},
-              {
-                text: 'Option 2',
-                onPress: () => setSegmentedSelection(1),
-              },
-              {
-                text: 'Option 3',
-                onPress: () => setSegmentedSelection(2),
-                subtext: 'Subtext',
-              },
-            ]}
-          />
+          <ThemeText>Segmented controls:</ThemeText>
+          {segmentedControls}
         </View>
       </ScrollView>
     </View>
