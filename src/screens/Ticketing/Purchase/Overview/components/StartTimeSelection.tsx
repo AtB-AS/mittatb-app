@@ -2,12 +2,12 @@ import React from 'react';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import ThemeText from '@atb/components/text';
 import {InteractiveColor} from '@atb/theme/colors';
-import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleProp, View, ViewStyle} from 'react-native';
+import {StyleSheet} from '@atb/theme';
 import {formatToShortDateTimeWithoutYear} from '@atb/utils/date';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import TravelDateSheet from '@atb/screens/Ticketing/Purchase/TravelDate/TravelDateSheet';
-import SegmentedControl from '@atb/components/segmented-control';
+import RadioSegments from '@atb/components/radio-segments';
 
 type StartTimeSelectionProps = {
   color: InteractiveColor;
@@ -44,9 +44,9 @@ export default function StartTimeSelection({
       <ThemeText type="body__secondary" color="secondary">
         {t(PurchaseOverviewTexts.startTime.title)}
       </ThemeText>
-      <SegmentedControl
+      <RadioSegments
         color={color}
-        style={styles.segmentedControl}
+        style={styles.radioSegments}
         activeIndex={!!validFromTime ? 1 : 0}
         options={[
           {
@@ -69,7 +69,7 @@ export default function StartTimeSelection({
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  segmentedControl: {
+  radioSegments: {
     marginTop: theme.spacings.medium,
   },
 }));

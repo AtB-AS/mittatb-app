@@ -14,7 +14,7 @@ import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {LegMode, TransportSubmode} from '@atb/sdk';
 import TransportationIcon from '@atb/components/transportation-icon';
-import SegmentedControl from '@atb/components/segmented-control';
+import RadioSegments from '@atb/components/radio-segments';
 
 export default function DesignSystem() {
   const style = useProfileHomeStyle();
@@ -35,7 +35,7 @@ export default function DesignSystem() {
     />
   ));
 
-  const segmentedControlOptions = [
+  const radioSegmentsOptions = [
     {text: 'Option 1', onPress: () => setSegmentedSelection(0)},
     {
       text: 'Option 2',
@@ -48,14 +48,14 @@ export default function DesignSystem() {
     },
   ];
 
-  const segmentedControls = Object.keys(theme.interactive).map((color) => (
-    <SegmentedControl
+  const radioSegments = Object.keys(theme.interactive).map((color) => (
+    <RadioSegments
       activeIndex={segmentedSelection}
       style={{
         marginTop: theme.spacings.small,
       }}
       color={color as InteractiveColor}
-      options={segmentedControlOptions}
+      options={radioSegmentsOptions}
     />
   ));
 
@@ -266,7 +266,7 @@ export default function DesignSystem() {
 
         <View style={{margin: theme.spacings.medium}}>
           <ThemeText>Segmented controls:</ThemeText>
-          {segmentedControls}
+          {radioSegments}
         </View>
       </ScrollView>
     </View>

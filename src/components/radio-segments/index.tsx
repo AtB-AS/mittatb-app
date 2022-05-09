@@ -12,7 +12,7 @@ export type SegmentOptions = {
   accessibilityHint?: string;
 };
 
-type SegmentedControlProps = {
+type RadioSegmentsProps = {
   color: InteractiveColor;
   activeIndex: number;
   options: SegmentOptions[];
@@ -20,13 +20,13 @@ type SegmentedControlProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export default function SegmentedControl({
+export default function RadioSegments({
   color,
   activeIndex,
   options,
   enabled = true,
   style,
-}: SegmentedControlProps) {
+}: RadioSegmentsProps) {
   const styles = useStyles();
   const {theme} = useTheme();
 
@@ -35,7 +35,7 @@ export default function SegmentedControl({
   return (
     <View
       style={[
-        styles.segmentedControl,
+        styles.radioSegments,
         {
           backgroundColor:
             interactiveColor[enabled ? 'default' : 'disabled'].background,
@@ -56,7 +56,7 @@ export default function SegmentedControl({
             onPress={option.onPress}
             disabled={!enabled}
             accessible={true}
-            accessibilityRole="button"
+            accessibilityRole="radio"
             accessibilityState={{selected}}
             accessibilityLabel={
               option.subtext ? option.text + '. ' + option.subtext : option.text
@@ -96,13 +96,7 @@ export default function SegmentedControl({
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  segmentedControl: {
-    borderRadius: 12,
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  multiSelectContainer: {
-    marginTop: theme.spacings.medium,
+  radioSegments: {
     borderRadius: 12,
     flexDirection: 'row',
     justifyContent: 'center',
