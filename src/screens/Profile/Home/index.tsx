@@ -28,6 +28,7 @@ import analytics from '@react-native-firebase/analytics';
 import {updateMetadata} from '@atb/chat/metadata';
 import parsePhoneNumber from 'libphonenumber-js';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -116,6 +117,13 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               </ThemeText>
             </Sections.GenericItem>
           )}
+          <Sections.LinkItem
+            text={t(
+              ProfileTexts.sections.account.linkItems.expiredTickets.label,
+            )}
+            onPress={() => navigation.navigate('ExpiredTickets')}
+            testID="expiredTicketsButton"
+          />
           {authenticationType !== 'phone' && (
             <Sections.LinkItem
               text={t(ProfileTexts.sections.account.linkItems.login.label)}
@@ -134,18 +142,17 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           )}
           {authenticationType === 'phone' && (
             <Sections.LinkItem
+              text={t(DeleteProfileTexts.header.title)}
+              onPress={() => navigation.navigate('DeleteProfile')}
+            />
+          )}
+          {authenticationType === 'phone' && (
+            <Sections.LinkItem
               text={t(ProfileTexts.sections.account.linkItems.logout.label)}
               onPress={signOut}
               testID="logoutButton"
             />
           )}
-          <Sections.LinkItem
-            text={t(
-              ProfileTexts.sections.account.linkItems.expiredTickets.label,
-            )}
-            onPress={() => navigation.navigate('ExpiredTickets')}
-            testID="expiredTicketsButton"
-          />
         </Sections.Section>
 
         <Sections.Section withPadding>
