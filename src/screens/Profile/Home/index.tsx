@@ -90,78 +90,89 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         testID="profileHomeScrollView"
       >
         {!enable_login ? (
-        <Sections.Section withPadding>
-          <Sections.HeaderItem
-            text={t(ProfileTexts.sections.account.heading)}
-          />
-          {authenticationType === 'phone' && (
-            <Sections.GenericItem>
-              <ThemeText style={style.customerNumberHeading}>
-                {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
-              </ThemeText>
-              <ThemeText type="body__secondary" color="secondary">
-                {phoneNumber?.formatInternational()}
-              </ThemeText>
-            </Sections.GenericItem>
-          )}
-          {customerNumber && (
-            <Sections.GenericItem>
-              <ThemeText style={style.customerNumberHeading}>
-                {t(ProfileTexts.sections.account.infoItems.customerNumber)}
-              </ThemeText>
-              <ThemeText
-                type="body__secondary"
-                color="secondary"
+          <Sections.Section withPadding>
+            <Sections.HeaderItem
+              text={t(ProfileTexts.sections.account.heading)}
+            />
+            {authenticationType === 'phone' && (
+              <Sections.GenericItem>
+                <ThemeText style={style.customerNumberHeading}>
+                  {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
+                </ThemeText>
+                <ThemeText type="body__secondary" color="secondary">
+                  {phoneNumber?.formatInternational()}
+                </ThemeText>
+              </Sections.GenericItem>
+            )}
+            {customerNumber && (
+              <Sections.GenericItem>
+                <ThemeText style={style.customerNumberHeading}>
+                  {t(ProfileTexts.sections.account.infoItems.customerNumber)}
+                </ThemeText>
+                <ThemeText
+                  type="body__secondary"
+                  color="secondary"
                   accessibilityLabel={numberToAccessibilityString(
                     customerNumber,
                   )}
-              >
-                {customerNumber}
-              </ThemeText>
-            </Sections.GenericItem>
-          )}
-          {authenticationType !== 'phone' && (
-            <Sections.LinkItem
-              text={t(ProfileTexts.sections.account.linkItems.login.label)}
-              onPress={() =>
-                navigation.navigate('LoginInApp', {
-                  screen: hasActiveFareContracts
-                    ? 'ActiveTicketPromptInApp'
-                    : 'PhoneInputInApp',
-                  params: {
-                    afterLogin: {routeName: 'ProfileHome'},
-                  },
-                })
-              }
-              testID="loginButton"
-            />
-          )}
-          {authenticationType === 'phone' && (
-            <Sections.LinkItem
-              text={t(ProfileTexts.sections.account.linkItems.logout.label)}
-              onPress={signOut}
-              testID="logoutButton"
-            />
-          )}
-          <Sections.LinkItem
-            text={t(
-              ProfileTexts.sections.account.linkItems.expiredTickets.label,
+                >
+                  {customerNumber}
+                </ThemeText>
+              </Sections.GenericItem>
             )}
-            onPress={() => navigation.navigate('ExpiredTickets')}
-            testID="expiredTicketsButton"
-          />
-        </Sections.Section>
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.account.linkItems.expiredTickets.label,
+              )}
+              onPress={() => navigation.navigate('ExpiredTickets')}
+              testID="expiredTicketsButton"
+            />
+            {authenticationType !== 'phone' && (
+              <Sections.LinkItem
+                text={t(ProfileTexts.sections.account.linkItems.login.label)}
+                onPress={() =>
+                  navigation.navigate('LoginInApp', {
+                    screen: hasActiveFareContracts
+                      ? 'ActiveTicketPromptInApp'
+                      : 'PhoneInputInApp',
+                    params: {
+                      afterLogin: {routeName: 'ProfileHome'},
+                    },
+                  })
+                }
+                testID="loginButton"
+              />
+            )}
+            {authenticationType === 'phone' && (
+              <Sections.LinkItem
+                text={t(DeleteProfileTexts.header.title)}
+                onPress={() => navigation.navigate('DeleteProfile')}
+              />
+            )}
+            {authenticationType === 'phone' && (
+              <Sections.LinkItem
+                text={t(ProfileTexts.sections.account.linkItems.logout.label)}
+                onPress={signOut}
+                testID="logoutButton"
+              />
+            )}
+          </Sections.Section>
         ) : null}
 
         <Sections.Section withPadding>
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.settings.heading)}
           />
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.settings.linkItems.userProfile.label)}
-            onPress={() => navigation.navigate('DefaultUserProfile')}
-            testID="defaultTravellerButton"
-          />
+          {enable_ticketing ? (
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.settings.linkItems.userProfile.label,
+              )}
+              onPress={() => navigation.navigate('DefaultUserProfile')}
+              testID="defaultTravellerButton"
+            />
+          ) : null}
+
           {authenticationType === 'phone' && hasEnabledMobileToken && (
             <Sections.LinkItem
               text={t(
