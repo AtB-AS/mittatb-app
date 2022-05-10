@@ -89,7 +89,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         contentContainerStyle={style.scrollView}
         testID="profileHomeScrollView"
       >
-        {!enable_login ? (
+        {enable_login ? (
           <Sections.Section withPadding>
             <Sections.HeaderItem
               text={t(ProfileTexts.sections.account.heading)}
