@@ -107,6 +107,11 @@ export default function DeleteProfile({navigation}: DeleteProfileScreenProps) {
           <Sections.LinkItem
             subtitle={`${customerNumber}`}
             text={t(DeleteProfileTexts.customerNumber)}
+            accessibility={{
+              accessibilityLabel: t(
+                DeleteProfileTexts.buttonA11ytext(customerNumber?.toString()),
+              ),
+            }}
             onPress={() => doDeleteProfile()}
             disabled={activeFareContracts}
             icon={<ThemeIcon svg={Delete} colorType="error" />}
