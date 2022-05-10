@@ -47,7 +47,8 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const {enable_i18n, privacy_policy_url, enable_ticketing} = useRemoteConfig();
+  const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login} =
+    useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
@@ -88,6 +89,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         contentContainerStyle={style.scrollView}
         testID="profileHomeScrollView"
       >
+        {!enable_login ? (
         <Sections.Section withPadding>
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.account.heading)}
@@ -110,7 +112,9 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               <ThemeText
                 type="body__secondary"
                 color="secondary"
-                accessibilityLabel={numberToAccessibilityString(customerNumber)}
+                  accessibilityLabel={numberToAccessibilityString(
+                    customerNumber,
+                  )}
               >
                 {customerNumber}
               </ThemeText>
@@ -147,6 +151,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             testID="expiredTicketsButton"
           />
         </Sections.Section>
+        ) : null}
 
         <Sections.Section withPadding>
           <Sections.HeaderItem
