@@ -7,6 +7,20 @@ const DeleteProfileTexts = {
     'Når du sletter Min profil mister du tilgang på billett- og kjøpshistorikk, kvitteringer og dine innstillinger.',
     'When deleting My profile you will lose access to recent tickets, receipts and settings',
   ),
+  buttonA11ytext: (customerNumber: string | undefined) =>
+    _(
+      `Aktiver for å slette kundeprofil ${
+        customerNumber
+          ? 'med kundenummer ' + customerNumber?.split('').join(', ')
+          : ''
+      }`,
+
+      `Activate to delete customer profile ${
+        customerNumber
+          ? 'with customer number ' + customerNumber?.split('').join(', ')
+          : ''
+      }`,
+    ),
   unableToDeleteWithTickets: _(
     'Kan ikke slette Min profil mens du har aktive billetter. Kontakt AtB kundeservice for refusjon eller vent til billettene har utløpt.',
     'Unable to delete My profile while you have active tickets. Please contact customer support to refund or wait until tickets expire.',
