@@ -50,7 +50,7 @@ const NavigationRoot = () => {
     <Tab.Navigator
       tabBarOptions={{
         labelPosition: 'below-icon',
-        activeTintColor: theme.static.background.background_accent_3.background,
+        activeTintColor: theme.static.background.background_accent_3.text,
         inactiveTintColor: theme.text.colors.secondary,
         style: {
           backgroundColor: theme.static.background.background_0.background,
