@@ -72,6 +72,9 @@ const PurchaseOverviewTexts = {
     days: _('dager', 'days'),
     chipHint: _('Aktiver for å velge varighet', 'Activate to select duration'),
   },
+  travellerSelection: {
+    title: _('Velg passasjerkategori', 'Select travellers'),
+  },
   startTime: {
     title: _('Velg oppstartstidspunkt', 'Select start time'),
     now: _('Oppstart nå', 'Start now'),

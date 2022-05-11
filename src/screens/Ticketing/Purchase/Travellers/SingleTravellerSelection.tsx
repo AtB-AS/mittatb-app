@@ -24,6 +24,7 @@ export default function SingleTravellerSelection({
           }
           addCount(u.userTypeString);
         }}
+        color="interactive_2"
       />
     </Sections.Section>
   );

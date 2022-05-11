@@ -41,6 +41,7 @@ export default function MultipleTravellersSelection({
           removeCount={() => removeTraveller(u.userTypeString)}
           type="spacious"
           testID={'counterInput' + i}
+          color="interactive_2"
         />
       ))}
     </Sections.Section>

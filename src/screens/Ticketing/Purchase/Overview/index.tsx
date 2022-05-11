@@ -1,6 +1,3 @@
-import {Edit} from '@atb/assets/svg/mono-icons/actions';
-import * as Sections from '@atb/components/sections';
-import ThemeIcon from '@atb/components/theme-icon';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
@@ -31,11 +28,8 @@ import {TicketingStackParams} from '../';
 import {TariffZoneWithMetadata} from '../TariffZones';
 import useOfferState from './use-offer-state';
 import {formatToLongDateTime} from '@atb/utils/date';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {usePreferences} from '@atb/preferences';
-import {screenReaderPause} from '@atb/components/accessible-text';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import TravellersSheet from '@atb/screens/Ticketing/Purchase/Travellers/TravellersSheet';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {
   useHasEnabledMobileToken,
@@ -46,6 +40,7 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import Summary from './components/Summary';
 import DurationSelection from './components/DurationSelection';
 import StartTimeSelection from './components/StartTimeSelection';
+import TravellerSelection from './components/TravellerSelection';
 
 export type OverviewNavigationProp = DismissableStackNavigationProp<
   TicketingStackParams,
@@ -62,7 +57,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   route: {params},
 }) => {
   const styles = useStyles();
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const {inspectableToken} = useMobileTokenContextState();
   const tokensEnabled = useHasEnabledMobileToken();
   const {customerProfile} = useTicketState();
@@ -141,20 +136,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const closeModal = () => navigation.dismiss();
 
-  const {open: openBottomSheet} = useBottomSheet();
-
-  const openTravellersSheet = () => {
-    openBottomSheet((close, focusRef) => (
-      <TravellersSheet
-        close={close}
-        save={setUserProfilesWithCount}
-        preassignedFareProduct={preassignedFareProduct}
-        userProfilesWithCount={selectableUserProfiles}
-        ref={focusRef}
-      />
-    ));
-  };
-
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -190,31 +171,12 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             />
           )}
 
-          <Sections.Section style={styles.selectionComponent}>
-            <Sections.LinkItem
-              text={createTravellersText(
-                userProfilesWithCount,
-                true,
-                false,
-                t,
-                language,
-              )}
-              onPress={openTravellersSheet}
-              icon={<ThemeIcon svg={Edit} />}
-              accessibility={{
-                accessibilityLabel:
-                  createTravellersText(
-                    userProfilesWithCount,
-                    false,
-                    false,
-                    t,
-                    language,
-                  ) + screenReaderPause,
-                accessibilityHint: t(PurchaseOverviewTexts.travellers.a11yHint),
-              }}
-              testID="selectTravellersButton"
-            />
-          </Sections.Section>
+          <TravellerSelection
+            setTravellerSelection={setUserProfilesWithCount}
+            preassignedFareProduct={preassignedFareProduct}
+            userProfilesWithCount={selectableUserProfiles}
+            style={styles.selectionComponent}
+          />
 
           <Zones
             fromTariffZone={fromTariffZone}
