@@ -29,8 +29,8 @@ const DeleteProfileTexts = {
   deleteConfirmation: {
     title: _('Slett Min profil', 'Delete My profile'),
     message: _(
-      'Dette vil slette brukerprofilen din og all data som er lagret hos AtB',
-      'This will erase you user profile and all data stored at AtB',
+      'Dette vil slette brukerprofilen din og alle dine data.',
+      'This will erase you user profile and all your data.',
     ),
     confirm: _('OK', 'OK'),
     cancel: _('Avbryt', 'Cancel'),
