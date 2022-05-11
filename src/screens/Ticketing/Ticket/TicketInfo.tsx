@@ -164,6 +164,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
           type="body__secondary"
           style={styles.zones}
           accessibilityLabel={tariffZoneSummary + screenReaderPause}
+          testID={testID + 'Zones'}
         >
           {tariffZoneSummary}
         </ThemeText>

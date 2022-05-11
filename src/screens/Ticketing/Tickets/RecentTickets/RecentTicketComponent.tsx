@@ -161,7 +161,9 @@ export const RecentTicketComponent = ({
                       additionalStyles={{
                         marginRight: theme.spacings.xSmall,
                       }}
-                      testID={'travellers' + userProfilesWithCount.indexOf(u)}
+                      testID={`${testID}Travellers${userProfilesWithCount.indexOf(
+                        u,
+                      )}`}
                     />
                   ))}
                 {userProfilesWithCount.length > 2 && (
@@ -169,13 +171,15 @@ export const RecentTicketComponent = ({
                     {userProfilesWithCount.slice(0, 1).map((u) => (
                       <FloatingLabel
                         text={`${u.count} ${getReferenceDataName(u, language)}`}
-                        testID={'travellers' + userProfilesWithCount.indexOf(u)}
+                        testID={`${testID}Travellers${userProfilesWithCount.indexOf(
+                          u,
+                        )}`}
                       />
                     ))}
                     <View style={styles.additionalCategories}>
                       <ThemeText
                         type="body__tertiary"
-                        testID="travellersOthers"
+                        testID={`${testID}TravellersOthers`}
                       >
                         + {userProfilesWithCount.slice(1).length}{' '}
                         {t(RecentTicketsTexts.titles.moreTravelers)}
@@ -191,9 +195,12 @@ export const RecentTicketComponent = ({
               {t(RecentTicketsTexts.titles.zone)}
             </ThemeText>
             {fromZone === toZone ? (
-              <FloatingLabel text={`${fromZone}`} testID="zone" />
+              <FloatingLabel text={`${fromZone}`} testID={`${testID}Zone`} />
             ) : (
-              <FloatingLabel text={`${fromZone} - ${toZone}`} testID="zones" />
+              <FloatingLabel
+                text={`${fromZone} - ${toZone}`}
+                testID={`${testID}Zones`}
+              />
             )}
           </View>
         </View>

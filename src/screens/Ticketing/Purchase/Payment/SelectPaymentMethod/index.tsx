@@ -378,7 +378,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
               {option.savedType === 'recurring' ? (
                 <ThemeText
                   style={styles.maskedPanPadding}
-                  testID="recurringPaymentNumber"
+                  testID={getPaymentTestId(option, index) + 'Number'}
                 >
                   **** {`${option.recurringCard.masked_pan}`}
                 </ThemeText>
