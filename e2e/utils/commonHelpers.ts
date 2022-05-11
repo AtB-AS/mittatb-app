@@ -84,6 +84,15 @@ export const getNumberOfHierarchyIds = async (
     .catch((e) => 0);
 };
 
+// Return text of given element id
+export const getTextOfElementId = async (elementId: string) => {
+  return await element(by.id(elementId))
+    .getAttributes()
+    .then((e) => {
+      return !('elements' in e) ? e.text : 'TooManyElements';
+    });
+};
+
 // true: id or idHierarchy exists
 // false: id or idHierarchy does not exists
 export const idExists = async (

@@ -21,4 +21,5 @@ export const ticketInfo = {
   singleTicketChildPrice: 21,
   singleTicketZoneAZoneB1Price: 84,
   periodic180daysPrice: 4450,
+  periodic30daysPrice: 890,
 };

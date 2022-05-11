@@ -1,19 +1,31 @@
-import {device} from 'detox';
+import {by, device} from 'detox';
 import {goBack, goToTab} from '../utils/commonHelpers';
-import { scrollContentToId, tapById, tapByText } from "../utils/interactionHelpers";
+import {tapById, tapByText} from '../utils/interactionHelpers';
 import {
   expectToBeVisibleById,
   expectToBeVisibleByText,
   expectIdToHaveText,
   expectToBeVisibleByPartOfText,
   expectToExistsById,
-  expectToExistsByLabel, expectIdToHaveChildText
-} from "../utils/expectHelpers";
+  expectToExistsByLabel,
+  expectIdToHaveChildText,
+  expectNotToExistsById,
+  expectToExistsByIdHierarchy,
+} from '../utils/expectHelpers';
 import {skipOnboarding} from '../utils/onboarding';
 import setLocation from '../utils';
-import {ensureTicketingIsAccepted, newTicketExists} from '../utils/tickets';
+import {
+  buySingleTicket,
+  ensureTicketingIsAccepted,
+  getTravelInfoForRecentTicket,
+  newTicketExists,
+  setZones,
+  verifyTravellersAndZoneInSummary,
+} from '../utils/tickets';
 import {logIn, logOut} from '../utils/account';
 import {userInfo, ticketInfo} from '../utils/testData';
+import {expectStringNotEqual} from '../utils/jestAssertions';
+import {Traveller} from '../utils/Traveller';
 
 /*
   Two test suites:
@@ -22,7 +34,7 @@ import {userInfo, ticketInfo} from '../utils/testData';
       - Necessities for test data is described in ../utils/testData.ts
  */
 
-xdescribe('Tickets anonymous', () => {
+describe('Tickets anonymous', () => {
   beforeAll(async () => {
     await device.launchApp({
       permissions: {
@@ -53,15 +65,14 @@ xdescribe('Tickets anonymous', () => {
   it('should get an offer for a single ticket', async () => {
     await expectToBeVisibleByText('Buy');
     await expectToBeVisibleByText('Valid');
+    await tapById('buyTicketsTab');
     await expectToBeVisibleByText('Single ticket');
     await expectToBeVisibleByText('Periodic ticket');
 
     // Choose single ticket
     await tapById('singleTicket');
 
-    await expectToBeVisibleByText('Single ticket bus/tram');
     await expectToBeVisibleByText('1 Adult');
-    await expectToBeVisibleByText('Starting now');
     //Zone is either A or C3 during the tests
     await expectToBeVisibleByPartOfText('Travel in 1 zone');
     await expectIdToHaveText(
@@ -81,6 +92,7 @@ xdescribe('Tickets anonymous', () => {
   });
 
   it('should be able to change travellers', async () => {
+    await tapById('buyTicketsTab');
     await tapById('singleTicket');
 
     await expectToBeVisibleByText('1 Adult');
@@ -112,6 +124,7 @@ xdescribe('Tickets anonymous', () => {
   });
 
   it('should be able to change zone', async () => {
+    await tapById('buyTicketsTab');
     await tapById('singleTicket');
 
     // Set zone A -> A
@@ -123,7 +136,8 @@ xdescribe('Tickets anonymous', () => {
     await tapById('saveZonesButton');
 
     // Verify
-    await expectToBeVisibleByText('Travel in 1 zone (A)');
+    await expectToBeVisibleByText('Travel in 1 zone');
+    await expectToBeVisibleByText('Zone A');
     await expectIdToHaveText(
       'offerTotalPriceText',
       `Total: ${ticketInfo.singleTicketAdultPrice} kr`,
@@ -139,7 +153,8 @@ xdescribe('Tickets anonymous', () => {
     await tapById('saveZonesButton');
 
     // Verify
-    await expectToBeVisibleByText('Travel from zone A to zone B1');
+    await expectToBeVisibleByText('Travel in 2 zones');
+    await expectToBeVisibleByText('Zone A to zone B1');
     await expectIdToHaveText(
       'offerTotalPriceText',
       `Total: ${ticketInfo.singleTicketZoneAZoneB1Price} kr`,
@@ -151,12 +166,7 @@ xdescribe('Tickets anonymous', () => {
   });
 
   it('should not be able to buy a periodic ticket as anonymous', async () => {
-    await expectToBeVisibleByText('Buy');
-    await expectToBeVisibleByText('Valid');
-    await expectToBeVisibleByText('Single ticket');
-    await expectToBeVisibleByText('Periodic ticket');
-
-    // Choose period ticket
+    await tapById('buyTicketsTab');
     await tapById('periodicTicket');
 
     await expectToBeVisibleByText('Periodic tickets – available now!');
@@ -169,13 +179,18 @@ xdescribe('Tickets anonymous', () => {
     await expectToBeVisibleByText('I want to log in later');
   });
 
-  xit('should not be shown any recent tickets', async () => {
-    // no recent tickets since the user is anonymous
-  })
+  // No recent tickets since this anonymous user has not bought any tickets
+  it('should not be shown any recent tickets', async () => {
+    await tapById('buyTicketsTab');
+
+    // Verify
+    await expectNotToExistsById('recent0');
+    await expectNotToExistsById('recent0BuyButton');
+  });
 });
 
 // NOTE! Due to recaptcha during the login process, tests may not run
-xdescribe('Tickets authorized', () => {
+describe('Tickets authorized', () => {
   let isLoggedIn: boolean = false;
 
   beforeAll(async () => {
@@ -228,11 +243,13 @@ xdescribe('Tickets authorized', () => {
       await expectToBeVisibleByText('Single ticket');
       await tapById('singleTicket');
 
-      await expectToBeVisibleByText('Single ticket bus/tram');
       await expectIdToHaveText(
         'offerTotalPriceText',
         `Total: ${ticketInfo.singleTicketAdultPrice} kr`,
       );
+
+      // Set zone E1 -> E1
+      await setZones('E1', 'E1');
 
       await tapById('goToPaymentButton');
 
@@ -250,7 +267,7 @@ xdescribe('Tickets authorized', () => {
       await expectToBeVisibleByText('MasterCard');
       await expectToExistsById('recurringPayment0');
       await expectIdToHaveText(
-        'recurringPaymentNumber',
+        'recurringPayment0Number',
         userInfo.recurringPaymentCardNumber,
       );
 
@@ -271,7 +288,7 @@ xdescribe('Tickets authorized', () => {
       await tapById('confirmButton');
 
       // Check if ticket exists
-      await newTicketExists();
+      await newTicketExists('Travel in 1 zone (E1)');
     }
   });
 
@@ -286,18 +303,17 @@ xdescribe('Tickets authorized', () => {
       await tapById('periodicTicket');
 
       // Set product
-      await scrollContentToId('selectDurationScrollView', 'chip180days', "right")
-      await tapById('chip180days');
+      await tapById('chip30days');
 
       await expectIdToHaveText(
         'offerTotalPriceText',
-        `Total: ${ticketInfo.periodic180daysPrice} kr`,
+        `Total: ${ticketInfo.periodic30daysPrice} kr`,
       );
 
       await tapById('goToPaymentButton');
 
-      await expectToBeVisibleByText('180 days pass');
-      await expectToBeVisibleByText(`${ticketInfo.periodic180daysPrice} kr`);
+      await expectToBeVisibleByText('Monthly pass');
+      await expectToBeVisibleByText(`${ticketInfo.periodic30daysPrice} kr`);
 
       // Go to payment
       await tapById('choosePaymentOptionButton');
@@ -308,7 +324,7 @@ xdescribe('Tickets authorized', () => {
       await expectToBeVisibleByText('MasterCard');
       await expectToExistsById('recurringPayment0');
       await expectIdToHaveText(
-        'recurringPaymentNumber',
+        'recurringPayment0Number',
         userInfo.recurringPaymentCardNumber,
       );
 
@@ -320,52 +336,21 @@ xdescribe('Tickets authorized', () => {
 
   it('should be able to change the periodic product', async () => {
     if (isLoggedIn) {
-      const products = [
-        {
-          text: '1 days',
-          id: 'chip1days',
-          name: '24 hour pass'
-        },
-        {
-          text: '180 days',
-          id: 'chip180days',
-          name: '180 days pass'
-        },
-        {
-          text: '180 days',
-          id: 'chip180days',
-          name: '180 days pass'
-        }
-      ];
-
       const product1day = {
-        visible: true,
         text: '1 days',
         id: 'chip1days',
-        name: '24 hour pass'
+        name: '24 hour pass',
+      };
+      const product7days = {
+        text: '7 days',
+        id: 'chip7days',
+        name: 'Weekly pass',
       };
       const product30days = {
-        visible: true,
         text: '30 days',
         id: 'chip30days',
-        name: 'Monthly pass'
+        name: 'Monthly pass',
       };
-      const product180days = {
-        visible: false,
-        text: '180 days',
-        id: 'chip180days',
-        name: '180 days pass'
-      };
-
-      const text1day = '1 days'
-      const text30days = '30 days'
-      const text180days = '180 days'
-      const id1day = 'chip1days'
-      const id30days = 'chip30days'
-      const id180days = 'chip180days'
-      //const product1day = '24 hour pass'
-      //const product30days = 'Monthly pass'
-      //const product180days = '180 days pass'
 
       await goToTab('tickets');
       await tapById('buyTicketsTab');
@@ -373,38 +358,118 @@ xdescribe('Tickets authorized', () => {
       // Choose period ticket
       await tapById('periodicTicket');
 
-      /*
-      await expectToBeVisibleById(id1day)
-      await expectToBeVisibleById(id30days)
-      await expectToExistsById(id180days)
-
-      await expectIdToHaveChildText(id1day, text1day)
-      await expectIdToHaveChildText(id30days, text30days)
-      await expectIdToHaveChildText(id180days, text180days)
-       */
-
       // Set products and verify in summary
-      for (let product of [product1day, product30days, product180days]) {
-        await expectIdToHaveChildText(product.id, product.text)
-        product.visible ? await expectToBeVisibleById(product.id) : await expectToExistsById(product.id)
-        await scrollContentToId('selectDurationScrollView', product.id, "right")
+      for (let product of [product1day, product7days, product30days]) {
+        await expectToBeVisibleById(product.id);
+        await expectIdToHaveChildText(product.id, product.text);
         await tapById(product.id);
-        await tapById('goToPaymentButton')
+        await tapById('goToPaymentButton');
 
         await expectToBeVisibleByText(product.name);
-        await goBack()
+        await goBack();
       }
+      await goBack();
     }
-  })
+  });
 
   xit('should be able to change the start time on a periodic product', async () => {
+    // No tests yet
+  });
 
-  })
+  it('should show correct recent tickets with two category travellers', async () => {
+    if (isLoggedIn) {
+      const travellers: Traveller = {
+        adult: true,
+        senior: true,
+        child: false,
+      };
+      const zone = 'E1';
 
-  xit('should show recent tickets', async () => {
-    // - buy a single ticket with 2 traveller categories
-    // - check
-    // - buy a single ticket with 3 traveller categories
-    // - check (remember to check for 'travellersOther')
-  })
+      await goToTab('tickets');
+      await tapById('buyTicketsTab');
+
+      // Buy ticket
+      await buySingleTicket(travellers, zone);
+      await tapById('buyTicketsTab');
+
+      // Verify recent tickets
+      await expectToExistsById('recent0');
+      await expectToExistsByIdHierarchy(
+        by.id('recent0Zone').and(by.text(zone)),
+      );
+
+      // Travellers (showing max 2 categories before truncating)
+      await expectToExistsByIdHierarchy(
+        by.id('recent0Travellers0').and(by.text('1 Adult')),
+      );
+      await expectToExistsByIdHierarchy(
+        by.id('recent0Travellers1').and(by.text('1 Senior')),
+      );
+
+      // Verify summary page
+      await tapById('recent0BuyButton');
+      await verifyTravellersAndZoneInSummary(travellers, zone);
+      await goBack();
+    }
+  });
+
+  it('should show correct recent tickets with three category travellers', async () => {
+    if (isLoggedIn) {
+      const travellers: Traveller = {
+        adult: true,
+        senior: true,
+        child: true,
+      };
+      const zone = 'E2';
+
+      await goToTab('tickets');
+      await tapById('buyTicketsTab');
+
+      // Buy ticket
+      await buySingleTicket(travellers, zone);
+      await tapById('buyTicketsTab');
+
+      // Verify recent tickets
+      await expectToExistsById('recent0');
+      await expectToExistsByIdHierarchy(
+        by.id('recent0Zone').and(by.text(zone)),
+      );
+
+      // Travellers (showing max 2 categories before truncating)
+      await expectToExistsByIdHierarchy(
+        by.id('recent0Travellers0').and(by.text('1 Adult')),
+      );
+      await expectToExistsByIdHierarchy(
+        by.id('recent0TravellersOthers').and(by.text('+ 2 other categories')),
+      );
+
+      // Verify summary page
+      await tapById('recent0BuyButton');
+      await verifyTravellersAndZoneInSummary(travellers, zone);
+      await goBack();
+    }
+  });
+
+  // Compare traveller and zone information for the different recent tickets
+  it('should not show duplicate recent tickets', async () => {
+    if (isLoggedIn) {
+      await goToTab('tickets');
+      await tapById('buyTicketsTab');
+
+      await expectToExistsById('recent0');
+      await expectToExistsById('recent1');
+      await expectToExistsById('recent2');
+      await expectNotToExistsById('recent3');
+
+      // Get travel info for the recent tickets
+      let travelInfoRecent0 = await getTravelInfoForRecentTicket('recent0');
+      let travelInfoRecent1 = await getTravelInfoForRecentTicket('recent1');
+      let travelInfoRecent2 = await getTravelInfoForRecentTicket('recent2');
+
+      // Compare
+      expectStringNotEqual(travelInfoRecent0, travelInfoRecent1);
+      expectStringNotEqual(travelInfoRecent0, travelInfoRecent2);
+      expectStringNotEqual(travelInfoRecent1, travelInfoRecent2);
+    }
+  });
 });
