@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
@@ -14,6 +14,7 @@ import NavigationIcon from '@atb/components/theme-icon/navigation-icon';
 import {useSectionItem, SectionItem, useSectionStyle} from './section-utils';
 import InternalLabeledItem from './internals/internal-labeled-item';
 import FixedSwitch from '../switch';
+import {InteractiveColor} from '@atb/theme/colors';
 
 export type ActionModes = 'check' | 'toggle' | 'heading-expand';
 export type ActionItemProps = SectionItem<{
@@ -22,6 +23,7 @@ export type ActionItemProps = SectionItem<{
   checked?: boolean;
   mode?: ActionModes;
   accessibility?: AccessibilityProps;
+  color?: InteractiveColor;
 }>;
 export default function ActionItem({
   text,
@@ -30,10 +32,14 @@ export default function ActionItem({
   checked = false,
   accessibility,
   testID,
+  color,
   ...props
 }: ActionItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
+  const {theme} = useTheme();
+  const interactiveColor =
+    color && checked ? theme.interactive[color].active : undefined;
 
   if (mode === 'toggle') {
     return (
@@ -55,7 +61,15 @@ export default function ActionItem({
   return (
     <TouchableOpacity
       onPress={() => onPress?.(!checked)}
-      style={[style.spaceBetween, topContainer]}
+      style={[
+        style.spaceBetween,
+        topContainer,
+        {
+          backgroundColor: interactiveColor
+            ? interactiveColor.background
+            : topContainer.backgroundColor,
+        },
+      ]}
       testID={testID}
       accessibilityRole={role}
       accessibilityState={{
@@ -67,11 +81,18 @@ export default function ActionItem({
         type={
           mode === 'heading-expand' ? 'body__primary--bold' : 'body__primary'
         }
-        style={contentContainer}
+        style={[
+          contentContainer,
+          interactiveColor ? {color: interactiveColor.text} : undefined,
+        ]}
       >
         {text}
       </ThemeText>
-      <ActionModeIcon mode={mode} checked={checked} />
+      <ActionModeIcon
+        mode={mode}
+        checked={checked}
+        color={interactiveColor ? color : undefined}
+      />
     </TouchableOpacity>
   );
 }
@@ -79,14 +100,23 @@ export default function ActionItem({
 function ActionModeIcon({
   mode,
   checked,
-}: Pick<ActionItemProps, 'mode' | 'checked'>) {
+  color,
+}: Pick<ActionItemProps, 'mode' | 'checked' | 'color'>) {
   const style = useHeaderExpandStyle();
   const {t} = useTranslation();
+  const {theme} = useTheme();
 
   switch (mode) {
     case 'check': {
       if (checked) {
-        return <ThemeIcon svg={Confirm} />;
+        return (
+          <ThemeIcon
+            svg={Confirm}
+            {...(color
+              ? {fill: theme.interactive[color].active.text}
+              : undefined)}
+          />
+        );
       } else {
         return null;
       }

@@ -2,6 +2,7 @@ import React from 'react';
 import ActionItem from './action-item';
 import SectionGroup, {SectionProps} from './section';
 import {HeaderItem} from '@atb/components/sections/index';
+import {InteractiveColor} from '@atb/theme/colors';
 
 export type RadioSectionProps<T> = Omit<SectionProps, 'type' | 'children'> & {
   items: T[];
@@ -10,6 +11,7 @@ export type RadioSectionProps<T> = Omit<SectionProps, 'type' | 'children'> & {
   itemToText(item: T, index: number): string;
   onSelect?(item: T, index: number): void;
   headerText?: string;
+  color?: InteractiveColor;
 };
 
 export default function RadioSectionGroup<T>({
@@ -19,6 +21,7 @@ export default function RadioSectionGroup<T>({
   selected,
   onSelect,
   headerText,
+  color,
   ...props
 }: RadioSectionProps<T>) {
   return (
@@ -32,6 +35,7 @@ export default function RadioSectionGroup<T>({
           text={itemToText(item, index)}
           onPress={() => onSelect?.(item, index)}
           testID={'radioButton' + itemToText(item, index)}
+          color={color}
         />
       ))}
     </SectionGroup>
