@@ -129,10 +129,4 @@ const ProfileTexts = {
     ),
   },
 };
-export default orgSpecificTranslations(ProfileTexts, {
-  nfk: {
-    header: {
-      title: _('Mitt Reis', 'My Reis'),
-    },
-  },
-});
+export default ProfileTexts;
