@@ -6,9 +6,9 @@ import {
   expectToBeVisibleByText,
   expectIdToHaveText,
   expectNotToBeVisibleByText,
-  expectIdToHaveChildId,
   expectNotToExistsById,
   expectToExistsByIdHierarchy,
+  expectToExistsById,
 } from '../utils/expectHelpers';
 import {skipOnboarding} from '../utils/onboarding';
 import setLocation from '../utils';
@@ -78,14 +78,14 @@ describe('Account', () => {
       await tapById('switchTokenButton');
       await expectToBeVisibleById('selectTravelcard');
       await expectToBeVisibleById('selectMobile');
-      await expectIdToHaveChildId('selectTravelcard', 'radioNotChecked');
-      await expectIdToHaveChildId('selectMobile', 'radioChecked');
+      await expectToExistsById('selectTravelcardRadioNotChecked');
+      await expectToExistsById('selectMobileRadioChecked');
       await expectToBeVisibleByText('Select device');
 
       // Choose travelcard
       await tapById('selectTravelcard');
-      await expectIdToHaveChildId('selectTravelcard', 'radioChecked');
-      await expectIdToHaveChildId('selectMobile', 'radioNotChecked');
+      await expectToExistsById('selectTravelcardRadioChecked');
+      await expectToExistsById('selectMobileRadioNotChecked');
       await expectNotToBeVisibleByText('Select device');
       await scrollToId(
         'selectTokenScrollView',
@@ -121,13 +121,13 @@ describe('Account', () => {
 
       // Switch
       await tapById('switchTokenButton');
-      await expectIdToHaveChildId('selectTravelcard', 'radioChecked');
-      await expectIdToHaveChildId('selectMobile', 'radioNotChecked');
+      await expectToExistsById('selectTravelcardRadioChecked');
+      await expectToExistsById('selectMobileRadioNotChecked');
 
       // Choose mobile
       await tapById('selectMobile');
-      await expectIdToHaveChildId('selectTravelcard', 'radioNotChecked');
-      await expectIdToHaveChildId('selectMobile', 'radioChecked');
+      await expectToExistsById('selectTravelcardRadioNotChecked');
+      await expectToExistsById('selectMobileRadioChecked');
       await scrollToId(
         'selectTokenScrollView',
         'confirmSelectionButton',

@@ -80,7 +80,7 @@ export default function RadioBox({
       </ThemeText>
       <View
         style={styles.radioIcon}
-        testID={selected ? 'radioChecked' : 'radioNotChecked'}
+        testID={testID + (selected ? 'RadioChecked' : 'RadioNotChecked')}
       >
         <RadioIcon checked={selected} color={themeColor} />
       </View>
