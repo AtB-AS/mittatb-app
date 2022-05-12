@@ -31,6 +31,7 @@ type TicketInfoProps = {
   status: ValidityStatus | 'recent';
   isInspectable: boolean;
   omitUserProfileCount?: boolean;
+  testID?: string;
 };
 
 const TicketInfo = ({
@@ -38,6 +39,7 @@ const TicketInfo = ({
   status,
   isInspectable,
   omitUserProfileCount,
+  testID,
 }: TicketInfoProps) => {
   const {tariffZones, userProfiles, preassignedFareproducts} =
     useFirestoreConfiguration();
@@ -68,6 +70,7 @@ const TicketInfo = ({
       status={status}
       isInspectable={isInspectable}
       omitUserProfileCount={omitUserProfileCount}
+      testID={testID}
     />
   );
 };
@@ -80,6 +83,7 @@ type TicketInfoViewProps = {
   status: TicketInfoProps['status'];
   isInspectable?: boolean;
   omitUserProfileCount?: boolean;
+  testID?: string;
 };
 
 export const TicketInfoView = (props: TicketInfoViewProps) => {
@@ -101,6 +105,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
     isInspectable,
     omitUserProfileCount,
     status,
+    testID,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -138,6 +143,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
             type="body__primary--bold"
             key={u.id}
             accessibilityLabel={userProfileCountAndName(u) + screenReaderPause}
+            testID={testID + 'UserAndCount'}
           >
             {userProfileCountAndName(u)}
           </ThemeText>
@@ -148,6 +154,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
           type="body__secondary"
           style={styles.product}
           accessibilityLabel={productName + screenReaderPause}
+          testID={testID + 'Product'}
         >
           {productName}
         </ThemeText>
@@ -157,6 +164,7 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
           type="body__secondary"
           style={styles.zones}
           accessibilityLabel={tariffZoneSummary + screenReaderPause}
+          testID={testID + 'Zones'}
         >
           {tariffZoneSummary}
         </ThemeText>

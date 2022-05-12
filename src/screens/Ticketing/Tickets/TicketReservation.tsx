@@ -34,7 +34,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
 
   return (
     <TouchableOpacity>
-      <View style={styles.ticketContainer}>
+      <View style={styles.ticketContainer} testID="ticketReservation">
         <View style={styles.validityContainer}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <View style={styles.iconContainer}>

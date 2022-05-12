@@ -93,6 +93,7 @@ export const RecentTickets = () => {
             paddingHorizontal: theme.spacings.xSmall,
           }}
           style={styles.horizontalScrollView}
+          testID="recentTicketsScrollView"
         >
           {memoizedRecentTickets.map((ticket) => {
             const componentKey =
@@ -118,6 +119,7 @@ export const RecentTickets = () => {
                   {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
                 ]}
                 selectTicket={selectTicket}
+                testID={'recent' + memoizedRecentTickets.indexOf(ticket)}
               />
             );
           })}

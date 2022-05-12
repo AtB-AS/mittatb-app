@@ -242,4 +242,25 @@ describe('My profile', () => {
 
     await goBack();
   });
+
+  xit('should change start page', async () => {
+    // change to departures
+    // await device.reloadReactNative();
+    // check
+    // change back
+    // await device.reloadReactNative();
+    // check
+  });
+
+  xit('should change default traveller', async () => {
+
+  });
+
+  xit('should view and delete favourite departures', async () => {
+
+  });
+
+  xit('should delete search history', async () => {
+
+  });
 });

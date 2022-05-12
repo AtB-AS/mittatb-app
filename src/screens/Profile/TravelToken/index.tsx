@@ -65,6 +65,7 @@ const ChangeTokenButton = ({onPress}: {onPress: () => void}) => {
         text={t(TravelTokenTexts.travelToken.changeTokenButton)}
         disabled={!travelTokens}
         onPress={onPress}
+        testID="switchTokenButton"
         icon={<ThemeIcon svg={Edit} />}
       />
     </Sections.Section>

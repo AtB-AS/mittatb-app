@@ -135,6 +135,12 @@ export const expectToExistsByIdHierarchy = async (
   await expectExists(element(elementMatcher));
 };
 
+export const expectNotToExistsByIdHierarchy = async (
+  elementMatcher: Detox.NativeMatcher,
+) => {
+  await expectNotToExists(element(elementMatcher));
+};
+
 export const expectNotToExistsById = async (id: string) => {
   await expectNotToExists(element(by.id(id)));
 };

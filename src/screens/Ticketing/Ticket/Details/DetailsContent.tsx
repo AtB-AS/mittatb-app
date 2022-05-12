@@ -71,6 +71,7 @@ const DetailsContent: React.FC<Props> = ({
             travelRights={fc.travelRights.filter(isPreactivatedTicket)}
             status={validityStatus}
             isInspectable={inspectable}
+            testID={'details'}
           />
         </Sections.GenericItem>
         <Sections.GenericItem>

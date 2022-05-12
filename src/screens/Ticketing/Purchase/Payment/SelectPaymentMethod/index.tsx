@@ -376,7 +376,10 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
               <RadioView checked={selected} />
               <ThemeText>{paymentTexts.text}</ThemeText>
               {option.savedType === 'recurring' ? (
-                <ThemeText style={styles.maskedPanPadding}>
+                <ThemeText
+                  style={styles.maskedPanPadding}
+                  testID={getPaymentTestId(option, index) + 'Number'}
+                >
                   **** {`${option.recurringCard.masked_pan}`}
                 </ThemeText>
               ) : null}

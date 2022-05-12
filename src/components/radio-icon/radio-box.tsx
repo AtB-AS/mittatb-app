@@ -18,6 +18,7 @@ type Props = {
   type?: ContainerSizingType;
   onPress: () => void;
   style?: ViewStyle;
+  testID?: string;
 };
 export default function RadioBox({
   title,
@@ -30,6 +31,7 @@ export default function RadioBox({
   type = 'standard',
   onPress,
   style,
+  testID,
 }: Props) {
   const styles = useStyles();
   const {theme} = useTheme();
@@ -58,6 +60,7 @@ export default function RadioBox({
         disabled,
       }}
       disabled={disabled}
+      testID={testID}
     >
       <ThemeText
         type="heading__title"
@@ -75,7 +78,10 @@ export default function RadioBox({
       >
         {description}
       </ThemeText>
-      <View style={styles.radioIcon}>
+      <View
+        style={styles.radioIcon}
+        testID={testID + (selected ? 'RadioChecked' : 'RadioNotChecked')}
+      >
         <RadioIcon checked={selected} color={themeColor} />
       </View>
     </TouchableOpacity>

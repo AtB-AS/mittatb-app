@@ -26,6 +26,7 @@ const Ticket = ({
   ticketIllustration,
   accented = false,
   onPress,
+  testID,
 }: {
   title: string;
   description: string;
@@ -34,6 +35,7 @@ const Ticket = ({
   ticketIllustration: TicketIllustration;
   accented?: boolean;
   onPress: () => void;
+  testID: string;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -46,7 +48,10 @@ const Ticket = ({
   );
 
   return (
-    <View style={[styles.ticket, {backgroundColor: themeColor.background}]}>
+    <View
+      style={[styles.ticket, {backgroundColor: themeColor.background}]}
+      testID={testID}
+    >
       <TouchableOpacity
         onPress={onPress}
         accessible={true}
@@ -79,6 +84,7 @@ const Ticket = ({
             style={styles.ticket_name}
             accessibilityLabel={title}
             color={themeColor}
+            testID={testID + 'Title'}
           >
             {title}
           </ThemeText>

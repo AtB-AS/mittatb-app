@@ -64,7 +64,10 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
         title={t(TravelTokenTexts.toggleToken.title)}
         leftButton={{type: 'back'}}
       />
-      <ScrollView contentContainerStyle={styles.scrollView}>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        testID="selectTokenScrollView"
+      >
         <View style={styles.radioArea}>
           <RadioBox
             title={t(TravelTokenTexts.toggleToken.radioBox.tCard.title)}
@@ -83,6 +86,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
               setSelectedToken(travelCardToken);
             }}
             style={styles.leftRadioBox}
+            testID="selectTravelcard"
           />
           <RadioBox
             title={t(TravelTokenTexts.toggleToken.radioBox.phone.title)}
@@ -102,6 +106,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
                 setSelectedToken(activatedMobileTokens?.[0]);
               }
             }}
+            testID="selectMobile"
           />
         </View>
 
@@ -162,6 +167,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
             text={t(TravelTokenTexts.toggleToken.saveButton)}
             interactiveColor="interactive_0"
             disabled={!selectedToken}
+            testID="confirmSelectionButton"
           />
         )}
       </ScrollView>
