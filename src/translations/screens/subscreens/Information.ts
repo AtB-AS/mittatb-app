@@ -154,7 +154,7 @@ const SelectStartScreenTexts = {
       ),
       part1Bullet2: _(
         `${bulletPoint} Mindreårige som er fylt 15 år: 900 kroner uansett oppgjørsform.`,
-        `${bulletPoint} Minors under 15 years: NOK 900 regardless of payment method`,
+        `${bulletPoint} Minors over 15 years: NOK 900 regardless of payment method`,
       ),
       part1Bullet3: _(
         `${bulletPoint} Misbruk eller forfalsking av billett: 2000 kroner, og billetten blir inndratt. Dersom du forfalsker en billett, vil du også bli politianmeldt.`,
