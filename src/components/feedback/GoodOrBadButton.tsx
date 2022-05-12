@@ -6,7 +6,7 @@ import {Opinions} from '.';
 import {useSectionItem} from '../sections/section-utils';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
 import hexToRgba from 'hex-to-rgba';
-import {StaticColor, StaticColorByType} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
 
 export type GoodOrBadButtonProps = {
   opinion: Opinions;
@@ -15,8 +15,6 @@ export type GoodOrBadButtonProps = {
 };
 
 const themeColor: StaticColorByType<'background'> = 'background_0';
-const selectedThemeColor: StaticColorByType<'background'> =
-  'background_accent_3';
 
 export const GoodOrBadButton = ({
   checked,
@@ -80,21 +78,21 @@ const useButtonStyle = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.xLarge,
   },
   button: {
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: theme.interactive.interactive_2.default.background,
     flex: 1,
     padding: theme.spacings.xLarge,
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderWidth: theme.border.width.medium,
     borderRadius: theme.border.radius.regular,
-    borderColor: theme.static.background[themeColor].background,
+    borderColor: theme.interactive.interactive_2.default.background,
   },
   selectedButton: {
     backgroundColor: hexToRgba(
-      theme.static.background[selectedThemeColor].background,
+      theme.interactive.interactive_2.active.background,
       0.2,
     ),
-    borderColor: theme.static.background[selectedThemeColor].background,
+    borderColor: theme.interactive.interactive_2.outline.background,
   },
 }));
 
