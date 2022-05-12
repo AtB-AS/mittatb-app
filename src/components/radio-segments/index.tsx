@@ -96,7 +96,8 @@ export default function RadioSegments({
 
 const getAccessibilityLabel = (option: SegmentOptions) => {
   if (option.accessibilityLabel) return option.accessibilityLabel;
-  return option.subtext ? option.text + '. ' + option.subtext : option.text;
+  if (option.subtext) return option.text + '. ' + option.subtext;
+  return option.text;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
