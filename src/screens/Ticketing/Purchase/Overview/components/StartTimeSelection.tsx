@@ -4,7 +4,10 @@ import ThemeText from '@atb/components/text';
 import {InteractiveColor} from '@atb/theme/colors';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {formatToShortDateTimeWithoutYear} from '@atb/utils/date';
+import {
+  formatToShortDateTimeWithoutYear,
+  formatToVerboseDateTime,
+} from '@atb/utils/date';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import TravelDateSheet from '@atb/screens/Ticketing/Purchase/TravelDate/TravelDateSheet';
 import RadioSegments from '@atb/components/radio-segments';
@@ -39,6 +42,15 @@ export default function StartTimeSelection({
     ));
   };
 
+  const subtext = validFromTime
+    ? formatToShortDateTimeWithoutYear(validFromTime, language)
+    : undefined;
+  const accessibilityLabel = validFromTime
+    ? t(PurchaseOverviewTexts.startTime.later) +
+      ', ' +
+      formatToVerboseDateTime(validFromTime, language)
+    : undefined;
+
   return (
     <View style={style}>
       <ThemeText type="body__secondary" color="secondary">
@@ -56,10 +68,9 @@ export default function StartTimeSelection({
           },
           {
             text: t(PurchaseOverviewTexts.startTime.later),
-            subtext: validFromTime
-              ? formatToShortDateTimeWithoutYear(validFromTime, language)
-              : undefined,
+            subtext,
             onPress: openTravelDateSheet,
+            accessibilityLabel,
             accessibilityHint: t(PurchaseOverviewTexts.startTime.a11yLaterHint),
           },
         ]}
