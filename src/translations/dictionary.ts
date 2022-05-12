@@ -65,11 +65,4 @@ const dictionary = {
   },
 };
 
-export default orgSpecificTranslations(dictionary, {
-  nfk: {
-    navigation: {
-      profile: _('Mitt Reis', 'My Reis'),
-      profile_a11y: _('Mitt Reis', 'My Reis'),
-    },
-  },
-});
+export default dictionary;
