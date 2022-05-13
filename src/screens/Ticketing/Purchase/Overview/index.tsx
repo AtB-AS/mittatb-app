@@ -178,7 +178,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           <TravellerSelection
             setTravellerSelection={setUserProfilesWithCount}
             preassignedFareProduct={preassignedFareProduct}
-            userProfilesWithCount={selectableUserProfiles}
+            selectableUserProfiles={selectableUserProfiles}
             style={styles.selectionComponent}
           />
 

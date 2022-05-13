@@ -12,7 +12,7 @@ import MultipleTravellersSelection from '../../Travellers/MultipleTravellersSele
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 
 type TravellerSelectionProps = {
-  userProfilesWithCount: UserProfileWithCount[];
+  selectableUserProfiles: UserProfileWithCount[];
   setTravellerSelection: (
     userProfilesWithCount: UserProfileWithCount[],
   ) => void;
@@ -23,13 +23,17 @@ type TravellerSelectionProps = {
 export default function TravellerSelection({
   setTravellerSelection,
   style,
-  userProfilesWithCount,
+  selectableUserProfiles,
   preassignedFareProduct,
 }: TravellerSelectionProps) {
   const styles = useStyles();
   const {t} = useTranslation();
   const {travellerSelectionMode} = getPurchaseFlow(preassignedFareProduct);
-  const userCountState = useUserCountState(userProfilesWithCount);
+  const userCountState = useUserCountState(selectableUserProfiles);
+  const selectableUserProfilesWithCount =
+    userCountState.userProfilesWithCount.filter((a) =>
+      selectableUserProfiles.find((b) => a.id === b.id),
+    );
 
   useEffect(() => {
     setTravellerSelection(userCountState.userProfilesWithCount);
@@ -41,9 +45,15 @@ export default function TravellerSelection({
         {t(PurchaseOverviewTexts.travellerSelection.title)}
       </ThemeText>
       {travellerSelectionMode === 'multiple' ? (
-        <MultipleTravellersSelection {...userCountState} />
+        <MultipleTravellersSelection
+          {...userCountState}
+          userProfilesWithCount={selectableUserProfilesWithCount}
+        />
       ) : (
-        <SingleTravellerSelection {...userCountState} />
+        <SingleTravellerSelection
+          {...userCountState}
+          userProfilesWithCount={selectableUserProfilesWithCount}
+        />
       )}
     </View>
   );
