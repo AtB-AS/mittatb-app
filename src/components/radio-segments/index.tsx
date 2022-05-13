@@ -10,6 +10,7 @@ export type SegmentOptions = {
   subtext?: string;
   selected?: boolean;
   accessibilityHint?: string;
+  accessibilityLabel?: string;
 };
 
 type RadioSegmentsProps = {
@@ -58,9 +59,7 @@ export default function RadioSegments({
             accessible={true}
             accessibilityRole="radio"
             accessibilityState={{selected}}
-            accessibilityLabel={
-              option.subtext ? option.text + '. ' + option.subtext : option.text
-            }
+            accessibilityLabel={getAccessibilityLabel(option)}
             accessibilityHint={option.accessibilityHint}
             style={[
               styles.optionBox,
@@ -94,6 +93,12 @@ export default function RadioSegments({
     </View>
   );
 }
+
+const getAccessibilityLabel = (option: SegmentOptions) => {
+  if (option.accessibilityLabel) return option.accessibilityLabel;
+  if (option.subtext) return option.text + '. ' + option.subtext;
+  return option.text;
+};
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   radioSegments: {

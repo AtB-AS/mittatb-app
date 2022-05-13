@@ -8,6 +8,7 @@ import {
   getMinutes,
   isPast,
   isSameDay,
+  isToday,
   isWithinInterval,
   Locale,
   parse,
@@ -221,7 +222,9 @@ export function formatToVerboseDateTime(
     locale: languageToLocale(language),
   });
 
-  return `${dateString} ${at} ${timeString}`;
+  return isToday(parseIfNeeded(date))
+    ? `${timeString}`
+    : `${dateString} ${at} ${timeString}`;
 }
 
 export const isWithin24Hours = (
