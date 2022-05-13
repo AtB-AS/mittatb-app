@@ -5,7 +5,6 @@ import ThemeText from '../text';
 import {Opinions} from '.';
 import {useSectionItem} from '../sections/section-utils';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
-import hexToRgba from 'hex-to-rgba';
 import {StaticColorByType} from '@atb/theme/colors';
 
 export type GoodOrBadButtonProps = {
@@ -88,10 +87,7 @@ const useButtonStyle = StyleSheet.createThemeHook((theme) => ({
     borderColor: theme.interactive.interactive_2.default.background,
   },
   selectedButton: {
-    backgroundColor: hexToRgba(
-      theme.interactive.interactive_2.active.background,
-      0.2,
-    ),
+    backgroundColor: theme.interactive.interactive_2.active.background,
     borderColor: theme.interactive.interactive_2.outline.background,
   },
 }));
