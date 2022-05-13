@@ -17,6 +17,8 @@ export default function SingleTravellerSelection({
         items={userProfilesWithCount}
         keyExtractor={(u) => u.userTypeString}
         itemToText={(u) => getReferenceDataName(u, language)}
+        // @TODO: add translated descriptions
+        // itemToSubtext={(u: UserProfileWithCount) => u.description.value}
         selected={selectedProfile}
         onSelect={(u) => {
           if (selectedProfile) {

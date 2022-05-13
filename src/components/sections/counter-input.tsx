@@ -11,6 +11,7 @@ import {InteractiveColor} from '@atb/theme/colors';
 
 export type CounterInputProps = SectionItem<{
   text: string;
+  subtext?: string;
   color?: InteractiveColor;
   count: number;
   addCount: () => void;
@@ -18,6 +19,7 @@ export type CounterInputProps = SectionItem<{
 }>;
 export default function CounterInput({
   text,
+  subtext,
   color,
   count,
   addCount,
@@ -36,8 +38,25 @@ export default function CounterInput({
 
   return (
     <View style={[topContainer, counterStyles.countContainer]} testID={testID}>
-      <View style={[style.spaceBetween, contentContainer]}>
-        <ThemeText accessibilityLabel={`${count} ${text}`}>{text}</ThemeText>
+      <View
+        style={[
+          style.spaceBetween,
+          contentContainer,
+          counterStyles.infoContainer,
+        ]}
+        accessible={true}
+        accessibilityLabel={`${count} ${text}, ${subtext || ''}`}
+      >
+        <ThemeText>{text}</ThemeText>
+        {subtext && (
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={counterStyles.infoSubtext}
+          >
+            {subtext}
+          </ThemeText>
+        )}
       </View>
       <View style={counterStyles.countActions}>
         <TouchableOpacity
@@ -109,6 +128,14 @@ export default function CounterInput({
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  infoContainer: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    marginRight: theme.spacings.medium,
+  },
+  infoSubtext: {
+    marginTop: theme.spacings.medium,
+  },
   countContainer: {
     flex: 1,
     flexDirection: 'row',

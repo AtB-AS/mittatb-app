@@ -19,6 +19,7 @@ import {InteractiveColor} from '@atb/theme/colors';
 export type ActionModes = 'check' | 'toggle' | 'heading-expand';
 export type ActionItemProps = SectionItem<{
   text: string;
+  subtext?: string;
   onPress?(checked: boolean): void;
   checked?: boolean;
   mode?: ActionModes;
@@ -27,6 +28,7 @@ export type ActionItemProps = SectionItem<{
 }>;
 export default function ActionItem({
   text,
+  subtext,
   onPress,
   mode = 'check',
   checked = false,
@@ -77,17 +79,28 @@ export default function ActionItem({
       }}
       {...accessibility}
     >
-      <ThemeText
-        type={
-          mode === 'heading-expand' ? 'body__primary--bold' : 'body__primary'
-        }
-        style={[
-          contentContainer,
-          interactiveColor ? {color: interactiveColor.text} : undefined,
-        ]}
-      >
-        {text}
-      </ThemeText>
+      <View style={{flexShrink: 1}}>
+        <ThemeText
+          type={
+            mode === 'heading-expand' ? 'body__primary--bold' : 'body__primary'
+          }
+          style={[
+            contentContainer,
+            interactiveColor ? {color: interactiveColor.text} : undefined,
+          ]}
+        >
+          {text}
+        </ThemeText>
+        {subtext && (
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={{marginTop: theme.spacings.medium}}
+          >
+            {subtext}
+          </ThemeText>
+        )}
+      </View>
       <ActionModeIcon
         mode={mode}
         checked={checked}
@@ -118,7 +131,8 @@ function ActionModeIcon({
           />
         );
       } else {
-        return null;
+        // In order to keep margins consistent, a transparent icon is returned.
+        return <ThemeIcon svg={Confirm} fill="#FFFFFF00" />;
       }
     }
     case 'heading-expand': {
