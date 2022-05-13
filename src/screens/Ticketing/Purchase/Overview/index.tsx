@@ -42,6 +42,7 @@ import DurationSelection from './components/DurationSelection';
 import StartTimeSelection from './components/StartTimeSelection';
 import TravellerSelection from './components/TravellerSelection';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {getPurchaseFlow} from '../utils';
 
 export type OverviewNavigationProp = DismissableStackNavigationProp<
   TicketingStackParams,
@@ -123,6 +124,8 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     travelDate,
   );
 
+  const {travelDateSelectionEnabled} = getPurchaseFlow(preassignedFareProduct);
+
   const shouldShowValidTrainTicketNotice =
     (preassignedFareProduct.type === 'single' ||
       preassignedFareProduct.type === 'period') &&
@@ -185,7 +188,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             style={styles.selectionComponent}
           />
 
-          {preassignedFareProduct.type === 'period' && (
+          {travelDateSelectionEnabled && (
             <StartTimeSelection
               color="interactive_2"
               travelDate={travelDate}
