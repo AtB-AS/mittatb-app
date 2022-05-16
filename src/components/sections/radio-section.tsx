@@ -4,7 +4,7 @@ import SectionGroup, {SectionProps} from './section';
 import {HeaderItem} from '@atb/components/sections/index';
 import {InteractiveColor} from '@atb/theme/colors';
 
-export type RadioSectionProps<T> = Omit<SectionProps, 'type' | 'children'> & {
+export type RadioSectionProps<T> = Omit<SectionProps, 'children'> & {
   items: T[];
   selected?: T;
   keyExtractor(item: T, index: number): string;
