@@ -121,19 +121,15 @@ function ActionModeIcon({
 
   switch (mode) {
     case 'check': {
-      if (checked) {
-        return (
-          <ThemeIcon
-            svg={Confirm}
-            {...(color
-              ? {fill: theme.interactive[color].active.text}
-              : undefined)}
-          />
-        );
-      } else {
-        // In order to keep margins consistent, a transparent icon is returned.
-        return <ThemeIcon svg={Confirm} fill="#FFFFFF00" />;
-      }
+      return (
+        <ThemeIcon
+          svg={Confirm}
+          {...(color
+            ? {fill: theme.interactive[color].active.text}
+            : undefined)}
+          fillOpacity={checked ? 1 : 0}
+        />
+      );
     }
     case 'heading-expand': {
       const text = checked
