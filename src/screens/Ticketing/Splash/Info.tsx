@@ -33,6 +33,7 @@ export default function SplashInfo({navigation}: Props) {
         <View style={styles.contentContainer}>
           <View style={styles.textContent}>
             <ThemeText
+              type="body__primary--jumbo--bold"
               color="background_accent_3"
               style={[styles.text, styles.bold]}
             >
@@ -74,7 +75,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
   },
   text: {
-    textAlign: 'center',
     marginBottom: theme.spacings.large,
   },
   bold: {fontWeight: 'bold'},
