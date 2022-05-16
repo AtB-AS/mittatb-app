@@ -36,8 +36,8 @@ export default orgSpecificTranslations(OnboardingTexts, {
       titleA11yLabel: _('Velkommen til Reis appen', 'Welcome to the Reis app'),
       description: {
         part1: _(
-          'Her kan du planlegge reiser og sjekke avgangstider i hele Nordland. Flere tjenester og billettyper kommer!',
-          'Plan trips and check departure times throughout Nordland. More features and ticket products are coming soon!',
+          'Her kan du planlegge reiser og sjekke avgangstider i hele Nordland. Snart kommer også billettkjøp, slik at du kan planlegge, betale og gjennomføre reisen din i en og samme app!',
+          'Plan trips and check departure times throughout Nordland. App ticketing is coming soon, so that you may plan and buy tickets for your trip using only one app!',
         ),
         part3: _(
           'Du vil også kunne administrere billetter og eventuelle reisekort på den nye nettbutikken med samme konto.',
