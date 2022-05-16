@@ -145,12 +145,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             )}
             {authenticationType === 'phone' && (
               <Sections.LinkItem
-                text={t(DeleteProfileTexts.header.title)}
-                onPress={() => navigation.navigate('DeleteProfile')}
-              />
-            )}
-            {authenticationType === 'phone' && (
-              <Sections.LinkItem
                 text={t(ProfileTexts.sections.account.linkItems.logout.label)}
                 onPress={signOut}
                 testID="logoutButton"
