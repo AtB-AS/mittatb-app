@@ -38,6 +38,7 @@ const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
               disabled={!hasPrevious}
               iconPosition="left"
               icon={ArrowLeft}
+              interactiveColor="interactive_2"
               onPress={() => onNavigate(page - 1)}
               text={t(PaginationTexts.previous.label)}
               testID="previousTripButton"
@@ -61,6 +62,7 @@ const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
               disabled={!hasNext}
               iconPosition="right"
               icon={ArrowRight}
+              interactiveColor="interactive_2"
               onPress={() => onNavigate(page + 1)}
               text={t(PaginationTexts.next.label)}
               testID="nextTripButton"
@@ -113,6 +115,9 @@ const usePaginateStyles = StyleSheet.createThemeHook((theme) => ({
   subline: {
     alignItems: 'center',
     paddingBottom: theme.spacings.medium,
+  },
+  text: {
+    color: theme.static.background.background_0.text,
   },
 }));
 export default PaginatedDetailsHeader;
