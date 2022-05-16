@@ -29,6 +29,14 @@
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^1.0.7"
 
+"@atb-as/theme@^6.0.0-alpha.4":
+  version "6.0.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-6.0.0-alpha.4.tgz#3e5702f724b3daf010a89489bf9405abf71ae802"
+  integrity sha512-AN1iEXVSpp4OrSJ6+MtpuIOuSEaKqK0FtFofEzWASx7xu4+qI5CPU6WYf/zVwkce51S/xRaaH8L9T9fXTEVOEw==
+  dependencies:
+    hex-to-rgba "^2.0.1"
+    ts-deepmerge "^1.0.7"
+
 "@babel/code-frame@7.12.11":
   version "7.12.11"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.12.11.tgz#f4ad435aa263db935b8f10f2c552d23fb716a63f"
