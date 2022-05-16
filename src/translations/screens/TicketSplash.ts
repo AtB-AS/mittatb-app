@@ -24,12 +24,12 @@ export default orgSpecificTranslations(TicketSplashTexts, {
   nfk: {
     splash: {
       title: _(
-        'Her kommer billettkjøp i app!',
-        'App ticketing will be available here!',
+        'Billettkjøp i app kommer snart!',
+        'App ticketing is coming soon!',
       ),
       paragraph1: _(
-        'Når dette er på plass, kan du kjøpe og administrere bussbilletter til reisen i Reis appen din. Du vil da ha alt du trenger for å reise med kollektivtransport i Nordland i en og samme app! \nI mellomtiden må appen «Billett Nordland» brukes til kjøp av bussbilletter.',
-        'Once this is in place, you can buy and manage bus tickets for your trip in the “Reis app”. You will then have everything you need to travel with public transport in Nordland in one app! \nIn the meantime, the app "Billett Nordland" must be used to buy bus tickets.',
+        'Her kan du snart kjøpe og administrere billetter til reisen din. Du vil da ha alt du trenger for å reise med kollektivtransport i Nordland i en og samme app! \n\nI mellomtiden ber vi deg bruke appen «Billett Nordland» til kjøp av billetter.',
+        'You will soon be able to purchase and manage tickets for your trip here. You will then have everything you need to travel with public transport in Nordland in one app! \n\nIn the meantime, we ask you to use the "Billett Nordland" app to purchase tickets.',
       ),
     },
   },
