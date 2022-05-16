@@ -41,6 +41,7 @@ import Summary from './components/Summary';
 import DurationSelection from './components/DurationSelection';
 import StartTimeSelection from './components/StartTimeSelection';
 import TravellerSelection from './components/TravellerSelection';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 
 export type OverviewNavigationProp = DismissableStackNavigationProp<
   TicketingStackParams,
@@ -224,17 +225,19 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           />
         )}
 
-        <Summary
-          isLoading={isSearchingOffer}
-          isError={!!error}
-          price={totalPrice}
-          fromTariffZone={fromTariffZone}
-          toTariffZone={toTariffZone}
-          userProfilesWithCount={userProfilesWithCount}
-          preassignedFareProduct={preassignedFareProduct}
-          travelDate={travelDate}
-          style={styles.summary}
-        />
+        <FullScreenFooter>
+          <Summary
+            isLoading={isSearchingOffer}
+            isError={!!error}
+            price={totalPrice}
+            fromTariffZone={fromTariffZone}
+            toTariffZone={toTariffZone}
+            userProfilesWithCount={userProfilesWithCount}
+            preassignedFareProduct={preassignedFareProduct}
+            travelDate={travelDate}
+            style={styles.summary}
+          />
+        </FullScreenFooter>
       </ScrollView>
     </View>
   );
@@ -381,7 +384,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
-  summary: {margin: theme.spacings.medium},
+  summary: {marginTop: theme.spacings.medium},
 }));
 
 export default PurchaseOverview;
