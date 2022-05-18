@@ -3,7 +3,11 @@ import {View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {dictionary, useTranslation} from '@atb/translations';
+import {
+  CancelledDepartureTexts,
+  dictionary,
+  useTranslation,
+} from '@atb/translations';
 import {
   formatToClockOrLongRelativeMinutes,
   formatToClockOrRelativeMinutes,
@@ -70,7 +74,9 @@ export default function EstimatedCallItem({
       a11yDateInfo = `${a11yDate} ${a11yTimeWithRealtimePrefix}`;
     }
 
-    return `${a11yLine} ${a11yFrontText} ${a11yDateInfo}`;
+    return `${
+      isTripCancelled && t(CancelledDepartureTexts.message)
+    } ${a11yLine} ${a11yFrontText} ${a11yDateInfo}`;
   };
 
   return (
