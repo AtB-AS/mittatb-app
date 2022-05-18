@@ -58,7 +58,11 @@ export default function ({
         <ActivityIndicator size="large" />
       ) : (
         <>
-          <ThemeText type="body__primary--bold" style={styles.price}>
+          <ThemeText
+            type="body__primary--bold"
+            style={styles.price}
+            testID="offerTotalPriceText"
+          >
             {t(PurchaseOverviewTexts.summary.price(formattedPrice))}
           </ThemeText>
           <ThemeText type="body__secondary" style={styles.message}>

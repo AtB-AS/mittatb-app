@@ -45,13 +45,30 @@ export const newTicketExists = async (zoneInfo: string = '') => {
   }
 };
 
+// Helper for handling keyboard-popup
+const tapZone = async (zoneId: string) => {
+  await tapById(zoneId);
+  const zoneIdExists = await idExists(by.id(zoneId));
+  if (zoneIdExists) {
+    await tapById(zoneId);
+  }
+};
+
+// Set one zone
+export const setZone = async (direction: 'To' | 'From', zone: string) => {
+  await tapById('selectZonesButton');
+  await tapById(`search${direction}Button`);
+  await tapZone(`tariffZone${zone}Button`);
+  await tapById('saveZonesButton');
+};
+
 // Set zones
 export const setZones = async (fromZone: string, toZone: string) => {
   await tapById('selectZonesButton');
   await tapById('searchFromButton');
-  await tapById(`tariffZone${fromZone}Button`);
+  await tapZone(`tariffZone${fromZone}Button`);
   await tapById('searchToButton');
-  await tapById(`tariffZone${toZone}Button`);
+  await tapZone(`tariffZone${toZone}Button`);
   await tapById('saveZonesButton');
 };
 

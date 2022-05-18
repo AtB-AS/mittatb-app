@@ -372,6 +372,84 @@ describe('Travel Search', () => {
     await verifyLegTypeOnQuays(departure, arrival, noQuays);
   });
 
+  // Check that recent journeys are listed and able to choose
+  it('should list recent journeys', async () => {
+    const departure1 = 'Prinsens gate';
+    const departure2 = 'Nidarosdomen';
+    const arrival1 = 'Melhus skysstasjon';
+    const arrival2 = 'Melhus sentrum';
+
+    // Remove the search history
+    await goToTab('profile');
+    await removeSearchHistory();
+    await goToTab('assistant');
+
+    // Search #1
+    await travelSearch(departure1, arrival1);
+
+    // Search #2
+    await tapById('searchToButton');
+    await setInputById('locationSearchInput', arrival2);
+    await chooseSearchResult('locationSearchItem0');
+
+    // Search #3
+    await tapById('searchFromButton');
+    await setInputById('locationSearchInput', departure2);
+    await chooseSearchResult('locationSearchItem0');
+
+    // Verify recent journeys with given departure
+    await tapById('searchFromButton');
+    await expectIdToHaveChildText(
+      'journeyHistoryItem0',
+      `${departure2} - ${arrival2}`,
+    );
+
+    // Verify recent journeys with any departure
+    await clearInputById('locationSearchInput');
+    await expectIdToHaveChildText(
+      'journeyHistoryItem0',
+      `${departure2} - ${arrival2}`,
+    );
+    await expectIdToHaveChildText(
+      'journeyHistoryItem1',
+      `${departure1} - ${arrival2}`,
+    );
+    await expectIdToHaveChildText(
+      'journeyHistoryItem2',
+      `${departure1} - ${arrival1}`,
+    );
+  });
+
+  // Check that recent locations are listed and able to choose
+  it('should list recent locations', async () => {
+    const departure1 = 'Prinsens gate';
+    const departure2 = 'Studentersamfundet';
+    const arrival1 = 'Melhus skysstasjon';
+    const arrival2 = 'Melhus sentrum';
+
+    // Remove the search history
+    await goToTab('profile');
+    await removeSearchHistory();
+    await goToTab('assistant');
+
+    // Search #1
+    await travelSearch(departure1, arrival1);
+
+    // Search #2
+    await travelSearch(departure2, arrival2);
+
+    // Verify no recent locations with given departure
+    await tapById('searchFromButton');
+    await expectNotToExistsById('previousResultItem0');
+
+    // Verify recent journeys with any departure
+    await clearInputById('locationSearchInput');
+    await expectIdToHaveText('previousResultItem0Name', arrival2);
+    await expectIdToHaveText('previousResultItem1Name', departure2);
+    await expectIdToHaveText('previousResultItem2Name', arrival1);
+    await expectIdToHaveText('previousResultItem3Name', departure1);
+  });
+
   // Test the use of favourites in a travel search
   it('should be able to use favourites in the travel search', async () => {
     const fav1 = 'Prinsens gate';
@@ -422,74 +500,6 @@ describe('Travel Search', () => {
     await goToTab('assistant');
     await expectToExistsById('favoriteChip0');
     await expectNotToExistsById('favoriteChip1');
-  });
-
-  // Check that recent journeys are listed and able to choose
-  it('should list recent journeys', async () => {
-    const departure1 = 'Prinsens gate';
-    const departure2 = 'Nidarosdomen';
-    const arrival1 = 'Melhus skysstasjon';
-    const arrival2 = 'Melhus sentrum';
-
-    // Search #1
-    await travelSearch(departure1, arrival1);
-
-    // Search #2
-    await tapById('searchToButton');
-    await setInputById('locationSearchInput', arrival2);
-    await chooseSearchResult('locationSearchItem0');
-
-    // Search #3
-    await tapById('searchFromButton');
-    await setInputById('locationSearchInput', departure2);
-    await chooseSearchResult('locationSearchItem0');
-
-    // Verify recent journeys with given departure
-    await tapById('searchFromButton');
-    await expectIdToHaveChildText(
-      'journeyHistoryItem0',
-      `${departure2} - ${arrival2}`,
-    );
-
-    // Verify recent journeys with any departure
-    await clearInputById('locationSearchInput');
-    await expectIdToHaveChildText(
-      'journeyHistoryItem0',
-      `${departure2} - ${arrival2}`,
-    );
-    await expectIdToHaveChildText(
-      'journeyHistoryItem1',
-      `${departure1} - ${arrival2}`,
-    );
-    await expectIdToHaveChildText(
-      'journeyHistoryItem2',
-      `${departure1} - ${arrival1}`,
-    );
-  });
-
-  // Check that recent locations are listed and able to choose
-  it('should list recent locations', async () => {
-    const departure1 = 'Prinsens gate';
-    const departure2 = 'Studentersamfundet';
-    const arrival1 = 'Melhus skysstasjon';
-    const arrival2 = 'Melhus sentrum';
-
-    // Search #1
-    await travelSearch(departure1, arrival1);
-
-    // Search #2
-    await travelSearch(departure2, arrival2);
-
-    // Verify no recent locations with given departure
-    await tapById('searchFromButton');
-    await expectNotToExistsById('previousResultItem0');
-
-    // Verify recent journeys with any departure
-    await clearInputById('locationSearchInput');
-    await expectIdToHaveText('previousResultItem0Name', arrival2);
-    await expectIdToHaveText('previousResultItem1Name', departure2);
-    await expectIdToHaveText('previousResultItem2Name', arrival1);
-    await expectIdToHaveText('previousResultItem3Name', departure1);
   });
 
   // Tapping should reset the travel search
