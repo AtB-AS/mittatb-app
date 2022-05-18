@@ -2,7 +2,7 @@ import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
 import {Info, Warning} from '@atb/assets/svg/color/situations';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
 import MessageBox, {TinyMessageBox} from '@atb/components/message-box';
-import PaginatedDetailsHeader from '@atb/components/pagination';
+import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
@@ -41,7 +41,7 @@ import {canSellTicketsForSubMode} from '@atb/operator-config';
 import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import CancelledDepartureMessage from '@atb/components/cancelled-departure';
+import CancelledDepartureMessage from '@atb/screens/TripDetails/components/CancelledDepartureMessage';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];

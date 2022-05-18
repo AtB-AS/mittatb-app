@@ -1,5 +1,5 @@
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
-import PaginatedDetailsHeader from '@atb/components/pagination';
+import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
 import Header from '@atb/components/screen-header';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
