@@ -157,6 +157,7 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
       case 'geolocation':
         return t(DeparturesTexts.stopPlaceList.listDescription.geoLoc);
       case 'search':
+      case 'favorite':
         return (
           t(DeparturesTexts.stopPlaceList.listDescription.address) +
           fromLocation.name
