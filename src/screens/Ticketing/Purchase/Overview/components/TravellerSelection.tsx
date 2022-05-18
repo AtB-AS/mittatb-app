@@ -36,8 +36,11 @@ export default function TravellerSelection({
     );
 
   useEffect(() => {
-    setTravellerSelection(userCountState.userProfilesWithCount);
-  }, [userCountState.userProfilesWithCount]);
+    const filteredSelection = userCountState.userProfilesWithCount.filter((u) =>
+      selectableUserProfiles.find((i) => i.id === u.id),
+    );
+    setTravellerSelection(filteredSelection);
+  }, [userCountState.userProfilesWithCount, preassignedFareProduct]);
 
   return (
     <View style={style}>

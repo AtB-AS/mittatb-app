@@ -19,10 +19,6 @@ export default function SingleTravellerSelection({
     addCount(u.userTypeString);
   };
 
-  // Default to first userProfile if the current selection is invalid
-  if (!userProfilesWithCount.find((u) => u.id === selectedProfile?.id))
-    select(userProfilesWithCount[0]);
-
   return (
     <Sections.Section>
       <Sections.RadioSection<UserProfileWithCount>

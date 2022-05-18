@@ -85,30 +85,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     userProfiles,
     preassignedFareProduct,
   );
-  const [userProfilesWithCount, setUserProfilesWithCount] = useState(
+  const [travellerSelection, setTravellerSelection] = useState(
     defaultUserProfilesWithCount,
   );
-
-  const [selectableUserProfiles, setSelectableUserProfiles] = useState(
-    defaultUserProfilesWithCount,
-  );
-
-  useEffect(() => {
-    const options = defaultUserProfilesWithCount.filter((p) => {
-      const profileIds = preassignedFareProduct.limitations.userProfileRefs;
-      return profileIds.includes(p.id);
-    });
-    const optionIds = options.map((p) => p.id);
-    const selectedUserProfiles = userProfilesWithCount
-      .filter((p) => p.count > 0)
-      .map((p) => p.id);
-
-    if (!selectedUserProfiles.every((p) => optionIds.includes(p))) {
-      setUserProfilesWithCount(defaultUserProfilesWithCount);
-    } else {
-      setSelectableUserProfiles(options);
-    }
-  }, [preassignedFareProduct, userProfilesWithCount]);
 
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
   const {fromTariffZone = defaultTariffZone, toTariffZone = defaultTariffZone} =
@@ -120,7 +99,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
-    userProfilesWithCount,
+    travellerSelection,
     travelDate,
   );
 
@@ -176,9 +155,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           )}
 
           <TravellerSelection
-            setTravellerSelection={setUserProfilesWithCount}
+            setTravellerSelection={setTravellerSelection}
             preassignedFareProduct={preassignedFareProduct}
-            selectableUserProfiles={selectableUserProfiles}
+            selectableUserProfiles={defaultUserProfilesWithCount}
             style={styles.selectionComponent}
           />
 
@@ -235,7 +214,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             price={totalPrice}
             fromTariffZone={fromTariffZone}
             toTariffZone={toTariffZone}
-            userProfilesWithCount={userProfilesWithCount}
+            userProfilesWithCount={travellerSelection}
             preassignedFareProduct={preassignedFareProduct}
             travelDate={travelDate}
             style={styles.summary}
