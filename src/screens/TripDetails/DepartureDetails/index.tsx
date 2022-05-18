@@ -40,9 +40,8 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
 import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
-import {TripPattern} from '@atb/api/types/trips';
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import CancelledDepartureMessage from '@atb/components/cancelled-departure';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -132,7 +131,9 @@ export default function DepartureDetails({navigation, route}: Props) {
             onNavigate={onPaginactionPress}
             showPagination={hasMultipleItems}
             currentDate={activeItem?.date}
+            isTripCancelled={activeItem.isTripCancelled}
           />
+          {activeItem.isTripCancelled && <CancelledDepartureMessage />}
           <SituationMessages
             situations={parentSituations}
             containerStyle={styles.situationsContainer}

@@ -13,6 +13,7 @@ type PaginatedDetailsHeader = ViewProps & {
   onNavigate(newPage: number): void;
   showPagination?: boolean;
   currentDate?: string | Date;
+  isTripCancelled?: boolean;
 };
 const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
   page,
@@ -21,6 +22,7 @@ const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
   style,
   currentDate,
   showPagination = true,
+  isTripCancelled = false,
 }) => {
   const styles = usePaginateStyles();
   const {t, language} = useTranslation();
@@ -79,6 +81,7 @@ const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
               ),
             )}
             testID="tripStartTime"
+            style={isTripCancelled && styles.strikethrough}
           >
             {fullDateTime(currentDate, language)}
           </ThemeText>
@@ -113,6 +116,9 @@ const usePaginateStyles = StyleSheet.createThemeHook((theme) => ({
   subline: {
     alignItems: 'center',
     paddingBottom: theme.spacings.medium,
+  },
+  strikethrough: {
+    textDecorationLine: 'line-through',
   },
 }));
 export default PaginatedDetailsHeader;
