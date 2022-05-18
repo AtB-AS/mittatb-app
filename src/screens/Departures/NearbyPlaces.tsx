@@ -121,7 +121,8 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
 
   useEffect(() => {
     if (
-      fromLocation?.resultType == 'search' &&
+      (fromLocation?.resultType == 'search' ||
+        fromLocation?.resultType === 'favorite') &&
       fromLocation?.layer === 'venue'
     ) {
       navigation.navigate('PlaceScreen', {
