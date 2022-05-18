@@ -56,6 +56,12 @@ describe('Short wait time evaluator', () => {
     expectedStartTime: addMinutes(nowDate, 15),
     expectedEndTime: addMinutes(nowDate, 20),
   } as Leg;
+
+  const weirdLeg: Leg = {
+    expectedStartTime: false,
+    expectedEndTime: {weird: true},
+  } as Leg;
+
   it('catches a short wait', () => {
     const isShortWait = hasShortWaitTime([Leg1, Leg2]);
     expect(isShortWait).toBe(true);
@@ -74,6 +80,10 @@ describe('Short wait time evaluator', () => {
   });
   it('passes with empty array', () => {
     const isShortWait = hasShortWaitTime([]);
+    expect(isShortWait).toBe(false);
+  });
+  it('passes on weird data', () => {
+    const isShortWait = hasShortWaitTime([weirdLeg, weirdLeg]);
     expect(isShortWait).toBe(false);
   });
 });
