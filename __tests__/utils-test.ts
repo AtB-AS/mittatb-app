@@ -58,7 +58,7 @@ describe('Short wait time evaluator', () => {
   } as Leg;
 
   const weirdLeg: Leg = {
-    expectedStartTime: false,
+    expectedStartTime: 'non parsable string',
     expectedEndTime: {weird: true},
   } as Leg;
 
