@@ -19,6 +19,7 @@ import {
   ensureTicketingIsAccepted,
   getTravelInfoForRecentTicket,
   newTicketExists,
+  setZone,
   setZones,
   verifyTravellersAndZoneInSummary,
 } from '../utils/tickets';
@@ -77,7 +78,7 @@ describe('Tickets anonymous', () => {
     await expectToBeVisibleByPartOfText('Travel in 1 zone');
     await expectIdToHaveText(
       'offerTotalPriceText',
-      `Total: ${ticketInfo.singleTicketAdultPrice} kr`,
+      `Total ${ticketInfo.singleTicketAdultPrice}.00 kr`,
     );
 
     await tapById('goToPaymentButton');
@@ -98,7 +99,7 @@ describe('Tickets anonymous', () => {
     await expectToBeVisibleByText('1 Adult');
     await expectIdToHaveText(
       'offerTotalPriceText',
-      `Total: ${ticketInfo.singleTicketAdultPrice} kr`,
+      `Total ${ticketInfo.singleTicketAdultPrice}.00 kr`,
     );
 
     // Change the number of travellers
@@ -114,7 +115,7 @@ describe('Tickets anonymous', () => {
 
     // Verify
     await expectToBeVisibleByText('2 Adult, 1 Child');
-    await expectIdToHaveText('offerTotalPriceText', `Total: ${totPrice} kr`);
+    await expectIdToHaveText('offerTotalPriceText', `Total ${totPrice}.00 kr`);
 
     await tapById('goToPaymentButton');
     await expectToBeVisibleByText(`${totPrice} kr`);
@@ -128,36 +129,28 @@ describe('Tickets anonymous', () => {
     await tapById('singleTicket');
 
     // Set zone A -> A
-    await tapById('selectZonesButton');
-    await tapById('searchFromButton');
-    await tapById('tariffZoneAButton');
-    await tapById('searchToButton');
-    await tapById('tariffZoneAButton');
-    await tapById('saveZonesButton');
+    await setZones('A', 'A');
 
     // Verify
     await expectToBeVisibleByText('Travel in 1 zone');
     await expectToBeVisibleByText('Zone A');
     await expectIdToHaveText(
       'offerTotalPriceText',
-      `Total: ${ticketInfo.singleTicketAdultPrice} kr`,
+      `Total ${ticketInfo.singleTicketAdultPrice}.00 kr`,
     );
     await tapById('goToPaymentButton');
     await expectToBeVisibleByText('Valid in zone A');
     await goBack();
 
     // Set zone A -> B1
-    await tapById('selectZonesButton');
-    await tapById('searchToButton');
-    await tapById('tariffZoneB1Button');
-    await tapById('saveZonesButton');
+    await setZone('To', 'B1');
 
     // Verify
     await expectToBeVisibleByText('Travel in 2 zones');
     await expectToBeVisibleByText('Zone A to zone B1');
     await expectIdToHaveText(
       'offerTotalPriceText',
-      `Total: ${ticketInfo.singleTicketZoneAZoneB1Price} kr`,
+      `Total ${ticketInfo.singleTicketZoneAZoneB1Price}.00 kr`,
     );
     await tapById('goToPaymentButton');
     await expectToBeVisibleByText('Valid from zone A to zone B1');
@@ -245,7 +238,7 @@ describe('Tickets authorized', () => {
 
       await expectIdToHaveText(
         'offerTotalPriceText',
-        `Total: ${ticketInfo.singleTicketAdultPrice} kr`,
+        `Total ${ticketInfo.singleTicketAdultPrice}.00 kr`,
       );
 
       // Set zone E1 -> E1
@@ -307,7 +300,7 @@ describe('Tickets authorized', () => {
 
       await expectIdToHaveText(
         'offerTotalPriceText',
-        `Total: ${ticketInfo.periodic30daysPrice} kr`,
+        `Total ${ticketInfo.periodic30daysPrice}.00 kr`,
       );
 
       await tapById('goToPaymentButton');
