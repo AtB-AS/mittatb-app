@@ -42,7 +42,7 @@ const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
             onPress: close,
             text: t(ScreenHeaderTexts.headerButton.cancel.text),
           }}
-          color={'background_2'}
+          color={'background_1'}
           setFocusOnLoad={false}
         />
       </View>

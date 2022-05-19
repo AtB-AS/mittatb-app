@@ -323,7 +323,7 @@ const Assistant: React.FC<Props> = ({
                 language,
               )}
               accessibilityHint={t(AssistantTexts.dateInput.a11yHint)}
-              interactiveColor="interactive_1"
+              interactiveColor="interactive_0"
               onPress={onSearchTimePress}
               testID="assistantDateTimePicker"
             />

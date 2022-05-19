@@ -48,7 +48,7 @@ const TravelDate = forwardRef<ScrollView, Props>(
             text: t(ScreenHeaderTexts.headerButton.cancel.text),
             testID: 'cancelButton',
           }}
-          color="background_2"
+          color="background_1"
           setFocusOnLoad={false}
         />
 
@@ -81,7 +81,7 @@ const TravelDate = forwardRef<ScrollView, Props>(
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.static.background.background_1.background,
   },
   contentContainer: {
     padding: theme.spacings.medium,

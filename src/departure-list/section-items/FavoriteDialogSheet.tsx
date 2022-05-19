@@ -29,7 +29,7 @@ const FavoriteDialogSheet = forwardRef<View, Props>(
       <BottomSheetContainer>
         <ScreenHeaderWithoutNavigation
           title={t(NearbyTexts.favoriteDialogSheet.title)}
-          color="background_2"
+          color="background_1"
           leftButton={{
             type: 'cancel',
             onPress: close,
