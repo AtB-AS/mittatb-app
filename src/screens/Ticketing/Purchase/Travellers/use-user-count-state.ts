@@ -8,7 +8,8 @@ type ReducerState = {
 
 type CountReducerAction =
   | {type: 'INCREMENT_COUNT'; userType: string}
-  | {type: 'DECREMENT_COUNT'; userType: string};
+  | {type: 'DECREMENT_COUNT'; userType: string}
+  | {type: 'UPDATE_SELECTABLE'; selectableUserProfiles: UserProfileWithCount[]};
 
 type CountReducer = (
   prevState: ReducerState,
@@ -47,6 +48,20 @@ const countReducer: CountReducer = (prevState, action): ReducerState => {
         ),
       };
     }
+    case 'UPDATE_SELECTABLE': {
+      return {
+        ...prevState,
+        userProfilesWithCount: action.selectableUserProfiles.map(
+          (selectable) => ({
+            ...selectable,
+            count:
+              prevState.userProfilesWithCount.find(
+                (prev) => prev.id === selectable.id,
+              )?.count || 0,
+          }),
+        ),
+      };
+    }
   }
 };
 
@@ -54,6 +69,7 @@ export type UserCountState = {
   userProfilesWithCount: UserProfileWithCount[];
   addCount: (userTypeString: string) => void;
   removeCount: (userTypeString: string) => void;
+  updateSelectable: (selectableUserProfiles: UserProfileWithCount[]) => void;
 };
 
 export default function useUserCountState(
@@ -71,10 +87,16 @@ export default function useUserCountState(
     (userType: string) => dispatch({type: 'DECREMENT_COUNT', userType}),
     [dispatch],
   );
+  const updateSelectable = useCallback(
+    (selectableUserProfiles: UserProfileWithCount[]) =>
+      dispatch({type: 'UPDATE_SELECTABLE', selectableUserProfiles}),
+    [dispatch],
+  );
 
   return {
     ...userCountState,
     addCount,
     removeCount,
+    updateSelectable,
   };
 }

@@ -42,6 +42,10 @@ export default function TravellerSelection({
     setTravellerSelection(filteredSelection);
   }, [userCountState.userProfilesWithCount, preassignedFareProduct]);
 
+  useEffect(() => {
+    userCountState.updateSelectable(selectableUserProfiles);
+  }, [selectableUserProfiles]);
+
   return (
     <View style={style}>
       <ThemeText type="body__secondary" color="secondary" style={styles.title}>
