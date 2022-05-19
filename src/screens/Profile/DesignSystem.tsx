@@ -8,7 +8,13 @@ import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import MessageBox from '@atb/components/message-box';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {InteractiveColor, textNames, TextNames} from '@atb/theme/colors';
+import {ContrastColor} from '@atb-as/theme';
+import {
+  InteractiveColor,
+  StaticColorByType,
+  textNames,
+  TextNames,
+} from '@atb/theme/colors';
 import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -34,6 +40,41 @@ export default function DesignSystem() {
       interactiveColor={color as InteractiveColor}
     />
   ));
+
+  const Swatch: React.FC<{color: ContrastColor; name: string}> = ({
+    color,
+    name,
+  }) => (
+    <ThemeText
+      style={{
+        backgroundColor: color.background,
+        color: color.text,
+        padding: theme.spacings.medium,
+      }}
+    >
+      {name}
+    </ThemeText>
+  );
+
+  const backgroundSwatches = Object.keys(theme.static.background).map(
+    (color) => {
+      const staticColor =
+        theme.static.background[color as StaticColorByType<'background'>];
+      return <Swatch color={staticColor} name={color} key={color} />;
+    },
+  );
+
+  const transportSwatches = Object.keys(theme.static.transport).map((color) => {
+    const staticColor =
+      theme.static.transport[color as StaticColorByType<'transport'>];
+    return <Swatch color={staticColor} name={color} key={color} />;
+  });
+
+  const statusSwatches = Object.keys(theme.static.status).map((color) => {
+    const staticColor =
+      theme.static.status[color as StaticColorByType<'status'>];
+    return <Swatch color={staticColor} name={color} key={color} />;
+  });
 
   const radioSegmentsOptions = [
     {text: 'Option 1', onPress: () => setSegmentedSelection(0)},
@@ -277,6 +318,10 @@ export default function DesignSystem() {
           <ButtonGroup>{buttons}</ButtonGroup>
         </View>
 
+        <View style={style.swatchGroup}>{backgroundSwatches}</View>
+        <View style={style.swatchGroup}>{transportSwatches}</View>
+        <View style={style.swatchGroup}>{statusSwatches}</View>
+
         <View style={{margin: theme.spacings.medium}}>
           <ThemeText>Segmented controls:</ThemeText>
           {radioSegments}
@@ -300,5 +345,8 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   buttons: {
     marginHorizontal: theme.spacings.medium,
+  },
+  swatchGroup: {
+    margin: theme.spacings.medium,
   },
 }));
