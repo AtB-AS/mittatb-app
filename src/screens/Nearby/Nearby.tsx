@@ -360,7 +360,7 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     alignContent: 'space-between',
     borderStyle: 'solid',
-    borderColor: theme.static.background.background_accent_3.background,
+    borderColor: theme.interactive.interactive_0.default.background,
     borderWidth: 2,
     padding: 2,
     borderRadius: 12,
