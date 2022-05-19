@@ -34,6 +34,7 @@
     "id": "ATB:PreassignedFareProduct:925469fb",
     "version": "ATB:Version:12b94a4d-b347-41c9-a6c6-35bc3386d4f4",
     "type": "period",
+    "durationDays": 30,
     "distributionChannel": [
       "app",
       "web"
@@ -65,6 +66,7 @@
     "id": "ATB:PreassignedFareProduct:f87316e6",
     "version": "ATB:Version:62736d83-3854-4c71-b9f2-d2d9b52997ab",
     "type": "period",
+    "durationDays": 180,
     "name": {
       "lang": "nob",
       "value": "180-dagersbillett"
@@ -96,6 +98,7 @@
     "id": "ATB:PreassignedFareProduct:6dd9beab",
     "version": "ATB:Version:c7e5a0d8-78e8-46e9-a019-07348b8328db",
     "type": "period",
+    "durationDays": 7,
     "distributionChannel": [
       "app",
       "web"
