@@ -119,9 +119,6 @@ const usePaginateStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     paddingBottom: theme.spacings.medium,
   },
-  text: {
-    color: theme.static.background.background_0.text,
-  },
   strikethrough: {
     textDecorationLine: 'line-through',
   },
