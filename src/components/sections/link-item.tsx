@@ -84,9 +84,11 @@ export default function LinkItem({
         {iconEl}
       </View>
       {subtitle && (
-        <ThemeText color="secondary" type="body__secondary">
-          {subtitle}
-        </ThemeText>
+        <View style={disabledStyle}>
+          <ThemeText color="secondary" type="body__secondary">
+            {subtitle}
+          </ThemeText>
+        </View>
       )}
     </TouchableOpacity>
   );

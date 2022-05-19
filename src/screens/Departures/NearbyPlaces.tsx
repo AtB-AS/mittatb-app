@@ -121,7 +121,8 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
 
   useEffect(() => {
     if (
-      fromLocation?.resultType == 'search' &&
+      (fromLocation?.resultType == 'search' ||
+        fromLocation?.resultType === 'favorite') &&
       fromLocation?.layer === 'venue'
     ) {
       navigation.navigate('PlaceScreen', {
@@ -156,6 +157,7 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
       case 'geolocation':
         return t(DeparturesTexts.stopPlaceList.listDescription.geoLoc);
       case 'search':
+      case 'favorite':
         return (
           t(DeparturesTexts.stopPlaceList.listDescription.address) +
           fromLocation.name
