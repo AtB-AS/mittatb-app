@@ -28,6 +28,7 @@ import analytics from '@react-native-firebase/analytics';
 import {updateMetadata} from '@atb/chat/metadata';
 import parsePhoneNumber from 'libphonenumber-js';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -141,6 +142,12 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                   })
                 }
                 testID="loginButton"
+              />
+            )}
+            {authenticationType === 'phone' && (
+              <Sections.LinkItem
+                text={t(DeleteProfileTexts.header.title)}
+                onPress={() => navigation.navigate('DeleteProfile')}
               />
             )}
             {authenticationType === 'phone' && (

@@ -222,6 +222,19 @@ export default function DesignSystem() {
             onPress={() => {}}
             icon={<ThemeIcon svg={Edit} />}
           />
+          <Sections.LinkItem
+            text="Dangerous Link Item"
+            subtitle="Subtitle text"
+            onPress={() => {}}
+            icon={<ThemeIcon svg={Delete} colorType="error" />}
+          />
+          <Sections.LinkItem
+            text="Disabled Dangerous Link Item text"
+            subtitle="Disabled Subtitle text"
+            disabled={true}
+            onPress={() => {}}
+            icon={<ThemeIcon svg={Delete} colorType="error" />}
+          />
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
