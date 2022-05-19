@@ -32,7 +32,7 @@ const ServiceDisruptionSheet = forwardRef<View, Props>(
             text: t(ScreenHeaderTexts.headerButton.cancel.text),
             testID: 'cancelButton',
           }}
-          color={'background_2'}
+          color={'background_1'}
           setFocusOnLoad={false}
         />
 

@@ -164,7 +164,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
             onPress: close,
             text: t(ScreenHeaderTexts.headerButton.cancel.text),
           }}
-          color={'background_2'}
+          color={'background_1'}
           setFocusOnLoad={false}
         />
         <View style={{flexShrink: 100, flexGrow: 100}}>
@@ -224,8 +224,8 @@ const SelectPaymentMethod: React.FC<Props> = ({
           <LinearGradient
             style={styles.gradient}
             colors={[
-              hexToRgba(theme.static.background.background_2.background, 0),
-              hexToRgba(theme.static.background.background_2.background, 1),
+              hexToRgba(theme.static.background.background_1.background, 0),
+              hexToRgba(theme.static.background.background_1.background, 1),
             ]}
             pointerEvents={'none'}
           />
@@ -512,7 +512,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.static.background.background_1.background,
     paddingHorizontal: theme.spacings.medium,
   },
   rowJustifyEnd: {flex: 1, flexDirection: 'row', justifyContent: 'flex-end'},

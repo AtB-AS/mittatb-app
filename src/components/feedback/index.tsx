@@ -338,7 +338,7 @@ export const Feedback = ({
               text={t(FeedbackTexts.submitText.submitFeedback)}
               onPress={submitFeedbackWithAlternatives}
               mode="primary"
-              interactiveColor="interactive_1"
+              interactiveColor="interactive_0"
             />
           </View>
         )}

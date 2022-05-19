@@ -69,7 +69,7 @@ const DepartureTimeSheet = forwardRef<ScrollView, Props>(
             onPress: close,
             text: t(ScreenHeaderTexts.headerButton.cancel.text),
           }}
-          color={'background_2'}
+          color={'background_1'}
           setFocusOnLoad={false}
         />
 
