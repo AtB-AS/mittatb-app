@@ -22,6 +22,7 @@ type QuaySectionProps = {
     serviceDate: string,
     date?: string,
     fromQuayId?: string,
+    isTripCancelled?: boolean,
   ) => void;
 };
 
@@ -101,6 +102,7 @@ export default function QuaySection({
                       departure.date,
                       departure.expectedDepartureTime,
                       departure.quay?.id,
+                      departure.cancellation,
                     );
                 }}
                 accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}

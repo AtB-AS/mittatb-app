@@ -60,6 +60,7 @@ export default function PlaceScreen({
     serviceDate: string,
     date?: string,
     fromQuayId?: string,
+    isTripCancelled?: boolean,
   ) => {
     if (!serviceJourneyId || !date) return;
     navigation.navigate('DepartureDetails', {
@@ -69,6 +70,7 @@ export default function PlaceScreen({
           serviceDate,
           date,
           fromQuayId,
+          isTripCancelled,
         },
       ],
     });

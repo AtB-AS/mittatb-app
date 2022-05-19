@@ -3,7 +3,11 @@ import {View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {dictionary, useTranslation} from '@atb/translations';
+import {
+  CancelledDepartureTexts,
+  dictionary,
+  useTranslation,
+} from '@atb/translations';
 import {
   formatToClockOrLongRelativeMinutes,
   formatToClockOrRelativeMinutes,
@@ -17,6 +21,7 @@ import useFontScale from '@atb/utils/use-font-scale';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {isToday, parseISO} from 'date-fns';
+import {Warning} from '../../../assets/svg/color/situations';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
@@ -40,6 +45,8 @@ export default function EstimatedCallItem({
   const timeWithRealtimePrefix = departure.realtime
     ? time
     : t(dictionary.missingRealTimePrefix) + time;
+
+  const isTripCancelled = departure.cancellation;
 
   const getA11yLineLabel = () => {
     const a11yLine = line?.publicCode
@@ -67,7 +74,9 @@ export default function EstimatedCallItem({
       a11yDateInfo = `${a11yDate} ${a11yTimeWithRealtimePrefix}`;
     }
 
-    return `${a11yLine} ${a11yFrontText} ${a11yDateInfo}`;
+    return `${
+      isTripCancelled && t(CancelledDepartureTexts.message)
+    } ${a11yLine} ${a11yFrontText} ${a11yDateInfo}`;
   };
 
   return (
@@ -87,7 +96,12 @@ export default function EstimatedCallItem({
       <ThemeText style={styles.lineName} testID={testID + 'Name'}>
         {departure.destinationDisplay?.frontText}
       </ThemeText>
-      <ThemeText type="body__primary--bold" testID={testID + 'Time'}>
+      {isTripCancelled && <Warning style={styles.warningIcon} />}
+      <ThemeText
+        type="body__primary--bold"
+        testID={testID + 'Time'}
+        style={isTripCancelled && styles.strikethrough}
+      >
         {timeWithRealtimePrefix}
       </ThemeText>
     </View>
@@ -164,5 +178,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   lineChipText: {
     color: theme.static.background.background_accent_3.text,
     textAlign: 'center',
+  },
+  strikethrough: {
+    textDecorationLine: 'line-through',
+  },
+  warningIcon: {
+    marginRight: theme.spacings.small,
   },
 }));
