@@ -88,6 +88,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const [travellerSelection, setTravellerSelection] = useState(
     defaultUserProfilesWithCount,
   );
+  const hasSelection = travellerSelection.some((u) => u.count);
 
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
   const {fromTariffZone = defaultTariffZone, toTariffZone = defaultTariffZone} =
@@ -210,7 +211,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         <FullScreenFooter>
           <Summary
             isLoading={isSearchingOffer}
-            isError={!!error}
+            isError={!!error || !hasSelection}
             price={totalPrice}
             fromTariffZone={fromTariffZone}
             toTariffZone={toTariffZone}

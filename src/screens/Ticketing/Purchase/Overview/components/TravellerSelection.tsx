@@ -32,7 +32,7 @@ export default function TravellerSelection({
   const userCountState = useUserCountState(selectableUserProfiles);
   const selectableUserProfilesWithCount =
     userCountState.userProfilesWithCount.filter((a) =>
-      selectableUserProfiles.find((b) => a.id === b.id),
+      selectableUserProfiles.some((b) => a.id === b.id),
     );
 
   useEffect(() => {
