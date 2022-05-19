@@ -20,7 +20,6 @@ export {default as ServiceDisruptionsTexts} from './components/ServiceDisruption
 export {default as CancelledDepartureTexts} from './components/CancelledDeparture';
 export {default as LocationSearchTexts} from './screens/subscreens/LocationSearch';
 export {default as ProductTexts} from './screens/subscreens/Product';
-export {default as TravellersTexts} from './screens/subscreens/Travellers';
 export {default as TariffZonesTexts} from './screens/subscreens/TariffZones';
 export {default as TariffZoneSearchTexts} from './screens/subscreens/TariffZoneSearch';
 export {default as PaymentCreditCardTexts} from './screens/subscreens/PaymentCreditCard';

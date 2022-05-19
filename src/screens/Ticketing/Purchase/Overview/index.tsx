@@ -1,6 +1,3 @@
-import {Edit} from '@atb/assets/svg/mono-icons/actions';
-import * as Sections from '@atb/components/sections';
-import ThemeIcon from '@atb/components/theme-icon';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
@@ -31,11 +28,8 @@ import {TicketingStackParams} from '../';
 import {TariffZoneWithMetadata} from '../TariffZones';
 import useOfferState from './use-offer-state';
 import {formatToLongDateTime} from '@atb/utils/date';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {usePreferences} from '@atb/preferences';
-import {screenReaderPause} from '@atb/components/accessible-text';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import TravellersSheet from '@atb/screens/Ticketing/Purchase/Travellers/TravellersSheet';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {
   useHasEnabledMobileToken,
@@ -46,6 +40,9 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import Summary from './components/Summary';
 import DurationSelection from './components/DurationSelection';
 import StartTimeSelection from './components/StartTimeSelection';
+import TravellerSelection from './components/TravellerSelection';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {getPurchaseFlow} from '../utils';
 
 export type OverviewNavigationProp = DismissableStackNavigationProp<
   TicketingStackParams,
@@ -62,7 +59,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   route: {params},
 }) => {
   const styles = useStyles();
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const {inspectableToken} = useMobileTokenContextState();
   const tokensEnabled = useHasEnabledMobileToken();
   const {customerProfile} = useTicketState();
@@ -88,30 +85,10 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     userProfiles,
     preassignedFareProduct,
   );
-  const [userProfilesWithCount, setUserProfilesWithCount] = useState(
+  const [travellerSelection, setTravellerSelection] = useState(
     defaultUserProfilesWithCount,
   );
-
-  const [selectableUserProfiles, setSelectableUserProfiles] = useState(
-    defaultUserProfilesWithCount,
-  );
-
-  useEffect(() => {
-    const options = defaultUserProfilesWithCount.filter((p) => {
-      const profileIds = preassignedFareProduct.limitations.userProfileRefs;
-      return profileIds.includes(p.id);
-    });
-    const optionIds = options.map((p) => p.id);
-    const selectedUserProfiles = userProfilesWithCount
-      .filter((p) => p.count > 0)
-      .map((p) => p.id);
-
-    if (!selectedUserProfiles.every((p) => optionIds.includes(p))) {
-      setUserProfilesWithCount(defaultUserProfilesWithCount);
-    } else {
-      setSelectableUserProfiles(options);
-    }
-  }, [preassignedFareProduct, userProfilesWithCount]);
+  const hasSelection = travellerSelection.some((u) => u.count);
 
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
   const {fromTariffZone = defaultTariffZone, toTariffZone = defaultTariffZone} =
@@ -123,9 +100,11 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
-    userProfilesWithCount,
+    travellerSelection,
     travelDate,
   );
+
+  const {travelDateSelectionEnabled} = getPurchaseFlow(preassignedFareProduct);
 
   const shouldShowValidTrainTicketNotice =
     (preassignedFareProduct.type === 'single' ||
@@ -140,20 +119,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   }, [params?.refreshOffer]);
 
   const closeModal = () => navigation.dismiss();
-
-  const {open: openBottomSheet} = useBottomSheet();
-
-  const openTravellersSheet = () => {
-    openBottomSheet((close, focusRef) => (
-      <TravellersSheet
-        close={close}
-        save={setUserProfilesWithCount}
-        preassignedFareProduct={preassignedFareProduct}
-        userProfilesWithCount={selectableUserProfiles}
-        ref={focusRef}
-      />
-    ));
-  };
 
   return (
     <View style={styles.container}>
@@ -190,31 +155,12 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             />
           )}
 
-          <Sections.Section style={styles.selectionComponent}>
-            <Sections.LinkItem
-              text={createTravellersText(
-                userProfilesWithCount,
-                true,
-                false,
-                t,
-                language,
-              )}
-              onPress={openTravellersSheet}
-              icon={<ThemeIcon svg={Edit} />}
-              accessibility={{
-                accessibilityLabel:
-                  createTravellersText(
-                    userProfilesWithCount,
-                    false,
-                    false,
-                    t,
-                    language,
-                  ) + screenReaderPause,
-                accessibilityHint: t(PurchaseOverviewTexts.travellers.a11yHint),
-              }}
-              testID="selectTravellersButton"
-            />
-          </Sections.Section>
+          <TravellerSelection
+            setTravellerSelection={setTravellerSelection}
+            preassignedFareProduct={preassignedFareProduct}
+            selectableUserProfiles={defaultUserProfilesWithCount}
+            style={styles.selectionComponent}
+          />
 
           <Zones
             fromTariffZone={fromTariffZone}
@@ -222,7 +168,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             style={styles.selectionComponent}
           />
 
-          {preassignedFareProduct.type === 'period' && (
+          {travelDateSelectionEnabled && (
             <StartTimeSelection
               color="interactive_2"
               travelDate={travelDate}
@@ -262,17 +208,19 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           />
         )}
 
-        <Summary
-          isLoading={isSearchingOffer}
-          isError={!!error}
-          price={totalPrice}
-          fromTariffZone={fromTariffZone}
-          toTariffZone={toTariffZone}
-          userProfilesWithCount={userProfilesWithCount}
-          preassignedFareProduct={preassignedFareProduct}
-          travelDate={travelDate}
-          style={styles.summary}
-        />
+        <FullScreenFooter>
+          <Summary
+            isLoading={isSearchingOffer}
+            isError={!!error || !hasSelection}
+            price={totalPrice}
+            fromTariffZone={fromTariffZone}
+            toTariffZone={toTariffZone}
+            userProfilesWithCount={travellerSelection}
+            preassignedFareProduct={preassignedFareProduct}
+            travelDate={travelDate}
+            style={styles.summary}
+          />
+        </FullScreenFooter>
       </ScrollView>
     </View>
   );
@@ -419,7 +367,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
-  summary: {margin: theme.spacings.medium},
+  summary: {marginTop: theme.spacings.medium},
 }));
 
 export default PurchaseOverview;

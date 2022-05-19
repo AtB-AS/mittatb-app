@@ -54,6 +54,7 @@ export default function RadioSegments({
 
         return (
           <TouchableOpacity
+            key={i}
             onPress={option.onPress}
             disabled={!enabled}
             accessible={true}

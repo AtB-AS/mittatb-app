@@ -7,15 +7,20 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {Add, Subtract} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
+import {InteractiveColor} from '@atb/theme/colors';
 
 export type CounterInputProps = SectionItem<{
   text: string;
+  subtext?: string;
+  color?: InteractiveColor;
   count: number;
   addCount: () => void;
   removeCount: () => void;
 }>;
 export default function CounterInput({
   text,
+  subtext,
+  color,
   count,
   addCount,
   removeCount,
@@ -28,10 +33,30 @@ export default function CounterInput({
   const {t} = useTranslation();
   const {theme} = useTheme();
   const removeButtonDisabled = count === 0;
+  const activeColor =
+    count > 0 && color ? theme.interactive[color].active : undefined;
+
   return (
     <View style={[topContainer, counterStyles.countContainer]} testID={testID}>
-      <View style={[style.spaceBetween, contentContainer]}>
-        <ThemeText accessibilityLabel={`${count} ${text}`}>{text}</ThemeText>
+      <View
+        style={[
+          style.spaceBetween,
+          contentContainer,
+          counterStyles.infoContainer,
+        ]}
+        accessible={true}
+        accessibilityLabel={`${count} ${text}, ${subtext || ''}`}
+      >
+        <ThemeText>{text}</ThemeText>
+        {subtext && (
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={counterStyles.infoSubtext}
+          >
+            {subtext}
+          </ThemeText>
+        )}
       </View>
       <View style={counterStyles.countActions}>
         <TouchableOpacity
@@ -65,13 +90,23 @@ export default function CounterInput({
             }
           />
         </TouchableOpacity>
-        <ThemeText
-          accessible={false}
-          style={counterStyles.countText}
-          type="body__primary--bold"
+        <View
+          style={[
+            counterStyles.countTextContainer,
+            activeColor && {backgroundColor: activeColor.background},
+          ]}
         >
-          {count}
-        </ThemeText>
+          <ThemeText
+            accessible={false}
+            style={[
+              counterStyles.countText,
+              activeColor && {color: activeColor.text},
+            ]}
+            type="body__primary--bold"
+          >
+            {count}
+          </ThemeText>
+        </View>
         <TouchableOpacity
           onPress={() => addCount()}
           accessibilityRole="button"
@@ -93,6 +128,14 @@ export default function CounterInput({
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  infoContainer: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    marginRight: theme.spacings.medium,
+  },
+  infoSubtext: {
+    marginTop: theme.spacings.medium,
+  },
   countContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -103,8 +146,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
+  countTextContainer: {
+    aspectRatio: 1,
+    borderRadius: theme.border.radius.circle,
+    justifyContent: 'center',
+  },
   countText: {
-    width: theme.spacings.large,
+    minWidth: theme.spacings.large,
+    margin: theme.spacings.small,
     textAlign: 'center',
   },
   removeCount: {
