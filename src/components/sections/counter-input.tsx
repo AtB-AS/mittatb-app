@@ -98,6 +98,7 @@ export default function CounterInput({
         >
           <ThemeText
             accessible={false}
+            importantForAccessibility={'no'}
             style={[
               counterStyles.countText,
               activeColor && {color: activeColor.text},
