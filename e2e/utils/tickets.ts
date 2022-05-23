@@ -1,8 +1,8 @@
 import {by} from 'detox';
-import {tapById} from './interactionHelpers';
+import {scroll, tapById} from './interactionHelpers';
 import {getTextOfElementId, idExists} from './commonHelpers';
 import {expectBoolean} from './jestAssertions';
-import {expectToBeVisibleByText} from './expectHelpers';
+import {expectIdToHaveText, expectToBeVisibleByText} from './expectHelpers';
 import {Traveller} from './Traveller';
 
 // Check if ticketing has to be accepted
@@ -72,6 +72,34 @@ export const setZones = async (fromZone: string, toZone: string) => {
   await tapById('saveZonesButton');
 };
 
+// Check the traveller counts. Each category defaults to 0
+export const verifyTravellerCounts = async (
+  adult: number = 0,
+  senior: number = 0,
+  child: number = 0,
+  student: number = 0,
+  military: number = 0,
+) => {
+  if ((await idExists(by.id('counterInput_adult_count'))) || adult > 0) {
+    await expectIdToHaveText('counterInput_adult_count', adult.toString());
+  }
+  if ((await idExists(by.id('counterInput_senior_count'))) || senior > 0) {
+    await expectIdToHaveText('counterInput_senior_count', senior.toString());
+  }
+  if ((await idExists(by.id('counterInput_child_count'))) || child > 0) {
+    await expectIdToHaveText('counterInput_child_count', child.toString());
+  }
+  if ((await idExists(by.id('counterInput_student_count'))) || student > 0) {
+    await expectIdToHaveText('counterInput_student_count', student.toString());
+  }
+  if ((await idExists(by.id('counterInput_military_count'))) || military > 0) {
+    await expectIdToHaveText(
+      'counterInput_military_count',
+      military.toString(),
+    );
+  }
+};
+
 // Buy single ticket (only within a single zone, and for adult/senior/child)
 export const buySingleTicket = async (travellers: Traveller, zone: string) => {
   await tapById('singleTicket');
@@ -79,26 +107,25 @@ export const buySingleTicket = async (travellers: Traveller, zone: string) => {
   // Set zones
   await setZones(zone, zone);
   // Set travellers
-  await tapById('selectTravellersButton');
   if (!travellers.adult) {
     // Default 1 Adult
-    await tapById('counterInput0_rem');
+    await tapById('counterInput_adult_rem');
   }
   if (travellers.adultCount != undefined && travellers.adultCount != 1) {
     // Default 1 Adult
     for (let i = 1; i < travellers.adultCount; i++) {
-      await tapById('counterInput0_add');
+      await tapById('counterInput_adult_add');
     }
   }
   if (travellers.senior) {
-    await tapById('counterInput1_add');
+    await tapById('counterInput_senior_add');
   }
   if (travellers.child) {
-    await tapById('counterInput2_add');
+    await tapById('counterInput_child_add');
   }
-  await tapById('saveTravellersButton');
 
   // Pay with stored payment card
+  await scroll('ticketingScrollView', 'bottom');
   await tapById('goToPaymentButton');
   await tapById('choosePaymentOptionButton');
   await tapById('recurringPayment0');

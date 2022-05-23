@@ -1,13 +1,12 @@
 import {by, device} from 'detox';
 import {goBack, goToTab} from '../utils/commonHelpers';
-import {tapById, tapByText} from '../utils/interactionHelpers';
+import {scroll, tapById, tapByText} from '../utils/interactionHelpers';
 import {
   expectToBeVisibleById,
   expectToBeVisibleByText,
   expectIdToHaveText,
   expectToBeVisibleByPartOfText,
   expectToExistsById,
-  expectToExistsByLabel,
   expectIdToHaveChildText,
   expectNotToExistsById,
   expectToExistsByIdHierarchy,
@@ -21,6 +20,7 @@ import {
   newTicketExists,
   setZone,
   setZones,
+  verifyTravellerCounts,
   verifyTravellersAndZoneInSummary,
 } from '../utils/tickets';
 import {logIn, logOut} from '../utils/account';
@@ -73,7 +73,7 @@ describe('Tickets anonymous', () => {
     // Choose single ticket
     await tapById('singleTicket');
 
-    await expectToBeVisibleByText('1 Adult');
+    await verifyTravellerCounts(1);
     //Zone is either A or C3 during the tests
     await expectToBeVisibleByPartOfText('Travel in 1 zone');
     await expectIdToHaveText(
@@ -81,6 +81,7 @@ describe('Tickets anonymous', () => {
       `Total ${ticketInfo.singleTicketAdultPrice}.00 kr`,
     );
 
+    await scroll('ticketingScrollView', 'bottom');
     await tapById('goToPaymentButton');
 
     await expectToBeVisibleByText('Single ticket');
@@ -96,28 +97,26 @@ describe('Tickets anonymous', () => {
     await tapById('buyTicketsTab');
     await tapById('singleTicket');
 
-    await expectToBeVisibleByText('1 Adult');
+    await verifyTravellerCounts(1);
     await expectIdToHaveText(
       'offerTotalPriceText',
       `Total ${ticketInfo.singleTicketAdultPrice}.00 kr`,
     );
 
     // Change the number of travellers
-    await tapById('selectTravellersButton');
-    await expectToExistsByLabel('Current selection: 1 Adult');
-    await tapById('counterInput0_add');
-    await expectToExistsByLabel('Current selection: 2 Adult');
-    await tapById('counterInput2_add');
-    await expectToExistsByLabel('Current selection: 2 Adult, 1 Child');
+    await tapById('counterInput_adult_add');
+    await tapById('counterInput_child_add');
+    await verifyTravellerCounts(2, 0, 1);
     const totPrice =
       2 * ticketInfo.singleTicketAdultPrice + ticketInfo.singleTicketChildPrice;
-    await tapById('saveTravellersButton');
 
     // Verify
-    await expectToBeVisibleByText('2 Adult, 1 Child');
     await expectIdToHaveText('offerTotalPriceText', `Total ${totPrice}.00 kr`);
 
+    await scroll('ticketingScrollView', 'bottom');
     await tapById('goToPaymentButton');
+    await expectToBeVisibleByText('2 Adult');
+    await expectToBeVisibleByText('1 Child');
     await expectToBeVisibleByText(`${totPrice} kr`);
 
     await goBack();
@@ -138,6 +137,7 @@ describe('Tickets anonymous', () => {
       'offerTotalPriceText',
       `Total ${ticketInfo.singleTicketAdultPrice}.00 kr`,
     );
+    await scroll('ticketingScrollView', 'bottom');
     await tapById('goToPaymentButton');
     await expectToBeVisibleByText('Valid in zone A');
     await goBack();
@@ -152,6 +152,7 @@ describe('Tickets anonymous', () => {
       'offerTotalPriceText',
       `Total ${ticketInfo.singleTicketZoneAZoneB1Price}.00 kr`,
     );
+    await scroll('ticketingScrollView', 'bottom');
     await tapById('goToPaymentButton');
     await expectToBeVisibleByText('Valid from zone A to zone B1');
     await goBack();
@@ -244,6 +245,7 @@ describe('Tickets authorized', () => {
       // Set zone E1 -> E1
       await setZones('E1', 'E1');
 
+      await scroll('ticketingScrollView', 'bottom');
       await tapById('goToPaymentButton');
 
       await expectToBeVisibleByText('Single ticket');
@@ -303,6 +305,7 @@ describe('Tickets authorized', () => {
         `Total ${ticketInfo.periodic30daysPrice}.00 kr`,
       );
 
+      await scroll('ticketingScrollView', 'bottom');
       await tapById('goToPaymentButton');
 
       await expectToBeVisibleByText('Monthly pass');
@@ -329,11 +332,6 @@ describe('Tickets authorized', () => {
 
   it('should be able to change the periodic product', async () => {
     if (isLoggedIn) {
-      const product1day = {
-        text: '1 days',
-        id: 'chip1days',
-        name: '24 hour pass',
-      };
       const product7days = {
         text: '7 days',
         id: 'chip7days',
@@ -352,14 +350,16 @@ describe('Tickets authorized', () => {
       await tapById('periodicTicket');
 
       // Set products and verify in summary
-      for (let product of [product1day, product7days, product30days]) {
+      for (let product of [product7days, product30days]) {
         await expectToBeVisibleById(product.id);
         await expectIdToHaveChildText(product.id, product.text);
         await tapById(product.id);
+        await scroll('ticketingScrollView', 'bottom');
         await tapById('goToPaymentButton');
 
         await expectToBeVisibleByText(product.name);
         await goBack();
+        await scroll('ticketingScrollView', 'top');
       }
       await goBack();
     }
