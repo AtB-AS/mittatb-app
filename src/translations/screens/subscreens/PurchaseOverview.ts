@@ -74,6 +74,7 @@ const PurchaseOverviewTexts = {
   },
   travellerSelection: {
     title: _('Velg passasjerkategori', 'Select travellers'),
+    a11yHint: _('Aktiver for å velge reisende', 'Activate to select traveller'),
   },
   startTime: {
     title: _('Velg oppstartstidspunkt', 'Select start time'),
