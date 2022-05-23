@@ -1,6 +1,6 @@
 import React from 'react';
 import {UserCountState, UserProfileWithCount} from './use-user-count-state';
-import {useTranslation} from '@atb/translations';
+import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import * as Sections from '../../../../components/sections';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 
@@ -9,7 +9,7 @@ export default function SingleTravellerSelection({
   addCount,
   removeCount,
 }: UserCountState) {
-  const {language} = useTranslation();
+  const {t, language} = useTranslation();
   const selectedProfile = userProfilesWithCount.find((u) => u.count);
 
   const select = (u: UserProfileWithCount) => {
@@ -30,6 +30,7 @@ export default function SingleTravellerSelection({
         selected={selectedProfile}
         onSelect={select}
         color="interactive_2"
+        accessibilityHint={t(PurchaseOverviewTexts.travellerSelection.a11yHint)}
       />
     </Sections.Section>
   );

@@ -3,6 +3,7 @@ import ActionItem from './action-item';
 import SectionGroup, {SectionProps} from './section';
 import {HeaderItem} from '@atb/components/sections/index';
 import {InteractiveColor} from '@atb/theme/colors';
+import {AccessibilityProps} from 'react-native';
 
 export type RadioSectionProps<T> = Omit<SectionProps, 'children'> & {
   items: T[];
@@ -24,6 +25,7 @@ export default function RadioSectionGroup<T>({
   onSelect,
   headerText,
   color,
+  accessibilityHint,
   ...props
 }: RadioSectionProps<T>) {
   return (
@@ -39,6 +41,7 @@ export default function RadioSectionGroup<T>({
           onPress={() => onSelect?.(item, index)}
           testID={'radioButton' + itemToText(item, index)}
           color={color}
+          accessibility={{accessibilityHint}}
         />
       ))}
     </SectionGroup>
