@@ -133,7 +133,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         alertContext="ticketing"
       />
 
-      <ScrollView>
+      <ScrollView testID="ticketingScrollView">
         <View style={styles.selectionLinks}>
           {error && (
             <MessageBox
