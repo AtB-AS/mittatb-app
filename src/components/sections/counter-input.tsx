@@ -16,6 +16,7 @@ export type CounterInputProps = SectionItem<{
   count: number;
   addCount: () => void;
   removeCount: () => void;
+  testID?: string;
 }>;
 export default function CounterInput({
   text,
@@ -103,6 +104,7 @@ export default function CounterInput({
               activeColor && {color: activeColor.text},
             ]}
             type="body__primary--bold"
+            testID={testID + '_count'}
           >
             {count}
           </ThemeText>

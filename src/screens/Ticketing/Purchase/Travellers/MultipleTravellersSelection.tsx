@@ -40,7 +40,7 @@ export default function MultipleTravellersSelection({
           addCount={() => addTraveller(u.userTypeString)}
           removeCount={() => removeTraveller(u.userTypeString)}
           type="spacious"
-          testID={'counterInput' + i}
+          testID={'counterInput_' + u.userTypeString.toLowerCase()}
           color="interactive_2"
           // @TODO: add translated descriptions
           // subtext={u.description.value}
