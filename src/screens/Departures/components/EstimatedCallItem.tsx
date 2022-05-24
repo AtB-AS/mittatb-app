@@ -3,24 +3,14 @@ import {View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {
-  CancelledDepartureTexts,
-  dictionary,
-  useTranslation,
-} from '@atb/translations';
-import {
-  formatToClockOrLongRelativeMinutes,
-  formatToClockOrRelativeMinutes,
-  formatToSimpleDate,
-} from '@atb/utils/date';
+import {dictionary, useTranslation} from '@atb/translations';
+import {formatToClockOrRelativeMinutes} from '@atb/utils/date';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import useFontScale from '@atb/utils/use-font-scale';
-import DeparturesTexts from '@atb/translations/screens/Departures';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {isToday, parseISO} from 'date-fns';
 import {Warning} from '../../../assets/svg/color/situations';
 
 type EstimatedCallItemProps = {
@@ -48,43 +38,8 @@ export default function EstimatedCallItem({
 
   const isTripCancelled = departure.cancellation;
 
-  const getA11yLineLabel = () => {
-    const a11yLine = line?.publicCode
-      ? `${t(DeparturesTexts.line)} ${line?.publicCode},`
-      : '';
-    const a11yFrontText = departure.destinationDisplay?.frontText
-      ? `${departure.destinationDisplay?.frontText}.`
-      : '';
-
-    let a11yDateInfo = '';
-    if (departure.expectedDepartureTime) {
-      const a11yClock = formatToClockOrLongRelativeMinutes(
-        departure.expectedDepartureTime,
-        language,
-        t(dictionary.date.units.now),
-        9,
-      );
-      const a11yTimeWithRealtimePrefix = departure.realtime
-        ? a11yClock
-        : t(dictionary.a11yMissingRealTimePrefix) + a11yClock;
-      const parsedDepartureTime = parseISO(departure.expectedDepartureTime);
-      const a11yDate = !isToday(parsedDepartureTime)
-        ? formatToSimpleDate(parsedDepartureTime, language) + ','
-        : '';
-      a11yDateInfo = `${a11yDate} ${a11yTimeWithRealtimePrefix}`;
-    }
-
-    return `${
-      isTripCancelled && t(CancelledDepartureTexts.message)
-    } ${a11yLine} ${a11yFrontText} ${a11yDateInfo}`;
-  };
-
   return (
-    <View
-      style={styles.estimatedCallItem}
-      accessible={true}
-      accessibilityLabel={getA11yLineLabel()}
-    >
+    <View style={styles.estimatedCallItem}>
       {line && (
         <LineChip
           publicCode={line.publicCode}
