@@ -1,14 +1,16 @@
 import React from 'react';
 import {UserCountState, UserProfileWithCount} from './use-user-count-state';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {useTranslation, TicketTravellerTexts} from '@atb/translations';
 import * as Sections from '../../../../components/sections';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {usePreferences} from '@atb/preferences';
+import {PreassignedFareProductType} from '@atb/reference-data/types';
 
 export default function SingleTravellerSelection({
   userProfilesWithCount,
   addCount,
   removeCount,
+  ticketType,
 }: UserCountState) {
   const {t, language} = useTranslation();
   const selectedProfile = userProfilesWithCount.find((u) => u.count);
@@ -23,16 +25,22 @@ export default function SingleTravellerSelection({
     addCount(u.userTypeString);
   };
 
+  function travellerInfoByTicketType(
+    ticketType: PreassignedFareProductType | undefined,
+  ) {
+    return (u: UserProfileWithCount) => {
+      return t(TicketTravellerTexts.information(u.userTypeString, ticketType));
+    };
+  }
+
   return (
     <Sections.Section>
       <Sections.RadioSection<UserProfileWithCount>
         items={userProfilesWithCount}
         keyExtractor={(u) => u.userTypeString}
         itemToText={(u) => getReferenceDataName(u, language)}
-        // @TODO: add translated descriptions
-        // itemToSubtext={(u: UserProfileWithCount) => u.description.value}
         hideSubtext={hideTravellerDescriptions}
-        itemToSubtext={(u) => u.userTypeString}
+        itemToSubtext={travellerInfoByTicketType(ticketType)}
         selected={selectedProfile}
         onSelect={select}
         color="interactive_2"

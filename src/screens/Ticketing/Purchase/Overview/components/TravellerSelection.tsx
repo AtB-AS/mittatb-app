@@ -87,7 +87,7 @@ export default function TravellerSelection({
           <FixedSwitch
             style={{
               alignSelf: 'flex-start',
-              transform: [{scale: 0.8}, {translateY: -3}],
+              transform: [{scale: 1}, {translateY: -2}],
             }}
             value={!hideTravellerDescriptions}
             onValueChange={(checked) => {
@@ -99,11 +99,13 @@ export default function TravellerSelection({
       </View>
       {travellerSelectionMode === 'multiple' ? (
         <MultipleTravellersSelection
+          ticketType={preassignedFareProduct.type}
           {...userCountState}
           userProfilesWithCount={selectableUserProfilesWithCount}
         />
       ) : (
         <SingleTravellerSelection
+          ticketType={preassignedFareProduct.type}
           {...userCountState}
           userProfilesWithCount={selectableUserProfilesWithCount}
         />

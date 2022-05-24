@@ -1,5 +1,8 @@
 import {useCallback, useReducer} from 'react';
-import {UserProfile} from '@atb/reference-data/types';
+import {
+  PreassignedFareProductType,
+  UserProfile,
+} from '@atb/reference-data/types';
 
 export type UserProfileWithCount = UserProfile & {count: number};
 type ReducerState = {
@@ -70,6 +73,7 @@ export type UserCountState = {
   addCount: (userTypeString: string) => void;
   removeCount: (userTypeString: string) => void;
   updateSelectable: (selectableUserProfiles: UserProfileWithCount[]) => void;
+  ticketType?: PreassignedFareProductType;
 };
 
 export default function useUserCountState(
