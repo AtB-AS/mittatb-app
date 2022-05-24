@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
   AccessibilityProps,
   AccessibilityRole,
@@ -20,6 +20,7 @@ export type ActionModes = 'check' | 'toggle' | 'heading-expand';
 export type ActionItemProps = SectionItem<{
   text: string;
   subtext?: string;
+  hideSubtext?: boolean;
   onPress?(checked: boolean): void;
   checked?: boolean;
   mode?: ActionModes;
@@ -29,6 +30,7 @@ export type ActionItemProps = SectionItem<{
 export default function ActionItem({
   text,
   subtext,
+  hideSubtext,
   onPress,
   mode = 'check',
   checked = false,
@@ -91,7 +93,7 @@ export default function ActionItem({
         >
           {text}
         </ThemeText>
-        {subtext && (
+        {subtext && !hideSubtext && (
           <ThemeText
             type="body__secondary"
             color="secondary"

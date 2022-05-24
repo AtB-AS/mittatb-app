@@ -1,17 +1,22 @@
 import React, {useRef} from 'react';
 import {UserCountState} from './use-user-count-state';
-import {useTranslation} from '@atb/translations';
+import {useTranslation, TicketTravellerTexts} from '@atb/translations';
 import * as Sections from '../../../../components/sections';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {createTravellersText} from '@atb/screens/Ticketing/Purchase/Overview';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
+import {usePreferences} from '@atb/preferences';
 
 export default function MultipleTravellersSelection({
   userProfilesWithCount,
   addCount,
   removeCount,
+  ticketType,
 }: UserCountState) {
   const {t, language} = useTranslation();
+  const {
+    preferences: {hideTravellerDescriptions},
+  } = usePreferences();
 
   const travellersModified = useRef(false);
 
@@ -42,8 +47,10 @@ export default function MultipleTravellersSelection({
           type="spacious"
           testID={'counterInput_' + u.userTypeString.toLowerCase()}
           color="interactive_2"
-          // @TODO: add translated descriptions
-          // subtext={u.description.value}
+          hideSubtext={hideTravellerDescriptions}
+          subtext={t(
+            TicketTravellerTexts.information(u.userTypeString, ticketType),
+          )}
         />
       ))}
     </Sections.Section>
