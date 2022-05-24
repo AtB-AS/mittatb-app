@@ -75,7 +75,6 @@ export default function TravellerSelection({
             justifyContent: 'flex-end',
           }}
         >
-          <View></View>
           <ThemeText type="body__secondary">{'Vis info'}</ThemeText>
           <FixedSwitch
             style={{
