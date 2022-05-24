@@ -5,6 +5,7 @@ import * as Sections from '../../../../components/sections';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {createTravellersText} from '@atb/screens/Ticketing/Purchase/Overview';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
+import {usePreferences} from '@atb/preferences';
 
 export default function MultipleTravellersSelection({
   userProfilesWithCount,
@@ -12,6 +13,9 @@ export default function MultipleTravellersSelection({
   removeCount,
 }: UserCountState) {
   const {t, language} = useTranslation();
+  const {
+    preferences: {hideTravellerDescriptions},
+  } = usePreferences();
 
   const travellersModified = useRef(false);
 
@@ -43,7 +47,8 @@ export default function MultipleTravellersSelection({
           testID={'counterInput_' + u.userTypeString.toLowerCase()}
           color="interactive_2"
           // @TODO: add translated descriptions
-          // subtext={u.description.value}
+          hideSubtext={hideTravellerDescriptions}
+          subtext={u.userTypeString}
         />
       ))}
     </Sections.Section>

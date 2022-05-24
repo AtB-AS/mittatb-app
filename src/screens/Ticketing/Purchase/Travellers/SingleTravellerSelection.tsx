@@ -3,6 +3,7 @@ import {UserCountState, UserProfileWithCount} from './use-user-count-state';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import * as Sections from '../../../../components/sections';
 import {getReferenceDataName} from '@atb/reference-data/utils';
+import {usePreferences} from '@atb/preferences';
 
 export default function SingleTravellerSelection({
   userProfilesWithCount,
@@ -11,6 +12,9 @@ export default function SingleTravellerSelection({
 }: UserCountState) {
   const {t, language} = useTranslation();
   const selectedProfile = userProfilesWithCount.find((u) => u.count);
+  const {
+    preferences: {hideTravellerDescriptions},
+  } = usePreferences();
 
   const select = (u: UserProfileWithCount) => {
     if (selectedProfile) {
@@ -27,6 +31,8 @@ export default function SingleTravellerSelection({
         itemToText={(u) => getReferenceDataName(u, language)}
         // @TODO: add translated descriptions
         // itemToSubtext={(u: UserProfileWithCount) => u.description.value}
+        hideSubtext={hideTravellerDescriptions}
+        itemToSubtext={(u) => u.userTypeString}
         selected={selectedProfile}
         onSelect={select}
         color="interactive_2"

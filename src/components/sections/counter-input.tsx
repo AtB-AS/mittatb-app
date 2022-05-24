@@ -16,6 +16,7 @@ export type CounterInputProps = SectionItem<{
   count: number;
   addCount: () => void;
   removeCount: () => void;
+  hideSubtext?: boolean;
   testID?: string;
 }>;
 export default function CounterInput({
@@ -25,6 +26,7 @@ export default function CounterInput({
   count,
   addCount,
   removeCount,
+  hideSubtext,
   testID,
   ...props
 }: CounterInputProps) {
@@ -49,7 +51,7 @@ export default function CounterInput({
         accessibilityLabel={`${count} ${text}, ${subtext || ''}`}
       >
         <ThemeText>{text}</ThemeText>
-        {subtext && (
+        {subtext && !hideSubtext && (
           <ThemeText
             type="body__secondary"
             color="secondary"

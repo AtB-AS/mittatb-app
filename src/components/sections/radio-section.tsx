@@ -11,6 +11,7 @@ export type RadioSectionProps<T> = Omit<SectionProps, 'children'> & {
   keyExtractor(item: T, index: number): string;
   itemToText(item: T, index: number): string;
   itemToSubtext?(item: T, index: number): string;
+  hideSubtext?: boolean;
   onSelect?(item: T, index: number): void;
   headerText?: string;
   color?: InteractiveColor;
@@ -20,6 +21,7 @@ export default function RadioSectionGroup<T>({
   keyExtractor,
   itemToText,
   itemToSubtext,
+  hideSubtext,
   items,
   selected,
   onSelect,
@@ -37,6 +39,7 @@ export default function RadioSectionGroup<T>({
           mode="check"
           checked={item == selected}
           text={itemToText(item, index)}
+          hideSubtext={hideSubtext}
           subtext={itemToSubtext ? itemToSubtext(item, index) : undefined}
           onPress={() => onSelect?.(item, index)}
           testID={'radioButton' + itemToText(item, index)}

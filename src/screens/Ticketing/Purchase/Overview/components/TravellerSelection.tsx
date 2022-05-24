@@ -9,7 +9,16 @@ import {PreassignedFareProduct} from '@atb/reference-data/types';
 import SingleTravellerSelection from '../../Travellers/SingleTravellerSelection';
 import {getPurchaseFlow} from '../../utils';
 import MultipleTravellersSelection from '../../Travellers/MultipleTravellersSelection';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {
+  DEFAULT_LANGUAGE,
+  LanguageSettingsTexts,
+  PurchaseOverviewTexts,
+  useTranslation,
+} from '@atb/translations';
+import {ActionItem} from '@atb/components/sections';
+import FixedSwitch from '@atb/components/switch';
+import InternalLabeledItem from '@atb/components/sections/internals/internal-labeled-item';
+import {usePreferences} from '@atb/preferences';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -34,6 +43,10 @@ export default function TravellerSelection({
     userCountState.userProfilesWithCount.filter((a) =>
       selectableUserProfiles.some((b) => a.id === b.id),
     );
+  const {
+    setPreference,
+    preferences: {hideTravellerDescriptions},
+  } = usePreferences();
 
   useEffect(() => {
     const filteredSelection = userCountState.userProfilesWithCount.filter((u) =>
@@ -48,9 +61,42 @@ export default function TravellerSelection({
 
   return (
     <View style={style}>
-      <ThemeText type="body__secondary" color="secondary" style={styles.title}>
-        {t(PurchaseOverviewTexts.travellerSelection.title)}
-      </ThemeText>
+      <View
+        style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}
+      >
+        <View style={{flexGrow: 1}}>
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={styles.title}
+          >
+            {t(PurchaseOverviewTexts.travellerSelection.title)}
+          </ThemeText>
+        </View>
+
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            flexGrow: 1,
+            justifyContent: 'flex-end',
+          }}
+        >
+          <View></View>
+          <ThemeText type="body__secondary">{'Vis info'}</ThemeText>
+          <FixedSwitch
+            style={{
+              alignSelf: 'flex-start',
+              transform: [{scale: 0.8}, {translateY: -3}],
+            }}
+            value={!hideTravellerDescriptions}
+            onValueChange={(checked) => {
+              setPreference({hideTravellerDescriptions: !checked});
+            }}
+            accessibilityLabel={'a11y'}
+          />
+        </View>
+      </View>
       {travellerSelectionMode === 'multiple' ? (
         <MultipleTravellersSelection
           {...userCountState}
