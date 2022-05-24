@@ -11,7 +11,6 @@ jobs:
       matrix:
         org: [atb, nfk]
     environment: ${{ matrix.org }}
-    if: ${{(matrix.org == 'atb' && !contains(github.ref, 'nfk') || (matrix.org == 'nfk' && !contains(github.ref, 'atb'))}}
     timeout-minutes: 90
     runs-on: macos-11
     steps:
