@@ -9,15 +9,8 @@ import {PreassignedFareProduct} from '@atb/reference-data/types';
 import SingleTravellerSelection from '../../Travellers/SingleTravellerSelection';
 import {getPurchaseFlow} from '../../utils';
 import MultipleTravellersSelection from '../../Travellers/MultipleTravellersSelection';
-import {
-  DEFAULT_LANGUAGE,
-  LanguageSettingsTexts,
-  PurchaseOverviewTexts,
-  useTranslation,
-} from '@atb/translations';
-import {ActionItem} from '@atb/components/sections';
+import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import FixedSwitch from '@atb/components/switch';
-import InternalLabeledItem from '@atb/components/sections/internals/internal-labeled-item';
 import {usePreferences} from '@atb/preferences';
 
 type TravellerSelectionProps = {

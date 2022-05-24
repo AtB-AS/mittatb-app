@@ -3,7 +3,6 @@ import ActionItem from './action-item';
 import SectionGroup, {SectionProps} from './section';
 import {HeaderItem} from '@atb/components/sections/index';
 import {InteractiveColor} from '@atb/theme/colors';
-import {AccessibilityProps} from 'react-native';
 
 export type RadioSectionProps<T> = Omit<SectionProps, 'children'> & {
   items: T[];
