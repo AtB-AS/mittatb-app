@@ -8,6 +8,7 @@ import {Add, Subtract} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {InteractiveColor} from '@atb/theme/colors';
+import useFontScale from '@atb/utils/use-font-scale';
 
 export type CounterInputProps = SectionItem<{
   text: string;
@@ -134,39 +135,42 @@ export default function CounterInput({
   );
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  infoContainer: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    marginRight: theme.spacings.medium,
-  },
-  infoSubtext: {
-    marginTop: theme.spacings.medium,
-  },
-  countContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  countActions: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  countTextContainer: {
-    aspectRatio: 1,
-    borderRadius: theme.border.radius.circle,
-    justifyContent: 'center',
-  },
-  countText: {
-    minWidth: theme.spacings.large,
-    margin: theme.spacings.small,
-    textAlign: 'center',
-  },
-  removeCount: {
-    marginRight: theme.spacings.xLarge,
-  },
-  addCount: {
-    marginLeft: theme.spacings.xLarge,
-  },
-}));
+const useStyles = StyleSheet.createThemeHook((theme) => {
+  const scale = useFontScale();
+  return {
+    infoContainer: {
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      marginRight: theme.spacings.medium,
+    },
+    infoSubtext: {
+      marginTop: theme.spacings.medium,
+    },
+    countContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    countActions: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+    },
+    countTextContainer: {
+      aspectRatio: 1,
+      borderRadius: 1000,
+      justifyContent: 'center',
+    },
+    countText: {
+      minWidth: theme.spacings.large * scale,
+      margin: theme.spacings.small * scale,
+      textAlign: 'center',
+    },
+    removeCount: {
+      marginRight: theme.spacings.xLarge,
+    },
+    addCount: {
+      marginLeft: theme.spacings.xLarge,
+    },
+  };
+});

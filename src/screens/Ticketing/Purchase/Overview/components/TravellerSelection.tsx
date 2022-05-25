@@ -12,6 +12,7 @@ import MultipleTravellersSelection from '../../Travellers/MultipleTravellersSele
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import FixedSwitch from '@atb/components/switch';
 import {usePreferences} from '@atb/preferences';
+import useFontScale from '@atb/utils/use-font-scale';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -118,18 +119,21 @@ export default function TravellerSelection({
   );
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  title: {
-    marginBottom: theme.spacings.medium,
-  },
-  toggle: {
-    alignSelf: 'flex-start',
-  },
-  androidToggle: {
-    transform: [{scale: 1}, {translateY: -2}],
-  },
-  iosToggle: {
-    marginLeft: theme.spacings.xSmall,
-    transform: [{scale: 0.7}, {translateY: -8}],
-  },
-}));
+const useStyles = StyleSheet.createThemeHook((theme) => {
+  const scale = useFontScale();
+  return {
+    title: {
+      marginBottom: theme.spacings.medium,
+    },
+    toggle: {
+      alignSelf: 'center',
+    },
+    androidToggle: {
+      transform: [{scale: scale}, {translateY: -6}],
+    },
+    iosToggle: {
+      marginLeft: theme.spacings.xSmall,
+      transform: [{scale: 0.7 * scale}, {translateY: -8}],
+    },
+  };
+});
