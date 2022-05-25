@@ -1,4 +1,5 @@
 import {translation as _} from '../commons';
+import orgSpecificTranslations from '../utils';
 
 const ServiceDisruptionsTexts = {
   header: {
@@ -19,4 +20,15 @@ const ServiceDisruptionsTexts = {
     ),
   },
 };
-export default ServiceDisruptionsTexts;
+
+export default orgSpecificTranslations(ServiceDisruptionsTexts, {
+  nfk: {
+    body: _(
+      'Oversikt over endringer, forsinkelser og avvik finner du på reisnordland.no:',
+      'Get an overview of changes, delays and service disruptions at reisnordland.no (Norwegian only):',
+    ),
+    button: {
+      text: _('Åpne i nettleser', 'Open in browser'),
+    },
+  },
+});
