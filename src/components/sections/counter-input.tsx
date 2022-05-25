@@ -48,7 +48,9 @@ export default function CounterInput({
           counterStyles.infoContainer,
         ]}
         accessible={true}
-        accessibilityLabel={`${count} ${text}, ${subtext || ''}`}
+        accessibilityLabel={`${count} ${text}, ${
+          (!hideSubtext && subtext) || ''
+        }`}
       >
         <ThemeText>{text}</ThemeText>
         {subtext && !hideSubtext && (
