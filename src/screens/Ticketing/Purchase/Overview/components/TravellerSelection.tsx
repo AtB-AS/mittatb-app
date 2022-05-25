@@ -133,7 +133,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     iosToggle: {
       marginLeft: theme.spacings.xSmall,
-      transform: [{scale: 0.7 * scale}, {translateY: -8}],
+      transform: [{scale: 0.7 * scale}, {translateY: -10 }],
     },
   };
 });
