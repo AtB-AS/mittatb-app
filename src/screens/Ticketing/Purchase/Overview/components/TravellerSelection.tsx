@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import ThemeText from '@atb/components/text';
-import {StyleProp, View, ViewStyle} from 'react-native';
+import {Platform, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import useUserCountState, {
   UserProfileWithCount,
@@ -12,6 +12,7 @@ import MultipleTravellersSelection from '../../Travellers/MultipleTravellersSele
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import FixedSwitch from '@atb/components/switch';
 import {usePreferences} from '@atb/preferences';
+import useFontScale from '@atb/utils/use-font-scale';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -85,10 +86,12 @@ export default function TravellerSelection({
             {t(PurchaseOverviewTexts.travellerSelection.infoToggle)}
           </ThemeText>
           <FixedSwitch
-            style={{
-              alignSelf: 'flex-start',
-              transform: [{scale: 1}, {translateY: -2}],
-            }}
+            style={[
+              styles.toggle,
+              Platform.OS === 'android'
+                ? styles.androidToggle
+                : styles.iosToggle,
+            ]}
             value={!hideTravellerDescriptions}
             onValueChange={(checked) => {
               setPreference({hideTravellerDescriptions: !checked});
@@ -116,8 +119,21 @@ export default function TravellerSelection({
   );
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  title: {
-    marginBottom: theme.spacings.medium,
-  },
-}));
+const useStyles = StyleSheet.createThemeHook((theme) => {
+  const scale = useFontScale();
+  return {
+    title: {
+      marginBottom: theme.spacings.medium,
+    },
+    toggle: {
+      alignSelf: 'center',
+    },
+    androidToggle: {
+      transform: [{scale: scale}, {translateY: -6}],
+    },
+    iosToggle: {
+      marginLeft: theme.spacings.xSmall,
+      transform: [{scale: 0.7 * scale}, {translateY: -10 }],
+    },
+  };
+});
