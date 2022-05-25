@@ -114,6 +114,7 @@ export default function QuaySection({
                       departure.cancellation,
                     );
                 }}
+                accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
                 accessibilityLabel={getA11yLineLabel(departure, t, language)}
               >
                 <EstimatedCallItem
@@ -197,7 +198,7 @@ function getA11yLineLabel(departure: any, t: any, language: any) {
   }
 
   return `${
-    departure.cancellation && t(CancelledDepartureTexts.message)
+    departure.cancellation ? t(CancelledDepartureTexts.message) : ''
   } ${a11yLine} ${a11yFrontText} ${a11yDateInfo}`;
 }
 
