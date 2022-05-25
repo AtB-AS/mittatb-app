@@ -32,20 +32,29 @@ export default function RadioSectionGroup<T>({
   return (
     <SectionGroup {...props} accessibilityRole="radiogroup">
       {headerText && <HeaderItem text={headerText} mode="subheading" />}
-      {items.map((item: T, index) => (
-        <ActionItem
-          key={keyExtractor(item, index)}
-          mode="check"
-          checked={item == selected}
-          text={itemToText(item, index)}
-          hideSubtext={hideSubtext}
-          subtext={itemToSubtext ? itemToSubtext(item, index) : undefined}
-          onPress={() => onSelect?.(item, index)}
-          testID={'radioButton' + itemToText(item, index)}
-          color={color}
-          accessibility={{accessibilityHint}}
-        />
-      ))}
+      {items.map((item: T, index) => {
+        const text = itemToText(item, index);
+        const subtext = itemToSubtext ? itemToSubtext(item, index) : undefined;
+        const a11yLabel = `${text}, ${hideSubtext ? '' : subtext}`;
+        const checked = item === selected;
+        return (
+          <ActionItem
+            key={keyExtractor(item, index)}
+            mode="check"
+            checked={checked}
+            text={itemToText(item, index)}
+            hideSubtext={hideSubtext}
+            subtext={subtext}
+            onPress={() => onSelect?.(item, index)}
+            testID={'radioButton' + itemToText(item, index)}
+            color={color}
+            accessibility={{
+              accessibilityHint: checked ? '' : accessibilityHint,
+              accessibilityLabel: a11yLabel,
+            }}
+          />
+        );
+      })}
     </SectionGroup>
   );
 }

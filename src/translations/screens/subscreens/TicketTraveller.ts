@@ -27,7 +27,7 @@ function specificOverrides(
       switch (travellerType) {
         case TravellerType.child:
           return _(
-            '6 til og med 19 år. Gjelder på nattbuss.',
+            '6 til og med 19 år. Gyldig på nattbuss.',
             '6 to 19 years. Valid for night bus.',
           );
         case TravellerType.student:
@@ -51,10 +51,10 @@ function generic(travellerType: string) {
     case TravellerType.child:
       return _('6 til og med 19 år.', '6 to 19 years.');
     case TravellerType.adult:
-      return _('20 til og med 66 år', '20 to 66 years.');
+      return _('20 til og med 66 år.', '20 to 66 years.');
     case TravellerType.student:
       return _(
-        'Fulltidsstudenter og elever under 35 år',
+        'Fulltidsstudenter og elever under 35 år.',
         'Fulltime students under 35.',
       );
     case TravellerType.senior:

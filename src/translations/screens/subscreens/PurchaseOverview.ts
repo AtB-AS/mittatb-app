@@ -73,8 +73,14 @@ const PurchaseOverviewTexts = {
     chipHint: _('Aktiver for å velge varighet', 'Activate to select duration'),
   },
   travellerSelection: {
-    title: _('Velg passasjerkategori', 'Select travellers'),
+    title_single: _('Velg passasjerkategori', 'Select a traveller'),
+    title_multiple: _('Velg passasjerkategorier', 'Select travellers'),
     a11yHint: _('Aktiver for å velge reisende', 'Activate to select traveller'),
+    infoToggle: _('Vis info', 'Show info'),
+    infoToggleA11y: _(
+      'Vis informasjon om passasjerkategorier',
+      'Show information about traveller categories',
+    ),
   },
   startTime: {
     title: _('Velg oppstartstidspunkt', 'Select start time'),

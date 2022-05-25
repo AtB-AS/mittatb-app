@@ -63,7 +63,9 @@ export default function TravellerSelection({
             color="secondary"
             style={styles.title}
           >
-            {t(PurchaseOverviewTexts.travellerSelection.title)}
+            {travellerSelectionMode == 'multiple'
+              ? t(PurchaseOverviewTexts.travellerSelection.title_multiple)
+              : t(PurchaseOverviewTexts.travellerSelection.title_single)}
           </ThemeText>
         </View>
 
@@ -75,7 +77,13 @@ export default function TravellerSelection({
             justifyContent: 'flex-end',
           }}
         >
-          <ThemeText type="body__secondary">{'Vis info'}</ThemeText>
+          <ThemeText
+            type="body__secondary"
+            accessible={false}
+            importantForAccessibility="no"
+          >
+            {t(PurchaseOverviewTexts.travellerSelection.infoToggle)}
+          </ThemeText>
           <FixedSwitch
             style={{
               alignSelf: 'flex-start',
@@ -85,7 +93,9 @@ export default function TravellerSelection({
             onValueChange={(checked) => {
               setPreference({hideTravellerDescriptions: !checked});
             }}
-            accessibilityLabel={'a11y'}
+            accessibilityLabel={t(
+              PurchaseOverviewTexts.travellerSelection.infoToggleA11y,
+            )}
           />
         </View>
       </View>
