@@ -99,6 +99,15 @@ const TicketsTexts = {
       pilot_description: _('', ''),
       transportModes: _('Buss/trikk', 'Bus/tram'),
     },
+    oneDayTicket: {
+      title: _('24-timersbillett', '24 hour pass'),
+      description: _(
+        'Når du vil reise flere ganger på et døgn',
+        'For travelling several times in 24 hours',
+      ),
+      pilot_description: _('', ''),
+      transportModes: _('Buss/trikk', 'Bus/tram'),
+    },
     summerPass: {
       title: _('AtB SommerPass', 'Summer pass'),
       description: _(

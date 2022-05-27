@@ -56,6 +56,16 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
     }
   };
 
+  const onBuyOneDayTicket = () => {
+    navigation.navigate('TicketPurchase', {
+      screen: 'PurchaseOverview',
+      params: {
+        selectableProductType: 'period',
+        selectableProductDuration: 1,
+      },
+    });
+  };
+
   return isSignedInAsAbtCustomer ? (
     <ScrollView
       style={{backgroundColor: theme.static.background.background_2.background}}
@@ -64,6 +74,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
       <AvailableTickets
         onBuySingleTicket={onBuySingleTicket}
         onBuyPeriodTicket={onBuyPeriodTicket}
+        onBuyOneDayTicket={onBuyOneDayTicket}
       />
     </ScrollView>
   ) : null;

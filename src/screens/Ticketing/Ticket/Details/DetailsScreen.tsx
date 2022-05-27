@@ -18,6 +18,8 @@ import DetailsContent from './DetailsContent';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import MessageBox from '@atb/components/message-box';
 import {getValidityStatus} from '../utils';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {IndependentPeriodicTicket} from '@atb/screens/Ticketing/Tickets/IndependentPeriodicTicket';
 
 export type TicketDetailsRouteParams = {
   orderId: string;
@@ -43,6 +45,7 @@ export default function DetailsScreen({navigation, route}: Props) {
   const {t} = useTranslation();
 
   const hasActiveTravelCard = !!customerProfile?.travelcard;
+  const {preassignedFareproducts} = useFirestoreConfiguration();
 
   const onReceiptNavigate = () =>
     fc &&
@@ -51,18 +54,35 @@ export default function DetailsScreen({navigation, route}: Props) {
       orderVersion: fc.version,
     });
 
-  const shouldShowValidTrainTicketNotice =
-    fc &&
-    isPreactivatedTicket(firstTravelRight) &&
-    getValidityStatus(
-      now,
-      firstTravelRight.startDateTime.toMillis(),
-      firstTravelRight.endDateTime.toMillis(),
-      fc.state,
-    ) === 'valid' &&
-    firstTravelRight.tariffZoneRefs.every(
-      (val: string) => val === 'ATB:TariffZone:1',
+  function isIndependentPeriodicTicket(fareProductRef: string | undefined) {
+    const boughtProduct = preassignedFareproducts.find(
+      (product) => product.id === fareProductRef,
     );
+    return (
+      boughtProduct?.type === 'period' &&
+      IndependentPeriodicTicket.some(
+        (ipt) => ipt.durationDays === boughtProduct.durationDays,
+      )
+    );
+  }
+
+  const shouldShowValidTrainTicketNotice = () => {
+    if (isIndependentPeriodicTicket(firstTravelRight?.fareProductRef))
+      return false;
+    return (
+      fc &&
+      isPreactivatedTicket(firstTravelRight) &&
+      getValidityStatus(
+        now,
+        firstTravelRight.startDateTime.toMillis(),
+        firstTravelRight.endDateTime.toMillis(),
+        fc.state,
+      ) === 'valid' &&
+      firstTravelRight.tariffZoneRefs.every(
+        (val: string) => val === 'ATB:TariffZone:1',
+      )
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -80,7 +100,7 @@ export default function DetailsScreen({navigation, route}: Props) {
           />
         )}
 
-        {shouldShowValidTrainTicketNotice && (
+        {shouldShowValidTrainTicketNotice() && (
           <MessageBox
             message={
               isSingleTicket(firstTravelRight)

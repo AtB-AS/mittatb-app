@@ -29,6 +29,7 @@ type PurchaseOverviewParams = {
   fromTariffZone?: TariffZoneWithMetadata;
   toTariffZone?: TariffZoneWithMetadata;
   travelDate?: string;
+  selectableProductDuration?: number;
 };
 
 type PaymentParams = {

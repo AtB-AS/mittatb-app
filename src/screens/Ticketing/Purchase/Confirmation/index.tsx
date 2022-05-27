@@ -34,6 +34,7 @@ import {useAuthState} from '@atb/auth';
 import {usePreviousPaymentMethod} from '../saved-payment-utils';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {getTicketType} from '@atb/screens/Ticketing/Purchase/utils';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -216,7 +217,11 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     <View style={styles.container}>
       <FullScreenHeader
         title={t(
-          PurchaseConfirmationTexts.header.title[preassignedFareProduct.type],
+          PurchaseConfirmationTexts.header.title[
+            getTicketType(
+              preassignedFareProduct,
+            ) as keyof typeof PurchaseConfirmationTexts.header.title
+          ],
         )}
         leftButton={headerLeftButton}
         alertContext="ticketing"

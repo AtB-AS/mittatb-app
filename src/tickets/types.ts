@@ -23,6 +23,7 @@ export type TravelRight = {
     | 'PreActivatedPeriodTicket'
     | 'CarnetTicket'
     | 'UnknownTicket';
+  fareProductRef: string;
 };
 
 export type Timestamp = FirebaseFirestoreTypes.Timestamp;

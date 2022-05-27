@@ -3,7 +3,6 @@ import {TicketsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
-import {ScrollView} from 'react-native-gesture-handler';
 import ThemeText from '@atb/components/text';
 import {
   Mode,
@@ -16,9 +15,11 @@ import Ticket from '@atb/screens/Ticketing/Tickets/AvailableTickets/Ticket';
 export const AvailableTickets = ({
   onBuySingleTicket,
   onBuyPeriodTicket,
+  onBuyOneDayTicket,
 }: {
   onBuySingleTicket: () => void;
   onBuyPeriodTicket: () => void;
+  onBuyOneDayTicket: () => void;
 }) => {
   const styles = useStyles();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
@@ -36,6 +37,10 @@ export const AvailableTickets = ({
     preassignedFareproducts.filter(productIsSellableInApp).some((product) => {
       return product.type === 'period';
     });
+
+  const shouldShowOneDayTicket = preassignedFareproducts
+    .filter(productIsSellableInApp)
+    .some((product) => product.type === 'period' && product.durationDays === 1);
 
   const shouldShowSummerPass = false;
 
@@ -81,6 +86,25 @@ export const AvailableTickets = ({
           />
         )}
       </View>
+      {shouldShowOneDayTicket && (
+        <View style={styles.ticketsContainer}>
+          <Ticket
+            title={t(TicketsTexts.availableTickets.oneDayTicket.title)}
+            transportationModeTexts={t(
+              TicketsTexts.availableTickets.oneDayTicket.transportModes,
+            )}
+            transportationModeIcons={[
+              {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+            ]}
+            description={t(
+              TicketsTexts.availableTickets.oneDayTicket.description,
+            )}
+            ticketIllustration="H24"
+            onPress={onBuyOneDayTicket}
+            testID="oneDayTicket"
+          />
+        </View>
+      )}
       {shouldShowSummerPass && (
         <View style={styles.ticketsContainer}>
           <Ticket

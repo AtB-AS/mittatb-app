@@ -42,7 +42,12 @@ import DurationSelection from './components/DurationSelection';
 import StartTimeSelection from './components/StartTimeSelection';
 import TravellerSelection from './components/TravellerSelection';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
-import {getPurchaseFlow} from '../utils';
+import {
+  getTicketType,
+  getPurchaseFlow,
+  filterPeriodicTicket,
+  isPeriodicTicket,
+} from '../utils';
 
 export type OverviewNavigationProp = DismissableStackNavigationProp<
   TicketingStackParams,
@@ -75,7 +80,12 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const selectableProducts = preassignedFareproducts
     .filter(productIsSellableInApp)
-    .filter((product) => product.type === params.selectableProductType);
+    .filter((product) => product.type === params.selectableProductType)
+    .filter(
+      (product) =>
+        !(params.selectableProductType === 'period') ||
+        filterPeriodicTicket(product, params),
+    );
 
   const [preassignedFareProduct, setPreassignedFareProduct] = useState(
     selectableProducts[0],
@@ -108,7 +118,10 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const shouldShowValidTrainTicketNotice =
     (preassignedFareProduct.type === 'single' ||
-      preassignedFareProduct.type === 'period') &&
+      isPeriodicTicket(
+        preassignedFareProduct.type,
+        preassignedFareProduct.durationDays,
+      )) &&
     fromTariffZone.id === 'ATB:TariffZone:1' &&
     toTariffZone.id === 'ATB:TariffZone:1';
 
@@ -124,7 +137,11 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     <View style={styles.container}>
       <FullScreenHeader
         title={t(
-          PurchaseOverviewTexts.header.title[preassignedFareProduct.type],
+          PurchaseOverviewTexts.header.title[
+            getTicketType(
+              preassignedFareProduct,
+            ) as keyof typeof PurchaseOverviewTexts.header.title
+          ],
         )}
         leftButton={{
           type: 'cancel',
@@ -146,12 +163,16 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             />
           )}
 
-          {preassignedFareProduct.type === 'period' && (
+          {isPeriodicTicket(
+            preassignedFareProduct.type,
+            preassignedFareProduct.durationDays,
+          ) && (
             <DurationSelection
               color="interactive_2"
               selectedProduct={preassignedFareProduct}
               setSelectedProduct={setPreassignedFareProduct}
               style={styles.selectionComponent}
+              selectableProducts={selectableProducts}
             />
           )}
 

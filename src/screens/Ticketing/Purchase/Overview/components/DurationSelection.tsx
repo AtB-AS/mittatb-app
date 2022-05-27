@@ -1,19 +1,18 @@
 import React from 'react';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import {productIsSellableInApp} from '@atb/reference-data/utils';
 import ThemeText from '@atb/components/text';
 import {InteractiveColor} from '@atb/theme/colors';
 import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ScrollView} from 'react-native';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 type DurationSelectionProps = {
   color: InteractiveColor;
   selectedProduct: PreassignedFareProduct;
   setSelectedProduct: (product: PreassignedFareProduct) => void;
   style?: StyleProp<ViewStyle>;
+  selectableProducts: Array<PreassignedFareProduct>;
 };
 
 export default function DurationSelection({
@@ -21,14 +20,10 @@ export default function DurationSelection({
   selectedProduct,
   setSelectedProduct,
   style,
+  selectableProducts,
 }: DurationSelectionProps) {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {preassignedFareproducts} = useFirestoreConfiguration();
-
-  const selectableProducts = preassignedFareproducts
-    .filter(productIsSellableInApp)
-    .filter((p) => p.type === selectedProduct.type);
 
   return (
     <View style={style}>
