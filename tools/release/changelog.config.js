@@ -1,7 +1,7 @@
 const {execSync} = require('child_process');
 
 const latestReleaseTag = execSync(
-  `git tag --sort=creatordate |  grep -E '(^alpha-.*)|(^v.*)|(.*nfk.*)' | tail -1`,
+  `git tag --sort=creatordate |  grep -E '/(?!(.*atb.*)|(.*nfk.*))((alpha-.*)|(v.*))' | tail -1`,
 )
   .toString('utf-8')
   .trim();
