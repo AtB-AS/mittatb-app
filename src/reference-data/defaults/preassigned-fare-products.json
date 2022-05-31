@@ -31,6 +31,68 @@
     }
   },
   {
+    "id": "ATB:PreassignedFareProduct:1fb2d3e4",
+    "version": "",
+    "type": "hour24",
+    "durationDays": 1,
+    "distributionChannel": [
+      "app",
+      "web"
+    ],
+    "name": {
+      "lang": "nob",
+      "value": "24-timersbillett"
+    },
+    "alternativeNames": [
+      {
+        "lang": "eng",
+        "value": "24 hour pass"
+      },
+      {
+        "lang": "nno",
+        "value": "24-timersbillett"
+      }
+    ],
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:2832569f"
+      ]
+    }
+  },
+  {
+    "id": "ATB:PreassignedFareProduct:6dd9beab",
+    "version": "ATB:Version:c7e5a0d8-78e8-46e9-a019-07348b8328db",
+    "type": "period",
+    "durationDays": 7,
+    "distributionChannel": [
+      "app",
+      "web"
+    ],
+    "name": {
+      "lang": "nob",
+      "value": "7-dagersbillett"
+    },
+    "alternativeNames": [
+      {
+        "lang": "nno",
+        "value": "7-dagersbillett"
+      },
+      {
+        "lang": "eng",
+        "value": "Weekly pass"
+      }
+    ],
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:2832569f"
+      ]
+    }
+  },
+  {
     "id": "ATB:PreassignedFareProduct:925469fb",
     "version": "ATB:Version:12b94a4d-b347-41c9-a6c6-35bc3386d4f4",
     "type": "period",
@@ -63,18 +125,82 @@
     }
   },
   {
-    "id": "ATB:PreassignedFareProduct:f87316e6",
-    "version": "ATB:Version:62736d83-3854-4c71-b9f2-d2d9b52997ab",
+    "id": "ATB:PreassignedFareProduct:c19cf036",
+    "version": "",
     "type": "period",
-    "durationDays": 180,
-    "name": {
-      "lang": "nob",
-      "value": "180-dagersbillett"
-    },
+    "durationDays": 60,
     "distributionChannel": [
       "app",
       "web"
     ],
+    "name": {
+      "lang": "nob",
+      "value": "60-dagersbillett"
+    },
+    "alternativeNames": [
+      {
+        "lang": "eng",
+        "value": "60 days pass"
+      },
+      {
+        "lang": "nno",
+        "value": "60-dagersbillett"
+      }
+    ],
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:2832569f"
+      ]
+    }
+  },
+  {
+    "id": "ATB:PreassignedFareProduct:39bcf20e",
+    "version": "",
+    "type": "period",
+    "durationDays": 90,
+    "distributionChannel": [
+      "app",
+      "web"
+    ],
+    "name": {
+      "lang": "nob",
+      "value": "90-dagersbillett"
+    },
+    "alternativeNames": [
+      {
+        "lang": "eng",
+        "value": "90 days pass"
+      },
+      {
+        "lang": "nno",
+        "value": "90-dagersbillett"
+      }
+    ],
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:2832569f"
+      ]
+    }
+  },
+  {
+    "id": "ATB:PreassignedFareProduct:f87316e6",
+    "version": "ATB:Version:62736d83-3854-4c71-b9f2-d2d9b52997ab",
+    "type": "period",
+    "durationDays": 180,
+    "distributionChannel": [
+      "app",
+      "web"
+    ],
+    "name": {
+      "lang": "nob",
+      "value": "180-dagersbillett"
+    },
     "alternativeNames": [
       {
         "lang": "eng",
@@ -88,37 +214,6 @@
     "limitations": {
       "userProfileRefs": [
         "ATB:UserProfile:1ae560ba",
-        "ATB:UserProfile:d3e4ec09",
-        "ATB:UserProfile:8ee842e3",
-        "ATB:UserProfile:2832569f"
-      ]
-    }
-  },
-  {
-    "id": "ATB:PreassignedFareProduct:6dd9beab",
-    "version": "ATB:Version:c7e5a0d8-78e8-46e9-a019-07348b8328db",
-    "type": "period",
-    "durationDays": 7,
-    "distributionChannel": [
-      "app",
-      "web"
-    ],
-    "name": {
-      "lang": "nob",
-      "value": "7-dagersbillett"
-    },
-    "alternativeNames": [
-      {
-        "lang": "nno",
-        "value": "7-dagersbillett"
-      },
-      {
-        "lang": "eng",
-        "value": "Weekly pass"
-      }
-    ],
-    "limitations": {
-      "userProfileRefs": [
         "ATB:UserProfile:d3e4ec09",
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"

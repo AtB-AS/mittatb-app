@@ -5,7 +5,7 @@ export type LanguageAndText = {
   value: string;
 };
 
-export type PreassignedFareProductType = 'single' | 'period' | 'carnet';
+export type PreassignedFareProductType = 'single' | 'period' | 'carnet' | 'hour24';
 
 export type DistributionChannel = 'web' | 'app';
 

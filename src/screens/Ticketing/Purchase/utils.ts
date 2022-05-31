@@ -17,7 +17,7 @@ export type PurchaseFlow = {
 export const getPurchaseFlow = (
   product: PreassignedFareProduct,
 ): PurchaseFlow => {
-  if (product.type === 'period') {
+  if (product.type === 'period' || product.type === 'hour24') {
     return {
       travellerSelectionMode: 'single',
       travelDateSelectionEnabled: true,
