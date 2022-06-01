@@ -486,7 +486,9 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                     ['==', selectedZones.from.id, ['id']],
                     hexToRgba(theme.static.status.valid.background, 0.6),
                     ['==', selectedZones.to.id, ['id']],
-                    hexToRgba(theme.static.status.info.background, 0.6),
+                    !isApplicableOnSingleZoneOnly
+                      ? hexToRgba(theme.static.status.info.background, 0.6)
+                      : 'transparent',
                     'transparent',
                   ],
                 }}

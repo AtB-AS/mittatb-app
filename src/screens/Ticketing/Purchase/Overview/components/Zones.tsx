@@ -44,9 +44,17 @@ export default function Zones({
         type="body__secondary"
         color="secondary"
         style={itemStyle.sectionText}
-        accessibilityLabel={t(PurchaseOverviewTexts.zones.label.a11yLabel)}
+        accessibilityLabel={t(
+          PurchaseOverviewTexts.zones.label[
+            isApplicableOnSingleZoneOnly ? 'singleZone' : 'multipleZone'
+          ].a11yLabel,
+        )}
       >
-        {t(PurchaseOverviewTexts.zones.label.text)}
+        {t(
+          PurchaseOverviewTexts.zones.label[
+            isApplicableOnSingleZoneOnly ? 'singleZone' : 'multipleZone'
+          ].text,
+        )}
       </ThemeText>
       <Sections.Section {...accessibility}>
         <Sections.ButtonInput

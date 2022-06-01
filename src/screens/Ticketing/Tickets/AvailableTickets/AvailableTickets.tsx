@@ -38,7 +38,7 @@ export const AvailableTickets = ({
       return product.type === 'period';
     });
 
-  const shouldShowOneDayTicket = preassignedFareproducts
+  const shouldShowHour24Ticket = preassignedFareproducts
     .filter(productIsSellableInApp)
     .some((product) => product.type === 'hour24');
 
@@ -86,7 +86,7 @@ export const AvailableTickets = ({
           />
         )}
       </View>
-      {shouldShowOneDayTicket && (
+      {shouldShowHour24Ticket && (
         <View style={styles.ticketsContainer}>
           <Ticket
             title={t(TicketsTexts.availableTickets.hour24.title)}
