@@ -7,6 +7,7 @@ const PurchaseOverviewTexts = {
       single: _('Enkeltbillett', 'Single ticket'),
       period: _('Periodebillett', 'Periodic ticket'),
       carnet: _('Klippekort', 'Carnet ticket'),
+      hour24: _('24-timersbillett', '24 hour pass'),
     },
   },
   errorMessageBox: {
@@ -63,8 +64,14 @@ const PurchaseOverviewTexts = {
   ),
   zones: {
     label: {
-      text: _('Velg sone(r)', 'Select zone(s)'),
-      a11yLabel: _('Velg soner', 'Select zones'),
+      singleZone: {
+        text: _('Velg sone (kun én)', 'Select zone (only one)'),
+        a11yLabel: _('Velg sone (kun én)', 'Select zone (only one)'),
+      },
+      multipleZone: {
+        text: _('Velg sone(r)', 'Select zone(s)'),
+        a11yLabel: _('Velg soner', 'Select zones'),
+      },
     },
   },
   duration: {

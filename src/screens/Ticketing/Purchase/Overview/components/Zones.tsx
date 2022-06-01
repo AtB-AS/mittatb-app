@@ -17,12 +17,14 @@ type ZonesProps = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
   style?: StyleProp<ViewStyle>;
+  isApplicableOnSingleZoneOnly?: boolean;
 };
 
 export default function Zones({
   fromTariffZone,
   toTariffZone,
   style,
+  isApplicableOnSingleZoneOnly,
 }: ZonesProps) {
   const itemStyle = useStyles();
   const {t, language} = useTranslation();
@@ -42,9 +44,17 @@ export default function Zones({
         type="body__secondary"
         color="secondary"
         style={itemStyle.sectionText}
-        accessibilityLabel={t(PurchaseOverviewTexts.zones.label.a11yLabel)}
+        accessibilityLabel={t(
+          PurchaseOverviewTexts.zones.label[
+            isApplicableOnSingleZoneOnly ? 'singleZone' : 'multipleZone'
+          ].a11yLabel,
+        )}
       >
-        {t(PurchaseOverviewTexts.zones.label.text)}
+        {t(
+          PurchaseOverviewTexts.zones.label[
+            isApplicableOnSingleZoneOnly ? 'singleZone' : 'multipleZone'
+          ].text,
+        )}
       </ThemeText>
       <Sections.Section {...accessibility}>
         <Sections.ButtonInput
@@ -61,6 +71,7 @@ export default function Zones({
             navigation.push('TariffZones', {
               fromTariffZone,
               toTariffZone,
+              isApplicableOnSingleZoneOnly: isApplicableOnSingleZoneOnly,
             });
           }}
           testID="selectZonesButton"
