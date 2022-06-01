@@ -35,6 +35,7 @@
     "version": "",
     "type": "hour24",
     "durationDays": 1,
+    "isApplicableOnSingleZoneOnly": true,
     "distributionChannel": [
       "app",
       "web"

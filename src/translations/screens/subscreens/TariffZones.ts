@@ -2,7 +2,10 @@ import {translation as _} from '../../commons';
 
 const TariffZonesTexts = {
   header: {
-    title: _('Velg soner', 'Select zones'),
+    title: {
+      singleZone: _('Velg sone', 'Select zone'),
+      multipleZone: _('Velg soner', 'Select zones'),
+    },
   },
   zoneSummary: {
     a11yLabelPrefix: _(`Sonevalget er`, `The zone selection is`),
@@ -41,6 +44,9 @@ const TariffZonesTexts = {
   },
 
   location: {
+    singleZone: {
+      label: _('Reise i ', 'Travel in '),
+    },
     departurePicker: {
       value: {
         noVenue: (zoneName: string) =>

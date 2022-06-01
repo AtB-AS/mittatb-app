@@ -96,9 +96,7 @@ export const AvailableTickets = ({
             transportationModeIcons={[
               {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
             ]}
-            description={t(
-              TicketsTexts.availableTickets.hour24.description,
-            )}
+            description={t(TicketsTexts.availableTickets.hour24.description)}
             ticketIllustration="H24"
             onPress={onBuyHour24Ticket}
             testID="24HourTicket"

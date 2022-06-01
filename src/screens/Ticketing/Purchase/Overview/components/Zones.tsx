@@ -17,12 +17,14 @@ type ZonesProps = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
   style?: StyleProp<ViewStyle>;
+  isApplicableOnSingleZoneOnly?: boolean;
 };
 
 export default function Zones({
   fromTariffZone,
   toTariffZone,
   style,
+  isApplicableOnSingleZoneOnly,
 }: ZonesProps) {
   const itemStyle = useStyles();
   const {t, language} = useTranslation();
@@ -61,6 +63,7 @@ export default function Zones({
             navigation.push('TariffZones', {
               fromTariffZone,
               toTariffZone,
+              isApplicableOnSingleZoneOnly: isApplicableOnSingleZoneOnly,
             });
           }}
           testID="selectZonesButton"

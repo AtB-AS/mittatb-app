@@ -166,6 +166,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             fromTariffZone={fromTariffZone}
             toTariffZone={toTariffZone}
             style={styles.selectionComponent}
+            isApplicableOnSingleZoneOnly={
+              preassignedFareProduct.isApplicableOnSingleZoneOnly
+            }
           />
 
           {travelDateSelectionEnabled && (
