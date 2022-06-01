@@ -104,7 +104,7 @@ describe('My profile', () => {
     await expectToBeVisibleByText('My account');
     await expectToBeVisibleByText('Customer number');
     await expectToBeVisibleById('loginButton');
-    await expectToBeVisibleByText('Sign in');
+    await expectToBeVisibleByText('Log in');
     await expectToBeVisibleById('expiredTicketsButton');
     await expectToBeVisibleByText('Expired tickets');
   });

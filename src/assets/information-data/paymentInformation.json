@@ -19,7 +19,7 @@
             "type": "heading"
         },
         {
-            "text": "All transactions performed with Vipps are processed by Vipps. If you have selected Vipps as your default payment method, the Vipps app will open when you pay. You are then asked to sign in to Vipps in the usual way. The AtB app will request access to Vipps, which you must answer yes to. Vipps will use your chosen payment method, account or card selected in the Vipps app. Information about your account, your cards or other personal information is not stored in the AtB app or at AtB.",
+            "text": "All transactions performed with Vipps are processed by Vipps. If you have selected Vipps as your default payment method, the Vipps app will open when you pay. You are then asked to log in to Vipps in the usual way. The AtB app will request access to Vipps, which you must answer yes to. Vipps will use your chosen payment method, account or card selected in the Vipps app. Information about your account, your cards or other personal information is not stored in the AtB app or at AtB.",
             "type": "text"
         },
         {

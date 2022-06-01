@@ -10,10 +10,10 @@ const ProfileTexts = {
       heading: _('Min konto', 'My account'),
       linkItems: {
         login: {
-          label: _('Logg inn', 'Sign in'),
+          label: _('Logg inn', 'Log in'),
         },
         logout: {
-          label: _('Logg ut', 'Sign out'),
+          label: _('Logg ut', 'Log out'),
         },
         expiredTickets: {
           label: _('Utløpte billetter', 'Expired tickets'),

@@ -11,7 +11,7 @@ const OnboardingTexts = {
       ),
       part2: _(
         'Hvis du logger inn vil du alltid ha tilgang til billettene dine, selv om du bytter eller mister telefonen din.',
-        'If you sign in you will always have access to your tickets, even if you switch or lose your phone.',
+        'If you log in you will always have access to your tickets, even if you switch or lose your phone.',
       ),
       part3: _(
         'Du vil også kunne administrere billetter og eventuelle t:kort på den nye nettbutikken med samme konto.',
