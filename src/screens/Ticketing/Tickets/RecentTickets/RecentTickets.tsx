@@ -45,7 +45,8 @@ export const RecentTickets = () => {
         if (
           ticketType === 'single' ||
           ticketType === 'period' ||
-          ticketType === 'carnet'
+          ticketType === 'carnet' ||
+          ticketType === 'hour24'
         )
           return true;
         else return false;
