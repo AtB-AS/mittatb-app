@@ -18,6 +18,7 @@ import Slider from '@react-native-community/slider';
 import {usePreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import Button from '@atb/components/button';
+import {useNavigation} from '@react-navigation/native';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -31,6 +32,7 @@ export default function DebugInfo() {
   const [idToken, setIdToken] = useState<
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
+  const navigation = useNavigation();
 
   useEffect(() => {
     async function run() {
@@ -108,7 +110,10 @@ export default function DebugInfo() {
               appDispatch({type: 'RESTART_ONBOARDING'});
             }}
           />
-
+          <Sections.LinkItem
+            text="Restart travel document onboarding"
+            onPress={() => navigation.navigate('TravelDocumentOnboardingStack')}
+          />
           <Sections.LinkItem
             text="Copy link to customer in Firestore (staging)"
             icon="arrow-upleft"
