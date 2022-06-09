@@ -82,7 +82,7 @@ export default function TravelTokenBox({
   );
 }
 
-const TravelDeviceTitle = ({
+export const TravelDeviceTitle = ({
   inspectableToken,
 }: {
   inspectableToken: TravelToken;
