@@ -13,7 +13,7 @@ export const FOCUS_ORIGIN: Coordinates = {
 export async function autocomplete(
   text: string,
   coordinates: Coordinates | null,
-  onlyAtbVenues: boolean = false,
+  onlyLocalTariffZone: boolean = false,
   config?: AxiosRequestConfig,
 ) {
   const url = 'bff/v1/geocoder/features';
@@ -23,7 +23,7 @@ export async function autocomplete(
       lat: coordinates?.latitude ?? FOCUS_ORIGIN.latitude,
       lon: coordinates?.longitude ?? FOCUS_ORIGIN.longitude,
       limit: 10,
-      tariff_zone_authorities: onlyAtbVenues ? 'ATB' : null,
+      tariff_zone_authorities: onlyLocalTariffZone ? TARIFF_ZONE : null,
     },
     {skipNull: true},
   );

@@ -9,7 +9,7 @@ import {getAxiosErrorType} from '../api/utils';
 export default function useGeocoder(
   text: string | null,
   coords: Coordinates | null,
-  onlyAtbVenues?: boolean,
+  onlyLocalTariffZone?: boolean,
 ): GeocoderState {
   const [state, dispatch] = useGeocoderReducer();
 
@@ -21,9 +21,14 @@ export default function useGeocoder(
       } else {
         try {
           dispatch({type: 'SET_IS_SEARCHING'});
-          const response = await autocomplete(text, coords, onlyAtbVenues, {
-            cancelToken: source.token,
-          });
+          const response = await autocomplete(
+            text,
+            coords,
+            onlyLocalTariffZone,
+            {
+              cancelToken: source.token,
+            },
+          );
           source.token.throwIfRequested();
           dispatch({
             type: 'SET_LOCATIONS',
