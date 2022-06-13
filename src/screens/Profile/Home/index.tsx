@@ -6,7 +6,11 @@ import {RootStackParamList} from '@atb/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
-import {ProfileTexts, useTranslation} from '@atb/translations';
+import {
+  ProfileTexts,
+  TranslatedString,
+  useTranslation,
+} from '@atb/translations';
 import useLocalConfig from '@atb/utils/use-local-config';
 import {IS_QA_ENV} from '@env';
 import {CompositeNavigationProp} from '@react-navigation/native';
@@ -47,6 +51,13 @@ type ProfileScreenProps = {
   navigation: ProfileNearbyScreenNavigationProp;
 };
 
+type ConfirmActionProps = {
+  confirmMessage: TranslatedString;
+  cancelAlertTranslatable: TranslatedString;
+  confirmAlertTranslatable: TranslatedString;
+  destructiveArrowFunction: any;
+};
+
 export default function ProfileHome({navigation}: ProfileScreenProps) {
   const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login} =
     useRemoteConfig();
@@ -78,6 +89,24 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   }
 
   const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
+
+  const confirmAction = ({
+    confirmMessage,
+    cancelAlertTranslatable,
+    confirmAlertTranslatable,
+    destructiveArrowFunction,
+  }: ConfirmActionProps): void =>
+    Alert.alert(t(confirmMessage), undefined, [
+      {
+        text: t(cancelAlertTranslatable),
+        style: 'cancel',
+      },
+      {
+        text: t(confirmAlertTranslatable),
+        style: 'destructive',
+        onPress: destructiveArrowFunction,
+      },
+    ]);
 
   return (
     <View style={style.container}>
@@ -154,29 +183,17 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               <Sections.LinkItem
                 text={t(ProfileTexts.sections.account.linkItems.logout.label)}
                 onPress={() =>
-                  Alert.alert(
-                    t(ProfileTexts.sections.account.linkItems.logout.confirm),
-                    undefined,
-                    [
-                      {
-                        text: t(
-                          ProfileTexts.sections.account.linkItems.logout.alert
-                            .cancel,
-                        ),
-                        style: 'cancel',
-                      },
-                      {
-                        text: t(
-                          ProfileTexts.sections.account.linkItems.logout.alert
-                            .confirm,
-                        ),
-                        style: 'destructive',
-                        onPress: () => {
-                          signOut();
-                        },
-                      },
-                    ],
-                  )
+                  confirmAction({
+                    confirmMessage:
+                      ProfileTexts.sections.account.linkItems.logout.confirm,
+                    cancelAlertTranslatable:
+                      ProfileTexts.sections.account.linkItems.logout.alert
+                        .cancel,
+                    confirmAlertTranslatable:
+                      ProfileTexts.sections.account.linkItems.logout.alert
+                        .confirm,
+                    destructiveArrowFunction: () => signOut(),
+                  })
                 }
                 testID="logoutButton"
               />
@@ -315,29 +332,19 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             }}
             testID="clearHistoryButton"
             onPress={() =>
-              Alert.alert(
-                t(ProfileTexts.sections.privacy.linkItems.clearHistory.confirm),
-                undefined,
-                [
-                  {
-                    text: t(
-                      ProfileTexts.sections.privacy.linkItems.clearHistory.alert
-                        .cancel,
-                    ),
-                    style: 'cancel',
-                  },
-                  {
-                    text: t(
-                      ProfileTexts.sections.privacy.linkItems.clearHistory.alert
-                        .confirm,
-                    ),
-                    style: 'destructive',
-                    onPress: async () => {
-                      await clearHistory();
-                    },
-                  },
-                ],
-              )
+              confirmAction({
+                confirmMessage:
+                  ProfileTexts.sections.privacy.linkItems.clearHistory.confirm,
+                cancelAlertTranslatable:
+                  ProfileTexts.sections.privacy.linkItems.clearHistory.alert
+                    .cancel,
+                confirmAlertTranslatable:
+                  ProfileTexts.sections.privacy.linkItems.clearHistory.alert
+                    .confirm,
+                destructiveArrowFunction: async () => {
+                  await clearHistory();
+                },
+              })
             }
           />
         </Sections.Section>
