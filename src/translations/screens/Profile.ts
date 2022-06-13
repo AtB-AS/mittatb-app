@@ -14,6 +14,14 @@ const ProfileTexts = {
         },
         logout: {
           label: _('Logg ut', 'Log out'),
+          confirm: _(
+            'Billettene dine vil fjernes fra appen hvis du logger ut.',
+            'Your tickets will disappear from the app if you log out.',
+          ),
+          alert: {
+            cancel: _('Avbryt', 'Cancel'),
+            confirm: _('Logg ut', 'Log out'),
+          },
         },
         expiredTickets: {
           label: _('Utløpte billetter', 'Expired tickets'),

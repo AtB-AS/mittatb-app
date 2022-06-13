@@ -153,7 +153,31 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             {authenticationType === 'phone' && (
               <Sections.LinkItem
                 text={t(ProfileTexts.sections.account.linkItems.logout.label)}
-                onPress={signOut}
+                onPress={() =>
+                  Alert.alert(
+                    t(ProfileTexts.sections.account.linkItems.logout.confirm),
+                    undefined,
+                    [
+                      {
+                        text: t(
+                          ProfileTexts.sections.account.linkItems.logout.alert
+                            .cancel,
+                        ),
+                        style: 'cancel',
+                      },
+                      {
+                        text: t(
+                          ProfileTexts.sections.account.linkItems.logout.alert
+                            .confirm,
+                        ),
+                        style: 'destructive',
+                        onPress: () => {
+                          signOut();
+                        },
+                      },
+                    ],
+                  )
+                }
                 testID="logoutButton"
               />
             )}
