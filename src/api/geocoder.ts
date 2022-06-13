@@ -1,4 +1,4 @@
-import {FOCUS_LATITUDE, FOCUS_LONGITUDE, TARIFF_ZONE} from '@env';
+import {FOCUS_LATITUDE, FOCUS_LONGITUDE, TARIFF_ZONE_AUTHORITY} from '@env';
 import {Feature, Coordinates} from '../sdk';
 import client from './client';
 import qs from 'query-string';
@@ -46,7 +46,7 @@ export async function getFeatureFromVenue(
       lon: venue.coordinates.longitude,
       limit: 1,
       layers: ['venue'],
-      tariff_zone_authorities: TARIFF_ZONE,
+      tariff_zone_authorities: TARIFF_ZONE_AUTHORITY,
     },
     {skipNull: true},
   );

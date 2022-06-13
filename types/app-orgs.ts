@@ -3,7 +3,7 @@ export enum AppOrgs {
   atb = 'atb',
 }
 
-export enum TariffZones {
+export enum TariffZoneAuthorities {
   atb = 'ATB',
   nfk = 'NOR',
   fram = 'MOR',
