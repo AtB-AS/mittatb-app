@@ -9,7 +9,7 @@ import {getAxiosErrorType} from '../api/utils';
 export default function useGeocoder(
   text: string | null,
   coords: Coordinates | null,
-  onlyLocalTariffZone?: boolean,
+  onlyLocalTariffZoneAuthority?: boolean,
 ): GeocoderState {
   const [state, dispatch] = useGeocoderReducer();
 
@@ -24,7 +24,7 @@ export default function useGeocoder(
           const response = await autocomplete(
             text,
             coords,
-            onlyLocalTariffZone,
+            onlyLocalTariffZoneAuthority,
             {
               cancelToken: source.token,
             },

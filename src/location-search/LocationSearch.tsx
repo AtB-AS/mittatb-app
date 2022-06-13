@@ -119,7 +119,7 @@ type LocationSearchContentProps = {
   defaultText?: string;
   onSelect(location: SelectableLocationData): void;
   onMapSelection?(): void;
-  onlyLocalTariffZone?: boolean;
+  onlyLocalTariffZoneAuthority?: boolean;
   includeHistory?: boolean;
   includeJourneyHistory?: boolean;
 };
@@ -131,7 +131,7 @@ export function LocationSearchContent({
   defaultText,
   onSelect,
   onMapSelection,
-  onlyLocalTariffZone = false,
+  onlyLocalTariffZoneAuthority = false,
   includeHistory = true,
   includeJourneyHistory = false,
 }: LocationSearchContentProps) {
@@ -148,7 +148,7 @@ export function LocationSearchContent({
     debouncedText,
     history,
     favorites,
-    onlyLocalTariffZone,
+    onlyLocalTariffZoneAuthority,
   );
 
   const {location: geolocation} = useGeolocationState();
@@ -156,7 +156,7 @@ export function LocationSearchContent({
   const {locations, error} = useGeocoder(
     debouncedText,
     geolocation?.coordinates ?? null,
-    onlyLocalTariffZone,
+    onlyLocalTariffZoneAuthority,
   );
 
   const filteredLocations = filterCurrentLocation(

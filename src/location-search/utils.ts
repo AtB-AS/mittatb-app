@@ -23,7 +23,7 @@ export const filterPreviousLocations = (
   searchText: string,
   previousLocations: SearchLocation[],
   favorites?: UserFavorites,
-  onlyLocalTariffZone: boolean = false,
+  onlyLocalTariffZoneAuthority: boolean = false,
 ): LocationSearchResult[] => {
   const mappedHistory: LocationSearchResult[] =
     previousLocations
@@ -32,7 +32,7 @@ export const filterPreviousLocations = (
       }))
       .filter(
         (location) =>
-          !onlyLocalTariffZone || location.location.layer == 'venue',
+          !onlyLocalTariffZoneAuthority || location.location.layer == 'venue',
       ) ?? [];
 
   if (!searchText) {
@@ -48,7 +48,7 @@ export const filterPreviousLocations = (
       } =>
         (matchText(searchText, favorite.location.name) ||
           matchText(searchText, favorite.name)) &&
-        (!onlyLocalTariffZone ||
+        (!onlyLocalTariffZoneAuthority ||
           getLocationLayer(favorite.location) == 'venue') &&
         favorite.location.resultType === 'search',
     )
