@@ -6,6 +6,7 @@ import {RootStackParamList} from '@atb/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
+import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import useLocalConfig from '@atb/utils/use-local-config';
@@ -287,6 +288,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.privacy.linkItems.clearHistory.label)}
+            icon={<ThemeIcon svg={Delete} />}
             accessibility={{
               accessibilityHint: t(
                 ProfileTexts.sections.privacy.linkItems.clearHistory.a11yHint,
