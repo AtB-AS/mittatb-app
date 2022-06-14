@@ -12,9 +12,10 @@ import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import storage from '@atb/storage';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import Slider from '@react-native-community/slider';
-import {TripSearchPreferences, usePreferences} from '@atb/preferences';
+import {usePreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import {useNavigation} from '@react-navigation/native';
+import {useHasEnabledMobileToken} from "@atb/mobile-token/MobileTokenContext";
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -70,6 +71,8 @@ export default function DebugInfo() {
     walkReluctance: 1.5,
     walkSpeed: 1.3,
   };
+  const hasEnabledMobileToken = useHasEnabledMobileToken();
+  const {authenticationType} = useAuthState();
 
   return (
     <View style={style.container}>
@@ -95,10 +98,12 @@ export default function DebugInfo() {
               appDispatch({type: 'RESTART_ONBOARDING'});
             }}
           />
-          <Sections.LinkItem
-            text="Restart mobile token onboarding"
-            onPress={() => navigation.navigate('MobileTokenOnboardingStack')}
-          />
+          {(hasEnabledMobileToken && authenticationType === 'phone') && <Sections.LinkItem
+              text="Restart mobile token onboarding"
+              onPress={() => {
+                appDispatch({type: 'RESTART_MOBILE_TOKEN_ONBOARDING'});
+              }}
+          />}
           <Sections.LinkItem
             text="Copy link to customer in Firestore (staging)"
             icon="arrow-upleft"

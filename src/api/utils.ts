@@ -54,3 +54,5 @@ export const getAxiosErrorMetadata = (error: AxiosError): ErrorMetadata => ({
 });
 
 export const stringifyUrl = (url: string, query: string) => `${url}?${query}`;
+
+export const shouldOnboardMobileToken = (hasEnabledMobileToken: boolean, authenticationType: string, mobileTokenOnboarded: boolean) =>  hasEnabledMobileToken && authenticationType === 'phone' && !mobileTokenOnboarded;
