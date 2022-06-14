@@ -6,6 +6,8 @@ import {RootStackParamList} from '@atb/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
+import {Delete} from '@atb/assets/svg/mono-icons/actions';
+import {LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import useLocalConfig from '@atb/utils/use-local-config';
 import {IS_QA_ENV} from '@env';
@@ -29,6 +31,7 @@ import {updateMetadata} from '@atb/chat/metadata';
 import parsePhoneNumber from 'libphonenumber-js';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
+import ThemeIcon from '@atb/components/theme-icon';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -153,6 +156,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             {authenticationType === 'phone' && (
               <Sections.LinkItem
                 text={t(ProfileTexts.sections.account.linkItems.logout.label)}
+                icon={<ThemeIcon svg={LogOut} />}
                 onPress={signOut}
                 testID="logoutButton"
               />
@@ -284,6 +288,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.privacy.linkItems.clearHistory.label)}
+            icon={<ThemeIcon svg={Delete} />}
             accessibility={{
               accessibilityHint: t(
                 ProfileTexts.sections.privacy.linkItems.clearHistory.a11yHint,
