@@ -1,5 +1,5 @@
 import {translation as _} from '../../commons';
-const TravelDocumentOnboardingTexts = {
+const MobileTokenOnboardingTexts = {
   info1: {
     heading: _('En mer fleksibel reisehverdag', 'More flexibility'),
     description: _(
@@ -68,4 +68,4 @@ const TravelDocumentOnboardingTexts = {
     'Activate to go to next page',
   ),
 };
-export default TravelDocumentOnboardingTexts;
+export default MobileTokenOnboardingTexts;
