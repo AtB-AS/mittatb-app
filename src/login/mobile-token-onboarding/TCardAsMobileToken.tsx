@@ -13,6 +13,7 @@ import {usePreferenceItems} from '@atb/preferences';
 import {settingToRouteName} from '@atb/utils/navigation';
 import {TravelDeviceTitle} from '@atb/travel-token-box';
 import {TravelToken} from '@atb/mobile-token/types';
+import {useAppState} from "@atb/AppContext";
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -26,6 +27,7 @@ export function TCardAsMobileToken({
   const navigation = useNavigation();
   const {themeName} = useTheme();
   const {startScreen} = usePreferenceItems();
+  const {completeMobileTokenOnboarding} = useAppState();
   return (
     <View style={styles.container}>
       <View style={styles.mainView}>
@@ -70,6 +72,7 @@ export function TCardAsMobileToken({
           <Button
             interactiveColor="interactive_0"
             onPress={() => {
+              completeMobileTokenOnboarding()
               navigation.navigate(settingToRouteName(startScreen));
             }}
             text={t(MobileTokenOnboardingTexts.ok)}

@@ -14,6 +14,7 @@ import {settingToRouteName} from '@atb/utils/navigation';
 import {usePreferenceItems} from '@atb/preferences';
 import {TravelDeviceTitle} from '@atb/travel-token-box';
 import {TravelToken} from '@atb/mobile-token/types';
+import {useAppState} from "@atb/AppContext";
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -28,6 +29,7 @@ export function PhoneAsMobileToken({
   const {themeName} = useTheme();
   const focusRef = useFocusOnLoad();
   const {startScreen} = usePreferenceItems();
+  const {completeMobileTokenOnboarding} = useAppState();
   return (
     <View style={styles.container}>
       <View style={styles.mainView}>
@@ -70,6 +72,7 @@ export function PhoneAsMobileToken({
         <FullScreenFooter>
           <Button
             onPress={() => {
+              completeMobileTokenOnboarding()
               navigation.navigate(settingToRouteName(startScreen));
             }}
             text={t(MobileTokenOnboardingTexts.ok)}

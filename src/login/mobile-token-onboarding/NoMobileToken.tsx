@@ -10,6 +10,8 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {CrashSmall} from '@atb/assets/svg/color/images';
 import {settingToRouteName} from '@atb/utils/navigation';
 import {usePreferenceItems} from '@atb/preferences';
+import {useAppState} from "@atb/AppContext";
+
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -17,6 +19,7 @@ export function NoMobileToken({}: {}): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const navigation = useNavigation();
+  const {completeMobileTokenOnboarding} = useAppState();
   const {startScreen} = usePreferenceItems();
 
   return (
@@ -40,7 +43,8 @@ export function NoMobileToken({}: {}): JSX.Element {
         <Button
           interactiveColor="interactive_0"
           onPress={() => {
-            navigation.navigate(settingToRouteName(startScreen));
+              completeMobileTokenOnboarding()
+              navigation.navigate(settingToRouteName(startScreen));
           }}
           text={t(MobileTokenOnboardingTexts.next)}
           testID="nextButton"
