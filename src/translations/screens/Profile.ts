@@ -1,5 +1,4 @@
 import {translation as _} from '../commons';
-import orgSpecificTranslations from '../utils';
 
 const ProfileTexts = {
   header: {
@@ -14,6 +13,14 @@ const ProfileTexts = {
         },
         logout: {
           label: _('Logg ut', 'Log out'),
+          confirm: _(
+            'Billettene dine vil ikke være tilgjengelig i appen hvis du logger ut. De blir tilgjengelige igjen hvis du logger inn.',
+            'Your tickets will be inaccessible in the app after logging out. You can access them again by logging in.',
+          ),
+          alert: {
+            cancel: _('Avbryt', 'Cancel'),
+            confirm: _('Logg ut', 'Log out'),
+          },
         },
         expiredTickets: {
           label: _('Utløpte billetter', 'Expired tickets'),

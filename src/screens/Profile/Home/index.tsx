@@ -6,15 +6,15 @@ import {RootStackParamList} from '@atb/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
+import {ProfileTexts, useTranslation} from '@atb/translations';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {LogOut} from '@atb/assets/svg/mono-icons/profile';
-import {ProfileTexts, useTranslation} from '@atb/translations';
 import useLocalConfig from '@atb/utils/use-local-config';
 import {IS_QA_ENV} from '@env';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
-import {Alert, Linking, View} from 'react-native';
+import {Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileStackParams} from '..';
@@ -32,6 +32,7 @@ import parsePhoneNumber from 'libphonenumber-js';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import ThemeIcon from '@atb/components/theme-icon';
+import {destructiveAlert} from './utils';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -157,7 +158,22 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               <Sections.LinkItem
                 text={t(ProfileTexts.sections.account.linkItems.logout.label)}
                 icon={<ThemeIcon svg={LogOut} />}
-                onPress={signOut}
+                onPress={() =>
+                  destructiveAlert({
+                    confirmMessageString: t(
+                      ProfileTexts.sections.account.linkItems.logout.confirm,
+                    ),
+                    cancelAlertString: t(
+                      ProfileTexts.sections.account.linkItems.logout.alert
+                        .cancel,
+                    ),
+                    confirmAlertString: t(
+                      ProfileTexts.sections.account.linkItems.logout.alert
+                        .confirm,
+                    ),
+                    destructiveArrowFunction: () => signOut(),
+                  })
+                }
                 testID="logoutButton"
               />
             )}
@@ -296,29 +312,22 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             }}
             testID="clearHistoryButton"
             onPress={() =>
-              Alert.alert(
-                t(ProfileTexts.sections.privacy.linkItems.clearHistory.confirm),
-                undefined,
-                [
-                  {
-                    text: t(
-                      ProfileTexts.sections.privacy.linkItems.clearHistory.alert
-                        .cancel,
-                    ),
-                    style: 'cancel',
-                  },
-                  {
-                    text: t(
-                      ProfileTexts.sections.privacy.linkItems.clearHistory.alert
-                        .confirm,
-                    ),
-                    style: 'destructive',
-                    onPress: async () => {
-                      await clearHistory();
-                    },
-                  },
-                ],
-              )
+              destructiveAlert({
+                confirmMessageString: t(
+                  ProfileTexts.sections.privacy.linkItems.clearHistory.confirm,
+                ),
+                cancelAlertString: t(
+                  ProfileTexts.sections.privacy.linkItems.clearHistory.alert
+                    .cancel,
+                ),
+                confirmAlertString: t(
+                  ProfileTexts.sections.privacy.linkItems.clearHistory.alert
+                    .confirm,
+                ),
+                destructiveArrowFunction: async () => {
+                  await clearHistory();
+                },
+              })
             }
           />
         </Sections.Section>
