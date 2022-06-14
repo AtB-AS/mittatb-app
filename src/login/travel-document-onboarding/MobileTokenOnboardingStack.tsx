@@ -11,7 +11,7 @@ import {
   TicketSafetyInfo,
 } from '@atb/login/travel-document-onboarding/OnboardingInfo';
 import {PageIndicator} from '@atb/login/travel-document-onboarding/PageIndicator';
-import TravelDocument from '@atb/login/travel-document-onboarding/TravelDocument';
+import MobileToken from '@atb/login/travel-document-onboarding/MobileToken';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -19,12 +19,12 @@ export type TicketTabsNavigatorParams = {
   FlexibilityInfo: undefined;
   OptionsInfo: undefined;
   TicketSafetyInfo: undefined;
-  TravelDocument: undefined;
+  MobileToken: undefined;
 };
 
 const Tab = createMaterialTopTabNavigator<TicketTabsNavigatorParams>();
 
-export default function TravelDocumentOnboardingStack() {
+export default function MobileTokenOnboardingStack() {
   const styles = useStyles();
   return (
     <View style={styles.container}>
@@ -49,9 +49,9 @@ export default function TravelDocumentOnboardingStack() {
           component={TicketSafetyInfo}
         />
         <Tab.Screen
-          name="TravelDocument"
-          key="TravelDocument"
-          component={TravelDocument}
+          name="MobileToken"
+          key="MobileToken"
+          component={MobileToken}
         />
       </Tab.Navigator>
 

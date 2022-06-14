@@ -96,8 +96,8 @@ export default function DebugInfo() {
             }}
           />
           <Sections.LinkItem
-            text="Restart travel document onboarding"
-            onPress={() => navigation.navigate('TravelDocumentOnboardingStack')}
+            text="Restart mobile token onboarding"
+            onPress={() => navigation.navigate('MobileTokenOnboardingStack')}
           />
           <Sections.LinkItem
             text="Copy link to customer in Firestore (staging)"

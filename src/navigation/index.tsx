@@ -32,7 +32,7 @@ import LoginInAppStack, {
   LoginInAppStackParams,
 } from '@atb/login/in-app/LoginInAppStack';
 import useTestIds from './use-test-ids';
-import TravelDocumentOnboardingStack from '@atb/login/travel-document-onboarding/TravelDocumentOnboardingStack';
+import MobileTokenOnboardingStack from '@atb/login/travel-document-onboarding/MobileTokenOnboardingStack';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -44,7 +44,7 @@ export type RootStackParamList = {
   LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
   TicketPurchase: NavigatorScreenParams<TicketingStackParams>;
   TicketModal: NavigatorScreenParams<TicketModalStackParams>;
-  TravelDocumentOnboardingStack: undefined;
+  MobileTokenOnboardingStack: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -160,8 +160,8 @@ const NavigationRoot = () => {
                   }}
                 />
                 <Stack.Screen
-                  name="TravelDocumentOnboardingStack"
-                  component={TravelDocumentOnboardingStack}
+                  name="MobileTokenOnboardingStack"
+                  component={MobileTokenOnboardingStack}
                 />
               </>
             )}

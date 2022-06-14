@@ -1,15 +1,15 @@
 import React from 'react';
 import {View} from 'react-native';
-import {TCardAsTravelDocument} from '@atb/login/travel-document-onboarding/TCardAsTravelDocument';
-import {PhoneAsTravelDocument} from '@atb/login/travel-document-onboarding/PhoneAsTravelDocument';
+import {TCardAsMobileToken} from '@atb/login/travel-document-onboarding/TCardAsMobileToken';
+import {PhoneAsMobileToken} from '@atb/login/travel-document-onboarding/PhoneAsMobileToken';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import {NoTravelDocument} from '@atb/login/travel-document-onboarding/NoTravelDocument';
+import {NoMobileToken} from '@atb/login/travel-document-onboarding/NoMobileToken';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-const TravelDocument = () => {
+const MobileToken = () => {
   const styles = useStyles();
   const {travelTokens} = useMobileTokenContextState();
   const inspectableToken = travelTokens?.find((t) => t.inspectable)!;
@@ -17,19 +17,19 @@ const TravelDocument = () => {
     case 'travelCard':
       return (
         <View style={styles.container}>
-          <TCardAsTravelDocument inspectableToken={inspectableToken} />
+          <TCardAsMobileToken inspectableToken={inspectableToken} />
         </View>
       );
     case 'mobile':
       return (
         <View style={styles.container}>
-          <PhoneAsTravelDocument inspectableToken={inspectableToken} />
+          <PhoneAsMobileToken inspectableToken={inspectableToken} />
         </View>
       );
     default:
       return (
         <View style={styles.container}>
-          <NoTravelDocument />
+          <NoMobileToken />
         </View>
       );
   }
@@ -42,4 +42,4 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-export default TravelDocument;
+export default MobileToken;

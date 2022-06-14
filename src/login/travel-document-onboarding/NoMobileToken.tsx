@@ -2,7 +2,7 @@ import {useTranslation} from '@atb/translations';
 import {useNavigation} from '@react-navigation/native';
 import {View} from 'react-native';
 import ThemeText from '@atb/components/text';
-import TravelDocumentOnboardingTexts from '@atb/translations/screens/subscreens/TravelDocumentOnboarding';
+import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
 import Button from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
@@ -11,7 +11,7 @@ import {Crash} from '@atb/assets/svg/color/images';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export function NoTravelDocument({}: {}): JSX.Element {
+export function NoMobileToken({}: {}): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const navigation = useNavigation();
@@ -24,14 +24,14 @@ export function NoTravelDocument({}: {}): JSX.Element {
           style={styles.alignCenter}
           color={themeColor}
         >
-          {t(TravelDocumentOnboardingTexts.error.heading)}
+          {t(MobileTokenOnboardingTexts.error.heading)}
         </ThemeText>
       </View>
       <View style={styles.svgContainer}>
         <Crash width="185px" height="185px" />
       </View>
       <ThemeText style={styles.description} color={themeColor}>
-        {t(TravelDocumentOnboardingTexts.error.description)}
+        {t(MobileTokenOnboardingTexts.error.description)}
       </ThemeText>
       <View style={styles.bottomView}>
         <Button
@@ -39,7 +39,7 @@ export function NoTravelDocument({}: {}): JSX.Element {
           onPress={() => {
             navigation.navigate('Info4');
           }}
-          text={t(TravelDocumentOnboardingTexts.next)}
+          text={t(MobileTokenOnboardingTexts.next)}
           testID="nextButton"
         />
       </View>

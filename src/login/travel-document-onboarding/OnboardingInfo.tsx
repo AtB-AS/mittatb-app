@@ -5,7 +5,7 @@ import {useTranslation} from '@atb/translations';
 import {StaticColorByType} from '@atb/theme/colors';
 import {StyleSheet} from '@atb/theme';
 import {useNavigation} from '@react-navigation/native';
-import TravelDocumentOnboardingTexts from '@atb/translations/screens/subscreens/TravelDocumentOnboarding';
+import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import Button from '@atb/components/button';
 import TravelPlanning from '@atb/assets/svg/color/images/TravelPlanning';
@@ -34,7 +34,7 @@ export function FlexibilityInfo(): JSX.Element {
             style={styles.header}
             color={themeColor}
           >
-            {t(TravelDocumentOnboardingTexts.info1.heading)}
+            {t(MobileTokenOnboardingTexts.info1.heading)}
           </ThemeText>
         </View>
         <TravelPlanning style={styles.alignCenter} />
@@ -42,7 +42,7 @@ export function FlexibilityInfo(): JSX.Element {
           color={themeColor}
           style={[styles.alignCenter, styles.marginTop]}
         >
-          {t(TravelDocumentOnboardingTexts.info1.description)}
+          {t(MobileTokenOnboardingTexts.info1.description)}
         </ThemeText>
       </View>
       <View style={styles.bottomView}>
@@ -52,11 +52,9 @@ export function FlexibilityInfo(): JSX.Element {
             onPress={() => {
               navigation.navigate('OptionsInfo');
             }}
-            text={t(TravelDocumentOnboardingTexts.next)}
+            text={t(MobileTokenOnboardingTexts.next)}
             testID="nextButton"
-            accessibilityHint={t(
-              TravelDocumentOnboardingTexts.a11yNextPageHint,
-            )}
+            accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
           />
         </FullScreenFooter>
       </View>
@@ -79,7 +77,7 @@ export function OptionsInfo(): JSX.Element {
             style={styles.header}
             color={themeColor}
           >
-            {t(TravelDocumentOnboardingTexts.info2.heading)}
+            {t(MobileTokenOnboardingTexts.info2.heading)}
           </ThemeText>
         </View>
 
@@ -91,12 +89,12 @@ export function OptionsInfo(): JSX.Element {
             accessible={false}
             importantForAccessibility="no"
           >
-            {t(TravelDocumentOnboardingTexts.info2.or)}
+            {t(MobileTokenOnboardingTexts.info2.or)}
           </ThemeText>
           <ThemedTokenPhone />
         </View>
         <ThemeText color={themeColor} style={styles.alignCenter}>
-          {t(TravelDocumentOnboardingTexts.info2.description)}
+          {t(MobileTokenOnboardingTexts.info2.description)}
         </ThemeText>
       </View>
 
@@ -107,11 +105,9 @@ export function OptionsInfo(): JSX.Element {
             onPress={() => {
               navigation.navigate('TicketSafetyInfo');
             }}
-            text={t(TravelDocumentOnboardingTexts.next)}
+            text={t(MobileTokenOnboardingTexts.next)}
             testID="nextButton"
-            accessibilityHint={t(
-              TravelDocumentOnboardingTexts.a11yNextPageHint,
-            )}
+            accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
           />
         </FullScreenFooter>
       </View>
@@ -133,7 +129,7 @@ export function TicketSafetyInfo(): JSX.Element {
             style={[styles.alignCenter, styles.header]}
             color={themeColor}
           >
-            {t(TravelDocumentOnboardingTexts.info3.heading)}
+            {t(MobileTokenOnboardingTexts.info3.heading)}
           </ThemeText>
         </View>
         <View style={styles.alignCenter}>
@@ -144,7 +140,7 @@ export function TicketSafetyInfo(): JSX.Element {
           style={[styles.alignCenter, styles.marginTop]}
           isMarkdown={true}
         >
-          {t(TravelDocumentOnboardingTexts.info3.description)}
+          {t(MobileTokenOnboardingTexts.info3.description)}
         </ThemeText>
       </View>
       <View style={styles.bottomView}>
@@ -152,13 +148,11 @@ export function TicketSafetyInfo(): JSX.Element {
           <Button
             interactiveColor="interactive_0"
             onPress={() => {
-              navigation.navigate('TravelDocument');
+              navigation.navigate('MobileToken');
             }}
-            text={t(TravelDocumentOnboardingTexts.next)}
+            text={t(MobileTokenOnboardingTexts.next)}
             testID="nextButton"
-            accessibilityHint={t(
-              TravelDocumentOnboardingTexts.a11yNextPageHint,
-            )}
+            accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
           />
         </FullScreenFooter>
       </View>
