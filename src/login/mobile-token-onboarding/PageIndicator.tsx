@@ -8,14 +8,8 @@ export function PageIndicator(props: MaterialTopTabBarProps) {
   const index = props.state.index;
   const styles = useThemeStyles();
   const count = props.state.routes.length;
-
   return (
-    <View
-      style={[
-        styles.pageIndicator,
-        index <= 2 ? styles.marginBottonLarge : styles.marginBottomSmall,
-      ]}
-    >
+    <View style={[styles.pageIndicator, props.style]}>
       {_.times(count, (i) => (
         <View
           key={i}
@@ -30,12 +24,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   pageIndicator: {
     flexDirection: 'row',
     justifyContent: 'center',
-  },
-  marginBottonLarge: {
-    marginBottom: 92.5,
-  },
-  marginBottomSmall: {
-    marginBottom: 38.5,
   },
   pageDot: {
     height: theme.spacings.medium,

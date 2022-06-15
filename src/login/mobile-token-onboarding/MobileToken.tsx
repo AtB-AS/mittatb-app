@@ -4,15 +4,13 @@ import {TCardAsMobileToken} from '@atb/login/mobile-token-onboarding/TCardAsMobi
 import {PhoneAsMobileToken} from '@atb/login/mobile-token-onboarding/PhoneAsMobileToken';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {NoMobileToken} from '@atb/login/mobile-token-onboarding/NoMobileToken';
+import {TravelToken} from '@atb/mobile-token/types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-const MobileToken = () => {
+const MobileToken = ({inspectableToken}: {inspectableToken: TravelToken}) => {
   const styles = useStyles();
-  const {travelTokens} = useMobileTokenContextState();
-  const inspectableToken = travelTokens?.find((t) => t.inspectable)!;
   switch (inspectableToken?.type) {
     case 'travelCard':
       return (
