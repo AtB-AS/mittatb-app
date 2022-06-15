@@ -2,7 +2,6 @@ import {StyleSheet} from '@atb/theme';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import React from 'react';
 import {View} from 'react-native';
-import TicketInformationalOverlay from '@atb/screens/Ticketing/Tickets/TicketInformationalOverlay';
 
 import {StaticColorByType} from '@atb/theme/colors';
 import {
@@ -54,8 +53,6 @@ export default function MobileTokenOnboardingStack() {
           component={MobileToken}
         />
       </Tab.Navigator>
-
-      <TicketInformationalOverlay />
     </View>
   );
 }
