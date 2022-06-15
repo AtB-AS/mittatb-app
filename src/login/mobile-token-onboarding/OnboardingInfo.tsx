@@ -15,10 +15,6 @@ import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-FlexibilityInfo.navigationOptions = {
-  gesturesEnabled: false,
-  swipeEnabled: false,
-};
 export function FlexibilityInfo(): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();

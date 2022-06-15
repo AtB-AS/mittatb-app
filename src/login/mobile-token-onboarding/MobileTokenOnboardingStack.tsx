@@ -8,20 +8,20 @@ import {
   FlexibilityInfo,
   OptionsInfo,
   TicketSafetyInfo,
-} from '@atb/login/travel-document-onboarding/OnboardingInfo';
-import {PageIndicator} from '@atb/login/travel-document-onboarding/PageIndicator';
-import MobileToken from '@atb/login/travel-document-onboarding/MobileToken';
+} from '@atb/login/mobile-token-onboarding/OnboardingInfo';
+import {PageIndicator} from '@atb/login/mobile-token-onboarding/PageIndicator';
+import MobileToken from '@atb/login/mobile-token-onboarding/MobileToken';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export type TicketTabsNavigatorParams = {
+export type MobileTokenStackParams = {
   FlexibilityInfo: undefined;
   OptionsInfo: undefined;
   TicketSafetyInfo: undefined;
   MobileToken: undefined;
 };
 
-const Tab = createMaterialTopTabNavigator<TicketTabsNavigatorParams>();
+const Tab = createMaterialTopTabNavigator<MobileTokenStackParams>();
 
 export default function MobileTokenOnboardingStack() {
   const styles = useStyles();

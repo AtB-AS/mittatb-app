@@ -32,7 +32,7 @@ import LoginInAppStack, {
   LoginInAppStackParams,
 } from '@atb/login/in-app/LoginInAppStack';
 import useTestIds from './use-test-ids';
-import MobileTokenOnboardingStack from '@atb/login/travel-document-onboarding/MobileTokenOnboardingStack';
+import MobileTokenOnboardingStack from '@atb/login/mobile-token-onboarding/MobileTokenOnboardingStack';
 
 export type RootStackParamList = {
   NotFound: undefined;
