@@ -8,20 +8,15 @@ import Button from '@atb/components/button';
 import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
 import {flatStaticColors, StaticColorByType} from '@atb/theme/colors';
-import {ThemedTokenPhone} from '@atb/theme/ThemedAssets';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {settingToRouteName} from '@atb/utils/navigation';
+import {ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {usePreferenceItems} from '@atb/preferences';
+import {settingToRouteName} from '@atb/utils/navigation';
 import {TravelDeviceTitle} from '@atb/travel-token-box';
 import {TravelToken} from '@atb/mobile-token/types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-PhoneAsMobileToken.navigationOptions = {
-  swipeEnabled: false,
-};
-
-export function PhoneAsMobileToken({
+export function TCardAsMobileToken({
   inspectableToken,
 }: {
   inspectableToken: TravelToken;
@@ -30,19 +25,18 @@ export function PhoneAsMobileToken({
   const {t} = useTranslation();
   const navigation = useNavigation();
   const {themeName} = useTheme();
-  const focusRef = useFocusOnLoad();
   const {startScreen} = usePreferenceItems();
   return (
     <View style={styles.container}>
       <View style={styles.mainView}>
-        <View accessible={true} ref={focusRef}>
+        <View>
           <ThemeText
             type="body__primary--jumbo"
             style={[styles.alignCenter, styles.marginVertical]}
             color={themeColor}
             isMarkdown={true}
           >
-            {t(MobileTokenOnboardingTexts.phone.heading)}
+            {t(MobileTokenOnboardingTexts.tCard.heading)}
           </ThemeText>
         </View>
         <View
@@ -56,9 +50,9 @@ export function PhoneAsMobileToken({
         >
           <TravelDeviceTitle inspectableToken={inspectableToken} />
           <View style={styles.flex}>
-            <ThemedTokenPhone />
+            <ThemedTokenTravelCard />
             <ThemeText color={themeColor} style={styles.reminderText}>
-              {t(MobileTokenOnboardingTexts.phone.reminder)}
+              {t(MobileTokenOnboardingTexts.tCard.reminder)}
             </ThemeText>
           </View>
         </View>
@@ -67,12 +61,14 @@ export function PhoneAsMobileToken({
           color={themeColor}
           isMarkdown={true}
         >
-          {t(MobileTokenOnboardingTexts.phone.description)}
+          {t(MobileTokenOnboardingTexts.tCard.description)}
         </ThemeText>
       </View>
+
       <View style={styles.bottomView}>
         <FullScreenFooter>
           <Button
+            interactiveColor="interactive_0"
             onPress={() => {
               navigation.navigate(settingToRouteName(startScreen));
             }}
@@ -86,7 +82,7 @@ export function PhoneAsMobileToken({
             onPress={() => {
               navigation.navigate('SelectTravelToken');
             }}
-            text={t(MobileTokenOnboardingTexts.phone.button)}
+            text={t(MobileTokenOnboardingTexts.tCard.button)}
             testID="switchButton"
           />
         </FullScreenFooter>
@@ -94,61 +90,41 @@ export function PhoneAsMobileToken({
     </View>
   );
 }
-
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background[themeColor].background,
-    flex: 1,
     paddingHorizontal: theme.spacings.xLarge,
+  },
+  alignCenter: {
+    textAlign: 'center',
   },
   mainView: {
     marginTop: 164,
     height: 430,
   },
-  alignCenter: {
-    textAlign: 'center',
-  },
   marginVertical: {
     marginTop: 44,
+  },
+  cardNo: {
+    flexDirection: 'row',
   },
   description: {
     textAlign: 'center',
   },
   flex: {
     flexDirection: 'row',
+    width: 327,
   },
   reminderText: {
-    marginHorizontal: theme.spacings.medium,
-    marginTop: theme.spacings.large,
-    marginRight: 80,
+    marginLeft: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
+    marginRight: 160,
   },
   mobileTokenContainer: {
     backgroundColor: theme.static.background.background_accent_2.background,
     height: 178,
     marginVertical: theme.spacings.xLarge,
     borderRadius: theme.border.radius.regular,
-    padding: 28,
-  },
-  phoneInfoBox: {
-    marginVertical: theme.spacings.xLarge,
-    alignSelf: 'center',
-    padding: theme.spacings.xLarge,
-    borderRadius: theme.border.radius.circle,
-    minHeight: 300,
-    minWidth: 200,
-  },
-  phoneLine: {
-    width: theme.spacings.xLarge * 2,
-    borderRadius: theme.border.radius.regular,
-    height: theme.spacings.small,
-    alignSelf: 'center',
-    marginTop: theme.spacings.small,
-    marginBottom: theme.spacings.small + theme.spacings.xLarge,
-  },
-  phoneInfoBoxInner: {
-    borderRadius: theme.border.radius.regular,
-    padding: theme.spacings.large,
-    alignSelf: 'center',
+    padding: 24,
   },
   bottomView: {
     marginTop: 35.5,

@@ -8,6 +8,8 @@ import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {StaticColorByType} from '@atb/theme/colors';
 import {CrashSmall} from '@atb/assets/svg/color/images';
+import {settingToRouteName} from '@atb/utils/navigation';
+import {usePreferenceItems} from '@atb/preferences';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -15,6 +17,7 @@ export function NoMobileToken({}: {}): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const navigation = useNavigation();
+  const {startScreen} = usePreferenceItems();
 
   return (
     <View style={styles.container}>
@@ -37,7 +40,7 @@ export function NoMobileToken({}: {}): JSX.Element {
         <Button
           interactiveColor="interactive_0"
           onPress={() => {
-            navigation.navigate('Info4');
+            navigation.navigate(settingToRouteName(startScreen));
           }}
           text={t(MobileTokenOnboardingTexts.next)}
           testID="nextButton"
@@ -53,8 +56,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginLeft: 95,
   },
   container: {
-    backgroundColor: theme.static.background[themeColor].background,
-    flex: 1,
     paddingHorizontal: theme.spacings.xLarge,
   },
   alignCenter: {
