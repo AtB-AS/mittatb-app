@@ -7,7 +7,7 @@ import Button from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {StaticColorByType} from '@atb/theme/colors';
-import {Crash} from '@atb/assets/svg/color/images';
+import {CrashSmall} from '@atb/assets/svg/color/images';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -28,7 +28,7 @@ export function NoMobileToken({}: {}): JSX.Element {
         </ThemeText>
       </View>
       <View style={styles.svgContainer}>
-        <Crash width="185px" height="185px" />
+        <CrashSmall width="185px" height="185px" />
       </View>
       <ThemeText style={styles.description} color={themeColor}>
         {t(MobileTokenOnboardingTexts.error.description)}
