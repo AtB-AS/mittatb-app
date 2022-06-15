@@ -160,8 +160,13 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 icon={<ThemeIcon svg={LogOut} />}
                 onPress={() =>
                   destructiveAlert({
-                    confirmMessageString: t(
-                      ProfileTexts.sections.account.linkItems.logout.confirm,
+                    alertTitleString: t(
+                      ProfileTexts.sections.account.linkItems.logout
+                        .confirmTitle,
+                    ),
+                    alertMessageString: t(
+                      ProfileTexts.sections.account.linkItems.logout
+                        .confirmMessage,
                     ),
                     cancelAlertString: t(
                       ProfileTexts.sections.account.linkItems.logout.alert
@@ -313,8 +318,9 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             testID="clearHistoryButton"
             onPress={() =>
               destructiveAlert({
-                confirmMessageString: t(
-                  ProfileTexts.sections.privacy.linkItems.clearHistory.confirm,
+                alertTitleString: t(
+                  ProfileTexts.sections.privacy.linkItems.clearHistory
+                    .confirmTitle,
                 ),
                 cancelAlertString: t(
                   ProfileTexts.sections.privacy.linkItems.clearHistory.alert

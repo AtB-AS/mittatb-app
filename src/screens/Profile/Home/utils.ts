@@ -1,19 +1,21 @@
 import {Alert} from 'react-native';
 
 type destructiveAlertProps = {
-  confirmMessageString: string;
+  alertTitleString: string;
+  alertMessageString?: string;
   cancelAlertString: string;
   confirmAlertString: string;
   destructiveArrowFunction: () => void;
 };
 
 export const destructiveAlert = ({
-  confirmMessageString,
+  alertTitleString,
+  alertMessageString,
   cancelAlertString,
   confirmAlertString,
   destructiveArrowFunction,
 }: destructiveAlertProps): void =>
-  Alert.alert(confirmMessageString, undefined, [
+  Alert.alert(alertTitleString, alertMessageString, [
     {
       text: cancelAlertString,
       style: 'cancel',
