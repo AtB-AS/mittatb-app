@@ -157,7 +157,7 @@ const GeolocationContextProvider: React.FC = ({children}) => {
       } else {
         const config: GeoOptions = {
           enableHighAccuracy: true,
-          distanceFilter: 0,
+          distanceFilter: 20,
         };
 
         watchId = Geolocation.watchPosition(
