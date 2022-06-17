@@ -30,7 +30,6 @@ export default function useTripsQuery(
 ): {
   tripPatterns: TripPatternWithKey[];
   timeOfLastSearch: DateString;
-  refresh: () => {};
   loadMore: (() => {}) | undefined;
   clear: () => void;
   searchState: SearchStateType;
@@ -170,10 +169,6 @@ export default function useTripsQuery(
 
   useEffect(() => search(), [search]);
 
-  const refresh = useCallback(() => {
-    return search();
-  }, [search]);
-
   const loadMore = useCallback(() => {
     return search(pageCursor, tripPatterns);
   }, [search, pageCursor, tripPatterns]);
@@ -181,7 +176,6 @@ export default function useTripsQuery(
   return {
     tripPatterns,
     timeOfLastSearch: timeOfSearch,
-    refresh,
     loadMore: !!pageCursor ? loadMore : undefined,
     clear: clearTrips,
     searchState: searchState,
@@ -252,17 +246,6 @@ async function doSearch(
     cancelToken: cancelToken.token,
   });
 }
-
-const stringifyLocation = (location: Location | undefined): string => {
-  if (!location) return 'Undefined location';
-  switch (location.resultType) {
-    case 'geolocation':
-      return `${location.id}--${location.name}`;
-    default:
-      return `${location.id}--${location.name}--${location.locality}`;
-  }
-};
-
 function generateKeyFromTripPattern(tripPattern: TripPattern) {
   const firstServiceLeg = tripPattern.legs.find((leg) => leg.serviceJourney);
   const key =
