@@ -22,6 +22,7 @@ type DeparturesListProps = {
   showOnlyFavorites: boolean;
   disableCollapsing?: boolean;
   searchDate: string;
+  fromLocation?: Location | undefined
 };
 
 export default function DeparturesList({
@@ -35,6 +36,7 @@ export default function DeparturesList({
   showOnlyFavorites,
   disableCollapsing = false,
   searchDate,
+  fromLocation
 }: DeparturesListProps) {
   const styles = useDeparturesListStyle();
   const {t} = useTranslation();
@@ -84,6 +86,7 @@ export default function DeparturesList({
               disableCollapsing={disableCollapsing}
               searchDate={searchDate}
               testID={'stopDeparture' + i}
+              fromLocation={fromLocation}
             />
           ))}
           <FooterLoader isFetchingMore={isFetchingMore} />
@@ -130,6 +133,7 @@ type StopDeparturesProps = {
   disableCollapsing?: boolean;
   searchDate: string;
   testID?: string;
+  fromLocation?: Location | undefined
 };
 const StopDepartures = React.memo(function StopDepartures({
   stopPlaceGroup,
@@ -139,6 +143,7 @@ const StopDepartures = React.memo(function StopDepartures({
   disableCollapsing = false,
   searchDate,
   testID,
+  fromLocation
 }: StopDeparturesProps) {
   const {t} = useTranslation();
   const [expanded, setExpanded] = useState(
@@ -189,6 +194,7 @@ const StopDepartures = React.memo(function StopDepartures({
             lastUpdated={lastUpdated}
             searchDate={searchDate}
             testID={'quaySection' + i}
+            fromLocation={fromLocation}
           />
         ))}
     </View>

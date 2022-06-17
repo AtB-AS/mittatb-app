@@ -43,6 +43,7 @@ export type DepartureDataState = {
   cursorInfo: DepartureGroupMetadata['metadata'] | undefined;
   lastRefreshTime: Date;
   searchTime: SearchTime;
+  fromLocation?: Location | undefined
 };
 
 const initialState: Omit<
@@ -95,6 +96,7 @@ type DepartureDataActions =
       locationId?: string;
       reset?: boolean;
       result: DepartureGroupMetadata;
+      fromLocation? : Location | undefined
     }
   | {
       type: 'SET_ERROR';
@@ -163,6 +165,7 @@ const reducer: ReducerWithSideEffects<
               type: 'UPDATE_DEPARTURES',
               reset: true,
               locationId: location.id,
+              fromLocation: location,
               result,
             });
           } catch (e) {
@@ -305,6 +308,7 @@ const reducer: ReducerWithSideEffects<
         ...state,
         isLoading: false,
         locationId: action.locationId,
+        fromLocation: action.fromLocation,
         data: action.reset
           ? action.result.data
           : (state.data ?? []).concat(action.result.data),
@@ -404,7 +408,7 @@ export function useDepartureData(
     [location?.id, favoriteDepartures],
   );
 
-  useEffect(refresh, [location?.id]);
+  useEffect(refresh, [location?.resultType === 'geolocation' ? null : location?.id]);
   useEffect(() => {
     if (!state.tick) {
       return;
