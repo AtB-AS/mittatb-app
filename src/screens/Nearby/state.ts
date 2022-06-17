@@ -43,7 +43,7 @@ export type DepartureDataState = {
   cursorInfo: DepartureGroupMetadata['metadata'] | undefined;
   lastRefreshTime: Date;
   searchTime: SearchTime;
-  fromLocation?: Location | undefined
+  fromLocation?: Location | undefined;
 };
 
 const initialState: Omit<
@@ -96,7 +96,7 @@ type DepartureDataActions =
       locationId?: string;
       reset?: boolean;
       result: DepartureGroupMetadata;
-      fromLocation? : Location | undefined
+      fromLocation?: Location | undefined;
     }
   | {
       type: 'SET_ERROR';
@@ -408,7 +408,9 @@ export function useDepartureData(
     [location?.id, favoriteDepartures],
   );
 
-  useEffect(refresh, [location?.resultType === 'geolocation' ? null : location?.id]);
+  useEffect(refresh, [
+    location?.resultType === 'geolocation' ? null : location?.id,
+  ]);
   useEffect(() => {
     if (!state.tick) {
       return;

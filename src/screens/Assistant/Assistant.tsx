@@ -207,14 +207,8 @@ const Assistant: React.FC<Props> = ({
     });
   }
 
-  const {
-    tripPatterns,
-    timeOfLastSearch,
-    loadMore,
-    clear,
-    searchState,
-    error,
-  } = useTripsQuery(from, to, searchTime);
+  const {tripPatterns, timeOfLastSearch, loadMore, clear, searchState, error} =
+    useTripsQuery(from, to, searchTime);
 
   const isSearching = searchState === 'searching';
   const openLocationSearch = (

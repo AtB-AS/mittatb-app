@@ -22,7 +22,7 @@ type DeparturesListProps = {
   showOnlyFavorites: boolean;
   disableCollapsing?: boolean;
   searchDate: string;
-  fromLocation?: Location | undefined
+  fromLocation?: Location | undefined;
 };
 
 export default function DeparturesList({
@@ -36,7 +36,7 @@ export default function DeparturesList({
   showOnlyFavorites,
   disableCollapsing = false,
   searchDate,
-  fromLocation
+  fromLocation,
 }: DeparturesListProps) {
   const styles = useDeparturesListStyle();
   const {t} = useTranslation();
@@ -133,7 +133,7 @@ type StopDeparturesProps = {
   disableCollapsing?: boolean;
   searchDate: string;
   testID?: string;
-  fromLocation?: Location | undefined
+  fromLocation?: Location | undefined;
 };
 const StopDepartures = React.memo(function StopDepartures({
   stopPlaceGroup,
@@ -143,7 +143,7 @@ const StopDepartures = React.memo(function StopDepartures({
   disableCollapsing = false,
   searchDate,
   testID,
-  fromLocation
+  fromLocation,
 }: StopDeparturesProps) {
   const {t} = useTranslation();
   const [expanded, setExpanded] = useState(

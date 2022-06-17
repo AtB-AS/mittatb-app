@@ -22,7 +22,7 @@ type QuaySectionProps = {
   hidden?: Date;
   searchDate: string;
   testID?: string;
-  fromLocation?: Location | undefined
+  fromLocation?: Location | undefined;
 };
 
 const QuaySection = React.memo(function QuaySection({
@@ -32,7 +32,7 @@ const QuaySection = React.memo(function QuaySection({
   lastUpdated,
   searchDate,
   testID,
-  fromLocation
+  fromLocation,
 }: QuaySectionProps) {
   const [limit, setLimit] = useState(LIMIT_SIZE);
   const {t} = useTranslation();
