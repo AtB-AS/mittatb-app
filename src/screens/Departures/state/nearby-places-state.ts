@@ -140,7 +140,7 @@ export function useNearestStopsData(location?: Location) {
     [location?.id],
   );
 
-  useEffect(refresh, [location?.id]);
+  useEffect(refresh, [location?.resultType === 'geolocation' ? null : location?.id]);
 
   return {
     state,

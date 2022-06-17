@@ -210,7 +210,6 @@ const Assistant: React.FC<Props> = ({
   const {
     tripPatterns,
     timeOfLastSearch,
-    refresh,
     loadMore,
     clear,
     searchState,
@@ -431,6 +430,13 @@ const Assistant: React.FC<Props> = ({
     return () => backHandler.remove();
   });
 
+  const refresh = () => {
+    navigation.setParams({
+      fromLocation: from?.resultType === 'geolocation' ? currentLocation : from,
+      toLocation: to?.resultType === 'geolocation' ? currentLocation : to,
+    });
+  };
+
   return (
     <DisappearingHeader
       renderHeader={renderHeader}
@@ -642,9 +648,8 @@ function useUpdatedLocation(
 
       switch (searchedLocation.resultType) {
         case 'search':
-          return updater(searchedLocation);
         case 'geolocation':
-          return updater(currentLocation);
+          return updater(searchedLocation);
         case 'journey': {
           const toSearch = (i: number): Location => ({
             ...searchedLocation.journeyData[i],
