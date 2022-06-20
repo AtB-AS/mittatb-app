@@ -1,0 +1,39 @@
+{
+    "name": "@entur/atb-mobile-client-sdk",
+    "version": "1.0.0",
+    "description": "",
+    "license": "EUPL-1.2",
+    "workspaces": [
+        "example-client",
+        "example-server",
+        "token/token-core-javascript-lib",
+        "token/token-state-react-native-lib",
+        "token/token-server-node-lib",
+        "barcode/barcode-javascript-lib",
+        "visual-code/model/visual-code-model-javascript-lib",
+        "visual-code/view/visual-code-view-javascript-lib"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/entur/abt-mobile-client-sdk"
+    },
+    "author": "Entur AS <feedback@entur.org> (https://github.com/entur/)",
+    "bugs": {
+        "url": "https://github.com/entur/abt-mobile-client-sdk/issues"
+    },
+    "homepage": "https://github.com/entur/#readme",
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    },
+    "scripts": {
+        "prettier": "prettier . --check",
+        "test": "npm run test --workspaces --if-present",
+        "ts": "npm run ts --workspaces --if-present",
+        "lint": "npm run lint --workspaces --if-present",
+        "tsint": "npm run ts && npm run lint"
+    },
+    "dependencies": {
+        "react-native": "0.68.1"
+    },
+    "yalcSig": "3f0e922a8fda1c1833b1da3791dcc6ea"
+}

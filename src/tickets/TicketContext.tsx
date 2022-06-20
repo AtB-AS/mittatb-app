@@ -3,7 +3,6 @@ import {useAuthState} from '../auth';
 import {Reservation, FareContract, PaymentStatus} from './types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {differenceInMinutes} from 'date-fns';
-import {TokenStatus} from '@entur/react-native-traveller/lib/typescript/token/types';
 import {CustomerProfile} from '.';
 import setupFirestoreListener from './firestore';
 
@@ -61,6 +60,10 @@ const ticketReducer: TicketReducer = (
       };
     }
     case 'UPDATE_FARE_CONTRACT_TICKETS': {
+      console.log(
+        'UPDATED FC',
+        action.fareContracts,
+      );
       const currentFareContractOrderIds = action.fareContracts.map(
         (fc) => fc.orderId,
       );

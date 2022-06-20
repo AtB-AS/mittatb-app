@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="status_active">#31B836</color>
+    <color name="status_active_in_future">#FFFF00</color>
+    <color name="status_closed_for_activation">#DB1010</color>
+    <color name="status_transferred">#2196F3</color>
+    <color name="status_open_for_activation">#888888</color>
+</resources>

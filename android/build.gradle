@@ -55,5 +55,26 @@ allprojects {
                 password = (netRcFile.text =~ /password (.+)/)[0][1]
             }
         }
+
+        maven {
+            url "$entur_artifactory_partner_resolve_snapshot_url"
+            credentials {
+                username "$entur_artifactory_user"
+                password "$entur_artifactory_password"
+            }
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
+        maven {
+            url "$entur_artifactory_partner_resolve_release_url"
+            credentials {
+                username "$entur_artifactory_user"
+                password "$entur_artifactory_password"
+            }
+            mavenContent {
+                releasesOnly()
+            }
+        }
     }
 }

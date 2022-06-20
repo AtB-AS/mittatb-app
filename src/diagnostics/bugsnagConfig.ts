@@ -33,7 +33,7 @@ export default function configureAndStartBugsnag() {
     };
     Bugsnag.leaveBreadcrumb = (message, metadata) =>
       // eslint-disable-next-line
-      console.log(message, metadata);
+      console.log(message, metadata || "");
     Bugsnag.setUser = () => {};
   }
 }

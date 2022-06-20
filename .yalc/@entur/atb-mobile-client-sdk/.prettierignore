@@ -1,0 +1,8 @@
+node_modules/
+lib/
+dist/
+vendor/
+example-client/ios/
+example-client/android/
+build/
+*.md

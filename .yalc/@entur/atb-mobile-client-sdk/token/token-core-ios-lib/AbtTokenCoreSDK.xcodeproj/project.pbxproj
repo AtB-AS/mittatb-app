@@ -1,0 +1,1336 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FE1EBC6C28250BED00583963 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = FE1EBC6B28250BED00583963 /* SwiftProtobuf */; };
+		FE24EFD828589BAB0033AF33 /* AttestationObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE24EFD728589BAB0033AF33 /* AttestationObject.swift */; };
+		FE24EFD928589BAB0033AF33 /* AttestationObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE24EFD728589BAB0033AF33 /* AttestationObject.swift */; };
+		FE24EFDA285B63840033AF33 /* validate.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD4F285872C500A8FF98 /* validate.pb.swift */; };
+		FE24EFDB285B63890033AF33 /* net_opengis_www_gml__3_2.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD55285872C500A8FF98 /* net_opengis_www_gml__3_2.pb.swift */; };
+		FE24EFDC285B638D0033AF33 /* Identity_Messages.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD5A285872C500A8FF98 /* Identity_Messages.pb.swift */; };
+		FE24EFDD285B638D0033AF33 /* DeviceDetails_Messages.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD5B285872C500A8FF98 /* DeviceDetails_Messages.pb.swift */; };
+		FE24EFDE285B638D0033AF33 /* SecureContainer_Messages.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD5C285872C500A8FF98 /* SecureContainer_Messages.pb.swift */; };
+		FE24EFDF285B638F0033AF33 /* Consumption_Messages.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD5E285872C500A8FF98 /* Consumption_Messages.pb.swift */; };
+		FE24EFE0285B63920033AF33 /* TravelCard_Messages.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD60285872C500A8FF98 /* TravelCard_Messages.pb.swift */; };
+		FE24EFE1285B63950033AF33 /* ErrorCode_Messages.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD63285872C500A8FF98 /* ErrorCode_Messages.pb.swift */; };
+		FE24EFE2285B63950033AF33 /* Common_Messages.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD62285872C500A8FF98 /* Common_Messages.pb.swift */; };
+		FE24EFE3285B63990033AF33 /* TravellerSupport_API.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD66285872C500A8FF98 /* TravellerSupport_API.pb.swift */; };
+		FE24EFE4285B63990033AF33 /* Traveller_Messages.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD67285872C500A8FF98 /* Traveller_Messages.pb.swift */; };
+		FE24EFE5285B63990033AF33 /* Traveller_API.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD65285872C500A8FF98 /* Traveller_API.pb.swift */; };
+		FE24EFE6285B639C0033AF33 /* date.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD6B285872C500A8FF98 /* date.pb.swift */; };
+		FE24EFE7285B639C0033AF33 /* timeofday.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD6A285872C500A8FF98 /* timeofday.pb.swift */; };
+		FE24EFE8285B639F0033AF33 /* status.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD6D285872C500A8FF98 /* status.pb.swift */; };
+		FE24EFE9285B63A60033AF33 /* xsd.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD75285872C500A8FF98 /* xsd.pb.swift */; };
+		FE24EFEA285B6E590033AF33 /* uk_org_netex_www_netex.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD73285872C500A8FF98 /* uk_org_netex_www_netex.pb.swift */; };
+		FE504AD028242B880004B3F0 /* AbtTokenCoreSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE504AC528242B880004B3F0 /* AbtTokenCoreSDK.framework */; };
+		FE504AD628242B880004B3F0 /* AbtTokenCoreSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = FE504AC828242B880004B3F0 /* AbtTokenCoreSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FE504AE828242BD60004B3F0 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504ADF28242BD60004B3F0 /* Token.swift */; };
+		FE504AE928242BD60004B3F0 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504ADF28242BD60004B3F0 /* Token.swift */; };
+		FE504AEA28242BD60004B3F0 /* PendingToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504AE028242BD60004B3F0 /* PendingToken.swift */; };
+		FE504AEB28242BD60004B3F0 /* PendingToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504AE028242BD60004B3F0 /* PendingToken.swift */; };
+		FE504AEC28242BD60004B3F0 /* DefaultTokenContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504AE128242BD60004B3F0 /* DefaultTokenContext.swift */; };
+		FE504AED28242BD60004B3F0 /* DefaultTokenContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504AE128242BD60004B3F0 /* DefaultTokenContext.swift */; };
+		FE504AEE28242BD60004B3F0 /* TokenEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504AE228242BD60004B3F0 /* TokenEncoder.swift */; };
+		FE504AEF28242BD60004B3F0 /* TokenEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504AE228242BD60004B3F0 /* TokenEncoder.swift */; };
+		FE504AF228242BD60004B3F0 /* TokenStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504AE428242BD60004B3F0 /* TokenStore.swift */; };
+		FE504AF328242BD60004B3F0 /* TokenStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504AE428242BD60004B3F0 /* TokenStore.swift */; };
+		FE504AF628242BD60004B3F0 /* ActivatedToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504AE628242BD60004B3F0 /* ActivatedToken.swift */; };
+		FE504AF728242BD60004B3F0 /* ActivatedToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504AE628242BD60004B3F0 /* ActivatedToken.swift */; };
+		FE504AF828242BD60004B3F0 /* TokenRenewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504AE728242BD60004B3F0 /* TokenRenewer.swift */; };
+		FE504AF928242BD60004B3F0 /* TokenRenewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504AE728242BD60004B3F0 /* TokenRenewer.swift */; };
+		FE504B0728243CBD0004B3F0 /* KeyPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504AFE28243CBD0004B3F0 /* KeyPair.swift */; };
+		FE504B0828243CBD0004B3F0 /* KeyPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504AFE28243CBD0004B3F0 /* KeyPair.swift */; };
+		FE504B0928243CBD0004B3F0 /* TokenContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504AFF28243CBD0004B3F0 /* TokenContext.swift */; };
+		FE504B0A28243CBD0004B3F0 /* TokenContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504AFF28243CBD0004B3F0 /* TokenContext.swift */; };
+		FE504B0B28243CBD0004B3F0 /* DefaultKeystoreSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B0028243CBD0004B3F0 /* DefaultKeystoreSearch.swift */; };
+		FE504B0C28243CBD0004B3F0 /* DefaultKeystoreSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B0028243CBD0004B3F0 /* DefaultKeystoreSearch.swift */; };
+		FE504B0D28243CBD0004B3F0 /* DefaultTokenKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B0128243CBD0004B3F0 /* DefaultTokenKeyStore.swift */; };
+		FE504B0E28243CBD0004B3F0 /* DefaultTokenKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B0128243CBD0004B3F0 /* DefaultTokenKeyStore.swift */; };
+		FE504B0F28243CBD0004B3F0 /* KeyStoreSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B0228243CBD0004B3F0 /* KeyStoreSearch.swift */; };
+		FE504B1028243CBD0004B3F0 /* KeyStoreSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B0228243CBD0004B3F0 /* KeyStoreSearch.swift */; };
+		FE504B1128243CBD0004B3F0 /* KeyStoreAliasFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B0328243CBD0004B3F0 /* KeyStoreAliasFactory.swift */; };
+		FE504B1228243CBD0004B3F0 /* KeyStoreAliasFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B0328243CBD0004B3F0 /* KeyStoreAliasFactory.swift */; };
+		FE504B1528243CBD0004B3F0 /* DefaultKeyStoreAliasFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B0528243CBD0004B3F0 /* DefaultKeyStoreAliasFactory.swift */; };
+		FE504B1628243CBD0004B3F0 /* DefaultKeyStoreAliasFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B0528243CBD0004B3F0 /* DefaultKeyStoreAliasFactory.swift */; };
+		FE504B1728243CBD0004B3F0 /* TokenKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B0628243CBD0004B3F0 /* TokenKeyStore.swift */; };
+		FE504B1A28243D8B0004B3F0 /* PrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B1928243D8B0004B3F0 /* PrivateKey.swift */; };
+		FE504B1B28243D8B0004B3F0 /* PrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B1928243D8B0004B3F0 /* PrivateKey.swift */; };
+		FE504B1D28243DD30004B3F0 /* PublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B1C28243DD30004B3F0 /* PublicKey.swift */; };
+		FE504B1E28243DD30004B3F0 /* PublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B1C28243DD30004B3F0 /* PublicKey.swift */; };
+		FE504B2128244D160004B3F0 /* TokenProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B2028244D160004B3F0 /* TokenProperty.swift */; };
+		FE504B2228244D160004B3F0 /* TokenProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B2028244D160004B3F0 /* TokenProperty.swift */; };
+		FE504B2428244D490004B3F0 /* TokenPropertyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B2328244D490004B3F0 /* TokenPropertyStore.swift */; };
+		FE504B2528244D490004B3F0 /* TokenPropertyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B2328244D490004B3F0 /* TokenPropertyStore.swift */; };
+		FE504B2E282456C20004B3F0 /* IOSDeviceAttestator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B2D282456C20004B3F0 /* IOSDeviceAttestator.swift */; };
+		FE504B2F282456C20004B3F0 /* IOSDeviceAttestator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B2D282456C20004B3F0 /* IOSDeviceAttestator.swift */; };
+		FE504B53282500340004B3F0 /* DefaultDeviceDetailsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B52282500340004B3F0 /* DefaultDeviceDetailsProvider.swift */; };
+		FE504B54282500340004B3F0 /* DefaultDeviceDetailsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B52282500340004B3F0 /* DefaultDeviceDetailsProvider.swift */; };
+		FE504B57282501C80004B3F0 /* DeviceDetailsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B56282501C80004B3F0 /* DeviceDetailsProvider.swift */; };
+		FE504B58282501C80004B3F0 /* DeviceDetailsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B56282501C80004B3F0 /* DeviceDetailsProvider.swift */; };
+		FE544A74283796C1001E4BCF /* CryptoExportImportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A038282DC1FB00201B64 /* CryptoExportImportManager.swift */; };
+		FE9DED01282909200006C91A /* Kronos in Frameworks */ = {isa = PBXBuildFile; productRef = FE9DED00282909200006C91A /* Kronos */; };
+		FE9DED0428290B070006C91A /* TokenEncodingRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED0328290B070006C91A /* TokenEncodingRequest.swift */; };
+		FE9DED0528290B070006C91A /* TokenEncodingRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED0328290B070006C91A /* TokenEncodingRequest.swift */; };
+		FE9DED0828290DB90006C91A /* TokenEncoderError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED0728290DB90006C91A /* TokenEncoderError.swift */; };
+		FE9DED0928290DB90006C91A /* TokenEncoderError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED0728290DB90006C91A /* TokenEncoderError.swift */; };
+		FE9DED0B28292FD40006C91A /* TokenPayloadAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED0A28292FD40006C91A /* TokenPayloadAction.swift */; };
+		FE9DED0C28292FD40006C91A /* TokenPayloadAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED0A28292FD40006C91A /* TokenPayloadAction.swift */; };
+		FE9DED0F28293EED0006C91A /* Data+Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED0E28293EED0006C91A /* Data+Crypto.swift */; };
+		FE9DED1028293EED0006C91A /* Data+Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED0E28293EED0006C91A /* Data+Crypto.swift */; };
+		FE9DED12282950140006C91A /* AbstractDeviceAttestator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED11282950140006C91A /* AbstractDeviceAttestator.swift */; };
+		FE9DED13282950140006C91A /* AbstractDeviceAttestator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED11282950140006C91A /* AbstractDeviceAttestator.swift */; };
+		FE9DED152829502C0006C91A /* DeviceAttestator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED142829502C0006C91A /* DeviceAttestator.swift */; };
+		FE9DED162829502C0006C91A /* DeviceAttestator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED142829502C0006C91A /* DeviceAttestator.swift */; };
+		FE9DED1B28297F370006C91A /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED1A28297F370006C91A /* Key.swift */; };
+		FE9DED1C28297F370006C91A /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED1A28297F370006C91A /* Key.swift */; };
+		FE9DED1E282996690006C91A /* TokenTrustChainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED1D282996690006C91A /* TokenTrustChainError.swift */; };
+		FE9DED1F282996690006C91A /* TokenTrustChainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED1D282996690006C91A /* TokenTrustChainError.swift */; };
+		FE9DED21282998520006C91A /* DeviceAttestatorError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED20282998520006C91A /* DeviceAttestatorError.swift */; };
+		FE9DED22282998520006C91A /* DeviceAttestatorError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED20282998520006C91A /* DeviceAttestatorError.swift */; };
+		FE9DED242829989C0006C91A /* KeyError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED232829989C0006C91A /* KeyError.swift */; };
+		FE9DED252829989C0006C91A /* KeyError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED232829989C0006C91A /* KeyError.swift */; };
+		FE9DED272829A05D0006C91A /* TokenKeyStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED262829A05D0006C91A /* TokenKeyStoreError.swift */; };
+		FE9DED282829A05D0006C91A /* TokenKeyStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED262829A05D0006C91A /* TokenKeyStoreError.swift */; };
+		FE9DED2A2829A9A40006C91A /* TokenStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED292829A9A40006C91A /* TokenStoreError.swift */; };
+		FE9DED2B2829A9A40006C91A /* TokenStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED292829A9A40006C91A /* TokenStoreError.swift */; };
+		FE9DED2D282A4BE90006C91A /* TokenStoreKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9DED2C282A4BE90006C91A /* TokenStoreKeyTests.swift */; };
+		FE9FDD76285872C500A8FF98 /* validate.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD4F285872C500A8FF98 /* validate.pb.swift */; };
+		FE9FDD77285872C500A8FF98 /* net_opengis_www_gml__3_2.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD55285872C500A8FF98 /* net_opengis_www_gml__3_2.pb.swift */; };
+		FE9FDD78285872C500A8FF98 /* Identity_Messages.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD5A285872C500A8FF98 /* Identity_Messages.pb.swift */; };
+		FE9FDD79285872C500A8FF98 /* DeviceDetails_Messages.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD5B285872C500A8FF98 /* DeviceDetails_Messages.pb.swift */; };
+		FE9FDD7A285872C500A8FF98 /* SecureContainer_Messages.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD5C285872C500A8FF98 /* SecureContainer_Messages.pb.swift */; };
+		FE9FDD7B285872C500A8FF98 /* Consumption_Messages.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD5E285872C500A8FF98 /* Consumption_Messages.pb.swift */; };
+		FE9FDD7C285872C500A8FF98 /* TravelCard_Messages.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD60285872C500A8FF98 /* TravelCard_Messages.pb.swift */; };
+		FE9FDD7D285872C500A8FF98 /* Common_Messages.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD62285872C500A8FF98 /* Common_Messages.pb.swift */; };
+		FE9FDD7E285872C500A8FF98 /* ErrorCode_Messages.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD63285872C500A8FF98 /* ErrorCode_Messages.pb.swift */; };
+		FE9FDD7F285872C500A8FF98 /* Traveller_API.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD65285872C500A8FF98 /* Traveller_API.pb.swift */; };
+		FE9FDD80285872C500A8FF98 /* TravellerSupport_API.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD66285872C500A8FF98 /* TravellerSupport_API.pb.swift */; };
+		FE9FDD81285872C500A8FF98 /* Traveller_Messages.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD67285872C500A8FF98 /* Traveller_Messages.pb.swift */; };
+		FE9FDD82285872C500A8FF98 /* timeofday.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD6A285872C500A8FF98 /* timeofday.pb.swift */; };
+		FE9FDD83285872C500A8FF98 /* date.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD6B285872C500A8FF98 /* date.pb.swift */; };
+		FE9FDD84285872C500A8FF98 /* status.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD6D285872C500A8FF98 /* status.pb.swift */; };
+		FE9FDD85285872C500A8FF98 /* uk_org_netex_www_netex.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD73285872C500A8FF98 /* uk_org_netex_www_netex.pb.swift */; };
+		FE9FDD86285872C500A8FF98 /* xsd.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9FDD75285872C500A8FF98 /* xsd.pb.swift */; };
+		FEF69FE8282A73DE00201B64 /* TokenContexts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF95A362828F9BC00100DD3 /* TokenContexts.swift */; };
+		FEF69FE9282A755900201B64 /* TokenKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B0628243CBD0004B3F0 /* TokenKeyStore.swift */; };
+		FEF6A00C282A7E9500201B64 /* TestHostiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A00B282A7E9500201B64 /* TestHostiOSApp.swift */; };
+		FEF6A00E282A7E9500201B64 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A00D282A7E9500201B64 /* ContentView.swift */; };
+		FEF6A010282A7E9700201B64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FEF6A00F282A7E9700201B64 /* Assets.xcassets */; };
+		FEF6A013282A7E9700201B64 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FEF6A012282A7E9700201B64 /* Preview Assets.xcassets */; };
+		FEF6A01C282A9C7900201B64 /* MockedDefaultTokenRenewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A01B282A9C7900201B64 /* MockedDefaultTokenRenewer.swift */; };
+		FEF6A01F282A9DD300201B64 /* KeyStoreAliasFactoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A01E282A9DD300201B64 /* KeyStoreAliasFactoryProvider.swift */; };
+		FEF6A023282AA3F100201B64 /* KeyStoreSearchFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A022282AA3F100201B64 /* KeyStoreSearchFactory.swift */; };
+		FEF6A025282AA40400201B64 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A024282AA40400201B64 /* Provider.swift */; };
+		FEF6A027282B9A8800201B64 /* KeyStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A026282B9A8800201B64 /* KeyStoreManager.swift */; };
+		FEF6A028282B9A8800201B64 /* KeyStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A026282B9A8800201B64 /* KeyStoreManager.swift */; };
+		FEF6A02A282BA18000201B64 /* KeyStoreManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A029282BA18000201B64 /* KeyStoreManagerTests.swift */; };
+		FEF6A02C282BA50D00201B64 /* OSStatus+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A02B282BA50D00201B64 /* OSStatus+Error.swift */; };
+		FEF6A02D282BA50D00201B64 /* OSStatus+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A02B282BA50D00201B64 /* OSStatus+Error.swift */; };
+		FEF6A039282DC1FB00201B64 /* CryptoExportImportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A038282DC1FB00201B64 /* CryptoExportImportManager.swift */; };
+		FEF95A102825460500100DD3 /* DeviceStatusProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF95A0F2825460500100DD3 /* DeviceStatusProvider.swift */; };
+		FEF95A112825460500100DD3 /* DeviceStatusProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF95A0F2825460500100DD3 /* DeviceStatusProvider.swift */; };
+		FEF95A132825620400100DD3 /* DeviceStatusEnricher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF95A122825620400100DD3 /* DeviceStatusEnricher.swift */; };
+		FEF95A142825620400100DD3 /* DeviceStatusEnricher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF95A122825620400100DD3 /* DeviceStatusEnricher.swift */; };
+		FEF95A16282562C600100DD3 /* BluetoothDeviceStatusEnricher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF95A15282562C600100DD3 /* BluetoothDeviceStatusEnricher.swift */; };
+		FEF95A17282562C600100DD3 /* BluetoothDeviceStatusEnricher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF95A15282562C600100DD3 /* BluetoothDeviceStatusEnricher.swift */; };
+		FEF95A19282563D800100DD3 /* NetworkDeviceStatusEnricher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF95A18282563D800100DD3 /* NetworkDeviceStatusEnricher.swift */; };
+		FEF95A1A282563D800100DD3 /* NetworkDeviceStatusEnricher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF95A18282563D800100DD3 /* NetworkDeviceStatusEnricher.swift */; };
+		FEF95A1C28258D8E00100DD3 /* NfcDeviceStatusEnricher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF95A1B28258D8E00100DD3 /* NfcDeviceStatusEnricher.swift */; };
+		FEF95A1D28258D8E00100DD3 /* NfcDeviceStatusEnricher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF95A1B28258D8E00100DD3 /* NfcDeviceStatusEnricher.swift */; };
+		FEF95A372828F9BC00100DD3 /* TokenContexts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF95A362828F9BC00100DD3 /* TokenContexts.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FE504AD128242B880004B3F0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE504ABC28242B880004B3F0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FE504AC428242B880004B3F0;
+			remoteInfo = AbtMobile;
+		};
+		FEF6A018282A7F1F00201B64 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE504ABC28242B880004B3F0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FEF6A008282A7E9500201B64;
+			remoteInfo = TestHostiOS;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		FE24EFD728589BAB0033AF33 /* AttestationObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttestationObject.swift; sourceTree = "<group>"; };
+		FE504AC528242B880004B3F0 /* AbtTokenCoreSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AbtTokenCoreSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE504AC828242B880004B3F0 /* AbtTokenCoreSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AbtTokenCoreSDK.h; sourceTree = "<group>"; };
+		FE504ACF28242B880004B3F0 /* AbtTokenCoreSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AbtTokenCoreSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE504ADF28242BD60004B3F0 /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		FE504AE028242BD60004B3F0 /* PendingToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PendingToken.swift; sourceTree = "<group>"; };
+		FE504AE128242BD60004B3F0 /* DefaultTokenContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultTokenContext.swift; sourceTree = "<group>"; };
+		FE504AE228242BD60004B3F0 /* TokenEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenEncoder.swift; sourceTree = "<group>"; };
+		FE504AE428242BD60004B3F0 /* TokenStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenStore.swift; sourceTree = "<group>"; };
+		FE504AE628242BD60004B3F0 /* ActivatedToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivatedToken.swift; sourceTree = "<group>"; };
+		FE504AE728242BD60004B3F0 /* TokenRenewer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenRenewer.swift; sourceTree = "<group>"; };
+		FE504AFE28243CBD0004B3F0 /* KeyPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyPair.swift; sourceTree = "<group>"; };
+		FE504AFF28243CBD0004B3F0 /* TokenContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenContext.swift; sourceTree = "<group>"; };
+		FE504B0028243CBD0004B3F0 /* DefaultKeystoreSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultKeystoreSearch.swift; sourceTree = "<group>"; };
+		FE504B0128243CBD0004B3F0 /* DefaultTokenKeyStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultTokenKeyStore.swift; sourceTree = "<group>"; };
+		FE504B0228243CBD0004B3F0 /* KeyStoreSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyStoreSearch.swift; sourceTree = "<group>"; };
+		FE504B0328243CBD0004B3F0 /* KeyStoreAliasFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyStoreAliasFactory.swift; sourceTree = "<group>"; };
+		FE504B0528243CBD0004B3F0 /* DefaultKeyStoreAliasFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultKeyStoreAliasFactory.swift; sourceTree = "<group>"; };
+		FE504B0628243CBD0004B3F0 /* TokenKeyStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenKeyStore.swift; sourceTree = "<group>"; };
+		FE504B1928243D8B0004B3F0 /* PrivateKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKey.swift; sourceTree = "<group>"; };
+		FE504B1C28243DD30004B3F0 /* PublicKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicKey.swift; sourceTree = "<group>"; };
+		FE504B2028244D160004B3F0 /* TokenProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenProperty.swift; sourceTree = "<group>"; };
+		FE504B2328244D490004B3F0 /* TokenPropertyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenPropertyStore.swift; sourceTree = "<group>"; };
+		FE504B2D282456C20004B3F0 /* IOSDeviceAttestator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSDeviceAttestator.swift; sourceTree = "<group>"; };
+		FE504B52282500340004B3F0 /* DefaultDeviceDetailsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultDeviceDetailsProvider.swift; sourceTree = "<group>"; };
+		FE504B56282501C80004B3F0 /* DeviceDetailsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailsProvider.swift; sourceTree = "<group>"; };
+		FE9DED0328290B070006C91A /* TokenEncodingRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenEncodingRequest.swift; sourceTree = "<group>"; };
+		FE9DED0728290DB90006C91A /* TokenEncoderError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenEncoderError.swift; sourceTree = "<group>"; };
+		FE9DED0A28292FD40006C91A /* TokenPayloadAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenPayloadAction.swift; sourceTree = "<group>"; };
+		FE9DED0E28293EED0006C91A /* Data+Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Crypto.swift"; sourceTree = "<group>"; };
+		FE9DED11282950140006C91A /* AbstractDeviceAttestator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractDeviceAttestator.swift; sourceTree = "<group>"; };
+		FE9DED142829502C0006C91A /* DeviceAttestator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceAttestator.swift; sourceTree = "<group>"; };
+		FE9DED1A28297F370006C91A /* Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
+		FE9DED1D282996690006C91A /* TokenTrustChainError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenTrustChainError.swift; sourceTree = "<group>"; };
+		FE9DED20282998520006C91A /* DeviceAttestatorError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceAttestatorError.swift; sourceTree = "<group>"; };
+		FE9DED232829989C0006C91A /* KeyError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyError.swift; sourceTree = "<group>"; };
+		FE9DED262829A05D0006C91A /* TokenKeyStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenKeyStoreError.swift; sourceTree = "<group>"; };
+		FE9DED292829A9A40006C91A /* TokenStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenStoreError.swift; sourceTree = "<group>"; };
+		FE9DED2C282A4BE90006C91A /* TokenStoreKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenStoreKeyTests.swift; sourceTree = "<group>"; };
+		FE9FDD4F285872C500A8FF98 /* validate.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = validate.pb.swift; sourceTree = "<group>"; };
+		FE9FDD55285872C500A8FF98 /* net_opengis_www_gml__3_2.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = net_opengis_www_gml__3_2.pb.swift; sourceTree = "<group>"; };
+		FE9FDD5A285872C500A8FF98 /* Identity_Messages.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identity_Messages.pb.swift; sourceTree = "<group>"; };
+		FE9FDD5B285872C500A8FF98 /* DeviceDetails_Messages.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDetails_Messages.pb.swift; sourceTree = "<group>"; };
+		FE9FDD5C285872C500A8FF98 /* SecureContainer_Messages.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureContainer_Messages.pb.swift; sourceTree = "<group>"; };
+		FE9FDD5E285872C500A8FF98 /* Consumption_Messages.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Consumption_Messages.pb.swift; sourceTree = "<group>"; };
+		FE9FDD60285872C500A8FF98 /* TravelCard_Messages.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TravelCard_Messages.pb.swift; sourceTree = "<group>"; };
+		FE9FDD62285872C500A8FF98 /* Common_Messages.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common_Messages.pb.swift; sourceTree = "<group>"; };
+		FE9FDD63285872C500A8FF98 /* ErrorCode_Messages.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorCode_Messages.pb.swift; sourceTree = "<group>"; };
+		FE9FDD65285872C500A8FF98 /* Traveller_API.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Traveller_API.pb.swift; sourceTree = "<group>"; };
+		FE9FDD66285872C500A8FF98 /* TravellerSupport_API.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TravellerSupport_API.pb.swift; sourceTree = "<group>"; };
+		FE9FDD67285872C500A8FF98 /* Traveller_Messages.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Traveller_Messages.pb.swift; sourceTree = "<group>"; };
+		FE9FDD6A285872C500A8FF98 /* timeofday.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = timeofday.pb.swift; sourceTree = "<group>"; };
+		FE9FDD6B285872C500A8FF98 /* date.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = date.pb.swift; sourceTree = "<group>"; };
+		FE9FDD6D285872C500A8FF98 /* status.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = status.pb.swift; sourceTree = "<group>"; };
+		FE9FDD73285872C500A8FF98 /* uk_org_netex_www_netex.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = uk_org_netex_www_netex.pb.swift; sourceTree = "<group>"; };
+		FE9FDD75285872C500A8FF98 /* xsd.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = xsd.pb.swift; sourceTree = "<group>"; };
+		FEF6A009282A7E9500201B64 /* TestHostiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHostiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEF6A00B282A7E9500201B64 /* TestHostiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHostiOSApp.swift; sourceTree = "<group>"; };
+		FEF6A00D282A7E9500201B64 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		FEF6A00F282A7E9700201B64 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FEF6A012282A7E9700201B64 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		FEF6A017282A7F0700201B64 /* TestHostiOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestHostiOS.entitlements; sourceTree = "<group>"; };
+		FEF6A01B282A9C7900201B64 /* MockedDefaultTokenRenewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedDefaultTokenRenewer.swift; sourceTree = "<group>"; };
+		FEF6A01E282A9DD300201B64 /* KeyStoreAliasFactoryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStoreAliasFactoryProvider.swift; sourceTree = "<group>"; };
+		FEF6A022282AA3F100201B64 /* KeyStoreSearchFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStoreSearchFactory.swift; sourceTree = "<group>"; };
+		FEF6A024282AA40400201B64 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+		FEF6A026282B9A8800201B64 /* KeyStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStoreManager.swift; sourceTree = "<group>"; };
+		FEF6A029282BA18000201B64 /* KeyStoreManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStoreManagerTests.swift; sourceTree = "<group>"; };
+		FEF6A02B282BA50D00201B64 /* OSStatus+Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OSStatus+Error.swift"; sourceTree = "<group>"; };
+		FEF6A038282DC1FB00201B64 /* CryptoExportImportManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoExportImportManager.swift; sourceTree = "<group>"; };
+		FEF95A0F2825460500100DD3 /* DeviceStatusProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatusProvider.swift; sourceTree = "<group>"; };
+		FEF95A122825620400100DD3 /* DeviceStatusEnricher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatusEnricher.swift; sourceTree = "<group>"; };
+		FEF95A15282562C600100DD3 /* BluetoothDeviceStatusEnricher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothDeviceStatusEnricher.swift; sourceTree = "<group>"; };
+		FEF95A18282563D800100DD3 /* NetworkDeviceStatusEnricher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkDeviceStatusEnricher.swift; sourceTree = "<group>"; };
+		FEF95A1B28258D8E00100DD3 /* NfcDeviceStatusEnricher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NfcDeviceStatusEnricher.swift; sourceTree = "<group>"; };
+		FEF95A362828F9BC00100DD3 /* TokenContexts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenContexts.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FE504AC228242B880004B3F0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FE9DED01282909200006C91A /* Kronos in Frameworks */,
+				FE1EBC6C28250BED00583963 /* SwiftProtobuf in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FE504ACC28242B880004B3F0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FE504AD028242B880004B3F0 /* AbtTokenCoreSDK.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FEF6A006282A7E9500201B64 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FE504ABB28242B880004B3F0 = {
+			isa = PBXGroup;
+			children = (
+				FE504AC728242B880004B3F0 /* AbtTokenCoreSDK */,
+				FE504AD328242B880004B3F0 /* AbtTokenCoreSDKTests */,
+				FE504AC628242B880004B3F0 /* Products */,
+				FEF6A00A282A7E9500201B64 /* TestHostiOS */,
+			);
+			sourceTree = "<group>";
+		};
+		FE504AC628242B880004B3F0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FE504AC528242B880004B3F0 /* AbtTokenCoreSDK.framework */,
+				FE504ACF28242B880004B3F0 /* AbtTokenCoreSDKTests.xctest */,
+				FEF6A009282A7E9500201B64 /* TestHostiOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FE504AC728242B880004B3F0 /* AbtTokenCoreSDK */ = {
+			isa = PBXGroup;
+			children = (
+				FE504AC828242B880004B3F0 /* AbtTokenCoreSDK.h */,
+				FE504AE628242BD60004B3F0 /* ActivatedToken.swift */,
+				FE504AE128242BD60004B3F0 /* DefaultTokenContext.swift */,
+				FEF6A026282B9A8800201B64 /* KeyStoreManager.swift */,
+				FE504AE028242BD60004B3F0 /* PendingToken.swift */,
+				FE504ADF28242BD60004B3F0 /* Token.swift */,
+				FEF95A362828F9BC00100DD3 /* TokenContexts.swift */,
+				FE504AE228242BD60004B3F0 /* TokenEncoder.swift */,
+				FE9DED0328290B070006C91A /* TokenEncodingRequest.swift */,
+				FE9DED0A28292FD40006C91A /* TokenPayloadAction.swift */,
+				FE504B2028244D160004B3F0 /* TokenProperty.swift */,
+				FE504B2328244D490004B3F0 /* TokenPropertyStore.swift */,
+				FE504AE728242BD60004B3F0 /* TokenRenewer.swift */,
+				FE504AE428242BD60004B3F0 /* TokenStore.swift */,
+				FE504B26282454250004B3F0 /* attestation */,
+				FE504B55282501980004B3F0 /* device */,
+				FE9DED0628290D920006C91A /* errors */,
+				FE9DED0D28293ECD0006C91A /* extensions */,
+				FE504AFD28243CBD0004B3F0 /* keystore */,
+				FE9FDD4D285872C500A8FF98 /* swift-proto */,
+				FEF6A03A282DC69400201B64 /* utils */,
+			);
+			path = AbtTokenCoreSDK;
+			sourceTree = "<group>";
+		};
+		FE504AD328242B880004B3F0 /* AbtTokenCoreSDKTests */ = {
+			isa = PBXGroup;
+			children = (
+				FEF6A029282BA18000201B64 /* KeyStoreManagerTests.swift */,
+				FE9DED2C282A4BE90006C91A /* TokenStoreKeyTests.swift */,
+				FEF6A01A282A9C5F00201B64 /* mocks */,
+				FEF6A01D282A9CA900201B64 /* providers */,
+			);
+			path = AbtTokenCoreSDKTests;
+			sourceTree = "<group>";
+		};
+		FE504AFD28243CBD0004B3F0 /* keystore */ = {
+			isa = PBXGroup;
+			children = (
+				FE504B0528243CBD0004B3F0 /* DefaultKeyStoreAliasFactory.swift */,
+				FE504B0028243CBD0004B3F0 /* DefaultKeystoreSearch.swift */,
+				FE504B0128243CBD0004B3F0 /* DefaultTokenKeyStore.swift */,
+				FE9DED1A28297F370006C91A /* Key.swift */,
+				FE504AFE28243CBD0004B3F0 /* KeyPair.swift */,
+				FE504B0328243CBD0004B3F0 /* KeyStoreAliasFactory.swift */,
+				FE504B0228243CBD0004B3F0 /* KeyStoreSearch.swift */,
+				FE504B1928243D8B0004B3F0 /* PrivateKey.swift */,
+				FE504B1C28243DD30004B3F0 /* PublicKey.swift */,
+				FE504AFF28243CBD0004B3F0 /* TokenContext.swift */,
+				FE504B0628243CBD0004B3F0 /* TokenKeyStore.swift */,
+			);
+			path = keystore;
+			sourceTree = "<group>";
+		};
+		FE504B26282454250004B3F0 /* attestation */ = {
+			isa = PBXGroup;
+			children = (
+				FE9DED11282950140006C91A /* AbstractDeviceAttestator.swift */,
+				FE24EFD728589BAB0033AF33 /* AttestationObject.swift */,
+				FE9DED142829502C0006C91A /* DeviceAttestator.swift */,
+				FE504B2D282456C20004B3F0 /* IOSDeviceAttestator.swift */,
+			);
+			path = attestation;
+			sourceTree = "<group>";
+		};
+		FE504B55282501980004B3F0 /* device */ = {
+			isa = PBXGroup;
+			children = (
+				FEF95A15282562C600100DD3 /* BluetoothDeviceStatusEnricher.swift */,
+				FE504B52282500340004B3F0 /* DefaultDeviceDetailsProvider.swift */,
+				FE504B56282501C80004B3F0 /* DeviceDetailsProvider.swift */,
+				FEF95A122825620400100DD3 /* DeviceStatusEnricher.swift */,
+				FEF95A0F2825460500100DD3 /* DeviceStatusProvider.swift */,
+				FEF95A18282563D800100DD3 /* NetworkDeviceStatusEnricher.swift */,
+				FEF95A1B28258D8E00100DD3 /* NfcDeviceStatusEnricher.swift */,
+			);
+			path = device;
+			sourceTree = "<group>";
+		};
+		FE9DED0628290D920006C91A /* errors */ = {
+			isa = PBXGroup;
+			children = (
+				FE9DED20282998520006C91A /* DeviceAttestatorError.swift */,
+				FE9DED232829989C0006C91A /* KeyError.swift */,
+				FE9DED0728290DB90006C91A /* TokenEncoderError.swift */,
+				FE9DED262829A05D0006C91A /* TokenKeyStoreError.swift */,
+				FE9DED292829A9A40006C91A /* TokenStoreError.swift */,
+				FE9DED1D282996690006C91A /* TokenTrustChainError.swift */,
+			);
+			path = errors;
+			sourceTree = "<group>";
+		};
+		FE9DED0D28293ECD0006C91A /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				FE9DED0E28293EED0006C91A /* Data+Crypto.swift */,
+				FEF6A02B282BA50D00201B64 /* OSStatus+Error.swift */,
+			);
+			path = extensions;
+			sourceTree = "<group>";
+		};
+		FE9FDD4D285872C500A8FF98 /* swift-proto */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD4E285872C500A8FF98 /* validate */,
+				FE9FDD50285872C500A8FF98 /* net */,
+				FE9FDD56285872C500A8FF98 /* no */,
+				FE9FDD68285872C500A8FF98 /* google */,
+				FE9FDD6E285872C500A8FF98 /* uk */,
+				FE9FDD74285872C500A8FF98 /* xsd */,
+			);
+			path = "swift-proto";
+			sourceTree = "<group>";
+		};
+		FE9FDD4E285872C500A8FF98 /* validate */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD4F285872C500A8FF98 /* validate.pb.swift */,
+			);
+			path = validate;
+			sourceTree = "<group>";
+		};
+		FE9FDD50285872C500A8FF98 /* net */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD51285872C500A8FF98 /* opengis */,
+			);
+			path = net;
+			sourceTree = "<group>";
+		};
+		FE9FDD51285872C500A8FF98 /* opengis */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD52285872C500A8FF98 /* www */,
+			);
+			path = opengis;
+			sourceTree = "<group>";
+		};
+		FE9FDD52285872C500A8FF98 /* www */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD53285872C500A8FF98 /* gml */,
+			);
+			path = www;
+			sourceTree = "<group>";
+		};
+		FE9FDD53285872C500A8FF98 /* gml */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD54285872C500A8FF98 /* _3_2 */,
+			);
+			path = gml;
+			sourceTree = "<group>";
+		};
+		FE9FDD54285872C500A8FF98 /* _3_2 */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD55285872C500A8FF98 /* net_opengis_www_gml__3_2.pb.swift */,
+			);
+			path = _3_2;
+			sourceTree = "<group>";
+		};
+		FE9FDD56285872C500A8FF98 /* no */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD57285872C500A8FF98 /* entur */,
+			);
+			path = no;
+			sourceTree = "<group>";
+		};
+		FE9FDD57285872C500A8FF98 /* entur */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD58285872C500A8FF98 /* abt */,
+			);
+			path = entur;
+			sourceTree = "<group>";
+		};
+		FE9FDD58285872C500A8FF98 /* abt */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD59285872C500A8FF98 /* token */,
+				FE9FDD5D285872C500A8FF98 /* consumption */,
+				FE9FDD5F285872C500A8FF98 /* travelcard */,
+				FE9FDD61285872C500A8FF98 /* common */,
+				FE9FDD64285872C500A8FF98 /* traveller */,
+			);
+			path = abt;
+			sourceTree = "<group>";
+		};
+		FE9FDD59285872C500A8FF98 /* token */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD5A285872C500A8FF98 /* Identity_Messages.pb.swift */,
+				FE9FDD5B285872C500A8FF98 /* DeviceDetails_Messages.pb.swift */,
+				FE9FDD5C285872C500A8FF98 /* SecureContainer_Messages.pb.swift */,
+			);
+			path = token;
+			sourceTree = "<group>";
+		};
+		FE9FDD5D285872C500A8FF98 /* consumption */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD5E285872C500A8FF98 /* Consumption_Messages.pb.swift */,
+			);
+			path = consumption;
+			sourceTree = "<group>";
+		};
+		FE9FDD5F285872C500A8FF98 /* travelcard */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD60285872C500A8FF98 /* TravelCard_Messages.pb.swift */,
+			);
+			path = travelcard;
+			sourceTree = "<group>";
+		};
+		FE9FDD61285872C500A8FF98 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD62285872C500A8FF98 /* Common_Messages.pb.swift */,
+				FE9FDD63285872C500A8FF98 /* ErrorCode_Messages.pb.swift */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		FE9FDD64285872C500A8FF98 /* traveller */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD65285872C500A8FF98 /* Traveller_API.pb.swift */,
+				FE9FDD66285872C500A8FF98 /* TravellerSupport_API.pb.swift */,
+				FE9FDD67285872C500A8FF98 /* Traveller_Messages.pb.swift */,
+			);
+			path = traveller;
+			sourceTree = "<group>";
+		};
+		FE9FDD68285872C500A8FF98 /* google */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD69285872C500A8FF98 /* type */,
+				FE9FDD6C285872C500A8FF98 /* rpc */,
+			);
+			path = google;
+			sourceTree = "<group>";
+		};
+		FE9FDD69285872C500A8FF98 /* type */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD6A285872C500A8FF98 /* timeofday.pb.swift */,
+				FE9FDD6B285872C500A8FF98 /* date.pb.swift */,
+			);
+			path = type;
+			sourceTree = "<group>";
+		};
+		FE9FDD6C285872C500A8FF98 /* rpc */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD6D285872C500A8FF98 /* status.pb.swift */,
+			);
+			path = rpc;
+			sourceTree = "<group>";
+		};
+		FE9FDD6E285872C500A8FF98 /* uk */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD6F285872C500A8FF98 /* org */,
+			);
+			path = uk;
+			sourceTree = "<group>";
+		};
+		FE9FDD6F285872C500A8FF98 /* org */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD70285872C500A8FF98 /* netex */,
+			);
+			path = org;
+			sourceTree = "<group>";
+		};
+		FE9FDD70285872C500A8FF98 /* netex */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD71285872C500A8FF98 /* www */,
+			);
+			path = netex;
+			sourceTree = "<group>";
+		};
+		FE9FDD71285872C500A8FF98 /* www */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD72285872C500A8FF98 /* netex */,
+			);
+			path = www;
+			sourceTree = "<group>";
+		};
+		FE9FDD72285872C500A8FF98 /* netex */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD73285872C500A8FF98 /* uk_org_netex_www_netex.pb.swift */,
+			);
+			path = netex;
+			sourceTree = "<group>";
+		};
+		FE9FDD74285872C500A8FF98 /* xsd */ = {
+			isa = PBXGroup;
+			children = (
+				FE9FDD75285872C500A8FF98 /* xsd.pb.swift */,
+			);
+			path = xsd;
+			sourceTree = "<group>";
+		};
+		FEF6A00A282A7E9500201B64 /* TestHostiOS */ = {
+			isa = PBXGroup;
+			children = (
+				FEF6A017282A7F0700201B64 /* TestHostiOS.entitlements */,
+				FEF6A00D282A7E9500201B64 /* ContentView.swift */,
+				FEF6A00B282A7E9500201B64 /* TestHostiOSApp.swift */,
+				FEF6A00F282A7E9700201B64 /* Assets.xcassets */,
+				FEF6A011282A7E9700201B64 /* Preview Content */,
+			);
+			path = TestHostiOS;
+			sourceTree = "<group>";
+		};
+		FEF6A011282A7E9700201B64 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				FEF6A012282A7E9700201B64 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		FEF6A01A282A9C5F00201B64 /* mocks */ = {
+			isa = PBXGroup;
+			children = (
+				FEF6A01B282A9C7900201B64 /* MockedDefaultTokenRenewer.swift */,
+			);
+			path = mocks;
+			sourceTree = "<group>";
+		};
+		FEF6A01D282A9CA900201B64 /* providers */ = {
+			isa = PBXGroup;
+			children = (
+				FEF6A01E282A9DD300201B64 /* KeyStoreAliasFactoryProvider.swift */,
+				FEF6A022282AA3F100201B64 /* KeyStoreSearchFactory.swift */,
+				FEF6A024282AA40400201B64 /* Provider.swift */,
+			);
+			path = providers;
+			sourceTree = "<group>";
+		};
+		FEF6A03A282DC69400201B64 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				FEF6A038282DC1FB00201B64 /* CryptoExportImportManager.swift */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		FE504AC028242B880004B3F0 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FE504AD628242B880004B3F0 /* AbtTokenCoreSDK.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		FE504AC428242B880004B3F0 /* AbtTokenCoreSDK */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FE504AD928242B880004B3F0 /* Build configuration list for PBXNativeTarget "AbtTokenCoreSDK" */;
+			buildPhases = (
+				FE504AC028242B880004B3F0 /* Headers */,
+				FE504AC128242B880004B3F0 /* Sources */,
+				FE504AC228242B880004B3F0 /* Frameworks */,
+				FE504AC328242B880004B3F0 /* Resources */,
+				FE504B1F28243EF60004B3F0 /* Swift Lint */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AbtTokenCoreSDK;
+			packageProductDependencies = (
+				FE1EBC6B28250BED00583963 /* SwiftProtobuf */,
+				FE9DED00282909200006C91A /* Kronos */,
+			);
+			productName = AbtMobile;
+			productReference = FE504AC528242B880004B3F0 /* AbtTokenCoreSDK.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		FE504ACE28242B880004B3F0 /* AbtTokenCoreSDKTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FE504ADC28242B880004B3F0 /* Build configuration list for PBXNativeTarget "AbtTokenCoreSDKTests" */;
+			buildPhases = (
+				FE504ACB28242B880004B3F0 /* Sources */,
+				FE504ACC28242B880004B3F0 /* Frameworks */,
+				FE504ACD28242B880004B3F0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FE504AD228242B880004B3F0 /* PBXTargetDependency */,
+				FEF6A019282A7F1F00201B64 /* PBXTargetDependency */,
+			);
+			name = AbtTokenCoreSDKTests;
+			productName = AbtMobileTests;
+			productReference = FE504ACF28242B880004B3F0 /* AbtTokenCoreSDKTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		FEF6A008282A7E9500201B64 /* TestHostiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FEF6A014282A7E9700201B64 /* Build configuration list for PBXNativeTarget "TestHostiOS" */;
+			buildPhases = (
+				FEF6A005282A7E9500201B64 /* Sources */,
+				FEF6A006282A7E9500201B64 /* Frameworks */,
+				FEF6A007282A7E9500201B64 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestHostiOS;
+			productName = TestHostiOS;
+			productReference = FEF6A009282A7E9500201B64 /* TestHostiOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FE504ABC28242B880004B3F0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1330;
+				LastUpgradeCheck = 1340;
+				TargetAttributes = {
+					FE504AC428242B880004B3F0 = {
+						CreatedOnToolsVersion = 13.3.1;
+					};
+					FE504ACE28242B880004B3F0 = {
+						CreatedOnToolsVersion = 13.3.1;
+						TestTargetID = FEF6A008282A7E9500201B64;
+					};
+					FEF6A008282A7E9500201B64 = {
+						CreatedOnToolsVersion = 13.3.1;
+					};
+				};
+			};
+			buildConfigurationList = FE504ABF28242B880004B3F0 /* Build configuration list for PBXProject "AbtTokenCoreSDK" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FE504ABB28242B880004B3F0;
+			packageReferences = (
+				FE1EBC6A28250BED00583963 /* XCRemoteSwiftPackageReference "swift-protobuf" */,
+				FE9DECFF282909200006C91A /* XCRemoteSwiftPackageReference "Kronos" */,
+			);
+			productRefGroup = FE504AC628242B880004B3F0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FE504AC428242B880004B3F0 /* AbtTokenCoreSDK */,
+				FE504ACE28242B880004B3F0 /* AbtTokenCoreSDKTests */,
+				FEF6A008282A7E9500201B64 /* TestHostiOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FE504AC328242B880004B3F0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FE504ACD28242B880004B3F0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FEF6A007282A7E9500201B64 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FEF6A013282A7E9700201B64 /* Preview Assets.xcassets in Resources */,
+				FEF6A010282A7E9700201B64 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		FE504B1F28243EF60004B3F0 /* Swift Lint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Swift Lint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Do not run this on a CI!\nif [ -z \"$CI\" ]; then\n    # Adds support for Apple Silicon brew directory\n    export PATH=\"$PATH:/opt/homebrew/bin\"\n    if mint which swiftlint >/dev/null; then\n      mint run swiftlint --config .swiftlint.yml\n    else\n      echo \"Warning: SwiftLint not installed, run either `sh bootstrap.sh` or `mint bootstrap`.\"\n    fi\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FE504AC128242B880004B3F0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FE9FDD81285872C500A8FF98 /* Traveller_Messages.pb.swift in Sources */,
+				FE9FDD79285872C500A8FF98 /* DeviceDetails_Messages.pb.swift in Sources */,
+				FE9FDD85285872C500A8FF98 /* uk_org_netex_www_netex.pb.swift in Sources */,
+				FE504B2E282456C20004B3F0 /* IOSDeviceAttestator.swift in Sources */,
+				FE9DED152829502C0006C91A /* DeviceAttestator.swift in Sources */,
+				FE504AF228242BD60004B3F0 /* TokenStore.swift in Sources */,
+				FE9FDD7C285872C500A8FF98 /* TravelCard_Messages.pb.swift in Sources */,
+				FEF95A372828F9BC00100DD3 /* TokenContexts.swift in Sources */,
+				FE9FDD7E285872C500A8FF98 /* ErrorCode_Messages.pb.swift in Sources */,
+				FE9FDD84285872C500A8FF98 /* status.pb.swift in Sources */,
+				FE504AEA28242BD60004B3F0 /* PendingToken.swift in Sources */,
+				FE504B2128244D160004B3F0 /* TokenProperty.swift in Sources */,
+				FE9FDD7A285872C500A8FF98 /* SecureContainer_Messages.pb.swift in Sources */,
+				FE9DED0828290DB90006C91A /* TokenEncoderError.swift in Sources */,
+				FE9DED2A2829A9A40006C91A /* TokenStoreError.swift in Sources */,
+				FE9DED272829A05D0006C91A /* TokenKeyStoreError.swift in Sources */,
+				FE504B0F28243CBD0004B3F0 /* KeyStoreSearch.swift in Sources */,
+				FE9DED1B28297F370006C91A /* Key.swift in Sources */,
+				FE504AE828242BD60004B3F0 /* Token.swift in Sources */,
+				FE504B0928243CBD0004B3F0 /* TokenContext.swift in Sources */,
+				FE9DED0428290B070006C91A /* TokenEncodingRequest.swift in Sources */,
+				FE9FDD83285872C500A8FF98 /* date.pb.swift in Sources */,
+				FE9DED12282950140006C91A /* AbstractDeviceAttestator.swift in Sources */,
+				FE9FDD77285872C500A8FF98 /* net_opengis_www_gml__3_2.pb.swift in Sources */,
+				FE9DED0F28293EED0006C91A /* Data+Crypto.swift in Sources */,
+				FEF6A039282DC1FB00201B64 /* CryptoExportImportManager.swift in Sources */,
+				FE9FDD78285872C500A8FF98 /* Identity_Messages.pb.swift in Sources */,
+				FE9DED1E282996690006C91A /* TokenTrustChainError.swift in Sources */,
+				FEF95A19282563D800100DD3 /* NetworkDeviceStatusEnricher.swift in Sources */,
+				FEF95A102825460500100DD3 /* DeviceStatusProvider.swift in Sources */,
+				FE9FDD7D285872C500A8FF98 /* Common_Messages.pb.swift in Sources */,
+				FEF95A132825620400100DD3 /* DeviceStatusEnricher.swift in Sources */,
+				FE504AEE28242BD60004B3F0 /* TokenEncoder.swift in Sources */,
+				FE504B1A28243D8B0004B3F0 /* PrivateKey.swift in Sources */,
+				FE504B1D28243DD30004B3F0 /* PublicKey.swift in Sources */,
+				FE504AEC28242BD60004B3F0 /* DefaultTokenContext.swift in Sources */,
+				FE504B1128243CBD0004B3F0 /* KeyStoreAliasFactory.swift in Sources */,
+				FE504B2428244D490004B3F0 /* TokenPropertyStore.swift in Sources */,
+				FEF6A027282B9A8800201B64 /* KeyStoreManager.swift in Sources */,
+				FE504B0728243CBD0004B3F0 /* KeyPair.swift in Sources */,
+				FE504B57282501C80004B3F0 /* DeviceDetailsProvider.swift in Sources */,
+				FE504AF828242BD60004B3F0 /* TokenRenewer.swift in Sources */,
+				FE504B1528243CBD0004B3F0 /* DefaultKeyStoreAliasFactory.swift in Sources */,
+				FE504B53282500340004B3F0 /* DefaultDeviceDetailsProvider.swift in Sources */,
+				FE504B0D28243CBD0004B3F0 /* DefaultTokenKeyStore.swift in Sources */,
+				FEF95A16282562C600100DD3 /* BluetoothDeviceStatusEnricher.swift in Sources */,
+				FE9DED0B28292FD40006C91A /* TokenPayloadAction.swift in Sources */,
+				FE24EFD828589BAB0033AF33 /* AttestationObject.swift in Sources */,
+				FE9FDD7B285872C500A8FF98 /* Consumption_Messages.pb.swift in Sources */,
+				FE504B1728243CBD0004B3F0 /* TokenKeyStore.swift in Sources */,
+				FE9FDD80285872C500A8FF98 /* TravellerSupport_API.pb.swift in Sources */,
+				FE9FDD86285872C500A8FF98 /* xsd.pb.swift in Sources */,
+				FE504AF628242BD60004B3F0 /* ActivatedToken.swift in Sources */,
+				FE9FDD7F285872C500A8FF98 /* Traveller_API.pb.swift in Sources */,
+				FE504B0B28243CBD0004B3F0 /* DefaultKeystoreSearch.swift in Sources */,
+				FEF95A1C28258D8E00100DD3 /* NfcDeviceStatusEnricher.swift in Sources */,
+				FEF6A02C282BA50D00201B64 /* OSStatus+Error.swift in Sources */,
+				FE9DED242829989C0006C91A /* KeyError.swift in Sources */,
+				FE9FDD76285872C500A8FF98 /* validate.pb.swift in Sources */,
+				FE9DED21282998520006C91A /* DeviceAttestatorError.swift in Sources */,
+				FE9FDD82285872C500A8FF98 /* timeofday.pb.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FE504ACB28242B880004B3F0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FE9DED162829502C0006C91A /* DeviceAttestator.swift in Sources */,
+				FE504B2F282456C20004B3F0 /* IOSDeviceAttestator.swift in Sources */,
+				FEF6A023282AA3F100201B64 /* KeyStoreSearchFactory.swift in Sources */,
+				FE24EFEA285B6E590033AF33 /* uk_org_netex_www_netex.pb.swift in Sources */,
+				FE504AF328242BD60004B3F0 /* TokenStore.swift in Sources */,
+				FE504AEB28242BD60004B3F0 /* PendingToken.swift in Sources */,
+				FEF95A1D28258D8E00100DD3 /* NfcDeviceStatusEnricher.swift in Sources */,
+				FEF95A112825460500100DD3 /* DeviceStatusProvider.swift in Sources */,
+				FEF95A142825620400100DD3 /* DeviceStatusEnricher.swift in Sources */,
+				FE24EFE8285B639F0033AF33 /* status.pb.swift in Sources */,
+				FE9DED2B2829A9A40006C91A /* TokenStoreError.swift in Sources */,
+				FEF69FE8282A73DE00201B64 /* TokenContexts.swift in Sources */,
+				FE24EFE1285B63950033AF33 /* ErrorCode_Messages.pb.swift in Sources */,
+				FE9DED282829A05D0006C91A /* TokenKeyStoreError.swift in Sources */,
+				FE9DED0928290DB90006C91A /* TokenEncoderError.swift in Sources */,
+				FE9DED1C28297F370006C91A /* Key.swift in Sources */,
+				FE504B2228244D160004B3F0 /* TokenProperty.swift in Sources */,
+				FE504B1028243CBD0004B3F0 /* KeyStoreSearch.swift in Sources */,
+				FE24EFE6285B639C0033AF33 /* date.pb.swift in Sources */,
+				FE9DED0528290B070006C91A /* TokenEncodingRequest.swift in Sources */,
+				FE9DED13282950140006C91A /* AbstractDeviceAttestator.swift in Sources */,
+				FE9DED2D282A4BE90006C91A /* TokenStoreKeyTests.swift in Sources */,
+				FE9DED1028293EED0006C91A /* Data+Crypto.swift in Sources */,
+				FE504AE928242BD60004B3F0 /* Token.swift in Sources */,
+				FE9DED1F282996690006C91A /* TokenTrustChainError.swift in Sources */,
+				FEF69FE9282A755900201B64 /* TokenKeyStore.swift in Sources */,
+				FE24EFE0285B63920033AF33 /* TravelCard_Messages.pb.swift in Sources */,
+				FE24EFE9285B63A60033AF33 /* xsd.pb.swift in Sources */,
+				FE24EFDC285B638D0033AF33 /* Identity_Messages.pb.swift in Sources */,
+				FE504B0A28243CBD0004B3F0 /* TokenContext.swift in Sources */,
+				FEF95A1A282563D800100DD3 /* NetworkDeviceStatusEnricher.swift in Sources */,
+				FE504AEF28242BD60004B3F0 /* TokenEncoder.swift in Sources */,
+				FE504B1B28243D8B0004B3F0 /* PrivateKey.swift in Sources */,
+				FE504B1E28243DD30004B3F0 /* PublicKey.swift in Sources */,
+				FE24EFD928589BAB0033AF33 /* AttestationObject.swift in Sources */,
+				FE504AED28242BD60004B3F0 /* DefaultTokenContext.swift in Sources */,
+				FE504B1228243CBD0004B3F0 /* KeyStoreAliasFactory.swift in Sources */,
+				FE24EFE5285B63990033AF33 /* Traveller_API.pb.swift in Sources */,
+				FEF6A01C282A9C7900201B64 /* MockedDefaultTokenRenewer.swift in Sources */,
+				FE24EFDE285B638D0033AF33 /* SecureContainer_Messages.pb.swift in Sources */,
+				FE504B2528244D490004B3F0 /* TokenPropertyStore.swift in Sources */,
+				FE504B0828243CBD0004B3F0 /* KeyPair.swift in Sources */,
+				FE504B58282501C80004B3F0 /* DeviceDetailsProvider.swift in Sources */,
+				FEF95A17282562C600100DD3 /* BluetoothDeviceStatusEnricher.swift in Sources */,
+				FE24EFE3285B63990033AF33 /* TravellerSupport_API.pb.swift in Sources */,
+				FE544A74283796C1001E4BCF /* CryptoExportImportManager.swift in Sources */,
+				FEF6A02D282BA50D00201B64 /* OSStatus+Error.swift in Sources */,
+				FE504AF928242BD60004B3F0 /* TokenRenewer.swift in Sources */,
+				FE24EFDA285B63840033AF33 /* validate.pb.swift in Sources */,
+				FE24EFE4285B63990033AF33 /* Traveller_Messages.pb.swift in Sources */,
+				FE24EFE7285B639C0033AF33 /* timeofday.pb.swift in Sources */,
+				FEF6A01F282A9DD300201B64 /* KeyStoreAliasFactoryProvider.swift in Sources */,
+				FE24EFDB285B63890033AF33 /* net_opengis_www_gml__3_2.pb.swift in Sources */,
+				FEF6A02A282BA18000201B64 /* KeyStoreManagerTests.swift in Sources */,
+				FE24EFDD285B638D0033AF33 /* DeviceDetails_Messages.pb.swift in Sources */,
+				FE504B1628243CBD0004B3F0 /* DefaultKeyStoreAliasFactory.swift in Sources */,
+				FE504B54282500340004B3F0 /* DefaultDeviceDetailsProvider.swift in Sources */,
+				FE9DED0C28292FD40006C91A /* TokenPayloadAction.swift in Sources */,
+				FE504B0E28243CBD0004B3F0 /* DefaultTokenKeyStore.swift in Sources */,
+				FE504AF728242BD60004B3F0 /* ActivatedToken.swift in Sources */,
+				FEF6A025282AA40400201B64 /* Provider.swift in Sources */,
+				FEF6A028282B9A8800201B64 /* KeyStoreManager.swift in Sources */,
+				FE504B0C28243CBD0004B3F0 /* DefaultKeystoreSearch.swift in Sources */,
+				FE9DED252829989C0006C91A /* KeyError.swift in Sources */,
+				FE24EFE2285B63950033AF33 /* Common_Messages.pb.swift in Sources */,
+				FE24EFDF285B638F0033AF33 /* Consumption_Messages.pb.swift in Sources */,
+				FE9DED22282998520006C91A /* DeviceAttestatorError.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FEF6A005282A7E9500201B64 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FEF6A00E282A7E9500201B64 /* ContentView.swift in Sources */,
+				FEF6A00C282A7E9500201B64 /* TestHostiOSApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FE504AD228242B880004B3F0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FE504AC428242B880004B3F0 /* AbtTokenCoreSDK */;
+			targetProxy = FE504AD128242B880004B3F0 /* PBXContainerItemProxy */;
+		};
+		FEF6A019282A7F1F00201B64 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FEF6A008282A7E9500201B64 /* TestHostiOS */;
+			targetProxy = FEF6A018282A7F1F00201B64 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		FE504AD728242B880004B3F0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		FE504AD828242B880004B3F0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		FE504ADA28242B880004B3F0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = CSV447Q97L;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = no.entur.AbtTokenCoreSDK;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FE504ADB28242B880004B3F0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = CSV447Q97L;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = no.entur.AbtTokenCoreSDK;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		FE504ADD28242B880004B3F0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CSV447Q97L;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = no.atb.AbtMobileTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestHostiOS.app/TestHostiOS";
+			};
+			name = Debug;
+		};
+		FE504ADE28242B880004B3F0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CSV447Q97L;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = no.atb.AbtMobileTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestHostiOS.app/TestHostiOS";
+			};
+			name = Release;
+		};
+		FEF6A015282A7E9700201B64 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TestHostiOS/TestHostiOS.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"TestHostiOS/Preview Content\"";
+				DEVELOPMENT_TEAM = CSV447Q97L;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = no.atb.TestHostiOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FEF6A016282A7E9700201B64 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TestHostiOS/TestHostiOS.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"TestHostiOS/Preview Content\"";
+				DEVELOPMENT_TEAM = CSV447Q97L;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = no.atb.TestHostiOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FE504ABF28242B880004B3F0 /* Build configuration list for PBXProject "AbtTokenCoreSDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FE504AD728242B880004B3F0 /* Debug */,
+				FE504AD828242B880004B3F0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FE504AD928242B880004B3F0 /* Build configuration list for PBXNativeTarget "AbtTokenCoreSDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FE504ADA28242B880004B3F0 /* Debug */,
+				FE504ADB28242B880004B3F0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FE504ADC28242B880004B3F0 /* Build configuration list for PBXNativeTarget "AbtTokenCoreSDKTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FE504ADD28242B880004B3F0 /* Debug */,
+				FE504ADE28242B880004B3F0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FEF6A014282A7E9700201B64 /* Build configuration list for PBXNativeTarget "TestHostiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FEF6A015282A7E9700201B64 /* Debug */,
+				FEF6A016282A7E9700201B64 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FE1EBC6A28250BED00583963 /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-protobuf.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		FE9DECFF282909200006C91A /* XCRemoteSwiftPackageReference "Kronos" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MobileNativeFoundation/Kronos";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FE1EBC6B28250BED00583963 /* SwiftProtobuf */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE1EBC6A28250BED00583963 /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = SwiftProtobuf;
+		};
+		FE9DED00282909200006C91A /* Kronos */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE9DECFF282909200006C91A /* XCRemoteSwiftPackageReference "Kronos" */;
+			productName = Kronos;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = FE504ABC28242B880004B3F0 /* Project object */;
+}

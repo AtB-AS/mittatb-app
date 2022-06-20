@@ -1,0 +1,22 @@
+{
+    "name": "@entur/token-state-react-native-lib",
+    "version": "1.0.0",
+    "description": "React Native wrapper for account-based ticketing",
+    "main": "src/index",
+    "source": "src/index",
+    "scripts": {
+        "lint": "eslint --ext .ts src/",
+        "test": "jest  --config ../../jest.config.js --rootDir .",
+        "ts": "tsc --noEmit"
+    },
+    "peerDependencies": {
+        "react": "*",
+        "react-native": "*"
+    },
+    "dependencies": {
+        "async-lock": "^1.3.1"
+    },
+    "devDependencies": {
+        "@types/async-lock": "^1.0.0"
+    }
+}

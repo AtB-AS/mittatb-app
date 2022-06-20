@@ -1,0 +1,28 @@
+if (!project.gradle.startParameter.taskNames.contains("renovate")) android {
+    defaultConfig {
+        minSdkVersion 23
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
+}
+
+dependencies {
+    api "androidx.test.espresso:espresso-idling-resource:${androidxEspressoVersion}"
+
+    api project(":challenge:model:challenge-model-java-lib")
+    api project(":challenge:bluetooth:model:bluetooth-model-java-lib")
+
+    testImplementation("org.bouncycastle:bcprov-jdk15on:${bouncyCastleVersion}")
+    testImplementation("org.bouncycastle:bcpkix-jdk15on:${bouncyCastleVersion}")
+
+    testImplementation("org.robolectric:robolectric:${robolectricVersion}") {
+        exclude group: 'com.google.protobuf', module: 'protobuf-java'
+    }
+
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:${desugarVersion}"
+
+}
+
+

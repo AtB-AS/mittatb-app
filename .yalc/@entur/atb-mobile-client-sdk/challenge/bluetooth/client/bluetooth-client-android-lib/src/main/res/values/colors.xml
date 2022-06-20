@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="status_active">#31B836</color>
+    <color name="status_archived">#DB1010</color>
+    <color name="status_transferred">#2196F3</color>
+    <color name="status_valid">#888888</color>
+</resources>
