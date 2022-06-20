@@ -131,7 +131,7 @@ const reducer: ReducerWithSideEffects<
 export function useNearestStopsData(location?: Location) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
 
-  const refresh = useCallback(
+  const loadData = useCallback(
     () =>
       dispatch({
         type: 'LOAD_NEAREST_STOP_PLACES',
@@ -140,12 +140,9 @@ export function useNearestStopsData(location?: Location) {
     [location?.id],
   );
 
-  useEffect(refresh, [
-    location?.resultType === 'geolocation' ? null : location?.id,
-  ]);
+  useEffect(loadData, [location?.id]);
 
   return {
     state,
-    refresh,
   };
 }

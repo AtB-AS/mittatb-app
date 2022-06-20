@@ -59,6 +59,7 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import useTripsQuery from '@atb/screens/Assistant/use-trips-query';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
+import {useDoOnceWhen} from '@atb/screens/utils';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -685,16 +686,6 @@ function useUpdatedLocation(
 }
 
 export default AssistantRoot;
-
-function useDoOnceWhen(fn: () => void, condition: boolean) {
-  const firstTimeRef = useRef(true);
-  useEffect(() => {
-    if (firstTimeRef.current && condition) {
-      firstTimeRef.current = false;
-      fn();
-    }
-  }, [condition]);
-}
 
 function log(message: string, metadata?: {[key: string]: string}) {
   Bugsnag.leaveBreadcrumb(message, {component: 'Assistant', ...metadata});
