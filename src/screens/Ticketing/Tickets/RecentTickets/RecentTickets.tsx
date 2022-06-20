@@ -64,13 +64,7 @@ export const RecentTickets = () => {
     <View
       style={{backgroundColor: theme.static.background.background_1.background}}
     >
-      <ThemeText
-        type="body__secondary"
-        style={{
-          marginTop: theme.spacings.xLarge,
-          marginLeft: theme.spacings.xLarge,
-        }}
-      >
+      <ThemeText type="body__secondary" style={styles.header}>
         {t(RecentTicketsTexts.repeatPurchase.label)}
       </ThemeText>
       {loading && (
@@ -141,5 +135,9 @@ export const RecentTickets = () => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   horizontalScrollView: {
     marginVertical: theme.spacings.medium,
+  },
+  header: {
+    marginTop: theme.spacings.xLarge,
+    marginLeft: theme.spacings.xLarge,
   },
 }));
