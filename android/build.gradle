@@ -26,9 +26,6 @@ allprojects {
         mavenCentral()
         mavenLocal()
         maven {
-            url "$rootDir/../node_modules/@entur/react-native-traveller/android/libs"
-        }
-        maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url("$rootDir/../node_modules/react-native/android")
         }
@@ -53,6 +50,27 @@ allprojects {
                 username = 'mapbox'
                 // Using same Mapbox token in .netrc file which is used for iOS Mapbox downloads
                 password = (netRcFile.text =~ /password (.+)/)[0][1]
+            }
+        }
+
+        maven {
+            url "$entur_artifactory_partner_resolve_snapshot_url"
+            credentials {
+                username "$entur_artifactory_user"
+                password "$entur_artifactory_password"
+            }
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
+        maven {
+            url "$entur_artifactory_partner_resolve_release_url"
+            credentials {
+                username "$entur_artifactory_user"
+                password "$entur_artifactory_password"
+            }
+            mavenContent {
+                releasesOnly()
             }
         }
     }
