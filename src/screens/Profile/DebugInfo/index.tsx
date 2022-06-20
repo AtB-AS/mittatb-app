@@ -14,6 +14,7 @@ import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import Slider from '@react-native-community/slider';
 import {usePreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
+import Button from '@atb/components/button';
 import {useNavigation} from '@react-navigation/native';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 
@@ -29,7 +30,6 @@ export default function DebugInfo() {
   const [idToken, setIdToken] = useState<
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
-  const {tokenStatus, retry, travelTokens} = useMobileTokenContextState();
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -44,6 +44,16 @@ export default function DebugInfo() {
 
     run();
   }, [user]);
+
+  const {
+    token,
+    remoteTokens,
+    retry,
+    createToken,
+    wipeToken,
+    validateToken,
+    removeRemoteToken,
+  } = useMobileTokenContextState();
 
   const [storedValues, setStoredValues] = useState<
     [string, string | null][] | null
@@ -124,147 +134,166 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.GenericItem>
-            <ThemeText type="heading__component">
-              Trip search parameters
-            </ThemeText>
-            <ThemeText type="body__secondary" color="secondary">
-              Press labels to reset to default
-            </ThemeText>
-          </Sections.GenericItem>
-          <LabeledSlider
-            max={50}
-            label="transferPenalty"
-            defaultValue={tripSearchDefaults.transferPenalty}
-            initialValue={tripSearchPreferences?.transferPenalty}
-            step={1}
-            onSetValue={(n: number) => {
-              setPreference({
-                tripSearchPreferences: {
-                  ...tripSearchPreferences,
-                  transferPenalty: n,
-                },
-              });
-            }}
-          />
-          <LabeledSlider
-            max={5}
-            label="waitReluctance"
-            defaultValue={tripSearchDefaults.waitReluctance}
-            initialValue={tripSearchPreferences?.waitReluctance}
-            onSetValue={(n: number) => {
-              setPreference({
-                tripSearchPreferences: {
-                  ...tripSearchPreferences,
-                  waitReluctance: n,
-                },
-              });
-            }}
-          />
-          <LabeledSlider
-            max={5}
-            label="walkReluctance"
-            defaultValue={tripSearchDefaults.walkReluctance}
-            initialValue={tripSearchPreferences?.walkReluctance}
-            onSetValue={(n: number) => {
-              setPreference({
-                tripSearchPreferences: {
-                  ...tripSearchPreferences,
-                  walkReluctance: n,
-                },
-              });
-            }}
-          />
-          <LabeledSlider
-            max={5}
-            label="walkSpeed"
-            defaultValue={tripSearchDefaults.walkSpeed}
-            initialValue={tripSearchPreferences?.walkSpeed}
-            onSetValue={(n: number) => {
-              setPreference({
-                tripSearchPreferences: {
-                  ...tripSearchPreferences,
-                  walkSpeed: n,
-                },
-              });
-            }}
-          />
-        </Sections.Section>
-
-        <Sections.Section withPadding withTopPadding>
-          <Sections.HeaderItem text="Firebase Auth user info" />
-          <Sections.GenericItem>
-            <View>
-              {Object.entries(user?.toJSON() ?? {}).map(([key, value]) =>
-                mapEntry(key, value),
-              )}
-            </View>
-          </Sections.GenericItem>
-        </Sections.Section>
-
-        <Sections.Section withPadding withTopPadding>
-          <Sections.HeaderItem text="Firebase Auth user claims" />
-          <Sections.GenericItem>
-            {!!idToken ? (
-              Object.entries(idToken).map(([key, value]) =>
-                mapEntry(key, value),
-              )
-            ) : (
-              <ThemeText>No id token</ThemeText>
-            )}
-          </Sections.GenericItem>
-        </Sections.Section>
-
-        <Sections.Section withPadding withTopPadding>
-          <Sections.HeaderItem text="Storage" />
-          {storedValues && (
-            <Sections.GenericItem>
-              {storedValues.map(([key, value]) => mapEntry(key, value))}
-            </Sections.GenericItem>
-          )}
-        </Sections.Section>
-
-        {retry && (
-          <Sections.Section withPadding withTopPadding>
-            <Sections.HeaderItem text="Mobile token state" />
-            <Sections.GenericItem>
+          <Sections.ExpandableItem
+            text={'Trip search parameters'}
+            showIconText={true}
+            expandContent={
               <View>
-                <ThemeText>{`Token state: ${tokenStatus?.state}`}</ThemeText>
-                <ThemeText>{`Token id: ${tokenStatus?.tokenId}`}</ThemeText>
-                <ThemeText>{`Visual state: ${tokenStatus?.visualState}`}</ThemeText>
-                <ThemeText>{`Error message: ${tokenStatus?.error?.message}`}</ThemeText>
-                <ThemeText>{`Error missing inet: ${tokenStatus?.error?.missingNetConnection}`}</ThemeText>
-                <ThemeText>{`Error object: ${
-                  tokenStatus?.error?.err
-                    ? JSON.stringify(
-                        tokenStatus?.error?.err,
-                        Object.getOwnPropertyNames(tokenStatus?.error?.err),
-                      )
-                    : undefined
-                }`}</ThemeText>
-              </View>
-            </Sections.GenericItem>
-            <Sections.HeaderItem text="Travel tokens" />
-            {travelTokens?.map((token) => (
-              <Sections.GenericItem>
-                {keys(token).map((k) => (
-                  <ThemeText>
-                    {k + ': ' + JSON.stringify(get(token, k))}
-                  </ThemeText>
-                ))}
-              </Sections.GenericItem>
-            ))}
-            {retry && (
-              <>
-                <Sections.LinkItem text="Retry" onPress={() => retry(false)} />
-                <Sections.LinkItem
-                  text="Force restart"
-                  onPress={() => retry(true)}
+                <ThemeText type="body__secondary" color="secondary">
+                  Press labels to reset to default
+                </ThemeText>
+                <LabeledSlider
+                  max={50}
+                  label="transferPenalty"
+                  defaultValue={tripSearchDefaults.transferPenalty}
+                  initialValue={tripSearchPreferences?.transferPenalty}
+                  step={1}
+                  onSetValue={(n: number) => {
+                    setPreference({
+                      tripSearchPreferences: {
+                        ...tripSearchPreferences,
+                        transferPenalty: n,
+                      },
+                    });
+                  }}
                 />
-              </>
-            )}
-          </Sections.Section>
-        )}
+                <LabeledSlider
+                  max={5}
+                  label="waitReluctance"
+                  defaultValue={tripSearchDefaults.waitReluctance}
+                  initialValue={tripSearchPreferences?.waitReluctance}
+                  onSetValue={(n: number) => {
+                    setPreference({
+                      tripSearchPreferences: {
+                        ...tripSearchPreferences,
+                        waitReluctance: n,
+                      },
+                    });
+                  }}
+                />
+                <LabeledSlider
+                  max={5}
+                  label="walkReluctance"
+                  defaultValue={tripSearchDefaults.walkReluctance}
+                  initialValue={tripSearchPreferences?.walkReluctance}
+                  onSetValue={(n: number) => {
+                    setPreference({
+                      tripSearchPreferences: {
+                        ...tripSearchPreferences,
+                        walkReluctance: n,
+                      },
+                    });
+                  }}
+                />
+                <LabeledSlider
+                  max={5}
+                  label="walkSpeed"
+                  defaultValue={tripSearchDefaults.walkSpeed}
+                  initialValue={tripSearchPreferences?.walkSpeed}
+                  onSetValue={(n: number) => {
+                    setPreference({
+                      tripSearchPreferences: {
+                        ...tripSearchPreferences,
+                        walkSpeed: n,
+                      },
+                    });
+                  }}
+                />
+              </View>
+            }
+          />
+        </Sections.Section>
+
+        <Sections.Section withPadding withTopPadding>
+          <Sections.ExpandableItem
+            text="Firebase Auth user info"
+            showIconText={true}
+            expandContent={
+              <View>
+                {Object.entries(user?.toJSON() ?? {}).map(([key, value]) =>
+                  mapEntry(key, value),
+                )}
+              </View>
+            }
+          />
+        </Sections.Section>
+
+        <Sections.Section withPadding withTopPadding>
+          <Sections.ExpandableItem
+            text="Firebase Auth user claims"
+            showIconText={true}
+            expandContent={
+              <View>
+                {!!idToken ? (
+                  Object.entries(idToken).map(([key, value]) =>
+                    mapEntry(key, value),
+                  )
+                ) : (
+                  <ThemeText>No id token</ThemeText>
+                )}
+              </View>
+            }
+          />
+        </Sections.Section>
+
+        <Sections.Section withPadding withTopPadding>
+          <Sections.ExpandableItem
+            text="Storage"
+            showIconText={true}
+            expandContent={
+              storedValues && (
+                <View>
+                  {storedValues.map(([key, value]) => mapEntry(key, value))}
+                </View>
+              )
+            }
+          />
+        </Sections.Section>
+
+        <Sections.Section withPadding withTopPadding>
+          <Sections.ExpandableItem
+            text="Mobile token state"
+            showIconText={true}
+            expandContent={
+              <View>
+                {token && (
+                  <View>
+                    <ThemeText>{`Token id: ${token.getTokenId()}`}</ThemeText>
+                    <ThemeText>{`Token start: ${new Date(
+                      token.getValidityStart(),
+                    ).toISOString()}`}</ThemeText>
+                    <ThemeText>{`Token end: ${new Date(
+                      token.getValidityEnd(),
+                    ).toISOString()}`}</ThemeText>
+                  </View>
+                )}
+                <Button text="Reload token(s)" onPress={retry} />
+                <Button text="Create token" onPress={createToken} />
+                {token && <Button text="Wipe token" onPress={wipeToken} />}
+                {token && (
+                  <Button text="Validate token" onPress={validateToken} />
+                )}
+                <Sections.ExpandableItem
+                  text="Remote tokens"
+                  showIconText={true}
+                  expandContent={remoteTokens?.map((token) => (
+                    <View key={token.id} style={style.remoteToken}>
+                      {keys(token).map((k) => (
+                        <ThemeText key={token.id + k}>
+                          {k + ': ' + JSON.stringify(get(token, k))}
+                        </ThemeText>
+                      ))}
+                      <Button
+                        onPress={() => removeRemoteToken(token.id)}
+                        text="Remove"
+                      />
+                    </View>
+                  ))}
+                />
+              </View>
+            }
+          />
+        </Sections.Section>
       </ScrollView>
     </View>
   );
@@ -389,5 +418,8 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   buttons: {
     marginHorizontal: theme.spacings.medium,
+  },
+  remoteToken: {
+    marginBottom: theme.spacings.large,
   },
 }));

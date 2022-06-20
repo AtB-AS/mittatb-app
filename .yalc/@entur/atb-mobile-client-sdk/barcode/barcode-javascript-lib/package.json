@@ -1,0 +1,10 @@
+{
+    "name": "@entur/abt-mobile-barcode-javascript-lib",
+    "version": "0.0.1",
+    "main": "src/index.ts",
+    "scripts": {
+        "lint": "eslint --ext .ts,.tsx src/",
+        "ts": "tsc --noEmit"
+    },
+    "dependencies": {}
+}

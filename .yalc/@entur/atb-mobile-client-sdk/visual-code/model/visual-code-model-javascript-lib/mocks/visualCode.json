@@ -1,0 +1,51 @@
+[
+    {
+        "nonce": "AAECAwQFBgc=",
+        "visualCode": {
+            "standard": {
+                "primaryBackgroundColor": "BLUE",
+                "secondaryBackgroundColor": "RED",
+                "backgroundPattern": "UNIFORM",
+                "shapes": [
+                    {
+                        "type": "SQUARE",
+                        "position": "TOP_RIGHT",
+                        "color": "GREEN"
+                    },
+                    {
+                        "type": "STAR",
+                        "position": "BOTTOM_LEFT",
+                        "color": "WHITE"
+                    },
+                    {
+                        "type": "TRIANGLE",
+                        "position": "BOTTOM_RIGHT",
+                        "color": "BLACK"
+                    }
+                ]
+            },
+            "inverted": {
+                "primaryBackgroundColor": "WHITE",
+                "secondaryBackgroundColor": "BLUE",
+                "backgroundPattern": "VERTICAL_STRIPES",
+                "shapes": [
+                    {
+                        "type": "STAR",
+                        "position": "TOP_LEFT",
+                        "color": "BLACK"
+                    },
+                    {
+                        "type": "SQUARE",
+                        "position": "BOTTOM_LEFT",
+                        "color": "RED"
+                    },
+                    {
+                        "type": "RHOMBUS",
+                        "position": "BOTTOM_RIGHT",
+                        "color": "BLACK"
+                    }
+                ]
+            }
+        }
+    }
+]

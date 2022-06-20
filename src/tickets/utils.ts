@@ -10,7 +10,6 @@ import {
   CarnetTicket,
   TravelRight,
 } from './types';
-import {TravelToken} from '@atb/mobile-token/types';
 
 export function isCarnetTicket(
   travelRight: TravelRight | undefined,
@@ -37,9 +36,9 @@ export function isInspectable(
   travelRight: TravelRight,
   hasActiveTravelCard: boolean,
   mobileTokenEnabled: boolean,
-  inspectableTravelToken?: TravelToken,
+  deviceIsInspectable: boolean,
 ): boolean {
-  if (mobileTokenEnabled) return inspectableTravelToken?.isThisDevice ?? false;
+  if (mobileTokenEnabled) return deviceIsInspectable;
   else return !hasActiveTravelCard && isSingleTicket(travelRight);
 }
 

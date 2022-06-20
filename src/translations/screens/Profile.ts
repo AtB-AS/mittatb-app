@@ -1,5 +1,4 @@
 import {translation as _} from '../commons';
-import orgSpecificTranslations from '../utils';
 
 const ProfileTexts = {
   header: {
@@ -14,6 +13,18 @@ const ProfileTexts = {
         },
         logout: {
           label: _('Logg ut', 'Log out'),
+          confirmTitle: _(
+            'Er du sikker på at du vil logge ut?',
+            'Are you sure you want to log out?',
+          ),
+          confirmMessage: _(
+            'Billettene dine vil ikke være tilgjengelig i appen hvis du logger ut. De blir tilgjengelige igjen hvis du logger inn.',
+            'Your tickets will be inaccessible in the app after logging out. You can access them again by logging in.',
+          ),
+          alert: {
+            cancel: _('Avbryt', 'Cancel'),
+            confirm: _('Logg ut', 'Log out'),
+          },
         },
         expiredTickets: {
           label: _('Utløpte billetter', 'Expired tickets'),
@@ -91,9 +102,9 @@ const ProfileTexts = {
             'Aktivér for å tømme tidligere søk',
             'Activate to clear previous searches',
           ),
-          confirm: _(
-            'Dette vil fjerne søkehistorikk.',
-            'This will permanently clear search history.',
+          confirmTitle: _(
+            'Er du sikker på at du vil slette søkehistorikk?',
+            'Are you sure you want to delete your search history?',
           ),
           alert: {
             cancel: _('Avbryt', 'Cancel'),

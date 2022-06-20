@@ -14,8 +14,6 @@ import {CompositeNavigationProp} from '@react-navigation/native';
 import {ProfileStackParams} from '..';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import TravelTokenBox from '@atb/travel-token-box';
-import MessageBox from '@atb/components/message-box';
-import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
 
 export type TravelCardNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -56,14 +54,14 @@ const ChangeTokenButton = ({onPress}: {onPress: () => void}) => {
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {travelTokens} = useMobileTokenContextState();
+  const {remoteTokens} = useMobileTokenContextState();
 
   return (
     <Sections.Section style={styles.changeTokenButton}>
       <Sections.LinkItem
         type="spacious"
         text={t(TravelTokenTexts.travelToken.changeTokenButton)}
-        disabled={!travelTokens}
+        disabled={!remoteTokens}
         onPress={onPress}
         testID="switchTokenButton"
         icon={<ThemeIcon svg={Edit} />}

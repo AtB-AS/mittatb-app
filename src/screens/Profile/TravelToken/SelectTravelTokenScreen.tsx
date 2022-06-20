@@ -1,5 +1,5 @@
 import {StyleSheet, Theme} from '@atb/theme';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ActivityIndicator, View} from 'react-native';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
@@ -8,12 +8,18 @@ import {ProfileStackParams} from '..';
 import Button from '@atb/components/button';
 import * as Sections from '@atb/components/sections';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import {TravelToken} from '@atb/mobile-token/types';
 import {animateNextChange} from '@atb/utils/animation';
 import MessageBox from '@atb/components/message-box';
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import RadioBox from '@atb/components/radio-icon/radio-box';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
+import {
+  findInspectable,
+  getDeviceName,
+  isMobileToken,
+  isTravelCardToken,
+} from '@atb/mobile-token/utils';
+import {RemoteToken} from '@atb/mobile-token/types';
 
 type RouteName = 'SelectTravelToken';
 
@@ -25,12 +31,14 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const {toggleTravelToken, travelTokens} = useMobileTokenContextState();
-  const inspectableToken = travelTokens?.find((t) => t.inspectable);
+  const {token, remoteTokens, toggleToken} = useMobileTokenContextState();
+  const inspectableToken = findInspectable(remoteTokens);
 
-  const [selectedType, setSelectedType] = useState(inspectableToken?.type);
+  const [selectedType, setSelectedType] = useState<'mobile' | 'travelCard'>(
+    isTravelCardToken(inspectableToken) ? 'travelCard' : 'mobile',
+  );
 
-  const [selectedToken, setSelectedToken] = useState<TravelToken | undefined>(
+  const [selectedToken, setSelectedToken] = useState<RemoteToken | undefined>(
     inspectableToken,
   );
 
@@ -40,23 +48,19 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
   });
 
   const onSave = useCallback(async () => {
-    if (selectedToken?.id === inspectableToken?.id) {
-      navigation.goBack();
-    } else if (selectedToken) {
+    if (selectedToken) {
       setSaveState({saving: true, error: false});
-      const success = await toggleTravelToken?.(selectedToken.id);
+      const success = await toggleToken(selectedToken.id);
       if (success) {
         navigation.goBack();
       } else {
         setSaveState({saving: false, error: true});
       }
     }
-  }, [toggleTravelToken, selectedToken]);
+  }, [toggleToken, selectedToken]);
 
-  const travelCardToken = travelTokens?.find((t) => t.type === 'travelCard');
-  const activatedMobileTokens = travelTokens
-    ?.filter((t) => t.type === 'mobile')
-    ?.filter((t) => t.activated);
+  const travelCardToken = remoteTokens?.find(isTravelCardToken);
+  const mobileTokens = remoteTokens?.filter(isMobileToken);
 
   return (
     <View style={styles.container}>
@@ -103,7 +107,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
               if (selectedToken?.type !== 'mobile') {
                 animateNextChange();
                 setSelectedType('mobile');
-                setSelectedToken(activatedMobileTokens?.[0]);
+                setSelectedToken(mobileTokens?.[0]);
               }
             }}
             testID="selectMobile"
@@ -119,7 +123,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
           />
         )}
 
-        {selectedType === 'mobile' && !activatedMobileTokens?.length && (
+        {selectedType === 'mobile' && !mobileTokens?.length && (
           <MessageBox
             type={'warning'}
             message={t(TravelTokenTexts.toggleToken.noMobileToken)}
@@ -128,14 +132,15 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
           />
         )}
 
-        {selectedToken?.type === 'mobile' && activatedMobileTokens?.length && (
+        {selectedType === 'mobile' && mobileTokens?.length && (
           <Sections.Section type="spacious" style={styles.selectDeviceSection}>
-            <Sections.RadioSection<TravelToken>
-              items={activatedMobileTokens}
-              keyExtractor={(tt) => tt.id}
-              itemToText={(tt) =>
-                (tt.name || t(TravelTokenTexts.toggleToken.unnamedDevice)) +
-                (tt.isThisDevice
+            <Sections.RadioSection<RemoteToken>
+              items={mobileTokens}
+              keyExtractor={(rt) => rt.id}
+              itemToText={(rt) =>
+                (getDeviceName(rt) ||
+                  t(TravelTokenTexts.toggleToken.unnamedDevice)) +
+                (token?.tokenId === rt.id
                   ? t(
                       TravelTokenTexts.toggleToken.radioBox.phone.selection
                         .thisDeviceSuffix,

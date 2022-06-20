@@ -32,8 +32,7 @@ const DetailsContent: React.FC<Props> = ({
 }) => {
   const {t, language} = useTranslation();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {travelTokens} = useMobileTokenContextState();
-  const inspectableTravelToken = travelTokens?.find((t) => t.inspectable);
+  const {deviceIsInspectable} = useMobileTokenContextState();
 
   const firstTravelRight = fc.travelRights[0];
   if (isPreactivatedTicket(firstTravelRight)) {
@@ -43,7 +42,7 @@ const DetailsContent: React.FC<Props> = ({
       firstTravelRight,
       hasActiveTravelCard,
       hasEnabledMobileToken,
-      inspectableTravelToken,
+      deviceIsInspectable,
     );
 
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);

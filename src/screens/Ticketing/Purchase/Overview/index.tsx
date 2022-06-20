@@ -60,14 +60,14 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {inspectableToken} = useMobileTokenContextState();
+  const {deviceIsInspectable} = useMobileTokenContextState();
   const tokensEnabled = useHasEnabledMobileToken();
   const {customerProfile} = useTicketState();
   const hasProfileTravelCard = !!customerProfile?.travelcard;
 
   const showProfileTravelcardWarning = !tokensEnabled && hasProfileTravelCard;
-  const showNotInspectableTokenWarning =
-    tokensEnabled && !inspectableToken?.isThisDevice;
+
+  const showNotInspectableTokenWarning = tokensEnabled && !deviceIsInspectable;
 
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
 

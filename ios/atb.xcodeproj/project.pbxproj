@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* atbTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* atbTests.m */; };
-		0F240964273EE9530001A5D3 /* RegisterLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F240963273EE9530001A5D3 /* RegisterLogger.swift */; };
 		0FAAF32724069EFC00267583 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0FAAF32624069EFC00267583 /* GoogleService-Info.plist */; };
 		0FF6825D247C33BC00FB80EE /* Intercom.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0FF6825C247C33BC00FB80EE /* Intercom.plist */; };
 		0FF6825F247FE01600FB80EE /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FF6825E247FE01600FB80EE /* BootSplash.storyboard */; };
@@ -46,7 +45,6 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* atbTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = atbTests.m; sourceTree = "<group>"; };
 		0F1FBC3125CBDED600484CA4 /* AtB.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = AtB.entitlements; path = atb/AtB.entitlements; sourceTree = "<group>"; };
-		0F240963273EE9530001A5D3 /* RegisterLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterLogger.swift; sourceTree = "<group>"; };
 		0FAAF32624069EFC00267583 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "atb/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0FF6825C247C33BC00FB80EE /* Intercom.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Intercom.plist; path = atb/Intercom.plist; sourceTree = "<group>"; };
 		0FF6825E247FE01600FB80EE /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = atb/BootSplash.storyboard; sourceTree = "<group>"; };
@@ -138,7 +136,6 @@
 				38CD3275254B616300C6B978 /* AtBRootView.h */,
 				384D20EA25E4F9990019DF98 /* ChangeNativeBridge.h */,
 				384D20EB25E4FA2B0019DF98 /* ChangeNativeBridge.m */,
-				0F240963273EE9530001A5D3 /* RegisterLogger.swift */,
 			);
 			name = atb;
 			sourceTree = "<group>";
@@ -505,7 +502,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F240964273EE9530001A5D3 /* RegisterLogger.swift in Sources */,
 				38CD3270254B612600C6B978 /* AtBRootView.m in Sources */,
 				385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */,
 				384D20F025E4FF730019DF98 /* ChangeNativeBridge.m in Sources */,

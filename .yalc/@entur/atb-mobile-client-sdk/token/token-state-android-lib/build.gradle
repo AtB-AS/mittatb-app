@@ -1,0 +1,58 @@
+if (!project.gradle.startParameter.taskNames.contains("renovate")) android {
+
+    defaultConfig {
+        minSdkVersion 23
+        //  testApplicationId = "no.entur.abt.android.token.test"
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
+}
+
+dependencies {
+
+    implementation "androidx.core:core:${androidxCoreVersion}"
+
+    implementation project(":token:token-core-android-lib")
+
+    api("com.google.android.gms:play-services-safetynet:${androidPlayServicesSafetynetVersion}") {
+        exclude group: "com.android.support"
+    }
+
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
+
+    api("no.entur.abt:abt-protobuf-lite-traveller:${abtProtoVersion}") {
+        changing = true
+        exclude group: "com.google.api.grpc", module: "proto-google-common-protos"
+        exclude group: "com.google.protobuf", module: "protobuf-java"
+        exclude group: "no.entur.abt", module: "abt-protobuf"
+        exclude group: "io.envoyproxy.protoc-gen-validate", module: "pgv-java-stub"
+    }
+
+    testImplementation("org.robolectric:robolectric:${robolectricVersion}") {
+        exclude group: 'com.google.protobuf', module: 'protobuf-java'
+    }
+
+    api "androidx.test.espresso:espresso-idling-resource:${androidxEspressoVersion}"
+
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:${desugarVersion}"
+
+    androidTestImplementation("com.adevinta.android:barista:${baristaVersion}") {
+        exclude group: "com.google.protobuf", module: "protobuf-lite"
+    }
+
+    androidTestImplementation platform("com.google.firebase:firebase-bom:${firebaseBomVersion}")
+    androidTestImplementation "com.google.firebase:firebase-analytics"
+    androidTestImplementation "com.google.firebase:firebase-crashlytics"
+
+    androidTestImplementation("org.bouncycastle:bcprov-jdk15on:${bouncyCastleVersion}")
+    androidTestImplementation("org.bouncycastle:bcpkix-jdk15on:${bouncyCastleVersion}")
+
+    testImplementation project(":test:common-test-android-lib")
+    androidTestImplementation project(":test:common-test-android-lib")
+
+}
+
+
+
