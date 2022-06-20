@@ -10,49 +10,39 @@ import qrcode from 'qrcode';
 import useInterval from '@atb/utils/use-interval';
 import MessageBox from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
-import {TravelToken} from '@atb/mobile-token/types';
+import {findInspectable, getDeviceName} from '@atb/mobile-token/utils';
+import {RemoteToken} from '@atb/mobile-token/types';
 
 type Props = {
   validityStatus: ValidityStatus;
 };
 
 export default function QrCode({validityStatus}: Props) {
-  const {tokenStatus, travelTokens, generateQrCode, retry} =
+  const {remoteTokens, deviceIsInspectable, isLoading, isError, retry} =
     useMobileTokenContextState();
 
   if (validityStatus !== 'valid') return null;
-  if (!generateQrCode) return null;
 
-  if (!travelTokens) {
-    return <QrCodeLoading />;
-  }
+  if (isLoading) return <QrCodeLoading />;
+  if (isError) return <QrCodeError retry={retry} />;
+  if (deviceIsInspectable) return <QrCodeSvg />;
 
-  const inspectableToken = travelTokens.find((t) => t.inspectable);
-
-  if (inspectableToken?.isThisDevice) {
-    return <QrCodeSvg generateQrCode={generateQrCode} />;
-  } else if (inspectableToken) {
+  const inspectableToken = findInspectable(remoteTokens);
+  if (inspectableToken) {
     return <QrCodeDeviceNotInspectable inspectableToken={inspectableToken} />;
-  } else if (tokenStatus?.visualState === 'MissingNetConnection') {
-    return <QrCodeMissingNetwork />;
-  } else if (tokenStatus?.visualState === 'Error') {
-    return <QrCodeError retry={retry} />;
-  } else {
-    return <QrCodeLoading />;
   }
+
+  return <QrCodeError retry={retry} />;
 }
 
 const UPDATE_INTERVAL = 10000;
 
-const QrCodeSvg = ({
-  generateQrCode,
-}: {
-  generateQrCode: () => Promise<string | undefined>;
-}) => {
+const QrCodeSvg = () => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {getSignedToken} = useMobileTokenContextState();
   const [qrCodeError, setQrCodeError] = useState(false);
-  const qrCode = useQrCode(generateQrCode, setQrCodeError, UPDATE_INTERVAL);
+  const qrCode = useQrCode(getSignedToken, setQrCodeError, UPDATE_INTERVAL);
   const [qrCodeSvg, setQrCodeSvg] = useState<string>();
   const [countdown, setCountdown] = useState<number>(UPDATE_INTERVAL / 1000);
 
@@ -100,7 +90,7 @@ const QrCodeSvg = ({
 };
 
 const useQrCode = (
-  generateQrCode: () => Promise<string | undefined>,
+  getSignedToken: () => Promise<string | undefined>,
   setQrCodeError: (isError: boolean) => void,
   interval: number,
 ) => {
@@ -108,7 +98,7 @@ const useQrCode = (
 
   const updateQrCode = useCallback(
     () =>
-      generateQrCode().then((qr) => {
+      getSignedToken().then((qr) => {
         if (!qr) {
           setQrCodeError(true);
         } else {
@@ -116,7 +106,7 @@ const useQrCode = (
           setTokenQRCode(qr);
         }
       }),
-    [generateQrCode, setTokenQRCode],
+    [getSignedToken, setTokenQRCode],
   );
 
   useEffect(() => {
@@ -151,7 +141,7 @@ const QrCodeError = ({retry}: {retry?: (forceRestart: boolean) => void}) => {
 const QrCodeDeviceNotInspectable = ({
   inspectableToken,
 }: {
-  inspectableToken: TravelToken;
+  inspectableToken: RemoteToken;
 }) => {
   const {t} = useTranslation();
   const message =
@@ -159,7 +149,7 @@ const QrCodeDeviceNotInspectable = ({
       ? t(TicketTexts.details.qrCodeErrors.notInspectableDevice.tCard)
       : t(
           TicketTexts.details.qrCodeErrors.notInspectableDevice.wrongDevice(
-            inspectableToken.name ||
+            getDeviceName(inspectableToken) ||
               t(
                 TicketTexts.details.qrCodeErrors.notInspectableDevice
                   .unnamedDevice,
@@ -177,6 +167,7 @@ const QrCodeDeviceNotInspectable = ({
     </Sections.GenericItem>
   );
 };
+
 const QrCodeLoading = () => {
   const {theme} = useTheme();
   return (
@@ -184,20 +175,6 @@ const QrCodeLoading = () => {
       <View style={{flex: 1}}>
         <ActivityIndicator animating={true} color={theme.text.colors.primary} />
       </View>
-    </Sections.GenericItem>
-  );
-};
-
-const QrCodeMissingNetwork = () => {
-  const {t} = useTranslation();
-
-  return (
-    <Sections.GenericItem>
-      <MessageBox
-        type={'warning'}
-        title={t(TicketTexts.details.qrCodeErrors.missingNetwork.title)}
-        message={t(TicketTexts.details.qrCodeErrors.missingNetwork.text)}
-      />
     </Sections.GenericItem>
   );
 };

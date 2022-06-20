@@ -224,13 +224,7 @@ PODS:
   - BVLinearGradient (2.5.6):
     - React
   - CocoaAsyncSocket (7.6.5)
-  - CryptoSwift (1.4.2)
   - DoubleConversion (1.1.6)
-  - entur-react-native-traveller (1.0.0):
-    - CryptoSwift
-    - Kronos
-    - React-Core
-    - SwiftProtobuf
   - FBLazyVector (0.66.3)
   - FBReactNativeSpec (0.66.3):
     - RCT-Folly (= 2021.06.28.00-v2)
@@ -433,7 +427,6 @@ PODS:
   - gRPC-Core/Interface (1.28.2)
   - GTMSessionFetcher/Core (1.7.0)
   - Intercom (10.3.5)
-  - Kronos (4.2.1)
   - leveldb-library (1.22.1)
   - libevent (2.1.12)
   - Mapbox-iOS-SDK (6.3.0):
@@ -783,7 +776,6 @@ PODS:
     - React-RCTImage
   - RNSVG (12.1.1):
     - React
-  - SwiftProtobuf (1.18.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -793,7 +785,6 @@ DEPENDENCIES:
   - "BugsnagReactNative (from `../node_modules/@bugsnag/react-native`)"
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
-  - "entur-react-native-traveller (from `../node_modules/@entur/react-native-traveller`)"
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - Flipper (= 0.99.0)
@@ -879,7 +870,6 @@ SPEC REPOS:
     - abseil
     - BoringSSL-GRPC
     - CocoaAsyncSocket
-    - CryptoSwift
     - Firebase
     - FirebaseABTesting
     - FirebaseAnalytics
@@ -908,7 +898,6 @@ SPEC REPOS:
     - gRPC-Core
     - GTMSessionFetcher
     - Intercom
-    - Kronos
     - leveldb-library
     - libevent
     - Mapbox-iOS-SDK
@@ -916,7 +905,6 @@ SPEC REPOS:
     - nanopb
     - OpenSSL-Universal
     - PromisesObjC
-    - SwiftProtobuf
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -928,8 +916,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-linear-gradient"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
-  entur-react-native-traveller:
-    :path: "../node_modules/@entur/react-native-traveller"
   FBLazyVector:
     :path: "../node_modules/react-native/Libraries/FBLazyVector"
   FBReactNativeSpec:
@@ -1048,9 +1034,7 @@ SPEC CHECKSUMS:
   BugsnagReactNative: 2e6375ce8a5789af2d1e3f2b6b8d5f679c1b2242
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  CryptoSwift: a532e74ed010f8c95f611d00b8bbae42e9fe7c17
   DoubleConversion: cde416483dac037923206447da6e1454df403714
-  entur-react-native-traveller: d4156cacd6b76f8395ae3ab743d7439762d1e369
   FBLazyVector: de148e8310b8b878db304ceea2fec13f2c02e3a0
   FBReactNativeSpec: 6192956c9e346013d5f1809ba049af720b11c6a4
   Firebase: 78e8dd2e39d653de6270432ad84fe8b59f7bf4e8
@@ -1082,7 +1066,6 @@ SPEC CHECKSUMS:
   gRPC-Core: 4afa11bfbedf7cdecd04de535a9e046893404ed5
   GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
   Intercom: d5d4549e40ca8da9f583edab5080e67ef70a8811
-  Kronos: 0ca73a1c00dc9a49a0bab4a6ed42f282562a7058
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   Mapbox-iOS-SDK: 6a67397df2bcafe5d2851604192aa8de6f8d6c89
@@ -1141,7 +1124,6 @@ SPEC CHECKSUMS:
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: eb0dfb2d6b21d2d7f980ad46b14eb306d2f1062e
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
-  SwiftProtobuf: c3c12645230d9b09c72267e0de89468c5543bd86
   Yoga: 32a18c0e845e185f4a2a66ec76e1fd1f958f22fa
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

@@ -1,3 +1,6 @@
+include ':tokencore'
+project(':tokencore').projectDir = new File(rootProject.projectDir, '../.yalc/@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/android')
+
 rootProject.name = 'atb'
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'

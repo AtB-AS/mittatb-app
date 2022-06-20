@@ -58,7 +58,10 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
         ...prevState,
         isAuthConnectionInitialized: true,
         user: action.user,
-        userCreationFinished: false,
+        userCreationFinished:
+          action.user?.uid === prevState.user?.uid
+            ? prevState.userCreationFinished
+            : false,
       };
     }
     case 'SET_ABT_CUSTOMER_ID': {

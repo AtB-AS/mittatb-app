@@ -1,8 +1,8 @@
 {
   "version": "v1",
   "packages": {
-    "@entur/react-native-traveller": {
-      "signature": "a34a1776e93f5d9d3c644a2c49f82db6",
+    "@entur/atb-mobile-client-sdk": {
+      "signature": "3f0e922a8fda1c1833b1da3791dcc6ea",
       "file": true
     }
   }

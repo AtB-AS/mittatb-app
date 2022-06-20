@@ -1,0 +1,6 @@
+<!-- AndroidManifest.xml -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="no.entur.abt.client.sdk.time.bridge">
+
+</manifest>

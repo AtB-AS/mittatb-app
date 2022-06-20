@@ -1,0 +1,18 @@
+
+{
+    "name": "@entur/time-react-native-lib",
+    "version": "1.0.0",
+    "description": "React Native wrapper for NTP",
+    "main": "src/index",
+    "source": "src/index",
+    "scripts": {
+        "lint": "eslint --ext .ts src/",
+        "test": "jest  --config ../../jest.config.js --rootDir .",
+        "ts": "tsc --noEmit"
+    },
+    "peerDependencies": {
+        "react": "*",
+        "react-native": "*"
+    }
+}
+

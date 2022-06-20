@@ -1,0 +1,229 @@
+# Java Gradle CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2.1
+
+aliases:
+
+orbs:
+    owasp: entur/owasp@0.0.17
+    gradle: entur/gradle-orb@0.0.8
+    slack: circleci/slack@4.9.4
+
+commands:
+    restore-build-cache:
+        description: |
+            Restore the build cache. See `save_build_cache` for more information.
+        parameters:
+            key:
+                description: 'Cache key'
+                default: 'android-orb-v3-'
+                type: string
+        steps:
+            - restore_cache:
+                  key: << parameters.key >>
+    save-build-cache:
+        description: |
+            Save the Android build-cache. The build cache stores certain outputs that the Android plugin for Gradle generates when building your project (such as unpackaged AARs and pre-dexed remote dependencies). Your clean builds are much faster while using the cache because the build system can simply reuse those cached files during subsequent builds, instead of recreating them. The build cache also works on continuous integration servers and when running multiple build processes on a single local machine.
+            See https://developer.android.com/studio/build/build-cache
+        parameters:
+            key:
+                description: 'Cache key'
+                default: 'android-orb-v3-'
+                type: string
+        steps:
+            - save_cache:
+                  key: << parameters.key >>-{{ epoch }}
+                  paths:
+                      - ~/.android/build-cache
+                      - ~/.android/cache
+    generate_gradle_properties:
+        steps:
+            - run:
+                  name: Generate ~/.gradle/gradle.properties with partner repositories
+                  command: |
+                      GRADLE_DIRECTORY="$HOME/.gradle"
+                      if [[ ! -e $GRADLE_DIRECTORY ]]; then
+                          mkdir $GRADLE_DIRECTORY
+                      fi
+                      GRADLE_PROPERTIES="$GRADLE_DIRECTORY/gradle.properties"
+
+                      echo "entur_artifactory_user=$ARTIFACTORY_USER" > $GRADLE_PROPERTIES
+                      echo "entur_artifactory_password=$ARTIFACTORY_PASSWORD" >> $GRADLE_PROPERTIES
+
+                      echo "entur_artifactory_partner_publish_snapshot_url=$ARTIFACTORY_URL/partner-snapshot-local" >> $GRADLE_PROPERTIES
+                      echo "entur_artifactory_partner_publish_release_url=$ARTIFACTORY_URL/partner-release-local" >> $GRADLE_PROPERTIES
+                      echo "entur_artifactory_partner_resolve_snapshot_url=$ARTIFACTORY_URL/partner-snapshot" >> $GRADLE_PROPERTIES
+                      echo "entur_artifactory_partner_resolve_release_url=$ARTIFACTORY_URL/partner-release" >> $GRADLE_PROPERTIES
+
+                      # append a lot of gradle properties as a single environment variable
+                      # dump more properties into environment variable using "cat my.gradle.properties.txt | base64 -w 0"
+                      echo "$GLOBAL_GRADLE_PROPERTIES_BASE64" | base64 -d >> $GRADLE_PROPERTIES
+
+    add_fonts:
+        steps:
+            - run:
+                  name: Add fonts. Disable this step when https://github.com/circleci/circleci-images/issues/539 is solved.
+                  command: |
+                      sudo apt-get -y -qq update || sudo apt-get -y -qq update
+                      sudo apt-get -y -qq install fontconfig
+
+    merge_develop_to_master:
+        steps:
+            - run:
+                  name: Merge develop into master branch (triggering production builds)
+                  command: |
+                      git checkout master
+                      # get latest changes on master
+                      git pull
+                      git merge --no-edit develop
+                      git push origin HEAD
+
+    configure_git_for_commit:
+        steps:
+            - add_ssh_keys:
+                  fingerprints:
+                      - $SSH_FINGERPRINT
+            - run:
+                  name: Configure git user
+                  command: |
+                      git config --global user.email "circleci@entur.no"
+                      git config --global user.name "circleci"
+
+    gradle_with_cache:
+        parameters:
+            steps:
+                type: steps
+        steps:
+            - add_fonts
+            - generate_gradle_properties
+            - checkout
+            - gradle/with_cache:
+                  steps:
+                      - steps: << parameters.steps >>
+
+executors:
+    android:
+        docker:
+            - image: cimg/android:2022.04
+              auth:
+                  username: $DOCKERHUB_LOGIN
+                  password: $DOCKERHUB_PASSWORD
+              environment:
+                  _JAVA_OPTIONS: -Xmx4g
+                  TERM: dumb
+        resource_class: large
+    android-xlarge:
+        docker:
+            - image: cimg/android:2022.04
+              auth:
+                  username: $DOCKERHUB_LOGIN
+                  password: $DOCKERHUB_PASSWORD
+              environment:
+                  _JAVA_OPTIONS: -Xmx4g
+                  TERM: dumb
+        resource_class: xlarge
+
+    circleci_tools:
+        docker:
+            - image: eu.gcr.io/entur-system-1287/circleci-toolbox-image
+              auth:
+                  username: _json_key
+                  password: $DOCKER_PASSWORD
+
+    circleci-tools-small:
+        docker:
+            - image: eu.gcr.io/entur-system-1287/circleci-toolbox-image
+              auth:
+                  username: _json_key
+                  password: $DOCKER_PASSWORD
+        resource_class: small
+
+jobs:
+    init:
+        executor: android-xlarge
+        steps:
+            - gradle_with_cache:
+                  steps:
+                      - run:
+                            command: |
+                                ./gradlew compileDebugUnitTestSources --info --stacktrace
+
+    run_gradle_command:
+        executor: android-xlarge
+        parameters:
+            command:
+                description: command
+                type: string
+        steps:
+            - gradle_with_cache:
+                  steps:
+                      - run:
+                            command: << parameters.command >>
+
+    publish-libraries:
+        executor: android
+        steps:
+            - add_fonts
+            - generate_gradle_properties
+            - configure_git_for_commit
+            - checkout
+            - gradle/with_cache:
+                  steps:
+                      - run:
+                            name: Perform release - publish artifacts
+                            command: ./gradlew -x test build publish --info --stacktrace
+
+workflows:
+    # MASTER BRANCH INIT
+    'master-flow':
+        jobs:
+            - init:
+                  name: Initialize build
+                  context: global
+                  pre-steps:
+                      - restore-build-cache:
+                            key: feature
+                  post-steps:
+                      - save-build-cache:
+                            key: feature
+            - owasp/gradle_owasp_dependency_check:
+                  name: OWASP
+                  executor: android
+                  context: global
+                  cache_key: a
+                  pre-steps:
+                      - add_fonts
+                      - generate_gradle_properties
+                      - restore-build-cache
+                  task: 'dependencyCheckAnalyze --info'
+                  requires:
+                      - Initialize build
+            - run_gradle_command:
+                  name: Build everything
+                  command: |
+                      ./gradlew build assembleDebugAndroidTest \
+                      jacocoTestReport sonarqube publishToMavenLocal --info --stacktrace \
+                      -Dsonar.projectKey=entur_${CIRCLE_PROJECT_REPONAME} \
+                      -Dsonar.organization=enturas-github \
+                      -Dsonar.projectName=${CIRCLE_PROJECT_REPONAME} \
+                      -Dsonar.host.url=https://sonarcloud.io \
+                      -Dsonar.login=${ENTUR_SONAR_PASSWORD} \
+                  context: global
+                  pre-steps:
+                      - restore-build-cache:
+                            key: master
+                  post-steps:
+                      - save-build-cache:
+                            key: master
+                  requires:
+                      - Initialize build
+            - publish-libraries:
+                  context: global
+                  requires:
+                      - Build everything
+                  filters:
+                      branches:
+                          only:
+                              - master

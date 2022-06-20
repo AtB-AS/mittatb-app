@@ -1,0 +1,1 @@
+{"version":3,"names":["createClient","createSecureToken"],"sources":["index.ts"],"sourcesContent":["export default function createClient() {\n    return {\n        createSecureToken: () => \"test123\"\n    }\n}"],"mappings":";;;;;;;AAAe,SAASA,YAAT,GAAwB;EACnC,OAAO;IACHC,iBAAiB,EAAE,MAAM;EADtB,CAAP;AAGH"}

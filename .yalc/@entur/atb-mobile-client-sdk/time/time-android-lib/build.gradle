@@ -1,0 +1,21 @@
+if (!project.gradle.startParameter.taskNames.contains("renovate")) android {
+    defaultConfig {
+        minSdkVersion 23
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
+}
+
+dependencies {
+    api "com.github.AllanHasegawa.Tempo:tempo:${tempoVersion}"
+    api "com.github.AllanHasegawa.Tempo:tempo-android-workmanager-scheduler:${tempoVersion}"
+
+    api "androidx.work:work-runtime:${androidxWorkVersion}"
+    api "androidx.core:core:${androidxCoreVersion}"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:${desugarVersion}"
+
+}
+
+

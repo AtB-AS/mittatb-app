@@ -1,0 +1,23 @@
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    testImplementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    testImplementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+}
+
+
+
+task runWithJavaExec(type: JavaExec) {
+    group = "Execution"
+    description = "Run the main class with JavaExecTask"
+    classpath = sourceSets.main.runtimeClasspath
+    classpath += sourceSets.test.runtimeClasspath
+    mainClass = "no.entur.abt.android.common.visual.model.VisualCodeTestcaseGenerator"
+    args = ["/tmp/visualCodes.json"]
+}

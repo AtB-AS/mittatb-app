@@ -1,0 +1,32 @@
+if (!project.gradle.startParameter.taskNames.contains("renovate")) android {
+    defaultConfig {
+        minSdkVersion 23
+    }
+}
+
+dependencies {
+    api "junit:junit:${unitVersion}"
+
+    api("com.adevinta.android:barista:${baristaVersion}") {
+        exclude group: "com.google.protobuf", module: "protobuf-lite"
+    }
+
+    api("androidx.test.espresso:espresso-core:${androidxEspressoVersion}")
+    api "androidx.test.espresso:espresso-web:${androidxEspressoVersion}"
+    api("androidx.test.espresso:espresso-contrib:${androidxEspressoVersion}") {
+        exclude group: "com.google.protobuf", module: "protobuf-lite"
+    }
+    api "androidx.test.espresso:espresso-core:${androidxEspressoVersion}"
+    api "androidx.test.espresso:espresso-web:${androidxEspressoVersion}"
+    api("androidx.test.espresso:espresso-contrib:${androidxEspressoVersion}") {
+        exclude group: "com.google.protobuf", module: "protobuf-lite"
+    }
+    api "androidx.test.espresso:espresso-idling-resource:${androidxEspressoVersion}"
+    api "androidx.test.espresso.idling:idling-concurrent:${androidxEspressoVersion}"
+    api "androidx.test:rules:${androidxTestRulesVersion}"
+    // UiAutomator Testing
+    api "androidx.test.uiautomator:uiautomator:${androidxTestUiAutomatorVersion}"
+    api("androidx.test.ext:junit:${androidxTestExtJunitVersion}")
+}
+
+

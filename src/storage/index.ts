@@ -14,6 +14,7 @@ export type StorageModel = {
   '@ATB_previous_build_number': string;
   '@ATB_saved_payment_methods': string;
   '@ATB_feedback_display_stats': string;
+  '@ATB_last_mobile_token_user': string;
 };
 
 export type StorageModelTypes = keyof StorageModel;

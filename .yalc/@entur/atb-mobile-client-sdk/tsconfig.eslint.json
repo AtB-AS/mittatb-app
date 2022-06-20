@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig.json",
+    "include": [
+        "./.eslintrc.js",
+        "./barcode",
+        "./token",
+        "./example-client",
+        "./example-server",
+        "./visual-code"
+    ]
+}
