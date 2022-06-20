@@ -60,10 +60,6 @@ const ticketReducer: TicketReducer = (
       };
     }
     case 'UPDATE_FARE_CONTRACT_TICKETS': {
-      console.log(
-        'UPDATED FC',
-        action.fareContracts,
-      );
       const currentFareContractOrderIds = action.fareContracts.map(
         (fc) => fc.orderId,
       );

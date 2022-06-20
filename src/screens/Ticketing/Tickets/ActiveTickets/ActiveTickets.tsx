@@ -29,12 +29,6 @@ export const ActiveTickets = () => {
     return 1;
   });
 
-  console.log(
-    'THE FARECONTRACTS',
-    fareContracts.filter((f) => f.orderId === '137ILVEL'),
-  );
-  console.log('ACTIVE FARECONTRACTS', activeFareContracts);
-
   const hasAnyFareContractsOnAccount = fareContracts.length > 0;
 
   const [now, setNow] = useState<number>(Date.now());
