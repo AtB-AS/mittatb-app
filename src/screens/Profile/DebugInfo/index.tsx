@@ -15,7 +15,7 @@ import Slider from '@react-native-community/slider';
 import {usePreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import {useNavigation} from '@react-navigation/native';
-import {useHasEnabledMobileToken} from "@atb/mobile-token/MobileTokenContext";
+import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -98,12 +98,14 @@ export default function DebugInfo() {
               appDispatch({type: 'RESTART_ONBOARDING'});
             }}
           />
-          {(hasEnabledMobileToken && authenticationType === 'phone') && <Sections.LinkItem
+          {hasEnabledMobileToken && authenticationType === 'phone' && (
+            <Sections.LinkItem
               text="Restart mobile token onboarding"
               onPress={() => {
                 appDispatch({type: 'RESTART_MOBILE_TOKEN_ONBOARDING'});
               }}
-          />}
+            />
+          )}
           <Sections.LinkItem
             text="Copy link to customer in Firestore (staging)"
             icon="arrow-upleft"

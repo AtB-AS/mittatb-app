@@ -39,8 +39,8 @@ type AppReducerAction =
   | {type: 'RESTART_ONBOARDING'}
   | {type: 'ACCEPT_TICKETING'}
   | {type: 'RESET_TICKETING'}
-  | { type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING' }
-  | { type: 'RESTART_MOBILE_TOKEN_ONBOARDING' };
+  | {type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING'}
+  | {type: 'RESTART_MOBILE_TOKEN_ONBOARDING'};
 
 type AppContextState = AppState & {
   completeOnboarding: () => void;
@@ -90,13 +90,13 @@ const appReducer: AppReducer = (prevState, action) => {
       };
     case 'COMPLETE_MOBILE_TOKEN_ONBOARDING':
       return {
-          ...prevState,
-          mobileTokenOnboarded: true,
+        ...prevState,
+        mobileTokenOnboarded: true,
       };
     case 'RESTART_MOBILE_TOKEN_ONBOARDING':
       return {
-          ...prevState,
-          mobileTokenOnboarded: false,
+        ...prevState,
+        mobileTokenOnboarded: false,
       };
   }
 };
@@ -122,8 +122,12 @@ const AppContextProvider: React.FC = ({children}) => {
         ? false
         : JSON.parse(savedTicketingAccepted);
 
-      const savedmobileTokenOnboarded = await storage.get(storeKey.mobileTokenOnboarding);
-      const mobileTokenOnboarded = !savedmobileTokenOnboarded ? false : JSON.parse(savedmobileTokenOnboarded);
+      const savedmobileTokenOnboarded = await storage.get(
+        storeKey.mobileTokenOnboarding,
+      );
+      const mobileTokenOnboarded = !savedmobileTokenOnboarded
+        ? false
+        : JSON.parse(savedmobileTokenOnboarded);
 
       const previousBuildNumber = await storage.get(
         storeKey.previousBuildNumber,
@@ -158,7 +162,7 @@ const AppContextProvider: React.FC = ({children}) => {
     acceptTicketing,
     resetTicketing,
     completeMobileTokenOnboarding,
-    restartMobileTokenOnboarding
+    restartMobileTokenOnboarding,
   } = useMemo(
     () => ({
       completeOnboarding: async () => {
@@ -183,7 +187,7 @@ const AppContextProvider: React.FC = ({children}) => {
       },
       restartMobileTokenOnboarding: async () => {
         dispatch({type: 'RESTART_MOBILE_TOKEN_ONBOARDING'});
-      }
+      },
     }),
     [],
   );
@@ -197,7 +201,7 @@ const AppContextProvider: React.FC = ({children}) => {
         acceptTicketing,
         resetTicketing,
         completeMobileTokenOnboarding,
-        restartMobileTokenOnboarding
+        restartMobileTokenOnboarding,
       }}
     >
       <AppDispatch.Provider value={dispatch}>{children}</AppDispatch.Provider>

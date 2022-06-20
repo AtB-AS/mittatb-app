@@ -33,10 +33,10 @@ import LoginInAppStack, {
 } from '@atb/login/in-app/LoginInAppStack';
 import useTestIds from './use-test-ids';
 import MobileTokenOnboardingStack from '@atb/login/mobile-token-onboarding/MobileTokenOnboardingStack';
-import {useAuthState} from "@atb/auth";
-import SelectTravelTokenScreen from "@atb/screens/Profile/TravelToken/SelectTravelTokenScreen";
-import {useHasEnabledMobileToken} from "@atb/mobile-token/MobileTokenContext";
-import {shouldOnboardMobileToken} from "@atb/api/utils";
+import {useAuthState} from '@atb/auth';
+import SelectTravelTokenScreen from '@atb/screens/Profile/TravelToken/SelectTravelTokenScreen';
+import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import {shouldOnboardMobileToken} from '@atb/api/utils';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -57,6 +57,8 @@ const Stack = createStackNavigator<RootStackParamList>();
 const NavigationRoot = () => {
   const {isLoading, onboarded, mobileTokenOnboarded} = useAppState();
   const {theme} = useTheme();
+  const {authenticationType} = useAuthState();
+  const hasEnabledMobileToken = useHasEnabledMobileToken();
 
   useTestIds();
 
@@ -99,87 +101,93 @@ const NavigationRoot = () => {
       background: theme.static.background.background_1.background,
     },
   };
-  const {authenticationType} = useAuthState();
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
-    return (
-        <>
-            <StatusBar
-                barStyle={theme.statusBarStyle}
-                translucent={true}
-                backgroundColor={statusBarColor}
-            />
-            <Host>
-                <NavigationContainer
-                    ref={ref}
-                    onStateChange={trackNavigation}
-                    theme={ReactNavigationTheme}
-                >
-                    <Stack.Navigator
-                        mode={isLoading || !onboarded ? 'card' : 'modal'}
-                        screenOptions={{headerShown: false}}
-                    >
-                        {!onboarded ? (
-                                <Stack.Screen name="Onboarding" component={Onboarding}/>
-                            ) :
-                            (shouldOnboardMobileToken(hasEnabledMobileToken, authenticationType, mobileTokenOnboarded) ? <><Stack.Screen
-                                name="MobileTokenOnboardingStack"
-                                component={MobileTokenOnboardingStack}
-                            />
-                              <Stack.Screen
-                                  name="SelectTravelToken"
-                                  component={SelectTravelTokenScreen}
-                              /></>: <>
-                                <Stack.Screen name="TabNavigator" component={TabNavigator}/>
-                                <Stack.Screen
-                                    name="LocationSearch"
-                                    component={LocationSearch}
-                                    options={TransitionPresets.ModalSlideFromBottomIOS}
-                                />
-                                <Stack.Screen
-                                    name="TicketPurchase"
-                                    component={TicketPurchase}
-                                />
-                                <Stack.Screen
-                                    name="TicketModal"
-                                    component={TicketModalScreen}
-                                />
 
-                                <Stack.Screen
-                                    name="AddEditFavorite"
-                                    component={AddEditFavorite}
-                                    options={TransitionPresets.ModalSlideFromBottomIOS}
-                                />
-                                <Stack.Screen
-                                    name="SortableFavoriteList"
-                                    component={SortableFavoriteList}
-                                    options={{
-                                        gestureResponseDistance: {
-                                            vertical: 100,
-                                        },
-                                        transitionSpec: {
-                                            open: transitionSpec,
-                                            close: transitionSpec,
-                                        },
-                                    }}
-                                />
-                                <Stack.Screen
-                                    name="LoginInApp"
-                                    component={LoginInAppStack}
-                                    options={{
-                                        transitionSpec: {
-                                            open: transitionSpec,
-                                            close: transitionSpec,
-                                        },
-                                    }}
-                                />
+  return (
+    <>
+      <StatusBar
+        barStyle={theme.statusBarStyle}
+        translucent={true}
+        backgroundColor={statusBarColor}
+      />
+      <Host>
+        <NavigationContainer
+          ref={ref}
+          onStateChange={trackNavigation}
+          theme={ReactNavigationTheme}
+        >
+          <Stack.Navigator
+            mode={isLoading || !onboarded ? 'card' : 'modal'}
+            screenOptions={{headerShown: false}}
+          >
+            {!onboarded ? (
+              <Stack.Screen name="Onboarding" component={Onboarding} />
+            ) : shouldOnboardMobileToken(
+                hasEnabledMobileToken,
+                authenticationType,
+                mobileTokenOnboarded,
+              ) ? (
+              <>
+                <Stack.Screen
+                  name="MobileTokenOnboardingStack"
+                  component={MobileTokenOnboardingStack}
+                />
+                <Stack.Screen
+                  name="SelectTravelToken"
+                  component={SelectTravelTokenScreen}
+                />
+              </>
+            ) : (
+              <>
+                <Stack.Screen name="TabNavigator" component={TabNavigator} />
+                <Stack.Screen
+                  name="LocationSearch"
+                  component={LocationSearch}
+                  options={TransitionPresets.ModalSlideFromBottomIOS}
+                />
+                <Stack.Screen
+                  name="TicketPurchase"
+                  component={TicketPurchase}
+                />
+                <Stack.Screen
+                  name="TicketModal"
+                  component={TicketModalScreen}
+                />
 
-                            </>)
-                        }
-                    </Stack.Navigator>
-                </NavigationContainer>
-            </Host>
-        </>
-    );
+                <Stack.Screen
+                  name="AddEditFavorite"
+                  component={AddEditFavorite}
+                  options={TransitionPresets.ModalSlideFromBottomIOS}
+                />
+                <Stack.Screen
+                  name="SortableFavoriteList"
+                  component={SortableFavoriteList}
+                  options={{
+                    gestureResponseDistance: {
+                      vertical: 100,
+                    },
+                    transitionSpec: {
+                      open: transitionSpec,
+                      close: transitionSpec,
+                    },
+                  }}
+                />
+                <Stack.Screen
+                  name="LoginInApp"
+                  component={LoginInAppStack}
+                  options={{
+                    transitionSpec: {
+                      open: transitionSpec,
+                      close: transitionSpec,
+                    },
+                  }}
+                />
+              </>
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Host>
+    </>
+  );
 };
 
 export default NavigationRoot;
