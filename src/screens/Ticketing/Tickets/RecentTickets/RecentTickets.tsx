@@ -64,6 +64,15 @@ export const RecentTickets = () => {
     <View
       style={{backgroundColor: theme.static.background.background_1.background}}
     >
+      <ThemeText
+        type="body__secondary"
+        style={{
+          marginTop: theme.spacings.xLarge,
+          marginLeft: theme.spacings.xLarge,
+        }}
+      >
+        {t(RecentTicketsTexts.repeatPurchase.label)}
+      </ThemeText>
       {loading && (
         <View
           style={{
@@ -90,7 +99,6 @@ export const RecentTickets = () => {
           showsHorizontalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{
-            marginVertical: theme.spacings.medium,
             paddingHorizontal: theme.spacings.xSmall,
           }}
           style={styles.horizontalScrollView}
