@@ -437,5 +437,6 @@ export function useDepartureData(
     loadMore,
     setSearchTime,
     setShowFavorites,
+    loadInitialDepartures,
   };
 }
