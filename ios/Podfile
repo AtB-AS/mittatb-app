@@ -20,6 +20,11 @@ target 'atb' do
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
 
+  $DontUseVendoredAbtMobile = true
+  
+  pod 'AbtTokenCoreSDK', :path => '../.yalc/@entur/atb-mobile-client-sdk/token/token-core-ios-lib/AbtTokenCoreSDK'
+  pod 'token-state-react-native-lib-ios', :path => '../.yalc/@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/ios'
+
   target 'atbTests' do
     inherit! :complete
     # Pods for testing
