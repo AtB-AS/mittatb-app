@@ -23,7 +23,7 @@
     "link-assets": "react-native link"
   },
   "dependencies": {
-    "@atb-as/theme": "^6.0.0-alpha.5",
+    "@atb-as/theme": "^6.0.0-alpha.6",
     "@bugsnag/react-native": "^7.12.0",
     "@bugsnag/source-maps": "^2.3.1",
     "@entur/sdk": "^3.4.0",
