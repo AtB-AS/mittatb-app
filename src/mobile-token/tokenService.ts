@@ -56,7 +56,7 @@ const service: TokenService = {
       keyValues: [{key: 'deviceName', value: deviceName}],
     };
     return client
-      .post<InitResponse>('/tokens/v1/init', data, {
+      .post<InitResponse>('/tokens/v3/init', data, {
         headers: {
           [CorrelationIdHeaderName]: traceId,
           [IsEmulatorHeaderName]: String(isEmulator),
@@ -68,7 +68,7 @@ const service: TokenService = {
   },
   activateNewMobileToken: async (pendingToken, correlationId) =>
     client
-      .post<ActivateResponse>('/tokens/v1/activate', pendingToken.toJSON(), {
+      .post<ActivateResponse>('/tokens/v3/activate', pendingToken.toJSON(), {
         headers: {
           [CorrelationIdHeaderName]: correlationId,
         },
@@ -78,7 +78,7 @@ const service: TokenService = {
       .catch(grpcErrorHandler),
   initiateMobileTokenRenewal: (token, secureContainer, traceId, attestation) =>
     client
-      .post<RenewResponse>('/tokens/v1/renew', undefined, {
+      .post<RenewResponse>('/tokens/v3/renew', undefined, {
         headers: {
           [CorrelationIdHeaderName]: traceId,
           [SignedTokenHeaderName]: secureContainer,
@@ -97,7 +97,7 @@ const service: TokenService = {
     attestation,
   ) =>
     client
-      .post<CompleteResponse>('/tokens/v1/complete', pendingToken.toJSON(), {
+      .post<CompleteResponse>('/tokens/v3/complete', pendingToken.toJSON(), {
         headers: {
           [CorrelationIdHeaderName]: correlationId,
           [SignedTokenHeaderName]: secureContainer,
@@ -110,7 +110,7 @@ const service: TokenService = {
       .catch(grpcErrorHandler),
   getMobileTokenDetails: (token, secureContainer, traceId, attestation) =>
     client
-      .get<DetailsResponse>('/tokens/v1/details', {
+      .get<DetailsResponse>('/tokens/v3/details', {
         headers: {
           [CorrelationIdHeaderName]: traceId,
           [SignedTokenHeaderName]: secureContainer,
@@ -124,7 +124,7 @@ const service: TokenService = {
   removeToken: async (tokenId: string, traceId: string): Promise<boolean> =>
     client
       .post<RemoveResponse>(
-        '/tokens/v1/remove',
+        '/tokens/v3/remove',
         {tokenId},
         {
           headers: {
@@ -138,7 +138,7 @@ const service: TokenService = {
       .catch(handleRemoteError),
   listTokens: async (traceId: string) =>
     client
-      .get<ListTokensResponse>('/tokens/v1/list', {
+      .get<ListTokensResponse>('/tokens/v3/list', {
         headers: {
           [CorrelationIdHeaderName]: traceId,
         },
@@ -150,7 +150,7 @@ const service: TokenService = {
   toggle: async (tokenId: string, traceId: string) =>
     client
       .post<ListTokensResponse>(
-        '/tokens/v1/toggle',
+        '/tokens/v3/toggle',
         {tokenId},
         {
           headers: {
@@ -164,7 +164,7 @@ const service: TokenService = {
       .catch(handleRemoteError),
   validate: async (token, secureContainer, traceId) =>
     reattestHandler(async (attestation) => {
-      await client.get('/tokens/v1/validate', {
+      await client.get('/tokens/v3/validate', {
         headers: {
           [CorrelationIdHeaderName]: traceId,
           [SignedTokenHeaderName]: secureContainer,
