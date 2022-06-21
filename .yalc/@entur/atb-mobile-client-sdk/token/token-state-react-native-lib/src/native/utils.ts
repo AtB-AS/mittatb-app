@@ -18,7 +18,7 @@ export enum TokenAction {
 }
 
 type ErrorName = keyof typeof Errors
-export const handleNativeError = (err: any): Promise<never> => {
+export const handleNativeError = (err: { code?: string; message: string }): Promise<never> => {
     if (!err.code) throw err
     const errorName = err.code.replace('Exception', 'Error') as ErrorName
     const errorConstructor = Errors[errorName] // Todo: Is this working when minified?

@@ -109,19 +109,19 @@ describe('TokenFactory', () => {
         const tokenStore = {
             createPendingNewToken: async (
                 contextId: string,
-                tokenId: string,
+                id: string,
                 _nonce: string,
                 traceId: string,
             ) => {
-                return createPendingToken(tokenId, traceId, contextId)
+                return createPendingToken(id, traceId, contextId)
             },
             convertPendingNewTokenToActiveToken: async (
                 contextId: string,
-                tokenId: string,
+                id: string,
                 _certificate: string,
-                validityStart: number,
-                validityEnd: number,
-            ) => createActivatedToken(tokenId, validityStart, validityEnd, contextId),
+                start: number,
+                end: number,
+            ) => createActivatedToken(id, start, end, contextId),
             getToken: jest.fn(async (contextId: string) => createPendingToken(tokenId, contextId)),
         }
 
@@ -135,7 +135,8 @@ describe('TokenFactory', () => {
         }
 
         const createdToken = await createTokenFactory(tokenStore, remoteTokenService).getToken(
-            tokenContextId, uuid()
+            tokenContextId,
+            uuid(),
         )
 
         expect(createdToken?.getTokenId()).toEqual(tokenId)

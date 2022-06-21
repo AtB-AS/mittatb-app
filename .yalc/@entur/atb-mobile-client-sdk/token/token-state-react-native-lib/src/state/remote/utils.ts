@@ -1,7 +1,7 @@
 import * as Errors from './errors'
 
 type ErrorName = keyof typeof Errors
-export const handleRemoteError = (err: any): Promise<never> => {
+export const handleRemoteError = (err: { grpcError?: GrpcErrorType }): Promise<never> => {
     if (!err.grpcError?.errorType) throw err
 
     const errorName = err.grpcError.errorType as ErrorName
@@ -36,4 +36,5 @@ type GrpcErrorType = {
     grpcErrorCode?: number
     grpcErrorMessage?: string
     grpcErrorDetails: GrpcErrorDetail[]
+    errorType: string
 }

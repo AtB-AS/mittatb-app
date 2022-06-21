@@ -8,11 +8,8 @@ public enum AttestionObjectType: String {
 
 public struct AttestionObject {
     private enum Key: String {
-        // For Attestion (Activation)
-        case commandUuid, commandAttestation, commandAttestationType, deviceCheckResult, attestationObject = "object"
-
-        // For Re-attestation (Assertion)
-        case type, data
+        case commandUuid, commandAttestation, commandAttestationType
+        case deviceCheckResult, attestationObject = "object"
     }
 
     public let uuid: String
@@ -48,14 +45,15 @@ public struct AttestionObject {
 
             addCommandAttestionForAttestation(to: &data, deviceCheckResult: iOSAppAttestAttestation.deviceCheckResult, attestationObject: iOSAppAttestAttestation.attestationObject)
         case .assertion:
-            data.setValue(objectType.rawValue, forKey: Key.type.rawValue)
+            data.setValue(objectType.rawValue, forKey: Key.commandAttestationType.rawValue)
 
             guard let iOSAppAttestAssertion = try? No_Entur_Abt_Traveller_V1_IOSAppAttestAssertion(serializedData: attestionData) else {
                 break
             }
 
             addCommandAttestionForReAttestation(to: &data, deviceCheckResult: iOSAppAttestAssertion.deviceCheckResult, attestationObject: iOSAppAttestAssertion.assertionObject)
-        default:
+        case .checkResult:
+            data.setValue(objectType.rawValue, forKey: Key.commandAttestationType.rawValue)
             data.setValue(attestionData.base64EncodedString, forKey: Key.commandAttestation.rawValue)
         }
 
@@ -78,7 +76,7 @@ public struct AttestionObject {
         appAttestation.setValue(attestationObject, forKey: Key.attestationObject.rawValue)
 
         if let jsonData = try? JSONSerialization.data(withJSONObject: appAttestation) {
-            data.setValue(jsonData.base64EncodedString, forKey: Key.data.rawValue)
+            data.setValue(jsonData.base64EncodedString, forKey: Key.commandAttestation.rawValue)
         }
     }
 }

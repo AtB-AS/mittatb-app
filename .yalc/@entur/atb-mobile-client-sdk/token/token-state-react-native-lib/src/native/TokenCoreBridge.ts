@@ -30,6 +30,11 @@ type BridgePendingToken = BaseBridgeToken & {
     signatureCertificateChain?: string[]
 }
 
+type BridgeReattestation = {
+    commandAttestation: string
+    commandAttestationType: string
+}
+
 type BridgeToken = BridgePendingToken | BridgeActiveToken
 
 interface NativeBridge {
@@ -83,14 +88,19 @@ interface NativeBridge {
         contextId: string,
         tokenId: string,
         reattestationData: string,
-    ) => Promise<Reattestation>
+    ) => Promise<BridgeReattestation>
     getCurrentTime: () => Promise<number>
-    isEmulator: () => Promise<boolean>
+    isEmulator: () => Promise<boolean>,
+    decryptVisualInspectionNonce: (
+        contextId: string,
+        tokenId: string,
+        encryptedVisualInspectionNonce: string,
+    ) => Promise<string>,
 }
 
 const bridge: NativeBridge = NativeModules.TokenCore
 
-export const getNativeModule = () => bridge as any as NativeModule
+export const getNativeModule = () => bridge as unknown as NativeModule
 
 export function start(googleSafetyNetApiKey: string, contextIds: string[]): Promise<void> {
     return bridge.start(googleSafetyNetApiKey, contextIds).catch(handleNativeError)
@@ -217,7 +227,10 @@ export function buildReattestation(
     tokenId: string,
     reattestationData: string,
 ): Promise<Reattestation> {
-    return bridge.buildReattestation(contextId, tokenId, reattestationData).catch(handleNativeError)
+    return bridge
+        .buildReattestation(contextId, tokenId, reattestationData)
+        .then(mapReattestation)
+        .catch(handleNativeError)
 }
 
 export async function getCurrentTime(): Promise<number> {
@@ -253,6 +266,12 @@ function mapPendingToken(bridgeResponse: BridgePendingToken): PendingToken {
         bridgeResponse.attestationEncryptionPublicKey,
     )
 }
+function mapReattestation(bridgeResponse: BridgeReattestation): Reattestation {
+    return {
+        data: bridgeResponse.commandAttestation,
+        type: bridgeResponse.commandAttestationType,
+    }
+}
 
 function mapToken(bridgeResponse?: BridgeToken) {
     // TODO: What to do if not found? This ok?
@@ -262,4 +281,14 @@ function mapToken(bridgeResponse?: BridgeToken) {
     } else {
         return mapPendingToken(bridgeResponse)
     }
+}
+
+export function decryptVisualInspectionNonce(
+    contextId: string,
+    tokenId: string,
+    encryptedVisualInspectionNonce: string,
+): Promise<string> {
+    return bridge
+        .decryptVisualInspectionNonce(contextId, tokenId, encryptedVisualInspectionNonce)
+        .catch(handleNativeError)
 }
