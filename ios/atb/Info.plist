@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AppTeamIdentifier</key>
+	<string>CSV447Q97L</string>
+	<key>AppEnvironment</key>
+	<string>PRODUCTION</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>For å kunne tilby raskere inspeksjon av reisebevis kan vi ha behov for tilgang til Bluetooth</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
