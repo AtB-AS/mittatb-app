@@ -23,6 +23,7 @@ import {
 import {
   RemoteTokenStateError,
   TokenEncodingInvalidRemoteTokenStateError,
+  TokenMustBeRenewedRemoteTokenStateError,
   TokenNotFoundRemoteTokenStateError,
 } from '../../.yalc/@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/src/state/remote/errors';
 import createTokenService from '@atb/mobile-token/tokenService';
@@ -151,6 +152,8 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
             ) {
               await wipeToken(token, traceId);
               token = undefined;
+            } else if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
+              token = await client.renew(token, traceId);
             } else {
               throw err;
             }
