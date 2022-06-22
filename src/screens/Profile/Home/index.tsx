@@ -33,6 +33,7 @@ import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import ThemeIcon from '@atb/components/theme-icon';
 import {destructiveAlert} from './utils';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -299,6 +300,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.privacy.linkItems.privacy.label)}
+            icon={<ThemeIcon svg={ExternalLink} />}
             accessibility={{
               accessibilityHint: t(
                 ProfileTexts.sections.privacy.linkItems.privacy.a11yHint,
