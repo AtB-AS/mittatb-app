@@ -64,6 +64,18 @@ jobs:
       - name: Generate native assets
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn generate-native-assets
+      - name: Copy gradle.properties
+        if: steps.apk-cache.outputs.cache-hit != 'true'
+        run: |
+          GRADLE_DIRECTORY="$HOME/.gradle"
+          if [[ ! -e $GRADLE_DIRECTORY ]]; then
+              mkdir $GRADLE_DIRECTORY
+          fi
+          echo "Copying gradle.properties from ./android to $GRADLE_DIRECTORY"
+          cp ./android/gradle.properties $GRADLE_DIRECTORY
+        env:
+          ENTUR_REGISTRY_USER: build-system@mittatb.no
+          ENTUR_REGISTRY_PASSWORD: ${{ secrets.NPM_TOKEN }}
       - name: Run fastlane build
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: fastlane android build
