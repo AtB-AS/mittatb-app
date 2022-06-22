@@ -63,7 +63,7 @@ export class InvalidRequestError extends HttpError {
 export class GrpcError extends HttpError {
     grpcErrorCode?: number
     grpcErrorMessage?: string
-    grpcErrorDetails: { type: string; value: unknown }[]
+    grpcErrorDetails: Array<{ type: string; value: unknown }>
     errorType: string
 
     constructor(error: ServiceError) {

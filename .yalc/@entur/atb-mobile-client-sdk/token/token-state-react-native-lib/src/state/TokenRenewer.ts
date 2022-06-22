@@ -126,8 +126,8 @@ export class TokenRenewer extends AbstractTokenFactory {
                     )
                     abtClientLogger.info('Completed renewal by getting got token details')
                     return activatedToken
-                } catch (err) {
-                    if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
+                } catch (error) {
+                    if (error instanceof TokenMustBeRenewedRemoteTokenStateError) {
                         abtClientLogger.info(
                             'Unable to get token details, token must be renewed (before we were able to get the certificate and start/stop dates',
                         )
@@ -185,7 +185,10 @@ export class TokenRenewer extends AbstractTokenFactory {
         return pendingTokenDetails
     }
 
-    activatePendingTokenImpl = async (activatedToken: ActivatedToken, traceId: string): Promise<ActivatedToken> => {
+    activatePendingTokenImpl = async (
+        activatedToken: ActivatedToken,
+        traceId: string,
+    ): Promise<ActivatedToken> => {
         const pendingToken = activatedToken.getRenewToken() as PendingToken // TODO: Make argument pending token? Or instance of check
         abtClientLogger.info('Activate pending token renewal ' + pendingToken.getTokenId())
         const secureContainerToken = await encodeAsSecureContainer(

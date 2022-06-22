@@ -95,9 +95,9 @@ async function getAuthToken(config: AbtTokenServerConfig): Promise<string> {
     })
 
     if (response.ok) {
-        const { access_token } = (await response.json()) as AuthTokenResponse
+        const { access_token: token } = (await response.json()) as AuthTokenResponse
 
-        return access_token
+        return token
     }
 
     throw new AuthTokenError(await response.text())

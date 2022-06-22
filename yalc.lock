@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "@entur/atb-mobile-client-sdk": {
-      "signature": "3f0e922a8fda1c1833b1da3791dcc6ea",
+      "signature": "cc8d23a47155c4e030e2bf6fea844707",
       "file": true
     }
   }

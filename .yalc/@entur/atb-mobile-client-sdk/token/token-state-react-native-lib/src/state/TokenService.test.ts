@@ -60,8 +60,8 @@ describe('TokenService', () => {
         const nonce = toBase64([0, 1, 2])
 
         const tokenFactory = {
-            createNewToken: jest.fn(async (contextId: string, tokenId: string) =>
-                createActivatedToken(tokenId, epocNow(), epocNow() + 1000, contextId),
+            createNewToken: jest.fn(async (contextId: string, id: string) =>
+                createActivatedToken(id, epocNow(), epocNow() + 1000, contextId),
             ),
         }
 

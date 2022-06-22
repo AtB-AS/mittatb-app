@@ -85,46 +85,50 @@ export const RecentTickets = () => {
       )}
 
       {!loading && !!recentTickets.length && (
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{
-            marginVertical: theme.spacings.medium,
-            paddingHorizontal: theme.spacings.xSmall,
-          }}
-          style={styles.horizontalScrollView}
-          testID="recentTicketsScrollView"
-        >
-          {memoizedRecentTickets.map((ticket) => {
-            const componentKey =
-              ticket.preassignedFareProduct.id +
-              ticket.userProfilesWithCount
-                .map((traveller) => {
-                  return traveller.count + traveller.userTypeString;
-                })
-                .join();
-            return (
-              <RecentTicketComponent
-                key={componentKey}
-                ticketData={ticket}
-                transportModeTexts={[
-                  {
-                    mode: Mode.Bus,
-                  },
-                  {
-                    mode: Mode.Tram,
-                  },
-                ]}
-                transportModeIcons={[
-                  {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
-                ]}
-                selectTicket={selectTicket}
-                testID={'recent' + memoizedRecentTickets.indexOf(ticket)}
-              />
-            );
-          })}
-        </ScrollView>
+        <>
+          <ThemeText type="body__secondary" style={styles.header}>
+            {t(RecentTicketsTexts.repeatPurchase.label)}
+          </ThemeText>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{
+              paddingHorizontal: theme.spacings.xSmall,
+            }}
+            style={styles.horizontalScrollView}
+            testID="recentTicketsScrollView"
+          >
+            {memoizedRecentTickets.map((ticket) => {
+              const componentKey =
+                ticket.preassignedFareProduct.id +
+                ticket.userProfilesWithCount
+                  .map((traveller) => {
+                    return traveller.count + traveller.userTypeString;
+                  })
+                  .join();
+              return (
+                <RecentTicketComponent
+                  key={componentKey}
+                  ticketData={ticket}
+                  transportModeTexts={[
+                    {
+                      mode: Mode.Bus,
+                    },
+                    {
+                      mode: Mode.Tram,
+                    },
+                  ]}
+                  transportModeIcons={[
+                    {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
+                  ]}
+                  selectTicket={selectTicket}
+                  testID={'recent' + memoizedRecentTickets.indexOf(ticket)}
+                />
+              );
+            })}
+          </ScrollView>
+        </>
       )}
     </View>
   );
@@ -133,5 +137,9 @@ export const RecentTickets = () => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   horizontalScrollView: {
     marginVertical: theme.spacings.medium,
+  },
+  header: {
+    marginTop: theme.spacings.xLarge,
+    marginLeft: theme.spacings.xLarge,
   },
 }));

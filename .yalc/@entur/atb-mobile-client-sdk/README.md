@@ -29,14 +29,14 @@ npm install
 You will need 3 separate terminal windows or tabs open to run the example code.
 
 #### 1.  🏭  Running the example server
-Before running the example server locally, you will have to set up some local **config** values. See the [**example-server README**](example-server/README.md) for more info.
+Before running the example server locally, you will have to set up some local **config** values. See the [**example-server README**](example-server/README.md) for details.
 
 Then, in a new terminal, navigate to the `example-server` folder, and run:
 ```bash
 npm start
 ```
 
-See the **start.sh** script for info about additional options that can be passed to this command.
+> NOTE: For more for info about additional options, please follow the instructions in the [**example-server README**](example-server/README.md).
 
 
 #### 2. 💻 Running the example client
@@ -70,7 +70,7 @@ or with an **iOS emulator** run:
 npm run ios
 ```
 
-> NOTE: For mode details on iOS please follow the instructions on [iOS example-client Readme](example-client/README.md)
+> NOTE: For more details on iOS setup, please follow the instructions in the [example-client Readme](example-client/README.md).
 
 -----
 

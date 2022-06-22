@@ -19,7 +19,7 @@ const SHAPES_TYPE_SEGMENT_INDEX_OFFSET = SHAPES_COLORS_SEGMENT_INDEX_OFFSET + MA
 const NUM_SEGMENTS = SHAPES_TYPE_SEGMENT_INDEX_OFFSET + MAX_NUM_SHAPES
 const MIN_BITS_PER_SEGMENT = 4
 
-function listByIndex<T>(arr: (T | string)[]): T[] {
+function listByIndex<T>(arr: Array<T | string>): T[] {
     return arr.filter((item): item is T => typeof item === 'number').sort()
 }
 

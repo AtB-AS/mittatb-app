@@ -55,10 +55,18 @@ public class Token {
         reference < deviceAttestationCounter
     }
 
-    // TODO: Not tested yet!
     public func decryptVisualInspectionNonce(_ cipherText: Data) -> Data? {
+        let privateKey = encryptionKeyPair.privateKey.reference
+        let algorithm: SecKeyAlgorithm = .eciesEncryptionCofactorVariableIVX963SHA256AESGCM
+
+        guard SecKeyIsAlgorithmSupported(privateKey, .decrypt, algorithm) else {
+            debugPrint("Algorithm not supported")
+            return nil
+        }
+
         var error: Unmanaged<CFError>?
-        guard let value = SecKeyCreateDecryptedData(encryptionKeyPair.privateKey.reference, .rsaEncryptionPKCS1, cipherText as CFData, &error) as Data? else {
+        guard let value = SecKeyCreateDecryptedData(privateKey, algorithm, cipherText as CFData, &error) as Data? else {
+            debugPrint(error.debugDescription)
             return nil
         }
 

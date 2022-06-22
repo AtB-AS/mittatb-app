@@ -23,7 +23,7 @@
     "link-assets": "react-native link"
   },
   "dependencies": {
-    "@atb-as/theme": "^6.0.0-alpha.5",
+    "@atb-as/theme": "^6.0.0-alpha.6",
     "@bugsnag/react-native": "^7.12.0",
     "@bugsnag/source-maps": "^2.3.1",
     "@entur/atb-mobile-client-sdk": "file:.yalc/@entur/atb-mobile-client-sdk",
@@ -102,7 +102,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@atb-as/generate-assets": "^4.0.0-alpha.11",
+    "@atb-as/generate-assets": "^4.0.0-alpha.18",
     "@babel/core": "^7.12.13",
     "@babel/runtime": "^7.12.13",
     "@svgr/cli": "^6.2.0",
