@@ -38,7 +38,6 @@ allprojects {
         maven { url 'https://www.jitpack.io' }
 
         def netRcFile = new File('../.netrc').exists() ? new File('../.netrc') : new File('.netrc')
-        def envFile = new File('../.env').exists() ? new File('../.env') : new File('.env')
 
         maven {
             url 'https://api.mapbox.com/downloads/v2/releases/maven'
@@ -55,20 +54,20 @@ allprojects {
         }
 
         maven {
-            url "https://entur2.jfrog.io/entur2/partner-snapshot"
+            url "$entur_artifactory_partner_resolve_snapshot_url"
             credentials {
-                username = (envFile.text =~ /ENTUR_REGISTRY_USER=(.+)/)[0][1]
-                password = (envFile.text =~ /ENTUR_REGISTRY_PASSWORD=(.+)/)[0][1]
+                username "$entur_artifactory_user"
+                password "$entur_artifactory_password"
             }
             mavenContent {
                 snapshotsOnly()
             }
         }
         maven {
-            url "https://entur2.jfrog.io/entur2/partner-release"
+            url "$entur_artifactory_partner_resolve_release_url"
             credentials {
-                username = (envFile.text =~ /ENTUR_REGISTRY_USER=(.+)/)[0][1]
-                password = (envFile.text =~ /ENTUR_REGISTRY_PASSWORD=(.+)/)[0][1]
+                username "$entur_artifactory_user"
+                password "$entur_artifactory_password"
             }
             mavenContent {
                 releasesOnly()
