@@ -41,15 +41,15 @@ export function FlexibilityInfo(): JSX.Element {
         </ThemeText>
       </View>
       <View style={styles.bottomView}>
-          <Button
-            interactiveColor="interactive_0"
-            onPress={() => {
-              navigation.navigate('OptionsInfo');
-            }}
-            text={t(MobileTokenOnboardingTexts.next)}
-            testID="nextButton"
-            accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
-          />
+        <Button
+          interactiveColor="interactive_0"
+          onPress={() => {
+            navigation.navigate('OptionsInfo');
+          }}
+          text={t(MobileTokenOnboardingTexts.next)}
+          testID="nextButton"
+          accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
+        />
       </View>
     </View>
   );
@@ -92,15 +92,15 @@ export function OptionsInfo(): JSX.Element {
       </View>
 
       <View style={styles.bottomView}>
-          <Button
-            interactiveColor="interactive_0"
-            onPress={() => {
-              navigation.navigate('TicketSafetyInfo');
-            }}
-            text={t(MobileTokenOnboardingTexts.next)}
-            testID="nextButton"
-            accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
-          />
+        <Button
+          interactiveColor="interactive_0"
+          onPress={() => {
+            navigation.navigate('TicketSafetyInfo');
+          }}
+          text={t(MobileTokenOnboardingTexts.next)}
+          testID="nextButton"
+          accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
+        />
       </View>
     </View>
   );
@@ -135,15 +135,15 @@ export function TicketSafetyInfo(): JSX.Element {
         </ThemeText>
       </View>
       <View style={styles.bottomView}>
-          <Button
-            interactiveColor="interactive_0"
-            onPress={() => {
-              navigation.navigate('MobileToken');
-            }}
-            text={t(MobileTokenOnboardingTexts.next)}
-            testID="nextButton"
-            accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
-          />
+        <Button
+          interactiveColor="interactive_0"
+          onPress={() => {
+            navigation.navigate('MobileToken');
+          }}
+          text={t(MobileTokenOnboardingTexts.next)}
+          testID="nextButton"
+          accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
+        />
       </View>
     </View>
   );
@@ -160,7 +160,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     height: 503,
   },
   paddingLarge: {
-     padding: theme.spacings.medium
+    padding: theme.spacings.medium,
   },
   header: {
     marginTop: 55,

@@ -23,13 +23,9 @@ export function NoMobileToken({}: {}): JSX.Element {
 
   return (
     <View style={styles.container}>
-        <ThemeText
-          type="heading--jumbo"
-          style={styles.header}
-          color={themeColor}
-        >
-          {t(MobileTokenOnboardingTexts.error.heading)}
-        </ThemeText>
+      <ThemeText type="heading--jumbo" style={styles.header} color={themeColor}>
+        {t(MobileTokenOnboardingTexts.error.heading)}
+      </ThemeText>
       <View style={styles.svgContainer}>
         <CrashSmall width="185px" height="185px" />
       </View>
