@@ -1,5 +1,4 @@
 import {useTranslation} from '@atb/translations';
-import {useNavigation} from '@react-navigation/native';
 import {View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
@@ -13,17 +12,20 @@ import {settingToRouteName} from '@atb/utils/navigation';
 import {TravelDeviceTitle} from '@atb/travel-token-box';
 import {RemoteToken} from '@atb/mobile-token/types';
 import {useAppState} from '@atb/AppContext';
+import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
+import {MobileTokenTabParams} from '@atb/screens/MobileTokenOnboarding/index';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export function TCardAsToken({
+export function TCardAsTokenScreen({
   inspectableToken,
+  navigation,
 }: {
   inspectableToken: RemoteToken;
+  navigation: MaterialTopTabNavigationProp<MobileTokenTabParams>;
 }): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const navigation = useNavigation();
   const {themeName} = useTheme();
   const {startScreen} = usePreferenceItems();
   const {completeMobileTokenOnboarding} = useAppState();
@@ -32,7 +34,7 @@ export function TCardAsToken({
       <View style={styles.mainView}>
         <View>
           <ThemeText
-            type="body__primary--jumbo"
+            type="heading--jumbo"
             style={[styles.alignCenter, styles.marginVertical]}
             color={themeColor}
             isMarkdown={true}

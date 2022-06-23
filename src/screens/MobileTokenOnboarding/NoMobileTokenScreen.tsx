@@ -1,5 +1,4 @@
 import {useTranslation} from '@atb/translations';
-import {useNavigation} from '@react-navigation/native';
 import {View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
@@ -11,13 +10,18 @@ import {CrashSmall} from '@atb/assets/svg/color/images';
 import {settingToRouteName} from '@atb/utils/navigation';
 import {usePreferenceItems} from '@atb/preferences';
 import {useAppState} from '@atb/AppContext';
+import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
+import {MobileTokenTabParams} from '@atb/screens/MobileTokenOnboarding';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export function NoMobileToken({}: {}): JSX.Element {
+export function NoMobileTokenScreen({
+  navigation,
+}: {
+  navigation: MaterialTopTabNavigationProp<MobileTokenTabParams>;
+}): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const navigation = useNavigation();
   const {completeMobileTokenOnboarding} = useAppState();
   const {startScreen} = usePreferenceItems();
 

@@ -9,7 +9,7 @@ export function PageIndicator(props: MaterialTopTabBarProps) {
   const styles = useThemeStyles();
   const count = props.state.routes.length;
   return (
-    <View style={[styles.pageIndicator, props.style]}>
+    <View style={styles.pageIndicator}>
       {_.times(count, (i) => (
         <View
           key={i}
@@ -24,6 +24,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   pageIndicator: {
     flexDirection: 'row',
     justifyContent: 'center',
+    marginBottom: 38.5,
   },
   pageDot: {
     height: theme.spacings.medium,
