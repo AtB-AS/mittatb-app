@@ -283,7 +283,6 @@ const NearbyOverview: React.FC<Props> = ({
         isInitialScreen={isInitialScreen}
         error={error ? translateErrorType(error.type, t) : undefined}
         searchDate={searchTime.date}
-        fromLocation={state.fromLocation}
       />
     </SimpleDisappearingHeader>
   );

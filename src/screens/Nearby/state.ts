@@ -43,7 +43,6 @@ export type DepartureDataState = {
   cursorInfo: DepartureGroupMetadata['metadata'] | undefined;
   lastRefreshTime: Date;
   searchTime: SearchTime;
-  fromLocation?: Location | undefined;
 };
 
 const initialState: Omit<
@@ -308,7 +307,6 @@ const reducer: ReducerWithSideEffects<
         ...state,
         isLoading: false,
         locationId: action.locationId,
-        fromLocation: action.fromLocation,
         data: action.reset
           ? action.result.data
           : (state.data ?? []).concat(action.result.data),

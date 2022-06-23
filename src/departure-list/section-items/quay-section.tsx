@@ -22,7 +22,6 @@ type QuaySectionProps = {
   hidden?: Date;
   searchDate: string;
   testID?: string;
-  fromLocation?: Location | undefined;
 };
 
 const QuaySection = React.memo(function QuaySection({
@@ -32,7 +31,6 @@ const QuaySection = React.memo(function QuaySection({
   lastUpdated,
   searchDate,
   testID,
-  fromLocation,
 }: QuaySectionProps) {
   const [limit, setLimit] = useState(LIMIT_SIZE);
   const {t} = useTranslation();
@@ -58,7 +56,7 @@ const QuaySection = React.memo(function QuaySection({
       <Section testID={testID}>
         <QuayHeaderItem
           quay={quayGroup.quay}
-          distance={getDistanceInfo(quayGroup, fromLocation)}
+          distance={getDistanceInfo(quayGroup, currentLocation)}
           testID={testID}
         />
 
