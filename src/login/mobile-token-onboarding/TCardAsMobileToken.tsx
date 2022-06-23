@@ -3,7 +3,6 @@ import {useNavigation} from '@react-navigation/native';
 import {View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import Button from '@atb/components/button';
 import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
@@ -68,7 +67,6 @@ export function TCardAsMobileToken({
       </View>
 
       <View style={styles.bottomView}>
-        <FullScreenFooter>
           <Button
             interactiveColor="interactive_0"
             onPress={() => {
@@ -88,7 +86,6 @@ export function TCardAsMobileToken({
             text={t(MobileTokenOnboardingTexts.tCard.button)}
             testID="switchButton"
           />
-        </FullScreenFooter>
       </View>
     </View>
   );
@@ -112,6 +109,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   description: {
     textAlign: 'center',
+    alignSelf: 'center',
+    paddingHorizontal: theme.spacings.medium,
   },
   flex: {
     flexDirection: 'row',
