@@ -32,7 +32,7 @@ import LoginInAppStack, {
   LoginInAppStackParams,
 } from '@atb/login/in-app/LoginInAppStack';
 import useTestIds from './use-test-ids';
-import MobileTokenOnboardingStack from '@atb/login/mobile-token-onboarding/MobileTokenOnboardingStack';
+import MobileTokenOnboarding from '@atb/screens/MobileTokenOnboarding';
 import {useAuthState} from '@atb/auth';
 import SelectTravelTokenScreen from '@atb/screens/Profile/TravelToken/SelectTravelTokenScreen';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
@@ -48,7 +48,7 @@ export type RootStackParamList = {
   LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
   TicketPurchase: NavigatorScreenParams<TicketingStackParams>;
   TicketModal: NavigatorScreenParams<TicketModalStackParams>;
-  MobileTokenOnboardingStack: undefined;
+  MobileTokenOnboarding: undefined;
   SelectTravelToken: undefined;
 };
 
@@ -128,8 +128,8 @@ const NavigationRoot = () => {
               ) ? (
               <>
                 <Stack.Screen
-                  name="MobileTokenOnboardingStack"
-                  component={MobileTokenOnboardingStack}
+                  name="MobileTokenOnboarding"
+                  component={MobileTokenOnboarding}
                 />
                 <Stack.Screen
                   name="SelectTravelToken"

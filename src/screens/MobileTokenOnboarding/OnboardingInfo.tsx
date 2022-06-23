@@ -4,20 +4,26 @@ import ThemeText from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
 import {StaticColorByType} from '@atb/theme/colors';
 import {StyleSheet} from '@atb/theme';
-import {useNavigation} from '@react-navigation/native';
 import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
 import Button from '@atb/components/button';
 import TravelPlanning from '@atb/assets/svg/color/images/TravelPlanning';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {Cloud} from '@atb/assets/svg/color/illustrations';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
+import {MobileTokenTabParams} from '@atb/screens/MobileTokenOnboarding/index';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export function FlexibilityInfo(): JSX.Element {
+export type OnboardingInfoProps = {
+  navigation: MaterialTopTabNavigationProp<MobileTokenTabParams>;
+};
+
+export function FlexibilityInfoScreen({
+  navigation,
+}: OnboardingInfoProps): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const navigation = useNavigation();
   const focusRef = useFocusOnLoad();
 
   return (
@@ -44,7 +50,7 @@ export function FlexibilityInfo(): JSX.Element {
         <Button
           interactiveColor="interactive_0"
           onPress={() => {
-            navigation.navigate('OptionsInfo');
+            navigation.navigate('OptionsInfoScreen');
           }}
           text={t(MobileTokenOnboardingTexts.next)}
           testID="nextButton"
@@ -55,10 +61,11 @@ export function FlexibilityInfo(): JSX.Element {
   );
 }
 
-export function OptionsInfo(): JSX.Element {
+export function OptionsInfoScreen({
+  navigation,
+}: OnboardingInfoProps): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const navigation = useNavigation();
   const focusRef = useFocusOnLoad();
 
   return (
@@ -95,7 +102,7 @@ export function OptionsInfo(): JSX.Element {
         <Button
           interactiveColor="interactive_0"
           onPress={() => {
-            navigation.navigate('TicketSafetyInfo');
+            navigation.navigate('TicketSafetyInfoScreen');
           }}
           text={t(MobileTokenOnboardingTexts.next)}
           testID="nextButton"
@@ -106,10 +113,11 @@ export function OptionsInfo(): JSX.Element {
   );
 }
 
-export function TicketSafetyInfo(): JSX.Element {
+export function TicketSafetyInfoScreen({
+  navigation,
+}: OnboardingInfoProps): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const navigation = useNavigation();
   const focusRef = useFocusOnLoad();
   return (
     <View style={styles.container}>

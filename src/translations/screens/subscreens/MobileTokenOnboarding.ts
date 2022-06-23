@@ -13,15 +13,15 @@ const MobileTokenOnboardingTexts = {
       'Choose between t:card or phone',
     ),
     description: _(
-      'Du kan bruke billetten din på et t:kort eller en mobil med appen AtB installert – men kun på én dings om gangen.',
-      'You can use your ticket on a t:card or a phone with the app AtB installed - but only on one gadget at a time.',
+      'Du kan bruke billetten din på et t:kort eller en mobil med appen AtB installert — men kun på én dings om gangen.',
+      'You can use your ticket on a t:card or a phone with the app AtB installed — but only on one gadget at a time.',
     ),
     or: _('eller', 'or'),
   },
   ticketSafetyInfo: {
     heading: _('Vi tar vare på billetten din', 'You ticket is safe with us'),
     description: _(
-      'Billetten din er trygt lagret på **Min profil**. Dermed vil du aldri miste den – selv om du mister t:kortet eller bytter mobil.',
+      'Billetten din er trygt lagret på **Min profil**. Dermed vil du aldri miste den — selv om du mister t:kortet eller bytter mobil.',
       "Your ticket is safely stored on **My profile**. That way you won't lose your ticket even if you lose your t:card or switch phones.",
     ),
   },
@@ -46,14 +46,14 @@ const MobileTokenOnboardingTexts = {
     ),
     button: _('Bytt til t:kort eller annen mobil', 'Switch to t:card or phone'),
     reminder: _(
-      'Ta med deg t:kortet når du er ute og reiser.',
+      'Ta med deg mobilen når du er ute og reiser.',
       'Remember to bring your phone while travelling. ',
     ),
   },
   error: {
     heading: _(
-      'Det ser ut som det tar litt tid..',
-      "It looks like it's taking a while..",
+      'Det ser ut som det tar litt tid...',
+      "It looks like it's taking a while...",
     ),
     description: _(
       'Vi får ikke knyttet et t:kort eller en mobil til profilen din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nOm problemet vedvarer kan du ta kontakt med AtB kundesenter.',
