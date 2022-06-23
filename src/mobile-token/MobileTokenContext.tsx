@@ -183,6 +183,11 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
     async (traceId: string) => {
       setRemoteTokens(undefined);
       const tokens = await tokenService.listTokens(traceId);
+      if (!tokens?.length) {
+        throw new Error(
+          'Empty remote tokens list. Should not happen as mobile token should already be initialized for this phone.',
+        );
+      }
       setRemoteTokens(tokens);
     },
     [tokenService],
