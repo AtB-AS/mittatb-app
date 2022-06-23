@@ -54,14 +54,14 @@ const ChangeTokenButton = ({onPress}: {onPress: () => void}) => {
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {remoteTokens} = useMobileTokenContextState();
+  const {isError, isLoading} = useMobileTokenContextState();
 
   return (
     <Sections.Section style={styles.changeTokenButton}>
       <Sections.LinkItem
         type="spacious"
         text={t(TravelTokenTexts.travelToken.changeTokenButton)}
-        disabled={!remoteTokens}
+        disabled={isError || isLoading}
         onPress={onPress}
         testID="switchTokenButton"
         icon={<ThemeIcon svg={Edit} />}
