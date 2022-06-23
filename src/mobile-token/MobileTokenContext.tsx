@@ -23,6 +23,7 @@ import {
 import {
   RemoteTokenStateError,
   TokenEncodingInvalidRemoteTokenStateError,
+  TokenMustBeRenewedRemoteTokenStateError,
   TokenNotFoundRemoteTokenStateError,
 } from '../../.yalc/@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/src/state/remote/errors';
 import createTokenService from '@atb/mobile-token/tokenService';
@@ -42,9 +43,9 @@ type MobileTokenContextState = {
   getSignedToken: () => Promise<string | undefined>;
   toggleToken: (tokenId: string) => Promise<boolean>;
   retry: () => void;
+  wipeToken: () => Promise<void>;
   // For debugging
   createToken: () => void;
-  wipeToken: () => void;
   validateToken: () => void;
   removeRemoteToken: (tokenId: string) => void;
 };
@@ -115,17 +116,16 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
 
       if (token) {
         /*
-        If token found in native layer then check if it has been a user
-        change. If user changed then the token should be wiped.
+         If token found in native layer then check if it has been a user
+         change. If user changed then the found token should not be used for
+         this user.
          */
         const lastUser = await storage.get('@ATB_last_mobile_token_user');
         const isNewUser = lastUser !== abtCustomerId;
         if (isNewUser) {
           Bugsnag.leaveBreadcrumb(
-            `Mobile token user change. Wiping token ${token.getTokenId()}`,
+            `Mobile token user change. Not using token ${token.getTokenId()}`,
           );
-          await wipeToken(token, traceId);
-          await storage.set('@ATB_last_mobile_token_user', abtCustomerId!);
           token = undefined;
         }
 
@@ -136,6 +136,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
           validation fails, and these errors will be handled as best possible.
            */
           try {
+            Bugsnag.leaveBreadcrumb(`Validating token ${token.getTokenId()}`);
             const signedToken = await client.encode(token, [
               TokenAction.TOKEN_ACTION_GET_FARECONTRACTS,
             ]);
@@ -151,12 +152,15 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
             ) {
               await wipeToken(token, traceId);
               token = undefined;
+            } else if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
+              token = await client.renew(token, traceId);
             } else {
               throw err;
             }
           }
         }
       }
+      await storage.set('@ATB_last_mobile_token_user', abtCustomerId!);
 
       if (!token) {
         /*

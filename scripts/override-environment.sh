@@ -37,8 +37,8 @@ else
     #replace urls containing :// with :/$()/ to be compatiable with xcconfig format
     sed -i '' -e "s,://,:/\$()/,g" ios/Configs/Config.xcconfig
 
-    echo "Copying $APP_ENVIRONMENT gradle.properties to android folder"
-    cp $ENV_FOLDER/gradle.properties android
+    echo "Copying $APP_ORG gradle.properties to android folder"
+    cp $ORG_FOLDER/gradle.properties android
 
     echo "Copying $APP_ENVIRONMENT google-services.json to android folder"
     cp $ENV_FOLDER/google-services.json android/app

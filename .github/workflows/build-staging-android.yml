@@ -64,18 +64,24 @@ jobs:
       - name: Generate native assets
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn generate-native-assets
-      - name: Copy gradle.properties
+      - name: Add Entur registry properties for gradle
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: |
           GRADLE_DIRECTORY="$HOME/.gradle"
           if [[ ! -e $GRADLE_DIRECTORY ]]; then
               mkdir $GRADLE_DIRECTORY
           fi
-          echo "Copying gradle.properties from ./android to $GRADLE_DIRECTORY"
-          cp ./android/gradle.properties $GRADLE_DIRECTORY
+          GRADLE_PROPERTIES="$GRADLE_DIRECTORY/gradle.properties"
+          echo "Adding Entur registry properties to $GRADLE_PROPERTIES"
+
+          echo "entur_artifactory_user=$ENTUR_REGISTRY_USER" > $GRADLE_PROPERTIES
+          echo "entur_artifactory_password=$ENTUR_REGISTRY_PASSWORD" >> $GRADLE_PROPERTIES
+
+          echo "entur_artifactory_partner_resolve_snapshot_url=https://entur2.jfrog.io/entur2/partner-snapshot" >> $GRADLE_PROPERTIES
+          echo "entur_artifactory_partner_resolve_release_url=https://entur2.jfrog.io/entur2/partner-snapshot" >> $GRADLE_PROPERTIES
         env:
-          ENTUR_REGISTRY_USER: build-system@mittatb.no
-          ENTUR_REGISTRY_PASSWORD: ${{ secrets.NPM_TOKEN }}
+          ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_PASSWORD: ${{ secrets.ENTUR_REGISTRY_PASSWORD }}
       - name: Run fastlane build
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: fastlane android build

@@ -7,6 +7,7 @@ import {
   TokenAction,
 } from '../../.yalc/@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/src';
 import Bugsnag from '@bugsnag/react-native';
+import {ActivatedToken} from '@entur/atb-mobile-client-sdk/token/token-core-javascript-lib/src';
 
 export default function useMobileTokenClient(
   abtClient: AbtTokenClient,
@@ -47,6 +48,11 @@ export default function useMobileTokenClient(
     [],
   );
   const clear = useCallback(async () => abtClient.clearToken(contextId), []);
+  const renew = useCallback(
+    (token: ActivatedToken, traceId: string) =>
+      abtClient.renewToken(token, traceId),
+    [],
+  );
 
   return useMemo(
     () => ({
@@ -54,6 +60,7 @@ export default function useMobileTokenClient(
       create,
       encode,
       clear,
+      renew,
     }),
     [get, create, encode, clear],
   );
