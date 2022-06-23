@@ -23,15 +23,13 @@ export function NoMobileToken({}: {}): JSX.Element {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topView}>
         <ThemeText
-          type="body__primary--jumbo--bold"
-          style={styles.alignCenter}
+          type="heading--jumbo"
+          style={styles.header}
           color={themeColor}
         >
           {t(MobileTokenOnboardingTexts.error.heading)}
         </ThemeText>
-      </View>
       <View style={styles.svgContainer}>
         <CrashSmall width="185px" height="185px" />
       </View>
@@ -61,11 +59,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.xLarge,
   },
-  alignCenter: {
-    textAlign: 'center',
-  },
-  topView: {
+  header: {
     marginTop: 100,
+    width: 303,
+    alignSelf: 'center',
+    textAlign: 'center',
   },
   description: {
     marginTop: 34,

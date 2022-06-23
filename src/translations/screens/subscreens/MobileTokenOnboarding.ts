@@ -1,13 +1,13 @@
 import {translation as _} from '../../commons';
 const MobileTokenOnboardingTexts = {
-  info1: {
+  flexibilityInfo: {
     heading: _('En mer fleksibel reisehverdag', 'More flexibility'),
     description: _(
       'Du velger selv hvordan du vil bruke og vise frem billetten din.',
       'Choose how to use and show your ticket.',
     ),
   },
-  info2: {
+  optionsInfo: {
     heading: _(
       'Velg mellom t:kort eller mobil',
       'Choose between t:card or phone',
@@ -18,7 +18,7 @@ const MobileTokenOnboardingTexts = {
     ),
     or: _('eller', 'or'),
   },
-  info3: {
+  ticketSafetyInfo: {
     heading: _('Vi tar vare på billetten din', 'You ticket is safe with us'),
     description: _(
       'Billetten din er trygt lagret på **Min profil**. Dermed vil du aldri miste den – selv om du mister t:kortet eller bytter mobil.',

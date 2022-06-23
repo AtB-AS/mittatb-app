@@ -6,7 +6,6 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {StyleSheet} from '@atb/theme';
 import {useNavigation} from '@react-navigation/native';
 import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import Button from '@atb/components/button';
 import TravelPlanning from '@atb/assets/svg/color/images/TravelPlanning';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
@@ -26,23 +25,22 @@ export function FlexibilityInfo(): JSX.Element {
       <View style={styles.mainView}>
         <View accessible={true} ref={focusRef}>
           <ThemeText
-            type="body__primary--jumbo--bold"
-            style={styles.header}
+            type="heading--jumbo"
+            style={[styles.alignCenter, styles.header]}
             color={themeColor}
           >
-            {t(MobileTokenOnboardingTexts.info1.heading)}
+            {t(MobileTokenOnboardingTexts.flexibilityInfo.heading)}
           </ThemeText>
         </View>
         <TravelPlanning style={styles.alignCenter} />
         <ThemeText
           color={themeColor}
-          style={[styles.alignCenter, styles.marginTop]}
+          style={[styles.alignCenter, styles.description]}
         >
-          {t(MobileTokenOnboardingTexts.info1.description)}
+          {t(MobileTokenOnboardingTexts.flexibilityInfo.description)}
         </ThemeText>
       </View>
       <View style={styles.bottomView}>
-        <FullScreenFooter>
           <Button
             interactiveColor="interactive_0"
             onPress={() => {
@@ -52,7 +50,6 @@ export function FlexibilityInfo(): JSX.Element {
             testID="nextButton"
             accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
           />
-        </FullScreenFooter>
       </View>
     </View>
   );
@@ -69,11 +66,11 @@ export function OptionsInfo(): JSX.Element {
       <View style={styles.mainView}>
         <View accessible={true} ref={focusRef}>
           <ThemeText
-            type="body__primary--jumbo--bold"
-            style={styles.header}
+            type="heading--jumbo"
+            style={[styles.alignCenter, styles.header]}
             color={themeColor}
           >
-            {t(MobileTokenOnboardingTexts.info2.heading)}
+            {t(MobileTokenOnboardingTexts.optionsInfo.heading)}
           </ThemeText>
         </View>
 
@@ -85,17 +82,16 @@ export function OptionsInfo(): JSX.Element {
             accessible={false}
             importantForAccessibility="no"
           >
-            {t(MobileTokenOnboardingTexts.info2.or)}
+            {t(MobileTokenOnboardingTexts.optionsInfo.or)}
           </ThemeText>
           <ThemedTokenPhone />
         </View>
         <ThemeText color={themeColor} style={styles.alignCenter}>
-          {t(MobileTokenOnboardingTexts.info2.description)}
+          {t(MobileTokenOnboardingTexts.optionsInfo.description)}
         </ThemeText>
       </View>
 
       <View style={styles.bottomView}>
-        <FullScreenFooter>
           <Button
             interactiveColor="interactive_0"
             onPress={() => {
@@ -105,7 +101,6 @@ export function OptionsInfo(): JSX.Element {
             testID="nextButton"
             accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
           />
-        </FullScreenFooter>
       </View>
     </View>
   );
@@ -121,11 +116,11 @@ export function TicketSafetyInfo(): JSX.Element {
       <View style={styles.mainView}>
         <View accessible={true} ref={focusRef}>
           <ThemeText
-            type="body__primary--jumbo--bold"
-            style={[styles.alignCenter, styles.header]}
+            type="heading--jumbo"
+            style={[styles.alignCenter, styles.header, styles.paddingLarge]}
             color={themeColor}
           >
-            {t(MobileTokenOnboardingTexts.info3.heading)}
+            {t(MobileTokenOnboardingTexts.ticketSafetyInfo.heading)}
           </ThemeText>
         </View>
         <View style={styles.alignCenter}>
@@ -133,14 +128,13 @@ export function TicketSafetyInfo(): JSX.Element {
         </View>
         <ThemeText
           color={themeColor}
-          style={[styles.alignCenter, styles.marginTop]}
+          style={[styles.alignCenter, styles.description]}
           isMarkdown={true}
         >
-          {t(MobileTokenOnboardingTexts.info3.description)}
+          {t(MobileTokenOnboardingTexts.ticketSafetyInfo.description)}
         </ThemeText>
       </View>
       <View style={styles.bottomView}>
-        <FullScreenFooter>
           <Button
             interactiveColor="interactive_0"
             onPress={() => {
@@ -150,7 +144,6 @@ export function TicketSafetyInfo(): JSX.Element {
             testID="nextButton"
             accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
           />
-        </FullScreenFooter>
       </View>
     </View>
   );
@@ -166,11 +159,14 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   mainView: {
     height: 503,
   },
+  paddingLarge: {
+     padding: theme.spacings.medium
+  },
   header: {
     marginTop: 55,
     height: 100,
+    width: 327,
     marginBottom: theme.spacings.xLarge,
-    textAlign: 'center',
   },
   alignCenter: {
     textAlign: 'center',
@@ -184,6 +180,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.xLarge,
   },
   marginTop: {
+    marginTop: theme.spacings.xLarge,
+  },
+  description: {
+    width: 327,
     marginTop: theme.spacings.xLarge,
   },
   bottomView: {
