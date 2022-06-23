@@ -59,6 +59,7 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import useTripsQuery from '@atb/screens/Assistant/use-trips-query';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
+import {useDoOnceWhen} from '@atb/screens/utils';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -207,15 +208,8 @@ const Assistant: React.FC<Props> = ({
     });
   }
 
-  const {
-    tripPatterns,
-    timeOfLastSearch,
-    refresh,
-    loadMore,
-    clear,
-    searchState,
-    error,
-  } = useTripsQuery(from, to, searchTime);
+  const {tripPatterns, timeOfLastSearch, loadMore, clear, searchState, error} =
+    useTripsQuery(from, to, searchTime);
 
   const isSearching = searchState === 'searching';
   const openLocationSearch = (
@@ -431,6 +425,13 @@ const Assistant: React.FC<Props> = ({
     return () => backHandler.remove();
   });
 
+  const refresh = () => {
+    navigation.setParams({
+      fromLocation: from?.resultType === 'geolocation' ? currentLocation : from,
+      toLocation: to?.resultType === 'geolocation' ? currentLocation : to,
+    });
+  };
+
   return (
     <DisappearingHeader
       renderHeader={renderHeader}
@@ -642,9 +643,8 @@ function useUpdatedLocation(
 
       switch (searchedLocation.resultType) {
         case 'search':
-          return updater(searchedLocation);
         case 'geolocation':
-          return updater(currentLocation);
+          return updater(searchedLocation);
         case 'journey': {
           const toSearch = (i: number): Location => ({
             ...searchedLocation.journeyData[i],
@@ -686,16 +686,6 @@ function useUpdatedLocation(
 }
 
 export default AssistantRoot;
-
-function useDoOnceWhen(fn: () => void, condition: boolean) {
-  const firstTimeRef = useRef(true);
-  useEffect(() => {
-    if (firstTimeRef.current && condition) {
-      firstTimeRef.current = false;
-      fn();
-    }
-  }, [condition]);
-}
 
 function log(message: string, metadata?: {[key: string]: string}) {
   Bugsnag.leaveBreadcrumb(message, {component: 'Assistant', ...metadata});
