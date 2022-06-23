@@ -12,6 +12,7 @@ import {
 import {PageIndicator} from '@atb/login/mobile-token-onboarding/PageIndicator';
 import MobileToken from '@atb/login/mobile-token-onboarding/MobileToken';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {hasNoTokenType, isInspectable} from '@atb/mobile-token/utils';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -25,9 +26,8 @@ export type MobileTokenStackParams = {
 const Tab = createMaterialTopTabNavigator<MobileTokenStackParams>();
 
 export default function MobileTokenOnboardingStack() {
-  const {travelTokens} = useMobileTokenContextState();
-  const inspectableToken = travelTokens?.find((t) => t.inspectable)!;
-
+  const {remoteTokens} = useMobileTokenContextState();
+  const inspectableToken = remoteTokens?.find((t) => isInspectable(t))!;
   const styles = useStyles();
   return (
     <View style={styles.container}>
@@ -38,9 +38,7 @@ export default function MobileTokenOnboardingStack() {
               'MobileToken',
             ) > -1;
           const isNoMobileTokenScreen =
-            isValidTokenScreen &&
-            inspectableToken?.type !== 'travelCard' &&
-            inspectableToken?.type !== 'mobile';
+            isValidTokenScreen && hasNoTokenType(inspectableToken);
           const customCss =
             isValidTokenScreen && !isNoMobileTokenScreen
               ? styles.marginBottomSmall
