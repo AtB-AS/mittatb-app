@@ -90,14 +90,16 @@ const NearbyOverview: React.FC<Props> = ({
   hasLocationPermission,
   navigation,
 }) => {
-  const searchedFromLocation =
-    useOnlySingleLocation<NearbyScreenProp>('location');
+  const fromLocation = useOnlySingleLocation<NearbyScreenProp>('location');
+
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
   const styles = useNearbyStyles();
 
-  useDoOnceWhen(setCurrentLocationAsFromIfEmpty, Boolean(currentLocation));
+  useDoOnceWhen(
+    setCurrentLocationAsFromIfEmpty,
+    Boolean(currentLocation) && navigation.isFocused(),
+  );
 
-  const fromLocation = searchedFromLocation ?? currentLocation;
   const updatingLocation = !fromLocation && hasLocationPermission;
 
   const {state, loadMore, setShowFavorites, setSearchTime} =

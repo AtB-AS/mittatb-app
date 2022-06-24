@@ -92,11 +92,12 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const searchedFromLocation =
-    useOnlySingleLocation<DeparturesProps>('location');
+  const fromLocation = useOnlySingleLocation<DeparturesProps>('location');
 
-  useDoOnceWhen(setCurrentLocationAsFromIfEmpty, Boolean(currentLocation));
-  const fromLocation = searchedFromLocation ?? currentLocation;
+  useDoOnceWhen(
+    setCurrentLocationAsFromIfEmpty,
+    Boolean(currentLocation) && navigation.isFocused(),
+  );
 
   const updatingLocation = !fromLocation && hasLocationPermission;
 
