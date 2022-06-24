@@ -7,5 +7,8 @@ export function useDoOnceWhen(fn: () => void, condition: boolean) {
       firstTimeRef.current = false;
       fn();
     }
+    return () => {
+      firstTimeRef.current = true;
+    };
   }, [condition]);
 }
