@@ -78,6 +78,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
     error,
     restartTerminal,
     cancelPayment,
+    handleInitialLoadingError,
   } = useTerminalState(
     offers,
     paymentType,
@@ -109,8 +110,9 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
             source={{
               uri: terminalUrl,
             }}
+            onError={handleInitialLoadingError}
             onLoadStart={onWebViewLoadStart}
-            onLoadEnd={onWebViewLoadEnd}
+            onNavigationStateChange={onWebViewLoadEnd}
           />
         )}
       </View>
