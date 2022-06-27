@@ -36,6 +36,7 @@ import Loading from '../Loading';
 import DepartureTimeSheet from './DepartureTimeSheet';
 import {useDepartureData} from './state';
 import {SearchTime} from './types';
+import {useDoOnceWhen} from '@atb/screens/utils';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -89,19 +90,19 @@ const NearbyOverview: React.FC<Props> = ({
   hasLocationPermission,
   navigation,
 }) => {
-  const searchedFromLocation =
-    useOnlySingleLocation<NearbyScreenProp>('location');
+  const fromLocation = useOnlySingleLocation<NearbyScreenProp>('location');
+
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
   const styles = useNearbyStyles();
 
-  const currentSearchLocation = useMemo<GeoLocation | undefined>(
-    () => currentLocation,
-    [currentLocation],
+  useDoOnceWhen(
+    setCurrentLocationAsFromIfEmpty,
+    Boolean(currentLocation) && navigation.isFocused(),
   );
-  const fromLocation = searchedFromLocation ?? currentSearchLocation;
+
   const updatingLocation = !fromLocation && hasLocationPermission;
 
-  const {state, refresh, loadMore, setShowFavorites, setSearchTime} =
+  const {state, loadMore, setShowFavorites, setSearchTime} =
     useDepartureData(fromLocation);
 
   const {
@@ -169,6 +170,13 @@ const NearbyOverview: React.FC<Props> = ({
       date: new Date().toISOString(),
     });
 
+  function setCurrentLocationAsFromIfEmpty() {
+    if (fromLocation) {
+      return;
+    }
+    setCurrentLocationAsFrom();
+  }
+
   function setCurrentLocationAsFrom() {
     navigation.setParams({
       location: currentLocation && {
@@ -205,6 +213,15 @@ const NearbyOverview: React.FC<Props> = ({
       );
     }
   }, [updatingLocation, isLoading]);
+
+  function refresh() {
+    navigation.setParams({
+      location:
+        fromLocation?.resultType === 'geolocation'
+          ? currentLocation
+          : fromLocation,
+    });
+  }
 
   return (
     <SimpleDisappearingHeader

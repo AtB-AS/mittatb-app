@@ -120,8 +120,6 @@
 		FEF69FE9282A755900201B64 /* TokenKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE504B0628243CBD0004B3F0 /* TokenKeyStore.swift */; };
 		FEF6A00C282A7E9500201B64 /* TestHostiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A00B282A7E9500201B64 /* TestHostiOSApp.swift */; };
 		FEF6A00E282A7E9500201B64 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A00D282A7E9500201B64 /* ContentView.swift */; };
-		FEF6A010282A7E9700201B64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FEF6A00F282A7E9700201B64 /* Assets.xcassets */; };
-		FEF6A013282A7E9700201B64 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FEF6A012282A7E9700201B64 /* Preview Assets.xcassets */; };
 		FEF6A01C282A9C7900201B64 /* MockedDefaultTokenRenewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A01B282A9C7900201B64 /* MockedDefaultTokenRenewer.swift */; };
 		FEF6A01F282A9DD300201B64 /* KeyStoreAliasFactoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A01E282A9DD300201B64 /* KeyStoreAliasFactoryProvider.swift */; };
 		FEF6A023282AA3F100201B64 /* KeyStoreSearchFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF6A022282AA3F100201B64 /* KeyStoreSearchFactory.swift */; };
@@ -222,8 +220,6 @@
 		FEF6A009282A7E9500201B64 /* TestHostiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHostiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEF6A00B282A7E9500201B64 /* TestHostiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHostiOSApp.swift; sourceTree = "<group>"; };
 		FEF6A00D282A7E9500201B64 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		FEF6A00F282A7E9700201B64 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		FEF6A012282A7E9700201B64 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		FEF6A017282A7F0700201B64 /* TestHostiOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestHostiOS.entitlements; sourceTree = "<group>"; };
 		FEF6A01B282A9C7900201B64 /* MockedDefaultTokenRenewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedDefaultTokenRenewer.swift; sourceTree = "<group>"; };
 		FEF6A01E282A9DD300201B64 /* KeyStoreAliasFactoryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStoreAliasFactoryProvider.swift; sourceTree = "<group>"; };
@@ -607,18 +603,8 @@
 				FEF6A017282A7F0700201B64 /* TestHostiOS.entitlements */,
 				FEF6A00D282A7E9500201B64 /* ContentView.swift */,
 				FEF6A00B282A7E9500201B64 /* TestHostiOSApp.swift */,
-				FEF6A00F282A7E9700201B64 /* Assets.xcassets */,
-				FEF6A011282A7E9700201B64 /* Preview Content */,
 			);
 			path = TestHostiOS;
-			sourceTree = "<group>";
-		};
-		FEF6A011282A7E9700201B64 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				FEF6A012282A7E9700201B64 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		FEF6A01A282A9C5F00201B64 /* mocks */ = {
@@ -785,8 +771,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FEF6A013282A7E9700201B64 /* Preview Assets.xcassets in Resources */,
-				FEF6A010282A7E9700201B64 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1200,12 +1184,11 @@
 		FEF6A015282A7E9700201B64 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = TestHostiOS/TestHostiOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"TestHostiOS/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = CSV447Q97L;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1231,12 +1214,11 @@
 		FEF6A016282A7E9700201B64 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = TestHostiOS/TestHostiOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"TestHostiOS/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = CSV447Q97L;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

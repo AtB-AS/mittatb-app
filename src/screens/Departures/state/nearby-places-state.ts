@@ -69,8 +69,8 @@ const reducer: ReducerWithSideEffects<
             const result = await getNearestStops({
               latitude: action.location.coordinates.latitude,
               longitude: action.location.coordinates.longitude,
-              count: 30,
-              distance: 1000,
+              count: 10,
+              distance: 3000,
             });
             dispatch({
               type: 'UPDATE_STOP_PLACES',
@@ -131,7 +131,7 @@ const reducer: ReducerWithSideEffects<
 export function useNearestStopsData(location?: Location) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
 
-  const refresh = useCallback(
+  const loadData = useCallback(
     () =>
       dispatch({
         type: 'LOAD_NEAREST_STOP_PLACES',
@@ -140,10 +140,9 @@ export function useNearestStopsData(location?: Location) {
     [location?.id],
   );
 
-  useEffect(refresh, [location?.id]);
+  useEffect(loadData, [location?.id]);
 
   return {
     state,
-    refresh,
   };
 }

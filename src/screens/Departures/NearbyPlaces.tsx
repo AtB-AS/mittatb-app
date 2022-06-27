@@ -26,6 +26,7 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
 import StopPlaceItem from './components/StopPlaceItem';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
+import {useDoOnceWhen} from '@atb/screens/utils';
 
 const DateOptions = ['now', 'departure'] as const;
 type DateOptionType = typeof DateOptions[number];
@@ -91,16 +92,16 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const searchedFromLocation =
-    useOnlySingleLocation<DeparturesProps>('location');
-  const currentSearchLocation = useMemo<Location | undefined>(
-    () => currentLocation,
-    [currentLocation],
+  const fromLocation = useOnlySingleLocation<DeparturesProps>('location');
+
+  useDoOnceWhen(
+    setCurrentLocationAsFromIfEmpty,
+    Boolean(currentLocation) && navigation.isFocused(),
   );
-  const fromLocation = searchedFromLocation ?? currentSearchLocation;
+
   const updatingLocation = !fromLocation && hasLocationPermission;
 
-  const {state, refresh} = useNearestStopsData(fromLocation);
+  const {state} = useNearestStopsData(fromLocation);
 
   const {data, isLoading, error} = state;
   const isInitialScreen = data == null && !isLoading && !error;
@@ -138,6 +139,13 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
         resultType: 'geolocation',
       },
     });
+  }
+
+  function setCurrentLocationAsFromIfEmpty() {
+    if (fromLocation) {
+      return;
+    }
+    setCurrentLocationAsFrom();
   }
 
   async function setCurrentLocationOrRequest() {
@@ -189,6 +197,15 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
       );
     }
   }, [updatingLocation, isLoading]);
+
+  function refresh() {
+    navigation.setParams({
+      location:
+        fromLocation?.resultType === 'geolocation'
+          ? currentLocation
+          : fromLocation,
+    });
+  }
 
   return (
     <SimpleDisappearingHeader

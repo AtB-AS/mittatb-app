@@ -29,7 +29,11 @@ export default function TravelTokenBox({
     useMobileTokenContextState();
 
   if (isLoading) {
-    return <ActivityIndicator size={'large'} />;
+    return (
+      <View style={styles.loadingIndicator}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   }
 
   const errorMessages = ErrorMessages(remoteTokens);
@@ -176,6 +180,9 @@ const ErrorMessages = (remoteTokens?: RemoteToken[]) => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
+  loadingIndicator: {
+    marginBottom: theme.spacings.medium,
+  },
   errorMessage: {
     marginBottom: theme.spacings.medium,
   },

@@ -120,7 +120,7 @@ ext {
     desugarVersion = '1.1.5'
     androidxEspressoVersion = '3.4.0'
     robolectricVersion = '4.7.3'
-    abtProtoVersion = '2.384'
+    abtProtoVersion = '2.386'
     grpcVersion = '1.46.0'
     androidPlayServicesSafetynetVersion = '18.0.1'
     androidxCoreVersion = '1.7.0'
@@ -361,8 +361,8 @@ if (!project.gradle.startParameter.taskNames.contains("renovate")) configure(and
             // set minSdkVersion per subproject
             targetSdkVersion 31
             // versions are copied here from the properties to improve build time. See the version.gradle script.
-            versionCode 3
-            versionName "1.0.2-SNAPSHOT"
+            versionCode 4
+            versionName "1.0.3"
             testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         }
 

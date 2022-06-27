@@ -95,6 +95,7 @@ type DepartureDataActions =
       locationId?: string;
       reset?: boolean;
       result: DepartureGroupMetadata;
+      fromLocation?: Location | undefined;
     }
   | {
       type: 'SET_ERROR';
@@ -163,6 +164,7 @@ const reducer: ReducerWithSideEffects<
               type: 'UPDATE_DEPARTURES',
               reset: true,
               locationId: location.id,
+              fromLocation: location,
               result,
             });
           } catch (e) {
@@ -377,7 +379,7 @@ export function useDepartureData(
     [location?.id, favoriteDepartures],
   );
 
-  const refresh = useCallback(
+  const loadInitialDepartures = useCallback(
     () =>
       dispatch({
         type: 'LOAD_INITIAL_DEPARTURES',
@@ -404,7 +406,7 @@ export function useDepartureData(
     [location?.id, favoriteDepartures],
   );
 
-  useEffect(refresh, [location?.id]);
+  useEffect(loadInitialDepartures, [location?.id]);
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -412,7 +414,7 @@ export function useDepartureData(
     const diff = differenceInMinutes(state.tick, state.lastRefreshTime);
 
     if (diff >= HARD_REFRESH_LIMIT_IN_MINUTES) {
-      refresh();
+      loadInitialDepartures();
     }
   }, [state.tick, state.lastRefreshTime]);
   useInterval(
@@ -430,9 +432,9 @@ export function useDepartureData(
 
   return {
     state,
-    refresh,
     loadMore,
     setSearchTime,
     setShowFavorites,
+    loadInitialDepartures,
   };
 }
