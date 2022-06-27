@@ -18,8 +18,6 @@ dependencies {
         exclude group: "com.android.support"
     }
 
-    implementation "io.grpc:grpc-stub:${grpcVersion}"
-
     api("no.entur.abt:abt-protobuf-lite-traveller:${abtProtoVersion}") {
         changing = true
         exclude group: "com.google.api.grpc", module: "proto-google-common-protos"

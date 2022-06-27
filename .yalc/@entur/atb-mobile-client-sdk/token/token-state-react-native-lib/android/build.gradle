@@ -22,7 +22,7 @@ def safeExtGet(prop, fallback) {
 }
 
 ext {
-  tokenVersion = '1.0.2-SNAPSHOT'
+  tokenVersion = '1.0.3'
   desugarVersion = '1.1.5'
 }
 
