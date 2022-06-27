@@ -78,7 +78,7 @@ jobs:
           echo "entur_artifactory_password=$ENTUR_REGISTRY_PASSWORD" >> $GRADLE_PROPERTIES
 
           echo "entur_artifactory_partner_resolve_snapshot_url=https://entur2.jfrog.io/entur2/partner-snapshot" >> $GRADLE_PROPERTIES
-          echo "entur_artifactory_partner_resolve_release_url=https://entur2.jfrog.io/entur2/partner-snapshot" >> $GRADLE_PROPERTIES
+          echo "entur_artifactory_partner_resolve_release_url=https://entur2.jfrog.io/entur2/partner-release" >> $GRADLE_PROPERTIES
         env:
           ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_PASSWORD: ${{ secrets.ENTUR_REGISTRY_PASSWORD }}
