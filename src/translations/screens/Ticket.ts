@@ -118,12 +118,31 @@ const TicketTexts = {
       _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`),
   },
   ticketInfo: {
-    travelcardIsActive: _(
-      'Du har valgt **t:kort** som gyldig reisebevis',
-      'You have specified **t:card** as valid travel token',
-    ),
     noInspectionIcon: _('Ikke bruk\ni kontroll', 'Not for\ninspection'),
     noInspectionIconA11yLabel: _('Ikke bruk i kontroll', 'Not for inspection'),
+  },
+  warning: {
+    unableToRetrieveToken: _(
+      'Feil ved uthenting av mobil / t:kort',
+      'Error retrieving mobile / t: card',
+    ),
+    noTokenFound: _(
+      'Finner ikke t:kort / mobil på profilen din',
+      "Can't find t: card / mobile on your profile",
+    ),
+    noInspectableTokenFound: _(
+      'Du må bruke billett på t:kort eller mobil',
+      'You must use a ticket on t: card or mobile',
+    ),
+    travelCardAstoken: _(
+      'Bruk t:kort når du reiser',
+      'Bring your t:card when you travel',
+    ),
+    anotherMobileAsToken: (deviceName?: string) =>
+      _(
+        `Bruk ${deviceName} når du reiser`,
+        `Bring ${deviceName} when you travel`,
+      ),
   },
 };
 export default TicketTexts;
