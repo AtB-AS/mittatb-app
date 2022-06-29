@@ -1,5 +1,6 @@
 name: Build staging iOS project
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
