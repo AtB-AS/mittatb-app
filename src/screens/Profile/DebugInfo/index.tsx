@@ -10,7 +10,10 @@ import {useAuthState} from '@atb/auth';
 import {useAppDispatch} from '@atb/AppContext';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import storage from '@atb/storage';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {
+  useHasEnabledMobileToken,
+  useMobileTokenContextState,
+} from '@atb/mobile-token/MobileTokenContext';
 import Slider from '@react-native-community/slider';
 import {usePreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
@@ -51,6 +54,8 @@ export default function DebugInfo() {
     validateToken,
     removeRemoteToken,
   } = useMobileTokenContextState();
+
+  const mobileTokenEnabled = useHasEnabledMobileToken();
 
   const [storedValues, setStoredValues] = useState<
     [string, string | null][] | null
@@ -243,42 +248,64 @@ export default function DebugInfo() {
             text="Mobile token state"
             showIconText={true}
             expandContent={
-              <View>
-                {token && (
-                  <View>
-                    <ThemeText>{`Token id: ${token.getTokenId()}`}</ThemeText>
-                    <ThemeText>{`Token start: ${new Date(
-                      token.getValidityStart(),
-                    ).toISOString()}`}</ThemeText>
-                    <ThemeText>{`Token end: ${new Date(
-                      token.getValidityEnd(),
-                    ).toISOString()}`}</ThemeText>
-                  </View>
-                )}
-                <Button text="Reload token(s)" onPress={retry} />
-                <Button text="Create token" onPress={createToken} />
-                {token && <Button text="Wipe token" onPress={wipeToken} />}
-                {token && (
-                  <Button text="Validate token" onPress={validateToken} />
-                )}
-                <Sections.ExpandableItem
-                  text="Remote tokens"
-                  showIconText={true}
-                  expandContent={remoteTokens?.map((token) => (
-                    <View key={token.id} style={style.remoteToken}>
-                      {keys(token).map((k) => (
-                        <ThemeText key={token.id + k}>
-                          {k + ': ' + JSON.stringify(get(token, k))}
-                        </ThemeText>
-                      ))}
-                      <Button
-                        onPress={() => removeRemoteToken(token.id)}
-                        text="Remove"
-                      />
+              mobileTokenEnabled ? (
+                <View>
+                  {token && (
+                    <View>
+                      <ThemeText>{`Token id: ${token.getTokenId()}`}</ThemeText>
+                      <ThemeText>{`Token start: ${new Date(
+                        token.getValidityStart(),
+                      ).toISOString()}`}</ThemeText>
+                      <ThemeText>{`Token end: ${new Date(
+                        token.getValidityEnd(),
+                      ).toISOString()}`}</ThemeText>
                     </View>
-                  ))}
-                />
-              </View>
+                  )}
+                  <Button
+                    style={style.button}
+                    text="Reload token(s)"
+                    onPress={retry}
+                  />
+                  <Button
+                    style={style.button}
+                    text="Create token"
+                    onPress={createToken}
+                  />
+                  {token && (
+                    <Button
+                      style={style.button}
+                      text="Wipe token"
+                      onPress={wipeToken}
+                    />
+                  )}
+                  {token && (
+                    <Button
+                      style={style.button}
+                      text="Validate token"
+                      onPress={validateToken}
+                    />
+                  )}
+                  <Sections.ExpandableItem
+                    text="Remote tokens"
+                    showIconText={true}
+                    expandContent={remoteTokens?.map((token) => (
+                      <View key={token.id} style={style.remoteToken}>
+                        {keys(token).map((k) => (
+                          <ThemeText key={token.id + k}>
+                            {k + ': ' + JSON.stringify(get(token, k))}
+                          </ThemeText>
+                        ))}
+                        <Button
+                          onPress={() => removeRemoteToken(token.id)}
+                          text="Remove"
+                        />
+                      </View>
+                    ))}
+                  />
+                </View>
+              ) : (
+                <ThemeText>Mobile token not enabled</ThemeText>
+              )
             }
           />
         </Sections.Section>
@@ -406,6 +433,9 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   buttons: {
     marginHorizontal: theme.spacings.medium,
+  },
+  button: {
+    marginVertical: theme.spacings.small,
   },
   remoteToken: {
     marginBottom: theme.spacings.large,
