@@ -94,3 +94,7 @@ vendor/bundle
 # Design system
 assets/design-assets
 src/assets/svg
+
+# Yalc
+.yalc/
+yalc.lock

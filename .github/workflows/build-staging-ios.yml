@@ -1,5 +1,6 @@
 name: Build staging iOS project
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -16,8 +17,17 @@ jobs:
     timeout-minutes: 90
     runs-on: macos-11
     steps:
+      - name: Checkout temp mobiletoken sdk
+        uses: actions/checkout@v3
+        with:
+          repository: 'AtB-AS/temp-mobiletoken-sdk'
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
+      - name: Publish temp mobiletoken sdk
+        run: npx yalc publish
       - name: Checkout project
         uses: actions/checkout@v1
+      - name: Yalc add temp mobiletoken sdk
+        run: npx yalc add @entur/atb-mobile-client-sdk
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
