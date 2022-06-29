@@ -20,6 +20,12 @@ import {
   isTravelCardToken,
 } from '@atb/mobile-token/utils';
 import {RemoteToken} from '@atb/mobile-token/types';
+import {
+  filterActiveOrCanBeUsedFareContracts,
+  isCarnetTicket,
+  useTicketState,
+} from '@atb/tickets';
+import {flatMap} from '@atb/utils/array';
 
 type RouteName = 'SelectTravelToken';
 
@@ -31,6 +37,8 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
   const styles = useStyles();
   const {t} = useTranslation();
 
+  const {fareContracts} = useTicketState();
+
   const {token, remoteTokens, toggleToken} = useMobileTokenContextState();
   const inspectableToken = findInspectable(remoteTokens);
 
@@ -41,6 +49,11 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
   const [selectedToken, setSelectedToken] = useState<RemoteToken | undefined>(
     inspectableToken,
   );
+
+  const hasActiveCarnetTicket = flatMap(
+    filterActiveOrCanBeUsedFareContracts(fareContracts),
+    (i) => i.travelRights,
+  ).some(isCarnetTicket);
 
   const [saveState, setSaveState] = useState({
     saving: false,
@@ -131,6 +144,19 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
             isMarkdown={false}
           />
         )}
+
+        {/* Show warning if we have selected to switch to mobile, but the
+            current inspectable token is travelCard AND we have active carnet tickets  */}
+        {selectedType === 'mobile' &&
+          isTravelCardToken(inspectableToken) &&
+          hasActiveCarnetTicket && (
+            <MessageBox
+              type={'warning'}
+              message={t(TravelTokenTexts.toggleToken.hasCarnet)}
+              containerStyle={styles.errorMessageBox}
+              isMarkdown={false}
+            />
+          )}
 
         {selectedType === 'mobile' && mobileTokens?.length && (
           <Sections.Section type="spacious" style={styles.selectDeviceSection}>
