@@ -248,7 +248,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
       return client.encode(token);
     }
     return undefined;
-  }, [client]);
+  }, [client, token]);
 
   /**
    * Whether this device is inspectable or not. It is inspectable if:
