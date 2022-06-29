@@ -32,6 +32,9 @@ import logger from '@atb/mobile-token/abtClientLogger';
 import createMobileTokenClient from '@entur/atb-mobile-client-sdk/token/token-state-react-native-lib';
 import {isInspectable} from '@atb/mobile-token/utils';
 
+import DeviceInfo from 'react-native-device-info';
+import {Platform} from 'react-native';
+
 const CONTEXT_ID = 'main';
 
 type MobileTokenContextState = {
@@ -313,6 +316,10 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
 export function useHasEnabledMobileToken() {
   const {customerProfile} = useTicketState();
   const {enable_period_tickets} = useRemoteConfig();
+
+  if (Platform.OS !== 'android' && DeviceInfo.isEmulatorSync()) {
+    return false;
+  }
 
   return customerProfile?.enableMobileToken || enable_period_tickets;
 }
