@@ -1,6 +1,11 @@
 name: Build staging iOS project
 on:
   workflow_dispatch:
+    inputs:
+      use-build-cache:
+        description: 'Use build cache'
+        required: false
+        default: 'true'
   push:
     branches:
       - master
@@ -29,7 +34,7 @@ jobs:
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
-          use-build-cache: 'false'
+          use-build-cache: ${{ inputs.use-build-cache }}
           app-environment: 'staging'
           app-org: ${{ matrix.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
