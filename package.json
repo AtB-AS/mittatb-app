@@ -29,6 +29,7 @@
     "@entur/sdk": "^3.4.0",
     "@leile/lobo-t": "^1.0.5",
     "@mapbox/polyline": "^1.1.1",
+    "@entur/atb-mobile-client-sdk": "file:./.yalc/@entur/atb-mobile-client-sdk",
     "@react-native-async-storage/async-storage": "^1.15.9",
     "@react-native-clipboard/clipboard": "^1.8.4",
     "@react-native-community/datetimepicker": "^3.5.2",
