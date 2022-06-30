@@ -58,10 +58,11 @@ const PurchaseOverviewTexts = {
       'Periodic tickets in zone A can also be used on train in zone A.',
     ),
   },
-  notInspectableTokenDeviceWarning: _(
-    'Du kan ikke reise med denne mobilen. Du kan bytte hvor du bruker billetten din fra **Min profil**.',
-    `You can't travel with this phone. Go to **My profile** to switch where your tickets are used.`,
-  ),
+  notInspectableTokenDeviceWarning: (deviceName?: string) =>
+    _(
+      `Du kan ikke reise med ${deviceName}. Du kan bytte hvor du bruker billetten din fra **Min profil**.`,
+      `You cannot use ${deviceName} when you travel. You can change which device to use your tickets on from **My profile**.`,
+    ),
   zones: {
     label: {
       singleZone: {

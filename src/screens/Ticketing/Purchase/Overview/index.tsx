@@ -43,6 +43,7 @@ import StartTimeSelection from './components/StartTimeSelection';
 import TravellerSelection from './components/TravellerSelection';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {getPurchaseFlow} from '../utils';
+import {getDeviceNameForCurrentToken} from '@atb/mobile-token/utils';
 
 export type OverviewNavigationProp = DismissableStackNavigationProp<
   TicketingStackParams,
@@ -60,7 +61,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {deviceIsInspectable} = useMobileTokenContextState();
+  const {deviceIsInspectable, token, remoteTokens} =
+    useMobileTokenContextState();
+
   const tokensEnabled = useHasEnabledMobileToken();
   const {customerProfile} = useTicketState();
   const hasProfileTravelCard = !!customerProfile?.travelcard;
@@ -194,7 +197,11 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           <MessageBox
             isMarkdown={true}
             containerStyle={styles.warning}
-            message={t(PurchaseOverviewTexts.notInspectableTokenDeviceWarning)}
+            message={t(
+              PurchaseOverviewTexts.notInspectableTokenDeviceWarning(
+                getDeviceNameForCurrentToken(token, remoteTokens),
+              ),
+            )}
             type="warning"
           />
         )}
