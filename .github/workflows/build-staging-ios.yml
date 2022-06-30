@@ -1,11 +1,6 @@
 name: Build staging iOS project
 on:
   workflow_dispatch:
-    inputs:
-      use-build-cache:
-        description: "Whether to use the build cache for artifacts and dependencies (will speed up subsequent builds if no native changes have happened)"
-        default: 'false'
-        required: false
   push:
     branches:
       - master
@@ -34,7 +29,7 @@ jobs:
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
-          use-build-cache: ${{ inputs.use-build-cache }}
+          use-build-cache: 'true'
           app-environment: 'staging'
           app-org: ${{ matrix.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
