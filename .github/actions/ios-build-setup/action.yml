@@ -2,7 +2,7 @@ name: iOS build setup
 description: 'Sets up the necessarry dependencies, environment and assets for building the iOS app'
 inputs:
   use-build-cache: 
-    description: "Wether to use the build cache for artifacts and dependencies (will speed up subsequent builds if no native changes have happened)"
+    description: "Whether to use the build cache for artifacts and dependencies (will speed up subsequent builds if no native changes have happened)"
     default: 'false'
     required: true
   app-environment:

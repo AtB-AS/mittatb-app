@@ -3,9 +3,9 @@ on:
   workflow_dispatch:
     inputs:
       use-build-cache:
-        description: 'Use build cache'
+        description: "Whether to use the build cache for artifacts and dependencies (will speed up subsequent builds if no native changes have happened)"
+        default: 'false'
         required: false
-        default: 'true'
   push:
     branches:
       - master
