@@ -9,7 +9,7 @@ import {
   getReferenceDataName,
 } from '@atb/reference-data/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {PreactivatedTicket, useTicketState} from '@atb/tickets';
+import {PreactivatedTicket} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import React, {ReactElement} from 'react';
 import {View} from 'react-native';
@@ -21,10 +21,17 @@ import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import {TicketAdd, TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {Warning} from '@atb/assets/svg/color/situations';
-import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {flatStaticColors, getStaticColor, StaticColor} from '@atb/theme/colors';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {Time} from '@atb/assets/svg/mono-icons/time';
+import {
+  findInspectable,
+  getDeviceName,
+  isMobileToken,
+  isTravelCardToken,
+} from '@atb/mobile-token/utils';
+import {RemoteToken} from '@atb/mobile-token/types';
 
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -96,6 +103,43 @@ export const TicketInfoView = (props: TicketInfoViewProps) => {
   );
 };
 
+const WarningMessage = (
+  isError: boolean,
+  remoteTokens?: RemoteToken[],
+  isInspectable?: boolean,
+) => {
+  const {t} = useTranslation();
+  const inspectableToken = findInspectable(remoteTokens);
+  if (isError)
+    return (
+      <ThemeText type="body__secondary">
+        {t(TicketTexts.warning.unableToRetrieveToken)}
+      </ThemeText>
+    );
+  if (!inspectableToken)
+    return (
+      <ThemeText type="body__secondary">
+        {t(TicketTexts.warning.noInspectableTokenFound)}
+      </ThemeText>
+    );
+  if (isTravelCardToken(inspectableToken))
+    return (
+      <ThemeText type="body__secondary">
+        {t(TicketTexts.warning.travelCardAstoken)}
+      </ThemeText>
+    );
+  if (isMobileToken(inspectableToken) && !isInspectable)
+    return (
+      <ThemeText type="body__secondary">
+        {t(
+          TicketTexts.warning.anotherMobileAsToken(
+            getDeviceName(inspectableToken),
+          ),
+        )}
+      </ThemeText>
+    );
+};
+
 const TicketInfoTexts = (props: TicketInfoViewProps) => {
   const {
     preassignedFareProduct,
@@ -104,7 +148,6 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
     userProfilesWithCount,
     isInspectable,
     omitUserProfileCount,
-    status,
     testID,
   } = props;
   const {t, language} = useTranslation();
@@ -124,16 +167,8 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
       ? `${getReferenceDataName(u, language)}`
       : `${u.count} ${getReferenceDataName(u, language)}`;
 
-  const tokensEnabled = useHasEnabledMobileToken();
-  const {customerProfile} = useTicketState();
-  const hasTravelCard = !!customerProfile?.travelcard;
-
-  // show warning to use inspectable t:card for travellers still not on tokens, for tickets that are valid
-  const showTravelCardActiveWarning =
-    !tokensEnabled &&
-    hasTravelCard &&
-    status !== 'expired' &&
-    status !== 'refunded';
+  const {isError, remoteTokens} = useMobileTokenContextState();
+  const warning = WarningMessage(isError, remoteTokens, isInspectable);
 
   return (
     <View style={styles.textsContainer} accessible={true}>
@@ -169,12 +204,10 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
           {tariffZoneSummary}
         </ThemeText>
       )}
-      {showTravelCardActiveWarning && (
-        <View style={styles.notInspectableWarning}>
-          <ThemeIcon svg={Warning} style={styles.notInspectableWarningIcon} />
-          <ThemeText isMarkdown={true}>
-            {t(TicketTexts.ticketInfo.travelcardIsActive)}
-          </ThemeText>
+      {warning && (
+        <View style={styles.warning}>
+          <ThemeIcon svg={Warning} style={styles.warningIcon} />
+          {warning}
         </View>
       )}
     </View>
@@ -340,11 +373,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     aspectRatio: 1,
     padding: theme.spacings.small,
   },
-  notInspectableWarning: {
+  warning: {
     flexDirection: 'row',
     paddingVertical: theme.spacings.small,
   },
-  notInspectableWarningIcon: {
+  warningIcon: {
     marginRight: theme.spacings.small,
   },
 }));
