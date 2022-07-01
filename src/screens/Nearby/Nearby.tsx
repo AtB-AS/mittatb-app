@@ -27,7 +27,11 @@ import {
 } from '@atb/translations';
 import {formatToShortDateTimeWithoutYear} from '@atb/utils/date';
 import {TFunc} from '@leile/lobo-t';
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
+import {
+  CompositeNavigationProp,
+  RouteProp,
+  useIsFocused,
+} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
@@ -95,9 +99,11 @@ const NearbyOverview: React.FC<Props> = ({
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
   const styles = useNearbyStyles();
 
+  const screenHasFocus = useIsFocused();
+
   useDoOnceWhen(
     setCurrentLocationAsFromIfEmpty,
-    Boolean(currentLocation) && navigation.isFocused(),
+    Boolean(currentLocation) && screenHasFocus,
   );
 
   const updatingLocation = !fromLocation && hasLocationPermission;

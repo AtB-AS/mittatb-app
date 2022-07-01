@@ -13,7 +13,11 @@ import {useOnlySingleLocation} from '@atb/location-search';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
+import {
+  CompositeNavigationProp,
+  RouteProp,
+  useIsFocused,
+} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
@@ -93,10 +97,11 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
   const {t} = useTranslation();
 
   const fromLocation = useOnlySingleLocation<DeparturesProps>('location');
+  const screenHasFocus = useIsFocused();
 
   useDoOnceWhen(
     setCurrentLocationAsFromIfEmpty,
-    Boolean(currentLocation) && navigation.isFocused(),
+    Boolean(currentLocation) && screenHasFocus,
   );
 
   const updatingLocation = !fromLocation && hasLocationPermission;
