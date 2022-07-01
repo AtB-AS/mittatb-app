@@ -26,8 +26,6 @@ jobs:
         run: npx yalc publish
       - name: Checkout project
         uses: actions/checkout@v1
-      - name: Yalc add temp mobiletoken sdk
-        run: npx yalc add @entur/atb-mobile-client-sdk
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
