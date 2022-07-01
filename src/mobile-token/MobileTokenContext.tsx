@@ -21,7 +21,6 @@ import {
   TokenMustBeReplacedRemoteTokenStateError,
 } from '../../.yalc/@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/src';
 import {
-  RemoteTokenStateError,
   TokenEncodingInvalidRemoteTokenStateError,
   TokenMustBeRenewedRemoteTokenStateError,
   TokenNotFoundRemoteTokenStateError,
@@ -34,6 +33,7 @@ import {isInspectable} from '@atb/mobile-token/utils';
 
 import DeviceInfo from 'react-native-device-info';
 import {Platform} from 'react-native';
+import {updateMetadata} from '@atb/chat/metadata';
 
 const CONTEXT_ID = 'main';
 
@@ -47,6 +47,7 @@ type MobileTokenContextState = {
   toggleToken: (tokenId: string) => Promise<boolean>;
   retry: () => void;
   wipeToken: () => Promise<void>;
+  fallbackEnabled: boolean;
   // For debugging
   createToken: () => void;
   validateToken: () => void;
@@ -71,6 +72,8 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
   const hasEnabledMobileToken = useHasEnabledMobileToken();
 
   const client = useMobileTokenClient(abtClient, CONTEXT_ID);
+
+  const {enable_token_fallback: fallbackEnabled} = useRemoteConfig();
 
   const wipeToken = useCallback(
     async (token: ActivatedToken | undefined, traceId: string) => {
@@ -176,22 +179,20 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
         Bugsnag.leaveBreadcrumb(`Creating new mobile token`);
         token = await client.create(traceId);
       }
-
-      setToken(token);
+      return token;
     },
     [client, tokenService, abtCustomerId],
   );
 
   const loadRemoteTokens = useCallback(
     async (traceId: string) => {
-      setRemoteTokens(undefined);
       const tokens = await tokenService.listTokens(traceId);
       if (!tokens?.length) {
         throw new Error(
           'Empty remote tokens list. Should not happen as mobile token should already be initialized for this phone.',
         );
       }
-      setRemoteTokens(tokens);
+      return tokens;
     },
     [tokenService],
   );
@@ -201,31 +202,46 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
       const traceId = uuid();
       setIsLoading(true);
       setIsError(false);
+      setToken(undefined);
+      setRemoteTokens(undefined);
+      let nativeToken: ActivatedToken;
+      let remoteTokens: RemoteToken[];
       try {
         // Retry loading native token and remote tokens twice for improved stability
         try {
-          await loadNativeToken(traceId);
+          nativeToken = await loadNativeToken(traceId);
         } catch (_) {
-          await loadNativeToken(traceId);
+          nativeToken = await loadNativeToken(traceId);
         }
 
         try {
-          await loadRemoteTokens(traceId);
+          remoteTokens = await loadRemoteTokens(traceId);
         } catch (_) {
-          await loadRemoteTokens(traceId);
+          remoteTokens = await loadRemoteTokens(traceId);
         }
+        setToken(nativeToken);
+        setRemoteTokens(remoteTokens);
+        updateMetadata({
+          'AtB-Mobile-Token-Id': nativeToken.tokenId,
+          'AtB-Mobile-Token-Status': 'success',
+          'AtB-Mobile-Token-Error-Correlation-Id': undefined,
+        });
       } catch (err: any) {
         setIsError(true);
         /*
          Errors that needs a certain action should already be handled. Just log
          to Bugsnag here.
          */
+        updateMetadata({
+          'AtB-Mobile-Token-Id': undefined,
+          'AtB-Mobile-Token-Status': 'error',
+          'AtB-Mobile-Token-Error-Correlation-Id': traceId,
+        });
         Bugsnag.notify(err, (event) => {
           event.addMetadata('token', {
-            test: err instanceof RemoteTokenStateError,
-            errorType: err.constructor.name,
             abtCustomerId,
             traceId,
+            description: 'Error loading native and remote tokens',
           });
         });
       } finally {
@@ -245,10 +261,21 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
    */
   const getSignedToken = useCallback(async () => {
     if (token) {
-      return client.encode(token);
+      try {
+        return await client.encode(token);
+      } catch (err: any) {
+        Bugsnag.notify(err, (event) => {
+          event.addMetadata('token', {
+            abtCustomerId,
+            tokenId: token.tokenId,
+            description: 'Error encoding signed token',
+          });
+        });
+        return undefined;
+      }
     }
     return undefined;
-  }, [client]);
+  }, [client, token]);
 
   /**
    * Whether this device is inspectable or not. It is inspectable if:
@@ -296,6 +323,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
         createToken: () => client.create(uuid()).then(setToken),
         wipeToken: () =>
           wipeToken(token, uuid()).then(() => setToken(undefined)),
+        fallbackEnabled,
         validateToken: () =>
           client
             .encode(token!, [TokenAction.TOKEN_ACTION_GET_FARECONTRACTS])

@@ -17,12 +17,14 @@ enum storeKey {
   onboarding = '@ATB_onboarded',
   previousBuildNumber = '@ATB_previous_build_number',
   ticketing = '@ATB_ticket_informational_accepted',
+  mobileTokenOnboarding = '@ATB_mobile_token_onboarded',
 }
 type AppState = {
   isLoading: boolean;
   onboarded: boolean;
   ticketingAccepted: boolean;
   newBuildSincePreviousLaunch: boolean;
+  mobileTokenOnboarded: boolean;
 };
 
 type AppReducerAction =
@@ -31,17 +33,22 @@ type AppReducerAction =
       onboarded: boolean;
       ticketingAccepted: boolean;
       newBuildSincePreviousLaunch: boolean;
+      mobileTokenOnboarded: boolean;
     }
   | {type: 'COMPLETE_ONBOARDING'}
   | {type: 'RESTART_ONBOARDING'}
   | {type: 'ACCEPT_TICKETING'}
-  | {type: 'RESET_TICKETING'};
+  | {type: 'RESET_TICKETING'}
+  | {type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING'}
+  | {type: 'RESTART_MOBILE_TOKEN_ONBOARDING'};
 
 type AppContextState = AppState & {
   completeOnboarding: () => void;
   restartOnboarding: () => void;
   acceptTicketing: () => void;
   resetTicketing: () => void;
+  completeMobileTokenOnboarding: () => void;
+  restartMobileTokenOnboarding: () => void;
 };
 const AppContext = createContext<AppContextState | undefined>(undefined);
 const AppDispatch = createContext<Dispatch<AppReducerAction> | undefined>(
@@ -59,6 +66,7 @@ const appReducer: AppReducer = (prevState, action) => {
         ticketingAccepted: action.ticketingAccepted,
         newBuildSincePreviousLaunch: action.newBuildSincePreviousLaunch,
         isLoading: false,
+        mobileTokenOnboarded: action.mobileTokenOnboarded,
       };
     case 'COMPLETE_ONBOARDING':
       return {
@@ -80,6 +88,16 @@ const appReducer: AppReducer = (prevState, action) => {
         ...prevState,
         ticketingAccepted: false,
       };
+    case 'COMPLETE_MOBILE_TOKEN_ONBOARDING':
+      return {
+        ...prevState,
+        mobileTokenOnboarded: true,
+      };
+    case 'RESTART_MOBILE_TOKEN_ONBOARDING':
+      return {
+        ...prevState,
+        mobileTokenOnboarded: false,
+      };
   }
 };
 
@@ -88,6 +106,7 @@ const defaultAppState: AppState = {
   onboarded: false,
   ticketingAccepted: false,
   newBuildSincePreviousLaunch: false,
+  mobileTokenOnboarded: false,
 };
 
 const AppContextProvider: React.FC = ({children}) => {
@@ -102,6 +121,13 @@ const AppContextProvider: React.FC = ({children}) => {
       const ticketingAccepted = !savedTicketingAccepted
         ? false
         : JSON.parse(savedTicketingAccepted);
+
+      const savedmobileTokenOnboarded = await storage.get(
+        storeKey.mobileTokenOnboarding,
+      );
+      const mobileTokenOnboarded = !savedmobileTokenOnboarded
+        ? false
+        : JSON.parse(savedmobileTokenOnboarded);
 
       const previousBuildNumber = await storage.get(
         storeKey.previousBuildNumber,
@@ -122,6 +148,7 @@ const AppContextProvider: React.FC = ({children}) => {
         onboarded,
         ticketingAccepted,
         newBuildSincePreviousLaunch,
+        mobileTokenOnboarded,
       });
 
       RNBootSplash.hide({fade: true});
@@ -134,6 +161,8 @@ const AppContextProvider: React.FC = ({children}) => {
     restartOnboarding,
     acceptTicketing,
     resetTicketing,
+    completeMobileTokenOnboarding,
+    restartMobileTokenOnboarding,
   } = useMemo(
     () => ({
       completeOnboarding: async () => {
@@ -152,6 +181,13 @@ const AppContextProvider: React.FC = ({children}) => {
       resetTicketing: async () => {
         dispatch({type: 'RESET_TICKETING'});
       },
+      completeMobileTokenOnboarding: async () => {
+        await storage.set(storeKey.mobileTokenOnboarding, JSON.stringify(true));
+        dispatch({type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING'});
+      },
+      restartMobileTokenOnboarding: async () => {
+        dispatch({type: 'RESTART_MOBILE_TOKEN_ONBOARDING'});
+      },
     }),
     [],
   );
@@ -164,6 +200,8 @@ const AppContextProvider: React.FC = ({children}) => {
         restartOnboarding,
         acceptTicketing,
         resetTicketing,
+        completeMobileTokenOnboarding,
+        restartMobileTokenOnboarding,
       }}
     >
       <AppDispatch.Provider value={dispatch}>{children}</AppDispatch.Provider>

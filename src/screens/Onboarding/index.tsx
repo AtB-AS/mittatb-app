@@ -1,17 +1,8 @@
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
-import SkipLoginWarning from '@atb/login/SkipLoginWarning';
-import {
-  ConfirmCodeInOnboarding,
-  ConfirmCodeInOnboardingRouteParams,
-} from '@atb/login/in-onboarding/ConfirmCodeInOnboarding';
-import {PhoneInputInOnboarding} from '@atb/login/in-onboarding/PhoneInputInOnboarding';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {ConfirmCodeInOnboardingRouteParams} from '@atb/login/in-onboarding/ConfirmCodeInOnboarding';
 import IntercomInfo from '@atb/screens/Onboarding/IntercomInfo';
-import {
-  WelcomeScreenLogin,
-  WelcomeScreenWithoutLogin,
-} from '@atb/screens/Onboarding/WelcomeScreen';
+import {WelcomeScreenWithoutLogin} from '@atb/screens/Onboarding/WelcomeScreen';
 
 export type OnboardingStackParams = {
   WelcomeScreenLogin: undefined;
