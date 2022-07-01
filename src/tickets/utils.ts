@@ -37,9 +37,12 @@ export function isInspectable(
   hasActiveTravelCard: boolean,
   mobileTokenEnabled: boolean,
   deviceIsInspectable: boolean,
+  mobileTokenError: boolean,
+  fallbackEnabled: boolean,
 ): boolean {
-  if (mobileTokenEnabled) return deviceIsInspectable;
-  else return !hasActiveTravelCard && isSingleTicket(travelRight);
+  if (mobileTokenEnabled) {
+    return deviceIsInspectable || (mobileTokenError && fallbackEnabled);
+  } else return !hasActiveTravelCard && isSingleTicket(travelRight);
 }
 
 function isOrWillBeActivatedFareContract(f: FareContract): boolean {

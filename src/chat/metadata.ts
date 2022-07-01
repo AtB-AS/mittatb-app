@@ -14,9 +14,9 @@ type Metadata = {
   'AtB-Platform-OS': PlatformOSType;
   'AtB-OS-Font-Scale': number;
   'AtB-Screen-Size': string;
-  'AtB-Mobile-Token-State': string;
-  'AtB-Mobile-Token-VisualState': string;
-  'AtB-Mobile-Token-Error': string;
+  'AtB-Mobile-Token-Id': string;
+  'AtB-Mobile-Token-Status': 'success' | 'error';
+  'AtB-Mobile-Token-Error-Correlation-Id': string;
   'AtB-Beta-Departures': string;
   'AtB-Beta-TripSearch': string;
 };

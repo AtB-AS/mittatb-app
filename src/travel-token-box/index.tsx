@@ -19,13 +19,15 @@ import {RemoteToken} from '@atb/mobile-token/types';
 export default function TravelTokenBox({
   showIfThisDevice,
   showHowToChangeHint,
+  alwaysShowErrors,
 }: {
   showIfThisDevice: boolean;
   showHowToChangeHint?: boolean;
+  alwaysShowErrors?: boolean;
 }) {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {deviceIsInspectable, remoteTokens, isLoading} =
+  const {deviceIsInspectable, remoteTokens, isLoading, fallbackEnabled} =
     useMobileTokenContextState();
 
   if (isLoading) {
@@ -36,14 +38,19 @@ export default function TravelTokenBox({
     );
   }
 
-  const errorMessages = ErrorMessages(remoteTokens);
+  const errorMessages = ErrorMessages(
+    fallbackEnabled,
+    alwaysShowErrors,
+    remoteTokens,
+  );
   if (errorMessages) return errorMessages;
 
   if (deviceIsInspectable && !showIfThisDevice) {
     return null;
   }
 
-  const inspectableToken = findInspectable(remoteTokens)!; // Bang! non-inspectable tokens are handled by ErrorMessages
+  const inspectableToken = findInspectable(remoteTokens);
+  if (!inspectableToken) return null;
 
   const a11yLabel =
     (isTravelCardToken(inspectableToken)
@@ -72,7 +79,7 @@ export default function TravelTokenBox({
           style={{alignItems: 'center'}}
           testID={inspectableToken.type + 'Icon'}
         >
-          {inspectableToken.type === 'travelCard' ? (
+          {isTravelCardToken(inspectableToken) ? (
             <ThemedTokenTravelCard />
           ) : (
             <ThemedTokenPhone />
@@ -145,13 +152,17 @@ const TravelDeviceTitle = ({
   }
 };
 
-const ErrorMessages = (remoteTokens?: RemoteToken[]) => {
+const ErrorMessages = (
+  fallbackEnabled: boolean,
+  alwaysShowErrors?: boolean,
+  remoteTokens?: RemoteToken[],
+) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const {isError, retry} = useMobileTokenContextState();
 
   if (isError) {
-    return (
+    return fallbackEnabled && !alwaysShowErrors ? null : (
       <MessageBox
         type={'warning'}
         title={t(TravelTokenBoxTexts.errorMessages.tokensNotLoadedTitle)}

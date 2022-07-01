@@ -1,5 +1,5 @@
 import {StyleSheet, Theme} from '@atb/theme';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ActivityIndicator, View} from 'react-native';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
@@ -117,7 +117,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
             icon={<ThemedTokenPhone />}
             type="spacious"
             onPress={() => {
-              if (selectedToken?.type !== 'mobile') {
+              if (!isMobileToken(selectedToken)) {
                 animateNextChange();
                 setSelectedType('mobile');
                 setSelectedToken(mobileTokens?.[0]);

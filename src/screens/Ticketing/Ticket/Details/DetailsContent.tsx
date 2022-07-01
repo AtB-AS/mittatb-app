@@ -11,7 +11,6 @@ import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import QrCode from '@atb/screens/Ticketing/Ticket/Details/QrCode';
-import PaperQrCode from '@atb/screens/Ticketing/Ticket/Details/PaperQrCode';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
@@ -32,7 +31,11 @@ const DetailsContent: React.FC<Props> = ({
 }) => {
   const {t, language} = useTranslation();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {deviceIsInspectable} = useMobileTokenContextState();
+  const {
+    deviceIsInspectable,
+    isError: mobileTokenError,
+    fallbackEnabled,
+  } = useMobileTokenContextState();
 
   const firstTravelRight = fc.travelRights[0];
   if (isPreactivatedTicket(firstTravelRight)) {
@@ -43,6 +46,8 @@ const DetailsContent: React.FC<Props> = ({
       hasActiveTravelCard,
       hasEnabledMobileToken,
       deviceIsInspectable,
+      mobileTokenError,
+      fallbackEnabled,
     );
 
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
@@ -96,15 +101,11 @@ const DetailsContent: React.FC<Props> = ({
           accessibility={{accessibilityRole: 'button'}}
           testID="receiptButton"
         />
-        {hasEnabledMobileToken ? (
-          <QrCode validityStatus={validityStatus} />
-        ) : (
-          <PaperQrCode
-            validityStatus={validityStatus}
-            isInspectable={inspectable}
-            fc={fc}
-          />
-        )}
+        <QrCode
+          validityStatus={validityStatus}
+          isInspectable={inspectable}
+          fc={fc}
+        />
       </Sections.Section>
     );
   } else {

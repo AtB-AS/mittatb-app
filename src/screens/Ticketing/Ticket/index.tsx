@@ -32,12 +32,18 @@ const SimpleTicket: React.FC<Props> = ({
 }) => {
   const firstTravelRight = fc.travelRights?.[0];
   const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {deviceIsInspectable} = useMobileTokenContextState();
+  const {
+    deviceIsInspectable,
+    isError: mobileTokenError,
+    fallbackEnabled,
+  } = useMobileTokenContextState();
   const inspectable = isInspectable(
     firstTravelRight,
     hasActiveTravelCard,
     hasEnabledMobileToken,
     deviceIsInspectable,
+    mobileTokenError,
+    fallbackEnabled,
   );
 
   if (isPreactivatedTicket(firstTravelRight)) {
