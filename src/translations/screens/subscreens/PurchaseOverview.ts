@@ -63,6 +63,7 @@ const PurchaseOverviewTexts = {
       `Du kan ikke reise med ${deviceName}. Du kan bytte hvor du bruker billetten din fra **Min profil**.`,
       `You cannot use ${deviceName} when you travel. You can change which device to use your tickets on from **My profile**.`,
     ),
+  unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   zones: {
     label: {
       singleZone: {

@@ -24,12 +24,9 @@ export const getDeviceName = (remoteToken?: RemoteToken) =>
   remoteToken?.keyValues?.find((kv) => kv.key === 'deviceName')?.value;
 
 export const getDeviceNameForCurrentToken = (
-  activatedToken?: ActivatedToken,
+  currentTokenId?: string,
   remoteTokens?: RemoteToken[],
-) =>
-  getDeviceName(
-    remoteTokens?.find((token) => token.id === activatedToken?.getTokenId()),
-  );
+) => getDeviceName(remoteTokens?.find((token) => token.id === currentTokenId));
 
 export const getTravelCardId = (remoteToken?: RemoteToken) =>
   remoteToken?.keyValues?.find((kv) => kv.key === 'travelCardId')?.value;

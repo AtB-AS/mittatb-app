@@ -10,6 +10,7 @@ import {StyleSheet} from '@atb/theme';
 import {
   Language,
   PurchaseOverviewTexts,
+  TicketTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
@@ -205,7 +206,10 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             containerStyle={styles.warning}
             message={t(
               PurchaseOverviewTexts.notInspectableTokenDeviceWarning(
-                getDeviceNameForCurrentToken(token, remoteTokens),
+                getDeviceNameForCurrentToken(
+                  token?.getTokenId(),
+                  remoteTokens,
+                ) || t(PurchaseOverviewTexts.unnamedDevice),
               ),
             )}
             type="warning"
