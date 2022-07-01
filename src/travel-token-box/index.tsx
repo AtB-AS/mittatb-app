@@ -38,11 +38,7 @@ export default function TravelTokenBox({
     );
   }
 
-  const errorMessages = ErrorMessages(
-    fallbackEnabled,
-    alwaysShowErrors,
-    remoteTokens,
-  );
+  const errorMessages = ErrorMessages(alwaysShowErrors);
   if (errorMessages) return errorMessages;
 
   if (deviceIsInspectable && !showIfThisDevice) {
@@ -152,14 +148,11 @@ const TravelDeviceTitle = ({
   }
 };
 
-const ErrorMessages = (
-  fallbackEnabled: boolean,
-  alwaysShowErrors?: boolean,
-  remoteTokens?: RemoteToken[],
-) => {
+const ErrorMessages = (alwaysShowErrors?: boolean) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {isError, retry} = useMobileTokenContextState();
+  const {isError, retry, remoteTokens, fallbackEnabled} =
+    useMobileTokenContextState();
 
   if (isError) {
     return fallbackEnabled && !alwaysShowErrors ? null : (

@@ -1,6 +1,6 @@
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
-import {FareContract, isInspectable, isPreactivatedTicket} from '@atb/tickets';
+import {FareContract, isInspectableTicket, isPreactivatedTicket} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
@@ -41,7 +41,7 @@ const DetailsContent: React.FC<Props> = ({
   if (isPreactivatedTicket(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
-    const inspectable = isInspectable(
+    const ticketIsInspectable = isInspectableTicket(
       firstTravelRight,
       hasActiveTravelCard,
       hasEnabledMobileToken,
@@ -62,19 +62,19 @@ const DetailsContent: React.FC<Props> = ({
             now={now}
             validFrom={validFrom}
             validTo={validTo}
-            isInspectable={inspectable}
+            isInspectable={ticketIsInspectable}
           />
           <ValidityLine
             status={validityStatus}
             now={now}
             validFrom={validFrom}
             validTo={validTo}
-            isInspectable={inspectable}
+            isInspectable={ticketIsInspectable}
           />
           <TicketInfo
             travelRights={fc.travelRights.filter(isPreactivatedTicket)}
             status={validityStatus}
-            isInspectable={inspectable}
+            isInspectable={ticketIsInspectable}
             testID={'details'}
           />
         </Sections.GenericItem>
@@ -103,7 +103,7 @@ const DetailsContent: React.FC<Props> = ({
         />
         <QrCode
           validityStatus={validityStatus}
-          isInspectable={inspectable}
+          ticketIsInspectable={ticketIsInspectable}
           fc={fc}
         />
       </Sections.Section>

@@ -22,16 +22,16 @@ import {FareContract} from '@atb/tickets';
 
 type Props = {
   validityStatus: ValidityStatus;
-  isInspectable: boolean;
+  ticketIsInspectable: boolean;
   fc: FareContract;
 };
 
 export default function QrCode({
   validityStatus,
-  isInspectable,
+  ticketIsInspectable,
   fc,
 }: Props): JSX.Element | null {
-  const status = useQrCodeStatus(validityStatus, isInspectable);
+  const status = useQrCodeStatus(validityStatus, ticketIsInspectable);
 
   switch (status) {
     case 'none':
@@ -49,13 +49,13 @@ export default function QrCode({
 
 const useQrCodeStatus = (
   validityStatus: ValidityStatus,
-  isInspectable: boolean,
+  ticketIsInspectable: boolean,
 ) => {
   const {remoteTokens, deviceIsInspectable, isLoading, isError} =
     useMobileTokenContextState();
   const mobileTokenEnabled = useHasEnabledMobileToken();
 
-  if (!isInspectable) return 'none';
+  if (!ticketIsInspectable) return 'none';
   if (validityStatus !== 'valid') return 'none';
 
   if (!mobileTokenEnabled) return 'static';

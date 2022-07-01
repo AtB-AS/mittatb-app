@@ -32,7 +32,7 @@ export function isSingleTicket(
   return travelRight?.type === 'PreActivatedSingleTicket';
 }
 
-export function isInspectable(
+export function isInspectableTicket(
   travelRight: TravelRight,
   hasActiveTravelCard: boolean,
   mobileTokenEnabled: boolean,

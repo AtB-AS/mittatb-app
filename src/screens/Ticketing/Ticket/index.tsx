@@ -1,7 +1,7 @@
 import {
   FareContract,
   isCarnetTicket,
-  isInspectable,
+  isInspectableTicket,
   isPreactivatedTicket,
 } from '@atb/tickets';
 import React from 'react';
@@ -37,7 +37,7 @@ const SimpleTicket: React.FC<Props> = ({
     isError: mobileTokenError,
     fallbackEnabled,
   } = useMobileTokenContextState();
-  const inspectable = isInspectable(
+  const ticketIsInspectable = isInspectableTicket(
     firstTravelRight,
     hasActiveTravelCard,
     hasEnabledMobileToken,
@@ -52,7 +52,7 @@ const SimpleTicket: React.FC<Props> = ({
         fareContractState={fc.state}
         travelRights={fc.travelRights.filter(isPreactivatedTicket)}
         now={now}
-        isInspectable={inspectable}
+        isInspectable={ticketIsInspectable}
         hideDetails={hideDetails}
         onPressDetails={onPressDetails}
         testID={testID}
@@ -64,7 +64,7 @@ const SimpleTicket: React.FC<Props> = ({
         fareContractState={fc.state}
         travelRights={fc.travelRights.filter(isCarnetTicket)}
         now={now}
-        isInspectable={inspectable}
+        isInspectable={ticketIsInspectable}
         testID={testID}
       />
     );

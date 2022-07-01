@@ -73,8 +73,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const showInspectableTokenWarning =
     tokensEnabled &&
-    ((mobileTokenError && !fallbackEnabled) ||
-      (!mobileTokenError && !deviceIsInspectable));
+    (mobileTokenError ? !fallbackEnabled : !deviceIsInspectable);
 
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
 
