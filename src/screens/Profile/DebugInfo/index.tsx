@@ -19,7 +19,6 @@ import {usePreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import Button from '@atb/components/button';
 import {useNavigation} from '@react-navigation/native';
-import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
