@@ -1,6 +1,10 @@
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
-import {FareContract, isInspectableTicket, isPreactivatedTicket} from '@atb/tickets';
+import {
+  FareContract,
+  isInspectableTicket,
+  isPreactivatedTicket,
+} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
