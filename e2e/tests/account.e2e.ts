@@ -109,7 +109,7 @@ describe('Account', () => {
       );
 
       await tapById('ticket0Details');
-      await expectNotToExistsById('paperQRCode');
+      await expectNotToExistsById('staticQRCode');
       await expectNotToExistsById('mobileTokenQRCode');
       await goBack();
     };
@@ -150,7 +150,7 @@ describe('Account', () => {
       );
 
       await tapById('ticket0Details');
-      await expectNotToExistsById('paperQRCode');
+      await expectNotToExistsById('staticQRCode');
       await expectNotToExistsById('mobileTokenQRCode');
       await goBack();
     };

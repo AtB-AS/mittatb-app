@@ -60,14 +60,20 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {deviceIsInspectable} = useMobileTokenContextState();
+  const {
+    deviceIsInspectable,
+    isError: mobileTokenError,
+    fallbackEnabled,
+  } = useMobileTokenContextState();
   const tokensEnabled = useHasEnabledMobileToken();
   const {customerProfile} = useTicketState();
   const hasProfileTravelCard = !!customerProfile?.travelcard;
 
   const showProfileTravelcardWarning = !tokensEnabled && hasProfileTravelCard;
 
-  const showNotInspectableTokenWarning = tokensEnabled && !deviceIsInspectable;
+  const showInspectableTokenWarning =
+    tokensEnabled &&
+    (mobileTokenError ? !fallbackEnabled : !deviceIsInspectable);
 
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
 
@@ -190,7 +196,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           />
         )}
 
-        {showNotInspectableTokenWarning && (
+        {showInspectableTokenWarning && (
           <MessageBox
             isMarkdown={true}
             containerStyle={styles.warning}
