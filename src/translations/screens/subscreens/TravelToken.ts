@@ -61,13 +61,13 @@ const SelectTravelTokenTexts = {
     title: _('Bytt mellom mobil / t:kort', 'Switch between phone / t:card'),
     radioBox: {
       tCard: {
-        title: _('T:kort', 'T:card'),
+        title: _('t:kort', 't:card'),
         description: _(
           'Les av t:kortet ditt på holdeplass eller om bord. Kortet leses av ved kontroll.',
           'Validate your t:card at the bus stop or on board. The card will be scanned in a ticket inspection.',
         ),
         a11yLabel: _(
-          'T:kort. Les av t-kortet ditt på holdeplass eller om bord. Kortet leses av ved kontroll.',
+          't:kort. Les av t-kortet ditt på holdeplass eller om bord. Kortet leses av ved kontroll.',
           't:card. Validate your t:card at the bus stop or on board. The card will be scanned in a ticket inspection.',
         ),
         a11yHint: _('Aktivér for å velge t:kort.', 'Activate to select t:card'),

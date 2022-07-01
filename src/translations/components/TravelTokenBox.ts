@@ -2,7 +2,7 @@ import {translation as _} from '../commons';
 import orgSpecificTranslations from '@atb/translations/utils';
 const TravelTokenBoxTexts = {
   tcard: {
-    title: _('T:kort', 'T:card'),
+    title: _('t:kort', 't:card'),
     description: _(
       'Ta med deg t:kortet når du er ute og reiser.',
       'Remember to bring your t:card when you travel.',

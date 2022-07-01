@@ -17,6 +17,13 @@ jobs:
     timeout-minutes: 90
     runs-on: macos-11
     steps:
+      - name: Checkout temp mobiletoken sdk
+        uses: actions/checkout@v3
+        with:
+          repository: 'AtB-AS/temp-mobiletoken-sdk'
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
+      - name: Publish temp mobiletoken sdk
+        run: npx yalc publish
       - name: Checkout project
         uses: actions/checkout@v1
       - name: Set global env vars
@@ -34,6 +41,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16
+      - name: Yalc add temp mobiletoken sdk
+        run: npx yalc add @entur/atb-mobile-client-sdk
       - name: Get potential cached node_modules
         uses: actions/cache@v2
         id: modules-cache

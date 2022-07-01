@@ -16,6 +16,10 @@ export const isTravelCardToken = (remoteToken?: RemoteToken) =>
 export const isMobileToken = (remoteToken?: RemoteToken) =>
   remoteToken?.type === 'TOKEN_TYPE_MOBILE';
 
+export const hasNoTokenType = (remoteToken?: RemoteToken) =>
+  remoteToken?.type !== 'TOKEN_TYPE_TRAVELCARD' &&
+  remoteToken?.type !== 'TOKEN_TYPE_MOBILE';
+
 export const getDeviceName = (remoteToken?: RemoteToken) =>
   remoteToken?.keyValues?.find((kv) => kv.key === 'deviceName')?.value;
 

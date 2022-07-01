@@ -40,7 +40,7 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
         leftButton={{type: 'back'}}
       />
       <ScrollView style={styles.scrollView}>
-        <TravelTokenBox showIfThisDevice={true} />
+        <TravelTokenBox showIfThisDevice={true} alwaysShowErrors={true} />
         <ChangeTokenButton
           onPress={() => navigation.navigate('SelectTravelToken')}
         />

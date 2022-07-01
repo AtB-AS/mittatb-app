@@ -5,6 +5,7 @@ on:
       - '**.js'
       - '**.ts'
       - '**.tsx'
+      - '**/tsc.yml'
 
 jobs:
   tsc:
@@ -14,11 +15,20 @@ jobs:
         org: [atb, nfk]
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout temp mobiletoken sdk
+        uses: actions/checkout@v3
+        with:
+          repository: 'AtB-AS/temp-mobiletoken-sdk'
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
+      - name: Publish temp mobiletoken sdk
+        run: npx yalc publish
       - uses: actions/checkout@v1
       - name: install node v16
         uses: actions/setup-node@v1
         with:
           node-version: 16
+      - name: Yalc add temp mobiletoken sdk
+        run: npx yalc add @entur/atb-mobile-client-sdk
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'

@@ -32,14 +32,17 @@ export function isSingleTicket(
   return travelRight?.type === 'PreActivatedSingleTicket';
 }
 
-export function isInspectable(
+export function isInspectableTicket(
   travelRight: TravelRight,
   hasActiveTravelCard: boolean,
   mobileTokenEnabled: boolean,
   deviceIsInspectable: boolean,
+  mobileTokenError: boolean,
+  fallbackEnabled: boolean,
 ): boolean {
-  if (mobileTokenEnabled) return deviceIsInspectable;
-  else return !hasActiveTravelCard && isSingleTicket(travelRight);
+  if (mobileTokenEnabled) {
+    return deviceIsInspectable || (mobileTokenError && fallbackEnabled);
+  } else return !hasActiveTravelCard && isSingleTicket(travelRight);
 }
 
 function isOrWillBeActivatedFareContract(f: FareContract): boolean {
