@@ -116,12 +116,6 @@ const WarningMessage = (
         {t(TicketTexts.warning.unableToRetrieveToken)}
       </ThemeText>
     );
-  if (remoteTokens && remoteTokens.length === 0)
-    return (
-      <ThemeText type="body__secondary">
-        {t(TicketTexts.warning.noTokenFound)}
-      </ThemeText>
-    );
   if (!inspectableToken)
     return (
       <ThemeText type="body__secondary">

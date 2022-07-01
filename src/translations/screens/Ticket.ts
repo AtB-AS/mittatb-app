@@ -126,10 +126,6 @@ const TicketTexts = {
       'Feil ved uthenting av mobil / t:kort',
       'Error retrieving mobile / t: card',
     ),
-    noTokenFound: _(
-      'Finner ikke t:kort / mobil på profilen din',
-      "Can't find t: card / mobile on your profile",
-    ),
     noInspectableTokenFound: _(
       'Du må bruke billett på t:kort eller mobil',
       'You must use a ticket on t: card or mobile',
