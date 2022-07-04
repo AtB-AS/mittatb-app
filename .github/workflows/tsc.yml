@@ -25,7 +25,9 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: yarn install
-        run: yarn install
+        run: |
+          ls -al ./npmrc
+          yarn install
       - name: Install assets
         run: sh ./scripts/generate-assets.sh ${{ matrix.org }}
       - name: tsc
