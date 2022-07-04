@@ -22,8 +22,8 @@ target 'atb' do
 
   $DontUseVendoredAbtMobile = true
   
-  pod 'AbtTokenCoreSDK', :path => '../.yalc/@entur/atb-mobile-client-sdk/token/token-core-ios-lib/AbtTokenCoreSDK'
-  pod 'token-state-react-native-lib-ios', :path => '../.yalc/@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/ios'
+  pod 'AbtTokenCoreSDK', :git => 'https://github.com/AtB-AS/temp-token-core-ios-lib.git'
+  pod 'token-state-react-native-lib-ios', :path => '../node_modules/@entur/abt-token-state-react-native-lib/ios'
 
   target 'atbTests' do
     inherit! :complete

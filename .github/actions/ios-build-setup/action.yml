@@ -32,16 +32,13 @@ runs:
         uses: actions/setup-node@v1
         with:
           node-version: 16
-      - name: Yalc add temp mobiletoken sdk
-        shell: bash
-        run: npx yalc add @entur/atb-mobile-client-sdk
       - name: Get potential cached node_modules
         uses: actions/cache@v2
         id: modules-cache
         if: ${{ inputs.use-build-cache }} == 'true'
         with:
           path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.yalc/**') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Install node_modules
         shell: bash
         if: ${{ inputs.use-build-cache }} != 'true' || steps.modules-cache.outputs.cache-hit != 'true'

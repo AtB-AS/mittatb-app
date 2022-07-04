@@ -1,6 +1,5 @@
 import {RemoteToken} from '@atb/mobile-token/types';
-import {TokenAction} from '../../.yalc/@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/src';
-import {ActivatedToken} from '@entur/atb-mobile-client-sdk/token/token-core-javascript-lib';
+import {TokenAction} from '@entur/abt-mobile-client-sdk';
 
 export const findInspectable = (remoteTokens?: RemoteToken[]) =>
   remoteTokens?.find(isInspectable);
