@@ -166,19 +166,21 @@ const service: TokenService = {
         .catch(grpcErrorHandler),
     ),
   validate: async (token, secureContainer, traceId) =>
-    handleReattest<any>(async (attestation) => {
-      await client.get('/tokens/v3/validate', {
-        headers: {
-          [CorrelationIdHeaderName]: traceId,
-          [SignedTokenHeaderName]: secureContainer,
-          [AttestationHeaderName]: attestation?.data || '',
-          [AttestationTypeHeaderName]: attestation?.type || '',
-        },
-        authWithIdToken: true,
-      });
-    }, token)
-      .catch(grpcErrorHandler)
-      .catch(handleRemoteError),
+    handleReattest<any>(
+      async (attestation) =>
+        client
+          .get('/tokens/v3/validate', {
+            headers: {
+              [CorrelationIdHeaderName]: traceId,
+              [SignedTokenHeaderName]: secureContainer,
+              [AttestationHeaderName]: attestation?.data || '',
+              [AttestationTypeHeaderName]: attestation?.type || '',
+            },
+            authWithIdToken: true,
+          })
+          .catch(grpcErrorHandler),
+      token,
+    ),
 };
 
 export default function createTokenService() {
