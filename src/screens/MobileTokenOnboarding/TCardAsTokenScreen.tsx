@@ -35,7 +35,7 @@ export function TCardAsTokenScreen({
         <View>
           <ThemeText
             type="heading--jumbo"
-            style={[styles.alignCenter, styles.marginVertical]}
+            style={[styles.header, styles.marginVertical]}
             color={themeColor}
             isMarkdown={true}
           >
@@ -95,13 +95,18 @@ export function TCardAsTokenScreen({
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.xLarge,
+    flex: 1,
+    backgroundColor: theme.static.background[themeColor].background,
+    paddingTop: '35%',
+    paddingBottom: '10%'
   },
-  alignCenter: {
+  header: {
     textAlign: 'center',
+    alignSelf: 'center',
+    width: '85%'
   },
   mainView: {
-    marginTop: 164,
-    height: 430,
+    height: '80%',
   },
   marginVertical: {
     marginTop: 44,
@@ -125,7 +130,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   mobileTokenContainer: {
     backgroundColor: theme.static.background.background_accent_2.background,
-    height: 178,
+    height: '42%',
     marginVertical: theme.spacings.xLarge,
     borderRadius: theme.border.radius.regular,
     padding: 24,

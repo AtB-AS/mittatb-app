@@ -27,15 +27,21 @@ export function NoMobileTokenScreen({
 
   return (
     <View style={styles.container}>
-      <ThemeText type="heading--jumbo" style={styles.header} color={themeColor}>
-        {t(MobileTokenOnboardingTexts.error.heading)}
-      </ThemeText>
-      <View style={styles.svgContainer}>
-        <CrashSmall width="185px" height="185px" />
+      <View style={styles.mainView}>
+        <ThemeText
+          type="heading--jumbo"
+          style={styles.header}
+          color={themeColor}
+        >
+          {t(MobileTokenOnboardingTexts.error.heading)}
+        </ThemeText>
+        <View style={styles.svgContainer}>
+          <CrashSmall width="185px" height="185px" />
+        </View>
+        <ThemeText style={styles.description} color={themeColor}>
+          {t(MobileTokenOnboardingTexts.error.description)}
+        </ThemeText>
       </View>
-      <ThemeText style={styles.description} color={themeColor}>
-        {t(MobileTokenOnboardingTexts.error.description)}
-      </ThemeText>
       <View style={styles.bottomView}>
         <Button
           interactiveColor="interactive_0"
@@ -58,10 +64,15 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     paddingHorizontal: theme.spacings.xLarge,
+    backgroundColor: theme.static.background[themeColor].background,
+    paddingTop: '25%',
+    flex: 1,
+  },
+  mainView: {
+    height: '75%',
   },
   header: {
-    marginTop: 100,
-    width: 303,
+    width: '80%',
     alignSelf: 'center',
     textAlign: 'center',
   },
@@ -70,6 +81,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
   },
   bottomView: {
-    marginTop: 34,
+    marginTop: '20%',
   },
 }));

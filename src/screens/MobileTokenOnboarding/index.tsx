@@ -1,7 +1,7 @@
 import {StyleSheet} from '@atb/theme';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import React from 'react';
-import {View} from 'react-native';
+import {ScrollView} from 'react-native';
 
 import {StaticColorByType} from '@atb/theme/colors';
 import {
@@ -31,7 +31,7 @@ const Tab = createMaterialTopTabNavigator<MobileTokenTabParams>();
 export default function Index() {
   const styles = useStyles();
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Tab.Navigator
         tabBar={(props) => {
           return <PageIndicator {...props} />;
@@ -60,7 +60,7 @@ export default function Index() {
           component={MobileToken}
         />
       </Tab.Navigator>
-    </View>
+    </ScrollView>
   );
 }
 

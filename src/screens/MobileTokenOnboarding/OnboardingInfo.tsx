@@ -38,7 +38,9 @@ export function FlexibilityInfoScreen({
             {t(MobileTokenOnboardingTexts.flexibilityInfo.heading)}
           </ThemeText>
         </View>
-        <TravelPlanning style={styles.alignCenter} />
+        <View style={styles.illustration}>
+          <TravelPlanning style={styles.alignCenter} />
+        </View>
         <ThemeText
           color={themeColor}
           style={[styles.alignCenter, styles.description]}
@@ -162,18 +164,16 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background[themeColor].background,
     flex: 1,
     paddingHorizontal: theme.spacings.xLarge,
-    paddingTop: 92.5,
+    paddingTop: '40%',
   },
   mainView: {
-    height: 503,
+    height: '75%',
   },
   paddingLarge: {
     padding: theme.spacings.medium,
   },
   header: {
-    marginTop: 55,
-    height: 100,
-    width: 327,
+    width: '85%',
     marginBottom: theme.spacings.xLarge,
   },
   alignCenter: {

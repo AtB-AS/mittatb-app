@@ -24,7 +24,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   pageIndicator: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 38.5,
+    marginBottom: theme.spacings.xLarge,
+    marginTop: theme.spacings.xLarge
   },
   pageDot: {
     height: theme.spacings.medium,
