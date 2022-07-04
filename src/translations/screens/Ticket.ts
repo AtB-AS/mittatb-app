@@ -139,6 +139,7 @@ const TicketTexts = {
         `Bruk ${deviceName} når du reiser`,
         `Bring ${deviceName} when you travel`,
       ),
+    unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },
 };
 export default TicketTexts;
