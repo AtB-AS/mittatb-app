@@ -20,18 +20,16 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16
-      - uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: yarn install
-        run: |
-          ls -al ./.npmrc
-          yarn install
+        run: yarn install
       - name: Install assets
         run: sh ./scripts/generate-assets.sh ${{ matrix.org }}
       - name: tsc
