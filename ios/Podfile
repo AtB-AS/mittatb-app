@@ -21,8 +21,12 @@ target 'atb' do
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
 
   $DontUseVendoredAbtMobile = true
-  
-  pod 'AbtTokenCoreSDK', :git => 'https://github.com/AtB-AS/temp-token-core-ios-lib.git'
+
+  if ENV['GH_ACCESS_TOKEN']
+    pod 'AbtTokenCoreSDK', :git => 'https://' + ENV['GH_ACCESS_TOKEN'] + '@github.com/AtB-AS/temp-token-core-ios-lib.git'
+  else
+    pod 'AbtTokenCoreSDK', :git => 'https://github.com/AtB-AS/temp-token-core-ios-lib.git'
+  end
   pod 'token-state-react-native-lib-ios', :path => '../node_modules/@entur/abt-token-state-react-native-lib/ios'
 
   target 'atbTests' do
