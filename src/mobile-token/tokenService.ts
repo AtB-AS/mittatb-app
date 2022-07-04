@@ -1,5 +1,5 @@
 import {RemoteTokenService} from '@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/src';
-import client from '@atb/api/client';
+import {createClient} from '@atb/api/client';
 import {
   ActivateResponse,
   CompleteResponse,
@@ -17,6 +17,7 @@ import {
 import {handleRemoteError} from '../../.yalc/@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/src/state/remote/utils';
 import axios from 'axios';
 import {getDeviceName} from 'react-native-device-info';
+import {API_BASE_URL} from '@env';
 
 const CorrelationIdHeaderName = 'Atb-Correlation-Id';
 const SignedTokenHeaderName = 'Atb-Signed-Token';
@@ -27,6 +28,8 @@ const IsEmulatorHeaderName = 'Atb-Is-Emulator';
 type ListTokensResponse = {
   tokens: RemoteToken[];
 };
+
+const client = createClient(API_BASE_URL, 15000);
 
 export type TokenService = RemoteTokenService & {
   removeToken: (tokenId: string, traceId: string) => Promise<boolean>;
