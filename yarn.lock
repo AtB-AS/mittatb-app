@@ -1807,10 +1807,10 @@
   resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur/abt-token-core-javascript-lib/-/@entur/abt-token-core-javascript-lib-1.0.5-rc.0.tgz#9d6d37abec8dbf9269258dcf926fc3190900cc33"
   integrity sha512-Xsfol52igK9uI7CJeV8Zrytrh/gjPnEwDNM0EqGYpTustgR/8iimQGPlhOZ0S0TpdsxQClEwnx3Rel39WRfdJg==
 
-"@entur/abt-token-server-node-lib@^1.0.0":
-  version "1.0.0"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur/abt-token-server-node-lib/-/@entur/abt-token-server-node-lib-1.0.0.tgz#220157512c6386ea769b372dbf0e9043ef156ef3"
-  integrity sha512-H6vNamT5JNDe4sDbXaWLDyPjxaEhpoeQcAR+/FJyg/FoNNPoY0g+IkoCiJQzpJs5qoqnWHZSpNQ7wWuxePpYUQ==
+"@entur/abt-token-server-node-lib@^1.0.5-rc.0":
+  version "1.0.5-rc.0"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur/abt-token-server-node-lib/-/@entur/abt-token-server-node-lib-1.0.5-rc.0.tgz#8c507b9f35c7be816912ca0ae4cb10130b29760c"
+  integrity sha512-7OxBciE+f6nMN+Nmg1TD8kwvvvqNGhoqA9MsauXarUFA4Z1NzLkp4OX/BCwReNrviJ/fZvqGdfRfIaS7uI7roA==
   dependencies:
     "@entur-private/abt-protobuf-js-grpc-node" "2.384.0"
     "@stackpath/node-grpc-error-details" "^1.1.3"
