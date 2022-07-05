@@ -55,6 +55,7 @@ export default function DebugInfo() {
     wipeToken,
     validateToken,
     removeRemoteToken,
+    fallbackEnabled,
   } = useMobileTokenContextState();
 
   const mobileTokenEnabled = useHasEnabledMobileToken();
@@ -270,6 +271,7 @@ export default function DebugInfo() {
                       <ThemeText>{`Token end: ${new Date(
                         token.getValidityEnd(),
                       ).toISOString()}`}</ThemeText>
+                      <ThemeText>{`Fallback enabled: ${fallbackEnabled}`}</ThemeText>
                     </View>
                   )}
                   <Button
