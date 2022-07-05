@@ -10,11 +10,7 @@ echo "@entur-private:registry=https://entur2.jfrog.io/entur2/api/npm/partner-npm
 echo "//entur2.jfrog.io/entur2/api/npm/partner-npm-local/:_authToken=$ENTUR_REGISTRY_TOKEN" >> $NPMRC_FILE
 
 GRADLE_DIRECTORY="$HOME/.gradle"
-if [[
-    ! -e $GRADLE_DIRECTORY
-   ]];then
-    mkdir $GRADLE_DIRECTORY
-fi
+mkdir -p $GRADLE_DIRECTORY
 GRADLE_PROPERTIES="$GRADLE_DIRECTORY/gradle.properties"
 echo "Adding Entur registry properties to $GRADLE_PROPERTIES"
 
