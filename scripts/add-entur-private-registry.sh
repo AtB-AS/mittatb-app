@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "Adding Entur private registry credentials"
 
 NPMRC_FILE="$HOME/.npmrc"
