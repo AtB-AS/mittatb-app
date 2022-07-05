@@ -1,5 +1,6 @@
 name: TypeScript Check
 on:
+  workflow_dispatch:
   push:
     paths:
       - '**.js'
