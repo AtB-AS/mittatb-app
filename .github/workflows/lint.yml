@@ -14,6 +14,7 @@ jobs:
     strategy:
       matrix:
         org: [atb, nfk]
+    environment: ${{ matrix.org }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
