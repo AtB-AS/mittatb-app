@@ -41,13 +41,10 @@ function shouldRetry(error: AxiosError): boolean {
   );
 }
 
-export function createClient(baseUrl: string | undefined, timeout?: number) {
-  const axiosConfig: AxiosRequestConfig = {
+export function createClient(baseUrl: string | undefined) {
+  const client = axios.create({
     baseURL: baseUrl,
-  };
-  if (timeout) axiosConfig.timeout = timeout;
-
-  const client = axios.create(axiosConfig);
+  });
   axiosBetterStacktrace(client, {
     errorMsg: 'Inner error',
   });
