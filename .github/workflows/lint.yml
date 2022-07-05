@@ -25,6 +25,9 @@ jobs:
       - name: Add Entur private registry credentials
         run: sh ./scripts/add-entur-private-registry.sh
         env:
+          TEST_SECRET: 'whatever'
+          NON_ENV_SECRET: ${{ secrets.GH_ACCESS_TOKEN }}
+          OTHER_ENV_SECRET: ${{ secrets.ABT_ENTUR_CLIENT_ID_STAGING }}
           ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - uses: actions/cache@v2
