@@ -34,18 +34,19 @@ We love feedback and suggestions. The AtB app and service is continously improve
 
 1. Setup Entur private registry in `.npmrc` and `gradle.properties`.
    1. Get access to Entur jfrog registry (https://entur2.jfrog.io/) for your mittatb account
-   2. Create an identity token for your jfrog user in jfrog user setting
-   3. Run this script:
+   1. Create an identity token for your jfrog user in jfrog user setting
+   1. Run this script:
    ```
    ENTUR_REGISTRY_USER=<USER_EMAIL> ENTUR_REGISTRY_TOKEN=<IDENTITY_TOKEN> ./scripts/add-entur-private-registry.sh
    ```
-2. Install dependencies:
+   Note: Access token from jfrog has a one-year expiry
+1. Install dependencies:
    1. React Native: `yarn`
-   2. Install Ruby dependencies `bundle install`
-   3. iOS specific: `cd ios/` and `pod install`
+   1. Install Ruby dependencies `bundle install`
+   1. iOS specific: `cd ios/` and `pod install`
       > If there is an issue related to Mapbox please refer to the `Common errors section` below.
-3. Decrypt sensitive files `git-crypt unlock <path/to/key>` (Key given to internal members)
-4. From root folder run: `yarn setup dev <organization>` where organization is either `atb` or `nfk`, to set root .env for local development and generate all icons and launch screens for iOS and Android
+1. Decrypt sensitive files `git-crypt unlock <path/to/key>` (Key given to internal members)
+1. From root folder run: `yarn setup dev <organization>` where organization is either `atb` or `nfk`, to set root .env for local development and generate all icons and launch screens for iOS and Android
 
 For external contributors, we need to fix [#35](https://github.com/AtB-AS/mittatb-app/issues/35) before they are able to run the app.
 
