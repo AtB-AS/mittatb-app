@@ -98,10 +98,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background[themeColor].background,
   },
   mainView: {
-    height: '70%',
     marginTop: '30%',
     marginBottom: '25%',
-    flex: 1.5,
   },
   header: {
     textAlign: 'center',
@@ -126,7 +124,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   mobileTokenContainer: {
     backgroundColor: theme.static.background.background_accent_2.background,
-    flex: 0.5,
     marginVertical: theme.spacings.xLarge,
     borderRadius: theme.border.radius.regular,
     padding: 28,

@@ -66,10 +66,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   mainView: {
-    height: '70%',
     marginTop: '30%',
     marginBottom: '15%',
-    flex: 1.5,
   },
   header: {
     width: '80%',

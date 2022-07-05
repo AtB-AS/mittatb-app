@@ -102,10 +102,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: '85%',
   },
   mainView: {
-    height: '70%',
     marginTop: '30%',
     marginBottom: '25%',
-    flex: 1.5,
   },
   marginVertical: {
     marginTop: 44,
@@ -129,7 +127,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   mobileTokenContainer: {
     backgroundColor: theme.static.background.background_accent_2.background,
-    flex: 0.5,
     marginVertical: theme.spacings.xLarge,
     borderRadius: theme.border.radius.regular,
     padding: 24,
