@@ -46,7 +46,6 @@ const grpcErrorHandler = (err: any) => {
       return Promise.reject(new GrpcError('TEST', errorData));
     }
   }
-
   return Promise.reject(err);
 };
 
