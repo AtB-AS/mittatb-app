@@ -20,10 +20,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16
-      - name: Decrypt env files
-        run: sh ./scripts/git-crypt-unlock.sh
+      - name: Add Entur private registry credentials
+        run: sh ./scripts/add-entur-private-registry.sh
         env:
-          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+          ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'

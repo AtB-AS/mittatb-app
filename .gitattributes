@@ -6,7 +6,6 @@
 env/** filter=git-crypt diff=git-crypt
 .env filter=git-crypt diff=git-crypt
 .netrc filter=git-crypt diff=git-crypt
-.npmrc filter=git-crypt diff=git-crypt
 ios/devices.txt filter=git-crypt diff=git-crypt
 android/app/src/main/res/values/Intercom.xml filter=git-crypt diff=git-crypt
 ios/atb/Intercom.plist filter=git-crypt diff=git-crypt
