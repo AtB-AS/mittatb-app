@@ -164,7 +164,6 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
           }
         }
       }
-      await storage.set('@ATB_last_mobile_token_user', abtCustomerId!);
 
       if (!token) {
         /*
@@ -177,6 +176,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
         Bugsnag.leaveBreadcrumb(`Creating new mobile token`);
         token = await client.create(traceId);
       }
+      await storage.set('@ATB_last_mobile_token_user', abtCustomerId!);
       return token;
     },
     [client, tokenService, abtCustomerId],
