@@ -28,12 +28,6 @@ runs:
         run: sh ./scripts/git-crypt-unlock.sh
         env:
           GIT_CRYPT_KEY: ${{ inputs.git-crypt-key }}
-      - name: Add Entur private registry credentials
-        shell: bash
-        run: sh ./scripts/add-entur-private-registry.sh
-        env:
-          ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
-          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: install node v16
         uses: actions/setup-node@v1
         with:

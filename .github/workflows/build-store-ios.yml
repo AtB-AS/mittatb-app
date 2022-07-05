@@ -35,6 +35,12 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       - name: Generate native assets
         run: brew install imagemagick && yarn generate-native-assets
+      - name: Add Entur private registry credentials
+        shell: bash
+        run: sh ./scripts/add-entur-private-registry.sh
+        env:
+          ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Run fastlane build
         run: fastlane ios build
         env:
