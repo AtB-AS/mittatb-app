@@ -4,6 +4,7 @@ echo "Adding Entur private registry credentials"
 
 NPMRC_FILE="$HOME/.npmrc"
 echo "Adding Entur registry properties to $NPMRC_FILE"
+echo "Using access token ${ENTUR_REGISTRY_TOKEN:0:3}****${ENTUR_REGISTRY_TOKEN: -3}"
 
 echo "@entur:registry=https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/" >> $NPMRC_FILE
 echo "@entur-private:registry=https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/" >> $NPMRC_FILE

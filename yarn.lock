@@ -1807,7 +1807,7 @@
   resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur/abt-token-core-javascript-lib/-/@entur/abt-token-core-javascript-lib-1.0.5-rc.0.tgz#9d6d37abec8dbf9269258dcf926fc3190900cc33"
   integrity sha512-Xsfol52igK9uI7CJeV8Zrytrh/gjPnEwDNM0EqGYpTustgR/8iimQGPlhOZ0S0TpdsxQClEwnx3Rel39WRfdJg==
 
-"@entur/abt-token-server-node-lib@^1.0.5-rc.0":
+"@entur/abt-token-server-node-lib@1.0.5-rc.0":
   version "1.0.5-rc.0"
   resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur/abt-token-server-node-lib/-/@entur/abt-token-server-node-lib-1.0.5-rc.0.tgz#8c507b9f35c7be816912ca0ae4cb10130b29760c"
   integrity sha512-7OxBciE+f6nMN+Nmg1TD8kwvvvqNGhoqA9MsauXarUFA4Z1NzLkp4OX/BCwReNrviJ/fZvqGdfRfIaS7uI7roA==

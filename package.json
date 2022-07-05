@@ -105,7 +105,7 @@
     "@atb-as/generate-assets": "^4.0.0-alpha.18",
     "@babel/core": "^7.12.13",
     "@babel/runtime": "^7.12.13",
-    "@entur/abt-token-server-node-lib": "^1.0.5-rc.0",
+    "@entur/abt-token-server-node-lib": "1.0.5-rc.0",
     "@svgr/cli": "^6.2.0",
     "@types/async-lock": "^1.1.5",
     "@types/child-process-promise": "^2.2.2",
