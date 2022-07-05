@@ -86,7 +86,6 @@ ios/atb/Images.xcassets/BootSplashLogo.imageset/bootsplash_logo*.png
 
 #Service files
 android/app/google-services.json
-android/gradle.properties
 ios/atb/GoogleService-Info.plist
 
 vendor/bundle
