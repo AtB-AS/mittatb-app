@@ -69,26 +69,24 @@ export function MobileAsTokenScreen({
           {t(MobileTokenOnboardingTexts.phone.description)}
         </ThemeText>
       </View>
-      <View style={styles.bottomView}>
-        <Button
-          onPress={() => {
-            completeMobileTokenOnboarding();
-            navigation.navigate(settingToRouteName(startScreen));
-          }}
-          text={t(MobileTokenOnboardingTexts.ok)}
-          testID="nextButton"
-          style={styles.nextButton}
-        />
-        <Button
-          interactiveColor="interactive_1"
-          mode="secondary"
-          onPress={() => {
-            navigation.navigate('SelectTravelToken');
-          }}
-          text={t(MobileTokenOnboardingTexts.phone.button)}
-          testID="switchButton"
-        />
-      </View>
+      <Button
+        onPress={() => {
+          completeMobileTokenOnboarding();
+          navigation.navigate(settingToRouteName(startScreen));
+        }}
+        text={t(MobileTokenOnboardingTexts.ok)}
+        testID="nextButton"
+        style={styles.nextButton}
+      />
+      <Button
+        interactiveColor="interactive_1"
+        mode="secondary"
+        onPress={() => {
+          navigation.navigate('SelectTravelToken');
+        }}
+        text={t(MobileTokenOnboardingTexts.phone.button)}
+        testID="switchButton"
+      />
     </View>
   );
 }
@@ -98,11 +96,12 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.xLarge,
     flex: 1,
     backgroundColor: theme.static.background[themeColor].background,
-    paddingTop: '35%',
-    paddingBottom: '10%',
   },
   mainView: {
-    height: '80%',
+    height: '70%',
+    marginTop: '30%',
+    marginBottom: '25%',
+    flex: 1.5,
   },
   header: {
     textAlign: 'center',
@@ -127,7 +126,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   mobileTokenContainer: {
     backgroundColor: theme.static.background.background_accent_2.background,
-    height: '42%',
+    flex: 0.5,
     marginVertical: theme.spacings.xLarge,
     borderRadius: theme.border.radius.regular,
     padding: 28,
@@ -152,9 +151,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
     padding: theme.spacings.large,
     alignSelf: 'center',
-  },
-  bottomView: {
-    marginTop: 35.5,
   },
   nextButton: {
     marginBottom: theme.spacings.medium,

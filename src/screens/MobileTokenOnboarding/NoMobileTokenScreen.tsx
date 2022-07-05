@@ -42,17 +42,15 @@ export function NoMobileTokenScreen({
           {t(MobileTokenOnboardingTexts.error.description)}
         </ThemeText>
       </View>
-      <View style={styles.bottomView}>
-        <Button
-          interactiveColor="interactive_0"
-          onPress={() => {
-            completeMobileTokenOnboarding();
-            navigation.navigate(settingToRouteName(startScreen));
-          }}
-          text={t(MobileTokenOnboardingTexts.next)}
-          testID="nextButton"
-        />
-      </View>
+      <Button
+        interactiveColor="interactive_0"
+        onPress={() => {
+          completeMobileTokenOnboarding();
+          navigation.navigate(settingToRouteName(startScreen));
+        }}
+        text={t(MobileTokenOnboardingTexts.next)}
+        testID="nextButton"
+      />
     </View>
   );
 }
@@ -65,11 +63,13 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.xLarge,
     backgroundColor: theme.static.background[themeColor].background,
-    paddingTop: '25%',
     flex: 1,
   },
   mainView: {
-    height: '75%',
+    height: '70%',
+    marginTop: '30%',
+    marginBottom: '15%',
+    flex: 1.5,
   },
   header: {
     width: '80%',
@@ -79,8 +79,5 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   description: {
     marginTop: 34,
     textAlign: 'center',
-  },
-  bottomView: {
-    marginTop: '20%',
   },
 }));

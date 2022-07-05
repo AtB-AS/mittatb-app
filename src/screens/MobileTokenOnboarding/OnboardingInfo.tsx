@@ -48,17 +48,15 @@ export function FlexibilityInfoScreen({
           {t(MobileTokenOnboardingTexts.flexibilityInfo.description)}
         </ThemeText>
       </View>
-      <View style={styles.bottomView}>
-        <Button
-          interactiveColor="interactive_0"
-          onPress={() => {
-            navigation.navigate('OptionsInfoScreen');
-          }}
-          text={t(MobileTokenOnboardingTexts.next)}
-          testID="nextButton"
-          accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
-        />
-      </View>
+      <Button
+        interactiveColor="interactive_0"
+        onPress={() => {
+          navigation.navigate('OptionsInfoScreen');
+        }}
+        text={t(MobileTokenOnboardingTexts.next)}
+        testID="nextButton"
+        accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
+      />
     </View>
   );
 }
@@ -100,17 +98,15 @@ export function OptionsInfoScreen({
         </ThemeText>
       </View>
 
-      <View style={styles.bottomView}>
-        <Button
-          interactiveColor="interactive_0"
-          onPress={() => {
-            navigation.navigate('TicketSafetyInfoScreen');
-          }}
-          text={t(MobileTokenOnboardingTexts.next)}
-          testID="nextButton"
-          accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
-        />
-      </View>
+      <Button
+        interactiveColor="interactive_0"
+        onPress={() => {
+          navigation.navigate('TicketSafetyInfoScreen');
+        }}
+        text={t(MobileTokenOnboardingTexts.next)}
+        testID="nextButton"
+        accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
+      />
     </View>
   );
 }
@@ -144,17 +140,15 @@ export function TicketSafetyInfoScreen({
           {t(MobileTokenOnboardingTexts.ticketSafetyInfo.description)}
         </ThemeText>
       </View>
-      <View style={styles.bottomView}>
-        <Button
-          interactiveColor="interactive_0"
-          onPress={() => {
-            navigation.navigate('MobileToken');
-          }}
-          text={t(MobileTokenOnboardingTexts.next)}
-          testID="nextButton"
-          accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
-        />
-      </View>
+      <Button
+        interactiveColor="interactive_0"
+        onPress={() => {
+          navigation.navigate('MobileToken');
+        }}
+        text={t(MobileTokenOnboardingTexts.next)}
+        testID="nextButton"
+        accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
+      />
     </View>
   );
 }
@@ -164,10 +158,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background[themeColor].background,
     flex: 1,
     paddingHorizontal: theme.spacings.xLarge,
-    paddingTop: '40%',
   },
   mainView: {
-    height: '75%',
+    height: '65%',
+    marginTop: '40%',
   },
   paddingLarge: {
     padding: theme.spacings.medium,
@@ -193,8 +187,5 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   description: {
     width: 327,
     marginTop: theme.spacings.xLarge,
-  },
-  bottomView: {
-    marginTop: 34,
   },
 }));
