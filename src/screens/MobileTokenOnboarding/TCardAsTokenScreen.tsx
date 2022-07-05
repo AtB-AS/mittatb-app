@@ -98,12 +98,12 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.static.background[themeColor].background,
     paddingTop: '35%',
-    paddingBottom: '10%'
+    paddingBottom: '10%',
   },
   header: {
     textAlign: 'center',
     alignSelf: 'center',
-    width: '85%'
+    width: '85%',
   },
   mainView: {
     height: '80%',
