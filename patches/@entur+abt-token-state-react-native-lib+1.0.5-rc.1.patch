@@ -1,0 +1,13 @@
+diff --git a/node_modules/@entur/abt-token-state-react-native-lib/ios/token-state-react-native-lib-ios.podspec b/node_modules/@entur/abt-token-state-react-native-lib/ios/token-state-react-native-lib-ios.podspec
+index 9afebb1..3b4fcce 100644
+--- a/node_modules/@entur/abt-token-state-react-native-lib/ios/token-state-react-native-lib-ios.podspec
++++ b/node_modules/@entur/abt-token-state-react-native-lib/ios/token-state-react-native-lib-ios.podspec
+@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
+   s.version      = projectPackage["version"]
+   s.summary      = projectPackage["description"]
+   s.homepage     = "https://github.com/entur/#readme"
+-  s.license      = "EUPL-1.2",
++  s.license      = "EUPL-1.2"
+   s.authors      = "Entur AS <feedback@entur.org> (https://github.com/entur/)"
+ 
+   s.platforms    = { :ios => "11.0" }
