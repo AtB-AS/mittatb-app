@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
 import {StaticColorByType} from '@atb/theme/colors';
@@ -27,37 +27,41 @@ export function FlexibilityInfoScreen({
   const focusRef = useFocusOnLoad();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.mainView}>
-        <View accessible={true} ref={focusRef}>
-          <ThemeText
-            type="heading--jumbo"
-            style={[styles.alignCenter, styles.header]}
-            color={themeColor}
-          >
-            {t(MobileTokenOnboardingTexts.flexibilityInfo.heading)}
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.containerContent}
+    >
+      <View style={styles.viewContent}>
+        <View style={styles.mainView}>
+          <View accessible={true} ref={focusRef}>
+            <ThemeText
+              type="heading--jumbo"
+              style={styles.header}
+              color={themeColor}
+            >
+              {t(MobileTokenOnboardingTexts.flexibilityInfo.heading)}
+            </ThemeText>
+          </View>
+          <View style={styles.illustration}>
+            <TravelPlanning />
+          </View>
+          <ThemeText color={themeColor} style={styles.description}>
+            {t(MobileTokenOnboardingTexts.flexibilityInfo.description)}
           </ThemeText>
         </View>
-        <View style={styles.illustration}>
-          <TravelPlanning style={styles.alignCenter} />
+        <View style={styles.buttons}>
+          <Button
+            interactiveColor="interactive_0"
+            onPress={() => {
+              navigation.navigate('OptionsInfoScreen');
+            }}
+            text={t(MobileTokenOnboardingTexts.next)}
+            testID="nextButton"
+            accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
+          />
         </View>
-        <ThemeText
-          color={themeColor}
-          style={[styles.alignCenter, styles.description]}
-        >
-          {t(MobileTokenOnboardingTexts.flexibilityInfo.description)}
-        </ThemeText>
       </View>
-      <Button
-        interactiveColor="interactive_0"
-        onPress={() => {
-          navigation.navigate('OptionsInfoScreen');
-        }}
-        text={t(MobileTokenOnboardingTexts.next)}
-        testID="nextButton"
-        accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
-      />
-    </View>
+    </ScrollView>
   );
 }
 
@@ -69,45 +73,54 @@ export function OptionsInfoScreen({
   const focusRef = useFocusOnLoad();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.mainView}>
-        <View accessible={true} ref={focusRef}>
-          <ThemeText
-            type="heading--jumbo"
-            style={[styles.alignCenter, styles.header]}
-            color={themeColor}
-          >
-            {t(MobileTokenOnboardingTexts.optionsInfo.heading)}
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.containerContent}
+    >
+      <View style={styles.viewContent}>
+        <View style={styles.mainView}>
+          <View accessible={true} ref={focusRef}>
+            <ThemeText
+              type="heading--jumbo"
+              style={styles.header}
+              color={themeColor}
+            >
+              {t(MobileTokenOnboardingTexts.optionsInfo.heading)}
+            </ThemeText>
+          </View>
+
+          <View style={styles.illustration}>
+            <View style={styles.cardOrPhoneIllustration}>
+              <ThemedTokenTravelCard />
+              <ThemeText
+                color={themeColor}
+                style={styles.cardOrPhoneText}
+                accessible={false}
+                importantForAccessibility="no"
+              >
+                {t(MobileTokenOnboardingTexts.optionsInfo.or)}
+              </ThemeText>
+              <ThemedTokenPhone />
+            </View>
+          </View>
+          <ThemeText color={themeColor} style={styles.description}>
+            {t(MobileTokenOnboardingTexts.optionsInfo.description)}
           </ThemeText>
         </View>
 
-        <View style={styles.illustration}>
-          <ThemedTokenTravelCard />
-          <ThemeText
-            color={themeColor}
-            style={styles.marginTop}
-            accessible={false}
-            importantForAccessibility="no"
-          >
-            {t(MobileTokenOnboardingTexts.optionsInfo.or)}
-          </ThemeText>
-          <ThemedTokenPhone />
+        <View style={styles.buttons}>
+          <Button
+            interactiveColor="interactive_0"
+            onPress={() => {
+              navigation.navigate('TicketSafetyInfoScreen');
+            }}
+            text={t(MobileTokenOnboardingTexts.next)}
+            testID="nextButton"
+            accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
+          />
         </View>
-        <ThemeText color={themeColor} style={styles.alignCenter}>
-          {t(MobileTokenOnboardingTexts.optionsInfo.description)}
-        </ThemeText>
       </View>
-
-      <Button
-        interactiveColor="interactive_0"
-        onPress={() => {
-          navigation.navigate('TicketSafetyInfoScreen');
-        }}
-        text={t(MobileTokenOnboardingTexts.next)}
-        testID="nextButton"
-        accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
-      />
-    </View>
+    </ScrollView>
   );
 }
 
@@ -118,38 +131,45 @@ export function TicketSafetyInfoScreen({
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
   return (
-    <View style={styles.container}>
-      <View style={styles.mainView}>
-        <View accessible={true} ref={focusRef}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.containerContent}
+    >
+      <View style={styles.viewContent}>
+        <View style={styles.mainView}>
+          <View accessible={true} ref={focusRef}>
+            <ThemeText
+              type="heading--jumbo"
+              style={styles.header}
+              color={themeColor}
+            >
+              {t(MobileTokenOnboardingTexts.ticketSafetyInfo.heading)}
+            </ThemeText>
+          </View>
+          <View style={styles.illustration}>
+            <Cloud />
+          </View>
           <ThemeText
-            type="heading--jumbo"
-            style={[styles.alignCenter, styles.header, styles.paddingLarge]}
             color={themeColor}
+            style={styles.description}
+            isMarkdown={true}
           >
-            {t(MobileTokenOnboardingTexts.ticketSafetyInfo.heading)}
+            {t(MobileTokenOnboardingTexts.ticketSafetyInfo.description)}
           </ThemeText>
         </View>
-        <View style={styles.alignCenter}>
-          <Cloud />
+        <View style={styles.buttons}>
+          <Button
+            interactiveColor="interactive_0"
+            onPress={() => {
+              navigation.navigate('MobileToken');
+            }}
+            text={t(MobileTokenOnboardingTexts.next)}
+            testID="nextButton"
+            accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
+          />
         </View>
-        <ThemeText
-          color={themeColor}
-          style={[styles.alignCenter, styles.description]}
-          isMarkdown={true}
-        >
-          {t(MobileTokenOnboardingTexts.ticketSafetyInfo.description)}
-        </ThemeText>
       </View>
-      <Button
-        interactiveColor="interactive_0"
-        onPress={() => {
-          navigation.navigate('MobileToken');
-        }}
-        text={t(MobileTokenOnboardingTexts.next)}
-        testID="nextButton"
-        accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
-      />
-    </View>
+    </ScrollView>
   );
 }
 
@@ -159,33 +179,40 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     paddingHorizontal: theme.spacings.xLarge,
   },
-  mainView: {
-    height: '65%',
-    marginTop: '40%',
+  containerContent: {
+    paddingTop: '35%',
+    minHeight: '100%',
   },
-  paddingLarge: {
-    padding: theme.spacings.medium,
+  viewContent: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  mainView: {
+    justifyContent: 'space-between',
   },
   header: {
-    width: '85%',
     marginBottom: theme.spacings.xLarge,
-  },
-  alignCenter: {
     textAlign: 'center',
-    alignSelf: 'center',
   },
   illustration: {
+    minHeight: 180,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: theme.spacings.xLarge,
+  },
+  cardOrPhoneIllustration: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    height: 185,
-    paddingTop: 53.5,
-    marginBottom: theme.spacings.xLarge,
   },
-  marginTop: {
+  cardOrPhoneText: {
     marginTop: theme.spacings.xLarge,
+    marginHorizontal: theme.spacings.xLarge,
   },
   description: {
-    width: 327,
     marginTop: theme.spacings.xLarge,
+    textAlign: 'center',
+  },
+  buttons: {
+    marginVertical: theme.spacings.medium,
   },
 }));

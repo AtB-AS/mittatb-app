@@ -3,28 +3,33 @@ import {ScrollView, View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
 import Button from '@atb/components/button';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
 import {StaticColorByType} from '@atb/theme/colors';
-import {CrashSmall} from '@atb/assets/svg/color/images';
+import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {settingToRouteName} from '@atb/utils/navigation';
 import {usePreferenceItems} from '@atb/preferences';
+import TravelTokenBox from '@atb/travel-token-box';
+import {RemoteToken} from '@atb/mobile-token/types';
 import {useAppState} from '@atb/AppContext';
 import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
-import {MobileTokenTabParams} from '@atb/screens/MobileTokenOnboarding';
+import {MobileTokenTabParams} from '@atb/screens/MobileTokenOnboarding/index';
+import {isTravelCardToken} from '@atb/mobile-token/utils';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export function NoMobileTokenScreen({
+export function InspectableTokenScreen({
+  inspectableToken,
   navigation,
 }: {
+  inspectableToken: RemoteToken;
   navigation: MaterialTopTabNavigationProp<MobileTokenTabParams>;
 }): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const {completeMobileTokenOnboarding} = useAppState();
+  const focusRef = useFocusOnLoad();
   const {startScreen} = usePreferenceItems();
-
+  const {completeMobileTokenOnboarding} = useAppState();
   return (
     <ScrollView
       style={styles.container}
@@ -32,29 +37,49 @@ export function NoMobileTokenScreen({
     >
       <View style={styles.viewContent}>
         <View style={styles.mainView}>
-          <ThemeText
-            type="heading--jumbo"
-            style={styles.header}
-            color={themeColor}
-          >
-            {t(MobileTokenOnboardingTexts.error.heading)}
-          </ThemeText>
-          <View style={styles.illustration}>
-            <CrashSmall width="185px" height="185px" />
+          <View accessible={true} ref={focusRef}>
+            <ThemeText
+              type="heading--jumbo"
+              style={styles.header}
+              color={themeColor}
+              isMarkdown={true}
+            >
+              {isTravelCardToken(inspectableToken)
+                ? t(MobileTokenOnboardingTexts.tCard.heading)
+                : t(MobileTokenOnboardingTexts.phone.heading)}
+            </ThemeText>
           </View>
-          <ThemeText style={styles.description} color={themeColor}>
-            {t(MobileTokenOnboardingTexts.error.description)}
+          <View style={styles.illustration}>
+            <TravelTokenBox showIfThisDevice={true} alwaysShowErrors={true} />
+          </View>
+          <ThemeText
+            style={styles.description}
+            color={themeColor}
+            isMarkdown={true}
+          >
+            {isTravelCardToken(inspectableToken)
+              ? t(MobileTokenOnboardingTexts.tCard.description)
+              : t(MobileTokenOnboardingTexts.phone.description)}
           </ThemeText>
         </View>
         <View style={styles.buttons}>
           <Button
-            interactiveColor="interactive_0"
             onPress={() => {
               completeMobileTokenOnboarding();
               navigation.navigate(settingToRouteName(startScreen));
             }}
-            text={t(MobileTokenOnboardingTexts.next)}
+            text={t(MobileTokenOnboardingTexts.ok)}
             testID="nextButton"
+            style={styles.okButton}
+          />
+          <Button
+            interactiveColor="interactive_1"
+            mode="secondary"
+            onPress={() => {
+              navigation.navigate('SelectTravelToken');
+            }}
+            text={t(MobileTokenOnboardingTexts.phone.button)}
+            testID="switchButton"
           />
         </View>
       </View>
@@ -65,8 +90,8 @@ export function NoMobileTokenScreen({
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.xLarge,
-    backgroundColor: theme.static.background[themeColor].background,
     flex: 1,
+    backgroundColor: theme.static.background[themeColor].background,
   },
   containerContent: {
     paddingTop: '35%',
@@ -86,7 +111,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   illustration: {
     minHeight: 180,
     justifyContent: 'center',
-    alignItems: 'center',
     marginVertical: theme.spacings.xLarge,
   },
   description: {
@@ -95,5 +119,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   buttons: {
     marginVertical: theme.spacings.medium,
+  },
+  okButton: {
+    marginBottom: theme.spacings.medium,
   },
 }));

@@ -1,12 +1,7 @@
 import React from 'react';
-import {TCardAsTokenScreen} from '@atb/screens/MobileTokenOnboarding/TCardAsTokenScreen';
-import {MobileAsTokenScreen} from '@atb/screens/MobileTokenOnboarding/MobileAsTokenScreen';
+import {InspectableTokenScreen} from '@atb/screens/MobileTokenOnboarding/InspectableTokenScreen';
 import {NoMobileTokenScreen} from '@atb/screens/MobileTokenOnboarding/NoMobileTokenScreen';
-import {
-  isInspectable,
-  isMobileToken,
-  isTravelCardToken,
-} from '@atb/mobile-token/utils';
+import {findInspectable, isInspectable} from '@atb/mobile-token/utils';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
 import {MobileTokenTabParams} from '@atb/screens/MobileTokenOnboarding';
@@ -20,24 +15,18 @@ const MobileToken = ({navigation}: MobileTokenProps) => {
   if (isLoading) return <NoMobileTokenScreen navigation={navigation} />;
   if (isError) return <NoMobileTokenScreen navigation={navigation} />;
 
-  const inspectableToken = remoteTokens?.find((t) => isInspectable(t))!;
+  const inspectableToken = findInspectable(remoteTokens);
 
-  if (isMobileToken(inspectableToken)) {
-    return (
-      <MobileAsTokenScreen
-        inspectableToken={inspectableToken}
-        navigation={navigation}
-      />
-    );
-  } else if (isTravelCardToken(inspectableToken)) {
-    return (
-      <TCardAsTokenScreen
-        inspectableToken={inspectableToken}
-        navigation={navigation}
-      />
-    );
+  if (!inspectableToken) {
+    return <NoMobileTokenScreen navigation={navigation} />;
   }
-  return <NoMobileTokenScreen navigation={navigation} />;
+
+  return (
+    <InspectableTokenScreen
+      inspectableToken={inspectableToken}
+      navigation={navigation}
+    />
+  );
 };
 
 export default MobileToken;
