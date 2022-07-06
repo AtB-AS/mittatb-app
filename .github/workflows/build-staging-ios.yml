@@ -19,6 +19,11 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v1
+      - name: Add Entur private registry credentials
+        run: sh ./scripts/add-entur-private-registry.sh
+        env:
+          ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
@@ -44,12 +49,6 @@ jobs:
       - name: Generate native assets
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn generate-native-assets
-      - name: Add Entur private registry credentials
-        shell: bash
-        run: sh ./scripts/add-entur-private-registry.sh
-        env:
-          ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
-          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Run fastlane build
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: fastlane ios build
