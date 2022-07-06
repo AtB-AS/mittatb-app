@@ -781,7 +781,7 @@ PODS:
   - RNSVG (12.1.1):
     - React
   - SwiftProtobuf (1.19.0)
-  - token-state-react-native-lib-ios (1.0.0):
+  - token-state-react-native-lib-ios (1.0.5-rc.0):
     - AbtTokenCoreSDK
     - React-Core
   - Yoga (1.14.0)
@@ -789,7 +789,7 @@ PODS:
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
-  - "AbtTokenCoreSDK (from `../.yalc/@entur/atb-mobile-client-sdk/token/token-core-ios-lib/AbtTokenCoreSDK`)"
+  - AbtTokenCoreSDK (from `https://github.com/AtB-AS/temp-token-core-ios-lib.git`)
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - "BugsnagReactNative (from `../node_modules/@bugsnag/react-native`)"
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
@@ -872,7 +872,7 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
-  - "token-state-react-native-lib-ios (from `../.yalc/@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/ios`)"
+  - "token-state-react-native-lib-ios (from `../node_modules/@entur/abt-token-state-react-native-lib/ios`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -921,7 +921,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   AbtTokenCoreSDK:
-    :path: "../.yalc/@entur/atb-mobile-client-sdk/token/token-core-ios-lib/AbtTokenCoreSDK"
+    :git: https://github.com/AtB-AS/temp-token-core-ios-lib.git
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   BugsnagReactNative:
@@ -1039,9 +1039,14 @@ EXTERNAL SOURCES:
   RNSVG:
     :path: "../node_modules/react-native-svg"
   token-state-react-native-lib-ios:
-    :path: "../.yalc/@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/ios"
+    :path: "../node_modules/@entur/abt-token-state-react-native-lib/ios"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
+
+CHECKOUT OPTIONS:
+  AbtTokenCoreSDK:
+    :commit: 3343769966459c7cf55ee0660451a9e09b5b8998
+    :git: https://github.com/AtB-AS/temp-token-core-ios-lib.git
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
@@ -1143,10 +1148,10 @@ SPEC CHECKSUMS:
   RNScreens: eb0dfb2d6b21d2d7f980ad46b14eb306d2f1062e
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   SwiftProtobuf: 6ef3f0e422ef90d6605ca20b21a94f6c1324d6b3
-  token-state-react-native-lib-ios: 59ddd1affa90f7590028276dcd5b013ea0bf0012
+  token-state-react-native-lib-ios: bc88469f5914f6c5691a1286ac9ab40494fae875
   Yoga: 32a18c0e845e185f4a2a66ec76e1fd1f958f22fa
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 296b0126880a16bbfb8f06a62daf47009b7861fe
+PODFILE CHECKSUM: 11bfc8c6d10cf1ca2a4799a5070718013db2fe30
 
 COCOAPODS: 1.10.1

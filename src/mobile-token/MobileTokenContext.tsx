@@ -15,20 +15,18 @@ import storage from '@atb/storage';
 import Bugsnag from '@bugsnag/react-native';
 import useMobileTokenClient from '@atb/mobile-token/mobileTokenClient';
 import {RemoteToken} from './types';
-import {ActivatedToken} from '@entur/atb-mobile-client-sdk/token/token-core-javascript-lib';
 import {
   TokenAction,
   TokenMustBeReplacedRemoteTokenStateError,
-} from '../../.yalc/@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/src';
-import {
+  ActivatedToken,
   TokenEncodingInvalidRemoteTokenStateError,
   TokenMustBeRenewedRemoteTokenStateError,
   TokenNotFoundRemoteTokenStateError,
-} from '../../.yalc/@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/src/state/remote/errors';
+  createClient,
+} from '@entur/abt-mobile-client-sdk';
 import createTokenService from '@atb/mobile-token/tokenService';
 import {SAFETY_NET_API_KEY} from '@env';
 import logger from '@atb/mobile-token/abtClientLogger';
-import createMobileTokenClient from '@entur/atb-mobile-client-sdk/token/token-state-react-native-lib';
 import {isInspectable} from '@atb/mobile-token/utils';
 
 import DeviceInfo from 'react-native-device-info';
@@ -59,7 +57,7 @@ const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
 );
 
 const tokenService = createTokenService();
-const abtClient = createMobileTokenClient({
+const abtClient = createClient({
   tokenContextIds: [CONTEXT_ID],
   googleSafetyNetApiKey: SAFETY_NET_API_KEY,
   remoteTokenService: tokenService,
@@ -166,7 +164,6 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
           }
         }
       }
-      await storage.set('@ATB_last_mobile_token_user', abtCustomerId!);
 
       if (!token) {
         /*
@@ -179,6 +176,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
         Bugsnag.leaveBreadcrumb(`Creating new mobile token`);
         token = await client.create(traceId);
       }
+      await storage.set('@ATB_last_mobile_token_user', abtCustomerId!);
       return token;
     },
     [client, tokenService, abtCustomerId],

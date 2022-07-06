@@ -1,4 +1,7 @@
-import {KeyValue} from '../../.yalc/@entur/atb-mobile-client-sdk/token/token-server-node-lib/types';
+export type KeyValue = {
+  key: string;
+  value: string;
+};
 
 export type RemoteToken = {
   id: string;

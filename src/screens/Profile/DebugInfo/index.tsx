@@ -19,6 +19,7 @@ import {usePreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import Button from '@atb/components/button';
 import {useNavigation} from '@react-navigation/native';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -55,7 +56,12 @@ export default function DebugInfo() {
     wipeToken,
     validateToken,
     removeRemoteToken,
+    fallbackEnabled,
+    isLoading,
+    isError,
   } = useMobileTokenContextState();
+
+  const {refresh: refreshRemoteConfig} = useRemoteConfig();
 
   const mobileTokenEnabled = useHasEnabledMobileToken();
 
@@ -129,6 +135,11 @@ export default function DebugInfo() {
           <Sections.LinkItem
             text="Force refresh id token"
             onPress={() => auth().currentUser?.getIdToken(true)}
+          />
+
+          <Sections.LinkItem
+            text="Force refresh remote config"
+            onPress={refreshRemoteConfig}
           />
 
           <Sections.LinkItem
@@ -272,6 +283,9 @@ export default function DebugInfo() {
                       ).toISOString()}`}</ThemeText>
                     </View>
                   )}
+                  <ThemeText>{`Fallback enabled: ${fallbackEnabled}`}</ThemeText>
+                  <ThemeText>{`Is loading: ${isLoading}`}</ThemeText>
+                  <ThemeText>{`Is error: ${isError}`}</ThemeText>
                   <Button
                     style={style.button}
                     text="Reload token(s)"

@@ -26,7 +26,7 @@ jobs:
         with:
           path: |
             build/detox/ios/Build/Products/Release-iphonesimulator/AtB.app
-          key: detox-app-cache-${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}
+          key: detox-app-cache-${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}
       - name: Generate native assets
         if: steps.detox-app-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn generate-native-assets

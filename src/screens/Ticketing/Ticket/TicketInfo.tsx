@@ -106,11 +106,14 @@ export const TicketInfoView = (props: TicketInfoViewProps) => {
 
 const WarningMessage = (
   isError: boolean,
+  fallbackEnabled: boolean,
   remoteTokens?: RemoteToken[],
   isInspectable?: boolean,
 ) => {
   const {t} = useTranslation();
   const inspectableToken = findInspectable(remoteTokens);
+  if (isError && fallbackEnabled) return null;
+
   if (isError)
     return (
       <ThemeText type="body__secondary">
@@ -169,8 +172,13 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
       ? `${getReferenceDataName(u, language)}`
       : `${u.count} ${getReferenceDataName(u, language)}`;
 
-  const {isError, remoteTokens} = useMobileTokenContextState();
-  const warning = WarningMessage(isError, remoteTokens, isInspectable);
+  const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
+  const warning = WarningMessage(
+    isError,
+    fallbackEnabled,
+    remoteTokens,
+    isInspectable,
+  );
 
   return (
     <View style={styles.textsContainer} accessible={true}>

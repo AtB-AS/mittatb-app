@@ -1,16 +1,19 @@
 import {useCallback, useEffect, useMemo} from 'react';
-import {NoTokenError} from '@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/src/native/errors';
-import {Token} from '@entur/atb-mobile-client-sdk/token/token-core-javascript-lib';
+// import {NoTokenError} from '@entur/abt-mobile-client-sdk/token/token-state-react-native-lib/src/native/errors';
+// import {Token} from '@entur/abt-mobile-client-sdk/token/token-core-javascript-lib';
 import {
-  AbtTokenClient,
+  AbtClient,
   encodeAsSecureContainer,
   TokenAction,
-} from '../../.yalc/@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/src';
+  NoTokenError,
+  Token,
+  ActivatedToken,
+} from '@entur/abt-mobile-client-sdk';
 import Bugsnag from '@bugsnag/react-native';
-import {ActivatedToken} from '@entur/atb-mobile-client-sdk/token/token-core-javascript-lib/src';
+// import {ActivatedToken} from '@entur/atb-mobile-client-sdk/token/token-core-javascript-lib/src';
 
 export default function useMobileTokenClient(
-  abtClient: AbtTokenClient,
+  abtClient: AbtClient,
   contextId: string,
 ) {
   useEffect(() => {

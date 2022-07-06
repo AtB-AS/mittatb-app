@@ -21,9 +21,14 @@ target 'atb' do
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
 
   $DontUseVendoredAbtMobile = true
-  
-  pod 'AbtTokenCoreSDK', :path => '../.yalc/@entur/atb-mobile-client-sdk/token/token-core-ios-lib/AbtTokenCoreSDK'
-  pod 'token-state-react-native-lib-ios', :path => '../.yalc/@entur/atb-mobile-client-sdk/token/token-state-react-native-lib/ios'
+
+  if ENV['GH_ACCESS_TOKEN']
+    pod 'AbtTokenCoreSDK', :git => 'https://' + ENV['GH_ACCESS_TOKEN'] + '@github.com/AtB-AS/temp-token-core-ios-lib.git'
+  else
+    # If no GH_ACCESS_TOKEN in env, then probably locally where the user uses personal ssh key
+    pod 'AbtTokenCoreSDK', :git => 'https://github.com/AtB-AS/temp-token-core-ios-lib.git'
+  end
+  pod 'token-state-react-native-lib-ios', :path => '../node_modules/@entur/abt-token-state-react-native-lib/ios'
 
   target 'atbTests' do
     inherit! :complete

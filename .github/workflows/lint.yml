@@ -1,5 +1,6 @@
 name: Lint
 on:
+  workflow_dispatch:
   push:
     paths:
       - '**.js'
@@ -13,26 +14,23 @@ jobs:
     strategy:
       matrix:
         org: [atb, nfk]
+    environment: ${{ matrix.org }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout temp mobiletoken sdk
-        uses: actions/checkout@v3
-        with:
-          repository: 'AtB-AS/temp-mobiletoken-sdk'
-          token: ${{ secrets.GH_ACCESS_TOKEN }}
-      - name: Publish temp mobiletoken sdk
-        run: npx yalc publish
       - uses: actions/checkout@v1
       - name: install node v16
         uses: actions/setup-node@v1
         with:
           node-version: 16
-      - name: Yalc add temp mobiletoken sdk
-        run: npx yalc add @entur/atb-mobile-client-sdk
+      - name: Add Entur private registry credentials
+        run: sh ./scripts/add-entur-private-registry.sh
+        env:
+          ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.yalc/**') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: yarn install
         run: yarn install
       - name: Install assets
