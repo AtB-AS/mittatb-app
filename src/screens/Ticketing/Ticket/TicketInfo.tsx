@@ -32,6 +32,7 @@ import {
   isTravelCardToken,
 } from '@atb/mobile-token/utils';
 import {RemoteToken} from '@atb/mobile-token/types';
+import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
 
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -136,7 +137,8 @@ const WarningMessage = (
       <ThemeText type="body__secondary">
         {t(
           TicketTexts.warning.anotherMobileAsToken(
-            getDeviceName(inspectableToken),
+            getDeviceName(inspectableToken) ||
+              t(TicketTexts.warning.unnamedDevice),
           ),
         )}
       </ThemeText>

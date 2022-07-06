@@ -62,6 +62,7 @@ const service: TokenService = {
           [IsEmulatorHeaderName]: String(isEmulator),
         },
         authWithIdToken: true,
+        timeout: 15000,
       })
       .then((res) => res.data.pendingTokenDetails)
       .catch(grpcErrorHandler);
@@ -73,6 +74,7 @@ const service: TokenService = {
           [CorrelationIdHeaderName]: correlationId,
         },
         authWithIdToken: true,
+        timeout: 15000,
       })
       .then((res) => res.data.activeTokenDetails)
       .catch(grpcErrorHandler),
@@ -86,6 +88,7 @@ const service: TokenService = {
           [AttestationTypeHeaderName]: attestation?.type || '',
         },
         authWithIdToken: true,
+        timeout: 15000,
       })
       .then((res) => res.data.pendingTokenDetails)
       .catch(grpcErrorHandler),
@@ -105,6 +108,7 @@ const service: TokenService = {
           [AttestationTypeHeaderName]: attestation?.type || '',
         },
         authWithIdToken: true,
+        timeout: 15000,
       })
       .then((res) => res.data.activeTokenDetails)
       .catch(grpcErrorHandler),
@@ -118,6 +122,7 @@ const service: TokenService = {
           [AttestationTypeHeaderName]: attestation?.type || '',
         },
         authWithIdToken: true,
+        timeout: 15000,
       })
       .then((res) => res.data.activeTokenDetails)
       .catch(grpcErrorHandler),
@@ -132,6 +137,7 @@ const service: TokenService = {
               [CorrelationIdHeaderName]: traceId,
             },
             authWithIdToken: true,
+            timeout: 15000,
           },
         )
         .then((res) => res.data.removed)
@@ -145,6 +151,7 @@ const service: TokenService = {
             [CorrelationIdHeaderName]: traceId,
           },
           authWithIdToken: true,
+          timeout: 15000,
         })
         .then((res) => res.data.tokens)
         .catch(grpcErrorHandler),
@@ -160,6 +167,7 @@ const service: TokenService = {
               [CorrelationIdHeaderName]: traceId,
             },
             authWithIdToken: true,
+            timeout: 15000,
           },
         )
         .then((res) => res.data.tokens)
@@ -177,6 +185,7 @@ const service: TokenService = {
               [AttestationTypeHeaderName]: attestation?.type || '',
             },
             authWithIdToken: true,
+            timeout: 15000,
           })
           .catch(grpcErrorHandler),
       token,

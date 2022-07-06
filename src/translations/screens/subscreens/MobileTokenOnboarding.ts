@@ -19,7 +19,7 @@ const MobileTokenOnboardingTexts = {
     or: _('eller', 'or'),
   },
   ticketSafetyInfo: {
-    heading: _('Vi tar vare på billetten din', 'You ticket is safe with us'),
+    heading: _('Vi tar vare på billetten din', 'Your ticket is safe with us'),
     description: _(
       'Billetten din er trygt lagret på **Min profil**. Dermed vil du aldri miste den — selv om du mister t:kortet eller bytter mobil.',
       "Your ticket is safely stored on **My profile**. That way you won't lose your ticket even if you lose your t:card or switch phones.",

@@ -123,12 +123,12 @@ const TicketTexts = {
   },
   warning: {
     unableToRetrieveToken: _(
-      'Feil ved uthenting av mobil / t:kort',
-      'Error retrieving mobile / t: card',
+      'Feil ved uthenting av t:kort / mobil',
+      'Error retrieving  t:card / phone',
     ),
     noInspectableTokenFound: _(
       'Du må bruke billett på t:kort eller mobil',
-      'You must use a ticket on t: card or mobile',
+      'You must use a ticket on t:card or phone',
     ),
     travelCardAstoken: _(
       'Bruk t:kort når du reiser',
@@ -139,6 +139,7 @@ const TicketTexts = {
         `Bruk ${deviceName} når du reiser`,
         `Bring ${deviceName} when you travel`,
       ),
+    unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },
 };
 export default TicketTexts;
