@@ -44,10 +44,10 @@ export type RouteParams = {
   headerLeftButton: LeftButtonProps;
 };
 
-async function getPreviousPaymentMethod(
+function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
   paymentTypes: PaymentType[],
-): Promise<PaymentMethod | undefined> {
+): PaymentMethod | undefined {
   if (!previousPaymentMethod) return undefined;
 
   if (!paymentTypes.includes(previousPaymentMethod.paymentType))
@@ -141,15 +141,11 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   const vatPercentString = formatDecimalNumber(vatPercent, language);
 
   useEffect(() => {
-    const getPrevMethod = async () => {
-      const prevMethod = await getPreviousPaymentMethod(
-        previousPaymentMethod,
-        paymentTypes,
-      );
-      setPreviousMethod(prevMethod);
-    };
-
-    getPrevMethod();
+    const prevMethod = getPreviousPaymentMethod(
+      previousPaymentMethod,
+      paymentTypes,
+    );
+    setPreviousMethod(prevMethod);
   }, [previousPaymentMethod]);
 
   async function payWithVipps(option: PaymentMethod) {
