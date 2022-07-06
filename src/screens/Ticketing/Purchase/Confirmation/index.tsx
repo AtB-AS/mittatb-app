@@ -14,7 +14,7 @@ import {PaymentType, ReserveOffer} from '@atb/tickets';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {addMinutes} from 'date-fns';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -44,14 +44,6 @@ export type RouteParams = {
   headerLeftButton: LeftButtonProps;
 };
 
-export type ConfirmationProps = {
-  navigation: DismissableStackNavigationProp<
-    TicketingStackParams,
-    'Confirmation'
-  >;
-  route: RouteProp<TicketingStackParams, 'Confirmation'>;
-};
-
 function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
   paymentTypes: PaymentType[],
@@ -76,8 +68,21 @@ function getPreviousPaymentMethod(
         paymentType: previousPaymentMethod.paymentType,
         recurringPaymentId: previousPaymentMethod.recurringCard.id,
       };
+    case 'recurring-without-card':
+      return {
+        paymentType: previousPaymentMethod.paymentType,
+        recurringPaymentId: previousPaymentMethod.recurringPaymentId,
+      };
   }
 }
+
+export type ConfirmationProps = {
+  navigation: DismissableStackNavigationProp<
+    TicketingStackParams,
+    'Confirmation'
+  >;
+  route: RouteProp<TicketingStackParams, 'Confirmation'>;
+};
 
 const Confirmation: React.FC<ConfirmationProps> = ({
   navigation,
@@ -89,13 +94,10 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   const {open: openBottomSheet} = useBottomSheet();
   const {user} = useAuthState();
   const {paymentTypes, vatPercent} = useFirestoreConfiguration();
-
-  const previousPaymentMethod = usePreviousPaymentMethod(user?.uid);
-
-  const previousMethod = getPreviousPaymentMethod(
-    previousPaymentMethod,
-    paymentTypes,
-  );
+  const [previousMethod, setPreviousMethod] = useState<
+    PaymentMethod | undefined
+  >(undefined);
+  const previousPaymentMethod = usePreviousPaymentMethod(user);
 
   const {enable_creditcard: enableCreditCard} = useRemoteConfig();
 
@@ -137,6 +139,14 @@ const Confirmation: React.FC<ConfirmationProps> = ({
 
   const vatAmountString = formatDecimalNumber(vatAmount, language);
   const vatPercentString = formatDecimalNumber(vatPercent, language);
+
+  useEffect(() => {
+    const prevMethod = getPreviousPaymentMethod(
+      previousPaymentMethod,
+      paymentTypes,
+    );
+    setPreviousMethod(prevMethod);
+  }, [previousPaymentMethod]);
 
   async function payWithVipps(option: PaymentMethod) {
     if (offerExpirationTime && totalPrice > 0) {

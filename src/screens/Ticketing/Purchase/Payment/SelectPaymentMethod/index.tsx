@@ -339,6 +339,11 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
           paymentType: option.paymentType,
           recurringPaymentId: option.recurringCard.id,
         };
+      case 'recurring-without-card':
+        return {
+          paymentType: option.paymentType,
+          recurringPaymentId: option.recurringPaymentId,
+        };
     }
   }
 
