@@ -94,8 +94,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background[themeColor].background,
   },
   containerContent: {
-    paddingTop: '35%',
-    minHeight: '100%',
+    paddingTop: theme.spacings.xLarge,
+    flexGrow: 1,
   },
   viewContent: {
     flex: 1,

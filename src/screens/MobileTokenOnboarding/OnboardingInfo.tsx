@@ -180,8 +180,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.xLarge,
   },
   containerContent: {
-    paddingTop: '35%',
-    minHeight: '100%',
+    paddingTop: theme.spacings.xLarge,
+    flexGrow: 1,
   },
   viewContent: {
     flex: 1,
