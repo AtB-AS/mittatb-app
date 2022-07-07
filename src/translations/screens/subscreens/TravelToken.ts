@@ -3,13 +3,13 @@ const SelectTravelTokenTexts = {
   travelToken: {
     header: {
       title: _(
-        'Bruk billett på mobil / t:kort',
-        'Use ticket on phone / t:card',
+        'Bruk billett på t:kort / mobil',
+        'Use ticket on t:card / phone',
       ),
     },
     changeTokenButton: _(
-      'Bytt mellom mobil / t:kort',
-      'Switch between phone / t:card',
+      'Bytt mellom t:kort / mobil',
+      'Switch between t:card / phone',
     ),
     faq: {
       title: _('Ofte stilte spørsmål', 'Frequently asked questions'),
@@ -17,8 +17,8 @@ const SelectTravelTokenTexts = {
     faqs: [
       {
         question: _(
-          'Hva skjer om jeg mister mobilen eller t:kortet?',
-          'What happens if I lose my phone or t:card?',
+          'Hva skjer om jeg mister t:kortet eller mobilen?',
+          'What happens if I lose my t:card or phone?',
         ),
         answer: _(
           'Du kan enkelt velge å bruke billetten din på et annet t:kort eller mobil. Det gjør du på **Min profil**.',
@@ -58,7 +58,7 @@ const SelectTravelTokenTexts = {
     ],
   },
   toggleToken: {
-    title: _('Bytt mellom mobil / t:kort', 'Switch between phone / t:card'),
+    title: _('Bytt mellom t:kort / mobil', 'Switch between t:card / phone'),
     radioBox: {
       tCard: {
         title: _('t:kort', 't:card'),
