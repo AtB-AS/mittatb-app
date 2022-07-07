@@ -24,6 +24,7 @@ export type RemoteConfig = {
   privacy_policy_url: string;
   service_disruption_url: string;
   enable_token_fallback: boolean;
+  enable_flex_tickets: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -49,6 +50,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   privacy_policy_url: PRIVACY_POLICY_URL,
   service_disruption_url: '',
   enable_token_fallback: true,
+  enable_flex_tickets: false,
 };
 
 export function getConfig(): RemoteConfig {
@@ -68,6 +70,9 @@ export function getConfig(): RemoteConfig {
   const enable_period_tickets =
     values['enable_period_tickets']?.asBoolean() ??
     defaultRemoteConfig.enable_period_tickets;
+  const enable_flex_tickets =
+    values['enable_flex_tickets']?.asBoolean() ??
+    defaultRemoteConfig.enable_flex_tickets;
   const enable_login =
     values['enable_login']?.asBoolean() ?? defaultRemoteConfig.enable_login;
   const feedback_questions =
@@ -130,6 +135,7 @@ export function getConfig(): RemoteConfig {
     privacy_policy_url,
     service_disruption_url,
     enable_token_fallback,
+    enable_flex_tickets,
   };
 }
 
