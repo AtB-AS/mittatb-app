@@ -30,8 +30,8 @@ const TravelTokenBoxTexts = {
   ),
   errorMessages: {
     tokensNotLoadedTitle: _(
-      'Klarer ikke hente informasjon om mobil / t:kort.',
-      'Unable to retrieve information about your phone / t:card.',
+      'Klarer ikke hente informasjon om t:kort / mobil.',
+      'Unable to retrieve information about your t:card / phone.',
     ),
     tokensNotLoaded: _(
       'Billetter må brukes på enten et t:kort eller en mobil, men akkurat nå klarer vi ikke finne ut hvor den er i bruk. Sjekk at du har tilgang på nett der du er.',
@@ -42,8 +42,8 @@ const TravelTokenBoxTexts = {
       'Choose where your tickets are used',
     ),
     noInspectableToken: _(
-      'Billetter må brukes på enten et t:kort eller en mobil, og det ser ikke ut som du har valgt en av dem.\n\nGå til **Min profil, Bytt mellom mobil / t:kort** for å velge.',
-      `Tickets must be used on either a t:card or a phone, and it looks like you haven't chosen one. Go to **My profile, switch between phone / t:card** to select`,
+      'Billetter må brukes på enten et t:kort eller en mobil, og det ser ikke ut som du har valgt en av dem.\n\nGå til **Min profil, Bytt mellom t:kort / mobil** for å velge.',
+      `Tickets must be used on either a t:card or a phone, and it looks like you haven't chosen one. Go to **My profile, switch between t:card / phone** to select`,
     ),
   },
 };

@@ -48,8 +48,8 @@ const ProfileTexts = {
         },
         travelToken: {
           label: _(
-            'Bruk billett på mobil / t:kort',
-            'Use ticket on phone / t:card',
+            'Bruk billett på t:kort / mobil',
+            'Use ticket on t:card / phone',
           ),
           flag: _('Ny', 'New'),
         },
