@@ -95,10 +95,10 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
   /**
    * Load/create native token and handle the situations that can arise.
    *
-   * - First retrieve the token from the client-sdk. If necessary, the token
-   *   will be renewed while getting it.
-   * - If a new user has logged in then the old token will be wiped both
-   *   natively and remote.
+   * - First check if there has been a user change. If there has, then a new
+   *   token should always be created (skip to last step)
+   * - If no user change retrieve the token from the client-sdk. If necessary,
+   *   the token will be renewed while getting it.
    * - If a token already exists it will be validated, and any exceptions thrown
    *   will be handled accordingly.
    * - A new token will be created if necessary.
@@ -113,32 +113,24 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
         `Loading mobile token state for user ${abtCustomerId}`,
       );
 
-      let token: ActivatedToken | undefined;
       /*
-       Retrieve the token from the native layer
+       Check if there has been a user change.
        */
-      token = await client.get(traceId);
+      const lastUser = await storage.get('@ATB_last_mobile_token_user');
+      const noUserChange = lastUser === abtCustomerId;
 
-      if (token) {
+      let token: ActivatedToken | undefined;
+      if (noUserChange) {
         /*
-         If token found in native layer then check if it has been a user
-         change. If user changed then the found token should not be used for
-         this user.
+         Retrieve the token from the native layer
          */
-        const lastUser = await storage.get('@ATB_last_mobile_token_user');
-        const isNewUser = lastUser !== abtCustomerId;
-        if (isNewUser) {
-          Bugsnag.leaveBreadcrumb(
-            `Mobile token user change. Not using token ${token.getTokenId()}`,
-          );
-          token = undefined;
-        }
+        token = await client.get(traceId);
 
         if (token) {
           /*
-          If native token still exists (not wiped because of new user) then
-          validate it. The validation request will throw an error if
-          validation fails, and these errors will be handled as best possible.
+           If native token exists then validate it. The validation request will
+           throw an error if validation fails, and these errors will be handled
+           as best possible.
            */
           try {
             Bugsnag.leaveBreadcrumb(`Validating token ${token.getTokenId()}`);
