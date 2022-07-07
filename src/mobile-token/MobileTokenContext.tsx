@@ -50,6 +50,7 @@ type MobileTokenContextState = {
   createToken: () => void;
   validateToken: () => void;
   removeRemoteToken: (tokenId: string) => void;
+  renewToken: () => void;
 };
 
 const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
@@ -332,6 +333,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
             setRemoteTokens(remoteTokens?.filter(({id}) => id !== tokenId));
           }
         },
+        renewToken: () => client.renew(token!, uuid()),
       }}
     >
       {children}
