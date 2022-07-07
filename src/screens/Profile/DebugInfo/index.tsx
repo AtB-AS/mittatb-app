@@ -18,7 +18,6 @@ import Slider from '@react-native-community/slider';
 import {usePreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import Button from '@atb/components/button';
-import {useNavigation} from '@react-navigation/native';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 function setClipboard(content: string) {
@@ -33,7 +32,6 @@ export default function DebugInfo() {
   const [idToken, setIdToken] = useState<
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
-  const navigation = useNavigation();
 
   useEffect(() => {
     async function run() {
@@ -56,6 +54,7 @@ export default function DebugInfo() {
     wipeToken,
     validateToken,
     removeRemoteToken,
+    renewToken,
     fallbackEnabled,
     isLoading,
     isError,
@@ -308,6 +307,13 @@ export default function DebugInfo() {
                       style={style.button}
                       text="Validate token"
                       onPress={validateToken}
+                    />
+                  )}
+                  {token && (
+                    <Button
+                      style={style.button}
+                      text="Renew token"
+                      onPress={renewToken}
                     />
                   )}
                   <Sections.ExpandableItem
