@@ -66,12 +66,6 @@ export default function TicketInformationalOverlay() {
         >
           {t(TicketsTexts.informational.bullet3)}
         </ThemeText>
-        <ThemeText
-          color={themeColor}
-          style={{marginTop: theme.spacings.medium}}
-        >
-          {t(TicketsTexts.informational.bullet4)}
-        </ThemeText>
         <View style={{marginVertical: theme.spacings.xLarge}}>
           <Button
             text={t(TicketsTexts.informational.button)}
