@@ -2,12 +2,12 @@ import {TranslatedString, translation as _} from '../commons';
 import orgSpecificTranslations from '../utils';
 const OnboardingTexts = {
   welcome: {
-    title: _('Velkommen til AtB-appen', 'Welcome to the AtB app'),
-    titleA11yLabel: _('Velkommen til ATB appen', 'Welcome to the ATB app'),
+    title: _('Velkommen til appen AtB', 'Welcome to AtB app'),
+    titleA11yLabel: _('Velkommen til appen AtB', 'Welcome to the ATB app'),
     description: {
       part1: _(
-        'Her kan du planlegge reiser og sjekke avgangstider i hele Trøndelag. Du kan også prøve kjøp av enkeltbilletter med Vipps. Flere tjenester og billettyper kommer!',
-        'Plan trips and check departure times throughout Trøndelag. You may also purchase single tickets with Vipps. More features and ticket products are coming soon!',
+        'Her kan du planlegge reiser og sjekke avgangstider i hele Trøndelag. Du kan også kjøpe billetter, alt i samme app. Flere tjenester og billettyper er også på vei!',
+        'Plan trips and check departure times throughout Trøndelag. You can also buy tickets, all in the same app. More services and ticket types are also on the way!',
       ),
       part2: _(
         'Hvis du logger inn vil du alltid ha tilgang til billettene dine, selv om du bytter eller mister telefonen din.',

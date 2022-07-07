@@ -52,10 +52,9 @@ const TripMessages: React.FC<TripMessagesProps> = ({
           containerStyle={messageStyle}
           type="warning"
           message={
-            t(TripDetailsTexts.messages.ticketsWeDontSell) +
             (canUseCollabTicket
               ? t(TripDetailsTexts.messages.collabTicketInfo)
-              : ``)
+              : ``) + t(TripDetailsTexts.messages.ticketsWeDontSell)
           }
         />
       )}

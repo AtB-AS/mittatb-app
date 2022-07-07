@@ -171,8 +171,8 @@ const TicketsTexts = {
   informational: {
     title: _('Prøv billettkjøp', 'Try buying tickets'),
     description: _(
-      'Les og godta vilkårene for å kjøpe billetter. Flere billetter og betalingsmåter kommer!',
-      'Read and accept these terms to buy tickets. More tickets and payment methods are coming.',
+      'For å kjøpe billett må du lese og godta vilkårene. Flere billettyper er på vei!',
+      'To buy a ticket, you must read and accept the terms. More ticket types are on the way!',
     ),
     paragraphHeading: _('Akkurat nå kan du:', 'Right now you can:'),
     bullet1: _(
@@ -180,16 +180,12 @@ const TicketsTexts = {
       `${bulletPoint} Buy single tickets for bus and tram.`,
     ),
     bullet2: _(
-      `${bulletPoint} Betale med Vipps.`,
-      `${bulletPoint} Payment with Vipps.`,
+      `${bulletPoint} Betale med Vipps og betalingskort.`,
+      `${bulletPoint} Payment with Vipps and debit card.`,
     ),
     bullet3: _(
-      `${bulletPoint} Kun bruke billetten på den telefonen du har gjennomført kjøpet med.`,
-      `${bulletPoint} Only use the ticket on the phone you made the purchase with.`,
-    ),
-    bullet4: _(
-      `${bulletPoint} Be om kvittering på e-post fra “billettdetaljer”.`,
-      `${bulletPoint} Request an e-mail receipt from “Ticket details”`,
+      `${bulletPoint} Få tilsendt kvittering på epost fra billettdetaljer.`,
+      `${bulletPoint} Receive a receipt by email from ticket details.`,
     ),
     button: _('Godta', 'Accept'),
   },
