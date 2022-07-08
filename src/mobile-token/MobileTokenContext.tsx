@@ -96,7 +96,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
    * Load/create native token and handle the situations that can arise.
    *
    * - First check if there has been a user change. If there has, then a new
-   *   token should always be created (skip to last step)
+   *   token should always be created (skip to last step).
    * - If no user change retrieve the token from the client-sdk. If necessary,
    *   the token will be renewed while getting it.
    * - If a token already exists it will be validated, and any exceptions thrown
