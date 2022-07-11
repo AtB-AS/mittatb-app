@@ -781,7 +781,7 @@ PODS:
   - RNSVG (12.1.1):
     - React
   - SwiftProtobuf (1.19.0)
-  - token-state-react-native-lib-ios (1.0.5-rc.0):
+  - token-state-react-native-lib-ios (1.0.5-rc.5):
     - AbtTokenCoreSDK
     - React-Core
   - Yoga (1.14.0)
@@ -1148,7 +1148,7 @@ SPEC CHECKSUMS:
   RNScreens: eb0dfb2d6b21d2d7f980ad46b14eb306d2f1062e
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   SwiftProtobuf: 6ef3f0e422ef90d6605ca20b21a94f6c1324d6b3
-  token-state-react-native-lib-ios: bc88469f5914f6c5691a1286ac9ab40494fae875
+  token-state-react-native-lib-ios: 3717d33110b112c26c0c6bca4790832b2d0b2712
   Yoga: 32a18c0e845e185f4a2a66ec76e1fd1f958f22fa
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
