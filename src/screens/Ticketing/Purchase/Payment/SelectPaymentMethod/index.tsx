@@ -14,7 +14,6 @@ import {
 } from '@atb/translations';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {parseISO} from 'date-fns';
 import ThemeText from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {listRecurringPayments, PaymentType} from '@atb/tickets';
@@ -27,6 +26,7 @@ import hexToRgba from 'hex-to-rgba';
 import LinearGradient from 'react-native-linear-gradient';
 import PaymentBrand from '../PaymentBrand';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import { getExpireDate, getPaymentTypeName } from '../../utils';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
@@ -351,17 +351,6 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
     onSelect(getSelectOption());
   }
 
-  function getExpireDate(iso: string): string {
-    let date = parseISO(iso);
-    let year = date.getFullYear();
-    let month = date.getMonth();
-    if (month === 0) {
-      month = 12;
-      year--;
-    }
-    return `${month < 10 ? '0' + month : month}/${year.toString().slice(2, 4)}`;
-  }
-
   const paymentTexts = getPaymentTexts(option);
 
   return (
@@ -441,19 +430,6 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
     </View>
   );
 };
-
-function getPaymentTypeName(paymentType: PaymentType) {
-  switch (paymentType) {
-    case PaymentType.Visa:
-      return 'Visa';
-    case PaymentType.Mastercard:
-      return 'MasterCard';
-    case PaymentType.Vipps:
-      return 'Vipps';
-    default:
-      return '';
-  }
-}
 
 type CheckedProps = {
   checked: boolean;
