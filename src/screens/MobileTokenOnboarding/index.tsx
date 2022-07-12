@@ -10,7 +10,7 @@ import {
   TicketSafetyInfoScreen,
 } from '@atb/screens/MobileTokenOnboarding/OnboardingInfo';
 import MobileToken from '@atb/screens/MobileTokenOnboarding/components/MobileToken';
-import {PageIndicator} from '@atb/screens/MobileTokenOnboarding/components/PageIndicator';
+import {PageIndicator} from '@atb/components/page-indicator';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
