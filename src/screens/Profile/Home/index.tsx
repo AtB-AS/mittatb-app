@@ -131,6 +131,14 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 </ThemeText>
               </Sections.GenericItem>
             )}
+
+            {authenticationType == 'phone' && (
+              <Sections.LinkItem 
+              text={t(ProfileTexts.sections.account.linkItems.paymentOptions.label)}
+              onPress={() => navigation.navigate('PaymentOptions')}
+              ></Sections.LinkItem>
+            )}
+
             <Sections.LinkItem
               text={t(
                 ProfileTexts.sections.account.linkItems.expiredTickets.label,

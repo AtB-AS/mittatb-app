@@ -6,6 +6,7 @@ import SelectTravelToken from './TravelToken/SelectTravelTokenScreen';
 import FavoriteDepartures from './FavoriteDepartures';
 import FavoriteList from './FavoriteList';
 import ProfileHome from './Home';
+import PaymentOptions from './PaymentOptions';
 import {ExpiredTickets} from './ExpiredTickets';
 import Language from './Language';
 import Enrollment from './Enrollment';
@@ -21,6 +22,7 @@ import DeleteProfile from '@atb/screens/Profile/DeleteProfile';
 
 export type ProfileStackParams = {
   ProfileHome: undefined;
+  PaymentOptions: undefined;
   ExpiredTickets: undefined;
   DeleteProfile: undefined;
   FavoriteList: undefined;
@@ -53,6 +55,7 @@ export default function ProfileScreen() {
     >
       <Stack.Screen name="ProfileHome" component={ProfileHome} />
       <Stack.Screen name="ExpiredTickets" component={ExpiredTickets} />
+      <Stack.Screen name="PaymentOptions" component={PaymentOptions} />
       <Stack.Screen name="DeleteProfile" component={DeleteProfile} />
       <Stack.Screen name="FavoriteList" component={FavoriteList} />
       <Stack.Screen name="FavoriteDepartures" component={FavoriteDepartures} />
