@@ -6,7 +6,6 @@ import SelectTravelToken from './TravelToken/SelectTravelTokenScreen';
 import FavoriteDepartures from './FavoriteDepartures';
 import FavoriteList from './FavoriteList';
 import ProfileHome from './Home';
-import PaymentOptions from './PaymentOptions';
 import {ExpiredTickets} from './ExpiredTickets';
 import Language from './Language';
 import Enrollment from './Enrollment';
@@ -19,6 +18,7 @@ import PaymentInformation from '@atb/screens/Profile/Information/PaymentInformat
 import TermsInformation from '@atb/screens/Profile/Information/TermsInformation';
 import TicketInspectionInformation from '@atb/screens/Profile/Information/TicketInspectionInformation';
 import DeleteProfile from '@atb/screens/Profile/DeleteProfile';
+import PaymentOptions from './PaymentOptions';
 
 export type ProfileStackParams = {
   ProfileHome: undefined;

@@ -18,6 +18,11 @@ const PaymentOptionsTexts = {
     cancelButton: _('Avbryt', 'Cancel'),
   },
   a11y: {
+    cardInfo: (paymentName: string, masked_pan: string) =>
+    _(
+      `${paymentName} som slutter på ${masked_pan}`,
+      `${paymentName} ending in ${masked_pan}`,
+    ),
     deleteCardIcon: (paymentName: string, masked_pan: string) =>
       _(
         `Aktiver for å fjerne ${paymentName} som slutter på ${masked_pan}`,

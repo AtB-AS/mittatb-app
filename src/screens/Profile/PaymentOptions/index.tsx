@@ -3,7 +3,6 @@ import {useAuthState} from '@atb/auth';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ThemeText from '@atb/components/text';
 import PaymentBrand from '@atb/screens/Ticketing/Purchase/Payment/PaymentBrand';
-import {SavedPaymentOption} from '@atb/screens/Ticketing/Purchase/types';
 import {
   getExpireDate,
   getPaymentTypeName,
@@ -16,15 +15,20 @@ import {
 } from '@atb/tickets';
 import {useTranslation} from '@atb/translations';
 import PaymentOptionsTexts from '@atb/translations/screens/subscreens/PaymentOptions';
-import {OperatorActivitiesEnumeration} from '@entur-private/abt-protobuf-js-grpc-node/lib/uk/org/netex/www/netex/uk_org_netex_www_netex_pb';
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, Alert, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {destructiveAlert} from '../Home/utils';
-import * as Sections from '@atb/components/sections';
 import MessageBox from '@atb/components/message-box';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '@atb/navigation';
+import useFontScale from '@atb/utils/use-font-scale';
 
-export default function PaymentOptions() {
+type PaymentOptionsProps = {
+  navigation: StackNavigationProp<RootStackParamList>;
+};
+
+export default function PaymentOptions({navigation}: PaymentOptionsProps) {
   const style = useStyle();
   const {theme} = useTheme();
   const {t} = useTranslation();
@@ -42,18 +46,22 @@ export default function PaymentOptions() {
     return [...recurringOptions.reverse()];
   }
 
+  /*
+   * Refresh stored cards when screen gets focus
+   */
   useEffect(() => {
-    async function run() {
-      let remoteOptions = await getRecurringPaymentOptions();
-      setStoredCards(remoteOptions);
-      setIsLoading(false);
-    }
-    run();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', refreshCards);
+    return unsubscribe;
+  }, [navigation]);
 
   async function handleRemovePayment(paymentOption: RecurringPayment) {
     setIsLoading(true);
     await deleteRecurringPayment(paymentOption.id);
+    refreshCards();
+  }
+
+  async function refreshCards() {
+    setIsLoading(true);
     const remoteOptions = await getRecurringPaymentOptions();
     setStoredCards(remoteOptions);
     setIsLoading(false);
@@ -66,26 +74,34 @@ export default function PaymentOptions() {
         leftButton={{type: 'back'}}
       />
 
-      
-      {isLoading && (
-        <ActivityIndicator
-          color={theme.text.colors.secondary}
-          size="large"
-          style={{paddingTop: theme.spacings.xLarge}}
-        />
-      )}
-
-      {!isLoading && storedCards.length > 0 && (
-        <ScrollView style={style.contentMargin}>
-          {storedCards.map((card) => (
-            <Card card={card} removePaymentHandler={handleRemovePayment} />
-          ))}
-        </ScrollView>
-      )}
-
       {!isLoading && storedCards.length == 0 && (
-        <MessageBox message={t(PaymentOptionsTexts.noStoredCards)} withMargin={true} containerStyle={{marginTop: theme.spacings.xLarge}} />
+        <View accessibilityLiveRegion="polite">
+          <MessageBox
+            message={t(PaymentOptionsTexts.noStoredCards)}
+            withMargin={true}
+            containerStyle={{marginTop: theme.spacings.xLarge}}
+          />
+        </View>
       )}
+
+      <ScrollView style={style.contentMargin}>
+        {storedCards.length > 0 &&
+          storedCards.map((card) => (
+            <Card
+              card={card}
+              removePaymentHandler={handleRemovePayment}
+              key={card.id}
+            />
+          ))}
+        {isLoading && (
+          <ActivityIndicator
+            key={'spinner'}
+            color={theme.text.colors.secondary}
+            size="large"
+            style={{paddingTop: theme.spacings.xLarge}}
+          />
+        )}
+      </ScrollView>
     </View>
   );
 }
@@ -99,12 +115,17 @@ const Card = (props: {
   const style = useStyle();
   const {theme} = useTheme();
   const {t} = useTranslation();
+  const fontScale = useFontScale();
 
   return (
     <View style={style.card}>
       <View style={style.cardTop}>
         <View>
-          <ThemeText>
+          <ThemeText
+            accessibilityLabel={t(
+              PaymentOptionsTexts.a11y.cardInfo(paymentName, card.masked_pan),
+            )}
+          >
             {paymentName} **** {card.masked_pan}
           </ThemeText>
         </View>
@@ -112,19 +133,30 @@ const Card = (props: {
         <View style={style.cardIcons}>
           <PaymentBrand icon={card.payment_type} />
           <TouchableOpacity
-            accessibilityLabel={t(PaymentOptionsTexts.a11y.deleteCardIcon(paymentName, card.masked_pan))}
+            accessibilityLabel={t(
+              PaymentOptionsTexts.a11y.deleteCardIcon(
+                paymentName,
+                card.masked_pan,
+              ),
+            )}
             style={{marginLeft: theme.spacings.medium}}
             onPress={() => {
               destructiveAlert({
                 alertTitleString: t(PaymentOptionsTexts.deleteModal.title),
                 alertMessageString: t(PaymentOptionsTexts.deleteModal.message),
-                cancelAlertString: t(PaymentOptionsTexts.deleteModal.cancelButton),
-                confirmAlertString: t(PaymentOptionsTexts.deleteModal.confirmButton),
+                cancelAlertString: t(
+                  PaymentOptionsTexts.deleteModal.cancelButton,
+                ),
+                confirmAlertString: t(
+                  PaymentOptionsTexts.deleteModal.confirmButton,
+                ),
                 destructiveArrowFunction: () => removePaymentHandler(card),
               });
             }}
           >
             <SvgDelete
+              height={21 * fontScale}
+              width={21 * fontScale}
               fill={
                 theme.interactive.interactive_destructive.default.background
               }
