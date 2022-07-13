@@ -26,7 +26,7 @@ import hexToRgba from 'hex-to-rgba';
 import LinearGradient from 'react-native-linear-gradient';
 import PaymentBrand from '../PaymentBrand';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import { getExpireDate, getPaymentTypeName } from '../../utils';
+import {getExpireDate, getPaymentTypeName} from '../../utils';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;

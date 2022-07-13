@@ -1,6 +1,6 @@
 import {PreassignedFareProduct} from '@atb/reference-data/types';
-import { PaymentType } from '@atb/tickets/types';
-import { parseISO } from 'date-fns';
+import {PaymentType} from '@atb/tickets/types';
+import {parseISO} from 'date-fns';
 
 export type PurchaseFlow = {
   /**
@@ -55,4 +55,3 @@ export function getPaymentTypeName(paymentType: PaymentType) {
       return '';
   }
 }
-

@@ -31,7 +31,7 @@ const ProfileTexts = {
         },
         paymentOptions: {
           label: _('Betalingsmåter', 'Payment options'),
-        }
+        },
       },
       infoItems: {
         customerNumber: _('Kundenummer', 'Customer number'),
