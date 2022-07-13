@@ -133,9 +133,11 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             )}
 
             {authenticationType == 'phone' && (
-              <Sections.LinkItem 
-              text={t(ProfileTexts.sections.account.linkItems.paymentOptions.label)}
-              onPress={() => navigation.navigate('PaymentOptions')}
+              <Sections.LinkItem
+                text={t(
+                  ProfileTexts.sections.account.linkItems.paymentOptions.label,
+                )}
+                onPress={() => navigation.navigate('PaymentOptions')}
               ></Sections.LinkItem>
             )}
 
