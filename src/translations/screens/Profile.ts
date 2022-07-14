@@ -29,6 +29,9 @@ const ProfileTexts = {
         expiredTickets: {
           label: _('Utløpte billetter', 'Expired tickets'),
         },
+        paymentOptions: {
+          label: _('Betalingsmåter', 'Payment options'),
+        },
       },
       infoItems: {
         customerNumber: _('Kundenummer', 'Customer number'),
