@@ -69,9 +69,6 @@ jobs:
       - name: Generate native assets
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn generate-native-assets
-      - name: Run fastlane build debug
-        if: steps.apk-cache.outputs.cache-hit != 'true'
-        run: fastlane android buildDebug
       - name: Run fastlane build
         if: steps.apk-cache.outputs.cache-hit != 'true'
         run: fastlane android build
