@@ -6,13 +6,11 @@ buildscript {
         minSdkVersion = 23
         compileSdkVersion = 31
         targetSdkVersion = 31
-        kotlinVersion = '1.6.21'
         ndkVersion = "21.4.7075529"
     }
     repositories {
         google()
         mavenCentral()
-        mavenLocal()
     }
     dependencies {
         classpath('com.android.tools.build:gradle:4.2.2')
