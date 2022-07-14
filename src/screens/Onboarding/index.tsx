@@ -4,9 +4,10 @@ import IntercomInfo from '@atb/screens/Onboarding/IntercomInfo';
 import {WelcomeScreenWithoutLogin} from '@atb/screens/Onboarding/WelcomeScreen';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {PageIndicator} from '@atb/components/page-indicator';
-import {SafeAreaView} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {StatusBar} from 'react-native';
 
 export type OnboardingStackParams = {
   WelcomeScreenLogin: undefined;
@@ -22,22 +23,28 @@ const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export default function Index() {
   const styles = useStyles();
+  const {theme} = useTheme();
   return (
-    <SafeAreaView style={styles.container}>
-      <Tab.Navigator
-        tabBar={(props) => {
-          return <PageIndicator {...props} />;
-        }}
-        tabBarPosition="bottom"
-        initialRouteName="WelcomeScreenWithoutLogin"
-      >
-        <Tab.Screen
-          name="WelcomeScreenWithoutLogin"
-          component={WelcomeScreenWithoutLogin}
-        />
-        <Tab.Screen name="IntercomInfo" component={IntercomInfo} />
-      </Tab.Navigator>
-    </SafeAreaView>
+    <>
+      <StatusBar
+        backgroundColor={theme.static.background[themeColor].background}
+      />
+      <SafeAreaView style={styles.container}>
+        <Tab.Navigator
+          tabBar={(props) => {
+            return <PageIndicator {...props} />;
+          }}
+          tabBarPosition="bottom"
+          initialRouteName="WelcomeScreenWithoutLogin"
+        >
+          <Tab.Screen
+            name="WelcomeScreenWithoutLogin"
+            component={WelcomeScreenWithoutLogin}
+          />
+          <Tab.Screen name="IntercomInfo" component={IntercomInfo} />
+        </Tab.Navigator>
+      </SafeAreaView>
+    </>
   );
 }
 
