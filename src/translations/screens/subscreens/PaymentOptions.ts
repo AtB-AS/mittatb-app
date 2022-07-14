@@ -8,6 +8,10 @@ const PaymentOptionsTexts = {
     'Du har ingen lagrede betalingmåter.',
     'You have no stored payment options.',
   ),
+  genericError: _(
+    'Det oppstod en feil. Vennligst prøv igjen.',
+    'An error occured. Please try again.',
+  ),
   deleteModal: {
     title: _('Fjerne betalingsmåte?', 'Delete payment option?'),
     message: _(

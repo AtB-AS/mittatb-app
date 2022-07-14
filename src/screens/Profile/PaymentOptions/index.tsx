@@ -16,8 +16,7 @@ import {
 import {useTranslation} from '@atb/translations';
 import PaymentOptionsTexts from '@atb/translations/screens/subscreens/PaymentOptions';
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {TouchableOpacity, View} from 'react-native';
 import {destructiveAlert} from '../Home/utils';
 import MessageBox from '@atb/components/message-box';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -25,20 +24,25 @@ import {RootStackParamList} from '@atb/navigation';
 import useFontScale from '@atb/utils/use-font-scale';
 import Bugsnag from '@bugsnag/react-native';
 import {useIsFocused} from '@react-navigation/native';
+import {FlatList} from 'react-native';
 
 type PaymentOptionsProps = {
   navigation: StackNavigationProp<RootStackParamList>;
 };
 
+type RecurringPaymentRenderItem = {
+  item: RecurringPayment;
+};
+
 export default function PaymentOptions({navigation}: PaymentOptionsProps) {
   const style = useStyle();
-  const {theme} = useTheme();
   const {t} = useTranslation();
   const {user} = useAuthState();
   const isFocused = useIsFocused();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [storedCards, setStoredCards] = useState<RecurringPayment[]>([]);
+  const [showError, setShowError] = useState<boolean>(false);
 
   async function getRecurringPaymentOptions(): Promise<RecurringPayment[]> {
     if (!user || user.isAnonymous) return [];
@@ -46,7 +50,7 @@ export default function PaymentOptions({navigation}: PaymentOptionsProps) {
       const recurringOptions = await listRecurringPayments();
       return recurringOptions.reverse();
     } catch (error: any) {
-      Bugsnag.notify(error);
+      setShowError(true);
       return [];
     }
   }
@@ -62,7 +66,6 @@ export default function PaymentOptions({navigation}: PaymentOptionsProps) {
     try {
       await deleteRecurringPayment(paymentOption.id);
     } catch (error: any) {
-      Bugsnag.notify(error);
     } finally {
       refreshCards();
     }
@@ -82,39 +85,36 @@ export default function PaymentOptions({navigation}: PaymentOptionsProps) {
 
   return (
     <View style={style.container}>
-      <FullScreenHeader
-        title={t(PaymentOptionsTexts.header.title)}
-        leftButton={{type: 'back'}}
-      />
-
-      {!isLoading && storedCards.length == 0 && (
-        <View accessibilityLiveRegion="polite">
-          <MessageBox
-            message={t(PaymentOptionsTexts.noStoredCards)}
-            withMargin={true}
-            containerStyle={{marginTop: theme.spacings.xLarge}}
-          />
-        </View>
-      )}
-
-      <ScrollView style={style.contentMargin}>
-        {storedCards.length > 0 &&
-          storedCards.map((card) => (
-            <Card
-              card={card}
-              removePaymentHandler={handleRemovePayment}
-              key={card.id}
-            />
-          ))}
-        {isLoading && (
-          <ActivityIndicator
-            key={'spinner'}
-            color={theme.text.colors.secondary}
-            size="large"
-            style={{paddingTop: theme.spacings.xLarge}}
-          />
-        )}
-      </ScrollView>
+      <View
+        onLayout={(e) => {
+          console.log(JSON.stringify(e.nativeEvent.layout));
+        }}
+      >
+        <FullScreenHeader
+          style={{elevation: 1000, zIndex: 1000}}
+          title={t(PaymentOptionsTexts.header.title)}
+          leftButton={{type: 'back'}}
+        />
+      </View>
+      <View style={style.contentContainer}>
+        <FlatList
+          ListHeaderComponent={
+            !isLoading && showError ? (
+              <GenericError />
+            ) : !isLoading && storedCards.length == 0 ? (
+              <NoCardsInfo />
+            ) : null
+          }
+          refreshing={isLoading}
+          onRefresh={() => refreshCards()}
+          progressViewOffset={0}
+          data={storedCards}
+          keyExtractor={(item) => 'card-' + item.id}
+          renderItem={({item}: RecurringPaymentRenderItem) => (
+            <Card card={item} removePaymentHandler={handleRemovePayment} />
+          )}
+        />
+      </View>
     </View>
   );
 }
@@ -185,13 +185,44 @@ const Card = (props: {
   );
 };
 
+const NoCardsInfo = () => {
+  const {theme} = useTheme();
+  const style = useStyle();
+  const {t} = useTranslation();
+  return (
+    <View accessibilityLiveRegion="polite">
+      <MessageBox
+        message={t(PaymentOptionsTexts.noStoredCards)}
+        containerStyle={style.messageStyle}
+      />
+    </View>
+  );
+};
+
+const GenericError = () => {
+  const {theme} = useTheme();
+  const style = useStyle();
+  const {t} = useTranslation();
+  return (
+    <View accessibilityLiveRegion="polite">
+      <MessageBox
+        type="error"
+        message={t(PaymentOptionsTexts.genericError)}
+        containerStyle={style.messageStyle}
+      />
+    </View>
+  );
+};
+
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
-  contentMargin: {
-    margin: theme.spacings.medium,
+  contentContainer: {
+    padding: theme.spacings.medium,
+    overflow: 'hidden',
+    height: '100%',
   },
   card: {
     marginVertical: theme.spacings.xSmall,
@@ -211,5 +242,8 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
     flexGrow: 1,
     justifyContent: 'flex-end',
+  },
+  messageStyle: {
+    marginBottom: theme.spacings.medium,
   },
 }));
