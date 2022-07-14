@@ -84,11 +84,7 @@ export default function PaymentOptions({navigation}: PaymentOptionsProps) {
 
   return (
     <View style={style.container}>
-      <View
-        onLayout={(e) => {
-          console.log(JSON.stringify(e.nativeEvent.layout));
-        }}
-      >
+      <View>
         <FullScreenHeader
           style={{elevation: 1000, zIndex: 1000}}
           title={t(PaymentOptionsTexts.header.title)}
