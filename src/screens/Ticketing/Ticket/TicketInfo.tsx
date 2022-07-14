@@ -21,7 +21,10 @@ import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import {TicketAdd, TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {Warning} from '@atb/assets/svg/color/situations';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {
+  useHasEnabledMobileToken,
+  useMobileTokenContextState,
+} from '@atb/mobile-token/MobileTokenContext';
 import {flatStaticColors, getStaticColor, StaticColor} from '@atb/theme/colors';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {Time} from '@atb/assets/svg/mono-icons/time';
@@ -112,6 +115,7 @@ const WarningMessage = (
 ) => {
   const {t} = useTranslation();
   const inspectableToken = findInspectable(remoteTokens);
+  const hasEnabledMobileToken = useHasEnabledMobileToken();
   if (isError && fallbackEnabled) return null;
 
   if (isError)
@@ -120,7 +124,7 @@ const WarningMessage = (
         {t(TicketTexts.warning.unableToRetrieveToken)}
       </ThemeText>
     );
-  if (!inspectableToken)
+  if (hasEnabledMobileToken && !inspectableToken)
     return (
       <ThemeText type="body__secondary">
         {t(TicketTexts.warning.noInspectableTokenFound)}
