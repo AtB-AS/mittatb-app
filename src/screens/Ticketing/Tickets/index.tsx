@@ -67,7 +67,10 @@ export default function TicketTabs() {
         />
       </Tab.Navigator>
 
-      <TicketInformationalOverlay />
+      {
+        // Should be added when expected terms and conditions are ready
+        /* <TicketInformationalOverlay/> */
+      }
     </View>
   );
 }
