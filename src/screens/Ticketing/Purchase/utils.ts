@@ -1,6 +1,6 @@
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {PaymentType} from '@atb/tickets/types';
-import {parseISO} from 'date-fns';
+import {format, parseISO} from 'date-fns';
 
 export type PurchaseFlow = {
   /**
@@ -34,13 +34,7 @@ export const getPurchaseFlow = (
 
 export function getExpireDate(iso: string): string {
   let date = parseISO(iso);
-  let year = date.getFullYear();
-  let month = date.getMonth();
-  if (month === 0) {
-    month = 12;
-    year--;
-  }
-  return `${month < 10 ? '0' + month : month}/${year.toString().slice(2, 4)}`;
+  return format(date, 'MM/yy');
 }
 
 export function getPaymentTypeName(paymentType: PaymentType) {

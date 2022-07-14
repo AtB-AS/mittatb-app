@@ -23,6 +23,8 @@ import MessageBox from '@atb/components/message-box';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '@atb/navigation';
 import useFontScale from '@atb/utils/use-font-scale';
+import Bugsnag from '@bugsnag/react-native';
+import {useIsFocused} from '@react-navigation/native';
 
 type PaymentOptionsProps = {
   navigation: StackNavigationProp<RootStackParamList>;
@@ -33,38 +35,49 @@ export default function PaymentOptions({navigation}: PaymentOptionsProps) {
   const {theme} = useTheme();
   const {t} = useTranslation();
   const {user} = useAuthState();
+  const isFocused = useIsFocused();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [storedCards, setStoredCards] = useState<RecurringPayment[]>([]);
 
-  async function getRecurringPaymentOptions(): Promise<
-    Array<RecurringPayment>
-  > {
+  async function getRecurringPaymentOptions(): Promise<RecurringPayment[]> {
     if (!user || user.isAnonymous) return [];
-    const recurringOptions: Array<RecurringPayment> =
-      await listRecurringPayments();
-    return [...recurringOptions.reverse()];
+    try {
+      const recurringOptions = await listRecurringPayments();
+      return recurringOptions.reverse();
+    } catch (error: any) {
+      Bugsnag.notify(error);
+      return [];
+    }
   }
 
-  /*
-   * Refresh stored cards when screen gets focus
-   */
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', refreshCards);
-    return unsubscribe;
-  }, [navigation]);
+    if (isFocused) {
+      refreshCards();
+    }
+  }, [isFocused]);
 
   async function handleRemovePayment(paymentOption: RecurringPayment) {
     setIsLoading(true);
-    await deleteRecurringPayment(paymentOption.id);
-    refreshCards();
+    try {
+      await deleteRecurringPayment(paymentOption.id);
+    } catch (error: any) {
+      Bugsnag.notify(error);
+    } finally {
+      refreshCards();
+    }
   }
 
   async function refreshCards() {
     setIsLoading(true);
-    const remoteOptions = await getRecurringPaymentOptions();
-    setStoredCards(remoteOptions);
-    setIsLoading(false);
+    try {
+      const remoteOptions = await getRecurringPaymentOptions();
+      setStoredCards(remoteOptions);
+    } catch (error: any) {
+      Bugsnag.notify(error);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -184,9 +197,7 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     marginVertical: theme.spacings.xSmall,
     borderRadius: theme.border.radius.regular,
     backgroundColor: theme.static.background.background_0.background,
-    paddingHorizontal: theme.spacings.medium,
-    paddingTop: theme.spacings.medium,
-    paddingBottom: theme.spacings.medium,
+    padding: theme.spacings.medium,
   },
   cardTop: {
     flex: 1,
@@ -194,7 +205,6 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  cardName: {},
   cardIcons: {
     flex: 1,
     flexDirection: 'row',
