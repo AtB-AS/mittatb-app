@@ -1,21 +1,17 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
 import {OnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {ScrollView, View} from 'react-native';
+import {ScrollView, useWindowDimensions, View} from 'react-native';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {OnboardingStackParams} from '@atb/screens/Onboarding/index';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {Onboarding1} from '@atb/assets/svg/color/images/';
-import Illustration from '@atb/screens/Onboarding/components/Illustration';
 import {StaticColorByType} from '@atb/theme/colors';
 
 export const themeColor: StaticColorByType<'background'> =
-  'background_accent_3';
+  'background_accent_0';
 
 export type WelcomeScreenProps = {
   navigation: StackNavigationProp<OnboardingStackParams>;
@@ -46,94 +42,76 @@ const WelcomeScreen = ({
 }) => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
-  const focusRef = useFocusOnLoad();
+  const {width: windowWidth} = useWindowDimensions();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.illustration}>
-        <Illustration Svg={Onboarding1} />
-      </View>
-      <View style={styles.topPush} />
-      <ScrollView style={styles.mainView}>
-        <View ref={focusRef} accessibilityRole="header" accessible={true}>
-          <ThemeText
-            type={'body__primary--jumbo--bold'}
-            color={themeColor}
-            accessibilityLabel={t(OnboardingTexts.welcome.titleA11yLabel)}
-          >
-            {t(OnboardingTexts.welcome.title)}
-          </ThemeText>
-        </View>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+    >
+      <View style={styles.mainView}>
+        <ThemeText
+          type={'body__primary--jumbo--bold'}
+          style={styles.header}
+          color={themeColor}
+          accessibilityLabel={t(OnboardingTexts.welcome.titleA11yLabel)}
+        >
+          {t(OnboardingTexts.welcome.title)}
+        </ThemeText>
+        <Onboarding1 width={windowWidth} height={windowWidth * (2 / 3)} />
         <View accessible={true}>
-          <ThemeText style={styles.descriptionPart} color={themeColor}>
+          <ThemeText style={styles.description} color={themeColor}>
             {t(OnboardingTexts.welcome.description.part1)}
           </ThemeText>
           {inLoginContext ? (
             <>
-              <ThemeText style={styles.descriptionPart} color={themeColor}>
+              <ThemeText style={styles.description} color={themeColor}>
                 {t(OnboardingTexts.welcome.description.part2)}
               </ThemeText>
-              <ThemeText style={styles.descriptionPart} color={themeColor}>
+              <ThemeText style={styles.description} color={themeColor}>
                 {t(OnboardingTexts.welcome.description.part3)}
               </ThemeText>
             </>
           ) : null}
         </View>
-      </ScrollView>
-      <View style={styles.bottomView}>
-        <FullScreenFooter>
-          <Button
-            interactiveColor="interactive_1"
-            onPress={onNext}
-            text={t(OnboardingTexts.welcome.mainButton)}
-            icon={ArrowRight}
-            iconPosition="right"
-            testID="nextButton"
-          />
-        </FullScreenFooter>
       </View>
-    </View>
+      <View style={styles.bottomView}>
+        <Button
+          interactiveColor="interactive_1"
+          onPress={onNext}
+          text={t(OnboardingTexts.welcome.mainButton)}
+          icon={ArrowRight}
+          iconPosition="right"
+          testID="nextButton"
+        />
+      </View>
+    </ScrollView>
   );
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+  contentContainer: {
+    flexGrow: 1,
+    paddingTop: theme.spacings.xLarge,
+  },
   container: {
     backgroundColor: theme.static.background[themeColor].background,
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  illustration: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-
-  topPush: {
-    flexGrow: 1,
-    height: '40%',
+    paddingTop: theme.spacings.xLarge,
   },
   mainView: {
-    margin: theme.spacings.medium,
-    padding: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
+    justifyContent: 'space-between',
+    flex: 1,
+  },
+  header: {
+    textAlign: 'center',
+  },
+  description: {
+    textAlign: 'center',
+    paddingHorizontal: theme.spacings.xLarge,
+    paddingBottom: theme.spacings.xLarge,
   },
   bottomView: {
-    flexGrow: 0,
+    paddingHorizontal: theme.spacings.xLarge,
+    paddingBottom: theme.spacings.xLarge,
   },
-  descriptionPart: {
-    marginTop: theme.spacings.medium,
-  },
-  messageBox: {
-    marginBottom: theme.spacings.medium,
-  },
-  buttonView: {
-    marginTop: theme.spacings.medium,
-  },
-  resendButton: {
-    marginTop: theme.spacings.medium,
-    padding: theme.spacings.medium,
-  },
-  resendButtonText: {textAlign: 'center'},
 }));
