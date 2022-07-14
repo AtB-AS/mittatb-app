@@ -77,7 +77,6 @@ export default function PaymentOptions({navigation}: PaymentOptionsProps) {
       const remoteOptions = await getRecurringPaymentOptions();
       setStoredCards(remoteOptions);
     } catch (error: any) {
-      Bugsnag.notify(error);
     } finally {
       setIsLoading(false);
     }
