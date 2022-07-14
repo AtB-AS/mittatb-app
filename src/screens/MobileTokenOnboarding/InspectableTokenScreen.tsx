@@ -78,7 +78,11 @@ export function InspectableTokenScreen({
             onPress={() => {
               navigation.navigate('SelectTravelToken');
             }}
-            text={t(MobileTokenOnboardingTexts.phone.button)}
+            text={
+              isTravelCardToken(inspectableToken)
+                ? t(MobileTokenOnboardingTexts.tCard.button)
+                : t(MobileTokenOnboardingTexts.phone.button)
+            }
             testID="switchButton"
           />
         </View>
