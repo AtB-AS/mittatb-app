@@ -7,7 +7,7 @@ import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
-import {useAppDispatch} from '@atb/AppContext';
+import {useAppDispatch, useAppState} from '@atb/AppContext';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import storage from '@atb/storage';
 import {
@@ -63,7 +63,7 @@ export default function DebugInfo() {
   const {refresh: refreshRemoteConfig} = useRemoteConfig();
 
   const mobileTokenEnabled = useHasEnabledMobileToken();
-
+  const {setCallerRouteForMobileTokenOnboarding} = useAppState();
   const [storedValues, setStoredValues] = useState<
     [string, string | null][] | null
   >(null);
@@ -121,6 +121,7 @@ export default function DebugInfo() {
             <Sections.LinkItem
               text="Restart mobile token onboarding"
               onPress={() => {
+                setCallerRouteForMobileTokenOnboarding('Profile');
                 appDispatch({type: 'RESTART_MOBILE_TOKEN_ONBOARDING'});
               }}
             />

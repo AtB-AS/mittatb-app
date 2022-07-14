@@ -24,6 +24,7 @@ import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import DeparturesScreen from '@atb/screens/Departures';
+import {useAppState} from '@atb/AppContext';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -45,6 +46,7 @@ const NavigationRoot = () => {
   const {t} = useTranslation();
   const {startScreen, newDepartures} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
+  const {callerRoute} = useAppState();
 
   return (
     <Tab.Navigator
@@ -57,7 +59,7 @@ const NavigationRoot = () => {
           ...useBottomNavigationStyles(),
         },
       }}
-      initialRouteName={settingToRouteName(startScreen)}
+      initialRouteName={callerRoute || settingToRouteName(startScreen)}
     >
       <Tab.Screen
         name="Assistant"

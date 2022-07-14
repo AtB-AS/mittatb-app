@@ -19,6 +19,8 @@ import TermsInformation from '@atb/screens/Profile/Information/TermsInformation'
 import TicketInspectionInformation from '@atb/screens/Profile/Information/TicketInspectionInformation';
 import DeleteProfile from '@atb/screens/Profile/DeleteProfile';
 import PaymentOptions from './PaymentOptions';
+import {useAppState} from '@atb/AppContext';
+import {useIsFocused} from '@react-navigation/native';
 
 export type ProfileStackParams = {
   ProfileHome: undefined;
@@ -45,6 +47,12 @@ export type ProfileStackParams = {
 const Stack = createStackNavigator<ProfileStackParams>();
 
 export default function ProfileScreen() {
+  const {callerRoute, setCallerRouteForMobileTokenOnboarding} = useAppState();
+
+  const isFocused = useIsFocused();
+  if (callerRoute === 'Profile' && isFocused) {
+    setCallerRouteForMobileTokenOnboarding(undefined);
+  }
   return (
     <Stack.Navigator
       initialRouteName="ProfileHome"

@@ -9,6 +9,8 @@ import {useAppState} from '@atb/AppContext';
 import {AvailableTickets} from '@atb/screens/Ticketing/Tickets/AvailableTickets/AvailableTickets';
 import {RecentTickets} from './RecentTickets/RecentTickets';
 import {useTheme} from '@atb/theme';
+import {willOnboardMobileToken} from '@atb/api/utils';
+import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 
 export type TicketingScreenNavigationProp =
   StackNavigationProp<RootStackParamList>;
@@ -19,10 +21,12 @@ type Props = {
 
 export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const {must_upgrade_ticketing, enable_recent_tickets} = useRemoteConfig();
-  const appContext = useAppState();
+  const {mobileTokenOnboarded, setCallerRouteForMobileTokenOnboarding} =
+    useAppState();
   const {abtCustomerId, authenticationType} = useAuthState();
   const isSignedInAsAbtCustomer = !!abtCustomerId;
   const {theme} = useTheme();
+  const hasEnabledMobileToken = useHasEnabledMobileToken();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -44,6 +48,8 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
         },
       });
     } else {
+      willOnboardMobileToken(hasEnabledMobileToken, mobileTokenOnboarded) &&
+        setCallerRouteForMobileTokenOnboarding('Ticketing');
       navigation.navigate('LoginInApp', {
         screen: 'LoginOnboardingInApp',
         params: {

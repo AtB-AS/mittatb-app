@@ -19,12 +19,15 @@ enum storeKey {
   ticketing = '@ATB_ticket_informational_accepted',
   mobileTokenOnboarding = '@ATB_mobile_token_onboarded',
 }
+
+export type CallerRouteForMobileTokenOnboarding = 'Ticketing' | 'Profile';
 type AppState = {
   isLoading: boolean;
   onboarded: boolean;
   ticketingAccepted: boolean;
   newBuildSincePreviousLaunch: boolean;
   mobileTokenOnboarded: boolean;
+  callerRoute: CallerRouteForMobileTokenOnboarding | undefined;
 };
 
 type AppReducerAction =
@@ -40,7 +43,11 @@ type AppReducerAction =
   | {type: 'ACCEPT_TICKETING'}
   | {type: 'RESET_TICKETING'}
   | {type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING'}
-  | {type: 'RESTART_MOBILE_TOKEN_ONBOARDING'};
+  | {type: 'RESTART_MOBILE_TOKEN_ONBOARDING'}
+  | {
+      type: 'SET_CALLER_ROUTE_MOBILE_TOKEN_ONBOARDING';
+      callerRoute: CallerRouteForMobileTokenOnboarding | undefined;
+    };
 
 type AppContextState = AppState & {
   completeOnboarding: () => void;
@@ -49,6 +56,9 @@ type AppContextState = AppState & {
   resetTicketing: () => void;
   completeMobileTokenOnboarding: () => void;
   restartMobileTokenOnboarding: () => void;
+  setCallerRouteForMobileTokenOnboarding: (
+    callerRoute: CallerRouteForMobileTokenOnboarding | undefined,
+  ) => void;
 };
 const AppContext = createContext<AppContextState | undefined>(undefined);
 const AppDispatch = createContext<Dispatch<AppReducerAction> | undefined>(
@@ -98,6 +108,11 @@ const appReducer: AppReducer = (prevState, action) => {
         ...prevState,
         mobileTokenOnboarded: false,
       };
+    case 'SET_CALLER_ROUTE_MOBILE_TOKEN_ONBOARDING':
+      return {
+        ...prevState,
+        callerRoute: action.callerRoute,
+      };
   }
 };
 
@@ -107,6 +122,7 @@ const defaultAppState: AppState = {
   ticketingAccepted: false,
   newBuildSincePreviousLaunch: false,
   mobileTokenOnboarded: false,
+  callerRoute: undefined,
 };
 
 const AppContextProvider: React.FC = ({children}) => {
@@ -163,6 +179,7 @@ const AppContextProvider: React.FC = ({children}) => {
     resetTicketing,
     completeMobileTokenOnboarding,
     restartMobileTokenOnboarding,
+    setCallerRouteForMobileTokenOnboarding,
   } = useMemo(
     () => ({
       completeOnboarding: async () => {
@@ -188,6 +205,14 @@ const AppContextProvider: React.FC = ({children}) => {
       restartMobileTokenOnboarding: async () => {
         dispatch({type: 'RESTART_MOBILE_TOKEN_ONBOARDING'});
       },
+      setCallerRouteForMobileTokenOnboarding: async (
+        callerRoute: CallerRouteForMobileTokenOnboarding | undefined,
+      ) => {
+        dispatch({
+          type: 'SET_CALLER_ROUTE_MOBILE_TOKEN_ONBOARDING',
+          callerRoute: callerRoute,
+        });
+      },
     }),
     [],
   );
@@ -202,6 +227,7 @@ const AppContextProvider: React.FC = ({children}) => {
         resetTicketing,
         completeMobileTokenOnboarding,
         restartMobileTokenOnboarding,
+        setCallerRouteForMobileTokenOnboarding,
       }}
     >
       <AppDispatch.Provider value={dispatch}>{children}</AppDispatch.Provider>

@@ -38,6 +38,8 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {destructiveAlert} from './utils';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import Bugsnag from '@bugsnag/react-native';
+import {willOnboardMobileToken} from '@atb/api/utils';
+import {useAppState} from '@atb/AppContext';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -66,7 +68,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   const {t} = useTranslation();
   const {authenticationType, signOut, user, customerNumber} = useAuthState();
   const config = useLocalConfig();
-
+  const {mobileTokenOnboarded, setCallerRouteForMobileTokenOnboarding} =
+    useAppState();
   const {fareContracts, customerProfile} = useTicketState();
   const activeFareContracts =
     filterActiveOrCanBeUsedFareContracts(fareContracts);
@@ -151,7 +154,9 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             {authenticationType !== 'phone' && (
               <Sections.LinkItem
                 text={t(ProfileTexts.sections.account.linkItems.login.label)}
-                onPress={() =>
+                onPress={() => {
+                  willOnboardMobileToken(true, mobileTokenOnboarded) &&
+                    setCallerRouteForMobileTokenOnboarding('Profile');
                   navigation.navigate('LoginInApp', {
                     screen: hasActiveFareContracts
                       ? 'ActiveTicketPromptInApp'
@@ -159,8 +164,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                     params: {
                       afterLogin: {routeName: 'ProfileHome'},
                     },
-                  })
-                }
+                  });
+                }}
                 testID="loginButton"
               />
             )}

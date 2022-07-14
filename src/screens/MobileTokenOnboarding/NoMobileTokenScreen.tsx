@@ -7,7 +7,6 @@ import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {StaticColorByType} from '@atb/theme/colors';
 import {CrashSmall} from '@atb/assets/svg/color/images';
-import {settingToRouteName} from '@atb/utils/navigation';
 import {usePreferenceItems} from '@atb/preferences';
 import {useAppState} from '@atb/AppContext';
 import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
@@ -51,7 +50,6 @@ export function NoMobileTokenScreen({
             interactiveColor="interactive_0"
             onPress={() => {
               completeMobileTokenOnboarding();
-              navigation.navigate(settingToRouteName(startScreen));
             }}
             text={t(MobileTokenOnboardingTexts.next)}
             testID="nextButton"

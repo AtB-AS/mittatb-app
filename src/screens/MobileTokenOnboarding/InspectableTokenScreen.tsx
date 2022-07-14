@@ -3,11 +3,10 @@ import {ScrollView, View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
 import Button from '@atb/components/button';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {StaticColorByType} from '@atb/theme/colors';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {settingToRouteName} from '@atb/utils/navigation';
 import {usePreferenceItems} from '@atb/preferences';
 import TravelTokenBox from '@atb/travel-token-box';
 import {RemoteToken} from '@atb/mobile-token/types';
@@ -66,7 +65,6 @@ export function InspectableTokenScreen({
           <Button
             onPress={() => {
               completeMobileTokenOnboarding();
-              navigation.navigate(settingToRouteName(startScreen));
             }}
             text={t(MobileTokenOnboardingTexts.ok)}
             testID="nextButton"
