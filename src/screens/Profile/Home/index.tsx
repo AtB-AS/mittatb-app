@@ -376,13 +376,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               onPress={() => navigation.navigate('TicketingInformation')}
             />
             <Sections.LinkItem
-              text={t(
-                ProfileTexts.sections.information.linkItems.payment.label,
-              )}
-              testID="paymentInfoButton"
-              onPress={() => navigation.navigate('PaymentInformation')}
-            />
-            <Sections.LinkItem
               text={t(ProfileTexts.sections.information.linkItems.terms.label)}
               testID="termsInfoButton"
               onPress={() => navigation.navigate('TermsInformation')}
