@@ -22,6 +22,7 @@ import TariffZoneSearch, {
 } from './TariffZones/search';
 import {TransitionPresets} from '@react-navigation/stack';
 import {CardPaymentMethod} from './types';
+import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/navigation/TabNavigator';
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;
@@ -53,6 +54,7 @@ type TicketPurchaseRootProps = {
 };
 
 export default function PurchaseStack({route}: TicketPurchaseRootProps) {
+  useGoToMobileTokenOnboardingWhenNecessary();
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}

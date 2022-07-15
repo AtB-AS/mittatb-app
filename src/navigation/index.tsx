@@ -33,10 +33,7 @@ import LoginInAppStack, {
 } from '@atb/login/in-app/LoginInAppStack';
 import useTestIds from './use-test-ids';
 import MobileTokenOnboarding from '@atb/screens/MobileTokenOnboarding';
-import {useAuthState} from '@atb/auth';
 import SelectTravelTokenScreen from '@atb/screens/Profile/TravelToken/SelectTravelTokenScreen';
-import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
-import {shouldOnboardMobileToken} from '@atb/api/utils';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -49,16 +46,14 @@ export type RootStackParamList = {
   TicketPurchase: NavigatorScreenParams<TicketingStackParams>;
   TicketModal: NavigatorScreenParams<TicketModalStackParams>;
   MobileTokenOnboarding: undefined;
-  SelectTravelToken: undefined;
+  SelectTravelTokenRoot: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 const NavigationRoot = () => {
-  const {isLoading, onboarded, mobileTokenOnboarded} = useAppState();
+  const {isLoading, onboarded} = useAppState();
   const {theme} = useTheme();
-  const {authenticationType} = useAuthState();
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
 
   useTestIds();
 
@@ -121,21 +116,6 @@ const NavigationRoot = () => {
           >
             {!onboarded ? (
               <Stack.Screen name="Onboarding" component={Onboarding} />
-            ) : shouldOnboardMobileToken(
-                hasEnabledMobileToken,
-                authenticationType,
-                mobileTokenOnboarded,
-              ) ? (
-              <>
-                <Stack.Screen
-                  name="MobileTokenOnboarding"
-                  component={MobileTokenOnboarding}
-                />
-                <Stack.Screen
-                  name="SelectTravelToken"
-                  component={SelectTravelTokenScreen}
-                />
-              </>
             ) : (
               <>
                 <Stack.Screen name="TabNavigator" component={TabNavigator} />
@@ -151,6 +131,14 @@ const NavigationRoot = () => {
                 <Stack.Screen
                   name="TicketModal"
                   component={TicketModalScreen}
+                />
+                <Stack.Screen
+                  name="MobileTokenOnboarding"
+                  component={MobileTokenOnboarding}
+                />
+                <Stack.Screen
+                  name="SelectTravelTokenRoot"
+                  component={SelectTravelTokenScreen}
                 />
 
                 <Stack.Screen
