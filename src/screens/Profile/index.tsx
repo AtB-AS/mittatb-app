@@ -14,7 +14,6 @@ import DesignSystem from './DesignSystem';
 import DebugInfo from './DebugInfo';
 import DefaultUserProfile from './DefaultUserProfile';
 import TicketingInformation from '@atb/screens/Profile/Information/TicketingInformation';
-import PaymentInformation from '@atb/screens/Profile/Information/PaymentInformation';
 import TermsInformation from '@atb/screens/Profile/Information/TermsInformation';
 import TicketInspectionInformation from '@atb/screens/Profile/Information/TicketInspectionInformation';
 import DeleteProfile from '@atb/screens/Profile/DeleteProfile';
@@ -72,7 +71,6 @@ export default function ProfileScreen() {
         name="TicketingInformation"
         component={TicketingInformation}
       />
-      <Stack.Screen name="PaymentInformation" component={PaymentInformation} />
       <Stack.Screen name="TermsInformation" component={TermsInformation} />
       <Stack.Screen
         name="TicketInspectionInformation"

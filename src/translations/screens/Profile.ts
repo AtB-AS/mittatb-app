@@ -122,9 +122,6 @@ const ProfileTexts = {
         ticketing: {
           label: _('Billettkjøp', 'Ticketing'),
         },
-        payment: {
-          label: _('Betaling', 'Payment'),
-        },
         terms: {
           label: _('Betingelser', 'Terms'),
         },
