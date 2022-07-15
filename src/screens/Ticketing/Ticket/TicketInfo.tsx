@@ -116,6 +116,7 @@ const WarningMessage = (
   const {t} = useTranslation();
   const inspectableToken = findInspectable(remoteTokens);
   const hasEnabledMobileToken = useHasEnabledMobileToken();
+  if (!hasEnabledMobileToken) return null;
   if (isError && fallbackEnabled) return null;
 
   if (isError)
@@ -124,7 +125,7 @@ const WarningMessage = (
         {t(TicketTexts.warning.unableToRetrieveToken)}
       </ThemeText>
     );
-  if (hasEnabledMobileToken && !inspectableToken)
+  if (!inspectableToken)
     return (
       <ThemeText type="body__secondary">
         {t(TicketTexts.warning.noInspectableTokenFound)}
