@@ -52,7 +52,7 @@ export default function Index() {
           <Tab.Screen
             name="ConsequencesScreen"
             component={ConsequencesScreen}
-            initialParams={{callerRoute: 'onboarding'}}
+            initialParams={{callerRoute: 'app-onboarding'}}
           />
         </Tab.Navigator>
       </SafeAreaView>

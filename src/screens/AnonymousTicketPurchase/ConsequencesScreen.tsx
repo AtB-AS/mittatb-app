@@ -29,7 +29,11 @@ export type ConsequencesScreenProps = {
   navigation: MaterialTopTabNavigationProp<OnboardingStackParams>;
 };
 
-export type CallerRoute = 'onboarding' | 'logout' | 'warning';
+export type CallerRoute =
+  | 'app-onboarding'
+  | 'logout'
+  | 'warning'
+  | 'login-onboarding';
 const ConsequencesScreen = ({
   route,
   navigation,
@@ -41,7 +45,8 @@ const ConsequencesScreen = ({
   const {t} = useTranslation();
   const {theme} = useTheme();
 
-  const isCallerRouteOnboarding = route?.params?.callerRoute === 'onboarding';
+  const isCallerRouteOnboarding =
+    route?.params?.callerRoute === 'app-onboarding';
 
   return (
     <>

@@ -24,6 +24,10 @@ const Actions = ({
   const {signOut} = useAuthState();
   const [isLoading, setIsLoading] = useIsLoading(false);
 
+  const navigateToTickets = () => {
+    navigation?.navigate('Ticketing');
+  };
+
   const navigateTologIn = async () => {
     await finishOnboarding();
     navigation?.navigate('LoginInApp', {
@@ -54,7 +58,7 @@ const Actions = ({
   }
 
   switch (callerRoute) {
-    case 'onboarding':
+    case 'app-onboarding':
       return (
         <Buttons
           primaryText={t(
@@ -103,6 +107,25 @@ const Actions = ({
             AnonymousTicketPurchases.consequences.button.login.a11yHint,
           )}
           primaryAction={navigateTologIn}
+          secondaryText={t(
+            AnonymousTicketPurchases.consequences.button.cancel.label,
+          )}
+          secondaryTextAccessibilityHint={t(
+            AnonymousTicketPurchases.consequences.button.cancel.a11yHint,
+          )}
+          secondaryAction={navigation.goBack}
+        />
+      );
+    case 'login-onboarding':
+      return (
+        <Buttons
+          primaryText={t(
+            AnonymousTicketPurchases.consequences.button.accept.label,
+          )}
+          primaryTextAccessibilityHint={t(
+            AnonymousTicketPurchases.consequences.button.accept.a11yHint,
+          )}
+          primaryAction={navigateToTickets}
           secondaryText={t(
             AnonymousTicketPurchases.consequences.button.cancel.label,
           )}

@@ -44,7 +44,7 @@ export default function IntercomInfo({navigation}: IntercomInfoScreenProps) {
           interactiveColor="interactive_1"
           onPress={() =>
             navigation.navigate('ConsequencesScreen', {
-              callerRoute: 'onboarding',
+              callerRoute: 'app-onboarding',
             })
           }
           text={t(OnboardingTexts.intercom.mainButton)}
