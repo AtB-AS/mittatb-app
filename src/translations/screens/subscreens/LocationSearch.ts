@@ -38,6 +38,15 @@ const LocationSearchTexts = {
         'Activate to use this location',
       ),
     },
+    category: {
+      bus: _('Bussholdeplass', 'Bus stop'),
+      tram: _('Trikkeholdeplass', 'Tram stop'),
+      rail: _('Togstasjon', 'Train station'),
+      airport: _('Flyplass', 'Airport'),
+      boat: _('Fergeleie', 'Ferry stop'),
+      unknown: _('Lokasjon', 'Location'),
+      location: _('Lokasjon', 'Location'),
+    },
   },
   messages: {
     networkError: _(
