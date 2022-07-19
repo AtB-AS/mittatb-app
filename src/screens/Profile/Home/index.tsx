@@ -29,15 +29,11 @@ import {usePreferences} from '@atb/preferences';
 import analytics from '@react-native-firebase/analytics';
 import {updateMetadata} from '@atb/chat/metadata';
 import parsePhoneNumber from 'libphonenumber-js';
-import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
+import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import ThemeIcon from '@atb/components/theme-icon';
 import {destructiveAlert} from './utils';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import Bugsnag from '@bugsnag/react-native';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -60,11 +56,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login} =
     useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {wipeToken} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
-  const {authenticationType, signOut, user, customerNumber} = useAuthState();
+  const {authenticationType, user, customerNumber} = useAuthState();
   const config = useLocalConfig();
 
   const {fareContracts, customerProfile} = useTicketState();
@@ -192,14 +187,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                       ProfileTexts.sections.account.linkItems.logout.alert
                         .confirm,
                     ),
-                    destructiveArrowFunction: async () => {
-                      try {
-                        // On logout we delete the user's token
-                        await wipeToken();
-                      } catch (err: any) {
-                        Bugsnag.notify(err);
-                      }
-                      return signOut();
+                    destructiveArrowFunction: () => {
+                      navigation.navigate('ConsequencesScreen', {
+                        callerRoute: 'logout',
+                      });
                     },
                   })
                 }

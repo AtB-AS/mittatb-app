@@ -8,6 +8,11 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {StatusBar} from 'react-native';
+import ConsequencesScreen, {
+  ConsequencesScreenRouteParams,
+} from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
+import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
+import {NavigatorScreenParams} from '@react-navigation/native';
 
 export type OnboardingStackParams = {
   WelcomeScreenLogin: undefined;
@@ -16,6 +21,8 @@ export type OnboardingStackParams = {
   PhoneInputInOnboarding: undefined;
   ConfirmCodeInOnboarding: ConfirmCodeInOnboardingRouteParams;
   SkipLoginWarning: undefined;
+  ConsequencesScreen: ConsequencesScreenRouteParams;
+  LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
 };
 
 const Tab = createMaterialTopTabNavigator<OnboardingStackParams>();
@@ -42,6 +49,11 @@ export default function Index() {
             component={WelcomeScreenWithoutLogin}
           />
           <Tab.Screen name="IntercomInfo" component={IntercomInfo} />
+          <Tab.Screen
+            name="ConsequencesScreen"
+            component={ConsequencesScreen}
+            initialParams={{callerRoute: 'onboarding'}}
+          />
         </Tab.Navigator>
       </SafeAreaView>
     </>

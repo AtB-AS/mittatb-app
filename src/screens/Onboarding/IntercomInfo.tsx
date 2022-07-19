@@ -4,17 +4,21 @@ import React from 'react';
 import {ScrollView, useWindowDimensions, View} from 'react-native';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
-import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
 import {Onboarding2} from '@atb/assets/svg/color/images';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StaticColorByType} from '@atb/theme/colors';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {OnboardingStackParams} from '@atb/screens/Onboarding/index';
+import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export default function IntercomInfo() {
+export type IntercomInfoScreenProps = {
+  navigation: MaterialTopTabNavigationProp<OnboardingStackParams>;
+};
+
+export default function IntercomInfo({navigation}: IntercomInfoScreenProps) {
   const {t} = useTranslation();
   const styles = useThemeStyles();
-  const finishOnboarding = useFinishOnboarding();
   const {width: windowWidth} = useWindowDimensions();
 
   return (
@@ -38,9 +42,13 @@ export default function IntercomInfo() {
       <View style={styles.bottomView}>
         <Button
           interactiveColor="interactive_1"
-          onPress={finishOnboarding}
+          onPress={() =>
+            navigation.navigate('ConsequencesScreen', {
+              callerRoute: 'onboarding',
+            })
+          }
           text={t(OnboardingTexts.intercom.mainButton)}
-          icon={Confirm}
+          icon={ArrowRight}
           iconPosition="right"
           testID="nextButton"
         />
