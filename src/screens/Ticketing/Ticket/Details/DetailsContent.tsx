@@ -14,11 +14,14 @@ import TicketInfo from '../TicketInfo';
 import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
-import QrCode from '@atb/screens/Ticketing/Ticket/Details/QrCode';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {findReferenceDataById} from '@atb/reference-data/utils';
+import _ from 'lodash';
+import {StyleSheet} from '@atb/theme';
 
 type Props = {
   fareContract: FareContract;
@@ -33,7 +36,7 @@ const DetailsContent: React.FC<Props> = ({
   onReceiptNavigate,
   hasActiveTravelCard = false,
 }) => {
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {
     deviceIsInspectable,
@@ -42,6 +45,8 @@ const DetailsContent: React.FC<Props> = ({
   } = useMobileTokenContextState();
 
   const firstTravelRight = fc.travelRights[0];
+  const {preassignedFareproducts} = useFirestoreConfiguration();
+
   if (isPreactivatedTicket(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
@@ -54,10 +59,12 @@ const DetailsContent: React.FC<Props> = ({
       fallbackEnabled,
     );
 
+    const preassignedFareProduct = findReferenceDataById(
+      preassignedFareproducts,
+      firstTravelRight.fareProductRef,
+    );
+
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
-
-    const orderIdText = t(TicketTexts.details.orderId(fc.orderId));
-
     return (
       <Sections.Section withBottomPadding>
         <Sections.GenericItem>
@@ -67,6 +74,7 @@ const DetailsContent: React.FC<Props> = ({
             validFrom={validFrom}
             validTo={validTo}
             isInspectable={ticketIsInspectable}
+            ticketType={preassignedFareProduct?.type}
           />
           <ValidityLine
             status={validityStatus}
@@ -80,24 +88,11 @@ const DetailsContent: React.FC<Props> = ({
             status={validityStatus}
             isInspectable={ticketIsInspectable}
             testID={'details'}
+            fareContract={fc}
           />
         </Sections.GenericItem>
         <Sections.GenericItem>
-          <View accessible={true}>
-            <ThemeText accessibilityLabel={`${orderIdText},`}>
-              {orderIdText}
-            </ThemeText>
-            <ThemeText type="body__secondary" color="secondary">
-              {t(
-                TicketTexts.details.purchaseTime(
-                  formatToLongDateTime(
-                    fromUnixTime(fc.created.toMillis() / 1000),
-                    language,
-                  ),
-                ),
-              )}
-            </ThemeText>
-          </View>
+          <OrderDetails fareContract={fc} />
         </Sections.GenericItem>
         <Sections.LinkItem
           text={t(TicketTexts.details.askForReceipt)}
@@ -105,16 +100,40 @@ const DetailsContent: React.FC<Props> = ({
           accessibility={{accessibilityRole: 'button'}}
           testID="receiptButton"
         />
-        <QrCode
-          validityStatus={validityStatus}
-          ticketIsInspectable={ticketIsInspectable}
-          fc={fc}
-        />
       </Sections.Section>
     );
   } else {
     return <UnknownTicketDetails fc={fc} />;
   }
+};
+
+const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
+  const style = useStyles();
+  const {t, language} = useTranslation();
+  const orderIdText = t(TicketTexts.details.orderId(fareContract.orderId));
+  return (
+    <View accessible={true}>
+      <ThemeText type="body__secondary" color="secondary">
+        {t(
+          TicketTexts.details.purchaseTime(
+            formatToLongDateTime(
+              fromUnixTime(fareContract.created.toMillis() / 1000),
+              language,
+            ),
+          ),
+        )}
+      </ThemeText>
+      <ThemeText
+        type="body__secondary"
+        color="secondary"
+        style={style.marginTop}
+      >
+        {t(TicketTexts.details.paymentMethod)}
+        {_.capitalize(fareContract?.paymentType)}
+      </ThemeText>
+      <ThemeText style={style.marginTop}>{orderIdText}</ThemeText>
+    </View>
+  );
 };
 
 function UnknownTicketDetails({fc}: {fc: FareContract}) {
@@ -130,5 +149,11 @@ function UnknownTicketDetails({fc}: {fc: FareContract}) {
     </Sections.Section>
   );
 }
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  marginTop: {
+    marginTop: theme.spacings.xSmall,
+  },
+}));
 
 export default DetailsContent;

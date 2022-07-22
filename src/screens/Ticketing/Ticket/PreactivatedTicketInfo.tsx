@@ -6,6 +6,8 @@ import TicketInfo from './TicketInfo';
 import ValidityHeader from './ValidityHeader';
 import ValidityLine from './ValidityLine';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {findReferenceDataById} from '@atb/reference-data/utils';
 
 type Props = {
   fareContractState: FareContractState;
@@ -32,6 +34,12 @@ const PreactivatedTicketInfo: React.FC<Props> = ({
   const {startDateTime, endDateTime} = firstTravelRight;
   const validTo = endDateTime.toMillis();
   const validFrom = startDateTime.toMillis();
+  const {preassignedFareproducts} = useFirestoreConfiguration();
+  const preassignedFareProduct = findReferenceDataById(
+    preassignedFareproducts,
+    firstTravelRight.fareProductRef,
+  );
+
   const validityStatus = getValidityStatus(
     now,
     validFrom,
@@ -47,6 +55,7 @@ const PreactivatedTicketInfo: React.FC<Props> = ({
           now={now}
           validFrom={validFrom}
           validTo={validTo}
+          ticketType={preassignedFareProduct?.type}
         />
         <ValidityLine
           status={validityStatus}

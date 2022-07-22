@@ -85,7 +85,7 @@ const TicketsTexts = {
       'Aktivér for å gå til kjøp',
       'Activate to go to purchasing',
     ),
-    singleTicket: {
+    single: {
       title: _('Enkeltbillett', 'Single ticket'),
       description: _(
         'Når du skal reise av og til',
@@ -93,7 +93,7 @@ const TicketsTexts = {
       ),
       transportModes: _('Buss/trikk', 'Bus/tram'),
     },
-    periodTicket: {
+    period: {
       title: _('Periodebillett', 'Periodic ticket'),
       description: _(
         'Når du reiser litt oftere',
@@ -118,6 +118,11 @@ const TicketsTexts = {
         'Explore Trøndelag by bus, train, tram, passenger boat or ferry, for 7 days. Travel as much as you like!',
       ),
       transportModes: _('Flere reisemåter', 'Several travel modes'),
+    },
+    carnet: {
+      title: _('', ''),
+      description: _('', ''),
+      transportModes: _('', ''),
     },
   },
   reservation: {

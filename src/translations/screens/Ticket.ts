@@ -39,11 +39,12 @@ const TicketTexts = {
     header: {
       title: _('Billettdetaljer', 'Ticket details'),
     },
+    paymentMethod: _('Betalingsmetode: ', 'Payment Method: '),
     orderId: (orderId: string) =>
       _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`),
     purchaseTime: (dateTime: string) =>
       _(`Kjøpt ${dateTime}`, `Purchased ${dateTime}`),
-    askForReceipt: _('Be om kvittering', 'Send receipt'),
+    askForReceipt: _('Få kvittering tilsendt', 'Get receipt sent'),
     qrCodeA11yLabel: _(
       'QR kode. Vis frem denne koden ved billett kontroll',
       'QR code. Show this code in case of inspection. ',
@@ -120,6 +121,10 @@ const TicketTexts = {
   ticketInfo: {
     noInspectionIcon: _('Ikke bruk\ni kontroll', 'Not for\ninspection'),
     noInspectionIconA11yLabel: _('Ikke bruk i kontroll', 'Not for inspection'),
+  },
+  label: {
+    travellers: _('Reisende', 'Travellers'),
+    zone: _('Sone', 'Zone'),
   },
   warning: {
     unableToRetrieveToken: _(

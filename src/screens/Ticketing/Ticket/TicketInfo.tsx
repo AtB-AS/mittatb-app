@@ -1,46 +1,48 @@
 import ThemeText from '@atb/components/text';
-import {
-  PreassignedFareProduct,
-  TariffZone,
-  UserProfile,
-} from '@atb/reference-data/types';
+import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {
   findReferenceDataById,
   getReferenceDataName,
 } from '@atb/reference-data/utils';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {PreactivatedTicket} from '@atb/tickets';
+import {StyleSheet} from '@atb/theme';
+import {FareContract, PreactivatedTicket} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
-import React, {ReactElement} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
 import {tariffZonesSummary} from '@atb/screens/Ticketing/Purchase/TariffZones';
-import {Bus} from '@atb/assets/svg/mono-icons/transportation';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
-import {TicketAdd, TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
+import {
+  getNonInspectableTokenWarning,
+  isValidTicket,
+  mapToUserProfilesWithCount,
+  ValidityStatus,
+} from '@atb/screens/Ticketing/Ticket/utils';
 import {screenReaderPause} from '@atb/components/accessible-text';
-import {Warning} from '@atb/assets/svg/color/situations';
-import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
-import {flatStaticColors, getStaticColor, StaticColor} from '@atb/theme/colors';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {Time} from '@atb/assets/svg/mono-icons/time';
-import {
-  findInspectable,
-  getDeviceName,
-  isMobileToken,
-  isTravelCardToken,
-} from '@atb/mobile-token/utils';
-import {RemoteToken} from '@atb/mobile-token/types';
-import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
+import NonTicketInspectionSymbol from '@atb/screens/Ticketing/Ticket/Component/NotForInspectionSymbol';
+import TicketDetail from '@atb/screens/Ticketing/Ticket/Component/TicketDetail';
+import WarningMessage from '@atb/screens/Ticketing/Ticket/Component/WarningMessage';
+import QrCode from '@atb/screens/Ticketing/Ticket/Details/QrCode';
+import SectionSeparator from '@atb/components/sections/section-separator';
+import ZoneSymbol from '@atb/screens/Ticketing/Ticket/Component/ZoneSymbol';
 
-type TicketInfoProps = {
+export type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
-  status: ValidityStatus | 'recent';
+  status: ValidityStatus;
   isInspectable: boolean;
+  omitUserProfileCount?: boolean;
+  testID?: string;
+  fareContract?: FareContract;
+};
+
+export type TicketInfoDetailsProps = {
+  preassignedFareProduct?: PreassignedFareProduct;
+  fromTariffZone?: TariffZone;
+  toTariffZone?: TariffZone;
+  userProfilesWithCount: UserProfileWithCount[];
+  status: TicketInfoProps['status'];
+  isInspectable?: boolean;
   omitUserProfileCount?: boolean;
   testID?: string;
 };
@@ -51,6 +53,7 @@ const TicketInfo = ({
   isInspectable,
   omitUserProfileCount,
   testID,
+  fareContract,
 }: TicketInfoProps) => {
   const {tariffZones, userProfiles, preassignedFareproducts} =
     useFirestoreConfiguration();
@@ -73,99 +76,93 @@ const TicketInfo = ({
   );
 
   return (
-    <TicketInfoView
-      preassignedFareProduct={preassignedFareProduct}
-      fromTariffZone={fromTariffZone}
-      toTariffZone={toTariffZone}
-      userProfilesWithCount={userProfilesWithCount}
-      status={status}
-      isInspectable={isInspectable}
-      omitUserProfileCount={omitUserProfileCount}
-      testID={testID}
-    />
-  );
-};
-
-type TicketInfoViewProps = {
-  preassignedFareProduct?: PreassignedFareProduct;
-  fromTariffZone?: TariffZone;
-  toTariffZone?: TariffZone;
-  userProfilesWithCount: UserProfileWithCount[];
-  status: TicketInfoProps['status'];
-  isInspectable?: boolean;
-  omitUserProfileCount?: boolean;
-  testID?: string;
-};
-
-export const TicketInfoView = (props: TicketInfoViewProps) => {
-  const styles = useStyles();
-  return (
-    <View style={styles.container}>
-      <TicketInfoTexts {...props} />
-      <TicketInspectionSymbol {...props} />
+    <View style={{flex: 1}}>
+      <TicketInfoHeader
+        preassignedFareProduct={preassignedFareProduct}
+        isInspectable={isInspectable}
+        testID={testID}
+        status={status}
+      />
+      {fareContract && (
+        <>
+          <SectionSeparator />
+          <QrCode
+            validityStatus={status}
+            ticketIsInspectable={isInspectable}
+            fc={fareContract}
+          />
+          <SectionSeparator />
+        </>
+      )}
+      <TicketInfoDetails
+        fromTariffZone={fromTariffZone}
+        toTariffZone={toTariffZone}
+        userProfilesWithCount={userProfilesWithCount}
+        status={status}
+        isInspectable={isInspectable}
+        omitUserProfileCount={omitUserProfileCount}
+        preassignedFareProduct={preassignedFareProduct}
+      />
     </View>
   );
 };
 
-const WarningMessage = (
-  isError: boolean,
-  fallbackEnabled: boolean,
-  remoteTokens?: RemoteToken[],
-  isInspectable?: boolean,
-) => {
+const TicketInfoHeader = ({
+  preassignedFareProduct,
+  isInspectable,
+  testID,
+  status,
+}: {
+  preassignedFareProduct?: PreassignedFareProduct;
+  isInspectable?: boolean;
+  testID?: string;
+  status: TicketInfoProps['status'];
+}) => {
+  const styles = useStyles();
+  const {language} = useTranslation();
+  const productName = preassignedFareProduct
+    ? getReferenceDataName(preassignedFareProduct, language)
+    : undefined;
+  const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
   const {t} = useTranslation();
-  const inspectableToken = findInspectable(remoteTokens);
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
-  if (!hasEnabledMobileToken) return null;
-  if (isError && fallbackEnabled) return null;
-
-  if (isError)
-    return (
-      <ThemeText type="body__secondary">
-        {t(TicketTexts.warning.unableToRetrieveToken)}
-      </ThemeText>
-    );
-  if (!inspectableToken)
-    return (
-      <ThemeText type="body__secondary">
-        {t(TicketTexts.warning.noInspectableTokenFound)}
-      </ThemeText>
-    );
-  if (isTravelCardToken(inspectableToken))
-    return (
-      <ThemeText type="body__secondary">
-        {t(TicketTexts.warning.travelCardAstoken)}
-      </ThemeText>
-    );
-  if (isMobileToken(inspectableToken) && !isInspectable)
-    return (
-      <ThemeText type="body__secondary">
-        {t(
-          TicketTexts.warning.anotherMobileAsToken(
-            getDeviceName(inspectableToken) ||
-              t(TicketTexts.warning.unnamedDevice),
-          ),
+  const warning = getNonInspectableTokenWarning(
+    isError,
+    fallbackEnabled,
+    t,
+    remoteTokens,
+    isInspectable,
+  );
+  return (
+    <View style={styles.header}>
+      <View style={styles.ticketHeader}>
+        {productName && (
+          <ThemeText
+            type="body__primary--bold"
+            style={styles.product}
+            accessibilityLabel={productName + screenReaderPause}
+            testID={testID + 'Product'}
+          >
+            {productName + ', AtB'}
+          </ThemeText>
         )}
-      </ThemeText>
-    );
+        <View>{warning && <WarningMessage message={warning} />}</View>
+      </View>
+      {status === 'valid' && !isInspectable && <NonTicketInspectionSymbol />}
+    </View>
+  );
 };
 
-const TicketInfoTexts = (props: TicketInfoViewProps) => {
+const TicketInfoDetails = (props: TicketInfoDetailsProps) => {
   const {
-    preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
     isInspectable,
     omitUserProfileCount,
-    testID,
+    status,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
-
-  const productName = preassignedFareProduct
-    ? getReferenceDataName(preassignedFareProduct, language)
-    : undefined;
 
   const tariffZoneSummary =
     fromTariffZone && toTariffZone
@@ -177,224 +174,44 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
       ? `${getReferenceDataName(u, language)}`
       : `${u.count} ${getReferenceDataName(u, language)}`;
 
-  const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
-  const warning = WarningMessage(
-    isError,
-    fallbackEnabled,
-    remoteTokens,
-    isInspectable,
-  );
-
   return (
-    <View style={styles.textsContainer} accessible={true}>
-      <View>
-        {userProfilesWithCount.map((u) => (
-          <ThemeText
-            type="body__primary--bold"
-            key={u.id}
-            accessibilityLabel={userProfileCountAndName(u) + screenReaderPause}
-            testID={testID + 'UserAndCount'}
-          >
-            {userProfileCountAndName(u)}
-          </ThemeText>
-        ))}
-      </View>
-      {productName && (
-        <ThemeText
-          type="body__secondary"
-          style={styles.product}
-          accessibilityLabel={productName + screenReaderPause}
-          testID={testID + 'Product'}
-        >
-          {productName}
-        </ThemeText>
-      )}
-      {tariffZoneSummary && (
-        <ThemeText
-          type="body__secondary"
-          style={styles.zones}
-          accessibilityLabel={tariffZoneSummary + screenReaderPause}
-          testID={testID + 'Zones'}
-        >
-          {tariffZoneSummary}
-        </ThemeText>
-      )}
-      {warning && (
-        <View style={styles.warning}>
-          <ThemeIcon svg={Warning} style={styles.warningIcon} />
-          {warning}
-        </View>
-      )}
-    </View>
-  );
-};
-
-const TicketInspectionSymbol = ({
-  fromTariffZone,
-  toTariffZone,
-  preassignedFareProduct,
-  status,
-  isInspectable = true,
-}: TicketInfoViewProps) => {
-  const styles = useStyles();
-  const {theme, themeName} = useTheme();
-  const {language} = useTranslation();
-  if (!fromTariffZone || !toTariffZone) return null;
-  const themeColor: StaticColor | undefined =
-    preassignedFareProduct?.type === 'period' && isInspectable
-      ? 'valid'
-      : undefined;
-  const icon = IconForStatus(status, isInspectable, themeColor);
-  if (!icon) return null;
-  const showAsInspectable = isInspectable || status !== 'valid';
-  const isValid = status === 'valid';
-  return (
-    <View
-      style={[
-        showAsInspectable && styles.symbolContainer,
-        isValid && {
-          ...styles.symbolContainerCircle,
-          backgroundColor: themeColor
-            ? flatStaticColors[themeName][themeColor].background
-            : undefined,
-        },
-        isValid &&
-          !isInspectable && {
-            ...styles.textContainer,
-            borderColor: theme.static.status.warning.background,
-          },
-      ]}
-      accessibilityElementsHidden={isInspectable}
-    >
-      <>
-        {status === 'valid' && isInspectable && (
-          <ThemeText
-            type="body__primary--bold"
-            allowFontScaling={false}
-            style={styles.symbolZones}
-            color={themeColor}
-          >
-            {getReferenceDataName(fromTariffZone, language)}
-            {fromTariffZone.id !== toTariffZone.id &&
-              '-' + getReferenceDataName(toTariffZone, language)}
-          </ThemeText>
-        )}
-        {icon}
-      </>
-    </View>
-  );
-};
-
-const IconForStatus = (
-  status: TicketInfoProps['status'],
-  isInspectable: boolean,
-  themeColor?: StaticColor,
-): ReactElement | null => {
-  const {t} = useTranslation();
-  const {themeName} = useTheme();
-  const fillColor = getStaticColor(
-    themeName,
-    themeColor || 'background_0',
-  ).text;
-
-  switch (status) {
-    case 'valid':
-      if (isInspectable)
-        return <ThemeIcon svg={Bus} fill={fillColor} size={'large'} />;
-      else
-        return (
-          <ThemeText
-            type="body__tertiary"
-            style={{
-              textAlign: 'center',
-            }}
-            accessibilityLabel={t(
-              TicketTexts.ticketInfo.noInspectionIconA11yLabel,
+    <View style={styles.container} accessible={true}>
+      <View style={styles.ticketDetails}>
+        <View>
+          <TicketDetail
+            header={t(TicketTexts.label.travellers)}
+            children={userProfilesWithCount.map((u) =>
+              userProfileCountAndName(u),
             )}
-          >
-            {t(TicketTexts.ticketInfo.noInspectionIcon)}
-          </ThemeText>
-        );
-    case 'expired':
-    case 'refunded':
-      return <ThemeIcon svg={TicketInvalid} colorType="error" size={'large'} />;
-    case 'recent':
-      return <ThemeIcon svg={TicketAdd} colorType="primary" size={'large'} />;
-    case 'upcoming':
-      return <ThemeIcon svg={Time} colorType="primary" size={'large'} />;
-    case 'reserving':
-    case 'unknown':
-      return null;
-  }
+          />
+          {tariffZoneSummary && (
+            <TicketDetail
+              header={t(TicketTexts.label.zone)}
+              children={[tariffZoneSummary]}
+            />
+          )}
+        </View>
+        {isValidTicket(status) && isInspectable && <ZoneSymbol {...props} />}
+      </View>
+    </View>
+  );
 };
-
-const mapToUserProfilesWithCount = (
-  userProfileRefs: string[],
-  userProfiles: UserProfile[],
-): UserProfileWithCount[] =>
-  userProfileRefs
-    .reduce((groupedById, userProfileRef) => {
-      const existing = groupedById.find(
-        (r) => r.userProfileRef === userProfileRef,
-      );
-      if (existing) {
-        existing.count += 1;
-        return groupedById;
-      }
-      return [...groupedById, {userProfileRef, count: 1}];
-    }, [] as {userProfileRef: string; count: number}[])
-    .map((refAndCount) => {
-      const userProfile = findReferenceDataById(
-        userProfiles,
-        refAndCount.userProfileRef,
-      );
-      return {
-        ...userProfile,
-        count: refAndCount.count,
-      };
-    })
-    .filter(
-      (userProfileWithCount): userProfileWithCount is UserProfileWithCount =>
-        'id' in userProfileWithCount,
-    );
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flexDirection: 'row'},
-  textsContainer: {flex: 1, paddingTop: theme.spacings.xSmall},
+  container: {flex: 1, paddingTop: theme.spacings.xSmall},
   product: {
     marginTop: theme.spacings.small,
   },
-  zones: {
-    marginTop: theme.spacings.small,
-  },
-  symbolContainer: {
-    height: 72,
-    width: 72,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  symbolContainerCircle: {
-    borderRadius: 1000,
-    borderColor: theme.static.status.valid.background,
-    borderWidth: 5,
-  },
-  symbolZones: {
-    marginTop: theme.spacings.small,
-  },
-  textContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-    aspectRatio: 1,
-    padding: theme.spacings.small,
-  },
-  warning: {
+  ticketDetails: {
     flexDirection: 'row',
-    paddingVertical: theme.spacings.small,
+    justifyContent: 'space-between',
   },
-  warningIcon: {
-    marginRight: theme.spacings.small,
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: theme.spacings.xLarge,
   },
+  ticketHeader: {justifyContent: 'space-between'},
 }));
 
 export default TicketInfo;

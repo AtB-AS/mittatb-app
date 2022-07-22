@@ -5,19 +5,15 @@ import {
   FareContractState,
   flattenCarnetTicketAccesses,
 } from '@atb/tickets';
-import {useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import ValidityLine from '../ValidityLine';
-import {getRelativeValidity, getValidityStatus} from '../utils';
+import {getValidityStatus} from '../utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import TicketInfo from '../TicketInfo';
 import UsedAccessValidityHeader from './UsedAccessValidityHeader';
 import {UsedAccessStatus} from './types';
 import ValidityHeader from '../ValidityHeader';
-import ThemeText from '@atb/components/text';
 import CarnetFooter from './CarnetFooter';
-import Dash from 'react-native-dash';
 import SectionSeparator from '@atb/components/sections/section-separator';
 
 type Props = {
@@ -66,6 +62,7 @@ const CarnetTicketInfo: React.FC<Props> = ({
             validFrom={fareContractValidFrom}
             validTo={fareContractValidTo}
             isInspectable={isInspectable}
+            ticketType={'carnet'}
           />
         ) : (
           <UsedAccessValidityHeader
