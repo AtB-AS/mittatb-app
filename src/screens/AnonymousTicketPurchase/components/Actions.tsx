@@ -4,12 +4,17 @@ import React from 'react';
 import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {CallerRoute} from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
 import Bugsnag from '@bugsnag/react-native';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {useAuthState} from '@atb/auth';
 import useIsLoading from '@atb/utils/use-is-loading';
 import {ActivityIndicator, View} from 'react-native';
+
+export type CallerRoute =
+  | 'ConsequencesFromOnboarding'
+  | 'ConsequencesFromLogout'
+  | 'ConsequencesFromTicketPurchase'
+  | 'ConsequencesFromLoginOnboarding';
 
 const Actions = ({
   callerRoute,
@@ -29,7 +34,6 @@ const Actions = ({
   };
 
   const navigateTologIn = async () => {
-    await finishOnboarding();
     navigation?.navigate('LoginInApp', {
       screen: 'PhoneInputInApp',
       params: {
@@ -58,7 +62,7 @@ const Actions = ({
   }
 
   switch (callerRoute) {
-    case 'app-onboarding':
+    case 'ConsequencesFromOnboarding':
       return (
         <Buttons
           primaryText={t(
@@ -77,7 +81,7 @@ const Actions = ({
           )}
         />
       );
-    case 'logout':
+    case 'ConsequencesFromLogout':
       return (
         <Buttons
           primaryText={t(
@@ -97,7 +101,7 @@ const Actions = ({
           isLoading={isLoading}
         />
       );
-    case 'warning':
+    case 'ConsequencesFromTicketPurchase':
       return (
         <Buttons
           primaryText={t(
@@ -116,7 +120,7 @@ const Actions = ({
           secondaryAction={navigation.goBack}
         />
       );
-    case 'login-onboarding':
+    case 'ConsequencesFromLoginOnboarding':
       return (
         <Buttons
           primaryText={t(

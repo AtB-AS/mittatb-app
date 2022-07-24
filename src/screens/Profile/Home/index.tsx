@@ -188,9 +188,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                         .confirm,
                     ),
                     destructiveArrowFunction: () => {
-                      navigation.navigate('ConsequencesScreen', {
-                        callerRoute: 'logout',
-                      });
+                      navigation.navigate('ConsequencesFromLogout');
                     },
                   })
                 }

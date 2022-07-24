@@ -36,9 +36,7 @@ import MobileTokenOnboarding from '@atb/screens/MobileTokenOnboarding';
 import {useAuthState} from '@atb/auth';
 import SelectTravelTokenScreen from '@atb/screens/Profile/TravelToken/SelectTravelTokenScreen';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
-import ConsequencesScreen, {
-  ConsequencesScreenRouteParams,
-} from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
+import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -52,7 +50,7 @@ export type RootStackParamList = {
   TicketModal: NavigatorScreenParams<TicketModalStackParams>;
   MobileTokenOnboarding: undefined;
   SelectTravelToken: undefined;
-  ConsequencesScreen: ConsequencesScreenRouteParams;
+  ConsequencesFromTicketPurchase: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -145,16 +143,7 @@ const NavigationRoot = () => {
             {!onboarded ? (
               <>
                 <Stack.Screen name="Onboarding" component={Onboarding} />
-                <Stack.Screen
-                  name="LoginInApp"
-                  component={LoginInAppStack}
-                  options={{
-                    transitionSpec: {
-                      open: transitionSpec,
-                      close: transitionSpec,
-                    },
-                  }}
-                />
+                <Stack.Screen name="LoginInApp" component={LoginInAppStack} />
               </>
             ) : shouldOnboardMobileToken ? (
               getMobileTokenOnboardingStackScreens()
@@ -162,7 +151,7 @@ const NavigationRoot = () => {
               <>
                 <Stack.Screen name="TabNavigator" component={TabNavigator} />
                 <Stack.Screen
-                  name="ConsequencesScreen"
+                  name="ConsequencesFromTicketPurchase"
                   component={ConsequencesScreen}
                 />
                 <Stack.Screen

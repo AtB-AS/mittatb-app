@@ -42,11 +42,7 @@ export default function IntercomInfo({navigation}: IntercomInfoScreenProps) {
       <View style={styles.bottomView}>
         <Button
           interactiveColor="interactive_1"
-          onPress={() =>
-            navigation.navigate('ConsequencesScreen', {
-              callerRoute: 'app-onboarding',
-            })
-          }
+          onPress={() => navigation.navigate('ConsequencesFromOnboarding')}
           text={t(OnboardingTexts.intercom.mainButton)}
           icon={ArrowRight}
           iconPosition="right"

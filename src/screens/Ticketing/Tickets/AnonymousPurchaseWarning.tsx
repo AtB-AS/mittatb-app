@@ -11,9 +11,7 @@ const AnonymousPurchaseWarning = () => {
   const styles = useStyle();
   const navigation = useNavigation();
   const navigateToConsequencesScreen = () => {
-    navigation.navigate('ConsequencesScreen', {
-      callerRoute: 'warning',
-    });
+    navigation.navigate('ConsequencesFromTicketPurchase');
   };
   return (
     <View style={styles.warning}>

@@ -16,12 +16,14 @@ import {
   ActiveTicketPromptInApp,
   ActiveTicketPromptInAppRouteParams,
 } from '@atb/login/in-app/ActiveTicketPrompt';
+import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
 
 export type LoginInAppStackParams = {
   LoginOnboardingInApp: LoginOnboardingInAppRouteParams;
   ActiveTicketPromptInApp: ActiveTicketPromptInAppRouteParams;
   PhoneInputInApp: PhoneInputInAppRouteParams;
   ConfirmCodeInApp: ConfirmCodeInAppRouteParams;
+  ConsequencesFromLoginOnboarding: undefined;
 };
 
 const Stack = createStackNavigator<LoginInAppStackParams>();
@@ -42,6 +44,10 @@ export default function LoginInAppStack() {
       />
       <Stack.Screen name="PhoneInputInApp" component={PhoneInputInApp} />
       <Stack.Screen name="ConfirmCodeInApp" component={ConfirmCodeInApp} />
+      <Stack.Screen
+        name="ConsequencesFromLoginOnboarding"
+        component={ConsequencesScreen}
+      />
     </Stack.Navigator>
   );
 }

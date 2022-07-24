@@ -16,24 +16,15 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export type ConsequencesScreenRouteParams = {
-  callerRoute: CallerRoute;
-};
-
 type ConsequencesScreenRouteProps = RouteProp<
   OnboardingStackParams,
-  'ConsequencesScreen'
+  'ConsequencesFromOnboarding'
 >;
 
 export type ConsequencesScreenProps = {
   navigation: MaterialTopTabNavigationProp<OnboardingStackParams>;
 };
 
-export type CallerRoute =
-  | 'app-onboarding'
-  | 'logout'
-  | 'warning'
-  | 'login-onboarding';
 const ConsequencesScreen = ({
   route,
   navigation,
@@ -45,8 +36,7 @@ const ConsequencesScreen = ({
   const {t} = useTranslation();
   const {theme} = useTheme();
 
-  const isCallerRouteOnboarding =
-    route?.params?.callerRoute === 'app-onboarding';
+  const isCallerRouteOnboarding = route?.name === 'ConsequencesFromOnboarding';
 
   return (
     <>
@@ -85,10 +75,7 @@ const ConsequencesScreen = ({
           />
         </View>
         <View style={styles.buttons}>
-          <Actions
-            callerRoute={route?.params?.callerRoute}
-            navigation={navigation}
-          />
+          <Actions callerRoute={route?.name} navigation={navigation} />
         </View>
       </ScrollView>
     </>

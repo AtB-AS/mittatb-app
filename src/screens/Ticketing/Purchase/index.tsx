@@ -22,6 +22,8 @@ import TariffZoneSearch, {
 } from './TariffZones/search';
 import {TransitionPresets} from '@react-navigation/stack';
 import {CardPaymentMethod} from './types';
+import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
+import {BuyTickets} from '@atb/screens/Ticketing/Tickets/Tabs';
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;
@@ -44,6 +46,7 @@ export type TicketingStackParams = {
   PaymentCreditCard: PaymentParams & {paymentMethod: CardPaymentMethod};
   PaymentVipps: PaymentParams;
   Splash: undefined;
+  ConsequencesFromTicketPurchase: undefined;
 };
 
 const Stack = createDismissableStackNavigator<TicketingStackParams>();
@@ -62,6 +65,10 @@ export default function PurchaseStack({route}: TicketPurchaseRootProps) {
         name="PurchaseOverview"
         component={PurchaseOverviewScreen}
         initialParams={route.params}
+      />
+      <Stack.Screen
+        name="ConsequencesFromTicketPurchase"
+        component={ConsequencesScreen}
       />
       <Stack.Screen name="TariffZones" component={TariffZones} />
       <Stack.Screen
