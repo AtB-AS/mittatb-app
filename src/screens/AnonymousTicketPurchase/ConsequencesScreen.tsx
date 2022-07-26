@@ -4,7 +4,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import ThemeText from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
 import AnonymousTicketPurchases from '@atb/translations/screens/subscreens/AnonymousTicketPurchases';
-import {StaticColorByType} from '@atb/theme/colors';
+import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {Support} from '@atb/assets/svg/mono-icons/actions';
 import {OnboardingStackParams} from '@atb/screens/Onboarding';
@@ -13,6 +13,7 @@ import {RouteProp} from '@react-navigation/native';
 import Actions from '@atb/screens/AnonymousTicketPurchase/components/Actions';
 import Consequence from '@atb/screens/AnonymousTicketPurchase/components/Consequence';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {Receipt} from '@atb/assets/svg/mono-icons/ticketing';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -34,10 +35,10 @@ const ConsequencesScreen = ({
 }) => {
   const styles = useStyle();
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {themeName} = useTheme();
 
   const isCallerRouteOnboarding = route?.name === 'ConsequencesFromOnboarding';
-
+  const fillColor = getStaticColor(themeName, themeColor).text;
   return (
     <>
       {!isCallerRouteOnboarding && (
@@ -57,21 +58,15 @@ const ConsequencesScreen = ({
         <View>
           <Consequence
             value={t(AnonymousTicketPurchases.consequences.messages[0])}
-            icon={
-              <Phone fill={theme.static.background.background_0.background} />
-            }
+            icon={<Phone fill={fillColor} />}
           />
           <Consequence
             value={t(AnonymousTicketPurchases.consequences.messages[1])}
-            icon={
-              <Phone fill={theme.static.background.background_0.background} />
-            }
+            icon={<Receipt fill={fillColor} />}
           />
           <Consequence
             value={t(AnonymousTicketPurchases.consequences.messages[2])}
-            icon={
-              <Support fill={theme.static.background.background_0.background} />
-            }
+            icon={<Support fill={fillColor} />}
           />
         </View>
         <View style={styles.buttons}>
