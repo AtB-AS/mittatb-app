@@ -1,15 +1,19 @@
 import React from 'react';
-import {View, TouchableOpacity} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {StyleSheet} from '../theme';
 import LocationIcon from '../components/location-icon';
 import insets from '../utils/insets';
-import {ArrowUpLeft} from '../assets/svg/mono-icons/navigation';
 import {LocationSearchResult} from './types';
 import {FavoriteIcon} from '../favorites';
 import ThemeText from '../components/text';
-import ThemeIcon from '../components/theme-icon';
 import {screenReaderPause} from '../components/accessible-text';
-import {LocationSearchTexts, useTranslation} from '@atb/translations';
+import {
+  LocationSearchTexts,
+  TranslateFunction,
+  useTranslation,
+} from '@atb/translations';
+import {getVenueIconTypes} from '@atb/location-search/utils';
+import {SearchLocation} from '@atb/favorites/types';
 
 type Props = {
   title?: string;
@@ -26,6 +30,7 @@ const LocationResults: React.FC<Props> = ({
 }) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
+
   return (
     <>
       {title && (
@@ -40,7 +45,9 @@ const LocationResults: React.FC<Props> = ({
               <TouchableOpacity
                 accessible={true}
                 accessibilityLabel={
-                  searchResult.location.label + screenReaderPause
+                  getLocationIconAccessibilityLabel(searchResult.location, t) +
+                  searchResult.location.label +
+                  screenReaderPause
                 }
                 accessibilityHint={t(
                   LocationSearchTexts.locationResults.a11y.activateToUse,
@@ -108,6 +115,21 @@ function mapToVisibleSearchResult(searchResult: LocationSearchResult) {
     emoji: searchResult.favoriteInfo.emoji,
   };
 }
+
+const getLocationIconAccessibilityLabel = (
+  {layer, category}: SearchLocation,
+  t: TranslateFunction,
+) => {
+  switch (layer) {
+    case 'venue':
+      return getVenueIconTypes(category)
+        .map((c) => t(LocationSearchTexts.locationResults.category[c]))
+        .join(',');
+    case 'address':
+    default:
+      return t(LocationSearchTexts.locationResults.category.location);
+  }
+};
 
 export default LocationResults;
 
