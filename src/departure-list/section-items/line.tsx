@@ -369,7 +369,8 @@ function ToggleFavoriteDepartureButton({line, stop, quay}: FavoriteStarProps) {
       openBottomSheet(
         (close, focusRef) => (
           <FavoriteDialogSheet
-            line={line}
+            lineNumber={line.lineNumber}
+            lineName={line.lineName}
             addFavorite={addFavorite}
             close={close}
             ref={focusRef}

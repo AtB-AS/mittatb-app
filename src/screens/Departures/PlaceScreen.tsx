@@ -132,6 +132,7 @@ export default function PlaceScreen({
           searchTime={searchTime}
           setSearchTime={setSearchTime}
           testID="departuresContentView"
+          stopPlace={place}
         />
       ) : (
         <StopPlaceView
