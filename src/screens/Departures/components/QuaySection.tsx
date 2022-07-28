@@ -5,21 +5,12 @@ import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {
-  CancelledDepartureTexts,
-  dictionary,
-  useTranslation,
-} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
-import {EstimatedCall, Quay} from '@atb/api/types/departures';
+import {EstimatedCall, Place, Quay} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import EstimatedCallItem from './EstimatedCallItem';
 import SectionSeparator from '@atb/components/sections/section-separator';
-import {
-  formatToClockOrLongRelativeMinutes,
-  formatToSimpleDate,
-} from '@atb/utils/date';
-import {isToday, parseISO} from 'date-fns';
 
 type QuaySectionProps = {
   quay: Quay;
@@ -33,6 +24,7 @@ type QuaySectionProps = {
     fromQuayId?: string,
     isTripCancelled?: boolean,
   ) => void;
+  stopPlace: Place;
 };
 
 type EstimatedCallRenderItem = {
@@ -46,6 +38,7 @@ export default function QuaySection({
   testID,
   navigateToQuay,
   navigateToDetails,
+  stopPlace,
 }: QuaySectionProps): JSX.Element {
   const [isHidden, setIsHidden] = useState(false);
   const styles = useStyles();
@@ -97,31 +90,22 @@ export default function QuaySection({
             ItemSeparatorComponent={SectionSeparator}
             data={departures}
             renderItem={({item: departure, index}: EstimatedCallRenderItem) => (
-              <Sections.GenericClickableItem
+              <Sections.GenericItem
                 radius={
                   !navigateToQuay && index === departures.length - 1
                     ? 'bottom'
                     : undefined
                 }
                 testID={'departureItem' + index}
-                onPress={() => {
-                  if (departure?.serviceJourney)
-                    navigateToDetails(
-                      departure.serviceJourney?.id,
-                      departure.date,
-                      departure.expectedDepartureTime,
-                      departure.quay?.id,
-                      departure.cancellation,
-                    );
-                }}
-                accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
-                accessibilityLabel={getA11yLineLabel(departure, t, language)}
               >
                 <EstimatedCallItem
                   departure={departure}
                   testID={'departureItem' + index}
+                  quay={quay}
+                  stopPlace={stopPlace}
+                  navigateToDetails={navigateToDetails}
                 />
-              </Sections.GenericClickableItem>
+              </Sections.GenericItem>
             )}
             keyExtractor={(item: EstimatedCall) =>
               // ServiceJourney ID is not a unique key if a ServiceJourney
@@ -168,38 +152,6 @@ export default function QuaySection({
       </Sections.Section>
     </View>
   );
-}
-
-function getA11yLineLabel(departure: any, t: any, language: any) {
-  const line = departure.serviceJourney?.line;
-  const a11yLine = line?.publicCode
-    ? `${t(DeparturesTexts.line)} ${line?.publicCode},`
-    : '';
-  const a11yFrontText = departure.destinationDisplay?.frontText
-    ? `${departure.destinationDisplay?.frontText}.`
-    : '';
-
-  let a11yDateInfo = '';
-  if (departure.expectedDepartureTime) {
-    const a11yClock = formatToClockOrLongRelativeMinutes(
-      departure.expectedDepartureTime,
-      language,
-      t(dictionary.date.units.now),
-      9,
-    );
-    const a11yTimeWithRealtimePrefix = departure.realtime
-      ? a11yClock
-      : t(dictionary.a11yMissingRealTimePrefix) + a11yClock;
-    const parsedDepartureTime = parseISO(departure.expectedDepartureTime);
-    const a11yDate = !isToday(parsedDepartureTime)
-      ? formatToSimpleDate(parsedDepartureTime, language) + ','
-      : '';
-    a11yDateInfo = `${a11yDate} ${a11yTimeWithRealtimePrefix}`;
-  }
-
-  return `${
-    departure.cancellation ? t(CancelledDepartureTexts.message) : ''
-  } ${a11yLine} ${a11yFrontText} ${a11yDateInfo}`;
 }
 
 function getDeparturesForQuay(

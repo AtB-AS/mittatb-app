@@ -1,10 +1,9 @@
+import {Coordinates, FeatureCategory} from '@entur/sdk';
+import {StoredType} from './storage';
 import {
-  Coordinates,
   TransportMode,
   TransportSubmode,
-  FeatureCategory,
-} from '@entur/sdk';
-import {StoredType} from './storage';
+} from '@atb/api/types/generated/journey_planner_v3_types';
 
 export type GeoLocation = {
   id: string;
