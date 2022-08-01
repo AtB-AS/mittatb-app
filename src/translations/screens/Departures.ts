@@ -63,5 +63,9 @@ const DeparturesTexts = {
     'Aktiver for å se detaljer',
     'Activate to view details',
   ),
+  resultType: {
+    all: _('Alle holdeplasser', 'All Stops'),
+    favourites: _('Favoritter', 'Favourites'),
+  },
 };
 export default DeparturesTexts;

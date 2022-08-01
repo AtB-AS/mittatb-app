@@ -1,9 +1,6 @@
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
-import DeparturesRoot, {
-  NearbyPlacesParams,
-  DeparturesProps,
-} from './NearbyPlaces';
+import DeparturesRoot from './NearbyPlacesScreen';
 import PlaceScreen, {PlaceScreenParams} from './PlaceScreen';
 import DepartureDetails, {
   DepartureDetailsRouteParams,
@@ -13,9 +10,11 @@ import QuayDepartures, {
 } from '../TripDetails/QuayDepartures';
 import TripDetailsRoot, {DetailsStackParams} from '../TripDetails';
 import TravelDetailsMap, {MapDetailRouteParams} from '../TripDetails/Map';
+import {AllStopsOverviewParams} from '@atb/screens/Departures/AllStopsOverview';
 
 export type DeparturesStackParams = {
-  DeparturesRoot: NearbyPlacesParams;
+  DeparturesRoot: undefined;
+  AllStopsOverview: AllStopsOverviewParams;
   PlaceScreen: PlaceScreenParams;
   DepartureDetails: DepartureDetailsRouteParams;
   QuayDepartures: QuayDeparturesRouteParams;
@@ -25,21 +24,13 @@ export type DeparturesStackParams = {
 
 const Stack = createStackNavigator<DeparturesStackParams>();
 
-type DeparturesRootProps = {
-  route: DeparturesProps;
-};
-
-const DeparturesScreen = ({route}: DeparturesRootProps) => {
+const DeparturesScreen = () => {
   return (
     <Stack.Navigator
       initialRouteName="DeparturesRoot"
       screenOptions={{headerShown: false}}
     >
-      <Stack.Screen
-        name="DeparturesRoot"
-        component={DeparturesRoot}
-        initialParams={route.params}
-      />
+      <Stack.Screen name="DeparturesRoot" component={DeparturesRoot} />
       <Stack.Screen name="PlaceScreen" component={PlaceScreen} />
       <Stack.Screen name="DepartureDetails" component={DepartureDetails} />
       <Stack.Screen name="QuayDepartures" component={QuayDepartures} />

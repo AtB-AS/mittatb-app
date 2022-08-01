@@ -2,10 +2,10 @@ import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData} from 'react-native';
 import {useStopPlaceData} from './state/stop-place-state';
 import {Place, Quay} from '@atb/api/types/departures';
-import {SearchTime} from './NearbyPlaces';
 import DateNavigation from './components/DateNavigator';
 import QuaySection from './components/QuaySection';
 import Feedback from '@atb/components/feedback';
+import {SearchTime} from '@atb/screens/Departures/utils';
 
 type StopPlaceViewProps = {
   stopPlace: Place;

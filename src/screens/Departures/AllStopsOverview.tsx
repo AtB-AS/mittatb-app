@@ -1,102 +1,62 @@
-import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
-import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
-import {LocationInput, Section} from '@atb/components/sections';
-import ThemeIcon from '@atb/components/theme-icon';
-import FavoriteChips from '@atb/favorite-chips';
-import {GeoLocation, Location} from '@atb/favorites/types';
-import {
-  RequestPermissionFn,
-  useGeolocationState,
-} from '@atb/GeolocationContext';
-import {useOnlySingleLocation} from '@atb/location-search';
-import {RootStackParamList} from '@atb/navigation';
-import {StyleSheet} from '@atb/theme';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import React, {useEffect, useMemo, useState} from 'react';
 import {NearbyTexts, useTranslation} from '@atb/translations';
+import {useOnlySingleLocation} from '@atb/location-search';
 import {
   CompositeNavigationProp,
   RouteProp,
   useIsFocused,
 } from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useEffect, useMemo, useState} from 'react';
-import {View} from 'react-native';
-import Loading from '../Loading';
-import {useNearestStopsData} from './state/nearby-places-state';
-import ThemeText from '@atb/components/text';
-import {Place, StopPlacePosition} from '@atb/api/types/departures';
-import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlacesQuery';
-import DeparturesTexts from '@atb/translations/screens/Departures';
-import {DeparturesStackParams} from '.';
-import StopPlaceItem from './components/StopPlaceItem';
-import {useServiceDisruptionSheet} from '@atb/service-disruptions';
+import ThemeIcon from '@atb/components/theme-icon';
 import {useDoOnceWhen} from '@atb/screens/utils';
+import {useNearestStopsData} from '@atb/screens/Departures/state/nearby-places-state';
+import DeparturesTexts from '@atb/translations/screens/Departures';
+import {Place, StopPlacePosition} from '@atb/api/types/departures';
+import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
+import {Location} from '@atb/favorites/types';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import StopPlaces from '@atb/screens/Departures/components/StopPlaces';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {View} from 'react-native';
+import {LocationInput, Section} from '@atb/components/sections';
+import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
+import FavoriteChips from '@atb/favorite-chips';
+import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlacesQuery';
+import {DeparturesStackParams} from '@atb/screens/Departures/index';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '@atb/navigation';
 
-const DateOptions = ['now', 'departure'] as const;
-type DateOptionType = typeof DateOptions[number];
-export type SearchTime = {
-  option: DateOptionType;
-  date: string;
-};
+type DeparturesRouteProps = RouteProp<
+  DeparturesStackParams,
+  'AllStopsOverview'
+>;
 
-type DeparturesRouteName = 'DeparturesRoot';
-const NearbyRouteNameStatic: DeparturesRouteName = 'DeparturesRoot';
-
-export type DepartureScreenNavigationProp = CompositeNavigationProp<
+type DepartureScreenNavigationProp = CompositeNavigationProp<
   StackNavigationProp<DeparturesStackParams>,
   StackNavigationProp<RootStackParamList>
 >;
 
-export type NearbyPlacesParams = {
+export type AllStopsOverviewParams = {
   location: Location;
 };
 
-export type DeparturesProps = RouteProp<
-  DeparturesStackParams,
-  DeparturesRouteName
->;
-
 type RootProps = {
   navigation: DepartureScreenNavigationProp;
-  route: DeparturesProps;
+  route: DeparturesRouteProps;
 };
 
-export default function NearbyPlacesScreen({navigation}: RootProps) {
+export const AllStopsOverview = ({navigation}: RootProps) => {
   const {status, location, locationEnabled, requestPermission} =
     useGeolocationState();
 
-  if (!status) {
-    return <Loading />;
-  }
-
-  return (
-    <PlacesOverview
-      requestGeoPermission={requestPermission}
-      hasLocationPermission={locationEnabled && status === 'granted'}
-      currentLocation={location || undefined}
-      navigation={navigation}
-    />
-  );
-}
-
-type PlacesOverviewProps = {
-  currentLocation?: GeoLocation;
-  hasLocationPermission: boolean;
-  requestGeoPermission: RequestPermissionFn;
-  navigation: DepartureScreenNavigationProp;
-};
-
-const PlacesOverview: React.FC<PlacesOverviewProps> = ({
-  requestGeoPermission,
-  currentLocation,
-  hasLocationPermission,
-  navigation,
-}) => {
+  const requestGeoPermission = requestPermission;
+  const currentLocation = location || undefined;
+  const hasLocationPermission = locationEnabled && status === 'granted';
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
-  const styles = useStyles();
-  const {t} = useTranslation();
 
-  const fromLocation = useOnlySingleLocation<DeparturesProps>('location');
+  const {t} = useTranslation();
+  const fromLocation = useOnlySingleLocation<DeparturesRouteProps>('location');
+
   const screenHasFocus = useIsFocused();
 
   useDoOnceWhen(
@@ -120,7 +80,7 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
       label: t(NearbyTexts.search.label),
-      callerRouteName: NearbyRouteNameStatic,
+      callerRouteName: 'AllStopsOverview',
       callerRouteParam: 'location',
       initialLocation: fromLocation,
     });
@@ -185,7 +145,6 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
       place,
     });
   };
-  const {leftButton} = useServiceDisruptionSheet();
 
   useEffect(() => {
     if (updatingLocation)
@@ -216,7 +175,6 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
     <SimpleDisappearingHeader
       onRefresh={refresh}
       isRefreshing={isLoading}
-      leftButton={leftButton}
       header={
         <Header
           fromLocation={fromLocation}
@@ -234,32 +192,17 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
           }}
         />
       }
-      headerTitle={t(DeparturesTexts.header.title)}
       useScroll={activateScroll}
       alertContext={'travel'}
       setFocusOnLoad={true}
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
-
-      <View style={styles.container} testID="nearbyStopsContainerView">
-        <ThemeText
-          style={styles.listDescription}
-          type="body__secondary"
-          color="secondary"
-        >
-          {getListDescription()}
-        </ThemeText>
-        {orderedStopPlaces.map((stopPlacePosition: StopPlacePosition) => (
-          <StopPlaceItem
-            key={stopPlacePosition.node?.place?.id}
-            stopPlacePosition={stopPlacePosition}
-            onPress={navigateToPlace}
-            testID={
-              'stopPlaceItem' + orderedStopPlaces.indexOf(stopPlacePosition)
-            }
-          />
-        ))}
-      </View>
+      <StopPlaces
+        header={getListDescription()}
+        stopPlaces={orderedStopPlaces}
+        navigateToPlace={navigateToPlace}
+        testID={'nearbyStopsContainerView'}
+      />
     </SimpleDisappearingHeader>
   );
 };
@@ -281,9 +224,13 @@ const Header = React.memo(function Header({
 }: HeaderProps) {
   const {t} = useTranslation();
   const styles = useStyles();
-
+  const {theme} = useTheme();
   return (
-    <>
+    <View
+      style={{
+        backgroundColor: theme.static.background.background_accent_0.background,
+      }}
+    >
       <Section withPadding>
         <LocationInput
           label={t(NearbyTexts.location.departurePicker.label)}
@@ -309,7 +256,7 @@ const Header = React.memo(function Header({
         chipTypes={['favorites', 'add-favorite']}
         contentContainerStyle={styles.favoriteChips}
       />
-    </>
+    </View>
   );
 });
 
@@ -335,17 +282,10 @@ function sortAndFilterStopPlaces(
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    paddingVertical: theme.spacings.medium,
-  },
   favoriteChips: {
     // @TODO Find solution for not hardcoding this. e.g. do proper math
     paddingRight: theme.spacings.medium / 2,
     paddingLeft: theme.spacings.medium,
     paddingBottom: theme.spacings.medium,
-  },
-  listDescription: {
-    paddingVertical: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium * 2,
   },
 }));

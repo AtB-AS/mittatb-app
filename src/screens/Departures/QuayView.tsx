@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import {RefreshControl, SectionList, SectionListData} from 'react-native';
 import {Place, Quay} from '@atb/api/types/departures';
-import {SearchTime} from './NearbyPlaces';
 import DateNavigation from './components/DateNavigator';
 import QuaySection from './components/QuaySection';
 import {useQuayData} from './state/quay-state';
 import stop from '@atb/assets/svg/mono-icons/places/Stop';
+import {SearchTime} from '@atb/screens/Departures/utils';
 
 export type QuayViewParams = {
   quay: Quay;
