@@ -42,6 +42,7 @@ import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import CancelledDepartureMessage from '@atb/screens/TripDetails/components/CancelledDepartureMessage';
+import {usePreferenceItems} from '@atb/preferences';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -285,7 +286,7 @@ function TripItem({
     subMode,
   );
   const showSituations = type !== 'passed' && call.situations.length > 0;
-
+  const {newDepartures} = usePreferenceItems();
   return (
     <View style={[styles.place, isStart && styles.startPlace]}>
       <TripLegDecoration
@@ -343,9 +344,19 @@ function TripItem({
     if (!location) {
       return;
     }
-    navigation.navigate('QuayDepartures', {
-      location,
-    });
+
+    if (newDepartures) {
+      navigation.push('PlaceScreen', {
+        place: {
+          id: location.id,
+          name: location.name,
+        },
+        selectedQuay:
+          quay?.id && quay?.name ? {id: quay?.id, name: quay?.name} : undefined,
+      });
+    } else {
+      navigation.navigate('QuayDepartures', {location});
+    }
   }
 }
 
