@@ -11,6 +11,7 @@ import {EstimatedCall, Place, Quay} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import EstimatedCallItem from './EstimatedCallItem';
 import SectionSeparator from '@atb/components/sections/section-separator';
+import {DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW} from '@atb/screens/Departures/state/stop-place-state';
 
 type QuaySectionProps = {
   quay: Quay;
@@ -88,7 +89,10 @@ export default function QuaySection({
         {!isHidden && (
           <FlatList
             ItemSeparatorComponent={SectionSeparator}
-            data={departures}
+            data={
+              departures &&
+              departures.slice(0, DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW)
+            }
             renderItem={({item: departure, index}: EstimatedCallRenderItem) => (
               <Sections.GenericItem
                 radius={

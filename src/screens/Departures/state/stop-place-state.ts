@@ -23,7 +23,12 @@ import {flatMap} from 'lodash';
 import {EstimatedCall, Place} from '@atb/api/types/departures';
 import {getSecondsUntilMidnightOrMinimum} from './quay-state';
 
-const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
+export const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
+
+//We fetch double the number of departures to be shown,
+// so that we have more departures to show when one or more departures have already passed
+export const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED =
+  DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW * 2;
 
 // Used to re-trigger full refresh after N minutes.
 // To repopulate the view when we get fewer departures.
@@ -42,7 +47,7 @@ export type DepartureDataState = {
 };
 
 const initialQueryInput: DepartureGroupsQuery = {
-  limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
+  limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED,
   startTime: new Date().toISOString(),
 };
 const initialState: DepartureDataState = {
@@ -100,7 +105,7 @@ const reducer: ReducerWithSideEffects<
       // Update input data with new date as this
       // is a fresh fetch. We should fetch the latest information.
       const queryInput: DepartureGroupsQuery = {
-        limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
+        limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED,
         startTime: action.startTime ?? new Date().toISOString(),
       };
 
