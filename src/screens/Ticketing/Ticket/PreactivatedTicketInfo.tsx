@@ -60,6 +60,7 @@ const PreactivatedTicketInfo: React.FC<Props> = ({
           travelRights={travelRights}
           status={validityStatus}
           isInspectable={isInspectable}
+          testID={testID}
         />
       </Sections.GenericItem>
       {!hideDetails && (
@@ -70,7 +71,7 @@ const PreactivatedTicketInfo: React.FC<Props> = ({
               : TicketTexts.detailsLink.notValid,
           )}
           onPress={onPressDetails}
-          testID="showDetailsButton"
+          testID={testID + 'Details'}
         />
       )}
     </Sections.Section>

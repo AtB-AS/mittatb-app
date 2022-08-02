@@ -6,6 +6,7 @@ import {
 import {useSearchHistory} from '@atb/search-history';
 import {LocationSearchResult} from './types';
 import {getLocationLayer} from '@atb/utils/location';
+import {FeatureCategory} from '@atb/sdk';
 
 export function useFilteredJourneySearch(searchText?: string) {
   const {journeyHistory} = useSearchHistory();
@@ -23,7 +24,7 @@ export const filterPreviousLocations = (
   searchText: string,
   previousLocations: SearchLocation[],
   favorites?: UserFavorites,
-  onlyAtbVenues: boolean = false,
+  onlyLocalTariffZoneAuthority: boolean = false,
 ): LocationSearchResult[] => {
   const mappedHistory: LocationSearchResult[] =
     previousLocations
@@ -31,7 +32,8 @@ export const filterPreviousLocations = (
         location,
       }))
       .filter(
-        (location) => !onlyAtbVenues || location.location.layer == 'venue',
+        (location) =>
+          !onlyLocalTariffZoneAuthority || location.location.layer == 'venue',
       ) ?? [];
 
   if (!searchText) {
@@ -47,7 +49,8 @@ export const filterPreviousLocations = (
       } =>
         (matchText(searchText, favorite.location.name) ||
           matchText(searchText, favorite.name)) &&
-        (!onlyAtbVenues || getLocationLayer(favorite.location) == 'venue') &&
+        (!onlyLocalTariffZoneAuthority ||
+          getLocationLayer(favorite.location) == 'venue') &&
         favorite.location.resultType === 'search',
     )
     .map(({location, ...favoriteInfo}) => ({
@@ -74,4 +77,33 @@ export const filterCurrentLocation = (
   return locations
     .filter((l) => !previousLocations.some((pl) => pl.location.id === l.id))
     .map((location) => ({location}));
+};
+
+export const getVenueIconTypes = (category: FeatureCategory[]) => {
+  return category
+    .map(mapLocationCategoryToVenueType)
+    .filter((v, i, arr) => arr.indexOf(v) === i); // get distinct values
+};
+
+const mapLocationCategoryToVenueType = (category: FeatureCategory) => {
+  switch (category) {
+    case 'onstreetBus':
+    case 'busStation':
+    case 'coachStation':
+      return 'bus';
+    case 'onstreetTram':
+    case 'tramStation':
+      return 'tram';
+    case 'railStation':
+    case 'metroStation':
+      return 'rail';
+    case 'airport':
+      return 'airport';
+    case 'harbourPort':
+    case 'ferryPort':
+    case 'ferryStop':
+      return 'boat';
+    default:
+      return 'unknown';
+  }
 };

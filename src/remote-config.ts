@@ -9,13 +9,13 @@ export type RemoteConfig = {
   enable_creditcard: boolean;
   enable_recent_tickets: boolean;
   enable_period_tickets: boolean;
+  enable_login: boolean;
   feedback_questions: string;
   must_upgrade_ticketing: boolean;
   news_enabled: boolean;
   news_text: string;
   news_link_text: string;
   news_link_url: string;
-  vat_percent: number;
   customer_service_url: string;
   customer_feedback_url: string;
   tripsSearch_target_number_of_initial_hits: number;
@@ -23,6 +23,8 @@ export type RemoteConfig = {
   tripsSearch_max_number_of_chained_searches: number;
   privacy_policy_url: string;
   service_disruption_url: string;
+  enable_token_fallback: boolean;
+  enable_flex_tickets: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -33,13 +35,13 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_creditcard: false,
   enable_recent_tickets: false,
   enable_period_tickets: false,
+  enable_login: true,
   feedback_questions: '',
   must_upgrade_ticketing: false,
   news_enabled: false,
   news_text: '',
   news_link_text: 'Les mer',
   news_link_url: '',
-  vat_percent: 6,
   customer_service_url: 'https://www.atb.no/kontakt/',
   customer_feedback_url: '',
   tripsSearch_target_number_of_initial_hits: 8,
@@ -47,6 +49,8 @@ export const defaultRemoteConfig: RemoteConfig = {
   tripsSearch_max_number_of_chained_searches: 5,
   privacy_policy_url: PRIVACY_POLICY_URL,
   service_disruption_url: '',
+  enable_token_fallback: true,
+  enable_flex_tickets: false,
 };
 
 export function getConfig(): RemoteConfig {
@@ -66,6 +70,11 @@ export function getConfig(): RemoteConfig {
   const enable_period_tickets =
     values['enable_period_tickets']?.asBoolean() ??
     defaultRemoteConfig.enable_period_tickets;
+  const enable_flex_tickets =
+    values['enable_flex_tickets']?.asBoolean() ??
+    defaultRemoteConfig.enable_flex_tickets;
+  const enable_login =
+    values['enable_login']?.asBoolean() ?? defaultRemoteConfig.enable_login;
   const feedback_questions =
     values['feedback_questions']?.asString() ??
     defaultRemoteConfig.feedback_questions;
@@ -75,8 +84,6 @@ export function getConfig(): RemoteConfig {
   const news_text = values['news_text']?.asString() ?? '';
   const news_link_text = values['news_link_text']?.asString() ?? 'Les mer';
   const news_link_url = values['news_link_url']?.asString() ?? '';
-  const vat_percent =
-    values['vat_percent']?.asNumber() ?? defaultRemoteConfig.vat_percent;
   const customer_service_url =
     values['customer_service_url']?.asString() ??
     defaultRemoteConfig.customer_service_url;
@@ -101,6 +108,10 @@ export function getConfig(): RemoteConfig {
     values['service_disruption_url']?.asString() ??
     defaultRemoteConfig.service_disruption_url;
 
+  const enable_token_fallback =
+    values['enable_token_fallback']?.asBoolean() ??
+    defaultRemoteConfig.enable_token_fallback;
+
   return {
     enable_network_logging,
     enable_ticketing,
@@ -109,13 +120,13 @@ export function getConfig(): RemoteConfig {
     enable_creditcard,
     enable_recent_tickets,
     enable_period_tickets,
+    enable_login,
     feedback_questions,
     must_upgrade_ticketing,
     news_enabled,
     news_text,
     news_link_url,
     news_link_text,
-    vat_percent,
     customer_service_url,
     customer_feedback_url,
     tripsSearch_target_number_of_initial_hits,
@@ -123,6 +134,8 @@ export function getConfig(): RemoteConfig {
     tripsSearch_max_number_of_chained_searches,
     privacy_policy_url,
     service_disruption_url,
+    enable_token_fallback,
+    enable_flex_tickets,
   };
 }
 

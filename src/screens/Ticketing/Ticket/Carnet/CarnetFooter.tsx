@@ -113,7 +113,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderBottomWidth: 5,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderBottomColor: theme.colors.background_1.backgroundColor,
+    borderBottomColor: theme.static.background.background_1.background,
   },
   box: {
     alignItems: 'center',
@@ -124,18 +124,18 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     paddingVertical: theme.spacings.xSmall,
     borderRadius: 3,
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
   },
   dot: {
-    backgroundColor: theme.colors.secondary_1.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_1.background,
     borderRadius: 20,
-    borderColor: theme.colors.secondary_1.backgroundColor,
+    borderColor: theme.static.background.background_accent_1.background,
     borderWidth: 2,
     width: 16,
     height: 16,
   },
   dot__unused: {
-    backgroundColor: theme.colors.secondary_1.color,
+    backgroundColor: theme.static.background.background_0.background,
   },
   dotFill__active: {
     borderTopRightRadius: 20,
@@ -143,7 +143,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height: '100%',
     width: '50%',
     marginLeft: '50%',
-    backgroundColor: theme.colors.secondary_1.color,
+    backgroundColor: theme.static.background.background_0.background,
   },
 }));
 

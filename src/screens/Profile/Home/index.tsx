@@ -7,16 +7,19 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
+import {Delete} from '@atb/assets/svg/mono-icons/actions';
+import {LogOut} from '@atb/assets/svg/mono-icons/profile';
 import useLocalConfig from '@atb/utils/use-local-config';
 import {IS_QA_ENV} from '@env';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
-import {Alert, Linking, View} from 'react-native';
+import {Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileStackParams} from '..';
 import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
+import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {
   filterActiveOrCanBeUsedFareContracts,
@@ -26,7 +29,15 @@ import {usePreferences} from '@atb/preferences';
 import analytics from '@react-native-firebase/analytics';
 import {updateMetadata} from '@atb/chat/metadata';
 import parsePhoneNumber from 'libphonenumber-js';
-import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import {
+  useHasEnabledMobileToken,
+  useMobileTokenContextState,
+} from '@atb/mobile-token/MobileTokenContext';
+import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
+import ThemeIcon from '@atb/components/theme-icon';
+import {destructiveAlert} from './utils';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import Bugsnag from '@bugsnag/react-native';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -46,8 +57,10 @@ type ProfileScreenProps = {
 };
 
 export default function ProfileHome({navigation}: ProfileScreenProps) {
-  const {enable_i18n, privacy_policy_url, enable_ticketing} = useRemoteConfig();
+  const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login} =
+    useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
+  const {wipeToken} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
@@ -87,71 +100,129 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
         contentContainerStyle={style.scrollView}
         testID="profileHomeScrollView"
       >
-        <Sections.Section withPadding>
-          <Sections.HeaderItem
-            text={t(ProfileTexts.sections.account.heading)}
-          />
-          {authenticationType === 'phone' && (
-            <Sections.GenericItem>
-              <ThemeText style={style.customerNumberHeading}>
-                {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
-              </ThemeText>
-              <ThemeText type="body__secondary" color="secondary">
-                {phoneNumber?.formatInternational()}
-              </ThemeText>
-            </Sections.GenericItem>
-          )}
-          {customerNumber && (
-            <Sections.GenericItem>
-              <ThemeText style={style.customerNumberHeading}>
-                {t(ProfileTexts.sections.account.infoItems.customerNumber)}
-              </ThemeText>
-              <ThemeText type="body__secondary" color="secondary">
-                {customerNumber}
-              </ThemeText>
-            </Sections.GenericItem>
-          )}
-          {authenticationType !== 'phone' && (
-            <Sections.LinkItem
-              text={t(ProfileTexts.sections.account.linkItems.login.label)}
-              onPress={() =>
-                navigation.navigate('LoginInApp', {
-                  screen: hasActiveFareContracts
-                    ? 'ActiveTicketPromptInApp'
-                    : 'PhoneInputInApp',
-                  params: {
-                    afterLogin: {routeName: 'ProfileHome'},
-                  },
-                })
-              }
-              testID="loginButton"
+        {enable_login ? (
+          <Sections.Section withPadding>
+            <Sections.HeaderItem
+              text={t(ProfileTexts.sections.account.heading)}
             />
-          )}
-          {authenticationType === 'phone' && (
-            <Sections.LinkItem
-              text={t(ProfileTexts.sections.account.linkItems.logout.label)}
-              onPress={signOut}
-              testID="logoutButton"
-            />
-          )}
-          <Sections.LinkItem
-            text={t(
-              ProfileTexts.sections.account.linkItems.expiredTickets.label,
+            {authenticationType === 'phone' && (
+              <Sections.GenericItem>
+                <ThemeText style={style.customerNumberHeading}>
+                  {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
+                </ThemeText>
+                <ThemeText type="body__secondary" color="secondary">
+                  {phoneNumber?.formatInternational()}
+                </ThemeText>
+              </Sections.GenericItem>
             )}
-            onPress={() => navigation.navigate('ExpiredTickets')}
-            testID="expiredTicketsButton"
-          />
-        </Sections.Section>
+            {customerNumber && (
+              <Sections.GenericItem>
+                <ThemeText style={style.customerNumberHeading}>
+                  {t(ProfileTexts.sections.account.infoItems.customerNumber)}
+                </ThemeText>
+                <ThemeText
+                  type="body__secondary"
+                  color="secondary"
+                  accessibilityLabel={numberToAccessibilityString(
+                    customerNumber,
+                  )}
+                >
+                  {customerNumber}
+                </ThemeText>
+              </Sections.GenericItem>
+            )}
+
+            {authenticationType == 'phone' && (
+              <Sections.LinkItem
+                text={t(
+                  ProfileTexts.sections.account.linkItems.paymentOptions.label,
+                )}
+                onPress={() => navigation.navigate('PaymentOptions')}
+              ></Sections.LinkItem>
+            )}
+
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.account.linkItems.expiredTickets.label,
+              )}
+              onPress={() => navigation.navigate('ExpiredTickets')}
+              testID="expiredTicketsButton"
+            />
+            {authenticationType !== 'phone' && (
+              <Sections.LinkItem
+                text={t(ProfileTexts.sections.account.linkItems.login.label)}
+                onPress={() =>
+                  navigation.navigate('LoginInApp', {
+                    screen: hasActiveFareContracts
+                      ? 'ActiveTicketPromptInApp'
+                      : 'PhoneInputInApp',
+                    params: {
+                      afterLogin: {routeName: 'ProfileHome'},
+                    },
+                  })
+                }
+                testID="loginButton"
+              />
+            )}
+            {authenticationType === 'phone' && (
+              <Sections.LinkItem
+                text={t(DeleteProfileTexts.header.title)}
+                onPress={() => navigation.navigate('DeleteProfile')}
+              />
+            )}
+            {authenticationType === 'phone' && (
+              <Sections.LinkItem
+                text={t(ProfileTexts.sections.account.linkItems.logout.label)}
+                icon={<ThemeIcon svg={LogOut} />}
+                onPress={() =>
+                  destructiveAlert({
+                    alertTitleString: t(
+                      ProfileTexts.sections.account.linkItems.logout
+                        .confirmTitle,
+                    ),
+                    alertMessageString: t(
+                      ProfileTexts.sections.account.linkItems.logout
+                        .confirmMessage,
+                    ),
+                    cancelAlertString: t(
+                      ProfileTexts.sections.account.linkItems.logout.alert
+                        .cancel,
+                    ),
+                    confirmAlertString: t(
+                      ProfileTexts.sections.account.linkItems.logout.alert
+                        .confirm,
+                    ),
+                    destructiveArrowFunction: async () => {
+                      try {
+                        // On logout we delete the user's token
+                        await wipeToken();
+                      } catch (err: any) {
+                        Bugsnag.notify(err);
+                      }
+                      return signOut();
+                    },
+                  })
+                }
+                testID="logoutButton"
+              />
+            )}
+          </Sections.Section>
+        ) : null}
 
         <Sections.Section withPadding>
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.settings.heading)}
           />
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.settings.linkItems.userProfile.label)}
-            onPress={() => navigation.navigate('DefaultUserProfile')}
-            testID="defaultTravellerButton"
-          />
+          {enable_ticketing ? (
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.settings.linkItems.userProfile.label,
+              )}
+              onPress={() => navigation.navigate('DefaultUserProfile')}
+              testID="defaultTravellerButton"
+            />
+          ) : null}
+
           {authenticationType === 'phone' && hasEnabledMobileToken && (
             <Sections.LinkItem
               text={t(
@@ -189,7 +260,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 {t(ProfileTexts.sections.newFeatures.heading)}
               </ThemeText>
               <View style={style.betaLabel}>
-                <ThemeText color="primary_2" style={style.betaLabelText}>
+                <ThemeText
+                  color="background_accent_3"
+                  style={style.betaLabelText}
+                >
                   BETA
                 </ThemeText>
               </View>
@@ -249,6 +323,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.privacy.linkItems.privacy.label)}
+            icon={<ThemeIcon svg={ExternalLink} />}
             accessibility={{
               accessibilityHint: t(
                 ProfileTexts.sections.privacy.linkItems.privacy.a11yHint,
@@ -259,6 +334,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           />
           <Sections.LinkItem
             text={t(ProfileTexts.sections.privacy.linkItems.clearHistory.label)}
+            icon={<ThemeIcon svg={Delete} />}
             accessibility={{
               accessibilityHint: t(
                 ProfileTexts.sections.privacy.linkItems.clearHistory.a11yHint,
@@ -266,29 +342,23 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             }}
             testID="clearHistoryButton"
             onPress={() =>
-              Alert.alert(
-                t(ProfileTexts.sections.privacy.linkItems.clearHistory.confirm),
-                undefined,
-                [
-                  {
-                    text: t(
-                      ProfileTexts.sections.privacy.linkItems.clearHistory.alert
-                        .cancel,
-                    ),
-                    style: 'cancel',
-                  },
-                  {
-                    text: t(
-                      ProfileTexts.sections.privacy.linkItems.clearHistory.alert
-                        .confirm,
-                    ),
-                    style: 'destructive',
-                    onPress: async () => {
-                      await clearHistory();
-                    },
-                  },
-                ],
-              )
+              destructiveAlert({
+                alertTitleString: t(
+                  ProfileTexts.sections.privacy.linkItems.clearHistory
+                    .confirmTitle,
+                ),
+                cancelAlertString: t(
+                  ProfileTexts.sections.privacy.linkItems.clearHistory.alert
+                    .cancel,
+                ),
+                confirmAlertString: t(
+                  ProfileTexts.sections.privacy.linkItems.clearHistory.alert
+                    .confirm,
+                ),
+                destructiveArrowFunction: async () => {
+                  await clearHistory();
+                },
+              })
             }
           />
         </Sections.Section>
@@ -304,13 +374,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               )}
               testID="ticketingInfoButton"
               onPress={() => navigation.navigate('TicketingInformation')}
-            />
-            <Sections.LinkItem
-              text={t(
-                ProfileTexts.sections.information.linkItems.payment.label,
-              )}
-              testID="paymentInfoButton"
-              onPress={() => navigation.navigate('PaymentInformation')}
             />
             <Sections.LinkItem
               text={t(ProfileTexts.sections.information.linkItems.terms.label)}
@@ -375,7 +438,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
   customerNumberHeading: {
@@ -393,7 +456,7 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
   },
   betaLabel: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_3.background,
     marginHorizontal: theme.spacings.small,
     paddingHorizontal: theme.spacings.small,
     paddingVertical: theme.spacings.small,

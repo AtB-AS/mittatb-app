@@ -1,11 +1,32 @@
-export type TravelTokenType = 'travelCard' | 'mobile';
+export type KeyValue = {
+  key: string;
+  value: string;
+};
 
-export type TravelToken = {
+export type RemoteToken = {
   id: string;
-  name?: string;
-  inspectable: boolean;
-  activated: boolean;
-  type: TravelTokenType;
-  travelCardId?: string;
-  isThisDevice: boolean;
+  validityStart?: number;
+  validityEnd?: number;
+  type: string;
+  state: string;
+  allowedActions: string[];
+  keyValues?: KeyValue[];
+};
+
+export type ListResponse = {
+  tokens: RemoteToken[];
+};
+
+export type ToggleRequest = {
+  tokenId: string;
+};
+
+export type ToggleResponse = ListResponse;
+
+export type RemoveRequest = {
+  tokenId: string;
+};
+
+export type RemoveResponse = {
+  removed: boolean;
 };

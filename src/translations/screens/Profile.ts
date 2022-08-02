@@ -1,5 +1,4 @@
 import {translation as _} from '../commons';
-import orgSpecificTranslations from '../utils';
 
 const ProfileTexts = {
   header: {
@@ -10,13 +9,28 @@ const ProfileTexts = {
       heading: _('Min konto', 'My account'),
       linkItems: {
         login: {
-          label: _('Logg inn', 'Sign in'),
+          label: _('Logg inn', 'Log in'),
         },
         logout: {
-          label: _('Logg ut', 'Sign out'),
+          label: _('Logg ut', 'Log out'),
+          confirmTitle: _(
+            'Er du sikker på at du vil logge ut?',
+            'Are you sure you want to log out?',
+          ),
+          confirmMessage: _(
+            'Billettene dine vil ikke være tilgjengelig i appen hvis du logger ut. De blir tilgjengelige igjen hvis du logger inn.',
+            'Your tickets will be inaccessible in the app after logging out. You can access them again by logging in.',
+          ),
+          alert: {
+            cancel: _('Avbryt', 'Cancel'),
+            confirm: _('Logg ut', 'Log out'),
+          },
         },
         expiredTickets: {
           label: _('Utløpte billetter', 'Expired tickets'),
+        },
+        paymentOptions: {
+          label: _('Betalingsmåter', 'Payment options'),
         },
       },
       infoItems: {
@@ -37,8 +51,8 @@ const ProfileTexts = {
         },
         travelToken: {
           label: _(
-            'Bruk billett på mobil / t:kort',
-            'Use ticket on phone / t:card',
+            'Bruk billett på t:kort / mobil',
+            'Use ticket on t:card / phone',
           ),
           flag: _('Ny', 'New'),
         },
@@ -91,9 +105,9 @@ const ProfileTexts = {
             'Aktivér for å tømme tidligere søk',
             'Activate to clear previous searches',
           ),
-          confirm: _(
-            'Dette vil fjerne søkehistorikk.',
-            'This will permanently clear search history.',
+          confirmTitle: _(
+            'Er du sikker på at du vil slette søkehistorikk?',
+            'Are you sure you want to delete your search history?',
           ),
           alert: {
             cancel: _('Avbryt', 'Cancel'),
@@ -107,9 +121,6 @@ const ProfileTexts = {
       linkItems: {
         ticketing: {
           label: _('Billettkjøp', 'Ticketing'),
-        },
-        payment: {
-          label: _('Betaling', 'Payment'),
         },
         terms: {
           label: _('Betingelser', 'Terms'),
@@ -129,10 +140,4 @@ const ProfileTexts = {
     ),
   },
 };
-export default orgSpecificTranslations(ProfileTexts, {
-  nfk: {
-    header: {
-      title: _('Mitt Reis', 'My Reis'),
-    },
-  },
-});
+export default ProfileTexts;

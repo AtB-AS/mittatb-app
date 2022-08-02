@@ -4,4 +4,5 @@ export type ServiceJourneyDeparture = {
   serviceDate: string;
   fromQuayId?: string;
   toQuayId?: string;
+  isTripCancelled?: boolean;
 };

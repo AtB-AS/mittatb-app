@@ -8,15 +8,24 @@ import {ProfileStackParams} from '..';
 import Button from '@atb/components/button';
 import * as Sections from '@atb/components/sections';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import {TravelToken} from '@atb/mobile-token/types';
 import {animateNextChange} from '@atb/utils/animation';
 import MessageBox from '@atb/components/message-box';
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import RadioBox from '@atb/components/radio-icon/radio-box';
+import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {
-  TravelTokenCard,
-  TravelTokenPhone,
-} from '@atb/assets/svg/color/illustrations';
+  findInspectable,
+  getDeviceName,
+  isMobileToken,
+  isTravelCardToken,
+} from '@atb/mobile-token/utils';
+import {RemoteToken} from '@atb/mobile-token/types';
+import {
+  filterActiveOrCanBeUsedFareContracts,
+  isCarnetTicket,
+  useTicketState,
+} from '@atb/tickets';
+import {flatMap} from '@atb/utils/array';
 
 type RouteName = 'SelectTravelToken';
 
@@ -28,14 +37,23 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const {toggleTravelToken, travelTokens} = useMobileTokenContextState();
-  const inspectableToken = travelTokens?.find((t) => t.inspectable);
+  const {fareContracts} = useTicketState();
 
-  const [selectedType, setSelectedType] = useState(inspectableToken?.type);
+  const {token, remoteTokens, toggleToken} = useMobileTokenContextState();
+  const inspectableToken = findInspectable(remoteTokens);
 
-  const [selectedToken, setSelectedToken] = useState<TravelToken | undefined>(
+  const [selectedType, setSelectedType] = useState<'mobile' | 'travelCard'>(
+    isTravelCardToken(inspectableToken) ? 'travelCard' : 'mobile',
+  );
+
+  const [selectedToken, setSelectedToken] = useState<RemoteToken | undefined>(
     inspectableToken,
   );
+
+  const hasActiveCarnetTicket = flatMap(
+    filterActiveOrCanBeUsedFareContracts(fareContracts),
+    (i) => i.travelRights,
+  ).some(isCarnetTicket);
 
   const [saveState, setSaveState] = useState({
     saving: false,
@@ -43,23 +61,19 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
   });
 
   const onSave = useCallback(async () => {
-    if (selectedToken?.id === inspectableToken?.id) {
-      navigation.goBack();
-    } else if (selectedToken) {
+    if (selectedToken) {
       setSaveState({saving: true, error: false});
-      const success = await toggleTravelToken?.(selectedToken.id);
+      const success = await toggleToken(selectedToken.id);
       if (success) {
         navigation.goBack();
       } else {
         setSaveState({saving: false, error: true});
       }
     }
-  }, [toggleTravelToken, selectedToken]);
+  }, [toggleToken, selectedToken]);
 
-  const travelCardToken = travelTokens?.find((t) => t.type === 'travelCard');
-  const activatedMobileTokens = travelTokens
-    ?.filter((t) => t.type === 'mobile')
-    ?.filter((t) => t.activated);
+  const travelCardToken = remoteTokens?.find(isTravelCardToken);
+  const mobileTokens = remoteTokens?.filter(isMobileToken);
 
   return (
     <View style={styles.container}>
@@ -67,7 +81,10 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
         title={t(TravelTokenTexts.toggleToken.title)}
         leftButton={{type: 'back'}}
       />
-      <ScrollView contentContainerStyle={styles.scrollView}>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        testID="selectTokenScrollView"
+      >
         <View style={styles.radioArea}>
           <RadioBox
             title={t(TravelTokenTexts.toggleToken.radioBox.tCard.title)}
@@ -78,7 +95,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
             a11yHint={t(TravelTokenTexts.toggleToken.radioBox.tCard.a11yHint)}
             disabled={false}
             selected={selectedType === 'travelCard'}
-            icon={<TravelTokenCard />}
+            icon={<ThemedTokenTravelCard />}
             type="spacious"
             onPress={() => {
               animateNextChange();
@@ -86,6 +103,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
               setSelectedToken(travelCardToken);
             }}
             style={styles.leftRadioBox}
+            testID="selectTravelcard"
           />
           <RadioBox
             title={t(TravelTokenTexts.toggleToken.radioBox.phone.title)}
@@ -96,15 +114,16 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
             a11yHint={t(TravelTokenTexts.toggleToken.radioBox.phone.a11yHint)}
             disabled={false}
             selected={selectedType === 'mobile'}
-            icon={<TravelTokenPhone />}
+            icon={<ThemedTokenPhone />}
             type="spacious"
             onPress={() => {
-              if (selectedToken?.type !== 'mobile') {
+              if (!isMobileToken(selectedToken)) {
                 animateNextChange();
                 setSelectedType('mobile');
-                setSelectedToken(activatedMobileTokens?.[0]);
+                setSelectedToken(mobileTokens?.[0]);
               }
             }}
+            testID="selectMobile"
           />
         </View>
 
@@ -117,7 +136,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
           />
         )}
 
-        {selectedType === 'mobile' && !activatedMobileTokens?.length && (
+        {selectedType === 'mobile' && !mobileTokens?.length && (
           <MessageBox
             type={'warning'}
             message={t(TravelTokenTexts.toggleToken.noMobileToken)}
@@ -126,14 +145,28 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
           />
         )}
 
-        {selectedToken?.type === 'mobile' && activatedMobileTokens?.length && (
+        {/* Show warning if we have selected to switch to mobile, but the
+            current inspectable token is travelCard AND we have active carnet tickets  */}
+        {selectedType === 'mobile' &&
+          isTravelCardToken(inspectableToken) &&
+          hasActiveCarnetTicket && (
+            <MessageBox
+              type={'warning'}
+              message={t(TravelTokenTexts.toggleToken.hasCarnet)}
+              containerStyle={styles.errorMessageBox}
+              isMarkdown={false}
+            />
+          )}
+
+        {selectedType === 'mobile' && mobileTokens?.length && (
           <Sections.Section type="spacious" style={styles.selectDeviceSection}>
-            <Sections.RadioSection<TravelToken>
-              items={activatedMobileTokens}
-              keyExtractor={(tt) => tt.id}
-              itemToText={(tt) =>
-                (tt.name || t(TravelTokenTexts.toggleToken.unnamedDevice)) +
-                (tt.isThisDevice
+            <Sections.RadioSection<RemoteToken>
+              items={mobileTokens}
+              keyExtractor={(rt) => rt.id}
+              itemToText={(rt) =>
+                (getDeviceName(rt) ||
+                  t(TravelTokenTexts.toggleToken.unnamedDevice)) +
+                (token?.tokenId === rt.id
                   ? t(
                       TravelTokenTexts.toggleToken.radioBox.phone.selection
                         .thisDeviceSuffix,
@@ -163,8 +196,9 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
           <Button
             onPress={onSave}
             text={t(TravelTokenTexts.toggleToken.saveButton)}
-            color="primary_2"
+            interactiveColor="interactive_0"
             disabled={!selectedToken}
+            testID="confirmSelectionButton"
           />
         )}
       </ScrollView>
@@ -174,7 +208,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.colors.background_accent.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_0.background,
     flex: 1,
   },
   scrollView: {

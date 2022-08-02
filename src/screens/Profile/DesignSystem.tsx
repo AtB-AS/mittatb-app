@@ -1,6 +1,6 @@
 import {Delete, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {Check} from '@atb/assets/svg/mono-icons/status';
-import {BlankTicket} from '@atb/assets/svg/mono-icons/ticketing';
+import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import Button, {ButtonGroup} from '@atb/components/button';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
@@ -8,27 +8,99 @@ import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import MessageBox from '@atb/components/message-box';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {textNames, TextNames, ThemeColor} from '@atb/theme/colors';
-import React from 'react';
+import {ContrastColor} from '@atb-as/theme';
+import {
+  InteractiveColor,
+  StaticColorByType,
+  textNames,
+  TextNames,
+} from '@atb/theme/colors';
+import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {LegMode, TransportSubmode} from '@atb/sdk';
 import TransportationIcon from '@atb/components/transportation-icon';
+import RadioSegments from '@atb/components/radio-segments';
 
 export default function DesignSystem() {
   const style = useProfileHomeStyle();
   const {theme} = useTheme();
 
-  const buttons = Object.keys(theme.colors).map((themeName) => (
+  const [segmentedSelection, setSegmentedSelection] = useState(0);
+
+  const buttons = Object.keys(theme.interactive).map((color) => (
     <Button
-      key={themeName}
-      text={themeName}
+      key={color}
+      text={color}
       onPress={() =>
-        Alert.alert(theme.colors[themeName as ThemeColor].backgroundColor)
+        Alert.alert(
+          theme.interactive[color as InteractiveColor].default.background,
+        )
       }
-      color={themeName as ThemeColor}
+      interactiveColor={color as InteractiveColor}
     />
   ));
+
+  const Swatch: React.FC<{color: ContrastColor; name: string}> = ({
+    color,
+    name,
+  }) => (
+    <ThemeText
+      style={{
+        backgroundColor: color.background,
+        color: color.text,
+        padding: theme.spacings.medium,
+      }}
+    >
+      {name}
+    </ThemeText>
+  );
+
+  const backgroundSwatches = Object.keys(theme.static.background).map(
+    (color) => {
+      const staticColor =
+        theme.static.background[color as StaticColorByType<'background'>];
+      return <Swatch color={staticColor} name={color} key={color} />;
+    },
+  );
+
+  const transportSwatches = Object.keys(theme.static.transport).map((color) => {
+    const staticColor =
+      theme.static.transport[color as StaticColorByType<'transport'>];
+    return <Swatch color={staticColor} name={color} key={color} />;
+  });
+
+  const statusSwatches = Object.keys(theme.static.status).map((color) => {
+    const staticColor =
+      theme.static.status[color as StaticColorByType<'status'>];
+    return <Swatch color={staticColor} name={color} key={color} />;
+  });
+
+  const radioSegmentsOptions = [
+    {text: 'Option 1', onPress: () => setSegmentedSelection(0)},
+    {
+      text: 'Option 2',
+      onPress: () => setSegmentedSelection(1),
+    },
+    {
+      text: 'Option 3',
+      onPress: () => setSegmentedSelection(2),
+      subtext: 'Subtext',
+    },
+  ];
+
+  const radioSegments = Object.keys(theme.interactive).map((color) => (
+    <RadioSegments
+      activeIndex={segmentedSelection}
+      style={{
+        marginTop: theme.spacings.small,
+      }}
+      color={color as InteractiveColor}
+      options={radioSegmentsOptions}
+    />
+  ));
+
+  // @TODO: add display of static colors
 
   return (
     <View style={style.container}>
@@ -48,8 +120,8 @@ export default function DesignSystem() {
               <ThemeIcon svg={Check} colorType="info" />
               <ThemeIcon svg={Check} colorType="warning" />
 
-              <ThemeIcon svg={BlankTicket} colorType="error" />
-              <ThemeIcon svg={BlankTicket} colorType="disabled" size="small" />
+              <ThemeIcon svg={Ticket} colorType="error" />
+              <ThemeIcon svg={Ticket} colorType="disabled" size="small" />
             </View>
             <View style={style.icons}>
               <TransportationIcon
@@ -115,25 +187,12 @@ export default function DesignSystem() {
 
         <View style={style.buttons}>
           <ButtonGroup>
-            <Button text="Press me" onPress={presser} mode="primary" />
+            <Button text="primary" onPress={presser} mode="primary" />
+            <Button text="secondary" onPress={presser} mode="secondary" />
+            <Button text="tertiary" onPress={presser} mode="tertiary" />
             <Button
               text="Press me"
               onPress={presser}
-              mode="primary"
-              color="secondary_1"
-            />
-            <Button text="Press me" onPress={presser} mode="secondary" />
-            <Button text="Press me" onPress={presser} mode="destructive" />
-            <Button
-              text="Press me"
-              onPress={presser}
-              mode="destructive"
-              icon={Delete}
-            />
-            <Button
-              text="Press me"
-              onPress={presser}
-              mode="destructive"
               icon={Delete}
               iconPosition="right"
             />
@@ -204,6 +263,19 @@ export default function DesignSystem() {
             onPress={() => {}}
             icon={<ThemeIcon svg={Edit} />}
           />
+          <Sections.LinkItem
+            text="Dangerous Link Item"
+            subtitle="Subtitle text"
+            onPress={() => {}}
+            icon={<ThemeIcon svg={Delete} colorType="error" />}
+          />
+          <Sections.LinkItem
+            text="Disabled Dangerous Link Item text"
+            subtitle="Disabled Subtitle text"
+            disabled={true}
+            onPress={() => {}}
+            icon={<ThemeIcon svg={Delete} colorType="error" />}
+          />
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
@@ -245,6 +317,15 @@ export default function DesignSystem() {
         <View style={style.buttons}>
           <ButtonGroup>{buttons}</ButtonGroup>
         </View>
+
+        <View style={style.swatchGroup}>{backgroundSwatches}</View>
+        <View style={style.swatchGroup}>{transportSwatches}</View>
+        <View style={style.swatchGroup}>{statusSwatches}</View>
+
+        <View style={{margin: theme.spacings.medium}}>
+          <ThemeText>Segmented controls:</ThemeText>
+          {radioSegments}
+        </View>
       </ScrollView>
     </View>
   );
@@ -256,7 +337,7 @@ function presser() {
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
   icons: {
@@ -264,5 +345,8 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   buttons: {
     marginHorizontal: theme.spacings.medium,
+  },
+  swatchGroup: {
+    margin: theme.spacings.medium,
   },
 }));

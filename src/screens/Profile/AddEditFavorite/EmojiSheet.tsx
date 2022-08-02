@@ -213,7 +213,7 @@ const EmojiSheet = forwardRef<ScrollView, Props>(
             text: t(AddEditFavoriteTexts.emojiSheet.rightButton),
             onPress: () => onClick(null),
           }}
-          color={'background_2'}
+          color={'background_1'}
           setFocusOnLoad={true}
         />
         <ScrollView ref={focusRef}>

@@ -1,7 +1,5 @@
-import {
-  CurrentLocationArrow,
-  MapPointPin,
-} from '@atb/assets/svg/mono-icons/places';
+import {Location} from '@atb/assets/svg/mono-icons/places';
+import {Pin} from '@atb/assets/svg/mono-icons/map/';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
@@ -51,7 +49,7 @@ const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
                 testID={'tariffZone' + tariffZone.name.value + 'Button'}
               >
                 <View style={{flexDirection: 'column'}}>
-                  <ThemeIcon svg={MapPointPin} width={20} />
+                  <ThemeIcon svg={Pin} width={20} />
                 </View>
                 <View style={styles.nameContainer}>
                   <ThemeText type="body__primary--bold">
@@ -60,7 +58,7 @@ const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
                 </View>
                 {tariffZoneFromLocation?.id === tariffZone.id ? (
                   <View style={styles.currentLocationIcon}>
-                    <ThemeIcon svg={CurrentLocationArrow} />
+                    <ThemeIcon svg={Location} />
                   </View>
                 ) : null}
               </TouchableOpacity>

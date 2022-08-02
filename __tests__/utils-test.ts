@@ -5,6 +5,7 @@ import {TIME_LIMIT_IN_MINUTES} from '../src/screens/TripDetails/Details/utils';
 import {hasShortWaitTime} from '../src/screens/TripDetails/components/utils';
 import {defaultPreassignedFareProducts} from '@atb/reference-data/defaults';
 import {productIsSellableInApp} from '@atb/reference-data/utils';
+import {Flattened, flattenObject} from '@atb/utils/object';
 
 describe('IterateWithNext', () => {
   it('iterates correctly', () => {
@@ -55,6 +56,12 @@ describe('Short wait time evaluator', () => {
     expectedStartTime: addMinutes(nowDate, 15),
     expectedEndTime: addMinutes(nowDate, 20),
   } as Leg;
+
+  const weirdLeg: Leg = {
+    expectedStartTime: 'non parsable string',
+    expectedEndTime: {weird: true},
+  } as Leg;
+
   it('catches a short wait', () => {
     const isShortWait = hasShortWaitTime([Leg1, Leg2]);
     expect(isShortWait).toBe(true);
@@ -73,6 +80,10 @@ describe('Short wait time evaluator', () => {
   });
   it('passes with empty array', () => {
     const isShortWait = hasShortWaitTime([]);
+    expect(isShortWait).toBe(false);
+  });
+  it('passes on weird data', () => {
+    const isShortWait = hasShortWaitTime([weirdLeg, weirdLeg]);
     expect(isShortWait).toBe(false);
   });
 });
@@ -96,5 +107,33 @@ describe('Default Fareproducts', () => {
     expect(
       defaultPreassignedFareProducts.length - filteredByAppChannel.length,
     ).toBeGreaterThan(0);
+  });
+});
+
+describe('Function flattenObject()', () => {
+  const inputObj = {
+    a: 1,
+    b: {ba: 2, bb: {bba: 0}, bc: [1, 2, 3]},
+    c: 'Hello',
+    d: [4, 5, 6],
+  };
+  const expectedObj = {
+    a: 1,
+    ba: 2,
+    bb: {bba: 0},
+    bc: [1, 2, 3],
+    c: 'Hello',
+    d: [4, 5, 6],
+  };
+
+  type ExpectedObj = Flattened<typeof inputObj>;
+  const flatObj = flattenObject(inputObj);
+
+  it('returns expected object', () => {
+    expect(JSON.stringify(flatObj) === JSON.stringify(expectedObj)).toBe(true);
+  });
+
+  it('has expected type', () => {
+    expect(flatObj as ExpectedObj).toBeTruthy();
   });
 });

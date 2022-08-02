@@ -1,6 +1,6 @@
 {
   "name": "atb",
-  "version": "1.17.0",
+  "version": "1.21.0",
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
@@ -23,10 +23,10 @@
     "link-assets": "react-native link"
   },
   "dependencies": {
-    "@atb-as/theme": "^5.0.0",
+    "@atb-as/theme": "^6.0.0-alpha.7",
     "@bugsnag/react-native": "^7.12.0",
     "@bugsnag/source-maps": "^2.3.1",
-    "@entur/react-native-traveller": "file:.yalc/@entur/react-native-traveller",
+    "@entur/abt-mobile-client-sdk": "1.1.0",
     "@entur/sdk": "^3.4.0",
     "@leile/lobo-t": "^1.0.5",
     "@mapbox/polyline": "^1.1.1",
@@ -55,6 +55,7 @@
     "@types/lodash.sortby": "^4.7.6",
     "@types/mapbox__polyline": "^1.0.2",
     "@types/qrcode": "^1.4.1",
+    "async-lock": "^1.3.1",
     "axios": "^0.23.0",
     "axios-better-stacktrace": "^2.1.1",
     "axios-retry": "^3.1.9",
@@ -101,10 +102,12 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@atb-as/generate-assets": "^3.1.0",
+    "@atb-as/generate-assets": "^4.0.0-alpha.18",
     "@babel/core": "^7.12.13",
     "@babel/runtime": "^7.12.13",
+    "@entur/abt-token-server-node-lib": "1.1.0",
     "@svgr/cli": "^6.2.0",
+    "@types/async-lock": "^1.1.5",
     "@types/child-process-promise": "^2.2.2",
     "@types/detox": "^18.1.0",
     "@types/geojson": "^7946.0.8",

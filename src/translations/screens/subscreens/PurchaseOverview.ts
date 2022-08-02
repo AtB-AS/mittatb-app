@@ -7,6 +7,7 @@ const PurchaseOverviewTexts = {
       single: _('Enkeltbillett', 'Single ticket'),
       period: _('Periodebillett', 'Periodic ticket'),
       carnet: _('Klippekort', 'Carnet ticket'),
+      hour24: _('24-timersbillett', '24 hour pass'),
     },
   },
   errorMessageBox: {
@@ -43,9 +44,6 @@ const PurchaseOverviewTexts = {
       'Activate to select ticket type',
     ),
   },
-  totalPrice: (totalPrice: number) =>
-    _(`Totalt: ${totalPrice} kr`, `Total: ${totalPrice} kr`),
-  primaryButton: _('Gå til betaling', 'Go to payment'),
   warning: _(
     'Når du er ute og reiser må du ha med t:kortet som er registrert på din profil.',
     'When traveling, you need to bring the t:card registered on your profile.',
@@ -60,10 +58,61 @@ const PurchaseOverviewTexts = {
       'Periodic tickets in zone A can also be used on train in zone A.',
     ),
   },
-  notInspectableTokenDeviceWarning: _(
-    'Du kan ikke reise med denne mobilen. Du kan bytte hvor du bruker billetten din fra **Min profil**.',
-    `You can't travel with this phone. Go to **My profile** to switch where your tickets are used.`,
-  ),
+  notInspectableTokenDeviceWarning: (deviceName?: string) =>
+    _(
+      `Du kan ikke reise med ${deviceName}. Du kan bytte hvor du bruker billetten din fra **Min profil**.`,
+      `You cannot use ${deviceName} when you travel. You can change which device to use your tickets on from **My profile**.`,
+    ),
+  unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
+  zones: {
+    label: {
+      singleZone: {
+        text: _('Velg sone (kun én)', 'Select zone (only one)'),
+        a11yLabel: _('Velg sone (kun én)', 'Select zone (only one)'),
+      },
+      multipleZone: {
+        text: _('Velg sone(r)', 'Select zone(s)'),
+        a11yLabel: _('Velg soner', 'Select zones'),
+      },
+    },
+  },
+  duration: {
+    title: _('Velg varighet', 'Select duration'),
+    days: _('dager', 'days'),
+    chipHint: _('Aktiver for å velge varighet', 'Activate to select duration'),
+  },
+  travellerSelection: {
+    title_single: _('Velg passasjerkategori', 'Select a traveller'),
+    title_multiple: _('Velg passasjerkategorier', 'Select travellers'),
+    a11yHint: _('Aktiver for å velge reisende', 'Activate to select traveller'),
+    infoToggle: _('Vis info', 'Show info'),
+    infoToggleA11y: _(
+      'Vis informasjon om passasjerkategorier',
+      'Show information about traveller categories',
+    ),
+  },
+  startTime: {
+    title: _('Velg oppstartstidspunkt', 'Select start time'),
+    now: _('Oppstart nå', 'Start now'),
+    later: _('Senere', 'Later'),
+    a11yLaterHint: _(
+      'Aktiver for å velge et senere oppstartstidspunkt',
+      'Activate to select a later start time',
+    ),
+    a11yNowHint: _(
+      'Aktiver for å sette oppstartstidspunkt til nå.',
+      'Activate to set ticket start time to now.',
+    ),
+  },
+  summary: {
+    price: (priceString: string) =>
+      _(`Total ${priceString} kr`, `Total ${priceString} kr`),
+    message: _(
+      `Gjelder for buss/trikk i valgte soner`,
+      `Applies for bus/tram in selected zones`,
+    ),
+    button: _('Til betaling', 'To payment'),
+  },
 };
 
 export default orgSpecificTranslations(PurchaseOverviewTexts, {

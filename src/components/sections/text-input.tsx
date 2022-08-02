@@ -150,9 +150,9 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     fontSize: theme.typography.body__primary.fontSize,
   },
   container: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
     borderWidth: theme.border.width.slim,
-    borderColor: theme.colors.background_0.backgroundColor,
+    borderColor: theme.static.background.background_0.background,
   },
   containerInline: {
     alignItems: 'center',

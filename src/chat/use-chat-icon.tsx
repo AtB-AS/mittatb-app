@@ -1,17 +1,18 @@
-import {Chat, ChatUnread} from '@atb/assets/svg/mono-icons/actions';
+import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import {ChatUnread} from '@atb/assets/svg/color/icons/actions';
 import {IconButton} from '@atb/components/screen-header/HeaderButton';
 import ThemeIcon from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
 import useChatUnreadCount from './use-chat-unread-count';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColor, TextColor} from '@atb/theme/colors';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import ContactSheet from '@atb/chat/ContactSheet';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 
 export default function useChatIcon(
-  color?: ThemeColor,
+  color?: StaticColor | TextColor,
   testID?: string,
 ): IconButton | undefined {
   const unreadCount = useChatUnreadCount();

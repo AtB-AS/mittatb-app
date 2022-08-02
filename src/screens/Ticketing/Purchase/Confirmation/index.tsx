@@ -1,4 +1,4 @@
-import {MasterCard, Vipps, Visa} from '@atb/assets/svg/mono-icons/ticketing';
+import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
 import {LeftButtonProps} from '@atb/components/screen-header';
@@ -14,7 +14,7 @@ import {PaymentType, ReserveOffer} from '@atb/tickets';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {addMinutes} from 'date-fns';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -44,14 +44,6 @@ export type RouteParams = {
   headerLeftButton: LeftButtonProps;
 };
 
-export type ConfirmationProps = {
-  navigation: DismissableStackNavigationProp<
-    TicketingStackParams,
-    'Confirmation'
-  >;
-  route: RouteProp<TicketingStackParams, 'Confirmation'>;
-};
-
 function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
   paymentTypes: PaymentType[],
@@ -76,8 +68,21 @@ function getPreviousPaymentMethod(
         paymentType: previousPaymentMethod.paymentType,
         recurringPaymentId: previousPaymentMethod.recurringCard.id,
       };
+    case 'recurring-without-card':
+      return {
+        paymentType: previousPaymentMethod.paymentType,
+        recurringPaymentId: previousPaymentMethod.recurringPaymentId,
+      };
   }
 }
+
+export type ConfirmationProps = {
+  navigation: DismissableStackNavigationProp<
+    TicketingStackParams,
+    'Confirmation'
+  >;
+  route: RouteProp<TicketingStackParams, 'Confirmation'>;
+};
 
 const Confirmation: React.FC<ConfirmationProps> = ({
   navigation,
@@ -88,17 +93,13 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
   const {user} = useAuthState();
-  const {paymentTypes} = useFirestoreConfiguration();
+  const {paymentTypes, vatPercent} = useFirestoreConfiguration();
+  const [previousMethod, setPreviousMethod] = useState<
+    PaymentMethod | undefined
+  >(undefined);
+  const previousPaymentMethod = usePreviousPaymentMethod(user);
 
-  const previousPaymentMethod = usePreviousPaymentMethod(user?.uid);
-
-  const previousMethod = getPreviousPaymentMethod(
-    previousPaymentMethod,
-    paymentTypes,
-  );
-
-  const {enable_creditcard: enableCreditCard, vat_percent: vatPercent} =
-    useRemoteConfig();
+  const {enable_creditcard: enableCreditCard} = useRemoteConfig();
 
   const {
     fromTariffZone,
@@ -138,6 +139,14 @@ const Confirmation: React.FC<ConfirmationProps> = ({
 
   const vatAmountString = formatDecimalNumber(vatAmount, language);
   const vatPercentString = formatDecimalNumber(vatPercent, language);
+
+  useEffect(() => {
+    const prevMethod = getPreviousPaymentMethod(
+      previousPaymentMethod,
+      paymentTypes,
+    );
+    setPreviousMethod(prevMethod);
+  }, [previousPaymentMethod]);
 
   async function payWithVipps(option: PaymentMethod) {
     if (offerExpirationTime && totalPrice > 0) {
@@ -341,7 +350,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               <View style={styles.flexColumn}>
                 <Button
                   text={getPaymentOptionTexts(previousMethod)}
-                  color="primary_2"
+                  interactiveColor="interactive_0"
                   disabled={!!error || !previousMethod}
                   iconPosition="right"
                   icon={
@@ -377,7 +386,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               </View>
             ) : (
               <Button
-                color="primary_2"
+                interactiveColor="interactive_0"
                 text={t(PurchaseConfirmationTexts.choosePaymentOption.text)}
                 disabled={!!error}
                 accessibilityHint={t(
@@ -398,7 +407,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
   },
   flexColumn: {
     flex: 1,
@@ -410,14 +419,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
   },
   buttonTopSpacing: {
-    marginTop: 24,
+    marginTop: theme.spacings.xLarge,
   },
   ticketsContainer: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
     borderTopEndRadius: theme.border.radius.regular,
     borderTopLeftRadius: theme.border.radius.regular,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.background_1.backgroundColor,
+    borderBottomColor: theme.static.background.background_1.background,
     padding: theme.spacings.medium,
     marginTop: theme.spacings.small,
   },
@@ -435,7 +444,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     padding: theme.spacings.medium,
     marginVertical: theme.spacings.medium,
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
     borderRadius: theme.border.radius.regular,
   },
   totalContainerHeadings: {

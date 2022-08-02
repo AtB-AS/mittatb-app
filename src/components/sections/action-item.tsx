@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
   AccessibilityProps,
   AccessibilityRole,
@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
@@ -14,26 +14,36 @@ import NavigationIcon from '@atb/components/theme-icon/navigation-icon';
 import {useSectionItem, SectionItem, useSectionStyle} from './section-utils';
 import InternalLabeledItem from './internals/internal-labeled-item';
 import FixedSwitch from '../switch';
+import {InteractiveColor} from '@atb/theme/colors';
 
 export type ActionModes = 'check' | 'toggle' | 'heading-expand';
 export type ActionItemProps = SectionItem<{
   text: string;
+  subtext?: string;
+  hideSubtext?: boolean;
   onPress?(checked: boolean): void;
   checked?: boolean;
   mode?: ActionModes;
   accessibility?: AccessibilityProps;
+  color?: InteractiveColor;
 }>;
 export default function ActionItem({
   text,
+  subtext,
+  hideSubtext,
   onPress,
   mode = 'check',
   checked = false,
   accessibility,
   testID,
+  color,
   ...props
 }: ActionItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
+  const {theme} = useTheme();
+  const interactiveColor =
+    color && checked ? theme.interactive[color].active : undefined;
 
   if (mode === 'toggle') {
     return (
@@ -55,7 +65,15 @@ export default function ActionItem({
   return (
     <TouchableOpacity
       onPress={() => onPress?.(!checked)}
-      style={[style.spaceBetween, topContainer]}
+      style={[
+        style.spaceBetween,
+        topContainer,
+        {
+          backgroundColor: interactiveColor
+            ? interactiveColor.background
+            : topContainer.backgroundColor,
+        },
+      ]}
       testID={testID}
       accessibilityRole={role}
       accessibilityState={{
@@ -63,15 +81,33 @@ export default function ActionItem({
       }}
       {...accessibility}
     >
-      <ThemeText
-        type={
-          mode === 'heading-expand' ? 'body__primary--bold' : 'body__primary'
-        }
-        style={contentContainer}
-      >
-        {text}
-      </ThemeText>
-      <ActionModeIcon mode={mode} checked={checked} />
+      <View style={{flexShrink: 1}}>
+        <ThemeText
+          type={
+            mode === 'heading-expand' ? 'body__primary--bold' : 'body__primary'
+          }
+          style={[
+            contentContainer,
+            interactiveColor ? {color: interactiveColor.text} : undefined,
+          ]}
+        >
+          {text}
+        </ThemeText>
+        {subtext && !hideSubtext && (
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={{marginTop: theme.spacings.medium}}
+          >
+            {subtext}
+          </ThemeText>
+        )}
+      </View>
+      <ActionModeIcon
+        mode={mode}
+        checked={checked}
+        color={interactiveColor ? color : undefined}
+      />
     </TouchableOpacity>
   );
 }
@@ -79,17 +115,23 @@ export default function ActionItem({
 function ActionModeIcon({
   mode,
   checked,
-}: Pick<ActionItemProps, 'mode' | 'checked'>) {
+  color,
+}: Pick<ActionItemProps, 'mode' | 'checked' | 'color'>) {
   const style = useHeaderExpandStyle();
   const {t} = useTranslation();
+  const {theme} = useTheme();
 
   switch (mode) {
     case 'check': {
-      if (checked) {
-        return <ThemeIcon svg={Confirm} />;
-      } else {
-        return null;
-      }
+      return (
+        <ThemeIcon
+          svg={Confirm}
+          {...(color
+            ? {fill: theme.interactive[color].active.text}
+            : undefined)}
+          fillOpacity={checked ? 1 : 0}
+        />
+      );
     }
     case 'heading-expand': {
       const text = checked

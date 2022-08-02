@@ -16,7 +16,7 @@ import ThemeText from '@atb/components/text';
 import {AlertContext} from '@atb/alerts/AlertsContext';
 import AlertBox from '@atb/alerts/AlertBox';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {ThemeColor} from '@atb/theme/colors';
+import {getStaticColor, StaticColor} from '@atb/theme/colors';
 
 export {default as AnimatedScreenHeader} from './animated-header';
 
@@ -45,12 +45,12 @@ export type ScreenHeaderProps = {
    */
   alertContext?: AlertContext;
   style?: ViewStyle;
-  color?: ThemeColor;
+  color?: StaticColor;
   setFocusOnLoad?: boolean;
 };
 
 const ScreenHeader: React.FC<ScreenHeaderProps> = (props) => {
-  const themeColor = props.color ?? 'background_accent';
+  const themeColor = props.color ?? 'background_accent_0';
 
   const leftIcon = props.leftButton ? (
     <HeaderButton color={themeColor} {...props.leftButton} testID="lhb" />
@@ -79,7 +79,7 @@ type ScreenHeaderWithoutNavigationProps = ScreenHeaderProps & {
 export const ScreenHeaderWithoutNavigation = (
   props: ScreenHeaderWithoutNavigationProps,
 ) => {
-  const themeColor = props.color ?? 'background_accent';
+  const themeColor = props.color ?? 'background_accent_0';
   const leftIcon = props.leftButton ? (
     <HeaderButtonWithoutNavigation color={themeColor} {...props.leftButton} />
   ) : (
@@ -110,13 +110,13 @@ const BaseHeader = ({
   rightIcon,
 }: BaseHeaderProps) => {
   const css = useHeaderStyle();
-  const {theme} = useTheme();
-  const themeColor = color ?? 'background_accent';
+  const {theme, themeName} = useTheme();
+  const themeColor = color ?? 'background_accent_0';
   const focusRef = useFocusOnLoad(setFocusOnLoad);
 
   const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();
 
-  const backgroundColor = theme.colors[themeColor].backgroundColor;
+  const backgroundColor = getStaticColor(themeName, themeColor).background;
 
   return (
     <View style={[css.container, style, {backgroundColor}]}>

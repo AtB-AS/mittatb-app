@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* atbTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* atbTests.m */; };
-		0F240964273EE9530001A5D3 /* RegisterLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F240963273EE9530001A5D3 /* RegisterLogger.swift */; };
 		0FAAF32724069EFC00267583 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0FAAF32624069EFC00267583 /* GoogleService-Info.plist */; };
 		0FF6825D247C33BC00FB80EE /* Intercom.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0FF6825C247C33BC00FB80EE /* Intercom.plist */; };
 		0FF6825F247FE01600FB80EE /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FF6825E247FE01600FB80EE /* BootSplash.storyboard */; };
@@ -28,6 +27,7 @@
 		7EF68E3733C33B6898317E18 /* libPods-atb-atbTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFE59519B596E51CEFDCCC0 /* libPods-atb-atbTests.a */; };
 		E6A5C3E919C3475F907B3CE4 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB1D1B473A9C41A79687569C /* Roboto-Regular.ttf */; };
 		F19471F4FCE444CF931BA221 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59E90F341F04DB2B427E0EF /* Roboto-Bold.ttf */; };
+		FED22489286F06AC0049ECE3 /* CoreNFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FED22488286F06AC0049ECE3 /* CoreNFC.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,7 +46,6 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* atbTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = atbTests.m; sourceTree = "<group>"; };
 		0F1FBC3125CBDED600484CA4 /* AtB.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = AtB.entitlements; path = atb/AtB.entitlements; sourceTree = "<group>"; };
-		0F240963273EE9530001A5D3 /* RegisterLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterLogger.swift; sourceTree = "<group>"; };
 		0FAAF32624069EFC00267583 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "atb/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0FF6825C247C33BC00FB80EE /* Intercom.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Intercom.plist; path = atb/Intercom.plist; sourceTree = "<group>"; };
 		0FF6825E247FE01600FB80EE /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = atb/BootSplash.storyboard; sourceTree = "<group>"; };
@@ -78,6 +77,7 @@
 		C0A881CF5CF3F2B244570E2A /* Pods-atb.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb.debug.xcconfig"; path = "Target Support Files/Pods-atb/Pods-atb.debug.xcconfig"; sourceTree = "<group>"; };
 		D00AAFFCFCFDA5787532823F /* Pods-atb.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb.release.xcconfig"; path = "Target Support Files/Pods-atb/Pods-atb.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		FED22488286F06AC0049ECE3 /* CoreNFC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreNFC.framework; path = System/Library/Frameworks/CoreNFC.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +94,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6172F2D35A4C3AA820D92908 /* libPods-atb.a in Frameworks */,
+				FED22489286F06AC0049ECE3 /* CoreNFC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,7 +139,6 @@
 				38CD3275254B616300C6B978 /* AtBRootView.h */,
 				384D20EA25E4F9990019DF98 /* ChangeNativeBridge.h */,
 				384D20EB25E4FA2B0019DF98 /* ChangeNativeBridge.m */,
-				0F240963273EE9530001A5D3 /* RegisterLogger.swift */,
 			);
 			name = atb;
 			sourceTree = "<group>";
@@ -158,6 +158,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FED22488286F06AC0049ECE3 /* CoreNFC.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				6423831EA8574132BED9D8CC /* libPods-atb.a */,
 				ABFE59519B596E51CEFDCCC0 /* libPods-atb-atbTests.a */,
@@ -505,7 +506,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F240964273EE9530001A5D3 /* RegisterLogger.swift in Sources */,
 				38CD3270254B612600C6B978 /* AtBRootView.m in Sources */,
 				385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */,
 				384D20F025E4FF730019DF98 /* ChangeNativeBridge.m in Sources */,

@@ -1,4 +1,4 @@
-import {Add, Remove} from '@atb/assets/svg/mono-icons/actions';
+import {Add, Subtract} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations/';
 import React from 'react';
@@ -30,7 +30,7 @@ const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
         accessibilityRole="button"
       >
         <View style={styles.zoomOutButton}>
-          <ThemeIcon svg={Remove} />
+          <ThemeIcon svg={Subtract} />
         </View>
       </TouchableOpacity>
     </View>
@@ -39,7 +39,7 @@ const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   zoomContainer: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     borderRadius: theme.border.radius.small,
     alignContent: 'stretch',
     ...shadows,

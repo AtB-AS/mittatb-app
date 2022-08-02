@@ -64,7 +64,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
           text={t(FavoriteListTexts.sortableScreen.buttons.save)}
           icon={Confirm}
           iconPosition="right"
-          color="primary_2"
+          interactiveColor="interactive_0"
         />
       </FullScreenFooter>
     </View>
@@ -72,7 +72,7 @@ export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
 }
 const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.colors.background_3.backgroundColor,
+    backgroundColor: theme.static.background.background_3.background,
     flex: 1,
   },
   error: {

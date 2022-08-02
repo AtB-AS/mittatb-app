@@ -4,6 +4,8 @@
 
 These are the steps for releasing a new major version to TestFlight / Play Store Alpha. This may be done as soon as the old version is deployed to production.
 
+If you want to release only for a given organization, the release tag must include the orgId specifier for the organization. The uploading jobs for other organizations will then exit and fail. An example tag for an NFK-only release is the tag `v1.20-rc3-nfk`. Please note that the releases after an org specific release may miss some information from the auto generated changelogs that may have to be manually added.
+
 Skip the first step of bumping the project files if the release is a new release candidate on an existing major version.
 
 ### Bump version number in project files

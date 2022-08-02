@@ -5,8 +5,7 @@ import ThemeText from '../text';
 import {Opinions} from '.';
 import {useSectionItem} from '../sections/section-utils';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
-import hexToRgba from 'hex-to-rgba';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
 
 export type GoodOrBadButtonProps = {
   opinion: Opinions;
@@ -14,8 +13,7 @@ export type GoodOrBadButtonProps = {
   setSelectedOpinion: (value: Opinions) => void;
 };
 
-const themeColor: ThemeColor = 'background_0';
-const selectedThemeColor: ThemeColor = 'primary_2';
+const themeColor: StaticColorByType<'background'> = 'background_0';
 
 export const GoodOrBadButton = ({
   checked,
@@ -34,11 +32,15 @@ export const GoodOrBadButton = ({
         }
         accessibilityRole="radio"
         accessibilityState={{selected: checked}}
-        accessibilityHint={
+        accessibilityHint={`${
+          opinion === Opinions.Good && t(FeedbackTexts.goodOrBadTexts.good)
+        }
+        ${opinion === Opinions.Bad && t(FeedbackTexts.goodOrBadTexts.bad)}
+        ${
           checked
             ? t(FeedbackTexts.alternatives.a11yHints.checked)
             : t(FeedbackTexts.alternatives.a11yHints.unchecked)
-        }
+        }`}
       >
         <View
           style={
@@ -75,21 +77,18 @@ const useButtonStyle = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.xLarge,
   },
   button: {
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.interactive.interactive_2.default.background,
     flex: 1,
     padding: theme.spacings.xLarge,
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderWidth: theme.border.width.medium,
     borderRadius: theme.border.radius.regular,
-    borderColor: theme.colors[themeColor].backgroundColor,
+    borderColor: theme.interactive.interactive_2.default.background,
   },
   selectedButton: {
-    backgroundColor: hexToRgba(
-      theme.colors[selectedThemeColor].backgroundColor,
-      0.2,
-    ),
-    borderColor: theme.colors[selectedThemeColor].backgroundColor,
+    backgroundColor: theme.interactive.interactive_2.active.background,
+    borderColor: theme.interactive.interactive_2.outline.background,
   },
 }));
 

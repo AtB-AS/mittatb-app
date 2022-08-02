@@ -18,7 +18,7 @@ const AlertBox = ({alertContext, style}: Props) => {
 
   const alert = alertContext ? findAlert(alertContext) : undefined;
 
-  if (!alert || !Object.keys(theme.status).includes(alert.type)) {
+  if (!alert || !Object.keys(theme.static.status).includes(alert.type)) {
     return null;
   }
 
@@ -34,7 +34,7 @@ const AlertBox = ({alertContext, style}: Props) => {
 
 const isValidAlert = (theme: Theme, alert?: Alert) => {
   if (!alert) return false;
-  return Object.keys(theme.status).includes(alert.type);
+  return Object.keys(theme.static.status).includes(alert.type);
 };
 
 export default AlertBox;

@@ -80,20 +80,7 @@ const SelectStartScreenTexts = {
       },
     },
   },
-  payment: {
-    title: _('Betaling', 'Payment'),
-    texts: {
-      part1Heading: _('Vipps', 'Vipps'),
-      part1Text: _(
-        'Alle transaksjoner utført med Vipps blir behandlet av Vipps. Har du valgt Vipps som standard betalingsmåte, vil Vipps-appen åpne seg når du skal betale. Du blir så bedt om å logge på Vipps på vanlig måte. Appen AtB vil be om tilgang til Vipps, dette må du svare ja på. Vipps vil benytte din valgte betalingsmetode, konto eller kort valgt i Vipps appen. Informasjon om din konto, dine kort eller andre personopplysninger blir ikke lagret i appen AtB eller hos AtB.',
-        'All transactions performed with Vipps are processed by Vipps. If you have selected Vipps as your default payment method, the Vipps app will open when you pay. You are then asked to sign in to Vipps in the usual way. The AtB app will request access to Vipps, which you must answer yes to. Vipps will use your chosen payment method, account or card selected in the Vipps app. Information about your account, your cards or other personal information is not stored in the AtB app or at AtB.',
-      ),
-      part2Heading: _(
-        'Det vil komme flere betalingsmåter',
-        'More methods of payment will be available',
-      ),
-    },
-  },
+  payment: {},
   terms: {
     title: _('Betingelser', 'Terms'),
     texts: {
@@ -154,7 +141,7 @@ const SelectStartScreenTexts = {
       ),
       part1Bullet2: _(
         `${bulletPoint} Mindreårige som er fylt 15 år: 900 kroner uansett oppgjørsform.`,
-        `${bulletPoint} Minors under 15 years: NOK 900 regardless of payment method`,
+        `${bulletPoint} Minors over 15 years: NOK 900 regardless of payment method`,
       ),
       part1Bullet3: _(
         `${bulletPoint} Misbruk eller forfalsking av billett: 2000 kroner, og billetten blir inndratt. Dersom du forfalsker en billett, vil du også bli politianmeldt.`,
@@ -192,7 +179,7 @@ export default orgSpecificTranslations(SelectStartScreenTexts, {
       texts: {
         part1Text: _(
           'Alle transaksjoner utført med Vipps blir behandlet av Vipps. Har du valgt Vipps som standard betalingsmåte, vil Vipps-appen åpne seg når du skal betale. Du blir så bedt om å logge på Vipps på vanlig måte. Appen Reis vil be om tilgang til Vipps, dette må du svare ja på. Vipps vil benytte din valgte betalingsmetode, konto eller kort valgt i Vipps appen. Informasjon om din konto, dine kort eller andre personopplysninger blir ikke lagret i appen Reis eller hos Reis Nordland.',
-          'All transactions performed with Vipps are processed by Vipps. If you have selected Vipps as your default payment method, the Vipps app will open when you pay. You are then asked to sign in to Vipps in the usual way. The Reis app will request access to Vipps, which you must answer yes to. Vipps will use your chosen payment method, account or card selected in the Vipps app. Information about your account, your cards or other personal information is not stored in the Reis app or at Reis Nordland.',
+          'All transactions performed with Vipps are processed by Vipps. If you have selected Vipps as your default payment method, the Vipps app will open when you pay. You are then asked to log in to Vipps in the usual way. The Reis app will request access to Vipps, which you must answer yes to. Vipps will use your chosen payment method, account or card selected in the Vipps app. Information about your account, your cards or other personal information is not stored in the Reis app or at Reis Nordland.',
         ),
       },
     },

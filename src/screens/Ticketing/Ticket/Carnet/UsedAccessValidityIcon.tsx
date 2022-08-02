@@ -1,9 +1,9 @@
-import {InvalidTicket, ValidTicket} from '@atb/assets/svg/mono-icons/ticketing';
+import {TicketInvalid, TicketValid} from '@atb/assets/svg/mono-icons/ticketing';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {useTheme} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
-import {Wait} from '@atb/assets/svg/mono-icons/transportation';
+import {Time} from '@atb/assets/svg/mono-icons/time';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {UsedAccessStatus} from './types';
@@ -32,7 +32,7 @@ const ValidityIconSvg = ({status, isInspectable}: Props) => {
       if (isInspectable) {
         return (
           <ThemeIcon
-            svg={ValidTicket}
+            svg={TicketValid}
             colorType="valid"
             accessibilityLabel={a11yLabel}
           />
@@ -40,7 +40,7 @@ const ValidityIconSvg = ({status, isInspectable}: Props) => {
       } else {
         return (
           <ThemeIcon
-            svg={ValidTicket}
+            svg={TicketValid}
             colorType="secondary"
             accessibilityLabel={a11yLabel}
           />
@@ -49,7 +49,7 @@ const ValidityIconSvg = ({status, isInspectable}: Props) => {
     case 'inactive':
       return (
         <ThemeIcon
-          svg={InvalidTicket}
+          svg={TicketInvalid}
           colorType="secondary"
           accessibilityLabel={a11yLabel}
         />
@@ -57,7 +57,7 @@ const ValidityIconSvg = ({status, isInspectable}: Props) => {
     case 'upcoming':
       return (
         <ThemeIcon
-          svg={Wait}
+          svg={Time}
           colorType="primary"
           accessibilityLabel={a11yLabel}
         />

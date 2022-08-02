@@ -73,6 +73,7 @@ export default function StopPlaceView({
                 navigateToDetails={navigateToDetails}
                 navigateToQuay={navigateToQuay}
                 testID={'quaySection' + index}
+                stopPlace={stopPlace}
               />
               {index === 0 && (
                 <Feedback

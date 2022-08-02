@@ -88,7 +88,10 @@ const Results: React.FC<Props> = ({
       <View style={styles.container}>
         <MessageBox containerStyle={styles.messageBoxContainer}>
           <ThemeText
-            style={{...styles.infoBoxText, color: theme.status.info.main.color}}
+            style={{
+              ...styles.infoBoxText,
+              color: theme.static.status.info.text,
+            }}
           >
             {t(AssistantTexts.results.info.emptyResult)}
             {pluralResultReasons && (

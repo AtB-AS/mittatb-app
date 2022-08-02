@@ -5,7 +5,11 @@ export type LanguageAndText = {
   value: string;
 };
 
-export type PreassignedFareProductType = 'single' | 'period' | 'carnet';
+export type PreassignedFareProductType =
+  | 'single'
+  | 'period'
+  | 'carnet'
+  | 'hour24';
 
 export type DistributionChannel = 'web' | 'app';
 
@@ -17,6 +21,8 @@ export type PreassignedFareProduct = {
   distributionChannel: DistributionChannel[];
   version: string;
   type: PreassignedFareProductType;
+  durationDays: number;
+  isApplicableOnSingleZoneOnly?: boolean;
   limitations: {
     userProfileRefs: string[];
   };

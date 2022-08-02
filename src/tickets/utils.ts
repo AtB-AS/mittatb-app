@@ -10,7 +10,6 @@ import {
   CarnetTicket,
   TravelRight,
 } from './types';
-import {TravelToken} from '@atb/mobile-token/types';
 
 export function isCarnetTicket(
   travelRight: TravelRight | undefined,
@@ -33,14 +32,17 @@ export function isSingleTicket(
   return travelRight?.type === 'PreActivatedSingleTicket';
 }
 
-export function isInspectable(
+export function isInspectableTicket(
   travelRight: TravelRight,
   hasActiveTravelCard: boolean,
   mobileTokenEnabled: boolean,
-  inspectableTravelToken?: TravelToken,
+  deviceIsInspectable: boolean,
+  mobileTokenError: boolean,
+  fallbackEnabled: boolean,
 ): boolean {
-  if (mobileTokenEnabled) return inspectableTravelToken?.isThisDevice ?? false;
-  else return !hasActiveTravelCard && isSingleTicket(travelRight);
+  if (mobileTokenEnabled) {
+    return deviceIsInspectable || (mobileTokenError && fallbackEnabled);
+  } else return !hasActiveTravelCard && isSingleTicket(travelRight);
 }
 
 function isOrWillBeActivatedFareContract(f: FareContract): boolean {

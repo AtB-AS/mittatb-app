@@ -2,7 +2,10 @@ import {translation as _} from '../../commons';
 
 const TariffZonesTexts = {
   header: {
-    title: _('Velg soner', 'Select zones'),
+    title: {
+      singleZone: _('Velg sone', 'Select zone'),
+      multipleZone: _('Velg soner', 'Select zones'),
+    },
   },
   zoneSummary: {
     a11yLabelPrefix: _(`Sonevalget er`, `The zone selection is`),
@@ -16,8 +19,34 @@ const TariffZonesTexts = {
         ),
     },
   },
+  zoneTitle: {
+    text: (numberOfZones: number) => {
+      if (numberOfZones > 1) {
+        return _(
+          `Reise i ${numberOfZones} soner`,
+          `Travel in ${numberOfZones} zones`,
+        );
+      }
+
+      return _(`Reise i 1 sone`, `Travel in 1 zone`);
+    },
+  },
+  zoneDescription: {
+    text: {
+      singleZone: (zoneName: string) =>
+        _(`Sone ${zoneName}`, `Zone ${zoneName}`),
+      multipleZone: (zoneNameFrom: string, zoneNameTo: string) =>
+        _(
+          `Sone ${zoneNameFrom} til sone ${zoneNameTo}`,
+          `Zone ${zoneNameFrom} to zone ${zoneNameTo}`,
+        ),
+    },
+  },
 
   location: {
+    singleZone: {
+      label: _('Reise i ', 'Travel in '),
+    },
     departurePicker: {
       value: {
         noVenue: (zoneName: string) =>

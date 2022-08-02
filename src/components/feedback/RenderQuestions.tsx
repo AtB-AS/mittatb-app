@@ -7,7 +7,6 @@ import {View} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useSectionItem} from '../sections/section-utils';
-import hexToRgba from 'hex-to-rgba';
 
 export interface RenderQuestionProps {
   selectedOpinion: Opinions;
@@ -82,11 +81,11 @@ function AlternativeItem({
       onPress={() => handleAnswerPress(alternative.alternativeId)}
       accessibilityRole="checkbox"
       accessibilityState={{checked: isChecked}}
-      accessibilityHint={
+      accessibilityHint={`${alternative.alternativeText[language]} ${
         isChecked
           ? t(FeedbackTexts.alternatives.a11yHints.checked)
           : t(FeedbackTexts.alternatives.a11yHints.unchecked)
-      }
+      }`}
     >
       <View
         style={
@@ -110,14 +109,14 @@ const useAlternativeStyle = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.medium,
     marginBottom: theme.spacings.small,
     paddingVertical: theme.spacings.medium,
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.interactive.interactive_2.default.background,
     borderWidth: theme.border.width.medium,
     borderRadius: theme.border.radius.regular,
-    borderColor: theme.colors.background_0.backgroundColor,
+    borderColor: theme.interactive.interactive_2.default.background,
   },
   checked: {
-    backgroundColor: hexToRgba(theme.colors.primary_2.backgroundColor, 0.2),
-    borderColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.interactive.interactive_2.active.background,
+    borderColor: theme.interactive.interactive_2.outline.background,
   },
   questionTitleView: {
     marginTop: theme.spacings.xLarge,

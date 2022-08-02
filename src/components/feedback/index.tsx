@@ -103,34 +103,6 @@ export const Feedback = ({
   const [versionStatsList, setVersionStatsList] = useState<VersionStats[]>([]);
   const [firebaseId, setFirebaseId] = useState<string>();
 
-  useEffect(() => {
-    incrementCounterAndSetDisplayStats();
-  }, []);
-
-  useEffect(() => {
-    // Reset state whenever metadata changes, unless the data is periodically refreshed
-    if (!avoidResetOnMetadataUpdate) {
-      setSelectedAlternativeIds([]);
-      setSelectedOpinion(Opinions.NotClickedYet);
-      setSubmitted(false);
-    }
-  }, [metadata]);
-
-  const toggleSelectedAlternativeId = useCallback(
-    (alternativeId: number) => {
-      if (selectedAlternativeIds.includes(alternativeId)) {
-        setSelectedAlternativeIds(
-          selectedAlternativeIds.filter((id) => id !== alternativeId),
-        );
-      } else {
-        setSelectedAlternativeIds([...selectedAlternativeIds, alternativeId]);
-      }
-    },
-    [selectedAlternativeIds],
-  );
-
-  if (!feedbackConfig) return null;
-
   const incrementCounterAndSetDisplayStats = async () => {
     if (feedbackConfig) {
       const defaultDisplayStatObject: VersionStats = {
@@ -166,6 +138,34 @@ export const Feedback = ({
       );
     }
   };
+
+  useEffect(() => {
+    incrementCounterAndSetDisplayStats();
+  }, []);
+
+  useEffect(() => {
+    // Reset state whenever metadata changes, unless the data is periodically refreshed
+    if (!avoidResetOnMetadataUpdate) {
+      setSelectedAlternativeIds([]);
+      setSelectedOpinion(Opinions.NotClickedYet);
+      setSubmitted(false);
+    }
+  }, [metadata]);
+
+  const toggleSelectedAlternativeId = useCallback(
+    (alternativeId: number) => {
+      if (selectedAlternativeIds.includes(alternativeId)) {
+        setSelectedAlternativeIds(
+          selectedAlternativeIds.filter((id) => id !== alternativeId),
+        );
+      } else {
+        setSelectedAlternativeIds([...selectedAlternativeIds, alternativeId]);
+      }
+    },
+    [selectedAlternativeIds],
+  );
+
+  if (!feedbackConfig) return null;
 
   const filterOutOldSurveyVersionStats = (versionStatsList: VersionStats[]) => {
     const numberOfSurveyVersionsToKeep = 3;
@@ -289,17 +289,17 @@ export const Feedback = ({
   const currentVersionStats = findCurrentVersionStats(versionStatsList);
 
   if (!currentVersionStats) return null;
-  if (currentVersionStats.doNotShowAgain) return null;
-
-  if (
-    feedbackConfig.gracePeriodDisplayCount &&
-    feedbackConfig.gracePeriodDisplayCount + 1 >
-      currentVersionStats.displayCount
-  ) {
-    return null;
-  }
 
   if (!feedbackConfig.alwaysShow) {
+    if (currentVersionStats.doNotShowAgain) return null;
+    if (
+      feedbackConfig.gracePeriodDisplayCount &&
+      feedbackConfig.gracePeriodDisplayCount + 1 >
+        currentVersionStats.displayCount
+    ) {
+      return null;
+    }
+
     if (feedbackConfig.repromptDisplayCount) {
       if (currentVersionStats.answeredAtDisplayCount) {
         const shouldReprompt =
@@ -338,17 +338,19 @@ export const Feedback = ({
               text={t(FeedbackTexts.submitText.submitFeedback)}
               onPress={submitFeedbackWithAlternatives}
               mode="primary"
-              color="background_accent"
+              interactiveColor="interactive_0"
             />
           </View>
         )}
         {selectedOpinion === Opinions.NotClickedYet &&
-          feedbackConfig.dismissable && (
+          feedbackConfig.dismissable &&
+          !feedbackConfig.alwaysShow && (
             <Button
               style={styles.submitButtonView}
               onPress={setDoNotShowAgain}
               text={t(FeedbackTexts.goodOrBadTexts.doNotShowAgain)}
-              mode={'tertiary'}
+              mode="tertiary"
+              interactiveColor="interactive_2"
             />
           )}
       </View>
@@ -359,7 +361,7 @@ export const Feedback = ({
 
 const useFeedbackStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     borderRadius: theme.border.radius.regular,
     padding: theme.spacings.xLarge,
   },

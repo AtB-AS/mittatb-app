@@ -8,16 +8,17 @@ import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
-import {TicketIcon, Psst} from '@atb/assets/svg/color/illustrations';
+import {Psst} from '@atb/assets/svg/color/illustrations';
+import {Periodebillett} from '@atb/assets/svg/color/images';
 import {TouchableOpacity} from 'react-native';
 import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketState,
 } from '@atb/tickets';
 
-const themeColor: ThemeColor = 'background_accent';
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export default function LoginOnboarding({
   headerLeftButton,
@@ -64,10 +65,10 @@ export default function LoginOnboarding({
             {t(LoginTexts.onboarding.description)}
           </ThemeText>
         </View>
-        <TicketIcon style={styles.illustation}></TicketIcon>
+        <Periodebillett style={styles.illustation} />
         <View style={styles.buttonView}>
           <Button
-            color={'primary_2'}
+            interactiveColor="interactive_0"
             onPress={onNext}
             text={t(LoginTexts.onboarding.button)}
             icon={ArrowRight}
@@ -109,7 +110,7 @@ export default function LoginOnboarding({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
     flex: 1,
   },
   mainView: {

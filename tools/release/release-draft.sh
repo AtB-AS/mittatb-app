@@ -1,6 +1,6 @@
 branch=$(git rev-parse --abbrev-ref HEAD)
-if [[ "$branch" != "master" ]]; then
-  echo 'You have to be on master to do a new release';
+if [[ "$branch" != "master" && "$branch" != "release/"* ]]; then
+  echo 'You have to be on master or release branch to do a new release';
   exit 1;
 fi
 

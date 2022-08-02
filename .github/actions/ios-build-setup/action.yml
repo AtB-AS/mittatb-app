@@ -1,7 +1,7 @@
 name: iOS build setup
 description: 'Sets up the necessarry dependencies, environment and assets for building the iOS app'
 inputs:
-  use-build-cache: 
+  use-build-cache:
     description: "Wether to use the build cache for artifacts and dependencies (will speed up subsequent builds if no native changes have happened)"
     default: 'false'
     required: true
@@ -38,7 +38,7 @@ runs:
         if: ${{ inputs.use-build-cache }} == 'true'
         with:
           path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.yalc/**') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Install node_modules
         shell: bash
         if: ${{ inputs.use-build-cache }} != 'true' || steps.modules-cache.outputs.cache-hit != 'true'

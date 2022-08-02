@@ -104,7 +104,7 @@ describe('My profile', () => {
     await expectToBeVisibleByText('My account');
     await expectToBeVisibleByText('Customer number');
     await expectToBeVisibleById('loginButton');
-    await expectToBeVisibleByText('Sign in');
+    await expectToBeVisibleByText('Log in');
     await expectToBeVisibleById('expiredTicketsButton');
     await expectToBeVisibleByText('Expired tickets');
   });
@@ -241,5 +241,26 @@ describe('My profile', () => {
     await expectNumberOfFavourites(2);
 
     await goBack();
+  });
+
+  xit('should change start page', async () => {
+    // change to departures
+    // await device.reloadReactNative();
+    // check
+    // change back
+    // await device.reloadReactNative();
+    // check
+  });
+
+  xit('should change default traveller', async () => {
+
+  });
+
+  xit('should view and delete favourite departures', async () => {
+
+  });
+
+  xit('should delete search history', async () => {
+
   });
 });

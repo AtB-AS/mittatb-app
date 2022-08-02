@@ -1,6 +1,10 @@
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
-import {FareContract, isInspectable, isPreactivatedTicket} from '@atb/tickets';
+import {
+  FareContract,
+  isInspectableTicket,
+  isPreactivatedTicket,
+} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
@@ -11,7 +15,6 @@ import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import QrCode from '@atb/screens/Ticketing/Ticket/Details/QrCode';
-import PaperQrCode from '@atb/screens/Ticketing/Ticket/Details/PaperQrCode';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
@@ -32,18 +35,23 @@ const DetailsContent: React.FC<Props> = ({
 }) => {
   const {t, language} = useTranslation();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {travelTokens} = useMobileTokenContextState();
-  const inspectableTravelToken = travelTokens?.find((t) => t.inspectable);
+  const {
+    deviceIsInspectable,
+    isError: mobileTokenError,
+    fallbackEnabled,
+  } = useMobileTokenContextState();
 
   const firstTravelRight = fc.travelRights[0];
   if (isPreactivatedTicket(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
-    const inspectable = isInspectable(
+    const ticketIsInspectable = isInspectableTicket(
       firstTravelRight,
       hasActiveTravelCard,
       hasEnabledMobileToken,
-      inspectableTravelToken,
+      deviceIsInspectable,
+      mobileTokenError,
+      fallbackEnabled,
     );
 
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
@@ -58,19 +66,20 @@ const DetailsContent: React.FC<Props> = ({
             now={now}
             validFrom={validFrom}
             validTo={validTo}
-            isInspectable={inspectable}
+            isInspectable={ticketIsInspectable}
           />
           <ValidityLine
             status={validityStatus}
             now={now}
             validFrom={validFrom}
             validTo={validTo}
-            isInspectable={inspectable}
+            isInspectable={ticketIsInspectable}
           />
           <TicketInfo
             travelRights={fc.travelRights.filter(isPreactivatedTicket)}
             status={validityStatus}
-            isInspectable={inspectable}
+            isInspectable={ticketIsInspectable}
+            testID={'details'}
           />
         </Sections.GenericItem>
         <Sections.GenericItem>
@@ -96,15 +105,11 @@ const DetailsContent: React.FC<Props> = ({
           accessibility={{accessibilityRole: 'button'}}
           testID="receiptButton"
         />
-        {hasEnabledMobileToken ? (
-          <QrCode validityStatus={validityStatus} />
-        ) : (
-          <PaperQrCode
-            validityStatus={validityStatus}
-            isInspectable={inspectable}
-            fc={fc}
-          />
-        )}
+        <QrCode
+          validityStatus={validityStatus}
+          ticketIsInspectable={ticketIsInspectable}
+          fc={fc}
+        />
       </Sections.Section>
     );
   } else {

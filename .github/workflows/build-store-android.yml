@@ -14,6 +14,9 @@ jobs:
     timeout-minutes: 90
     runs-on: macos-11
     steps:
+      - name: Check if release tag is org specific and exit for other orgs
+        if: ${{ (matrix.org == 'atb' && contains(github.ref, 'nfk')) || (matrix.org == 'nfk' && contains(github.ref, 'atb')) }}
+        run: exit 1
       - name: Checkout project
         uses: actions/checkout@v1
       - name: Set global env vars
@@ -27,6 +30,11 @@ jobs:
         run: sh ./scripts/git-crypt-unlock.sh
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+      - name: Add Entur private registry credentials
+        run: sh ./scripts/add-entur-private-registry.sh
+        env:
+          ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: install node v16
         uses: actions/setup-node@v1
         with:

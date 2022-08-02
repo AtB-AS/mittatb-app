@@ -4,7 +4,6 @@ import {
   WebViewError,
   WebViewErrorEvent,
   WebViewNavigation,
-  WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
 import {parse as parseURL} from 'search-params';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
@@ -166,24 +165,16 @@ export default function useTerminalState(
   const redirectToPaymentCaptureRef = useRef<boolean>(false);
   const verifyingBankIdRef = useRef<boolean>(false);
 
-  function handleInitialLoadingError(
-    event: WebViewNavigationEvent | WebViewErrorEvent,
-  ) {
-    if (isWebViewError(event.nativeEvent)) {
-      dispatch({
-        type: 'SET_ERROR',
-        errorType: 'unknown',
-        errorContext: 'terminal-loading',
-      });
-    } else {
-      dispatch({type: 'TERMINAL_LOADED'});
-    }
+  function handleInitialLoadingError(event: WebViewErrorEvent) {
+    dispatch({
+      type: 'SET_ERROR',
+      errorType: 'unknown',
+      errorContext: 'terminal-loading',
+    });
   }
 
-  function handlePaymentCallback(
-    event: WebViewNavigationEvent | WebViewErrorEvent,
-  ) {
-    const params = parseURL(event.nativeEvent.url);
+  function handlePaymentCallback(event: WebViewNavigation) {
+    const params = parseURL(event.url);
     const responseCode = params['responseCode'];
     if (isNetsResponseCode(responseCode))
       dispatch({type: 'SET_NETS_RESPONSE_CODE', responseCode});
@@ -193,16 +184,16 @@ export default function useTerminalState(
     dispatch({type: 'VERIFYING_BANK_ID'});
   }
 
-  const onWebViewLoadEnd = (
-    event: WebViewNavigationEvent | WebViewErrorEvent,
-  ) => {
-    const {url} = event.nativeEvent;
+  const onWebViewLoadEnd = (event: WebViewNavigation) => {
+    const {url} = event;
+
     // load events might be called several times
     // for each type of resource, html, assets, etc
     // so we have a "loading guard" here
+
     if (initialLoadRef.current) {
       initialLoadRef.current = false;
-      handleInitialLoadingError(event);
+      dispatch({type: 'TERMINAL_LOADED'});
     } else if (!redirectToPaymentCaptureRef.current) {
       if (url.includes('/ticket/v2/payments/')) {
         redirectToPaymentCaptureRef.current = true;
@@ -221,24 +212,49 @@ export default function useTerminalState(
     }
   };
 
-  async function savePaymentMethod(recurringPaymentId?: number) {
+  async function savePaymentMethod(
+    saveRecurringCard: boolean,
+    recurringPaymentId?: number,
+  ) {
     if (recurringPaymentId) {
       if (user?.phoneNumber) {
-        let allRecurringPaymentOptions = await listRecurringPayments();
-        const card = allRecurringPaymentOptions.find((item) => {
+        const existingMethods = await listRecurringPayments();
+        const alreadyAddedRecurringCard = existingMethods.find((item) => {
           return item.id === recurringPaymentId;
         });
-        if (card) {
+        if (alreadyAddedRecurringCard) {
           savePreviousPaymentMethodByUser(user.uid, {
             savedType: 'recurring',
             paymentType: paymentType,
-            recurringCard: card,
+            recurringCard: alreadyAddedRecurringCard,
           });
-        } else {
-          savePreviousPaymentMethodByUser(user.uid, {
-            savedType: 'normal',
-            paymentType: paymentType,
-          });
+        }
+
+        if (saveRecurringCard) {
+          const checkIfRecurringCardHasBeenSavedAtEntur = async (
+            recurringPaymentId: number,
+          ) => {
+            let allRecurringPaymentOptions = await listRecurringPayments();
+            const card = allRecurringPaymentOptions.find((item) => {
+              return item.id === recurringPaymentId;
+            });
+
+            if (card) {
+              savePreviousPaymentMethodByUser(user.uid, {
+                savedType: 'recurring',
+                paymentType: paymentType,
+                recurringCard: card,
+              });
+            } else {
+              savePreviousPaymentMethodByUser(user.uid, {
+                savedType: 'recurring-without-card',
+                paymentType: paymentType,
+                recurringPaymentId: recurringPaymentId,
+              });
+            }
+          };
+
+          checkIfRecurringCardHasBeenSavedAtEntur(recurringPaymentId);
         }
       }
     } else {
@@ -255,7 +271,7 @@ export default function useTerminalState(
     switch (paymentResponseCode) {
       case 'OK':
         if (!reservation) return;
-        savePaymentMethod(reservation.recurring_payment_id);
+        savePaymentMethod(saveRecurringCard, reservation.recurring_payment_id);
         break;
       case 'Cancel':
         cancelTerminal();
@@ -291,9 +307,6 @@ export default function useTerminalState(
     error,
     restartTerminal,
     cancelPayment: cancel,
+    handleInitialLoadingError,
   };
 }
-
-const isWebViewError = (
-  nativeEvent: WebViewNavigation | WebViewError,
-): nativeEvent is WebViewError => 'code' in nativeEvent;

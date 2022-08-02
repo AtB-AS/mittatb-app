@@ -69,7 +69,7 @@ export default function VippsPayment({
             <Processing message={translateStateMessage(state, t)} />
           ) : (
             <Button
-              color="primary_2"
+              interactiveColor="interactive_0"
               text={t(PaymentVippsTexts.buttons.goToVipps)}
               onPress={() => openVipps()}
               style={styles.button}
@@ -84,14 +84,14 @@ export default function VippsPayment({
             />
             {error.context === 'open-vipps-url' && (
               <Button
-                color="primary_2"
+                interactiveColor="interactive_0"
                 onPress={openVipps}
                 text={t(PaymentVippsTexts.buttons.tryAgain)}
                 style={styles.button}
               />
             )}
             <Button
-              color="secondary_1"
+              interactiveColor="interactive_1"
               onPress={() => cancelVipps()}
               text={t(PaymentVippsTexts.buttons.goBack)}
               style={styles.button}
@@ -129,7 +129,7 @@ const translateStateMessage = (loadingState: State, t: TranslateFunction) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
   },
   content: {
     flex: 1,

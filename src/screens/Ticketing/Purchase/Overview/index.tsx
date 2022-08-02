@@ -1,7 +1,3 @@
-import {Edit} from '@atb/assets/svg/mono-icons/actions';
-import Button from '@atb/components/button';
-import * as Sections from '@atb/components/sections';
-import ThemeIcon from '@atb/components/theme-icon';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
@@ -14,46 +10,49 @@ import {StyleSheet} from '@atb/theme';
 import {
   Language,
   PurchaseOverviewTexts,
+  TicketTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
 import {RouteProp} from '@react-navigation/native';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
+import Zones from './components/Zones';
+
 import {
   getReferenceDataName,
   productIsSellableInApp,
 } from '@atb/reference-data/utils';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {TicketingStackParams} from '../';
-import {tariffZonesSummary, TariffZoneWithMetadata} from '../TariffZones';
+import {TariffZoneWithMetadata} from '../TariffZones';
 import useOfferState from './use-offer-state';
-import {getPurchaseFlow} from '@atb/screens/Ticketing/Purchase/utils';
 import {formatToLongDateTime} from '@atb/utils/date';
-import ThemeText from '@atb/components/text';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
-import ProductSheet from '@atb/screens/Ticketing/Purchase/Product/ProductSheet';
 import {usePreferences} from '@atb/preferences';
-import {screenReaderPause} from '@atb/components/accessible-text';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import TravellersSheet from '@atb/screens/Ticketing/Purchase/Travellers/TravellersSheet';
-import TravelDateSheet from '@atb/screens/Ticketing/Purchase/TravelDate/TravelDateSheet';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
 import {useTicketState} from '@atb/tickets';
-import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import Summary from './components/Summary';
+import DurationSelection from './components/DurationSelection';
+import StartTimeSelection from './components/StartTimeSelection';
+import TravellerSelection from './components/TravellerSelection';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {getPurchaseFlow} from '../utils';
+import {getDeviceNameForCurrentToken} from '@atb/mobile-token/utils';
+
+export type OverviewNavigationProp = DismissableStackNavigationProp<
+  TicketingStackParams,
+  'PurchaseOverview'
+>;
 
 export type OverviewProps = {
-  navigation: DismissableStackNavigationProp<
-    TicketingStackParams,
-    'PurchaseOverview'
-  >;
+  navigation: OverviewNavigationProp;
   route: RouteProp<TicketingStackParams, 'PurchaseOverview'>;
 };
 
@@ -62,15 +61,23 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   route: {params},
 }) => {
   const styles = useStyles();
-  const {t, language} = useTranslation();
-  const {inspectableToken} = useMobileTokenContextState();
+  const {t} = useTranslation();
+  const {
+    deviceIsInspectable,
+    isError: mobileTokenError,
+    fallbackEnabled,
+    token,
+    remoteTokens,
+  } = useMobileTokenContextState();
   const tokensEnabled = useHasEnabledMobileToken();
   const {customerProfile} = useTicketState();
   const hasProfileTravelCard = !!customerProfile?.travelcard;
 
   const showProfileTravelcardWarning = !tokensEnabled && hasProfileTravelCard;
-  const showNotInspectableTokenWarning =
-    tokensEnabled && !inspectableToken?.isThisDevice;
+
+  const showInspectableTokenWarning =
+    tokensEnabled &&
+    (mobileTokenError ? !fallbackEnabled : !deviceIsInspectable);
 
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
 
@@ -84,36 +91,14 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     selectableProducts[0],
   );
 
-  const {travelDateSelectionEnabled} = getPurchaseFlow(preassignedFareProduct);
-
   const defaultUserProfilesWithCount = useDefaultUserProfilesWithCount(
     userProfiles,
     preassignedFareProduct,
   );
-  const [userProfilesWithCount, setUserProfilesWithCount] = useState(
+  const [travellerSelection, setTravellerSelection] = useState(
     defaultUserProfilesWithCount,
   );
-
-  const [selectableUserProfiles, setSelectableUserProfiles] = useState(
-    defaultUserProfilesWithCount,
-  );
-
-  useEffect(() => {
-    const options = defaultUserProfilesWithCount.filter((p) => {
-      const profileIds = preassignedFareProduct.limitations.userProfileRefs;
-      return profileIds.includes(p.id);
-    });
-    const optionIds = options.map((p) => p.id);
-    const selectedUserProfiles = userProfilesWithCount
-      .filter((p) => p.count > 0)
-      .map((p) => p.id);
-
-    if (!selectedUserProfiles.every((p) => optionIds.includes(p))) {
-      setUserProfilesWithCount(defaultUserProfilesWithCount);
-    } else {
-      setSelectableUserProfiles(options);
-    }
-  }, [preassignedFareProduct, userProfilesWithCount]);
+  const hasSelection = travellerSelection.some((u) => u.count);
 
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
   const {fromTariffZone = defaultTariffZone, toTariffZone = defaultTariffZone} =
@@ -125,9 +110,11 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
-    userProfilesWithCount,
+    travellerSelection,
     travelDate,
   );
+
+  const {travelDateSelectionEnabled} = getPurchaseFlow(preassignedFareProduct);
 
   const shouldShowValidTrainTicketNotice =
     (preassignedFareProduct.type === 'single' ||
@@ -143,42 +130,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const closeModal = () => navigation.dismiss();
 
-  const {open: openBottomSheet} = useBottomSheet();
-
-  const openProductSheet = () => {
-    openBottomSheet((close, focusRef) => (
-      <ProductSheet
-        close={close}
-        save={setPreassignedFareProduct}
-        preassignedFareProduct={preassignedFareProduct}
-        ref={focusRef}
-      />
-    ));
-  };
-
-  const openTravellersSheet = () => {
-    openBottomSheet((close, focusRef) => (
-      <TravellersSheet
-        close={close}
-        save={setUserProfilesWithCount}
-        preassignedFareProduct={preassignedFareProduct}
-        userProfilesWithCount={selectableUserProfiles}
-        ref={focusRef}
-      />
-    ));
-  };
-
-  const openTravelDateSheet = () => {
-    openBottomSheet((close, focusRef) => (
-      <TravelDateSheet
-        close={close}
-        save={setTravelDate}
-        travelDate={travelDate}
-        ref={focusRef}
-      />
-    ));
-  };
-
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -192,150 +143,105 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         alertContext="ticketing"
       />
 
-      <View style={styles.selectionLinks}>
-        {error && (
+      <ScrollView testID="ticketingScrollView">
+        <View style={styles.selectionLinks}>
+          {error && (
+            <MessageBox
+              type="error"
+              title={t(PurchaseOverviewTexts.errorMessageBox.title)}
+              message={t(PurchaseOverviewTexts.errorMessageBox.message)}
+              onPress={refreshOffer}
+              onPressText={t(MessageBoxTexts.tryAgainButton)}
+              containerStyle={styles.selectionComponent}
+            />
+          )}
+
+          {preassignedFareProduct.type === 'period' && (
+            <DurationSelection
+              color="interactive_2"
+              selectedProduct={preassignedFareProduct}
+              setSelectedProduct={setPreassignedFareProduct}
+              style={styles.selectionComponent}
+            />
+          )}
+
+          <TravellerSelection
+            setTravellerSelection={setTravellerSelection}
+            preassignedFareProduct={preassignedFareProduct}
+            selectableUserProfiles={defaultUserProfilesWithCount}
+            style={styles.selectionComponent}
+          />
+
+          <Zones
+            fromTariffZone={fromTariffZone}
+            toTariffZone={toTariffZone}
+            style={styles.selectionComponent}
+            isApplicableOnSingleZoneOnly={
+              preassignedFareProduct.isApplicableOnSingleZoneOnly
+            }
+          />
+
+          {travelDateSelectionEnabled && (
+            <StartTimeSelection
+              color="interactive_2"
+              travelDate={travelDate}
+              setTravelDate={setTravelDate}
+              validFromTime={travelDate}
+              style={styles.selectionComponent}
+            />
+          )}
+        </View>
+
+        {showProfileTravelcardWarning && (
           <MessageBox
-            type="error"
-            title={t(PurchaseOverviewTexts.errorMessageBox.title)}
-            message={t(PurchaseOverviewTexts.errorMessageBox.message)}
-            onPress={refreshOffer}
-            onPressText={t(MessageBoxTexts.tryAgainButton)}
-            containerStyle={styles.errorMessage}
+            containerStyle={styles.warning}
+            message={t(PurchaseOverviewTexts.warning)}
+            type="warning"
           />
         )}
 
-        <Sections.Section>
-          <Sections.LinkItem
-            text={getReferenceDataName(preassignedFareProduct, language)}
-            onPress={openProductSheet}
-            disabled={selectableProducts.length <= 1}
-            icon={<ThemeIcon svg={Edit} />}
-            accessibility={{
-              accessibilityLabel:
-                getReferenceDataName(preassignedFareProduct, language) +
-                screenReaderPause,
-              accessibilityHint: t(PurchaseOverviewTexts.product.a11yHint),
-            }}
-            testID="selectProductButton"
-          />
-          <Sections.LinkItem
-            text={createTravellersText(
-              userProfilesWithCount,
-              true,
-              false,
-              t,
-              language,
+        {showInspectableTokenWarning && (
+          <MessageBox
+            isMarkdown={true}
+            containerStyle={styles.warning}
+            message={t(
+              PurchaseOverviewTexts.notInspectableTokenDeviceWarning(
+                getDeviceNameForCurrentToken(
+                  token?.getTokenId(),
+                  remoteTokens,
+                ) || t(PurchaseOverviewTexts.unnamedDevice),
+              ),
             )}
-            onPress={openTravellersSheet}
-            icon={<ThemeIcon svg={Edit} />}
-            accessibility={{
-              accessibilityLabel:
-                createTravellersText(
-                  userProfilesWithCount,
-                  false,
-                  false,
-                  t,
-                  language,
-                ) + screenReaderPause,
-              accessibilityHint: t(PurchaseOverviewTexts.travellers.a11yHint),
-            }}
-            testID="selectTravellersButton"
+            type="warning"
           />
-          <Sections.LinkItem
-            text={createTravelDateText(t, language, travelDate)}
-            disabled={!travelDateSelectionEnabled}
-            onPress={openTravelDateSheet}
-            icon={<ThemeIcon svg={Edit} />}
-            accessibility={{
-              accessibilityLabel:
-                createTravelDateText(t, language, travelDate) +
-                screenReaderPause,
-              accessibilityHint: t(PurchaseOverviewTexts.travelDate.a11yHint),
-            }}
-            testID="selectStartTimeButton"
+        )}
+
+        {shouldShowValidTrainTicketNotice && (
+          <MessageBox
+            containerStyle={styles.warning}
+            message={
+              preassignedFareProduct.type === 'single'
+                ? t(PurchaseOverviewTexts.samarbeidsbillettenInfo.single)
+                : t(PurchaseOverviewTexts.samarbeidsbillettenInfo.period)
+            }
+            type="info"
           />
-          <Sections.LinkItem
-            text={tariffZonesSummary(fromTariffZone, toTariffZone, language, t)}
-            onPress={() => {
-              navigation.push('TariffZones', {
-                fromTariffZone,
-                toTariffZone,
-              });
-            }}
-            icon={<ThemeIcon svg={Edit} />}
-            accessibility={{
-              accessibilityLabel:
-                tariffZonesSummary(fromTariffZone, toTariffZone, language, t) +
-                screenReaderPause,
-              accessibilityHint: t(PurchaseOverviewTexts.tariffZones.a11yHint),
-            }}
-            testID="selectZonesButton"
+        )}
+
+        <FullScreenFooter>
+          <Summary
+            isLoading={isSearchingOffer}
+            isError={!!error || !hasSelection}
+            price={totalPrice}
+            fromTariffZone={fromTariffZone}
+            toTariffZone={toTariffZone}
+            userProfilesWithCount={travellerSelection}
+            preassignedFareProduct={preassignedFareProduct}
+            travelDate={travelDate}
+            style={styles.summary}
           />
-          <Sections.GenericItem>
-            {isSearchingOffer ? (
-              <ActivityIndicator style={styles.totalSection} />
-            ) : (
-              <ThemeText
-                style={styles.totalSection}
-                type="body__primary--bold"
-                testID="offerTotalPriceText"
-              >
-                {t(PurchaseOverviewTexts.totalPrice(totalPrice))}
-              </ThemeText>
-            )}
-          </Sections.GenericItem>
-        </Sections.Section>
-      </View>
-
-      {showProfileTravelcardWarning && (
-        <MessageBox
-          containerStyle={styles.warning}
-          message={t(PurchaseOverviewTexts.warning)}
-          type="warning"
-        />
-      )}
-
-      {showNotInspectableTokenWarning && (
-        <MessageBox
-          isMarkdown={true}
-          containerStyle={styles.warning}
-          message={t(PurchaseOverviewTexts.notInspectableTokenDeviceWarning)}
-          type="warning"
-        />
-      )}
-
-      {shouldShowValidTrainTicketNotice && (
-        <MessageBox
-          containerStyle={styles.warning}
-          message={
-            preassignedFareProduct.type === 'single'
-              ? t(PurchaseOverviewTexts.samarbeidsbillettenInfo.single)
-              : t(PurchaseOverviewTexts.samarbeidsbillettenInfo.period)
-          }
-          type="info"
-        />
-      )}
-
-      <View style={styles.toPaymentButton}>
-        <Button
-          color="primary_2"
-          text={t(PurchaseOverviewTexts.primaryButton)}
-          disabled={isSearchingOffer || !totalPrice || !!error}
-          onPress={() => {
-            navigation.navigate('Confirmation', {
-              fromTariffZone,
-              toTariffZone,
-              userProfilesWithCount,
-              preassignedFareProduct,
-              travelDate,
-              headerLeftButton: {type: 'back'},
-            });
-          }}
-          icon={ArrowRight}
-          iconPosition="right"
-          testID="goToPaymentButton"
-        />
-      </View>
+        </FullScreenFooter>
+      </ScrollView>
     </View>
   );
 };
@@ -469,10 +375,10 @@ export const useTariffZoneFromLocation = (tariffZones: TariffZone[]) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
   },
-  errorMessage: {
-    marginBottom: theme.spacings.medium,
+  selectionComponent: {
+    marginVertical: theme.spacings.medium,
   },
   selectionLinks: {margin: theme.spacings.medium},
   totalSection: {flex: 1, textAlign: 'center'},
@@ -481,6 +387,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
+  summary: {marginTop: theme.spacings.medium},
 }));
 
 export default PurchaseOverview;

@@ -3,13 +3,13 @@ const SelectTravelTokenTexts = {
   travelToken: {
     header: {
       title: _(
-        'Bruk billett på mobil / t:kort',
-        'Use ticket on phone / t:card',
+        'Bruk billett på t:kort / mobil',
+        'Use ticket on t:card / phone',
       ),
     },
     changeTokenButton: _(
-      'Bytt mellom mobil / t:kort',
-      'Switch between phone / t:card',
+      'Bytt mellom t:kort / mobil',
+      'Switch between t:card / phone',
     ),
     faq: {
       title: _('Ofte stilte spørsmål', 'Frequently asked questions'),
@@ -17,8 +17,8 @@ const SelectTravelTokenTexts = {
     faqs: [
       {
         question: _(
-          'Hva skjer om jeg mister mobilen eller t:kortet?',
-          'What happens if I lose my phone or t:card?',
+          'Hva skjer om jeg mister t:kortet eller mobilen?',
+          'What happens if I lose my t:card or phone?',
         ),
         answer: _(
           'Du kan enkelt velge å bruke billetten din på et annet t:kort eller mobil. Det gjør du på **Min profil**.',
@@ -58,16 +58,16 @@ const SelectTravelTokenTexts = {
     ],
   },
   toggleToken: {
-    title: _('Bytt mellom mobil / t:kort', 'Switch between phone / t:card'),
+    title: _('Bytt mellom t:kort / mobil', 'Switch between t:card / phone'),
     radioBox: {
       tCard: {
-        title: _('T:kort', 'T:card'),
+        title: _('t:kort', 't:card'),
         description: _(
           'Les av t:kortet ditt på holdeplass eller om bord. Kortet leses av ved kontroll.',
           'Validate your t:card at the bus stop or on board. The card will be scanned in a ticket inspection.',
         ),
         a11yLabel: _(
-          'T:kort. Les av t-kortet ditt på holdeplass eller om bord. Kortet leses av ved kontroll.',
+          't:kort. Les av t-kortet ditt på holdeplass eller om bord. Kortet leses av ved kontroll.',
           't:card. Validate your t:card at the bus stop or on board. The card will be scanned in a ticket inspection.',
         ),
         a11yHint: _('Aktivér for å velge t:kort.', 'Activate to select t:card'),
@@ -98,6 +98,10 @@ const SelectTravelTokenTexts = {
     noMobileToken: _(
       'Vi forsøker å klargjøre din mobil til å kunne bruke billettene på den, men det ser ut som det tar litt tid. Du kan sjekke om du har nettilgang og hvis ikke så vil appen forsøke på nytt neste gang du får tilgang.',
       `We're trying to get your phone ready for ticket usage, but it seems like it's taking some time. Check that your device is connected to the internet, if not we'll try again once the internet connection is restored.`,
+    ),
+    hasCarnet: _(
+      'Du har et klippekort. Foreløpig fungerer ikke klippekort på mobil. Hvis du bytter til mobil vil du ikke kunne bruke klippekortet ditt.',
+      `You have an active punch card. Currently punch cards cannot be activated using a phone. If you change to a phone now, you will not be able to use your punch card.`,
     ),
     unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },

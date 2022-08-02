@@ -88,19 +88,10 @@ const LoginTexts = {
     title: _('Er du sikker?', 'Are you sure?'),
     description: _(
       'Hvis du bytter eller mister telefonen vil vi ikke kunne finne fram billettene dine igjen.\n\nDu kan også logge inn senere under "Min profil"',
-      'If you switch or lose your phone your tickets will be lost.\n\nYou can also sign in at a later time under "My profile"',
+      'If you switch or lose your phone your tickets will be lost.\n\nYou can also log in at a later time under "My profile"',
     ),
     mainButton: _('Godta og gå videre', 'Accept and continue'),
-    wantToLoginButton: _('Jeg vil logge inn likevel', 'I want to sign in'),
+    wantToLoginButton: _('Jeg vil logge inn likevel', 'I want to log in'),
   },
 };
-export default orgSpecificTranslations(LoginTexts, {
-  nfk: {
-    skipLoginWarning: {
-      description: _(
-        'Hvis du bytter eller mister telefonen vil vi ikke kunne finne fram billettene dine igjen.\n\nDu kan også logge inn senere under "Mitt Reis"',
-        'If you switch or lose your phone your tickets will be lost.\n\nYou can also sign in at a later time under "My Reis"',
-      ),
-    },
-  },
-});
+export default LoginTexts;

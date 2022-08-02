@@ -6,8 +6,8 @@ import {FlatList} from 'react-native-gesture-handler';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {useTranslation} from '@atb/translations';
-import {Expand, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
-import {EstimatedCall, Quay} from '@atb/api/types/departures';
+import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
+import {EstimatedCall, Place, Quay} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import EstimatedCallItem from './EstimatedCallItem';
 import SectionSeparator from '@atb/components/sections/section-separator';
@@ -22,7 +22,9 @@ type QuaySectionProps = {
     serviceDate: string,
     date?: string,
     fromQuayId?: string,
+    isTripCancelled?: boolean,
   ) => void;
+  stopPlace: Place;
 };
 
 type EstimatedCallRenderItem = {
@@ -36,11 +38,12 @@ export default function QuaySection({
   testID,
   navigateToQuay,
   navigateToDetails,
+  stopPlace,
 }: QuaySectionProps): JSX.Element {
   const [isHidden, setIsHidden] = useState(false);
   const styles = useStyles();
   const departures = getDeparturesForQuay(data, quay);
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   return (
     <View testID={testID}>
@@ -79,7 +82,7 @@ export default function QuaySection({
                 </ThemeText>
               )}
             </View>
-            <ThemeIcon svg={isHidden ? Expand : ExpandLess}></ThemeIcon>
+            <ThemeIcon svg={isHidden ? ExpandMore : ExpandLess} />
           </View>
         </Sections.GenericClickableItem>
         {!isHidden && (
@@ -87,29 +90,22 @@ export default function QuaySection({
             ItemSeparatorComponent={SectionSeparator}
             data={departures}
             renderItem={({item: departure, index}: EstimatedCallRenderItem) => (
-              <Sections.GenericClickableItem
+              <Sections.GenericItem
                 radius={
                   !navigateToQuay && index === departures.length - 1
                     ? 'bottom'
                     : undefined
                 }
                 testID={'departureItem' + index}
-                onPress={() => {
-                  if (departure?.serviceJourney)
-                    navigateToDetails(
-                      departure.serviceJourney?.id,
-                      departure.date,
-                      departure.expectedDepartureTime,
-                      departure.quay?.id,
-                    );
-                }}
-                accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
               >
                 <EstimatedCallItem
                   departure={departure}
                   testID={'departureItem' + index}
+                  quay={quay}
+                  stopPlace={stopPlace}
+                  navigateToDetails={navigateToDetails}
                 />
-              </Sections.GenericClickableItem>
+              </Sections.GenericItem>
             )}
             keyExtractor={(item: EstimatedCall) =>
               // ServiceJourney ID is not a unique key if a ServiceJourney

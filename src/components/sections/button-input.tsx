@@ -21,6 +21,7 @@ export type ButtonInputProps = SectionItem<{
   iconAccessibility?: AccessibilityProps;
   placeholder?: string;
   value?: string | JSX.Element;
+  inlineValue?: boolean;
   highlighted?: boolean;
   icon?: NavigationIconTypes | JSX.Element;
   containerStyle?: ViewStyle;
@@ -31,6 +32,7 @@ export type ButtonInputProps = SectionItem<{
 export default function ButtonInput({
   onPress,
   value,
+  inlineValue = true,
   placeholder,
   label,
   highlighted,
@@ -92,18 +94,18 @@ export default function ButtonInput({
     <View style={wrapperStyle}>
       <TouchableOpacity
         onPress={onPress}
-        style={[
-          topContainer,
-          sectionStyles.spaceBetween,
-          styles.container,
-          containerPadding,
-        ]}
+        style={[topContainer, styles.container, containerPadding]}
         {...props}
       >
-        <ThemeText type="body__secondary" style={styles.label}>
-          {label}
-        </ThemeText>
-        <View style={[contentContainer, containerStyle]}>{valueEl}</View>
+        <View style={sectionStyles.spaceBetween}>
+          <ThemeText type="body__secondary" style={styles.label}>
+            {label}
+          </ThemeText>
+          {inlineValue && (
+            <View style={[contentContainer, containerStyle]}>{valueEl}</View>
+          )}
+        </View>
+        {!inlineValue && <View style={styles.inlineValueStyle}>{valueEl}</View>}
         {handlerWithoutPress}
       </TouchableOpacity>
       {handlerWithPress}
@@ -117,14 +119,17 @@ function isStringText(a: any): a is string {
 
 const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   wrapper__inline: {
     alignSelf: 'flex-start',
   },
   iconContainer: {
     position: 'absolute',
+    justifyContent: 'center',
     right: 0,
+    top: 0,
+    bottom: 0,
   },
   label: {
     // @TODO Find a better way to do this.
@@ -132,5 +137,8 @@ const useSymbolPickerStyle = StyleSheet.createThemeHook((theme) => ({
   },
   faded: {
     color: theme.text.colors.secondary,
+  },
+  inlineValueStyle: {
+    paddingTop: theme.spacings.xSmall,
   },
 }));

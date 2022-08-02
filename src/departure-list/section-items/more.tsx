@@ -1,4 +1,4 @@
-import {Expand} from '@atb/assets/svg/mono-icons/navigation';
+import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {
   SectionItem,
   useSectionItem,
@@ -32,7 +32,7 @@ export default function MoreItem({
     >
       <View style={[topContainer, sectionStyle.spaceBetween]}>
         <ThemeText style={[styles.center, contentContainer]}>{text}</ThemeText>
-        <ThemeIcon svg={Expand} />
+        <ThemeIcon svg={ExpandMore} />
       </View>
     </TouchableOpacity>
   );

@@ -31,6 +31,7 @@ export type UserPreferences = {
   newDepartures?: boolean;
   showTestIds?: boolean;
   tripSearchPreferences?: TripSearchPreferences;
+  hideTravellerDescriptions?: boolean;
 };
 
 export type PreferenceItem = keyof UserPreferences;

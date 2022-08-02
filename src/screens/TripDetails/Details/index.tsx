@@ -1,5 +1,5 @@
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
-import PaginatedDetailsHeader from '@atb/components/pagination';
+import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
 import Header from '@atb/components/screen-header';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
@@ -16,11 +16,11 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {DetailsStackParams} from '..';
 import Trip from '../components/Trip';
 import CompactMap from '../Map/CompactMap';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
 import {singleTripSearch} from '@atb/api/trips_v2';
 import {TripPattern} from '@atb/api/types/trips';
 
-const themeColor: ThemeColor = 'background_accent';
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export type DetailsRouteParams = {
   tripPatterns?: TripPattern[];
@@ -164,11 +164,11 @@ function useTripPattern(
 }
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   header: {
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
   },
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
   },
   paddedContainer: {
     paddingHorizontal: theme.spacings.medium,

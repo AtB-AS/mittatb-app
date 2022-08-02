@@ -12,24 +12,24 @@ import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import React, {forwardRef} from 'react';
-import {DepartureLineInfo} from '@atb/api/departures/types';
 import StyleSheet from '@atb/theme/StyleSheet';
 
 type Props = {
-  line: DepartureLineInfo;
+  lineNumber: string;
+  lineName: string;
   addFavorite: (forSpecificLineName: boolean) => void;
   close: () => void;
 };
 
 const FavoriteDialogSheet = forwardRef<View, Props>(
-  ({line, addFavorite, close}, focusRef) => {
+  ({lineNumber, lineName, addFavorite, close}, focusRef) => {
     const {t} = useTranslation();
     const styles = useStyles();
     return (
       <BottomSheetContainer>
         <ScreenHeaderWithoutNavigation
           title={t(NearbyTexts.favoriteDialogSheet.title)}
-          color="background_2"
+          color="background_1"
           leftButton={{
             type: 'cancel',
             onPress: close,
@@ -39,39 +39,34 @@ const FavoriteDialogSheet = forwardRef<View, Props>(
         <View style={styles.text} ref={focusRef} accessible={true}>
           <ThemeText>
             {t(
-              NearbyTexts.favoriteDialogSheet.description(
-                line.lineNumber,
-                line.lineName,
-              ),
+              NearbyTexts.favoriteDialogSheet.description(lineNumber, lineName),
             )}
           </ThemeText>
         </View>
         <FullScreenFooter>
           <ButtonGroup>
             <Button
-              color="primary_2"
+              interactiveColor="interactive_0"
               onPress={() => {
                 close();
                 addFavorite(true);
               }}
               text={t(
                 NearbyTexts.favoriteDialogSheet.buttons.specific(
-                  line.lineNumber,
-                  line.lineName,
+                  lineNumber,
+                  lineName,
                 ),
               )}
               icon={SvgFavoriteSemi}
               iconPosition={'right'}
             />
             <Button
-              color="primary_2"
+              interactiveColor="interactive_0"
               onPress={() => {
                 close();
                 addFavorite(false);
               }}
-              text={t(
-                NearbyTexts.favoriteDialogSheet.buttons.all(line.lineNumber),
-              )}
+              text={t(NearbyTexts.favoriteDialogSheet.buttons.all(lineNumber))}
               icon={SvgFavoriteFill}
               iconPosition={'right'}
             />

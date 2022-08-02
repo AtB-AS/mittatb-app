@@ -50,7 +50,7 @@ export default function Splash() {
               icon={Confirm}
               disabled={isLoading || !inviteCode}
               style={styles.button}
-              color={'primary_2'}
+              interactiveColor="interactive_0"
             />
           </>
         )}
@@ -74,7 +74,7 @@ function useMessageText(type: MessageType) {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
   contentContainer: {

@@ -1,4 +1,4 @@
-import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
+import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {LocationInput, Section} from '@atb/components/sections';
@@ -13,7 +13,11 @@ import {useOnlySingleLocation} from '@atb/location-search';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
+import {
+  CompositeNavigationProp,
+  RouteProp,
+  useIsFocused,
+} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
@@ -26,6 +30,7 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
 import StopPlaceItem from './components/StopPlaceItem';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
+import {useDoOnceWhen} from '@atb/screens/utils';
 
 const DateOptions = ['now', 'departure'] as const;
 type DateOptionType = typeof DateOptions[number];
@@ -91,16 +96,17 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const searchedFromLocation =
-    useOnlySingleLocation<DeparturesProps>('location');
-  const currentSearchLocation = useMemo<Location | undefined>(
-    () => currentLocation,
-    [currentLocation],
+  const fromLocation = useOnlySingleLocation<DeparturesProps>('location');
+  const screenHasFocus = useIsFocused();
+
+  useDoOnceWhen(
+    setCurrentLocationAsFromIfEmpty,
+    Boolean(currentLocation) && screenHasFocus,
   );
-  const fromLocation = searchedFromLocation ?? currentSearchLocation;
+
   const updatingLocation = !fromLocation && hasLocationPermission;
 
-  const {state, refresh} = useNearestStopsData(fromLocation);
+  const {state} = useNearestStopsData(fromLocation);
 
   const {data, isLoading, error} = state;
   const isInitialScreen = data == null && !isLoading && !error;
@@ -121,7 +127,8 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
 
   useEffect(() => {
     if (
-      fromLocation?.resultType == 'search' &&
+      (fromLocation?.resultType == 'search' ||
+        fromLocation?.resultType === 'favorite') &&
       fromLocation?.layer === 'venue'
     ) {
       navigation.navigate('PlaceScreen', {
@@ -137,6 +144,13 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
         resultType: 'geolocation',
       },
     });
+  }
+
+  function setCurrentLocationAsFromIfEmpty() {
+    if (fromLocation) {
+      return;
+    }
+    setCurrentLocationAsFrom();
   }
 
   async function setCurrentLocationOrRequest() {
@@ -156,6 +170,7 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
       case 'geolocation':
         return t(DeparturesTexts.stopPlaceList.listDescription.geoLoc);
       case 'search':
+      case 'favorite':
         return (
           t(DeparturesTexts.stopPlaceList.listDescription.address) +
           fromLocation.name
@@ -187,6 +202,15 @@ const PlacesOverview: React.FC<PlacesOverviewProps> = ({
       );
     }
   }, [updatingLocation, isLoading]);
+
+  function refresh() {
+    navigation.setParams({
+      location:
+        fromLocation?.resultType === 'geolocation'
+          ? currentLocation
+          : fromLocation,
+    });
+  }
 
   return (
     <SimpleDisappearingHeader
@@ -267,7 +291,7 @@ const Header = React.memo(function Header({
           location={fromLocation}
           onPress={openLocationSearch}
           accessibilityLabel={t(NearbyTexts.location.departurePicker.a11yLabel)}
-          icon={<ThemeIcon svg={CurrentLocationArrow} />}
+          icon={<ThemeIcon svg={LocationIcon} />}
           onIconPress={setCurrentLocationOrRequest}
           iconAccessibility={{
             accessible: true,

@@ -4,21 +4,30 @@ import ThemeText from '@atb/components/text';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 import insets from '@atb/utils/insets';
 import ThemeIcon from '@atb/components/theme-icon';
-import {Add, Remove} from '@atb/assets/svg/mono-icons/actions';
+import {Add, Subtract} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
+import {InteractiveColor} from '@atb/theme/colors';
+import useFontScale from '@atb/utils/use-font-scale';
 
 export type CounterInputProps = SectionItem<{
   text: string;
+  subtext?: string;
+  color?: InteractiveColor;
   count: number;
   addCount: () => void;
   removeCount: () => void;
+  hideSubtext?: boolean;
+  testID?: string;
 }>;
 export default function CounterInput({
   text,
+  subtext,
+  color,
   count,
   addCount,
   removeCount,
+  hideSubtext,
   testID,
   ...props
 }: CounterInputProps) {
@@ -28,10 +37,32 @@ export default function CounterInput({
   const {t} = useTranslation();
   const {theme} = useTheme();
   const removeButtonDisabled = count === 0;
+  const activeColor =
+    count > 0 && color ? theme.interactive[color].active : undefined;
+
   return (
     <View style={[topContainer, counterStyles.countContainer]} testID={testID}>
-      <View style={[style.spaceBetween, contentContainer]}>
-        <ThemeText accessibilityLabel={`${count} ${text}`}>{text}</ThemeText>
+      <View
+        style={[
+          style.spaceBetween,
+          contentContainer,
+          counterStyles.infoContainer,
+        ]}
+        accessible={true}
+        accessibilityLabel={`${count} ${text}, ${
+          (!hideSubtext && subtext) || ''
+        }`}
+      >
+        <ThemeText>{text}</ThemeText>
+        {subtext && !hideSubtext && (
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={counterStyles.infoSubtext}
+          >
+            {subtext}
+          </ThemeText>
+        )}
       </View>
       <View style={counterStyles.countActions}>
         <TouchableOpacity
@@ -57,7 +88,7 @@ export default function CounterInput({
           testID={testID + '_rem'}
         >
           <ThemeIcon
-            svg={Remove}
+            svg={Subtract}
             fill={
               removeButtonDisabled
                 ? theme.text.colors.disabled
@@ -65,13 +96,25 @@ export default function CounterInput({
             }
           />
         </TouchableOpacity>
-        <ThemeText
-          accessible={false}
-          style={counterStyles.countText}
-          type="body__primary--bold"
+        <View
+          style={[
+            counterStyles.countTextContainer,
+            activeColor && {backgroundColor: activeColor.background},
+          ]}
         >
-          {count}
-        </ThemeText>
+          <ThemeText
+            accessible={false}
+            importantForAccessibility={'no'}
+            style={[
+              counterStyles.countText,
+              activeColor && {color: activeColor.text},
+            ]}
+            type="body__primary--bold"
+            testID={testID + '_count'}
+          >
+            {count}
+          </ThemeText>
+        </View>
         <TouchableOpacity
           onPress={() => addCount()}
           accessibilityRole="button"
@@ -92,25 +135,42 @@ export default function CounterInput({
   );
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  countContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  countActions: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  countText: {
-    width: theme.spacings.large,
-    textAlign: 'center',
-  },
-  removeCount: {
-    marginRight: theme.spacings.xLarge,
-  },
-  addCount: {
-    marginLeft: theme.spacings.xLarge,
-  },
-}));
+const useStyles = StyleSheet.createThemeHook((theme) => {
+  const scale = useFontScale();
+  return {
+    infoContainer: {
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      marginRight: theme.spacings.medium,
+    },
+    infoSubtext: {
+      marginTop: theme.spacings.medium,
+    },
+    countContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    countActions: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+    },
+    countTextContainer: {
+      aspectRatio: 1,
+      borderRadius: 1000,
+      justifyContent: 'center',
+    },
+    countText: {
+      minWidth: theme.spacings.large * scale,
+      margin: theme.spacings.small * scale,
+      textAlign: 'center',
+    },
+    removeCount: {
+      marginRight: theme.spacings.xLarge,
+    },
+    addCount: {
+      marginLeft: theme.spacings.xLarge,
+    },
+  };
+});

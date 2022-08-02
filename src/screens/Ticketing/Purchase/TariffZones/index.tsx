@@ -1,5 +1,5 @@
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
-import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
+import {Location} from '@atb/assets/svg/mono-icons/places';
 import Button from '@atb/components/button';
 import {
   MapCameraConfig,
@@ -44,6 +44,7 @@ const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
 export type RouteParams = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
+  isApplicableOnSingleZoneOnly?: boolean;
 };
 
 type RouteProps = RouteProp<TicketingStackParams, TariffZonesRouteName>;
@@ -98,6 +99,38 @@ export const tariffZonesSummary = (
   } else {
     return t(
       TariffZonesTexts.zoneSummary.text.multipleZone(
+        getReferenceDataName(fromTariffZone, language),
+        getReferenceDataName(toTariffZone, language),
+      ),
+    );
+  }
+};
+
+export const tariffZonesTitle = (
+  fromTariffZone: TariffZone,
+  toTariffZone: TariffZone,
+  language: Language,
+  t: TranslateFunction,
+): string => {
+  const numberOfZones = fromTariffZone.id === toTariffZone.id ? 1 : 2;
+  return t(TariffZonesTexts.zoneTitle.text(numberOfZones));
+};
+
+export const tariffZonesDescription = (
+  fromTariffZone: TariffZone,
+  toTariffZone: TariffZone,
+  language: Language,
+  t: TranslateFunction,
+): string => {
+  if (fromTariffZone.id === toTariffZone.id) {
+    return t(
+      TariffZonesTexts.zoneDescription.text.singleZone(
+        getReferenceDataName(fromTariffZone, language),
+      ),
+    );
+  } else {
+    return t(
+      TariffZonesTexts.zoneDescription.text.multipleZone(
         getReferenceDataName(fromTariffZone, language),
         getReferenceDataName(toTariffZone, language),
       ),
@@ -203,13 +236,13 @@ const destinationPickerValue = (
 };
 
 const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
-  const {fromTariffZone, toTariffZone} = params;
+  const {fromTariffZone, toTariffZone, isApplicableOnSingleZoneOnly} = params;
   const [regionEvent, setRegionEvent] = useState<RegionEvent>();
   const {tariffZones} = useFirestoreConfiguration();
   const [selectedZones, setSelectedZones] = useState<TariffZoneSelection>({
     from: fromTariffZone,
     to: toTariffZone,
-    selectNext: 'to',
+    selectNext: isApplicableOnSingleZoneOnly ? 'from' : 'to',
   });
 
   useEffect(() => {
@@ -243,7 +276,11 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
         ...clickedTariffZone,
         resultType: resultType,
       },
-      selectNext: selectedZones.selectNext === 'from' ? 'to' : 'from',
+      selectNext: isApplicableOnSingleZoneOnly
+        ? 'from'
+        : selectedZones.selectNext === 'from'
+        ? 'to'
+        : 'from',
     };
     setSelectedZones(newZoneSelection);
   };
@@ -255,7 +292,9 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
   const onSave = () => {
     navigation.navigate('PurchaseOverview', {
       fromTariffZone: selectedZones.from,
-      toTariffZone: selectedZones.to,
+      toTariffZone: isApplicableOnSingleZoneOnly
+        ? selectedZones.from
+        : selectedZones.to,
     });
   };
 
@@ -332,13 +371,21 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <FullScreenHeader
-          title={t(TariffZonesTexts.header.title)}
+          title={
+            isApplicableOnSingleZoneOnly
+              ? t(TariffZonesTexts.header.title.singleZone)
+              : t(TariffZonesTexts.header.title.multipleZone)
+          }
           leftButton={{type: 'back'}}
         />
 
         <Section withPadding>
           <ButtonInput
-            label={t(TariffZonesTexts.location.departurePicker.label)}
+            label={
+              isApplicableOnSingleZoneOnly
+                ? t(TariffZonesTexts.location.singleZone.label)
+                : t(TariffZonesTexts.location.departurePicker.label)
+            }
             value={departurePickerValue(selectedZones.from, language, t)}
             accessibilityLabel={departurePickerAccessibilityLabel(
               selectedZones.from,
@@ -351,37 +398,39 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
             onPress={() => onVenueSearchClick('fromTariffZone')}
             icon={
               selectedZones.from.resultType === 'geolocation' ? (
-                <ThemeIcon svg={CurrentLocationArrow} />
+                <ThemeIcon svg={Location} />
               ) : undefined
             }
             highlighted={selectedZones.selectNext === 'from'}
             testID="searchFromButton"
           />
-          <ButtonInput
-            label={t(TariffZonesTexts.location.destinationPicker.label)}
-            value={destinationPickerValue(
-              selectedZones.from,
-              selectedZones.to,
-              language,
-              t,
-            )}
-            accessibilityLabel={destinationPickerAccessibilityLabel(
-              selectedZones.to,
-              language,
-              t,
-            )}
-            accessibilityHint={t(
-              TariffZonesTexts.location.departurePicker.a11yHint,
-            )}
-            onPress={() => onVenueSearchClick('toTariffZone')}
-            icon={
-              selectedZones.to.resultType === 'geolocation' ? (
-                <ThemeIcon svg={CurrentLocationArrow} />
-              ) : undefined
-            }
-            highlighted={selectedZones.selectNext === 'to'}
-            testID="searchToButton"
-          />
+          {!isApplicableOnSingleZoneOnly && (
+            <ButtonInput
+              label={t(TariffZonesTexts.location.destinationPicker.label)}
+              value={destinationPickerValue(
+                selectedZones.from,
+                selectedZones.to,
+                language,
+                t,
+              )}
+              accessibilityLabel={destinationPickerAccessibilityLabel(
+                selectedZones.to,
+                language,
+                t,
+              )}
+              accessibilityHint={t(
+                TariffZonesTexts.location.departurePicker.a11yHint,
+              )}
+              onPress={() => onVenueSearchClick('toTariffZone')}
+              icon={
+                selectedZones.to.resultType === 'geolocation' ? (
+                  <ThemeIcon svg={Location} />
+                ) : undefined
+              }
+              highlighted={selectedZones.selectNext === 'to'}
+              testID="searchToButton"
+            />
+          )}
         </Section>
       </View>
 
@@ -399,7 +448,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
           >
             <Button
               onPress={onSave}
-              color="primary_2"
+              interactiveColor="interactive_0"
               text={t(TariffZonesTexts.saveButton.text)}
               accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
               testID="saveZonesButton"
@@ -435,9 +484,11 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
                     // Mapbox Expression syntax
                     'case',
                     ['==', selectedZones.from.id, ['id']],
-                    hexToRgba(theme.status.valid.main.backgroundColor, 0.6),
+                    hexToRgba(theme.static.status.valid.background, 0.6),
                     ['==', selectedZones.to.id, ['id']],
-                    hexToRgba(theme.status.info.main.backgroundColor, 0.6),
+                    !isApplicableOnSingleZoneOnly
+                      ? hexToRgba(theme.static.status.info.background, 0.6)
+                      : 'transparent',
                     'transparent',
                   ],
                 }}
@@ -485,7 +536,7 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
             <View style={styles.saveButton}>
               <Button
                 onPress={onSave}
-                color="primary_2"
+                interactiveColor="interactive_0"
                 text={t(TariffZonesTexts.saveButton.text)}
                 accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
                 testID="saveZonesButton"
@@ -519,10 +570,10 @@ const mapZonesToFeatureCollection = (
 const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
   },
   headerContainer: {
-    backgroundColor: theme.colors.background_accent.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_0.background,
   },
   pinContainer: {
     position: 'absolute',

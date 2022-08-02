@@ -114,8 +114,8 @@ const TicketsScrollView: React.FC<Props> = ({
       <LinearGradient
         style={{position: 'absolute', bottom: 0, width: '100%', height: 30}}
         colors={[
-          hexToRgba(theme.colors.background_1.backgroundColor, 0.1),
-          hexToRgba(theme.colors.background_1.backgroundColor, 1),
+          hexToRgba(theme.static.background.background_1.background, 0.1),
+          hexToRgba(theme.static.background.background_1.background, 1),
         ]}
         pointerEvents={'none'}
       />
@@ -131,7 +131,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
   },
   gradient: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
   },
   messageBox: {
     marginBottom: theme.spacings.large,

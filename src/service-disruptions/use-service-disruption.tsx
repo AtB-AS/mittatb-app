@@ -1,4 +1,3 @@
-import {ThemeColor} from '@atb/theme/colors';
 import React, {useCallback} from 'react';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import ServiceDisruptionSheet from './ServiceDisruptionSheet';
@@ -24,9 +23,9 @@ export default function useServiceDisruptionModal(): {
 
   const leftButton: LeftButtonProps = {
     type: 'status-disruption',
-    // This should always be in header and thus primary_2
+    // This should always be in header and thus background_accent_3
     // hardcoded from before, but we should at some point see how to better handle it.
-    color: 'primary_2',
+    color: 'background_accent_3',
     onPress: openServiceDistruptionSheet,
     accessibilityLabel: '',
     testID: 'lhb',

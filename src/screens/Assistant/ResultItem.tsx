@@ -1,9 +1,7 @@
 import {ArrowRight, ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
-import {DestinationFlag} from '@atb/assets/svg/mono-icons/places';
-import {
-  Duration,
-  WalkingPerson,
-} from '@atb/assets/svg/mono-icons/transportation';
+import {Destination} from '@atb/assets/svg/mono-icons/places';
+import {Walk} from '@atb/assets/svg/mono-icons/transportation';
+import {Time} from '@atb/assets/svg/mono-icons/time';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
@@ -261,12 +259,12 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   result: {
-    backgroundColor: theme.colors.background_0.backgroundColor,
+    backgroundColor: theme.static.background.background_0.background,
     borderRadius: theme.border.radius.regular,
     marginTop: theme.spacings.medium,
   },
   resultInPast: {
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
   },
   detailsContainer: {
     padding: theme.spacings.medium,
@@ -356,11 +354,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       accessibilityLabel={a11yText}
       testID="fLeg"
     >
-      {!mustWalk ? (
-        <ThemeIcon svg={Duration} />
-      ) : (
-        <ThemeIcon svg={WalkingPerson} />
-      )}
+      {!mustWalk ? <ThemeIcon svg={Time} /> : <ThemeIcon svg={Walk} />}
     </View>
   );
 };
@@ -400,7 +394,7 @@ const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
   return (
     <View style={styles.legContainer}>
       <View style={styles.iconContainer}>
-        <ThemeIcon svg={DestinationFlag} />
+        <ThemeIcon svg={Destination} />
       </View>
     </View>
   );

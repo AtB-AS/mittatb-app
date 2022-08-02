@@ -11,6 +11,7 @@ export type QuayDeparturesQuery = {
       expectedDepartureTime?: any;
       aimedDepartureTime?: any;
       realtime?: boolean;
+      cancellation: boolean;
       quay?: {id: string};
       destinationDisplay?: {frontText?: string};
       serviceJourney?: {

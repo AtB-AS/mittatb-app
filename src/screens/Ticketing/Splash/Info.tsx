@@ -1,8 +1,9 @@
-import {TicketingSplash} from '@atb/assets/svg/color/illustrations';
+import {TicketSplash} from '@atb/assets/svg/color/images';
 import Button from '@atb/components/button';
 import Header from '@atb/components/screen-header';
 import ThemeText from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
+import {StaticColor} from '@atb/theme/colors';
 import {TicketSplashTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {useWindowDimensions, View} from 'react-native';
@@ -19,26 +20,29 @@ export default function SplashInfo({navigation}: Props) {
   const {width: windowWidth} = useWindowDimensions();
   const {t} = useTranslation();
 
+  const bgcolor: StaticColor = 'background_accent_0';
+
   return (
     <SafeAreaView style={styles.container}>
       <Header
         title={t(TicketSplashTexts.header.title)}
         rightButton={{type: 'chat'}}
-        color="primary_2"
+        color={bgcolor}
       />
       <View style={styles.bannerContainer}>
-        <TicketingSplash
-          width={windowWidth}
-          height={windowWidth / 2}
-        ></TicketingSplash>
+        <TicketSplash width={windowWidth} height={windowWidth / 2} />
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.contentContainer}>
           <View style={styles.textContent}>
-            <ThemeText color="primary_2" style={[styles.text, styles.bold]}>
+            <ThemeText
+              type="body__primary--jumbo--bold"
+              color={bgcolor}
+              style={styles.text}
+            >
               {t(TicketSplashTexts.splash.title)}
             </ThemeText>
-            <ThemeText color="primary_2" style={styles.text}>
+            <ThemeText color={bgcolor} style={styles.text}>
               {t(TicketSplashTexts.splash.paragraph1)}
             </ThemeText>
           </View>
@@ -49,7 +53,10 @@ export default function SplashInfo({navigation}: Props) {
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1, backgroundColor: theme.colors.primary_2.backgroundColor},
+  container: {
+    flex: 1,
+    backgroundColor: theme.static.background.background_accent_0.background,
+  },
   scrollContainer: {
     flexGrow: 1,
   },
@@ -71,10 +78,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
   },
   text: {
-    textAlign: 'center',
     marginBottom: theme.spacings.large,
   },
-  bold: {fontWeight: 'bold'},
   bannerContainer: {
     position: 'absolute',
     bottom: theme.spacings.large,

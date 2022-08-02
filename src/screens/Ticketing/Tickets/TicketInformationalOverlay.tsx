@@ -6,10 +6,10 @@ import {ScrollView, View} from 'react-native';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 
-const themeColor: ThemeColor = 'background_accent';
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export default function TicketInformationalOverlay() {
   const {theme} = useTheme();
@@ -66,20 +66,14 @@ export default function TicketInformationalOverlay() {
         >
           {t(TicketsTexts.informational.bullet3)}
         </ThemeText>
-        <ThemeText
-          color={themeColor}
-          style={{marginTop: theme.spacings.medium}}
-        >
-          {t(TicketsTexts.informational.bullet4)}
-        </ThemeText>
         <View style={{marginVertical: theme.spacings.xLarge}}>
           <Button
             text={t(TicketsTexts.informational.button)}
             icon={Confirm}
             iconPosition="right"
-            color="primary_2"
+            interactiveColor="interactive_0"
             onPress={onAccept}
-            testID="confirmButton"
+            testID="acceptTicketingButton"
           />
         </View>
       </ScrollView>
@@ -98,6 +92,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   scrollView: {
     padding: theme.spacings.xLarge,
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
   },
 }));

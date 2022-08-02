@@ -1,5 +1,5 @@
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
-import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
+import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import Button from '@atb/components/button';
 import DisappearingHeader from '@atb/components/disappearing-header';
@@ -55,12 +55,13 @@ import FadeBetween from './FadeBetween';
 import {SearchTime, useSearchTimeValue} from './journey-date-picker';
 import NewsBanner from './NewsBanner';
 import Results from './Results';
-import {ThemeColor} from '@atb/theme/colors';
-import * as navIcons from '@atb/assets/svg/mono-icons/navigation';
+import {StaticColorByType} from '@atb/theme/colors';
+import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import useTripsQuery from '@atb/screens/Assistant/use-trips-query';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
+import {useDoOnceWhen} from '@atb/screens/utils';
 
-const themeColor: ThemeColor = 'background_accent';
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type AssistantRouteName = 'AssistantRoot';
 const AssistantRouteNameStatic: AssistantRouteName = 'AssistantRoot';
@@ -207,15 +208,8 @@ const Assistant: React.FC<Props> = ({
     });
   }
 
-  const {
-    tripPatterns,
-    timeOfLastSearch,
-    refresh,
-    loadMore,
-    clear,
-    searchState,
-    error,
-  } = useTripsQuery(from, to, searchTime);
+  const {tripPatterns, timeOfLastSearch, loadMore, clear, searchState, error} =
+    useTripsQuery(from, to, searchTime);
 
   const isSearching = searchState === 'searching';
   const openLocationSearch = (
@@ -256,7 +250,7 @@ const Assistant: React.FC<Props> = ({
               location={from}
               label={t(AssistantTexts.location.departurePicker.label)}
               onPress={() => openLocationSearch('fromLocation', from)}
-              icon={<ThemeIcon svg={CurrentLocationArrow} />}
+              icon={<ThemeIcon svg={LocationIcon} />}
               onIconPress={setCurrentLocationOrRequest}
               iconAccessibility={{
                 accessible: true,
@@ -323,7 +317,7 @@ const Assistant: React.FC<Props> = ({
                 language,
               )}
               accessibilityHint={t(AssistantTexts.dateInput.a11yHint)}
-              color="secondary_3"
+              interactiveColor="interactive_0"
               onPress={onSearchTimePress}
               testID="assistantDateTimePicker"
             />
@@ -431,6 +425,13 @@ const Assistant: React.FC<Props> = ({
     return () => backHandler.remove();
   });
 
+  const refresh = () => {
+    navigation.setParams({
+      fromLocation: from?.resultType === 'geolocation' ? currentLocation : from,
+      toLocation: to?.resultType === 'geolocation' ? currentLocation : to,
+    });
+  };
+
   return (
     <DisappearingHeader
       renderHeader={renderHeader}
@@ -452,7 +453,7 @@ const Assistant: React.FC<Props> = ({
       alertContext="travel"
     >
       <ScreenReaderAnnouncement message={searchStateMessage} />
-      {isValidLocations && (
+      {from && to && (
         <Results
           tripPatterns={tripPatterns}
           isSearching={isSearching}
@@ -502,7 +503,7 @@ const Assistant: React.FC<Props> = ({
                   <ThemeText testID="resultsLoaded">
                     {t(AssistantTexts.results.fetchMore)}{' '}
                   </ThemeText>
-                  <ThemeIcon svg={navIcons.Expand} size={'normal'} />
+                  <ThemeIcon svg={ExpandMore} size={'normal'} />
                 </>
               ) : null}
             </>
@@ -642,9 +643,8 @@ function useUpdatedLocation(
 
       switch (searchedLocation.resultType) {
         case 'search':
-          return updater(searchedLocation);
         case 'geolocation':
-          return updater(currentLocation);
+          return updater(searchedLocation);
         case 'journey': {
           const toSearch = (i: number): Location => ({
             ...searchedLocation.journeyData[i],
@@ -686,16 +686,6 @@ function useUpdatedLocation(
 }
 
 export default AssistantRoot;
-
-function useDoOnceWhen(fn: () => void, condition: boolean) {
-  const firstTimeRef = useRef(true);
-  useEffect(() => {
-    if (firstTimeRef.current && condition) {
-      firstTimeRef.current = false;
-      fn();
-    }
-  }, [condition]);
-}
 
 function log(message: string, metadata?: {[key: string]: string}) {
   Bugsnag.leaveBreadcrumb(message, {component: 'Assistant', ...metadata});

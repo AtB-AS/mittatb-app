@@ -1,10 +1,11 @@
 import React, {useEffect} from 'react';
 import {RefreshControl, SectionList, SectionListData} from 'react-native';
-import {Quay} from '@atb/api/types/departures';
+import {Place, Quay} from '@atb/api/types/departures';
 import {SearchTime} from './NearbyPlaces';
 import DateNavigation from './components/DateNavigator';
 import QuaySection from './components/QuaySection';
 import {useQuayData} from './state/quay-state';
+import stop from '@atb/assets/svg/mono-icons/places/Stop';
 
 export type QuayViewParams = {
   quay: Quay;
@@ -21,6 +22,7 @@ export type QuayViewProps = {
   searchTime: SearchTime;
   setSearchTime: (searchTime: SearchTime) => void;
   testID?: string;
+  stopPlace: Place;
 };
 
 export default function QuayView({
@@ -29,6 +31,7 @@ export default function QuayView({
   searchTime,
   setSearchTime,
   testID,
+  stopPlace,
 }: QuayViewProps) {
   const {state, refresh} = useQuayData(
     quay,
@@ -61,6 +64,7 @@ export default function QuayView({
           data={state.data}
           navigateToDetails={navigateToDetails}
           testID={'quaySection'}
+          stopPlace={stopPlace}
         />
       )}
     />

@@ -2,7 +2,7 @@ import {translation as _} from '../commons';
 import orgSpecificTranslations from '@atb/translations/utils';
 const TravelTokenBoxTexts = {
   tcard: {
-    title: _('T:kort', 'T:card'),
+    title: _('t:kort', 't:card'),
     description: _(
       'Ta med deg t:kortet når du er ute og reiser.',
       'Remember to bring your t:card when you travel.',
@@ -30,30 +30,20 @@ const TravelTokenBoxTexts = {
   ),
   errorMessages: {
     tokensNotLoadedTitle: _(
-      'Klarer ikke hente informasjon om mobil / t:kort.',
-      'Unable to retrieve information about your phone / t:card.',
+      'Klarer ikke hente informasjon om t:kort / mobil.',
+      'Unable to retrieve information about your t:card / phone.',
     ),
     tokensNotLoaded: _(
       'Billetter må brukes på enten et t:kort eller en mobil, men akkurat nå klarer vi ikke finne ut hvor den er i bruk. Sjekk at du har tilgang på nett der du er.',
       `Tickets must be used on either a t:card or phone, but right now we are unable to find where the ticket is in use. Check that you have internet access.`,
-    ),
-    emptyTokensTitle: _(
-      'Vi finner ingen t:kort eller mobiler tilknyttet profilen din.',
-      `We can not find any t:cards or phones associated with your profile.`,
-    ),
-    emptyTokens: _(
-      'Sjekk at du har tilgang på nett. Hvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.' +
-        '\n\n' +
-        'Om problemet vedvarer kan du ta kontakt med AtB kundesenter.',
-      `Check that you have internet access. If you are not online, the app will try again once you are connected. If the problem persists, please contact AtB service center`,
     ),
     noInspectableTokenTitle: _(
       'Velg hvor du vil bruke billettene dine',
       'Choose where your tickets are used',
     ),
     noInspectableToken: _(
-      'Billetter må brukes på enten et t:kort eller en mobil, og det ser ikke ut som du har valgt en av dem.\n\nGå til **Min profil, Bytt mellom mobil / t:kort** for å velge.',
-      `Tickets must be used on either a t:card or a phone, and it looks like you haven't chosen one. Go to **My profile, switch between phone / t:card** to select`,
+      'Billetter må brukes på enten et t:kort eller en mobil, og det ser ikke ut som du har valgt en av dem.\n\nGå til **Min profil, Bytt mellom t:kort / mobil** for å velge.',
+      `Tickets must be used on either a t:card or a phone, and it looks like you haven't chosen one. Go to **My profile, switch between t:card / phone** to select`,
     ),
   },
 };

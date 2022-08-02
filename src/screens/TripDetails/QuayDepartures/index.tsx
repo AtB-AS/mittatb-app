@@ -26,7 +26,7 @@ type RootProps = {
 const QuayDepartures: React.FC<RootProps> = ({route}) => {
   const styles = useNearbyStyles();
 
-  const {state: departureState, refresh} = useDepartureData(
+  const {state: departureState, loadInitialDepartures} = useDepartureData(
     route.params.location,
   );
 
@@ -40,7 +40,10 @@ const QuayDepartures: React.FC<RootProps> = ({route}) => {
       />
       <ScrollView
         refreshControl={
-          <RefreshControl refreshing={!departureData} onRefresh={refresh} />
+          <RefreshControl
+            refreshing={!departureData}
+            onRefresh={loadInitialDepartures}
+          />
         }
       >
         <View style={styles.scrollContainer}>
@@ -62,7 +65,7 @@ export default QuayDepartures;
 
 const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
   screen: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     flexGrow: 1,
     flex: 1,
   },

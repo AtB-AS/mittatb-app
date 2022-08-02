@@ -119,7 +119,7 @@ type LocationSearchContentProps = {
   defaultText?: string;
   onSelect(location: SelectableLocationData): void;
   onMapSelection?(): void;
-  onlyAtbVenues?: boolean;
+  onlyLocalTariffZoneAuthority?: boolean;
   includeHistory?: boolean;
   includeJourneyHistory?: boolean;
 };
@@ -131,7 +131,7 @@ export function LocationSearchContent({
   defaultText,
   onSelect,
   onMapSelection,
-  onlyAtbVenues = false,
+  onlyLocalTariffZoneAuthority = false,
   includeHistory = true,
   includeJourneyHistory = false,
 }: LocationSearchContentProps) {
@@ -148,7 +148,7 @@ export function LocationSearchContent({
     debouncedText,
     history,
     favorites,
-    onlyAtbVenues,
+    onlyLocalTariffZoneAuthority,
   );
 
   const {location: geolocation} = useGeolocationState();
@@ -156,7 +156,7 @@ export function LocationSearchContent({
   const {locations, error} = useGeocoder(
     debouncedText,
     geolocation?.coordinates ?? null,
-    onlyAtbVenues,
+    onlyLocalTariffZoneAuthority,
   );
 
   const filteredLocations = filterCurrentLocation(
@@ -296,11 +296,11 @@ function translateErrorType(
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.background_2.backgroundColor,
+    backgroundColor: theme.static.background.background_2.background,
     flex: 1,
   },
   header: {
-    backgroundColor: theme.colors.background_accent.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_0.background,
   },
   withMargin: {
     margin: theme.spacings.medium,

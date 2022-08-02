@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 import ThemeText from '@atb/components/text';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
 
-const themeColor: ThemeColor = 'background_accent';
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 const NewsBanner: React.FC<{} & AccessibilityProps> = ({...props}) => {
   const style = useStyle();
@@ -44,7 +44,7 @@ const NewsBanner: React.FC<{} & AccessibilityProps> = ({...props}) => {
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: theme.spacings.medium,
-    backgroundColor: theme.colors.background_accent.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_0.background,
     borderRadius: theme.border.radius.regular,
   },
   text: {

@@ -1,4 +1,4 @@
-import {CurrentLocationArrow} from '@atb/assets/svg/mono-icons/places';
+import {Location} from '@atb/assets/svg/mono-icons/places';
 import {StyleSheet} from '@atb/theme';
 import insets from '@atb/utils/insets';
 import React from 'react';
@@ -14,10 +14,10 @@ const PositionArrow: React.FC<
   return (
     <Button
       type="compact"
-      color="primary_2"
+      interactiveColor="interactive_0"
       onPress={flyToCurrentLocation}
       hitSlop={insets.symmetric(12, 20)}
-      icon={CurrentLocationArrow}
+      icon={Location}
       style={styles.flyToButton}
     />
   );

@@ -1,18 +1,13 @@
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
-import SkipLoginWarning from '@atb/login/SkipLoginWarning';
-import {
-  ConfirmCodeInOnboarding,
-  ConfirmCodeInOnboardingRouteParams,
-} from '@atb/login/in-onboarding/ConfirmCodeInOnboarding';
-import {PhoneInputInOnboarding} from '@atb/login/in-onboarding/PhoneInputInOnboarding';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {ConfirmCodeInOnboardingRouteParams} from '@atb/login/in-onboarding/ConfirmCodeInOnboarding';
 import IntercomInfo from '@atb/screens/Onboarding/IntercomInfo';
-import {
-  WelcomeScreenLogin,
-  WelcomeScreenWithoutLogin,
-} from '@atb/screens/Onboarding/WelcomeScreen';
-import {ThemeColor} from '@atb/theme/colors';
+import {WelcomeScreenWithoutLogin} from '@atb/screens/Onboarding/WelcomeScreen';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {PageIndicator} from '@atb/components/page-indicator';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {StaticColorByType} from '@atb/theme/colors';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {StatusBar} from 'react-native';
 
 export type OnboardingStackParams = {
   WelcomeScreenLogin: undefined;
@@ -23,41 +18,39 @@ export type OnboardingStackParams = {
   SkipLoginWarning: undefined;
 };
 
-const Stack = createStackNavigator<OnboardingStackParams>();
+const Tab = createMaterialTopTabNavigator<OnboardingStackParams>();
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export default function Index() {
+  const styles = useStyles();
+  const {theme} = useTheme();
   return (
-    <Stack.Navigator
-      headerMode="none"
-      screenOptions={{
-        ...TransitionPresets.SlideFromRightIOS,
-      }}
-    >
-      {/*{enable_login ? (*/}
-      {/*  <>*/}
-      {/*    <Stack.Screen*/}
-      {/*      name="WelcomeScreenLogin"*/}
-      {/*      component={WelcomeScreenLogin}*/}
-      {/*    />*/}
-      {/*    <Stack.Screen*/}
-      {/*      name="PhoneInputInOnboarding"*/}
-      {/*      component={PhoneInputInOnboarding}*/}
-      {/*    />*/}
-      {/*    <Stack.Screen*/}
-      {/*      name="ConfirmCodeInOnboarding"*/}
-      {/*      component={ConfirmCodeInOnboarding}*/}
-      {/*    />*/}
-      {/*    <Stack.Screen name="SkipLoginWarning" component={SkipLoginWarning} />*/}
-      {/*  </>*/}
-      {/*) : (*/}
-      <>
-        <Stack.Screen
-          name="WelcomeScreenWithoutLogin"
-          component={WelcomeScreenWithoutLogin}
-        />
-        <Stack.Screen name="IntercomInfo" component={IntercomInfo} />
-      </>
-      {/*)}*/}
-    </Stack.Navigator>
+    <>
+      <StatusBar
+        backgroundColor={theme.static.background[themeColor].background}
+      />
+      <SafeAreaView style={styles.container}>
+        <Tab.Navigator
+          tabBar={(props) => {
+            return <PageIndicator {...props} />;
+          }}
+          tabBarPosition="bottom"
+          initialRouteName="WelcomeScreenWithoutLogin"
+        >
+          <Tab.Screen
+            name="WelcomeScreenWithoutLogin"
+            component={WelcomeScreenWithoutLogin}
+          />
+          <Tab.Screen name="IntercomInfo" component={IntercomInfo} />
+        </Tab.Navigator>
+      </SafeAreaView>
+    </>
   );
 }
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    flex: 1,
+    backgroundColor: theme.static.background[themeColor].background,
+  },
+}));

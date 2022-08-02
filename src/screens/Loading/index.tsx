@@ -24,7 +24,7 @@ const Loading: React.FC<{text?: string}> = ({text}) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.colors.primary_2.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_3.background,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

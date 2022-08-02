@@ -19,9 +19,9 @@ import {
 } from '@atb/components/screen-header';
 import {AlertContext} from '@atb/alerts/AlertsContext';
 import AlertBox from '@atb/alerts/AlertBox';
-import {ThemeColor} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
 
-const themeColor: ThemeColor = 'background_accent';
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type Props = {
   header: React.ReactNode;
@@ -197,18 +197,18 @@ const hasReachedEnd = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   screen: {
-    backgroundColor: theme.colors.background_1.backgroundColor,
+    backgroundColor: theme.static.background.background_1.background,
     flexGrow: 1,
   },
   alertBoxContainer: {
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
   },
   alertBox: {
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
   topBorder: {
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
   },
 
   content: {
@@ -224,11 +224,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     overflow: 'hidden',
     zIndex: 2,
     elevated: 1,
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
     justifyContent: 'space-between',
   },
   container: {
-    backgroundColor: theme.colors[themeColor].backgroundColor,
+    backgroundColor: theme.static.background[themeColor].background,
     paddingBottom: 0,
     flexGrow: 1,
   },

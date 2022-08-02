@@ -14,8 +14,6 @@ import {CompositeNavigationProp} from '@react-navigation/native';
 import {ProfileStackParams} from '..';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import TravelTokenBox from '@atb/travel-token-box';
-import MessageBox from '@atb/components/message-box';
-import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
 
 export type TravelCardNavigationProp = StackNavigationProp<
   ProfileStackParams,
@@ -42,7 +40,7 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
         leftButton={{type: 'back'}}
       />
       <ScrollView style={styles.scrollView}>
-        <TravelTokenBox showIfThisDevice={true} />
+        <TravelTokenBox showIfThisDevice={true} alwaysShowErrors={true} />
         <ChangeTokenButton
           onPress={() => navigation.navigate('SelectTravelToken')}
         />
@@ -56,15 +54,16 @@ const ChangeTokenButton = ({onPress}: {onPress: () => void}) => {
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {travelTokens} = useMobileTokenContextState();
+  const {isError, isLoading} = useMobileTokenContextState();
 
   return (
     <Sections.Section style={styles.changeTokenButton}>
       <Sections.LinkItem
         type="spacious"
         text={t(TravelTokenTexts.travelToken.changeTokenButton)}
-        disabled={!travelTokens}
+        disabled={isError || isLoading}
         onPress={onPress}
+        testID="switchTokenButton"
         icon={<ThemeIcon svg={Edit} />}
       />
     </Sections.Section>
@@ -93,7 +92,7 @@ const FaqSection = () => {
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.colors.background_accent.backgroundColor,
+    backgroundColor: theme.static.background.background_accent_0.background,
     flex: 1,
   },
   scrollView: {

@@ -36,6 +36,11 @@ export async function listRecurringPayments(): Promise<RecurringPayment[]> {
   return response.data;
 }
 
+export async function deleteRecurringPayment(paymentId: number) {
+  const url = `ticket/v2/recurring-payments/${paymentId}`;
+  await client.delete<void>(url, {authWithIdToken: true});
+}
+
 type ReserveOfferParams = {
   offers: ReserveOffer[];
   paymentType: PaymentType;

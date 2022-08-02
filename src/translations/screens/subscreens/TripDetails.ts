@@ -48,7 +48,9 @@ const TripDetailsTexts = {
         label: (count: number, duration: string) =>
           _(
             `${count} mellomstopp \n${duration}`,
-            `${count} intermediate stop \n${duration}`,
+            count > 1
+              ? `${count} intermediate stops \n${duration}`
+              : `${count} intermediate stop \n${duration}`,
           ),
         a11yHint: _(
           'Aktivér for å vise alle mellomstopp.',
@@ -116,12 +118,12 @@ const TripDetailsTexts = {
       'Please note short changeover time',
     ),
     ticketsWeDontSell: _(
-      'Reisen krever billett som ikke er tilgjengelig i denne appen, eller som må kjøpes fra et annet selskap enn AtB.',
-      'This journey requires a ticket that is not available from this app, or must be purchased from a provider other than AtB.',
+      'Om reisen din går utenfor sone A kan det kreve billetter som må kjøpes fra andre selskaper enn AtB.',
+      'If your trip goes outside zone A, it may require tickets that must be purchased from companies other than AtB.',
     ),
     collabTicketInfo: _(
-      `\n\nMed enkelt- og periodebillett for sone A fra AtB kan du reise med tog i sonen.`,
-      `\n\nWith a single or periodic ticket for zone A from AtB, you can travel by train in the zone.`,
+      `Med enkelt- og periodebillett for sone A fra AtB kan du reise med tog i denne sonen.\n\n`,
+      `With a single and period ticket for zone A from AtB, you can travel by train in this zone.\n\n`,
     ),
     errorNetwork: _(
       'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.',

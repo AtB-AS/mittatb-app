@@ -1,5 +1,6 @@
 name: Build staging iOS project
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -18,6 +19,11 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v1
+      - name: Add Entur private registry credentials
+        run: sh ./scripts/add-entur-private-registry.sh
+        env:
+          ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
@@ -35,7 +41,7 @@ jobs:
           path: |
             AtB.ipa
             AtB.app.dSYM.zip
-          key: ${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}-${{ hashFiles('.env') }}
+          key: ${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets/') }}
       - name: Run fastlane cert match
         run: fastlane ios get_cert
         env:
@@ -49,6 +55,7 @@ jobs:
         env:
           PROVISIONING_PROFILE: $IOS_PROVISIONING_PROFILE_SPECIFIER
           EXPORT_METHOD: 'ad-hoc'
+          GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
       - name: Replace ipa bundle
         if: steps.ipa-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/ios/replace-bundle.sh

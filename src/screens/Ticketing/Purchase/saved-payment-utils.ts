@@ -1,19 +1,61 @@
 import {useEffect, useState} from 'react';
-import {SavedPaymentOption} from './types';
+import {
+  RecurringPaymentOption,
+  RecurringPaymentWithoutCardOption,
+  SavedPaymentOption,
+} from './types';
 import storage from '@atb/storage';
 import Bugsnag from '@bugsnag/react-native';
+import {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {listRecurringPayments} from '@atb/tickets';
+
+async function getCardFromRecurringPaymentId(
+  previousPaymentMethod: RecurringPaymentWithoutCardOption,
+  user: FirebaseAuthTypes.User | null,
+): Promise<RecurringPaymentOption | undefined> {
+  const {paymentType, recurringPaymentId} = previousPaymentMethod;
+
+  if (!user || !recurringPaymentId) return undefined;
+
+  let allRecurringPaymentOptions = await listRecurringPayments();
+  const card = allRecurringPaymentOptions.find((item) => {
+    return item.id === recurringPaymentId;
+  });
+
+  if (card) {
+    await savePreviousPaymentMethodByUser(user.uid, {
+      savedType: 'recurring',
+      paymentType,
+      recurringCard: card,
+    });
+    return {
+      savedType: 'recurring',
+      paymentType,
+      recurringCard: card,
+    };
+  } else return undefined;
+}
 
 export function usePreviousPaymentMethod(
-  userId: string | undefined,
+  user: FirebaseAuthTypes.User | null,
 ): SavedPaymentOption | undefined {
   const [paymentMethod, setPaymentMethod] = useState<
     SavedPaymentOption | undefined
   >(undefined);
+  const userId = user?.uid;
 
   useEffect(() => {
     async function run(uid: string) {
       const method = await getPreviousPaymentMethodByUser(uid);
-      setPaymentMethod(method);
+      if (method?.savedType === 'recurring-without-card') {
+        const furtherPaymentDetails = await getCardFromRecurringPaymentId(
+          method,
+          user,
+        );
+        setPaymentMethod(furtherPaymentDetails);
+      } else {
+        setPaymentMethod(method);
+      }
     }
 
     if (!userId) {

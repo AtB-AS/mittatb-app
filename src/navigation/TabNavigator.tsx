@@ -1,8 +1,8 @@
 import {
   Assistant as AssistantIcon,
-  Nearby,
+  Departures,
   Profile,
-  Tickets,
+  Ticketing,
 } from '@atb/assets/svg/mono-icons/tab-bar';
 import ThemeText from '@atb/components/text';
 import {Location} from '@atb/favorites/types';
@@ -50,10 +50,10 @@ const NavigationRoot = () => {
     <Tab.Navigator
       tabBarOptions={{
         labelPosition: 'below-icon',
-        activeTintColor: theme.colors.primary_2.backgroundColor,
+        activeTintColor: theme.interactive.interactive_2.outline.background,
         inactiveTintColor: theme.text.colors.secondary,
         style: {
-          backgroundColor: theme.colors.background_0.backgroundColor,
+          backgroundColor: theme.interactive.interactive_2.default.background,
           ...useBottomNavigationStyles(),
         },
       }}
@@ -76,7 +76,7 @@ const NavigationRoot = () => {
         options={tabSettings(
           t(dictionary.navigation.nearby),
           t(dictionary.navigation.nearby),
-          Nearby,
+          Departures,
           lineHeight,
           'departuresTab',
         )}
@@ -87,7 +87,7 @@ const NavigationRoot = () => {
         options={tabSettings(
           t(dictionary.navigation.ticketing),
           t(dictionary.navigation.ticketing),
-          Tickets,
+          Ticketing,
           lineHeight,
           'ticketsTab',
         )}

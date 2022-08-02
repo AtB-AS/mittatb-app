@@ -5,54 +5,81 @@ import {TicketTexts, useTranslation} from '@atb/translations';
 import {SvgXml} from 'react-native-svg';
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {
+  useHasEnabledMobileToken,
+  useMobileTokenContextState,
+} from '@atb/mobile-token/MobileTokenContext';
 import qrcode from 'qrcode';
 import useInterval from '@atb/utils/use-interval';
 import MessageBox from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
-import {TravelToken} from '@atb/mobile-token/types';
+import {
+  findInspectable,
+  getDeviceName,
+  isTravelCardToken,
+} from '@atb/mobile-token/utils';
+import {FareContract} from '@atb/tickets';
 
 type Props = {
   validityStatus: ValidityStatus;
+  ticketIsInspectable: boolean;
+  fc: FareContract;
 };
 
-export default function QrCode({validityStatus}: Props) {
-  const {tokenStatus, travelTokens, generateQrCode, retry} =
-    useMobileTokenContextState();
+export default function QrCode({
+  validityStatus,
+  ticketIsInspectable,
+  fc,
+}: Props): JSX.Element | null {
+  const status = useQrCodeStatus(validityStatus, ticketIsInspectable);
 
-  if (validityStatus !== 'valid') return null;
-  if (!generateQrCode) return null;
-
-  if (!travelTokens) {
-    return <QrCodeLoading />;
-  }
-
-  const inspectableToken = travelTokens.find((t) => t.inspectable);
-
-  if (inspectableToken?.isThisDevice) {
-    return <QrCodeSvg generateQrCode={generateQrCode} />;
-  } else if (inspectableToken) {
-    return <QrCodeDeviceNotInspectable inspectableToken={inspectableToken} />;
-  } else if (tokenStatus?.visualState === 'MissingNetConnection') {
-    return <QrCodeMissingNetwork />;
-  } else if (tokenStatus?.visualState === 'Error') {
-    return <QrCodeError retry={retry} />;
-  } else {
-    return <QrCodeLoading />;
+  switch (status) {
+    case 'none':
+      return null;
+    case 'loading':
+      return <LoadingQr />;
+    case 'static':
+      return <StaticQr fc={fc} />;
+    case 'mobiletoken':
+      return <MobileTokenQr fc={fc} />;
+    case 'other':
+      return <DeviceNotInspectable />;
   }
 }
 
-const UPDATE_INTERVAL = 10000;
+const useQrCodeStatus = (
+  validityStatus: ValidityStatus,
+  ticketIsInspectable: boolean,
+) => {
+  const {remoteTokens, deviceIsInspectable, isLoading, isError} =
+    useMobileTokenContextState();
+  const mobileTokenEnabled = useHasEnabledMobileToken();
 
-const QrCodeSvg = ({
-  generateQrCode,
-}: {
-  generateQrCode: () => Promise<string | undefined>;
-}) => {
+  if (!ticketIsInspectable) return 'none';
+  if (validityStatus !== 'valid') return 'none';
+
+  if (!mobileTokenEnabled) return 'static';
+
+  if (isLoading) return 'loading';
+  if (isError) return 'static';
+  if (deviceIsInspectable) return 'mobiletoken';
+
+  if (findInspectable(remoteTokens)) return 'other';
+
+  return 'static';
+};
+
+const UPDATE_INTERVAL = 10000;
+/**
+ * Show qr code for mobile token. This can also fallback to static qr if
+ * anything goes wrong when getting the signed mobile token.
+ */
+const MobileTokenQr = ({fc}: {fc: FareContract}) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {getSignedToken} = useMobileTokenContextState();
   const [qrCodeError, setQrCodeError] = useState(false);
-  const qrCode = useQrCode(generateQrCode, setQrCodeError, UPDATE_INTERVAL);
+  const qrCode = useQrCode(getSignedToken, setQrCodeError, UPDATE_INTERVAL);
   const [qrCodeSvg, setQrCodeSvg] = useState<string>();
   const [countdown, setCountdown] = useState<number>(UPDATE_INTERVAL / 1000);
 
@@ -75,9 +102,9 @@ const QrCodeSvg = ({
   );
 
   if (qrCodeError) {
-    return <QrCodeError />;
+    return <StaticQr fc={fc} />;
   } else if (!qrCodeSvg) {
-    return <QrCodeLoading />;
+    return <LoadingQr />;
   }
 
   return (
@@ -100,7 +127,7 @@ const QrCodeSvg = ({
 };
 
 const useQrCode = (
-  generateQrCode: () => Promise<string | undefined>,
+  getSignedToken: () => Promise<string | undefined>,
   setQrCodeError: (isError: boolean) => void,
   interval: number,
 ) => {
@@ -108,7 +135,7 @@ const useQrCode = (
 
   const updateQrCode = useCallback(
     () =>
-      generateQrCode().then((qr) => {
+      getSignedToken().then((qr) => {
         if (!qr) {
           setQrCodeError(true);
         } else {
@@ -116,7 +143,7 @@ const useQrCode = (
           setTokenQRCode(qr);
         }
       }),
-    [generateQrCode, setTokenQRCode],
+    [getSignedToken, setTokenQRCode],
   );
 
   useEffect(() => {
@@ -133,39 +160,39 @@ const useQrCode = (
 
   return tokenQRCode;
 };
-const QrCodeError = ({retry}: {retry?: (forceRestart: boolean) => void}) => {
-  const {t} = useTranslation();
 
-  return (
-    <Sections.GenericItem>
-      <MessageBox
-        type={'error'}
-        title={t(TicketTexts.details.qrCodeErrors.generic.title)}
-        message={t(TicketTexts.details.qrCodeErrors.generic.text)}
-        onPress={retry && (() => retry(true))}
-        onPressText={retry && t(TicketTexts.details.qrCodeErrors.generic.retry)}
-      />
-    </Sections.GenericItem>
-  );
-};
-const QrCodeDeviceNotInspectable = ({
-  inspectableToken,
-}: {
-  inspectableToken: TravelToken;
-}) => {
+// const QrCodeError = ({retry}: {retry?: (forceRestart: boolean) => void}) => {
+//   const {t} = useTranslation();
+//
+//   return (
+//     <Sections.GenericItem>
+//       <MessageBox
+//         type={'error'}
+//         title={t(TicketTexts.details.qrCodeErrors.generic.title)}
+//         message={t(TicketTexts.details.qrCodeErrors.generic.text)}
+//         onPress={retry && (() => retry(true))}
+//         onPressText={retry && t(TicketTexts.details.qrCodeErrors.generic.retry)}
+//       />
+//     </Sections.GenericItem>
+//   );
+// };
+
+const DeviceNotInspectable = () => {
   const {t} = useTranslation();
-  const message =
-    inspectableToken.type === 'travelCard'
-      ? t(TicketTexts.details.qrCodeErrors.notInspectableDevice.tCard)
-      : t(
-          TicketTexts.details.qrCodeErrors.notInspectableDevice.wrongDevice(
-            inspectableToken.name ||
-              t(
-                TicketTexts.details.qrCodeErrors.notInspectableDevice
-                  .unnamedDevice,
-              ),
-          ),
-        );
+  const {remoteTokens} = useMobileTokenContextState();
+  const inspectableToken = findInspectable(remoteTokens);
+  if (!inspectableToken) return null;
+  const message = isTravelCardToken(inspectableToken)
+    ? t(TicketTexts.details.qrCodeErrors.notInspectableDevice.tCard)
+    : t(
+        TicketTexts.details.qrCodeErrors.notInspectableDevice.wrongDevice(
+          getDeviceName(inspectableToken) ||
+            t(
+              TicketTexts.details.qrCodeErrors.notInspectableDevice
+                .unnamedDevice,
+            ),
+        ),
+      );
   return (
     <Sections.GenericItem>
       <MessageBox
@@ -177,7 +204,8 @@ const QrCodeDeviceNotInspectable = ({
     </Sections.GenericItem>
   );
 };
-const QrCodeLoading = () => {
+
+const LoadingQr = () => {
   const {theme} = useTheme();
   return (
     <Sections.GenericItem>
@@ -188,16 +216,29 @@ const QrCodeLoading = () => {
   );
 };
 
-const QrCodeMissingNetwork = () => {
+const StaticQr = ({fc}: {fc: FareContract}) => {
+  const styles = useStyles();
   const {t} = useTranslation();
+  const [qrCodeSvg, setQrCodeSvg] = useState<string>();
+
+  useEffect(() => {
+    if (fc.qrCode) {
+      qrcode.toString(fc.qrCode, {type: 'svg'}).then(setQrCodeSvg);
+    }
+  }, [fc.qrCode, setQrCodeSvg]);
+
+  if (!qrCodeSvg) return null;
 
   return (
     <Sections.GenericItem>
-      <MessageBox
-        type={'warning'}
-        title={t(TicketTexts.details.qrCodeErrors.missingNetwork.title)}
-        message={t(TicketTexts.details.qrCodeErrors.missingNetwork.text)}
-      />
+      <View
+        style={styles.qrCode}
+        accessible={true}
+        accessibilityLabel={t(TicketTexts.details.qrCodeA11yLabel)}
+        testID="staticQRCode"
+      >
+        <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
+      </View>
     </Sections.GenericItem>
   );
 };
