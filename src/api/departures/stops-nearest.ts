@@ -2,7 +2,7 @@ import {AxiosRequestConfig} from 'axios';
 import {CursoredData, CursoredQuery, StopPlaceDetails} from '@atb/sdk';
 import {stringifyWithDate} from '@atb/utils/querystring';
 import client from '../client';
-import {FavoriteDeparture} from '@atb/favorites/types';
+import {FavoriteDeparture, UserFavoriteDepartures} from '@atb/favorites/types';
 import {StopPlaceQuayDepartures} from '../types/departures';
 import {stringifyUrl} from 'query-string';
 import {QuayDeparturesQuery} from '../types/generated/QuayDeparturesQuery';
@@ -26,6 +26,10 @@ export type StopPlaceDeparturesPayload = {
     layer: 'venue';
     id: string;
   };
+  favorites?: FavoriteDeparture[];
+};
+
+export type DeparturesPayload = {
   favorites?: FavoriteDeparture[];
 };
 
@@ -66,10 +70,15 @@ export async function getStopsDetails(
 
 export async function getStopPlaceDepartures(
   query: StopPlaceDeparturesQuery,
+  favorites: UserFavoriteDepartures,
   opts?: AxiosRequestConfig,
 ): Promise<StopPlaceQuayDepartures> {
   const url = `${BASE_URL}/stop-departures`;
-  return requestStopPlaceDepartures(stringifyUrl({url, query}), opts);
+  return requestStopPlaceDepartures(
+    stringifyUrl({url, query}),
+    {favorites},
+    opts,
+  );
 }
 
 export async function getQuayDepartures(
@@ -107,8 +116,13 @@ async function requestQuayDepartures(
 
 async function requestStopPlaceDepartures(
   url: string,
+  payload: DeparturesPayload,
   opts?: AxiosRequestConfig,
 ): Promise<StopPlaceQuayDepartures> {
-  const response = await client.get<StopPlaceQuayDepartures>(url, opts);
+  const response = await client.post<StopPlaceQuayDepartures>(
+    url,
+    payload,
+    opts,
+  );
   return response.data;
 }
