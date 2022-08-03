@@ -50,8 +50,8 @@ const PurchaseOverviewTexts = {
   ),
   samarbeidsbillettenInfo: {
     single: _(
-      'Enkeltbilletter i sone A kan også brukes på tog i sone A.',
-      'Single tickets in zone A can also be used on train in zone A.',
+      'Enkeltbilletter i sone A kan også brukes på tog i sone A. De kan imidlertid ikke brukes på nattbusser.',
+      'Single tickets in zone A can also be used on train in zone A. However they cannot be used on night buses.',
     ),
     period: _(
       'Periodebilletter i sone A kan også brukes på tog i sone A.',
