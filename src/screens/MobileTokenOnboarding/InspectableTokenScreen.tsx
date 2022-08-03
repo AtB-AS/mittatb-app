@@ -10,6 +10,7 @@ import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import TravelTokenBox from '@atb/travel-token-box';
 import {RemoteToken} from '@atb/mobile-token/types';
 import {isTravelCardToken} from '@atb/mobile-token/utils';
+import {useAppState} from '@atb/AppContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -25,7 +26,7 @@ export function InspectableTokenScreen({
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
-
+  const {completeMobileTokenOnboarding} = useAppState();
   return (
     <ScrollView
       style={styles.container}
@@ -60,7 +61,10 @@ export function InspectableTokenScreen({
         </View>
         <View style={styles.buttons}>
           <Button
-            onPress={close}
+            onPress={() => {
+              completeMobileTokenOnboarding();
+              close();
+            }}
             text={t(MobileTokenOnboardingTexts.ok)}
             testID="nextButton"
             style={styles.okButton}
@@ -68,7 +72,10 @@ export function InspectableTokenScreen({
           <Button
             interactiveColor="interactive_1"
             mode="secondary"
-            onPress={navigateToSelectToken}
+            onPress={() => {
+              completeMobileTokenOnboarding();
+              navigateToSelectToken();
+            }}
             text={
               isTravelCardToken(inspectableToken)
                 ? t(MobileTokenOnboardingTexts.tCard.button)

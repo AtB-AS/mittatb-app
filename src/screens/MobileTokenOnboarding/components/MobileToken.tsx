@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {InspectableTokenScreen} from '@atb/screens/MobileTokenOnboarding/InspectableTokenScreen';
 import {NoMobileTokenScreen} from '@atb/screens/MobileTokenOnboarding/NoMobileTokenScreen';
 import {findInspectable} from '@atb/mobile-token/utils';
@@ -8,7 +8,6 @@ import {MobileTokenTabParams} from '@atb/screens/MobileTokenOnboarding';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '@atb/navigation';
-import {useAppState} from '@atb/AppContext';
 
 type NavigationProp = CompositeNavigationProp<
   MaterialTopTabNavigationProp<MobileTokenTabParams>,
@@ -20,13 +19,8 @@ type MobileTokenProps = {
 };
 const MobileToken = ({navigation}: MobileTokenProps) => {
   const {remoteTokens, isLoading, isError} = useMobileTokenContextState();
-  const {completeMobileTokenOnboarding} = useAppState();
 
-  useEffect(() => {
-    completeMobileTokenOnboarding();
-  }, [completeMobileTokenOnboarding]);
-
-  const close = () => navigation.pop();
+  const close = () => navigation.popToTop();
 
   if (isLoading) return <NoMobileTokenScreen close={close} />;
   if (isError) return <NoMobileTokenScreen close={close} />;

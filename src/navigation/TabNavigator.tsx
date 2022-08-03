@@ -156,11 +156,10 @@ function tabSettings(
   };
 }
 
-export const useGoToMobileTokenOnboardingWhenNecessary = () => {
+const useGoToMobileTokenOnboardingWhenNecessary = () => {
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {authenticationType} = useAuthState();
   const {mobileTokenOnboarded} = useAppState();
-  const isFocused = useIsFocused();
   const shouldOnboard = shouldOnboardMobileToken(
     hasEnabledMobileToken,
     authenticationType,
@@ -169,8 +168,8 @@ export const useGoToMobileTokenOnboardingWhenNecessary = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (shouldOnboard && isFocused) {
+    if (shouldOnboard) {
       navigation.navigate('MobileTokenOnboarding');
     }
-  }, [shouldOnboard, isFocused]);
+  }, [shouldOnboard]);
 };

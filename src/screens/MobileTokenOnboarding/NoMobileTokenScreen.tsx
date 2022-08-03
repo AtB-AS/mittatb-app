@@ -7,12 +7,14 @@ import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {StaticColorByType} from '@atb/theme/colors';
 import {CrashSmall} from '@atb/assets/svg/color/images';
+import {useAppState} from '@atb/AppContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export function NoMobileTokenScreen({close}: {close: () => void}): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
+  const {completeMobileTokenOnboarding} = useAppState();
 
   return (
     <ScrollView
@@ -38,7 +40,10 @@ export function NoMobileTokenScreen({close}: {close: () => void}): JSX.Element {
         <View style={styles.buttons}>
           <Button
             interactiveColor="interactive_0"
-            onPress={close}
+            onPress={() => {
+              completeMobileTokenOnboarding();
+              close();
+            }}
             text={t(MobileTokenOnboardingTexts.next)}
             testID="nextButton"
           />
