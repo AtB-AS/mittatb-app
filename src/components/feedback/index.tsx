@@ -364,6 +364,7 @@ const useFeedbackStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background.background_1.background,
     borderRadius: theme.border.radius.regular,
     padding: theme.spacings.xLarge,
+    marginBottom: theme.spacings.medium,
   },
   infoBoxText: theme.typography.body__primary,
   centerText: {
