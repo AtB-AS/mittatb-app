@@ -5,7 +5,9 @@ import {Place, StopPlacePosition} from '@atb/api/types/departures';
 import {CompositeNavigationProp} from '@react-navigation/native';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {useTranslation} from '@atb/translations';
-import StopPlaces from '@atb/screens/Departures/components/StopPlaces';
+import StopPlaces, {
+  NoStopPlaceMessage,
+} from '@atb/screens/Departures/components/StopPlaces';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {DeparturesStackParams} from '@atb/screens/Departures/index';
 import {RootStackParamList} from '@atb/navigation';
@@ -76,7 +78,10 @@ const FavouriteStopsOverview = ({navigation}: RootProps) => {
       testID={'favouriteStopsContainerView'}
     />
   ) : (
-    <></>
+    <NoStopPlaceMessage
+      header={t(DeparturesTexts.resultType.favourites)}
+      notStopPlaceMessage={t(DeparturesTexts.message.noFavourites)}
+    />
   );
 };
 

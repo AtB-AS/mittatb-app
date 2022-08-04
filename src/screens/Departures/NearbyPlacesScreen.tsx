@@ -33,8 +33,8 @@ export default function NearbyPlacesScreen() {
       <View style={style.container}>
         <Tab.Navigator
           tabBarOptions={{
-            activeTintColor: theme.interactive.interactive_2.default.background,
-            inactiveTintColor: theme.text.colors.disabled,
+            activeTintColor: theme.interactive.interactive_1.active.text,
+            inactiveTintColor: theme.interactive.interactive_1.active.text,
             indicatorStyle: {
               backgroundColor:
                 theme.static.background.background_accent_0.background,
