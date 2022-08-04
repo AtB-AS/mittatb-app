@@ -27,7 +27,7 @@ import useReducerWithSideEffects, {
 } from 'use-reducer-with-side-effects';
 import {updateDeparturesWithRealtimeV2} from '../../../departure-list/utils';
 
-const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
+const MAX_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
 
 // Used to re-trigger full refresh after N minutes.
 // To repopulate the view when we get fewer departures.
@@ -46,7 +46,7 @@ export type DepartureDataState = {
 };
 
 const initialQueryInput = {
-  numberOfDepartures: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
+  numberOfDepartures: MAX_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
   startTime: new Date().toISOString(),
 };
 const initialState: DepartureDataState = {
@@ -113,7 +113,7 @@ const reducer: ReducerWithSideEffects<
       // is a fresh fetch. We should fetch the latest information.
       const queryInput: QuayDeparturesVariables = {
         id: action.quay.id,
-        numberOfDepartures: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
+        numberOfDepartures: MAX_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
         startTime: action.startTime,
       };
 

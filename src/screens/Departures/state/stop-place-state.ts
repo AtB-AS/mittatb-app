@@ -25,7 +25,7 @@ export const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 
 // We fetch double the number of departures to be shown, so that we have more
 // departures to show when one or more departures have already passed.
-export const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED =
+const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED =
   DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW * 2;
 
 // Used to re-trigger full refresh after N minutes.
