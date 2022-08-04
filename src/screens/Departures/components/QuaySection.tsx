@@ -1,4 +1,8 @@
-import {EstimatedCall, Place, Quay} from '@atb/api/types/departures';
+import {
+  EstimatedCall,
+  Place as StopPlace,
+  Quay,
+} from '@atb/api/types/departures';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import * as Sections from '@atb/components/sections';
 import SectionSeparator from '@atb/components/sections/section-separator';
@@ -25,7 +29,7 @@ type QuaySectionProps = {
     fromQuayId?: string,
     isTripCancelled?: boolean,
   ) => void;
-  stopPlace: Place;
+  stopPlace: StopPlace;
 };
 
 type EstimatedCallRenderItem = {

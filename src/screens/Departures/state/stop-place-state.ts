@@ -1,6 +1,6 @@
 import {getRealtimeDepartureV2} from '@atb/api/departures';
 import {getStopPlaceDepartures} from '@atb/api/departures/stops-nearest';
-import {EstimatedCall, Place} from '@atb/api/types/departures';
+import {EstimatedCall, Place as StopPlace} from '@atb/api/types/departures';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavorites} from '@atb/favorites';
 import {UserFavoriteDepartures} from '@atb/favorites/types';
@@ -65,13 +65,13 @@ const initialState: DepartureDataState = {
 type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
-      stopPlace: Place;
+      stopPlace: StopPlace;
       startTime?: string;
       favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
       type: 'LOAD_REALTIME_DATA';
-      stopPlace?: Place;
+      stopPlace?: StopPlace;
     }
   | {
       type: 'STOP_LOADER';
@@ -85,7 +85,7 @@ type DepartureDataActions =
   | {
       type: 'SET_SHOW_FAVORITES';
       showOnlyFavorites: boolean;
-      stopPlace: Place;
+      stopPlace: StopPlace;
       startTime?: string;
       favoriteDepartures?: UserFavoriteDepartures;
     }
@@ -252,7 +252,7 @@ const reducer: ReducerWithSideEffects<
 };
 
 export function useStopPlaceData(
-  stopPlace: Place,
+  stopPlace: StopPlace,
   startTime?: string,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
@@ -320,7 +320,7 @@ type QueryInput = {
 
 async function fetchEstimatedCalls(
   queryInput: QueryInput,
-  stopPlace: Place,
+  stopPlace: StopPlace,
   favoriteDepartures?: UserFavoriteDepartures,
 ): Promise<EstimatedCall[]> {
   const timeRange = getSecondsUntilMidnightOrMinimum(
