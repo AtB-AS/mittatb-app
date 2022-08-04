@@ -28,6 +28,7 @@ const AlertBox = ({alertContext, style}: Props) => {
       title={getReferenceDataText(alert.title ?? [], language)}
       message={getReferenceDataText(alert.body, language)}
       type={alert.type}
+      isMarkdown={true}
     />
   );
 };
