@@ -1,11 +1,12 @@
+import {Place, Quay} from '@atb/api/types/departures';
+import Feedback from '@atb/components/feedback';
+import {DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW} from '@atb/screens/Departures/state/stop-place-state';
 import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData} from 'react-native';
-import {useStopPlaceData} from './state/stop-place-state';
-import {Place, Quay} from '@atb/api/types/departures';
-import {SearchTime} from './NearbyPlaces';
 import DateNavigation from './components/DateNavigator';
 import QuaySection from './components/QuaySection';
-import Feedback from '@atb/components/feedback';
+import {SearchTime} from './NearbyPlaces';
+import {useStopPlaceData} from './state/stop-place-state';
 
 type StopPlaceViewProps = {
   stopPlace: Place;
@@ -69,6 +70,9 @@ export default function StopPlaceView({
             <>
               <QuaySection
                 quay={item}
+                departuresPerQuay={
+                  DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW
+                }
                 data={state.data}
                 navigateToDetails={navigateToDetails}
                 navigateToQuay={navigateToQuay}
