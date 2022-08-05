@@ -36,6 +36,8 @@ type EstimatedCallItemProps = {
     fromQuayId?: string,
     isTripCancelled?: boolean,
   ) => void;
+  setFilter: (filter: DepartureFilter | undefined) => void;
+  filter?: DepartureFilter;
 };
 
 export default function EstimatedCallItem({
@@ -44,6 +46,8 @@ export default function EstimatedCallItem({
   quay,
   stopPlace,
   navigateToDetails,
+  setFilter,
+  filter,
 }: EstimatedCallItemProps): JSX.Element {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -81,12 +85,27 @@ export default function EstimatedCallItem({
       >
         <View style={styles.estimatedCallItem}>
           {line && (
-            <LineChip
-              publicCode={line.publicCode}
-              transportMode={line.transportMode}
-              transportSubmode={line.transportSubmode}
-              testID={testID}
-            ></LineChip>
+            <TouchableOpacity
+              onPress={() => {
+                setFilter(
+                  filter
+                    ? undefined
+                    : {
+                        publicCode: line.publicCode,
+                        transportMode: line.transportMode,
+                        transportSubmode: line.transportSubmode,
+                      },
+                );
+              }}
+            >
+              <LineChip
+                publicCode={line.publicCode}
+                transportMode={line.transportMode}
+                transportSubmode={line.transportSubmode}
+                accent={!!filter}
+                testID={testID}
+              ></LineChip>
+            </TouchableOpacity>
           )}
           <ThemeText style={styles.lineName} testID={testID + 'Name'}>
             {departure.destinationDisplay?.frontText}
@@ -144,10 +163,17 @@ function getA11yLineLabel(departure: any, t: any, language: any) {
   } ${a11yLine} ${a11yFrontText} ${a11yDateInfo}`;
 }
 
+export type DepartureFilter = {
+  publicCode?: string;
+  transportMode?: Types.TransportMode;
+  transportSubmode?: Types.TransportSubmode;
+};
+
 type LineChipProps = {
   publicCode?: string;
   transportMode?: Types.TransportMode;
   transportSubmode?: Types.TransportSubmode;
+  accent: boolean;
   testID?: string;
 };
 
@@ -155,6 +181,7 @@ function LineChip({
   publicCode,
   transportMode,
   transportSubmode,
+  accent,
   testID,
 }: LineChipProps): JSX.Element {
   const styles = useStyles();
@@ -171,10 +198,23 @@ function LineChip({
     'text',
   );
   return (
-    <View style={[styles.lineChip, {backgroundColor: transportColor}]}>
+    <View
+      style={[
+        styles.lineChip,
+        {backgroundColor: transportColor},
+        accent && styles.accent,
+        accent && {
+          backgroundColor: theme.interactive.interactive_2.active.background,
+        },
+      ]}
+    >
       {svg && (
         <ThemeIcon
-          fill={transportTextColor}
+          fill={
+            accent
+              ? theme.interactive.interactive_2.active.text
+              : transportTextColor
+          }
           style={{marginRight: publicCode ? theme.spacings.small : 0}}
           svg={svg}
         ></ThemeIcon>
@@ -184,6 +224,7 @@ function LineChip({
           style={[
             styles.lineChipText,
             {color: transportTextColor, minWidth: fontScale * 20},
+            accent && {color: theme.interactive.interactive_2.active.text},
           ]}
           testID={testID + 'PublicCode'}
           type="body__primary--bold"
@@ -228,5 +269,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   warningIcon: {
     marginRight: theme.spacings.small,
+  },
+  accent: {
+    borderWidth: theme.border.width.medium,
+    borderColor: theme.interactive.interactive_2.outline.background,
+    padding: theme.spacings.small - theme.border.width.medium,
   },
 }));

@@ -14,7 +14,7 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
-import EstimatedCallItem from './EstimatedCallItem';
+import EstimatedCallItem, {DepartureFilter} from './EstimatedCallItem';
 
 type QuaySectionProps = {
   quay: Quay;
@@ -50,6 +50,13 @@ export default function QuaySection({
   const styles = useStyles();
   const departures = getDeparturesForQuay(data, quay);
   const {t, language} = useTranslation();
+  const [filter, setFilter] = useState<DepartureFilter | undefined>();
+  const filteredDepartures = departures.filter(
+    (d) =>
+      !filter ||
+      (d.serviceJourney?.line &&
+        shouldDisplayDeparture(d.serviceJourney?.line, filter)),
+  );
 
   return (
     <View testID={testID}>
@@ -94,11 +101,14 @@ export default function QuaySection({
         {!isHidden && (
           <FlatList
             ItemSeparatorComponent={SectionSeparator}
-            data={departures && departures.slice(0, departuresPerQuay)}
+            data={
+              filteredDepartures &&
+              filteredDepartures.slice(0, departuresPerQuay)
+            }
             renderItem={({item: departure, index}: EstimatedCallRenderItem) => (
               <Sections.GenericItem
                 radius={
-                  !navigateToQuay && index === departures.length - 1
+                  !navigateToQuay && index === filteredDepartures.length - 1
                     ? 'bottom'
                     : undefined
                 }
@@ -110,6 +120,8 @@ export default function QuaySection({
                   quay={quay}
                   stopPlace={stopPlace}
                   navigateToDetails={navigateToDetails}
+                  setFilter={setFilter}
+                  filter={filter}
                 />
               </Sections.GenericItem>
             )}
@@ -159,6 +171,20 @@ export default function QuaySection({
     </View>
   );
 }
+
+const shouldDisplayDeparture = (
+  line: Required<Required<EstimatedCall>['serviceJourney']>['line'],
+  filter: DepartureFilter,
+) => {
+  if (!filter) return true;
+  if (!line) return true;
+
+  if (line.publicCode !== filter.publicCode) return false;
+  if (line.transportMode !== filter.transportMode) return false;
+  if (line.transportSubmode !== filter.transportSubmode) return false;
+
+  return true;
+};
 
 function getDeparturesForQuay(
   departures: EstimatedCall[] | null,
