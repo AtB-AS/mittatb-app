@@ -19,7 +19,7 @@ const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
   const styles = useStyle();
 
   return (
-    <>
+    <View style={styles.container}>
       <TripMessages
         tripPattern={tripPattern}
         error={error}
@@ -47,7 +47,7 @@ const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
       </View>
       <Summary {...tripPattern} />
       <Feedback metadata={tripPattern} viewContext="assistant" />
-    </>
+    </View>
   );
 };
 
@@ -72,6 +72,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   trip: {
     paddingTop: theme.spacings.large,
+  },
+  container: {
+    paddingBottom: theme.spacings.medium,
   },
 }));
 
