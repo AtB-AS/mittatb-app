@@ -25,15 +25,14 @@ export const getReferenceDataText = (
 ) => {
   if (language === Language.English) {
     const englishText = texts.find((t) => t.lang === ReferenceDataLanguage.eng);
-    if (englishText) return englishText.valueWithMarkdown || englishText.value;
+    if (englishText) return englishText.value;
   }
   const norwegianText = texts.find(
     (t) =>
       t.lang === ReferenceDataLanguage.nor ||
       t.lang === ReferenceDataLanguage.nob,
   );
-  if (norwegianText)
-    return norwegianText.valueWithMarkdown || norwegianText.value;
+  if (norwegianText) return norwegianText.value;
 
   return texts[0]?.value;
 };
