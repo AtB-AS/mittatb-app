@@ -4,6 +4,7 @@ import {DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW} from '@atb/screens/Depart
 import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData} from 'react-native';
 import DateNavigation from './components/DateNavigator';
+import FavoriteToggle from './components/FavoriteToggle';
 import QuaySection from './components/QuaySection';
 import {SearchTime} from './NearbyPlaces';
 import {useStopPlaceData} from './state/stop-place-state';
@@ -19,6 +20,8 @@ type StopPlaceViewProps = {
   ) => void;
   searchTime: SearchTime;
   setSearchTime: (searchTime: SearchTime) => void;
+  showOnlyFavorites: boolean;
+  setShowOnlyFavorites: (enabled: boolean) => void;
   testID?: string;
 };
 
@@ -28,10 +31,13 @@ export default function StopPlaceView({
   navigateToDetails,
   searchTime,
   setSearchTime,
+  showOnlyFavorites,
+  setShowOnlyFavorites,
   testID,
 }: StopPlaceViewProps) {
   const {state, refresh} = useStopPlaceData(
     stopPlace,
+    showOnlyFavorites,
     searchTime?.option !== 'now' ? searchTime.date : undefined,
   );
   const quayListData: SectionListData<Quay>[] | undefined = stopPlace.quays
@@ -55,10 +61,16 @@ export default function StopPlaceView({
       {quayListData && (
         <SectionList
           ListHeaderComponent={
-            <DateNavigation
-              searchTime={searchTime}
-              setSearchTime={setSearchTime}
-            ></DateNavigation>
+            <>
+              <FavoriteToggle
+                enabled={showOnlyFavorites}
+                setEnabled={setShowOnlyFavorites}
+              />
+              <DateNavigation
+                searchTime={searchTime}
+                setSearchTime={setSearchTime}
+              ></DateNavigation>
+            </>
           }
           refreshControl={
             <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />

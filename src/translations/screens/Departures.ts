@@ -63,5 +63,8 @@ const DeparturesTexts = {
     'Aktiver for å se detaljer',
     'Activate to view details',
   ),
+  favorites: {
+    toggle: _('Vis kun favorittavganger', 'View favourite departures only'),
+  },
 };
 export default DeparturesTexts;

@@ -1,11 +1,15 @@
-import React, {useEffect} from 'react';
-import {RefreshControl, SectionList, SectionListData} from 'react-native';
 import {Place, Quay} from '@atb/api/types/departures';
-import {SearchTime} from './NearbyPlaces';
+import {ActionItem} from '@atb/components/sections';
+import {StyleSheet} from '@atb/theme';
+import {useTranslation} from '@atb/translations';
+import DeparturesTexts from '@atb/translations/screens/Departures';
+import React, {useEffect, useState} from 'react';
+import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import DateNavigation from './components/DateNavigator';
+import FavoriteToggle from './components/FavoriteToggle';
 import QuaySection from './components/QuaySection';
+import {SearchTime} from './NearbyPlaces';
 import {useQuayData} from './state/quay-state';
-import stop from '@atb/assets/svg/mono-icons/places/Stop';
 
 export type QuayViewParams = {
   quay: Quay;
@@ -21,6 +25,8 @@ export type QuayViewProps = {
   ) => void;
   searchTime: SearchTime;
   setSearchTime: (searchTime: SearchTime) => void;
+  showOnlyFavorites: boolean;
+  setShowOnlyFavorites: (enabled: boolean) => void;
   testID?: string;
   stopPlace: Place;
 };
@@ -30,11 +36,14 @@ export default function QuayView({
   navigateToDetails,
   searchTime,
   setSearchTime,
+  showOnlyFavorites,
+  setShowOnlyFavorites,
   testID,
   stopPlace,
 }: QuayViewProps) {
   const {state, refresh} = useQuayData(
     quay,
+    showOnlyFavorites,
     searchTime?.option !== 'now' ? searchTime.date : undefined,
   );
 
@@ -47,10 +56,16 @@ export default function QuayView({
   return (
     <SectionList
       ListHeaderComponent={
-        <DateNavigation
-          searchTime={searchTime}
-          setSearchTime={setSearchTime}
-        ></DateNavigation>
+        <>
+          <FavoriteToggle
+            enabled={showOnlyFavorites}
+            setEnabled={setShowOnlyFavorites}
+          />
+          <DateNavigation
+            searchTime={searchTime}
+            setSearchTime={setSearchTime}
+          />
+        </>
       }
       refreshControl={
         <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />

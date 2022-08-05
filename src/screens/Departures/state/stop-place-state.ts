@@ -253,6 +253,7 @@ const reducer: ReducerWithSideEffects<
 
 export function useStopPlaceData(
   stopPlace: StopPlace,
+  showOnlyFavorites: boolean,
   startTime?: string,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
@@ -267,21 +268,22 @@ export function useStopPlaceData(
         type: 'LOAD_INITIAL_DEPARTURES',
         stopPlace,
         startTime,
-        favoriteDepartures,
+        favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
       }),
     [stopPlace?.id, startTime],
   );
-  const setShowFavorites = useCallback(
-    (showOnlyFavorites: boolean) =>
+
+  useEffect(
+    () =>
       dispatch({
         type: 'SET_SHOW_FAVORITES',
         stopPlace,
+        startTime,
         showOnlyFavorites,
         favoriteDepartures,
       }),
-    [stopPlace?.id, favoriteDepartures],
+    [stopPlace?.id, favoriteDepartures, showOnlyFavorites],
   );
-
   useEffect(refresh, [stopPlace?.id, startTime]);
   useEffect(() => {
     if (!state.tick) {
@@ -309,7 +311,6 @@ export function useStopPlaceData(
   return {
     state,
     refresh,
-    setShowFavorites,
   };
 }
 

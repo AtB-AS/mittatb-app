@@ -254,6 +254,7 @@ const reducer: ReducerWithSideEffects<
 
 export function useQuayData(
   quay: DepartureTypes.Quay,
+  showOnlyFavorites: boolean,
   startTime?: string,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
@@ -268,20 +269,22 @@ export function useQuayData(
         type: 'LOAD_INITIAL_DEPARTURES',
         quay,
         startTime,
+        favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
       }),
     [quay?.id, startTime],
   );
-  const setShowFavorites = useCallback(
-    (showOnlyFavorites: boolean) =>
+
+  useEffect(
+    () =>
       dispatch({
         type: 'SET_SHOW_FAVORITES',
         quay,
+        startTime,
         showOnlyFavorites,
         favoriteDepartures,
       }),
-    [quay?.id, favoriteDepartures],
+    [quay?.id, favoriteDepartures, showOnlyFavorites],
   );
-
   useEffect(refresh, [startTime]);
   useEffect(() => {
     if (!state.tick) {
@@ -309,7 +312,6 @@ export function useQuayData(
   return {
     state,
     refresh,
-    setShowFavorites,
   };
 }
 
