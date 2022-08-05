@@ -3,6 +3,7 @@ import {Polygon} from 'geojson';
 export type LanguageAndText = {
   lang: string;
   value: string;
+  valueWithMarkdown?: string;
 };
 
 export type PreassignedFareProductType =
