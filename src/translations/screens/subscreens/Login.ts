@@ -19,8 +19,8 @@ const LoginTexts = {
       'Periodic tickets – available now!',
     ),
     description: _(
-      'Når du logger inn kan du kjøpe periodebilletter på 7, 30 eller 180 dagers varighet.',
-      'Log in to purchase 7, 30 or 180-day tickets.',
+      'Når du logger inn kan du kjøpe periodebilletter på 7, 30, 60, 90 eller 180 dagers varighet.',
+      'Log in to purchase 7, 30, 60, 90 or 180-day tickets.',
     ),
     button: _('Ta meg til innlogging', 'Take me to login'),
     laterButton: _('Jeg vil logge inn senere', 'I want to log in later'),
