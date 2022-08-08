@@ -1,15 +1,14 @@
 import {Place, Quay} from '@atb/api/types/departures';
-import {ActionItem} from '@atb/components/sections';
+import {useFavorites} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
-import DeparturesTexts from '@atb/translations/screens/Departures';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import DateNavigation from './components/DateNavigator';
 import FavoriteToggle from './components/FavoriteToggle';
 import QuaySection from './components/QuaySection';
 import {SearchTime} from './NearbyPlaces';
 import {useQuayData} from './state/quay-state';
+import {hasFavorites} from './StopPlaceView';
 
 export type QuayViewParams = {
   quay: Quay;
@@ -41,6 +40,8 @@ export default function QuayView({
   testID,
   stopPlace,
 }: QuayViewProps) {
+  const styles = useStyles();
+  const {favoriteDepartures} = useFavorites();
   const {state, refresh} = useQuayData(
     quay,
     showOnlyFavorites,
@@ -49,6 +50,18 @@ export default function QuayView({
 
   const quayListData: SectionListData<Quay>[] = [{data: [quay]}];
 
+  const placeHasFavorites = hasFavorites(
+    favoriteDepartures,
+    stopPlace.id,
+    stopPlace.quays?.map((q) => q.id),
+  );
+
+  // If all favorites are removed while setShowOnlyFavorites is true, reset the
+  // value to false
+  useEffect(() => {
+    if (!placeHasFavorites) setShowOnlyFavorites(false);
+  }, [favoriteDepartures.length]);
+
   useEffect(() => {
     refresh();
   }, [quay]);
@@ -56,16 +69,18 @@ export default function QuayView({
   return (
     <SectionList
       ListHeaderComponent={
-        <>
-          <FavoriteToggle
-            enabled={showOnlyFavorites}
-            setEnabled={setShowOnlyFavorites}
-          />
+        <View style={styles.header}>
+          {placeHasFavorites && (
+            <FavoriteToggle
+              enabled={showOnlyFavorites}
+              setEnabled={setShowOnlyFavorites}
+            />
+          )}
           <DateNavigation
             searchTime={searchTime}
             setSearchTime={setSearchTime}
           />
-        </>
+        </View>
       }
       refreshControl={
         <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
@@ -85,3 +100,10 @@ export default function QuayView({
     />
   );
 }
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  header: {
+    paddingVertical: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
+  },
+}));

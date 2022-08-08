@@ -14,26 +14,16 @@ export default function FavoriteToggle({
   enabled,
   setEnabled,
 }: FavoriteToggleProps): JSX.Element {
-  const styles = useStyles();
   const {t} = useTranslation();
 
   return (
-    <View style={styles.container}>
-      <ActionItem
-        transparent
-        text={t(DeparturesTexts.favorites.toggle)}
-        mode="toggle"
-        checked={enabled}
-        onPress={setEnabled}
-        testID="showOnlyFavoritesButton"
-      />
-    </View>
+    <ActionItem
+      transparent
+      text={t(DeparturesTexts.favorites.toggle)}
+      mode="toggle"
+      checked={enabled}
+      onPress={setEnabled}
+      testID="showOnlyFavoritesButton"
+    />
   );
 }
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    paddingHorizontal: theme.spacings.medium,
-    paddingTop: theme.spacings.medium,
-  },
-}));

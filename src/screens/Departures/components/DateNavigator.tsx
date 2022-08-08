@@ -165,7 +165,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium,
   },
 }));
