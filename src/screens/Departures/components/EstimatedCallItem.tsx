@@ -204,7 +204,7 @@ function LineChip({
         {backgroundColor: transportColor},
         accent && styles.accent,
         accent && {
-          backgroundColor: theme.interactive.interactive_2.active.background,
+          backgroundColor: theme.interactive.interactive_1.active.background,
         },
       ]}
     >
@@ -212,7 +212,7 @@ function LineChip({
         <ThemeIcon
           fill={
             accent
-              ? theme.interactive.interactive_2.active.text
+              ? theme.interactive.interactive_1.active.text
               : transportTextColor
           }
           style={{marginRight: publicCode ? theme.spacings.small : 0}}
@@ -224,7 +224,7 @@ function LineChip({
           style={[
             styles.lineChipText,
             {color: transportTextColor, minWidth: fontScale * 20},
-            accent && {color: theme.interactive.interactive_2.active.text},
+            accent && {color: theme.interactive.interactive_1.active.text},
           ]}
           testID={testID + 'PublicCode'}
           type="body__primary--bold"
@@ -272,7 +272,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   accent: {
     borderWidth: theme.border.width.medium,
-    borderColor: theme.interactive.interactive_2.outline.background,
+    borderColor: theme.interactive.interactive_1.outline.background,
     padding: theme.spacings.small - theme.border.width.medium,
   },
 }));
