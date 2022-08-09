@@ -92,7 +92,7 @@ export default function StopPlaceView({
               <DateNavigation
                 searchTime={searchTime}
                 setSearchTime={setSearchTime}
-              ></DateNavigation>
+              />
             </View>
           }
           refreshControl={
