@@ -60,7 +60,7 @@ export default function QuayView({
   // value to false
   useEffect(() => {
     if (!placeHasFavorites) setShowOnlyFavorites(false);
-  }, [favoriteDepartures.length]);
+  }, [favoriteDepartures]);
 
   useEffect(() => {
     refresh();

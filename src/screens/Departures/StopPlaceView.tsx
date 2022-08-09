@@ -63,7 +63,7 @@ export default function StopPlaceView({
   // value to false
   useEffect(() => {
     if (!placeHasFavorites) setShowOnlyFavorites(false);
-  }, [favoriteDepartures.length]);
+  }, [favoriteDepartures]);
 
   useEffect(() => {
     refresh();

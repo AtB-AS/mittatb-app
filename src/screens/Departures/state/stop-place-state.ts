@@ -270,7 +270,7 @@ export function useStopPlaceData(
         startTime,
         favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
       }),
-    [stopPlace?.id, startTime],
+    [stopPlace?.id, startTime, showOnlyFavorites, favoriteDepartures],
   );
 
   useEffect(

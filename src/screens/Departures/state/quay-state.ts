@@ -271,7 +271,7 @@ export function useQuayData(
         startTime,
         favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
       }),
-    [quay?.id, startTime],
+    [quay?.id, startTime, showOnlyFavorites, favoriteDepartures],
   );
 
   useEffect(
