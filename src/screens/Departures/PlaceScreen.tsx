@@ -44,6 +44,7 @@ export default function PlaceScreen({
     option: 'now',
     date: new Date().toISOString(),
   });
+  const [showOnlyFavorites, setShowOnlyFavorites] = useState<boolean>(false);
 
   const {state} = useStopsDetailsData(
     place.quays === undefined ? [place.id] : undefined,
@@ -131,6 +132,8 @@ export default function PlaceScreen({
           navigateToDetails={navigateToDetails}
           searchTime={searchTime}
           setSearchTime={setSearchTime}
+          showOnlyFavorites={showOnlyFavorites}
+          setShowOnlyFavorites={setShowOnlyFavorites}
           testID="departuresContentView"
           stopPlace={place}
         />
@@ -141,6 +144,8 @@ export default function PlaceScreen({
           navigateToQuay={navigateToQuay}
           searchTime={searchTime}
           setSearchTime={setSearchTime}
+          showOnlyFavorites={showOnlyFavorites}
+          setShowOnlyFavorites={setShowOnlyFavorites}
           testID="departuresContentView"
         />
       )}

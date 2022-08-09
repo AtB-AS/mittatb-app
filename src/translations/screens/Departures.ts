@@ -63,6 +63,9 @@ const DeparturesTexts = {
     'Aktiver for å se detaljer',
     'Activate to view details',
   ),
+  favorites: {
+    toggle: _('Vis kun favorittavganger', 'View favourite departures only'),
+  },
   resultType: {
     all: _('Alle holdeplasser', 'All Stops'),
     favourites: _('Favoritter', 'Favourites'),

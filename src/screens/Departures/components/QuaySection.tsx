@@ -1,20 +1,24 @@
+import {
+  EstimatedCall,
+  Place as StopPlace,
+  Quay,
+} from '@atb/api/types/departures';
+import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import * as Sections from '@atb/components/sections';
+import SectionSeparator from '@atb/components/sections/section-separator';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {StyleSheet} from '@atb/theme';
+import {useTranslation} from '@atb/translations';
+import DeparturesTexts from '@atb/translations/screens/Departures';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
-import ThemeText from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {useTranslation} from '@atb/translations';
-import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
-import {EstimatedCall, Place, Quay} from '@atb/api/types/departures';
-import DeparturesTexts from '@atb/translations/screens/Departures';
 import EstimatedCallItem from './EstimatedCallItem';
-import SectionSeparator from '@atb/components/sections/section-separator';
-import {DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW} from '@atb/screens/Departures/state/stop-place-state';
 
 type QuaySectionProps = {
   quay: Quay;
+  departuresPerQuay?: number;
   data: EstimatedCall[] | null;
   testID?: 'quaySection' | string;
   navigateToQuay?: (arg0: Quay) => void;
@@ -25,7 +29,7 @@ type QuaySectionProps = {
     fromQuayId?: string,
     isTripCancelled?: boolean,
   ) => void;
-  stopPlace: Place;
+  stopPlace: StopPlace;
 };
 
 type EstimatedCallRenderItem = {
@@ -35,6 +39,7 @@ type EstimatedCallRenderItem = {
 
 export default function QuaySection({
   quay,
+  departuresPerQuay,
   data,
   testID,
   navigateToQuay,
@@ -89,10 +94,7 @@ export default function QuaySection({
         {!isHidden && (
           <FlatList
             ItemSeparatorComponent={SectionSeparator}
-            data={
-              departures &&
-              departures.slice(0, DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW)
-            }
+            data={departures && departures.slice(0, departuresPerQuay)}
             renderItem={({item: departure, index}: EstimatedCallRenderItem) => (
               <Sections.GenericItem
                 radius={
