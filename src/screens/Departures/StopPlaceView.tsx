@@ -3,13 +3,13 @@ import Feedback from '@atb/components/feedback';
 import {useFavorites} from '@atb/favorites';
 import {UserFavoriteDepartures} from '@atb/favorites/types';
 import {DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW} from '@atb/screens/Departures/state/stop-place-state';
+import {SearchTime} from '@atb/screens/Departures/utils';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import DateNavigation from './components/DateNavigator';
 import FavoriteToggle from './components/FavoriteToggle';
 import QuaySection from './components/QuaySection';
-import {SearchTime} from './NearbyPlaces';
 import {useStopPlaceData} from './state/stop-place-state';
 
 type StopPlaceViewProps = {

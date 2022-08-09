@@ -31,7 +31,7 @@ type Props = {
   isFullHeight?: boolean;
 
   useScroll?: boolean;
-  headerTitle: React.ReactNode;
+  headerTitle?: React.ReactNode;
   alternativeTitleComponent?: React.ReactNode;
 
   leftButton?: LeftButtonProps;
@@ -123,17 +123,19 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
 
   return (
     <>
-      <View style={[styles.topBorder, screenTopStyle]} />
+      <View style={headerTitle ? [styles.topBorder, screenTopStyle] : {}} />
       <View style={styles.screen}>
         <View onLayout={onScreenHeaderLayout}>
-          <AnimatedScreenHeader
-            title={headerTitle}
-            rightButton={{type: 'chat', color: themeColor, testID: 'rhb'}}
-            alternativeTitleComponent={alternativeTitleComponent}
-            scrollRef={isRefreshing ? nullRef : scrollYRef}
-            leftButton={leftButton}
-            setFocusOnLoad={setFocusOnLoad}
-          />
+          {headerTitle && (
+            <AnimatedScreenHeader
+              title={headerTitle}
+              rightButton={{type: 'chat', color: themeColor, testID: 'rhb'}}
+              alternativeTitleComponent={alternativeTitleComponent}
+              scrollRef={isRefreshing ? nullRef : scrollYRef}
+              leftButton={leftButton}
+              setFocusOnLoad={setFocusOnLoad}
+            />
+          )}
           <View style={styles.alertBoxContainer}>
             <AlertBox alertContext={alertContext} style={styles.alertBox} />
           </View>

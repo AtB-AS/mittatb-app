@@ -12,8 +12,8 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
 import QuayView from './QuayView';
 import StopPlaceView from './StopPlaceView';
-import {SearchTime} from './NearbyPlaces';
 import {useStopsDetailsData} from './state/stop-place-details-state';
+import {SearchTime} from '@atb/screens/Departures/utils';
 
 export type PlaceScreenParams = {
   place: Place;

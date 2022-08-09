@@ -18,6 +18,7 @@ export async function enrollIntoBetaGroups(inviteKey: string) {
     stringifyUrl(url, query),
     undefined,
     {
+      authWithIdToken: true,
       skipErrorLogging: (error) => error.response?.status === 422,
     },
   );

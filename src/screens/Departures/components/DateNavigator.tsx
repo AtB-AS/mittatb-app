@@ -1,5 +1,5 @@
 import {StyleSheet, useTheme} from '@atb/theme';
-import React, {Dispatch, SetStateAction} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import Button from '@atb/components/button';
 import {Language, useTranslation} from '@atb/translations';
@@ -11,11 +11,11 @@ import {
 } from '@atb/utils/date';
 import {ArrowLeft, ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Date as DateIcon} from '@atb/assets/svg/mono-icons/time';
-import {SearchTime} from '../NearbyPlaces';
 import {addDays, isSameDay, isToday, parseISO} from 'date-fns';
 import DepartureTimeSheet from '../../Nearby/DepartureTimeSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import DeparturesTexts from '@atb/translations/screens/Departures';
+import {SearchTime} from '@atb/screens/Departures/utils';
 
 type DateNavigationProps = {
   searchTime: SearchTime;

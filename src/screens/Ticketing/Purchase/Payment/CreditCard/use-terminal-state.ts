@@ -175,9 +175,21 @@ export default function useTerminalState(
 
   function handlePaymentCallback(event: WebViewNavigation) {
     const params = parseURL(event.url);
-    const responseCode = params['responseCode'];
-    if (isNetsResponseCode(responseCode))
-      dispatch({type: 'SET_NETS_RESPONSE_CODE', responseCode});
+    const iosResponseCode = params['responseCode'];
+    const androidResponseCode = params['response_code'];
+    if (iosResponseCode) {
+      if (isNetsResponseCode(iosResponseCode))
+        dispatch({
+          type: 'SET_NETS_RESPONSE_CODE',
+          responseCode: iosResponseCode,
+        });
+    } else if (androidResponseCode) {
+      if (isNetsResponseCode(androidResponseCode))
+        dispatch({
+          type: 'SET_NETS_RESPONSE_CODE',
+          responseCode: androidResponseCode,
+        });
+    }
   }
 
   function handleVerifyingBankId() {
@@ -195,7 +207,10 @@ export default function useTerminalState(
       initialLoadRef.current = false;
       dispatch({type: 'TERMINAL_LOADED'});
     } else if (!redirectToPaymentCaptureRef.current) {
-      if (url.includes('/ticket/v2/payments/')) {
+      if (
+        url.includes('/ticket/v2/payments/') ||
+        url.includes('atb://ticketing')
+      ) {
         redirectToPaymentCaptureRef.current = true;
         handlePaymentCallback(event);
       }
@@ -206,7 +221,7 @@ export default function useTerminalState(
       verifyingBankIdRef.current = true;
     } else if (
       verifyingBankIdRef.current &&
-      url.includes('/ticket/v2/payments/')
+      (url.includes('/ticket/v2/payments/') || url.includes('atb://ticketing'))
     ) {
       handleVerifyingBankId();
     }

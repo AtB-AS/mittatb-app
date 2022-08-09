@@ -1,12 +1,12 @@
 import {Place, Quay} from '@atb/api/types/departures';
 import {useFavorites} from '@atb/favorites';
+import {SearchTime} from '@atb/screens/Departures/utils';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import DateNavigation from './components/DateNavigator';
 import FavoriteToggle from './components/FavoriteToggle';
 import QuaySection from './components/QuaySection';
-import {SearchTime} from './NearbyPlaces';
 import {useQuayData} from './state/quay-state';
 import {hasFavorites} from './StopPlaceView';
 
