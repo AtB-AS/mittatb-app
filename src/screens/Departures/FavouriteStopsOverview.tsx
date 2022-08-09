@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
 import {useFavorites} from '@atb/favorites';
 import {Place, StopPlacePosition} from '@atb/api/types/departures';
@@ -28,40 +28,42 @@ const FavouriteStopsOverview = ({navigation}: RootProps) => {
   const {location} = useGeolocationState();
   const favouriteStopIds = new Set(favoriteDepartures.map((fd) => fd.stopId));
   const {state} = useStopsDetailsData(Array.from(favouriteStopIds));
-  const currentLocation = location || undefined;
 
   const getDistanceFromCurrentLocation = (
     latitude?: number,
     longitude?: number,
   ) => {
     return (
-      currentLocation &&
-      latitude &&
-      longitude &&
-      coordinatesDistanceInMetres(currentLocation.coordinates, {
-        latitude: latitude,
-        longitude: longitude,
-      })
+      (location &&
+        latitude &&
+        longitude &&
+        coordinatesDistanceInMetres(location.coordinates, {
+          latitude: latitude,
+          longitude: longitude,
+        })) ||
+      undefined
     );
   };
 
-  const favouriteStopsDetails = state.data?.stopPlaces
-    .map((stopPlace): StopPlacePosition => {
-      return {
-        node: {
-          distance: getDistanceFromCurrentLocation(
-            stopPlace.latitude,
-            stopPlace.longitude,
-          ),
-          place: {...stopPlace},
-        },
-      };
-    })
-    .sort((edgeA, edgeB) => {
-      if (edgeA.node?.distance === undefined) return 1;
-      if (edgeB.node?.distance === undefined) return -1;
-      return edgeA.node?.distance > edgeB.node?.distance ? 1 : -1;
-    });
+  const favouriteStopsDetails = useMemo(() => {
+    return state.data?.stopPlaces
+      .map((stopPlace): StopPlacePosition => {
+        return {
+          node: {
+            distance: getDistanceFromCurrentLocation(
+              stopPlace.latitude,
+              stopPlace.longitude,
+            ),
+            place: {...stopPlace},
+          },
+        };
+      })
+      .sort((edgeA, edgeB) => {
+        if (edgeA.node?.distance === undefined) return 1;
+        if (edgeB.node?.distance === undefined) return -1;
+        return edgeA.node?.distance > edgeB.node?.distance ? 1 : -1;
+      });
+  }, [state.data]);
 
   const {t} = useTranslation();
   const navigateToPlace = (place: Place) => {
