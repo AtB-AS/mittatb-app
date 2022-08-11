@@ -54,8 +54,8 @@ const TicketsTexts = {
     label: _('Utløpte', 'Expired'),
     a11yLabel: _('Utløpte billetter', 'Expired tickets'),
     noTickets: _(
-      'Fant ingen billetthistorikk',
-      'Nothing to show here until you have purchased a ticket',
+      'Fant ingen billetthistorikk.',
+      'Nothing to show here until you have purchased a ticket.',
     ),
   },
   ticket: {
