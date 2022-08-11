@@ -37,11 +37,9 @@ export default function IntercomInfo() {
       </View>
       <View style={styles.bottomView}>
         <Button
-          interactiveColor="interactive_1"
+          interactiveColor="interactive_0"
           onPress={finishOnboarding}
           text={t(OnboardingTexts.intercom.mainButton)}
-          icon={Confirm}
-          iconPosition="right"
           testID="nextButton"
         />
       </View>
@@ -64,6 +62,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   header: {
     textAlign: 'center',
+    paddingHorizontal: theme.spacings.xLarge,
   },
   description: {
     textAlign: 'center',
