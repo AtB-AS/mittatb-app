@@ -1,13 +1,6 @@
-import {ErrorType} from '@atb/api/utils';
-import Button from '@atb/components/button';
-import MessageBox from '@atb/components/message-box';
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {StyleSheet} from '@atb/theme';
-import {
-  PaymentCreditCardTexts,
-  TranslateFunction,
-  useTranslation,
-} from '@atb/translations';
+import {PaymentCreditCardTexts, useTranslation,} from '@atb/translations';
 import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
 import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import React, {useState} from 'react';
@@ -15,17 +8,8 @@ import {View} from 'react-native';
 import WebView from 'react-native-webview';
 import {TicketingStackParams} from '../..';
 import {TicketTabsNavigatorParams} from '../../../Tickets';
-import Processing from '../Processing';
-import useTerminalState, {
-  ErrorContext,
-  LoadingState,
-} from './use-terminal-state';
+import useTerminalState from './use-terminal-state';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import Bugsnag from '@bugsnag/react-native';
-import {
-  WebViewErrorEvent,
-  WebViewNavigationEvent,
-} from 'react-native-webview/lib/WebViewTypes';
 
 type NavigationProp = CompositeNavigationProp<
   MaterialTopTabNavigationProp<TicketTabsNavigatorParams>,
@@ -63,28 +47,11 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const saveRecurringCard =
     'save' in paymentMethod ? paymentMethod.save : false;
 
-  function onWebViewLoadStart(
-    event: WebViewNavigationEvent | WebViewErrorEvent,
-  ) {
-    Bugsnag.leaveBreadcrumb('terminal_navigation', {
-      url: event?.nativeEvent?.url,
-    });
-  }
-
-  const {
-    loadingState,
-    terminalUrl,
-    onWebViewLoadEnd,
-    error,
-    restartTerminal,
-    cancelPayment,
-    handleInitialLoadingError,
-  } = useTerminalState(
+  const terminalUrl = useTerminalState(
     offers,
     paymentType,
     recurringPaymentId,
     saveRecurringCard,
-    navigateBackFromTerminal,
   );
 
   return (
@@ -94,7 +61,6 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
         leftButton={{
           type: 'cancel',
           onPress: async () => {
-            await cancelPayment();
             navigateBackFromTerminal();
           },
         }}
@@ -102,78 +68,12 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
       <View
         style={{
           flex: 1,
-          position: !loadingState && !error ? 'relative' : 'absolute',
         }}
       >
-        {terminalUrl && showWebView && (
-          <WebView
-            source={{
-              uri: terminalUrl,
-            }}
-            onError={handleInitialLoadingError}
-            onLoadStart={onWebViewLoadStart}
-            onNavigationStateChange={onWebViewLoadEnd}
-          />
-        )}
+        {terminalUrl && showWebView && <WebView source={{uri: terminalUrl}} />}
       </View>
-      {loadingState && (
-        <View style={styles.center}>
-          <Processing message={translateLoadingMessage(loadingState, t)} />
-        </View>
-      )}
-      {!!error && (
-        <View style={styles.center}>
-          <MessageBox
-            message={translateError(error.context, error.type, t)}
-            type="error"
-            containerStyle={styles.messageBox}
-          />
-          {(error.context === 'terminal-loading' ||
-            error.context === 'capture') && (
-            <Button
-              onPress={restartTerminal}
-              text={t(PaymentCreditCardTexts.buttons.restart)}
-              style={styles.button}
-            />
-          )}
-          <Button
-            interactiveColor="interactive_1"
-            onPress={() => navigateBackFromTerminal()}
-            text={t(PaymentCreditCardTexts.buttons.goBack)}
-          />
-        </View>
-      )}
     </View>
   );
-};
-
-const translateLoadingMessage = (
-  loadingState: LoadingState,
-  t: TranslateFunction,
-) => {
-  switch (loadingState) {
-    case 'reserving-offer':
-      return t(PaymentCreditCardTexts.stateMessages.reserving);
-    case 'loading-terminal':
-      return t(PaymentCreditCardTexts.stateMessages.loading);
-    case 'processing-payment':
-      return t(PaymentCreditCardTexts.stateMessages.processing);
-  }
-};
-
-const translateError = (
-  errorContext: ErrorContext,
-  errorType: ErrorType,
-  t: TranslateFunction,
-) => {
-  switch (errorContext) {
-    case 'terminal-loading':
-      return t(PaymentCreditCardTexts.errorMessages.loading);
-    case 'reservation':
-      return t(PaymentCreditCardTexts.errorMessages.reservation);
-    case 'capture':
-      return t(PaymentCreditCardTexts.errorMessages.capture);
-  }
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
