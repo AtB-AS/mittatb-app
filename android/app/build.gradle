@@ -273,7 +273,7 @@ dependencies {
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
-    implementation files('../../node_modules/@entur/abt-token-state-react-native-lib/android/libs/classes.jar')
+    implementation files('../../node_modules/@entur-private/abt-token-state-react-native-lib/android/libs/classes.jar')
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'androidx.multidex:multidex:2.0.1'

@@ -28,7 +28,7 @@ target 'atb' do
     # If no GH_ACCESS_TOKEN in env, then probably locally where the user uses personal ssh key
     pod 'AbtTokenCoreSDK', :git => 'https://github.com/AtB-AS/temp-token-core-ios-lib.git'
   end
-  pod 'token-state-react-native-lib-ios', :path => '../node_modules/@entur/abt-token-state-react-native-lib/ios'
+  pod 'token-state-react-native-lib-ios', :path => '../node_modules/@entur-private/abt-token-state-react-native-lib/ios'
 
   target 'atbTests' do
     inherit! :complete
