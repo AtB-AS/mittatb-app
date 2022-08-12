@@ -45,12 +45,8 @@ export default function StopPlaceView({
     showOnlyFavorites,
     searchTime?.option !== 'now' ? searchTime.date : undefined,
   );
-  const filteredQuays = stopPlace.quays?.filter((quay) => {
-    if (!showOnlyFavorites) return true;
-    return favoriteDepartures.find((favorite) => quay.id === favorite.quayId);
-  });
-  const quayListData: SectionListData<Quay>[] | undefined = filteredQuays
-    ? [{data: filteredQuays}]
+  const quayListData: SectionListData<Quay>[] | undefined = stopPlace.quays
+    ? [{data: stopPlace.quays}]
     : undefined;
 
   const placeHasFavorites = hasFavorites(

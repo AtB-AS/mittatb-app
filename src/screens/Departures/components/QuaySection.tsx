@@ -8,10 +8,11 @@ import * as Sections from '@atb/components/sections';
 import SectionSeparator from '@atb/components/sections/section-separator';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
+import {useFavorites} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import EstimatedCallItem from './EstimatedCallItem';
@@ -48,10 +49,19 @@ export default function QuaySection({
   stopPlace,
   showOnlyFavorites,
 }: QuaySectionProps): JSX.Element {
-  const [isHidden, setIsHidden] = useState(false);
+  const {favoriteDepartures} = useFavorites();
+  const [isMinimized, setIsMinimized] = useState(false);
   const styles = useStyles();
   const departures = getDeparturesForQuay(data, quay);
   const {t, language} = useTranslation();
+
+  useEffect(() => {
+    if (!showOnlyFavorites) return setIsMinimized(false);
+    setIsMinimized(
+      !!navigateToQuay &&
+        !favoriteDepartures.find((favorite) => quay.id === favorite.quayId),
+    );
+  }, [showOnlyFavorites]);
 
   return (
     <View testID={testID}>
@@ -59,10 +69,10 @@ export default function QuaySection({
         <Sections.GenericClickableItem
           type="inline"
           onPress={() => {
-            setIsHidden(!isHidden);
+            setIsMinimized(!isMinimized);
           }}
           accessibilityHint={
-            isHidden
+            isMinimized
               ? t(DeparturesTexts.quaySection.a11yExpand)
               : t(DeparturesTexts.quaySection.a11yMinimize)
           }
@@ -90,10 +100,10 @@ export default function QuaySection({
                 </ThemeText>
               )}
             </View>
-            <ThemeIcon svg={isHidden ? ExpandMore : ExpandLess} />
+            <ThemeIcon svg={isMinimized ? ExpandMore : ExpandLess} />
           </View>
         </Sections.GenericClickableItem>
-        {!isHidden && (
+        {!isMinimized && (
           <FlatList
             ItemSeparatorComponent={SectionSeparator}
             data={departures && departures.slice(0, departuresPerQuay)}
@@ -142,14 +152,14 @@ export default function QuaySection({
             }
           />
         )}
-        {!data && (
+        {!data && !isMinimized && (
           <Sections.GenericItem>
             <View style={{width: '100%'}}>
               <ActivityIndicator></ActivityIndicator>
             </View>
           </Sections.GenericItem>
         )}
-        {navigateToQuay && !isHidden && (
+        {navigateToQuay && !isMinimized && (
           <Sections.LinkItem
             icon="arrow-right"
             text={
