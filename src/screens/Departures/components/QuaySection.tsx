@@ -30,6 +30,7 @@ type QuaySectionProps = {
     isTripCancelled?: boolean,
   ) => void;
   stopPlace: StopPlace;
+  showOnlyFavorites: boolean;
 };
 
 type EstimatedCallRenderItem = {
@@ -45,6 +46,7 @@ export default function QuaySection({
   navigateToQuay,
   navigateToDetails,
   stopPlace,
+  showOnlyFavorites,
 }: QuaySectionProps): JSX.Element {
   const [isHidden, setIsHidden] = useState(false);
   const styles = useStyles();
@@ -125,8 +127,14 @@ export default function QuaySection({
                   <Sections.GenericItem
                     radius={!navigateToQuay ? 'bottom' : undefined}
                   >
-                    <ThemeText color="secondary">
-                      {t(DeparturesTexts.noDepartures)}
+                    <ThemeText
+                      color="secondary"
+                      type="body__secondary"
+                      style={{textAlign: 'center', width: '100%'}}
+                    >
+                      {showOnlyFavorites
+                        ? t(DeparturesTexts.noDeparturesForFavorites)
+                        : t(DeparturesTexts.noDepartures)}
                     </ThemeText>
                   </Sections.GenericItem>
                 )}
