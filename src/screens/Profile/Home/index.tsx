@@ -80,7 +80,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
   const {
     setPreference,
-    preferences: {newDepartures},
+    preferences: {newDepartures, newFrontPage},
   } = usePreferences();
 
   function copyInstallId() {
@@ -269,6 +269,22 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               </View>
             </View>
           </Sections.GenericItem>
+          <Sections.ActionItem
+            mode="toggle"
+            text={t(ProfileTexts.sections.newFeatures.frontPage)}
+            checked={newFrontPage}
+            testID="newFrontpageToggle"
+            onPress={(newFrontPage) => {
+              analytics().logEvent('toggle_beta_frontPage', {
+                toggle: newFrontPage ? 'enable' : 'disable',
+              });
+              updateMetadata({
+                'AtB-Beta-Frontpage': newFrontPage ? 'enabled' : 'disabled',
+              });
+              setPreference({newFrontPage});
+            }}
+          />
+
           <Sections.ActionItem
             mode="toggle"
             text={t(ProfileTexts.sections.newFeatures.departures)}

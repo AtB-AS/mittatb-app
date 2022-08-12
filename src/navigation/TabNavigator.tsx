@@ -8,6 +8,7 @@ import ThemeText from '@atb/components/text';
 import {Location} from '@atb/favorites/types';
 import {usePreferenceItems} from '@atb/preferences';
 import Assistant from '@atb/screens/Assistant';
+import Dashboard from '@atb/screens/Dashboard/Dashboard';
 import NearbyScreen, {NearbyStackParams} from '@atb/screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '@atb/screens/Profile';
 import TicketingScreen from '@atb/screens/Ticketing';
@@ -43,7 +44,7 @@ const Tab = createBottomTabNavigator<TabNavigatorParams>();
 const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const {startScreen, newDepartures} = usePreferenceItems();
+  const {startScreen, newDepartures, newFrontPage} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
   return (
@@ -61,7 +62,7 @@ const NavigationRoot = () => {
     >
       <Tab.Screen
         name="Assistant"
-        component={Assistant}
+        component={newFrontPage ? Dashboard : Assistant}
         options={tabSettings(
           t(dictionary.navigation.assistant),
           t(dictionary.navigation.assistant_a11y),
