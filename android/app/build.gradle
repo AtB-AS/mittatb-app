@@ -160,6 +160,11 @@ if (appName == null) {
     throw new GradleException("APP_NAME not found. Define APP_NAME with current app name in the .env file.")
 }
 
+def appScheme = System.getProperty('APP_SCHEME')
+if (appScheme == null) {
+    throw new GradleException("APP_SCHEME not found. Define APP_SCHEME with current org identifier in the .env file.")
+}
+
 def appVersionCode = '1'
 
 android {
@@ -175,6 +180,7 @@ android {
 
     defaultConfig {
         resValue "string", "app_name", appName
+        resValue "string", "app_scheme", appScheme
         applicationId appApplicationId
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
