@@ -12,13 +12,19 @@ import {LanguageAndText} from '@atb/reference-data/types';
 import {Statuses} from '@atb/theme';
 
 export type Alert = {
-  title: LanguageAndText[];
+  active: boolean;
+  title?: LanguageAndText[];
   body: LanguageAndText[];
   type: Statuses;
   context: AlertContext;
 };
 
-export type AlertContext = 'general' | 'ticketing' | 'travel';
+export type AlertContext =
+  | 'app-assistant'
+  | 'app-departures'
+  | 'app-ticketing'
+  | 'web-ticketing'
+  | 'web-overview';
 
 type AlertsContextState = {
   findAlert: (context: AlertContext) => Alert | undefined;
@@ -37,7 +43,7 @@ const AlertsContextProvider: React.FC = ({children}) => {
   useEffect(
     () =>
       firestore()
-        .collection('alerts')
+        .collection('alerts-v2')
         .where('active', '==', true)
         .onSnapshot(
           (snapshot) => {
@@ -57,9 +63,7 @@ const AlertsContextProvider: React.FC = ({children}) => {
 
   const findAlert = useCallback(
     (context: AlertContext) => {
-      return alerts.filter(
-        (a) => a.context === 'general' || a.context === context,
-      )[0];
+      return alerts.filter((a) => a.context === context)[0];
     },
     [alerts],
   );
