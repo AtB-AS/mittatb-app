@@ -18,7 +18,6 @@ export type AssistantParams = {
   };
   TripDetails: DetailsRouteParams;
   DateTimePicker: DateTimePickerParams;
-  Dashboard: undefined;
 };
 
 const Stack = createStackNavigator<AssistantParams>();

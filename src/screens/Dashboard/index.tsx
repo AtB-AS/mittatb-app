@@ -1,22 +1,39 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import Dashboard from './Dashboard';
 import TripSearch from '@atb/screens/Dashboard/TripSearch';
 
+import {SearchTime} from '../Nearby/types';
+import {Location} from '@atb/favorites/types';
+import {DetailsRouteParams} from '../TripDetails/Details';
+import {DateTimePickerParams} from '../Assistant/journey-date-picker';
+import DashboardRoot from './Dashboard';
+
 export type DashboardParams = {
-  Dashboard: undefined;
-  TripSearch: undefined;
+  DashboardRoot: {
+    fromLocation: Location | undefined;
+    toLocation: Location | undefined;
+    searchTime: SearchTime | undefined;
+  };
+  TripSearch: {
+    fromLocation: Location;
+    toLocation: Location;
+  };
+  //TripSearch: DetailsRouteParams;
+  DateTimePicker: DateTimePickerParams;
 };
 
 const Stack = createStackNavigator<DashboardParams>();
 
-const Assistant = () => {
+const Dashboard = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Dashboard"
+      initialRouteName="DashboardRoot"
       screenOptions={{headerShown: false}}
     >
-      <Stack.Screen name="Dashboard" component={Dashboard}></Stack.Screen>
+      <Stack.Screen
+        name="DashboardRoot"
+        component={DashboardRoot}
+      ></Stack.Screen>
       <Stack.Screen
         name="TripSearch"
         component={TripSearch}
@@ -27,4 +44,4 @@ const Assistant = () => {
     </Stack.Navigator>
   );
 };
-export default Assistant;
+export default Dashboard;
