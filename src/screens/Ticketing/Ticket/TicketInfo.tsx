@@ -10,7 +10,7 @@ import {
 } from '@atb/reference-data/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PreactivatedTicket} from '@atb/tickets';
-import {TicketTexts, useTranslation} from '@atb/translations';
+import {Language, TicketTexts, useTranslation} from '@atb/translations';
 import React, {ReactElement} from 'react';
 import {View} from 'react-native';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
@@ -36,6 +36,7 @@ import {
 } from '@atb/mobile-token/utils';
 import {RemoteToken} from '@atb/mobile-token/types';
 import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
+import {languages} from 'humanize-duration';
 
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -118,6 +119,15 @@ export const ShortTicketInfoView = (props: TicketInfoViewProps) => {
   );
 };
 
+const userProfileCountAndName = (
+  u: UserProfileWithCount,
+  omitUserProfileCount: Boolean | undefined,
+  language: Language,
+) =>
+  omitUserProfileCount
+    ? `${getReferenceDataName(u, language)}`
+    : `${u.count} ${getReferenceDataName(u, language)}`;
+
 const WarningMessage = (
   isError: boolean,
   fallbackEnabled: boolean,
@@ -183,11 +193,6 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
       ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
       : undefined;
 
-  const userProfileCountAndName = (u: UserProfileWithCount) =>
-    omitUserProfileCount
-      ? `${getReferenceDataName(u, language)}`
-      : `${u.count} ${getReferenceDataName(u, language)}`;
-
   const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
   const warning = WarningMessage(
     isError,
@@ -203,10 +208,10 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
           <ThemeText
             type="body__primary--bold"
             key={u.id}
-            accessibilityLabel={userProfileCountAndName(u) + screenReaderPause}
+            accessibilityLabel={userProfileCountAndName(u, omitUserProfileCount, language) + screenReaderPause}
             testID={testID + 'UserAndCount'}
           >
-            {userProfileCountAndName(u)}
+            {userProfileCountAndName(u, omitUserProfileCount, language)}
           </ThemeText>
         ))}
       </View>
@@ -262,11 +267,6 @@ const ShortTicketInfoTexts = (props: TicketInfoViewProps) => {
       ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
       : undefined;
 
-  const userProfileCountAndName = (u: UserProfileWithCount) =>
-    omitUserProfileCount
-      ? `${getReferenceDataName(u, language)}`
-      : `${u.count} ${getReferenceDataName(u, language)}`;
-
   const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
   const warning = WarningMessage(
     isError,
@@ -277,26 +277,24 @@ const ShortTicketInfoTexts = (props: TicketInfoViewProps) => {
   const expireTime = 'Gyldig i 23 dager';
   return (
     <View style={styles.textsContainer} accessible={true}>
-      <View>
-        {userProfilesWithCount.map((u) => (
-          <ThemeText
-            type="body__primary--bold"
-            key={u.id}
-            accessibilityLabel={expireTime}
-            testID={testID + 'ExpireTime'}
-            style={styles.expireTime}
-          >
-            {expireTime}
-          </ThemeText>
-        ))}
-      </View>
+      <ThemeText
+        type="body__primary--bold"
+        accessibilityLabel={expireTime}
+        testID={testID + 'ExpireTime'}
+        style={styles.expireTime}
+      >
+        {expireTime}
+      </ThemeText>
       {userProfilesWithCount.map((u) => (
         <ThemeText
           type="body__secondary"
-          accessibilityLabel={userProfileCountAndName(u) + screenReaderPause}
+          accessibilityLabel={
+            userProfileCountAndName(u, omitUserProfileCount, language) +
+            screenReaderPause
+          }
           testID={testID + 'UserAndCount'}
         >
-          {userProfileCountAndName(u)}
+          {userProfileCountAndName(u, omitUserProfileCount, language)}
         </ThemeText>
       ))}
       {productName && (
