@@ -95,6 +95,7 @@ type TicketInfoViewProps = {
   isInspectable?: boolean;
   omitUserProfileCount?: boolean;
   testID?: string;
+  filled?: boolean;
 };
 
 export const TicketInfoView = (props: TicketInfoViewProps) => {
@@ -102,6 +103,16 @@ export const TicketInfoView = (props: TicketInfoViewProps) => {
   return (
     <View style={styles.container}>
       <TicketInfoTexts {...props} />
+      <TicketInspectionSymbol {...props} />
+    </View>
+  );
+};
+
+export const ShortTicketInfoView = (props: TicketInfoViewProps) => {
+  const styles = useStyles();
+  return (
+    <View style={styles.container}>
+      <ShortTicketInfoTexts {...props} />
       <TicketInspectionSymbol {...props} />
     </View>
   );
@@ -229,12 +240,100 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
   );
 };
 
+const ShortTicketInfoTexts = (props: TicketInfoViewProps) => {
+  const {
+    preassignedFareProduct,
+    fromTariffZone,
+    toTariffZone,
+    userProfilesWithCount,
+    isInspectable,
+    omitUserProfileCount,
+    testID,
+  } = props;
+  const {t, language} = useTranslation();
+  const styles = useStyles();
+
+  const productName = preassignedFareProduct
+    ? getReferenceDataName(preassignedFareProduct, language)
+    : undefined;
+
+  const tariffZoneSummary =
+    fromTariffZone && toTariffZone
+      ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
+      : undefined;
+
+  const userProfileCountAndName = (u: UserProfileWithCount) =>
+    omitUserProfileCount
+      ? `${getReferenceDataName(u, language)}`
+      : `${u.count} ${getReferenceDataName(u, language)}`;
+
+  const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
+  const warning = WarningMessage(
+    isError,
+    fallbackEnabled,
+    remoteTokens,
+    isInspectable,
+  );
+  const expireTime = 'Gyldig i 23 dager';
+  return (
+    <View style={styles.textsContainer} accessible={true}>
+      <View>
+        {userProfilesWithCount.map((u) => (
+          <ThemeText
+            type="body__primary--bold"
+            key={u.id}
+            accessibilityLabel={expireTime}
+            testID={testID + 'ExpireTime'}
+            style={styles.expireTime}
+          >
+            {expireTime}
+          </ThemeText>
+        ))}
+      </View>
+      {userProfilesWithCount.map((u) => (
+        <ThemeText
+          type="body__secondary"
+          accessibilityLabel={userProfileCountAndName(u) + screenReaderPause}
+          testID={testID + 'UserAndCount'}
+        >
+          {userProfileCountAndName(u)}
+        </ThemeText>
+      ))}
+      {productName && (
+        <ThemeText
+          type="body__secondary"
+          accessibilityLabel={productName + screenReaderPause}
+          testID={testID + 'Product'}
+        >
+          {productName}
+        </ThemeText>
+      )}
+      {tariffZoneSummary && (
+        <ThemeText
+          type="body__secondary"
+          accessibilityLabel={tariffZoneSummary + screenReaderPause}
+          testID={testID + 'Zones'}
+        >
+          {tariffZoneSummary}
+        </ThemeText>
+      )}
+      {warning && (
+        <View style={styles.warning}>
+          <ThemeIcon svg={Warning} style={styles.warningIcon} />
+          {warning}
+        </View>
+      )}
+    </View>
+  );
+};
+
 const TicketInspectionSymbol = ({
   fromTariffZone,
   toTariffZone,
   preassignedFareProduct,
   status,
   isInspectable = true,
+  filled = false,
 }: TicketInfoViewProps) => {
   const styles = useStyles();
   const {theme, themeName} = useTheme();
@@ -253,10 +352,12 @@ const TicketInspectionSymbol = ({
       style={[
         showAsInspectable && styles.symbolContainer,
         isValid && {
-          ...styles.symbolContainerCircle,
           backgroundColor: themeColor
             ? flatStaticColors[themeName][themeColor].background
             : undefined,
+          ...(filled
+            ? styles.filledSymbolContainerCircle
+            : styles.symbolContainerCircle),
         },
         isValid &&
           !isInspectable && {
@@ -328,7 +429,7 @@ const IconForStatus = (
   }
 };
 
-const mapToUserProfilesWithCount = (
+export const mapToUserProfilesWithCount = (
   userProfileRefs: string[],
   userProfiles: UserProfile[],
 ): UserProfileWithCount[] =>
@@ -361,6 +462,9 @@ const mapToUserProfilesWithCount = (
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flexDirection: 'row'},
   textsContainer: {flex: 1, paddingTop: theme.spacings.xSmall},
+  expireTime: {
+    marginBottom: theme.spacings.small,
+  },
   product: {
     marginTop: theme.spacings.small,
   },
@@ -377,6 +481,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: 1000,
     borderColor: theme.static.status.valid.background,
     borderWidth: 5,
+  },
+  filledSymbolContainerCircle: {
+    borderRadius: 1000,
+    backgroundColor: theme.static.status.valid.background,
   },
   symbolZones: {
     marginTop: theme.spacings.small,
