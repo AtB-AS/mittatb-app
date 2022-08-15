@@ -1,7 +1,7 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import TripSearch from '@atb/screens/Dashboard/TripSearch';
-
+import {TripDetailsRoot} from '../TripDetails';
 import {SearchTime} from '../Nearby/types';
 import {Location} from '@atb/favorites/types';
 import {DetailsRouteParams} from '../TripDetails/Details';
@@ -19,6 +19,7 @@ export type DashboardParams = {
     toLocation: Location;
   };
   //TripSearch: DetailsRouteParams;
+  TripDetails: DetailsRouteParams;
   DateTimePicker: DateTimePickerParams;
 };
 
@@ -37,6 +38,13 @@ const Dashboard = () => {
       <Stack.Screen
         name="TripSearch"
         component={TripSearch}
+        options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="TripDetails"
+        component={TripDetailsRoot}
         options={{
           ...TransitionPresets.SlideFromRightIOS,
         }}

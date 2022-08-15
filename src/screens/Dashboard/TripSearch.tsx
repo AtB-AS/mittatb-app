@@ -15,6 +15,7 @@ import {
 import {
   CompositeNavigationProp,
   RouteProp,
+  useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -41,9 +42,16 @@ import {AssistantScreenNavigationProp} from '../Assistant/Assistant';
 import Bugsnag from '@bugsnag/react-native';
 import {SearchTime, useSearchTimeValue} from '../Assistant/journey-date-picker';
 import {TFunc} from '@leile/lobo-t';
-import {formatToLongDateTime} from '@atb/utils/date';
+import {formatToLongDateTime, isInThePast} from '@atb/utils/date';
 import useTripsQuery from '../Assistant/use-trips-query';
 import {StaticColorByType} from '@atb/theme/colors';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import Results from '../Assistant/Results';
+import {
+  coordinatesAreEqual,
+  coordinatesDistanceInMetres,
+  LOCATIONS_REALLY_CLOSE_THRESHOLD,
+} from '@atb/utils/location';
 
 type TripSearchRouteName = 'TripSearch';
 const TripSearchRouteNameStatic: TripSearchRouteName = 'TripSearch';
@@ -65,8 +73,10 @@ type SearchForLocations = {
   to?: Location;
 };
 
-const themeBackgroundColor: StaticColorByType<'background'> =
+const headerBackgroundColor: StaticColorByType<'background'> =
   'background_accent_0';
+
+const ResultsBackgroundColor: StaticColorByType<'background'> = 'background_1';
 
 const TripSearch: React.FC<RootProps> = ({navigation}) => {
   const style = useStyle();
@@ -91,6 +101,35 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
   });
   const {tripPatterns, timeOfLastSearch, loadMore, clear, searchState, error} =
     useTripsQuery(from, to, searchTime);
+
+  const isSearching = searchState === 'searching';
+  const showEmptyScreen = !tripPatterns && !isSearching && !error;
+  const isEmptyResult = !isSearching && !tripPatterns?.length;
+  const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
+
+  const [searchStateMessage, setSearchStateMessage] = useState<
+    string | undefined
+  >();
+
+  const screenHasFocus = useIsFocused();
+
+  useEffect(() => {
+    if (!screenHasFocus) return;
+    switch (searchState) {
+      case 'searching':
+        setSearchStateMessage(t(AssistantTexts.searchState.searching));
+        break;
+      case 'search-success':
+        setSearchStateMessage(t(AssistantTexts.searchState.searchSuccess));
+        break;
+      case 'search-empty-result':
+        setSearchStateMessage(t(AssistantTexts.searchState.searchEmptyResult));
+        break;
+      default:
+        setSearchStateMessage('');
+        break;
+    }
+  }, [searchState]);
 
   const setCurrentLocationAsFrom = useCallback(
     function setCurrentLocationAsFrom() {
@@ -135,6 +174,15 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
     [currentLocation, setCurrentLocationAsFrom, requestGeoPermission],
   );
 
+  const onPressed = useCallback(
+    (tripPatterns, startIndex) =>
+      navigation.navigate('TripDetails', {
+        tripPatterns,
+        startIndex,
+      }),
+    [navigation, from, to],
+  );
+
   function swap() {
     log('swap', {
       newFrom: translateLocation(to),
@@ -173,77 +221,88 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
         }}
       />
 
-      <ScrollView contentContainerStyle={style.scrollView}>
-        <View style={style.searchHeader}>
-          <View style={style.paddedContainer}>
-            <Section>
-              <LocationInput
-                accessibilityLabel={
-                  t(AssistantTexts.location.departurePicker.a11yLabel) +
-                  screenReaderPause
-                }
-                accessibilityHint={
-                  t(AssistantTexts.location.departurePicker.a11yHint) +
-                  screenReaderPause
-                }
-                updatingLocation={updatingLocation && !to}
-                location={from}
-                label={t(AssistantTexts.location.departurePicker.label)}
-                onPress={() => openLocationSearch('fromLocation', from)}
-                icon={<ThemeIcon svg={LocationIcon} />}
-                onIconPress={setCurrentLocationOrRequest}
-                iconAccessibility={{
-                  accessible: true,
-                  accessibilityLabel:
-                    from?.resultType == 'geolocation'
-                      ? t(
-                          AssistantTexts.location.locationButton.a11yLabel
-                            .update,
-                        )
-                      : t(AssistantTexts.location.locationButton.a11yLabel.use),
-                  accessibilityRole: 'button',
-                }}
-                testID="searchFromButton"
-              />
+      <View style={style.searchHeader}>
+        <View style={style.paddedContainer}>
+          <Section>
+            <LocationInput
+              accessibilityLabel={
+                t(AssistantTexts.location.departurePicker.a11yLabel) +
+                screenReaderPause
+              }
+              accessibilityHint={
+                t(AssistantTexts.location.departurePicker.a11yHint) +
+                screenReaderPause
+              }
+              updatingLocation={updatingLocation && !to}
+              location={from}
+              label={t(AssistantTexts.location.departurePicker.label)}
+              onPress={() => openLocationSearch('fromLocation', from)}
+              icon={<ThemeIcon svg={LocationIcon} />}
+              onIconPress={setCurrentLocationOrRequest}
+              iconAccessibility={{
+                accessible: true,
+                accessibilityLabel:
+                  from?.resultType == 'geolocation'
+                    ? t(AssistantTexts.location.locationButton.a11yLabel.update)
+                    : t(AssistantTexts.location.locationButton.a11yLabel.use),
+                accessibilityRole: 'button',
+              }}
+              testID="searchFromButton"
+            />
 
-              <LocationInput
-                accessibilityLabel={t(
-                  AssistantTexts.location.destinationPicker.a11yLabel,
-                )}
-                label={t(AssistantTexts.location.destinationPicker.label)}
-                location={to}
-                onPress={() => openLocationSearch('toLocation', to)}
-                icon={<ThemeIcon svg={Swap} />}
-                onIconPress={swap}
-                iconAccessibility={{
-                  accessible: true,
-                  accessibilityLabel:
-                    t(AssistantTexts.location.swapButton.a11yLabel) +
-                    screenReaderPause,
-                  accessibilityRole: 'button',
-                }}
-                testID="searchToButton"
-              />
-            </Section>
-          </View>
-
-          <FavoriteChips
-            key="favoriteChips"
-            chipTypes={['favorites', 'add-favorite']}
-            onSelectLocation={fillNextAvailableLocation}
-            containerStyle={style.fadeChild}
-            contentContainerStyle={{
-              // @TODO Find solution for not hardcoding this. e.g. do proper math
-              paddingLeft: theme.spacings.medium,
-              paddingRight: theme.spacings.medium / 2,
-            }}
-            chipActionHint={
-              t(AssistantTexts.favorites.favoriteChip.a11yHint) +
-              t(!!from ? dictionary.toPlace : dictionary.fromPlace) +
-              screenReaderPause
-            }
-          />
+            <LocationInput
+              accessibilityLabel={t(
+                AssistantTexts.location.destinationPicker.a11yLabel,
+              )}
+              label={t(AssistantTexts.location.destinationPicker.label)}
+              location={to}
+              onPress={() => openLocationSearch('toLocation', to)}
+              icon={<ThemeIcon svg={Swap} />}
+              onIconPress={swap}
+              iconAccessibility={{
+                accessible: true,
+                accessibilityLabel:
+                  t(AssistantTexts.location.swapButton.a11yLabel) +
+                  screenReaderPause,
+                accessibilityRole: 'button',
+              }}
+              testID="searchToButton"
+            />
+          </Section>
         </View>
+
+        <FavoriteChips
+          key="favoriteChips"
+          chipTypes={['favorites', 'add-favorite']}
+          onSelectLocation={fillNextAvailableLocation}
+          containerStyle={style.fadeChild}
+          contentContainerStyle={{
+            // @TODO Find solution for not hardcoding this. e.g. do proper math
+            paddingLeft: theme.spacings.medium,
+            paddingRight: theme.spacings.medium / 2,
+          }}
+          chipActionHint={
+            t(AssistantTexts.favorites.favoriteChip.a11yHint) +
+            t(!!from ? dictionary.toPlace : dictionary.fromPlace) +
+            screenReaderPause
+          }
+        />
+      </View>
+
+      <ScrollView contentContainerStyle={style.scrollView}>
+        <ScreenReaderAnnouncement message={searchStateMessage} />
+        {from && to && (
+          <Results
+            tripPatterns={tripPatterns}
+            isSearching={isSearching}
+            showEmptyScreen={showEmptyScreen}
+            isEmptyResult={isEmptyResult}
+            resultReasons={noResultReasons}
+            onDetailsPressed={onPressed}
+            errorType={error}
+            searchTime={searchTime}
+          />
+        )}
       </ScrollView>
     </View>
   );
@@ -365,13 +424,47 @@ function getSearchTimeLabel(
   return time;
 }
 
+function computeNoResultReasons(
+  t: TFunc<typeof Language>,
+  date?: SearchTime,
+  from?: Location,
+  to?: Location,
+): String[] {
+  let reasons = [];
+
+  if (!!from && !!to) {
+    if (coordinatesAreEqual(from.coordinates, to.coordinates)) {
+      reasons.push(
+        t(AssistantTexts.searchState.noResultReason.IdenticalLocations),
+      );
+    } else if (
+      coordinatesDistanceInMetres(from.coordinates, to.coordinates) <
+      LOCATIONS_REALLY_CLOSE_THRESHOLD
+    ) {
+      reasons.push(t(AssistantTexts.searchState.noResultReason.CloseLocations));
+    }
+  }
+
+  const isPastDate = date && date?.option !== 'now' && isInThePast(date.date);
+
+  if (isPastDate) {
+    const isArrival = date?.option === 'arrival';
+    const dateReason = isArrival
+      ? t(AssistantTexts.searchState.noResultReason.PastArrivalTime)
+      : t(AssistantTexts.searchState.noResultReason.PastDepartureTime);
+    reasons.push(dateReason);
+  }
+  return reasons;
+}
+
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background[themeBackgroundColor].background,
+    backgroundColor: theme.static.background[ResultsBackgroundColor].background,
     flex: 1,
   },
   scrollView: {
     paddingBottom: theme.spacings.medium,
+    backgroundColor: theme.static.background[ResultsBackgroundColor].background,
   },
   paddedContainer: {
     marginHorizontal: theme.spacings.medium,
@@ -380,7 +473,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.medium,
   },
   searchHeader: {
-    backgroundColor: theme.static.background[themeBackgroundColor].background,
+    backgroundColor: theme.static.background[headerBackgroundColor].background,
   },
 }));
 
