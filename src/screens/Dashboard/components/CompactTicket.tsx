@@ -36,13 +36,6 @@ const CompactTicket: React.FC<Props> = ({
   testID,
   hasActiveTravelCard = false,
 }) => {
-  const accessibility: AccessibilityProps = {
-    accessible: true,
-    accessibilityRole: 'button',
-    accessibilityLabel: 'OK' + screenReaderPause,
-    accessibilityHint: 'OK',
-  };
-
   const travelRights = fc.travelRights.filter(isPreactivatedTicket);
   const firstTravelRight = travelRights[0];
   const {fareProductRef: productRef, tariffZoneRefs} = firstTravelRight;
