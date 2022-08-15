@@ -349,40 +349,42 @@ const TicketInspectionSymbol = ({
   const showAsInspectable = isInspectable || status !== 'valid';
   const isValid = status === 'valid';
   return (
-    <View
-      style={[
-        showAsInspectable && styles.symbolContainer,
-        isValid && {
-          backgroundColor: themeColor
-            ? flatStaticColors[themeName][themeColor].background
-            : undefined,
-          ...(filled
-            ? styles.filledSymbolContainerCircle
-            : styles.symbolContainerCircle),
-        },
-        isValid &&
-          !isInspectable && {
-            ...styles.textContainer,
-            borderColor: theme.static.status.warning.background,
+    <View style={styles.symbolContainer}>
+      <View
+        style={[
+          showAsInspectable && styles.symbolIcon,
+          isValid && {
+            backgroundColor: themeColor
+              ? flatStaticColors[themeName][themeColor].background
+              : undefined,
+            ...(filled
+              ? styles.filledSymbolContainerCircle
+              : styles.symbolContainerCircle),
           },
-      ]}
-      accessibilityElementsHidden={isInspectable}
-    >
-      <>
-        {status === 'valid' && isInspectable && (
-          <ThemeText
-            type="body__primary--bold"
-            allowFontScaling={false}
-            style={styles.symbolZones}
-            color={themeColor}
-          >
-            {getReferenceDataName(fromTariffZone, language)}
-            {fromTariffZone.id !== toTariffZone.id &&
-              '-' + getReferenceDataName(toTariffZone, language)}
-          </ThemeText>
-        )}
-        {icon}
-      </>
+          isValid &&
+            !isInspectable && {
+              ...styles.textContainer,
+              borderColor: theme.static.status.warning.background,
+            },
+        ]}
+        accessibilityElementsHidden={isInspectable}
+      >
+        <>
+          {status === 'valid' && isInspectable && (
+            <ThemeText
+              type="body__primary--bold"
+              allowFontScaling={false}
+              style={styles.symbolZones}
+              color={themeColor}
+            >
+              {getReferenceDataName(fromTariffZone, language)}
+              {fromTariffZone.id !== toTariffZone.id &&
+                '-' + getReferenceDataName(toTariffZone, language)}
+            </ThemeText>
+          )}
+          {icon}
+        </>
+      </View>
     </View>
   );
 };
@@ -473,6 +475,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.small,
   },
   symbolContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  symbolIcon: {
     height: 72,
     width: 72,
     justifyContent: 'center',
