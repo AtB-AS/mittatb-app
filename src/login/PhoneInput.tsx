@@ -99,6 +99,7 @@ export default function PhoneInput({
           keyboardShouldPersistTaps="handled"
           centerContent={true}
           style={styles.scrollView}
+          contentContainerStyle={styles.contentContainerStyle}
         >
           <View accessible={true} accessibilityRole="header" ref={focusRef}>
             <ThemeText
@@ -174,6 +175,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   scrollView: {
     margin: theme.spacings.large,
+  },
+  contentContainerStyle: {
+    flexGrow: 0.5,
+    justifyContent: 'center',
   },
   title: {
     textAlign: 'center',

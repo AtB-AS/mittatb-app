@@ -155,7 +155,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                   navigation.navigate('LoginInApp', {
                     screen: hasActiveFareContracts
                       ? 'ActiveTicketPromptInApp'
-                      : 'PhoneInputInApp',
+                      : 'LoginOptionsScreen',
                     params: {
                       afterLogin: {routeName: 'ProfileHome'},
                     },
