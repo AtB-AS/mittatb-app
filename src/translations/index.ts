@@ -52,3 +52,5 @@ export {default as ContactSheetTexts} from './screens/subscreens/ContactSheet';
 export {default as FeedbackTexts} from './screens/Feedback';
 export {default as TravelTokenTexts} from './screens/subscreens/TravelToken';
 export {default as TicketTravellerTexts} from './screens/subscreens/TicketTraveller';
+export {default as DashboardTexts} from './screens/Dashboard';
+export {default as TripSearchTexts} from './screens/TripSearch';
