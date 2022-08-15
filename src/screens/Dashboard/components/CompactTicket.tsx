@@ -1,7 +1,5 @@
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
-import {AccessibilityProps} from 'react-native';
-import {screenReaderPause} from '@atb/components/accessible-text';
 import * as Sections from '@atb/components/sections';
 import {
   ShortTicketInfoView,
