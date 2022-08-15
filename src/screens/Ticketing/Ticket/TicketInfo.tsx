@@ -35,8 +35,7 @@ import {
   isTravelCardToken,
 } from '@atb/mobile-token/utils';
 import {RemoteToken} from '@atb/mobile-token/types';
-import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
-import {languages} from 'humanize-duration';
+import {secondsToDuration} from '@atb/utils/date';
 
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -97,6 +96,9 @@ type TicketInfoViewProps = {
   omitUserProfileCount?: boolean;
   testID?: string;
   filled?: boolean;
+  now?: number;
+  validTo?: number;
+  validFrom?: number;
 };
 
 export const TicketInfoView = (props: TicketInfoViewProps) => {
@@ -256,7 +258,10 @@ const ShortTicketInfoTexts = (props: TicketInfoViewProps) => {
     userProfilesWithCount,
     isInspectable,
     omitUserProfileCount,
+    status,
     testID,
+    validTo,
+    now,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -277,16 +282,23 @@ const ShortTicketInfoTexts = (props: TicketInfoViewProps) => {
     remoteTokens,
     isInspectable,
   );
-  const expireTime = 'Gyldig i 23 dager';
+
+  const secondsUntilValid = ((validTo || 0) - (now || 0)) / 1000;
+  const conjunction = t(TicketTexts.validityHeader.durationDelimiter);
+  const durationText = secondsToDuration(secondsUntilValid, language, {
+    conjunction,
+    serialComma: false,
+  });
+  const timeUntilExpire = t(TicketTexts.validityHeader.valid(durationText));
   return (
     <View style={styles.textsContainer} accessible={true}>
       <ThemeText
         type="body__primary--bold"
-        accessibilityLabel={expireTime}
+        accessibilityLabel={timeUntilExpire}
         testID={testID + 'ExpireTime'}
         style={styles.expireTime}
       >
-        {expireTime}
+        {timeUntilExpire}
       </ThemeText>
       {userProfilesWithCount.map((u) => (
         <ThemeText

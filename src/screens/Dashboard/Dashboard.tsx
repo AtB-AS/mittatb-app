@@ -15,7 +15,7 @@ import {AssistantParams} from '../Assistant';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 import CompactTicket from './components/CompactTicket';
 
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {NavigationProp} from '@react-navigation/native';
 import {
   filterActiveOrCanBeUsedFareContracts,
   isValidRightNowFareContract,
