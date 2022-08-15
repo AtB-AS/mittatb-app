@@ -13,14 +13,7 @@ import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {AssistantParams} from '../Assistant';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
-import CompactTicket from './components/CompactTicket';
-
-import {NavigationProp} from '@react-navigation/native';
-import {
-  filterActiveOrCanBeUsedFareContracts,
-  isValidRightNowFareContract,
-  useTicketState,
-} from '@atb/tickets';
+import CompactTickets from './CompactTickets';
 
 export type DashboardScreenNavigationParams = StackNavigationProp<
   AssistantParams,
@@ -36,33 +29,11 @@ type DashboardScreenProps = {
   navigation: DashboardScreenNavigationProp;
 };
 
-type RootNavigationProp = NavigationProp<RootStackParamList>;
-
 export default function Dashboard({navigation}: DashboardScreenProps) {
   const style = useStyle();
   const {t} = useTranslation();
   const scrollViewRef = useRef<ScrollView>(null);
   const {leftButton: serviceDisruptionButton} = useServiceDisruptionSheet();
-
-  const {
-    reservations,
-    fareContracts,
-    isRefreshingTickets,
-    refreshTickets,
-    didPaymentFail,
-  } = useTicketState();
-  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
-    fareContracts,
-  ).sort(function (a, b): number {
-    const isA = isValidRightNowFareContract(a);
-    const isB = isValidRightNowFareContract(b);
-
-    if (isA === isB) return 0;
-    if (isA) return -1;
-    return 1;
-  });
-  const [now, setNow] = useState<number>(Date.now());
-  const hasActiveTravelCard = false;
 
   return (
     <View style={style.container}>
@@ -80,20 +51,14 @@ export default function Dashboard({navigation}: DashboardScreenProps) {
           scrollViewRef.current?.scrollToEnd({animated: true})
         }
       >
-        {fareContracts?.map((fc, index) => (
-          <CompactTicket
-            hasActiveTravelCard={hasActiveTravelCard}
-            fareContract={fc}
-            now={now}
-            onPressDetails={() =>
-              navigation.navigate('TicketModal', {
-                screen: 'TicketDetails',
-                params: {orderId: fc.orderId},
-              })
-            }
-            testID={'ticket' + index}
-          />
-        ))}
+        <CompactTickets
+          onPressDetails={(orderId: string) =>
+            navigation.navigate('TicketModal', {
+              screen: 'TicketDetails',
+              params: {orderId},
+            })
+          }
+        />
       </ScrollView>
     </View>
   );
