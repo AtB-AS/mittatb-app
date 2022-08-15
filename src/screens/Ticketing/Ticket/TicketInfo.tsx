@@ -208,7 +208,10 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
           <ThemeText
             type="body__primary--bold"
             key={u.id}
-            accessibilityLabel={userProfileCountAndName(u, omitUserProfileCount, language) + screenReaderPause}
+            accessibilityLabel={
+              userProfileCountAndName(u, omitUserProfileCount, language) +
+              screenReaderPause
+            }
             testID={testID + 'UserAndCount'}
           >
             {userProfileCountAndName(u, omitUserProfileCount, language)}
