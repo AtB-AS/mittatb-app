@@ -95,7 +95,7 @@ type TicketInfoViewProps = {
   isInspectable?: boolean;
   omitUserProfileCount?: boolean;
   testID?: string;
-  filled?: boolean;
+  useBackgroundOnInspectionSymbol?: boolean;
   now?: number;
   validTo?: number;
   validFrom?: number;
@@ -346,7 +346,7 @@ const TicketInspectionSymbol = ({
   preassignedFareProduct,
   status,
   isInspectable = true,
-  filled = false,
+  useBackgroundOnInspectionSymbol = false,
 }: TicketInfoViewProps) => {
   const styles = useStyles();
   const {theme, themeName} = useTheme();
@@ -369,7 +369,7 @@ const TicketInspectionSymbol = ({
             backgroundColor: themeColor
               ? flatStaticColors[themeName][themeColor].background
               : undefined,
-            ...(filled
+            ...(useBackgroundOnInspectionSymbol
               ? styles.filledSymbolContainerCircle
               : styles.symbolContainerCircle),
           },

@@ -19,12 +19,17 @@ import {
   isValidRightNowFareContract,
   useTicketState,
 } from '@atb/tickets';
+import ThemeText from '@atb/components/text';
+import {TicketsTexts, useTranslation} from '@atb/translations';
 
 type Props = {
   onPressDetails?: (orderId: string) => void;
 };
 
 const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
+  const itemStyle = useStyles();
+
+  // TODO: Verify if this is the correct way to update time-to-time the expiration time of the tickets.
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 1000);
 
@@ -50,9 +55,18 @@ const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
   } = useMobileTokenContextState();
   const {tariffZones, userProfiles, preassignedFareproducts} =
     useFirestoreConfiguration();
+  const {t, language} = useTranslation();
 
   return (
     <>
+      <ThemeText
+        type="body__secondary"
+        color="secondary"
+        style={itemStyle.sectionText}
+        accessibilityLabel={t(TicketsTexts.header.title)}
+      >
+        {t(TicketsTexts.header.title)}
+      </ThemeText>
       {activeFareContracts?.map((fareContract, index) => {
         const travelRights =
           fareContract.travelRights.filter(isPreactivatedTicket);
@@ -107,7 +121,7 @@ const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
                 validFrom={validFrom}
                 isInspectable={ticketIsInspectable}
                 testID={'ticket' + index}
-                filled={true}
+                useBackgroundOnInspectionSymbol={true}
               />
             </Sections.GenericClickableItem>
           </Sections.Section>
@@ -119,6 +133,7 @@ const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   sectionText: {
+    marginLeft: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
 }));
