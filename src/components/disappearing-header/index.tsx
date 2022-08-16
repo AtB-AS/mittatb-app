@@ -1,5 +1,5 @@
-import AlertBox from '@atb/alerts/AlertBox';
-import {AlertContext} from '@atb/alerts/AlertsContext';
+import GlobalMessageBox from '@atb/global-messages/GlobalMessage';
+import {GlobalMessageContext} from '@atb/global-messages/GlobalMessagesContext';
 import {
   AnimatedScreenHeader,
   LeftButtonProps,
@@ -62,7 +62,7 @@ type Props = {
    * For specifying the alert context for alerts that should be shown in this
    * header. If no context is specified then no alerts are shown.
    */
-  alertContext?: AlertContext;
+  globalMessageContext?: GlobalMessageContext;
 };
 
 const SCROLLED_TOP_THRESHOLD = 30;
@@ -97,7 +97,7 @@ const DisappearingHeader: React.FC<Props> = ({
   onEndReachedThreshold = 10,
 
   onFullscreenTransitionEnd,
-  alertContext,
+  globalMessageContext,
 }) => {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const [fullheightTransitioned, setTransitioned] = useState(isFullHeight);
@@ -234,7 +234,10 @@ const DisappearingHeader: React.FC<Props> = ({
           />
 
           <View style={styles.alertBoxContainer}>
-            <AlertBox alertContext={alertContext} style={styles.alertBox} />
+            <GlobalMessageBox
+              globalMessageContext={globalMessageContext}
+              style={styles.alertBox}
+            />
           </View>
         </View>
 

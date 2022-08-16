@@ -229,7 +229,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           PurchaseConfirmationTexts.header.title[preassignedFareProduct.type],
         )}
         leftButton={headerLeftButton}
-        alertContext="app-ticketing"
+        globalMessageContext="app-ticketing"
       />
 
       <ScrollView style={styles.ticketInfoSection}>
