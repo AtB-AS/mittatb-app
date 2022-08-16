@@ -20,9 +20,15 @@ import {
 } from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {View} from 'react-native';
+import {
+  ActivityIndicator,
+  RefreshControl,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Button from '@atb/components/button';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
+import {ScrollView} from 'react-native';
 import {AssistantParams} from '../Assistant';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 import {LocationInput, Section} from '@atb/components/sections';
@@ -50,8 +56,10 @@ import Results from '../Assistant/Results';
 import {
   coordinatesAreEqual,
   coordinatesDistanceInMetres,
+  isValidTripLocations,
   LOCATIONS_REALLY_CLOSE_THRESHOLD,
 } from '@atb/utils/location';
+import ThemeText from '@atb/components/text';
 
 type TripSearchRouteName = 'TripSearch';
 const TripSearchRouteNameStatic: TripSearchRouteName = 'TripSearch';
@@ -106,6 +114,7 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
   const showEmptyScreen = !tripPatterns && !isSearching && !error;
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
+  const isValidLocations = isValidTripLocations(from, to);
 
   const [searchStateMessage, setSearchStateMessage] = useState<
     string | undefined
@@ -204,6 +213,14 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
       });
     }
   }
+
+  const refresh = () => {
+    navigation.setParams({
+      fromLocation: from?.resultType === 'geolocation' ? currentLocation : from,
+      toLocation: to?.resultType === 'geolocation' ? currentLocation : to,
+    });
+  };
+
   return (
     <View style={style.container}>
       <FullScreenHeader
@@ -289,7 +306,16 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
         />
       </View>
 
-      <ScrollView contentContainerStyle={style.scrollView}>
+      <ScrollView
+        contentContainerStyle={style.scrollView}
+        refreshControl={
+          <RefreshControl
+            refreshing={searchState === 'searching' && !tripPatterns.length}
+            onRefresh={refresh}
+            tintColor={theme.text.colors.secondary}
+          />
+        }
+      >
         <ScreenReaderAnnouncement message={searchStateMessage} />
         {from && to && (
           <Results
@@ -302,6 +328,57 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
             errorType={error}
             searchTime={searchTime}
           />
+        )}
+        {!tripPatterns.length && <View style={style.emptyResultsSpacer}></View>}
+        {!error && isValidLocations && (
+          <TouchableOpacity
+            onPress={loadMore}
+            disabled={searchState === 'searching'}
+            style={style.loadMoreButton}
+            testID="loadMoreButton"
+          >
+            {searchState === 'searching' ? (
+              <View style={style.loadingIndicator}>
+                {tripPatterns.length ? (
+                  <>
+                    <ActivityIndicator
+                      color={theme.text.colors.secondary}
+                      style={{
+                        marginRight: theme.spacings.medium,
+                      }}
+                    />
+                    <ThemeText color="secondary" testID="searchingForResults">
+                      {t(AssistantTexts.results.fetchingMore)}
+                    </ThemeText>
+                  </>
+                ) : (
+                  <ThemeText
+                    color="secondary"
+                    style={style.loadingText}
+                    testID="searchingForResults"
+                  >
+                    {t(AssistantTexts.searchState.searching)}
+                  </ThemeText>
+                )}
+              </View>
+            ) : (
+              <>
+                {loadMore ? (
+                  <>
+                    <ThemeIcon
+                      colorType="secondary"
+                      svg={ExpandMore}
+                      size={'normal'}
+                    />
+                    <ThemeText color="secondary" testID="resultsLoaded">
+                      {' '}
+                      {t(AssistantTexts.results.fetchMore)}
+                    </ThemeText>
+                  </>
+                ) : null}
+              </>
+            )}
+          </TouchableOpacity>
         )}
       </ScrollView>
     </View>
@@ -474,7 +551,27 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   searchHeader: {
     backgroundColor: theme.static.background[headerBackgroundColor].background,
+    elevation: 1,
+  },
+  loadingIndicator: {
+    // marginTop: theme.spacings.xLarge,
+    flexDirection: 'row',
+  },
+
+  loadingText: {
+    // marginTop: theme.spacings.xLarge,
+  },
+  loadMoreButton: {
+    paddingVertical: theme.spacings.xLarge,
+    marginBottom: theme.spacings.xLarge,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  emptyResultsSpacer: {
+    marginTop: theme.spacings.xLarge * 3,
   },
 }));
+
 
 export default TripSearch;
