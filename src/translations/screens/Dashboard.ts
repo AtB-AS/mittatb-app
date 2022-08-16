@@ -7,7 +7,6 @@ const DashboardTexts = {
       logo: _('Nullstill reisesøk', 'Reset search'),
     },
   },
-  
 };
 
 export default DashboardTexts;
