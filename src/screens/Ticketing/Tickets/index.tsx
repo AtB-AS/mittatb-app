@@ -39,7 +39,7 @@ export default function TicketTabs() {
       <FullScreenHeader
         title={t(TicketsTexts.header.title)}
         rightButton={{type: 'chat'}}
-        alertContext="ticketing"
+        alertContext="app-ticketing"
       />
       <Tab.Navigator
         tabBar={(props) => <TabBar {...props} />}

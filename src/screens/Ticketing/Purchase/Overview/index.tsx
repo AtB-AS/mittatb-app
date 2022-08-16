@@ -140,7 +140,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           type: 'cancel',
           onPress: closeModal,
         }}
-        alertContext="ticketing"
+        alertContext="app-ticketing"
       />
 
       <ScrollView testID="ticketingScrollView">
