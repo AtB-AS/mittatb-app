@@ -1,13 +1,13 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 
-import navigation, {RootStackParamList} from '@atb/navigation';
+import {RootStackParamList} from '@atb/navigation';
 
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
-  AssistantTexts,
   DashboardTexts,
   dictionary,
   Language,
+  TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
 
@@ -19,9 +19,7 @@ import {
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
-import Button from '@atb/components/button';
 import {ScrollView} from 'react-native-gesture-handler';
-import {AssistantParams} from '../Assistant';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 import {LocationInput, Section} from '@atb/components/sections';
 import {screenReaderPause} from '@atb/components/accessible-text';
@@ -32,18 +30,13 @@ import ThemeIcon from '@atb/components/theme-icon';
 import FavoriteChips from '@atb/favorite-chips';
 import {useFavorites} from '@atb/favorites';
 import {useLocationSearchValue} from '@atb/location-search';
-import FadeBetween from '../Assistant/FadeBetween';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {DashboardParams} from '.';
 import {SelectableLocationData} from '@atb/location-search/types';
-import {AssistantScreenNavigationProp} from '../Assistant/Assistant';
 import Bugsnag from '@bugsnag/react-native';
-import {SearchTime, useSearchTimeValue} from '../Assistant/journey-date-picker';
-import {TFunc} from '@leile/lobo-t';
-import {formatToLongDateTime} from '@atb/utils/date';
-import useTripsQuery from '../Assistant/use-trips-query';
 import {StaticColorByType} from '@atb/theme/colors';
 import {useDoOnceWhen} from '../utils';
+import {SearchForLocations} from './TripSearch';
 
 type DashboardRouteName = 'DashboardRoot';
 const DashboardRouteNameStatic: DashboardRouteName = 'DashboardRoot';
@@ -60,18 +53,13 @@ type RootProps = {
   route: DashboardRouteProp;
 };
 
-type SearchForLocations = {
-  from?: Location;
-  to?: Location;
-};
-
 const themeBackgroundColor: StaticColorByType<'background'> =
   'background_accent_0';
 
 const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
   const style = useStyle();
   const {theme} = useTheme();
-  const {language, t} = useTranslation();
+  const {t} = useTranslation();
   const {leftButton: serviceDisruptionButton} = useServiceDisruptionSheet();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
 
@@ -101,16 +89,14 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
     }
     setCurrentLocationAsFrom();
   }
-
   const {from, to} = useLocations(currentLocation);
-  const searchTime = useSearchTimeValue('searchTime', {
-    option: 'now',
-    date: new Date().toISOString(),
-  });
-
   useEffect(() => {
     if (!!to && !!from) {
-      navigation.navigate('TripSearch', {fromLocation: from, toLocation: to});
+      navigation.navigate('TripSearch', {
+        fromLocation: from,
+        toLocation: to,
+        searchTime: undefined,
+      });
     }
   }, [to, from, navigation]);
 
@@ -135,8 +121,8 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
     navigation.navigate('LocationSearch', {
       label:
         callerRouteParam === 'fromLocation'
-          ? t(AssistantTexts.location.departurePicker.label)
-          : t(AssistantTexts.location.destinationPicker.label),
+          ? t(TripSearchTexts.location.departurePicker.label)
+          : t(TripSearchTexts.location.destinationPicker.label),
       callerRouteName: DashboardRouteNameStatic,
       callerRouteParam,
       initialLocation,
@@ -196,16 +182,16 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
             <Section>
               <LocationInput
                 accessibilityLabel={
-                  t(AssistantTexts.location.departurePicker.a11yLabel) +
+                  t(TripSearchTexts.location.departurePicker.a11yLabel) +
                   screenReaderPause
                 }
                 accessibilityHint={
-                  t(AssistantTexts.location.departurePicker.a11yHint) +
+                  t(TripSearchTexts.location.departurePicker.a11yHint) +
                   screenReaderPause
                 }
                 updatingLocation={updatingLocation && !to}
                 location={from}
-                label={t(AssistantTexts.location.departurePicker.label)}
+                label={t(TripSearchTexts.location.departurePicker.label)}
                 onPress={() => openLocationSearch('fromLocation', from)}
                 icon={<ThemeIcon svg={LocationIcon} />}
                 onIconPress={setCurrentLocationOrRequest}
@@ -214,10 +200,12 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
                   accessibilityLabel:
                     from?.resultType == 'geolocation'
                       ? t(
-                          AssistantTexts.location.locationButton.a11yLabel
+                          TripSearchTexts.location.locationButton.a11yLabel
                             .update,
                         )
-                      : t(AssistantTexts.location.locationButton.a11yLabel.use),
+                      : t(
+                          TripSearchTexts.location.locationButton.a11yLabel.use,
+                        ),
                   accessibilityRole: 'button',
                 }}
                 testID="searchFromButton"
@@ -225,9 +213,9 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
 
               <LocationInput
                 accessibilityLabel={t(
-                  AssistantTexts.location.destinationPicker.a11yLabel,
+                  TripSearchTexts.location.destinationPicker.a11yLabel,
                 )}
-                label={t(AssistantTexts.location.destinationPicker.label)}
+                label={t(TripSearchTexts.location.destinationPicker.label)}
                 location={to}
                 onPress={() => openLocationSearch('toLocation', to)}
                 icon={<ThemeIcon svg={Swap} />}
@@ -235,7 +223,7 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
                 iconAccessibility={{
                   accessible: true,
                   accessibilityLabel:
-                    t(AssistantTexts.location.swapButton.a11yLabel) +
+                    t(TripSearchTexts.location.swapButton.a11yLabel) +
                     screenReaderPause,
                   accessibilityRole: 'button',
                 }}
@@ -255,7 +243,7 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
               paddingRight: theme.spacings.medium / 2,
             }}
             chipActionHint={
-              t(AssistantTexts.favorites.favoriteChip.a11yHint) +
+              t(TripSearchTexts.favorites.favoriteChip.a11yHint) +
               t(!!from ? dictionary.toPlace : dictionary.fromPlace) +
               screenReaderPause
             }
@@ -300,7 +288,7 @@ function useUpdatedLocation(
 ): SearchForLocations {
   const [from, setFrom] = useState<Location | undefined>();
   const [to, setTo] = useState<Location | undefined>();
-  const navigation = useNavigation<AssistantScreenNavigationProp>();
+  const navigation = useNavigation<DashboardScreenNavigationProp>();
 
   const setLocation = useCallback(
     (direction: 'from' | 'to', searchedLocation?: SelectableLocationData) => {
@@ -361,26 +349,6 @@ function translateLocation(location: Location | undefined): string {
     return location.id;
   }
   return `${location.id}--${location.name}--${location.locality}`;
-}
-
-function getSearchTimeLabel(
-  searchTime: SearchTime,
-  timeOfLastSearch: string,
-  t: TFunc<typeof Language>,
-  language: Language,
-) {
-  const date = searchTime.option === 'now' ? timeOfLastSearch : searchTime.date;
-  const time = formatToLongDateTime(date, language);
-
-  switch (searchTime.option) {
-    case 'now':
-      return t(AssistantTexts.dateInput.departureNow(time));
-    case 'arrival':
-      return t(AssistantTexts.dateInput.arrival(time));
-    case 'departure':
-      return t(AssistantTexts.dateInput.departure(time));
-  }
-  return time;
 }
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({

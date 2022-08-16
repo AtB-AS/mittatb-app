@@ -5,7 +5,9 @@ import {TripDetailsRoot} from '../TripDetails';
 import {SearchTime} from '../Nearby/types';
 import {Location} from '@atb/favorites/types';
 import {DetailsRouteParams} from '../TripDetails/Details';
-import {DateTimePickerParams} from '../Assistant/journey-date-picker';
+import JourneyDatePicker, {
+  DateTimePickerParams,
+} from '../Assistant/journey-date-picker';
 import DashboardRoot from './Dashboard';
 
 export type DashboardParams = {
@@ -17,8 +19,9 @@ export type DashboardParams = {
   TripSearch: {
     fromLocation: Location;
     toLocation: Location;
+    searchTime: SearchTime | undefined;
   };
-  //TripSearch: DetailsRouteParams;
+
   TripDetails: DetailsRouteParams;
   DateTimePicker: DateTimePickerParams;
 };
@@ -48,6 +51,10 @@ const Dashboard = () => {
         options={{
           ...TransitionPresets.SlideFromRightIOS,
         }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="DateTimePicker"
+        component={JourneyDatePicker}
       ></Stack.Screen>
     </Stack.Navigator>
   );

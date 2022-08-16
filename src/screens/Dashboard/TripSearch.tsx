@@ -1,16 +1,9 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 
-import navigation, {RootStackParamList} from '@atb/navigation';
+import {RootStackParamList} from '@atb/navigation';
 
 import {StyleSheet, useTheme} from '@atb/theme';
-import {
-  AssistantTexts,
-  DashboardTexts,
-  dictionary,
-  Language,
-  TripSearchTexts,
-  useTranslation,
-} from '@atb/translations';
+import {Language, TripSearchTexts, useTranslation} from '@atb/translations';
 
 import {
   CompositeNavigationProp,
@@ -29,26 +22,25 @@ import {
 import Button from '@atb/components/button';
 import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {ScrollView} from 'react-native';
-import {AssistantParams} from '../Assistant';
-import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 import {LocationInput, Section} from '@atb/components/sections';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import ThemeIcon from '@atb/components/theme-icon';
-import FavoriteChips from '@atb/favorite-chips';
 import {useFavorites} from '@atb/favorites';
 import {useLocationSearchValue} from '@atb/location-search';
-import FadeBetween from '../Assistant/FadeBetween';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {DashboardParams} from '.';
 import {SelectableLocationData} from '@atb/location-search/types';
-import {AssistantScreenNavigationProp} from '../Assistant/Assistant';
 import Bugsnag from '@bugsnag/react-native';
-import {SearchTime, useSearchTimeValue} from '../Assistant/journey-date-picker';
+import {
+  getSearchTimeLabel,
+  SearchTime,
+  useSearchTimeValue,
+} from '../Assistant/journey-date-picker';
 import {TFunc} from '@leile/lobo-t';
-import {formatToLongDateTime, isInThePast} from '@atb/utils/date';
+import {isInThePast} from '@atb/utils/date';
 import useTripsQuery from '../Assistant/use-trips-query';
 import {StaticColorByType} from '@atb/theme/colors';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
@@ -76,7 +68,7 @@ type RootProps = {
   route: TripSearchRouteProp;
 };
 
-type SearchForLocations = {
+export type SearchForLocations = {
   from?: Location;
   to?: Location;
 };
@@ -90,7 +82,6 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
   const style = useStyle();
   const {theme} = useTheme();
   const {language, t} = useTranslation();
-  const {leftButton: serviceDisruptionButton} = useServiceDisruptionSheet();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
 
   const {
@@ -126,13 +117,13 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
     if (!screenHasFocus) return;
     switch (searchState) {
       case 'searching':
-        setSearchStateMessage(t(AssistantTexts.searchState.searching));
+        setSearchStateMessage(t(TripSearchTexts.searchState.searching));
         break;
       case 'search-success':
-        setSearchStateMessage(t(AssistantTexts.searchState.searchSuccess));
+        setSearchStateMessage(t(TripSearchTexts.searchState.searchSuccess));
         break;
       case 'search-empty-result':
-        setSearchStateMessage(t(AssistantTexts.searchState.searchEmptyResult));
+        setSearchStateMessage(t(TripSearchTexts.searchState.searchEmptyResult));
         break;
       default:
         setSearchStateMessage('');
@@ -161,8 +152,8 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
     navigation.navigate('LocationSearch', {
       label:
         callerRouteParam === 'fromLocation'
-          ? t(AssistantTexts.location.departurePicker.label)
-          : t(AssistantTexts.location.destinationPicker.label),
+          ? t(TripSearchTexts.location.departurePicker.label)
+          : t(TripSearchTexts.location.destinationPicker.label),
       callerRouteName: TripSearchRouteNameStatic,
       callerRouteParam,
       initialLocation,
@@ -200,18 +191,12 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
     navigation.setParams({fromLocation: to, toLocation: from});
   }
 
-  function fillNextAvailableLocation(selectedLocation: Location) {
-    if (!from) {
-      navigation.setParams({
-        fromLocation: selectedLocation,
-        toLocation: to,
-      });
-    } else {
-      navigation.setParams({
-        fromLocation: from,
-        toLocation: selectedLocation,
-      });
-    }
+  function onSearchTimePress() {
+    navigation.navigate('DateTimePicker', {
+      callerRouteName: 'TripSearch',
+      callerRouteParam: 'searchTime',
+      searchTime,
+    });
   }
 
   const refresh = () => {
@@ -243,16 +228,16 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
           <Section>
             <LocationInput
               accessibilityLabel={
-                t(AssistantTexts.location.departurePicker.a11yLabel) +
+                t(TripSearchTexts.location.departurePicker.a11yLabel) +
                 screenReaderPause
               }
               accessibilityHint={
-                t(AssistantTexts.location.departurePicker.a11yHint) +
+                t(TripSearchTexts.location.departurePicker.a11yHint) +
                 screenReaderPause
               }
               updatingLocation={updatingLocation && !to}
               location={from}
-              label={t(AssistantTexts.location.departurePicker.label)}
+              label={t(TripSearchTexts.location.departurePicker.label)}
               onPress={() => openLocationSearch('fromLocation', from)}
               icon={<ThemeIcon svg={LocationIcon} />}
               onIconPress={setCurrentLocationOrRequest}
@@ -260,8 +245,11 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
                 accessible: true,
                 accessibilityLabel:
                   from?.resultType == 'geolocation'
-                    ? t(AssistantTexts.location.locationButton.a11yLabel.update)
-                    : t(AssistantTexts.location.locationButton.a11yLabel.use),
+                    ? t(
+                        TripSearchTexts.location.locationButton.a11yLabel
+                          .update,
+                      )
+                    : t(TripSearchTexts.location.locationButton.a11yLabel.use),
                 accessibilityRole: 'button',
               }}
               testID="searchFromButton"
@@ -269,9 +257,9 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
 
             <LocationInput
               accessibilityLabel={t(
-                AssistantTexts.location.destinationPicker.a11yLabel,
+                TripSearchTexts.location.destinationPicker.a11yLabel,
               )}
-              label={t(AssistantTexts.location.destinationPicker.label)}
+              label={t(TripSearchTexts.location.destinationPicker.label)}
               location={to}
               onPress={() => openLocationSearch('toLocation', to)}
               icon={<ThemeIcon svg={Swap} />}
@@ -279,7 +267,7 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
               iconAccessibility={{
                 accessible: true,
                 accessibilityLabel:
-                  t(AssistantTexts.location.swapButton.a11yLabel) +
+                  t(TripSearchTexts.location.swapButton.a11yLabel) +
                   screenReaderPause,
                 accessibilityRole: 'button',
               }}
@@ -287,23 +275,15 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
             />
           </Section>
         </View>
-
-        <FavoriteChips
-          key="favoriteChips"
-          chipTypes={['favorites', 'add-favorite']}
-          onSelectLocation={fillNextAvailableLocation}
-          containerStyle={style.fadeChild}
-          contentContainerStyle={{
-            // @TODO Find solution for not hardcoding this. e.g. do proper math
-            paddingLeft: theme.spacings.medium,
-            paddingRight: theme.spacings.medium / 2,
-          }}
-          chipActionHint={
-            t(AssistantTexts.favorites.favoriteChip.a11yHint) +
-            t(!!from ? dictionary.toPlace : dictionary.fromPlace) +
-            screenReaderPause
-          }
-        />
+        <View style={[style.paddedContainer, style.fadeChild]} key="dateInput">
+          <Button
+            text={getSearchTimeLabel(searchTime, timeOfLastSearch, t, language)}
+            accessibilityHint={t(TripSearchTexts.dateInput.a11yHint)}
+            interactiveColor="interactive_0"
+            onPress={onSearchTimePress}
+            testID="assistantDateTimePicker"
+          />
+        </View>
       </View>
 
       <ScrollView
@@ -348,7 +328,7 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
                       }}
                     />
                     <ThemeText color="secondary" testID="searchingForResults">
-                      {t(AssistantTexts.results.fetchingMore)}
+                      {t(TripSearchTexts.results.fetchingMore)}
                     </ThemeText>
                   </>
                 ) : (
@@ -357,7 +337,7 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
                     style={style.loadingText}
                     testID="searchingForResults"
                   >
-                    {t(AssistantTexts.searchState.searching)}
+                    {t(TripSearchTexts.searchState.searching)}
                   </ThemeText>
                 )}
               </View>
@@ -372,7 +352,7 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
                     />
                     <ThemeText color="secondary" testID="resultsLoaded">
                       {' '}
-                      {t(AssistantTexts.results.fetchMore)}
+                      {t(TripSearchTexts.results.fetchMore)}
                     </ThemeText>
                   </>
                 ) : null}
@@ -418,7 +398,7 @@ function useUpdatedLocation(
 ): SearchForLocations {
   const [from, setFrom] = useState<Location | undefined>();
   const [to, setTo] = useState<Location | undefined>();
-  const navigation = useNavigation<AssistantScreenNavigationProp>();
+  const navigation = useNavigation<TripSearchScreenNavigationProp>();
 
   const setLocation = useCallback(
     (direction: 'from' | 'to', searchedLocation?: SelectableLocationData) => {
@@ -481,26 +461,6 @@ function translateLocation(location: Location | undefined): string {
   return `${location.id}--${location.name}--${location.locality}`;
 }
 
-function getSearchTimeLabel(
-  searchTime: SearchTime,
-  timeOfLastSearch: string,
-  t: TFunc<typeof Language>,
-  language: Language,
-) {
-  const date = searchTime.option === 'now' ? timeOfLastSearch : searchTime.date;
-  const time = formatToLongDateTime(date, language);
-
-  switch (searchTime.option) {
-    case 'now':
-      return t(AssistantTexts.dateInput.departureNow(time));
-    case 'arrival':
-      return t(AssistantTexts.dateInput.arrival(time));
-    case 'departure':
-      return t(AssistantTexts.dateInput.departure(time));
-  }
-  return time;
-}
-
 function computeNoResultReasons(
   t: TFunc<typeof Language>,
   date?: SearchTime,
@@ -512,13 +472,15 @@ function computeNoResultReasons(
   if (!!from && !!to) {
     if (coordinatesAreEqual(from.coordinates, to.coordinates)) {
       reasons.push(
-        t(AssistantTexts.searchState.noResultReason.IdenticalLocations),
+        t(TripSearchTexts.searchState.noResultReason.IdenticalLocations),
       );
     } else if (
       coordinatesDistanceInMetres(from.coordinates, to.coordinates) <
       LOCATIONS_REALLY_CLOSE_THRESHOLD
     ) {
-      reasons.push(t(AssistantTexts.searchState.noResultReason.CloseLocations));
+      reasons.push(
+        t(TripSearchTexts.searchState.noResultReason.CloseLocations),
+      );
     }
   }
 
@@ -527,8 +489,8 @@ function computeNoResultReasons(
   if (isPastDate) {
     const isArrival = date?.option === 'arrival';
     const dateReason = isArrival
-      ? t(AssistantTexts.searchState.noResultReason.PastArrivalTime)
-      : t(AssistantTexts.searchState.noResultReason.PastDepartureTime);
+      ? t(TripSearchTexts.searchState.noResultReason.PastArrivalTime)
+      : t(TripSearchTexts.searchState.noResultReason.PastDepartureTime);
     reasons.push(dateReason);
   }
   return reasons;
