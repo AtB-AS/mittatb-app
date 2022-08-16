@@ -1,16 +1,12 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-
 import {RootStackParamList} from '@atb/navigation';
-
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   DashboardTexts,
   dictionary,
-  Language,
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
-
 import {
   CompositeNavigationProp,
   RouteProp,

@@ -1,10 +1,7 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-
 import {RootStackParamList} from '@atb/navigation';
-
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Language, TripSearchTexts, useTranslation} from '@atb/translations';
-
 import {
   CompositeNavigationProp,
   RouteProp,
@@ -534,6 +531,5 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.xLarge * 3,
   },
 }));
-
 
 export default TripSearch;
