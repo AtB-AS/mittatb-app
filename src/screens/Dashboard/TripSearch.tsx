@@ -214,7 +214,7 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
           onPress: () => {
             navigation.navigate('DashboardRoot', {
               toLocation: undefined,
-              fromLocation: undefined,
+              fromLocation: currentLocation,
               searchTime: undefined,
             });
           },

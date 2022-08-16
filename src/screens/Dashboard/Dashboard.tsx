@@ -43,6 +43,7 @@ import {TFunc} from '@leile/lobo-t';
 import {formatToLongDateTime} from '@atb/utils/date';
 import useTripsQuery from '../Assistant/use-trips-query';
 import {StaticColorByType} from '@atb/theme/colors';
+import {useDoOnceWhen} from '../utils';
 
 type DashboardRouteName = 'DashboardRoot';
 const DashboardRouteNameStatic: DashboardRouteName = 'DashboardRoot';
@@ -81,15 +82,31 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
     requestPermission: requestGeoPermission,
   } = useGeolocationState();
 
+  const hasLocationPermission = locationEnabled && status === 'granted';
   const currentLocation = location || undefined;
+
+  useDoOnceWhen(
+    () => setUpdatingLocation(true),
+    !Boolean(currentLocation) && hasLocationPermission,
+  );
+  useDoOnceWhen(
+    () => setUpdatingLocation(false),
+    Boolean(currentLocation) && hasLocationPermission,
+  );
+  useDoOnceWhen(setCurrentLocationAsFromIfEmpty, Boolean(currentLocation));
+
+  function setCurrentLocationAsFromIfEmpty() {
+    if (from) {
+      return;
+    }
+    setCurrentLocationAsFrom();
+  }
 
   const {from, to} = useLocations(currentLocation);
   const searchTime = useSearchTimeValue('searchTime', {
     option: 'now',
     date: new Date().toISOString(),
   });
-  // const {tripPatterns, timeOfLastSearch, loadMore, clear, searchState, error} =
-  //  useTripsQuery(from, to, searchTime);
 
   useEffect(() => {
     if (!!to && !!from) {
