@@ -12,6 +12,7 @@ import {LanguageAndText} from '@atb/reference-data/types';
 import {Statuses} from '@atb/theme';
 
 export type Alert = {
+  id: string;
   active: boolean;
   title?: LanguageAndText[];
   body: LanguageAndText[];
