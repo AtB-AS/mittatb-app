@@ -131,6 +131,7 @@ export default function LoginOptionsScreen({
         leftButton={{type: 'back'}}
         setFocusOnLoad={false}
         color={themeColor}
+        title={t(LoginTexts.logInOptions.title)}
       />
       <ScrollView
         centerContent={true}

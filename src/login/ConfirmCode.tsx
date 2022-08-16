@@ -80,6 +80,7 @@ export default function ConfirmCode({
         leftButton={{type: 'back'}}
         setFocusOnLoad={false}
         color={themeColor}
+        title={t(LoginTexts.logInOptions.title)}
       />
 
       <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
@@ -152,7 +153,7 @@ export default function ConfirmCode({
                 >
                   <ThemeText
                     style={styles.resendButtonText}
-                    type="body__primary"
+                    type="body__primary--underline"
                     color={themeColor}
                   >
                     {t(LoginTexts.confirmCode.resendButton)}
@@ -178,6 +179,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   scrollView: {
     padding: theme.spacings.large,
+    flexGrow: 0.5,
+    justifyContent: 'center',
   },
   title: {
     textAlign: 'center',

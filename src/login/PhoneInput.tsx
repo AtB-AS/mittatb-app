@@ -92,6 +92,7 @@ export default function PhoneInput({
         rightButton={headerRightButton}
         setFocusOnLoad={false}
         color={themeColor}
+        title={t(LoginTexts.phoneInput.title)}
       />
 
       <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
