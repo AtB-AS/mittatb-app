@@ -1,13 +1,13 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import TripSearch from '@atb/screens/Dashboard/TripSearch';
-import {TripDetailsRoot} from '../TripDetails';
-import {SearchTime} from '../Nearby/types';
+import {TripDetailsRoot} from '@atb/screens/TripDetails';
+import {SearchTime} from '@atb/screens/Nearby/types';
 import {Location} from '@atb/favorites/types';
-import {DetailsRouteParams} from '../TripDetails/Details';
+import {DetailsRouteParams} from '@atb/screens/TripDetails/Details';
 import JourneyDatePicker, {
   DateTimePickerParams,
-} from '../Assistant/journey-date-picker';
+} from '@atb/screens/Assistant/journey-date-picker';
 import DashboardRoot from './Dashboard';
 
 export type DashboardParams = {

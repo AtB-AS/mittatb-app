@@ -35,13 +35,13 @@ import {
   getSearchTimeLabel,
   SearchTime,
   useSearchTimeValue,
-} from '../Assistant/journey-date-picker';
+} from '@atb/screens/Assistant/journey-date-picker';
 import {TFunc} from '@leile/lobo-t';
 import {isInThePast} from '@atb/utils/date';
-import useTripsQuery from '../Assistant/use-trips-query';
+import useTripsQuery from '@atb/screens/Assistant/use-trips-query';
 import {StaticColorByType} from '@atb/theme/colors';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
-import Results from '../Assistant/Results';
+import Results from '@atb/screens/Assistant/Results';
 import {
   coordinatesAreEqual,
   coordinatesDistanceInMetres,

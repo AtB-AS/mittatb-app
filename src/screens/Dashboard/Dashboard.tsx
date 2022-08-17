@@ -31,7 +31,7 @@ import {DashboardParams} from '.';
 import {SelectableLocationData} from '@atb/location-search/types';
 import Bugsnag from '@bugsnag/react-native';
 import {StaticColorByType} from '@atb/theme/colors';
-import {useDoOnceWhen} from '../utils';
+import {useDoOnceWhen} from '@atb/screens/utils';
 import {SearchForLocations} from './TripSearch';
 
 type DashboardRouteName = 'DashboardRoot';
