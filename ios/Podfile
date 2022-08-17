@@ -7,6 +7,10 @@ ENV['REACT_NATIVE_MAPBOX_GL_USE_FRAMEWORKS'] = '1'
 $ReactNativeMapboxGLIOSVersion = '6.3.0'
 
 target 'atb' do
+  pod 'Firebase', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
+
   config = use_native_modules!
 
   use_react_native!(
