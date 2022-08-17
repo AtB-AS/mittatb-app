@@ -10,7 +10,7 @@ import {
 } from '@atb/reference-data/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PreactivatedTicket} from '@atb/tickets';
-import {TicketTexts, useTranslation} from '@atb/translations';
+import {Language, TicketTexts, useTranslation} from '@atb/translations';
 import React, {ReactElement} from 'react';
 import {View} from 'react-native';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
@@ -35,7 +35,7 @@ import {
   isTravelCardToken,
 } from '@atb/mobile-token/utils';
 import {RemoteToken} from '@atb/mobile-token/types';
-import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
+import {secondsToDuration} from '@atb/utils/date';
 
 type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -95,6 +95,10 @@ type TicketInfoViewProps = {
   isInspectable?: boolean;
   omitUserProfileCount?: boolean;
   testID?: string;
+  useBackgroundOnInspectionSymbol?: boolean;
+  now?: number;
+  validTo?: number;
+  validFrom?: number;
 };
 
 export const TicketInfoView = (props: TicketInfoViewProps) => {
@@ -106,6 +110,25 @@ export const TicketInfoView = (props: TicketInfoViewProps) => {
     </View>
   );
 };
+
+export const ShortTicketInfoView = (props: TicketInfoViewProps) => {
+  const styles = useStyles();
+  return (
+    <View style={styles.container}>
+      <ShortTicketInfoTexts {...props} />
+      <TicketInspectionSymbol {...props} />
+    </View>
+  );
+};
+
+const userProfileCountAndName = (
+  u: UserProfileWithCount,
+  omitUserProfileCount: Boolean | undefined,
+  language: Language,
+) =>
+  omitUserProfileCount
+    ? `${getReferenceDataName(u, language)}`
+    : `${u.count} ${getReferenceDataName(u, language)}`;
 
 const WarningMessage = (
   isError: boolean,
@@ -172,11 +195,6 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
       ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
       : undefined;
 
-  const userProfileCountAndName = (u: UserProfileWithCount) =>
-    omitUserProfileCount
-      ? `${getReferenceDataName(u, language)}`
-      : `${u.count} ${getReferenceDataName(u, language)}`;
-
   const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
   const warning = WarningMessage(
     isError,
@@ -192,10 +210,13 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
           <ThemeText
             type="body__primary--bold"
             key={u.id}
-            accessibilityLabel={userProfileCountAndName(u) + screenReaderPause}
+            accessibilityLabel={
+              userProfileCountAndName(u, omitUserProfileCount, language) +
+              screenReaderPause
+            }
             testID={testID + 'UserAndCount'}
           >
-            {userProfileCountAndName(u)}
+            {userProfileCountAndName(u, omitUserProfileCount, language)}
           </ThemeText>
         ))}
       </View>
@@ -229,12 +250,103 @@ const TicketInfoTexts = (props: TicketInfoViewProps) => {
   );
 };
 
+const ShortTicketInfoTexts = (props: TicketInfoViewProps) => {
+  const {
+    preassignedFareProduct,
+    fromTariffZone,
+    toTariffZone,
+    userProfilesWithCount,
+    isInspectable,
+    omitUserProfileCount,
+    status,
+    testID,
+    validTo,
+    now,
+  } = props;
+  const {t, language} = useTranslation();
+  const styles = useStyles();
+
+  const productName = preassignedFareProduct
+    ? getReferenceDataName(preassignedFareProduct, language)
+    : undefined;
+
+  const tariffZoneSummary =
+    fromTariffZone && toTariffZone
+      ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
+      : undefined;
+
+  const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
+  const warning = WarningMessage(
+    isError,
+    fallbackEnabled,
+    remoteTokens,
+    isInspectable,
+  );
+
+  const secondsUntilValid = ((validTo || 0) - (now || 0)) / 1000;
+  const conjunction = t(TicketTexts.validityHeader.durationDelimiter);
+  const durationText = secondsToDuration(secondsUntilValid, language, {
+    conjunction,
+    serialComma: false,
+  });
+  const timeUntilExpire = t(TicketTexts.validityHeader.valid(durationText));
+  return (
+    <View style={styles.textsContainer} accessible={true}>
+      <ThemeText
+        type="body__primary--bold"
+        accessibilityLabel={timeUntilExpire}
+        testID={testID + 'ExpireTime'}
+        style={styles.expireTime}
+      >
+        {timeUntilExpire}
+      </ThemeText>
+      {userProfilesWithCount.map((u) => (
+        <ThemeText
+          type="body__secondary"
+          accessibilityLabel={
+            userProfileCountAndName(u, omitUserProfileCount, language) +
+            screenReaderPause
+          }
+          testID={testID + 'UserAndCount'}
+        >
+          {userProfileCountAndName(u, omitUserProfileCount, language)}
+        </ThemeText>
+      ))}
+      {productName && (
+        <ThemeText
+          type="body__secondary"
+          accessibilityLabel={productName + screenReaderPause}
+          testID={testID + 'Product'}
+        >
+          {productName}
+        </ThemeText>
+      )}
+      {tariffZoneSummary && (
+        <ThemeText
+          type="body__secondary"
+          accessibilityLabel={tariffZoneSummary + screenReaderPause}
+          testID={testID + 'Zones'}
+        >
+          {tariffZoneSummary}
+        </ThemeText>
+      )}
+      {warning && (
+        <View style={styles.warning}>
+          <ThemeIcon svg={Warning} style={styles.warningIcon} />
+          {warning}
+        </View>
+      )}
+    </View>
+  );
+};
+
 const TicketInspectionSymbol = ({
   fromTariffZone,
   toTariffZone,
   preassignedFareProduct,
   status,
   isInspectable = true,
+  useBackgroundOnInspectionSymbol = false,
 }: TicketInfoViewProps) => {
   const styles = useStyles();
   const {theme, themeName} = useTheme();
@@ -249,38 +361,42 @@ const TicketInspectionSymbol = ({
   const showAsInspectable = isInspectable || status !== 'valid';
   const isValid = status === 'valid';
   return (
-    <View
-      style={[
-        showAsInspectable && styles.symbolContainer,
-        isValid && {
-          ...styles.symbolContainerCircle,
-          backgroundColor: themeColor
-            ? flatStaticColors[themeName][themeColor].background
-            : undefined,
-        },
-        isValid &&
-          !isInspectable && {
-            ...styles.textContainer,
-            borderColor: theme.static.status.warning.background,
+    <View style={styles.symbolContainer}>
+      <View
+        style={[
+          showAsInspectable && styles.symbolIcon,
+          isValid && {
+            backgroundColor: themeColor
+              ? flatStaticColors[themeName][themeColor].background
+              : undefined,
+            ...(useBackgroundOnInspectionSymbol
+              ? styles.filledSymbolContainerCircle
+              : styles.symbolContainerCircle),
           },
-      ]}
-      accessibilityElementsHidden={isInspectable}
-    >
-      <>
-        {status === 'valid' && isInspectable && (
-          <ThemeText
-            type="body__primary--bold"
-            allowFontScaling={false}
-            style={styles.symbolZones}
-            color={themeColor}
-          >
-            {getReferenceDataName(fromTariffZone, language)}
-            {fromTariffZone.id !== toTariffZone.id &&
-              '-' + getReferenceDataName(toTariffZone, language)}
-          </ThemeText>
-        )}
-        {icon}
-      </>
+          isValid &&
+            !isInspectable && {
+              ...styles.textContainer,
+              borderColor: theme.static.status.warning.background,
+            },
+        ]}
+        accessibilityElementsHidden={isInspectable}
+      >
+        <>
+          {status === 'valid' && isInspectable && (
+            <ThemeText
+              type="body__primary--bold"
+              allowFontScaling={false}
+              style={styles.symbolZones}
+              color={themeColor}
+            >
+              {getReferenceDataName(fromTariffZone, language)}
+              {fromTariffZone.id !== toTariffZone.id &&
+                '-' + getReferenceDataName(toTariffZone, language)}
+            </ThemeText>
+          )}
+          {icon}
+        </>
+      </View>
     </View>
   );
 };
@@ -328,7 +444,7 @@ const IconForStatus = (
   }
 };
 
-const mapToUserProfilesWithCount = (
+export const mapToUserProfilesWithCount = (
   userProfileRefs: string[],
   userProfiles: UserProfile[],
 ): UserProfileWithCount[] =>
@@ -361,6 +477,9 @@ const mapToUserProfilesWithCount = (
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flexDirection: 'row'},
   textsContainer: {flex: 1, paddingTop: theme.spacings.xSmall},
+  expireTime: {
+    marginBottom: theme.spacings.small,
+  },
   product: {
     marginTop: theme.spacings.small,
   },
@@ -368,6 +487,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.small,
   },
   symbolContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  symbolIcon: {
     height: 72,
     width: 72,
     justifyContent: 'center',
@@ -377,6 +500,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: 1000,
     borderColor: theme.static.status.valid.background,
     borderWidth: 5,
+  },
+  filledSymbolContainerCircle: {
+    borderRadius: 1000,
+    backgroundColor: theme.static.status.valid.background,
   },
   symbolZones: {
     marginTop: theme.spacings.small,
