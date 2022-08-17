@@ -33,7 +33,6 @@ import Bugsnag from '@bugsnag/react-native';
 import {StaticColorByType} from '@atb/theme/colors';
 import {useDoOnceWhen} from '../utils';
 import {SearchForLocations} from './TripSearch';
-import CompactTickets from './CompactTickets';
 
 type DashboardRouteName = 'DashboardRoot';
 const DashboardRouteNameStatic: DashboardRouteName = 'DashboardRoot';
