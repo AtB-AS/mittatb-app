@@ -43,8 +43,6 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   const [globalMessages, setGlobalMessages] = useState<GlobalMessage[]>([]);
   const [error, setError] = useState(false);
 
-  console.log('global messages', globalMessages);
-
   useEffect(
     () =>
       firestore()

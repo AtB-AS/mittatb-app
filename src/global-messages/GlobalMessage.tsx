@@ -36,18 +36,23 @@ const GlobalMessageBox = ({globalMessageContext, style}: Props) => {
     return null;
   }
 
-  return globalMessages.map((globalMessage: GlobalMessage) => (
-    <MessageBox
-      containerStyle={style}
-      title={getReferenceDataText(globalMessage.title ?? [], language)}
-      message={getReferenceDataText(
-        markdownPreferredText(globalMessage.body),
-        language,
-      )}
-      type={globalMessage.type}
-      isMarkdown={true}
-    />
-  ));
+  return (
+    <>
+      {globalMessages.map((globalMessage: GlobalMessage) => (
+        <MessageBox
+          key={globalMessage.id}
+          containerStyle={style}
+          title={getReferenceDataText(globalMessage.title ?? [], language)}
+          message={getReferenceDataText(
+            markdownPreferredText(globalMessage.body),
+            language,
+          )}
+          type={globalMessage.type}
+          isMarkdown={true}
+        />
+      ))}
+    </>
+  );
 };
 
 const markdownPreferredText = (
