@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -14,7 +14,6 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
@@ -58,7 +57,6 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
   const style = useStyle();
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const scrollViewRef = useRef<ScrollView>(null);
   const {leftButton: serviceDisruptionButton} = useServiceDisruptionSheet();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
 
