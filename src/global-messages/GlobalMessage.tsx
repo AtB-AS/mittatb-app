@@ -8,7 +8,6 @@ import {
 import MessageBox from '@atb/components/message-box';
 import {getReferenceDataText} from '@atb/reference-data/utils';
 import {StyleProp, ViewStyle} from 'react-native';
-import {Theme, useTheme} from '@atb/theme';
 
 type Props = {
   globalMessageContext?: GlobalMessageContext;
@@ -17,16 +16,13 @@ type Props = {
 
 const GlobalMessageBox = ({globalMessageContext, style}: Props) => {
   const {language} = useTranslation();
-  const {theme} = useTheme();
   const {findGlobalMessages} = useGlobalMessagesState();
 
   const globalMessages = globalMessageContext
     ? findGlobalMessages(globalMessageContext)
     : undefined;
 
-  if (
-    !globalMessages?.length // || !Object.keys(theme.static.status).includes(globalMessage.type)
-  ) {
+  if (!globalMessages?.length) {
     return null;
   }
 
@@ -44,11 +40,6 @@ const GlobalMessageBox = ({globalMessageContext, style}: Props) => {
       ))}
     </>
   );
-};
-
-const isValidAlert = (theme: Theme, globalMessage?: GlobalMessage) => {
-  if (!globalMessage) return false;
-  return Object.keys(theme.static.status).includes(globalMessage.type);
 };
 
 export default GlobalMessageBox;
