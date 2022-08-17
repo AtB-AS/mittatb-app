@@ -1,3 +1,4 @@
+import React, {useRef, useState} from 'react';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 import {RootStackParamList} from '@atb/navigation';
@@ -7,11 +8,12 @@ import {DashboardTexts, useTranslation} from '@atb/translations';
 
 import {CompositeNavigationProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import React from 'react';
+
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {AssistantParams} from '../Assistant';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
+import CompactTickets from './CompactTickets';
 
 export type DashboardScreenNavigationParams = StackNavigationProp<
   AssistantParams,
@@ -30,6 +32,7 @@ type DashboardScreenProps = {
 export default function Dashboard({navigation}: DashboardScreenProps) {
   const style = useStyle();
   const {t} = useTranslation();
+  const scrollViewRef = useRef<ScrollView>(null);
   const {leftButton: serviceDisruptionButton} = useServiceDisruptionSheet();
 
   return (
@@ -43,7 +46,20 @@ export default function Dashboard({navigation}: DashboardScreenProps) {
       <ScrollView
         contentContainerStyle={style.scrollView}
         testID="dashboardScrollView"
-      ></ScrollView>
+        ref={scrollViewRef}
+        onContentSizeChange={() =>
+          scrollViewRef.current?.scrollToEnd({animated: true})
+        }
+      >
+        <CompactTickets
+          onPressDetails={(orderId: string) =>
+            navigation.navigate('TicketModal', {
+              screen: 'TicketDetails',
+              params: {orderId},
+            })
+          }
+        />
+      </ScrollView>
     </View>
   );
 }
