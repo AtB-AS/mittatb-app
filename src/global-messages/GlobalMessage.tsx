@@ -24,20 +24,19 @@ type Props = {
 const GlobalMessageBox = ({globalMessageContext, style}: Props) => {
   const {language} = useTranslation();
   const {theme} = useTheme();
-  const {findGlobalMessage} = useGlobalMessagesState();
+  const {findGlobalMessages} = useGlobalMessagesState();
 
-  const globalMessage = globalMessageContext
-    ? findGlobalMessage(globalMessageContext)
+  const globalMessages = globalMessageContext
+    ? findGlobalMessages(globalMessageContext)
     : undefined;
 
   if (
-    !globalMessage ||
-    !Object.keys(theme.static.status).includes(globalMessage.type)
+    !globalMessages?.length // || !Object.keys(theme.static.status).includes(globalMessage.type)
   ) {
     return null;
   }
 
-  return (
+  return globalMessages.map((globalMessage: GlobalMessage) => (
     <MessageBox
       containerStyle={style}
       title={getReferenceDataText(globalMessage.title ?? [], language)}
@@ -48,7 +47,7 @@ const GlobalMessageBox = ({globalMessageContext, style}: Props) => {
       type={globalMessage.type}
       isMarkdown={true}
     />
-  );
+  ));
 };
 
 const markdownPreferredText = (

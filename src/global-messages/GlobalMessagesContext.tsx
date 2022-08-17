@@ -17,7 +17,7 @@ export type GlobalMessage = {
   title?: LanguageAndText[];
   body: LanguageAndText[];
   type: Statuses;
-  context: GlobalMessageContext;
+  context: GlobalMessageContext[];
 };
 
 export type GlobalMessageContext =
@@ -28,13 +28,11 @@ export type GlobalMessageContext =
   | 'web-overview';
 
 type GlobalMessageContextState = {
-  findGlobalMessage: (
-    context: GlobalMessageContext,
-  ) => GlobalMessage | undefined;
+  findGlobalMessages: (context: GlobalMessageContext) => GlobalMessage[];
 };
 
 const defaultGlobalMessageState = {
-  findGlobalMessage: () => undefined,
+  findGlobalMessages: () => [],
 };
 
 const GlobalMessagesContext = createContext<GlobalMessageContextState>(
@@ -45,10 +43,12 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   const [globalMessages, setGlobalMessages] = useState<GlobalMessage[]>([]);
   const [error, setError] = useState(false);
 
+  console.log('global messages', globalMessages);
+
   useEffect(
     () =>
       firestore()
-        .collection('alerts-v2')
+        .collection('globalMessages')
         .where('active', '==', true)
         .onSnapshot(
           (snapshot) => {
@@ -66,9 +66,15 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
     [],
   );
 
-  const findGlobalMessage = useCallback(
+  const findGlobalMessages = useCallback(
     (context: GlobalMessageContext) => {
-      return globalMessages.filter((a) => a.context === context)[0];
+      return globalMessages.filter((a) => {
+        if (!a.context) return false;
+        if (typeof a.context === 'string') {
+          return a.context === context;
+        }
+        return a.context.find((cont) => cont === context);
+      });
     },
     [globalMessages],
   );
@@ -76,7 +82,7 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   return (
     <GlobalMessagesContext.Provider
       value={{
-        findGlobalMessage,
+        findGlobalMessages,
       }}
     >
       {children}
