@@ -71,7 +71,7 @@ type DepartureDataActions =
     }
   | {
       type: 'LOAD_REALTIME_DATA';
-      stopPlace?: StopPlace;
+      stopPlace: StopPlace;
     }
   | {
       type: 'STOP_LOADER';
@@ -124,9 +124,6 @@ const reducer: ReducerWithSideEffects<
         },
         async (state, dispatch) => {
           try {
-            if (!action.stopPlace) return;
-            if (!action.favoriteDepartures) return;
-
             const result = await fetchEstimatedCalls(
               queryInput,
               action.stopPlace,
@@ -267,7 +264,7 @@ export function useStopPlaceData(
         startTime,
         favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
       }),
-    [stopPlace?.id, startTime, showOnlyFavorites, favoriteDepartures],
+    [stopPlace.id, startTime, showOnlyFavorites, favoriteDepartures],
   );
 
   useEffect(
@@ -279,9 +276,9 @@ export function useStopPlaceData(
         showOnlyFavorites,
         favoriteDepartures,
       }),
-    [stopPlace?.id, favoriteDepartures, showOnlyFavorites],
+    [stopPlace.id, favoriteDepartures, showOnlyFavorites],
   );
-  useEffect(refresh, [stopPlace?.id, startTime]);
+  useEffect(refresh, [stopPlace.id, startTime]);
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -295,7 +292,7 @@ export function useStopPlaceData(
   useInterval(
     () => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace}),
     updateFrequencyInSeconds * 1000,
-    [stopPlace?.id],
+    [stopPlace.id],
     !isFocused,
   );
   useInterval(

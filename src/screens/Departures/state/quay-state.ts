@@ -269,7 +269,7 @@ export function useQuayData(
         startTime,
         favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
       }),
-    [quay?.id, startTime, showOnlyFavorites, favoriteDepartures],
+    [quay.id, startTime, showOnlyFavorites, favoriteDepartures],
   );
 
   useEffect(
@@ -281,7 +281,7 @@ export function useQuayData(
         showOnlyFavorites,
         favoriteDepartures,
       }),
-    [quay?.id, favoriteDepartures, showOnlyFavorites],
+    [quay.id, favoriteDepartures, showOnlyFavorites],
   );
   useEffect(refresh, [startTime]);
   useEffect(() => {
