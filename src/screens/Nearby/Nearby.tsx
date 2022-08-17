@@ -263,7 +263,7 @@ const NearbyOverview: React.FC<Props> = ({
         </AccessibleText>
       }
       onEndReached={onScrollViewEndReached}
-      globalMessageContext="app-assistant"
+      globalMessageContext="app-departures"
       setFocusOnLoad={true}
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
