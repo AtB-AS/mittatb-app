@@ -72,7 +72,7 @@ const FavouriteStopsOverview = ({navigation}: RootProps) => {
     });
   };
 
-  return favouriteStopsDetails ? (
+  return favouriteStopsDetails && favouriteStopsDetails.length > 0 ? (
     <StopPlaces
       header={t(DeparturesTexts.resultType.favourites)}
       stopPlaces={favouriteStopsDetails}
