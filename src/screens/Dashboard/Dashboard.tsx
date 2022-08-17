@@ -1,3 +1,4 @@
+import React, {useRef, useState} from 'react';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -17,6 +18,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
+import CompactTickets from './CompactTickets';
 import {LocationInput, Section} from '@atb/components/sections';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
@@ -56,6 +58,7 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
   const style = useStyle();
   const {theme} = useTheme();
   const {t} = useTranslation();
+  const scrollViewRef = useRef<ScrollView>(null);
   const {leftButton: serviceDisruptionButton} = useServiceDisruptionSheet();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
 
@@ -245,6 +248,14 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
             }
           />
         </View>
+        <CompactTickets
+          onPressDetails={(orderId: string) =>
+            navigation.navigate('TicketModal', {
+              screen: 'TicketDetails',
+              params: {orderId},
+            })
+          }
+        />
       </ScrollView>
     </View>
   );
