@@ -21,7 +21,8 @@ export type ValidityStatus =
   | RelativeValidityStatus
   | 'reserving'
   | 'unknown'
-  | 'refunded';
+  | 'refunded'
+  | 'inactive';
 
 export function getRelativeValidity(
   now: number,
@@ -49,6 +50,7 @@ export const getTransportationModes = (ticketType?: string) => {
     case 'single':
     case 'hour24':
     case 'period':
+    case 'carnet':
       return [{mode: Mode.Bus, subMode: TransportSubmode.LocalBus}];
     case 'summerPass': //TODO cross check this value
       return [

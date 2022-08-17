@@ -105,6 +105,7 @@ function validityTimeText(
     case 'reserving':
       return t(TicketTexts.validityHeader.reserving);
     case 'unknown':
+    default:
       return t(TicketTexts.validityHeader.unknown);
   }
 }
@@ -139,8 +140,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   label: {
     flex: 1,
-    flexWrap: 'wrap',
     textAlign: 'right',
+    marginLeft: theme.spacings.medium,
   },
 }));
 

@@ -145,9 +145,11 @@ const TicketInfoHeader = ({
             {productName + ', AtB'}
           </ThemeText>
         )}
-        <View>{warning && <WarningMessage message={warning} />}</View>
+        {status === 'valid' && !isInspectable && <NonTicketInspectionSymbol />}
       </View>
-      {status === 'valid' && !isInspectable && <NonTicketInspectionSymbol />}
+      <View style={{paddingTop: 12}}>
+        {warning && <WarningMessage message={warning} />}
+      </View>
     </View>
   );
 };
@@ -207,11 +209,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
   },
   header: {
+    justifyContent: 'space-between',
+    marginBottom: theme.spacings.medium,
+  },
+  ticketHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: theme.spacings.xLarge,
+    flex: 0.8,
+    alignItems: 'center',
+    marginTop: theme.spacings.xSmall,
   },
-  ticketHeader: {justifyContent: 'space-between'},
 }));
 
 export default TicketInfo;

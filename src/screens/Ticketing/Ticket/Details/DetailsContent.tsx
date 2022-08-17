@@ -1,15 +1,11 @@
 import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
 import {
   FareContract,
   isInspectableTicket,
   isPreactivatedTicket,
 } from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
-import {formatToLongDateTime} from '@atb/utils/date';
-import {fromUnixTime} from 'date-fns';
 import React from 'react';
-import {View} from 'react-native';
 import TicketInfo from '../TicketInfo';
 import ValidityHeader from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
@@ -20,8 +16,8 @@ import {
 } from '@atb/mobile-token/MobileTokenContext';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {findReferenceDataById} from '@atb/reference-data/utils';
-import _ from 'lodash';
-import {StyleSheet} from '@atb/theme';
+import OrderDetails from '@atb/screens/Ticketing/Ticket/Details/OrderDetails';
+import {UnknownTicketDetails} from '@atb/screens/Ticketing/Ticket/Details/UnknownTicketDetails';
 
 type Props = {
   fareContract: FareContract;
@@ -106,54 +102,5 @@ const DetailsContent: React.FC<Props> = ({
     return <UnknownTicketDetails fc={fc} />;
   }
 };
-
-const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
-  const style = useStyles();
-  const {t, language} = useTranslation();
-  const orderIdText = t(TicketTexts.details.orderId(fareContract.orderId));
-  return (
-    <View accessible={true}>
-      <ThemeText type="body__secondary" color="secondary">
-        {t(
-          TicketTexts.details.purchaseTime(
-            formatToLongDateTime(
-              fromUnixTime(fareContract.created.toMillis() / 1000),
-              language,
-            ),
-          ),
-        )}
-      </ThemeText>
-      <ThemeText
-        type="body__secondary"
-        color="secondary"
-        style={style.marginTop}
-      >
-        {t(TicketTexts.details.paymentMethod)}
-        {_.capitalize(fareContract?.paymentType)}
-      </ThemeText>
-      <ThemeText style={style.marginTop}>{orderIdText}</ThemeText>
-    </View>
-  );
-};
-
-function UnknownTicketDetails({fc}: {fc: FareContract}) {
-  const {t} = useTranslation();
-  return (
-    <Sections.Section withBottomPadding>
-      <Sections.GenericItem>
-        <ValidityLine status="unknown" />
-      </Sections.GenericItem>
-      <Sections.GenericItem>
-        <ThemeText>{t(TicketTexts.details.orderId(fc.orderId))}</ThemeText>
-      </Sections.GenericItem>
-    </Sections.Section>
-  );
-}
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  marginTop: {
-    marginTop: theme.spacings.xSmall,
-  },
-}));
 
 export default DetailsContent;

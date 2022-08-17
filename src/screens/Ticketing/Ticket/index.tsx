@@ -61,7 +61,7 @@ const SimpleTicket: React.FC<Props> = ({
   } else if (isCarnetTicket(firstTravelRight)) {
     return (
       <Carnet
-        fareContractState={fc.state}
+        fareContract={fc}
         travelRights={fc.travelRights.filter(isCarnetTicket)}
         now={now}
         isInspectable={ticketIsInspectable}

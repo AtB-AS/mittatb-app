@@ -10,9 +10,11 @@ import {StyleSheet, Theme} from '@atb/theme';
 const TransportMode = ({
   ticketType,
   iconSize,
+  disabled,
 }: {
   ticketType: PreassignedFareProductType | 'summerPass';
   iconSize?: keyof Theme['icon']['size'];
+  disabled?: boolean;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -24,6 +26,7 @@ const TransportMode = ({
           mode={mode.mode}
           subMode={mode.subMode}
           size={iconSize}
+          disabled={disabled}
         />
       ))}
       <ThemeText type="label__uppercase" color={'secondary'}>
