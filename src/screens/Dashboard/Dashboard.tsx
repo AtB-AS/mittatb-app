@@ -245,14 +245,6 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
             }
           />
         </View>
-        <CompactTickets
-          onPressDetails={(orderId: string) =>
-            navigation.navigate('TicketModal', {
-              screen: 'TicketDetails',
-              params: {orderId},
-            })
-          }
-        />
       </ScrollView>
     </View>
   );
