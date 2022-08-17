@@ -1,9 +1,8 @@
 import {Place, Quay} from '@atb/api/types/departures';
 import Feedback from '@atb/components/feedback';
 import {useFavorites} from '@atb/favorites';
-import {UserFavoriteDepartures} from '@atb/favorites/types';
 import {DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW} from '@atb/screens/Departures/state/stop-place-state';
-import {SearchTime} from '@atb/screens/Departures/utils';
+import {hasFavorites, SearchTime} from '@atb/screens/Departures/utils';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
@@ -40,26 +39,21 @@ export default function StopPlaceView({
 }: StopPlaceViewProps) {
   const styles = useStyles();
   const {favoriteDepartures} = useFavorites();
-  const {state, refresh} = useStopPlaceData(
-    stopPlace,
-    showOnlyFavorites,
-    searchTime?.option !== 'now' ? searchTime.date : undefined,
-  );
-  const quayListData: SectionListData<Quay>[] | undefined = stopPlace.quays
-    ? [{data: stopPlace.quays}]
-    : undefined;
 
-  const placeHasFavorites = hasFavorites(
+  const stopHasFavorites = hasFavorites(
     favoriteDepartures,
     stopPlace.id,
     stopPlace.quays?.map((q) => q.id),
   );
 
-  // If all favorites are removed while setShowOnlyFavorites is true, reset the
-  // value to false
-  useEffect(() => {
-    if (!placeHasFavorites) setShowOnlyFavorites(false);
-  }, [favoriteDepartures]);
+  const {state, refresh} = useStopPlaceData(
+    stopPlace,
+    showOnlyFavorites && stopHasFavorites,
+    searchTime?.option !== 'now' ? searchTime.date : undefined,
+  );
+  const quayListData: SectionListData<Quay>[] | undefined = stopPlace.quays
+    ? [{data: stopPlace.quays}]
+    : undefined;
 
   useEffect(() => {
     refresh();
@@ -79,7 +73,7 @@ export default function StopPlaceView({
         <SectionList
           ListHeaderComponent={
             <View style={styles.header}>
-              {placeHasFavorites && (
+              {stopHasFavorites && (
                 <FavoriteToggle
                   enabled={showOnlyFavorites}
                   setEnabled={setShowOnlyFavorites}
@@ -123,18 +117,6 @@ export default function StopPlaceView({
         />
       )}
     </>
-  );
-}
-
-export function hasFavorites(
-  favorites: UserFavoriteDepartures,
-  stopPlaceId?: string,
-  quayIds?: string[],
-) {
-  return favorites.some(
-    (favorite) =>
-      stopPlaceId === favorite.stopId ||
-      quayIds?.find((quayId) => favorite.quayId === quayId),
   );
 }
 

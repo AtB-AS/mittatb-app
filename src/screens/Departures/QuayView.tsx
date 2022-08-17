@@ -1,14 +1,13 @@
 import {Place, Quay} from '@atb/api/types/departures';
 import {useFavorites} from '@atb/favorites';
-import {SearchTime} from '@atb/screens/Departures/utils';
+import {SearchTime, hasFavorites} from '@atb/screens/Departures/utils';
 import {StyleSheet} from '@atb/theme';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import DateNavigation from './components/DateNavigator';
 import FavoriteToggle from './components/FavoriteToggle';
 import QuaySection from './components/QuaySection';
 import {useQuayData} from './state/quay-state';
-import {hasFavorites} from './StopPlaceView';
 
 export type QuayViewParams = {
   quay: Quay;
@@ -42,25 +41,18 @@ export default function QuayView({
 }: QuayViewProps) {
   const styles = useStyles();
   const {favoriteDepartures} = useFavorites();
+
+  const quayHasFavorites = hasFavorites(favoriteDepartures, undefined, [
+    quay.id,
+  ]);
+
   const {state, refresh} = useQuayData(
     quay,
-    showOnlyFavorites,
+    showOnlyFavorites && quayHasFavorites,
     searchTime?.option !== 'now' ? searchTime.date : undefined,
   );
 
   const quayListData: SectionListData<Quay>[] = [{data: [quay]}];
-
-  const placeHasFavorites = hasFavorites(
-    favoriteDepartures,
-    stopPlace.id,
-    stopPlace.quays?.map((q) => q.id),
-  );
-
-  // If all favorites are removed while setShowOnlyFavorites is true, reset the
-  // value to false
-  useEffect(() => {
-    if (!placeHasFavorites) setShowOnlyFavorites(false);
-  }, [favoriteDepartures]);
 
   useEffect(() => {
     refresh();
@@ -70,7 +62,7 @@ export default function QuayView({
     <SectionList
       ListHeaderComponent={
         <View style={styles.header}>
-          {placeHasFavorites && (
+          {quayHasFavorites && (
             <FavoriteToggle
               enabled={showOnlyFavorites}
               setEnabled={setShowOnlyFavorites}
