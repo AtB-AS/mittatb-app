@@ -208,7 +208,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             )}
           </Sections.Section>
         ) : null}
-
         <Sections.Section withPadding>
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.settings.heading)}
@@ -271,22 +270,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
           </Sections.GenericItem>
           <Sections.ActionItem
             mode="toggle"
-            text={t(ProfileTexts.sections.newFeatures.frontPage)}
-            checked={newFrontPage}
-            testID="newFrontpageToggle"
-            onPress={(newFrontPage) => {
-              analytics().logEvent('toggle_beta_frontPage', {
-                toggle: newFrontPage ? 'enable' : 'disable',
-              });
-              updateMetadata({
-                'AtB-Beta-Frontpage': newFrontPage ? 'enabled' : 'disabled',
-              });
-              setPreference({newFrontPage});
-            }}
-          />
-
-          <Sections.ActionItem
-            mode="toggle"
             text={t(ProfileTexts.sections.newFeatures.departures)}
             checked={newDepartures}
             testID="newDeparturesToggle"
@@ -306,7 +289,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             testID="invitationCodeButton"
           />
         </Sections.Section>
-
         <Sections.Section withPadding>
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.favorites.heading)}
@@ -332,7 +314,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             onPress={() => navigation.navigate('FavoriteDepartures')}
           />
         </Sections.Section>
-
         <Sections.Section withPadding>
           <Sections.HeaderItem
             text={t(ProfileTexts.sections.privacy.heading)}
@@ -378,7 +359,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             }
           />
         </Sections.Section>
-
         {enable_ticketing && (
           <Sections.Section withPadding>
             <Sections.HeaderItem
@@ -405,12 +385,26 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             />
           </Sections.Section>
         )}
-
         {(!!JSON.parse(IS_QA_ENV || 'false') ||
           __DEV__ ||
           customerProfile?.debug) && (
           <Sections.Section withPadding>
             <Sections.HeaderItem text="Developer menu" />
+            <Sections.ActionItem
+              mode="toggle"
+              text={t(ProfileTexts.sections.newFeatures.frontPage)}
+              checked={newFrontPage}
+              testID="newFrontpageToggle"
+              onPress={(newFrontPage) => {
+                analytics().logEvent('toggle_beta_frontPage', {
+                  toggle: newFrontPage ? 'enable' : 'disable',
+                });
+                updateMetadata({
+                  'AtB-Beta-Frontpage': newFrontPage ? 'enabled' : 'disabled',
+                });
+                setPreference({newFrontPage});
+              }}
+            />
             <Sections.LinkItem
               text="Design system"
               testID="designSystemButton"
@@ -423,7 +417,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             />
           </Sections.Section>
         )}
-
         <View style={style.debugInfoContainer}>
           <ThemeText>
             v{version} ({buildNumber})
