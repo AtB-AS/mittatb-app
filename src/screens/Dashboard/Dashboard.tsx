@@ -174,14 +174,6 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
         contentContainerStyle={style.scrollView}
         testID="dashboardScrollView"
       >
-        <CompactTickets
-          onPressDetails={(orderId: string) =>
-            navigation.navigate('TicketModal', {
-              screen: 'TicketDetails',
-              params: {orderId},
-            })
-          }
-        />
         <View style={style.searchHeader}>
           <View style={style.paddedContainer}>
             <Section>
@@ -254,6 +246,14 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
             }
           />
         </View>
+        <CompactTickets
+          onPressDetails={(orderId: string) =>
+            navigation.navigate('TicketModal', {
+              screen: 'TicketDetails',
+              params: {orderId},
+            })
+          }
+        />
       </ScrollView>
     </View>
   );
