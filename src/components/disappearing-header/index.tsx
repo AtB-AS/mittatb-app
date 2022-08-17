@@ -233,10 +233,10 @@ const DisappearingHeader: React.FC<Props> = ({
             leftButton={leftButton}
           />
 
-          <View style={styles.alertBoxContainer}>
+          <View style={styles.globalMessageBoxContainer}>
             <GlobalMessageBox
               globalMessageContext={globalMessageContext}
-              style={styles.alertBox}
+              style={styles.globalMessageBox}
             />
           </View>
         </View>
@@ -345,10 +345,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background.background_1.background,
     flexGrow: 1,
   },
-  alertBoxContainer: {
+  globalMessageBoxContainer: {
     backgroundColor: theme.static.background[themeColor].background,
   },
-  alertBox: {
+  globalMessageBox: {
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },

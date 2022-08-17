@@ -158,7 +158,7 @@ const BaseHeader = ({
       </View>
       <GlobalMessageBox
         globalMessageContext={globalMessageContext}
-        style={css.alertBox}
+        style={css.globalMessageBox}
       />
     </View>
   );
@@ -179,7 +179,7 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     left: theme.spacings.medium,
     width: '100%',
   },
-  alertBox: {
+  globalMessageBox: {
     marginTop: theme.spacings.medium,
   },
 }));
