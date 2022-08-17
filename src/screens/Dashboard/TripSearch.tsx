@@ -35,13 +35,13 @@ import {
   getSearchTimeLabel,
   SearchTime,
   useSearchTimeValue,
-} from '@atb/screens/Assistant/journey-date-picker';
+} from '@atb/screens/Dashboard/journey-date-picker';
 import {TFunc} from '@leile/lobo-t';
 import {isInThePast} from '@atb/utils/date';
-import useTripsQuery from '@atb/screens/Assistant/use-trips-query';
+import useTripsQuery from '@atb/screens/Dashboard/use-trips-query';
 import {StaticColorByType} from '@atb/theme/colors';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
-import Results from '@atb/screens/Assistant/Results';
+import Results from '@atb/screens/Dashboard/Results';
 import {
   coordinatesAreEqual,
   coordinatesDistanceInMetres,
@@ -278,7 +278,7 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
             accessibilityHint={t(TripSearchTexts.dateInput.a11yHint)}
             interactiveColor="interactive_0"
             onPress={onSearchTimePress}
-            testID="assistantDateTimePicker"
+            testID="dashboardDateTimePicker"
           />
         </View>
       </View>
@@ -447,7 +447,7 @@ function useUpdatedLocation(
 }
 
 function log(message: string, metadata?: {[key: string]: string}) {
-  Bugsnag.leaveBreadcrumb(message, {component: 'Assistant', ...metadata});
+  Bugsnag.leaveBreadcrumb(message, {component: 'TripSearch', ...metadata});
 }
 
 function translateLocation(location: Location | undefined): string {

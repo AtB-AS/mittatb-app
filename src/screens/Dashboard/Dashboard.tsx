@@ -27,12 +27,12 @@ import FavoriteChips from '@atb/favorite-chips';
 import {useFavorites} from '@atb/favorites';
 import {useLocationSearchValue} from '@atb/location-search';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {DashboardParams} from '.';
+import {DashboardParams} from '@atb/screens/Dashboard';
 import {SelectableLocationData} from '@atb/location-search/types';
 import Bugsnag from '@bugsnag/react-native';
 import {StaticColorByType} from '@atb/theme/colors';
 import {useDoOnceWhen} from '@atb/screens/utils';
-import {SearchForLocations} from './TripSearch';
+import {SearchForLocations} from '@atb/screens/Dashboard/TripSearch';
 
 type DashboardRouteName = 'DashboardRoot';
 const DashboardRouteNameStatic: DashboardRouteName = 'DashboardRoot';
@@ -336,7 +336,7 @@ function useUpdatedLocation(
 }
 
 function log(message: string, metadata?: {[key: string]: string}) {
-  Bugsnag.leaveBreadcrumb(message, {component: 'Assistant', ...metadata});
+  Bugsnag.leaveBreadcrumb(message, {component: 'Dashboard', ...metadata});
 }
 
 function translateLocation(location: Location | undefined): string {

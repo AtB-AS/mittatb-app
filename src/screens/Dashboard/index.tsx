@@ -7,8 +7,8 @@ import {Location} from '@atb/favorites/types';
 import {DetailsRouteParams} from '@atb/screens/TripDetails/Details';
 import JourneyDatePicker, {
   DateTimePickerParams,
-} from '@atb/screens/Assistant/journey-date-picker';
-import DashboardRoot from './Dashboard';
+} from '@atb/screens/Dashboard/journey-date-picker';
+import DashboardRoot from '@atb/screens/Dashboard';
 
 export type DashboardParams = {
   DashboardRoot: {
