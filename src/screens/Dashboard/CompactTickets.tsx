@@ -29,7 +29,6 @@ type Props = {
 const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
   const itemStyle = useStyles();
 
-  // TODO: Verify if this is the correct way to update time-to-time the expiration time of the tickets.
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 1000);
 
@@ -45,7 +44,6 @@ const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
     return 1;
   });
 
-  // TODO: Double check if this is how it should be implemented, using the customer profile!
   const hasActiveTravelCard = !!customerProfile?.travelcard;
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {
@@ -55,7 +53,12 @@ const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
   } = useMobileTokenContextState();
   const {tariffZones, userProfiles, preassignedFareproducts} =
     useFirestoreConfiguration();
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
+
+  // Display empty state if no active tickets
+  if (activeFareContracts.length === 0) {
+    return <></>;
+  }
 
   return (
     <>
@@ -68,6 +71,7 @@ const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
         {t(TicketsTexts.header.title)}
       </ThemeText>
       {activeFareContracts?.map((fareContract, index) => {
+        // TODO: Move all this initialization into a better layer of abstraction!
         const travelRights =
           fareContract.travelRights.filter(isPreactivatedTicket);
         const firstTravelRight = travelRights[0];
@@ -106,9 +110,7 @@ const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
         return (
           <Sections.Section withPadding>
             <Sections.GenericClickableItem
-              onPress={() =>
-                onPressDetails && onPressDetails(fareContract.orderId)
-              }
+              onPress={() => onPressDetails?.(fareContract.orderId)}
             >
               <ShortTicketInfoView
                 preassignedFareProduct={preassignedFareProduct}
@@ -121,7 +123,9 @@ const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
                 validFrom={validFrom}
                 isInspectable={ticketIsInspectable}
                 testID={'ticket' + index}
-                useBackgroundOnInspectionSymbol={true}
+                useBackgroundOnInspectionSymbol={
+                  preassignedFareProduct?.type === 'single'
+                }
               />
             </Sections.GenericClickableItem>
           </Sections.Section>
