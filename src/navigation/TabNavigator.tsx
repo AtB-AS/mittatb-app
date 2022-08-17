@@ -8,7 +8,7 @@ import ThemeText from '@atb/components/text';
 import {Location} from '@atb/favorites/types';
 import {usePreferenceItems} from '@atb/preferences';
 import Assistant from '@atb/screens/Assistant';
-import Dashboard from '@atb/screens/Dashboard/Dashboard';
+import Dashboard from '@atb/screens/Dashboard';
 import NearbyScreen, {NearbyStackParams} from '@atb/screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '@atb/screens/Profile';
 import TicketingScreen from '@atb/screens/Ticketing';
