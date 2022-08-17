@@ -114,7 +114,7 @@ const reducer: ReducerWithSideEffects<
       const queryInput: QuayDeparturesVariables = {
         id: action.quay.id,
         numberOfDepartures: MAX_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
-        startTime: action.startTime,
+        startTime: action.startTime ?? new Date().toISOString(),
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -159,8 +159,6 @@ const reducer: ReducerWithSideEffects<
           // Use same query input with same startTime to ensure that
           // we get the same result.
           try {
-            if (!state.queryInput.numberOfDepartures) return;
-            if (!state.queryInput.startTime) return;
             const quayIds = [action.quay.id];
 
             const realtimeData = await getRealtimeDepartureV2(quayIds, {
@@ -328,8 +326,8 @@ export function getSecondsUntilMidnightOrMinimum(
 }
 
 type QueryInput = {
-  numberOfDepartures?: number;
-  startTime?: string;
+  numberOfDepartures: number;
+  startTime: string;
   timeRange?: number;
 };
 
@@ -339,7 +337,7 @@ async function fetchEstimatedCalls(
   favoriteDepartures?: UserFavoriteDepartures,
 ): Promise<DepartureTypes.EstimatedCall[]> {
   const timeRange = getSecondsUntilMidnightOrMinimum(
-    queryInput.startTime ?? new Date().toISOString(),
+    queryInput.startTime,
     MIN_TIME_RANGE,
   );
 
