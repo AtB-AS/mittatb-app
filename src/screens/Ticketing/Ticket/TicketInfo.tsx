@@ -1,5 +1,9 @@
 import ThemeText from '@atb/components/text';
-import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
+import {
+  PreassignedFareProduct,
+  PreassignedFareProductType,
+  TariffZone,
+} from '@atb/reference-data/types';
 import {
   findReferenceDataById,
   getReferenceDataName,
@@ -34,6 +38,7 @@ export type TicketInfoProps = {
   omitUserProfileCount?: boolean;
   testID?: string;
   fareContract?: FareContract;
+  ticketType?: PreassignedFareProductType;
 };
 
 export type TicketInfoDetailsProps = {
@@ -54,6 +59,7 @@ const TicketInfo = ({
   omitUserProfileCount,
   testID,
   fareContract,
+  ticketType,
 }: TicketInfoProps) => {
   const {tariffZones, userProfiles, preassignedFareproducts} =
     useFirestoreConfiguration();
@@ -82,6 +88,7 @@ const TicketInfo = ({
         isInspectable={isInspectable}
         testID={testID}
         status={status}
+        ticketType={ticketType}
       />
       {fareContract && (
         <>
@@ -112,11 +119,13 @@ const TicketInfoHeader = ({
   isInspectable,
   testID,
   status,
+  ticketType,
 }: {
   preassignedFareProduct?: PreassignedFareProduct;
   isInspectable?: boolean;
   testID?: string;
   status: TicketInfoProps['status'];
+  ticketType?: PreassignedFareProductType;
 }) => {
   const styles = useStyles();
   const {language} = useTranslation();
@@ -131,6 +140,7 @@ const TicketInfoHeader = ({
     t,
     remoteTokens,
     isInspectable,
+    ticketType,
   );
   return (
     <View style={styles.header}>
@@ -147,9 +157,7 @@ const TicketInfoHeader = ({
         )}
         {status === 'valid' && !isInspectable && <NonTicketInspectionSymbol />}
       </View>
-      <View style={{paddingTop: 12}}>
-        {warning && <WarningMessage message={warning} />}
-      </View>
+      {warning && <WarningMessage message={warning} />}
     </View>
   );
 };
@@ -215,7 +223,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   ticketHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    flex: 0.8,
     alignItems: 'center',
     marginTop: theme.spacings.xSmall,
   },

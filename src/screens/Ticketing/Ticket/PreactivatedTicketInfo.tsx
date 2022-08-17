@@ -70,6 +70,7 @@ const PreactivatedTicketInfo: React.FC<Props> = ({
           status={validityStatus}
           isInspectable={isInspectable}
           testID={testID}
+          ticketType={preassignedFareProduct?.type}
         />
       </Sections.GenericItem>
       {!hideDetails && (

@@ -85,6 +85,7 @@ const DetailsContent: React.FC<Props> = ({
             isInspectable={ticketIsInspectable}
             testID={'details'}
             fareContract={fc}
+            ticketType={preassignedFareProduct?.type}
           />
         </Sections.GenericItem>
         <Sections.GenericItem>

@@ -18,10 +18,11 @@ const WarningMessage = ({message}: {message: string}) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   warning: {
     flexDirection: 'row',
-    paddingTop: theme.spacings.small,
+    paddingTop: theme.spacings.xLarge,
+    paddingRight: theme.spacings.large,
   },
   warningIcon: {
-    marginRight: theme.spacings.xSmall,
+    marginRight: theme.spacings.small,
   },
 }));
 

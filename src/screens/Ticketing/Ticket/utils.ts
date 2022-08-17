@@ -3,7 +3,10 @@ import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {UserProfile} from '@atb/reference-data/types';
+import {
+  PreassignedFareProductType,
+  UserProfile,
+} from '@atb/reference-data/types';
 import {UserProfileWithCount} from '@atb/screens/Ticketing/Purchase/Travellers/use-user-count-state';
 import {findReferenceDataById} from '@atb/reference-data/utils';
 import {RemoteToken} from '@atb/mobile-token/types';
@@ -99,20 +102,28 @@ export const getNonInspectableTokenWarning = (
   t: TranslateFunction,
   remoteTokens?: RemoteToken[],
   isInspectable?: boolean,
+  ticketType?: PreassignedFareProductType,
 ) => {
   const inspectableToken = findInspectable(remoteTokens);
   if (isError && fallbackEnabled) return null;
-
-  if (isError) return t(TicketTexts.warning.unableToRetrieveToken);
-  if (!inspectableToken) return t(TicketTexts.warning.noInspectableTokenFound);
-  if (isTravelCardToken(inspectableToken))
-    return t(TicketTexts.warning.travelCardAstoken);
-  if (isMobileToken(inspectableToken) && !isInspectable)
-    return t(
-      TicketTexts.warning.anotherMobileAsToken(
-        getDeviceName(inspectableToken) || t(TicketTexts.warning.unnamedDevice),
-      ),
-    );
+  if (ticketType !== 'carnet') {
+    if (isError) return t(TicketTexts.warning.unableToRetrieveToken);
+    if (!inspectableToken)
+      return t(TicketTexts.warning.noInspectableTokenFound);
+    if (isTravelCardToken(inspectableToken))
+      return t(TicketTexts.warning.travelCardAstoken);
+    if (isMobileToken(inspectableToken) && !isInspectable)
+      return t(
+        TicketTexts.warning.anotherMobileAsToken(
+          getDeviceName(inspectableToken) ||
+            t(TicketTexts.warning.unnamedDevice),
+        ),
+      );
+  } else {
+    if (!isTravelCardToken(inspectableToken)) {
+      return t(TicketTexts.warning.carnetWarning);
+    }
+  }
 };
 
 export const isValidTicket = (status: ValidityStatus) => status === 'valid';

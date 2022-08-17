@@ -137,6 +137,10 @@ const TicketTexts = {
         `Bruk ${deviceName} når du reiser`,
         `Bring ${deviceName} when you travel`,
       ),
+    carnetWarning: _(
+      'Vennligst bytt til t:card for å kunne bruke dette hullkortet.',
+      'Please switch to t:card to be able to use this punch card.',
+    ),
     unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },
 };

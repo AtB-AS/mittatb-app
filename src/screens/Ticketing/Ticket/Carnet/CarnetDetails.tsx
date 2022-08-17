@@ -85,6 +85,7 @@ export function CarnetDetails(props: {
           isInspectable={inspectable}
           omitUserProfileCount={true}
           testID={props.testID}
+          ticketType={'carnet'}
         />
       </Sections.GenericItem>
       <Sections.GenericItem>
