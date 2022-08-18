@@ -64,7 +64,7 @@ const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
     <>
       <ThemeText
         type="body__secondary"
-        color="secondary"
+        color="background_accent_0"
         style={itemStyle.sectionText}
         accessibilityLabel={t(TicketsTexts.header.title)}
       >
