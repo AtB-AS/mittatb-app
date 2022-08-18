@@ -194,7 +194,7 @@ const NearbyTexts = {
     description: (lineNumber: string, lineName: string) =>
       _(
         `Vil du favorittmarkere kun '${lineNumber} ${lineName}' eller alle variasjoner av linje ${lineNumber}?`,
-        `Do you want to favorite mark only '${lineNumber} ${lineName}' or all variations of line ${lineNumber}?`,
+        `Do you want to favourite mark only '${lineNumber} ${lineName}' or all variations of line ${lineNumber}?`,
       ),
     buttons: {
       specific: (lineNumber: string, lineName: string) =>
