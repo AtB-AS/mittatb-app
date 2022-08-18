@@ -169,29 +169,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               <Sections.LinkItem
                 text={t(ProfileTexts.sections.account.linkItems.logout.label)}
                 icon={<ThemeIcon svg={LogOut} />}
-                onPress={() =>
-                  destructiveAlert({
-                    alertTitleString: t(
-                      ProfileTexts.sections.account.linkItems.logout
-                        .confirmTitle,
-                    ),
-                    alertMessageString: t(
-                      ProfileTexts.sections.account.linkItems.logout
-                        .confirmMessage,
-                    ),
-                    cancelAlertString: t(
-                      ProfileTexts.sections.account.linkItems.logout.alert
-                        .cancel,
-                    ),
-                    confirmAlertString: t(
-                      ProfileTexts.sections.account.linkItems.logout.alert
-                        .confirm,
-                    ),
-                    destructiveArrowFunction: () => {
-                      navigation.navigate('ConsequencesFromLogout');
-                    },
-                  })
-                }
+                onPress={() => navigation.navigate('ConsequencesFromLogout')}
                 testID="logoutButton"
               />
             )}
