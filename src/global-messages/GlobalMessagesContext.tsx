@@ -5,11 +5,10 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import firestore, {
-  FirebaseFirestoreTypes,
-} from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
 import {LanguageAndText} from '@atb/reference-data/types';
 import {Statuses} from '@atb/theme';
+import {mapToGlobalMessages} from './converters';
 
 export type GlobalMessage = {
   id: string;
@@ -55,9 +54,7 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
         ])
         .onSnapshot(
           (snapshot) => {
-            const globalMessages = (
-              snapshot as FirebaseFirestoreTypes.QuerySnapshot<GlobalMessage>
-            ).docs.map<GlobalMessage>((d) => d.data());
+            const globalMessages = mapToGlobalMessages(snapshot.docs);
             setGlobalMessages(globalMessages);
             setError(false);
           },
@@ -71,10 +68,9 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
 
   const findGlobalMessages = useCallback(
     (context: GlobalMessageContext) => {
-      return globalMessages.filter((a) => {
-        if (!a.context) return false;
-        return a.context.find((cont) => cont === context);
-      });
+      return globalMessages.filter((a) =>
+        a.context.find((cont) => cont === context),
+      );
     },
     [globalMessages],
   );
