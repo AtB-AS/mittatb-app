@@ -48,6 +48,11 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
       firestore()
         .collection('globalMessages')
         .where('active', '==', true)
+        .where('context', 'array-contains-any', [
+          'app-ticketing',
+          'app-departures',
+          'app-assistant',
+        ])
         .onSnapshot(
           (snapshot) => {
             const globalMessages = (
