@@ -58,7 +58,7 @@ const ConsequencesScreen = ({
         <View>
           <Consequence
             value={t(AnonymousTicketPurchases.consequences.messages[0])}
-            icon={<Phone fill={fillColor} />}
+            icon={<ThemeIcon svg={Phone} fill={fillColor} size="large" />}
           />
           <Consequence
             value={t(AnonymousTicketPurchases.consequences.messages[1])}
