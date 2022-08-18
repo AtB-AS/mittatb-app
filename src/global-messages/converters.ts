@@ -4,7 +4,7 @@ import {isArray} from 'lodash';
 import {GlobalMessage, GlobalMessageContext} from './GlobalMessagesContext';
 
 export function mapToGlobalMessages(
-  result: FirebaseFirestoreTypes.QueryDocumentSnapshot<GlobalMessage>[],
+  result: FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>[],
 ): GlobalMessage[] {
   if (!result) return [];
 
@@ -13,7 +13,7 @@ export function mapToGlobalMessages(
     .filter(Boolean) as GlobalMessage[];
 }
 
-export function mapToGlobalMessage(
+function mapToGlobalMessage(
   id: string,
   result: any,
 ): GlobalMessage | undefined {
