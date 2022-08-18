@@ -34,6 +34,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {StaticColorByType} from '@atb/theme/colors';
 import {useDoOnceWhen} from '@atb/screens/utils';
 import {SearchForLocations} from '@atb/screens/Dashboard/TripSearch';
+import {DashboardBackground} from '@atb/assets/svg/color/images';
 
 type DashboardRouteName = 'DashboardRoot';
 const DashboardRouteNameStatic: DashboardRouteName = 'DashboardRoot';
@@ -169,6 +170,10 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
         rightButton={{type: 'chat'}}
         leftButton={serviceDisruptionButton}
       />
+
+      <View style={style.backdrop}>
+        <DashboardBackground width={'100%'} height={'100%'} />
+      </View>
 
       <ScrollView
         contentContainerStyle={style.scrollView}
@@ -363,6 +368,16 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   scrollView: {
     paddingBottom: theme.spacings.medium,
+    backgroundColor: 'transparent',
+  },
+  backdrop: {
+    position: 'absolute',
+    height: 250,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    padding: 0,
+    margin: 0,
   },
   paddedContainer: {
     marginHorizontal: theme.spacings.medium,
