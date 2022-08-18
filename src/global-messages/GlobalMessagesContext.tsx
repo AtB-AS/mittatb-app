@@ -48,6 +48,11 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
       firestore()
         .collection('globalMessages')
         .where('active', '==', true)
+        .where('context', 'array-contains-any', [
+          'app-ticketing',
+          'app-departures',
+          'app-assistant',
+        ])
         .onSnapshot(
           (snapshot) => {
             const globalMessages = (
@@ -68,9 +73,6 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
     (context: GlobalMessageContext) => {
       return globalMessages.filter((a) => {
         if (!a.context) return false;
-        if (typeof a.context === 'string') {
-          return a.context === context;
-        }
         return a.context.find((cont) => cont === context);
       });
     },
