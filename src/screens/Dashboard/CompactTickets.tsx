@@ -20,7 +20,7 @@ import {
   useTicketState,
 } from '@atb/tickets';
 import ThemeText from '@atb/components/text';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {TicketsTexts, DashboardTexts, useTranslation} from '@atb/translations';
 import Button from '@atb/components/button';
 
 type Props = {
@@ -73,7 +73,7 @@ const CompactTickets: React.FC<Props> = ({
       {activeFareContracts?.length == 0 && (
         <Button
           style={itemStyle.buttonSection}
-          text={t(TicketsTexts.dashboard.label)}
+          text={t(DashboardTexts.buyTicketsButton)}
           onPress={onPressBuyTickets}
         />
       )}
