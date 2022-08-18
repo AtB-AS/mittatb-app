@@ -193,7 +193,6 @@ export const AllStopsOverview = ({navigation}: RootProps) => {
         />
       }
       useScroll={activateScroll}
-      globalMessageContext="app-departures"
       setFocusOnLoad={true}
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
