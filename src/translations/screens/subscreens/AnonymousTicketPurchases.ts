@@ -54,6 +54,10 @@ const AnonymousTicketPurchases = {
       },
     },
   },
+  unknown_error: _(
+    'Oops - noe gikk galt. Supert om du prøver på nytt 🤞',
+    'Whoops - something went wrong. Please try again 🤞',
+  ),
 };
 
 export default AnonymousTicketPurchases;

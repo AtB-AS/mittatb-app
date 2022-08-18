@@ -1,14 +1,15 @@
 import Button from '@atb/components/button';
 import AnonymousTicketPurchases from '@atb/translations/screens/subscreens/AnonymousTicketPurchases';
-import React from 'react';
+import React, {useState} from 'react';
 import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet, useTheme} from '@atb/theme';
+import useIsLoading from '@atb/utils/use-is-loading';
+import {ActivityIndicator, View} from 'react-native';
 import Bugsnag from '@bugsnag/react-native';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {useAuthState} from '@atb/auth';
-import useIsLoading from '@atb/utils/use-is-loading';
-import {ActivityIndicator, View} from 'react-native';
+import MessageBox from '@atb/components/message-box';
 
 export type CallerRoute =
   | 'ConsequencesFromOnboarding'
@@ -25,6 +26,7 @@ const Actions = ({
 }) => {
   const {t} = useTranslation();
   const finishOnboarding = useFinishOnboarding();
+  const [error, setError] = useState<string>('');
   const {wipeToken} = useMobileTokenContextState();
   const {signOut} = useAuthState();
   const [isLoading, setIsLoading] = useIsLoading(false);
@@ -46,8 +48,14 @@ const Actions = ({
 
   const logout = async () => {
     setIsLoading(true);
-    await logoutAndWipeTokens();
-    setIsLoading(false);
+    try {
+      await logoutAndWipeTokens();
+    } catch (err) {
+      setError(t(AnonymousTicketPurchases.unknown_error));
+      return;
+    } finally {
+      setIsLoading(false);
+    }
     navigation.goBack();
   };
 
@@ -79,6 +87,7 @@ const Actions = ({
           secondaryTextAccessibilityHint={t(
             AnonymousTicketPurchases.consequences.button.login.a11yHint,
           )}
+          error={error}
         />
       );
     case 'ConsequencesFromLogout':
@@ -99,6 +108,7 @@ const Actions = ({
             AnonymousTicketPurchases.consequences.button.stayLoggedIn.a11yHint,
           )}
           isLoading={isLoading}
+          error={error}
         />
       );
     case 'ConsequencesFromTicketPurchase':
@@ -118,6 +128,7 @@ const Actions = ({
             AnonymousTicketPurchases.consequences.button.cancel.a11yHint,
           )}
           secondaryAction={navigation.goBack}
+          error={error}
         />
       );
     case 'ConsequencesFromLoginOnboarding':
@@ -137,6 +148,7 @@ const Actions = ({
             AnonymousTicketPurchases.consequences.button.cancel.a11yHint,
           )}
           secondaryAction={navigation.goBack}
+          error={error}
         />
       );
   }
@@ -150,6 +162,7 @@ const Buttons = ({
   secondaryAction,
   secondaryTextAccessibilityHint,
   isLoading,
+  error,
 }: {
   primaryText: string;
   primaryAction: () => void;
@@ -158,6 +171,7 @@ const Buttons = ({
   secondaryAction: () => void;
   secondaryTextAccessibilityHint: string;
   isLoading?: boolean;
+  error?: string;
 }) => {
   const styles = useStyle();
   const {theme} = useTheme();
@@ -172,6 +186,11 @@ const Buttons = ({
             style={styles.spinner}
             size="large"
           />
+        </View>
+      )}
+      {!!error && (
+        <View style={styles.error}>
+          <MessageBox type="error" message={error} />
         </View>
       )}
       <Button
@@ -204,6 +223,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   spinner: {
     paddingBottom: theme.spacings.medium,
+  },
+  error: {
+    marginBottom: theme.spacings.xSmall,
   },
 }));
 

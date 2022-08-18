@@ -29,11 +29,15 @@ import {usePreferences} from '@atb/preferences';
 import analytics from '@react-native-firebase/analytics';
 import {updateMetadata} from '@atb/chat/metadata';
 import parsePhoneNumber from 'libphonenumber-js';
-import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import {
+  useHasEnabledMobileToken,
+  useMobileTokenContextState,
+} from '@atb/mobile-token/MobileTokenContext';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import ThemeIcon from '@atb/components/theme-icon';
 import {destructiveAlert} from './utils';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import Bugsnag from '@bugsnag/react-native';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -61,6 +65,8 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   const {t} = useTranslation();
   const {authenticationType, user, customerNumber} = useAuthState();
   const config = useLocalConfig();
+  const {wipeToken} = useMobileTokenContextState();
+  const {signOut} = useAuthState();
 
   const {fareContracts, customerProfile} = useTicketState();
   const activeFareContracts =
@@ -83,6 +89,16 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   }
 
   const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
+
+  async function logoutAndWipeTokens() {
+    try {
+      // On logout we delete the user's token
+      await wipeToken();
+    } catch (err: any) {
+      Bugsnag.notify(err);
+    }
+    return signOut();
+  }
 
   return (
     <View style={style.container}>
@@ -169,7 +185,11 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               <Sections.LinkItem
                 text={t(ProfileTexts.sections.account.linkItems.logout.label)}
                 icon={<ThemeIcon svg={LogOut} />}
-                onPress={() => navigation.navigate('ConsequencesFromLogout')}
+                onPress={() =>
+                  enable_ticketing
+                    ? navigation.navigate('ConsequencesFromLogout')
+                    : logoutAndWipeTokens()
+                }
                 testID="logoutButton"
               />
             )}

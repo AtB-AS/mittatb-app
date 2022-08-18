@@ -9,6 +9,8 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {OnboardingStackParams} from '@atb/screens/Onboarding/index';
 import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
+import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -20,6 +22,8 @@ export default function IntercomInfo({navigation}: IntercomInfoScreenProps) {
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {width: windowWidth} = useWindowDimensions();
+  const finishOnboarding = useFinishOnboarding();
+  const {enable_ticketing} = useRemoteConfig();
 
   return (
     <ScrollView
@@ -42,7 +46,11 @@ export default function IntercomInfo({navigation}: IntercomInfoScreenProps) {
       <View style={styles.bottomView}>
         <Button
           interactiveColor="interactive_1"
-          onPress={() => navigation.navigate('ConsequencesFromOnboarding')}
+          onPress={() =>
+            enable_ticketing
+              ? navigation.navigate('ConsequencesFromOnboarding')
+              : finishOnboarding()
+          }
           text={t(OnboardingTexts.intercom.mainButton)}
           icon={ArrowRight}
           iconPosition="right"
