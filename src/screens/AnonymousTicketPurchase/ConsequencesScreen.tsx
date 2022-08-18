@@ -14,6 +14,7 @@ import Actions from '@atb/screens/AnonymousTicketPurchase/components/Actions';
 import Consequence from '@atb/screens/AnonymousTicketPurchase/components/Consequence';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {Receipt} from '@atb/assets/svg/mono-icons/ticketing';
+import ThemeIcon from '@atb/components/theme-icon';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -62,11 +63,11 @@ const ConsequencesScreen = ({
           />
           <Consequence
             value={t(AnonymousTicketPurchases.consequences.messages[1])}
-            icon={<Receipt fill={fillColor} />}
+            icon={<ThemeIcon svg={Receipt} fill={fillColor} size="large" />}
           />
           <Consequence
             value={t(AnonymousTicketPurchases.consequences.messages[2])}
-            icon={<Support fill={fillColor} />}
+            icon={<ThemeIcon svg={Support} fill={fillColor} size="large" />}
           />
         </View>
         <View style={styles.buttons}>
