@@ -20,13 +20,18 @@ import {
   useTicketState,
 } from '@atb/tickets';
 import ThemeText from '@atb/components/text';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {TicketsTexts, DashboardTexts, useTranslation} from '@atb/translations';
+import Button from '@atb/components/button';
 
 type Props = {
   onPressDetails?: (orderId: string) => void;
+  onPressBuyTickets(): void;
 };
 
-const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
+const CompactTickets: React.FC<Props> = ({
+  onPressDetails,
+  onPressBuyTickets,
+}) => {
   const itemStyle = useStyles();
 
   const [now, setNow] = useState<number>(Date.now());
@@ -55,11 +60,6 @@ const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
     useFirestoreConfiguration();
   const {t} = useTranslation();
 
-  // Display empty state if no active tickets
-  if (activeFareContracts.length === 0) {
-    return <></>;
-  }
-
   return (
     <>
       <ThemeText
@@ -70,6 +70,13 @@ const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
       >
         {t(TicketsTexts.header.title)}
       </ThemeText>
+      {activeFareContracts?.length == 0 && (
+        <Button
+          style={itemStyle.buttonSection}
+          text={t(DashboardTexts.buyTicketsButton)}
+          onPress={onPressBuyTickets}
+        />
+      )}
       {activeFareContracts?.map((fareContract, index) => {
         // TODO: Move all this initialization into a better layer of abstraction!
         const travelRights =
@@ -139,6 +146,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   sectionText: {
     marginLeft: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
+  },
+  buttonSection: {
+    marginLeft: theme.spacings.medium,
+    marginRight: theme.spacings.medium,
   },
 }));
 
