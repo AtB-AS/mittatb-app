@@ -18,6 +18,7 @@ import {SearchTime} from '@atb/screens/Departures/utils';
 export type PlaceScreenParams = {
   place: Place;
   selectedQuay?: Quay;
+  showOnlyFavoritesByDefault?: boolean;
 };
 
 type PlaceScreenRouteProps = RouteProp<DeparturesStackParams, 'PlaceScreen'>;
@@ -34,7 +35,7 @@ export type PlaceScreenProps = {
 export default function PlaceScreen({
   navigation,
   route: {
-    params: {place, selectedQuay},
+    params: {place, selectedQuay, showOnlyFavoritesByDefault},
   },
 }: PlaceScreenProps) {
   const styles = useStyles();
@@ -44,7 +45,9 @@ export default function PlaceScreen({
     option: 'now',
     date: new Date().toISOString(),
   });
-  const [showOnlyFavorites, setShowOnlyFavorites] = useState<boolean>(false);
+  const [showOnlyFavorites, setShowOnlyFavorites] = useState<boolean>(
+    showOnlyFavoritesByDefault || false,
+  );
 
   const {state} = useStopsDetailsData(
     place.quays === undefined ? [place.id] : undefined,
