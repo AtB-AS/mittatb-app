@@ -190,7 +190,7 @@ const NearbyTexts = {
     },
   },
   favoriteDialogSheet: {
-    title: _('Velg favorittavgang', 'Select favorite departure'),
+    title: _('Velg favorittavgang', 'Select favourite departure'),
     description: (lineNumber: string, lineName: string) =>
       _(
         `Vil du favorittmarkere kun '${lineNumber} ${lineName}' eller alle variasjoner av linje ${lineNumber}?`,
