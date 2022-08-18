@@ -25,6 +25,7 @@ import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import DeparturesScreen from '@atb/screens/Departures';
+import {TicketTabsNavigatorParams} from '@atb/screens/Ticketing/Tickets';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -36,7 +37,7 @@ export type TabNavigatorParams = {
     toLocation: Location;
   };
   Nearest: NavigatorScreenParams<NearbyStackParams>;
-  Ticketing: undefined;
+  Ticketing: NavigatorScreenParams<TicketTabsNavigatorParams>;
   Profile: SubNavigator<ProfileStackParams>;
 };
 const Tab = createBottomTabNavigator<TabNavigatorParams>();

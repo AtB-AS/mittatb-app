@@ -35,19 +35,26 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {useDoOnceWhen} from '@atb/screens/utils';
 import {SearchForLocations} from '@atb/screens/Dashboard/TripSearch';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
+import {BuyTicketsScreenName} from '../Ticketing/Tickets';
+import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
 
 type DashboardRouteName = 'DashboardRoot';
 const DashboardRouteNameStatic: DashboardRouteName = 'DashboardRoot';
 
-export type DashboardScreenNavigationProp = CompositeNavigationProp<
+type DashboardScreenNavigationProp = CompositeNavigationProp<
   StackNavigationProp<DashboardParams>,
   StackNavigationProp<RootStackParamList>
+>;
+
+type NavigationProp = CompositeNavigationProp<
+  DashboardScreenNavigationProp,
+  StackNavigationProp<TabNavigatorParams>
 >;
 
 type DashboardRouteProp = RouteProp<DashboardParams, DashboardRouteName>;
 
 type RootProps = {
-  navigation: DashboardScreenNavigationProp;
+  navigation: NavigationProp;
   route: DashboardRouteProp;
 };
 
@@ -257,6 +264,9 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
               screen: 'TicketDetails',
               params: {orderId},
             })
+          }
+          onPressBuyTickets={() =>
+            navigation.navigate('Ticketing', {screen: BuyTicketsScreenName})
           }
         />
       </ScrollView>

@@ -7,6 +7,9 @@ const TicketsTexts = {
   header: {
     title: _('Billetter', 'Tickets'),
   },
+  dashboard: {
+    label: _('Kjøp billetter', 'Buy tickets'),
+  },
   buyTicketsTab: {
     label: _('Kjøp', 'Buy'),
     a11yLabel: _('Kjøp billetter', 'Buy tickets'),
