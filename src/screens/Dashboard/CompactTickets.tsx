@@ -23,11 +23,7 @@ import ThemeText from '@atb/components/text';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import {useNavigation} from '@react-navigation/native';
 
-type Props = {
-  onPressDetails?: (orderId: string) => void;
-};
-
-const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
+const CompactTickets: React.FC = () => {
   const itemStyle = useStyles();
 
   const [now, setNow] = useState<number>(Date.now());
@@ -62,10 +58,10 @@ const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
     return <></>;
   }
 
-  const goTo = (id: string) => {
+  const showTicket = (orderId: string) => {
     navigation.navigate('TicketModal', {
       screen: 'TicketDetails',
-      params: {id},
+      params: {orderId},
     });
   };
 
@@ -119,7 +115,7 @@ const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
         return (
           <Sections.Section withPadding>
             <Sections.GenericClickableItem
-              onPress={() => goTo(fareContract.orderId)}
+              onPress={() => showTicket(fareContract.orderId)}
             >
               <ShortTicketInfoView
                 preassignedFareProduct={preassignedFareProduct}
