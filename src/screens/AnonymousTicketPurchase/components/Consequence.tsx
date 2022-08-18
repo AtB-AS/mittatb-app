@@ -20,10 +20,12 @@ const Consequence = ({value, icon}: {value: string; icon: JSX.Element}) => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   description: {
-    padding: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
+    flex: 1,
   },
   icon: {
     justifyContent: 'center',
+    paddingHorizontal: theme.spacings.medium,
   },
   consequence: {
     backgroundColor: theme.static.background.background_accent_1.background,
