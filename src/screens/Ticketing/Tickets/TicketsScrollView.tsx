@@ -86,7 +86,11 @@ const TicketsScrollView: React.FC<Props> = ({
           />
         )}
         {!fareContracts?.length && !reservations?.length && (
-          <ThemeText style={styles.noTicketsText}>{noTicketsLabel}</ThemeText>
+          <MessageBox
+            containerStyle={styles.messageBox}
+            type="info"
+            message={noTicketsLabel}
+          />
         )}
         {reservations?.map((res) => (
           <TicketReservation key={res.orderId} reservation={res} />

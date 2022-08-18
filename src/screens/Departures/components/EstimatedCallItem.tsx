@@ -1,26 +1,49 @@
 import React from 'react';
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {dictionary, useTranslation} from '@atb/translations';
-import {formatToClockOrRelativeMinutes} from '@atb/utils/date';
+import {
+  CancelledDepartureTexts,
+  dictionary,
+  useTranslation,
+} from '@atb/translations';
+import {
+  formatToClockOrLongRelativeMinutes,
+  formatToClockOrRelativeMinutes,
+  formatToSimpleDate,
+} from '@atb/utils/date';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
-import {EstimatedCall} from '@atb/api/types/departures';
+import {EstimatedCall, Place, Quay} from '@atb/api/types/departures';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import useFontScale from '@atb/utils/use-font-scale';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Warning} from '../../../assets/svg/color/situations';
+import ToggleFavouriteDeparture from '@atb/screens/Departures/components/ToggleFavouriteDeparture';
+import DeparturesTexts from '@atb/translations/screens/Departures';
+import {isToday, parseISO} from 'date-fns';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
   testID: string;
+  quay: Quay;
+  stopPlace: Place;
+  navigateToDetails: (
+    serviceJourneyId: string,
+    serviceDate: string,
+    date?: string,
+    fromQuayId?: string,
+    isTripCancelled?: boolean,
+  ) => void;
 };
 
 export default function EstimatedCallItem({
   departure,
   testID,
+  quay,
+  stopPlace,
+  navigateToDetails,
 }: EstimatedCallItemProps): JSX.Element {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -37,30 +60,88 @@ export default function EstimatedCallItem({
     : t(dictionary.missingRealTimePrefix) + time;
 
   const isTripCancelled = departure.cancellation;
-
+  const lineName = departure.destinationDisplay?.frontText;
+  const lineNumber = line?.publicCode;
   return (
-    <View style={styles.estimatedCallItem}>
-      {line && (
-        <LineChip
-          publicCode={line.publicCode}
-          transportMode={line.transportMode}
-          transportSubmode={line.transportSubmode}
-          testID={testID}
-        ></LineChip>
-      )}
-      <ThemeText style={styles.lineName} testID={testID + 'Name'}>
-        {departure.destinationDisplay?.frontText}
-      </ThemeText>
-      {isTripCancelled && <Warning style={styles.warningIcon} />}
-      <ThemeText
-        type="body__primary--bold"
-        testID={testID + 'Time'}
-        style={isTripCancelled && styles.strikethrough}
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.actionableItem}
+        onPress={() => {
+          if (departure?.serviceJourney)
+            navigateToDetails(
+              departure.serviceJourney?.id,
+              departure.date,
+              departure.expectedDepartureTime,
+              departure.quay?.id,
+              departure.cancellation,
+            );
+        }}
+        accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
+        accessibilityLabel={getA11yLineLabel(departure, t, language)}
       >
-        {timeWithRealtimePrefix}
-      </ThemeText>
+        <View style={styles.estimatedCallItem}>
+          {line && (
+            <LineChip
+              publicCode={line.publicCode}
+              transportMode={line.transportMode}
+              transportSubmode={line.transportSubmode}
+              testID={testID}
+            ></LineChip>
+          )}
+          <ThemeText style={styles.lineName} testID={testID + 'Name'}>
+            {departure.destinationDisplay?.frontText}
+          </ThemeText>
+          {isTripCancelled && <Warning style={styles.warningIcon} />}
+          <ThemeText
+            type="body__primary--bold"
+            testID={testID + 'Time'}
+            style={isTripCancelled && styles.strikethrough}
+          >
+            {timeWithRealtimePrefix}
+          </ThemeText>
+        </View>
+      </TouchableOpacity>
+      {lineName && lineNumber && (
+        <ToggleFavouriteDeparture
+          line={{...line, lineNumber: lineNumber, lineName: lineName}}
+          quay={quay}
+          stop={stopPlace}
+        />
+      )}
     </View>
   );
+}
+
+function getA11yLineLabel(departure: any, t: any, language: any) {
+  const line = departure.serviceJourney?.line;
+  const a11yLine = line?.publicCode
+    ? `${t(DeparturesTexts.line)} ${line?.publicCode},`
+    : '';
+  const a11yFrontText = departure.destinationDisplay?.frontText
+    ? `${departure.destinationDisplay?.frontText}.`
+    : '';
+
+  let a11yDateInfo = '';
+  if (departure.expectedDepartureTime) {
+    const a11yClock = formatToClockOrLongRelativeMinutes(
+      departure.expectedDepartureTime,
+      language,
+      t(dictionary.date.units.now),
+      9,
+    );
+    const a11yTimeWithRealtimePrefix = departure.realtime
+      ? a11yClock
+      : t(dictionary.a11yMissingRealTimePrefix) + a11yClock;
+    const parsedDepartureTime = parseISO(departure.expectedDepartureTime);
+    const a11yDate = !isToday(parsedDepartureTime)
+      ? formatToSimpleDate(parsedDepartureTime, language) + ','
+      : '';
+    a11yDateInfo = `${a11yDate} ${a11yTimeWithRealtimePrefix}`;
+  }
+
+  return `${
+    departure.cancellation ? t(CancelledDepartureTexts.message) : ''
+  } ${a11yLine} ${a11yFrontText} ${a11yDateInfo}`;
 }
 
 type LineChipProps = {
@@ -115,14 +196,22 @@ function LineChip({
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  actionableItem: {
+    flex: 1,
+  },
   estimatedCallItem: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   lineName: {
     flexGrow: 1,
     flexShrink: 1,
-    marginRight: theme.spacings.medium,
+    marginRight: theme.spacings.xLarge,
   },
   lineChip: {
     padding: theme.spacings.small,

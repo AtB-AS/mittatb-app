@@ -22,10 +22,6 @@ const PaymentCreditCardTexts = {
       'Whoops - we failed while processing the payment. Please try again 🤞',
     ),
   },
-  stateMessages: {
-    reserving: _('Reserverer billett…', 'Reserving ticket…'),
-    loading: _('Laster betalingsterminal…', 'Loading payment terminal…'),
-    processing: _('Prosesserer betaling…', 'Processing payment…'),
-  },
+  loading: _('Laster…', 'Loading…'),
 };
 export default PaymentCreditCardTexts;

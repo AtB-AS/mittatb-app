@@ -39,7 +39,7 @@ export default function TicketTabs() {
       <FullScreenHeader
         title={t(TicketsTexts.header.title)}
         rightButton={{type: 'chat'}}
-        alertContext="ticketing"
+        globalMessageContext="app-ticketing"
       />
       <Tab.Navigator
         tabBar={(props) => <TabBar {...props} />}
@@ -67,7 +67,10 @@ export default function TicketTabs() {
         />
       </Tab.Navigator>
 
-      <TicketInformationalOverlay />
+      {
+        // Should be added when expected terms and conditions are ready
+        /* <TicketInformationalOverlay/> */
+      }
     </View>
   );
 }

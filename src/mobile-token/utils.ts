@@ -1,5 +1,5 @@
 import {RemoteToken} from '@atb/mobile-token/types';
-import {TokenAction} from '@entur/abt-mobile-client-sdk';
+import {TokenAction} from '@entur-private/abt-mobile-client-sdk';
 
 export const findInspectable = (remoteTokens?: RemoteToken[]) =>
   remoteTokens?.find(isInspectable);

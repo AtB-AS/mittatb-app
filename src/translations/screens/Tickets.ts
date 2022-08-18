@@ -41,7 +41,10 @@ const TicketsTexts = {
   activeTicketsTab: {
     label: _('Aktive', 'Valid'),
     a11yLabel: _('Aktive billetter', 'Active tickets'),
-    noTickets: _('Du har ingen aktive billetter', 'No valid tickets right now'),
+    noTickets: _(
+      'Du har ingen aktive billetter.',
+      'You have no active tickets.',
+    ),
     noTicketsExpiredHelpText: _(
       'Du har ingen aktive billetter. Utløpte billetter finner du under Min profil-fanen.',
       'You have no valid tickets right now. Expired tickets can be found under the My profile tab.',
@@ -51,8 +54,8 @@ const TicketsTexts = {
     label: _('Utløpte', 'Expired'),
     a11yLabel: _('Utløpte billetter', 'Expired tickets'),
     noTickets: _(
-      'Fant ingen billetthistorikk',
-      'Nothing to show here until you have purchased a ticket',
+      'Fant ingen billetthistorikk.',
+      'Nothing to show here until you have purchased a ticket.',
     ),
   },
   ticket: {

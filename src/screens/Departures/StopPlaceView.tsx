@@ -1,11 +1,16 @@
-import React, {useEffect, useMemo} from 'react';
-import {RefreshControl, SectionList, SectionListData} from 'react-native';
-import {useStopPlaceData} from './state/stop-place-state';
 import {Place, Quay} from '@atb/api/types/departures';
-import {SearchTime} from './NearbyPlaces';
-import DateNavigation from './components/DateNavigator';
-import QuaySection from './components/QuaySection';
 import Feedback from '@atb/components/feedback';
+import {useFavorites} from '@atb/favorites';
+import {UserFavoriteDepartures} from '@atb/favorites/types';
+import {DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW} from '@atb/screens/Departures/state/stop-place-state';
+import {SearchTime} from '@atb/screens/Departures/utils';
+import {StyleSheet} from '@atb/theme';
+import React, {useEffect, useMemo} from 'react';
+import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
+import DateNavigation from './components/DateNavigator';
+import FavoriteToggle from './components/FavoriteToggle';
+import QuaySection from './components/QuaySection';
+import {useStopPlaceData} from './state/stop-place-state';
 
 type StopPlaceViewProps = {
   stopPlace: Place;
@@ -18,6 +23,8 @@ type StopPlaceViewProps = {
   ) => void;
   searchTime: SearchTime;
   setSearchTime: (searchTime: SearchTime) => void;
+  showOnlyFavorites: boolean;
+  setShowOnlyFavorites: (enabled: boolean) => void;
   testID?: string;
 };
 
@@ -27,15 +34,32 @@ export default function StopPlaceView({
   navigateToDetails,
   searchTime,
   setSearchTime,
+  showOnlyFavorites,
+  setShowOnlyFavorites,
   testID,
 }: StopPlaceViewProps) {
+  const styles = useStyles();
+  const {favoriteDepartures} = useFavorites();
   const {state, refresh} = useStopPlaceData(
     stopPlace,
+    showOnlyFavorites,
     searchTime?.option !== 'now' ? searchTime.date : undefined,
   );
   const quayListData: SectionListData<Quay>[] | undefined = stopPlace.quays
     ? [{data: stopPlace.quays}]
     : undefined;
+
+  const placeHasFavorites = hasFavorites(
+    favoriteDepartures,
+    stopPlace.id,
+    stopPlace.quays?.map((q) => q.id),
+  );
+
+  // If all favorites are removed while setShowOnlyFavorites is true, reset the
+  // value to false
+  useEffect(() => {
+    if (!placeHasFavorites) setShowOnlyFavorites(false);
+  }, [favoriteDepartures]);
 
   useEffect(() => {
     refresh();
@@ -54,10 +78,18 @@ export default function StopPlaceView({
       {quayListData && (
         <SectionList
           ListHeaderComponent={
-            <DateNavigation
-              searchTime={searchTime}
-              setSearchTime={setSearchTime}
-            ></DateNavigation>
+            <View style={styles.header}>
+              {placeHasFavorites && (
+                <FavoriteToggle
+                  enabled={showOnlyFavorites}
+                  setEnabled={setShowOnlyFavorites}
+                />
+              )}
+              <DateNavigation
+                searchTime={searchTime}
+                setSearchTime={setSearchTime}
+              />
+            </View>
           }
           refreshControl={
             <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
@@ -69,10 +101,15 @@ export default function StopPlaceView({
             <>
               <QuaySection
                 quay={item}
+                departuresPerQuay={
+                  DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW
+                }
                 data={state.data}
                 navigateToDetails={navigateToDetails}
                 navigateToQuay={navigateToQuay}
                 testID={'quaySection' + index}
+                stopPlace={stopPlace}
+                showOnlyFavorites={showOnlyFavorites}
               />
               {index === 0 && (
                 <Feedback
@@ -89,6 +126,18 @@ export default function StopPlaceView({
   );
 }
 
+export function hasFavorites(
+  favorites: UserFavoriteDepartures,
+  stopPlaceId?: string,
+  quayIds?: string[],
+) {
+  return favorites.some(
+    (favorite) =>
+      stopPlaceId === favorite.stopId ||
+      quayIds?.find((quayId) => favorite.quayId === quayId),
+  );
+}
+
 function publicCodeCompare(a?: string, b?: string): number {
   // Show quays with no public code last
   if (!a) return 1;
@@ -100,3 +149,9 @@ function publicCodeCompare(a?: string, b?: string): number {
   // Otherwise compare as strings (e.g. K1 < K2)
   return a.localeCompare(b);
 }
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  header: {
+    paddingVertical: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
+  },
+}));

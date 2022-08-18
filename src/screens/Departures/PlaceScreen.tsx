@@ -12,8 +12,8 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import {DeparturesStackParams} from '.';
 import QuayView from './QuayView';
 import StopPlaceView from './StopPlaceView';
-import {SearchTime} from './NearbyPlaces';
 import {useStopsDetailsData} from './state/stop-place-details-state';
+import {SearchTime} from '@atb/screens/Departures/utils';
 
 export type PlaceScreenParams = {
   place: Place;
@@ -44,6 +44,7 @@ export default function PlaceScreen({
     option: 'now',
     date: new Date().toISOString(),
   });
+  const [showOnlyFavorites, setShowOnlyFavorites] = useState<boolean>(false);
 
   const {state} = useStopsDetailsData(
     place.quays === undefined ? [place.id] : undefined,
@@ -131,7 +132,10 @@ export default function PlaceScreen({
           navigateToDetails={navigateToDetails}
           searchTime={searchTime}
           setSearchTime={setSearchTime}
+          showOnlyFavorites={showOnlyFavorites}
+          setShowOnlyFavorites={setShowOnlyFavorites}
           testID="departuresContentView"
+          stopPlace={place}
         />
       ) : (
         <StopPlaceView
@@ -140,6 +144,8 @@ export default function PlaceScreen({
           navigateToQuay={navigateToQuay}
           searchTime={searchTime}
           setSearchTime={setSearchTime}
+          showOnlyFavorites={showOnlyFavorites}
+          setShowOnlyFavorites={setShowOnlyFavorites}
           testID="departuresContentView"
         />
       )}

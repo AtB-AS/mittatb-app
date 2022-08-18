@@ -77,11 +77,9 @@ const WelcomeScreen = ({
       </View>
       <View style={styles.bottomView}>
         <Button
-          interactiveColor="interactive_1"
+          interactiveColor="interactive_0"
           onPress={onNext}
           text={t(OnboardingTexts.welcome.mainButton)}
-          icon={ArrowRight}
-          iconPosition="right"
           testID="nextButton"
         />
       </View>
@@ -104,6 +102,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   header: {
     textAlign: 'center',
+    paddingHorizontal: theme.spacings.xLarge,
   },
   description: {
     textAlign: 'center',

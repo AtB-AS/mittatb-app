@@ -14,12 +14,16 @@ import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
 import QuayDepartures, {
   QuayDeparturesRouteParams,
 } from '@atb/screens/TripDetails/QuayDepartures';
+import PlaceScreen, {
+  PlaceScreenParams,
+} from '@atb/screens/Departures/PlaceScreen';
 
 export type DetailsStackParams = {
   Details: DetailsRouteParams;
   DepartureDetails: DepartureDetailsRouteParams;
   DetailsMap: MapDetailRouteParams;
   QuayDepartures: QuayDeparturesRouteParams;
+  PlaceScreen: PlaceScreenParams;
 };
 
 export type DetailsModalNavigationProp = CompositeNavigationProp<
@@ -52,6 +56,7 @@ export const TripDetailsRoot = ({route}: TripDetailsRootProps) => {
       />
       <Stack.Screen name="QuayDepartures" component={QuayDepartures} />
       <Stack.Screen name="DepartureDetails" component={DepartureDetails} />
+      <Stack.Screen name="PlaceScreen" component={PlaceScreen} />
     </Stack.Navigator>
   );
 };
