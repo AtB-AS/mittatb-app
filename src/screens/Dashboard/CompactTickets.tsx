@@ -21,6 +21,7 @@ import {
 } from '@atb/tickets';
 import ThemeText from '@atb/components/text';
 import {TicketsTexts, useTranslation} from '@atb/translations';
+import {useNavigation} from '@react-navigation/native';
 
 type Props = {
   onPressDetails?: (orderId: string) => void;
@@ -31,6 +32,7 @@ const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
 
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 1000);
+  const navigation = useNavigation();
 
   const {fareContracts, customerProfile} = useTicketState();
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
@@ -59,6 +61,13 @@ const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
   if (activeFareContracts.length === 0) {
     return <></>;
   }
+
+  const goTo = (id: string) => {
+    navigation.navigate('TicketModal', {
+      screen: 'TicketDetails',
+      params: {id},
+    });
+  };
 
   return (
     <>
@@ -110,7 +119,7 @@ const CompactTickets: React.FC<Props> = ({onPressDetails}) => {
         return (
           <Sections.Section withPadding>
             <Sections.GenericClickableItem
-              onPress={() => onPressDetails?.(fareContract.orderId)}
+              onPress={() => goTo(fareContract.orderId)}
             >
               <ShortTicketInfoView
                 preassignedFareProduct={preassignedFareProduct}
