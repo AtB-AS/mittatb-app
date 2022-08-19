@@ -118,8 +118,8 @@ const TicketTexts = {
       _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`),
   },
   ticketInfo: {
-    noInspectionIcon: _('Ikke bruk\ni kontroll', 'Not for\ninspection'),
-    noInspectionIconA11yLabel: _('Ikke bruk i kontroll', 'Not for inspection'),
+    noInspectionIcon: _('Ugyldig\ni kontroll', 'Invalid in \ninspection'),
+    noInspectionIconA11yLabel: _('Ugyldig i kontroll', 'Invalid in inspection'),
   },
   warning: {
     unableToRetrieveToken: _(

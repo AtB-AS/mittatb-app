@@ -13,8 +13,8 @@ const MobileTokenOnboardingTexts = {
       'Choose between t:card or phone',
     ),
     description: _(
-      'Du kan bruke billetten din på et t:kort eller en mobil med appen AtB installert — men kun på én dings om gangen.',
-      'You can use your ticket on a t:card or a phone with the app AtB installed — but only on one gadget at a time.',
+      'Du kan bruke billetten din på et t:kort eller en mobil med appen AtB installert — men kun en av gangen.',
+      'You can use your ticket on a t:card or a phone with the app AtB installed — but only one at a time.',
     ),
     or: _('eller', 'or'),
   },
