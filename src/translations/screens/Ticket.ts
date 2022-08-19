@@ -118,7 +118,7 @@ const TicketTexts = {
       _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`),
   },
   ticketInfo: {
-    noInspectionIcon: _('Ugyldig\ni kontroll', 'Invalid in \ninspection'),
+    noInspectionIcon: _('Ugyldig\ni kontroll', 'Invalid in\ninspection'),
     noInspectionIconA11yLabel: _('Ugyldig i kontroll', 'Invalid in inspection'),
   },
   warning: {
