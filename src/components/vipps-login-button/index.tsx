@@ -1,10 +1,10 @@
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import vipps from '@atb/assets/svg/mono-icons/ticketing/Vipps';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {TouchableOpacity, View} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
+import vippsLogo from '@atb/assets/svg/color/icons/ticketing/VippsLogo';
 
 export const VippsLoginButton = ({
   onPress,
@@ -17,16 +17,13 @@ export const VippsLoginButton = ({
   const style = useStyle();
   const getVippsLabel = () => (
     <View style={[style.container, disabled && style.disabledOpacity]}>
-      <ThemeText type="body__primary--bold" style={{color: 'white'}}>
-        {t(LoginTexts.logInOptions.options.vipps.labelPart1)}
-      </ThemeText>
-      <ThemeText type="body__primary--bold" style={{color: 'white'}}>
-        V
-      </ThemeText>
-      <ThemeIcon svg={vipps} colorType="background_accent_3" />
-      <ThemeText type="body__primary--bold" style={{color: 'white'}}>
-        {t(LoginTexts.logInOptions.options.vipps.labelPart2)}
-      </ThemeText>
+        <ThemeText
+          type="body__primary--bold"
+          style={{color: 'white', paddingVertical: 12}}
+        >
+          {t(LoginTexts.logInOptions.options.vipps.label)}
+        </ThemeText>
+        <ThemeIcon svg={vippsLogo} style={style.icon} />
     </View>
   );
 
@@ -44,12 +41,16 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     flexDirection: 'row',
     backgroundColor: '#FF5B24',
-    paddingVertical: theme.spacings.medium,
     borderRadius: theme.border.radius.regular,
-    width: '100%',
     justifyContent: 'center',
   },
   disabledOpacity: {
     opacity: 0.2,
+  },
+  icon: {
+    minWidth: '15%',
+    minHeight: '30%',
+    alignSelf: 'center',
+    marginTop: theme.spacings.xSmall,
   },
 }));

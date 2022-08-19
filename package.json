@@ -104,7 +104,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@atb-as/generate-assets": "^4.0.0-alpha.18",
+    "@atb-as/generate-assets": "^5.1.0-alpha.8",
     "@babel/core": "^7.12.13",
     "@babel/runtime": "^7.12.13",
     "@entur/abt-token-server-node-lib": "1.1.0",

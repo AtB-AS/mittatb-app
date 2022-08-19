@@ -11,8 +11,7 @@ const LoginTexts = {
         'Mobile number and one-time code',
       ),
       vipps: {
-        labelPart1: _('Logg inn med ', 'Log in with '),
-        labelPart2: _('ipps ', 'ipps'),
+        label: _('Logg inn med ', 'Log in with '),
         a11yLabel: _('Logg inn med Vipps', 'Log in with Vipps'),
       },
     },

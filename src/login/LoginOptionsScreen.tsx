@@ -98,12 +98,12 @@ export default function LoginOptionsScreen({
   }, [authorizationCode]);
 
   useEffect(() => {
-    Linking.addEventListener('url', async (url) => {
-      if (url.url.includes('atb://auth/vipps')) {
+    const vippsCallbackHandler = async (event: any) => {
+      if (event.url.includes('atb://auth/vipps')) {
         setIsLoading(true);
-        const code = parseUrl(url.url).query.code;
+        const code = parseUrl(event.url).query.code;
         if (code) {
-          const state = parseUrl(url.url).query.state;
+          const state = parseUrl(event.url).query.state;
           const initialState = await storage.get('vipps_state');
           if (initialState?.toString() !== state?.toString()) {
             setError('unknown_error');
@@ -111,7 +111,7 @@ export default function LoginOptionsScreen({
           }
           setAuthorizationCode(code.toString());
         } else {
-          const error = parseUrl(url.url).query.error;
+          const error = parseUrl(event.url).query.error;
           if (error) {
             if (error === 'outdated_app_version' || error === 'access_denied') {
               setError(error);
@@ -122,7 +122,12 @@ export default function LoginOptionsScreen({
           }
         }
       }
-    });
+    };
+    const eventSubscription = Linking.addEventListener(
+      'url',
+      vippsCallbackHandler,
+    );
+    return eventSubscription.remove();
   }, [appStatus]);
 
   return (
