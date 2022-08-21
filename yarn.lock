@@ -9,10 +9,10 @@
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.0"
 
-"@atb-as/generate-assets@^4.0.0-alpha.18":
-  version "4.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-4.0.0-alpha.19.tgz#21fe59ed1995bfee0c71690d6d864bee4b124b29"
-  integrity sha512-aj/FuXMakVeTbLWH+PnZH64x9CKgQNxhuBahY00WfsXOMLZ+beKqWHovv9z9/d6C7B4Sa7rpQ3WPZ7umUBgRGg==
+"@atb-as/generate-assets@^5.1.0-alpha.8":
+  version "5.1.0-alpha.8"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-5.1.0-alpha.8.tgz#1037daff20efa5d9bc61aef2ca6ddb8070f4a465"
+  integrity sha512-kR3PkIt16oJY1Z0IyJTFQd3aNT10rCfCfM6ZRARnq8iOlIBAzpGhyDxncM87Q0ecD43+biwoSfeaqX7WSndKKQ==
   dependencies:
     "@atb-as/theme" "^6.0.0-alpha.7"
     commander "^8.3.0"
@@ -3476,6 +3476,11 @@
   integrity sha512-vxMyr7JM7tYPxu8vUE83NiosWX5DZieCyYeJRoOIg0pAkyofCBzknJ2ycUZkPGDFis2RS8GN/BeJLnRnAPxeCA==
   dependencies:
     "@types/node" "*"
+
+"@types/react-native-custom-tabs@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@types/react-native-custom-tabs/-/react-native-custom-tabs-0.1.2.tgz#725e2f01721f304890c54cd1814e8d8f4ccaf129"
+  integrity sha512-GWPd/r6voEIZb7va+3rsLxeT8j9GpUUM8FPBcBJ5RXM+kmJneFz05GANQiD+si+E4MztWmeUemCUxMeEsaYktQ==
 
 "@types/react-native@0.66.8":
   version "0.66.8"
@@ -9201,7 +9206,7 @@ open@^7.4.2:
     is-docker "^2.0.0"
     is-wsl "^2.1.1"
 
-opencollective-postinstall@^2.0.1:
+opencollective-postinstall@^2.0.1, opencollective-postinstall@^2.0.3:
   version "2.0.3"
   resolved "https://registry.npmjs.org/opencollective-postinstall/-/opencollective-postinstall-2.0.3.tgz"
   integrity sha512-8AV/sCtuzUeTo8gQK5qDZzARrulB3egtLzFgteqB2tcT4Mw7B8Kt7JcDHmltjz6FOAHsvTevk70gZEbhM4ZS9Q==
@@ -9892,6 +9897,11 @@ react-native-codegen@^0.0.7:
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
 
+react-native-custom-tabs@^0.1.7:
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/react-native-custom-tabs/-/react-native-custom-tabs-0.1.7.tgz#2dfb4028b0a443610d94792b2019810f68dde525"
+  integrity sha512-Lgxh/KvhRnirnvN9FrS/+FJ8OIKJcWGdceSrZutZt2x02Sc72uQVD1O4rh2kzN8NUw8yU6KQz279ltkicISbaw==
+
 react-native-dash@^0.0.11:
   version "0.0.11"
   resolved "https://registry.npmjs.org/react-native-dash/-/react-native-dash-0.0.11.tgz"
@@ -9934,6 +9944,14 @@ react-native-get-random-values@^1.7.0:
   integrity sha512-zDhmpWUekGRFb9I+MQkxllHcqXN9HBSsgPwBQfrZ1KZYpzDspWLZ6/yLMMZrtq4pVqNR7C7N96L3SuLpXv1nhQ==
   dependencies:
     fast-base64-decode "^1.0.0"
+
+react-native-inappbrowser-reborn@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-inappbrowser-reborn/-/react-native-inappbrowser-reborn-3.7.0.tgz#849a43c3c7da22b65147649fe596836bcb494083"
+  integrity sha512-Ia53jYNtFcbNaX5W3QfOmN25I7bcvuDiQmSY5zABXjy4+WI20bPc9ua09li55F8yDCjv3C99jX6vKms68mBV7g==
+  dependencies:
+    invariant "^2.2.4"
+    opencollective-postinstall "^2.0.3"
 
 react-native-intercom@21.1.1:
   version "21.1.1"

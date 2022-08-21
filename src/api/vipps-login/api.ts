@@ -1,8 +1,8 @@
 import storage from '@atb/storage';
-import {CustomTabs} from 'react-native-custom-tabs';
 import client from '@atb/api/client';
 import {VippsSignInErrorCode} from '@atb/auth/AuthContext';
 import {generateNonce, generateState} from '@atb/api/vipps-login/utils';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 export const authorizeUser = async (setIsLoading: any) => {
   const state = await generateState();
@@ -12,7 +12,7 @@ export const authorizeUser = async (setIsLoading: any) => {
     .then(async (response) => {
       const authorisationUrl = response.data;
       setIsLoading(false);
-      await CustomTabs.openURL(
+      await InAppBrowser.open(
         `${authorisationUrl}&state=${state}&nonce=${nonce}`,
       );
     });

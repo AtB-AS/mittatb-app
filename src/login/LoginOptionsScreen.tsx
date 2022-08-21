@@ -127,7 +127,7 @@ export default function LoginOptionsScreen({
       'url',
       vippsCallbackHandler,
     );
-    return eventSubscription.remove();
+    return () => eventSubscription.remove();
   }, [appStatus]);
 
   return (
@@ -206,7 +206,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: theme.spacings.xLarge,
   },
   contentContainerStyle: {
-    marginHorizontal: theme.spacings.large,
+    paddingHorizontal: theme.spacings.large,
     flexDirection: 'column',
     paddingBottom: theme.spacings.xLarge,
   },
