@@ -17,13 +17,13 @@ export const VippsLoginButton = ({
   const style = useStyle();
   const getVippsLabel = () => (
     <View style={[style.container, disabled && style.disabledOpacity]}>
-        <ThemeText
-          type="body__primary--bold"
-          style={{color: 'white', paddingVertical: 12}}
-        >
-          {t(LoginTexts.logInOptions.options.vipps.label)}
-        </ThemeText>
-        <ThemeIcon svg={vippsLogo} style={style.icon} />
+      <ThemeText
+        type="body__primary--bold"
+        style={{color: 'white', paddingVertical: 12}}
+      >
+        {t(LoginTexts.logInOptions.options.vipps.label)}
+      </ThemeText>
+      <ThemeIcon svg={vippsLogo} style={style.icon} />
     </View>
   );
 

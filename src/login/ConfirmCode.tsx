@@ -87,7 +87,8 @@ export default function ConfirmCode({
         <ScrollView
           keyboardShouldPersistTaps="handled"
           centerContent={true}
-          contentContainerStyle={styles.scrollView}
+          style={styles.scrollView}
+          contentContainerStyle={styles.contentContainerStyle}
         >
           <View accessible={true} accessibilityRole="header" ref={focusRef}>
             <ThemeText
@@ -176,11 +177,15 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   mainView: {
     flex: 1,
     justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   scrollView: {
-    padding: theme.spacings.large,
-    flexGrow: 0.5,
-    justifyContent: 'center',
+    paddingBottom: theme.spacings.xLarge,
+  },
+  contentContainerStyle: {
+    paddingHorizontal: theme.spacings.large,
+    paddingBottom: theme.spacings.xLarge,
   },
   title: {
     textAlign: 'center',

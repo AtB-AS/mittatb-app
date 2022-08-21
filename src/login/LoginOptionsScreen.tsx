@@ -138,53 +138,55 @@ export default function LoginOptionsScreen({
         color={themeColor}
         title={t(LoginTexts.logInOptions.title)}
       />
-      <ScrollView
-        centerContent={true}
-        style={styles.scrollView}
-        contentContainerStyle={styles.contentContainerStyle}
-      >
-        <View accessible={true} accessibilityRole="header">
-          <ThemeText
-            type={'body__primary--jumbo--bold'}
-            style={styles.title}
-            color={themeColor}
-          >
-            {t(LoginTexts.logInOptions.title)}
+      <View style={styles.mainView}>
+        <ScrollView
+          centerContent={true}
+          style={styles.scrollView}
+          contentContainerStyle={styles.contentContainerStyle}
+        >
+          <View accessible={true} accessibilityRole="header">
+            <ThemeText
+              type={'body__primary--jumbo--bold'}
+              style={styles.title}
+              color={themeColor}
+            >
+              {t(LoginTexts.logInOptions.title)}
+            </ThemeText>
+          </View>
+          {isLoading && (
+            <ActivityIndicator style={styles.activityIndicator} size="large" />
+          )}
+          {error && error !== 'access_denied' && (
+            <MessageBox
+              containerStyle={styles.errorMessage}
+              type="error"
+              message={t(LoginTexts.vipps.errors[error])}
+            />
+          )}
+          <ThemeText style={styles.description} color={themeColor}>
+            {t(LoginTexts.logInOptions.selectLoginMethod)}
           </ThemeText>
-        </View>
-        {isLoading && (
-          <ActivityIndicator style={styles.activityIndicator} size="large" />
-        )}
-        {error && error !== 'access_denied' && (
-          <MessageBox
-            containerStyle={styles.errorMessage}
-            type="error"
-            message={t(LoginTexts.vipps.errors[error])}
-          />
-        )}
-        <ThemeText style={styles.description} color={themeColor}>
-          {t(LoginTexts.logInOptions.selectLoginMethod)}
-        </ThemeText>
-        <VippsLoginButton
-          onPress={authenticateUserByVipps}
-          disabled={isLoading}
-        />
-        <ThemeText style={styles.description} color={themeColor}>
-          {t(LoginTexts.logInOptions.or)}
-        </ThemeText>
-        <Sections.Section>
-          <Sections.LinkItem
-            text={t(LoginTexts.logInOptions.options.phoneAndCode)}
-            onPress={() => {
-              navigation.navigate('LoginInApp', {
-                screen: 'PhoneInputInApp',
-                params: {afterLogin: afterLogin},
-              });
-            }}
+          <VippsLoginButton
+            onPress={authenticateUserByVipps}
             disabled={isLoading}
           />
-        </Sections.Section>
-      </ScrollView>
+          <ThemeText style={styles.description} color={themeColor}>
+            {t(LoginTexts.logInOptions.or)}
+          </ThemeText>
+          <Sections.Section>
+            <Sections.LinkItem
+              text={t(LoginTexts.logInOptions.options.phoneAndCode)}
+              onPress={() => {
+                navigation.navigate('LoginInApp', {
+                  screen: 'PhoneInputInApp',
+                  params: {afterLogin: afterLogin},
+                });
+              }}
+              disabled={isLoading}
+            />
+          </Sections.Section>
+        </ScrollView>
+      </View>
     </View>
   );
 }
@@ -194,14 +196,19 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background[themeColor].background,
     flex: 1,
   },
+  mainView: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   scrollView: {
-    marginHorizontal: theme.spacings.large,
-    flexDirection: 'column',
-    paddingVertical: 24,
+    paddingBottom: theme.spacings.xLarge,
   },
   contentContainerStyle: {
-    flexGrow: 0.5,
-    justifyContent: 'center',
+    marginHorizontal: theme.spacings.large,
+    flexDirection: 'column',
+    paddingBottom: theme.spacings.xLarge,
   },
   title: {
     textAlign: 'center',

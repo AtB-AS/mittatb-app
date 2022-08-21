@@ -173,13 +173,15 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   mainView: {
     flex: 1,
     justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   scrollView: {
-    margin: theme.spacings.large,
+    paddingBottom: theme.spacings.xLarge,
   },
   contentContainerStyle: {
-    flexGrow: 0.5,
-    justifyContent: 'center',
+    paddingHorizontal: theme.spacings.large,
+    paddingBottom: theme.spacings.xLarge,
   },
   title: {
     textAlign: 'center',
