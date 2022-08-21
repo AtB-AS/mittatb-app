@@ -5,6 +5,7 @@ import {RouteProp} from '@react-navigation/native';
 import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
 import {AfterLoginParams} from '@atb/login/types';
 import ActiveTicketPrompt from '../ActiveTicketPrompt';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export type ActiveTicketPromptInAppRouteParams = {
   afterLogin: AfterLoginParams;
@@ -25,13 +26,19 @@ export const ActiveTicketPromptInApp = ({
   route: {
     params: {afterLogin},
   },
-}: ActiveTicketPromptProps) => (
-  <ActiveTicketPrompt
-    doAfterSubmit={() => {
-      navigation.navigate('PhoneInputInApp', {
-        afterLogin,
-      });
-    }}
-    headerLeftButton={{type: 'back'}}
-  />
-);
+}: ActiveTicketPromptProps) => {
+  const {enable_vipps_login} = useRemoteConfig();
+  return (
+    <ActiveTicketPrompt
+      doAfterSubmit={() => {
+        navigation.navigate(
+          enable_vipps_login ? 'LoginOptionsScreen' : 'PhoneInputInApp',
+          {
+            afterLogin,
+          },
+        );
+      }}
+      headerLeftButton={{type: 'back'}}
+    />
+  );
+};
