@@ -88,6 +88,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   }
 
   const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
+  const {enable_vipps_login} = useRemoteConfig();
 
   return (
     <View style={style.container}>
@@ -155,7 +156,9 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                   navigation.navigate('LoginInApp', {
                     screen: hasActiveFareContracts
                       ? 'ActiveTicketPromptInApp'
-                      : 'LoginOptionsScreen',
+                      : enable_vipps_login
+                      ? 'LoginOptionsScreen'
+                      : 'PhoneInputInApp',
                     params: {
                       afterLogin: {routeName: 'ProfileHome'},
                     },
