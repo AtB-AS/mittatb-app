@@ -37,6 +37,7 @@ import {SearchForLocations} from '@atb/screens/Dashboard/TripSearch';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {BuyTicketsScreenName} from '../Ticketing/Tickets';
 import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
+import FavouritesWidget from './DeparturesWidget';
 
 type DashboardRouteName = 'DashboardRoot';
 const DashboardRouteNameStatic: DashboardRouteName = 'DashboardRoot';
@@ -269,6 +270,7 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
             navigation.navigate('Ticketing', {screen: BuyTicketsScreenName})
           }
         />
+        <FavouritesWidget />
       </ScrollView>
     </View>
   );

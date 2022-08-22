@@ -10,6 +10,11 @@ import {flatMap} from '@atb/utils/array';
 import client from '../client';
 import {DepartureGroupsQuery} from './departure-group';
 import {StopPlaceGroup} from './types';
+import {
+  FavouriteDepartureQuery,
+  FavouriteDepartureQueryVariables,
+} from '../types/generated/FavouriteDepartures';
+import {nullLiteral} from '@babel/types';
 
 export type DeparturesInputQuery = {
   numberOfDepartures: number; // Number of departures to fetch per quay.
@@ -66,5 +71,35 @@ export async function getRealtimeDepartureV2(
   const response = await client.get<DeparturesRealtimeData>(url, opts);
   return response.data;
 }
+
+export async function getFavouriteDepartures(
+  quayId: string,
+  lineId: string,
+  opts?: AxiosRequestConfig,
+): Promise<FavouriteDepartureQuery | null> {
+  if (!quayId || !lineId) {
+    return null;
+  }
+  const url = '/bff/v2/departures/favourites';
+  const query: FavouriteDepartureQueryVariables = {
+    lines: lineId,
+    quayIds: quayId,
+  };
+  return await post<FavouriteDepartureQuery>(url, query, {...opts});
+}
+
+async function post<T>(
+  url: string,
+  query: any,
+  opts?: AxiosRequestConfig<any>,
+) {
+  const response = await client.post<T>(url, query, {
+    ...opts,
+    baseURL: 'http://10.0.2.2:8080',
+  });
+
+  return response.data;
+}
+
 
 export {getDepartureGroups} from './departure-group';
