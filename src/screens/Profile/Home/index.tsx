@@ -60,13 +60,12 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login} =
     useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
+  const {wipeToken} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t} = useTranslation();
-  const {authenticationType, user, customerNumber} = useAuthState();
+  const {authenticationType, signOut, user, customerNumber} = useAuthState();
   const config = useLocalConfig();
-  const {wipeToken} = useMobileTokenContextState();
-  const {signOut} = useAuthState();
 
   const {fareContracts, customerProfile} = useTicketState();
   const activeFareContracts =

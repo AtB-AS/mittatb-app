@@ -23,7 +23,6 @@ import TariffZoneSearch, {
 import {TransitionPresets} from '@react-navigation/stack';
 import {CardPaymentMethod} from './types';
 import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
-import {BuyTickets} from '@atb/screens/Ticketing/Tickets/Tabs';
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;

@@ -16,7 +16,6 @@ import {
   ActiveTicketPromptInApp,
   ActiveTicketPromptInAppRouteParams,
 } from '@atb/login/in-app/ActiveTicketPrompt';
-import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
 
 export type LoginInAppStackParams = {
   LoginOnboardingInApp: LoginOnboardingInAppRouteParams;
