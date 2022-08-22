@@ -77,7 +77,7 @@ const DeparturesTexts = {
   message: {
     noFavourites: _(
       'Det er ingen avganger som skal vises, da du ikke har noen stopp merket som favoritter.',
-      'There are no departures to be shown, as you have no stops marked as favorites.',
+      'There are no departures to be shown, as you have no stops marked as favourites.',
     ),
   },
 };

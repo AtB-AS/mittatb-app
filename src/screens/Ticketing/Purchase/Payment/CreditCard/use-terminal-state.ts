@@ -1,10 +1,6 @@
 import {AxiosError} from 'axios';
-import {useCallback, useEffect, useReducer, useRef, useState} from 'react';
-import {
-  WebViewError,
-  WebViewErrorEvent,
-  WebViewNavigation,
-} from 'react-native-webview/lib/WebViewTypes';
+import {useCallback, useEffect, useState} from 'react';
+import {WebViewNavigation} from 'react-native-webview/lib/WebViewTypes';
 import {parse as parseURL} from 'search-params';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {
@@ -15,89 +11,13 @@ import {
   reserveOffers,
   TicketReservation,
 } from '@atb/tickets';
-import {usePreferences} from '@atb/preferences';
 import {useAuthState} from '@atb/auth';
 import {savePreviousPaymentMethodByUser} from '../../saved-payment-utils';
 import Bugsnag from '@bugsnag/react-native';
 
-const possibleResponseCodes = ['Cancel', 'OK'] as const;
-type NetsResponseCode = typeof possibleResponseCodes[number];
-
-const isNetsResponseCode = (code: any): code is NetsResponseCode =>
-  possibleResponseCodes.includes(code);
-
-export type LoadingState =
-  | 'reserving-offer'
-  | 'loading-terminal'
-  | 'processing-payment';
-
 export type ErrorContext = 'reservation' | 'terminal-loading' | 'capture';
 
-type TerminalReducerState = {
-  loadingState?: LoadingState;
-  reservation?: TicketReservation;
-  paymentResponseCode?: NetsResponseCode;
-  error?: {context: ErrorContext; type: ErrorType};
-};
-
-type TerminalReducerAction =
-  | {type: 'RESTART_TERMINAL'}
-  | {type: 'OFFER_RESERVED'; reservation: TicketReservation}
-  | {type: 'TERMINAL_LOADED'}
-  | {type: 'VERIFYING_BANK_ID'}
-  | {type: 'SET_NETS_RESPONSE_CODE'; responseCode: NetsResponseCode}
-  | {type: 'SET_ERROR'; errorType: ErrorType; errorContext: ErrorContext};
-
-type TerminalReducer = (
-  prevState: TerminalReducerState,
-  action: TerminalReducerAction,
-) => TerminalReducerState;
-
-const terminalReducer: TerminalReducer = (prevState, action) => {
-  switch (action.type) {
-    case 'RESTART_TERMINAL': {
-      return initialState;
-    }
-    case 'OFFER_RESERVED': {
-      return {
-        ...prevState,
-        paymentResponseCode: undefined,
-        reservation: action.reservation,
-        loadingState: 'loading-terminal',
-      };
-    }
-    case 'TERMINAL_LOADED': {
-      return {
-        ...prevState,
-        loadingState: undefined,
-      };
-    }
-    case 'SET_NETS_RESPONSE_CODE': {
-      return {
-        ...prevState,
-        loadingState: 'processing-payment',
-        paymentResponseCode: action.responseCode,
-      };
-    }
-    case 'VERIFYING_BANK_ID': {
-      return {
-        ...prevState,
-        loadingState: 'processing-payment',
-      };
-    }
-    case 'SET_ERROR': {
-      return {
-        ...prevState,
-        loadingState: undefined,
-        error: {context: action.errorContext, type: action.errorType},
-      };
-    }
-  }
-};
-
-const initialState: TerminalReducerState = {
-  loadingState: 'reserving-offer',
-};
+type PaymentError = {context: ErrorContext; type: ErrorType};
 
 export default function useTerminalState(
   offers: ReserveOffer[],
@@ -106,25 +26,23 @@ export default function useTerminalState(
   saveRecurringCard: boolean,
   cancelTerminal: () => void,
 ) {
-  const [{paymentResponseCode, reservation, loadingState, error}, dispatch] =
-    useReducer(terminalReducer, initialState);
+  const [isLoading, setIsLoading] = useState(true);
+  const [reservation, setReservation] = useState<TicketReservation>();
+  const [error, setError] = useState<PaymentError>();
 
   const {user} = useAuthState();
 
-  const handleAxiosError = useCallback(
-    function (err: AxiosError | unknown, errorContext: ErrorContext) {
-      const errorType = getAxiosErrorType(err);
+  const handleAxiosError = useCallback(function (
+    err: AxiosError | unknown,
+    errorContext: ErrorContext,
+  ) {
+    const errorType = getAxiosErrorType(err);
 
-      if (errorType !== 'cancel') {
-        dispatch({
-          type: 'SET_ERROR',
-          errorType: errorType,
-          errorContext,
-        });
-      }
-    },
-    [dispatch],
-  );
+    if (errorType !== 'cancel') {
+      setError({type: errorType, context: errorContext});
+    }
+  },
+  []);
 
   const reserveOffer = useCallback(
     async function () {
@@ -148,84 +66,49 @@ export default function useTerminalState(
               },
               scaExemption: true,
             });
-        dispatch({type: 'OFFER_RESERVED', reservation: response});
+        setReservation(response);
       } catch (err) {
         console.warn(err);
         handleAxiosError(err, 'reservation');
       }
     },
-    [offers, dispatch, handleAxiosError],
+    [offers, handleAxiosError],
   );
 
   useEffect(() => {
-    if (loadingState === 'reserving-offer') reserveOffer();
-  }, [reserveOffer, loadingState]);
+    reserveOffer();
+  }, [reserveOffer]);
 
-  const initialLoadRef = useRef<boolean>(true);
-  const redirectToPaymentCaptureRef = useRef<boolean>(false);
-  const verifyingBankIdRef = useRef<boolean>(false);
-
-  function handleInitialLoadingError(event: WebViewErrorEvent) {
-    dispatch({
-      type: 'SET_ERROR',
-      errorType: 'unknown',
-      errorContext: 'terminal-loading',
-    });
-  }
-
-  function handlePaymentCallback(event: WebViewNavigation) {
+  /**
+   * Get response code from query param. iOS uses 'responseCode' and Android
+   * uses 'response_code'.
+   */
+  function getResponseCode(event: WebViewNavigation) {
     const params = parseURL(event.url);
-    const iosResponseCode = params['responseCode'];
-    const androidResponseCode = params['response_code'];
-    if (iosResponseCode) {
-      if (isNetsResponseCode(iosResponseCode))
-        dispatch({
-          type: 'SET_NETS_RESPONSE_CODE',
-          responseCode: iosResponseCode,
-        });
-    } else if (androidResponseCode) {
-      if (isNetsResponseCode(androidResponseCode))
-        dispatch({
-          type: 'SET_NETS_RESPONSE_CODE',
-          responseCode: androidResponseCode,
-        });
-    }
+    return params['responseCode'] ?? params['response_code'];
   }
 
-  function handleVerifyingBankId() {
-    dispatch({type: 'VERIFYING_BANK_ID'});
-  }
+  const onWebViewLoadEnd = () => {
+    setIsLoading(false);
+  };
 
-  const onWebViewLoadEnd = (event: WebViewNavigation) => {
+  const onWebViewNavigationChange = (event: WebViewNavigation) => {
     const {url} = event;
-
-    // load events might be called several times
-    // for each type of resource, html, assets, etc
-    // so we have a "loading guard" here
-
-    if (initialLoadRef.current) {
-      initialLoadRef.current = false;
-      dispatch({type: 'TERMINAL_LOADED'});
-    } else if (!redirectToPaymentCaptureRef.current) {
-      if (
-        url.includes('/ticket/v2/payments/') ||
-        url.includes('atb://ticketing')
-      ) {
-        redirectToPaymentCaptureRef.current = true;
-        handlePaymentCallback(event);
+    if (url.includes('/ticket/v2/payments/')) {
+      const responseCode = getResponseCode(event);
+      if (responseCode === 'Cancel') {
+        cancel();
+        cancelTerminal();
+      } else if (responseCode === 'OK') {
+        if (!reservation) return;
+        savePaymentMethod(saveRecurringCard, reservation.recurring_payment_id);
       }
-    } else if (url === reservation?.url) {
-      // we have already redirected to payment callback
-      // which redirected back to terminal-URL because
-      // of SoftDecline
-      verifyingBankIdRef.current = true;
-    } else if (
-      verifyingBankIdRef.current &&
-      (url.includes('/ticket/v2/payments/') || url.includes('atb://ticketing'))
-    ) {
-      handleVerifyingBankId();
     }
   };
+
+  function onWebViewError() {
+    setError({type: 'unknown', context: 'terminal-loading'});
+  }
 
   async function savePaymentMethod(
     saveRecurringCard: boolean,
@@ -282,30 +165,15 @@ export default function useTerminalState(
     }
   }
 
-  useEffect(() => {
-    switch (paymentResponseCode) {
-      case 'OK':
-        if (!reservation) return;
-        savePaymentMethod(saveRecurringCard, reservation.recurring_payment_id);
-        break;
-      case 'Cancel':
-        cancelTerminal();
-        break;
-    }
-  }, [paymentResponseCode]);
-
-  function resetOnLoadGuards() {
-    initialLoadRef.current = true;
-    redirectToPaymentCaptureRef.current = false;
-    verifyingBankIdRef.current = false;
-  }
-
   function restartTerminal() {
-    resetOnLoadGuards();
-    dispatch({type: 'RESTART_TERMINAL'});
+    setIsLoading(true);
+    setReservation(undefined);
+    setError(undefined);
+    reserveOffer();
   }
 
   async function cancel() {
+    Bugsnag.leaveBreadcrumb('terminal_cancelled');
     if (reservation) {
       try {
         await cancelPayment(reservation.payment_id, reservation.transaction_id);
@@ -317,11 +185,12 @@ export default function useTerminalState(
 
   return {
     terminalUrl: reservation?.url,
-    loadingState,
+    isLoading,
     onWebViewLoadEnd,
+    onWebViewNavigationChange,
     error,
     restartTerminal,
     cancelPayment: cancel,
-    handleInitialLoadingError,
+    onWebViewError,
   };
 }

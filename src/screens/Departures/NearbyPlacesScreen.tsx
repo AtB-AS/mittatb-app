@@ -28,7 +28,7 @@ export default function NearbyPlacesScreen() {
         title={t(DeparturesTexts.header.title)}
         rightButton={{type: 'chat'}}
         leftButton={leftButton}
-        alertContext="ticketing"
+        globalMessageContext="app-departures"
       />
       <View style={style.container}>
         <Tab.Navigator
