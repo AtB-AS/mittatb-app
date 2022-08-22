@@ -40,7 +40,6 @@ export type ProfileStackParams = {
   PaymentInformation: undefined;
   TermsInformation: undefined;
   TicketInspectionInformation: undefined;
-  ConsequencesFromLogout: undefined;
 };
 
 const Stack = createStackNavigator<ProfileStackParams>();
@@ -69,10 +68,6 @@ export default function ProfileScreen() {
       <Stack.Screen name="Enrollment" component={Enrollment} />
       <Stack.Screen name="DesignSystem" component={DesignSystem} />
       <Stack.Screen name="DebugInfo" component={DebugInfo} />
-      <Stack.Screen
-        name="ConsequencesFromLogout"
-        component={ConsequencesScreen}
-      />
       <Stack.Screen
         name="TicketingInformation"
         component={TicketingInformation}

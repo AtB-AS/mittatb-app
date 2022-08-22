@@ -90,16 +90,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
   const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
 
-  async function logoutAndWipeTokens() {
-    try {
-      // On logout we delete the user's token
-      await wipeToken();
-    } catch (err: any) {
-      Bugsnag.notify(err);
-    }
-    return signOut();
-  }
-
   return (
     <View style={style.container}>
       <FullScreenHeader
@@ -186,9 +176,33 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 text={t(ProfileTexts.sections.account.linkItems.logout.label)}
                 icon={<ThemeIcon svg={LogOut} />}
                 onPress={() =>
-                  enable_ticketing
-                    ? navigation.navigate('ConsequencesFromLogout')
-                    : logoutAndWipeTokens()
+                  destructiveAlert({
+                    alertTitleString: t(
+                      ProfileTexts.sections.account.linkItems.logout
+                        .confirmTitle,
+                    ),
+                    alertMessageString: t(
+                      ProfileTexts.sections.account.linkItems.logout
+                        .confirmMessage,
+                    ),
+                    cancelAlertString: t(
+                      ProfileTexts.sections.account.linkItems.logout.alert
+                        .cancel,
+                    ),
+                    confirmAlertString: t(
+                      ProfileTexts.sections.account.linkItems.logout.alert
+                        .confirm,
+                    ),
+                    destructiveArrowFunction: async () => {
+                      try {
+                        // On logout we delete the user's token
+                        await wipeToken();
+                      } catch (err: any) {
+                        Bugsnag.notify(err);
+                      }
+                      return signOut();
+                    },
+                  })
                 }
                 testID="logoutButton"
               />

@@ -78,9 +78,7 @@ export default function LoginOnboarding({
         </View>
         <TouchableOpacity
           style={styles.laterButton}
-          onPress={() => {
-            navigation.navigate('ConsequencesFromLoginOnboarding');
-          }}
+          onPress={navigation.goBack}
           accessibilityRole="button"
           testID="loginLaterButton"
         >
