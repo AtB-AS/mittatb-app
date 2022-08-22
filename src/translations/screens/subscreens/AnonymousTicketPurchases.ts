@@ -14,15 +14,15 @@ const AnonymousTicketPurchases = {
     messages: [
       _(
         'mister du tilgangen på tidligere kjøpte billetter hvis du mister eller får ny telefon',
-        'you will lose access to previously purchased tickets if you lose or get a new phone',
+        'you lose access to previous tickets if you change phones',
       ),
       _(
         'har du tilgang på kvitteringer etter kjøp i en begrenset periode',
-        'you have access to receipts after purchase for a limited period',
+        'you only have access to receipts for a limited time',
       ),
       _(
         'har du selv ansvar for å ta vare på ordre-ID hvis du skulle ha behov for hjelp vedrørende et billettkjøp',
-        'you are responsible for taking care of the order ID if you need help regarding a ticket purchase',
+        'you must save the order ID if you need help regarding a ticket purchase',
       ),
     ],
     button: {
