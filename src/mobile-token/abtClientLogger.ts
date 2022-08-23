@@ -1,5 +1,5 @@
 import Bugsnag, {Event} from '@bugsnag/react-native';
-import {AbtClientConfig} from '@entur/abt-mobile-client-sdk';
+import {AbtClientConfig} from '@entur-private/abt-mobile-client-sdk';
 
 const logger: AbtClientConfig['logger'] = {
   info: (msg, metadata?) => {

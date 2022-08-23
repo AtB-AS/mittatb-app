@@ -13,8 +13,8 @@ import HeaderButton, {
   HeaderButtonWithoutNavigationProps,
 } from './HeaderButton';
 import ThemeText from '@atb/components/text';
-import {AlertContext} from '@atb/alerts/AlertsContext';
-import AlertBox from '@atb/alerts/AlertBox';
+import {GlobalMessageContext} from '@atb/global-messages/GlobalMessagesContext';
+import GlobalMessageBox from '@atb/global-messages/GlobalMessage';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {getStaticColor, StaticColor} from '@atb/theme/colors';
 
@@ -43,7 +43,7 @@ export type ScreenHeaderProps = {
    * For specifying the alert context for alerts that should be shown in this
    * header. If no context is specified then no alerts are shown.
    */
-  alertContext?: AlertContext;
+  globalMessageContext?: GlobalMessageContext;
   style?: ViewStyle;
   color?: StaticColor;
   setFocusOnLoad?: boolean;
@@ -105,7 +105,7 @@ const BaseHeader = ({
   style,
   title,
   titleA11yLabel,
-  alertContext,
+  globalMessageContext,
   leftIcon,
   rightIcon,
 }: BaseHeaderProps) => {
@@ -156,7 +156,10 @@ const BaseHeader = ({
         <View onLayout={setLayoutFor('leftButton')}>{leftIcon}</View>
         <View onLayout={setLayoutFor('rightButton')}>{rightIcon}</View>
       </View>
-      <AlertBox alertContext={alertContext} style={css.alertBox} />
+      <GlobalMessageBox
+        globalMessageContext={globalMessageContext}
+        style={css.globalMessageBox}
+      />
     </View>
   );
 };
@@ -176,7 +179,7 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     left: theme.spacings.medium,
     width: '100%',
   },
-  alertBox: {
+  globalMessageBox: {
     marginTop: theme.spacings.medium,
   },
 }));

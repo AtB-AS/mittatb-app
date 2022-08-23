@@ -1,4 +1,6 @@
 import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {PaymentType} from '@atb/tickets/types';
+import {format, parseISO} from 'date-fns';
 
 export type PurchaseFlow = {
   /**
@@ -29,3 +31,21 @@ export const getPurchaseFlow = (
     };
   }
 };
+
+export function getExpireDate(iso: string): string {
+  let date = parseISO(iso);
+  return format(date, 'MM/yy');
+}
+
+export function getPaymentTypeName(paymentType: PaymentType) {
+  switch (paymentType) {
+    case PaymentType.Visa:
+      return 'Visa';
+    case PaymentType.Mastercard:
+      return 'MasterCard';
+    case PaymentType.Vipps:
+      return 'Vipps';
+    default:
+      return '';
+  }
+}

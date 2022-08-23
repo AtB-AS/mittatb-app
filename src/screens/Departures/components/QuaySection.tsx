@@ -1,28 +1,25 @@
+import {
+  EstimatedCall,
+  Place as StopPlace,
+  Quay,
+} from '@atb/api/types/departures';
+import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import * as Sections from '@atb/components/sections';
-import {StyleSheet} from '@atb/theme';
-import React, {useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import SectionSeparator from '@atb/components/sections/section-separator';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {
-  CancelledDepartureTexts,
-  dictionary,
-  useTranslation,
-} from '@atb/translations';
-import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
-import {EstimatedCall, Quay} from '@atb/api/types/departures';
+import {useFavorites} from '@atb/favorites';
+import {StyleSheet} from '@atb/theme';
+import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, View} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import EstimatedCallItem from './EstimatedCallItem';
-import SectionSeparator from '@atb/components/sections/section-separator';
-import {
-  formatToClockOrLongRelativeMinutes,
-  formatToSimpleDate,
-} from '@atb/utils/date';
-import {isToday, parseISO} from 'date-fns';
 
 type QuaySectionProps = {
   quay: Quay;
+  departuresPerQuay?: number;
   data: EstimatedCall[] | null;
   testID?: 'quaySection' | string;
   navigateToQuay?: (arg0: Quay) => void;
@@ -33,6 +30,8 @@ type QuaySectionProps = {
     fromQuayId?: string,
     isTripCancelled?: boolean,
   ) => void;
+  stopPlace: StopPlace;
+  showOnlyFavorites: boolean;
 };
 
 type EstimatedCallRenderItem = {
@@ -42,15 +41,27 @@ type EstimatedCallRenderItem = {
 
 export default function QuaySection({
   quay,
+  departuresPerQuay,
   data,
   testID,
   navigateToQuay,
   navigateToDetails,
+  stopPlace,
+  showOnlyFavorites,
 }: QuaySectionProps): JSX.Element {
-  const [isHidden, setIsHidden] = useState(false);
+  const {favoriteDepartures} = useFavorites();
+  const [isMinimized, setIsMinimized] = useState(false);
   const styles = useStyles();
   const departures = getDeparturesForQuay(data, quay);
   const {t, language} = useTranslation();
+
+  useEffect(() => {
+    if (!showOnlyFavorites) return setIsMinimized(false);
+    setIsMinimized(
+      !!navigateToQuay &&
+        !favoriteDepartures.find((favorite) => quay.id === favorite.quayId),
+    );
+  }, [showOnlyFavorites]);
 
   return (
     <View testID={testID}>
@@ -58,10 +69,10 @@ export default function QuaySection({
         <Sections.GenericClickableItem
           type="inline"
           onPress={() => {
-            setIsHidden(!isHidden);
+            setIsMinimized(!isMinimized);
           }}
           accessibilityHint={
-            isHidden
+            isMinimized
               ? t(DeparturesTexts.quaySection.a11yExpand)
               : t(DeparturesTexts.quaySection.a11yMinimize)
           }
@@ -89,39 +100,30 @@ export default function QuaySection({
                 </ThemeText>
               )}
             </View>
-            <ThemeIcon svg={isHidden ? ExpandMore : ExpandLess} />
+            <ThemeIcon svg={isMinimized ? ExpandMore : ExpandLess} />
           </View>
         </Sections.GenericClickableItem>
-        {!isHidden && (
+        {!isMinimized && (
           <FlatList
             ItemSeparatorComponent={SectionSeparator}
-            data={departures}
+            data={departures && departures.slice(0, departuresPerQuay)}
             renderItem={({item: departure, index}: EstimatedCallRenderItem) => (
-              <Sections.GenericClickableItem
+              <Sections.GenericItem
                 radius={
                   !navigateToQuay && index === departures.length - 1
                     ? 'bottom'
                     : undefined
                 }
                 testID={'departureItem' + index}
-                onPress={() => {
-                  if (departure?.serviceJourney)
-                    navigateToDetails(
-                      departure.serviceJourney?.id,
-                      departure.date,
-                      departure.expectedDepartureTime,
-                      departure.quay?.id,
-                      departure.cancellation,
-                    );
-                }}
-                accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
-                accessibilityLabel={getA11yLineLabel(departure, t, language)}
               >
                 <EstimatedCallItem
                   departure={departure}
                   testID={'departureItem' + index}
+                  quay={quay}
+                  stopPlace={stopPlace}
+                  navigateToDetails={navigateToDetails}
                 />
-              </Sections.GenericClickableItem>
+              </Sections.GenericItem>
             )}
             keyExtractor={(item: EstimatedCall) =>
               // ServiceJourney ID is not a unique key if a ServiceJourney
@@ -135,8 +137,14 @@ export default function QuaySection({
                   <Sections.GenericItem
                     radius={!navigateToQuay ? 'bottom' : undefined}
                   >
-                    <ThemeText color="secondary">
-                      {t(DeparturesTexts.noDepartures)}
+                    <ThemeText
+                      color="secondary"
+                      type="body__secondary"
+                      style={{textAlign: 'center', width: '100%'}}
+                    >
+                      {showOnlyFavorites
+                        ? t(DeparturesTexts.noDeparturesForFavorites)
+                        : t(DeparturesTexts.noDepartures)}
                     </ThemeText>
                   </Sections.GenericItem>
                 )}
@@ -144,14 +152,14 @@ export default function QuaySection({
             }
           />
         )}
-        {!data && (
+        {!data && !isMinimized && (
           <Sections.GenericItem>
             <View style={{width: '100%'}}>
               <ActivityIndicator></ActivityIndicator>
             </View>
           </Sections.GenericItem>
         )}
-        {navigateToQuay && !isHidden && (
+        {navigateToQuay && !isMinimized && (
           <Sections.LinkItem
             icon="arrow-right"
             text={
@@ -168,38 +176,6 @@ export default function QuaySection({
       </Sections.Section>
     </View>
   );
-}
-
-function getA11yLineLabel(departure: any, t: any, language: any) {
-  const line = departure.serviceJourney?.line;
-  const a11yLine = line?.publicCode
-    ? `${t(DeparturesTexts.line)} ${line?.publicCode},`
-    : '';
-  const a11yFrontText = departure.destinationDisplay?.frontText
-    ? `${departure.destinationDisplay?.frontText}.`
-    : '';
-
-  let a11yDateInfo = '';
-  if (departure.expectedDepartureTime) {
-    const a11yClock = formatToClockOrLongRelativeMinutes(
-      departure.expectedDepartureTime,
-      language,
-      t(dictionary.date.units.now),
-      9,
-    );
-    const a11yTimeWithRealtimePrefix = departure.realtime
-      ? a11yClock
-      : t(dictionary.a11yMissingRealTimePrefix) + a11yClock;
-    const parsedDepartureTime = parseISO(departure.expectedDepartureTime);
-    const a11yDate = !isToday(parsedDepartureTime)
-      ? formatToSimpleDate(parsedDepartureTime, language) + ','
-      : '';
-    a11yDateInfo = `${a11yDate} ${a11yTimeWithRealtimePrefix}`;
-  }
-
-  return `${
-    departure.cancellation ? t(CancelledDepartureTexts.message) : ''
-  } ${a11yLine} ${a11yFrontText} ${a11yDateInfo}`;
 }
 
 function getDeparturesForQuay(

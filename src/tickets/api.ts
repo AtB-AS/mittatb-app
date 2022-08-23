@@ -1,3 +1,4 @@
+import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
 import {CancelPaymentRequest, ReserveOfferRequestBody} from '.';
 import {client} from '../api';
@@ -34,6 +35,11 @@ export async function listRecurringPayments(): Promise<RecurringPayment[]> {
     authWithIdToken: true,
   });
   return response.data;
+}
+
+export async function deleteRecurringPayment(paymentId: number) {
+  const url = `ticket/v2/recurring-payments/${paymentId}`;
+  await client.delete<void>(url, {authWithIdToken: true});
 }
 
 type ReserveOfferParams = {
@@ -93,8 +99,7 @@ export async function reserveOffers({
   | ReserveOfferWithRecurringParams): Promise<TicketReservation> {
   const url = 'ticket/v2/reserve';
   let body: ReserveOfferRequestBody = {
-    payment_redirect_url:
-      'atb://ticketing?transaction_id={transaction_id}&payment_id={payment_id}',
+    payment_redirect_url: `${APP_SCHEME}://ticketing?transaction_id={transaction_id}&payment_id={payment_id}`,
     offers,
     payment_type: paymentType,
     store_payment:

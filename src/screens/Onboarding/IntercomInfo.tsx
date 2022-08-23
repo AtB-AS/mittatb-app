@@ -1,97 +1,88 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
 import {OnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {ScrollView, View} from 'react-native';
+import {ScrollView, useWindowDimensions, View} from 'react-native';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
-import Illustration from '@atb/screens/Onboarding/components/Illustration';
 import {Onboarding2} from '@atb/assets/svg/color/images';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StaticColorByType} from '@atb/theme/colors';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {OnboardingStackParams} from '@atb/screens/Onboarding/index';
+import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
+import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
-const themeColor: StaticColorByType<'background'> = 'background_accent_3';
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export default function IntercomInfo() {
+export type IntercomInfoScreenProps = {
+  navigation: MaterialTopTabNavigationProp<OnboardingStackParams>;
+};
+
+export default function IntercomInfo({navigation}: IntercomInfoScreenProps) {
   const {t} = useTranslation();
   const styles = useThemeStyles();
-  const focusRef = useFocusOnLoad();
+  const {width: windowWidth} = useWindowDimensions();
   const finishOnboarding = useFinishOnboarding();
+  const {enable_ticketing} = useRemoteConfig();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.illustration}>
-        <Illustration Svg={Onboarding2} />
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+    >
+      <View style={styles.mainView}>
+        <ThemeText
+          type={'body__primary--jumbo--bold'}
+          color={themeColor}
+          style={styles.header}
+        >
+          {t(OnboardingTexts.intercom.title)}
+        </ThemeText>
+        <Onboarding2 width={windowWidth} height={windowWidth * (4 / 5)} />
+        <ThemeText style={styles.description} color={themeColor}>
+          {t(OnboardingTexts.intercom.description)}
+        </ThemeText>
       </View>
-      <View style={styles.topPush} />
-      <ScrollView style={styles.mainView}>
-        <View ref={focusRef} accessibilityRole="header" accessible={true}>
-          <ThemeText type={'heading__title'} color={themeColor}>
-            {t(OnboardingTexts.intercom.title)}
-          </ThemeText>
-        </View>
-        <View>
-          <ThemeText style={styles.description} color={themeColor}>
-            {t(OnboardingTexts.intercom.description)}
-          </ThemeText>
-        </View>
-      </ScrollView>
       <View style={styles.bottomView}>
-        <FullScreenFooter>
-          <Button
-            interactiveColor="interactive_1"
-            onPress={finishOnboarding}
-            text={t(OnboardingTexts.intercom.mainButton)}
-            icon={Confirm}
-            iconPosition="right"
-            testID="nextButton"
-          />
-        </FullScreenFooter>
+        <Button
+          interactiveColor="interactive_0"
+          onPress={() =>
+            enable_ticketing
+              ? navigation.navigate('ConsequencesFromOnboarding')
+              : finishOnboarding()
+          }
+          text={t(OnboardingTexts.intercom.mainButton)}
+          testID="nextButton"
+        />
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+  contentContainer: {
+    flexGrow: 1,
+    paddingTop: theme.spacings.xLarge,
+  },
   container: {
     backgroundColor: theme.static.background[themeColor].background,
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  illustration: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  topPush: {
-    flexGrow: 1,
-    height: '40%',
+    paddingTop: theme.spacings.xLarge,
   },
   mainView: {
-    margin: theme.spacings.medium,
-    padding: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
+    flex: 1,
+    justifyContent: 'space-between',
   },
-  bottomView: {
-    flexGrow: 0,
+  header: {
+    textAlign: 'center',
+    paddingHorizontal: theme.spacings.xLarge,
   },
   description: {
-    marginTop: theme.spacings.medium,
+    textAlign: 'center',
+    paddingHorizontal: theme.spacings.xLarge,
+    paddingBottom: theme.spacings.xLarge,
   },
-  messageBox: {
-    marginBottom: theme.spacings.medium,
+  bottomView: {
+    paddingHorizontal: theme.spacings.xLarge,
+    paddingBottom: theme.spacings.xLarge,
   },
-  buttonView: {
-    marginTop: theme.spacings.medium,
-  },
-  resendButton: {
-    marginTop: theme.spacings.medium,
-    padding: theme.spacings.medium,
-  },
-  resendButtonText: {textAlign: 'center'},
 }));

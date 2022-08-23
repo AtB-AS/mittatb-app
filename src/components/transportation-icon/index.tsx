@@ -15,7 +15,6 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {TransportSubmode as TransportSubMode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import ThemeText from '@atb/components/text';
-import {iconSizes} from '@atb-as/theme';
 
 export type AnyMode = LegMode | Mode_v2 | TransportMode | TransportMode_v2;
 export type AnySubMode = TransportSubmode | TransportSubMode_v2;
@@ -25,6 +24,7 @@ export type TransportationIconProps = {
   subMode?: AnySubMode;
   lineNumber?: string;
   size?: keyof Theme['icon']['size'];
+  disabled?: boolean;
 };
 
 const TransportationIcon: React.FC<TransportationIconProps> = ({
@@ -32,11 +32,14 @@ const TransportationIcon: React.FC<TransportationIconProps> = ({
   subMode,
   lineNumber,
   size = 'normal',
+  disabled,
 }) => {
   const {t} = useTranslation();
   const {theme} = useTheme();
   const themeColor = useThemeColorForTransportMode(mode, subMode);
-  const backgroundColor = theme.static.transport[themeColor].background;
+  const backgroundColor = disabled
+    ? theme.text.colors.disabled
+    : theme.static.transport[themeColor].background;
   const svg = getTransportModeSvg(mode);
   const styles = useStyles();
 

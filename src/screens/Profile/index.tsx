@@ -14,13 +14,14 @@ import DesignSystem from './DesignSystem';
 import DebugInfo from './DebugInfo';
 import DefaultUserProfile from './DefaultUserProfile';
 import TicketingInformation from '@atb/screens/Profile/Information/TicketingInformation';
-import PaymentInformation from '@atb/screens/Profile/Information/PaymentInformation';
 import TermsInformation from '@atb/screens/Profile/Information/TermsInformation';
 import TicketInspectionInformation from '@atb/screens/Profile/Information/TicketInspectionInformation';
 import DeleteProfile from '@atb/screens/Profile/DeleteProfile';
+import PaymentOptions from './PaymentOptions';
 
 export type ProfileStackParams = {
   ProfileHome: undefined;
+  PaymentOptions: undefined;
   ExpiredTickets: undefined;
   DeleteProfile: undefined;
   FavoriteList: undefined;
@@ -53,6 +54,7 @@ export default function ProfileScreen() {
     >
       <Stack.Screen name="ProfileHome" component={ProfileHome} />
       <Stack.Screen name="ExpiredTickets" component={ExpiredTickets} />
+      <Stack.Screen name="PaymentOptions" component={PaymentOptions} />
       <Stack.Screen name="DeleteProfile" component={DeleteProfile} />
       <Stack.Screen name="FavoriteList" component={FavoriteList} />
       <Stack.Screen name="FavoriteDepartures" component={FavoriteDepartures} />
@@ -69,7 +71,6 @@ export default function ProfileScreen() {
         name="TicketingInformation"
         component={TicketingInformation}
       />
-      <Stack.Screen name="PaymentInformation" component={PaymentInformation} />
       <Stack.Screen name="TermsInformation" component={TermsInformation} />
       <Stack.Screen
         name="TicketInspectionInformation"

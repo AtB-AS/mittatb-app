@@ -3,9 +3,9 @@ import {Location as LocationMonoIcon} from '@atb/assets/svg/mono-icons/places';
 import * as TransportationIcons from '@atb/assets/svg/mono-icons/transportation';
 import * as EnturTransportationIcons from '@atb/assets/svg/mono-icons/transportation-entur';
 import {Location} from '@atb/favorites/types';
-import {FeatureCategory} from '@atb/sdk';
 import React from 'react';
 import ThemeIcon from '@atb/components/theme-icon';
+import {getVenueIconTypes} from '@atb/location-search/utils';
 
 const LocationIcon = ({
   location,
@@ -22,9 +22,7 @@ const LocationIcon = ({
     case 'address':
       return <ThemeIcon svg={Pin} />;
     case 'venue':
-      const venueIconTypes = location.category
-        .map(mapCategoryToVenueIconType)
-        .filter((v, i, arr) => arr.indexOf(v) === i); // get distinct values
+      const venueIconTypes = getVenueIconTypes(location.category);
 
       if (!venueIconTypes.length) {
         return <ThemeIcon svg={Pin} />;
@@ -88,29 +86,6 @@ const mapTypeToIconComponent = (iconType: VenueIconType) => {
       return (
         <ThemeIcon svg={Pin} accessibilityLabel="Lokasjon" key="unknown" />
       );
-  }
-};
-
-const mapCategoryToVenueIconType = (category: FeatureCategory) => {
-  switch (category) {
-    case 'onstreetBus':
-    case 'busStation':
-    case 'coachStation':
-      return 'bus';
-    case 'onstreetTram':
-    case 'tramStation':
-      return 'tram';
-    case 'railStation':
-    case 'metroStation':
-      return 'rail';
-    case 'airport':
-      return 'airport';
-    case 'harbourPort':
-    case 'ferryPort':
-    case 'ferryStop':
-      return 'boat';
-    default:
-      return 'unknown';
   }
 };
 

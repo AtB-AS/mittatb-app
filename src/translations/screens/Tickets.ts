@@ -41,7 +41,10 @@ const TicketsTexts = {
   activeTicketsTab: {
     label: _('Aktive', 'Valid'),
     a11yLabel: _('Aktive billetter', 'Active tickets'),
-    noTickets: _('Du har ingen aktive billetter', 'No valid tickets right now'),
+    noTickets: _(
+      'Du har ingen aktive billetter.',
+      'You have no active tickets.',
+    ),
     noTicketsExpiredHelpText: _(
       'Du har ingen aktive billetter. Utløpte billetter finner du under Min profil-fanen.',
       'You have no valid tickets right now. Expired tickets can be found under the My profile tab.',
@@ -51,8 +54,8 @@ const TicketsTexts = {
     label: _('Utløpte', 'Expired'),
     a11yLabel: _('Utløpte billetter', 'Expired tickets'),
     noTickets: _(
-      'Fant ingen billetthistorikk',
-      'Nothing to show here until you have purchased a ticket',
+      'Fant ingen billetthistorikk.',
+      'Nothing to show here until you have purchased a ticket.',
     ),
   },
   ticket: {
@@ -82,7 +85,7 @@ const TicketsTexts = {
       'Aktivér for å gå til kjøp',
       'Activate to go to purchasing',
     ),
-    singleTicket: {
+    single: {
       title: _('Enkeltbillett', 'Single ticket'),
       description: _(
         'Når du skal reise av og til',
@@ -90,7 +93,7 @@ const TicketsTexts = {
       ),
       transportModes: _('Buss/trikk', 'Bus/tram'),
     },
-    periodTicket: {
+    period: {
       title: _('Periodebillett', 'Periodic ticket'),
       description: _(
         'Når du reiser litt oftere',
@@ -115,6 +118,9 @@ const TicketsTexts = {
         'Explore Trøndelag by bus, train, tram, passenger boat or ferry, for 7 days. Travel as much as you like!',
       ),
       transportModes: _('Flere reisemåter', 'Several travel modes'),
+    },
+    carnet: {
+      transportModes: _('Buss/trikk', 'Bus/tram'),
     },
   },
   reservation: {

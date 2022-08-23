@@ -34,6 +34,8 @@ import LoginInAppStack, {
 import useTestIds from './use-test-ids';
 import MobileTokenOnboarding from '@atb/screens/MobileTokenOnboarding';
 import SelectTravelTokenScreen from '@atb/screens/Profile/TravelToken/SelectTravelTokenScreen';
+import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
+import {APP_SCHEME} from '@env';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -47,6 +49,7 @@ export type RootStackParamList = {
   TicketModal: NavigatorScreenParams<TicketModalStackParams>;
   MobileTokenOnboarding: undefined;
   SelectTravelTokenRoot: undefined;
+  ConsequencesFromTicketPurchase: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -59,7 +62,7 @@ const NavigationRoot = () => {
 
   const ref = useRef<NavigationContainerRef>(null);
   const {getInitialState} = useLinking(ref, {
-    prefixes: ['atb://'],
+    prefixes: [`${APP_SCHEME}://`],
     config: {
       screens: {
         TabNavigator: {
@@ -115,10 +118,17 @@ const NavigationRoot = () => {
             screenOptions={{headerShown: false}}
           >
             {!onboarded ? (
-              <Stack.Screen name="Onboarding" component={Onboarding} />
+                <>
+                  <Stack.Screen name="Onboarding" component={Onboarding} />
+                  <Stack.Screen name="LoginInApp" component={LoginInAppStack} />
+                </>
             ) : (
               <>
                 <Stack.Screen name="TabNavigator" component={TabNavigator} />
+                <Stack.Screen
+                    name="ConsequencesFromTicketPurchase"
+                    component={ConsequencesScreen}
+                />
                 <Stack.Screen
                   name="LocationSearch"
                   component={LocationSearch}
