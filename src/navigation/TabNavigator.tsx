@@ -19,11 +19,20 @@ import {
 } from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {NavigatorScreenParams, ParamListBase} from '@react-navigation/native';
-import React from 'react';
+import {
+  NavigatorScreenParams,
+  ParamListBase,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
+import React, {useEffect} from 'react';
 import {SvgProps} from 'react-native-svg';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import DeparturesScreen from '@atb/screens/Departures';
+import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import {useAuthState} from '@atb/auth';
+import {useAppState} from '@atb/AppContext';
+import {shouldOnboardMobileToken} from '@atb/api/utils';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -45,6 +54,8 @@ const NavigationRoot = () => {
   const {t} = useTranslation();
   const {startScreen, newDepartures} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
+
+  useGoToMobileTokenOnboardingWhenNecessary();
 
   return (
     <Tab.Navigator
@@ -144,3 +155,21 @@ function tabSettings(
     tabBarIcon: ({color}) => <ThemeIcon svg={Icon} fill={color} />,
   };
 }
+
+const useGoToMobileTokenOnboardingWhenNecessary = () => {
+  const hasEnabledMobileToken = useHasEnabledMobileToken();
+  const {authenticationType} = useAuthState();
+  const {mobileTokenOnboarded} = useAppState();
+  const shouldOnboard = shouldOnboardMobileToken(
+    hasEnabledMobileToken,
+    authenticationType,
+    mobileTokenOnboarded,
+  );
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    if (shouldOnboard) {
+      navigation.navigate('MobileTokenOnboarding');
+    }
+  }, [shouldOnboard]);
+};
