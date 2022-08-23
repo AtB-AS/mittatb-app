@@ -37,6 +37,7 @@ import {useAuthState} from '@atb/auth';
 import SelectTravelTokenScreen from '@atb/screens/Profile/TravelToken/SelectTravelTokenScreen';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
+import {APP_SCHEME} from '@env';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -65,7 +66,7 @@ const NavigationRoot = () => {
 
   const ref = useRef<NavigationContainerRef>(null);
   const {getInitialState} = useLinking(ref, {
-    prefixes: ['atb://'],
+    prefixes: [`${APP_SCHEME}://`],
     config: {
       screens: {
         TabNavigator: {
