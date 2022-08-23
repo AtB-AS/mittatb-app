@@ -78,7 +78,6 @@
     "react": "17.0.2",
     "react-native": "0.66.3",
     "react-native-bootsplash": "^3.2.4",
-    "react-native-custom-tabs": "^0.1.7",
     "react-native-dash": "^0.0.11",
     "react-native-device-info": "^8.3.1",
     "react-native-geolocation-service": "^5.2.0",
