@@ -10,7 +10,7 @@ import {
 } from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
 import {FareContract, PreactivatedTicket} from '@atb/tickets';
-import {Language, TicketTexts, useTranslation} from '@atb/translations';
+import {TicketTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
@@ -20,6 +20,7 @@ import {
   isValidTicket,
   mapToUserProfilesWithCount,
   ValidityStatus,
+  userProfileCountAndName,
 } from '@atb/screens/Ticketing/Ticket/utils';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
@@ -30,7 +31,6 @@ import WarningMessage from '@atb/screens/Ticketing/Ticket/Component/WarningMessa
 import QrCode from '@atb/screens/Ticketing/Ticket/Details/QrCode';
 import SectionSeparator from '@atb/components/sections/section-separator';
 import ZoneSymbol from '@atb/screens/Ticketing/Ticket/Component/ZoneSymbol';
-import {secondsToDuration} from '@atb/utils/date';
 
 export type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -165,26 +165,6 @@ const TicketInfoHeader = ({
   );
 };
 
-export const ShortTicketInfo = (props: TicketInfoDetailsProps) => {
-  const styles = useStyles();
-  const {status, isInspectable} = props;
-  return (
-    <View style={styles.shortTicketContainer}>
-      <ShortTicketInfoTexts {...props} />
-      {isValidTicket(status) && isInspectable && <ZoneSymbol {...props} />}
-    </View>
-  );
-};
-
-const userProfileCountAndName = (
-  u: UserProfileWithCount,
-  omitUserProfileCount: Boolean | undefined,
-  language: Language,
-) =>
-  omitUserProfileCount
-    ? `${getReferenceDataName(u, language)}`
-    : `${u.count} ${getReferenceDataName(u, language)}`;
-
 const TicketInfoDetails = (props: TicketInfoDetailsProps) => {
   const {
     fromTariffZone,
@@ -227,11 +207,6 @@ const TicketInfoDetails = (props: TicketInfoDetailsProps) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flex: 1, paddingTop: theme.spacings.xSmall},
-  shortTicketContainer: {flexDirection: 'row'},
-  textsContainer: {flex: 1, paddingTop: theme.spacings.xSmall},
-  expireTime: {
-    marginBottom: theme.spacings.small,
-  },
   product: {
     marginTop: theme.spacings.small,
   },
@@ -250,91 +225,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.xSmall,
   },
 }));
-
-const ShortTicketInfoTexts = (props: TicketInfoDetailsProps) => {
-  const {
-    preassignedFareProduct,
-    fromTariffZone,
-    toTariffZone,
-    userProfilesWithCount,
-    isInspectable,
-    omitUserProfileCount,
-    testID,
-    validTo,
-    now,
-  } = props;
-  const {t, language} = useTranslation();
-  const styles = useStyles();
-
-  const productName = preassignedFareProduct
-    ? getReferenceDataName(preassignedFareProduct, language)
-    : undefined;
-
-  const tariffZoneSummary =
-    fromTariffZone && toTariffZone
-      ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
-      : undefined;
-
-  const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
-  const warning = getNonInspectableTokenWarning(
-    isError,
-    fallbackEnabled,
-    t,
-    remoteTokens,
-    isInspectable,
-    preassignedFareProduct?.type,
-  );
-
-  const secondsUntilValid = ((validTo || 0) - (now || 0)) / 1000;
-  const conjunction = t(TicketTexts.validityHeader.durationDelimiter);
-  const durationText = secondsToDuration(secondsUntilValid, language, {
-    conjunction,
-    serialComma: false,
-  });
-  const timeUntilExpire = t(TicketTexts.validityHeader.valid(durationText));
-  return (
-    <View style={styles.textsContainer} accessible={true}>
-      <ThemeText
-        type="body__primary--bold"
-        accessibilityLabel={timeUntilExpire}
-        testID={testID + 'ExpireTime'}
-        style={styles.expireTime}
-      >
-        {timeUntilExpire}
-      </ThemeText>
-      {userProfilesWithCount.map((u) => (
-        <ThemeText
-          type="body__secondary"
-          accessibilityLabel={
-            userProfileCountAndName(u, omitUserProfileCount, language) +
-            screenReaderPause
-          }
-          testID={testID + 'UserAndCount'}
-        >
-          {userProfileCountAndName(u, omitUserProfileCount, language)}
-        </ThemeText>
-      ))}
-      {productName && (
-        <ThemeText
-          type="body__secondary"
-          accessibilityLabel={productName + screenReaderPause}
-          testID={testID + 'Product'}
-        >
-          {productName}
-        </ThemeText>
-      )}
-      {tariffZoneSummary && (
-        <ThemeText
-          type="body__secondary"
-          accessibilityLabel={tariffZoneSummary + screenReaderPause}
-          testID={testID + 'Zones'}
-        >
-          {tariffZoneSummary}
-        </ThemeText>
-      )}
-      {warning && <WarningMessage message={warning} />}
-    </View>
-  );
-};
 
 export default TicketInfo;

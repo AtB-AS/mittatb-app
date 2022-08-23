@@ -8,9 +8,9 @@ import {
   UserProfile,
 } from '@atb/reference-data/types';
 import {UserProfileWithCount} from '@atb/screens/Ticketing/Purchase/Travellers/use-user-count-state';
-import {findReferenceDataById} from '@atb/reference-data/utils';
+import {findReferenceDataById, getReferenceDataName} from '@atb/reference-data/utils';
 import {RemoteToken} from '@atb/mobile-token/types';
-import {TicketTexts, TranslateFunction} from '@atb/translations';
+import {Language, TicketTexts, TranslateFunction} from '@atb/translations';
 import {
   findInspectable,
   getDeviceName,
@@ -37,6 +37,15 @@ export function getRelativeValidity(
 
   return 'valid';
 }
+
+export const userProfileCountAndName = (
+  u: UserProfileWithCount,
+  omitUserProfileCount: Boolean | undefined,
+  language: Language,
+) =>
+  omitUserProfileCount
+    ? `${getReferenceDataName(u, language)}`
+    : `${u.count} ${getReferenceDataName(u, language)}`;
 
 export function getValidityStatus(
   now: number,

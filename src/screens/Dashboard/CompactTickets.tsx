@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
 import {StyleSheet} from '@atb/theme';
 import * as Sections from '@atb/components/sections';
-import {
-  ShortTicketInfoView,
-  mapToUserProfilesWithCount,
-} from '../Ticketing/Ticket/TicketInfo';
+import {CompactTicketInfo} from '../Ticketing/Ticket/CompactTicketInfo';
+import {mapToUserProfilesWithCount} from '@atb/screens/Ticketing/Ticket/utils';
 import {isPreactivatedTicket, isInspectableTicket} from '@atb/tickets';
 import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
 import useInterval from '@atb/utils/use-interval';
@@ -119,7 +117,7 @@ const CompactTickets: React.FC<Props> = ({
             <Sections.GenericClickableItem
               onPress={() => onPressDetails?.(fareContract.orderId)}
             >
-              <ShortTicketInfoView
+              <CompactTicketInfo
                 preassignedFareProduct={preassignedFareProduct}
                 fromTariffZone={fromTariffZone}
                 toTariffZone={toTariffZone}
@@ -127,12 +125,8 @@ const CompactTickets: React.FC<Props> = ({
                 status={validityStatus}
                 now={now}
                 validTo={validTo}
-                validFrom={validFrom}
                 isInspectable={ticketIsInspectable}
                 testID={'ticket' + index}
-                useBackgroundOnInspectionSymbol={
-                  preassignedFareProduct?.type === 'single'
-                }
               />
             </Sections.GenericClickableItem>
           </Sections.Section>
