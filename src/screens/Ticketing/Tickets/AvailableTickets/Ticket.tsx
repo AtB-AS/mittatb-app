@@ -32,7 +32,7 @@ const Ticket = ({
   accented?: boolean;
   onPress: () => void;
   testID: string;
-  ticketType: PreassignedFareProductType | 'summerPass';
+  ticketType: Exclude<PreassignedFareProductType | 'summerPass', 'carnet'>;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();

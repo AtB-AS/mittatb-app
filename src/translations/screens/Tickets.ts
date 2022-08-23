@@ -120,11 +120,6 @@ const TicketsTexts = {
       transportModes: _('Flere reisemåter', 'Several travel modes'),
     },
     carnet: {
-      title: _('Klippekort (10 billetter)', 'Punch card (10 tickets)'),
-      description: _(
-        '10 forhåndskjøpte enkeltbilletter som må aktiveres før du går om bord.',
-        '10 pre-purchased single tickets that you have to validate before boarding.',
-      ),
       transportModes: _('Buss/trikk', 'Bus/tram'),
     },
   },
