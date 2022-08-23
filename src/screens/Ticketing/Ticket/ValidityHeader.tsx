@@ -10,8 +10,13 @@ import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {toDate} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
-import ValidityIcon from './ValidityIcon';
-import {ValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
+import {
+  isValidTicket,
+  ValidityStatus,
+} from '@atb/screens/Ticketing/Ticket/utils';
+import {PreassignedFareProductType} from '@atb/reference-data/types';
+import TransportMode from '@atb/screens/Ticketing/Ticket/Component/TransportMode';
+import TicketStatusSymbol from '@atb/screens/Ticketing/Ticket/Component/TicketStatusSymbol';
 
 const ValidityHeader: React.FC<{
   status: ValidityStatus;
@@ -19,7 +24,8 @@ const ValidityHeader: React.FC<{
   validFrom: number;
   validTo: number;
   isInspectable: boolean;
-}> = ({status, now, validFrom, validTo, isInspectable}) => {
+  ticketType: PreassignedFareProductType | undefined;
+}> = ({status, now, validFrom, validTo, isInspectable, ticketType}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
@@ -35,9 +41,13 @@ const ValidityHeader: React.FC<{
   return (
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
-        <ValidityIcon status={status} isInspectable={isInspectable} />
+        {isValidTicket(status) ? (
+          ticketType && <TransportMode ticketType={ticketType} />
+        ) : (
+          <TicketStatusSymbol status={status} />
+        )}
         <ThemeText
-          style={styles.validityText}
+          style={styles.label}
           type="body__secondary"
           accessibilityLabel={
             !isInspectable
@@ -95,6 +105,7 @@ function validityTimeText(
     case 'reserving':
       return t(TicketTexts.validityHeader.reserving);
     case 'unknown':
+    default:
       return t(TicketTexts.validityHeader.unknown);
   }
 }
@@ -115,14 +126,22 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   validityContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    flex: 1,
+  },
+  transportationMode: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   validityDashContainer: {
     marginVertical: theme.spacings.medium,
     marginHorizontal: -theme.spacings.medium,
     flexDirection: 'row',
   },
-  validityText: {
+  label: {
     flex: 1,
+    textAlign: 'right',
+    marginLeft: theme.spacings.medium,
   },
 }));
 

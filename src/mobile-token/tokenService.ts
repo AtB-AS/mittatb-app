@@ -4,7 +4,7 @@ import {
   handleReattest,
   handleRemoteError,
   RemoteTokenServiceWithInitiate,
-} from '@entur/abt-mobile-client-sdk';
+} from '@entur-private/abt-mobile-client-sdk';
 import {
   ActivateResponse,
   CompleteResponse,
@@ -12,7 +12,7 @@ import {
   InitRequest,
   InitResponse,
   RenewResponse,
-} from '@entur/abt-token-server-node-lib/types';
+} from '@entur-private/abt-token-server-javascript-interface';
 import client from '@atb/api/client';
 import {RemoteToken, RemoveResponse} from '@atb/mobile-token/types';
 import axios from 'axios';

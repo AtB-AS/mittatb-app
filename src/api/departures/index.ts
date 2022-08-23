@@ -5,7 +5,6 @@ import {
   DeparturesMetadata,
   DeparturesRealtimeData,
   PaginationInput,
-  StopPlaceDetails,
 } from '@atb/sdk';
 import {flatMap} from '@atb/utils/array';
 import client from '../client';

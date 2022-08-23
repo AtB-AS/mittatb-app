@@ -16,6 +16,7 @@ type Props =
       validFrom: number;
       validTo: number;
       isInspectable: boolean;
+      ticketType?: string;
     }
   | {status: Exclude<ValidityStatus, 'valid'>};
 
@@ -33,9 +34,10 @@ const ValidityLine = (props: Props): ReactElement => {
         />
       );
     case 'valid':
-      const {now, validFrom, validTo, isInspectable} = props;
+      const {now, validFrom, validTo, isInspectable, ticketType} = props;
       const validityPercent = getValidityPercent(now, validFrom, validTo);
-      return isInspectable ? (
+      //Carnets tickets are not inspectable but we still want to show the validity line
+      return isInspectable || ticketType === 'carnet' ? (
         <LineWithVerticalBars
           backgroundColor={theme.static.status.valid.background}
           validityPercent={validityPercent}
@@ -48,6 +50,7 @@ const ValidityLine = (props: Props): ReactElement => {
     case 'upcoming':
     case 'refunded':
     case 'expired':
+    case 'inactive':
       return (
         <View style={styles.container}>
           <SectionSeparator />

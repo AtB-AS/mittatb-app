@@ -16,10 +16,7 @@ import WebView from 'react-native-webview';
 import {TicketingStackParams} from '../..';
 import {TicketTabsNavigatorParams} from '../../../Tickets';
 import Processing from '../Processing';
-import useTerminalState, {
-  ErrorContext,
-  LoadingState,
-} from './use-terminal-state';
+import useTerminalState, {ErrorContext} from './use-terminal-state';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import Bugsnag from '@bugsnag/react-native';
 import {
@@ -72,13 +69,14 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
   }
 
   const {
-    loadingState,
+    isLoading,
     terminalUrl,
     onWebViewLoadEnd,
+    onWebViewNavigationChange,
     error,
     restartTerminal,
     cancelPayment,
-    handleInitialLoadingError,
+    onWebViewError,
   } = useTerminalState(
     offers,
     paymentType,
@@ -102,7 +100,7 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
       <View
         style={{
           flex: 1,
-          position: !loadingState && !error ? 'relative' : 'absolute',
+          position: !isLoading && !error ? 'relative' : 'absolute',
         }}
       >
         {terminalUrl && showWebView && (
@@ -110,15 +108,16 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
             source={{
               uri: terminalUrl,
             }}
-            onError={handleInitialLoadingError}
+            onError={onWebViewError}
             onLoadStart={onWebViewLoadStart}
-            onNavigationStateChange={onWebViewLoadEnd}
+            onLoadEnd={onWebViewLoadEnd}
+            onNavigationStateChange={onWebViewNavigationChange}
           />
         )}
       </View>
-      {loadingState && (
+      {isLoading && (
         <View style={styles.center}>
-          <Processing message={translateLoadingMessage(loadingState, t)} />
+          <Processing message={t(PaymentCreditCardTexts.loading)} />
         </View>
       )}
       {!!error && (
@@ -145,20 +144,6 @@ const CreditCard: React.FC<Props> = ({route, navigation}) => {
       )}
     </View>
   );
-};
-
-const translateLoadingMessage = (
-  loadingState: LoadingState,
-  t: TranslateFunction,
-) => {
-  switch (loadingState) {
-    case 'reserving-offer':
-      return t(PaymentCreditCardTexts.stateMessages.reserving);
-    case 'loading-terminal':
-      return t(PaymentCreditCardTexts.stateMessages.loading);
-    case 'processing-payment':
-      return t(PaymentCreditCardTexts.stateMessages.processing);
-  }
 };
 
 const translateError = (

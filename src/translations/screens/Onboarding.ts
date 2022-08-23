@@ -26,7 +26,7 @@ const OnboardingTexts = {
       'Vi ønsker dine tilbakemeldinger for å gjøre appen bedre. Dette gjør du enklest i chatten i høyre hjørne. Chatten er anonym.',
       'We appreciate your feedback to make the app better. Use the chat in the upper right corner. The chat is anonymous.',
     ),
-    mainButton: _('Begynn å bruk appen', 'Start using the app'),
+    mainButton: _('Neste', 'Next'),
   },
 };
 export default orgSpecificTranslations(OnboardingTexts, {

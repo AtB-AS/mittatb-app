@@ -1,20 +1,25 @@
+import {
+  EstimatedCall,
+  Place as StopPlace,
+  Quay,
+} from '@atb/api/types/departures';
+import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import * as Sections from '@atb/components/sections';
-import {StyleSheet} from '@atb/theme';
-import React, {useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import SectionSeparator from '@atb/components/sections/section-separator';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
+import {useFavorites} from '@atb/favorites';
+import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
-import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
-import {EstimatedCall, Place, Quay} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, View} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import EstimatedCallItem from './EstimatedCallItem';
-import SectionSeparator from '@atb/components/sections/section-separator';
-import {DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW} from '@atb/screens/Departures/state/stop-place-state';
 
 type QuaySectionProps = {
   quay: Quay;
+  departuresPerQuay?: number;
   data: EstimatedCall[] | null;
   testID?: 'quaySection' | string;
   navigateToQuay?: (arg0: Quay) => void;
@@ -25,7 +30,8 @@ type QuaySectionProps = {
     fromQuayId?: string,
     isTripCancelled?: boolean,
   ) => void;
-  stopPlace: Place;
+  stopPlace: StopPlace;
+  showOnlyFavorites: boolean;
 };
 
 type EstimatedCallRenderItem = {
@@ -35,16 +41,27 @@ type EstimatedCallRenderItem = {
 
 export default function QuaySection({
   quay,
+  departuresPerQuay,
   data,
   testID,
   navigateToQuay,
   navigateToDetails,
   stopPlace,
+  showOnlyFavorites,
 }: QuaySectionProps): JSX.Element {
-  const [isHidden, setIsHidden] = useState(false);
+  const {favoriteDepartures} = useFavorites();
+  const [isMinimized, setIsMinimized] = useState(false);
   const styles = useStyles();
   const departures = getDeparturesForQuay(data, quay);
   const {t, language} = useTranslation();
+
+  useEffect(() => {
+    if (!showOnlyFavorites) return setIsMinimized(false);
+    setIsMinimized(
+      !!navigateToQuay &&
+        !favoriteDepartures.find((favorite) => quay.id === favorite.quayId),
+    );
+  }, [showOnlyFavorites]);
 
   return (
     <View testID={testID}>
@@ -52,10 +69,10 @@ export default function QuaySection({
         <Sections.GenericClickableItem
           type="inline"
           onPress={() => {
-            setIsHidden(!isHidden);
+            setIsMinimized(!isMinimized);
           }}
           accessibilityHint={
-            isHidden
+            isMinimized
               ? t(DeparturesTexts.quaySection.a11yExpand)
               : t(DeparturesTexts.quaySection.a11yMinimize)
           }
@@ -83,16 +100,13 @@ export default function QuaySection({
                 </ThemeText>
               )}
             </View>
-            <ThemeIcon svg={isHidden ? ExpandMore : ExpandLess} />
+            <ThemeIcon svg={isMinimized ? ExpandMore : ExpandLess} />
           </View>
         </Sections.GenericClickableItem>
-        {!isHidden && (
+        {!isMinimized && (
           <FlatList
             ItemSeparatorComponent={SectionSeparator}
-            data={
-              departures &&
-              departures.slice(0, DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW)
-            }
+            data={departures && departures.slice(0, departuresPerQuay)}
             renderItem={({item: departure, index}: EstimatedCallRenderItem) => (
               <Sections.GenericItem
                 radius={
@@ -123,8 +137,14 @@ export default function QuaySection({
                   <Sections.GenericItem
                     radius={!navigateToQuay ? 'bottom' : undefined}
                   >
-                    <ThemeText color="secondary">
-                      {t(DeparturesTexts.noDepartures)}
+                    <ThemeText
+                      color="secondary"
+                      type="body__secondary"
+                      style={{textAlign: 'center', width: '100%'}}
+                    >
+                      {showOnlyFavorites
+                        ? t(DeparturesTexts.noDeparturesForFavorites)
+                        : t(DeparturesTexts.noDepartures)}
                     </ThemeText>
                   </Sections.GenericItem>
                 )}
@@ -132,14 +152,14 @@ export default function QuaySection({
             }
           />
         )}
-        {!data && (
+        {!data && !isMinimized && (
           <Sections.GenericItem>
             <View style={{width: '100%'}}>
               <ActivityIndicator></ActivityIndicator>
             </View>
           </Sections.GenericItem>
         )}
-        {navigateToQuay && !isHidden && (
+        {navigateToQuay && !isMinimized && (
           <Sections.LinkItem
             icon="arrow-right"
             text={

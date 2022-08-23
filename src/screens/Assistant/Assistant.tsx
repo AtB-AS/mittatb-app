@@ -450,7 +450,7 @@ const Assistant: React.FC<Props> = ({
           clear();
         }
       }}
-      alertContext="travel"
+      globalMessageContext="app-assistant"
     >
       <ScreenReaderAnnouncement message={searchStateMessage} />
       {from && to && (

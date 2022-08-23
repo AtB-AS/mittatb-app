@@ -1,4 +1,14 @@
+import {getRealtimeDepartureV2} from '@atb/api/departures';
+import {getStopPlaceDepartures} from '@atb/api/departures/stops-nearest';
+import {EstimatedCall, Place as StopPlace} from '@atb/api/types/departures';
+import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
+import {useFavorites} from '@atb/favorites';
+import {UserFavoriteDepartures} from '@atb/favorites/types';
+import {DeparturesRealtimeData} from '@atb/sdk';
+import useInterval from '@atb/utils/use-interval';
 import {useIsFocused} from '@react-navigation/native';
+import {differenceInMinutes} from 'date-fns';
+import {flatMap} from 'lodash';
 import {useCallback, useEffect} from 'react';
 import {LayoutAnimation} from 'react-native';
 import useReducerWithSideEffects, {
@@ -8,26 +18,14 @@ import useReducerWithSideEffects, {
   Update,
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
-import {getRealtimeDepartureV2} from '@atb/api/departures';
-import {
-  DepartureGroupMetadata,
-  DepartureGroupsQuery,
-} from '@atb/api/departures/departure-group';
-import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {DeparturesRealtimeData} from '@atb/sdk';
-import {differenceInMinutes} from 'date-fns';
-import useInterval from '@atb/utils/use-interval';
 import {updateDeparturesWithRealtimeV2} from '../../../departure-list/utils';
-import {getStopPlaceDepartures} from '@atb/api/departures/stops-nearest';
-import {flatMap} from 'lodash';
-import {EstimatedCall, Place} from '@atb/api/types/departures';
 import {getSecondsUntilMidnightOrMinimum} from './quay-state';
 
 export const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 
 // We fetch double the number of departures to be shown, so that we have more
 // departures to show when one or more departures have already passed.
-export const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED =
+const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED =
   DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW * 2;
 
 // Used to re-trigger full refresh after N minutes.
@@ -37,25 +35,25 @@ const MIN_TIME_RANGE = 3 * 60 * 60; // Three hours
 
 export type DepartureDataState = {
   data: EstimatedCall[] | null;
+  showOnlyFavorites: boolean;
   tick?: Date;
   error?: {type: ErrorType};
   locationId?: string;
   isLoading: boolean;
-  queryInput: DepartureGroupsQuery;
-  cursorInfo: DepartureGroupMetadata['metadata'] | undefined;
+  queryInput: QueryInput;
   lastRefreshTime: Date;
 };
 
-const initialQueryInput: DepartureGroupsQuery = {
-  limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED,
+const initialQueryInput: QueryInput = {
+  numberOfDepartures: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED,
   startTime: new Date().toISOString(),
 };
 const initialState: DepartureDataState = {
   data: null,
+  showOnlyFavorites: false,
   error: undefined,
   locationId: undefined,
   isLoading: false,
-  cursorInfo: undefined,
   queryInput: initialQueryInput,
   lastRefreshTime: new Date(),
 
@@ -67,12 +65,13 @@ const initialState: DepartureDataState = {
 type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
-      stopPlace: Place;
+      stopPlace: StopPlace;
       startTime?: string;
+      favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
       type: 'LOAD_REALTIME_DATA';
-      stopPlace?: Place;
+      stopPlace: StopPlace;
     }
   | {
       type: 'STOP_LOADER';
@@ -82,6 +81,13 @@ type DepartureDataActions =
       locationId?: string;
       reset?: boolean;
       result: EstimatedCall[];
+    }
+  | {
+      type: 'SET_SHOW_FAVORITES';
+      showOnlyFavorites: boolean;
+      stopPlace: StopPlace;
+      startTime?: string;
+      favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
       type: 'SET_ERROR';
@@ -104,8 +110,8 @@ const reducer: ReducerWithSideEffects<
     case 'LOAD_INITIAL_DEPARTURES': {
       // Update input data with new date as this
       // is a fresh fetch. We should fetch the latest information.
-      const queryInput: DepartureGroupsQuery = {
-        limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED,
+      const queryInput: QueryInput = {
+        numberOfDepartures: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED,
         startTime: action.startTime ?? new Date().toISOString(),
       };
 
@@ -118,10 +124,10 @@ const reducer: ReducerWithSideEffects<
         },
         async (state, dispatch) => {
           try {
-            if (!action.stopPlace) return;
             const result = await fetchEstimatedCalls(
               queryInput,
               action.stopPlace,
+              state.showOnlyFavorites ? action.favoriteDepartures : undefined,
             );
 
             dispatch({
@@ -150,12 +156,11 @@ const reducer: ReducerWithSideEffects<
           // Use same query input with same startTime to ensure that
           // we get the same result.
           try {
-            const quayIds = action.stopPlace?.quays?.map((q) => q.id);
-
-            const realtimeData = await getRealtimeDepartureV2(
-              quayIds,
-              state.queryInput,
-            );
+            const quayIds = action.stopPlace.quays?.map((q) => q.id);
+            const realtimeData = await getRealtimeDepartureV2(quayIds, {
+              limitPerLine: state.queryInput.numberOfDepartures,
+              startTime: state.queryInput.startTime,
+            });
             dispatch({
               type: 'UPDATE_REALTIME',
               realtimeData,
@@ -182,6 +187,23 @@ const reducer: ReducerWithSideEffects<
         // know when to update components while still being performant.
         tick: new Date(),
       });
+    }
+
+    case 'SET_SHOW_FAVORITES': {
+      return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
+        {
+          ...state,
+          showOnlyFavorites: action.showOnlyFavorites,
+        },
+        async (_, dispatch) => {
+          dispatch({
+            type: 'LOAD_INITIAL_DEPARTURES',
+            stopPlace: action.stopPlace,
+            startTime: action.startTime,
+            favoriteDepartures: action.favoriteDepartures,
+          });
+        },
+      );
     }
 
     case 'UPDATE_DEPARTURES': {
@@ -224,13 +246,15 @@ const reducer: ReducerWithSideEffects<
 };
 
 export function useStopPlaceData(
-  stopPlace: Place,
+  stopPlace: StopPlace,
+  showOnlyFavorites: boolean,
   startTime?: string,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const isFocused = useIsFocused();
+  const {favoriteDepartures} = useFavorites();
 
   const refresh = useCallback(
     () =>
@@ -238,11 +262,23 @@ export function useStopPlaceData(
         type: 'LOAD_INITIAL_DEPARTURES',
         stopPlace,
         startTime,
+        favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
       }),
-    [stopPlace?.id, startTime],
+    [stopPlace.id, startTime, showOnlyFavorites, favoriteDepartures],
   );
 
-  useEffect(refresh, [stopPlace?.id, startTime]);
+  useEffect(
+    () =>
+      dispatch({
+        type: 'SET_SHOW_FAVORITES',
+        stopPlace,
+        startTime,
+        showOnlyFavorites,
+        favoriteDepartures,
+      }),
+    [stopPlace.id, favoriteDepartures, showOnlyFavorites],
+  );
+  useEffect(refresh, [stopPlace.id, startTime]);
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -256,7 +292,7 @@ export function useStopPlaceData(
   useInterval(
     () => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace}),
     updateFrequencyInSeconds * 1000,
-    [stopPlace?.id],
+    [stopPlace.id],
     !isFocused,
   );
   useInterval(
@@ -272,21 +308,30 @@ export function useStopPlaceData(
   };
 }
 
+type QueryInput = {
+  numberOfDepartures: number;
+  startTime: string;
+};
+
 async function fetchEstimatedCalls(
-  queryInput: DepartureGroupsQuery,
-  stopPlace: Place,
+  queryInput: QueryInput,
+  stopPlace: StopPlace,
+  favoriteDepartures?: UserFavoriteDepartures,
 ): Promise<EstimatedCall[]> {
   const timeRange = getSecondsUntilMidnightOrMinimum(
-    queryInput.startTime,
+    queryInput.startTime ?? new Date().toISOString(),
     MIN_TIME_RANGE,
   );
 
-  const result = await getStopPlaceDepartures({
-    id: stopPlace.id,
-    startTime: queryInput.startTime,
-    numberOfDepartures: queryInput.limitPerLine,
-    timeRange: timeRange,
-  });
+  const result = await getStopPlaceDepartures(
+    {
+      id: stopPlace.id,
+      startTime: queryInput.startTime,
+      numberOfDepartures: queryInput.numberOfDepartures,
+      timeRange: timeRange,
+    },
+    favoriteDepartures,
+  );
 
   return flatMap(
     result.stopPlace?.quays,
