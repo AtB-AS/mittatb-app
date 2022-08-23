@@ -170,7 +170,7 @@ Specific notes on QA:
 
 See documentation on setting up other environments.
 
-- [QA Ticketing](./docs/OrgConfig.md)
+- [Configuration for different organizations](./docs/OrgConfig.md)
 
 ## License
 
