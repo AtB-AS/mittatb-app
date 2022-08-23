@@ -11,6 +11,7 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {
   getOrCreateVippsUserCustomToken,
   authorizeUser,
+  VIPPS_CALLBACK_URL,
 } from '@atb/api/vipps-login/api';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {parseUrl} from 'query-string';
@@ -20,7 +21,6 @@ import {AfterLoginParams} from '@atb/login/types';
 import {VippsLoginButton} from '@atb/components/vipps-login-button';
 import MessageBox from '@atb/components/message-box';
 import * as Sections from '@atb/components/sections';
-import {APP_SCHEMA} from '@env';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -102,7 +102,7 @@ export default function LoginOptionsScreen({
 
   useEffect(() => {
     const vippsCallbackHandler = async (event: any) => {
-      if (event.url.includes(`${APP_SCHEMA}://auth/vipps`)) {
+      if (event.url.includes(VIPPS_CALLBACK_URL)) {
         setIsLoading(true);
         const code = parseUrl(event.url).query.code;
         if (code) {

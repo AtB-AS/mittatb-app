@@ -3,12 +3,15 @@ import client from '@atb/api/client';
 import {VippsSignInErrorCode} from '@atb/auth/AuthContext';
 import {generateNonce, generateState} from '@atb/api/vipps-login/utils';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
+import {APP_SCHEME} from '@env';
+
+export const VIPPS_CALLBACK_URL = `${APP_SCHEME}://auth/vipps`;
 
 export const authorizeUser = async (setIsLoading: any) => {
   const state = await generateState();
   const nonce = await generateNonce();
   return client
-    .get('/bff/login/vipps/authorization-url')
+    .get(`/bff/login/vipps/authorization-url?callbackUrl=${VIPPS_CALLBACK_URL}`)
     .then(async (response) => {
       const authorisationUrl = response.data;
       setIsLoading(false);
@@ -26,9 +29,12 @@ export const getOrCreateVippsUserCustomToken = async (
   if (!state || !nonce) {
     throw new Error('unknown_error');
   }
-  return client.post('/bff/login/vipps/user-custom-token', {
-    state: state,
-    nonce: nonce,
-    authorizationCode: authorizationCode,
-  });
+  return client.post(
+    `/bff/login/vipps/user-custom-token?callbackUrl=${VIPPS_CALLBACK_URL}`,
+    {
+      state: state,
+      nonce: nonce,
+      authorizationCode: authorizationCode,
+    },
+  );
 };

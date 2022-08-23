@@ -14,5 +14,4 @@ declare module '@env' {
   export const IS_QA_ENV: string | undefined;
   export const SAFETY_NET_API_KEY: string;
   export const ENABLE_TICKETING: string | undefined;
-  export const APP_SCHEMA: string | undefined;
 }
