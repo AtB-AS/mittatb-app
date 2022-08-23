@@ -118,16 +118,16 @@ const NavigationRoot = () => {
             screenOptions={{headerShown: false}}
           >
             {!onboarded ? (
-                <>
-                  <Stack.Screen name="Onboarding" component={Onboarding} />
-                  <Stack.Screen name="LoginInApp" component={LoginInAppStack} />
-                </>
+              <>
+                <Stack.Screen name="Onboarding" component={Onboarding} />
+                <Stack.Screen name="LoginInApp" component={LoginInAppStack} />
+              </>
             ) : (
               <>
                 <Stack.Screen name="TabNavigator" component={TabNavigator} />
                 <Stack.Screen
-                    name="ConsequencesFromTicketPurchase"
-                    component={ConsequencesScreen}
+                  name="ConsequencesFromTicketPurchase"
+                  component={ConsequencesScreen}
                 />
                 <Stack.Screen
                   name="LocationSearch"
