@@ -48,8 +48,8 @@ const LoginTexts = {
   vipps: {
     errors: {
       outdated_app_version: _(
-        'Er du sikker på at telefonnummeret er korrekt?',
-        'Are you certain the phone number is correct?',
+        'Oppdater Vipps-appen før du bruker den til å logge inn.',
+        'Please update the Vipps app before using it to log in.',
       ),
       unknown_error: _(
         'Oops - noe gikk galt. Supert om du prøver på nytt 🤞',

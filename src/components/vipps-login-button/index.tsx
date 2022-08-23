@@ -17,10 +17,7 @@ export const VippsLoginButton = ({
   const style = useStyle();
   const getVippsLabel = () => (
     <View style={[style.container, disabled && style.disabledOpacity]}>
-      <ThemeText
-        type="body__primary--bold"
-        style={{color: 'white', paddingVertical: 12}}
-      >
+      <ThemeText type="body__primary--bold" style={style.label}>
         {t(LoginTexts.logInOptions.options.vipps.label)}
       </ThemeText>
       <ThemeIcon svg={vippsLogo} style={style.icon} />
@@ -53,4 +50,5 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignSelf: 'center',
     marginTop: theme.spacings.xSmall,
   },
+  label: {color: 'white', paddingVertical: theme.spacings.medium},
 }));

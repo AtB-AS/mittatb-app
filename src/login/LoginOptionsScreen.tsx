@@ -48,7 +48,9 @@ export default function LoginOptionsScreen({
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
   const appStatus = useAppStateStatus();
-  const [authorizationCode, setAuthorizationCode] = useState('');
+  const [authorizationCode, setAuthorizationCode] = useState<
+    string | undefined
+  >(undefined);
 
   const authenticateUserByVipps = async () => {
     setIsLoading(true);
@@ -79,7 +81,7 @@ export default function LoginOptionsScreen({
   };
 
   useEffect(() => {
-    const signInVippsUser = async () => {
+    const signInVippsUser = async (authorizationCode: string) => {
       try {
         const customToken = await getOrCreateVippsUserCustomToken(
           authorizationCode,
@@ -93,7 +95,7 @@ export default function LoginOptionsScreen({
       }
     };
     if (authorizationCode) {
-      signInVippsUser();
+      signInVippsUser(authorizationCode);
     }
   }, [authorizationCode]);
 
