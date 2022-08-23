@@ -47,8 +47,12 @@ const DeparturesTexts = {
       _(`Valgt dato: ${dateTime}`, `Selected date, ${dateTime}`),
   },
   noDepartures: _(
-    'Ingen avganger i nærmeste fremtid',
-    'No departures in the near future',
+    'Ingen avganger i dette tidsrommet.',
+    'No departures in the selected period of time.',
+  ),
+  noDeparturesForFavorites: _(
+    'Fant ingen avganger blant favorittene dine. Deaktiver "Vis kun favorittavganger" for å se alle avganger.',
+    'We found no departures among your favourites. Disable "View favourite departures only" to show all departures.',
   ),
   quaySection: {
     a11yExpand: _('Aktiver for å utvide', 'Activate to expand'),
@@ -73,7 +77,7 @@ const DeparturesTexts = {
   message: {
     noFavourites: _(
       'Det er ingen avganger som skal vises, da du ikke har noen stopp merket som favoritter.',
-      'There are no departures to be shown, as you have no stops marked as favorites.',
+      'There are no departures to be shown, as you have no stops marked as favourites.',
     ),
   },
 };

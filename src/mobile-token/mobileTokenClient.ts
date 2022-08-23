@@ -8,7 +8,7 @@ import {
   NoTokenError,
   Token,
   ActivatedToken,
-} from '@entur/abt-mobile-client-sdk';
+} from '@entur-private/abt-mobile-client-sdk';
 import Bugsnag from '@bugsnag/react-native';
 // import {ActivatedToken} from '@entur/atb-mobile-client-sdk/token/token-core-javascript-lib/src';
 

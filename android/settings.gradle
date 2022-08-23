@@ -1,5 +1,5 @@
 include ':tokencore'
-project(':tokencore').projectDir = new File(rootProject.projectDir, '../node_modules/@entur/abt-token-state-react-native-lib/android')
+project(':tokencore').projectDir = new File(rootProject.projectDir, '../node_modules/@entur-private/abt-token-state-react-native-lib/android')
 
 rootProject.name = 'atb'
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)

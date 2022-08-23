@@ -35,15 +35,15 @@ export type DeparturesPayload = {
 
 export type StopPlaceDeparturesQuery = {
   id: string;
-  numberOfDepartures?: number;
-  startTime?: string;
+  numberOfDepartures: number;
+  startTime: string;
   timeRange?: number;
 };
 
 export type QuayDeparturesVariables = {
   id: string;
-  numberOfDepartures?: number;
-  startTime?: string;
+  numberOfDepartures: number;
+  startTime: string;
   timeRange?: number;
 };
 

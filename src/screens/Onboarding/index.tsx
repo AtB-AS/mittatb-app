@@ -8,6 +8,10 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {StatusBar} from 'react-native';
+import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
+import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
+import {NavigatorScreenParams} from '@react-navigation/native';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export type OnboardingStackParams = {
   WelcomeScreenLogin: undefined;
@@ -16,6 +20,8 @@ export type OnboardingStackParams = {
   PhoneInputInOnboarding: undefined;
   ConfirmCodeInOnboarding: ConfirmCodeInOnboardingRouteParams;
   SkipLoginWarning: undefined;
+  ConsequencesFromOnboarding: undefined;
+  LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
 };
 
 const Tab = createMaterialTopTabNavigator<OnboardingStackParams>();
@@ -24,6 +30,7 @@ const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 export default function Index() {
   const styles = useStyles();
   const {theme} = useTheme();
+  const {enable_ticketing} = useRemoteConfig();
   return (
     <>
       <StatusBar
@@ -42,6 +49,12 @@ export default function Index() {
             component={WelcomeScreenWithoutLogin}
           />
           <Tab.Screen name="IntercomInfo" component={IntercomInfo} />
+          {enable_ticketing && (
+            <Tab.Screen
+              name="ConsequencesFromOnboarding"
+              component={ConsequencesScreen}
+            />
+          )}
         </Tab.Navigator>
       </SafeAreaView>
     </>

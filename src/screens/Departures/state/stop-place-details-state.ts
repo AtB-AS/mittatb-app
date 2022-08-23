@@ -59,6 +59,14 @@ const reducer: ReducerWithSideEffects<
         },
         async (state, dispatch) => {
           if (!action.locations) return;
+          if (action.locations.length === 0) {
+            dispatch({
+              type: 'UPDATE_STOP_DETAILS',
+              ids: action.locations,
+              result: {stopPlaces: []},
+            });
+            return;
+          }
           try {
             const result = await getStopsDetails({ids: action.locations});
             dispatch({

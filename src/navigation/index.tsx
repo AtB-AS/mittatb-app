@@ -36,7 +36,8 @@ import MobileTokenOnboarding from '@atb/screens/MobileTokenOnboarding';
 import {useAuthState} from '@atb/auth';
 import SelectTravelTokenScreen from '@atb/screens/Profile/TravelToken/SelectTravelTokenScreen';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
-import {shouldOnboardMobileToken} from '@atb/api/utils';
+import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
+import {APP_SCHEME} from '@env';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -50,6 +51,7 @@ export type RootStackParamList = {
   TicketModal: NavigatorScreenParams<TicketModalStackParams>;
   MobileTokenOnboarding: undefined;
   SelectTravelToken: undefined;
+  ConsequencesFromTicketPurchase: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -64,7 +66,7 @@ const NavigationRoot = () => {
 
   const ref = useRef<NavigationContainerRef>(null);
   const {getInitialState} = useLinking(ref, {
-    prefixes: ['atb://'],
+    prefixes: [`${APP_SCHEME}://`],
     config: {
       screens: {
         TabNavigator: {
@@ -90,6 +92,11 @@ const NavigationRoot = () => {
     return null;
   }
 
+  const shouldOnboardMobileToken =
+    hasEnabledMobileToken &&
+    authenticationType === 'phone' &&
+    !mobileTokenOnboarded;
+
   const statusBarColor = onboarded
     ? theme.static.background.background_accent_0.background
     : theme.static.background.background_accent_3.background;
@@ -101,6 +108,21 @@ const NavigationRoot = () => {
       background: theme.static.background.background_1.background,
     },
   };
+
+  function getMobileTokenOnboardingStackScreens() {
+    return (
+      <>
+        <Stack.Screen
+          name="MobileTokenOnboarding"
+          component={MobileTokenOnboarding}
+        />
+        <Stack.Screen
+          name="SelectTravelToken"
+          component={SelectTravelTokenScreen}
+        />
+      </>
+    );
+  }
 
   return (
     <>
@@ -120,25 +142,19 @@ const NavigationRoot = () => {
             screenOptions={{headerShown: false}}
           >
             {!onboarded ? (
-              <Stack.Screen name="Onboarding" component={Onboarding} />
-            ) : shouldOnboardMobileToken(
-                hasEnabledMobileToken,
-                authenticationType,
-                mobileTokenOnboarded,
-              ) ? (
               <>
-                <Stack.Screen
-                  name="MobileTokenOnboarding"
-                  component={MobileTokenOnboarding}
-                />
-                <Stack.Screen
-                  name="SelectTravelToken"
-                  component={SelectTravelTokenScreen}
-                />
+                <Stack.Screen name="Onboarding" component={Onboarding} />
+                <Stack.Screen name="LoginInApp" component={LoginInAppStack} />
               </>
+            ) : shouldOnboardMobileToken ? (
+              getMobileTokenOnboardingStackScreens()
             ) : (
               <>
                 <Stack.Screen name="TabNavigator" component={TabNavigator} />
+                <Stack.Screen
+                  name="ConsequencesFromTicketPurchase"
+                  component={ConsequencesScreen}
+                />
                 <Stack.Screen
                   name="LocationSearch"
                   component={LocationSearch}

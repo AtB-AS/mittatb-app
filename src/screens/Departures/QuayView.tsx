@@ -95,6 +95,7 @@ export default function QuayView({
           navigateToDetails={navigateToDetails}
           testID={'quaySection'}
           stopPlace={stopPlace}
+          showOnlyFavorites={showOnlyFavorites}
         />
       )}
     />

@@ -23,7 +23,7 @@ import {
   TokenMustBeRenewedRemoteTokenStateError,
   TokenNotFoundRemoteTokenStateError,
   createClient,
-} from '@entur/abt-mobile-client-sdk';
+} from '@entur-private/abt-mobile-client-sdk';
 import createTokenService from '@atb/mobile-token/tokenService';
 import {SAFETY_NET_API_KEY} from '@env';
 import logger from '@atb/mobile-token/abtClientLogger';
