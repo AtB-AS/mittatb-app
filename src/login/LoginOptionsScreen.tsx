@@ -73,7 +73,7 @@ export default function LoginOptionsScreen({
   const signInUsingCustomToken = async (token: string) => {
     const response = await signInWithCustomToken(token);
     if (!response.error) {
-      navigation.navigate('Profile');
+      navigation.navigate(afterLogin.routeName as any, afterLogin.routeParams);
     } else {
       setError(response.error);
       setIsLoading(false);
