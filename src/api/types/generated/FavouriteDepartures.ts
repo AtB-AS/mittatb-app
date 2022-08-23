@@ -11,14 +11,35 @@ export type FavouriteDepartureQueryVariables = Types.Exact<{
   >;
 }>;
 
+
 export type FavouriteDepartureQuery = {
   quays: Array<{
     id: string;
     name: string;
+    stopPlace?: {
+      id: string;
+      description?: string;
+      name: string;
+      longitude?: number;
+      latitude?: number;
+    };
     estimatedCalls: Array<{
+      date?: any;
+      expectedDepartureTime: any;
       aimedDepartureTime: any;
-      serviceJourney?: {line: {id: string}};
+      quay?: {id: string};
       destinationDisplay?: {frontText?: string};
+      serviceJourney?: {
+        id: string;
+        line: {
+          id: string;
+          publicCode?: string;
+          transportMode?: Types.TransportMode;
+          transportSubmode?: Types.TransportSubmode;
+          name?: string;
+        };
+      };
     }>;
   }>;
 };
+

@@ -1,20 +1,27 @@
 import {getFavouriteDepartures} from '@atb/api/departures';
+import {DepartureLineInfo, DepartureTime} from '@atb/api/departures/types';
+import {FavouriteDepartureQuery} from '@atb/api/types/generated/FavouriteDepartures';
 import ThemeText from '@atb/components/text';
+import QuaySection from '@atb/departure-list/section-items/quay-section';
 import {useFavorites} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import React, {useEffect, useState} from 'react';
+import {Button, View} from 'react-native';
+import {call} from 'react-native-reanimated';
 
 const FavouritesWidget: React.FC = () => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {favoriteDepartures} = useFavorites();
 
-  console.log('Favourites s');
   console.log(favoriteDepartures);
 
   const [favs, setFavs] = useState(null);
+  const [count, setCount] = useState(0);
+  const [favResults, setFavResults] = useState<FavouriteDepartureQuery>();
+  const [searchDate, setSearchDate] = useState<string>('');
 
   useEffect(() => {
     const fetch = async () => {
@@ -24,21 +31,68 @@ const FavouritesWidget: React.FC = () => {
       );
       return result;
     };
-    const result = fetch().catch((err) => {
-      console.log(err);
-    }); // TODO: Log this
-    console.log('## Fav results');
-    console.log(result);
-  }, []);
+    const result = fetch()
+      .catch((err) => {
+        console.log('##Favorites error');
+        console.log(err);
+      })
+      .then((data) => {
+        console.log('## Fav results');
+        console.log('res', data);
+        if (data) {
+          setFavResults(data);
+          setSearchDate(new Date().toISOString());
+        }
+      });
+  }, [count]);
 
   return (
-    <ThemeText
-      type="body__secondary"
-      color="background_accent_0"
-      style={styles.sectionText}
-    >
-      {t(DeparturesTexts.widget.heading)}
-    </ThemeText>
+    <View>
+      <ThemeText
+        type="body__secondary"
+        color="background_accent_0"
+        style={styles.sectionText}
+      >
+        {t(DeparturesTexts.widget.heading)}
+      </ThemeText>
+      <Button onPress={() => setCount(count + 1)} title="Fetch" />
+      {favResults?.quays?.map((quay) => {
+        const departureTimes: DepartureTime[] = quay.estimatedCalls.map(
+          (call) => {
+            return {
+              aimedTime: call.aimedDepartureTime,
+              serviceDate: call.date,
+              situations: [], // not currently used by component
+              time: call.expectedDepartureTime,
+            };
+          },
+        );
+
+        const line = quay.estimatedCalls.find((call) => call.serviceJourney)
+          ?.serviceJourney?.line;
+
+        const lineInfo: DepartureLineInfo | undefined = line
+          ? {
+              lineId: line.id,
+              lineName: line.name ?? '',
+              lineNumber: line.publicCode ?? '',
+              quayId: quay.id,
+              notices: [],
+            }
+          : undefined;
+
+        return (
+          <QuaySection
+            quayGroup={{
+              group: [{departures: departureTimes, lineInfo: lineInfo}],
+              quay: {...quay, situations: []},
+            }}
+            searchDate={searchDate}
+            stop={quay.stopPlace!} // jp3 says stopPlace is optional, but favourite departures should always have a stop place
+          />
+        );
+      })}
+    </View>
   );
 };
 

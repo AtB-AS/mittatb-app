@@ -98,7 +98,9 @@ async function post<T>(
     baseURL: 'http://10.0.2.2:8080',
   });
 
-  return response.data;
+  const data = response.data;
+  console.log('## Fetched data', JSON.stringify(data));
+  return data;
 }
 
 
