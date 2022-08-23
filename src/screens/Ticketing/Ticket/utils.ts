@@ -8,7 +8,10 @@ import {
   UserProfile,
 } from '@atb/reference-data/types';
 import {UserProfileWithCount} from '@atb/screens/Ticketing/Purchase/Travellers/use-user-count-state';
-import {findReferenceDataById, getReferenceDataName} from '@atb/reference-data/utils';
+import {
+  findReferenceDataById,
+  getReferenceDataName,
+} from '@atb/reference-data/utils';
 import {RemoteToken} from '@atb/mobile-token/types';
 import {Language, TicketTexts, TranslateFunction} from '@atb/translations';
 import {
