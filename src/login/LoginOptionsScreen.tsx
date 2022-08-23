@@ -99,7 +99,7 @@ export default function LoginOptionsScreen({
 
   useEffect(() => {
     const vippsCallbackHandler = async (event: any) => {
-      if (event.url.includes('atb://auth/vipps')) {
+      if (event.url.includes(`${APP_SCHEMA}://auth/vipps`)) {
         setIsLoading(true);
         const code = parseUrl(event.url).query.code;
         if (code) {
