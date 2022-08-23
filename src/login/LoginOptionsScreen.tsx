@@ -20,6 +20,7 @@ import {AfterLoginParams} from '@atb/login/types';
 import {VippsLoginButton} from '@atb/components/vipps-login-button';
 import MessageBox from '@atb/components/message-box';
 import * as Sections from '@atb/components/sections';
+import {APP_SCHEMA} from '@env';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
