@@ -6,6 +6,7 @@ import {TouchableOpacity, View} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
 import vippsLogo from '@atb/assets/svg/color/icons/ticketing/VippsLogo';
 
+const VIPPS_BACKGROUND_COLOR = '#FF5B24';
 export const VippsLoginButton = ({
   onPress,
   disabled,
@@ -15,21 +16,18 @@ export const VippsLoginButton = ({
 }) => {
   const {t} = useTranslation();
   const style = useStyle();
-  const getVippsLabel = () => (
-    <View style={[style.container, disabled && style.disabledOpacity]}>
-      <ThemeText type="body__primary--bold" style={style.label}>
-        {t(LoginTexts.logInOptions.options.vipps.label)}
-      </ThemeText>
-      <ThemeIcon svg={vippsLogo} style={style.icon} />
-    </View>
-  );
 
   return (
     <TouchableOpacity
       accessibilityLabel={t(LoginTexts.logInOptions.options.vipps.a11yLabel)}
       onPress={onPress}
     >
-      {getVippsLabel()}
+      <View style={[style.container, disabled && style.disabledOpacity]}>
+        <ThemeText type="body__primary--bold" style={style.label}>
+          {t(LoginTexts.logInOptions.options.vipps.label)}
+        </ThemeText>
+        <ThemeIcon svg={vippsLogo} style={style.icon} />
+      </View>
     </TouchableOpacity>
   );
 };
@@ -37,7 +35,7 @@ export const VippsLoginButton = ({
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#FF5B24',
+    backgroundColor: VIPPS_BACKGROUND_COLOR,
     borderRadius: theme.border.radius.regular,
     justifyContent: 'center',
   },

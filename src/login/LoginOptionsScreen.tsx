@@ -111,8 +111,9 @@ export default function LoginOptionsScreen({
           if (initialState?.toString() !== state?.toString()) {
             setError('unknown_error');
             setIsLoading(false);
+          } else {
+            setAuthorizationCode(code.toString());
           }
-          setAuthorizationCode(code.toString());
         } else {
           const error = parseUrl(event.url).query.error;
           if (error) {
