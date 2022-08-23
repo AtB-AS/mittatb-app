@@ -3,7 +3,6 @@ import {
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {TouchableOpacity, View} from 'react-native';
-import TransportationIcon from '@atb/components/transportation-icon';
 import ThemeText from '@atb/components/text';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -12,6 +11,8 @@ import ThemedTicketIllustration, {
 } from '@atb/components/ticket-illustration';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import {getStaticColor, StaticColor} from '@atb/theme/colors';
+import TransportMode from '@atb/screens/Ticketing/Ticket/Component/TransportMode';
+import {PreassignedFareProductType} from '@atb/reference-data/types';
 
 export type TransportationModeIconProperties = {
   mode: Mode;
@@ -19,30 +20,27 @@ export type TransportationModeIconProperties = {
 };
 
 const Ticket = ({
-  title,
-  description,
-  transportationModeIcons,
   transportationModeTexts,
   ticketIllustration,
   accented = false,
   onPress,
   testID,
+  ticketType,
 }: {
-  title: string;
-  description: string;
-  transportationModeIcons: TransportationModeIconProperties[];
   transportationModeTexts: string;
   ticketIllustration: TicketIllustration;
   accented?: boolean;
   onPress: () => void;
   testID: string;
+  ticketType: Exclude<PreassignedFareProductType | 'summerPass', 'carnet'>;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {themeName} = useTheme();
   const color: StaticColor = accented ? 'background_accent_3' : 'background_0';
   const themeColor = getStaticColor(themeName, color);
-
+  const title = t(TicketsTexts.availableTickets[ticketType].title);
+  const description = t(TicketsTexts.availableTickets[ticketType].description);
   const accessibilityLabel = [title, transportationModeTexts, description].join(
     '. ',
   );
@@ -60,25 +58,7 @@ const Ticket = ({
         style={styles.spreadContent}
       >
         <View style={styles.contentContainer}>
-          <View style={styles.ticketIconContainer}>
-            {transportationModeIcons.map((icon) => {
-              return (
-                <TransportationIcon
-                  size={'small'}
-                  mode={icon.mode}
-                  subMode={icon.subMode}
-                  key={icon.mode + icon.subMode}
-                />
-              );
-            })}
-            <ThemeText
-              type="label__uppercase"
-              style={styles.label}
-              color={themeColor}
-            >
-              {transportationModeTexts}
-            </ThemeText>
-          </View>
+          <TransportMode ticketType={ticketType} iconSize={'small'} />
           <ThemeText
             type="body__secondary--bold"
             style={styles.ticket_name}

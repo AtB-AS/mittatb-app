@@ -9,6 +9,7 @@ import {useAppState} from '@atb/AppContext';
 import {AvailableTickets} from '@atb/screens/Ticketing/Tickets/AvailableTickets/AvailableTickets';
 import {RecentTickets} from './RecentTickets/RecentTickets';
 import {useTheme} from '@atb/theme';
+import AnonymousPurchaseWarning from '@atb/screens/Ticketing/Tickets/AnonymousPurchaseWarning';
 
 export type TicketingScreenNavigationProp =
   StackNavigationProp<RootStackParamList>;
@@ -70,6 +71,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
       style={{backgroundColor: theme.static.background.background_2.background}}
     >
       {enable_recent_tickets && <RecentTickets />}
+      {authenticationType !== 'phone' && <AnonymousPurchaseWarning />}
       <AvailableTickets
         onBuySingleTicket={onBuySingleTicket}
         onBuyPeriodTicket={onBuyPeriodTicket}

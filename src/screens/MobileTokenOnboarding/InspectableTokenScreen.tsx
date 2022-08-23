@@ -3,32 +3,29 @@ import {ScrollView, View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
 import Button from '@atb/components/button';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {StaticColorByType} from '@atb/theme/colors';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {settingToRouteName} from '@atb/utils/navigation';
-import {usePreferenceItems} from '@atb/preferences';
 import TravelTokenBox from '@atb/travel-token-box';
 import {RemoteToken} from '@atb/mobile-token/types';
-import {useAppState} from '@atb/AppContext';
-import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
-import {MobileTokenTabParams} from '@atb/screens/MobileTokenOnboarding/index';
 import {isTravelCardToken} from '@atb/mobile-token/utils';
+import {useAppState} from '@atb/AppContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export function InspectableTokenScreen({
   inspectableToken,
-  navigation,
+  close,
+  navigateToSelectToken,
 }: {
   inspectableToken: RemoteToken;
-  navigation: MaterialTopTabNavigationProp<MobileTokenTabParams>;
+  close: () => void;
+  navigateToSelectToken: () => void;
 }): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
-  const {startScreen} = usePreferenceItems();
   const {completeMobileTokenOnboarding} = useAppState();
   return (
     <ScrollView
@@ -66,7 +63,7 @@ export function InspectableTokenScreen({
           <Button
             onPress={() => {
               completeMobileTokenOnboarding();
-              navigation.navigate(settingToRouteName(startScreen));
+              close();
             }}
             text={t(MobileTokenOnboardingTexts.ok)}
             testID="nextButton"
@@ -76,7 +73,8 @@ export function InspectableTokenScreen({
             interactiveColor="interactive_1"
             mode="secondary"
             onPress={() => {
-              navigation.navigate('SelectTravelToken');
+              completeMobileTokenOnboarding();
+              navigateToSelectToken();
             }}
             text={
               isTravelCardToken(inspectableToken)
