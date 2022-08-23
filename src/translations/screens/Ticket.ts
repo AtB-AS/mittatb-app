@@ -17,18 +17,11 @@ const TicketTexts = {
       _(`Blir gyldig om ${duration}`, `Becomes valid in ${duration}`),
     reserving: _(`Reserverer…`, `Reserving…`),
     unknown: _(`Ukjent`, `Unknown`),
+    inactive: _(`Inaktiv`, `Inactive`),
     inactiveCarnet: _(`Ingen aktive klipp`, `No active ticket`),
     uninspectable: (duration: string) =>
       _(`Utløper ${duration}`, `Expires ${duration}`),
     durationDelimiter: _(' og ', ' and '),
-  },
-  validityIcon: {
-    valid: _(`Gyldig billett`, `Valid ticket`),
-    reserving: _(`Reserverer billett`, `Reserving ticket`),
-    expired: _(`Utløpt billett`, `Expired ticket`),
-    refunded: _(`Refundert billett`, 'Refunded ticket'),
-    upcoming: _(`Kommende billett`, `Upcoming ticket`),
-    unknown: _(`Ukjent billett`, `Unknown ticket`),
   },
   usedAccessValidityIcon: {
     valid: _(`Gyldig billett`, `Valid ticket`),
@@ -39,11 +32,12 @@ const TicketTexts = {
     header: {
       title: _('Billettdetaljer', 'Ticket details'),
     },
+    paymentMethod: _('Betalingsmetode: ', 'Payment Method: '),
     orderId: (orderId: string) =>
       _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`),
     purchaseTime: (dateTime: string) =>
       _(`Kjøpt ${dateTime}`, `Purchased ${dateTime}`),
-    askForReceipt: _('Be om kvittering', 'Send receipt'),
+    askForReceipt: _('Få kvittering tilsendt', 'Get receipt sent'),
     qrCodeA11yLabel: _(
       'QR kode. Vis frem denne koden ved billett kontroll',
       'QR code. Show this code in case of inspection. ',
@@ -121,6 +115,10 @@ const TicketTexts = {
     noInspectionIcon: _('Ugyldig\ni kontroll', 'Invalid in\ninspection'),
     noInspectionIconA11yLabel: _('Ugyldig i kontroll', 'Invalid in inspection'),
   },
+  label: {
+    travellers: _('Reisende', 'Travellers'),
+    zone: _('Sone', 'Zone'),
+  },
   warning: {
     unableToRetrieveToken: _(
       'Feil ved uthenting av t:kort / mobil',
@@ -139,6 +137,10 @@ const TicketTexts = {
         `Bruk ${deviceName} når du reiser`,
         `Bring ${deviceName} when you travel`,
       ),
+    carnetWarning: _(
+      'Vennligst bytt til t:kort for å kunne bruke dette klippekortet.',
+      'Please switch to t:card to be able to use this punch card.',
+    ),
     unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },
 };
