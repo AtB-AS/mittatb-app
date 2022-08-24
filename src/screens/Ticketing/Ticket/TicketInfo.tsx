@@ -20,6 +20,7 @@ import {
   isValidTicket,
   mapToUserProfilesWithCount,
   ValidityStatus,
+  userProfileCountAndName,
 } from '@atb/screens/Ticketing/Ticket/utils';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
@@ -50,6 +51,8 @@ export type TicketInfoDetailsProps = {
   isInspectable?: boolean;
   omitUserProfileCount?: boolean;
   testID?: string;
+  now?: number;
+  validTo?: number;
 };
 
 const TicketInfo = ({
@@ -179,11 +182,6 @@ const TicketInfoDetails = (props: TicketInfoDetailsProps) => {
       ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
       : undefined;
 
-  const userProfileCountAndName = (u: UserProfileWithCount) =>
-    omitUserProfileCount
-      ? `${getReferenceDataName(u, language)}`
-      : `${u.count} ${getReferenceDataName(u, language)}`;
-
   return (
     <View style={styles.container} accessible={true}>
       <View style={styles.ticketDetails}>
@@ -191,7 +189,7 @@ const TicketInfoDetails = (props: TicketInfoDetailsProps) => {
           <TicketDetail
             header={t(TicketTexts.label.travellers)}
             children={userProfilesWithCount.map((u) =>
-              userProfileCountAndName(u),
+              userProfileCountAndName(u, omitUserProfileCount, language),
             )}
           />
           {tariffZoneSummary && (

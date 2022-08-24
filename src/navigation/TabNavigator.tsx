@@ -8,6 +8,7 @@ import ThemeText from '@atb/components/text';
 import {Location} from '@atb/favorites/types';
 import {usePreferenceItems} from '@atb/preferences';
 import Assistant from '@atb/screens/Assistant';
+import Dashboard from '@atb/screens/Dashboard';
 import NearbyScreen, {NearbyStackParams} from '@atb/screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '@atb/screens/Profile';
 import TicketingScreen from '@atb/screens/Ticketing';
@@ -22,13 +23,13 @@ import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/ty
 import {
   NavigatorScreenParams,
   ParamListBase,
-  useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {SvgProps} from 'react-native-svg';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import DeparturesScreen from '@atb/screens/Departures';
+import {TicketTabsNavigatorParams} from '@atb/screens/Ticketing/Tickets';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import {useAuthState} from '@atb/auth';
 import {useAppState} from '@atb/AppContext';
@@ -44,7 +45,7 @@ export type TabNavigatorParams = {
     toLocation: Location;
   };
   Nearest: NavigatorScreenParams<NearbyStackParams>;
-  Ticketing: undefined;
+  Ticketing: NavigatorScreenParams<TicketTabsNavigatorParams>;
   Profile: SubNavigator<ProfileStackParams>;
 };
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
@@ -52,7 +53,7 @@ const Tab = createBottomTabNavigator<TabNavigatorParams>();
 const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const {startScreen, newDepartures} = usePreferenceItems();
+  const {startScreen, newDepartures, newFrontPage} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
   useGoToMobileTokenOnboardingWhenNecessary();
@@ -72,7 +73,7 @@ const NavigationRoot = () => {
     >
       <Tab.Screen
         name="Assistant"
-        component={Assistant}
+        component={newFrontPage ? Dashboard : Assistant}
         options={tabSettings(
           t(dictionary.navigation.assistant),
           t(dictionary.navigation.assistant_a11y),
