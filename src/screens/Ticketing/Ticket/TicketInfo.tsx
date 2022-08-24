@@ -93,15 +93,15 @@ const TicketInfo = ({
         status={status}
         ticketType={ticketType}
       />
+      <SectionSeparator />
       {fareContract && (
         <>
-          <SectionSeparator />
           <QrCode
             validityStatus={status}
             ticketIsInspectable={isInspectable}
             fc={fareContract}
           />
-          <SectionSeparator />
+          {isInspectable && <SectionSeparator />}
         </>
       )}
       <TicketInfoDetails
