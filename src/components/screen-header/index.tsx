@@ -122,6 +122,7 @@ const BaseHeader = ({
     <View style={[css.container, style, {backgroundColor}]}>
       <View
         accessible={!!title}
+        importantForAccessibility={!!title ? 'yes' : 'no'}
         accessibilityRole="header"
         style={[
           css.headerTitle,
@@ -135,6 +136,7 @@ const BaseHeader = ({
       >
         <ThemeText
           accessible={!!title}
+          importantForAccessibility={!!title ? 'yes' : 'no'}
           accessibilityLabel={titleA11yLabel}
           onLayout={setLayoutFor('title')}
           type="body__primary--bold"
