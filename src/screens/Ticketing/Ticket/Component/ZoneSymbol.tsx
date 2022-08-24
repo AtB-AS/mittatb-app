@@ -19,7 +19,10 @@ const ZoneSymbol = ({
   const {language} = useTranslation();
   if (!fromTariffZone || !toTariffZone) return null;
   const themeColor: StaticColor | undefined =
-    preassignedFareProduct?.type === 'period' ? 'valid' : undefined;
+    preassignedFareProduct?.type === 'period' ||
+    preassignedFareProduct?.type === 'hour24'
+      ? 'valid'
+      : undefined;
   const fillColor = getStaticColor(
     themeName,
     themeColor || 'background_3',
