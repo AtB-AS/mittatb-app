@@ -1132,11 +1132,11 @@ PODS:
     - Mapbox-iOS-SDK (= 6.3.0)
     - React
     - React-Core
-  - react-native-netinfo (6.1.0):
+  - react-native-netinfo (9.3.0):
     - React-Core
   - react-native-safe-area-context (3.3.0):
     - React-Core
-  - react-native-slider (4.2.0):
+  - react-native-slider (4.3.1):
     - React-Core
   - react-native-webview (11.13.0):
     - React-Core
@@ -1206,13 +1206,13 @@ PODS:
     - React-jsi (= 0.69.4)
     - React-logger (= 0.69.4)
     - React-perflogger (= 0.69.4)
-  - RNBootSplash (3.2.4):
+  - RNBootSplash (4.3.2):
     - React-Core
   - RNCAsyncStorage (1.15.9):
     - React-Core
   - RNCClipboard (1.8.4):
     - React-Core
-  - RNDateTimePicker (3.5.2):
+  - RNDateTimePicker (6.3.2):
     - React-Core
   - RNDeviceInfo (8.3.1):
     - React-Core
@@ -1626,9 +1626,9 @@ SPEC CHECKSUMS:
   react-native-get-random-values: 237bffb1c7e05fb142092681531810a29ba53015
   react-native-intercom: fb708ee880fd1d102c232e9e3b5d27c5ebe7bd8d
   react-native-mapbox-gl: bffacc7783a77b1e2d040018a8212ed344105e10
-  react-native-netinfo: 5a001e406317eaaf1e4846906650e107dadcaa72
+  react-native-netinfo: 129bd99f607a2dc5bb096168f3e5c150fd1f1c95
   react-native-safe-area-context: 61c8c484a3a9e7d1fda19f7b1794b35bbfd2262a
-  react-native-slider: 37e1cf275dab20d3c015e40969aa9f5c309645a8
+  react-native-slider: d3ae4270cf8a8cc45a69912db0cc42b151560d5a
   react-native-webview: 133a6a5149f963259646e710b4545c67ef35d7c9
   React-perflogger: cb386fd44c97ec7f8199c04c12b22066b0f2e1e0
   React-RCTActionSheet: f803a85e46cf5b4066c2ac5e122447f918e9c6e5
@@ -1642,10 +1642,10 @@ SPEC CHECKSUMS:
   React-RCTVibration: 9adb4a3cbb598d1bbd46a05256f445e4b8c70603
   React-runtimeexecutor: 61ee22a8cdf8b6bb2a7fb7b4ba2cc763e5285196
   ReactCommon: 8f67bd7e0a6afade0f20718f859dc8c2275f2e83
-  RNBootSplash: 4844706cbb56a3270556c9b94e59dedadccd47e4
+  RNBootSplash: 5f346163977573d6b2aeba1b25df9d2245c0d73c
   RNCAsyncStorage: 26f25150da507524a7815f2ada06ca0967f65633
   RNCClipboard: ddd4d291537f1667209c9c405aaa4307297e252e
-  RNDateTimePicker: 7658208086d86d09e1627b5c34ba0cf237c60140
+  RNDateTimePicker: 4f1fc917f5af9d9ae4c5fc0c63a4474d61338693
   RNDeviceInfo: 7b82d1467b87f7e74d1c7ba9439a9a57d0c68ee9
   RNFBAnalytics: 6ea16cce15e2081b26b0727e6520f2f365cf8f9c
   RNFBApp: 39904cebc3958e2d377dccf870b5c5d76cb089a9
