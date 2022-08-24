@@ -134,6 +134,8 @@ export const getNonInspectableTokenWarning = (
   } else {
     if (!isTravelCardToken(inspectableToken)) {
       return t(TicketTexts.warning.carnetWarning);
+    } else {
+      return t(TicketTexts.warning.travelCardAstoken);
     }
   }
 };
