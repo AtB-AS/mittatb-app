@@ -93,15 +93,15 @@ const TicketInfo = ({
         status={status}
         ticketType={ticketType}
       />
+      <SectionSeparator />
       {fareContract && (
         <>
-          <SectionSeparator />
           <QrCode
             validityStatus={status}
             ticketIsInspectable={isInspectable}
             fc={fareContract}
           />
-          <SectionSeparator />
+          {isInspectable && <SectionSeparator />}
         </>
       )}
       <TicketInfoDetails
@@ -145,6 +145,11 @@ const TicketInfoHeader = ({
     isInspectable,
     ticketType,
   );
+
+  const shouldShowWarning =
+    warning &&
+    !(status === 'expired' || status === 'refunded' || status === 'unknown');
+
   return (
     <View style={styles.header}>
       <View style={styles.ticketHeader}>
@@ -160,7 +165,7 @@ const TicketInfoHeader = ({
         )}
         {status === 'valid' && !isInspectable && <NonTicketInspectionSymbol />}
       </View>
-      {warning && <WarningMessage message={warning} />}
+      {shouldShowWarning && <WarningMessage message={warning} />}
     </View>
   );
 };
