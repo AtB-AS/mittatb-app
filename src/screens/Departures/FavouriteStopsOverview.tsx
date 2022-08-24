@@ -69,6 +69,7 @@ const FavouriteStopsOverview = ({navigation}: RootProps) => {
   const navigateToPlace = (place: Place) => {
     navigation.navigate('PlaceScreen', {
       place,
+      showOnlyFavoritesByDefault: true,
     });
   };
 
