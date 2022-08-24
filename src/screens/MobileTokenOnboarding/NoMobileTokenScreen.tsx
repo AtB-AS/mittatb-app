@@ -7,23 +7,14 @@ import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {StaticColorByType} from '@atb/theme/colors';
 import {CrashSmall} from '@atb/assets/svg/color/images';
-import {settingToRouteName} from '@atb/utils/navigation';
-import {usePreferenceItems} from '@atb/preferences';
 import {useAppState} from '@atb/AppContext';
-import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
-import {MobileTokenTabParams} from '@atb/screens/MobileTokenOnboarding';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export function NoMobileTokenScreen({
-  navigation,
-}: {
-  navigation: MaterialTopTabNavigationProp<MobileTokenTabParams>;
-}): JSX.Element {
+export function NoMobileTokenScreen({close}: {close: () => void}): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const {completeMobileTokenOnboarding} = useAppState();
-  const {startScreen} = usePreferenceItems();
 
   return (
     <ScrollView
@@ -51,7 +42,7 @@ export function NoMobileTokenScreen({
             interactiveColor="interactive_0"
             onPress={() => {
               completeMobileTokenOnboarding();
-              navigation.navigate(settingToRouteName(startScreen));
+              close();
             }}
             text={t(MobileTokenOnboardingTexts.next)}
             testID="nextButton"
