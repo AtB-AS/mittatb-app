@@ -70,6 +70,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({
           style={[styles.retryText, {color: textColor}]}
           type="body__primary--underline"
           onPress={onPress}
+          accessibilityRole="link"
         >
           {onPressText ?? t(MessageBoxTexts.tryAgainButton)}
         </ThemeText>
