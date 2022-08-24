@@ -1,5 +1,5 @@
 import React from 'react';
-import {Platform, View} from 'react-native';
+import {FlatList, Platform, View} from 'react-native';
 
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
@@ -15,11 +15,12 @@ import TransportationIcon from '@atb/components/transportation-icon';
 import {useFavorites} from '@atb/favorites';
 import useFontScale from '@atb/utils/use-font-scale';
 import {AnyMode} from '@atb/components/transportation-icon';
-import {LegMode} from '@entur/sdk';
+import {LegMode, TransportSubmode} from '@entur/sdk';
+import SectionSeparator from '@atb/components/sections/section-separator';
 
 type SelectableFavouriteDepartureData = {
   lineTransportationMode: AnyMode;
-  lineTransportationSubmode?: AnyMode;
+  lineTransportationSubmode?: TransportSubmode;
   lineIdentifier: string;
   lineName: string | TranslatedString;
   departureStation: string;
@@ -77,6 +78,7 @@ const SelectFavouritesBottomSheet = ({
   const {t} = useTranslation();
   const {favoriteDepartures} = useFavorites();
   const items = favoriteDepartures ?? [];
+  const favouriteOverflow = true;
 
   console.log('favorites', favoriteDepartures);
 
@@ -93,46 +95,50 @@ const SelectFavouritesBottomSheet = ({
           color="background_1"
         />
 
-        <View style={{flexShrink: 100, flexGrow: 100}}>
-          <View style={styles.whiteArea}>
-            <View>
+        <View>
+          <FlatList
+            style={styles.flatListArea}
+            ListHeaderComponent={
               <ThemeText style={styles.questionText} type="heading__component">
                 {t(SelectFavouriteDeparturesText.title.text)}
               </ThemeText>
-              {items.map((departure) => (
-                <SelectableFavouriteDeparture
-                  departureStation={departure.quayName}
-                  lineIdentifier={departure.lineLineNumber ?? ''}
-                  lineName={
-                    departure.lineName ??
-                    t(SelectFavouriteDeparturesText.departures.allVariations)
-                  }
-                  lineTransportationMode={
-                    departure.lineTransportationMode ?? LegMode.BUS
-                  }
-                  key={departure.id}
-                />
-              ))}
-            </View>
-          </View>
-        </View>
-        <FullScreenFooter>
-          <Button
-            interactiveColor="interactive_0"
-            text={t(SelectFavouriteDeparturesText.confirm_button.text)}
-            accessibilityHint={t(
-              SelectFavouriteDeparturesText.confirm_button.a11yhint,
+            }
+            data={items}
+            scrollEnabled={favouriteOverflow}
+            ItemSeparatorComponent={SectionSeparator}
+            renderItem={(item) => (
+              <SelectableFavouriteDeparture
+                departureStation={item.item.quayName}
+                lineIdentifier={item.item.lineLineNumber ?? ''}
+                lineName={
+                  item.item.lineName ??
+                  t(SelectFavouriteDeparturesText.departures.allVariations)
+                }
+                lineTransportationMode={
+                  item.item.lineTransportationMode ?? LegMode.BUS
+                }
+                key={item.item.id}
+              />
             )}
-            onPress={() => {
-              close();
-            }}
-            disabled={false}
-            icon={Confirm}
-            iconPosition="right"
-            testID="confirmButton"
           />
-        </FullScreenFooter>
+        </View>
       </View>
+      <FullScreenFooter>
+        <Button
+          interactiveColor="interactive_0"
+          text={t(SelectFavouriteDeparturesText.confirm_button.text)}
+          accessibilityHint={t(
+            SelectFavouriteDeparturesText.confirm_button.a11yhint,
+          )}
+          onPress={() => {
+            close();
+          }}
+          disabled={false}
+          icon={Confirm}
+          iconPosition="right"
+          testID="confirmButton"
+        />
+      </FullScreenFooter>
     </BottomSheetContainer>
   );
 };
@@ -148,8 +154,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     questionText: {
       paddingVertical: theme.spacings.medium,
     },
-    whiteArea: {
-      backgroundColor: 'white',
+    flatListArea: {
+      backgroundColor: theme.static.background.background_0.background,
       margin: theme.spacings.medium,
       paddingHorizontal: theme.spacings.medium,
       borderRadius: theme.border.radius.regular,
