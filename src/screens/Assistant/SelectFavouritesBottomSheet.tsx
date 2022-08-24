@@ -1,6 +1,5 @@
 import React from 'react';
-import {FlatList, Platform, View} from 'react-native';
-
+import {FlatList, Platform, ScrollView, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
@@ -78,51 +77,43 @@ const SelectFavouritesBottomSheet = ({
   const {t} = useTranslation();
   const {favoriteDepartures} = useFavorites();
   const items = favoriteDepartures ?? [];
-  const favouriteOverflow = true;
 
   console.log('favorites', favoriteDepartures);
 
   return (
-    <BottomSheetContainer fullHeight={true}>
-      <View style={styles.container}>
-        <ScreenHeaderWithoutNavigation
-          title={t(SelectFavouriteDeparturesText.header.text)}
-          leftButton={{
-            type: 'cancel',
-            onPress: close,
-            text: 'Close',
-          }}
-          color="background_1"
-        />
+    <BottomSheetContainer>
+      <ScreenHeaderWithoutNavigation
+        title={t(SelectFavouriteDeparturesText.header.text)}
+        leftButton={{
+          type: 'cancel',
+          onPress: close,
+          text: 'Close',
+        }}
+        color="background_1"
+      />
+
+      <ScrollView style={styles.flatListArea}>
+        <ThemeText style={styles.questionText} type="heading__component">
+          {t(SelectFavouriteDeparturesText.title.text)}
+        </ThemeText>
 
         <View>
-          <FlatList
-            style={styles.flatListArea}
-            ListHeaderComponent={
-              <ThemeText style={styles.questionText} type="heading__component">
-                {t(SelectFavouriteDeparturesText.title.text)}
-              </ThemeText>
-            }
-            data={items}
-            scrollEnabled={favouriteOverflow}
-            ItemSeparatorComponent={SectionSeparator}
-            renderItem={(item) => (
-              <SelectableFavouriteDeparture
-                departureStation={item.item.quayName}
-                lineIdentifier={item.item.lineLineNumber ?? ''}
-                lineName={
-                  item.item.lineName ??
-                  t(SelectFavouriteDeparturesText.departures.allVariations)
-                }
-                lineTransportationMode={
-                  item.item.lineTransportationMode ?? LegMode.BUS
-                }
-                key={item.item.id}
-              />
-            )}
-          />
+          {items.map((departureDetails) => (
+            <SelectableFavouriteDeparture
+              departureStation={departureDetails.quayName}
+              lineIdentifier={departureDetails.lineLineNumber ?? ''}
+              lineName={
+                departureDetails.lineName ??
+                t(SelectFavouriteDeparturesText.departures.allVariations)
+              }
+              lineTransportationMode={
+                departureDetails.lineTransportationMode ?? LegMode.BUS
+              }
+              key={departureDetails.id}
+            />
+          ))}
         </View>
-      </View>
+      </ScrollView>
       <FullScreenFooter>
         <Button
           interactiveColor="interactive_0"
