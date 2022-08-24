@@ -11,17 +11,23 @@ import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';
 import {TranslatedString, useTranslation} from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
-import ThemeIcon from '@atb/components/theme-icon';
+import TransportationIcon from '@atb/components/transportation-icon';
 import {useFavorites} from '@atb/favorites';
 import useFontScale from '@atb/utils/use-font-scale';
+import {AnyMode} from '@atb/components/transportation-icon';
+import {LegMode} from '@entur/sdk';
 
 type SelectableFavouriteDepartureData = {
+  lineTransportationMode: AnyMode;
+  lineTransportationSubmode?: AnyMode;
   lineIdentifier: string;
   lineName: string | TranslatedString;
   departureStation: string;
 };
 
 const SelectableFavouriteDeparture = ({
+  lineTransportationMode,
+  lineTransportationSubmode,
   lineIdentifier,
   lineName,
   departureStation,
@@ -29,7 +35,13 @@ const SelectableFavouriteDeparture = ({
   const styles = useStyles();
   const {t} = useTranslation();
   return (
-    <View style={{flexDirection: 'row'}}>
+    <View style={styles.selectableDeparture}>
+      <View style={styles.lineModeIcon}>
+        <TransportationIcon
+          mode={lineTransportationMode}
+          subMode={lineTransportationSubmode}
+        />
+      </View>
       <View style={styles.selectableDepartureTextView}>
         <ThemeText type="body__primary" style={styles.lineIdentiferText}>
           {lineIdentifier} {lineName}
@@ -78,6 +90,7 @@ const SelectFavouritesBottomSheet = ({
             onPress: close,
             text: 'Close',
           }}
+          color="background_1"
         />
 
         <View style={{flexShrink: 100, flexGrow: 100}}>
@@ -93,6 +106,9 @@ const SelectFavouritesBottomSheet = ({
                   lineName={
                     departure.lineName ??
                     t(SelectFavouriteDeparturesText.departures.allVariations)
+                  }
+                  lineTransportationMode={
+                    departure.lineTransportationMode ?? LegMode.BUS
                   }
                   key={departure.id}
                 />
@@ -138,12 +154,18 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       paddingHorizontal: theme.spacings.medium,
       borderRadius: theme.border.radius.regular,
     },
-    selectableDeparture: {},
+    selectableDeparture: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
     selectableDepartureTextView: {
       flex: 1,
       flexDirection: 'column',
       justifyContent: 'flex-start',
       paddingVertical: theme.spacings.medium,
+    },
+    lineModeIcon: {
+      marginRight: theme.spacings.small,
     },
     lineIdentiferText: {
       marginBottom: theme.spacings.small,
@@ -156,7 +178,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     iosToggle: {
       marginLeft: theme.spacings.xSmall,
-      transform: [{scale: 0.7 * scale}, {translateY: 10}],
+      transform: [{scale: 0.7 * scale}, {translateY: -20}],
     },
   };
 });
