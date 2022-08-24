@@ -6,6 +6,7 @@ import Animated, {
   cond,
   debug,
   Easing,
+  EasingNode,
   set,
   startClock,
   stopClock,
@@ -18,7 +19,7 @@ export default function runTiming(timingConfig: {
   from: number;
   to: number;
   duration?: number;
-  easing?: Animated.EasingFunction;
+  easing?: Animated.EasingNodeFunction;
   callback?: () => void;
 }) {
   const {clock, from, to, duration, easing, callback} = timingConfig;
@@ -32,7 +33,7 @@ export default function runTiming(timingConfig: {
   const config = {
     duration: duration ?? 400,
     toValue: new Value<number>(to),
-    easing: easing ?? Easing.linear,
+    easing: easing ?? EasingNode.linear,
   };
 
   return block([
