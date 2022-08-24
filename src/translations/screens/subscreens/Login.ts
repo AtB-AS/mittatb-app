@@ -4,7 +4,7 @@ const LoginTexts = {
   logInOptions: {
     title: _('Logg inn', 'Log in'),
     selectLoginMethod: _('Velg innloggingsmetode', 'Select login method'),
-    or: _('Eller logg inn med', 'or Log in with'),
+    or: _('Eller logg inn med', 'Or log in with'),
     options: {
       phoneAndCode: _(
         'Mobilnummer og engangskode',
