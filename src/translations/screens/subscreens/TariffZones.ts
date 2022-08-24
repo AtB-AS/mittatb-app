@@ -14,8 +14,8 @@ const TariffZonesTexts = {
         _(`Reise i 1 sone (${zoneName})`, `Travel in 1 zone (${zoneName})`),
       multipleZone: (zoneNameFrom: string, zoneNameTo: string) =>
         _(
-          `Reise fra sone ${zoneNameFrom} til sone ${zoneNameTo}`,
-          `Travel from zone ${zoneNameFrom} to zone ${zoneNameTo}`,
+          `Reise i 2 soner (${zoneNameFrom} - ${zoneNameTo})`,
+          `Travel in 2 zones (${zoneNameFrom} - ${zoneNameTo})`,
         ),
     },
   },
