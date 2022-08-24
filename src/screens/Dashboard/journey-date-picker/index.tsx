@@ -27,7 +27,7 @@ import {
 } from '@react-navigation/native';
 import React, {useRef, useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {AssistantParams} from '..';
+import {DashboardParams} from '@atb/screens/Dashboard';
 
 export type DateTimePickerParams = {
   searchTime: SearchTime;
@@ -35,8 +35,8 @@ export type DateTimePickerParams = {
   callerRouteParam: string;
 };
 
-export type DateTimeNavigationProp = NavigationProp<AssistantParams>;
-export type DateTimeRouteProp = RouteProp<AssistantParams, 'DateTimePicker'>;
+export type DateTimeNavigationProp = NavigationProp<DashboardParams>;
+export type DateTimeRouteProp = RouteProp<DashboardParams, 'DateTimePicker'>;
 
 type JourneyDatePickerProps = {
   navigation: DateTimeNavigationProp;
