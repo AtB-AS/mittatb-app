@@ -29,6 +29,7 @@ import {setupConfig} from './setup';
 import {MobileTokenContextProvider} from '@atb/mobile-token';
 import FeedbackQuestionsProvider from './components/feedback/FeedbackContext';
 import {FirestoreConfigurationContextProvider} from '@atb/configuration/FirestoreConfigurationContext';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
@@ -48,45 +49,47 @@ const App = () => {
     return null;
   }
   return (
-    <SafeAreaProvider>
-      <ErrorBoundary type="full-screen">
-        <AppContextProvider>
-          <PreferencesContextProvider>
-            <LocaleContextProvider>
-              <AuthContextProvider>
-                <AccessibilityContextProvider>
-                  <ThemeContextProvider>
-                    <FavoritesContextProvider>
-                      <SearchHistoryContextProvider>
-                        <GeolocationContextProvider>
-                          <RemoteConfigContextProvider>
-                            <FirestoreConfigurationContextProvider>
-                              <TicketContextProvider>
-                                <MobileTokenContextProvider>
-                                  <AppLanguageProvider>
-                                    <GlobalMessagesContextProvider>
-                                      <BottomSheetProvider>
-                                        <FeedbackQuestionsProvider>
-                                          <NavigationRoot />
-                                        </FeedbackQuestionsProvider>
-                                      </BottomSheetProvider>
-                                    </GlobalMessagesContextProvider>
-                                  </AppLanguageProvider>
-                                </MobileTokenContextProvider>
-                              </TicketContextProvider>
-                            </FirestoreConfigurationContextProvider>
-                          </RemoteConfigContextProvider>
-                        </GeolocationContextProvider>
-                      </SearchHistoryContextProvider>
-                    </FavoritesContextProvider>
-                  </ThemeContextProvider>
-                </AccessibilityContextProvider>
-              </AuthContextProvider>
-            </LocaleContextProvider>
-          </PreferencesContextProvider>
-        </AppContextProvider>
-      </ErrorBoundary>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <SafeAreaProvider>
+        <ErrorBoundary type="full-screen">
+          <AppContextProvider>
+            <PreferencesContextProvider>
+              <LocaleContextProvider>
+                <AuthContextProvider>
+                  <AccessibilityContextProvider>
+                    <ThemeContextProvider>
+                      <FavoritesContextProvider>
+                        <SearchHistoryContextProvider>
+                          <GeolocationContextProvider>
+                            <RemoteConfigContextProvider>
+                              <FirestoreConfigurationContextProvider>
+                                <TicketContextProvider>
+                                  <MobileTokenContextProvider>
+                                    <AppLanguageProvider>
+                                      <GlobalMessagesContextProvider>
+                                        <BottomSheetProvider>
+                                          <FeedbackQuestionsProvider>
+                                            <NavigationRoot />
+                                          </FeedbackQuestionsProvider>
+                                        </BottomSheetProvider>
+                                      </GlobalMessagesContextProvider>
+                                    </AppLanguageProvider>
+                                  </MobileTokenContextProvider>
+                                </TicketContextProvider>
+                              </FirestoreConfigurationContextProvider>
+                            </RemoteConfigContextProvider>
+                          </GeolocationContextProvider>
+                        </SearchHistoryContextProvider>
+                      </FavoritesContextProvider>
+                    </ThemeContextProvider>
+                  </AccessibilityContextProvider>
+                </AuthContextProvider>
+              </LocaleContextProvider>
+            </PreferencesContextProvider>
+          </AppContextProvider>
+        </ErrorBoundary>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 };
 
