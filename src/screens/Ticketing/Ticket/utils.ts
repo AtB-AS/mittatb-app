@@ -126,4 +126,25 @@ export const getNonInspectableTokenWarning = (
   }
 };
 
+export const getOtherDeviceIsInspectableWarning = (
+  tokensEnabled: boolean,
+  isError: boolean,
+  fallbackEnabled: boolean,
+  t: TranslateFunction,
+  remoteTokens?: RemoteToken[],
+  deviceIsInspectable?: boolean,
+) => {
+  const shouldShowWarning =
+    tokensEnabled && (isError ? !fallbackEnabled : !deviceIsInspectable);
+  if (!shouldShowWarning) return;
+
+  const activeToken = findInspectable(remoteTokens);
+  const deviceName =
+    getDeviceName(activeToken) || t(TicketTexts.warning.unnamedDevice);
+
+  return isTravelCardToken(activeToken)
+    ? t(TicketTexts.warning.tcardIsInspectableWarning)
+    : t(TicketTexts.warning.anotherPhoneIsInspectableWarning(deviceName));
+};
+
 export const isValidTicket = (status: ValidityStatus) => status === 'valid';
