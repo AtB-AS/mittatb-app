@@ -81,7 +81,7 @@ export function CarnetDetails(props: {
         )}
         <TicketInfo
           travelRights={travelRights}
-          status={fareContractValidityStatus}
+          status={usedAccessValidityStatus}
           isInspectable={inspectable}
           omitUserProfileCount={true}
           testID={props.testID}

@@ -146,9 +146,9 @@ const TicketInfoHeader = ({
     ticketType,
   );
 
-  const shouldShowWarning =
-    warning &&
-    !(status === 'expired' || status === 'refunded' || status === 'unknown');
+  const productDisplayName = `${productName}, ${t(
+    TicketTexts.organizationName,
+  )}`;
 
   return (
     <View style={styles.header}>
@@ -157,15 +157,15 @@ const TicketInfoHeader = ({
           <ThemeText
             type="body__primary--bold"
             style={styles.product}
-            accessibilityLabel={productName + screenReaderPause}
+            accessibilityLabel={productDisplayName + screenReaderPause}
             testID={testID + 'Product'}
           >
-            {productName + ', AtB'}
+            {productDisplayName}
           </ThemeText>
         )}
         {status === 'valid' && !isInspectable && <NonTicketInspectionSymbol />}
       </View>
-      {shouldShowWarning && <WarningMessage message={warning} />}
+      {status === 'valid' && warning && <WarningMessage message={warning} />}
     </View>
   );
 };
