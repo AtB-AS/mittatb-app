@@ -146,10 +146,6 @@ const TicketInfoHeader = ({
     ticketType,
   );
 
-  const shouldShowWarning =
-    warning &&
-    !(status === 'expired' || status === 'refunded' || status === 'unknown');
-
   return (
     <View style={styles.header}>
       <View style={styles.ticketHeader}>
@@ -165,7 +161,7 @@ const TicketInfoHeader = ({
         )}
         {status === 'valid' && !isInspectable && <NonTicketInspectionSymbol />}
       </View>
-      {shouldShowWarning && <WarningMessage message={warning} />}
+      {status === 'valid' && warning && <WarningMessage message={warning} />}
     </View>
   );
 };
