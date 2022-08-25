@@ -157,7 +157,7 @@ const TicketInfoHeader = ({
           <ThemeText
             type="body__primary--bold"
             style={styles.product}
-            accessibilityLabel={productName + screenReaderPause}
+            accessibilityLabel={productName + ', AtB' + screenReaderPause}
             testID={testID + 'Product'}
           >
             {productName + ', AtB'}
