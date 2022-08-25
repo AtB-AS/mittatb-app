@@ -202,7 +202,7 @@ const DisappearingHeader: React.FC<Props> = ({
     const {navigation, onTabPressOnTopScroll} = tabPressBehaviour;
 
     const unsubscribe = navigation
-      .dangerouslyGetParent()
+      .getParent()
       // Typescript doesn't know that tabLongPress exist in the parent
       // and types aren't properly exposed to compensate for that.
       ?.addListener('tabPress' as any, () => {

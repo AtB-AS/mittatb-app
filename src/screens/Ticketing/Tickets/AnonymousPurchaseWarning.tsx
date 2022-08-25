@@ -4,12 +4,13 @@ import {View} from 'react-native';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
-import {useNavigation} from '@react-navigation/native';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {TicketingStackParams} from '../Purchase';
 
 const AnonymousPurchaseWarning = () => {
   const {t} = useTranslation();
   const styles = useStyle();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<TicketingStackParams>>();
   const navigateToConsequencesScreen = () => {
     navigation.navigate('ConsequencesFromTicketPurchase');
   };

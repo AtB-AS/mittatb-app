@@ -1,22 +1,24 @@
-import React from 'react';
-import Details, {DetailsRouteParams, DetailScreenRouteProp} from './Details';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-  TransitionPresets,
-} from '@react-navigation/stack';
-import DepartureDetails, {
-  DepartureDetailsRouteParams,
-} from './DepartureDetails';
-import {CompositeNavigationProp} from '@react-navigation/native';
-import {MapDetailRouteParams, TravelDetailsMap} from './Map';
 import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
-import QuayDepartures, {
-  QuayDeparturesRouteParams,
-} from '@atb/screens/TripDetails/QuayDepartures';
 import PlaceScreen, {
   PlaceScreenParams,
 } from '@atb/screens/Departures/PlaceScreen';
+import QuayDepartures, {
+  QuayDeparturesRouteParams,
+} from '@atb/screens/TripDetails/QuayDepartures';
+import {CompositeNavigationProp} from '@react-navigation/native';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+  StackScreenProps,
+  TransitionPresets,
+} from '@react-navigation/stack';
+import React from 'react';
+import {NearbyStackParams} from '../Nearby';
+import DepartureDetails, {
+  DepartureDetailsRouteParams,
+} from './DepartureDetails';
+import Details, {DetailsRouteParams} from './Details';
+import {MapDetailRouteParams, TravelDetailsMap} from './Map';
 
 export type DetailsStackParams = {
   Details: DetailsRouteParams;
@@ -35,9 +37,7 @@ export type RouteParams = DetailsRouteParams;
 
 const Stack = createStackNavigator<DetailsStackParams>();
 
-type TripDetailsRootProps = {
-  route: DetailScreenRouteProp;
-};
+type TripDetailsRootProps = StackScreenProps<NearbyStackParams, 'TripDetails'>;
 
 export const TripDetailsRoot = ({route}: TripDetailsRootProps) => {
   return (

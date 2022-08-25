@@ -1,13 +1,21 @@
 import {useAppState} from '@atb/AppContext';
+import {useAuthState} from '@atb/auth';
 import trackNavigation from '@atb/diagnostics/trackNavigation';
 import LocationSearch, {
   RouteParams as LocationSearchParams,
 } from '@atb/location-search';
+import LoginInAppStack, {
+  LoginInAppStackParams,
+} from '@atb/login/in-app/LoginInAppStack';
+import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
+import MobileTokenOnboarding from '@atb/screens/MobileTokenOnboarding';
 import Onboarding from '@atb/screens/Onboarding';
 import AddEditFavorite, {
   AddEditFavoriteRootParams,
 } from '@atb/screens/Profile/AddEditFavorite';
 import SortableFavoriteList from '@atb/screens/Profile/FavoriteList/SortFavorites';
+import SelectTravelTokenScreen from '@atb/screens/Profile/TravelToken/SelectTravelTokenScreen';
 import TicketPurchase, {
   TicketingStackParams,
 } from '@atb/screens/Ticketing/Purchase';
@@ -15,40 +23,26 @@ import TicketModalScreen, {
   TicketModalStackParams,
 } from '@atb/screens/Ticketing/Ticket/Details';
 import {useTheme} from '@atb/theme';
-import {
-  NavigationContainer,
-  NavigationContainerRef,
-  NavigatorScreenParams,
-  useLinking,
-  DefaultTheme,
-} from '@react-navigation/native';
+import {APP_SCHEME} from '@env';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
 import TabNavigator, {TabNavigatorParams} from './TabNavigator';
 import transitionSpec from './transitionSpec';
-import LoginInAppStack, {
-  LoginInAppStackParams,
-} from '@atb/login/in-app/LoginInAppStack';
 import useTestIds from './use-test-ids';
-import MobileTokenOnboarding from '@atb/screens/MobileTokenOnboarding';
-import {useAuthState} from '@atb/auth';
-import SelectTravelTokenScreen from '@atb/screens/Profile/TravelToken/SelectTravelTokenScreen';
-import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
-import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
-import {APP_SCHEME} from '@env';
 
 export type RootStackParamList = {
   NotFound: undefined;
   Onboarding: undefined;
-  TabNavigator: NavigatorScreenParams<TabNavigatorParams>;
+  TabNavigator: TabNavigatorParams;
   LocationSearch: LocationSearchParams;
   SortableFavoriteList: undefined;
-  AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;
-  LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
-  TicketPurchase: NavigatorScreenParams<TicketingStackParams>;
-  TicketModal: NavigatorScreenParams<TicketModalStackParams>;
+  AddEditFavorite: AddEditFavoriteRootParams;
+  LoginInApp: LoginInAppStackParams;
+  TicketPurchase: TicketingStackParams;
+  TicketModal: TicketModalStackParams;
   MobileTokenOnboarding: undefined;
   SelectTravelToken: undefined;
   ConsequencesFromTicketPurchase: undefined;
@@ -63,30 +57,6 @@ const NavigationRoot = () => {
   const hasEnabledMobileToken = useHasEnabledMobileToken();
 
   useTestIds();
-
-  const ref = useRef<NavigationContainerRef>(null);
-  const {getInitialState} = useLinking(ref, {
-    prefixes: [`${APP_SCHEME}://`],
-    config: {
-      screens: {
-        TabNavigator: {
-          screens: {
-            Profile: 'profile',
-            Ticketing: {
-              screens: {ActiveTickets: 'ticketing'},
-            },
-          },
-        },
-      },
-    },
-  });
-
-  useEffect(() => {
-    getInitialState().then(
-      () => {},
-      () => {},
-    );
-  }, [getInitialState]);
 
   if (isLoading) {
     return null;
@@ -132,14 +102,30 @@ const NavigationRoot = () => {
         backgroundColor={statusBarColor}
       />
       <Host>
-        <NavigationContainer
-          ref={ref}
+        <NavigationContainer<RootStackParamList>
           onStateChange={trackNavigation}
           theme={ReactNavigationTheme}
+          linking={{
+            prefixes: [`${APP_SCHEME}://`],
+            config: {
+              screens: {
+                TabNavigator: {
+                  screens: {
+                    Profile: 'profile',
+                    Ticketing: {
+                      screens: {ActiveTickets: 'ticketing'},
+                    },
+                  },
+                },
+              },
+            },
+          }}
         >
           <Stack.Navigator
-            mode={isLoading || !onboarded ? 'card' : 'modal'}
-            screenOptions={{headerShown: false}}
+            screenOptions={{
+              headerShown: false,
+              presentation: isLoading || !onboarded ? 'card' : 'modal',
+            }}
           >
             {!onboarded ? (
               <>
@@ -178,9 +164,7 @@ const NavigationRoot = () => {
                   name="SortableFavoriteList"
                   component={SortableFavoriteList}
                   options={{
-                    gestureResponseDistance: {
-                      vertical: 100,
-                    },
+                    gestureResponseDistance: 100,
                     transitionSpec: {
                       open: transitionSpec,
                       close: transitionSpec,

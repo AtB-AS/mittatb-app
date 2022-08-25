@@ -1,5 +1,8 @@
 import {StyleSheet} from '@atb/theme';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {
+  createMaterialTopTabNavigator,
+  MaterialTopTabBarProps,
+} from '@react-navigation/material-top-tabs';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
@@ -33,7 +36,7 @@ export default function Index() {
   return (
     <SafeAreaView style={styles.container}>
       <Tab.Navigator
-        tabBar={(props) => {
+        tabBar={(props: MaterialTopTabBarProps) => {
           return <PageIndicator {...props} />;
         }}
         tabBarPosition="bottom"

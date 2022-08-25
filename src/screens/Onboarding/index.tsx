@@ -1,17 +1,20 @@
-import React from 'react';
+import {PageIndicator} from '@atb/components/page-indicator';
+import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
 import {ConfirmCodeInOnboardingRouteParams} from '@atb/login/in-onboarding/ConfirmCodeInOnboarding';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
 import IntercomInfo from '@atb/screens/Onboarding/IntercomInfo';
 import {WelcomeScreenWithoutLogin} from '@atb/screens/Onboarding/WelcomeScreen';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {PageIndicator} from '@atb/components/page-indicator';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {StatusBar} from 'react-native';
-import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
-import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
+import {
+  createMaterialTopTabNavigator,
+  MaterialTopTabBarProps,
+} from '@react-navigation/material-top-tabs';
 import {NavigatorScreenParams} from '@react-navigation/native';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import React from 'react';
+import {StatusBar} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export type OnboardingStackParams = {
   WelcomeScreenLogin: undefined;
@@ -38,7 +41,7 @@ export default function Index() {
       />
       <SafeAreaView style={styles.container}>
         <Tab.Navigator
-          tabBar={(props) => {
+          tabBar={(props: MaterialTopTabBarProps) => {
             return <PageIndicator {...props} />;
           }}
           tabBarPosition="bottom"

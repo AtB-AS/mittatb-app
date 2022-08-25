@@ -2,16 +2,13 @@ import {
   createNavigatorFactory,
   DefaultNavigatorOptions,
   DefaultRouterOptions,
+  NavigationState,
   ParamListBase,
   StackRouter,
-  StackRouterOptions,
   useNavigationBuilder,
 } from '@react-navigation/native';
-import {
-  StackNavigationOptions,
-  StackNavigationProp,
-  StackView,
-} from '@react-navigation/stack';
+import {StackNavigationProp, StackView} from '@react-navigation/stack';
+import {StackNavigationConfig} from '@react-navigation/stack/lib/typescript/src/types';
 import * as React from 'react';
 
 export type DismissableStackNavigationProp<
@@ -41,17 +38,16 @@ function DismissableStackRouter(
 }
 
 const DismissableStackNavigator: React.FC<
-  DefaultNavigatorOptions<StackNavigationOptions> &
-    StackRouterOptions & {dismissToScreen: string}
-> = ({initialRouteName, children, screenOptions, dismissToScreen, ...rest}) => {
+  StackNavigationConfig & {dismissToScreen: string} & DefaultNavigatorOptions<
+      ParamListBase,
+      NavigationState,
+      {},
+      Record<string, any>
+    >
+> = ({dismissToScreen, ...rest}) => {
   const {state, descriptors, navigation} = useNavigationBuilder(
     DismissableStackRouter,
-    {
-      initialRouteName,
-      children,
-      screenOptions,
-      dismissToScreen,
-    },
+    {...rest, dismissToScreen},
   );
 
   return (

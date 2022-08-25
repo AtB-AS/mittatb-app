@@ -1,17 +1,19 @@
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
 import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketState,
 } from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {
+  createMaterialTopTabNavigator,
+  MaterialTopTabBarProps,
+} from '@react-navigation/material-top-tabs';
 import React from 'react';
 import {View} from 'react-native';
+import {ActiveTickets} from './ActiveTickets/ActiveTickets';
 import TabBar from './TabBar';
 import {BuyTickets} from './Tabs';
-import {ActiveTickets} from './ActiveTickets/ActiveTickets';
-import TicketInformationalOverlay from '@atb/screens/Ticketing/Tickets/TicketInformationalOverlay';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export const BuyTicketsScreenName = 'BuyTickets';
 export const ActiveTicketsScreenName = 'ActiveTickets';
@@ -42,7 +44,7 @@ export default function TicketTabs() {
         globalMessageContext="app-ticketing"
       />
       <Tab.Navigator
-        tabBar={(props) => <TabBar {...props} />}
+        tabBar={(props: MaterialTopTabBarProps) => <TabBar {...props} />}
         initialRouteName={initialRoute}
       >
         <Tab.Screen

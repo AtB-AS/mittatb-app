@@ -12,7 +12,7 @@ export type LoginOnboardingInAppRouteParams = {
 
 type LoginOnboardingInAppRouteProps = RouteProp<
   LoginInAppStackParams,
-  'PhoneInputInApp'
+  'LoginOnboardingInApp'
 >;
 
 export type LoginOnboardingProps = {

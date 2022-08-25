@@ -1,14 +1,8 @@
-import analytics from '@react-native-firebase/analytics';
-import {useNavigation} from '@react-navigation/native';
-import {useCallback} from 'react';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {TabNavigatorParams} from '../navigation/TabNavigator';
-import {
-  Preference_ScreenAlternatives,
-  usePreferenceItems,
-} from '../preferences';
 import useFontScale from '@atb/utils/use-font-scale';
 import {Platform} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {TabNavigatorParams} from '../navigation/TabNavigator';
+import {Preference_ScreenAlternatives} from '../preferences';
 
 // This is code from react-navigation, for regular tab bar
 // (not compact). Should be a better way to set this or
@@ -33,15 +27,7 @@ export const useBottomNavigationStyles = () => {
     paddingBottom: adjustedBottom,
   };
 };
-export const useNavigateToStartScreen = () => {
-  const navigation = useNavigation();
-  const {startScreen} = usePreferenceItems();
 
-  return useCallback(() => {
-    analytics().logEvent('click_logo');
-    navigation.navigate(settingToRouteName(startScreen));
-  }, [navigation, startScreen]);
-};
 export function settingToRouteName(
   setting?: Preference_ScreenAlternatives,
 ): keyof TabNavigatorParams {

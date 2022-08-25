@@ -48,11 +48,12 @@ const NavigationRoot = () => {
 
   return (
     <Tab.Navigator
-      tabBarOptions={{
-        labelPosition: 'below-icon',
-        activeTintColor: theme.interactive.interactive_2.outline.background,
-        inactiveTintColor: theme.text.colors.secondary,
-        style: {
+      screenOptions={{
+        tabBarLabelPosition: 'below-icon',
+        tabBarActiveTintColor:
+          theme.interactive.interactive_2.outline.background,
+        tabBarInactiveTintColor: theme.text.colors.secondary,
+        tabBarStyle: {
           backgroundColor: theme.interactive.interactive_2.default.background,
           ...useBottomNavigationStyles(),
         },

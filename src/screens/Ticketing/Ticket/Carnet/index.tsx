@@ -1,9 +1,10 @@
 import * as Sections from '@atb/components/sections';
-import {CarnetTicket, FareContract} from '@atb/tickets';
-import React from 'react';
-import {TicketTexts, useTranslation} from '@atb/translations';
-import {useNavigation} from '@react-navigation/native';
+import {RootStackParamList} from '@atb/navigation';
 import {CarnetDetails} from '@atb/screens/Ticketing/Ticket/Carnet/CarnetDetails';
+import {CarnetTicket, FareContract} from '@atb/tickets';
+import {TicketTexts, useTranslation} from '@atb/translations';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import React from 'react';
 
 type Props = {
   fareContract: FareContract;
@@ -13,6 +14,8 @@ type Props = {
   testID?: string;
 };
 
+type RootNavigationProp = NavigationProp<RootStackParamList>;
+
 const CarnetTicketInfo: React.FC<Props> = ({
   fareContract,
   travelRights,
@@ -21,7 +24,7 @@ const CarnetTicketInfo: React.FC<Props> = ({
   testID,
 }) => {
   const {t} = useTranslation();
-  const navigation = useNavigation();
+  const navigation = useNavigation<RootNavigationProp>();
 
   return (
     <Sections.Section withBottomPadding testID={testID}>

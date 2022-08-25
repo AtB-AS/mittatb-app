@@ -1,39 +1,35 @@
-import React from 'react';
-import {ScrollView, View} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
-import ThemeText from '@atb/components/text';
-import {useTranslation} from '@atb/translations';
-import AnonymousTicketPurchases from '@atb/translations/screens/subscreens/AnonymousTicketPurchases';
-import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
-import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {Support} from '@atb/assets/svg/mono-icons/actions';
-import {OnboardingStackParams} from '@atb/screens/Onboarding';
-import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
-import {RouteProp} from '@react-navigation/native';
+import {Phone} from '@atb/assets/svg/mono-icons/devices';
+import {Receipt} from '@atb/assets/svg/mono-icons/ticketing';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import {RootStackParamList} from '@atb/navigation';
 import Actions from '@atb/screens/AnonymousTicketPurchase/components/Actions';
 import Consequence from '@atb/screens/AnonymousTicketPurchase/components/Consequence';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {Receipt} from '@atb/assets/svg/mono-icons/ticketing';
-import ThemeIcon from '@atb/components/theme-icon';
+import {OnboardingStackParams} from '@atb/screens/Onboarding';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
+import {useTranslation} from '@atb/translations';
+import AnonymousTicketPurchases from '@atb/translations/screens/subscreens/AnonymousTicketPurchases';
+import {RouteProp} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import React from 'react';
+import {ScrollView, View} from 'react-native';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-type ConsequencesScreenRouteProps = RouteProp<
+export type ConsequencesScreenRouteProps = RouteProp<
   OnboardingStackParams,
   'ConsequencesFromOnboarding'
 >;
 
-export type ConsequencesScreenProps = {
-  navigation: MaterialTopTabNavigationProp<OnboardingStackParams>;
-};
+type ConsequencesScreenProps = StackNavigationProp<
+  RootStackParamList,
+  'ConsequencesFromTicketPurchase'
+>;
 
-const ConsequencesScreen = ({
-  route,
-  navigation,
-}: {
-  route: ConsequencesScreenRouteProps;
-  navigation: ConsequencesScreenProps;
-}) => {
+const ConsequencesScreen = ({route, navigation}: ConsequencesScreenProps) => {
   const styles = useStyle();
   const {t} = useTranslation();
   const {themeName} = useTheme();
