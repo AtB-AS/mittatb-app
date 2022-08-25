@@ -1,6 +1,8 @@
 import {translation as _} from '../commons';
+import orgSpecificTranslations from '@atb/translations/utils';
 
 const TicketTexts = {
+  organizationName: _('AtB', 'AtB'),
   detailsLink: {
     valid: _('Vis detaljer / kontroll', 'Show details / inspection'),
     notValid: _('Vis detaljer', 'Show details'),
@@ -144,4 +146,9 @@ const TicketTexts = {
     unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },
 };
-export default TicketTexts;
+
+export default orgSpecificTranslations(TicketTexts, {
+  nfk: {
+    organizationName: _('NFK', 'NFK'),
+  },
+});
