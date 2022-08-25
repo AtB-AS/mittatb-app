@@ -46,7 +46,7 @@ export function CarnetDetails(props: {
 
   return (
     <>
-      <Sections.GenericItem>
+      <Sections.GenericItem radius={'top'}>
         {fareContractValidityStatus !== 'valid' ? (
           <ValidityHeader
             now={now}
