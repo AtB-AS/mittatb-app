@@ -82,19 +82,33 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
 
   const {preassignedFareproducts} = useFirestoreConfiguration();
+  const productType =
+    params.preassignedFareProduct?.type ?? params.selectableProductType;
 
   const selectableProducts = preassignedFareproducts
     .filter(productIsSellableInApp)
-    .filter((product) => product.type === params.selectableProductType);
+    .filter((product) => product.type === productType);
 
   const [preassignedFareProduct, setPreassignedFareProduct] = useState(
-    selectableProducts[0],
+    params.preassignedFareProduct ?? selectableProducts[0],
   );
 
   const defaultUserProfilesWithCount = useDefaultUserProfilesWithCount(
     userProfiles,
     preassignedFareProduct,
   );
+
+  if (params.userProfilesWithCount) {
+    defaultUserProfilesWithCount.forEach((u) => (u.count = 0));
+    params.userProfilesWithCount?.forEach((u: UserProfileWithCount) => {
+      defaultUserProfilesWithCount
+        .filter(
+          (upc: UserProfileWithCount) => upc.userTypeString == u.userTypeString,
+        )
+        .forEach((v: UserProfileWithCount) => (v.count = u.count));
+    });
+  }
+
   const [travellerSelection, setTravellerSelection] = useState(
     defaultUserProfilesWithCount,
   );

@@ -23,10 +23,13 @@ import TariffZoneSearch, {
 import {TransitionPresets} from '@react-navigation/stack';
 import {CardPaymentMethod} from './types';
 import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
+import {UserProfileWithCount} from './Travellers/use-user-count-state';
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;
   selectableProductType?: PreassignedFareProductType;
+  preassignedFareProduct?: PreassignedFareProduct;
+  userProfilesWithCount?: UserProfileWithCount[];
   fromTariffZone?: TariffZoneWithMetadata;
   toTariffZone?: TariffZoneWithMetadata;
   travelDate?: string;
