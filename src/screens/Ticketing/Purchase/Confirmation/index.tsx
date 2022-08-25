@@ -34,6 +34,16 @@ import {useAuthState} from '@atb/auth';
 import {usePreviousPaymentMethod} from '../saved-payment-utils';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {
+  useHasEnabledMobileToken,
+  useMobileTokenContextState,
+} from '@atb/mobile-token/MobileTokenContext';
+import {
+  findInspectable,
+  getDeviceName,
+  isTravelCardToken,
+} from '@atb/mobile-token/utils';
+import {getOtherDeviceIsInspectableWarning} from '../../Ticket/utils';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -98,8 +108,22 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     PaymentMethod | undefined
   >(undefined);
   const previousPaymentMethod = usePreviousPaymentMethod(user);
+  const {
+    deviceIsInspectable,
+    remoteTokens,
+    fallbackEnabled,
+    isError: mobileTokenError,
+  } = useMobileTokenContextState();
+  const tokensEnabled = useHasEnabledMobileToken();
 
-  const {enable_creditcard: enableCreditCard} = useRemoteConfig();
+  const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
+    tokensEnabled,
+    mobileTokenError,
+    fallbackEnabled,
+    t,
+    remoteTokens,
+    deviceIsInspectable,
+  );
 
   const {
     fromTariffZone,
@@ -338,6 +362,14 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               : t(PurchaseConfirmationTexts.infoText.validNow)
           }
         />
+        {inspectableTokenWarningText && (
+          <MessageBox
+            type="warning"
+            message={inspectableTokenWarningText}
+            containerStyle={styles.warningMessage}
+            isMarkdown={true}
+          />
+        )}
         {isSearchingOffer ? (
           <ActivityIndicator
             size="large"
@@ -432,6 +464,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   errorMessage: {
     marginBottom: theme.spacings.medium,
+  },
+  warningMessage: {
+    marginTop: theme.spacings.medium,
   },
   ticketInfoSection: {padding: theme.spacings.medium},
   userProfileItem: {
