@@ -15,6 +15,7 @@ import Consequence from '@atb/screens/AnonymousTicketPurchase/components/Consequ
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {Receipt} from '@atb/assets/svg/mono-icons/ticketing';
 import ThemeIcon from '@atb/components/theme-icon';
+import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -37,17 +38,21 @@ const ConsequencesScreen = ({
   const styles = useStyle();
   const {t} = useTranslation();
   const {themeName} = useTheme();
-
+  const focusRef = useFocusOnLoad();
   const isCallerRouteOnboarding = route?.name === 'ConsequencesFromOnboarding';
   const fillColor = getStaticColor(themeName, themeColor).text;
   return (
     <>
       {!isCallerRouteOnboarding && (
-        <FullScreenHeader leftButton={{type: 'cancel'}} />
+        <FullScreenHeader
+          leftButton={{type: 'cancel'}}
+          setFocusOnLoad={false}
+        />
       )}
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
+        ref={focusRef}
       >
         <ThemeText
           type="heading--jumbo"
