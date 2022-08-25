@@ -5,6 +5,7 @@ import LoginOnboarding from '@atb/login/LoginOnboarding';
 import {RouteProp} from '@react-navigation/native';
 import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
 import {AfterLoginParams} from '@atb/login/types';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export type LoginOnboardingInAppRouteParams = {
   afterLogin: AfterLoginParams;
@@ -25,19 +26,25 @@ export const LoginOnboardingInApp = ({
   route: {
     params: {afterLogin},
   },
-}: LoginOnboardingProps) => (
-  <LoginOnboarding
-    doAfterSubmit={(hasActiveFareContracts: boolean) => {
-      if (hasActiveFareContracts) {
-        navigation.navigate('ActiveTicketPromptInApp', {
-          afterLogin,
-        });
-      } else {
-        navigation.navigate('PhoneInputInApp', {
-          afterLogin,
-        });
-      }
-    }}
-    headerLeftButton={{type: 'cancel'}}
-  />
-);
+}: LoginOnboardingProps) => {
+  const {enable_vipps_login} = useRemoteConfig();
+  return (
+    <LoginOnboarding
+      doAfterSubmit={(hasActiveFareContracts: boolean) => {
+        if (hasActiveFareContracts) {
+          navigation.navigate('ActiveTicketPromptInApp', {
+            afterLogin,
+          });
+        } else {
+          navigation.navigate(
+            enable_vipps_login ? 'LoginOptionsScreen' : 'PhoneInputInApp',
+            {
+              afterLogin,
+            },
+          );
+        }
+      }}
+      headerLeftButton={{type: 'cancel'}}
+    />
+  );
+};

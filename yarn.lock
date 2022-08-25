@@ -9,10 +9,10 @@
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.0"
 
-"@atb-as/generate-assets@^5.1.0-alpha.7":
-  version "5.1.0-alpha.7"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-5.1.0-alpha.7.tgz#0d71ea8b235b2cf18e9292da4f9ea9a66649d828"
-  integrity sha512-yp7Y/WrM5/5C5L6cpsC4hGdBKwlAiiEz1rJ1/JB/eyWPi+x0gDuT33mKozRwGLj+wCZYaNSSzATLZ2+R4inKIg==
+"@atb-as/generate-assets@^5.1.0-alpha.8":
+  version "5.1.0-alpha.8"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-5.1.0-alpha.8.tgz#1037daff20efa5d9bc61aef2ca6ddb8070f4a465"
+  integrity sha512-kR3PkIt16oJY1Z0IyJTFQd3aNT10rCfCfM6ZRARnq8iOlIBAzpGhyDxncM87Q0ecD43+biwoSfeaqX7WSndKKQ==
   dependencies:
     "@atb-as/theme" "^6.0.0-alpha.7"
     commander "^8.3.0"
@@ -8772,7 +8772,7 @@ open@^7.4.2:
     is-docker "^2.0.0"
     is-wsl "^2.1.1"
 
-opencollective-postinstall@^2.0.1:
+opencollective-postinstall@^2.0.1, opencollective-postinstall@^2.0.3:
   version "2.0.3"
   resolved "https://registry.npmjs.org/opencollective-postinstall/-/opencollective-postinstall-2.0.3.tgz"
   integrity sha512-8AV/sCtuzUeTo8gQK5qDZzARrulB3egtLzFgteqB2tcT4Mw7B8Kt7JcDHmltjz6FOAHsvTevk70gZEbhM4ZS9Q==
@@ -9464,6 +9464,14 @@ react-native-get-random-values@^1.7.0:
   integrity sha512-zDhmpWUekGRFb9I+MQkxllHcqXN9HBSsgPwBQfrZ1KZYpzDspWLZ6/yLMMZrtq4pVqNR7C7N96L3SuLpXv1nhQ==
   dependencies:
     fast-base64-decode "^1.0.0"
+
+react-native-inappbrowser-reborn@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-inappbrowser-reborn/-/react-native-inappbrowser-reborn-3.7.0.tgz#849a43c3c7da22b65147649fe596836bcb494083"
+  integrity sha512-Ia53jYNtFcbNaX5W3QfOmN25I7bcvuDiQmSY5zABXjy4+WI20bPc9ua09li55F8yDCjv3C99jX6vKms68mBV7g==
+  dependencies:
+    invariant "^2.2.4"
+    opencollective-postinstall "^2.0.3"
 
 react-native-intercom@21.1.1:
   version "21.1.1"

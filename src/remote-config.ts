@@ -25,6 +25,7 @@ export type RemoteConfig = {
   service_disruption_url: string;
   enable_token_fallback: boolean;
   enable_flex_tickets: boolean;
+  enable_vipps_login: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -51,6 +52,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   service_disruption_url: '',
   enable_token_fallback: true,
   enable_flex_tickets: false,
+  enable_vipps_login: false,
 };
 
 export function getConfig(): RemoteConfig {
@@ -112,6 +114,10 @@ export function getConfig(): RemoteConfig {
     values['enable_token_fallback']?.asBoolean() ??
     defaultRemoteConfig.enable_token_fallback;
 
+  const enable_vipps_login =
+    values['enable_vipps_login']?.asBoolean() ??
+    defaultRemoteConfig.enable_vipps_login;
+
   return {
     enable_network_logging,
     enable_ticketing,
@@ -136,6 +142,7 @@ export function getConfig(): RemoteConfig {
     service_disruption_url,
     enable_token_fallback,
     enable_flex_tickets,
+    enable_vipps_login,
   };
 }
 

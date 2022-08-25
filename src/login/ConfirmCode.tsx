@@ -80,13 +80,15 @@ export default function ConfirmCode({
         leftButton={{type: 'back'}}
         setFocusOnLoad={false}
         color={themeColor}
+        title={t(LoginTexts.logInOptions.title)}
       />
 
       <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
           centerContent={true}
-          contentContainerStyle={styles.scrollView}
+          style={styles.scrollView}
+          contentContainerStyle={styles.contentContainerStyle}
         >
           <View accessible={true} accessibilityRole="header" ref={focusRef}>
             <ThemeText
@@ -152,7 +154,7 @@ export default function ConfirmCode({
                 >
                   <ThemeText
                     style={styles.resendButtonText}
-                    type="body__primary"
+                    type="body__primary--underline"
                     color={themeColor}
                   >
                     {t(LoginTexts.confirmCode.resendButton)}
@@ -175,9 +177,15 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   mainView: {
     flex: 1,
     justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   scrollView: {
-    padding: theme.spacings.large,
+    paddingBottom: theme.spacings.xLarge,
+  },
+  contentContainerStyle: {
+    paddingHorizontal: theme.spacings.large,
+    paddingBottom: theme.spacings.xLarge,
   },
   title: {
     textAlign: 'center',
