@@ -45,7 +45,7 @@ export function CarnetDetails(props: {
   );
 
   return (
-    <>
+    <Sections.Section>
       <Sections.GenericItem>
         {fareContractValidityStatus !== 'valid' ? (
           <ValidityHeader
@@ -95,7 +95,7 @@ export function CarnetDetails(props: {
           numberOfUsedAccesses={numberOfUsedAccesses}
         />
       </Sections.GenericItem>
-    </>
+    </Sections.Section>
   );
 }
 
