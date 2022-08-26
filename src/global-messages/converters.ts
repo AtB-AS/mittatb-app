@@ -1,3 +1,4 @@
+import {Statuses} from '@atb-as/theme';
 import {LanguageAndText} from '@atb/reference-data/types';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {isArray} from 'lodash';
@@ -29,12 +30,21 @@ function mapToGlobalMessage(
 
   return {
     id,
-    type: result.type ?? 'info',
+    type: mapToMessageType(result.type),
     active: result.active,
     context,
     body,
     title,
   };
+}
+
+function mapToMessageType(type: any) {
+  const defaultType = 'info';
+  const options = ['info', 'valid', 'warning', 'error'];
+
+  if (typeof type !== 'string') return defaultType;
+  if (!options.includes(type)) return defaultType;
+  return type as Statuses;
 }
 
 function mapToContexts(data: any): GlobalMessageContext[] | undefined {
