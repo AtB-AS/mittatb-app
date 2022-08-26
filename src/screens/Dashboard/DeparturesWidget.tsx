@@ -55,17 +55,12 @@ const FavouritesWidget: React.FC = () => {
         {t(DeparturesTexts.widget.heading)}
       </ThemeText>
       <Button onPress={() => setCount(count + 1)} title="Fetch" />
-
+      <ThemeText>{'hello'}</ThemeText>
       {favResults?.forEach((stopPlaceGroup) => {
         const stopPlaceInfo = stopPlaceGroup.stopPlace;
         return stopPlaceGroup.quays.map((quay) => {
-          return (
-            <QuaySection
-              quayGroup={quay}
-              searchDate={searchDate}
-              stop={stopPlaceInfo}
-            />
-          );
+          console.log('quay data', quay);
+          return <ThemeText>{'this is not printing! whyyyyy'}</ThemeText>;
         });
       })}
     </View>
