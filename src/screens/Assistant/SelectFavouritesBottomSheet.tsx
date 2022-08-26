@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {FlatList, Platform, ScrollView, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
@@ -16,8 +16,15 @@ import useFontScale from '@atb/utils/use-font-scale';
 import {AnyMode} from '@atb/components/transportation-icon';
 import {LegMode, TransportSubmode} from '@entur/sdk';
 import SectionSeparator from '@atb/components/sections/section-separator';
+import MessageBox from '@atb/components/message-box';
+import {
+  FavoriteDepartureId,
+  StoredFavoriteDeparture,
+} from '@atb/favorites/types';
 
 type SelectableFavouriteDepartureData = {
+  handleSwitchFlip: (favouriteId: any) => void;
+  favouriteId: string;
   lineTransportationMode: AnyMode;
   lineTransportationSubmode?: TransportSubmode;
   lineIdentifier: string;
@@ -26,6 +33,8 @@ type SelectableFavouriteDepartureData = {
 };
 
 const SelectableFavouriteDeparture = ({
+  handleSwitchFlip,
+  favouriteId,
   lineTransportationMode,
   lineTransportationSubmode,
   lineIdentifier,
@@ -34,6 +43,7 @@ const SelectableFavouriteDeparture = ({
 }: SelectableFavouriteDepartureData) => {
   const styles = useStyles();
   const {t} = useTranslation();
+
   return (
     <View style={styles.selectableDeparture}>
       <View style={styles.lineModeIcon}>
@@ -56,6 +66,7 @@ const SelectableFavouriteDeparture = ({
         <FixedSwitch
           accessibilityHint={t(SelectFavouriteDeparturesText.switch.a11yhint)}
           value={false}
+          onChange={() => handleSwitchFlip(favouriteId)}
           style={[
             styles.toggle,
             Platform.OS === 'android' ? styles.androidToggle : styles.iosToggle,
@@ -75,10 +86,40 @@ const SelectFavouritesBottomSheet = ({
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {favoriteDepartures} = useFavorites();
-  const items = favoriteDepartures ?? [];
+  const {
+    favoriteDepartures,
+    frontPageFavouriteDepartures,
+    addFrontPageFavouriteDeparture,
+    removeFrontPageFavouriteDeparture,
+  } = useFavorites();
+  const favouriteItems = favoriteDepartures ?? [];
+  const frontpageFavouriteItems = frontPageFavouriteDepartures ?? [];
 
-  console.log('favorites', favoriteDepartures);
+  const handleSwitchFlip = (favouriteId: string) => {
+    console.log('switch flipped', favouriteId);
+    const favouriteInFavourites = favouriteItems.find(
+      (item) => item.id === favouriteId,
+    );
+
+    const favouriteInFrontpageFavourites = frontpageFavouriteItems.find(
+      (item) => item.id === favouriteId,
+    );
+
+    if (!favouriteInFrontpageFavourites) {
+      // dersom ikke blant favoritter
+      const favourite = favoriteDepartures.find(
+        (departure) => departure.id === favouriteId,
+      );
+      console.log('adding favourite', favourite);
+      if (favourite) addFrontPageFavouriteDeparture(favourite);
+      else console.log('something weird');
+    } else if (favouriteInFavourites) {
+      // dersom blant favoritter
+      console.log('removing favourite', favouriteInFrontpageFavourites);
+
+      removeFrontPageFavouriteDeparture(favouriteInFrontpageFavourites);
+    }
+  };
 
   return (
     <BottomSheetContainer>
@@ -98,20 +139,30 @@ const SelectFavouritesBottomSheet = ({
         </ThemeText>
 
         <View>
-          {items.map((departureDetails) => (
-            <SelectableFavouriteDeparture
-              departureStation={departureDetails.quayName}
-              lineIdentifier={departureDetails.lineLineNumber ?? ''}
-              lineName={
-                departureDetails.lineName ??
-                t(SelectFavouriteDeparturesText.departures.allVariations)
-              }
-              lineTransportationMode={
-                departureDetails.lineTransportationMode ?? LegMode.BUS
-              }
-              key={departureDetails.id}
-            />
-          ))}
+          {favouriteItems &&
+            favouriteItems.map((departureDetails) => (
+              <SelectableFavouriteDeparture
+                handleSwitchFlip={handleSwitchFlip}
+                favouriteId={departureDetails.id}
+                departureStation={departureDetails.quayName}
+                lineIdentifier={departureDetails.lineLineNumber ?? ''}
+                lineName={
+                  departureDetails.lineName ??
+                  t(SelectFavouriteDeparturesText.departures.allVariations)
+                }
+                lineTransportationMode={
+                  departureDetails.lineTransportationMode ?? LegMode.BUS
+                }
+                key={departureDetails.id}
+              />
+            ))}
+          {!favouriteItems && (
+            <MessageBox type="info">
+              <ThemeText>
+                {t(SelectFavouriteDeparturesText.noFavourites.text)}
+              </ThemeText>
+            </MessageBox>
+          )}
         </View>
       </ScrollView>
       <FullScreenFooter>
@@ -175,7 +226,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     iosToggle: {
       marginLeft: theme.spacings.xSmall,
-      transform: [{scale: 0.7 * scale}, {translateY: -20}],
+      transform: [{scale: 0.7 * scale}],
     },
   };
 });

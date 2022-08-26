@@ -1,6 +1,11 @@
 import {v4 as uuid} from 'uuid';
 import storage, {StorageModelTypes} from '../storage';
-import {FavoriteDeparture, LocationFavorite, UserFavorites} from './types';
+import {
+  FavoriteDeparture,
+  FavoriteDepartureWithId,
+  LocationFavorite,
+  UserFavorites,
+} from './types';
 
 export type StoredType<T> = {
   id: string;
@@ -31,6 +36,37 @@ class FavoriteStore<T = LocationFavorite | FavoriteDeparture> {
     return await this.setFavorites(favorites);
   }
 
+  async addFrontpageFavourite(
+    favorite: FavoriteDepartureWithId,
+  ): Promise<FavoriteDepartureWithId[]> {
+    let favorites = await this.getFrontpageFavorites();
+    favorites.push(favorite);
+    return await this.setFrontpageFavorites(favorites);
+  }
+
+  async getFrontpageFavorites(): Promise<FavoriteDepartureWithId[]> {
+    const userLocations = await storage.get(this.key);
+    let data = (
+      userLocations ? JSON.parse(userLocations) : []
+    ) as StoredType<FavoriteDepartureWithId>[];
+    return data;
+  }
+
+  async setFrontpageFavorites(
+    favorites: FavoriteDepartureWithId[],
+  ): Promise<FavoriteDepartureWithId[]> {
+    await storage.set(this.key, JSON.stringify(favorites));
+    return favorites;
+  }
+
+  async removeFrontpageFavorite(
+    id: string,
+  ): Promise<FavoriteDepartureWithId[]> {
+    let favorites = await this.getFrontpageFavorites();
+    favorites = favorites.filter((item) => item.id !== id);
+    return await this.setFrontpageFavorites(favorites);
+  }
+
   async removeFavorite(id: string): Promise<StoredType<T>[]> {
     let favorites = await this.getFavorites();
     favorites = favorites.filter((item) => item.id !== id);
@@ -54,4 +90,7 @@ export const places = new FavoriteStore<LocationFavorite>(
 );
 export const departures = new FavoriteStore<FavoriteDeparture>(
   '@ATB_user_departures',
+);
+export const frontpageFavourites = new FavoriteStore<FavoriteDeparture>(
+  '@ATB_user_frontpage_departures',
 );

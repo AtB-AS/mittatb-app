@@ -4,6 +4,7 @@ import Bugsnag from '@bugsnag/react-native';
 export type StorageModel = {
   stored_user_locations: string;
   '@ATB_user_departures': string;
+  '@ATB_user_frontpage_departures': string;
   '@ATB_user_preferences': string;
   install_id: string;
   customer_id: string;

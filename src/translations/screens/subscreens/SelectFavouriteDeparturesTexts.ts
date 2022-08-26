@@ -20,6 +20,12 @@ const SelectFavouriteDeparturesText = {
       'Activate to show or hide this favourite departure on the front page.',
     ),
   },
+  noFavourites: {
+    text: _(
+      'Vi fant ingen favoritter. For å vise dine favoritter må du aktivere ny avganger-visning, og klikke på stjernen ved en eller flere avganger.',
+      'We found no favourites.',
+    ),
+  },
   confirm_button: {
     text: _('Lagre valg', 'Save selection'),
     a11yhint: _(
