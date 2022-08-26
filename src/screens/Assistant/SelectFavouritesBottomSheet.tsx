@@ -25,6 +25,7 @@ import {
 type SelectableFavouriteDepartureData = {
   handleSwitchFlip: (favouriteId: any) => void;
   favouriteId: string;
+  active: boolean;
   lineTransportationMode: AnyMode;
   lineTransportationSubmode?: TransportSubmode;
   lineIdentifier: string;
@@ -35,6 +36,7 @@ type SelectableFavouriteDepartureData = {
 const SelectableFavouriteDeparture = ({
   handleSwitchFlip,
   favouriteId,
+  active,
   lineTransportationMode,
   lineTransportationSubmode,
   lineIdentifier,
@@ -65,7 +67,7 @@ const SelectableFavouriteDeparture = ({
       <View>
         <FixedSwitch
           accessibilityHint={t(SelectFavouriteDeparturesText.switch.a11yhint)}
-          value={false}
+          value={active}
           onChange={() => handleSwitchFlip(favouriteId)}
           style={[
             styles.toggle,
@@ -144,6 +146,13 @@ const SelectFavouritesBottomSheet = ({
               <SelectableFavouriteDeparture
                 handleSwitchFlip={handleSwitchFlip}
                 favouriteId={departureDetails.id}
+                active={
+                  frontPageFavouriteDepartures.find(
+                    (departure) => departure.id === departureDetails.id,
+                  )
+                    ? true
+                    : false
+                }
                 departureStation={departureDetails.quayName}
                 lineIdentifier={departureDetails.lineLineNumber ?? ''}
                 lineName={
