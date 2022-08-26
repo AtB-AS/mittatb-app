@@ -49,6 +49,7 @@ const NavigationRoot = () => {
   return (
     <Tab.Navigator
       screenOptions={{
+        headerShown: false,
         tabBarLabelPosition: 'below-icon',
         tabBarActiveTintColor:
           theme.interactive.interactive_2.outline.background,

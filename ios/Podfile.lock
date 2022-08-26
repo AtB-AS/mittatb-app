@@ -1134,6 +1134,8 @@ PODS:
     - React-Core
   - react-native-netinfo (9.3.0):
     - React-Core
+  - react-native-pager-view (5.4.25):
+    - React-Core
   - react-native-safe-area-context (4.3.3):
     - RCT-Folly
     - RCTRequired
@@ -1216,7 +1218,7 @@ PODS:
     - React-Core
   - RNCClipboard (1.8.4):
     - React-Core
-  - RNDateTimePicker (6.3.2):
+  - RNDateTimePicker (6.1.2):
     - React-Core
   - RNDeviceInfo (8.3.1):
     - React-Core
@@ -1348,6 +1350,7 @@ DEPENDENCIES:
   - react-native-intercom (from `../node_modules/react-native-intercom`)
   - "react-native-mapbox-gl (from `../node_modules/@react-native-mapbox-gl/maps`)"
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -1487,6 +1490,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-mapbox-gl/maps"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-pager-view:
+    :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
@@ -1631,6 +1636,7 @@ SPEC CHECKSUMS:
   react-native-intercom: fb708ee880fd1d102c232e9e3b5d27c5ebe7bd8d
   react-native-mapbox-gl: bffacc7783a77b1e2d040018a8212ed344105e10
   react-native-netinfo: 129bd99f607a2dc5bb096168f3e5c150fd1f1c95
+  react-native-pager-view: da490aa1f902c9a5aeecf0909cc975ad0e92e53e
   react-native-safe-area-context: b456e1c40ec86f5593d58b275bd0e9603169daca
   react-native-slider: d3ae4270cf8a8cc45a69912db0cc42b151560d5a
   react-native-webview: 133a6a5149f963259646e710b4545c67ef35d7c9
@@ -1649,7 +1655,7 @@ SPEC CHECKSUMS:
   RNBootSplash: 5f346163977573d6b2aeba1b25df9d2245c0d73c
   RNCAsyncStorage: 26f25150da507524a7815f2ada06ca0967f65633
   RNCClipboard: ddd4d291537f1667209c9c405aaa4307297e252e
-  RNDateTimePicker: 4f1fc917f5af9d9ae4c5fc0c63a4474d61338693
+  RNDateTimePicker: 6f1f0b4cf7c71b6e2aea7a3aa62969111084bbd1
   RNDeviceInfo: 7b82d1467b87f7e74d1c7ba9439a9a57d0c68ee9
   RNFBAnalytics: 6ea16cce15e2081b26b0727e6520f2f365cf8f9c
   RNFBApp: 39904cebc3958e2d377dccf870b5c5d76cb089a9
