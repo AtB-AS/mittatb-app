@@ -23,14 +23,16 @@ function mapToGlobalMessage(
   const body = mapToLanguageAndTexts(result.body);
   const title = mapToLanguageAndTexts(result.title);
   const context = mapToContexts(result.context);
+  const type = mapToMessageType(result.type);
 
   if (!result.active) return;
   if (!body) return;
   if (!context) return;
+  if (!type) return;
 
   return {
     id,
-    type: mapToMessageType(result.type),
+    type,
     active: result.active,
     context,
     body,
@@ -39,11 +41,10 @@ function mapToGlobalMessage(
 }
 
 function mapToMessageType(type: any) {
-  const defaultType = 'info';
   const options = ['info', 'valid', 'warning', 'error'];
 
-  if (typeof type !== 'string') return defaultType;
-  if (!options.includes(type)) return defaultType;
+  if (typeof type !== 'string') return;
+  if (!options.includes(type)) return;
   return type as Statuses;
 }
 
