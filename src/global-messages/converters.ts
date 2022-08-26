@@ -29,6 +29,7 @@ function mapToGlobalMessage(
   if (!body) return;
   if (!context) return;
   if (!type) return;
+  if (typeof result.active !== 'boolean') return;
 
   return {
     id,
