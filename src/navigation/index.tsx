@@ -24,7 +24,11 @@ import TicketModalScreen, {
 } from '@atb/screens/Ticketing/Ticket/Details';
 import {useTheme} from '@atb/theme';
 import {APP_SCHEME} from '@env';
-import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import {
+  DefaultTheme,
+  NavigationContainer,
+  NavigatorScreenParams,
+} from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
 import {StatusBar} from 'react-native';
@@ -36,13 +40,13 @@ import useTestIds from './use-test-ids';
 export type RootStackParamList = {
   NotFound: undefined;
   Onboarding: undefined;
-  TabNavigator: TabNavigatorParams;
+  TabNavigator: NavigatorScreenParams<TabNavigatorParams>;
   LocationSearch: LocationSearchParams;
   SortableFavoriteList: undefined;
-  AddEditFavorite: AddEditFavoriteRootParams;
-  LoginInApp: LoginInAppStackParams;
-  TicketPurchase: TicketingStackParams;
-  TicketModal: TicketModalStackParams;
+  AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;
+  LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
+  TicketPurchase: NavigatorScreenParams<TicketingStackParams>;
+  TicketModal: NavigatorScreenParams<TicketModalStackParams>;
   MobileTokenOnboarding: undefined;
   SelectTravelToken: undefined;
   ConsequencesFromTicketPurchase: undefined;

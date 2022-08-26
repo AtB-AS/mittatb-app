@@ -1,15 +1,15 @@
 import React from 'react';
-import {lexer, Token} from 'marked';
+import {marked} from 'marked';
 import {Linking, Text} from 'react-native';
 import {textTypeStyles} from '@atb/theme/colors';
 import Bugsnag from '@bugsnag/react-native';
 
 export default function render(markdown: string): React.ReactElement[] {
-  const tree = lexer(markdown, {smartypants: true});
+  const tree = marked.lexer(markdown, {smartypants: true});
   return tree.map(renderToken);
 }
 
-function renderToken(token: Token, index: number): React.ReactElement {
+function renderToken(token: marked.Token, index: number): React.ReactElement {
   switch (token.type) {
     case 'text':
       return <Text key={index}>{token.text}</Text>;

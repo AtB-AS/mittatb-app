@@ -32,10 +32,11 @@ export default function NearbyPlacesScreen() {
       />
       <View style={style.container}>
         <Tab.Navigator
-          tabBarOptions={{
-            activeTintColor: theme.interactive.interactive_1.active.text,
-            inactiveTintColor: theme.interactive.interactive_1.active.text,
-            indicatorStyle: {
+          screenOptions={{
+            tabBarActiveTintColor: theme.interactive.interactive_1.active.text,
+            tabBarInactiveTintColor:
+              theme.interactive.interactive_1.active.text,
+            tabBarIndicatorStyle: {
               backgroundColor:
                 theme.static.background.background_accent_0.background,
               height: '100%',
@@ -43,7 +44,7 @@ export default function NearbyPlacesScreen() {
               borderColor: theme.interactive.interactive_1.default.background,
               borderWidth: theme.border.width.medium * 2,
             },
-            style: {
+            tabBarStyle: {
               backgroundColor:
                 theme.interactive.interactive_1.default.background,
               borderRadius: 12,
@@ -52,11 +53,11 @@ export default function NearbyPlacesScreen() {
               alignContent: 'center',
               justifyContent: 'center',
             },
-            labelStyle: {
+            tabBarLabelStyle: {
               textTransform: 'none',
               fontSize: theme.typography.body__primary.fontSize,
             },
-            tabStyle: {
+            tabBarItemStyle: {
               justifyContent: 'center',
             },
           }}
