@@ -1,5 +1,9 @@
 import {getFavouriteDepartures} from '@atb/api/departures';
-import {DepartureLineInfo, DepartureTime} from '@atb/api/departures/types';
+import {
+  DepartureLineInfo,
+  DepartureTime,
+  StopPlaceGroup,
+} from '@atb/api/departures/types';
 import {FavouriteDepartureQuery} from '@atb/api/types/generated/FavouriteDepartures';
 import ThemeText from '@atb/components/text';
 import QuaySection from '@atb/departure-list/section-items/quay-section';
@@ -7,44 +11,39 @@ import {useFavorites} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
+import groupBy from 'lodash.groupby';
 import React, {useEffect, useState} from 'react';
 import {Button, View} from 'react-native';
-import {call} from 'react-native-reanimated';
 
 const FavouritesWidget: React.FC = () => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {favoriteDepartures} = useFavorites();
 
-  console.log(favoriteDepartures);
+  console.log('## stored favourites', JSON.stringify(favoriteDepartures));
 
   const [favs, setFavs] = useState(null);
   const [count, setCount] = useState(0);
-  const [favResults, setFavResults] = useState<FavouriteDepartureQuery>();
+  const [favResults, setFavResults] = useState<StopPlaceGroup[]>([]);
   const [searchDate, setSearchDate] = useState<string>('');
 
   useEffect(() => {
     const fetch = async () => {
-      const result = await getFavouriteDepartures(
-        'NSR:Quay:72405',
-        'ATB:Line:2_25',
-      );
+      const result = await getFavouriteDepartures(favoriteDepartures);
       return result;
     };
     const result = fetch()
       .catch((err) => {
-        console.log('##Favorites error');
-        console.log(err);
+        console.log('##Favorites error', JSON.stringify(err));
       })
       .then((data) => {
-        console.log('## Fav results');
-        console.log('res', data);
+        console.log('## Fav results', JSON.stringify(data));
         if (data) {
           setFavResults(data);
           setSearchDate(new Date().toISOString());
         }
       });
-  }, [count]);
+  }, [count, favoriteDepartures]);
 
   return (
     <View>
@@ -56,41 +55,18 @@ const FavouritesWidget: React.FC = () => {
         {t(DeparturesTexts.widget.heading)}
       </ThemeText>
       <Button onPress={() => setCount(count + 1)} title="Fetch" />
-      {favResults?.quays?.map((quay) => {
-        const departureTimes: DepartureTime[] = quay.estimatedCalls.map(
-          (call) => {
-            return {
-              aimedTime: call.aimedDepartureTime,
-              serviceDate: call.date,
-              situations: [], // not currently used by component
-              time: call.expectedDepartureTime,
-            };
-          },
-        );
 
-        const line = quay.estimatedCalls.find((call) => call.serviceJourney)
-          ?.serviceJourney?.line;
-
-        const lineInfo: DepartureLineInfo | undefined = line
-          ? {
-              lineId: line.id,
-              lineName: line.name ?? '',
-              lineNumber: line.publicCode ?? '',
-              quayId: quay.id,
-              notices: [],
-            }
-          : undefined;
-
-        return (
-          <QuaySection
-            quayGroup={{
-              group: [{departures: departureTimes, lineInfo: lineInfo}],
-              quay: {...quay, situations: []},
-            }}
-            searchDate={searchDate}
-            stop={quay.stopPlace!} // jp3 says stopPlace is optional, but favourite departures should always have a stop place
-          />
-        );
+      {favResults?.forEach((stopPlaceGroup) => {
+        const stopPlaceInfo = stopPlaceGroup.stopPlace;
+        return stopPlaceGroup.quays.map((quay) => {
+          return (
+            <QuaySection
+              quayGroup={quay}
+              searchDate={searchDate}
+              stop={stopPlaceInfo}
+            />
+          );
+        });
       })}
     </View>
   );
@@ -105,107 +81,118 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-/*
 [
   {
-    id: '051a3812-8f28-4407-a7cb-c602b2fbd52d',
-    lineId: 'ATB:Line:2_25',
-    lineLineNumber: '25',
-    lineName: 'Hurtigbåtterm. via Singsaker',
-    lineTransportationMode: 'bus',
-    lineTransportationSubMode: 'localBus',
-    quayId: 'NSR:Quay:72405',
-    quayName: 'Gyldenløves gate',
-    quayPublicCode: '',
-    stopId: 'NSR:StopPlace:42284',
-  },
-  {
-    id: 'd70b9340-75a2-4cc5-82bb-49648ee04a9a',
-    lineId: 'ATB:Line:2_25',
-    lineLineNumber: '25',
-    lineName: 'Vikåsen via Singsaker',
-    lineTransportationMode: 'bus',
-    lineTransportationSubMode: 'localBus',
-    quayId: 'NSR:Quay:72406',
-    quayName: 'Gyldenløves gate',
-    quayPublicCode: '',
-    stopId: 'NSR:StopPlace:42284',
+    stopPlace: {
+      __typename: 'StopPlace',
+      id: 'NSR:StopPlace:43133',
+      description: '',
+      name: 'Solsiden',
+      longitude: 10.413246,
+      latitude: 63.434019,
+    },
+    quays: [
+      {
+        quay: {
+          id: 'NSR:Quay:73975',
+          name: 'Solsiden',
+          stopPlaceId: 'NSR:StopPlace:43133',
+        },
+        group: [
+          {
+            lineInfo: {
+              lineId: 'ATB:Line:2_12',
+              lineName: 'Marienborg via sentrum',
+              lineNumber: '12',
+              quayId: 'NSR:Quay:73975',
+              notices: [],
+            },
+            departures: [
+              {
+                aimedTime: '2022-08-26T14:44:00+02:00',
+                serviceDate: '2022-08-26',
+                time: '2022-08-26T14:48:29+02:00',
+              },
+              {
+                aimedTime: '2022-08-26T14:55:00+02:00',
+                serviceDate: '2022-08-26',
+                time: '2022-08-26T14:56:09+02:00',
+              },
+              {
+                aimedTime: '2022-08-26T15:05:00+02:00',
+                serviceDate: '2022-08-26',
+                time: '2022-08-26T15:05:42+02:00',
+              },
+              {
+                aimedTime: '2022-08-26T15:15:00+02:00',
+                serviceDate: '2022-08-26',
+                time: '2022-08-26T15:15:41+02:00',
+              },
+              {
+                aimedTime: '2022-08-26T15:35:00+02:00',
+                serviceDate: '2022-08-26',
+                time: '2022-08-26T15:35:42+02:00',
+              },
+              {
+                aimedTime: '2022-08-26T15:45:00+02:00',
+                serviceDate: '2022-08-26',
+                time: '2022-08-26T15:45:42+02:00',
+              },
+              {
+                aimedTime: '2022-08-26T15:55:00+02:00',
+                serviceDate: '2022-08-26',
+                time: '2022-08-26T15:55:42+02:00',
+              },
+            ],
+          },
+          {
+            lineInfo: {
+              lineId: 'ATB:Line:2_12',
+              lineName: 'Trondheim Spektrum via sentrum',
+              lineNumber: '12',
+              quayId: 'NSR:Quay:73975',
+              notices: [],
+            },
+            departures: [
+              {
+                aimedTime: '2022-08-26T15:25:00+02:00',
+                serviceDate: '2022-08-26',
+                time: '2022-08-26T15:25:42+02:00',
+              },
+              {
+                aimedTime: '2022-08-26T16:25:00+02:00',
+                serviceDate: '2022-08-26',
+                time: '2022-08-26T16:25:00+02:00',
+              },
+              {
+                aimedTime: '2022-08-26T17:14:00+02:00',
+                serviceDate: '2022-08-26',
+                time: '2022-08-26T17:15:44+02:00',
+              },
+              {
+                aimedTime: '2022-08-26T17:54:00+02:00',
+                serviceDate: '2022-08-26',
+                time: '2022-08-26T17:54:00+02:00',
+              },
+              {
+                aimedTime: '2022-08-26T18:34:00+02:00',
+                serviceDate: '2022-08-26',
+                time: '2022-08-26T18:34:00+02:00',
+              },
+              {
+                aimedTime: '2022-08-26T19:14:00+02:00',
+                serviceDate: '2022-08-26',
+                time: '2022-08-26T19:14:00+02:00',
+              },
+              {
+                aimedTime: '2022-08-26T19:54:00+02:00',
+                serviceDate: '2022-08-26',
+                time: '2022-08-26T19:54:00+02:00',
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
 ];
-
-
-
-*/
-
-[
-  {
-    id: '051a3812-8f28-4407-a7cb-c602b2fbd52d',
-    lineId: 'ATB:Line:2_25',
-    lineLineNumber: '25',
-    lineName: 'Hurtigbåtterm. via Singsaker',
-    lineTransportationMode: 'bus',
-    lineTransportationSubMode: 'localBus',
-    quayId: 'NSR:Quay:72405',
-    quayName: 'Gyldenløves gate',
-    quayPublicCode: '',
-    stopId: 'NSR:StopPlace:42284',
-  },
-  {
-    id: 'd70b9340-75a2-4cc5-82bb-49648ee04a9a',
-    lineId: 'ATB:Line:2_25',
-    lineLineNumber: '25',
-    lineName: 'Vikåsen via Singsaker',
-    lineTransportationMode: 'bus',
-    lineTransportationSubMode: 'localBus',
-    quayId: '     ',
-    quayName: 'Gyldenløves gate',
-    quayPublicCode: '',
-    stopId: 'NSR:StopPlace:42284',
-  },
-  {
-    id: 'a455d715-36b5-44f4-8f84-8e64d99a8661',
-    lineTransportationMode: 'bus',
-    lineTransportationSubMode: 'localBus',
-    quayId: 'NSR:Quay:75155',
-    quayName: 'Festningsgata',
-    quayPublicCode: '',
-    stopId: 'NSR:StopPlace:43777',
-  },
-];
-
-/*
-{
-  a1: quays(ids: "NSR:Quay:72406") {
-    id
-    name
-    estimatedCalls(whiteListed: {lines: "ATB:Line:2_25"}, numberOfDepartures: 7) {
-      serviceJourney {
-        line {
-          id
-        }
-      }
-      aimedDepartureTime
-      destinationDisplay {
-        frontText
-      }
-    }
-    name
-  }
-  a2: quays(ids: "NSR:Quay:72405") {
-    id
-    name
-    estimatedCalls(whiteListed: {lines: "ATB:Line:2_25"}, numberOfDepartures: 7) {
-      serviceJourney {
-        line {
-          id
-        }
-      }
-      aimedDepartureTime
-      destinationDisplay {
-        frontText
-      }
-    }
-    name
-  }
-}
-  */

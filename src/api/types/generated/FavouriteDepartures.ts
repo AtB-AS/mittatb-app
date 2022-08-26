@@ -1,4 +1,10 @@
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
+import {
+  Notice,
+  PtSituationElement,
+  TransportMode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 
 export type FavouriteDepartureQueryVariables = Types.Exact<{
   quayIds?: Types.InputMaybe<
@@ -10,7 +16,6 @@ export type FavouriteDepartureQueryVariables = Types.Exact<{
     | Types.InputMaybe<Types.Scalars['ID']>
   >;
 }>;
-
 
 export type FavouriteDepartureQuery = {
   quays: Array<{
@@ -42,4 +47,5 @@ export type FavouriteDepartureQuery = {
     }>;
   }>;
 };
+
 
