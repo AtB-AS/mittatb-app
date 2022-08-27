@@ -27,6 +27,10 @@ const Actions = ({
       params: {
         afterLogin: {
           routeName: 'TabNavigator',
+          routeParams:
+            callerRoute === 'ConsequencesFromTicketPurchase'
+              ? {screen: 'Ticketing'}
+              : {},
         },
       },
     });
