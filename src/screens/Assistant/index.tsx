@@ -4,6 +4,7 @@ import {Location} from '@atb/favorites/types';
 import {DetailsRouteParams} from '../TripDetails/Details';
 import {TripDetailsRoot} from '../TripDetails';
 import AssistantRoot from './Assistant';
+import Dashboard from '../Dashboard/Dashboard';
 import JourneyDatePicker, {
   DateTimePickerParams,
   SearchTime,

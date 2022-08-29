@@ -20,6 +20,7 @@ import {
   isValidTicket,
   mapToUserProfilesWithCount,
   ValidityStatus,
+  userProfileCountAndName,
 } from '@atb/screens/Ticketing/Ticket/utils';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
@@ -50,6 +51,8 @@ export type TicketInfoDetailsProps = {
   isInspectable?: boolean;
   omitUserProfileCount?: boolean;
   testID?: string;
+  now?: number;
+  validTo?: number;
 };
 
 const TicketInfo = ({
@@ -90,15 +93,15 @@ const TicketInfo = ({
         status={status}
         ticketType={ticketType}
       />
+      <SectionSeparator />
       {fareContract && (
         <>
-          <SectionSeparator />
           <QrCode
             validityStatus={status}
             ticketIsInspectable={isInspectable}
             fc={fareContract}
           />
-          <SectionSeparator />
+          {isInspectable && <SectionSeparator />}
         </>
       )}
       <TicketInfoDetails
@@ -142,6 +145,7 @@ const TicketInfoHeader = ({
     isInspectable,
     ticketType,
   );
+
   return (
     <View style={styles.header}>
       <View style={styles.ticketHeader}>
@@ -152,12 +156,12 @@ const TicketInfoHeader = ({
             accessibilityLabel={productName + screenReaderPause}
             testID={testID + 'Product'}
           >
-            {productName + ', AtB'}
+            {productName}
           </ThemeText>
         )}
         {status === 'valid' && !isInspectable && <NonTicketInspectionSymbol />}
       </View>
-      {warning && <WarningMessage message={warning} />}
+      {status === 'valid' && warning && <WarningMessage message={warning} />}
     </View>
   );
 };
@@ -179,19 +183,14 @@ const TicketInfoDetails = (props: TicketInfoDetailsProps) => {
       ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
       : undefined;
 
-  const userProfileCountAndName = (u: UserProfileWithCount) =>
-    omitUserProfileCount
-      ? `${getReferenceDataName(u, language)}`
-      : `${u.count} ${getReferenceDataName(u, language)}`;
-
   return (
     <View style={styles.container} accessible={true}>
       <View style={styles.ticketDetails}>
-        <View>
+        <View style={styles.details}>
           <TicketDetail
             header={t(TicketTexts.label.travellers)}
             children={userProfilesWithCount.map((u) =>
-              userProfileCountAndName(u),
+              userProfileCountAndName(u, omitUserProfileCount, language),
             )}
           />
           {tariffZoneSummary && (
@@ -216,6 +215,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  details: {flex: 1},
   header: {
     justifyContent: 'space-between',
     marginBottom: theme.spacings.medium,

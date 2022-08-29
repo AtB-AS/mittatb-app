@@ -5,6 +5,7 @@ import {RootStackParamList} from '@atb/navigation';
 import {RouteProp} from '@react-navigation/native';
 import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
 import {AfterLoginParams} from '@atb/login/types';
+import {StackActions} from '@react-navigation/native';
 
 export type ConfirmCodeInAppRouteParams = {
   phoneNumber: string;
@@ -26,12 +27,13 @@ export const ConfirmCodeInApp = ({
   return (
     <ConfirmCode
       phoneNumber={route.params.phoneNumber}
-      doAfterLogin={() =>
-        navigation.navigate(
-          route.params.afterLogin.routeName as any,
-          route.params.afterLogin.routeParams,
-        )
-      }
+      doAfterLogin={() => {
+        navigation.dispatch(
+          StackActions.replace(route.params.afterLogin.routeName as any, {
+            ...route.params.afterLogin.routeParams,
+          }),
+        );
+      }}
     />
   );
 };

@@ -141,7 +141,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   label: {
     flex: 1,
     textAlign: 'right',
-    marginLeft: theme.spacings.medium,
+    marginLeft: theme.spacings.xLarge,
   },
 }));
 

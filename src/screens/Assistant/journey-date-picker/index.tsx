@@ -9,10 +9,16 @@ import {
 import {StyleSheet} from '@atb/theme';
 import {
   JourneyDatePickerTexts,
+  Language,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
+import {
+  dateWithReplacedTime,
+  formatLocaleTime,
+  formatToLongDateTime,
+} from '@atb/utils/date';
+import {TFunc} from '@leile/lobo-t';
 import {
   NavigationProp,
   ParamListBase,
@@ -158,4 +164,24 @@ export function useSearchTimeValue<
   }, [route.params?.[callerRouteParam]]);
 
   return searchTime;
+}
+
+export function getSearchTimeLabel(
+  searchTime: SearchTime,
+  timeOfLastSearch: string,
+  t: TFunc<typeof Language>,
+  language: Language,
+) {
+  const date = searchTime.option === 'now' ? timeOfLastSearch : searchTime.date;
+  const time = formatToLongDateTime(date, language);
+
+  switch (searchTime.option) {
+    case 'now':
+      return t(JourneyDatePickerTexts.dateInput.departureNow(time));
+    case 'arrival':
+      return t(JourneyDatePickerTexts.dateInput.arrival(time));
+    case 'departure':
+      return t(JourneyDatePickerTexts.dateInput.departure(time));
+  }
+  return time;
 }

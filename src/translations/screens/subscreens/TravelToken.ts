@@ -31,8 +31,8 @@ const SelectTravelTokenTexts = {
           'Can I use the ticket on both t:card and phone at the same time?',
         ),
         answer: _(
-          'Nei. Billetten kan bare brukes på en dings om gangen, og billetten kan ikke deles med andre.',
-          'No. You can only use the ticket on one gadget at a time and the ticket can not be shared with others.',
+          'Nei. Du du kan kun bruke en av gangen, og billetten kan ikke deles.',
+          'No. You can only use one at a time, and the ticket cannot be shared.',
         ),
       },
       {
@@ -41,8 +41,8 @@ const SelectTravelTokenTexts = {
           'Can I travel without my t:card or phone?',
         ),
         answer: _(
-          'Nei. Du må alltid ha med deg den dingsen du har valgt å bruke billetten på.',
-          'No. You must always bring the gadget you have chosen to use your ticket on.',
+          'Nei. Du må alltid ha med deg det t:kortet eller den mobilen du har valgt å bruke billetten på.',
+          'No. You must always bring the t:card or the phone you have chosen to use the ticket on.',
         ),
       },
       {

@@ -23,6 +23,7 @@ import TariffZoneSearch, {
 import {TransitionPresets} from '@react-navigation/stack';
 import {CardPaymentMethod} from './types';
 import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
+import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/screens/MobileTokenOnboarding/utils';
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;
@@ -55,6 +56,7 @@ type TicketPurchaseRootProps = {
 };
 
 export default function PurchaseStack({route}: TicketPurchaseRootProps) {
+  useGoToMobileTokenOnboardingWhenNecessary();
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}

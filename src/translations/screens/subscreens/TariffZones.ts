@@ -14,23 +14,12 @@ const TariffZonesTexts = {
         _(`Reise i 1 sone (${zoneName})`, `Travel in 1 zone (${zoneName})`),
       multipleZone: (zoneNameFrom: string, zoneNameTo: string) =>
         _(
-          `Reise fra sone ${zoneNameFrom} til sone ${zoneNameTo}`,
-          `Travel from zone ${zoneNameFrom} to zone ${zoneNameTo}`,
+          `Reise mellom sone ${zoneNameFrom} og sone ${zoneNameTo}`,
+          `Travel between zone ${zoneNameFrom} and zone ${zoneNameTo}`,
         ),
     },
   },
-  zoneTitle: {
-    text: (numberOfZones: number) => {
-      if (numberOfZones > 1) {
-        return _(
-          `Reise i ${numberOfZones} soner`,
-          `Travel in ${numberOfZones} zones`,
-        );
-      }
-
-      return _(`Reise i 1 sone`, `Travel in 1 zone`);
-    },
-  },
+  zoneTitle: _(`Reisesone(r)`, `Travel zone(s)`),
   zoneDescription: {
     text: {
       singleZone: (zoneName: string) =>

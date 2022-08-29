@@ -1,6 +1,6 @@
 {
   "name": "atb",
-  "version": "1.22.0",
+  "version": "1.24.0",
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
@@ -83,6 +83,7 @@
     "react-native-geolocation-service": "^5.2.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-get-random-values": "^1.7.0",
+    "react-native-inappbrowser-reborn": "^3.7.0",
     "react-native-intercom": "21.1.1",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-localize": "^2.1.3",
@@ -102,7 +103,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@atb-as/generate-assets": "^5.1.0-alpha.3",
+    "@atb-as/generate-assets": "^5.1.0-alpha.8",
     "@babel/core": "^7.12.13",
     "@babel/runtime": "^7.12.13",
     "@entur-private/abt-token-server-javascript-interface": "1.1.5",
