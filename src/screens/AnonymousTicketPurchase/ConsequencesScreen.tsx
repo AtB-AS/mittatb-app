@@ -16,6 +16,8 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {Receipt} from '@atb/assets/svg/mono-icons/ticketing';
 import ThemeIcon from '@atb/components/theme-icon';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -24,16 +26,12 @@ type ConsequencesScreenRouteProps = RouteProp<
   'ConsequencesFromOnboarding'
 >;
 
-export type ConsequencesScreenProps = {
-  navigation: MaterialTopTabNavigationProp<OnboardingStackParams>;
-};
-
 const ConsequencesScreen = ({
   route,
   navigation,
 }: {
   route: ConsequencesScreenRouteProps;
-  navigation: ConsequencesScreenProps;
+  navigation: MaterialTopTabNavigationProp<OnboardingStackParams>;
 }) => {
   const styles = useStyle();
   const {t} = useTranslation();
@@ -41,6 +39,23 @@ const ConsequencesScreen = ({
   const focusRef = useFocusOnLoad();
   const isCallerRouteOnboarding = route?.name === 'ConsequencesFromOnboarding';
   const fillColor = getStaticColor(themeName, themeColor).text;
+  const finishOnboarding = useFinishOnboarding();
+  const {enable_vipps_login} = useRemoteConfig();
+  const navigateTologIn = async () => {
+    navigation.navigate('LoginInApp', {
+      screen: enable_vipps_login ? 'LoginOptionsScreen' : 'PhoneInputInApp',
+      params: {
+        afterLogin: {
+          routeName: 'TabNavigator',
+          routeParams: isCallerRouteOnboarding ? {} : {screen: 'Ticketing'},
+        },
+      },
+    });
+  };
+
+  const secondaryAction = () =>
+    isCallerRouteOnboarding ? finishOnboarding() : navigation.goBack();
+
   return (
     <>
       {!isCallerRouteOnboarding && (
@@ -76,7 +91,10 @@ const ConsequencesScreen = ({
           />
         </View>
         <View style={styles.buttons}>
-          <Actions callerRoute={route?.name} navigation={navigation} />
+          <Actions
+            primaryAction={navigateTologIn}
+            secondaryAction={secondaryAction}
+          />
         </View>
       </ScrollView>
     </>
