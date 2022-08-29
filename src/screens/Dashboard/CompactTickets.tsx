@@ -113,7 +113,7 @@ const CompactTickets: React.FC<Props> = ({
         );
 
         return (
-          <Sections.Section withPadding>
+          <Sections.Section withPadding key={fareContract.id}>
             <Sections.GenericClickableItem
               onPress={() => onPressDetails?.(fareContract.orderId)}
             >
