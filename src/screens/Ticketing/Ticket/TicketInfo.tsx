@@ -146,10 +146,6 @@ const TicketInfoHeader = ({
     ticketType,
   );
 
-  const productDisplayName = `${productName}, ${t(
-    TicketTexts.organizationName,
-  )}`;
-
   return (
     <View style={styles.header}>
       <View style={styles.ticketHeader}>
@@ -157,10 +153,10 @@ const TicketInfoHeader = ({
           <ThemeText
             type="body__primary--bold"
             style={styles.product}
-            accessibilityLabel={productDisplayName + screenReaderPause}
+            accessibilityLabel={productName + screenReaderPause}
             testID={testID + 'Product'}
           >
-            {productDisplayName}
+            {productName}
           </ThemeText>
         )}
         {status === 'valid' && !isInspectable && <NonTicketInspectionSymbol />}
