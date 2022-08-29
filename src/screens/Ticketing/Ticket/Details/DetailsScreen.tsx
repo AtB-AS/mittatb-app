@@ -1,3 +1,5 @@
+import MessageBox from '@atb/components/message-box';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
 import {
   isPreactivatedTicket,
@@ -10,28 +12,17 @@ import {
   useTranslation,
 } from '@atb/translations';
 import useInterval from '@atb/utils/use-interval';
-import {RouteProp} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {TicketModalNavigationProp, TicketModalStackParams} from '.';
-import DetailsContent from './DetailsContent';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import MessageBox from '@atb/components/message-box';
 import {getValidityStatus} from '../utils';
+import DetailsContent from './DetailsContent';
+import {TicketModalScreenProps} from './types';
 
 export type TicketDetailsRouteParams = {
   orderId: string;
 };
 
-export type TicketDetailsScreenRouteProp = RouteProp<
-  TicketModalStackParams,
-  'TicketDetails'
->;
-
-type Props = {
-  route: TicketDetailsScreenRouteProp;
-  navigation: TicketModalNavigationProp;
-};
+type Props = TicketModalScreenProps<'TicketDetails'>;
 
 export default function DetailsScreen({navigation, route}: Props) {
   const styles = useStyles();

@@ -1,54 +1,26 @@
 import {useAppState} from '@atb/AppContext';
 import trackNavigation from '@atb/diagnostics/trackNavigation';
-import LocationSearch, {
-  RouteParams as LocationSearchParams,
-} from '@atb/location-search';
-import LoginInAppStack, {
-  LoginInAppStackParams,
-} from '@atb/login/in-app/LoginInAppStack';
+import LocationSearch from '@atb/location-search';
+import LoginInAppStack from '@atb/login/in-app/LoginInAppStack';
 import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
 import MobileTokenOnboarding from '@atb/screens/MobileTokenOnboarding';
 import Onboarding from '@atb/screens/Onboarding';
-import AddEditFavorite, {
-  AddEditFavoriteRootParams,
-} from '@atb/screens/Profile/AddEditFavorite';
+import AddEditFavorite from '@atb/screens/Profile/AddEditFavorite';
 import SortableFavoriteList from '@atb/screens/Profile/FavoriteList/SortFavorites';
 import SelectTravelTokenScreen from '@atb/screens/Profile/TravelToken/SelectTravelTokenScreen';
-import TicketPurchase, {
-  TicketingStackParams,
-} from '@atb/screens/Ticketing/Purchase';
-import TicketModalScreen, {
-  TicketModalStackParams,
-} from '@atb/screens/Ticketing/Ticket/Details';
+import TicketPurchase from '@atb/screens/Ticketing/Purchase';
+import TicketModalScreen from '@atb/screens/Ticketing/Ticket/Details';
 import {useTheme} from '@atb/theme';
 import {APP_SCHEME} from '@env';
-import {
-  DefaultTheme,
-  NavigationContainer,
-  NavigatorScreenParams,
-} from '@react-navigation/native';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
 import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
-import TabNavigator, {TabNavigatorParams} from './TabNavigator';
+import TabNavigator from './TabNavigator';
 import transitionSpec from './transitionSpec';
+import {RootStackParamList} from './types';
 import useTestIds from './use-test-ids';
-
-export type RootStackParamList = {
-  NotFound: undefined;
-  Onboarding: undefined;
-  TabNavigator: NavigatorScreenParams<TabNavigatorParams>;
-  LocationSearch: LocationSearchParams;
-  SortableFavoriteList: undefined;
-  AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;
-  LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
-  TicketPurchase: NavigatorScreenParams<TicketingStackParams>;
-  TicketModal: NavigatorScreenParams<TicketModalStackParams>;
-  MobileTokenOnboarding: undefined;
-  SelectTravelTokenRoot: undefined;
-  ConsequencesFromTicketPurchase: undefined;
-};
 
 const Stack = createStackNavigator<RootStackParamList>();
 

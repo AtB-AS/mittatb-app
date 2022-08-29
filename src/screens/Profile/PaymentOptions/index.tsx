@@ -1,5 +1,6 @@
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {useAuthState} from '@atb/auth';
+import MessageBox from '@atb/components/message-box';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ThemeText from '@atb/components/text';
 import PaymentBrand from '@atb/screens/Ticketing/Purchase/Payment/PaymentBrand';
@@ -15,26 +16,20 @@ import {
 } from '@atb/tickets';
 import {useTranslation} from '@atb/translations';
 import PaymentOptionsTexts from '@atb/translations/screens/subscreens/PaymentOptions';
-import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
-import {destructiveAlert} from '../Home/utils';
-import MessageBox from '@atb/components/message-box';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '@atb/navigation';
 import useFontScale from '@atb/utils/use-font-scale';
-import Bugsnag from '@bugsnag/react-native';
 import {useIsFocused} from '@react-navigation/native';
-import {FlatList} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, TouchableOpacity, View} from 'react-native';
+import {destructiveAlert} from '../Home/utils';
+import {ProfileScreenProps} from '../types';
 
-type PaymentOptionsProps = {
-  navigation: StackNavigationProp<RootStackParamList>;
-};
+type PaymentOptionsProps = ProfileScreenProps<'PaymentOptions'>;
 
 type RecurringPaymentRenderItem = {
   item: RecurringPayment;
 };
 
-export default function PaymentOptions({navigation}: PaymentOptionsProps) {
+export default function PaymentOptions({}: PaymentOptionsProps) {
   const style = useStyle();
   const {t} = useTranslation();
   const {user} = useAuthState();

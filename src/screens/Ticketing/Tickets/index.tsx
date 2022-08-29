@@ -14,14 +14,11 @@ import {View} from 'react-native';
 import {ActiveTickets} from './ActiveTickets/ActiveTickets';
 import TabBar from './TabBar';
 import {BuyTickets} from './Tabs';
-
-export const BuyTicketsScreenName = 'BuyTickets';
-export const ActiveTicketsScreenName = 'ActiveTickets';
-
-export type TicketTabsNavigatorParams = {
-  [BuyTicketsScreenName]: undefined;
-  [ActiveTicketsScreenName]: undefined;
-};
+import {
+  ActiveTicketsScreenName,
+  BuyTicketsScreenName,
+  TicketTabsNavigatorParams,
+} from './types';
 
 const Tab = createMaterialTopTabNavigator<TicketTabsNavigatorParams>();
 

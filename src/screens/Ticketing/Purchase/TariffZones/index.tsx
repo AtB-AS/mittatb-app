@@ -1,3 +1,4 @@
+import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {Location} from '@atb/assets/svg/mono-icons/places';
 import Button from '@atb/components/button';
@@ -11,10 +12,11 @@ import {
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {ButtonInput, Section} from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
+import TariffZoneResults from '@atb/screens/Ticketing/Purchase/TariffZones/search/TariffZoneResults';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   Language,
@@ -26,17 +28,13 @@ import MapboxGL, {
   OnPressEvent,
   RegionPayload,
 } from '@react-native-mapbox-gl/maps';
-import {RouteProp} from '@react-navigation/native';
 import turfCentroid from '@turf/centroid';
 import {FeatureCollection, Polygon} from 'geojson';
+import hexToRgba from 'hex-to-rgba';
 import React, {useEffect, useRef, useState} from 'react';
 import {PixelRatio, Platform, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {TicketingStackParams} from '../';
-import TariffZoneResults from '@atb/screens/Ticketing/Purchase/TariffZones/search/TariffZoneResults';
-import {useAccessibilityContext} from '@atb/AccessibilityContext';
-import hexToRgba from 'hex-to-rgba';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {TicketPurchaseScreenProps} from '../types';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -47,21 +45,10 @@ export type RouteParams = {
   isApplicableOnSingleZoneOnly?: boolean;
 };
 
-type RouteProps = RouteProp<TicketingStackParams, TariffZonesRouteName>;
-type NavigationProps = DismissableStackNavigationProp<
-  TicketingStackParams,
-  TariffZonesRouteName
->;
-
 export type TariffZoneResultType = 'venue' | 'geolocation' | 'zone';
 export type TariffZoneWithMetadata = TariffZone & {
   resultType: TariffZoneResultType;
   venueName?: string;
-};
-
-export type TariffZonesProps = {
-  navigation: NavigationProps;
-  route: RouteProps;
 };
 
 type RegionEvent = {
@@ -75,13 +62,10 @@ type TariffZoneSelection = {
   selectNext: 'from' | 'to';
 };
 
+type TariffZonesProps = TicketPurchaseScreenProps<'TariffZones'>;
+
 const TariffZonesRoot: React.FC<TariffZonesProps> = ({navigation, route}) => {
   return <TariffZones navigation={navigation} route={route} />;
-};
-
-type Props = {
-  navigation: NavigationProps;
-  route: RouteProps;
 };
 
 export const tariffZonesSummary = (
@@ -235,7 +219,10 @@ const destinationPickerValue = (
   }
 };
 
-const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
+const TariffZones: React.FC<TariffZonesProps> = ({
+  navigation,
+  route: {params},
+}) => {
   const {fromTariffZone, toTariffZone, isApplicableOnSingleZoneOnly} = params;
   const [regionEvent, setRegionEvent] = useState<RegionEvent>();
   const {tariffZones} = useFirestoreConfiguration();

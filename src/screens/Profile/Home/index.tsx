@@ -1,64 +1,49 @@
+import {Delete} from '@atb/assets/svg/mono-icons/actions';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {useAuthState} from '@atb/auth';
+import {updateMetadata} from '@atb/chat/metadata';
+import ActivityIndicatorOverlay from '@atb/components/activity-indicator-overlay';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
-import {RootStackParamList} from '@atb/navigation';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useSearchHistory} from '@atb/search-history';
-import {StyleSheet, Theme} from '@atb/theme';
-import {ProfileTexts, useTranslation} from '@atb/translations';
-import {Delete} from '@atb/assets/svg/mono-icons/actions';
-import {LogOut} from '@atb/assets/svg/mono-icons/profile';
-import useLocalConfig from '@atb/utils/use-local-config';
-import {IS_QA_ENV} from '@env';
-import {CompositeNavigationProp} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import React from 'react';
-import {Linking, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import {getBuildNumber, getVersion} from 'react-native-device-info';
-import {ProfileStackParams} from '..';
-import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
-import {numberToAccessibilityString} from '@atb/utils/accessibility';
-import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
-import {
-  filterActiveOrCanBeUsedFareContracts,
-  useTicketState,
-} from '@atb/tickets';
-import {usePreferences} from '@atb/preferences';
-import analytics from '@react-native-firebase/analytics';
-import {updateMetadata} from '@atb/chat/metadata';
-import parsePhoneNumber from 'libphonenumber-js';
+import ThemeIcon from '@atb/components/theme-icon';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
+import {usePreferences} from '@atb/preferences';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useSearchHistory} from '@atb/search-history';
+import {StyleSheet, Theme} from '@atb/theme';
+import {
+  filterActiveOrCanBeUsedFareContracts,
+  useTicketState,
+} from '@atb/tickets';
+import {ProfileTexts, useTranslation} from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
-import ThemeIcon from '@atb/components/theme-icon';
-import {destructiveAlert} from './utils';
-import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import Bugsnag from '@bugsnag/react-native';
+import {numberToAccessibilityString} from '@atb/utils/accessibility';
+import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
 import useIsLoading from '@atb/utils/use-is-loading';
-import ActivityIndicatorOverlay from '@atb/components/activity-indicator-overlay';
+import useLocalConfig from '@atb/utils/use-local-config';
+import Bugsnag from '@bugsnag/react-native';
+import {IS_QA_ENV} from '@env';
+import analytics from '@react-native-firebase/analytics';
+import parsePhoneNumber from 'libphonenumber-js';
+import React from 'react';
+import {Linking, View} from 'react-native';
+import {getBuildNumber, getVersion} from 'react-native-device-info';
+import {ScrollView} from 'react-native-gesture-handler';
+import {ProfileScreenProps} from '../types';
+import {destructiveAlert} from './utils';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
 
-export type ProfileScreenNavigationProp = StackNavigationProp<
-  ProfileStackParams,
-  'ProfileHome'
->;
+type ProfileProps = ProfileScreenProps<'ProfileHome'>;
 
-type ProfileNearbyScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<RootStackParamList>,
-  ProfileScreenNavigationProp
->;
-
-type ProfileScreenProps = {
-  navigation: ProfileNearbyScreenNavigationProp;
-};
-
-export default function ProfileHome({navigation}: ProfileScreenProps) {
+export default function ProfileHome({navigation}: ProfileProps) {
   const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login} =
     useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();

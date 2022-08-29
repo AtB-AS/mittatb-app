@@ -1,14 +1,16 @@
-import ThemeText from '@atb/components/text';
+import MessageBox from '@atb/components/message-box';
 import ErrorBoundary from '@atb/error-boundary';
-import {RootStackParamList} from '@atb/navigation';
+import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import {RootStackParamList} from '@atb/navigation/types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
-  Reservation,
   FareContract,
+  Reservation,
   TravelCard,
   useTicketState,
 } from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
+import TravelTokenBox from '@atb/travel-token-box';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import hexToRgba from 'hex-to-rgba';
 import React from 'react';
@@ -18,9 +20,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import SimpleTicket from '../Ticket';
 import TicketReservation from './TicketReservation';
 import TravelCardInformation from './TravelCardInformation';
-import MessageBox from '@atb/components/message-box';
-import TravelTokenBox from '@atb/travel-token-box';
-import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 

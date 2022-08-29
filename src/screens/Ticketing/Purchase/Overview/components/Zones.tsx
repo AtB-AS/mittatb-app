@@ -1,18 +1,18 @@
-import React from 'react';
-import {View, AccessibilityProps, StyleProp, ViewStyle} from 'react-native';
-import ThemeText from '@atb/components/text';
-import * as Sections from '@atb/components/sections';
-import {StyleSheet} from '@atb/theme';
-import {OverviewNavigationProp} from '@atb/screens/Ticketing/Purchase/Overview';
 import {screenReaderPause} from '@atb/components/accessible-text';
-import {
-  tariffZonesSummary,
-  tariffZonesTitle,
-  tariffZonesDescription,
-  TariffZoneWithMetadata,
-} from '../../TariffZones';
+import * as Sections from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
+import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {useNavigation} from '@react-navigation/native';
+import React from 'react';
+import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
+import {
+  tariffZonesDescription,
+  tariffZonesSummary,
+  tariffZonesTitle,
+  TariffZoneWithMetadata,
+} from '../../TariffZones';
+import {OverviewNavigationProps} from '../types';
 type ZonesProps = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
@@ -28,7 +28,7 @@ export default function Zones({
 }: ZonesProps) {
   const itemStyle = useStyles();
   const {t, language} = useTranslation();
-  const navigation = useNavigation<OverviewNavigationProp>();
+  const navigation = useNavigation<OverviewNavigationProps>();
   const accessibility: AccessibilityProps = {
     accessible: true,
     accessibilityRole: 'button',

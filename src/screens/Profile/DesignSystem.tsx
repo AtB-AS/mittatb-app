@@ -1,14 +1,17 @@
+import {ContrastColor} from '@atb-as/theme';
 import {Delete, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {Check} from '@atb/assets/svg/mono-icons/status';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import Button, {ButtonGroup} from '@atb/components/button';
+import MessageBox from '@atb/components/message-box';
+import RadioSegments from '@atb/components/radio-segments';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import MessageBox from '@atb/components/message-box';
+import TransportationIcon from '@atb/components/transportation-icon';
+import {LegMode, TransportSubmode} from '@atb/sdk';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {ContrastColor} from '@atb-as/theme';
 import {
   InteractiveColor,
   StaticColorByType,
@@ -18,9 +21,6 @@ import {
 import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {LegMode, TransportSubmode} from '@atb/sdk';
-import TransportationIcon from '@atb/components/transportation-icon';
-import RadioSegments from '@atb/components/radio-segments';
 
 export default function DesignSystem() {
   const style = useProfileHomeStyle();

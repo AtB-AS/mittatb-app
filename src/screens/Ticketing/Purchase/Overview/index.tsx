@@ -1,6 +1,5 @@
-import {useGeolocationState} from '@atb/GeolocationContext';
 import MessageBox from '@atb/components/message-box';
-import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
+import {useGeolocationState} from '@atb/GeolocationContext';
 import {
   PreassignedFareProduct,
   TariffZone,
@@ -13,47 +12,38 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {RouteProp} from '@react-navigation/native';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import Zones from './components/Zones';
 
-import {
-  getReferenceDataName,
-  productIsSellableInApp,
-} from '@atb/reference-data/utils';
-import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {ScrollView, View} from 'react-native';
-import {TicketingStackParams} from '../';
-import {TariffZoneWithMetadata} from '../TariffZones';
-import useOfferState from './use-offer-state';
-import {formatToLongDateTime} from '@atb/utils/date';
-import {usePreferences} from '@atb/preferences';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import MessageBoxTexts from '@atb/translations/components/MessageBox';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
+import {usePreferences} from '@atb/preferences';
+import {
+  getReferenceDataName,
+  productIsSellableInApp,
+} from '@atb/reference-data/utils';
 import {useTicketState} from '@atb/tickets';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import Summary from './components/Summary';
+import MessageBoxTexts from '@atb/translations/components/MessageBox';
+import {formatToLongDateTime} from '@atb/utils/date';
+import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {ScrollView, View} from 'react-native';
+import {getOtherDeviceIsInspectableWarning} from '../../Ticket/utils';
+import {TariffZoneWithMetadata} from '../TariffZones';
+import {TicketPurchaseScreenProps} from '../types';
+import {getPurchaseFlow} from '../utils';
 import DurationSelection from './components/DurationSelection';
 import StartTimeSelection from './components/StartTimeSelection';
+import Summary from './components/Summary';
 import TravellerSelection from './components/TravellerSelection';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
-import {getPurchaseFlow} from '../utils';
-import {getOtherDeviceIsInspectableWarning} from '../../Ticket/utils';
+import useOfferState from './use-offer-state';
 
-export type OverviewNavigationProp = DismissableStackNavigationProp<
-  TicketingStackParams,
-  'PurchaseOverview'
->;
-
-export type OverviewProps = {
-  navigation: OverviewNavigationProp;
-  route: RouteProp<TicketingStackParams, 'PurchaseOverview'>;
-};
+type OverviewProps = TicketPurchaseScreenProps<'PurchaseOverview'>;
 
 const PurchaseOverview: React.FC<OverviewProps> = ({
   navigation,

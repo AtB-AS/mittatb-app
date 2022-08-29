@@ -1,16 +1,21 @@
+import {shouldOnboardMobileToken} from '@atb/api/utils';
+import {useAppState} from '@atb/AppContext';
 import {
   Assistant as AssistantIcon,
   Departures,
   Profile,
   Ticketing,
 } from '@atb/assets/svg/mono-icons/tab-bar';
+import {useAuthState} from '@atb/auth';
 import ThemeText from '@atb/components/text';
-import {Location} from '@atb/favorites/types';
+import ThemeIcon from '@atb/components/theme-icon/theme-icon';
+import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import {usePreferenceItems} from '@atb/preferences';
 import Assistant from '@atb/screens/Assistant';
 import Dashboard from '@atb/screens/Dashboard';
-import NearbyScreen, {NearbyStackParams} from '@atb/screens/Nearby';
-import ProfileScreen, {ProfileStackParams} from '@atb/screens/Profile';
+import DeparturesScreen from '@atb/screens/Departures';
+import NearbyScreen from '@atb/screens/Nearby';
+import ProfileScreen from '@atb/screens/Profile';
 import TicketingScreen from '@atb/screens/Ticketing';
 import {useTheme} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations/';
@@ -20,34 +25,11 @@ import {
 } from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {
-  NavigatorScreenParams,
-  ParamListBase,
-  useNavigation,
-} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {SvgProps} from 'react-native-svg';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import DeparturesScreen from '@atb/screens/Departures';
-import {TicketTabsNavigatorParams} from '@atb/screens/Ticketing/Tickets';
-import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
-import {useAuthState} from '@atb/auth';
-import {useAppState} from '@atb/AppContext';
-import {shouldOnboardMobileToken} from '@atb/api/utils';
+import {RootProps, TabNavigatorParams} from './types';
 
-type SubNavigator<T extends ParamListBase> = {
-  [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
-}[keyof T];
-
-export type TabNavigatorParams = {
-  Assistant: {
-    fromLocation: Location;
-    toLocation: Location;
-  };
-  Nearest: NavigatorScreenParams<NearbyStackParams>;
-  Ticketing: NavigatorScreenParams<TicketTabsNavigatorParams>;
-  Profile: SubNavigator<ProfileStackParams>;
-};
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
 const NavigationRoot = () => {
@@ -168,7 +150,7 @@ const useGoToMobileTokenOnboardingWhenNecessary = () => {
     authenticationType,
     mobileTokenOnboarded,
   );
-  const navigation = useNavigation();
+  const navigation = useNavigation<RootProps>();
 
   useEffect(() => {
     if (shouldOnboard) {

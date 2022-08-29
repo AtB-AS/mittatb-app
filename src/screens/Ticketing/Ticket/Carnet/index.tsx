@@ -1,5 +1,5 @@
 import * as Sections from '@atb/components/sections';
-import {RootStackParamList} from '@atb/navigation';
+import {RootStackParamList} from '@atb/navigation/types';
 import {CarnetDetails} from '@atb/screens/Ticketing/Ticket/Carnet/CarnetDetails';
 import {CarnetTicket, FareContract} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';

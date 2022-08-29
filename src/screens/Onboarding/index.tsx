@@ -1,6 +1,4 @@
 import {PageIndicator} from '@atb/components/page-indicator';
-import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
-import {ConfirmCodeInOnboardingRouteParams} from '@atb/login/in-onboarding/ConfirmCodeInOnboarding';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
 import IntercomInfo from '@atb/screens/Onboarding/IntercomInfo';
@@ -11,21 +9,10 @@ import {
   createMaterialTopTabNavigator,
   MaterialTopTabBarProps,
 } from '@react-navigation/material-top-tabs';
-import {NavigatorScreenParams} from '@react-navigation/native';
 import React from 'react';
 import {StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
-export type OnboardingStackParams = {
-  WelcomeScreenLogin: undefined;
-  WelcomeScreenWithoutLogin: undefined;
-  IntercomInfo: undefined;
-  PhoneInputInOnboarding: undefined;
-  ConfirmCodeInOnboarding: ConfirmCodeInOnboardingRouteParams;
-  SkipLoginWarning: undefined;
-  ConsequencesFromOnboarding: undefined;
-  LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
-};
+import {OnboardingStackParams} from './type';
 
 const Tab = createMaterialTopTabNavigator<OnboardingStackParams>();
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';

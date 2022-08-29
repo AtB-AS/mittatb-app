@@ -4,33 +4,30 @@ import {Receipt} from '@atb/assets/svg/mono-icons/ticketing';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
-import {RootStackParamList} from '@atb/navigation';
+import {RootStackScreenProps} from '@atb/navigation/types';
 import Actions from '@atb/screens/AnonymousTicketPurchase/components/Actions';
 import Consequence from '@atb/screens/AnonymousTicketPurchase/components/Consequence';
-import {OnboardingStackParams} from '@atb/screens/Onboarding';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {useTranslation} from '@atb/translations';
 import AnonymousTicketPurchases from '@atb/translations/screens/subscreens/AnonymousTicketPurchases';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {RouteProp} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
+import {OnboardingScreenProps} from '../Onboarding/type';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export type ConsequencesScreenRouteProps = RouteProp<
-  OnboardingStackParams,
-  'ConsequencesFromOnboarding'
->;
+type ConsequencesScreenProps =
+  RootStackScreenProps<'ConsequencesFromTicketPurchase'>;
 
-type ConsequencesScreenProps = StackNavigationProp<
-  RootStackParamList,
-  'ConsequencesFromTicketPurchase'
->;
+type ConsequencesFromOnboardingScreenProps =
+  OnboardingScreenProps<'ConsequencesFromOnboarding'>;
 
-const ConsequencesScreen = ({route, navigation}: ConsequencesScreenProps) => {
+const ConsequencesScreen = ({
+  route,
+  navigation,
+}: ConsequencesScreenProps | ConsequencesFromOnboardingScreenProps) => {
   const styles = useStyle();
   const {t} = useTranslation();
   const {themeName} = useTheme();

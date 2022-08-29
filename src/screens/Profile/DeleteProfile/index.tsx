@@ -1,38 +1,23 @@
-import {StyleSheet, Theme} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
-import React, {useEffect, useState} from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {Alert, Platform, View} from 'react-native';
+import deleteProfile from '@atb/api/delete_profile';
+import {Delete} from '@atb/assets/svg/mono-icons/actions';
+import {useAuthState} from '@atb/auth';
 import MessageBox from '@atb/components/message-box';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
-import {Delete} from '@atb/assets/svg/mono-icons/actions';
+import {StyleSheet, Theme} from '@atb/theme';
 import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketState,
 } from '@atb/tickets';
-import deleteProfile from '@atb/api/delete_profile';
-import {useAuthState} from '@atb/auth';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {CompositeNavigationProp} from '@react-navigation/native';
-import {ProfileStackParams} from '..';
-import {RootStackParamList} from '@atb/navigation';
+import {useTranslation} from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
+import React, {useEffect, useState} from 'react';
+import {Alert, View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import {ProfileScreenProps} from '../types';
 
-export type DeleteProfileNavigationProp = StackNavigationProp<
-  ProfileStackParams,
-  'DeleteProfile'
->;
-
-type DeleteProfilecreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<RootStackParamList>,
-  DeleteProfileNavigationProp
->;
-
-type DeleteProfileScreenProps = {
-  navigation: DeleteProfilecreenNavigationProp;
-};
+type DeleteProfileScreenProps = ProfileScreenProps<'DeleteProfile'>;
 
 export default function DeleteProfile({navigation}: DeleteProfileScreenProps) {
   const style = useStyle();

@@ -1,7 +1,7 @@
+import {TabNavigatorParams} from '@atb/navigation/types';
 import useFontScale from '@atb/utils/use-font-scale';
 import {Platform} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {TabNavigatorParams} from '../navigation/TabNavigator';
 import {Preference_ScreenAlternatives} from '../preferences';
 
 // This is code from react-navigation, for regular tab bar
