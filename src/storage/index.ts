@@ -36,6 +36,8 @@ const leaveBreadCrumb = (
   });
 };
 
+export type KeyValuePair = [string, string | null];
+
 const storage = {
   get: async (key: string) => {
     const value = await AsyncStorage.getItem(key).catch(errorHandler);
