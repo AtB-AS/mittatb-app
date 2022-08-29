@@ -6,24 +6,32 @@ import React from 'react';
 import {View} from 'react-native';
 import {tariffZonesSummary} from '@atb/screens/Ticketing/Purchase/TariffZones';
 import {
-  getNonInspectableTokenWarning,
   isValidTicket,
   userProfileCountAndName,
 } from '@atb/screens/Ticketing/Ticket/utils';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import WarningMessage from '@atb/screens/Ticketing/Ticket/Component/WarningMessage';
 import ZoneSymbol from '@atb/screens/Ticketing/Ticket/Component/ZoneSymbol';
 import {secondsToDuration} from '@atb/utils/date';
 import {TicketInfoDetailsProps} from './TicketInfo';
+import NonTicketInspectionSymbol from './Component/NotForInspectionSymbol';
+import LoadingSymbol from './Component/LoadingSymbol';
 
 export const CompactTicketInfo = (props: TicketInfoDetailsProps) => {
   const styles = useStyles();
   const {status, isInspectable} = props;
+  const isValid = isValidTicket(status);
+  const {isLoading} = useMobileTokenContextState();
   return (
     <View style={styles.container}>
       <CompactTicketInfoTexts {...props} />
-      {isValidTicket(status) && isInspectable && <ZoneSymbol {...props} />}
+      <View style={styles.symbolContainer}>
+        {isLoading && <LoadingSymbol />}
+        {isValid && isInspectable && !isLoading && <ZoneSymbol {...props} />}
+        {isValid && !isInspectable && !isLoading && (
+          <NonTicketInspectionSymbol />
+        )}
+      </View>
     </View>
   );
 };
@@ -34,7 +42,6 @@ const CompactTicketInfoTexts = (props: TicketInfoDetailsProps) => {
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
-    isInspectable,
     omitUserProfileCount,
     testID,
     validTo,
@@ -52,16 +59,6 @@ const CompactTicketInfoTexts = (props: TicketInfoDetailsProps) => {
       ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
       : undefined;
 
-  const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
-  const warning = getNonInspectableTokenWarning(
-    isError,
-    fallbackEnabled,
-    t,
-    remoteTokens,
-    isInspectable,
-    preassignedFareProduct?.type,
-  );
-
   const secondsUntilValid = ((validTo || 0) - (now || 0)) / 1000;
   const conjunction = t(TicketTexts.validityHeader.durationDelimiter);
   const durationText = secondsToDuration(secondsUntilValid, language, {
@@ -69,6 +66,7 @@ const CompactTicketInfoTexts = (props: TicketInfoDetailsProps) => {
     serialComma: false,
   });
   const timeUntilExpire = t(TicketTexts.validityHeader.valid(durationText));
+
   return (
     <View style={styles.textsContainer} accessible={true}>
       <ThemeText
@@ -109,7 +107,6 @@ const CompactTicketInfoTexts = (props: TicketInfoDetailsProps) => {
           {tariffZoneSummary}
         </ThemeText>
       )}
-      {warning && <WarningMessage message={warning} />}
     </View>
   );
 };
@@ -119,6 +116,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   textsContainer: {flex: 1, paddingTop: theme.spacings.xSmall},
   expireTime: {
     marginBottom: theme.spacings.small,
+  },
+  symbolContainer: {
+    height: 72,
+    width: 72,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
   },
 }));
 
