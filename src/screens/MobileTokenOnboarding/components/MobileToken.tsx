@@ -20,7 +20,7 @@ type MobileTokenProps = {
 const MobileToken = ({navigation}: MobileTokenProps) => {
   const {remoteTokens, isLoading, isError} = useMobileTokenContextState();
 
-  const close = () => navigation.popToTop();
+  const close = () => navigation.pop();
 
   if (isLoading) return <NoMobileTokenScreen close={close} />;
   if (isError) return <NoMobileTokenScreen close={close} />;
