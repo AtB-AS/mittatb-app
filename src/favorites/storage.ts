@@ -4,7 +4,6 @@ import {
   FavoriteDeparture,
   FavoriteDepartureWithId,
   LocationFavorite,
-  UserFavorites,
 } from './types';
 
 export type StoredType<T> = {
@@ -45,9 +44,9 @@ class FavoriteStore<T = LocationFavorite | FavoriteDeparture> {
   }
 
   async getFrontpageFavorites(): Promise<FavoriteDepartureWithId[]> {
-    const userLocations = await storage.get(this.key);
+    const frontPageFavourites = await storage.get(this.key);
     let data = (
-      userLocations ? JSON.parse(userLocations) : []
+      frontPageFavourites ? JSON.parse(frontPageFavourites) : []
     ) as StoredType<FavoriteDepartureWithId>[];
     return data;
   }

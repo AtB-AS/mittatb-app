@@ -44,12 +44,15 @@ const FavoritesContextProvider: React.FC = ({children}) => {
   const [frontPageFavouriteDepartures, setFrontPageFavouriteDepartures] =
     useState<UserFavoriteDepartures>([]);
   async function populateFavorites() {
-    const [favorites, favoriteDepartures] = await Promise.all([
-      places.getFavorites(),
-      departures.getFavorites(),
-    ]);
+    const [favorites, favoriteDepartures, frontPageFavouriteDepartures] =
+      await Promise.all([
+        places.getFavorites(),
+        departures.getFavorites(),
+        frontpageFavourites.getFrontpageFavorites(),
+      ]);
     setFavoritesState(favorites ?? []);
     setFavoriteDeparturesState(favoriteDepartures ?? []);
+    setFrontPageFavouriteDepartures(frontPageFavouriteDepartures ?? []);
   }
 
   useEffect(() => {
