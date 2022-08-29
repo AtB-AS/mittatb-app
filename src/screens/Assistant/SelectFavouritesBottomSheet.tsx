@@ -94,7 +94,6 @@ const SelectFavouritesBottomSheet = ({
   const frontpageFavouriteItems = frontPageFavouriteDepartures ?? [];
 
   const handleSwitchFlip = (favouriteId: string) => {
-    console.log('switch flipped', favouriteId);
     const favouriteInFavourites = favouriteItems.find(
       (item) => item.id === favouriteId,
     );
@@ -104,17 +103,12 @@ const SelectFavouritesBottomSheet = ({
     );
 
     if (!favouriteInFrontpageFavourites) {
-      // dersom ikke blant favoritter
       const favourite = favoriteDepartures.find(
         (departure) => departure.id === favouriteId,
       );
-      console.log('adding favourite', favourite);
-      if (favourite) addFrontPageFavouriteDeparture(favourite);
-      else console.log('something weird');
+      if (!favourite) return;
+      addFrontPageFavouriteDeparture(favourite);
     } else if (favouriteInFavourites) {
-      // dersom blant favoritter
-      console.log('removing favourite', favouriteInFrontpageFavourites);
-
       removeFrontPageFavouriteDeparture(favouriteInFrontpageFavourites);
     }
   };
@@ -208,6 +202,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     flatListArea: {
       backgroundColor: theme.static.background.background_0.background,
       margin: theme.spacings.medium,
+      marginBottom: theme.spacings.xLarge,
       borderRadius: theme.border.radius.regular,
     },
     selectableDeparture: {
