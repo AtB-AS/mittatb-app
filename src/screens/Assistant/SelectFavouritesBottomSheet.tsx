@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {FlatList, Platform, ScrollView, View} from 'react-native';
+import React from 'react';
+import {Platform, ScrollView, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
@@ -17,10 +17,6 @@ import {AnyMode} from '@atb/components/transportation-icon';
 import {LegMode, TransportSubmode} from '@entur/sdk';
 import SectionSeparator from '@atb/components/sections/section-separator';
 import MessageBox from '@atb/components/message-box';
-import {
-  FavoriteDepartureId,
-  StoredFavoriteDeparture,
-} from '@atb/favorites/types';
 
 type SelectableFavouriteDepartureData = {
   handleSwitchFlip: (favouriteId: any) => void;
@@ -142,29 +138,34 @@ const SelectFavouritesBottomSheet = ({
 
         <View>
           {favouriteItems &&
-            favouriteItems.map((departureDetails) => (
-              <SelectableFavouriteDeparture
-                handleSwitchFlip={handleSwitchFlip}
-                favouriteId={departureDetails.id}
-                active={
-                  frontPageFavouriteDepartures.find(
-                    (departure) => departure.id === departureDetails.id,
-                  )
-                    ? true
-                    : false
-                }
-                departureStation={departureDetails.quayName}
-                lineIdentifier={departureDetails.lineLineNumber ?? ''}
-                lineName={
-                  departureDetails.lineName ??
-                  t(SelectFavouriteDeparturesText.departures.allVariations)
-                }
-                lineTransportationMode={
-                  departureDetails.lineTransportationMode ?? LegMode.BUS
-                }
-                key={departureDetails.id}
-              />
-            ))}
+            favouriteItems.map((departureDetails, index) => {
+              return (
+                <>
+                  <SelectableFavouriteDeparture
+                    handleSwitchFlip={handleSwitchFlip}
+                    favouriteId={departureDetails.id}
+                    active={
+                      frontPageFavouriteDepartures.find(
+                        (departure) => departure.id === departureDetails.id,
+                      )
+                        ? true
+                        : false
+                    }
+                    departureStation={departureDetails.quayName}
+                    lineIdentifier={departureDetails.lineLineNumber ?? ''}
+                    lineName={
+                      departureDetails.lineName ??
+                      t(SelectFavouriteDeparturesText.departures.allVariations)
+                    }
+                    lineTransportationMode={
+                      departureDetails.lineTransportationMode ?? LegMode.BUS
+                    }
+                    key={departureDetails.id}
+                  />
+                  {favouriteItems.length - 1 !== index && <SectionSeparator />}
+                </>
+              );
+            })}
           {!favouriteItems && (
             <MessageBox type="info">
               <ThemeText>
