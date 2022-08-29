@@ -87,6 +87,13 @@ const ProfileTexts = {
             'Activate to edit favourite departures',
           ),
         },
+        frontpageFavourites: {
+          label: _('Forside-favoritter', 'Frontpage favourites'),
+          a11yHint: _(
+            'Aktivér for å endre favoritt-avganger på forsiden',
+            'Activate to edit front page favourite departures',
+          ),
+        },
       },
     },
     privacy: {

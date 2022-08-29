@@ -38,6 +38,8 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {destructiveAlert} from './utils';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import Bugsnag from '@bugsnag/react-native';
+import SelectFavouritesBottomSheet from '@atb/screens/Assistant/SelectFavouritesBottomSheet';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -88,6 +90,13 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   }
 
   const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
+
+  const {open: openBottomSheet} = useBottomSheet();
+  async function selectFavourites() {
+    openBottomSheet((close) => {
+      return <SelectFavouritesBottomSheet close={close} />;
+    });
+  }
 
   return (
     <View style={style.container}>
@@ -314,6 +323,20 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             }}
             testID="favoriteDeparturesButton"
             onPress={() => navigation.navigate('FavoriteDepartures')}
+          />
+          <Sections.LinkItem
+            text={t(
+              ProfileTexts.sections.favorites.linkItems.frontpageFavourites
+                .label,
+            )}
+            accessibility={{
+              accessibilityHint: t(
+                ProfileTexts.sections.favorites.linkItems.frontpageFavourites
+                  .a11yHint,
+              ),
+            }}
+            testID="favoriteDeparturesButton"
+            onPress={selectFavourites}
           />
         </Sections.Section>
 
