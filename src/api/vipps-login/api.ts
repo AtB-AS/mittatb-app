@@ -17,6 +17,10 @@ export const authorizeUser = async (setIsLoading: any) => {
       setIsLoading(false);
       await InAppBrowser.open(
         `${authorisationUrl}&state=${state}&nonce=${nonce}`,
+        // Param showInRecents is needed so the InAppBrowser doesn't get closed when the app goes to background
+        // hence user is again navigated back to browser after giving consent in Vipps App,
+        // and then can complete the authentication process successfully
+        {showInRecents: true},
       );
     });
 };
