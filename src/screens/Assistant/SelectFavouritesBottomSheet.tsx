@@ -140,7 +140,7 @@ const SelectFavouritesBottomSheet = ({
           {favouriteItems &&
             favouriteItems.map((departureDetails, index) => {
               return (
-                <>
+                <View key={departureDetails.id}>
                   <SelectableFavouriteDeparture
                     handleSwitchFlip={handleSwitchFlip}
                     favouriteId={departureDetails.id}
@@ -160,10 +160,9 @@ const SelectFavouritesBottomSheet = ({
                     lineTransportationMode={
                       departureDetails.lineTransportationMode ?? LegMode.BUS
                     }
-                    key={departureDetails.id}
                   />
                   {favouriteItems.length - 1 !== index && <SectionSeparator />}
-                </>
+                </View>
               );
             })}
           {!favouriteItems && (
@@ -204,17 +203,17 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       flex: 1,
     },
     questionText: {
-      paddingVertical: theme.spacings.medium,
+      padding: theme.spacings.medium,
     },
     flatListArea: {
       backgroundColor: theme.static.background.background_0.background,
       margin: theme.spacings.medium,
-      paddingHorizontal: theme.spacings.medium,
       borderRadius: theme.border.radius.regular,
     },
     selectableDeparture: {
       flexDirection: 'row',
       alignItems: 'center',
+      paddingHorizontal: theme.spacings.medium,
     },
     selectableDepartureTextView: {
       flex: 1,
