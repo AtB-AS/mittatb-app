@@ -55,7 +55,7 @@ const SelectableFavouriteDeparture = ({
           {lineIdentifier} {lineName}
         </ThemeText>
 
-        <ThemeText type="body__secondary">
+        <ThemeText type="body__secondary" style={styles.secondaryText}>
           {t(SelectFavouriteDeparturesText.departures.from)} {departureStation}
         </ThemeText>
       </View>
@@ -220,6 +220,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       flexDirection: 'column',
       justifyContent: 'flex-start',
       paddingVertical: theme.spacings.medium,
+    },
+    secondaryText: {
+      color: theme.text.colors.secondary,
     },
     lineModeIcon: {
       marginRight: theme.spacings.small,
