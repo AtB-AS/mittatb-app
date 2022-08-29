@@ -1,6 +1,8 @@
 import {translation as _} from '../commons';
+import orgSpecificTranslations from '@atb/translations/utils';
 
 const TicketTexts = {
+  organizationName: _('AtB', 'AtB'),
   detailsLink: {
     valid: _('Vis detaljer / kontroll', 'Show details / inspection'),
     notValid: _('Vis detaljer', 'Show details'),
@@ -141,7 +143,21 @@ const TicketTexts = {
       'Vennligst bytt til t:kort for å kunne bruke dette klippekortet.',
       'Please switch to t:card to be able to use this punch card.',
     ),
+    anotherPhoneIsInspectableWarning: (deviceName: string) =>
+      _(
+        `Merk at billetter du kjøper nå vil være tilknyttet ${deviceName}. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.`,
+        `This ticket will be connected to ${deviceName}. If you would rather use tickets on this phone, you can switch to this device from **My profile**.`,
+      ),
+    tcardIsInspectableWarning: _(
+      'Merk at billetter du kjøper nå vil være tilknyttet ditt t:kort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.',
+      'This ticket will be connected to your t:card. If you would rather use tickets on this phone, you can switch to this device from **My profile**.',
+    ),
     unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },
 };
-export default TicketTexts;
+
+export default orgSpecificTranslations(TicketTexts, {
+  nfk: {
+    organizationName: _('NFK', 'NFK'),
+  },
+});

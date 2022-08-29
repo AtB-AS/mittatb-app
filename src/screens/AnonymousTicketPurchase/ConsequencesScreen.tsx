@@ -12,6 +12,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {useTranslation} from '@atb/translations';
 import AnonymousTicketPurchases from '@atb/translations/screens/subscreens/AnonymousTicketPurchases';
+import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
@@ -33,17 +34,21 @@ const ConsequencesScreen = ({route, navigation}: ConsequencesScreenProps) => {
   const styles = useStyle();
   const {t} = useTranslation();
   const {themeName} = useTheme();
-
+  const focusRef = useFocusOnLoad();
   const isCallerRouteOnboarding = route?.name === 'ConsequencesFromOnboarding';
   const fillColor = getStaticColor(themeName, themeColor).text;
   return (
     <>
       {!isCallerRouteOnboarding && (
-        <FullScreenHeader leftButton={{type: 'cancel'}} />
+        <FullScreenHeader
+          leftButton={{type: 'cancel'}}
+          setFocusOnLoad={false}
+        />
       )}
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
+        ref={focusRef}
       >
         <ThemeText
           type="heading--jumbo"

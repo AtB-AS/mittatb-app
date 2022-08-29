@@ -4,6 +4,7 @@ import React from 'react';
 import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
 import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export type CallerRoute =
   | 'ConsequencesFromOnboarding'
@@ -18,10 +19,11 @@ const Actions = ({
 }) => {
   const {t} = useTranslation();
   const finishOnboarding = useFinishOnboarding();
+  const {enable_vipps_login} = useRemoteConfig();
 
   const navigateTologIn = async () => {
     navigation?.navigate('LoginInApp', {
-      screen: 'PhoneInputInApp',
+      screen: enable_vipps_login ? 'LoginOptionsScreen' : 'PhoneInputInApp',
       params: {
         afterLogin: {
           routeName: 'TabNavigator',

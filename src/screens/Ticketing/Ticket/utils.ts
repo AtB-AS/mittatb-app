@@ -8,9 +8,12 @@ import {
   UserProfile,
 } from '@atb/reference-data/types';
 import {UserProfileWithCount} from '@atb/screens/Ticketing/Purchase/Travellers/use-user-count-state';
-import {findReferenceDataById} from '@atb/reference-data/utils';
+import {
+  findReferenceDataById,
+  getReferenceDataName,
+} from '@atb/reference-data/utils';
 import {RemoteToken} from '@atb/mobile-token/types';
-import {TicketTexts, TranslateFunction} from '@atb/translations';
+import {Language, TicketTexts, TranslateFunction} from '@atb/translations';
 import {
   findInspectable,
   getDeviceName,
@@ -37,6 +40,15 @@ export function getRelativeValidity(
 
   return 'valid';
 }
+
+export const userProfileCountAndName = (
+  u: UserProfileWithCount,
+  omitUserProfileCount: Boolean | undefined,
+  language: Language,
+) =>
+  omitUserProfileCount
+    ? `${getReferenceDataName(u, language)}`
+    : `${u.count} ${getReferenceDataName(u, language)}`;
 
 export function getValidityStatus(
   now: number,
@@ -122,8 +134,31 @@ export const getNonInspectableTokenWarning = (
   } else {
     if (!isTravelCardToken(inspectableToken)) {
       return t(TicketTexts.warning.carnetWarning);
+    } else {
+      return t(TicketTexts.warning.travelCardAstoken);
     }
   }
+};
+
+export const getOtherDeviceIsInspectableWarning = (
+  tokensEnabled: boolean,
+  isError: boolean,
+  fallbackEnabled: boolean,
+  t: TranslateFunction,
+  remoteTokens?: RemoteToken[],
+  deviceIsInspectable?: boolean,
+) => {
+  const shouldShowWarning =
+    tokensEnabled && (isError ? !fallbackEnabled : !deviceIsInspectable);
+  if (!shouldShowWarning) return;
+
+  const activeToken = findInspectable(remoteTokens);
+  const deviceName =
+    getDeviceName(activeToken) || t(TicketTexts.warning.unnamedDevice);
+
+  return isTravelCardToken(activeToken)
+    ? t(TicketTexts.warning.tcardIsInspectableWarning)
+    : t(TicketTexts.warning.anotherPhoneIsInspectableWarning(deviceName));
 };
 
 export const isValidTicket = (status: ValidityStatus) => status === 'valid';

@@ -46,7 +46,7 @@ export function CarnetDetails(props: {
 
   return (
     <>
-      <Sections.GenericItem>
+      <Sections.GenericItem radius="top">
         {fareContractValidityStatus !== 'valid' ? (
           <ValidityHeader
             now={now}
@@ -81,7 +81,7 @@ export function CarnetDetails(props: {
         )}
         <TicketInfo
           travelRights={travelRights}
-          status={fareContractValidityStatus}
+          status={usedAccessValidityStatus}
           isInspectable={inspectable}
           omitUserProfileCount={true}
           testID={props.testID}
