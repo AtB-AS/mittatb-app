@@ -21,6 +21,7 @@ import {AfterLoginParams} from '@atb/login/types';
 import {VippsLoginButton} from '@atb/components/vipps-login-button';
 import MessageBox from '@atb/components/message-box';
 import * as Sections from '@atb/components/sections';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -103,6 +104,7 @@ export default function LoginOptionsScreen({
   useEffect(() => {
     const vippsCallbackHandler = async (event: any) => {
       if (event.url.includes(VIPPS_CALLBACK_URL)) {
+        InAppBrowser.close();
         setIsLoading(true);
         const code = parseUrl(event.url).query.code;
         if (code) {
