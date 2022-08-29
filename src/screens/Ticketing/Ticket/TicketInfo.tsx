@@ -186,7 +186,7 @@ const TicketInfoDetails = (props: TicketInfoDetailsProps) => {
   return (
     <View style={styles.container} accessible={true}>
       <View style={styles.ticketDetails}>
-        <View>
+        <View style={styles.details}>
           <TicketDetail
             header={t(TicketTexts.label.travellers)}
             children={userProfilesWithCount.map((u) =>
@@ -215,6 +215,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  details: {flex: 1},
   header: {
     justifyContent: 'space-between',
     marginBottom: theme.spacings.medium,
