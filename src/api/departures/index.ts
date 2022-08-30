@@ -90,7 +90,7 @@ export async function getFavouriteDepartures(
     };
   });
 
-  console.log('## Sending data to BFF: ', JSON.stringify(query));
+  //console.log('## Sending data to BFF: ', JSON.stringify(query));
   return await post<StopPlaceGroup[]>(url, query, {...opts});
 }
 
@@ -105,9 +105,8 @@ async function post<T>(
   });
 
   const data = response.data;
-  console.log('## Fetched data', JSON.stringify(data));
+  //console.log('## Fetched data', JSON.stringify(data));
   return data;
 }
-
 
 export {getDepartureGroups} from './departure-group';
