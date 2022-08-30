@@ -4,6 +4,7 @@ import ThemeText from '@atb/components/text';
 import QuaySection from '@atb/departure-list/section-items/quay-section';
 import {useFavorites} from '@atb/favorites';
 import {useGeolocationState} from '@atb/GeolocationContext';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
@@ -22,9 +23,9 @@ const FavouritesWidget: React.FC = () => {
   const [searchDate, setSearchDate] = useState<string>('');
   const navigation = useNavigation();
   const isFocused = useIsFocused();
+  const {favourite_departures_poll_interval} = useRemoteConfig();
 
   const fetchFavouriteDepartures = async () => {
-    if (!favoriteDepartures || !navigation.isFocused()) return; // prevent backgound polling
     await getFavouriteDepartures(favoriteDepartures).then((data) => {
       if (data) {
         setFavResults(data);
@@ -33,11 +34,15 @@ const FavouritesWidget: React.FC = () => {
     });
   };
 
+  // timer orchestration
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined = undefined;
     if (polling) {
       fetchFavouriteDepartures();
-      interval = setInterval(fetchFavouriteDepartures, 10000);
+      interval = setInterval(
+        fetchFavouriteDepartures,
+        favourite_departures_poll_interval,
+      );
     } else {
       if (interval) {
         clearInterval(interval);
@@ -51,7 +56,7 @@ const FavouritesWidget: React.FC = () => {
     };
   }, [polling]);
 
-  // timer
+  // do polling only when screen has focus and user has faourites.
   useEffect(() => {
     if (isFocused && !!favoriteDepartures.length) {
       setPolling(true);
@@ -60,7 +65,7 @@ const FavouritesWidget: React.FC = () => {
     }
   }, [isFocused, !!favoriteDepartures.length]);
 
-  //
+  // refresh favourite departures when user adds or removees a favourite
   useEffect(() => {
     fetchFavouriteDepartures();
   }, [favoriteDepartures.length]);
