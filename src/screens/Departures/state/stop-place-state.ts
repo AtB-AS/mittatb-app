@@ -71,7 +71,7 @@ type DepartureDataActions =
     }
   | {
       type: 'LOAD_REALTIME_DATA';
-      stopPlace?: StopPlace;
+      stopPlace: StopPlace;
     }
   | {
       type: 'STOP_LOADER';
@@ -112,7 +112,7 @@ const reducer: ReducerWithSideEffects<
       // is a fresh fetch. We should fetch the latest information.
       const queryInput: QueryInput = {
         numberOfDepartures: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED,
-        startTime: action.startTime,
+        startTime: action.startTime ?? new Date().toISOString(),
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -124,9 +124,6 @@ const reducer: ReducerWithSideEffects<
         },
         async (state, dispatch) => {
           try {
-            if (!action.stopPlace) return;
-            if (!action.favoriteDepartures) return;
-
             const result = await fetchEstimatedCalls(
               queryInput,
               action.stopPlace,
@@ -159,10 +156,7 @@ const reducer: ReducerWithSideEffects<
           // Use same query input with same startTime to ensure that
           // we get the same result.
           try {
-            if (!state.queryInput.numberOfDepartures) return;
-            if (!state.queryInput.startTime) return;
-
-            const quayIds = action.stopPlace?.quays?.map((q) => q.id);
+            const quayIds = action.stopPlace.quays?.map((q) => q.id);
             const realtimeData = await getRealtimeDepartureV2(quayIds, {
               limitPerLine: state.queryInput.numberOfDepartures,
               startTime: state.queryInput.startTime,
@@ -270,7 +264,7 @@ export function useStopPlaceData(
         startTime,
         favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
       }),
-    [stopPlace?.id, startTime, showOnlyFavorites, favoriteDepartures],
+    [stopPlace.id, startTime, showOnlyFavorites, favoriteDepartures],
   );
 
   useEffect(
@@ -282,9 +276,9 @@ export function useStopPlaceData(
         showOnlyFavorites,
         favoriteDepartures,
       }),
-    [stopPlace?.id, favoriteDepartures, showOnlyFavorites],
+    [stopPlace.id, favoriteDepartures, showOnlyFavorites],
   );
-  useEffect(refresh, [stopPlace?.id, startTime]);
+  useEffect(refresh, [stopPlace.id, startTime]);
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -298,7 +292,7 @@ export function useStopPlaceData(
   useInterval(
     () => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace}),
     updateFrequencyInSeconds * 1000,
-    [stopPlace?.id],
+    [stopPlace.id],
     !isFocused,
   );
   useInterval(
@@ -315,8 +309,8 @@ export function useStopPlaceData(
 }
 
 type QueryInput = {
-  numberOfDepartures?: number;
-  startTime?: string;
+  numberOfDepartures: number;
+  startTime: string;
 };
 
 async function fetchEstimatedCalls(

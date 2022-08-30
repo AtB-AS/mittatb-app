@@ -101,6 +101,10 @@ const getAuthenticationType = (
 
 export type ConfirmationErrorCode = 'invalid_code' | 'unknown_error';
 export type PhoneSignInErrorCode = 'invalid_phone' | 'unknown_error';
+export type VippsSignInErrorCode =
+  | 'access_denied'
+  | 'outdated_app_version'
+  | 'unknown_error';
 
 type AuthContextState = {
   signInWithPhoneNumber: (
@@ -110,6 +114,9 @@ type AuthContextState = {
   signOut: () => Promise<void>;
   confirmCode: (code: string) => Promise<ConfirmationErrorCode | undefined>;
   authenticationType: AuthenticationType;
+  signInWithCustomToken: (
+    token: string,
+  ) => Promise<{error?: VippsSignInErrorCode}>;
 } & AuthReducerState;
 
 const AuthContext = createContext<AuthContextState | undefined>(undefined);
@@ -236,6 +243,16 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
     }
   }, [state.isAuthConnectionInitialized, state.user?.uid]);
 
+  const signInWithCustomToken = async (token: string) => {
+    try {
+      await auth().signInWithCustomToken(token);
+      return {};
+    } catch (err) {
+      console.warn(err);
+      return {error: 'unknown_error' as VippsSignInErrorCode};
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -244,6 +261,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
         confirmCode,
         signOut,
         authenticationType: getAuthenticationType(state.user),
+        signInWithCustomToken,
       }}
     >
       {children}

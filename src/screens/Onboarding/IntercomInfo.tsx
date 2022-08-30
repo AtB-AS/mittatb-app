@@ -4,18 +4,26 @@ import React from 'react';
 import {ScrollView, useWindowDimensions, View} from 'react-native';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
-import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
 import {Onboarding2} from '@atb/assets/svg/color/images';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StaticColorByType} from '@atb/theme/colors';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {OnboardingStackParams} from '@atb/screens/Onboarding/index';
+import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
+import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export default function IntercomInfo() {
+export type IntercomInfoScreenProps = {
+  navigation: MaterialTopTabNavigationProp<OnboardingStackParams>;
+};
+
+export default function IntercomInfo({navigation}: IntercomInfoScreenProps) {
   const {t} = useTranslation();
   const styles = useThemeStyles();
-  const finishOnboarding = useFinishOnboarding();
   const {width: windowWidth} = useWindowDimensions();
+  const finishOnboarding = useFinishOnboarding();
+  const {enable_ticketing} = useRemoteConfig();
 
   return (
     <ScrollView
@@ -38,7 +46,11 @@ export default function IntercomInfo() {
       <View style={styles.bottomView}>
         <Button
           interactiveColor="interactive_0"
-          onPress={finishOnboarding}
+          onPress={() =>
+            enable_ticketing
+              ? navigation.navigate('ConsequencesFromOnboarding')
+              : finishOnboarding()
+          }
           text={t(OnboardingTexts.intercom.mainButton)}
           testID="nextButton"
         />

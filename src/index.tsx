@@ -3,7 +3,7 @@ import 'react-native-get-random-values';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppContextProvider from './AppContext';
-import {AlertsContextProvider} from './alerts';
+import {GlobalMessagesContextProvider} from './global-messages';
 import GeolocationContextProvider from './GeolocationContext';
 import NavigationRoot from './navigation';
 import trackAppState from './diagnostics/trackAppState';
@@ -64,13 +64,13 @@ const App = () => {
                               <TicketContextProvider>
                                 <MobileTokenContextProvider>
                                   <AppLanguageProvider>
-                                    <AlertsContextProvider>
+                                    <GlobalMessagesContextProvider>
                                       <BottomSheetProvider>
                                         <FeedbackQuestionsProvider>
                                           <NavigationRoot />
                                         </FeedbackQuestionsProvider>
                                       </BottomSheetProvider>
-                                    </AlertsContextProvider>
+                                    </GlobalMessagesContextProvider>
                                   </AppLanguageProvider>
                                 </MobileTokenContextProvider>
                               </TicketContextProvider>

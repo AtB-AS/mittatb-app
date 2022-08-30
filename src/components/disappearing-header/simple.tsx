@@ -17,8 +17,8 @@ import {
   AnimatedScreenHeader,
   LeftButtonProps,
 } from '@atb/components/screen-header';
-import {AlertContext} from '@atb/alerts/AlertsContext';
-import AlertBox from '@atb/alerts/AlertBox';
+import {GlobalMessageContext} from '@atb/global-messages/GlobalMessagesContext';
+import GlobalMessageBox from '@atb/global-messages/GlobalMessage';
 import {StaticColorByType} from '@atb/theme/colors';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -45,7 +45,7 @@ type Props = {
    * For specifying the alert context for alerts that should be shown in this
    * header. If no context is specified then no alerts are shown.
    */
-  alertContext?: AlertContext;
+  globalMessageContext?: GlobalMessageContext;
 };
 
 type Scrollable = {
@@ -68,7 +68,7 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
 
   setFocusOnLoad,
 
-  alertContext,
+  globalMessageContext,
 }) => {
   const {contentHeight, onScreenHeaderLayout, onHeaderContentLayout} =
     useCalculateHeaderContentHeight();
@@ -136,8 +136,11 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
               setFocusOnLoad={setFocusOnLoad}
             />
           )}
-          <View style={styles.alertBoxContainer}>
-            <AlertBox alertContext={alertContext} style={styles.alertBox} />
+          <View style={styles.globalMessageBoxContainer}>
+            <GlobalMessageBox
+              globalMessageContext={globalMessageContext}
+              style={styles.globalMessageBox}
+            />
           </View>
         </View>
 
@@ -202,10 +205,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background.background_1.background,
     flexGrow: 1,
   },
-  alertBoxContainer: {
+  globalMessageBoxContainer: {
     backgroundColor: theme.static.background[themeColor].background,
   },
-  alertBox: {
+  globalMessageBox: {
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },

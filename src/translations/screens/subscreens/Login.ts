@@ -1,6 +1,21 @@
 import orgSpecificTranslations from '@atb/translations/utils';
 import {translation as _} from '../../commons';
 const LoginTexts = {
+  logInOptions: {
+    title: _('Logg inn', 'Log in'),
+    selectLoginMethod: _('Velg innloggingsmetode', 'Select login method'),
+    or: _('Eller logg inn med', 'Or log in with'),
+    options: {
+      phoneAndCode: _(
+        'Mobilnummer og engangskode',
+        'Mobile number and one-time code',
+      ),
+      vipps: {
+        label: _('Logg inn med ', 'Log in with '),
+        a11yLabel: _('Logg inn med Vipps', 'Log in with Vipps'),
+      },
+    },
+  },
   activeTicketPrompt: {
     title: _(
       'Vent litt, du har en gyldig billett',
@@ -29,6 +44,18 @@ const LoginTexts = {
       'Da kan du også lagre betalingskort og etterhvert andre smarte reiseting slik at du enkelt finner dem igjen – selv ved bytte av mobil.',
       '...to store payment cards for later use. Soon, login will store personal preferences to your profile so that you can carry them with you when swapping phones.',
     ),
+  },
+  vipps: {
+    errors: {
+      outdated_app_version: _(
+        'Oppdater Vipps-appen før du bruker den til å logge inn.',
+        'Please update the Vipps app before using it to log in.',
+      ),
+      unknown_error: _(
+        'Oops - noe gikk galt. Supert om du prøver på nytt 🤞',
+        'Whoops - something went wrong. Please try again 🤞',
+      ),
+    },
   },
   phoneInput: {
     title: _('Logg inn', 'Log in'),

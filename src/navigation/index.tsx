@@ -33,10 +33,9 @@ import LoginInAppStack, {
 } from '@atb/login/in-app/LoginInAppStack';
 import useTestIds from './use-test-ids';
 import MobileTokenOnboarding from '@atb/screens/MobileTokenOnboarding';
-import {useAuthState} from '@atb/auth';
 import SelectTravelTokenScreen from '@atb/screens/Profile/TravelToken/SelectTravelTokenScreen';
-import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
-import {shouldOnboardMobileToken} from '@atb/api/utils';
+import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
+import {APP_SCHEME} from '@env';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -49,22 +48,21 @@ export type RootStackParamList = {
   TicketPurchase: NavigatorScreenParams<TicketingStackParams>;
   TicketModal: NavigatorScreenParams<TicketModalStackParams>;
   MobileTokenOnboarding: undefined;
-  SelectTravelToken: undefined;
+  SelectTravelTokenRoot: undefined;
+  ConsequencesFromTicketPurchase: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 const NavigationRoot = () => {
-  const {isLoading, onboarded, mobileTokenOnboarded} = useAppState();
+  const {isLoading, onboarded} = useAppState();
   const {theme} = useTheme();
-  const {authenticationType} = useAuthState();
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
 
   useTestIds();
 
   const ref = useRef<NavigationContainerRef>(null);
   const {getInitialState} = useLinking(ref, {
-    prefixes: ['atb://'],
+    prefixes: [`${APP_SCHEME}://`],
     config: {
       screens: {
         TabNavigator: {
@@ -120,25 +118,17 @@ const NavigationRoot = () => {
             screenOptions={{headerShown: false}}
           >
             {!onboarded ? (
-              <Stack.Screen name="Onboarding" component={Onboarding} />
-            ) : shouldOnboardMobileToken(
-                hasEnabledMobileToken,
-                authenticationType,
-                mobileTokenOnboarded,
-              ) ? (
               <>
-                <Stack.Screen
-                  name="MobileTokenOnboarding"
-                  component={MobileTokenOnboarding}
-                />
-                <Stack.Screen
-                  name="SelectTravelToken"
-                  component={SelectTravelTokenScreen}
-                />
+                <Stack.Screen name="Onboarding" component={Onboarding} />
+                <Stack.Screen name="LoginInApp" component={LoginInAppStack} />
               </>
             ) : (
               <>
                 <Stack.Screen name="TabNavigator" component={TabNavigator} />
+                <Stack.Screen
+                  name="ConsequencesFromTicketPurchase"
+                  component={ConsequencesScreen}
+                />
                 <Stack.Screen
                   name="LocationSearch"
                   component={LocationSearch}
@@ -151,6 +141,14 @@ const NavigationRoot = () => {
                 <Stack.Screen
                   name="TicketModal"
                   component={TicketModalScreen}
+                />
+                <Stack.Screen
+                  name="MobileTokenOnboarding"
+                  component={MobileTokenOnboarding}
+                />
+                <Stack.Screen
+                  name="SelectTravelTokenRoot"
+                  component={SelectTravelTokenScreen}
                 />
 
                 <Stack.Screen

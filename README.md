@@ -166,6 +166,12 @@ Specific notes on QA:
 
 - [QA Ticketing](./docs/TicketingQA.md)
 
+## Using with other organizations
+
+See documentation on setting up other environments.
+
+- [Configuration for different organizations](./docs/OrgConfig.md)
+
 ## License
 
 The contents of this repository is licensed as [EUPL-1.2](./LICENSE). See [RFC](https://github.com/AtB-AS/org/blob/master/rfc/0015_License/index.md).

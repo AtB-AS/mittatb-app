@@ -10,7 +10,7 @@ import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
 import {UsedAccessStatus} from './types';
-import UsedAccessValidityIcon from './UsedAccessValidityIcon';
+import TransportMode from '@atb/screens/Ticketing/Ticket/Component/TransportMode';
 
 type Props = {
   now: number;
@@ -28,12 +28,12 @@ function UsedAccessValidityHeader(props: Props) {
   return (
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
-        <UsedAccessValidityIcon
-          status={props.status}
-          isInspectable={props.isInspectable}
+        <TransportMode
+          ticketType={'carnet'}
+          disabled={props.status === 'inactive'}
         />
         <ThemeText
-          style={styles.validityText}
+          style={styles.label}
           type="body__secondary"
           accessibilityLabel={
             !props.isInspectable
@@ -96,14 +96,18 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   validityContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    flex: 1,
   },
   validityDashContainer: {
     marginVertical: theme.spacings.medium,
     marginHorizontal: -theme.spacings.medium,
     flexDirection: 'row',
   },
-  validityText: {
+  label: {
     flex: 1,
+    textAlign: 'right',
+    marginLeft: theme.spacings.medium,
   },
 }));
 

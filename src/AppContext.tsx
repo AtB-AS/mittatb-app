@@ -186,6 +186,10 @@ const AppContextProvider: React.FC = ({children}) => {
         dispatch({type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING'});
       },
       restartMobileTokenOnboarding: async () => {
+        await storage.set(
+          storeKey.mobileTokenOnboarding,
+          JSON.stringify(false),
+        );
         dispatch({type: 'RESTART_MOBILE_TOKEN_ONBOARDING'});
       },
     }),
