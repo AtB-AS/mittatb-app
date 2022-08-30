@@ -212,9 +212,6 @@ const TicketInfoDetails = (props: TicketInfoDetailsProps) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flex: 1, paddingTop: theme.spacings.xSmall},
-  expireTime: {
-    marginBottom: theme.spacings.small,
-  },
   product: {
     marginTop: theme.spacings.small,
   },
