@@ -57,6 +57,10 @@ const PurchaseOverviewTexts = {
       'Periodebilletter i sone A kan også brukes på tog i sone A.',
       'Periodic tickets in zone A can also be used on train in zone A.',
     ),
+    hour24: _(
+      '24-timersbillett kan ikke brukes på tog eller nattbuss.',
+      '24 hour pass can not be used on trains nor night busses.',
+    ),
   },
   zones: {
     label: {
