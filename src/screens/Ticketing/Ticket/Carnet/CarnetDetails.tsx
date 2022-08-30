@@ -34,7 +34,7 @@ export function CarnetDetails(props: {
     status: usedAccessValidityStatus,
     validFrom: usedAccessValidFrom,
     validTo: usedAccessValidTo,
-  } = useLastUsedAccess(now, usedAccesses);
+  } = getLastUsedAccess(now, usedAccesses);
 
   const style = useStyles();
   const fareContractValidityStatus = getValidityStatus(
@@ -115,7 +115,7 @@ function getUsedAccessValidity(
   return 'valid';
 }
 
-function useLastUsedAccess(
+export function getLastUsedAccess(
   now: number,
   usedAccesses: CarnetTicketUsedAccess[],
 ): LastUsedAccessState {

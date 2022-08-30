@@ -1,7 +1,6 @@
 import {StyleSheet} from '@atb/theme';
 import {
-  filterActiveOrCanBeUsedFareContracts,
-  isValidRightNowFareContract,
+  filterAndSortActiveOrCanBeUsedFareContracts,
   useTicketState,
 } from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
@@ -18,16 +17,8 @@ export const ActiveTickets = () => {
     refreshTickets,
     didPaymentFail,
   } = useTicketState();
-  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
-    fareContracts,
-  ).sort(function (a, b): number {
-    const isA = isValidRightNowFareContract(a);
-    const isB = isValidRightNowFareContract(b);
-
-    if (isA === isB) return 0;
-    if (isA) return -1;
-    return 1;
-  });
+  const activeFareContracts =
+    filterAndSortActiveOrCanBeUsedFareContracts(fareContracts);
 
   const hasAnyFareContractsOnAccount = fareContracts.length > 0;
 

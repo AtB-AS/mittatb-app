@@ -1,12 +1,4 @@
-import {
-  FareContract,
-  FareContractState,
-  filterActiveOrCanBeUsedFareContracts,
-  isInspectableTicket,
-  isPreactivatedTicket,
-  isValidRightNowFareContract,
-  useTicketState,
-} from '@atb/tickets';
+import {FareContractState} from '@atb/tickets';
 import {
   Mode,
   TransportSubmode,
@@ -28,14 +20,6 @@ import {
   isMobileToken,
   isTravelCardToken,
 } from '@atb/mobile-token/utils';
-import {TicketInfoDetailsProps} from './TicketInfo';
-import {useState} from 'react';
-import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import useInterval from '@atb/utils/use-interval';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -178,65 +162,3 @@ export const getOtherDeviceIsInspectableWarning = (
 };
 
 export const isValidTicket = (status: ValidityStatus) => status === 'valid';
-
-export const getTicketInfoDetailsProps = (
-  fareContract: FareContract,
-  now: number,
-): TicketInfoDetailsProps => {
-  const {customerProfile} = useTicketState();
-
-  const hasActiveTravelCard = !!customerProfile?.travelcard;
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {
-    deviceIsInspectable,
-    isError: mobileTokenError,
-    fallbackEnabled,
-  } = useMobileTokenContextState();
-  const {tariffZones, userProfiles, preassignedFareproducts} =
-    useFirestoreConfiguration();
-
-  const travelRights = fareContract.travelRights.filter(isPreactivatedTicket);
-  const firstTravelRight = travelRights[0];
-  const {fareProductRef: productRef, tariffZoneRefs} = firstTravelRight;
-  const ticketIsInspectable = isInspectableTicket(
-    firstTravelRight,
-    hasActiveTravelCard,
-    hasEnabledMobileToken,
-    deviceIsInspectable,
-    mobileTokenError,
-    fallbackEnabled,
-  );
-  const fareContractState = fareContract.state;
-  const {startDateTime, endDateTime} = firstTravelRight;
-  const validTo = endDateTime.toMillis();
-  const validFrom = startDateTime.toMillis();
-  const validityStatus = getValidityStatus(
-    now,
-    validFrom,
-    validTo,
-    fareContractState,
-  );
-  const [firstZone] = tariffZoneRefs;
-  const [lastZone] = tariffZoneRefs.slice(-1);
-  const fromTariffZone = findReferenceDataById(tariffZones, firstZone);
-  const toTariffZone = findReferenceDataById(tariffZones, lastZone);
-  const preassignedFareProduct = findReferenceDataById(
-    preassignedFareproducts,
-    productRef,
-  );
-  const userProfilesWithCount = mapToUserProfilesWithCount(
-    travelRights.map((tr) => tr.userProfileRef),
-    userProfiles,
-  );
-
-  return {
-    preassignedFareProduct: preassignedFareProduct,
-    fromTariffZone: fromTariffZone,
-    toTariffZone: toTariffZone,
-    userProfilesWithCount: userProfilesWithCount,
-    status: validityStatus,
-    now: now,
-    validTo: validTo,
-    isInspectable: ticketIsInspectable,
-  };
-};

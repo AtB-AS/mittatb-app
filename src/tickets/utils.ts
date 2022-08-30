@@ -140,6 +140,22 @@ export const filterActiveOrCanBeUsedFareContracts = (
   return fareContracts.filter(isActiveFareContractNowOrCanBeUsed);
 };
 
+export const filterAndSortActiveOrCanBeUsedFareContracts = (
+  fareContracts: FareContract[],
+) => {
+  return filterActiveOrCanBeUsedFareContracts(fareContracts).sort(function (
+    a,
+    b,
+  ): number {
+    const isA = isValidRightNowFareContract(a);
+    const isB = isValidRightNowFareContract(b);
+
+    if (isA === isB) return 0;
+    if (isA) return -1;
+    return 1;
+  });
+};
+
 export const filterExpiredFareContracts = (fareContracts: FareContract[]) => {
   const isRefunded = (f: FareContract) =>
     f.state === FareContractState.Refunded;

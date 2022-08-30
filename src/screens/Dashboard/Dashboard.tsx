@@ -259,12 +259,26 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
           />
         </View>
         <CompactTickets
-          onPressDetails={(orderId: string) =>
-            navigation.navigate('TicketModal', {
+          onPressDetails={(
+            isCarnet: boolean,
+            isInspectable: boolean,
+            orderId: string,
+          ) => {
+            if (isCarnet) {
+              return navigation.navigate('TicketModal', {
+                screen: 'CarnetDetailsScreen',
+                params: {
+                  orderId,
+                  isInspectable,
+                },
+              });
+            }
+
+            return navigation.navigate('TicketModal', {
               screen: 'TicketDetails',
               params: {orderId},
-            })
-          }
+            });
+          }}
           onPressBuyTickets={() =>
             navigation.navigate('Ticketing', {screen: BuyTicketsScreenName})
           }

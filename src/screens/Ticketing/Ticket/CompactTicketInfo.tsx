@@ -1,7 +1,12 @@
 import ThemeText from '@atb/components/text';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
-import {TicketTexts, useTranslation} from '@atb/translations';
+import {
+  Language,
+  TicketTexts,
+  TranslateFunction,
+  useTranslation,
+} from '@atb/translations';
 import React from 'react';
 import {AccessibilityProps, View} from 'react-native';
 import {tariffZonesSummary} from '@atb/screens/Ticketing/Purchase/TariffZones';
@@ -37,8 +42,9 @@ export const CompactTicketInfo = (props: CompactTicketInfoProps) => {
   const {status, isInspectable} = props;
   const isValid = isValidTicket(status);
   const {isLoading} = useMobileTokenContextState();
+  const {t, language} = useTranslation();
 
-  const ticketTexts = getTicketInfoTexts(props);
+  const ticketTexts = getTicketInfoTexts(props, t, language);
   const ticketInfoTextsProps = {
     ...ticketTexts,
     ...props,
@@ -120,6 +126,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
 
 export const getTicketInfoTexts = (
   props: CompactTicketInfoProps,
+  t: TranslateFunction,
+  language: Language,
 ): TicketInfoTextsProps => {
   const {
     userProfilesWithCount,
@@ -130,8 +138,6 @@ export const getTicketInfoTexts = (
     validTo,
     now,
   } = props;
-
-  const {t, language} = useTranslation();
 
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)

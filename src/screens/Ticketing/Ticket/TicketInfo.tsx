@@ -3,13 +3,21 @@ import {
   PreassignedFareProduct,
   PreassignedFareProductType,
   TariffZone,
+  UserProfile,
 } from '@atb/reference-data/types';
 import {
   findReferenceDataById,
   getReferenceDataName,
 } from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
-import {FareContract, PreactivatedTicket} from '@atb/tickets';
+import {
+  CustomerProfile,
+  FareContract,
+  isCarnetTicket,
+  isInspectableTicket,
+  NormalTravelRight,
+  PreactivatedTicket,
+} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
@@ -21,6 +29,7 @@ import {
   mapToUserProfilesWithCount,
   ValidityStatus,
   userProfileCountAndName,
+  getValidityStatus,
 } from '@atb/screens/Ticketing/Ticket/utils';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
@@ -49,6 +58,7 @@ export type TicketInfoDetailsProps = {
   userProfilesWithCount: UserProfileWithCount[];
   status: TicketInfoProps['status'];
   isInspectable?: boolean;
+  isCarnetTicket?: boolean;
   omitUserProfileCount?: boolean;
   testID?: string;
   now?: number;
@@ -208,6 +218,72 @@ const TicketInfoDetails = (props: TicketInfoDetailsProps) => {
       </View>
     </View>
   );
+};
+
+export const getTicketInfoDetailsProps = (
+  fareContract: FareContract,
+  now: number,
+  customerProfile: CustomerProfile | undefined,
+  hasEnabledMobileToken: boolean,
+  deviceIsInspectable: boolean,
+  mobileTokenError: boolean,
+  fallbackEnabled: boolean,
+  tariffZones: TariffZone[],
+  userProfiles: UserProfile[],
+  preassignedFareproducts: PreassignedFareProduct[],
+): TicketInfoDetailsProps => {
+  const hasActiveTravelCard = !!customerProfile?.travelcard;
+  const firstTravelRight = fareContract.travelRights?.[0] as NormalTravelRight;
+  const {
+    startDateTime,
+    endDateTime,
+    fareProductRef: productRef,
+    tariffZoneRefs,
+  } = firstTravelRight;
+  const ticketIsInspectable = isInspectableTicket(
+    firstTravelRight,
+    hasActiveTravelCard,
+    hasEnabledMobileToken,
+    deviceIsInspectable,
+    mobileTokenError,
+    fallbackEnabled,
+  );
+  const fareContractState = fareContract.state;
+  const validTo = endDateTime.toMillis();
+  const validFrom = startDateTime.toMillis();
+  const validityStatus = getValidityStatus(
+    now,
+    validFrom,
+    validTo,
+    fareContractState,
+  );
+
+  const [firstZone] = tariffZoneRefs;
+  const [lastZone] = tariffZoneRefs.slice(-1);
+  const fromTariffZone = findReferenceDataById(tariffZones, firstZone);
+  const toTariffZone = findReferenceDataById(tariffZones, lastZone);
+  const preassignedFareProduct = findReferenceDataById(
+    preassignedFareproducts,
+    productRef,
+  );
+  const userProfilesWithCount = mapToUserProfilesWithCount(
+    fareContract.travelRights.map(
+      (tr) => (tr as NormalTravelRight).userProfileRef,
+    ),
+    userProfiles,
+  );
+
+  return {
+    preassignedFareProduct: preassignedFareProduct,
+    fromTariffZone: fromTariffZone,
+    toTariffZone: toTariffZone,
+    userProfilesWithCount: userProfilesWithCount,
+    status: validityStatus,
+    now: now,
+    validTo: validTo,
+    isInspectable: ticketIsInspectable,
+    isCarnetTicket: isCarnetTicket(firstTravelRight),
+  };
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

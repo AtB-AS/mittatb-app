@@ -1,19 +1,30 @@
 import React, {useState} from 'react';
 import {StyleSheet} from '@atb/theme';
 import {CompactTicketInfo} from '../Ticketing/Ticket/CompactTicketInfo';
-import {getTicketInfoDetailsProps} from '@atb/screens/Ticketing/Ticket/utils';
 import useInterval from '@atb/utils/use-interval';
 import {
-  filterActiveOrCanBeUsedFareContracts,
-  isValidRightNowFareContract,
+  filterAndSortActiveOrCanBeUsedFareContracts,
+  flattenCarnetTicketAccesses,
+  isCarnetTicket,
   useTicketState,
 } from '@atb/tickets';
 import ThemeText from '@atb/components/text';
 import {TicketsTexts, DashboardTexts, useTranslation} from '@atb/translations';
 import Button from '@atb/components/button';
+import {getTicketInfoDetailsProps} from '../Ticketing/Ticket/TicketInfo';
+import {
+  useHasEnabledMobileToken,
+  useMobileTokenContextState,
+} from '@atb/mobile-token/MobileTokenContext';
+import {getLastUsedAccess} from '../Ticketing/Ticket/Carnet/CarnetDetails';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 type Props = {
-  onPressDetails?: (orderId: string) => void;
+  onPressDetails?: (
+    isCarnet: boolean,
+    isInspectable: boolean,
+    orderId: string,
+  ) => void;
   onPressBuyTickets(): void;
 };
 
@@ -26,19 +37,38 @@ const CompactTickets: React.FC<Props> = ({
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 1000);
 
-  const {fareContracts, customerProfile} = useTicketState();
-  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+  const {fareContracts} = useTicketState();
+  const activeFareContracts = filterAndSortActiveOrCanBeUsedFareContracts(
     fareContracts,
-  ).sort(function (a, b): number {
-    const isA = isValidRightNowFareContract(a);
-    const isB = isValidRightNowFareContract(b);
+  ).filter((fareContract) => {
+    const firstTravelRight = fareContract.travelRights?.[0];
+    if (isCarnetTicket(firstTravelRight)) {
+      const travelRights = fareContract.travelRights.filter(isCarnetTicket);
+      const {usedAccesses} = flattenCarnetTicketAccesses(travelRights);
 
-    if (isA === isB) return 0;
-    if (isA) return -1;
-    return 1;
+      const {validFrom: usedAccessValidFrom, validTo: usedAccessValidTo} =
+        getLastUsedAccess(now, usedAccesses);
+
+      if (usedAccessValidTo && usedAccessValidFrom) {
+        return true;
+      }
+
+      return false;
+    }
+
+    return true;
   });
 
   const {t} = useTranslation();
+  const {customerProfile} = useTicketState();
+  const hasEnabledMobileToken = useHasEnabledMobileToken();
+  const {
+    deviceIsInspectable,
+    isError: mobileTokenError,
+    fallbackEnabled,
+  } = useMobileTokenContextState();
+  const {tariffZones, userProfiles, preassignedFareproducts} =
+    useFirestoreConfiguration();
 
   return (
     <>
@@ -58,14 +88,30 @@ const CompactTickets: React.FC<Props> = ({
         />
       )}
       {activeFareContracts?.map((fareContract, index) => {
-        const ticketInfoDetailsProps = getTicketInfoDetailsProps(fareContract, now);
+        const ticketInfoDetailsProps = getTicketInfoDetailsProps(
+          fareContract,
+          now,
+          customerProfile,
+          hasEnabledMobileToken,
+          deviceIsInspectable,
+          mobileTokenError,
+          fallbackEnabled,
+          tariffZones,
+          userProfiles,
+          preassignedFareproducts,
+        );
         return (
           <CompactTicketInfo
             {...ticketInfoDetailsProps}
             now={now}
             onPressDetails={() => {
-              onPressDetails?.(fareContract.orderId);
+              onPressDetails?.(
+                ticketInfoDetailsProps.isCarnetTicket ?? false,
+                ticketInfoDetailsProps.isInspectable ?? false,
+                fareContract.orderId,
+              );
             }}
+            testID={'ticket' + index}
           />
         );
       })}
