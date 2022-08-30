@@ -1,17 +1,8 @@
 import React, {useState} from 'react';
 import {StyleSheet} from '@atb/theme';
-import * as Sections from '@atb/components/sections';
 import {CompactTicketInfo} from '../Ticketing/Ticket/CompactTicketInfo';
-import {mapToUserProfilesWithCount} from '@atb/screens/Ticketing/Ticket/utils';
-import {isPreactivatedTicket, isInspectableTicket} from '@atb/tickets';
-import {getValidityStatus} from '@atb/screens/Ticketing/Ticket/utils';
+import {getTicketInfoDetailsProps} from '@atb/screens/Ticketing/Ticket/utils';
 import useInterval from '@atb/utils/use-interval';
-import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
-import {findReferenceDataById} from '@atb/reference-data/utils';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {
   filterActiveOrCanBeUsedFareContracts,
   isValidRightNowFareContract,
@@ -47,15 +38,6 @@ const CompactTickets: React.FC<Props> = ({
     return 1;
   });
 
-  const hasActiveTravelCard = !!customerProfile?.travelcard;
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {
-    deviceIsInspectable,
-    isError: mobileTokenError,
-    fallbackEnabled,
-  } = useMobileTokenContextState();
-  const {tariffZones, userProfiles, preassignedFareproducts} =
-    useFirestoreConfiguration();
   const {t} = useTranslation();
 
   return (
@@ -76,60 +58,15 @@ const CompactTickets: React.FC<Props> = ({
         />
       )}
       {activeFareContracts?.map((fareContract, index) => {
-        // TODO: Move all this initialization into a better layer of abstraction!
-        const travelRights =
-          fareContract.travelRights.filter(isPreactivatedTicket);
-        const firstTravelRight = travelRights[0];
-        const {fareProductRef: productRef, tariffZoneRefs} = firstTravelRight;
-        const ticketIsInspectable = isInspectableTicket(
-          firstTravelRight,
-          hasActiveTravelCard,
-          hasEnabledMobileToken,
-          deviceIsInspectable,
-          mobileTokenError,
-          fallbackEnabled,
-        );
-        const fareContractState = fareContract.state;
-        const {startDateTime, endDateTime} = firstTravelRight;
-        const validTo = endDateTime.toMillis();
-        const validFrom = startDateTime.toMillis();
-        const validityStatus = getValidityStatus(
-          now,
-          validFrom,
-          validTo,
-          fareContractState,
-        );
-        const [firstZone] = tariffZoneRefs;
-        const [lastZone] = tariffZoneRefs.slice(-1);
-        const fromTariffZone = findReferenceDataById(tariffZones, firstZone);
-        const toTariffZone = findReferenceDataById(tariffZones, lastZone);
-        const preassignedFareProduct = findReferenceDataById(
-          preassignedFareproducts,
-          productRef,
-        );
-        const userProfilesWithCount = mapToUserProfilesWithCount(
-          travelRights.map((tr) => tr.userProfileRef),
-          userProfiles,
-        );
-
+        const ticketInfoDetailsProps = getTicketInfoDetailsProps(fareContract, now);
         return (
-          <Sections.Section withPadding key={fareContract.id}>
-            <Sections.GenericClickableItem
-              onPress={() => onPressDetails?.(fareContract.orderId)}
-            >
-              <CompactTicketInfo
-                preassignedFareProduct={preassignedFareProduct}
-                fromTariffZone={fromTariffZone}
-                toTariffZone={toTariffZone}
-                userProfilesWithCount={userProfilesWithCount}
-                status={validityStatus}
-                now={now}
-                validTo={validTo}
-                isInspectable={ticketIsInspectable}
-                testID={'ticket' + index}
-              />
-            </Sections.GenericClickableItem>
-          </Sections.Section>
+          <CompactTicketInfo
+            {...ticketInfoDetailsProps}
+            now={now}
+            onPressDetails={() => {
+              onPressDetails?.(fareContract.orderId);
+            }}
+          />
         );
       })}
     </>
