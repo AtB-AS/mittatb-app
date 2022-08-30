@@ -141,11 +141,9 @@ const SelectFavouritesBottomSheet = ({
                         handleSwitchFlip={handleSwitchFlip}
                         favouriteId={departureDetails.id}
                         active={
-                          frontPageFavouriteDepartures.find(
+                          !!frontPageFavouriteDepartures.find(
                             (departure) => departure.id === departureDetails.id,
                           )
-                            ? true
-                            : false
                         }
                         departureStation={departureDetails.quayName}
                         lineIdentifier={departureDetails.lineLineNumber ?? ''}
