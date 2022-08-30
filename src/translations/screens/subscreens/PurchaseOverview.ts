@@ -59,7 +59,7 @@ const PurchaseOverviewTexts = {
     ),
     hour24: _(
       '24-timersbillett kan ikke brukes på tog eller nattbuss.',
-      '24 hour pass can not be used on trains nor night busses.',
+      '24 hour pass can not be used on trains nor night buses.',
     ),
   },
   zones: {
