@@ -1,9 +1,10 @@
 import axios, {AxiosError, AxiosRequestConfig} from 'axios';
 import {v4 as uuid} from 'uuid';
-import {API_BASE_URL} from '@env';
+import {API_BASE_URL, APP_VERSION} from '@env';
 import {getAxiosErrorMetadata, getAxiosErrorType} from './utils';
 import Bugsnag from '@bugsnag/react-native';
 import {
+  AppVersionHeaderName,
   FirebaseAuthIdHeaderName,
   InstallIdHeaderName,
   RequestIdHeaderName,
@@ -79,6 +80,9 @@ function requestHandler(config: AxiosRequestConfig): AxiosRequestConfig {
   if (authId) {
     config.headers[FirebaseAuthIdHeaderName] = authId;
   }
+
+  config.headers[AppVersionHeaderName] = APP_VERSION;
+
   return config;
 }
 
