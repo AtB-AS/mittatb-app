@@ -1,22 +1,16 @@
 import {getFavouriteDepartures} from '@atb/api/departures';
-import {
-  DepartureLineInfo,
-  DepartureTime,
-  StopPlaceGroup,
-} from '@atb/api/departures/types';
-import {FavouriteDepartureQuery} from '@atb/api/types/generated/FavouriteDepartures';
+import {StopPlaceGroup} from '@atb/api/departures/types';
 import ThemeText from '@atb/components/text';
 import QuaySection from '@atb/departure-list/section-items/quay-section';
 import {useFavorites} from '@atb/favorites';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
-import groupBy from 'lodash.groupby';
+
 import React, {useEffect, useState} from 'react';
-import {Button, View} from 'react-native';
-import {themeColor} from '../Onboarding/WelcomeScreen';
+import {View} from 'react-native';
 
 const FavouritesWidget: React.FC = () => {
   const styles = useStyles();
@@ -31,14 +25,12 @@ const FavouritesWidget: React.FC = () => {
 
   const fetchFavouriteDepartures = async () => {
     if (!favoriteDepartures || !navigation.isFocused()) return; // prevent backgound polling
-    const result = await getFavouriteDepartures(favoriteDepartures).then(
-      (data) => {
-        if (data) {
-          setFavResults(data);
-          setSearchDate(new Date().toISOString());
-        }
-      },
-    );
+    await getFavouriteDepartures(favoriteDepartures).then((data) => {
+      if (data) {
+        setFavResults(data);
+        setSearchDate(new Date().toISOString());
+      }
+    });
   };
 
   useEffect(() => {
