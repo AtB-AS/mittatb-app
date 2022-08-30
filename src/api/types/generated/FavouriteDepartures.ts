@@ -47,5 +47,3 @@ export type FavouriteDepartureQuery = {
     }>;
   }>;
 };
-
-

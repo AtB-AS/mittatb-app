@@ -90,7 +90,6 @@ export default function LineItem({
   }));
 
   const onPress = (activeItemIndex: number) => {
-    console.log('##Line item press handler', items);
     navigation.navigate('TripDetails', {
       screen: 'DepartureDetails',
       params: {

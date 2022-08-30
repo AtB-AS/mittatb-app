@@ -30,13 +30,9 @@ const FavouritesWidget: React.FC = () => {
   const isFocused = useIsFocused();
 
   const fetchFavouriteDepartures = async () => {
-    console.log('focus: ', navigation.isFocused());
-    console.log('favs: ', favoriteDepartures.length);
     if (!favoriteDepartures || !navigation.isFocused()) return; // prevent backgound polling
-    console.log('## Fetching data..');
     const result = await getFavouriteDepartures(favoriteDepartures).then(
       (data) => {
-        //console.log('## Fav results', JSON.stringify(data));
         if (data) {
           setFavResults(data);
           setSearchDate(new Date().toISOString());
@@ -49,17 +45,14 @@ const FavouritesWidget: React.FC = () => {
     let interval: NodeJS.Timeout | undefined = undefined;
     if (polling) {
       fetchFavouriteDepartures();
-      console.log('## Starting interval');
       interval = setInterval(fetchFavouriteDepartures, 10000);
     } else {
       if (interval) {
-        console.log('## Stopping interval');
         clearInterval(interval);
       }
     }
 
     return () => {
-      console.log('## Stopping interval');
       if (interval) {
         clearInterval(interval);
       }
@@ -69,10 +62,8 @@ const FavouritesWidget: React.FC = () => {
   // timer
   useEffect(() => {
     if (isFocused && !!favoriteDepartures.length) {
-      console.log('## Setting polling to true');
       setPolling(true);
     } else {
-      console.log('## Setting polling to false');
       setPolling(false);
     }
   }, [isFocused, !!favoriteDepartures.length]);
