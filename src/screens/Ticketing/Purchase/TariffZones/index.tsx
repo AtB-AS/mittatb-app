@@ -90,16 +90,6 @@ export const tariffZonesSummary = (
   }
 };
 
-export const tariffZonesTitle = (
-  fromTariffZone: TariffZone,
-  toTariffZone: TariffZone,
-  language: Language,
-  t: TranslateFunction,
-): string => {
-  const numberOfZones = fromTariffZone.id === toTariffZone.id ? 1 : 2;
-  return t(TariffZonesTexts.zoneTitle.text(numberOfZones));
-};
-
 export const tariffZonesDescription = (
   fromTariffZone: TariffZone,
   toTariffZone: TariffZone,

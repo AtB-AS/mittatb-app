@@ -11,9 +11,13 @@ import TariffZones from './TariffZones';
 import TariffZoneSearch from './TariffZones/search';
 import {TicketingStackParams, TicketPurchaseStackRootProps} from './types';
 
+import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/screens/MobileTokenOnboarding/utils';
+
 const Stack = createDismissableStackNavigator<TicketingStackParams>();
 
 export default function PurchaseStack({route}: TicketPurchaseStackRootProps) {
+  useGoToMobileTokenOnboardingWhenNecessary();
+
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}

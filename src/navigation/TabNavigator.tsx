@@ -1,19 +1,16 @@
-import {shouldOnboardMobileToken} from '@atb/api/utils';
-import {useAppState} from '@atb/AppContext';
 import {
   Assistant as AssistantIcon,
   Departures,
   Profile,
   Ticketing,
 } from '@atb/assets/svg/mono-icons/tab-bar';
-import {useAuthState} from '@atb/auth';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import {usePreferenceItems} from '@atb/preferences';
 import Assistant from '@atb/screens/Assistant';
 import Dashboard from '@atb/screens/Dashboard';
 import DeparturesScreen from '@atb/screens/Departures';
+import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/screens/MobileTokenOnboarding/utils';
 import NearbyScreen from '@atb/screens/Nearby';
 import ProfileScreen from '@atb/screens/Profile';
 import TicketingScreen from '@atb/screens/Ticketing';
@@ -25,10 +22,9 @@ import {
 } from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {useNavigation} from '@react-navigation/native';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {SvgProps} from 'react-native-svg';
-import {RootStackProps, TabNavigatorParams} from './types';
+import {TabNavigatorParams} from './types';
 
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
@@ -140,21 +136,3 @@ function tabSettings(
     tabBarIcon: ({color}) => <ThemeIcon svg={Icon} fill={color} />,
   };
 }
-
-const useGoToMobileTokenOnboardingWhenNecessary = () => {
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {authenticationType} = useAuthState();
-  const {mobileTokenOnboarded} = useAppState();
-  const shouldOnboard = shouldOnboardMobileToken(
-    hasEnabledMobileToken,
-    authenticationType,
-    mobileTokenOnboarded,
-  );
-  const navigation = useNavigation<RootStackProps['navigation']>();
-
-  useEffect(() => {
-    if (shouldOnboard) {
-      navigation.navigate('MobileTokenOnboarding');
-    }
-  }, [shouldOnboard]);
-};

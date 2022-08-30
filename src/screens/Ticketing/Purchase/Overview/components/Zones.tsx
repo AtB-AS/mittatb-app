@@ -2,17 +2,21 @@ import {screenReaderPause} from '@atb/components/accessible-text';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {
+  PurchaseOverviewTexts,
+  TariffZonesTexts,
+  useTranslation,
+} from '@atb/translations';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
   tariffZonesDescription,
   tariffZonesSummary,
-  tariffZonesTitle,
   TariffZoneWithMetadata,
 } from '../../TariffZones';
 import {OverviewNavigationProps} from '../types';
+
 type ZonesProps = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
@@ -58,7 +62,7 @@ export default function Zones({
       </ThemeText>
       <Sections.Section {...accessibility}>
         <Sections.ButtonInput
-          label={tariffZonesTitle(fromTariffZone, toTariffZone, language, t)}
+          label={t(TariffZonesTexts.zoneTitle)}
           value={tariffZonesDescription(
             fromTariffZone,
             toTariffZone,

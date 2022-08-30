@@ -148,7 +148,10 @@ export default function ProfileHome({navigation}: ProfileProps) {
                       ? 'LoginOptionsScreen'
                       : 'PhoneInputInApp',
                     params: {
-                      afterLogin: {routeName: 'ProfileHome'},
+                      afterLogin: {
+                        routeName: 'TabNavigator',
+                        routeParams: {screen: 'Profile'},
+                      },
                     },
                   })
                 }

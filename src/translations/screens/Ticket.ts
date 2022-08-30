@@ -1,5 +1,4 @@
 import {translation as _} from '../commons';
-import orgSpecificTranslations from '@atb/translations/utils';
 
 const TicketTexts = {
   organizationName: _('AtB', 'AtB'),
@@ -156,8 +155,4 @@ const TicketTexts = {
   },
 };
 
-export default orgSpecificTranslations(TicketTexts, {
-  nfk: {
-    organizationName: _('NFK', 'NFK'),
-  },
-});
+export default TicketTexts;

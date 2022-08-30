@@ -79,6 +79,7 @@ const CompactTickets: React.FC<Props> = ({
         // TODO: Move all this initialization into a better layer of abstraction!
         const travelRights =
           fareContract.travelRights.filter(isPreactivatedTicket);
+        if (travelRights.length < 1) return null;
         const firstTravelRight = travelRights[0];
         const {fareProductRef: productRef, tariffZoneRefs} = firstTravelRight;
         const ticketIsInspectable = isInspectableTicket(

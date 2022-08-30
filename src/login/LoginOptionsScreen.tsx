@@ -3,6 +3,7 @@ import {
   getOrCreateVippsUserCustomToken,
   VIPPS_CALLBACK_URL,
 } from '@atb/api/vipps-login/api';
+import {useAppState} from '@atb/AppContext';
 import {useAuthState} from '@atb/auth';
 import {VippsSignInErrorCode} from '@atb/auth/AuthContext';
 import MessageBox from '@atb/components/message-box';
@@ -16,9 +17,11 @@ import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
+import {StackActions} from '@react-navigation/native';
 import {parseUrl} from 'query-string';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -40,6 +43,7 @@ export default function LoginOptionsScreen({
   const [error, setError] = useState<VippsSignInErrorCode>();
   const [isLoading, setIsLoading] = useState(false);
   const appStatus = useAppStateStatus();
+  const {completeOnboarding, onboarded} = useAppState();
   const [authorizationCode, setAuthorizationCode] = useState<
     string | undefined
   >(undefined);
@@ -65,7 +69,14 @@ export default function LoginOptionsScreen({
   const signInUsingCustomToken = async (token: string) => {
     const response = await signInWithCustomToken(token);
     if (!response.error) {
-      navigation.navigate(afterLogin.routeName as any, afterLogin.routeParams);
+      if (!onboarded) {
+        await completeOnboarding();
+      }
+      navigation.dispatch(
+        StackActions.replace(afterLogin.routeName as any, {
+          ...afterLogin.routeParams,
+        }),
+      );
     } else {
       setError(response.error);
       setIsLoading(false);
@@ -94,6 +105,7 @@ export default function LoginOptionsScreen({
   useEffect(() => {
     const vippsCallbackHandler = async (event: any) => {
       if (event.url.includes(VIPPS_CALLBACK_URL)) {
+        InAppBrowser.close();
         setIsLoading(true);
         const code = parseUrl(event.url).query.code;
         if (code) {

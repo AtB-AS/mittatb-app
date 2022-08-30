@@ -15,6 +15,8 @@ import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {OnboardingScreenProps} from '../Onboarding/types';
+import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -34,6 +36,23 @@ const ConsequencesScreen = ({
   const focusRef = useFocusOnLoad();
   const isCallerRouteOnboarding = route?.name === 'ConsequencesFromOnboarding';
   const fillColor = getStaticColor(themeName, themeColor).text;
+  const finishOnboarding = useFinishOnboarding();
+  const {enable_vipps_login} = useRemoteConfig();
+  const navigateTologIn = async () => {
+    navigation.navigate('LoginInApp', {
+      screen: enable_vipps_login ? 'LoginOptionsScreen' : 'PhoneInputInApp',
+      params: {
+        afterLogin: {
+          routeName: 'TabNavigator',
+          routeParams: isCallerRouteOnboarding ? {} : {screen: 'Ticketing'},
+        },
+      },
+    });
+  };
+
+  const secondaryAction = () =>
+    isCallerRouteOnboarding ? finishOnboarding() : navigation.goBack();
+
   return (
     <>
       {!isCallerRouteOnboarding && (
@@ -69,7 +88,10 @@ const ConsequencesScreen = ({
           />
         </View>
         <View style={styles.buttons}>
-          <Actions callerRoute={route?.name} navigation={navigation} />
+          <Actions
+            primaryAction={navigateTologIn}
+            secondaryAction={secondaryAction}
+          />
         </View>
       </ScrollView>
     </>
