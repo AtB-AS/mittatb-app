@@ -832,11 +832,9 @@ export type QueryType = {
   trip: Trip;
 };
 
-
 export type QueryTypeAuthorityArgs = {
   id: Scalars['String'];
 };
-
 
 export type QueryTypeBikeParkArgs = {
   id: Scalars['String'];
@@ -850,14 +848,12 @@ export type QueryTypeBikeRentalStationsArgs = {
   ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryTypeBikeRentalStationsByBboxArgs = {
   maximumLatitude?: InputMaybe<Scalars['Float']>;
   maximumLongitude?: InputMaybe<Scalars['Float']>;
   minimumLatitude?: InputMaybe<Scalars['Float']>;
   minimumLongitude?: InputMaybe<Scalars['Float']>;
 };
-
 
 export type QueryTypeDatedServiceJourneyArgs = {
   id?: InputMaybe<Scalars['String']>;
@@ -877,11 +873,9 @@ export type QueryTypeLegArgs = {
   id: Scalars['ID'];
 };
 
-
 export type QueryTypeLineArgs = {
   id: Scalars['ID'];
 };
-
 
 export type QueryTypeLinesArgs = {
   authorities?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -913,11 +907,9 @@ export type QueryTypeOperatorArgs = {
   id: Scalars['String'];
 };
 
-
 export type QueryTypeQuayArgs = {
   id: Scalars['String'];
 };
-
 
 export type QueryTypeQuaysArgs = {
   ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -944,11 +936,9 @@ export type QueryTypeQuaysByRadiusArgs = {
   radius: Scalars['Float'];
 };
 
-
 export type QueryTypeServiceJourneyArgs = {
   id: Scalars['String'];
 };
-
 
 export type QueryTypeServiceJourneysArgs = {
   activeDates?: InputMaybe<Array<InputMaybe<Scalars['Date']>>>;
@@ -966,11 +956,9 @@ export type QueryTypeSituationsArgs = {
   severities?: InputMaybe<Array<InputMaybe<Severity>>>;
 };
 
-
 export type QueryTypeStopPlaceArgs = {
   id: Scalars['String'];
 };
-
 
 export type QueryTypeStopPlacesArgs = {
   ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -1264,12 +1252,10 @@ export type ServiceJourney = {
   wheelchairAccessible?: Maybe<WheelchairBoarding>;
 };
 
-
 /** A planned vehicle journey with passengers. */
 export type ServiceJourneyEstimatedCallsArgs = {
   date?: InputMaybe<Scalars['Date']>;
 };
-
 
 /** A planned vehicle journey with passengers. */
 export type ServiceJourneyQuaysArgs = {
@@ -1318,7 +1304,6 @@ export type StopPlace = PlaceInterface & {
   weighting?: Maybe<InterchangeWeighting>;
 };
 
-
 /** Named place where public transport may be accessed. May be a building complex (e.g. a station) or an on-street location. */
 export type StopPlaceEstimatedCallsArgs = {
   arrivalDeparture?: InputMaybe<ArrivalDeparture>;
@@ -1331,12 +1316,10 @@ export type StopPlaceEstimatedCallsArgs = {
   whiteListedModes?: InputMaybe<Array<InputMaybe<TransportMode>>>;
 };
 
-
 /** Named place where public transport may be accessed. May be a building complex (e.g. a station) or an on-street location. */
 export type StopPlaceNameArgs = {
   lang?: InputMaybe<Scalars['String']>;
 };
-
 
 /** Named place where public transport may be accessed. May be a building complex (e.g. a station) or an on-street location. */
 export type StopPlaceQuaysArgs = {
