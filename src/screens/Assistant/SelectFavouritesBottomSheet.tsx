@@ -185,9 +185,7 @@ const SelectFavouritesBottomSheet = ({
           accessibilityHint={t(
             SelectFavouriteDeparturesText.confirm_button.a11yhint,
           )}
-          onPress={() => {
-            close();
-          }}
+          onPress={close}
           disabled={false}
           icon={Confirm}
           iconPosition="right"
