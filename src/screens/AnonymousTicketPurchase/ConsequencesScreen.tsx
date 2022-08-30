@@ -31,17 +31,28 @@ type ConsequencesFromOnboardingScreenProps =
 type ConsequencesFromTicketPurchaseScreenProps =
   TicketPurchaseScreenPropsWithoutDismissable<'ConsequencesFromTicketPurchase'>;
 
-type ConsequencesProps =
+type ConsequencesPropsInternal =
   | ConsequencesScreenProps
   | ConsequencesFromOnboardingScreenProps
   | ConsequencesFromTicketPurchaseScreenProps;
 
-const ConsequencesScreen = ({route}: ConsequencesProps) => {
+type NavigationProps = ConsequencesScreenProps['navigation'] &
+  ConsequencesFromOnboardingScreenProps['navigation'] &
+  ConsequencesFromTicketPurchaseScreenProps['navigation'];
+
+// Having issues doing proper typing where the navigation
+// gets all overlapping types of routes as this is used from
+// several places. For routes and properties this works
+// but having to _combine_ everything for navigation to work.
+type ConsequencesProps = ConsequencesPropsInternal & {
+  navigation: NavigationProps;
+};
+
+const ConsequencesScreen = ({route, navigation}: ConsequencesProps) => {
   const styles = useStyle();
   const {t} = useTranslation();
   const {themeName} = useTheme();
   const focusRef = useFocusOnLoad();
-  const navigation = useNavigation<ConsequencesProps['navigation']>();
 
   const isCallerRouteOnboarding = route?.name === 'ConsequencesFromOnboarding';
   const fillColor = getStaticColor(themeName, themeColor).text;
