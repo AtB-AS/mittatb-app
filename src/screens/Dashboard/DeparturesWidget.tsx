@@ -83,10 +83,11 @@ const FavouritesWidget: React.FC = () => {
       {favResults.map((stopPlaceGroup) => {
         const stopPlaceInfo = stopPlaceGroup.stopPlace;
         return (
-          <>
+          <View key={stopPlaceGroup.stopPlace.id}>
             {stopPlaceGroup.quays.map((quay) => {
               return (
                 <QuaySection
+                  key={quay.quay.id}
                   quayGroup={quay}
                   stop={stopPlaceInfo}
                   searchDate={searchDate}
@@ -94,7 +95,7 @@ const FavouritesWidget: React.FC = () => {
                 />
               );
             })}
-          </>
+          </View>
         );
       })}
     </View>

@@ -10,11 +10,6 @@ import {flatMap} from '@atb/utils/array';
 import client from '../client';
 import {DepartureGroupsQuery} from './departure-group';
 import {StopPlaceGroup} from './types';
-import {
-  FavouriteDepartureQuery,
-  FavouriteDepartureQueryVariables,
-} from '../types/generated/FavouriteDepartures';
-import {nullLiteral} from '@babel/types';
 import {FavouriteAPIParam} from '../types/departures';
 
 export type DeparturesInputQuery = {
