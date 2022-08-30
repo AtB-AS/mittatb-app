@@ -7,18 +7,13 @@ import {TicketModalStackParams, TicketModalStackRootProps} from './types';
 
 const Stack = createStackNavigator<TicketModalStackParams>();
 
-const TicketModalRoot = ({route}: TicketModalStackRootProps) => {
+const TicketModalRoot = ({}: TicketModalStackRootProps) => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen
-        name="TicketDetails"
-        component={DetailsScreen}
-        initialParams={route.params}
-      />
+      <Stack.Screen name="TicketDetails" component={DetailsScreen} />
       <Stack.Screen
         name="CarnetDetailsScreen"
         component={CarnetDetailsScreen}
-        initialParams={route.params}
       />
       <Stack.Screen name="TicketReceipt" component={ReceiptScreen} />
     </Stack.Navigator>

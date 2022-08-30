@@ -16,6 +16,7 @@ import {
   CompositeScreenProps,
   NavigationProp,
   NavigatorScreenParams,
+  ParamListBase,
 } from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 
@@ -40,13 +41,20 @@ export type RootStackProps = RootStackScreenProps<keyof RootStackParamList>;
 export type RootStackScreenProps<T extends keyof RootStackParamList> =
   StackScreenProps<RootStackParamList, T>;
 
+interface ISubNavigator<T extends ParamListBase, K extends keyof T> {
+  screen: K;
+  params?: T[K];
+}
+
 export type TabNavigatorParams = {
   Assistant: {
     fromLocation: Location;
     toLocation: Location;
   };
   Nearest: NavigatorScreenParams<NearbyStackParams>;
-  Ticketing: NavigatorScreenParams<TicketTabsNavigatorParams>;
+  Ticketing:
+    | ISubNavigator<TicketTabsNavigatorParams, 'ActiveTickets'>
+    | ISubNavigator<TicketTabsNavigatorParams, 'BuyTickets'>;
   Profile: NavigatorScreenParams<ProfileStackParams>;
 };
 

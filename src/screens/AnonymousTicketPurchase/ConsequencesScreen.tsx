@@ -5,18 +5,20 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {RootStackScreenProps} from '@atb/navigation/types';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Actions from '@atb/screens/AnonymousTicketPurchase/components/Actions';
 import Consequence from '@atb/screens/AnonymousTicketPurchase/components/Consequence';
+import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {useTranslation} from '@atb/translations';
 import AnonymousTicketPurchases from '@atb/translations/screens/subscreens/AnonymousTicketPurchases';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {OnboardingScreenProps} from '../Onboarding/types';
-import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {TicketPurchaseScreenPropsWithoutDismissable} from '../Ticketing/Purchase/types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -26,14 +28,21 @@ type ConsequencesScreenProps =
 type ConsequencesFromOnboardingScreenProps =
   OnboardingScreenProps<'ConsequencesFromOnboarding'>;
 
-const ConsequencesScreen = ({
-  route,
-  navigation,
-}: ConsequencesScreenProps | ConsequencesFromOnboardingScreenProps) => {
+type ConsequencesFromTicketPurchaseScreenProps =
+  TicketPurchaseScreenPropsWithoutDismissable<'ConsequencesFromTicketPurchase'>;
+
+type ConsequencesProps =
+  | ConsequencesScreenProps
+  | ConsequencesFromOnboardingScreenProps
+  | ConsequencesFromTicketPurchaseScreenProps;
+
+const ConsequencesScreen = ({route}: ConsequencesProps) => {
   const styles = useStyle();
   const {t} = useTranslation();
   const {themeName} = useTheme();
   const focusRef = useFocusOnLoad();
+  const navigation = useNavigation<ConsequencesProps['navigation']>();
+
   const isCallerRouteOnboarding = route?.name === 'ConsequencesFromOnboarding';
   const fillColor = getStaticColor(themeName, themeColor).text;
   const finishOnboarding = useFinishOnboarding();

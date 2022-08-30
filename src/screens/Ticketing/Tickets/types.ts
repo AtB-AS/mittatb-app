@@ -9,12 +9,9 @@ import {
 } from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 
-export const BuyTicketsScreenName = 'BuyTickets';
-export const ActiveTicketsScreenName = 'ActiveTickets';
-
 export type TicketTabsNavigatorParams = {
-  [BuyTicketsScreenName]: undefined;
-  [ActiveTicketsScreenName]: undefined;
+  BuyTickets: undefined;
+  ActiveTickets: undefined;
 };
 
 export type TicketsStackRootProps = TabNavigatorScreenProps<'Ticketing'>;

@@ -2,7 +2,6 @@ import {ErrorType} from '@atb/api/utils';
 import Button from '@atb/components/button';
 import MessageBox from '@atb/components/message-box';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {ActiveTicketsScreenName} from '@atb/screens/Ticketing/Tickets/types';
 import {StyleSheet} from '@atb/theme';
 import {
   PaymentVippsTexts,
@@ -29,8 +28,12 @@ export default function VippsPayment({
   const cancelVipps = () => navigation.pop();
 
   const dismiss = () => {
-    // @TODO Fix this
-    navigation.navigate(ActiveTicketsScreenName);
+    navigation.navigate('TabNavigator', {
+      screen: 'Ticketing',
+      params: {
+        screen: 'ActiveTickets',
+      },
+    });
   };
 
   const {state, error, openVipps} = useVippsState(offers, dismiss);

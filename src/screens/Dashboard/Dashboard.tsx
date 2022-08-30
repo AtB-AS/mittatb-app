@@ -27,7 +27,6 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {BuyTicketsScreenName} from '../Ticketing/Tickets/types';
 import CompactTickets from './CompactTickets';
 import {DashboardScreenProps} from './types';
 
@@ -244,7 +243,7 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
             })
           }
           onPressBuyTickets={() =>
-            navigation.navigate('Ticketing', {screen: BuyTicketsScreenName})
+            navigation.navigate('Ticketing', {screen: 'BuyTickets'})
           }
         />
       </ScrollView>

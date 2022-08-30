@@ -14,11 +14,7 @@ import {View} from 'react-native';
 import {ActiveTickets} from './ActiveTickets/ActiveTickets';
 import TabBar from './TabBar';
 import {BuyTickets} from './Tabs';
-import {
-  ActiveTicketsScreenName,
-  BuyTicketsScreenName,
-  TicketTabsNavigatorParams,
-} from './types';
+import {TicketTabsNavigatorParams} from './types';
 
 const Tab = createMaterialTopTabNavigator<TicketTabsNavigatorParams>();
 
@@ -29,9 +25,8 @@ export default function TicketTabs() {
   const {fareContracts} = useTicketState();
   const activeFareContracts =
     filterActiveOrCanBeUsedFareContracts(fareContracts);
-  const initialRoute = activeFareContracts.length
-    ? ActiveTicketsScreenName
-    : BuyTicketsScreenName;
+  const initialRoute: keyof TicketTabsNavigatorParams =
+    activeFareContracts.length ? 'ActiveTickets' : 'BuyTickets';
 
   return (
     <View style={styles.container}>
@@ -45,7 +40,7 @@ export default function TicketTabs() {
         initialRouteName={initialRoute}
       >
         <Tab.Screen
-          name={BuyTicketsScreenName}
+          name="BuyTickets"
           component={BuyTickets}
           options={{
             tabBarLabel: t(TicketsTexts.buyTicketsTab.label),
@@ -54,7 +49,7 @@ export default function TicketTabs() {
           }}
         />
         <Tab.Screen
-          name={ActiveTicketsScreenName}
+          name="ActiveTickets"
           component={ActiveTickets}
           options={{
             tabBarLabel: t(TicketsTexts.activeTicketsTab.label),

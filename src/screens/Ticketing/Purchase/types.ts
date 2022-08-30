@@ -100,3 +100,10 @@ export type TicketPurchaseScreenProps<T extends keyof TicketingStackParams> =
   > & {
     navigation: TicketPurchaseNavigationProps<T>;
   };
+
+export type TicketPurchaseScreenPropsWithoutDismissable<
+  T extends keyof TicketingStackParams,
+> = CompositeScreenProps<
+  StackScreenProps<TicketingStackParams, T>,
+  TicketPurchaseStackRootProps
+>;

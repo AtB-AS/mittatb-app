@@ -6,17 +6,13 @@ import {NearbyStackParams, RootNearbyScreenProps} from './types';
 
 const Stack = createStackNavigator<NearbyStackParams>();
 
-const NearbyScreen = ({route}: RootNearbyScreenProps) => {
+const NearbyScreen = ({}: RootNearbyScreenProps) => {
   return (
     <Stack.Navigator
       initialRouteName="NearbyRoot"
       screenOptions={{headerShown: false}}
     >
-      <Stack.Screen
-        name="NearbyRoot"
-        component={NearbyRoot}
-        initialParams={route.params}
-      />
+      <Stack.Screen name="NearbyRoot" component={NearbyRoot} />
       <Stack.Screen name="TripDetails" component={TripDetailsRoot} />
     </Stack.Navigator>
   );
