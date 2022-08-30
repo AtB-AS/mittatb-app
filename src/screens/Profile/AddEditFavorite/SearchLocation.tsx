@@ -1,17 +1,15 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {Location, SearchLocation} from '@atb/favorites/types';
+import {SearchLocation} from '@atb/favorites/types';
 import {LocationSearchContent} from '@atb/location-search/LocationSearch';
 import {StyleSheet} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {Keyboard, View} from 'react-native';
-import {LocationSearchNavigationProp} from './';
+import {AddEditFavoriteScreenProps} from './types';
 
-export type SearchStopPlaceProps = {
-  navigation: LocationSearchNavigationProp;
-};
+export type SearchStopPlaceProps = AddEditFavoriteScreenProps<'SearchLocation'>;
 
-export default function SearchStopPlace({navigation}: SearchStopPlaceProps) {
+export function SearchStopPlace({navigation}: SearchStopPlaceProps) {
   const {t} = useTranslation();
   const styles = useThemeStyles();
 

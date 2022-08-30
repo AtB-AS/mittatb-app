@@ -10,8 +10,9 @@ import FavouriteStopsOverview from '@atb/screens/Departures/FavouriteStopsOvervi
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {AllStopsOverview} from '@atb/screens/Departures/AllStopsOverview';
+import {NearbyPlacesScreenTabParams} from './types';
 
-const Tab = createMaterialTopTabNavigator();
+const Tab = createMaterialTopTabNavigator<NearbyPlacesScreenTabParams>();
 
 export default function NearbyPlacesScreen() {
   const {theme} = useTheme();

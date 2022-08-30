@@ -1,5 +1,5 @@
 import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
-import {RootProps, RootStackScreenProps} from '@atb/navigation/types';
+import {RootNavigationProps, RootStackScreenProps} from '@atb/navigation/types';
 import {
   PreassignedFareProduct,
   PreassignedFareProductType,
@@ -90,7 +90,7 @@ export type TicketPurchaseNavigationProps<
   T extends keyof TicketingStackParams,
 > = CompositeNavigationProp<
   DismissableStackNavigationProp<TicketingStackParams, T>,
-  RootProps
+  RootNavigationProps
 >;
 
 export type TicketPurchaseScreenProps<T extends keyof TicketingStackParams> =
@@ -98,8 +98,5 @@ export type TicketPurchaseScreenProps<T extends keyof TicketingStackParams> =
     StackScreenProps<TicketingStackParams, T>,
     TicketPurchaseStackRootProps
   > & {
-    navigation: CompositeNavigationProp<
-      DismissableStackNavigationProp<TicketingStackParams, T>,
-      RootProps
-    >;
+    navigation: TicketPurchaseNavigationProps<T>;
   };

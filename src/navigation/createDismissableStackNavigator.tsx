@@ -52,7 +52,7 @@ const DismissableStackNavigator: React.FC<
 
   return (
     <StackView
-      {...rest}
+      {...(rest as any)}
       state={state}
       navigation={navigation}
       descriptors={descriptors}

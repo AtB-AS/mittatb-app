@@ -1,27 +1,17 @@
-import React, {useMemo} from 'react';
-import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
-import {useFavorites} from '@atb/favorites';
 import {Place, StopPlacePosition} from '@atb/api/types/departures';
-import {CompositeNavigationProp} from '@react-navigation/native';
-import DeparturesTexts from '@atb/translations/screens/Departures';
-import {useTranslation} from '@atb/translations';
+import {useFavorites} from '@atb/favorites';
+import {useGeolocationState} from '@atb/GeolocationContext';
 import StopPlaces, {
   NoStopPlaceMessage,
 } from '@atb/screens/Departures/components/StopPlaces';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {DeparturesStackParams} from '@atb/screens/Departures/index';
-import {RootStackParamList} from '@atb/navigation';
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
+import {useTranslation} from '@atb/translations';
+import DeparturesTexts from '@atb/translations/screens/Departures';
 import {coordinatesDistanceInMetres} from '@atb/utils/location';
+import React, {useMemo} from 'react';
+import {NearbyPlacesScreenTabProps} from './types';
 
-type FavouritePlacesNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<DeparturesStackParams>,
-  StackNavigationProp<RootStackParamList>
->;
-
-type RootProps = {
-  navigation: FavouritePlacesNavigationProp;
-};
+type RootProps = NearbyPlacesScreenTabProps<'FavouriteStopsOverview'>;
 
 const FavouriteStopsOverview = ({navigation}: RootProps) => {
   const {favoriteDepartures} = useFavorites();

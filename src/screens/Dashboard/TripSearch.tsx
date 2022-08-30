@@ -1,74 +1,57 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {RootStackParamList} from '@atb/navigation';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {Language, TripSearchTexts, useTranslation} from '@atb/translations';
-import {
-  CompositeNavigationProp,
-  RouteProp,
-  useIsFocused,
-  useNavigation,
-} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  ActivityIndicator,
-  RefreshControl,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import Button from '@atb/components/button';
-import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
-import {ScrollView} from 'react-native';
-import {LocationInput, Section} from '@atb/components/sections';
-import {screenReaderPause} from '@atb/components/accessible-text';
-import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
+import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
+import {screenReaderPause} from '@atb/components/accessible-text';
+import Button from '@atb/components/button';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import {LocationInput, Section} from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
-import {useLocationSearchValue} from '@atb/location-search';
+import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {DashboardParams} from '.';
+import {useLocationSearchValue} from '@atb/location-search';
 import {SelectableLocationData} from '@atb/location-search/types';
-import Bugsnag from '@bugsnag/react-native';
 import {
   getSearchTimeLabel,
   SearchTime,
   useSearchTimeValue,
 } from '@atb/screens/Dashboard/journey-date-picker';
-import {TFunc} from '@leile/lobo-t';
-import {isInThePast} from '@atb/utils/date';
-import useTripsQuery from '@atb/screens/Dashboard/use-trips-query';
-import {StaticColorByType} from '@atb/theme/colors';
-import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import Results from '@atb/screens/Dashboard/Results';
+import useTripsQuery from '@atb/screens/Dashboard/use-trips-query';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {StaticColorByType} from '@atb/theme/colors';
+import {Language, TripSearchTexts, useTranslation} from '@atb/translations';
+import {isInThePast} from '@atb/utils/date';
 import {
   coordinatesAreEqual,
   coordinatesDistanceInMetres,
   isValidTripLocations,
   LOCATIONS_REALLY_CLOSE_THRESHOLD,
 } from '@atb/utils/location';
-import ThemeText from '@atb/components/text';
+import Bugsnag from '@bugsnag/react-native';
+import {TFunc} from '@leile/lobo-t';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {
+  ActivityIndicator,
+  RefreshControl,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {DashboardScreenProps} from './types';
 
 type TripSearchRouteName = 'TripSearch';
 const TripSearchRouteNameStatic: TripSearchRouteName = 'TripSearch';
-
-export type TripSearchScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<DashboardParams>,
-  StackNavigationProp<RootStackParamList>
->;
-
-type TripSearchRouteProp = RouteProp<DashboardParams, TripSearchRouteName>;
-
-type RootProps = {
-  navigation: TripSearchScreenNavigationProp;
-  route: TripSearchRouteProp;
-};
 
 export type SearchForLocations = {
   from?: Location;
   to?: Location;
 };
+
+type RootProps = DashboardScreenProps<'TripSearch'>;
 
 const headerBackgroundColor: StaticColorByType<'background'> =
   'background_accent_0';
@@ -143,7 +126,7 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
   );
 
   const openLocationSearch = (
-    callerRouteParam: keyof TripSearchRouteProp['params'],
+    callerRouteParam: keyof RootProps['route']['params'],
     initialLocation: Location | undefined,
   ) =>
     navigation.navigate('LocationSearch', {
@@ -375,9 +358,9 @@ function useLocations(
   );
 
   const searchedFromLocation =
-    useLocationSearchValue<TripSearchRouteProp>('fromLocation');
+    useLocationSearchValue<RootProps['route']>('fromLocation');
   const searchedToLocation =
-    useLocationSearchValue<TripSearchRouteProp>('toLocation');
+    useLocationSearchValue<RootProps['route']>('toLocation');
 
   return useUpdatedLocation(
     searchedFromLocation,
@@ -395,7 +378,7 @@ function useUpdatedLocation(
 ): SearchForLocations {
   const [from, setFrom] = useState<Location | undefined>();
   const [to, setTo] = useState<Location | undefined>();
-  const navigation = useNavigation<TripSearchScreenNavigationProp>();
+  const navigation = useNavigation<RootProps['navigation']>();
 
   const setLocation = useCallback(
     (direction: 'from' | 'to', searchedLocation?: SelectableLocationData) => {

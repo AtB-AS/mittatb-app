@@ -1,25 +1,15 @@
-import {StackNavigationProp} from '@react-navigation/stack';
-import React from 'react';
+import {useAppState} from '@atb/AppContext';
 import PhoneInput from '@atb/login/PhoneInput';
-import {RouteProp} from '@react-navigation/native';
-import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
 import {AfterLoginParams} from '@atb/login/types';
 import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
-import {useAppState} from '@atb/AppContext';
+import React from 'react';
+import {LoginInAppScreenProps} from '../types';
 
 export type PhoneInputInAppRouteParams = {
   afterLogin: AfterLoginParams;
 };
 
-type PhoneInputInAppRouteProps = RouteProp<
-  LoginInAppStackParams,
-  'PhoneInputInApp'
->;
-
-export type PhoneInputInAppProps = {
-  navigation: StackNavigationProp<LoginInAppStackParams>;
-  route: PhoneInputInAppRouteProps;
-};
+type PhoneInputInAppProps = LoginInAppScreenProps<'PhoneInputInApp'>;
 
 export const PhoneInputInApp = ({
   navigation,

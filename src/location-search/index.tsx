@@ -1,42 +1,16 @@
-import {
-  CompositeNavigationProp,
-  ParamListBase,
-  RouteProp,
-  useRoute,
-} from '@react-navigation/native';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-  TransitionPresets,
-} from '@react-navigation/stack';
+import {ParamListBase, RouteProp, useRoute} from '@react-navigation/native';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React, {useRef} from 'react';
 import {Location} from '../favorites/types';
-import {RootStackParamList} from '../navigation';
-import LocationSearch, {
-  RouteParams as LocationSearchRouteParams,
-} from './LocationSearch';
-import MapSelection, {
-  RouteParams as MapSelectionRouteParams,
-} from './map-selection';
-import {SelectableLocationData} from './types';
-
-export type LocationSearchStackParams = {
-  LocationSearch: LocationSearchRouteParams;
-  MapSelection: MapSelectionRouteParams;
-};
-
-export type LocationSearchNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<LocationSearchStackParams>,
-  StackNavigationProp<RootStackParamList>
->;
-
-export type RouteParams = LocationSearchRouteParams;
+import LocationSearch from './LocationSearch';
+import MapSelection from './map-selection';
+import {
+  LocationSearchRootProps,
+  LocationSearchStackParams,
+  SelectableLocationData,
+} from './types';
 
 const Stack = createStackNavigator<LocationSearchStackParams>();
-
-type LocationSearchRootProps = {
-  route: {params: RouteParams};
-};
 
 const LocationSearchRoot = ({route}: LocationSearchRootProps) => {
   return (

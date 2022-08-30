@@ -28,7 +28,7 @@ import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/ty
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {SvgProps} from 'react-native-svg';
-import {RootProps, TabNavigatorParams} from './types';
+import {RootStackProps, TabNavigatorParams} from './types';
 
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
@@ -150,7 +150,7 @@ const useGoToMobileTokenOnboardingWhenNecessary = () => {
     authenticationType,
     mobileTokenOnboarded,
   );
-  const navigation = useNavigation<RootProps>();
+  const navigation = useNavigation<RootStackProps['navigation']>();
 
   useEffect(() => {
     if (shouldOnboard) {

@@ -5,11 +5,12 @@ import {
   QuayInfo,
   StopPlaceInfo,
 } from '@atb/api/departures/types';
+import Warning from '@atb/assets/svg/color/situations/Warning';
 import SvgFavorite from '@atb/assets/svg/mono-icons/places/Favorite';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
-import Warning from '@atb/assets/svg/color/situations/Warning';
 import {screenReaderPause} from '@atb/components/accessible-text';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
 import {
   SectionItem,
@@ -19,7 +20,12 @@ import {
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
+import FavoriteDialogSheet from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import {useFavorites} from '@atb/favorites';
+import {StoredType} from '@atb/favorites/storage';
+import {FavoriteDeparture} from '@atb/favorites/types';
+import {NearbyScreenProps} from '@atb/screens/Nearby/types';
+import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
 import {StyleSheet} from '@atb/theme';
 import {
   dictionary,
@@ -46,13 +52,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {NearbyScreenNavigationProp} from '@atb/screens/Nearby/Nearby';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {StoredType} from '@atb/favorites/storage';
-import {FavoriteDeparture} from '@atb/favorites/types';
-import FavoriteDialogSheet from '@atb/departure-list/section-items/FavoriteDialogSheet';
-import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
+
+type RootProps = NearbyScreenProps<'NearbyRoot'>;
 
 export type LineItemProps = SectionItem<{
   group: DepartureGroup;
@@ -73,7 +75,8 @@ export default function LineItem({
   const {contentContainer, topContainer} = useSectionItem(props);
   const sectionStyle = useSectionStyle();
   const styles = useItemStyles();
-  const navigation = useNavigation<NearbyScreenNavigationProp>();
+  // @TODO this shouldn't refer to useNavigation but instead have "onPress"
+  const navigation = useNavigation<RootProps['navigation']>();
   const {t, language} = useTranslation();
 
   if (hasNoDeparturesOnGroup(group)) {

@@ -12,7 +12,7 @@ import {
 import React from 'react';
 import {StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {OnboardingStackParams} from './type';
+import {OnboardingStackParams} from './types';
 
 const Tab = createMaterialTopTabNavigator<OnboardingStackParams>();
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';

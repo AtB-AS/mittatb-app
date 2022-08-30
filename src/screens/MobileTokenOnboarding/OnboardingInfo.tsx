@@ -1,27 +1,25 @@
+import {Cloud} from '@atb/assets/svg/color/illustrations';
+import TravelPlanning from '@atb/assets/svg/color/images/TravelPlanning';
+import Button from '@atb/components/button';
+import ThemeText from '@atb/components/text';
+import {StyleSheet} from '@atb/theme';
+import {StaticColorByType} from '@atb/theme/colors';
+import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
+import {useTranslation} from '@atb/translations';
+import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
+import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
-import ThemeText from '@atb/components/text';
-import {useTranslation} from '@atb/translations';
-import {StaticColorByType} from '@atb/theme/colors';
-import {StyleSheet} from '@atb/theme';
-import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
-import Button from '@atb/components/button';
-import TravelPlanning from '@atb/assets/svg/color/images/TravelPlanning';
-import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
-import {Cloud} from '@atb/assets/svg/color/illustrations';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
-import {MobileTokenTabParams} from '@atb/screens/MobileTokenOnboarding/index';
+import {MobileTokenOnboardingScreenProps} from './types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export type OnboardingInfoProps = {
-  navigation: MaterialTopTabNavigationProp<MobileTokenTabParams>;
-};
+export type FlexibilityInfoProps =
+  MobileTokenOnboardingScreenProps<'FlexibilityInfoScreen'>;
 
 export function FlexibilityInfoScreen({
   navigation,
-}: OnboardingInfoProps): JSX.Element {
+}: FlexibilityInfoProps): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
@@ -64,6 +62,9 @@ export function FlexibilityInfoScreen({
     </ScrollView>
   );
 }
+
+export type OnboardingInfoProps =
+  MobileTokenOnboardingScreenProps<'OptionsInfoScreen'>;
 
 export function OptionsInfoScreen({
   navigation,
@@ -124,9 +125,12 @@ export function OptionsInfoScreen({
   );
 }
 
+export type TicketSafetyInfoProps =
+  MobileTokenOnboardingScreenProps<'TicketSafetyInfoScreen'>;
+
 export function TicketSafetyInfoScreen({
   navigation,
-}: OnboardingInfoProps): JSX.Element {
+}: TicketSafetyInfoProps): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();

@@ -112,7 +112,6 @@ const NavigationRoot = () => {
                   name="SelectTravelTokenRoot"
                   component={SelectTravelTokenScreen}
                 />
-
                 <Stack.Screen
                   name="AddEditFavorite"
                   component={AddEditFavorite}

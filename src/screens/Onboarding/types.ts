@@ -1,5 +1,5 @@
-import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
 import {ConfirmCodeInOnboardingRouteParams} from '@atb/login/in-onboarding/ConfirmCodeInOnboarding';
+import {LoginInAppStackParams} from '@atb/login/types';
 import {RootStackScreenProps} from '@atb/navigation/types';
 import {
   CompositeScreenProps,

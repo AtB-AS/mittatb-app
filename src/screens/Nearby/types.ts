@@ -5,7 +5,7 @@ import {
   NavigatorScreenParams,
 } from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
-import {DetailsStackParams} from '../TripDetails';
+import {DetailsStackParams} from '../TripDetails/types';
 
 type NearbyRouteName = 'NearbyRoot';
 export const NearbyRouteNameStatic: NearbyRouteName = 'NearbyRoot';

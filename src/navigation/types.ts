@@ -1,8 +1,8 @@
 import {Location} from '@atb/favorites/types';
-import {RouteParams as LocationSearchParams} from '@atb/location-search';
-import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
+import {RouteParams as LocationSearchParams} from '@atb/location-search/LocationSearch';
+import {LoginInAppStackParams} from '@atb/login/types';
 import {NearbyStackParams} from '@atb/screens/Nearby/types';
-import {AddEditFavoriteRootParams} from '@atb/screens/Profile/AddEditFavorite';
+import {AddEditFavoriteRootParams} from '@atb/screens/Profile/AddEditFavorite/types';
 import {ProfileStackParams} from '@atb/screens/Profile/types';
 import {TicketingStackParams} from '@atb/screens/Ticketing/Purchase/types';
 import {TicketModalStackParams} from '@atb/screens/Ticketing/Ticket/Details/types';
@@ -34,7 +34,8 @@ export type RootStackParamList = {
   ConsequencesFromTicketPurchase: undefined;
 };
 
-export type RootProps = NavigationProp<RootStackParamList>;
+export type RootNavigationProps = NavigationProp<RootStackParamList>;
+export type RootStackProps = RootStackScreenProps<keyof RootStackParamList>;
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =
   StackScreenProps<RootStackParamList, T>;

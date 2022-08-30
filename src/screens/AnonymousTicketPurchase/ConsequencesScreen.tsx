@@ -14,7 +14,7 @@ import AnonymousTicketPurchases from '@atb/translations/screens/subscreens/Anony
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
-import {OnboardingScreenProps} from '../Onboarding/type';
+import {OnboardingScreenProps} from '../Onboarding/types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 

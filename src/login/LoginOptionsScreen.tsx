@@ -1,26 +1,24 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {StyleSheet} from '@atb/theme';
-import {LoginTexts, useTranslation} from '@atb/translations';
-import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
-import {useAuthState} from '@atb/auth';
-import ThemeText from '@atb/components/text';
-import {VippsSignInErrorCode} from '@atb/auth/AuthContext';
-import {RouteProp, useNavigation} from '@react-navigation/native';
-import {StaticColorByType} from '@atb/theme/colors';
 import {
-  getOrCreateVippsUserCustomToken,
   authorizeUser,
+  getOrCreateVippsUserCustomToken,
   VIPPS_CALLBACK_URL,
 } from '@atb/api/vipps-login/api';
+import {useAuthState} from '@atb/auth';
+import {VippsSignInErrorCode} from '@atb/auth/AuthContext';
+import MessageBox from '@atb/components/message-box';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import * as Sections from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
+import {VippsLoginButton} from '@atb/components/vipps-login-button';
+import {AfterLoginParams, LoginInAppScreenProps} from '@atb/login/types';
+import storage from '@atb/storage';
+import {StyleSheet} from '@atb/theme';
+import {StaticColorByType} from '@atb/theme/colors';
+import {LoginTexts, useTranslation} from '@atb/translations';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {parseUrl} from 'query-string';
-import storage from '@atb/storage';
-import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
-import {AfterLoginParams} from '@atb/login/types';
-import {VippsLoginButton} from '@atb/components/vipps-login-button';
-import MessageBox from '@atb/components/message-box';
-import * as Sections from '@atb/components/sections';
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -28,16 +26,10 @@ export type LoginOptionsRouteParams = {
   afterLogin: AfterLoginParams;
 };
 
-type LoginOptionsRouteProps = RouteProp<
-  LoginInAppStackParams,
-  'LoginOptionsScreen'
->;
-
-type LoginOptionsProps = {
-  route: LoginOptionsRouteProps;
-};
+type LoginOptionsProps = LoginInAppScreenProps<'LoginOptionsScreen'>;
 
 export default function LoginOptionsScreen({
+  navigation,
   route: {
     params: {afterLogin},
   },
@@ -47,7 +39,6 @@ export default function LoginOptionsScreen({
   const {signInWithCustomToken} = useAuthState();
   const [error, setError] = useState<VippsSignInErrorCode>();
   const [isLoading, setIsLoading] = useState(false);
-  const navigation = useNavigation();
   const appStatus = useAppStateStatus();
   const [authorizationCode, setAuthorizationCode] = useState<
     string | undefined

@@ -1,6 +1,6 @@
+import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {JourneySearchHistoryEntry} from '@atb/search-history/types';
-import {RouteProp, useIsFocused} from '@react-navigation/native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Keyboard, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {FOCUS_ORIGIN} from '../api/geocoder';
@@ -14,7 +14,6 @@ import {useFavorites} from '../favorites';
 import {Location} from '../favorites/types';
 import {useGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
-import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
 import {StyleSheet} from '../theme';
 import {
@@ -22,18 +21,17 @@ import {
   TranslateFunction,
   useTranslation,
 } from '../translations/';
-import {LocationSearchNavigationProp} from './';
 import JourneyHistory from './JourneyHistory';
 import LocationResults from './LocationResults';
-import {LocationSearchResult, SelectableLocationData} from './types';
+import {
+  LocationSearchResult,
+  LocationSearchScreenProps,
+  SelectableLocationData,
+} from './types';
 import useDebounce from './useDebounce';
 import {filterCurrentLocation, filterPreviousLocations} from './utils';
-import {useAccessibilityContext} from '@atb/AccessibilityContext';
 
-export type Props = {
-  navigation: LocationSearchNavigationProp;
-  route: RouteProp<RootStackParamList, 'LocationSearch'>;
-};
+export type Props = LocationSearchScreenProps<'LocationSearch'>;
 
 export type RouteParams = {
   callerRouteName: string;
