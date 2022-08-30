@@ -126,48 +126,58 @@ const SelectFavouritesBottomSheet = ({
       />
 
       <ScrollView style={styles.flatListArea}>
-        <ThemeText style={styles.questionText} type="heading__component">
-          {t(SelectFavouriteDeparturesText.title.text)}
-        </ThemeText>
+        {favoriteDepartures.length > 0 && (
+          <>
+            <ThemeText style={styles.questionText} type="heading__component">
+              {t(SelectFavouriteDeparturesText.title.text)}
+            </ThemeText>
 
-        <View>
-          {favouriteItems &&
-            favouriteItems.map((departureDetails, index) => {
-              return (
-                <View key={departureDetails.id}>
-                  <SelectableFavouriteDeparture
-                    handleSwitchFlip={handleSwitchFlip}
-                    favouriteId={departureDetails.id}
-                    active={
-                      frontPageFavouriteDepartures.find(
-                        (departure) => departure.id === departureDetails.id,
-                      )
-                        ? true
-                        : false
-                    }
-                    departureStation={departureDetails.quayName}
-                    lineIdentifier={departureDetails.lineLineNumber ?? ''}
-                    lineName={
-                      departureDetails.lineName ??
-                      t(SelectFavouriteDeparturesText.departures.allVariations)
-                    }
-                    lineTransportationMode={
-                      departureDetails.lineTransportationMode ?? LegMode.BUS
-                    }
-                  />
-                  {favouriteItems.length - 1 !== index && <SectionSeparator />}
-                </View>
-              );
-            })}
-          {!favouriteItems && (
-            <MessageBox type="info">
-              <ThemeText>
-                {t(SelectFavouriteDeparturesText.noFavourites.text)}
-              </ThemeText>
-            </MessageBox>
-          )}
-        </View>
+            <View>
+              {favouriteItems &&
+                favouriteItems.map((departureDetails, index) => {
+                  return (
+                    <View key={departureDetails.id}>
+                      <SelectableFavouriteDeparture
+                        handleSwitchFlip={handleSwitchFlip}
+                        favouriteId={departureDetails.id}
+                        active={
+                          frontPageFavouriteDepartures.find(
+                            (departure) => departure.id === departureDetails.id,
+                          )
+                            ? true
+                            : false
+                        }
+                        departureStation={departureDetails.quayName}
+                        lineIdentifier={departureDetails.lineLineNumber ?? ''}
+                        lineName={
+                          departureDetails.lineName ??
+                          t(
+                            SelectFavouriteDeparturesText.departures
+                              .allVariations,
+                          )
+                        }
+                        lineTransportationMode={
+                          departureDetails.lineTransportationMode ?? LegMode.BUS
+                        }
+                      />
+                      {favouriteItems.length - 1 !== index && (
+                        <SectionSeparator />
+                      )}
+                    </View>
+                  );
+                })}
+            </View>
+          </>
+        )}
+        {!favouriteItems.length && (
+          <MessageBox type="info">
+            <ThemeText>
+              {t(SelectFavouriteDeparturesText.noFavourites.text)}
+            </ThemeText>
+          </MessageBox>
+        )}
       </ScrollView>
+
       <FullScreenFooter>
         <Button
           interactiveColor="interactive_0"
