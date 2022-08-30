@@ -94,22 +94,17 @@ const SelectFavouritesBottomSheet = ({
   const frontpageFavouriteItems = frontPageFavouriteDepartures ?? [];
 
   const handleSwitchFlip = (favouriteId: string) => {
-    const favouriteInFavourites = favouriteItems.find(
-      (item) => item.id === favouriteId,
-    );
-
     const favouriteInFrontpageFavourites = frontpageFavouriteItems.find(
       (item) => item.id === favouriteId,
     );
 
-    if (!favouriteInFrontpageFavourites) {
+    if (favouriteInFrontpageFavourites) {
+      removeFrontPageFavouriteDeparture(favouriteInFrontpageFavourites);
+    } else {
       const favourite = favoriteDepartures.find(
         (departure) => departure.id === favouriteId,
       );
-      if (!favourite) return;
-      addFrontPageFavouriteDeparture(favourite);
-    } else if (favouriteInFavourites) {
-      removeFrontPageFavouriteDeparture(favouriteInFrontpageFavourites);
+      if (favourite) addFrontPageFavouriteDeparture(favourite);
     }
   };
 
