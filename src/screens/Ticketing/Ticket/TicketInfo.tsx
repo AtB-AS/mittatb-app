@@ -271,7 +271,8 @@ export const getTicketInfoDetailsProps = (
     userProfiles,
   );
 
-  if (isCarnetTicket(firstTravelRight)) {
+  const carnetTicket = isCarnetTicket(firstTravelRight);
+  if (carnetTicket) {
     const travelRights = fareContract.travelRights.filter(isCarnetTicket);
     const {usedAccesses} = flattenCarnetTicketAccesses(travelRights);
 
@@ -288,7 +289,7 @@ export const getTicketInfoDetailsProps = (
     now: now,
     validTo: validTo,
     isInspectable: ticketIsInspectable,
-    isCarnetTicket: isCarnetTicket(firstTravelRight),
+    isCarnetTicket: carnetTicket,
   };
 };
 
