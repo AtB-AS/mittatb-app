@@ -56,7 +56,7 @@ const FavouritesWidget: React.FC = () => {
     };
   }, [polling]);
 
-  // do polling only when screen has focus and user has faourites.
+  // do polling only when screen has focus and user has favourites.
   useEffect(() => {
     if (isFocused && !!favoriteDepartures.length) {
       setPolling(true);
