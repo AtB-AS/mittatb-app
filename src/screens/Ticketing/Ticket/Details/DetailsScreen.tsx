@@ -1,9 +1,5 @@
 import {StyleSheet} from '@atb/theme';
-import {
-  isPreactivatedTicket,
-  isSingleTicket,
-  useTicketState,
-} from '@atb/tickets';
+import {isPreactivatedTicket, useTicketState} from '@atb/tickets';
 import {
   PurchaseOverviewTexts,
   TicketTexts,
@@ -18,6 +14,8 @@ import DetailsContent from './DetailsContent';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import MessageBox from '@atb/components/message-box';
 import {getValidityStatus} from '../utils';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {findReferenceDataById} from '@atb/reference-data/utils';
 
 export type TicketDetailsRouteParams = {
   orderId: string;
@@ -33,6 +31,10 @@ type Props = {
   navigation: TicketModalNavigationProp;
 };
 
+function isOfFareProductRef(a: any): a is {fareProductRef: string} {
+  return 'fareProductRef' in a;
+}
+
 export default function DetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
   const [now, setNow] = useState<number>(Date.now());
@@ -41,6 +43,12 @@ export default function DetailsScreen({navigation, route}: Props) {
   const fc = findFareContractByOrderId(route?.params?.orderId);
   const firstTravelRight = fc?.travelRights[0];
   const {t} = useTranslation();
+
+  const {preassignedFareproducts} = useFirestoreConfiguration();
+  const preassignedFareProduct = findReferenceDataById(
+    preassignedFareproducts,
+    isOfFareProductRef(firstTravelRight) ? firstTravelRight.fareProductRef : '',
+  );
 
   const hasActiveTravelCard = !!customerProfile?.travelcard;
 
@@ -64,6 +72,13 @@ export default function DetailsScreen({navigation, route}: Props) {
       (val: string) => val === 'ATB:TariffZone:1',
     );
 
+  const getTrainTicketNoticeText = (fareProductType?: string) => {
+    if (fareProductType === 'single')
+      return t(PurchaseOverviewTexts.samarbeidsbillettenInfo.single);
+    if (fareProductType === 'hour24')
+      return t(PurchaseOverviewTexts.samarbeidsbillettenInfo.hour24);
+    return t(PurchaseOverviewTexts.samarbeidsbillettenInfo.period);
+  };
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -74,6 +89,7 @@ export default function DetailsScreen({navigation, route}: Props) {
         {fc && (
           <DetailsContent
             fareContract={fc}
+            preassignedFareProduct={preassignedFareProduct}
             now={now}
             onReceiptNavigate={onReceiptNavigate}
             hasActiveTravelCard={hasActiveTravelCard}
@@ -82,11 +98,7 @@ export default function DetailsScreen({navigation, route}: Props) {
 
         {shouldShowValidTrainTicketNotice && (
           <MessageBox
-            message={
-              isSingleTicket(firstTravelRight)
-                ? t(PurchaseOverviewTexts.samarbeidsbillettenInfo.single)
-                : t(PurchaseOverviewTexts.samarbeidsbillettenInfo.period)
-            }
+            message={getTrainTicketNoticeText(preassignedFareProduct?.type)}
             type="info"
           />
         )}

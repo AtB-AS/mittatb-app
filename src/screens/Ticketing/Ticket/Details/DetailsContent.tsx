@@ -14,13 +14,13 @@ import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {findReferenceDataById} from '@atb/reference-data/utils';
 import OrderDetails from '@atb/screens/Ticketing/Ticket/Details/OrderDetails';
 import {UnknownTicketDetails} from '@atb/screens/Ticketing/Ticket/Details/UnknownTicketDetails';
+import {PreassignedFareProduct} from '@atb/reference-data/types';
 
 type Props = {
   fareContract: FareContract;
+  preassignedFareProduct?: PreassignedFareProduct;
   now: number;
   onReceiptNavigate: () => void;
   hasActiveTravelCard?: boolean;
@@ -28,6 +28,7 @@ type Props = {
 
 const DetailsContent: React.FC<Props> = ({
   fareContract: fc,
+  preassignedFareProduct,
   now,
   onReceiptNavigate,
   hasActiveTravelCard = false,
@@ -41,7 +42,6 @@ const DetailsContent: React.FC<Props> = ({
   } = useMobileTokenContextState();
 
   const firstTravelRight = fc.travelRights[0];
-  const {preassignedFareproducts} = useFirestoreConfiguration();
 
   if (isPreactivatedTicket(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
@@ -53,11 +53,6 @@ const DetailsContent: React.FC<Props> = ({
       deviceIsInspectable,
       mobileTokenError,
       fallbackEnabled,
-    );
-
-    const preassignedFareProduct = findReferenceDataById(
-      preassignedFareproducts,
-      firstTravelRight.fareProductRef,
     );
 
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
