@@ -38,6 +38,8 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {destructiveAlert} from './utils';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import Bugsnag from '@bugsnag/react-native';
+import SelectFavouritesBottomSheet from '@atb/screens/Assistant/SelectFavouritesBottomSheet';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 import useIsLoading from '@atb/utils/use-is-loading';
 import ActivityIndicatorOverlay from '@atb/components/activity-indicator-overlay';
 
@@ -92,6 +94,13 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
   const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
   const {enable_vipps_login} = useRemoteConfig();
+
+  const {open: openBottomSheet} = useBottomSheet();
+  async function selectFavourites() {
+    openBottomSheet((close) => {
+      return <SelectFavouritesBottomSheet close={close} />;
+    });
+  }
 
   return (
     <View style={style.container}>
@@ -421,6 +430,20 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 });
                 setPreference({newFrontPage});
               }}
+            />
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.favorites.linkItems.frontpageFavourites
+                  .label,
+              )}
+              accessibility={{
+                accessibilityHint: t(
+                  ProfileTexts.sections.favorites.linkItems.frontpageFavourites
+                    .a11yHint,
+                ),
+              }}
+              testID="favoriteDeparturesButton"
+              onPress={selectFavourites}
             />
             <Sections.LinkItem
               text="Design system"

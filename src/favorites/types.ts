@@ -56,5 +56,9 @@ export type FavoriteDeparture = FavoriteDepartureId & {
   quayPublicCode?: string;
 };
 
+export type FavoriteDepartureWithId = FavoriteDeparture & {
+  id: string;
+};
+
 export type StoredFavoriteDeparture = StoredType<FavoriteDeparture>;
 export type UserFavoriteDepartures = StoredFavoriteDeparture[];
