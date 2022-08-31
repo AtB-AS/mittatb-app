@@ -50,6 +50,11 @@ export type OverviewNavigationProp = DismissableStackNavigationProp<
   'PurchaseOverview'
 >;
 
+export type UserProfileTypeWithCount = {
+  userTypeString: string;
+  count: number;
+};
+
 export type OverviewProps = {
   navigation: OverviewNavigationProp;
   route: RouteProp<TicketingStackParams, 'PurchaseOverview'>;
@@ -82,8 +87,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     deviceIsInspectable,
   );
 
-  const {tariffZones, userProfiles} = useFirestoreConfiguration();
-
   const {preassignedFareproducts} = useFirestoreConfiguration();
   const productType =
     params.preassignedFareProduct?.type ?? params.selectableProductType;
@@ -96,24 +99,30 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     params.preassignedFareProduct ?? selectableProducts[0],
   );
 
-  const defaultUserProfilesWithCount = useDefaultUserProfilesWithCount(
-    userProfiles,
-    preassignedFareProduct,
+  const {tariffZones, userProfiles} = useFirestoreConfiguration();
+  const {
+    preferences: {defaultUserTypeString},
+  } = usePreferences();
+
+  const defaultUserType: UserProfileTypeWithCount = {
+    userTypeString: defaultUserTypeString ?? userProfiles[0].userTypeString,
+    count: 1,
+  };
+
+  const defaultUsers = params.userProfilesWithCount?.map(
+    (up: UserProfileTypeWithCount): UserProfileTypeWithCount => {
+      return {userTypeString: up.userTypeString, count: up.count};
+    },
   );
 
-  if (params.userProfilesWithCount) {
-    defaultUserProfilesWithCount.forEach((u) => (u.count = 0));
-    params.userProfilesWithCount?.forEach((u: UserProfileWithCount) => {
-      defaultUserProfilesWithCount
-        .filter(
-          (upc: UserProfileWithCount) => upc.userTypeString == u.userTypeString,
-        )
-        .forEach((v: UserProfileWithCount) => (v.count = u.count));
-    });
-  }
+  const userProfilesWithCount = useDefaultUserProfilesWithCount(
+    userProfiles,
+    preassignedFareProduct,
+    defaultUsers ?? [defaultUserType],
+  );
 
   const [travellerSelection, setTravellerSelection] = useState(
-    defaultUserProfilesWithCount,
+    userProfilesWithCount,
   );
   const hasSelection = travellerSelection.some((u) => u.count);
 
@@ -185,7 +194,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           <TravellerSelection
             setTravellerSelection={setTravellerSelection}
             preassignedFareProduct={preassignedFareProduct}
-            selectableUserProfiles={defaultUserProfilesWithCount}
+            selectableUserProfiles={userProfilesWithCount}
             style={styles.selectionComponent}
           />
 
@@ -309,6 +318,18 @@ export const createTravelDateText = (
     : t(PurchaseOverviewTexts.travelDate.now);
 };
 
+const getCountIfUserIsIncluded = (
+  u: UserProfile,
+  selections: UserProfileTypeWithCount[],
+): number => {
+  const selectedUser = selections.filter(
+    (up: UserProfileTypeWithCount) => up.userTypeString === u.userTypeString,
+  );
+
+  if (selectedUser.length < 1) return 0;
+  return selectedUser[0].count;
+};
+
 /**
  * Get the default user profiles with count. If a default user profile has been
  * selected in the preferences that profile will have a count of one. If no
@@ -318,38 +339,19 @@ export const createTravelDateText = (
 const useDefaultUserProfilesWithCount = (
   userProfiles: UserProfile[],
   preassignedFareProduct: PreassignedFareProduct,
+  defaultSelections: UserProfileTypeWithCount[],
 ) => {
-  const {
-    preferences: {defaultUserTypeString},
-  } = usePreferences();
-
-  const isDefaultProfile = useCallback(
-    (u: UserProfile, index: number, filteredProfiles: UserProfile[]) => {
-      if (
-        defaultUserTypeString &&
-        filteredProfiles.some(
-          (fp) => fp.userTypeString === defaultUserTypeString,
-        )
-      ) {
-        return u.userTypeString === defaultUserTypeString;
-      } else {
-        return index === 0;
-      }
-    },
-    [defaultUserTypeString],
-  );
-
   return useMemo(
     () =>
       userProfiles
         .filter((u) =>
           preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
         )
-        .map((u, i, filteredProfiles) => ({
+        .map((u) => ({
           ...u,
-          count: isDefaultProfile(u, i, filteredProfiles) ? 1 : 0,
+          count: getCountIfUserIsIncluded(u, defaultSelections),
         })),
-    [userProfiles, isDefaultProfile, preassignedFareProduct],
+    [userProfiles, preassignedFareProduct],
   );
 };
 
