@@ -72,7 +72,6 @@ const FavouritesWidget: React.FC = () => {
 
   // refresh favourite departures when user adds or removees a favourite
   useEffect(() => {
-    console.log('## User changed departures ', favoriteDepartures.length);
     fetchFavouriteDepartures();
   }, [favoriteDepartures.length]);
 
