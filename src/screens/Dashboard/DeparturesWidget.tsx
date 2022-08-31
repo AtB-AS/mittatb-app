@@ -19,7 +19,9 @@ const FavouritesWidget: React.FC = () => {
   const {favoriteDepartures} = useFavorites();
   const {location} = useGeolocationState();
   const [polling, setPolling] = useState(false);
-  const [favResults, setFavResults] = useState<StopPlaceGroup[]>([]);
+  const [favouritesResults, setFavouritesResults] = useState<StopPlaceGroup[]>(
+    [],
+  );
   const [searchDate, setSearchDate] = useState<string>('');
   const navigation = useNavigation();
   const isFocused = useIsFocused();
@@ -28,7 +30,7 @@ const FavouritesWidget: React.FC = () => {
   const fetchFavouriteDepartures = async () => {
     await getFavouriteDepartures(favoriteDepartures).then((data) => {
       if (data) {
-        setFavResults(data);
+        setFavouritesResults(data);
         setSearchDate(new Date().toISOString());
       }
     });
@@ -63,10 +65,14 @@ const FavouritesWidget: React.FC = () => {
     } else {
       setPolling(false);
     }
+    if (!favoriteDepartures.length) {
+      setFavouritesResults([]);
+    }
   }, [isFocused, !!favoriteDepartures.length]);
 
   // refresh favourite departures when user adds or removees a favourite
   useEffect(() => {
+    console.log('## User changed departures ', favoriteDepartures.length);
     fetchFavouriteDepartures();
   }, [favoriteDepartures.length]);
 
@@ -80,7 +86,7 @@ const FavouritesWidget: React.FC = () => {
         {t(DeparturesTexts.widget.heading)}
       </ThemeText>
 
-      {favResults.map((stopPlaceGroup) => {
+      {favouritesResults.map((stopPlaceGroup) => {
         const stopPlaceInfo = stopPlaceGroup.stopPlace;
         return (
           <View key={stopPlaceGroup.stopPlace.id}>
