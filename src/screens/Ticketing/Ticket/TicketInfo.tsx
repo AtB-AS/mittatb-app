@@ -3,13 +3,22 @@ import {
   PreassignedFareProduct,
   PreassignedFareProductType,
   TariffZone,
+  UserProfile,
 } from '@atb/reference-data/types';
 import {
   findReferenceDataById,
   getReferenceDataName,
 } from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
-import {FareContract, PreactivatedTicket} from '@atb/tickets';
+import {
+  CustomerProfile,
+  FareContract,
+  flattenCarnetTicketAccesses,
+  isCarnetTicket,
+  isInspectableTicket,
+  NormalTravelRight,
+  PreactivatedTicket,
+} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
@@ -21,6 +30,7 @@ import {
   mapToUserProfilesWithCount,
   ValidityStatus,
   userProfileCountAndName,
+  getValidityStatus,
 } from '@atb/screens/Ticketing/Ticket/utils';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
@@ -31,6 +41,7 @@ import WarningMessage from '@atb/screens/Ticketing/Ticket/Component/WarningMessa
 import QrCode from '@atb/screens/Ticketing/Ticket/Details/QrCode';
 import SectionSeparator from '@atb/components/sections/section-separator';
 import ZoneSymbol from '@atb/screens/Ticketing/Ticket/Component/ZoneSymbol';
+import {getLastUsedAccess} from './Carnet/CarnetDetails';
 
 export type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -49,6 +60,7 @@ export type TicketInfoDetailsProps = {
   userProfilesWithCount: UserProfileWithCount[];
   status: TicketInfoProps['status'];
   isInspectable?: boolean;
+  isCarnetTicket?: boolean;
   omitUserProfileCount?: boolean;
   testID?: string;
   now?: number;
@@ -204,6 +216,84 @@ const TicketInfoDetails = (props: TicketInfoDetailsProps) => {
       </View>
     </View>
   );
+};
+
+export const getTicketInfoDetailsProps = (
+  fareContract: FareContract,
+  now: number,
+  customerProfile: CustomerProfile | undefined,
+  hasEnabledMobileToken: boolean,
+  deviceIsInspectable: boolean,
+  mobileTokenError: boolean,
+  fallbackEnabled: boolean,
+  tariffZones: TariffZone[],
+  userProfiles: UserProfile[],
+  preassignedFareproducts: PreassignedFareProduct[],
+): TicketInfoDetailsProps => {
+  const hasActiveTravelCard = !!customerProfile?.travelcard;
+  const firstTravelRight = fareContract.travelRights?.[0] as NormalTravelRight;
+  const {
+    startDateTime,
+    endDateTime,
+    fareProductRef: productRef,
+    tariffZoneRefs,
+  } = firstTravelRight;
+  const ticketIsInspectable = isInspectableTicket(
+    firstTravelRight,
+    hasActiveTravelCard,
+    hasEnabledMobileToken,
+    deviceIsInspectable,
+    mobileTokenError,
+    fallbackEnabled,
+  );
+  const fareContractState = fareContract.state;
+  var validTo = endDateTime.toMillis();
+  const validFrom = startDateTime.toMillis();
+  const validityStatus = getValidityStatus(
+    now,
+    validFrom,
+    validTo,
+    fareContractState,
+  );
+
+  const [firstZone] = tariffZoneRefs;
+  const [lastZone] = tariffZoneRefs.slice(-1);
+  const fromTariffZone = findReferenceDataById(tariffZones, firstZone);
+  const toTariffZone = findReferenceDataById(tariffZones, lastZone);
+  const preassignedFareProduct = findReferenceDataById(
+    preassignedFareproducts,
+    productRef,
+  );
+  const userProfilesWithCount = mapToUserProfilesWithCount(
+    fareContract.travelRights.map(
+      (tr) => (tr as NormalTravelRight).userProfileRef,
+    ),
+    userProfiles,
+  );
+
+  const carnetTicketTravelRights =
+    fareContract.travelRights.filter(isCarnetTicket);
+  const isACarnetTicket = carnetTicketTravelRights.length > 0;
+  if (isACarnetTicket) {
+    const {usedAccesses} = flattenCarnetTicketAccesses(
+      carnetTicketTravelRights,
+    );
+
+    const {validTo: usedAccessValidTo} = getLastUsedAccess(now, usedAccesses);
+    if (usedAccessValidTo) validTo = usedAccessValidTo;
+  }
+
+  return {
+    preassignedFareProduct: preassignedFareProduct,
+    fromTariffZone: fromTariffZone,
+    toTariffZone: toTariffZone,
+    userProfilesWithCount: userProfilesWithCount,
+    status: validityStatus,
+    now: now,
+    validTo: validTo,
+    isInspectable: ticketIsInspectable,
+    isCarnetTicket: isACarnetTicket,
+  };
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
