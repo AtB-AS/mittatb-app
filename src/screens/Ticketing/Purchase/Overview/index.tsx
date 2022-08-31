@@ -10,7 +10,6 @@ import {StyleSheet} from '@atb/theme';
 import {
   Language,
   PurchaseOverviewTexts,
-  TicketTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
@@ -44,7 +43,7 @@ import StartTimeSelection from './components/StartTimeSelection';
 import TravellerSelection from './components/TravellerSelection';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {getPurchaseFlow} from '../utils';
-import {getDeviceNameForCurrentToken} from '@atb/mobile-token/utils';
+import {getOtherDeviceIsInspectableWarning} from '../../Ticket/utils';
 
 export type OverviewNavigationProp = DismissableStackNavigationProp<
   TicketingStackParams,
@@ -66,7 +65,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     deviceIsInspectable,
     isError: mobileTokenError,
     fallbackEnabled,
-    token,
     remoteTokens,
   } = useMobileTokenContextState();
   const tokensEnabled = useHasEnabledMobileToken();
@@ -75,9 +73,14 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const showProfileTravelcardWarning = !tokensEnabled && hasProfileTravelCard;
 
-  const showInspectableTokenWarning =
-    tokensEnabled &&
-    (mobileTokenError ? !fallbackEnabled : !deviceIsInspectable);
+  const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
+    tokensEnabled,
+    mobileTokenError,
+    fallbackEnabled,
+    t,
+    remoteTokens,
+    deviceIsInspectable,
+  );
 
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
 
@@ -214,19 +217,12 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           />
         )}
 
-        {showInspectableTokenWarning && (
+        {inspectableTokenWarningText && (
           <MessageBox
-            isMarkdown={true}
-            containerStyle={styles.warning}
-            message={t(
-              PurchaseOverviewTexts.notInspectableTokenDeviceWarning(
-                getDeviceNameForCurrentToken(
-                  token?.getTokenId(),
-                  remoteTokens,
-                ) || t(PurchaseOverviewTexts.unnamedDevice),
-              ),
-            )}
             type="warning"
+            message={inspectableTokenWarningText}
+            containerStyle={styles.warning}
+            isMarkdown={true}
           />
         )}
 

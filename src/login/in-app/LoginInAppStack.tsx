@@ -16,12 +16,16 @@ import {
   ActiveTicketPromptInApp,
   ActiveTicketPromptInAppRouteParams,
 } from '@atb/login/in-app/ActiveTicketPrompt';
+import LoginOptionsScreen, {
+  LoginOptionsRouteParams,
+} from '@atb/login/LoginOptionsScreen';
 
 export type LoginInAppStackParams = {
   LoginOnboardingInApp: LoginOnboardingInAppRouteParams;
   ActiveTicketPromptInApp: ActiveTicketPromptInAppRouteParams;
   PhoneInputInApp: PhoneInputInAppRouteParams;
   ConfirmCodeInApp: ConfirmCodeInAppRouteParams;
+  LoginOptionsScreen: LoginOptionsRouteParams;
 };
 
 const Stack = createStackNavigator<LoginInAppStackParams>();
@@ -40,6 +44,7 @@ export default function LoginInAppStack() {
         name="LoginOnboardingInApp"
         component={LoginOnboardingInApp}
       />
+      <Stack.Screen name="LoginOptionsScreen" component={LoginOptionsScreen} />
       <Stack.Screen name="PhoneInputInApp" component={PhoneInputInApp} />
       <Stack.Screen name="ConfirmCodeInApp" component={ConfirmCodeInApp} />
     </Stack.Navigator>

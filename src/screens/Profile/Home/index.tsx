@@ -38,6 +38,8 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {destructiveAlert} from './utils';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import Bugsnag from '@bugsnag/react-native';
+import useIsLoading from '@atb/utils/use-is-loading';
+import ActivityIndicatorOverlay from '@atb/components/activity-indicator-overlay';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -86,8 +88,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
   function copyInstallId() {
     if (config?.installId) setClipboard(config.installId);
   }
+  const [isLoading, setIsLoading] = useIsLoading(false);
 
   const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
+  const {enable_vipps_login} = useRemoteConfig();
 
   return (
     <View style={style.container}>
@@ -155,9 +159,14 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                   navigation.navigate('LoginInApp', {
                     screen: hasActiveFareContracts
                       ? 'ActiveTicketPromptInApp'
+                      : enable_vipps_login
+                      ? 'LoginOptionsScreen'
                       : 'PhoneInputInApp',
                     params: {
-                      afterLogin: {routeName: 'ProfileHome'},
+                      afterLogin: {
+                        routeName: 'TabNavigator',
+                        routeParams: {screen: 'Profile'},
+                      },
                     },
                   })
                 }
@@ -193,13 +202,21 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                         .confirm,
                     ),
                     destructiveArrowFunction: async () => {
+                      setIsLoading(true);
                       try {
                         // On logout we delete the user's token
                         await wipeToken();
                       } catch (err: any) {
                         Bugsnag.notify(err);
                       }
-                      return signOut();
+
+                      try {
+                        await signOut();
+                      } catch (err: any) {
+                        Bugsnag.notify(err);
+                      } finally {
+                        setIsLoading(false);
+                      }
                     },
                   })
                 }
@@ -441,6 +458,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             ))}
         </View>
       </ScrollView>
+      {isLoading && <ActivityIndicatorOverlay />}
     </View>
   );
 }

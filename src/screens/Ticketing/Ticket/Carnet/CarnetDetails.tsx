@@ -34,7 +34,7 @@ export function CarnetDetails(props: {
     status: usedAccessValidityStatus,
     validFrom: usedAccessValidFrom,
     validTo: usedAccessValidTo,
-  } = useLastUsedAccess(now, usedAccesses);
+  } = getLastUsedAccess(now, usedAccesses);
 
   const style = useStyles();
   const fareContractValidityStatus = getValidityStatus(
@@ -46,7 +46,7 @@ export function CarnetDetails(props: {
 
   return (
     <>
-      <Sections.GenericItem>
+      <Sections.GenericItem radius="top">
         {fareContractValidityStatus !== 'valid' ? (
           <ValidityHeader
             now={now}
@@ -81,7 +81,7 @@ export function CarnetDetails(props: {
         )}
         <TicketInfo
           travelRights={travelRights}
-          status={fareContractValidityStatus}
+          status={usedAccessValidityStatus}
           isInspectable={inspectable}
           omitUserProfileCount={true}
           testID={props.testID}
@@ -115,7 +115,7 @@ function getUsedAccessValidity(
   return 'valid';
 }
 
-function useLastUsedAccess(
+export function getLastUsedAccess(
   now: number,
   usedAccesses: CarnetTicketUsedAccess[],
 ): LastUsedAccessState {
