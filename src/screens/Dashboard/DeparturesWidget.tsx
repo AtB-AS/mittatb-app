@@ -1,5 +1,9 @@
 import {getFavouriteDepartures} from '@atb/api/departures';
 import {StopPlaceGroup} from '@atb/api/departures/types';
+import {Edit} from '@atb/assets/svg/mono-icons/actions';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
+import SelectFavouritesBottomSheet from '@atb/screens/Assistant/SelectFavouritesBottomSheet';
+import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import QuaySection from '@atb/departure-list/section-items/quay-section';
 import {useFavorites} from '@atb/favorites';
@@ -70,6 +74,13 @@ const FavouritesWidget: React.FC = () => {
     fetchFavouriteDepartures();
   }, [favoriteDepartures.length]);
 
+  const {open: openBottomSheet} = useBottomSheet();
+  async function openFrontpageFavouritesBottomSheet() {
+    openBottomSheet((close) => {
+      return <SelectFavouritesBottomSheet close={close} />;
+    });
+  }
+
   return (
     <View style={styles.container}>
       <ThemeText
@@ -98,6 +109,15 @@ const FavouritesWidget: React.FC = () => {
           </View>
         );
       })}
+
+      <Button
+        mode="secondary"
+        type="block"
+        onPress={openFrontpageFavouritesBottomSheet}
+        text={t(DeparturesTexts.button.text)}
+        icon={Edit}
+        iconPosition="right"
+      />
     </View>
   );
 };

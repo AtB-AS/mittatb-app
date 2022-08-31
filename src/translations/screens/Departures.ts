@@ -83,5 +83,8 @@ const DeparturesTexts = {
       'There are no departures to be shown, as you have no stops marked as favourites.',
     ),
   },
+  button: {
+    text: _('Velg favorittavganger', 'Select favourite departures'),
+  },
 };
 export default DeparturesTexts;
