@@ -83,41 +83,42 @@ const CompactTickets: React.FC<Props> = ({
       >
         {t(TicketsTexts.header.title)}
       </ThemeText>
-      {activeFareContracts?.length == 0 && (
+      {activeFareContracts.length == 0 ? (
         <Button
           style={itemStyle.buttonSection}
           text={t(DashboardTexts.buyTicketsButton)}
           onPress={onPressBuyTickets}
         />
+      ) : (
+        activeFareContracts.map((fareContract, index) => {
+          const ticketInfoDetailsProps = getTicketInfoDetailsProps(
+            fareContract,
+            now,
+            customerProfile,
+            hasEnabledMobileToken,
+            deviceIsInspectable,
+            mobileTokenError,
+            fallbackEnabled,
+            tariffZones,
+            userProfiles,
+            preassignedFareproducts,
+          );
+          return (
+            <CompactTicketInfo
+              {...ticketInfoDetailsProps}
+              now={now}
+              onPressDetails={() => {
+                onPressDetails?.(
+                  ticketInfoDetailsProps.isCarnetTicket ?? false,
+                  ticketInfoDetailsProps.isInspectable ?? false,
+                  fareContract.orderId,
+                );
+              }}
+              testID={'ticket' + index}
+            />
+          );
+        })
       )}
-      {activeFareContracts?.map((fareContract, index) => {
-        const ticketInfoDetailsProps = getTicketInfoDetailsProps(
-          fareContract,
-          now,
-          customerProfile,
-          hasEnabledMobileToken,
-          deviceIsInspectable,
-          mobileTokenError,
-          fallbackEnabled,
-          tariffZones,
-          userProfiles,
-          preassignedFareproducts,
-        );
-        return (
-          <CompactTicketInfo
-            {...ticketInfoDetailsProps}
-            now={now}
-            onPressDetails={() => {
-              onPressDetails?.(
-                ticketInfoDetailsProps.isCarnetTicket ?? false,
-                ticketInfoDetailsProps.isInspectable ?? false,
-                fareContract.orderId,
-              );
-            }}
-            testID={'ticket' + index}
-          />
-        );
-      })}
     </>
   );
 };
