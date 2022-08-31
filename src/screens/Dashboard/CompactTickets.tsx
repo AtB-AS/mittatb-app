@@ -44,15 +44,16 @@ const CompactTickets: React.FC<Props> = ({
     const travelRights = fareContract.travelRights;
     if (travelRights.length < 1) return false;
 
-    const firstTravelRight = travelRights[0];
-    if (isCarnetTicket(firstTravelRight)) {
-      const travelRights = fareContract.travelRights.filter(isCarnetTicket);
-      const {usedAccesses} = flattenCarnetTicketAccesses(travelRights);
+    const carnetTravelRights = fareContract.travelRights.filter(isCarnetTicket);
+    if (carnetTravelRights.length > 0) {
+      const {usedAccesses} = flattenCarnetTicketAccesses(carnetTravelRights);
 
-      const {validFrom: usedAccessValidFrom, validTo: usedAccessValidTo} =
-        getLastUsedAccess(now, usedAccesses);
+      const {status: usedAccessValidityStatus} = getLastUsedAccess(
+        now,
+        usedAccesses,
+      );
 
-      if (usedAccessValidTo && usedAccessValidFrom) {
+      if (usedAccessValidityStatus === 'valid') {
         return true;
       }
 
