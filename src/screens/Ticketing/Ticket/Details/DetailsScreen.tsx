@@ -71,6 +71,14 @@ export default function DetailsScreen({navigation, route}: Props) {
     firstTravelRight.tariffZoneRefs.every(
       (val: string) => val === 'ATB:TariffZone:1',
     );
+
+  const getTrainTicketNoticeText = (fareProductType?: string) => {
+    if (fareProductType === 'single')
+      return t(PurchaseOverviewTexts.samarbeidsbillettenInfo.single);
+    if (fareProductType === 'hour24')
+      return t(PurchaseOverviewTexts.samarbeidsbillettenInfo.hour24);
+    return t(PurchaseOverviewTexts.samarbeidsbillettenInfo.period);
+  };
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -90,13 +98,7 @@ export default function DetailsScreen({navigation, route}: Props) {
 
         {shouldShowValidTrainTicketNotice && (
           <MessageBox
-            message={
-              preassignedFareProduct?.type === 'single'
-                ? t(PurchaseOverviewTexts.samarbeidsbillettenInfo.single)
-                : preassignedFareProduct?.type === 'hour24'
-                ? t(PurchaseOverviewTexts.samarbeidsbillettenInfo.hour24)
-                : t(PurchaseOverviewTexts.samarbeidsbillettenInfo.period)
-            }
+            message={getTrainTicketNoticeText(preassignedFareProduct?.type)}
             type="info"
           />
         )}
