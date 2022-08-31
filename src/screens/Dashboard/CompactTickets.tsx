@@ -44,7 +44,7 @@ const CompactTickets: React.FC<Props> = ({
     const travelRights = fareContract.travelRights;
     if (travelRights.length < 1) return false;
 
-    const carnetTravelRights = fareContract.travelRights.filter(isCarnetTicket);
+    const carnetTravelRights = travelRights.filter(isCarnetTicket);
     if (carnetTravelRights.length > 0) {
       const {usedAccesses} = flattenCarnetTicketAccesses(carnetTravelRights);
 
