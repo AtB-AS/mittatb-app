@@ -6,6 +6,7 @@ import {
   filterAndSortActiveOrCanBeUsedFareContracts,
   flattenCarnetTicketAccesses,
   isCarnetTicket,
+  isPreactivatedTicket,
   useTicketState,
 } from '@atb/tickets';
 import ThemeText from '@atb/components/text';
@@ -60,7 +61,13 @@ const CompactTickets: React.FC<Props> = ({
       return false;
     }
 
-    return true;
+    const preactivatedTicketTravelRights =
+      travelRights.filter(isPreactivatedTicket);
+    if (preactivatedTicketTravelRights.length > 0) {
+      return true;
+    }
+
+    return false;
   });
 
   const {t} = useTranslation();

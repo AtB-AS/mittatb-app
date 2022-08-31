@@ -271,10 +271,13 @@ export const getTicketInfoDetailsProps = (
     userProfiles,
   );
 
-  const carnetTicket = isCarnetTicket(firstTravelRight);
-  if (carnetTicket) {
-    const travelRights = fareContract.travelRights.filter(isCarnetTicket);
-    const {usedAccesses} = flattenCarnetTicketAccesses(travelRights);
+  const carnetTicketTravelRights =
+    fareContract.travelRights.filter(isCarnetTicket);
+  const isACarnetTicket = carnetTicketTravelRights.length > 0;
+  if (isACarnetTicket) {
+    const {usedAccesses} = flattenCarnetTicketAccesses(
+      carnetTicketTravelRights,
+    );
 
     const {validTo: usedAccessValidTo} = getLastUsedAccess(now, usedAccesses);
     if (usedAccessValidTo) validTo = usedAccessValidTo;
@@ -289,7 +292,7 @@ export const getTicketInfoDetailsProps = (
     now: now,
     validTo: validTo,
     isInspectable: ticketIsInspectable,
-    isCarnetTicket: carnetTicket,
+    isCarnetTicket: isACarnetTicket,
   };
 };
 
