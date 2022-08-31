@@ -144,12 +144,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginRight: theme.spacings.medium,
     },
     infoSubtext: {
-      marginTop: theme.spacings.medium,
+      marginTop: theme.spacings.small,
     },
     countContainer: {
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
+      padding: theme.spacings.medium,
     },
     countActions: {
       flexDirection: 'row',
