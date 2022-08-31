@@ -6,7 +6,7 @@ import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
 import {useAuthState} from '@atb/auth';
 import ThemeText from '@atb/components/text';
 import {VippsSignInErrorCode} from '@atb/auth/AuthContext';
-import {RouteProp, useNavigation} from '@react-navigation/native';
+import {RouteProp, StackActions, useNavigation} from '@react-navigation/native';
 import {StaticColorByType} from '@atb/theme/colors';
 import {
   getOrCreateVippsUserCustomToken,
@@ -21,6 +21,10 @@ import {AfterLoginParams} from '@atb/login/types';
 import {VippsLoginButton} from '@atb/components/vipps-login-button';
 import MessageBox from '@atb/components/message-box';
 import * as Sections from '@atb/components/sections';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '@atb/navigation';
+import {useAppState} from '@atb/AppContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -35,20 +39,22 @@ type LoginOptionsRouteProps = RouteProp<
 
 type LoginOptionsProps = {
   route: LoginOptionsRouteProps;
+  navigation: StackNavigationProp<RootStackParamList>;
 };
 
 export default function LoginOptionsScreen({
   route: {
     params: {afterLogin},
   },
+  navigation,
 }: LoginOptionsProps) {
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {signInWithCustomToken} = useAuthState();
   const [error, setError] = useState<VippsSignInErrorCode>();
   const [isLoading, setIsLoading] = useState(false);
-  const navigation = useNavigation();
   const appStatus = useAppStateStatus();
+  const {completeOnboarding, onboarded} = useAppState();
   const [authorizationCode, setAuthorizationCode] = useState<
     string | undefined
   >(undefined);
@@ -74,7 +80,14 @@ export default function LoginOptionsScreen({
   const signInUsingCustomToken = async (token: string) => {
     const response = await signInWithCustomToken(token);
     if (!response.error) {
-      navigation.navigate(afterLogin.routeName as any, afterLogin.routeParams);
+      if (!onboarded) {
+        await completeOnboarding();
+      }
+      navigation.dispatch(
+        StackActions.replace(afterLogin.routeName as any, {
+          ...afterLogin.routeParams,
+        }),
+      );
     } else {
       setError(response.error);
       setIsLoading(false);
@@ -103,6 +116,7 @@ export default function LoginOptionsScreen({
   useEffect(() => {
     const vippsCallbackHandler = async (event: any) => {
       if (event.url.includes(VIPPS_CALLBACK_URL)) {
+        InAppBrowser.close();
         setIsLoading(true);
         const code = parseUrl(event.url).query.code;
         if (code) {

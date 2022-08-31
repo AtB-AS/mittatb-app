@@ -41,7 +41,10 @@ const CompactTickets: React.FC<Props> = ({
   const activeFareContracts = filterAndSortActiveOrCanBeUsedFareContracts(
     fareContracts,
   ).filter((fareContract) => {
-    const firstTravelRight = fareContract.travelRights?.[0];
+    const travelRights = fareContract.travelRights;
+    if (travelRights.length < 1) return false;
+
+    const firstTravelRight = travelRights[0];
     if (isCarnetTicket(firstTravelRight)) {
       const travelRights = fareContract.travelRights.filter(isCarnetTicket);
       const {usedAccesses} = flattenCarnetTicketAccesses(travelRights);

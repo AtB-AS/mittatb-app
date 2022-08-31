@@ -7,11 +7,14 @@ import {OverviewNavigationProp} from '@atb/screens/Ticketing/Purchase/Overview';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {
   tariffZonesSummary,
-  tariffZonesTitle,
   tariffZonesDescription,
   TariffZoneWithMetadata,
 } from '../../TariffZones';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {
+  PurchaseOverviewTexts,
+  TariffZonesTexts,
+  useTranslation,
+} from '@atb/translations';
 import {useNavigation} from '@react-navigation/native';
 type ZonesProps = {
   fromTariffZone: TariffZoneWithMetadata;
@@ -58,7 +61,7 @@ export default function Zones({
       </ThemeText>
       <Sections.Section {...accessibility}>
         <Sections.ButtonInput
-          label={tariffZonesTitle(fromTariffZone, toTariffZone, language, t)}
+          label={t(TariffZonesTexts.zoneTitle)}
           value={tariffZonesDescription(
             fromTariffZone,
             toTariffZone,
