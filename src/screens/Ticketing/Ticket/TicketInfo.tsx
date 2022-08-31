@@ -13,6 +13,7 @@ import {StyleSheet} from '@atb/theme';
 import {
   CustomerProfile,
   FareContract,
+  flattenCarnetTicketAccesses,
   isCarnetTicket,
   isInspectableTicket,
   NormalTravelRight,
@@ -40,6 +41,7 @@ import WarningMessage from '@atb/screens/Ticketing/Ticket/Component/WarningMessa
 import QrCode from '@atb/screens/Ticketing/Ticket/Details/QrCode';
 import SectionSeparator from '@atb/components/sections/section-separator';
 import ZoneSymbol from '@atb/screens/Ticketing/Ticket/Component/ZoneSymbol';
+import {getLastUsedAccess} from './Carnet/CarnetDetails';
 
 export type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -249,7 +251,7 @@ export const getTicketInfoDetailsProps = (
     fallbackEnabled,
   );
   const fareContractState = fareContract.state;
-  const validTo = endDateTime.toMillis();
+  var validTo = endDateTime.toMillis();
   const validFrom = startDateTime.toMillis();
   const validityStatus = getValidityStatus(
     now,
@@ -272,6 +274,14 @@ export const getTicketInfoDetailsProps = (
     ),
     userProfiles,
   );
+
+  if (isCarnetTicket(firstTravelRight)) {
+    const travelRights = fareContract.travelRights.filter(isCarnetTicket);
+    const {usedAccesses} = flattenCarnetTicketAccesses(travelRights);
+
+    const {validTo: usedAccessValidTo} = getLastUsedAccess(now, usedAccesses);
+    if (usedAccessValidTo) validTo = usedAccessValidTo;
+  }
 
   return {
     preassignedFareProduct: preassignedFareProduct,
