@@ -97,7 +97,7 @@ export default function ActionItem({
           <ThemeText
             type="body__secondary"
             color="secondary"
-            style={{marginTop: theme.spacings.medium}}
+            style={{marginTop: theme.spacings.small}}
           >
             {subtext}
           </ThemeText>
