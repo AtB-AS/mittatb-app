@@ -1,8 +1,8 @@
-import {Situation} from '@atb/sdk';
 import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
+import {Situation} from '../types/trips';
 
 type Notice = {text?: string};
 

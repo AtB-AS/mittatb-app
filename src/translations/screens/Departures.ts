@@ -70,6 +70,9 @@ const DeparturesTexts = {
   favorites: {
     toggle: _('Vis kun favorittavganger', 'View favourite departures only'),
   },
+  widget: {
+    heading: _('Favorittavganger', 'Favourite departures'),
+  },
   resultType: {
     all: _('Alle holdeplasser', 'All Stops'),
     favourites: _('Favoritter', 'Favourites'),
