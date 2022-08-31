@@ -339,20 +339,6 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             testID="favoriteDeparturesButton"
             onPress={() => navigation.navigate('FavoriteDepartures')}
           />
-          <Sections.LinkItem
-            text={t(
-              ProfileTexts.sections.favorites.linkItems.frontpageFavourites
-                .label,
-            )}
-            accessibility={{
-              accessibilityHint: t(
-                ProfileTexts.sections.favorites.linkItems.frontpageFavourites
-                  .a11yHint,
-              ),
-            }}
-            testID="favoriteDeparturesButton"
-            onPress={selectFavourites}
-          />
         </Sections.Section>
         <Sections.Section withPadding>
           <Sections.HeaderItem
@@ -444,6 +430,20 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                 });
                 setPreference({newFrontPage});
               }}
+            />
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.favorites.linkItems.frontpageFavourites
+                  .label,
+              )}
+              accessibility={{
+                accessibilityHint: t(
+                  ProfileTexts.sections.favorites.linkItems.frontpageFavourites
+                    .a11yHint,
+                ),
+              }}
+              testID="favoriteDeparturesButton"
+              onPress={selectFavourites}
             />
             <Sections.LinkItem
               text="Design system"
