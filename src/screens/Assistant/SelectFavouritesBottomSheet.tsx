@@ -167,11 +167,9 @@ const SelectFavouritesBottomSheet = ({
           </>
         )}
         {!favouriteItems.length && (
-          <MessageBox type="info">
-            <ThemeText>
-              {t(SelectFavouriteDeparturesText.noFavourites.text)}
-            </ThemeText>
-          </MessageBox>
+          <MessageBox
+            message={t(SelectFavouriteDeparturesText.noFavourites.text)}
+          />
         )}
       </ScrollView>
 
