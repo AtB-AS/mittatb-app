@@ -20,7 +20,7 @@ import {View} from 'react-native';
 const FavouritesWidget: React.FC = () => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {frontPageFavouriteDepartures} = useFavorites();
+  const {favoriteDepartures, frontPageFavouriteDepartures} = useFavorites();
   const {location} = useGeolocationState();
   const [polling, setPolling] = useState(false);
   const [favResults, setFavResults] = useState<StopPlaceGroup[]>([]);
@@ -78,6 +78,9 @@ const FavouritesWidget: React.FC = () => {
     });
   }
 
+  console.log('favs', favoriteDepartures);
+  console.log('frontpageFavs', frontPageFavouriteDepartures);
+
   return (
     <View style={styles.container}>
       <ThemeText
@@ -87,6 +90,16 @@ const FavouritesWidget: React.FC = () => {
       >
         {t(DeparturesTexts.widget.heading)}
       </ThemeText>
+
+      {!frontPageFavouriteDepartures.length && (
+        <View style={styles.noFavouritesView}>
+          <ThemeText>
+            {!favoriteDepartures.length
+              ? t(DeparturesTexts.message.noFavouritesWidget)
+              : t(DeparturesTexts.message.noFrontpageFavouritesWidget)}
+          </ThemeText>
+        </View>
+      )}
 
       {favResults.map((stopPlaceGroup) => {
         const stopPlaceInfo = stopPlaceGroup.stopPlace;
@@ -108,14 +121,16 @@ const FavouritesWidget: React.FC = () => {
         );
       })}
 
-      <Button
-        mode="secondary"
-        type="block"
-        onPress={openFrontpageFavouritesBottomSheet}
-        text={t(DeparturesTexts.button.text)}
-        icon={Edit}
-        iconPosition="right"
-      />
+      {!!favoriteDepartures.length && (
+        <Button
+          mode="secondary"
+          type="block"
+          onPress={openFrontpageFavouritesBottomSheet}
+          text={t(DeparturesTexts.button.text)}
+          icon={Edit}
+          iconPosition="right"
+        />
+      )}
     </View>
   );
 };
@@ -129,5 +144,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
     marginTop: theme.spacings.large,
     marginBottom: theme.spacings.medium,
+  },
+  noFavouritesView: {
+    backgroundColor: theme.static.background.background_0.background,
+    borderRadius: theme.border.radius.regular,
+    alignItems: 'center',
+    padding: theme.spacings.medium,
   },
 }));
