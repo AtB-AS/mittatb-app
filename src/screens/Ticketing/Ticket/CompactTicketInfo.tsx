@@ -21,6 +21,7 @@ import LoadingSymbol from './Component/LoadingSymbol';
 import * as Sections from '@atb/components/sections';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import InspectionSymbol from '@atb/screens/Ticketing/Ticket/Component/InspectionSymbol';
+import {isInspectable} from '@atb/mobile-token/utils';
 
 export type CompactTicketInfoProps = TicketInfoDetailsProps & {
   onPressDetails?: () => void;
@@ -61,8 +62,8 @@ export const CompactTicketInfo = (props: CompactTicketInfoProps) => {
     <Sections.Section withPadding {...accessibility}>
       <Sections.GenericClickableItem onPress={props.onPressDetails}>
         <View style={styles.container}>
-          <CompactTicketInfoTexts {...ticketInfoTextsProps} />
-          <View style={styles.symbolContainer}>
+          <View style={styles.ticketDetails}>
+            <CompactTicketInfoTexts {...ticketInfoTextsProps} />
             {isLoading && <LoadingSymbol />}
             {isValid && !isLoading && <InspectionSymbol {...props} />}
           </View>
@@ -104,14 +105,18 @@ const CompactTicketInfoTexts = (props: CompactTicketInfoTexts) => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flexDirection: 'row'},
+  container: {flex: 1},
+  ticketDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   textsContainer: {flex: 1, paddingTop: theme.spacings.xSmall},
   expireTime: {
     marginBottom: theme.spacings.small,
   },
   symbolContainer: {
-    height: 72,
-    width: 72,
+    minHeight: 72,
+    minWidth: 72,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
@@ -131,6 +136,7 @@ export const getTicketInfoTexts = (
     toTariffZone,
     validTo,
     now,
+    isInspectable,
   } = props;
 
   const productName = preassignedFareProduct
@@ -158,6 +164,10 @@ export const getTicketInfoTexts = (
   );
   accessibilityLabel += productName + screenReaderPause;
   accessibilityLabel += tariffZoneSummary + screenReaderPause;
+
+  if (!isInspectable) {
+    accessibilityLabel += t(TicketTexts.ticketInfo.noInspectionIconA11yLabel);
+  }
 
   return {
     productName,
