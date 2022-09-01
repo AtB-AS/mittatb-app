@@ -1,4 +1,8 @@
-import {QuayGroup, StopPlaceInfo} from '@atb/api/departures/types';
+import {
+  QuayGroup,
+  QuaySectionMode,
+  StopPlaceInfo,
+} from '@atb/api/departures/types';
 import {Section} from '@atb/components/sections';
 import {useTheme} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
@@ -22,6 +26,7 @@ type QuaySectionProps = {
   hidden?: Date;
   searchDate: string;
   testID?: string;
+  mode: QuaySectionMode;
 };
 
 const QuaySection = React.memo(function QuaySection({
@@ -31,6 +36,7 @@ const QuaySection = React.memo(function QuaySection({
   lastUpdated,
   searchDate,
   testID,
+  mode = 'departures',
 }: QuaySectionProps) {
   const [limit, setLimit] = useState(LIMIT_SIZE);
   const {t} = useTranslation();
@@ -68,6 +74,7 @@ const QuaySection = React.memo(function QuaySection({
             key={group.lineInfo?.lineId + String(group.lineInfo?.lineName)}
             searchDate={searchDate}
             testID={'lineItem' + i}
+            mode={mode}
           />
         ))}
         {hasMoreItems && (

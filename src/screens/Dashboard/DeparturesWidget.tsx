@@ -20,7 +20,7 @@ import {View} from 'react-native';
 const FavouritesWidget: React.FC = () => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {favoriteDepartures} = useFavorites();
+  const {frontPageFavouriteDepartures} = useFavorites();
   const {location} = useGeolocationState();
   const [polling, setPolling] = useState(false);
   const [favResults, setFavResults] = useState<StopPlaceGroup[]>([]);
@@ -29,8 +29,8 @@ const FavouritesWidget: React.FC = () => {
   const isFocused = useIsFocused();
   const {favourite_departures_poll_interval} = useRemoteConfig();
 
-  const fetchFavouriteDepartures = async () => {
-    const data = await getFavouriteDepartures(favoriteDepartures);
+  const fetchFavouriteFrontpageDepartures = async () => {
+    const data = await getFavouriteDepartures(frontPageFavouriteDepartures);
     setFavResults(data || []);
     setSearchDate(new Date().toISOString());
   };
@@ -39,9 +39,9 @@ const FavouritesWidget: React.FC = () => {
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined = undefined;
     if (polling) {
-      fetchFavouriteDepartures();
+      fetchFavouriteFrontpageDepartures();
       interval = setInterval(
-        fetchFavouriteDepartures,
+        fetchFavouriteFrontpageDepartures,
         favourite_departures_poll_interval,
       );
     } else {
@@ -57,19 +57,19 @@ const FavouritesWidget: React.FC = () => {
     };
   }, [polling]);
 
-  // do polling only when screen has focus and user has favourites.
+  // do polling only when screen has focus and user has frontpage favourites.
   useEffect(() => {
-    if (isFocused && !!favoriteDepartures.length) {
+    if (isFocused && !!frontPageFavouriteDepartures.length) {
       setPolling(true);
     } else {
       setPolling(false);
     }
-  }, [isFocused, !!favoriteDepartures.length]);
+  }, [isFocused, !!frontPageFavouriteDepartures.length]);
 
   // refresh favourite departures when user adds or removees a favourite
   useEffect(() => {
-    fetchFavouriteDepartures();
-  }, [favoriteDepartures.length]);
+    fetchFavouriteFrontpageDepartures();
+  }, [frontPageFavouriteDepartures.length]);
 
   const {open: openBottomSheet} = useBottomSheet();
   async function openFrontpageFavouritesBottomSheet() {
@@ -100,6 +100,7 @@ const FavouritesWidget: React.FC = () => {
                   stop={stopPlaceInfo}
                   searchDate={searchDate}
                   currentLocation={location || undefined}
+                  mode="frontpage"
                 />
               );
             })}

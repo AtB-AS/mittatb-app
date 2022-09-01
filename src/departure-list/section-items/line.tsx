@@ -3,6 +3,7 @@ import {
   DepartureLineInfo,
   DepartureTime,
   QuayInfo,
+  QuaySectionMode,
   StopPlaceInfo,
 } from '@atb/api/departures/types';
 import SvgFavorite from '@atb/assets/svg/mono-icons/places/Favorite';
@@ -60,6 +61,7 @@ export type LineItemProps = SectionItem<{
   quay: QuayInfo;
   accessibility?: AccessibilityProps;
   searchDate: string;
+  mode: QuaySectionMode;
 }>;
 export default function LineItem({
   group,
@@ -68,6 +70,7 @@ export default function LineItem({
   accessibility,
   searchDate,
   testID,
+  mode,
   ...props
 }: LineItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -136,6 +139,7 @@ export default function LineItem({
           line={group.lineInfo}
           stop={stop}
           quay={quay}
+          mode={mode}
         />
       </View>
       <ScrollView
@@ -343,8 +347,14 @@ type FavoriteStarProps = {
   line?: DepartureLineInfo;
   stop: StopPlaceInfo;
   quay: QuayInfo;
+  mode: QuaySectionMode;
 };
-function ToggleFavoriteDepartureButton({line, stop, quay}: FavoriteStarProps) {
+function ToggleFavoriteDepartureButton({
+  line,
+  stop,
+  quay,
+  mode = 'departures',
+}: FavoriteStarProps) {
   const {getFavoriteDeparture, addFavoriteDeparture, removeFavoriteDeparture} =
     useFavorites();
   const {t} = useTranslation();
@@ -353,6 +363,11 @@ function ToggleFavoriteDepartureButton({line, stop, quay}: FavoriteStarProps) {
 
   const {open: openBottomSheet} = useBottomSheet();
 
+  console.log('mode', mode);
+
+  if (mode === 'frontpage') {
+    return null;
+  }
   if (!line) {
     return null;
   }
