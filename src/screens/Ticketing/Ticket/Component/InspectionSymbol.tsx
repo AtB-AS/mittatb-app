@@ -76,8 +76,7 @@ const InspectableContent = ({
       <ThemeText
         type="body__primary--bold"
         allowFontScaling={false}
-        style={styles.symbolZones}
-        color={themeColor}
+        color={shouldFill ? themeColor : undefined}
       >
         {getReferenceDataName(fromTariffZone, language)}
         {fromTariffZone.id !== toTariffZone.id &&
@@ -127,9 +126,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.small,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  symbolZones: {
-    marginTop: theme.spacings.small,
   },
 }));
 
