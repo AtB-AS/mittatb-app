@@ -15,13 +15,12 @@ import {
   userProfileCountAndName,
 } from '@atb/screens/Ticketing/Ticket/utils';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import ZoneSymbol from '@atb/screens/Ticketing/Ticket/Component/ZoneSymbol';
 import {secondsToDuration} from '@atb/utils/date';
 import {TicketInfoDetailsProps} from './TicketInfo';
-import NonTicketInspectionSymbol from './Component/NotForInspectionSymbol';
 import LoadingSymbol from './Component/LoadingSymbol';
 import * as Sections from '@atb/components/sections';
 import {screenReaderPause} from '@atb/components/accessible-text';
+import InspectionSymbol from '@atb/screens/Ticketing/Ticket/Component/InspectionSymbol';
 
 export type CompactTicketInfoProps = TicketInfoDetailsProps & {
   onPressDetails?: () => void;
@@ -39,7 +38,7 @@ export type CompactTicketInfoTexts = CompactTicketInfoProps &
 
 export const CompactTicketInfo = (props: CompactTicketInfoProps) => {
   const styles = useStyles();
-  const {status, isInspectable} = props;
+  const {status} = props;
   const isValid = isValidTicket(status);
   const {isLoading} = useMobileTokenContextState();
   const {t, language} = useTranslation();
@@ -65,12 +64,7 @@ export const CompactTicketInfo = (props: CompactTicketInfoProps) => {
           <CompactTicketInfoTexts {...ticketInfoTextsProps} />
           <View style={styles.symbolContainer}>
             {isLoading && <LoadingSymbol />}
-            {isValid && isInspectable && !isLoading && (
-              <ZoneSymbol {...props} />
-            )}
-            {isValid && !isInspectable && !isLoading && (
-              <NonTicketInspectionSymbol />
-            )}
+            {isValid && !isLoading && <InspectionSymbol {...props} />}
           </View>
         </View>
       </Sections.GenericClickableItem>
