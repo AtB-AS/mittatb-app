@@ -363,8 +363,6 @@ function ToggleFavoriteDepartureButton({
 
   const {open: openBottomSheet} = useBottomSheet();
 
-  console.log('mode', mode);
-
   if (mode === 'frontpage') {
     return null;
   }

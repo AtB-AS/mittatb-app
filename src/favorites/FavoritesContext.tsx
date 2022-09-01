@@ -100,8 +100,11 @@ const FavoritesContextProvider: React.FC = ({children}) => {
     },
     async removeFavoriteDeparture(id: string) {
       const favorites = await departures.removeFavorite(id);
-      await frontpageFavourites.removeFrontpageFavorite(id);
+      const frontpageFavs = await frontpageFavourites.removeFrontpageFavorite(
+        id,
+      );
       setFavoriteDeparturesState(favorites);
+      setFrontPageFavouriteDepartures(frontpageFavs);
     },
     getFavoriteDeparture(potential: FavoriteDepartureId) {
       return favoriteDepartures.find(function (favorite) {
