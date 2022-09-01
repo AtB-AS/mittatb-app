@@ -104,25 +104,25 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     preferences: {defaultUserTypeString},
   } = usePreferences();
 
-  const defaultUserType: UserProfileTypeWithCount = {
+  const defaultPreSelectedUser: UserProfileTypeWithCount = {
     userTypeString: defaultUserTypeString ?? userProfiles[0].userTypeString,
     count: 1,
   };
 
-  const defaultUsers = params.userProfilesWithCount?.map(
-    (up: UserProfileTypeWithCount): UserProfileTypeWithCount => {
+  const preSelectedUsers = params.userProfilesWithCount?.map(
+    (up: UserProfileWithCount): UserProfileTypeWithCount => {
       return {userTypeString: up.userTypeString, count: up.count};
     },
   );
 
-  const userProfilesWithCount = useDefaultUserProfilesWithCount(
+  const selectableTravellers = useTravellersWithPreselectedCounts(
     userProfiles,
     preassignedFareProduct,
-    defaultUsers ?? [defaultUserType],
+    preSelectedUsers ?? [defaultPreSelectedUser],
   );
 
   const [travellerSelection, setTravellerSelection] = useState(
-    userProfilesWithCount,
+    selectableTravellers,
   );
   const hasSelection = travellerSelection.some((u) => u.count);
 
@@ -194,7 +194,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           <TravellerSelection
             setTravellerSelection={setTravellerSelection}
             preassignedFareProduct={preassignedFareProduct}
-            selectableUserProfiles={userProfilesWithCount}
+            selectableUserProfiles={selectableTravellers}
             style={styles.selectionComponent}
           />
 
@@ -336,7 +336,7 @@ const getCountIfUserIsIncluded = (
  * default user profile preference exists then the first user profile will have
  * a count of one.
  */
-const useDefaultUserProfilesWithCount = (
+const useTravellersWithPreselectedCounts = (
   userProfiles: UserProfile[],
   preassignedFareProduct: PreassignedFareProduct,
   defaultSelections: UserProfileTypeWithCount[],
