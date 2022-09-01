@@ -30,12 +30,9 @@ const FavouritesWidget: React.FC = () => {
   const {favourite_departures_poll_interval} = useRemoteConfig();
 
   const fetchFavouriteDepartures = async () => {
-    await getFavouriteDepartures(favoriteDepartures).then((data) => {
-      if (data) {
-        setFavResults(data);
-        setSearchDate(new Date().toISOString());
-      }
-    });
+    const data = await getFavouriteDepartures(favoriteDepartures);
+    setFavResults(data || []);
+    setSearchDate(new Date().toISOString());
   };
 
   // timer orchestration
