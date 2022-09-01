@@ -70,6 +70,9 @@ const DeparturesTexts = {
   favorites: {
     toggle: _('Vis kun favorittavganger', 'View favourite departures only'),
   },
+  widget: {
+    heading: _('Favorittavganger', 'Favourite departures'),
+  },
   resultType: {
     all: _('Alle holdeplasser', 'All Stops'),
     favourites: _('Favoritter', 'Favourites'),
@@ -79,6 +82,9 @@ const DeparturesTexts = {
       'Det er ingen avganger som skal vises, da du ikke har noen stopp merket som favoritter.',
       'There are no departures to be shown, as you have no stops marked as favourites.',
     ),
+  },
+  button: {
+    text: _('Velg favorittavganger', 'Select favourite departures'),
   },
 };
 export default DeparturesTexts;

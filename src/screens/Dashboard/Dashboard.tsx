@@ -28,6 +28,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import CompactTickets from './CompactTickets';
+import FavouritesWidget from './DeparturesWidget';
 import {DashboardScreenProps} from './types';
 
 type DashboardRouteName = 'DashboardRoot';
@@ -236,16 +237,31 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
           />
         </View>
         <CompactTickets
-          onPressDetails={(orderId: string) =>
-            navigation.navigate('TicketModal', {
+          onPressDetails={(
+            isCarnet: boolean,
+            isInspectable: boolean,
+            orderId: string,
+          ) => {
+            if (isCarnet) {
+              return navigation.navigate('TicketModal', {
+                screen: 'CarnetDetailsScreen',
+                params: {
+                  orderId,
+                  isInspectable,
+                },
+              });
+            }
+
+            return navigation.navigate('TicketModal', {
               screen: 'TicketDetails',
               params: {orderId},
-            })
-          }
+            });
+          }}
           onPressBuyTickets={() =>
             navigation.navigate('Ticketing', {screen: 'BuyTickets'})
           }
         />
+        <FavouritesWidget />
       </ScrollView>
     </View>
   );

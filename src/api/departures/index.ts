@@ -1,6 +1,6 @@
 import {AxiosRequestConfig} from 'axios';
 import {build} from 'search-params';
-import {Location} from '@atb/favorites/types';
+import {Location, UserFavoriteDepartures} from '@atb/favorites/types';
 import {
   DeparturesMetadata,
   DeparturesRealtimeData,
@@ -10,6 +10,7 @@ import {flatMap} from '@atb/utils/array';
 import client from '../client';
 import {DepartureGroupsQuery} from './departure-group';
 import {StopPlaceGroup} from './types';
+import {FavouriteAPIParam} from '../types/departures';
 
 export type DeparturesInputQuery = {
   numberOfDepartures: number; // Number of departures to fetch per quay.
@@ -64,6 +65,38 @@ export async function getRealtimeDepartureV2(
 
   let url = `bff/v2/departures/realtime?${params}`;
   const response = await client.get<DeparturesRealtimeData>(url, opts);
+  return response.data;
+}
+
+export async function getFavouriteDepartures(
+  favourites: UserFavoriteDepartures,
+  opts?: AxiosRequestConfig,
+): Promise<StopPlaceGroup[] | null> {
+  if (!favourites || favourites.length === 0) {
+    return null;
+  }
+
+  const url = '/bff/v2/departures/favourites';
+  const query: FavouriteAPIParam[] = favourites.map((userFavourite) => {
+    return {
+      lineId: userFavourite.lineId,
+      lineName: userFavourite.lineName,
+      quayId: userFavourite.quayId,
+    };
+  });
+
+  return await post<StopPlaceGroup[]>(url, query, {...opts});
+}
+
+async function post<T>(
+  url: string,
+  query: any,
+  opts?: AxiosRequestConfig<any>,
+) {
+  const response = await client.post<T>(url, query, {
+    ...opts,
+  });
+
   return response.data;
 }
 

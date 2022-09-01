@@ -4,6 +4,7 @@ import {LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {useAuthState} from '@atb/auth';
 import {updateMetadata} from '@atb/chat/metadata';
 import ActivityIndicatorOverlay from '@atb/components/activity-indicator-overlay';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import * as Sections from '@atb/components/sections';
@@ -15,6 +16,7 @@ import {
 } from '@atb/mobile-token/MobileTokenContext';
 import {usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import SelectFavouritesBottomSheet from '@atb/screens/Assistant/SelectFavouritesBottomSheet';
 import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
@@ -77,6 +79,13 @@ export default function ProfileHome({navigation}: ProfileProps) {
 
   const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
   const {enable_vipps_login} = useRemoteConfig();
+
+  const {open: openBottomSheet} = useBottomSheet();
+  async function selectFavourites() {
+    openBottomSheet((close) => {
+      return <SelectFavouritesBottomSheet close={close} />;
+    });
+  }
 
   return (
     <View style={style.container}>
@@ -406,6 +415,20 @@ export default function ProfileHome({navigation}: ProfileProps) {
                 });
                 setPreference({newFrontPage});
               }}
+            />
+            <Sections.LinkItem
+              text={t(
+                ProfileTexts.sections.favorites.linkItems.frontpageFavourites
+                  .label,
+              )}
+              accessibility={{
+                accessibilityHint: t(
+                  ProfileTexts.sections.favorites.linkItems.frontpageFavourites
+                    .a11yHint,
+                ),
+              }}
+              testID="favoriteDeparturesButton"
+              onPress={selectFavourites}
             />
             <Sections.LinkItem
               text="Design system"

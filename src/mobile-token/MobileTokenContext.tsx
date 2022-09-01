@@ -86,7 +86,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const [token, setToken] = useState<ActivatedToken>();
   const [remoteTokens, setRemoteTokens] = useState<RemoteToken[]>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
   const enabled =

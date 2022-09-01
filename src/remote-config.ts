@@ -26,6 +26,7 @@ export type RemoteConfig = {
   enable_token_fallback: boolean;
   enable_flex_tickets: boolean;
   enable_vipps_login: boolean;
+  favourite_departures_poll_interval: number;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -53,6 +54,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_token_fallback: true,
   enable_flex_tickets: false,
   enable_vipps_login: false,
+  favourite_departures_poll_interval: 30000,
 };
 
 export function getConfig(): RemoteConfig {
@@ -118,6 +120,10 @@ export function getConfig(): RemoteConfig {
     values['enable_vipps_login']?.asBoolean() ??
     defaultRemoteConfig.enable_vipps_login;
 
+  const favourite_departures_poll_interval =
+    values['favourite_departures_poll_interval']?.asNumber() ??
+    defaultRemoteConfig.favourite_departures_poll_interval;
+
   return {
     enable_network_logging,
     enable_ticketing,
@@ -143,6 +149,7 @@ export function getConfig(): RemoteConfig {
     enable_token_fallback,
     enable_flex_tickets,
     enable_vipps_login,
+    favourite_departures_poll_interval,
   };
 }
 

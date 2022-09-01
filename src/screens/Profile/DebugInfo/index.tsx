@@ -140,6 +140,11 @@ export default function DebugInfo() {
             text="Reset feedback displayStats"
             onPress={() => storage.set('@ATB_feedback_display_stats', '')}
           />
+
+          <Sections.LinkItem
+            text="Reset frontpage favourite departures"
+            onPress={() => storage.set('@ATB_user_frontpage_departures', '[]')}
+          />
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
