@@ -23,17 +23,18 @@ const ThemeIcon = ({
   svg,
   colorType,
   size = 'normal',
+  fill,
   ...props
 }: ThemeIconProps): JSX.Element => {
   const {theme, themeName} = useTheme();
 
-  const fill = getFill(theme, themeName, colorType);
+  const fillToUse = fill || getFill(theme, themeName, colorType);
 
   const fontScale = useFontScale();
   const iconSize = theme.icon.size[size] * fontScale;
 
   const settings = {
-    fill,
+    fill: fillToUse,
     height: iconSize,
     width: iconSize,
     ...props,
