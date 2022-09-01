@@ -78,9 +78,6 @@ const FavouritesWidget: React.FC = () => {
     });
   }
 
-  console.log('favs', favoriteDepartures);
-  console.log('frontpageFavs', frontPageFavouriteDepartures);
-
   return (
     <View style={styles.container}>
       <ThemeText
