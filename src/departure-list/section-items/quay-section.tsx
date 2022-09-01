@@ -26,7 +26,7 @@ type QuaySectionProps = {
   hidden?: Date;
   searchDate: string;
   testID?: string;
-  mode: QuaySectionMode;
+  mode?: QuaySectionMode;
 };
 
 const QuaySection = React.memo(function QuaySection({
