@@ -15,11 +15,12 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {Linking, View} from 'react-native';
 
 const FavouritesWidget: React.FC = () => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const {new_favourites_info_url} = useRemoteConfig();
   const {favoriteDepartures, frontPageFavouriteDepartures} = useFavorites();
   const {location} = useGeolocationState();
   const [polling, setPolling] = useState(false);
@@ -95,6 +96,13 @@ const FavouritesWidget: React.FC = () => {
               ? t(DeparturesTexts.message.noFavouritesWidget)
               : t(DeparturesTexts.message.noFrontpageFavouritesWidget)}
           </ThemeText>
+          {new_favourites_info_url && (
+            <Button
+              mode="tertiary"
+              text={t(DeparturesTexts.message.readMoreUrl)}
+              onPress={() => Linking.openURL(new_favourites_info_url)}
+            />
+          )}
         </View>
       )}
 

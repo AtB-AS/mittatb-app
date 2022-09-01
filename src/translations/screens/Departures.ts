@@ -90,6 +90,7 @@ const DeparturesTexts = {
       'Du kan vise favorittavganger på denne siden. Du kan velge hvilke avganger du vil vise med knappen under.',
       'You can now show your favourite departures in this section. You may select the favourites you would like to display, using the button below.',
     ),
+    readMoreUrl: _('Les mer', 'Read more'),
   },
   button: {
     text: _('Velg favorittavganger', 'Select favourite departures'),
