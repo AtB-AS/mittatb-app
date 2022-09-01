@@ -121,9 +121,8 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     preSelectedUsers ?? [defaultPreSelectedUser],
   );
 
-  const [travellerSelection, setTravellerSelection] = useState(
-    selectableTravellers,
-  );
+  const [travellerSelection, setTravellerSelection] =
+    useState(selectableTravellers);
   const hasSelection = travellerSelection.some((u) => u.count);
 
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
