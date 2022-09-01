@@ -80,6 +80,7 @@ const CompactTickets: React.FC<Props> = ({
   } = useMobileTokenContextState();
   const {tariffZones, userProfiles, preassignedFareproducts} =
     useFirestoreConfiguration();
+  const {remoteTokens} = useMobileTokenContextState();
 
   return (
     <>
@@ -114,6 +115,7 @@ const CompactTickets: React.FC<Props> = ({
           return (
             <CompactTicketInfo
               {...ticketInfoDetailsProps}
+              remoteTokens={remoteTokens}
               now={now}
               onPressDetails={() => {
                 onPressDetails?.(

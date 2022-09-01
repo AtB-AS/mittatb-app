@@ -21,10 +21,17 @@ import LoadingSymbol from './Component/LoadingSymbol';
 import * as Sections from '@atb/components/sections';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import InspectionSymbol from '@atb/screens/Ticketing/Ticket/Component/InspectionSymbol';
-import {isInspectable} from '@atb/mobile-token/utils';
+import {
+  findInspectable,
+  getDeviceName,
+  isInspectable,
+  isMobileToken,
+} from '@atb/mobile-token/utils';
+import {RemoteToken} from '@atb/mobile-token/types';
 
 export type CompactTicketInfoProps = TicketInfoDetailsProps & {
   onPressDetails?: () => void;
+  remoteTokens?: RemoteToken[];
 };
 
 export type TicketInfoTextsProps = {
@@ -80,6 +87,7 @@ const CompactTicketInfoTexts = (props: CompactTicketInfoTexts) => {
     productName,
     tariffZoneSummary,
     timeUntilExpire,
+    isInspectable,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -137,7 +145,10 @@ export const getTicketInfoTexts = (
     validTo,
     now,
     isInspectable,
+    remoteTokens,
   } = props;
+
+  const inspectableToken = findInspectable(remoteTokens);
 
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)
@@ -154,9 +165,21 @@ export const getTicketInfoTexts = (
     conjunction,
     serialComma: false,
   });
-  const timeUntilExpire = t(TicketTexts.validityHeader.valid(durationText));
+  var timeUntilExpireOrInvalid: string;
 
-  var accessibilityLabel = timeUntilExpire + screenReaderPause;
+  if (isMobileToken(inspectableToken) && !isInspectable) {
+    timeUntilExpireOrInvalid = t(
+      TicketTexts.warning.anotherMobileAsToken(
+        getDeviceName(inspectableToken) || t(TicketTexts.warning.unnamedDevice),
+      ),
+    );
+  } else {
+    timeUntilExpireOrInvalid = t(
+      TicketTexts.validityHeader.valid(durationText),
+    );
+  }
+
+  var accessibilityLabel = timeUntilExpireOrInvalid + screenReaderPause;
   accessibilityLabel += userProfilesWithCount.map(
     (u) =>
       userProfileCountAndName(u, omitUserProfileCount, language) +
@@ -172,7 +195,7 @@ export const getTicketInfoTexts = (
   return {
     productName,
     tariffZoneSummary,
-    timeUntilExpire,
+    timeUntilExpire: timeUntilExpireOrInvalid,
     accessibilityLabel,
   };
 };
