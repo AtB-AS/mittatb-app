@@ -1,4 +1,3 @@
-import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {RootNavigationProps, RootStackScreenProps} from '@atb/navigation/types';
 import {
   PreassignedFareProduct,
@@ -9,7 +8,7 @@ import {
   CompositeNavigationProp,
   CompositeScreenProps,
 } from '@react-navigation/native';
-import {StackScreenProps} from '@react-navigation/stack';
+import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import {RouteParams as ConfirmationRouteParams} from './Confirmation';
 import {
   RouteParams as TariffZonesParams,
@@ -89,7 +88,7 @@ export type TicketPurchaseStackRootProps =
 export type TicketPurchaseNavigationProps<
   T extends keyof TicketingStackParams,
 > = CompositeNavigationProp<
-  DismissableStackNavigationProp<TicketingStackParams, T>,
+  StackNavigationProp<TicketingStackParams, T>,
   RootNavigationProps
 >;
 
@@ -97,13 +96,4 @@ export type TicketPurchaseScreenProps<T extends keyof TicketingStackParams> =
   CompositeScreenProps<
     StackScreenProps<TicketingStackParams, T>,
     TicketPurchaseStackRootProps
-  > & {
-    navigation: TicketPurchaseNavigationProps<T>;
-  };
-
-export type TicketPurchaseScreenPropsWithoutDismissable<
-  T extends keyof TicketingStackParams,
-> = CompositeScreenProps<
-  StackScreenProps<TicketingStackParams, T>,
-  TicketPurchaseStackRootProps
->;
+  >;

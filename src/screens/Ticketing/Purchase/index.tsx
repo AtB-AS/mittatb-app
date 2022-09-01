@@ -1,7 +1,10 @@
-import createDismissableStackNavigator from '@atb/navigation/createDismissableStackNavigator';
 import transitionSpec from '@atb/navigation/transitionSpec';
 import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
-import {TransitionPresets} from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackNavigationOptions,
+  TransitionPresets,
+} from '@react-navigation/stack';
 import React from 'react';
 import ConfirmationScreen from './Confirmation';
 import PurchaseOverviewScreen from './Overview';
@@ -12,19 +15,17 @@ import {TicketingStackParams, TicketPurchaseStackRootProps} from './types';
 
 import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/screens/MobileTokenOnboarding/utils';
 
-const Stack = createDismissableStackNavigator<TicketingStackParams>();
+const Stack = createStackNavigator<TicketingStackParams>();
+
+const options: StackNavigationOptions = {
+  headerShown: false,
+};
 
 export default function PurchaseStack({}: TicketPurchaseStackRootProps) {
   useGoToMobileTokenOnboardingWhenNecessary();
 
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-        presentation: 'card',
-      }}
-      dismissToScreen="BuyTickets"
-    >
+    <Stack.Navigator screenOptions={options}>
       <Stack.Screen
         name="PurchaseOverview"
         component={PurchaseOverviewScreen}

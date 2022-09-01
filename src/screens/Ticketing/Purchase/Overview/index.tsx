@@ -121,7 +121,13 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     }
   }, [params?.refreshOffer]);
 
-  const closeModal = () => navigation.dismiss();
+  const closeModal = () =>
+    navigation.navigate('TabNavigator', {
+      screen: 'Ticketing',
+      params: {
+        screen: 'BuyTickets',
+      },
+    });
 
   return (
     <View style={styles.container}>

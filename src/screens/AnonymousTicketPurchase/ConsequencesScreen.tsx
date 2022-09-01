@@ -14,11 +14,10 @@ import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {useTranslation} from '@atb/translations';
 import AnonymousTicketPurchases from '@atb/translations/screens/subscreens/AnonymousTicketPurchases';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {OnboardingScreenProps} from '../Onboarding/types';
-import {TicketPurchaseScreenPropsWithoutDismissable} from '../Ticketing/Purchase/types';
+import {TicketPurchaseScreenProps} from '../Ticketing/Purchase/types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -29,7 +28,7 @@ type ConsequencesFromOnboardingScreenProps =
   OnboardingScreenProps<'ConsequencesFromOnboarding'>;
 
 type ConsequencesFromTicketPurchaseScreenProps =
-  TicketPurchaseScreenPropsWithoutDismissable<'ConsequencesFromTicketPurchase'>;
+  TicketPurchaseScreenProps<'ConsequencesFromTicketPurchase'>;
 
 type ConsequencesPropsInternal =
   | ConsequencesScreenProps

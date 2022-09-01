@@ -76,16 +76,20 @@ const NavigationRoot = () => {
           <Stack.Navigator
             screenOptions={{
               headerShown: false,
-              presentation: isLoading || !onboarded ? 'card' : 'modal',
             }}
           >
             {!onboarded ? (
-              <>
+              <Stack.Group screenOptions={{presentation: 'card'}}>
                 <Stack.Screen name="Onboarding" component={Onboarding} />
                 <Stack.Screen name="LoginInApp" component={LoginInAppStack} />
-              </>
+              </Stack.Group>
             ) : (
-              <>
+              <Stack.Group
+                screenOptions={{
+                  presentation: 'modal',
+                  ...TransitionPresets.ModalSlideFromBottomIOS,
+                }}
+              >
                 <Stack.Screen name="TabNavigator" component={TabNavigator} />
                 <Stack.Screen
                   name="ConsequencesFromTicketPurchase"
@@ -138,7 +142,7 @@ const NavigationRoot = () => {
                     },
                   }}
                 />
-              </>
+              </Stack.Group>
             )}
           </Stack.Navigator>
         </NavigationContainer>
