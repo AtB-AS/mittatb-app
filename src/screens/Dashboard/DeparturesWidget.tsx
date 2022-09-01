@@ -147,5 +147,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
     alignItems: 'center',
     padding: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
 }));

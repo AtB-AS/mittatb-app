@@ -84,11 +84,11 @@ const DeparturesTexts = {
     ),
     noFavouritesWidget: _(
       'For å vise dine favoritter på forsiden må du først legge til noen favoritter. Du kan legge til en favoritt ved å klikke på stjernen ved avganger i Avganger-visningen.',
-      'To show your favourites in this widget, you will need to add one or more favourite departures. You may add a favourite by clicking a star next to a departure in the Departure view.',
+      'To show your favourites in this widget, you will need to add one or more favourite departures. You may add a favourite by clicking the star next to a departure in the Departure view.',
     ),
     noFrontpageFavouritesWidget: _(
-      'Du kan vise noen av dine favorittavganger her på den nye forsiden! Bare klikk på knappen under, og velg hvilke avganger du vil ha her på fremsiden, så er du i gang!',
-      'You may show some of your favourite departures, right here in your new dashboard. Just click the button below, and toggle the departures you would like to have displayed here.',
+      'Du kan vise favorittavganger på denne siden. Du kan velge hvilke avganger du vil vise med knappen under.',
+      'You can now show your favourite departures in this section. You may select the favourites you would like to display, using the button below.',
     ),
   },
   button: {
