@@ -11,7 +11,6 @@ import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import {getLastUsedAccess} from '../Ticketing/Ticket/Carnet/CarnetDetails';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 type Props = {

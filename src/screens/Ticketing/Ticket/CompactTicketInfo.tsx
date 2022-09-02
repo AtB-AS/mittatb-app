@@ -2,9 +2,7 @@ import ThemeText from '@atb/components/text';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
 import {
-  Language,
   TicketTexts,
-  TranslateFunction,
   useTranslation,
 } from '@atb/translations';
 import React from 'react';
@@ -22,13 +20,6 @@ import LoadingSymbol from './Component/LoadingSymbol';
 import * as Sections from '@atb/components/sections';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import InspectionSymbol from '@atb/screens/Ticketing/Ticket/Component/InspectionSymbol';
-import {
-  findInspectable,
-  getDeviceName,
-  isInspectable,
-  isMobileToken,
-} from '@atb/mobile-token/utils';
-import {RemoteToken} from '@atb/mobile-token/types';
 
 export type CompactTicketInfoProps = TicketInfoDetailsProps & {
   onPressDetails?: () => void;
