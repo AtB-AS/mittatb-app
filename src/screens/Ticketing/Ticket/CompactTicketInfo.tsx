@@ -1,10 +1,7 @@
 import ThemeText from '@atb/components/text';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
-import {
-  TicketTexts,
-  useTranslation,
-} from '@atb/translations';
+import {TicketTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {AccessibilityProps, View} from 'react-native';
 import {tariffZonesSummary} from '@atb/screens/Ticketing/Purchase/TariffZones';
