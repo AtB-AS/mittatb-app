@@ -108,6 +108,10 @@ const reducer: ReducerWithSideEffects<
 > = (state, action) => {
   switch (action.type) {
     case 'LOAD_INITIAL_DEPARTURES': {
+      if (state.isLoading == true) {
+        return NoUpdate();
+      }
+
       // Update input data with new date as this
       // is a fresh fetch. We should fetch the latest information.
       const queryInput: QueryInput = {
@@ -256,16 +260,20 @@ export function useStopPlaceData(
   const isFocused = useIsFocused();
   const {favoriteDepartures} = useFavorites();
 
-  const refresh = useCallback(
-    () =>
-      dispatch({
-        type: 'LOAD_INITIAL_DEPARTURES',
-        stopPlace,
-        startTime,
-        favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
-      }),
-    [stopPlace.id, startTime, showOnlyFavorites, favoriteDepartures],
-  );
+  const dispatchLoadInitialDepartures = () =>
+    dispatch({
+      type: 'LOAD_INITIAL_DEPARTURES',
+      stopPlace,
+      startTime,
+      favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
+    });
+
+  const refresh = useCallback(dispatchLoadInitialDepartures, [
+    stopPlace.id,
+    startTime,
+    showOnlyFavorites,
+    favoriteDepartures,
+  ]);
 
   useEffect(
     () =>
@@ -278,7 +286,7 @@ export function useStopPlaceData(
       }),
     [stopPlace.id, favoriteDepartures, showOnlyFavorites],
   );
-  useEffect(refresh, [stopPlace.id, startTime]);
+  useEffect(dispatchLoadInitialDepartures, [stopPlace.id, startTime]);
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -286,7 +294,7 @@ export function useStopPlaceData(
     const diff = differenceInMinutes(state.tick, state.lastRefreshTime);
 
     if (diff >= HARD_REFRESH_LIMIT_IN_MINUTES) {
-      refresh();
+      dispatchLoadInitialDepartures();
     }
   }, [state.tick, state.lastRefreshTime]);
   useInterval(
