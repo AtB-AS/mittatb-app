@@ -98,3 +98,6 @@ src/assets/svg
 # Yalc
 .yalc/
 yalc.lock
+
+
+.cxx/
