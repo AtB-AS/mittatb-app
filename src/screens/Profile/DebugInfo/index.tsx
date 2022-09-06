@@ -123,7 +123,7 @@ export default function DebugInfo() {
             onPress={restartMobileTokenOnboarding}
           />
           <Sections.LinkItem
-            text="Reset dismissable Global messages"
+            text="Reset dismissed Global messages"
             onPress={resetDismissedGlobalMessages}
           />
           <Sections.LinkItem
