@@ -108,7 +108,7 @@ const reducer: ReducerWithSideEffects<
 > = (state, action) => {
   switch (action.type) {
     case 'LOAD_INITIAL_DEPARTURES': {
-      if (state.isLoading == true) {
+      if (state.isLoading === true) {
         return NoUpdate();
       }
 
