@@ -38,6 +38,7 @@ import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {BuyTicketsScreenName} from '../Ticketing/Tickets';
 import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
 import FavouritesWidget from './DeparturesWidget';
+import GlobalMessageBox from '@atb/global-messages/GlobalMessage';
 
 type DashboardRouteName = 'DashboardRoot';
 const DashboardRouteNameStatic: DashboardRouteName = 'DashboardRoot';
@@ -189,6 +190,10 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
       >
         <View style={style.searchHeader}>
           <View style={style.paddedContainer}>
+            <GlobalMessageBox
+              style={style.dashboardGlobalmessages}
+              globalMessageContext="app-assistant"
+            />
             <Section>
               <LocationInput
                 accessibilityLabel={
@@ -413,6 +418,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   searchHeader: {
     backgroundColor: theme.static.background[themeBackgroundColor].background,
+  },
+  dashboardGlobalmessages: {
+    marginBottom: theme.spacings.medium,
   },
 }));
 
