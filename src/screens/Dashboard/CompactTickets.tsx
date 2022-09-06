@@ -2,13 +2,7 @@ import React, {useState} from 'react';
 import {StyleSheet} from '@atb/theme';
 import {CompactTicketInfo} from '../Ticketing/Ticket/CompactTicketInfo';
 import useInterval from '@atb/utils/use-interval';
-import {
-  filterAndSortActiveOrCanBeUsedFareContracts,
-  flattenCarnetTicketAccesses,
-  isCarnetTicket,
-  isPreactivatedTicket,
-  useTicketState,
-} from '@atb/tickets';
+import {filterValidRightNowFareContract, useTicketState} from '@atb/tickets';
 import ThemeText from '@atb/components/text';
 import {TicketsTexts, DashboardTexts, useTranslation} from '@atb/translations';
 import Button from '@atb/components/button';
@@ -17,7 +11,6 @@ import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import {getLastUsedAccess} from '../Ticketing/Ticket/Carnet/CarnetDetails';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 type Props = {
@@ -39,36 +32,7 @@ const CompactTickets: React.FC<Props> = ({
   useInterval(() => setNow(Date.now()), 1000);
 
   const {fareContracts} = useTicketState();
-  const activeFareContracts = filterAndSortActiveOrCanBeUsedFareContracts(
-    fareContracts,
-  ).filter((fareContract) => {
-    const travelRights = fareContract.travelRights;
-    if (travelRights.length < 1) return false;
-
-    const carnetTravelRights = travelRights.filter(isCarnetTicket);
-    if (carnetTravelRights.length > 0) {
-      const {usedAccesses} = flattenCarnetTicketAccesses(carnetTravelRights);
-
-      const {status: usedAccessValidityStatus} = getLastUsedAccess(
-        now,
-        usedAccesses,
-      );
-
-      if (usedAccessValidityStatus === 'valid') {
-        return true;
-      }
-
-      return false;
-    }
-
-    const preactivatedTicketTravelRights =
-      travelRights.filter(isPreactivatedTicket);
-    if (preactivatedTicketTravelRights.length > 0) {
-      return true;
-    }
-
-    return false;
-  });
+  const validFareContracts = filterValidRightNowFareContract(fareContracts);
 
   const {t} = useTranslation();
   const {customerProfile} = useTicketState();
@@ -91,14 +55,14 @@ const CompactTickets: React.FC<Props> = ({
       >
         {t(TicketsTexts.header.title)}
       </ThemeText>
-      {activeFareContracts.length == 0 ? (
+      {validFareContracts.length == 0 ? (
         <Button
           style={itemStyle.buttonSection}
           text={t(DashboardTexts.buyTicketsButton)}
           onPress={onPressBuyTickets}
         />
       ) : (
-        activeFareContracts.map((fareContract, index) => {
+        validFareContracts.map((fareContract, index) => {
           const ticketInfoDetailsProps = getTicketInfoDetailsProps(
             fareContract,
             now,

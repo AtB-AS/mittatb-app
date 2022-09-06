@@ -44,6 +44,7 @@ import TravellerSelection from './components/TravellerSelection';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {getPurchaseFlow} from '../utils';
 import {getOtherDeviceIsInspectableWarning} from '../../Ticket/utils';
+import {getTrainTicketNoticeText} from '../../utils';
 
 export type OverviewNavigationProp = DismissableStackNavigationProp<
   TicketingStackParams,
@@ -143,7 +144,8 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const shouldShowValidTrainTicketNotice =
     (preassignedFareProduct.type === 'single' ||
-      preassignedFareProduct.type === 'period') &&
+      preassignedFareProduct.type === 'period' ||
+      preassignedFareProduct.type === 'hour24') &&
     fromTariffZone.id === 'ATB:TariffZone:1' &&
     toTariffZone.id === 'ATB:TariffZone:1';
 
@@ -237,11 +239,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         {shouldShowValidTrainTicketNotice && (
           <MessageBox
             containerStyle={styles.warning}
-            message={
-              preassignedFareProduct.type === 'single'
-                ? t(PurchaseOverviewTexts.samarbeidsbillettenInfo.single)
-                : t(PurchaseOverviewTexts.samarbeidsbillettenInfo.period)
-            }
+            message={getTrainTicketNoticeText(t, preassignedFareProduct.type)}
             type="info"
           />
         )}

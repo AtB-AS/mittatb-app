@@ -12,7 +12,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 
 import React, {useEffect, useState} from 'react';
 import {Linking, View} from 'react-native';
@@ -24,9 +24,10 @@ const FavouritesWidget: React.FC = () => {
   const {favoriteDepartures, frontPageFavouriteDepartures} = useFavorites();
   const {location} = useGeolocationState();
   const [polling, setPolling] = useState(false);
-  const [favResults, setFavResults] = useState<StopPlaceGroup[]>([]);
+  const [favouritesResults, setFavouritesResults] = useState<StopPlaceGroup[]>(
+    [],
+  );
   const [searchDate, setSearchDate] = useState<string>('');
-  const navigation = useNavigation();
   const isFocused = useIsFocused();
   const {favourite_departures_poll_interval} = useRemoteConfig();
 
