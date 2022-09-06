@@ -33,7 +33,7 @@ const FavouritesWidget: React.FC = () => {
 
   const fetchFavouriteFrontpageDepartures = async () => {
     const data = await getFavouriteDepartures(frontPageFavouriteDepartures);
-    setFavResults(data || []);
+    setFavouritesResults(data || []);
     setSearchDate(new Date().toISOString());
   };
 
@@ -107,7 +107,7 @@ const FavouritesWidget: React.FC = () => {
         </View>
       )}
 
-      {favResults.map((stopPlaceGroup) => {
+      {favouritesResults.map((stopPlaceGroup) => {
         const stopPlaceInfo = stopPlaceGroup.stopPlace;
         return (
           <View key={stopPlaceGroup.stopPlace.id}>
