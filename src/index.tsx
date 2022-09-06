@@ -45,51 +45,51 @@ const App = () => {
     }
     config();
   }, []);
+
   if (isLoading) {
-    return null;
+    return <GestureHandlerRootView style={{flex: 1}}></GestureHandlerRootView>;
   }
+
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <SafeAreaProvider>
-        <ErrorBoundary type="full-screen">
-          <AppContextProvider>
-            <PreferencesContextProvider>
-              <LocaleContextProvider>
-                <AuthContextProvider>
-                  <AccessibilityContextProvider>
-                    <ThemeContextProvider>
-                      <FavoritesContextProvider>
-                        <SearchHistoryContextProvider>
-                          <GeolocationContextProvider>
-                            <RemoteConfigContextProvider>
-                              <FirestoreConfigurationContextProvider>
-                                <TicketContextProvider>
-                                  <MobileTokenContextProvider>
-                                    <AppLanguageProvider>
-                                      <GlobalMessagesContextProvider>
-                                        <BottomSheetProvider>
-                                          <FeedbackQuestionsProvider>
-                                            <NavigationRoot />
-                                          </FeedbackQuestionsProvider>
-                                        </BottomSheetProvider>
-                                      </GlobalMessagesContextProvider>
-                                    </AppLanguageProvider>
-                                  </MobileTokenContextProvider>
-                                </TicketContextProvider>
-                              </FirestoreConfigurationContextProvider>
-                            </RemoteConfigContextProvider>
-                          </GeolocationContextProvider>
-                        </SearchHistoryContextProvider>
-                      </FavoritesContextProvider>
-                    </ThemeContextProvider>
-                  </AccessibilityContextProvider>
-                </AuthContextProvider>
-              </LocaleContextProvider>
-            </PreferencesContextProvider>
-          </AppContextProvider>
-        </ErrorBoundary>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <SafeAreaProvider>
+      <ErrorBoundary type="full-screen">
+        <AppContextProvider>
+          <PreferencesContextProvider>
+            <LocaleContextProvider>
+              <AuthContextProvider>
+                <AccessibilityContextProvider>
+                  <ThemeContextProvider>
+                    <FavoritesContextProvider>
+                      <SearchHistoryContextProvider>
+                        <GeolocationContextProvider>
+                          <RemoteConfigContextProvider>
+                            <FirestoreConfigurationContextProvider>
+                              <TicketContextProvider>
+                                <MobileTokenContextProvider>
+                                  <AppLanguageProvider>
+                                    <GlobalMessagesContextProvider>
+                                      <BottomSheetProvider>
+                                        <FeedbackQuestionsProvider>
+                                          <NavigationRoot />
+                                        </FeedbackQuestionsProvider>
+                                      </BottomSheetProvider>
+                                    </GlobalMessagesContextProvider>
+                                  </AppLanguageProvider>
+                                </MobileTokenContextProvider>
+                              </TicketContextProvider>
+                            </FirestoreConfigurationContextProvider>
+                          </RemoteConfigContextProvider>
+                        </GeolocationContextProvider>
+                      </SearchHistoryContextProvider>
+                    </FavoritesContextProvider>
+                  </ThemeContextProvider>
+                </AccessibilityContextProvider>
+              </AuthContextProvider>
+            </LocaleContextProvider>
+          </PreferencesContextProvider>
+        </AppContextProvider>
+      </ErrorBoundary>
+    </SafeAreaProvider>
   );
 };
 
