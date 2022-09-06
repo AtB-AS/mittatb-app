@@ -15,7 +15,7 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import {useIsFocused} from '@react-navigation/native';
 
 import React, {useEffect, useState} from 'react';
-import {Linking, View} from 'react-native';
+import {Linking, TouchableOpacity, View} from 'react-native';
 
 const FavouritesWidget: React.FC = () => {
   const styles = useStyles();
@@ -98,11 +98,17 @@ const FavouritesWidget: React.FC = () => {
               : t(DeparturesTexts.message.noFrontpageFavouritesWidget)}
           </ThemeText>
           {new_favourites_info_url && (
-            <Button
-              mode="tertiary"
-              text={t(DeparturesTexts.message.readMoreUrl)}
+            <TouchableOpacity
               onPress={() => Linking.openURL(new_favourites_info_url)}
-            />
+            >
+              <ThemeText
+                color="background_0"
+                type="body__primary--underline"
+                style={styles.noFavouritesUrl}
+              >
+                {t(DeparturesTexts.message.readMoreUrl)}
+              </ThemeText>
+            </TouchableOpacity>
           )}
         </View>
       )}
@@ -154,8 +160,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   noFavouritesView: {
     backgroundColor: theme.static.background.background_0.background,
     borderRadius: theme.border.radius.regular,
-    alignItems: 'center',
     padding: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
+  },
+  noFavouritesUrl: {
+    marginVertical: theme.spacings.xSmall,
   },
 }));
