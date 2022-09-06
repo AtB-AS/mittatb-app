@@ -106,7 +106,14 @@ export default function LineItem({
   const nextValids = group.departures.filter(isValidDeparture);
 
   return (
-    <View style={[topContainer, {padding: 0}]} testID={testID}>
+    <View
+      style={
+        mode === 'frontpage'
+          ? [topContainer, styles.roundedSection]
+          : [topContainer, styles.unRoundedSection]
+      }
+      testID={testID}
+    >
       <View style={[topContainer, sectionStyle.spaceBetween]}>
         <TouchableOpacity
           style={[styles.lineHeader, contentContainer]}
@@ -340,6 +347,14 @@ const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   },
   favoriteButton: {
     paddingLeft: theme.spacings.medium,
+  },
+  roundedSection: {
+    padding: 0,
+    borderBottomLeftRadius: theme.border.radius.regular,
+    borderBottomRightRadius: theme.border.radius.regular,
+  },
+  unRoundedSection: {
+    padding: 0,
   },
 }));
 
