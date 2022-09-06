@@ -19,6 +19,7 @@ import {usePreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import Button from '@atb/components/button';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useGlobalMessagesState} from '@atb/global-messages';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -29,6 +30,7 @@ export default function DebugInfo() {
   const style = useProfileHomeStyle();
   const appDispatch = useAppDispatch();
   const {restartMobileTokenOnboarding} = useAppState();
+  const {resetDismissedGlobalMessages} = useGlobalMessagesState();
   const {user, abtCustomerId} = useAuthState();
   const [idToken, setIdToken] = useState<
     FirebaseAuthTypes.IdTokenResult | undefined
@@ -119,6 +121,10 @@ export default function DebugInfo() {
           <Sections.LinkItem
             text="Set mobile token onboarded to false"
             onPress={restartMobileTokenOnboarding}
+          />
+          <Sections.LinkItem
+            text="Reset dismissable Global messages"
+            onPress={resetDismissedGlobalMessages}
           />
           <Sections.LinkItem
             text="Copy link to customer in Firestore (staging)"

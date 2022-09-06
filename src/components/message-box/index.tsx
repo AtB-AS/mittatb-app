@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleProp, ViewStyle} from 'react-native';
+import {View, StyleProp, ViewStyle, TouchableOpacity} from 'react-native';
 import {
   Check,
   Error as ErrorIcon,
@@ -11,6 +11,7 @@ import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {useTranslation} from '@atb/translations';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type WithMessage = {
   message: string;
@@ -33,6 +34,8 @@ export type MessageBoxProps = {
   containerStyle?: StyleProp<ViewStyle>;
   title?: string;
   withMargin?: boolean;
+  isDismissable?: boolean;
+  onDismiss?: () => void;
 } & (WithMessage | WithChildren);
 
 const MessageBox: React.FC<MessageBoxProps> = ({
@@ -46,6 +49,8 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   isMarkdown = false,
   onPress,
   onPressText,
+  isDismissable,
+  onDismiss,
 }) => {
   const {theme} = useTheme();
   const styles = useBoxStyle();
@@ -101,6 +106,13 @@ const MessageBox: React.FC<MessageBoxProps> = ({
         )}
         <View>{child}</View>
       </View>
+      {isDismissable && (
+        <TouchableOpacity onPress={onDismiss}>
+          <View style={styles.iconContainer}>
+            <ThemeIcon fill={textColor} svg={Close} />
+          </View>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

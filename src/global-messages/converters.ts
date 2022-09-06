@@ -24,6 +24,7 @@ function mapToGlobalMessage(
   const title = mapToLanguageAndTexts(result.title);
   const context = mapToContexts(result.context);
   const type = mapToMessageType(result.type);
+  const isDismissable = result.isDismissable;
 
   if (!result.active) return;
   if (!body) return;
@@ -38,6 +39,7 @@ function mapToGlobalMessage(
     context,
     body,
     title,
+    isDismissable,
   };
 }
 
