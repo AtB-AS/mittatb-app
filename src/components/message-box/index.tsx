@@ -108,9 +108,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({
       </View>
       {isDismissable && (
         <TouchableOpacity onPress={onDismiss}>
-          <View style={styles.iconContainer}>
-            <ThemeIcon fill={textColor} svg={Close} />
-          </View>
+          <ThemeIcon fill={textColor} svg={Close} />
         </TouchableOpacity>
       )}
     </View>

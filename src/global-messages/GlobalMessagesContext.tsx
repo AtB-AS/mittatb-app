@@ -112,6 +112,7 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   const resetDismissedGlobalMessages = async () => {
     await setDismissedMessagesInStore([]);
     setDismissedGlobalMessages([]);
+    console.warn('Reset dismissed messages');
   };
 
   const findGlobalMessages = useCallback(
