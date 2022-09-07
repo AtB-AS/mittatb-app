@@ -63,12 +63,12 @@ export function FlexibilityInfoScreen({
   );
 }
 
-export type OnboardingInfoProps =
+export type OptionsInfoScreenProps =
   MobileTokenOnboardingScreenProps<'OptionsInfoScreen'>;
 
 export function OptionsInfoScreen({
   navigation,
-}: OnboardingInfoProps): JSX.Element {
+}: OptionsInfoScreenProps): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
