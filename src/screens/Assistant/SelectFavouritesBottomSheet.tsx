@@ -31,6 +31,7 @@ type SelectableFavouriteDepartureData = {
   lineIdentifier: string;
   lineName: string | TranslatedString;
   departureStation: string;
+  departureQuay?: string;
 };
 
 const SelectableFavouriteDeparture = ({
@@ -42,6 +43,7 @@ const SelectableFavouriteDeparture = ({
   lineIdentifier,
   lineName,
   departureStation,
+  departureQuay,
 }: SelectableFavouriteDepartureData) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -60,7 +62,8 @@ const SelectableFavouriteDeparture = ({
         </ThemeText>
 
         <ThemeText type="body__secondary" style={styles.secondaryText}>
-          {t(SelectFavouriteDeparturesText.departures.from)} {departureStation}
+          {t(SelectFavouriteDeparturesText.departures.from)} {departureStation}{' '}
+          {departureQuay}
         </ThemeText>
       </View>
 
@@ -145,6 +148,7 @@ const SelectFavouritesBottomSheet = ({
                           )
                         }
                         departureStation={departureDetails.quayName}
+                        departureQuay={departureDetails.quayPublicCode}
                         lineIdentifier={departureDetails.lineLineNumber ?? ''}
                         lineName={
                           departureDetails.lineName ??
