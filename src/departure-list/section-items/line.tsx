@@ -3,6 +3,7 @@ import {
   DepartureLineInfo,
   DepartureTime,
   QuayInfo,
+  QuaySectionMode,
   StopPlaceInfo,
 } from '@atb/api/departures/types';
 import SvgFavorite from '@atb/assets/svg/mono-icons/places/Favorite';
@@ -60,6 +61,7 @@ export type LineItemProps = SectionItem<{
   quay: QuayInfo;
   accessibility?: AccessibilityProps;
   searchDate: string;
+  mode: QuaySectionMode;
 }>;
 export default function LineItem({
   group,
@@ -68,6 +70,7 @@ export default function LineItem({
   accessibility,
   searchDate,
   testID,
+  mode,
   ...props
 }: LineItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -103,7 +106,14 @@ export default function LineItem({
   const nextValids = group.departures.filter(isValidDeparture);
 
   return (
-    <View style={[topContainer, {padding: 0}]} testID={testID}>
+    <View
+      style={
+        mode === 'frontpage'
+          ? [topContainer, styles.roundedSection]
+          : [topContainer, styles.unRoundedSection]
+      }
+      testID={testID}
+    >
       <View style={[topContainer, sectionStyle.spaceBetween]}>
         <TouchableOpacity
           style={[styles.lineHeader, contentContainer]}
@@ -136,6 +146,7 @@ export default function LineItem({
           line={group.lineInfo}
           stop={stop}
           quay={quay}
+          mode={mode}
         />
       </View>
       <ScrollView
@@ -337,14 +348,28 @@ const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   favoriteButton: {
     paddingLeft: theme.spacings.medium,
   },
+  roundedSection: {
+    padding: 0,
+    borderBottomLeftRadius: theme.border.radius.regular,
+    borderBottomRightRadius: theme.border.radius.regular,
+  },
+  unRoundedSection: {
+    padding: 0,
+  },
 }));
 
 type FavoriteStarProps = {
   line?: DepartureLineInfo;
   stop: StopPlaceInfo;
   quay: QuayInfo;
+  mode: QuaySectionMode;
 };
-function ToggleFavoriteDepartureButton({line, stop, quay}: FavoriteStarProps) {
+function ToggleFavoriteDepartureButton({
+  line,
+  stop,
+  quay,
+  mode = 'departures',
+}: FavoriteStarProps) {
   const {getFavoriteDeparture, addFavoriteDeparture, removeFavoriteDeparture} =
     useFavorites();
   const {t} = useTranslation();
@@ -353,6 +378,9 @@ function ToggleFavoriteDepartureButton({line, stop, quay}: FavoriteStarProps) {
 
   const {open: openBottomSheet} = useBottomSheet();
 
+  if (mode === 'frontpage') {
+    return null;
+  }
   if (!line) {
     return null;
   }

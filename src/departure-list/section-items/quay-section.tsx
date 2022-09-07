@@ -1,6 +1,10 @@
-import {QuayGroup, StopPlaceInfo} from '@atb/api/departures/types';
+import {
+  QuayGroup,
+  QuaySectionMode,
+  StopPlaceInfo,
+} from '@atb/api/departures/types';
 import {Section} from '@atb/components/sections';
-import {useTheme} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import haversineDistance from 'haversine-distance';
 import sortBy from 'lodash.sortby';
@@ -22,6 +26,7 @@ type QuaySectionProps = {
   hidden?: Date;
   searchDate: string;
   testID?: string;
+  mode?: QuaySectionMode;
 };
 
 const QuaySection = React.memo(function QuaySection({
@@ -31,10 +36,12 @@ const QuaySection = React.memo(function QuaySection({
   lastUpdated,
   searchDate,
   testID,
+  mode = 'departures',
 }: QuaySectionProps) {
   const [limit, setLimit] = useState(LIMIT_SIZE);
   const {t} = useTranslation();
   const {theme} = useTheme();
+  const styles = useStyles();
 
   useEffect(() => {
     setLimit(LIMIT_SIZE);
@@ -53,7 +60,7 @@ const QuaySection = React.memo(function QuaySection({
 
   return (
     <Fragment>
-      <Section testID={testID}>
+      <Section testID={testID} style={styles.quaySection}>
         <QuayHeaderItem
           quay={quayGroup.quay}
           distance={getDistanceInfo(quayGroup, currentLocation)}
@@ -68,6 +75,7 @@ const QuaySection = React.memo(function QuaySection({
             key={group.lineInfo?.lineId + String(group.lineInfo?.lineName)}
             searchDate={searchDate}
             testID={'lineItem' + i}
+            mode={mode}
           />
         ))}
         {hasMoreItems && (
@@ -103,3 +111,10 @@ function getDistanceInfo(group: QuayGroup, currentLocation?: Location): number {
     ? 0
     : haversineDistance(currentLocation.coordinates, pos);
 }
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  quaySection: {
+    backgroundColor: theme.static.background.background_1.background,
+    borderRadius: theme.border.radius.regular,
+  },
+}));

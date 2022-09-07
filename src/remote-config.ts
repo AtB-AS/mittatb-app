@@ -27,6 +27,7 @@ export type RemoteConfig = {
   enable_flex_tickets: boolean;
   enable_vipps_login: boolean;
   favourite_departures_poll_interval: number;
+  new_favourites_info_url: string;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -55,6 +56,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_flex_tickets: false,
   enable_vipps_login: false,
   favourite_departures_poll_interval: 30000,
+  new_favourites_info_url: 'https://www.atb.no',
 };
 
 export function getConfig(): RemoteConfig {
@@ -124,6 +126,10 @@ export function getConfig(): RemoteConfig {
     values['favourite_departures_poll_interval']?.asNumber() ??
     defaultRemoteConfig.favourite_departures_poll_interval;
 
+  const new_favourites_info_url =
+    values['new_favourites_info_url']?.asString() ??
+    defaultRemoteConfig.new_favourites_info_url;
+
   return {
     enable_network_logging,
     enable_ticketing,
@@ -150,6 +156,7 @@ export function getConfig(): RemoteConfig {
     enable_flex_tickets,
     enable_vipps_login,
     favourite_departures_poll_interval,
+    new_favourites_info_url,
   };
 }
 
