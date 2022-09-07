@@ -119,7 +119,7 @@ const SelectFavouritesBottomSheet = ({
         leftButton={{
           type: 'cancel',
           onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.cancel.text),
+          text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
         color="background_1"
       />
