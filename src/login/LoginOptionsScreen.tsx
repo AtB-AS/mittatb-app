@@ -72,15 +72,11 @@ export default function LoginOptionsScreen({
       if (!onboarded) {
         await completeOnboarding();
       }
-      // @TODO Verify that this wont mess things up for android
-      navigation.navigate(afterLogin.routeName as any, {
-        ...afterLogin.routeParams,
-      });
-      // navigation.dispatch(
-      //   StackActions.replace(afterLogin.routeName as any, {
-      //     ...afterLogin.routeParams,
-      //   }),
-      // );
+      navigation.dispatch(
+        StackActions.replace(afterLogin.routeName as any, {
+          ...afterLogin.routeParams,
+        }),
+      );
     } else {
       setError(response.error);
       setIsLoading(false);

@@ -16,10 +16,11 @@ export const ConfirmCodeInApp = ({navigation, route}: Props) => {
     <ConfirmCode
       phoneNumber={route.params.phoneNumber}
       doAfterLogin={() => {
-        // @TODO Verify that this wont mess things up for android
-        navigation.navigate(route.params.afterLogin.routeName as any, {
-          ...route.params.afterLogin.routeParams,
-        });
+        navigation.dispatch(
+          StackActions.replace(route.params.afterLogin.routeName as any, {
+            ...route.params.afterLogin.routeParams,
+          }),
+        );
       }}
     />
   );
