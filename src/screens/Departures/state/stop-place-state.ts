@@ -260,20 +260,16 @@ export function useStopPlaceData(
   const isFocused = useIsFocused();
   const {favoriteDepartures} = useFavorites();
 
-  const dispatchLoadInitialDepartures = () =>
-    dispatch({
-      type: 'LOAD_INITIAL_DEPARTURES',
-      stopPlace,
-      startTime,
-      favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
-    });
-
-  const refresh = useCallback(dispatchLoadInitialDepartures, [
-    stopPlace.id,
-    startTime,
-    showOnlyFavorites,
-    favoriteDepartures,
-  ]);
+  const refresh = useCallback(
+    () =>
+      dispatch({
+        type: 'LOAD_INITIAL_DEPARTURES',
+        stopPlace,
+        startTime,
+        favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
+      }),
+    [stopPlace.id, startTime, showOnlyFavorites, favoriteDepartures],
+  );
 
   useEffect(
     () =>
@@ -286,7 +282,7 @@ export function useStopPlaceData(
       }),
     [stopPlace.id, favoriteDepartures, showOnlyFavorites],
   );
-  useEffect(dispatchLoadInitialDepartures, [stopPlace.id, startTime]);
+  useEffect(refresh, [stopPlace.id, startTime]);
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -294,7 +290,7 @@ export function useStopPlaceData(
     const diff = differenceInMinutes(state.tick, state.lastRefreshTime);
 
     if (diff >= HARD_REFRESH_LIMIT_IN_MINUTES) {
-      dispatchLoadInitialDepartures();
+      refresh();
     }
   }, [state.tick, state.lastRefreshTime]);
   useInterval(
