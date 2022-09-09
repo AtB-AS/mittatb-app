@@ -132,7 +132,7 @@ describe('Departures v2', () => {
 
     // Choose a stop place on the line
     await tapByText(nextDepartureStop + ' ');
-    await expectIdToHaveText('quaySection0Title', nextDepartureStop);
+    await expectIdToHaveText('quaySectionName', nextDepartureStop);
 
     // Go back
     await goBack();
@@ -176,16 +176,8 @@ describe('Departures v2', () => {
       departureQuay0Description,
     );
 
-    // Hide and expand departures
     let noDepTimesQuay0Expanded = await numberOfDepartures('quaySection0');
     expectGreaterThan(noDepTimesQuay0Expanded, 0);
-
-    await tapById('quaySection0HideAction');
-
-    let noDepTimesQuay0Hidden = await numberOfDepartures('quaySection0');
-    expectNumber(noDepTimesQuay0Hidden, 0);
-
-    await tapById('quaySection0HideAction');
 
     // ** Quay 1 **
 
@@ -197,40 +189,8 @@ describe('Departures v2', () => {
       departureQuay1Description,
     );
 
-    // Hide and expand departures
     let noDepTimesQuay1Expanded = await numberOfDepartures('quaySection1');
     expectGreaterThan(noDepTimesQuay1Expanded, 0);
-
-    await tapById('quaySection1HideAction');
-
-    let noDepTimesQuay1Hidden = await numberOfDepartures('quaySection1');
-    expectNumber(noDepTimesQuay1Hidden, 0);
-
-    await tapById('quaySection1HideAction');
-
-    // ** Departure details Quay 0 **
-
-    await scroll('departuresContentView', 'top');
-
-    // Collect info to check in details
-    let lineTitle = await getLineTitleV2('quaySection0', 'departureItem0');
-
-    // Get travel details of first travel
-    await tapDeparture('quaySection0', 'departureItem0');
-
-    await expectToBeVisibleByText(lineTitle);
-    await expectToBeVisibleByText(departureQuay0 + ' ');
-
-    // Choose a stop place on the line
-    await tapByText(nextDepartureStop + ' ');
-    await expectIdToHaveText('quaySection0Title', nextDepartureStop);
-
-    // Go back
-    await goBack();
-    await goBack();
-    await expectToBeVisibleByText(departureStop);
-    await goBack();
-    await expectToBeVisibleByText('Departures');
   });
 
   xit('should show departures depending on given time', async () => {

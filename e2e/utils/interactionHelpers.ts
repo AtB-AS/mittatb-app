@@ -4,16 +4,15 @@ import {expectVisible} from './expectHelpers';
 // ** TAP **
 
 export const tap = async (elementRef: Detox.NativeElement) => {
-  await expectVisible(elementRef);
   await elementRef.tap();
 };
 
-export const tapById = async (id: string) => {
-  await tap(element(by.id(id)).atIndex(0));
+export const tapById = async (id: string, index: number = 0) => {
+  await tap(element(by.id(id)).atIndex(index));
 };
 
-export const tapByText = async (text: string) => {
-  await tap(element(by.text(text)).atIndex(0));
+export const tapByText = async (text: string, index: number = 0) => {
+  await tap(element(by.text(text)).atIndex(index));
 };
 
 // ** SCROLL **

@@ -56,8 +56,6 @@ describe('My profile', () => {
     await expectToBeVisibleByText('Info and prices');
     await expectToBeVisibleById('ticketingInfoButton');
     await expectToBeVisibleByText('Ticketing');
-    await expectToBeVisibleById('paymentInfoButton');
-    await expectToBeVisibleByText('Payment');
     await expectToBeVisibleById('termsInfoButton');
     await expectToBeVisibleByText('Terms');
     await expectToBeVisibleById('inspectionInfoButton');
@@ -65,7 +63,6 @@ describe('My profile', () => {
 
     // Privacy
     await scrollToText('profileHomeScrollView', 'Privacy', 'up');
-    await expectToBeVisibleByText('Privacy');
     await expectToBeVisibleById('privacyButton');
     await expectToBeVisibleByText('Privacy statement');
     await expectToBeVisibleById('clearHistoryButton');
@@ -73,7 +70,6 @@ describe('My profile', () => {
 
     // Favourites
     await scrollToText('profileHomeScrollView', 'Favourites', 'up');
-    await expectToBeVisibleByText('Favourites');
     await expectToBeVisibleById('favoriteLocationsButton');
     await expectToBeVisibleByText('Locations');
     await expectToBeVisibleById('favoriteDeparturesButton');
@@ -89,7 +85,6 @@ describe('My profile', () => {
 
     // Settings
     await scrollToText('profileHomeScrollView', 'Settings', 'up');
-    await expectToBeVisibleByText('Settings');
     await expectToBeVisibleById('defaultTravellerButton');
     await expectToBeVisibleByText('Default traveller');
     await expectToBeVisibleById('appearanceButton');
@@ -101,12 +96,11 @@ describe('My profile', () => {
 
     // My account
     await scrollToText('profileHomeScrollView', 'My account', 'up');
-    await expectToBeVisibleByText('My account');
     await expectToBeVisibleByText('Customer number');
-    await expectToBeVisibleById('loginButton');
-    await expectToBeVisibleByText('Log in');
     await expectToBeVisibleById('expiredTicketsButton');
     await expectToBeVisibleByText('Expired tickets');
+    await expectToBeVisibleById('loginButton');
+    await expectToBeVisibleByText('Log in');
   });
 
   xit('Settings: should change the appearance', async () => {
