@@ -1,4 +1,3 @@
-import ThemeText from '@atb/components/text';
 import ErrorBoundary from '@atb/error-boundary';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -21,6 +20,7 @@ import TravelCardInformation from './TravelCardInformation';
 import MessageBox from '@atb/components/message-box';
 import TravelTokenBox from '@atb/travel-token-box';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import ErroredTicket from '@atb/screens/Ticketing/Tickets/ErroredTicket';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -92,9 +92,13 @@ const TicketsScrollView: React.FC<Props> = ({
             message={noTicketsLabel}
           />
         )}
-        {reservations?.map((res) => (
-          <TicketReservation key={res.orderId} reservation={res} />
-        ))}
+        {reservations?.map((res) =>
+          res.paymentStatus !== 'REJECT' ? (
+            <TicketReservation key={res.orderId} reservation={res} />
+          ) : (
+            <ErroredTicket key={res.orderId} reservation={res} />
+          ),
+        )}
         {fareContracts?.map((fc, index) => (
           <ErrorBoundary
             key={fc.orderId}

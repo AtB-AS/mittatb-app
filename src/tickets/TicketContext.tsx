@@ -189,7 +189,7 @@ function isOlderThanAnHour(date: Date): boolean {
   return differenceInMinutes(new Date(), date) > 60;
 }
 
-const abortedPaymentStatus: PaymentStatus[] = ['CANCEL', 'CREDIT', 'REJECT'];
+const abortedPaymentStatus: PaymentStatus[] = ['CANCEL', 'CREDIT'];
 
 function isAbortedPaymentStatus(status: PaymentStatus): boolean {
   return abortedPaymentStatus.includes(status);

@@ -9,6 +9,7 @@ import Bugsnag from '@bugsnag/react-native';
 import React from 'react';
 import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
 import ValidityLine from '../Ticket/ValidityLine';
+import {getPaymentMode} from '@atb/screens/Ticketing/Tickets/utils';
 
 type Props = {
   reservation: Reservation;
@@ -27,10 +28,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
     }
   }
 
-  const paymentType =
-    reservation.paymentType === PaymentType.Vipps
-      ? t(TicketsTexts.reservation.paymentType.vipps)
-      : t(TicketsTexts.reservation.paymentType.creditcard);
+  const paymentType = getPaymentMode(reservation.paymentType, t);
 
   return (
     <TouchableOpacity>

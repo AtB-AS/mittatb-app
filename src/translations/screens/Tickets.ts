@@ -144,6 +144,11 @@ const TicketsTexts = {
       approved: (type: string) => _(`Betalt med ${type}`, `Paid with ${type}`),
     },
     goToVipps: _('Gå til Vipps for betaling', 'Go to Vipps for payment'),
+    paymentError: (orderId: string, paymentMode: string, orderDate: any) =>
+      _(
+        `Oops! Betalingen feilet. Vennligst prøv igjen 🤞 \n\nOrdre-id: ${orderId} \nBetalingsmetode: ${paymentMode} \nBestillingsdato: ${orderDate}`,
+        `Whoops! Payment failed. Please try again 🤞  \n\nOrder ID: ${orderId} \nPayment mode: ${paymentMode} \nOrder date: ${orderDate}`,
+      ),
   },
   scrollView: {
     errorLoadingTicket: (orderId: string) =>
