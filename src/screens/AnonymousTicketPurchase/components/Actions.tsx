@@ -25,6 +25,7 @@ const Actions = ({
         accessibilityHint={t(
           AnonymousTicketPurchases.consequences.button.login.a11yHint,
         )}
+        testID="loginButton"
       />
       <Button
         interactiveColor="interactive_1"
@@ -34,6 +35,7 @@ const Actions = ({
         accessibilityHint={t(
           AnonymousTicketPurchases.consequences.button.accept.a11yHint,
         )}
+        testID="acceptRestrictionsButton"
       />
     </>
   );
