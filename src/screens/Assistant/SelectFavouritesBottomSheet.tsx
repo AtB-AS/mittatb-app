@@ -62,8 +62,8 @@ const SelectableFavouriteDeparture = ({
         </ThemeText>
 
         <ThemeText type="body__secondary" style={styles.secondaryText}>
-          {t(SelectFavouriteDeparturesText.departures.from)} {departureStation}{' '}
-          {departureQuay}
+          {t(SelectFavouriteDeparturesText.departures.from)} {departureStation}
+          {departureQuay && ' ' + departureQuay}
         </ThemeText>
       </View>
 
