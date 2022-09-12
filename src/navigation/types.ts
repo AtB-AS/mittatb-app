@@ -48,8 +48,8 @@ interface ISubNavigator<T extends ParamListBase, K extends keyof T> {
 
 export type TabNavigatorParams = {
   Assistant: {
-    fromLocation: Location;
-    toLocation: Location;
+    fromLocation?: Location;
+    toLocation?: Location;
   };
   Nearest: NavigatorScreenParams<NearbyStackParams>;
   Ticketing:

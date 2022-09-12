@@ -10,6 +10,7 @@ import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
+import {LoginInAppStackParams} from '@atb/login/types';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
@@ -149,21 +150,27 @@ export default function ProfileHome({navigation}: ProfileProps) {
             {authenticationType !== 'phone' && (
               <Sections.LinkItem
                 text={t(ProfileTexts.sections.account.linkItems.login.label)}
-                onPress={() =>
-                  navigation.navigate('LoginInApp', {
-                    screen: hasActiveFareContracts
-                      ? 'ActiveTicketPromptInApp'
-                      : enable_vipps_login
-                      ? 'LoginOptionsScreen'
-                      : 'PhoneInputInApp',
+                onPress={() => {
+                  let screen: keyof LoginInAppStackParams = 'PhoneInputInApp';
+                  if (hasActiveFareContracts) {
+                    screen = 'ActiveTicketPromptInApp';
+                  } else if (enable_vipps_login) {
+                    screen = 'LoginOptionsScreen';
+                  }
+
+                  return navigation.navigate('LoginInApp', {
+                    screen,
                     params: {
                       afterLogin: {
-                        routeName: 'TabNavigator',
-                        routeParams: {screen: 'Profile'},
+                        screen: 'TabNavigator',
+                        params: {
+                          screen: 'Profile',
+                          params: {screen: 'ProfileHome'},
+                        },
                       },
                     },
-                  })
-                }
+                  });
+                }}
                 testID="loginButton"
               />
             )}

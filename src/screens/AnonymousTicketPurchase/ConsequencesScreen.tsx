@@ -61,10 +61,23 @@ const ConsequencesScreen = ({route, navigation}: ConsequencesProps) => {
     navigation.navigate('LoginInApp', {
       screen: enable_vipps_login ? 'LoginOptionsScreen' : 'PhoneInputInApp',
       params: {
-        afterLogin: {
-          routeName: 'TabNavigator',
-          routeParams: isCallerRouteOnboarding ? {} : {screen: 'Ticketing'},
-        },
+        afterLogin: isCallerRouteOnboarding
+          ? {
+              screen: 'TabNavigator',
+              params: {
+                screen: 'Assistant',
+                params: {},
+              },
+            }
+          : {
+              screen: 'TabNavigator',
+              params: {
+                screen: 'Ticketing',
+                params: {
+                  screen: 'BuyTickets',
+                },
+              },
+            },
       },
     });
   };

@@ -6,7 +6,9 @@ import ActiveTicketPrompt from '../ActiveTicketPrompt';
 import {LoginInAppScreenProps} from '../types';
 
 export type ActiveTicketPromptInAppRouteParams = {
-  afterLogin: AfterLoginParams;
+  afterLogin:
+    | AfterLoginParams<'TabNavigator'>
+    | AfterLoginParams<'TicketPurchase'>;
 };
 
 type Props = LoginInAppScreenProps<'ActiveTicketPromptInApp'>;

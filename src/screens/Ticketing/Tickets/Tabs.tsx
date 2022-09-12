@@ -41,8 +41,13 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
         screen: 'LoginOnboardingInApp',
         params: {
           afterLogin: {
-            routeName: 'TicketPurchase',
-            routeParams: {selectableProductType: 'period'},
+            screen: 'TicketPurchase',
+            params: {
+              screen: 'PurchaseOverview',
+              params: {
+                selectableProductType: 'period',
+              },
+            },
           },
         },
       });

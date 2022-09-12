@@ -6,7 +6,9 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {LoginInAppScreenProps} from '../types';
 
 export type LoginOnboardingInAppRouteParams = {
-  afterLogin: AfterLoginParams;
+  afterLogin:
+    | AfterLoginParams<'TabNavigator'>
+    | AfterLoginParams<'TicketPurchase'>;
 };
 
 type LoginOnboardingProps = LoginInAppScreenProps<'LoginOnboardingInApp'>;

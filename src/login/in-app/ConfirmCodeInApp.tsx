@@ -6,7 +6,9 @@ import {LoginInAppScreenProps} from '../types';
 
 export type ConfirmCodeInAppRouteParams = {
   phoneNumber: string;
-  afterLogin: AfterLoginParams;
+  afterLogin:
+    | AfterLoginParams<'TabNavigator'>
+    | AfterLoginParams<'TicketPurchase'>;
 };
 
 type Props = LoginInAppScreenProps<'ConfirmCodeInApp'>;
@@ -17,9 +19,10 @@ export const ConfirmCodeInApp = ({navigation, route}: Props) => {
       phoneNumber={route.params.phoneNumber}
       doAfterLogin={() => {
         navigation.dispatch(
-          StackActions.replace(route.params.afterLogin.routeName as any, {
-            ...route.params.afterLogin.routeParams,
-          }),
+          StackActions.replace(
+            route.params.afterLogin.screen,
+            route.params.afterLogin.params,
+          ),
         );
       }}
     />
