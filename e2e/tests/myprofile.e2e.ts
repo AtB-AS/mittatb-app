@@ -246,15 +246,9 @@ describe('My profile', () => {
     // check
   });
 
-  xit('should change default traveller', async () => {
+  xit('should change default traveller', async () => {});
 
-  });
+  xit('should view and delete favourite departures', async () => {});
 
-  xit('should view and delete favourite departures', async () => {
-
-  });
-
-  xit('should delete search history', async () => {
-
-  });
+  xit('should delete search history', async () => {});
 });

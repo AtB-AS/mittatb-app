@@ -10,7 +10,7 @@ export const logIn = async (
   customerNumber: string,
 ) => {
   await tapById('loginButton');
-  await tapById('chooseLoginPhone')
+  await tapById('chooseLoginPhone');
   await setInputById('loginPhoneInput', phoneNumber);
   await tapById('sendCodeButton');
 

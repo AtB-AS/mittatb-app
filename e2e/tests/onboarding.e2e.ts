@@ -1,6 +1,6 @@
 import {device} from 'detox';
 import setLocation from '../utils';
-import { tapById, tapByText } from "../utils/interactionHelpers";
+import {tapById} from '../utils/interactionHelpers';
 import {expectToBeVisibleByText} from '../utils/expectHelpers';
 
 describe('Onboarding', () => {

@@ -158,15 +158,15 @@ describe('Tickets anonymous', () => {
     await goBack();
   });
 
-  xit('should be able to toggle traveller information', async () => {})
+  xit('should be able to toggle traveller information', async () => {});
 
-  xit('should show warning when buying anonymously', async () => {})
+  xit('should show warning when buying anonymously', async () => {});
 
-  xit('should get an offer for a 24h ticket', async () => {})
+  xit('should get an offer for a 24h ticket', async () => {});
 
-  xit('should be able to change travellers on a 24h ticket', async () => {})
+  xit('should be able to change travellers on a 24h ticket', async () => {});
 
-  xit('should be able to change zone on a 24h ticket', async () => {})
+  xit('should be able to change zone on a 24h ticket', async () => {});
 
   xit('should be able to change the start time on a 24h ticket', async () => {});
 

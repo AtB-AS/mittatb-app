@@ -1,5 +1,4 @@
 import {by, element} from 'detox';
-import {expectVisible} from './expectHelpers';
 
 // ** TAP **
 

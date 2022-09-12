@@ -148,7 +148,6 @@ describe('Departures v2', () => {
     const departureQuay0Description = 'ved Bunnpris';
     const departureQuay1 = 'Prinsens gate P2';
     const departureQuay1Description = 'ved AtB Kundesenter';
-    const nextDepartureStop = 'Nidarosdomen';
 
     // Enable v2
     await goToTab('profile');
