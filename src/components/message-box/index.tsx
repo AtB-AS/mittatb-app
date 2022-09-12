@@ -12,6 +12,7 @@ import ThemeIcon from '@atb/components/theme-icon';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {screenReaderPause} from '@atb/components/accessible-text';
 
 type WithMessage = {
   message: string;
@@ -95,11 +96,12 @@ const MessageBox: React.FC<MessageBoxProps> = ({
           <View style={styles.iconContainer}>{iconElement}</View>
         )}
       </View>
-      <View style={styles.content}>
+      <View style={styles.content} accessible={true}>
         {title && (
           <ThemeText
             type="body__primary--bold"
             style={{...styles.title, color: textColor}}
+            accessibilityLabel={title + screenReaderPause}
           >
             {title}
           </ThemeText>
@@ -107,7 +109,13 @@ const MessageBox: React.FC<MessageBoxProps> = ({
         <View>{child}</View>
       </View>
       {isDismissable && (
-        <TouchableOpacity onPress={onDismiss}>
+        <TouchableOpacity
+          onPress={onDismiss}
+          accessible={true}
+          accessibilityLabel={t(MessageBoxTexts.dismiss.allyLabel)}
+          accessibilityHint={t(MessageBoxTexts.dismiss.allyHint)}
+          accessibilityRole="button"
+        >
           <ThemeIcon fill={textColor} svg={Close} />
         </TouchableOpacity>
       )}
