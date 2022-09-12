@@ -33,6 +33,9 @@ const SelectFavouriteDeparturesText = {
       'Activate to save the selected favourite departures',
     ),
   },
+  accessibleText: {
+    from: _('fra', 'from'),
+  },
 };
 
 export default SelectFavouriteDeparturesText;

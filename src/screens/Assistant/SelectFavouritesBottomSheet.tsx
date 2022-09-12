@@ -21,6 +21,7 @@ import {AnyMode} from '@atb/components/transportation-icon';
 import {LegMode, TransportSubmode} from '@entur/sdk';
 import SectionSeparator from '@atb/components/sections/section-separator';
 import MessageBox from '@atb/components/message-box';
+import {getTranslatedModeName} from '@atb/utils/transportation-names';
 
 type SelectableFavouriteDepartureData = {
   handleSwitchFlip: (favouriteId: any) => void;
@@ -49,7 +50,15 @@ const SelectableFavouriteDeparture = ({
   const {t} = useTranslation();
 
   return (
-    <View style={styles.selectableDeparture}>
+    <View
+      style={styles.selectableDeparture}
+      accessible={true}
+      accessibilityLabel={`${t(
+        getTranslatedModeName(lineTransportationMode),
+      )} ${lineIdentifier} ${lineName}, ${t(
+        SelectFavouriteDeparturesText.accessibleText.from,
+      )} ${departureStation} ${departureQuay && departureQuay}`}
+    >
       <View style={styles.lineModeIcon}>
         <TransportationIcon
           mode={lineTransportationMode}
