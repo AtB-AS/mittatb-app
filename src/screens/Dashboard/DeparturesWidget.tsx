@@ -13,6 +13,7 @@ import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {useIsFocused} from '@react-navigation/native';
+import {NoFavouriteDeparture} from '@atb/assets/svg/color/images/';
 
 import React, {useEffect, useState} from 'react';
 import {Linking, TouchableOpacity, View} from 'react-native';
@@ -92,24 +93,27 @@ const FavouritesWidget: React.FC = () => {
 
       {!frontPageFavouriteDepartures.length && (
         <View style={styles.noFavouritesView}>
-          <ThemeText>
-            {!favoriteDepartures.length
-              ? t(DeparturesTexts.message.noFavouritesWidget)
-              : t(DeparturesTexts.message.noFrontpageFavouritesWidget)}
-          </ThemeText>
-          {new_favourites_info_url && (
-            <TouchableOpacity
-              onPress={() => Linking.openURL(new_favourites_info_url)}
-            >
-              <ThemeText
-                color="background_0"
-                type="body__primary--underline"
-                style={styles.noFavouritesUrl}
+          <NoFavouriteDeparture />
+          <View style={styles.noFavouritesTextContainer}>
+            <ThemeText>
+              {!favoriteDepartures.length
+                ? t(DeparturesTexts.message.noFavouritesWidget)
+                : t(DeparturesTexts.message.noFrontpageFavouritesWidget)}
+            </ThemeText>
+            {new_favourites_info_url && (
+              <TouchableOpacity
+                onPress={() => Linking.openURL(new_favourites_info_url)}
               >
-                {t(DeparturesTexts.message.readMoreUrl)}
-              </ThemeText>
-            </TouchableOpacity>
-          )}
+                <ThemeText
+                  color="background_0"
+                  type="body__primary--underline"
+                  style={styles.noFavouritesUrl}
+                >
+                  {t(DeparturesTexts.message.readMoreUrl)}
+                </ThemeText>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       )}
 
@@ -158,10 +162,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
   },
   noFavouritesView: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: theme.static.background.background_0.background,
     borderRadius: theme.border.radius.regular,
     padding: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
+  },
+  noFavouritesTextContainer: {
+    flex: 1,
   },
   noFavouritesUrl: {
     marginVertical: theme.spacings.xSmall,
