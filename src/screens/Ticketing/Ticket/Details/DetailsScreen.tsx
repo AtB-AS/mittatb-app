@@ -4,17 +4,14 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {findReferenceDataById} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
 import {isPreactivatedTicket, useTicketState} from '@atb/tickets';
-import {
-  PurchaseOverviewTexts,
-  TicketTexts,
-  useTranslation,
-} from '@atb/translations';
+import {TicketTexts, useTranslation} from '@atb/translations';
 import useInterval from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {getValidityStatus} from '../utils';
 import DetailsContent from './DetailsContent';
 import {TicketModalScreenProps} from './types';
+import {getTrainTicketNoticeText} from '../../utils';
 
 export type TicketDetailsRouteParams = {
   orderId: string;
@@ -63,13 +60,6 @@ export default function DetailsScreen({navigation, route}: Props) {
       (val: string) => val === 'ATB:TariffZone:1',
     );
 
-  const getTrainTicketNoticeText = (fareProductType?: string) => {
-    if (fareProductType === 'single')
-      return t(PurchaseOverviewTexts.samarbeidsbillettenInfo.single);
-    if (fareProductType === 'hour24')
-      return t(PurchaseOverviewTexts.samarbeidsbillettenInfo.hour24);
-    return t(PurchaseOverviewTexts.samarbeidsbillettenInfo.period);
-  };
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -89,7 +79,7 @@ export default function DetailsScreen({navigation, route}: Props) {
 
         {shouldShowValidTrainTicketNotice && (
           <MessageBox
-            message={getTrainTicketNoticeText(preassignedFareProduct?.type)}
+            message={getTrainTicketNoticeText(t, preassignedFareProduct?.type)}
             type="info"
           />
         )}

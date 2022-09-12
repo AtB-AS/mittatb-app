@@ -1,27 +1,22 @@
 import ThemeText from '@atb/components/text';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
-import {
-  Language,
-  TicketTexts,
-  TranslateFunction,
-  useTranslation,
-} from '@atb/translations';
+import {TicketTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {AccessibilityProps, View} from 'react-native';
 import {tariffZonesSummary} from '@atb/screens/Ticketing/Purchase/TariffZones';
 import {
+  getNonInspectableTokenWarning,
   isValidTicket,
   userProfileCountAndName,
 } from '@atb/screens/Ticketing/Ticket/utils';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import ZoneSymbol from '@atb/screens/Ticketing/Ticket/Component/ZoneSymbol';
 import {secondsToDuration} from '@atb/utils/date';
 import {TicketInfoDetailsProps} from './TicketInfo';
-import NonTicketInspectionSymbol from './Component/NotForInspectionSymbol';
 import LoadingSymbol from './Component/LoadingSymbol';
 import * as Sections from '@atb/components/sections';
 import {screenReaderPause} from '@atb/components/accessible-text';
+import InspectionSymbol from '@atb/screens/Ticketing/Ticket/Component/InspectionSymbol';
 
 export type CompactTicketInfoProps = TicketInfoDetailsProps & {
   onPressDetails?: () => void;
@@ -39,12 +34,11 @@ export type CompactTicketInfoTexts = CompactTicketInfoProps &
 
 export const CompactTicketInfo = (props: CompactTicketInfoProps) => {
   const styles = useStyles();
-  const {status, isInspectable} = props;
+  const {status} = props;
   const isValid = isValidTicket(status);
   const {isLoading} = useMobileTokenContextState();
-  const {t, language} = useTranslation();
 
-  const ticketTexts = getTicketInfoTexts(props, t, language);
+  const ticketTexts = useTicketInfoTexts(props);
   const ticketInfoTextsProps = {
     ...ticketTexts,
     ...props,
@@ -62,15 +56,10 @@ export const CompactTicketInfo = (props: CompactTicketInfoProps) => {
     <Sections.Section withPadding {...accessibility}>
       <Sections.GenericClickableItem onPress={props.onPressDetails}>
         <View style={styles.container}>
-          <CompactTicketInfoTexts {...ticketInfoTextsProps} />
-          <View style={styles.symbolContainer}>
+          <View style={styles.ticketDetails}>
+            <CompactTicketInfoTexts {...ticketInfoTextsProps} />
             {isLoading && <LoadingSymbol />}
-            {isValid && isInspectable && !isLoading && (
-              <ZoneSymbol {...props} />
-            )}
-            {isValid && !isInspectable && !isLoading && (
-              <NonTicketInspectionSymbol />
-            )}
+            {isValid && !isLoading && <InspectionSymbol {...props} />}
           </View>
         </View>
       </Sections.GenericClickableItem>
@@ -85,6 +74,7 @@ const CompactTicketInfoTexts = (props: CompactTicketInfoTexts) => {
     productName,
     tariffZoneSummary,
     timeUntilExpire,
+    isInspectable,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -110,24 +100,26 @@ const CompactTicketInfoTexts = (props: CompactTicketInfoTexts) => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flexDirection: 'row'},
+  container: {flex: 1},
+  ticketDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   textsContainer: {flex: 1, paddingTop: theme.spacings.xSmall},
   expireTime: {
     marginBottom: theme.spacings.small,
   },
   symbolContainer: {
-    height: 72,
-    width: 72,
+    minHeight: 72,
+    minWidth: 72,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
   },
 }));
 
-export const getTicketInfoTexts = (
+export const useTicketInfoTexts = (
   props: CompactTicketInfoProps,
-  t: TranslateFunction,
-  language: Language,
 ): TicketInfoTextsProps => {
   const {
     userProfilesWithCount,
@@ -137,7 +129,11 @@ export const getTicketInfoTexts = (
     toTariffZone,
     validTo,
     now,
+    isInspectable,
   } = props;
+
+  const {t, language} = useTranslation();
+  const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
 
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)
@@ -154,9 +150,28 @@ export const getTicketInfoTexts = (
     conjunction,
     serialComma: false,
   });
-  const timeUntilExpire = t(TicketTexts.validityHeader.valid(durationText));
 
-  var accessibilityLabel = timeUntilExpire + screenReaderPause;
+  var accessibilityLabel: string = '';
+  var timeUntilExpireOrWarning: string | undefined;
+
+  if (isInspectable) {
+    timeUntilExpireOrWarning = t(
+      TicketTexts.validityHeader.valid(durationText),
+    );
+  } else {
+    const warning = getNonInspectableTokenWarning(
+      isError,
+      fallbackEnabled,
+      t,
+      remoteTokens,
+      isInspectable,
+      preassignedFareProduct?.type,
+    );
+
+    timeUntilExpireOrWarning = warning ?? undefined;
+  }
+
+  accessibilityLabel += timeUntilExpireOrWarning + screenReaderPause;
   accessibilityLabel += userProfilesWithCount.map(
     (u) =>
       userProfileCountAndName(u, omitUserProfileCount, language) +
@@ -165,10 +180,14 @@ export const getTicketInfoTexts = (
   accessibilityLabel += productName + screenReaderPause;
   accessibilityLabel += tariffZoneSummary + screenReaderPause;
 
+  if (!isInspectable) {
+    accessibilityLabel += t(TicketTexts.ticketInfo.noInspectionIconA11yLabel);
+  }
+
   return {
     productName,
     tariffZoneSummary,
-    timeUntilExpire,
+    timeUntilExpire: timeUntilExpireOrWarning,
     accessibilityLabel,
   };
 };

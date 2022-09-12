@@ -58,3 +58,5 @@ export type StopPlaceGroup = {
   stopPlace: StopPlaceInfo;
   quays: QuayGroup[];
 };
+
+export type QuaySectionMode = 'departures' | 'frontpage';

@@ -8,7 +8,11 @@ import ThemeText from '@atb/components/text';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';
-import {TranslatedString, useTranslation} from '@atb/translations';
+import {
+  ScreenHeaderTexts,
+  TranslatedString,
+  useTranslation,
+} from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {useFavorites} from '@atb/favorites';
@@ -115,7 +119,7 @@ const SelectFavouritesBottomSheet = ({
         leftButton={{
           type: 'cancel',
           onPress: close,
-          text: 'Close',
+          text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
         color="background_1"
       />
@@ -163,11 +167,9 @@ const SelectFavouritesBottomSheet = ({
           </>
         )}
         {!favouriteItems.length && (
-          <MessageBox type="info">
-            <ThemeText>
-              {t(SelectFavouriteDeparturesText.noFavourites.text)}
-            </ThemeText>
-          </MessageBox>
+          <MessageBox
+            message={t(SelectFavouriteDeparturesText.noFavourites.text)}
+          />
         )}
       </ScrollView>
 

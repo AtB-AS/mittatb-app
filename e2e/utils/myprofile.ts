@@ -1,10 +1,5 @@
 import {by, element, expect} from 'detox';
-import {
-  scroll,
-  scrollToId,
-  tapById,
-  tapByText,
-} from './interactionHelpers';
+import {scroll, scrollToId, tapById, tapByText} from './interactionHelpers';
 import {expectToBeVisibleByText} from './expectHelpers';
 import {chooseSearchResult, goToTab, setInputById} from './commonHelpers';
 

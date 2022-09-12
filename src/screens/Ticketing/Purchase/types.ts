@@ -15,6 +15,7 @@ import {
   TariffZoneWithMetadata,
 } from './TariffZones';
 import {RouteParams as TariffZoneSearchParams} from './TariffZones/search';
+import {UserProfileWithCount} from './Travellers/use-user-count-state';
 
 export type CardPaymentMethod =
   | {paymentType: PaymentType.Visa | PaymentType.Mastercard; save: boolean}
@@ -60,6 +61,8 @@ export type SavedPaymentOption =
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;
+  preassignedFareProduct?: PreassignedFareProduct;
+  userProfilesWithCount?: UserProfileWithCount[];
   selectableProductType?: PreassignedFareProductType;
   fromTariffZone?: TariffZoneWithMetadata;
   toTariffZone?: TariffZoneWithMetadata;

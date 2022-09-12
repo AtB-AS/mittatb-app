@@ -12,39 +12,39 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
+import {NoFavouriteDeparture} from '@atb/assets/svg/color/images/';
 
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {Linking, TouchableOpacity, View} from 'react-native';
 
 const FavouritesWidget: React.FC = () => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {favoriteDepartures} = useFavorites();
+  const {new_favourites_info_url} = useRemoteConfig();
+  const {favoriteDepartures, frontPageFavouriteDepartures} = useFavorites();
   const {location} = useGeolocationState();
   const [polling, setPolling] = useState(false);
-  const [favResults, setFavResults] = useState<StopPlaceGroup[]>([]);
+  const [favouritesResults, setFavouritesResults] = useState<StopPlaceGroup[]>(
+    [],
+  );
   const [searchDate, setSearchDate] = useState<string>('');
-  const navigation = useNavigation();
   const isFocused = useIsFocused();
   const {favourite_departures_poll_interval} = useRemoteConfig();
 
-  const fetchFavouriteDepartures = async () => {
-    await getFavouriteDepartures(favoriteDepartures).then((data) => {
-      if (data) {
-        setFavResults(data);
-        setSearchDate(new Date().toISOString());
-      }
-    });
+  const fetchFavouriteFrontpageDepartures = async () => {
+    const data = await getFavouriteDepartures(frontPageFavouriteDepartures);
+    setFavouritesResults(data || []);
+    setSearchDate(new Date().toISOString());
   };
 
   // timer orchestration
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined = undefined;
     if (polling) {
-      fetchFavouriteDepartures();
+      fetchFavouriteFrontpageDepartures();
       interval = setInterval(
-        fetchFavouriteDepartures,
+        fetchFavouriteFrontpageDepartures,
         favourite_departures_poll_interval,
       );
     } else {
@@ -60,19 +60,19 @@ const FavouritesWidget: React.FC = () => {
     };
   }, [polling]);
 
-  // do polling only when screen has focus and user has favourites.
+  // do polling only when screen has focus and user has frontpage favourites.
   useEffect(() => {
-    if (isFocused && !!favoriteDepartures.length) {
+    if (isFocused && !!frontPageFavouriteDepartures.length) {
       setPolling(true);
     } else {
       setPolling(false);
     }
-  }, [isFocused, !!favoriteDepartures.length]);
+  }, [isFocused, !!frontPageFavouriteDepartures.length]);
 
   // refresh favourite departures when user adds or removees a favourite
   useEffect(() => {
-    fetchFavouriteDepartures();
-  }, [favoriteDepartures.length]);
+    fetchFavouriteFrontpageDepartures();
+  }, [frontPageFavouriteDepartures.length]);
 
   const {open: openBottomSheet} = useBottomSheet();
   async function openFrontpageFavouritesBottomSheet() {
@@ -91,7 +91,33 @@ const FavouritesWidget: React.FC = () => {
         {t(DeparturesTexts.widget.heading)}
       </ThemeText>
 
-      {favResults.map((stopPlaceGroup) => {
+      {!frontPageFavouriteDepartures.length && (
+        <View style={styles.noFavouritesView}>
+          <NoFavouriteDeparture />
+          <View style={styles.noFavouritesTextContainer}>
+            <ThemeText>
+              {!favoriteDepartures.length
+                ? t(DeparturesTexts.message.noFavouritesWidget)
+                : t(DeparturesTexts.message.noFrontpageFavouritesWidget)}
+            </ThemeText>
+            {new_favourites_info_url && (
+              <TouchableOpacity
+                onPress={() => Linking.openURL(new_favourites_info_url)}
+              >
+                <ThemeText
+                  color="background_0"
+                  type="body__primary--underline"
+                  style={styles.noFavouritesUrl}
+                >
+                  {t(DeparturesTexts.message.readMoreUrl)}
+                </ThemeText>
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+      )}
+
+      {favouritesResults.map((stopPlaceGroup) => {
         const stopPlaceInfo = stopPlaceGroup.stopPlace;
         return (
           <View key={stopPlaceGroup.stopPlace.id}>
@@ -103,6 +129,7 @@ const FavouritesWidget: React.FC = () => {
                   stop={stopPlaceInfo}
                   searchDate={searchDate}
                   currentLocation={location || undefined}
+                  mode="frontpage"
                 />
               );
             })}
@@ -110,14 +137,16 @@ const FavouritesWidget: React.FC = () => {
         );
       })}
 
-      <Button
-        mode="secondary"
-        type="block"
-        onPress={openFrontpageFavouritesBottomSheet}
-        text={t(DeparturesTexts.button.text)}
-        icon={Edit}
-        iconPosition="right"
-      />
+      {!!favoriteDepartures.length && (
+        <Button
+          mode="secondary"
+          type="block"
+          onPress={openFrontpageFavouritesBottomSheet}
+          text={t(DeparturesTexts.button.text)}
+          icon={Edit}
+          iconPosition="right"
+        />
+      )}
     </View>
   );
 };
@@ -131,5 +160,20 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
     marginTop: theme.spacings.large,
     marginBottom: theme.spacings.medium,
+  },
+  noFavouritesView: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.static.background.background_0.background,
+    borderRadius: theme.border.radius.regular,
+    padding: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
+  },
+  noFavouritesTextContainer: {
+    flex: 1,
+  },
+  noFavouritesUrl: {
+    marginVertical: theme.spacings.xSmall,
   },
 }));

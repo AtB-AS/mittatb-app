@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleProp, ViewStyle} from 'react-native';
+import {View, StyleProp, ViewStyle, TouchableOpacity} from 'react-native';
 import {
   Check,
   Error as ErrorIcon,
@@ -11,6 +11,8 @@ import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {useTranslation} from '@atb/translations';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {screenReaderPause} from '@atb/components/accessible-text';
 
 type WithMessage = {
   message: string;
@@ -33,6 +35,8 @@ export type MessageBoxProps = {
   containerStyle?: StyleProp<ViewStyle>;
   title?: string;
   withMargin?: boolean;
+  isDismissable?: boolean;
+  onDismiss?: () => void;
 } & (WithMessage | WithChildren);
 
 const MessageBox: React.FC<MessageBoxProps> = ({
@@ -46,6 +50,8 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   isMarkdown = false,
   onPress,
   onPressText,
+  isDismissable,
+  onDismiss,
 }) => {
   const {theme} = useTheme();
   const styles = useBoxStyle();
@@ -90,17 +96,29 @@ const MessageBox: React.FC<MessageBoxProps> = ({
           <View style={styles.iconContainer}>{iconElement}</View>
         )}
       </View>
-      <View style={styles.content}>
+      <View style={styles.content} accessible={true}>
         {title && (
           <ThemeText
             type="body__primary--bold"
             style={{...styles.title, color: textColor}}
+            accessibilityLabel={title + screenReaderPause}
           >
             {title}
           </ThemeText>
         )}
         <View>{child}</View>
       </View>
+      {isDismissable && (
+        <TouchableOpacity
+          onPress={onDismiss}
+          accessible={true}
+          accessibilityLabel={t(MessageBoxTexts.dismiss.allyLabel)}
+          accessibilityHint={t(MessageBoxTexts.dismiss.allyHint)}
+          accessibilityRole="button"
+        >
+          <ThemeIcon fill={textColor} svg={Close} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

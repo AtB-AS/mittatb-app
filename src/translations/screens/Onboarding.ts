@@ -2,7 +2,7 @@ import {TranslatedString, translation as _} from '../commons';
 import orgSpecificTranslations from '../utils';
 const OnboardingTexts = {
   welcome: {
-    title: _('Velkommen til appen AtB', 'Welcome to AtB app'),
+    title: _('Velkommen til appen AtB', 'Welcome to the AtB app'),
     titleA11yLabel: _('Velkommen til appen AtB', 'Welcome to the ATB app'),
     description: {
       part1: _(

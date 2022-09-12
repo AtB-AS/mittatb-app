@@ -35,13 +35,12 @@ import {
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import NonTicketInspectionSymbol from '@atb/screens/Ticketing/Ticket/Component/NotForInspectionSymbol';
 import TicketDetail from '@atb/screens/Ticketing/Ticket/Component/TicketDetail';
 import WarningMessage from '@atb/screens/Ticketing/Ticket/Component/WarningMessage';
 import QrCode from '@atb/screens/Ticketing/Ticket/Details/QrCode';
 import SectionSeparator from '@atb/components/sections/section-separator';
-import ZoneSymbol from '@atb/screens/Ticketing/Ticket/Component/ZoneSymbol';
 import {getLastUsedAccess} from './Carnet/CarnetDetails';
+import InspectionSymbol from '@atb/screens/Ticketing/Ticket/Component/InspectionSymbol';
 
 export type TicketInfoProps = {
   travelRights: PreactivatedTicket[];
@@ -171,7 +170,6 @@ const TicketInfoHeader = ({
             {productName}
           </ThemeText>
         )}
-        {status === 'valid' && !isInspectable && <NonTicketInspectionSymbol />}
       </View>
       {status === 'valid' && warning && <WarningMessage message={warning} />}
     </View>
@@ -183,7 +181,6 @@ const TicketInfoDetails = (props: TicketInfoDetailsProps) => {
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
-    isInspectable,
     omitUserProfileCount,
     status,
   } = props;
@@ -212,7 +209,7 @@ const TicketInfoDetails = (props: TicketInfoDetailsProps) => {
             />
           )}
         </View>
-        {isValidTicket(status) && isInspectable && <ZoneSymbol {...props} />}
+        {isValidTicket(status) && <InspectionSymbol {...props} />}
       </View>
     </View>
   );

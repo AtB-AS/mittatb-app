@@ -1,3 +1,4 @@
+import {getLastUsedAccess} from '@atb/screens/Ticketing/Ticket/Carnet/CarnetDetails';
 import {flatten, sumBy} from 'lodash';
 import {
   CarnetTicketUsedAccess,
@@ -78,7 +79,9 @@ export function isValidRightNowFareContract(f: FareContract): boolean {
   return false;
 }
 
-function hasActiveOrUsableCarnetTicket(tickets: CarnetTicket[]): boolean {
+export function hasActiveOrUsableCarnetTicket(
+  tickets: CarnetTicket[],
+): boolean {
   const [firstTicket] = tickets;
   const {usedAccesses, maximumNumberOfAccesses, numberOfUsedAccesses} =
     flattenCarnetTicketAccesses(tickets);
@@ -162,4 +165,43 @@ export const filterExpiredFareContracts = (fareContracts: FareContract[]) => {
   const isExpiredOrRefunded = (f: FareContract) =>
     !isActiveFareContractNowOrCanBeUsed(f) || isRefunded(f);
   return fareContracts.filter(isExpiredOrRefunded);
+};
+
+export const filterValidRightNowFareContract = (
+  fareContracts: FareContract[],
+) => {
+  return fareContracts.filter((f: FareContract): boolean => {
+    if (f.state !== FareContractState.Activated) return false;
+
+    const travelRights = f.travelRights;
+    if (travelRights.length < 1) return false;
+
+    const now = Date.now();
+    const firstTravelRight = travelRights?.[0];
+
+    const carnetTravelRights = travelRights.filter(isCarnetTicket);
+    if (carnetTravelRights.length > 0) {
+      const {usedAccesses} = flattenCarnetTicketAccesses(carnetTravelRights);
+
+      const {status: usedAccessValidityStatus} = getLastUsedAccess(
+        now,
+        usedAccesses,
+      );
+
+      if (usedAccessValidityStatus === 'valid') {
+        return true;
+      }
+
+      return false;
+    }
+
+    if (isPreactivatedTicket(firstTravelRight)) {
+      return (
+        now >= firstTravelRight.startDateTime.toMillis() &&
+        now <= firstTravelRight.endDateTime.toMillis()
+      );
+    }
+
+    return false;
+  });
 };

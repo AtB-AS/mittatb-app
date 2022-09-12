@@ -16,7 +16,11 @@ type Props = {
 
 const GlobalMessageBox = ({globalMessageContext, style}: Props) => {
   const {language} = useTranslation();
-  const {findGlobalMessages} = useGlobalMessagesState();
+  const {
+    findGlobalMessages,
+    dismissedGlobalMessages,
+    addDismissedGlobalMessages,
+  } = useGlobalMessagesState();
 
   const globalMessages = globalMessageContext
     ? findGlobalMessages(globalMessageContext)
@@ -26,18 +30,30 @@ const GlobalMessageBox = ({globalMessageContext, style}: Props) => {
     return null;
   }
 
+  const dismissGlobalMessage = (globalMessage: GlobalMessage) => {
+    globalMessage.isDismissable && addDismissedGlobalMessages(globalMessage);
+  };
+
+  const isNotADismissedMessage = (globalMessage: GlobalMessage) =>
+    !globalMessage.isDismissable ||
+    dismissedGlobalMessages.map((dga) => dga.id).indexOf(globalMessage.id) < 0;
+
   return (
     <>
-      {globalMessages.map((globalMessage: GlobalMessage) => (
-        <MessageBox
-          key={globalMessage.id}
-          containerStyle={style}
-          title={getReferenceDataText(globalMessage.title ?? [], language)}
-          message={getReferenceDataText(globalMessage.body, language)}
-          type={globalMessage.type}
-          isMarkdown={true}
-        />
-      ))}
+      {globalMessages
+        .filter(isNotADismissedMessage)
+        .map((globalMessage: GlobalMessage) => (
+          <MessageBox
+            key={globalMessage.id}
+            containerStyle={style}
+            title={getReferenceDataText(globalMessage.title ?? [], language)}
+            message={getReferenceDataText(globalMessage.body, language)}
+            type={globalMessage.type}
+            isMarkdown={true}
+            isDismissable={globalMessage.isDismissable}
+            onDismiss={() => dismissGlobalMessage(globalMessage)}
+          />
+        ))}
     </>
   );
 };

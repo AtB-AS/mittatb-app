@@ -23,10 +23,12 @@ export const RecentTickets = () => {
 
   const selectTicket = (ticket: RecentTicket) => {
     navigation.navigate('TicketPurchase', {
-      screen: 'Confirmation',
+      screen: 'PurchaseOverview',
       params: {
-        ...ticket,
-        headerLeftButton: {type: 'cancel'},
+        preassignedFareProduct: ticket.preassignedFareProduct,
+        userProfilesWithCount: ticket.userProfilesWithCount,
+        fromTariffZone: {...ticket.fromTariffZone, resultType: 'zone'},
+        toTariffZone: {...ticket.toTariffZone, resultType: 'zone'},
       },
     });
   };
