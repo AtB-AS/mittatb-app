@@ -22,7 +22,7 @@ jobs:
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
-          use-build-cache: 'true'
+          use-build-cache: 'false'
           app-environment: 'staging'
           app-org: 'atb'
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
