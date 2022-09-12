@@ -201,6 +201,7 @@ export default function LoginOptionsScreen({
                 });
               }}
               disabled={isLoading}
+              testID="chooseLoginPhone"
             />
           </Sections.Section>
         </ScrollView>

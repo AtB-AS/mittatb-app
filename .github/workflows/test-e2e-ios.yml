@@ -1,5 +1,6 @@
 name: E2E tests on iOS
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -11,6 +12,11 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v1
+      - name: Add Entur private registry credentials
+        run: sh ./scripts/add-entur-private-registry.sh
+        env:
+          ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Pre-boot simulator
         run: sh e2e/boot.sh
       - name: Setup build dependencies, environment and assets

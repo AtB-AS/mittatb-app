@@ -68,14 +68,13 @@ describe('Tickets anonymous', () => {
     await expectToBeVisibleByText('Valid');
     await tapById('buyTicketsTab');
     await expectToBeVisibleByText('Single ticket');
-    await expectToBeVisibleByText('Periodic ticket');
+    //await expectToBeVisibleByText('Periodic ticket');
+    await expectToBeVisibleByText('24 hour pass');
 
     // Choose single ticket
     await tapById('singleTicket');
 
     await verifyTravellerCounts(1);
-    //Zone is either A or C3 during the tests
-    await expectToBeVisibleByPartOfText('Travel in 1 zone');
     await expectIdToHaveText(
       'offerTotalPriceText',
       `Total ${ticketInfo.singleTicketAdultPrice}.00 kr`,
@@ -93,7 +92,7 @@ describe('Tickets anonymous', () => {
     await expectToBeVisibleByText('Starting now');
   });
 
-  it('should be able to change travellers', async () => {
+  it('should be able to change travellers on a single ticket', async () => {
     await tapById('buyTicketsTab');
     await tapById('singleTicket');
 
@@ -123,7 +122,7 @@ describe('Tickets anonymous', () => {
     await goBack();
   });
 
-  it('should be able to change zone', async () => {
+  it('should be able to change zone on a single ticket', async () => {
     await tapById('buyTicketsTab');
     await tapById('singleTicket');
 
@@ -131,7 +130,7 @@ describe('Tickets anonymous', () => {
     await setZones('A', 'A');
 
     // Verify
-    await expectToBeVisibleByText('Travel in 1 zone');
+    //await expectToBeVisibleByText('Travel in 1 zone');
     await expectToBeVisibleByText('Zone A');
     await expectIdToHaveText(
       'offerTotalPriceText',
@@ -146,7 +145,7 @@ describe('Tickets anonymous', () => {
     await setZone('To', 'B1');
 
     // Verify
-    await expectToBeVisibleByText('Travel in 2 zones');
+    //await expectToBeVisibleByText('Travel in 2 zones');
     await expectToBeVisibleByText('Zone A to zone B1');
     await expectIdToHaveText(
       'offerTotalPriceText',
@@ -159,7 +158,20 @@ describe('Tickets anonymous', () => {
     await goBack();
   });
 
-  it('should not be able to buy a periodic ticket as anonymous', async () => {
+  xit('should be able to toggle traveller information', async () => {});
+
+  xit('should show warning when buying anonymously', async () => {});
+
+  xit('should get an offer for a 24h ticket', async () => {});
+
+  xit('should be able to change travellers on a 24h ticket', async () => {});
+
+  xit('should be able to change zone on a 24h ticket', async () => {});
+
+  xit('should be able to change the start time on a 24h ticket', async () => {});
+
+  // NOTE!! Currently not enabled due to no mobile tokens
+  xit('should not be able to buy a periodic ticket as anonymous', async () => {
     await tapById('buyTicketsTab');
     await tapById('periodicTicket');
 
@@ -184,7 +196,8 @@ describe('Tickets anonymous', () => {
 });
 
 // NOTE! Due to recaptcha during the login process, tests may not run
-describe('Tickets authorized', () => {
+// NOTE!! Currently not enabled due to no mobile tokens
+xdescribe('Tickets authorized', () => {
   let isLoggedIn: boolean = false;
 
   beforeAll(async () => {

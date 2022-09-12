@@ -27,7 +27,8 @@ import {expectGreaterThan} from '../utils/jestAssertions';
  */
 
 // NOTE! Due to recaptcha during the login process, tests may not run
-describe('Account', () => {
+// NOTE!! Currently not enabled due to no mobile tokens
+xdescribe('Account', () => {
   let isLoggedIn: boolean = false;
 
   beforeAll(async () => {
@@ -204,7 +205,7 @@ describe('Account', () => {
     }
   });
 
-  it('should show correct user id in debug menu', async () => {
+  xit('should show correct user id in debug menu', async () => {
     if (isLoggedIn) {
       await goToTab('profile');
       await scrollToId('profileHomeScrollView', 'debugButton', 'down');
