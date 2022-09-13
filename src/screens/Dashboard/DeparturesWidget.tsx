@@ -13,6 +13,7 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import React, {useEffect} from 'react';
 import {Linking, TouchableOpacity, View} from 'react-native';
 import {useFavoriteDepartureData} from './state';
+import {NoFavouriteDeparture} from '@atb/assets/svg/color/images/';
 
 const FavouritesWidget: React.FC = () => {
   const styles = useStyles();
@@ -47,23 +48,23 @@ const FavouritesWidget: React.FC = () => {
           <NoFavouriteDeparture />
           <View style={styles.noFavouritesTextContainer}>
             <ThemeText>
-            {!favoriteDepartures.length
-              ? t(DeparturesTexts.message.noFavouritesWidget)
-              : t(DeparturesTexts.message.noFrontpageFavouritesWidget)}
-          </ThemeText>
-          {new_favourites_info_url && (
-            <TouchableOpacity
-              onPress={() => Linking.openURL(new_favourites_info_url)}
-            >
-              <ThemeText
-                color="background_0"
-                type="body__primary--underline"
-                style={styles.noFavouritesUrl}
+              {!favoriteDepartures.length
+                ? t(DeparturesTexts.message.noFavouritesWidget)
+                : t(DeparturesTexts.message.noFrontpageFavouritesWidget)}
+            </ThemeText>
+            {new_favourites_info_url && (
+              <TouchableOpacity
+                onPress={() => Linking.openURL(new_favourites_info_url)}
               >
-                {t(DeparturesTexts.message.readMoreUrl)}
-              </ThemeText>
-            </TouchableOpacity>
-          )}
+                <ThemeText
+                  color="background_0"
+                  type="body__primary--underline"
+                  style={styles.noFavouritesUrl}
+                >
+                  {t(DeparturesTexts.message.readMoreUrl)}
+                </ThemeText>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       )}
