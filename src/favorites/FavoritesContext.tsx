@@ -16,6 +16,7 @@ type FavoriteContextState = {
   favoriteDepartures: UserFavoriteDepartures;
   addFavoriteLocation(location: LocationFavorite): Promise<void>;
   removeFavoriteLocation(id: string): Promise<void>;
+  setFavoriteDepartures(favorite: UserFavoriteDepartures): Promise<void>;
   setDashboardFavorite(id: string, value: boolean): Promise<void>;
   updateFavoriteLocation(favorite: StoredLocationFavorite): Promise<void>;
   setFavoriteLocationss(favorites: UserFavorites): Promise<void>;
@@ -88,6 +89,10 @@ const FavoritesContextProvider: React.FC = ({children}) => {
     async removeFavoriteDeparture(id: string) {
       const favorites = await departures.removeFavorite(id);
       setFavoriteDeparturesState(favorites);
+    },
+    async setFavoriteDepartures(favorites: UserFavoriteDepartures) {
+      setFavoriteDeparturesState(favorites);
+      await departures.setFavorites(favorites);
     },
     async setDashboardFavorite(id: string, value: boolean) {
       const updatedFavorites = favoriteDepartures.map((f) =>

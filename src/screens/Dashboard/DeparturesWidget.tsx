@@ -23,8 +23,7 @@ const FavouritesWidget: React.FC = () => {
   const {location} = useGeolocationState();
   const {state, loadInitialDepartures, searchDate} = useFavoriteDepartureData();
 
-  // refresh favourite departures when user adds or removees a favourite
-  useEffect(() => loadInitialDepartures, [favoriteDepartures]);
+  useEffect(() => loadInitialDepartures(), [favoriteDepartures]);
 
   const {open: openBottomSheet} = useBottomSheet();
   async function openFrontpageFavouritesBottomSheet() {
