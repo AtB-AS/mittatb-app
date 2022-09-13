@@ -1,26 +1,24 @@
-import ThemeText from '@atb/components/text';
-import ErrorBoundary from '@atb/error-boundary';
 import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
-  Reservation,
   FareContract,
+  Reservation,
+  Timestamp,
   TravelCard,
   useTicketState,
 } from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import hexToRgba from 'hex-to-rgba';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
-import SimpleTicket from '../Ticket';
-import TicketReservation from './TicketReservation';
 import TravelCardInformation from './TravelCardInformation';
 import MessageBox from '@atb/components/message-box';
 import TravelTokenBox from '@atb/travel-token-box';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import TicketsToDisplay from '@atb/screens/Ticketing/Tickets/TicketsToDisplay';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -34,6 +32,12 @@ type Props = {
   travelCard?: TravelCard;
   didPaymentFail?: boolean;
   showTokenInfo?: boolean;
+};
+
+type TicketToDisplay = {
+  type: 'fareContract' | 'reservation';
+  createdAt: Timestamp;
+  ticket: FareContract | Reservation;
 };
 
 const TicketsScrollView: React.FC<Props> = ({
@@ -55,6 +59,38 @@ const TicketsScrollView: React.FC<Props> = ({
   const hasEnabledMobileToken = useHasEnabledMobileToken();
 
   const hasActiveTravelCard = !!travelCard;
+
+  const getFareContractsToDisplay = useCallback(() => {
+    return fareContracts
+      ? fareContracts.map((fc) => {
+          return {
+            type: 'fareContract',
+            createdAt: fc.created,
+            ticket: fc,
+          } as TicketToDisplay;
+        })
+      : [];
+  }, [fareContracts]);
+
+  const getReservationsToDisplay = useCallback(() => {
+    return reservations
+      ? reservations.map((res) => {
+          return {
+            type: 'reservation',
+            createdAt: res.created,
+            ticket: res,
+          } as TicketToDisplay;
+        })
+      : [];
+  }, [reservations]);
+
+  const getTicketsToDisplay = useCallback((): TicketToDisplay[] => {
+    return [...getFareContractsToDisplay(), ...getReservationsToDisplay()].sort(
+      (a, b) => b.createdAt.toMillis() - a.createdAt.toMillis(),
+    );
+  }, [reservations, fareContracts]);
+
+  const ticketsToDisplay = getTicketsToDisplay();
 
   return (
     <View style={styles.container}>
@@ -85,34 +121,22 @@ const TicketsScrollView: React.FC<Props> = ({
             onPressText={t(TicketsTexts.scrollView.paymentErrorButton)}
           />
         )}
-        {!fareContracts?.length && !reservations?.length && (
+        {!ticketsToDisplay.length && (
           <MessageBox
             containerStyle={styles.messageBox}
             type="info"
             message={noTicketsLabel}
           />
         )}
-        {reservations?.map((res) => (
-          <TicketReservation key={res.orderId} reservation={res} />
-        ))}
-        {fareContracts?.map((fc, index) => (
-          <ErrorBoundary
-            key={fc.orderId}
-            message={t(TicketsTexts.scrollView.errorLoadingTicket(fc.orderId))}
-          >
-            <SimpleTicket
-              hasActiveTravelCard={hasActiveTravelCard}
-              fareContract={fc}
-              now={now}
-              onPressDetails={() =>
-                navigation.navigate('TicketModal', {
-                  screen: 'TicketDetails',
-                  params: {orderId: fc.orderId},
-                })
-              }
-              testID={'ticket' + index}
-            />
-          </ErrorBoundary>
+        {ticketsToDisplay?.map((ttd, index) => (
+          <TicketsToDisplay
+            now={now}
+            navigation={navigation}
+            key={ttd.ticket.orderId}
+            ticket={ttd.ticket}
+            type={ttd.type}
+            index={index}
+          />
         ))}
       </ScrollView>
       <LinearGradient

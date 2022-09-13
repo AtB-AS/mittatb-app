@@ -124,7 +124,7 @@ const TicketsTexts = {
     },
   },
   reservation: {
-    processing: _(
+    reserving: _(
       'Prosesseres... ikke gyldig enda',
       'Processing... not yet valid',
     ),
@@ -132,17 +132,23 @@ const TicketsTexts = {
       'Betaling godkjent. Henter billett...',
       'Payment successful. Fetching ticket...',
     ),
+    rejected: _(
+      'Billetten er ikke gyldig. Betaling avvist.',
+      'Ticket is not valid. Payment rejected',
+    ),
     orderId: (orderId: string) =>
-      _(`Ordre-id ${orderId}`, `Order ID ${orderId}`),
+      _(`Ordre-id: ${orderId}`, `Order Id: ${orderId}`),
     paymentType: {
       vipps: _('Vipps', 'Vipps'),
       creditcard: _('kredittkort', 'credit card'),
     },
-    paymentStage: {
-      processing: (type: string) =>
-        _(`Betales med ${type}`, `Payment using ${type}`),
-      approved: (type: string) => _(`Betalt med ${type}`, `Paid with ${type}`),
-    },
+    orderDate: (orderDate: string) =>
+      _(`Bestillingsdato: ${orderDate}`, `Order date: ${orderDate}`),
+    paymentMethod: (paymentMethod: string) =>
+      _(
+        `Betalingsmetode: ${paymentMethod}`,
+        `Payment Method: ${paymentMethod}`,
+      ),
     goToVipps: _('Gå til Vipps for betaling', 'Go to Vipps for payment'),
   },
   scrollView: {
