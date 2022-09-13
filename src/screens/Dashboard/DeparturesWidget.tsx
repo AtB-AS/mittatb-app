@@ -1,21 +1,18 @@
-import {getFavouriteDepartures} from '@atb/api/departures';
-import {StopPlaceGroup} from '@atb/api/departures/types';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import SelectFavouritesBottomSheet from '@atb/screens/Assistant/SelectFavouritesBottomSheet';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import QuaySection from '@atb/departure-list/section-items/quay-section';
 import {useFavorites} from '@atb/favorites';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import SelectFavouritesBottomSheet from '@atb/screens/Assistant/SelectFavouritesBottomSheet';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import {useIsFocused} from '@react-navigation/native';
-
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Linking, TouchableOpacity, View} from 'react-native';
+import {useFavoriteDepartureData} from './state';
 
 const FavouritesWidget: React.FC = () => {
   const styles = useStyles();
@@ -23,55 +20,10 @@ const FavouritesWidget: React.FC = () => {
   const {new_favourites_info_url} = useRemoteConfig();
   const {favoriteDepartures, frontPageFavouriteDepartures} = useFavorites();
   const {location} = useGeolocationState();
-  const [polling, setPolling] = useState(false);
-  const [favouritesResults, setFavouritesResults] = useState<StopPlaceGroup[]>(
-    [],
-  );
-  const [searchDate, setSearchDate] = useState<string>('');
-  const isFocused = useIsFocused();
-  const {favourite_departures_poll_interval} = useRemoteConfig();
-
-  const fetchFavouriteFrontpageDepartures = async () => {
-    const data = await getFavouriteDepartures(frontPageFavouriteDepartures);
-    setFavouritesResults(data || []);
-    setSearchDate(new Date().toISOString());
-  };
-
-  // timer orchestration
-  useEffect(() => {
-    let interval: NodeJS.Timeout | undefined = undefined;
-    if (polling) {
-      fetchFavouriteFrontpageDepartures();
-      interval = setInterval(
-        fetchFavouriteFrontpageDepartures,
-        favourite_departures_poll_interval,
-      );
-    } else {
-      if (interval) {
-        clearInterval(interval);
-      }
-    }
-
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [polling]);
-
-  // do polling only when screen has focus and user has frontpage favourites.
-  useEffect(() => {
-    if (isFocused && !!frontPageFavouriteDepartures.length) {
-      setPolling(true);
-    } else {
-      setPolling(false);
-    }
-  }, [isFocused, !!frontPageFavouriteDepartures.length]);
+  const {state, loadInitialDepartures, searchDate} = useFavoriteDepartureData();
 
   // refresh favourite departures when user adds or removees a favourite
-  useEffect(() => {
-    fetchFavouriteFrontpageDepartures();
-  }, [frontPageFavouriteDepartures.length]);
+  useEffect(() => loadInitialDepartures, [frontPageFavouriteDepartures]);
 
   const {open: openBottomSheet} = useBottomSheet();
   async function openFrontpageFavouritesBottomSheet() {
@@ -89,8 +41,9 @@ const FavouritesWidget: React.FC = () => {
       >
         {t(DeparturesTexts.widget.heading)}
       </ThemeText>
+      <Button onPress={loadInitialDepartures} text="refresh" />
 
-      {!frontPageFavouriteDepartures.length && (
+      {!state.data?.length && (
         <View style={styles.noFavouritesView}>
           <ThemeText>
             {!favoriteDepartures.length
@@ -113,7 +66,7 @@ const FavouritesWidget: React.FC = () => {
         </View>
       )}
 
-      {favouritesResults.map((stopPlaceGroup) => {
+      {state.data?.map((stopPlaceGroup) => {
         const stopPlaceInfo = stopPlaceGroup.stopPlace;
         return (
           <View key={stopPlaceGroup.stopPlace.id}>
