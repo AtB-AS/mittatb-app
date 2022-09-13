@@ -12,7 +12,6 @@ type TicketReducerState = {
   isRefreshingTickets: boolean;
   errorRefreshingTickets: boolean;
   customerProfile: CustomerProfile | undefined;
-  didPaymentFail: boolean;
 };
 
 type TicketReducerAction =
@@ -29,10 +28,6 @@ type TicketReducerAction =
   | {
       type: 'UPDATE_CUSTOMER_PROFILE';
       customerProfile: CustomerProfile | undefined;
-    }
-  | {
-      type: 'UPDATE_PAYMENT_FAILED';
-      didPaymentFail: boolean;
     };
 
 type TicketReducer = (
@@ -89,20 +84,12 @@ const ticketReducer: TicketReducer = (
         customerProfile: action.customerProfile,
       };
     }
-    case 'UPDATE_PAYMENT_FAILED': {
-      return {
-        ...prevState,
-        didPaymentFail: action.didPaymentFail,
-      };
-    }
   }
 };
 
 type TicketState = {
   refreshTickets: () => void;
   fareContracts: FareContract[];
-  didPaymentFail: boolean;
-  resetPaymentStatus: () => void;
   findFareContractByOrderId: (id: string) => FareContract | undefined;
 } & Pick<
   TicketReducerState,
@@ -115,7 +102,6 @@ const initialReducerState: TicketReducerState = {
   isRefreshingTickets: false,
   errorRefreshingTickets: false,
   customerProfile: undefined,
-  didPaymentFail: false,
 };
 
 const TicketContext = createContext<TicketState | undefined>(undefined);
@@ -163,19 +149,12 @@ const TicketContextProvider: React.FC = ({children}) => {
   }, [user, abtCustomerId, enable_ticketing]);
 
   const refreshTickets = () => {};
-  const resetPaymentStatus = () => {
-    dispatch({
-      type: 'UPDATE_PAYMENT_FAILED',
-      didPaymentFail: false,
-    });
-  };
 
   return (
     <TicketContext.Provider
       value={{
         ...state,
         refreshTickets,
-        resetPaymentStatus,
         findFareContractByOrderId: (orderId) =>
           state.fareContracts.find((fc) => fc.orderId === orderId),
       }}

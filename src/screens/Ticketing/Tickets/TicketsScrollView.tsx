@@ -30,7 +30,6 @@ type Props = {
   refreshTickets: () => void;
   now: number;
   travelCard?: TravelCard;
-  didPaymentFail?: boolean;
   showTokenInfo?: boolean;
 };
 
@@ -48,14 +47,11 @@ const TicketsScrollView: React.FC<Props> = ({
   refreshTickets,
   now,
   travelCard,
-  didPaymentFail = false,
   showTokenInfo,
 }) => {
   const {theme} = useTheme();
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProp>();
-  const {t} = useTranslation();
-  const {resetPaymentStatus} = useTicketState();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
 
   const hasActiveTravelCard = !!travelCard;
@@ -112,15 +108,6 @@ const TicketsScrollView: React.FC<Props> = ({
           ) : hasActiveTravelCard ? (
             <TravelCardInformation travelCard={travelCard} />
           ) : null)}
-        {didPaymentFail && (
-          <MessageBox
-            containerStyle={styles.messageBox}
-            type="error"
-            message={t(TicketsTexts.scrollView.paymentError)}
-            onPress={resetPaymentStatus}
-            onPressText={t(TicketsTexts.scrollView.paymentErrorButton)}
-          />
-        )}
         {!ticketsToDisplay.length && (
           <MessageBox
             containerStyle={styles.messageBox}
