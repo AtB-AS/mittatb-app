@@ -50,9 +50,7 @@ const TicketsTexts = {
       'You have no valid tickets right now. Expired tickets can be found under the My profile tab.',
     ),
   },
-  expiredTicketsTab: {
-    label: _('Utløpte', 'Expired'),
-    a11yLabel: _('Utløpte billetter', 'Expired tickets'),
+  ticketHistoryTab: {
     noTickets: _(
       'Fant ingen billetthistorikk.',
       'Nothing to show here until you have purchased a ticket.',

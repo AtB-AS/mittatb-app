@@ -27,7 +27,7 @@ const ProfileTexts = {
           },
         },
         expiredTickets: {
-          label: _('Utløpte billetter', 'Expired tickets'),
+          label: _('Billetthistorikk', 'Ticket history'),
         },
         paymentOptions: {
           label: _('Betalingsmåter', 'Payment options'),

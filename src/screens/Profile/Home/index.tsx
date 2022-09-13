@@ -158,7 +158,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
               text={t(
                 ProfileTexts.sections.account.linkItems.expiredTickets.label,
               )}
-              onPress={() => navigation.navigate('ExpiredTickets')}
+              onPress={() => navigation.navigate('TicketHistory')}
               testID="expiredTicketsButton"
             />
             {authenticationType !== 'phone' && (
