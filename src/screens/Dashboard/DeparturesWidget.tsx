@@ -11,7 +11,7 @@ import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import React, {useEffect} from 'react';
-import {Linking, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
 import {useFavoriteDepartureData} from './state';
 import {NoFavouriteDeparture} from '@atb/assets/svg/color/images/';
 
@@ -66,6 +66,10 @@ const FavouritesWidget: React.FC = () => {
             )}
           </View>
         </View>
+      )}
+
+      {state.isLoading && (
+        <ActivityIndicator size="large" style={styles.activityIndicator} />
       )}
 
       {state.data?.map((stopPlaceGroup) => {
@@ -126,5 +130,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   noFavouritesUrl: {
     marginVertical: theme.spacings.xSmall,
+  },
+  activityIndicator: {
+    marginVertical: theme.spacings.medium,
   },
 }));
