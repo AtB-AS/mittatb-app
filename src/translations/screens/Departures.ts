@@ -86,10 +86,6 @@ const DeparturesTexts = {
       'Du har ingen favorittavganger. Trykk på stjernesymbolet i Avganger-visningen for å lagre en avgang du bruker ofte.',
       'You have no favorite departures. Tap a star in the Departures view to save a frequently used departure.',
     ),
-    noFrontpageFavouritesWidget: _(
-      'Velg hvilke av dine favorittavganger du vil se her med knappen under.',
-      'Choose which of your favorite departures you want displayed here with the button below.',
-    ),
     readMoreUrl: _(
       'Les mer og se flere nyttige tips',
       'Read more and find other useful tips',

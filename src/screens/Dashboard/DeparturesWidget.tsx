@@ -43,14 +43,12 @@ const FavouritesWidget: React.FC = () => {
         {t(DeparturesTexts.widget.heading)}
       </ThemeText>
 
-      {!state.data?.length && (
+      {!favoriteDepartures.length && (
         <View style={styles.noFavouritesView}>
           <NoFavouriteDeparture />
           <View style={styles.noFavouritesTextContainer}>
             <ThemeText>
-              {!favoriteDepartures.length
-                ? t(DeparturesTexts.message.noFavouritesWidget)
-                : t(DeparturesTexts.message.noFrontpageFavouritesWidget)}
+              {t(DeparturesTexts.message.noFavouritesWidget)}
             </ThemeText>
             {new_favourites_info_url && (
               <TouchableOpacity
