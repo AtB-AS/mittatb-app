@@ -9,6 +9,7 @@ import setupFirestoreListener from './firestore';
 type TicketReducerState = {
   fareContracts: FareContract[];
   reservations: Reservation[];
+  rejectedReservations: Reservation[];
   isRefreshingTickets: boolean;
   errorRefreshingTickets: boolean;
   customerProfile: CustomerProfile | undefined;
@@ -24,6 +25,10 @@ type TicketReducerAction =
   | {
       type: 'UPDATE_RESERVATIONS';
       reservations: Reservation[];
+    }
+  | {
+      type: 'UPDATE_REJECTED_RESERVATIONS';
+      rejectedReservations: Reservation[];
     }
   | {
       type: 'UPDATE_CUSTOMER_PROFILE';
@@ -78,6 +83,17 @@ const ticketReducer: TicketReducer = (
         ),
       };
     }
+    case 'UPDATE_REJECTED_RESERVATIONS': {
+      const currentFareContractOrderIds = prevState.fareContracts.map(
+        (fc) => fc.orderId,
+      );
+      return {
+        ...prevState,
+        rejectedReservations: action.rejectedReservations.filter(
+          (r) => !currentFareContractOrderIds.includes(r.orderId),
+        ),
+      };
+    }
     case 'UPDATE_CUSTOMER_PROFILE': {
       return {
         ...prevState,
@@ -93,12 +109,16 @@ type TicketState = {
   findFareContractByOrderId: (id: string) => FareContract | undefined;
 } & Pick<
   TicketReducerState,
-  'reservations' | 'isRefreshingTickets' | 'customerProfile'
+  | 'reservations'
+  | 'isRefreshingTickets'
+  | 'customerProfile'
+  | 'rejectedReservations'
 >;
 
 const initialReducerState: TicketReducerState = {
   fareContracts: [],
   reservations: [],
+  rejectedReservations: [],
   isRefreshingTickets: false,
   errorRefreshingTickets: false,
   customerProfile: undefined,
@@ -131,6 +151,14 @@ const TicketContextProvider: React.FC = ({children}) => {
                   !isAbortedPaymentStatus(r.paymentStatus) &&
                   !isOlderThanAnHour(r.created.toDate()),
               ),
+            }),
+          onError: (err) => console.error(err),
+        },
+        rejectedReservations: {
+          onSnapshot: (rejectedReservations) =>
+            dispatch({
+              type: 'UPDATE_REJECTED_RESERVATIONS',
+              rejectedReservations: rejectedReservations,
             }),
           onError: (err) => console.error(err),
         },

@@ -8,7 +8,8 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ExpiredTicketsTexts from '@atb/translations/screens/subscreens/ExpiredTickets';
 
 export const ExpiredTickets: React.FC = () => {
-  const {fareContracts, isRefreshingTickets} = useTicketState();
+  const {fareContracts, isRefreshingTickets, rejectedReservations} =
+    useTicketState();
 
   const [now, setNow] = useState<number>(Date.now());
   const expiredFareContracts = filterExpiredFareContracts(fareContracts);
@@ -23,6 +24,7 @@ export const ExpiredTickets: React.FC = () => {
       />
       <TicketsScrollView
         fareContracts={expiredFareContracts}
+        reservations={rejectedReservations}
         isRefreshingTickets={isRefreshingTickets}
         refreshTickets={() => setNow(Date.now())}
         noTicketsLabel={t(TicketsTexts.expiredTicketsTab.noTickets)}
