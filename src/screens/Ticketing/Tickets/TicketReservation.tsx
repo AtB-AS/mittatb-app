@@ -48,17 +48,16 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
     <TouchableOpacity>
       <View style={styles.ticketContainer} testID="ticketReservation">
         <View style={styles.validityContainer}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View style={styles.iconContainer}>
+          <View style={styles.validityHeader}>
+            {status === 'reserving' ? (
+              <ActivityIndicator color={theme.text.colors.primary} />
+            ) : (
               <TicketStatusSymbol status={status}></TicketStatusSymbol>
-            </View>
-            <ThemeText type="body__secondary" color="secondary">
+            )}
+            <ThemeText type="body__secondary">
               {t(TicketsTexts.reservation[status])}
             </ThemeText>
           </View>
-          {status === 'reserving' && (
-            <ActivityIndicator color={theme.text.colors.primary} />
-          )}
         </View>
         <VerifyingValidityLine status={status} />
         <View style={styles.ticketInfoContainer}>
@@ -101,7 +100,12 @@ const VerifyingValidityLine = ({status}: {status: any}) => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  iconContainer: {marginRight: theme.spacings.medium},
+  validityHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'space-between',
+  },
   detail: {
     paddingVertical: theme.spacings.xSmall,
   },
@@ -116,10 +120,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   validityContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginRight: 3,
-    padding: theme.spacings.medium,
+    padding: theme.spacings.small,
   },
   validityDashContainer: {
     marginHorizontal: theme.spacings.medium,
