@@ -1,6 +1,11 @@
 import {AxiosRequestConfig} from 'axios';
 import {build} from 'search-params';
-import {Location, UserFavoriteDepartures} from '@atb/favorites/types';
+import {
+  FavoriteDeparture,
+  Location,
+  UserFavoriteDepartures,
+  UserFavorites,
+} from '@atb/favorites/types';
 import {
   DeparturesMetadata,
   DeparturesRealtimeData,
@@ -8,7 +13,11 @@ import {
 } from '@atb/sdk';
 import {flatMap} from '@atb/utils/array';
 import client from '../client';
-import {DepartureGroupsQuery} from './departure-group';
+import {
+  DepartureFavoritesQuery,
+  DepartureGroupMetadata,
+  DepartureGroupsQuery,
+} from './departure-group';
 import {StopPlaceGroup} from './types';
 import {FavouriteAPIParam} from '../types/departures';
 
@@ -70,22 +79,36 @@ export async function getRealtimeDepartureV2(
 
 export async function getFavouriteDepartures(
   favourites: UserFavoriteDepartures,
+  query: DepartureFavoritesQuery,
   opts?: AxiosRequestConfig,
-): Promise<StopPlaceGroup[] | null> {
+): Promise<DepartureGroupMetadata | null> {
   if (!favourites || favourites.length === 0) {
     return null;
   }
 
-  const url = '/bff/v2/departures/favourites';
-  const query: FavouriteAPIParam[] = favourites.map((userFavourite) => {
-    return {
-      lineId: userFavourite.lineId,
-      lineName: userFavourite.lineName,
-      quayId: userFavourite.quayId,
-    };
+  const params = build({
+    startTime: query.startTime,
+    limitPerLine: query.limitPerLine,
   });
 
-  return await post<StopPlaceGroup[]>(url, query, {...opts});
+  const favorites: FavoriteDeparture[] = favourites.map((f) => ({
+    lineId: f.lineId,
+    quayId: f.quayId,
+    quayName: f.quayName,
+    stopId: f.stopId,
+    lineLineNumber: f.lineLineNumber,
+    lineName: f.lineName,
+    lineTransportationMode: f.lineTransportationMode,
+    lineTransportationSubMode: f.lineTransportationSubMode,
+    quayPublicCode: f.quayPublicCode,
+  }));
+
+  const url = `/bff/v2/departure-favorites?${params}`;
+  return await post<DepartureGroupMetadata>(
+    url,
+    {favorites: favorites},
+    {...opts},
+  );
 }
 
 async function post<T>(
