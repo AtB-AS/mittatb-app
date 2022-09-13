@@ -78,7 +78,7 @@ const QuaySection = React.memo(function QuaySection({
             mode={mode}
           />
         ))}
-        {hasMoreItems && (
+        {hasMoreItems && mode !== 'frontpage' && (
           <MoreItem
             onPress={() => setLimit(limit + LIMIT_SIZE)}
             text={t(NearbyTexts.results.quayResult.showMoreToggler.text)}
