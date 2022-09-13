@@ -75,7 +75,7 @@ type DepartureDataActions =
   | {
       type: 'UPDATE_DEPARTURES';
       reset?: boolean;
-      result: DepartureGroupMetadata;
+      result: DepartureGroupMetadata | null;
     }
   | {
       type: 'SET_ERROR';
@@ -97,11 +97,8 @@ const reducer: ReducerWithSideEffects<
 > = (state, action) => {
   switch (action.type) {
     case 'LOAD_INITIAL_DEPARTURES': {
-      if (!action.favoriteDepartures) return NoUpdate();
-
       // Update input data with new date as this
       // is a fresh fetch. We should fetch the latest information.
-
       const {option, date} = state.searchTime;
 
       const startTime = option === 'now' ? new Date().toISOString() : date;
@@ -129,7 +126,6 @@ const reducer: ReducerWithSideEffects<
               queryInput,
             );
 
-            if (!result) return;
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
@@ -195,9 +191,9 @@ const reducer: ReducerWithSideEffects<
         ...state,
         isLoading: false,
         data: action.reset
-          ? action.result.data
-          : (state.data ?? []).concat(action.result.data),
-        cursorInfo: action.result.metadata,
+          ? action.result?.data ?? []
+          : (state.data ?? []).concat(action.result?.data ?? []),
+        cursorInfo: action.result?.metadata,
         tick: new Date(),
       });
     }
