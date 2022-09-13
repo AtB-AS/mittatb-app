@@ -19,12 +19,12 @@ const FavouritesWidget: React.FC = () => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {new_favourites_info_url} = useRemoteConfig();
-  const {favoriteDepartures, frontPageFavouriteDepartures} = useFavorites();
+  const {favoriteDepartures} = useFavorites();
   const {location} = useGeolocationState();
   const {state, loadInitialDepartures, searchDate} = useFavoriteDepartureData();
 
   // refresh favourite departures when user adds or removees a favourite
-  useEffect(() => loadInitialDepartures, [frontPageFavouriteDepartures]);
+  useEffect(() => loadInitialDepartures, [favoriteDepartures]);
 
   const {open: openBottomSheet} = useBottomSheet();
   async function openFrontpageFavouritesBottomSheet() {

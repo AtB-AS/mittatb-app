@@ -54,6 +54,7 @@ export type FavoriteDeparture = FavoriteDepartureId & {
   lineTransportationSubMode?: TransportSubmode;
   quayName: string;
   quayPublicCode?: string;
+  visibleOnDashboard?: boolean;
 };
 
 export type FavoriteDepartureWithId = FavoriteDeparture & {

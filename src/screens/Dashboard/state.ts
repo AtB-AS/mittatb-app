@@ -257,15 +257,18 @@ export function useFavoriteDepartureData(
     lastRefreshTime: new Date(),
   });
   const isFocused = useIsFocused();
-  const {frontPageFavouriteDepartures} = useFavorites();
+  const {favoriteDepartures} = useFavorites();
+  const dashboardFavorites = favoriteDepartures.filter(
+    (f) => f.visibleOnDashboard,
+  );
 
   const loadInitialDepartures = useCallback(
     () =>
       dispatch({
         type: 'LOAD_INITIAL_DEPARTURES',
-        favoriteDepartures: frontPageFavouriteDepartures,
+        favoriteDepartures: dashboardFavorites,
       }),
-    [location?.id, frontPageFavouriteDepartures],
+    [location?.id, JSON.stringify(favoriteDepartures)],
   );
 
   useEffect(loadInitialDepartures, [location?.id]);
