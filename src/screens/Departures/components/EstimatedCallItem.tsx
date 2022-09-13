@@ -79,7 +79,7 @@ export default function EstimatedCallItem({
         accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
         accessibilityLabel={getA11yLineLabel(departure, t, language)}
       >
-        <View style={styles.estimatedCallItem}>
+        <View style={styles.estimatedCallItem} testID={testID}>
           {line && (
             <LineChip
               publicCode={line.publicCode}

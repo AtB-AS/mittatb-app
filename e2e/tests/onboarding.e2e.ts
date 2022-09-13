@@ -18,7 +18,7 @@ describe('Onboarding', () => {
   });
 
   it('should have welcome screen', async () => {
-    await expectToBeVisibleByText('Welcome to the AtB app');
+    await expectToBeVisibleByText('Welcome to the AtB app'); //Welcome to the AtB app
   });
 
   it('should show help us make app better after next', async () => {
@@ -26,8 +26,14 @@ describe('Onboarding', () => {
     await expectToBeVisibleByText('Help us make the app better');
   });
 
-  it('should assistant view after onboarding', async () => {
-    await tapById('nextButton');
+  it('should show anonymously warning after make the app better', async () => {
+    await tapById('nextButton', 1);
+    //await tap(element(by.id('nextButton')).atIndex(1));
+    await expectToBeVisibleByText('When you buy anonymously...');
+  });
+
+  it('should show the assistant view after all onboarding', async () => {
+    await tapById('acceptRestrictionsButton');
     await expectToBeVisibleByText('Travel assistant');
   });
 });

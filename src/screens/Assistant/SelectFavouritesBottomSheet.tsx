@@ -21,6 +21,7 @@ import {AnyMode} from '@atb/components/transportation-icon';
 import {LegMode, TransportSubmode} from '@entur/sdk';
 import SectionSeparator from '@atb/components/sections/section-separator';
 import MessageBox from '@atb/components/message-box';
+import {getTranslatedModeName} from '@atb/utils/transportation-names';
 
 type SelectableFavouriteDepartureData = {
   handleSwitchFlip: (favouriteId: any) => void;
@@ -31,6 +32,7 @@ type SelectableFavouriteDepartureData = {
   lineIdentifier: string;
   lineName: string | TranslatedString;
   departureStation: string;
+  departureQuay?: string;
 };
 
 const SelectableFavouriteDeparture = ({
@@ -42,12 +44,23 @@ const SelectableFavouriteDeparture = ({
   lineIdentifier,
   lineName,
   departureStation,
+  departureQuay,
 }: SelectableFavouriteDepartureData) => {
   const styles = useStyles();
   const {t} = useTranslation();
 
   return (
-    <View style={styles.selectableDeparture}>
+    <View
+      style={styles.selectableDeparture}
+      accessible={true}
+      accessibilityLabel={`${t(
+        getTranslatedModeName(lineTransportationMode),
+      )} ${lineIdentifier} ${lineName}, ${t(
+        SelectFavouriteDeparturesText.accessibleText.from,
+      )} ${departureStation} ${departureQuay && departureQuay}`}
+      accessibilityState={{checked: active}}
+      onAccessibilityTap={() => handleSwitchFlip(favouriteId)}
+    >
       <View style={styles.lineModeIcon}>
         <TransportationIcon
           mode={lineTransportationMode}
@@ -61,6 +74,7 @@ const SelectableFavouriteDeparture = ({
 
         <ThemeText type="body__secondary" style={styles.secondaryText}>
           {t(SelectFavouriteDeparturesText.departures.from)} {departureStation}
+          {departureQuay && ' ' + departureQuay}
         </ThemeText>
       </View>
 
@@ -145,6 +159,7 @@ const SelectFavouritesBottomSheet = ({
                           )
                         }
                         departureStation={departureDetails.quayName}
+                        departureQuay={departureDetails.quayPublicCode}
                         lineIdentifier={departureDetails.lineLineNumber ?? ''}
                         lineName={
                           departureDetails.lineName ??

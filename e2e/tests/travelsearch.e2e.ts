@@ -243,7 +243,7 @@ describe('Travel Search', () => {
   });
 
   // Test the pagination where a user asks for more suggestions
-  it('should load more travel suggestions', async () => {
+  xit('should load more travel suggestions', async () => {
     const departure = 'Prinsens gate';
     const arrival = 'Nidarosdomen';
 
@@ -271,7 +271,7 @@ describe('Travel Search', () => {
   });
 
   // Arrival time is the basis for sorting among the travel suggestions
-  it('travel suggestions should be sorted according to arrival time as default', async () => {
+  xit('travel suggestions should be sorted according to arrival time as default', async () => {
     const departure = 'Prinsens gate';
     const arrival = 'Melhus skysstasjon';
 
@@ -289,7 +289,7 @@ describe('Travel Search', () => {
   });
 
   // Choosing "Now", "Departure after" or "Arrival before" should be reflected in the suggestions
-  it('should be able to change time criteria for departure', async () => {
+  xit('should be able to change time criteria for departure', async () => {
     const departure = 'Prinsens gate';
     const arrival = 'Melhus skysstasjon';
     const reqDepTime = '10:00';
@@ -351,7 +351,7 @@ describe('Travel Search', () => {
   });
 
   // Check that earlier and later quays on a line is rendered correctly, when travelling only a part of the line
-  it('should show the journey as part of a complete line', async () => {
+  xit('should show the journey as part of a complete line', async () => {
     // Line 82 has 1 previous quay, 1 intermediate quay and 1 later quay
     const departure = 'Høyeggen skole';
     const arrivalSearch = 'Uglevegen, Melhus';
@@ -373,7 +373,7 @@ describe('Travel Search', () => {
   });
 
   // Check that recent journeys are listed and able to choose
-  it('should list recent journeys', async () => {
+  xit('should list recent journeys', async () => {
     const departure1 = 'Prinsens gate';
     const departure2 = 'Nidarosdomen';
     const arrival1 = 'Melhus skysstasjon';
@@ -421,7 +421,7 @@ describe('Travel Search', () => {
   });
 
   // Check that recent locations are listed and able to choose
-  it('should list recent locations', async () => {
+  xit('should list recent locations', async () => {
     const departure1 = 'Prinsens gate';
     const departure2 = 'Studentersamfundet';
     const arrival1 = 'Melhus skysstasjon';
@@ -451,7 +451,7 @@ describe('Travel Search', () => {
   });
 
   // Test the use of favourites in a travel search
-  it('should be able to use favourites in the travel search', async () => {
+  xit('should be able to use favourites in the travel search', async () => {
     const fav1 = 'Prinsens gate';
     const favName1 = 'PG';
     const fav2 = 'Melhus skysstasjon';
@@ -503,7 +503,7 @@ describe('Travel Search', () => {
   });
 
   // Tapping should reset the travel search
-  it('should be able to reset the travel search', async () => {
+  xit('should be able to reset the travel search', async () => {
     const departure = 'Prinsens gate';
     const arrival = 'Melhus skysstasjon';
 
@@ -551,7 +551,7 @@ describe('Travel Search', () => {
   });
 
   // The service disruption button should lead to a link
-  it('should show where to find service disruptions', async () => {
+  xit('should show where to find service disruptions', async () => {
     const serviceDisruptionText = 'atb.no/driftsavvik (opens in browser)';
 
     // Open information
