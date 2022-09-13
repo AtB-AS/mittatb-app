@@ -3,10 +3,10 @@ import {translation as _} from '../commons';
 const MessageBoxTexts = {
   tryAgainButton: _('Prøv på nytt', 'Try again'),
   dismiss: {
-    allyLabel: _('Avvis', 'Dismiss'),
+    allyLabel: _('Lukk', 'Close'),
     allyHint: _(
-      'Aktiver for å avvise denne meldingen',
-      'Activate to dismiss this message',
+      'Aktiver for å lukke denne meldingen',
+      'Activate to close this message',
     ),
   },
 };

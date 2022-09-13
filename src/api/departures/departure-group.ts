@@ -23,6 +23,11 @@ export type DepartureGroupsQuery = CursoredQuery<{
   limitPerLine: number;
 }>;
 
+export type DepartureFavoritesQuery = CursoredQuery<{
+  startTime: string;
+  limitPerLine: number;
+}>;
+
 export type DepartureGroupMetadata = CursoredData<StopPlaceGroup[]>;
 
 const BASE_URL = 'bff/v1/departures-grouped';

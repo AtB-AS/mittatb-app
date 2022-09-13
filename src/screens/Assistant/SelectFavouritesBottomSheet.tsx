@@ -24,7 +24,7 @@ import MessageBox from '@atb/components/message-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 
 type SelectableFavouriteDepartureData = {
-  handleSwitchFlip: (favouriteId: any) => void;
+  handleSwitchFlip: (favouriteId: string, active: boolean) => void;
   favouriteId: string;
   active: boolean;
   lineTransportationMode: AnyMode;
@@ -59,7 +59,7 @@ const SelectableFavouriteDeparture = ({
         SelectFavouriteDeparturesText.accessibleText.from,
       )} ${departureStation} ${departureQuay && departureQuay}`}
       accessibilityState={{checked: active}}
-      onAccessibilityTap={() => handleSwitchFlip(favouriteId)}
+      onAccessibilityTap={() => handleSwitchFlip(favouriteId, !active)}
     >
       <View style={styles.lineModeIcon}>
         <TransportationIcon
@@ -82,7 +82,7 @@ const SelectableFavouriteDeparture = ({
         <FixedSwitch
           accessibilityHint={t(SelectFavouriteDeparturesText.switch.a11yhint)}
           value={active}
-          onChange={() => handleSwitchFlip(favouriteId)}
+          onChange={() => handleSwitchFlip(favouriteId, !active)}
           style={[
             styles.toggle,
             Platform.OS === 'android' ? styles.androidToggle : styles.iosToggle,
@@ -102,29 +102,9 @@ const SelectFavouritesBottomSheet = ({
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {
-    favoriteDepartures,
-    frontPageFavouriteDepartures,
-    addFrontPageFavouriteDeparture,
-    removeFrontPageFavouriteDeparture,
-  } = useFavorites();
+  const {favoriteDepartures, setDashboardFavorite} = useFavorites();
   const favouriteItems = favoriteDepartures ?? [];
-  const frontpageFavouriteItems = frontPageFavouriteDepartures ?? [];
-
-  const handleSwitchFlip = (favouriteId: string) => {
-    const favouriteInFrontpageFavourites = frontpageFavouriteItems.find(
-      (item) => item.id === favouriteId,
-    );
-
-    if (favouriteInFrontpageFavourites) {
-      removeFrontPageFavouriteDeparture(favouriteInFrontpageFavourites);
-    } else {
-      const favourite = favoriteDepartures.find(
-        (departure) => departure.id === favouriteId,
-      );
-      if (favourite) addFrontPageFavouriteDeparture(favourite);
-    }
-  };
+  const dashboardFavorites = favouriteItems.filter((f) => f.visibleOnDashboard);
 
   return (
     <BottomSheetContainer>
@@ -147,29 +127,25 @@ const SelectFavouritesBottomSheet = ({
 
             <View>
               {favouriteItems &&
-                favouriteItems.map((departureDetails, index) => {
+                favouriteItems.map((favorite, index) => {
                   return (
-                    <View key={departureDetails.id}>
+                    <View key={favorite.id}>
                       <SelectableFavouriteDeparture
-                        handleSwitchFlip={handleSwitchFlip}
-                        favouriteId={departureDetails.id}
-                        active={
-                          !!frontPageFavouriteDepartures.find(
-                            (departure) => departure.id === departureDetails.id,
-                          )
-                        }
-                        departureStation={departureDetails.quayName}
-                        departureQuay={departureDetails.quayPublicCode}
-                        lineIdentifier={departureDetails.lineLineNumber ?? ''}
+                        handleSwitchFlip={setDashboardFavorite}
+                        favouriteId={favorite.id}
+                        active={!!favorite.visibleOnDashboard}
+                        departureStation={favorite.quayName}
+                        departureQuay={favorite.quayPublicCode}
+                        lineIdentifier={favorite.lineLineNumber ?? ''}
                         lineName={
-                          departureDetails.lineName ??
+                          favorite.lineName ??
                           t(
                             SelectFavouriteDeparturesText.departures
                               .allVariations,
                           )
                         }
                         lineTransportationMode={
-                          departureDetails.lineTransportationMode ?? LegMode.BUS
+                          favorite.lineTransportationMode ?? LegMode.BUS
                         }
                       />
                       {favouriteItems.length - 1 !== index && (
@@ -251,7 +227,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     iosToggle: {
       marginLeft: theme.spacings.xSmall,
-      transform: [{scale: 0.7 * scale}],
+      transform: [{scale: scale}],
     },
   };
 });

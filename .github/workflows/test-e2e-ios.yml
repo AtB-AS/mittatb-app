@@ -22,7 +22,7 @@ jobs:
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
-          use-build-cache: 'false'
+          use-build-cache: 'true'
           app-environment: 'staging'
           app-org: 'atb'
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
@@ -39,6 +39,8 @@ jobs:
       - name: Install Pods
         if: steps.detox-app-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane ios pods
+        env:
+          GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
       - name: Install Detox CLI
         run: npm install -g detox-cli
       - name: Install Applesimutils
