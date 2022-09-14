@@ -16,7 +16,7 @@ const LocationSearchRoot = ({route}: LocationSearchRootProps) => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen
-        name="LocationSearch"
+        name="LocationSearchMain"
         component={LocationSearch}
         initialParams={route.params}
       />

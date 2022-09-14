@@ -25,7 +25,7 @@ export type SelectableLocationData =
 // Routing
 
 export type LocationSearchStackParams = {
-  LocationSearch: LocationSearchRouteParams;
+  LocationSearchMain: LocationSearchRouteParams;
   MapSelection: MapSelectionRouteParams;
 };
 

@@ -31,7 +31,7 @@ import {
 import useDebounce from './useDebounce';
 import {filterCurrentLocation, filterPreviousLocations} from './utils';
 
-export type Props = LocationSearchScreenProps<'LocationSearch'>;
+export type Props = LocationSearchScreenProps<'LocationSearchMain'>;
 
 export type RouteParams = {
   callerRouteName: string;
