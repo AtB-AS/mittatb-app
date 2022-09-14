@@ -11,7 +11,7 @@ import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import React, {useEffect} from 'react';
-import {Linking, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
 import {useFavoriteDepartureData} from './state';
 import {NoFavouriteDeparture} from '@atb/assets/svg/color/images/';
 
@@ -23,8 +23,7 @@ const FavouritesWidget: React.FC = () => {
   const {location} = useGeolocationState();
   const {state, loadInitialDepartures, searchDate} = useFavoriteDepartureData();
 
-  // refresh favourite departures when user adds or removees a favourite
-  useEffect(() => loadInitialDepartures, [favoriteDepartures]);
+  useEffect(() => loadInitialDepartures(), [favoriteDepartures]);
 
   const {open: openBottomSheet} = useBottomSheet();
   async function openFrontpageFavouritesBottomSheet() {
@@ -65,6 +64,10 @@ const FavouritesWidget: React.FC = () => {
             )}
           </View>
         </View>
+      )}
+
+      {state.isLoading && (
+        <ActivityIndicator size="large" style={styles.activityIndicator} />
       )}
 
       {state.data?.map((stopPlaceGroup) => {
@@ -125,5 +128,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   noFavouritesUrl: {
     marginVertical: theme.spacings.xSmall,
+  },
+  activityIndicator: {
+    marginVertical: theme.spacings.medium,
   },
 }));

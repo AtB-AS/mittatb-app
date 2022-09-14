@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Platform, ScrollView, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
@@ -102,9 +102,22 @@ const SelectFavouritesBottomSheet = ({
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {favoriteDepartures, setDashboardFavorite} = useFavorites();
+  const {favoriteDepartures, setFavoriteDepartures} = useFavorites();
   const favouriteItems = favoriteDepartures ?? [];
-  const dashboardFavorites = favouriteItems.filter((f) => f.visibleOnDashboard);
+  const [updatedFavorites, setUpdatedFavorites] = useState(favoriteDepartures);
+
+  const handleSwitchFlip = (id: string, active: boolean) => {
+    setUpdatedFavorites(
+      updatedFavorites.map((f) =>
+        f.id == id ? {...f, visibleOnDashboard: active} : f,
+      ),
+    );
+  };
+
+  const saveAndExit = () => {
+    setFavoriteDepartures(updatedFavorites);
+    close();
+  };
 
   return (
     <BottomSheetContainer>
@@ -113,7 +126,7 @@ const SelectFavouritesBottomSheet = ({
         leftButton={{
           type: 'cancel',
           onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.close.text),
+          text: t(ScreenHeaderTexts.headerButton.cancel.text),
         }}
         color="background_1"
       />
@@ -126,12 +139,12 @@ const SelectFavouritesBottomSheet = ({
             </ThemeText>
 
             <View>
-              {favouriteItems &&
-                favouriteItems.map((favorite, index) => {
+              {updatedFavorites &&
+                updatedFavorites.map((favorite, index) => {
                   return (
                     <View key={favorite.id}>
                       <SelectableFavouriteDeparture
-                        handleSwitchFlip={setDashboardFavorite}
+                        handleSwitchFlip={handleSwitchFlip}
                         favouriteId={favorite.id}
                         active={!!favorite.visibleOnDashboard}
                         departureStation={favorite.quayName}
@@ -171,7 +184,7 @@ const SelectFavouritesBottomSheet = ({
           accessibilityHint={t(
             SelectFavouriteDeparturesText.confirm_button.a11yhint,
           )}
-          onPress={close}
+          onPress={saveAndExit}
           disabled={false}
           icon={Confirm}
           iconPosition="right"
