@@ -1,6 +1,6 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import {TicketTexts, useTranslation} from '@atb/translations';
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import React from 'react';
 import {getReferenceDataName} from '@atb/reference-data/utils';
@@ -13,7 +13,8 @@ export type InspectionSymbolProps = {
   preassignedFareProduct?: PreassignedFareProduct;
   fromTariffZone?: TariffZone;
   toTariffZone?: TariffZone;
-  isInspectable?: boolean;
+  isInspectable: boolean;
+  isLoading?: boolean;
 };
 
 const InspectionSymbol = ({
@@ -21,12 +22,17 @@ const InspectionSymbol = ({
   fromTariffZone,
   toTariffZone,
   isInspectable,
+  isLoading,
 }: InspectionSymbolProps) => {
   const styles = useStyles();
   const {theme} = useTheme();
   const themeColor = isInspectable
     ? theme.static.status['valid']
     : theme.static.status['warning'];
+
+  if (isLoading) {
+    return <ActivityIndicator size="large" />;
+  }
 
   return (
     <View

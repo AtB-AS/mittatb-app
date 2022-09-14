@@ -13,23 +13,22 @@ import {
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {secondsToDuration} from '@atb/utils/date';
 import {TicketInfoDetailsProps} from './TicketInfo';
-import LoadingSymbol from './Component/LoadingSymbol';
 import * as Sections from '@atb/components/sections';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import InspectionSymbol from '@atb/screens/Ticketing/Ticket/Component/InspectionSymbol';
 
-export type CompactTicketInfoProps = TicketInfoDetailsProps & {
+type CompactTicketInfoProps = TicketInfoDetailsProps & {
   onPressDetails?: () => void;
 };
 
-export type TicketInfoTextsProps = {
+type TicketInfoTextsProps = {
   productName?: string;
   tariffZoneSummary?: string;
   timeUntilExpire?: string;
   accessibilityLabel?: string;
 };
 
-export type CompactTicketInfoTexts = CompactTicketInfoProps &
+export type CompactTicketInfoTextsProps = CompactTicketInfoProps &
   TicketInfoTextsProps;
 
 export const CompactTicketInfo = (props: CompactTicketInfoProps) => {
@@ -58,8 +57,7 @@ export const CompactTicketInfo = (props: CompactTicketInfoProps) => {
         <View style={styles.container}>
           <View style={styles.ticketDetails}>
             <CompactTicketInfoTexts {...ticketInfoTextsProps} />
-            {isLoading && <LoadingSymbol />}
-            {isValid && !isLoading && <InspectionSymbol {...props} />}
+            {isValid && <InspectionSymbol {...props} isLoading={isLoading} />}
           </View>
         </View>
       </Sections.GenericClickableItem>
@@ -67,16 +65,15 @@ export const CompactTicketInfo = (props: CompactTicketInfoProps) => {
   );
 };
 
-const CompactTicketInfoTexts = (props: CompactTicketInfoTexts) => {
+const CompactTicketInfoTexts = (props: CompactTicketInfoTextsProps) => {
   const {
     userProfilesWithCount,
     omitUserProfileCount,
     productName,
     tariffZoneSummary,
     timeUntilExpire,
-    isInspectable,
   } = props;
-  const {t, language} = useTranslation();
+  const {language} = useTranslation();
   const styles = useStyles();
 
   return (
