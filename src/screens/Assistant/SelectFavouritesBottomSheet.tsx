@@ -58,8 +58,11 @@ const SelectableFavouriteDeparture = ({
       )} ${lineIdentifier} ${lineName}, ${t(
         SelectFavouriteDeparturesText.accessibleText.from,
       )} ${departureStation} ${departureQuay && departureQuay}`}
+      accessibilityRole="switch"
+      accessibilityActions={[{name: 'activate'}]}
+      onAccessibilityAction={() => handleSwitchFlip(favouriteId, !active)}
+      accessibilityHint={t(SelectFavouriteDeparturesText.switch.a11yhint)}
       accessibilityState={{checked: active}}
-      onAccessibilityTap={() => handleSwitchFlip(favouriteId, !active)}
     >
       <View style={styles.lineModeIcon}>
         <TransportationIcon
@@ -80,7 +83,7 @@ const SelectableFavouriteDeparture = ({
 
       <View>
         <FixedSwitch
-          accessibilityHint={t(SelectFavouriteDeparturesText.switch.a11yhint)}
+          importantForAccessibility="no"
           value={active}
           onChange={() => handleSwitchFlip(favouriteId, !active)}
           style={[

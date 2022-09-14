@@ -32,6 +32,8 @@ const FavouritesWidget: React.FC = () => {
     });
   }
 
+  const openAppInfoUrl = () => Linking.openURL(new_favourites_info_url);
+
   return (
     <View style={styles.container}>
       <ThemeText
@@ -43,7 +45,18 @@ const FavouritesWidget: React.FC = () => {
       </ThemeText>
 
       {!favoriteDepartures.length && (
-        <View style={styles.noFavouritesView}>
+        <View
+          style={styles.noFavouritesView}
+          accessible={true}
+          accessibilityRole="link"
+          accessibilityActions={[{name: 'activate'}]}
+          onAccessibilityAction={openAppInfoUrl}
+          accessibilityLabel={
+            t(DeparturesTexts.message.noFavouritesWidget) +
+            ' ' +
+            t(DeparturesTexts.message.readMoreUrl)
+          }
+        >
           <NoFavouriteDeparture />
           <View style={styles.noFavouritesTextContainer}>
             <ThemeText>
@@ -51,7 +64,8 @@ const FavouritesWidget: React.FC = () => {
             </ThemeText>
             {new_favourites_info_url && (
               <TouchableOpacity
-                onPress={() => Linking.openURL(new_favourites_info_url)}
+                onPress={openAppInfoUrl}
+                importantForAccessibility={'no'}
               >
                 <ThemeText
                   color="background_0"

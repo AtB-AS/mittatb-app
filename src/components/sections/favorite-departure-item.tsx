@@ -31,12 +31,15 @@ export type FavoriteDepartureItemProps = SectionItem<BaseProps | WithOnPress>;
 export default function FavoriteDepartureItem(
   props: FavoriteDepartureItemProps,
 ) {
+  const {t} = useTranslation();
   if (!withOnPress(props)) {
     return <FavoriteItemContent {...props} />;
   }
   const favorite = props.favorite;
   const a11yLabel = favorite.quayPublicCode
-    ? `${favorite.lineLineNumber} ${favorite.lineName}, ${favorite.quayName} ${favorite.quayPublicCode}`
+    ? `${favorite.lineLineNumber} ${
+        favorite.lineName ?? t(SectionTexts.favoriteDeparture.allVariations)
+      }, ${favorite.quayName} ${favorite.quayPublicCode}`
     : `${favorite.lineLineNumber} ${favorite.lineName}, ${favorite.quayName}`;
 
   return (
@@ -73,7 +76,8 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
       </View>
       <View style={contentContainer}>
         <ThemeText>
-          {favorite.lineLineNumber} {favorite.lineName}
+          {favorite.lineLineNumber}{' '}
+          {favorite.lineName ?? t(SectionTexts.favoriteDeparture.allVariations)}
         </ThemeText>
         <ThemeText type="body__secondary" color="secondary">
           {t(SectionTexts.favoriteDeparture.from)} {favorite.quayName}{' '}
