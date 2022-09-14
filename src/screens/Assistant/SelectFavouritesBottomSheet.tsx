@@ -114,7 +114,7 @@ const SelectFavouritesBottomSheet = ({
     );
   };
 
-  const saveAndExit = async () => {
+  const saveAndExit = () => {
     setFavoriteDepartures(updatedFavorites);
     close();
   };
