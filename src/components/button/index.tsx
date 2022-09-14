@@ -60,22 +60,23 @@ export type ButtonProps = {
 
 const DISABLED_OPACITY = 0.2;
 
-const Button: React.FC<ButtonProps> = ({
-  onPress,
-  interactiveColor = 'interactive_0',
-  mode = 'primary',
-  type = 'block',
-  icon: Icon,
-  iconPosition = 'left',
-  text,
-  disabled,
-  active,
-  style,
-  viewContainerStyle,
-  textContainerStyle,
-  textStyle,
-  ...props
-}) => {
+const Button = React.forwardRef<any, ButtonProps>((props, ref) => {
+  const {
+    onPress,
+    interactiveColor = 'interactive_0',
+    mode = 'primary',
+    type = 'block',
+    icon: Icon,
+    iconPosition = 'left',
+    text,
+    disabled,
+    active,
+    style,
+    viewContainerStyle,
+    textContainerStyle,
+    textStyle,
+    ...otherProps
+  } = props;
   const modeData = DefaultModeStyles[mode];
   const themeColor = interactiveColor;
   const css = useButtonStyle();
@@ -143,7 +144,8 @@ const Button: React.FC<ButtonProps> = ({
         disabled={disabled}
         accessibilityRole="button"
         accessibilityState={{disabled: !!disabled}}
-        {...props}
+        ref={ref}
+        {...otherProps}
       >
         {Icon && iconPosition === 'left' && (
           <View style={iconContainer}>
@@ -170,7 +172,7 @@ const Button: React.FC<ButtonProps> = ({
       </TouchableOpacity>
     </Animated.View>
   );
-};
+});
 export default Button;
 
 const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({

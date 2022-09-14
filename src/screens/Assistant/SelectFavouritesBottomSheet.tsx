@@ -133,6 +133,7 @@ const SelectFavouritesBottomSheet = ({
           text: t(ScreenHeaderTexts.headerButton.cancel.text),
         }}
         color="background_1"
+        setFocusOnLoad={true}
       />
 
       <ScrollView style={styles.flatListArea}>
