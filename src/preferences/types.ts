@@ -1,4 +1,3 @@
-import {PaymentType} from '@atb/tickets';
 import {ColorSchemeName} from 'react-native';
 import {appLanguages} from '../translations';
 export const preference_screenAlternatives = [
@@ -33,6 +32,7 @@ export type UserPreferences = {
   tripSearchPreferences?: TripSearchPreferences;
   hideTravellerDescriptions?: boolean;
   newFrontPage?: boolean;
+  enableMapTab?: boolean;
 };
 
 export type PreferenceItem = keyof UserPreferences;

@@ -42,6 +42,7 @@ import SelectFavouritesBottomSheet from '@atb/screens/Assistant/SelectFavourites
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import useIsLoading from '@atb/utils/use-is-loading';
 import ActivityIndicatorOverlay from '@atb/components/activity-indicator-overlay';
+import {useMapTab} from '@atb/components/map/use-map-tab';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -86,6 +87,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
     setPreference,
     preferences: {newDepartures, newFrontPage},
   } = usePreferences();
+  const showMapTab = useMapTab();
 
   function copyInstallId() {
     if (config?.installId) setClipboard(config.installId);
@@ -429,6 +431,15 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                   'AtB-Beta-Frontpage': newFrontPage ? 'enabled' : 'disabled',
                 });
                 setPreference({newFrontPage});
+              }}
+            />
+            <Sections.ActionItem
+              mode="toggle"
+              text={t(ProfileTexts.sections.newFeatures.map)}
+              checked={showMapTab}
+              testID="enableMapTabToggle"
+              onPress={(enableMapTab) => {
+                setPreference({enableMapTab});
               }}
             />
             <Sections.LinkItem

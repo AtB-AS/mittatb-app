@@ -30,6 +30,7 @@ import DeparturesScreen from '@atb/screens/Departures';
 import {TicketTabsNavigatorParams} from '@atb/screens/Ticketing/Tickets';
 import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/screens/MobileTokenOnboarding/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useMapTab} from '@atb/components/map/use-map-tab';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -52,7 +53,7 @@ const NavigationRoot = () => {
   const {t} = useTranslation();
   const {startScreen, newDepartures, newFrontPage} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
-  const {enable_map_tab} = useRemoteConfig();
+  const showMapTab = useMapTab();
   useGoToMobileTokenOnboardingWhenNecessary();
 
   return (
@@ -79,7 +80,7 @@ const NavigationRoot = () => {
           'assistantTab',
         )}
       />
-      {enable_map_tab && (
+      {showMapTab && (
         <Tab.Screen
           name="MapScreen"
           component={MapStack}
