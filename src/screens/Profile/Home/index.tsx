@@ -42,6 +42,7 @@ import SelectFavouritesBottomSheet from '@atb/screens/Assistant/SelectFavourites
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import useIsLoading from '@atb/utils/use-is-loading';
 import ActivityIndicatorOverlay from '@atb/components/activity-indicator-overlay';
+import {useNewFrontpage} from '@atb/screens/Dashboard/use-new-frontpage';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -84,8 +85,10 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
   const {
     setPreference,
-    preferences: {newDepartures, newFrontPage},
+    preferences: {newDepartures},
   } = usePreferences();
+
+  const shouldUseNewFrontPage = useNewFrontpage();
 
   function copyInstallId() {
     if (config?.installId) setClipboard(config.installId);
@@ -419,7 +422,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
             <Sections.ActionItem
               mode="toggle"
               text={t(ProfileTexts.sections.newFeatures.frontPage)}
-              checked={newFrontPage}
+              checked={shouldUseNewFrontPage}
               testID="newFrontpageToggle"
               onPress={(newFrontPage) => {
                 analytics().logEvent('toggle_beta_frontPage', {

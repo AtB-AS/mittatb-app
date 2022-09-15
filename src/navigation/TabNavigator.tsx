@@ -27,6 +27,7 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import DeparturesScreen from '@atb/screens/Departures';
 import {TicketTabsNavigatorParams} from '@atb/screens/Ticketing/Tickets';
 import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/screens/MobileTokenOnboarding/utils';
+import {useNewFrontpage} from '@atb/screens/Dashboard/use-new-frontpage';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -46,8 +47,9 @@ const Tab = createBottomTabNavigator<TabNavigatorParams>();
 const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const {startScreen, newDepartures, newFrontPage} = usePreferenceItems();
+  const {startScreen, newDepartures} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
+  const shouldUseNewFrontPage = useNewFrontpage();
 
   useGoToMobileTokenOnboardingWhenNecessary();
 
@@ -66,7 +68,7 @@ const NavigationRoot = () => {
     >
       <Tab.Screen
         name="Assistant"
-        component={newFrontPage ? Dashboard : Assistant}
+        component={shouldUseNewFrontPage ? Dashboard : Assistant}
         options={tabSettings(
           t(dictionary.navigation.assistant),
           t(dictionary.navigation.assistant_a11y),
