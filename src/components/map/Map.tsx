@@ -111,54 +111,53 @@ const Map = ({
   const controlStyles = useControlPositionsStyle();
   return (
     <View style={styles.container}>
-      <View>
-        {shouldShowSearchBar && (
-          <LocationBar
-            location={selectedLocation}
-            onSelect={onSelect}
-            isSearching={!!regionEvent?.isMoving || isSearching}
-            error={error}
-          />
-        )}
-      </View>
-
-      <MapboxGL.MapView
-        ref={mapViewRef}
-        style={{
-          flex: 1,
-        }}
-        onRegionDidChange={(region) => {
-          setRegionEvent({isMoving: false, region});
-        }}
-        onRegionWillChange={() =>
-          setRegionEvent({isMoving: true, region: regionEvent?.region})
-        }
-        onPress={flyToFeature}
-        {...MapViewConfig}
-      >
-        <MapboxGL.Camera
-          ref={mapCameraRef}
-          zoomLevel={coordinates.zoomLevel}
-          centerCoordinate={[coordinates.longitude, coordinates.latitude]}
-          {...MapCameraConfig}
+      {shouldShowSearchBar && (
+        <LocationBar
+          location={selectedLocation}
+          onSelect={onSelect}
+          isSearching={!!regionEvent?.isMoving || isSearching}
+          error={error}
         />
-        <MapboxGL.UserLocation showsUserHeadingIndicator />
-      </MapboxGL.MapView>
-
-      <View style={styles.pinContainer}>
-        <TouchableOpacity onPress={onSelect} style={styles.pin}>
-          <SelectionPin
-            isMoving={!!regionEvent?.isMoving}
-            mode={getPinMode(
-              !!regionEvent?.isMoving || isSearching,
-              !!location,
-            )}
+      )}
+      <View style={{flex: 1}}>
+        <MapboxGL.MapView
+          ref={mapViewRef}
+          style={{
+            flex: 1,
+          }}
+          onRegionDidChange={(region) => {
+            setRegionEvent({isMoving: false, region});
+          }}
+          onRegionWillChange={() =>
+            setRegionEvent({isMoving: true, region: regionEvent?.region})
+          }
+          onPress={flyToFeature}
+          {...MapViewConfig}
+        >
+          <MapboxGL.Camera
+            ref={mapCameraRef}
+            zoomLevel={coordinates.zoomLevel}
+            centerCoordinate={[coordinates.longitude, coordinates.latitude]}
+            {...MapCameraConfig}
           />
-        </TouchableOpacity>
-      </View>
-      <View style={controlStyles.controlsContainer}>
-        <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
-        <MapControls zoomIn={zoomIn} zoomOut={zoomOut} />
+          <MapboxGL.UserLocation showsUserHeadingIndicator />
+        </MapboxGL.MapView>
+
+        <View style={styles.pinContainer}>
+          <TouchableOpacity onPress={onSelect} style={styles.pin}>
+            <SelectionPin
+              isMoving={!!regionEvent?.isMoving}
+              mode={getPinMode(
+                !!regionEvent?.isMoving || isSearching,
+                !!location,
+              )}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={controlStyles.controlsContainer}>
+          <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
+          <MapControls zoomIn={zoomIn} zoomOut={zoomOut} />
+        </View>
       </View>
     </View>
   );
@@ -174,10 +173,14 @@ const useMapStyles = StyleSheet.createThemeHook(() => ({
   container: {flex: 1},
   pinContainer: {
     position: 'absolute',
-    top: '50%',
-    right: '50%',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  pin: {position: 'absolute', top: 40, right: -20, ...shadows},
+  pin: {position: 'absolute', ...shadows},
 }));
 
 export default Map;
