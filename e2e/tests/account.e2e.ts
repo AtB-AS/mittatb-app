@@ -181,11 +181,11 @@ xdescribe('Account', () => {
     }
   });
 
-  it('should have expired tickets', async () => {
+  it('should have elements in ticket history', async () => {
     if (isLoggedIn) {
       await goToTab('profile');
       await scroll('profileHomeScrollView', 'top');
-      await tapById('expiredTicketsButton');
+      await tapById('ticketHistoryButton');
 
       // Verify
       await expectToBeVisibleById('ticket0');

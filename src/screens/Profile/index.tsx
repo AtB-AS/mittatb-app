@@ -6,7 +6,7 @@ import SelectTravelToken from './TravelToken/SelectTravelTokenScreen';
 import FavoriteDepartures from './FavoriteDepartures';
 import FavoriteList from './FavoriteList';
 import ProfileHome from './Home';
-import {ExpiredTickets} from './ExpiredTickets';
+import {TicketHistory} from './TicketHistory';
 import Language from './Language';
 import Enrollment from './Enrollment';
 import SelectStartScreen from './SelectStartScreen';
@@ -22,7 +22,7 @@ import PaymentOptions from './PaymentOptions';
 export type ProfileStackParams = {
   ProfileHome: undefined;
   PaymentOptions: undefined;
-  ExpiredTickets: undefined;
+  TicketHistory: undefined;
   DeleteProfile: undefined;
   FavoriteList: undefined;
   FavoriteDepartures: undefined;
@@ -53,7 +53,7 @@ export default function ProfileScreen() {
       }}
     >
       <Stack.Screen name="ProfileHome" component={ProfileHome} />
-      <Stack.Screen name="ExpiredTickets" component={ExpiredTickets} />
+      <Stack.Screen name="TicketHistory" component={TicketHistory} />
       <Stack.Screen name="PaymentOptions" component={PaymentOptions} />
       <Stack.Screen name="DeleteProfile" component={DeleteProfile} />
       <Stack.Screen name="FavoriteList" component={FavoriteList} />
