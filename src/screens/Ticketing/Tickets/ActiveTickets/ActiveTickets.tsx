@@ -31,7 +31,7 @@ export const ActiveTickets = () => {
         refreshTickets={refreshTickets}
         noTicketsLabel={t(
           hasAnyFareContractsOnAccount
-            ? TicketsTexts.activeTicketsTab.noTicketsExpiredHelpText
+            ? TicketsTexts.activeTicketsTab.noTicketsHistoryHelpText
             : TicketsTexts.activeTicketsTab.noTickets,
         )}
         now={now}

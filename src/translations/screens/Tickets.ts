@@ -45,9 +45,9 @@ const TicketsTexts = {
       'Du har ingen aktive billetter.',
       'You have no active tickets.',
     ),
-    noTicketsExpiredHelpText: _(
-      'Du har ingen aktive billetter. Utløpte billetter finner du under Min profil-fanen.',
-      'You have no valid tickets right now. Expired tickets can be found under the My profile tab.',
+    noTicketsHistoryHelpText: _(
+      'Du har ingen aktive billetter. Billetthistorikk finner du under Min profil-fanen.',
+      'You have no valid tickets right now. Ticket history can be found under the My profile tab.',
     ),
   },
   ticketHistoryTab: {

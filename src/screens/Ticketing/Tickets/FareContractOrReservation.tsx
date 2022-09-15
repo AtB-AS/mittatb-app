@@ -5,45 +5,40 @@ import {TicketsTexts, useTranslation} from '@atb/translations';
 import SimpleTicket from '@atb/screens/Ticketing/Ticket';
 import ErrorBoundary from '@atb/error-boundary';
 
-export default function TicketsToDisplay({
-  type,
-  ticket,
-  navigation,
+export default function FareContractOrReservation({
+  fcOrReservation,
+  onPressFareContract,
   now,
   index,
 }: {
-  type: 'fareContract' | 'reservation';
-  ticket: FareContract | Reservation;
-  navigation: any;
+  fcOrReservation: FareContract | Reservation;
+  onPressFareContract: () => void;
   now: number;
   index: number;
 }) {
   const {t} = useTranslation();
   const hasActiveTravelCard = false;
 
-  if (type === 'reservation') {
+  if ('transactionId' in fcOrReservation) {
     return (
       <TicketReservation
-        key={ticket.orderId}
-        reservation={ticket as Reservation}
+        key={fcOrReservation.orderId}
+        reservation={fcOrReservation}
       />
     );
   } else {
     return (
       <ErrorBoundary
-        key={ticket.orderId}
-        message={t(TicketsTexts.scrollView.errorLoadingTicket(ticket.orderId))}
+        key={fcOrReservation.orderId}
+        message={t(
+          TicketsTexts.scrollView.errorLoadingTicket(fcOrReservation.orderId),
+        )}
       >
         <SimpleTicket
           hasActiveTravelCard={hasActiveTravelCard}
-          fareContract={ticket as FareContract}
+          fareContract={fcOrReservation}
           now={now}
-          onPressDetails={() =>
-            navigation.navigate('TicketModal', {
-              screen: 'TicketDetails',
-              params: {orderId: ticket.orderId},
-            })
-          }
+          onPressDetails={onPressFareContract}
           testID={'ticket' + index}
         />
       </ErrorBoundary>

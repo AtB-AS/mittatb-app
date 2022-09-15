@@ -10,7 +10,7 @@ import {
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import hexToRgba from 'hex-to-rgba';
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
@@ -18,7 +18,7 @@ import TravelCardInformation from './TravelCardInformation';
 import MessageBox from '@atb/components/message-box';
 import TravelTokenBox from '@atb/travel-token-box';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
-import TicketsToDisplay from '@atb/screens/Ticketing/Tickets/TicketsToDisplay';
+import FareContractOrReservation from '@atb/screens/Ticketing/Tickets/FareContractOrReservation';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -31,12 +31,6 @@ type Props = {
   now: number;
   travelCard?: TravelCard;
   showTokenInfo?: boolean;
-};
-
-type TicketToDisplay = {
-  type: 'fareContract' | 'reservation';
-  createdAt: Timestamp;
-  ticket: FareContract | Reservation;
 };
 
 const TicketsScrollView: React.FC<Props> = ({
@@ -53,40 +47,13 @@ const TicketsScrollView: React.FC<Props> = ({
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProp>();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
-
   const hasActiveTravelCard = !!travelCard;
 
-  const getFareContractsToDisplay = useCallback(() => {
-    return fareContracts
-      ? fareContracts.map((fc) => {
-          return {
-            type: 'fareContract',
-            createdAt: fc.created,
-            ticket: fc,
-          } as TicketToDisplay;
-        })
-      : [];
-  }, [fareContracts]);
-
-  const getReservationsToDisplay = useCallback(() => {
-    return reservations
-      ? reservations.map((res) => {
-          return {
-            type: 'reservation',
-            createdAt: res.created,
-            ticket: res,
-          } as TicketToDisplay;
-        })
-      : [];
-  }, [reservations]);
-
-  const getTicketsToDisplay = useCallback((): TicketToDisplay[] => {
-    return [...getFareContractsToDisplay(), ...getReservationsToDisplay()].sort(
-      (a, b) => b.createdAt.toMillis() - a.createdAt.toMillis(),
+  const fareContractsAndReservationsSorted = useMemo(() => {
+    return [...(fareContracts || []), ...(reservations || [])].sort(
+      (a, b) => b.created.toMillis() - a.created.toMillis(),
     );
   }, [reservations, fareContracts]);
-
-  const ticketsToDisplay = getTicketsToDisplay();
 
   return (
     <View style={styles.container}>
@@ -108,20 +75,24 @@ const TicketsScrollView: React.FC<Props> = ({
           ) : hasActiveTravelCard ? (
             <TravelCardInformation travelCard={travelCard} />
           ) : null)}
-        {!ticketsToDisplay.length && (
+        {!fareContractsAndReservationsSorted.length && (
           <MessageBox
             containerStyle={styles.messageBox}
             type="info"
             message={noTicketsLabel}
           />
         )}
-        {ticketsToDisplay?.map((ttd, index) => (
-          <TicketsToDisplay
+        {fareContractsAndReservationsSorted?.map((fcor, index) => (
+          <FareContractOrReservation
             now={now}
-            navigation={navigation}
-            key={ttd.ticket.orderId}
-            ticket={ttd.ticket}
-            type={ttd.type}
+            onPressFareContract={() =>
+              navigation.navigate('TicketModal', {
+                screen: 'TicketDetails',
+                params: {orderId: fcor.orderId},
+              })
+            }
+            key={fcor.orderId}
+            fcOrReservation={fcor}
             index={index}
           />
         ))}

@@ -26,7 +26,7 @@ const ProfileTexts = {
             confirm: _('Logg ut', 'Log out'),
           },
         },
-        expiredTickets: {
+        ticketHistory: {
           label: _('Billetthistorikk', 'Ticket history'),
         },
         paymentOptions: {
