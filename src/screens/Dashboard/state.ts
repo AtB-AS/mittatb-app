@@ -119,7 +119,7 @@ const reducer: ReducerWithSideEffects<
           lastRefreshTime: new Date(),
           queryInput,
         },
-        async (state, dispatch) => {
+        async (_, dispatch) => {
           try {
             // Fresh fetch, reset paging and use new query input with new startTime
             const result = await getFavouriteDepartures(
@@ -149,7 +149,7 @@ const reducer: ReducerWithSideEffects<
       if (!state.data?.length) return NoUpdate();
 
       return SideEffect<DepartureDataState, DepartureDataActions>(
-        async (state2, dispatch) => {
+        async (_, dispatch) => {
           // Use same query input with same startTime to ensure that
           // we get the same result.
           try {
