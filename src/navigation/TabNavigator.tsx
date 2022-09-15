@@ -4,11 +4,13 @@ import {
   Profile,
   Ticketing,
 } from '@atb/assets/svg/mono-icons/tab-bar';
+import {MapPin} from '../assets/svg/mono-icons/map';
 import ThemeText from '@atb/components/text';
 import {Location} from '@atb/favorites/types';
 import {usePreferenceItems} from '@atb/preferences';
 import Assistant from '@atb/screens/Assistant';
 import Dashboard from '@atb/screens/Dashboard';
+import MapStack from '@atb/screens/Map';
 import NearbyScreen, {NearbyStackParams} from '@atb/screens/Nearby';
 import ProfileScreen, {ProfileStackParams} from '@atb/screens/Profile';
 import TicketingScreen from '@atb/screens/Ticketing';
@@ -40,6 +42,7 @@ export type TabNavigatorParams = {
   Nearest: NavigatorScreenParams<NearbyStackParams>;
   Ticketing: NavigatorScreenParams<TicketTabsNavigatorParams>;
   Profile: SubNavigator<ProfileStackParams>;
+  MapScreen: undefined;
 };
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
@@ -73,6 +76,17 @@ const NavigationRoot = () => {
           AssistantIcon,
           lineHeight,
           'assistantTab',
+        )}
+      />
+      <Tab.Screen
+        name="MapScreen"
+        component={MapStack}
+        options={tabSettings(
+          t(dictionary.navigation.map),
+          t(dictionary.navigation.map),
+          MapPin,
+          lineHeight,
+          'mapTab',
         )}
       />
       <Tab.Screen
