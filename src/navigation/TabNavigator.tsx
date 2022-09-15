@@ -29,6 +29,7 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import DeparturesScreen from '@atb/screens/Departures';
 import {TicketTabsNavigatorParams} from '@atb/screens/Ticketing/Tickets';
 import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/screens/MobileTokenOnboarding/utils';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 type SubNavigator<T extends ParamListBase> = {
   [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
@@ -51,7 +52,7 @@ const NavigationRoot = () => {
   const {t} = useTranslation();
   const {startScreen, newDepartures, newFrontPage} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
-
+  const {enable_map_tab} = useRemoteConfig();
   useGoToMobileTokenOnboardingWhenNecessary();
 
   return (
@@ -78,17 +79,19 @@ const NavigationRoot = () => {
           'assistantTab',
         )}
       />
-      <Tab.Screen
-        name="MapScreen"
-        component={MapStack}
-        options={tabSettings(
-          t(dictionary.navigation.map),
-          t(dictionary.navigation.map),
-          MapPin,
-          lineHeight,
-          'mapTab',
-        )}
-      />
+      {enable_map_tab && (
+        <Tab.Screen
+          name="MapScreen"
+          component={MapStack}
+          options={tabSettings(
+            t(dictionary.navigation.map),
+            t(dictionary.navigation.map),
+            MapPin,
+            lineHeight,
+            'mapTab',
+          )}
+        />
+      )}
       <Tab.Screen
         name="Nearest"
         component={newDepartures ? DeparturesScreen : NearbyScreen}
