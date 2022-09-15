@@ -28,6 +28,7 @@ import FavoriteChips from '@atb/favorite-chips';
 import {useFavorites} from '@atb/favorites';
 import {useLocationSearchValue} from '@atb/location-search';
 import {useGeolocationState} from '@atb/GeolocationContext';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {DashboardParams} from '@atb/screens/Dashboard';
 import {SelectableLocationData} from '@atb/location-search/types';
 import Bugsnag from '@bugsnag/react-native';
@@ -67,6 +68,7 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
   const style = useStyle();
   const {theme} = useTheme();
   const {t} = useTranslation();
+  const {enable_ticketing} = useRemoteConfig();
   const {leftButton: serviceDisruptionButton} = useServiceDisruptionSheet();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
 
@@ -264,31 +266,33 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
             }
           />
         </View>
-        <CompactTickets
-          onPressDetails={(
-            isCarnet: boolean,
-            isInspectable: boolean,
-            orderId: string,
-          ) => {
-            if (isCarnet) {
-              return navigation.navigate('TicketModal', {
-                screen: 'CarnetDetailsScreen',
-                params: {
-                  orderId,
-                  isInspectable,
-                },
-              });
-            }
+        {enable_ticketing && (
+          <CompactTickets
+            onPressDetails={(
+              isCarnet: boolean,
+              isInspectable: boolean,
+              orderId: string,
+            ) => {
+              if (isCarnet) {
+                return navigation.navigate('TicketModal', {
+                  screen: 'CarnetDetailsScreen',
+                  params: {
+                    orderId,
+                    isInspectable,
+                  },
+                });
+              }
 
-            return navigation.navigate('TicketModal', {
-              screen: 'TicketDetails',
-              params: {orderId},
-            });
-          }}
-          onPressBuyTickets={() =>
-            navigation.navigate('Ticketing', {screen: BuyTicketsScreenName})
-          }
-        />
+              return navigation.navigate('TicketModal', {
+                screen: 'TicketDetails',
+                params: {orderId},
+              });
+            }}
+            onPressBuyTickets={() =>
+              navigation.navigate('Ticketing', {screen: BuyTicketsScreenName})
+            }
+          />
+        )}
         <FavouritesWidget />
       </ScrollView>
     </View>
