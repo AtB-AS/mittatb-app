@@ -135,7 +135,7 @@ const TicketsTexts = {
       'Ticket is not valid. Payment rejected',
     ),
     orderId: (orderId: string) =>
-      _(`Ordre-id: ${orderId}`, `Order Id: ${orderId}`),
+      _(`Ordre-ID: ${orderId}`, `Order ID: ${orderId}`),
     paymentType: {
       vipps: _('Vipps', 'Vipps'),
       creditcard: _('kredittkort', 'credit card'),
