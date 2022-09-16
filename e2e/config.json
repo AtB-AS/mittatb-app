@@ -3,6 +3,17 @@
   "testRunner": "jest-circus/runner",
   "testTimeout": 120000,
   "testRegex": "\\.e2e\\.ts$",
-  "reporters": ["detox/runners/jest/streamlineReporter"],
+  "reporters": [
+    "detox/runners/jest/streamlineReporter",
+    [
+      "jest-junit",
+      {
+        "outputDirectory": "e2e/results",
+        "outputName": "junit.xml",
+        "classNameTemplate": "{filename}",
+        "titleTemplate": "{title}"
+      }
+    ]
+  ],
   "verbose": true
 }
