@@ -199,6 +199,13 @@ const TicketsTexts = {
     ),
     button: _('Godta', 'Accept'),
   },
+  ticketStatusSymbolA11yLabel: {
+    refunded: _('Tilbakebetalt billett', 'Refunded ticket'),
+    expired: _('Utløpt billett', 'Expired ticket'),
+    rejected: _('Avvist billett', 'Rejected ticket'),
+    upcoming: _('Kommende billett', 'Upcoming ticket'),
+    approved: _('Godkjent billett', 'Approved ticket'),
+  },
 };
 
 export default orgSpecificTranslations(TicketsTexts, {
