@@ -45,7 +45,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
       : t(TicketsTexts.reservation.paymentType.creditcard);
 
   return (
-    <TouchableOpacity>
+    <TouchableOpacity accessible={false} importantForAccessibility="no">
       <View style={styles.ticketContainer} testID="ticketReservation">
         <View style={styles.validityContainer}>
           <View style={styles.validityHeader}>
