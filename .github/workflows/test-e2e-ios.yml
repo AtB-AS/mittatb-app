@@ -59,14 +59,14 @@ jobs:
         run: detox test --configuration ios.release --retries 2 --take-screenshots failing
       - name: Upload test report json
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: junit.xml
-          path: ./e2e/results/junit.xml
+          name: junit-results
+          path: ./e2e/results/*.xml
           retention-days: 5
       - name: Upload test artifacts
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: e2e-artifacts
           path: artifacts
