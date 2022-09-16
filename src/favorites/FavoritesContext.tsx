@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import {places, departures, StoredType, frontpageFavourites} from './storage';
+import {places, departures, StoredType} from './storage';
 import {
   FavoriteDeparture,
   FavoriteDepartureId,
@@ -14,9 +14,10 @@ import {
 type FavoriteContextState = {
   favorites: UserFavorites;
   favoriteDepartures: UserFavoriteDepartures;
-  frontPageFavouriteDepartures: UserFavoriteDepartures;
   addFavoriteLocation(location: LocationFavorite): Promise<void>;
   removeFavoriteLocation(id: string): Promise<void>;
+  setFavoriteDepartures(favorite: UserFavoriteDepartures): Promise<void>;
+  setDashboardFavorite(id: string, value: boolean): Promise<void>;
   updateFavoriteLocation(favorite: StoredLocationFavorite): Promise<void>;
   setFavoriteLocationss(favorites: UserFavorites): Promise<void>;
 
@@ -25,13 +26,6 @@ type FavoriteContextState = {
   ): StoredFavoriteDeparture | undefined;
   addFavoriteDeparture(favoriteDeparture: FavoriteDeparture): Promise<void>;
   removeFavoriteDeparture(id: string): Promise<void>;
-
-  addFrontPageFavouriteDeparture(
-    favoriteDeparture: FavoriteDeparture,
-  ): Promise<void>;
-  removeFrontPageFavouriteDeparture(
-    favouriteDepartureId: FavoriteDepartureId,
-  ): Promise<void>;
 };
 const FavoritesContext = createContext<FavoriteContextState | undefined>(
   undefined,
@@ -41,18 +35,13 @@ const FavoritesContextProvider: React.FC = ({children}) => {
   const [favorites, setFavoritesState] = useState<UserFavorites>([]);
   const [favoriteDepartures, setFavoriteDeparturesState] =
     useState<UserFavoriteDepartures>([]);
-  const [frontPageFavouriteDepartures, setFrontPageFavouriteDepartures] =
-    useState<UserFavoriteDepartures>([]);
   async function populateFavorites() {
-    const [favorites, favoriteDepartures, frontPageFavouriteDepartures] =
-      await Promise.all([
-        places.getFavorites(),
-        departures.getFavorites(),
-        frontpageFavourites.getFrontpageFavorites(),
-      ]);
+    const [favorites, favoriteDepartures] = await Promise.all([
+      places.getFavorites(),
+      departures.getFavorites(),
+    ]);
     setFavoritesState(favorites ?? []);
     setFavoriteDeparturesState(favoriteDepartures ?? []);
-    setFrontPageFavouriteDepartures(frontPageFavouriteDepartures ?? []);
   }
 
   useEffect(() => {
@@ -62,7 +51,6 @@ const FavoritesContextProvider: React.FC = ({children}) => {
   const contextValue: FavoriteContextState = {
     favorites,
     favoriteDepartures,
-    frontPageFavouriteDepartures,
     async addFavoriteLocation(favorite: LocationFavorite) {
       const favorites = await places.addFavorite(favorite);
       setFavoritesState(favorites);
@@ -100,11 +88,18 @@ const FavoritesContextProvider: React.FC = ({children}) => {
     },
     async removeFavoriteDeparture(id: string) {
       const favorites = await departures.removeFavorite(id);
-      const frontpageFavs = await frontpageFavourites.removeFrontpageFavorite(
-        id,
-      );
       setFavoriteDeparturesState(favorites);
-      setFrontPageFavouriteDepartures(frontpageFavs);
+    },
+    async setFavoriteDepartures(favorites: UserFavoriteDepartures) {
+      setFavoriteDeparturesState(favorites);
+      await departures.setFavorites(favorites);
+    },
+    async setDashboardFavorite(id: string, value: boolean) {
+      const updatedFavorites = favoriteDepartures.map((f) =>
+        f.id == id ? {...f, visibleOnDashboard: value} : f,
+      );
+      await departures.setFavorites(updatedFavorites);
+      setFavoriteDeparturesState(updatedFavorites);
     },
     getFavoriteDeparture(potential: FavoriteDepartureId) {
       return favoriteDepartures.find(function (favorite) {
@@ -115,23 +110,6 @@ const FavoritesContextProvider: React.FC = ({children}) => {
           favorite.quayId == potential.quayId
         );
       });
-    },
-
-    async addFrontPageFavouriteDeparture(
-      favoriteDeparture: FavoriteDepartureWithId,
-    ) {
-      const frontPageFavouriteDepartures =
-        await frontpageFavourites.addFrontpageFavourite(favoriteDeparture);
-      setFrontPageFavouriteDepartures(frontPageFavouriteDepartures);
-    },
-
-    async removeFrontPageFavouriteDeparture(
-      favouriteDeparture: FavoriteDepartureWithId,
-    ) {
-      const favourites = await frontpageFavourites.removeFrontpageFavorite(
-        favouriteDeparture.id,
-      );
-      setFrontPageFavouriteDepartures(favourites);
     },
   };
 

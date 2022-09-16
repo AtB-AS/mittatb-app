@@ -12,7 +12,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 export type ProfileStackParams = {
   ProfileHome: undefined;
   PaymentOptions: undefined;
-  ExpiredTickets: undefined;
+  TicketHistory: undefined;
   DeleteProfile: undefined;
   FavoriteList: undefined;
   FavoriteDepartures: undefined;

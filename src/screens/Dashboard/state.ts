@@ -9,7 +9,6 @@ import useReducerWithSideEffects, {
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
 import {
-  getDepartureGroups,
   getFavouriteDepartures,
   getRealtimeDeparture,
 } from '@atb/api/departures';
@@ -19,7 +18,7 @@ import {
 } from '@atb/api/departures/departure-group';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavorites} from '@atb/favorites';
-import {Location, UserFavoriteDepartures} from '@atb/favorites/types';
+import {UserFavoriteDepartures} from '@atb/favorites/types';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {differenceInMinutes} from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
@@ -76,8 +75,7 @@ type DepartureDataActions =
   | {
       type: 'UPDATE_DEPARTURES';
       reset?: boolean;
-      result: DepartureGroupMetadata;
-      fromLocation?: Location | undefined;
+      result: DepartureGroupMetadata | null;
     }
   | {
       type: 'SET_ERROR';
@@ -99,11 +97,8 @@ const reducer: ReducerWithSideEffects<
 > = (state, action) => {
   switch (action.type) {
     case 'LOAD_INITIAL_DEPARTURES': {
-      if (!action.favoriteDepartures) return NoUpdate();
-
       // Update input data with new date as this
       // is a fresh fetch. We should fetch the latest information.
-
       const {option, date} = state.searchTime;
 
       const startTime = option === 'now' ? new Date().toISOString() : date;
@@ -131,7 +126,6 @@ const reducer: ReducerWithSideEffects<
               queryInput,
             );
 
-            if (!result) return;
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
@@ -197,9 +191,9 @@ const reducer: ReducerWithSideEffects<
         ...state,
         isLoading: false,
         data: action.reset
-          ? action.result.data
-          : (state.data ?? []).concat(action.result.data),
-        cursorInfo: action.result.metadata,
+          ? action.result?.data ?? []
+          : (state.data ?? []).concat(action.result?.data ?? []),
+        cursorInfo: action.result?.metadata,
         tick: new Date(),
       });
     }
@@ -236,12 +230,10 @@ const reducer: ReducerWithSideEffects<
  * Use state for fetching departure groups and keeping data up to date with realtime
  * predictions.
  *
- * @param {Location} [location] - Location on which to fetch departures from. Can be venue or address
  * @param {number} [updateFrequencyInSeconds=30] - frequency to fetch new data from realtime endpoint. Should not be too frequent as it can fetch a lot of data.
  * @param {number} [tickRateInSeconds=10] - "tick frequency" is how often we retrigger time calculations and sorting. More frequent means more CPU load/battery drain. Less frequent can mean outdated data.
  */
 export function useFavoriteDepartureData(
-  location?: Location,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
 ) {
@@ -257,18 +249,21 @@ export function useFavoriteDepartureData(
     lastRefreshTime: new Date(),
   });
   const isFocused = useIsFocused();
-  const {frontPageFavouriteDepartures} = useFavorites();
+  const {favoriteDepartures} = useFavorites();
+  const dashboardFavorites = favoriteDepartures.filter(
+    (f) => f.visibleOnDashboard,
+  );
 
+  const dashboardFavoriteIds = dashboardFavorites.map((f) => f.id);
   const loadInitialDepartures = useCallback(
     () =>
       dispatch({
         type: 'LOAD_INITIAL_DEPARTURES',
-        favoriteDepartures: frontPageFavouriteDepartures,
+        favoriteDepartures: dashboardFavorites,
       }),
-    [location?.id, frontPageFavouriteDepartures],
+    [dashboardFavoriteIds],
   );
 
-  useEffect(loadInitialDepartures, [location?.id]);
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -282,7 +277,7 @@ export function useFavoriteDepartureData(
   useInterval(
     () => dispatch({type: 'LOAD_REALTIME_DATA'}),
     updateFrequencyInSeconds * 1000,
-    [location?.id],
+    [],
     !isFocused,
   );
   useInterval(

@@ -142,10 +142,10 @@ export default function ProfileHome({navigation}: ProfileProps) {
 
             <Sections.LinkItem
               text={t(
-                ProfileTexts.sections.account.linkItems.expiredTickets.label,
+                ProfileTexts.sections.account.linkItems.ticketHistory.label,
               )}
-              onPress={() => navigation.navigate('ExpiredTickets')}
-              testID="expiredTicketsButton"
+              onPress={() => navigation.navigate('TicketHistory')}
+              testID="ticketHistoryButton"
             />
             {authenticationType !== 'phone' && (
               <Sections.LinkItem

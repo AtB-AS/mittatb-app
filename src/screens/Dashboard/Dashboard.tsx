@@ -9,8 +9,10 @@ import FavoriteChips from '@atb/favorite-chips';
 import {useFavorites} from '@atb/favorites';
 import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';
+import GlobalMessageBox from '@atb/global-messages/GlobalMessage';
 import {useLocationSearchValue} from '@atb/location-search';
 import {SelectableLocationData} from '@atb/location-search/types';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SearchForLocations} from '@atb/screens/Dashboard/TripSearch';
 import {useDoOnceWhen} from '@atb/screens/utils';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
@@ -30,7 +32,6 @@ import {ScrollView} from 'react-native-gesture-handler';
 import CompactTickets from './CompactTickets';
 import FavouritesWidget from './DeparturesWidget';
 import {DashboardScreenProps} from './types';
-import GlobalMessageBox from '@atb/global-messages/GlobalMessage';
 
 type DashboardRouteName = 'DashboardRoot';
 const DashboardRouteNameStatic: DashboardRouteName = 'DashboardRoot';
@@ -44,6 +45,7 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
   const style = useStyle();
   const {theme} = useTheme();
   const {t} = useTranslation();
+  const {enable_ticketing} = useRemoteConfig();
   const {leftButton: serviceDisruptionButton} = useServiceDisruptionSheet();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
 
@@ -241,31 +243,33 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
             }
           />
         </View>
-        <CompactTickets
-          onPressDetails={(
-            isCarnet: boolean,
-            isInspectable: boolean,
-            orderId: string,
-          ) => {
-            if (isCarnet) {
-              return navigation.navigate('TicketModal', {
-                screen: 'CarnetDetailsScreen',
-                params: {
-                  orderId,
-                  isInspectable,
-                },
-              });
-            }
+        {enable_ticketing && (
+          <CompactTickets
+            onPressDetails={(
+              isCarnet: boolean,
+              isInspectable: boolean,
+              orderId: string,
+            ) => {
+              if (isCarnet) {
+                return navigation.navigate('TicketModal', {
+                  screen: 'CarnetDetailsScreen',
+                  params: {
+                    orderId,
+                    isInspectable,
+                  },
+                });
+              }
 
-            return navigation.navigate('TicketModal', {
-              screen: 'TicketDetails',
-              params: {orderId},
-            });
-          }}
-          onPressBuyTickets={() =>
-            navigation.navigate('Ticketing', {screen: 'BuyTickets'})
-          }
-        />
+              return navigation.navigate('TicketModal', {
+                screen: 'TicketDetails',
+                params: {orderId},
+              });
+            }}
+            onPressBuyTickets={() =>
+              navigation.navigate('Ticketing', {screen: 'BuyTickets'})
+            }
+          />
+        )}
         <FavouritesWidget />
       </ScrollView>
     </View>

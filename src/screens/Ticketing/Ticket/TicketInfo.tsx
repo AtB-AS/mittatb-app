@@ -58,7 +58,7 @@ export type TicketInfoDetailsProps = {
   toTariffZone?: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
   status: TicketInfoProps['status'];
-  isInspectable?: boolean;
+  isInspectable: boolean;
   isCarnetTicket?: boolean;
   omitUserProfileCount?: boolean;
   testID?: string;

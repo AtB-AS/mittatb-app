@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Platform, ScrollView, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
@@ -18,13 +18,14 @@ import TransportationIcon from '@atb/components/transportation-icon';
 import {useFavorites} from '@atb/favorites';
 import useFontScale from '@atb/utils/use-font-scale';
 import {AnyMode} from '@atb/components/transportation-icon';
-import {LegMode, TransportSubmode} from '@entur/sdk';
+import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {LegMode} from '@entur/sdk';
 import SectionSeparator from '@atb/components/sections/section-separator';
 import MessageBox from '@atb/components/message-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 
 type SelectableFavouriteDepartureData = {
-  handleSwitchFlip: (favouriteId: any) => void;
+  handleSwitchFlip: (favouriteId: string, active: boolean) => void;
   favouriteId: string;
   active: boolean;
   lineTransportationMode: AnyMode;
@@ -58,8 +59,11 @@ const SelectableFavouriteDeparture = ({
       )} ${lineIdentifier} ${lineName}, ${t(
         SelectFavouriteDeparturesText.accessibleText.from,
       )} ${departureStation} ${departureQuay && departureQuay}`}
+      accessibilityRole="switch"
+      accessibilityActions={[{name: 'activate'}]}
+      onAccessibilityAction={() => handleSwitchFlip(favouriteId, !active)}
+      accessibilityHint={t(SelectFavouriteDeparturesText.switch.a11yhint)}
       accessibilityState={{checked: active}}
-      onAccessibilityTap={() => handleSwitchFlip(favouriteId)}
     >
       <View style={styles.lineModeIcon}>
         <TransportationIcon
@@ -80,9 +84,9 @@ const SelectableFavouriteDeparture = ({
 
       <View>
         <FixedSwitch
-          accessibilityHint={t(SelectFavouriteDeparturesText.switch.a11yhint)}
+          importantForAccessibility="no"
           value={active}
-          onChange={() => handleSwitchFlip(favouriteId)}
+          onChange={() => handleSwitchFlip(favouriteId, !active)}
           style={[
             styles.toggle,
             Platform.OS === 'android' ? styles.androidToggle : styles.iosToggle,
@@ -102,28 +106,21 @@ const SelectFavouritesBottomSheet = ({
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {
-    favoriteDepartures,
-    frontPageFavouriteDepartures,
-    addFrontPageFavouriteDeparture,
-    removeFrontPageFavouriteDeparture,
-  } = useFavorites();
+  const {favoriteDepartures, setFavoriteDepartures} = useFavorites();
   const favouriteItems = favoriteDepartures ?? [];
-  const frontpageFavouriteItems = frontPageFavouriteDepartures ?? [];
+  const [updatedFavorites, setUpdatedFavorites] = useState(favoriteDepartures);
 
-  const handleSwitchFlip = (favouriteId: string) => {
-    const favouriteInFrontpageFavourites = frontpageFavouriteItems.find(
-      (item) => item.id === favouriteId,
+  const handleSwitchFlip = (id: string, active: boolean) => {
+    setUpdatedFavorites(
+      updatedFavorites.map((f) =>
+        f.id == id ? {...f, visibleOnDashboard: active} : f,
+      ),
     );
+  };
 
-    if (favouriteInFrontpageFavourites) {
-      removeFrontPageFavouriteDeparture(favouriteInFrontpageFavourites);
-    } else {
-      const favourite = favoriteDepartures.find(
-        (departure) => departure.id === favouriteId,
-      );
-      if (favourite) addFrontPageFavouriteDeparture(favourite);
-    }
+  const saveAndExit = () => {
+    setFavoriteDepartures(updatedFavorites);
+    close();
   };
 
   return (
@@ -133,9 +130,10 @@ const SelectFavouritesBottomSheet = ({
         leftButton={{
           type: 'cancel',
           onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.close.text),
+          text: t(ScreenHeaderTexts.headerButton.cancel.text),
         }}
         color="background_1"
+        setFocusOnLoad={true}
       />
 
       <ScrollView style={styles.flatListArea}>
@@ -146,30 +144,29 @@ const SelectFavouritesBottomSheet = ({
             </ThemeText>
 
             <View>
-              {favouriteItems &&
-                favouriteItems.map((departureDetails, index) => {
+              {updatedFavorites &&
+                updatedFavorites.map((favorite, index) => {
                   return (
-                    <View key={departureDetails.id}>
+                    <View key={favorite.id}>
                       <SelectableFavouriteDeparture
                         handleSwitchFlip={handleSwitchFlip}
-                        favouriteId={departureDetails.id}
-                        active={
-                          !!frontPageFavouriteDepartures.find(
-                            (departure) => departure.id === departureDetails.id,
-                          )
-                        }
-                        departureStation={departureDetails.quayName}
-                        departureQuay={departureDetails.quayPublicCode}
-                        lineIdentifier={departureDetails.lineLineNumber ?? ''}
+                        favouriteId={favorite.id}
+                        active={!!favorite.visibleOnDashboard}
+                        departureStation={favorite.quayName}
+                        departureQuay={favorite.quayPublicCode}
+                        lineIdentifier={favorite.lineLineNumber ?? ''}
                         lineName={
-                          departureDetails.lineName ??
+                          favorite.lineName ??
                           t(
                             SelectFavouriteDeparturesText.departures
                               .allVariations,
                           )
                         }
                         lineTransportationMode={
-                          departureDetails.lineTransportationMode ?? LegMode.BUS
+                          favorite.lineTransportationMode ?? LegMode.BUS
+                        }
+                        lineTransportationSubmode={
+                          favorite.lineTransportationSubMode
                         }
                       />
                       {favouriteItems.length - 1 !== index && (
@@ -195,7 +192,7 @@ const SelectFavouritesBottomSheet = ({
           accessibilityHint={t(
             SelectFavouriteDeparturesText.confirm_button.a11yhint,
           )}
-          onPress={close}
+          onPress={saveAndExit}
           disabled={false}
           icon={Confirm}
           iconPosition="right"
@@ -251,7 +248,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     iosToggle: {
       marginLeft: theme.spacings.xSmall,
-      transform: [{scale: 0.7 * scale}],
+      transform: [{scale: scale}],
     },
   };
 });

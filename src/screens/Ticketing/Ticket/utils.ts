@@ -28,7 +28,9 @@ export type ValidityStatus =
   | 'reserving'
   | 'unknown'
   | 'refunded'
-  | 'inactive';
+  | 'inactive'
+  | 'rejected'
+  | 'approved';
 
 export function getRelativeValidity(
   now: number,

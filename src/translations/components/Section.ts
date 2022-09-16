@@ -55,6 +55,7 @@ const SectionTexts = {
   },
   favoriteDeparture: {
     from: _('Fra', 'From'),
+    allVariations: _('Alle linjevariasjoner', 'All line variations'),
   },
 };
 export default SectionTexts;

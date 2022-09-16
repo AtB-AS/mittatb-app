@@ -57,8 +57,15 @@ jobs:
         run: npx react-native bundle --platform ios --dev false --reset-cache --entry-file index.js --bundle-output main.jsbundle && mv main.jsbundle build/detox/ios/Build/Products/Release-iphonesimulator/AtB.app/
       - name: Run tests
         run: detox test --configuration ios.release --retries 2 --take-screenshots failing
+      - name: Upload test report json
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: junit.xml
+          path: ./e2e/results/junit.xml
+          retention-days: 5
       - name: Upload test artifacts
-        if: ${{ failure() }}
+        if: failure()
         uses: actions/upload-artifact@v2
         with:
           name: e2e-artifacts
