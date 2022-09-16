@@ -30,15 +30,19 @@ type RegionEvent = {
   region?: GeoJSON.Feature<GeoJSON.Point, RegionPayload>;
 };
 
+type MapProps = {
+  coordinates: any;
+  shouldShowSearchBar?: boolean;
+  shouldShowSelectionPin?: boolean;
+  onLocationSelect?: (selectedLocation?: any) => void;
+};
+
 const Map = ({
   coordinates,
   shouldShowSearchBar,
+  shouldShowSelectionPin,
   onLocationSelect,
-}: {
-  coordinates: any;
-  shouldShowSearchBar: boolean;
-  onLocationSelect?: (selectedLocation?: any) => void;
-}) => {
+}: MapProps) => {
   const [regionEvent, setRegionEvent] = useState<RegionEvent>();
   const centeredCoordinates = useMemo<Coordinates | null>(
     () =>
@@ -142,18 +146,19 @@ const Map = ({
           />
           <MapboxGL.UserLocation showsUserHeadingIndicator />
         </MapboxGL.MapView>
-
-        <View style={styles.pinContainer}>
-          <TouchableOpacity onPress={onSelect} style={styles.pin}>
-            <SelectionPin
-              isMoving={!!regionEvent?.isMoving}
-              mode={getPinMode(
-                !!regionEvent?.isMoving || isSearching,
-                !!location,
-              )}
-            />
-          </TouchableOpacity>
-        </View>
+        {shouldShowSelectionPin && (
+          <View style={styles.pinContainer}>
+            <TouchableOpacity onPress={onSelect} style={styles.pin}>
+              <SelectionPin
+                isMoving={!!regionEvent?.isMoving}
+                mode={getPinMode(
+                  !!regionEvent?.isMoving || isSearching,
+                  !!location,
+                )}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
         <View style={controlStyles.controlsContainer}>
           <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
           <MapControls zoomIn={zoomIn} zoomOut={zoomOut} />

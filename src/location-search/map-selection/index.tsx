@@ -46,6 +46,7 @@ const MapSelection: React.FC<Props> = ({
         onLocationSelect={onLocationSelect}
         coordinates={coordinates}
         shouldShowSearchBar={true}
+        shouldShowSelectionPin={true}
       />
     </View>
   );
