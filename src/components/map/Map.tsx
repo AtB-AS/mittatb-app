@@ -31,7 +31,7 @@ type RegionEvent = {
 };
 
 type MapProps = {
-  coordinates: any;
+  coordinates: Coordinates & {zoomLevel: number};
   shouldShowSearchBar?: boolean;
   shouldShowSelectionPin?: boolean;
   onLocationSelect?: (selectedLocation?: any) => void;
