@@ -2,9 +2,12 @@ import {TripPattern} from '@atb/api/types/trips';
 
 import {Location} from '@atb/favorites/types';
 import {TabNavigatorScreenProps} from '@atb/navigation/types';
-import {CompositeScreenProps} from '@react-navigation/native';
+import {
+  CompositeScreenProps,
+  NavigatorScreenParams,
+} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
-import {DetailsRouteParams} from '../TripDetails/Details';
+import {DetailsStackParams} from '../TripDetails/types';
 import {DateTimePickerParams, SearchTime} from './journey-date-picker';
 
 export type SearchStateType =
@@ -27,7 +30,7 @@ export type DashboardParams = {
     searchTime: SearchTime | undefined;
   };
 
-  TripDetails: DetailsRouteParams;
+  TripDetails: NavigatorScreenParams<DetailsStackParams>;
   DateTimePicker: DateTimePickerParams;
 };
 

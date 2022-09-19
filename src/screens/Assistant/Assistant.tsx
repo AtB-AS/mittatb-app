@@ -359,8 +359,11 @@ const Assistant: React.FC<Props> = ({
   const onPressed = useCallback(
     (tripPatterns, startIndex) =>
       navigation.navigate('TripDetails', {
-        tripPatterns,
-        startIndex,
+        screen: 'Details',
+        params: {
+          tripPatterns,
+          startIndex,
+        },
       }),
     [navigation, from, to],
   );

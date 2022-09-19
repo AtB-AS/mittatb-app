@@ -157,8 +157,11 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
   const onPressed = useCallback(
     (tripPatterns, startIndex) =>
       navigation.navigate('TripDetails', {
-        tripPatterns,
-        startIndex,
+        screen: 'Details',
+        params: {
+          tripPatterns,
+          startIndex,
+        },
       }),
     [navigation, from, to],
   );
