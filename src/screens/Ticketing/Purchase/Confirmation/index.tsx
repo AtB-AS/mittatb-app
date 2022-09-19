@@ -1,49 +1,45 @@
 import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
+import {useAuthState} from '@atb/auth';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
+import MessageBox from '@atb/components/message-box';
 import {LeftButtonProps} from '@atb/components/screen-header';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
-import MessageBox from '@atb/components/message-box';
-import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
-import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
-import {getReferenceDataName} from '@atb/reference-data/utils';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {PaymentType, ReserveOffer} from '@atb/tickets';
-import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
-import {RouteProp} from '@react-navigation/native';
-import {addMinutes} from 'date-fns';
-import React, {useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  ScrollView,
-  View,
-  TouchableOpacity,
-} from 'react-native';
-import {TicketingStackParams} from '../';
-import useOfferState from '../Overview/use-offer-state';
-import {UserProfileWithCount} from '../Travellers/use-user-count-state';
-import {createTravelDateText} from '@atb/screens/Ticketing/Purchase/Overview';
-import {formatToLongDateTime} from '@atb/utils/date';
-import {formatDecimalNumber} from '@atb/utils/numbers';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {SelectPaymentMethod} from '../Payment';
-import {CardPaymentMethod, PaymentMethod, SavedPaymentOption} from '../types';
-import {useAuthState} from '@atb/auth';
-import {usePreviousPaymentMethod} from '../saved-payment-utils';
-import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
+import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
+import {getReferenceDataName} from '@atb/reference-data/utils';
+import {createTravelDateText} from '@atb/screens/Ticketing/Purchase/Overview';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {PaymentType, ReserveOffer} from '@atb/tickets';
+import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
+import MessageBoxTexts from '@atb/translations/components/MessageBox';
+import {formatToLongDateTime} from '@atb/utils/date';
+import {formatDecimalNumber} from '@atb/utils/numbers';
+import {addMinutes} from 'date-fns';
+import React, {useEffect, useState} from 'react';
 import {
-  findInspectable,
-  getDeviceName,
-  isTravelCardToken,
-} from '@atb/mobile-token/utils';
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {getOtherDeviceIsInspectableWarning} from '../../Ticket/utils';
+import useOfferState from '../Overview/use-offer-state';
+import {SelectPaymentMethod} from '../Payment';
+import {usePreviousPaymentMethod} from '../saved-payment-utils';
+import {UserProfileWithCount} from '../Travellers/use-user-count-state';
+import {
+  CardPaymentMethod,
+  PaymentMethod,
+  SavedPaymentOption,
+  TicketPurchaseScreenProps,
+} from '../types';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -86,13 +82,7 @@ function getPreviousPaymentMethod(
   }
 }
 
-export type ConfirmationProps = {
-  navigation: DismissableStackNavigationProp<
-    TicketingStackParams,
-    'Confirmation'
-  >;
-  route: RouteProp<TicketingStackParams, 'Confirmation'>;
-};
+type ConfirmationProps = TicketPurchaseScreenProps<'Confirmation'>;
 
 const Confirmation: React.FC<ConfirmationProps> = ({
   navigation,

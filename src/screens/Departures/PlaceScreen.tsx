@@ -1,19 +1,18 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {ActivityIndicator, View} from 'react-native';
-import React, {useState} from 'react';
-import {FlatList} from 'react-native-gesture-handler';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RouteProp} from '@react-navigation/native';
-import Button from '@atb/components/button';
-import {useTranslation} from '@atb/translations';
 import {Place, Quay} from '@atb/api/types/departures';
-import DeparturesTexts from '@atb/translations/screens/Departures';
-import {DeparturesStackParams} from '.';
-import QuayView from './QuayView';
-import StopPlaceView from './StopPlaceView';
-import {useStopsDetailsData} from './state/stop-place-details-state';
+import Button from '@atb/components/button';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {SearchTime} from '@atb/screens/Departures/utils';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {useTranslation} from '@atb/translations';
+import DeparturesTexts from '@atb/translations/screens/Departures';
+import React, {useState} from 'react';
+import {ActivityIndicator, View} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
+import {TripDetailsScreenProps} from '../TripDetails/types';
+import QuayView from './QuayView';
+import {useStopsDetailsData} from './state/stop-place-details-state';
+import StopPlaceView from './StopPlaceView';
+import {DeparturesScreenProps} from './types';
 
 export type PlaceScreenParams = {
   place: Place;
@@ -21,16 +20,11 @@ export type PlaceScreenParams = {
   showOnlyFavoritesByDefault?: boolean;
 };
 
-type PlaceScreenRouteProps = RouteProp<DeparturesStackParams, 'PlaceScreen'>;
-
 type quayChipData = {
   item: Quay;
 };
 
-export type PlaceScreenProps = {
-  navigation: StackNavigationProp<DeparturesStackParams>;
-  route: PlaceScreenRouteProps;
-};
+export type PlaceScreenProps = DeparturesScreenProps<'PlaceScreen'>;
 
 export default function PlaceScreen({
   navigation,

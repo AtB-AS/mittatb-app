@@ -1,38 +1,26 @@
 import {ErrorType} from '@atb/api/utils';
 import Button from '@atb/components/button';
 import MessageBox from '@atb/components/message-box';
-import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
 import {
   PaymentCreditCardTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
+import Bugsnag from '@bugsnag/react-native';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import WebView from 'react-native-webview';
-import {TicketingStackParams} from '../..';
-import {TicketTabsNavigatorParams} from '../../../Tickets';
-import Processing from '../Processing';
-import useTerminalState, {ErrorContext} from './use-terminal-state';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import Bugsnag from '@bugsnag/react-native';
 import {
   WebViewErrorEvent,
   WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
+import {TicketPurchaseScreenProps} from '../../types';
+import Processing from '../Processing';
+import useTerminalState, {ErrorContext} from './use-terminal-state';
 
-type NavigationProp = CompositeNavigationProp<
-  MaterialTopTabNavigationProp<TicketTabsNavigatorParams>,
-  DismissableStackNavigationProp<TicketingStackParams, 'PaymentCreditCard'>
->;
-
-type Props = {
-  navigation: NavigationProp;
-  route: RouteProp<TicketingStackParams, 'PaymentCreditCard'>;
-};
+type Props = TicketPurchaseScreenProps<'PaymentCreditCard'>;
 
 const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const styles = useStyles();

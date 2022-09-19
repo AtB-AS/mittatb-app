@@ -1,41 +1,20 @@
 import {ErrorType} from '@atb/api/utils';
 import Button from '@atb/components/button';
 import MessageBox from '@atb/components/message-box';
-import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
-import {
-  PaymentType,
-  ReserveOffer,
-  TicketReservation,
-  useTicketState,
-} from '@atb/tickets';
 import {
   PaymentVippsTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
 import React from 'react';
 import {View} from 'react-native';
-import {TicketingStackParams} from '../..';
-import {
-  ActiveTicketsScreenName,
-  TicketTabsNavigatorParams,
-} from '../../../Tickets';
+import {TicketPurchaseScreenProps} from '../../types';
 import Processing from '../Processing';
 import useVippsState, {ErrorContext, State} from './use-vipps-state';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
 
-type NavigationProp = CompositeNavigationProp<
-  MaterialTopTabNavigationProp<TicketTabsNavigatorParams>,
-  DismissableStackNavigationProp<TicketingStackParams, 'PaymentVipps'>
->;
-
-type Props = {
-  navigation: NavigationProp;
-  route: RouteProp<TicketingStackParams, 'PaymentVipps'>;
-};
+type Props = TicketPurchaseScreenProps<'PaymentVipps'>;
 
 export default function VippsPayment({
   navigation,
@@ -49,7 +28,12 @@ export default function VippsPayment({
   const cancelVipps = () => navigation.pop();
 
   const dismiss = () => {
-    navigation.navigate(ActiveTicketsScreenName);
+    navigation.navigate('TabNavigator', {
+      screen: 'Ticketing',
+      params: {
+        screen: 'ActiveTickets',
+      },
+    });
   };
 
   const {state, error, openVipps} = useVippsState(offers, dismiss);

@@ -11,16 +11,15 @@ import {useReverseGeocoder} from '@atb/geocoder';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
+import {coordinatesDistanceInMetres} from '@atb/utils/location';
 import {Coordinates} from '@entur/sdk';
 import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
-import {RouteProp} from '@react-navigation/native';
 import {Feature} from 'geojson';
 import React, {useMemo, useRef, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
+import {LocationSearchScreenProps} from '../types';
 import LocationBar from './LocationBar';
 import SelectionPin, {PinMode} from './SelectionPin';
-import {coordinatesDistanceInMetres} from '@atb/utils/location';
 
 /**
  * How many meters from the current location GPS coordinates can the map arrow
@@ -38,10 +37,7 @@ export type RouteParams = {
   };
 };
 
-export type Props = {
-  navigation: LocationSearchNavigationProp;
-  route: RouteProp<LocationSearchStackParams, 'MapSelection'>;
-};
+export type Props = LocationSearchScreenProps<'MapSelection'>;
 
 type RegionEvent = {
   isMoving: boolean;

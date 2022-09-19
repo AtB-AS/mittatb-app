@@ -18,28 +18,7 @@ import TermsInformation from '@atb/screens/Profile/Information/TermsInformation'
 import TicketInspectionInformation from '@atb/screens/Profile/Information/TicketInspectionInformation';
 import DeleteProfile from '@atb/screens/Profile/DeleteProfile';
 import PaymentOptions from './PaymentOptions';
-
-export type ProfileStackParams = {
-  ProfileHome: undefined;
-  PaymentOptions: undefined;
-  TicketHistory: undefined;
-  DeleteProfile: undefined;
-  FavoriteList: undefined;
-  FavoriteDepartures: undefined;
-  SelectStartScreen: undefined;
-  TravelToken: undefined;
-  SelectTravelToken: undefined;
-  Appearance: undefined;
-  Language: undefined;
-  DefaultUserProfile: undefined;
-  Enrollment: undefined;
-  DesignSystem: undefined;
-  DebugInfo: undefined;
-  TicketingInformation: undefined;
-  PaymentInformation: undefined;
-  TermsInformation: undefined;
-  TicketInspectionInformation: undefined;
-};
+import {ProfileStackParams} from './types';
 
 const Stack = createStackNavigator<ProfileStackParams>();
 

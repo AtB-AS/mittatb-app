@@ -1,15 +1,14 @@
-import {AxiosError} from 'axios';
-import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
-import {secondsBetween} from '@atb/utils/date';
-import {timeIsShort} from '../Details/utils';
-import TripMessages from './TripMessages';
-import TripSection, {InterchangeDetails, getPlaceName} from './TripSection';
-import Summary from './TripSummary';
-import {WaitDetails} from './WaitSection';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import Feedback from '@atb/components/feedback';
+import {StyleSheet} from '@atb/theme';
+import {secondsBetween} from '@atb/utils/date';
+import {AxiosError} from 'axios';
+import React from 'react';
+import {View} from 'react-native';
+import TripMessages from './TripMessages';
+import TripSection, {getPlaceName, InterchangeDetails} from './TripSection';
+import Summary from './TripSummary';
+import {WaitDetails} from './WaitSection';
 
 type TripProps = {
   tripPattern: TripPattern;

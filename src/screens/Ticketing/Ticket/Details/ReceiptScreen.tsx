@@ -1,6 +1,8 @@
+import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import Button from '@atb/components/button';
-import * as Sections from '@atb/components/sections';
 import MessageBox, {MessageBoxProps} from '@atb/components/message-box';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import * as Sections from '@atb/components/sections';
 import {StyleSheet} from '@atb/theme';
 import {sendReceipt} from '@atb/tickets';
 import {
@@ -8,28 +10,17 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {RouteProp} from '@react-navigation/native';
+import {validateEmail} from '@atb/utils/validation';
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import {TicketModalNavigationProp, TicketModalStackParams} from './';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {useAccessibilityContext} from '@atb/AccessibilityContext';
-import {validateEmail} from '@atb/utils/validation';
+import {TicketModalScreenProps} from './types';
 
 export type ReceiptScreenRouteParams = {
   orderId: string;
   orderVersion: string;
 };
 
-export type TicketDetailsScreenRouteProp = RouteProp<
-  TicketModalStackParams,
-  'TicketReceipt'
->;
-
-type Props = {
-  route: TicketDetailsScreenRouteProp;
-  navigation: TicketModalNavigationProp;
-};
+type Props = TicketModalScreenProps<'TicketReceipt'>;
 
 type MessageState =
   | 'loading'
@@ -38,7 +29,7 @@ type MessageState =
   | 'invalid-field'
   | undefined;
 
-export default function ReceiptScreen({navigation, route}: Props) {
+export default function ReceiptScreen({route}: Props) {
   const {orderId, orderVersion} = route.params;
   const styles = useStyles();
   const [email, setEmail] = useState('');

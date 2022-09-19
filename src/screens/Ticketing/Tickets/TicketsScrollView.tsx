@@ -1,24 +1,17 @@
-import {RootStackParamList} from '@atb/navigation';
+import MessageBox from '@atb/components/message-box';
+import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import {RootStackParamList} from '@atb/navigation/types';
+import FareContractOrReservation from '@atb/screens/Ticketing/Tickets/FareContractOrReservation';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {
-  FareContract,
-  Reservation,
-  Timestamp,
-  TravelCard,
-  useTicketState,
-} from '@atb/tickets';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {FareContract, Reservation, TravelCard} from '@atb/tickets';
+import TravelTokenBox from '@atb/travel-token-box';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import hexToRgba from 'hex-to-rgba';
-import React, {useCallback, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import TravelCardInformation from './TravelCardInformation';
-import MessageBox from '@atb/components/message-box';
-import TravelTokenBox from '@atb/travel-token-box';
-import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
-import FareContractOrReservation from '@atb/screens/Ticketing/Tickets/FareContractOrReservation';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 

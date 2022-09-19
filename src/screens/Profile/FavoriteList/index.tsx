@@ -1,30 +1,21 @@
-import {StackNavigationProp} from '@react-navigation/stack';
-import React from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
-import {ProfileStackParams} from '..';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import SvgReorder from '@atb/assets/svg/mono-icons/actions/Reorder';
+import MessageBox from '@atb/components/message-box';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {StoredLocationFavorite} from '@atb/favorites/types';
-import MessageBox from '@atb/components/message-box';
-import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, Theme} from '@atb/theme';
 import {FavoriteListTexts, useTranslation} from '@atb/translations';
+import React from 'react';
 import {View} from 'react-native';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {ScrollView} from 'react-native-gesture-handler';
+import {ProfileScreenProps} from '../types';
 
-export type ProfileScreenNavigationProp = StackNavigationProp<
-  ProfileStackParams,
-  'FavoriteList'
->;
+type FavoriteListProps = ProfileScreenProps<'FavoriteList'>;
 
-type ProfileScreenProps = {
-  navigation: StackNavigationProp<RootStackParamList>;
-};
-
-export default function FavoriteList({navigation}: ProfileScreenProps) {
+export default function FavoriteList({navigation}: FavoriteListProps) {
   const style = useProfileStyle();
   const {favorites} = useFavorites();
   const {t} = useTranslation();

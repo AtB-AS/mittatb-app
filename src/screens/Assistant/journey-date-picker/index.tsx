@@ -19,15 +19,10 @@ import {
   formatToLongDateTime,
 } from '@atb/utils/date';
 import {TFunc} from '@leile/lobo-t';
-import {
-  NavigationProp,
-  ParamListBase,
-  RouteProp,
-  useRoute,
-} from '@react-navigation/native';
+import {ParamListBase, RouteProp, useRoute} from '@react-navigation/native';
 import React, {useRef, useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {AssistantParams} from '..';
+import {AssistantScreenProps} from '../types';
 
 export type DateTimePickerParams = {
   searchTime: SearchTime;
@@ -35,13 +30,8 @@ export type DateTimePickerParams = {
   callerRouteParam: string;
 };
 
-export type DateTimeNavigationProp = NavigationProp<AssistantParams>;
-export type DateTimeRouteProp = RouteProp<AssistantParams, 'DateTimePicker'>;
+type JourneyDatePickerProps = AssistantScreenProps<'DateTimePicker'>;
 
-type JourneyDatePickerProps = {
-  navigation: DateTimeNavigationProp;
-  route: DateTimeRouteProp;
-};
 const DateOptions = ['now', 'departure', 'arrival'] as const;
 type DateOptionType = typeof DateOptions[number];
 export type DateString = string;

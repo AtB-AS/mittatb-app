@@ -1,15 +1,16 @@
 import MessageBox from '@atb/components/message-box';
-import AnonymousTicketPurchases from '@atb/translations/screens/subscreens/AnonymousTicketPurchases';
-import {View} from 'react-native';
-import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
+import AnonymousTicketPurchases from '@atb/translations/screens/subscreens/AnonymousTicketPurchases';
 import {useNavigation} from '@react-navigation/native';
+import React from 'react';
+import {View} from 'react-native';
+import {TicketsStackRootNavigationProps} from './types';
 
 const AnonymousPurchaseWarning = () => {
   const {t} = useTranslation();
   const styles = useStyle();
-  const navigation = useNavigation();
+  const navigation = useNavigation<TicketsStackRootNavigationProps>();
   const navigateToConsequencesScreen = () => {
     navigation.navigate('ConsequencesFromTicketPurchase');
   };

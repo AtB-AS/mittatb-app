@@ -1,30 +1,16 @@
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
+import TripDetailsRoot from '../TripDetails';
+import DepartureDetails from '../TripDetails/DepartureDetails';
+import TravelDetailsMap from '../TripDetails/Map';
+import QuayDepartures from '../TripDetails/QuayDepartures';
 import DeparturesRoot from './NearbyPlacesScreen';
-import PlaceScreen, {PlaceScreenParams} from './PlaceScreen';
-import DepartureDetails, {
-  DepartureDetailsRouteParams,
-} from '../TripDetails/DepartureDetails';
-import QuayDepartures, {
-  QuayDeparturesRouteParams,
-} from '../TripDetails/QuayDepartures';
-import TripDetailsRoot, {DetailsStackParams} from '../TripDetails';
-import TravelDetailsMap, {MapDetailRouteParams} from '../TripDetails/Map';
-import {AllStopsOverviewParams} from '@atb/screens/Departures/AllStopsOverview';
-
-export type DeparturesStackParams = {
-  DeparturesRoot: undefined;
-  AllStopsOverview: AllStopsOverviewParams;
-  PlaceScreen: PlaceScreenParams;
-  DepartureDetails: DepartureDetailsRouteParams;
-  QuayDepartures: QuayDeparturesRouteParams;
-  TripDetails: DetailsStackParams;
-  DetailsMap: MapDetailRouteParams;
-};
+import PlaceScreen from './PlaceScreen';
+import {DeparturesStackParams, RootDeparturesScreenProps} from './types';
 
 const Stack = createStackNavigator<DeparturesStackParams>();
 
-const DeparturesScreen = () => {
+const DeparturesScreen = ({}: RootDeparturesScreenProps) => {
   return (
     <Stack.Navigator
       initialRouteName="DeparturesRoot"

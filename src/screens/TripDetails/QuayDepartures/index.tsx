@@ -1,27 +1,17 @@
-import React from 'react';
-import {View, RefreshControl, ScrollView} from 'react-native';
-import {GeoLocation, Location, SearchLocation} from '@atb/favorites/types';
-import {StyleSheet} from '@atb/theme';
-import DeparturesList from '@atb/departure-list/DeparturesList';
-import {useDepartureData} from '@atb/screens/Nearby/state';
-import {NavigationProp, RouteProp} from '@react-navigation/native';
-import {DetailsStackParams} from '@atb/screens/TripDetails';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-
-export type QuayDeaparturesNavigationProps = NavigationProp<DetailsStackParams>;
-export type QuayDeparturesRouteProp = RouteProp<
-  DetailsStackParams,
-  'QuayDepartures'
->;
+import DeparturesList from '@atb/departure-list/DeparturesList';
+import {SearchLocation} from '@atb/favorites/types';
+import {useDepartureData} from '@atb/screens/Nearby/state';
+import {StyleSheet} from '@atb/theme';
+import React from 'react';
+import {RefreshControl, ScrollView, View} from 'react-native';
+import {TripDetailsScreenProps} from '../types';
 
 export type QuayDeparturesRouteParams = {
   location: SearchLocation;
 };
 
-type RootProps = {
-  route: QuayDeparturesRouteProp;
-  navigation: QuayDeaparturesNavigationProps;
-};
+type RootProps = TripDetailsScreenProps<'QuayDepartures'>;
 
 const QuayDepartures: React.FC<RootProps> = ({route}) => {
   const styles = useNearbyStyles();
