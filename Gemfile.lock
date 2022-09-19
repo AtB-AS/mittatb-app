@@ -276,6 +276,7 @@ GEM
     zeitwerk (2.6.0)
 
 PLATFORMS
+  ruby
   universal-darwin-21
 
 DEPENDENCIES
@@ -285,5 +286,8 @@ DEPENDENCIES
   fastlane-plugin-appcenter
   fastlane-plugin-firebase_app_distribution
 
+RUBY VERSION
+   ruby 2.7.6p219
+
 BUNDLED WITH
-   2.3.20
+   2.3.22
