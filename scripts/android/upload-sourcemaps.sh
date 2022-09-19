@@ -17,6 +17,6 @@ echo "Generating and uploading Android source maps"
         --app-version=$BUILD_ID \
         --platform=android \
         --bundle=bundle/index.android.bundle \
-        --source-map=bundle/index.android.bundle.map \
+        --source-map=bundle/index.android.bundle.packager.map \
         --overwrite
 fi
