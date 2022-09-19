@@ -19,6 +19,7 @@ import CompactMap from '../Map/CompactMap';
 import {StaticColorByType} from '@atb/theme/colors';
 import {singleTripSearch} from '@atb/api/trips_v2';
 import {TripPattern} from '@atb/api/types/trips';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -29,7 +30,8 @@ export type DetailsRouteParams = {
 
 export type DetailScreenRouteProp = RouteProp<DetailsStackParams, 'Details'>;
 
-export type DetailScreenNavigationProp = NavigationProp<DetailsStackParams>;
+export type DetailScreenNavigationProp =
+  StackNavigationProp<DetailsStackParams>;
 
 type Props = {
   route: DetailScreenRouteProp;
