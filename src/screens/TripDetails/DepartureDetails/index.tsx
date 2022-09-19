@@ -46,7 +46,7 @@ import {usePreferenceItems} from '@atb/preferences';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
-  activeItemIndex?: number;
+  activeItemIndex: number;
 };
 
 export type DetailScreenRouteProp = RouteProp<
@@ -63,7 +63,7 @@ type Props = {
 };
 
 export default function DepartureDetails({navigation, route}: Props) {
-  const {activeItemIndex = 0, items} = route.params;
+  const {activeItemIndex, items} = route.params;
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useTheme();
   const {modesWeSellTicketsFor} = useFirestoreConfiguration();
