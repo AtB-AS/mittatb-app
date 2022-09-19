@@ -4,11 +4,7 @@ import Header from '@atb/components/screen-header';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import usePollableResource from '@atb/utils/use-pollable-resource';
-import {
-  NavigationProp,
-  RouteProp,
-  useIsFocused,
-} from '@react-navigation/native';
+import {RouteProp, useIsFocused} from '@react-navigation/native';
 import Axios, {AxiosError} from 'axios';
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
