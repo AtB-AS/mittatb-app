@@ -46,7 +46,7 @@ import {usePreferenceItems} from '@atb/preferences';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
-  activeItemIndex?: number;
+  activeItemIndex: number;
 };
 
 export type DetailScreenRouteProp = RouteProp<
@@ -63,14 +63,13 @@ type Props = {
 };
 
 export default function DepartureDetails({navigation, route}: Props) {
-  const {activeItemIndex = 0, items} = route.params;
+  const {activeItemIndex, items} = route.params;
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useTheme();
   const {modesWeSellTicketsFor} = useFirestoreConfiguration();
   const {enable_ticketing} = useRemoteConfig();
 
-  const activeItem: ServiceJourneyDeparture | undefined =
-    items[activeItemIndexState];
+  const activeItem = items[activeItemIndexState];
   const hasMultipleItems = items.length > 1;
 
   const styles = useStopsStyle();
@@ -126,15 +125,23 @@ export default function DepartureDetails({navigation, route}: Props) {
           style={styles.scrollView__content}
           testID="departureDetailsContentView"
         >
-          <PaginatedDetailsHeader
-            page={activeItemIndexState + 1}
-            totalPages={items.length}
-            onNavigate={onPaginactionPress}
-            showPagination={hasMultipleItems}
-            currentDate={activeItem?.date}
-            isTripCancelled={activeItem.isTripCancelled}
-          />
-          {activeItem.isTripCancelled && <CancelledDepartureMessage />}
+          {activeItem ? (
+            <PaginatedDetailsHeader
+              page={activeItemIndexState + 1}
+              totalPages={items.length}
+              onNavigate={onPaginactionPress}
+              showPagination={hasMultipleItems}
+              currentDate={activeItem?.date}
+              isTripCancelled={activeItem?.isTripCancelled}
+            />
+          ) : (
+            <MessageBox
+              type="error"
+              message={t(DepartureDetailsTexts.messages.noActiveItem)}
+            />
+          )}
+
+          {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
           <SituationMessages
             situations={parentSituations}
             containerStyle={styles.situationsContainer}

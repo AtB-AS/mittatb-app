@@ -4,11 +4,7 @@ import Header from '@atb/components/screen-header';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import usePollableResource from '@atb/utils/use-pollable-resource';
-import {
-  NavigationProp,
-  RouteProp,
-  useIsFocused,
-} from '@react-navigation/native';
+import {RouteProp, useIsFocused} from '@react-navigation/native';
 import Axios, {AxiosError} from 'axios';
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
@@ -19,6 +15,7 @@ import CompactMap from '../Map/CompactMap';
 import {StaticColorByType} from '@atb/theme/colors';
 import {singleTripSearch} from '@atb/api/trips_v2';
 import {TripPattern} from '@atb/api/types/trips';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -29,7 +26,8 @@ export type DetailsRouteParams = {
 
 export type DetailScreenRouteProp = RouteProp<DetailsStackParams, 'Details'>;
 
-export type DetailScreenNavigationProp = NavigationProp<DetailsStackParams>;
+export type DetailScreenNavigationProp =
+  StackNavigationProp<DetailsStackParams>;
 
 type Props = {
   route: DetailScreenRouteProp;
