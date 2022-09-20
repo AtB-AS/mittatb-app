@@ -57,22 +57,30 @@ const Index: React.FC<Props> = ({
     );
 
   const onSelectZone = (tariffZone: TariffZone) => {
-    navigation.navigate(callerRouteName as any, {
-      [callerRouteParam]: {
-        ...tariffZone,
-        resultType: 'zone',
+    navigation.navigate({
+      name: callerRouteName as any,
+      params: {
+        [callerRouteParam]: {
+          ...tariffZone,
+          resultType: 'zone',
+        },
       },
+      merge: true,
     });
   };
 
   const onSelectVenue = (location: SearchLocation) => {
     const tariffZone = getMatchingTariffZone(location);
-    navigation.navigate(callerRouteName as any, {
-      [callerRouteParam]: {
-        ...tariffZone,
-        resultType: 'venue',
-        venueName: location.name,
+    navigation.navigate({
+      name: callerRouteName as any,
+      params: {
+        [callerRouteParam]: {
+          ...tariffZone,
+          resultType: 'venue',
+          venueName: location.name,
+        },
       },
+      merge: true,
     });
   };
 
