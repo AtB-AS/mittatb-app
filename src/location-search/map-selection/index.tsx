@@ -88,8 +88,12 @@ const MapSelection: React.FC<Props> = ({
 
   const onSelect = () => {
     location &&
-      navigation.navigate(callerRouteName as any, {
-        [callerRouteParam]: selectedLocation,
+      navigation.navigate({
+        name: callerRouteName as any,
+        params: {
+          [callerRouteParam]: selectedLocation,
+        },
+        merge: true,
       });
   };
 
