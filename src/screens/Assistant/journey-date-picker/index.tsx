@@ -62,8 +62,12 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
           : dateWithReplacedTime(dateString, timeString).toISOString(),
       option,
     };
-    navigation.navigate(callerRouteName as any, {
-      [callerRouteParam]: calculatedTime,
+    navigation.navigate({
+      name: callerRouteName as any,
+      params: {
+        [callerRouteParam]: calculatedTime,
+      },
+      merge: true,
     });
   };
 
