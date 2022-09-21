@@ -27,13 +27,11 @@ jobs:
           echo "APK_FILE_NAME=app-staging.apk" >> $GITHUB_ENV
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
       - name: Decrypt env files
-        run: sh ./scripts/git-crypt-unlock.sh
-        shell: bash
+        run: bash ./scripts/git-crypt-unlock.sh
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Add Entur private registry credentials
-        run: sh ./scripts/add-entur-private-registry.sh
-        shell: bash
+        run: bash ./scripts/add-entur-private-registry.sh
         env:
           ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
@@ -55,14 +53,11 @@ jobs:
           ruby-version: 2.7.6
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Set environment
-        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT ${{ matrix.org }}
-        shell: bash
+        run: bash ./scripts/override-environment.sh $APP_ENVIRONMENT ${{ matrix.org }}
       - name: Export workflow env variables based on environment
-        run: sh ./scripts/export-workflow-parameters.sh
-        shell: bash
+        run: bash ./scripts/export-workflow-parameters.sh
       - name: Override native config files
-        run: sh ./scripts/override-config-files.sh
-        shell: bash
+        run: bash ./scripts/override-config-files.sh
       - name: Get potential cached APK
         uses: actions/cache@v2
         id: apk-cache
@@ -70,8 +65,7 @@ jobs:
           path: app-staging.apk
           key: ${{ matrix.org }}-${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.env') }}
       - name: Decode Android keystore
-        run: sh ./scripts/android/create-keystore-file.sh
-        shell: bash
+        run: bash ./scripts/android/create-keystore-file.sh
         env:
           KEYSTORE: ${{ secrets.KEYSTORE }}
       - name: Generate native assets
@@ -86,8 +80,7 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
       - name: Replace apk bundle
         if: steps.apk-cache.outputs.cache-hit == 'true'
-        run: sh ./scripts/android/replace-bundle.sh
-        shell: bash
+        run: bash ./scripts/android/replace-bundle.sh
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
@@ -106,13 +99,11 @@ jobs:
           GCP_CREDENTIALS_PATH: google-services.json
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
       - name: Upload bundle and source maps
-        run: sh ./scripts/android/upload-sourcemaps.sh
+        run: bash ./scripts/android/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
-        shell: bash
       - name: Register app version
-        run: sh ./scripts/android/register-app-version.sh
-        shell: bash
+        run: bash ./scripts/android/register-app-version.sh
         env:
           ENTUR_CLIENT_ID: ${{ secrets.ABT_ENTUR_CLIENT_ID_STAGING}}
           ENTUR_CLIENT_SECRET: ${{ secrets.ABT_ENTUR_CLIENT_SECRET_STAGING}}
