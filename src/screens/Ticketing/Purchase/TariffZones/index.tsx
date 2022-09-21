@@ -267,22 +267,30 @@ const TariffZones: React.FC<TariffZonesProps> = ({
     : [FOCUS_ORIGIN.longitude, FOCUS_ORIGIN.latitude];
 
   const onSave = () => {
-    navigation.navigate('PurchaseOverview', {
-      fromTariffZone: selectedZones.from,
-      toTariffZone: isApplicableOnSingleZoneOnly
-        ? selectedZones.from
-        : selectedZones.to,
+    navigation.navigate({
+      name: 'PurchaseOverview',
+      params: {
+        fromTariffZone: selectedZones.from,
+        toTariffZone: isApplicableOnSingleZoneOnly
+          ? selectedZones.from
+          : selectedZones.to,
+      },
+      merge: true,
     });
   };
 
   const onVenueSearchClick = (callerRouteParam: keyof RouteParams) => {
-    navigation.navigate('TariffZoneSearch', {
-      label:
-        callerRouteParam === 'fromTariffZone'
-          ? t(TariffZonesTexts.location.departurePicker.label)
-          : t(TariffZonesTexts.location.destinationPicker.label),
-      callerRouteName: TariffZonesRouteNameStatic,
-      callerRouteParam,
+    navigation.navigate({
+      name: 'TariffZoneSearch',
+      params: {
+        label:
+          callerRouteParam === 'fromTariffZone'
+            ? t(TariffZonesTexts.location.departurePicker.label)
+            : t(TariffZonesTexts.location.destinationPicker.label),
+        callerRouteName: TariffZonesRouteNameStatic,
+        callerRouteParam,
+      },
+      merge: true,
     });
   };
 
