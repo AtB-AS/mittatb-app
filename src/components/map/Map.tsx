@@ -18,12 +18,16 @@ import {TouchableOpacity, View} from 'react-native';
 import {coordinatesDistanceInMetres} from '@atb/utils/location';
 import SelectionPin, {PinMode} from '@atb/components/map/SelectionPin';
 import LocationBar from '@atb/components/map/LocationBar';
+import {tripsSearch} from '@atb/api/trips_v2';
+import MapRoute from '@atb/screens/TripDetails/Map/MapRoute';
+import {createMapLines} from '@atb/screens/TripDetails/Map/utils';
 
 /**
  * How many meters from the current location GPS coordinates can the map arrow
  * icon be and still be considered "My position"
  */
 const CURRENT_LOCATION_THRESHOLD_METERS = 30;
+const MAX_LIMIT_TO_SHOW_WALKING_TRIP_PATTERN = 10000;
 
 type RegionEvent = {
   isMoving: boolean;
@@ -34,6 +38,7 @@ type MapProps = {
   coordinates: Coordinates & {zoomLevel: number};
   shouldShowSearchBar?: boolean;
   shouldShowSelectionPin?: boolean;
+  shouldExploreTripOptions?: boolean;
   onLocationSelect?: (selectedLocation?: any) => void;
 };
 
@@ -41,9 +46,12 @@ const Map = ({
   coordinates,
   shouldShowSearchBar,
   shouldShowSelectionPin,
+  shouldExploreTripOptions,
   onLocationSelect,
 }: MapProps) => {
   const [regionEvent, setRegionEvent] = useState<RegionEvent>();
+  const [tripLegs, setTripLegs] = useState<any>();
+  const mapLines = tripLegs ? createMapLines(tripLegs) : [];
   const centeredCoordinates = useMemo<Coordinates | null>(
     () =>
       (regionEvent?.region?.geometry && {
@@ -105,10 +113,70 @@ const Map = ({
       );
   }
 
-  const flyToFeature = (feature: Feature) => {
+  const flyToFeature = async (feature: Feature) => {
+    setTripLegs([]);
     if (feature && feature.geometry.type === 'Point') {
+      if (shouldExploreTripOptions) {
+        await findTripToSelectedLocation(feature);
+      }
       mapCameraRef.current?.flyTo(feature.geometry.coordinates, 300);
     }
+  };
+
+  async function findTripToSelectedLocation(feature: any) {
+    const selectedCoordinates = {
+      longitude: feature.geometry.coordinates[0],
+      latitude: feature.geometry.coordinates[1],
+    };
+
+    const currentLocationCoordinates = {
+      longitude: coordinates.longitude,
+      latitude: coordinates.latitude,
+    };
+    const {screenPointX, screenPointY} = feature.properties;
+    const featuresAtPoint =
+      await mapViewRef?.current?.queryRenderedFeaturesAtPoint(
+        [screenPointX, screenPointY],
+        ['==', ['geometry-type'], 'Point'],
+      );
+
+    featuresAtPoint?.features.map(async (feature) => {
+      if (feature?.properties?.entityType === 'StopPlace') {
+        const trips = await getTrips(
+          currentLocationCoordinates,
+          selectedCoordinates,
+        );
+
+        // can entur return more than one walking pattern between two stops?
+        const walkingTripPattern = trips?.trip.tripPatterns.find(
+          (tp) => tp.legs.length === 1 && tp.legs[0].mode === 'foot',
+        );
+        if (
+          walkingTripPattern &&
+          (walkingTripPattern.walkDistance as number) <=
+            MAX_LIMIT_TO_SHOW_WALKING_TRIP_PATTERN
+        ) {
+          setTripLegs(walkingTripPattern.legs);
+        }
+      }
+    });
+  }
+
+  const getTrips = async (
+    fromCoordinates: Coordinates,
+    toCoordinates: Coordinates,
+  ) => {
+    return await tripsSearch({
+      from: {
+        name: 'From Position',
+        coordinates: fromCoordinates,
+      },
+      to: {
+        name: 'To Position',
+        coordinates: toCoordinates,
+      },
+      arriveBy: false,
+    });
   };
 
   const styles = useMapStyles();
@@ -144,6 +212,7 @@ const Map = ({
             centerCoordinate={[coordinates.longitude, coordinates.latitude]}
             {...MapCameraConfig}
           />
+          {mapLines && <MapRoute lines={mapLines}></MapRoute>}
           <MapboxGL.UserLocation showsUserHeadingIndicator />
         </MapboxGL.MapView>
         {shouldShowSelectionPin && (

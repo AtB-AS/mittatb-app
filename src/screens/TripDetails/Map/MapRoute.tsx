@@ -38,6 +38,12 @@ function MapLineItem({line, index}: MapLineItemProps) {
     ? hexToRgba(lineColorInput, 0.5)
     : lineColorInput;
 
+  const dottedLineStyle = {
+    lineCap: 'round',
+    lineDasharray: [0, 2],
+  };
+  const customStyle = line.travelType === 'foot' ? dottedLineStyle : {};
+
   return (
     <View>
       <MapboxGL.ShapeSource id={'shape-' + index} shape={line.geometry}>
@@ -47,6 +53,7 @@ function MapLineItem({line, index}: MapLineItemProps) {
             lineWidth: 4,
             lineOffset: -1,
             lineColor,
+            ...customStyle,
           }}
         ></MapboxGL.LineLayer>
       </MapboxGL.ShapeSource>
