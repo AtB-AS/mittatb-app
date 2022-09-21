@@ -41,8 +41,10 @@ jobs:
           node-version: 16
       - name: Install node_modules
         run: yarn install
-      - name: Bundle install, fastlane dependencies
-        run: bundle install
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.6
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Get Github-release data
         if: matrix.org == 'atb'
         id: get_release
@@ -60,16 +62,16 @@ jobs:
         env:
           KEYSTORE: ${{ secrets.KEYSTORE }}
       - name: Generate native assets
-        run: brew install imagemagick && yarn generate-native-assets
+        run: yarn generate-native-assets
       - name: Run fastlane build
-        run: fastlane android build
+        run: bundle exec fastlane android build
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
       - name: Distribute to Google Alpha
         if: matrix.org == 'atb'
-        run: fastlane android appcenter_alpha
+        run: bundle exec fastlane android appcenter_alpha
         env:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
           RELEASE_NOTES: ${{ steps.get_release.outputs.body }}
@@ -78,7 +80,7 @@ jobs:
         if: matrix.org == 'nfk'
         run: |
           echo ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT}} | base64 --decode > google-play-service-account.json
-          fastlane android playstore_internal
+          bundle exec fastlane android playstore_internal
         env:
           GOOGLE_PLAY_SERVICE_ACCOUNT_PATH: google-play-service-account.json
           ANDROID_PACKAGE_NAME: ${{ env.ANDROID_APPLICATION_ID }}
