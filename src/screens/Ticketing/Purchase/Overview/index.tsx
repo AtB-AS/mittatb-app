@@ -1,17 +1,6 @@
 import MessageBox from '@atb/components/message-box';
-import {useGeolocationState} from '@atb/GeolocationContext';
-import {
-  PreassignedFareProduct,
-  TariffZone,
-  UserProfile,
-} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
-import {
-  Language,
-  PurchaseOverviewTexts,
-  TranslateFunction,
-  useTranslation,
-} from '@atb/translations';
+import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import Zones from './components/Zones';
 
@@ -23,20 +12,18 @@ import {
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
 import {usePreferences} from '@atb/preferences';
-import {
-  getReferenceDataName,
-  productIsSellableInApp,
-} from '@atb/reference-data/utils';
+import {productIsSellableInApp} from '@atb/reference-data/utils';
 import {useTicketState} from '@atb/tickets';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
-import {formatToLongDateTime} from '@atb/utils/date';
-import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useEffect, useMemo, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {getOtherDeviceIsInspectableWarning} from '../../Ticket/utils';
-import {TariffZoneWithMetadata} from '../TariffZones';
 import {TicketPurchaseScreenProps} from '../types';
-import {getPurchaseFlow} from '../utils';
+import {
+  getPurchaseFlow,
+  UserProfileTypeWithCount,
+  useTravellersWithPreselectedCounts,
+} from '../utils';
 import DurationSelection from './components/DurationSelection';
 import StartTimeSelection from './components/StartTimeSelection';
 import Summary from './components/Summary';
@@ -44,11 +31,10 @@ import TravellerSelection from './components/TravellerSelection';
 import useOfferState from './use-offer-state';
 
 import {getTrainTicketNoticeText} from '../../utils';
-
-type UserProfileTypeWithCount = {
-  userTypeString: string;
-  count: number;
-};
+import {TariffZone} from '@atb/reference-data/types';
+import {TariffZoneWithMetadata} from '../TariffZones';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 
 type OverviewProps = TicketPurchaseScreenProps<'PurchaseOverview'>;
 
@@ -256,96 +242,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         </FullScreenFooter>
       </ScrollView>
     </View>
-  );
-};
-
-export const createTravellersText = (
-  userProfilesWithCount: UserProfileWithCount[],
-  /**
-   * shortened Shorten text if more than two traveller groups, making
-   * '2 adults, 1 child, 2 senior' become '5 travellers'.
-   */
-  shortened: boolean,
-  /**
-   * prefixed Prefix the traveller selection with text signalling it is the current
-   * selection.
-   */
-  prefixed: boolean,
-  t: TranslateFunction,
-  language: Language,
-) => {
-  const chosenUserProfiles = userProfilesWithCount.filter((u) => u.count);
-
-  const prefix = prefixed ? t(PurchaseOverviewTexts.travellers.prefix) : '';
-
-  if (chosenUserProfiles.length === 0) {
-    return prefix + t(PurchaseOverviewTexts.travellers.noTravellers);
-  } else if (chosenUserProfiles.length > 2 && shortened) {
-    const totalCount = chosenUserProfiles.reduce(
-      (total, u) => total + u.count,
-      0,
-    );
-    return (
-      prefix + t(PurchaseOverviewTexts.travellers.travellersCount(totalCount))
-    );
-  } else {
-    return (
-      prefix +
-      chosenUserProfiles
-        .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
-        .join(', ')
-    );
-  }
-};
-
-export const createTravelDateText = (
-  t: TranslateFunction,
-  language: Language,
-  travelDate?: string,
-) => {
-  return travelDate
-    ? t(
-        PurchaseOverviewTexts.travelDate.futureDate(
-          formatToLongDateTime(travelDate, language),
-        ),
-      )
-    : t(PurchaseOverviewTexts.travelDate.now);
-};
-
-const getCountIfUserIsIncluded = (
-  u: UserProfile,
-  selections: UserProfileTypeWithCount[],
-): number => {
-  const selectedUser = selections.filter(
-    (up: UserProfileTypeWithCount) => up.userTypeString === u.userTypeString,
-  );
-
-  if (selectedUser.length < 1) return 0;
-  return selectedUser[0].count;
-};
-
-/**
- * Get the default user profiles with count. If a default user profile has been
- * selected in the preferences that profile will have a count of one. If no
- * default user profile preference exists then the first user profile will have
- * a count of one.
- */
-const useTravellersWithPreselectedCounts = (
-  userProfiles: UserProfile[],
-  preassignedFareProduct: PreassignedFareProduct,
-  defaultSelections: UserProfileTypeWithCount[],
-) => {
-  return useMemo(
-    () =>
-      userProfiles
-        .filter((u) =>
-          preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
-        )
-        .map((u) => ({
-          ...u,
-          count: getCountIfUserIsIncluded(u, defaultSelections),
-        })),
-    [userProfiles, preassignedFareProduct],
   );
 };
 

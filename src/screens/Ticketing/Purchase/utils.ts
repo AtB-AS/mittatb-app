@@ -1,6 +1,22 @@
-import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import {
+  PreassignedFareProduct,
+  TariffZone,
+  UserProfile,
+} from '@atb/reference-data/types';
 import {PaymentType} from '@atb/tickets/types';
 import {format, parseISO} from 'date-fns';
+import {useMemo} from 'react';
+import {TariffZoneWithMetadata} from './TariffZones';
+import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import {
+  Language,
+  PurchaseOverviewTexts,
+  TranslateFunction,
+} from '@atb/translations';
+import {UserProfileWithCount} from './Travellers/use-user-count-state';
+import {formatToLongDateTime} from '@atb/utils/date';
+import {getReferenceDataName} from '@atb/reference-data/utils';
 
 export type PurchaseFlow = {
   /**
@@ -14,6 +30,11 @@ export type PurchaseFlow = {
    * ticket.
    */
   travelDateSelectionEnabled: boolean;
+};
+
+export type UserProfileTypeWithCount = {
+  userTypeString: string;
+  count: number;
 };
 
 export const getPurchaseFlow = (
@@ -48,4 +69,94 @@ export function getPaymentTypeName(paymentType: PaymentType) {
     default:
       return '';
   }
+}
+
+/**
+ * Get the default user profiles with count. If a default user profile has been
+ * selected in the preferences that profile will have a count of one. If no
+ * default user profile preference exists then the first user profile will have
+ * a count of one.
+ */
+export function useTravellersWithPreselectedCounts(
+  userProfiles: UserProfile[],
+  preassignedFareProduct: PreassignedFareProduct,
+  defaultSelections: UserProfileTypeWithCount[],
+) {
+  return useMemo(
+    () =>
+      userProfiles
+        .filter((u) =>
+          preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
+        )
+        .map((u) => ({
+          ...u,
+          count: getCountIfUserIsIncluded(u, defaultSelections),
+        })),
+    [userProfiles, preassignedFareProduct],
+  );
+}
+
+export function createTravellersText(
+  userProfilesWithCount: UserProfileWithCount[],
+  /**
+   * shortened Shorten text if more than two traveller groups, making
+   * '2 adults, 1 child, 2 senior' become '5 travellers'.
+   */
+  shortened: boolean,
+  /**
+   * prefixed Prefix the traveller selection with text signalling it is the current
+   * selection.
+   */
+  prefixed: boolean,
+  t: TranslateFunction,
+  language: Language,
+) {
+  const chosenUserProfiles = userProfilesWithCount.filter((u) => u.count);
+
+  const prefix = prefixed ? t(PurchaseOverviewTexts.travellers.prefix) : '';
+
+  if (chosenUserProfiles.length === 0) {
+    return prefix + t(PurchaseOverviewTexts.travellers.noTravellers);
+  } else if (chosenUserProfiles.length > 2 && shortened) {
+    const totalCount = chosenUserProfiles.reduce(
+      (total, u) => total + u.count,
+      0,
+    );
+    return (
+      prefix + t(PurchaseOverviewTexts.travellers.travellersCount(totalCount))
+    );
+  } else {
+    return (
+      prefix +
+      chosenUserProfiles
+        .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
+        .join(', ')
+    );
+  }
+}
+
+export function createTravelDateText(
+  t: TranslateFunction,
+  language: Language,
+  travelDate?: string,
+) {
+  return travelDate
+    ? t(
+        PurchaseOverviewTexts.travelDate.futureDate(
+          formatToLongDateTime(travelDate, language),
+        ),
+      )
+    : t(PurchaseOverviewTexts.travelDate.now);
+}
+
+export function getCountIfUserIsIncluded(
+  u: UserProfile,
+  selections: UserProfileTypeWithCount[],
+): number {
+  const selectedUser = selections.filter(
+    (up: UserProfileTypeWithCount) => up.userTypeString === u.userTypeString,
+  );
+
+  if (selectedUser.length < 1) return 0;
+  return selectedUser[0].count;
 }

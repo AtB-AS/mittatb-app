@@ -3,9 +3,9 @@ import {UserCountState} from './use-user-count-state';
 import {useTranslation, TicketTravellerTexts} from '@atb/translations';
 import * as Sections from '../../../../components/sections';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import {createTravellersText} from '@atb/screens/Ticketing/Purchase/Overview';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {usePreferences} from '@atb/preferences';
+import {createTravellersText} from '../utils';
 
 export default function MultipleTravellersSelection({
   userProfilesWithCount,
