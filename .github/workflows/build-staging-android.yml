@@ -51,7 +51,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7.6
-      - run: bundle install
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Set environment
         run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT ${{ matrix.org }}
       - name: Export workflow env variables based on environment
@@ -73,7 +73,7 @@ jobs:
         run: yarn generate-native-assets
       - name: Run fastlane build
         if: steps.apk-cache.outputs.cache-hit != 'true'
-        run: fastlane android build
+        run: bundle exec fastlane android build
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
@@ -87,14 +87,14 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
       - name: Distribute to AppCenter
         if: matrix.org == 'atb'
-        run: fastlane android appcenter_staging
+        run: bundle exec fastlane android appcenter_staging
         env:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
       - name: Distribute to Firebase app distribution
         if: matrix.org == 'nfk'
         run: |
           echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
-          fastlane android firebase_distribution_staging
+          bundle exec fastlane android firebase_distribution_staging
         env:
           GCP_CREDENTIALS_PATH: google-services.json
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
