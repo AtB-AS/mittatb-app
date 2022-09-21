@@ -163,7 +163,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
 
   const vatAmountString = formatDecimalNumber(vatAmount, language);
   const vatPercentString = formatDecimalNumber(vatPercent, language);
-  const totalPriceString = formatDecimalNumber(totalPrice, language);
+  const totalPriceString = formatDecimalNumber(totalPrice, language, 2);
 
   useEffect(() => {
     const prevMethod = getPreviousPaymentMethod(
@@ -286,7 +286,12 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                       {u.count} {getReferenceDataName(u, language)}
                     </ThemeText>
                     <ThemeText>
-                      {u.count * (u.offer.prices[0].amount_float || 0)} kr
+                      {formatDecimalNumber(
+                        u.count * (u.offer.prices[0].amount_float || 0),
+                        language,
+                        2,
+                      )}{' '}
+                      kr
                     </ThemeText>
                   </View>
                 ))}
