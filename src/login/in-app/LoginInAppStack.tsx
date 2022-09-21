@@ -1,32 +1,11 @@
+import {ActiveTicketPromptInApp} from '@atb/login/in-app/ActiveTicketPrompt';
+import {ConfirmCodeInApp} from '@atb/login/in-app/ConfirmCodeInApp';
+import {LoginOnboardingInApp} from '@atb/login/in-app/LoginOnboarding';
+import {PhoneInputInApp} from '@atb/login/in-app/PhoneInputInApp';
+import LoginOptionsScreen from '@atb/login/LoginOptionsScreen';
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import {
-  ConfirmCodeInApp,
-  ConfirmCodeInAppRouteParams,
-} from '@atb/login/in-app/ConfirmCodeInApp';
-import {
-  PhoneInputInApp,
-  PhoneInputInAppRouteParams,
-} from '@atb/login/in-app/PhoneInputInApp';
-import {
-  LoginOnboardingInApp,
-  LoginOnboardingInAppRouteParams,
-} from '@atb/login/in-app/LoginOnboarding';
-import {
-  ActiveTicketPromptInApp,
-  ActiveTicketPromptInAppRouteParams,
-} from '@atb/login/in-app/ActiveTicketPrompt';
-import LoginOptionsScreen, {
-  LoginOptionsRouteParams,
-} from '@atb/login/LoginOptionsScreen';
-
-export type LoginInAppStackParams = {
-  LoginOnboardingInApp: LoginOnboardingInAppRouteParams;
-  ActiveTicketPromptInApp: ActiveTicketPromptInAppRouteParams;
-  PhoneInputInApp: PhoneInputInAppRouteParams;
-  ConfirmCodeInApp: ConfirmCodeInAppRouteParams;
-  LoginOptionsScreen: LoginOptionsRouteParams;
-};
+import {LoginInAppStackParams} from '../types';
 
 const Stack = createStackNavigator<LoginInAppStackParams>();
 

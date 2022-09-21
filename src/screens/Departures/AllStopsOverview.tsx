@@ -1,49 +1,30 @@
-import {useGeolocationState} from '@atb/GeolocationContext';
-import React, {useEffect, useMemo, useState} from 'react';
-import {NearbyTexts, useTranslation} from '@atb/translations';
-import {useOnlySingleLocation} from '@atb/location-search';
-import {
-  CompositeNavigationProp,
-  RouteProp,
-  useIsFocused,
-} from '@react-navigation/native';
-import ThemeIcon from '@atb/components/theme-icon';
-import {useDoOnceWhen} from '@atb/screens/utils';
-import {useNearestStopsData} from '@atb/screens/Departures/state/nearby-places-state';
-import DeparturesTexts from '@atb/translations/screens/Departures';
 import {Place, StopPlacePosition} from '@atb/api/types/departures';
-import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
-import {Location} from '@atb/favorites/types';
-import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
-import StopPlaces from '@atb/screens/Departures/components/StopPlaces';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {View} from 'react-native';
-import {LocationInput, Section} from '@atb/components/sections';
-import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import FavoriteChips from '@atb/favorite-chips';
 import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlacesQuery';
-import {DeparturesStackParams} from '@atb/screens/Departures/index';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '@atb/navigation';
-
-type DeparturesRouteProps = RouteProp<
-  DeparturesStackParams,
-  'AllStopsOverview'
->;
-
-type DepartureScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<DeparturesStackParams>,
-  StackNavigationProp<RootStackParamList>
->;
+import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
+import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import {LocationInput, Section} from '@atb/components/sections';
+import ThemeIcon from '@atb/components/theme-icon';
+import FavoriteChips from '@atb/favorite-chips';
+import {Location} from '@atb/favorites/types';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import {useOnlySingleLocation} from '@atb/location-search';
+import StopPlaces from '@atb/screens/Departures/components/StopPlaces';
+import {useNearestStopsData} from '@atb/screens/Departures/state/nearby-places-state';
+import {useDoOnceWhen} from '@atb/screens/utils';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {NearbyTexts, useTranslation} from '@atb/translations';
+import DeparturesTexts from '@atb/translations/screens/Departures';
+import {useIsFocused} from '@react-navigation/native';
+import React, {useEffect, useMemo, useState} from 'react';
+import {View} from 'react-native';
+import {NearbyPlacesScreenTabProps} from './types';
 
 export type AllStopsOverviewParams = {
   location: Location;
 };
 
-type RootProps = {
-  navigation: DepartureScreenNavigationProp;
-  route: DeparturesRouteProps;
-};
+type RootProps = NearbyPlacesScreenTabProps<'AllStopsOverview'>;
 
 export const AllStopsOverview = ({navigation}: RootProps) => {
   const {status, location, locationEnabled, requestPermission} =
@@ -55,7 +36,7 @@ export const AllStopsOverview = ({navigation}: RootProps) => {
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
 
   const {t} = useTranslation();
-  const fromLocation = useOnlySingleLocation<DeparturesRouteProps>('location');
+  const fromLocation = useOnlySingleLocation<RootProps['route']>('location');
 
   const screenHasFocus = useIsFocused();
 

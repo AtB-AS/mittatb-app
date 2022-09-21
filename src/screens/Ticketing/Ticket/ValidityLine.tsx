@@ -26,6 +26,7 @@ const ValidityLine = (props: Props): ReactElement => {
 
   switch (props.status) {
     case 'reserving':
+    case 'approved':
       return (
         <LineWithVerticalBars
           backgroundColor={
@@ -51,6 +52,7 @@ const ValidityLine = (props: Props): ReactElement => {
     case 'refunded':
     case 'expired':
     case 'inactive':
+    case 'rejected':
       return (
         <View style={styles.container}>
           <SectionSeparator />

@@ -184,7 +184,7 @@ platform :android do
     sh("cp", "../android/app/build/outputs/apk/#{build_type}/app-#{build_type}.apk", "../")
     sh("mkdir", "-p", "../bundle")
     sh("cp", "../android/app/build/generated/assets/react/#{build_type}/index.android.bundle", "../bundle")
-    sh("cp", "../android/app/build/generated/sourcemaps/react/#{build_type}/index.android.bundle.map", "../bundle")
+    sh("cp", "../android/app/build/intermediates/sourcemaps/react/#{build_type}/index.android.bundle.packager.map", "../bundle/index.android.bundle.map")
   end
 
   lane :firebase_distribution_staging do

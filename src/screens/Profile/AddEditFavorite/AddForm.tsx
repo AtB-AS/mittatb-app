@@ -1,8 +1,11 @@
 import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {Pin} from '@atb/assets/svg/mono-icons/map';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button, {ButtonGroup} from '@atb/components/button';
 import MessageBox from '@atb/components/message-box';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
@@ -10,18 +13,12 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {SearchLocation, StoredLocationFavorite} from '@atb/favorites/types';
 import {useOnlySingleLocation} from '@atb/location-search';
-import {RootStackParamList} from '@atb/navigation';
 import {StyleSheet, Theme} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
-import {CompositeNavigationProp, RouteProp} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useEffect, useState} from 'react';
 import {Alert, Keyboard, ScrollView, View} from 'react-native';
-import {AddEditFavoriteRootParams} from '.';
 import EmojiSheet from './EmojiSheet';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {AddEditFavoriteScreenProps} from './types';
 
 type AddEditRouteName = 'AddEditForm';
 const AddEditRouteNameStatic: AddEditRouteName = 'AddEditForm';
@@ -31,20 +28,7 @@ export type AddEditParams = {
   searchLocation?: SearchLocation;
 };
 
-export type AddEditNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<AddEditFavoriteRootParams, AddEditRouteName>,
-  StackNavigationProp<RootStackParamList>
->;
-
-type AddEditScreenRouteProp = RouteProp<
-  AddEditFavoriteRootParams,
-  AddEditRouteName
->;
-
-type AddEditProps = {
-  navigation: AddEditNavigationProp;
-  route: AddEditScreenRouteProp;
-};
+export type AddEditProps = AddEditFavoriteScreenProps<'AddEditForm'>;
 
 export default function AddEditFavorite({navigation, route}: AddEditProps) {
   const css = useScreenStyle();
@@ -61,7 +45,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
   );
   const [emoji, setEmoji] = useState<string | undefined>(editItem?.emoji);
   const [name, setName] = useState<string>(editItem?.name ?? '');
-  const location = useOnlySingleLocation<AddEditScreenRouteProp>(
+  const location = useOnlySingleLocation<AddEditProps['route']>(
     'searchLocation',
     editItem?.location,
   );

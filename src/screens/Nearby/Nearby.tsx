@@ -14,8 +14,8 @@ import {
   useGeolocationState,
 } from '@atb/GeolocationContext';
 import {useOnlySingleLocation} from '@atb/location-search';
-import {RootStackParamList} from '@atb/navigation';
 import {usePreferences} from '@atb/preferences';
+import {useDoOnceWhen} from '@atb/screens/utils';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
@@ -27,41 +27,17 @@ import {
 } from '@atb/translations';
 import {formatToShortDateTimeWithoutYear} from '@atb/utils/date';
 import {TFunc} from '@leile/lobo-t';
-import {
-  CompositeNavigationProp,
-  RouteProp,
-  useIsFocused,
-} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useEffect, useMemo, useState} from 'react';
+import {useIsFocused} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
-import {NearbyStackParams} from '.';
 import Loading from '../Loading';
 import DepartureTimeSheet from './DepartureTimeSheet';
 import {useDepartureData} from './state';
-import {SearchTime} from './types';
-import {useDoOnceWhen} from '@atb/screens/utils';
+import {NearbyRouteNameStatic, NearbyScreenProps, SearchTime} from './types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-type NearbyRouteName = 'NearbyRoot';
-const NearbyRouteNameStatic: NearbyRouteName = 'NearbyRoot';
-
-export type NearbyScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<NearbyStackParams>,
-  StackNavigationProp<RootStackParamList>
->;
-
-export type NearbyScreenParams = {
-  location: Location;
-};
-
-export type NearbyScreenProp = RouteProp<NearbyStackParams, NearbyRouteName>;
-
-type RootProps = {
-  navigation: NearbyScreenNavigationProp;
-  route: NearbyScreenProp;
-};
+type RootProps = NearbyScreenProps<'NearbyRoot'>;
 
 export default function NearbyScreen({navigation}: RootProps) {
   const {status, location, locationEnabled, requestPermission} =
@@ -85,7 +61,7 @@ type Props = {
   currentLocation?: GeoLocation;
   hasLocationPermission: boolean;
   requestGeoPermission: RequestPermissionFn;
-  navigation: NearbyScreenNavigationProp;
+  navigation: RootProps['navigation'];
 };
 
 const NearbyOverview: React.FC<Props> = ({
@@ -94,7 +70,7 @@ const NearbyOverview: React.FC<Props> = ({
   hasLocationPermission,
   navigation,
 }) => {
-  const fromLocation = useOnlySingleLocation<NearbyScreenProp>('location');
+  const fromLocation = useOnlySingleLocation<RootProps['route']>('location');
 
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
   const styles = useNearbyStyles();

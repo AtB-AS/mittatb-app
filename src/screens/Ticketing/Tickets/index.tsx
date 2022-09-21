@@ -1,25 +1,20 @@
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
 import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketState,
 } from '@atb/tickets';
 import {TicketsTexts, useTranslation} from '@atb/translations';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {
+  createMaterialTopTabNavigator,
+  MaterialTopTabBarProps,
+} from '@react-navigation/material-top-tabs';
 import React from 'react';
 import {View} from 'react-native';
+import {ActiveTickets} from './ActiveTickets/ActiveTickets';
 import TabBar from './TabBar';
 import {BuyTickets} from './Tabs';
-import {ActiveTickets} from './ActiveTickets/ActiveTickets';
-import TicketInformationalOverlay from '@atb/screens/Ticketing/Tickets/TicketInformationalOverlay';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-
-export const BuyTicketsScreenName = 'BuyTickets';
-export const ActiveTicketsScreenName = 'ActiveTickets';
-
-export type TicketTabsNavigatorParams = {
-  [BuyTicketsScreenName]: undefined;
-  [ActiveTicketsScreenName]: undefined;
-};
+import {TicketTabsNavigatorParams} from './types';
 
 const Tab = createMaterialTopTabNavigator<TicketTabsNavigatorParams>();
 
@@ -30,9 +25,8 @@ export default function TicketTabs() {
   const {fareContracts} = useTicketState();
   const activeFareContracts =
     filterActiveOrCanBeUsedFareContracts(fareContracts);
-  const initialRoute = activeFareContracts.length
-    ? ActiveTicketsScreenName
-    : BuyTicketsScreenName;
+  const initialRoute: keyof TicketTabsNavigatorParams =
+    activeFareContracts.length ? 'ActiveTickets' : 'BuyTickets';
 
   return (
     <View style={styles.container}>
@@ -42,11 +36,11 @@ export default function TicketTabs() {
         globalMessageContext="app-ticketing"
       />
       <Tab.Navigator
-        tabBar={(props) => <TabBar {...props} />}
+        tabBar={(props: MaterialTopTabBarProps) => <TabBar {...props} />}
         initialRouteName={initialRoute}
       >
         <Tab.Screen
-          name={BuyTicketsScreenName}
+          name="BuyTickets"
           component={BuyTickets}
           options={{
             tabBarLabel: t(TicketsTexts.buyTicketsTab.label),
@@ -55,7 +49,7 @@ export default function TicketTabs() {
           }}
         />
         <Tab.Screen
-          name={ActiveTicketsScreenName}
+          name="ActiveTickets"
           component={ActiveTickets}
           options={{
             tabBarLabel: t(TicketsTexts.activeTicketsTab.label),

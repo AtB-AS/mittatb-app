@@ -1,74 +1,34 @@
-import createDismissableStackNavigator from '@atb/navigation/createDismissableStackNavigator';
 import transitionSpec from '@atb/navigation/transitionSpec';
+import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
 import {
-  PreassignedFareProduct,
-  PreassignedFareProductType,
-} from '@atb/reference-data/types';
-import {ReserveOffer} from '@atb/tickets';
-import {RouteProp} from '@react-navigation/native';
+  createStackNavigator,
+  StackNavigationOptions,
+  TransitionPresets,
+} from '@react-navigation/stack';
 import React from 'react';
-import {BuyTicketsScreenName} from '../Tickets';
-import ConfirmationScreen, {
-  RouteParams as ConfirmationRouteParams,
-} from './Confirmation';
+import ConfirmationScreen from './Confirmation';
 import PurchaseOverviewScreen from './Overview';
 import {CreditCard as CreditCardScreen, Vipps as VippsScreen} from './Payment';
-import TariffZones, {
-  RouteParams as TariffZonesParams,
-  TariffZoneWithMetadata,
-} from './TariffZones';
-import TariffZoneSearch, {
-  RouteParams as TariffZoneSearchParams,
-} from './TariffZones/search';
-import {TransitionPresets} from '@react-navigation/stack';
-import {CardPaymentMethod} from './types';
-import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
-import {UserProfileWithCount} from './Travellers/use-user-count-state';
+import TariffZones from './TariffZones';
+import TariffZoneSearch from './TariffZones/search';
+import {TicketingStackParams, TicketPurchaseStackRootProps} from './types';
+
 import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/screens/MobileTokenOnboarding/utils';
 
-type PurchaseOverviewParams = {
-  refreshOffer?: boolean;
-  selectableProductType?: PreassignedFareProductType;
-  preassignedFareProduct?: PreassignedFareProduct;
-  userProfilesWithCount?: UserProfileWithCount[];
-  fromTariffZone?: TariffZoneWithMetadata;
-  toTariffZone?: TariffZoneWithMetadata;
-  travelDate?: string;
+const Stack = createStackNavigator<TicketingStackParams>();
+
+const options: StackNavigationOptions = {
+  headerShown: false,
 };
 
-type PaymentParams = {
-  offers: ReserveOffer[];
-  preassignedFareProduct: PreassignedFareProduct;
-};
-
-export type TicketingStackParams = {
-  PurchaseOverview: PurchaseOverviewParams;
-  TariffZones: TariffZonesParams;
-  TariffZoneSearch: TariffZoneSearchParams;
-  Confirmation: ConfirmationRouteParams;
-  PaymentCreditCard: PaymentParams & {paymentMethod: CardPaymentMethod};
-  PaymentVipps: PaymentParams;
-  Splash: undefined;
-  ConsequencesFromTicketPurchase: undefined;
-};
-
-const Stack = createDismissableStackNavigator<TicketingStackParams>();
-
-type TicketPurchaseRootProps = {
-  route: RouteProp<TicketingStackParams, 'PurchaseOverview'>;
-};
-
-export default function PurchaseStack({route}: TicketPurchaseRootProps) {
+export default function PurchaseStack({}: TicketPurchaseStackRootProps) {
   useGoToMobileTokenOnboardingWhenNecessary();
+
   return (
-    <Stack.Navigator
-      screenOptions={{headerShown: false}}
-      dismissToScreen={BuyTicketsScreenName}
-    >
+    <Stack.Navigator screenOptions={options}>
       <Stack.Screen
         name="PurchaseOverview"
         component={PurchaseOverviewScreen}
-        initialParams={route.params}
       />
       <Stack.Screen
         name="ConsequencesFromTicketPurchase"

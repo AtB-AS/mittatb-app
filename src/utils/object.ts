@@ -21,7 +21,7 @@ export type Flattened<T> = T extends object
  * Returns:
  *   { a: 1, ba: 2, bb: {bba: 0} }
  */
-export function flattenObject<T>(obj: T): Flattened<T> {
+export function flattenObject<T extends object>(obj: T): Flattened<T> {
   const flattened: any = {};
   Object.keys(obj).forEach((key) => {
     const value = obj[key as keyof typeof obj];

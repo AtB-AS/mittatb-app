@@ -1,8 +1,16 @@
 diff --git a/node_modules/react-native-dash/Dash.js b/node_modules/react-native-dash/Dash.js
-index 32ff1ec..42bbee1 100644
+index 32ff1ec..899bc60 100644
 --- a/node_modules/react-native-dash/Dash.js
 +++ b/node_modules/react-native-dash/Dash.js
-@@ -12,8 +12,13 @@ import { getDashStyle, isStyleRow } from '../util'
+@@ -5,15 +5,19 @@
+ */
+ 
+ import React from 'react'
+-import PropTypes from 'prop-types'
+-import { View, StyleSheet, ViewPropTypes } from 'react-native'
++import { View, StyleSheet } from 'react-native'
+ import MeasureMeHOC from 'react-native-measureme'
+ import { getDashStyle, isStyleRow } from '../util'
  
  const Dash = props => {
  	const isRow = isStyleRow(props.style)
@@ -18,11 +26,38 @@ index 32ff1ec..42bbee1 100644
  	const calculatedDashStyles = getDashStyle(props)
  	let dash = []
  	for (let i = 0; i < n; i++) {
+@@ -42,15 +46,6 @@ const styles = StyleSheet.create({
+ 	column: { flexDirection: 'column' },
+ })
+ 
+-Dash.propTypes = {
+-	style: ViewPropTypes.style,
+-	dashGap: PropTypes.number.isRequired,
+-	dashLength: PropTypes.number.isRequired,
+-	dashThickness: PropTypes.number.isRequired,
+-	dashColor: PropTypes.string,
+-	dashStyle: ViewPropTypes.style,
+-}
+-
+ Dash.defaultProps = {
+ 	dashGap: 2,
+ 	dashLength: 4,
 diff --git a/node_modules/react-native-dash/dist/index.js b/node_modules/react-native-dash/dist/index.js
-index 4034e31..b09a27f 100644
+index 4034e31..0f3e833 100644
 --- a/node_modules/react-native-dash/dist/index.js
 +++ b/node_modules/react-native-dash/dist/index.js
-@@ -24,8 +24,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
+@@ -8,10 +8,6 @@ var _react = require('react');
+ 
+ var _react2 = _interopRequireDefault(_react);
+ 
+-var _propTypes = require('prop-types');
+-
+-var _propTypes2 = _interopRequireDefault(_propTypes);
+-
+ var _reactNative = require('react-native');
+ 
+ var _reactNativeMeasureme = require('react-native-measureme');
+@@ -24,8 +20,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  
  var Dash = function Dash(props) {
  	var isRow = (0, _util.isStyleRow)(props.style);
@@ -38,14 +73,22 @@ index 4034e31..b09a27f 100644
  	var calculatedDashStyles = (0, _util.getDashStyle)(props);
  	var dash = [];
  	for (var i = 0; i < n; i++) {
-@@ -55,6 +60,7 @@ var styles = _reactNative.StyleSheet.create({
+@@ -53,15 +54,6 @@ var styles = _reactNative.StyleSheet.create({
+ 	column: { flexDirection: 'column' }
+ });
  
- Dash.propTypes = {
- 	style: _reactNative.ViewPropTypes.style,
-+	dashCount: _propTypes2.default.number,
- 	dashGap: _propTypes2.default.number.isRequired,
- 	dashLength: _propTypes2.default.number.isRequired,
- 	dashThickness: _propTypes2.default.number.isRequired,
+-Dash.propTypes = {
+-	style: _reactNative.ViewPropTypes.style,
+-	dashGap: _propTypes2.default.number.isRequired,
+-	dashLength: _propTypes2.default.number.isRequired,
+-	dashThickness: _propTypes2.default.number.isRequired,
+-	dashColor: _propTypes2.default.string,
+-	dashStyle: _reactNative.ViewPropTypes.style
+-};
+-
+ Dash.defaultProps = {
+ 	dashGap: 2,
+ 	dashLength: 4,
 diff --git a/node_modules/react-native-dash/index.d.ts b/node_modules/react-native-dash/index.d.ts
 index a234223..c7dd059 100644
 --- a/node_modules/react-native-dash/index.d.ts

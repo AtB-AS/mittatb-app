@@ -26,8 +26,8 @@ const ProfileTexts = {
             confirm: _('Logg ut', 'Log out'),
           },
         },
-        expiredTickets: {
-          label: _('Utløpte billetter', 'Expired tickets'),
+        ticketHistory: {
+          label: _('Billetthistorikk', 'Ticket history'),
         },
         paymentOptions: {
           label: _('Betalingsmåter', 'Payment options'),

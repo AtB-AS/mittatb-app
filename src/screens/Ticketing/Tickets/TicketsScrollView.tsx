@@ -1,26 +1,17 @@
-import ThemeText from '@atb/components/text';
-import ErrorBoundary from '@atb/error-boundary';
-import {RootStackParamList} from '@atb/navigation';
+import MessageBox from '@atb/components/message-box';
+import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
+import {RootStackParamList} from '@atb/navigation/types';
+import FareContractOrReservation from '@atb/screens/Ticketing/Tickets/FareContractOrReservation';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {
-  Reservation,
-  FareContract,
-  TravelCard,
-  useTicketState,
-} from '@atb/tickets';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {FareContract, Reservation, TravelCard} from '@atb/tickets';
+import TravelTokenBox from '@atb/travel-token-box';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import hexToRgba from 'hex-to-rgba';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
-import SimpleTicket from '../Ticket';
-import TicketReservation from './TicketReservation';
 import TravelCardInformation from './TravelCardInformation';
-import MessageBox from '@atb/components/message-box';
-import TravelTokenBox from '@atb/travel-token-box';
-import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -32,7 +23,6 @@ type Props = {
   refreshTickets: () => void;
   now: number;
   travelCard?: TravelCard;
-  didPaymentFail?: boolean;
   showTokenInfo?: boolean;
 };
 
@@ -44,17 +34,19 @@ const TicketsScrollView: React.FC<Props> = ({
   refreshTickets,
   now,
   travelCard,
-  didPaymentFail = false,
   showTokenInfo,
 }) => {
   const {theme} = useTheme();
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProp>();
-  const {t} = useTranslation();
-  const {resetPaymentStatus} = useTicketState();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
-
   const hasActiveTravelCard = !!travelCard;
+
+  const fareContractsAndReservationsSorted = useMemo(() => {
+    return [...(fareContracts || []), ...(reservations || [])].sort(
+      (a, b) => b.created.toMillis() - a.created.toMillis(),
+    );
+  }, [reservations, fareContracts]);
 
   return (
     <View style={styles.container}>
@@ -76,43 +68,26 @@ const TicketsScrollView: React.FC<Props> = ({
           ) : hasActiveTravelCard ? (
             <TravelCardInformation travelCard={travelCard} />
           ) : null)}
-        {didPaymentFail && (
-          <MessageBox
-            containerStyle={styles.messageBox}
-            type="error"
-            message={t(TicketsTexts.scrollView.paymentError)}
-            onPress={resetPaymentStatus}
-            onPressText={t(TicketsTexts.scrollView.paymentErrorButton)}
-          />
-        )}
-        {!fareContracts?.length && !reservations?.length && (
+        {!fareContractsAndReservationsSorted.length && (
           <MessageBox
             containerStyle={styles.messageBox}
             type="info"
             message={noTicketsLabel}
           />
         )}
-        {reservations?.map((res) => (
-          <TicketReservation key={res.orderId} reservation={res} />
-        ))}
-        {fareContracts?.map((fc, index) => (
-          <ErrorBoundary
-            key={fc.orderId}
-            message={t(TicketsTexts.scrollView.errorLoadingTicket(fc.orderId))}
-          >
-            <SimpleTicket
-              hasActiveTravelCard={hasActiveTravelCard}
-              fareContract={fc}
-              now={now}
-              onPressDetails={() =>
-                navigation.navigate('TicketModal', {
-                  screen: 'TicketDetails',
-                  params: {orderId: fc.orderId},
-                })
-              }
-              testID={'ticket' + index}
-            />
-          </ErrorBoundary>
+        {fareContractsAndReservationsSorted?.map((fcor, index) => (
+          <FareContractOrReservation
+            now={now}
+            onPressFareContract={() =>
+              navigation.navigate('TicketModal', {
+                screen: 'TicketDetails',
+                params: {orderId: fcor.orderId},
+              })
+            }
+            key={fcor.orderId}
+            fcOrReservation={fcor}
+            index={index}
+          />
         ))}
       </ScrollView>
       <LinearGradient

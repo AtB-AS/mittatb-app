@@ -1,11 +1,11 @@
 import {ErrorType} from '@atb/api/utils';
+import MessageBox from '@atb/components/message-box';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {TextInput} from '@atb/components/sections';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {SearchLocation} from '@atb/favorites/types';
 import {useGeocoder} from '@atb/geocoder';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import MessageBox from '@atb/components/message-box';
-import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {TariffZone} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -14,7 +14,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import useDebounce from '@atb/utils/useDebounce';
-import {RouteProp, useIsFocused} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   ActivityIndicator,
@@ -23,31 +23,17 @@ import {
   View,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {TicketingStackParams} from '../..';
+import {TicketPurchaseScreenProps} from '../../types';
 import TariffZoneResults from './TariffZoneResults';
 import VenueResults, {LocationAndTariffZone} from './VenueResults';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
-type TariffZonesSearchName = 'TariffZones';
-
-type NavigationProp = DismissableStackNavigationProp<
-  TicketingStackParams,
-  TariffZonesSearchName
->;
 export type RouteParams = {
   callerRouteName: string;
   callerRouteParam: string;
   label: string;
 };
 
-type TariffZoneSearchRouteName = 'TariffZoneSearch';
-
-type RouteProps = RouteProp<TicketingStackParams, TariffZoneSearchRouteName>;
-
-export type Props = {
-  navigation: NavigationProp;
-  route: RouteProps;
-};
+export type Props = TicketPurchaseScreenProps<'TariffZoneSearch'>;
 
 const Index: React.FC<Props> = ({
   navigation,
@@ -71,22 +57,30 @@ const Index: React.FC<Props> = ({
     );
 
   const onSelectZone = (tariffZone: TariffZone) => {
-    navigation.navigate(callerRouteName as any, {
-      [callerRouteParam]: {
-        ...tariffZone,
-        resultType: 'zone',
+    navigation.navigate({
+      name: callerRouteName as any,
+      params: {
+        [callerRouteParam]: {
+          ...tariffZone,
+          resultType: 'zone',
+        },
       },
+      merge: true,
     });
   };
 
   const onSelectVenue = (location: SearchLocation) => {
     const tariffZone = getMatchingTariffZone(location);
-    navigation.navigate(callerRouteName as any, {
-      [callerRouteParam]: {
-        ...tariffZone,
-        resultType: 'venue',
-        venueName: location.name,
+    navigation.navigate({
+      name: callerRouteName as any,
+      params: {
+        [callerRouteParam]: {
+          ...tariffZone,
+          resultType: 'venue',
+          venueName: location.name,
+        },
       },
+      merge: true,
     });
   };
 

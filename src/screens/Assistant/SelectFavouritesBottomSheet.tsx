@@ -18,7 +18,8 @@ import TransportationIcon from '@atb/components/transportation-icon';
 import {useFavorites} from '@atb/favorites';
 import useFontScale from '@atb/utils/use-font-scale';
 import {AnyMode} from '@atb/components/transportation-icon';
-import {LegMode, TransportSubmode} from '@entur/sdk';
+import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {LegMode} from '@entur/sdk';
 import SectionSeparator from '@atb/components/sections/section-separator';
 import MessageBox from '@atb/components/message-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
@@ -132,6 +133,7 @@ const SelectFavouritesBottomSheet = ({
           text: t(ScreenHeaderTexts.headerButton.cancel.text),
         }}
         color="background_1"
+        setFocusOnLoad={true}
       />
 
       <ScrollView style={styles.flatListArea}>
@@ -162,6 +164,9 @@ const SelectFavouritesBottomSheet = ({
                         }
                         lineTransportationMode={
                           favorite.lineTransportationMode ?? LegMode.BUS
+                        }
+                        lineTransportationSubmode={
+                          favorite.lineTransportationSubMode
                         }
                       />
                       {favouriteItems.length - 1 !== index && (

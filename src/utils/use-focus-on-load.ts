@@ -6,11 +6,14 @@ import {useNavigation} from '@react-navigation/native';
  * Return a ref which can be set on a component to make it be focused by screen
  * reader when loaded on screen. This will work both on component mount, and
  * when the screen gets back in focus while already on the stack.
+ *
+ * The give focus is delayed by 200ms to allow the render to finish before
+ * trying to give focus.
  */
 export default function useFocusOnLoad(setFocusOnLoad: boolean = true) {
   const focusRef = useRef(null);
   useEffect(() => {
-    giveFocus(focusRef, setFocusOnLoad);
+    setTimeout(() => giveFocus(focusRef, setFocusOnLoad), 200);
   }, [focusRef.current, setFocusOnLoad]);
 
   const navigation = useNavigationSafe();

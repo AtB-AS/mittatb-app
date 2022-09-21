@@ -10,7 +10,7 @@ import SelectFavouritesBottomSheet from '@atb/screens/Assistant/SelectFavourites
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
 import {useFavoriteDepartureData} from './state';
 import {NoFavouriteDeparture} from '@atb/assets/svg/color/images/';
@@ -26,10 +26,11 @@ const FavouritesWidget: React.FC = () => {
   useEffect(() => loadInitialDepartures(), [favoriteDepartures]);
 
   const {open: openBottomSheet} = useBottomSheet();
+  const closeRef = useRef(null);
   async function openFrontpageFavouritesBottomSheet() {
     openBottomSheet((close) => {
       return <SelectFavouritesBottomSheet close={close} />;
-    });
+    }, closeRef);
   }
 
   const openAppInfoUrl = () => Linking.openURL(new_favourites_info_url);
@@ -112,6 +113,7 @@ const FavouritesWidget: React.FC = () => {
           text={t(DeparturesTexts.button.text)}
           icon={Edit}
           iconPosition="right"
+          ref={closeRef}
         />
       )}
     </View>

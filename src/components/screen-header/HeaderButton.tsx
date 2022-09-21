@@ -1,7 +1,6 @@
 import useChatIcon from '@atb/chat/use-chat-icon';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import insets from '@atb/utils/insets';
-import {useNavigateToStartScreen} from '@atb/utils/navigation';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {AccessibilityProps, TouchableOpacity} from 'react-native';
@@ -80,7 +79,6 @@ const useIconButton = (
   buttonProps: HeaderButtonProps,
 ): IconButton | undefined => {
   const navigation = useNavigation();
-  const navigateHome = useNavigateToStartScreen();
   const chatIcon = useChatIcon(buttonProps.color, buttonProps.testID);
   const {t} = useTranslation();
   switch (buttonProps.type) {

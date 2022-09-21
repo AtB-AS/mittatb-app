@@ -1,11 +1,10 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
-import {RouteProp} from '@react-navigation/native';
 import React from 'react';
 import {View} from 'react-native';
-import {LocationSearchNavigationProp, LocationSearchStackParams} from '../';
 import Map from '@atb/components/map/Map';
+import {LocationSearchScreenProps} from "@atb/location-search/types";
 
 export type RouteParams = {
   callerRouteName: string;
@@ -17,10 +16,7 @@ export type RouteParams = {
   };
 };
 
-export type Props = {
-  navigation: LocationSearchNavigationProp;
-  route: RouteProp<LocationSearchStackParams, 'MapSelection'>;
-};
+export type Props = LocationSearchScreenProps<'MapSelection'>;
 
 const MapSelection: React.FC<Props> = ({
   navigation,

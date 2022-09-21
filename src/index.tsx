@@ -29,6 +29,7 @@ import {setupConfig} from './setup';
 import {MobileTokenContextProvider} from '@atb/mobile-token';
 import FeedbackQuestionsProvider from './components/feedback/FeedbackContext';
 import {FirestoreConfigurationContextProvider} from '@atb/configuration/FirestoreConfigurationContext';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
@@ -44,9 +45,11 @@ const App = () => {
     }
     config();
   }, []);
+
   if (isLoading) {
-    return null;
+    return <GestureHandlerRootView style={{flex: 1}}></GestureHandlerRootView>;
   }
+
   return (
     <SafeAreaProvider>
       <ErrorBoundary type="full-screen">

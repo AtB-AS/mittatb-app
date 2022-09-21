@@ -1,4 +1,21 @@
-import {PaymentType} from '@atb/tickets';
+import {RootNavigationProps, RootStackScreenProps} from '@atb/navigation/types';
+import {
+  PreassignedFareProduct,
+  PreassignedFareProductType,
+} from '@atb/reference-data/types';
+import {PaymentType, ReserveOffer} from '@atb/tickets';
+import {
+  CompositeNavigationProp,
+  CompositeScreenProps,
+} from '@react-navigation/native';
+import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
+import {RouteParams as ConfirmationRouteParams} from './Confirmation';
+import {
+  RouteParams as TariffZonesParams,
+  TariffZoneWithMetadata,
+} from './TariffZones';
+import {RouteParams as TariffZoneSearchParams} from './TariffZones/search';
+import {UserProfileWithCount} from './Travellers/use-user-count-state';
 
 export type CardPaymentMethod =
   | {paymentType: PaymentType.Visa | PaymentType.Mastercard; save: boolean}
@@ -39,3 +56,47 @@ export type SavedPaymentOption =
   | DefaultPaymentOption
   | RecurringPaymentOption
   | RecurringPaymentWithoutCardOption;
+
+// Routing
+
+type PurchaseOverviewParams = {
+  refreshOffer?: boolean;
+  preassignedFareProduct?: PreassignedFareProduct;
+  userProfilesWithCount?: UserProfileWithCount[];
+  selectableProductType?: PreassignedFareProductType;
+  fromTariffZone?: TariffZoneWithMetadata;
+  toTariffZone?: TariffZoneWithMetadata;
+  travelDate?: string;
+};
+
+type PaymentParams = {
+  offers: ReserveOffer[];
+  preassignedFareProduct: PreassignedFareProduct;
+};
+
+export type TicketingStackParams = {
+  PurchaseOverview: PurchaseOverviewParams;
+  TariffZones: TariffZonesParams;
+  TariffZoneSearch: TariffZoneSearchParams;
+  Confirmation: ConfirmationRouteParams;
+  PaymentCreditCard: PaymentParams & {paymentMethod: CardPaymentMethod};
+  PaymentVipps: PaymentParams;
+  Splash: undefined;
+  ConsequencesFromTicketPurchase: undefined;
+};
+
+export type TicketPurchaseStackRootProps =
+  RootStackScreenProps<'TicketPurchase'>;
+
+export type TicketPurchaseNavigationProps<
+  T extends keyof TicketingStackParams,
+> = CompositeNavigationProp<
+  StackNavigationProp<TicketingStackParams, T>,
+  RootNavigationProps
+>;
+
+export type TicketPurchaseScreenProps<T extends keyof TicketingStackParams> =
+  CompositeScreenProps<
+    StackScreenProps<TicketingStackParams, T>,
+    TicketPurchaseStackRootProps
+  >;

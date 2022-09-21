@@ -1,21 +1,18 @@
+import {Onboarding1} from '@atb/assets/svg/color/images/';
+import Button from '@atb/components/button';
+import ThemeText from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
+import {StaticColorByType} from '@atb/theme/colors';
 import {OnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, useWindowDimensions, View} from 'react-native';
-import Button from '@atb/components/button';
-import ThemeText from '@atb/components/text';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {OnboardingStackParams} from '@atb/screens/Onboarding/index';
-import {Onboarding1} from '@atb/assets/svg/color/images/';
-import {StaticColorByType} from '@atb/theme/colors';
+import {OnboardingScreenProps} from './types';
 
 export const themeColor: StaticColorByType<'background'> =
   'background_accent_0';
 
-export type WelcomeScreenProps = {
-  navigation: StackNavigationProp<OnboardingStackParams>;
-};
+export type WelcomeScreenProps =
+  OnboardingScreenProps<'WelcomeScreenWithoutLogin'>;
 
 export const WelcomeScreenLogin = ({navigation}: WelcomeScreenProps) => {
   const onNext = () => {

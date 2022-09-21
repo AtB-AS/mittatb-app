@@ -6,7 +6,7 @@ import SelectTravelToken from './TravelToken/SelectTravelTokenScreen';
 import FavoriteDepartures from './FavoriteDepartures';
 import FavoriteList from './FavoriteList';
 import ProfileHome from './Home';
-import {ExpiredTickets} from './ExpiredTickets';
+import {TicketHistory} from './TicketHistory';
 import Language from './Language';
 import Enrollment from './Enrollment';
 import SelectStartScreen from './SelectStartScreen';
@@ -18,28 +18,7 @@ import TermsInformation from '@atb/screens/Profile/Information/TermsInformation'
 import TicketInspectionInformation from '@atb/screens/Profile/Information/TicketInspectionInformation';
 import DeleteProfile from '@atb/screens/Profile/DeleteProfile';
 import PaymentOptions from './PaymentOptions';
-
-export type ProfileStackParams = {
-  ProfileHome: undefined;
-  PaymentOptions: undefined;
-  ExpiredTickets: undefined;
-  DeleteProfile: undefined;
-  FavoriteList: undefined;
-  FavoriteDepartures: undefined;
-  SelectStartScreen: undefined;
-  TravelToken: undefined;
-  SelectTravelToken: undefined;
-  Appearance: undefined;
-  Language: undefined;
-  DefaultUserProfile: undefined;
-  Enrollment: undefined;
-  DesignSystem: undefined;
-  DebugInfo: undefined;
-  TicketingInformation: undefined;
-  PaymentInformation: undefined;
-  TermsInformation: undefined;
-  TicketInspectionInformation: undefined;
-};
+import {ProfileStackParams} from './types';
 
 const Stack = createStackNavigator<ProfileStackParams>();
 
@@ -53,7 +32,7 @@ export default function ProfileScreen() {
       }}
     >
       <Stack.Screen name="ProfileHome" component={ProfileHome} />
-      <Stack.Screen name="ExpiredTickets" component={ExpiredTickets} />
+      <Stack.Screen name="TicketHistory" component={TicketHistory} />
       <Stack.Screen name="PaymentOptions" component={PaymentOptions} />
       <Stack.Screen name="DeleteProfile" component={DeleteProfile} />
       <Stack.Screen name="FavoriteList" component={FavoriteList} />

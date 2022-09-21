@@ -1,4 +1,5 @@
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
+import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import Button from '@atb/components/button';
@@ -16,8 +17,11 @@ import {
 } from '@atb/GeolocationContext';
 import {useLocationSearchValue} from '@atb/location-search';
 import {SelectableLocationData} from '@atb/location-search/types';
-import {RootStackParamList} from '@atb/navigation';
+import useTripsQuery from '@atb/screens/Assistant/use-trips-query';
+import {useDoOnceWhen} from '@atb/screens/utils';
+import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 import {StyleSheet, useTheme} from '@atb/theme';
+import {StaticColorByType} from '@atb/theme/colors';
 import {
   AssistantTexts,
   dictionary,
@@ -26,57 +30,36 @@ import {
 } from '@atb/translations';
 import {formatToLongDateTime, isInThePast} from '@atb/utils/date';
 import {
-  coordinatesDistanceInMetres as distanceInMetres,
-  LOCATIONS_REALLY_CLOSE_THRESHOLD,
   coordinatesAreEqual,
+  coordinatesDistanceInMetres as distanceInMetres,
   isValidTripLocations,
+  LOCATIONS_REALLY_CLOSE_THRESHOLD,
 } from '@atb/utils/location';
 import {useLayout} from '@atb/utils/use-layout';
 import Bugsnag from '@bugsnag/react-native';
 import {TFunc} from '@leile/lobo-t';
 import analytics from '@react-native-firebase/analytics';
-import {
-  CompositeNavigationProp,
-  RouteProp,
-  useIsFocused,
-  useNavigation,
-} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
+  BackHandler,
   TouchableOpacity,
   View,
-  BackHandler,
 } from 'react-native';
-import {AssistantParams} from '.';
 import Loading from '../Loading';
 import FadeBetween from './FadeBetween';
 import {SearchTime, useSearchTimeValue} from './journey-date-picker';
 import NewsBanner from './NewsBanner';
 import Results from './Results';
-import {StaticColorByType} from '@atb/theme/colors';
-import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
-import useTripsQuery from '@atb/screens/Assistant/use-trips-query';
-import {useServiceDisruptionSheet} from '@atb/service-disruptions';
-import {useDoOnceWhen} from '@atb/screens/utils';
+import {AssistantScreenProps} from './types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type AssistantRouteName = 'AssistantRoot';
 const AssistantRouteNameStatic: AssistantRouteName = 'AssistantRoot';
 
-export type AssistantScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<AssistantParams>,
-  StackNavigationProp<RootStackParamList>
->;
-
-type AssistantRouteProp = RouteProp<AssistantParams, AssistantRouteName>;
-
-type RootProps = {
-  navigation: AssistantScreenNavigationProp;
-  route: AssistantRouteProp;
-};
+type RootProps = AssistantScreenProps<'AssistantRoot'>;
 
 const AssistantRoot: React.FC<RootProps> = ({navigation}) => {
   const {
@@ -104,7 +87,7 @@ type Props = {
   currentLocation?: GeoLocation;
   hasLocationPermission: boolean;
   requestGeoPermission: RequestPermissionFn;
-  navigation: AssistantScreenNavigationProp;
+  navigation: RootProps['navigation'];
 };
 
 const Assistant: React.FC<Props> = ({
@@ -213,7 +196,7 @@ const Assistant: React.FC<Props> = ({
 
   const isSearching = searchState === 'searching';
   const openLocationSearch = (
-    callerRouteParam: keyof AssistantRouteProp['params'],
+    callerRouteParam: keyof RootProps['route']['params'],
     initialLocation: Location | undefined,
   ) =>
     navigation.navigate('LocationSearch', {
@@ -376,8 +359,11 @@ const Assistant: React.FC<Props> = ({
   const onPressed = useCallback(
     (tripPatterns, startIndex) =>
       navigation.navigate('TripDetails', {
-        tripPatterns,
-        startIndex,
+        screen: 'Details',
+        params: {
+          tripPatterns,
+          startIndex,
+        },
       }),
     [navigation, from, to],
   );
@@ -614,9 +600,9 @@ function useLocations(
   );
 
   const searchedFromLocation =
-    useLocationSearchValue<AssistantRouteProp>('fromLocation');
+    useLocationSearchValue<RootProps['route']>('fromLocation');
   const searchedToLocation =
-    useLocationSearchValue<AssistantRouteProp>('toLocation');
+    useLocationSearchValue<RootProps['route']>('toLocation');
 
   return useUpdatedLocation(
     searchedFromLocation,
@@ -634,7 +620,7 @@ function useUpdatedLocation(
 ): SearchForLocations {
   const [from, setFrom] = useState<Location | undefined>();
   const [to, setTo] = useState<Location | undefined>();
-  const navigation = useNavigation<AssistantScreenNavigationProp>();
+  const navigation = useNavigation<RootProps['navigation']>();
 
   const setLocation = useCallback(
     (direction: 'from' | 'to', searchedLocation?: SelectableLocationData) => {

@@ -15,6 +15,7 @@ export default function setupFirestoreListener(
   listeners: {
     fareContracts: SnapshotListener<FareContract[]>;
     reservations: SnapshotListener<Reservation[]>;
+    rejectedReservations: SnapshotListener<Reservation[]>;
     customer: SnapshotListener<CustomerProfile>;
   },
 ) {
@@ -66,6 +67,29 @@ export default function setupFirestoreListener(
       },
     );
 
+  const rejectedReservationsSub = firestore()
+    .collection('customers')
+    .doc(abtCustomerId)
+    .collection('reservations')
+    .where('paymentStatus', '==', 'REJECT')
+    .onSnapshot(
+      (snapshot) => {
+        const rejectedReservations = (
+          snapshot as FirebaseFirestoreTypes.QuerySnapshot<Reservation>
+        ).docs.map<Reservation>((d) => d.data());
+        listeners.rejectedReservations.onSnapshot(rejectedReservations);
+        Bugsnag.leaveBreadcrumb('rejected_reservations_snapshot', {
+          count: rejectedReservations.length,
+        });
+      },
+      (err) => {
+        Bugsnag.notify(err, function (event) {
+          event.addMetadata('ticket', {abtCustomerId});
+        });
+        listeners.rejectedReservations.onError(err);
+      },
+    );
+
   const customerProfileSub = firestore()
     .collection('customers')
     .doc(abtCustomerId)
@@ -92,5 +116,6 @@ export default function setupFirestoreListener(
     fareContractSub();
     reservationsSub();
     customerProfileSub();
+    rejectedReservationsSub();
   };
 }

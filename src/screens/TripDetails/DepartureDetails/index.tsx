@@ -1,12 +1,20 @@
-import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
+import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
+import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {Info, Warning} from '@atb/assets/svg/color/situations';
+import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
 import MessageBox, {TinyMessageBox} from '@atb/components/message-box';
-import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {searchByStopPlace} from '@atb/geocoder/search-for-location';
+import {canSellTicketsForSubMode} from '@atb/operator-config';
+import {usePreferenceItems} from '@atb/preferences';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import CancelledDepartureMessage from '@atb/screens/TripDetails/components/CancelledDepartureMessage';
+import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
 import {
   EstimatedCall,
   Quay,
@@ -20,47 +28,23 @@ import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
 import {getQuayName} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import {
-  NavigationProp,
-  RouteProp,
-  useIsFocused,
-  useNavigation,
-} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
-import {DetailsModalNavigationProp, DetailsStackParams} from '..';
 import Time from '../components/Time';
 import TripLegDecoration from '../components/TripLegDecoration';
 import TripRow from '../components/TripRow';
 import CompactMap from '../Map/CompactMap';
+import {TripDetailsRootProps, TripDetailsScreenProps} from '../types';
 import {ServiceJourneyDeparture} from './types';
 import useDepartureData, {CallListGroup} from './use-departure-data';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {canSellTicketsForSubMode} from '@atb/operator-config';
-import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
-import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import CancelledDepartureMessage from '@atb/screens/TripDetails/components/CancelledDepartureMessage';
-import {usePreferenceItems} from '@atb/preferences';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
   activeItemIndex?: number;
 };
 
-export type DetailScreenRouteProp = RouteProp<
-  DetailsStackParams,
-  'DepartureDetails'
->;
-
-export type DepartureDetailScreenNavigationProp =
-  NavigationProp<DetailsStackParams>;
-
-type Props = {
-  route: DetailScreenRouteProp;
-  navigation: DepartureDetailScreenNavigationProp;
-};
+type Props = TripDetailsScreenProps<'DepartureDetails'>;
 
 export default function DepartureDetails({navigation, route}: Props) {
   const {activeItemIndex = 0, items} = route.params;
@@ -277,7 +261,7 @@ function TripItem({
   isStart,
   isEnd,
 }: TripItemProps) {
-  const navigation = useNavigation<DetailsModalNavigationProp>();
+  const navigation = useNavigation<Props['navigation']>();
   const {t} = useTranslation();
   const styles = useStopsStyle();
   const isBetween = !isStart && !isEnd;

@@ -117,6 +117,7 @@ export function useRemoteConfig() {
 }
 
 const parseJson = (text: string, defaultObject: object) => {
+  if (!text) return defaultObject;
   try {
     return JSON.parse(text);
   } catch (err) {

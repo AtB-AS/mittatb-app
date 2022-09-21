@@ -9,7 +9,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
 import {useAppDispatch, useAppState} from '@atb/AppContext';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import storage from '@atb/storage';
+import storage, {KeyValuePair} from '@atb/storage';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
@@ -68,7 +68,7 @@ export default function DebugInfo() {
   const mobileTokenEnabled = useHasEnabledMobileToken();
 
   const [storedValues, setStoredValues] = useState<
-    [string, string | null][] | null
+    readonly KeyValuePair[] | null
   >(null);
 
   useEffect(() => {
