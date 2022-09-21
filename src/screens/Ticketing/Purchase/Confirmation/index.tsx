@@ -163,6 +163,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
 
   const vatAmountString = formatDecimalNumber(vatAmount, language);
   const vatPercentString = formatDecimalNumber(vatPercent, language);
+  const totalPriceString = formatDecimalNumber(totalPrice, language);
 
   useEffect(() => {
     const prevMethod = getPreviousPaymentMethod(
@@ -341,7 +342,9 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           </View>
 
           {!isSearchingOffer ? (
-            <ThemeText type="body__primary--jumbo">{totalPrice} kr</ThemeText>
+            <ThemeText type="body__primary--jumbo">
+              {totalPriceString} kr
+            </ThemeText>
           ) : (
             <ActivityIndicator
               size={theme.spacings.medium}
