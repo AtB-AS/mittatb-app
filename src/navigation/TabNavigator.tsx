@@ -4,6 +4,7 @@ import {
   Profile,
   Ticketing,
 } from '@atb/assets/svg/mono-icons/tab-bar';
+import {MapPin} from '../assets/svg/mono-icons/map';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {usePreferenceItems} from '@atb/preferences';
@@ -11,8 +12,7 @@ import Assistant from '@atb/screens/Assistant';
 import Dashboard from '@atb/screens/Dashboard';
 import DeparturesScreen from '@atb/screens/Departures';
 import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/screens/MobileTokenOnboarding/utils';
-import NearbyScreen from '@atb/screens/Nearby';
-import ProfileScreen from '@atb/screens/Profile';
+import MapStack from '@atb/screens/Map';
 import TicketingScreen from '@atb/screens/Ticketing';
 import {useTheme} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations/';
@@ -25,6 +25,9 @@ import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/ty
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import {TabNavigatorParams} from './types';
+import NearbyScreen from '@atb/screens/Nearby';
+import ProfileScreen from '@atb/screens/Profile';
+import {useMapPage} from '@atb/components/map/use-map-page';
 
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
@@ -33,7 +36,7 @@ const NavigationRoot = () => {
   const {t} = useTranslation();
   const {startScreen, newDepartures, newFrontPage} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
-
+  const showMapPage = useMapPage();
   useGoToMobileTokenOnboardingWhenNecessary();
 
   return (
@@ -62,6 +65,19 @@ const NavigationRoot = () => {
           'assistantTab',
         )}
       />
+      {showMapPage && (
+        <Tab.Screen
+          name="MapScreen"
+          component={MapStack}
+          options={tabSettings(
+            t(dictionary.navigation.map),
+            t(dictionary.navigation.map),
+            MapPin,
+            lineHeight,
+            'mapPage',
+          )}
+        />
+      )}
       <Tab.Screen
         name="Nearest"
         component={newDepartures ? DeparturesScreen : NearbyScreen}

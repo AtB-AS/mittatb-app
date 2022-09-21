@@ -27,8 +27,7 @@ describe('Onboarding', () => {
   });
 
   it('should show anonymously warning after make the app better', async () => {
-    await tapById('nextButton', 1);
-    //await tap(element(by.id('nextButton')).atIndex(1));
+    await tapById('nextButton');
     await expectToBeVisibleByText('When you buy anonymously...');
   });
 

@@ -9,11 +9,13 @@
       "jest-junit",
       {
         "outputDirectory": "e2e/results",
-        "outputName": "junit.xml",
+        "outputName": "junit",
+        "uniqueOutputName": "true",
         "classNameTemplate": "{filename}",
         "titleTemplate": "{title}"
       }
     ]
   ],
+  "preset": "ts-jest",
   "verbose": true
 }
