@@ -18,39 +18,9 @@ import {UserProfileWithCount} from './Travellers/use-user-count-state';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 
-export type PurchaseFlow = {
-  /**
-   * Whether the traveller selection should allow a single traveller or
-   * multiple travellers to be selected.
-   */
-  travellerSelectionMode: 'single' | 'multiple';
-
-  /**
-   * Whether the customer should be able to select a future start time for the
-   * ticket.
-   */
-  travelDateSelectionEnabled: boolean;
-};
-
 export type UserProfileTypeWithCount = {
   userTypeString: string;
   count: number;
-};
-
-export const getPurchaseFlow = (
-  product: PreassignedFareProduct,
-): PurchaseFlow => {
-  if (product.type === 'period' || product.type === 'hour24') {
-    return {
-      travellerSelectionMode: 'single',
-      travelDateSelectionEnabled: true,
-    };
-  } else {
-    return {
-      travellerSelectionMode: 'multiple',
-      travelDateSelectionEnabled: false,
-    };
-  }
 };
 
 export function getExpireDate(iso: string): string {
@@ -79,14 +49,14 @@ export function getPaymentTypeName(paymentType: PaymentType) {
  */
 export function useTravellersWithPreselectedCounts(
   userProfiles: UserProfile[],
-  preassignedFareProduct: PreassignedFareProduct,
   defaultSelections: UserProfileTypeWithCount[],
+  preassignedFareProduct?: PreassignedFareProduct,
 ) {
   return useMemo(
     () =>
       userProfiles
         .filter((u) =>
-          preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
+          preassignedFareProduct?.limitations.userProfileRefs.includes(u.id),
         )
         .map((u) => ({
           ...u,

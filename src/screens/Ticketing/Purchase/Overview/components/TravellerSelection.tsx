@@ -7,7 +7,6 @@ import useUserCountState, {
 } from '../../Travellers/use-user-count-state';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import SingleTravellerSelection from '../../Travellers/SingleTravellerSelection';
-import {getPurchaseFlow} from '../../utils';
 import MultipleTravellersSelection from '../../Travellers/MultipleTravellersSelection';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import FixedSwitch from '@atb/components/switch';
@@ -21,6 +20,7 @@ type TravellerSelectionProps = {
   ) => void;
   style?: StyleProp<ViewStyle>;
   preassignedFareProduct: PreassignedFareProduct;
+  mode: 'multiple' | 'single';
 };
 
 export default function TravellerSelection({
@@ -28,10 +28,10 @@ export default function TravellerSelection({
   style,
   selectableUserProfiles,
   preassignedFareProduct,
+  mode,
 }: TravellerSelectionProps) {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {travellerSelectionMode} = getPurchaseFlow(preassignedFareProduct);
   const userCountState = useUserCountState(selectableUserProfiles);
   const selectableUserProfilesWithCount =
     userCountState.userProfilesWithCount.filter((a) =>
@@ -64,7 +64,7 @@ export default function TravellerSelection({
             color="secondary"
             style={styles.title}
           >
-            {travellerSelectionMode == 'multiple'
+            {mode == 'multiple'
               ? t(PurchaseOverviewTexts.travellerSelection.title_multiple)
               : t(PurchaseOverviewTexts.travellerSelection.title_single)}
           </ThemeText>
@@ -102,7 +102,7 @@ export default function TravellerSelection({
           />
         </View>
       </View>
-      {travellerSelectionMode === 'multiple' ? (
+      {mode === 'multiple' ? (
         <MultipleTravellersSelection
           ticketType={preassignedFareProduct.type}
           {...userCountState}

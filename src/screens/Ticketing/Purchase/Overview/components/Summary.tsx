@@ -41,6 +41,8 @@ export default function Summary({
 
   const formattedPrice = formatDecimalNumber(price, language, 2);
 
+  const hasSelection = userProfilesWithCount.some((u) => u.count);
+
   const toPaymentFunction = () => {
     navigation.navigate('Confirmation', {
       fromTariffZone,
@@ -74,7 +76,7 @@ export default function Summary({
       <Button
         interactiveColor="interactive_0"
         text={t(PurchaseOverviewTexts.summary.button)}
-        disabled={isLoading || isError}
+        disabled={isLoading || !hasSelection || isError}
         onPress={toPaymentFunction}
         icon={ArrowRight}
         iconPosition="right"

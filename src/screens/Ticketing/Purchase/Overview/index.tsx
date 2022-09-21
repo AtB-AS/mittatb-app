@@ -1,40 +1,28 @@
-import MessageBox from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
-import Zones from './components/Zones';
-
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
-import {usePreferences} from '@atb/preferences';
 import {productIsSellableInApp} from '@atb/reference-data/utils';
-import {useTicketState} from '@atb/tickets';
-import MessageBoxTexts from '@atb/translations/components/MessageBox';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import {ScrollView, View} from 'react-native';
-import {getOtherDeviceIsInspectableWarning} from '../../Ticket/utils';
 import {TicketPurchaseScreenProps} from '../types';
+import {useGeolocationState} from '@atb/GeolocationContext';
 import {
-  getPurchaseFlow,
+  PreassignedFareProduct,
+  PreassignedFareProductType,
+  TariffZone,
+} from '@atb/reference-data/types';
+import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import {TariffZoneWithMetadata} from '../TariffZones';
+import {usePreferences} from '@atb/preferences';
+import {
   UserProfileTypeWithCount,
   useTravellersWithPreselectedCounts,
 } from '../utils';
-import DurationSelection from './components/DurationSelection';
-import StartTimeSelection from './components/StartTimeSelection';
-import Summary from './components/Summary';
-import TravellerSelection from './components/TravellerSelection';
-import useOfferState from './use-offer-state';
-
-import {getTrainTicketNoticeText} from '../../utils';
-import {TariffZone} from '@atb/reference-data/types';
-import {TariffZoneWithMetadata} from '../TariffZones';
-import {useGeolocationState} from '@atb/GeolocationContext';
-import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import SingleTicketOverview from './ticket-types/SingleTicketOverview';
+import PeriodTicketOverview from './ticket-types/PeriodTicketOverview';
+import Hour24TicketOverview from './ticket-types/Hour24TicketOverview';
 
 type OverviewProps = TicketPurchaseScreenProps<'PurchaseOverview'>;
 
@@ -44,26 +32,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {
-    deviceIsInspectable,
-    isError: mobileTokenError,
-    fallbackEnabled,
-    remoteTokens,
-  } = useMobileTokenContextState();
-  const tokensEnabled = useHasEnabledMobileToken();
-  const {customerProfile} = useTicketState();
-  const hasProfileTravelCard = !!customerProfile?.travelcard;
-
-  const showProfileTravelcardWarning = !tokensEnabled && hasProfileTravelCard;
-
-  const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
-    tokensEnabled,
-    mobileTokenError,
-    fallbackEnabled,
-    t,
-    remoteTokens,
-    deviceIsInspectable,
-  );
 
   const {preassignedFareproducts} = useFirestoreConfiguration();
   const productType =
@@ -73,11 +41,14 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     .filter(productIsSellableInApp)
     .filter((product) => product.type === productType);
 
-  const [preassignedFareProduct, setPreassignedFareProduct] = useState(
-    params.preassignedFareProduct ?? selectableProducts[0],
-  );
+  const preassignedFareProduct =
+    params.preassignedFareProduct ??
+    (selectableProducts[0] as PreassignedFareProduct | undefined);
 
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
+  const defaultTariffZone = useDefaultTariffZone(tariffZones);
+  const {fromTariffZone = defaultTariffZone, toTariffZone = defaultTariffZone} =
+    params;
   const {
     preferences: {defaultUserTypeString},
   } = usePreferences();
@@ -95,42 +66,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const selectableTravellers = useTravellersWithPreselectedCounts(
     userProfiles,
-    preassignedFareProduct,
     preSelectedUsers ?? [defaultPreSelectedUser],
-  );
-
-  const [travellerSelection, setTravellerSelection] =
-    useState(selectableTravellers);
-  const hasSelection = travellerSelection.some((u) => u.count);
-
-  const defaultTariffZone = useDefaultTariffZone(tariffZones);
-  const {fromTariffZone = defaultTariffZone, toTariffZone = defaultTariffZone} =
-    params;
-
-  const [travelDate, setTravelDate] = useState<string | undefined>();
-
-  const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
     preassignedFareProduct,
-    fromTariffZone,
-    toTariffZone,
-    travellerSelection,
-    travelDate,
   );
-
-  const {travelDateSelectionEnabled} = getPurchaseFlow(preassignedFareProduct);
-
-  const shouldShowValidTrainTicketNotice =
-    (preassignedFareProduct.type === 'single' ||
-      preassignedFareProduct.type === 'period' ||
-      preassignedFareProduct.type === 'hour24') &&
-    fromTariffZone.id === 'ATB:TariffZone:1' &&
-    toTariffZone.id === 'ATB:TariffZone:1';
-
-  useEffect(() => {
-    if (params?.refreshOffer) {
-      refreshOffer();
-    }
-  }, [params?.refreshOffer]);
 
   const closeModal = () =>
     navigation.navigate('TabNavigator', {
@@ -143,9 +81,11 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title={t(
-          PurchaseOverviewTexts.header.title[preassignedFareProduct.type],
-        )}
+        title={
+          preassignedFareProduct
+            ? t(PurchaseOverviewTexts.header.title[preassignedFareProduct.type])
+            : ''
+        }
         leftButton={{
           type: 'cancel',
           onPress: closeModal,
@@ -154,102 +94,48 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
       />
 
       <ScrollView testID="ticketingScrollView">
-        <View style={styles.selectionLinks}>
-          {error && (
-            <MessageBox
-              type="error"
-              title={t(PurchaseOverviewTexts.errorMessageBox.title)}
-              message={t(PurchaseOverviewTexts.errorMessageBox.message)}
-              onPress={refreshOffer}
-              onPressText={t(MessageBoxTexts.tryAgainButton)}
-              containerStyle={styles.selectionComponent}
-            />
-          )}
-
-          {preassignedFareProduct.type === 'period' && (
-            <DurationSelection
-              color="interactive_2"
-              selectedProduct={preassignedFareProduct}
-              setSelectedProduct={setPreassignedFareProduct}
-              style={styles.selectionComponent}
-            />
-          )}
-
-          <TravellerSelection
-            setTravellerSelection={setTravellerSelection}
+        {preassignedFareProduct && (
+          <TicketDetailSelection
+            {...params}
             preassignedFareProduct={preassignedFareProduct}
-            selectableUserProfiles={selectableTravellers}
-            style={styles.selectionComponent}
-          />
-
-          <Zones
+            selectableTravellers={selectableTravellers}
             fromTariffZone={fromTariffZone}
             toTariffZone={toTariffZone}
-            style={styles.selectionComponent}
-            isApplicableOnSingleZoneOnly={
-              preassignedFareProduct.isApplicableOnSingleZoneOnly
-            }
-          />
-
-          {travelDateSelectionEnabled && (
-            <StartTimeSelection
-              color="interactive_2"
-              travelDate={travelDate}
-              setTravelDate={setTravelDate}
-              validFromTime={travelDate}
-              style={styles.selectionComponent}
-            />
-          )}
-        </View>
-
-        {showProfileTravelcardWarning && (
-          <MessageBox
-            containerStyle={styles.warning}
-            message={t(PurchaseOverviewTexts.warning)}
-            type="warning"
           />
         )}
-
-        {inspectableTokenWarningText && (
-          <MessageBox
-            type="warning"
-            message={inspectableTokenWarningText}
-            containerStyle={styles.warning}
-            isMarkdown={true}
-          />
-        )}
-
-        {shouldShowValidTrainTicketNotice && (
-          <MessageBox
-            containerStyle={styles.warning}
-            message={getTrainTicketNoticeText(t, preassignedFareProduct.type)}
-            type="info"
-          />
-        )}
-
-        <FullScreenFooter>
-          <Summary
-            isLoading={isSearchingOffer}
-            isError={!!error || !hasSelection}
-            price={totalPrice}
-            fromTariffZone={fromTariffZone}
-            toTariffZone={toTariffZone}
-            userProfilesWithCount={travellerSelection}
-            preassignedFareProduct={preassignedFareProduct}
-            travelDate={travelDate}
-            style={styles.summary}
-          />
-        </FullScreenFooter>
       </ScrollView>
     </View>
   );
+};
+
+export type TicketOverviewProps = {
+  preassignedFareProduct: PreassignedFareProduct;
+  refreshOffer?: boolean;
+  selectableTravellers: UserProfileWithCount[];
+  selectableProductType?: PreassignedFareProductType;
+  fromTariffZone: TariffZoneWithMetadata;
+  toTariffZone: TariffZoneWithMetadata;
+  travelDate?: string;
+};
+
+const TicketDetailSelection = (props: TicketOverviewProps) => {
+  switch (props.preassignedFareProduct.type) {
+    case 'single':
+      return <SingleTicketOverview {...props} />;
+    case 'period':
+      return <PeriodTicketOverview {...props} />;
+    case 'hour24':
+      return <Hour24TicketOverview {...props} />;
+    default:
+      return <></>;
+  }
 };
 
 /**
  * Get the default tariff zone, either based on current location or else the
  * first tariff zone in the provided tariff zones list.
  */
-const useDefaultTariffZone = (
+export const useDefaultTariffZone = (
   tariffZones: TariffZone[],
 ): TariffZoneWithMetadata => {
   const tariffZoneFromLocation = useTariffZoneFromLocation(tariffZones);
@@ -279,17 +165,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.static.background.background_2.background,
   },
-  selectionComponent: {
-    marginVertical: theme.spacings.medium,
-  },
-  selectionLinks: {margin: theme.spacings.medium},
-  totalSection: {flex: 1, textAlign: 'center'},
-  toPaymentButton: {marginHorizontal: theme.spacings.medium},
-  warning: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
-  },
-  summary: {marginTop: theme.spacings.medium},
 }));
 
 export default PurchaseOverview;
