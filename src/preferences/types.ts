@@ -32,7 +32,7 @@ export type UserPreferences = {
   tripSearchPreferences?: TripSearchPreferences;
   hideTravellerDescriptions?: boolean;
   newFrontPage?: boolean;
-  enableMapTab?: boolean;
+  enableMapPage?: boolean;
 };
 
 export type PreferenceItem = keyof UserPreferences;

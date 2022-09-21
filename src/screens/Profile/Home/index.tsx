@@ -39,8 +39,8 @@ import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from '../types';
 import {destructiveAlert} from './utils';
-import useIsLoading from "@atb/utils/use-is-loading";
-import {useMapTab} from "@atb/components/map/use-map-tab";
+import useIsLoading from '@atb/utils/use-is-loading';
+import {useMapPage} from '@atb/components/map/use-map-page';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -73,7 +73,7 @@ export default function ProfileHome({navigation}: ProfileProps) {
     setPreference,
     preferences: {newDepartures, newFrontPage},
   } = usePreferences();
-  const showMapTab = useMapTab();
+  const showMapPage = useMapPage();
 
   function copyInstallId() {
     if (config?.installId) setClipboard(config.installId);
@@ -428,10 +428,10 @@ export default function ProfileHome({navigation}: ProfileProps) {
             <Sections.ActionItem
               mode="toggle"
               text={t(ProfileTexts.sections.newFeatures.map)}
-              checked={showMapTab}
-              testID="enableMapTabToggle"
-              onPress={(enableMapTab) => {
-                setPreference({enableMapTab});
+              checked={showMapPage}
+              testID="enableMapPageToggle"
+              onPress={(enableMapPage) => {
+                setPreference({enableMapPage: enableMapPage});
               }}
             />
             <Sections.LinkItem

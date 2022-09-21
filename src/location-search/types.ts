@@ -8,7 +8,7 @@ import {
 } from '../favorites/types';
 import {RouteParams as LocationSearchRouteParams} from './LocationSearch';
 import {RouteParams as MapSelectionRouteParams} from './map-selection';
-import {CompositeScreenProps} from "@react-navigation/native";
+import {CompositeScreenProps} from '@react-navigation/native';
 
 export type LocationSearchResult = {
   location: SearchLocation;

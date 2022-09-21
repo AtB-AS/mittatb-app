@@ -4,7 +4,7 @@ import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import Map from '@atb/components/map/Map';
-import {LocationSearchScreenProps} from "@atb/location-search/types";
+import {LocationSearchScreenProps} from '@atb/location-search/types';
 
 export type RouteParams = {
   callerRouteName: string;

@@ -25,9 +25,9 @@ import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/ty
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import {TabNavigatorParams} from './types';
-import NearbyScreen from "@atb/screens/Nearby";
-import ProfileScreen from "@atb/screens/Profile";
-import {useMapTab} from "@atb/components/map/use-map-tab";
+import NearbyScreen from '@atb/screens/Nearby';
+import ProfileScreen from '@atb/screens/Profile';
+import {useMapPage} from '@atb/components/map/use-map-page';
 
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
@@ -36,7 +36,7 @@ const NavigationRoot = () => {
   const {t} = useTranslation();
   const {startScreen, newDepartures, newFrontPage} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
-  const showMapTab = useMapTab();
+  const showMapPage = useMapPage();
   useGoToMobileTokenOnboardingWhenNecessary();
 
   return (
@@ -65,7 +65,7 @@ const NavigationRoot = () => {
           'assistantTab',
         )}
       />
-      {showMapTab && (
+      {showMapPage && (
         <Tab.Screen
           name="MapScreen"
           component={MapStack}
@@ -74,7 +74,7 @@ const NavigationRoot = () => {
             t(dictionary.navigation.map),
             MapPin,
             lineHeight,
-            'mapTab',
+            'mapPage',
           )}
         />
       )}
