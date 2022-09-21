@@ -48,8 +48,10 @@ jobs:
       - name: Install node_modules
         if: steps.modules-cache.outputs.cache-hit != 'true'
         run: yarn install
-      - name: Bundle install, fastlane dependencies
-        run: bundle install
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.6
+      - run: bundle install
       - name: Set environment
         run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT ${{ matrix.org }}
       - name: Export workflow env variables based on environment
