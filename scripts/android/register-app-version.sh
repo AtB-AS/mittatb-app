@@ -6,16 +6,8 @@
 # in addition to client ID and client secret for Entur ABT OAuth login.
 
 # Check for secrets from env vars
-if [[
-  -z ${ENTUR_CLIENT_ID}
-  || -z ${ENTUR_CLIENT_SECRET}
-  || -z ${APP_ENVIRONMENT}
-  || -z ${AUTHORITY}
-  || -z ${ANDROID_APPLICATION_ID}
-  || -z ${ANDROID_SIGNING_CERTIFICATE_FINGERPRINT}
-  || -z ${APP_VERSION}
-  || -z ${BUILD_ID}
-]]; then
+if [[ -z "${ENTUR_CLIENT_ID}" ]] || [[ -z "${ENTUR_CLIENT_SECRET}" ]] || [[ -z "${APP_ENVIRONMENT}" ]] || [[ -z "${AUTHORITY}" ]] || [[ -z "${ANDROID_APPLICATION_ID}" ]] || [[ -z "${ANDROID_SIGNING_CERTIFICATE_FINGERPRINT}" ]] || [[ -z "${APP_VERSION}" ]] || [[ -z "${BUILD_ID}" ]];
+then
   echo "Argument error!"
   echo "Expected environment variables:
   - ENTUR_CLIENT_ID
