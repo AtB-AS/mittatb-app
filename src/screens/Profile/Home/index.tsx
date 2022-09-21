@@ -28,7 +28,6 @@ import {ProfileTexts, useTranslation} from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
-import useIsLoading from '@atb/utils/use-is-loading';
 import useLocalConfig from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {IS_QA_ENV} from '@env';
@@ -40,6 +39,8 @@ import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from '../types';
 import {destructiveAlert} from './utils';
+import useIsLoading from '@atb/utils/use-is-loading';
+import {useMapPage} from '@atb/components/map/use-map-page';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -72,6 +73,7 @@ export default function ProfileHome({navigation}: ProfileProps) {
     setPreference,
     preferences: {newDepartures, newFrontPage},
   } = usePreferences();
+  const showMapPage = useMapPage();
 
   function copyInstallId() {
     if (config?.installId) setClipboard(config.installId);
@@ -421,6 +423,15 @@ export default function ProfileHome({navigation}: ProfileProps) {
                   'AtB-Beta-Frontpage': newFrontPage ? 'enabled' : 'disabled',
                 });
                 setPreference({newFrontPage});
+              }}
+            />
+            <Sections.ActionItem
+              mode="toggle"
+              text={t(ProfileTexts.sections.newFeatures.map)}
+              checked={showMapPage}
+              testID="enableMapPageToggle"
+              onPress={(enableMapPage) => {
+                setPreference({enableMapPage: enableMapPage});
               }}
             />
             <Sections.LinkItem

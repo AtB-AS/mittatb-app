@@ -56,6 +56,7 @@ export type TabNavigatorParams = {
     | ISubNavigator<TicketTabsNavigatorParams, 'ActiveTickets'>
     | ISubNavigator<TicketTabsNavigatorParams, 'BuyTickets'>;
   Profile: NavigatorScreenParams<ProfileStackParams>;
+  MapScreen: undefined;
 };
 
 export type TabNavigatorScreenProps<T extends keyof TabNavigatorParams> =
