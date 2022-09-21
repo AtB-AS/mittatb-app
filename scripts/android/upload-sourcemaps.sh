@@ -1,8 +1,7 @@
 #!/bin/bash
 
-if [[
-  (-z "${BUGSNAG_API_KEY}") || (-z "${BUILD_ID}")
-]]; then
+if [[ -z "${BUGSNAG_API_KEY}" ]] || [[ -z "${BUILD_ID}" ]]
+then
     echo "Argument error!"
     echo "Expected two env variables:
   - BUGSNAG_API_KEY
