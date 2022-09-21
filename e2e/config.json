@@ -16,5 +16,6 @@
       }
     ]
   ],
+  "preset": "ts-jest",
   "verbose": true
 }

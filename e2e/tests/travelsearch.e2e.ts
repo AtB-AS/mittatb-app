@@ -197,7 +197,8 @@ describe('Travel Search', () => {
   });
 
   // Check that the number of legs is correct on the suggestions
-  it('should show correct number of legs', async () => {
+  // TODO An error in here (https://github.com/AtB-AS/kundevendt/issues/1560#issuecomment-1252057310)
+  xit('should show correct number of legs', async () => {
     const departure = 'Snåsa skole';
     const arrival = 'Fillan kai';
 
