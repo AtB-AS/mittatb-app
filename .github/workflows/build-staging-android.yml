@@ -28,10 +28,12 @@ jobs:
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
+        shell: bash
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Add Entur private registry credentials
         run: sh ./scripts/add-entur-private-registry.sh
+        shell: bash
         env:
           ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
@@ -69,6 +71,7 @@ jobs:
           key: ${{ matrix.org }}-${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.env') }}
       - name: Decode Android keystore
         run: sh ./scripts/android/create-keystore-file.sh
+        shell: bash
         env:
           KEYSTORE: ${{ secrets.KEYSTORE }}
       - name: Generate native assets
