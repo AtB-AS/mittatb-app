@@ -132,7 +132,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   reservationStatus: {
     flex: 1,
     textAlign: 'right',
-    marginLeft: theme.spacings.xLarge,
+    marginLeft: theme.spacings.small,
   },
 }));
 
