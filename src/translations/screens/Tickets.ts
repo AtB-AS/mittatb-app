@@ -136,10 +136,6 @@ const TicketsTexts = {
     ),
     orderId: (orderId: string) =>
       _(`Ordre-ID: ${orderId}`, `Order ID: ${orderId}`),
-    paymentType: {
-      vipps: _('Vipps', 'Vipps'),
-      creditcard: _('kredittkort', 'credit card'),
-    },
     orderDate: (orderDate: string) =>
       _(`Bestillingsdato: ${orderDate}`, `Order date: ${orderDate}`),
     paymentMethod: (paymentMethod: string) =>

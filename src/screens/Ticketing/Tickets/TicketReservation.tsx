@@ -8,6 +8,7 @@ import React from 'react';
 import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
 import ValidityLine from '../Ticket/ValidityLine';
 import TicketStatusSymbol from '@atb/screens/Ticketing/Ticket/Component/TicketStatusSymbol';
+import _ from 'lodash';
 
 type Props = {
   reservation: Reservation;
@@ -39,11 +40,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
 
   const status = getStatus();
 
-  const paymentType =
-    reservation.paymentType === PaymentType.Vipps
-      ? t(TicketsTexts.reservation.paymentType.vipps)
-      : t(TicketsTexts.reservation.paymentType.creditcard);
-
+  const paymentType = PaymentType[reservation.paymentType];
   return (
     <TouchableOpacity accessible={false} importantForAccessibility="no">
       <View style={styles.ticketContainer} testID="ticketReservation">
