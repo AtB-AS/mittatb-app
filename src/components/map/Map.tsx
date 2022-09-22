@@ -27,7 +27,7 @@ import {createMapLines} from '@atb/screens/TripDetails/Map/utils';
  * icon be and still be considered "My position"
  */
 const CURRENT_LOCATION_THRESHOLD_METERS = 30;
-const MAX_LIMIT_TO_SHOW_WALKING_TRIP_PATTERN = 10000;
+const MAX_LIMIT_TO_SHOW_WALKING_TRIP_PATTERN = 5000;
 
 type RegionEvent = {
   isMoving: boolean;
@@ -39,6 +39,7 @@ type MapProps = {
   shouldShowSearchBar?: boolean;
   shouldShowSelectionPin?: boolean;
   shouldExploreTripOptions?: boolean;
+  shouldFlyToSelectedPoints?: boolean;
   onLocationSelect?: (selectedLocation?: any) => void;
 };
 
@@ -47,6 +48,7 @@ const Map = ({
   shouldShowSearchBar,
   shouldShowSelectionPin,
   shouldExploreTripOptions,
+  shouldFlyToSelectedPoints,
   onLocationSelect,
 }: MapProps) => {
   const [regionEvent, setRegionEvent] = useState<RegionEvent>();
@@ -113,16 +115,15 @@ const Map = ({
       );
   }
 
-  const flyToFeature = async (feature: Feature) => {
-    setTripLegs([]);
+  const onPointSelect = async (feature: Feature) => {
     if (feature && feature.geometry.type === 'Point') {
       if (shouldExploreTripOptions) {
         await findTripToSelectedLocation(feature);
+      } else if (shouldFlyToSelectedPoints) {
+        mapCameraRef.current?.flyTo(feature.geometry.coordinates, 300);
       }
-      mapCameraRef.current?.flyTo(feature.geometry.coordinates, 300);
     }
   };
-
   async function findTripToSelectedLocation(feature: any) {
     const selectedCoordinates = {
       longitude: feature.geometry.coordinates[0],
@@ -140,8 +141,19 @@ const Map = ({
         ['==', ['geometry-type'], 'Point'],
       );
 
-    featuresAtPoint?.features.map(async (feature) => {
-      if (feature?.properties?.entityType === 'StopPlace') {
+    featuresAtPoint?.features.map(async (featureAtPoint) => {
+      if (featureAtPoint?.properties?.entityType === 'StopPlace') {
+        setTripLegs([]);
+        mapCameraRef.current?.fitBounds(
+          [
+            currentLocationCoordinates.longitude,
+            currentLocationCoordinates.latitude,
+          ],
+          feature.geometry.coordinates,
+          [50, 50],
+          1000,
+        );
+
         const trips = await getTrips(
           currentLocationCoordinates,
           selectedCoordinates,
@@ -203,7 +215,7 @@ const Map = ({
           onRegionWillChange={() =>
             setRegionEvent({isMoving: true, region: regionEvent?.region})
           }
-          onPress={flyToFeature}
+          onPress={onPointSelect}
           {...MapViewConfig}
         >
           <MapboxGL.Camera
