@@ -21,6 +21,7 @@ import LocationBar from '@atb/components/map/LocationBar';
 import {tripsSearch} from '@atb/api/trips_v2';
 import MapRoute from '@atb/screens/TripDetails/Map/MapRoute';
 import {createMapLines} from '@atb/screens/TripDetails/Map/utils';
+import {TripsQuery} from '@atb/api/types/trips';
 
 /**
  * How many meters from the current location GPS coordinates can the map arrow
@@ -116,59 +117,61 @@ const Map = ({
   }
 
   const onPointSelect = async (feature: Feature) => {
-    if (feature && feature.geometry.type === 'Point') {
-      if (shouldExploreTripOptions) {
-        await findTripToSelectedLocation(feature);
-      } else if (shouldFlyToSelectedPoints) {
-        mapCameraRef.current?.flyTo(feature.geometry.coordinates, 300);
-      }
+    if (shouldExploreTripOptions) {
+      await findTripToSelectedPoint(feature);
+    } else if (shouldFlyToSelectedPoints) {
+      flyToSelectedPoint(feature);
     }
   };
-  async function findTripToSelectedLocation(feature: any) {
-    const selectedCoordinates = {
-      longitude: feature.geometry.coordinates[0],
-      latitude: feature.geometry.coordinates[1],
-    };
 
-    const currentLocationCoordinates = {
-      longitude: coordinates.longitude,
-      latitude: coordinates.latitude,
-    };
+  const flyToSelectedPoint = (feature: Feature) => {
+    if (feature && feature.geometry.type === 'Point') {
+      mapCameraRef.current?.flyTo(feature.geometry.coordinates, 300);
+    }
+  };
+
+  const getWalkingTrip = (trips: TripsQuery) =>
+    trips?.trip.tripPatterns.find(
+      (tripPattern) =>
+        tripPattern.legs.length === 1 && tripPattern.legs[0].mode === 'foot',
+    );
+
+  const shouldShowWalkingTrip = (walkingDistance: number) =>
+    walkingDistance <= MAX_LIMIT_TO_SHOW_WALKING_TRIP_PATTERN;
+
+  async function findTripToSelectedPoint(feature: any) {
     const {screenPointX, screenPointY} = feature.properties;
-    const featuresAtPoint =
+    const renderedFeaturesResult =
       await mapViewRef?.current?.queryRenderedFeaturesAtPoint(
         [screenPointX, screenPointY],
         ['==', ['geometry-type'], 'Point'],
       );
 
-    featuresAtPoint?.features.map(async (featureAtPoint) => {
-      if (featureAtPoint?.properties?.entityType === 'StopPlace') {
+    renderedFeaturesResult?.features.map(async (featureAtPoint) => {
+      if (
+        featureAtPoint.geometry.type === 'Point' &&
+        featureAtPoint?.properties?.entityType === 'StopPlace'
+      ) {
         setTripLegs([]);
         mapCameraRef.current?.fitBounds(
-          [
-            currentLocationCoordinates.longitude,
-            currentLocationCoordinates.latitude,
-          ],
-          feature.geometry.coordinates,
+          [coordinates.longitude, coordinates.latitude],
+          featureAtPoint.geometry.coordinates,
           [50, 50],
           1000,
         );
 
         const trips = await getTrips(
-          currentLocationCoordinates,
-          selectedCoordinates,
+          {longitude: coordinates.longitude, latitude: coordinates.latitude},
+          {
+            longitude: featureAtPoint.geometry.coordinates[0],
+            latitude: featureAtPoint.geometry.coordinates[1],
+          },
         );
 
-        // can entur return more than one walking pattern between two stops?
-        const walkingTripPattern = trips?.trip.tripPatterns.find(
-          (tp) => tp.legs.length === 1 && tp.legs[0].mode === 'foot',
-        );
-        if (
-          walkingTripPattern &&
-          (walkingTripPattern.walkDistance as number) <=
-            MAX_LIMIT_TO_SHOW_WALKING_TRIP_PATTERN
-        ) {
-          setTripLegs(walkingTripPattern.legs);
+        // can Entur return more than one walking pattern between two stops?
+        const walkingTrip = getWalkingTrip(trips);
+        if (shouldShowWalkingTrip(walkingTrip?.walkDistance as number)) {
+          setTripLegs(walkingTrip?.legs);
         }
       }
     });
@@ -177,7 +180,7 @@ const Map = ({
   const getTrips = async (
     fromCoordinates: Coordinates,
     toCoordinates: Coordinates,
-  ) => {
+  ): Promise<TripsQuery> => {
     return await tripsSearch({
       from: {
         name: 'From Position',
