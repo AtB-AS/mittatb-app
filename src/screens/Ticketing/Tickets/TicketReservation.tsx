@@ -52,7 +52,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
             ) : (
               <TicketStatusSymbol status={status}></TicketStatusSymbol>
             )}
-            <ThemeText type="body__secondary">
+            <ThemeText type="body__secondary" style={styles.reservationStatus}>
               {t(TicketsTexts.reservation[status])}
             </ThemeText>
           </View>
@@ -128,6 +128,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   ticketInfoContainer: {
     padding: theme.spacings.medium,
+  },
+  reservationStatus: {
+    flex: 1,
+    textAlign: 'right',
+    marginLeft: theme.spacings.xLarge,
   },
 }));
 
