@@ -110,8 +110,8 @@ xdescribe('Account', () => {
       );
 
       await tapById('ticket0Details');
-      await expectNotToExistsById('staticQRCode');
-      await expectNotToExistsById('mobileTokenQRCode');
+      await expectNotToExistsById('staticBarcode');
+      await expectNotToExistsById('mobileTokenBarcode');
       await goBack();
     };
 
@@ -151,8 +151,8 @@ xdescribe('Account', () => {
       );
 
       await tapById('ticket0Details');
-      await expectNotToExistsById('staticQRCode');
-      await expectNotToExistsById('mobileTokenQRCode');
+      await expectNotToExistsById('staticBarcode');
+      await expectNotToExistsById('mobileTokenBarcode');
       await goBack();
     };
 

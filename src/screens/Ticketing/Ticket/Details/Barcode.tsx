@@ -9,7 +9,6 @@ import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import qrcode from 'qrcode';
 import useInterval from '@atb/utils/use-interval';
 import MessageBox from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
@@ -19,6 +18,7 @@ import {
   isTravelCardToken,
 } from '@atb/mobile-token/utils';
 import {FareContract} from '@atb/tickets';
+import {renderAztec} from '@entur-private/abt-mobile-client-sdk';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -26,28 +26,28 @@ type Props = {
   fc: FareContract;
 };
 
-export default function QrCode({
+export default function Barcode({
   validityStatus,
   ticketIsInspectable,
   fc,
 }: Props): JSX.Element | null {
-  const status = useQrCodeStatus(validityStatus, ticketIsInspectable);
+  const status = useBarcodeCodeStatus(validityStatus, ticketIsInspectable);
 
   switch (status) {
     case 'none':
       return null;
     case 'loading':
-      return <LoadingQr />;
+      return <LoadingBarcode />;
     case 'static':
-      return <StaticQr fc={fc} />;
+      return <StaticAztec fc={fc} />;
     case 'mobiletoken':
-      return <MobileTokenQr fc={fc} />;
+      return <MobileTokenAztec fc={fc} />;
     case 'other':
       return <DeviceNotInspectable />;
   }
 }
 
-const useQrCodeStatus = (
+const useBarcodeCodeStatus = (
   validityStatus: ValidityStatus,
   ticketIsInspectable: boolean,
 ) => {
@@ -71,107 +71,75 @@ const useQrCodeStatus = (
 
 const UPDATE_INTERVAL = 10000;
 /**
- * Show qr code for mobile token. This can also fallback to static qr if
+ * Show aztec code for mobile token. This can also fall back to static aztec if
  * anything goes wrong when getting the signed mobile token.
  */
-const MobileTokenQr = ({fc}: {fc: FareContract}) => {
+const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {getSignedToken} = useMobileTokenContextState();
-  const [qrCodeError, setQrCodeError] = useState(false);
-  const qrCode = useQrCode(getSignedToken, setQrCodeError, UPDATE_INTERVAL);
-  const [qrCodeSvg, setQrCodeSvg] = useState<string>();
-  const [countdown, setCountdown] = useState<number>(UPDATE_INTERVAL / 1000);
-
-  useEffect(() => {
-    if (qrCode) {
-      qrcode.toString(qrCode, {type: 'svg'}).then(setQrCodeSvg);
-      setCountdown(UPDATE_INTERVAL / 1000);
-    }
-  }, [qrCode, setQrCodeSvg]);
+  const [aztecCodeError, setAztecCodeError] = useState(false);
+  const [aztecXml, setAztecXml] = useState<string>();
+  const [countdown, setCountdown] = useState<number>(0);
 
   useInterval(
-    () => {
+    async () => {
       if (countdown > 0) {
         setCountdown(countdown - 1);
+      } else {
+        const signedToken = await getSignedToken();
+        if (!signedToken) {
+          setAztecCodeError(true);
+        } else {
+          setAztecCodeError(false);
+          setAztecXml(renderAztec(signedToken));
+        }
+        setCountdown(UPDATE_INTERVAL / 1000);
       }
     },
     1000,
     [],
-    countdown === 0,
   );
 
-  if (qrCodeError) {
-    return <StaticQr fc={fc} />;
-  } else if (!qrCodeSvg) {
-    return <LoadingQr />;
+  if (aztecCodeError) {
+    return <StaticAztec fc={fc} />;
+  } else if (!aztecXml) {
+    return <LoadingBarcode />;
   }
 
   return (
     <Sections.GenericItem>
       <View style={{alignItems: 'center'}}>
         <View
-          style={styles.qrCode}
+          style={styles.aztecCode}
           accessible={true}
-          accessibilityLabel={t(TicketTexts.details.qrCodeA11yLabel)}
-          testID="mobileTokenQRCode"
+          accessibilityLabel={t(TicketTexts.details.barcodeA11yLabel)}
+          testID="mobileTokenBarcode"
         >
-          <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
+          <SvgXml xml={aztecXml} width="100%" height="100%" />
         </View>
-        <ThemeText>
-          {t(TicketTexts.details.qrCodeCountdown(countdown))}
+        <ThemeText
+          accessible={false}
+          importantForAccessibility={'no-hide-descendants'}
+        >
+          {t(TicketTexts.details.barcodeCountdown(countdown))}
         </ThemeText>
       </View>
     </Sections.GenericItem>
   );
 };
 
-const useQrCode = (
-  getSignedToken: () => Promise<string | undefined>,
-  setQrCodeError: (isError: boolean) => void,
-  interval: number,
-) => {
-  const [tokenQRCode, setTokenQRCode] = useState<string | undefined>(undefined);
-
-  const updateQrCode = useCallback(
-    () =>
-      getSignedToken().then((qr) => {
-        if (!qr) {
-          setQrCodeError(true);
-        } else {
-          setQrCodeError(false);
-          setTokenQRCode(qr);
-        }
-      }),
-    [getSignedToken, setTokenQRCode],
-  );
-
-  useEffect(() => {
-    updateQrCode();
-  }, []);
-
-  useInterval(
-    () => {
-      updateQrCode();
-    },
-    interval,
-    [],
-  );
-
-  return tokenQRCode;
-};
-
-// const QrCodeError = ({retry}: {retry?: (forceRestart: boolean) => void}) => {
+// const BarcodeError = ({retry}: {retry?: (forceRestart: boolean) => void}) => {
 //   const {t} = useTranslation();
 //
 //   return (
 //     <Sections.GenericItem>
 //       <MessageBox
 //         type={'error'}
-//         title={t(TicketTexts.details.qrCodeErrors.generic.title)}
-//         message={t(TicketTexts.details.qrCodeErrors.generic.text)}
+//         title={t(TicketTexts.details.barcodeErrors.generic.title)}
+//         message={t(TicketTexts.details.barcodeErrors.generic.text)}
 //         onPress={retry && (() => retry(true))}
-//         onPressText={retry && t(TicketTexts.details.qrCodeErrors.generic.retry)}
+//         onPressText={retry && t(TicketTexts.details.barcodeErrors.generic.retry)}
 //       />
 //     </Sections.GenericItem>
 //   );
@@ -183,12 +151,12 @@ const DeviceNotInspectable = () => {
   const inspectableToken = findInspectable(remoteTokens);
   if (!inspectableToken) return null;
   const message = isTravelCardToken(inspectableToken)
-    ? t(TicketTexts.details.qrCodeErrors.notInspectableDevice.tCard)
+    ? t(TicketTexts.details.barcodeErrors.notInspectableDevice.tCard)
     : t(
-        TicketTexts.details.qrCodeErrors.notInspectableDevice.wrongDevice(
+        TicketTexts.details.barcodeErrors.notInspectableDevice.wrongDevice(
           getDeviceName(inspectableToken) ||
             t(
-              TicketTexts.details.qrCodeErrors.notInspectableDevice
+              TicketTexts.details.barcodeErrors.notInspectableDevice
                 .unnamedDevice,
             ),
         ),
@@ -197,7 +165,7 @@ const DeviceNotInspectable = () => {
     <Sections.GenericItem>
       <MessageBox
         type={'warning'}
-        title={t(TicketTexts.details.qrCodeErrors.notInspectableDevice.title)}
+        title={t(TicketTexts.details.barcodeErrors.notInspectableDevice.title)}
         message={message}
         isMarkdown={true}
       />
@@ -205,7 +173,7 @@ const DeviceNotInspectable = () => {
   );
 };
 
-const LoadingQr = () => {
+const LoadingBarcode = () => {
   const {theme} = useTheme();
   return (
     <Sections.GenericItem>
@@ -216,37 +184,39 @@ const LoadingQr = () => {
   );
 };
 
-const StaticQr = ({fc}: {fc: FareContract}) => {
+const StaticAztec = ({fc}: {fc: FareContract}) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const [qrCodeSvg, setQrCodeSvg] = useState<string>();
+  const [aztecXml, setAztecXml] = useState<string>();
 
   useEffect(() => {
     if (fc.qrCode) {
-      qrcode.toString(fc.qrCode, {type: 'svg'}).then(setQrCodeSvg);
+      setAztecXml(renderAztec(fc.qrCode));
     }
-  }, [fc.qrCode, setQrCodeSvg]);
+  }, [fc.qrCode, setAztecXml, renderAztec]);
 
-  if (!qrCodeSvg) return null;
+  if (!aztecXml) return null;
 
   return (
     <Sections.GenericItem>
       <View
-        style={styles.qrCode}
+        style={styles.aztecCode}
         accessible={true}
-        accessibilityLabel={t(TicketTexts.details.qrCodeA11yLabel)}
-        testID="staticQRCode"
+        accessibilityLabel={t(TicketTexts.details.barcodeA11yLabel)}
+        testID="staticBarcode"
       >
-        <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
+        <SvgXml xml={aztecXml} width="100%" height="100%" />
       </View>
     </Sections.GenericItem>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  qrCode: {
+  aztecCode: {
     width: '100%',
     aspectRatio: 1,
+    padding: theme.spacings.large,
+    backgroundColor: '#FFFFFF',
     marginBottom: theme.spacings.medium,
   },
 }));
