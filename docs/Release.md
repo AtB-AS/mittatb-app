@@ -17,8 +17,8 @@ Bump the version number in these files:
   - All .env-files
   - package.json
 
-Do this in a commit with message "chore: Bump to version x.xx". 
-    
+Do this in a commit with message "chore: Bump to version x.xx".
+
 Tip: You can check earlier commits with the message "chore: Bump to version x.xx" to see if all necessary files are bumped.
 
 ### Create release candidate with the command line
@@ -26,7 +26,8 @@ Tip: You can check earlier commits with the message "chore: Bump to version x.xx
 This will create a draft release in GitHub.
 
 - `git fetch` to locally pull all existing tags
-- `yarn release-draft` to create a tag for the new release. This should be done on the master branch.
+- Make sure you've checked out the branch from which you want to make the release (`master` or `release/x.x`).
+- `yarn release-draft` to create a tag for the new release.
 - You are asked to specify version. This should be the major-version with a release candidate version suffix, for example `v1.16-rc2`.
 - If this is the first release for the current major version use `rc1` as suffix like this: `v1.16-rc1`.
 - If a release candidate already exists, increment the suffix number. If `v1.16-rc2` exists, the next version should be `v1.16-rc3`.
@@ -37,6 +38,7 @@ Follow these steps in GitHub:
 
 - Go to this repository in GitHub and select _Releases_.
 - Find the previously created draft release with the correct release candidate version and click _Edit_.
+- Set the target branch to the same branch the release draft was created from.
 - Click _Publish release_.
 
 This makes GitHub Actions build the release and send it to TestFlight / Play Store Alpha. This is configured with [fastlane](https://fastlane.tools/). The build itself will take approximately an hour, and there may be additional review time at Apple / Google. The exception is if the release is an update to an existing major version, then TestFlight will automatically accept the release without a new review.
