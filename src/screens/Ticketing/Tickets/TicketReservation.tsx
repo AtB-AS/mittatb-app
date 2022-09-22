@@ -8,6 +8,8 @@ import React from 'react';
 import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
 import ValidityLine from '../Ticket/ValidityLine';
 import TicketStatusSymbol from '@atb/screens/Ticketing/Ticket/Component/TicketStatusSymbol';
+import {formatToLongDateTime} from '@atb/utils/date';
+import {fromUnixTime} from 'date-fns';
 
 type Props = {
   reservation: Reservation;
@@ -16,7 +18,7 @@ type Props = {
 const TicketReservation: React.FC<Props> = ({reservation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   async function openVippsUrl(vippsUrl: string) {
     try {
@@ -39,11 +41,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
 
   const status = getStatus();
 
-  const paymentType =
-    reservation.paymentType === PaymentType.Vipps
-      ? t(TicketsTexts.reservation.paymentType.vipps)
-      : t(TicketsTexts.reservation.paymentType.creditcard);
-
+  const paymentType = PaymentType[reservation.paymentType];
   return (
     <TouchableOpacity accessible={false} importantForAccessibility="no">
       <View style={styles.ticketContainer} testID="ticketReservation">
@@ -54,7 +52,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
             ) : (
               <TicketStatusSymbol status={status}></TicketStatusSymbol>
             )}
-            <ThemeText type="body__secondary">
+            <ThemeText type="body__secondary" style={styles.reservationStatus}>
               {t(TicketsTexts.reservation[status])}
             </ThemeText>
           </View>
@@ -71,7 +69,10 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
             <ThemeText style={styles.detail}>
               {t(
                 TicketsTexts.reservation.orderDate(
-                  reservation.created.toDate().toLocaleString(),
+                  formatToLongDateTime(
+                    fromUnixTime(reservation.created.toMillis() / 1000),
+                    language,
+                  ),
                 ),
               )}
             </ThemeText>
@@ -127,6 +128,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   ticketInfoContainer: {
     padding: theme.spacings.medium,
+  },
+  reservationStatus: {
+    flex: 1,
+    textAlign: 'right',
+    marginLeft: theme.spacings.small,
   },
 }));
 
