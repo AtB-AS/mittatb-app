@@ -8,7 +8,8 @@ import React from 'react';
 import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
 import ValidityLine from '../Ticket/ValidityLine';
 import TicketStatusSymbol from '@atb/screens/Ticketing/Ticket/Component/TicketStatusSymbol';
-import _ from 'lodash';
+import {formatToLongDateTime} from '@atb/utils/date';
+import {fromUnixTime} from 'date-fns';
 
 type Props = {
   reservation: Reservation;
@@ -17,7 +18,7 @@ type Props = {
 const TicketReservation: React.FC<Props> = ({reservation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   async function openVippsUrl(vippsUrl: string) {
     try {
@@ -68,7 +69,10 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
             <ThemeText style={styles.detail}>
               {t(
                 TicketsTexts.reservation.orderDate(
-                  reservation.created.toDate().toLocaleString(),
+                  formatToLongDateTime(
+                    fromUnixTime(reservation.created.toMillis() / 1000),
+                    language,
+                  ),
                 ),
               )}
             </ThemeText>
