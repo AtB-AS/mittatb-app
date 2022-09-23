@@ -8,8 +8,9 @@ export function MapScreen() {
   const currentLocationCoordinates = location?.coordinates || FOCUS_ORIGIN;
   return (
     <Map
-      coordinates={{...currentLocationCoordinates, zoomLevel: 12}}
-      shouldExploreTripOptions={true}
+      coordinates={{...currentLocationCoordinates}}
+      zoomLevel={12}
+      shouldExploreTripFromStops={true}
     />
   );
 }

@@ -4,7 +4,7 @@ import SvgInfo from '@atb/assets/svg/mono-icons/status/Info';
 import LocationIcon from '@atb/components/location-icon';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {ErrorType} from '@atb/api/utils';
 import {Location} from '@atb/favorites/types';
@@ -14,24 +14,47 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
+import {useReverseGeocoder} from '@atb/geocoder';
+import {coordinatesDistanceInMetres} from '@atb/utils/location';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import {Coordinates} from '@atb/screens/TripDetails/Map/types';
 
 type Props = {
-  location?: Location;
-  error?: ErrorType;
-  onSelect(): void;
-  isSearching: boolean;
+  coordinates: Coordinates | null;
+  onSelect?: (selectedLocation: any) => void;
 };
 
-const LocationBar: React.FC<Props> = ({
-  location,
-  error,
-  onSelect,
-  isSearching,
-}) => {
+/**
+ * How many meters from the current location GPS coordinates can the map arrow
+ * icon be and still be considered "My position"
+ */
+const CURRENT_LOCATION_THRESHOLD_METERS = 30;
+
+const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
   const styles = useStyles();
+  const {location: geolocation} = useGeolocationState();
+  const {closestLocation, isSearching, error} = useReverseGeocoder(coordinates);
+
+  const onPress = () => {
+    if (location && onSelect) {
+      onSelect(location);
+    }
+  };
+
+  const location = useMemo(() => {
+    if (!coordinates) return undefined;
+    if (!geolocation) return closestLocation;
+
+    const pinIsCloseToGeolocation =
+      coordinatesDistanceInMetres(geolocation.coordinates, coordinates) <
+      CURRENT_LOCATION_THRESHOLD_METERS;
+
+    return pinIsCloseToGeolocation ? geolocation : closestLocation;
+  }, [geolocation, closestLocation]);
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={{flex: 1}} onPress={onSelect}>
+      <TouchableOpacity style={{flex: 1}} onPress={onPress}>
         <View style={styles.innerContainer}>
           <View style={styles.locationContainer}>
             <Icon

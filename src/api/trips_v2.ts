@@ -27,6 +27,7 @@ export async function tripsSearch(
     waitReluctance: query.waitReluctance,
     walkReluctance: query.walkReluctance,
     walkSpeed: query.walkSpeed,
+    modes: query.modes,
   };
 
   const results = await post<TripsQuery>(url, cleanQuery, opts);

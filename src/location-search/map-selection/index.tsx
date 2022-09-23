@@ -40,10 +40,13 @@ const MapSelection: React.FC<Props> = ({
       />
       <Map
         onLocationSelect={onLocationSelect}
-        coordinates={coordinates}
+        coordinates={{
+          latitude: coordinates.latitude,
+          longitude: coordinates.longitude,
+        }}
         shouldShowSearchBar={true}
-        shouldShowSelectionPin={true}
-        shouldFlyToSelectedPoints={true}
+        shouldSelectLocation={true}
+        zoomLevel={coordinates.zoomLevel}
       />
     </View>
   );
