@@ -57,7 +57,7 @@ jobs:
       - name: Export workflow env variables based on environment
         run: bash ./scripts/export-workflow-parameters.sh
       - name: Override native config files
-        run: bash ./scripts/override-config-files.sh
+        run: bash ./scripts/android/override-config-files.sh
       - name: Decode Android keystore
         run: bash ./scripts/android/create-keystore-file.sh
         env:
