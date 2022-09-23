@@ -43,11 +43,6 @@ const TicketTexts = {
       'Barkode. Vis frem denne koden ved billett kontroll',
       'Barcode. Show this code in case of inspection. ',
     ),
-    barcodeCountdown: (secondsLeft: number) =>
-      _(
-        `Barkode oppdateres om ${secondsLeft} sek.`,
-        `Barcode will update in ${secondsLeft} sec.`,
-      ),
     barcodeErrors: {
       notInspectableDevice: {
         title: _('Barkode', 'Barcode'),
