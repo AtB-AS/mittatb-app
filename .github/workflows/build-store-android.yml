@@ -41,7 +41,8 @@ jobs:
           node-version: 16
       - name: Install node_modules
         run: yarn install
-      - uses: ruby/setup-ruby@v1
+      - name: Setup ruby and bundle install
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7.6
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
