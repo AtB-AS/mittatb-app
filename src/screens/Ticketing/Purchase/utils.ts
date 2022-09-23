@@ -18,9 +18,60 @@ import {UserProfileWithCount} from './Travellers/use-user-count-state';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 
+export type PurchaseFlow = {
+  /**
+   * Whether the traveller selection should allow a single traveller or
+   * multiple travellers to be selected.
+   */
+  travellerSelectionMode: 'single' | 'multiple';
+
+  /**
+   * Whether the customer should be able to select a future start time for the
+   * ticket.
+   */
+  travelDateSelectionEnabled: boolean;
+
+  /**
+   * Whether the ticket can be used on train in Zone A (part of
+   * Sammarbeidsbilletten)
+   */
+  usableOnTrainInZoneA: boolean;
+};
+
 export type UserProfileTypeWithCount = {
   userTypeString: string;
   count: number;
+};
+
+export const getPurchaseFlow = (
+  product: PreassignedFareProduct,
+): PurchaseFlow => {
+  switch (product.type) {
+    case 'period':
+      return {
+        travellerSelectionMode: 'single',
+        travelDateSelectionEnabled: true,
+        usableOnTrainInZoneA: true,
+      };
+    case 'hour24':
+      return {
+        travellerSelectionMode: 'single',
+        travelDateSelectionEnabled: true,
+        usableOnTrainInZoneA: true,
+      };
+    case 'single':
+      return {
+        travellerSelectionMode: 'multiple',
+        travelDateSelectionEnabled: false,
+        usableOnTrainInZoneA: true,
+      };
+    default:
+      return {
+        travellerSelectionMode: 'multiple',
+        travelDateSelectionEnabled: false,
+        usableOnTrainInZoneA: false,
+      };
+  }
 };
 
 export function getExpireDate(iso: string): string {

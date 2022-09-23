@@ -1,31 +1,56 @@
 import MessageBox from '@atb/components/message-box';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {
+  useHasEnabledMobileToken,
+  useMobileTokenContextState,
+} from '@atb/mobile-token/MobileTokenContext';
+import {
+  PreassignedFareProduct,
+  PreassignedFareProductType,
+} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
+import {useTicketState} from '@atb/tickets';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
-import {TicketOverviewProps} from '..';
-import DurationSelection from '../components/DurationSelection';
-import PurchaseMessages from '../components/PurchaseWarnings';
-import StartTimeSelection from '../components/StartTimeSelection';
-import Summary from '../components/Summary';
-import TravellerSelection from '../components/TravellerSelection';
-import Zones from '../components/Zones';
-import useOfferState from '../use-offer-state';
+import {TariffZoneWithMetadata} from '../TariffZones';
+import {UserProfileWithCount} from '../Travellers/use-user-count-state';
+import {getPurchaseFlow} from '../utils';
+import DurationSelection from './components/DurationSelection';
+import PurchaseMessages from './components/PurchaseMessages';
+import StartTimeSelection from './components/StartTimeSelection';
+import Summary from './components/Summary';
+import TravellerSelection from './components/TravellerSelection';
+import Zones from './components/Zones';
+import useOfferState from './use-offer-state';
 
-const PeriodTicketOverview: React.FC<TicketOverviewProps> = (props) => {
-  const {fromTariffZone, toTariffZone} = props;
+export type TicketDetailsSelectionProps = {
+  preassignedFareProduct: PreassignedFareProduct;
+  refreshOffer?: boolean;
+  selectableTravellers: UserProfileWithCount[];
+  selectableProductType?: PreassignedFareProductType;
+  fromTariffZone: TariffZoneWithMetadata;
+  toTariffZone: TariffZoneWithMetadata;
+  travelDate?: string;
+};
+
+const TicketDetailsSelection: React.FC<TicketDetailsSelectionProps> = (
+  params,
+) => {
+  const {fromTariffZone, toTariffZone} = params;
   const styles = useStyles();
   const {t} = useTranslation();
 
   const [preassignedFareProduct, setPreassignedFareProduct] = useState(
-    props.preassignedFareProduct,
+    params.preassignedFareProduct,
   );
 
   const [travellerSelection, setTravellerSelection] = useState(
-    props.selectableTravellers,
+    params.selectableTravellers,
   );
+  const hasSelection = params.selectableTravellers.some((u) => u.count);
+
   const [travelDate, setTravelDate] = useState<string | undefined>();
 
   const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
@@ -35,11 +60,14 @@ const PeriodTicketOverview: React.FC<TicketOverviewProps> = (props) => {
     travellerSelection,
     travelDate,
   );
+
+  const {travelDateSelectionEnabled} = getPurchaseFlow(preassignedFareProduct);
+
   useEffect(() => {
-    if (props?.refreshOffer) {
+    if (params?.refreshOffer) {
       refreshOffer();
     }
-  }, [props?.refreshOffer]);
+  }, [params?.refreshOffer]);
 
   return (
     <>
@@ -67,9 +95,8 @@ const PeriodTicketOverview: React.FC<TicketOverviewProps> = (props) => {
         <TravellerSelection
           setTravellerSelection={setTravellerSelection}
           preassignedFareProduct={preassignedFareProduct}
-          selectableUserProfiles={props.selectableTravellers}
+          selectableUserProfiles={params.selectableTravellers}
           style={styles.selectionComponent}
-          mode="single"
         />
 
         <Zones
@@ -81,13 +108,15 @@ const PeriodTicketOverview: React.FC<TicketOverviewProps> = (props) => {
           }
         />
 
-        <StartTimeSelection
-          color="interactive_2"
-          travelDate={travelDate}
-          setTravelDate={setTravelDate}
-          validFromTime={travelDate}
-          style={styles.selectionComponent}
-        />
+        {travelDateSelectionEnabled && (
+          <StartTimeSelection
+            color="interactive_2"
+            travelDate={travelDate}
+            setTravelDate={setTravelDate}
+            validFromTime={travelDate}
+            style={styles.selectionComponent}
+          />
+        )}
       </View>
 
       <PurchaseMessages
@@ -99,7 +128,7 @@ const PeriodTicketOverview: React.FC<TicketOverviewProps> = (props) => {
       <FullScreenFooter>
         <Summary
           isLoading={isSearchingOffer}
-          isError={!!error}
+          isError={!!error || !hasSelection}
           price={totalPrice}
           fromTariffZone={fromTariffZone}
           toTariffZone={toTariffZone}
@@ -118,7 +147,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.medium,
   },
   selectionLinks: {margin: theme.spacings.medium},
+  totalSection: {flex: 1, textAlign: 'center'},
+  toPaymentButton: {marginHorizontal: theme.spacings.medium},
+  warning: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
+  },
   summary: {marginTop: theme.spacings.medium},
 }));
 
-export default PeriodTicketOverview;
+export default TicketDetailsSelection;

@@ -8,11 +8,7 @@ import React, {useMemo} from 'react';
 import {ScrollView, View} from 'react-native';
 import {TicketPurchaseScreenProps} from '../types';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {
-  PreassignedFareProduct,
-  PreassignedFareProductType,
-  TariffZone,
-} from '@atb/reference-data/types';
+import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {TariffZoneWithMetadata} from '../TariffZones';
 import {usePreferences} from '@atb/preferences';
@@ -20,9 +16,7 @@ import {
   UserProfileTypeWithCount,
   useTravellersWithPreselectedCounts,
 } from '../utils';
-import SingleTicketOverview from './ticket-types/SingleTicketOverview';
-import PeriodTicketOverview from './ticket-types/PeriodTicketOverview';
-import Hour24TicketOverview from './ticket-types/Hour24TicketOverview';
+import TicketDetailsSelection from './TicketDetailsSelection';
 
 type OverviewProps = TicketPurchaseScreenProps<'PurchaseOverview'>;
 
@@ -95,7 +89,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
       <ScrollView testID="ticketingScrollView">
         {preassignedFareProduct && (
-          <TicketDetailSelection
+          <TicketDetailsSelection
             {...params}
             preassignedFareProduct={preassignedFareProduct}
             selectableTravellers={selectableTravellers}
@@ -106,29 +100,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
       </ScrollView>
     </View>
   );
-};
-
-export type TicketOverviewProps = {
-  preassignedFareProduct: PreassignedFareProduct;
-  refreshOffer?: boolean;
-  selectableTravellers: UserProfileWithCount[];
-  selectableProductType?: PreassignedFareProductType;
-  fromTariffZone: TariffZoneWithMetadata;
-  toTariffZone: TariffZoneWithMetadata;
-  travelDate?: string;
-};
-
-const TicketDetailSelection = (props: TicketOverviewProps) => {
-  switch (props.preassignedFareProduct.type) {
-    case 'single':
-      return <SingleTicketOverview {...props} />;
-    case 'period':
-      return <PeriodTicketOverview {...props} />;
-    case 'hour24':
-      return <Hour24TicketOverview {...props} />;
-    default:
-      return <></>;
-  }
 };
 
 /**
