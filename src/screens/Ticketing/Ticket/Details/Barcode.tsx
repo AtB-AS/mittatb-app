@@ -80,26 +80,18 @@ const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
   const {getSignedToken} = useMobileTokenContextState();
   const [aztecCodeError, setAztecCodeError] = useState(false);
   const [aztecXml, setAztecXml] = useState<string>();
-  const [countdown, setCountdown] = useState<number>(0);
 
-  useInterval(
-    async () => {
-      if (countdown > 0) {
-        setCountdown(countdown - 1);
-      } else {
-        const signedToken = await getSignedToken();
-        if (!signedToken) {
-          setAztecCodeError(true);
-        } else {
-          setAztecCodeError(false);
-          setAztecXml(renderAztec(signedToken));
-        }
-        setCountdown(UPDATE_INTERVAL / 1000);
-      }
-    },
-    1000,
-    [],
-  );
+  const renderAztecCode = async () => {
+    const signedToken = await getSignedToken();
+    if (!signedToken) {
+      setAztecCodeError(true);
+    } else {
+      setAztecCodeError(false);
+      setAztecXml(renderAztec(signedToken));
+    }
+  };
+
+  useInterval(renderAztecCode, UPDATE_INTERVAL, [], false, true);
 
   if (aztecCodeError) {
     return <StaticAztec fc={fc} />;
@@ -118,12 +110,6 @@ const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
         >
           <SvgXml xml={aztecXml} width="100%" height="100%" />
         </View>
-        <ThemeText
-          accessible={false}
-          importantForAccessibility={'no-hide-descendants'}
-        >
-          {t(TicketTexts.details.barcodeCountdown(countdown))}
-        </ThemeText>
       </View>
     </Sections.GenericItem>
   );
@@ -217,6 +203,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     aspectRatio: 1,
     padding: theme.spacings.large,
     backgroundColor: '#FFFFFF',
-    marginBottom: theme.spacings.medium,
   },
 }));
