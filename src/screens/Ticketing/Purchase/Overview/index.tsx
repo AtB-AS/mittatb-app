@@ -8,7 +8,7 @@ import React, {useMemo} from 'react';
 import {ScrollView, View} from 'react-native';
 import {TicketPurchaseScreenProps} from '../types';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
+import {TariffZone} from '@atb/reference-data/types';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {TariffZoneWithMetadata} from '../TariffZones';
 import {usePreferences} from '@atb/preferences';
@@ -36,8 +36,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     .filter((product) => product.type === productType);
 
   const preassignedFareProduct =
-    params.preassignedFareProduct ??
-    (selectableProducts[0] as PreassignedFareProduct | undefined);
+    params.preassignedFareProduct ?? selectableProducts[0];
 
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
@@ -75,11 +74,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title={
-          preassignedFareProduct
-            ? t(PurchaseOverviewTexts.header.title[preassignedFareProduct.type])
-            : ''
-        }
+        title={t(
+          PurchaseOverviewTexts.header.title[preassignedFareProduct.type],
+        )}
         leftButton={{
           type: 'cancel',
           onPress: closeModal,
@@ -88,15 +85,13 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
       />
 
       <ScrollView testID="ticketingScrollView">
-        {preassignedFareProduct && (
-          <TicketDetailsSelection
-            {...params}
-            preassignedFareProduct={preassignedFareProduct}
-            selectableTravellers={selectableTravellers}
-            fromTariffZone={fromTariffZone}
-            toTariffZone={toTariffZone}
-          />
-        )}
+        <TicketDetailsSelection
+          {...params}
+          preassignedFareProduct={preassignedFareProduct}
+          selectableTravellers={selectableTravellers}
+          fromTariffZone={fromTariffZone}
+          toTariffZone={toTariffZone}
+        />
       </ScrollView>
     </View>
   );

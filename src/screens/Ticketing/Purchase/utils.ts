@@ -101,13 +101,13 @@ export function getPaymentTypeName(paymentType: PaymentType) {
 export function useTravellersWithPreselectedCounts(
   userProfiles: UserProfile[],
   defaultSelections: UserProfileTypeWithCount[],
-  preassignedFareProduct?: PreassignedFareProduct,
+  preassignedFareProduct: PreassignedFareProduct,
 ) {
   return useMemo(
     () =>
       userProfiles
         .filter((u) =>
-          preassignedFareProduct?.limitations.userProfileRefs.includes(u.id),
+          preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
         )
         .map((u) => ({
           ...u,
