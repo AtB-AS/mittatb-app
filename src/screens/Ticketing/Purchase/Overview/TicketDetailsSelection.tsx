@@ -143,12 +143,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.medium,
   },
   selectionLinks: {margin: theme.spacings.medium},
-  totalSection: {flex: 1, textAlign: 'center'},
-  toPaymentButton: {marginHorizontal: theme.spacings.medium},
-  warning: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
-  },
   summary: {marginTop: theme.spacings.medium},
 }));
 

@@ -17,6 +17,11 @@ import {TicketPurchaseScreenProps} from '../types';
 import {useTariffZoneFromLocation} from '../utils';
 import TicketDetailsSelection from './TicketDetailsSelection';
 
+type UserProfileTypeWithCount = {
+  userTypeString: string;
+  count: number;
+};
+
 type OverviewProps = TicketPurchaseScreenProps<'PurchaseOverview'>;
 
 const PurchaseOverview: React.FC<OverviewProps> = ({
@@ -58,8 +63,8 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const selectableTravellers = useTravellersWithPreselectedCounts(
     userProfiles,
-    preSelectedUsers ?? [defaultPreSelectedUser],
     preassignedFareProduct,
+    preSelectedUsers ?? [defaultPreSelectedUser],
   );
 
   const closeModal = () =>
@@ -94,11 +99,6 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
       </ScrollView>
     </View>
   );
-};
-
-type UserProfileTypeWithCount = {
-  userTypeString: string;
-  count: number;
 };
 
 const getCountIfUserIsIncluded = (
