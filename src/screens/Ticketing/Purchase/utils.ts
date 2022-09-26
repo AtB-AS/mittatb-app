@@ -30,12 +30,6 @@ export type PurchaseFlow = {
    * ticket.
    */
   travelDateSelectionEnabled: boolean;
-
-  /**
-   * Whether the ticket can be used on train in Zone A (part of
-   * Sammarbeidsbilletten)
-   */
-  usableOnTrainInZoneA: boolean;
 };
 
 export type UserProfileTypeWithCount = {
@@ -51,25 +45,21 @@ export const getPurchaseFlow = (
       return {
         travellerSelectionMode: 'single',
         travelDateSelectionEnabled: true,
-        usableOnTrainInZoneA: true,
       };
     case 'hour24':
       return {
         travellerSelectionMode: 'single',
         travelDateSelectionEnabled: true,
-        usableOnTrainInZoneA: true,
       };
     case 'single':
       return {
         travellerSelectionMode: 'multiple',
         travelDateSelectionEnabled: false,
-        usableOnTrainInZoneA: true,
       };
     default:
       return {
         travellerSelectionMode: 'multiple',
         travelDateSelectionEnabled: false,
-        usableOnTrainInZoneA: false,
       };
   }
 };
