@@ -8,6 +8,7 @@ import React from 'react';
 import {Alert, LayoutAnimation, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {animateNextChange} from '@atb/utils/animation';
 
 export default function FavoriteDepartures() {
   const style = useProfileStyle();
@@ -27,9 +28,7 @@ export default function FavoriteDepartures() {
           text: t(FavoriteDeparturesTexts.delete.delete),
           style: 'destructive',
           onPress: async () => {
-            LayoutAnimation.configureNext(
-              LayoutAnimation.Presets.easeInEaseOut,
-            );
+            animateNextChange();
             removeFavoriteDeparture(item.id);
           },
         },
