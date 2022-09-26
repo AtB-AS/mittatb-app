@@ -119,10 +119,10 @@ function getCountIfUserIsIncluded(
  * default user profile preference exists then the first user profile will have
  * a count of one.
  */
-export function useTravellersWithPreselectedCounts(
+function useTravellersWithPreselectedCounts(
   userProfiles: UserProfile[],
-  defaultSelections: UserProfileTypeWithCount[],
   preassignedFareProduct: PreassignedFareProduct,
+  defaultSelections: UserProfileTypeWithCount[],
 ) {
   return useMemo(
     () =>
