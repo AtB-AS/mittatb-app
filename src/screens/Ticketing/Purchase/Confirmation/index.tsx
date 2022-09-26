@@ -14,7 +14,6 @@ import {
 } from '@atb/mobile-token/MobileTokenContext';
 import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import {createTravelDateText} from '@atb/screens/Ticketing/Purchase/Overview';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/tickets';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
@@ -40,6 +39,7 @@ import {
   SavedPaymentOption,
   TicketPurchaseScreenProps,
 } from '../types';
+import {createTravelDateText} from '../utils';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
