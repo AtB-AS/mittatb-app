@@ -23,6 +23,12 @@ export type PurchaseFlow = {
    * ticket.
    */
   travelDateSelectionEnabled: boolean;
+
+  /**
+   * Whether the customer should be able to select between a set of durations
+   * for the ticket, based on `fareproduct.durationDays`.
+   */
+  durationSelectionEnabled: boolean;
 };
 
 export const getPurchaseFlow = (
@@ -33,21 +39,25 @@ export const getPurchaseFlow = (
       return {
         travellerSelectionMode: 'single',
         travelDateSelectionEnabled: true,
+        durationSelectionEnabled: true,
       };
     case 'hour24':
       return {
         travellerSelectionMode: 'single',
         travelDateSelectionEnabled: true,
+        durationSelectionEnabled: false,
       };
     case 'single':
       return {
         travellerSelectionMode: 'multiple',
         travelDateSelectionEnabled: false,
+        durationSelectionEnabled: false,
       };
     case 'carnet':
       return {
         travellerSelectionMode: 'single',
         travelDateSelectionEnabled: false,
+        durationSelectionEnabled: false,
       };
   }
 };

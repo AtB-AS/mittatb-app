@@ -56,7 +56,8 @@ const TicketDetailsSelection: React.FC<TicketDetailsSelectionProps> = (
     travelDate,
   );
 
-  const {travelDateSelectionEnabled} = getPurchaseFlow(preassignedFareProduct);
+  const {travelDateSelectionEnabled, durationSelectionEnabled} =
+    getPurchaseFlow(preassignedFareProduct);
 
   useEffect(() => {
     if (params?.refreshOffer) {
@@ -78,7 +79,7 @@ const TicketDetailsSelection: React.FC<TicketDetailsSelectionProps> = (
           />
         )}
 
-        {preassignedFareProduct.type === 'period' && (
+        {durationSelectionEnabled && (
           <DurationSelection
             color="interactive_2"
             selectedProduct={preassignedFareProduct}
