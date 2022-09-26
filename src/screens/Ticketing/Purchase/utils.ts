@@ -78,48 +78,6 @@ export function getPaymentTypeName(paymentType: PaymentType) {
   }
 }
 
-export type UserProfileTypeWithCount = {
-  userTypeString: string;
-  count: number;
-};
-
-/**
- * Get the default user profiles with count. If a default user profile has been
- * selected in the preferences that profile will have a count of one. If no
- * default user profile preference exists then the first user profile will have
- * a count of one.
- */
-export function useTravellersWithPreselectedCounts(
-  userProfiles: UserProfile[],
-  defaultSelections: UserProfileTypeWithCount[],
-  preassignedFareProduct: PreassignedFareProduct,
-) {
-  return useMemo(
-    () =>
-      userProfiles
-        .filter((u) =>
-          preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
-        )
-        .map((u) => ({
-          ...u,
-          count: getCountIfUserIsIncluded(u, defaultSelections),
-        })),
-    [userProfiles, preassignedFareProduct],
-  );
-}
-
-export function getCountIfUserIsIncluded(
-  u: UserProfile,
-  selections: UserProfileTypeWithCount[],
-): number {
-  const selectedUser = selections.filter(
-    (up: UserProfileTypeWithCount) => up.userTypeString === u.userTypeString,
-  );
-
-  if (selectedUser.length < 1) return 0;
-  return selectedUser[0].count;
-}
-
 export const useTariffZoneFromLocation = (tariffZones: TariffZone[]) => {
   const {location} = useGeolocationState();
   return useMemo(() => {
