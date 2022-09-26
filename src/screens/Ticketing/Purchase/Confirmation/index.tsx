@@ -39,7 +39,6 @@ import {
   SavedPaymentOption,
   TicketPurchaseScreenProps,
 } from '../types';
-import {createTravelDateText} from '../utils';
 
 export type RouteParams = {
   preassignedFareProduct: PreassignedFareProduct;
@@ -153,6 +152,14 @@ const Confirmation: React.FC<ConfirmationProps> = ({
 
   const vatAmountString = formatDecimalNumber(vatAmount, language);
   const vatPercentString = formatDecimalNumber(vatPercent, language);
+
+  const travelDateText = travelDate
+    ? t(
+        PurchaseConfirmationTexts.travelDate.futureDate(
+          formatToLongDateTime(travelDate, language),
+        ),
+      )
+    : t(PurchaseConfirmationTexts.travelDate.now);
 
   useEffect(() => {
     const prevMethod = getPreviousPaymentMethod(
@@ -308,7 +315,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                     type="body__secondary"
                     color="secondary"
                   >
-                    {createTravelDateText(t, language, travelDate)}
+                    {travelDateText}
                   </ThemeText>
                 </View>
               </Sections.GenericItem>

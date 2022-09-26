@@ -17,14 +17,6 @@ const PurchaseOverviewTexts = {
       'Whoops - we were unable to retrieve cost. Please try again 🤞',
     ),
   },
-  travelDate: {
-    now: _('Oppstart nå', 'Starting now'),
-    futureDate: (time: string) => _(`Oppstart ${time}`, `Start time ${time}`),
-    a11yHint: _(
-      'Aktivér for å velge starttidspunkt',
-      `Activate to select start time`,
-    ),
-  },
   travellers: {
     prefix: _('Nåværende valg: ', 'Current selection: '),
     noTravellers: _(`Ingen reisende`, `No travellers`),

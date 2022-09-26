@@ -149,20 +149,6 @@ export function createTravellersText(
   }
 }
 
-export function createTravelDateText(
-  t: TranslateFunction,
-  language: Language,
-  travelDate?: string,
-) {
-  return travelDate
-    ? t(
-        PurchaseOverviewTexts.travelDate.futureDate(
-          formatToLongDateTime(travelDate, language),
-        ),
-      )
-    : t(PurchaseOverviewTexts.travelDate.now);
-}
-
 export function getCountIfUserIsIncluded(
   u: UserProfile,
   selections: UserProfileTypeWithCount[],
