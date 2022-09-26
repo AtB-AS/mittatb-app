@@ -1,11 +1,11 @@
-import {PreassignedFareProduct, UserProfile} from '@atb/reference-data/types';
-import {PaymentType} from '@atb/tickets/types';
+import {useGeolocationState} from '@atb/GeolocationContext';
 import {
-  Language,
-  PurchaseOverviewTexts,
-  TranslateFunction,
-} from '@atb/translations';
-import {formatToLongDateTime} from '@atb/utils/date';
+  PreassignedFareProduct,
+  TariffZone,
+  UserProfile,
+} from '@atb/reference-data/types';
+import {PaymentType} from '@atb/tickets/types';
+import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {format, parseISO} from 'date-fns';
 import {useMemo} from 'react';
 
@@ -119,3 +119,15 @@ export function getCountIfUserIsIncluded(
   if (selectedUser.length < 1) return 0;
   return selectedUser[0].count;
 }
+
+export const useTariffZoneFromLocation = (tariffZones: TariffZone[]) => {
+  const {location} = useGeolocationState();
+  return useMemo(() => {
+    if (location) {
+      const {longitude, latitude} = location.coordinates;
+      return tariffZones.find((t) =>
+        turfBooleanPointInPolygon([longitude, latitude], t.geometry),
+      );
+    }
+  }, [tariffZones, location]);
+};

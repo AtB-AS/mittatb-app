@@ -1,19 +1,18 @@
-import {StyleSheet} from '@atb/theme';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {usePreferences} from '@atb/preferences';
+import {TariffZone} from '@atb/reference-data/types';
 import {productIsSellableInApp} from '@atb/reference-data/utils';
+import {StyleSheet} from '@atb/theme';
+import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React, {useMemo} from 'react';
 import {ScrollView, View} from 'react-native';
-import {TicketPurchaseScreenProps} from '../types';
-import {useGeolocationState} from '@atb/GeolocationContext';
-import {TariffZone} from '@atb/reference-data/types';
-import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {TariffZoneWithMetadata} from '../TariffZones';
-import {usePreferences} from '@atb/preferences';
+import {UserProfileWithCount} from '../Travellers/use-user-count-state';
+import {TicketPurchaseScreenProps} from '../types';
 import {
   UserProfileTypeWithCount,
+  useTariffZoneFromLocation,
   useTravellersWithPreselectedCounts,
 } from '../utils';
 import TicketDetailsSelection from './TicketDetailsSelection';
@@ -101,7 +100,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
  * Get the default tariff zone, either based on current location or else the
  * first tariff zone in the provided tariff zones list.
  */
-export const useDefaultTariffZone = (
+const useDefaultTariffZone = (
   tariffZones: TariffZone[],
 ): TariffZoneWithMetadata => {
   const tariffZoneFromLocation = useTariffZoneFromLocation(tariffZones);
@@ -112,18 +111,6 @@ export const useDefaultTariffZone = (
         : {...tariffZones[0], resultType: 'zone'},
     [tariffZones, tariffZoneFromLocation],
   );
-};
-
-export const useTariffZoneFromLocation = (tariffZones: TariffZone[]) => {
-  const {location} = useGeolocationState();
-  return useMemo(() => {
-    if (location) {
-      const {longitude, latitude} = location.coordinates;
-      return tariffZones.find((t) =>
-        turfBooleanPointInPolygon([longitude, latitude], t.geometry),
-      );
-    }
-  }, [tariffZones, location]);
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
