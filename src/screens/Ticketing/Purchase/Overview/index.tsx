@@ -101,17 +101,17 @@ type UserProfileTypeWithCount = {
   count: number;
 };
 
-function getCountIfUserIsIncluded(
+const getCountIfUserIsIncluded = (
   u: UserProfile,
   selections: UserProfileTypeWithCount[],
-): number {
+): number => {
   const selectedUser = selections.filter(
     (up: UserProfileTypeWithCount) => up.userTypeString === u.userTypeString,
   );
 
   if (selectedUser.length < 1) return 0;
   return selectedUser[0].count;
-}
+};
 
 /**
  * Get the default user profiles with count. If a default user profile has been
@@ -119,11 +119,11 @@ function getCountIfUserIsIncluded(
  * default user profile preference exists then the first user profile will have
  * a count of one.
  */
-function useTravellersWithPreselectedCounts(
+const useTravellersWithPreselectedCounts = (
   userProfiles: UserProfile[],
   preassignedFareProduct: PreassignedFareProduct,
   defaultSelections: UserProfileTypeWithCount[],
-) {
+) => {
   return useMemo(
     () =>
       userProfiles
@@ -136,7 +136,7 @@ function useTravellersWithPreselectedCounts(
         })),
     [userProfiles, preassignedFareProduct],
   );
-}
+};
 
 /**
  * Get the default tariff zone, either based on current location or else the
