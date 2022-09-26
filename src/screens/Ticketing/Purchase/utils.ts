@@ -56,9 +56,9 @@ export const getPurchaseFlow = (
         travellerSelectionMode: 'multiple',
         travelDateSelectionEnabled: false,
       };
-    default:
+    case 'carnet':
       return {
-        travellerSelectionMode: 'multiple',
+        travellerSelectionMode: 'single',
         travelDateSelectionEnabled: false,
       };
   }
