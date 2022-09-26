@@ -25,6 +25,7 @@ import useInterval from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '../../departure-list/utils';
 import {SearchTime} from '../Nearby/types';
 import {flatMap} from '@atb/utils/array';
+import {animateNextChange} from '@atb/utils/animation';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
@@ -187,7 +188,7 @@ const reducer: ReducerWithSideEffects<
     }
 
     case 'UPDATE_DEPARTURES': {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      animateNextChange();
       return Update<DepartureDataState>({
         ...state,
         isLoading: false,
@@ -200,7 +201,7 @@ const reducer: ReducerWithSideEffects<
     }
 
     case 'UPDATE_REALTIME': {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      animateNextChange();
       return Update<DepartureDataState>({
         ...state,
         data: updateStopsWithRealtime(state.data ?? [], action.realtimeData),
