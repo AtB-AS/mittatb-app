@@ -1,15 +1,13 @@
 import {PreassignedFareProduct, UserProfile} from '@atb/reference-data/types';
 import {PaymentType} from '@atb/tickets/types';
-import {format, parseISO} from 'date-fns';
-import {useMemo} from 'react';
 import {
   Language,
   PurchaseOverviewTexts,
   TranslateFunction,
 } from '@atb/translations';
-import {UserProfileWithCount} from './Travellers/use-user-count-state';
 import {formatToLongDateTime} from '@atb/utils/date';
-import {getReferenceDataName} from '@atb/reference-data/utils';
+import {format, parseISO} from 'date-fns';
+import {useMemo} from 'react';
 
 export type PurchaseFlow = {
   /**
@@ -108,45 +106,6 @@ export function useTravellersWithPreselectedCounts(
         })),
     [userProfiles, preassignedFareProduct],
   );
-}
-
-export function createTravellersText(
-  userProfilesWithCount: UserProfileWithCount[],
-  /**
-   * shortened Shorten text if more than two traveller groups, making
-   * '2 adults, 1 child, 2 senior' become '5 travellers'.
-   */
-  shortened: boolean,
-  /**
-   * prefixed Prefix the traveller selection with text signalling it is the current
-   * selection.
-   */
-  prefixed: boolean,
-  t: TranslateFunction,
-  language: Language,
-) {
-  const chosenUserProfiles = userProfilesWithCount.filter((u) => u.count);
-
-  const prefix = prefixed ? t(PurchaseOverviewTexts.travellers.prefix) : '';
-
-  if (chosenUserProfiles.length === 0) {
-    return prefix + t(PurchaseOverviewTexts.travellers.noTravellers);
-  } else if (chosenUserProfiles.length > 2 && shortened) {
-    const totalCount = chosenUserProfiles.reduce(
-      (total, u) => total + u.count,
-      0,
-    );
-    return (
-      prefix + t(PurchaseOverviewTexts.travellers.travellersCount(totalCount))
-    );
-  } else {
-    return (
-      prefix +
-      chosenUserProfiles
-        .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
-        .join(', ')
-    );
-  }
 }
 
 export function getCountIfUserIsIncluded(

@@ -1,11 +1,16 @@
 import React, {useRef} from 'react';
-import {UserCountState} from './use-user-count-state';
-import {useTranslation, TicketTravellerTexts} from '@atb/translations';
+import {UserCountState, UserProfileWithCount} from './use-user-count-state';
+import {
+  useTranslation,
+  TicketTravellerTexts,
+  PurchaseOverviewTexts,
+  TranslateFunction,
+  Language,
+} from '@atb/translations';
 import * as Sections from '../../../../components/sections';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {usePreferences} from '@atb/preferences';
-import {createTravellersText} from '../utils';
 
 export default function MultipleTravellersSelection({
   userProfilesWithCount,
@@ -55,4 +60,43 @@ export default function MultipleTravellersSelection({
       ))}
     </Sections.Section>
   );
+}
+
+function createTravellersText(
+  userProfilesWithCount: UserProfileWithCount[],
+  /**
+   * shortened Shorten text if more than two traveller groups, making
+   * '2 adults, 1 child, 2 senior' become '5 travellers'.
+   */
+  shortened: boolean,
+  /**
+   * prefixed Prefix the traveller selection with text signalling it is the current
+   * selection.
+   */
+  prefixed: boolean,
+  t: TranslateFunction,
+  language: Language,
+) {
+  const chosenUserProfiles = userProfilesWithCount.filter((u) => u.count);
+
+  const prefix = prefixed ? t(PurchaseOverviewTexts.travellers.prefix) : '';
+
+  if (chosenUserProfiles.length === 0) {
+    return prefix + t(PurchaseOverviewTexts.travellers.noTravellers);
+  } else if (chosenUserProfiles.length > 2 && shortened) {
+    const totalCount = chosenUserProfiles.reduce(
+      (total, u) => total + u.count,
+      0,
+    );
+    return (
+      prefix + t(PurchaseOverviewTexts.travellers.travellersCount(totalCount))
+    );
+  } else {
+    return (
+      prefix +
+      chosenUserProfiles
+        .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
+        .join(', ')
+    );
+  }
 }
