@@ -1,14 +1,7 @@
-import {useGeolocationState} from '@atb/GeolocationContext';
-import {
-  PreassignedFareProduct,
-  TariffZone,
-  UserProfile,
-} from '@atb/reference-data/types';
+import {PreassignedFareProduct, UserProfile} from '@atb/reference-data/types';
 import {PaymentType} from '@atb/tickets/types';
 import {format, parseISO} from 'date-fns';
 import {useMemo} from 'react';
-import {TariffZoneWithMetadata} from './TariffZones';
-import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {
   Language,
   PurchaseOverviewTexts,
@@ -30,11 +23,6 @@ export type PurchaseFlow = {
    * ticket.
    */
   travelDateSelectionEnabled: boolean;
-};
-
-export type UserProfileTypeWithCount = {
-  userTypeString: string;
-  count: number;
 };
 
 export const getPurchaseFlow = (
@@ -81,6 +69,11 @@ export function getPaymentTypeName(paymentType: PaymentType) {
       return '';
   }
 }
+
+export type UserProfileTypeWithCount = {
+  userTypeString: string;
+  count: number;
+};
 
 /**
  * Get the default user profiles with count. If a default user profile has been
