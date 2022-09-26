@@ -97,8 +97,8 @@ describe('My profile', () => {
     // My account
     await scrollToText('profileHomeScrollView', 'My account', 'up');
     await expectToBeVisibleByText('Customer number');
-    await expectToBeVisibleById('expiredTicketsButton');
-    await expectToBeVisibleByText('Expired tickets');
+    await expectToBeVisibleById('ticketHistoryButton');
+    await expectToBeVisibleByText('Ticket history');
     await expectToBeVisibleById('loginButton');
     await expectToBeVisibleByText('Log in');
   });

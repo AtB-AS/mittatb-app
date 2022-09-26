@@ -1,34 +1,22 @@
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import Button from '@atb/components/button';
-import {useFavorites} from '@atb/favorites';
 import MessageBox from '@atb/components/message-box';
-import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {useFavorites} from '@atb/favorites';
+import {RootStackScreenProps} from '@atb/navigation/types';
 import {StyleSheet, Theme} from '@atb/theme';
 import {FavoriteListTexts, useTranslation} from '@atb/translations';
-import {CompositeNavigationProp} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
-import {ProfileStackParams} from '..';
-import SortableList from './SortableList';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {View} from 'react-native';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {ProfileScreenProps} from '../types';
+import SortableList from './SortableList';
 
-export type ProfileScreenNavigationProp = StackNavigationProp<
-  ProfileStackParams,
-  'ProfileHome'
->;
+type RootProps =
+  | ProfileScreenProps<'FavoriteList'>
+  | RootStackScreenProps<'SortableFavoriteList'>;
 
-type ProfileNearbyScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<TabNavigatorParams, 'Profile'>,
-  ProfileScreenNavigationProp
->;
-
-type ProfileScreenProps = {
-  navigation: ProfileNearbyScreenNavigationProp;
-};
-
-export default function SortableFavoriteList({navigation}: ProfileScreenProps) {
+export default function SortableFavoriteList({navigation}: RootProps) {
   const style = useProfileStyle();
   const {favorites, setFavoriteLocationss: setFavorites} = useFavorites();
   const items = favorites ?? [];

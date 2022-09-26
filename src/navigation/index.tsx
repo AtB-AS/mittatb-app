@@ -1,56 +1,26 @@
 import {useAppState} from '@atb/AppContext';
 import trackNavigation from '@atb/diagnostics/trackNavigation';
-import LocationSearch, {
-  RouteParams as LocationSearchParams,
-} from '@atb/location-search';
+import LocationSearch from '@atb/location-search';
+import LoginInAppStack from '@atb/login/in-app/LoginInAppStack';
+import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
+import MobileTokenOnboarding from '@atb/screens/MobileTokenOnboarding';
 import Onboarding from '@atb/screens/Onboarding';
-import AddEditFavorite, {
-  AddEditFavoriteRootParams,
-} from '@atb/screens/Profile/AddEditFavorite';
+import AddEditFavorite from '@atb/screens/Profile/AddEditFavorite';
 import SortableFavoriteList from '@atb/screens/Profile/FavoriteList/SortFavorites';
-import TicketPurchase, {
-  TicketingStackParams,
-} from '@atb/screens/Ticketing/Purchase';
-import TicketModalScreen, {
-  TicketModalStackParams,
-} from '@atb/screens/Ticketing/Ticket/Details';
+import SelectTravelTokenScreen from '@atb/screens/Profile/TravelToken/SelectTravelTokenScreen';
+import TicketPurchase from '@atb/screens/Ticketing/Purchase';
+import TicketModalScreen from '@atb/screens/Ticketing/Ticket/Details';
 import {useTheme} from '@atb/theme';
-import {
-  NavigationContainer,
-  NavigationContainerRef,
-  NavigatorScreenParams,
-  useLinking,
-  DefaultTheme,
-} from '@react-navigation/native';
+import {APP_SCHEME} from '@env';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
-import TabNavigator, {TabNavigatorParams} from './TabNavigator';
+import TabNavigator from './TabNavigator';
 import transitionSpec from './transitionSpec';
-import LoginInAppStack, {
-  LoginInAppStackParams,
-} from '@atb/login/in-app/LoginInAppStack';
+import {RootStackParamList} from './types';
 import useTestIds from './use-test-ids';
-import MobileTokenOnboarding from '@atb/screens/MobileTokenOnboarding';
-import SelectTravelTokenScreen from '@atb/screens/Profile/TravelToken/SelectTravelTokenScreen';
-import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
-import {APP_SCHEME} from '@env';
-
-export type RootStackParamList = {
-  NotFound: undefined;
-  Onboarding: undefined;
-  TabNavigator: NavigatorScreenParams<TabNavigatorParams>;
-  LocationSearch: LocationSearchParams;
-  SortableFavoriteList: undefined;
-  AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;
-  LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
-  TicketPurchase: NavigatorScreenParams<TicketingStackParams>;
-  TicketModal: NavigatorScreenParams<TicketModalStackParams>;
-  MobileTokenOnboarding: undefined;
-  SelectTravelTokenRoot: undefined;
-  ConsequencesFromTicketPurchase: undefined;
-};
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -59,30 +29,6 @@ const NavigationRoot = () => {
   const {theme} = useTheme();
 
   useTestIds();
-
-  const ref = useRef<NavigationContainerRef>(null);
-  const {getInitialState} = useLinking(ref, {
-    prefixes: [`${APP_SCHEME}://`],
-    config: {
-      screens: {
-        TabNavigator: {
-          screens: {
-            Profile: 'profile',
-            Ticketing: {
-              screens: {ActiveTickets: 'ticketing'},
-            },
-          },
-        },
-      },
-    },
-  });
-
-  useEffect(() => {
-    getInitialState().then(
-      () => {},
-      () => {},
-    );
-  }, [getInitialState]);
 
   if (isLoading) {
     return null;
@@ -108,22 +54,42 @@ const NavigationRoot = () => {
         backgroundColor={statusBarColor}
       />
       <Host>
-        <NavigationContainer
-          ref={ref}
+        <NavigationContainer<RootStackParamList>
           onStateChange={trackNavigation}
           theme={ReactNavigationTheme}
+          linking={{
+            prefixes: [`${APP_SCHEME}://`],
+            config: {
+              screens: {
+                TabNavigator: {
+                  screens: {
+                    Profile: 'profile',
+                    Ticketing: {
+                      screens: {ActiveTickets: 'ticketing'},
+                    },
+                  },
+                },
+              },
+            },
+          }}
         >
           <Stack.Navigator
-            mode={isLoading || !onboarded ? 'card' : 'modal'}
-            screenOptions={{headerShown: false}}
+            screenOptions={{
+              headerShown: false,
+            }}
           >
             {!onboarded ? (
-              <>
+              <Stack.Group screenOptions={{presentation: 'card'}}>
                 <Stack.Screen name="Onboarding" component={Onboarding} />
                 <Stack.Screen name="LoginInApp" component={LoginInAppStack} />
-              </>
+              </Stack.Group>
             ) : (
-              <>
+              <Stack.Group
+                screenOptions={{
+                  presentation: 'modal',
+                  ...TransitionPresets.ModalSlideFromBottomIOS,
+                }}
+              >
                 <Stack.Screen name="TabNavigator" component={TabNavigator} />
                 <Stack.Screen
                   name="ConsequencesFromTicketPurchase"
@@ -150,7 +116,6 @@ const NavigationRoot = () => {
                   name="SelectTravelTokenRoot"
                   component={SelectTravelTokenScreen}
                 />
-
                 <Stack.Screen
                   name="AddEditFavorite"
                   component={AddEditFavorite}
@@ -160,9 +125,7 @@ const NavigationRoot = () => {
                   name="SortableFavoriteList"
                   component={SortableFavoriteList}
                   options={{
-                    gestureResponseDistance: {
-                      vertical: 100,
-                    },
+                    gestureResponseDistance: 100,
                     transitionSpec: {
                       open: transitionSpec,
                       close: transitionSpec,
@@ -179,7 +142,7 @@ const NavigationRoot = () => {
                     },
                   }}
                 />
-              </>
+              </Stack.Group>
             )}
           </Stack.Navigator>
         </NavigationContainer>

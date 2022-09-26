@@ -1,18 +1,11 @@
-import {StackNavigationProp} from '@react-navigation/stack';
-import React from 'react';
 import PhoneInput from '@atb/login/PhoneInput';
-import {RouteProp} from '@react-navigation/native';
-import {OnboardingStackParams} from '@atb/screens/Onboarding';
+import {OnboardingScreenProps} from '@atb/screens/Onboarding/types';
+import React from 'react';
 
-type PhoneInputOnboardingRouteProps = RouteProp<
-  OnboardingStackParams,
-  'PhoneInputInOnboarding'
->;
+// @TODO Are these files in use??
 
-export type PhoneInputOnboardingProps = {
-  navigation: StackNavigationProp<OnboardingStackParams>;
-  route: PhoneInputOnboardingRouteProps;
-};
+type PhoneInputOnboardingProps =
+  OnboardingScreenProps<'PhoneInputInOnboarding'>;
 
 export const PhoneInputInOnboarding = ({
   navigation,

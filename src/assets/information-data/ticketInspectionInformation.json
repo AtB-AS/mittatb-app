@@ -1,7 +1,7 @@
 {
     "nb": [
         {
-            "text": "Ved billettkontroll, åpne appen din og velg hovedmenyen «Billetter» nederst i appen. Velg fanen «Aktive». Her finner du din gyldige billett. Velg «Vis detaljer/kontroll». Du får nå opp informasjon om billetten og en QR-kode. Vis denne QR-koden til kontrollør som vil scanne denne med eget utstyr for å kontrollere om billetten er gyldig.\n",
+            "text": "Ved billettkontroll, åpne appen din og velg hovedmenyen «Billetter» nederst i appen. Velg fanen «Aktive». Her finner du din gyldige billett. Velg «Vis detaljer/kontroll». Du får nå opp informasjon om billetten og en barkode. Vis denne barkoden til kontrollør som vil scanne denne med eget utstyr for å kontrollere om billetten er gyldig.\n",
             "type": "text"
         },
         {
@@ -45,7 +45,7 @@
     ],
     "en": [
         {
-            "text": "During ticket inspections, open your app and select the main menu «Tickets» at the bottom of the app. Select the «Valid» tab. Here you will find your valid ticket. Select «Show details / inspection». You will now receive information about the ticket and a QR code. Show this QR code to the ticket inspector who will scan it with his own equipment to check if the ticket is valid.\n",
+            "text": "During ticket inspections, open your app and select the main menu «Tickets» at the bottom of the app. Select the «Valid» tab. Here you will find your valid ticket. Select «Show details / inspection». You will now receive information about the ticket and a barcode. Show this barcode to the ticket inspector who will scan it with his own equipment to check if the ticket is valid.\n",
             "type": "text"
         },
         {

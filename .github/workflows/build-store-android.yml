@@ -27,11 +27,11 @@ jobs:
           echo "APK_FILE_NAME=app-store.apk" >> $GITHUB_ENV
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
       - name: Decrypt env files
-        run: sh ./scripts/git-crypt-unlock.sh
+        run: bash ./scripts/git-crypt-unlock.sh
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Add Entur private registry credentials
-        run: sh ./scripts/add-entur-private-registry.sh
+        run: bash ./scripts/add-entur-private-registry.sh
         env:
           ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
@@ -41,8 +41,11 @@ jobs:
           node-version: 16
       - name: Install node_modules
         run: yarn install
-      - name: Bundle install, fastlane dependencies
-        run: bundle install
+      - name: Setup ruby and bundle install
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.6
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Get Github-release data
         if: matrix.org == 'atb'
         id: get_release
@@ -50,26 +53,26 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set environment
-        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT ${{ matrix.org }}
+        run: bash ./scripts/override-environment.sh $APP_ENVIRONMENT ${{ matrix.org }}
       - name: Export workflow env variables based on environment
-        run: sh ./scripts/export-workflow-parameters.sh
+        run: bash ./scripts/export-workflow-parameters.sh
       - name: Override native config files
-        run: sh ./scripts/override-config-files.sh
+        run: bash ./scripts/android/override-config-files.sh
       - name: Decode Android keystore
-        run: sh ./scripts/android/create-keystore-file.sh
+        run: bash ./scripts/android/create-keystore-file.sh
         env:
           KEYSTORE: ${{ secrets.KEYSTORE }}
       - name: Generate native assets
-        run: brew install imagemagick && yarn generate-native-assets
+        run: yarn generate-native-assets
       - name: Run fastlane build
-        run: fastlane android build
+        run: bundle exec fastlane android build
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
       - name: Distribute to Google Alpha
         if: matrix.org == 'atb'
-        run: fastlane android appcenter_alpha
+        run: bundle exec fastlane android appcenter_alpha
         env:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
           RELEASE_NOTES: ${{ steps.get_release.outputs.body }}
@@ -78,18 +81,18 @@ jobs:
         if: matrix.org == 'nfk'
         run: |
           echo ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT}} | base64 --decode > google-play-service-account.json
-          fastlane android playstore_internal
+          bundle exec fastlane android playstore_internal
         env:
           GOOGLE_PLAY_SERVICE_ACCOUNT_PATH: google-play-service-account.json
           ANDROID_PACKAGE_NAME: ${{ env.ANDROID_APPLICATION_ID }}
       - name: Upload bundle and source maps
         if: matrix.org == 'atb'
-        run: sh ./scripts/android/upload-sourcemaps.sh
+        run: bash ./scripts/android/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Register app version
         if: matrix.org == 'atb'
-        run: sh ./scripts/android/register-app-version.sh
+        run: bash ./scripts/android/register-app-version.sh
         env:
           ENTUR_CLIENT_ID: ${{ secrets.ABT_ENTUR_CLIENT_ID_PRODUCTION}}
           ENTUR_CLIENT_SECRET: ${{ secrets.ABT_ENTUR_CLIENT_SECRET_PRODUCTION}}

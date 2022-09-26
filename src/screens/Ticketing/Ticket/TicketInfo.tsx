@@ -37,7 +37,7 @@ import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import TicketDetail from '@atb/screens/Ticketing/Ticket/Component/TicketDetail';
 import WarningMessage from '@atb/screens/Ticketing/Ticket/Component/WarningMessage';
-import QrCode from '@atb/screens/Ticketing/Ticket/Details/QrCode';
+import Barcode from '@atb/screens/Ticketing/Ticket/Details/Barcode';
 import SectionSeparator from '@atb/components/sections/section-separator';
 import {getLastUsedAccess} from './Carnet/CarnetDetails';
 import InspectionSymbol from '@atb/screens/Ticketing/Ticket/Component/InspectionSymbol';
@@ -58,7 +58,7 @@ export type TicketInfoDetailsProps = {
   toTariffZone?: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
   status: TicketInfoProps['status'];
-  isInspectable?: boolean;
+  isInspectable: boolean;
   isCarnetTicket?: boolean;
   omitUserProfileCount?: boolean;
   testID?: string;
@@ -107,7 +107,7 @@ const TicketInfo = ({
       <SectionSeparator />
       {fareContract && (
         <>
-          <QrCode
+          <Barcode
             validityStatus={status}
             ticketIsInspectable={isInspectable}
             fc={fareContract}

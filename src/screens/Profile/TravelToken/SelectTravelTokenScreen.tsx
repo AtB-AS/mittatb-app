@@ -1,37 +1,35 @@
-import {StyleSheet, Theme} from '@atb/theme';
-import React, {useCallback, useState} from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
-import {ActivityIndicator, View} from 'react-native';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {ProfileStackParams} from '..';
 import Button from '@atb/components/button';
+import MessageBox from '@atb/components/message-box';
+import RadioBox from '@atb/components/radio-icon/radio-box';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import {animateNextChange} from '@atb/utils/animation';
-import MessageBox from '@atb/components/message-box';
-import {TravelTokenTexts, useTranslation} from '@atb/translations';
-import RadioBox from '@atb/components/radio-icon/radio-box';
-import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
+import {RemoteToken} from '@atb/mobile-token/types';
 import {
   findInspectable,
   getDeviceName,
   isMobileToken,
   isTravelCardToken,
 } from '@atb/mobile-token/utils';
-import {RemoteToken} from '@atb/mobile-token/types';
+import {RootStackScreenProps} from '@atb/navigation/types';
+import {StyleSheet, Theme} from '@atb/theme';
+import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {
   filterActiveOrCanBeUsedFareContracts,
   isCarnetTicket,
   useTicketState,
 } from '@atb/tickets';
+import {TravelTokenTexts, useTranslation} from '@atb/translations';
+import {animateNextChange} from '@atb/utils/animation';
 import {flatMap} from '@atb/utils/array';
+import React, {useCallback, useState} from 'react';
+import {ActivityIndicator, View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import {ProfileScreenProps} from '../types';
 
-type RouteName = 'SelectTravelToken';
-
-type Props = {
-  navigation: StackNavigationProp<ProfileStackParams, RouteName>;
-};
+type Props =
+  | ProfileScreenProps<'SelectTravelToken'>
+  | RootStackScreenProps<'SelectTravelTokenRoot'>;
 
 export default function SelectTravelTokenScreen({navigation}: Props) {
   const styles = useStyles();

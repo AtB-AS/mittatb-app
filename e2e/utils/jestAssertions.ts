@@ -1,4 +1,4 @@
-const jestExpect = require('expect');
+import jestExpect from "expect";
 
 export const expectBoolean = (
   value: boolean,

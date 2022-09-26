@@ -1,29 +1,20 @@
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
 import {useTicketState} from '@atb/tickets';
-import {TicketTexts, useTranslation} from '@atb/translations';
+import {useTranslation, TicketTexts} from '@atb/translations';
 import useInterval from '@atb/utils/use-interval';
-import {RouteProp} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {ScrollView, View} from 'react-native';
-import {TicketModalNavigationProp, TicketModalStackParams} from '../Details';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-
-import CarnetDetailedView from '@atb/screens/Ticketing/Ticket/Carnet/CarnetDetailedView';
+import {View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import CarnetDetailedView from '../Carnet/CarnetDetailedView';
+import {TicketModalScreenProps} from './types';
 
 export type CarnetDetailsRouteParams = {
   orderId: string;
   isInspectable: boolean;
 };
 
-export type CarnetDetailsScreenRouteProp = RouteProp<
-  TicketModalStackParams,
-  'CarnetDetailsScreen'
->;
-
-type Props = {
-  route: CarnetDetailsScreenRouteProp;
-  navigation: TicketModalNavigationProp;
-};
+type Props = TicketModalScreenProps<'CarnetDetailsScreen'>;
 
 export default function CarnetDetailsScreen({navigation, route}: Props) {
   const styles = useStyles();

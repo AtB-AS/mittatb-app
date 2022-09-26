@@ -1,25 +1,23 @@
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
+import {DateInputItem, Section, TimeInputItem} from '@atb/components/sections';
 import {StyleSheet} from '@atb/theme';
 import {
   NearbyTexts,
   ScreenHeaderTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {forwardRef, useState} from 'react';
-import {ScrollView, View} from 'react-native';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {DateInputItem, Section, TimeInputItem} from '@atb/components/sections';
-import {NavigationProp} from '@react-navigation/native';
-import {NearbyStackParams} from '.';
 import {
   dateWithReplacedTime,
   formatLocaleTime,
   isInThePast,
 } from '@atb/utils/date';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import useKeyboardHeight from '@atb/utils/use-keyboard-height';
+import React, {forwardRef, useState} from 'react';
+import {ScrollView, View} from 'react-native';
 import {SearchTime} from './types';
 
 type Props = {
@@ -34,8 +32,6 @@ export type DateTimePickerParams = {
   callerRouteName: string;
   callerRouteParam: string;
 };
-
-export type DateTimeNavigationProp = NavigationProp<NearbyStackParams>;
 
 const DepartureTimeSheet = forwardRef<ScrollView, Props>(
   ({close, initialTime, setSearchTime, allowTimeInPast = true}, focusRef) => {

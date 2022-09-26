@@ -4,6 +4,7 @@ import {
   CarnetTicketUsedAccess,
   PreactivatedSingleTicket,
   PreactivatedTicket,
+  Reservation,
 } from '.';
 import {
   FareContract,
@@ -166,6 +167,9 @@ export const filterExpiredFareContracts = (fareContracts: FareContract[]) => {
     !isActiveFareContractNowOrCanBeUsed(f) || isRefunded(f);
   return fareContracts.filter(isExpiredOrRefunded);
 };
+
+export const filterRejectedReservations = (reservations: Reservation[]) =>
+  reservations.filter((f: Reservation) => f.paymentStatus === 'REJECT');
 
 export const filterValidRightNowFareContract = (
   fareContracts: FareContract[],

@@ -9,10 +9,10 @@ import setupFirestoreListener from './firestore';
 type TicketReducerState = {
   fareContracts: FareContract[];
   reservations: Reservation[];
+  rejectedReservations: Reservation[];
   isRefreshingTickets: boolean;
   errorRefreshingTickets: boolean;
   customerProfile: CustomerProfile | undefined;
-  didPaymentFail: boolean;
 };
 
 type TicketReducerAction =
@@ -27,12 +27,12 @@ type TicketReducerAction =
       reservations: Reservation[];
     }
   | {
-      type: 'UPDATE_CUSTOMER_PROFILE';
-      customerProfile: CustomerProfile | undefined;
+      type: 'UPDATE_REJECTED_RESERVATIONS';
+      rejectedReservations: Reservation[];
     }
   | {
-      type: 'UPDATE_PAYMENT_FAILED';
-      didPaymentFail: boolean;
+      type: 'UPDATE_CUSTOMER_PROFILE';
+      customerProfile: CustomerProfile | undefined;
     };
 
 type TicketReducer = (
@@ -83,16 +83,21 @@ const ticketReducer: TicketReducer = (
         ),
       };
     }
+    case 'UPDATE_REJECTED_RESERVATIONS': {
+      const currentFareContractOrderIds = prevState.fareContracts.map(
+        (fc) => fc.orderId,
+      );
+      return {
+        ...prevState,
+        rejectedReservations: action.rejectedReservations.filter(
+          (r) => !currentFareContractOrderIds.includes(r.orderId),
+        ),
+      };
+    }
     case 'UPDATE_CUSTOMER_PROFILE': {
       return {
         ...prevState,
         customerProfile: action.customerProfile,
-      };
-    }
-    case 'UPDATE_PAYMENT_FAILED': {
-      return {
-        ...prevState,
-        didPaymentFail: action.didPaymentFail,
       };
     }
   }
@@ -101,21 +106,22 @@ const ticketReducer: TicketReducer = (
 type TicketState = {
   refreshTickets: () => void;
   fareContracts: FareContract[];
-  didPaymentFail: boolean;
-  resetPaymentStatus: () => void;
   findFareContractByOrderId: (id: string) => FareContract | undefined;
 } & Pick<
   TicketReducerState,
-  'reservations' | 'isRefreshingTickets' | 'customerProfile'
+  | 'reservations'
+  | 'isRefreshingTickets'
+  | 'customerProfile'
+  | 'rejectedReservations'
 >;
 
 const initialReducerState: TicketReducerState = {
   fareContracts: [],
   reservations: [],
+  rejectedReservations: [],
   isRefreshingTickets: false,
   errorRefreshingTickets: false,
   customerProfile: undefined,
-  didPaymentFail: false,
 };
 
 const TicketContext = createContext<TicketState | undefined>(undefined);
@@ -148,6 +154,14 @@ const TicketContextProvider: React.FC = ({children}) => {
             }),
           onError: (err) => console.error(err),
         },
+        rejectedReservations: {
+          onSnapshot: (rejectedReservations) =>
+            dispatch({
+              type: 'UPDATE_REJECTED_RESERVATIONS',
+              rejectedReservations: rejectedReservations,
+            }),
+          onError: (err) => console.error(err),
+        },
         // TODO: Temporary hack to get travelcard ID before we have tokens. Should be
         // replaced when tokens are implemented.
         customer: {
@@ -163,19 +177,12 @@ const TicketContextProvider: React.FC = ({children}) => {
   }, [user, abtCustomerId, enable_ticketing]);
 
   const refreshTickets = () => {};
-  const resetPaymentStatus = () => {
-    dispatch({
-      type: 'UPDATE_PAYMENT_FAILED',
-      didPaymentFail: false,
-    });
-  };
 
   return (
     <TicketContext.Provider
       value={{
         ...state,
         refreshTickets,
-        resetPaymentStatus,
         findFareContractByOrderId: (orderId) =>
           state.fareContracts.find((fc) => fc.orderId === orderId),
       }}
@@ -189,7 +196,7 @@ function isOlderThanAnHour(date: Date): boolean {
   return differenceInMinutes(new Date(), date) > 60;
 }
 
-const abortedPaymentStatus: PaymentStatus[] = ['CANCEL', 'CREDIT', 'REJECT'];
+const abortedPaymentStatus: PaymentStatus[] = ['CANCEL', 'CREDIT'];
 
 function isAbortedPaymentStatus(status: PaymentStatus): boolean {
   return abortedPaymentStatus.includes(status);

@@ -15,7 +15,7 @@ jobs:
         org: [atb, nfk]
     environment: ${{ matrix.org }}
     timeout-minutes: 180
-    runs-on: macos-11
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout project
         uses: actions/checkout@v1
@@ -27,11 +27,11 @@ jobs:
           echo "APK_FILE_NAME=app-staging.apk" >> $GITHUB_ENV
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
       - name: Decrypt env files
-        run: sh ./scripts/git-crypt-unlock.sh
+        run: bash ./scripts/git-crypt-unlock.sh
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Add Entur private registry credentials
-        run: sh ./scripts/add-entur-private-registry.sh
+        run: bash ./scripts/add-entur-private-registry.sh
         env:
           ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
@@ -48,14 +48,17 @@ jobs:
       - name: Install node_modules
         if: steps.modules-cache.outputs.cache-hit != 'true'
         run: yarn install
-      - name: Bundle install, fastlane dependencies
-        run: bundle install
+      - name: Setup ruby and bundle install
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.6
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Set environment
-        run: sh ./scripts/override-environment.sh $APP_ENVIRONMENT ${{ matrix.org }}
+        run: bash ./scripts/override-environment.sh $APP_ENVIRONMENT ${{ matrix.org }}
       - name: Export workflow env variables based on environment
-        run: sh ./scripts/export-workflow-parameters.sh
+        run: bash ./scripts/export-workflow-parameters.sh
       - name: Override native config files
-        run: sh ./scripts/override-config-files.sh
+        run: bash ./scripts/android/override-config-files.sh
       - name: Get potential cached APK
         uses: actions/cache@v2
         id: apk-cache
@@ -63,45 +66,45 @@ jobs:
           path: app-staging.apk
           key: ${{ matrix.org }}-${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.env') }}
       - name: Decode Android keystore
-        run: sh ./scripts/android/create-keystore-file.sh
+        run: bash ./scripts/android/create-keystore-file.sh
         env:
           KEYSTORE: ${{ secrets.KEYSTORE }}
       - name: Generate native assets
         if: steps.apk-cache.outputs.cache-hit != 'true'
-        run: brew install imagemagick && yarn generate-native-assets
+        run: yarn generate-native-assets
       - name: Run fastlane build
         if: steps.apk-cache.outputs.cache-hit != 'true'
-        run: fastlane android build
+        run: bundle exec fastlane android build
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
       - name: Replace apk bundle
         if: steps.apk-cache.outputs.cache-hit == 'true'
-        run: sh ./scripts/android/replace-bundle.sh
+        run: bash ./scripts/android/replace-bundle.sh
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
       - name: Distribute to AppCenter
         if: matrix.org == 'atb'
-        run: fastlane android appcenter_staging
+        run: bundle exec fastlane android appcenter_staging
         env:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
       - name: Distribute to Firebase app distribution
         if: matrix.org == 'nfk'
         run: |
           echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
-          fastlane android firebase_distribution_staging
+          bundle exec fastlane android firebase_distribution_staging
         env:
           GCP_CREDENTIALS_PATH: google-services.json
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
       - name: Upload bundle and source maps
-        run: sh ./scripts/android/upload-sourcemaps.sh
+        run: bash ./scripts/android/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Register app version
-        run: sh ./scripts/android/register-app-version.sh
+        run: bash ./scripts/android/register-app-version.sh
         env:
           ENTUR_CLIENT_ID: ${{ secrets.ABT_ENTUR_CLIENT_ID_STAGING}}
           ENTUR_CLIENT_SECRET: ${{ secrets.ABT_ENTUR_CLIENT_SECRET_STAGING}}
