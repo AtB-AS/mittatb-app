@@ -1,7 +1,7 @@
 import React from 'react';
-import Map from '@atb/components/map/Map';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
+import {Map} from '@atb/components/map';
 
 export function MapScreen() {
   const {location} = useGeolocationState();

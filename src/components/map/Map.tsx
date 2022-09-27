@@ -8,8 +8,8 @@ import {
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import {Coordinates} from '@entur/sdk';
-import MapboxGL, {Point} from '@react-native-mapbox-gl/maps';
-import {Feature, Position} from 'geojson';
+import MapboxGL from '@react-native-mapbox-gl/maps';
+import {Feature} from 'geojson';
 import React, {useRef, useState} from 'react';
 import {View} from 'react-native';
 

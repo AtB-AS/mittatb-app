@@ -3,8 +3,8 @@ import {StyleSheet} from '@atb/theme';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import Map from '@atb/components/map/Map';
 import {LocationSearchScreenProps} from '@atb/location-search/types';
+import {Map} from '@atb/components/map';
 
 export type RouteParams = {
   callerRouteName: string;
