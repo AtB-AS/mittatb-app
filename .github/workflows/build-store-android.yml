@@ -12,7 +12,7 @@ jobs:
         org: [atb, nfk]
     environment: ${{ matrix.org }}
     timeout-minutes: 180
-    runs-on: macos-11
+    runs-on: ubuntu-latest
     steps:
       - name: Check if release tag is org specific and exit for other orgs
         if: ${{ (matrix.org == 'atb' && contains(github.ref, 'nfk')) || (matrix.org == 'nfk' && contains(github.ref, 'atb')) }}
@@ -26,6 +26,7 @@ jobs:
           echo "KEYSTORE_PATH=./android/app/keystore.jks" >> $GITHUB_ENV
           echo "APK_FILE_NAME=app-store.apk" >> $GITHUB_ENV
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
+          echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
       - name: Decrypt env files
         run: bash ./scripts/git-crypt-unlock.sh
         env:
