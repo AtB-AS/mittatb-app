@@ -15,6 +15,7 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {hasShortWaitTime} from '@atb/screens/TripDetails/components/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 
 type TripMessagesProps = {
   tripPattern: TripPattern;
@@ -37,9 +38,19 @@ const TripMessages: React.FC<TripMessagesProps> = ({
   const {enable_ticketing} = useRemoteConfig();
   const isTicketingEnabledAndSomeTicketsAreUnavailableInApp =
     enable_ticketing && someTicketsAreUnavailableInApp;
+  const tripIncludesRailReplacementBus = tripPattern.legs.some(
+    (leg) => leg.transportSubmode === TransportSubmode.RailReplacementBus,
+  );
 
   return (
     <>
+      {tripIncludesRailReplacementBus && (
+        <MessageBox
+          containerStyle={messageStyle}
+          type="warning"
+          message={t(TripDetailsTexts.messages.tripIncludesRailReplacementBus)}
+        />
+      )}
       {shortWaitTime && (
         <MessageBox
           containerStyle={messageStyle}

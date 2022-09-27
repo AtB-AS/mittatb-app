@@ -4,7 +4,7 @@ import {Interchange} from '@atb/assets/svg/mono-icons/actions';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
-import {TinyMessageBox} from '@atb/components/message-box';
+import MessageBox, {TinyMessageBox} from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
@@ -24,6 +24,7 @@ import {
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {View} from 'react-native';
@@ -139,6 +140,15 @@ const TripSection: React.FC<TripSectionProps> = ({
         {!!leg.situations.length && (
           <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
             <SituationMessages mode="no-icon" situations={leg.situations} />
+          </TripRow>
+        )}
+        {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
+          <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
+            <MessageBox type="warning" icon={null}>
+              <ThemeText>
+                {t(TripDetailsTexts.messages.departureIsRailReplacementBus)}
+              </ThemeText>
+            </MessageBox>
           </TripRow>
         )}
 
