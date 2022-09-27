@@ -136,7 +136,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         </View>
 
         <PurchaseMessages
-          preassignedFareProduct={selectedPreassignedFareProduct}
+          preassignedFareProductType={selectedPreassignedFareProduct.type}
           fromTariffZone={fromTariffZone}
           toTariffZone={toTariffZone}
         />

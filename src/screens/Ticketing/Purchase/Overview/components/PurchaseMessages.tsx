@@ -3,7 +3,7 @@ import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {PreassignedFareProductType} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {useTicketState} from '@atb/tickets';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
@@ -13,13 +13,13 @@ import {getTrainTicketNoticeText} from '../../../utils';
 import {TariffZoneWithMetadata} from '../../TariffZones';
 
 export type PurchaseWarningsProps = {
-  preassignedFareProduct: PreassignedFareProduct;
+  preassignedFareProductType: PreassignedFareProductType;
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
 };
 
 const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
-  preassignedFareProduct,
+  preassignedFareProductType,
   fromTariffZone,
   toTariffZone,
 }) => {
@@ -46,11 +46,11 @@ const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
   );
 
   const shouldShowValidTrainTicketNotice =
-    (preassignedFareProduct.type === 'single' ||
-      preassignedFareProduct.type === 'period' ||
-      preassignedFareProduct.type === 'hour24') &&
+    (preassignedFareProductType === 'single' ||
+      preassignedFareProductType === 'period' ||
+      preassignedFareProductType === 'hour24') &&
     fromTariffZone.id === 'ATB:TariffZone:1' &&
-    fromTariffZone.id === 'ATB:TariffZone:1';
+    toTariffZone.id === 'ATB:TariffZone:1';
 
   return (
     <>
@@ -74,7 +74,7 @@ const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
       {shouldShowValidTrainTicketNotice && (
         <MessageBox
           containerStyle={styles.warning}
-          message={getTrainTicketNoticeText(t, preassignedFareProduct.type)}
+          message={getTrainTicketNoticeText(t, preassignedFareProductType)}
           type="info"
         />
       )}
