@@ -14,7 +14,6 @@ import {
 } from '@atb/mobile-token/MobileTokenContext';
 import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import {createTravelDateText} from '@atb/screens/Ticketing/Purchase/Overview';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/tickets';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
@@ -153,6 +152,14 @@ const Confirmation: React.FC<ConfirmationProps> = ({
 
   const vatAmountString = formatDecimalNumber(vatAmount, language);
   const vatPercentString = formatDecimalNumber(vatPercent, language);
+
+  const travelDateText = travelDate
+    ? t(
+        PurchaseConfirmationTexts.travelDate.futureDate(
+          formatToLongDateTime(travelDate, language),
+        ),
+      )
+    : t(PurchaseConfirmationTexts.travelDate.now);
 
   useEffect(() => {
     const prevMethod = getPreviousPaymentMethod(
@@ -308,7 +315,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                     type="body__secondary"
                     color="secondary"
                   >
-                    {createTravelDateText(t, language, travelDate)}
+                    {travelDateText}
                   </ThemeText>
                 </View>
               </Sections.GenericItem>

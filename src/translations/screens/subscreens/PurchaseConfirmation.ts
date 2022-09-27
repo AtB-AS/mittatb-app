@@ -46,6 +46,10 @@ const PurchaseConfirmationTexts = {
         `This ticket will be valid from ${time}.`,
       ),
   },
+  travelDate: {
+    futureDate: (time: string) => _(`Oppstart ${time}`, `Start time ${time}`),
+    now: _('Oppstart nå', 'Starting now'),
+  },
   paymentButtonVipps: {
     text: _('Vipps', 'Vipps'),
     a11yLabel: _('Betal med Vipps', 'Pay with Vipps'),

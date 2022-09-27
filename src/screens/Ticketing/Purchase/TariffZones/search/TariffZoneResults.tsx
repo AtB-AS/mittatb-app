@@ -10,7 +10,7 @@ import {TariffZoneSearchTexts, useTranslation} from '@atb/translations';
 import insets from '@atb/utils/insets';
 import React from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
-import {useTariffZoneFromLocation} from '@atb/screens/Ticketing/Purchase/Overview';
+import {useTariffZoneFromLocation} from '@atb/screens/Ticketing/Purchase/utils';
 
 type Props = {
   tariffZones: TariffZone[];
