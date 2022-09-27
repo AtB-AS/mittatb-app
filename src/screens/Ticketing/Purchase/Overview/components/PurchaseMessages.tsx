@@ -3,10 +3,7 @@ import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import {
-  PreassignedFareProduct,
-  PreassignedFareProductType,
-} from '@atb/reference-data/types';
+import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {useTicketState} from '@atb/tickets';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
@@ -48,6 +45,13 @@ const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
     deviceIsInspectable,
   );
 
+  const shouldShowValidTrainTicketNotice =
+    (preassignedFareProduct.type === 'single' ||
+      preassignedFareProduct.type === 'period' ||
+      preassignedFareProduct.type === 'hour24') &&
+    fromTariffZone.id === 'ATB:TariffZone:1' &&
+    fromTariffZone.id === 'ATB:TariffZone:1';
+
   return (
     <>
       {showProfileTravelcardWarning && (
@@ -67,11 +71,7 @@ const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
         />
       )}
 
-      {shouldShowValidTrainTicketNotice(
-        preassignedFareProduct.type,
-        fromTariffZone.id,
-        toTariffZone.id,
-      ) && (
+      {shouldShowValidTrainTicketNotice && (
         <MessageBox
           containerStyle={styles.warning}
           message={getTrainTicketNoticeText(t, preassignedFareProduct.type)}
@@ -81,17 +81,6 @@ const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
     </>
   );
 };
-
-const shouldShowValidTrainTicketNotice = (
-  PreassignedFareProductType: PreassignedFareProductType,
-  fromTariffZoneId: string,
-  toTariffZoneId: string,
-) =>
-  (PreassignedFareProductType === 'single' ||
-    PreassignedFareProductType === 'period' ||
-    PreassignedFareProductType === 'hour24') &&
-  fromTariffZoneId === 'ATB:TariffZone:1' &&
-  toTariffZoneId === 'ATB:TariffZone:1';
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   warning: {
