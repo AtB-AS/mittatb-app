@@ -123,6 +123,7 @@ const ResultItemHeader: React.FC<{
           accessibilityLabel={t(
             TripSearchTexts.results.resultItem.hasSituationsTip,
           )}
+          style={styles.warningIcon}
         />
       )}
       <SituationWarningIcon
