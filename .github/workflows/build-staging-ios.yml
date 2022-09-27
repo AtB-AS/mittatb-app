@@ -15,7 +15,7 @@ jobs:
         org: [atb, nfk]
     environment: ${{ matrix.org }}
     timeout-minutes: 360
-    runs-on: macos-11
+    runs-on: macOS-12
     steps:
       - name: Checkout project
         uses: actions/checkout@v1

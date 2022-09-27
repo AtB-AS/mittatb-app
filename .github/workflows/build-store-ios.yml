@@ -12,7 +12,7 @@ jobs:
         org: [atb, nfk]
     environment: ${{ matrix.org }}
     timeout-minutes: 360
-    runs-on: macos-11
+    runs-on: macOS-12
     steps:
       - name: Check if release tag is org specific and exit for other orgs
         if: ${{ (matrix.org == 'atb' && contains(github.ref, 'nfk')) || (matrix.org == 'nfk' && contains(github.ref, 'atb')) }}
