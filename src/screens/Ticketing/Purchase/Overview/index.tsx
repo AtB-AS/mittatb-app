@@ -90,7 +90,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
       <ScrollView testID="ticketingScrollView">
         <TicketDetailsSelection
-          {...params}
+          refreshOffer={params.refreshOffer}
           preassignedFareProduct={preassignedFareProduct}
           selectableTravellers={selectableTravellers}
           fromTariffZone={fromTariffZone}

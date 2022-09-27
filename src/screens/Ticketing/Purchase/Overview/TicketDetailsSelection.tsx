@@ -1,9 +1,6 @@
 import MessageBox from '@atb/components/message-box';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
-import {
-  PreassignedFareProduct,
-  PreassignedFareProductType,
-} from '@atb/reference-data/types';
+import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
@@ -24,10 +21,8 @@ export type TicketDetailsSelectionProps = {
   preassignedFareProduct: PreassignedFareProduct;
   refreshOffer?: boolean;
   selectableTravellers: UserProfileWithCount[];
-  selectableProductType?: PreassignedFareProductType;
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
-  travelDate?: string;
 };
 
 const TicketDetailsSelection: React.FC<TicketDetailsSelectionProps> = (
