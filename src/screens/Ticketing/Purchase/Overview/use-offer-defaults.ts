@@ -35,7 +35,7 @@ export function useOfferDefaults(
   const defaultPreassignedFareProduct =
     preassignedFareProduct ?? selectableProducts[0];
 
-  // Get default TariffZone
+  // Get default TariffZones
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
   const defaultFromTariffZone = fromTariffZone ?? defaultTariffZone;
   const defaultToTariffZone = toTariffZone ?? defaultTariffZone;
