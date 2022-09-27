@@ -1,26 +1,21 @@
+import MessageBox from '@atb/components/message-box';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {usePreferences} from '@atb/preferences';
-import {
-  PreassignedFareProduct,
-  TariffZone,
-  UserProfile,
-} from '@atb/reference-data/types';
-import {productIsSellableInApp} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import React, {useMemo} from 'react';
+import MessageBoxTexts from '@atb/translations/components/MessageBox';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {TariffZoneWithMetadata} from '../TariffZones';
-import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import {TicketPurchaseScreenProps} from '../types';
-import {useTariffZoneFromLocation} from '../utils';
-import TicketDetailsSelection from './TicketDetailsSelection';
-
-type UserProfileTypeWithCount = {
-  userTypeString: string;
-  count: number;
-};
+import {getPurchaseFlow} from '../utils';
+import DurationSelection from './components/DurationSelection';
+import PurchaseMessages from './components/PurchaseMessages';
+import StartTimeSelection from './components/StartTimeSelection';
+import Summary from './components/Summary';
+import TravellerSelection from './components/TravellerSelection';
+import Zones from './components/Zones';
+import {useOfferDefaults} from './use-offer-defaults';
+import useOfferState from './use-offer-state';
 
 type OverviewProps = TicketPurchaseScreenProps<'PurchaseOverview'>;
 
@@ -31,41 +26,42 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const {preassignedFareproducts} = useFirestoreConfiguration();
-  const productType =
-    params.preassignedFareProduct?.type ?? params.selectableProductType;
-
-  const selectableProducts = preassignedFareproducts
-    .filter(productIsSellableInApp)
-    .filter((product) => product.type === productType);
-
-  const preassignedFareProduct =
-    params.preassignedFareProduct ?? selectableProducts[0];
-
-  const {tariffZones, userProfiles} = useFirestoreConfiguration();
-  const defaultTariffZone = useDefaultTariffZone(tariffZones);
-  const {fromTariffZone = defaultTariffZone, toTariffZone = defaultTariffZone} =
-    params;
   const {
-    preferences: {defaultUserTypeString},
-  } = usePreferences();
-
-  const defaultPreSelectedUser: UserProfileTypeWithCount = {
-    userTypeString: defaultUserTypeString ?? userProfiles[0].userTypeString,
-    count: 1,
-  };
-
-  const preSelectedUsers = params.userProfilesWithCount?.map(
-    (up: UserProfileWithCount): UserProfileTypeWithCount => {
-      return {userTypeString: up.userTypeString, count: up.count};
-    },
-  );
-
-  const selectableTravellers = useTravellersWithPreselectedCounts(
-    userProfiles,
     preassignedFareProduct,
-    preSelectedUsers ?? [defaultPreSelectedUser],
+    selectableTravellers,
+    fromTariffZone,
+    toTariffZone,
+  } = useOfferDefaults(
+    params.preassignedFareProduct,
+    params.selectableProductType,
+    params.userProfilesWithCount,
+    params.fromTariffZone,
+    params.toTariffZone,
   );
+
+  const [selectedPreassignedFareProduct, setSelectedPreassignedFareProduct] =
+    useState(preassignedFareProduct);
+  const [travellerSelection, setTravellerSelection] =
+    useState(selectableTravellers);
+  const hasSelection = travellerSelection.some((u) => u.count);
+  const [travelDate, setTravelDate] = useState<string | undefined>();
+
+  const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
+    selectedPreassignedFareProduct,
+    fromTariffZone,
+    toTariffZone,
+    travellerSelection,
+    travelDate,
+  );
+
+  const {travelDateSelectionEnabled, durationSelectionEnabled} =
+    getPurchaseFlow(preassignedFareProduct);
+
+  useEffect(() => {
+    if (params?.refreshOffer) {
+      refreshOffer();
+    }
+  }, [params?.refreshOffer]);
 
   const closeModal = () =>
     navigation.navigate('TabNavigator', {
@@ -79,7 +75,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     <View style={styles.container}>
       <FullScreenHeader
         title={t(
-          PurchaseOverviewTexts.header.title[preassignedFareProduct.type],
+          PurchaseOverviewTexts.header.title[
+            selectedPreassignedFareProduct.type
+          ],
         )}
         leftButton={{
           type: 'cancel',
@@ -89,69 +87,75 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
       />
 
       <ScrollView testID="ticketingScrollView">
-        <TicketDetailsSelection
-          refreshOffer={params.refreshOffer}
-          preassignedFareProduct={preassignedFareProduct}
-          selectableTravellers={selectableTravellers}
+        <View style={styles.selectionLinks}>
+          {error && (
+            <MessageBox
+              type="error"
+              title={t(PurchaseOverviewTexts.errorMessageBox.title)}
+              message={t(PurchaseOverviewTexts.errorMessageBox.message)}
+              onPress={refreshOffer}
+              onPressText={t(MessageBoxTexts.tryAgainButton)}
+              containerStyle={styles.selectionComponent}
+            />
+          )}
+
+          {durationSelectionEnabled && (
+            <DurationSelection
+              color="interactive_2"
+              selectedProduct={selectedPreassignedFareProduct}
+              setSelectedProduct={setSelectedPreassignedFareProduct}
+              style={styles.selectionComponent}
+            />
+          )}
+
+          <TravellerSelection
+            setTravellerSelection={setTravellerSelection}
+            preassignedFareProduct={preassignedFareProduct}
+            selectableUserProfiles={selectableTravellers}
+            style={styles.selectionComponent}
+          />
+
+          <Zones
+            fromTariffZone={fromTariffZone}
+            toTariffZone={toTariffZone}
+            style={styles.selectionComponent}
+            isApplicableOnSingleZoneOnly={
+              selectedPreassignedFareProduct.isApplicableOnSingleZoneOnly
+            }
+          />
+
+          {travelDateSelectionEnabled && (
+            <StartTimeSelection
+              color="interactive_2"
+              travelDate={travelDate}
+              setTravelDate={setTravelDate}
+              validFromTime={travelDate}
+              style={styles.selectionComponent}
+            />
+          )}
+        </View>
+
+        <PurchaseMessages
+          preassignedFareProduct={selectedPreassignedFareProduct}
           fromTariffZone={fromTariffZone}
           toTariffZone={toTariffZone}
         />
+
+        <FullScreenFooter>
+          <Summary
+            isLoading={isSearchingOffer}
+            isError={!!error || !hasSelection}
+            price={totalPrice}
+            fromTariffZone={fromTariffZone}
+            toTariffZone={toTariffZone}
+            userProfilesWithCount={travellerSelection}
+            preassignedFareProduct={selectedPreassignedFareProduct}
+            travelDate={travelDate}
+            style={styles.summary}
+          />
+        </FullScreenFooter>
       </ScrollView>
     </View>
-  );
-};
-
-const getCountIfUserIsIncluded = (
-  u: UserProfile,
-  selections: UserProfileTypeWithCount[],
-): number => {
-  const selectedUser = selections.filter(
-    (up: UserProfileTypeWithCount) => up.userTypeString === u.userTypeString,
-  );
-
-  if (selectedUser.length < 1) return 0;
-  return selectedUser[0].count;
-};
-
-/**
- * Get the default user profiles with count. If a default user profile has been
- * selected in the preferences that profile will have a count of one. If no
- * default user profile preference exists then the first user profile will have
- * a count of one.
- */
-const useTravellersWithPreselectedCounts = (
-  userProfiles: UserProfile[],
-  preassignedFareProduct: PreassignedFareProduct,
-  defaultSelections: UserProfileTypeWithCount[],
-) => {
-  return useMemo(
-    () =>
-      userProfiles
-        .filter((u) =>
-          preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
-        )
-        .map((u) => ({
-          ...u,
-          count: getCountIfUserIsIncluded(u, defaultSelections),
-        })),
-    [userProfiles, preassignedFareProduct],
-  );
-};
-
-/**
- * Get the default tariff zone, either based on current location or else the
- * first tariff zone in the provided tariff zones list.
- */
-const useDefaultTariffZone = (
-  tariffZones: TariffZone[],
-): TariffZoneWithMetadata => {
-  const tariffZoneFromLocation = useTariffZoneFromLocation(tariffZones);
-  return useMemo<TariffZoneWithMetadata>(
-    () =>
-      tariffZoneFromLocation
-        ? {...tariffZoneFromLocation, resultType: 'geolocation'}
-        : {...tariffZones[0], resultType: 'zone'},
-    [tariffZones, tariffZoneFromLocation],
   );
 };
 
@@ -160,6 +164,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.static.background.background_2.background,
   },
+  selectionComponent: {
+    marginVertical: theme.spacings.medium,
+  },
+  selectionLinks: {margin: theme.spacings.medium},
+  summary: {marginTop: theme.spacings.medium},
 }));
 
 export default PurchaseOverview;
