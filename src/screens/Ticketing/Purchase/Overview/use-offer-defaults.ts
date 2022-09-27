@@ -26,35 +26,33 @@ export function useOfferDefaults(
 ) {
   const {tariffZones, userProfiles, preassignedFareproducts} =
     useFirestoreConfiguration();
-  const productType = preassignedFareProduct?.type ?? selectableProductType;
 
+  // Get default PreassignedFareProduct
+  const productType = preassignedFareProduct?.type ?? selectableProductType;
   const selectableProducts = preassignedFareproducts
     .filter(productIsSellableInApp)
     .filter((product) => product.type === productType);
-
   const defaultPreassignedFareProduct =
     preassignedFareProduct ?? selectableProducts[0];
 
+  // Get default TariffZone
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
-
   const defaultFromTariffZone = fromTariffZone ?? defaultTariffZone;
   const defaultToTariffZone = toTariffZone ?? defaultTariffZone;
 
+  // Get default SelectableTravellers
   const {
     preferences: {defaultUserTypeString},
   } = usePreferences();
-
   const defaultPreSelectedUser: UserProfileTypeWithCount = {
     userTypeString: defaultUserTypeString ?? userProfiles[0].userTypeString,
     count: 1,
   };
-
   const preSelectedUsers = userProfilesWithCount?.map(
     (up: UserProfileWithCount): UserProfileTypeWithCount => {
       return {userTypeString: up.userTypeString, count: up.count};
     },
   );
-
   const defaultSelectableTravellers = useTravellersWithPreselectedCounts(
     userProfiles,
     defaultPreassignedFareProduct,
