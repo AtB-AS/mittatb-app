@@ -208,7 +208,10 @@ const NearbyOverview: React.FC<Props> = ({
   }
 
   const {geolocation_refresh_interval} = useRemoteConfig();
-  useInterval(refresh, geolocation_refresh_interval, [!updatingLocation, !isLoading]);
+  useInterval(refresh, geolocation_refresh_interval, [
+    !updatingLocation,
+    !isLoading,
+  ]);
 
   return (
     <SimpleDisappearingHeader
