@@ -10,18 +10,26 @@ import {StyleSheet} from '@atb/theme';
 import {Coordinates} from '@entur/sdk';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Feature, Point} from 'geojson';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
 
 import LocationBar from '@atb/components/map/LocationBar';
-import WalkingRoute from '@atb/components/map/WalkingRoute';
+import useWalkingRouteLines from '@atb/components/map/use-walking-route-lines';
+import MapRoute from '@atb/screens/TripDetails/Map/MapRoute';
+import {
+  fitBounds,
+  flyToLocation,
+  isFeaturePoint,
+  zoomIn,
+  zoomOut,
+} from '@atb/components/map/utils';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map should behave
  * ExploreStops: If only the Stop Places (Bus, Trams stops etc.)  should be interactable
  * ExploreLocation: If every selected location should be interactable
  */
-type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
+export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
 
 type MapProps = {
   coordinates: Coordinates;
@@ -47,24 +55,21 @@ const Map = ({
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
+  const shouldShowWalkingRouteToStop = selectionMode === 'ExploreStops';
+  const mapLines = useWalkingRouteLines(
+    coordinates,
+    selectedCoordinates,
+    shouldShowWalkingRouteToStop,
+  );
 
-  async function zoomIn() {
-    const currentZoom = await mapViewRef.current?.getZoom();
-    mapCameraRef.current?.zoomTo((currentZoom ?? 10) + 1, 200);
-  }
-
-  async function zoomOut() {
-    const currentZoom = await mapViewRef.current?.getZoom();
-    mapCameraRef.current?.zoomTo((currentZoom ?? 10) - 1, 200);
-  }
-
-  async function flyToCurrentLocation() {
-    geolocation &&
-      mapCameraRef.current?.flyTo(
-        [geolocation.coordinates.longitude, geolocation.coordinates.latitude],
-        750,
-      );
-  }
+  useEffect(() => {
+    if (!selectedCoordinates) return;
+    if (mapLines) {
+      fitBounds(coordinates, selectedCoordinates, mapCameraRef);
+    } else {
+      flyToLocation(mapCameraRef, selectedCoordinates);
+    }
+  }, [mapLines]);
 
   const onPress = async (feature: Feature) => {
     if (!isFeaturePoint(feature)) return;
@@ -75,15 +80,16 @@ const Map = ({
     }
   };
 
-  const isFeaturePoint = (f: Feature): f is Feature<Point> =>
-    f.geometry.type === 'Point';
-
   const selectPoint = (feature: Feature<Point>) => {
     setSelectedCoordinates({
       longitude: feature.geometry.coordinates[0],
       latitude: feature.geometry.coordinates[1],
     });
-    mapCameraRef.current?.flyTo(feature.geometry.coordinates, 300);
+    const coordinates = feature.geometry.coordinates;
+    flyToLocation(mapCameraRef, {
+      longitude: coordinates[0],
+      latitude: coordinates[1],
+    });
   };
 
   async function selectStopPlace(feature: Feature<Point>) {
@@ -112,9 +118,6 @@ const Map = ({
     }
   }
 
-  const shouldShowWalkingRouteToStop =
-    selectionMode === 'ExploreStops' && selectedCoordinates;
-
   return (
     <View style={styles.container}>
       {selectionMode === 'ExploreLocation' && (
@@ -138,18 +141,19 @@ const Map = ({
             centerCoordinate={[coordinates.longitude, coordinates.latitude]}
             {...MapCameraConfig}
           />
-          {shouldShowWalkingRouteToStop && (
-            <WalkingRoute
-              fromCoordinates={coordinates}
-              toCoordinates={selectedCoordinates}
-              mapCameraRef={mapCameraRef}
-            ></WalkingRoute>
-          )}
+          {mapLines && <MapRoute lines={mapLines}></MapRoute>}
           <MapboxGL.UserLocation showsUserHeadingIndicator />
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
-          <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
-          <MapControls zoomIn={zoomIn} zoomOut={zoomOut} />
+          <PositionArrow
+            flyToCurrentLocation={() =>
+              flyToLocation(mapCameraRef, geolocation?.coordinates)
+            }
+          />
+          <MapControls
+            zoomIn={() => zoomIn(mapViewRef, mapCameraRef)}
+            zoomOut={() => zoomOut(mapViewRef, mapCameraRef)}
+          />
         </View>
       </View>
     </View>

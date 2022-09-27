@@ -35,6 +35,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {PixelRatio, Platform, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TicketPurchaseScreenProps} from '../types';
+import {flyToLocation, zoomIn, zoomOut} from '@atb/components/map/utils';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -297,31 +298,14 @@ const TariffZones: React.FC<TariffZonesProps> = ({
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
 
-  async function zoomIn() {
-    const currentZoom = await mapViewRef.current?.getZoom();
-    mapCameraRef.current?.zoomTo((currentZoom ?? 10) + 1, 200);
-  }
-
-  async function zoomOut() {
-    const currentZoom = await mapViewRef.current?.getZoom();
-    mapCameraRef.current?.zoomTo((currentZoom ?? 10) - 1, 200);
-  }
-
   const selectFeature = (event: OnPressEvent) => {
     const feature = event.features[0];
-    mapCameraRef.current?.flyTo(
-      [event.coordinates.longitude, event.coordinates.latitude],
-      300,
-    );
+    flyToLocation(mapCameraRef, event.coordinates, 300);
     updateSelectedZones(feature.id as string);
   };
 
   async function flyToCurrentLocation() {
-    geolocation &&
-      mapCameraRef.current?.flyTo(
-        [geolocation.coordinates.longitude, geolocation.coordinates.latitude],
-        750,
-      );
+    flyToLocation(mapCameraRef, geolocation?.coordinates);
 
     if (mapViewRef.current && geolocation) {
       let point = await mapViewRef.current.getPointInView([
@@ -515,7 +499,10 @@ const TariffZones: React.FC<TariffZonesProps> = ({
             <View>
               <View style={styles.mapControls}>
                 <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
-                <MapControls zoomIn={zoomIn} zoomOut={zoomOut} />
+                <MapControls
+                  zoomIn={() => zoomIn(mapViewRef, mapCameraRef)}
+                  zoomOut={() => zoomOut(mapViewRef, mapCameraRef)}
+                />
               </View>
             </View>
             <View style={styles.saveButton}>
