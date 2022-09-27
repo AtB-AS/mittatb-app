@@ -1,5 +1,8 @@
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
+import {
+  PreassignedFareProductType,
+  TariffZone,
+} from '@atb/reference-data/types';
 import {PaymentType} from '@atb/tickets/types';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {format, parseISO} from 'date-fns';
@@ -26,9 +29,9 @@ export type PurchaseFlow = {
 };
 
 export const getPurchaseFlow = (
-  product: PreassignedFareProduct,
+  productType: PreassignedFareProductType,
 ): PurchaseFlow => {
-  switch (product.type) {
+  switch (productType) {
     case 'period':
       return {
         travellerSelectionMode: 'single',

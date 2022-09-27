@@ -55,7 +55,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   );
 
   const {travelDateSelectionEnabled, durationSelectionEnabled} =
-    getPurchaseFlow(preassignedFareProduct);
+    getPurchaseFlow(preassignedFareProduct.type);
 
   useEffect(() => {
     if (params?.refreshOffer) {
