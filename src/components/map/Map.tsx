@@ -87,6 +87,7 @@ const Map = ({
   };
 
   async function selectStopPlace(feature: Feature<Point>) {
+    setSelectedCoordinates(null);
     if (!feature.properties) return;
     const {screenPointX, screenPointY} = feature.properties;
     if (!screenPointX || !screenPointY) return;
@@ -108,12 +109,6 @@ const Map = ({
         longitude: stopPlaceFeature.geometry.coordinates[0],
         latitude: stopPlaceFeature.geometry.coordinates[1],
       });
-      mapCameraRef.current?.fitBounds(
-        [coordinates.longitude, coordinates.latitude],
-        stopPlaceFeature.geometry.coordinates,
-        [100, 100],
-        1000,
-      );
     }
   }
 
@@ -147,6 +142,7 @@ const Map = ({
             <WalkingRoute
               fromCoordinates={coordinates}
               toCoordinates={selectedCoordinates}
+              mapCameraRef={mapCameraRef}
             ></WalkingRoute>
           )}
           <MapboxGL.UserLocation showsUserHeadingIndicator />
