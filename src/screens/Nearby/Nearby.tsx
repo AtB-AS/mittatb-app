@@ -34,6 +34,8 @@ import Loading from '../Loading';
 import DepartureTimeSheet from './DepartureTimeSheet';
 import {useDepartureData} from './state';
 import {NearbyRouteNameStatic, NearbyScreenProps, SearchTime} from './types';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import useInterval from '@atb/utils/use-interval';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -204,6 +206,9 @@ const NearbyOverview: React.FC<Props> = ({
           : fromLocation,
     });
   }
+
+  const {geolocation_refresh_interval} = useRemoteConfig();
+  useInterval(refresh, geolocation_refresh_interval, [!updatingLocation, !isLoading]);
 
   return (
     <SimpleDisappearingHeader
