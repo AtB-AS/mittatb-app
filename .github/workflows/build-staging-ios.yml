@@ -43,7 +43,7 @@ jobs:
             AtB.app.dSYM.zip
           key: ${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets/') }}
       - name: Run fastlane cert match
-        run: fastlane ios get_cert
+        run: bundle exec fastlane ios get_cert
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       - name: Generate native assets
@@ -51,7 +51,7 @@ jobs:
         run: brew install imagemagick && yarn generate-native-assets
       - name: Run fastlane build
         if: steps.ipa-cache.outputs.cache-hit != 'true'
-        run: fastlane ios build
+        run: bundle exec fastlane ios build
         env:
           # A workaround for Github Actions which breaks for a timeout in some cases, 
           # so this sets a higher value for TIMEOUT and reduces the number of retries
@@ -71,14 +71,14 @@ jobs:
         if: matrix.org == 'nfk'
         run: |
           echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
-          fastlane ios firebase_distribution_staging
+          bundle exec fastlane ios firebase_distribution_staging
         env:
           GCP_CREDENTIALS_PATH: google-services.json
           FIREBASE_APP_ID_IOS: ${{ secrets.FIREBASE_APP_ID_IOS }}
 
       - name: Distribute to AppCenter
         if: matrix.org == 'atb'
-        run: fastlane ios appcenter_staging
+        run: bundle exec fastlane ios appcenter_staging
         env:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_IOS_API_KEY }}
       - name: Create bundle and source maps

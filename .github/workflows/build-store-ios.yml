@@ -35,13 +35,13 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
       - name: Run fastlane cert match
-        run: fastlane ios get_cert
+        run: bundle exec fastlane ios get_cert
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       - name: Generate native assets
         run: brew install imagemagick && yarn generate-native-assets
       - name: Run fastlane build
-        run: fastlane ios build
+        run: bundle exec fastlane ios build
         env:
           # A workaround for Github Actions which breaks for a timeout in some cases, 
           # so this sets a higher value for TIMEOUT and reduces the number of retries
@@ -58,7 +58,7 @@ jobs:
       - name: Distribute to TestFlight
         run: |
           echo ${{ secrets.APP_STORE_CONNECT_API_KEY}} | base64 --decode > app-store-connect-api-key.json
-          fastlane ios testflight_prod
+          bundle exec fastlane ios testflight_prod
         env:
           APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
       - name: Create bundle and source maps
