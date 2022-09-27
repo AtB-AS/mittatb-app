@@ -53,6 +53,15 @@ runs:
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.6
+          bundler-cache: true
+      - name: Install required bundler version
+        shell: bash
+        run: |
+          gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
       - name: Bundle Install
         shell: bash
         run: |
