@@ -44,8 +44,7 @@ const MapSelection: React.FC<Props> = ({
           latitude: coordinates.latitude,
           longitude: coordinates.longitude,
         }}
-        shouldShowSearchBar={true}
-        shouldSelectLocation={true}
+        selectionMode={'ExploreLocation'}
         zoomLevel={coordinates.zoomLevel}
       />
     </View>

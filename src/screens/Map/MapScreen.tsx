@@ -10,7 +10,7 @@ export function MapScreen() {
     <Map
       coordinates={{...currentLocationCoordinates}}
       zoomLevel={12}
-      shouldExploreTripFromStops={true}
+      selectionMode={'ExploreStops'}
     />
   );
 }

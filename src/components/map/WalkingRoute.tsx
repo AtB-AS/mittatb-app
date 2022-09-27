@@ -1,10 +1,9 @@
 import MapRoute from '@atb/screens/TripDetails/Map/MapRoute';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Coordinates} from '@atb/screens/TripDetails/Map/types';
-import {createMapLines} from '@atb/screens/TripDetails/Map/utils';
+import {createMapLines, MapLine} from '@atb/screens/TripDetails/Map/utils';
 import {tripsSearch} from '@atb/api/trips_v2';
 import {StreetMode} from '@entur/sdk/lib/journeyPlanner/types';
-import {TripPattern} from '@atb/api/types/trips';
 
 const MAX_LIMIT_TO_SHOW_WALKING_TRIP = 5000;
 
@@ -15,42 +14,42 @@ const WalkingRoute = ({
   fromCoordinates: Coordinates;
   toCoordinates: Coordinates;
 }) => {
-  const [walkingTripPattern, setWalkingTripPattern] = useState<TripPattern>();
+  const [mapLines, setMapLines] = useState<MapLine[]>();
 
   useEffect(() => {
-    getWalkingTripPattern(fromCoordinates, toCoordinates);
+    getMapLines(fromCoordinates, toCoordinates).then(setMapLines);
   }, [fromCoordinates, toCoordinates]);
 
-  const getWalkingTripPattern = async (
-    fromCoordinates: Coordinates,
-    toCoordinates: Coordinates,
-  ) => {
-    const result = await tripsSearch({
-      from: {
-        name: 'From Position',
-        coordinates: fromCoordinates,
-      },
-      to: {
-        name: 'To Position',
-        coordinates: toCoordinates,
-      },
-      arriveBy: false,
-      modes: {directMode: StreetMode.Foot},
-    });
-    setWalkingTripPattern(result?.trip?.tripPatterns[0]);
-  };
+  return mapLines ? <MapRoute lines={mapLines}></MapRoute> : null;
+};
 
-  const mapLines = useMemo(() => {
-    if (
-      (walkingTripPattern?.walkDistance as number) <=
-      MAX_LIMIT_TO_SHOW_WALKING_TRIP
-    ) {
-      const tripLegs = walkingTripPattern?.legs;
-      return tripLegs ? createMapLines(tripLegs) : [];
-    }
-  }, [walkingTripPattern]);
+const getMapLines = async (
+  fromCoordinates: Coordinates,
+  toCoordinates: Coordinates,
+) => {
+  const result = await tripsSearch({
+    from: {
+      name: 'From Position',
+      coordinates: fromCoordinates,
+    },
+    to: {
+      name: 'To Position',
+      coordinates: toCoordinates,
+    },
+    arriveBy: false,
+    modes: {directMode: StreetMode.Foot},
+  });
+  const walkingTripPattern = result?.trip?.tripPatterns[0];
 
-  return mapLines ? <MapRoute lines={mapLines}></MapRoute> : <></>;
+  if (
+    walkingTripPattern.walkDistance &&
+    walkingTripPattern.walkDistance <= MAX_LIMIT_TO_SHOW_WALKING_TRIP
+  ) {
+    const tripLegs = walkingTripPattern?.legs;
+    return tripLegs ? createMapLines(tripLegs) : undefined;
+  }
+
+  return undefined;
 };
 
 export default WalkingRoute;

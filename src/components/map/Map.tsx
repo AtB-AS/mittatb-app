@@ -9,32 +9,38 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import {Coordinates} from '@entur/sdk';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {Feature} from 'geojson';
+import {Feature, Point} from 'geojson';
 import React, {useRef, useState} from 'react';
 import {View} from 'react-native';
 
 import LocationBar from '@atb/components/map/LocationBar';
 import WalkingRoute from '@atb/components/map/WalkingRoute';
 
+/**
+ * MapSelectionMode: Parameter to decide how on-select/ on-click on the map should behave
+ * ExploreStops: If only the Stop Places (Bus, Trams stops etc.)  should be interactable
+ * ExploreLocation: If every selected location should be interactable
+ */
+type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
+
 type MapProps = {
   coordinates: Coordinates;
   shouldShowSearchBar?: boolean;
-  shouldExploreTripFromStops?: boolean;
-  shouldSelectLocation?: boolean;
+  selectionMode?: MapSelectionMode;
   onLocationSelect?: (selectedLocation?: any) => void;
   zoomLevel: number;
 };
 
 const Map = ({
   coordinates,
-  shouldShowSearchBar,
-  shouldExploreTripFromStops,
-  shouldSelectLocation,
+  selectionMode,
   onLocationSelect,
   zoomLevel,
 }: MapProps) => {
   const [selectedCoordinates, setSelectedCoordinates] =
-    useState<Coordinates | null>(shouldSelectLocation ? coordinates : null);
+    useState<Coordinates | null>(
+      selectionMode === 'ExploreLocation' ? coordinates : null,
+    );
 
   const {location: geolocation} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
@@ -61,56 +67,62 @@ const Map = ({
   }
 
   const onPress = async (feature: Feature) => {
-    if (shouldExploreTripFromStops) {
+    if (!isFeaturePoint(feature)) return;
+    if (selectionMode === 'ExploreStops') {
       await selectStopPlace(feature);
-    } else if (shouldSelectLocation) {
+    } else if (selectionMode === 'ExploreLocation') {
       selectPoint(feature);
     }
   };
 
-  const selectPoint = (feature: Feature) => {
-    if (feature && feature.geometry.type === 'Point') {
-      setSelectedCoordinates({
-        longitude: feature.geometry.coordinates[0],
-        latitude: feature.geometry.coordinates[1],
-      });
-      mapCameraRef.current?.flyTo(feature.geometry.coordinates, 300);
-    }
+  const isFeaturePoint = (f: Feature): f is Feature<Point> =>
+    f.geometry.type === 'Point';
+
+  const selectPoint = (feature: Feature<Point>) => {
+    setSelectedCoordinates({
+      longitude: feature.geometry.coordinates[0],
+      latitude: feature.geometry.coordinates[1],
+    });
+    mapCameraRef.current?.flyTo(feature.geometry.coordinates, 300);
   };
 
-  async function selectStopPlace(feature: any) {
+  async function selectStopPlace(feature: Feature<Point>) {
+    if (!feature.properties) return;
     const {screenPointX, screenPointY} = feature.properties;
+    if (!screenPointX || !screenPointY) return;
     const renderedFeaturesResult =
       await mapViewRef?.current?.queryRenderedFeaturesAtPoint(
         [screenPointX, screenPointY],
         ['==', ['geometry-type'], 'Point'],
       );
 
-    renderedFeaturesResult?.features.map(async (featureAtPoint) => {
-      if (
-        featureAtPoint.geometry.type === 'Point' &&
-        featureAtPoint?.properties?.entityType === 'StopPlace'
-      ) {
-        setSelectedCoordinates({
-          longitude: featureAtPoint.geometry.coordinates[0],
-          latitude: featureAtPoint.geometry.coordinates[1],
-        });
-        mapCameraRef.current?.fitBounds(
-          [coordinates.longitude, coordinates.latitude],
-          featureAtPoint.geometry.coordinates,
-          [100, 100],
-          1000,
-        );
-      }
-    });
+    const stopPlaceFeature = renderedFeaturesResult?.features
+      .filter(isFeaturePoint)
+      .find(
+        (featureAtPoint) =>
+          featureAtPoint?.properties?.entityType === 'StopPlace',
+      );
+
+    if (stopPlaceFeature) {
+      setSelectedCoordinates({
+        longitude: stopPlaceFeature.geometry.coordinates[0],
+        latitude: stopPlaceFeature.geometry.coordinates[1],
+      });
+      mapCameraRef.current?.fitBounds(
+        [coordinates.longitude, coordinates.latitude],
+        stopPlaceFeature.geometry.coordinates,
+        [100, 100],
+        1000,
+      );
+    }
   }
 
-  const shouldShowWalkingRoute =
-    shouldExploreTripFromStops && selectedCoordinates;
+  const shouldShowWalkingRouteToStop =
+    selectionMode === 'ExploreStops' && selectedCoordinates;
 
   return (
     <View style={styles.container}>
-      {shouldShowSearchBar && (
+      {selectionMode === 'ExploreLocation' && (
         <LocationBar
           coordinates={selectedCoordinates}
           onSelect={onLocationSelect}
@@ -131,7 +143,7 @@ const Map = ({
             centerCoordinate={[coordinates.longitude, coordinates.latitude]}
             {...MapCameraConfig}
           />
-          {shouldShowWalkingRoute && (
+          {shouldShowWalkingRouteToStop && (
             <WalkingRoute
               fromCoordinates={coordinates}
               toCoordinates={selectedCoordinates}
