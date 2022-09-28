@@ -83,7 +83,7 @@ const ResultItemHeader: React.FC<{
   const durationText = secondsToDurationShort(tripPattern.duration, language);
   const startTime = tripPattern.legs[0].expectedStartTime;
   const endTime = tripPattern.legs[tripPattern.legs.length - 1].expectedEndTime;
-  const resultIncludesRailReplacementBus = tripPattern.legs.some(
+  const tripIncludesRailReplacementBus = tripPattern.legs.some(
     (leg) => leg.transportSubmode === TransportSubmode.RailReplacementBus,
   );
 
@@ -118,7 +118,7 @@ const ResultItemHeader: React.FC<{
         </AccessibleText>
       </View>
 
-      {resultIncludesRailReplacementBus && (
+      {tripIncludesRailReplacementBus && (
         <Warning
           accessibilityLabel={t(
             TripSearchTexts.results.resultItem.hasSituationsTip,
