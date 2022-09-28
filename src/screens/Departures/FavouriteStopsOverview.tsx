@@ -53,7 +53,7 @@ const FavouriteStopsOverview = ({navigation}: RootProps) => {
         if (edgeB.node?.distance === undefined) return -1;
         return edgeA.node?.distance > edgeB.node?.distance ? 1 : -1;
       });
-  }, [state.data]);
+  }, [state.data, location]);
 
   const {t} = useTranslation();
   const navigateToPlace = (place: Place) => {
