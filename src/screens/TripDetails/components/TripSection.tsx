@@ -11,7 +11,7 @@ import TransportationIcon from '@atb/components/transportation-icon';
 import {searchByStopPlace} from '@atb/geocoder/search-for-location';
 import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
 import SituationMessages from '@atb/situations';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   Language,
   TranslateFunction,
@@ -66,6 +66,7 @@ const TripSection: React.FC<TripSectionProps> = ({
 }) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
+  const {theme} = useTheme();
 
   const isWalkSection = leg.mode === 'foot';
   const legColor = useTransportationColor(leg.mode, leg.line?.transportSubmode);
@@ -144,11 +145,13 @@ const TripSection: React.FC<TripSectionProps> = ({
         )}
         {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
           <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
-            <MessageBox type="warning" icon={null}>
-              <ThemeText>
-                {t(TripDetailsTexts.messages.departureIsRailReplacementBus)}
-              </ThemeText>
-            </MessageBox>
+            <MessageBox
+              type="warning"
+              icon={null}
+              message={t(
+                TripDetailsTexts.messages.departureIsRailReplacementBus,
+              )}
+            />
           </TripRow>
         )}
 
