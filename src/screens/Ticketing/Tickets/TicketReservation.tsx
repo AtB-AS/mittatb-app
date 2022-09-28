@@ -59,14 +59,8 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
         </View>
         <VerifyingValidityLine status={status} />
         <View style={styles.ticketInfoContainer} accessible={true}>
-          <ThemeText style={styles.detail}>
-            {t(TicketsTexts.reservation.orderId(reservation.orderId))}
-          </ThemeText>
-          <ThemeText style={styles.detail}>
-            {t(TicketsTexts.reservation.paymentMethod(paymentType))}
-          </ThemeText>
           {status == 'rejected' && (
-            <ThemeText style={styles.detail}>
+            <ThemeText type="body__secondary" color="secondary">
               {t(
                 TicketsTexts.reservation.orderDate(
                   formatToLongDateTime(
@@ -77,6 +71,16 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
               )}
             </ThemeText>
           )}
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={styles.detail}
+          >
+            {t(TicketsTexts.reservation.paymentMethod(paymentType))}
+          </ThemeText>
+          <ThemeText style={styles.detail}>
+            {t(TicketsTexts.reservation.orderId(reservation.orderId))}
+          </ThemeText>
           {reservation.paymentType === PaymentType.Vipps &&
             status === 'reserving' && (
               <Button
