@@ -15,8 +15,7 @@ type RootProps = NearbyPlacesScreenTabProps<'FavouriteStopsOverview'>;
 
 const FavouriteStopsOverview = ({navigation}: RootProps) => {
   const {favoriteDepartures} = useFavorites();
-  const {location: currentLocation} = useGeolocationState();
-  const [location, setLocation] = useState(currentLocation);
+  const {location} = useGeolocationState();
   const favouriteStopIds = new Set(favoriteDepartures.map((fd) => fd.stopId));
   const {state} = useStopsDetailsData(Array.from(favouriteStopIds));
 
@@ -54,7 +53,7 @@ const FavouriteStopsOverview = ({navigation}: RootProps) => {
         if (edgeB.node?.distance === undefined) return -1;
         return edgeA.node?.distance > edgeB.node?.distance ? 1 : -1;
       });
-  }, [state.data, location]);
+  }, [state.data]);
 
   const {t} = useTranslation();
   const navigateToPlace = (place: Place) => {
