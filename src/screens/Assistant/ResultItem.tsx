@@ -43,6 +43,8 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {SearchTime} from './journey-date-picker';
+import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
+import {Warning} from '@atb/assets/svg/color/situations';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -81,6 +83,9 @@ const ResultItemHeader: React.FC<{
   const durationText = secondsToDurationShort(tripPattern.duration, language);
   const startTime = tripPattern.legs[0].expectedStartTime;
   const endTime = tripPattern.legs[tripPattern.legs.length - 1].expectedEndTime;
+  const tripIncludesRailReplacementBus = tripPattern.legs.some(
+    (leg) => leg.transportSubmode === TransportSubmode.RailReplacementBus,
+  );
 
   return (
     <View style={styles.resultHeader}>
@@ -112,6 +117,15 @@ const ResultItemHeader: React.FC<{
           {durationText}
         </AccessibleText>
       </View>
+
+      {tripIncludesRailReplacementBus && (
+        <Warning
+          accessibilityLabel={t(
+            AssistantTexts.results.resultItem.tripIncludesRailReplacementBus,
+          )}
+          style={styles.warningIcon}
+        />
+      )}
 
       <SituationWarningIcon
         situations={flatMap(tripPattern.legs, (leg) => leg.situations)}

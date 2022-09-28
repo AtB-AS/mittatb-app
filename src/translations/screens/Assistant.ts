@@ -182,6 +182,10 @@ const AssistantTexts = {
             `From ${fromPlace}, at ${fromPlaceDepartureTime}`,
           ),
       },
+      tripIncludesRailReplacementBus: _(
+        'Reisen inkluderer buss for tog.',
+        'This trip includes rail replacement bus.',
+      ),
     },
   },
 };
