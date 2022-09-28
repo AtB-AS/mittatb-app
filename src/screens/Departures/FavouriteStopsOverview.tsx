@@ -10,8 +10,6 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import {coordinatesDistanceInMetres} from '@atb/utils/location';
 import React, {useMemo, useState} from 'react';
 import {NearbyPlacesScreenTabProps} from './types';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import useInterval from '@atb/utils/use-interval';
 
 type RootProps = NearbyPlacesScreenTabProps<'FavouriteStopsOverview'>;
 
@@ -21,17 +19,6 @@ const FavouriteStopsOverview = ({navigation}: RootProps) => {
   const [location, setLocation] = useState(currentLocation);
   const favouriteStopIds = new Set(favoriteDepartures.map((fd) => fd.stopId));
   const {state} = useStopsDetailsData(Array.from(favouriteStopIds));
-  const {geolocation_refresh_interval} = useRemoteConfig();
-
-  useInterval(
-    () => {
-      setLocation(currentLocation);
-    },
-    geolocation_refresh_interval,
-    [],
-    false,
-    true,
-  );
 
   const getDistanceFromCurrentLocation = (
     latitude?: number,

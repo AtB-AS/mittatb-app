@@ -19,8 +19,6 @@ import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {NearbyPlacesScreenTabProps} from './types';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import useInterval from '@atb/utils/use-interval';
 
 export type AllStopsOverviewParams = {
   location: Location;
@@ -153,12 +151,6 @@ export const AllStopsOverview = ({navigation}: RootProps) => {
           : fromLocation,
     });
   }
-
-  const {geolocation_refresh_interval} = useRemoteConfig();
-  useInterval(refresh, geolocation_refresh_interval, [
-    !updatingLocation,
-    !isLoading,
-  ]);
 
   return (
     <SimpleDisappearingHeader

@@ -29,7 +29,6 @@ export type RemoteConfig = {
   enable_map_page: boolean;
   favourite_departures_poll_interval: number;
   new_favourites_info_url: string;
-  geolocation_refresh_interval: number;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -60,7 +59,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_map_page: false,
   favourite_departures_poll_interval: 30000,
   new_favourites_info_url: 'https://www.atb.no',
-  geolocation_refresh_interval: 300000,
 };
 
 export function getConfig(): RemoteConfig {
@@ -138,10 +136,6 @@ export function getConfig(): RemoteConfig {
     values['new_favourites_info_url']?.asString() ??
     defaultRemoteConfig.new_favourites_info_url;
 
-  const geolocation_refresh_interval =
-    values['geolocation_refresh_interval']?.asNumber() ??
-    defaultRemoteConfig.geolocation_refresh_interval;
-
   return {
     enable_network_logging,
     enable_ticketing,
@@ -170,7 +164,6 @@ export function getConfig(): RemoteConfig {
     enable_map_page: enable_map_tab,
     favourite_departures_poll_interval,
     new_favourites_info_url,
-    geolocation_refresh_interval,
   };
 }
 
