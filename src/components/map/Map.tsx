@@ -23,11 +23,12 @@ import {
   zoomIn,
   zoomOut,
 } from '@atb/components/map/utils';
+import {GeoLocation, SearchLocation} from '@atb/favorites/types';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map should behave
- * ExploreStops: If only the Stop Places (Bus, Trams stops etc.)  should be interactable
- * ExploreLocation: If every selected location should be interactable
+ *  - ExploreStops: If only the Stop Places (Bus, Trams stops etc.)  should be interactable
+ *  - ExploreLocation: If every selected location should be interactable. It also shows the Location bar on top of the Map to show the currently selected location
  */
 export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
 
@@ -35,7 +36,7 @@ type MapProps = {
   coordinates: Coordinates;
   shouldShowSearchBar?: boolean;
   selectionMode?: MapSelectionMode;
-  onLocationSelect?: (selectedLocation?: any) => void;
+  onLocationSelect?: (selectedLocation?: GeoLocation | SearchLocation) => void;
   zoomLevel: number;
 };
 

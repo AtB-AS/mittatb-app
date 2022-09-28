@@ -7,7 +7,7 @@ import ThemeIcon from '@atb/components/theme-icon';
 import React, {useMemo} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {ErrorType} from '@atb/api/utils';
-import {Location} from '@atb/favorites/types';
+import {GeoLocation, Location, SearchLocation} from '@atb/favorites/types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   LocationSearchTexts,
@@ -21,7 +21,7 @@ import {Coordinates} from '@atb/screens/TripDetails/Map/types';
 
 type Props = {
   coordinates: Coordinates | null;
-  onSelect?: (selectedLocation: any) => void;
+  onSelect?: (selectedLocation: GeoLocation | SearchLocation) => void;
 };
 
 /**
