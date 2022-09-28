@@ -142,7 +142,7 @@ const Map = ({
             centerCoordinate={[coordinates.longitude, coordinates.latitude]}
             {...MapCameraConfig}
           />
-          {mapLines && <MapRoute lines={mapLines}></MapRoute>}
+          {mapLines && <MapRoute lines={mapLines} />}
           <MapboxGL.UserLocation showsUserHeadingIndicator />
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
