@@ -58,7 +58,7 @@ const TicketReservation: React.FC<Props> = ({reservation}) => {
           </View>
         </View>
         <VerifyingValidityLine status={status} />
-        <View style={styles.ticketInfoContainer}>
+        <View style={styles.ticketInfoContainer} accessible={true}>
           <ThemeText style={styles.detail}>
             {t(TicketsTexts.reservation.orderId(reservation.orderId))}
           </ThemeText>
