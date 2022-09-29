@@ -192,6 +192,8 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
     });
   };
 
+  useEffect(refresh, [from, to]);
+
   return (
     <View style={style.container}>
       <FullScreenHeader
