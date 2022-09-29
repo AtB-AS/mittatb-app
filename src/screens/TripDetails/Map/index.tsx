@@ -79,8 +79,8 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
       </View>
       <View style={controlStyles.controlsContainer}>
         <PositionArrow
-          flyToCurrentLocation={() =>
-            flyToLocation(mapCameraRef, geolocation?.coordinates)
+          onPress={() =>
+            flyToLocation(geolocation?.coordinates, 750, mapCameraRef)
           }
         />
         <MapControls

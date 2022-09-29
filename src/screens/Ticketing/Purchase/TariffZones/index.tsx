@@ -300,12 +300,12 @@ const TariffZones: React.FC<TariffZonesProps> = ({
 
   const selectFeature = (event: OnPressEvent) => {
     const feature = event.features[0];
-    flyToLocation(mapCameraRef, event.coordinates, 300);
+    flyToLocation(event.coordinates, 300, mapCameraRef);
     updateSelectedZones(feature.id as string);
   };
 
   async function flyToCurrentLocation() {
-    flyToLocation(mapCameraRef, geolocation?.coordinates);
+    flyToLocation(geolocation?.coordinates, 750, mapCameraRef);
 
     if (mapViewRef.current && geolocation) {
       let point = await mapViewRef.current.getPointInView([
@@ -498,7 +498,7 @@ const TariffZones: React.FC<TariffZonesProps> = ({
           <View style={[styles.bottomControls, {bottom: safeAreaBottom}]}>
             <View>
               <View style={styles.mapControls}>
-                <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
+                <PositionArrow onPress={flyToCurrentLocation} />
                 <MapControls
                   zoomIn={() => zoomIn(mapViewRef, mapCameraRef)}
                   zoomOut={() => zoomOut(mapViewRef, mapCameraRef)}

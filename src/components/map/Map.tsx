@@ -10,32 +10,36 @@ import {StyleSheet} from '@atb/theme';
 import {Coordinates} from '@entur/sdk';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Feature, Point} from 'geojson';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {View} from 'react-native';
 
 import LocationBar from '@atb/components/map/LocationBar';
-import useWalkingRouteLines from '@atb/components/map/use-walking-route-lines';
+import useSelectedFeatureChangeEffect from './use-selected-feature-change-effect';
 import MapRoute from '@atb/screens/TripDetails/Map/MapRoute';
 import {
-  fitBounds,
   flyToLocation,
   isFeaturePoint,
+  mapPositionToCoordinates,
   zoomIn,
   zoomOut,
 } from '@atb/components/map/utils';
 import {GeoLocation, SearchLocation} from '@atb/favorites/types';
 
 /**
- * MapSelectionMode: Parameter to decide how on-select/ on-click on the map should behave
- *  - ExploreStops: If only the Stop Places (Bus, Trams stops etc.)  should be interactable
- *  - ExploreLocation: If every selected location should be interactable. It also shows the Location bar on top of the Map to show the currently selected location
+ * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
+ * should behave
+ *  - ExploreStops: If only the Stop Places (Bus, Trams stops etc.) should be
+ *    interactable
+ *  - ExploreLocation: If every selected location should be interactable. It
+ *    also shows the Location bar on top of the Map to show the currently
+ *    selected location
  */
 export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
 
 type MapProps = {
   coordinates: Coordinates;
   shouldShowSearchBar?: boolean;
-  selectionMode?: MapSelectionMode;
+  selectionMode: MapSelectionMode;
   onLocationSelect?: (selectedLocation?: GeoLocation | SearchLocation) => void;
   zoomLevel: number;
 };
@@ -46,84 +50,38 @@ const Map = ({
   onLocationSelect,
   zoomLevel,
 }: MapProps) => {
-  const [selectedCoordinates, setSelectedCoordinates] =
-    useState<Coordinates | null>(
-      selectionMode === 'ExploreLocation' ? coordinates : null,
-    );
+  const [selectedFeature, setSelectedFeature] = useState<Feature<Point>>();
+  const [fromCoordinates, setFromCoordinates] =
+    useState<Coordinates>(coordinates);
 
   const {location: geolocation} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
-  const shouldShowWalkingRouteToStop = selectionMode === 'ExploreStops';
-  const mapLines = useWalkingRouteLines(
-    coordinates,
-    selectedCoordinates,
-    shouldShowWalkingRouteToStop,
+  const mapLines = useSelectedFeatureChangeEffect(
+    fromCoordinates,
+    selectedFeature,
+    selectionMode,
+    mapViewRef,
+    mapCameraRef,
   );
-
-  useEffect(() => {
-    if (!selectedCoordinates) return;
-    if (mapLines) {
-      fitBounds(coordinates, selectedCoordinates, mapCameraRef);
-    } else {
-      flyToLocation(mapCameraRef, selectedCoordinates);
-    }
-  }, [mapLines]);
 
   const onPress = async (feature: Feature) => {
     if (!isFeaturePoint(feature)) return;
-    if (selectionMode === 'ExploreStops') {
-      await selectStopPlace(feature);
-    } else if (selectionMode === 'ExploreLocation') {
-      selectPoint(feature);
-    }
+    setSelectedFeature(feature);
+    setFromCoordinates(coordinates);
   };
-
-  const selectPoint = (feature: Feature<Point>) => {
-    setSelectedCoordinates({
-      longitude: feature.geometry.coordinates[0],
-      latitude: feature.geometry.coordinates[1],
-    });
-    const coordinates = feature.geometry.coordinates;
-    flyToLocation(mapCameraRef, {
-      longitude: coordinates[0],
-      latitude: coordinates[1],
-    });
-  };
-
-  async function selectStopPlace(feature: Feature<Point>) {
-    setSelectedCoordinates(null);
-    if (!feature.properties) return;
-    const {screenPointX, screenPointY} = feature.properties;
-    if (!screenPointX || !screenPointY) return;
-    const renderedFeaturesResult =
-      await mapViewRef?.current?.queryRenderedFeaturesAtPoint(
-        [screenPointX, screenPointY],
-        ['==', ['geometry-type'], 'Point'],
-      );
-
-    const stopPlaceFeature = renderedFeaturesResult?.features
-      .filter(isFeaturePoint)
-      .find(
-        (featureAtPoint) =>
-          featureAtPoint?.properties?.entityType === 'StopPlace',
-      );
-
-    if (stopPlaceFeature) {
-      setSelectedCoordinates({
-        longitude: stopPlaceFeature.geometry.coordinates[0],
-        latitude: stopPlaceFeature.geometry.coordinates[1],
-      });
-    }
-  }
 
   return (
     <View style={styles.container}>
       {selectionMode === 'ExploreLocation' && (
         <LocationBar
-          coordinates={selectedCoordinates}
+          coordinates={
+            selectedFeature
+              ? mapPositionToCoordinates(selectedFeature.geometry.coordinates)
+              : fromCoordinates
+          }
           onSelect={onLocationSelect}
         />
       )}
@@ -139,7 +97,10 @@ const Map = ({
           <MapboxGL.Camera
             ref={mapCameraRef}
             zoomLevel={zoomLevel}
-            centerCoordinate={[coordinates.longitude, coordinates.latitude]}
+            centerCoordinate={[
+              fromCoordinates.longitude,
+              fromCoordinates.latitude,
+            ]}
             {...MapCameraConfig}
           />
           {mapLines && <MapRoute lines={mapLines} />}
@@ -147,9 +108,10 @@ const Map = ({
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
           <PositionArrow
-            flyToCurrentLocation={() =>
-              flyToLocation(mapCameraRef, geolocation?.coordinates)
-            }
+            onPress={() => {
+              setSelectedFeature(undefined);
+              flyToLocation(geolocation?.coordinates, 750, mapCameraRef);
+            }}
           />
           <MapControls
             zoomIn={() => zoomIn(mapViewRef, mapCameraRef)}
