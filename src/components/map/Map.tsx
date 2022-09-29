@@ -10,7 +10,7 @@ import {StyleSheet} from '@atb/theme';
 import {Coordinates} from '@entur/sdk';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Feature, Point} from 'geojson';
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useMemo} from 'react';
 import {View} from 'react-native';
 
 import LocationBar from '@atb/components/map/LocationBar';
@@ -24,6 +24,7 @@ import {
   zoomOut,
 } from '@atb/components/map/utils';
 import {GeoLocation, SearchLocation} from '@atb/favorites/types';
+import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -37,22 +38,28 @@ import {GeoLocation, SearchLocation} from '@atb/favorites/types';
 export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
 
 type MapProps = {
-  coordinates: Coordinates;
-  shouldShowSearchBar?: boolean;
+  initialCoordinates: Coordinates;
   selectionMode: MapSelectionMode;
   onLocationSelect?: (selectedLocation?: GeoLocation | SearchLocation) => void;
   zoomLevel: number;
 };
 
 const Map = ({
-  coordinates,
+  initialCoordinates,
   selectionMode,
   onLocationSelect,
   zoomLevel,
 }: MapProps) => {
   const [selectedFeature, setSelectedFeature] = useState<Feature<Point>>();
-  const [fromCoordinates, setFromCoordinates] =
-    useState<Coordinates>(coordinates);
+  const {location: currentLocation} = useGeolocationState();
+
+  const firstCoordinates = useMemo(() => {
+    return initialCoordinates || currentLocation?.coordinates || FOCUS_ORIGIN;
+  }, []);
+
+  const [fromCoordinates, setFromCoordinates] = useState(
+    currentLocation?.coordinates,
+  );
 
   const {location: geolocation} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
@@ -70,7 +77,7 @@ const Map = ({
   const onPress = async (feature: Feature) => {
     if (!isFeaturePoint(feature)) return;
     setSelectedFeature(feature);
-    setFromCoordinates(coordinates);
+    setFromCoordinates(fromCoordinates);
   };
 
   return (
@@ -80,7 +87,7 @@ const Map = ({
           coordinates={
             selectedFeature
               ? mapPositionToCoordinates(selectedFeature.geometry.coordinates)
-              : fromCoordinates
+              : firstCoordinates
           }
           onSelect={onLocationSelect}
         />
@@ -98,8 +105,8 @@ const Map = ({
             ref={mapCameraRef}
             zoomLevel={zoomLevel}
             centerCoordinate={[
-              fromCoordinates.longitude,
-              fromCoordinates.latitude,
+              firstCoordinates.longitude,
+              firstCoordinates.latitude,
             ]}
             {...MapCameraConfig}
           />

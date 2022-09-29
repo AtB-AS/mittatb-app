@@ -12,11 +12,12 @@ import {
 } from '@atb/components/map/utils';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Feature, Point} from 'geojson';
+import {useGeolocationState} from '@atb/GeolocationContext';
 
 const MAX_LIMIT_TO_SHOW_WALKING_TRIP = 5000;
 
 const useSelectedFeatureChangeEffect = (
-  fromCoordinates: Coordinates,
+  fromCoordinates: Coordinates | undefined,
   selectedFeature: Feature<Point> | undefined,
   selectionMode: MapSelectionMode,
   mapViewRef: RefObject<MapboxGL.MapView>,
@@ -26,8 +27,7 @@ const useSelectedFeatureChangeEffect = (
 
   useEffect(() => {
     (async function () {
-      console.log("CURRENT", fromCoordinates);
-      console.log("SELECTED", selectedFeature);
+      console.log('SELECTED', selectedFeature);
       if (!selectedFeature) {
         setMapLines(undefined);
         return;
@@ -51,20 +51,20 @@ const useSelectedFeatureChangeEffect = (
             const stopPlaceCoordinates = mapPositionToCoordinates(
               stopPlaceFeature.geometry.coordinates,
             );
-            const mapLines = await getMapLines(
-              fromCoordinates,
-              stopPlaceCoordinates,
-            );
-            if (mapLines) {
-              setMapLines(mapLines);
-              fitBounds(fromCoordinates, stopPlaceCoordinates, mapCameraRef);
-            } else {
-              setMapLines(undefined);
-              flyToLocation(stopPlaceCoordinates, 750, mapCameraRef);
+            if (fromCoordinates) {
+              const mapLines = await getMapLines(
+                fromCoordinates,
+                stopPlaceCoordinates,
+              );
+              if (mapLines) {
+                setMapLines(mapLines);
+                fitBounds(fromCoordinates, stopPlaceCoordinates, mapCameraRef);
+                return;
+              }
             }
-          } else {
-            setMapLines(undefined);
+            flyToLocation(stopPlaceCoordinates, 750, mapCameraRef);
           }
+          setMapLines(undefined);
         }
       }
     })();
