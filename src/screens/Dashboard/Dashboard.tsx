@@ -82,7 +82,6 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
         fromLocation: from,
         toLocation: to,
         searchTime: undefined,
-        updateLocations: false,
       });
     }
   }, [to, from, navigation]);
