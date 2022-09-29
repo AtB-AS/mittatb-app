@@ -28,6 +28,7 @@ export type DashboardParams = {
     fromLocation: Location;
     toLocation: Location;
     searchTime: SearchTime | undefined;
+    updatedLocation: string | undefined;
   };
 
   TripDetails: NavigatorScreenParams<DetailsStackParams>;

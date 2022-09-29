@@ -58,7 +58,7 @@ const headerBackgroundColor: StaticColorByType<'background'> =
 
 const ResultsBackgroundColor: StaticColorByType<'background'> = 'background_1';
 
-const TripSearch: React.FC<RootProps> = ({navigation}) => {
+const TripSearch: React.FC<RootProps> = ({route, navigation}) => {
   const style = useStyle();
   const {theme} = useTheme();
   const {language, t} = useTranslation();
@@ -92,6 +92,40 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
   >();
 
   const screenHasFocus = useIsFocused();
+
+  const updateLocationIfNeeded = (
+    location: Location | undefined,
+  ): Location | undefined => {
+    if (location?.resultType === 'geolocation') {
+      return (
+        currentLocation && {
+          ...currentLocation,
+          resultType: 'geolocation',
+        }
+      );
+    }
+
+    return location;
+  };
+
+  const updatedLocation = route.params.updatedLocation;
+  useEffect(() => {
+    if (updatedLocation === 'fromLocation') {
+      navigation.setParams({
+        fromLocation: from,
+        toLocation: updateLocationIfNeeded(to),
+        updatedLocation: undefined,
+      });
+    }
+
+    if (updatedLocation === 'toLocation') {
+      navigation.setParams({
+        fromLocation: updateLocationIfNeeded(from),
+        toLocation: to,
+        updatedLocation: undefined,
+      });
+    }
+  }, [updatedLocation]);
 
   useEffect(() => {
     if (!screenHasFocus) return;
