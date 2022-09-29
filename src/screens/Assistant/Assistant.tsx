@@ -418,6 +418,8 @@ const Assistant: React.FC<Props> = ({
     });
   };
 
+  useEffect(refresh, [from, to]);
+
   return (
     <DisappearingHeader
       renderHeader={renderHeader}
