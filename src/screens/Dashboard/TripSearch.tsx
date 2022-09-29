@@ -174,7 +174,6 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
     navigation.setParams({
       fromLocation: to,
       toLocation: from,
-      updateLocations: false,
     });
   }
 
