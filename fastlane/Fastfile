@@ -92,7 +92,10 @@ platform :ios do
       scheme: 'atb',
       configuration: 'Release',
       export_method: ENV['EXPORT_METHOD'],
-      workspace: './ios/atb.xcworkspace'
+      workspace: './ios/atb.xcworkspace',
+      export_options: {
+        compileBitcode: false,
+      }
     )
   end
 

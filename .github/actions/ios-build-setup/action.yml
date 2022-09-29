@@ -47,17 +47,11 @@ runs:
         uses: maxim-lobanov/setup-xcode@v1.3.0
         with:
           xcode-version: "13.1"
-      - name: Get bundle cache
-        uses: actions/cache@v2
-        if: ${{ inputs.use-build-cache }} == 'true'
+      - name: Setup ruby and bundle install
+        uses: ruby/setup-ruby@v1
         with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-      - name: Bundle Install
-        shell: bash
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+          ruby-version: 2.7.6
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Set environment
         shell: bash
         run: sh ./scripts/override-environment.sh ${{ inputs.app-environment }} ${{ inputs.app-org }}

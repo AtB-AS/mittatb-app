@@ -8,7 +8,7 @@ on:
 jobs:
   run_tests:
     name: E2E test
-    runs-on: macos-11
+    runs-on: macOS-12
     steps:
       - name: Checkout project
         uses: actions/checkout@v1
