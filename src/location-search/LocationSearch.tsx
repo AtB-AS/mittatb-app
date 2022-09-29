@@ -64,7 +64,6 @@ const LocationSearch: React.FC<Props> = ({
       name: callerRouteName as any,
       params: {
         [callerRouteParam]: location,
-        updatedLocation: callerRouteParam,
       },
       merge: true,
     });
