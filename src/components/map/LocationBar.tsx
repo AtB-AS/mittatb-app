@@ -20,7 +20,7 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {Coordinates} from '@atb/screens/TripDetails/Map/types';
 
 type Props = {
-  coordinates: Coordinates | null;
+  coordinates?: Coordinates;
   onSelect?: (selectedLocation: GeoLocation | SearchLocation) => void;
 };
 
@@ -33,7 +33,9 @@ const CURRENT_LOCATION_THRESHOLD_METERS = 30;
 const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
   const styles = useStyles();
   const {location: geolocation} = useGeolocationState();
-  const {closestLocation, isSearching, error} = useReverseGeocoder(coordinates);
+  const {closestLocation, isSearching, error} = useReverseGeocoder(
+    coordinates || null,
+  );
 
   const onPress = () => {
     if (location && onSelect) {

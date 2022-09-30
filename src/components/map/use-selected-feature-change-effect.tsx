@@ -16,25 +16,37 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 
 const MAX_LIMIT_TO_SHOW_WALKING_TRIP = 5000;
 
+type FeatureOrCoordinates = Feature<Point> | Coordinates;
+
 const useSelectedFeatureChangeEffect = (
-  fromCoordinates: Coordinates | undefined,
-  selectedFeature: Feature<Point> | undefined,
   selectionMode: MapSelectionMode,
+  startingCoordinates: Coordinates | undefined,
   mapViewRef: RefObject<MapboxGL.MapView>,
   mapCameraRef: RefObject<MapboxGL.Camera>,
 ) => {
   const [mapLines, setMapLines] = useState<MapLine[]>();
+  const [featureOrCoordinates, setFeatureOrCoordinates] = useState<
+    FeatureOrCoordinates | undefined
+  >(startingCoordinates);
+  const {location: currentLocation} = useGeolocationState();
+  const [fromCoordinates, setFromCoordinates] = useState(
+    currentLocation?.coordinates,
+  );
+
+  const onClick = (fc: FeatureOrCoordinates) => {
+    setFeatureOrCoordinates(fc);
+    setFromCoordinates(currentLocation?.coordinates);
+  };
 
   useEffect(() => {
     (async function () {
-      console.log('SELECTED', selectedFeature);
-      if (!selectedFeature) {
+      console.log('SELECTED', featureOrCoordinates);
+      if (!featureOrCoordinates) {
         setMapLines(undefined);
         return;
       }
-      const selectedCoordinates = mapPositionToCoordinates(
-        selectedFeature.geometry.coordinates,
-      );
+      const selectedCoordinates =
+        getCoordinatesFromFeatureOrCoordinates(featureOrCoordinates);
 
       switch (selectionMode) {
         case 'ExploreLocation': {
@@ -42,10 +54,13 @@ const useSelectedFeatureChangeEffect = (
           break;
         }
         case 'ExploreStops': {
+          if (isCoordinates(featureOrCoordinates)) return;
+
           const stopPlaceFeature = await findClickedStopPlace(
-            selectedFeature,
+            featureOrCoordinates,
             mapViewRef,
           );
+          console.log('Found stop place feature:', stopPlaceFeature);
 
           if (stopPlaceFeature) {
             const stopPlaceCoordinates = mapPositionToCoordinates(
@@ -68,10 +83,22 @@ const useSelectedFeatureChangeEffect = (
         }
       }
     })();
-  }, [fromCoordinates, selectedFeature]);
+  }, [fromCoordinates, featureOrCoordinates]);
 
-  return mapLines;
+  return {
+    mapLines,
+    onClick,
+    selectedCoordinates: featureOrCoordinates
+      ? getCoordinatesFromFeatureOrCoordinates(featureOrCoordinates)
+      : undefined,
+  };
 };
+
+const isCoordinates = (foc: FeatureOrCoordinates): foc is Coordinates =>
+  'latitude' in foc;
+
+const getCoordinatesFromFeatureOrCoordinates = (foc: FeatureOrCoordinates) =>
+  'latitude' in foc ? foc : mapPositionToCoordinates(foc.geometry.coordinates);
 
 export default useSelectedFeatureChangeEffect;
 

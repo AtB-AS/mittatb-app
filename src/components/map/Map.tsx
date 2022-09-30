@@ -3,14 +3,15 @@ import {
   MapControls,
   MapViewConfig,
   PositionArrow,
+  shadows,
   useControlPositionsStyle,
 } from '@atb/components/map/index';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import {Coordinates} from '@entur/sdk';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {Feature, Point} from 'geojson';
-import React, {useRef, useState, useMemo} from 'react';
+import {Feature} from 'geojson';
+import React, {useMemo, useRef} from 'react';
 import {View} from 'react-native';
 
 import LocationBar from '@atb/components/map/LocationBar';
@@ -19,12 +20,12 @@ import MapRoute from '@atb/screens/TripDetails/Map/MapRoute';
 import {
   flyToLocation,
   isFeaturePoint,
-  mapPositionToCoordinates,
   zoomIn,
   zoomOut,
 } from '@atb/components/map/utils';
-import {GeoLocation, SearchLocation} from '@atb/favorites/types';
+import {GeoLocation, Location, SearchLocation} from '@atb/favorites/types';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
+import SelectionPin from '@atb/components/map/SelectionPin';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -38,57 +39,41 @@ import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
 
 type MapProps = {
-  initialCoordinates: Coordinates;
+  initialLocation?: Location;
   selectionMode: MapSelectionMode;
   onLocationSelect?: (selectedLocation?: GeoLocation | SearchLocation) => void;
-  zoomLevel: number;
 };
 
-const Map = ({
-  initialCoordinates,
-  selectionMode,
-  onLocationSelect,
-  zoomLevel,
-}: MapProps) => {
-  const [selectedFeature, setSelectedFeature] = useState<Feature<Point>>();
+const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
   const {location: currentLocation} = useGeolocationState();
-
-  const firstCoordinates = useMemo(() => {
-    return initialCoordinates || currentLocation?.coordinates || FOCUS_ORIGIN;
-  }, []);
-
-  const [fromCoordinates, setFromCoordinates] = useState(
-    currentLocation?.coordinates,
-  );
-
-  const {location: geolocation} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
-  const mapLines = useSelectedFeatureChangeEffect(
-    fromCoordinates,
-    selectedFeature,
-    selectionMode,
-    mapViewRef,
-    mapCameraRef,
+
+  const startingCoordinates = useMemo(
+    () =>
+      initialLocation && initialLocation?.resultType !== 'geolocation'
+        ? initialLocation.coordinates
+        : currentLocation?.coordinates || FOCUS_ORIGIN,
+    [],
   );
 
-  const onPress = async (feature: Feature) => {
-    if (!isFeaturePoint(feature)) return;
-    setSelectedFeature(feature);
-    setFromCoordinates(fromCoordinates);
-  };
+  console.log("THE STARTING COORDS", FOCUS_ORIGIN, startingCoordinates);
+
+  const {mapLines, selectedCoordinates, onClick} =
+    useSelectedFeatureChangeEffect(
+      selectionMode,
+      startingCoordinates,
+      mapViewRef,
+      mapCameraRef,
+    );
 
   return (
     <View style={styles.container}>
       {selectionMode === 'ExploreLocation' && (
         <LocationBar
-          coordinates={
-            selectedFeature
-              ? mapPositionToCoordinates(selectedFeature.geometry.coordinates)
-              : firstCoordinates
-          }
+          coordinates={selectedCoordinates || startingCoordinates}
           onSelect={onLocationSelect}
         />
       )}
@@ -98,28 +83,44 @@ const Map = ({
           style={{
             flex: 1,
           }}
-          onPress={onPress}
+          onPress={(f: Feature) => {
+            console.log("CLICKED", f);
+            if (isFeaturePoint(f)) {
+              onClick(f);
+            }
+          }}
           {...MapViewConfig}
         >
           <MapboxGL.Camera
             ref={mapCameraRef}
-            zoomLevel={zoomLevel}
+            zoomLevel={15}
             centerCoordinate={[
-              firstCoordinates.longitude,
-              firstCoordinates.latitude,
+              startingCoordinates.longitude,
+              startingCoordinates.latitude,
             ]}
             {...MapCameraConfig}
           />
           {mapLines && <MapRoute lines={mapLines} />}
           <MapboxGL.UserLocation showsUserHeadingIndicator />
+          {selectionMode === 'ExploreLocation' && selectedCoordinates && (
+            <MapboxGL.PointAnnotation
+              id={'selectionPin'}
+              coordinate={[
+                selectedCoordinates.longitude,
+                selectedCoordinates.latitude,
+              ]}
+            />
+          )}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
-          <PositionArrow
-            onPress={() => {
-              setSelectedFeature(undefined);
-              flyToLocation(geolocation?.coordinates, 750, mapCameraRef);
-            }}
-          />
+          {currentLocation && (
+            <PositionArrow
+              onPress={() => {
+                onClick(currentLocation.coordinates);
+                flyToLocation(currentLocation.coordinates, 750, mapCameraRef);
+              }}
+            />
+          )}
           <MapControls
             zoomIn={() => zoomIn(mapViewRef, mapCameraRef)}
             zoomOut={() => zoomOut(mapViewRef, mapCameraRef)}
@@ -132,6 +133,7 @@ const Map = ({
 
 const useMapStyles = StyleSheet.createThemeHook(() => ({
   container: {flex: 1},
+  pin: {position: 'absolute', ...shadows},
 }));
 
 export default Map;

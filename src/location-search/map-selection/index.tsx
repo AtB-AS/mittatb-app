@@ -5,15 +5,12 @@ import React from 'react';
 import {View} from 'react-native';
 import {LocationSearchScreenProps} from '@atb/location-search/types';
 import {Map} from '@atb/components/map';
+import {Location} from '@atb/favorites/types';
 
 export type RouteParams = {
   callerRouteName: string;
   callerRouteParam: string;
-  coordinates: {
-    longitude: number;
-    latitude: number;
-    zoomLevel: number;
-  };
+  initialLocation?: Location;
 };
 
 export type Props = LocationSearchScreenProps<'MapSelection'>;
@@ -21,7 +18,7 @@ export type Props = LocationSearchScreenProps<'MapSelection'>;
 const MapSelection: React.FC<Props> = ({
   navigation,
   route: {
-    params: {callerRouteName, callerRouteParam, coordinates},
+    params: {callerRouteName, callerRouteParam, initialLocation},
   },
 }) => {
   const onLocationSelect = (selectedLocation?: any) => {
@@ -40,12 +37,8 @@ const MapSelection: React.FC<Props> = ({
       />
       <Map
         onLocationSelect={onLocationSelect}
-        coordinates={{
-          latitude: coordinates.latitude,
-          longitude: coordinates.longitude,
-        }}
+        initialLocation={initialLocation}
         selectionMode={'ExploreLocation'}
-        zoomLevel={coordinates.zoomLevel}
       />
     </View>
   );
