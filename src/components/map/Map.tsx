@@ -8,7 +8,6 @@ import {
 } from '@atb/components/map/index';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
-import {Coordinates} from '@entur/sdk';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Feature} from 'geojson';
 import React, {useMemo, useRef} from 'react';
@@ -25,7 +24,8 @@ import {
 } from '@atb/components/map/utils';
 import {GeoLocation, Location, SearchLocation} from '@atb/favorites/types';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
-import SelectionPin from '@atb/components/map/SelectionPin';
+import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
+import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -59,8 +59,6 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
     [],
   );
 
-  console.log("THE STARTING COORDS", FOCUS_ORIGIN, startingCoordinates);
-
   const {mapLines, selectedCoordinates, onClick} =
     useSelectedFeatureChangeEffect(
       selectionMode,
@@ -83,10 +81,9 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
           style={{
             flex: 1,
           }}
-          onPress={(f: Feature) => {
-            console.log("CLICKED", f);
-            if (isFeaturePoint(f)) {
-              onClick(f);
+          onPress={(feature: Feature) => {
+            if (isFeaturePoint(feature)) {
+              onClick(feature);
             }
           }}
           {...MapViewConfig}
@@ -109,7 +106,12 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
                 selectedCoordinates.longitude,
                 selectedCoordinates.latitude,
               ]}
-            />
+            >
+              <View style={styles.pin}>
+                <SelectionPinConfirm width={40} height={40} />
+                <SelectionPinShadow width={40} height={4} />
+              </View>
+            </MapboxGL.PointAnnotation>
           )}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
@@ -133,7 +135,7 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
 
 const useMapStyles = StyleSheet.createThemeHook(() => ({
   container: {flex: 1},
-  pin: {position: 'absolute', ...shadows},
+  pin: {...shadows},
 }));
 
 export default Map;

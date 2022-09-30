@@ -40,7 +40,6 @@ const useSelectedFeatureChangeEffect = (
 
   useEffect(() => {
     (async function () {
-      console.log('SELECTED', featureOrCoordinates);
       if (!featureOrCoordinates) {
         setMapLines(undefined);
         return;
@@ -60,7 +59,6 @@ const useSelectedFeatureChangeEffect = (
             featureOrCoordinates,
             mapViewRef,
           );
-          console.log('Found stop place feature:', stopPlaceFeature);
 
           if (stopPlaceFeature) {
             const stopPlaceCoordinates = mapPositionToCoordinates(

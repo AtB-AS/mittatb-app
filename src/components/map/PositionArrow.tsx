@@ -6,9 +6,9 @@ import {AccessibilityProps} from 'react-native';
 import Button from '@atb/components/button';
 import shadows from './shadows';
 
-const PositionArrow: React.FC<
-  {onPress(): void} & AccessibilityProps
-> = ({onPress}) => {
+const PositionArrow: React.FC<{onPress(): void} & AccessibilityProps> = ({
+  onPress,
+}) => {
   const styles = useStyles();
 
   return (
