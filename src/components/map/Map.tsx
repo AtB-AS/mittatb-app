@@ -59,7 +59,7 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
     [],
   );
 
-  const {mapLines, selectedCoordinates, onClick} =
+  const {mapLines, selectedCoordinates, onMapClick} =
     useSelectedFeatureChangeEffect(
       selectionMode,
       startingCoordinates,
@@ -83,7 +83,7 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
           }}
           onPress={(feature: Feature) => {
             if (isFeaturePoint(feature)) {
-              onClick(feature);
+              onMapClick(feature);
             }
           }}
           {...MapViewConfig}
@@ -118,8 +118,7 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
           {currentLocation && (
             <PositionArrow
               onPress={() => {
-                onClick(currentLocation.coordinates);
-                flyToLocation(currentLocation.coordinates, 750, mapCameraRef);
+                onMapClick(currentLocation.coordinates);
               }}
             />
           )}

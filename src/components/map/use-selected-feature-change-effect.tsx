@@ -20,32 +20,32 @@ type FeatureOrCoordinates = Feature<Point> | Coordinates;
 
 const useSelectedFeatureChangeEffect = (
   selectionMode: MapSelectionMode,
-  startingCoordinates: Coordinates | undefined,
+  startingSelectedCoordinates: Coordinates | undefined,
   mapViewRef: RefObject<MapboxGL.MapView>,
   mapCameraRef: RefObject<MapboxGL.Camera>,
 ) => {
   const [mapLines, setMapLines] = useState<MapLine[]>();
-  const [featureOrCoordinates, setFeatureOrCoordinates] = useState<
-    FeatureOrCoordinates | undefined
-  >(startingCoordinates);
+  const [selectedFeatureOrCoordinates, setSelectedFeatureOrCoordinates] =
+    useState<FeatureOrCoordinates | undefined>(startingSelectedCoordinates);
   const {location: currentLocation} = useGeolocationState();
   const [fromCoordinates, setFromCoordinates] = useState(
     currentLocation?.coordinates,
   );
 
-  const onClick = (fc: FeatureOrCoordinates) => {
-    setFeatureOrCoordinates(fc);
+  const onMapClick = (fc: FeatureOrCoordinates) => {
+    setSelectedFeatureOrCoordinates(fc);
     setFromCoordinates(currentLocation?.coordinates);
   };
 
   useEffect(() => {
     (async function () {
-      if (!featureOrCoordinates) {
+      if (!selectedFeatureOrCoordinates) {
         setMapLines(undefined);
         return;
       }
-      const selectedCoordinates =
-        getCoordinatesFromFeatureOrCoordinates(featureOrCoordinates);
+      const selectedCoordinates = getCoordinatesFromFeatureOrCoordinates(
+        selectedFeatureOrCoordinates,
+      );
 
       switch (selectionMode) {
         case 'ExploreLocation': {
@@ -53,10 +53,12 @@ const useSelectedFeatureChangeEffect = (
           break;
         }
         case 'ExploreStops': {
-          if (isCoordinates(featureOrCoordinates)) return;
-
+          if (isCoordinates(selectedFeatureOrCoordinates)) {
+            flyToLocation(selectedCoordinates, 750, mapCameraRef);
+            return;
+          }
           const stopPlaceFeature = await findClickedStopPlace(
-            featureOrCoordinates,
+            selectedFeatureOrCoordinates,
             mapViewRef,
           );
 
@@ -81,13 +83,13 @@ const useSelectedFeatureChangeEffect = (
         }
       }
     })();
-  }, [fromCoordinates, featureOrCoordinates]);
+  }, [fromCoordinates, selectedFeatureOrCoordinates]);
 
   return {
     mapLines,
-    onClick,
-    selectedCoordinates: featureOrCoordinates
-      ? getCoordinatesFromFeatureOrCoordinates(featureOrCoordinates)
+    onMapClick,
+    selectedCoordinates: selectedFeatureOrCoordinates
+      ? getCoordinatesFromFeatureOrCoordinates(selectedFeatureOrCoordinates)
       : undefined,
   };
 };
