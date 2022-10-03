@@ -3,7 +3,6 @@ import {JourneySearchHistoryEntry} from '@atb/search-history/types';
 import React, {useEffect, useState} from 'react';
 import {Keyboard, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {FOCUS_ORIGIN} from '../api/geocoder';
 import {ErrorType} from '../api/utils';
 import MessageBox from '../components/message-box';
 import FullScreenHeader from '../components/screen-header/full-header';
@@ -57,7 +56,6 @@ const LocationSearch: React.FC<Props> = ({
 }) => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
-  const {location: geolocation} = useGeolocationState();
 
   const onSelect = (location: SelectableLocationData) => {
     navigation.navigate({
@@ -70,22 +68,12 @@ const LocationSearch: React.FC<Props> = ({
   };
 
   const onMapSelection = () => {
-    const coordinates: {
-      latitude: number;
-      longitude: number;
-      zoomLevel: number;
-    } = initialLocation
-      ? {...initialLocation.coordinates, zoomLevel: 12}
-      : geolocation
-      ? {...geolocation.coordinates, zoomLevel: 12}
-      : {...FOCUS_ORIGIN, zoomLevel: 6};
-
     navigation.navigate({
       name: 'MapSelection',
       params: {
         callerRouteName,
         callerRouteParam,
-        coordinates: coordinates,
+        initialLocation,
       },
       merge: true,
     });

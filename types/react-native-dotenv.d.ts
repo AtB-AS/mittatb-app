@@ -9,8 +9,8 @@ declare module '@env' {
   export const APP_ORG: import('./app-orgs').AppOrgs;
   export const APP_SCHEME: string;
   export const TARIFF_ZONE_AUTHORITY: import('./app-orgs').TariffZoneAuthorities;
-  export const FOCUS_LATITUDE: number;
-  export const FOCUS_LONGITUDE: number;
+  export const FOCUS_LATITUDE: string;
+  export const FOCUS_LONGITUDE: string;
   export const IS_QA_ENV: string | undefined;
   export const SAFETY_NET_API_KEY: string;
   export const ENABLE_TICKETING: string | undefined;

@@ -6,121 +6,73 @@ import {
   shadows,
   useControlPositionsStyle,
 } from '@atb/components/map/index';
-import {useReverseGeocoder} from '@atb/geocoder';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
-import {Coordinates} from '@entur/sdk';
-import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Feature} from 'geojson';
-import React, {useMemo, useRef, useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import React, {useMemo, useRef} from 'react';
+import {View} from 'react-native';
 
-import {coordinatesDistanceInMetres} from '@atb/utils/location';
-import SelectionPin, {PinMode} from '@atb/components/map/SelectionPin';
 import LocationBar from '@atb/components/map/LocationBar';
+import useSelectedFeatureChangeEffect from './use-selected-feature-change-effect';
+import MapRoute from '@atb/screens/TripDetails/Map/MapRoute';
+import {
+  flyToLocation,
+  isFeaturePoint,
+  zoomIn,
+  zoomOut,
+} from '@atb/components/map/utils';
+import {GeoLocation, Location, SearchLocation} from '@atb/favorites/types';
+import {FOCUS_ORIGIN} from '@atb/api/geocoder';
+import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
+import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
 
 /**
- * How many meters from the current location GPS coordinates can the map arrow
- * icon be and still be considered "My position"
+ * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
+ * should behave
+ *  - ExploreStops: If only the Stop Places (Bus, Trams stops etc.) should be
+ *    interactable
+ *  - ExploreLocation: If every selected location should be interactable. It
+ *    also shows the Location bar on top of the Map to show the currently
+ *    selected location
  */
-const CURRENT_LOCATION_THRESHOLD_METERS = 30;
-
-type RegionEvent = {
-  isMoving: boolean;
-  region?: GeoJSON.Feature<GeoJSON.Point, RegionPayload>;
-};
+export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
 
 type MapProps = {
-  coordinates: Coordinates & {zoomLevel: number};
-  shouldShowSearchBar?: boolean;
-  shouldShowSelectionPin?: boolean;
-  onLocationSelect?: (selectedLocation?: any) => void;
+  initialLocation?: Location;
+  selectionMode: MapSelectionMode;
+  onLocationSelect?: (selectedLocation?: GeoLocation | SearchLocation) => void;
 };
 
-const Map = ({
-  coordinates,
-  shouldShowSearchBar,
-  shouldShowSelectionPin,
-  onLocationSelect,
-}: MapProps) => {
-  const [regionEvent, setRegionEvent] = useState<RegionEvent>();
-  const centeredCoordinates = useMemo<Coordinates | null>(
-    () =>
-      (regionEvent?.region?.geometry && {
-        latitude: regionEvent.region.geometry.coordinates[1],
-        longitude: regionEvent.region?.geometry?.coordinates[0],
-      }) ??
-      null,
-    [
-      regionEvent?.region?.geometry?.coordinates[0],
-      regionEvent?.region?.geometry?.coordinates[1],
-    ],
-  );
-
-  const {
-    closestLocation: location,
-    isSearching,
-    error,
-  } = useReverseGeocoder(centeredCoordinates);
-
-  const {location: geolocation} = useGeolocationState();
-
-  const selectedLocation = useMemo(() => {
-    if (!centeredCoordinates) return undefined;
-    if (!geolocation) return location;
-
-    const pinIsCloseToGeolocation =
-      coordinatesDistanceInMetres(
-        geolocation.coordinates,
-        centeredCoordinates,
-      ) < CURRENT_LOCATION_THRESHOLD_METERS;
-
-    return pinIsCloseToGeolocation ? geolocation : location;
-  }, [geolocation, location]);
-
-  const onSelect = () => {
-    if (location && onLocationSelect) {
-      onLocationSelect(selectedLocation);
-    }
-  };
-
+const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
+  const {location: currentLocation} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
-
-  async function zoomIn() {
-    const currentZoom = await mapViewRef.current?.getZoom();
-    mapCameraRef.current?.zoomTo((currentZoom ?? 10) + 1, 200);
-  }
-
-  async function zoomOut() {
-    const currentZoom = await mapViewRef.current?.getZoom();
-    mapCameraRef.current?.zoomTo((currentZoom ?? 10) - 1, 200);
-  }
-
-  async function flyToCurrentLocation() {
-    geolocation &&
-      mapCameraRef.current?.flyTo(
-        [geolocation.coordinates.longitude, geolocation.coordinates.latitude],
-        750,
-      );
-  }
-
-  const flyToFeature = (feature: Feature) => {
-    if (feature && feature.geometry.type === 'Point') {
-      mapCameraRef.current?.flyTo(feature.geometry.coordinates, 300);
-    }
-  };
-
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
+
+  const startingCoordinates = useMemo(
+    () =>
+      initialLocation && initialLocation?.resultType !== 'geolocation'
+        ? initialLocation.coordinates
+        : currentLocation?.coordinates || FOCUS_ORIGIN,
+    [],
+  );
+
+  const {mapLines, selectedCoordinates, onMapClick} =
+    useSelectedFeatureChangeEffect(
+      selectionMode,
+      startingCoordinates,
+      mapViewRef,
+      mapCameraRef,
+    );
+
   return (
     <View style={styles.container}>
-      {shouldShowSearchBar && (
+      {selectionMode === 'ExploreLocation' && (
         <LocationBar
-          location={selectedLocation}
-          onSelect={onSelect}
-          isSearching={!!regionEvent?.isMoving || isSearching}
-          error={error}
+          coordinates={selectedCoordinates || startingCoordinates}
+          onSelect={onLocationSelect}
         />
       )}
       <View style={{flex: 1}}>
@@ -129,63 +81,60 @@ const Map = ({
           style={{
             flex: 1,
           }}
-          onRegionDidChange={(region) => {
-            setRegionEvent({isMoving: false, region});
+          onPress={(feature: Feature) => {
+            if (isFeaturePoint(feature)) {
+              onMapClick(feature);
+            }
           }}
-          onRegionWillChange={() =>
-            setRegionEvent({isMoving: true, region: regionEvent?.region})
-          }
-          onPress={flyToFeature}
           {...MapViewConfig}
         >
           <MapboxGL.Camera
             ref={mapCameraRef}
-            zoomLevel={coordinates.zoomLevel}
-            centerCoordinate={[coordinates.longitude, coordinates.latitude]}
+            zoomLevel={15}
+            centerCoordinate={[
+              startingCoordinates.longitude,
+              startingCoordinates.latitude,
+            ]}
             {...MapCameraConfig}
           />
+          {mapLines && <MapRoute lines={mapLines} />}
           <MapboxGL.UserLocation showsUserHeadingIndicator />
+          {selectionMode === 'ExploreLocation' && selectedCoordinates && (
+            <MapboxGL.PointAnnotation
+              id={'selectionPin'}
+              coordinate={[
+                selectedCoordinates.longitude,
+                selectedCoordinates.latitude,
+              ]}
+            >
+              <View style={styles.pin}>
+                <SelectionPinConfirm width={40} height={40} />
+                <SelectionPinShadow width={40} height={4} />
+              </View>
+            </MapboxGL.PointAnnotation>
+          )}
         </MapboxGL.MapView>
-        {shouldShowSelectionPin && (
-          <View style={styles.pinContainer}>
-            <TouchableOpacity onPress={onSelect} style={styles.pin}>
-              <SelectionPin
-                isMoving={!!regionEvent?.isMoving}
-                mode={getPinMode(
-                  !!regionEvent?.isMoving || isSearching,
-                  !!location,
-                )}
-              />
-            </TouchableOpacity>
-          </View>
-        )}
         <View style={controlStyles.controlsContainer}>
-          <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
-          <MapControls zoomIn={zoomIn} zoomOut={zoomOut} />
+          {currentLocation && (
+            <PositionArrow
+              onPress={() => {
+                onMapClick(currentLocation.coordinates);
+              }}
+            />
+          )}
+          <MapControls
+            zoomIn={() => zoomIn(mapViewRef, mapCameraRef)}
+            zoomOut={() => zoomOut(mapViewRef, mapCameraRef)}
+          />
         </View>
       </View>
     </View>
   );
 };
 
-function getPinMode(isSearching: boolean, hasLocation: boolean): PinMode {
-  if (isSearching) return 'searching';
-  if (hasLocation) return 'found';
-
-  return 'nothing';
-}
 const useMapStyles = StyleSheet.createThemeHook(() => ({
   container: {flex: 1},
-  pinContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  pin: {position: 'absolute', ...shadows},
+  pin: {...shadows},
 }));
 
 export default Map;

@@ -3,17 +3,14 @@ import {StyleSheet} from '@atb/theme';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import Map from '@atb/components/map/Map';
 import {LocationSearchScreenProps} from '@atb/location-search/types';
+import {Map} from '@atb/components/map';
+import {Location} from '@atb/favorites/types';
 
 export type RouteParams = {
   callerRouteName: string;
   callerRouteParam: string;
-  coordinates: {
-    longitude: number;
-    latitude: number;
-    zoomLevel: number;
-  };
+  initialLocation?: Location;
 };
 
 export type Props = LocationSearchScreenProps<'MapSelection'>;
@@ -21,12 +18,16 @@ export type Props = LocationSearchScreenProps<'MapSelection'>;
 const MapSelection: React.FC<Props> = ({
   navigation,
   route: {
-    params: {callerRouteName, callerRouteParam, coordinates},
+    params: {callerRouteName, callerRouteParam, initialLocation},
   },
 }) => {
-  const onLocationSelect = (selectedLocation?: any) => {
-    navigation.navigate(callerRouteName as any, {
-      [callerRouteParam]: selectedLocation,
+  const onLocationSelect = (selectedLocation?: Location) => {
+    navigation.navigate({
+      name: callerRouteName as any,
+      params: {
+        [callerRouteParam]: selectedLocation,
+      },
+      merge: true,
     });
   };
 
@@ -40,9 +41,8 @@ const MapSelection: React.FC<Props> = ({
       />
       <Map
         onLocationSelect={onLocationSelect}
-        coordinates={coordinates}
-        shouldShowSearchBar={true}
-        shouldShowSelectionPin={true}
+        initialLocation={initialLocation}
+        selectionMode={'ExploreLocation'}
       />
     </View>
   );

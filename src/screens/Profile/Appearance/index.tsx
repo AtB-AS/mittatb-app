@@ -35,16 +35,14 @@ export default function Appearance() {
           />
 
           {overrideSystemAppearance && (
-            <>
-              <ActionItem
-                mode="toggle"
-                text={t(AppearanceSettingsTexts.actions.darkMode)}
-                checked={storedColorScheme === 'dark'}
-                onPress={(checked) =>
-                  updateThemePreference(checked ? 'dark' : 'light')
-                }
-              />
-            </>
+            <ActionItem
+              mode="toggle"
+              text={t(AppearanceSettingsTexts.actions.darkMode)}
+              checked={storedColorScheme === 'dark'}
+              onPress={(checked) =>
+                updateThemePreference(checked ? 'dark' : 'light')
+              }
+            />
           )}
         </Section>
         {Platform.OS === 'android' && (

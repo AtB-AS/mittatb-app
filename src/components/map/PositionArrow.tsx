@@ -6,16 +6,16 @@ import {AccessibilityProps} from 'react-native';
 import Button from '@atb/components/button';
 import shadows from './shadows';
 
-const PositionArrow: React.FC<
-  {flyToCurrentLocation(): void} & AccessibilityProps
-> = ({flyToCurrentLocation}) => {
+const PositionArrow: React.FC<{onPress(): void} & AccessibilityProps> = ({
+  onPress,
+}) => {
   const styles = useStyles();
 
   return (
     <Button
       type="compact"
       interactiveColor="interactive_0"
-      onPress={flyToCurrentLocation}
+      onPress={onPress}
       hitSlop={insets.symmetric(12, 20)}
       icon={Location}
       style={styles.flyToButton}
