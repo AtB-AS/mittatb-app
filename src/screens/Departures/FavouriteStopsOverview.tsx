@@ -8,7 +8,7 @@ import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-deta
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {coordinatesDistanceInMetres} from '@atb/utils/location';
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import {NearbyPlacesScreenTabProps} from './types';
 
 type RootProps = NearbyPlacesScreenTabProps<'FavouriteStopsOverview'>;
@@ -53,7 +53,7 @@ const FavouriteStopsOverview = ({navigation}: RootProps) => {
         if (edgeB.node?.distance === undefined) return -1;
         return edgeA.node?.distance > edgeB.node?.distance ? 1 : -1;
       });
-  }, [state.data]);
+  }, [state.data, location]);
 
   const {t} = useTranslation();
   const navigateToPlace = (place: Place) => {

@@ -171,7 +171,10 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
       newFrom: translateLocation(to),
       newTo: translateLocation(from),
     });
-    navigation.setParams({fromLocation: to, toLocation: from});
+    navigation.setParams({
+      fromLocation: to,
+      toLocation: from,
+    });
   }
 
   function onSearchTimePress() {
@@ -188,6 +191,8 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
       toLocation: to?.resultType === 'geolocation' ? currentLocation : to,
     });
   };
+
+  useEffect(refresh, [from, to]);
 
   return (
     <View style={style.container}>
