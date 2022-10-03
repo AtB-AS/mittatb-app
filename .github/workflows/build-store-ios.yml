@@ -50,11 +50,6 @@ jobs:
           PROVISIONING_PROFILE: $IOS_PROVISIONING_PROFILE_SPECIFIER
           EXPORT_METHOD: 'app-store'
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
-      - name: Get Github-release data
-        id: get_release
-        uses: bruceadams/get-release@v1.2.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Distribute to TestFlight
         run: |
           echo ${{ secrets.APP_STORE_CONNECT_API_KEY}} | base64 --decode > app-store-connect-api-key.json
