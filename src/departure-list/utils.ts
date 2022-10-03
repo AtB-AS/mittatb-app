@@ -132,7 +132,7 @@ export function updateDeparturesWithRealtimeV2(
     .sort((a, b) => {
       // Sort departures based on expectedDepartureTime, for cases where a
       // realtime update shows that a departure has passed another.
-      return a.expectedDepartureTime < b.expectedDepartureTime ? 0 : 1;
+      return a.expectedDepartureTime < b.expectedDepartureTime ? -1 : 1;
     });
 }
 
