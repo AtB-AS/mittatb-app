@@ -43,8 +43,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {SearchTime} from '@atb/screens/Dashboard/journey-date-picker';
-import {Warning} from '@atb/assets/svg/color/situations';
-import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
+import WarnWhenRailReplacementBus from '@atb/components/rail-replacement-bus-message';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -74,22 +73,6 @@ function getFirstQuayName(legs: Leg[]) {
   const publicCodeOutput = fromQuay.publicCode ? ' ' + fromQuay.publicCode : '';
   return fromQuay.name + publicCodeOutput;
 }
-const WarnWhenRailReplacementBus: React.FC<{
-  tripPattern: TripPattern;
-}> = ({tripPattern}) => {
-  const {t} = useTranslation();
-  const styles = useThemeStyles();
-  return tripPattern.legs.some(
-    (leg) => leg.transportSubmode === TransportSubmode.RailReplacementBus,
-  ) ? (
-    <Warning
-      accessibilityLabel={t(
-        TripSearchTexts.results.resultItem.hasSituationsTip,
-      )}
-      style={styles.warningIcon}
-    />
-  ) : null;
-};
 const ResultItemHeader: React.FC<{
   tripPattern: TripPattern;
   strikethrough: boolean;
