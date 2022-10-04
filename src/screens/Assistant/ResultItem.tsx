@@ -74,6 +74,22 @@ function getFirstQuayName(legs: Leg[]) {
   const publicCodeOutput = fromQuay.publicCode ? ' ' + fromQuay.publicCode : '';
   return fromQuay.name + publicCodeOutput;
 }
+const WarnWhenRailReplacementBus: React.FC<{
+  tripPattern: TripPattern;
+}> = ({tripPattern}) => {
+  const {t} = useTranslation();
+  const styles = useThemeStyles();
+  return tripPattern.legs.some(
+    (leg) => leg.transportSubmode === TransportSubmode.RailReplacementBus,
+  ) ? (
+    <Warning
+      accessibilityLabel={t(
+        AssistantTexts.results.resultItem.tripIncludesRailReplacementBus,
+      )}
+      style={styles.warningIcon}
+    />
+  ) : null;
+};
 const ResultItemHeader: React.FC<{
   tripPattern: TripPattern;
   strikethrough: boolean;
@@ -83,9 +99,6 @@ const ResultItemHeader: React.FC<{
   const durationText = secondsToDurationShort(tripPattern.duration, language);
   const startTime = tripPattern.legs[0].expectedStartTime;
   const endTime = tripPattern.legs[tripPattern.legs.length - 1].expectedEndTime;
-  const tripIncludesRailReplacementBus = tripPattern.legs.some(
-    (leg) => leg.transportSubmode === TransportSubmode.RailReplacementBus,
-  );
 
   return (
     <View style={styles.resultHeader}>
@@ -118,14 +131,7 @@ const ResultItemHeader: React.FC<{
         </AccessibleText>
       </View>
 
-      {tripIncludesRailReplacementBus && (
-        <Warning
-          accessibilityLabel={t(
-            AssistantTexts.results.resultItem.tripIncludesRailReplacementBus,
-          )}
-          style={styles.warningIcon}
-        />
-      )}
+      <WarnWhenRailReplacementBus tripPattern={tripPattern} />
 
       <SituationWarningIcon
         situations={flatMap(tripPattern.legs, (leg) => leg.situations)}
