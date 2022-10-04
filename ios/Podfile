@@ -55,6 +55,10 @@ target 'atb' do
     inherit! :complete
     # Pods for testing
   end
+  
+  target 'departureWidgetExtension' do
+    inherit! :complete
+  end
 
   post_install do |installer|
     react_native_post_install(
@@ -64,6 +68,19 @@ target 'atb' do
       :mac_catalyst_enabled => false
     )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    # Xcode 14 workaround: https://github.com/CocoaPods/CocoaPods/issues/11402#issuecomment-1201464693
+    # https://stackoverflow.com/questions/48122769/facebook-cocoapods-sharedapplication-is-unavailable-not-available-on-ios-app
+    # TODO: Find a better way to exclude react-native from extensions
+    installer.pods_project.targets.each do |target|
+      if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
+        target.build_configurations.each do |config|
+            config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+        end
+      end
+      target.build_configurations.each do |config|
+        config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'No'
+      end
+    end
   end
   
   pre_install do |installer|
