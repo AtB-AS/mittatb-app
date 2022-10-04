@@ -9,12 +9,12 @@
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.0"
 
-"@atb-as/generate-assets@^5.1.0-alpha.11":
-  version "5.1.0-alpha.11"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-5.1.0-alpha.11.tgz#e744a78e41a30fb8fe64fce357c66267fd2b5a66"
-  integrity sha512-R9kSMRZ2BFiOTNRUSEQhtlb2RxkaGL6QN9TPN0dBC5x99qLxOSR5wvS1Hw7A8d7hkj37IaTEu98ZKjwmwrhm9w==
+"@atb-as/generate-assets@^5.3.0-alpha.0":
+  version "5.3.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-5.3.0-alpha.0.tgz#8be2d4a0494a85a032e096995244110960a20a79"
+  integrity sha512-Plci2nSYmdvceJkgT2aK3kW9M55Bm3WY2yvrRlRVbxVJRLvAzkwBpaxYEkaaxpk8fSyz96ibaJgfEBAJgjFjDw==
   dependencies:
-    "@atb-as/theme" "^6.0.0-alpha.7"
+    "@atb-as/theme" "^6.1.0-alpha.0"
     commander "^9.4.0"
     fast-glob "^3.2.11"
     micromatch "^4.0.5"
@@ -28,6 +28,14 @@
   dependencies:
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^1.0.7"
+
+"@atb-as/theme@^6.1.0-alpha.0":
+  version "6.1.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-6.1.0-alpha.0.tgz#2eb2acd0f7fec72796f45cda5e11a6c6b832c1f5"
+  integrity sha512-jdqGL0tQlVlROlHsIQqPiWEnj0Dorj8zRdoFncTLwSaDWarVDHYOy3pt3pYgOBIW1xEla0+63ftfjeZIEz0nUw==
+  dependencies:
+    hex-to-rgba "^2.0.1"
+    ts-deepmerge "^4.0.0"
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@~7.10.4":
   version "7.10.4"
@@ -10572,6 +10580,11 @@ ts-deepmerge@^1.0.7:
   version "1.1.0"
   resolved "https://registry.npmjs.org/ts-deepmerge/-/ts-deepmerge-1.1.0.tgz"
   integrity sha512-VvwaV/6RyYMwT9d8dClmfHIsG2PCdm6WY430QKOIbPRR50Y/1Q2ilp4i2XEZeHFcNqfaYnAQzpyUC6XA0AqqBg==
+
+ts-deepmerge@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/ts-deepmerge/-/ts-deepmerge-4.0.0.tgz#e236314a601ff9a6526cbd07c4b97e885f58532a"
+  integrity sha512-IrjjAwfM/J6ajWv5wDRZBdpVaTmuONJN1vC85mXlWVPXKelouLFiqsjR7m0h245qY6zZEtcDtcOTc4Rozgg1TQ==
 
 ts-jest@^29.0.1:
   version "29.0.1"
