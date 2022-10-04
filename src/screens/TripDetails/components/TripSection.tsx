@@ -4,14 +4,14 @@ import {Interchange} from '@atb/assets/svg/mono-icons/actions';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
-import {TinyMessageBox} from '@atb/components/message-box';
+import MessageBox, {TinyMessageBox} from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {searchByStopPlace} from '@atb/geocoder/search-for-location';
 import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
 import SituationMessages from '@atb/situations';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   Language,
   TranslateFunction,
@@ -24,6 +24,7 @@ import {
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {View} from 'react-native';
@@ -65,6 +66,7 @@ const TripSection: React.FC<TripSectionProps> = ({
 }) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
+  const {theme} = useTheme();
 
   const isWalkSection = leg.mode === 'foot';
   const legColor = useTransportationColor(leg.mode, leg.line?.transportSubmode);
@@ -139,6 +141,17 @@ const TripSection: React.FC<TripSectionProps> = ({
         {!!leg.situations.length && (
           <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
             <SituationMessages mode="no-icon" situations={leg.situations} />
+          </TripRow>
+        )}
+        {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
+          <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
+            <MessageBox
+              type="warning"
+              icon={null}
+              message={t(
+                TripDetailsTexts.messages.departureIsRailReplacementBus,
+              )}
+            />
           </TripRow>
         )}
 
