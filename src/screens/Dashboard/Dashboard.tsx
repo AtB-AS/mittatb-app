@@ -78,9 +78,17 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
   const {from, to} = useLocations(currentLocation);
   useEffect(() => {
     if (!!to && !!from) {
+      const toLocation = to;
+      const fromLocation = from;
+
+      // Reset search params before navigation to TripSearch to prevent the
+      // search fields being filled when navigating back.
+      setCurrentLocationAsFrom();
+      navigation.setParams({toLocation: undefined});
+
       navigation.navigate('TripSearch', {
-        fromLocation: from,
-        toLocation: to,
+        fromLocation,
+        toLocation,
         searchTime: undefined,
       });
     }
