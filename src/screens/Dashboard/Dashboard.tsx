@@ -81,8 +81,9 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
       const toLocation = to;
       const fromLocation = from;
 
-      // Reset search params before navigation to TripSearch to prevent the
-      // search fields being filled when navigating back.
+      // Reset search params before navigating to TripSearch in order to prevent
+      // the search fields both being filled (which is an invalid state) when
+      // navigating back
       setCurrentLocationAsFrom();
       navigation.setParams({toLocation: undefined});
 
