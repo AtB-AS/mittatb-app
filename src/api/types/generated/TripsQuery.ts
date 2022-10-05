@@ -22,19 +22,19 @@ export type TripsQuery = {
       searchWindowUsed: number;
     };
     tripPatterns: Array<{
-      expectedStartTime?: any;
-      expectedEndTime?: any;
+      expectedStartTime: any;
+      expectedEndTime: any;
       duration?: any;
       walkDistance?: number;
       legs: Array<{
-        mode?: Types.Mode;
-        distance?: number;
-        duration?: any;
-        aimedStartTime?: any;
-        aimedEndTime?: any;
-        expectedEndTime?: any;
-        expectedStartTime?: any;
-        realtime?: boolean;
+        mode: Types.Mode;
+        distance: number;
+        duration: any;
+        aimedStartTime: any;
+        aimedEndTime: any;
+        expectedEndTime: any;
+        expectedStartTime: any;
+        realtime: boolean;
         transportSubmode?: Types.TransportSubmode;
         line?: {
           id: string;
@@ -43,15 +43,15 @@ export type TripsQuery = {
           publicCode?: string;
         };
         fromEstimatedCall?: {
-          aimedDepartureTime?: any;
-          expectedDepartureTime?: any;
+          aimedDepartureTime: any;
+          expectedDepartureTime: any;
           destinationDisplay?: {frontText?: string};
           quay?: {publicCode?: string; name: string};
           notices: Array<{text?: string; id: string}>;
         };
         situations: Array<{
           situationNumber?: string;
-          description: Array<{value?: string}>;
+          description: Array<{value: string}>;
         }>;
         fromPlace: {
           name?: string;
@@ -63,7 +63,12 @@ export type TripsQuery = {
             name: string;
             longitude?: number;
             latitude?: number;
-            stopPlace?: {longitude?: number; latitude?: number; name: string};
+            stopPlace?: {
+              id: string;
+              longitude?: number;
+              latitude?: number;
+              name: string;
+            };
           };
         };
         toPlace: {
@@ -76,7 +81,12 @@ export type TripsQuery = {
             name: string;
             longitude?: number;
             latitude?: number;
-            stopPlace?: {longitude?: number; latitude?: number; name: string};
+            stopPlace?: {
+              id: string;
+              longitude?: number;
+              latitude?: number;
+              name: string;
+            };
           };
         };
         serviceJourney?: {id: string};
