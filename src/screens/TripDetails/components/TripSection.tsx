@@ -9,6 +9,7 @@ import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {searchByStopPlace} from '@atb/geocoder/search-for-location';
+import {usePreferenceItems} from '@atb/preferences';
 import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
 import SituationMessages from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -67,6 +68,7 @@ const TripSection: React.FC<TripSectionProps> = ({
   const {t, language} = useTranslation();
   const style = useSectionStyles();
   const {theme} = useTheme();
+  const {newDepartures} = usePreferenceItems();
 
   const isWalkSection = leg.mode === 'foot';
   const legColor = useTransportationColor(leg.mode, leg.line?.transportSubmode);
@@ -221,9 +223,25 @@ const TripSection: React.FC<TripSectionProps> = ({
     if (!location) {
       return;
     }
-    navigation.navigate('QuayDepartures', {
-      location,
-    });
+    if (newDepartures) {
+      navigation.push('PlaceScreen', {
+        place: {
+          id: location.id,
+          name: location.name,
+        },
+        selectedQuay:
+          quay?.id && quay.name
+            ? {
+                id: quay.id,
+                name: quay.name,
+              }
+            : undefined,
+      });
+    } else {
+      navigation.push('QuayDepartures', {
+        location,
+      });
+    }
   }
 };
 const IntermediateInfo = (leg: Leg) => {
