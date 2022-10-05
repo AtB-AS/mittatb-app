@@ -24,6 +24,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
+import {useNewFrontpage} from '@atb/screens/Dashboard/use-new-frontpage';
 import {TabNavigatorParams} from './types';
 import NearbyScreen from '@atb/screens/Nearby';
 import ProfileScreen from '@atb/screens/Profile';
@@ -34,8 +35,10 @@ const Tab = createBottomTabNavigator<TabNavigatorParams>();
 const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const {startScreen, newDepartures, newFrontPage} = usePreferenceItems();
+  const {startScreen, newDepartures} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
+  const shouldUseNewFrontPage = useNewFrontpage();
+
   const showMapPage = useMapPage();
   useGoToMobileTokenOnboardingWhenNecessary();
 
@@ -56,7 +59,7 @@ const NavigationRoot = () => {
     >
       <Tab.Screen
         name="Assistant"
-        component={newFrontPage ? Dashboard : Assistant}
+        component={shouldUseNewFrontPage ? Dashboard : Assistant}
         options={tabSettings(
           t(dictionary.navigation.assistant),
           t(dictionary.navigation.assistant_a11y),

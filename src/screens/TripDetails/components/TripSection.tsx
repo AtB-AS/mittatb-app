@@ -241,7 +241,10 @@ const IntermediateInfo = (leg: Leg) => {
         fromQuayId: leg.fromPlace.quay?.id,
         toQuayId: leg.toPlace.quay?.id,
       };
-      navigation.navigate('DepartureDetails', {items: [departureData]});
+      navigation.push('DepartureDetails', {
+        items: [departureData],
+        activeItemIndex: 0,
+      });
     }
     return null;
   };

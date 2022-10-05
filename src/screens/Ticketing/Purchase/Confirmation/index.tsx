@@ -152,6 +152,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
 
   const vatAmountString = formatDecimalNumber(vatAmount, language);
   const vatPercentString = formatDecimalNumber(vatPercent, language);
+  const totalPriceString = formatDecimalNumber(totalPrice, language, 2);
 
   const travelDateText = travelDate
     ? t(
@@ -282,7 +283,12 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                       {u.count} {getReferenceDataName(u, language)}
                     </ThemeText>
                     <ThemeText>
-                      {u.count * (u.offer.prices[0].amount_float || 0)} kr
+                      {formatDecimalNumber(
+                        u.count * (u.offer.prices[0].amount_float || 0),
+                        language,
+                        2,
+                      )}{' '}
+                      kr
                     </ThemeText>
                   </View>
                 ))}
@@ -338,7 +344,9 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           </View>
 
           {!isSearchingOffer ? (
-            <ThemeText type="body__primary--jumbo">{totalPrice} kr</ThemeText>
+            <ThemeText type="body__primary--jumbo">
+              {totalPriceString} kr
+            </ThemeText>
           ) : (
             <ActivityIndicator
               size={theme.spacings.medium}
