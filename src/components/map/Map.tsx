@@ -9,12 +9,18 @@ import {
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {Feature} from 'geojson';
-import React, {useMemo, useRef} from 'react';
+import {Feature, GeoJsonProperties, Point} from 'geojson';
+import React, {useMemo, useRef, forwardRef} from 'react';
 import {View} from 'react-native';
 
 import LocationBar from '@atb/components/map/LocationBar';
-import useSelectedFeatureChangeEffect from './use-selected-feature-change-effect';
+import useSelectedFeatureChangeEffect, {
+  findClickedStopPlace,
+} from './use-selected-feature-change-effect';
+import {
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
 import MapRoute from '@atb/screens/TripDetails/Map/MapRoute';
 import {
   flyToLocation,
@@ -26,6 +32,8 @@ import {GeoLocation, Location, SearchLocation} from '@atb/favorites/types';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
 import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
+import {ScreenHeaderWithoutNavigation} from '../screen-header';
+import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -50,6 +58,8 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
+  const {open: openBottomSheet} = useBottomSheet();
+  const closeRef = useRef(null);
 
   const startingCoordinates = useMemo(
     () =>
@@ -81,9 +91,27 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
           style={{
             flex: 1,
           }}
-          onPress={(feature: Feature) => {
+          onPress={async (feature: Feature) => {
             if (isFeaturePoint(feature)) {
               onMapClick(feature);
+
+              const stopPlaceFeature = await findClickedStopPlace(
+                feature,
+                mapViewRef,
+              );
+
+              if (stopPlaceFeature) {
+                openBottomSheet(
+                  (close, focusRef) => (
+                    <DeparturesDialogSheet
+                      stopPlace={stopPlaceFeature}
+                      close={close}
+                      ref={focusRef}
+                    />
+                  ),
+                  closeRef,
+                );
+              }
             }
           }}
           {...MapViewConfig}
@@ -137,5 +165,31 @@ const useMapStyles = StyleSheet.createThemeHook(() => ({
   container: {flex: 1},
   pin: {...shadows},
 }));
+
+type DeparturesDialogSheetProps = {
+  close: () => void;
+  stopPlace: Feature<Point, GeoJsonProperties>;
+};
+
+const DeparturesDialogSheet = forwardRef<View, DeparturesDialogSheetProps>(
+  ({close, stopPlace}, focusRef) => {
+    const {t} = useTranslation();
+
+    return (
+      <BottomSheetContainer>
+        <ScreenHeaderWithoutNavigation
+          title={stopPlace.properties?.name}
+          color="background_1"
+          leftButton={{
+            type: 'close',
+            onPress: close,
+            text: t(ScreenHeaderTexts.headerButton.cancel.text),
+          }}
+        />
+        <View ref={focusRef} accessible={true}></View>
+      </BottomSheetContainer>
+    );
+  },
+);
 
 export default Map;

@@ -102,7 +102,7 @@ const getCoordinatesFromFeatureOrCoordinates = (foc: FeatureOrCoordinates) =>
 
 export default useSelectedFeatureChangeEffect;
 
-const findClickedStopPlace = async (
+export const findClickedStopPlace = async (
   selectedFeature: Feature<Point>,
   mapViewRef: RefObject<MapboxGL.MapView>,
 ) => {
