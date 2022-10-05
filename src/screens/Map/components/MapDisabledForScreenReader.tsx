@@ -1,19 +1,21 @@
 import ThemeText from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {Map as MapImage} from '@atb/assets/svg/color/images';
+import {ThemedMapImage} from '@atb/theme/ThemedAssets';
 import {MapTexts, useTranslation} from '@atb/translations';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export function MapDisabledForScreenReader() {
   const styles = useStyles();
   const {t} = useTranslation();
   return (
     <SafeAreaView style={styles.container}>
-      <MapImage style={styles.illustration} />
+      <ThemedMapImage />
       <ThemeText type="body__primary--bold" style={styles.header}>
         {t(MapTexts.disabledForScreenReader.title)}
       </ThemeText>
-      <ThemeText>{t(MapTexts.disabledForScreenReader.description)}</ThemeText>
+      <ThemeText style={styles.description}>
+        {t(MapTexts.disabledForScreenReader.description)}
+      </ThemeText>
     </SafeAreaView>
   );
 }
@@ -26,9 +28,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
   },
   header: {
-    marginBottom: theme.spacings.medium,
+    marginVertical: theme.spacings.medium,
+    textAlign: 'center',
   },
-  illustration: {
-    marginBottom: theme.spacings.medium,
+  description: {
+    textAlign: 'center',
   },
 }));
