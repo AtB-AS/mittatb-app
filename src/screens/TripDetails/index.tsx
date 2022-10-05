@@ -1,52 +1,20 @@
+import PlaceScreen from '@atb/screens/Departures/PlaceScreen';
+import QuayDepartures from '@atb/screens/TripDetails/QuayDepartures';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
-import Details, {DetailsRouteParams, DetailScreenRouteProp} from './Details';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-  TransitionPresets,
-} from '@react-navigation/stack';
-import DepartureDetails, {
-  DepartureDetailsRouteParams,
-} from './DepartureDetails';
-import {CompositeNavigationProp} from '@react-navigation/native';
-import {MapDetailRouteParams, TravelDetailsMap} from './Map';
-import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
-import QuayDepartures, {
-  QuayDeparturesRouteParams,
-} from '@atb/screens/TripDetails/QuayDepartures';
-import PlaceScreen, {
-  PlaceScreenParams,
-} from '@atb/screens/Departures/PlaceScreen';
-
-export type DetailsStackParams = {
-  Details: DetailsRouteParams;
-  DepartureDetails: DepartureDetailsRouteParams;
-  DetailsMap: MapDetailRouteParams;
-  QuayDepartures: QuayDeparturesRouteParams;
-  PlaceScreen: PlaceScreenParams;
-};
-
-export type DetailsModalNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<DetailsStackParams>,
-  StackNavigationProp<TabNavigatorParams>
->;
-
-export type RouteParams = DetailsRouteParams;
+import DepartureDetails from './DepartureDetails';
+import Details from './Details';
+import {TravelDetailsMap} from './Map';
+import {DetailsStackParams, TripDetailsRootProps} from './types';
 
 const Stack = createStackNavigator<DetailsStackParams>();
 
-type TripDetailsRootProps = {
-  route: DetailScreenRouteProp;
-};
+// @Todo, Should this really use PlaceScreen directly from Departures?
 
-export const TripDetailsRoot = ({route}: TripDetailsRootProps) => {
+function TripDetailsRoot({}: TripDetailsRootProps) {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen
-        name="Details"
-        component={Details}
-        initialParams={route.params}
-      />
+      <Stack.Screen name="Details" component={Details} />
       <Stack.Screen
         name="DetailsMap"
         component={TravelDetailsMap}
@@ -59,6 +27,6 @@ export const TripDetailsRoot = ({route}: TripDetailsRootProps) => {
       <Stack.Screen name="PlaceScreen" component={PlaceScreen} />
     </Stack.Navigator>
   );
-};
+}
 
 export default TripDetailsRoot;

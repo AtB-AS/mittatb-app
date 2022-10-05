@@ -4,13 +4,15 @@ import {
   Profile,
   Ticketing,
 } from '@atb/assets/svg/mono-icons/tab-bar';
+import {MapPin} from '../assets/svg/mono-icons/map';
 import ThemeText from '@atb/components/text';
-import {Location} from '@atb/favorites/types';
+import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {usePreferenceItems} from '@atb/preferences';
 import Assistant from '@atb/screens/Assistant';
 import Dashboard from '@atb/screens/Dashboard';
-import NearbyScreen, {NearbyStackParams} from '@atb/screens/Nearby';
-import ProfileScreen, {ProfileStackParams} from '@atb/screens/Profile';
+import DeparturesScreen from '@atb/screens/Departures';
+import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/screens/MobileTokenOnboarding/utils';
+import MapStack from '@atb/screens/Map';
 import TicketingScreen from '@atb/screens/Ticketing';
 import {useTheme} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations/';
@@ -20,28 +22,14 @@ import {
 } from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {NavigatorScreenParams, ParamListBase} from '@react-navigation/native';
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import DeparturesScreen from '@atb/screens/Departures';
-import {TicketTabsNavigatorParams} from '@atb/screens/Ticketing/Tickets';
-import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/screens/MobileTokenOnboarding/utils';
 import {useNewFrontpage} from '@atb/screens/Dashboard/use-new-frontpage';
+import {TabNavigatorParams} from './types';
+import NearbyScreen from '@atb/screens/Nearby';
+import ProfileScreen from '@atb/screens/Profile';
+import {useMapPage} from '@atb/components/map/use-map-page';
 
-type SubNavigator<T extends ParamListBase> = {
-  [K in keyof T]: {screen: K; initial?: boolean; params?: T[K]};
-}[keyof T];
-
-export type TabNavigatorParams = {
-  Assistant: {
-    fromLocation: Location;
-    toLocation: Location;
-  };
-  Nearest: NavigatorScreenParams<NearbyStackParams>;
-  Ticketing: NavigatorScreenParams<TicketTabsNavigatorParams>;
-  Profile: SubNavigator<ProfileStackParams>;
-};
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
 const NavigationRoot = () => {
@@ -51,15 +39,18 @@ const NavigationRoot = () => {
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
   const shouldUseNewFrontPage = useNewFrontpage();
 
+  const showMapPage = useMapPage();
   useGoToMobileTokenOnboardingWhenNecessary();
 
   return (
     <Tab.Navigator
-      tabBarOptions={{
-        labelPosition: 'below-icon',
-        activeTintColor: theme.interactive.interactive_2.outline.background,
-        inactiveTintColor: theme.text.colors.secondary,
-        style: {
+      screenOptions={{
+        headerShown: false,
+        tabBarLabelPosition: 'below-icon',
+        tabBarActiveTintColor:
+          theme.interactive.interactive_2.outline.background,
+        tabBarInactiveTintColor: theme.text.colors.secondary,
+        tabBarStyle: {
           backgroundColor: theme.interactive.interactive_2.default.background,
           ...useBottomNavigationStyles(),
         },
@@ -77,6 +68,19 @@ const NavigationRoot = () => {
           'assistantTab',
         )}
       />
+      {showMapPage && (
+        <Tab.Screen
+          name="MapScreen"
+          component={MapStack}
+          options={tabSettings(
+            t(dictionary.navigation.map),
+            t(dictionary.navigation.map),
+            MapPin,
+            lineHeight,
+            'mapPage',
+          )}
+        />
+      )}
       <Tab.Screen
         name="Nearest"
         component={newDepartures ? DeparturesScreen : NearbyScreen}

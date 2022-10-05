@@ -1,30 +1,22 @@
 import {StyleSheet} from '@atb/theme';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {
+  createMaterialTopTabNavigator,
+  MaterialTopTabBarProps,
+} from '@react-navigation/material-top-tabs';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-import {StaticColorByType} from '@atb/theme/colors';
+import {PageIndicator} from '@atb/components/page-indicator';
+import MobileToken from '@atb/screens/MobileTokenOnboarding/components/MobileToken';
 import {
   FlexibilityInfoScreen,
   OptionsInfoScreen,
   TicketSafetyInfoScreen,
 } from '@atb/screens/MobileTokenOnboarding/OnboardingInfo';
-import MobileToken from '@atb/screens/MobileTokenOnboarding/components/MobileToken';
-import {PageIndicator} from '@atb/components/page-indicator';
+import {StaticColorByType} from '@atb/theme/colors';
+import {MobileTokenTabParams} from './types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
-
-export type MobileTokenTabParams = {
-  FlexibilityInfoScreen: undefined;
-  OptionsInfoScreen: undefined;
-  TicketSafetyInfoScreen: undefined;
-  MobileToken: undefined;
-  Assistant: undefined;
-  Nearest: undefined;
-  Ticketing: undefined;
-  Profile: undefined;
-  SelectTravelToken: undefined;
-};
 
 const Tab = createMaterialTopTabNavigator<MobileTokenTabParams>();
 
@@ -33,7 +25,7 @@ export default function Index() {
   return (
     <SafeAreaView style={styles.container}>
       <Tab.Navigator
-        tabBar={(props) => {
+        tabBar={(props: MaterialTopTabBarProps) => {
           return <PageIndicator {...props} />;
         }}
         tabBarPosition="bottom"

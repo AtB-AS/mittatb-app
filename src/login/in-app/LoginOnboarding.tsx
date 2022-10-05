@@ -1,25 +1,17 @@
-import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
 
 import LoginOnboarding from '@atb/login/LoginOnboarding';
-import {RouteProp} from '@react-navigation/native';
-import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
 import {AfterLoginParams} from '@atb/login/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {LoginInAppScreenProps} from '../types';
 
 export type LoginOnboardingInAppRouteParams = {
-  afterLogin: AfterLoginParams;
+  afterLogin:
+    | AfterLoginParams<'TabNavigator'>
+    | AfterLoginParams<'TicketPurchase'>;
 };
 
-type LoginOnboardingInAppRouteProps = RouteProp<
-  LoginInAppStackParams,
-  'PhoneInputInApp'
->;
-
-export type LoginOnboardingProps = {
-  navigation: StackNavigationProp<LoginInAppStackParams>;
-  route: LoginOnboardingInAppRouteProps;
-};
+type LoginOnboardingProps = LoginInAppScreenProps<'LoginOnboardingInApp'>;
 
 export const LoginOnboardingInApp = ({
   navigation,

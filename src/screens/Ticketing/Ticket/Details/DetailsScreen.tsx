@@ -1,32 +1,23 @@
+import MessageBox from '@atb/components/message-box';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {findReferenceDataById} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
 import {isPreactivatedTicket, useTicketState} from '@atb/tickets';
 import {TicketTexts, useTranslation} from '@atb/translations';
 import useInterval from '@atb/utils/use-interval';
-import {RouteProp} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {TicketModalNavigationProp, TicketModalStackParams} from '.';
-import DetailsContent from './DetailsContent';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import MessageBox from '@atb/components/message-box';
 import {getValidityStatus} from '../utils';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {findReferenceDataById} from '@atb/reference-data/utils';
+import DetailsContent from './DetailsContent';
+import {TicketModalScreenProps} from './types';
 import {getTrainTicketNoticeText} from '../../utils';
 
 export type TicketDetailsRouteParams = {
   orderId: string;
 };
 
-export type TicketDetailsScreenRouteProp = RouteProp<
-  TicketModalStackParams,
-  'TicketDetails'
->;
-
-type Props = {
-  route: TicketDetailsScreenRouteProp;
-  navigation: TicketModalNavigationProp;
-};
+type Props = TicketModalScreenProps<'TicketDetails'>;
 
 function isOfFareProductRef(a: any): a is {fareProductRef: string} {
   return 'fareProductRef' in a;

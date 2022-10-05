@@ -10,13 +10,8 @@ import {View} from 'react-native';
 import TicketsScrollView from '../TicketsScrollView';
 
 export const ActiveTickets = () => {
-  const {
-    reservations,
-    fareContracts,
-    isRefreshingTickets,
-    refreshTickets,
-    didPaymentFail,
-  } = useTicketState();
+  const {reservations, fareContracts, isRefreshingTickets, refreshTickets} =
+    useTicketState();
   const activeFareContracts =
     filterAndSortActiveOrCanBeUsedFareContracts(fareContracts);
 
@@ -36,11 +31,10 @@ export const ActiveTickets = () => {
         refreshTickets={refreshTickets}
         noTicketsLabel={t(
           hasAnyFareContractsOnAccount
-            ? TicketsTexts.activeTicketsTab.noTicketsExpiredHelpText
+            ? TicketsTexts.activeTicketsTab.noTicketsHistoryHelpText
             : TicketsTexts.activeTicketsTab.noTickets,
         )}
         now={now}
-        didPaymentFail={didPaymentFail}
         showTokenInfo={true}
       />
     </View>

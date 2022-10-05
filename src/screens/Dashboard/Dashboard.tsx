@@ -1,64 +1,42 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {DashboardBackground} from '@atb/assets/svg/color/images';
+import {Swap} from '@atb/assets/svg/mono-icons/actions';
+import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
+import {screenReaderPause} from '@atb/components/accessible-text';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {RootStackParamList} from '@atb/navigation';
+import {LocationInput, Section} from '@atb/components/sections';
+import ThemeIcon from '@atb/components/theme-icon';
+import FavoriteChips from '@atb/favorite-chips';
+import {useFavorites} from '@atb/favorites';
+import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import GlobalMessageBox from '@atb/global-messages/GlobalMessage';
+import {useLocationSearchValue} from '@atb/location-search';
+import {SelectableLocationData} from '@atb/location-search/types';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {SearchForLocations} from '@atb/screens/Dashboard/TripSearch';
+import {useDoOnceWhen} from '@atb/screens/utils';
+import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 import {StyleSheet, useTheme} from '@atb/theme';
+import {StaticColorByType} from '@atb/theme/colors';
 import {
   DashboardTexts,
   dictionary,
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
-import {
-  CompositeNavigationProp,
-  RouteProp,
-  useNavigation,
-} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import Bugsnag from '@bugsnag/react-native';
+import {useNavigation} from '@react-navigation/native';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 import CompactTickets from './CompactTickets';
-import {LocationInput, Section} from '@atb/components/sections';
-import {screenReaderPause} from '@atb/components/accessible-text';
-import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
-import {Swap} from '@atb/assets/svg/mono-icons/actions';
-import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import ThemeIcon from '@atb/components/theme-icon';
-import FavoriteChips from '@atb/favorite-chips';
-import {useFavorites} from '@atb/favorites';
-import {useLocationSearchValue} from '@atb/location-search';
-import {useGeolocationState} from '@atb/GeolocationContext';
-import {DashboardParams} from '@atb/screens/Dashboard';
-import {SelectableLocationData} from '@atb/location-search/types';
-import Bugsnag from '@bugsnag/react-native';
-import {StaticColorByType} from '@atb/theme/colors';
-import {useDoOnceWhen} from '@atb/screens/utils';
-import {SearchForLocations} from '@atb/screens/Dashboard/TripSearch';
-import {DashboardBackground} from '@atb/assets/svg/color/images';
-import {BuyTicketsScreenName} from '../Ticketing/Tickets';
-import {TabNavigatorParams} from '@atb/navigation/TabNavigator';
 import FavouritesWidget from './DeparturesWidget';
-import GlobalMessageBox from '@atb/global-messages/GlobalMessage';
+import {DashboardScreenProps} from './types';
 
 type DashboardRouteName = 'DashboardRoot';
 const DashboardRouteNameStatic: DashboardRouteName = 'DashboardRoot';
 
-type DashboardScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<DashboardParams>,
-  StackNavigationProp<RootStackParamList>
->;
-
-type NavigationProp = CompositeNavigationProp<
-  DashboardScreenNavigationProp,
-  StackNavigationProp<TabNavigatorParams>
->;
-
-type DashboardRouteProp = RouteProp<DashboardParams, DashboardRouteName>;
-
-type RootProps = {
-  navigation: NavigationProp;
-  route: DashboardRouteProp;
-};
+type RootProps = DashboardScreenProps<'DashboardRoot'>;
 
 const themeBackgroundColor: StaticColorByType<'background'> =
   'background_accent_0';
@@ -67,6 +45,7 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
   const style = useStyle();
   const {theme} = useTheme();
   const {t} = useTranslation();
+  const {enable_ticketing} = useRemoteConfig();
   const {leftButton: serviceDisruptionButton} = useServiceDisruptionSheet();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
 
@@ -122,7 +101,7 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
   );
 
   const openLocationSearch = (
-    callerRouteParam: keyof DashboardRouteProp['params'],
+    callerRouteParam: keyof RootProps['route']['params'],
     initialLocation: Location | undefined,
   ) =>
     navigation.navigate('LocationSearch', {
@@ -264,31 +243,33 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
             }
           />
         </View>
-        <CompactTickets
-          onPressDetails={(
-            isCarnet: boolean,
-            isInspectable: boolean,
-            orderId: string,
-          ) => {
-            if (isCarnet) {
-              return navigation.navigate('TicketModal', {
-                screen: 'CarnetDetailsScreen',
-                params: {
-                  orderId,
-                  isInspectable,
-                },
-              });
-            }
+        {enable_ticketing && (
+          <CompactTickets
+            onPressDetails={(
+              isCarnet: boolean,
+              isInspectable: boolean,
+              orderId: string,
+            ) => {
+              if (isCarnet) {
+                return navigation.navigate('TicketModal', {
+                  screen: 'CarnetDetailsScreen',
+                  params: {
+                    orderId,
+                    isInspectable,
+                  },
+                });
+              }
 
-            return navigation.navigate('TicketModal', {
-              screen: 'TicketDetails',
-              params: {orderId},
-            });
-          }}
-          onPressBuyTickets={() =>
-            navigation.navigate('Ticketing', {screen: BuyTicketsScreenName})
-          }
-        />
+              return navigation.navigate('TicketModal', {
+                screen: 'TicketDetails',
+                params: {orderId},
+              });
+            }}
+            onPressBuyTickets={() =>
+              navigation.navigate('Ticketing', {screen: 'BuyTickets'})
+            }
+          />
+        )}
         <FavouritesWidget />
       </ScrollView>
     </View>
@@ -309,9 +290,9 @@ function useLocations(
   );
 
   const searchedFromLocation =
-    useLocationSearchValue<DashboardRouteProp>('fromLocation');
+    useLocationSearchValue<RootProps['route']>('fromLocation');
   const searchedToLocation =
-    useLocationSearchValue<DashboardRouteProp>('toLocation');
+    useLocationSearchValue<RootProps['route']>('toLocation');
 
   return useUpdatedLocation(
     searchedFromLocation,
@@ -329,7 +310,7 @@ function useUpdatedLocation(
 ): SearchForLocations {
   const [from, setFrom] = useState<Location | undefined>();
   const [to, setTo] = useState<Location | undefined>();
-  const navigation = useNavigation<DashboardScreenNavigationProp>();
+  const navigation = useNavigation<RootProps['navigation']>();
 
   const setLocation = useCallback(
     (direction: 'from' | 'to', searchedLocation?: SelectableLocationData) => {

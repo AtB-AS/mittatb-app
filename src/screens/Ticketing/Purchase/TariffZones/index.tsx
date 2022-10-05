@@ -1,3 +1,4 @@
+import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {Location} from '@atb/assets/svg/mono-icons/places';
 import Button from '@atb/components/button';
@@ -11,10 +12,11 @@ import {
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {ButtonInput, Section} from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {DismissableStackNavigationProp} from '@atb/navigation/createDismissableStackNavigator';
 import {TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
+import TariffZoneResults from '@atb/screens/Ticketing/Purchase/TariffZones/search/TariffZoneResults';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   Language,
@@ -26,17 +28,14 @@ import MapboxGL, {
   OnPressEvent,
   RegionPayload,
 } from '@react-native-mapbox-gl/maps';
-import {RouteProp} from '@react-navigation/native';
 import turfCentroid from '@turf/centroid';
 import {FeatureCollection, Polygon} from 'geojson';
+import hexToRgba from 'hex-to-rgba';
 import React, {useEffect, useRef, useState} from 'react';
 import {PixelRatio, Platform, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {TicketingStackParams} from '../';
-import TariffZoneResults from '@atb/screens/Ticketing/Purchase/TariffZones/search/TariffZoneResults';
-import {useAccessibilityContext} from '@atb/AccessibilityContext';
-import hexToRgba from 'hex-to-rgba';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {TicketPurchaseScreenProps} from '../types';
+import {flyToLocation, zoomIn, zoomOut} from '@atb/components/map/utils';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -47,21 +46,10 @@ export type RouteParams = {
   isApplicableOnSingleZoneOnly?: boolean;
 };
 
-type RouteProps = RouteProp<TicketingStackParams, TariffZonesRouteName>;
-type NavigationProps = DismissableStackNavigationProp<
-  TicketingStackParams,
-  TariffZonesRouteName
->;
-
 export type TariffZoneResultType = 'venue' | 'geolocation' | 'zone';
 export type TariffZoneWithMetadata = TariffZone & {
   resultType: TariffZoneResultType;
   venueName?: string;
-};
-
-export type TariffZonesProps = {
-  navigation: NavigationProps;
-  route: RouteProps;
 };
 
 type RegionEvent = {
@@ -75,13 +63,10 @@ type TariffZoneSelection = {
   selectNext: 'from' | 'to';
 };
 
+type TariffZonesProps = TicketPurchaseScreenProps<'TariffZones'>;
+
 const TariffZonesRoot: React.FC<TariffZonesProps> = ({navigation, route}) => {
   return <TariffZones navigation={navigation} route={route} />;
-};
-
-type Props = {
-  navigation: NavigationProps;
-  route: RouteProps;
 };
 
 export const tariffZonesSummary = (
@@ -225,7 +210,10 @@ const destinationPickerValue = (
   }
 };
 
-const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
+const TariffZones: React.FC<TariffZonesProps> = ({
+  navigation,
+  route: {params},
+}) => {
   const {fromTariffZone, toTariffZone, isApplicableOnSingleZoneOnly} = params;
   const [regionEvent, setRegionEvent] = useState<RegionEvent>();
   const {tariffZones} = useFirestoreConfiguration();
@@ -280,53 +268,44 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
     : [FOCUS_ORIGIN.longitude, FOCUS_ORIGIN.latitude];
 
   const onSave = () => {
-    navigation.navigate('PurchaseOverview', {
-      fromTariffZone: selectedZones.from,
-      toTariffZone: isApplicableOnSingleZoneOnly
-        ? selectedZones.from
-        : selectedZones.to,
+    navigation.navigate({
+      name: 'PurchaseOverview',
+      params: {
+        fromTariffZone: selectedZones.from,
+        toTariffZone: isApplicableOnSingleZoneOnly
+          ? selectedZones.from
+          : selectedZones.to,
+      },
+      merge: true,
     });
   };
 
   const onVenueSearchClick = (callerRouteParam: keyof RouteParams) => {
-    navigation.navigate('TariffZoneSearch', {
-      label:
-        callerRouteParam === 'fromTariffZone'
-          ? t(TariffZonesTexts.location.departurePicker.label)
-          : t(TariffZonesTexts.location.destinationPicker.label),
-      callerRouteName: TariffZonesRouteNameStatic,
-      callerRouteParam,
+    navigation.navigate({
+      name: 'TariffZoneSearch',
+      params: {
+        label:
+          callerRouteParam === 'fromTariffZone'
+            ? t(TariffZonesTexts.location.departurePicker.label)
+            : t(TariffZonesTexts.location.destinationPicker.label),
+        callerRouteName: TariffZonesRouteNameStatic,
+        callerRouteParam,
+      },
+      merge: true,
     });
   };
 
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
 
-  async function zoomIn() {
-    const currentZoom = await mapViewRef.current?.getZoom();
-    mapCameraRef.current?.zoomTo((currentZoom ?? 10) + 1, 200);
-  }
-
-  async function zoomOut() {
-    const currentZoom = await mapViewRef.current?.getZoom();
-    mapCameraRef.current?.zoomTo((currentZoom ?? 10) - 1, 200);
-  }
-
   const selectFeature = (event: OnPressEvent) => {
     const feature = event.features[0];
-    mapCameraRef.current?.flyTo(
-      [event.coordinates.longitude, event.coordinates.latitude],
-      300,
-    );
+    flyToLocation(event.coordinates, 300, mapCameraRef);
     updateSelectedZones(feature.id as string);
   };
 
   async function flyToCurrentLocation() {
-    geolocation &&
-      mapCameraRef.current?.flyTo(
-        [geolocation.coordinates.longitude, geolocation.coordinates.latitude],
-        750,
-      );
+    flyToLocation(geolocation?.coordinates, 750, mapCameraRef);
 
     if (mapViewRef.current && geolocation) {
       let point = await mapViewRef.current.getPointInView([
@@ -519,8 +498,11 @@ const TariffZones: React.FC<Props> = ({navigation, route: {params}}) => {
           <View style={[styles.bottomControls, {bottom: safeAreaBottom}]}>
             <View>
               <View style={styles.mapControls}>
-                <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
-                <MapControls zoomIn={zoomIn} zoomOut={zoomOut} />
+                <PositionArrow onPress={flyToCurrentLocation} />
+                <MapControls
+                  zoomIn={() => zoomIn(mapViewRef, mapCameraRef)}
+                  zoomOut={() => zoomOut(mapViewRef, mapCameraRef)}
+                />
               </View>
             </View>
             <View style={styles.saveButton}>

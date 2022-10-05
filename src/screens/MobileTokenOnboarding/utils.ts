@@ -4,6 +4,7 @@ import {useAppState} from '@atb/AppContext';
 import {shouldOnboardMobileToken} from '@atb/api/utils';
 import {useNavigation} from '@react-navigation/native';
 import {useEffect} from 'react';
+import {RootNavigationProps} from '@atb/navigation/types';
 
 export const useGoToMobileTokenOnboardingWhenNecessary = () => {
   const hasEnabledMobileToken = useHasEnabledMobileToken();
@@ -14,7 +15,7 @@ export const useGoToMobileTokenOnboardingWhenNecessary = () => {
     authenticationType,
     mobileTokenOnboarded,
   );
-  const navigation = useNavigation();
+  const navigation = useNavigation<RootNavigationProps>();
 
   useEffect(() => {
     if (shouldOnboard) {

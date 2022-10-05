@@ -44,8 +44,12 @@ export interface ErrorMetadata {
 }
 
 export const getAxiosErrorMetadata = (error: AxiosError): ErrorMetadata => ({
-  requestId: error?.config?.headers?.[RequestIdHeaderName],
-  firebaseAuthId: error?.config?.headers?.[FirebaseAuthIdHeaderName],
+  requestId: error?.config?.headers?.[RequestIdHeaderName] as
+    | string
+    | undefined,
+  firebaseAuthId: error?.config?.headers?.[FirebaseAuthIdHeaderName] as
+    | string
+    | undefined,
   requestCode: error?.code,
   requestBaseUrl: error?.config?.baseURL,
   requestUrl: error?.config?.url,

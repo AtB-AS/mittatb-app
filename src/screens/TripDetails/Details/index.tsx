@@ -1,21 +1,20 @@
+import {singleTripSearch} from '@atb/api/trips_v2';
+import {TripPattern} from '@atb/api/types/trips';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
-import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
 import Header from '@atb/components/screen-header';
+import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
 import {StyleSheet, useTheme} from '@atb/theme';
+import {StaticColorByType} from '@atb/theme/colors';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import usePollableResource from '@atb/utils/use-pollable-resource';
-import {RouteProp, useIsFocused} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import Axios, {AxiosError} from 'axios';
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {DetailsStackParams} from '..';
 import Trip from '../components/Trip';
 import CompactMap from '../Map/CompactMap';
-import {StaticColorByType} from '@atb/theme/colors';
-import {singleTripSearch} from '@atb/api/trips_v2';
-import {TripPattern} from '@atb/api/types/trips';
-import {StackNavigationProp} from '@react-navigation/stack';
+import {TripDetailsScreenProps} from '../types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -24,15 +23,7 @@ export type DetailsRouteParams = {
   startIndex?: number;
 };
 
-export type DetailScreenRouteProp = RouteProp<DetailsStackParams, 'Details'>;
-
-export type DetailScreenNavigationProp =
-  StackNavigationProp<DetailsStackParams>;
-
-type Props = {
-  route: DetailScreenRouteProp;
-  navigation: DetailScreenNavigationProp;
-};
+type Props = TripDetailsScreenProps<'Details'>;
 const Details: React.FC<Props> = (props) => {
   const {
     params: {tripPatterns: initialTripPatterns, startIndex},

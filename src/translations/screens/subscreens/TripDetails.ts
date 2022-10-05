@@ -133,6 +133,11 @@ const TripDetailsTexts = {
       'Vi kunne ikke oppdatere reiseforslaget ditt. Det kan hende reisen har endra seg eller er utdatert?',
       'We could not update your trip plan. Perhaps your trip has changed or timed out?',
     ),
+    tripIncludesRailReplacementBus: _(
+      'Reisen inkluderer buss for tog.',
+      'This trip includes rail replacement bus.',
+    ),
+    departureIsRailReplacementBus: _('Buss for tog', 'Rail replacement bus'),
     interchange: (
       fromPublicCode: string,
       toPublicCode: string,

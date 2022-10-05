@@ -31,7 +31,7 @@ export default function TravellerSelection({
 }: TravellerSelectionProps) {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {travellerSelectionMode} = getPurchaseFlow(preassignedFareProduct);
+  const {travellerSelectionMode} = getPurchaseFlow(preassignedFareProduct.type);
   const userCountState = useUserCountState(selectableUserProfiles);
   const selectableUserProfilesWithCount =
     userCountState.userProfilesWithCount.filter((a) =>

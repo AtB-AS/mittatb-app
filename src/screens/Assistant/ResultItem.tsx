@@ -43,6 +43,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {SearchTime} from './journey-date-picker';
+import WarnWhenRailReplacementBus from '@atb/components/rail-replacement-bus-message';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -112,6 +113,8 @@ const ResultItemHeader: React.FC<{
           {durationText}
         </AccessibleText>
       </View>
+
+      <WarnWhenRailReplacementBus tripPattern={tripPattern} />
 
       <SituationWarningIcon
         situations={flatMap(tripPattern.legs, (leg) => leg.situations)}

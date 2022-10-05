@@ -1,13 +1,17 @@
+import {Leg, Place, Quay} from '@atb/api/types/trips';
 import {Warning} from '@atb/assets/svg/color/situations';
 import {Interchange} from '@atb/assets/svg/mono-icons/actions';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
+import MessageBox, {TinyMessageBox} from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
-import {TinyMessageBox} from '@atb/components/message-box';
+import {searchByStopPlace} from '@atb/geocoder/search-for-location';
+import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
 import SituationMessages from '@atb/situations';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   Language,
   TranslateFunction,
@@ -15,30 +19,26 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {formatToClock, secondsToDuration} from '@atb/utils/date';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {
   getQuayName,
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
+import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {View} from 'react-native';
-import {DetailScreenNavigationProp} from '../Details';
 import {
   getLineName,
   significantWaitTime,
   significantWalkTime,
 } from '../Details/utils';
+import {TripDetailsRootNavigation} from '../types';
 import {getTimeRepresentationType, TimeValues} from '../utils';
 import Time from './Time';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
-import {DetailsModalNavigationProp} from '@atb/screens/TripDetails';
-import {searchByStopPlace} from '@atb/geocoder/search-for-location';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {Leg, Place, Quay} from '@atb/api/types/trips';
-import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -66,6 +66,7 @@ const TripSection: React.FC<TripSectionProps> = ({
 }) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
+  const {theme} = useTheme();
 
   const isWalkSection = leg.mode === 'foot';
   const legColor = useTransportationColor(leg.mode, leg.line?.transportSubmode);
@@ -76,7 +77,7 @@ const TripSection: React.FC<TripSectionProps> = ({
 
   const {startTimes, endTimes} = mapLegToTimeValues(leg);
 
-  const navigation = useNavigation<DetailsModalNavigationProp>();
+  const navigation = useNavigation<TripDetailsRootNavigation<'Details'>>();
 
   const sectionOutput = (
     <>
@@ -140,6 +141,17 @@ const TripSection: React.FC<TripSectionProps> = ({
         {!!leg.situations.length && (
           <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
             <SituationMessages mode="no-icon" situations={leg.situations} />
+          </TripRow>
+        )}
+        {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
+          <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
+            <MessageBox
+              type="warning"
+              icon={null}
+              message={t(
+                TripDetailsTexts.messages.departureIsRailReplacementBus,
+              )}
+            />
           </TripRow>
         )}
 
@@ -216,7 +228,7 @@ const TripSection: React.FC<TripSectionProps> = ({
 };
 const IntermediateInfo = (leg: Leg) => {
   const {t, language} = useTranslation();
-  const navigation = useNavigation<DetailScreenNavigationProp>();
+  const navigation = useNavigation<TripDetailsRootNavigation<'Details'>>();
 
   const numberOfIntermediateCalls = leg.intermediateEstimatedCalls.length;
 

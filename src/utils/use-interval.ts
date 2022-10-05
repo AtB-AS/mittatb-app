@@ -5,6 +5,7 @@ export default function useInterval(
   delay: number,
   deps: React.DependencyList = [],
   disabled: boolean = false,
+  triggerImmediately: boolean = false,
 ) {
   const savedCallback = useRef<Function>(() => {});
 
@@ -17,6 +18,9 @@ export default function useInterval(
   useEffect(() => {
     function tick() {
       savedCallback.current();
+    }
+    if (triggerImmediately) {
+      tick();
     }
     if (delay !== null && !disabled) {
       let id = setInterval(tick, delay);

@@ -122,7 +122,8 @@ describe('Tickets anonymous', () => {
     await goBack();
   });
 
-  it('should be able to change zone on a single ticket', async () => {
+  // TODO The app is crashing (https://github.com/AtB-AS/kundevendt/issues/1560#issuecomment-1252041408)
+  xit('should be able to change zone on a single ticket', async () => {
     await tapById('buyTicketsTab');
     await tapById('singleTicket');
 

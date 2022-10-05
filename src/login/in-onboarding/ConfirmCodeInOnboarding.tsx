@@ -1,23 +1,20 @@
-import React from 'react';
 import ConfirmCode from '@atb/login/ConfirmCode';
-import {RouteProp} from '@react-navigation/native';
-import {OnboardingStackParams} from '@atb/screens/Onboarding';
+import {OnboardingScreenProps} from '@atb/screens/Onboarding/types';
 import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
+import React from 'react';
+
+// @TODO Are these files in use??
 
 export type ConfirmCodeInOnboardingRouteParams = {
   phoneNumber: string;
 };
 
-type ConfirmCodeInOnboardingRouteProps = RouteProp<
-  OnboardingStackParams,
-  'ConfirmCodeInOnboarding'
->;
+type ConfirmCodeInOnboardingRouteProps =
+  OnboardingScreenProps<'ConfirmCodeInOnboarding'>;
 
 export const ConfirmCodeInOnboarding = ({
   route,
-}: {
-  route: ConfirmCodeInOnboardingRouteProps;
-}) => {
+}: ConfirmCodeInOnboardingRouteProps) => {
   const finishOnboarding = useFinishOnboarding();
   return (
     <ConfirmCode

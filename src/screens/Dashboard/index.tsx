@@ -1,30 +1,10 @@
-import React from 'react';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import TripSearch from '@atb/screens/Dashboard/TripSearch';
-import {TripDetailsRoot} from '@atb/screens/TripDetails';
-import {SearchTime} from '@atb/screens/Nearby/types';
-import {Location} from '@atb/favorites/types';
-import {DetailsRouteParams} from '@atb/screens/TripDetails/Details';
-import JourneyDatePicker, {
-  DateTimePickerParams,
-} from '@atb/screens/Dashboard/journey-date-picker';
 import DashboardRoot from '@atb/screens/Dashboard/Dashboard';
-
-export type DashboardParams = {
-  DashboardRoot: {
-    fromLocation: Location | undefined;
-    toLocation: Location | undefined;
-    searchTime: SearchTime | undefined;
-  };
-  TripSearch: {
-    fromLocation: Location;
-    toLocation: Location;
-    searchTime: SearchTime | undefined;
-  };
-
-  TripDetails: DetailsRouteParams;
-  DateTimePicker: DateTimePickerParams;
-};
+import JourneyDatePicker from '@atb/screens/Dashboard/journey-date-picker';
+import TripSearch from '@atb/screens/Dashboard/TripSearch';
+import TripDetailsRoot from '@atb/screens/TripDetails';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import React from 'react';
+import {DashboardParams} from './types';
 
 const Stack = createStackNavigator<DashboardParams>();
 

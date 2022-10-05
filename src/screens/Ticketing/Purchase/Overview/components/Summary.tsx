@@ -1,16 +1,16 @@
-import ThemeText from '@atb/components/text';
-import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
-import Button from '@atb/components/button';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import React from 'react';
-import {StyleSheet} from '@atb/theme';
-import {formatDecimalNumber} from '@atb/utils/numbers';
-import {useNavigation} from '@react-navigation/native';
-import {OverviewNavigationProp} from '@atb/screens/Ticketing/Purchase/Overview';
+import Button from '@atb/components/button';
+import ThemeText from '@atb/components/text';
+import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {TariffZoneWithMetadata} from '@atb/screens/Ticketing/Purchase/TariffZones';
 import {UserProfileWithCount} from '@atb/screens/Ticketing/Purchase/Travellers/use-user-count-state';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {StyleSheet} from '@atb/theme';
+import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {formatDecimalNumber} from '@atb/utils/numbers';
+import {useNavigation} from '@react-navigation/native';
+import React from 'react';
+import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
+import {OverviewNavigationProps} from '../types';
 
 type Props = {
   price: number;
@@ -24,7 +24,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-export default function ({
+export default function Summary({
   price,
   isLoading,
   isError,
@@ -37,9 +37,11 @@ export default function ({
 }: Props) {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const navigation = useNavigation<OverviewNavigationProp>();
+  const navigation = useNavigation<OverviewNavigationProps>();
 
   const formattedPrice = formatDecimalNumber(price, language, 2);
+
+  const hasSelection = userProfilesWithCount.some((u) => u.count);
 
   const toPaymentFunction = () => {
     navigation.navigate('Confirmation', {
@@ -74,7 +76,7 @@ export default function ({
       <Button
         interactiveColor="interactive_0"
         text={t(PurchaseOverviewTexts.summary.button)}
-        disabled={isLoading || isError}
+        disabled={isLoading || !hasSelection || isError}
         onPress={toPaymentFunction}
         icon={ArrowRight}
         iconPosition="right"

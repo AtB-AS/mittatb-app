@@ -60,4 +60,4 @@ runs:
         run: sh ./scripts/export-workflow-parameters.sh
       - name: Override native config files
         shell: bash
-        run: sh ./scripts/override-config-files.sh
+        run: sh ./scripts/ios/override-config-files.sh

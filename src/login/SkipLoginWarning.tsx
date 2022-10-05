@@ -1,23 +1,22 @@
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import Button from '@atb/components/button';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import ThemeText from '@atb/components/text';
+import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
 import {StyleSheet} from '@atb/theme';
+import {StaticColorByType} from '@atb/theme/colors';
 import {LoginTexts, useTranslation} from '@atb/translations';
+import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import React from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
-import Button from '@atb/components/button';
-import ThemeText from '@atb/components/text';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {OnboardingStackParams} from '@atb/screens/Onboarding';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {StaticColorByType} from '@atb/theme/colors';
+import {LoginInAppRootProps} from './types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export type SkipLoginWarningProps = {
-  navigation: StackNavigationProp<OnboardingStackParams>;
-};
+// @TODO Is this even in use?
+
+export type SkipLoginWarningProps = LoginInAppRootProps;
 
 export default function SkipLoginWarning({navigation}: SkipLoginWarningProps) {
   const {t} = useTranslation();

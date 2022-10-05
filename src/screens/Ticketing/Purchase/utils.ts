@@ -1,6 +1,12 @@
-import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import {
+  PreassignedFareProductType,
+  TariffZone,
+} from '@atb/reference-data/types';
 import {PaymentType} from '@atb/tickets/types';
+import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {format, parseISO} from 'date-fns';
+import {useMemo} from 'react';
 
 export type PurchaseFlow = {
   /**
@@ -14,21 +20,42 @@ export type PurchaseFlow = {
    * ticket.
    */
   travelDateSelectionEnabled: boolean;
+
+  /**
+   * Whether the customer should be able to select between a set of durations
+   * for the ticket, based on `fareproduct.durationDays`.
+   */
+  durationSelectionEnabled: boolean;
 };
 
 export const getPurchaseFlow = (
-  product: PreassignedFareProduct,
+  productType: PreassignedFareProductType,
 ): PurchaseFlow => {
-  if (product.type === 'period' || product.type === 'hour24') {
-    return {
-      travellerSelectionMode: 'single',
-      travelDateSelectionEnabled: true,
-    };
-  } else {
-    return {
-      travellerSelectionMode: 'multiple',
-      travelDateSelectionEnabled: false,
-    };
+  switch (productType) {
+    case 'period':
+      return {
+        travellerSelectionMode: 'single',
+        travelDateSelectionEnabled: true,
+        durationSelectionEnabled: true,
+      };
+    case 'hour24':
+      return {
+        travellerSelectionMode: 'single',
+        travelDateSelectionEnabled: true,
+        durationSelectionEnabled: false,
+      };
+    case 'single':
+      return {
+        travellerSelectionMode: 'multiple',
+        travelDateSelectionEnabled: false,
+        durationSelectionEnabled: false,
+      };
+    case 'carnet':
+      return {
+        travellerSelectionMode: 'single',
+        travelDateSelectionEnabled: false,
+        durationSelectionEnabled: false,
+      };
   }
 };
 
@@ -49,3 +76,15 @@ export function getPaymentTypeName(paymentType: PaymentType) {
       return '';
   }
 }
+
+export const useTariffZoneFromLocation = (tariffZones: TariffZone[]) => {
+  const {location} = useGeolocationState();
+  return useMemo(() => {
+    if (location) {
+      const {longitude, latitude} = location.coordinates;
+      return tariffZones.find((t) =>
+        turfBooleanPointInPolygon([longitude, latitude], t.geometry),
+      );
+    }
+  }, [tariffZones, location]);
+};

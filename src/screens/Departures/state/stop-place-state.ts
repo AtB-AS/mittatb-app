@@ -5,6 +5,7 @@ import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavorites} from '@atb/favorites';
 import {UserFavoriteDepartures} from '@atb/favorites/types';
 import {DeparturesRealtimeData} from '@atb/sdk';
+import {animateNextChange} from '@atb/utils/animation';
 import useInterval from '@atb/utils/use-interval';
 import {useIsFocused} from '@react-navigation/native';
 import {differenceInMinutes} from 'date-fns';
@@ -211,7 +212,7 @@ const reducer: ReducerWithSideEffects<
     }
 
     case 'UPDATE_DEPARTURES': {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      animateNextChange();
       return Update<DepartureDataState>({
         ...state,
         isLoading: false,
@@ -223,7 +224,7 @@ const reducer: ReducerWithSideEffects<
     }
 
     case 'UPDATE_REALTIME': {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      animateNextChange();
       return Update<DepartureDataState>({
         ...state,
         data: updateDeparturesWithRealtimeV2(state.data, action.realtimeData),

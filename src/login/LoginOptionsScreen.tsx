@@ -1,52 +1,43 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {StyleSheet} from '@atb/theme';
-import {LoginTexts, useTranslation} from '@atb/translations';
-import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
-import {useAuthState} from '@atb/auth';
-import ThemeText from '@atb/components/text';
-import {VippsSignInErrorCode} from '@atb/auth/AuthContext';
-import {RouteProp, StackActions, useNavigation} from '@react-navigation/native';
-import {StaticColorByType} from '@atb/theme/colors';
 import {
-  getOrCreateVippsUserCustomToken,
   authorizeUser,
+  getOrCreateVippsUserCustomToken,
   VIPPS_CALLBACK_URL,
 } from '@atb/api/vipps-login/api';
-import {useAppStateStatus} from '@atb/utils/use-app-state-status';
-import {parseUrl} from 'query-string';
-import storage from '@atb/storage';
-import {LoginInAppStackParams} from '@atb/login/in-app/LoginInAppStack';
-import {AfterLoginParams} from '@atb/login/types';
-import {VippsLoginButton} from '@atb/components/vipps-login-button';
-import MessageBox from '@atb/components/message-box';
-import * as Sections from '@atb/components/sections';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '@atb/navigation';
 import {useAppState} from '@atb/AppContext';
+import {useAuthState} from '@atb/auth';
+import {VippsSignInErrorCode} from '@atb/auth/AuthContext';
+import MessageBox from '@atb/components/message-box';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import * as Sections from '@atb/components/sections';
+import ThemeText from '@atb/components/text';
+import {VippsLoginButton} from '@atb/components/vipps-login-button';
+import {AfterLoginParams, LoginInAppScreenProps} from '@atb/login/types';
+import storage from '@atb/storage';
+import {StyleSheet} from '@atb/theme';
+import {StaticColorByType} from '@atb/theme/colors';
+import {LoginTexts, useTranslation} from '@atb/translations';
+import {useAppStateStatus} from '@atb/utils/use-app-state-status';
+import {StackActions} from '@react-navigation/native';
+import {parseUrl} from 'query-string';
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export type LoginOptionsRouteParams = {
-  afterLogin: AfterLoginParams;
+  afterLogin:
+    | AfterLoginParams<'TabNavigator'>
+    | AfterLoginParams<'TicketPurchase'>;
 };
 
-type LoginOptionsRouteProps = RouteProp<
-  LoginInAppStackParams,
-  'LoginOptionsScreen'
->;
-
-type LoginOptionsProps = {
-  route: LoginOptionsRouteProps;
-  navigation: StackNavigationProp<RootStackParamList>;
-};
+type LoginOptionsProps = LoginInAppScreenProps<'LoginOptionsScreen'>;
 
 export default function LoginOptionsScreen({
+  navigation,
   route: {
     params: {afterLogin},
   },
-  navigation,
 }: LoginOptionsProps) {
   const {t} = useTranslation();
   const styles = useThemeStyles();
@@ -84,9 +75,7 @@ export default function LoginOptionsScreen({
         await completeOnboarding();
       }
       navigation.dispatch(
-        StackActions.replace(afterLogin.routeName as any, {
-          ...afterLogin.routeParams,
-        }),
+        StackActions.replace(afterLogin.screen, afterLogin.params),
       );
     } else {
       setError(response.error);

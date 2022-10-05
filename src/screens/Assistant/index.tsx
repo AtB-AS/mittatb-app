@@ -1,24 +1,9 @@
-import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import {Location} from '@atb/favorites/types';
-import {DetailsRouteParams} from '../TripDetails/Details';
-import {TripDetailsRoot} from '../TripDetails';
+import React from 'react';
+import TripDetailsRoot from '../TripDetails';
 import AssistantRoot from './Assistant';
-import Dashboard from '../Dashboard/Dashboard';
-import JourneyDatePicker, {
-  DateTimePickerParams,
-  SearchTime,
-} from './journey-date-picker';
-
-export type AssistantParams = {
-  AssistantRoot: {
-    fromLocation: Location;
-    toLocation: Location;
-    searchTime: SearchTime;
-  };
-  TripDetails: DetailsRouteParams;
-  DateTimePicker: DateTimePickerParams;
-};
+import JourneyDatePicker from './journey-date-picker';
+import {AssistantParams} from './types';
 
 const Stack = createStackNavigator<AssistantParams>();
 

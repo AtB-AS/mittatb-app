@@ -1,9 +1,8 @@
+import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {JourneySearchHistoryEntry} from '@atb/search-history/types';
-import {RouteProp, useIsFocused} from '@react-navigation/native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Keyboard, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {FOCUS_ORIGIN} from '../api/geocoder';
 import {ErrorType} from '../api/utils';
 import MessageBox from '../components/message-box';
 import FullScreenHeader from '../components/screen-header/full-header';
@@ -14,7 +13,6 @@ import {useFavorites} from '../favorites';
 import {Location} from '../favorites/types';
 import {useGeocoder} from '../geocoder';
 import {useGeolocationState} from '../GeolocationContext';
-import {RootStackParamList} from '../navigation';
 import {useSearchHistory} from '../search-history';
 import {StyleSheet} from '../theme';
 import {
@@ -22,18 +20,17 @@ import {
   TranslateFunction,
   useTranslation,
 } from '../translations/';
-import {LocationSearchNavigationProp} from './';
 import JourneyHistory from './JourneyHistory';
 import LocationResults from './LocationResults';
-import {LocationSearchResult, SelectableLocationData} from './types';
+import {
+  LocationSearchResult,
+  LocationSearchScreenProps,
+  SelectableLocationData,
+} from './types';
 import useDebounce from './useDebounce';
 import {filterCurrentLocation, filterPreviousLocations} from './utils';
-import {useAccessibilityContext} from '@atb/AccessibilityContext';
 
-export type Props = {
-  navigation: LocationSearchNavigationProp;
-  route: RouteProp<RootStackParamList, 'LocationSearch'>;
-};
+export type Props = LocationSearchScreenProps<'LocationSearchMain'>;
 
 export type RouteParams = {
   callerRouteName: string;
@@ -59,29 +56,26 @@ const LocationSearch: React.FC<Props> = ({
 }) => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
-  const {location: geolocation} = useGeolocationState();
 
   const onSelect = (location: SelectableLocationData) => {
-    navigation.navigate(callerRouteName as any, {
-      [callerRouteParam]: location,
+    navigation.navigate({
+      name: callerRouteName as any,
+      params: {
+        [callerRouteParam]: location,
+      },
+      merge: true,
     });
   };
 
   const onMapSelection = () => {
-    const coordinates: {
-      latitude: number;
-      longitude: number;
-      zoomLevel: number;
-    } = initialLocation
-      ? {...initialLocation.coordinates, zoomLevel: 12}
-      : geolocation
-      ? {...geolocation.coordinates, zoomLevel: 12}
-      : {...FOCUS_ORIGIN, zoomLevel: 6};
-
-    navigation.navigate('MapSelection', {
-      callerRouteName,
-      callerRouteParam,
-      coordinates: coordinates,
+    navigation.navigate({
+      name: 'MapSelection',
+      params: {
+        callerRouteName,
+        callerRouteParam,
+        initialLocation,
+      },
+      merge: true,
     });
   };
 

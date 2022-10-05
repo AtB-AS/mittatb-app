@@ -10,7 +10,7 @@ import useReducerWithSideEffects, {
 } from 'use-reducer-with-side-effects';
 import {
   getFavouriteDepartures,
-  getRealtimeDeparture,
+  getRealtimeDepartureV2,
 } from '@atb/api/departures';
 import {
   DepartureGroupMetadata,
@@ -24,6 +24,8 @@ import {differenceInMinutes} from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '../../departure-list/utils';
 import {SearchTime} from '../Nearby/types';
+import {flatMap} from '@atb/utils/array';
+import {animateNextChange} from '@atb/utils/animation';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
@@ -118,7 +120,7 @@ const reducer: ReducerWithSideEffects<
           lastRefreshTime: new Date(),
           queryInput,
         },
-        async (state, dispatch) => {
+        async (_, dispatch) => {
           try {
             // Fresh fetch, reset paging and use new query input with new startTime
             const result = await getFavouriteDepartures(
@@ -148,12 +150,12 @@ const reducer: ReducerWithSideEffects<
       if (!state.data?.length) return NoUpdate();
 
       return SideEffect<DepartureDataState, DepartureDataActions>(
-        async (state2, dispatch) => {
+        async (_, dispatch) => {
           // Use same query input with same startTime to ensure that
           // we get the same result.
           try {
-            const realtimeData = await getRealtimeDeparture(
-              state.data ?? [],
+            const realtimeData = await getRealtimeDepartureV2(
+              flatMap(state.data ?? [], (f) => f.quays.map((q) => q.quay.id)),
               state.queryInput,
             );
             dispatch({
@@ -186,7 +188,7 @@ const reducer: ReducerWithSideEffects<
     }
 
     case 'UPDATE_DEPARTURES': {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      animateNextChange();
       return Update<DepartureDataState>({
         ...state,
         isLoading: false,
@@ -199,7 +201,7 @@ const reducer: ReducerWithSideEffects<
     }
 
     case 'UPDATE_REALTIME': {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      animateNextChange();
       return Update<DepartureDataState>({
         ...state,
         data: updateStopsWithRealtime(state.data ?? [], action.realtimeData),

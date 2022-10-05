@@ -28,7 +28,7 @@ else
     npx react-native bundle --platform android --dev false --reset-cache --entry-file index.js --bundle-output bundle/temp.bundle --sourcemap-output bundle/temp.bundle.map
 
     echo "Compile JS to Hermes Bytecode"
-    ./node_modules/hermes-engine/osx-bin/hermesc -emit-binary -source-map=bundle/temp.bundle.map -output-source-map -out bundle/index.android.bundle bundle/temp.bundle
+    ./node_modules/react-native/sdks/hermesc/linux64-bin/hermesc -emit-binary -source-map=bundle/temp.bundle.map -output-source-map -out bundle/index.android.bundle bundle/temp.bundle
 
     brew install apktool yq
 
@@ -46,8 +46,8 @@ else
     apktool b decompiled-apk -o temp-$APK_FILE_NAME
 
     echo "The APK must be aligned to 4 byte boundaries to work on Android"
-    ~/Library/Android/sdk/build-tools/29.0.2/zipalign -p -f 4 temp-$APK_FILE_NAME $APK_FILE_NAME
+    /usr/local/lib/android/sdk/build-tools/33.0.0/zipalign -p -f 4 temp-$APK_FILE_NAME $APK_FILE_NAME
 
     echo "Re-sign APK"
-    ~/Library/Android/sdk/build-tools/29.0.2/apksigner sign --ks $KEYSTORE_PATH --ks-pass pass:"$KEYSTORE_PASS" --key-pass pass:"$KEY_PASS" --ks-key-alias $KEY_ALIAS $APK_FILE_NAME
+    /usr/local/lib/android/sdk/build-tools/33.0.0/apksigner sign --ks $KEYSTORE_PATH --ks-pass pass:"$KEYSTORE_PASS" --key-pass pass:"$KEY_PASS" --ks-key-alias $KEY_ALIAS $APK_FILE_NAME
 fi

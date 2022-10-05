@@ -1,22 +1,11 @@
-import React from 'react';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {findInspectable} from '@atb/mobile-token/utils';
 import {InspectableTokenScreen} from '@atb/screens/MobileTokenOnboarding/InspectableTokenScreen';
 import {NoMobileTokenScreen} from '@atb/screens/MobileTokenOnboarding/NoMobileTokenScreen';
-import {findInspectable} from '@atb/mobile-token/utils';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
-import {MobileTokenTabParams} from '@atb/screens/MobileTokenOnboarding';
-import {CompositeNavigationProp} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '@atb/navigation';
+import React from 'react';
+import {MobileTokenOnboardingScreenProps} from '../types';
 
-type NavigationProp = CompositeNavigationProp<
-  MaterialTopTabNavigationProp<MobileTokenTabParams>,
-  StackNavigationProp<RootStackParamList, 'MobileTokenOnboarding'>
->;
-
-type MobileTokenProps = {
-  navigation: NavigationProp;
-};
+export type MobileTokenProps = MobileTokenOnboardingScreenProps<'MobileToken'>;
 const MobileToken = ({navigation}: MobileTokenProps) => {
   const {remoteTokens, isLoading, isError} = useMobileTokenContextState();
 

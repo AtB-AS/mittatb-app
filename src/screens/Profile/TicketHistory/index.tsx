@@ -5,10 +5,11 @@ import {StyleSheet} from '@atb/theme';
 import {filterExpiredFareContracts, useTicketState} from '@atb/tickets';
 import TicketsScrollView from '@atb/screens/Ticketing/Tickets/TicketsScrollView';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import ExpiredTicketsTexts from '@atb/translations/screens/subscreens/ExpiredTickets';
+import TicketHistoryTexts from '@atb/translations/screens/subscreens/TicketHistory';
 
-export const ExpiredTickets: React.FC = () => {
-  const {fareContracts, isRefreshingTickets} = useTicketState();
+export const TicketHistory: React.FC = () => {
+  const {fareContracts, isRefreshingTickets, rejectedReservations} =
+    useTicketState();
 
   const [now, setNow] = useState<number>(Date.now());
   const expiredFareContracts = filterExpiredFareContracts(fareContracts);
@@ -18,14 +19,15 @@ export const ExpiredTickets: React.FC = () => {
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title={t(ExpiredTicketsTexts.header)}
+        title={t(TicketHistoryTexts.header)}
         leftButton={{type: 'back'}}
       />
       <TicketsScrollView
         fareContracts={expiredFareContracts}
+        reservations={rejectedReservations}
         isRefreshingTickets={isRefreshingTickets}
         refreshTickets={() => setNow(Date.now())}
-        noTicketsLabel={t(TicketsTexts.expiredTicketsTab.noTickets)}
+        noTicketsLabel={t(TicketsTexts.ticketHistoryTab.noTickets)}
         now={now}
       />
     </View>

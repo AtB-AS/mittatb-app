@@ -6,8 +6,8 @@ import {stringifyUrl} from './utils';
 import {AxiosRequestConfig} from 'axios';
 
 export const FOCUS_ORIGIN: Coordinates = {
-  latitude: FOCUS_LATITUDE,
-  longitude: FOCUS_LONGITUDE,
+  latitude: parseFloat(FOCUS_LATITUDE),
+  longitude: parseFloat(FOCUS_LONGITUDE),
 };
 
 export async function autocomplete(

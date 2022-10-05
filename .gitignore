@@ -57,6 +57,7 @@ buck-out/
 */fastlane/Preview.html
 */fastlane/screenshots
 fastlane/report.xml
+**/fastlane/test_output
 
 
 # Bundle artifact
@@ -97,3 +98,6 @@ src/assets/svg
 # Yalc
 .yalc/
 yalc.lock
+
+
+.cxx/

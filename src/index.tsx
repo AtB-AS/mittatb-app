@@ -29,10 +29,21 @@ import {setupConfig} from './setup';
 import {MobileTokenContextProvider} from '@atb/mobile-token';
 import FeedbackQuestionsProvider from './components/feedback/FeedbackContext';
 import {FirestoreConfigurationContextProvider} from '@atb/configuration/FirestoreConfigurationContext';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {Platform, UIManager} from 'react-native';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
 trackAppState();
+
+if (Platform.OS === 'android') {
+  // Default seems to be True in later React Native versions,
+  // but LayoutAnimation doesn't seem to be working properly
+  // on Android for our use case. Disable for now.
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(false);
+  }
+}
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -44,9 +55,11 @@ const App = () => {
     }
     config();
   }, []);
+
   if (isLoading) {
-    return null;
+    return <GestureHandlerRootView style={{flex: 1}}></GestureHandlerRootView>;
   }
+
   return (
     <SafeAreaProvider>
       <ErrorBoundary type="full-screen">

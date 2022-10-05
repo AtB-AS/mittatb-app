@@ -7,30 +7,26 @@ import {
   useControlPositionsStyle,
 } from '@atb/components/map';
 import {useGeolocationState} from '@atb/GeolocationContext';
+import {Coordinates, MapLeg} from '@atb/screens/TripDetails/Map/types';
 import {MapTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {RouteProp} from '@react-navigation/native';
 import {Position} from 'geojson';
 import React, {useMemo, useRef} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {DetailsStackParams} from '..';
-import {DetailScreenNavigationProp} from '../Details';
+import {TripDetailsScreenProps} from '../types';
 import MapLabel from './MapLabel';
 import MapRoute from './MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
-import {Coordinates, MapLeg} from '@atb/screens/TripDetails/Map/types';
+import {flyToLocation, zoomIn, zoomOut} from '@atb/components/map/utils';
 
 export type MapDetailRouteParams = {
   legs: MapLeg[];
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
 };
-export type MapDetailRouteProp = RouteProp<DetailsStackParams, 'DetailsMap'>;
-type MapProps = {
-  route: MapDetailRouteProp;
-  navigation: DetailScreenNavigationProp;
-};
+
+type MapProps = TripDetailsScreenProps<'DetailsMap'>;
 
 export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
@@ -41,23 +37,6 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
   const features = useMemo(() => createMapLines(legs), [legs]);
   const bounds = getMapBounds(features);
 
-  async function zoomIn() {
-    const currentZoom = await mapViewRef.current?.getZoom();
-    mapCameraRef.current?.zoomTo((currentZoom ?? 10) + 1, 200);
-  }
-
-  async function zoomOut() {
-    const currentZoom = await mapViewRef.current?.getZoom();
-    mapCameraRef.current?.zoomTo((currentZoom ?? 10) - 1, 200);
-  }
-
-  async function flyToCurrentLocation() {
-    geolocation &&
-      mapCameraRef.current?.flyTo(
-        [geolocation?.coordinates.longitude, geolocation?.coordinates.latitude],
-        750,
-      );
-  }
   const {t} = useTranslation();
   const controlStyles = useControlPositionsStyle();
   return (
@@ -99,8 +78,15 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
         />
       </View>
       <View style={controlStyles.controlsContainer}>
-        <PositionArrow flyToCurrentLocation={flyToCurrentLocation} />
-        <MapControls zoomIn={zoomIn} zoomOut={zoomOut} />
+        <PositionArrow
+          onPress={() =>
+            flyToLocation(geolocation?.coordinates, 750, mapCameraRef)
+          }
+        />
+        <MapControls
+          zoomIn={() => zoomIn(mapViewRef, mapCameraRef)}
+          zoomOut={() => zoomOut(mapViewRef, mapCameraRef)}
+        />
       </View>
     </View>
   );

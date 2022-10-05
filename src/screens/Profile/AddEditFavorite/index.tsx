@@ -1,25 +1,12 @@
-import {CompositeNavigationProp} from '@react-navigation/native';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import {RootStackParamList} from '@atb/navigation';
-import AddEditForm, {AddEditParams} from './AddForm';
-import SearchLocation from './SearchLocation';
-
-export type AddEditFavoriteRootParams = {
-  SearchLocation: undefined;
-  AddEditForm: AddEditParams;
-};
-
-export type LocationSearchNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<AddEditFavoriteRootParams>,
-  StackNavigationProp<RootStackParamList>
->;
+import AddEditForm from './AddForm';
+import {SearchStopPlace as SearchLocation} from './SearchLocation';
+import {AddEditFavoriteRootParams} from './types';
 
 const Stack = createStackNavigator<AddEditFavoriteRootParams>();
 
+// @TODO This should be moved outside of Profile as it is separate screen.
 export default function AddFavoriteDeparture() {
   return (
     <Stack.Navigator

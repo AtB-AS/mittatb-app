@@ -1,28 +1,21 @@
-import React, {useMemo} from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {ScrollView, View, ActivityIndicator, Dimensions} from 'react-native';
-import useRecentTickets, {RecentTicket} from '../use-recent-tickets';
-import {RecentTicketComponent} from './RecentTicketComponent';
 import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {productIsSellableInApp} from '@atb/reference-data/utils';
-import {RootStackParamList} from '@atb/navigation';
-import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {TicketingStackParams} from '../../Purchase';
 import ThemeText from '@atb/components/text';
+import {productIsSellableInApp} from '@atb/reference-data/utils';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {TicketsTexts, useTranslation} from '@atb/translations';
 import RecentTicketsTexts from '@atb/translations/screens/subscreens/RecentTicketsTexts';
-
-type NavigationProp = CompositeNavigationProp<
-  StackNavigationProp<TicketingStackParams>,
-  StackNavigationProp<RootStackParamList>
->;
+import {useNavigation} from '@react-navigation/native';
+import React, {useMemo} from 'react';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {TicketsNavigationProps} from '../types';
+import useRecentTickets, {RecentTicket} from '../use-recent-tickets';
+import {RecentTicketComponent} from './RecentTicketComponent';
 
 export const RecentTickets = () => {
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<TicketsNavigationProps<'BuyTickets'>>();
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();

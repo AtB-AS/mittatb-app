@@ -1,21 +1,20 @@
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useCallback, useEffect, useState} from 'react';
-import {StyleProp, View, ViewStyle} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import {Pin} from '@atb/assets/svg/mono-icons/map';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import Button, {ButtonProps} from '@atb/components/button';
-import {FavoriteIcon, useFavorites} from '../favorites';
-import {GeoLocation, Location} from '../favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {RootStackParamList} from '@atb/navigation';
+import {RootStackProps} from '@atb/navigation/types';
 import {StyleSheet, useTheme} from '@atb/theme';
+import {InteractiveColor} from '@atb/theme/colors';
 import {FavoriteTexts, useTranslation} from '@atb/translations';
 import useDisableMapCheck from '@atb/utils/use-disable-map-check';
-import {InteractiveColor} from '@atb/theme/colors';
+import {useNavigation} from '@react-navigation/native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {StyleProp, View, ViewStyle} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import {FavoriteIcon, useFavorites} from '../favorites';
+import {GeoLocation, Location} from '../favorites/types';
 
 const themeColor: InteractiveColor = 'interactive_0';
 
@@ -30,8 +29,6 @@ type Props = {
 
 export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
 
-type ProfileNearbyScreenNavigationProp =
-  StackNavigationProp<RootStackParamList>;
 const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
   containerStyle,
@@ -40,7 +37,8 @@ const FavoriteChips: React.FC<Props> = ({
   chipTypes = ['favorites', 'location', 'map'],
   chipActionHint,
 }) => {
-  const navigation = useNavigation<ProfileNearbyScreenNavigationProp>();
+  // @TODO this shouldn't refer to useNavigation but have onEditPress or something
+  const navigation = useNavigation<RootStackProps['navigation']>();
   const {favorites} = useFavorites();
   const styles = useStyles();
   const {t} = useTranslation();

@@ -1,26 +1,18 @@
 import {useAuthState} from '@atb/auth';
-import {RootStackParamList} from '@atb/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {StackNavigationProp} from '@react-navigation/stack';
+import AnonymousPurchaseWarning from '@atb/screens/Ticketing/Tickets/AnonymousPurchaseWarning';
+import {AvailableTickets} from '@atb/screens/Ticketing/Tickets/AvailableTickets/AvailableTickets';
+import {useTheme} from '@atb/theme';
 import React from 'react';
 import {ScrollView} from 'react-native';
-import UpgradeSplash from './UpgradeSplash';
-import {useAppState} from '@atb/AppContext';
-import {AvailableTickets} from '@atb/screens/Ticketing/Tickets/AvailableTickets/AvailableTickets';
 import {RecentTickets} from './RecentTickets/RecentTickets';
-import {useTheme} from '@atb/theme';
-import AnonymousPurchaseWarning from '@atb/screens/Ticketing/Tickets/AnonymousPurchaseWarning';
+import {TicketsScreenProps} from './types';
+import UpgradeSplash from './UpgradeSplash';
 
-export type TicketingScreenNavigationProp =
-  StackNavigationProp<RootStackParamList>;
-
-type Props = {
-  navigation: TicketingScreenNavigationProp;
-};
+type Props = TicketsScreenProps<'BuyTickets'>;
 
 export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const {must_upgrade_ticketing, enable_recent_tickets} = useRemoteConfig();
-  const appContext = useAppState();
   const {abtCustomerId, authenticationType} = useAuthState();
   const isSignedInAsAbtCustomer = !!abtCustomerId;
   const {theme} = useTheme();
@@ -49,8 +41,13 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
         screen: 'LoginOnboardingInApp',
         params: {
           afterLogin: {
-            routeName: 'TicketPurchase',
-            routeParams: {selectableProductType: 'period'},
+            screen: 'TicketPurchase',
+            params: {
+              screen: 'PurchaseOverview',
+              params: {
+                selectableProductType: 'period',
+              },
+            },
           },
         },
       });

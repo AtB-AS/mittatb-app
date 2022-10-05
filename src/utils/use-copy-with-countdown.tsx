@@ -1,8 +1,8 @@
-import React, {PropsWithChildren, useRef, useState} from 'react';
 import Clipboard from '@react-native-clipboard/clipboard';
+import React, {PropsWithChildren, useRef, useState} from 'react';
 import Animated, {
   Clock,
-  Easing,
+  EasingNode,
   set,
   useCode,
   useValue,
@@ -24,7 +24,7 @@ export default function useCopyWithOpacityFade(duration: number = 500) {
           from: 1,
           to: 0,
           duration,
-          easing: Easing.quad,
+          easing: EasingNode.quad,
           callback: () => setIsAnimating(false),
         }),
       ),

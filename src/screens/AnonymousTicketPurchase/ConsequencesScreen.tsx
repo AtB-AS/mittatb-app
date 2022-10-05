@@ -1,42 +1,58 @@
-import React from 'react';
-import {ScrollView, View} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
-import ThemeText from '@atb/components/text';
-import {useTranslation} from '@atb/translations';
-import AnonymousTicketPurchases from '@atb/translations/screens/subscreens/AnonymousTicketPurchases';
-import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
-import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {Support} from '@atb/assets/svg/mono-icons/actions';
-import {OnboardingStackParams} from '@atb/screens/Onboarding';
-import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
-import {RouteProp} from '@react-navigation/native';
+import {Phone} from '@atb/assets/svg/mono-icons/devices';
+import {Receipt} from '@atb/assets/svg/mono-icons/ticketing';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import ThemeText from '@atb/components/text';
+import ThemeIcon from '@atb/components/theme-icon';
+import {RootStackScreenProps} from '@atb/navigation/types';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Actions from '@atb/screens/AnonymousTicketPurchase/components/Actions';
 import Consequence from '@atb/screens/AnonymousTicketPurchase/components/Consequence';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {Receipt} from '@atb/assets/svg/mono-icons/ticketing';
-import ThemeIcon from '@atb/components/theme-icon';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
+import {useTranslation} from '@atb/translations';
+import AnonymousTicketPurchases from '@atb/translations/screens/subscreens/AnonymousTicketPurchases';
+import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import React from 'react';
+import {ScrollView, View} from 'react-native';
+import {OnboardingScreenProps} from '../Onboarding/types';
+import {TicketPurchaseScreenProps} from '../Ticketing/Purchase/types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-type ConsequencesScreenRouteProps = RouteProp<
-  OnboardingStackParams,
-  'ConsequencesFromOnboarding'
->;
+type ConsequencesScreenProps =
+  RootStackScreenProps<'ConsequencesFromTicketPurchase'>;
 
-const ConsequencesScreen = ({
-  route,
-  navigation,
-}: {
-  route: ConsequencesScreenRouteProps;
-  navigation: MaterialTopTabNavigationProp<OnboardingStackParams>;
-}) => {
+type ConsequencesFromOnboardingScreenProps =
+  OnboardingScreenProps<'ConsequencesFromOnboarding'>;
+
+type ConsequencesFromTicketPurchaseScreenProps =
+  TicketPurchaseScreenProps<'ConsequencesFromTicketPurchase'>;
+
+type ConsequencesPropsInternal =
+  | ConsequencesScreenProps
+  | ConsequencesFromOnboardingScreenProps
+  | ConsequencesFromTicketPurchaseScreenProps;
+
+type NavigationProps = ConsequencesScreenProps['navigation'] &
+  ConsequencesFromOnboardingScreenProps['navigation'] &
+  ConsequencesFromTicketPurchaseScreenProps['navigation'];
+
+// Having issues doing proper typing where the navigation
+// gets all overlapping types of routes as this is used from
+// several places. For routes and properties this works
+// but having to _combine_ everything for navigation to work.
+type ConsequencesProps = ConsequencesPropsInternal & {
+  navigation: NavigationProps;
+};
+
+const ConsequencesScreen = ({route, navigation}: ConsequencesProps) => {
   const styles = useStyle();
   const {t} = useTranslation();
   const {themeName} = useTheme();
   const focusRef = useFocusOnLoad();
+
   const isCallerRouteOnboarding = route?.name === 'ConsequencesFromOnboarding';
   const fillColor = getStaticColor(themeName, themeColor).text;
   const finishOnboarding = useFinishOnboarding();
@@ -45,10 +61,23 @@ const ConsequencesScreen = ({
     navigation.navigate('LoginInApp', {
       screen: enable_vipps_login ? 'LoginOptionsScreen' : 'PhoneInputInApp',
       params: {
-        afterLogin: {
-          routeName: 'TabNavigator',
-          routeParams: isCallerRouteOnboarding ? {} : {screen: 'Ticketing'},
-        },
+        afterLogin: isCallerRouteOnboarding
+          ? {
+              screen: 'TabNavigator',
+              params: {
+                screen: 'Assistant',
+                params: {},
+              },
+            }
+          : {
+              screen: 'TabNavigator',
+              params: {
+                screen: 'Ticketing',
+                params: {
+                  screen: 'BuyTickets',
+                },
+              },
+            },
       },
     });
   };

@@ -1,67 +1,54 @@
+import {Delete} from '@atb/assets/svg/mono-icons/actions';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {useAuthState} from '@atb/auth';
+import {updateMetadata} from '@atb/chat/metadata';
+import ActivityIndicatorOverlay from '@atb/components/activity-indicator-overlay';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
-import {RootStackParamList} from '@atb/navigation';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useSearchHistory} from '@atb/search-history';
-import {StyleSheet, Theme} from '@atb/theme';
-import {ProfileTexts, useTranslation} from '@atb/translations';
-import {Delete} from '@atb/assets/svg/mono-icons/actions';
-import {LogOut} from '@atb/assets/svg/mono-icons/profile';
-import useLocalConfig from '@atb/utils/use-local-config';
-import {IS_QA_ENV} from '@env';
-import {CompositeNavigationProp} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import React from 'react';
-import {Linking, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import {getBuildNumber, getVersion} from 'react-native-device-info';
-import {ProfileStackParams} from '..';
-import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
-import {numberToAccessibilityString} from '@atb/utils/accessibility';
-import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
-import {
-  filterActiveOrCanBeUsedFareContracts,
-  useTicketState,
-} from '@atb/tickets';
-import {usePreferences} from '@atb/preferences';
-import analytics from '@react-native-firebase/analytics';
-import {updateMetadata} from '@atb/chat/metadata';
-import parsePhoneNumber from 'libphonenumber-js';
+import ThemeIcon from '@atb/components/theme-icon';
+import {LoginInAppStackParams} from '@atb/login/types';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
-import ThemeIcon from '@atb/components/theme-icon';
-import {destructiveAlert} from './utils';
-import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import Bugsnag from '@bugsnag/react-native';
+import {usePreferences} from '@atb/preferences';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import SelectFavouritesBottomSheet from '@atb/screens/Assistant/SelectFavouritesBottomSheet';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useSearchHistory} from '@atb/search-history';
+import {StyleSheet, Theme} from '@atb/theme';
+import {
+  filterActiveOrCanBeUsedFareContracts,
+  useTicketState,
+} from '@atb/tickets';
+import {ProfileTexts, useTranslation} from '@atb/translations';
+import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
+import {numberToAccessibilityString} from '@atb/utils/accessibility';
+import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
+import useLocalConfig from '@atb/utils/use-local-config';
+import Bugsnag from '@bugsnag/react-native';
+import {IS_QA_ENV} from '@env';
+import analytics from '@react-native-firebase/analytics';
+import parsePhoneNumber from 'libphonenumber-js';
+import React from 'react';
+import {Linking, View} from 'react-native';
+import {getBuildNumber, getVersion} from 'react-native-device-info';
+import {ScrollView} from 'react-native-gesture-handler';
+import {ProfileScreenProps} from '../types';
+import {destructiveAlert} from './utils';
 import useIsLoading from '@atb/utils/use-is-loading';
-import ActivityIndicatorOverlay from '@atb/components/activity-indicator-overlay';
 import {useNewFrontpage} from '@atb/screens/Dashboard/use-new-frontpage';
+import {useMapPage} from '@atb/components/map/use-map-page';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
 
-export type ProfileScreenNavigationProp = StackNavigationProp<
-  ProfileStackParams,
-  'ProfileHome'
->;
+type ProfileProps = ProfileScreenProps<'ProfileHome'>;
 
-type ProfileNearbyScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<RootStackParamList>,
-  ProfileScreenNavigationProp
->;
-
-type ProfileScreenProps = {
-  navigation: ProfileNearbyScreenNavigationProp;
-};
-
-export default function ProfileHome({navigation}: ProfileScreenProps) {
+export default function ProfileHome({navigation}: ProfileProps) {
   const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login} =
     useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
@@ -87,6 +74,7 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
     setPreference,
     preferences: {newDepartures},
   } = usePreferences();
+  const showMapPage = useMapPage();
 
   const shouldUseNewFrontPage = useNewFrontpage();
 
@@ -159,29 +147,35 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
 
             <Sections.LinkItem
               text={t(
-                ProfileTexts.sections.account.linkItems.expiredTickets.label,
+                ProfileTexts.sections.account.linkItems.ticketHistory.label,
               )}
-              onPress={() => navigation.navigate('ExpiredTickets')}
-              testID="expiredTicketsButton"
+              onPress={() => navigation.navigate('TicketHistory')}
+              testID="ticketHistoryButton"
             />
             {authenticationType !== 'phone' && (
               <Sections.LinkItem
                 text={t(ProfileTexts.sections.account.linkItems.login.label)}
-                onPress={() =>
-                  navigation.navigate('LoginInApp', {
-                    screen: hasActiveFareContracts
-                      ? 'ActiveTicketPromptInApp'
-                      : enable_vipps_login
-                      ? 'LoginOptionsScreen'
-                      : 'PhoneInputInApp',
+                onPress={() => {
+                  let screen: keyof LoginInAppStackParams = 'PhoneInputInApp';
+                  if (hasActiveFareContracts) {
+                    screen = 'ActiveTicketPromptInApp';
+                  } else if (enable_vipps_login) {
+                    screen = 'LoginOptionsScreen';
+                  }
+
+                  return navigation.navigate('LoginInApp', {
+                    screen,
                     params: {
                       afterLogin: {
-                        routeName: 'TabNavigator',
-                        routeParams: {screen: 'Profile'},
+                        screen: 'TabNavigator',
+                        params: {
+                          screen: 'Profile',
+                          params: {screen: 'ProfileHome'},
+                        },
                       },
                     },
-                  })
-                }
+                  });
+                }}
                 testID="loginButton"
               />
             )}
@@ -432,6 +426,15 @@ export default function ProfileHome({navigation}: ProfileScreenProps) {
                   'AtB-Beta-Frontpage': newFrontPage ? 'enabled' : 'disabled',
                 });
                 setPreference({newFrontPage});
+              }}
+            />
+            <Sections.ActionItem
+              mode="toggle"
+              text={t(ProfileTexts.sections.newFeatures.map)}
+              checked={showMapPage}
+              testID="enableMapPageToggle"
+              onPress={(enableMapPage) => {
+                setPreference({enableMapPage: enableMapPage});
               }}
             />
             <Sections.LinkItem
