@@ -48,6 +48,7 @@ export async function getFeatureFromVenue(
       lon: venue.coordinates.longitude,
       limit: 1,
       layers: ['venue'],
+      tariff_zone_authorities: TARIFF_ZONE_AUTHORITY,
     },
     {skipNull: true},
   );
