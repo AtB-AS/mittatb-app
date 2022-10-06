@@ -223,16 +223,13 @@ const TripSection: React.FC<TripSectionProps> = ({
       if (!quay?.stopPlace?.id) return;
       navigation.push('PlaceScreen', {
         place: {
-          id: quay?.stopPlace?.id,
-          name: quay?.stopPlace?.name,
+          id: quay.stopPlace.id,
+          name: quay.stopPlace.name,
         },
-        selectedQuay:
-          quay?.id && quay.name
-            ? {
-                id: quay.id,
-                name: quay.name,
-              }
-            : undefined,
+        selectedQuay: {
+          id: quay.id,
+          name: quay.name,
+        },
       });
     } else {
       const location = await searchByStopPlace(quay?.stopPlace);
