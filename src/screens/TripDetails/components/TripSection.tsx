@@ -219,25 +219,22 @@ const TripSection: React.FC<TripSectionProps> = ({
   );
 
   async function handleQuayPress(quay: Quay | undefined) {
-    const location = await searchByStopPlace(quay?.stopPlace);
-    if (!location) {
-      return;
-    }
     if (newDepartures) {
+      if (!quay?.stopPlace?.id) return;
       navigation.push('PlaceScreen', {
         place: {
-          id: location.id,
-          name: location.name,
+          id: quay.stopPlace.id,
+          name: quay.stopPlace.name,
         },
-        selectedQuay:
-          quay?.id && quay.name
-            ? {
-                id: quay.id,
-                name: quay.name,
-              }
-            : undefined,
+        selectedQuay: {
+          id: quay.id,
+          name: quay.name,
+        },
       });
     } else {
+      const location = await searchByStopPlace(quay?.stopPlace);
+      if (!location) return;
+
       navigation.push('QuayDepartures', {
         location,
       });
