@@ -258,7 +258,7 @@ const NearbyOverview: React.FC<Props> = ({
       )}
 
       <DeparturesList
-        currentLocation={currentLocation}
+        locationOrStopPlace={currentLocation}
         showOnlyFavorites={showOnlyFavorites}
         departures={data}
         lastUpdated={tick}

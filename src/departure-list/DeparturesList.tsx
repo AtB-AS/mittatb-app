@@ -10,11 +10,12 @@ import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import QuaySection from './section-items/quay-section';
 import {hasNoGroupsWithDepartures, hasNoQuaysWithDepartures} from './utils';
+import {StopPlace} from '@atb/api/types/trips';
 
 type DeparturesListProps = {
   departures: StopPlaceGroup[] | null;
   lastUpdated?: Date;
-  currentLocation?: Location;
+  locationOrStopPlace?: Location | StopPlace;
   isFetchingMore?: boolean;
   isLoading?: boolean;
   error?: string;
@@ -31,7 +32,7 @@ export default function DeparturesList({
   isLoading = false,
   error,
   isInitialScreen,
-  currentLocation,
+  locationOrStopPlace: currentLocation,
   showOnlyFavorites,
   disableCollapsing = false,
   searchDate,
@@ -124,7 +125,7 @@ function FooterLoader({isFetchingMore}: FooterLoaderProps) {
 
 type StopDeparturesProps = {
   stopPlaceGroup: StopPlaceGroup;
-  currentLocation?: Location;
+  currentLocation?: Location | StopPlace;
   lastUpdated?: Date;
   defaultExpanded?: boolean;
   disableCollapsing?: boolean;
@@ -185,7 +186,7 @@ const StopDepartures = React.memo(function StopDepartures({
             key={quayGroup.quay.id}
             stop={stopPlaceGroup.stopPlace}
             quayGroup={quayGroup}
-            currentLocation={currentLocation}
+            locationOrStopPlace={currentLocation}
             lastUpdated={lastUpdated}
             searchDate={searchDate}
             testID={'quaySection' + i}
