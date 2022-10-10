@@ -19,13 +19,13 @@ export async function travelSearch(departure: string, arrival: string) {
   await setInputById('locationSearchInput', departure);
   await chooseSearchResult('locationSearchItem0');
 
-  await expectToBeVisibleByText('Travel assistant');
+  await expectToBeVisibleByText('Travel search');
 
   await tapById('searchToButton');
   await setInputById('locationSearchInput', arrival);
   await chooseSearchResult('locationSearchItem0');
 
-  await expectToBeVisibleByText('Travel assistant');
+  await expectToBeVisibleByText('Travel search');
 }
 
 // Get the number of travel suggestions
@@ -238,7 +238,7 @@ export const getDepartureTimes = async (noTravelSuggestions: number) => {
     let arrDepTime = await element(
       by
         .id('resultStartAndEndTime')
-        .withAncestor(by.id('assistantSearchResult' + i)),
+        .withAncestor(by.id('tripSearchSearchResult' + i)),
     )
       .getAttributes()
       .then((e) => (!('elements' in e) ? e.text?.split(' ') : ['00:00']))
@@ -261,7 +261,7 @@ export const getArrivalTimes = async (noTravelSuggestions: number) => {
     let arrDepTime = await element(
       by
         .id('resultStartAndEndTime')
-        .withAncestor(by.id('assistantSearchResult' + i)),
+        .withAncestor(by.id('tripSearchSearchResult' + i)),
     )
       .getAttributes()
       .then((e) => (!('elements' in e) ? e.text?.split(' ') : ['00:00']))

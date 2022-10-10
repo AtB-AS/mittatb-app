@@ -27,6 +27,26 @@ export const toggleLanguage = async (useMyPhoneSettings: boolean) => {
   }
 };
 
+// Toggle frontpage on/off
+export const toggleFrontpage = async (enable: boolean) => {
+  await scrollToId('profileHomeScrollView', 'newFrontpageToggle', 'down');
+
+  const toggle = await element(by.id('newFrontpageToggle'))
+    .getAttributes()
+    .then((elem) => {
+      return !('elements' in elem) ? elem.value : undefined;
+    });
+
+  // Enable OTP 2 if not enabled
+  if (toggle == 0 && enable) {
+    await tapById('newFrontpageToggle');
+  }
+  // Disable OTP 2 if not disabled
+  if (toggle == 1 && !enable) {
+    await tapById('newFrontpageToggle');
+  }
+};
+
 // Toggle departures v2 on/off
 export const toggleDeparturesV2 = async (enableV2: boolean) => {
   await scrollToId('profileHomeScrollView', 'newDeparturesToggle', 'down');
