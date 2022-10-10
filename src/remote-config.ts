@@ -60,7 +60,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_vipps_login: false,
   enable_map_page: false,
   favourite_departures_poll_interval: 30000,
-  new_favourites_info_url: 'https://www.atb.no',
+  new_favourites_info_url: '',
 };
 
 export function getConfig(): RemoteConfig {
