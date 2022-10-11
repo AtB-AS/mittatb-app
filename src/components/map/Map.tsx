@@ -10,7 +10,7 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
-import React, {useMemo, useRef, forwardRef, useState} from 'react';
+import React, {forwardRef, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import LocationBar from '@atb/components/map/LocationBar';
@@ -37,7 +37,7 @@ import {ScreenHeaderWithoutNavigation} from '../screen-header';
 import {useTranslation} from '@atb/translations';
 import StopPlaceView from '@atb/screens/Departures/StopPlaceView';
 import {SearchTime} from '@atb/screens/Departures/utils';
-import {Quay} from '@atb/api/types/departures';
+import {Place, Quay} from '@atb/api/types/departures';
 import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
 import ThemeText from '../text';
 import ThemeIcon from '../theme-icon';
@@ -58,9 +58,15 @@ type MapProps = {
   initialLocation?: Location;
   selectionMode: MapSelectionMode;
   onLocationSelect?: (selectedLocation?: GeoLocation | SearchLocation) => void;
+  navigateToQuay: (place: Place, quay: Quay) => void;
 };
 
-const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
+const Map = ({
+  initialLocation,
+  selectionMode,
+  onLocationSelect,
+  navigateToQuay,
+}: MapProps) => {
   const {location: currentLocation} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
@@ -86,7 +92,6 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
       mapCameraRef,
     );
 
-  const navigateToQuay = (quay: Quay) => {};
   const navigateToDetails = (
     serviceJourneyId: string,
     serviceDate: string,
@@ -191,7 +196,7 @@ const useMapStyles = StyleSheet.createThemeHook(() => ({
 type DeparturesDialogSheetProps = {
   close: () => void;
   stopPlaceFeature: Feature<Point, GeoJsonProperties>;
-  navigateToQuay: (quay: Quay) => void;
+  navigateToQuay: (place: Place, quay: Quay) => void;
   navigateToDetails: (
     serviceJourneyId: string,
     serviceDate: string,
@@ -244,7 +249,10 @@ const DeparturesDialogSheet = forwardRef<View, DeparturesDialogSheetProps>(
                 stopPlace={stopPlace}
                 showTimeNavigation={false}
                 navigateToDetails={navigateToDetails}
-                navigateToQuay={navigateToQuay}
+                navigateToQuay={(quay) => {
+                  close();
+                  navigateToQuay(stopPlace, quay);
+                }}
                 searchTime={searchTime}
                 setSearchTime={setSearchTime}
                 showOnlyFavorites={showOnlyFavorites}
