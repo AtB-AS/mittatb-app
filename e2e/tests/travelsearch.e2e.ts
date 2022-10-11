@@ -57,6 +57,7 @@ import {
   addFavouriteLocation,
   deleteFavouriteLocation,
   removeSearchHistory,
+  toggleFrontpage,
 } from '../utils/myprofile';
 
 describe('Travel Search', () => {
@@ -72,6 +73,10 @@ describe('Travel Search', () => {
     });
     await setLocation(62.4305, 9.3951);
     await skipOnboarding();
+
+    // Enable frontpage
+    await goToTab('profile');
+    await toggleFrontpage(true);
   });
 
   beforeEach(async () => {
@@ -92,9 +97,9 @@ describe('Travel Search', () => {
 
     // Get travel details of first travel
     let paging = `1 of ${travelSuggestions}`;
-    await expectToBeVisibleById('assistantSearchResult0');
-    await expectIdToHaveChildText('assistantSearchResult0', 'Details');
-    await tapById('assistantSearchResult0');
+    await expectToBeVisibleById('tripSearchSearchResult0');
+    await expectIdToHaveChildText('tripSearchSearchResult0', 'Details');
+    await tapById('tripSearchSearchResult0');
 
     await expectToBeVisibleByText('Trip details');
     await expectToBeVisibleByText(paging);
@@ -138,17 +143,17 @@ describe('Travel Search', () => {
     await travelSearch(departure, arrival);
 
     // Get values to assert on
-    await expectToBeVisibleById('assistantSearchResult0');
-    let startEndTime = await getStartAndEndTimes('assistantSearchResult0');
+    await expectToBeVisibleById('tripSearchSearchResult0');
+    let startEndTime = await getStartAndEndTimes('tripSearchSearchResult0');
     let startTime = startEndTime[0];
     let endTime = startEndTime[1];
-    let depInfo = await getDepartureInfo('assistantSearchResult0');
+    let depInfo = await getDepartureInfo('tripSearchSearchResult0');
     let depLocation = depInfo[0];
     let depTime = depInfo[1];
-    let tripDuration = await getTripDuration('assistantSearchResult0');
+    let tripDuration = await getTripDuration('tripSearchSearchResult0');
 
     // Get travel details of first travel
-    await tapById('assistantSearchResult0');
+    await tapById('tripSearchSearchResult0');
 
     // Check correct departure and arrival locations in details
     await expectStartLocationInTravelDetails(departure);
@@ -174,12 +179,12 @@ describe('Travel Search', () => {
     // Do a travel search
     await travelSearch(departure, arrival);
 
-    await expectToBeVisibleById('assistantSearchResult0');
+    await expectToBeVisibleById('tripSearchSearchResult0');
     let travelSuggestions = await numberOfTravelSuggestions();
     let paging = `1 of ${travelSuggestions}`;
 
     // Get travel details of first travel
-    await tapById('assistantSearchResult0');
+    await tapById('tripSearchSearchResult0');
 
     await expectIdToHaveText('tripPagination', paging);
     await expectStartLocationInTravelDetails(departure);
@@ -215,20 +220,20 @@ describe('Travel Search', () => {
     for (let i = 0; i < 2; i++) {
       // Get number of legs on overview
       const noWalkLegs = await getNumberOfLegs(
-        'assistantSearchResult' + i,
+        'tripSearchSearchResult' + i,
         'fLeg',
       );
       const noTransportLegs = await getNumberOfLegs(
-        'assistantSearchResult' + i,
+        'tripSearchSearchResult' + i,
         'trLeg',
       );
       const noCollapsedLegs = await getNumberOfCollapsedLegs(
-        'assistantSearchResult' + i,
+        'tripSearchSearchResult' + i,
       );
       const noLegs = noWalkLegs + noTransportLegs + noCollapsedLegs;
 
       // Get travel details of first travel
-      await tapById('assistantSearchResult' + i);
+      await tapById('tripSearchSearchResult' + i);
 
       //Verify number of legs
       const noWalkLegsInDetails = await getNumberOfIds('footLeg');
@@ -259,7 +264,7 @@ describe('Travel Search', () => {
     let travelSuggestions = await numberOfTravelSuggestions();
 
     // Load more suggestions
-    await scrollContentToId('assistantContentView', 'loadMoreButton', 'down');
+    await scrollContentToId('tripSearchContentView', 'loadMoreButton', 'down');
     await tapById('loadMoreButton');
 
     // Verify
@@ -360,7 +365,7 @@ describe('Travel Search', () => {
 
     // Do a travel search and get details of the line
     await travelSearch(departure, arrivalSearch);
-    await tapById('assistantSearchResult1');
+    await tapById('tripSearchSearchResult1');
     await scrollContentToId(
       'tripDetailsContentView',
       'intermediateStops',
@@ -474,10 +479,10 @@ describe('Travel Search', () => {
     await tapById('favoriteChip1');
 
     // Verify
-    await expectToBeVisibleByText('Travel assistant');
+    await expectToBeVisibleByText('Travel search');
     await expectGreaterThan(await numberOfTravelSuggestions(), 0);
     // Get travel details of first travel
-    await tapById('assistantSearchResult0');
+    await tapById('tripSearchSearchResult0');
     await expectStartLocationInTravelDetails(fav1);
     await expectEndLocationInTravelDetails(fav2);
 
@@ -520,35 +525,35 @@ describe('Travel Search', () => {
     let lastJourneyIndex = (await numberOfTravelSuggestions()) - 1;
 
     await scrollContentToId(
-      'assistantContentView',
-      'assistantSearchResult' + lastJourneyIndex,
+      'tripSearchContentView',
+      'tripSearchSearchResult' + lastJourneyIndex,
       'down',
     );
-    await tapById('assistantSearchResult' + lastJourneyIndex);
+    await tapById('tripSearchSearchResult' + lastJourneyIndex);
 
-    await expectNotToExistsByText('Travel assistant');
+    await expectNotToExistsByText('Travel search');
     await expectToBeVisibleByText('Trip details');
 
     // Verify 'back' by tapping the assistant tab
     await tapById('assistantTab');
 
     await expectNotToExistsByText('Trip details');
-    await expectToBeVisibleByText('Travel assistant');
-    await expectToBeVisibleById('assistantSearchResult' + lastJourneyIndex);
-    await expectNotToBeVisibleById('assistantSearchResult0');
+    await expectToBeVisibleByText('Travel search');
+    await expectToBeVisibleById('tripSearchSearchResult' + lastJourneyIndex);
+    await expectNotToBeVisibleById('tripSearchSearchResult0');
 
     // Verify 'scrollUp' by tapping the assistant tab
     await tapById('assistantTab');
 
-    await expectToBeVisibleByText('Travel assistant');
-    await expectToBeVisibleById('assistantSearchResult0');
-    await expectNotToBeVisibleById('assistantSearchResult' + lastJourneyIndex);
+    await expectToBeVisibleByText('Travel search');
+    await expectToBeVisibleById('tripSearchSearchResult0');
+    await expectNotToBeVisibleById('tripSearchSearchResult' + lastJourneyIndex);
 
     // Verify 'reset' by tapping the assistant tab
     await tapById('assistantTab');
 
-    await expectToBeVisibleByText('Travel assistant');
-    await expectNotToExistsById('assistantContentView');
+    await expectToBeVisibleByText('Travel search');
+    await expectNotToExistsById('tripSearchContentView');
   });
 
   // The service disruption button should lead to a link

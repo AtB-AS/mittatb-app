@@ -33,6 +33,6 @@ describe('Onboarding', () => {
 
   it('should show the assistant view after all onboarding', async () => {
     await tapById('acceptRestrictionsButton');
-    await expectToBeVisibleByText('Travel assistant');
+    await expectToBeVisibleByText('Travel search');
   });
 });
