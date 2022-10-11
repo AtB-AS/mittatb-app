@@ -9,10 +9,10 @@ export function useAppStateStatus() {
     setAppState(newState);
   }
   useEffect(() => {
-    AppState.addEventListener('change', onChange);
+    const appStateSubscription = AppState.addEventListener('change', onChange);
 
     return () => {
-      AppState.removeEventListener('change', onChange);
+      appStateSubscription.remove();
     };
   }, []);
 
