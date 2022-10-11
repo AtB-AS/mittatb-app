@@ -70,6 +70,8 @@ const BottomSheetProvider: React.FC = ({children}) => {
   const close = () => {
     setContentFunction(() => () => null);
     setIsOpen(false);
+    setStyle({});
+    setBackdropEnabled(true);
     if (closeRef) {
       setTimeout(() => giveFocus(closeRef), 200);
     }

@@ -1,8 +1,8 @@
+import React from 'react';
 import useChatIcon from '@atb/chat/use-chat-icon';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import insets from '@atb/utils/insets';
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
 import {AccessibilityProps, TouchableOpacity} from 'react-native';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
@@ -39,7 +39,8 @@ const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
 };
 
 export type HeaderButtonWithoutNavigationProps = {
-  text: string;
+  text?: string;
+  icon?: React.ReactNode;
   onPress: () => void;
   color?: StaticColor | TextColor;
   testID?: string;
@@ -47,13 +48,14 @@ export type HeaderButtonWithoutNavigationProps = {
 
 export const HeaderButtonWithoutNavigation = ({
   text,
+  icon,
   onPress,
   color,
   ...accessibilityProps
 }: HeaderButtonWithoutNavigationProps) => {
   return (
     <BaseHeaderButton
-      icon={<ThemeText color={color}>{text}</ThemeText>}
+      icon={text ? <ThemeText color={color}>{text}</ThemeText> : icon}
       onPress={onPress}
       {...accessibilityProps}
     />

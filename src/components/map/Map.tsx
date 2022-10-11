@@ -19,6 +19,7 @@ import useSelectedFeatureChangeEffect, {
 } from './use-selected-feature-change-effect';
 import {
   BottomSheetContainer,
+  BottomSheetSize,
   useBottomSheet,
 } from '@atb/components/bottom-sheet';
 import MapRoute from '@atb/screens/TripDetails/Map/MapRoute';
@@ -33,14 +34,14 @@ import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
 import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
 import {ScreenHeaderWithoutNavigation} from '../screen-header';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
-import {BottomSheetSize} from '../bottom-sheet/BottomSheetContainer';
+import {useTranslation} from '@atb/translations';
 import StopPlaceView from '@atb/screens/Departures/StopPlaceView';
 import {SearchTime} from '@atb/screens/Departures/utils';
 import {Quay} from '@atb/api/types/departures';
 import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
 import ThemeText from '../text';
-import {DeparturesScreenProps} from '@atb/screens/Departures/types';
+import ThemeIcon from '../theme-icon';
+import SvgClose from '@atb/assets/svg/mono-icons/actions/Close';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -224,7 +225,7 @@ const DeparturesDialogSheet = forwardRef<View, DeparturesDialogSheetProps>(
               leftButton={{
                 type: 'close',
                 onPress: close,
-                text: t(ScreenHeaderTexts.headerButton.cancel.text),
+                icon: <ThemeIcon svg={SvgClose} />,
               }}
             />
             <View

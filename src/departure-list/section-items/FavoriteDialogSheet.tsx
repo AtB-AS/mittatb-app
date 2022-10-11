@@ -10,7 +10,10 @@ import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import Button, {ButtonGroup} from '@atb/components/button';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {
+  BottomSheetContainer,
+  BottomSheetSize,
+} from '@atb/components/bottom-sheet';
 import React, {forwardRef} from 'react';
 import StyleSheet from '@atb/theme/StyleSheet';
 
@@ -26,7 +29,7 @@ const FavoriteDialogSheet = forwardRef<View, Props>(
     const {t} = useTranslation();
     const styles = useStyles();
     return (
-      <BottomSheetContainer>
+      <BottomSheetContainer sheetSize={BottomSheetSize.auto}>
         <ScreenHeaderWithoutNavigation
           title={t(NearbyTexts.favoriteDialogSheet.title)}
           color="background_1"

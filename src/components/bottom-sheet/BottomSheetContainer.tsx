@@ -8,19 +8,19 @@ export enum BottomSheetSize {
   cover = 0.8,
 }
 
-type BottomSheetContainerProps = {
+export type BottomSheetContainerProps = {
   children: ReactNode;
-  sheetSize?: BottomSheetSize;
+  sheetSize: BottomSheetSize;
   style?: ViewStyle;
 };
 
 export default function BottomSheetContainer({
   children,
-  sheetSize = BottomSheetSize.auto,
+  sheetSize,
   style,
 }: BottomSheetContainerProps) {
   const {height: windowHeight} = useWindowDimensions();
   const maxHeight = windowHeight * sheetSize;
-  const height = maxHeight >= 0 ? maxHeight : 'auto';
+  const height = sheetSize > 0 ? maxHeight : 'auto';
   return <View style={[{maxHeight, height}, style]}>{children}</View>;
 }
