@@ -59,6 +59,13 @@ type MapProps = {
   selectionMode: MapSelectionMode;
   onLocationSelect?: (selectedLocation?: GeoLocation | SearchLocation) => void;
   navigateToQuay: (place: Place, quay: Quay) => void;
+  navigateToDetails: (
+    serviceJourneyId: string,
+    serviceDate: string,
+    date?: string,
+    fromQuayId?: string,
+    isTripCancelled?: boolean,
+  ) => void;
 };
 
 const Map = ({
@@ -66,6 +73,7 @@ const Map = ({
   selectionMode,
   onLocationSelect,
   navigateToQuay,
+  navigateToDetails,
 }: MapProps) => {
   const {location: currentLocation} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
@@ -91,14 +99,6 @@ const Map = ({
       mapViewRef,
       mapCameraRef,
     );
-
-  const navigateToDetails = (
-    serviceJourneyId: string,
-    serviceDate: string,
-    date?: string,
-    fromQuayId?: string,
-    isTripCancelled?: boolean,
-  ) => {};
 
   return (
     <View style={styles.container}>
@@ -248,7 +248,22 @@ const DeparturesDialogSheet = forwardRef<View, DeparturesDialogSheetProps>(
               <StopPlaceView
                 stopPlace={stopPlace}
                 showTimeNavigation={false}
-                navigateToDetails={navigateToDetails}
+                navigateToDetails={(
+                  serviceJourneyId: string,
+                  serviceDate: string,
+                  date?: string,
+                  fromQuayId?: string,
+                  isTripCancelled?: boolean,
+                ) => {
+                  close();
+                  navigateToDetails(
+                    serviceJourneyId,
+                    serviceDate,
+                    date,
+                    fromQuayId,
+                    isTripCancelled,
+                  );
+                }}
                 navigateToQuay={(quay) => {
                   close();
                   navigateToQuay(stopPlace, quay);
