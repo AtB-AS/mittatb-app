@@ -30,7 +30,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import CompactTickets from './CompactTickets';
-import FavouritesWidget from './DeparturesWidget';
+import DeparturesWidget from './DeparturesWidget';
 import {DashboardScreenProps} from './types';
 
 type DashboardRouteName = 'DashboardRoot';
@@ -283,7 +283,7 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
             }
           />
         )}
-        <FavouritesWidget />
+        <DeparturesWidget />
       </ScrollView>
     </View>
   );
