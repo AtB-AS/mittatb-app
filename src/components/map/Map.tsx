@@ -10,9 +10,9 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
-import React, {useMemo, useRef, forwardRef} from 'react';
+import React, {useMemo, useRef, forwardRef, useState} from 'react';
 import {View} from 'react-native';
-
+import DeparturesTexts from '@atb/translations/screens/Departures';
 import LocationBar from '@atb/components/map/LocationBar';
 import useSelectedFeatureChangeEffect, {
   findClickedStopPlace,
@@ -34,6 +34,13 @@ import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
 import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
 import {ScreenHeaderWithoutNavigation} from '../screen-header';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {BottomSheetSize} from '../bottom-sheet/BottomSheetContainer';
+import StopPlaceView from '@atb/screens/Departures/StopPlaceView';
+import {SearchTime} from '@atb/screens/Departures/utils';
+import {Quay} from '@atb/api/types/departures';
+import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
+import ThemeText from '../text';
+import {DeparturesScreenProps} from '@atb/screens/Departures/types';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -60,6 +67,7 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
   const controlStyles = useControlPositionsStyle();
   const {open: openBottomSheet} = useBottomSheet();
   const closeRef = useRef(null);
+  const bottomSheetStyles = useBottomSheetStyles();
 
   const startingCoordinates = useMemo(
     () =>
@@ -76,6 +84,15 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
       mapViewRef,
       mapCameraRef,
     );
+
+  const navigateToQuay = (quay: Quay) => {};
+  const navigateToDetails = (
+    serviceJourneyId: string,
+    serviceDate: string,
+    date?: string,
+    fromQuayId?: string,
+    isTripCancelled?: boolean,
+  ) => {};
 
   return (
     <View style={styles.container}>
@@ -104,12 +121,16 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
                 openBottomSheet(
                   (close, focusRef) => (
                     <DeparturesDialogSheet
-                      stopPlace={stopPlaceFeature}
                       close={close}
+                      stopPlaceFeature={stopPlaceFeature}
+                      navigateToDetails={navigateToDetails}
+                      navigateToQuay={navigateToQuay}
                       ref={focusRef}
                     />
                   ),
                   closeRef,
+                  false,
+                  bottomSheetStyles.roundEdgesOnTop,
                 );
               }
             }
@@ -168,28 +189,87 @@ const useMapStyles = StyleSheet.createThemeHook(() => ({
 
 type DeparturesDialogSheetProps = {
   close: () => void;
-  stopPlace: Feature<Point, GeoJsonProperties>;
+  stopPlaceFeature: Feature<Point, GeoJsonProperties>;
+  navigateToQuay: (quay: Quay) => void;
+  navigateToDetails: (
+    serviceJourneyId: string,
+    serviceDate: string,
+    date?: string,
+    fromQuayId?: string,
+    isTripCancelled?: boolean,
+  ) => void;
 };
 
 const DeparturesDialogSheet = forwardRef<View, DeparturesDialogSheetProps>(
-  ({close, stopPlace}, focusRef) => {
+  ({close, stopPlaceFeature, navigateToDetails, navigateToQuay}, focusRef) => {
     const {t} = useTranslation();
+    const styles = useBottomSheetStyles();
+    const [searchTime, setSearchTime] = useState<SearchTime>({
+      option: 'now',
+      date: new Date().toISOString(),
+    });
+    const [showOnlyFavorites, setShowOnlyFavorites] = useState<boolean>(false);
+    const featureId = stopPlaceFeature.properties?.id;
+    const stopDetails = useStopsDetailsData([featureId]);
+    const stopPlace = stopDetails.state.data?.stopPlaces?.[0];
 
     return (
-      <BottomSheetContainer>
-        <ScreenHeaderWithoutNavigation
-          title={stopPlace.properties?.name}
-          color="background_1"
-          leftButton={{
-            type: 'close',
-            onPress: close,
-            text: t(ScreenHeaderTexts.headerButton.cancel.text),
-          }}
-        />
-        <View ref={focusRef} accessible={true}></View>
-      </BottomSheetContainer>
+      <>
+        {stopPlace && (
+          <BottomSheetContainer sheetSize={BottomSheetSize.compact}>
+            <ScreenHeaderWithoutNavigation
+              title={stopPlace.name}
+              color="background_1"
+              style={styles.roundEdgesOnTop}
+              leftButton={{
+                type: 'close',
+                onPress: close,
+                text: t(ScreenHeaderTexts.headerButton.cancel.text),
+              }}
+            />
+            <View
+              ref={focusRef}
+              accessible={true}
+              style={styles.departuresContainer}
+            >
+              <ThemeText
+                type="body__secondary"
+                color="secondary"
+                style={styles.title}
+              >
+                {t(DeparturesTexts.header.title)}
+              </ThemeText>
+              <StopPlaceView
+                stopPlace={stopPlace}
+                showTimeNavigation={false}
+                navigateToDetails={navigateToDetails}
+                navigateToQuay={navigateToQuay}
+                searchTime={searchTime}
+                setSearchTime={setSearchTime}
+                showOnlyFavorites={showOnlyFavorites}
+                setShowOnlyFavorites={setShowOnlyFavorites}
+                testID="departuresContentView"
+              />
+            </View>
+          </BottomSheetContainer>
+        )}
+      </>
     );
   },
 );
+
+const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
+  departuresContainer: {
+    flex: 1,
+  },
+  title: {
+    marginLeft: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
+  },
+  roundEdgesOnTop: {
+    borderTopLeftRadius: theme.border.radius.circle,
+    borderTopRightRadius: theme.border.radius.circle,
+  },
+}));
 
 export default Map;

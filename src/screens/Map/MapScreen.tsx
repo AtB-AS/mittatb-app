@@ -1,6 +1,6 @@
 import React from 'react';
 import {Map} from '@atb/components/map';
 
-export function MapScreen() {
+export const MapScreen = ({}) => {
   return <Map selectionMode={'ExploreStops'} />;
-}
+};

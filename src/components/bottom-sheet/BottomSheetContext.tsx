@@ -15,6 +15,7 @@ import {
   Easing,
   LayoutChangeEvent,
   View,
+  ViewStyle,
 } from 'react-native';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import Backdrop from '@atb/components/bottom-sheet/Backdrop';
@@ -32,6 +33,8 @@ type BottomSheetState = {
     contentFunction: BottomSheetContentFunction,
     /** Optional ref to component which should be focused on sheet close */
     closeRef?: RefObject<any>,
+    useBackdrop?: boolean,
+    style?: ViewStyle,
   ) => void;
 };
 
@@ -43,6 +46,8 @@ const BottomSheetProvider: React.FC = ({children}) => {
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isBackdropEnabled, setBackdropEnabled] = useState(true);
+  const [style, setStyle] = useState({});
   const [contentFunction, setContentFunction] = useState<
     (close: () => void, focusRef: RefObject<any>) => ReactNode
   >(() => () => null);
@@ -73,10 +78,14 @@ const BottomSheetProvider: React.FC = ({children}) => {
   const open = (
     contentFunction: (close: () => void, focusRef: RefObject<any>) => ReactNode,
     closeRef?: RefObject<any>,
+    useBackdrop: boolean = true,
+    style: ViewStyle = {},
   ) => {
     setContentFunction(() => contentFunction);
     setCloseRef(closeRef);
+    setBackdropEnabled(useBackdrop);
     setIsOpen(true);
+    setStyle(style);
     setTimeout(() => giveFocus(focusRef), 300);
   };
 
@@ -102,11 +111,12 @@ const BottomSheetProvider: React.FC = ({children}) => {
   const bottomSheet = useMemo(
     () => (
       <>
-        <Backdrop animatedOffset={animatedOffset} />
+        {isBackdropEnabled && <Backdrop animatedOffset={animatedOffset} />}
         <ClickableBackground isOpen={isOpen} close={close} height={height} />
         <AnimatedBottomSheet
           animatedOffset={animatedOffset}
           onLayout={onLayout}
+          style={style}
         >
           {contentFunction(close, focusRef)}
         </AnimatedBottomSheet>

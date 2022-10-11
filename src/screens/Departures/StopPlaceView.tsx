@@ -14,6 +14,7 @@ import {useStopPlaceData} from './state/stop-place-state';
 
 type StopPlaceViewProps = {
   stopPlace: Place;
+  showTimeNavigation?: boolean;
   navigateToQuay: (quay: Quay) => void;
   navigateToDetails: (
     serviceJourneyId: string,
@@ -30,6 +31,7 @@ type StopPlaceViewProps = {
 
 export default function StopPlaceView({
   stopPlace,
+  showTimeNavigation = true,
   navigateToQuay,
   navigateToDetails,
   searchTime,
@@ -78,17 +80,25 @@ export default function StopPlaceView({
       {quayListData && (
         <SectionList
           ListHeaderComponent={
-            <View style={styles.header}>
+            <View
+              style={
+                showTimeNavigation
+                  ? styles.headerWithNavigation
+                  : styles.headerWithoutNavigation
+              }
+            >
               {placeHasFavorites && (
                 <FavoriteToggle
                   enabled={showOnlyFavorites}
                   setEnabled={setShowOnlyFavorites}
                 />
               )}
-              <DateNavigation
-                searchTime={searchTime}
-                setSearchTime={setSearchTime}
-              />
+              {showTimeNavigation && (
+                <DateNavigation
+                  searchTime={searchTime}
+                  setSearchTime={setSearchTime}
+                />
+              )}
             </View>
           }
           refreshControl={
@@ -149,9 +159,13 @@ function publicCodeCompare(a?: string, b?: string): number {
   // Otherwise compare as strings (e.g. K1 < K2)
   return a.localeCompare(b);
 }
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  header: {
+  headerWithNavigation: {
     paddingVertical: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
+  },
+  headerWithoutNavigation: {
     marginHorizontal: theme.spacings.medium,
   },
 }));

@@ -27,6 +27,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import PaymentBrand from '../PaymentBrand';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {getExpireDate, getPaymentTypeName} from '../../utils';
+import {BottomSheetSize} from '@atb/components/bottom-sheet/BottomSheetContainer';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
@@ -155,7 +156,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
   }, [previousPaymentMethod]);
 
   return (
-    <BottomSheetContainer fullHeight={true}>
+    <BottomSheetContainer sheetSize={BottomSheetSize.cover}>
       <View style={{flex: 1}}>
         <ScreenHeaderWithoutNavigation
           title={t(SelectPaymentMethodTexts.header.text)}

@@ -258,7 +258,8 @@ export function useStopPlaceData(
   tickRateInSeconds: number = 10,
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
-  const isFocused = useIsFocused();
+  // TODO: Fix use of focused
+  const isFocused = true; //useIsFocused();
   const {favoriteDepartures} = useFavorites();
 
   const refresh = useCallback(
