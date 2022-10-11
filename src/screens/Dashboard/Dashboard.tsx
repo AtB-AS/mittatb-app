@@ -78,9 +78,17 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
   const {from, to} = useLocations(currentLocation);
   useEffect(() => {
     if (!!to && !!from) {
+      const toLocation = to;
+      const fromLocation = from;
+
+      // Reset search params before navigating to TripSearch in order to prevent
+      // the search fields from both being filled (which is an invalid state)
+      // when navigating back.
+      reset();
+
       navigation.navigate('TripSearch', {
-        fromLocation: from,
-        toLocation: to,
+        fromLocation,
+        toLocation,
         searchTime: undefined,
       });
     }
@@ -135,6 +143,11 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
       newTo: translateLocation(from),
     });
     navigation.setParams({fromLocation: to, toLocation: from});
+  }
+
+  function reset() {
+    setCurrentLocationAsFrom();
+    navigation.setParams({toLocation: undefined});
   }
 
   function fillNextAvailableLocation(selectedLocation: Location) {
