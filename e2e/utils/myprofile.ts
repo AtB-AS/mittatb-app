@@ -41,7 +41,7 @@ export const toggleFrontpage = async (enable: boolean) => {
   if (toggle == 0 && enable) {
     await tapById('newFrontpageToggle');
   }
-  // Disable OTP 2 if not disabled
+  // Disable frontpage if not disabled
   if (toggle == 1 && !enable) {
     await tapById('newFrontpageToggle');
   }
