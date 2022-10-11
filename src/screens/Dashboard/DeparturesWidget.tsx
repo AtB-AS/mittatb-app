@@ -96,7 +96,7 @@ const FavouritesWidget: React.FC = () => {
                   quayGroup={quay}
                   stop={stopPlaceInfo}
                   searchDate={searchDate}
-                  currentLocation={location || undefined}
+                  locationOrStopPlace={location || undefined}
                   mode="frontpage"
                 />
               );

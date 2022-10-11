@@ -8,7 +8,6 @@ import MessageBox, {TinyMessageBox} from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
-import {searchByStopPlace} from '@atb/geocoder/search-for-location';
 import {usePreferenceItems} from '@atb/preferences';
 import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
 import SituationMessages from '@atb/situations';
@@ -219,12 +218,14 @@ const TripSection: React.FC<TripSectionProps> = ({
   );
 
   async function handleQuayPress(quay: Quay | undefined) {
+    const stopPlace = quay?.stopPlace;
+    if (!stopPlace) return;
+
     if (newDepartures) {
-      if (!quay?.stopPlace?.id) return;
       navigation.push('PlaceScreen', {
         place: {
-          id: quay.stopPlace.id,
-          name: quay.stopPlace.name,
+          id: stopPlace.id,
+          name: stopPlace.name,
         },
         selectedQuay: {
           id: quay.id,
@@ -232,11 +233,8 @@ const TripSection: React.FC<TripSectionProps> = ({
         },
       });
     } else {
-      const location = await searchByStopPlace(quay?.stopPlace);
-      if (!location) return;
-
       navigation.push('QuayDepartures', {
-        location,
+        stopPlace,
       });
     }
   }

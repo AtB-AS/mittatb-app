@@ -6,17 +6,19 @@ import client from '../client';
 import {StopPlaceGroup} from './types';
 
 export type DepartureGroupsPayload = {
-  location:
-    | {
-        layer: 'address';
-        coordinates: {longitude: number; latitude: number};
-      }
-    | {
-        layer: 'venue';
-        id: string;
-      };
+  location: DepartureGroupsPayloadLocation;
   favorites?: FavoriteDeparture[];
 };
+
+export type DepartureGroupsPayloadLocation =
+  | {
+      layer: 'address';
+      coordinates: {longitude: number; latitude: number};
+    }
+  | {
+      layer: 'venue';
+      id: string;
+    };
 
 export type DepartureGroupsQuery = CursoredQuery<{
   startTime: string;

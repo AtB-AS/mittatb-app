@@ -15,13 +15,14 @@ import LineItem from './line';
 import MoreItem from './more';
 import QuayHeaderItem from './quay-header';
 import {Location} from '@atb/favorites/types';
+import {StopPlace} from '@atb/api/types/trips';
 
 const LIMIT_SIZE = 5;
 
 type QuaySectionProps = {
   quayGroup: QuayGroup;
   stop: StopPlaceInfo;
-  currentLocation?: Location;
+  locationOrStopPlace?: Location | StopPlace;
   lastUpdated?: Date;
   hidden?: Date;
   searchDate: string;
@@ -32,7 +33,7 @@ type QuaySectionProps = {
 const QuaySection = React.memo(function QuaySection({
   quayGroup,
   stop,
-  currentLocation,
+  locationOrStopPlace,
   lastUpdated,
   searchDate,
   testID,
@@ -63,7 +64,7 @@ const QuaySection = React.memo(function QuaySection({
       <Section testID={testID} style={styles.quaySection}>
         <QuayHeaderItem
           quay={quayGroup.quay}
-          distance={getDistanceInfo(quayGroup, currentLocation)}
+          distance={getDistanceInfo(quayGroup, locationOrStopPlace)}
           testID={testID}
         />
 
@@ -102,14 +103,35 @@ function sortAndLimit(quayGroup: QuayGroup, limit: number) {
   return sorted;
 }
 
-function getDistanceInfo(group: QuayGroup, currentLocation?: Location): number {
+function getDistanceInfo(
+  group: QuayGroup,
+  locationOrStopPlace?: Location | StopPlace,
+): number {
   const pos = {
     lat: group.quay.latitude!,
     lng: group.quay.longitude!,
   };
-  return !currentLocation?.coordinates
-    ? 0
-    : haversineDistance(currentLocation.coordinates, pos);
+
+  // locationOrStopPlace is StopPlace
+  if (locationOrStopPlace && 'latitude' in locationOrStopPlace) {
+    if (!locationOrStopPlace.latitude || !locationOrStopPlace.longitude) {
+      return 0;
+    }
+    return haversineDistance(
+      {
+        latitude: locationOrStopPlace.latitude,
+        longitude: locationOrStopPlace.longitude,
+      },
+      pos,
+    );
+  }
+
+  // locationOrStopPlace is Location
+  if (locationOrStopPlace && 'coordinates' in locationOrStopPlace) {
+    return haversineDistance(locationOrStopPlace.coordinates, pos);
+  }
+
+  return 0;
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
