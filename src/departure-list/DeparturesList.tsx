@@ -32,7 +32,7 @@ export default function DeparturesList({
   isLoading = false,
   error,
   isInitialScreen,
-  locationOrStopPlace: currentLocation,
+  locationOrStopPlace,
   showOnlyFavorites,
   disableCollapsing = false,
   searchDate,
@@ -79,7 +79,7 @@ export default function DeparturesList({
             <StopDepartures
               key={item?.stopPlace.id}
               stopPlaceGroup={item}
-              currentLocation={currentLocation}
+              locationOrStopPlace={locationOrStopPlace}
               lastUpdated={lastUpdated}
               defaultExpanded={i === 0}
               disableCollapsing={disableCollapsing}
@@ -125,7 +125,7 @@ function FooterLoader({isFetchingMore}: FooterLoaderProps) {
 
 type StopDeparturesProps = {
   stopPlaceGroup: StopPlaceGroup;
-  currentLocation?: Location | StopPlace;
+  locationOrStopPlace?: Location | StopPlace;
   lastUpdated?: Date;
   defaultExpanded?: boolean;
   disableCollapsing?: boolean;
@@ -134,7 +134,7 @@ type StopDeparturesProps = {
 };
 const StopDepartures = React.memo(function StopDepartures({
   stopPlaceGroup,
-  currentLocation,
+  locationOrStopPlace,
   lastUpdated,
   defaultExpanded = false,
   disableCollapsing = false,
@@ -186,7 +186,7 @@ const StopDepartures = React.memo(function StopDepartures({
             key={quayGroup.quay.id}
             stop={stopPlaceGroup.stopPlace}
             quayGroup={quayGroup}
-            locationOrStopPlace={currentLocation}
+            locationOrStopPlace={locationOrStopPlace}
             lastUpdated={lastUpdated}
             searchDate={searchDate}
             testID={'quaySection' + i}

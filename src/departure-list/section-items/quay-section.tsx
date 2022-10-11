@@ -33,7 +33,7 @@ type QuaySectionProps = {
 const QuaySection = React.memo(function QuaySection({
   quayGroup,
   stop,
-  locationOrStopPlace: currentLocation,
+  locationOrStopPlace,
   lastUpdated,
   searchDate,
   testID,
@@ -64,7 +64,7 @@ const QuaySection = React.memo(function QuaySection({
       <Section testID={testID} style={styles.quaySection}>
         <QuayHeaderItem
           quay={quayGroup.quay}
-          distance={getDistanceInfo(quayGroup, currentLocation)}
+          distance={getDistanceInfo(quayGroup, locationOrStopPlace)}
           testID={testID}
         />
 
