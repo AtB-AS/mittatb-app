@@ -438,24 +438,19 @@ export function useDepartureData(
 function getPayloadLocation(
   locationOrStopPlace: Location | StopPlace,
 ): DepartureGroupsPayloadLocation {
-  // locationOrStopPlace is StopPlace
-  if ('latitude' in locationOrStopPlace) {
-    return {
-      id: locationOrStopPlace.id,
-      layer: 'venue',
-    };
-  }
-
   // locationOrStopPlace is Location
-  if ('coordinates' in locationOrStopPlace) {
+  if ('resultType' in locationOrStopPlace) {
     return locationOrStopPlace.resultType === 'search'
       ? locationOrStopPlace
       : {
           layer: 'address',
           coordinates: locationOrStopPlace.coordinates,
         };
+  } else {
+    // locationOrStopPlace is StopPlace
+    return {
+      id: locationOrStopPlace.id,
+      layer: 'venue',
+    };
   }
-
-  // Should not be possible, but for typing there needs to be a fallback
-  return {id: '', layer: 'venue'};
 }
