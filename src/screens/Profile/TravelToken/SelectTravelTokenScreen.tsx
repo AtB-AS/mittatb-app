@@ -8,6 +8,7 @@ import {RemoteToken} from '@atb/mobile-token/types';
 import {
   findInspectable,
   getDeviceName,
+  isInspectable,
   isMobileToken,
   isTravelCardToken,
 } from '@atb/mobile-token/utils';
@@ -60,6 +61,10 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
 
   const onSave = useCallback(async () => {
     if (selectedToken) {
+      if (isInspectable(selectedToken)) {
+        navigation.goBack();
+        return;
+      }
       setSaveState({saving: true, error: false});
       const success = await toggleToken(selectedToken.id);
       if (success) {
