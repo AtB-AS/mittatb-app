@@ -11,7 +11,7 @@ import {StyleSheet} from '@atb/theme';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Feature} from 'geojson';
 import React, {useMemo, useRef} from 'react';
-import {View} from 'react-native';
+import {useWindowDimensions, View} from 'react-native';
 import LocationBar from '@atb/components/map/LocationBar';
 import useSelectedFeatureChangeEffect, {
   findClickedStopPlace,
@@ -75,6 +75,7 @@ const Map = ({
   const {open: openBottomSheet} = useBottomSheet();
   const closeRef = useRef(null);
   const bottomSheetStyles = useBottomSheetStyles();
+  const {height: windowHeight} = useWindowDimensions();
 
   const startingCoordinates = useMemo(
     () =>
@@ -90,6 +91,7 @@ const Map = ({
       startingCoordinates,
       mapViewRef,
       mapCameraRef,
+      [100, 100, windowHeight / 2, 100],
     );
 
   return (

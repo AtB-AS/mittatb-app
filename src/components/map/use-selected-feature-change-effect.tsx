@@ -17,12 +17,19 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 const MAX_LIMIT_TO_SHOW_WALKING_TRIP = 5000;
 
 type FeatureOrCoordinates = Feature<Point> | Coordinates;
+type BoundingBox = {
+  xMin: number;
+  xMax: number;
+  yMin: number;
+  yMax: number;
+};
 
 const useSelectedFeatureChangeEffect = (
   selectionMode: MapSelectionMode,
   startingSelectedCoordinates: Coordinates | undefined,
   mapViewRef: RefObject<MapboxGL.MapView>,
   mapCameraRef: RefObject<MapboxGL.Camera>,
+  padding: MapboxGL.Padding = [100, 100],
 ) => {
   const [mapLines, setMapLines] = useState<MapLine[]>();
   const [selectedFeatureOrCoordinates, setSelectedFeatureOrCoordinates] =
@@ -73,7 +80,16 @@ const useSelectedFeatureChangeEffect = (
               );
               if (mapLines) {
                 setMapLines(mapLines);
-                fitBounds(fromCoordinates, stopPlaceCoordinates, mapCameraRef);
+                const bbox = getBoundingBox(mapLines);
+                const northEast: Coordinates = {
+                  longitude: bbox.xMin,
+                  latitude: bbox.yMin,
+                };
+                const southWest: Coordinates = {
+                  longitude: bbox.xMax,
+                  latitude: bbox.yMax,
+                };
+                fitBounds(northEast, southWest, mapCameraRef, padding);
                 return;
               }
             }
@@ -148,4 +164,24 @@ const getMapLines = async (
     return tripLegs ? createMapLines(tripLegs) : undefined;
   }
   return undefined;
+};
+
+const getBoundingBox = (data: MapLine[]): BoundingBox => {
+  var bounds: BoundingBox = {xMin: 180, xMax: 0, yMin: 90, yMax: 0};
+  var coords, latitude, longitude;
+
+  for (var i = 0; i < data.length; i++) {
+    coords = data[i].geometry.coordinates;
+
+    for (var j = 0; j < coords.length; j++) {
+      longitude = coords[j][0];
+      latitude = coords[j][1];
+      bounds.xMin = bounds.xMin < longitude ? bounds.xMin : longitude;
+      bounds.xMax = bounds.xMax > longitude ? bounds.xMax : longitude;
+      bounds.yMin = bounds.yMin < latitude ? bounds.yMin : latitude;
+      bounds.yMax = bounds.yMax > latitude ? bounds.yMax : latitude;
+    }
+  }
+
+  return bounds;
 };

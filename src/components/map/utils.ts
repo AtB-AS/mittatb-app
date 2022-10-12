@@ -35,11 +35,12 @@ export function fitBounds(
   fromCoordinates: Coordinates,
   toCoordinates: Coordinates,
   mapCameraRef: RefObject<MapboxGL.Camera>,
+  padding: MapboxGL.Padding = [100, 100],
 ) {
   mapCameraRef.current?.fitBounds(
     [fromCoordinates.longitude, fromCoordinates.latitude],
     [toCoordinates.longitude, toCoordinates.latitude],
-    [100, 100],
+    padding,
     1000,
   );
 }
