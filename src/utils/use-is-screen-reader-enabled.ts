@@ -12,10 +12,13 @@ export default function useIsScreenReaderEnabled() {
     };
 
     fetch();
-    AccessibilityInfo.addEventListener('screenReaderChanged', setEnabled);
+    const accessibilityInfoSubscription = AccessibilityInfo.addEventListener(
+      'screenReaderChanged',
+      setEnabled,
+    );
     return () => {
       mounted = false;
-      AccessibilityInfo.removeEventListener('screenReaderChanged', setEnabled);
+      accessibilityInfoSubscription.remove();
     };
   }, []);
 
