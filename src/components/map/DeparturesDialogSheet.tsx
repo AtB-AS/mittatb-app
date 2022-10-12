@@ -86,6 +86,7 @@ const DeparturesDialogSheet = forwardRef<View, DeparturesDialogSheetProps>(
               navigateToQuay={(quay) => {
                 navigateToQuay(stopPlace, quay);
               }}
+              isFocused={false}
               searchTime={searchTime}
               setSearchTime={setSearchTime}
               showOnlyFavorites={showOnlyFavorites}

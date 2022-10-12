@@ -5,10 +5,10 @@ import {SearchTime} from '@atb/screens/Departures/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
+import {useIsFocused} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
-import {TripDetailsScreenProps} from '../TripDetails/types';
 import QuayView from './QuayView';
 import {useStopsDetailsData} from './state/stop-place-details-state';
 import StopPlaceView from './StopPlaceView';
@@ -76,6 +76,7 @@ export default function PlaceScreen({
   const navigateToQuay = (quay: Quay) => {
     navigation.setParams({selectedQuay: quay});
   };
+  const isFocused = useIsFocused();
 
   return (
     <View style={styles.container}>
@@ -137,6 +138,7 @@ export default function PlaceScreen({
       ) : (
         <StopPlaceView
           stopPlace={place}
+          isFocused={isFocused}
           navigateToDetails={navigateToDetails}
           navigateToQuay={navigateToQuay}
           searchTime={searchTime}

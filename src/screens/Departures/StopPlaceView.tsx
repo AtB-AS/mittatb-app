@@ -26,6 +26,7 @@ type StopPlaceViewProps = {
   setSearchTime: (searchTime: SearchTime) => void;
   showOnlyFavorites: boolean;
   setShowOnlyFavorites: (enabled: boolean) => void;
+  isFocused: boolean;
   testID?: string;
 };
 
@@ -38,6 +39,7 @@ export default function StopPlaceView({
   setSearchTime,
   showOnlyFavorites,
   setShowOnlyFavorites,
+  isFocused,
   testID,
 }: StopPlaceViewProps) {
   const styles = useStyles();
@@ -45,6 +47,7 @@ export default function StopPlaceView({
   const {state, refresh} = useStopPlaceData(
     stopPlace,
     showOnlyFavorites,
+    isFocused,
     searchTime?.option !== 'now' ? searchTime.date : undefined,
   );
   const quayListData: SectionListData<Quay>[] | undefined = stopPlace.quays
