@@ -36,6 +36,7 @@ type BottomSheetState = {
     useBackdrop?: boolean,
     style?: ViewStyle,
   ) => void;
+  isOpen: () => boolean;
 };
 
 const BottomSheetContext = createContext<BottomSheetState | undefined>(
@@ -137,6 +138,7 @@ const BottomSheetProvider: React.FC = ({children}) => {
 
   const state = {
     open,
+    isOpen: () => isOpen,
   };
 
   return (

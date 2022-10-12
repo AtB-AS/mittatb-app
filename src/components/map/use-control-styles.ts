@@ -3,7 +3,9 @@ import {useMemo} from 'react';
 import {ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-export function useControlPositionsStyle() {
+export function useControlPositionsStyle(
+  controlsExtraBottomPadding: number = 0,
+) {
   const {top, bottom} = useSafeAreaInsets();
   const {theme} = useTheme();
 
@@ -21,7 +23,7 @@ export function useControlPositionsStyle() {
       },
       controlsContainer: {
         position: 'absolute',
-        bottom: bottom + theme.spacings.medium,
+        bottom: bottom + controlsExtraBottomPadding + theme.spacings.medium,
         right: theme.spacings.medium,
       },
       locationContainer: {
@@ -31,6 +33,6 @@ export function useControlPositionsStyle() {
         width: '100%',
       },
     }),
-    [bottom, top],
+    [bottom, top, controlsExtraBottomPadding],
   );
 }

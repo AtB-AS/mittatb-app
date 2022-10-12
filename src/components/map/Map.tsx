@@ -9,14 +9,14 @@ import {
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {Feature} from 'geojson';
-import React, {useMemo, useRef} from 'react';
+import {Feature, GeoJsonProperties, Point} from 'geojson';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {useWindowDimensions, View} from 'react-native';
 import LocationBar from '@atb/components/map/LocationBar';
 import useSelectedFeatureChangeEffect, {
   findClickedStopPlace,
 } from './use-selected-feature-change-effect';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {BottomSheetSize, useBottomSheet} from '@atb/components/bottom-sheet';
 import MapRoute from '@atb/screens/TripDetails/Map/MapRoute';
 import {
   flyToLocation,
@@ -32,6 +32,7 @@ import {Place, Quay} from '@atb/api/types/departures';
 import DeparturesDialogSheet, {
   useBottomSheetStyles,
 } from './DeparturesDialogSheet';
+import {useBottomNavigationStyles} from '@atb/utils/navigation';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -71,11 +72,18 @@ const Map = ({
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
-  const controlStyles = useControlPositionsStyle();
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, isOpen} = useBottomSheet();
   const closeRef = useRef(null);
   const bottomSheetStyles = useBottomSheetStyles();
   const {height: windowHeight} = useWindowDimensions();
+  const {minHeight} = useBottomNavigationStyles();
+
+  const bottomSheetSize = BottomSheetSize.compact;
+  const windowsHeightBasedOnBottomSheet = windowHeight * bottomSheetSize;
+
+  const controlStyles = useControlPositionsStyle(
+    isOpen() ? windowsHeightBasedOnBottomSheet - minHeight : 0,
+  );
 
   const startingCoordinates = useMemo(
     () =>
@@ -91,7 +99,7 @@ const Map = ({
       startingCoordinates,
       mapViewRef,
       mapCameraRef,
-      [100, 100, windowHeight / 2, 100],
+      [100, 100, windowsHeightBasedOnBottomSheet, 100],
     );
 
   return (
@@ -110,8 +118,6 @@ const Map = ({
           }}
           onPress={async (feature: Feature) => {
             if (isFeaturePoint(feature)) {
-              onMapClick(feature);
-
               const stopPlaceFeature = await findClickedStopPlace(
                 feature,
                 mapViewRef,
@@ -126,10 +132,29 @@ const Map = ({
                 openBottomSheet(
                   (close, focusRef) => (
                     <DeparturesDialogSheet
+                      bottomSheetSize={bottomSheetSize}
                       close={close}
                       stopPlaceFeature={stopPlaceFeature}
-                      navigateToDetails={navigateToDetails}
-                      navigateToQuay={navigateToQuay}
+                      navigateToDetails={(
+                        serviceJourneyId: string,
+                        serviceDate: string,
+                        date?: string,
+                        fromQuayId?: string,
+                        isTripCancelled?: boolean,
+                      ) => {
+                        close();
+                        navigateToDetails(
+                          serviceJourneyId,
+                          serviceDate,
+                          date,
+                          fromQuayId,
+                          isTripCancelled,
+                        );
+                      }}
+                      navigateToQuay={(stopPlace, quay) => {
+                        close();
+                        navigateToQuay(stopPlace, quay);
+                      }}
                       ref={focusRef}
                     />
                   ),
@@ -138,6 +163,7 @@ const Map = ({
                   bottomSheetStyles.roundEdgesOnTop,
                 );
               }
+              onMapClick(feature);
             }
           }}
           {...MapViewConfig}
