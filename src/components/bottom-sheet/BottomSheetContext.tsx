@@ -113,8 +113,16 @@ const BottomSheetProvider: React.FC = ({children}) => {
   const bottomSheet = useMemo(
     () => (
       <>
-        {isBackdropEnabled && <Backdrop animatedOffset={animatedOffset} />}
-        <ClickableBackground isOpen={isOpen} close={close} height={height} />
+        {isBackdropEnabled && (
+          <>
+            <Backdrop animatedOffset={animatedOffset} />
+            <ClickableBackground
+              isOpen={isOpen}
+              close={close}
+              height={height}
+            />
+          </>
+        )}
         <AnimatedBottomSheet
           animatedOffset={animatedOffset}
           onLayout={onLayout}

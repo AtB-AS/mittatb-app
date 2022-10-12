@@ -32,6 +32,7 @@ export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
     <Map
       selectionMode={'ExploreStops'}
       navigateToQuay={navigateToQuay}
+      showDeparturesBottomSheet={true}
       navigateToDetails={navigateToDetails}
     />
   );

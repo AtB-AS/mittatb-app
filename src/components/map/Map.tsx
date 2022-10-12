@@ -57,9 +57,10 @@ export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
 type MapProps = {
   initialLocation?: Location;
   selectionMode: MapSelectionMode;
+  showDeparturesBottomSheet: boolean;
   onLocationSelect?: (selectedLocation?: GeoLocation | SearchLocation) => void;
-  navigateToQuay: (place: Place, quay: Quay) => void;
-  navigateToDetails: (
+  navigateToQuay?: (place: Place, quay: Quay) => void;
+  navigateToDetails?: (
     serviceJourneyId: string,
     serviceDate: string,
     date?: string,
@@ -71,6 +72,7 @@ type MapProps = {
 const Map = ({
   initialLocation,
   selectionMode,
+  showDeparturesBottomSheet = false,
   onLocationSelect,
   navigateToQuay,
   navigateToDetails,
@@ -123,7 +125,12 @@ const Map = ({
                 mapViewRef,
               );
 
-              if (stopPlaceFeature) {
+              if (
+                stopPlaceFeature &&
+                showDeparturesBottomSheet &&
+                navigateToDetails &&
+                navigateToQuay
+              ) {
                 openBottomSheet(
                   (close, focusRef) => (
                     <DeparturesDialogSheet

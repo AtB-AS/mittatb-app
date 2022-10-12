@@ -17,10 +17,11 @@ export type BottomSheetContainerProps = {
 export default function BottomSheetContainer({
   children,
   sheetSize,
-  style,
+  style = {},
 }: BottomSheetContainerProps) {
   const {height: windowHeight} = useWindowDimensions();
-  const maxHeight = windowHeight * sheetSize;
-  const height = sheetSize > 0 ? maxHeight : 'auto';
+  const isAuto = sheetSize === BottomSheetSize.auto;
+  const maxHeight = windowHeight * (isAuto ? BottomSheetSize.cover : sheetSize);
+  const height = isAuto ? 'auto' : maxHeight;
   return <View style={[{maxHeight, height}, style]}>{children}</View>;
 }
