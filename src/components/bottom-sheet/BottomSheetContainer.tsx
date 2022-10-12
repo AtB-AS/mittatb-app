@@ -10,13 +10,13 @@ export enum BottomSheetSize {
 
 export type BottomSheetContainerProps = {
   children: ReactNode;
-  sheetSize: BottomSheetSize;
+  sheetSize?: BottomSheetSize;
   style?: ViewStyle;
 };
 
 export default function BottomSheetContainer({
   children,
-  sheetSize,
+  sheetSize = BottomSheetSize.auto,
   style = {},
 }: BottomSheetContainerProps) {
   const {height: windowHeight} = useWindowDimensions();
