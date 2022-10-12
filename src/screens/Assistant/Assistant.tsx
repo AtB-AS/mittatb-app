@@ -415,6 +415,13 @@ const Assistant: React.FC<Props> = ({
     navigation.setParams({
       fromLocation: from?.resultType === 'geolocation' ? currentLocation : from,
       toLocation: to?.resultType === 'geolocation' ? currentLocation : to,
+      searchTime:
+        searchTime.option === 'now'
+          ? {
+              option: 'now',
+              date: new Date().toISOString(),
+            }
+          : searchTime,
     });
   };
 
