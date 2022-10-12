@@ -16,7 +16,7 @@ const LoginTexts = {
       },
     },
   },
-  activeTicketPrompt: {
+  activeFareContractPrompt: {
     title: _(
       'Vent litt, du har en gyldig billett',
       'Wait a sec – you have a valid ticket',

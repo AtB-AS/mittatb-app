@@ -14,7 +14,7 @@ export default function SingleTravellerSelection({
   userProfilesWithCount,
   addCount,
   removeCount,
-  ticketType,
+  fareProductType,
 }: UserCountState) {
   const {t, language} = useTranslation();
   const selectedProfile = userProfilesWithCount.find((u) => u.count);
@@ -29,11 +29,13 @@ export default function SingleTravellerSelection({
     addCount(u.userTypeString);
   };
 
-  function travellerInfoByTicketType(
-    ticketType: PreassignedFareProductType | undefined,
+  function travellerInfoByFareProductType(
+    fareProductType: PreassignedFareProductType | undefined,
   ) {
     return (u: UserProfileWithCount) => {
-      return t(TicketTravellerTexts.information(u.userTypeString, ticketType));
+      return t(
+        TicketTravellerTexts.information(u.userTypeString, fareProductType),
+      );
     };
   }
 
@@ -44,7 +46,7 @@ export default function SingleTravellerSelection({
         keyExtractor={(u) => u.userTypeString}
         itemToText={(u) => getReferenceDataName(u, language)}
         hideSubtext={hideTravellerDescriptions}
-        itemToSubtext={travellerInfoByTicketType(ticketType)}
+        itemToSubtext={travellerInfoByFareProductType(fareProductType)}
         selected={selectedProfile}
         onSelect={select}
         color="interactive_2"

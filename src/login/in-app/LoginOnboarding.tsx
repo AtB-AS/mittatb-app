@@ -24,7 +24,7 @@ export const LoginOnboardingInApp = ({
     <LoginOnboarding
       doAfterSubmit={(hasActiveFareContracts: boolean) => {
         if (hasActiveFareContracts) {
-          navigation.navigate('ActiveTicketPromptInApp', {
+          navigation.navigate('activeFareContractPromptInApp', {
             afterLogin,
           });
         } else {

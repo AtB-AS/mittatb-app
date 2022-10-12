@@ -1,6 +1,6 @@
 import {translation as _} from '../commons';
 
-const TicketTexts = {
+const TicketingTexts = {
   organizationName: _('AtB', 'AtB'),
   detailsLink: {
     valid: _('Vis detaljer / kontroll', 'Show details / inspection'),
@@ -95,12 +95,12 @@ const TicketTexts = {
       ),
     },
   },
-  unknownTicket: {
+  unknownFareContract: {
     message: _('Ukjent billett', 'Unknown ticket'),
     orderId: (orderId: string) =>
       _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`),
   },
-  ticketInfo: {
+  fareContractInfo: {
     noInspectionIcon: _('Ugyldig\ni kontroll', 'Invalid in\ninspection'),
     noInspectionIconA11yLabel: _('Ugyldig i kontroll', 'Invalid in inspection'),
   },
@@ -143,4 +143,4 @@ const TicketTexts = {
   },
 };
 
-export default TicketTexts;
+export default TicketingTexts;

@@ -21,7 +21,7 @@ const DeleteProfileTexts = {
           : ''
       }`,
     ),
-  unableToDeleteWithTickets: _(
+  unableToDeleteWithFareContracts: _(
     'Kan ikke slette Min profil mens du har aktive billetter. Kontakt AtB kundeservice for refusjon eller vent til billettene har utløpt.',
     'Unable to delete My profile while you have active tickets. Please contact customer support to refund or wait until tickets expire.',
   ),

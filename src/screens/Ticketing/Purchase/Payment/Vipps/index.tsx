@@ -31,7 +31,7 @@ export default function VippsPayment({
     navigation.navigate('TabNavigator', {
       screen: 'Ticketing',
       params: {
-        screen: 'ActiveTickets',
+        screen: 'ActiveFareProductsAndReservationsTab',
       },
     });
   };

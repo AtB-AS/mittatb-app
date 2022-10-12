@@ -4,17 +4,17 @@ import * as Light from '@atb/assets/svg/color/illustrations/ticket-type/light';
 import * as Dark from '@atb/assets/svg/color/illustrations/ticket-type/dark';
 import {SvgProps} from 'react-native-svg';
 
-export type TicketIllustration = keyof typeof Light;
-type TicketIllustrationsProps = {name: TicketIllustration} & SvgProps;
+export type FareProductIllustration = keyof typeof Light;
+type FareProductIllustrationsProps = {name: FareProductIllustration} & SvgProps;
 
-const ThemedTicketIllustration = ({
+const ThemedFareProductIllustration = ({
   name,
   ...props
-}: TicketIllustrationsProps): JSX.Element => {
+}: FareProductIllustrationsProps): JSX.Element => {
   const {themeName} = useTheme();
   const themeIllustrations = themeName === 'light' ? Light : Dark;
   const Illustration = themeIllustrations[name];
   return <Illustration {...props} />;
 };
 
-export default ThemedTicketIllustration;
+export default ThemedFareProductIllustration;

@@ -27,7 +27,7 @@ export {default as PaymentVippsTexts} from './screens/subscreens/PaymentVipps';
 export {default as PurchaseOverviewTexts} from './screens/subscreens/PurchaseOverview';
 export {default as PurchaseConfirmationTexts} from './screens/subscreens/PurchaseConfirmation';
 export {default as ProfileTexts} from './screens/Profile';
-export {default as TicketTexts} from './screens/Ticket';
+export {default as TicketingTexts} from './screens/Ticket';
 export {default as TicketsTexts} from './screens/Tickets';
 export {default as TicketSplashTexts} from './screens/TicketSplash';
 export {default as UpgradeSplashTexts} from './screens/UpgradeSplash';

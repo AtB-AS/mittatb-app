@@ -74,7 +74,7 @@ const ConsequencesScreen = ({route, navigation}: ConsequencesProps) => {
               params: {
                 screen: 'Ticketing',
                 params: {
-                  screen: 'BuyTickets',
+                  screen: 'PurchaseTab',
                 },
               },
             },

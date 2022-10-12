@@ -5,8 +5,8 @@ import {NearbyStackParams} from '@atb/screens/Nearby/types';
 import {AddEditFavoriteRootParams} from '@atb/screens/Profile/AddEditFavorite/types';
 import {ProfileStackParams} from '@atb/screens/Profile/types';
 import {TicketingStackParams} from '@atb/screens/Ticketing/Purchase/types';
-import {TicketModalStackParams} from '@atb/screens/Ticketing/Ticket/Details/types';
-import {TicketTabsNavigatorParams} from '@atb/screens/Ticketing/Tickets/types';
+import {FareContractModalStackParams} from '@atb/screens/Ticketing/FareContracts/Details/types';
+import {TicketingTabsNavigatorParams} from '@atb/screens/Ticketing/FareProducts/types';
 import {
   BottomTabNavigationProp,
   BottomTabScreenProps,
@@ -29,7 +29,7 @@ export type RootStackParamList = {
   AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;
   LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
   TicketPurchase: NavigatorScreenParams<TicketingStackParams>;
-  TicketModal: NavigatorScreenParams<TicketModalStackParams>;
+  FareContractModal: NavigatorScreenParams<FareContractModalStackParams>;
   MobileTokenOnboarding: undefined;
   SelectTravelTokenRoot: undefined;
   ConsequencesFromTicketPurchase: undefined;
@@ -53,8 +53,11 @@ export type TabNavigatorParams = {
   };
   Nearest: NavigatorScreenParams<NearbyStackParams>;
   Ticketing:
-    | ISubNavigator<TicketTabsNavigatorParams, 'ActiveTickets'>
-    | ISubNavigator<TicketTabsNavigatorParams, 'BuyTickets'>;
+    | ISubNavigator<
+        TicketingTabsNavigatorParams,
+        'ActiveFareProductsAndReservationsTab'
+      >
+    | ISubNavigator<TicketingTabsNavigatorParams, 'PurchaseTab'>;
   Profile: NavigatorScreenParams<ProfileStackParams>;
   MapScreen: undefined;
 };

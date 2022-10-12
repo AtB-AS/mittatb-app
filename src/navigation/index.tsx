@@ -9,7 +9,7 @@ import AddEditFavorite from '@atb/screens/Profile/AddEditFavorite';
 import SortableFavoriteList from '@atb/screens/Profile/FavoriteList/SortFavorites';
 import SelectTravelTokenScreen from '@atb/screens/Profile/TravelToken/SelectTravelTokenScreen';
 import TicketPurchase from '@atb/screens/Ticketing/Purchase';
-import TicketModalScreen from '@atb/screens/Ticketing/Ticket/Details';
+import FareContractModalScreen from '@atb/screens/Ticketing/FareContracts/Details';
 import {useTheme} from '@atb/theme';
 import {APP_SCHEME} from '@env';
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
@@ -65,7 +65,9 @@ const NavigationRoot = () => {
                   screens: {
                     Profile: 'profile',
                     Ticketing: {
-                      screens: {ActiveTickets: 'ticketing'},
+                      screens: {
+                        ActiveFareProductsAndReservationsTab: 'ticketing',
+                      },
                     },
                   },
                 },
@@ -105,8 +107,8 @@ const NavigationRoot = () => {
                   component={TicketPurchase}
                 />
                 <Stack.Screen
-                  name="TicketModal"
-                  component={TicketModalScreen}
+                  name="FareContractModal"
+                  component={FareContractModalScreen}
                 />
                 <Stack.Screen
                   name="MobileTokenOnboarding"

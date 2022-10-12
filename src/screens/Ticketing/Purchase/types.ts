@@ -3,7 +3,7 @@ import {
   PreassignedFareProduct,
   PreassignedFareProductType,
 } from '@atb/reference-data/types';
-import {PaymentType, ReserveOffer} from '@atb/tickets';
+import {PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
   CompositeNavigationProp,
   CompositeScreenProps,

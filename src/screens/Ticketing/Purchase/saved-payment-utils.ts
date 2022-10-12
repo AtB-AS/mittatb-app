@@ -7,7 +7,7 @@ import {
 import storage from '@atb/storage';
 import Bugsnag from '@bugsnag/react-native';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {listRecurringPayments} from '@atb/tickets';
+import {listRecurringPayments} from '@atb/ticketing';
 
 async function getCardFromRecurringPaymentId(
   previousPaymentMethod: RecurringPaymentWithoutCardOption,

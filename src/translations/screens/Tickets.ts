@@ -7,7 +7,7 @@ const TicketsTexts = {
   header: {
     title: _('Billetter', 'Tickets'),
   },
-  buyTicketsTab: {
+  purchaseTab: {
     label: _('Kjøp', 'Buy'),
     a11yLabel: _('Kjøp billetter', 'Buy tickets'),
     button: {
@@ -38,20 +38,17 @@ const TicketsTexts = {
       ),
     },
   },
-  activeTicketsTab: {
+  activeFareProductsAndReservationsTab: {
     label: _('Aktive', 'Valid'),
     a11yLabel: _('Aktive billetter', 'Active tickets'),
-    noTickets: _(
-      'Du har ingen aktive billetter.',
-      'You have no active tickets.',
-    ),
-    noTicketsHistoryHelpText: _(
+    noItems: _('Du har ingen aktive billetter.', 'You have no active tickets.'),
+    noItemsHistoryHelpText: _(
       'Du har ingen aktive billetter. Billetthistorikk finner du under Min profil-fanen.',
       'You have no valid tickets right now. Ticket history can be found under the My profile tab.',
     ),
   },
   ticketHistoryTab: {
-    noTickets: _(
+    noItems: _(
       'Fant ingen billetthistorikk.',
       'Nothing to show here until you have purchased a ticket.',
     ),
@@ -69,7 +66,7 @@ const TicketsTexts = {
         _(`Kjøpt ${dateTime}`, `Purchased ${dateTime}`),
     },
   },
-  recentTickets: {
+  recentFareContracts: {
     title: _('Kjøp på nytt', 'Purchase again'),
     loading: _('Laster tidligere kjøp', 'Loading recent purchases'),
     a11yHint: _(
@@ -77,7 +74,7 @@ const TicketsTexts = {
       'Activate to purchase this ticket',
     ),
   },
-  availableTickets: {
+  availableFareProducts: {
     allTickets: _('Alle billetter', 'All products'),
     navigateToBuy: _(
       'Aktivér for å gå til kjøp',

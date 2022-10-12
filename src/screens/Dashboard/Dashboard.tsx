@@ -29,7 +29,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import CompactTickets from './CompactTickets';
+import CompactFareContracts from './CompactFareContracts';
 import DeparturesWidget from './DeparturesWidget';
 import {DashboardScreenProps} from './types';
 
@@ -257,14 +257,14 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
           />
         </View>
         {enable_ticketing && (
-          <CompactTickets
+          <CompactFareContracts
             onPressDetails={(
               isCarnet: boolean,
               isInspectable: boolean,
               orderId: string,
             ) => {
               if (isCarnet) {
-                return navigation.navigate('TicketModal', {
+                return navigation.navigate('FareContractModal', {
                   screen: 'CarnetDetailsScreen',
                   params: {
                     orderId,
@@ -273,13 +273,13 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
                 });
               }
 
-              return navigation.navigate('TicketModal', {
-                screen: 'TicketDetails',
+              return navigation.navigate('FareContractModal', {
+                screen: 'FareContractDetails',
                 params: {orderId},
               });
             }}
-            onPressBuyTickets={() =>
-              navigation.navigate('Ticketing', {screen: 'BuyTickets'})
+            onPressBuy={() =>
+              navigation.navigate('Ticketing', {screen: 'PurchaseTab'})
             }
           />
         )}

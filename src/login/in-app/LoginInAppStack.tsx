@@ -1,4 +1,4 @@
-import {ActiveTicketPromptInApp} from '@atb/login/in-app/ActiveTicketPrompt';
+import {ActiveFareContractPromptInApp} from '@atb/login/in-app/ActiveFareContractPrompt';
 import {ConfirmCodeInApp} from '@atb/login/in-app/ConfirmCodeInApp';
 import {LoginOnboardingInApp} from '@atb/login/in-app/LoginOnboarding';
 import {PhoneInputInApp} from '@atb/login/in-app/PhoneInputInApp';
@@ -13,11 +13,11 @@ export default function LoginInAppStack() {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="ActiveTicketPromptInApp"
+      initialRouteName="activeFareContractPromptInApp"
     >
       <Stack.Screen
-        name="ActiveTicketPromptInApp"
-        component={ActiveTicketPromptInApp}
+        name="activeFareContractPromptInApp"
+        component={ActiveFareContractPromptInApp}
       />
       <Stack.Screen
         name="LoginOnboardingInApp"

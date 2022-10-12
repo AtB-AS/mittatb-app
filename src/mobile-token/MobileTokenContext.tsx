@@ -7,7 +7,7 @@ import React, {
   useState,
 } from 'react';
 import {useAuthState} from '@atb/auth';
-import {useTicketState} from '@atb/tickets';
+import {useTicketingState} from '@atb/ticketing';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 import {v4 as uuid} from 'uuid';
@@ -334,7 +334,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
 };
 
 export function useHasEnabledMobileToken() {
-  const {customerProfile} = useTicketState();
+  const {customerProfile} = useTicketingState();
   const {enable_period_tickets} = useRemoteConfig();
 
   if (Platform.OS !== 'android' && DeviceInfo.isEmulatorSync()) {

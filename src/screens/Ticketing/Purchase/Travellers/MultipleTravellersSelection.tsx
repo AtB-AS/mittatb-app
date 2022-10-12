@@ -16,7 +16,7 @@ export default function MultipleTravellersSelection({
   userProfilesWithCount,
   addCount,
   removeCount,
-  ticketType,
+  fareProductType,
 }: UserCountState) {
   const {t, language} = useTranslation();
   const {
@@ -54,7 +54,7 @@ export default function MultipleTravellersSelection({
           color="interactive_2"
           hideSubtext={hideTravellerDescriptions}
           subtext={t(
-            TicketTravellerTexts.information(u.userTypeString, ticketType),
+            TicketTravellerTexts.information(u.userTypeString, fareProductType),
           )}
         />
       ))}

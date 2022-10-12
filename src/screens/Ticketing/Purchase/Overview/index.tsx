@@ -67,7 +67,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     navigation.navigate('TabNavigator', {
       screen: 'Ticketing',
       params: {
-        screen: 'BuyTickets',
+        screen: 'PurchaseTab',
       },
     });
 
