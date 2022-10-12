@@ -1,4 +1,4 @@
-import {activeFareContractPromptInAppRouteParams} from '@atb/login/in-app/activeFareContractPrompt';
+import {activeFareContractPromptInAppRouteParams} from '@atb/login/in-app/ActiveFareContractPrompt';
 import {ConfirmCodeInAppRouteParams} from '@atb/login/in-app/ConfirmCodeInApp';
 import {LoginOnboardingInAppRouteParams} from '@atb/login/in-app/LoginOnboarding';
 import {PhoneInputInAppRouteParams} from '@atb/login/in-app/PhoneInputInApp';
