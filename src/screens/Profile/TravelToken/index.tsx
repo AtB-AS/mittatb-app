@@ -1,22 +1,46 @@
-import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {StyleSheet, Theme} from '@atb/theme';
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import TravelTokenBox from '@atb/travel-token-box';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from '../types';
+import {FaqSection} from '@atb/screens/Profile/TravelToken/FaqSection';
+import {ChangeTokenAction} from '@atb/screens/Profile/TravelToken/ChangeTokenAction';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useIsFocused} from '@react-navigation/native';
 
 type TravelCardScreenProps = ProfileScreenProps<'TravelToken'>;
 
 export default function TravelCard({navigation}: TravelCardScreenProps) {
   const styles = useStyles();
   const {t} = useTranslation();
+  const [showLoader, setShowLoader] = useState<boolean>(false);
+  const [toggleLimit, setToggleLimit] = useState<number | undefined>();
+  const [maxToggleLimit, setMaxToggleLimit] = useState<number | undefined>();
+
+  const {isError, isLoading, getTokenToggleDetails} =
+    useMobileTokenContextState();
+  const screenHasFocus = useIsFocused();
+
+  useEffect(() => {
+    const fetchToggleLimit = async () => {
+      setShowLoader(true);
+      const toggleToggleDetails = await getTokenToggleDetails();
+      if (toggleToggleDetails) {
+        const {toggleMaxLimit, toggledCount} = toggleToggleDetails;
+        if (toggleMaxLimit && toggleMaxLimit >= toggledCount) {
+          setToggleLimit(toggleMaxLimit - toggledCount);
+        }
+        setMaxToggleLimit(toggleMaxLimit);
+      }
+      setShowLoader(false);
+    };
+    if (!isError && !isLoading) {
+      fetchToggleLimit();
+    }
+  }, [getTokenToggleDetails, screenHasFocus]);
 
   return (
     <View style={styles.container}>
@@ -26,54 +50,16 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
       />
       <ScrollView style={styles.scrollView}>
         <TravelTokenBox showIfThisDevice={true} alwaysShowErrors={true} />
-        <ChangeTokenButton
-          onPress={() => navigation.navigate('SelectTravelToken')}
+        <ChangeTokenAction
+          onChange={() => navigation.navigate('SelectTravelToken')}
+          toggleLimit={toggleLimit}
+          showLoader={showLoader}
         />
-        <FaqSection />
+        <FaqSection toggleMaxLimit={maxToggleLimit} />
       </ScrollView>
     </View>
   );
 }
-
-const ChangeTokenButton = ({onPress}: {onPress: () => void}) => {
-  const {t} = useTranslation();
-  const styles = useStyles();
-
-  const {isError, isLoading} = useMobileTokenContextState();
-
-  return (
-    <Sections.Section style={styles.changeTokenButton}>
-      <Sections.LinkItem
-        type="spacious"
-        text={t(TravelTokenTexts.travelToken.changeTokenButton)}
-        disabled={isError || isLoading}
-        onPress={onPress}
-        testID="switchTokenButton"
-        icon={<ThemeIcon svg={Edit} />}
-      />
-    </Sections.Section>
-  );
-};
-
-const FaqSection = () => {
-  const {t} = useTranslation();
-  const styles = useStyles();
-
-  return (
-    <Sections.Section style={styles.faqSection}>
-      <Sections.HeaderItem text={t(TravelTokenTexts.travelToken.faq.title)} />
-      {/*eslint-disable-next-line rulesdir/translations-warning*/}
-      {TravelTokenTexts.travelToken.faqs.map(({question, answer}, index) => (
-        <Sections.ExpandableItem
-          key={index}
-          text={t(question)}
-          showIconText={false}
-          expandContent={<ThemeText isMarkdown={true}>{t(answer)}</ThemeText>}
-        />
-      ))}
-    </Sections.Section>
-  );
-};
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
@@ -82,14 +68,5 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   scrollView: {
     padding: theme.spacings.medium,
-  },
-  errorMessage: {
-    marginBottom: theme.spacings.medium,
-  },
-  changeTokenButton: {
-    marginBottom: theme.spacings.medium,
-  },
-  faqSection: {
-    marginBottom: theme.spacings.xLarge,
   },
 }));

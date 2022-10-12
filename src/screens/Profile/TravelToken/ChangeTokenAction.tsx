@@ -1,0 +1,94 @@
+import {TravelTokenTexts, useTranslation} from '@atb/translations';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {formatToShortDateWithYear} from '@atb/utils/date';
+import React from 'react';
+import Warning from '@atb/assets/svg/color/icons/status/Warning';
+import Info from '@atb/assets/svg/color/icons/status/Info';
+import Error from '@atb/assets/svg/color/icons/status/Error';
+import * as Sections from '@atb/components/sections';
+import ThemeIcon from '@atb/components/theme-icon';
+import {Swap} from '@atb/assets/svg/mono-icons/actions';
+import {ActivityIndicator, View} from 'react-native';
+import ThemeText from '@atb/components/text';
+import {StyleSheet, Theme} from '@atb/theme';
+
+const ChangeTokenAction = ({
+  onChange,
+  toggleLimit,
+  showLoader,
+}: {
+  onChange: () => void;
+  toggleLimit?: number;
+  showLoader?: boolean;
+}) => {
+  const {t, language} = useTranslation();
+  const styles = useStyles();
+  const {isError, isLoading} = useMobileTokenContextState();
+  const now = new Date();
+  const nextMonthStartDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const countRenewalDate = formatToShortDateWithYear(
+    nextMonthStartDate,
+    language,
+  );
+
+  const getToggleInfoIcon = (toggleLimit: number) => {
+    switch (toggleLimit) {
+      case 0:
+        return Error;
+      case 1:
+        return Warning;
+      default:
+        return Info;
+    }
+  };
+
+  return (
+    <Sections.Section style={styles.changeTokenButton}>
+      <Sections.LinkItem
+        type="spacious"
+        text={t(TravelTokenTexts.travelToken.changeTokenButton)}
+        disabled={isError || isLoading || toggleLimit === 0}
+        onPress={onChange}
+        testID="switchTokenButton"
+        icon={<ThemeIcon svg={Swap} />}
+      />
+
+      {showLoader ? (
+        <Sections.GenericItem>
+          <ActivityIndicator style={styles.loader} />
+        </Sections.GenericItem>
+      ) : toggleLimit !== undefined ? (
+        <Sections.GenericItem>
+          <View style={styles.tokenInfoView}>
+            <ThemeIcon svg={getToggleInfoIcon(toggleLimit)} />
+            <ThemeText style={styles.tokenInfo}>
+              {toggleLimit === 0
+                ? t(
+                    TravelTokenTexts.travelToken.zeroToggleCountLeftInfo(
+                      countRenewalDate,
+                    ),
+                  )
+                : t(
+                    TravelTokenTexts.travelToken.toggleCountLimitInfo(
+                      toggleLimit,
+                      countRenewalDate,
+                    ),
+                  )}
+            </ThemeText>
+          </View>
+        </Sections.GenericItem>
+      ) : null}
+    </Sections.Section>
+  );
+};
+
+export {ChangeTokenAction};
+
+const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
+  changeTokenButton: {
+    marginBottom: theme.spacings.medium,
+  },
+  loader: {alignSelf: 'center', flex: 1},
+  tokenInfoView: {flexDirection: 'row'},
+  tokenInfo: {marginLeft: theme.spacings.xSmall},
+}));
