@@ -85,7 +85,7 @@ describe('Tickets anonymous', () => {
 
     await expectToBeVisibleByText('Single ticket');
     await expectToBeVisibleByText('1 Adult');
-    await expectToBeVisibleByText(`${ticketInfo.singleTicketAdultPrice} kr`);
+    await expectToBeVisibleByText(`${ticketInfo.singleTicketAdultPrice}.00 kr`);
     await expectToBeVisibleByText('Single ticket bus/tram');
     //Zone is either A or C3 during the tests
     await expectToBeVisibleByPartOfText('Valid in zone');
@@ -116,7 +116,7 @@ describe('Tickets anonymous', () => {
     await tapById('goToPaymentButton');
     await expectToBeVisibleByText('2 Adult');
     await expectToBeVisibleByText('1 Child');
-    await expectToBeVisibleByText(`${totPrice} kr`);
+    await expectToBeVisibleByText(`${totPrice}.00 kr`);
 
     await goBack();
     await goBack();
