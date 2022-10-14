@@ -2,7 +2,7 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet, Theme} from '@atb/theme';
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import TravelTokenBox from '@atb/travel-token-box';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from '../types';
@@ -20,7 +20,7 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
   const {isError, isLoading} = useMobileTokenContextState();
   const screenHasFocus = useIsFocused();
   const shouldFetchTokenDetails = screenHasFocus && !isError && !isLoading;
-  const {showLoader, toggleLimit, maxToggleLimit} = useTokenToggleDetails(
+  const {shouldShowLoader, toggleLimit, maxToggleLimit} = useTokenToggleDetails(
     shouldFetchTokenDetails,
   );
   return (
@@ -34,7 +34,7 @@ export default function TravelCard({navigation}: TravelCardScreenProps) {
         <ChangeTokenAction
           onChange={() => navigation.navigate('SelectTravelToken')}
           toggleLimit={toggleLimit}
-          showLoader={showLoader}
+          shouldShowLoader={shouldShowLoader}
         />
         <FaqSection toggleMaxLimit={maxToggleLimit} />
       </ScrollView>

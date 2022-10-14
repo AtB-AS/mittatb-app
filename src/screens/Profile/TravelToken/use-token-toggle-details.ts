@@ -2,14 +2,14 @@ import {useEffect, useState} from 'react';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 
 const useTokenToggleDetails = (shouldFetchTokenDetails: boolean) => {
-  const [showLoader, setShowLoader] = useState<boolean>(false);
+  const [shouldShowLoader, setShouldShowLoader] = useState<boolean>(false);
   const [toggleLimit, setToggleLimit] = useState<number | undefined>();
   const [maxToggleLimit, setMaxToggleLimit] = useState<number | undefined>();
 
   const {getTokenToggleDetails} = useMobileTokenContextState();
 
   const fetchToggleLimit = async () => {
-    setShowLoader(true);
+    setShouldShowLoader(true);
     const toggleToggleDetails = await getTokenToggleDetails();
     if (toggleToggleDetails) {
       const {toggleMaxLimit, toggledCount} = toggleToggleDetails;
@@ -18,7 +18,7 @@ const useTokenToggleDetails = (shouldFetchTokenDetails: boolean) => {
       }
       setMaxToggleLimit(toggleMaxLimit);
     }
-    setShowLoader(false);
+    setShouldShowLoader(false);
   };
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const useTokenToggleDetails = (shouldFetchTokenDetails: boolean) => {
     }
   }, [shouldFetchTokenDetails, getTokenToggleDetails]);
 
-  return {showLoader, toggleLimit, maxToggleLimit};
+  return {shouldShowLoader, toggleLimit, maxToggleLimit};
 };
 
 export {useTokenToggleDetails};

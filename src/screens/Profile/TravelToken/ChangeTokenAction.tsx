@@ -15,11 +15,11 @@ import {StyleSheet, Theme} from '@atb/theme';
 const ChangeTokenAction = ({
   onChange,
   toggleLimit,
-  showLoader,
+  shouldShowLoader,
 }: {
   onChange: () => void;
   toggleLimit?: number;
-  showLoader?: boolean;
+  shouldShowLoader?: boolean;
 }) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -53,7 +53,7 @@ const ChangeTokenAction = ({
         icon={<ThemeIcon svg={Swap} />}
       />
 
-      {showLoader ? (
+      {shouldShowLoader ? (
         <Sections.GenericItem>
           <ActivityIndicator style={styles.loader} />
         </Sections.GenericItem>
