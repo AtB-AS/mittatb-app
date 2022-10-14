@@ -1,7 +1,7 @@
 import MessageBox from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
-import AnonymousTicketPurchases from '@atb/translations/screens/subscreens/AnonymousTicketPurchases';
+import AnonymousPurchases from '@atb/translations/screens/subscreens/AnonymousPurchases';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {View} from 'react-native';
@@ -12,15 +12,15 @@ const AnonymousPurchaseWarning = () => {
   const styles = useStyle();
   const navigation = useNavigation<TicketingStackRootNavigationProps>();
   const navigateToConsequencesScreen = () => {
-    navigation.navigate('ConsequencesFromTicketPurchase');
+    navigation.navigate('ConsequencesFromPurchase');
   };
   return (
     <View style={styles.warning}>
       <MessageBox
-        title={t(AnonymousTicketPurchases.warning.title)}
-        message={t(AnonymousTicketPurchases.warning.message)}
+        title={t(AnonymousPurchases.warning.title)}
+        message={t(AnonymousPurchases.warning.message)}
         onPress={navigateToConsequencesScreen}
-        onPressText={t(AnonymousTicketPurchases.warning.checkHere)}
+        onPressText={t(AnonymousPurchases.warning.checkHere)}
         type={'warning'}
         isMarkdown={true}
       />

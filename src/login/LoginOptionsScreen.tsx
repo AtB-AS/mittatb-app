@@ -26,9 +26,7 @@ import InAppBrowser from 'react-native-inappbrowser-reborn';
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export type LoginOptionsRouteParams = {
-  afterLogin:
-    | AfterLoginParams<'TabNavigator'>
-    | AfterLoginParams<'TicketPurchase'>;
+  afterLogin: AfterLoginParams<'TabNavigator'> | AfterLoginParams<'Purchase'>;
 };
 
 type LoginOptionsProps = LoginInAppScreenProps<'LoginOptionsScreen'>;

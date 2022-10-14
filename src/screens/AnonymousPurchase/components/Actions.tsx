@@ -1,7 +1,6 @@
 import Button from '@atb/components/button';
-import AnonymousTicketPurchases from '@atb/translations/screens/subscreens/AnonymousTicketPurchases';
 import React from 'react';
-import {useTranslation} from '@atb/translations';
+import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 
 const Actions = ({
@@ -21,9 +20,9 @@ const Actions = ({
         mode="primary"
         onPress={primaryAction}
         style={styles.primaryButton}
-        text={t(AnonymousTicketPurchases.consequences.button.login.label)}
+        text={t(AnonymousPurchasesTexts.consequences.button.login.label)}
         accessibilityHint={t(
-          AnonymousTicketPurchases.consequences.button.login.a11yHint,
+          AnonymousPurchasesTexts.consequences.button.login.a11yHint,
         )}
         testID="loginButton"
       />
@@ -31,9 +30,9 @@ const Actions = ({
         interactiveColor="interactive_1"
         mode="secondary"
         onPress={secondaryAction}
-        text={t(AnonymousTicketPurchases.consequences.button.accept.label)}
+        text={t(AnonymousPurchasesTexts.consequences.button.accept.label)}
         accessibilityHint={t(
-          AnonymousTicketPurchases.consequences.button.accept.a11yHint,
+          AnonymousPurchasesTexts.consequences.button.accept.a11yHint,
         )}
         testID="acceptRestrictionsButton"
       />

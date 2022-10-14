@@ -20,7 +20,7 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
   const onBuySingleFareProduct = () => {
-    navigation.navigate('TicketPurchase', {
+    navigation.navigate('Purchase', {
       screen: 'PurchaseOverview',
       params: {
         selectableProductType: 'single',
@@ -30,7 +30,7 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
 
   const onBuyPeriodFareProduct = () => {
     if (authenticationType === 'phone') {
-      navigation.navigate('TicketPurchase', {
+      navigation.navigate('Purchase', {
         screen: 'PurchaseOverview',
         params: {
           selectableProductType: 'period',
@@ -41,7 +41,7 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
         screen: 'LoginOnboardingInApp',
         params: {
           afterLogin: {
-            screen: 'TicketPurchase',
+            screen: 'Purchase',
             params: {
               screen: 'PurchaseOverview',
               params: {
@@ -55,7 +55,7 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
   };
 
   const onBuyHour24FareProduct = () => {
-    navigation.navigate('TicketPurchase', {
+    navigation.navigate('Purchase', {
       screen: 'PurchaseOverview',
       params: {
         selectableProductType: 'hour24',

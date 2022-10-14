@@ -10,11 +10,11 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import {TicketPurchaseScreenProps} from '../../types';
+import {PurchaseScreenProps} from '../../types';
 import Processing from '../Processing';
 import useVippsState, {ErrorContext, State} from './use-vipps-state';
 
-type Props = TicketPurchaseScreenProps<'PaymentVipps'>;
+type Props = PurchaseScreenProps<'PaymentVipps'>;
 
 export default function VippsPayment({
   navigation,

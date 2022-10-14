@@ -1,6 +1,6 @@
 import {translation as _} from '../../commons';
 
-const AnonymousTicketPurchases = {
+const AnonymousPurchases = {
   warning: {
     title: _('Anonyme billettkjøp', 'Anonymous ticket purchases'),
     message: _(
@@ -60,4 +60,4 @@ const AnonymousTicketPurchases = {
   ),
 };
 
-export default AnonymousTicketPurchases;
+export default AnonymousPurchases;

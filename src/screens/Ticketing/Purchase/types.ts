@@ -74,7 +74,7 @@ type PaymentParams = {
   preassignedFareProduct: PreassignedFareProduct;
 };
 
-export type TicketPurchaseStackParams = {
+export type PurchaseStackParams = {
   PurchaseOverview: PurchaseOverviewParams;
   TariffZones: TariffZonesParams;
   TariffZoneSearch: TariffZoneSearchParams;
@@ -82,22 +82,19 @@ export type TicketPurchaseStackParams = {
   PaymentCreditCard: PaymentParams & {paymentMethod: CardPaymentMethod};
   PaymentVipps: PaymentParams;
   Splash: undefined;
-  ConsequencesFromTicketPurchase: undefined;
+  ConsequencesFromPurchase: undefined;
 };
 
-export type TicketPurchaseStackRootProps =
-  RootStackScreenProps<'TicketPurchase'>;
+export type PurchaseStackRootProps = RootStackScreenProps<'Purchase'>;
 
-export type TicketPurchaseNavigationProps<
-  T extends keyof TicketPurchaseStackParams,
-> = CompositeNavigationProp<
-  StackNavigationProp<TicketPurchaseStackParams, T>,
-  RootNavigationProps
->;
+export type PurchaseNavigationProps<T extends keyof PurchaseStackParams> =
+  CompositeNavigationProp<
+    StackNavigationProp<PurchaseStackParams, T>,
+    RootNavigationProps
+  >;
 
-export type TicketPurchaseScreenProps<
-  T extends keyof TicketPurchaseStackParams,
-> = CompositeScreenProps<
-  StackScreenProps<TicketPurchaseStackParams, T>,
-  TicketPurchaseStackRootProps
->;
+export type PurchaseScreenProps<T extends keyof PurchaseStackParams> =
+  CompositeScreenProps<
+    StackScreenProps<PurchaseStackParams, T>,
+    PurchaseStackRootProps
+  >;

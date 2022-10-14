@@ -24,7 +24,7 @@ export const RecentFareContracts = () => {
   const {recentFareContracts, loading} = useRecentFareContracts();
 
   const onSelect = (rfc: RecentFareContract) => {
-    navigation.navigate('TicketPurchase', {
+    navigation.navigate('Purchase', {
       screen: 'PurchaseOverview',
       params: {
         preassignedFareProduct: rfc.preassignedFareProduct,

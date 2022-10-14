@@ -6,7 +6,7 @@ import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {TicketPurchaseScreenProps} from '../types';
+import {PurchaseScreenProps} from '../types';
 import {getPurchaseFlow} from '../utils';
 import DurationSelection from './components/DurationSelection';
 import PurchaseMessages from './components/PurchaseMessages';
@@ -17,7 +17,7 @@ import Zones from './components/Zones';
 import {useOfferDefaults} from './use-offer-defaults';
 import useOfferState from './use-offer-state';
 
-type OverviewProps = TicketPurchaseScreenProps<'PurchaseOverview'>;
+type OverviewProps = PurchaseScreenProps<'PurchaseOverview'>;
 
 const PurchaseOverview: React.FC<OverviewProps> = ({
   navigation,

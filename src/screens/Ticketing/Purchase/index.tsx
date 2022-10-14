@@ -1,5 +1,5 @@
 import transitionSpec from '@atb/navigation/transitionSpec';
-import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
+import ConsequencesScreen from '@atb/screens/AnonymousPurchase/ConsequencesScreen';
 import {
   createStackNavigator,
   StackNavigationOptions,
@@ -11,17 +11,17 @@ import PurchaseOverviewScreen from './Overview';
 import {CreditCard as CreditCardScreen, Vipps as VippsScreen} from './Payment';
 import TariffZones from './TariffZones';
 import TariffZoneSearch from './TariffZones/search';
-import {TicketPurchaseStackParams, TicketPurchaseStackRootProps} from './types';
+import {PurchaseStackParams, PurchaseStackRootProps} from './types';
 
 import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/screens/MobileTokenOnboarding/utils';
 
-const Stack = createStackNavigator<TicketPurchaseStackParams>();
+const Stack = createStackNavigator<PurchaseStackParams>();
 
 const options: StackNavigationOptions = {
   headerShown: false,
 };
 
-export default function PurchaseStack({}: TicketPurchaseStackRootProps) {
+export default function PurchaseStack({}: PurchaseStackRootProps) {
   useGoToMobileTokenOnboardingWhenNecessary();
 
   return (
@@ -31,7 +31,7 @@ export default function PurchaseStack({}: TicketPurchaseStackRootProps) {
         component={PurchaseOverviewScreen}
       />
       <Stack.Screen
-        name="ConsequencesFromTicketPurchase"
+        name="ConsequencesFromPurchase"
         component={ConsequencesScreen}
       />
       <Stack.Screen name="TariffZones" component={TariffZones} />

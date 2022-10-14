@@ -34,7 +34,7 @@ import hexToRgba from 'hex-to-rgba';
 import React, {useEffect, useRef, useState} from 'react';
 import {PixelRatio, Platform, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {TicketPurchaseScreenProps} from '../types';
+import {PurchaseScreenProps} from '../types';
 import {flyToLocation, zoomIn, zoomOut} from '@atb/components/map/utils';
 
 type TariffZonesRouteName = 'TariffZones';
@@ -63,7 +63,7 @@ type TariffZoneSelection = {
   selectNext: 'from' | 'to';
 };
 
-type TariffZonesProps = TicketPurchaseScreenProps<'TariffZones'>;
+type TariffZonesProps = PurchaseScreenProps<'TariffZones'>;
 
 const TariffZonesRoot: React.FC<TariffZonesProps> = ({navigation, route}) => {
   return <TariffZones navigation={navigation} route={route} />;

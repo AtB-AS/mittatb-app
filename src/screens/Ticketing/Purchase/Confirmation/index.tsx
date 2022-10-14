@@ -37,7 +37,7 @@ import {
   CardPaymentMethod,
   PaymentMethod,
   SavedPaymentOption,
-  TicketPurchaseScreenProps,
+  PurchaseScreenProps,
 } from '../types';
 
 export type RouteParams = {
@@ -81,7 +81,7 @@ function getPreviousPaymentMethod(
   }
 }
 
-type ConfirmationProps = TicketPurchaseScreenProps<'Confirmation'>;
+type ConfirmationProps = PurchaseScreenProps<'Confirmation'>;
 
 const Confirmation: React.FC<ConfirmationProps> = ({
   navigation,

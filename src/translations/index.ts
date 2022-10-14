@@ -54,3 +54,4 @@ export {default as TravelTokenTexts} from './screens/subscreens/TravelToken';
 export {default as TicketTravellerTexts} from './screens/subscreens/TicketTraveller';
 export {default as DashboardTexts} from './screens/Dashboard';
 export {default as TripSearchTexts} from './screens/TripSearch';
+export {default as AnonymousPurchasesTexts} from './screens/subscreens/AnonymousPurchases';

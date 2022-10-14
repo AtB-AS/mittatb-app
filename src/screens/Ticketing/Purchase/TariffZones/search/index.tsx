@@ -23,7 +23,7 @@ import {
   View,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {TicketPurchaseScreenProps} from '../../types';
+import {PurchaseScreenProps} from '../../types';
 import TariffZoneResults from './TariffZoneResults';
 import VenueResults, {LocationAndTariffZone} from './VenueResults';
 
@@ -33,7 +33,7 @@ export type RouteParams = {
   label: string;
 };
 
-export type Props = TicketPurchaseScreenProps<'TariffZoneSearch'>;
+export type Props = PurchaseScreenProps<'TariffZoneSearch'>;
 
 const Index: React.FC<Props> = ({
   navigation,

@@ -6,9 +6,7 @@ import React from 'react';
 import {LoginInAppScreenProps} from '../types';
 
 export type PhoneInputInAppRouteParams = {
-  afterLogin:
-    | AfterLoginParams<'TabNavigator'>
-    | AfterLoginParams<'TicketPurchase'>;
+  afterLogin: AfterLoginParams<'TabNavigator'> | AfterLoginParams<'Purchase'>;
 };
 
 type PhoneInputInAppProps = LoginInAppScreenProps<'PhoneInputInApp'>;
