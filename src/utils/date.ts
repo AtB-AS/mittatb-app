@@ -203,6 +203,15 @@ export function formatToShortDate(date: Date | string, language: Language) {
   });
 }
 
+export function formatToShortDateWithYear(
+  date: Date | string,
+  language: Language,
+) {
+  return format(parseIfNeeded(date), 'dd.MM.yy', {
+    locale: languageToLocale(language),
+  });
+}
+
 export function formatToSimpleDate(date: Date | string, language: Language) {
   return format(parseIfNeeded(date), 'do MMMM', {
     locale: languageToLocale(language),
