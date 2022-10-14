@@ -10,38 +10,19 @@ import {FaqSection} from '@atb/screens/Profile/TravelToken/FaqSection';
 import {ChangeTokenAction} from '@atb/screens/Profile/TravelToken/ChangeTokenAction';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {useIsFocused} from '@react-navigation/native';
+import {useTokenToggleDetails} from '@atb/screens/Profile/TravelToken/use-token-toggle-details';
 
 type TravelCardScreenProps = ProfileScreenProps<'TravelToken'>;
 
 export default function TravelCard({navigation}: TravelCardScreenProps) {
   const styles = useStyles();
   const {t} = useTranslation();
-  const [showLoader, setShowLoader] = useState<boolean>(false);
-  const [toggleLimit, setToggleLimit] = useState<number | undefined>();
-  const [maxToggleLimit, setMaxToggleLimit] = useState<number | undefined>();
-
-  const {isError, isLoading, getTokenToggleDetails} =
-    useMobileTokenContextState();
+  const {isError, isLoading} = useMobileTokenContextState();
   const screenHasFocus = useIsFocused();
-
-  useEffect(() => {
-    const fetchToggleLimit = async () => {
-      setShowLoader(true);
-      const toggleToggleDetails = await getTokenToggleDetails();
-      if (toggleToggleDetails) {
-        const {toggleMaxLimit, toggledCount} = toggleToggleDetails;
-        if (toggleMaxLimit && toggleMaxLimit >= toggledCount) {
-          setToggleLimit(toggleMaxLimit - toggledCount);
-        }
-        setMaxToggleLimit(toggleMaxLimit);
-      }
-      setShowLoader(false);
-    };
-    if (!isError && !isLoading) {
-      fetchToggleLimit();
-    }
-  }, [getTokenToggleDetails, screenHasFocus]);
-
+  const shouldFetchTokenDetails = screenHasFocus && !isError && !isLoading;
+  const {showLoader, toggleLimit, maxToggleLimit} = useTokenToggleDetails(
+    shouldFetchTokenDetails,
+  );
   return (
     <View style={styles.container}>
       <FullScreenHeader
