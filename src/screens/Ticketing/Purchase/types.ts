@@ -74,7 +74,7 @@ type PaymentParams = {
   preassignedFareProduct: PreassignedFareProduct;
 };
 
-export type TicketingStackParams = {
+export type TicketPurchaseStackParams = {
   PurchaseOverview: PurchaseOverviewParams;
   TariffZones: TariffZonesParams;
   TariffZoneSearch: TariffZoneSearchParams;
@@ -89,14 +89,15 @@ export type TicketPurchaseStackRootProps =
   RootStackScreenProps<'TicketPurchase'>;
 
 export type TicketPurchaseNavigationProps<
-  T extends keyof TicketingStackParams,
+  T extends keyof TicketPurchaseStackParams,
 > = CompositeNavigationProp<
-  StackNavigationProp<TicketingStackParams, T>,
+  StackNavigationProp<TicketPurchaseStackParams, T>,
   RootNavigationProps
 >;
 
-export type TicketPurchaseScreenProps<T extends keyof TicketingStackParams> =
-  CompositeScreenProps<
-    StackScreenProps<TicketingStackParams, T>,
-    TicketPurchaseStackRootProps
-  >;
+export type TicketPurchaseScreenProps<
+  T extends keyof TicketPurchaseStackParams,
+> = CompositeScreenProps<
+  StackScreenProps<TicketPurchaseStackParams, T>,
+  TicketPurchaseStackRootProps
+>;

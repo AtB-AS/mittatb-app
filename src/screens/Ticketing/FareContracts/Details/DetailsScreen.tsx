@@ -4,7 +4,7 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {findReferenceDataById} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
 import {isPreActivatedTravelRight, useTicketingState} from '@atb/ticketing';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import useInterval from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
@@ -64,7 +64,7 @@ export default function DetailsScreen({navigation, route}: Props) {
     <View style={styles.container}>
       <FullScreenHeader
         leftButton={{type: 'close'}}
-        title={t(TicketingTexts.details.header.title)}
+        title={t(FareContractTexts.details.header.title)}
       />
       <ScrollView contentContainerStyle={styles.content}>
         {fc && (

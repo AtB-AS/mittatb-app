@@ -4,7 +4,7 @@ import Header from '@atb/components/screen-header';
 import ThemeText from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {StaticColor} from '@atb/theme/colors';
-import {TicketSplashTexts, useTranslation} from '@atb/translations';
+import {TicketingSplashTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {useWindowDimensions, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -25,7 +25,7 @@ export default function SplashInfo({navigation}: Props) {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        title={t(TicketSplashTexts.header.title)}
+        title={t(TicketingSplashTexts.header.title)}
         rightButton={{type: 'chat'}}
         color={bgcolor}
       />
@@ -40,10 +40,10 @@ export default function SplashInfo({navigation}: Props) {
               color={bgcolor}
               style={styles.text}
             >
-              {t(TicketSplashTexts.splash.title)}
+              {t(TicketingSplashTexts.splash.title)}
             </ThemeText>
             <ThemeText color={bgcolor} style={styles.text}>
-              {t(TicketSplashTexts.splash.paragraph1)}
+              {t(TicketingSplashTexts.splash.paragraph1)}
             </ThemeText>
           </View>
         </View>

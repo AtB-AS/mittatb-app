@@ -13,7 +13,11 @@ import {
   getReferenceDataName,
 } from '@atb/reference-data/utils';
 import {RemoteToken} from '@atb/mobile-token/types';
-import {Language, TicketingTexts, TranslateFunction} from '@atb/translations';
+import {
+  Language,
+  FareContractTexts,
+  TranslateFunction,
+} from '@atb/translations';
 import {
   findInspectable,
   getDeviceName,
@@ -121,23 +125,23 @@ export const getNonInspectableTokenWarning = (
   const inspectableToken = findInspectable(remoteTokens);
   if (isError && fallbackEnabled) return null;
   if (fareProductType !== 'carnet') {
-    if (isError) return t(TicketingTexts.warning.unableToRetrieveToken);
+    if (isError) return t(FareContractTexts.warning.unableToRetrieveToken);
     if (!inspectableToken)
-      return t(TicketingTexts.warning.noInspectableTokenFound);
+      return t(FareContractTexts.warning.noInspectableTokenFound);
     if (isTravelCardToken(inspectableToken))
-      return t(TicketingTexts.warning.travelCardAstoken);
+      return t(FareContractTexts.warning.travelCardAstoken);
     if (isMobileToken(inspectableToken) && !isInspectable)
       return t(
-        TicketingTexts.warning.anotherMobileAsToken(
+        FareContractTexts.warning.anotherMobileAsToken(
           getDeviceName(inspectableToken) ||
-            t(TicketingTexts.warning.unnamedDevice),
+            t(FareContractTexts.warning.unnamedDevice),
         ),
       );
   } else {
     if (!isTravelCardToken(inspectableToken)) {
-      return t(TicketingTexts.warning.carnetWarning);
+      return t(FareContractTexts.warning.carnetWarning);
     } else {
-      return t(TicketingTexts.warning.travelCardAstoken);
+      return t(FareContractTexts.warning.travelCardAstoken);
     }
   }
 };
@@ -156,11 +160,11 @@ export const getOtherDeviceIsInspectableWarning = (
 
   const activeToken = findInspectable(remoteTokens);
   const deviceName =
-    getDeviceName(activeToken) || t(TicketingTexts.warning.unnamedDevice);
+    getDeviceName(activeToken) || t(FareContractTexts.warning.unnamedDevice);
 
   return isTravelCardToken(activeToken)
-    ? t(TicketingTexts.warning.tcardIsInspectableWarning)
-    : t(TicketingTexts.warning.anotherPhoneIsInspectableWarning(deviceName));
+    ? t(FareContractTexts.warning.tcardIsInspectableWarning)
+    : t(FareContractTexts.warning.anotherPhoneIsInspectableWarning(deviceName));
 };
 
 export const isValidFareContract = (status: ValidityStatus) =>

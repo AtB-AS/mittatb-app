@@ -2,7 +2,7 @@ import * as Sections from '@atb/components/sections';
 import {RootStackParamList} from '@atb/navigation/types';
 import {CarnetDetails} from '@atb/screens/Ticketing/FareContracts/Carnet/CarnetDetails';
 import {CarnetTravelRight, FareContract} from '@atb/ticketing';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 
@@ -36,7 +36,7 @@ const CarnetFareContractInfo: React.FC<Props> = ({
         fareContract={fareContract}
       />
       <Sections.LinkItem
-        text={t(TicketingTexts.detailsLink.notValid)}
+        text={t(FareContractTexts.detailsLink.notValid)}
         onPress={() =>
           navigation.navigate('FareContractModal', {
             screen: 'CarnetDetailsScreen',

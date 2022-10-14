@@ -3,7 +3,7 @@ import {
   filterAndSortActiveOrCanBeUsedFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {TicketingTexts, useTranslation} from '@atb/translations';
 import useInterval from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {View} from 'react-native';
@@ -31,9 +31,9 @@ export const ActiveFareProductsAndReservationsTab = () => {
         refresh={() => {}}
         noItemsLabel={t(
           hasAnyFareContractsOnAccount
-            ? TicketsTexts.activeFareProductsAndReservationsTab
+            ? TicketingTexts.activeFareProductsAndReservationsTab
                 .noItemsHistoryHelpText
-            : TicketsTexts.activeFareProductsAndReservationsTab.noItems,
+            : TicketingTexts.activeFareProductsAndReservationsTab.noItems,
         )}
         now={now}
         showTokenInfo={true}

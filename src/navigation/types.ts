@@ -4,9 +4,9 @@ import {LoginInAppStackParams} from '@atb/login/types';
 import {NearbyStackParams} from '@atb/screens/Nearby/types';
 import {AddEditFavoriteRootParams} from '@atb/screens/Profile/AddEditFavorite/types';
 import {ProfileStackParams} from '@atb/screens/Profile/types';
-import {TicketingStackParams} from '@atb/screens/Ticketing/Purchase/types';
+import {TicketPurchaseStackParams} from '@atb/screens/Ticketing/Purchase/types';
 import {FareContractModalStackParams} from '@atb/screens/Ticketing/FareContracts/Details/types';
-import {TicketingTabsNavigatorParams} from '@atb/screens/Ticketing/FareProducts/types';
+import {TicketingTabsNavigatorParams} from '@atb/screens/Ticketing/types';
 import {
   BottomTabNavigationProp,
   BottomTabScreenProps,
@@ -28,7 +28,7 @@ export type RootStackParamList = {
   SortableFavoriteList: undefined;
   AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;
   LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
-  TicketPurchase: NavigatorScreenParams<TicketingStackParams>;
+  TicketPurchase: NavigatorScreenParams<TicketPurchaseStackParams>;
   FareContractModal: NavigatorScreenParams<FareContractModalStackParams>;
   MobileTokenOnboarding: undefined;
   SelectTravelTokenRoot: undefined;

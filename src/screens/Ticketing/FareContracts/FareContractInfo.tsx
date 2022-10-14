@@ -19,7 +19,7 @@ import {
   NormalTravelRight,
   PreActivatedTravelRight,
 } from '@atb/ticketing';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
@@ -197,14 +197,14 @@ const FareContractInfoDetails = (props: FareContractInfoDetailsProps) => {
       <View style={styles.fareContractDetails}>
         <View style={styles.details}>
           <FareContractDetail
-            header={t(TicketingTexts.label.travellers)}
+            header={t(FareContractTexts.label.travellers)}
             children={userProfilesWithCount.map((u) =>
               userProfileCountAndName(u, omitUserProfileCount, language),
             )}
           />
           {tariffZoneSummary && (
             <FareContractDetail
-              header={t(TicketingTexts.label.zone)}
+              header={t(FareContractTexts.label.zone)}
               children={[tariffZoneSummary]}
             />
           )}

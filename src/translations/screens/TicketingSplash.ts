@@ -1,7 +1,7 @@
 import {translation as _} from '../commons';
 import orgSpecificTranslations from '../utils';
 
-const TicketSplashTexts = {
+const TicketingSplashTexts = {
   header: {
     title: _('Billetter', 'Tickets'),
     logo: {
@@ -20,7 +20,7 @@ const TicketSplashTexts = {
     ),
   },
 };
-export default orgSpecificTranslations(TicketSplashTexts, {
+export default orgSpecificTranslations(TicketingSplashTexts, {
   nfk: {
     splash: {
       title: _(

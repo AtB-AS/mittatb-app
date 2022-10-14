@@ -1,5 +1,5 @@
 import {FareContract} from '@atb/ticketing';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import * as Sections from '@atb/components/sections';
 import ValidityLine from '@atb/screens/Ticketing/FareContracts/ValidityLine';
 import ThemeText from '@atb/components/text';
@@ -13,7 +13,9 @@ export function UnknownFareContractDetails({fc}: {fc: FareContract}) {
         <ValidityLine status="unknown" />
       </Sections.GenericItem>
       <Sections.GenericItem>
-        <ThemeText>{t(TicketingTexts.details.orderId(fc.orderId))}</ThemeText>
+        <ThemeText>
+          {t(FareContractTexts.details.orderId(fc.orderId))}
+        </ThemeText>
       </Sections.GenericItem>
     </Sections.Section>
   );

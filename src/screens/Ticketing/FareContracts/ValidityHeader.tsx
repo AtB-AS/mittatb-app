@@ -2,7 +2,7 @@ import ThemeText from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {
   Language,
-  TicketingTexts,
+  FareContractTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
@@ -53,7 +53,7 @@ const ValidityHeader: React.FC<{
             !isInspectable
               ? validityTime +
                 ', ' +
-                t(TicketingTexts.fareContractInfo.noInspectionIconA11yLabel)
+                t(FareContractTexts.fareContractInfo.noInspectionIconA11yLabel)
               : undefined
           }
         >
@@ -72,7 +72,7 @@ function validityTimeText(
   t: TranslateFunction,
   language: Language,
 ): string {
-  const conjunction = t(TicketingTexts.validityHeader.durationDelimiter);
+  const conjunction = t(FareContractTexts.validityHeader.durationDelimiter);
   const toDurationText = (seconds: number) =>
     secondsToDuration(seconds, language, {
       conjunction,
@@ -81,32 +81,34 @@ function validityTimeText(
 
   switch (status) {
     case 'refunded':
-      return t(TicketingTexts.validityHeader.refunded);
+      return t(FareContractTexts.validityHeader.refunded);
     case 'upcoming': {
       const secondsUntilValid = (validFrom - now) / 1000;
       const durationText = toDurationText(secondsUntilValid);
-      return t(TicketingTexts.validityHeader.upcoming(durationText));
+      return t(FareContractTexts.validityHeader.upcoming(durationText));
     }
     case 'valid': {
       const secondsUntilExpired = (validTo - now) / 1000;
       const durationText = toDurationText(secondsUntilExpired);
-      return t(TicketingTexts.validityHeader.valid(durationText));
+      return t(FareContractTexts.validityHeader.valid(durationText));
     }
     case 'expired': {
       const secondsSinceExpired = (now - validTo) / 1000;
       if (secondsSinceExpired < 60 * 60) {
         const durationText = toDurationText(secondsSinceExpired);
-        return t(TicketingTexts.validityHeader.recentlyExpired(durationText));
+        return t(
+          FareContractTexts.validityHeader.recentlyExpired(durationText),
+        );
       } else {
         const dateTime = formatToLongDateTime(toDate(validTo), language);
-        return t(TicketingTexts.validityHeader.expired(dateTime));
+        return t(FareContractTexts.validityHeader.expired(dateTime));
       }
     }
     case 'reserving':
-      return t(TicketingTexts.validityHeader.reserving);
+      return t(FareContractTexts.validityHeader.reserving);
     case 'unknown':
     default:
-      return t(TicketingTexts.validityHeader.unknown);
+      return t(FareContractTexts.validityHeader.unknown);
   }
 }
 

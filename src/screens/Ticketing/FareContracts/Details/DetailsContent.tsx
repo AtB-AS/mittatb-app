@@ -4,7 +4,7 @@ import {
   isInspectableTravelRight,
   isPreActivatedTravelRight,
 } from '@atb/ticketing';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import FareContractInfo from '../FareContractInfo';
 import ValidityHeader from '../ValidityHeader';
@@ -87,7 +87,7 @@ const DetailsContent: React.FC<Props> = ({
           <OrderDetails fareContract={fc} />
         </Sections.GenericItem>
         <Sections.LinkItem
-          text={t(TicketingTexts.details.askForReceipt)}
+          text={t(FareContractTexts.details.askForReceipt)}
           onPress={onReceiptNavigate}
           accessibility={{accessibilityRole: 'button'}}
           testID="receiptButton"

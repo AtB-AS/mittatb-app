@@ -4,7 +4,7 @@ import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {TicketingTexts, useTranslation} from '@atb/translations';
 import {
   createMaterialTopTabNavigator,
   MaterialTopTabBarProps,
@@ -14,7 +14,7 @@ import {View} from 'react-native';
 import {ActiveFareProductsAndReservationsTab} from '../FareContracts/ActiveFareContracts/ActiveFareProductsAndReservationsTab';
 import TabBar from './TabBar';
 import {PurchaseTab} from './PurchaseTab';
-import {TicketingTabsNavigatorParams} from './types';
+import {TicketingTabsNavigatorParams} from '../types';
 
 const Tab = createMaterialTopTabNavigator<TicketingTabsNavigatorParams>();
 
@@ -33,7 +33,7 @@ export default function TicketingTabs() {
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title={t(TicketsTexts.header.title)}
+        title={t(TicketingTexts.header.title)}
         rightButton={{type: 'chat'}}
         globalMessageContext="app-ticketing"
       />
@@ -45,8 +45,8 @@ export default function TicketingTabs() {
           name="PurchaseTab"
           component={PurchaseTab}
           options={{
-            tabBarLabel: t(TicketsTexts.purchaseTab.label),
-            tabBarAccessibilityLabel: t(TicketsTexts.purchaseTab.a11yLabel),
+            tabBarLabel: t(TicketingTexts.purchaseTab.label),
+            tabBarAccessibilityLabel: t(TicketingTexts.purchaseTab.a11yLabel),
             tabBarTestID: 'purchaseTab',
           }}
         />
@@ -55,10 +55,10 @@ export default function TicketingTabs() {
           component={ActiveFareProductsAndReservationsTab}
           options={{
             tabBarLabel: t(
-              TicketsTexts.activeFareProductsAndReservationsTab.label,
+              TicketingTexts.activeFareProductsAndReservationsTab.label,
             ),
             tabBarAccessibilityLabel: t(
-              TicketsTexts.activeFareProductsAndReservationsTab.a11yLabel,
+              TicketingTexts.activeFareProductsAndReservationsTab.a11yLabel,
             ),
             tabBarTestID: 'validTicketsTab',
           }}

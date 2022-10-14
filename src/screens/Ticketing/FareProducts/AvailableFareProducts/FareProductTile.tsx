@@ -9,7 +9,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import ThemedFareProductIllustration, {
   FareProductIllustration,
 } from '@atb/components/ticket-illustration';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {TicketingTexts, useTranslation} from '@atb/translations';
 import {getStaticColor, StaticColor} from '@atb/theme/colors';
 import TransportMode from '@atb/screens/Ticketing/FareContracts/Component/TransportMode';
 import {PreassignedFareProductType} from '@atb/reference-data/types';
@@ -39,8 +39,8 @@ const FareProductTile = ({
   const {themeName} = useTheme();
   const color: StaticColor = accented ? 'background_accent_3' : 'background_0';
   const themeColor = getStaticColor(themeName, color);
-  const title = t(TicketsTexts.availableFareProducts[type].title);
-  const description = t(TicketsTexts.availableFareProducts[type].description);
+  const title = t(TicketingTexts.availableFareProducts[type].title);
+  const description = t(TicketingTexts.availableFareProducts[type].description);
   const accessibilityLabel = [title, transportationModeTexts, description].join(
     '. ',
   );
@@ -54,7 +54,9 @@ const FareProductTile = ({
         onPress={onPress}
         accessible={true}
         accessibilityLabel={accessibilityLabel}
-        accessibilityHint={t(TicketsTexts.availableFareProducts.navigateToBuy)}
+        accessibilityHint={t(
+          TicketingTexts.availableFareProducts.navigateToBuy,
+        )}
         style={styles.spreadContent}
       >
         <View style={styles.contentContainer}>

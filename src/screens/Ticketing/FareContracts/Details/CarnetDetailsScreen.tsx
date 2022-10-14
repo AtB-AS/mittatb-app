@@ -1,7 +1,7 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
 import {useTicketingState} from '@atb/ticketing';
-import {useTranslation, TicketingTexts} from '@atb/translations';
+import {useTranslation, FareContractTexts} from '@atb/translations';
 import useInterval from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {View} from 'react-native';
@@ -35,7 +35,7 @@ export default function CarnetDetailsScreen({navigation, route}: Props) {
     <View style={styles.container}>
       <FullScreenHeader
         leftButton={{type: 'close'}}
-        title={t(TicketingTexts.details.header.title)}
+        title={t(FareContractTexts.details.header.title)}
       />
       <ScrollView contentContainerStyle={styles.content}>
         {fc && (

@@ -2,7 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 
 type Props = {
   active: boolean;
@@ -39,13 +39,15 @@ const CarnetFooter: React.FC<Props> = ({
       style={{flexDirection: 'column', flex: 1}}
       accessible={true}
       accessibilityLabel={t(
-        TicketingTexts.carnet.numberOfUsedAccessesRemaining(accessesRemaining),
+        FareContractTexts.carnet.numberOfUsedAccessesRemaining(
+          accessesRemaining,
+        ),
       )}
     >
       <View>
         <ThemeText type="body__secondary">
           {t(
-            TicketingTexts.carnet.numberOfUsedAccessesRemaining(
+            FareContractTexts.carnet.numberOfUsedAccessesRemaining(
               accessesRemaining,
             ),
           )}

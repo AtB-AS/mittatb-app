@@ -2,7 +2,7 @@ import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Reservation, PaymentType} from '@atb/ticketing';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {TicketingTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
 import React from 'react';
 import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
@@ -55,7 +55,7 @@ const PurchaseReservation: React.FC<Props> = ({reservation}) => {
               ></FareContractStatusSymbol>
             )}
             <ThemeText type="body__secondary" style={styles.reservationStatus}>
-              {t(TicketsTexts.reservation[status])}
+              {t(TicketingTexts.reservation[status])}
             </ThemeText>
           </View>
         </View>
@@ -64,7 +64,7 @@ const PurchaseReservation: React.FC<Props> = ({reservation}) => {
           {status == 'rejected' && (
             <ThemeText type="body__secondary" color="secondary">
               {t(
-                TicketsTexts.reservation.orderDate(
+                TicketingTexts.reservation.orderDate(
                   formatToLongDateTime(
                     fromUnixTime(reservation.created.toMillis() / 1000),
                     language,
@@ -78,16 +78,16 @@ const PurchaseReservation: React.FC<Props> = ({reservation}) => {
             color="secondary"
             style={styles.detail}
           >
-            {t(TicketsTexts.reservation.paymentMethod(paymentType))}
+            {t(TicketingTexts.reservation.paymentMethod(paymentType))}
           </ThemeText>
           <ThemeText style={styles.detail}>
-            {t(TicketsTexts.reservation.orderId(reservation.orderId))}
+            {t(TicketingTexts.reservation.orderId(reservation.orderId))}
           </ThemeText>
           {reservation.paymentType === PaymentType.Vipps &&
             status === 'reserving' && (
               <Button
                 onPress={() => openVippsUrl(reservation.url)}
-                text={t(TicketsTexts.reservation.goToVipps)}
+                text={t(TicketingTexts.reservation.goToVipps)}
                 mode="tertiary"
               />
             )}

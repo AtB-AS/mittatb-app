@@ -1,7 +1,7 @@
 import ThemeText from '@atb/components/text';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {AccessibilityProps, View} from 'react-native';
 import {tariffZonesSummary} from '@atb/screens/Ticketing/Purchase/TariffZones';
@@ -146,7 +146,7 @@ export const useFareContractInfoTexts = (
       : undefined;
 
   const secondsUntilValid = ((validTo || 0) - (now || 0)) / 1000;
-  const conjunction = t(TicketingTexts.validityHeader.durationDelimiter);
+  const conjunction = t(FareContractTexts.validityHeader.durationDelimiter);
   const durationText = secondsToDuration(secondsUntilValid, language, {
     conjunction,
     serialComma: false,
@@ -157,7 +157,7 @@ export const useFareContractInfoTexts = (
 
   if (isInspectable) {
     timeUntilExpireOrWarning = t(
-      TicketingTexts.validityHeader.valid(durationText),
+      FareContractTexts.validityHeader.valid(durationText),
     );
   } else {
     const warning = getNonInspectableTokenWarning(
@@ -183,7 +183,7 @@ export const useFareContractInfoTexts = (
 
   if (!isInspectable) {
     accessibilityLabel += t(
-      TicketingTexts.fareContractInfo.noInspectionIconA11yLabel,
+      FareContractTexts.fareContractInfo.noInspectionIconA11yLabel,
     );
   }
 

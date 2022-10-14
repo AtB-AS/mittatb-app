@@ -2,7 +2,7 @@ import ThemeText from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {
   Language,
-  TicketingTexts,
+  FareContractTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
@@ -39,7 +39,7 @@ function UsedAccessValidityHeader(props: Props) {
             !props.isInspectable
               ? usedAccessValidityText +
                 ', ' +
-                t(TicketingTexts.fareContractInfo.noInspectionIconA11yLabel)
+                t(FareContractTexts.fareContractInfo.noInspectionIconA11yLabel)
               : undefined
           }
         >
@@ -55,7 +55,7 @@ function getUsedAccessValidityText(
   t: TranslateFunction,
   language: Language,
 ): string {
-  const conjunction = t(TicketingTexts.validityHeader.durationDelimiter);
+  const conjunction = t(FareContractTexts.validityHeader.durationDelimiter);
   const toDurationText = (seconds: number) =>
     secondsToDuration(seconds, language, {
       conjunction,
@@ -68,15 +68,15 @@ function getUsedAccessValidityText(
     case 'valid': {
       const secondsUntilExpired = (props.validTo! - now) / 1000;
       const durationText = toDurationText(secondsUntilExpired);
-      return t(TicketingTexts.validityHeader.valid(durationText));
+      return t(FareContractTexts.validityHeader.valid(durationText));
     }
     case 'upcoming': {
       const secondsUntilValid = (props.validFrom! - now) / 1000;
       const durationText = toDurationText(secondsUntilValid);
-      return t(TicketingTexts.validityHeader.upcoming(durationText));
+      return t(FareContractTexts.validityHeader.upcoming(durationText));
     }
     case 'inactive':
-      return t(TicketingTexts.validityHeader.inactiveCarnet);
+      return t(FareContractTexts.validityHeader.inactiveCarnet);
   }
 }
 

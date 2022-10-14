@@ -2,7 +2,7 @@ import {View} from 'react-native';
 import {getTransportationModes} from '@atb/screens/Ticketing/FareContracts/utils';
 import TransportationIcon from '@atb/components/transportation-icon';
 import ThemeText from '@atb/components/text';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {TicketingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {PreassignedFareProductType} from '@atb/reference-data/types';
 import {StyleSheet, Theme} from '@atb/theme';
@@ -30,7 +30,9 @@ const TransportMode = ({
         />
       ))}
       <ThemeText type="label__uppercase" color={'secondary'}>
-        {t(TicketsTexts.availableFareProducts[fareProductType].transportModes)}
+        {t(
+          TicketingTexts.availableFareProducts[fareProductType].transportModes,
+        )}
       </ThemeText>
     </View>
   );

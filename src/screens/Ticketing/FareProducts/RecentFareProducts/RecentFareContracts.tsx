@@ -5,19 +5,19 @@ import {
 import ThemeText from '@atb/components/text';
 import {productIsSellableInApp} from '@atb/reference-data/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {TicketingTexts, useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import {useNavigation} from '@react-navigation/native';
 import React, {useMemo} from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {TicketsNavigationProps} from '../types';
+import {TicketingNavigationProps} from '../../types';
 import useRecentFareContracts, {
   RecentFareContract,
 } from '../use-recent-fare-contracts';
 import {RecentFareContractComponent} from './RecentFareContractComponent';
 
 export const RecentFareContracts = () => {
-  const navigation = useNavigation<TicketsNavigationProps<'PurchaseTab'>>();
+  const navigation = useNavigation<TicketingNavigationProps<'PurchaseTab'>>();
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
@@ -71,7 +71,7 @@ export const RecentFareContracts = () => {
             type="body__primary"
             style={{textAlign: 'center', marginBottom: theme.spacings.large}}
           >
-            {t(TicketsTexts.recentFareContracts.loading)}
+            {t(TicketingTexts.recentFareContracts.loading)}
           </ThemeText>
           <ActivityIndicator
             color={theme.static.background.background_0.text}

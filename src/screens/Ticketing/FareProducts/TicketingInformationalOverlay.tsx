@@ -1,5 +1,5 @@
 import {useAppState} from '@atb/AppContext';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {TicketingTexts, useTranslation} from '@atb/translations';
 import ThemeText from '@atb/components/text';
 import Button from '@atb/components/button';
 import {ScrollView, View} from 'react-native';
@@ -28,47 +28,47 @@ export default function TicketingInformationalOverlay() {
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title={t(TicketsTexts.header.title)}
+        title={t(TicketingTexts.header.title)}
         rightButton={{type: 'chat'}}
       />
       <ScrollView style={styles.scrollView}>
         <ThemeText color={themeColor} type="body__primary--jumbo--bold">
-          {t(TicketsTexts.informational.title)}
+          {t(TicketingTexts.informational.title)}
         </ThemeText>
         <ThemeText
           color={themeColor}
           style={{marginTop: theme.spacings.xLarge}}
         >
-          {t(TicketsTexts.informational.description)}
+          {t(TicketingTexts.informational.description)}
         </ThemeText>
         <ThemeText
           color={themeColor}
           type="heading__paragraph"
           style={{marginTop: theme.spacings.xLarge}}
         >
-          {t(TicketsTexts.informational.paragraphHeading)}
+          {t(TicketingTexts.informational.paragraphHeading)}
         </ThemeText>
         <ThemeText
           color={themeColor}
           style={{marginTop: theme.spacings.medium}}
         >
-          {t(TicketsTexts.informational.bullet1)}
+          {t(TicketingTexts.informational.bullet1)}
         </ThemeText>
         <ThemeText
           color={themeColor}
           style={{marginTop: theme.spacings.medium}}
         >
-          {t(TicketsTexts.informational.bullet2)}
+          {t(TicketingTexts.informational.bullet2)}
         </ThemeText>
         <ThemeText
           color={themeColor}
           style={{marginTop: theme.spacings.medium}}
         >
-          {t(TicketsTexts.informational.bullet3)}
+          {t(TicketingTexts.informational.bullet3)}
         </ThemeText>
         <View style={{marginVertical: theme.spacings.xLarge}}>
           <Button
-            text={t(TicketsTexts.informational.button)}
+            text={t(TicketingTexts.informational.button)}
             icon={Confirm}
             iconPosition="right"
             interactiveColor="interactive_0"

@@ -6,7 +6,7 @@ import * as Sections from '@atb/components/sections';
 import {StyleSheet} from '@atb/theme';
 import {sendReceipt} from '@atb/ticketing';
 import {
-  TicketingTexts,
+  FareContractTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
@@ -66,7 +66,7 @@ export default function ReceiptScreen({route}: Props) {
     <View style={styles.container}>
       <FullScreenHeader
         leftButton={{type: 'back'}}
-        title={t(TicketingTexts.receipt.header.title)}
+        title={t(FareContractTexts.receipt.header.title)}
         setFocusOnLoad={a11yContext.isScreenReaderEnabled}
       />
       <View style={styles.content}>
@@ -77,7 +77,7 @@ export default function ReceiptScreen({route}: Props) {
         </View>
         <Sections.Section withTopPadding withBottomPadding>
           <Sections.TextInput
-            label={t(TicketingTexts.receipt.inputLabel)}
+            label={t(FareContractTexts.receipt.inputLabel)}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -88,7 +88,7 @@ export default function ReceiptScreen({route}: Props) {
           />
         </Sections.Section>
         <Button
-          text={t(TicketingTexts.receipt.sendButton)}
+          text={t(FareContractTexts.receipt.sendButton)}
           onPress={onSend}
           disabled={state === 'loading'}
           interactiveColor="interactive_0"
@@ -107,27 +107,29 @@ function translateStateToMessage(
   switch (state) {
     case 'loading':
       return {
-        message: t(TicketingTexts.receipt.messages.loading),
+        message: t(FareContractTexts.receipt.messages.loading),
         type: 'info',
       };
     case 'error':
       return {
-        message: t(TicketingTexts.receipt.messages.error),
+        message: t(FareContractTexts.receipt.messages.error),
         type: 'error',
       };
     case 'success':
       return {
-        message: t(TicketingTexts.receipt.messages.success(email, reference!)),
+        message: t(
+          FareContractTexts.receipt.messages.success(email, reference!),
+        ),
         type: 'valid',
       };
     case 'invalid-field':
       return {
-        message: t(TicketingTexts.receipt.messages.invalidField),
+        message: t(FareContractTexts.receipt.messages.invalidField),
         type: 'error',
       };
     default:
       return {
-        message: t(TicketingTexts.receipt.messages.defaultFallback),
+        message: t(FareContractTexts.receipt.messages.defaultFallback),
         type: 'info',
       };
   }

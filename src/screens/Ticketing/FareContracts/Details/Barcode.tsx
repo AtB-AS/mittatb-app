@@ -1,7 +1,7 @@
 import {ValidityStatus} from '@atb/screens/Ticketing/FareContracts/utils';
 import * as Sections from '@atb/components/sections';
 import {ActivityIndicator, View} from 'react-native';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import {SvgXml} from 'react-native-svg';
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -105,7 +105,7 @@ const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
         <View
           style={styles.aztecCode}
           accessible={true}
-          accessibilityLabel={t(TicketingTexts.details.barcodeA11yLabel)}
+          accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
           testID="mobileTokenBarcode"
         >
           <SvgXml xml={aztecXml} width="100%" height="100%" />
@@ -137,12 +137,12 @@ const DeviceNotInspectable = () => {
   const inspectableToken = findInspectable(remoteTokens);
   if (!inspectableToken) return null;
   const message = isTravelCardToken(inspectableToken)
-    ? t(TicketingTexts.details.barcodeErrors.notInspectableDevice.tCard)
+    ? t(FareContractTexts.details.barcodeErrors.notInspectableDevice.tCard)
     : t(
-        TicketingTexts.details.barcodeErrors.notInspectableDevice.wrongDevice(
+        FareContractTexts.details.barcodeErrors.notInspectableDevice.wrongDevice(
           getDeviceName(inspectableToken) ||
             t(
-              TicketingTexts.details.barcodeErrors.notInspectableDevice
+              FareContractTexts.details.barcodeErrors.notInspectableDevice
                 .unnamedDevice,
             ),
         ),
@@ -152,7 +152,7 @@ const DeviceNotInspectable = () => {
       <MessageBox
         type={'warning'}
         title={t(
-          TicketingTexts.details.barcodeErrors.notInspectableDevice.title,
+          FareContractTexts.details.barcodeErrors.notInspectableDevice.title,
         )}
         message={message}
         isMarkdown={true}
@@ -190,7 +190,7 @@ const StaticAztec = ({fc}: {fc: FareContract}) => {
       <View
         style={styles.aztecCode}
         accessible={true}
-        accessibilityLabel={t(TicketingTexts.details.barcodeA11yLabel)}
+        accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
         testID="staticBarcode"
       >
         <SvgXml xml={aztecXml} width="100%" height="100%" />

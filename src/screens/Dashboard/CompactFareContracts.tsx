@@ -7,7 +7,11 @@ import {
   useTicketingState,
 } from '@atb/ticketing';
 import ThemeText from '@atb/components/text';
-import {TicketsTexts, DashboardTexts, useTranslation} from '@atb/translations';
+import {
+  TicketingTexts,
+  DashboardTexts,
+  useTranslation,
+} from '@atb/translations';
 import Button from '@atb/components/button';
 import {getFareContractInfoDetails} from '../Ticketing/FareContracts/FareContractInfo';
 import {
@@ -54,9 +58,9 @@ const CompactFareContracts: React.FC<Props> = ({
         type="body__secondary"
         color="background_accent_0"
         style={itemStyle.sectionText}
-        accessibilityLabel={t(TicketsTexts.header.title)}
+        accessibilityLabel={t(TicketingTexts.header.title)}
       >
-        {t(TicketsTexts.header.title)}
+        {t(TicketingTexts.header.title)}
       </ThemeText>
       {validFareContracts.length == 0 ? (
         <Button

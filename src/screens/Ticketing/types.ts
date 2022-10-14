@@ -14,20 +14,20 @@ export type TicketingTabsNavigatorParams = {
   ActiveFareProductsAndReservationsTab: undefined;
 };
 
-export type TicketsStackRootProps = TabNavigatorScreenProps<'Ticketing'>;
+export type TicketingStackRootProps = TabNavigatorScreenProps<'Ticketing'>;
 
-export type TicketsStackRootNavigationProps =
+export type TicketingStackRootNavigationProps =
   TabNavigatorNavigationProps<'Ticketing'>;
 
-export type TicketsNavigationProps<
+export type TicketingNavigationProps<
   T extends keyof TicketingTabsNavigatorParams,
 > = CompositeNavigationProp<
   NavigationProp<TicketingTabsNavigatorParams, T>,
-  TicketsStackRootNavigationProps
+  TicketingStackRootNavigationProps
 >;
 
-export type TicketsScreenProps<T extends keyof TicketingTabsNavigatorParams> =
+export type TicketingScreenProps<T extends keyof TicketingTabsNavigatorParams> =
   CompositeScreenProps<
     StackScreenProps<TicketingTabsNavigatorParams, T>,
-    TicketsStackRootProps
+    TicketingStackRootProps
   >;

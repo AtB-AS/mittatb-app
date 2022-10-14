@@ -1,6 +1,6 @@
 import * as Sections from '@atb/components/sections';
 import {FareContractState, PreActivatedTravelRight} from '@atb/ticketing';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import FareContractInfo from './FareContractInfo';
 import ValidityHeader from './ValidityHeader';
@@ -77,8 +77,8 @@ const PreActivatedFareContractInfo: React.FC<Props> = ({
         <Sections.LinkItem
           text={t(
             validityStatus === 'valid' && isInspectable
-              ? TicketingTexts.detailsLink.valid
-              : TicketingTexts.detailsLink.notValid,
+              ? FareContractTexts.detailsLink.valid
+              : FareContractTexts.detailsLink.notValid,
           )}
           onPress={onPressDetails}
           testID={testID + 'Details'}

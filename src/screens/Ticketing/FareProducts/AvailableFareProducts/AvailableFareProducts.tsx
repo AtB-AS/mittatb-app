@@ -1,5 +1,5 @@
 import {View} from 'react-native';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {TicketingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
@@ -43,14 +43,14 @@ export const AvailableFareProducts = ({
   return (
     <View>
       <ThemeText type="body__secondary" style={styles.heading}>
-        {t(TicketsTexts.availableFareProducts.allTickets)}
+        {t(TicketingTexts.availableFareProducts.allTickets)}
       </ThemeText>
 
       <View style={styles.fareProductsContainer}>
         {shouldShowSingleFareProduct && (
           <FareProductTile
             transportationModeTexts={t(
-              TicketsTexts.availableFareProducts.single.transportModes,
+              TicketingTexts.availableFareProducts.single.transportModes,
             )}
             illustration="Single"
             onPress={onBuySingleFareProduct}
@@ -61,7 +61,7 @@ export const AvailableFareProducts = ({
         {shouldShowPeriodFareProduct && (
           <FareProductTile
             transportationModeTexts={t(
-              TicketsTexts.availableFareProducts.period.transportModes,
+              TicketingTexts.availableFareProducts.period.transportModes,
             )}
             illustration="Period"
             onPress={onBuyPeriodFareProduct}
@@ -74,7 +74,7 @@ export const AvailableFareProducts = ({
         <View style={styles.fareProductsContainer}>
           <FareProductTile
             transportationModeTexts={t(
-              TicketsTexts.availableFareProducts.hour24.transportModes,
+              TicketingTexts.availableFareProducts.hour24.transportModes,
             )}
             illustration="H24"
             onPress={onBuyHour24FareProduct}
@@ -87,7 +87,7 @@ export const AvailableFareProducts = ({
         <View style={styles.fareProductsContainer}>
           <FareProductTile
             transportationModeTexts={t(
-              TicketsTexts.availableFareProducts.summerPass.transportModes,
+              TicketingTexts.availableFareProducts.summerPass.transportModes,
             )}
             illustration="Summer"
             accented={true}

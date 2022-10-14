@@ -1,6 +1,6 @@
 import {translation as _} from '../commons';
 
-const TicketingTexts = {
+const FareContractTexts = {
   organizationName: _('AtB', 'AtB'),
   detailsLink: {
     valid: _('Vis detaljer / kontroll', 'Show details / inspection'),
@@ -143,4 +143,4 @@ const TicketingTexts = {
   },
 };
 
-export default TicketingTexts;
+export default FareContractTexts;

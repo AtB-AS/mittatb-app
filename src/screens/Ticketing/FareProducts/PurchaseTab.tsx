@@ -6,10 +6,10 @@ import {useTheme} from '@atb/theme';
 import React from 'react';
 import {ScrollView} from 'react-native';
 import {RecentFareContracts} from './RecentFareProducts/RecentFareContracts';
-import {TicketsScreenProps} from './types';
+import {TicketingScreenProps} from '../types';
 import UpgradeSplash from './UpgradeSplash';
 
-type Props = TicketsScreenProps<'PurchaseTab'>;
+type Props = TicketingScreenProps<'PurchaseTab'>;
 
 export const PurchaseTab: React.FC<Props> = ({navigation}) => {
   const {must_upgrade_ticketing, enable_recent_tickets} = useRemoteConfig();

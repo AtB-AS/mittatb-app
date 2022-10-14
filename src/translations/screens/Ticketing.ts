@@ -3,7 +3,7 @@ import {translation as _} from '../commons';
 
 const bulletPoint = '\u2022';
 
-const TicketsTexts = {
+const TicketingTexts = {
   header: {
     title: _('Billetter', 'Tickets'),
   },
@@ -201,7 +201,7 @@ const TicketsTexts = {
   },
 };
 
-export default orgSpecificTranslations(TicketsTexts, {
+export default orgSpecificTranslations(TicketingTexts, {
   nfk: {
     travelCardInformation: {
       illustrationa11yLabel: (travelCardId: string) =>

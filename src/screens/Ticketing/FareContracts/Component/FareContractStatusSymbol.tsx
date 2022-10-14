@@ -4,7 +4,7 @@ import {TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 import {ValidityStatus} from '@atb/screens/Ticketing/FareContracts/utils';
 import {Ticket} from '@atb/assets/svg/color/images';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {TicketingTexts, useTranslation} from '@atb/translations';
 
 const FareContractStatusSymbol = ({status}: {status: ValidityStatus}) => {
   const {t} = useTranslation();
@@ -18,7 +18,7 @@ const FareContractStatusSymbol = ({status}: {status: ValidityStatus}) => {
           colorType="error"
           size={'large'}
           accessibilityLabel={t(
-            TicketsTexts.ticketStatusSymbolA11yLabel[status],
+            TicketingTexts.ticketStatusSymbolA11yLabel[status],
           )}
         />
       );
@@ -29,7 +29,7 @@ const FareContractStatusSymbol = ({status}: {status: ValidityStatus}) => {
           colorType="primary"
           size={'large'}
           accessibilityLabel={t(
-            TicketsTexts.ticketStatusSymbolA11yLabel[status],
+            TicketingTexts.ticketStatusSymbolA11yLabel[status],
           )}
         />
       );
@@ -38,7 +38,7 @@ const FareContractStatusSymbol = ({status}: {status: ValidityStatus}) => {
         <ThemeIcon
           svg={Ticket}
           accessibilityLabel={t(
-            TicketsTexts.ticketStatusSymbolA11yLabel[status],
+            TicketingTexts.ticketStatusSymbolA11yLabel[status],
           )}
         />
       );

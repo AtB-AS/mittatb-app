@@ -1,6 +1,6 @@
 import * as Sections from '@atb/components/sections';
 import {FareContract, isCarnetTravelRight} from '@atb/ticketing';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import OrderDetails from '@atb/screens/Ticketing/FareContracts/Details/OrderDetails';
 import {UnknownFareContractDetails} from '@atb/screens/Ticketing/FareContracts/Details/UnknownFareContractDetails';
@@ -34,7 +34,7 @@ const CarnetDetailedView: React.FC<Props> = ({
           <OrderDetails fareContract={fc} />
         </Sections.GenericItem>
         <Sections.LinkItem
-          text={t(TicketingTexts.details.askForReceipt)}
+          text={t(FareContractTexts.details.askForReceipt)}
           onPress={onReceiptNavigate}
           accessibility={{accessibilityRole: 'button'}}
           testID="receiptButton"

@@ -2,7 +2,7 @@ import ThemeText from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {flatStaticColors, StaticColor} from '@atb/theme/colors';
 import {TravelCard} from '@atb/ticketing';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {TicketingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 
@@ -21,14 +21,14 @@ const TravelCardInformation: React.FC<Props> = ({travelCard}) => {
         type="heading__component"
         style={{...styles.centerText, ...styles.title}}
       >
-        {t(TicketsTexts.travelCardInformation.reisebevis)}
+        {t(TicketingTexts.travelCardInformation.reisebevis)}
       </ThemeText>
       <ThemeText
         type="body__primary"
         color="secondary"
         style={styles.centerText}
       >
-        {t(TicketsTexts.travelCardInformation.onInspection)}
+        {t(TicketingTexts.travelCardInformation.onInspection)}
       </ThemeText>
       <ActiveTravelCard
         cardId={travelCard.id?.toString()}
@@ -39,7 +39,7 @@ const TravelCardInformation: React.FC<Props> = ({travelCard}) => {
         color="secondary"
         style={styles.centerText}
       >
-        {t(TicketsTexts.travelCardInformation.changeInstructions)}
+        {t(TicketingTexts.travelCardInformation.changeInstructions)}
       </ThemeText> */}
     </View>
   );
@@ -66,7 +66,7 @@ export function ActiveTravelCard(props: ActiveTravelCardProps): JSX.Element {
       ]}
       accessible={true}
       accessibilityLabel={t(
-        TicketsTexts.travelCardInformation.illustrationa11yLabel(
+        TicketingTexts.travelCardInformation.illustrationa11yLabel(
           cardId.toString(),
         ),
       )}
@@ -97,7 +97,7 @@ export function ActiveTravelCard(props: ActiveTravelCardProps): JSX.Element {
           style={styles.tcardicon}
         >
           {'\n'}
-          {t(TicketsTexts.travelCardInformation.cardType)}
+          {t(TicketingTexts.travelCardInformation.cardType)}
         </ThemeText>
       </View>
     </View>

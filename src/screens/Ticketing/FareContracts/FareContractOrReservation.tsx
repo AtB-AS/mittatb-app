@@ -1,7 +1,7 @@
 import PurchaseReservation from '@atb/screens/Ticketing/FareContracts/PurchaseReservation';
 import React from 'react';
 import {FareContract, Reservation} from '@atb/ticketing';
-import {TicketsTexts, useTranslation} from '@atb/translations';
+import {TicketingTexts, useTranslation} from '@atb/translations';
 import SimpleFareContract from '@atb/screens/Ticketing/FareContracts/index';
 import ErrorBoundary from '@atb/error-boundary';
 
@@ -31,7 +31,7 @@ export default function FareContractOrReservation({
       <ErrorBoundary
         key={fcOrReservation.orderId}
         message={t(
-          TicketsTexts.scrollView.errorLoadingTicket(fcOrReservation.orderId),
+          TicketingTexts.scrollView.errorLoadingTicket(fcOrReservation.orderId),
         )}
       >
         <SimpleFareContract

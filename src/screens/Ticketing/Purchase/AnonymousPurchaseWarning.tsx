@@ -5,12 +5,12 @@ import AnonymousTicketPurchases from '@atb/translations/screens/subscreens/Anony
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {View} from 'react-native';
-import {TicketsStackRootNavigationProps} from '../FareProducts/types';
+import {TicketingStackRootNavigationProps} from '../types';
 
 const AnonymousPurchaseWarning = () => {
   const {t} = useTranslation();
   const styles = useStyle();
-  const navigation = useNavigation<TicketsStackRootNavigationProps>();
+  const navigation = useNavigation<TicketingStackRootNavigationProps>();
   const navigateToConsequencesScreen = () => {
     navigation.navigate('ConsequencesFromTicketPurchase');
   };

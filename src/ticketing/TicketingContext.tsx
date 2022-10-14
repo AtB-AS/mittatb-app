@@ -16,7 +16,6 @@ type TicketingReducerState = {
 };
 
 type TicketingReducerAction =
-  | {type: 'SET_IS_REFRESHING_FARE_CONTRACTS'}
   | {type: 'SET_ERROR_REFRESHING_FARE_CONTRACTS'}
   | {
       type: 'UPDATE_FARE_CONTRACTS';
@@ -45,13 +44,6 @@ const ticketingReducer: TicketingReducer = (
   action,
 ): TicketingReducerState => {
   switch (action.type) {
-    case 'SET_IS_REFRESHING_FARE_CONTRACTS': {
-      return {
-        ...prevState,
-        isRefreshingFareContracts: true,
-        errorRefreshingFareContracts: false,
-      };
-    }
     case 'SET_ERROR_REFRESHING_FARE_CONTRACTS': {
       return {
         ...prevState,

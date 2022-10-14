@@ -1,5 +1,5 @@
 import {StyleSheet, useTheme} from '@atb/theme';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import {ActivityIndicator, View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import React from 'react';
@@ -108,10 +108,10 @@ const NotInspectableContent = () => {
           textAlign: 'center',
         }}
         accessibilityLabel={t(
-          TicketingTexts.fareContractInfo.noInspectionIconA11yLabel,
+          FareContractTexts.fareContractInfo.noInspectionIconA11yLabel,
         )}
       >
-        {t(TicketingTexts.fareContractInfo.noInspectionIcon)}
+        {t(FareContractTexts.fareContractInfo.noInspectionIcon)}
       </ThemeText>
     </View>
   );

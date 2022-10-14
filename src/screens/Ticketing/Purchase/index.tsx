@@ -11,11 +11,11 @@ import PurchaseOverviewScreen from './Overview';
 import {CreditCard as CreditCardScreen, Vipps as VippsScreen} from './Payment';
 import TariffZones from './TariffZones';
 import TariffZoneSearch from './TariffZones/search';
-import {TicketingStackParams, TicketPurchaseStackRootProps} from './types';
+import {TicketPurchaseStackParams, TicketPurchaseStackRootProps} from './types';
 
 import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/screens/MobileTokenOnboarding/utils';
 
-const Stack = createStackNavigator<TicketingStackParams>();
+const Stack = createStackNavigator<TicketPurchaseStackParams>();
 
 const options: StackNavigationOptions = {
   headerShown: false,
