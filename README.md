@@ -5,16 +5,11 @@
 
 ![AtB Illustration](https://atbeta-git-new-landingpage.atb.vercel.app/illustration.svg)
 
-This repo contains all planning, documentation, discussions and code for the AtB travel assistant (and eventually ticketing).
+This repo contains documentation and code for the AtB app with travel assistance and ticketing.
 
 Read more on AtB development, blogposts and projects at [the AtBeta page and blog](https://beta.atb.no).
 
-## Links and planning
-
-- See ongoing tasks at [Progress](https://github.com/AtB-AS/mittatb-app/projects/6).
-- Follow design work and feature refinements at [Feature refinements](https://github.com/AtB-AS/mittatb-app/projects/5)
-- [Follow different milestones](https://github.com/AtB-AS/mittatb-app/milestones)
-- [Report new bug of feature proposal](https://github.com/AtB-AS/mittatb-app/issues/new/choose)
+You can submit a new bug report or feature proposal by [creating a new issue](https://github.com/AtB-AS/mittatb-app/issues/new/choose).
 
 ## Contribution
 

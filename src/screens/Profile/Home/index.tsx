@@ -40,6 +40,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from '../types';
 import {destructiveAlert} from './utils';
 import useIsLoading from '@atb/utils/use-is-loading';
+import {useNewFrontpage} from '@atb/screens/Dashboard/use-new-frontpage';
 import {useMapPage} from '@atb/components/map/use-map-page';
 
 const buildNumber = getBuildNumber();
@@ -71,9 +72,11 @@ export default function ProfileHome({navigation}: ProfileProps) {
 
   const {
     setPreference,
-    preferences: {newDepartures, newFrontPage},
+    preferences: {newDepartures},
   } = usePreferences();
   const showMapPage = useMapPage();
+
+  const shouldUseNewFrontPage = useNewFrontpage();
 
   function copyInstallId() {
     if (config?.installId) setClipboard(config.installId);
@@ -413,7 +416,7 @@ export default function ProfileHome({navigation}: ProfileProps) {
             <Sections.ActionItem
               mode="toggle"
               text={t(ProfileTexts.sections.newFeatures.frontPage)}
-              checked={newFrontPage}
+              checked={shouldUseNewFrontPage}
               testID="newFrontpageToggle"
               onPress={(newFrontPage) => {
                 analytics().logEvent('toggle_beta_frontPage', {

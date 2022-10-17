@@ -15,7 +15,7 @@ import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
 import {useFavoriteDepartureData} from './state';
 import {NoFavouriteDeparture} from '@atb/assets/svg/color/images/';
 
-const FavouritesWidget: React.FC = () => {
+const DeparturesWidget: React.FC = () => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {new_favourites_info_url} = useRemoteConfig();
@@ -96,7 +96,7 @@ const FavouritesWidget: React.FC = () => {
                   quayGroup={quay}
                   stop={stopPlaceInfo}
                   searchDate={searchDate}
-                  currentLocation={location || undefined}
+                  locationOrStopPlace={location || undefined}
                   mode="frontpage"
                 />
               );
@@ -120,7 +120,7 @@ const FavouritesWidget: React.FC = () => {
   );
 };
 
-export default FavouritesWidget;
+export default DeparturesWidget;
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

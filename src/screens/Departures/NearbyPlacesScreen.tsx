@@ -39,7 +39,7 @@ export default function NearbyPlacesScreen() {
               theme.interactive.interactive_1.active.text,
             tabBarIndicatorStyle: {
               backgroundColor:
-                theme.static.background.background_accent_0.background,
+                theme.interactive.interactive_1.active.background,
               height: '100%',
               borderRadius: 12,
               borderColor: theme.interactive.interactive_1.default.background,

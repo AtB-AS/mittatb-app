@@ -189,6 +189,13 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
     navigation.setParams({
       fromLocation: from?.resultType === 'geolocation' ? currentLocation : from,
       toLocation: to?.resultType === 'geolocation' ? currentLocation : to,
+      searchTime:
+        searchTime.option === 'now'
+          ? {
+              option: 'now',
+              date: new Date().toISOString(),
+            }
+          : searchTime,
     });
   };
 
@@ -201,13 +208,7 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
         rightButton={{type: 'chat'}}
         leftButton={{
           type: 'back',
-          onPress: () => {
-            navigation.navigate('DashboardRoot', {
-              toLocation: undefined,
-              fromLocation: currentLocation,
-              searchTime: undefined,
-            });
-          },
+          onPress: () => navigation.goBack(),
         }}
       />
 

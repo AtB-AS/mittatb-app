@@ -8,6 +8,6 @@ export async function skipOnboarding() {
     await element(by.id('nextButton')).atIndex(0).tap();
     await element(by.id('nextButton')).atIndex(0).tap();
     await element(by.id('acceptRestrictionsButton')).tap();
-    await expect(element(by.text('Travel assistant'))).toBeVisible();
+    await expect(element(by.text('Travel search'))).toBeVisible();
   }
 }

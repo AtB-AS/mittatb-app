@@ -2,8 +2,13 @@ import React from 'react';
 import {Map} from '@atb/components/map';
 import {MapScreenProps} from '@atb/screens/Map/index';
 import {Place, Quay} from '@atb/api/types/departures';
+import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
+import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 
 export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+  if (isScreenReaderEnabled) return <MapDisabledForScreenReader />;
+
   const navigateToQuay = (place: Place, quay: Quay) => {
     navigation.navigate('PlaceScreen', {place, selectedQuay: quay});
   };
@@ -25,6 +30,7 @@ export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
           isTripCancelled,
         },
       ],
+      activeItemIndex: 0,
     });
   };
 

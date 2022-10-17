@@ -3,6 +3,8 @@ import {Travelcard as DarkTravelCard} from '@atb/assets/svg/color/illustrations/
 import {Travelcard as LightTravelCard} from '@atb/assets/svg/color/illustrations/token/travelcard/light/';
 import {Phone as DarkPhone} from '@atb/assets/svg/color/illustrations/token/mobile/dark/';
 import {Phone as LightPhone} from '@atb/assets/svg/color/illustrations/token/mobile/light/';
+import {Map as LightMap} from '@atb/assets/svg/color/images/light';
+import {Map as DarkMap} from '@atb/assets/svg/color/images/dark';
 import {useTheme} from '@atb/theme/ThemeContext';
 
 export const ThemedTokenTravelCard = () => {
@@ -15,4 +17,10 @@ export const ThemedTokenPhone = () => {
   const {themeName} = useTheme();
   const Phone = themeName === 'dark' ? DarkPhone : LightPhone;
   return <Phone />;
+};
+
+export const ThemedMapImage = () => {
+  const {themeName} = useTheme();
+  const Map = themeName === 'dark' ? DarkMap : LightMap;
+  return <Map />;
 };

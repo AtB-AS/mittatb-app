@@ -61,7 +61,7 @@ export default function PlaceScreen({
     isTripCancelled?: boolean,
   ) => {
     if (!serviceJourneyId || !date) return;
-    navigation.navigate('DepartureDetails', {
+    navigation.push('DepartureDetails', {
       items: [
         {
           serviceJourneyId,
@@ -71,6 +71,7 @@ export default function PlaceScreen({
           isTripCancelled,
         },
       ],
+      activeItemIndex: 0,
     });
   };
   const navigateToQuay = (quay: Quay) => {
