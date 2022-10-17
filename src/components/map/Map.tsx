@@ -281,6 +281,10 @@ const useDeparturesBottomSheet = () => {
                   isTripCancelled,
                 );
             }}
+            onFavouriteClosed={() => {
+              setShouldReOpenDepartureDialog(true);
+              close();
+            }}
             navigateToQuay={(stopPlace, quay) => {
               setShouldReOpenDepartureDialog(true);
               close();

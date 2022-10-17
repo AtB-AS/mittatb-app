@@ -23,10 +23,20 @@ type DeparturesDialogSheetProps = {
     fromQuayId?: string,
     isTripCancelled?: boolean,
   ) => void;
+  onFavouriteClosed: () => void;
 };
 
 const DeparturesDialogSheet = forwardRef<View, DeparturesDialogSheetProps>(
-  ({close, stopPlaceFeature, navigateToDetails, navigateToQuay}, focusRef) => {
+  (
+    {
+      close,
+      stopPlaceFeature,
+      navigateToDetails,
+      navigateToQuay,
+      onFavouriteClosed,
+    },
+    focusRef,
+  ) => {
     const {t} = useTranslation();
     const styles = useBottomSheetStyles();
     const [searchTime, setSearchTime] = useState<SearchTime>({
@@ -75,6 +85,7 @@ const DeparturesDialogSheet = forwardRef<View, DeparturesDialogSheetProps>(
               setSearchTime={setSearchTime}
               showOnlyFavorites={showOnlyFavorites}
               setShowOnlyFavorites={setShowOnlyFavorites}
+              onFavouriteClosed={onFavouriteClosed}
               testID="departuresContentView"
             />
           ) : (

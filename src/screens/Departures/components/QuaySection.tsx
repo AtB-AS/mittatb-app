@@ -30,6 +30,7 @@ type QuaySectionProps = {
     fromQuayId?: string,
     isTripCancelled?: boolean,
   ) => void;
+  onFavouriteClosed?: () => void;
   stopPlace: StopPlace;
   showOnlyFavorites: boolean;
 };
@@ -46,6 +47,7 @@ export default function QuaySection({
   testID,
   navigateToQuay,
   navigateToDetails,
+  onFavouriteClosed,
   stopPlace,
   showOnlyFavorites,
 }: QuaySectionProps): JSX.Element {
@@ -53,7 +55,7 @@ export default function QuaySection({
   const [isMinimized, setIsMinimized] = useState(false);
   const styles = useStyles();
   const departures = getDeparturesForQuay(data, quay);
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
 
   useEffect(() => {
     if (!showOnlyFavorites) return setIsMinimized(false);
@@ -122,6 +124,7 @@ export default function QuaySection({
                   quay={quay}
                   stopPlace={stopPlace}
                   navigateToDetails={navigateToDetails}
+                  onFavouriteClosed={onFavouriteClosed}
                 />
               </Sections.GenericItem>
             )}

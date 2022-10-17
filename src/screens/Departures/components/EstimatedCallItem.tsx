@@ -36,6 +36,7 @@ type EstimatedCallItemProps = {
     fromQuayId?: string,
     isTripCancelled?: boolean,
   ) => void;
+  onFavouriteClosed?: () => void;
 };
 
 export default function EstimatedCallItem({
@@ -44,6 +45,7 @@ export default function EstimatedCallItem({
   quay,
   stopPlace,
   navigateToDetails,
+  onFavouriteClosed,
 }: EstimatedCallItemProps): JSX.Element {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -106,6 +108,7 @@ export default function EstimatedCallItem({
           line={{...line, lineNumber: lineNumber, lineName: lineName}}
           quay={quay}
           stop={stopPlace}
+          onClose={onFavouriteClosed}
         />
       )}
     </View>

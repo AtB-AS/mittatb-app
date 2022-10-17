@@ -22,6 +22,7 @@ type StopPlaceViewProps = {
     date?: string,
     fromQuayId?: string,
   ) => void;
+  onFavouriteClosed?: () => void;
   searchTime: SearchTime;
   setSearchTime: (searchTime: SearchTime) => void;
   showOnlyFavorites: boolean;
@@ -35,6 +36,7 @@ export default function StopPlaceView({
   showTimeNavigation = true,
   navigateToQuay,
   navigateToDetails,
+  onFavouriteClosed,
   searchTime,
   setSearchTime,
   showOnlyFavorites,
@@ -123,6 +125,7 @@ export default function StopPlaceView({
                 testID={'quaySection' + index}
                 stopPlace={stopPlace}
                 showOnlyFavorites={showOnlyFavorites}
+                onFavouriteClosed={onFavouriteClosed}
               />
               {index === 0 && (
                 <Feedback
