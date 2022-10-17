@@ -29,9 +29,7 @@ import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
 import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
 import {Place, Quay} from '@atb/api/types/departures';
-import DeparturesDialogSheet, {
-  useBottomSheetStyles,
-} from './DeparturesDialogSheet';
+import DeparturesDialogSheet from './DeparturesDialogSheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 
 /**

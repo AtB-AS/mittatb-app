@@ -11,8 +11,6 @@ import {SearchTime} from '@atb/screens/Departures/utils';
 import {Place, Quay} from '@atb/api/types/departures';
 import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
 import ThemeText from '../text';
-import ThemeIcon from '../theme-icon';
-import SvgClose from '@atb/assets/svg/mono-icons/actions/Close';
 
 type DeparturesDialogSheetProps = {
   close: () => void;
@@ -90,7 +88,7 @@ const DeparturesDialogSheet = forwardRef<View, DeparturesDialogSheetProps>(
   },
 );
 
-export const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
+const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
   departuresContainer: {
     flex: 1,
   },
