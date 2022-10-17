@@ -9,8 +9,8 @@ import {
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {Feature} from 'geojson';
-import React, {useMemo, useRef} from 'react';
+import {Feature, GeoJsonProperties, Point} from 'geojson';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {useWindowDimensions, View} from 'react-native';
 import LocationBar from '@atb/components/map/LocationBar';
 import useSelectedFeatureChangeEffect, {
@@ -31,6 +31,7 @@ import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
 import {Place, Quay} from '@atb/api/types/departures';
 import DeparturesDialogSheet from './DeparturesDialogSheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
+import {useNavigationState} from '@react-navigation/native';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -43,19 +44,22 @@ import {useBottomNavigationStyles} from '@atb/utils/navigation';
  */
 export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
 
+type NavigateToQuayCallback = (place: Place, quay: Quay) => void;
+type NavigateToDetailsCallback = (
+  serviceJourneyId: string,
+  serviceDate: string,
+  date?: string,
+  fromQuayId?: string,
+  isTripCancelled?: boolean,
+) => void;
+
 type MapProps = {
   initialLocation?: Location;
   selectionMode: MapSelectionMode;
   showDeparturesBottomSheet?: boolean;
   onLocationSelect?: (selectedLocation?: GeoLocation | SearchLocation) => void;
-  navigateToQuay?: (place: Place, quay: Quay) => void;
-  navigateToDetails?: (
-    serviceJourneyId: string,
-    serviceDate: string,
-    date?: string,
-    fromQuayId?: string,
-    isTripCancelled?: boolean,
-  ) => void;
+  navigateToQuay?: NavigateToQuayCallback;
+  navigateToDetails?: NavigateToDetailsCallback;
 };
 
 const Map = ({
@@ -70,10 +74,20 @@ const Map = ({
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
-  const {open: openBottomSheet, isOpen} = useBottomSheet();
-  const closeRef = useRef(null);
   const {height: windowHeight} = useWindowDimensions();
   const {minHeight} = useBottomNavigationStyles();
+  const navigationIndex = useRef(0);
+  useNavigationState((state) => (navigationIndex.current = state.index));
+  const {
+    openDepartureDialogSheet,
+    closeDepartureDialogSheet,
+    isOpen,
+    shouldReopenDepartureDialog,
+    resetReopenDepartureDialog,
+  } = useDeparturesBottomSheet();
+  const [stopPlaceFeature, setStopPlaceFeature] = useState<
+    Feature<Point, GeoJsonProperties> | undefined
+  >(undefined);
 
   const windowsHeightBasedOnBottomSheet = windowHeight * 0.5;
 
@@ -89,7 +103,7 @@ const Map = ({
     [],
   );
 
-  const {mapLines, selectedCoordinates, onMapClick} =
+  const {mapLines, selectedCoordinates, onMapClick, onClearMap} =
     useSelectedFeatureChangeEffect(
       selectionMode,
       startingCoordinates,
@@ -97,6 +111,52 @@ const Map = ({
       mapCameraRef,
       [100, 100, windowsHeightBasedOnBottomSheet, 100],
     );
+
+  const openDepartureDialog = useCallback(() => {
+    if (stopPlaceFeature) {
+      openDepartureDialogSheet(
+        stopPlaceFeature,
+        () => {
+          setStopPlaceFeature(undefined);
+          onClearMap();
+        },
+        navigateToQuay,
+        navigateToDetails,
+      );
+    } else if (isOpen()) {
+      closeDepartureDialogSheet();
+    }
+  }, [
+    stopPlaceFeature,
+    openDepartureDialogSheet,
+    setStopPlaceFeature,
+    onClearMap,
+    navigateToQuay,
+    navigateToDetails,
+    closeDepartureDialogSheet,
+    isOpen,
+  ]);
+
+  useEffect(() => {
+    openDepartureDialog();
+  }, [stopPlaceFeature]);
+
+  // Opens the bottom departures dialog, once the user returns back from one of the dependents screens inside the dialog.
+  useEffect(() => {
+    if (
+      !isOpen() &&
+      navigationIndex.current === 0 &&
+      shouldReopenDepartureDialog()
+    ) {
+      openDepartureDialog();
+      resetReopenDepartureDialog();
+    }
+  }, [
+    navigationIndex,
+    isOpen,
+    shouldReopenDepartureDialog,
+    resetReopenDepartureDialog,
+  ]);
 
   return (
     <View style={styles.container}>
@@ -114,49 +174,15 @@ const Map = ({
           }}
           onPress={async (feature: Feature) => {
             if (isFeaturePoint(feature)) {
-              const stopPlaceFeature = await findClickedStopPlace(
-                feature,
-                mapViewRef,
-              );
-
-              if (
-                stopPlaceFeature &&
-                showDeparturesBottomSheet &&
-                navigateToDetails &&
-                navigateToQuay
-              ) {
-                openBottomSheet(
-                  (close, focusRef) => (
-                    <DeparturesDialogSheet
-                      close={close}
-                      stopPlaceFeature={stopPlaceFeature}
-                      navigateToDetails={(
-                        serviceJourneyId: string,
-                        serviceDate: string,
-                        date?: string,
-                        fromQuayId?: string,
-                        isTripCancelled?: boolean,
-                      ) => {
-                        close();
-                        navigateToDetails(
-                          serviceJourneyId,
-                          serviceDate,
-                          date,
-                          fromQuayId,
-                          isTripCancelled,
-                        );
-                      }}
-                      navigateToQuay={(stopPlace, quay) => {
-                        close();
-                        navigateToQuay(stopPlace, quay);
-                      }}
-                      ref={focusRef}
-                    />
-                  ),
-                  closeRef,
-                  false,
+              if (showDeparturesBottomSheet) {
+                const stopPlaceFeature = await findClickedStopPlace(
+                  feature,
+                  mapViewRef,
                 );
+
+                setStopPlaceFeature(stopPlaceFeature);
               }
+
               onMapClick(feature);
             }
           }}
@@ -205,6 +231,69 @@ const Map = ({
       </View>
     </View>
   );
+};
+
+const useDeparturesBottomSheet = () => {
+  const {
+    open: openBottomSheet,
+    close: closeBottomSheet,
+    isOpen,
+  } = useBottomSheet();
+  const closeRef = useRef(null);
+  const [shouldReOpenDepartureDialog, setShouldReOpenDepartureDialog] =
+    useState(false);
+
+  return {
+    isOpen,
+    shouldReopenDepartureDialog: () => shouldReOpenDepartureDialog,
+    resetReopenDepartureDialog: () => setShouldReOpenDepartureDialog(false),
+    closeDepartureDialogSheet: closeBottomSheet,
+    openDepartureDialogSheet: (
+      stopPlaceFeature: Feature<Point>,
+      userClosedDepartureDialog?: () => void,
+      navigateToQuay?: NavigateToQuayCallback,
+      navigateToDetails?: NavigateToDetailsCallback,
+    ) => {
+      openBottomSheet(
+        (close, focusRef) => (
+          <DeparturesDialogSheet
+            close={() => {
+              setShouldReOpenDepartureDialog(false);
+              if (userClosedDepartureDialog) userClosedDepartureDialog();
+              close();
+            }}
+            stopPlaceFeature={stopPlaceFeature}
+            navigateToDetails={(
+              serviceJourneyId: string,
+              serviceDate: string,
+              date?: string,
+              fromQuayId?: string,
+              isTripCancelled?: boolean,
+            ) => {
+              setShouldReOpenDepartureDialog(true);
+              close();
+              if (navigateToDetails)
+                navigateToDetails(
+                  serviceJourneyId,
+                  serviceDate,
+                  date,
+                  fromQuayId,
+                  isTripCancelled,
+                );
+            }}
+            navigateToQuay={(stopPlace, quay) => {
+              setShouldReOpenDepartureDialog(true);
+              close();
+              if (navigateToQuay) navigateToQuay(stopPlace, quay);
+            }}
+            ref={focusRef}
+          />
+        ),
+        closeRef,
+        false,
+      );
+    },
+  };
 };
 
 const useMapStyles = StyleSheet.createThemeHook(() => ({

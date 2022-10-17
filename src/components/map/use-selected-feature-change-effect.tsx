@@ -44,6 +44,10 @@ const useSelectedFeatureChangeEffect = (
     setFromCoordinates(currentLocation?.coordinates);
   };
 
+  const onClearMap = () => {
+    setMapLines(undefined);
+  };
+
   useEffect(() => {
     (async function () {
       if (!selectedFeatureOrCoordinates) {
@@ -107,6 +111,7 @@ const useSelectedFeatureChangeEffect = (
     selectedCoordinates: selectedFeatureOrCoordinates
       ? getCoordinatesFromFeatureOrCoordinates(selectedFeatureOrCoordinates)
       : undefined,
+    onClearMap,
   };
 };
 
