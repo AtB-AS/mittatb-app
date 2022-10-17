@@ -1,9 +1,4 @@
-import {
-  Animated,
-  LayoutChangeEvent,
-  useWindowDimensions,
-  ViewStyle,
-} from 'react-native';
+import {Animated, LayoutChangeEvent, useWindowDimensions} from 'react-native';
 import React, {ReactNode, useMemo} from 'react';
 import {StyleSheet} from '@atb/theme';
 
@@ -11,11 +6,9 @@ export default function AnimatedBottomSheet({
   animatedOffset,
   children,
   onLayout,
-  style,
 }: {
   animatedOffset: Animated.Value;
   children: ReactNode;
-  style?: ViewStyle;
   onLayout: (ev: LayoutChangeEvent) => void;
 }) {
   const styles = useStyles();
@@ -38,7 +31,6 @@ export default function AnimatedBottomSheet({
           },
         ],
         maxHeight: windowHeight,
-        ...style,
       }}
       onLayout={onLayout}
     >

@@ -34,7 +34,6 @@ type BottomSheetState = {
     /** Optional ref to component which should be focused on sheet close */
     closeRef?: RefObject<any>,
     useBackdrop?: boolean,
-    style?: ViewStyle,
   ) => void;
   isOpen: () => boolean;
 };
@@ -48,7 +47,6 @@ const BottomSheetProvider: React.FC = ({children}) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isBackdropEnabled, setBackdropEnabled] = useState(true);
-  const [style, setStyle] = useState({});
   const [contentFunction, setContentFunction] = useState<
     (close: () => void, focusRef: RefObject<any>) => ReactNode
   >(() => () => null);
@@ -71,7 +69,6 @@ const BottomSheetProvider: React.FC = ({children}) => {
   const close = () => {
     setContentFunction(() => () => null);
     setIsOpen(false);
-    setStyle({});
     if (closeRef) {
       setTimeout(() => giveFocus(closeRef), 200);
     }
@@ -81,13 +78,11 @@ const BottomSheetProvider: React.FC = ({children}) => {
     contentFunction: (close: () => void, focusRef: RefObject<any>) => ReactNode,
     closeRef?: RefObject<any>,
     useBackdrop: boolean = true,
-    style: ViewStyle = {},
   ) => {
     setContentFunction(() => contentFunction);
     setCloseRef(closeRef);
     setBackdropEnabled(useBackdrop);
     setIsOpen(true);
-    setStyle(style);
     setTimeout(() => giveFocus(focusRef), 300);
   };
 
@@ -126,7 +121,6 @@ const BottomSheetProvider: React.FC = ({children}) => {
         <AnimatedBottomSheet
           animatedOffset={animatedOffset}
           onLayout={onLayout}
-          style={style}
         >
           {contentFunction(close, focusRef)}
         </AnimatedBottomSheet>

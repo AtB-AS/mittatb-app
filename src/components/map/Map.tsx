@@ -9,8 +9,8 @@ import {
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {Feature, GeoJsonProperties, Point} from 'geojson';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {Feature} from 'geojson';
+import React, {useMemo, useRef} from 'react';
 import {useWindowDimensions, View} from 'react-native';
 import LocationBar from '@atb/components/map/LocationBar';
 import useSelectedFeatureChangeEffect, {
@@ -74,7 +74,6 @@ const Map = ({
   const styles = useMapStyles();
   const {open: openBottomSheet, isOpen} = useBottomSheet();
   const closeRef = useRef(null);
-  const bottomSheetStyles = useBottomSheetStyles();
   const {height: windowHeight} = useWindowDimensions();
   const {minHeight} = useBottomNavigationStyles();
 
@@ -158,7 +157,6 @@ const Map = ({
                   ),
                   closeRef,
                   false,
-                  bottomSheetStyles.roundEdgesOnTop,
                 );
               }
               onMapClick(feature);

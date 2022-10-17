@@ -1,6 +1,6 @@
 import {StyleSheet} from '@atb/theme';
 import {Feature, GeoJsonProperties, Point} from 'geojson';
-import React, {forwardRef, useEffect, useState} from 'react';
+import React, {forwardRef, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
@@ -46,7 +46,6 @@ const DeparturesDialogSheet = forwardRef<View, DeparturesDialogSheetProps>(
         <ScreenHeaderWithoutNavigation
           title={featureName}
           color="background_1"
-          style={styles.roundEdgesOnTop}
           leftButton={{
             type: 'close',
             onPress: close,
@@ -101,10 +100,6 @@ export const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
   title: {
     marginLeft: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
-  },
-  roundEdgesOnTop: {
-    borderTopLeftRadius: theme.border.radius.circle,
-    borderTopRightRadius: theme.border.radius.circle,
   },
 }));
 
