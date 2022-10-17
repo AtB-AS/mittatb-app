@@ -26,8 +26,8 @@ const SelectTravelTokenTexts = {
       ),
     zeroToggleCountLeftInfo: (countRenewalDate: string) =>
       _(
-        `Du kan ikke bytte flere ganger.\nFlere bytter blir tilgjengelig ${countRenewalDate}. Kontakt AtB kundesenter ved spørsmål.`,
-        `You have no switches left. \nMore will be available ${countRenewalDate}. In case of questions contact AtB customer centre`,
+        `Du kan ikke bytte flere ganger.\nFlere bytter blir tilgjengelig ${countRenewalDate}.`,
+        `You have no switches left. \nMore will be available ${countRenewalDate}.`,
       ),
     faq: {
       title: _('Ofte stilte spørsmål', 'Frequently asked questions'),

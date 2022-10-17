@@ -101,5 +101,5 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   loader: {alignSelf: 'center', flex: 1},
   tokenInfoView: {flexDirection: 'row'},
-  tokenInfo: {marginLeft: theme.spacings.xSmall},
+  tokenInfo: {marginLeft: theme.spacings.xSmall, flex: 1},
 }));
