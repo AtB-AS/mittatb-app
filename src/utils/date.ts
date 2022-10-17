@@ -218,6 +218,15 @@ export function formatToSimpleDate(date: Date | string, language: Language) {
   });
 }
 
+export function formatToVerboseFullDate(
+  date: Date | string,
+  language: Language,
+) {
+  return format(parseIfNeeded(date), 'do MMMM yyyy', {
+    locale: languageToLocale(language),
+  });
+}
+
 export function formatToVerboseDateTime(
   date: Date | string,
   language: Language,
