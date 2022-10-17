@@ -39,8 +39,7 @@ const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
 };
 
 export type HeaderButtonWithoutNavigationProps = {
-  text?: string;
-  icon?: React.ReactNode;
+  text: string;
   onPress: () => void;
   color?: StaticColor | TextColor;
   testID?: string;
@@ -48,14 +47,13 @@ export type HeaderButtonWithoutNavigationProps = {
 
 export const HeaderButtonWithoutNavigation = ({
   text,
-  icon,
   onPress,
   color,
   ...accessibilityProps
 }: HeaderButtonWithoutNavigationProps) => {
   return (
     <BaseHeaderButton
-      icon={text ? <ThemeText color={color}>{text}</ThemeText> : icon}
+      icon={<ThemeText color={color}>{text}</ThemeText>}
       onPress={onPress}
       {...accessibilityProps}
     />

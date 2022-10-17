@@ -15,7 +15,6 @@ import {
   Easing,
   LayoutChangeEvent,
   View,
-  ViewStyle,
 } from 'react-native';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import Backdrop from '@atb/components/bottom-sheet/Backdrop';

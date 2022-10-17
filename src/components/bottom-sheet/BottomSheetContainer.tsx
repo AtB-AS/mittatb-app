@@ -16,5 +16,5 @@ export default function BottomSheetContainer({
   const {height: windowHeight} = useWindowDimensions();
   const maxHeight = windowHeight * maxHeightValue;
   const height = fullHeight ? maxHeight : 'auto';
-  return <View style={[{maxHeight, height}]}>{children}</View>;
+  return <View style={{maxHeight, height}}>{children}</View>;
 }

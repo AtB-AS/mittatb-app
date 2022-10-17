@@ -5,7 +5,7 @@ import {ActivityIndicator, View} from 'react-native';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '../screen-header';
-import {useTranslation} from '@atb/translations';
+import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import StopPlaceView from '@atb/screens/Departures/StopPlaceView';
 import {SearchTime} from '@atb/screens/Departures/utils';
 import {Place, Quay} from '@atb/api/types/departures';
@@ -47,9 +47,9 @@ const DeparturesDialogSheet = forwardRef<View, DeparturesDialogSheetProps>(
           title={featureName}
           color="background_1"
           leftButton={{
+            text: t(ScreenHeaderTexts.headerButton.cancel.text),
             type: 'close',
             onPress: close,
-            icon: <ThemeIcon svg={SvgClose} />,
           }}
         />
         <View
