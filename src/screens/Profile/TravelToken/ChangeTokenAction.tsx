@@ -42,6 +42,28 @@ const ChangeTokenAction = ({
     }
   };
 
+  const getToggleInfo = (toggleLimit: number) => {
+    switch (toggleLimit) {
+      case 0:
+        return t(
+          TravelTokenTexts.travelToken.zeroToggleCountLeftInfo(
+            countRenewalDate,
+          ),
+        );
+      case 1:
+        return t(
+          TravelTokenTexts.travelToken.oneToggleCountLeftInfo(countRenewalDate),
+        );
+      default:
+        return t(
+          TravelTokenTexts.travelToken.toggleCountLimitInfo(
+            toggleLimit,
+            countRenewalDate,
+          ),
+        );
+    }
+  };
+
   return (
     <Sections.Section style={styles.changeTokenButton}>
       <Sections.LinkItem
@@ -62,18 +84,7 @@ const ChangeTokenAction = ({
           <View style={styles.tokenInfoView}>
             <ThemeIcon svg={getToggleInfoIcon(toggleLimit)} />
             <ThemeText style={styles.tokenInfo}>
-              {toggleLimit === 0
-                ? t(
-                    TravelTokenTexts.travelToken.zeroToggleCountLeftInfo(
-                      countRenewalDate,
-                    ),
-                  )
-                : t(
-                    TravelTokenTexts.travelToken.toggleCountLimitInfo(
-                      toggleLimit,
-                      countRenewalDate,
-                    ),
-                  )}
+              {getToggleInfo(toggleLimit)}
             </ThemeText>
           </View>
         </Sections.GenericItem>
