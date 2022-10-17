@@ -3,10 +3,7 @@ import {Feature, GeoJsonProperties, Point} from 'geojson';
 import React, {forwardRef, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import {
-  BottomSheetContainer,
-  BottomSheetSize,
-} from '@atb/components/bottom-sheet';
+import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '../screen-header';
 import {useTranslation} from '@atb/translations';
 import StopPlaceView from '@atb/screens/Departures/StopPlaceView';
@@ -21,7 +18,6 @@ type DeparturesDialogSheetProps = {
   close: () => void;
   stopPlaceFeature: Feature<Point, GeoJsonProperties>;
   navigateToQuay: (place: Place, quay: Quay) => void;
-  bottomSheetSize: BottomSheetSize;
   navigateToDetails: (
     serviceJourneyId: string,
     serviceDate: string,
@@ -32,16 +28,7 @@ type DeparturesDialogSheetProps = {
 };
 
 const DeparturesDialogSheet = forwardRef<View, DeparturesDialogSheetProps>(
-  (
-    {
-      close,
-      bottomSheetSize,
-      stopPlaceFeature,
-      navigateToDetails,
-      navigateToQuay,
-    },
-    focusRef,
-  ) => {
+  ({close, stopPlaceFeature, navigateToDetails, navigateToQuay}, focusRef) => {
     const {t} = useTranslation();
     const styles = useBottomSheetStyles();
     const [searchTime, setSearchTime] = useState<SearchTime>({
@@ -55,7 +42,7 @@ const DeparturesDialogSheet = forwardRef<View, DeparturesDialogSheetProps>(
     const stopPlace = stopDetails.state.data?.stopPlaces?.[0];
 
     return (
-      <BottomSheetContainer sheetSize={bottomSheetSize}>
+      <BottomSheetContainer maxHeightValue={0.5} fullHeight>
         <ScreenHeaderWithoutNavigation
           title={featureName}
           color="background_1"

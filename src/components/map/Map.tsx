@@ -16,7 +16,7 @@ import LocationBar from '@atb/components/map/LocationBar';
 import useSelectedFeatureChangeEffect, {
   findClickedStopPlace,
 } from './use-selected-feature-change-effect';
-import {BottomSheetSize, useBottomSheet} from '@atb/components/bottom-sheet';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 import MapRoute from '@atb/screens/TripDetails/Map/MapRoute';
 import {
   flyToLocation,
@@ -78,8 +78,7 @@ const Map = ({
   const {height: windowHeight} = useWindowDimensions();
   const {minHeight} = useBottomNavigationStyles();
 
-  const bottomSheetSize = BottomSheetSize.compact;
-  const windowsHeightBasedOnBottomSheet = windowHeight * bottomSheetSize;
+  const windowsHeightBasedOnBottomSheet = windowHeight * 0.5;
 
   const controlStyles = useControlPositionsStyle(
     isOpen() ? windowsHeightBasedOnBottomSheet - minHeight : 0,
@@ -132,7 +131,6 @@ const Map = ({
                 openBottomSheet(
                   (close, focusRef) => (
                     <DeparturesDialogSheet
-                      bottomSheetSize={bottomSheetSize}
                       close={close}
                       stopPlaceFeature={stopPlaceFeature}
                       navigateToDetails={(

@@ -3,7 +3,4 @@ export {
   useBottomSheet,
 } from './BottomSheetContext';
 
-export {
-  default as BottomSheetContainer,
-  BottomSheetSize,
-} from './BottomSheetContainer';
+export {default as BottomSheetContainer} from './BottomSheetContainer';
