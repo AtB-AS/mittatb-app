@@ -72,9 +72,7 @@ export default function DebugInfo() {
   >(null);
 
   useEffect(() => {
-    //TODO: make work again
-    //storage.get('install_id').then(setStoredValues);
-    //storage.getAll().then(setStoredValues);
+    storage.getAll().then(setStoredValues);
   }, []);
 
   function copyFirestoreLink() {
