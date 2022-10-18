@@ -1,14 +1,10 @@
-//
-//  ViewModel.swift
-//  departureWidgetExtension
-//
-//  Created by Adrian Hakvåg on 18/10/2022.
-//
-
 import Foundation
 
-
 class ViewModel : ObservableObject{
+  private struct K {
+    static let defaultLineName = "N/A"
+    static let defaultLineNumber = "N/A"
+  }
   
   private let quayGroup : QuayGroup
   
@@ -20,19 +16,19 @@ class ViewModel : ObservableObject{
     return quayGroup.quay.name
   }
   
-  var lineInfo : DepartureLineInfo{
-    return quayGroup.group[0].lineInfo
+  var lineInfo : DepartureLineInfo? {
+    return quayGroup.group.first?.lineInfo
   }
   
-  var lineName : String{
-    return lineInfo.lineName
+  var lineName : String {
+    return lineInfo?.lineName ?? K.defaultLineName
   }
   
-  var lineNumber : String{
-    return lineInfo.lineNumber
+  var lineNumber : String {
+    return lineInfo?.lineNumber ?? K.defaultLineNumber
   }
   
-  var departures : [DepartureTime]{
+  var departures : [DepartureTime] {
     return quayGroup.group[0].departures
   }
 }

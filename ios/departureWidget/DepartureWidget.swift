@@ -1,7 +1,6 @@
 import WidgetKit
 import SwiftUI
 
-
 struct DepartureWidgetEntryView : View {
     var entry: Provider.Entry
     @ObservedObject var viewModel: ViewModel
@@ -11,9 +10,7 @@ struct DepartureWidgetEntryView : View {
     viewModel = ViewModel(quayGroup: entry.quayGroup!)
   }
 
-    var body: some View {
-      
-      
+    var body: some View {      
       if(entry.quayGroup != nil){
         VStack{
           HStack{

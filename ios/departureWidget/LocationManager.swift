@@ -1,9 +1,3 @@
-//
-//  LocationManager.swift
-//  My first widget at AtB
-//
-//  Created by Adrian Hakvåg on 12/09/2022.
-//
 import Foundation
 import CoreLocation
 import Combine

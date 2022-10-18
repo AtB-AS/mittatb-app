@@ -1,11 +1,3 @@
-
-//
-//  Provider.swift
-//  departureWidgetExtension
-//
-//  Created by Adrian Hakvåg on 17/10/2022.
-//
-
 import WidgetKit
 import SwiftUI
 import CoreLocation
@@ -18,11 +10,11 @@ struct Provider: TimelineProvider {
 
 
     func placeholder(in context: Context) -> Entry {
-        Entry(date: Date(), departureGroup: nil)
+      Entry(date: Date(), quayGroup: nil)
   }
 
   func getSnapshot(in context: Context, completion: @escaping (Entry) -> ()) {
-        let entry = Entry(date: Date(), departureGroup: nil)
+    let entry = Entry(date: Date(), quayGroup: nil)
         completion(entry)
   }
   
@@ -38,8 +30,9 @@ struct Provider: TimelineProvider {
     
         switch result{
         case .success(let object):
-            let timeline = Timeline(entries: [Entry(date: date, departureGroup: object)], policy: .atEnd)
-            completion(timeline)
+          // TODO: Object `Entry` is expecting a `quayGroup` not `departureGroup`
+          let timeline = Timeline(entries: [Entry(date: date, quayGroup: nil)], policy: .atEnd)
+          completion(timeline)
         case .failure(_):
             return
         }

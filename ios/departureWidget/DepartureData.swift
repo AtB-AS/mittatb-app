@@ -3,6 +3,7 @@ import Foundation
 struct DepartureData: Codable {
     let data : [StopPlaceGroup]
 }
+
 struct StopPlaceGroup: Codable{
     let stopPlace : StopPlaceInfo
     let quays : [QuayGroup]

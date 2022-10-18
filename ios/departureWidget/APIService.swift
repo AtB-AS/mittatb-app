@@ -1,20 +1,8 @@
-//
-//  APIService.swift
-//  My first widget at AtB
-//
-//  Created by Adrian Hakvåg on 12/09/2022.
-//
-
-
 import Foundation
-
-
-
 
 struct Body:Codable{
     let favorites : [Favorite]
 }
-
 
 enum AppEndPoint: String {
     case favoriteDepartures, example

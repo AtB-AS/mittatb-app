@@ -30,14 +30,14 @@
 		5038614A28FD6EB900E16E13 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614928FD6EB900E16E13 /* APIService.swift */; };
 		5038614C28FD750A00E16E13 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationManager.swift */; };
 		5038614E28FD81B700E16E13 /* DepartureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614D28FD81B700E16E13 /* DepartureData.swift */; };
-		504992B728FD33B500F39CFC /* data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504992B628FD33B500F39CFC /* data.swift */; };
+		504992B728FD33B500F39CFC /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504992B628FD33B500F39CFC /* Data.swift */; };
 		506538E028FEA57400A0DDCC /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506538DF28FEA57400A0DDCC /* ViewModel.swift */; };
 		A1E701563B78F99B13487BE3 /* libPods-atb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B12A710282707BA8960F89A /* libPods-atb.a */; };
 		E6A5C3E919C3475F907B3CE4 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB1D1B473A9C41A79687569C /* Roboto-Regular.ttf */; };
 		F19471F4FCE444CF931BA221 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59E90F341F04DB2B427E0EF /* Roboto-Bold.ttf */; };
 		FE55264928EC45ED0091F697 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE55264828EC45ED0091F697 /* WidgetKit.framework */; };
 		FE55264B28EC45ED0091F697 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE55264A28EC45ED0091F697 /* SwiftUI.framework */; };
-		FE55264E28EC45ED0091F697 /* departureWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE55264D28EC45ED0091F697 /* departureWidget.swift */; };
+		FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE55264D28EC45ED0091F697 /* DepartureWidget.swift */; };
 		FE55265028EC45EE0091F697 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE55264F28EC45EE0091F697 /* Assets.xcassets */; };
 		FE55265428EC45EE0091F697 /* departureWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE55264728EC45ED0091F697 /* departureWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FED22489286F06AC0049ECE3 /* CoreNFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FED22488286F06AC0049ECE3 /* CoreNFC.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -110,7 +110,7 @@
 		5038614928FD6EB900E16E13 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		5038614B28FD750A00E16E13 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		5038614D28FD81B700E16E13 /* DepartureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartureData.swift; sourceTree = "<group>"; };
-		504992B628FD33B500F39CFC /* data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = data.swift; sourceTree = "<group>"; };
+		504992B628FD33B500F39CFC /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		5051B09328F4092200B8EA18 /* departureWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = departureWidgetExtension.entitlements; sourceTree = "<group>"; };
 		506538DF28FEA57400A0DDCC /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		86E9F6F8FAE78B8F34A96337 /* Pods-atb-atbTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb-atbTests.release.xcconfig"; path = "Target Support Files/Pods-atb-atbTests/Pods-atb-atbTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -125,7 +125,7 @@
 		FE55264728EC45ED0091F697 /* departureWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = departureWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE55264828EC45ED0091F697 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		FE55264A28EC45ED0091F697 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		FE55264D28EC45ED0091F697 /* departureWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = departureWidget.swift; sourceTree = "<group>"; };
+		FE55264D28EC45ED0091F697 /* DepartureWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartureWidget.swift; sourceTree = "<group>"; };
 		FE55264F28EC45EE0091F697 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FE55265128EC45EE0091F697 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FE8AF9EC28EC69FA00505277 /* departureWidgetExtensionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = departureWidgetExtensionDebug.entitlements; sourceTree = "<group>"; };
@@ -294,16 +294,16 @@
 		FE55264C28EC45ED0091F697 /* departureWidget */ = {
 			isa = PBXGroup;
 			children = (
-				FE55264D28EC45ED0091F697 /* departureWidget.swift */,
-				FE55264F28EC45EE0091F697 /* Assets.xcassets */,
 				FE55265128EC45EE0091F697 /* Info.plist */,
-				504992B628FD33B500F39CFC /* data.swift */,
-				5038614528FD509400E16E13 /* Provider.swift */,
-				5038614728FD511900E16E13 /* Entry.swift */,
 				5038614928FD6EB900E16E13 /* APIService.swift */,
-				5038614B28FD750A00E16E13 /* LocationManager.swift */,
+				504992B628FD33B500F39CFC /* Data.swift */,
 				5038614D28FD81B700E16E13 /* DepartureData.swift */,
+				FE55264D28EC45ED0091F697 /* DepartureWidget.swift */,
+				5038614728FD511900E16E13 /* Entry.swift */,
+				5038614B28FD750A00E16E13 /* LocationManager.swift */,
+				5038614528FD509400E16E13 /* Provider.swift */,
 				506538DF28FEA57400A0DDCC /* ViewModel.swift */,
+				FE55264F28EC45EE0091F697 /* Assets.xcassets */,
 			);
 			path = departureWidget;
 			sourceTree = "<group>";
@@ -685,10 +685,10 @@
 				5038614828FD511900E16E13 /* Entry.swift in Sources */,
 				5038614A28FD6EB900E16E13 /* APIService.swift in Sources */,
 				5038614C28FD750A00E16E13 /* LocationManager.swift in Sources */,
-				FE55264E28EC45ED0091F697 /* departureWidget.swift in Sources */,
+				FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */,
 				5038614628FD509400E16E13 /* Provider.swift in Sources */,
 				506538E028FEA57400A0DDCC /* ViewModel.swift in Sources */,
-				504992B728FD33B500F39CFC /* data.swift in Sources */,
+				504992B728FD33B500F39CFC /* Data.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

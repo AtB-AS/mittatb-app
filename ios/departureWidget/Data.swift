@@ -1,13 +1,5 @@
-//
-//  data.swift
-//  departureWidgetExtension
-//
-//  Created by Adrian Hakvåg on 17/10/2022.
-//
-
 import Foundation
 import CoreLocation
-
 
 struct Favorite: Codable{
     let stopId : String
