@@ -12,6 +12,5 @@ import SwiftUI
 
 struct Entry: TimelineEntry {
     let date: Date
-    let departureGroup: DepartureGroup?
-  
+    let quayGroup: QuayGroup?
 }
