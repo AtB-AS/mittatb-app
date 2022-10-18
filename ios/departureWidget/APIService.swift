@@ -30,7 +30,6 @@ enum AppEndPoint: String {
               URLQueryItem(name: "pageSize", value: "0"),
           ]
           
-          print(url.string)
           return url.string!
         case .example:
             return ""

@@ -44,7 +44,7 @@ struct Provider: TimelineProvider {
             return
         }
     }
-    }
+  }
   
   func getStoredFavorites() -> [Favorite]{
     let defaults = UserDefaults(suiteName: "group.no.mittatb")!
