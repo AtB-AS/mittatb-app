@@ -118,7 +118,6 @@
     "@types/lodash.pickby": "^4.6.7",
     "@types/marked": "^4.0.6",
     "@types/react-native": "0.69.5",
-    "@types/react-native-shared-group-preferences": "^1.1.1",
     "@types/react-test-renderer": "^18.0.0",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.35.1",

@@ -3444,11 +3444,6 @@
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.3.tgz"
   integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
 
-"@types/react-native-shared-group-preferences@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@types/react-native-shared-group-preferences/-/react-native-shared-group-preferences-1.1.1.tgz#df29c55d64b9ad54598add4ec52cb9297d010cba"
-  integrity sha512-EHkkOzcnZSxUbI79jnIdJZmXLw7qYFdrZ1C0ORYSkRU3tKYk1RCgZhfNI87yjCZpACpBcTiHQP5L/+uED/6mnA==
-
 "@types/react-native@0.69.5":
   version "0.69.5"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.69.5.tgz#7709fdbff031a5ecf1956705e6c4a07cdfe6867c"
