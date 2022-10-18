@@ -57,8 +57,8 @@ class HistoryStore<T = SearchHistoryEntry | JourneySearchHistoryEntry> {
   }
 }
 
-export const STORAGE_KEY = 'ATB_search-history';
-export const JOURNEY_STORAGE_KEY = 'ATB_journey_search-history';
+export const STORAGE_KEY = '@ATB_search-history';
+export const JOURNEY_STORAGE_KEY = '@ATB_journey_search-history';
 
 export const searchStore = new HistoryStore<SearchHistoryEntry>(
   STORAGE_KEY,

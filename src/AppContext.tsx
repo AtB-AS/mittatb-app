@@ -14,10 +14,10 @@ import storage from './storage';
 const buildNumber = getBuildNumber();
 
 enum storeKey {
-  onboarding = 'ATB_onboarded',
-  previousBuildNumber = 'ATB_previous_build_number',
-  ticketing = 'ATB_ticket_informational_accepted',
-  mobileTokenOnboarding = 'ATB_mobile_token_onboarded',
+  onboarding = '@ATB_onboarded',
+  previousBuildNumber = '@ATB_previous_build_number',
+  ticketing = '@ATB_ticket_informational_accepted',
+  mobileTokenOnboarding = '@ATB_mobile_token_onboarded',
 }
 type AppState = {
   isLoading: boolean;
