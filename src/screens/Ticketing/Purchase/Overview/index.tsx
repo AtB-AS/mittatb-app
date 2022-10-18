@@ -40,7 +40,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     params.toTariffZone,
   );
 
-  const setSelectedPreassignedFareProduct = (fp: PreassignedFareProduct) => {
+  const onSelectPreassignedFareProduct = (fp: PreassignedFareProduct) => {
     navigation.setParams({
       preassignedFareProduct: fp,
     });
@@ -105,7 +105,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             <DurationSelection
               color="interactive_2"
               selectedProduct={preassignedFareProduct}
-              setSelectedProduct={setSelectedPreassignedFareProduct}
+              setSelectedProduct={onSelectPreassignedFareProduct}
               style={styles.selectionComponent}
             />
           )}
