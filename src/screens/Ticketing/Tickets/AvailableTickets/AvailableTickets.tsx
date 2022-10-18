@@ -17,7 +17,7 @@ export const AvailableTickets = ({
   onBuySingleTicket: () => void;
   onBuyPeriodTicket: () => void;
   onBuyHour24Ticket: () => void;
-  containerStyle: ViewStyle;
+  containerStyle?: ViewStyle;
 }) => {
   const styles = useStyles();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
