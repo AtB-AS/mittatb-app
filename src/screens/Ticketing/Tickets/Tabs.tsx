@@ -64,15 +64,21 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   };
 
   return isSignedInAsAbtCustomer ? (
-    <ScrollView
-      style={{backgroundColor: theme.static.background.background_2.background}}
-    >
+    <ScrollView>
       {enable_recent_tickets && <RecentTickets />}
       {authenticationType !== 'phone' && <AnonymousPurchaseWarning />}
       <AvailableTickets
         onBuySingleTicket={onBuySingleTicket}
         onBuyPeriodTicket={onBuyPeriodTicket}
         onBuyHour24Ticket={onBuyHour24Ticket}
+        containerStyle={
+          enable_recent_tickets
+            ? {
+                backgroundColor:
+                  theme.static.background.background_2.background,
+              }
+            : undefined
+        }
       />
     </ScrollView>
   ) : null;
