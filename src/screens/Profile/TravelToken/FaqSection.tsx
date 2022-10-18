@@ -11,15 +11,6 @@ const FaqSection = ({toggleMaxLimit}: {toggleMaxLimit?: number}) => {
   return (
     <Sections.Section style={styles.faqSection}>
       <Sections.HeaderItem text={t(TravelTokenTexts.travelToken.faq.title)} />
-      {/*eslint-disable-next-line rulesdir/translations-warning*/}
-      {TravelTokenTexts.travelToken.faqs.map(({question, answer}, index) => (
-        <Sections.ExpandableItem
-          key={index}
-          text={t(question)}
-          showIconText={false}
-          expandContent={<ThemeText isMarkdown={true}>{t(answer)}</ThemeText>}
-        />
-      ))}
       {toggleMaxLimit ? (
         <Sections.ExpandableItem
           text={t(TravelTokenTexts.travelToken.tokenToggleFaq.question)}
@@ -35,6 +26,15 @@ const FaqSection = ({toggleMaxLimit}: {toggleMaxLimit?: number}) => {
           }
         />
       ) : null}
+      {/*eslint-disable-next-line rulesdir/translations-warning*/}
+      {TravelTokenTexts.travelToken.faqs.map(({question, answer}, index) => (
+        <Sections.ExpandableItem
+          key={index}
+          text={t(question)}
+          showIconText={false}
+          expandContent={<ThemeText isMarkdown={true}>{t(answer)}</ThemeText>}
+        />
+      ))}
     </Sections.Section>
   );
 };

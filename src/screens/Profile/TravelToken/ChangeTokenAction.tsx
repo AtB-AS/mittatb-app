@@ -1,6 +1,9 @@
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import {formatToShortDateWithYear} from '@atb/utils/date';
+import {
+  formatToShortDateWithYear,
+  formatToVerboseFullDate,
+} from '@atb/utils/date';
 import React from 'react';
 import Warning from '@atb/assets/svg/color/icons/status/Warning';
 import Info from '@atb/assets/svg/color/icons/status/Info';
@@ -30,7 +33,10 @@ const ChangeTokenAction = ({
     nextMonthStartDate,
     language,
   );
-
+  const countRenewalDateA11yLabel = formatToVerboseFullDate(
+    nextMonthStartDate,
+    language,
+  );
   const getToggleInfoIcon = (toggleLimit: number) => {
     switch (toggleLimit) {
       case 0:
@@ -39,6 +45,28 @@ const ChangeTokenAction = ({
         return Warning;
       default:
         return Info;
+    }
+  };
+
+  const getToggleInfo = (toggleLimit: number, countRenewalDate: string) => {
+    switch (toggleLimit) {
+      case 0:
+        return t(
+          TravelTokenTexts.travelToken.zeroToggleCountLeftInfo(
+            countRenewalDate,
+          ),
+        );
+      case 1:
+        return t(
+          TravelTokenTexts.travelToken.oneToggleCountLeftInfo(countRenewalDate),
+        );
+      default:
+        return t(
+          TravelTokenTexts.travelToken.toggleCountLimitInfo(
+            toggleLimit,
+            countRenewalDate,
+          ),
+        );
     }
   };
 
@@ -61,19 +89,15 @@ const ChangeTokenAction = ({
         <Sections.GenericItem>
           <View style={styles.tokenInfoView}>
             <ThemeIcon svg={getToggleInfoIcon(toggleLimit)} />
-            <ThemeText style={styles.tokenInfo}>
-              {toggleLimit === 0
-                ? t(
-                    TravelTokenTexts.travelToken.zeroToggleCountLeftInfo(
-                      countRenewalDate,
-                    ),
-                  )
-                : t(
-                    TravelTokenTexts.travelToken.toggleCountLimitInfo(
-                      toggleLimit,
-                      countRenewalDate,
-                    ),
-                  )}
+            <ThemeText
+              style={styles.tokenInfo}
+              accessibilityLabel={getToggleInfo(
+                toggleLimit,
+                countRenewalDateA11yLabel,
+              )}
+              accessible={true}
+            >
+              {getToggleInfo(toggleLimit, countRenewalDate)}
             </ThemeText>
           </View>
         </Sections.GenericItem>
@@ -90,5 +114,5 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   loader: {alignSelf: 'center', flex: 1},
   tokenInfoView: {flexDirection: 'row'},
-  tokenInfo: {marginLeft: theme.spacings.xSmall},
+  tokenInfo: {marginLeft: theme.spacings.xSmall, flex: 1},
 }));

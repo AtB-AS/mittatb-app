@@ -17,12 +17,17 @@ const SelectTravelTokenTexts = {
     ) =>
       _(
         `Du har ${remainingToggleCount} bytter igjen.\nFlere bytter blir tilgjengelig ${countRenewalDate}.`,
-        `You have ${remainingToggleCount} switches left. \nMore will be available ${countRenewalDate}.`,
+        `You have ${remainingToggleCount} switches left. \nMore will be available on ${countRenewalDate}.`,
+      ),
+    oneToggleCountLeftInfo: (countRenewalDate: string) =>
+      _(
+        `Du har 1 bytte igjen.\nFlere bytter blir tilgjengelig ${countRenewalDate}.`,
+        `You have 1 switch left. \nMore will be available on ${countRenewalDate}.`,
       ),
     zeroToggleCountLeftInfo: (countRenewalDate: string) =>
       _(
-        `Du kan ikke bytte flere ganger.\nFlere bytter blir tilgjengelig ${countRenewalDate}. Kontakt AtB kundesenter ved spørsmål.`,
-        `You have no switches left. \nMore will be available ${countRenewalDate}. In case of questions contact AtB customer centre`,
+        `Du kan ikke bytte flere ganger.\nFlere bytter blir tilgjengelig ${countRenewalDate}.`,
+        `You have no switches left. \nMore will be available on ${countRenewalDate}.`,
       ),
     faq: {
       title: _('Ofte stilte spørsmål', 'Frequently asked questions'),
