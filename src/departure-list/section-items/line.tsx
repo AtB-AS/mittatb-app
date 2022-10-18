@@ -96,7 +96,7 @@ export default function LineItem({
   }));
 
   const onPress = (activeItemIndex: number) => {
-    navigation.navigate('TripDetails', {
+    navigation.push('TripDetails', {
       screen: 'DepartureDetails',
       params: {
         activeItemIndex,

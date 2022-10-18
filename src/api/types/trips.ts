@@ -16,7 +16,7 @@ export type Place =
   Required<Types.TripsQuery>['trip']['tripPatterns'][0]['legs'][0]['fromPlace'];
 
 export type Quay = Place['quay'];
-export type StopPlace = Required<Place>['quay']['stopPlace'];
+export type StopPlace = Required<Required<Place>['quay']>['stopPlace'];
 
 export type TripsQueryWithJourneyIds = {
   query: TripsQueryVariables;

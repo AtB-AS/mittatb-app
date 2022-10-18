@@ -148,7 +148,7 @@ export default function useOfferState(
               products: [preassignedFareProduct.id],
               travel_date: travelDate,
             },
-            {cancelToken, retry: true},
+            {cancelToken, retry: true, authWithIdToken: true},
           );
 
           cancelToken?.throwIfRequested();

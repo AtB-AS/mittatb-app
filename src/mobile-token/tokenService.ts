@@ -14,7 +14,11 @@ import {
   RenewResponse,
 } from '@entur-private/abt-token-server-javascript-interface';
 import client from '@atb/api/client';
-import {RemoteToken, RemoveResponse} from '@atb/mobile-token/types';
+import {
+  RemoteToken,
+  RemoveResponse,
+  TokenLimitResponse,
+} from '@atb/mobile-token/types';
 import axios from 'axios';
 import {getDeviceName} from 'react-native-device-info';
 
@@ -37,6 +41,7 @@ export type TokenService = RemoteTokenServiceWithInitiate & {
     secureContainer: string,
     traceId: string,
   ) => Promise<void>;
+  getTokenToggleDetails: () => Promise<TokenLimitResponse>;
 };
 
 const grpcErrorHandler = (err: any) => {
@@ -171,6 +176,16 @@ const service: TokenService = {
           },
         )
         .then((res) => res.data.tokens)
+        .catch(grpcErrorHandler),
+    ),
+  getTokenToggleDetails: async () =>
+    handleRemoteError(() =>
+      client
+        .get<TokenLimitResponse>('/tokens/v3/toggle/details', {
+          authWithIdToken: true,
+          timeout: 15000,
+        })
+        .then((res) => res.data)
         .catch(grpcErrorHandler),
     ),
   validate: async (token, secureContainer, traceId) =>

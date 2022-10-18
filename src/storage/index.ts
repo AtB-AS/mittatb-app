@@ -43,7 +43,9 @@ const leaveBreadCrumb = (
 export type KeyValuePair = [string, string | null];
 
 const storage = {
-  //TODO: find one method for all
+  setAppGroupName: async (groupName: string) => {
+    await AsyncStorage.setAppGroupName(groupName).catch(errorHandler);
+  },
   get: async (key: string) => {
     const value = await SharedGroupPreferences.getItem(key, appGroup).catch(
       errorHandler,
@@ -62,13 +64,12 @@ const storage = {
       errorHandler,
     );
   },
-
-  /*getAll: async () => {
+  getAll: async () => {
     leaveBreadCrumb('read-all');
     return AsyncStorage.getAllKeys()
       .then((keys) => AsyncStorage.multiGet(keys))
       .catch(errorHandler);
-  },*/
+  },
 };
 
 export default storage;

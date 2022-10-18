@@ -9,7 +9,6 @@ import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {searchByStopPlace} from '@atb/geocoder/search-for-location';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
 import {usePreferenceItems} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
@@ -35,26 +34,25 @@ import Time from '../components/Time';
 import TripLegDecoration from '../components/TripLegDecoration';
 import TripRow from '../components/TripRow';
 import CompactMap from '../Map/CompactMap';
-import {TripDetailsRootProps, TripDetailsScreenProps} from '../types';
+import {TripDetailsScreenProps} from '../types';
 import {ServiceJourneyDeparture} from './types';
 import useDepartureData, {CallListGroup} from './use-departure-data';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
-  activeItemIndex?: number;
+  activeItemIndex: number;
 };
 
 type Props = TripDetailsScreenProps<'DepartureDetails'>;
 
 export default function DepartureDetails({navigation, route}: Props) {
-  const {activeItemIndex = 0, items} = route.params;
+  const {activeItemIndex, items} = route.params;
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useTheme();
   const {modesWeSellTicketsFor} = useFirestoreConfiguration();
   const {enable_ticketing} = useRemoteConfig();
 
-  const activeItem: ServiceJourneyDeparture | undefined =
-    items[activeItemIndexState];
+  const activeItem = items[activeItemIndexState];
   const hasMultipleItems = items.length > 1;
 
   const styles = useStopsStyle();
@@ -110,15 +108,23 @@ export default function DepartureDetails({navigation, route}: Props) {
           style={styles.scrollView__content}
           testID="departureDetailsContentView"
         >
-          <PaginatedDetailsHeader
-            page={activeItemIndexState + 1}
-            totalPages={items.length}
-            onNavigate={onPaginactionPress}
-            showPagination={hasMultipleItems}
-            currentDate={activeItem?.date}
-            isTripCancelled={activeItem.isTripCancelled}
-          />
-          {activeItem.isTripCancelled && <CancelledDepartureMessage />}
+          {activeItem ? (
+            <PaginatedDetailsHeader
+              page={activeItemIndexState + 1}
+              totalPages={items.length}
+              onNavigate={onPaginactionPress}
+              showPagination={hasMultipleItems}
+              currentDate={activeItem?.date}
+              isTripCancelled={activeItem?.isTripCancelled}
+            />
+          ) : (
+            <MessageBox
+              type="error"
+              message={t(DepartureDetailsTexts.messages.noActiveItem)}
+            />
+          )}
+
+          {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
           <SituationMessages
             situations={parentSituations}
             containerStyle={styles.situationsContainer}
@@ -324,22 +330,22 @@ function TripItem({
   );
 
   async function handleQuayPress(quay: Quay | undefined) {
-    const location = await searchByStopPlace(quay?.stopPlace);
-    if (!location) {
-      return;
-    }
+    const stopPlace = quay?.stopPlace;
+    if (!stopPlace) return;
 
     if (newDepartures) {
       navigation.push('PlaceScreen', {
         place: {
-          id: location.id,
-          name: location.name,
+          id: quay.stopPlace.id,
+          name: quay.stopPlace.name,
         },
-        selectedQuay:
-          quay?.id && quay?.name ? {id: quay?.id, name: quay?.name} : undefined,
+        selectedQuay: {
+          id: quay.id,
+          name: quay.name,
+        },
       });
     } else {
-      navigation.navigate('QuayDepartures', {location});
+      navigation.navigate('QuayDepartures', {stopPlace});
     }
   }
 }

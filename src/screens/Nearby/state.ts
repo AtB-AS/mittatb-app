@@ -13,6 +13,7 @@ import {
   DepartureGroupMetadata,
   DepartureFavoritesQuery,
   getNextDepartureGroups,
+  DepartureGroupsPayloadLocation,
 } from '@atb/api/departures/departure-group';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavorites} from '@atb/favorites';
@@ -23,6 +24,7 @@ import useInterval from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '../../departure-list/utils';
 import {SearchTime} from './types';
 import {animateNextChange} from '@atb/utils/animation';
+import {StopPlace} from '@atb/api/types/trips';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
@@ -66,23 +68,23 @@ type DepartureDataActions =
   | {
       type: 'SET_SEARCH_TIME';
       searchTime: SearchTime;
-      location?: Location;
+      locationOrStopPlace?: Location | StopPlace;
       favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
-      location?: Location;
+      locationOrStopPlace?: Location | StopPlace;
       favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
       type: 'LOAD_MORE_DEPARTURES';
-      location?: Location;
+      locationOrStopPlace?: Location | StopPlace;
       favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
       type: 'SET_SHOW_FAVORITES';
       showOnlyFavorites: boolean;
-      location?: Location;
+      locationOrStopPlace?: Location | StopPlace;
       favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
@@ -96,7 +98,7 @@ type DepartureDataActions =
       locationId?: string;
       reset?: boolean;
       result: DepartureGroupMetadata;
-      fromLocation?: Location | undefined;
+      fromLocation?: Location | StopPlace;
     }
   | {
       type: 'SET_ERROR';
@@ -118,8 +120,8 @@ const reducer: ReducerWithSideEffects<
 > = (state, action) => {
   switch (action.type) {
     case 'LOAD_INITIAL_DEPARTURES': {
-      if (!action.location) return NoUpdate();
-      const location = action.location;
+      if (!action.locationOrStopPlace) return NoUpdate();
+      const locationOrStopPlace = action.locationOrStopPlace;
 
       // Update input data with new date as this
       // is a fresh fetch. We should fetch the latest information.
@@ -148,13 +150,7 @@ const reducer: ReducerWithSideEffects<
             // Fresh fetch, reset paging and use new query input with new startTime
             const result = await getDepartureGroups(
               {
-                location:
-                  location.resultType === 'search'
-                    ? location
-                    : {
-                        layer: 'address',
-                        coordinates: location.coordinates,
-                      },
+                location: getPayloadLocation(locationOrStopPlace),
                 favorites: state.showOnlyFavorites
                   ? action.favoriteDepartures
                   : undefined,
@@ -164,14 +160,14 @@ const reducer: ReducerWithSideEffects<
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
-              locationId: location.id,
-              fromLocation: location,
+              locationId: locationOrStopPlace.id,
+              fromLocation: locationOrStopPlace,
               result,
             });
           } catch (e) {
             dispatch({
               type: 'SET_ERROR',
-              reset: location.id !== state.locationId,
+              reset: locationOrStopPlace.id !== state.locationId,
               loadType: 'initial',
               error: getAxiosErrorType(e),
             });
@@ -183,8 +179,9 @@ const reducer: ReducerWithSideEffects<
     }
 
     case 'LOAD_MORE_DEPARTURES': {
-      if (!action.location || !state.cursorInfo?.hasNextPage) return NoUpdate();
-      const location = action.location;
+      if (!action.locationOrStopPlace || !state.cursorInfo?.hasNextPage)
+        return NoUpdate();
+      const locationOrStopPlace = action.locationOrStopPlace;
       if (state.isFetchingMore) return NoUpdate();
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -195,13 +192,7 @@ const reducer: ReducerWithSideEffects<
             // to ensure that we get the same departures.
             const result = await getNextDepartureGroups(
               {
-                location:
-                  location.resultType === 'search'
-                    ? location
-                    : {
-                        layer: 'address',
-                        coordinates: location.coordinates,
-                      },
+                location: getPayloadLocation(locationOrStopPlace),
                 favorites: state.showOnlyFavorites
                   ? action.favoriteDepartures
                   : undefined,
@@ -212,7 +203,7 @@ const reducer: ReducerWithSideEffects<
             if (result) {
               dispatch({
                 type: 'UPDATE_DEPARTURES',
-                locationId: action.location?.id,
+                locationId: locationOrStopPlace?.id,
                 result,
               });
             }
@@ -279,7 +270,7 @@ const reducer: ReducerWithSideEffects<
         async (_, dispatch) => {
           dispatch({
             type: 'LOAD_INITIAL_DEPARTURES',
-            location: action.location,
+            locationOrStopPlace: action.locationOrStopPlace,
             favoriteDepartures: action.favoriteDepartures,
           });
         },
@@ -295,7 +286,7 @@ const reducer: ReducerWithSideEffects<
         async (_, dispatch) => {
           dispatch({
             type: 'LOAD_INITIAL_DEPARTURES',
-            location: action.location,
+            locationOrStopPlace: action.locationOrStopPlace,
             favoriteDepartures: action.favoriteDepartures,
           });
         },
@@ -353,7 +344,7 @@ const reducer: ReducerWithSideEffects<
  * @param {number} [tickRateInSeconds=10] - "tick frequency" is how often we retrigger time calculations and sorting. More frequent means more CPU load/battery drain. Less frequent can mean outdated data.
  */
 export function useDepartureData(
-  location?: Location,
+  locationOrStopPlace?: Location | StopPlace,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
 ) {
@@ -374,26 +365,30 @@ export function useDepartureData(
       dispatch({
         type: 'SET_SEARCH_TIME',
         searchTime,
-        location,
+        locationOrStopPlace,
         favoriteDepartures,
       }),
-    [location?.id, favoriteDepartures],
+    [locationOrStopPlace?.id, favoriteDepartures],
   );
 
   const loadInitialDepartures = useCallback(
     () =>
       dispatch({
         type: 'LOAD_INITIAL_DEPARTURES',
-        location,
+        locationOrStopPlace,
         favoriteDepartures,
       }),
-    [location?.id, favoriteDepartures],
+    [locationOrStopPlace?.id, favoriteDepartures],
   );
 
   const loadMore = useCallback(
     () =>
-      dispatch({type: 'LOAD_MORE_DEPARTURES', location, favoriteDepartures}),
-    [location?.id, favoriteDepartures],
+      dispatch({
+        type: 'LOAD_MORE_DEPARTURES',
+        locationOrStopPlace,
+        favoriteDepartures,
+      }),
+    [locationOrStopPlace?.id, favoriteDepartures],
   );
 
   const setShowFavorites = useCallback(
@@ -401,13 +396,13 @@ export function useDepartureData(
       dispatch({
         type: 'SET_SHOW_FAVORITES',
         showOnlyFavorites,
-        location,
+        locationOrStopPlace,
         favoriteDepartures,
       }),
-    [location?.id, favoriteDepartures],
+    [locationOrStopPlace?.id, favoriteDepartures],
   );
 
-  useEffect(loadInitialDepartures, [location?.id]);
+  useEffect(loadInitialDepartures, [locationOrStopPlace?.id]);
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -421,7 +416,7 @@ export function useDepartureData(
   useInterval(
     () => dispatch({type: 'LOAD_REALTIME_DATA'}),
     updateFrequencyInSeconds * 1000,
-    [location?.id],
+    [locationOrStopPlace?.id],
     !isFocused,
   );
   useInterval(
@@ -438,4 +433,24 @@ export function useDepartureData(
     setShowFavorites,
     loadInitialDepartures,
   };
+}
+
+function getPayloadLocation(
+  locationOrStopPlace: Location | StopPlace,
+): DepartureGroupsPayloadLocation {
+  // locationOrStopPlace is Location
+  if ('resultType' in locationOrStopPlace) {
+    return locationOrStopPlace.resultType === 'search'
+      ? locationOrStopPlace
+      : {
+          layer: 'address',
+          coordinates: locationOrStopPlace.coordinates,
+        };
+  } else {
+    // locationOrStopPlace is StopPlace
+    return {
+      id: locationOrStopPlace.id,
+      layer: 'venue',
+    };
+  }
 }

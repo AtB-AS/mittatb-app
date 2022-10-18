@@ -20,6 +20,10 @@ const DepartureDetailsTexts = {
       `\n\nWith a single or periodic ticket for zone A from AtB, you can travel by train in the zone.`,
     ),
     noAlighting: _('Ingen avstigning', 'No disembarking'),
+    noActiveItem: _(
+      'Ojda! Noe gikk galt med lasting av detaljer for denne reisen.',
+      'Oops! We had some issues loading the details for this journey.',
+    ),
   },
 };
 export default orgSpecificTranslations(DepartureDetailsTexts, {

@@ -17,6 +17,11 @@ export type ListResponse = {
   tokens: RemoteToken[];
 };
 
+export type TokenLimitResponse = {
+  toggleMaxLimit?: number;
+  toggledCount: number;
+};
+
 export type ToggleRequest = {
   tokenId: string;
 };

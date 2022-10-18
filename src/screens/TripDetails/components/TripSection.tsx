@@ -4,14 +4,14 @@ import {Interchange} from '@atb/assets/svg/mono-icons/actions';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
-import {TinyMessageBox} from '@atb/components/message-box';
+import MessageBox, {TinyMessageBox} from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
-import {searchByStopPlace} from '@atb/geocoder/search-for-location';
+import {usePreferenceItems} from '@atb/preferences';
 import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
 import SituationMessages from '@atb/situations';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   Language,
   TranslateFunction,
@@ -24,6 +24,7 @@ import {
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {View} from 'react-native';
@@ -65,6 +66,8 @@ const TripSection: React.FC<TripSectionProps> = ({
 }) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
+  const {theme} = useTheme();
+  const {newDepartures} = usePreferenceItems();
 
   const isWalkSection = leg.mode === 'foot';
   const legColor = useTransportationColor(leg.mode, leg.line?.transportSubmode);
@@ -141,6 +144,17 @@ const TripSection: React.FC<TripSectionProps> = ({
             <SituationMessages mode="no-icon" situations={leg.situations} />
           </TripRow>
         )}
+        {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
+          <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
+            <MessageBox
+              type="warning"
+              icon={null}
+              message={t(
+                TripDetailsTexts.messages.departureIsRailReplacementBus,
+              )}
+            />
+          </TripRow>
+        )}
 
         {leg.intermediateEstimatedCalls.length > 0 && (
           <IntermediateInfo {...leg} />
@@ -204,13 +218,25 @@ const TripSection: React.FC<TripSectionProps> = ({
   );
 
   async function handleQuayPress(quay: Quay | undefined) {
-    const location = await searchByStopPlace(quay?.stopPlace);
-    if (!location) {
-      return;
+    const stopPlace = quay?.stopPlace;
+    if (!stopPlace) return;
+
+    if (newDepartures) {
+      navigation.push('PlaceScreen', {
+        place: {
+          id: stopPlace.id,
+          name: stopPlace.name,
+        },
+        selectedQuay: {
+          id: quay.id,
+          name: quay.name,
+        },
+      });
+    } else {
+      navigation.push('QuayDepartures', {
+        stopPlace,
+      });
     }
-    navigation.navigate('QuayDepartures', {
-      location,
-    });
   }
 };
 const IntermediateInfo = (leg: Leg) => {
@@ -228,7 +254,10 @@ const IntermediateInfo = (leg: Leg) => {
         fromQuayId: leg.fromPlace.quay?.id,
         toQuayId: leg.toPlace.quay?.id,
       };
-      navigation.navigate('DepartureDetails', {items: [departureData]});
+      navigation.push('DepartureDetails', {
+        items: [departureData],
+        activeItemIndex: 0,
+      });
     }
     return null;
   };
