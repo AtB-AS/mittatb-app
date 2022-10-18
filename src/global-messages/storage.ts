@@ -2,7 +2,7 @@ import storage from '@atb/storage';
 import {GlobalMessage} from '@atb/global-messages/GlobalMessagesContext';
 
 export const DISMISSED_GLOBAL_MESSAGES_KEY =
-  '@ATB_user_dismissed_global_messages';
+  'ATB_user_dismissed_global_messages';
 
 export async function addDismissedMessageInStore(
   dismissedGlobalMessage: GlobalMessage,

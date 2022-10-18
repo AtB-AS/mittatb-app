@@ -116,7 +116,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
       /*
        Check if there has been a user change.
        */
-      const lastUser = await storage.get('@ATB_last_mobile_token_user');
+      const lastUser = await storage.get('ATB_last_mobile_token_user');
       const noUserChange = lastUser === abtCustomerId;
 
       let token: ActivatedToken | undefined;
@@ -169,7 +169,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
         Bugsnag.leaveBreadcrumb(`Creating new mobile token`);
         token = await client.create(traceId);
       }
-      await storage.set('@ATB_last_mobile_token_user', abtCustomerId!);
+      await storage.set('ATB_last_mobile_token_user', abtCustomerId!);
       return token;
     },
     [client, tokenService, abtCustomerId],

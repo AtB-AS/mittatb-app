@@ -18,14 +18,12 @@ class FavoriteStore<T = LocationFavorite | FavoriteDeparture> {
 
   async getFavorites(): Promise<StoredType<T>[]> {
     const userLocations = await storage.get(this.key);
-    let data = (
-      userLocations ? JSON.parse(userLocations) : []
-    ) as StoredType<T>[];
+    let data = (userLocations ? userLocations : []) as StoredType<T>[];
     return data;
   }
 
   async setFavorites(favorites: StoredType<T>[]): Promise<StoredType<T>[]> {
-    await storage.set(this.key, JSON.stringify(favorites));
+    await storage.setFavorite(this.key, favorites);
     return favorites;
   }
 
@@ -57,8 +55,8 @@ export const places = new FavoriteStore<LocationFavorite>(
   'stored_user_locations',
 );
 export const departures = new FavoriteStore<FavoriteDeparture>(
-  '@ATB_user_departures',
+  'ATB_user_departures',
 );
 export const frontpageFavourites = new FavoriteStore<FavoriteDeparture>(
-  '@ATB_user_frontpage_departures',
+  'ATB_user_frontpage_departures',
 );

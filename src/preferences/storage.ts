@@ -2,7 +2,7 @@ import storage, {StorageModelTypes} from '../storage';
 import {v4 as uuid} from 'uuid';
 import {PreferenceItem, UserPreferences} from './types';
 
-const STORAGE_KEY: StorageModelTypes = '@ATB_user_preferences';
+const STORAGE_KEY: StorageModelTypes = 'ATB_user_preferences';
 
 export async function getPreferences(): Promise<UserPreferences> {
   const preferences = await storage.get(STORAGE_KEY);

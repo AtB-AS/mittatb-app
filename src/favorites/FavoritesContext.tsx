@@ -24,7 +24,19 @@ type FavoriteContextState = {
   getFavoriteDeparture(
     favoriteDeparture: FavoriteDepartureId,
   ): StoredFavoriteDeparture | undefined;
-  addFavoriteDeparture(favoriteDeparture: FavoriteDeparture): Promise<void>;
+  addFavoriteDeparture(favoriteDeparture: {
+    lineLineNumber: string;
+    quayName: string;
+    quayId: string;
+    lineTransportationMode: TransportMode | undefined;
+    latitude: number | undefined;
+    longitude: number | undefined;
+    lineId: string;
+    lineName: string | undefined;
+    stopId: string;
+    lineTransportationSubMode: TransportSubmode | undefined;
+    quayPublicCode: string | undefined;
+  }): Promise<void>;
   removeFavoriteDeparture(id: string): Promise<void>;
 };
 const FavoritesContext = createContext<FavoriteContextState | undefined>(

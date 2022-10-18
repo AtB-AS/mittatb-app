@@ -25,6 +25,12 @@
 		385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */; };
 		38CD3270254B612600C6B978 /* AtBRootView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38CD326F254B612600C6B978 /* AtBRootView.m */; };
 		3F87E069DD96FBECA2EEB7DD /* libPods-atb-atbTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 890F33DF27CF0C595F634586 /* libPods-atb-atbTests.a */; };
+		5038614628FD509400E16E13 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614528FD509400E16E13 /* Provider.swift */; };
+		5038614828FD511900E16E13 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614728FD511900E16E13 /* Entry.swift */; };
+		5038614A28FD6EB900E16E13 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614928FD6EB900E16E13 /* APIService.swift */; };
+		5038614C28FD750A00E16E13 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationManager.swift */; };
+		5038614E28FD81B700E16E13 /* DepartureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614D28FD81B700E16E13 /* DepartureData.swift */; };
+		504992B728FD33B500F39CFC /* data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504992B628FD33B500F39CFC /* data.swift */; };
 		A1E701563B78F99B13487BE3 /* libPods-atb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B12A710282707BA8960F89A /* libPods-atb.a */; };
 		E6A5C3E919C3475F907B3CE4 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB1D1B473A9C41A79687569C /* Roboto-Regular.ttf */; };
 		F19471F4FCE444CF931BA221 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59E90F341F04DB2B427E0EF /* Roboto-Bold.ttf */; };
@@ -96,8 +102,15 @@
 		3887588DCC0270C66494CEA5 /* libPods-atb-departureWidgetExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atb-departureWidgetExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		38CD326F254B612600C6B978 /* AtBRootView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AtBRootView.m; path = atb/AtBRootView.m; sourceTree = "<group>"; };
 		38CD3275254B616300C6B978 /* AtBRootView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AtBRootView.h; path = atb/AtBRootView.h; sourceTree = "<group>"; };
-		38E33D0D242C0838003D56ED /* atb-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "atb-Bridging-Header.h"; sourceTree = "<group>"; };
+		38E33D0D242C0838003D56ED /* atb-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "atb-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		38F348B52542D8120073C300 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		5038614528FD509400E16E13 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+		5038614728FD511900E16E13 /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
+		5038614928FD6EB900E16E13 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		5038614B28FD750A00E16E13 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		5038614D28FD81B700E16E13 /* DepartureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartureData.swift; sourceTree = "<group>"; };
+		504992B628FD33B500F39CFC /* data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = data.swift; sourceTree = "<group>"; };
+		5051B09328F4092200B8EA18 /* departureWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = departureWidgetExtension.entitlements; sourceTree = "<group>"; };
 		86E9F6F8FAE78B8F34A96337 /* Pods-atb-atbTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb-atbTests.release.xcconfig"; path = "Target Support Files/Pods-atb-atbTests/Pods-atb-atbTests.release.xcconfig"; sourceTree = "<group>"; };
 		890F33DF27CF0C595F634586 /* libPods-atb-atbTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atb-atbTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93DD12AA3A71553A1E11F3E3 /* Pods-atb-departureWidgetExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb-departureWidgetExtension.release.xcconfig"; path = "Target Support Files/Pods-atb-departureWidgetExtension/Pods-atb-departureWidgetExtension.release.xcconfig"; sourceTree = "<group>"; };
@@ -237,6 +250,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				5051B09328F4092200B8EA18 /* departureWidgetExtension.entitlements */,
 				FE8AF9EC28EC69FA00505277 /* departureWidgetExtensionDebug.entitlements */,
 				13B07FAE1A68108700A75B9A /* atb */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -281,6 +295,12 @@
 				FE55264D28EC45ED0091F697 /* departureWidget.swift */,
 				FE55264F28EC45EE0091F697 /* Assets.xcassets */,
 				FE55265128EC45EE0091F697 /* Info.plist */,
+				504992B628FD33B500F39CFC /* data.swift */,
+				5038614528FD509400E16E13 /* Provider.swift */,
+				5038614728FD511900E16E13 /* Entry.swift */,
+				5038614928FD6EB900E16E13 /* APIService.swift */,
+				5038614B28FD750A00E16E13 /* LocationManager.swift */,
+				5038614D28FD81B700E16E13 /* DepartureData.swift */,
 			);
 			path = departureWidget;
 			sourceTree = "<group>";
@@ -365,13 +385,10 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = CSV447Q97L;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = CSV447Q97L;
 						LastSwiftMigration = 1120;
-						ProvisioningStyle = Manual;
 					};
 					FE55264628EC45ED0091F697 = {
 						CreatedOnToolsVersion = 14.0.1;
@@ -661,7 +678,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5038614E28FD81B700E16E13 /* DepartureData.swift in Sources */,
+				5038614828FD511900E16E13 /* Entry.swift in Sources */,
+				5038614A28FD6EB900E16E13 /* APIService.swift in Sources */,
+				5038614C28FD750A00E16E13 /* LocationManager.swift in Sources */,
 				FE55264E28EC45ED0091F697 /* departureWidget.swift in Sources */,
+				5038614628FD509400E16E13 /* Provider.swift in Sources */,
+				504992B728FD33B500F39CFC /* data.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -699,6 +722,7 @@
 			baseConfigurationReference = 222B80A426D8C8B500EE86C9 /* Debug-tests.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = CSV447Q97L;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -753,9 +777,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = atb/atbDebug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "$(IOS_DEVELOPMENT_TEAM_ID)";
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = CSV447Q97L;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = atb/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -770,7 +797,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(IOS_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = AtB;
-				PROVISIONING_PROFILE_SPECIFIER = "$(IOS_PROVISIONING_PROFILE_SPECIFIER)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development no.mittatb.debug";
 				SWIFT_OBJC_BRIDGING_HEADER = "atb-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -786,9 +814,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = atb/AtB.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "$(IOS_DEVELOPMENT_TEAM_ID)";
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = atb/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -802,7 +831,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(IOS_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = AtB;
-				PROVISIONING_PROFILE_SPECIFIER = "$(IOS_PROVISIONING_PROFILE_SPECIFIER)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "atb-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1002,6 +1031,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = departureWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
