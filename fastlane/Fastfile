@@ -195,7 +195,6 @@ platform :android do
     )
   end
 
-
   lane :playstore_internal do
     ensure_env_vars(
       env_vars: ['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH','APK_FILE_NAME','ANDROID_PACKAGE_NAME']
