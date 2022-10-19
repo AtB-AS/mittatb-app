@@ -44,21 +44,13 @@ platform :ios do
       env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_SSH_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
     )
     if is_ci
-      create_keychain(
-        name: "CI",
-        password: ENV["MATCH_PASSWORD"],
-        default_keychain: true,
-        unlock: true,
-        timeout: 3600,
-        lock_when_sleeps: false
-      )
+      setup_ci()
       match(
         type: ENV["FASTLANE_MATCH_TYPE"],
         app_identifier: ENV['IOS_BUNDLE_IDENTIFIER'],
         storage_mode: 'git',
         git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
         readonly: true,
-        keychain_name: "CI",
         keychain_password: ENV["MATCH_PASSWORD"],
         team_id: ENV['IOS_DEVELOPMENT_TEAM_ID']
       )
