@@ -8,6 +8,7 @@ import {ScrollView} from 'react-native';
 import {RecentTickets} from './RecentTickets/RecentTickets';
 import {TicketsScreenProps} from './types';
 import UpgradeSplash from './UpgradeSplash';
+import useRecentTickets from './use-recent-tickets';
 
 type Props = TicketsScreenProps<'BuyTickets'>;
 
@@ -16,6 +17,8 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const {abtCustomerId, authenticationType} = useAuthState();
   const isSignedInAsAbtCustomer = !!abtCustomerId;
   const {theme} = useTheme();
+  const {recentTickets} = useRecentTickets();
+  const hasRecentTickets = enable_recent_tickets && recentTickets.length;
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -72,7 +75,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
         onBuyPeriodTicket={onBuyPeriodTicket}
         onBuyHour24Ticket={onBuyHour24Ticket}
         containerStyle={
-          enable_recent_tickets
+          hasRecentTickets
             ? {
                 backgroundColor:
                   theme.static.background.background_2.background,
