@@ -43,7 +43,7 @@ export const AvailableTickets = ({
   const shouldShowSummerPass = false;
 
   return (
-    <View style={containerStyle}>
+    <View style={[containerStyle, styles.container]}>
       <ThemeText type="body__secondary" style={styles.heading}>
         {t(TicketsTexts.availableTickets.allTickets)}
       </ThemeText>
@@ -104,6 +104,9 @@ export const AvailableTickets = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    paddingBottom: theme.spacings.medium,
+  },
   heading: {
     margin: theme.spacings.medium,
     marginLeft: theme.spacings.xLarge,
