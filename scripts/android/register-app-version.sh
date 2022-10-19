@@ -87,7 +87,8 @@ json=$(cat <<EOJ
     },
     android: {
       "apk_package_name": "$ANDROID_APPLICATION_ID",
-      "application_version_id": "$concat_app_version",
+      "version_name": "$concat_app_version",
+      "version_code": "$BUILD_ID",
       "certificate_digests": [
         "$certificate_digest"
       ],
