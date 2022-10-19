@@ -1,4 +1,4 @@
-import {StopPlaceGroup} from '@atb/api/departures/types';
+import {StopPlaceInfo} from '@atb/api/departures/types';
 import {NoFavouriteDeparture} from '@atb/assets/svg/color/images/';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
@@ -37,6 +37,12 @@ const DeparturesWidget: React.FC = () => {
   }
 
   const openAppInfoUrl = () => Linking.openURL(new_favourites_info_url);
+
+  const sortedStopPlaceGroups = location
+    ? state.data?.sort((a, b) =>
+        sortStopsByDistance(a.stopPlace, b.stopPlace, location.coordinates),
+      )
+    : state.data;
 
   return (
     <View style={styles.container}>
@@ -88,27 +94,20 @@ const DeparturesWidget: React.FC = () => {
         <ActivityIndicator size="large" style={styles.activityIndicator} />
       )}
 
-      {state.data
-        ?.sort((a, b) => sortStopsByDistanceOrName(a, b, location?.coordinates))
-        .map((stopPlaceGroup) => {
-          const stopPlaceInfo = stopPlaceGroup.stopPlace;
-          return (
-            <View key={stopPlaceGroup.stopPlace.id}>
-              {stopPlaceGroup.quays.map((quay) => {
-                return (
-                  <QuaySection
-                    key={quay.quay.id}
-                    quayGroup={quay}
-                    stop={stopPlaceInfo}
-                    searchDate={searchDate}
-                    locationOrStopPlace={location || undefined}
-                    mode="frontpage"
-                  />
-                );
-              })}
-            </View>
-          );
-        })}
+      {sortedStopPlaceGroups?.map((stopPlaceGroup) => (
+        <View key={stopPlaceGroup.stopPlace.id}>
+          {stopPlaceGroup.quays.map((quay) => (
+            <QuaySection
+              key={quay.quay.id}
+              quayGroup={quay}
+              stop={stopPlaceGroup.stopPlace}
+              searchDate={searchDate}
+              locationOrStopPlace={location || undefined}
+              mode="frontpage"
+            />
+          ))}
+        </View>
+      ))}
 
       {!!favoriteDepartures.length && (
         <Button
@@ -125,28 +124,21 @@ const DeparturesWidget: React.FC = () => {
   );
 };
 
-function sortStopsByDistanceOrName(
-  a: StopPlaceGroup,
-  b: StopPlaceGroup,
-  geolocation?: Coordinates,
+function sortStopsByDistance(
+  a: StopPlaceInfo,
+  b: StopPlaceInfo,
+  geolocation: Coordinates,
 ) {
-  if (!geolocation) {
-    // Sort by name if any of the locations are unknown
-    if (a.stopPlace.name > b.stopPlace.name) return 1;
-    if (a.stopPlace.name < b.stopPlace.name) return -1;
-    return 0;
-  }
-
   // Place stops without coordinates last
-  if (!a.stopPlace.latitude || !a.stopPlace.longitude) return -1;
-  if (!b.stopPlace.latitude || !b.stopPlace.longitude) return 1;
+  if (!a.latitude || !a.longitude) return -1;
+  if (!b.latitude || !b.longitude) return 1;
 
   const distanceToA = haversineDistance(
-    {lat: a.stopPlace.latitude, lon: a.stopPlace.longitude},
+    {lat: a.latitude, lon: a.longitude},
     geolocation,
   );
   const distanceToB = haversineDistance(
-    {lat: b.stopPlace.latitude, lon: b.stopPlace.longitude},
+    {lat: b.latitude, lon: b.longitude},
     geolocation,
   );
 
