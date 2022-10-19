@@ -5,7 +5,7 @@ import {DepartureDetailsRouteParams} from '../TripDetails/DepartureDetails';
 import {MapDetailRouteParams} from '../TripDetails/Map';
 import {QuayDeparturesRouteParams} from '../TripDetails/QuayDepartures';
 import {DetailsStackParams} from '../TripDetails/types';
-import {AllStopsOverviewParams} from './AllStopsOverview';
+import {AllStopsOverview, AllStopsOverviewParams} from './AllStopsOverview';
 import {PlaceScreenParams} from './PlaceScreen';
 
 export type DeparturesStackParams = {
@@ -15,6 +15,7 @@ export type DeparturesStackParams = {
   QuayDepartures: QuayDeparturesRouteParams;
   TripDetails: DetailsStackParams;
   DetailsMap: MapDetailRouteParams;
+  AllStopsOverview: AllStopsOverviewParams
 };
 
 export type RootDeparturesScreenProps = TabNavigatorScreenProps<'Nearest'>;

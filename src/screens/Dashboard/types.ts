@@ -9,6 +9,7 @@ import {
 import {StackScreenProps} from '@react-navigation/stack';
 import {DetailsStackParams} from '../TripDetails/types';
 import {DateTimePickerParams, SearchTime} from './journey-date-picker';
+import {AllStopsOverview, AllStopsOverviewParams} from "@atb/screens/Departures/AllStopsOverview";
 
 export type SearchStateType =
   | 'idle'
@@ -32,6 +33,8 @@ export type DashboardParams = {
 
   TripDetails: NavigatorScreenParams<DetailsStackParams>;
   DateTimePicker: DateTimePickerParams;
+  FavoriteDepartures: undefined;
+  AllStopsOverviewFromDashboard: AllStopsOverviewParams
 };
 
 export type RootDashboardScreenProps = TabNavigatorScreenProps<'Assistant'>;

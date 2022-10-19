@@ -3,14 +3,21 @@ import {useFavorites} from '@atb/favorites';
 import {StoredFavoriteDeparture} from '@atb/favorites/types';
 import MessageBox from '@atb/components/message-box';
 import {StyleSheet, Theme} from '@atb/theme';
-import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
+import {
+  FavoriteDeparturesTexts,
+  LoginTexts,
+  useTranslation,
+} from '@atb/translations';
 import React from 'react';
 import {Alert, LayoutAnimation, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {animateNextChange} from '@atb/utils/animation';
+import {Add} from '@atb/assets/svg/mono-icons/actions';
+import SvgAdd from '@atb/assets/svg/mono-icons/actions/Add';
+import ThemeIcon from '@atb/components/theme-icon';
 
-export default function FavoriteDepartures() {
+export default function FavoriteDepartures({navigation}: {navigation?: any}) {
   const style = useProfileStyle();
   const {favoriteDepartures, removeFavoriteDeparture} = useFavorites();
   const {t} = useTranslation();
@@ -65,6 +72,14 @@ export default function FavoriteDepartures() {
               onPress={onDeletePress}
             />
           ))}
+        </Sections.Section>
+        <Sections.Section withPadding>
+          <Sections.LinkItem
+            text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
+            onPress={() => {navigation.navigate('AllStopsOverviewFromDashboard')}}
+            testID="chooseLoginPhone"
+            icon={<ThemeIcon svg={Add} />}
+          />
         </Sections.Section>
       </ScrollView>
     </View>

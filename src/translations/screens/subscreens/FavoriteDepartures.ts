@@ -22,5 +22,12 @@ const FavoriteDeparturesTexts = {
     cancel: _('Avbryt', 'Cancel'),
     delete: _('Slett', 'Delete'),
   },
+  favoriteItemAdd: {
+    label: _('Legg til favorittavgang', 'Add favorite departure'),
+    a11yHint: _(
+      'Aktiver for å legge til favorittavganger',
+      'Activate to add favourite departures',
+    ),
+  },
 };
 export default FavoriteDeparturesTexts;
