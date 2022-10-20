@@ -26,10 +26,9 @@ type Props = {
   };
   quay: Quay;
   stop: Place;
-  onClose?: () => void;
 };
 
-const ToggleFavouriteDeparture = ({line, quay, stop, onClose}: Props) => {
+const ToggleFavouriteDeparture = ({line, quay, stop}: Props) => {
   const style = useStyles();
   const {t} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
@@ -76,10 +75,7 @@ const ToggleFavouriteDeparture = ({line, quay, stop, onClose}: Props) => {
             lineName={line.lineName}
             lineNumber={line.lineNumber}
             addFavorite={addFavorite}
-            close={() => {
-              if (onClose) onClose();
-              close();
-            }}
+            close={close}
             ref={focusRef}
           />
         ),

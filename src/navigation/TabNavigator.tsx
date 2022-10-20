@@ -28,7 +28,7 @@ import {useNewFrontpage} from '@atb/screens/Dashboard/use-new-frontpage';
 import {TabNavigatorParams} from './types';
 import NearbyScreen from '@atb/screens/Nearby';
 import ProfileScreen from '@atb/screens/Profile';
-import {useMapPage} from '@atb/components/map/use-map-page';
+import {useMapPage} from '@atb/components/map/hooks/use-map-page';
 
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 

@@ -4,6 +4,7 @@ import {MapScreenProps} from '@atb/screens/Map/index';
 import {Place, Quay} from '@atb/api/types/departures';
 import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
+import {View} from "react-native";
 
 export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
@@ -38,7 +39,6 @@ export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
     <Map
       selectionMode={'ExploreStops'}
       navigateToQuay={navigateToQuay}
-      showDeparturesBottomSheet={true}
       navigateToDetails={navigateToDetails}
     />
   );

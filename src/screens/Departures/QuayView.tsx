@@ -96,6 +96,7 @@ export default function QuayView({
           testID={'quaySection'}
           stopPlace={stopPlace}
           showOnlyFavorites={showOnlyFavorites}
+          allowFavouriteSelection={true}
         />
       )}
     />
