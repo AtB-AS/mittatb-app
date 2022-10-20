@@ -1,9 +1,8 @@
-import Foundation
-import CoreLocation
 import Combine
+import CoreLocation
+import Foundation
 
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
-
     private let locationManager = CLLocationManager()
     @Published var locationStatus: CLAuthorizationStatus?
     @Published var lastLocation: CLLocation?
@@ -31,19 +30,16 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
 
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    func locationManager(_: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         locationStatus = status
         print(#function, statusString)
     }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+
+    func locationManager(_: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         lastLocation = location
         print(#function, location)
     }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Swift.Error) {
-        
-    }
 
+    func locationManager(_: CLLocationManager, didFailWithError _: Swift.Error) {}
 }

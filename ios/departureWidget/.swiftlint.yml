@@ -1,0 +1,14 @@
+disabled_rules:
+    - line_length
+    - file_length
+    - function_body_length
+    - type_body_length
+
+type_name:
+    min_length: 1
+
+identifier_name:
+    min_length: 1
+
+trailing_comma:
+  mandatory_comma: true
