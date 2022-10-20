@@ -40,7 +40,7 @@ const DeparturesWidget: React.FC = () => {
 
   const sortedStopPlaceGroups = location
     ? state.data?.sort((a, b) =>
-        sortStopsByDistance(a.stopPlace, b.stopPlace, location.coordinates),
+        compareStopsByDistance(a.stopPlace, b.stopPlace, location.coordinates),
       )
     : state.data;
 
@@ -124,7 +124,7 @@ const DeparturesWidget: React.FC = () => {
   );
 };
 
-function sortStopsByDistance(
+function compareStopsByDistance(
   a: StopPlaceInfo,
   b: StopPlaceInfo,
   geolocation: Coordinates,
@@ -141,10 +141,7 @@ function sortStopsByDistance(
     {lat: b.latitude, lon: b.longitude},
     geolocation,
   );
-
-  if (distanceToA > distanceToB) return 1;
-  if (distanceToA < distanceToB) return -1;
-  return 0;
+  return distanceToA - distanceToB;
 }
 
 export default DeparturesWidget;
