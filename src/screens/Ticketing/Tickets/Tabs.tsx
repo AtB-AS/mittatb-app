@@ -4,7 +4,7 @@ import AnonymousPurchaseWarning from '@atb/screens/Ticketing/Tickets/AnonymousPu
 import {AvailableTickets} from '@atb/screens/Ticketing/Tickets/AvailableTickets/AvailableTickets';
 import {useTheme} from '@atb/theme';
 import React from 'react';
-import {ScrollView} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {RecentTickets} from './RecentTickets/RecentTickets';
 import {TicketsScreenProps} from './types';
 import UpgradeSplash from './UpgradeSplash';
@@ -18,7 +18,7 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
   const isSignedInAsAbtCustomer = !!abtCustomerId;
   const {theme} = useTheme();
   const {recentTickets} = useRecentTickets();
-  const hasRecentTickets = enable_recent_tickets && recentTickets.length;
+  const hasRecentTickets = enable_recent_tickets && !!recentTickets.length;
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -68,21 +68,21 @@ export const BuyTickets: React.FC<Props> = ({navigation}) => {
 
   return isSignedInAsAbtCustomer ? (
     <ScrollView>
-      {enable_recent_tickets && <RecentTickets />}
-      {authenticationType !== 'phone' && <AnonymousPurchaseWarning />}
-      <AvailableTickets
-        onBuySingleTicket={onBuySingleTicket}
-        onBuyPeriodTicket={onBuyPeriodTicket}
-        onBuyHour24Ticket={onBuyHour24Ticket}
-        containerStyle={
-          hasRecentTickets
-            ? {
-                backgroundColor:
-                  theme.static.background.background_2.background,
-              }
-            : undefined
-        }
-      />
+      {hasRecentTickets && <RecentTickets />}
+      <View
+        style={{
+          backgroundColor: hasRecentTickets
+            ? theme.static.background.background_2.background
+            : undefined,
+        }}
+      >
+        {authenticationType !== 'phone' && <AnonymousPurchaseWarning />}
+        <AvailableTickets
+          onBuySingleTicket={onBuySingleTicket}
+          onBuyPeriodTicket={onBuyPeriodTicket}
+          onBuyHour24Ticket={onBuyHour24Ticket}
+        />
+      </View>
     </ScrollView>
   ) : null;
 };

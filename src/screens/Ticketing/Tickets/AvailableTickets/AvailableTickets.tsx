@@ -12,12 +12,10 @@ export const AvailableTickets = ({
   onBuySingleTicket,
   onBuyPeriodTicket,
   onBuyHour24Ticket,
-  containerStyle,
 }: {
   onBuySingleTicket: () => void;
   onBuyPeriodTicket: () => void;
   onBuyHour24Ticket: () => void;
-  containerStyle?: ViewStyle;
 }) => {
   const styles = useStyles();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
@@ -43,7 +41,7 @@ export const AvailableTickets = ({
   const shouldShowSummerPass = false;
 
   return (
-    <View style={[containerStyle, styles.container]}>
+    <View style={styles.container}>
       <ThemeText type="body__secondary" style={styles.heading}>
         {t(TicketsTexts.availableTickets.allTickets)}
       </ThemeText>

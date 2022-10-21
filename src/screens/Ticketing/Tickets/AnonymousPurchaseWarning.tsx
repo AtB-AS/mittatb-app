@@ -30,7 +30,7 @@ const AnonymousPurchaseWarning = () => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   warning: {
-    marginTop: theme.spacings.large,
+    marginTop: theme.spacings.xLarge,
     paddingHorizontal: theme.spacings.medium,
   },
 }));
