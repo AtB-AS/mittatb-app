@@ -1,7 +1,7 @@
 import {CancelToken as CancelTokenStatic} from '@atb/api';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
-import {Offer, OfferPrice, searchOffers} from '@atb/tickets';
+import {Offer, OfferPrice, searchOffers} from '@atb/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useMemo, useReducer} from 'react';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';

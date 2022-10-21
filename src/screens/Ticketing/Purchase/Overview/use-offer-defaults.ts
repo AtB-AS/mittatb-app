@@ -24,12 +24,12 @@ export function useOfferDefaults(
   fromTariffZone?: TariffZoneWithMetadata,
   toTariffZone?: TariffZoneWithMetadata,
 ) {
-  const {tariffZones, userProfiles, preassignedFareproducts} =
+  const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
 
   // Get default PreassignedFareProduct
   const productType = preassignedFareProduct?.type ?? selectableProductType;
-  const selectableProducts = preassignedFareproducts
+  const selectableProducts = preassignedFareProducts
     .filter(productIsSellableInApp)
     .filter((product) => product.type === productType);
   const defaultPreassignedFareProduct =

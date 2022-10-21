@@ -1,6 +1,6 @@
 import {PageIndicator} from '@atb/components/page-indicator';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
+import ConsequencesScreen from '@atb/screens/AnonymousPurchase/ConsequencesScreen';
 import IntercomInfo from '@atb/screens/Onboarding/IntercomInfo';
 import {WelcomeScreenWithoutLogin} from '@atb/screens/Onboarding/WelcomeScreen';
 import {StyleSheet, useTheme} from '@atb/theme';

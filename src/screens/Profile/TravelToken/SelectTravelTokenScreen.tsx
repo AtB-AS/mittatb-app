@@ -17,9 +17,9 @@ import {StyleSheet, Theme} from '@atb/theme';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {
   filterActiveOrCanBeUsedFareContracts,
-  isCarnetTicket,
-  useTicketState,
-} from '@atb/tickets';
+  isCarnetTravelRight,
+  useTicketingState,
+} from '@atb/ticketing';
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
 import {flatMap} from '@atb/utils/array';
@@ -36,7 +36,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const {fareContracts} = useTicketState();
+  const {fareContracts} = useTicketingState();
 
   const {token, remoteTokens, toggleToken} = useMobileTokenContextState();
   const inspectableToken = findInspectable(remoteTokens);
@@ -49,10 +49,10 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
     inspectableToken,
   );
 
-  const hasActiveCarnetTicket = flatMap(
+  const hasActiveCarnetFareContract = flatMap(
     filterActiveOrCanBeUsedFareContracts(fareContracts),
     (i) => i.travelRights,
-  ).some(isCarnetTicket);
+  ).some(isCarnetTravelRight);
 
   const [saveState, setSaveState] = useState({
     saving: false,
@@ -149,10 +149,11 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
         )}
 
         {/* Show warning if we have selected to switch to mobile, but the
-            current inspectable token is travelCard AND we have active carnet tickets  */}
+            current inspectable token is travelCard AND we have active carnet
+             fare contract */}
         {selectedType === 'mobile' &&
           isTravelCardToken(inspectableToken) &&
-          hasActiveCarnetTicket && (
+          hasActiveCarnetFareContract && (
             <MessageBox
               type={'warning'}
               message={t(TravelTokenTexts.toggleToken.hasCarnet)}
@@ -225,9 +226,6 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   leftRadioBox: {
     marginRight: theme.spacings.medium,
-  },
-  activeTicketHeader: {
-    marginBottom: theme.spacings.medium,
   },
   selectDeviceSection: {
     marginBottom: theme.spacings.medium,

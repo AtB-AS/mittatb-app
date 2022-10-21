@@ -16,11 +16,11 @@ import {
   WebViewErrorEvent,
   WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
-import {TicketPurchaseScreenProps} from '../../types';
+import {PurchaseScreenProps} from '../../types';
 import Processing from '../Processing';
 import useTerminalState, {ErrorContext} from './use-terminal-state';
 
-type Props = TicketPurchaseScreenProps<'PaymentCreditCard'>;
+type Props = PurchaseScreenProps<'PaymentCreditCard'>;
 
 const CreditCard: React.FC<Props> = ({route, navigation}) => {
   const styles = useStyles();

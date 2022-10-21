@@ -24,9 +24,9 @@ export default function DurationSelection({
 }: DurationSelectionProps) {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {preassignedFareproducts} = useFirestoreConfiguration();
+  const {preassignedFareProducts} = useFirestoreConfiguration();
 
-  const selectableProducts = preassignedFareproducts
+  const selectableProducts = preassignedFareProducts
     .filter(productIsSellableInApp)
     .filter((p) => p.type === selectedProduct.type);
 

@@ -13,7 +13,7 @@ import {
   deleteRecurringPayment,
   listRecurringPayments,
   RecurringPayment,
-} from '@atb/tickets';
+} from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
 import PaymentOptionsTexts from '@atb/translations/screens/subscreens/PaymentOptions';
 import useFontScale from '@atb/utils/use-font-scale';
