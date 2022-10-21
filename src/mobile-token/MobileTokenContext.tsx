@@ -14,7 +14,7 @@ import {v4 as uuid} from 'uuid';
 import storage from '@atb/storage';
 import Bugsnag from '@bugsnag/react-native';
 import useMobileTokenClient from '@atb/mobile-token/mobileTokenClient';
-import {RemoteToken} from './types';
+import {RemoteToken, TokenLimitResponse} from './types';
 import {
   TokenAction,
   TokenMustBeReplacedRemoteTokenStateError,
@@ -51,6 +51,7 @@ type MobileTokenContextState = {
   validateToken: () => void;
   removeRemoteToken: (tokenId: string) => void;
   renewToken: () => void;
+  getTokenToggleDetails: () => Promise<TokenLimitResponse | undefined>;
 };
 
 const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
@@ -297,6 +298,15 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
     [tokenService],
   );
 
+  const getTokenToggleDetails = useCallback(async () => {
+    try {
+      const toggleLimitResponse = await tokenService.getTokenToggleDetails();
+      return toggleLimitResponse;
+    } catch (err) {
+      return undefined;
+    }
+  }, [tokenService]);
+
   return (
     <MobileTokenContext.Provider
       value={{
@@ -326,6 +336,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
           }
         },
         renewToken: () => client.renew(token!, uuid()),
+        getTokenToggleDetails,
       }}
     >
       {children}

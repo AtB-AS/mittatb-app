@@ -8,6 +8,7 @@ import {ScrollView} from 'react-native';
 import {RecentFareContracts} from './RecentFareProducts/RecentFareContracts';
 import {TicketingScreenProps} from '../types';
 import UpgradeSplash from './UpgradeSplash';
+import useRecentFareContracts from './use-recent-fare-contracts';
 
 type Props = TicketingScreenProps<'PurchaseTab'>;
 
@@ -16,6 +17,9 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
   const {abtCustomerId, authenticationType} = useAuthState();
   const isSignedInAsAbtCustomer = !!abtCustomerId;
   const {theme} = useTheme();
+  const {recentFareContracts} = useRecentFareContracts();
+  const hasRecentFareContracts =
+    enable_recent_tickets && recentFareContracts.length;
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -64,15 +68,21 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
   };
 
   return isSignedInAsAbtCustomer ? (
-    <ScrollView
-      style={{backgroundColor: theme.static.background.background_2.background}}
-    >
+    <ScrollView>
       {enable_recent_tickets && <RecentFareContracts />}
       {authenticationType !== 'phone' && <AnonymousPurchaseWarning />}
       <AvailableFareProducts
         onBuySingleFareProduct={onBuySingleFareProduct}
         onBuyPeriodFareProduct={onBuyPeriodFareProduct}
         onBuyHour24FareProduct={onBuyHour24FareProduct}
+        containerStyle={
+          hasRecentFareContracts
+            ? {
+                backgroundColor:
+                  theme.static.background.background_2.background,
+              }
+            : undefined
+        }
       />
     </ScrollView>
   ) : null;

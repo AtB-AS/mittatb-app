@@ -11,6 +11,24 @@ const SelectTravelTokenTexts = {
       'Bytt mellom t:kort / mobil',
       'Switch between t:card / phone',
     ),
+    toggleCountLimitInfo: (
+      remainingToggleCount: number,
+      countRenewalDate: string,
+    ) =>
+      _(
+        `Du har ${remainingToggleCount} bytter igjen.\nFlere bytter blir tilgjengelig ${countRenewalDate}.`,
+        `You have ${remainingToggleCount} switches left. \nMore will be available on ${countRenewalDate}.`,
+      ),
+    oneToggleCountLeftInfo: (countRenewalDate: string) =>
+      _(
+        `Du har 1 bytte igjen.\nFlere bytter blir tilgjengelig ${countRenewalDate}.`,
+        `You have 1 switch left. \nMore will be available on ${countRenewalDate}.`,
+      ),
+    zeroToggleCountLeftInfo: (countRenewalDate: string) =>
+      _(
+        `Du kan ikke bytte flere ganger.\nFlere bytter blir tilgjengelig ${countRenewalDate}.`,
+        `You have no switches left. \nMore will be available on ${countRenewalDate}.`,
+      ),
     faq: {
       title: _('Ofte stilte spørsmål', 'Frequently asked questions'),
     },
@@ -56,6 +74,17 @@ const SelectTravelTokenTexts = {
         ),
       },
     ],
+    tokenToggleFaq: {
+      question: _(
+        `Hvor mange ganger kan jeg bytte?`,
+        `How many times can I switch?`,
+      ),
+      answer: (toggleMaxLimit: number) =>
+        _(
+          `Du kan bytte inntil ${toggleMaxLimit} ganger i måneden. Du får nye bytter den 1. hver måned.`,
+          `You can switch up to ${toggleMaxLimit} times a month. You get new switches on the 1st of every month.`,
+        ),
+    },
   },
   toggleToken: {
     title: _('Bytt mellom t:kort / mobil', 'Switch between t:card / phone'),

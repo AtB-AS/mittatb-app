@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {View, ViewStyle} from 'react-native';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
@@ -12,10 +12,12 @@ export const AvailableFareProducts = ({
   onBuySingleFareProduct,
   onBuyPeriodFareProduct,
   onBuyHour24FareProduct,
+  containerStyle,
 }: {
   onBuySingleFareProduct: () => void;
   onBuyPeriodFareProduct: () => void;
   onBuyHour24FareProduct: () => void;
+  containerStyle?: ViewStyle;
 }) => {
   const styles = useStyles();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
@@ -41,7 +43,7 @@ export const AvailableFareProducts = ({
   const shouldShowSummerPass = false;
 
   return (
-    <View>
+    <View style={[containerStyle, styles.container]}>
       <ThemeText type="body__secondary" style={styles.heading}>
         {t(TicketingTexts.availableFareProducts.allTickets)}
       </ThemeText>
@@ -102,6 +104,9 @@ export const AvailableFareProducts = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    paddingBottom: theme.spacings.medium,
+  },
   heading: {
     margin: theme.spacings.medium,
     marginLeft: theme.spacings.xLarge,
