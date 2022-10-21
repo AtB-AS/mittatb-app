@@ -1,4 +1,4 @@
-import React, {RefObject, useState} from 'react';
+import React, {RefObject, useEffect, useState} from 'react';
 import {getCoordinatesFromFeatureOrCoordinates} from '@atb/components/map/utils';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {useGeolocationState} from '@atb/GeolocationContext';
@@ -6,7 +6,6 @@ import {FeatureOrCoordinates, MapProps} from '../types';
 import {useTriggerCameraMoveEffect} from './use-trigger-camera-move-effect';
 import {useDecideCameraFocusMode} from './use-decide-camera-focus-mode';
 import {useUpdateBottomSheetWhenSelectedStopPlaceChanges} from './use-update-bottom-sheet-when-selected-stop-place-changes';
-import {useFindSelectedStopPlace} from '@atb/components/map/hooks/use-find-selected-stop-place';
 
 /**
  * This is a custom hook handling all effects triggered when the user clicks the
@@ -28,21 +27,16 @@ export const useMapSelectionChangeEffect = (
   const {location: currentLocation} = useGeolocationState();
   const [fromCoords, setFromCoords] = useState(currentLocation?.coordinates);
 
-  const selectedStopPlaceFeature = useFindSelectedStopPlace(
-    mapProps.selectionMode,
-    selectedFeatureOrCoords,
-    mapViewRef,
-  );
   const cameraFocusMode = useDecideCameraFocusMode(
     mapProps.selectionMode,
     fromCoords,
     selectedFeatureOrCoords,
-    selectedStopPlaceFeature,
+    mapViewRef,
   );
   useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef);
   useUpdateBottomSheetWhenSelectedStopPlaceChanges(
     mapProps,
-    selectedStopPlaceFeature,
+    selectedFeatureOrCoords,
     mapViewRef,
     () => setSelectedFeatureOrCoords(undefined),
   );

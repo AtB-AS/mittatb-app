@@ -4,16 +4,18 @@ import {
   MapSelectionMode,
 } from '@atb/components/map/types';
 import {Coordinates} from '@atb/screens/TripDetails/Map/types';
-import {useEffect, useState} from 'react';
+import {RefObject, useEffect, useState} from 'react';
 import {Feature, Point} from 'geojson';
 import {createMapLines} from '@atb/screens/TripDetails/Map/utils';
 import {
+  findClickedStopPlace,
   getCoordinatesFromFeatureOrCoordinates,
   isCoordinates,
   mapPositionToCoordinates,
 } from '@atb/components/map/utils';
 import {tripsSearch} from '@atb/api/trips_v2';
 import {StreetMode} from '@entur/sdk/lib/journeyPlanner/types';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 
 const MAX_LIMIT_TO_SHOW_WALKING_TRIP = 5000;
 
@@ -24,14 +26,14 @@ const MAX_LIMIT_TO_SHOW_WALKING_TRIP = 5000;
  *
  * Why is there a split between the "decide camera focus" and "trigger camera
  * move" hooks? This is both for simplifying the code a bit, since it was pretty
- * long and hard to read before it was splitt up. In addition, we need to return
+ * long and hard to read before it was split up. In addition, we need to return
  * the map lines back from the hook so the Map-component can draw them.
  */
 export const useDecideCameraFocusMode = (
   selectionMode: MapSelectionMode,
   fromCoords: Coordinates | undefined,
   selectedFeatureOrCoords: FeatureOrCoordinates | undefined,
-  stopPlaceFeature: Feature<Point> | undefined,
+  mapViewRef: RefObject<MapboxGL.MapView>,
 ) => {
   const [cameraFocusMode, setCameraFocusMode] = useState<CameraFocusModeType>();
   useEffect(() => {
@@ -61,16 +63,22 @@ export const useDecideCameraFocusMode = (
           break;
         }
         case 'ExploreStops': {
+          const stopPlaceFeature = await findClickedStopPlace(
+            selectedFeatureOrCoords,
+            mapViewRef,
+          );
           const mapLines = await fetchMapLines(fromCoords, stopPlaceFeature);
           if (mapLines) {
             setCameraFocusMode({mode: 'map-lines', mapLines});
           } else if (stopPlaceFeature) {
             setCameraFocusMode({mode: 'stop-place', stopPlaceFeature});
+          } else {
+            setCameraFocusMode(undefined);
           }
         }
       }
     })();
-  }, [selectedFeatureOrCoords, stopPlaceFeature]);
+  }, [selectedFeatureOrCoords]);
   return cameraFocusMode;
 };
 

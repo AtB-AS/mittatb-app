@@ -1,30 +1,41 @@
-import {MapProps} from '@atb/components/map/types';
-import React, {RefObject, useEffect} from 'react';
+import {FeatureOrCoordinates, MapProps} from '@atb/components/map/types';
+import React, {RefObject, useEffect, useState} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import DeparturesDialogSheet from '@atb/components/map/components/DeparturesDialogSheet';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Feature, Point} from 'geojson';
+import {findClickedStopPlace, isCoordinates} from '@atb/components/map/utils';
 
 /**
- * Open or close the bottom sheet based on the selected stop place. Will also
- * close the bottom sheet when navigation to other places, but it will be
+ * Open or close the bottom sheet based on the selected coordinates. Will also
+ * close the bottom sheet when navigating to other places, but it will be
  * reopened when the `isFocused` value becomes `true`.
  */
 export const useUpdateBottomSheetWhenSelectedStopPlaceChanges = (
   mapProps: MapProps,
-  stopPlaceFeature: Feature<Point> | undefined,
+  featureOrCoords: FeatureOrCoordinates | undefined,
   mapViewRef: RefObject<MapboxGL.MapView>,
   closeCallback: () => void,
 ) => {
   const isFocused = useIsFocused();
-
+  const [stopPlaceFeature, setStopPlaceFeature] = useState<Feature<Point>>();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
 
   const closeWithCallback = () => {
     closeBottomSheet();
     closeCallback();
   };
+
+  useEffect(() => {
+    (async function () {
+      const stopPlace =
+        featureOrCoords && !isCoordinates(featureOrCoords)
+          ? await findClickedStopPlace(featureOrCoords, mapViewRef)
+          : undefined;
+      setStopPlaceFeature(stopPlace);
+    })();
+  }, [featureOrCoords]);
 
   useEffect(() => {
     (async function () {
@@ -51,7 +62,7 @@ export const useUpdateBottomSheetWhenSelectedStopPlaceChanges = (
           false,
         );
       } else {
-        closeWithCallback();
+        closeBottomSheet();
       }
     })();
   }, [stopPlaceFeature, isFocused]);
