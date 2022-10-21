@@ -37,7 +37,6 @@ export const useTriggerCameraMoveEffect = (
 
     switch (cameraFocusMode.mode) {
       case 'map-lines': {
-        console.log('Moving to map lines?', bottomSheetHeight);
         // Only trigger this effect after the bottom sheet has opened
         if (!bottomSheetHeight) return;
         moveCameraToMapLines(
@@ -48,7 +47,6 @@ export const useTriggerCameraMoveEffect = (
         break;
       }
       case 'stop-place': {
-        console.log('Moving to stop place?', bottomSheetHeight);
         // Only trigger this effect after the bottom sheet has opened
         if (!bottomSheetHeight) return;
         moveCameraToStopPlace(
@@ -59,7 +57,6 @@ export const useTriggerCameraMoveEffect = (
         break;
       }
       case 'coordinates': {
-        console.log('Moving to coordinates?', cameraFocusMode.coordinates);
         moveCameraToFeatureOrCoordinates(
           cameraFocusMode.coordinates,
           mapCameraRef,

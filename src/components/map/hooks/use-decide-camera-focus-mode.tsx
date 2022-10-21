@@ -7,10 +7,9 @@ import {Coordinates} from '@atb/screens/TripDetails/Map/types';
 import {RefObject, useEffect, useState} from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Feature, Point} from 'geojson';
-import {createMapLines, MapLine} from '@atb/screens/TripDetails/Map/utils';
+import {createMapLines} from '@atb/screens/TripDetails/Map/utils';
 import {
   findClickedStopPlace,
-  getCoordinatesFromFeatureOrCoordinates,
   isCoordinates,
   mapPositionToCoordinates,
 } from '@atb/components/map/utils';
@@ -28,50 +27,44 @@ export const useDecideCameraFocusMode = (
   const [cameraFocusMode, setCameraFocusMode] = useState<CameraFocusModeType>();
   useEffect(() => {
     (async function () {
-      setCameraFocusMode(undefined);
+      console.log('RUNNING DECIDE', selectedFeatureOrCoords);
       if (!selectedFeatureOrCoords) {
+        setCameraFocusMode(undefined);
         return;
       }
+
+      if (isCoordinates(selectedFeatureOrCoords)) {
+        // Will be coordinates when the user pressed location arrow
+        setCameraFocusMode({
+          mode: 'coordinates',
+          coordinates: selectedFeatureOrCoords,
+        });
+        return;
+      }
+
+      const clickedFeature = selectedFeatureOrCoords;
 
       switch (selectionMode) {
         case 'ExploreLocation': {
           setCameraFocusMode({
             mode: 'coordinates',
-            coordinates: getCoordinatesFromFeatureOrCoordinates(
-              selectedFeatureOrCoords,
+            coordinates: mapPositionToCoordinates(
+              clickedFeature.geometry.coordinates,
             ),
           });
           break;
         }
         case 'ExploreStops': {
-          if (isCoordinates(selectedFeatureOrCoords)) {
-            setCameraFocusMode({
-              mode: 'coordinates',
-              coordinates: selectedFeatureOrCoords,
-            });
-          } else {
-            const stopPlaceFeature = await findClickedStopPlace(
-              selectedFeatureOrCoords,
-              mapViewRef,
-            );
-            if (fromCoords && stopPlaceFeature) {
-              const stopPlaceCoordinates = mapPositionToCoordinates(
-                stopPlaceFeature.geometry.coordinates,
-              );
-              const mapLines = await fetchMapLines(
-                fromCoords,
-                stopPlaceCoordinates,
-              );
-              if (mapLines) {
-                setCameraFocusMode({mode: 'map-lines', mapLines});
-                return;
-              }
-            }
-            if (stopPlaceFeature) {
-              console.log("STOPPLACEFEATURE", stopPlaceFeature)
-              console.log("STOPPLACEFEATURE", stopPlaceFeature.bbox)
-              setCameraFocusMode({mode: 'stop-place', stopPlaceFeature});
-            }
+          const stopPlaceFeature = await findClickedStopPlace(
+            clickedFeature,
+            mapViewRef,
+          );
+
+          const mapLines = await fetchMapLines(fromCoords, stopPlaceFeature);
+          if (mapLines) {
+            setCameraFocusMode({mode: 'map-lines', mapLines, stopPlaceFeature});
+          } else if (stopPlaceFeature) {
+            setCameraFocusMode({mode: 'stop-place', stopPlaceFeature});
           }
         }
       }
@@ -81,17 +74,21 @@ export const useDecideCameraFocusMode = (
 };
 
 const fetchMapLines = async (
-  fromCoordinates: Coordinates,
-  toCoordinates: Coordinates,
+  fromCoords?: Coordinates,
+  stopPlaceFeature?: Feature<Point>,
 ) => {
+  if (!fromCoords || !stopPlaceFeature) return undefined;
+  const stopPlaceCoords = mapPositionToCoordinates(
+    stopPlaceFeature.geometry.coordinates,
+  );
   const result = await tripsSearch({
     from: {
       name: 'From Position',
-      coordinates: fromCoordinates,
+      coordinates: fromCoords,
     },
     to: {
       name: 'To Position',
-      coordinates: toCoordinates,
+      coordinates: stopPlaceCoords,
     },
     arriveBy: false,
     modes: {directMode: StreetMode.Foot},

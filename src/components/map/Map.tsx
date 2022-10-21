@@ -43,11 +43,7 @@ const Map = (props: MapProps) => {
   );
 
   const {mapLines, selectedCoordinates, onMapClick} =
-    useMapSelectionChangeEffect(
-      props,
-      mapViewRef,
-      mapCameraRef,
-    );
+    useMapSelectionChangeEffect(props, mapViewRef, mapCameraRef);
 
   return (
     <View style={styles.container}>

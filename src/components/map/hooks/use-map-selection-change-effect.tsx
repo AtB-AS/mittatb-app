@@ -1,5 +1,4 @@
-import {Coordinates} from '@atb/screens/TripDetails/Map/types';
-import React, {RefObject, useState} from 'react';
+import React, {RefObject, useState, useEffect} from 'react';
 import {getCoordinatesFromFeatureOrCoordinates} from '@atb/components/map/utils';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {useGeolocationState} from '@atb/GeolocationContext';
@@ -12,7 +11,7 @@ import {useUpdateBottomSheetWhenSelectedCoordsChanges} from './use-update-bottom
  * This is a custom hook handling all effects triggered when the user clicks the
  * map, whether it is finding map lines, opening bottom sheet, moving camera
  * focus, and so on. As such this hook is quite complex, but it has the benefit
- * of encapsulating the complexity so it doesn't affect the Map-component.
+ * of encapsulating the complexity, so it doesn't affect the Map-component.
  *
  * To simplify this a bit the logic is drawn out into smaller custom hooks that
  * can be inspected when necessary.
@@ -33,10 +32,13 @@ export const useMapSelectionChangeEffect = (
     selectedFeatureOrCoords,
     mapViewRef,
   );
+  useEffect(() => {
+    console.log('CAMERA FOCUS MODE', cameraFocusMode);
+  }, [cameraFocusMode]);
   useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef);
   useUpdateBottomSheetWhenSelectedCoordsChanges(
     mapProps,
-    selectedFeatureOrCoords,
+    cameraFocusMode,
     mapViewRef,
     () => setSelectedFeatureOrCoords(undefined),
   );

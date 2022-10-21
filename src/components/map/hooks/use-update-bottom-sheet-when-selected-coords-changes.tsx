@@ -1,4 +1,8 @@
-import {FeatureOrCoordinates, MapProps} from '@atb/components/map/types';
+import {
+  CameraFocusModeType,
+  FeatureOrCoordinates,
+  MapProps,
+} from '@atb/components/map/types';
 import React, {RefObject, useEffect} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
@@ -8,7 +12,7 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 
 export const useUpdateBottomSheetWhenSelectedCoordsChanges = (
   mapProps: MapProps,
-  featureOrCoords: FeatureOrCoordinates | undefined,
+  cameraFocusMode: CameraFocusModeType | undefined,
   mapViewRef: RefObject<MapboxGL.MapView>,
   closeCallback: () => void,
 ) => {
@@ -25,22 +29,16 @@ export const useUpdateBottomSheetWhenSelectedCoordsChanges = (
     (async function () {
       if (!isFocused) return;
       if (mapProps.selectionMode !== 'ExploreStops') return;
-      if (!featureOrCoords || isCoordinates(featureOrCoords)) {
-        closeWithCallback();
-        return;
-      }
 
-      const stopPlaceFeature = await findClickedStopPlace(
-        featureOrCoords,
-        mapViewRef,
-      );
-
-      if (stopPlaceFeature) {
+      if (
+        cameraFocusMode?.mode === 'stop-place' ||
+        cameraFocusMode?.mode === 'map-lines'
+      ) {
         openBottomSheet(
           () => (
             <DeparturesDialogSheet
               close={closeWithCallback}
-              stopPlaceFeature={stopPlaceFeature}
+              stopPlaceFeature={cameraFocusMode.stopPlaceFeature}
               navigateToDetails={(...params) => {
                 closeBottomSheet();
                 mapProps.navigateToDetails(...params);
@@ -58,5 +56,5 @@ export const useUpdateBottomSheetWhenSelectedCoordsChanges = (
         closeWithCallback();
       }
     })();
-  }, [featureOrCoords, isFocused]);
+  }, [cameraFocusMode, isFocused]);
 };
