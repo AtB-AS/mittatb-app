@@ -49,7 +49,7 @@ export default function QuaySection({
   navigateToDetails,
   stopPlace,
   showOnlyFavorites,
-  allowFavouriteSelection
+  allowFavouriteSelection,
 }: QuaySectionProps): JSX.Element {
   const {favoriteDepartures} = useFavorites();
   const [isMinimized, setIsMinimized] = useState(false);

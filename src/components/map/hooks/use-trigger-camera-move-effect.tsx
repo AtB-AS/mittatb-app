@@ -25,6 +25,12 @@ type BoundingBox = {
 
 const DEFAULT_PADDING = 100;
 
+/**
+ * Trigger camera move based on the camera focus mode. When the camera focus
+ * mode is 'coordinates' the camera movement happens instantly, but when the
+ * camera focus mode is 'stop-place' or 'map-lines' it will wait until the
+ * bottom sheet is shown.
+ */
 export const useTriggerCameraMoveEffect = (
   cameraFocusMode: CameraFocusModeType | undefined,
   mapCameraRef: RefObject<MapboxGL.Camera>,
@@ -37,7 +43,6 @@ export const useTriggerCameraMoveEffect = (
 
     switch (cameraFocusMode.mode) {
       case 'map-lines': {
-        // Only trigger this effect after the bottom sheet has opened
         if (!bottomSheetHeight) return;
         moveCameraToMapLines(
           cameraFocusMode.mapLines,
@@ -47,7 +52,6 @@ export const useTriggerCameraMoveEffect = (
         break;
       }
       case 'stop-place': {
-        // Only trigger this effect after the bottom sheet has opened
         if (!bottomSheetHeight) return;
         moveCameraToStopPlace(
           cameraFocusMode.stopPlaceFeature,

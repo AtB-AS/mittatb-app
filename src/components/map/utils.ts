@@ -91,17 +91,14 @@ export const getFeaturesAtCoordinates = async (
     coords.longitude,
     coords.latitude,
   ]);
-  console.log("FOUND POINT", point);
   if (Platform.OS == 'android') {
     // Necessary hack (https://github.com/react-native-mapbox-gl/maps/issues/1085)
     point = point.map((p) => p * PixelRatio.get());
   }
-  console.log("MAPPED POINT", point);
   const featuresAtPoint = await mapViewRef.current.queryRenderedFeaturesAtPoint(
     point,
     filter,
     layerIds,
   );
-  console.log("FOUND FEATURES", featuresAtPoint)
   return featuresAtPoint?.features;
 };

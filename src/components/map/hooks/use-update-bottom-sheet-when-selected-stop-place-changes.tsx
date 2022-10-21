@@ -1,18 +1,19 @@
-import {
-  CameraFocusModeType,
-  FeatureOrCoordinates,
-  MapProps,
-} from '@atb/components/map/types';
+import {MapProps} from '@atb/components/map/types';
 import React, {RefObject, useEffect} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import DeparturesDialogSheet from '@atb/components/map/components/DeparturesDialogSheet';
-import {findClickedStopPlace, isCoordinates} from '@atb/components/map/utils';
 import MapboxGL from '@react-native-mapbox-gl/maps';
+import {Feature, Point} from 'geojson';
 
-export const useUpdateBottomSheetWhenSelectedCoordsChanges = (
+/**
+ * Open or close the bottom sheet based on the selected stop place. Will also
+ * close the bottom sheet when navigation to other places, but it will be
+ * reopened when the `isFocused` value becomes `true`.
+ */
+export const useUpdateBottomSheetWhenSelectedStopPlaceChanges = (
   mapProps: MapProps,
-  cameraFocusMode: CameraFocusModeType | undefined,
+  stopPlaceFeature: Feature<Point> | undefined,
   mapViewRef: RefObject<MapboxGL.MapView>,
   closeCallback: () => void,
 ) => {
@@ -30,15 +31,12 @@ export const useUpdateBottomSheetWhenSelectedCoordsChanges = (
       if (!isFocused) return;
       if (mapProps.selectionMode !== 'ExploreStops') return;
 
-      if (
-        cameraFocusMode?.mode === 'stop-place' ||
-        cameraFocusMode?.mode === 'map-lines'
-      ) {
+      if (stopPlaceFeature) {
         openBottomSheet(
           () => (
             <DeparturesDialogSheet
               close={closeWithCallback}
-              stopPlaceFeature={cameraFocusMode.stopPlaceFeature}
+              stopPlaceFeature={stopPlaceFeature}
               navigateToDetails={(...params) => {
                 closeBottomSheet();
                 mapProps.navigateToDetails(...params);
@@ -56,5 +54,5 @@ export const useUpdateBottomSheetWhenSelectedCoordsChanges = (
         closeWithCallback();
       }
     })();
-  }, [cameraFocusMode, isFocused]);
+  }, [stopPlaceFeature, isFocused]);
 };

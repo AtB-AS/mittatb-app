@@ -4,12 +4,11 @@ import {
   MapSelectionMode,
 } from '@atb/components/map/types';
 import {Coordinates} from '@atb/screens/TripDetails/Map/types';
-import {RefObject, useEffect, useState} from 'react';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import {useEffect, useState} from 'react';
 import {Feature, Point} from 'geojson';
 import {createMapLines} from '@atb/screens/TripDetails/Map/utils';
 import {
-  findClickedStopPlace,
+  getCoordinatesFromFeatureOrCoordinates,
   isCoordinates,
   mapPositionToCoordinates,
 } from '@atb/components/map/utils';
@@ -18,16 +17,25 @@ import {StreetMode} from '@entur/sdk/lib/journeyPlanner/types';
 
 const MAX_LIMIT_TO_SHOW_WALKING_TRIP = 5000;
 
+/**
+ * Deciding the camera focus mode. The camera focus mode also returns the values
+ * which the camera should focus on, like the coordinates, stop place or map
+ * lines.
+ *
+ * Why is there a split between the "decide camera focus" and "trigger camera
+ * move" hooks? This is both for simplifying the code a bit, since it was pretty
+ * long and hard to read before it was splitt up. In addition, we need to return
+ * the map lines back from the hook so the Map-component can draw them.
+ */
 export const useDecideCameraFocusMode = (
   selectionMode: MapSelectionMode,
   fromCoords: Coordinates | undefined,
   selectedFeatureOrCoords: FeatureOrCoordinates | undefined,
-  mapViewRef: RefObject<MapboxGL.MapView>,
+  stopPlaceFeature: Feature<Point> | undefined,
 ) => {
   const [cameraFocusMode, setCameraFocusMode] = useState<CameraFocusModeType>();
   useEffect(() => {
     (async function () {
-      console.log('RUNNING DECIDE', selectedFeatureOrCoords);
       if (!selectedFeatureOrCoords) {
         setCameraFocusMode(undefined);
         return;
@@ -42,34 +50,27 @@ export const useDecideCameraFocusMode = (
         return;
       }
 
-      const clickedFeature = selectedFeatureOrCoords;
-
       switch (selectionMode) {
         case 'ExploreLocation': {
           setCameraFocusMode({
             mode: 'coordinates',
-            coordinates: mapPositionToCoordinates(
-              clickedFeature.geometry.coordinates,
+            coordinates: getCoordinatesFromFeatureOrCoordinates(
+              selectedFeatureOrCoords,
             ),
           });
           break;
         }
         case 'ExploreStops': {
-          const stopPlaceFeature = await findClickedStopPlace(
-            clickedFeature,
-            mapViewRef,
-          );
-
           const mapLines = await fetchMapLines(fromCoords, stopPlaceFeature);
           if (mapLines) {
-            setCameraFocusMode({mode: 'map-lines', mapLines, stopPlaceFeature});
+            setCameraFocusMode({mode: 'map-lines', mapLines});
           } else if (stopPlaceFeature) {
             setCameraFocusMode({mode: 'stop-place', stopPlaceFeature});
           }
         }
       }
     })();
-  }, [selectedFeatureOrCoords]);
+  }, [selectedFeatureOrCoords, stopPlaceFeature]);
   return cameraFocusMode;
 };
 

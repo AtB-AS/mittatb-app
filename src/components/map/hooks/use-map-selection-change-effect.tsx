@@ -1,17 +1,19 @@
-import React, {RefObject, useState, useEffect} from 'react';
+import React, {RefObject, useState} from 'react';
 import {getCoordinatesFromFeatureOrCoordinates} from '@atb/components/map/utils';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {FeatureOrCoordinates, MapProps} from '../types';
 import {useTriggerCameraMoveEffect} from './use-trigger-camera-move-effect';
 import {useDecideCameraFocusMode} from './use-decide-camera-focus-mode';
-import {useUpdateBottomSheetWhenSelectedCoordsChanges} from './use-update-bottom-sheet-when-selected-coords-changes';
+import {useUpdateBottomSheetWhenSelectedStopPlaceChanges} from './use-update-bottom-sheet-when-selected-stop-place-changes';
+import {useFindSelectedStopPlace} from '@atb/components/map/hooks/use-find-selected-stop-place';
 
 /**
  * This is a custom hook handling all effects triggered when the user clicks the
- * map, whether it is finding map lines, opening bottom sheet, moving camera
- * focus, and so on. As such this hook is quite complex, but it has the benefit
- * of encapsulating the complexity, so it doesn't affect the Map-component.
+ * map, whether it is finding stop place, finding map lines, opening bottom
+ * sheet, moving camera focus, and so on. As such everything this hook handles
+ * are quite complex, but it has the benefit of encapsulating the complexity, so
+ * it doesn't leak out to the Map-component.
  *
  * To simplify this a bit the logic is drawn out into smaller custom hooks that
  * can be inspected when necessary.
@@ -26,19 +28,21 @@ export const useMapSelectionChangeEffect = (
   const {location: currentLocation} = useGeolocationState();
   const [fromCoords, setFromCoords] = useState(currentLocation?.coordinates);
 
+  const selectedStopPlaceFeature = useFindSelectedStopPlace(
+    mapProps.selectionMode,
+    selectedFeatureOrCoords,
+    mapViewRef,
+  );
   const cameraFocusMode = useDecideCameraFocusMode(
     mapProps.selectionMode,
     fromCoords,
     selectedFeatureOrCoords,
-    mapViewRef,
+    selectedStopPlaceFeature,
   );
-  useEffect(() => {
-    console.log('CAMERA FOCUS MODE', cameraFocusMode);
-  }, [cameraFocusMode]);
   useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef);
-  useUpdateBottomSheetWhenSelectedCoordsChanges(
+  useUpdateBottomSheetWhenSelectedStopPlaceChanges(
     mapProps,
-    cameraFocusMode,
+    selectedStopPlaceFeature,
     mapViewRef,
     () => setSelectedFeatureOrCoords(undefined),
   );

@@ -41,10 +41,10 @@ export type MapProps = {
 );
 
 export type FeatureOrCoordinates = Feature<Point> | Coordinates;
+
 export type CameraFocusModeType =
   | {
       mode: 'map-lines';
-      stopPlaceFeature: Feature<Point>;
       mapLines: MapLine[];
     }
   | {
