@@ -26,7 +26,7 @@ class ViewModel: ObservableObject {
         quayGroup?.group.first?.lineInfo
     }
 
-    var lineName: String {
+    var lineName: String? {
         lineInfo?.lineName
     }
 
