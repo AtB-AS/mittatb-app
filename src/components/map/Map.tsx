@@ -97,7 +97,7 @@ const Map = (props: MapProps) => {
             <PositionArrow
               onPress={() => {
                 onMapClick(currentLocation.coordinates);
-                flyToLocation(currentLocation.coordinates, 750, mapCameraRef);
+                flyToLocation(currentLocation.coordinates, mapCameraRef);
               }}
             />
           )}

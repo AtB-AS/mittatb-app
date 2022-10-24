@@ -24,7 +24,9 @@ type BoundingBox = {
 };
 
 const DEFAULT_PADDING = 100;
-const DEFAULT_PADDING_DISPLACEMENT = 0.0003;
+
+// Move coordinates 0.003 represents around 0.3664 km in radius and a diagonal distance between northwest and southeast of 0.7328 km approximately
+const DEFAULT_PADDING_DISPLACEMENT = 0.003;
 
 /**
  * Trigger camera move based on the camera focus mode. When the camera focus
@@ -120,7 +122,7 @@ const moveCameraToFeatureOrCoordinates = (
 ) => {
   const selectedCoordinates =
     getCoordinatesFromFeatureOrCoordinates(featureOrCoordinates);
-  flyToLocation(selectedCoordinates, 750, mapCameraRef);
+  flyToLocation(selectedCoordinates, mapCameraRef);
 };
 
 const moveCameraToStopPlace = (
