@@ -19,15 +19,19 @@ struct Provider: TimelineProvider {
     }
 
     func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
+      
+        let date = Calendar.current.date(byAdding: .minute, value: 5, to: Date())!
+
+        //Get favorites, if none return empty Entry
         guard let favoriteDepartures = Manifest.data?.departures else {
+            let timeline = Timeline(entries: [Entry(date: date, quayGroup: nil)], policy: .atEnd)
+            completion(timeline)
             return
         }
 
-        // TODO: if no favorites
         let closestDeparture = getClosestDeparture(favoriteDepartures)
 
-        let date = Calendar.current.date(byAdding: .minute, value: 5, to: Date())!
-
+        //fetch departure data for the closest favorite
         apiService.fetchFavoriteDepartures(favorite: closestDeparture) { (result: Result<QuayGroup, Error>) in
             switch result {
             case let .success(object):
