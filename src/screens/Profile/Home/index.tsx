@@ -41,7 +41,7 @@ import {ProfileScreenProps} from '../types';
 import {destructiveAlert} from './utils';
 import useIsLoading from '@atb/utils/use-is-loading';
 import {useNewFrontpage} from '@atb/screens/Dashboard/use-new-frontpage';
-import {useMapPage} from '@atb/components/map/use-map-page';
+import {useMapPage} from '@atb/components/map/hooks/use-map-page';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();

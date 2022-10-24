@@ -14,6 +14,7 @@ import {useStopPlaceData} from './state/stop-place-state';
 
 type StopPlaceViewProps = {
   stopPlace: Place;
+  showTimeNavigation?: boolean;
   navigateToQuay: (quay: Quay) => void;
   navigateToDetails: (
     serviceJourneyId: string,
@@ -21,21 +22,26 @@ type StopPlaceViewProps = {
     date?: string,
     fromQuayId?: string,
   ) => void;
+  allowFavouriteSelection: boolean;
   searchTime: SearchTime;
   setSearchTime: (searchTime: SearchTime) => void;
   showOnlyFavorites: boolean;
   setShowOnlyFavorites: (enabled: boolean) => void;
+  isFocused: boolean;
   testID?: string;
 };
 
 export default function StopPlaceView({
   stopPlace,
+  showTimeNavigation = true,
   navigateToQuay,
   navigateToDetails,
+  allowFavouriteSelection,
   searchTime,
   setSearchTime,
   showOnlyFavorites,
   setShowOnlyFavorites,
+  isFocused,
   testID,
 }: StopPlaceViewProps) {
   const styles = useStyles();
@@ -43,6 +49,7 @@ export default function StopPlaceView({
   const {state, refresh} = useStopPlaceData(
     stopPlace,
     showOnlyFavorites,
+    isFocused,
     searchTime?.option !== 'now' ? searchTime.date : undefined,
   );
   const quayListData: SectionListData<Quay>[] | undefined = stopPlace.quays
@@ -78,17 +85,25 @@ export default function StopPlaceView({
       {quayListData && (
         <SectionList
           ListHeaderComponent={
-            <View style={styles.header}>
-              {placeHasFavorites && (
+            <View
+              style={
+                showTimeNavigation
+                  ? styles.headerWithNavigation
+                  : styles.headerWithoutNavigation
+              }
+            >
+              {allowFavouriteSelection && placeHasFavorites && (
                 <FavoriteToggle
                   enabled={showOnlyFavorites}
                   setEnabled={setShowOnlyFavorites}
                 />
               )}
-              <DateNavigation
-                searchTime={searchTime}
-                setSearchTime={setSearchTime}
-              />
+              {showTimeNavigation && (
+                <DateNavigation
+                  searchTime={searchTime}
+                  setSearchTime={setSearchTime}
+                />
+              )}
             </View>
           }
           refreshControl={
@@ -110,6 +125,7 @@ export default function StopPlaceView({
                 testID={'quaySection' + index}
                 stopPlace={stopPlace}
                 showOnlyFavorites={showOnlyFavorites}
+                allowFavouriteSelection={allowFavouriteSelection}
               />
               {index === 0 && (
                 <Feedback
@@ -149,9 +165,13 @@ function publicCodeCompare(a?: string, b?: string): number {
   // Otherwise compare as strings (e.g. K1 < K2)
   return a.localeCompare(b);
 }
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  header: {
+  headerWithNavigation: {
     paddingVertical: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
+  },
+  headerWithoutNavigation: {
     marginHorizontal: theme.spacings.medium,
   },
 }));

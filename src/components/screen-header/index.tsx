@@ -171,6 +171,8 @@ export default ScreenHeader;
 const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: theme.spacings.medium,
+    borderTopLeftRadius: theme.border.radius.regular,
+    borderTopRightRadius: theme.border.radius.regular,
   },
   headerTitle: {alignItems: 'center'},
   buttons: {

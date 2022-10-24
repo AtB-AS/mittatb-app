@@ -36,6 +36,7 @@ type EstimatedCallItemProps = {
     fromQuayId?: string,
     isTripCancelled?: boolean,
   ) => void;
+  allowFavouriteSelection: boolean;
 };
 
 export default function EstimatedCallItem({
@@ -44,6 +45,7 @@ export default function EstimatedCallItem({
   quay,
   stopPlace,
   navigateToDetails,
+  allowFavouriteSelection,
 }: EstimatedCallItemProps): JSX.Element {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -101,7 +103,7 @@ export default function EstimatedCallItem({
           </ThemeText>
         </View>
       </TouchableOpacity>
-      {lineName && lineNumber && (
+      {allowFavouriteSelection && lineName && lineNumber && (
         <ToggleFavouriteDeparture
           line={{...line, lineNumber: lineNumber, lineName: lineName}}
           quay={quay}

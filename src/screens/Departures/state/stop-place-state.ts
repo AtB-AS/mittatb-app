@@ -7,11 +7,9 @@ import {UserFavoriteDepartures} from '@atb/favorites/types';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {animateNextChange} from '@atb/utils/animation';
 import useInterval from '@atb/utils/use-interval';
-import {useIsFocused} from '@react-navigation/native';
 import {differenceInMinutes} from 'date-fns';
 import {flatMap} from 'lodash';
 import {useCallback, useEffect} from 'react';
-import {LayoutAnimation} from 'react-native';
 import useReducerWithSideEffects, {
   NoUpdate,
   ReducerWithSideEffects,
@@ -253,12 +251,12 @@ const reducer: ReducerWithSideEffects<
 export function useStopPlaceData(
   stopPlace: StopPlace,
   showOnlyFavorites: boolean,
+  isFocused: boolean,
   startTime?: string,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
-  const isFocused = useIsFocused();
   const {favoriteDepartures} = useFavorites();
 
   const refresh = useCallback(

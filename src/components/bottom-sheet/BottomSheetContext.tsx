@@ -32,7 +32,11 @@ type BottomSheetState = {
     contentFunction: BottomSheetContentFunction,
     /** Optional ref to component which should be focused on sheet close */
     closeRef?: RefObject<any>,
+    useBackdrop?: boolean,
   ) => void;
+  isOpen: () => boolean;
+  close: () => void;
+  height: number;
 };
 
 const BottomSheetContext = createContext<BottomSheetState | undefined>(
@@ -43,6 +47,7 @@ const BottomSheetProvider: React.FC = ({children}) => {
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isBackdropEnabled, setBackdropEnabled] = useState(true);
   const [contentFunction, setContentFunction] = useState<
     (close: () => void, focusRef: RefObject<any>) => ReactNode
   >(() => () => null);
@@ -73,9 +78,11 @@ const BottomSheetProvider: React.FC = ({children}) => {
   const open = (
     contentFunction: (close: () => void, focusRef: RefObject<any>) => ReactNode,
     closeRef?: RefObject<any>,
+    useBackdrop: boolean = true,
   ) => {
     setContentFunction(() => contentFunction);
     setCloseRef(closeRef);
+    setBackdropEnabled(useBackdrop);
     setIsOpen(true);
     setTimeout(() => giveFocus(focusRef), 300);
   };
@@ -102,8 +109,16 @@ const BottomSheetProvider: React.FC = ({children}) => {
   const bottomSheet = useMemo(
     () => (
       <>
-        <Backdrop animatedOffset={animatedOffset} />
-        <ClickableBackground isOpen={isOpen} close={close} height={height} />
+        {isBackdropEnabled && (
+          <>
+            <Backdrop animatedOffset={animatedOffset} />
+            <ClickableBackground
+              isOpen={isOpen}
+              close={close}
+              height={height}
+            />
+          </>
+        )}
         <AnimatedBottomSheet
           animatedOffset={animatedOffset}
           onLayout={onLayout}
@@ -117,6 +132,9 @@ const BottomSheetProvider: React.FC = ({children}) => {
 
   const state = {
     open,
+    close,
+    isOpen: () => isOpen,
+    height,
   };
 
   return (

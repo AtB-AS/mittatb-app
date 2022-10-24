@@ -2,10 +2,10 @@ import {Add, Subtract} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations/';
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import shadows from './shadows';
 import Button from '@atb/components/button';
-import insets from '@atb/utils/insets';
+
 export type Props = {
   zoomIn(): void;
   zoomOut(): void;

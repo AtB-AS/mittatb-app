@@ -12,9 +12,8 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Feature} from 'geojson';
 import React, {useMemo, useRef} from 'react';
 import {View} from 'react-native';
-
-import LocationBar from '@atb/components/map/LocationBar';
-import useSelectedFeatureChangeEffect from './use-selected-feature-change-effect';
+import LocationBar from '@atb/components/map/components/LocationBar';
+import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import MapRoute from '@atb/screens/TripDetails/Map/MapRoute';
 import {
   flyToLocation,
@@ -22,29 +21,13 @@ import {
   zoomIn,
   zoomOut,
 } from '@atb/components/map/utils';
-import {GeoLocation, Location, SearchLocation} from '@atb/favorites/types';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
 import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
+import {MapProps} from './types';
 
-/**
- * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
- * should behave
- *  - ExploreStops: If only the Stop Places (Bus, Trams stops etc.) should be
- *    interactable
- *  - ExploreLocation: If every selected location should be interactable. It
- *    also shows the Location bar on top of the Map to show the currently
- *    selected location
- */
-export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
-
-type MapProps = {
-  initialLocation?: Location;
-  selectionMode: MapSelectionMode;
-  onLocationSelect?: (selectedLocation?: GeoLocation | SearchLocation) => void;
-};
-
-const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
+const Map = (props: MapProps) => {
+  const {initialLocation} = props;
   const {location: currentLocation} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
@@ -60,19 +43,14 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
   );
 
   const {mapLines, selectedCoordinates, onMapClick} =
-    useSelectedFeatureChangeEffect(
-      selectionMode,
-      startingCoordinates,
-      mapViewRef,
-      mapCameraRef,
-    );
+    useMapSelectionChangeEffect(props, mapViewRef, mapCameraRef);
 
   return (
     <View style={styles.container}>
-      {selectionMode === 'ExploreLocation' && (
+      {props.selectionMode === 'ExploreLocation' && (
         <LocationBar
           coordinates={selectedCoordinates || startingCoordinates}
-          onSelect={onLocationSelect}
+          onSelect={props.onLocationSelect}
         />
       )}
       <View style={{flex: 1}}>
@@ -81,7 +59,7 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
           style={{
             flex: 1,
           }}
-          onPress={(feature: Feature) => {
+          onPress={async (feature: Feature) => {
             if (isFeaturePoint(feature)) {
               onMapClick(feature);
             }
@@ -99,7 +77,7 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
           />
           {mapLines && <MapRoute lines={mapLines} />}
           <MapboxGL.UserLocation showsUserHeadingIndicator />
-          {selectionMode === 'ExploreLocation' && selectedCoordinates && (
+          {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
             <MapboxGL.PointAnnotation
               id={'selectionPin'}
               coordinate={[
@@ -119,7 +97,7 @@ const Map = ({initialLocation, selectionMode, onLocationSelect}: MapProps) => {
             <PositionArrow
               onPress={() => {
                 onMapClick(currentLocation.coordinates);
-                flyToLocation(currentLocation.coordinates, 750, mapCameraRef);
+                flyToLocation(currentLocation.coordinates, mapCameraRef);
               }}
             />
           )}

@@ -155,7 +155,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
   }, [previousPaymentMethod]);
 
   return (
-    <BottomSheetContainer fullHeight={true}>
+    <BottomSheetContainer fullHeight>
       <View style={{flex: 1}}>
         <ScreenHeaderWithoutNavigation
           title={t(SelectPaymentMethodTexts.header.text)}
