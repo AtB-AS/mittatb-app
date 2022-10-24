@@ -25,6 +25,8 @@ struct DepartureWidgetEntryView: View {
                         HStack {
                             Text(lineNumber)
                             Text(lineName)
+                              .lineLimit(1)
+
                             Spacer()
                         }
                     }
@@ -37,7 +39,7 @@ struct DepartureWidgetEntryView: View {
 
                         if time.distance(to: Date()) < 0 {
                             if time.distance(to: Date()) > -600 {
-                                Text(time, style: .relative)
+                              Text(time, style: .relative)
                                     .background(.gray)
                                     .foregroundColor(.white)
                                     .cornerRadius(5)
@@ -50,9 +52,10 @@ struct DepartureWidgetEntryView: View {
                         }
                     }
                 }
+              Spacer()
             }
         } else {
-            // NOTE: Use localization!
+            // TODO: Base language on preference from the app
             Text("Du må velge en favorittavgang")
         }
     }

@@ -28,7 +28,7 @@ enum AppEndPoint: String {
             return nil
         }
 
-        URL(string: path)
+        return URL(string: path)
     }
 
     var method: String {

@@ -37,7 +37,7 @@ class ViewModel: ObservableObject {
     /// Returns the times of the current departure
     var departures: [Date] {
         var times: [Date] = []
-        for departure in quayGroup?.group[0].departures.prefix(upTo: 2) ?? [] {
+        for departure in quayGroup?.group[0].departures.prefix(upTo: 3) ?? [] {
             times.append(departure.aimedTime)
         }
         return times
