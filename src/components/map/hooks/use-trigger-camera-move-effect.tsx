@@ -131,13 +131,30 @@ const moveCameraToStopPlace = (
   const stopPlaceCoordinates = mapPositionToCoordinates(
     stopPlaceFeature.geometry.coordinates,
   );
+  moveCameraToCoordinate(mapCameraRef, stopPlaceCoordinates, paddingBottom);
+};
+
+/**
+ * Move the map camera to a bounded area based on the coordinates and a displacement
+ * to the northwest and southwest! forming a box where the coordinate is the centre.
+ * @param mapCameraRef
+ * @param centerCoordinate
+ * @param paddingBottom
+ * @param displacement A distance for displacement in a coordinates system
+ */
+export const moveCameraToCoordinate = (
+  mapCameraRef: RefObject<MapboxGL.Camera>,
+  centerCoordinate: Coordinates,
+  paddingBottom: number = DEFAULT_PADDING,
+  displacement: number = DEFAULT_PADDING_DISPLACEMENT,
+) => {
   const northEast: Coordinates = {
-    longitude: stopPlaceCoordinates.longitude - DEFAULT_PADDING_DISPLACEMENT,
-    latitude: stopPlaceCoordinates.latitude - DEFAULT_PADDING_DISPLACEMENT,
+    longitude: centerCoordinate.longitude - displacement,
+    latitude: centerCoordinate.latitude - displacement,
   };
   const southWest: Coordinates = {
-    longitude: stopPlaceCoordinates.longitude + DEFAULT_PADDING_DISPLACEMENT,
-    latitude: stopPlaceCoordinates.latitude + DEFAULT_PADDING_DISPLACEMENT,
+    longitude: centerCoordinate.longitude + displacement,
+    latitude: centerCoordinate.latitude + displacement,
   };
   fitBounds(northEast, southWest, mapCameraRef, [
     DEFAULT_PADDING,
