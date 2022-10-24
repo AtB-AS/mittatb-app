@@ -30,48 +30,57 @@ struct QuayInfo: Codable {
     let id: String
     let name: String
     let description: String?
+    let publicCode: String
     let latitude: Double
     let longitude: Double
-    let situations: [String]
 }
 
 struct DepartureGroup: Codable {
-    let lineInfo: DepartureLine?
+    let lineInfo: DepartureLineInfo
     let departures: [DepartureTime]
 }
 
-struct DepartureLine: Codable {
-    let id: String
+struct DepartureLineInfo: Codable {
     let lineId: String
-    let lineName: String
-    let lineLineNumber: String
-    let lineTransportationMode: String
-    let lineTransportationSubMode: String
-    let longitude: Double
-    let latitude: Double
-    let quayName: String
-    let quayPublicCode: String
+    let lineName: String?
+    let lineNumber: String
+    let transportMode: String
+    let transportSubmode: String
     let quayId: String
-    let stopId: String
-
-    var location: CLLocation {
-        CLLocation(latitude: latitude, longitude: longitude)
-    }
 }
 
-struct DepartureTime: Codable, Identifiable {
+struct DepartureTime: Codable {
     let time: Date
     let aimedTime: Date
     let predictionInaccurate: Bool
     let realtime: Bool
     let situations: [String]
     let serviceJourneyId: String
-    var id: UUID {
-        UUID()
-    }
+  
 }
 
 struct Entry: TimelineEntry {
     let date: Date
     let quayGroup: QuayGroup?
+}
+
+
+//Struct for favorite departures stored on device
+struct FavoriteDeparture: Codable {
+  let id: String
+  let lineId: String
+  let lineName: String?
+  let lineLineNumber: String
+  let lineTransportationMode: String
+  let lineTransportationSubMode: String
+  let longitude: Double
+  let latitude: Double
+  let quayName: String
+  let quayPublicCode: String
+  let quayId: String
+  let stopId: String
+
+  var location: CLLocation {
+      CLLocation(latitude: latitude, longitude: longitude)
+  }
 }

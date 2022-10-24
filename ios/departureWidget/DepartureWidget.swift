@@ -3,33 +3,50 @@ import WidgetKit
 
 struct DepartureWidgetEntryView: View {
     var entry: Provider.Entry
-    // @ObservedObject var viewModel: ViewModel
+    @ObservedObject var viewModel: ViewModel
 
     init(entry: Provider.Entry) {
         self.entry = entry
-        // TODO: Fix `entry.quayGroup`
-        // viewModel = ViewModel(quayGroup: entry.quayGroup!)
+        viewModel = ViewModel(quayGroup: entry.quayGroup)
     }
-
+  
     var body: some View {
-        if entry.quayGroup != nil {
-//        VStack{
-//          HStack{
-//            Text(viewModel.lineNumber)
-//            Text(viewModel.lineName)
-//            Spacer()
-//          }.padding(10)
-//
-//          HStack{
-//            ForEach(viewModel.departures){ departure in
-//              Text(departure.time.ISO8601Format())
-//                .padding(10)
-//                .background(.blue)
-//                .cornerRadius(5)
-//            }
-//          }
-//        }
-            Text("Working!")
+      if viewModel != nil {
+        
+          VStack{
+            HStack{
+              Text(viewModel.quayName)
+                .bold()
+              Spacer()
+            }.padding(5)
+            HStack{
+              Text(viewModel.lineNumber)
+              Text(viewModel.lineName)
+              Spacer()
+            }.padding(5)
+         
+            
+            Divider()
+            
+            HStack{
+              ForEach(viewModel.departures, id: \.self){ time in
+                
+                if(time.distance(to: Date()) > 0 ){
+                  Text(time, style: .relative)
+                    .background(.gray)
+                    .foregroundColor(.white)
+                    .cornerRadius(5)
+                }else{
+                  Text(time, style: .time)
+                    .background(.gray)
+                    .foregroundColor(.white)
+                    .cornerRadius(5)
+                }
+              
+
+              }
+            }
+          }
         } else {
             Text("Du må velge en favorittavgang")
         }

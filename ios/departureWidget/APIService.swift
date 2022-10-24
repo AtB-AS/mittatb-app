@@ -1,7 +1,7 @@
 import Foundation
 
 struct Body: Codable {
-    let favorites: [DepartureLine]
+    let favorites: [FavoriteDeparture]
 }
 
 enum AppEndPoint: String {
@@ -83,7 +83,7 @@ class APIService {
         task.resume()
     }
 
-    func fetchFavoriteDepartures(favorite: DepartureLine, callback: @escaping (Result<DepartureGroup, Error>) -> Void) {
+    func fetchFavoriteDepartures(favorite: FavoriteDeparture, callback: @escaping (Result<QuayGroup, Error>) -> Void) {
         let body = Body(favorites: [favorite])
 
         guard let uploadData = try? JSONEncoder().encode(body) else {
@@ -91,11 +91,10 @@ class APIService {
         }
 
         fetchData(endPoint: .favoriteDepartures, data: uploadData) { (result: Result<DepartureData, Error>) in
-
             switch result {
             case let .success(object):
-                print(object)
-                callback(.success(object.data[0].quays[0].group[0]))
+              print(object)
+              callback(.success(object.data.first!.quays.first!))
             case let .failure(error):
                 print(error)
                 callback(.failure(error))

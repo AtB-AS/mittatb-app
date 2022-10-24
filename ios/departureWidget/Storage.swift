@@ -15,14 +15,15 @@ struct Manifest: Codable {
         case departures = "@ATB_user_departures"
     }
 
-    let departures: [DepartureLine]?
+    let departures: [FavoriteDeparture]?
 
-    // NOTE: Consider using a non-static value, it might be that is no need to cache this!
-    static var data = buildManifest()
+    static var data: Manifest? {
+      buildManifest()
+    }
 
     init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard let departuresJsonString = try container.decodeIfPresent(String.self, forKey: .departures) else {
+        let container = try! decoder.container(keyedBy: CodingKeys.self)
+        guard let departuresJsonString = try! container.decodeIfPresent(String.self, forKey: .departures) else {
             throw ManifestError.invalidType
         }
 
@@ -30,7 +31,7 @@ struct Manifest: Codable {
             throw ManifestError.parsingData
         }
 
-        departures = try JSONDecoder().decode([DepartureLine].self, from: departuresJsonData)
+        departures = try! JSONDecoder().decode([FavoriteDeparture].self, from: departuresJsonData)
     }
 
     private static func buildManifest() -> Manifest? {
@@ -48,6 +49,6 @@ struct Manifest: Codable {
             return nil
         }
 
-        return try? JSONDecoder().decode(Manifest.self, from: Data(jsonData))
+        return try! JSONDecoder().decode(Manifest.self, from: Data(jsonData))
     }
 }
