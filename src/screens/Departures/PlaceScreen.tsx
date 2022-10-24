@@ -147,6 +147,7 @@ export default function PlaceScreen({
           showOnlyFavorites={showOnlyFavorites}
           setShowOnlyFavorites={setShowOnlyFavorites}
           testID="departuresContentView"
+          allowFavouriteSelection={true}
         />
       )}
     </View>

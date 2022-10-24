@@ -30,9 +30,9 @@ type QuaySectionProps = {
     fromQuayId?: string,
     isTripCancelled?: boolean,
   ) => void;
-  onFavouriteClosed?: () => void;
   stopPlace: StopPlace;
   showOnlyFavorites: boolean;
+  allowFavouriteSelection: boolean;
 };
 
 type EstimatedCallRenderItem = {
@@ -47,9 +47,9 @@ export default function QuaySection({
   testID,
   navigateToQuay,
   navigateToDetails,
-  onFavouriteClosed,
   stopPlace,
   showOnlyFavorites,
+  allowFavouriteSelection,
 }: QuaySectionProps): JSX.Element {
   const {favoriteDepartures} = useFavorites();
   const [isMinimized, setIsMinimized] = useState(false);
@@ -124,7 +124,7 @@ export default function QuaySection({
                   quay={quay}
                   stopPlace={stopPlace}
                   navigateToDetails={navigateToDetails}
-                  onFavouriteClosed={onFavouriteClosed}
+                  allowFavouriteSelection={allowFavouriteSelection}
                 />
               </Sections.GenericItem>
             )}
