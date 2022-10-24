@@ -10,7 +10,7 @@ import trackAppState from './diagnostics/trackAppState';
 import ThemeContextProvider from './theme/ThemeContext';
 import FavoritesContextProvider from './favorites/FavoritesContext';
 import SearchHistoryContextProvider from './search-history';
-import {TicketContextProvider} from './tickets';
+import {TicketingContextProvider} from './ticketing';
 import RemoteConfigContextProvider from './RemoteConfigContext';
 import {AuthContextProvider} from './auth';
 import ErrorBoundary from './error-boundary';
@@ -74,7 +74,7 @@ const App = () => {
                         <GeolocationContextProvider>
                           <RemoteConfigContextProvider>
                             <FirestoreConfigurationContextProvider>
-                              <TicketContextProvider>
+                              <TicketingContextProvider>
                                 <MobileTokenContextProvider>
                                   <AppLanguageProvider>
                                     <GlobalMessagesContextProvider>
@@ -86,7 +86,7 @@ const App = () => {
                                     </GlobalMessagesContextProvider>
                                   </AppLanguageProvider>
                                 </MobileTokenContextProvider>
-                              </TicketContextProvider>
+                              </TicketingContextProvider>
                             </FirestoreConfigurationContextProvider>
                           </RemoteConfigContextProvider>
                         </GeolocationContextProvider>

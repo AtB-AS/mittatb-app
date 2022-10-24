@@ -1,3 +1,5 @@
+import {StopPlaceInfo} from '@atb/api/departures/types';
+import {NoFavouriteDeparture} from '@atb/assets/svg/color/images/';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
@@ -10,10 +12,11 @@ import SelectFavouritesBottomSheet from '@atb/screens/Assistant/SelectFavourites
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
+import {Coordinates} from '@entur/sdk';
+import haversineDistance from 'haversine-distance';
 import React, {useEffect, useRef} from 'react';
 import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
 import {useFavoriteDepartureData} from './state';
-import {NoFavouriteDeparture} from '@atb/assets/svg/color/images/';
 
 const DeparturesWidget: React.FC = () => {
   const styles = useStyles();
@@ -34,6 +37,12 @@ const DeparturesWidget: React.FC = () => {
   }
 
   const openAppInfoUrl = () => Linking.openURL(new_favourites_info_url);
+
+  const sortedStopPlaceGroups = location
+    ? state.data?.sort((a, b) =>
+        compareStopsByDistance(a.stopPlace, b.stopPlace, location.coordinates),
+      )
+    : state.data;
 
   return (
     <View style={styles.container}>
@@ -85,25 +94,20 @@ const DeparturesWidget: React.FC = () => {
         <ActivityIndicator size="large" style={styles.activityIndicator} />
       )}
 
-      {state.data?.map((stopPlaceGroup) => {
-        const stopPlaceInfo = stopPlaceGroup.stopPlace;
-        return (
-          <View key={stopPlaceGroup.stopPlace.id}>
-            {stopPlaceGroup.quays.map((quay) => {
-              return (
-                <QuaySection
-                  key={quay.quay.id}
-                  quayGroup={quay}
-                  stop={stopPlaceInfo}
-                  searchDate={searchDate}
-                  locationOrStopPlace={location || undefined}
-                  mode="frontpage"
-                />
-              );
-            })}
-          </View>
-        );
-      })}
+      {sortedStopPlaceGroups?.map((stopPlaceGroup) => (
+        <View key={stopPlaceGroup.stopPlace.id}>
+          {stopPlaceGroup.quays.map((quay) => (
+            <QuaySection
+              key={quay.quay.id}
+              quayGroup={quay}
+              stop={stopPlaceGroup.stopPlace}
+              searchDate={searchDate}
+              locationOrStopPlace={location || undefined}
+              mode="frontpage"
+            />
+          ))}
+        </View>
+      ))}
 
       {!!favoriteDepartures.length && (
         <Button
@@ -119,6 +123,26 @@ const DeparturesWidget: React.FC = () => {
     </View>
   );
 };
+
+function compareStopsByDistance(
+  a: StopPlaceInfo,
+  b: StopPlaceInfo,
+  geolocation: Coordinates,
+) {
+  // Place stops without coordinates last
+  if (!a.latitude || !a.longitude) return -1;
+  if (!b.latitude || !b.longitude) return 1;
+
+  const distanceToA = haversineDistance(
+    {lat: a.latitude, lon: a.longitude},
+    geolocation,
+  );
+  const distanceToB = haversineDistance(
+    {lat: b.latitude, lon: b.longitude},
+    geolocation,
+  );
+  return distanceToA - distanceToB;
+}
 
 export default DeparturesWidget;
 

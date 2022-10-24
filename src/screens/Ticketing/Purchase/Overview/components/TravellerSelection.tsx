@@ -104,13 +104,13 @@ export default function TravellerSelection({
       </View>
       {travellerSelectionMode === 'multiple' ? (
         <MultipleTravellersSelection
-          ticketType={preassignedFareProduct.type}
+          fareProductType={preassignedFareProduct.type}
           {...userCountState}
           userProfilesWithCount={selectableUserProfilesWithCount}
         />
       ) : (
         <SingleTravellerSelection
-          ticketType={preassignedFareProduct.type}
+          fareProductType={preassignedFareProduct.type}
           {...userCountState}
           userProfilesWithCount={selectableUserProfilesWithCount}
         />

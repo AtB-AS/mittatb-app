@@ -4,6 +4,7 @@ import {MapScreenProps} from '@atb/screens/Map/index';
 import {Place, Quay} from '@atb/api/types/departures';
 import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
+import StatusBarOnFocus from '@atb/components/status-bar-on-focus';
 
 export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
@@ -35,10 +36,13 @@ export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
   };
 
   return (
-    <Map
-      selectionMode={'ExploreStops'}
-      navigateToQuay={navigateToQuay}
-      navigateToDetails={navigateToDetails}
-    />
+    <>
+      <StatusBarOnFocus barStyle="dark-content" />
+      <Map
+        selectionMode={'ExploreStops'}
+        navigateToQuay={navigateToQuay}
+        navigateToDetails={navigateToDetails}
+      />
+    </>
   );
 };

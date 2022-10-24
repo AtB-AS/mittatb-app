@@ -22,8 +22,8 @@ import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
   filterActiveOrCanBeUsedFareContracts,
-  useTicketState,
-} from '@atb/tickets';
+  useTicketingState,
+} from '@atb/ticketing';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
@@ -59,7 +59,7 @@ export default function ProfileHome({navigation}: ProfileProps) {
   const {authenticationType, signOut, user, customerNumber} = useAuthState();
   const config = useLocalConfig();
 
-  const {fareContracts, customerProfile} = useTicketState();
+  const {fareContracts, customerProfile} = useTicketingState();
   const activeFareContracts =
     filterActiveOrCanBeUsedFareContracts(fareContracts);
   const hasActiveFareContracts = activeFareContracts.length > 0;
@@ -158,7 +158,7 @@ export default function ProfileHome({navigation}: ProfileProps) {
                 onPress={() => {
                   let screen: keyof LoginInAppStackParams = 'PhoneInputInApp';
                   if (hasActiveFareContracts) {
-                    screen = 'ActiveTicketPromptInApp';
+                    screen = 'activeFareContractPromptInApp';
                   } else if (enable_vipps_login) {
                     screen = 'LoginOptionsScreen';
                   }

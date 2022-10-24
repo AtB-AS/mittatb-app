@@ -2,14 +2,14 @@ import {useAppState} from '@atb/AppContext';
 import trackNavigation from '@atb/diagnostics/trackNavigation';
 import LocationSearch from '@atb/location-search';
 import LoginInAppStack from '@atb/login/in-app/LoginInAppStack';
-import ConsequencesScreen from '@atb/screens/AnonymousTicketPurchase/ConsequencesScreen';
+import ConsequencesScreen from '@atb/screens/AnonymousPurchase/ConsequencesScreen';
 import MobileTokenOnboarding from '@atb/screens/MobileTokenOnboarding';
 import Onboarding from '@atb/screens/Onboarding';
 import AddEditFavorite from '@atb/screens/Profile/AddEditFavorite';
 import SortableFavoriteList from '@atb/screens/Profile/FavoriteList/SortFavorites';
 import SelectTravelTokenScreen from '@atb/screens/Profile/TravelToken/SelectTravelTokenScreen';
-import TicketPurchase from '@atb/screens/Ticketing/Purchase';
-import TicketModalScreen from '@atb/screens/Ticketing/Ticket/Details';
+import Purchase from '@atb/screens/Ticketing/Purchase';
+import FareContractModalScreen from '@atb/screens/Ticketing/FareContracts/Details';
 import {useTheme} from '@atb/theme';
 import {APP_SCHEME} from '@env';
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
@@ -65,7 +65,9 @@ const NavigationRoot = () => {
                   screens: {
                     Profile: 'profile',
                     Ticketing: {
-                      screens: {ActiveTickets: 'ticketing'},
+                      screens: {
+                        ActiveFareProductsAndReservationsTab: 'ticketing',
+                      },
                     },
                   },
                 },
@@ -92,7 +94,7 @@ const NavigationRoot = () => {
               >
                 <Stack.Screen name="TabNavigator" component={TabNavigator} />
                 <Stack.Screen
-                  name="ConsequencesFromTicketPurchase"
+                  name="ConsequencesFromPurchase"
                   component={ConsequencesScreen}
                 />
                 <Stack.Screen
@@ -100,13 +102,10 @@ const NavigationRoot = () => {
                   component={LocationSearch}
                   options={TransitionPresets.ModalSlideFromBottomIOS}
                 />
+                <Stack.Screen name="Purchase" component={Purchase} />
                 <Stack.Screen
-                  name="TicketPurchase"
-                  component={TicketPurchase}
-                />
-                <Stack.Screen
-                  name="TicketModal"
-                  component={TicketModalScreen}
+                  name="FareContractModal"
+                  component={FareContractModalScreen}
                 />
                 <Stack.Screen
                   name="MobileTokenOnboarding"

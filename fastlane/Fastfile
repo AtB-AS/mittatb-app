@@ -49,7 +49,7 @@ platform :ios do
         password: ENV["MATCH_PASSWORD"],
         default_keychain: true,
         unlock: true,
-        timeout: 3600,
+        timeout: 10800,
         lock_when_sleeps: false
       )
       match(
@@ -202,7 +202,6 @@ platform :android do
       groups:"NFK"
     )
   end
-
 
   lane :playstore_internal do
     ensure_env_vars(

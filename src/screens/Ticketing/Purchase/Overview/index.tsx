@@ -1,12 +1,13 @@
 import MessageBox from '@atb/components/message-box';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {TicketPurchaseScreenProps} from '../types';
+import {PurchaseScreenProps} from '../types';
 import {getPurchaseFlow} from '../utils';
 import DurationSelection from './components/DurationSelection';
 import PurchaseMessages from './components/PurchaseMessages';
@@ -17,7 +18,7 @@ import Zones from './components/Zones';
 import {useOfferDefaults} from './use-offer-defaults';
 import useOfferState from './use-offer-state';
 
-type OverviewProps = TicketPurchaseScreenProps<'PurchaseOverview'>;
+type OverviewProps = PurchaseScreenProps<'PurchaseOverview'>;
 
 const PurchaseOverview: React.FC<OverviewProps> = ({
   navigation,
@@ -39,15 +40,18 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     params.toTariffZone,
   );
 
-  const [selectedPreassignedFareProduct, setSelectedPreassignedFareProduct] =
-    useState(preassignedFareProduct);
+  const onSelectPreassignedFareProduct = (fp: PreassignedFareProduct) => {
+    navigation.setParams({
+      preassignedFareProduct: fp,
+    });
+  };
   const [travellerSelection, setTravellerSelection] =
     useState(selectableTravellers);
   const hasSelection = travellerSelection.some((u) => u.count);
   const [travelDate, setTravelDate] = useState<string | undefined>();
 
   const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
-    selectedPreassignedFareProduct,
+    preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
     travellerSelection,
@@ -67,7 +71,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     navigation.navigate('TabNavigator', {
       screen: 'Ticketing',
       params: {
-        screen: 'BuyTickets',
+        screen: 'PurchaseTab',
       },
     });
 
@@ -75,9 +79,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     <View style={styles.container}>
       <FullScreenHeader
         title={t(
-          PurchaseOverviewTexts.header.title[
-            selectedPreassignedFareProduct.type
-          ],
+          PurchaseOverviewTexts.header.title[preassignedFareProduct.type],
         )}
         leftButton={{
           type: 'cancel',
@@ -102,8 +104,8 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           {durationSelectionEnabled && (
             <DurationSelection
               color="interactive_2"
-              selectedProduct={selectedPreassignedFareProduct}
-              setSelectedProduct={setSelectedPreassignedFareProduct}
+              selectedProduct={preassignedFareProduct}
+              setSelectedProduct={onSelectPreassignedFareProduct}
               style={styles.selectionComponent}
             />
           )}
@@ -120,7 +122,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             toTariffZone={toTariffZone}
             style={styles.selectionComponent}
             isApplicableOnSingleZoneOnly={
-              selectedPreassignedFareProduct.isApplicableOnSingleZoneOnly
+              preassignedFareProduct.isApplicableOnSingleZoneOnly
             }
           />
 
@@ -136,7 +138,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         </View>
 
         <PurchaseMessages
-          preassignedFareProductType={selectedPreassignedFareProduct.type}
+          preassignedFareProductType={preassignedFareProduct.type}
           fromTariffZone={fromTariffZone}
           toTariffZone={toTariffZone}
         />
@@ -149,7 +151,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             fromTariffZone={fromTariffZone}
             toTariffZone={toTariffZone}
             userProfilesWithCount={travellerSelection}
-            preassignedFareProduct={selectedPreassignedFareProduct}
+            preassignedFareProduct={preassignedFareProduct}
             travelDate={travelDate}
             style={styles.summary}
           />

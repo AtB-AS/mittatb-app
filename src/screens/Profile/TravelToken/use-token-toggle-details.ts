@@ -13,8 +13,13 @@ const useTokenToggleDetails = (shouldFetchTokenDetails: boolean) => {
     const toggleToggleDetails = await getTokenToggleDetails();
     if (toggleToggleDetails) {
       const {toggleMaxLimit, toggledCount} = toggleToggleDetails;
-      if (toggleMaxLimit && toggleMaxLimit >= toggledCount) {
-        setToggleLimit(toggleMaxLimit - toggledCount);
+      if (toggleMaxLimit) {
+        if (toggleMaxLimit >= toggledCount) {
+          setToggleLimit(toggleMaxLimit - toggledCount);
+        } else {
+          //We can end up here if we decide to reduce max limit value in firestore
+          setToggleLimit(0);
+        }
       }
       setMaxToggleLimit(toggleMaxLimit);
     }

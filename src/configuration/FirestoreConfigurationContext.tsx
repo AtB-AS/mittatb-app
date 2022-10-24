@@ -24,10 +24,10 @@ import {
   defaultPaymentTypes,
   defaultModesWeSellTicketsFor,
 } from '@atb/configuration/defaults';
-import {PaymentType} from '@atb/tickets';
+import {PaymentType} from '@atb/ticketing';
 
 type ConfigurationContextState = {
-  preassignedFareproducts: PreassignedFareProduct[];
+  preassignedFareProducts: PreassignedFareProduct[];
   tariffZones: TariffZone[];
   userProfiles: UserProfile[];
   modesWeSellTicketsFor: string[];
@@ -36,7 +36,7 @@ type ConfigurationContextState = {
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
-  preassignedFareproducts: defaultPreassignedFareProducts,
+  preassignedFareProducts: defaultPreassignedFareProducts,
   tariffZones: defaultTariffZones,
   userProfiles: defaultUserProfiles,
   modesWeSellTicketsFor: defaultModesWeSellTicketsFor,
@@ -49,7 +49,7 @@ const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
 );
 
 export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
-  const [preassignedFareproducts, setPreassignedFareproducts] = useState(
+  const [preassignedFareProducts, setPreassignedFareProducts] = useState(
     defaultPreassignedFareProducts,
   );
   const [tariffZones, setTariffZones] = useState(defaultTariffZones);
@@ -65,10 +65,10 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       .collection('configuration')
       .onSnapshot(
         (snapshot) => {
-          const preassignedFareproducts =
-            getPreassignedFarecontractsFromSnapshot(snapshot);
-          if (preassignedFareproducts) {
-            setPreassignedFareproducts(preassignedFareproducts);
+          const preassignedFareProducts =
+            getPreassignedFareContractsFromSnapshot(snapshot);
+          if (preassignedFareProducts) {
+            setPreassignedFareProducts(preassignedFareProducts);
           }
 
           const tariffZones = getTariffZonesFromSnapshot(snapshot);
@@ -108,7 +108,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
 
   const memoizedState = useMemo(() => {
     return {
-      preassignedFareproducts,
+      preassignedFareProducts,
       tariffZones,
       userProfiles,
       modesWeSellTicketsFor,
@@ -116,7 +116,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       vatPercent,
     };
   }, [
-    preassignedFareproducts,
+    preassignedFareProducts,
     tariffZones,
     userProfiles,
     modesWeSellTicketsFor,
@@ -141,17 +141,17 @@ export function useFirestoreConfiguration() {
   return context;
 }
 
-function getPreassignedFarecontractsFromSnapshot(
+function getPreassignedFareContractsFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
 ): PreassignedFareProduct[] | undefined {
-  const preassignedFareproductsFromFirestore = snapshot.docs
+  const preassignedFareProductsFromFirestore = snapshot.docs
     .find((doc) => doc.id == 'referenceData')
     ?.get<string>('preassignedFareProducts_v2');
 
   try {
-    if (preassignedFareproductsFromFirestore) {
+    if (preassignedFareProductsFromFirestore) {
       return JSON.parse(
-        preassignedFareproductsFromFirestore,
+        preassignedFareProductsFromFirestore,
       ) as PreassignedFareProduct[];
     }
   } catch (error: any) {
@@ -225,7 +225,7 @@ function getPaymentTypesFromSnapshot(
 function mapPaymentTypeStringsToEnums(
   arrayOfPaymentTypes: string[],
 ): PaymentType[] {
-  var paymentTypes: PaymentType[] = [];
+  const paymentTypes: PaymentType[] = [];
   for (const option of arrayOfPaymentTypes) {
     const typeName =
       option.charAt(0).toUpperCase() + option.slice(1).toLocaleLowerCase();

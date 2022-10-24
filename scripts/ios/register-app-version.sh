@@ -80,7 +80,7 @@ json=$(cat <<EOJ
     "ios": {
       "team_identifiers": ["$IOS_DEVELOPMENT_TEAM_ID"],
       "bundle_id": "$IOS_BUNDLE_IDENTIFIER",
-      "application_version_id": "$APP_VERSION"
+      "version_name": "$APP_VERSION"
     },
     "active": true
   }
