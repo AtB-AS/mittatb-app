@@ -24,6 +24,7 @@ type BoundingBox = {
 };
 
 const DEFAULT_PADDING = 100;
+const DEFAULT_PADDING_DISPLACEMENT = 0.0003;
 
 /**
  * Trigger camera move based on the camera focus mode. When the camera focus
@@ -130,17 +131,18 @@ const moveCameraToStopPlace = (
   const stopPlaceCoordinates = mapPositionToCoordinates(
     stopPlaceFeature.geometry.coordinates,
   );
-  mapCameraRef.current?.setCamera({
-    centerCoordinate: [
-      stopPlaceCoordinates.longitude,
-      stopPlaceCoordinates.latitude,
-    ],
-    animationDuration: 750,
-    animationMode: 'flyTo',
-    bounds: {
-      ne: [stopPlaceCoordinates.longitude, stopPlaceCoordinates.latitude],
-      sw: [stopPlaceCoordinates.longitude, stopPlaceCoordinates.latitude],
-      paddingBottom: paddingBottom,
-    },
-  });
+  const northEast: Coordinates = {
+    longitude: stopPlaceCoordinates.longitude - DEFAULT_PADDING_DISPLACEMENT,
+    latitude: stopPlaceCoordinates.latitude - DEFAULT_PADDING_DISPLACEMENT,
+  };
+  const southWest: Coordinates = {
+    longitude: stopPlaceCoordinates.longitude + DEFAULT_PADDING_DISPLACEMENT,
+    latitude: stopPlaceCoordinates.latitude + DEFAULT_PADDING_DISPLACEMENT,
+  };
+  fitBounds(northEast, southWest, mapCameraRef, [
+    DEFAULT_PADDING,
+    DEFAULT_PADDING,
+    DEFAULT_PADDING + paddingBottom,
+    DEFAULT_PADDING,
+  ]);
 };
