@@ -15,10 +15,10 @@ struct DepartureWidgetEntryView: View {
             VStack {
                 VStack {
                     HStack {
-                      if let quayName = viewModel.quayName{
-                        Text(quayName)
-                            .bold()
-                      }
+                        if let quayName = viewModel.quayName {
+                            Text(quayName)
+                                .bold()
+                        }
                         Spacer()
                     }
                     if let lineNumber = viewModel.lineNumber, let lineName = viewModel.lineName {
