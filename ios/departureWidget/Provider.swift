@@ -39,9 +39,7 @@ struct Provider: TimelineProvider {
         }
     }
 
-    /**
-     Finds the closest favorite departure based on current location on the user
-     */
+    /// Finds the closest favorite departure based on current location on the user
     func getClosestDeparture(_ departures: [FavoriteDeparture]) -> FavoriteDeparture {
         var closestDeparture: FavoriteDeparture = departures.first!
         var smallestDistance: CLLocationDistance?

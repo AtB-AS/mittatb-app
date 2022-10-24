@@ -63,7 +63,7 @@ struct Entry: TimelineEntry {
     let quayGroup: QuayGroup?
 }
 
-// Struct for favorite departures stored on device
+/// Struct for favorite departures stored on device
 struct FavoriteDeparture: Codable {
     let id: String
     let lineId: String

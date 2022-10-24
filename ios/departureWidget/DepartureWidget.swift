@@ -11,7 +11,7 @@ struct DepartureWidgetEntryView: View {
     }
 
     var body: some View {
-        if viewModel != nil {
+        if let _ = viewModel.lineInfo {
             VStack {
                 VStack {
                     HStack {
@@ -52,6 +52,7 @@ struct DepartureWidgetEntryView: View {
                 }
             }
         } else {
+            // NOTE: Use localization!
             Text("Du må velge en favorittavgang")
         }
     }

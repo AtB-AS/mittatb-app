@@ -32,13 +32,13 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     func locationManager(_: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         locationStatus = status
-        print(#function, statusString)
+        debugPrint(#function, statusString)
     }
 
     func locationManager(_: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         lastLocation = location
-        print(#function, location)
+        debugPrint(#function, location)
     }
 
     func locationManager(_: CLLocationManager, didFailWithError _: Swift.Error) {}

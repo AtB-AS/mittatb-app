@@ -7,24 +7,27 @@ struct Body: Codable {
 enum AppEndPoint: String {
     case favoriteDepartures, example
 
-    var path: String {
+    var path: String? {
         switch self {
         case .favoriteDepartures:
-            var url = URLComponents(string: "https://api.staging.mittatb.no/bff/v2/departure-favorites")!
-
-            url.queryItems = [
+            var url = URLComponents(string: "https://api.staging.mittatb.no/bff/v2/departure-favorites")
+            url?.queryItems = [
                 URLQueryItem(name: "limitPerLine", value: "20"),
                 URLQueryItem(name: "startTime", value: Date().ISO8601Format()),
                 URLQueryItem(name: "pageSize", value: "0"),
             ]
 
-            return url.string!
+            return url?.string
         case .example:
             return ""
         }
     }
 
     var url: URL? {
+        guard let path = path else {
+            return nil
+        }
+
         URL(string: path)
     }
 

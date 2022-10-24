@@ -22,8 +22,8 @@ struct Manifest: Codable {
     }
 
     init(from decoder: Decoder) throws {
-        let container = try! decoder.container(keyedBy: CodingKeys.self)
-        guard let departuresJsonString = try! container.decodeIfPresent(String.self, forKey: .departures) else {
+        let container = try? decoder.container(keyedBy: CodingKeys.self)
+        guard let departuresJsonString = try? container?.decodeIfPresent(String.self, forKey: .departures) else {
             throw ManifestError.invalidType
         }
 
@@ -31,7 +31,7 @@ struct Manifest: Codable {
             throw ManifestError.parsingData
         }
 
-        departures = try! JSONDecoder().decode([FavoriteDeparture].self, from: departuresJsonData)
+        departures = try? JSONDecoder().decode([FavoriteDeparture].self, from: departuresJsonData)
     }
 
     private static func buildManifest() -> Manifest? {
@@ -49,6 +49,6 @@ struct Manifest: Codable {
             return nil
         }
 
-        return try! JSONDecoder().decode(Manifest.self, from: Data(jsonData))
+        return try? JSONDecoder().decode(Manifest.self, from: Data(jsonData))
     }
 }

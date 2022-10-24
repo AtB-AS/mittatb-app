@@ -34,9 +34,7 @@ class ViewModel: ObservableObject {
         lineInfo?.lineNumber
     }
 
-    /**
-     Returns the times of the current departure
-     */
+    /// Returns the times of the current departure
     var departures: [Date] {
         var times: [Date] = []
         for departure in quayGroup?.group[0].departures.prefix(upTo: 2) ?? [] {
