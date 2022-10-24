@@ -9,30 +9,22 @@
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.0"
 
-"@atb-as/generate-assets@^5.3.0-alpha.2":
-  version "5.3.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-5.3.0-alpha.2.tgz#04c2404e43975f34e2bc7af89cbb58940b0ace56"
-  integrity sha512-wS2yTt07U8srLZj1gwRV/lPQC47uJa644mMM4+Xct1ZRGmjk3aFDV9C7PTgMSa6eawOEX8eMmOs4YYKxbgVidA==
+"@atb-as/generate-assets@^5.3.0-alpha.4":
+  version "5.3.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-5.3.0-alpha.4.tgz#b6a4df723fdf991a0aff4dcc85f2e9c17f872baa"
+  integrity sha512-zHQXn6HDvzlDDs5Bx/KDcx32W8r9aLnYixR3V1ZJSmmAGhwFVX5A2zcwN2631J0yrwP5Epo7muovFTwHfCWQjQ==
   dependencies:
-    "@atb-as/theme" "^6.1.0-alpha.0"
+    "@atb-as/theme" "^6.1.0-alpha.1"
     commander "^9.4.0"
     fast-glob "^3.2.11"
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@^6.0.0-alpha.7":
-  version "6.0.0-alpha.7"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-6.0.0-alpha.7.tgz#13ee962118dadfdcb84e89a5c7a2460c11fdbe26"
-  integrity sha512-zjXOil0iDH3lou46dG5jG2fhJnfJ8NCmHMzDsUAl/d1o1vQPZuhecaWaG2205KRmdmRImV+6Z2gxkSUQoGeRDQ==
-  dependencies:
-    hex-to-rgba "^2.0.1"
-    ts-deepmerge "^1.0.7"
-
-"@atb-as/theme@^6.1.0-alpha.0":
-  version "6.1.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-6.1.0-alpha.0.tgz#2eb2acd0f7fec72796f45cda5e11a6c6b832c1f5"
-  integrity sha512-jdqGL0tQlVlROlHsIQqPiWEnj0Dorj8zRdoFncTLwSaDWarVDHYOy3pt3pYgOBIW1xEla0+63ftfjeZIEz0nUw==
+"@atb-as/theme@^6.1.0-alpha.1":
+  version "6.1.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-6.1.0-alpha.1.tgz#0dd506b85c096fd37e71bf9192ce7eab47eb864e"
+  integrity sha512-nIAjoOMFPUxPzntgUy4gZsxuox+atk+ryvPRi07y0QMyw+CBZMhIreRAOoqU4KlCS0xGxu2KMKUu/OHmqGSj+w==
   dependencies:
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
@@ -10575,11 +10567,6 @@ truncate-utf8-bytes@^1.0.0:
   integrity sha1-QFkjkJWS1W94pYGENLC3hInKXys=
   dependencies:
     utf8-byte-length "^1.0.1"
-
-ts-deepmerge@^1.0.7:
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/ts-deepmerge/-/ts-deepmerge-1.1.0.tgz"
-  integrity sha512-VvwaV/6RyYMwT9d8dClmfHIsG2PCdm6WY430QKOIbPRR50Y/1Q2ilp4i2XEZeHFcNqfaYnAQzpyUC6XA0AqqBg==
 
 ts-deepmerge@^4.0.0:
   version "4.0.0"
