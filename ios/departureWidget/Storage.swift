@@ -18,7 +18,7 @@ struct Manifest: Codable {
     let departures: [FavoriteDeparture]?
 
     static var data: Manifest? {
-      buildManifest()
+        buildManifest()
     }
 
     init(from decoder: Decoder) throws {

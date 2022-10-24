@@ -56,7 +56,6 @@ struct DepartureTime: Codable {
     let realtime: Bool
     let situations: [String]
     let serviceJourneyId: String
-  
 }
 
 struct Entry: TimelineEntry {
@@ -64,23 +63,22 @@ struct Entry: TimelineEntry {
     let quayGroup: QuayGroup?
 }
 
-
-//Struct for favorite departures stored on device
+// Struct for favorite departures stored on device
 struct FavoriteDeparture: Codable {
-  let id: String
-  let lineId: String
-  let lineName: String?
-  let lineLineNumber: String
-  let lineTransportationMode: String
-  let lineTransportationSubMode: String
-  let longitude: Double
-  let latitude: Double
-  let quayName: String
-  let quayPublicCode: String
-  let quayId: String
-  let stopId: String
+    let id: String
+    let lineId: String
+    let lineName: String?
+    let lineLineNumber: String
+    let lineTransportationMode: String
+    let lineTransportationSubMode: String
+    let longitude: Double
+    let latitude: Double
+    let quayName: String
+    let quayPublicCode: String
+    let quayId: String
+    let stopId: String
 
-  var location: CLLocation {
-      CLLocation(latitude: latitude, longitude: longitude)
-  }
+    var location: CLLocation {
+        CLLocation(latitude: latitude, longitude: longitude)
+    }
 }
