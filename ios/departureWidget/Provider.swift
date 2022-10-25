@@ -36,7 +36,6 @@ struct Provider: TimelineProvider {
         }
     }
 
-    // TODO: make timeline update based on times returned from
     func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
         var date = Calendar.current.date(byAdding: .minute, value: 5, to: Date())!
 

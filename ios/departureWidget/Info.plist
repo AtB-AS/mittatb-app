@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>We need yout location to show bus departures enar you</string>
+	<string>We need your location to show bus departures near you</string>
 	<key>NSWidgetWantsLocation</key>
 	<true/>
 	<key>NSExtension</key>

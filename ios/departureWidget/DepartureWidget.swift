@@ -30,28 +30,27 @@ struct DepartureWidgetEntryView: View {
                             Spacer()
                         }
                     }
-                }.padding(.leading, 5)
-
-                Divider()
+                }.padding(10).background(.green)
 
                 HStack {
                     ForEach(viewModel.departures, id: \.self) { time in
 
-                        if time.distance(to: Date()) < 0 {
-                            if time.distance(to: Date()) > -600 {
-                                Text(time, style: .relative)
-                                    .background(.gray)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(5)
-                            } else {
-                                Text(time, style: .time)
-                                    .background(.gray)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(5)
-                            }
+                        if time.distance(to: Date()) > -600 {
+                          Text(time, style: .relative)
+                                .padding(3)
+                                .background(.gray)
+                                .foregroundColor(.white)
+                                .cornerRadius(5)
+
+                        } else {
+                            Text(time, style: .time)
+                                .padding(3)
+                                .background(.gray)
+                                .foregroundColor(.white)
+                                .cornerRadius(5)
                         }
                     }
-                }
+                }.padding(5)
                 Spacer()
             }
         } else {

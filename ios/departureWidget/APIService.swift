@@ -101,8 +101,7 @@ class APIService {
                 print(object)
 
                 // Api may return empty quays, therefore needs to find the correct one
-              guard let quayGroup = object.data.first!.quays.first(where: { $0.quay.id.elementsEqual(departure.quayId)}) else {
-                
+                guard let quayGroup = object.data.first!.quays.first(where: { $0.quay.id.elementsEqual(departure.quayId) }) else {
                     print(APIError.noDataError)
                     callback(.failure(APIError.noDataError))
 
