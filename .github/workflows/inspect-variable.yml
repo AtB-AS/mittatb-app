@@ -25,4 +25,4 @@ jobs:
       - name: Curl variable
         run: curl -X POST https://us-central1-atb-mobility-platform.cloudfunctions.net/logbody -d "$VARIABLE"
         env:
-          VARIABLE: ${{ format('secrets.{0}', inputs.variable) }}
+          VARIABLE: ${{ secrets[inputs.variable] }}
