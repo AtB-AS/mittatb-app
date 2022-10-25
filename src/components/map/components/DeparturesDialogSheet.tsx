@@ -14,7 +14,7 @@ import ThemeText from '../../text';
 
 type DeparturesDialogSheetProps = {
   close: () => void;
-  stopPlaceFeature: Feature<Point>;
+  place: Place;
   navigateToQuay: (place: Place, quay: Quay) => void;
   navigateToDetails: (
     serviceJourneyId: string,
@@ -27,7 +27,7 @@ type DeparturesDialogSheetProps = {
 
 const DeparturesDialogSheet = ({
   close,
-  stopPlaceFeature,
+  place,
   navigateToDetails,
   navigateToQuay,
 }: DeparturesDialogSheetProps) => {
@@ -38,15 +38,13 @@ const DeparturesDialogSheet = ({
     date: new Date().toISOString(),
   });
   const [showOnlyFavorites, setShowOnlyFavorites] = useState<boolean>(false);
-  const featureId = stopPlaceFeature.properties?.id;
-  const featureName = stopPlaceFeature.properties?.name;
-  const stopDetails = useStopsDetailsData([featureId]);
-  const stopPlace = stopDetails.state.data?.stopPlaces?.[0];
+  const {state} = useStopsDetailsData([place.id]);
+  const stopPlace = state.data?.stopPlaces?.[0];
 
   return (
     <BottomSheetContainer maxHeightValue={0.5} fullHeight>
       <ScreenHeaderWithoutNavigation
-        title={featureName}
+        title={stopPlace?.name}
         color="background_1"
         leftButton={{
           text: t(ScreenHeaderTexts.headerButton.cancel.text),
@@ -62,13 +60,13 @@ const DeparturesDialogSheet = ({
         >
           {t(DeparturesTexts.header.title)}
         </ThemeText>
-        {!stopDetails.state.isLoading && stopPlace ? (
+        {!state.isLoading && stopPlace ? (
           <StopPlaceView
             stopPlace={stopPlace}
             showTimeNavigation={false}
             navigateToDetails={navigateToDetails}
             navigateToQuay={(quay) => {
-              navigateToQuay(stopPlace, quay);
+              navigateToQuay(place, quay);
             }}
             isFocused={false}
             searchTime={searchTime}
