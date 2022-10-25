@@ -82,3 +82,74 @@ struct FavoriteDeparture: Codable {
         CLLocation(latitude: latitude, longitude: longitude)
     }
 }
+
+extension FavoriteDeparture {
+    static let dummy: FavoriteDeparture = .init(
+        id: "",
+        lineId: "ATB:Line:2_2",
+        lineName: "Ranheim",
+        lineLineNumber: "1",
+        lineTransportationMode: "bus",
+        lineTransportationSubMode: "bus",
+        longitude: 0,
+        latitude: 0,
+        quayName: "Prinsens gate",
+        quayPublicCode: "P1",
+        quayId: "NSR:Quay:71184",
+        stopId: "NSR:StopPlace:41613"
+    )
+}
+
+extension QuayGroup {
+    static let dummy: QuayGroup = .init(
+        quay:
+        QuayInfo(
+            __typename: "",
+            id: "",
+            name: "Prinsens gate",
+            description: nil,
+            publicCode: "",
+            latitude: 63.43457,
+            longitude: 10.39844
+        ),
+        group: [
+            DepartureGroup(
+                lineInfo:
+                DepartureLineInfo(
+                    lineId: "",
+                    lineName: "Ranheim",
+                    lineNumber: "1",
+                    transportMode: "bus",
+                    transportSubmode: "bus",
+                    quayId: ""
+                ),
+                departures: [
+                    DepartureTime(
+                        time: Date().addingTimeInterval(300),
+                        aimedTime: Date().addingTimeInterval(300),
+                        predictionInaccurate: false,
+                        realtime: false,
+                        situations: [],
+                        serviceJourneyId: ""
+                    ),
+                    DepartureTime(
+                        time: Date().addingTimeInterval(600),
+                        aimedTime: Date().addingTimeInterval(600),
+                        predictionInaccurate: false,
+                        realtime: false,
+                        situations: [],
+                        serviceJourneyId: ""
+                    ),
+                    DepartureTime(
+                        time: Date().addingTimeInterval(900),
+                        aimedTime: Date().addingTimeInterval(900),
+                        predictionInaccurate: false,
+                        realtime: false,
+                        situations: [],
+                        serviceJourneyId: ""
+                    ),
+                ]
+            ),
+        ]
+    )
+}

@@ -7,22 +7,41 @@ struct Provider: TimelineProvider {
     let locationManager = LocationManager()
     let apiService = APIService()
 
+  
+    /// The placeholder is shown in transitions and while loading the snapshot when adding the widget to the home screen
     func placeholder(in _: Context) -> Entry {
-        // TODO: create placeholder
-        Entry(date: Date(), quayGroup: nil)
+        Entry(date: Date(), quayGroup: QuayGroup.dummy)
     }
 
+  
+    /// The snapshot shows is used to preview the widget when adding it to the home screen
     func getSnapshot(in _: Context, completion: @escaping (Entry) -> Void) {
-        // TODO: create snapshot
-        let entry = Entry(date: Date(), quayGroup: nil)
-        completion(entry)
+        let date = Calendar.current.date(byAdding: .minute, value: 5, to: Date())!
+      
+        //if no favorites, show dummy data so the user still gets a preview
+        guard let favoriteDepartures = Manifest.data?.departures else {
+            let entry = Entry(date: date, quayGroup: QuayGroup.dummy)
+            completion(entry)
+            return
+        }
+      
+        let closestDeparture = getClosestDeparture(favoriteDepartures)
+      
+        apiService.fetchFavoriteDepartures(favorite: closestDeparture) { (result: Result<QuayGroup, Error>) in
+            switch result {
+            case let .success(object):
+                let entry = Entry(date: date, quayGroup: object)
+                completion(entry)
+            case .failure:
+                return
+            }
+        }
     }
 
     func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
-      
         let date = Calendar.current.date(byAdding: .minute, value: 5, to: Date())!
 
-        //Get favorites, if none return empty Entry
+        // Get favorites, if none return empty Entry
         guard let favoriteDepartures = Manifest.data?.departures else {
             let timeline = Timeline(entries: [Entry(date: date, quayGroup: nil)], policy: .atEnd)
             completion(timeline)
@@ -31,7 +50,7 @@ struct Provider: TimelineProvider {
 
         let closestDeparture = getClosestDeparture(favoriteDepartures)
 
-        //fetch departure data for the closest favorite
+        // Fetch departure data for the closest favorite
         apiService.fetchFavoriteDepartures(favorite: closestDeparture) { (result: Result<QuayGroup, Error>) in
             switch result {
             case let .success(object):
@@ -42,6 +61,7 @@ struct Provider: TimelineProvider {
             }
         }
     }
+ 
 
     /// Finds the closest favorite departure based on current location on the user
     func getClosestDeparture(_ departures: [FavoriteDeparture]) -> FavoriteDeparture {

@@ -8,14 +8,10 @@ class ViewModel: ObservableObject {
         static let defaultQuayName = "N/A"
     }
 
-    var hasData = false
-
     private let quayGroup: QuayGroup?
 
     init(quayGroup: QuayGroup?) {
         self.quayGroup = quayGroup
-
-        if quayGroup != nil { hasData = true }
     }
 
     var quayName: String? {
