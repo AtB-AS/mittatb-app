@@ -47,7 +47,10 @@ export const useUpdateBottomSheetWhenSelectedStopPlaceChanges = (
           () => (
             <DeparturesDialogSheet
               close={closeWithCallback}
-              stopPlaceFeature={stopPlaceFeature}
+              place={{
+                id: stopPlaceFeature.properties?.id,
+                name: stopPlaceFeature.properties?.name,
+              }}
               navigateToDetails={(...params) => {
                 closeBottomSheet();
                 mapProps.navigateToDetails(...params);
