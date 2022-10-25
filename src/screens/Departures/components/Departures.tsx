@@ -8,25 +8,35 @@ import ThemeIcon from '@atb/components/theme-icon';
 import FavoriteChips from '@atb/favorite-chips';
 import {Location} from '@atb/favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {useOnlySingleLocation} from '@atb/location-search';
 import StopPlaces from '@atb/screens/Departures/components/StopPlaces';
 import {useNearestStopsData} from '@atb/screens/Departures/state/nearby-places-state';
 import {useDoOnceWhen} from '@atb/screens/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import {useIsFocused} from '@react-navigation/native';
+import {NavigationProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
-import {NearbyPlacesScreenTabProps} from './types';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 
-export type AllStopsOverviewParams = {
-  location: Location;
-};
-
-type RootProps = NearbyPlacesScreenTabProps<'AllStopsOverview'>;
-
-export const AllStopsOverview = ({navigation}: RootProps) => {
+export const Departures = ({
+  navigation,
+  fromLocation,
+  callerRouteName,
+  onSelect,
+  title,
+  leftButton,
+  rightButton,
+}: {
+  navigation: NavigationProp<any>;
+  fromLocation: Location | undefined;
+  callerRouteName: string;
+  onSelect: (place: Place) => void;
+  title: string;
+  leftButton?: LeftButtonProps;
+  rightButton?: RightButtonProps;
+}) => {
   const {status, location, locationEnabled, requestPermission} =
     useGeolocationState();
 
@@ -36,7 +46,6 @@ export const AllStopsOverview = ({navigation}: RootProps) => {
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
 
   const {t} = useTranslation();
-  const fromLocation = useOnlySingleLocation<RootProps['route']>('location');
 
   const screenHasFocus = useIsFocused();
 
@@ -61,7 +70,7 @@ export const AllStopsOverview = ({navigation}: RootProps) => {
   const openLocationSearch = () =>
     navigation.navigate('LocationSearch', {
       label: t(NearbyTexts.search.label),
-      callerRouteName: 'AllStopsOverview',
+      callerRouteName: callerRouteName,
       callerRouteParam: 'location',
       initialLocation: fromLocation,
     });
@@ -72,9 +81,7 @@ export const AllStopsOverview = ({navigation}: RootProps) => {
         fromLocation?.resultType === 'favorite') &&
       fromLocation?.layer === 'venue'
     ) {
-      navigation.navigate('PlaceScreen', {
-        place: fromLocation,
-      });
+      onSelect(fromLocation);
     }
   }, [fromLocation?.id]);
 
@@ -121,12 +128,6 @@ export const AllStopsOverview = ({navigation}: RootProps) => {
     }
   };
 
-  const navigateToPlace = (place: Place) => {
-    navigation.navigate('PlaceScreen', {
-      place,
-    });
-  };
-
   useEffect(() => {
     if (updatingLocation)
       setLoadAnnouncement(t(NearbyTexts.stateAnnouncements.updatingLocation));
@@ -153,37 +154,43 @@ export const AllStopsOverview = ({navigation}: RootProps) => {
   }
 
   return (
-    <SimpleDisappearingHeader
-      onRefresh={refresh}
-      isRefreshing={isLoading}
-      header={
-        <Header
-          fromLocation={fromLocation}
-          updatingLocation={updatingLocation}
-          openLocationSearch={openLocationSearch}
-          setCurrentLocationOrRequest={setCurrentLocationOrRequest}
-          setLocation={(location: Location) => {
-            location.resultType === 'search' && location.layer === 'venue'
-              ? navigation.navigate('PlaceScreen', {
-                  place: location as Place,
-                })
-              : navigation.setParams({
-                  location,
-                });
-          }}
-        />
-      }
-      useScroll={activateScroll}
-      setFocusOnLoad={true}
-    >
-      <ScreenReaderAnnouncement message={loadAnnouncement} />
-      <StopPlaces
-        header={getListDescription()}
-        stopPlaces={orderedStopPlaces}
-        navigateToPlace={navigateToPlace}
-        testID={'nearbyStopsContainerView'}
+    <>
+      <FullScreenHeader
+        title={title}
+        rightButton={rightButton}
+        leftButton={leftButton}
+        globalMessageContext="app-departures"
       />
-    </SimpleDisappearingHeader>
+      <SimpleDisappearingHeader
+        onRefresh={refresh}
+        isRefreshing={isLoading}
+        header={
+          <Header
+            fromLocation={fromLocation}
+            updatingLocation={updatingLocation}
+            openLocationSearch={openLocationSearch}
+            setCurrentLocationOrRequest={setCurrentLocationOrRequest}
+            setLocation={(location: Location) => {
+              location.resultType === 'search' && location.layer === 'venue'
+                ? onSelect(location)
+                : navigation.setParams({
+                    location,
+                  });
+            }}
+          />
+        }
+        useScroll={activateScroll}
+        setFocusOnLoad={true}
+      >
+        <ScreenReaderAnnouncement message={loadAnnouncement} />
+        <StopPlaces
+          header={getListDescription()}
+          stopPlaces={orderedStopPlaces}
+          navigateToPlace={onSelect}
+          testID={'nearbyStopsContainerView'}
+        />
+      </SimpleDisappearingHeader>
+    </>
   );
 };
 

@@ -5,8 +5,8 @@ import {DepartureDetailsRouteParams} from '../TripDetails/DepartureDetails';
 import {MapDetailRouteParams} from '../TripDetails/Map';
 import {QuayDeparturesRouteParams} from '../TripDetails/QuayDepartures';
 import {DetailsStackParams} from '../TripDetails/types';
-import {AllStopsOverviewParams} from './AllStopsOverview';
 import {PlaceScreenParams} from './PlaceScreen';
+import {DeparturesScreenParams} from '@atb/screens/Departures/DeparturesScreen';
 
 export type DeparturesStackParams = {
   DeparturesRoot: undefined;
@@ -15,27 +15,13 @@ export type DeparturesStackParams = {
   QuayDepartures: QuayDeparturesRouteParams;
   TripDetails: DetailsStackParams;
   DetailsMap: MapDetailRouteParams;
+  DeparturesScreen: DeparturesScreenParams;
 };
 
 export type RootDeparturesScreenProps = TabNavigatorScreenProps<'Nearest'>;
 
-export type DeparturesScreenProps<T extends keyof DeparturesStackParams> =
+export type DeparturesStackProps<T extends keyof DeparturesStackParams> =
   CompositeScreenProps<
     StackScreenProps<DeparturesStackParams, T>,
     RootDeparturesScreenProps
   >;
-
-export type NearbyPlacesScreenTabParams = {
-  AllStopsOverview: AllStopsOverviewParams;
-  FavouriteStopsOverview: undefined;
-};
-
-export type RootNearbyPlacesScreenTabProps =
-  DeparturesScreenProps<'DeparturesRoot'>;
-
-export type NearbyPlacesScreenTabProps<
-  T extends keyof NearbyPlacesScreenTabParams,
-> = CompositeScreenProps<
-  StackScreenProps<NearbyPlacesScreenTabParams, T>,
-  RootNearbyPlacesScreenTabProps
->;
