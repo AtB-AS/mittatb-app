@@ -48,7 +48,7 @@ enum AppEndPoint: String {
 }
 
 enum APIError: Error {
-    case errorFromServer, decodeError
+    case errorFromServer, decodeError, noDataError
 }
 
 class APIService {
@@ -78,6 +78,7 @@ class APIService {
 
             guard let result = try? decoder.decode(T.self, from: data!) else {
                 callback(.failure(APIError.decodeError))
+
                 return
             }
 
@@ -86,8 +87,9 @@ class APIService {
         task.resume()
     }
 
-    func fetchFavoriteDepartures(favorite: FavoriteDeparture, callback: @escaping (Result<QuayGroup, Error>) -> Void) {
-        let body = Body(favorites: [favorite])
+    /// Fetch departure times for a given departure
+    func fetchDepartureTimes(departure: FavoriteDeparture, callback: @escaping (Result<QuayGroup, Error>) -> Void) {
+        let body = Body(favorites: [departure])
 
         guard let uploadData = try? JSONEncoder().encode(body) else {
             return
@@ -97,7 +99,17 @@ class APIService {
             switch result {
             case let .success(object):
                 print(object)
-                callback(.success(object.data.first!.quays.first!))
+
+                // Api may return empty quays, therefore needs to find the correct one
+              guard let quayGroup = object.data.first!.quays.first(where: { $0.quay.id.elementsEqual(departure.quayId)}) else {
+                
+                    print(APIError.noDataError)
+                    callback(.failure(APIError.noDataError))
+
+                    return
+                }
+                callback(.success(quayGroup))
+
             case let .failure(error):
                 print(error)
                 callback(.failure(error))
