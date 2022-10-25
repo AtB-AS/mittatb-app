@@ -38,6 +38,7 @@ export type StopPlaceDeparturesQuery = {
   numberOfDepartures: number;
   startTime: string;
   timeRange?: number;
+  limitPerLine?: number;
 };
 
 export type QuayDeparturesVariables = {
@@ -45,6 +46,7 @@ export type QuayDeparturesVariables = {
   numberOfDepartures: number;
   startTime: string;
   timeRange?: number;
+  limitPerLine?: number;
 };
 
 export type StopPlaceMetadata = CursoredData<StopPlaceDetails[]>;

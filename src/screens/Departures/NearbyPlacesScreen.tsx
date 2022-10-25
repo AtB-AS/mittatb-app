@@ -9,7 +9,7 @@ import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 import FavouriteStopsOverview from '@atb/screens/Departures/FavouriteStopsOverview';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {AllStopsOverview} from '@atb/screens/Departures/AllStopsOverview';
+import {DeparturesV2Screen} from '@atb/screens/Departures/DeparturesV2Screen';
 import {NearbyPlacesScreenTabParams} from './types';
 
 const Tab = createMaterialTopTabNavigator<NearbyPlacesScreenTabParams>();
@@ -64,12 +64,12 @@ export default function NearbyPlacesScreen() {
           }}
         >
           <Tab.Screen
-            name={'AllStopsOverview'}
+            name={'DeparturesV2Screen'}
             options={{
               tabBarLabel: t(DeparturesTexts.resultType.all),
               tabBarAccessibilityLabel: t(DeparturesTexts.resultType.all),
             }}
-            component={AllStopsOverview}
+            component={DeparturesV2Screen}
           />
           <Tab.Screen
             name={'FavouriteStopsOverview'}

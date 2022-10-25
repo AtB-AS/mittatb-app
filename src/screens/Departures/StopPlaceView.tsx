@@ -3,12 +3,10 @@ import Feedback from '@atb/components/feedback';
 import {useFavorites} from '@atb/favorites';
 import {UserFavoriteDepartures} from '@atb/favorites/types';
 import {DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW} from '@atb/screens/Departures/state/stop-place-state';
-import {SearchTime} from '@atb/screens/Departures/utils';
+import {publicCodeCompare, SearchTime} from '@atb/screens/Departures/utils';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
-import DateNavigation from './components/DateNavigator';
-import FavoriteToggle from './components/FavoriteToggle';
 import QuaySection from './components/QuaySection';
 import {useStopPlaceData} from './state/stop-place-state';
 
@@ -77,20 +75,6 @@ export default function StopPlaceView({
     <>
       {quayListData && (
         <SectionList
-          ListHeaderComponent={
-            <View style={styles.header}>
-              {placeHasFavorites && (
-                <FavoriteToggle
-                  enabled={showOnlyFavorites}
-                  setEnabled={setShowOnlyFavorites}
-                />
-              )}
-              <DateNavigation
-                searchTime={searchTime}
-                setSearchTime={setSearchTime}
-              />
-            </View>
-          }
           refreshControl={
             <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
           }
@@ -111,13 +95,6 @@ export default function StopPlaceView({
                 stopPlace={stopPlace}
                 showOnlyFavorites={showOnlyFavorites}
               />
-              {index === 0 && (
-                <Feedback
-                  viewContext="departures"
-                  metadata={quayListData}
-                  avoidResetOnMetadataUpdate
-                />
-              )}
             </>
           )}
         />
@@ -138,17 +115,6 @@ export function hasFavorites(
   );
 }
 
-function publicCodeCompare(a?: string, b?: string): number {
-  // Show quays with no public code last
-  if (!a) return 1;
-  if (!b) return -1;
-  // If both public codes are numbers, compare as numbers (e.g. 2 < 10)
-  if (parseInt(a) && parseInt(b)) {
-    return parseInt(a) - parseInt(b);
-  }
-  // Otherwise compare as strings (e.g. K1 < K2)
-  return a.localeCompare(b);
-}
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
     paddingVertical: theme.spacings.medium,

@@ -151,7 +151,7 @@ type LineChipProps = {
   testID?: string;
 };
 
-function LineChip({
+export function LineChip({
   publicCode,
   transportMode,
   transportSubmode,

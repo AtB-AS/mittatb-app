@@ -5,6 +5,9 @@ import TripDetailsRoot from '@atb/screens/TripDetails';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
 import {DashboardParams} from './types';
+import NearbyDeparturesScreen from '@atb/screens/Dashboard/NearbyDeparturesScreen';
+import NearbyLinesScreen from '@atb/screens/Dashboard/NearbyLinesScreen';
+import FavoriteDepartures from '@atb/screens/Profile/FavoriteDepartures';
 
 const Stack = createStackNavigator<DashboardParams>();
 
@@ -36,6 +39,15 @@ const Dashboard = () => {
         name="DateTimePicker"
         component={JourneyDatePicker}
       ></Stack.Screen>
+      <Stack.Screen
+        name="NearbyDeparturesScreen"
+        component={NearbyDeparturesScreen}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="NearbyLinesScreen"
+        component={NearbyLinesScreen}
+      ></Stack.Screen>
+      <Stack.Screen name="FavoriteDepartures" component={FavoriteDepartures} />
     </Stack.Navigator>
   );
 };

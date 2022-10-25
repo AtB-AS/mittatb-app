@@ -9,6 +9,9 @@ import {
 } from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 
+import {NearbyDeparturesScreenParams} from "@atb/screens/Dashboard/NearbyDeparturesScreen";
+import {NearbyLinesScreenParams} from "@atb/screens/Dashboard/NearbyLinesScreen";
+
 export type ProfileStackParams = {
   ProfileHome: undefined;
   PaymentOptions: undefined;
@@ -29,6 +32,8 @@ export type ProfileStackParams = {
   PaymentInformation: undefined;
   TermsInformation: undefined;
   TicketInspectionInformation: undefined;
+  NearbyDeparturesScreen: NearbyDeparturesScreenParams | undefined;
+  NearbyLinesScreen: NearbyLinesScreenParams
 };
 
 export type ProfileStackRootProps = TabNavigatorScreenProps<'Profile'>;

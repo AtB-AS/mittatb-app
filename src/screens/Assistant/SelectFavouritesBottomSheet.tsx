@@ -23,6 +23,8 @@ import {LegMode} from '@entur/sdk';
 import SectionSeparator from '@atb/components/sections/section-separator';
 import MessageBox from '@atb/components/message-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
+import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
+import {NavigationProp} from "@react-navigation/native";
 
 type SelectableFavouriteDepartureData = {
   handleSwitchFlip: (favouriteId: string, active: boolean) => void;
@@ -99,10 +101,12 @@ const SelectableFavouriteDeparture = ({
 
 type SelectFavouritesBottomSheetProps = {
   close: () => void;
+  navigation: NavigationProp<any>;
 };
 
 const SelectFavouritesBottomSheet = ({
   close,
+  navigation,
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -197,6 +201,22 @@ const SelectFavouritesBottomSheet = ({
           icon={Confirm}
           iconPosition="right"
           testID="confirmButton"
+        />
+        <Button
+          style={{marginTop: 12}}
+          interactiveColor="interactive_2"
+          text={t(SelectFavouriteDeparturesText.edit_button.text)}
+          accessibilityHint={t(
+            SelectFavouriteDeparturesText.edit_button.a11yhint,
+          )}
+          onPress={() => {
+            close();
+            navigation.navigate('FavoriteDepartures');
+          }}
+          icon={SvgArrowRight}
+          iconPosition="right"
+          testID="editButton"
+          mode="secondary"
         />
       </FullScreenFooter>
     </BottomSheetContainer>

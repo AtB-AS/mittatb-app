@@ -5,8 +5,8 @@ import {DepartureDetailsRouteParams} from '../TripDetails/DepartureDetails';
 import {MapDetailRouteParams} from '../TripDetails/Map';
 import {QuayDeparturesRouteParams} from '../TripDetails/QuayDepartures';
 import {DetailsStackParams} from '../TripDetails/types';
-import {AllStopsOverviewParams} from './AllStopsOverview';
 import {PlaceScreenParams} from './PlaceScreen';
+import {DeparturesV2ScreenParams} from '@atb/screens/Departures/DeparturesV2Screen';
 
 export type DeparturesStackParams = {
   DeparturesRoot: undefined;
@@ -15,6 +15,7 @@ export type DeparturesStackParams = {
   QuayDepartures: QuayDeparturesRouteParams;
   TripDetails: DetailsStackParams;
   DetailsMap: MapDetailRouteParams;
+  DeparturesV2Screen: DeparturesV2ScreenParams;
 };
 
 export type RootDeparturesScreenProps = TabNavigatorScreenProps<'Nearest'>;
@@ -26,7 +27,7 @@ export type DeparturesScreenProps<T extends keyof DeparturesStackParams> =
   >;
 
 export type NearbyPlacesScreenTabParams = {
-  AllStopsOverview: AllStopsOverviewParams;
+  DeparturesV2Screen: DeparturesV2ScreenParams;
   FavouriteStopsOverview: undefined;
 };
 

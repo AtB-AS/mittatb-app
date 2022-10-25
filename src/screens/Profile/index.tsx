@@ -19,6 +19,8 @@ import TicketInspectionInformation from '@atb/screens/Profile/Information/Ticket
 import DeleteProfile from '@atb/screens/Profile/DeleteProfile';
 import PaymentOptions from './PaymentOptions';
 import {ProfileStackParams} from './types';
+import NearbyDeparturesScreen from "@atb/screens/Dashboard/NearbyDeparturesScreen";
+import NearbyLinesScreen from "@atb/screens/Dashboard/NearbyLinesScreen";
 
 const Stack = createStackNavigator<ProfileStackParams>();
 
@@ -54,6 +56,14 @@ export default function ProfileScreen() {
       <Stack.Screen
         name="TicketInspectionInformation"
         component={TicketInspectionInformation}
+      />
+      <Stack.Screen
+          name="NearbyDeparturesScreen"
+          component={NearbyDeparturesScreen}
+      />
+      <Stack.Screen
+          name="NearbyLinesScreen"
+          component={NearbyLinesScreen}
       />
     </Stack.Navigator>
   );
