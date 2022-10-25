@@ -8,6 +8,12 @@ const AssistantTexts = {
     },
   },
   location: {
+    travelFrom: {
+      title: _(`Reise fra`, `Travel from`),
+    },
+    travelTo: {
+      title: _(`Reise til`, `Travel to`),
+    },
     departurePicker: {
       label: _('Fra', 'From'),
       a11yLabel: _('Velg avreisested', 'Select place of departure'),

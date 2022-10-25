@@ -5,12 +5,17 @@ import {ActivityIndicator, View} from 'react-native';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '../../screen-header';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {
+  AssistantTexts,
+  ScreenHeaderTexts,
+  useTranslation,
+} from '@atb/translations';
 import StopPlaceView from '@atb/screens/Departures/StopPlaceView';
 import {SearchTime} from '@atb/screens/Departures/utils';
 import {Place, Quay} from '@atb/api/types/departures';
 import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
 import ThemeText from '../../text';
+import Button from '@atb/components/button';
 
 type DeparturesDialogSheetProps = {
   close: () => void;
@@ -55,6 +60,24 @@ const DeparturesDialogSheet = ({
         }}
       />
       <View style={styles.departuresContainer}>
+        <View style={styles.buttonsContainer}>
+          <View style={styles.travelButton}>
+            <Button
+              text={t(AssistantTexts.location.travelFrom.title)}
+              onPress={() => {}}
+              mode="primary"
+              style={styles.travelFromButtonPadding}
+            />
+          </View>
+          <View style={styles.travelButton}>
+            <Button
+              text={t(AssistantTexts.location.travelTo.title)}
+              onPress={() => {}}
+              mode="primary"
+              style={styles.travelToButtonPadding}
+            />
+          </View>
+        </View>
         <ThemeText
           type="body__secondary"
           color="secondary"
@@ -91,6 +114,21 @@ const DeparturesDialogSheet = ({
 const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
   departuresContainer: {
     flex: 1,
+  },
+  buttonsContainer: {
+    padding: theme.spacings.medium,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  travelButton: {
+    flex: 1,
+  },
+  travelFromButtonPadding: {
+    marginRight: theme.spacings.small,
+  },
+  travelToButtonPadding: {
+    marginLeft: theme.spacings.small,
   },
   loadingIndicator: {
     padding: theme.spacings.medium,
