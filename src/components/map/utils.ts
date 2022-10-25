@@ -50,11 +50,19 @@ export const findClickedStopPlace = async (
   const renderedFeatures = await getFeaturesAtCoordinates(
     featureOrCoords,
     mapViewRef,
-    ['==', ['geometry-type'], 'Point'],
+    [
+      'all',
+      ['==', ['geometry-type'], 'Point'],
+      ['==', ['get', 'entityType'], 'StopPlace'],
+    ],
   );
-  return renderedFeatures
-    ?.filter(isFeaturePoint)
-    .find((feature) => feature?.properties?.entityType === 'StopPlace');
+  let filteredFeatures = renderedFeatures?.filter(isFeaturePoint);
+
+  return (
+    filteredFeatures?.find(
+      (feature) => feature.properties?.finalStopPlaceType === undefined,
+    ) ?? filteredFeatures?.[0]
+  );
 };
 
 export const isFeaturePoint = (f: Feature): f is Feature<Point> =>
@@ -91,10 +99,16 @@ export const getFeaturesAtCoordinates = async (
     // Necessary hack (https://github.com/react-native-mapbox-gl/maps/issues/1085)
     point = point.map((p) => p * PixelRatio.get());
   }
-  const featuresAtPoint = await mapViewRef.current.queryRenderedFeaturesAtPoint(
-    point,
+  const bbox = calcBoundingBox(point, 10);
+  const featuresAtPoint = await mapViewRef.current.queryRenderedFeaturesInRect(
+    bbox,
     filter,
     layerIds,
   );
   return featuresAtPoint?.features;
+};
+
+export const calcBoundingBox = (point: GeoJSON.Position, offset: number) => {
+  const [x, y] = point;
+  return [y - offset, x - offset, y + offset, x + offset];
 };
