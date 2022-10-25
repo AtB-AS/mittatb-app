@@ -7,6 +7,9 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var locationStatus: CLAuthorizationStatus?
     @Published var lastLocation: CLLocation?
 
+    // Default location at Trondheim city centre
+    @Published var defaultLocation = CLLocation(latitude: 63.43457, longitude: 10.39844)
+
     override init() {
         super.init()
         locationManager.delegate = self

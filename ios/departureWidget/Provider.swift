@@ -69,8 +69,7 @@ struct Provider: TimelineProvider {
         var smallestDistance: CLLocationDistance?
 
         for departure in departures {
-            // TODO: better solution for default location
-            let distance = departure.location.distance(from: locationManager.lastLocation ?? CLLocation(latitude: 63.43457, longitude: 10.39844))
+            let distance = departure.location.distance(from: locationManager.lastLocation ?? locationManager.defaultLocation)
             if smallestDistance == nil || distance < smallestDistance! {
                 closestDeparture = departure
                 smallestDistance = distance
