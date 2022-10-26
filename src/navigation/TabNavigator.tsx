@@ -10,7 +10,7 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {usePreferenceItems} from '@atb/preferences';
 import Assistant from '@atb/screens/Assistant';
 import Dashboard from '@atb/screens/Dashboard';
-import DeparturesScreen from '@atb/screens/Departures';
+import DeparturesStack from '@atb/screens/Departures';
 import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/screens/MobileTokenOnboarding/utils';
 import MapStack from '@atb/screens/Map';
 import TicketingScreen from '@atb/screens/Ticketing';
@@ -83,7 +83,7 @@ const NavigationRoot = () => {
       )}
       <Tab.Screen
         name="Nearest"
-        component={newDepartures ? DeparturesScreen : NearbyScreen}
+        component={newDepartures ? DeparturesStack : NearbyScreen}
         options={tabSettings(
           t(dictionary.navigation.nearby),
           t(dictionary.navigation.nearby),
