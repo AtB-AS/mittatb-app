@@ -150,7 +150,7 @@ const BaseHeader = ({
         style={[
           css.buttons,
           {
-            top: theme.spacings.medium + buttonsTopOffset,
+            top: theme.spacings.large + buttonsTopOffset,
             height: buttonsHeight,
           },
         ]}
@@ -170,9 +170,12 @@ export default ScreenHeader;
 
 const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    padding: theme.spacings.medium,
-    borderTopLeftRadius: theme.border.radius.regular,
-    borderTopRightRadius: theme.border.radius.regular,
+    paddingLeft: theme.spacings.medium,
+    paddingRight: theme.spacings.medium,
+    paddingBottom: theme.spacings.large,
+    paddingTop: theme.spacings.large,
+    borderTopLeftRadius: theme.border.radius.circle,
+    borderTopRightRadius: theme.border.radius.circle,
   },
   headerTitle: {alignItems: 'center'},
   buttons: {

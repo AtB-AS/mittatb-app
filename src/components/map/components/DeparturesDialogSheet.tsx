@@ -47,7 +47,7 @@ const DeparturesDialogSheet = ({
         title={stopPlace?.name}
         color="background_1"
         leftButton={{
-          text: t(ScreenHeaderTexts.headerButton.cancel.text),
+          text: t(ScreenHeaderTexts.headerButton.close.text),
           type: 'close',
           onPress: close,
         }}
@@ -89,6 +89,7 @@ const DeparturesDialogSheet = ({
 const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
   departuresContainer: {
     flex: 1,
+    marginBottom: theme.spacings.medium,
   },
   loadingIndicator: {
     padding: theme.spacings.medium,
