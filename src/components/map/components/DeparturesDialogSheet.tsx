@@ -12,13 +12,15 @@ import {
 import StopPlaceView from '@atb/screens/Departures/StopPlaceView';
 import {SearchTime} from '@atb/screens/Departures/utils';
 import {Place, Quay} from '@atb/api/types/departures';
-import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
 import ThemeText from '../../text';
 import MessageBox from '@atb/components/message-box';
+import {Feature, Point} from 'geojson';
+import {useReverseGeocoder} from '@atb/geocoder';
+import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
 
 type DeparturesDialogSheetProps = {
   close: () => void;
-  place: Place;
+  stopPlaceFeature: Feature<Point>;
   navigateToQuay: (place: Place, quay: Quay) => void;
   navigateToDetails: (
     serviceJourneyId: string,
@@ -31,7 +33,7 @@ type DeparturesDialogSheetProps = {
 
 const DeparturesDialogSheet = ({
   close,
-  place,
+  stopPlaceFeature,
   navigateToDetails,
   navigateToQuay,
 }: DeparturesDialogSheetProps) => {
@@ -42,15 +44,21 @@ const DeparturesDialogSheet = ({
     date: new Date().toISOString(),
   });
   const [showOnlyFavorites, setShowOnlyFavorites] = useState<boolean>(false);
-  const {state} = useStopsDetailsData([place.id]);
+
+  const message = t(NearbyTexts.results.messages.emptyResult);
+  const [longitude, latitude] = stopPlaceFeature.geometry.coordinates;
+  const {closestLocation, isSearching} = useReverseGeocoder(
+    {longitude, latitude} || null,
+  );
+
+  const {state} = useStopsDetailsData(closestLocation && [closestLocation.id]);
   const stopPlace = state.data?.stopPlaces?.[0];
   const isLoading = state.isLoading;
-  const message = t(NearbyTexts.results.messages.emptyResult);
 
   return (
     <BottomSheetContainer maxHeightValue={0.5} fullHeight>
       <ScreenHeaderWithoutNavigation
-        title={stopPlace?.name}
+        title={stopPlaceFeature.properties?.name ?? stopPlace?.name}
         color="background_1"
         leftButton={{
           text: t(ScreenHeaderTexts.headerButton.close.text),
@@ -66,14 +74,14 @@ const DeparturesDialogSheet = ({
         >
           {t(DeparturesTexts.header.title)}
         </ThemeText>
-        {!isLoading ? (
+        {!isSearching && !isLoading ? (
           stopPlace && (stopPlace.quays?.length ?? 0 > 0) ? (
             <StopPlaceView
               stopPlace={stopPlace}
               showTimeNavigation={false}
               navigateToDetails={navigateToDetails}
               navigateToQuay={(quay) => {
-                navigateToQuay(place, quay);
+                navigateToQuay(stopPlace, quay);
               }}
               isFocused={false}
               searchTime={searchTime}
