@@ -41,13 +41,12 @@ export const useTriggerCameraMoveEffect = (
 ) => {
   const {height: bottomSheetHeight} = useBottomSheet();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
-  var paddingBottom = bottomSheetHeight - tabBarMinHeight;
+  let paddingBottom = bottomSheetHeight - tabBarMinHeight;
 
-  paddingBottom =
-    // Workaround for Android when font and screen size changes!
-    Platform.OS == 'android' && PixelRatio.get() > 3.0
-      ? paddingBottom / PixelRatio.get()
-      : paddingBottom;
+  // Workaround for Android when font and screen size changes
+  if (Platform.OS == 'android' && PixelRatio.get() > 3.0) {
+    paddingBottom = paddingBottom / PixelRatio.get();
+  }
   useEffect(() => {
     if (!cameraFocusMode) return;
 
