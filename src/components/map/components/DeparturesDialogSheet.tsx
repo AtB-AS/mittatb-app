@@ -81,6 +81,7 @@ const DeparturesDialogSheet = ({
             setShowOnlyFavorites={(_) => {}}
             testID="departuresContentView"
             allowFavouriteSelection={false}
+            mode={'Departure'}
           />
         );
       }
