@@ -170,10 +170,8 @@ export default ScreenHeader;
 
 const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    paddingLeft: theme.spacings.medium,
-    paddingRight: theme.spacings.medium,
-    paddingBottom: theme.spacings.large,
-    paddingTop: theme.spacings.large,
+    paddingHorizontal: theme.spacings.medium,
+    paddingVertical: theme.spacings.large,
     borderTopLeftRadius: theme.border.radius.circle,
     borderTopRightRadius: theme.border.radius.circle,
   },

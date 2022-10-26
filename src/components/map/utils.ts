@@ -87,11 +87,9 @@ export const getFeaturesAtCoordinates = async (
     coords.longitude,
     coords.latitude,
   ]);
-  var boundingOffset = 50;
   if (Platform.OS == 'android') {
     // Necessary hack (https://github.com/react-native-mapbox-gl/maps/issues/1085)
     point = point.map((p) => p * PixelRatio.get());
-    boundingOffset = boundingOffset * PixelRatio.get();
   }
   const featuresAtPoint = await mapViewRef.current.queryRenderedFeaturesAtPoint(
     point,
