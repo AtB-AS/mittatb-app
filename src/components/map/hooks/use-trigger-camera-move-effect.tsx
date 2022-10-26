@@ -42,7 +42,6 @@ export const useTriggerCameraMoveEffect = (
   const {height: bottomSheetHeight} = useBottomSheet();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   var paddingBottom = bottomSheetHeight - tabBarMinHeight;
-  console.log(PixelRatio.get(), PixelRatio.getFontScale());
 
   paddingBottom =
     // Workaround for Android when font and screen size changes!
