@@ -17,15 +17,15 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {SearchTime} from '@atb/screens/Departures/utils';
 
-type DateNavigationProps = {
+type DateSelectionProps = {
   searchTime: SearchTime;
   setSearchTime: (searchTime: SearchTime) => void;
 };
 
-export default function DateNavigation({
+export default function DateSelection({
   searchTime,
   setSearchTime,
-}: DateNavigationProps): JSX.Element {
+}: DateSelectionProps): JSX.Element {
   const styles = useStyles();
   const {theme} = useTheme();
   const {t, language} = useTranslation();
