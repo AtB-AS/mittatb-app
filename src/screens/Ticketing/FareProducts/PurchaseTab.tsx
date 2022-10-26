@@ -4,7 +4,7 @@ import AnonymousPurchaseWarning from '@atb/screens/Ticketing/Purchase/AnonymousP
 import {AvailableFareProducts} from '@atb/screens/Ticketing/FareProducts/AvailableFareProducts/AvailableFareProducts';
 import {useTheme} from '@atb/theme';
 import React from 'react';
-import {ScrollView} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {RecentFareContracts} from './RecentFareProducts/RecentFareContracts';
 import {TicketingScreenProps} from '../types';
 import UpgradeSplash from './UpgradeSplash';
@@ -19,7 +19,7 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
   const {theme} = useTheme();
   const {recentFareContracts} = useRecentFareContracts();
   const hasRecentFareContracts =
-    enable_recent_tickets && recentFareContracts.length;
+    enable_recent_tickets && !!recentFareContracts.length;
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -69,21 +69,21 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
 
   return isSignedInAsAbtCustomer ? (
     <ScrollView>
-      {enable_recent_tickets && <RecentFareContracts />}
-      {authenticationType !== 'phone' && <AnonymousPurchaseWarning />}
-      <AvailableFareProducts
-        onBuySingleFareProduct={onBuySingleFareProduct}
-        onBuyPeriodFareProduct={onBuyPeriodFareProduct}
-        onBuyHour24FareProduct={onBuyHour24FareProduct}
-        containerStyle={
-          hasRecentFareContracts
-            ? {
-                backgroundColor:
-                  theme.static.background.background_2.background,
-              }
-            : undefined
-        }
-      />
+      {hasRecentFareContracts && <RecentFareContracts />}
+      <View
+        style={{
+          backgroundColor: hasRecentFareContracts
+            ? theme.static.background.background_2.background
+            : undefined,
+        }}
+      >
+        {authenticationType !== 'phone' && <AnonymousPurchaseWarning />}
+        <AvailableFareProducts
+          onBuySingleFareProduct={onBuySingleFareProduct}
+          onBuyPeriodFareProduct={onBuyPeriodFareProduct}
+          onBuyHour24FareProduct={onBuyHour24FareProduct}
+        />
+      </View>
     </ScrollView>
   ) : null;
 };
