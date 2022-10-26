@@ -66,8 +66,8 @@ const DeparturesDialogSheet = ({
         >
           {t(DeparturesTexts.header.title)}
         </ThemeText>
-        {!isLoading && stopPlace ? (
-          stopPlace.quays?.length ?? 0 > 0 ? (
+        {!isLoading ? (
+          stopPlace ? (
             <StopPlaceView
               stopPlace={stopPlace}
               showTimeNavigation={false}
