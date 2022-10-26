@@ -14,7 +14,7 @@ import axiosBetterStacktrace from 'axios-better-stacktrace';
 import {getBooleanConfigValue} from '../remote-config';
 import auth from '@react-native-firebase/auth';
 
-export default createClient('http://10.100.1.55:8080');
+export default createClient(API_BASE_URL);
 
 const RETRY_COUNT = 3;
 
