@@ -15,6 +15,7 @@ import {
   CameraFocusModeType,
   FeatureOrCoordinates,
 } from '@atb/components/map/types';
+import {PixelRatio, Platform} from 'react-native';
 
 type BoundingBox = {
   xMin: number;
@@ -40,7 +41,14 @@ export const useTriggerCameraMoveEffect = (
 ) => {
   const {height: bottomSheetHeight} = useBottomSheet();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
-  const paddingBottom = bottomSheetHeight - tabBarMinHeight;
+  var paddingBottom = bottomSheetHeight - tabBarMinHeight;
+  console.log(PixelRatio.get(), PixelRatio.getFontScale());
+
+  paddingBottom =
+    // Workaround for Android when font and screen size changes!
+    Platform.OS == 'android' && PixelRatio.get() > 3.0
+      ? paddingBottom / PixelRatio.get()
+      : paddingBottom;
   useEffect(() => {
     if (!cameraFocusMode) return;
 

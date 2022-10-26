@@ -1,16 +1,20 @@
 import {StyleSheet} from '@atb/theme';
-import {Feature, Point} from 'geojson';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '../../screen-header';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {
+  NearbyTexts,
+  ScreenHeaderTexts,
+  useTranslation,
+} from '@atb/translations';
 import StopPlaceView from '@atb/screens/Departures/StopPlaceView';
 import {SearchTime} from '@atb/screens/Departures/utils';
 import {Place, Quay} from '@atb/api/types/departures';
 import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
 import ThemeText from '../../text';
+import MessageBox from '@atb/components/message-box';
 
 type DeparturesDialogSheetProps = {
   close: () => void;
@@ -40,6 +44,8 @@ const DeparturesDialogSheet = ({
   const [showOnlyFavorites, setShowOnlyFavorites] = useState<boolean>(false);
   const {state} = useStopsDetailsData([place.id]);
   const stopPlace = state.data?.stopPlaces?.[0];
+  const isLoading = state.isLoading;
+  const message = t(NearbyTexts.results.messages.emptyResult);
 
   return (
     <BottomSheetContainer maxHeightValue={0.5} fullHeight>
@@ -60,24 +66,30 @@ const DeparturesDialogSheet = ({
         >
           {t(DeparturesTexts.header.title)}
         </ThemeText>
-        {!state.isLoading && stopPlace ? (
-          <StopPlaceView
-            stopPlace={stopPlace}
-            showTimeNavigation={false}
-            navigateToDetails={navigateToDetails}
-            navigateToQuay={(quay) => {
-              navigateToQuay(place, quay);
-            }}
-            isFocused={false}
-            searchTime={searchTime}
-            setSearchTime={setSearchTime}
-            showOnlyFavorites={showOnlyFavorites}
-            setShowOnlyFavorites={setShowOnlyFavorites}
-            testID="departuresContentView"
-            allowFavouriteSelection={false}
-          />
+        {!isLoading && stopPlace ? (
+          stopPlace.quays?.length ?? 0 > 0 ? (
+            <StopPlaceView
+              stopPlace={stopPlace}
+              showTimeNavigation={false}
+              navigateToDetails={navigateToDetails}
+              navigateToQuay={(quay) => {
+                navigateToQuay(place, quay);
+              }}
+              isFocused={false}
+              searchTime={searchTime}
+              setSearchTime={setSearchTime}
+              showOnlyFavorites={showOnlyFavorites}
+              setShowOnlyFavorites={setShowOnlyFavorites}
+              testID="departuresContentView"
+              allowFavouriteSelection={false}
+            />
+          ) : (
+            <View style={styles.container}>
+              <MessageBox type="info" message={message} />
+            </View>
+          )
         ) : (
-          <View style={styles.loadingIndicator}>
+          <View style={styles.container}>
             <ActivityIndicator size="large" />
           </View>
         )}
@@ -90,12 +102,13 @@ const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
   departuresContainer: {
     flex: 1,
   },
-  loadingIndicator: {
-    padding: theme.spacings.medium,
+  container: {
+    paddingTop: theme.spacings.small,
+    paddingLeft: theme.spacings.medium,
+    paddingRight: theme.spacings.medium,
   },
   title: {
     marginLeft: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
   },
 }));
 
