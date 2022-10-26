@@ -343,6 +343,7 @@ function TripItem({
           id: quay.id,
           name: quay.name,
         },
+        mode: 'Departure',
       });
     } else {
       navigation.navigate('QuayDepartures', {stopPlace});

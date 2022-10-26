@@ -94,7 +94,9 @@ export default function ProfileHome({navigation}: ProfileProps) {
   const {open: openBottomSheet} = useBottomSheet();
   async function selectFavourites() {
     openBottomSheet((close) => {
-      return <SelectFavouritesBottomSheet close={close} />;
+      return (
+        <SelectFavouritesBottomSheet close={close} navigation={navigation} />
+      );
     });
   }
 

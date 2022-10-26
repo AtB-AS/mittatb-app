@@ -90,5 +90,8 @@ const DeparturesTexts = {
   button: {
     text: _('Velg favorittavganger', 'Select favourite departures'),
   },
+  closeButton: {
+    label: _('Lukk', 'Close'),
+  },
 };
 export default DeparturesTexts;

@@ -67,6 +67,7 @@ type DepartureDataActions =
       stopPlace: StopPlace;
       startTime?: string;
       favoriteDepartures?: UserFavoriteDepartures;
+      limitPerLine?: number;
     }
   | {
       type: 'LOAD_REALTIME_DATA';
@@ -87,6 +88,7 @@ type DepartureDataActions =
       stopPlace: StopPlace;
       startTime?: string;
       favoriteDepartures?: UserFavoriteDepartures;
+      limitPerLine?: number;
     }
   | {
       type: 'SET_ERROR';
@@ -116,6 +118,7 @@ const reducer: ReducerWithSideEffects<
       const queryInput: QueryInput = {
         numberOfDepartures: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED,
         startTime: action.startTime ?? new Date().toISOString(),
+        limitPerLine: action.limitPerLine,
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -204,6 +207,7 @@ const reducer: ReducerWithSideEffects<
             stopPlace: action.stopPlace,
             startTime: action.startTime,
             favoriteDepartures: action.favoriteDepartures,
+            limitPerLine: action.limitPerLine,
           });
         },
       );
@@ -253,6 +257,7 @@ export function useStopPlaceData(
   showOnlyFavorites: boolean,
   isFocused: boolean,
   startTime?: string,
+  limitPerLine?: number,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
 ) {
@@ -265,6 +270,7 @@ export function useStopPlaceData(
         type: 'LOAD_INITIAL_DEPARTURES',
         stopPlace,
         startTime,
+        limitPerLine,
         favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
       }),
     [stopPlace.id, startTime, showOnlyFavorites, favoriteDepartures],
@@ -278,6 +284,7 @@ export function useStopPlaceData(
         startTime,
         showOnlyFavorites,
         favoriteDepartures,
+        limitPerLine,
       }),
     [stopPlace.id, favoriteDepartures, showOnlyFavorites],
   );
@@ -314,6 +321,7 @@ export function useStopPlaceData(
 type QueryInput = {
   numberOfDepartures: number;
   startTime: string;
+  limitPerLine?: number;
 };
 
 async function fetchEstimatedCalls(
@@ -332,6 +340,7 @@ async function fetchEstimatedCalls(
       startTime: queryInput.startTime,
       numberOfDepartures: queryInput.numberOfDepartures,
       timeRange: timeRange,
+      limitPerLine: queryInput.limitPerLine,
     },
     favoriteDepartures,
   );

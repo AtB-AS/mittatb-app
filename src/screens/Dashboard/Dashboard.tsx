@@ -288,7 +288,7 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
             }
           />
         )}
-        <DeparturesWidget />
+        <DeparturesWidget navigation={navigation} />
       </ScrollView>
     </View>
   );
