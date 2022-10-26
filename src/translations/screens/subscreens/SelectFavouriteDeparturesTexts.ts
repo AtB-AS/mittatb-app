@@ -33,6 +33,13 @@ const SelectFavouriteDeparturesText = {
       'Activate to save the selected favourite departures',
     ),
   },
+  edit_button: {
+    text: _('Rediger favorittavganger', 'Edit favorite departures'),
+    a11yhint: _(
+      'Aktiver for å redigere favorittavganger',
+      'Activate to edit favourite departures',
+    ),
+  },
   accessibleText: {
     from: _('fra', 'from'),
   },

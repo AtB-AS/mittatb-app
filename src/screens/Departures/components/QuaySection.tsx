@@ -65,6 +65,11 @@ export default function QuaySection({
     );
   }, [showOnlyFavorites]);
 
+  const shouldShowMoreItemsLink =
+    navigateToQuay &&
+    !isMinimized &&
+    departuresPerQuay &&
+    departures.length > departuresPerQuay;
   return (
     <View testID={testID}>
       <Sections.Section withPadding withBottomPadding>
@@ -162,7 +167,7 @@ export default function QuaySection({
             </View>
           </Sections.GenericItem>
         )}
-        {navigateToQuay && !isMinimized && (
+        {shouldShowMoreItemsLink && (
           <Sections.LinkItem
             icon="arrow-right"
             text={

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Platform, ScrollView, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import Button from '@atb/components/button';
+import Button, {ButtonGroup} from '@atb/components/button';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import FixedSwitch from '@atb/components/switch';
 import ThemeText from '@atb/components/text';
@@ -23,6 +23,8 @@ import {LegMode} from '@entur/sdk';
 import SectionSeparator from '@atb/components/sections/section-separator';
 import MessageBox from '@atb/components/message-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
+import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
+import {NavigationProp} from '@react-navigation/native';
 
 type SelectableFavouriteDepartureData = {
   handleSwitchFlip: (favouriteId: string, active: boolean) => void;
@@ -99,10 +101,12 @@ const SelectableFavouriteDeparture = ({
 
 type SelectFavouritesBottomSheetProps = {
   close: () => void;
+  navigation: NavigationProp<any>;
 };
 
 const SelectFavouritesBottomSheet = ({
   close,
+  navigation,
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -186,18 +190,35 @@ const SelectFavouritesBottomSheet = ({
       </ScrollView>
 
       <FullScreenFooter>
-        <Button
-          interactiveColor="interactive_0"
-          text={t(SelectFavouriteDeparturesText.confirm_button.text)}
-          accessibilityHint={t(
-            SelectFavouriteDeparturesText.confirm_button.a11yhint,
-          )}
-          onPress={saveAndExit}
-          disabled={false}
-          icon={Confirm}
-          iconPosition="right"
-          testID="confirmButton"
-        />
+        <ButtonGroup>
+          <Button
+            interactiveColor="interactive_0"
+            text={t(SelectFavouriteDeparturesText.confirm_button.text)}
+            accessibilityHint={t(
+              SelectFavouriteDeparturesText.confirm_button.a11yhint,
+            )}
+            onPress={saveAndExit}
+            disabled={false}
+            icon={Confirm}
+            iconPosition="right"
+            testID="confirmButton"
+          />
+          <Button
+            interactiveColor="interactive_2"
+            text={t(SelectFavouriteDeparturesText.edit_button.text)}
+            accessibilityHint={t(
+              SelectFavouriteDeparturesText.edit_button.a11yhint,
+            )}
+            onPress={() => {
+              close();
+              navigation.navigate('FavoriteDepartures');
+            }}
+            icon={SvgArrowRight}
+            iconPosition="right"
+            testID="editButton"
+            mode="secondary"
+          />
+        </ButtonGroup>
       </FullScreenFooter>
     </BottomSheetContainer>
   );

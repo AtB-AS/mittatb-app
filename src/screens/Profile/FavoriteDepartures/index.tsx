@@ -1,16 +1,20 @@
 import * as Sections from '@atb/components/sections';
 import {useFavorites} from '@atb/favorites';
 import {StoredFavoriteDeparture} from '@atb/favorites/types';
-import MessageBox from '@atb/components/message-box';
 import {StyleSheet, Theme} from '@atb/theme';
 import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {Alert, LayoutAnimation, View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {animateNextChange} from '@atb/utils/animation';
+import {Add} from '@atb/assets/svg/mono-icons/actions';
+import ThemeIcon from '@atb/components/theme-icon';
+import {ProfileScreenProps} from '@atb/screens/Profile/types';
 
-export default function FavoriteDepartures() {
+export type Props = ProfileScreenProps<'FavoriteDepartures'>;
+
+export default function FavoriteDepartures({navigation}: Props) {
   const style = useProfileStyle();
   const {favoriteDepartures, removeFavoriteDeparture} = useFavorites();
   const {t} = useTranslation();
@@ -44,15 +48,7 @@ export default function FavoriteDepartures() {
       />
 
       <ScrollView>
-        {!favoriteDepartures.length && (
-          <MessageBox
-            containerStyle={style.empty}
-            message={t(FavoriteDeparturesTexts.noFavorites)}
-            type="info"
-          />
-        )}
-
-        <Sections.Section withTopPadding withPadding>
+        <Sections.Section withFullPadding>
           {favoriteDepartures.map((favorite) => (
             <Sections.FavoriteDepartureItem
               key={favorite.id}
@@ -65,6 +61,18 @@ export default function FavoriteDepartures() {
               onPress={onDeletePress}
             />
           ))}
+        </Sections.Section>
+        <Sections.Section withPadding>
+          <Sections.LinkItem
+            text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
+            onPress={() => {
+              navigation.navigate('NearbyStopPlacesScreen', {
+                location: undefined,
+              });
+            }}
+            testID="chooseLoginPhone"
+            icon={<ThemeIcon svg={Add} />}
+          />
         </Sections.Section>
       </ScrollView>
     </View>

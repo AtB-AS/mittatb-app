@@ -70,6 +70,7 @@ type DepartureDataActions =
       quay: DepartureTypes.Quay;
       startTime?: string;
       favoriteDepartures?: UserFavoriteDepartures;
+      limitPerLine?: number;
     }
   | {
       type: 'LOAD_REALTIME_DATA';
@@ -90,6 +91,7 @@ type DepartureDataActions =
       quay: DepartureTypes.Quay;
       startTime?: string;
       favoriteDepartures?: UserFavoriteDepartures;
+      limitPerLine?: number;
     }
   | {
       type: 'SET_ERROR';
@@ -116,6 +118,7 @@ const reducer: ReducerWithSideEffects<
         id: action.quay.id,
         numberOfDepartures: MAX_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
         startTime: action.startTime ?? new Date().toISOString(),
+        limitPerLine: action.limitPerLine,
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -207,6 +210,7 @@ const reducer: ReducerWithSideEffects<
             quay: action.quay,
             startTime: action.startTime,
             favoriteDepartures: action.favoriteDepartures,
+            limitPerLine: action.limitPerLine,
           });
         },
       );
@@ -255,6 +259,7 @@ export function useQuayData(
   quay: DepartureTypes.Quay,
   showOnlyFavorites: boolean,
   startTime?: string,
+  limitPerLine?: number,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
 ) {
@@ -269,6 +274,7 @@ export function useQuayData(
         quay,
         startTime,
         favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
+        limitPerLine,
       }),
     [quay.id, startTime, showOnlyFavorites, favoriteDepartures],
   );
@@ -281,6 +287,7 @@ export function useQuayData(
         startTime,
         showOnlyFavorites,
         favoriteDepartures,
+        limitPerLine,
       }),
     [quay.id, favoriteDepartures, showOnlyFavorites],
   );
@@ -330,6 +337,7 @@ type QueryInput = {
   numberOfDepartures: number;
   startTime: string;
   timeRange?: number;
+  limitPerLine?: number;
 };
 
 async function fetchEstimatedCalls(
@@ -348,6 +356,7 @@ async function fetchEstimatedCalls(
       startTime: queryInput.startTime,
       numberOfDepartures: queryInput.numberOfDepartures,
       timeRange: timeRange,
+      limitPerLine: queryInput.limitPerLine,
     },
     favoriteDepartures,
   );

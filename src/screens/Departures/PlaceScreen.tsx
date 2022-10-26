@@ -13,11 +13,14 @@ import QuayView from './QuayView';
 import {useStopsDetailsData} from './state/stop-place-details-state';
 import StopPlaceView from './StopPlaceView';
 import {DeparturesStackProps} from './types';
+import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 
+export type PlaceScreenMode = 'Favourite' | 'Departure';
 export type PlaceScreenParams = {
   place: Place;
   selectedQuay?: Quay;
   showOnlyFavoritesByDefault?: boolean;
+  mode: PlaceScreenMode;
 };
 
 type quayChipData = {
@@ -29,7 +32,12 @@ export type PlaceScreenProps = DeparturesStackProps<'PlaceScreen'>;
 export default function PlaceScreen({
   navigation,
   route: {
-    params: {place, selectedQuay, showOnlyFavoritesByDefault},
+    params: {
+      place,
+      selectedQuay,
+      showOnlyFavoritesByDefault,
+      mode,
+    },
   },
 }: PlaceScreenProps) {
   const styles = useStyles();
@@ -82,73 +90,92 @@ export default function PlaceScreen({
   return (
     <View style={styles.container}>
       <FullScreenHeader title={place.name} leftButton={{type: 'back'}} />
-      <FlatList
-        data={place.quays}
-        style={styles.quayChipContainer}
-        horizontal={!isMissingQuays}
-        showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.id}
-        ListHeaderComponent={
-          <>
-            {isMissingQuays ? (
-              <ActivityIndicator size="large" />
-            ) : (
-              <Button
-                onPress={() => {
-                  navigation.setParams({selectedQuay: undefined});
-                }}
-                text={t(DeparturesTexts.quayChips.allStops)}
-                interactiveColor="interactive_1"
-                active={!selectedQuay}
-                style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
-                accessibilityHint={t(
-                  DeparturesTexts.quayChips.a11yAllStopsHint,
-                )}
-                testID="allStopsSelectionButton"
-              ></Button>
-            )}
-          </>
-        }
-        renderItem={({item}: quayChipData) => (
-          <Button
-            onPress={() => {
-              navigation.setParams({selectedQuay: item});
-            }}
-            text={getQuayName(item)}
-            interactiveColor="interactive_1"
-            active={selectedQuay?.id === item.id}
-            style={styles.quayChip}
-            accessibilityHint={
-              t(DeparturesTexts.quayChips.a11yHint) + getQuayName(item)
-            }
-            testID="quaySelectionButton"
-          ></Button>
+      {mode === 'Departure' && (
+        <FlatList
+          data={place.quays}
+          style={styles.quayChipContainer}
+          horizontal={!isMissingQuays}
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item) => item.id}
+          ListHeaderComponent={
+            <>
+              {isMissingQuays ? (
+                <ActivityIndicator size="large" />
+              ) : (
+                <Button
+                  onPress={() => {
+                    navigation.setParams({selectedQuay: undefined});
+                  }}
+                  text={t(DeparturesTexts.quayChips.allStops)}
+                  interactiveColor="interactive_1"
+                  active={!selectedQuay}
+                  style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
+                  accessibilityHint={t(
+                    DeparturesTexts.quayChips.a11yAllStopsHint,
+                  )}
+                  testID="allStopsSelectionButton"
+                ></Button>
+              )}
+            </>
+          }
+          renderItem={({item}: quayChipData) => (
+            <Button
+              onPress={() => {
+                navigation.setParams({selectedQuay: item});
+              }}
+              text={getQuayName(item)}
+              interactiveColor="interactive_1"
+              active={selectedQuay?.id === item.id}
+              style={styles.quayChip}
+              accessibilityHint={
+                t(DeparturesTexts.quayChips.a11yHint) + getQuayName(item)
+              }
+              testID="quaySelectionButton"
+            ></Button>
+          )}
+        />
+      )}
+
+      <View style={styles.quayData}>
+        {selectedQuay ? (
+          <QuayView
+            quay={selectedQuay}
+            navigateToDetails={navigateToDetails}
+            searchTime={searchTime}
+            setSearchTime={setSearchTime}
+            showOnlyFavorites={showOnlyFavorites}
+            setShowOnlyFavorites={setShowOnlyFavorites}
+            testID="departuresContentView"
+            stopPlace={place}
+            mode={mode}
+          />
+        ) : (
+          <StopPlaceView
+            stopPlace={place}
+            isFocused={isFocused}
+            navigateToDetails={navigateToDetails}
+            navigateToQuay={navigateToQuay}
+            searchTime={searchTime}
+            setSearchTime={setSearchTime}
+            showOnlyFavorites={showOnlyFavorites}
+            setShowOnlyFavorites={setShowOnlyFavorites}
+            testID="departuresContentView"
+            allowFavouriteSelection={true}
+            mode={mode}
+          />
         )}
-      />
-      {selectedQuay ? (
-        <QuayView
-          quay={selectedQuay}
-          navigateToDetails={navigateToDetails}
-          searchTime={searchTime}
-          setSearchTime={setSearchTime}
-          showOnlyFavorites={showOnlyFavorites}
-          setShowOnlyFavorites={setShowOnlyFavorites}
-          testID="departuresContentView"
-          stopPlace={place}
-        />
-      ) : (
-        <StopPlaceView
-          stopPlace={place}
-          isFocused={isFocused}
-          navigateToDetails={navigateToDetails}
-          navigateToQuay={navigateToQuay}
-          searchTime={searchTime}
-          setSearchTime={setSearchTime}
-          showOnlyFavorites={showOnlyFavorites}
-          setShowOnlyFavorites={setShowOnlyFavorites}
-          testID="departuresContentView"
-          allowFavouriteSelection={true}
-        />
+      </View>
+
+      {mode === 'Favourite' && (
+        <FullScreenFooter>
+          <Button
+            style={styles.closeButton}
+            interactiveColor="interactive_0"
+            text={t(DeparturesTexts.closeButton.label)}
+            onPress={() => navigation.popToTop()}
+            testID="confirmButton"
+          />
+        </FullScreenFooter>
       )}
     </View>
   );
@@ -172,4 +199,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   quayChip: {
     marginRight: theme.spacings.medium,
   },
+  closeButton: {
+    marginTop: theme.spacings.medium,
+  },
+  quayData: {flex: 1, marginTop: theme.spacings.small},
 }));

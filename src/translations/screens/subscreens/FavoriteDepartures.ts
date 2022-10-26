@@ -3,14 +3,17 @@ const FavoriteDeparturesTexts = {
   header: {
     title: _('Favorittavganger', 'Favourite departures'),
   },
-  noFavorites: _(
-    'Du har ingen favorittavganger. Du kan legge til med å stjernemarkere i Avganger-visningen.',
-    `No favourite departures added yet. Add one by tapping a star in the "Departures" view`,
-  ),
   favoriteItemDelete: {
     a11yHint: _(
       'Aktivér for å fjerne favorittavgang',
       'Activate to delete favourite departure',
+    ),
+  },
+  favoriteItemAdd: {
+    label: _('Legg til favorittavgang', 'Add favorite departure'),
+    a11yHint: _(
+      'Aktiver for å legge til favorittavganger',
+      'Activate to add favourite departures',
     ),
   },
   delete: {
