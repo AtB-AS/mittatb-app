@@ -56,11 +56,12 @@ export const findClickedStopPlace = async (
       ['==', ['get', 'entityType'], 'StopPlace'],
     ],
   );
+
   let filteredFeatures = renderedFeatures?.filter(isFeaturePoint);
 
   return (
     filteredFeatures?.find(
-      (feature) => feature.properties?.finalStopPlaceType === undefined,
+      (feature) => feature.properties?.isParentStopPlace === 'true',
     ) ?? filteredFeatures?.[0]
   );
 };
@@ -95,11 +96,13 @@ export const getFeaturesAtCoordinates = async (
     coords.longitude,
     coords.latitude,
   ]);
+  var boundingOffset = 10;
   if (Platform.OS == 'android') {
     // Necessary hack (https://github.com/react-native-mapbox-gl/maps/issues/1085)
     point = point.map((p) => p * PixelRatio.get());
+    boundingOffset = boundingOffset * PixelRatio.get();
   }
-  const bbox = calcBoundingBox(point, 10);
+  const bbox = calcBoundingBox(point, boundingOffset);
   const featuresAtPoint = await mapViewRef.current.queryRenderedFeaturesInRect(
     bbox,
     filter,
