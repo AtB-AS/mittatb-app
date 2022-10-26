@@ -62,12 +62,12 @@ const DeparturesDialogSheet = ({
         <ThemeText
           type="body__secondary"
           color="secondary"
-          style={styles.title}
+          style={[styles.title, styles.horizontalPadding]}
         >
           {t(DeparturesTexts.header.title)}
         </ThemeText>
         {!isLoading ? (
-          stopPlace ? (
+          stopPlace && (stopPlace.quays?.length ?? 0 > 0) ? (
             <StopPlaceView
               stopPlace={stopPlace}
               showTimeNavigation={false}
@@ -84,12 +84,12 @@ const DeparturesDialogSheet = ({
               allowFavouriteSelection={false}
             />
           ) : (
-            <View style={styles.container}>
+            <View style={styles.horizontalPadding}>
               <MessageBox type="info" message={message} />
             </View>
           )
         ) : (
-          <View style={styles.container}>
+          <View style={styles.horizontalPadding}>
             <ActivityIndicator size="large" />
           </View>
         )}
@@ -102,13 +102,11 @@ const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
   departuresContainer: {
     flex: 1,
   },
-  container: {
-    paddingTop: theme.spacings.small,
-    paddingLeft: theme.spacings.medium,
-    paddingRight: theme.spacings.medium,
+  horizontalPadding: {
+    paddingHorizontal: theme.spacings.medium,
   },
   title: {
-    marginLeft: theme.spacings.medium,
+    paddingBottom: theme.spacings.small,
   },
 }));
 
