@@ -3,14 +3,17 @@ import Feedback from '@atb/components/feedback';
 import {useFavorites} from '@atb/favorites';
 import {UserFavoriteDepartures} from '@atb/favorites/types';
 import {DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW} from '@atb/screens/Departures/state/stop-place-state';
-import {SearchTime} from '@atb/screens/Departures/utils';
+import {
+  getLimitOfDeparturesPerLineByMode,
+  SearchTime,
+} from '@atb/screens/Departures/utils';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import QuaySection from './components/QuaySection';
 import {useStopPlaceData} from './state/stop-place-state';
 import FavoriteToggle from '@atb/screens/Departures/components/FavoriteToggle';
-import DateNavigation from '@atb/screens/Departures/components/DateNavigator';
+import DateSelection from '@atb/screens/Departures/components/DateSelection';
 import {PlaceScreenMode} from '@atb/screens/Departures/PlaceScreen';
 
 type StopPlaceViewProps = {
@@ -54,7 +57,7 @@ export default function StopPlaceView({
     showOnlyFavorites,
     isFocused,
     searchTime?.option !== 'now' ? searchTime.date : undefined,
-    mode === 'Favourite' ? 1 : undefined,
+    getLimitOfDeparturesPerLineByMode(mode),
   );
   const quayListData: SectionListData<Quay>[] | undefined = stopPlace.quays
     ? [{data: stopPlace.quays}]
@@ -104,7 +107,7 @@ export default function StopPlaceView({
                   />
                 )}
                 {showTimeNavigation && (
-                  <DateNavigation
+                  <DateSelection
                     searchTime={searchTime}
                     setSearchTime={setSearchTime}
                   />

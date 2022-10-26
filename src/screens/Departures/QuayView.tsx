@@ -1,10 +1,13 @@
 import {Place, Quay} from '@atb/api/types/departures';
 import {useFavorites} from '@atb/favorites';
-import {SearchTime} from '@atb/screens/Departures/utils';
+import {
+  getLimitOfDeparturesPerLineByMode,
+  SearchTime,
+} from '@atb/screens/Departures/utils';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
-import DateNavigation from './components/DateNavigator';
+import DateSelection from './components/DateSelection';
 import FavoriteToggle from './components/FavoriteToggle';
 import QuaySection from './components/QuaySection';
 import {useQuayData} from './state/quay-state';
@@ -49,7 +52,7 @@ export default function QuayView({
     quay,
     showOnlyFavorites,
     searchTime?.option !== 'now' ? searchTime.date : undefined,
-    mode === 'Favourite' ? 1 : undefined,
+    getLimitOfDeparturesPerLineByMode(mode),
   );
 
   const quayListData: SectionListData<Quay>[] = [{data: [quay]}];
@@ -81,7 +84,7 @@ export default function QuayView({
                 setEnabled={setShowOnlyFavorites}
               />
             )}
-            <DateNavigation
+            <DateSelection
               searchTime={searchTime}
               setSearchTime={setSearchTime}
             />
