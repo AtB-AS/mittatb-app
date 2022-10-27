@@ -53,7 +53,7 @@ const DeparturesDialogSheet = ({
 
   const {state} = useStopsDetailsData(closestLocation && [closestLocation.id]);
   const stopPlace = state.data?.stopPlaces?.[0];
-  const isLoading = state.isLoading;
+  const isLoading = state.isLoading || isSearching;
 
   return (
     <BottomSheetContainer maxHeightValue={0.5} fullHeight>
@@ -74,8 +74,8 @@ const DeparturesDialogSheet = ({
         >
           {t(DeparturesTexts.header.title)}
         </ThemeText>
-        {!isSearching && !isLoading ? (
-          stopPlace && (stopPlace.quays?.length ?? 0 > 0) ? (
+        {!isLoading ? (
+          !!stopPlace?.quays?.length ? (
             <StopPlaceView
               stopPlace={stopPlace}
               showTimeNavigation={false}
