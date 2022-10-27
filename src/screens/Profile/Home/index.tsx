@@ -49,7 +49,7 @@ const version = getVersion();
 type ProfileProps = ProfileScreenProps<'ProfileHome'>;
 
 export default function ProfileHome({navigation}: ProfileProps) {
-  const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login} =
+  const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login, enable_map_page} =
     useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {wipeToken} = useMobileTokenContextState();
@@ -306,15 +306,17 @@ export default function ProfileHome({navigation}: ProfileProps) {
               setPreference({newDepartures});
             }}
           />
-          <Sections.ActionItem
-            mode="toggle"
-            text={t(ProfileTexts.sections.newFeatures.map)}
-            checked={showMapPage}
-            testID="enableMapPageToggle"
-            onPress={(enableMapPage) => {
-              setPreference({enableMapPage: enableMapPage});
-            }}
-          />
+          {enable_map_page ? (
+            <Sections.ActionItem
+              mode="toggle"
+              text={t(ProfileTexts.sections.newFeatures.map)}
+              checked={showMapPage}
+              testID="enableMapPageToggle"
+              onPress={(enableMapPage) => {
+                setPreference({enableMapPage: enableMapPage});
+              }}
+            />
+          ) : null}
           <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
             onPress={() => navigation.navigate('Enrollment')}
