@@ -154,27 +154,26 @@ export const moveCameraToCoordinate = (
 const useCalculatePaddings = (): MapboxGL.Padding => {
   const {height: bottomSheetHeight} = useBottomSheet();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
-  const {height: screenWidth} = Dimensions.get('screen');
+  const {height: screenHeight} = Dimensions.get('screen');
+  const padding = screenHeight * 0.1;
 
   if (Platform.OS === 'android') {
-    const headerHeight =
-      (StatusBar.currentHeight ?? 0) / PixelRatio.getFontScale();
+    const headerHeight = StatusBar.currentHeight ?? 0;
 
-    /*
-    This is the base level for the padding. The reason we
-    */
-    const basePadding = screenWidth * 0.15;
-    const scaledPadding =
-      basePadding / PixelRatio.get() / PixelRatio.getFontScale();
-    const scaledBottomSheetPadding =
-      (bottomSheetHeight - tabBarMinHeight) / PixelRatio.getFontScale();
+    // This is the base level for the padding, where the values are divided by the device font scale to match the map unit.
+    const scaledBottomSheetPadding = bottomSheetHeight - tabBarMinHeight;
     return [
-      scaledPadding + headerHeight, // Subtract the header height on Android since it is not see through
-      scaledPadding,
-      scaledPadding + scaledBottomSheetPadding,
-      scaledPadding,
-    ];
+      padding + headerHeight, // Subtract the header height on Android since it is not see through
+      padding,
+      padding + scaledBottomSheetPadding,
+      padding,
+    ].map((p) => p / PixelRatio.getFontScale()) as MapboxGL.Padding;
   }
 
-  return [100, 100, 100 + (bottomSheetHeight - tabBarMinHeight), 100];
+  return [
+    padding,
+    padding,
+    padding + (bottomSheetHeight - tabBarMinHeight),
+    padding,
+  ];
 };
