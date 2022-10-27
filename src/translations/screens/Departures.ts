@@ -73,10 +73,6 @@ const DeparturesTexts = {
   widget: {
     heading: _('Favorittavganger', 'Favourite departures'),
   },
-  resultType: {
-    all: _('Alle holdeplasser', 'All Stops'),
-    favourites: _('Favoritter', 'Favourites'),
-  },
   message: {
     noFavourites: _(
       'Det er ingen avganger som skal vises, da du ikke har noen stopp merket som favoritter.',

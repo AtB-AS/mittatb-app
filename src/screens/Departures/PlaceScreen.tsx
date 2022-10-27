@@ -12,7 +12,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import QuayView from './QuayView';
 import {useStopsDetailsData} from './state/stop-place-details-state';
 import StopPlaceView from './StopPlaceView';
-import {DeparturesScreenProps} from './types';
+import {DeparturesStackProps} from './types';
 
 export type PlaceScreenParams = {
   place: Place;
@@ -24,7 +24,7 @@ type quayChipData = {
   item: Quay;
 };
 
-export type PlaceScreenProps = DeparturesScreenProps<'PlaceScreen'>;
+export type PlaceScreenProps = DeparturesStackProps<'PlaceScreen'>;
 
 export default function PlaceScreen({
   navigation,

@@ -7,7 +7,7 @@ import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import {AssistantScreenProps} from '../Assistant/types';
 import {DashboardScreenProps} from '../Dashboard/types';
 import {PlaceScreenParams} from '../Departures/PlaceScreen';
-import {DeparturesScreenProps} from '../Departures/types';
+import {DeparturesStackProps} from '../Departures/types';
 import {NearbyScreenProps} from '../Nearby/types';
 import {DepartureDetailsRouteParams} from './DepartureDetails';
 import {DetailsRouteParams} from './Details';
@@ -27,7 +27,7 @@ export type TripDetailsRootProps =
   | NearbyScreenProps<'TripDetails'>
   | AssistantScreenProps<'TripDetails'>
   | DashboardScreenProps<'TripDetails'>
-  | DeparturesScreenProps<'TripDetails'>;
+  | DeparturesStackProps<'TripDetails'>;
 
 export type TripDetailsRootNavigation<T extends keyof DetailsStackParams> =
   CompositeNavigationProp<
