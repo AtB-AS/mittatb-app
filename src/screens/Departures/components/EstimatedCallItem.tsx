@@ -30,7 +30,7 @@ type EstimatedCallItemProps = {
   testID: string;
   quay: Quay;
   stopPlace: Place;
-  navigateToDetails: (
+  navigateToDetails?: (
     serviceJourneyId: string,
     serviceDate: string,
     date?: string,
@@ -71,15 +71,17 @@ export default function EstimatedCallItem({
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.actionableItem}
+        disabled={!navigateToDetails}
         onPress={() => {
           if (departure?.serviceJourney)
-            navigateToDetails(
-              departure.serviceJourney?.id,
-              departure.date,
-              departure.expectedDepartureTime,
-              departure.quay?.id,
-              departure.cancellation,
-            );
+            navigateToDetails &&
+              navigateToDetails(
+                departure.serviceJourney?.id,
+                departure.date,
+                departure.expectedDepartureTime,
+                departure.quay?.id,
+                departure.cancellation,
+              );
         }}
         accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
         accessibilityLabel={getA11yLineLabel(departure, t, language)}

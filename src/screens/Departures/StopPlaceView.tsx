@@ -20,7 +20,7 @@ type StopPlaceViewProps = {
   stopPlace: Place;
   showTimeNavigation?: boolean;
   navigateToQuay: (quay: Quay) => void;
-  navigateToDetails: (
+  navigateToDetails?: (
     serviceJourneyId: string,
     serviceDate: string,
     date?: string,

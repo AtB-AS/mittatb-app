@@ -89,7 +89,9 @@ export default function PlaceScreen({
         {selectedQuay ? (
           <QuayView
             quay={selectedQuay}
-            navigateToDetails={navigateToDetails}
+            navigateToDetails={
+              mode === 'Departure' ? navigateToDetails : undefined
+            }
             searchTime={searchTime}
             setSearchTime={setSearchTime}
             showOnlyFavorites={showOnlyFavorites}
@@ -102,7 +104,9 @@ export default function PlaceScreen({
           <StopPlaceView
             stopPlace={place}
             isFocused={isFocused}
-            navigateToDetails={navigateToDetails}
+            navigateToDetails={
+              mode === 'Departure' ? navigateToDetails : undefined
+            }
             navigateToQuay={navigateToQuay}
             searchTime={searchTime}
             setSearchTime={setSearchTime}
