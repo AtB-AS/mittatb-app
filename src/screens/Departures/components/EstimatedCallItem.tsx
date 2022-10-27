@@ -23,6 +23,7 @@ import {Warning} from '../../../assets/svg/color/situations';
 import ToggleFavouriteDeparture from '@atb/screens/Departures/components/ToggleFavouriteDeparture';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {isToday, parseISO} from 'date-fns';
+import {PlaceScreenMode} from '@atb/screens/Departures/PlaceScreen';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
@@ -37,6 +38,7 @@ type EstimatedCallItemProps = {
     isTripCancelled?: boolean,
   ) => void;
   allowFavouriteSelection: boolean;
+  mode: PlaceScreenMode;
 };
 
 export default function EstimatedCallItem({
@@ -46,6 +48,7 @@ export default function EstimatedCallItem({
   stopPlace,
   navigateToDetails,
   allowFavouriteSelection,
+  mode,
 }: EstimatedCallItemProps): JSX.Element {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -93,14 +96,13 @@ export default function EstimatedCallItem({
           <ThemeText style={styles.lineName} testID={testID + 'Name'}>
             {departure.destinationDisplay?.frontText}
           </ThemeText>
-          {isTripCancelled && <Warning style={styles.warningIcon} />}
-          <ThemeText
-            type="body__primary--bold"
-            testID={testID + 'Time'}
-            style={isTripCancelled && styles.strikethrough}
-          >
-            {timeWithRealtimePrefix}
-          </ThemeText>
+          {mode === 'Departure' ? (
+            <DepartureTimeAndWarning
+              isTripCancelled={isTripCancelled}
+              timeWithRealtimePrefix={timeWithRealtimePrefix}
+              testID={testID}
+            ></DepartureTimeAndWarning>
+          ) : null}
         </View>
       </TouchableOpacity>
       {allowFavouriteSelection && lineName && lineNumber && (
@@ -113,6 +115,30 @@ export default function EstimatedCallItem({
     </View>
   );
 }
+
+const DepartureTimeAndWarning = ({
+  isTripCancelled,
+  timeWithRealtimePrefix,
+  testID,
+}: {
+  isTripCancelled: boolean;
+  timeWithRealtimePrefix: string;
+  testID: string;
+}) => {
+  const styles = useStyles();
+  return (
+    <>
+      {isTripCancelled && <Warning style={styles.warningIcon} />}
+      <ThemeText
+        type="body__primary--bold"
+        testID={testID + 'Time'}
+        style={isTripCancelled && styles.strikethrough}
+      >
+        {timeWithRealtimePrefix}
+      </ThemeText>
+    </>
+  );
+};
 
 function getA11yLineLabel(departure: any, t: any, language: any) {
   const line = departure.serviceJourney?.line;

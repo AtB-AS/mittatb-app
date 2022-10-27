@@ -135,6 +135,7 @@ export default function StopPlaceView({
                 stopPlace={stopPlace}
                 showOnlyFavorites={showOnlyFavorites}
                 allowFavouriteSelection={allowFavouriteSelection}
+                mode={mode}
               />
               {mode === 'Departure' && index === 0 && (
                 <Feedback

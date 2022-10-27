@@ -16,6 +16,7 @@ import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import EstimatedCallItem from './EstimatedCallItem';
+import {PlaceScreenMode} from '@atb/screens/Departures/PlaceScreen';
 
 type QuaySectionProps = {
   quay: Quay;
@@ -33,6 +34,7 @@ type QuaySectionProps = {
   stopPlace: StopPlace;
   showOnlyFavorites: boolean;
   allowFavouriteSelection: boolean;
+  mode: PlaceScreenMode;
 };
 
 type EstimatedCallRenderItem = {
@@ -50,6 +52,7 @@ export default function QuaySection({
   stopPlace,
   showOnlyFavorites,
   allowFavouriteSelection,
+  mode,
 }: QuaySectionProps): JSX.Element {
   const {favoriteDepartures} = useFavorites();
   const [isMinimized, setIsMinimized] = useState(false);
@@ -130,6 +133,7 @@ export default function QuaySection({
                   stopPlace={stopPlace}
                   navigateToDetails={navigateToDetails}
                   allowFavouriteSelection={allowFavouriteSelection}
+                  mode={mode}
                 />
               </Sections.GenericItem>
             )}
