@@ -1,16 +1,22 @@
 import {StyleSheet} from '@atb/theme';
-import {Feature, Point} from 'geojson';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '../../screen-header';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {
+  NearbyTexts,
+  ScreenHeaderTexts,
+  useTranslation,
+} from '@atb/translations';
 import StopPlaceView from '@atb/screens/Departures/StopPlaceView';
 import {SearchTime} from '@atb/screens/Departures/utils';
 import {Place, Quay} from '@atb/api/types/departures';
-import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
 import ThemeText from '../../text';
+import MessageBox from '@atb/components/message-box';
+import {Feature, Point} from 'geojson';
+import {useReverseGeocoder} from '@atb/geocoder';
+import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
 
 type DeparturesDialogSheetProps = {
   close: () => void;
@@ -38,18 +44,24 @@ const DeparturesDialogSheet = ({
     date: new Date().toISOString(),
   });
   const [showOnlyFavorites, setShowOnlyFavorites] = useState<boolean>(false);
-  const featureId = stopPlaceFeature.properties?.id;
-  const featureName = stopPlaceFeature.properties?.name;
-  const stopDetails = useStopsDetailsData([featureId]);
-  const stopPlace = stopDetails.state.data?.stopPlaces?.[0];
+
+  const message = t(NearbyTexts.results.messages.emptyResult);
+  const [longitude, latitude] = stopPlaceFeature.geometry.coordinates;
+  const {closestLocation, isSearching} = useReverseGeocoder(
+    {longitude, latitude} || null,
+  );
+
+  const {state} = useStopsDetailsData(closestLocation && [closestLocation.id]);
+  const stopPlace = state.data?.stopPlaces?.[0];
+  const isLoading = state.isLoading || isSearching;
 
   return (
     <BottomSheetContainer maxHeightValue={0.5} fullHeight>
       <ScreenHeaderWithoutNavigation
-        title={featureName}
+        title={stopPlaceFeature.properties?.name ?? stopPlace?.name}
         color="background_1"
         leftButton={{
-          text: t(ScreenHeaderTexts.headerButton.cancel.text),
+          text: t(ScreenHeaderTexts.headerButton.close.text),
           type: 'close',
           onPress: close,
         }}
@@ -58,28 +70,34 @@ const DeparturesDialogSheet = ({
         <ThemeText
           type="body__secondary"
           color="secondary"
-          style={styles.title}
+          style={[styles.title, styles.paddingHorizontal]}
         >
           {t(DeparturesTexts.header.title)}
         </ThemeText>
-        {!stopDetails.state.isLoading && stopPlace ? (
-          <StopPlaceView
-            stopPlace={stopPlace}
-            showTimeNavigation={false}
-            navigateToDetails={navigateToDetails}
-            navigateToQuay={(quay) => {
-              navigateToQuay(stopPlace, quay);
-            }}
-            isFocused={false}
-            searchTime={searchTime}
-            setSearchTime={setSearchTime}
-            showOnlyFavorites={showOnlyFavorites}
-            setShowOnlyFavorites={setShowOnlyFavorites}
-            testID="departuresContentView"
-            allowFavouriteSelection={false}
-          />
+        {!isLoading ? (
+          !!stopPlace?.quays?.length ? (
+            <StopPlaceView
+              stopPlace={stopPlace}
+              showTimeNavigation={false}
+              navigateToDetails={navigateToDetails}
+              navigateToQuay={(quay) => {
+                navigateToQuay(stopPlace, quay);
+              }}
+              isFocused={false}
+              searchTime={searchTime}
+              setSearchTime={setSearchTime}
+              showOnlyFavorites={showOnlyFavorites}
+              setShowOnlyFavorites={setShowOnlyFavorites}
+              testID="departuresContentView"
+              allowFavouriteSelection={false}
+            />
+          ) : (
+            <View style={styles.paddingHorizontal}>
+              <MessageBox type="info" message={message} />
+            </View>
+          )
         ) : (
-          <View style={styles.loadingIndicator}>
+          <View style={styles.paddingHorizontal}>
             <ActivityIndicator size="large" />
           </View>
         )}
@@ -92,12 +110,11 @@ const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
   departuresContainer: {
     flex: 1,
   },
-  loadingIndicator: {
-    padding: theme.spacings.medium,
+  paddingHorizontal: {
+    paddingHorizontal: theme.spacings.medium,
   },
   title: {
-    marginLeft: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
+    paddingBottom: theme.spacings.small,
   },
 }));
 
