@@ -49,8 +49,13 @@ const version = getVersion();
 type ProfileProps = ProfileScreenProps<'ProfileHome'>;
 
 export default function ProfileHome({navigation}: ProfileProps) {
-  const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login, enable_map_page} =
-    useRemoteConfig();
+  const {
+    enable_i18n,
+    privacy_policy_url,
+    enable_ticketing,
+    enable_login,
+    enable_map_page,
+  } = useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {wipeToken} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
