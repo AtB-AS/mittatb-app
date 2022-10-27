@@ -12,7 +12,6 @@ import QuayView from './QuayView';
 import {useStopsDetailsData} from './state/stop-place-details-state';
 import StopPlaceView from './StopPlaceView';
 import {DeparturesStackProps} from './types';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {StopPlaceAndQuaySelection} from '@atb/screens/Departures/components/StopPlaceAndQuaySelection';
 
 export type PlaceScreenMode = 'Favourite' | 'Departure';
@@ -120,15 +119,14 @@ export default function PlaceScreen({
       </View>
 
       {mode === 'Favourite' && (
-        <FullScreenFooter>
+        <View style={styles.closeButton}>
           <Button
-            style={styles.closeButton}
             interactiveColor="interactive_0"
             text={t(DeparturesTexts.closeButton.label)}
             onPress={() => navigation.popToTop()}
             testID="confirmButton"
           />
-        </FullScreenFooter>
+        </View>
       )}
     </View>
   );
@@ -141,6 +139,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   closeButton: {
     marginTop: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
   },
   quayData: {flex: 1, marginTop: theme.spacings.small},
 }));

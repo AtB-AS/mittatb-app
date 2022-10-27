@@ -120,7 +120,8 @@ export default function QuaySection({
             renderItem={({item: departure, index}: EstimatedCallRenderItem) => (
               <Sections.GenericItem
                 radius={
-                  !navigateToQuay && index === departures.length - 1
+                  (!navigateToQuay && index === departures.length - 1) ||
+                  !shouldShowMoreItemsLink
                     ? 'bottom'
                     : undefined
                 }
