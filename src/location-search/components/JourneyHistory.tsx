@@ -4,9 +4,9 @@ import {JourneySearchHistoryEntry} from '@atb/search-history/types';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {screenReaderPause} from '../components/accessible-text';
-import ThemeText from '../components/text';
-import {useFilteredJourneySearch} from './utils';
+import {screenReaderPause} from '@atb/components/accessible-text';
+import ThemeText from '../../components/text';
+import {useFilteredJourneySearch} from '../utils';
 
 type JourneyHistoryProps = {
   searchText?: string;
@@ -16,10 +16,7 @@ type JourneyHistoryProps = {
 // @TODO Could be configurable at some point.
 const DEFAULT_HISTORY_LIMIT = 3;
 
-export default function JourneyHistory({
-  searchText,
-  onSelect,
-}: JourneyHistoryProps) {
+export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
   const {t} = useTranslation();
   const journeyHistory = useFilteredJourneySearch(searchText);
 

@@ -3,19 +3,13 @@ import {StyleSheet} from '@atb/theme';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import {LocationSearchScreenProps} from '@atb/location-search/types';
+import {LocationSearchStackScreenProps} from './navigation-types';
 import {Map} from '@atb/components/map';
 import {Location} from '@atb/favorites/types';
 
-export type RouteParams = {
-  callerRouteName: string;
-  callerRouteParam: string;
-  initialLocation?: Location;
-};
+export type Props = LocationSearchStackScreenProps<'LocationSearchByMapScreen'>;
 
-export type Props = LocationSearchScreenProps<'MapSelection'>;
-
-const MapSelection: React.FC<Props> = ({
+export const LocationSearchByMapScreen: React.FC<Props> = ({
   navigation,
   route: {
     params: {callerRouteName, callerRouteParam, initialLocation},
@@ -51,5 +45,3 @@ const MapSelection: React.FC<Props> = ({
 const useMapStyles = StyleSheet.createThemeHook(() => ({
   container: {flex: 1},
 }));
-
-export default MapSelection;

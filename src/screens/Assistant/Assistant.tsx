@@ -15,8 +15,10 @@ import {
   RequestPermissionFn,
   useGeolocationState,
 } from '@atb/GeolocationContext';
-import {useLocationSearchValue} from '@atb/location-search';
-import {SelectableLocationData} from '@atb/location-search/types';
+import {
+  useLocationSearchValue,
+  SelectableLocationType,
+} from '@atb/location-search';
 import useTripsQuery from '@atb/screens/Assistant/use-trips-query';
 import {useDoOnceWhen} from '@atb/screens/utils';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
@@ -199,15 +201,18 @@ const Assistant: React.FC<Props> = ({
     callerRouteParam: keyof RootProps['route']['params'],
     initialLocation: Location | undefined,
   ) =>
-    navigation.navigate('LocationSearch', {
-      label:
-        callerRouteParam === 'fromLocation'
-          ? t(AssistantTexts.location.departurePicker.label)
-          : t(AssistantTexts.location.destinationPicker.label),
-      callerRouteName: AssistantRouteNameStatic,
-      callerRouteParam,
-      initialLocation,
-      includeJourneyHistory: true,
+    navigation.navigate('LocationSearchStack', {
+      screen: 'LocationSearchByTextScreen',
+      params: {
+        label:
+          callerRouteParam === 'fromLocation'
+            ? t(AssistantTexts.location.departurePicker.label)
+            : t(AssistantTexts.location.destinationPicker.label),
+        callerRouteName: AssistantRouteNameStatic,
+        callerRouteParam,
+        initialLocation,
+        includeJourneyHistory: true,
+      },
     });
 
   const showEmptyScreen = !tripPatterns && !isSearching && !error;
@@ -622,8 +627,8 @@ function useLocations(
 }
 
 function useUpdatedLocation(
-  searchedFromLocation: SelectableLocationData | undefined,
-  searchedToLocation: SelectableLocationData | undefined,
+  searchedFromLocation: SelectableLocationType | undefined,
+  searchedToLocation: SelectableLocationType | undefined,
   currentLocation: GeoLocation | undefined,
   favorites: UserFavorites,
 ): SearchForLocations {
@@ -632,7 +637,7 @@ function useUpdatedLocation(
   const navigation = useNavigation<RootProps['navigation']>();
 
   const setLocation = useCallback(
-    (direction: 'from' | 'to', searchedLocation?: SelectableLocationData) => {
+    (direction: 'from' | 'to', searchedLocation?: SelectableLocationType) => {
       const updater = direction === 'from' ? setFrom : setTo;
       if (!searchedLocation) return updater(searchedLocation);
 
