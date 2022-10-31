@@ -111,7 +111,7 @@ const moveCameraToFeatureOrCoordinates = (
 ) => {
   const selectedCoordinates =
     getCoordinatesFromFeatureOrCoordinates(featureOrCoordinates);
-  moveCameraToCoordinate(selectedCoordinates, mapCameraRef, 0, true);
+  moveCameraToCoordinate(selectedCoordinates, mapCameraRef);
 };
 
 const moveCameraToStopPlace = (
@@ -122,7 +122,7 @@ const moveCameraToStopPlace = (
   const stopPlaceCoordinates = mapPositionToCoordinates(
     stopPlaceFeature.geometry.coordinates,
   );
-  moveCameraToCoordinate(stopPlaceCoordinates, mapCameraRef, padding, true);
+  moveCameraToCoordinate(stopPlaceCoordinates, mapCameraRef, padding);
 };
 
 /**
