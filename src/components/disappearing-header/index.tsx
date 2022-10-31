@@ -1,5 +1,4 @@
-import GlobalMessageBox from '@atb/global-messages/GlobalMessage';
-import {GlobalMessageContext} from '@atb/global-messages/GlobalMessagesContext';
+import GlobalMessage from '@atb/global-messages/GlobalMessage';
 import {
   AnimatedScreenHeader,
   LeftButtonProps,
@@ -29,6 +28,7 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import {GlobalMessageContext} from '@atb/global-messages/types';
 
 type Props = {
   renderHeader(
@@ -234,7 +234,7 @@ const DisappearingHeader: React.FC<Props> = ({
           />
 
           <View style={styles.globalMessageBoxContainer}>
-            <GlobalMessageBox
+            <GlobalMessage
               globalMessageContext={globalMessageContext}
               style={styles.globalMessageBox}
             />

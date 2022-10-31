@@ -17,9 +17,9 @@ import {
   AnimatedScreenHeader,
   LeftButtonProps,
 } from '@atb/components/screen-header';
-import {GlobalMessageContext} from '@atb/global-messages/GlobalMessagesContext';
-import GlobalMessageBox from '@atb/global-messages/GlobalMessage';
+import GlobalMessage from '@atb/global-messages/GlobalMessage';
 import {StaticColorByType} from '@atb/theme/colors';
+import {GlobalMessageContext} from '@atb/global-messages/types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -137,7 +137,7 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
             />
           )}
           <View style={styles.globalMessageBoxContainer}>
-            <GlobalMessageBox
+            <GlobalMessage
               globalMessageContext={globalMessageContext}
               style={styles.globalMessageBox}
             />

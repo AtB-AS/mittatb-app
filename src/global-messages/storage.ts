@@ -1,11 +1,11 @@
 import storage from '@atb/storage';
-import {GlobalMessage} from '@atb/global-messages/GlobalMessagesContext';
+import {GlobalMessageType} from '@atb/global-messages/types';
 
 export const DISMISSED_GLOBAL_MESSAGES_KEY =
   '@ATB_user_dismissed_global_messages';
 
 export async function addDismissedMessageInStore(
-  dismissedGlobalMessage: GlobalMessage,
+  dismissedGlobalMessage: GlobalMessageType,
 ) {
   const dismissedGlobalMessages = await getDismissedMessagesFromStore();
   dismissedGlobalMessages.push(dismissedGlobalMessage);
@@ -21,7 +21,7 @@ export async function getDismissedMessagesFromStore() {
 }
 
 export async function setDismissedMessagesInStore(
-  dismissedGlobalMessages: GlobalMessage[],
+  dismissedGlobalMessages: GlobalMessageType[],
 ) {
   await storage.set(
     DISMISSED_GLOBAL_MESSAGES_KEY,

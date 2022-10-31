@@ -1,20 +1,20 @@
 import React from 'react';
 import {useTranslation} from '@atb/translations';
-import {
-  GlobalMessage,
-  GlobalMessageContext,
-  useGlobalMessagesState,
-} from '@atb/global-messages/GlobalMessagesContext';
+import {useGlobalMessagesState} from '@atb/global-messages/GlobalMessagesContext';
 import MessageBox from '@atb/components/message-box';
 import {getReferenceDataText} from '@atb/reference-data/utils';
 import {StyleProp, ViewStyle} from 'react-native';
+import {
+  GlobalMessageContext,
+  GlobalMessageType,
+} from '@atb/global-messages/types';
 
 type Props = {
   globalMessageContext?: GlobalMessageContext;
   style?: StyleProp<ViewStyle>;
 };
 
-const GlobalMessageBox = ({globalMessageContext, style}: Props) => {
+const GlobalMessage = ({globalMessageContext, style}: Props) => {
   const {language} = useTranslation();
   const {
     findGlobalMessages,
@@ -30,11 +30,11 @@ const GlobalMessageBox = ({globalMessageContext, style}: Props) => {
     return null;
   }
 
-  const dismissGlobalMessage = (globalMessage: GlobalMessage) => {
+  const dismissGlobalMessage = (globalMessage: GlobalMessageType) => {
     globalMessage.isDismissable && addDismissedGlobalMessages(globalMessage);
   };
 
-  const isNotADismissedMessage = (globalMessage: GlobalMessage) =>
+  const isNotADismissedMessage = (globalMessage: GlobalMessageType) =>
     !globalMessage.isDismissable ||
     dismissedGlobalMessages.map((dga) => dga.id).indexOf(globalMessage.id) < 0;
 
@@ -42,7 +42,7 @@ const GlobalMessageBox = ({globalMessageContext, style}: Props) => {
     <>
       {globalMessages
         .filter(isNotADismissedMessage)
-        .map((globalMessage: GlobalMessage) => (
+        .map((globalMessage: GlobalMessageType) => (
           <MessageBox
             key={globalMessage.id}
             containerStyle={style}
@@ -58,4 +58,4 @@ const GlobalMessageBox = ({globalMessageContext, style}: Props) => {
   );
 };
 
-export default GlobalMessageBox;
+export default GlobalMessage;

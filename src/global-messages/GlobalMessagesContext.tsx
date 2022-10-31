@@ -6,43 +6,29 @@ import React, {
   useState,
 } from 'react';
 import firestore from '@react-native-firebase/firestore';
-import {LanguageAndText} from '@atb/reference-data/types';
-import {Statuses} from '@atb/theme';
 import {mapToGlobalMessages} from './converters';
 import {
   addDismissedMessageInStore,
   getDismissedMessagesFromStore,
   setDismissedMessagesInStore,
 } from '@atb/global-messages/storage';
-
-export type GlobalMessage = {
-  id: string;
-  active: boolean;
-  title?: LanguageAndText[];
-  body: LanguageAndText[];
-  type: Statuses;
-  context: GlobalMessageContext[];
-  isDismissable?: boolean;
-};
-
-export type GlobalMessageContext =
-  | 'app-assistant'
-  | 'app-departures'
-  | 'app-ticketing'
-  | 'web-ticketing'
-  | 'web-overview';
+import {
+  GlobalMessageContext,
+  GlobalMessageRaw,
+  GlobalMessageType,
+} from '@atb/global-messages/types';
 
 type GlobalMessageContextState = {
-  findGlobalMessages: (context: GlobalMessageContext) => GlobalMessage[];
-  dismissedGlobalMessages: GlobalMessage[];
-  addDismissedGlobalMessages: (dismissedMessage: GlobalMessage) => void;
+  findGlobalMessages: (context: GlobalMessageContext) => GlobalMessageType[];
+  dismissedGlobalMessages: GlobalMessageType[];
+  addDismissedGlobalMessages: (dismissedMessage: GlobalMessageType) => void;
   resetDismissedGlobalMessages: () => void;
 };
 
 const defaultGlobalMessageState = {
   findGlobalMessages: () => [],
   dismissedGlobalMessages: [],
-  addDismissedGlobalMessages: (dismissedMessage: GlobalMessage) => {},
+  addDismissedGlobalMessages: (dismissedMessage: GlobalMessageType) => {},
   resetDismissedGlobalMessages: () => {},
 };
 const GlobalMessagesContext = createContext<GlobalMessageContextState>(
@@ -50,15 +36,15 @@ const GlobalMessagesContext = createContext<GlobalMessageContextState>(
 );
 
 const GlobalMessagesContextProvider: React.FC = ({children}) => {
-  const [globalMessages, setGlobalMessages] = useState<GlobalMessage[]>([]);
+  const [globalMessages, setGlobalMessages] = useState<GlobalMessageType[]>([]);
   const [dismissedGlobalMessages, setDismissedGlobalMessages] = useState<
-    GlobalMessage[]
+    GlobalMessageType[]
   >([]);
   const [error, setError] = useState(false);
   useEffect(
     () =>
       firestore()
-        .collection('globalMessages')
+        .collection<GlobalMessageRaw>('globalMessages')
         .where('active', '==', true)
         .where('context', 'array-contains-any', [
           'app-ticketing',
@@ -82,17 +68,17 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
 
   const isCurrentlyActive = (
     dismissedMessageId: string,
-    globalMessages: GlobalMessage[],
+    globalMessages: GlobalMessageType[],
   ) => {
     return globalMessages.map((gm) => gm.id).indexOf(dismissedMessageId) > -1;
   };
 
   const setLatestDismissedGlobalMessages = async (
-    globalMessages: GlobalMessage[],
+    globalMessages: GlobalMessageType[],
   ) => {
     const dismissedGlobalMessages = await getDismissedMessagesFromStore();
     const currentlyActiveDismissedMessages = dismissedGlobalMessages
-      ? dismissedGlobalMessages.filter((dgm: GlobalMessage) =>
+      ? dismissedGlobalMessages.filter((dgm: GlobalMessageType) =>
           isCurrentlyActive(dgm.id, globalMessages),
         )
       : [];
@@ -101,7 +87,7 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   };
 
   const addDismissedGlobalMessages = async (
-    dismissedMessage: GlobalMessage,
+    dismissedMessage: GlobalMessageType,
   ) => {
     const dismissedGlobalMessages = await addDismissedMessageInStore(
       dismissedMessage,

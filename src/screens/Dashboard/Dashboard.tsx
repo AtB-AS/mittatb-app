@@ -9,7 +9,7 @@ import FavoriteChips from '@atb/favorite-chips';
 import {useFavorites} from '@atb/favorites';
 import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import GlobalMessageBox from '@atb/global-messages/GlobalMessage';
+import GlobalMessage from '@atb/global-messages/GlobalMessage';
 import {useLocationSearchValue} from '@atb/location-search';
 import {SelectableLocationData} from '@atb/location-search/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
@@ -182,7 +182,7 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
       >
         <View style={style.searchHeader}>
           <View style={style.paddedContainer}>
-            <GlobalMessageBox
+            <GlobalMessage
               style={style.dashboardGlobalmessages}
               globalMessageContext="app-assistant"
             />
