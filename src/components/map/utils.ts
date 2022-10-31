@@ -26,7 +26,7 @@ export function flyToLocation(
   coordinates: Coordinates | undefined,
   mapCameraRef: RefObject<MapboxGL.Camera>,
 ) {
-  coordinates && moveCameraToCoordinate(mapCameraRef, coordinates, 0);
+  coordinates && moveCameraToCoordinate(mapCameraRef, coordinates, 0, false);
 }
 
 export function fitBounds(

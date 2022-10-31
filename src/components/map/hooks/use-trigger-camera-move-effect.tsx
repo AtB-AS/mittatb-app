@@ -123,7 +123,7 @@ const moveCameraToStopPlace = (
   const stopPlaceCoordinates = mapPositionToCoordinates(
     stopPlaceFeature.geometry.coordinates,
   );
-  moveCameraToCoordinate(mapCameraRef, stopPlaceCoordinates, padding);
+  moveCameraToCoordinate(mapCameraRef, stopPlaceCoordinates, padding, true);
 };
 
 /**
@@ -138,17 +138,25 @@ export const moveCameraToCoordinate = (
   mapCameraRef: RefObject<MapboxGL.Camera>,
   centerCoordinate: Coordinates,
   padding: MapboxGL.Padding,
+  shouldFitBounds: boolean = false,
   displacement: number = DEFAULT_PADDING_DISPLACEMENT,
 ) => {
-  const northEast: Coordinates = {
-    longitude: centerCoordinate.longitude - displacement,
-    latitude: centerCoordinate.latitude - displacement,
-  };
-  const southWest: Coordinates = {
-    longitude: centerCoordinate.longitude + displacement,
-    latitude: centerCoordinate.latitude + displacement,
-  };
-  fitBounds(northEast, southWest, mapCameraRef, padding);
+  if (shouldFitBounds) {
+    const northEast: Coordinates = {
+      longitude: centerCoordinate.longitude - displacement,
+      latitude: centerCoordinate.latitude - displacement,
+    };
+    const southWest: Coordinates = {
+      longitude: centerCoordinate.longitude + displacement,
+      latitude: centerCoordinate.latitude + displacement,
+    };
+    fitBounds(northEast, southWest, mapCameraRef, padding);
+  } else {
+    mapCameraRef.current?.flyTo(
+      [centerCoordinate.longitude, centerCoordinate.latitude],
+      750,
+    );
+  }
 };
 
 const useCalculatePaddings = (): MapboxGL.Padding => {
