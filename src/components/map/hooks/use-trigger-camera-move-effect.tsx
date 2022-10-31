@@ -139,9 +139,9 @@ export function flyToLocation(
 /**
  * Move the map camera to a bounded area based on the coordinates and a displacement
  * to the northwest and southwest! forming a box where the coordinate is the centre.
- * @param mapCameraRef
  * @param centerCoordinate
- * @param paddingBottom
+ * @param mapCameraRef
+ * @param padding
  * @param displacement A distance for displacement in a coordinates system
  */
 export const fitCameraWithinLocation = (
