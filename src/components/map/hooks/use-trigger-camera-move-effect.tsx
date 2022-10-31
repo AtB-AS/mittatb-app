@@ -7,7 +7,6 @@ import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {Coordinates} from '@atb/screens/TripDetails/Map/types';
 import {
   fitBounds,
-  flyToLocation,
   getCoordinatesFromFeatureOrCoordinates,
   mapPositionToCoordinates,
 } from '@atb/components/map/utils';
@@ -112,7 +111,7 @@ const moveCameraToFeatureOrCoordinates = (
 ) => {
   const selectedCoordinates =
     getCoordinatesFromFeatureOrCoordinates(featureOrCoordinates);
-  flyToLocation(selectedCoordinates, mapCameraRef);
+  moveCameraToCoordinate(selectedCoordinates, mapCameraRef, 0, true);
 };
 
 const moveCameraToStopPlace = (
@@ -123,7 +122,7 @@ const moveCameraToStopPlace = (
   const stopPlaceCoordinates = mapPositionToCoordinates(
     stopPlaceFeature.geometry.coordinates,
   );
-  moveCameraToCoordinate(mapCameraRef, stopPlaceCoordinates, padding, true);
+  moveCameraToCoordinate(stopPlaceCoordinates, mapCameraRef, padding, true);
 };
 
 /**
@@ -135,13 +134,13 @@ const moveCameraToStopPlace = (
  * @param displacement A distance for displacement in a coordinates system
  */
 export const moveCameraToCoordinate = (
-  mapCameraRef: RefObject<MapboxGL.Camera>,
   centerCoordinate: Coordinates,
-  padding: MapboxGL.Padding,
-  shouldFitBounds: boolean = false,
+  mapCameraRef: RefObject<MapboxGL.Camera>,
+  padding: MapboxGL.Padding = 0,
+  shouldUseDisplacementBounds: boolean = true,
   displacement: number = DEFAULT_PADDING_DISPLACEMENT,
 ) => {
-  if (shouldFitBounds) {
+  if (shouldUseDisplacementBounds) {
     const northEast: Coordinates = {
       longitude: centerCoordinate.longitude - displacement,
       latitude: centerCoordinate.latitude - displacement,

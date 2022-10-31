@@ -15,16 +15,12 @@ import {View} from 'react-native';
 import LocationBar from '@atb/components/map/components/LocationBar';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import MapRoute from '@atb/screens/TripDetails/Map/MapRoute';
-import {
-  flyToLocation,
-  isFeaturePoint,
-  zoomIn,
-  zoomOut,
-} from '@atb/components/map/utils';
+import {isFeaturePoint, zoomIn, zoomOut} from '@atb/components/map/utils';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
 import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
 import {MapProps} from './types';
+import {moveCameraToCoordinate} from './hooks/use-trigger-camera-move-effect';
 
 const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -97,7 +93,10 @@ const Map = (props: MapProps) => {
             <PositionArrow
               onPress={() => {
                 onMapClick(currentLocation.coordinates);
-                flyToLocation(currentLocation.coordinates, mapCameraRef);
+                moveCameraToCoordinate(
+                  currentLocation.coordinates,
+                  mapCameraRef,
+                );
               }}
             />
           )}
