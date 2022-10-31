@@ -1,4 +1,4 @@
-import React, {RefObject, useEffect, useState} from 'react';
+import {RefObject, useState} from 'react';
 import {getCoordinatesFromFeatureOrCoordinates} from '@atb/components/map/utils';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {useGeolocationState} from '@atb/GeolocationContext';
@@ -46,7 +46,7 @@ export const useMapSelectionChangeEffect = (
       cameraFocusMode?.mode === 'map-lines'
         ? cameraFocusMode.mapLines
         : undefined,
-    onMapClick: (fc: FeatureOrCoordinates) => {
+    onMapClick: (fc: FeatureOrCoordinates | undefined) => {
       setSelectedFeatureOrCoords(fc);
       setFromCoords(currentLocation?.coordinates);
     },

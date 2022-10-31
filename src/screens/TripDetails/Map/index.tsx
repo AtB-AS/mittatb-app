@@ -19,7 +19,7 @@ import MapLabel from './MapLabel';
 import MapRoute from './MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
 import {zoomIn, zoomOut} from '@atb/components/map/utils';
-import {moveCameraToCoordinate} from '@atb/components/map/hooks/use-trigger-camera-move-effect';
+import {flyToLocation} from '@atb/components/map/hooks/use-trigger-camera-move-effect';
 
 export type MapDetailRouteParams = {
   legs: MapLeg[];
@@ -81,8 +81,7 @@ export const TravelDetailsMap: React.FC<MapProps> = ({route, navigation}) => {
       <View style={controlStyles.controlsContainer}>
         <PositionArrow
           onPress={() => {
-            if (geolocation?.coordinates)
-              moveCameraToCoordinate(geolocation?.coordinates, mapCameraRef);
+            flyToLocation(geolocation?.coordinates, mapCameraRef);
           }}
         />
         <MapControls

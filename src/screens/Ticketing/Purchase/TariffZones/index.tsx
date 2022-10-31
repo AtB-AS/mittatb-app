@@ -36,7 +36,7 @@ import {PixelRatio, Platform, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {PurchaseScreenProps} from '../types';
 import {zoomIn, zoomOut} from '@atb/components/map/utils';
-import {moveCameraToCoordinate} from '@atb/components/map/hooks/use-trigger-camera-move-effect';
+import {flyToLocation} from '@atb/components/map/hooks/use-trigger-camera-move-effect';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -301,13 +301,12 @@ const TariffZones: React.FC<TariffZonesProps> = ({
 
   const selectFeature = (event: OnPressEvent) => {
     const feature = event.features[0];
-    moveCameraToCoordinate(event.coordinates, mapCameraRef, 0, false);
+    flyToLocation(event.coordinates, mapCameraRef);
     updateSelectedZones(feature.id as string);
   };
 
   async function flyToCurrentLocation() {
-    if (geolocation?.coordinates)
-      moveCameraToCoordinate(geolocation?.coordinates, mapCameraRef, 0, false);
+    flyToLocation(geolocation?.coordinates, mapCameraRef);
 
     if (mapViewRef.current && geolocation) {
       let point = await mapViewRef.current.getPointInView([
