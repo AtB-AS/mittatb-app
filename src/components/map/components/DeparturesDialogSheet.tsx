@@ -1,5 +1,5 @@
 import {StyleSheet} from '@atb/theme';
-import React, {useMemo, useState} from 'react';
+import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
