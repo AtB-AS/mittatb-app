@@ -63,7 +63,7 @@ const DeparturesDialogSheet = ({
   const isLoading = isStopDetailsLoading || isGeocoderSearching;
   const didLoadingDataFail = !!geocoderError || !!stopDetailsError;
 
-  const buildViewComponents = () => {
+  const StopPlaceViewOrError = () => {
     if (!isLoading && !didLoadingDataFail) {
       if (stopPlace?.quays?.length) {
         return (
@@ -132,7 +132,7 @@ const DeparturesDialogSheet = ({
         >
           {t(DeparturesTexts.header.title)}
         </ThemeText>
-        {buildViewComponents}
+        <StopPlaceViewOrError />
       </View>
     </BottomSheetContainer>
   );
