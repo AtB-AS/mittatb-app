@@ -63,7 +63,7 @@ const DeparturesDialogSheet = ({
   const isLoading = isStopDetailsLoading || isGeocoderSearching;
   const didLoadingDataFail = !!geocoderError || !!stopDetailsError;
 
-  const memoizedComponents = useMemo(() => {
+  const buildViewComponents = () => {
     if (!isLoading && !didLoadingDataFail) {
       if (stopPlace?.quays?.length) {
         return (
@@ -111,14 +111,7 @@ const DeparturesDialogSheet = ({
         <ActivityIndicator size="large" />
       </View>
     );
-  }, [
-    stopPlace,
-    isLoading,
-    didLoadingDataFail,
-    searchTime,
-    navigateToDetails,
-    navigateToQuay,
-  ]);
+  };
 
   return (
     <BottomSheetContainer maxHeightValue={0.5} fullHeight>
@@ -139,7 +132,7 @@ const DeparturesDialogSheet = ({
         >
           {t(DeparturesTexts.header.title)}
         </ThemeText>
-        {memoizedComponents}
+        {buildViewComponents}
       </View>
     </BottomSheetContainer>
   );
