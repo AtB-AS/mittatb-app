@@ -5,6 +5,7 @@ import {DashboardScreenProps} from '@atb/screens/Dashboard/types';
 import {Place} from '@atb/api/types/departures';
 import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import {Departures} from '@atb/screens/Departures/components/Departures';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export type NearbyStopPlacesScreenParams = {
   location: Location | undefined;
@@ -24,14 +25,18 @@ const NearbyStopPlacesScreen = ({navigation, route}: RootProps) => {
   const {t} = useTranslation();
 
   return (
-    <Departures
-      navigation={navigation}
-      fromLocation={fromLocation}
-      callerRouteName={'NearbyStopPlacesScreen'}
-      onSelect={navigateToPlace}
-      title={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
-      leftButton={{type: 'close'}}
-    />
+    <>
+      <FullScreenHeader
+        title={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
+        leftButton={{type: 'close'}}
+      />
+      <Departures
+        navigation={navigation}
+        fromLocation={fromLocation}
+        callerRouteName={'NearbyStopPlacesScreen'}
+        onSelect={navigateToPlace}
+      />
+    </>
   );
 };
 

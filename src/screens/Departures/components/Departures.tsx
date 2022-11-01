@@ -17,25 +17,17 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import {NavigationProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 
 export const Departures = ({
   navigation,
   fromLocation,
   callerRouteName,
   onSelect,
-  title,
-  leftButton,
-  rightButton,
 }: {
   navigation: NavigationProp<any>;
   fromLocation: Location | undefined;
   callerRouteName: string;
   onSelect: (place: Place) => void;
-  title: string;
-  leftButton?: LeftButtonProps;
-  rightButton?: RightButtonProps;
 }) => {
   const {status, location, locationEnabled, requestPermission} =
     useGeolocationState();
@@ -158,12 +150,6 @@ export const Departures = ({
 
   return (
     <>
-      <FullScreenHeader
-        title={title}
-        rightButton={rightButton}
-        leftButton={leftButton}
-        globalMessageContext="app-departures"
-      />
       <SimpleDisappearingHeader
         onRefresh={refresh}
         isRefreshing={isLoading}
