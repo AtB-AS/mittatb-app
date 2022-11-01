@@ -14,8 +14,9 @@ import {Coordinates, MapLine} from '@atb/screens/TripDetails/Map/types';
  */
 export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
 
-type SelectionLocationCallback = (
+export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
+  as?: string,
 ) => void;
 export type NavigateToQuayCallback = (place: Place, quay: Quay) => void;
 export type NavigateToDetailsCallback = (
@@ -28,10 +29,10 @@ export type NavigateToDetailsCallback = (
 
 export type MapProps = {
   initialLocation?: Location;
+  onLocationSelect: SelectionLocationCallback;
 } & (
   | {
       selectionMode: 'ExploreLocation';
-      onLocationSelect: SelectionLocationCallback;
     }
   | {
       selectionMode: 'ExploreStops';

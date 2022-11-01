@@ -19,6 +19,8 @@ import {Feature, Point} from 'geojson';
 import {useReverseGeocoder} from '@atb/geocoder';
 import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
 import Button from '@atb/components/button';
+import {SelectionLocationCallback} from '../types';
+import {Location, SearchLocation} from '@atb/favorites/types';
 
 type DeparturesDialogSheetProps = {
   close: () => void;
@@ -31,6 +33,7 @@ type DeparturesDialogSheetProps = {
     fromQuayId?: string,
     isTripCancelled?: boolean,
   ) => void;
+  onLocationSelect: SelectionLocationCallback;
 };
 
 const DeparturesDialogSheet = ({
@@ -38,6 +41,7 @@ const DeparturesDialogSheet = ({
   stopPlaceFeature,
   navigateToDetails,
   navigateToQuay,
+  onLocationSelect,
 }: DeparturesDialogSheetProps) => {
   const {t} = useTranslation();
   const styles = useBottomSheetStyles();
@@ -57,6 +61,16 @@ const DeparturesDialogSheet = ({
   const stopPlace = state.data?.stopPlaces?.[0];
   const isLoading = state.isLoading || isSearching;
 
+  const stopPlaceGeoLocation: Location | undefined =
+    (stopPlaceFeature.properties && {
+      ...(stopPlaceFeature.properties as SearchLocation),
+      // id: stopPlaceFeature.properties.id,
+      // name: stopPlaceFeature.properties.name,
+      coordinates: {latitude, longitude},
+      resultType: 'search',
+    }) ||
+    undefined;
+
   return (
     <BottomSheetContainer maxHeightValue={0.5} fullHeight>
       <ScreenHeaderWithoutNavigation
@@ -73,7 +87,9 @@ const DeparturesDialogSheet = ({
           <View style={styles.travelButton}>
             <Button
               text={t(AssistantTexts.location.travelFrom.title)}
-              onPress={() => {}}
+              onPress={() =>
+                onLocationSelect(stopPlaceGeoLocation, 'fromLocation')
+              }
               mode="primary"
               style={styles.travelFromButtonPadding}
             />
@@ -81,7 +97,9 @@ const DeparturesDialogSheet = ({
           <View style={styles.travelButton}>
             <Button
               text={t(AssistantTexts.location.travelTo.title)}
-              onPress={() => {}}
+              onPress={() =>
+                onLocationSelect(stopPlaceGeoLocation, 'toLocation')
+              }
               mode="primary"
               style={styles.travelToButtonPadding}
             />

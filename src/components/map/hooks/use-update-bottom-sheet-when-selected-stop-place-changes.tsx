@@ -56,6 +56,10 @@ export const useUpdateBottomSheetWhenSelectedStopPlaceChanges = (
                 closeBottomSheet();
                 mapProps.navigateToQuay(...params);
               }}
+              onLocationSelect={(...params) => {
+                closeBottomSheet();
+                mapProps.onLocationSelect(...params);
+              }}
             />
           ),
           undefined,

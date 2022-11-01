@@ -5,6 +5,7 @@ import {Place, Quay} from '@atb/api/types/departures';
 import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import StatusBarOnFocus from '@atb/components/status-bar-on-focus';
+import {SelectionLocationCallback} from '@atb/components/map/types';
 
 export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
@@ -34,6 +35,16 @@ export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
       activeItemIndex: 0,
     });
   };
+  const onLocationSelect: SelectionLocationCallback = (location, as) => {
+    location &&
+      as &&
+      navigation.navigate({
+        name: 'DashboardRoot' as any,
+        params: {
+          [as]: location,
+        },
+      });
+  };
 
   return (
     <>
@@ -42,6 +53,7 @@ export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
         selectionMode={'ExploreStops'}
         navigateToQuay={navigateToQuay}
         navigateToDetails={navigateToDetails}
+        onLocationSelect={onLocationSelect}
       />
     </>
   );

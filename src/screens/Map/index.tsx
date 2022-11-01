@@ -11,12 +11,14 @@ import {
   MapDetailRouteParams,
   TravelDetailsMap,
 } from '@atb/screens/TripDetails/Map';
+import {DashboardParams} from '../Dashboard/types';
 
 export type MapStackNavigatorParams = {
   MapScreen: undefined;
   PlaceScreen: PlaceScreenParams;
   DepartureDetails: DepartureDetailsRouteParams;
   DetailsMap: MapDetailRouteParams;
+  Dashboard: DashboardParams;
 };
 
 export type MapScreenProps<T extends keyof MapStackNavigatorParams> =
