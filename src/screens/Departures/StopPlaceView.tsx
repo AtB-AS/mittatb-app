@@ -59,9 +59,8 @@ export default function StopPlaceView({
     stopPlace,
     showOnlyFavorites,
     isFocused,
+    mode,
     searchStartTime,
-    getTimeRangeByMode(mode, searchStartTime),
-    getLimitOfDeparturesPerLineByMode(mode),
   );
   const quayListData: SectionListData<Quay>[] | undefined = stopPlace.quays
     ? [{data: stopPlace.quays}]

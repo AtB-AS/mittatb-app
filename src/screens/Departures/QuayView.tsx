@@ -54,9 +54,8 @@ export default function QuayView({
   const {state, refresh} = useQuayData(
     quay,
     showOnlyFavorites,
+    mode,
     searchStartTime,
-    getTimeRangeByMode(mode, searchStartTime),
-    getLimitOfDeparturesPerLineByMode(mode),
   );
 
   const quayListData: SectionListData<Quay>[] = [{data: [quay]}];

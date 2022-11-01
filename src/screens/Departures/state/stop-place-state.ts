@@ -18,7 +18,11 @@ import useReducerWithSideEffects, {
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
 import {updateDeparturesWithRealtimeV2} from '../../../departure-list/utils';
-import {getSecondsUntilMidnightOrMinimum} from '@atb/screens/Departures/state/quay-state';
+import {StopPlacesMode} from '@atb/screens/Departures/types';
+import {
+  getLimitOfDeparturesPerLineByMode,
+  getTimeRangeByMode,
+} from '@atb/screens/Departures/utils';
 
 export const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 
@@ -259,15 +263,15 @@ export function useStopPlaceData(
   stopPlace: StopPlace,
   showOnlyFavorites: boolean,
   isFocused: boolean,
+  mode: StopPlacesMode,
   startTime?: string,
-  timeRange?: number,
-  limitPerLine?: number,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const {favoriteDepartures} = useFavorites();
-
+  const timeRange = getTimeRangeByMode(mode, startTime);
+  const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
   const refresh = useCallback(
     () =>
       dispatch({
@@ -309,13 +313,13 @@ export function useStopPlaceData(
     () => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace}),
     updateFrequencyInSeconds * 1000,
     [stopPlace.id],
-    !isFocused,
+    !isFocused || mode !== 'Departure',
   );
   useInterval(
     () => dispatch({type: 'TICK_TICK'}),
     tickRateInSeconds * 1000,
     [],
-    !isFocused,
+    !isFocused || mode !== 'Departure',
   );
 
   return {
