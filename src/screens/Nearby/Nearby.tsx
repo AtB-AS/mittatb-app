@@ -126,11 +126,14 @@ const NearbyOverview: React.FC<Props> = ({
   const onScrollViewEndReached = () => data?.length && loadMore();
 
   const openLocationSearch = () =>
-    navigation.navigate('LocationSearch', {
-      label: t(NearbyTexts.search.label),
-      callerRouteName: NearbyRouteNameStatic,
-      callerRouteParam: 'location',
-      initialLocation: fromLocation,
+    navigation.navigate('LocationSearchStack', {
+      screen: 'LocationSearchByTextScreen',
+      params: {
+        label: t(NearbyTexts.search.label),
+        callerRouteName: NearbyRouteNameStatic,
+        callerRouteParam: 'location',
+        initialLocation: fromLocation,
+      },
     });
 
   const {open: openBottomSheet} = useBottomSheet();

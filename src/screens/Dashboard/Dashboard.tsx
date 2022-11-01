@@ -10,8 +10,10 @@ import {useFavorites} from '@atb/favorites';
 import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import GlobalMessageBox from '@atb/global-messages/GlobalMessage';
-import {useLocationSearchValue} from '@atb/location-search';
-import {SelectableLocationData} from '@atb/location-search/types';
+import {
+  SelectableLocationType,
+  useLocationSearchValue,
+} from '@atb/location-search';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SearchForLocations} from '@atb/screens/Dashboard/TripSearch';
 import {useDoOnceWhen} from '@atb/screens/utils';
@@ -112,15 +114,18 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
     callerRouteParam: keyof RootProps['route']['params'],
     initialLocation: Location | undefined,
   ) =>
-    navigation.navigate('LocationSearch', {
-      label:
-        callerRouteParam === 'fromLocation'
-          ? t(TripSearchTexts.location.departurePicker.label)
-          : t(TripSearchTexts.location.destinationPicker.label),
-      callerRouteName: DashboardRouteNameStatic,
-      callerRouteParam,
-      initialLocation,
-      includeJourneyHistory: true,
+    navigation.navigate('LocationSearchStack', {
+      screen: 'LocationSearchByTextScreen',
+      params: {
+        label:
+          callerRouteParam === 'fromLocation'
+            ? t(TripSearchTexts.location.departurePicker.label)
+            : t(TripSearchTexts.location.destinationPicker.label),
+        callerRouteName: DashboardRouteNameStatic,
+        callerRouteParam,
+        initialLocation,
+        includeJourneyHistory: true,
+      },
     });
 
   const setCurrentLocationOrRequest = useCallback(
@@ -316,8 +321,8 @@ function useLocations(
 }
 
 function useUpdatedLocation(
-  searchedFromLocation: SelectableLocationData | undefined,
-  searchedToLocation: SelectableLocationData | undefined,
+  searchedFromLocation: SelectableLocationType | undefined,
+  searchedToLocation: SelectableLocationType | undefined,
   currentLocation: GeoLocation | undefined,
   favorites: UserFavorites,
 ): SearchForLocations {
@@ -326,7 +331,7 @@ function useUpdatedLocation(
   const navigation = useNavigation<RootProps['navigation']>();
 
   const setLocation = useCallback(
-    (direction: 'from' | 'to', searchedLocation?: SelectableLocationData) => {
+    (direction: 'from' | 'to', searchedLocation?: SelectableLocationType) => {
       const updater = direction === 'from' ? setFrom : setTo;
       if (!searchedLocation) return updater(searchedLocation);
 

@@ -122,8 +122,7 @@ const DeparturesDialogSheet = ({
   const stopPlaceGeoLocation: Location | undefined =
     (stopPlaceFeature.properties && {
       ...(stopPlaceFeature.properties as SearchLocation),
-      // id: stopPlaceFeature.properties.id,
-      // name: stopPlaceFeature.properties.name,
+      label: stopPlaceFeature.properties.name,
       coordinates: {latitude, longitude},
       resultType: 'search',
     }) ||

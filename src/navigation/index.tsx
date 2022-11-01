@@ -1,6 +1,6 @@
 import {useAppState} from '@atb/AppContext';
 import trackNavigation from '@atb/diagnostics/trackNavigation';
-import LocationSearch from '@atb/location-search';
+import {LocationSearchStack} from '@atb/location-search';
 import LoginInAppStack from '@atb/login/in-app/LoginInAppStack';
 import ConsequencesScreen from '@atb/screens/AnonymousPurchase/ConsequencesScreen';
 import MobileTokenOnboarding from '@atb/screens/MobileTokenOnboarding';
@@ -98,8 +98,8 @@ const NavigationRoot = () => {
                   component={ConsequencesScreen}
                 />
                 <Stack.Screen
-                  name="LocationSearch"
-                  component={LocationSearch}
+                  name="LocationSearchStack"
+                  component={LocationSearchStack}
                   options={TransitionPresets.ModalSlideFromBottomIOS}
                 />
                 <Stack.Screen name="Purchase" component={Purchase} />

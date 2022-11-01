@@ -163,12 +163,15 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
             label={t(AddEditFavoriteTexts.fields.location.label)}
             location={location}
             onPress={() =>
-              navigation.navigate('LocationSearch', {
-                callerRouteName: AddEditRouteNameStatic,
-                callerRouteParam: 'searchLocation',
-                label: t(AddEditFavoriteTexts.fields.location.label),
-                favoriteChipTypes: ['location', 'map'],
-                initialLocation: location,
+              navigation.navigate('LocationSearchStack', {
+                screen: 'LocationSearchByTextScreen',
+                params: {
+                  callerRouteName: AddEditRouteNameStatic,
+                  callerRouteParam: 'searchLocation',
+                  label: t(AddEditFavoriteTexts.fields.location.label),
+                  favoriteChipTypes: ['location', 'map'],
+                  initialLocation: location,
+                },
               })
             }
             testID="locationSearchButton"
