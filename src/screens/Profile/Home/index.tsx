@@ -49,8 +49,13 @@ const version = getVersion();
 type ProfileProps = ProfileScreenProps<'ProfileHome'>;
 
 export default function ProfileHome({navigation}: ProfileProps) {
-  const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login} =
-    useRemoteConfig();
+  const {
+    enable_i18n,
+    privacy_policy_url,
+    enable_ticketing,
+    enable_login,
+    enable_map_page,
+  } = useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {wipeToken} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
@@ -306,6 +311,17 @@ export default function ProfileHome({navigation}: ProfileProps) {
               setPreference({newDepartures});
             }}
           />
+          {enable_map_page ? (
+            <Sections.ActionItem
+              mode="toggle"
+              text={t(ProfileTexts.sections.newFeatures.map)}
+              checked={showMapPage}
+              testID="enableMapPageToggle"
+              onPress={(enableMapPage) => {
+                setPreference({enableMapPage: enableMapPage});
+              }}
+            />
+          ) : null}
           <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
             onPress={() => navigation.navigate('Enrollment')}
@@ -426,15 +442,6 @@ export default function ProfileHome({navigation}: ProfileProps) {
                   'AtB-Beta-Frontpage': newFrontPage ? 'enabled' : 'disabled',
                 });
                 setPreference({newFrontPage});
-              }}
-            />
-            <Sections.ActionItem
-              mode="toggle"
-              text={t(ProfileTexts.sections.newFeatures.map)}
-              checked={showMapPage}
-              testID="enableMapPageToggle"
-              onPress={(enableMapPage) => {
-                setPreference({enableMapPage: enableMapPage});
               }}
             />
             <Sections.LinkItem

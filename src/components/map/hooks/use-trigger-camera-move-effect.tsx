@@ -15,6 +15,7 @@ import {
   CameraFocusModeType,
   FeatureOrCoordinates,
 } from '@atb/components/map/types';
+import {Dimensions, PixelRatio, Platform, StatusBar} from 'react-native';
 
 type BoundingBox = {
   xMin: number;
@@ -22,8 +23,6 @@ type BoundingBox = {
   yMin: number;
   yMax: number;
 };
-
-const DEFAULT_PADDING = 100;
 
 // Move coordinates 0.003 represents around 0.3664 km in radius and a diagonal distance between northwest and southeast of 0.7328 km approximately
 const DEFAULT_PADDING_DISPLACEMENT = 0.003;
@@ -39,26 +38,22 @@ export const useTriggerCameraMoveEffect = (
   mapCameraRef: RefObject<MapboxGL.Camera>,
 ) => {
   const {height: bottomSheetHeight} = useBottomSheet();
-  const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
-  const paddingBottom = bottomSheetHeight - tabBarMinHeight;
+  const padding = useCalculatePaddings();
+
   useEffect(() => {
     if (!cameraFocusMode) return;
 
     switch (cameraFocusMode.mode) {
       case 'map-lines': {
         if (!bottomSheetHeight) return;
-        moveCameraToMapLines(
-          cameraFocusMode.mapLines,
-          paddingBottom,
-          mapCameraRef,
-        );
+        moveCameraToMapLines(cameraFocusMode.mapLines, padding, mapCameraRef);
         break;
       }
       case 'stop-place': {
         if (!bottomSheetHeight) return;
         moveCameraToStopPlace(
           cameraFocusMode.stopPlaceFeature,
-          paddingBottom,
+          100,
           mapCameraRef,
         );
         break;
@@ -76,7 +71,7 @@ export const useTriggerCameraMoveEffect = (
 
 const moveCameraToMapLines = (
   mapLines: MapLine[],
-  paddingBottom: number,
+  padding: MapboxGL.Padding,
   mapCameraRef: RefObject<MapboxGL.Camera>,
 ) => {
   const bbox = getMapLinesBoundingBox(mapLines);
@@ -88,12 +83,7 @@ const moveCameraToMapLines = (
     longitude: bbox.xMax,
     latitude: bbox.yMax,
   };
-  fitBounds(northEast, southWest, mapCameraRef, [
-    DEFAULT_PADDING,
-    DEFAULT_PADDING,
-    DEFAULT_PADDING + paddingBottom,
-    DEFAULT_PADDING,
-  ]);
+  fitBounds(northEast, southWest, mapCameraRef, padding);
 };
 
 const getMapLinesBoundingBox = (data: MapLine[]): BoundingBox => {
@@ -127,13 +117,13 @@ const moveCameraToFeatureOrCoordinates = (
 
 const moveCameraToStopPlace = (
   stopPlaceFeature: Feature<Point>,
-  paddingBottom: number,
+  padding: MapboxGL.Padding,
   mapCameraRef: RefObject<MapboxGL.Camera>,
 ) => {
   const stopPlaceCoordinates = mapPositionToCoordinates(
     stopPlaceFeature.geometry.coordinates,
   );
-  moveCameraToCoordinate(mapCameraRef, stopPlaceCoordinates, paddingBottom);
+  moveCameraToCoordinate(mapCameraRef, stopPlaceCoordinates, padding);
 };
 
 /**
@@ -147,7 +137,7 @@ const moveCameraToStopPlace = (
 export const moveCameraToCoordinate = (
   mapCameraRef: RefObject<MapboxGL.Camera>,
   centerCoordinate: Coordinates,
-  paddingBottom: number = DEFAULT_PADDING,
+  padding: MapboxGL.Padding,
   displacement: number = DEFAULT_PADDING_DISPLACEMENT,
 ) => {
   const northEast: Coordinates = {
@@ -158,10 +148,32 @@ export const moveCameraToCoordinate = (
     longitude: centerCoordinate.longitude + displacement,
     latitude: centerCoordinate.latitude + displacement,
   };
-  fitBounds(northEast, southWest, mapCameraRef, [
-    DEFAULT_PADDING,
-    DEFAULT_PADDING,
-    DEFAULT_PADDING + paddingBottom,
-    DEFAULT_PADDING,
-  ]);
+  fitBounds(northEast, southWest, mapCameraRef, padding);
+};
+
+const useCalculatePaddings = (): MapboxGL.Padding => {
+  const {height: bottomSheetHeight} = useBottomSheet();
+  const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
+  const {height: screenHeight} = Dimensions.get('screen');
+  const padding = screenHeight * 0.1;
+
+  if (Platform.OS === 'android') {
+    const headerHeight = StatusBar.currentHeight ?? 0;
+
+    // This is the base level for the padding, where the values are divided by the device font scale to match the map unit.
+    const scaledBottomSheetPadding = bottomSheetHeight - tabBarMinHeight;
+    return [
+      padding + headerHeight, // Subtract the header height on Android since it is not see through
+      padding,
+      padding + scaledBottomSheetPadding,
+      padding,
+    ].map((p) => p / PixelRatio.getFontScale()) as MapboxGL.Padding;
+  }
+
+  return [
+    padding,
+    padding,
+    padding + (bottomSheetHeight - tabBarMinHeight),
+    padding,
+  ];
 };
