@@ -22,6 +22,7 @@ export default function useReverseGeocoder(
           dispatch({type: 'SET_IS_SEARCHING'});
           const response = await reverse(coords, {
             cancelToken: source.token,
+            timeout: 15000,
           });
           source.token.throwIfRequested();
 

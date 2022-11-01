@@ -11,14 +11,16 @@ import {
   MapDetailRouteParams,
   TravelDetailsMap,
 } from '@atb/screens/TripDetails/Map';
-import {DashboardParams} from '../Dashboard/types';
+import QuayDepartures, {
+  QuayDeparturesRouteParams,
+} from '../TripDetails/QuayDepartures';
 
 export type MapStackNavigatorParams = {
   MapScreen: undefined;
   PlaceScreen: PlaceScreenParams;
   DepartureDetails: DepartureDetailsRouteParams;
   DetailsMap: MapDetailRouteParams;
-  Dashboard: DashboardParams;
+  QuayDepartures: QuayDeparturesRouteParams;
 };
 
 export type MapScreenProps<T extends keyof MapStackNavigatorParams> =
@@ -36,6 +38,7 @@ const MapStack = () => {
       <Stack.Screen name="PlaceScreen" component={PlaceScreen} />
       <Stack.Screen name="DepartureDetails" component={DepartureDetails} />
       <Stack.Screen name="DetailsMap" component={TravelDetailsMap} />
+      <Stack.Screen name="QuayDepartures" component={QuayDepartures} />
     </Stack.Navigator>
   );
 };
