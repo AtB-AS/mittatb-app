@@ -21,9 +21,11 @@ export const useMapSelectionChangeEffect = (
   mapProps: MapProps,
   mapViewRef: RefObject<MapboxGL.MapView>,
   mapCameraRef: RefObject<MapboxGL.Camera>,
+  coordinate: FeatureOrCoordinates,
 ) => {
-  const [selectedFeatureOrCoords, setSelectedFeatureOrCoords] =
-    useState<FeatureOrCoordinates>();
+  const [selectedFeatureOrCoords, setSelectedFeatureOrCoords] = useState<
+    FeatureOrCoordinates | undefined
+  >(coordinate);
   const {location: currentLocation} = useGeolocationState();
   const [fromCoords, setFromCoords] = useState(currentLocation?.coordinates);
 

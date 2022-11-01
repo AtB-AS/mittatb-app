@@ -39,7 +39,12 @@ const Map = (props: MapProps) => {
   );
 
   const {mapLines, selectedCoordinates, onMapClick} =
-    useMapSelectionChangeEffect(props, mapViewRef, mapCameraRef);
+    useMapSelectionChangeEffect(
+      props,
+      mapViewRef,
+      mapCameraRef,
+      startingCoordinates,
+    );
 
   return (
     <View style={styles.container}>
@@ -92,7 +97,11 @@ const Map = (props: MapProps) => {
           {currentLocation && (
             <PositionArrow
               onPress={() => {
-                onMapClick(undefined);
+                onMapClick(
+                  props.selectionMode === 'ExploreStops'
+                    ? undefined
+                    : currentLocation.coordinates,
+                );
                 fitCameraWithinLocation(
                   currentLocation.coordinates,
                   mapCameraRef,
