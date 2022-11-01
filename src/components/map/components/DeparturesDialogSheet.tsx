@@ -43,17 +43,75 @@ const DeparturesDialogSheet = ({
     option: 'now',
     date: new Date().toISOString(),
   });
-  const [showOnlyFavorites, setShowOnlyFavorites] = useState<boolean>(false);
-
-  const message = t(NearbyTexts.results.messages.emptyResult);
   const [longitude, latitude] = stopPlaceFeature.geometry.coordinates;
-  const {closestLocation, isSearching} = useReverseGeocoder(
-    {longitude, latitude} || null,
-  );
+  const {
+    closestLocation,
+    isSearching: isGeocoderSearching,
+    error: geocoderError,
+  } = useReverseGeocoder({longitude, latitude} || null);
 
-  const {state} = useStopsDetailsData(closestLocation && [closestLocation.id]);
-  const stopPlace = state.data?.stopPlaces?.[0];
-  const isLoading = state.isLoading || isSearching;
+  const {state: stopDetailsState} = useStopsDetailsData(
+    closestLocation && [closestLocation.id],
+  );
+  const {
+    data: stopDetailsData,
+    isLoading: isStopDetailsLoading,
+    error: stopDetailsError,
+  } = stopDetailsState;
+
+  const stopPlace = stopDetailsData?.stopPlaces?.[0];
+  const isLoading = isStopDetailsLoading || isGeocoderSearching;
+  const didLoadingDataFail = !!geocoderError || !!stopDetailsError;
+
+  const StopPlaceViewOrError = () => {
+    if (!isLoading && !didLoadingDataFail) {
+      if (stopPlace?.quays?.length) {
+        return (
+          <StopPlaceView
+            stopPlace={stopPlace}
+            showTimeNavigation={false}
+            navigateToDetails={navigateToDetails}
+            navigateToQuay={(quay) => {
+              navigateToQuay(stopPlace, quay);
+            }}
+            isFocused={false}
+            searchTime={searchTime}
+            setSearchTime={setSearchTime}
+            showOnlyFavorites={false}
+            setShowOnlyFavorites={(_) => {}}
+            testID="departuresContentView"
+            allowFavouriteSelection={false}
+          />
+        );
+      }
+
+      return (
+        <View style={styles.paddingHorizontal}>
+          <MessageBox
+            type="info"
+            message={t(NearbyTexts.results.messages.emptyResult)}
+          />
+        </View>
+      );
+    }
+
+    if (!isLoading && didLoadingDataFail) {
+      return (
+        <View style={styles.paddingHorizontal}>
+          <MessageBox
+            type="error"
+            message={t(NearbyTexts.results.messages.resultFailed)}
+          />
+        </View>
+      );
+    }
+
+    return (
+      <View style={styles.paddingHorizontal}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  };
 
   return (
     <BottomSheetContainer maxHeightValue={0.5} fullHeight>
@@ -74,33 +132,7 @@ const DeparturesDialogSheet = ({
         >
           {t(DeparturesTexts.header.title)}
         </ThemeText>
-        {!isLoading ? (
-          !!stopPlace?.quays?.length ? (
-            <StopPlaceView
-              stopPlace={stopPlace}
-              showTimeNavigation={false}
-              navigateToDetails={navigateToDetails}
-              navigateToQuay={(quay) => {
-                navigateToQuay(stopPlace, quay);
-              }}
-              isFocused={false}
-              searchTime={searchTime}
-              setSearchTime={setSearchTime}
-              showOnlyFavorites={showOnlyFavorites}
-              setShowOnlyFavorites={setShowOnlyFavorites}
-              testID="departuresContentView"
-              allowFavouriteSelection={false}
-            />
-          ) : (
-            <View style={styles.paddingHorizontal}>
-              <MessageBox type="info" message={message} />
-            </View>
-          )
-        ) : (
-          <View style={styles.paddingHorizontal}>
-            <ActivityIndicator size="large" />
-          </View>
-        )}
+        <StopPlaceViewOrError />
       </View>
     </BottomSheetContainer>
   );
