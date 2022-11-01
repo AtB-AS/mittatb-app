@@ -101,12 +101,12 @@ const SelectableFavouriteDeparture = ({
 
 type SelectFavouritesBottomSheetProps = {
   close: () => void;
-  navigation: NavigationProp<any>;
+  onEditFavouriteDeparture: () => void;
 };
 
 const SelectFavouritesBottomSheet = ({
   close,
-  navigation,
+  onEditFavouriteDeparture,
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -211,7 +211,7 @@ const SelectFavouritesBottomSheet = ({
             )}
             onPress={() => {
               close();
-              navigation.navigate('FavoriteDepartures');
+              onEditFavouriteDeparture();
             }}
             icon={SvgArrowRight}
             iconPosition="right"

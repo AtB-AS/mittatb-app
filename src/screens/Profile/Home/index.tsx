@@ -95,7 +95,12 @@ export default function ProfileHome({navigation}: ProfileProps) {
   async function selectFavourites() {
     openBottomSheet((close) => {
       return (
-        <SelectFavouritesBottomSheet close={close} navigation={navigation} />
+        <SelectFavouritesBottomSheet
+          close={close}
+          onEditFavouriteDeparture={() =>
+            navigation.navigate('FavoriteDepartures')
+          }
+        />
       );
     });
   }

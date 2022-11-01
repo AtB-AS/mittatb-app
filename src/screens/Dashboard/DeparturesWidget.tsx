@@ -10,11 +10,7 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import SelectFavouritesBottomSheet from '@atb/screens/Assistant/SelectFavouritesBottomSheet';
 import {StyleSheet} from '@atb/theme';
-import {
-  FavoriteDeparturesTexts,
-  ProfileTexts,
-  useTranslation,
-} from '@atb/translations';
+import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {Coordinates} from '@entur/sdk';
 import haversineDistance from 'haversine-distance';
@@ -23,13 +19,16 @@ import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
 import {useFavoriteDepartureData} from './state';
 import * as Sections from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
-import {NavigationProp} from '@react-navigation/native';
 
 type Props = {
-  navigation: NavigationProp<any>;
+  onEditFavouriteDeparture: () => void;
+  onAddFavouriteDeparture: () => void;
 };
 
-const DeparturesWidget = ({navigation}: Props) => {
+const DeparturesWidget = ({
+  onEditFavouriteDeparture,
+  onAddFavouriteDeparture,
+}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {new_favourites_info_url} = useRemoteConfig();
@@ -44,7 +43,10 @@ const DeparturesWidget = ({navigation}: Props) => {
   async function openFrontpageFavouritesBottomSheet() {
     openBottomSheet((close) => {
       return (
-        <SelectFavouritesBottomSheet close={close} navigation={navigation} />
+        <SelectFavouritesBottomSheet
+          close={close}
+          onEditFavouriteDeparture={onEditFavouriteDeparture}
+        />
       );
     }, closeRef);
   }
@@ -106,9 +108,7 @@ const DeparturesWidget = ({navigation}: Props) => {
           </Sections.GenericItem>
           <Sections.LinkItem
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
-            onPress={() => {
-              navigation.navigate('NearbyStopPlacesScreen');
-            }}
+            onPress={onAddFavouriteDeparture}
             icon={<ThemeIcon svg={Add} />}
           />
         </Sections.Section>
