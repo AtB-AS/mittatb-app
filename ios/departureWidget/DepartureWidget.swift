@@ -33,23 +33,27 @@ struct DepartureWidgetEntryView: View {
                 }.padding(10).background(.green)
 
                 HStack {
-                    ForEach(viewModel.departures, id: \.self) { time in
+                    /*
+                     ForEach(viewModel.departures, id: \.self) { time in
+                       if time.distance(to: Date()) > -600 {
+                         Text(time, style: .relative)
+                           .padding(3)
+                           .background(.gray)
+                           .foregroundColor(.white)
+                           .cornerRadius(5)
 
-                        if time.distance(to: Date()) > -600 {
-                          Text(time, style: .relative)
-                                .padding(3)
-                                .background(.gray)
-                                .foregroundColor(.white)
-                                .cornerRadius(5)
+                       } else {
+                         Text(time, style: .time)
+                           .padding(3)
+                           .background(.gray)
+                           .foregroundColor(.white)
+                           .cornerRadius(5)
+                       }
 
-                        } else {
-                            Text(time, style: .time)
-                                .padding(3)
-                                .background(.gray)
-                                .foregroundColor(.white)
-                                .cornerRadius(5)
-                        }
-                    }
+                     }*/
+
+                    // Testing view with timer, should count every second
+                    CounterView()
                 }.padding(5)
                 Spacer()
             }
@@ -68,7 +72,7 @@ struct departureWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             DepartureWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("Favorittavganger")
+        .description("Viser førstkommende avganger for nærmeste favorittavgang.")
     }
 }

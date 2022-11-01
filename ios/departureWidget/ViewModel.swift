@@ -30,10 +30,15 @@ class ViewModel: ObservableObject {
         lineInfo?.lineNumber
     }
 
-    /// Returns the times of the current departure
+    /// Returns the relevant departure times of the current departure
     var departures: [Date] {
         var times: [Date] = []
-        for departure in quayGroup?.group[0].departures.prefix(upTo: 3) ?? [] {
+
+        var departures: [DepartureTime] = quayGroup?.group[0].departures ?? []
+
+      departures.removeAll(where: { $0.aimedTime < Date() })
+
+        for departure in departures.prefix(upTo: 2) {
             times.append(departure.aimedTime)
         }
         return times

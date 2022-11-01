@@ -12,7 +12,9 @@ enum AppEndPoint: String {
         case .favoriteDepartures:
             var url = URLComponents(string: "https://api.staging.mittatb.no/bff/v2/departure-favorites")
             url?.queryItems = [
-                URLQueryItem(name: "limitPerLine", value: "20"),
+                /* Fetching a large number of departures to be able to give the widgetManager a better
+                 estimate of the future rerenders needed */
+                URLQueryItem(name: "limitPerLine", value: "50"),
                 URLQueryItem(name: "startTime", value: Date().ISO8601Format()),
                 URLQueryItem(name: "pageSize", value: "0"),
             ]

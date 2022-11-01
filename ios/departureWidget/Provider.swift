@@ -37,7 +37,7 @@ struct Provider: TimelineProvider {
     }
 
     func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
-        var date = Calendar.current.date(byAdding: .minute, value: 5, to: Date())!
+        let date = Calendar.current.date(byAdding: .minute, value: 5, to: Date())!
 
         // Get favorites, if none return empty Entry
         guard let favoriteDepartures = Manifest.data?.departures else {
@@ -53,14 +53,27 @@ struct Provider: TimelineProvider {
             switch result {
             case let .success(quayGroup):
 
-                // Makes timeline only refresh a few minutes before the first departure is 5 minutes away
-                let firstDepartureTime = quayGroup.group[0].departures.first?.time ?? Date()
+                var entries: [Entry] = []
 
-                date = Calendar.current.date(byAdding: .minute, value: 5, to: firstDepartureTime)!
+                /*
+                  Rerenders widget when a departure has passed, by giving IOS more information about future
+                  dates we hopefully get better timed rerenders
 
-                let timeline = Timeline(entries: [Entry(date: date, quayGroup: quayGroup)], policy: .atEnd)
+                  This also relies on that location change asks for a new timeline, and not jst rerenders
+                 */
+
+                // TODO: find out if location updates requests new timeline or only renders widget
+                for departure in quayGroup.group.first!.departures {
+                    let entry = Entry(date: departure.aimedTime, quayGroup: quayGroup)
+                    entries.append(entry)
+                }
+
+                let timeline = Timeline(entries: entries, policy: .atEnd)
                 completion(timeline)
+
             case .failure:
+                let timeline = Timeline(entries: [Entry(date: date, quayGroup: nil)], policy: .atEnd)
+                completion(timeline)
                 return
             }
         }
