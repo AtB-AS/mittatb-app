@@ -11,15 +11,14 @@ import {View} from 'react-native';
 import QuayView from './QuayView';
 import {useStopsDetailsData} from './state/stop-place-details-state';
 import StopPlaceView from './StopPlaceView';
-import {DeparturesStackProps} from './types';
+import {DeparturesStackProps, StopPlacesMode} from './types';
 import {StopPlaceAndQuaySelection} from '@atb/screens/Departures/components/StopPlaceAndQuaySelection';
 
-export type PlaceScreenMode = 'Favourite' | 'Departure';
 export type PlaceScreenParams = {
   place: Place;
   selectedQuay?: Quay;
   showOnlyFavoritesByDefault?: boolean;
-  mode: PlaceScreenMode;
+  mode: StopPlacesMode;
 };
 export type PlaceScreenProps = DeparturesStackProps<'PlaceScreen'>;
 

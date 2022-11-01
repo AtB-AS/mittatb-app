@@ -14,7 +14,7 @@ import QuaySection from './components/QuaySection';
 import {useStopPlaceData} from './state/stop-place-state';
 import FavoriteToggle from '@atb/screens/Departures/components/FavoriteToggle';
 import DateSelection from '@atb/screens/Departures/components/DateSelection';
-import {PlaceScreenMode} from '@atb/screens/Departures/PlaceScreen';
+import {StopPlacesMode} from '@atb/screens/Departures/types';
 
 type StopPlaceViewProps = {
   stopPlace: Place;
@@ -33,7 +33,7 @@ type StopPlaceViewProps = {
   setShowOnlyFavorites: (enabled: boolean) => void;
   isFocused: boolean;
   testID?: string;
-  mode: PlaceScreenMode;
+  mode: StopPlacesMode;
 };
 
 export default function StopPlaceView({

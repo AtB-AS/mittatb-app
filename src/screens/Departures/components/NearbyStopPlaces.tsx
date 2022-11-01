@@ -17,17 +17,20 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import {NavigationProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
+import {StopPlacesMode} from '@atb/screens/Departures/types';
 
-export const Departures = ({
+export const NearbyStopPlaces = ({
   navigation,
   fromLocation,
   callerRouteName,
   onSelect,
+  mode,
 }: {
   navigation: NavigationProp<any>;
   fromLocation: Location | undefined;
   callerRouteName: string;
   onSelect: (place: Place) => void;
+  mode: StopPlacesMode;
 }) => {
   const {status, location, locationEnabled, requestPermission} =
     useGeolocationState();
@@ -166,6 +169,7 @@ export const Departures = ({
                     location,
                   });
             }}
+            mode={mode}
           />
         }
         useScroll={activateScroll}
@@ -189,6 +193,7 @@ type HeaderProps = {
   openLocationSearch: () => void;
   setCurrentLocationOrRequest(): Promise<void>;
   setLocation: (location: Location) => void;
+  mode: StopPlacesMode;
 };
 
 const Header = React.memo(function Header({
@@ -197,6 +202,7 @@ const Header = React.memo(function Header({
   openLocationSearch,
   setCurrentLocationOrRequest,
   setLocation,
+  mode,
 }: HeaderProps) {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -225,13 +231,15 @@ const Header = React.memo(function Header({
           }}
         />
       </Section>
-      <FavoriteChips
-        onSelectLocation={(location) => {
-          setLocation(location);
-        }}
-        chipTypes={['favorites', 'add-favorite']}
-        contentContainerStyle={styles.favoriteChips}
-      />
+      {mode === 'Departure' && (
+        <FavoriteChips
+          onSelectLocation={(location) => {
+            setLocation(location);
+          }}
+          chipTypes={['favorites', 'add-favorite']}
+          contentContainerStyle={styles.favoriteChips}
+        />
+      )}
     </View>
   );
 });

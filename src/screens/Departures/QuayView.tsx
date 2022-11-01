@@ -12,7 +12,7 @@ import FavoriteToggle from './components/FavoriteToggle';
 import QuaySection from './components/QuaySection';
 import {useQuayData} from './state/quay-state';
 import {hasFavorites} from './StopPlaceView';
-import {PlaceScreenMode} from '@atb/screens/Departures/PlaceScreen';
+import {StopPlacesMode} from '@atb/screens/Departures/types';
 
 export type QuayViewParams = {
   quay: Quay;
@@ -32,7 +32,7 @@ export type QuayViewProps = {
   setShowOnlyFavorites: (enabled: boolean) => void;
   testID?: string;
   stopPlace: Place;
-  mode: PlaceScreenMode;
+  mode: StopPlacesMode;
 };
 
 export default function QuayView({

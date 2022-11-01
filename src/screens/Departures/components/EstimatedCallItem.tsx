@@ -23,9 +23,9 @@ import {Warning} from '../../../assets/svg/color/situations';
 import ToggleFavouriteDeparture from '@atb/screens/Departures/components/ToggleFavouriteDeparture';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {isToday, parseISO} from 'date-fns';
-import {PlaceScreenMode} from '@atb/screens/Departures/PlaceScreen';
 import {useOnMarkFavouriteDepartures} from '@atb/screens/Departures/components/use-on-mark-favourite-departures';
 import {EstimatedCallItemWrapperView} from '@atb/screens/Departures/components/EstimatedCallItemWrapperView';
+import {StopPlacesMode} from '@atb/screens/Departures/types';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
@@ -40,7 +40,7 @@ type EstimatedCallItemProps = {
     isTripCancelled?: boolean,
   ) => void;
   allowFavouriteSelection: boolean;
-  mode: PlaceScreenMode;
+  mode: StopPlacesMode;
 };
 
 export default function EstimatedCallItem({

@@ -16,7 +16,7 @@ import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import EstimatedCallItem from './EstimatedCallItem';
-import {PlaceScreenMode} from '@atb/screens/Departures/PlaceScreen';
+import {StopPlacesMode} from '@atb/screens/Departures/types';
 
 type QuaySectionProps = {
   quay: Quay;
@@ -34,7 +34,7 @@ type QuaySectionProps = {
   stopPlace: StopPlace;
   showOnlyFavorites: boolean;
   allowFavouriteSelection: boolean;
-  mode: PlaceScreenMode;
+  mode: StopPlacesMode;
 };
 
 type EstimatedCallRenderItem = {

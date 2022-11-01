@@ -18,7 +18,7 @@ import useReducerWithSideEffects, {
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
 import {updateDeparturesWithRealtimeV2} from '../../../departure-list/utils';
-import {getSecondsUntilMidnightOrMinimum} from './quay-state';
+import {getSecondsUntilMidnightOrMinimum} from "@atb/screens/Departures/state/quay-state";
 
 export const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 
