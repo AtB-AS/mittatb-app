@@ -24,8 +24,8 @@ import ToggleFavouriteDeparture from '@atb/screens/Departures/components/ToggleF
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {isToday, parseISO} from 'date-fns';
 import {useOnMarkFavouriteDepartures} from '@atb/screens/Departures/components/use-on-mark-favourite-departures';
-import {EstimatedCallItemWrapperView} from '@atb/screens/Departures/components/EstimatedCallItemWrapperView';
 import {StopPlacesMode} from '@atb/screens/Departures/types';
+import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view/TouchableOpacityOrView';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
@@ -76,10 +76,7 @@ export default function EstimatedCallItem({
       stopPlace,
     );
   return (
-    <EstimatedCallItemWrapperView
-      onCallItemSelect={onMarkFavourite}
-      mode={mode}
-    >
+    <TouchableOpacityOrView onClick={onMarkFavourite} style={styles.container}>
       <TouchableOpacity
         style={styles.actionableItem}
         disabled={!navigateToDetails}
@@ -125,7 +122,7 @@ export default function EstimatedCallItem({
           toggleFavouriteAccessibilityLabel={toggleFavouriteAccessibilityLabel}
         />
       )}
-    </EstimatedCallItemWrapperView>
+    </TouchableOpacityOrView>
   );
 }
 
@@ -237,6 +234,11 @@ function LineChip({
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
   actionableItem: {
     flex: 1,
   },
