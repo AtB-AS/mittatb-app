@@ -1,117 +1,35 @@
-import {useAccessibilityContext} from '@atb/AccessibilityContext';
-import {JourneySearchHistoryEntry} from '@atb/search-history/types';
-import React, {useEffect, useState} from 'react';
-import {Keyboard, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import {ErrorType} from '../api/utils';
-import MessageBox from '../components/message-box';
-import FullScreenHeader from '../components/screen-header/full-header';
-import ScreenReaderAnnouncement from '../components/screen-reader-announcement';
-import {TextInput} from '../components/sections';
-import FavoriteChips, {ChipTypeGroup} from '../favorite-chips';
-import {useFavorites} from '../favorites';
-import {Location} from '../favorites/types';
-import {useGeocoder} from '../geocoder';
-import {useGeolocationState} from '../GeolocationContext';
-import {useSearchHistory} from '../search-history';
-import {StyleSheet} from '../theme';
+import {useFavorites} from '@atb/favorites';
+import {useSearchHistory} from '@atb/search-history';
 import {
   LocationSearchTexts,
   TranslateFunction,
   useTranslation,
-} from '../translations/';
-import JourneyHistory from './JourneyHistory';
-import LocationResults from './LocationResults';
-import {
-  LocationSearchResult,
-  LocationSearchScreenProps,
-  SelectableLocationData,
-} from './types';
-import useDebounce from './useDebounce';
-import {filterCurrentLocation, filterPreviousLocations} from './utils';
-
-export type Props = LocationSearchScreenProps<'LocationSearchMain'>;
-
-export type RouteParams = {
-  callerRouteName: string;
-  callerRouteParam: string;
-  label: string;
-  favoriteChipTypes?: ChipTypeGroup[];
-  initialLocation?: Location;
-  includeJourneyHistory?: boolean;
-};
-
-const LocationSearch: React.FC<Props> = ({
-  navigation,
-  route: {
-    params: {
-      callerRouteName,
-      callerRouteParam,
-      label,
-      favoriteChipTypes,
-      initialLocation,
-      includeJourneyHistory = false,
-    },
-  },
-}) => {
-  const {t} = useTranslation();
-  const styles = useThemeStyles();
-
-  const onSelect = (location: SelectableLocationData) => {
-    navigation.navigate({
-      name: callerRouteName as any,
-      params: {
-        [callerRouteParam]: location,
-      },
-      merge: true,
-    });
-  };
-
-  const onMapSelection = () => {
-    navigation.navigate({
-      name: 'MapSelection',
-      params: {
-        callerRouteName,
-        callerRouteParam,
-        initialLocation,
-      },
-      merge: true,
-    });
-  };
-
-  const a11yContext = useAccessibilityContext();
-
-  return (
-    <View style={styles.container}>
-      <FullScreenHeader
-        title={t(LocationSearchTexts.header.title)}
-        leftButton={{type: 'close'}}
-        setFocusOnLoad={a11yContext.isScreenReaderEnabled}
-      />
-
-      <LocationSearchContent
-        onSelect={onSelect}
-        onMapSelection={onMapSelection}
-        label={label}
-        favoriteChipTypes={favoriteChipTypes}
-        placeholder={t(LocationSearchTexts.searchField.placeholder)}
-        defaultText={
-          initialLocation?.resultType === 'search'
-            ? initialLocation.name
-            : undefined
-        }
-        includeJourneyHistory={includeJourneyHistory}
-      />
-    </View>
-  );
-};
+} from '@atb/translations';
+import React, {useEffect, useState} from 'react';
+import useDebounce from '@atb/utils/useDebounce';
+import {filterCurrentLocation, filterPreviousLocations} from '../utils';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import {useGeocoder} from '@atb/geocoder';
+import {LocationSearchResultType, SelectableLocationType} from '../types';
+import {JourneySearchHistoryEntry} from '@atb/search-history/types';
+import {useAccessibilityContext} from '@atb/AccessibilityContext';
+import {Keyboard, View} from 'react-native';
+import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import {TextInput} from '@atb/components/sections';
+import FavoriteChips, {ChipTypeGroup} from '@atb/favorite-chips';
+import MessageBox from '@atb/components/message-box';
+import {ScrollView} from 'react-native-gesture-handler';
+import {JourneyHistory} from './JourneyHistory';
+import {LocationResults} from './LocationResults';
+import {ErrorType} from '@atb/api/utils';
+import {StyleSheet} from '@atb/theme';
 
 type LocationSearchContentProps = {
   label: string;
   placeholder: string;
   favoriteChipTypes?: ChipTypeGroup[];
   defaultText?: string;
-  onSelect(location: SelectableLocationData): void;
+  onSelect(location: SelectableLocationType): void;
   onMapSelection?(): void;
   onlyLocalTariffZoneAuthority?: boolean;
   includeHistory?: boolean;
@@ -158,7 +76,7 @@ export function LocationSearchContent({
     includeHistory ? previousLocations : [],
   );
 
-  const onSearchSelect = (searchResult: LocationSearchResult) => {
+  const onSearchSelect = (searchResult: LocationSearchResultType) => {
     if (!searchResult.favoriteInfo) {
       addSearchEntry(searchResult.location);
     }
@@ -289,10 +207,6 @@ function translateErrorType(
 }
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    backgroundColor: theme.static.background.background_2.background,
-    flex: 1,
-  },
   header: {
     backgroundColor: theme.static.background.background_accent_0.background,
   },
@@ -312,5 +226,3 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
 }));
-
-export default LocationSearch;

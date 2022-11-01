@@ -1,5 +1,5 @@
 import {Location} from '@atb/favorites/types';
-import {RouteParams as LocationSearchParams} from '@atb/location-search/LocationSearch';
+import {LocationSearchStackParams} from '@atb/location-search';
 import {LoginInAppStackParams} from '@atb/login/types';
 import {NearbyStackParams} from '@atb/screens/Nearby/types';
 import {AddEditFavoriteRootParams} from '@atb/screens/Profile/AddEditFavorite/types';
@@ -16,7 +16,6 @@ import {
   CompositeScreenProps,
   NavigationProp,
   NavigatorScreenParams,
-  ParamListBase,
 } from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 
@@ -24,7 +23,7 @@ export type RootStackParamList = {
   NotFound: undefined;
   Onboarding: undefined;
   TabNavigator: NavigatorScreenParams<TabNavigatorParams>;
-  LocationSearch: LocationSearchParams;
+  LocationSearchStack: NavigatorScreenParams<LocationSearchStackParams>;
   SortableFavoriteList: undefined;
   AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;
   LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
@@ -41,23 +40,13 @@ export type RootStackProps = RootStackScreenProps<keyof RootStackParamList>;
 export type RootStackScreenProps<T extends keyof RootStackParamList> =
   StackScreenProps<RootStackParamList, T>;
 
-interface ISubNavigator<T extends ParamListBase, K extends keyof T> {
-  screen: K;
-  params?: T[K];
-}
-
 export type TabNavigatorParams = {
   Assistant: {
     fromLocation?: Location;
     toLocation?: Location;
   };
   Nearest: NavigatorScreenParams<NearbyStackParams>;
-  Ticketing:
-    | ISubNavigator<
-        TicketingTabsNavigatorParams,
-        'ActiveFareProductsAndReservationsTab'
-      >
-    | ISubNavigator<TicketingTabsNavigatorParams, 'PurchaseTab'>;
+  Ticketing: NavigatorScreenParams<TicketingTabsNavigatorParams>;
   Profile: NavigatorScreenParams<ProfileStackParams>;
   MapScreen: undefined;
 };

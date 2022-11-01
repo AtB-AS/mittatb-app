@@ -68,11 +68,14 @@ export const Departures = ({
   );
 
   const openLocationSearch = () =>
-    navigation.navigate('LocationSearch', {
-      label: t(NearbyTexts.search.label),
-      callerRouteName: callerRouteName,
-      callerRouteParam: 'location',
-      initialLocation: fromLocation,
+    navigation.navigate('LocationSearchStack', {
+      screen: 'LocationSearchByTextScreen',
+      params: {
+        label: t(NearbyTexts.search.label),
+        callerRouteName: callerRouteName,
+        callerRouteParam: 'location',
+        initialLocation: fromLocation,
+      },
     });
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {SearchLocation} from '@atb/favorites/types';
-import {LocationSearchContent} from '@atb/location-search/LocationSearch';
+import {LocationSearchContent} from '@atb/location-search';
 import {StyleSheet} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 import React from 'react';
