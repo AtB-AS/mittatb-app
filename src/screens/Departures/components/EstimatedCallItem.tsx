@@ -24,6 +24,8 @@ import ToggleFavouriteDeparture from '@atb/screens/Departures/components/ToggleF
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {isToday, parseISO} from 'date-fns';
 import {PlaceScreenMode} from '@atb/screens/Departures/PlaceScreen';
+import {useOnMarkFavouriteDepartures} from '@atb/screens/Departures/components/use-on-mark-favourite-departures';
+import {EstimatedCallItemWrapperView} from '@atb/screens/Departures/components/EstimatedCallItemWrapperView';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
@@ -67,21 +69,30 @@ export default function EstimatedCallItem({
   const isTripCancelled = departure.cancellation;
   const lineName = departure.destinationDisplay?.frontText;
   const lineNumber = line?.publicCode;
+  const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
+    useOnMarkFavouriteDepartures(
+      {...line, lineNumber: lineNumber, lineName: lineName},
+      quay,
+      stopPlace,
+    );
   return (
-    <View style={styles.container}>
+    <EstimatedCallItemWrapperView
+      onCallItemSelect={onMarkFavourite}
+      mode={mode}
+    >
       <TouchableOpacity
         style={styles.actionableItem}
         disabled={!navigateToDetails}
         onPress={() => {
-          if (departure?.serviceJourney)
-            navigateToDetails &&
-              navigateToDetails(
-                departure.serviceJourney?.id,
-                departure.date,
-                departure.expectedDepartureTime,
-                departure.quay?.id,
-                departure.cancellation,
-              );
+          if (navigateToDetails && departure?.serviceJourney) {
+            navigateToDetails(
+              departure.serviceJourney?.id,
+              departure.date,
+              departure.expectedDepartureTime,
+              departure.quay?.id,
+              departure.cancellation,
+            );
+          }
         }}
         accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
         accessibilityLabel={getA11yLineLabel(departure, t, language)}
@@ -107,14 +118,14 @@ export default function EstimatedCallItem({
           ) : null}
         </View>
       </TouchableOpacity>
-      {allowFavouriteSelection && lineName && lineNumber && (
+      {allowFavouriteSelection && (
         <ToggleFavouriteDeparture
-          line={{...line, lineNumber: lineNumber, lineName: lineName}}
-          quay={quay}
-          stop={stopPlace}
+          existingFavorite={existingFavorite}
+          onMarkFavourite={mode === 'Departure' ? onMarkFavourite : undefined}
+          toggleFavouriteAccessibilityLabel={toggleFavouriteAccessibilityLabel}
         />
       )}
-    </View>
+    </EstimatedCallItemWrapperView>
   );
 }
 
@@ -226,10 +237,6 @@ function LineChip({
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   actionableItem: {
     flex: 1,
   },
