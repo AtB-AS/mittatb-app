@@ -18,7 +18,7 @@ import useReducerWithSideEffects, {
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
 import {updateDeparturesWithRealtimeV2} from '../../../departure-list/utils';
-import {getSecondsUntilMidnightOrMinimum} from "@atb/screens/Departures/state/quay-state";
+import {getSecondsUntilMidnightOrMinimum} from '@atb/screens/Departures/state/quay-state';
 
 export const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 
@@ -66,6 +66,7 @@ type DepartureDataActions =
       type: 'LOAD_INITIAL_DEPARTURES';
       stopPlace: StopPlace;
       startTime?: string;
+      timeRange?: number;
       favoriteDepartures?: UserFavoriteDepartures;
       limitPerLine?: number;
     }
@@ -87,6 +88,7 @@ type DepartureDataActions =
       showOnlyFavorites: boolean;
       stopPlace: StopPlace;
       startTime?: string;
+      timeRange?: number;
       favoriteDepartures?: UserFavoriteDepartures;
       limitPerLine?: number;
     }
@@ -119,6 +121,7 @@ const reducer: ReducerWithSideEffects<
         numberOfDepartures: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED,
         startTime: action.startTime ?? new Date().toISOString(),
         limitPerLine: action.limitPerLine,
+        timeRange: action.timeRange,
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -206,6 +209,7 @@ const reducer: ReducerWithSideEffects<
             type: 'LOAD_INITIAL_DEPARTURES',
             stopPlace: action.stopPlace,
             startTime: action.startTime,
+            timeRange: action.timeRange,
             favoriteDepartures: action.favoriteDepartures,
             limitPerLine: action.limitPerLine,
           });
@@ -257,6 +261,7 @@ export function useStopPlaceData(
   showOnlyFavorites: boolean,
   isFocused: boolean,
   startTime?: string,
+  timeRange?: number,
   limitPerLine?: number,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
@@ -270,6 +275,7 @@ export function useStopPlaceData(
         type: 'LOAD_INITIAL_DEPARTURES',
         stopPlace,
         startTime,
+        timeRange,
         limitPerLine,
         favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
       }),
@@ -282,6 +288,7 @@ export function useStopPlaceData(
         type: 'SET_SHOW_FAVORITES',
         stopPlace,
         startTime,
+        timeRange,
         showOnlyFavorites,
         favoriteDepartures,
         limitPerLine,
@@ -322,6 +329,7 @@ type QueryInput = {
   numberOfDepartures: number;
   startTime: string;
   limitPerLine?: number;
+  timeRange?: number;
 };
 
 async function fetchEstimatedCalls(
@@ -329,17 +337,12 @@ async function fetchEstimatedCalls(
   stopPlace: StopPlace,
   favoriteDepartures?: UserFavoriteDepartures,
 ): Promise<EstimatedCall[]> {
-  const timeRange = getSecondsUntilMidnightOrMinimum(
-    queryInput.startTime ?? new Date().toISOString(),
-    MIN_TIME_RANGE,
-  );
-
   const result = await getStopPlaceDepartures(
     {
       id: stopPlace.id,
       startTime: queryInput.startTime,
       numberOfDepartures: queryInput.numberOfDepartures,
-      timeRange: timeRange,
+      timeRange: queryInput.timeRange,
       limitPerLine: queryInput.limitPerLine,
     },
     favoriteDepartures,

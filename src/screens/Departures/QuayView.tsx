@@ -2,6 +2,7 @@ import {Place, Quay} from '@atb/api/types/departures';
 import {useFavorites} from '@atb/favorites';
 import {
   getLimitOfDeparturesPerLineByMode,
+  getTimeRangeByMode,
   SearchTime,
 } from '@atb/screens/Departures/utils';
 import {StyleSheet} from '@atb/theme';
@@ -48,10 +49,13 @@ export default function QuayView({
 }: QuayViewProps) {
   const styles = useStyles();
   const {favoriteDepartures} = useFavorites();
+  const searchStartTime =
+    searchTime?.option !== 'now' ? searchTime.date : undefined;
   const {state, refresh} = useQuayData(
     quay,
     showOnlyFavorites,
-    searchTime?.option !== 'now' ? searchTime.date : undefined,
+    searchStartTime,
+    getTimeRangeByMode(mode, searchStartTime),
     getLimitOfDeparturesPerLineByMode(mode),
   );
 

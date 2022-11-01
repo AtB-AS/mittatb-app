@@ -5,6 +5,7 @@ import {UserFavoriteDepartures} from '@atb/favorites/types';
 import {DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW} from '@atb/screens/Departures/state/stop-place-state';
 import {
   getLimitOfDeparturesPerLineByMode,
+  getTimeRangeByMode,
   SearchTime,
 } from '@atb/screens/Departures/utils';
 import {StyleSheet} from '@atb/theme';
@@ -52,11 +53,14 @@ export default function StopPlaceView({
 }: StopPlaceViewProps) {
   const styles = useStyles();
   const {favoriteDepartures} = useFavorites();
+  const searchStartTime =
+    searchTime?.option !== 'now' ? searchTime.date : undefined;
   const {state, refresh} = useStopPlaceData(
     stopPlace,
     showOnlyFavorites,
     isFocused,
-    searchTime?.option !== 'now' ? searchTime.date : undefined,
+    searchStartTime,
+    getTimeRangeByMode(mode, searchStartTime),
     getLimitOfDeparturesPerLineByMode(mode),
   );
   const quayListData: SectionListData<Quay>[] | undefined = stopPlace.quays

@@ -71,6 +71,7 @@ type DepartureDataActions =
       startTime?: string;
       favoriteDepartures?: UserFavoriteDepartures;
       limitPerLine?: number;
+      timeRange?: number;
     }
   | {
       type: 'LOAD_REALTIME_DATA';
@@ -90,6 +91,7 @@ type DepartureDataActions =
       showOnlyFavorites: boolean;
       quay: DepartureTypes.Quay;
       startTime?: string;
+      timeRange?: number;
       favoriteDepartures?: UserFavoriteDepartures;
       limitPerLine?: number;
     }
@@ -119,6 +121,7 @@ const reducer: ReducerWithSideEffects<
         numberOfDepartures: MAX_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
         startTime: action.startTime ?? new Date().toISOString(),
         limitPerLine: action.limitPerLine,
+        timeRange: action.timeRange,
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -209,6 +212,7 @@ const reducer: ReducerWithSideEffects<
             type: 'LOAD_INITIAL_DEPARTURES',
             quay: action.quay,
             startTime: action.startTime,
+            timeRange: action.timeRange,
             favoriteDepartures: action.favoriteDepartures,
             limitPerLine: action.limitPerLine,
           });
@@ -259,6 +263,7 @@ export function useQuayData(
   quay: DepartureTypes.Quay,
   showOnlyFavorites: boolean,
   startTime?: string,
+  timeRange?: number,
   limitPerLine?: number,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
@@ -275,6 +280,7 @@ export function useQuayData(
         startTime,
         favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
         limitPerLine,
+        timeRange,
       }),
     [quay.id, startTime, showOnlyFavorites, favoriteDepartures],
   );
@@ -285,6 +291,7 @@ export function useQuayData(
         type: 'SET_SHOW_FAVORITES',
         quay,
         startTime,
+        timeRange,
         showOnlyFavorites,
         favoriteDepartures,
         limitPerLine,
@@ -345,17 +352,12 @@ async function fetchEstimatedCalls(
   quay: DepartureTypes.Quay,
   favoriteDepartures?: UserFavoriteDepartures,
 ): Promise<DepartureTypes.EstimatedCall[]> {
-  const timeRange = getSecondsUntilMidnightOrMinimum(
-    queryInput.startTime,
-    MIN_TIME_RANGE,
-  );
-
   const result = await getQuayDepartures(
     {
       id: quay.id,
       startTime: queryInput.startTime,
       numberOfDepartures: queryInput.numberOfDepartures,
-      timeRange: timeRange,
+      timeRange: queryInput.timeRange,
       limitPerLine: queryInput.limitPerLine,
     },
     favoriteDepartures,
