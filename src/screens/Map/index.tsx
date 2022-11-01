@@ -14,6 +14,8 @@ import {
 import QuayDepartures, {
   QuayDeparturesRouteParams,
 } from '../TripDetails/QuayDepartures';
+import TripDetails from '../TripDetails';
+import {DetailsStackParams} from '../TripDetails/types';
 
 export type MapStackNavigatorParams = {
   MapScreen: undefined;
@@ -21,6 +23,7 @@ export type MapStackNavigatorParams = {
   DepartureDetails: DepartureDetailsRouteParams;
   DetailsMap: MapDetailRouteParams;
   QuayDepartures: QuayDeparturesRouteParams;
+  TripDetails: DetailsStackParams;
 };
 
 export type MapScreenProps<T extends keyof MapStackNavigatorParams> =
@@ -39,6 +42,7 @@ const MapStack = () => {
       <Stack.Screen name="DepartureDetails" component={DepartureDetails} />
       <Stack.Screen name="DetailsMap" component={TravelDetailsMap} />
       <Stack.Screen name="QuayDepartures" component={QuayDepartures} />
+      <Stack.Screen name="TripDetails" component={TripDetails} />
     </Stack.Navigator>
   );
 };
