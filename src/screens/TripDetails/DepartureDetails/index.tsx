@@ -1,4 +1,13 @@
 import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
+import {
+  TransportMode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
+import {
+  EstimatedCallFieldsFragment,
+  QuayFieldsFragment,
+  SituationFieldsFragment,
+} from '@atb/api/types/generated/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {Info, Warning} from '@atb/assets/svg/color/situations';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
@@ -14,13 +23,6 @@ import {usePreferenceItems} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import CancelledDepartureMessage from '@atb/screens/TripDetails/components/CancelledDepartureMessage';
 import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
-import {
-  EstimatedCall,
-  Quay,
-  Situation,
-  TransportMode,
-  TransportSubmode,
-} from '@atb/sdk';
 import SituationMessages from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
@@ -70,7 +72,7 @@ export default function DepartureDetails({navigation, route}: Props) {
     modesWeSellTicketsFor,
   );
 
-  const someLegsAreByTrain = mode === TransportMode.RAIL;
+  const someLegsAreByTrain = mode === TransportMode.Rail;
   const isTicketingEnabledAndWeCantSellTicketForDeparture =
     enable_ticketing && !canSellTicketsForDeparture;
 
@@ -176,7 +178,7 @@ export default function DepartureDetails({navigation, route}: Props) {
 }
 function mapGroup<T>(
   groups: CallListGroup,
-  map: (group: keyof CallListGroup, calls: EstimatedCall[]) => T,
+  map: (group: keyof CallListGroup, calls: EstimatedCallFieldsFragment[]) => T,
 ) {
   return Object.entries(groups).map(([name, group]) =>
     map(name as keyof CallListGroup, group),
@@ -184,11 +186,11 @@ function mapGroup<T>(
 }
 
 type CallGroupProps = {
-  calls: EstimatedCall[];
+  calls: EstimatedCallFieldsFragment[];
   type: keyof CallListGroup;
   mode?: TransportMode;
   subMode?: TransportSubmode;
-  parentSituations: Situation[];
+  parentSituations: SituationFieldsFragment[];
 };
 function CallGroup({
   type,
@@ -226,9 +228,13 @@ function CallGroup({
   return (
     <>
       {items.map((call, i) => {
+        // Quay and ServiceJourney ID is not an unique key if a ServiceJourney
+        // passes by the same stop several times, (e.g. Ringen in Oslo)
+        // which is why it is used in combination with aimedDepartureTime.
+        const key = `${call.quay?.id} ${call.serviceJourney?.id} ${call.aimedDepartureTime}`;
         return (
           <TripItem
-            key={call.quay?.id + call.serviceJourney.id}
+            key={key}
             isStartPlace={isStartPlace(i)}
             isStart={isStartPlace(i) || i === 0}
             isEnd={i === items.length - 1 && !collapsed}
@@ -247,11 +253,11 @@ function CallGroup({
 
 type TripItemProps = {
   isStartPlace: boolean;
-  call: EstimatedCall;
+  call: EstimatedCallFieldsFragment;
   type: string;
   mode: TransportMode | undefined;
   subMode: TransportSubmode | undefined;
-  parentSituations: Situation[];
+  parentSituations: SituationFieldsFragment[];
   collapseButton: JSX.Element | null;
   isStart: boolean;
   isEnd: boolean;
@@ -307,6 +313,7 @@ function TripItem({
       )}
       {call.notices &&
         call.notices.map((notice, index) => {
+          if (!notice.text) return null;
           return (
             <TripRow
               key={'notice-' + index}
@@ -329,15 +336,15 @@ function TripItem({
     </View>
   );
 
-  async function handleQuayPress(quay: Quay | undefined) {
+  async function handleQuayPress(quay: QuayFieldsFragment | undefined) {
     const stopPlace = quay?.stopPlace;
     if (!stopPlace) return;
 
     if (newDepartures) {
       navigation.push('PlaceScreen', {
         place: {
-          id: quay.stopPlace.id,
-          name: quay.stopPlace.name,
+          id: stopPlace.id,
+          name: stopPlace.name,
         },
         selectedQuay: {
           id: quay.id,

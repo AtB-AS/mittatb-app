@@ -1,19 +1,19 @@
 import {formatISO} from 'date-fns';
-import {EstimatedCall, ServiceJourneyMapInfoData} from '../sdk';
 import client from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
+import {EstimatedCallFieldsFragment} from './types/generated/serviceJourney';
 
 type ServiceJourneyDepartures = {
-  value: EstimatedCall[];
+  value: EstimatedCallFieldsFragment[];
 };
 
 export async function getDepartures(
   id: string,
   date?: Date,
-): Promise<EstimatedCall[]> {
-  let url = `bff/v1/servicejourney/${encodeURIComponent(id)}/departures`;
+): Promise<EstimatedCallFieldsFragment[]> {
+  let url = `bff/v2/servicejourney/${encodeURIComponent(id)}/departures`;
   if (date) {
     url = url + `?date=${formatISO(date, {representation: 'date'})}`;
   }

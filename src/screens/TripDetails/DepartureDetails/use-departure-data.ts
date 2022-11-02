@@ -1,13 +1,14 @@
-import {parseISO} from 'date-fns';
-import {useCallback} from 'react';
 import {getDepartures} from '@atb/api/serviceJourney';
 import {
-  EstimatedCall,
-  Situation,
   TransportMode,
   TransportSubmode,
-} from '@atb/sdk';
+} from '@atb/api/types/generated/journey_planner_v3_types';
+import {
+  EstimatedCallFieldsFragment,
+  SituationFieldsFragment,
+} from '@atb/api/types/generated/serviceJourney';
 import usePollableResource from '@atb/utils/use-pollable-resource';
+import {useCallback} from 'react';
 import {ServiceJourneyDeparture} from './types';
 
 export type DepartureData = {
@@ -15,13 +16,13 @@ export type DepartureData = {
   mode?: TransportMode;
   title?: string;
   subMode?: TransportSubmode;
-  situations: Situation[];
+  situations: SituationFieldsFragment[];
 };
 
 export type CallListGroup = {
-  passed: EstimatedCall[];
-  trip: EstimatedCall[];
-  after: EstimatedCall[];
+  passed: EstimatedCallFieldsFragment[];
+  trip: EstimatedCallFieldsFragment[];
+  after: EstimatedCallFieldsFragment[];
 };
 
 export default function useDepartureData(
@@ -43,7 +44,7 @@ export default function useDepartureData(
       const line = callGroups.trip[0]?.serviceJourney?.journeyPattern?.line;
       const parentSituation = callGroups.trip[0]?.situations;
       const title = line?.publicCode
-        ? `${line?.publicCode} ${callGroups.trip[0]?.destinationDisplay.frontText}`
+        ? `${line?.publicCode} ${callGroups.trip[0]?.destinationDisplay?.frontText}`
         : undefined;
 
       return {
@@ -76,13 +77,13 @@ export default function useDepartureData(
 const onType = (
   obj: CallListGroup,
   key: keyof CallListGroup,
-  call: EstimatedCall,
+  call: EstimatedCallFieldsFragment,
 ): CallListGroup => ({
   ...obj,
   [key]: obj[key].concat(call),
 });
 function groupAllCallsByQuaysInLeg(
-  calls: EstimatedCall[],
+  calls: EstimatedCallFieldsFragment[],
   fromQuayId?: string,
   toQuayId?: string,
 ): CallListGroup {
