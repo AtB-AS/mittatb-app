@@ -97,15 +97,7 @@ const Map = (props: MapProps) => {
           {currentLocation && (
             <PositionArrow
               onPress={() => {
-                onMapClick(
-                  props.selectionMode === 'ExploreStops'
-                    ? undefined
-                    : currentLocation.coordinates,
-                );
-                fitCameraWithinLocation(
-                  currentLocation.coordinates,
-                  mapCameraRef,
-                );
+                onMapClick({...currentLocation.coordinates}); // Recreating object to re-trigger effects
               }}
             />
           )}

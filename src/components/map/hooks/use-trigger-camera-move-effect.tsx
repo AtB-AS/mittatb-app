@@ -58,10 +58,8 @@ export const useTriggerCameraMoveEffect = (
         break;
       }
       case 'coordinates': {
-        moveCameraToFeatureOrCoordinates(
-          cameraFocusMode.coordinates,
-          mapCameraRef,
-        );
+        if (bottomSheetHeight) return;
+        fitCameraWithinLocation(cameraFocusMode.coordinates, mapCameraRef);
         break;
       }
     }

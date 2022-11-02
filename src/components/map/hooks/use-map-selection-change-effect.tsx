@@ -6,6 +6,7 @@ import {FeatureOrCoordinates, MapProps} from '../types';
 import {useTriggerCameraMoveEffect} from './use-trigger-camera-move-effect';
 import {useDecideCameraFocusMode} from './use-decide-camera-focus-mode';
 import {useUpdateBottomSheetWhenSelectedStopPlaceChanges} from './use-update-bottom-sheet-when-selected-stop-place-changes';
+import { Coordinates } from "@atb/screens/TripDetails/Map/types";
 
 /**
  * This is a custom hook handling all effects triggered when the user clicks the
@@ -21,11 +22,11 @@ export const useMapSelectionChangeEffect = (
   mapProps: MapProps,
   mapViewRef: RefObject<MapboxGL.MapView>,
   mapCameraRef: RefObject<MapboxGL.Camera>,
-  coordinate: FeatureOrCoordinates,
+  startingCoordinates: Coordinates,
 ) => {
   const [selectedFeatureOrCoords, setSelectedFeatureOrCoords] = useState<
     FeatureOrCoordinates | undefined
-  >(coordinate);
+  >(startingCoordinates);
   const {location: currentLocation} = useGeolocationState();
   const [fromCoords, setFromCoords] = useState(currentLocation?.coordinates);
 
