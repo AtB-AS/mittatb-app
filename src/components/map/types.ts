@@ -40,7 +40,15 @@ export type MapProps = {
     }
 );
 
-export type FeatureOrCoordinates = Feature<Point> | Coordinates;
+export type MapSelectionActionType =
+  | {
+      source: 'map-click';
+      feature: Feature<Point>;
+    }
+  | {
+      source: 'my-position';
+      coords: Coordinates;
+    };
 
 export type CameraFocusModeType =
   | {
@@ -53,5 +61,9 @@ export type CameraFocusModeType =
     }
   | {
       mode: 'coordinates';
+      coordinates: Coordinates;
+    }
+  | {
+      mode: 'my-position';
       coordinates: Coordinates;
     };

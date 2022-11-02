@@ -2,7 +2,7 @@ import {RefObject} from 'react';
 import MapboxGL, {Expression} from '@react-native-mapbox-gl/maps';
 import {Coordinates} from '@atb/screens/TripDetails/Map/types';
 import {Feature, Point, Position} from 'geojson';
-import {FeatureOrCoordinates} from '@atb/components/map/types';
+import {MapSelectionActionType} from '@atb/components/map/types';
 import {PixelRatio, Platform} from 'react-native';
 
 export async function zoomIn(
@@ -35,12 +35,12 @@ export function fitBounds(
   );
 }
 
-export const findClickedStopPlace = async (
-  featureOrCoords: FeatureOrCoordinates,
+export const findStopPlaceAtClick = async (
+  clickedFeature: Feature<Point>,
   mapViewRef: RefObject<MapboxGL.MapView>,
 ) => {
-  const renderedFeatures = await getFeaturesAtCoordinates(
-    featureOrCoords,
+  const renderedFeatures = await getFeaturesAtClick(
+    clickedFeature,
     mapViewRef,
     ['==', ['geometry-type'], 'Point'],
   );
@@ -57,24 +57,21 @@ export const mapPositionToCoordinates = (p: Position): Coordinates => ({
   latitude: p[1],
 });
 
-export const getCoordinatesFromFeatureOrCoordinates = (
-  foc: FeatureOrCoordinates,
+export const getCoordinatesFromMapSelectionAction = (
+  sc: MapSelectionActionType,
 ) =>
-  isCoordinates(foc) ? foc : mapPositionToCoordinates(foc.geometry.coordinates);
+  sc.source === 'my-position'
+    ? sc.coords
+    : mapPositionToCoordinates(sc.feature.geometry.coordinates);
 
-export const isCoordinates = (foc: FeatureOrCoordinates): foc is Coordinates =>
-  'latitude' in foc;
-
-export const getFeaturesAtCoordinates = async (
-  featureOrCoords: FeatureOrCoordinates,
+export const getFeaturesAtClick = async (
+  clickedFeature: Feature<Point>,
   mapViewRef: RefObject<MapboxGL.MapView>,
   filter?: Expression,
   layerIds?: string[],
 ) => {
   if (!mapViewRef.current) return undefined;
-  const coords = isCoordinates(featureOrCoords)
-    ? featureOrCoords
-    : mapPositionToCoordinates(featureOrCoords.geometry.coordinates);
+  const coords = mapPositionToCoordinates(clickedFeature.geometry.coordinates);
   let point = await mapViewRef.current?.getPointInView([
     coords.longitude,
     coords.latitude,

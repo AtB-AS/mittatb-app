@@ -1,11 +1,12 @@
 import {RefObject, useState} from 'react';
-import {getCoordinatesFromFeatureOrCoordinates} from '@atb/components/map/utils';
+import {getCoordinatesFromMapSelectionAction} from '@atb/components/map/utils';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {FeatureOrCoordinates, MapProps} from '../types';
+import {MapProps, MapSelectionActionType} from '../types';
 import {useTriggerCameraMoveEffect} from './use-trigger-camera-move-effect';
 import {useDecideCameraFocusMode} from './use-decide-camera-focus-mode';
 import {useUpdateBottomSheetWhenSelectedStopPlaceChanges} from './use-update-bottom-sheet-when-selected-stop-place-changes';
+import {Coordinates} from '@atb/screens/TripDetails/Map/types';
 
 /**
  * This is a custom hook handling all effects triggered when the user clicks the
@@ -21,24 +22,26 @@ export const useMapSelectionChangeEffect = (
   mapProps: MapProps,
   mapViewRef: RefObject<MapboxGL.MapView>,
   mapCameraRef: RefObject<MapboxGL.Camera>,
+  startingCoordinates: Coordinates,
 ) => {
-  const [selectedFeatureOrCoords, setSelectedFeatureOrCoords] =
-    useState<FeatureOrCoordinates>();
+  const [mapSelectionAction, setMapSelectionAction] = useState<
+    MapSelectionActionType | undefined
+  >({source: 'my-position', coords: startingCoordinates});
   const {location: currentLocation} = useGeolocationState();
   const [fromCoords, setFromCoords] = useState(currentLocation?.coordinates);
 
   const cameraFocusMode = useDecideCameraFocusMode(
     mapProps.selectionMode,
     fromCoords,
-    selectedFeatureOrCoords,
+    mapSelectionAction,
     mapViewRef,
   );
   useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef);
   useUpdateBottomSheetWhenSelectedStopPlaceChanges(
     mapProps,
-    selectedFeatureOrCoords,
+    mapSelectionAction,
     mapViewRef,
-    () => setSelectedFeatureOrCoords(undefined),
+    () => setMapSelectionAction(undefined),
   );
 
   return {
@@ -46,12 +49,12 @@ export const useMapSelectionChangeEffect = (
       cameraFocusMode?.mode === 'map-lines'
         ? cameraFocusMode.mapLines
         : undefined,
-    onMapClick: (fc: FeatureOrCoordinates | undefined) => {
-      setSelectedFeatureOrCoords(fc);
+    onMapClick: (sc: MapSelectionActionType) => {
+      setMapSelectionAction(sc);
       setFromCoords(currentLocation?.coordinates);
     },
-    selectedCoordinates: selectedFeatureOrCoords
-      ? getCoordinatesFromFeatureOrCoordinates(selectedFeatureOrCoords)
+    selectedCoordinates: mapSelectionAction
+      ? getCoordinatesFromMapSelectionAction(mapSelectionAction)
       : undefined,
   };
 };
