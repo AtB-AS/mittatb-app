@@ -9,7 +9,6 @@ import FavoriteChips from '@atb/favorite-chips';
 import {useFavorites} from '@atb/favorites';
 import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import GlobalMessageBox from '@atb/global-messages/GlobalMessage';
 import {
   SelectableLocationType,
   useLocationSearchValue,
@@ -34,6 +33,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import CompactFareContracts from './CompactFareContracts';
 import DeparturesWidget from './DeparturesWidget';
 import {DashboardScreenProps} from './types';
+import {GlobalMessage} from '@atb/global-messages';
 
 type DashboardRouteName = 'DashboardRoot';
 const DashboardRouteNameStatic: DashboardRouteName = 'DashboardRoot';
@@ -187,7 +187,7 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
       >
         <View style={style.searchHeader}>
           <View style={style.paddedContainer}>
-            <GlobalMessageBox
+            <GlobalMessage
               style={style.dashboardGlobalmessages}
               globalMessageContext="app-assistant"
             />

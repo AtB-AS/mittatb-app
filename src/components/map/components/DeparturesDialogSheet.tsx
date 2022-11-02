@@ -53,10 +53,18 @@ const DeparturesDialogSheet = ({
   const [longitude, latitude] = stopPlaceFeature.geometry.coordinates;
   const {locationEnabled, location} = useGeolocationState();
   const {
-    closestLocation,
+    locations,
     isSearching: isGeocoderSearching,
     error: geocoderError,
   } = useReverseGeocoder({longitude, latitude} || null);
+
+  const filteredLocations = locations?.filter(
+    (location) =>
+      location.layer === 'venue' &&
+      stopPlaceFeature.properties?.name.includes(location.name),
+  );
+
+  const closestLocation = filteredLocations?.[0];
 
   const {state: stopDetailsState} = useStopsDetailsData(
     closestLocation && [closestLocation.id],

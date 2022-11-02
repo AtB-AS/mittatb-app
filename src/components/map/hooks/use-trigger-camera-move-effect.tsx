@@ -5,15 +5,8 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {Coordinates} from '@atb/screens/TripDetails/Map/types';
-import {
-  fitBounds,
-  getCoordinatesFromFeatureOrCoordinates,
-  mapPositionToCoordinates,
-} from '@atb/components/map/utils';
-import {
-  CameraFocusModeType,
-  FeatureOrCoordinates,
-} from '@atb/components/map/types';
+import {fitBounds, mapPositionToCoordinates} from '@atb/components/map/utils';
+import {CameraFocusModeType} from '@atb/components/map/types';
 import {Dimensions, PixelRatio, Platform, StatusBar} from 'react-native';
 
 type BoundingBox = {
@@ -58,10 +51,11 @@ export const useTriggerCameraMoveEffect = (
         break;
       }
       case 'coordinates': {
-        moveCameraToFeatureOrCoordinates(
-          cameraFocusMode.coordinates,
-          mapCameraRef,
-        );
+        moveCameraToCoordinates(cameraFocusMode.coordinates, mapCameraRef);
+        break;
+      }
+      case 'my-position': {
+        fitCameraWithinLocation(cameraFocusMode.coordinates, mapCameraRef);
         break;
       }
     }
@@ -105,13 +99,11 @@ const getMapLinesBoundingBox = (data: MapLine[]): BoundingBox => {
   return bounds;
 };
 
-const moveCameraToFeatureOrCoordinates = (
-  featureOrCoordinates: FeatureOrCoordinates,
+const moveCameraToCoordinates = (
+  coords: Coordinates,
   mapCameraRef: RefObject<MapboxGL.Camera>,
 ) => {
-  const selectedCoordinates =
-    getCoordinatesFromFeatureOrCoordinates(featureOrCoordinates);
-  flyToLocation(selectedCoordinates, mapCameraRef);
+  flyToLocation(coords, mapCameraRef);
 };
 
 const moveCameraToStopPlace = (

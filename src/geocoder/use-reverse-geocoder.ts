@@ -49,6 +49,7 @@ export default function useReverseGeocoder(
 
   return {
     ...state,
+    locations: state.locations,
     closestLocation: state.locations?.[0],
   };
 }
