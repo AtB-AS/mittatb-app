@@ -1,16 +1,14 @@
 import {
   CameraFocusModeType,
-  FeatureOrCoordinates,
   MapSelectionMode,
+  MapSelectionActionType,
 } from '@atb/components/map/types';
 import {Coordinates} from '@atb/screens/TripDetails/Map/types';
 import {RefObject, useEffect, useState} from 'react';
 import {Feature, Point} from 'geojson';
 import {createMapLines} from '@atb/screens/TripDetails/Map/utils';
 import {
-  findClickedStopPlace,
-  getCoordinatesFromFeatureOrCoordinates,
-  isCoordinates,
+  findStopPlaceAtClick,
   mapPositionToCoordinates,
 } from '@atb/components/map/utils';
 import {tripsSearch} from '@atb/api/trips_v2';
@@ -32,22 +30,21 @@ const MAX_LIMIT_TO_SHOW_WALKING_TRIP = 5000;
 export const useDecideCameraFocusMode = (
   selectionMode: MapSelectionMode,
   fromCoords: Coordinates | undefined,
-  selectedFeatureOrCoords: FeatureOrCoordinates | undefined,
+  mapSelectionAction: MapSelectionActionType | undefined,
   mapViewRef: RefObject<MapboxGL.MapView>,
 ) => {
   const [cameraFocusMode, setCameraFocusMode] = useState<CameraFocusModeType>();
   useEffect(() => {
     (async function () {
-      if (!selectedFeatureOrCoords) {
+      if (!mapSelectionAction) {
         setCameraFocusMode(undefined);
         return;
       }
 
-      if (isCoordinates(selectedFeatureOrCoords)) {
-        // Will be coordinates when the user pressed location arrow
+      if (mapSelectionAction.source === 'my-position') {
         setCameraFocusMode({
-          mode: 'coordinates',
-          coordinates: selectedFeatureOrCoords,
+          mode: 'my-position',
+          coordinates: mapSelectionAction.coords,
         });
         return;
       }
@@ -56,15 +53,15 @@ export const useDecideCameraFocusMode = (
         case 'ExploreLocation': {
           setCameraFocusMode({
             mode: 'coordinates',
-            coordinates: getCoordinatesFromFeatureOrCoordinates(
-              selectedFeatureOrCoords,
+            coordinates: mapPositionToCoordinates(
+              mapSelectionAction.feature.geometry.coordinates,
             ),
           });
           break;
         }
         case 'ExploreStops': {
-          const stopPlaceFeature = await findClickedStopPlace(
-            selectedFeatureOrCoords,
+          const stopPlaceFeature = await findStopPlaceAtClick(
+            mapSelectionAction.feature,
             mapViewRef,
           );
           const mapLines = await fetchMapLines(fromCoords, stopPlaceFeature);
@@ -78,7 +75,7 @@ export const useDecideCameraFocusMode = (
         }
       }
     })();
-  }, [selectedFeatureOrCoords]);
+  }, [mapSelectionAction]);
   return cameraFocusMode;
 };
 

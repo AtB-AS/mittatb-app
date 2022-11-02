@@ -20,7 +20,6 @@ import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
 import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
 import {MapProps} from './types';
-import {fitCameraWithinLocation} from './hooks/use-trigger-camera-move-effect';
 
 const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -62,7 +61,10 @@ const Map = (props: MapProps) => {
           }}
           onPress={async (feature: Feature) => {
             if (isFeaturePoint(feature)) {
-              onMapClick(feature);
+              onMapClick({
+                source: 'map-click',
+                feature,
+              });
             }
           }}
           {...MapViewConfig}
@@ -97,7 +99,10 @@ const Map = (props: MapProps) => {
           {currentLocation && (
             <PositionArrow
               onPress={() => {
-                onMapClick({...currentLocation.coordinates}); // Recreating object to re-trigger effects
+                onMapClick({
+                  source: 'my-position',
+                  coords: currentLocation.coordinates,
+                });
               }}
             />
           )}
