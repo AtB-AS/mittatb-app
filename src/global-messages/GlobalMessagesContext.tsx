@@ -46,7 +46,7 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   useEffect(
     () =>
       firestore()
-        .collection<GlobalMessageRaw>('globalMessages')
+        .collection<GlobalMessageRaw>('globalMessagesV2')
         .where('active', '==', true)
         .where('context', 'array-contains-any', [
           'app-ticketing',
