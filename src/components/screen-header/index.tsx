@@ -13,10 +13,9 @@ import HeaderButton, {
   HeaderButtonWithoutNavigationProps,
 } from './HeaderButton';
 import ThemeText from '@atb/components/text';
-import GlobalMessage from '@atb/global-messages/GlobalMessage';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {getStaticColor, StaticColor} from '@atb/theme/colors';
-import {GlobalMessageContext} from '@atb/global-messages/types';
+import {GlobalMessageContextType, GlobalMessage} from '@atb/global-messages';
 
 export {default as AnimatedScreenHeader} from './animated-header';
 
@@ -43,7 +42,7 @@ export type ScreenHeaderProps = {
    * For specifying the alert context for alerts that should be shown in this
    * header. If no context is specified then no alerts are shown.
    */
-  globalMessageContext?: GlobalMessageContext;
+  globalMessageContext?: GlobalMessageContextType;
   style?: ViewStyle;
   color?: StaticColor;
   setFocusOnLoad?: boolean;

@@ -3,7 +3,7 @@ import {Statuses} from '@atb/theme';
 
 export type AppPlatformType = 'ios' | 'android';
 
-export type GlobalMessageContext =
+export type GlobalMessageContextType =
   | 'app-assistant'
   | 'app-departures'
   | 'app-ticketing'
@@ -16,19 +16,14 @@ export type GlobalMessageRaw = {
   title?: LanguageAndText[];
   body: LanguageAndText[];
   type: Statuses;
-  context: GlobalMessageContext[];
+  context: GlobalMessageContextType[];
   isDismissable?: boolean;
   appPlatforms: AppPlatformType[];
   appVersionMin: string;
   appVersionMax: string;
 };
 
-export type GlobalMessageType = {
-  id: string;
-  active: boolean;
-  title?: LanguageAndText[];
-  body: LanguageAndText[];
-  type: Statuses;
-  context: GlobalMessageContext[];
-  isDismissable?: boolean;
-};
+export type GlobalMessageType = Omit<
+  GlobalMessageRaw,
+  'appPlatforms' | 'appVersionMin' | 'appVersionMax'
+>;

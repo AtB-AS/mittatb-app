@@ -9,7 +9,6 @@ import FavoriteChips from '@atb/favorite-chips';
 import {useFavorites} from '@atb/favorites';
 import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import GlobalMessage from '@atb/global-messages/GlobalMessage';
 import {useLocationSearchValue} from '@atb/location-search';
 import {SelectableLocationData} from '@atb/location-search/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
@@ -32,6 +31,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import CompactFareContracts from './CompactFareContracts';
 import DeparturesWidget from './DeparturesWidget';
 import {DashboardScreenProps} from './types';
+import {GlobalMessage} from '@atb/global-messages';
 
 type DashboardRouteName = 'DashboardRoot';
 const DashboardRouteNameStatic: DashboardRouteName = 'DashboardRoot';

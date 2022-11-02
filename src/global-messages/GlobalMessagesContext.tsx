@@ -13,13 +13,15 @@ import {
   setDismissedMessagesInStore,
 } from '@atb/global-messages/storage';
 import {
-  GlobalMessageContext,
+  GlobalMessageContextType,
   GlobalMessageRaw,
   GlobalMessageType,
 } from '@atb/global-messages/types';
 
 type GlobalMessageContextState = {
-  findGlobalMessages: (context: GlobalMessageContext) => GlobalMessageType[];
+  findGlobalMessages: (
+    context: GlobalMessageContextType,
+  ) => GlobalMessageType[];
   dismissedGlobalMessages: GlobalMessageType[];
   addDismissedGlobalMessages: (dismissedMessage: GlobalMessageType) => void;
   resetDismissedGlobalMessages: () => void;
@@ -102,7 +104,7 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   };
 
   const findGlobalMessages = useCallback(
-    (context: GlobalMessageContext) => {
+    (context: GlobalMessageContextType) => {
       return globalMessages.filter((a) =>
         a.context.find((cont) => cont === context),
       );
@@ -134,4 +136,4 @@ export function useGlobalMessagesState() {
   return context;
 }
 
-export default GlobalMessagesContextProvider;
+export {GlobalMessagesContextProvider};

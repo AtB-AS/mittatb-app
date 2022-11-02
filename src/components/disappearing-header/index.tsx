@@ -1,4 +1,3 @@
-import GlobalMessage from '@atb/global-messages/GlobalMessage';
 import {
   AnimatedScreenHeader,
   LeftButtonProps,
@@ -28,7 +27,8 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import {GlobalMessageContext} from '@atb/global-messages/types';
+import {GlobalMessageContextType} from '@atb/global-messages';
+import {GlobalMessage} from '@atb/global-messages';
 
 type Props = {
   renderHeader(
@@ -62,7 +62,7 @@ type Props = {
    * For specifying the alert context for alerts that should be shown in this
    * header. If no context is specified then no alerts are shown.
    */
-  globalMessageContext?: GlobalMessageContext;
+  globalMessageContext?: GlobalMessageContextType;
 };
 
 const SCROLLED_TOP_THRESHOLD = 30;

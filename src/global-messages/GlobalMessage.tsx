@@ -5,12 +5,12 @@ import MessageBox from '@atb/components/message-box';
 import {getReferenceDataText} from '@atb/reference-data/utils';
 import {StyleProp, ViewStyle} from 'react-native';
 import {
-  GlobalMessageContext,
+  GlobalMessageContextType,
   GlobalMessageType,
 } from '@atb/global-messages/types';
 
 type Props = {
-  globalMessageContext?: GlobalMessageContext;
+  globalMessageContext?: GlobalMessageContextType;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -58,4 +58,4 @@ const GlobalMessage = ({globalMessageContext, style}: Props) => {
   );
 };
 
-export default GlobalMessage;
+export {GlobalMessage};

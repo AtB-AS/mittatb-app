@@ -6,7 +6,7 @@ import {Platform} from 'react-native';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {
   AppPlatformType,
-  GlobalMessageContext,
+  GlobalMessageContextType,
   GlobalMessageRaw,
   GlobalMessageType,
 } from '@atb/global-messages/types';
@@ -65,12 +65,12 @@ function mapToMessageType(type: any) {
   return type as Statuses;
 }
 
-function mapToContexts(data: any): GlobalMessageContext[] | undefined {
+function mapToContexts(data: any): GlobalMessageContextType[] | undefined {
   if (!isArray(data)) return;
 
   return data
     .map((context: any) => mapToContext(context))
-    .filter(Boolean) as GlobalMessageContext[];
+    .filter(Boolean) as GlobalMessageContextType[];
 }
 
 function isAppPlatformValid(platforms: AppPlatformType[]) {
@@ -80,7 +80,7 @@ function isAppPlatformValid(platforms: AppPlatformType[]) {
   );
 }
 
-function mapToContext(data: any): GlobalMessageContext | undefined {
+function mapToContext(data: any): GlobalMessageContextType | undefined {
   const options = [
     'app-assistant',
     'app-departures',
