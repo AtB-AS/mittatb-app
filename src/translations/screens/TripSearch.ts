@@ -31,6 +31,7 @@ const TripSearchTexts = {
         'Avreisetid har passert',
         'Departure time has passed',
       ),
+      MissingLocation: _('', ''),
     },
   },
   location: {

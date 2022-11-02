@@ -16,7 +16,10 @@ export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
 
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
-  as?: string,
+) => void;
+export type NavigateToTripSearchCallback = (
+  location: GeoLocation | SearchLocation,
+  destination: string,
 ) => void;
 export type NavigateToQuayCallback = (place: Place, quay: Quay) => void;
 export type NavigateToDetailsCallback = (
@@ -29,15 +32,16 @@ export type NavigateToDetailsCallback = (
 
 export type MapProps = {
   initialLocation?: Location;
-  onLocationSelect: SelectionLocationCallback;
 } & (
   | {
       selectionMode: 'ExploreLocation';
+      onLocationSelect: SelectionLocationCallback;
     }
   | {
       selectionMode: 'ExploreStops';
       navigateToQuay: NavigateToQuayCallback;
       navigateToDetails: NavigateToDetailsCallback;
+      navigateToTripSearch: NavigateToTripSearchCallback;
     }
 );
 

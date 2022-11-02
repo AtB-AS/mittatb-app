@@ -19,8 +19,9 @@ import {Feature, Point} from 'geojson';
 import {useReverseGeocoder} from '@atb/geocoder';
 import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
 import Button from '@atb/components/button';
-import {SelectionLocationCallback} from '../types';
 import {Location, SearchLocation} from '@atb/favorites/types';
+import {NavigateToTripSearchCallback} from '../types';
+import {useGeolocationState} from '@atb/GeolocationContext';
 
 type DeparturesDialogSheetProps = {
   close: () => void;
@@ -33,7 +34,7 @@ type DeparturesDialogSheetProps = {
     fromQuayId?: string,
     isTripCancelled?: boolean,
   ) => void;
-  onLocationSelect: SelectionLocationCallback;
+  navigateToTripSearch: NavigateToTripSearchCallback;
 };
 
 const DeparturesDialogSheet = ({
@@ -41,7 +42,7 @@ const DeparturesDialogSheet = ({
   stopPlaceFeature,
   navigateToDetails,
   navigateToQuay,
-  onLocationSelect,
+  navigateToTripSearch,
 }: DeparturesDialogSheetProps) => {
   const {t} = useTranslation();
   const styles = useBottomSheetStyles();
@@ -50,6 +51,7 @@ const DeparturesDialogSheet = ({
     date: new Date().toISOString(),
   });
   const [longitude, latitude] = stopPlaceFeature.geometry.coordinates;
+  const {locationEnabled, location} = useGeolocationState();
   const {
     closestLocation,
     isSearching: isGeocoderSearching,
@@ -128,6 +130,8 @@ const DeparturesDialogSheet = ({
     }) ||
     undefined;
 
+  const currentLocation = locationEnabled && location ? location : undefined;
+
   return (
     <BottomSheetContainer maxHeightValue={0.5} fullHeight>
       <ScreenHeaderWithoutNavigation
@@ -145,7 +149,8 @@ const DeparturesDialogSheet = ({
             <Button
               text={t(AssistantTexts.location.travelFrom.title)}
               onPress={() =>
-                onLocationSelect(stopPlaceGeoLocation, 'fromLocation')
+                stopPlaceGeoLocation &&
+                navigateToTripSearch(stopPlaceGeoLocation, 'fromLocation')
               }
               mode="primary"
               style={styles.travelFromButtonPadding}
@@ -155,7 +160,8 @@ const DeparturesDialogSheet = ({
             <Button
               text={t(AssistantTexts.location.travelTo.title)}
               onPress={() =>
-                onLocationSelect(stopPlaceGeoLocation, 'toLocation')
+                stopPlaceGeoLocation &&
+                navigateToTripSearch(stopPlaceGeoLocation, 'toLocation')
               }
               mode="primary"
               style={styles.travelToButtonPadding}

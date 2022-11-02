@@ -27,10 +27,10 @@ export type AssistantParams = {
   DateTimePicker: DateTimePickerParams;
 };
 
-export type RootAssistantScreenProps = TabNavigatorScreenProps<'Assistant'>;
+export type RootDashboardScreenProps = TabNavigatorScreenProps<'Dashboard'>;
 
 export type AssistantScreenProps<T extends keyof AssistantParams> =
   CompositeScreenProps<
     StackScreenProps<AssistantParams, T>,
-    RootAssistantScreenProps
+    RootDashboardScreenProps
   >;

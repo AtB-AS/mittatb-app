@@ -5,12 +5,11 @@ import {Place, Quay} from '@atb/api/types/departures';
 import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import StatusBarOnFocus from '@atb/components/status-bar-on-focus';
-import {SelectionLocationCallback} from '@atb/components/map/types';
+import {NavigateToTripSearchCallback as TravelFromAndToLocationsCallback} from '@atb/components/map/types';
 
 export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   if (isScreenReaderEnabled) return <MapDisabledForScreenReader />;
-
   const navigateToQuay = (place: Place, quay: Quay) => {
     navigation.navigate('PlaceScreen', {place, selectedQuay: quay});
   };
@@ -35,15 +34,17 @@ export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
       activeItemIndex: 0,
     });
   };
-  const onLocationSelect: SelectionLocationCallback = (location, as) => {
-    location &&
-      as &&
-      navigation.navigate({
-        name: 'DashboardRoot' as any,
-        params: {
-          [as]: location,
-        },
-      });
+  const navigateToTripSearch: TravelFromAndToLocationsCallback = (
+    location,
+    destination,
+  ) => {
+    navigation.navigate({
+      name: 'TripSearch' as any,
+      params: {
+        [destination]: location,
+      },
+      merge: true,
+    });
   };
 
   return (
@@ -53,7 +54,7 @@ export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
         selectionMode={'ExploreStops'}
         navigateToQuay={navigateToQuay}
         navigateToDetails={navigateToDetails}
-        onLocationSelect={onLocationSelect}
+        navigateToTripSearch={navigateToTripSearch}
       />
     </>
   );

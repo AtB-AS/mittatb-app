@@ -291,6 +291,16 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
         }
       >
         <ScreenReaderAnnouncement message={searchStateMessage} />
+        {!from ||
+          (!to && (
+            <ThemeText
+              color="secondary"
+              style={style.missingLocationText}
+              testID="missingLocation"
+            >
+              {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
+            </ThemeText>
+          ))}
         {from && to && (
           <Results
             tripPatterns={tripPatterns}
@@ -371,10 +381,14 @@ function useLocations(
     ],
   );
 
-  const searchedFromLocation =
+  var searchedFromLocation =
     useLocationSearchValue<RootProps['route']>('fromLocation');
   const searchedToLocation =
     useLocationSearchValue<RootProps['route']>('toLocation');
+
+  if (searchedToLocation && !searchedFromLocation) {
+    searchedFromLocation = currentLocation;
+  }
 
   return useUpdatedLocation(
     searchedFromLocation,
@@ -516,6 +530,10 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
 
   loadingText: {
     // marginTop: theme.spacings.xLarge,
+  },
+  missingLocationText: {
+    padding: theme.spacings.xLarge,
+    justifyContent: 'center',
   },
   loadMoreButton: {
     paddingVertical: theme.spacings.xLarge,

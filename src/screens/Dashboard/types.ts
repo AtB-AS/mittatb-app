@@ -25,16 +25,16 @@ export type DashboardParams = {
     searchTime: SearchTime | undefined;
   };
   TripSearch: {
-    fromLocation: Location;
-    toLocation: Location;
-    searchTime: SearchTime | undefined;
+    fromLocation?: Location;
+    toLocation?: Location;
+    searchTime?: SearchTime;
   };
 
   TripDetails: NavigatorScreenParams<DetailsStackParams>;
   DateTimePicker: DateTimePickerParams;
 };
 
-export type RootDashboardScreenProps = TabNavigatorScreenProps<'Assistant'>;
+export type RootDashboardScreenProps = TabNavigatorScreenProps<'Dashboard'>;
 
 export type DashboardScreenProps<T extends keyof DashboardParams> =
   CompositeScreenProps<
