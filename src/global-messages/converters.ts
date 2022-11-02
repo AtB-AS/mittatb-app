@@ -75,7 +75,9 @@ function mapToContexts(data: any): GlobalMessageContext[] | undefined {
 
 function isAppPlatformValid(platforms: AppPlatformType[]) {
   if (!platforms) return true;
-  return !!platforms.find((platform) => platform === Platform.OS);
+  return !!platforms.find(
+    (platform) => platform.toLowerCase() === Platform.OS.toLowerCase(),
+  );
 }
 
 function mapToContext(data: any): GlobalMessageContext | undefined {
