@@ -6,7 +6,7 @@ import {FeatureOrCoordinates, MapProps} from '../types';
 import {useTriggerCameraMoveEffect} from './use-trigger-camera-move-effect';
 import {useDecideCameraFocusMode} from './use-decide-camera-focus-mode';
 import {useUpdateBottomSheetWhenSelectedStopPlaceChanges} from './use-update-bottom-sheet-when-selected-stop-place-changes';
-import { Coordinates } from "@atb/screens/TripDetails/Map/types";
+import {Coordinates} from '@atb/screens/TripDetails/Map/types';
 
 /**
  * This is a custom hook handling all effects triggered when the user clicks the
