@@ -34,7 +34,7 @@ function mapToGlobalMessage(
   const isDismissable = result.isDismissable;
   const appVersionMin = result.appVersionMin;
   const appVersionMax = result.appVersionMax;
-  const platforms = result.appPlatform;
+  const platforms = result.appPlatforms;
 
   if (!result.active) return;
   if (!isAppPlatformValid(platforms)) return;

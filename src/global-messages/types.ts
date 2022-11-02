@@ -18,7 +18,7 @@ export type GlobalMessageRaw = {
   type: Statuses;
   context: GlobalMessageContext[];
   isDismissable?: boolean;
-  appPlatform: AppPlatformType[];
+  appPlatforms: AppPlatformType[];
   appVersionMin: string;
   appVersionMax: string;
 };
