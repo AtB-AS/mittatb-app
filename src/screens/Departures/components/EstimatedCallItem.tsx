@@ -25,7 +25,7 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import {isToday, parseISO} from 'date-fns';
 import {useOnMarkFavouriteDepartures} from '@atb/screens/Departures/components/use-on-mark-favourite-departures';
 import {StopPlacesMode} from '@atb/screens/Departures/types';
-import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view/TouchableOpacityOrView';
+import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
