@@ -35,7 +35,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import {PixelRatio, Platform, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {PurchaseScreenProps} from '../types';
-import {flyToLocation, zoomIn, zoomOut} from '@atb/components/map/utils';
+import {zoomIn, zoomOut} from '@atb/components/map/utils';
+import {flyToLocation} from '@atb/components/map/hooks/use-trigger-camera-move-effect';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';

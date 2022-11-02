@@ -4,7 +4,6 @@ import {Coordinates} from '@atb/screens/TripDetails/Map/types';
 import {Feature, Point, Position} from 'geojson';
 import {FeatureOrCoordinates} from '@atb/components/map/types';
 import {PixelRatio, Platform} from 'react-native';
-import {moveCameraToCoordinate} from './hooks/use-trigger-camera-move-effect';
 
 export async function zoomIn(
   mapViewRef: RefObject<MapboxGL.MapView>,
@@ -20,13 +19,6 @@ export async function zoomOut(
 ) {
   const currentZoom = await mapViewRef.current?.getZoom();
   mapCameraRef.current?.zoomTo((currentZoom ?? 10) - 1, 200);
-}
-
-export function flyToLocation(
-  coordinates: Coordinates | undefined,
-  mapCameraRef: RefObject<MapboxGL.Camera>,
-) {
-  coordinates && moveCameraToCoordinate(mapCameraRef, coordinates, 0);
 }
 
 export function fitBounds(

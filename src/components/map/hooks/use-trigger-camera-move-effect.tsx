@@ -7,7 +7,6 @@ import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {Coordinates} from '@atb/screens/TripDetails/Map/types';
 import {
   fitBounds,
-  flyToLocation,
   getCoordinatesFromFeatureOrCoordinates,
   mapPositionToCoordinates,
 } from '@atb/components/map/utils';
@@ -53,7 +52,7 @@ export const useTriggerCameraMoveEffect = (
         if (!bottomSheetHeight) return;
         moveCameraToStopPlace(
           cameraFocusMode.stopPlaceFeature,
-          100,
+          padding,
           mapCameraRef,
         );
         break;
@@ -123,21 +122,32 @@ const moveCameraToStopPlace = (
   const stopPlaceCoordinates = mapPositionToCoordinates(
     stopPlaceFeature.geometry.coordinates,
   );
-  moveCameraToCoordinate(mapCameraRef, stopPlaceCoordinates, padding);
+  fitCameraWithinLocation(stopPlaceCoordinates, mapCameraRef, padding, 0.001);
 };
+
+export function flyToLocation(
+  coordinates: Coordinates | undefined,
+  mapCameraRef: RefObject<MapboxGL.Camera>,
+) {
+  coordinates &&
+    mapCameraRef.current?.flyTo(
+      [coordinates.longitude, coordinates.latitude],
+      750,
+    );
+}
 
 /**
  * Move the map camera to a bounded area based on the coordinates and a displacement
  * to the northwest and southwest! forming a box where the coordinate is the centre.
- * @param mapCameraRef
  * @param centerCoordinate
- * @param paddingBottom
+ * @param mapCameraRef
+ * @param padding
  * @param displacement A distance for displacement in a coordinates system
  */
-export const moveCameraToCoordinate = (
-  mapCameraRef: RefObject<MapboxGL.Camera>,
+export const fitCameraWithinLocation = (
   centerCoordinate: Coordinates,
-  padding: MapboxGL.Padding,
+  mapCameraRef: RefObject<MapboxGL.Camera>,
+  padding: MapboxGL.Padding = 0,
   displacement: number = DEFAULT_PADDING_DISPLACEMENT,
 ) => {
   const northEast: Coordinates = {

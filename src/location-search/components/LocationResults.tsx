@@ -1,28 +1,28 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {StyleSheet} from '../theme';
-import LocationIcon from '../components/location-icon';
-import insets from '../utils/insets';
-import {LocationSearchResult} from './types';
-import {FavoriteIcon} from '../favorites';
-import ThemeText from '../components/text';
-import {screenReaderPause} from '../components/accessible-text';
+import {StyleSheet} from '@atb/theme';
+import LocationIcon from '@atb/components/location-icon';
+import insets from '@atb/utils/insets';
+import {LocationSearchResultType} from '../types';
+import {FavoriteIcon} from '@atb/favorites';
+import ThemeText from '@atb/components/text';
+import {screenReaderPause} from '@atb/components/accessible-text';
 import {
   LocationSearchTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {getVenueIconTypes} from '@atb/location-search/utils';
+import {getVenueIconTypes} from '../utils';
 import {SearchLocation} from '@atb/favorites/types';
 
 type Props = {
   title?: string;
-  locations: LocationSearchResult[];
-  onSelect: (location: LocationSearchResult) => void;
+  locations: LocationSearchResultType[];
+  onSelect: (location: LocationSearchResultType) => void;
   testIDItemPrefix: string;
 };
 
-const LocationResults: React.FC<Props> = ({
+export const LocationResults: React.FC<Props> = ({
   title,
   locations,
   onSelect,
@@ -89,7 +89,7 @@ const LocationResults: React.FC<Props> = ({
   );
 };
 
-function mapToVisibleSearchResult(searchResult: LocationSearchResult) {
+function mapToVisibleSearchResult(searchResult: LocationSearchResultType) {
   const location = searchResult.location;
   if (!searchResult.favoriteInfo) {
     return {
@@ -130,8 +130,6 @@ const getLocationIconAccessibilityLabel = (
       return t(LocationSearchTexts.locationResults.category.location);
   }
 };
-
-export default LocationResults;
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   subHeader: {
