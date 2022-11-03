@@ -17,19 +17,16 @@ export type SearchStateType =
   | 'search-empty-result';
 
 export type TripPatternWithKey = TripPattern & {key: string};
+export type TripSearchParams = {
+  fromLocation?: Location;
+  toLocation?: Location;
+  searchTime?: SearchTime;
+};
+export type DashboardRootParams = {} & TripSearchParams;
 
 export type DashboardParams = {
-  DashboardRoot: {
-    fromLocation: Location | undefined;
-    toLocation: Location | undefined;
-    searchTime: SearchTime | undefined;
-  };
-  TripSearch: {
-    fromLocation?: Location;
-    toLocation?: Location;
-    searchTime?: SearchTime;
-  };
-
+  DashboardRoot: DashboardRootParams;
+  TripSearch: TripSearchParams;
   TripDetails: NavigatorScreenParams<DetailsStackParams>;
   DateTimePicker: DateTimePickerParams;
 };

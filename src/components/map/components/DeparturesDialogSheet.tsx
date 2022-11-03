@@ -8,7 +8,6 @@ import {
   NearbyTexts,
   ScreenHeaderTexts,
   useTranslation,
-  AssistantTexts,
 } from '@atb/translations';
 import StopPlaceView from '@atb/screens/Departures/StopPlaceView';
 import {SearchTime} from '@atb/screens/Departures/utils';
@@ -22,6 +21,7 @@ import Button from '@atb/components/button';
 import {Location, SearchLocation} from '@atb/favorites/types';
 import {NavigateToTripSearchCallback} from '../types';
 import {useGeolocationState} from '@atb/GeolocationContext';
+import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
 
 type DeparturesDialogSheetProps = {
   close: () => void;
@@ -155,7 +155,7 @@ const DeparturesDialogSheet = ({
         <View style={styles.buttonsContainer}>
           <View style={styles.travelButton}>
             <Button
-              text={t(AssistantTexts.location.travelFrom.title)}
+              text={t(DeparturesDialogSheetTexts.travelFrom.title)}
               onPress={() =>
                 stopPlaceGeoLocation &&
                 navigateToTripSearch(stopPlaceGeoLocation, 'fromLocation')
@@ -166,7 +166,7 @@ const DeparturesDialogSheet = ({
           </View>
           <View style={styles.travelButton}>
             <Button
-              text={t(AssistantTexts.location.travelTo.title)}
+              text={t(DeparturesDialogSheetTexts.travelTo.title)}
               onPress={() =>
                 stopPlaceGeoLocation &&
                 navigateToTripSearch(stopPlaceGeoLocation, 'toLocation')

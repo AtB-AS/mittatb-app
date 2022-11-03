@@ -1,11 +1,11 @@
 import {TripPattern} from '@atb/api/types/trips';
 import {Location} from '@atb/favorites/types';
-import {TabNavigatorScreenProps} from '@atb/navigation/types';
 import {
   CompositeScreenProps,
   NavigatorScreenParams,
 } from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
+import {RootDashboardScreenProps} from '../Dashboard/types';
 import {DetailsStackParams} from '../TripDetails/types';
 import {DateTimePickerParams, SearchTime} from './journey-date-picker';
 
@@ -26,8 +26,6 @@ export type AssistantParams = {
   TripDetails: NavigatorScreenParams<DetailsStackParams>;
   DateTimePicker: DateTimePickerParams;
 };
-
-export type RootDashboardScreenProps = TabNavigatorScreenProps<'Dashboard'>;
 
 export type AssistantScreenProps<T extends keyof AssistantParams> =
   CompositeScreenProps<
