@@ -31,7 +31,7 @@ const TripSearchTexts = {
         'Avreisetid har passert',
         'Departure time has passed',
       ),
-      MissingLocation: _('', ''),
+      MissingLocation: _('Fyll inn begge felter for å utføre et reisesøk', 'Fill in both fields to perform a travel search'),
     },
   },
   location: {
