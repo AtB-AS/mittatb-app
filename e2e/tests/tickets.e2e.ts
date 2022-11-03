@@ -80,12 +80,14 @@ describe('Tickets anonymous', () => {
       `Total ${ticketInfo.singleFareProductAdultPrice}.00 kr`,
     );
 
-    await scroll('purchaseOverviewScrollView', 'bottom');
+    await scroll('ticketingScrollView', 'bottom');
     await tapById('goToPaymentButton');
 
     await expectToBeVisibleByText('Single ticket');
     await expectToBeVisibleByText('1 Adult');
-    await expectToBeVisibleByText(`${ticketInfo.singleFareProductAdultPrice}.00 kr`);
+    await expectToBeVisibleByText(
+      `${ticketInfo.singleFareProductAdultPrice}.00 kr`,
+    );
     await expectToBeVisibleByText('Single ticket bus/tram');
     //Zone is either A or C3 during the tests
     await expectToBeVisibleByPartOfText('Valid in zone');
@@ -107,12 +109,13 @@ describe('Tickets anonymous', () => {
     await tapById('counterInput_child_add');
     await verifyTravellerCounts(2, 0, 1);
     const totPrice =
-      2 * ticketInfo.singleFareProductAdultPrice + ticketInfo.singleFareProductChildPrice;
+      2 * ticketInfo.singleFareProductAdultPrice +
+      ticketInfo.singleFareProductChildPrice;
 
     // Verify
     await expectIdToHaveText('offerTotalPriceText', `Total ${totPrice}.00 kr`);
 
-    await scroll('purchaseOverviewScrollView', 'bottom');
+    await scroll('ticketingScrollView', 'bottom');
     await tapById('goToPaymentButton');
     await expectToBeVisibleByText('2 Adult');
     await expectToBeVisibleByText('1 Child');
@@ -137,7 +140,7 @@ describe('Tickets anonymous', () => {
       'offerTotalPriceText',
       `Total ${ticketInfo.singleFareProductAdultPrice}.00 kr`,
     );
-    await scroll('purchaseOverviewScrollView', 'bottom');
+    await scroll('ticketingScrollView', 'bottom');
     await tapById('goToPaymentButton');
     await expectToBeVisibleByText('Valid in zone A');
     await goBack();
@@ -152,7 +155,7 @@ describe('Tickets anonymous', () => {
       'offerTotalPriceText',
       `Total ${ticketInfo.singleFareProductZoneAZoneB1Price}.00 kr`,
     );
-    await scroll('purchaseOverviewScrollView', 'bottom');
+    await scroll('ticketingScrollView', 'bottom');
     await tapById('goToPaymentButton');
     await expectToBeVisibleByText('Valid from zone A to zone B1');
     await goBack();
@@ -259,11 +262,13 @@ xdescribe('Tickets authorized', () => {
       // Set zone E1 -> E1
       await setZones('E1', 'E1');
 
-      await scroll('purchaseOverviewScrollView', 'bottom');
+      await scroll('ticketingScrollView', 'bottom');
       await tapById('goToPaymentButton');
 
       await expectToBeVisibleByText('Single ticket');
-      await expectToBeVisibleByText(`${ticketInfo.singleFareProductAdultPrice} kr`);
+      await expectToBeVisibleByText(
+        `${ticketInfo.singleFareProductAdultPrice} kr`,
+      );
       await expectToBeVisibleByText('Single ticket bus/tram');
       await expectToBeVisibleByText('Starting now');
 
@@ -319,7 +324,7 @@ xdescribe('Tickets authorized', () => {
         `Total ${ticketInfo.periodic30daysPrice}.00 kr`,
       );
 
-      await scroll('purchaseOverviewScrollView', 'bottom');
+      await scroll('ticketingScrollView', 'bottom');
       await tapById('goToPaymentButton');
 
       await expectToBeVisibleByText('Monthly pass');
@@ -368,12 +373,12 @@ xdescribe('Tickets authorized', () => {
         await expectToBeVisibleById(product.id);
         await expectIdToHaveChildText(product.id, product.text);
         await tapById(product.id);
-        await scroll('purchaseOverviewScrollView', 'bottom');
+        await scroll('ticketingScrollView', 'bottom');
         await tapById('goToPaymentButton');
 
         await expectToBeVisibleByText(product.name);
         await goBack();
-        await scroll('purchaseOverviewScrollView', 'top');
+        await scroll('ticketingScrollView', 'top');
       }
       await goBack();
     }

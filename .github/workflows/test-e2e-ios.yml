@@ -1,6 +1,11 @@
 name: E2E tests on iOS
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Define branch to test'
+        required: true
+        default: 'master'
   push:
     branches:
       - master
@@ -10,8 +15,15 @@ jobs:
     name: E2E test
     runs-on: macOS-12
     steps:
+      - name: Set variables
+        env:
+          DEFAULT_BRANCH: 'master'
+        run: |
+          echo "INPUT_BRANCH=${{ github.event.inputs.branch || env.DEFAULT_BRANCH }}" >> $GITHUB_ENV
       - name: Checkout project
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ env.INPUT_BRANCH }}
       - name: Add Entur private registry credentials
         run: sh ./scripts/add-entur-private-registry.sh
         env:
@@ -27,7 +39,7 @@ jobs:
           app-org: 'atb'
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Get potentially cached app
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: detox-app-cache
         with:
           path: |

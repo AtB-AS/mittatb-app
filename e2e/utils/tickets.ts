@@ -125,7 +125,7 @@ export const buySingleTicket = async (travellers: Traveller, zone: string) => {
   }
 
   // Pay with stored payment card
-  await scroll('purchaseOverviewScrollView', 'bottom');
+  await scroll('ticketingScrollView', 'bottom');
   await tapById('goToPaymentButton');
   await tapById('choosePaymentOptionButton');
   await tapById('recurringPayment0');
