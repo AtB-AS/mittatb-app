@@ -94,7 +94,14 @@ export default function ProfileHome({navigation}: ProfileProps) {
   const {open: openBottomSheet} = useBottomSheet();
   async function selectFavourites() {
     openBottomSheet((close) => {
-      return <SelectFavouritesBottomSheet close={close} />;
+      return (
+        <SelectFavouritesBottomSheet
+          close={close}
+          onEditFavouriteDeparture={() =>
+            navigation.navigate('FavoriteDeparturesProfileScreen')
+          }
+        />
+      );
     });
   }
 
@@ -350,7 +357,9 @@ export default function ProfileHome({navigation}: ProfileProps) {
               ),
             }}
             testID="favoriteDeparturesButton"
-            onPress={() => navigation.navigate('FavoriteDepartures')}
+            onPress={() =>
+              navigation.navigate('FavoriteDeparturesProfileScreen')
+            }
           />
         </Sections.Section>
         <Sections.Section withPadding>

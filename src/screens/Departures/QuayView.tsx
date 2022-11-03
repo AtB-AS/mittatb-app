@@ -1,14 +1,19 @@
 import {Place, Quay} from '@atb/api/types/departures';
 import {useFavorites} from '@atb/favorites';
-import {SearchTime} from '@atb/screens/Departures/utils';
+import {
+  getLimitOfDeparturesPerLineByMode,
+  getTimeRangeByMode,
+  SearchTime,
+} from '@atb/screens/Departures/utils';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
-import DateNavigation from './components/DateNavigator';
+import DateSelection from './components/DateSelection';
 import FavoriteToggle from './components/FavoriteToggle';
 import QuaySection from './components/QuaySection';
 import {useQuayData} from './state/quay-state';
 import {hasFavorites} from './StopPlaceView';
+import {StopPlacesMode} from '@atb/screens/Departures/types';
 
 export type QuayViewParams = {
   quay: Quay;
@@ -16,7 +21,7 @@ export type QuayViewParams = {
 
 export type QuayViewProps = {
   quay: Quay;
-  navigateToDetails: (
+  navigateToDetails?: (
     serviceJourneyId: string,
     serviceDate: string,
     date?: string,
@@ -28,6 +33,7 @@ export type QuayViewProps = {
   setShowOnlyFavorites: (enabled: boolean) => void;
   testID?: string;
   stopPlace: Place;
+  mode: StopPlacesMode;
 };
 
 export default function QuayView({
@@ -39,13 +45,17 @@ export default function QuayView({
   setShowOnlyFavorites,
   testID,
   stopPlace,
+  mode,
 }: QuayViewProps) {
   const styles = useStyles();
   const {favoriteDepartures} = useFavorites();
+  const searchStartTime =
+    searchTime?.option !== 'now' ? searchTime.date : undefined;
   const {state, refresh} = useQuayData(
     quay,
     showOnlyFavorites,
-    searchTime?.option !== 'now' ? searchTime.date : undefined,
+    mode,
+    searchStartTime,
   );
 
   const quayListData: SectionListData<Quay>[] = [{data: [quay]}];
@@ -69,18 +79,20 @@ export default function QuayView({
   return (
     <SectionList
       ListHeaderComponent={
-        <View style={styles.header}>
-          {placeHasFavorites && (
-            <FavoriteToggle
-              enabled={showOnlyFavorites}
-              setEnabled={setShowOnlyFavorites}
+        mode === 'Departure' ? (
+          <View style={styles.header}>
+            {placeHasFavorites && (
+              <FavoriteToggle
+                enabled={showOnlyFavorites}
+                setEnabled={setShowOnlyFavorites}
+              />
+            )}
+            <DateSelection
+              searchTime={searchTime}
+              setSearchTime={setSearchTime}
             />
-          )}
-          <DateNavigation
-            searchTime={searchTime}
-            setSearchTime={setSearchTime}
-          />
-        </View>
+          </View>
+        ) : null
       }
       refreshControl={
         <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
@@ -97,6 +109,7 @@ export default function QuayView({
           stopPlace={stopPlace}
           showOnlyFavorites={showOnlyFavorites}
           allowFavouriteSelection={true}
+          mode={mode}
         />
       )}
     />

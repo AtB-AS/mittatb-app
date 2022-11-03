@@ -18,7 +18,11 @@ import useReducerWithSideEffects, {
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
 import {updateDeparturesWithRealtimeV2} from '../../../departure-list/utils';
-import {getSecondsUntilMidnightOrMinimum} from './quay-state';
+import {StopPlacesMode} from '@atb/screens/Departures/types';
+import {
+  getLimitOfDeparturesPerLineByMode,
+  getTimeRangeByMode,
+} from '@atb/screens/Departures/utils';
 
 export const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 
@@ -30,7 +34,6 @@ const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED =
 // Used to re-trigger full refresh after N minutes.
 // To repopulate the view when we get fewer departures.
 const HARD_REFRESH_LIMIT_IN_MINUTES = 10;
-const MIN_TIME_RANGE = 3 * 60 * 60; // Three hours
 
 export type DepartureDataState = {
   data: EstimatedCall[] | null;
@@ -66,7 +69,9 @@ type DepartureDataActions =
       type: 'LOAD_INITIAL_DEPARTURES';
       stopPlace: StopPlace;
       startTime?: string;
+      timeRange?: number;
       favoriteDepartures?: UserFavoriteDepartures;
+      limitPerLine?: number;
     }
   | {
       type: 'LOAD_REALTIME_DATA';
@@ -86,7 +91,9 @@ type DepartureDataActions =
       showOnlyFavorites: boolean;
       stopPlace: StopPlace;
       startTime?: string;
+      timeRange?: number;
       favoriteDepartures?: UserFavoriteDepartures;
+      limitPerLine?: number;
     }
   | {
       type: 'SET_ERROR';
@@ -116,6 +123,8 @@ const reducer: ReducerWithSideEffects<
       const queryInput: QueryInput = {
         numberOfDepartures: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED,
         startTime: action.startTime ?? new Date().toISOString(),
+        limitPerLine: action.limitPerLine,
+        timeRange: action.timeRange,
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -203,7 +212,9 @@ const reducer: ReducerWithSideEffects<
             type: 'LOAD_INITIAL_DEPARTURES',
             stopPlace: action.stopPlace,
             startTime: action.startTime,
+            timeRange: action.timeRange,
             favoriteDepartures: action.favoriteDepartures,
+            limitPerLine: action.limitPerLine,
           });
         },
       );
@@ -252,19 +263,23 @@ export function useStopPlaceData(
   stopPlace: StopPlace,
   showOnlyFavorites: boolean,
   isFocused: boolean,
+  mode: StopPlacesMode,
   startTime?: string,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const {favoriteDepartures} = useFavorites();
-
+  const timeRange = getTimeRangeByMode(mode, startTime);
+  const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
   const refresh = useCallback(
     () =>
       dispatch({
         type: 'LOAD_INITIAL_DEPARTURES',
         stopPlace,
         startTime,
+        timeRange,
+        limitPerLine,
         favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
       }),
     [stopPlace.id, startTime, showOnlyFavorites, favoriteDepartures],
@@ -276,8 +291,10 @@ export function useStopPlaceData(
         type: 'SET_SHOW_FAVORITES',
         stopPlace,
         startTime,
+        timeRange,
         showOnlyFavorites,
         favoriteDepartures,
+        limitPerLine,
       }),
     [stopPlace.id, favoriteDepartures, showOnlyFavorites],
   );
@@ -296,13 +313,13 @@ export function useStopPlaceData(
     () => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace}),
     updateFrequencyInSeconds * 1000,
     [stopPlace.id],
-    !isFocused,
+    !isFocused || mode !== 'Departure',
   );
   useInterval(
     () => dispatch({type: 'TICK_TICK'}),
     tickRateInSeconds * 1000,
     [],
-    !isFocused,
+    !isFocused || mode !== 'Departure',
   );
 
   return {
@@ -314,6 +331,8 @@ export function useStopPlaceData(
 type QueryInput = {
   numberOfDepartures: number;
   startTime: string;
+  limitPerLine?: number;
+  timeRange?: number;
 };
 
 async function fetchEstimatedCalls(
@@ -321,17 +340,13 @@ async function fetchEstimatedCalls(
   stopPlace: StopPlace,
   favoriteDepartures?: UserFavoriteDepartures,
 ): Promise<EstimatedCall[]> {
-  const timeRange = getSecondsUntilMidnightOrMinimum(
-    queryInput.startTime ?? new Date().toISOString(),
-    MIN_TIME_RANGE,
-  );
-
   const result = await getStopPlaceDepartures(
     {
       id: stopPlace.id,
       startTime: queryInput.startTime,
       numberOfDepartures: queryInput.numberOfDepartures,
-      timeRange: timeRange,
+      timeRange: queryInput.timeRange,
+      limitPerLine: queryInput.limitPerLine,
     },
     favoriteDepartures,
   );

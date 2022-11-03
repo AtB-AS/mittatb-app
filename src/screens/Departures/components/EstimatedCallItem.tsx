@@ -23,13 +23,16 @@ import {Warning} from '../../../assets/svg/color/situations';
 import ToggleFavouriteDeparture from '@atb/screens/Departures/components/ToggleFavouriteDeparture';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {isToday, parseISO} from 'date-fns';
+import {useOnMarkFavouriteDepartures} from '@atb/screens/Departures/components/use-on-mark-favourite-departures';
+import {StopPlacesMode} from '@atb/screens/Departures/types';
+import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
   testID: string;
   quay: Quay;
   stopPlace: Place;
-  navigateToDetails: (
+  navigateToDetails?: (
     serviceJourneyId: string,
     serviceDate: string,
     date?: string,
@@ -37,6 +40,7 @@ type EstimatedCallItemProps = {
     isTripCancelled?: boolean,
   ) => void;
   allowFavouriteSelection: boolean;
+  mode: StopPlacesMode;
 };
 
 export default function EstimatedCallItem({
@@ -46,6 +50,7 @@ export default function EstimatedCallItem({
   stopPlace,
   navigateToDetails,
   allowFavouriteSelection,
+  mode,
 }: EstimatedCallItemProps): JSX.Element {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -64,12 +69,19 @@ export default function EstimatedCallItem({
   const isTripCancelled = departure.cancellation;
   const lineName = departure.destinationDisplay?.frontText;
   const lineNumber = line?.publicCode;
+  const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
+    useOnMarkFavouriteDepartures(
+      {...line, lineNumber: lineNumber, lineName: lineName},
+      quay,
+      stopPlace,
+    );
   return (
-    <View style={styles.container}>
+    <TouchableOpacityOrView onClick={onMarkFavourite} style={styles.container}>
       <TouchableOpacity
         style={styles.actionableItem}
+        disabled={!navigateToDetails}
         onPress={() => {
-          if (departure?.serviceJourney)
+          if (navigateToDetails && departure?.serviceJourney) {
             navigateToDetails(
               departure.serviceJourney?.id,
               departure.date,
@@ -77,6 +89,7 @@ export default function EstimatedCallItem({
               departure.quay?.id,
               departure.cancellation,
             );
+          }
         }}
         accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
         accessibilityLabel={getA11yLineLabel(departure, t, language)}
@@ -93,26 +106,49 @@ export default function EstimatedCallItem({
           <ThemeText style={styles.lineName} testID={testID + 'Name'}>
             {departure.destinationDisplay?.frontText}
           </ThemeText>
-          {isTripCancelled && <Warning style={styles.warningIcon} />}
-          <ThemeText
-            type="body__primary--bold"
-            testID={testID + 'Time'}
-            style={isTripCancelled && styles.strikethrough}
-          >
-            {timeWithRealtimePrefix}
-          </ThemeText>
+          {mode === 'Departure' ? (
+            <DepartureTimeAndWarning
+              isTripCancelled={isTripCancelled}
+              timeWithRealtimePrefix={timeWithRealtimePrefix}
+              testID={testID}
+            ></DepartureTimeAndWarning>
+          ) : null}
         </View>
       </TouchableOpacity>
-      {allowFavouriteSelection && lineName && lineNumber && (
+      {allowFavouriteSelection && (
         <ToggleFavouriteDeparture
-          line={{...line, lineNumber: lineNumber, lineName: lineName}}
-          quay={quay}
-          stop={stopPlace}
+          existingFavorite={existingFavorite}
+          onMarkFavourite={mode === 'Departure' ? onMarkFavourite : undefined}
+          toggleFavouriteAccessibilityLabel={toggleFavouriteAccessibilityLabel}
         />
       )}
-    </View>
+    </TouchableOpacityOrView>
   );
 }
+
+const DepartureTimeAndWarning = ({
+  isTripCancelled,
+  timeWithRealtimePrefix,
+  testID,
+}: {
+  isTripCancelled: boolean;
+  timeWithRealtimePrefix: string;
+  testID: string;
+}) => {
+  const styles = useStyles();
+  return (
+    <>
+      {isTripCancelled && <Warning style={styles.warningIcon} />}
+      <ThemeText
+        type="body__primary--bold"
+        testID={testID + 'Time'}
+        style={isTripCancelled && styles.strikethrough}
+      >
+        {timeWithRealtimePrefix}
+      </ThemeText>
+    </>
+  );
+};
 
 function getA11yLineLabel(departure: any, t: any, language: any) {
   const line = departure.serviceJourney?.line;
@@ -201,6 +237,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
   },
   actionableItem: {
     flex: 1,

@@ -1,20 +1,44 @@
 import * as Sections from '@atb/components/sections';
 import {useFavorites} from '@atb/favorites';
 import {StoredFavoriteDeparture} from '@atb/favorites/types';
-import MessageBox from '@atb/components/message-box';
 import {StyleSheet, Theme} from '@atb/theme';
 import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {Alert, LayoutAnimation, View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {animateNextChange} from '@atb/utils/animation';
+import {Add} from '@atb/assets/svg/mono-icons/actions';
+import ThemeIcon from '@atb/components/theme-icon';
+import {ProfileScreenProps} from '@atb/screens/Profile/types';
+import {useRoute} from '@react-navigation/native';
+import {DashboardScreenProps} from '@atb/screens/Dashboard/types';
 
-export default function FavoriteDepartures() {
+type FavoriteDeparturesProfileScreenProps =
+  ProfileScreenProps<'FavoriteDeparturesProfileScreen'>;
+type FavoriteDeparturesDashboardScreenProps =
+  DashboardScreenProps<'FavoriteDeparturesDashboardScreen'>;
+
+type FavoriteDeparturesPropsInternal =
+  | FavoriteDeparturesProfileScreenProps
+  | FavoriteDeparturesDashboardScreenProps;
+
+type NavigationProps = FavoriteDeparturesProfileScreenProps['navigation'] &
+  FavoriteDeparturesDashboardScreenProps['navigation'];
+
+// Having issues doing proper typing where the navigation
+// gets all overlapping types of routes as this is used from
+// several places. For routes and properties this works
+// but having to _combine_ everything for navigation to work.
+export type Props = FavoriteDeparturesPropsInternal & {
+  navigation: NavigationProps;
+};
+
+export default function FavoriteDeparturesScreen({navigation}: Props) {
   const style = useProfileStyle();
   const {favoriteDepartures, removeFavoriteDeparture} = useFavorites();
   const {t} = useTranslation();
-
+  const route = useRoute();
   const onDeletePress = (item: StoredFavoriteDeparture) => {
     Alert.alert(
       t(FavoriteDeparturesTexts.delete.label),
@@ -36,6 +60,10 @@ export default function FavoriteDepartures() {
     );
   };
 
+  const nearbyStopPlaceScreenName =
+    route.name === 'FavoriteDeparturesDashboardScreen'
+      ? 'NearbyStopPlacesDashboardScreen'
+      : 'NearbyStopPlacesProfileScreen';
   return (
     <View style={style.container}>
       <FullScreenHeader
@@ -44,15 +72,7 @@ export default function FavoriteDepartures() {
       />
 
       <ScrollView>
-        {!favoriteDepartures.length && (
-          <MessageBox
-            containerStyle={style.empty}
-            message={t(FavoriteDeparturesTexts.noFavorites)}
-            type="info"
-          />
-        )}
-
-        <Sections.Section withTopPadding withPadding>
+        <Sections.Section withFullPadding>
           {favoriteDepartures.map((favorite) => (
             <Sections.FavoriteDepartureItem
               key={favorite.id}
@@ -65,6 +85,18 @@ export default function FavoriteDepartures() {
               onPress={onDeletePress}
             />
           ))}
+        </Sections.Section>
+        <Sections.Section withPadding>
+          <Sections.LinkItem
+            text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
+            onPress={() => {
+              navigation.navigate(nearbyStopPlaceScreenName as any, {
+                location: undefined,
+              });
+            }}
+            testID="chooseLoginPhone"
+            icon={<ThemeIcon svg={Add} />}
+          />
         </Sections.Section>
       </ScrollView>
     </View>
