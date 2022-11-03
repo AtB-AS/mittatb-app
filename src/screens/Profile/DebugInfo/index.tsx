@@ -151,6 +151,16 @@ export default function DebugInfo() {
             text="Reset frontpage favourite departures"
             onPress={() => storage.set('@ATB_user_frontpage_departures', '[]')}
           />
+
+          <Sections.LinkItem
+            text="Reset has read departures v2 onboarding"
+            onPress={() =>
+              storage.set(
+                '@ATB_has_read_departures_v2_onboarding',
+                JSON.stringify(false),
+              )
+            }
+          />
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>

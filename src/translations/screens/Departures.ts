@@ -90,5 +90,16 @@ const DeparturesTexts = {
   button: {
     text: _('Velg favorittavganger', 'Select favourite departures'),
   },
+  onboarding: {
+    title: _('Overskrift', 'Heading'),
+    body: _(
+      '*Tekst om at vi har oppgradert visningen av avganger basert på brukernes tilbakemeldinger vises her*',
+      '*Tekst om at vi har oppgradert visningen av avganger basert på brukernes tilbakemeldinger vises her*',
+    ),
+    button: _(
+      'Den er grei!',
+      'That\'s right!',
+    ),
+  },
 };
 export default DeparturesTexts;
