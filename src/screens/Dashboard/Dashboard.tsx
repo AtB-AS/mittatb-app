@@ -290,10 +290,10 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
         )}
         <DeparturesWidget
           onEditFavouriteDeparture={() =>
-            navigation.navigate('FavoriteDepartures')
+            navigation.navigate('FavoriteDeparturesDashboardScreen')
           }
           onAddFavouriteDeparture={() =>
-            navigation.navigate('NearbyStopPlacesScreen', {
+            navigation.navigate('NearbyStopPlacesDashboardScreen', {
               location: undefined,
             })
           }

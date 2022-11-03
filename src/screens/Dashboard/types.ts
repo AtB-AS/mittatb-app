@@ -36,8 +36,8 @@ export type DashboardParams = {
 
   TripDetails: NavigatorScreenParams<DetailsStackParams>;
   DateTimePicker: DateTimePickerParams;
-  NearbyStopPlacesScreen: NearbyStopPlacesScreenParams;
-  FavoriteDepartures: undefined;
+  FavoriteDeparturesDashboardScreen: undefined;
+  NearbyStopPlacesDashboardScreen: NearbyStopPlacesScreenParams;
   PlaceScreen: PlaceScreenParams;
 };
 

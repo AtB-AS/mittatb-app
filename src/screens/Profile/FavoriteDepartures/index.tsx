@@ -11,14 +11,34 @@ import {animateNextChange} from '@atb/utils/animation';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import ThemeIcon from '@atb/components/theme-icon';
 import {ProfileScreenProps} from '@atb/screens/Profile/types';
+import {useRoute} from '@react-navigation/native';
+import {DashboardScreenProps} from '@atb/screens/Dashboard/types';
 
-export type Props = ProfileScreenProps<'FavoriteDepartures'>;
+type FavoriteDeparturesProfileScreenProps =
+  ProfileScreenProps<'FavoriteDeparturesProfileScreen'>;
+type FavoriteDeparturesDashboardScreenProps =
+  DashboardScreenProps<'FavoriteDeparturesDashboardScreen'>;
 
-export default function FavoriteDepartures({navigation}: Props) {
+type FavoriteDeparturesPropsInternal =
+  | FavoriteDeparturesProfileScreenProps
+  | FavoriteDeparturesDashboardScreenProps;
+
+type NavigationProps = FavoriteDeparturesProfileScreenProps['navigation'] &
+  FavoriteDeparturesDashboardScreenProps['navigation'];
+
+// Having issues doing proper typing where the navigation
+// gets all overlapping types of routes as this is used from
+// several places. For routes and properties this works
+// but having to _combine_ everything for navigation to work.
+export type Props = FavoriteDeparturesPropsInternal & {
+  navigation: NavigationProps;
+};
+
+export default function FavoriteDeparturesScreen({navigation}: Props) {
   const style = useProfileStyle();
   const {favoriteDepartures, removeFavoriteDeparture} = useFavorites();
   const {t} = useTranslation();
-
+  const route = useRoute();
   const onDeletePress = (item: StoredFavoriteDeparture) => {
     Alert.alert(
       t(FavoriteDeparturesTexts.delete.label),
@@ -40,6 +60,10 @@ export default function FavoriteDepartures({navigation}: Props) {
     );
   };
 
+  const nearbyStopPlaceScreenName =
+    route.name === 'FavoriteDeparturesDashboardScreen'
+      ? 'NearbyStopPlacesDashboardScreen'
+      : 'NearbyStopPlacesProfileScreen';
   return (
     <View style={style.container}>
       <FullScreenHeader
@@ -66,7 +90,7 @@ export default function FavoriteDepartures({navigation}: Props) {
           <Sections.LinkItem
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={() => {
-              navigation.navigate('NearbyStopPlacesScreen', {
+              navigation.navigate(nearbyStopPlaceScreenName as any, {
                 location: undefined,
               });
             }}

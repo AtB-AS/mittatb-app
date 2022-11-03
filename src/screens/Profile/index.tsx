@@ -3,7 +3,7 @@ import React from 'react';
 import Appearance from './Appearance';
 import TravelToken from './TravelToken';
 import SelectTravelToken from './TravelToken/SelectTravelTokenScreen';
-import FavoriteDepartures from './FavoriteDepartures';
+import FavoriteDeparturesScreen from './FavoriteDepartures';
 import FavoriteList from './FavoriteList';
 import ProfileHome from './Home';
 import {TicketHistory} from './TicketHistory';
@@ -38,7 +38,10 @@ export default function ProfileScreen() {
       <Stack.Screen name="PaymentOptions" component={PaymentOptions} />
       <Stack.Screen name="DeleteProfile" component={DeleteProfile} />
       <Stack.Screen name="FavoriteList" component={FavoriteList} />
-      <Stack.Screen name="FavoriteDepartures" component={FavoriteDepartures} />
+      <Stack.Screen
+        name="FavoriteDeparturesProfileScreen"
+        component={FavoriteDeparturesScreen}
+      />
       <Stack.Screen name="SelectStartScreen" component={SelectStartScreen} />
       <Stack.Screen name="TravelToken" component={TravelToken} />
       <Stack.Screen name="SelectTravelToken" component={SelectTravelToken} />
@@ -58,7 +61,7 @@ export default function ProfileScreen() {
         component={TicketInspectionInformation}
       />
       <Stack.Screen
-        name="NearbyStopPlacesScreen"
+        name="NearbyStopPlacesProfileScreen"
         component={NearbyStopPlacesScreen}
       />
       <Stack.Screen name="PlaceScreen" component={PlaceScreen}></Stack.Screen>

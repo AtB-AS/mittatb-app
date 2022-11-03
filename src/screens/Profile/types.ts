@@ -17,7 +17,7 @@ export type ProfileStackParams = {
   TicketHistory: undefined;
   DeleteProfile: undefined;
   FavoriteList: undefined;
-  FavoriteDepartures: undefined;
+  FavoriteDeparturesProfileScreen: undefined;
   SelectStartScreen: undefined;
   TravelToken: undefined;
   SelectTravelToken: undefined;
@@ -31,7 +31,7 @@ export type ProfileStackParams = {
   PaymentInformation: undefined;
   TermsInformation: undefined;
   TicketInspectionInformation: undefined;
-  NearbyStopPlacesScreen: NearbyStopPlacesScreenParams;
+  NearbyStopPlacesProfileScreen: NearbyStopPlacesScreenParams;
   PlaceScreen: PlaceScreenParams;
 };
 
