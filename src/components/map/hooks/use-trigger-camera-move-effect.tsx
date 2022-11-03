@@ -8,6 +8,7 @@ import {Coordinates} from '@atb/screens/TripDetails/Map/types';
 import {fitBounds, mapPositionToCoordinates} from '@atb/components/map/utils';
 import {CameraFocusModeType} from '@atb/components/map/types';
 import {Dimensions, PixelRatio, Platform, StatusBar} from 'react-native';
+import {useHasChanged} from '@atb/utils/use-has-changed';
 
 type BoundingBox = {
   xMin: number;
@@ -33,31 +34,29 @@ export const useTriggerCameraMoveEffect = (
   const padding = useCalculatePaddings();
 
   useEffect(() => {
-    if (!cameraFocusMode) return;
+    if (cameraFocusMode?.mode === 'coordinates') {
+      moveCameraToCoordinates(cameraFocusMode.coordinates, mapCameraRef);
+    } else if (cameraFocusMode?.mode === 'my-position') {
+      fitCameraWithinLocation(cameraFocusMode.coordinates, mapCameraRef);
+    }
+  }, [cameraFocusMode, mapCameraRef]);
 
-    switch (cameraFocusMode.mode) {
-      case 'map-lines': {
-        if (!bottomSheetHeight) return;
-        moveCameraToMapLines(cameraFocusMode.mapLines, padding, mapCameraRef);
-        break;
-      }
-      case 'stop-place': {
-        if (!bottomSheetHeight) return;
-        moveCameraToStopPlace(
-          cameraFocusMode.stopPlaceFeature,
-          padding,
-          mapCameraRef,
-        );
-        break;
-      }
-      case 'coordinates': {
-        moveCameraToCoordinates(cameraFocusMode.coordinates, mapCameraRef);
-        break;
-      }
-      case 'my-position': {
-        fitCameraWithinLocation(cameraFocusMode.coordinates, mapCameraRef);
-        break;
-      }
+  /*
+   * Moving camera to stop place and map lines are also dependent on that the
+   * bottom sheet is visible first, to be able to calculate the correct bottom
+   * padding.
+   */
+  useEffect(() => {
+    if (!bottomSheetHeight) return;
+
+    if (cameraFocusMode?.mode === 'map-lines') {
+      moveCameraToMapLines(cameraFocusMode.mapLines, padding, mapCameraRef);
+    } else if (cameraFocusMode?.mode === 'stop-place') {
+      moveCameraToStopPlace(
+        cameraFocusMode.stopPlaceFeature,
+        padding,
+        mapCameraRef,
+      );
     }
   }, [bottomSheetHeight, cameraFocusMode, mapCameraRef]);
 };
