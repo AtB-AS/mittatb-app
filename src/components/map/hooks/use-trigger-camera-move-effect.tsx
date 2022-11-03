@@ -8,7 +8,6 @@ import {Coordinates} from '@atb/screens/TripDetails/Map/types';
 import {fitBounds, mapPositionToCoordinates} from '@atb/components/map/utils';
 import {CameraFocusModeType} from '@atb/components/map/types';
 import {Dimensions, PixelRatio, Platform, StatusBar} from 'react-native';
-import {useHasChanged} from '@atb/utils/use-has-changed';
 
 type BoundingBox = {
   xMin: number;
