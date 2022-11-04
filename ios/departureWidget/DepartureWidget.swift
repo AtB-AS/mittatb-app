@@ -33,14 +33,13 @@ struct DepartureWidgetEntryView: View {
                 }.padding(10).background(.green)
 
                 HStack {
-                    
-                     ForEach(viewModel.departures, id: \.self) { time in
-                       Text(time, style: .time)
-                           .padding(3)
-                           .background(.gray)
-                           .foregroundColor(.white)
-                           .cornerRadius(5)
-                     }
+                    ForEach(viewModel.departures, id: \.self) { time in
+                        Text(time, style: .time)
+                            .padding(3)
+                            .background(.gray)
+                            .foregroundColor(.white)
+                            .cornerRadius(5)
+                    }
                 }.padding(5)
                 Spacer()
             }

@@ -7,32 +7,37 @@ struct Provider: TimelineProvider {
     let locationManager = LocationManager()
     let apiService = APIService()
 
+    var dateFiveMinutesAhead: Date {
+        // Date 5 minutes ahead in time, 5 * 60seconds
+        Date.now.addingTimeInterval(5 * 60)
+    }
+
     /// The placeholder is shown in transitions and while loading the snapshot when adding the widget to the home screen
     func placeholder(in _: Context) -> Entry {
-        Entry(date: Date(), quayGroup: QuayGroup.dummy)
+        Entry(date: Date.now, quayGroup: QuayGroup.dummy)
     }
 
     /// The snapshot shows is used to preview the widget when adding it to the home screen
     func getSnapshot(in context: Context, completion: @escaping (Entry) -> Void) {
-        let date = Calendar.current.date(byAdding: .minute, value: 5, to: Date())!
-        var entry = Entry(date: date, quayGroup: QuayGroup.dummy)
+        var entry = Entry(date: dateFiveMinutesAhead, quayGroup: QuayGroup.dummy)
 
         guard let favoriteDepartures = Manifest.data?.departures else {
             completion(entry)
             return
         }
 
+        // shows dummy data if it is a preview
         if context.isPreview {
             completion(entry)
         }
-        
-        // shows how the app will look for a user wih already defined favorites
+
+        // Shows how the app will look for a user wih already defined favorites
         let closestDeparture = getClosestDeparture(favoriteDepartures)
 
         apiService.fetchDepartureTimes(departure: closestDeparture) { (result: Result<QuayGroup, Error>) in
             switch result {
             case let .success(object):
-                entry = Entry(date: date, quayGroup: object)
+                entry = Entry(date: dateFiveMinutesAhead, quayGroup: object)
                 completion(entry)
             case .failure:
                 return
@@ -41,11 +46,11 @@ struct Provider: TimelineProvider {
     }
 
     func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
-        let date = Calendar.current.date(byAdding: .minute, value: 5, to: Date())!
+        // Empty timeline to use in case of error
+        var timeline = Timeline(entries: [Entry(date: dateFiveMinutesAhead, quayGroup: nil)], policy: .atEnd)
 
         // Get favorites, if none return empty Entry
         guard let favoriteDepartures = Manifest.data?.departures else {
-            let timeline = Timeline(entries: [Entry(date: date, quayGroup: nil)], policy: .atEnd)
             completion(timeline)
             return
         }
@@ -57,26 +62,29 @@ struct Provider: TimelineProvider {
             switch result {
             case let .success(quayGroup):
 
-                var entries: [Entry] = []
+                guard let firstQuayGroup = quayGroup.group.first else {
+                    completion(timeline)
+                    return
+                }
 
                 /*
-                  Rerenders widget when a departure has passed, by giving IOS more information about future
-                  dates we hopefully get better timed rerenders
+                 Rerenders widget when a departure has passed, by giving IOS more information about future
+                 dates we hopefully get better timed rerenders
 
-                  This also relies on that location change asks for a new timeline, and not just rerenders
+                 This also relies on that location change asks for a new timeline, and not just rerenders
                  */
+                var entries: [Entry] = []
 
                 // TODO: find out if location updates requests new timeline or only renders widget
-                for departure in quayGroup.group.first!.departures {
+                for departure in firstQuayGroup.departures {
                     let entry = Entry(date: departure.aimedTime, quayGroup: quayGroup)
                     entries.append(entry)
                 }
 
-                let timeline = Timeline(entries: entries, policy: .atEnd)
+                timeline = Timeline(entries: entries, policy: .atEnd)
                 completion(timeline)
 
             case .failure:
-                let timeline = Timeline(entries: [Entry(date: date, quayGroup: nil)], policy: .atEnd)
                 completion(timeline)
                 return
             }
