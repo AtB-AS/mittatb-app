@@ -122,7 +122,7 @@ export default function PlaceScreen({
           <Button
             interactiveColor="interactive_0"
             text={t(DeparturesTexts.closeButton.label)}
-            onPress={() => navigation.popToTop()}
+            onPress={() => navigation.pop(2)}
             testID="confirmButton"
           />
         </View>
