@@ -9,9 +9,11 @@ class ViewModel: ObservableObject {
     }
 
     private let quayGroup: QuayGroup?
+    private let date: Date
 
-    init(quayGroup: QuayGroup?) {
+    init(quayGroup: QuayGroup?, date: Date) {
         self.quayGroup = quayGroup
+        self.date = date
     }
 
     var quayName: String? {
@@ -35,8 +37,8 @@ class ViewModel: ObservableObject {
         var times: [Date] = []
 
         var departures: [DepartureTime] = quayGroup?.group[0].departures ?? []
-
-        departures.removeAll(where: { $0.aimedTime < Date() })
+    
+        departures.removeAll(where: { $0.aimedTime < Date.now })
 
         for departure in departures.prefix(upTo: 2) {
             times.append(departure.aimedTime)
