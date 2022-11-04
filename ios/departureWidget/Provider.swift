@@ -13,14 +13,17 @@ struct Provider: TimelineProvider {
     }
 
     /// The snapshot shows is used to preview the widget when adding it to the home screen
-    func getSnapshot(in _: Context, completion: @escaping (Entry) -> Void) {
+    func getSnapshot(in context: Context, completion: @escaping (Entry) -> Void) {
         let date = Calendar.current.date(byAdding: .minute, value: 5, to: Date())!
+        var entry = Entry(date: date, quayGroup: QuayGroup.dummy)
 
-        // if no favorites, show dummy data so the user still gets a preview
         guard let favoriteDepartures = Manifest.data?.departures else {
-            let entry = Entry(date: date, quayGroup: QuayGroup.dummy)
             completion(entry)
             return
+        }
+
+        if context.isPreview {
+            completion(entry)
         }
 
         let closestDeparture = getClosestDeparture(favoriteDepartures)
@@ -28,7 +31,7 @@ struct Provider: TimelineProvider {
         apiService.fetchDepartureTimes(departure: closestDeparture) { (result: Result<QuayGroup, Error>) in
             switch result {
             case let .success(object):
-                let entry = Entry(date: date, quayGroup: object)
+                entry = Entry(date: date, quayGroup: object)
                 completion(entry)
             case .failure:
                 return
