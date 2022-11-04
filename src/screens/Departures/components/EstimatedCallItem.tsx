@@ -6,6 +6,7 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {
   CancelledDepartureTexts,
   dictionary,
+  FavoriteDeparturesTexts,
   useTranslation,
 } from '@atb/translations';
 import {
@@ -76,7 +77,18 @@ export default function EstimatedCallItem({
       stopPlace,
     );
   return (
-    <TouchableOpacityOrView onClick={onMarkFavourite} style={styles.container}>
+    <TouchableOpacityOrView
+      onClick={mode === 'Favourite' ? onMarkFavourite : undefined}
+      style={styles.container}
+      accessibilityHint={
+        mode === 'Favourite'
+          ? t(FavoriteDeparturesTexts.a11yMarkFavouriteHint)
+          : undefined
+      }
+      accessibilityLabel={
+        mode === 'Favourite' ? getLineA11yLabel(departure, t) : undefined
+      }
+    >
       <TouchableOpacity
         style={styles.actionableItem}
         disabled={!navigateToDetails}
@@ -91,8 +103,18 @@ export default function EstimatedCallItem({
             );
           }
         }}
-        accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
-        accessibilityLabel={getA11yLineLabel(departure, t, language)}
+        accessible={!!navigateToDetails}
+        importantForAccessibility={!!navigateToDetails ? 'yes' : 'no'}
+        accessibilityHint={
+          navigateToDetails
+            ? t(DeparturesTexts.a11yViewDepartureDetailsHint)
+            : undefined
+        }
+        accessibilityLabel={
+          navigateToDetails
+            ? getA11yDeparturesLabel(departure, t, language)
+            : undefined
+        }
       >
         <View style={styles.estimatedCallItem} testID={testID}>
           {line && (
@@ -119,7 +141,9 @@ export default function EstimatedCallItem({
         <ToggleFavouriteDeparture
           existingFavorite={existingFavorite}
           onMarkFavourite={mode === 'Departure' ? onMarkFavourite : undefined}
-          toggleFavouriteAccessibilityLabel={toggleFavouriteAccessibilityLabel}
+          toggleFavouriteAccessibilityLabel={
+            mode === 'Departure' ? toggleFavouriteAccessibilityLabel : undefined
+          }
         />
       )}
     </TouchableOpacityOrView>
@@ -150,15 +174,7 @@ const DepartureTimeAndWarning = ({
   );
 };
 
-function getA11yLineLabel(departure: any, t: any, language: any) {
-  const line = departure.serviceJourney?.line;
-  const a11yLine = line?.publicCode
-    ? `${t(DeparturesTexts.line)} ${line?.publicCode},`
-    : '';
-  const a11yFrontText = departure.destinationDisplay?.frontText
-    ? `${departure.destinationDisplay?.frontText}.`
-    : '';
-
+function getA11yDeparturesLabel(departure: any, t: any, language: any) {
   let a11yDateInfo = '';
   if (departure.expectedDepartureTime) {
     const a11yClock = formatToClockOrLongRelativeMinutes(
@@ -179,7 +195,18 @@ function getA11yLineLabel(departure: any, t: any, language: any) {
 
   return `${
     departure.cancellation ? t(CancelledDepartureTexts.message) : ''
-  } ${a11yLine} ${a11yFrontText} ${a11yDateInfo}`;
+  } ${getLineA11yLabel(departure, t)} ${a11yDateInfo}`;
+}
+
+function getLineA11yLabel(departure: any, t: any) {
+  const line = departure.serviceJourney?.line;
+  const a11yLine = line?.publicCode
+    ? `${t(DeparturesTexts.line)} ${line?.publicCode},`
+    : '';
+  const a11yFrontText = departure.destinationDisplay?.frontText
+    ? `${departure.destinationDisplay?.frontText}.`
+    : '';
+  return `${a11yLine} ${a11yFrontText}`;
 }
 
 type LineChipProps = {

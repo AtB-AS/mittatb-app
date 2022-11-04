@@ -5,13 +5,22 @@ const TouchableOpacityOrView = ({
   style,
   onClick,
   children,
+  accessibilityHint,
+  accessibilityLabel,
 }: {
   style: ViewStyle;
   children: ReactNode;
   onClick?: () => void;
+  accessibilityHint?: string;
+  accessibilityLabel?: string;
 }) => {
   return onClick ? (
-    <TouchableOpacity onPress={onClick} style={style}>
+    <TouchableOpacity
+      onPress={onClick}
+      style={style}
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
+    >
       {children}
     </TouchableOpacity>
   ) : (

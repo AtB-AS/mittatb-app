@@ -63,7 +63,7 @@ const DeparturesTexts = {
     ),
   },
   line: _('Linje', 'Line'),
-  a11yEstimatedCallItemHint: _(
+  a11yViewDepartureDetailsHint: _(
     'Aktiver for å se detaljer',
     'Activate to view details',
   ),
