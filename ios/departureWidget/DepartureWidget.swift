@@ -7,53 +7,39 @@ struct DepartureWidgetEntryView: View {
 
     init(entry: Provider.Entry) {
         self.entry = entry
-        viewModel = ViewModel(quayGroup: entry.quayGroup)
+        viewModel = ViewModel(quayGroup: entry.quayGroup, date: entry.date)
     }
 
     var body: some View {
-        if let _ = viewModel.lineInfo {
-            VStack {
+        ZStack {
+            Color("WidgetBackground")
+            if let _ = viewModel.lineInfo {
                 VStack {
-                    HStack {
-                        if let quayName = viewModel.quayName {
-                            Text(quayName)
-                                .bold()
-                        }
-                        Spacer()
+                    if let quayName = viewModel.quayName {
+                        Text("Fra \(quayName)")
+                            .bold()
+                            .lineLimit(1)
                     }
+                    Spacer()
+
                     if let lineNumber = viewModel.lineNumber, let lineName = viewModel.lineName {
-                        HStack {
-                            Text(lineNumber)
-                            Text(lineName)
-                            Spacer()
+                        Text("\(lineNumber) \(lineName)")
+                            .lineLimit(2)
+                            .foregroundColor(Color("TextDisabled"))
+                    }
+                    Spacer()
+
+                    HStack {
+                        ForEach(viewModel.departures, id: \.self) { time in
+                            TimeTileVew(date: time)
                         }
                     }
-                }.padding(.leading, 5)
+                }.padding(16)
 
-                Divider()
-
-                HStack {
-                    ForEach(viewModel.departures, id: \.self) { time in
-
-                        if time.distance(to: Date()) < 0 {
-                            if time.distance(to: Date()) > -600 {
-                                Text(time, style: .relative)
-                                    .background(.gray)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(5)
-                            } else {
-                                Text(time, style: .time)
-                                    .background(.gray)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(5)
-                            }
-                        }
-                    }
-                }
+            } else {
+                // TODO: Base language on preference from the app
+                Text("Du må velge en favorittavgang")
             }
-        } else {
-            // NOTE: Use localization!
-            Text("Du må velge en favorittavgang")
         }
     }
 }
@@ -66,7 +52,13 @@ struct departureWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             DepartureWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("Favorittavganger")
+        .description("Viser førstkommende avganger for nærmeste favorittavgang.")
+    }
+}
+
+struct DepartureWidget_Previews: PreviewProvider {
+    static var previews: some View {
+        DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 10), quayGroup: QuayGroup.dummy)).previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }

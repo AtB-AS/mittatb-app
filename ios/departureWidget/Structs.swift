@@ -37,7 +37,7 @@ struct QuayInfo: Codable {
 
 struct DepartureGroup: Codable {
     let lineInfo: DepartureLineInfo
-    let departures: [DepartureTime]
+    var departures: [DepartureTime]
 }
 
 struct DepartureLineInfo: Codable {
@@ -81,4 +81,75 @@ struct FavoriteDeparture: Codable {
     var location: CLLocation {
         CLLocation(latitude: latitude, longitude: longitude)
     }
+}
+
+extension FavoriteDeparture {
+    static let dummy: FavoriteDeparture = .init(
+        id: "",
+        lineId: "ATB:Line:2_2",
+        lineName: "Ranheim",
+        lineLineNumber: "1",
+        lineTransportationMode: "bus",
+        lineTransportationSubMode: "bus",
+        longitude: 0,
+        latitude: 0,
+        quayName: "Prinsens gate",
+        quayPublicCode: "P1",
+        quayId: "NSR:Quay:71184",
+        stopId: "NSR:StopPlace:41613"
+    )
+}
+
+extension QuayGroup {
+    static let dummy: QuayGroup = .init(
+        quay:
+        QuayInfo(
+            __typename: "",
+            id: "",
+            name: "Solsiden",
+            description: nil,
+            publicCode: "",
+            latitude: 63.43457,
+            longitude: 10.39844
+        ),
+        group: [
+            DepartureGroup(
+                lineInfo:
+                DepartureLineInfo(
+                    lineId: "",
+                    lineName: "Kattem via sentrum-Tiller",
+                    lineNumber: "1",
+                    transportMode: "bus",
+                    transportSubmode: "bus",
+                    quayId: ""
+                ),
+                departures: [
+                    DepartureTime(
+                        time: Date.now.addingTimeInterval(300),
+                        aimedTime: Date.now.addingTimeInterval(300),
+                        predictionInaccurate: false,
+                        realtime: false,
+                        situations: [],
+                        serviceJourneyId: ""
+                    ),
+                    DepartureTime(
+                        time: Date.now.addingTimeInterval(600),
+                        aimedTime: Date.now.addingTimeInterval(600),
+                        predictionInaccurate: false,
+                        realtime: false,
+                        situations: [],
+                        serviceJourneyId: ""
+                    ),
+                    DepartureTime(
+                        time: Date.now.addingTimeInterval(900),
+                        aimedTime: Date.now.addingTimeInterval(900),
+                        predictionInaccurate: false,
+                        realtime: false,
+                        situations: [],
+                        serviceJourneyId: ""
+                    ),
+                ]
+            ),
+        ]
+    )
 }

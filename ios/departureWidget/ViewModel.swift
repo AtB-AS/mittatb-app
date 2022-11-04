@@ -6,16 +6,15 @@ class ViewModel: ObservableObject {
         static let defaultLineName = "N/A"
         static let defaultLineNumber = "N/A"
         static let defaultQuayName = "N/A"
+        static let maxNumberOfDepartures = 2
     }
 
-    var hasData = false
-
     private let quayGroup: QuayGroup?
+    private let date: Date
 
-    init(quayGroup: QuayGroup?) {
+    init(quayGroup: QuayGroup?, date: Date) {
         self.quayGroup = quayGroup
-
-        if quayGroup != nil { hasData = true }
+        self.date = date
     }
 
     var quayName: String? {
@@ -34,12 +33,19 @@ class ViewModel: ObservableObject {
         lineInfo?.lineNumber
     }
 
-    /// Returns the times of the current departure
+    /// Returns the relevant departure times of the current departure
     var departures: [Date] {
         var times: [Date] = []
-        for departure in quayGroup?.group[0].departures.prefix(upTo: 2) ?? [] {
-            times.append(departure.aimedTime)
+        let departures: [DepartureTime] = quayGroup?.group[0].departures ?? []
+        var count = 0
+
+        for departure in departures {
+            if count < K.maxNumberOfDepartures, departure.aimedTime >= date {
+                times.append(departure.aimedTime)
+                count += 1
+            }
         }
+
         return times
     }
 }
