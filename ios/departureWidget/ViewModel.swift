@@ -36,7 +36,7 @@ class ViewModel: ObservableObject {
 
         var departures: [DepartureTime] = quayGroup?.group[0].departures ?? []
 
-      departures.removeAll(where: { $0.aimedTime < Date() })
+        departures.removeAll(where: { $0.aimedTime < Date() })
 
         for departure in departures.prefix(upTo: 2) {
             times.append(departure.aimedTime)

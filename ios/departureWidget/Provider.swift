@@ -25,7 +25,8 @@ struct Provider: TimelineProvider {
         if context.isPreview {
             completion(entry)
         }
-
+        
+        // shows how the app will look for a user wih already defined favorites
         let closestDeparture = getClosestDeparture(favoriteDepartures)
 
         apiService.fetchDepartureTimes(departure: closestDeparture) { (result: Result<QuayGroup, Error>) in
@@ -62,7 +63,7 @@ struct Provider: TimelineProvider {
                   Rerenders widget when a departure has passed, by giving IOS more information about future
                   dates we hopefully get better timed rerenders
 
-                  This also relies on that location change asks for a new timeline, and not jst rerenders
+                  This also relies on that location change asks for a new timeline, and not just rerenders
                  */
 
                 // TODO: find out if location updates requests new timeline or only renders widget

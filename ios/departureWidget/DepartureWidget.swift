@@ -33,27 +33,14 @@ struct DepartureWidgetEntryView: View {
                 }.padding(10).background(.green)
 
                 HStack {
-                    /*
+                    
                      ForEach(viewModel.departures, id: \.self) { time in
-                       if time.distance(to: Date()) > -600 {
-                         Text(time, style: .relative)
+                       Text(time, style: .time)
                            .padding(3)
                            .background(.gray)
                            .foregroundColor(.white)
                            .cornerRadius(5)
-
-                       } else {
-                         Text(time, style: .time)
-                           .padding(3)
-                           .background(.gray)
-                           .foregroundColor(.white)
-                           .cornerRadius(5)
-                       }
-
-                     }*/
-
-                    // Testing view with timer, should count every second
-                    CounterView()
+                     }
                 }.padding(5)
                 Spacer()
             }

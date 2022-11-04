@@ -30,7 +30,6 @@
 		5038614C28FD750A00E16E13 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationManager.swift */; };
 		5038614E28FD81B700E16E13 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614D28FD81B700E16E13 /* Structs.swift */; };
 		506538E028FEA57400A0DDCC /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506538DF28FEA57400A0DDCC /* ViewModel.swift */; };
-		50989D372910176300CB0651 /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50989D362910176300CB0651 /* CounterView.swift */; };
 		A1E701563B78F99B13487BE3 /* libPods-atb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B12A710282707BA8960F89A /* libPods-atb.a */; };
 		E6A5C3E919C3475F907B3CE4 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB1D1B473A9C41A79687569C /* Roboto-Regular.ttf */; };
 		F19471F4FCE444CF931BA221 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59E90F341F04DB2B427E0EF /* Roboto-Bold.ttf */; };
@@ -112,7 +111,6 @@
 		5038614D28FD81B700E16E13 /* Structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
 		5051B09328F4092200B8EA18 /* departureWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = departureWidgetExtension.entitlements; sourceTree = "<group>"; };
 		506538DF28FEA57400A0DDCC /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
-		50989D362910176300CB0651 /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
 		86E9F6F8FAE78B8F34A96337 /* Pods-atb-atbTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb-atbTests.release.xcconfig"; path = "Target Support Files/Pods-atb-atbTests/Pods-atb-atbTests.release.xcconfig"; sourceTree = "<group>"; };
 		890F33DF27CF0C595F634586 /* libPods-atb-atbTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atb-atbTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93DD12AA3A71553A1E11F3E3 /* Pods-atb-departureWidgetExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb-departureWidgetExtension.release.xcconfig"; path = "Target Support Files/Pods-atb-departureWidgetExtension/Pods-atb-departureWidgetExtension.release.xcconfig"; sourceTree = "<group>"; };
@@ -312,7 +310,6 @@
 				FE09922828FFF47300E5046D /* Storage.swift */,
 				5038614D28FD81B700E16E13 /* Structs.swift */,
 				506538DF28FEA57400A0DDCC /* ViewModel.swift */,
-				50989D362910176300CB0651 /* CounterView.swift */,
 				FE55264F28EC45EE0091F697 /* Assets.xcassets */,
 				FE09922A28FFF4F000E5046D /* Extensions */,
 			);
@@ -697,7 +694,6 @@
 				FE09922C28FFF50800E5046D /* Bundle.swift in Sources */,
 				5038614C28FD750A00E16E13 /* LocationManager.swift in Sources */,
 				FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */,
-				50989D372910176300CB0651 /* CounterView.swift in Sources */,
 				FE09922928FFF47300E5046D /* Storage.swift in Sources */,
 				5038614628FD509400E16E13 /* Provider.swift in Sources */,
 				506538E028FEA57400A0DDCC /* ViewModel.swift in Sources */,
