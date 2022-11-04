@@ -68,7 +68,15 @@ export default function PlaceScreen({
     });
   };
   const navigateToQuay = (quay: Quay) => {
-    navigation.setParams({selectedQuay: quay});
+    if (mode === 'Favourite') {
+      navigation.push('PlaceScreen', {
+        selectedQuay: quay,
+        mode: mode,
+        place: place,
+      });
+    } else {
+      navigation.setParams({selectedQuay: quay});
+    }
   };
   const isFocused = useIsFocused();
 
@@ -122,7 +130,7 @@ export default function PlaceScreen({
           <Button
             interactiveColor="interactive_0"
             text={t(DeparturesTexts.closeButton.label)}
-            onPress={() => navigation.pop(2)}
+            onPress={() => navigation.pop(selectedQuay ? 3 : 2)} // check if there is a smart way of doing this
             testID="confirmButton"
           />
         </View>
