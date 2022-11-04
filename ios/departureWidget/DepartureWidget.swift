@@ -76,3 +76,9 @@ struct departureWidget: Widget {
         .description("Viser førstkommende avganger for nærmeste favorittavgang.")
     }
 }
+
+struct DepartureWidget_Previews: PreviewProvider {
+    static var previews: some View {
+        DepartureWidgetEntryView(entry: Entry(date: Date(), quayGroup: QuayGroup.dummy)).previewContext(WidgetPreviewContext(family: .systemSmall))
+    }
+}
