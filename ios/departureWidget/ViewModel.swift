@@ -6,6 +6,7 @@ class ViewModel: ObservableObject {
         static let defaultLineName = "N/A"
         static let defaultLineNumber = "N/A"
         static let defaultQuayName = "N/A"
+        static let maxNumberOfDepartures = 2
     }
 
     private let quayGroup: QuayGroup?
@@ -35,13 +36,11 @@ class ViewModel: ObservableObject {
     /// Returns the relevant departure times of the current departure
     var departures: [Date] {
         var times: [Date] = []
-
         let departures: [DepartureTime] = quayGroup?.group[0].departures ?? []
-
         var count = 0
 
         for departure in departures {
-          if count < 2 && departure.aimedTime > date {
+            if count < K.maxNumberOfDepartures, departure.aimedTime >= date {
                 times.append(departure.aimedTime)
                 count += 1
             }

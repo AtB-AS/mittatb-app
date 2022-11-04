@@ -12,10 +12,10 @@ enum ManifestError: Error {
 
 struct Manifest: Codable {
     enum CodingKeys: String, CodingKey {
-        case departures = "@ATB_user_departures"
+        case favoriteDepartures = "@ATB_user_departures"
     }
 
-    let departures: [FavoriteDeparture]?
+    let favoriteDepartures: [FavoriteDeparture]?
 
     static var data: Manifest? {
         buildManifest()
@@ -23,7 +23,7 @@ struct Manifest: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try? decoder.container(keyedBy: CodingKeys.self)
-        guard let departuresJsonString = try? container?.decodeIfPresent(String.self, forKey: .departures) else {
+        guard let departuresJsonString = try? container?.decodeIfPresent(String.self, forKey: .favoriteDepartures) else {
             throw ManifestError.invalidType
         }
 
@@ -31,7 +31,7 @@ struct Manifest: Codable {
             throw ManifestError.parsingData
         }
 
-        departures = try? JSONDecoder().decode([FavoriteDeparture].self, from: departuresJsonData)
+        favoriteDepartures = try? JSONDecoder().decode([FavoriteDeparture].self, from: departuresJsonData)
     }
 
     private static func buildManifest() -> Manifest? {
