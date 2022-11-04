@@ -59,6 +59,6 @@ struct departureWidget: Widget {
 
 struct DepartureWidget_Previews: PreviewProvider {
     static var previews: some View {
-        DepartureWidgetEntryView(entry: Entry(date: Date(), quayGroup: QuayGroup.dummy)).previewContext(WidgetPreviewContext(family: .systemSmall))
+        DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 10), quayGroup: QuayGroup.dummy)).previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }

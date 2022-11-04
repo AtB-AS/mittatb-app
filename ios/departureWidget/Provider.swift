@@ -77,8 +77,6 @@ struct Provider: TimelineProvider {
 
                 // TODO: find out if location updates requests new timeline or only renders widget
                 for departure in firstQuayGroup.departures {
-                  
-                    
                     let entry = Entry(date: departure.aimedTime, quayGroup: quayGroup)
                     entries.append(entry)
                 }

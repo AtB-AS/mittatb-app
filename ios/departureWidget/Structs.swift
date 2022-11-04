@@ -125,24 +125,24 @@ extension QuayGroup {
                 ),
                 departures: [
                     DepartureTime(
-                        time: Date().addingTimeInterval(300),
-                        aimedTime: Date().addingTimeInterval(300),
+                        time: Date.now.addingTimeInterval(300),
+                        aimedTime: Date.now.addingTimeInterval(300),
                         predictionInaccurate: false,
                         realtime: false,
                         situations: [],
                         serviceJourneyId: ""
                     ),
                     DepartureTime(
-                        time: Date().addingTimeInterval(600),
-                        aimedTime: Date().addingTimeInterval(600),
+                        time: Date.now.addingTimeInterval(600),
+                        aimedTime: Date.now.addingTimeInterval(600),
                         predictionInaccurate: false,
                         realtime: false,
                         situations: [],
                         serviceJourneyId: ""
                     ),
                     DepartureTime(
-                        time: Date().addingTimeInterval(900),
-                        aimedTime: Date().addingTimeInterval(900),
+                        time: Date.now.addingTimeInterval(900),
+                        aimedTime: Date.now.addingTimeInterval(900),
                         predictionInaccurate: false,
                         realtime: false,
                         situations: [],
