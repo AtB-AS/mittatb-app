@@ -37,7 +37,7 @@ struct QuayInfo: Codable {
 
 struct DepartureGroup: Codable {
     let lineInfo: DepartureLineInfo
-    let departures: [DepartureTime]
+    var departures: [DepartureTime]
 }
 
 struct DepartureLineInfo: Codable {
@@ -106,7 +106,7 @@ extension QuayGroup {
         QuayInfo(
             __typename: "",
             id: "",
-            name: "Prinsens gate",
+            name: "Solsiden",
             description: nil,
             publicCode: "",
             latitude: 63.43457,
@@ -117,7 +117,7 @@ extension QuayGroup {
                 lineInfo:
                 DepartureLineInfo(
                     lineId: "",
-                    lineName: "Ranheim",
+                    lineName: "Kattem via sentrum-Tiller",
                     lineNumber: "1",
                     transportMode: "bus",
                     transportSubmode: "bus",

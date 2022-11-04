@@ -7,45 +7,39 @@ struct DepartureWidgetEntryView: View {
 
     init(entry: Provider.Entry) {
         self.entry = entry
-        viewModel = ViewModel(quayGroup: entry.quayGroup)
+        viewModel = ViewModel(quayGroup: entry.quayGroup, date: entry.date)
     }
 
     var body: some View {
-        if let _ = viewModel.lineInfo {
-            VStack {
+        ZStack {
+            Color("WidgetBackground")
+            if let _ = viewModel.lineInfo {
                 VStack {
-                    HStack {
-                        if let quayName = viewModel.quayName {
-                            Text(quayName)
-                                .bold()
-                        }
-                        Spacer()
+                    if let quayName = viewModel.quayName {
+                        Text("Fra \(quayName)")
+                            .bold()
+                            .lineLimit(1)
                     }
+                    Spacer()
+
                     if let lineNumber = viewModel.lineNumber, let lineName = viewModel.lineName {
-                        HStack {
-                            Text(lineNumber)
-                            Text(lineName)
-                                .lineLimit(1)
+                        Text("\(lineNumber) \(lineName)")
+                            .lineLimit(2)
+                            .foregroundColor(Color("TextDisabled"))
+                    }
+                    Spacer()
 
-                            Spacer()
+                    HStack {
+                        ForEach(viewModel.departures, id: \.self) { time in
+                            TimeTileVew(date: time)
                         }
                     }
-                }.padding(10).background(.green)
+                }.padding(16)
 
-                HStack {
-                    ForEach(viewModel.departures, id: \.self) { time in
-                        Text(time, style: .time)
-                            .padding(3)
-                            .background(.gray)
-                            .foregroundColor(.white)
-                            .cornerRadius(5)
-                    }
-                }.padding(5)
-                Spacer()
+            } else {
+                // TODO: Base language on preference from the app
+                Text("Du må velge en favorittavgang")
             }
-        } else {
-            // TODO: Base language on preference from the app
-            Text("Du må velge en favorittavgang")
         }
     }
 }
