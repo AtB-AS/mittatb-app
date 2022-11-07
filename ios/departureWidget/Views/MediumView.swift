@@ -10,7 +10,6 @@ struct MediumView: View {
     }
 
     let largeSizeCategories: [ContentSizeCategory] = [
-        .large,
         .extraLarge,
         .extraExtraLarge,
         .extraExtraExtraLarge,
@@ -55,9 +54,10 @@ struct MediumView: View {
             }
             HStack(spacing: 8) {
                 ForEach(viewModel.departures(numberOfdepartures: numberOfDepartures), id: \.self) { time in
-                    TimeTileVew(date: time)
+                  TimeTileVew(date: time)
                 }
-            }.frame(maxWidth: .infinity)
-        }.padding(16)
+            }
+        }
+        .padding(16)
     }
 }

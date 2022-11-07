@@ -9,7 +9,8 @@ struct TimeTileVew: View {
             .padding(8)
             .background(Color("TimeTileBackground"))
             .cornerRadius(8)
-            .scaledToFill()
+            .lineLimit(1)
+            .fixedSize()
             .bold()
     }
 }
