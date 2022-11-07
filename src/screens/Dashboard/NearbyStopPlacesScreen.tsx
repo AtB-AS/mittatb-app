@@ -9,10 +9,6 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {ProfileScreenProps} from '@atb/screens/Profile/types';
 import {useRoute} from '@react-navigation/native';
 
-export type NearbyStopPlacesScreenParams = {
-  location: Location | undefined;
-};
-
 type NearbyStopPlacesProfileScreenProps =
   ProfileScreenProps<'NearbyStopPlacesProfileScreen'>;
 type NearbyStopPlacesDashboardScreenProps =
@@ -25,6 +21,11 @@ type NearbyStopPlacesPropsInternal =
 type NavigationProps = NearbyStopPlacesProfileScreenProps['navigation'] &
   NearbyStopPlacesDashboardScreenProps['navigation'];
 
+export type NearbyStopPlacesScreenParams = {
+    location: Location | undefined;
+    onCloseRoute?: string;
+};
+
 // Having issues doing proper typing where the navigation
 // gets all overlapping types of routes as this is used from
 // several places. For routes and properties this works
@@ -32,14 +33,14 @@ type NavigationProps = NearbyStopPlacesProfileScreenProps['navigation'] &
 type RootProps = NearbyStopPlacesPropsInternal & {navigation: NavigationProps};
 
 const NearbyStopPlacesScreen = ({navigation, route}: RootProps) => {
-  const fromLocation = useOnlySingleLocation<RootProps['route']>('location');
+  const fromLocation = useOnlySingleLocation('location');
   const currentRoute = useRoute();
 
   const navigateToPlace = (place: Place) => {
     navigation.navigate('PlaceScreen', {
       place,
       mode: 'Favourite',
-      onCloseRoute: currentRoute?.params?.onCloseRoute,
+      onCloseRoute: route?.params?.onCloseRoute,
     });
   };
   const {t} = useTranslation();
