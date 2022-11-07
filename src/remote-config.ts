@@ -176,7 +176,7 @@ export function getConfig(): RemoteConfig {
     enable_map_page: enable_map_tab,
     favourite_departures_poll_interval,
     new_favourites_info_url,
-    enable_departures_v2_onboarding
+    enable_departures_v2_onboarding,
   };
 }
 

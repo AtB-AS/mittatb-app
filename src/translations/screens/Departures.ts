@@ -96,10 +96,7 @@ const DeparturesTexts = {
       '*Tekst om at vi har oppgradert visningen av avganger basert på brukernes tilbakemeldinger vises her*',
       '*Tekst om at vi har oppgradert visningen av avganger basert på brukernes tilbakemeldinger vises her*',
     ),
-    button: _(
-      'Den er grei!',
-      'That\'s right!',
-    ),
+    button: _('Den er grei!', "That's right!"),
   },
 };
 export default DeparturesTexts;
