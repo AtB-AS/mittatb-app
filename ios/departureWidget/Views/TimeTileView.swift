@@ -1,10 +1,3 @@
-//
-//  TimeTileView.swift
-//  departureWidgetExtension
-//
-//  Created by Adrian Hakvåg on 04/11/2022.
-//
-
 import Foundation
 import SwiftUI
 
@@ -12,11 +5,12 @@ struct TimeTileVew: View {
     let date: Date
 
     var body: some View {
-        Text(date, style: .time)
+        Text(date.formatted(.dateTime.locale(Locale(identifier: "en_UK")).hour().minute()))
             .padding(8)
             .background(Color("TimeTileBackground"))
-            .frame(width: 60, height: 36)
+            .minimumScaleFactor(0.1)
             .cornerRadius(8)
-            .minimumScaleFactor(0.01)
+            .lineLimit(1)
+            .bold()
     }
 }

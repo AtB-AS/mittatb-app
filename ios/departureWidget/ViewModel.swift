@@ -1,4 +1,5 @@
 import Foundation
+import WidgetKit
 
 class ViewModel: ObservableObject {
     // TODO: show what fields the view model is containing
@@ -6,7 +7,6 @@ class ViewModel: ObservableObject {
         static let defaultLineName = "N/A"
         static let defaultLineNumber = "N/A"
         static let defaultQuayName = "N/A"
-        static let maxNumberOfDepartures = 2
     }
 
     private let quayGroup: QuayGroup?
@@ -34,13 +34,13 @@ class ViewModel: ObservableObject {
     }
 
     /// Returns the relevant departure times of the current departure
-    var departures: [Date] {
+    func departures(numberOfdepartures: Int) -> [Date] {
         var times: [Date] = []
         let departures: [DepartureTime] = quayGroup?.group[0].departures ?? []
         var count = 0
 
         for departure in departures {
-            if count < K.maxNumberOfDepartures, departure.aimedTime >= date {
+            if count < numberOfdepartures, departure.aimedTime >= date {
                 times.append(departure.aimedTime)
                 count += 1
             }

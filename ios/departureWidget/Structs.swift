@@ -148,6 +148,30 @@ extension QuayGroup {
                         situations: [],
                         serviceJourneyId: ""
                     ),
+                    DepartureTime(
+                        time: Date.now.addingTimeInterval(1200),
+                        aimedTime: Date.now.addingTimeInterval(1200),
+                        predictionInaccurate: false,
+                        realtime: false,
+                        situations: [],
+                        serviceJourneyId: ""
+                    ),
+                    DepartureTime(
+                        time: Date.now.addingTimeInterval(1500),
+                        aimedTime: Date.now.addingTimeInterval(1500),
+                        predictionInaccurate: false,
+                        realtime: false,
+                        situations: [],
+                        serviceJourneyId: ""
+                    ),
+                    DepartureTime(
+                        time: Date.now.addingTimeInterval(1800),
+                        aimedTime: Date.now.addingTimeInterval(1800),
+                        predictionInaccurate: false,
+                        realtime: false,
+                        situations: [],
+                        serviceJourneyId: ""
+                    ),
                 ]
             ),
         ]

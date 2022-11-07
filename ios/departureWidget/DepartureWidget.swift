@@ -4,6 +4,7 @@ import WidgetKit
 struct DepartureWidgetEntryView: View {
     var entry: Provider.Entry
     @ObservedObject var viewModel: ViewModel
+    @Environment(\.widgetFamily) var family
 
     init(entry: Provider.Entry) {
         self.entry = entry
@@ -14,27 +15,16 @@ struct DepartureWidgetEntryView: View {
         ZStack {
             Color("WidgetBackground")
             if let _ = viewModel.lineInfo {
-                VStack {
-                    if let quayName = viewModel.quayName {
-                        Text("Fra \(quayName)")
-                            .bold()
-                            .lineLimit(1)
-                    }
-                    Spacer()
+                switch family {
+                case .systemMedium:
+                    MediumView(viewModel: viewModel)
 
-                    if let lineNumber = viewModel.lineNumber, let lineName = viewModel.lineName {
-                        Text("\(lineNumber) \(lineName)")
-                            .lineLimit(2)
-                            .foregroundColor(Color("TextDisabled"))
-                    }
-                    Spacer()
+                case .systemSmall:
+                    SmallView(viewModel: viewModel)
 
-                    HStack {
-                        ForEach(viewModel.departures, id: \.self) { time in
-                            TimeTileVew(date: time)
-                        }
-                    }
-                }.padding(16)
+                default:
+                    EmptyView()
+                }
 
             } else {
                 // TODO: Base language on preference from the app
@@ -53,13 +43,16 @@ struct departureWidget: Widget {
             DepartureWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("Favorittavganger")
-        .description("Viser førstkommende avganger for nærmeste favorittavgang.")
+        .description("Viser relevante avganger for nærmeste favorittavgang.")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
 
 struct DepartureWidget_Previews: PreviewProvider {
     static var previews: some View {
-        DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 10), quayGroup: QuayGroup.dummy)).previewContext(WidgetPreviewContext(family: .systemSmall))
+        Group {
+            DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 5), quayGroup: QuayGroup.dummy)).previewContext(WidgetPreviewContext(family: .systemSmall))
+            DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 5), quayGroup: QuayGroup.dummy)).previewContext(WidgetPreviewContext(family: .systemMedium))
+        }
     }
 }
