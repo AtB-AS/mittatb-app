@@ -1,30 +1,39 @@
-import {TouchableOpacity, View, ViewStyle} from 'react-native';
+import {
+  AccessibilityProps,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {ReactNode} from 'react';
 
 const TouchableOpacityOrView = ({
   style,
   onClick,
   children,
-  accessibilityHint,
-  accessibilityLabel,
+  accessibilityProps,
 }: {
   style: ViewStyle;
   children: ReactNode;
   onClick?: () => void;
-  accessibilityHint?: string;
-  accessibilityLabel?: string;
+  accessibilityProps?: AccessibilityProps;
 }) => {
   return onClick ? (
     <TouchableOpacity
       onPress={onClick}
       style={style}
-      accessibilityLabel={accessibilityLabel}
-      accessibilityHint={accessibilityHint}
+      accessibilityLabel={accessibilityProps?.accessibilityLabel}
+      accessibilityHint={accessibilityProps?.accessibilityHint}
     >
       {children}
     </TouchableOpacity>
   ) : (
-    <View style={style}>{children}</View>
+    <View
+      style={style}
+      accessibilityLabel={accessibilityProps?.accessibilityLabel}
+      accessibilityHint={accessibilityProps?.accessibilityHint}
+    >
+      {children}
+    </View>
   );
 };
 

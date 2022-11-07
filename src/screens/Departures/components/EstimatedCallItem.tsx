@@ -7,6 +7,8 @@ import {
   CancelledDepartureTexts,
   dictionary,
   FavoriteDeparturesTexts,
+  Language,
+  TranslateFunction,
   useTranslation,
 } from '@atb/translations';
 import {
@@ -80,14 +82,14 @@ export default function EstimatedCallItem({
     <TouchableOpacityOrView
       onClick={mode === 'Favourite' ? onMarkFavourite : undefined}
       style={styles.container}
-      accessibilityHint={
-        mode === 'Favourite'
-          ? t(FavoriteDeparturesTexts.a11yMarkFavouriteHint)
-          : undefined
-      }
-      accessibilityLabel={
-        mode === 'Favourite' ? getLineA11yLabel(departure, t) : undefined
-      }
+      accessibilityProps={{
+        accessibilityLabel:
+          mode === 'Favourite' ? getLineA11yLabel(departure, t) : undefined,
+        accessibilityHint:
+          mode === 'Favourite'
+            ? t(FavoriteDeparturesTexts.a11yMarkFavouriteHint)
+            : undefined,
+      }}
     >
       <TouchableOpacity
         style={styles.actionableItem}
@@ -174,7 +176,11 @@ const DepartureTimeAndWarning = ({
   );
 };
 
-function getA11yDeparturesLabel(departure: any, t: any, language: any) {
+function getA11yDeparturesLabel(
+  departure: EstimatedCall,
+  t: TranslateFunction,
+  language: Language,
+) {
   let a11yDateInfo = '';
   if (departure.expectedDepartureTime) {
     const a11yClock = formatToClockOrLongRelativeMinutes(
@@ -198,7 +204,7 @@ function getA11yDeparturesLabel(departure: any, t: any, language: any) {
   } ${getLineA11yLabel(departure, t)} ${a11yDateInfo}`;
 }
 
-function getLineA11yLabel(departure: any, t: any) {
+function getLineA11yLabel(departure: EstimatedCall, t: TranslateFunction) {
   const line = departure.serviceJourney?.line;
   const a11yLine = line?.publicCode
     ? `${t(DeparturesTexts.line)} ${line?.publicCode},`
