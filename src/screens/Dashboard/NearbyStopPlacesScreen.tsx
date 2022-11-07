@@ -22,8 +22,8 @@ type NavigationProps = NearbyStopPlacesProfileScreenProps['navigation'] &
   NearbyStopPlacesDashboardScreenProps['navigation'];
 
 export type NearbyStopPlacesScreenParams = {
-    location: Location | undefined;
-    onCloseRoute?: string;
+  location: Location | undefined;
+  onCloseRoute?: string;
 };
 
 // Having issues doing proper typing where the navigation

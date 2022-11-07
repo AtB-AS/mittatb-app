@@ -82,14 +82,14 @@ export default function EstimatedCallItem({
     <TouchableOpacityOrView
       onClick={mode === 'Favourite' ? onMarkFavourite : undefined}
       style={styles.container}
-      accessibilityProps={{
-        accessibilityLabel:
-          mode === 'Favourite' ? getLineA11yLabel(departure, t) : undefined,
-        accessibilityHint:
-          mode === 'Favourite'
-            ? t(FavoriteDeparturesTexts.a11yMarkFavouriteHint)
-            : undefined,
-      }}
+      accessibilityLabel={
+        mode === 'Favourite' ? getLineA11yLabel(departure, t) : undefined
+      }
+      accessibilityHint={
+        mode === 'Favourite'
+          ? t(FavoriteDeparturesTexts.a11yMarkFavouriteHint)
+          : undefined
+      }
     >
       <TouchableOpacity
         style={styles.actionableItem}
