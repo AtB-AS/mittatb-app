@@ -54,6 +54,7 @@ struct departureWidget: Widget {
         }
         .configurationDisplayName("Favorittavganger")
         .description("Viser førstkommende avganger for nærmeste favorittavgang.")
+        .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
 
