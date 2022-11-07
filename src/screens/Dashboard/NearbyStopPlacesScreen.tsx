@@ -39,6 +39,7 @@ const NearbyStopPlacesScreen = ({navigation, route}: RootProps) => {
     navigation.navigate('PlaceScreen', {
       place,
       mode: 'Favourite',
+      onCloseRoute: currentRoute?.params?.onCloseRoute,
     });
   };
   const {t} = useTranslation();
