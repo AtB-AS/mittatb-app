@@ -25,5 +25,9 @@ const FavoriteDeparturesTexts = {
     cancel: _('Avbryt', 'Cancel'),
     delete: _('Slett', 'Delete'),
   },
+  a11yMarkFavouriteHint: _(
+    'Aktiver for å merke som favoritt',
+    'Activate to mark as favourite',
+  ),
 };
 export default FavoriteDeparturesTexts;

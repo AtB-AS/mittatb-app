@@ -15,7 +15,7 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import {Coordinates} from '@entur/sdk';
 import haversineDistance from 'haversine-distance';
 import React, {useEffect, useRef} from 'react';
-import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Linking, View} from 'react-native';
 import {useFavoriteDepartureData} from './state';
 import * as Sections from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
@@ -31,7 +31,6 @@ const DeparturesWidget = ({
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {new_favourites_info_url} = useRemoteConfig();
   const {favoriteDepartures} = useFavorites();
   const {location} = useGeolocationState();
   const {state, loadInitialDepartures, searchDate} = useFavoriteDepartureData();
@@ -50,8 +49,6 @@ const DeparturesWidget = ({
       );
     }, closeRef);
   }
-
-  const openAppInfoUrl = () => Linking.openURL(new_favourites_info_url);
 
   const sortedStopPlaceGroups = location
     ? state.data?.sort((a, b) =>
@@ -72,41 +69,21 @@ const DeparturesWidget = ({
       {!favoriteDepartures.length && (
         <Sections.Section>
           <Sections.GenericItem>
-            <View
-              style={styles.noFavouritesView}
-              accessible={true}
-              accessibilityRole="link"
-              accessibilityActions={[{name: 'activate'}]}
-              onAccessibilityAction={openAppInfoUrl}
-              accessibilityLabel={
-                t(DeparturesTexts.message.noFavouritesWidget) +
-                ' ' +
-                t(DeparturesTexts.message.readMoreUrl)
-              }
-            >
+            <View style={styles.noFavouritesView}>
               <NoFavouriteDeparture />
               <View style={styles.noFavouritesTextContainer}>
-                <ThemeText>
+                <ThemeText
+                  type="body__secondary"
+                  color="secondary"
+                  style={styles.noFavouritesText}
+                >
                   {t(DeparturesTexts.message.noFavouritesWidget)}
                 </ThemeText>
-                {new_favourites_info_url && (
-                  <TouchableOpacity
-                    onPress={openAppInfoUrl}
-                    importantForAccessibility={'no'}
-                  >
-                    <ThemeText
-                      color="background_0"
-                      type="body__primary--underline"
-                      style={styles.noFavouritesUrl}
-                    >
-                      {t(DeparturesTexts.message.readMoreUrl)}
-                    </ThemeText>
-                  </TouchableOpacity>
-                )}
               </View>
             </View>
           </Sections.GenericItem>
           <Sections.LinkItem
+            textType="body__secondary"
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={onAddFavouriteDeparture}
             icon={<ThemeIcon svg={Add} />}
@@ -185,6 +162,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   noFavouritesTextContainer: {
     flex: 1,
     paddingVertical: theme.spacings.small,
+  },
+  noFavouritesText: {
+    marginHorizontal: theme.spacings.small,
   },
   noFavouritesUrl: {
     marginVertical: theme.spacings.xSmall,

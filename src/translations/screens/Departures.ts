@@ -63,7 +63,7 @@ const DeparturesTexts = {
     ),
   },
   line: _('Linje', 'Line'),
-  a11yEstimatedCallItemHint: _(
+  a11yViewDepartureDetailsHint: _(
     'Aktiver for å se detaljer',
     'Activate to view details',
   ),
@@ -79,12 +79,8 @@ const DeparturesTexts = {
       'There are no departures to be shown, as you have no stops marked as favourites.',
     ),
     noFavouritesWidget: _(
-      'Du har ingen favorittavganger. Trykk på stjernesymbolet i Avganger-visningen for å lagre en avgang du bruker ofte.',
-      'You have no favorite departures. Tap a star in the Departures view to save a frequently used departure.',
-    ),
-    readMoreUrl: _(
-      'Les mer og se flere nyttige tips',
-      'Read more and find other useful tips',
+      'Du har ingen favorittavganger. \nTrykk “Legg til favorittavgang” for å lagre en avgang du bruker ofte.',
+      'You have no favorite departures. \nPress “Add favorite departure” to save a frequently used departure.',
     ),
   },
   button: {
