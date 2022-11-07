@@ -5,6 +5,7 @@ struct DepartureWidgetEntryView: View {
     var entry: Provider.Entry
     @ObservedObject var viewModel: ViewModel
     @Environment(\.widgetFamily) var family
+    @Environment(\.sizeCategory) var sizeCategory: ContentSizeCategory
 
     init(entry: Provider.Entry) {
         self.entry = entry
@@ -17,7 +18,7 @@ struct DepartureWidgetEntryView: View {
             if let _ = viewModel.lineInfo {
                 switch family {
                 case .systemMedium:
-                    MediumView(viewModel: viewModel)
+                    MediumView(viewModel: viewModel, sizeCategory: sizeCategory)
 
                 case .systemSmall:
                     SmallView(viewModel: viewModel)

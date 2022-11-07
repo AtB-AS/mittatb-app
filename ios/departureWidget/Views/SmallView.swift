@@ -21,7 +21,7 @@ struct SmallView: View {
             }
             Spacer()
 
-            HStack(spacing: 8) {
+            HStack {
                 ForEach(viewModel.departures(numberOfdepartures: 2), id: \.self) { time in
                     TimeTileVew(date: time)
                 }

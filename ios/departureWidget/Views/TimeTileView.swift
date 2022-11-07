@@ -8,9 +8,8 @@ struct TimeTileVew: View {
         Text(date.formatted(.dateTime.locale(Locale(identifier: "en_UK")).hour().minute()))
             .padding(8)
             .background(Color("TimeTileBackground"))
-            .minimumScaleFactor(0.1)
             .cornerRadius(8)
-            .lineLimit(1)
+            .scaledToFill()
             .bold()
     }
 }
