@@ -40,7 +40,7 @@ class ViewModel: ObservableObject {
         var count = 0
 
         for departure in departures {
-            if count < numberOfdepartures, departure.aimedTime >= date {
+            if count < numberOfdepartures, departure.aimedTime > date {
                 times.append(departure.aimedTime)
                 count += 1
             }

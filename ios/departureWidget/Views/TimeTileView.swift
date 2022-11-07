@@ -11,6 +11,6 @@ struct TimeTileVew: View {
             .cornerRadius(8)
             .lineLimit(1)
             .fixedSize()
-            .bold()
+            .font(.custom("", size: 14, relativeTo: .headline))
     }
 }

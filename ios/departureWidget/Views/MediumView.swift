@@ -52,12 +52,11 @@ struct MediumView: View {
                     Spacer()
                 }
             }
-            HStack(spacing: 8) {
+            HStack() {
                 ForEach(viewModel.departures(numberOfdepartures: numberOfDepartures), id: \.self) { time in
                   TimeTileVew(date: time)
                 }
             }
-        }
-        .padding(16)
+        }.padding(16)
     }
 }
