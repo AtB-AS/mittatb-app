@@ -283,7 +283,7 @@ export function useStopPlaceData(
   const timeRange = getTimeRangeByMode(mode, startTime);
   const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
 
-  const forceRefresh = () => {
+  const loadDepartures = () => {
     dispatch({
       type: 'LOAD_INITIAL_DEPARTURES',
       stopPlace,
@@ -295,7 +295,7 @@ export function useStopPlaceData(
     });
   };
   const refresh = useCallback(
-    () => forceRefresh(),
+    () => loadDepartures(),
     [stopPlace.id, startTime, showOnlyFavorites, favoriteDepartures],
   );
 
@@ -344,7 +344,7 @@ export function useStopPlaceData(
   return {
     state,
     refresh,
-    forceRefresh,
+    forceRefresh: loadDepartures,
   };
 }
 

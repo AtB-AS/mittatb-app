@@ -55,7 +55,7 @@ const DeparturesDialogSheet = ({
 
   const closestLocation = filteredLocations?.[0];
 
-  const {state: stopDetailsState, refresh: forceRefreshStopDetailsData} =
+  const {state: stopDetailsState, forceRefresh: forceRefreshStopDetailsData} =
     useStopsDetailsData(closestLocation && [closestLocation.id]);
   const {
     data: stopDetailsData,

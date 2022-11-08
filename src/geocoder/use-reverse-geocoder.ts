@@ -17,7 +17,7 @@ export default function useReverseGeocoder(
 ): ReverseGeocoderState {
   const [state, dispatch] = useGeocoderReducer();
   const timeoutRequest = useTimeoutRequest();
-  const refresh = () => {
+  const loadLocations = () => {
     async function reverseCoordLookup() {
       if (coords) {
         try {
@@ -45,7 +45,7 @@ export default function useReverseGeocoder(
     reverseCoordLookup();
   };
   useEffect(() => {
-    refresh();
+    loadLocations();
 
     return () => timeoutRequest.abort();
   }, [coords?.latitude, coords?.longitude]);
@@ -54,6 +54,6 @@ export default function useReverseGeocoder(
     ...state,
     locations: state.locations,
     closestLocation: state.locations?.[0],
-    forceRefresh: refresh,
+    forceRefresh: loadLocations,
   };
 }

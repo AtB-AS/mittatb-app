@@ -135,7 +135,7 @@ const reducer: ReducerWithSideEffects<
 export function useStopsDetailsData(locationIds?: Array<string>) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const timeout = useTimeoutRequest();
-  const refresh = () =>
+  const loadDetails = () =>
     dispatch({
       type: 'LOAD_DETAILS',
       locations: locationIds,
@@ -143,13 +143,13 @@ export function useStopsDetailsData(locationIds?: Array<string>) {
     });
 
   useEffect(() => {
-    refresh();
+    loadDetails();
 
     return () => timeout.abort();
   }, [JSON.stringify(locationIds)]);
 
   return {
     state,
-    refresh,
+    forceRefresh: loadDetails,
   };
 }
