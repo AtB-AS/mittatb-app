@@ -4,9 +4,9 @@ import {
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {
-  EstimatedCallFieldsFragment,
-  QuayFieldsFragment,
-  SituationFieldsFragment,
+  ServiceJourneyEstimatedCallFragment,
+  QuayFragment,
+  SituationFragment,
 } from '@atb/api/types/generated/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {Info, Warning} from '@atb/assets/svg/color/situations';
@@ -178,7 +178,10 @@ export default function DepartureDetails({navigation, route}: Props) {
 }
 function mapGroup<T>(
   groups: CallListGroup,
-  map: (group: keyof CallListGroup, calls: EstimatedCallFieldsFragment[]) => T,
+  map: (
+    group: keyof CallListGroup,
+    calls: ServiceJourneyEstimatedCallFragment[],
+  ) => T,
 ) {
   return Object.entries(groups).map(([name, group]) =>
     map(name as keyof CallListGroup, group),
@@ -186,11 +189,11 @@ function mapGroup<T>(
 }
 
 type CallGroupProps = {
-  calls: EstimatedCallFieldsFragment[];
+  calls: ServiceJourneyEstimatedCallFragment[];
   type: keyof CallListGroup;
   mode?: TransportMode;
   subMode?: TransportSubmode;
-  parentSituations: SituationFieldsFragment[];
+  parentSituations: SituationFragment[];
 };
 function CallGroup({
   type,
@@ -253,11 +256,11 @@ function CallGroup({
 
 type TripItemProps = {
   isStartPlace: boolean;
-  call: EstimatedCallFieldsFragment;
+  call: ServiceJourneyEstimatedCallFragment;
   type: string;
   mode: TransportMode | undefined;
   subMode: TransportSubmode | undefined;
-  parentSituations: SituationFieldsFragment[];
+  parentSituations: SituationFragment[];
   collapseButton: JSX.Element | null;
   isStart: boolean;
   isEnd: boolean;
@@ -336,7 +339,7 @@ function TripItem({
     </View>
   );
 
-  async function handleQuayPress(quay: QuayFieldsFragment | undefined) {
+  async function handleQuayPress(quay: QuayFragment | undefined) {
     const stopPlace = quay?.stopPlace;
     if (!stopPlace) return;
 

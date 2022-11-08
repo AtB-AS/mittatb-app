@@ -4,8 +4,8 @@ import {
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {
-  EstimatedCallFieldsFragment,
-  SituationFieldsFragment,
+  ServiceJourneyEstimatedCallFragment,
+  SituationFragment,
 } from '@atb/api/types/generated/serviceJourney';
 import usePollableResource from '@atb/utils/use-pollable-resource';
 import {useCallback} from 'react';
@@ -16,13 +16,13 @@ export type DepartureData = {
   mode?: TransportMode;
   title?: string;
   subMode?: TransportSubmode;
-  situations: SituationFieldsFragment[];
+  situations: SituationFragment[];
 };
 
 export type CallListGroup = {
-  passed: EstimatedCallFieldsFragment[];
-  trip: EstimatedCallFieldsFragment[];
-  after: EstimatedCallFieldsFragment[];
+  passed: ServiceJourneyEstimatedCallFragment[];
+  trip: ServiceJourneyEstimatedCallFragment[];
+  after: ServiceJourneyEstimatedCallFragment[];
 };
 
 export default function useDepartureData(
@@ -77,13 +77,13 @@ export default function useDepartureData(
 const onType = (
   obj: CallListGroup,
   key: keyof CallListGroup,
-  call: EstimatedCallFieldsFragment,
+  call: ServiceJourneyEstimatedCallFragment,
 ): CallListGroup => ({
   ...obj,
   [key]: obj[key].concat(call),
 });
 function groupAllCallsByQuaysInLeg(
-  calls: EstimatedCallFieldsFragment[],
+  calls: ServiceJourneyEstimatedCallFragment[],
   fromQuayId?: string,
   toQuayId?: string,
 ): CallListGroup {

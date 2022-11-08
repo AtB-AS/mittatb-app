@@ -3,16 +3,16 @@ import client from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
-import {EstimatedCallFieldsFragment} from './types/generated/serviceJourney';
+import {ServiceJourneyEstimatedCallFragment} from './types/generated/serviceJourney';
 
 type ServiceJourneyDepartures = {
-  value: EstimatedCallFieldsFragment[];
+  value: ServiceJourneyEstimatedCallFragment[];
 };
 
 export async function getDepartures(
   id: string,
   date?: Date,
-): Promise<EstimatedCallFieldsFragment[]> {
+): Promise<ServiceJourneyEstimatedCallFragment[]> {
   let url = `bff/v2/servicejourney/${encodeURIComponent(id)}/departures`;
   if (date) {
     url = url + `?date=${formatISO(date, {representation: 'date'})}`;

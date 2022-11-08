@@ -58,7 +58,7 @@ export type ServiceJourneyDeparturesQuery = {
   };
 };
 
-export type EstimatedCallFieldsFragment = {
+export type ServiceJourneyEstimatedCallFragment = {
   actualArrivalTime?: any;
   actualDepartureTime?: any;
   aimedArrivalTime: any;
@@ -112,9 +112,9 @@ export type EstimatedCallFieldsFragment = {
   }>;
 };
 
-export type NoticeFieldsFragment = {text?: string};
+export type NoticeFragment = {text?: string};
 
-export type QuayFieldsFragment = {
+export type QuayFragment = {
   id: string;
   name: string;
   publicCode?: string;
@@ -129,7 +129,7 @@ export type QuayFieldsFragment = {
   stopPlace?: {id: string; name: string; latitude?: number; longitude?: number};
 };
 
-export type SituationFieldsFragment = {
+export type SituationFragment = {
   situationNumber?: string;
   reportType?: Types.ReportType;
   summary: Array<{language?: string; value: string}>;
@@ -138,7 +138,7 @@ export type SituationFieldsFragment = {
   infoLinks?: Array<{uri: string; label?: string}>;
 };
 
-export type LineFieldsFragment = {
+export type LineFragment = {
   id: string;
   name?: string;
   publicCode?: string;
@@ -146,14 +146,14 @@ export type LineFieldsFragment = {
   transportSubmode?: Types.TransportSubmode;
 };
 
-export type StopPlaceFieldsFragment = {
+export type StopPlaceFragment = {
   id: string;
   name: string;
   latitude?: number;
   longitude?: number;
 };
 
-export type ServiceJourneyFieldsFragment = {
+export type ServiceJourneyFragment = {
   id: string;
   journeyPattern?: {
     line: {
