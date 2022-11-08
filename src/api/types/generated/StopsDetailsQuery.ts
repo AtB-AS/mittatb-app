@@ -14,15 +14,6 @@ export type StopsDetailsQuery = {
       name: string;
       publicCode?: string;
       stopPlace?: {id: string};
-      situations: Array<{
-        situationNumber?: string;
-        reportType?: Types.ReportType;
-        summary: Array<{language?: string; value: string}>;
-        description: Array<{language?: string; value: string}>;
-        advice: Array<{language?: string; value: string}>;
-        validityPeriod?: {startTime?: any; endTime?: any};
-        infoLinks?: Array<{uri: string; label?: string}>;
-      }>;
     }>;
   }>;
 };
