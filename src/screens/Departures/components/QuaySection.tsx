@@ -81,7 +81,6 @@ export default function QuaySection({
     <View testID={testID}>
       <Sections.Section withPadding withBottomPadding>
         <Sections.GenericClickableItem
-          type="inline"
           onPress={() => {
             setIsMinimized(!isMinimized);
           }}
@@ -237,13 +236,12 @@ function compareByLineNameAndDesc(
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   stopPlaceHeader: {
     flexDirection: 'row',
-    maxWidth: '100%',
     alignItems: 'center',
   },
   stopPlaceHeaderText: {
     flexDirection: 'row',
+    flex: 1,
     flexWrap: 'wrap',
-    flexShrink: 1,
   },
   rightMargin: {
     marginRight: theme.spacings.medium,
