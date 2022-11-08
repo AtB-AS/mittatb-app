@@ -55,7 +55,7 @@ export default function QuayView({
   const {favoriteDepartures} = useFavorites();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
-  const {state, refresh} = useQuayData(
+  const {state, refresh, forceRefresh} = useQuayData(
     quay,
     showOnlyFavorites,
     mode,
@@ -63,6 +63,7 @@ export default function QuayView({
   );
 
   const quayListData: SectionListData<Quay>[] = [{data: [quay]}];
+  const didLoadingDataFail = !!state.error;
 
   const placeHasFavorites = hasFavorites(
     favoriteDepartures,
@@ -84,7 +85,7 @@ export default function QuayView({
     <SectionList
       ListHeaderComponent={
         <>
-          {!!state.error && (
+          {didLoadingDataFail && (
             <View
               style={[
                 styles.messageBox,
@@ -94,6 +95,9 @@ export default function QuayView({
               <MessageBox
                 type="error"
                 message={t(DeparturesTexts.message.resultFailed)}
+                onPress={() => {
+                  forceRefresh();
+                }}
               />
             </View>
           )}
@@ -114,7 +118,10 @@ export default function QuayView({
         </>
       }
       refreshControl={
-        <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
+        <RefreshControl
+          refreshing={state.isLoading}
+          onRefresh={didLoadingDataFail ? forceRefresh : refresh}
+        />
       }
       sections={quayListData}
       testID={testID}

@@ -282,17 +282,20 @@ export function useStopPlaceData(
   const timeout = useTimeoutRequest();
   const timeRange = getTimeRangeByMode(mode, startTime);
   const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
+
+  const forceRefresh = () => {
+    dispatch({
+      type: 'LOAD_INITIAL_DEPARTURES',
+      stopPlace,
+      startTime,
+      timeRange,
+      limitPerLine,
+      favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
+      timeOut: timeout,
+    });
+  };
   const refresh = useCallback(
-    () =>
-      dispatch({
-        type: 'LOAD_INITIAL_DEPARTURES',
-        stopPlace,
-        startTime,
-        timeRange,
-        limitPerLine,
-        favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
-        timeOut: timeout,
-      }),
+    () => forceRefresh(),
     [stopPlace.id, startTime, showOnlyFavorites, favoriteDepartures],
   );
 
@@ -341,6 +344,7 @@ export function useStopPlaceData(
   return {
     state,
     refresh,
+    forceRefresh,
   };
 }
 

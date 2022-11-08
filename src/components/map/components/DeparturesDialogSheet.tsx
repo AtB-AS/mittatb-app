@@ -44,6 +44,7 @@ const DeparturesDialogSheet = ({
     locations,
     isSearching: isGeocoderSearching,
     error: geocoderError,
+    forceRefresh: forceRefreshReverseGeocode,
   } = useReverseGeocoder({longitude, latitude} || null);
 
   const filteredLocations = locations?.filter(
@@ -54,9 +55,8 @@ const DeparturesDialogSheet = ({
 
   const closestLocation = filteredLocations?.[0];
 
-  const {state: stopDetailsState} = useStopsDetailsData(
-    closestLocation && [closestLocation.id],
-  );
+  const {state: stopDetailsState, refresh: forceRefreshStopDetailsData} =
+    useStopsDetailsData(closestLocation && [closestLocation.id]);
   const {
     data: stopDetailsData,
     isLoading: isStopDetailsLoading,
@@ -66,6 +66,16 @@ const DeparturesDialogSheet = ({
   const stopPlace = stopDetailsData?.stopPlaces?.[0];
   const isLoading = isStopDetailsLoading || isGeocoderSearching;
   const didLoadingDataFail = !!geocoderError || !!stopDetailsError;
+
+  const refresh = () => {
+    if (!!geocoderError) {
+      return forceRefreshReverseGeocode();
+    }
+
+    if (!!stopDetailsError) {
+      return forceRefreshStopDetailsData();
+    }
+  };
 
   const StopPlaceViewOrError = () => {
     if (!isLoading && !didLoadingDataFail) {
@@ -106,6 +116,9 @@ const DeparturesDialogSheet = ({
           <MessageBox
             type="error"
             message={t(DeparturesTexts.message.resultFailed)}
+            onPress={() => {
+              refresh();
+            }}
           />
         </View>
       );

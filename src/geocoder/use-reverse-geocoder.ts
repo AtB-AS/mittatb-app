@@ -7,14 +7,17 @@ import {getAxiosErrorType} from '../api/utils';
 import {SearchLocation} from '../favorites/types';
 import {useTimeoutRequest} from '@atb/api/client';
 
-type ReverseGeocoderState = GeocoderState & {closestLocation?: SearchLocation};
+type ReverseGeocoderState = GeocoderState & {
+  closestLocation?: SearchLocation;
+  forceRefresh(): void;
+};
 
 export default function useReverseGeocoder(
   coords: Coordinates | null,
 ): ReverseGeocoderState {
   const [state, dispatch] = useGeocoderReducer();
   const timeoutRequest = useTimeoutRequest();
-  useEffect(() => {
+  const refresh = () => {
     async function reverseCoordLookup() {
       if (coords) {
         try {
@@ -40,6 +43,9 @@ export default function useReverseGeocoder(
     }
 
     reverseCoordLookup();
+  };
+  useEffect(() => {
+    refresh();
 
     return () => timeoutRequest.abort();
   }, [coords?.latitude, coords?.longitude]);
@@ -48,5 +54,6 @@ export default function useReverseGeocoder(
     ...state,
     locations: state.locations,
     closestLocation: state.locations?.[0],
+    forceRefresh: refresh,
   };
 }

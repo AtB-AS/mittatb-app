@@ -59,7 +59,7 @@ export default function StopPlaceView({
   const {t} = useTranslation();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
-  const {state, refresh} = useStopPlaceData(
+  const {state, refresh, forceRefresh} = useStopPlaceData(
     stopPlace,
     showOnlyFavorites,
     isFocused,
@@ -109,6 +109,9 @@ export default function StopPlaceView({
               <MessageBox
                 type="error"
                 message={t(DeparturesTexts.message.resultFailed)}
+                onPress={() => {
+                  forceRefresh();
+                }}
               />
             </View>
           )}
@@ -137,7 +140,10 @@ export default function StopPlaceView({
         </>
       }
       refreshControl={
-        <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
+        <RefreshControl
+          refreshing={state.isLoading}
+          onRefresh={didLoadingDataFail ? forceRefresh : refresh}
+        />
       }
       sections={quayListData}
       testID={testID}

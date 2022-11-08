@@ -91,8 +91,8 @@ const DeparturesTexts = {
       'No departures found at the specified location',
     ),
     resultFailed: _(
-      'Kunne ikke laste avganger. Prøv igjen.',
-      'Could not load the departures. Please try again.',
+      'Kunne ikke laste avganger.',
+      'Could not load the departures.',
     ),
     noData: _('Ingen informasjon', 'No data'),
   },
