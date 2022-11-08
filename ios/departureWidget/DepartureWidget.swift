@@ -4,17 +4,15 @@ import WidgetKit
 struct DepartureWidgetEntryView: View {
     var entry: Provider.Entry
     @ObservedObject var viewModel: ViewModel
-    @Environment(\.widgetFamily) var family
+    @Environment(\.widgetFamily) var family: WidgetFamily
     @Environment(\.sizeCategory) var sizeCategory: ContentSizeCategory
-
 
     init(entry: Provider.Entry) {
         self.entry = entry
         viewModel = ViewModel(quayGroup: entry.quayGroup, date: entry.date)
-      
+
         // TODO: Check if location has changed, and ask for new timeline if that is the case
         // WidgetCenter.shared.reloadTimelines(ofKind: "com.mygame.gamestatus")
-
     }
 
     var body: some View {
@@ -49,7 +47,7 @@ struct departureWidget: Widget {
             DepartureWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("Favorittavganger")
-        .description("Viser relevante avganger for nærmeste favorittavgang.")
+        .description("Se avganger for din nærmeste favoritt.")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }

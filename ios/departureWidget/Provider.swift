@@ -38,12 +38,12 @@ struct Provider: TimelineProvider {
                 // Rerenders widget when a departure has passed, by giving IOS more information about future
                 // dates we hopefully get better timed rerenders
                 // This also relies on that location change asks for a new timeline, and not just rerenders
-                // TODO: find out if location updates requests new timeline or only renders widget
+                // TODO: Get new timeline if position changes
                 var entries = firstQuayGroup.departures.map { departure in Entry(date: departure.aimedTime, quayGroup: quayGroup) }
-              
-                // Remove last entries so that there always is enough quays to show.
+
+                // Remove last entries so that the viewmodel always has enough quays to show.
                 entries.removeLast(5)
-              
+
                 return completion(Timeline(entries: entries, policy: .atEnd))
             case .failure:
                 return completion(K.emptyTimeline)
