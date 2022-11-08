@@ -29,7 +29,7 @@
 		5038614A28FD6EB900E16E13 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614928FD6EB900E16E13 /* APIService.swift */; };
 		5038614C28FD750A00E16E13 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationManager.swift */; };
 		5038614E28FD81B700E16E13 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614D28FD81B700E16E13 /* Structs.swift */; };
-		505D9ECE291537E500AEFF94 /* TimeTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9ECD291537E500AEFF94 /* TimeTileView.swift */; };
+		505D9ECE291537E500AEFF94 /* DepartureTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9ECD291537E500AEFF94 /* DepartureTileView.swift */; };
 		506538E028FEA57400A0DDCC /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506538DF28FEA57400A0DDCC /* ViewModel.swift */; };
 		50A14ED72918F97E00A661D9 /* SmallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A14ED62918F97E00A661D9 /* SmallView.swift */; };
 		50A14ED92918F98E00A661D9 /* MediumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A14ED82918F98E00A661D9 /* MediumView.swift */; };
@@ -113,7 +113,7 @@
 		5038614B28FD750A00E16E13 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		5038614D28FD81B700E16E13 /* Structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
 		5051B09328F4092200B8EA18 /* departureWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = departureWidgetExtension.entitlements; sourceTree = "<group>"; };
-		505D9ECD291537E500AEFF94 /* TimeTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTileView.swift; sourceTree = "<group>"; };
+		505D9ECD291537E500AEFF94 /* DepartureTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartureTileView.swift; sourceTree = "<group>"; };
 		506538DF28FEA57400A0DDCC /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		50A14ED62918F97E00A661D9 /* SmallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallView.swift; sourceTree = "<group>"; };
 		50A14ED82918F98E00A661D9 /* MediumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediumView.swift; sourceTree = "<group>"; };
@@ -251,7 +251,7 @@
 		50A14EDA2918FAB600A661D9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				505D9ECD291537E500AEFF94 /* TimeTileView.swift */,
+				505D9ECD291537E500AEFF94 /* DepartureTileView.swift */,
 				50A14ED62918F97E00A661D9 /* SmallView.swift */,
 				50A14ED82918F98E00A661D9 /* MediumView.swift */,
 			);
@@ -709,7 +709,7 @@
 				5038614E28FD81B700E16E13 /* Structs.swift in Sources */,
 				5038614A28FD6EB900E16E13 /* APIService.swift in Sources */,
 				FE09922C28FFF50800E5046D /* Bundle.swift in Sources */,
-				505D9ECE291537E500AEFF94 /* TimeTileView.swift in Sources */,
+				505D9ECE291537E500AEFF94 /* DepartureTileView.swift in Sources */,
 				5038614C28FD750A00E16E13 /* LocationManager.swift in Sources */,
 				FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */,
 				50A14ED92918F98E00A661D9 /* MediumView.swift in Sources */,

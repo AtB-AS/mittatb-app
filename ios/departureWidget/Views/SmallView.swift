@@ -17,13 +17,13 @@ struct SmallView: View {
                 Text("\(lineNumber) \(lineName)")
                     .lineLimit(2)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(Color("LineText"))
+                    .foregroundColor(Color("LineInformationTextColor"))
             }
             Spacer()
 
             HStack {
                 ForEach(viewModel.departures(numberOfdepartures: 2), id: \.self) { time in
-                    TimeTileVew(date: time)
+                    DepartureTileView(date: time)
                 }
             }
         }.padding(16)

@@ -47,7 +47,7 @@ struct MediumView: View {
 
                     Text("\(lineNumber) \(lineName)")
                         .lineLimit(1)
-                        .foregroundColor(Color("LineText"))
+                        .foregroundColor(Color("LineInformationTextColor"))
 
                     Spacer()
                 }
@@ -55,7 +55,7 @@ struct MediumView: View {
             Spacer()
             HStack {
                 ForEach(viewModel.departures(numberOfdepartures: numberOfDepartures), id: \.self) { time in
-                    TimeTileVew(date: time)
+                    DepartureTileView(date: time)
                 }
             }
 

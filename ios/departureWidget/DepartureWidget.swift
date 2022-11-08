@@ -17,7 +17,7 @@ struct DepartureWidgetEntryView: View {
 
     var body: some View {
         ZStack {
-            Color("WidgetBackground")
+            Color("WidgetBackgroundColor")
             if let _ = viewModel.lineInfo {
                 switch family {
                 case .systemMedium:
