@@ -83,7 +83,12 @@ export default function QuayView({
   return (
     <>
       {!!state.error && (
-        <View style={styles.messageBox}>
+        <View
+          style={[
+            styles.messageBox,
+            mode !== 'Departure' ? styles.marginBottom : undefined,
+          ]}
+        >
           <MessageBox
             type="error"
             message={t(DeparturesTexts.message.resultFailed)}
@@ -138,6 +143,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   messageBox: {
     marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
+  },
+  marginBottom: {
+    marginBottom: 100,
   },
 }));

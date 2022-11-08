@@ -98,7 +98,12 @@ export default function StopPlaceView({
   return (
     <>
       {didLoadingDataFail && (
-        <View style={styles.messageBox}>
+        <View
+          style={[
+            styles.messageBox,
+            !showTimeNavigation ? styles.marginBottom : undefined,
+          ]}
+        >
           <MessageBox
             type="error"
             message={t(DeparturesTexts.message.resultFailed)}
@@ -203,6 +208,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   messageBox: {
     marginHorizontal: theme.spacings.medium,
+  },
+  marginBottom: {
     marginBottom: theme.spacings.medium,
   },
 }));
