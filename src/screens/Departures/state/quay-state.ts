@@ -123,6 +123,9 @@ const reducer: ReducerWithSideEffects<
 > = (state, action) => {
   switch (action.type) {
     case 'LOAD_INITIAL_DEPARTURES': {
+      if ((state.queryInput as QuayDeparturesVariables).id === action.quay.id)
+        return NoUpdate();
+
       // Update input data with new date as this
       // is a fresh fetch. We should fetch the latest information.
       const queryInput: QuayDeparturesVariables = {
