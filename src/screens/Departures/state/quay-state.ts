@@ -287,7 +287,8 @@ export function useQuayData(
   const timeRange = getTimeRangeByMode(mode, startTime);
   const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
   const timeout = useTimeoutRequest();
-  const forceRefresh = () => {
+
+  const loadDepartures = () => {
     dispatch({
       type: 'LOAD_INITIAL_DEPARTURES',
       quay,
@@ -298,29 +299,27 @@ export function useQuayData(
       timeout,
     });
   };
-  const refresh = useCallback(
-    () => forceRefresh(),
-    [(quay.id, startTime, showOnlyFavorites, favoriteDepartures)],
-  );
+  const refresh = useCallback(() => {
+    loadDepartures();
+  }, [(quay.id, startTime, showOnlyFavorites, favoriteDepartures)]);
 
-  useEffect(
-    () =>
-      dispatch({
-        type: 'SET_SHOW_FAVORITES',
-        quay,
-        startTime,
-        timeRange,
-        showOnlyFavorites,
-        favoriteDepartures,
-        limitPerLine,
-        timeout,
-      }),
-    [quay.id, favoriteDepartures, showOnlyFavorites],
-  );
+  useEffect(() => {
+    dispatch({
+      type: 'SET_SHOW_FAVORITES',
+      quay,
+      startTime,
+      timeRange,
+      showOnlyFavorites,
+      favoriteDepartures,
+      limitPerLine,
+      timeout,
+    });
+  }, [quay.id, favoriteDepartures, showOnlyFavorites]);
   useEffect(() => {
     refresh();
     return () => timeout.abort();
   }, [startTime]);
+
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -347,7 +346,7 @@ export function useQuayData(
   return {
     state,
     refresh,
-    forceRefresh,
+    forceRefresh: loadDepartures,
   };
 }
 
