@@ -5,7 +5,7 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
-import {Place, Quay} from '@atb/api/types/departures';
+import {StopPlace, Quay} from '@atb/api/types/departures';
 import {NavigationProp} from '@react-navigation/native';
 
 type quayChipData = {
@@ -17,7 +17,7 @@ const StopPlaceAndQuaySelection = ({
   selectedQuay,
   navigation,
 }: {
-  place: Place;
+  place: StopPlace;
   selectedQuay?: Quay;
   navigation: NavigationProp<any>;
 }) => {

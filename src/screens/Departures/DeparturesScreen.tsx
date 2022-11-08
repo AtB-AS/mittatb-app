@@ -1,4 +1,4 @@
-import {Place} from '@atb/api/types/departures';
+import {StopPlace} from '@atb/api/types/departures';
 import {Location} from '@atb/favorites/types';
 import {useOnlySingleLocation} from '@atb/location-search';
 import {useTranslation} from '@atb/translations';
@@ -19,7 +19,7 @@ export const DeparturesScreen = ({navigation}: RootProps) => {
   const fromLocation = useOnlySingleLocation<RootProps['route']>('location');
   const {t} = useTranslation();
 
-  const navigateToPlace = (place: Place) => {
+  const navigateToPlace = (place: StopPlace) => {
     navigation.navigate('PlaceScreen', {
       place,
       mode: 'Departure',

@@ -2,7 +2,7 @@ import {useOnlySingleLocation} from '@atb/location-search';
 import React from 'react';
 import {Location} from '@atb/favorites/types';
 import {DashboardScreenProps} from '@atb/screens/Dashboard/types';
-import {Place} from '@atb/api/types/departures';
+import {StopPlace} from '@atb/api/types/departures';
 import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import {NearbyStopPlaces} from '@atb/screens/Departures/components/NearbyStopPlaces';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
@@ -35,7 +35,7 @@ const NearbyStopPlacesScreen = ({navigation, route}: RootProps) => {
   const fromLocation = useOnlySingleLocation<RootProps['route']>('location');
   const currentRoute = useRoute();
 
-  const navigateToPlace = (place: Place) => {
+  const navigateToPlace = (place: StopPlace) => {
     navigation.navigate('PlaceScreen', {
       place,
       mode: 'Favourite',

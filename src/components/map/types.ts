@@ -1,4 +1,4 @@
-import {Place, Quay} from '@atb/api/types/departures';
+import {StopPlace, Quay} from '@atb/api/types/departures';
 import {GeoLocation, Location, SearchLocation} from '@atb/favorites/types';
 import {Feature, Point} from 'geojson';
 import {Coordinates, MapLine} from '@atb/screens/TripDetails/Map/types';
@@ -17,7 +17,7 @@ export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
 type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
 ) => void;
-export type NavigateToQuayCallback = (place: Place, quay: Quay) => void;
+export type NavigateToQuayCallback = (place: StopPlace, quay: Quay) => void;
 export type NavigateToDetailsCallback = (
   serviceJourneyId: string,
   serviceDate: string,
