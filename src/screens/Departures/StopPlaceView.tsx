@@ -16,6 +16,9 @@ import {useStopPlaceData} from './state/stop-place-state';
 import FavoriteToggle from '@atb/screens/Departures/components/FavoriteToggle';
 import DateSelection from '@atb/screens/Departures/components/DateSelection';
 import {StopPlacesMode} from '@atb/screens/Departures/types';
+import MessageBox from '@atb/components/message-box';
+import DeparturesTexts from '@atb/translations/screens/Departures';
+import {useTranslation} from '@atb/translations';
 
 type StopPlaceViewProps = {
   stopPlace: Place;
@@ -53,6 +56,7 @@ export default function StopPlaceView({
 }: StopPlaceViewProps) {
   const styles = useStyles();
   const {favoriteDepartures} = useFavorites();
+  const {t} = useTranslation();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
   const {state, refresh} = useStopPlaceData(
@@ -62,6 +66,7 @@ export default function StopPlaceView({
     mode,
     searchStartTime,
   );
+  const didLoadingDataFail = !!state.error;
   const quayListData: SectionListData<Quay>[] | undefined = stopPlace.quays
     ? [{data: stopPlace.quays}]
     : undefined;
@@ -92,6 +97,14 @@ export default function StopPlaceView({
 
   return (
     <>
+      {didLoadingDataFail && (
+        <View style={styles.messageBox}>
+          <MessageBox
+            type="error"
+            message={t(DeparturesTexts.message.resultFailed)}
+          />
+        </View>
+      )}
       {quayListData && (
         <SectionList
           ListHeaderComponent={
@@ -132,6 +145,7 @@ export default function StopPlaceView({
                   DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW
                 }
                 data={state.data}
+                didLoadingDataFail={didLoadingDataFail}
                 navigateToDetails={navigateToDetails}
                 navigateToQuay={navigateToQuay}
                 testID={'quaySection' + index}
@@ -186,5 +200,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   headerWithoutNavigation: {
     marginHorizontal: theme.spacings.medium,
+  },
+  messageBox: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
 }));

@@ -1,11 +1,11 @@
 import {useEffect} from 'react';
-import {CancelToken, isCancel} from '../api/client';
 import {Coordinates} from '../sdk';
 import {reverse} from '../api';
 import {mapFeatureToLocation} from './utils';
 import useGeocoderReducer, {GeocoderState} from './use-geocoder-reducer';
 import {getAxiosErrorType} from '../api/utils';
 import {SearchLocation} from '../favorites/types';
+import {useTimeoutRequest} from '@atb/api/client';
 
 type ReverseGeocoderState = GeocoderState & {closestLocation?: SearchLocation};
 
@@ -13,30 +13,26 @@ export default function useReverseGeocoder(
   coords: Coordinates | null,
 ): ReverseGeocoderState {
   const [state, dispatch] = useGeocoderReducer();
-
+  const timeoutRequest = useTimeoutRequest();
   useEffect(() => {
-    const source = CancelToken.source();
     async function reverseCoordLookup() {
       if (coords) {
         try {
           dispatch({type: 'SET_IS_SEARCHING'});
+          timeoutRequest.start();
           const response = await reverse(coords, {
-            cancelToken: source.token,
-            timeout: 15000,
+            signal: timeoutRequest.signal,
           });
-          source.token.throwIfRequested();
-
+          timeoutRequest.clear();
           dispatch({
             type: 'SET_LOCATIONS',
             locations: response?.data?.map(mapFeatureToLocation),
           });
         } catch (err) {
-          if (!isCancel(err)) {
-            console.warn(err);
-            dispatch({type: 'SET_ERROR', error: getAxiosErrorType(err)});
-          } else {
-            dispatch({type: 'SET_LOCATIONS', locations: null});
-          }
+          dispatch({
+            type: 'SET_ERROR',
+            error: getAxiosErrorType(err, timeoutRequest.didTimeout),
+          });
         }
       } else {
         dispatch({type: 'SET_LOCATIONS', locations: null});
@@ -44,7 +40,8 @@ export default function useReverseGeocoder(
     }
 
     reverseCoordLookup();
-    return () => source.cancel('Cancelling previous reverse');
+
+    return () => timeoutRequest.abort();
   }, [coords?.latitude, coords?.longitude]);
 
   return {

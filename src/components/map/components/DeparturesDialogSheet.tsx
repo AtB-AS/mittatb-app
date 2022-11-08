@@ -4,11 +4,7 @@ import {ActivityIndicator, View} from 'react-native';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '../../screen-header';
-import {
-  NearbyTexts,
-  ScreenHeaderTexts,
-  useTranslation,
-} from '@atb/translations';
+import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import StopPlaceView from '@atb/screens/Departures/StopPlaceView';
 import {SearchTime} from '@atb/screens/Departures/utils';
 import {Place, Quay} from '@atb/api/types/departures';
@@ -98,7 +94,7 @@ const DeparturesDialogSheet = ({
         <View style={styles.paddingHorizontal}>
           <MessageBox
             type="info"
-            message={t(NearbyTexts.results.messages.emptyResult)}
+            message={t(DeparturesTexts.message.emptyResult)}
           />
         </View>
       );
@@ -109,7 +105,7 @@ const DeparturesDialogSheet = ({
         <View style={styles.paddingHorizontal}>
           <MessageBox
             type="error"
-            message={t(NearbyTexts.results.messages.resultFailed)}
+            message={t(DeparturesTexts.message.resultFailed)}
           />
         </View>
       );

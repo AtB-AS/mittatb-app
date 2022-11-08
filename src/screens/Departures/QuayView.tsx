@@ -14,6 +14,9 @@ import QuaySection from './components/QuaySection';
 import {useQuayData} from './state/quay-state';
 import {hasFavorites} from './StopPlaceView';
 import {StopPlacesMode} from '@atb/screens/Departures/types';
+import MessageBox from '@atb/components/message-box';
+import DeparturesTexts from '@atb/translations/screens/Departures';
+import {useTranslation} from '@atb/translations';
 
 export type QuayViewParams = {
   quay: Quay;
@@ -48,6 +51,7 @@ export default function QuayView({
   mode,
 }: QuayViewProps) {
   const styles = useStyles();
+  const {t} = useTranslation();
   const {favoriteDepartures} = useFavorites();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
@@ -77,42 +81,53 @@ export default function QuayView({
   }, [quay]);
 
   return (
-    <SectionList
-      ListHeaderComponent={
-        mode === 'Departure' ? (
-          <View style={styles.header}>
-            {placeHasFavorites && (
-              <FavoriteToggle
-                enabled={showOnlyFavorites}
-                setEnabled={setShowOnlyFavorites}
-              />
-            )}
-            <DateSelection
-              searchTime={searchTime}
-              setSearchTime={setSearchTime}
-            />
-          </View>
-        ) : null
-      }
-      refreshControl={
-        <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
-      }
-      sections={quayListData}
-      testID={testID}
-      keyExtractor={(item) => item.id}
-      renderItem={({item}) => (
-        <QuaySection
-          quay={item}
-          data={state.data}
-          navigateToDetails={navigateToDetails}
-          testID={'quaySection'}
-          stopPlace={stopPlace}
-          showOnlyFavorites={showOnlyFavorites}
-          allowFavouriteSelection={true}
-          mode={mode}
-        />
+    <>
+      {!!state.error && (
+        <View style={styles.messageBox}>
+          <MessageBox
+            type="error"
+            message={t(DeparturesTexts.message.resultFailed)}
+          />
+        </View>
       )}
-    />
+      <SectionList
+        ListHeaderComponent={
+          mode === 'Departure' ? (
+            <View style={styles.header}>
+              {placeHasFavorites && (
+                <FavoriteToggle
+                  enabled={showOnlyFavorites}
+                  setEnabled={setShowOnlyFavorites}
+                />
+              )}
+              <DateSelection
+                searchTime={searchTime}
+                setSearchTime={setSearchTime}
+              />
+            </View>
+          ) : null
+        }
+        refreshControl={
+          <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
+        }
+        sections={quayListData}
+        testID={testID}
+        keyExtractor={(item) => item.id}
+        renderItem={({item}) => (
+          <QuaySection
+            quay={item}
+            data={state.data}
+            didLoadingDataFail={!!state.error}
+            navigateToDetails={navigateToDetails}
+            testID={'quaySection'}
+            stopPlace={stopPlace}
+            showOnlyFavorites={showOnlyFavorites}
+            allowFavouriteSelection={true}
+            mode={mode}
+          />
+        )}
+      />
+    </>
   );
 }
 
@@ -120,5 +135,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
     paddingVertical: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
+  },
+  messageBox: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
 }));

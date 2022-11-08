@@ -86,6 +86,15 @@ const DeparturesTexts = {
       'Les mer og se flere nyttige tips',
       'Read more and find other useful tips',
     ),
+    emptyResult: _(
+      'Fant ingen avganger på valgt sted.',
+      'No departures found at the specified location',
+    ),
+    resultFailed: _(
+      'Kunne ikke laste avganger. Prøv igjen.',
+      'Could not load the departures. Please try again.',
+    ),
+    noData: _('Ingen informasjon', 'No data'),
   },
   button: {
     text: _('Velg favorittavganger', 'Select favourite departures'),
