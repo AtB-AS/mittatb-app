@@ -67,9 +67,9 @@ export default function StopPlaceView({
     searchStartTime,
   );
   const didLoadingDataFail = !!state.error;
-  const quayListData: SectionListData<Quay>[] | undefined = stopPlace.quays
+  const quayListData: SectionListData<Quay>[] = stopPlace.quays
     ? [{data: stopPlace.quays}]
-    : undefined;
+    : [];
 
   const placeHasFavorites = hasFavorites(
     favoriteDepartures,
@@ -96,81 +96,77 @@ export default function StopPlaceView({
   );
 
   return (
-    <>
-      {didLoadingDataFail && (
-        <View
-          style={[
-            styles.messageBox,
-            !showTimeNavigation ? styles.marginBottom : undefined,
-          ]}
-        >
-          <MessageBox
-            type="error"
-            message={t(DeparturesTexts.message.resultFailed)}
-          />
-        </View>
-      )}
-      {quayListData && (
-        <SectionList
-          ListHeaderComponent={
-            mode === 'Departure' ? (
-              <View
-                style={
-                  showTimeNavigation
-                    ? styles.headerWithNavigation
-                    : styles.headerWithoutNavigation
-                }
-              >
-                {allowFavouriteSelection && placeHasFavorites && (
-                  <FavoriteToggle
-                    enabled={showOnlyFavorites}
-                    setEnabled={setShowOnlyFavorites}
-                  />
-                )}
-                {showTimeNavigation && (
-                  <DateSelection
-                    searchTime={searchTime}
-                    setSearchTime={setSearchTime}
-                  />
-                )}
-              </View>
-            ) : null
-          }
-          refreshControl={
-            <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
-          }
-          sections={quayListData}
-          testID={testID}
-          keyExtractor={(item) => item.id}
-          renderItem={({item, index}) => (
-            <>
-              <QuaySection
-                quay={item}
-                departuresPerQuay={
-                  DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW
-                }
-                data={state.data}
-                didLoadingDataFail={didLoadingDataFail}
-                navigateToDetails={navigateToDetails}
-                navigateToQuay={navigateToQuay}
-                testID={'quaySection' + index}
-                stopPlace={stopPlace}
-                showOnlyFavorites={showOnlyFavorites}
-                allowFavouriteSelection={allowFavouriteSelection}
-                mode={mode}
+    <SectionList
+      ListHeaderComponent={
+        <>
+          {didLoadingDataFail && (
+            <View
+              style={[
+                styles.messageBox,
+                !showTimeNavigation ? styles.marginBottom : undefined,
+              ]}
+            >
+              <MessageBox
+                type="error"
+                message={t(DeparturesTexts.message.resultFailed)}
               />
-              {mode === 'Departure' && index === 0 && (
-                <Feedback
-                  viewContext="departures"
-                  metadata={quayListData}
-                  avoidResetOnMetadataUpdate
+            </View>
+          )}
+          {mode === 'Departure' ? (
+            <View
+              style={
+                showTimeNavigation
+                  ? styles.headerWithNavigation
+                  : styles.headerWithoutNavigation
+              }
+            >
+              {allowFavouriteSelection && placeHasFavorites && (
+                <FavoriteToggle
+                  enabled={showOnlyFavorites}
+                  setEnabled={setShowOnlyFavorites}
                 />
               )}
-            </>
+              {showTimeNavigation && (
+                <DateSelection
+                  searchTime={searchTime}
+                  setSearchTime={setSearchTime}
+                />
+              )}
+            </View>
+          ) : null}
+        </>
+      }
+      refreshControl={
+        <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
+      }
+      sections={quayListData}
+      testID={testID}
+      keyExtractor={(item) => item.id}
+      renderItem={({item, index}) => (
+        <>
+          <QuaySection
+            quay={item}
+            departuresPerQuay={DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW}
+            data={state.data}
+            didLoadingDataFail={didLoadingDataFail}
+            navigateToDetails={navigateToDetails}
+            navigateToQuay={navigateToQuay}
+            testID={'quaySection' + index}
+            stopPlace={stopPlace}
+            showOnlyFavorites={showOnlyFavorites}
+            allowFavouriteSelection={allowFavouriteSelection}
+            mode={mode}
+          />
+          {mode === 'Departure' && index === 0 && (
+            <Feedback
+              viewContext="departures"
+              metadata={quayListData}
+              avoidResetOnMetadataUpdate
+            />
           )}
-        />
+        </>
       )}
-    </>
+    />
   );
 }
 

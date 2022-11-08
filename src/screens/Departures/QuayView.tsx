@@ -81,23 +81,23 @@ export default function QuayView({
   }, [quay]);
 
   return (
-    <>
-      {!!state.error && (
-        <View
-          style={[
-            styles.messageBox,
-            mode !== 'Departure' ? styles.marginBottom : undefined,
-          ]}
-        >
-          <MessageBox
-            type="error"
-            message={t(DeparturesTexts.message.resultFailed)}
-          />
-        </View>
-      )}
-      <SectionList
-        ListHeaderComponent={
-          mode === 'Departure' ? (
+    <SectionList
+      ListHeaderComponent={
+        <>
+          {!!state.error && (
+            <View
+              style={[
+                styles.messageBox,
+                mode !== 'Departure' ? styles.marginBottom : undefined,
+              ]}
+            >
+              <MessageBox
+                type="error"
+                message={t(DeparturesTexts.message.resultFailed)}
+              />
+            </View>
+          )}
+          {mode === 'Departure' ? (
             <View style={styles.header}>
               {placeHasFavorites && (
                 <FavoriteToggle
@@ -110,29 +110,29 @@ export default function QuayView({
                 setSearchTime={setSearchTime}
               />
             </View>
-          ) : null
-        }
-        refreshControl={
-          <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
-        }
-        sections={quayListData}
-        testID={testID}
-        keyExtractor={(item) => item.id}
-        renderItem={({item}) => (
-          <QuaySection
-            quay={item}
-            data={state.data}
-            didLoadingDataFail={!!state.error}
-            navigateToDetails={navigateToDetails}
-            testID={'quaySection'}
-            stopPlace={stopPlace}
-            showOnlyFavorites={showOnlyFavorites}
-            allowFavouriteSelection={true}
-            mode={mode}
-          />
-        )}
-      />
-    </>
+          ) : null}
+        </>
+      }
+      refreshControl={
+        <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
+      }
+      sections={quayListData}
+      testID={testID}
+      keyExtractor={(item) => item.id}
+      renderItem={({item}) => (
+        <QuaySection
+          quay={item}
+          data={state.data}
+          didLoadingDataFail={!!state.error}
+          navigateToDetails={navigateToDetails}
+          testID={'quaySection'}
+          stopPlace={stopPlace}
+          showOnlyFavorites={showOnlyFavorites}
+          allowFavouriteSelection={true}
+          mode={mode}
+        />
+      )}
+    />
   );
 }
 
