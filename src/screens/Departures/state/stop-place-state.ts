@@ -279,10 +279,9 @@ export function useStopPlaceData(
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const {favoriteDepartures} = useFavorites();
-  const timeOut = useTimeoutRequest();
+  const timeout = useTimeoutRequest();
   const timeRange = getTimeRangeByMode(mode, startTime);
   const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
-  const controller = new AbortController();
   const refresh = useCallback(
     () =>
       dispatch({
@@ -292,7 +291,7 @@ export function useStopPlaceData(
         timeRange,
         limitPerLine,
         favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
-        timeOut: timeOut,
+        timeOut: timeout,
       }),
     [stopPlace.id, startTime, showOnlyFavorites, favoriteDepartures],
   );
@@ -307,14 +306,14 @@ export function useStopPlaceData(
         showOnlyFavorites,
         favoriteDepartures,
         limitPerLine,
-        timeOut: timeOut,
+        timeOut: timeout,
       }),
     [stopPlace.id, favoriteDepartures, showOnlyFavorites],
   );
   useEffect(() => {
     refresh();
 
-    return () => timeOut.abort();
+    return () => timeout.abort();
   }, [stopPlace.id, startTime]);
   useEffect(() => {
     if (!state.tick) {

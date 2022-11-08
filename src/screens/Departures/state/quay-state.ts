@@ -32,6 +32,8 @@ import {
   getLimitOfDeparturesPerLineByMode,
   getTimeRangeByMode,
 } from '@atb/screens/Departures/utils';
+import {TimeoutRequest, useTimeoutRequest} from '@atb/api/client';
+import {AxiosRequestConfig} from 'axios';
 
 const MAX_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
 
@@ -77,6 +79,7 @@ type DepartureDataActions =
       favoriteDepartures?: UserFavoriteDepartures;
       limitPerLine?: number;
       timeRange?: number;
+      timeout: TimeoutRequest;
     }
   | {
       type: 'LOAD_REALTIME_DATA';
@@ -99,6 +102,7 @@ type DepartureDataActions =
       timeRange?: number;
       favoriteDepartures?: UserFavoriteDepartures;
       limitPerLine?: number;
+      timeout: TimeoutRequest;
     }
   | {
       type: 'SET_ERROR';
@@ -138,12 +142,16 @@ const reducer: ReducerWithSideEffects<
         },
         async (_, dispatch) => {
           try {
+            action.timeout.start();
             const result = await fetchEstimatedCalls(
               queryInput,
               action.quay,
               state.showOnlyFavorites ? action.favoriteDepartures : undefined,
+              {
+                signal: action.timeout.signal,
+              },
             );
-
+            action.timeout.clear();
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
@@ -154,7 +162,7 @@ const reducer: ReducerWithSideEffects<
             dispatch({
               type: 'SET_ERROR',
               reset: false,
-              error: getAxiosErrorType(e),
+              error: getAxiosErrorType(e, action.timeout.didTimeout),
             });
           } finally {
             dispatch({type: 'STOP_LOADER'});
@@ -220,6 +228,7 @@ const reducer: ReducerWithSideEffects<
             timeRange: action.timeRange,
             favoriteDepartures: action.favoriteDepartures,
             limitPerLine: action.limitPerLine,
+            timeout: action.timeout,
           });
         },
       );
@@ -277,6 +286,7 @@ export function useQuayData(
   const {favoriteDepartures} = useFavorites();
   const timeRange = getTimeRangeByMode(mode, startTime);
   const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
+  const timeout = useTimeoutRequest();
   const refresh = useCallback(
     () =>
       dispatch({
@@ -286,6 +296,7 @@ export function useQuayData(
         favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
         limitPerLine,
         timeRange,
+        timeout,
       }),
     [quay.id, startTime, showOnlyFavorites, favoriteDepartures],
   );
@@ -300,10 +311,14 @@ export function useQuayData(
         showOnlyFavorites,
         favoriteDepartures,
         limitPerLine,
+        timeout,
       }),
     [quay.id, favoriteDepartures, showOnlyFavorites],
   );
-  useEffect(refresh, [startTime]);
+  useEffect(() => {
+    refresh();
+    return () => timeout.abort();
+  }, [startTime]);
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -356,6 +371,7 @@ async function fetchEstimatedCalls(
   queryInput: QueryInput,
   quay: DepartureTypes.Quay,
   favoriteDepartures?: UserFavoriteDepartures,
+  opts?: AxiosRequestConfig,
 ): Promise<DepartureTypes.EstimatedCall[]> {
   const result = await getQuayDepartures(
     {
@@ -366,6 +382,7 @@ async function fetchEstimatedCalls(
       limitPerLine: queryInput.limitPerLine,
     },
     favoriteDepartures,
+    opts,
   );
   return result.quay?.estimatedCalls as DepartureTypes.EstimatedCall[];
 }
