@@ -39,7 +39,11 @@ struct Provider: TimelineProvider {
                 // dates we hopefully get better timed rerenders
                 // This also relies on that location change asks for a new timeline, and not just rerenders
                 // TODO: find out if location updates requests new timeline or only renders widget
-                let entries = firstQuayGroup.departures.map { departure in Entry(date: departure.aimedTime, quayGroup: quayGroup) }
+                var entries = firstQuayGroup.departures.map { departure in Entry(date: departure.aimedTime, quayGroup: quayGroup) }
+              
+                // Remove last entries so that there always is enough quays to show.
+                entries.removeLast(5)
+              
                 return completion(Timeline(entries: entries, policy: .atEnd))
             case .failure:
                 return completion(K.emptyTimeline)

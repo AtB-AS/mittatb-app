@@ -7,9 +7,14 @@ struct DepartureWidgetEntryView: View {
     @Environment(\.widgetFamily) var family
     @Environment(\.sizeCategory) var sizeCategory: ContentSizeCategory
 
+
     init(entry: Provider.Entry) {
         self.entry = entry
         viewModel = ViewModel(quayGroup: entry.quayGroup, date: entry.date)
+      
+        // TODO: Check if location has changed, and ask for new timeline if that is the case
+        // WidgetCenter.shared.reloadTimelines(ofKind: "com.mygame.gamestatus")
+
     }
 
     var body: some View {

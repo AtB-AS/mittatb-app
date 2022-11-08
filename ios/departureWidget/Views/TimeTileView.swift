@@ -10,7 +10,8 @@ struct TimeTileVew: View {
             .background(Color("TimeTileBackground"))
             .cornerRadius(8)
             .lineLimit(1)
-            .fixedSize()
-            .font(.custom("", size: 14, relativeTo: .headline))
+            .scaledToFit()
+            .minimumScaleFactor(0.1)
+            .bold()
     }
 }

@@ -29,7 +29,7 @@ struct MediumView: View {
     }
 
     var body: some View {
-        VStack(spacing: 16) {
+      VStack() {
             if let quayName = viewModel.quayName {
                 HStack {
                     Text("Fra \(quayName)")
@@ -39,11 +39,13 @@ struct MediumView: View {
                     Spacer()
                 }
             }
+        Spacer()
             Divider()
+        Spacer()
 
             if let lineNumber = viewModel.lineNumber, let lineName = viewModel.lineName {
                 HStack {
-                    Image("BusIcon")
+                  Image("BusIcon").resizable().frame(width: 20, height: 20)
 
                     Text("\(lineNumber) \(lineName)")
                         .lineLimit(1)
@@ -52,11 +54,13 @@ struct MediumView: View {
                     Spacer()
                 }
             }
+        Spacer()
             HStack() {
                 ForEach(viewModel.departures(numberOfdepartures: numberOfDepartures), id: \.self) { time in
                   TimeTileVew(date: time)
                 }
             }
+          
         }.padding(16)
     }
 }
