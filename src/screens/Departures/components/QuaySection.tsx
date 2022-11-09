@@ -72,11 +72,14 @@ export default function QuaySection({
     );
   }, [showOnlyFavorites]);
 
+  const hasMoreItemsThanDisplayLimit =
+    departuresPerQuay && departuresToDisplay.length > departuresPerQuay;
+
   const shouldShowMoreItemsLink =
     navigateToQuay &&
     !isMinimized &&
-    departuresPerQuay &&
-    departuresToDisplay.length > departuresPerQuay;
+    (mode === 'Departure' || hasMoreItemsThanDisplayLimit);
+
   return (
     <View testID={testID}>
       <Sections.Section withPadding withBottomPadding>
@@ -155,7 +158,7 @@ export default function QuaySection({
               <>
                 {data && (
                   <Sections.GenericItem
-                    radius={!navigateToQuay ? 'bottom' : undefined}
+                    radius={!shouldShowMoreItemsLink ? 'bottom' : undefined}
                   >
                     <ThemeText
                       color="secondary"
