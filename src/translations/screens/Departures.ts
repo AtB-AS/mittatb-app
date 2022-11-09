@@ -91,11 +91,14 @@ const DeparturesTexts = {
     text: _('Velg favorittavganger', 'Select favourite departures'),
   },
   onboarding: {
-    title: _('Overskrift', 'Heading'),
-    body: _(
-      '*Tekst om at vi har oppgradert visningen av avganger basert på brukernes tilbakemeldinger vises her*',
-      '*Tekst om at vi har oppgradert visningen av avganger basert på brukernes tilbakemeldinger vises her*',
-    ),
+    title: _('Avganger i ny drakt 🎉', 'Departures with new design 🎉'),
+    body: {
+      part1: _('Det har nå kommet en ny visning av avganger i appen.', ''),
+      part2: _(
+        'Endringene er basert på tilbakemeldinger fra våre brukere. Foreløpig er det fortsatt mulig å bruke den gamle visningen ved å gå til *Min profil*.',
+        '',
+      ),
+    },
     button: _('Den er grei!', "That's right!"),
   },
 };

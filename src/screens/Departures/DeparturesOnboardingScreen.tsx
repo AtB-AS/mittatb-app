@@ -12,6 +12,7 @@ import {DeparturesStackProps} from '@atb/screens/Departures/types';
 import storage from '@atb/storage';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {screenReaderPause} from '@atb/components/accessible-text';
+import {Cloud} from '@atb/assets/svg/color/illustrations';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -33,7 +34,7 @@ export const DeparturesOnboardingScreen = ({navigation}: Props) => {
           accessibilityLabel={
             t(DeparturesTexts.onboarding.title) +
             screenReaderPause +
-            t(DeparturesTexts.onboarding.body)
+            t(DeparturesTexts.onboarding.body.part1)
           }
           ref={focusRef}
         >
@@ -46,23 +47,27 @@ export const DeparturesOnboardingScreen = ({navigation}: Props) => {
             {t(DeparturesTexts.onboarding.title)}
           </ThemeText>
           <ThemeText color={themeColor} style={styles.body}>
-            {t(DeparturesTexts.onboarding.body)}
+            {t(DeparturesTexts.onboarding.body.part1)}
+          </ThemeText>
+          <View style={styles.illustration}>
+            <Cloud />
+          </View>
+          <ThemeText color={themeColor} style={styles.body} isMarkdown={true}>
+            {t(DeparturesTexts.onboarding.body.part2)}
           </ThemeText>
         </View>
+        <Button
+          text={t(DeparturesTexts.onboarding.button)}
+          onPress={async () => {
+            await storage.set(
+              '@ATB_has_read_departures_v2_onboarding',
+              JSON.stringify(true),
+            );
+            navigation.goBack();
+          }}
+          style={styles.button}
+        />
       </ScrollView>
-      <Button
-        text={t(DeparturesTexts.onboarding.button)}
-        icon={Confirm}
-        iconPosition="right"
-        onPress={async () => {
-          await storage.set(
-            '@ATB_has_read_departures_v2_onboarding',
-            JSON.stringify(true),
-          );
-          navigation.goBack();
-        }}
-        style={styles.button}
-      />
     </SafeAreaView>
   );
 };
@@ -77,7 +82,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
     paddingHorizontal: theme.spacings.xLarge,
   },
-  title: {marginBottom: theme.spacings.medium},
-  body: {marginBottom: theme.spacings.medium},
-  button: {margin: theme.spacings.xLarge},
+  title: {
+    marginBottom: theme.spacings.xLarge,
+    textAlign: 'center',
+  },
+  body: {
+    textAlign: 'center',
+  },
+  illustration: {
+    alignItems: 'center',
+    marginVertical: theme.spacings.xLarge,
+  },
+  button: {marginVertical: theme.spacings.xLarge},
 }));
