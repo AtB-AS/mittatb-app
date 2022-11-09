@@ -31,11 +31,7 @@ export const DeparturesOnboardingScreen = ({navigation}: Props) => {
       >
         <View
           accessible={true}
-          accessibilityLabel={
-            t(DeparturesTexts.onboarding.title) +
-            screenReaderPause +
-            t(DeparturesTexts.onboarding.body.part1)
-          }
+          accessibilityLabel={t(DeparturesTexts.onboarding.a11yLabel)}
           ref={focusRef}
         >
           <ThemeText
