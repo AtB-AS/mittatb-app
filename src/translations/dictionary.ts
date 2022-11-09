@@ -64,6 +64,12 @@ const dictionary = {
     km: _('km', 'km'),
     m: _('m', 'm'),
   },
+  messageTypes: {
+    info: _('Til info', 'Info'),
+    warning: _('Advarsel', 'Warning'),
+    valid: _('Suksess', 'Success'),
+    error: _('Feil', 'Error'),
+  },
 };
 
 export default dictionary;
