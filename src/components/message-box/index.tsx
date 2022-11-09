@@ -13,6 +13,7 @@ import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {screenReaderPause} from '@atb/components/accessible-text';
+import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 
 type WithMessage = {
   message: string;
@@ -61,7 +62,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({
     typeof icon !== 'undefined' ? (
       icon
     ) : (
-      <ThemeIcon fill={textColor} svg={typeToIcon(type)} />
+      <ThemeIcon fill={textColor} svg={messageTypeToIcon(type)} />
     );
   const child = message ? (
     <>
@@ -176,16 +177,3 @@ const useBoxStyle = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.small,
   },
 }));
-
-function typeToIcon(type: MessageBoxProps['type']) {
-  switch (type) {
-    case 'warning':
-      return Warning;
-    case 'error':
-      return ErrorIcon;
-    case 'valid':
-      return Check;
-    default:
-      return Info;
-  }
-}
