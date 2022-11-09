@@ -12,7 +12,7 @@ import {DeparturesStackProps} from '@atb/screens/Departures/types';
 import storage from '@atb/storage';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {screenReaderPause} from '@atb/components/accessible-text';
-import {Cloud} from '@atb/assets/svg/color/illustrations';
+import {DeparturesOnboarding} from '@atb/assets/svg/color/images';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -41,7 +41,7 @@ export const DeparturesOnboardingScreen = ({navigation}: Props) => {
           <ThemeText
             style={styles.title}
             color={themeColor}
-            type="heading--jumbo"
+            type="heading--big"
             accessible={true}
           >
             {t(DeparturesTexts.onboarding.title)}
@@ -50,7 +50,7 @@ export const DeparturesOnboardingScreen = ({navigation}: Props) => {
             {t(DeparturesTexts.onboarding.body.part1)}
           </ThemeText>
           <View style={styles.illustration}>
-            <Cloud />
+            <DeparturesOnboarding />
           </View>
           <ThemeText color={themeColor} style={styles.body} isMarkdown={true}>
             {t(DeparturesTexts.onboarding.body.part2)}
