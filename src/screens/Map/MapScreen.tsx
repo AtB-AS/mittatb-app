@@ -43,12 +43,9 @@ export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
     destination,
   ) => {
     navigation.navigate({
-      name: 'Dashboard',
+      name: 'TripSearch' as any,
       params: {
-        screen: 'TripSearch',
-        params: {
-          [destination]: location,
-        },
+        [destination]: location,
       },
       merge: true,
     });
