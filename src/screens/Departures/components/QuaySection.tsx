@@ -22,6 +22,7 @@ type QuaySectionProps = {
   quay: Quay;
   departuresPerQuay?: number;
   data: EstimatedCall[] | null;
+  didLoadingDataFail: boolean;
   testID?: 'quaySection' | string;
   navigateToQuay?: (arg0: Quay) => void;
   navigateToDetails?: (
@@ -46,6 +47,7 @@ export default function QuaySection({
   quay,
   departuresPerQuay,
   data,
+  didLoadingDataFail,
   testID,
   navigateToQuay,
   navigateToDetails,
@@ -175,7 +177,16 @@ export default function QuaySection({
             }
           />
         )}
-        {!data && !isMinimized && (
+        {!isMinimized && didLoadingDataFail && (
+          <Sections.GenericItem>
+            <View style={styles.messageBox}>
+              <ThemeText type="body__secondary" color="secondary">
+                {t(DeparturesTexts.message.noData)}
+              </ThemeText>
+            </View>
+          </Sections.GenericItem>
+        )}
+        {!data && !isMinimized && !didLoadingDataFail && (
           <Sections.GenericItem>
             <View style={{width: '100%'}}>
               <ActivityIndicator></ActivityIndicator>
@@ -248,5 +259,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   rightMargin: {
     marginRight: theme.spacings.medium,
+  },
+  messageBox: {
+    width: '100%',
+    alignItems: 'center',
   },
 }));
