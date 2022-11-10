@@ -197,8 +197,6 @@ const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
   buttonsContainer: {
     padding: theme.spacings.medium,
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   travelButton: {
     flex: 1,
