@@ -25,3 +25,4 @@ export type DeparturesStackProps<T extends keyof DeparturesStackParams> =
     StackScreenProps<DeparturesStackParams, T>,
     RootDeparturesScreenProps
   >;
+export type StopPlacesMode = 'Favourite' | 'Departure';

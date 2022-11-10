@@ -288,7 +288,16 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
             }
           />
         )}
-        <DeparturesWidget />
+        <DeparturesWidget
+          onEditFavouriteDeparture={() =>
+            navigation.navigate('FavoriteDeparturesDashboardScreen')
+          }
+          onAddFavouriteDeparture={() =>
+            navigation.navigate('NearbyStopPlacesDashboardScreen', {
+              location: undefined,
+            })
+          }
+        />
       </ScrollView>
     </View>
   );

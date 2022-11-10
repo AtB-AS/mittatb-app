@@ -11,7 +11,11 @@ export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   if (isScreenReaderEnabled) return <MapDisabledForScreenReader />;
   const navigateToQuay = (place: Place, quay: Quay) => {
-    navigation.navigate('PlaceScreen', {place, selectedQuay: quay});
+    navigation.navigate('PlaceScreen', {
+      place,
+      selectedQuay: quay,
+      mode: 'Departure',
+    });
   };
   const navigateToDetails = (
     serviceJourneyId: string,

@@ -3,20 +3,25 @@ import Feedback from '@atb/components/feedback';
 import {useFavorites} from '@atb/favorites';
 import {UserFavoriteDepartures} from '@atb/favorites/types';
 import {DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW} from '@atb/screens/Departures/state/stop-place-state';
-import {SearchTime} from '@atb/screens/Departures/utils';
+import {
+  getLimitOfDeparturesPerLineByMode,
+  getTimeRangeByMode,
+  SearchTime,
+} from '@atb/screens/Departures/utils';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
-import DateNavigation from './components/DateNavigator';
-import FavoriteToggle from './components/FavoriteToggle';
 import QuaySection from './components/QuaySection';
 import {useStopPlaceData} from './state/stop-place-state';
+import FavoriteToggle from '@atb/screens/Departures/components/FavoriteToggle';
+import DateSelection from '@atb/screens/Departures/components/DateSelection';
+import {StopPlacesMode} from '@atb/screens/Departures/types';
 
 type StopPlaceViewProps = {
   stopPlace: Place;
   showTimeNavigation?: boolean;
   navigateToQuay: (quay: Quay) => void;
-  navigateToDetails: (
+  navigateToDetails?: (
     serviceJourneyId: string,
     serviceDate: string,
     date?: string,
@@ -29,6 +34,7 @@ type StopPlaceViewProps = {
   setShowOnlyFavorites: (enabled: boolean) => void;
   isFocused: boolean;
   testID?: string;
+  mode: StopPlacesMode;
 };
 
 export default function StopPlaceView({
@@ -43,14 +49,18 @@ export default function StopPlaceView({
   setShowOnlyFavorites,
   isFocused,
   testID,
+  mode,
 }: StopPlaceViewProps) {
   const styles = useStyles();
   const {favoriteDepartures} = useFavorites();
+  const searchStartTime =
+    searchTime?.option !== 'now' ? searchTime.date : undefined;
   const {state, refresh} = useStopPlaceData(
     stopPlace,
     showOnlyFavorites,
     isFocused,
-    searchTime?.option !== 'now' ? searchTime.date : undefined,
+    mode,
+    searchStartTime,
   );
   const quayListData: SectionListData<Quay>[] | undefined = stopPlace.quays
     ? [{data: stopPlace.quays}]
@@ -85,26 +95,28 @@ export default function StopPlaceView({
       {quayListData && (
         <SectionList
           ListHeaderComponent={
-            <View
-              style={
-                showTimeNavigation
-                  ? styles.headerWithNavigation
-                  : styles.headerWithoutNavigation
-              }
-            >
-              {allowFavouriteSelection && placeHasFavorites && (
-                <FavoriteToggle
-                  enabled={showOnlyFavorites}
-                  setEnabled={setShowOnlyFavorites}
-                />
-              )}
-              {showTimeNavigation && (
-                <DateNavigation
-                  searchTime={searchTime}
-                  setSearchTime={setSearchTime}
-                />
-              )}
-            </View>
+            mode === 'Departure' ? (
+              <View
+                style={
+                  showTimeNavigation
+                    ? styles.headerWithNavigation
+                    : styles.headerWithoutNavigation
+                }
+              >
+                {allowFavouriteSelection && placeHasFavorites && (
+                  <FavoriteToggle
+                    enabled={showOnlyFavorites}
+                    setEnabled={setShowOnlyFavorites}
+                  />
+                )}
+                {showTimeNavigation && (
+                  <DateSelection
+                    searchTime={searchTime}
+                    setSearchTime={setSearchTime}
+                  />
+                )}
+              </View>
+            ) : null
           }
           refreshControl={
             <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
@@ -126,8 +138,9 @@ export default function StopPlaceView({
                 stopPlace={stopPlace}
                 showOnlyFavorites={showOnlyFavorites}
                 allowFavouriteSelection={allowFavouriteSelection}
+                mode={mode}
               />
-              {index === 0 && (
+              {mode === 'Departure' && index === 0 && (
                 <Feedback
                   viewContext="departures"
                   metadata={quayListData}

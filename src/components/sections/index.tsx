@@ -20,3 +20,6 @@ export {default as PhoneInput} from './phone-input';
 export {default as LocationInput} from './location-input';
 export {default as ButtonInput} from './button-input';
 export {default as CounterInput} from './counter-input';
+
+// Info
+export {default as MessageItem} from './message-item';

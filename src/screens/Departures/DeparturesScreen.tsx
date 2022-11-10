@@ -5,8 +5,9 @@ import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import React from 'react';
 import {DeparturesStackProps} from './types';
-import {Departures} from '@atb/screens/Departures/components/Departures';
+import {NearbyStopPlaces} from '@atb/screens/Departures/components/NearbyStopPlaces';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 
 export type DeparturesScreenParams = {
   location: Location;
@@ -21,19 +22,26 @@ export const DeparturesScreen = ({navigation}: RootProps) => {
   const navigateToPlace = (place: Place) => {
     navigation.navigate('PlaceScreen', {
       place,
+      mode: 'Departure',
     });
   };
   const {leftButton} = useServiceDisruptionSheet();
 
   return (
-    <Departures
-      navigation={navigation}
-      fromLocation={fromLocation}
-      callerRouteName={'DeparturesScreen'}
-      onSelect={navigateToPlace}
-      title={t(DeparturesTexts.header.title)}
-      leftButton={leftButton}
-      rightButton={{type: 'chat'}}
-    />
+    <>
+      <FullScreenHeader
+        title={t(DeparturesTexts.header.title)}
+        rightButton={{type: 'chat'}}
+        leftButton={leftButton}
+        globalMessageContext="app-departures"
+      />
+      <NearbyStopPlaces
+        navigation={navigation}
+        fromLocation={fromLocation}
+        callerRouteName={'DeparturesScreen'}
+        onSelect={navigateToPlace}
+        mode={'Departure'}
+      />
+    </>
   );
 };

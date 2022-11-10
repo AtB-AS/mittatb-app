@@ -27,6 +27,11 @@ import useReducerWithSideEffects, {
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
 import {updateDeparturesWithRealtimeV2} from '../../../departure-list/utils';
+import {StopPlacesMode} from '@atb/screens/Departures/types';
+import {
+  getLimitOfDeparturesPerLineByMode,
+  getTimeRangeByMode,
+} from '@atb/screens/Departures/utils';
 
 const MAX_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
 
@@ -70,6 +75,8 @@ type DepartureDataActions =
       quay: DepartureTypes.Quay;
       startTime?: string;
       favoriteDepartures?: UserFavoriteDepartures;
+      limitPerLine?: number;
+      timeRange?: number;
     }
   | {
       type: 'LOAD_REALTIME_DATA';
@@ -89,7 +96,9 @@ type DepartureDataActions =
       showOnlyFavorites: boolean;
       quay: DepartureTypes.Quay;
       startTime?: string;
+      timeRange?: number;
       favoriteDepartures?: UserFavoriteDepartures;
+      limitPerLine?: number;
     }
   | {
       type: 'SET_ERROR';
@@ -116,6 +125,8 @@ const reducer: ReducerWithSideEffects<
         id: action.quay.id,
         numberOfDepartures: MAX_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
         startTime: action.startTime ?? new Date().toISOString(),
+        limitPerLine: action.limitPerLine,
+        timeRange: action.timeRange,
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -206,7 +217,9 @@ const reducer: ReducerWithSideEffects<
             type: 'LOAD_INITIAL_DEPARTURES',
             quay: action.quay,
             startTime: action.startTime,
+            timeRange: action.timeRange,
             favoriteDepartures: action.favoriteDepartures,
+            limitPerLine: action.limitPerLine,
           });
         },
       );
@@ -254,6 +267,7 @@ const reducer: ReducerWithSideEffects<
 export function useQuayData(
   quay: DepartureTypes.Quay,
   showOnlyFavorites: boolean,
+  mode: StopPlacesMode,
   startTime?: string,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
@@ -261,7 +275,8 @@ export function useQuayData(
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const isFocused = useIsFocused();
   const {favoriteDepartures} = useFavorites();
-
+  const timeRange = getTimeRangeByMode(mode, startTime);
+  const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
   const refresh = useCallback(
     () =>
       dispatch({
@@ -269,6 +284,8 @@ export function useQuayData(
         quay,
         startTime,
         favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
+        limitPerLine,
+        timeRange,
       }),
     [quay.id, startTime, showOnlyFavorites, favoriteDepartures],
   );
@@ -279,8 +296,10 @@ export function useQuayData(
         type: 'SET_SHOW_FAVORITES',
         quay,
         startTime,
+        timeRange,
         showOnlyFavorites,
         favoriteDepartures,
+        limitPerLine,
       }),
     [quay.id, favoriteDepartures, showOnlyFavorites],
   );
@@ -299,13 +318,13 @@ export function useQuayData(
     () => dispatch({type: 'LOAD_REALTIME_DATA', quay: quay}),
     updateFrequencyInSeconds * 1000,
     [quay.id],
-    !isFocused,
+    !isFocused || mode !== 'Departure',
   );
   useInterval(
     () => dispatch({type: 'TICK_TICK'}),
     tickRateInSeconds * 1000,
     [],
-    !isFocused,
+    !isFocused || mode !== 'Departure',
   );
 
   return {
@@ -330,6 +349,7 @@ type QueryInput = {
   numberOfDepartures: number;
   startTime: string;
   timeRange?: number;
+  limitPerLine?: number;
 };
 
 async function fetchEstimatedCalls(
@@ -337,17 +357,13 @@ async function fetchEstimatedCalls(
   quay: DepartureTypes.Quay,
   favoriteDepartures?: UserFavoriteDepartures,
 ): Promise<DepartureTypes.EstimatedCall[]> {
-  const timeRange = getSecondsUntilMidnightOrMinimum(
-    queryInput.startTime,
-    MIN_TIME_RANGE,
-  );
-
   const result = await getQuayDepartures(
     {
       id: quay.id,
       startTime: queryInput.startTime,
       numberOfDepartures: queryInput.numberOfDepartures,
-      timeRange: timeRange,
+      timeRange: queryInput.timeRange,
+      limitPerLine: queryInput.limitPerLine,
     },
     favoriteDepartures,
   );
