@@ -82,6 +82,15 @@ const DeparturesTexts = {
       'Du har ingen favorittavganger. \nTrykk “Legg til favorittavgang” for å lagre en avgang du bruker ofte.',
       'You have no favorite departures. \nPress “Add favorite departure” to save a frequently used departure.',
     ),
+    emptyResult: _(
+      'Fant ingen avganger på valgt sted.',
+      'No departures found at the specified location',
+    ),
+    resultFailed: _(
+      'Kunne ikke laste avganger.',
+      'Could not load the departures.',
+    ),
+    noData: _('Ingen informasjon', 'No data'),
   },
   button: {
     text: _('Velg favorittavganger', 'Select favourite departures'),
