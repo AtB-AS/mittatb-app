@@ -57,7 +57,7 @@ struct MediumView: View {
                 ForEach(viewModel.departures(numberOfdepartures: numberOfDepartures), id: \.self) { time in
                     DepartureTileView(date: time)
                 }
-            }
+            }.scaledToFit().minimumScaleFactor(0.1)
 
         }.padding(16)
     }

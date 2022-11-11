@@ -25,7 +25,8 @@ struct SmallView: View {
                 ForEach(viewModel.departures(numberOfdepartures: 2), id: \.self) { time in
                     DepartureTileView(date: time)
                 }
-            }
+            }.scaledToFit().minimumScaleFactor(0.1)
+
         }.padding(16)
     }
 }

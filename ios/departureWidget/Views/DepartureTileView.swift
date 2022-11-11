@@ -10,8 +10,6 @@ struct DepartureTileView: View {
             .background(Color("TimeTileBackgroundColor"))
             .cornerRadius(8)
             .lineLimit(1)
-            .scaledToFit()
-            .minimumScaleFactor(0.1)
             .bold()
     }
 }
