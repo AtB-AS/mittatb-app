@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import storage from '@atb/storage';
+import storage, {StorageModelKeysEnum} from '@atb/storage';
 
 /**
  * Show the departures onboarding if the screen is focused, it is enabled in
@@ -16,7 +16,7 @@ export const useShouldShowDeparturesOnboarding = () => {
     if (isFocused && enabled) {
       (async function () {
         const hasRead = await storage.get(
-          '@ATB_has_read_departures_v2_onboarding',
+          StorageModelKeysEnum.HasReadDeparturesV2Onboarding,
         );
         setShouldShow(hasRead ? !JSON.parse(hasRead) : true);
       })();

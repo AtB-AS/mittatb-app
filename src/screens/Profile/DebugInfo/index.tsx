@@ -9,7 +9,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
 import {useAppDispatch, useAppState} from '@atb/AppContext';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import storage, {KeyValuePair} from '@atb/storage';
+import storage, {KeyValuePair, StorageModelKeysEnum} from '@atb/storage';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
@@ -156,7 +156,7 @@ export default function DebugInfo() {
             text="Reset has read departures v2 onboarding"
             onPress={() =>
               storage.set(
-                '@ATB_has_read_departures_v2_onboarding',
+                StorageModelKeysEnum.HasReadDeparturesV2Onboarding,
                 JSON.stringify(false),
               )
             }

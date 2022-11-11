@@ -9,7 +9,7 @@ import {StaticColorByType} from '@atb/theme/colors';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {DeparturesStackProps} from '@atb/screens/Departures/types';
-import storage from '@atb/storage';
+import storage, {StorageModelKeysEnum} from '@atb/storage';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {screenReaderPause} from '@atb/components/accessible-text';
 import {DeparturesOnboarding} from '@atb/assets/svg/color/images';
@@ -56,7 +56,7 @@ export const DeparturesOnboardingScreen = ({navigation}: Props) => {
           text={t(DeparturesTexts.onboarding.button)}
           onPress={async () => {
             await storage.set(
-              '@ATB_has_read_departures_v2_onboarding',
+              StorageModelKeysEnum.HasReadDeparturesV2Onboarding,
               JSON.stringify(true),
             );
             navigation.goBack();
