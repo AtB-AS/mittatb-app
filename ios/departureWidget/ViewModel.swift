@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 import WidgetKit
 
 class ViewModel: ObservableObject {
@@ -31,6 +32,22 @@ class ViewModel: ObservableObject {
 
     var lineNumber: String? {
         lineInfo?.lineNumber
+    }
+
+    var transportModeIcon: Image {
+        if lineInfo?.transportSubmode == "regionBus" {
+            return Image("RegionBusIcon")
+        }
+        switch lineInfo?.transportMode {
+        case "water":
+            return Image("BoatIcon")
+        case "rail":
+            return Image("TrainIcon")
+        case "tram":
+            return Image("TramIcon")
+        default:
+            return Image("BusIcon")
+        }
     }
 
     /// Returns the relevant departure times of the current departure

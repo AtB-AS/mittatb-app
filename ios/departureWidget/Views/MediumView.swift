@@ -43,7 +43,7 @@ struct MediumView: View {
 
             if let lineNumber = viewModel.lineNumber, let lineName = viewModel.lineName {
                 HStack {
-                    Image("BusIcon").resizable().frame(width: 20, height: 20)
+                    viewModel.transportModeIcon.resizable().frame(width: 20, height: 20)
 
                     Text("\(lineNumber) \(lineName)")
                         .lineLimit(1)
@@ -53,11 +53,8 @@ struct MediumView: View {
                 }
             }
             Spacer()
-            HStack {
-                ForEach(viewModel.departures(numberOfdepartures: numberOfDepartures), id: \.self) { time in
-                    DepartureTileView(date: time)
-                }
-            }.scaledToFit().minimumScaleFactor(0.1)
+
+            DepartureTilesView(departures: viewModel.departures(numberOfdepartures: numberOfDepartures))
 
         }.padding(16)
     }

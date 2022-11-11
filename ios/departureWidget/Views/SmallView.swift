@@ -21,11 +21,7 @@ struct SmallView: View {
             }
             Spacer()
 
-            HStack {
-                ForEach(viewModel.departures(numberOfdepartures: 2), id: \.self) { time in
-                    DepartureTileView(date: time)
-                }
-            }.scaledToFit().minimumScaleFactor(0.1)
+            DepartureTilesView(departures: viewModel.departures(numberOfdepartures: 2))
 
         }.padding(16)
     }
