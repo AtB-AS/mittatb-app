@@ -43,7 +43,12 @@ struct MediumView: View {
 
             if let lineNumber = viewModel.lineNumber, let lineName = viewModel.lineName {
                 HStack {
-                    viewModel.transportModeIcon.resizable().frame(width: 20, height: 20)
+                    viewModel.transportModeIcon
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                    // For better placeholder
+                    .background(Color("TransportCity"))
+                    .cornerRadius(2)
 
                     Text("\(lineNumber) \(lineName)")
                         .lineLimit(1)
