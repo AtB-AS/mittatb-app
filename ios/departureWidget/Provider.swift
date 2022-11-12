@@ -6,7 +6,7 @@ import WidgetKit
 struct Provider: TimelineProvider {
     private enum K {
         static var dummyEntry: Entry { Entry(date: Date.now, quayGroup: QuayGroup.dummy) }
-        static let oneEntryTimeline = Timeline<Entry>(entries: [Entry(date: Date.now, quayGroup: nil)], policy: .after(Date.now.addingTimeInterval(5*60)))
+        static let oneEntryTimeline = Timeline<Entry>(entries: [Entry(date: Date.now, quayGroup: nil)], policy: .after(Date.now.addingTimeInterval(5 * 60)))
     }
 
     let locationManager = LocationManager()
@@ -40,11 +40,13 @@ struct Provider: TimelineProvider {
                 // This also relies on that location change asks for a new timeline, and not just rerenders
                 // TODO: Get new timeline if position changes
                 var entries = firstQuayGroup.departures.map { departure in Entry(date: departure.aimedTime, quayGroup: quayGroup) }
-                
+
                 entries.insert(Entry(date: Date.now, quayGroup: quayGroup), at: 0)
 
                 // Remove last entries so that the viewmodel always has enough quays to show.
-                entries.removeLast(5)
+                if entries.count > 10 {
+                    entries.removeLast(5)
+                }
 
                 return completion(Timeline(entries: entries, policy: .atEnd))
             case .failure:

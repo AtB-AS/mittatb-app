@@ -11,11 +11,18 @@ class ViewModel: ObservableObject {
     }
 
     private let quayGroup: QuayGroup?
-    private let date: Date
+    private let entryDate: Date
+    private var calendar: Calendar
+    private var locale: Locale
 
     init(quayGroup: QuayGroup?, date: Date) {
         self.quayGroup = quayGroup
-        self.date = date
+        entryDate = date
+
+        let prefLanguage = Locale.preferredLanguages[0]
+        calendar = Calendar(identifier: .gregorian)
+        locale = NSLocale(localeIdentifier: prefLanguage) as Locale
+        calendar.locale = locale
     }
 
     var quayName: String? {
@@ -35,7 +42,7 @@ class ViewModel: ObservableObject {
     }
 
     var transportModeIcon: Image {
-        if lineInfo?.transportSubmode == "regionBus" {
+        if lineInfo?.transportSubmode == "regionBus" || lineInfo?.transportSubmode == "nightBus" {
             return Image("RegionBusIcon")
         }
         switch lineInfo?.transportMode {
@@ -50,19 +57,43 @@ class ViewModel: ObservableObject {
         }
     }
 
+    func departureStrings(n: Int) -> [String] {
+        var strings: [String] = []
+        for departure in departures(numberOfDepartures: n) {
+            strings.append(dateText(date: departure))
+        }
+        return strings
+    }
+
+    func dateText(date: Date) -> String {
+        if gapInDaysFromNow(date: date) > 0 {
+            let dayIndex = Calendar.current.component(.weekday, from: date)
+            let weekDay = calendar.weekdaySymbols[dayIndex - 1]
+            return String("\(weekDay.prefix(2))." + date.formatted(.dateTime.locale(locale).hour().minute()))
+        } else {
+            return String(date.formatted(.dateTime.locale(locale).hour().minute()))
+        }
+    }
+
+    func gapInDaysFromNow(date: Date) -> Int {
+        guard let gap = Calendar.current.dateComponents([.day], from: entryDate, to: date).day else {
+            return 0
+        }
+        return gap
+    }
+
     /// Returns the relevant departure times of the current departure
-    func departures(numberOfdepartures: Int) -> [Date] {
+    func departures(numberOfDepartures: Int) -> [Date] {
         var times: [Date] = []
         let departures: [DepartureTime] = quayGroup?.group[0].departures ?? []
         var count = 0
 
         for departure in departures {
-            if count < numberOfdepartures, departure.aimedTime > date {
+            if count < numberOfDepartures, departure.aimedTime > entryDate {
                 times.append(departure.aimedTime)
                 count += 1
             }
         }
-
         return times
     }
 }

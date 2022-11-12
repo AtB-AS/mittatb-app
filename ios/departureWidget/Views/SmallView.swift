@@ -21,7 +21,7 @@ struct SmallView: View {
             }
             Spacer()
 
-            DepartureTilesView(departures: viewModel.departures(numberOfdepartures: 2))
+            DepartureTilesView(departureStrings: viewModel.departureStrings(n: 2))
 
         }.padding(16)
     }

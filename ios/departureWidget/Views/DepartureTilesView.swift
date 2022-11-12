@@ -2,12 +2,12 @@ import Foundation
 import SwiftUI
 
 struct DepartureTilesView: View {
-    let departures: [Date]
+    var departureStrings: [String]
 
     var body: some View {
         HStack {
-            ForEach(departures, id: \.self) { time in
-                Text(time.formatted(.dateTime.locale(Locale(identifier: "en_UK")).hour().minute()))
+            ForEach(departureStrings, id: \.self) { string in
+                Text(string)
                     .padding(8)
                     .background(Color("TimeTileBackgroundColor"))
                     .cornerRadius(8)
