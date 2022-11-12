@@ -40,6 +40,8 @@ struct Provider: TimelineProvider {
                 // This also relies on that location change asks for a new timeline, and not just rerenders
                 // TODO: Get new timeline if position changes
                 var entries = firstQuayGroup.departures.map { departure in Entry(date: departure.aimedTime, quayGroup: quayGroup) }
+                
+                entries.insert(Entry(date: Date.now, quayGroup: quayGroup), at: 0)
 
                 // Remove last entries so that the viewmodel always has enough quays to show.
                 entries.removeLast(5)
