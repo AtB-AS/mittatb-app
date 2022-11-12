@@ -6,7 +6,7 @@ import WidgetKit
 struct Provider: TimelineProvider {
     private enum K {
         static var dummyEntry: Entry { Entry(date: Date.now, quayGroup: QuayGroup.dummy) }
-        static let emptyTimeline = Timeline<Entry>(entries: [], policy: .atEnd)
+        static let oneEntryTimeline = Timeline<Entry>(entries: [Entry(date: Date.now, quayGroup: nil)], policy: .after(Date.now.addingTimeInterval(5*60)))
     }
 
     let locationManager = LocationManager()
@@ -24,7 +24,7 @@ struct Provider: TimelineProvider {
 
     func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
         guard let favoriteDepartures = Manifest.data?.favoriteDepartures, let closestDeparture = findClosestDeparture(favoriteDepartures) else {
-            return completion(K.emptyTimeline)
+            return completion(K.oneEntryTimeline)
         }
 
         // Fetch departure data for the closest favorite
@@ -32,7 +32,7 @@ struct Provider: TimelineProvider {
             switch result {
             case let .success(quayGroup):
                 guard let firstQuayGroup = quayGroup.group.first else {
-                    return completion(K.emptyTimeline)
+                    return completion(K.oneEntryTimeline)
                 }
 
                 // Rerenders widget when a departure has passed, by giving IOS more information about future
@@ -46,7 +46,7 @@ struct Provider: TimelineProvider {
 
                 return completion(Timeline(entries: entries, policy: .atEnd))
             case .failure:
-                return completion(K.emptyTimeline)
+                return completion(K.oneEntryTimeline)
             }
         }
     }
