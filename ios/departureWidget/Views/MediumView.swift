@@ -59,7 +59,7 @@ struct MediumView: View {
             }
             Spacer()
 
-            DepartureTilesView(departureStrings: viewModel.departureStrings(n: 5))
+            DepartureTilesView(departureStrings: viewModel.departureStrings(n: numberOfDepartures))
 
         }.padding(16)
     }
