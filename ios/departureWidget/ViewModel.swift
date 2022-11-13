@@ -14,6 +14,7 @@ class ViewModel: ObservableObject {
     private let entryDate: Date
     private var calendar: Calendar
     private var locale: Locale
+    private var hasDeparturesNextDay: Bool = false
 
     init(quayGroup: QuayGroup?, date: Date) {
         self.quayGroup = quayGroup
@@ -67,6 +68,7 @@ class ViewModel: ObservableObject {
 
     func dateText(date: Date) -> String {
         if gapInDaysFromNow(date: date) > 0 {
+            hasDeparturesNextDay = true
             let dayIndex = Calendar.current.component(.weekday, from: date)
             let weekDay = calendar.weekdaySymbols[dayIndex - 1]
             return String("\(weekDay.prefix(2))." + date.formatted(.dateTime.locale(locale).hour().minute()))
@@ -76,7 +78,7 @@ class ViewModel: ObservableObject {
     }
 
     func gapInDaysFromNow(date: Date) -> Int {
-        guard let gap = Calendar.current.dateComponents([.day], from: entryDate, to: date).day else {
+        guard let gap = Calendar.current.dateComponents([.day], from: Date.now, to: date).day else {
             return 0
         }
         return gap
@@ -84,12 +86,15 @@ class ViewModel: ObservableObject {
 
     /// Returns the relevant departure times of the current departure
     func departures(numberOfDepartures: Int) -> [Date] {
+        var n = numberOfDepartures
+        if hasDeparturesNextDay { n = n - 1 }
+
         var times: [Date] = []
         let departures: [DepartureTime] = quayGroup?.group[0].departures ?? []
         var count = 0
 
         for departure in departures {
-            if count < numberOfDepartures, departure.aimedTime > entryDate {
+            if count < n, departure.aimedTime > entryDate {
                 times.append(departure.aimedTime)
                 count += 1
             }

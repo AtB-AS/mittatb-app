@@ -101,8 +101,6 @@ extension FavoriteDeparture {
 }
 
 extension QuayGroup {
-    // Creating a distant future date since the preview page only loads these dates once, which creates the issue of the dates passing if using Date.now
-    static let distantFutureDate = Calendar.current.date(from: DateComponents(year: 2100, day: 1, hour: 11, minute: 5))!
     static let dummy: QuayGroup = .init(
         quay:
         QuayInfo(
@@ -127,48 +125,48 @@ extension QuayGroup {
                 ),
                 departures: [
                     DepartureTime(
-                        time: distantFutureDate,
-                        aimedTime: distantFutureDate,
+                        time: Date.now,
+                        aimedTime: Date.now,
                         predictionInaccurate: false,
                         realtime: false,
                         situations: [],
                         serviceJourneyId: ""
                     ),
                     DepartureTime(
-                        time: distantFutureDate.addingTimeInterval(6 * 100),
-                        aimedTime: distantFutureDate.addingTimeInterval(6 * 100),
+                        time: Date.now.addingTimeInterval(6 * 100),
+                        aimedTime: Date.now.addingTimeInterval(6 * 100),
                         predictionInaccurate: false,
                         realtime: false,
                         situations: [],
                         serviceJourneyId: ""
                     ),
                     DepartureTime(
-                        time: distantFutureDate.addingTimeInterval(12 * 100),
-                        aimedTime: distantFutureDate.addingTimeInterval(12 * 100),
+                        time: Date.now.addingTimeInterval(12 * 100),
+                        aimedTime: Date.now.addingTimeInterval(12 * 100),
                         predictionInaccurate: false,
                         realtime: false,
                         situations: [],
                         serviceJourneyId: ""
                     ),
                     DepartureTime(
-                        time: distantFutureDate.addingTimeInterval(18 * 100),
-                        aimedTime: distantFutureDate.addingTimeInterval(18 * 100),
+                        time: Date.now.addingTimeInterval(18 * 100),
+                        aimedTime: Date.now.addingTimeInterval(18 * 100),
                         predictionInaccurate: false,
                         realtime: false,
                         situations: [],
                         serviceJourneyId: ""
                     ),
                     DepartureTime(
-                        time: distantFutureDate.addingTimeInterval(24 * 100),
-                        aimedTime: distantFutureDate.addingTimeInterval(24 * 100),
+                        time: Date.now.addingTimeInterval(24 * 100),
+                        aimedTime: Date.now.addingTimeInterval(24 * 100),
                         predictionInaccurate: false,
                         realtime: false,
                         situations: [],
                         serviceJourneyId: ""
                     ),
                     DepartureTime(
-                        time: distantFutureDate.addingTimeInterval(30 * 100),
-                        aimedTime: distantFutureDate.addingTimeInterval(30 * 100),
+                        time: Date.now.addingTimeInterval(30 * 100),
+                        aimedTime: Date.now.addingTimeInterval(30 * 100),
                         predictionInaccurate: false,
                         realtime: false,
                         situations: [],
