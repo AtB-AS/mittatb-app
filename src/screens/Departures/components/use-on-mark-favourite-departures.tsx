@@ -1,7 +1,7 @@
 import {useFavorites} from '@atb/favorites';
 import {AccessibilityInfo} from 'react-native';
 import {NearbyTexts, useTranslation} from '@atb/translations';
-import {Place, Quay} from '@atb/api/types/departures';
+import {StopPlace, Quay} from '@atb/api/types/departures';
 import FavoriteDialogSheet from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import React, {useRef} from 'react';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
@@ -19,7 +19,7 @@ type FavouriteDepartureLine = {
 export function useOnMarkFavouriteDepartures(
   line: FavouriteDepartureLine,
   quay: Quay,
-  stop: Place,
+  stopPlace: StopPlace,
 ) {
   const {addFavoriteDeparture, removeFavoriteDeparture, getFavoriteDeparture} =
     useFavorites();
@@ -40,7 +40,7 @@ export function useOnMarkFavouriteDepartures(
         quayName: quay.name,
         quayPublicCode: quay.publicCode,
         quayId: quay.id,
-        stopId: stop.id,
+        stopId: stopPlace.id,
       }));
     AccessibilityInfo.announceForAccessibility(
       t(NearbyTexts.results.lines.favorite.message.saved),
@@ -50,7 +50,7 @@ export function useOnMarkFavouriteDepartures(
   const existingFavorite = getFavoriteDeparture({
     lineName: line.lineName,
     lineId: line.id,
-    stopId: stop.id,
+    stopId: stopPlace.id,
     quayId: quay.id,
   });
 
@@ -58,13 +58,13 @@ export function useOnMarkFavouriteDepartures(
     ? t(
         NearbyTexts.results.lines.favorite.removeFavorite(
           `${line.lineNumber} ${existingFavorite.lineName ?? ''}`,
-          stop.name,
+          stopPlace.name,
         ),
       )
     : t(
         NearbyTexts.results.lines.favorite.addFavorite(
           `${line.lineNumber} ${line.lineName}`,
-          stop.name,
+          stopPlace.name,
         ),
       );
 

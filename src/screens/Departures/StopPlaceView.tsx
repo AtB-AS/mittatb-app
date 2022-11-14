@@ -1,4 +1,4 @@
-import {Place, Quay} from '@atb/api/types/departures';
+import {StopPlace, Quay} from '@atb/api/types/departures';
 import Feedback from '@atb/components/feedback';
 import {useFavorites} from '@atb/favorites';
 import {UserFavoriteDepartures} from '@atb/favorites/types';
@@ -21,7 +21,7 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import {useTranslation} from '@atb/translations';
 
 type StopPlaceViewProps = {
-  stopPlace: Place;
+  stopPlace: StopPlace;
   showTimeNavigation?: boolean;
   navigateToQuay: (quay: Quay) => void;
   navigateToDetails?: (

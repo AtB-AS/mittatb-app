@@ -1,6 +1,6 @@
 import {getRealtimeDepartureV2} from '@atb/api/departures';
 import {getStopPlaceDepartures} from '@atb/api/departures/stops-nearest';
-import {EstimatedCall, Place as StopPlace} from '@atb/api/types/departures';
+import {EstimatedCall, StopPlace} from '@atb/api/types/departures';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavorites} from '@atb/favorites';
 import {UserFavoriteDepartures} from '@atb/favorites/types';

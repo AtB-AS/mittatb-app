@@ -18,7 +18,7 @@ import {
 } from '@atb/utils/date';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
-import {EstimatedCall, Place, Quay} from '@atb/api/types/departures';
+import {EstimatedCall, StopPlace, Quay} from '@atb/api/types/departures';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import useFontScale from '@atb/utils/use-font-scale';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -34,7 +34,7 @@ type EstimatedCallItemProps = {
   departure: EstimatedCall;
   testID: string;
   quay: Quay;
-  stopPlace: Place;
+  stopPlace: StopPlace;
   navigateToDetails?: (
     serviceJourneyId: string,
     serviceDate: string,

@@ -6,30 +6,30 @@ import ThemeText from '@atb/components/text';
 import * as Sections from '@atb/components/sections';
 import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
-import {Place, StopPlacePosition} from '@atb/api/types/departures';
+import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {StyleSheet} from '@atb/theme';
 
 type StopPlaceItemProps = {
-  stopPlacePosition: StopPlacePosition;
-  onPress: (place: Place) => void;
+  stopPlaceNode: NearestStopPlaceNode;
+  onPress: (place: StopPlace) => void;
   testID: string;
 };
 
 export default function StopPlaceItem({
-  stopPlacePosition,
+  stopPlaceNode,
   onPress,
   testID,
 }: StopPlaceItemProps): JSX.Element {
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const place = stopPlacePosition.node?.place;
+  const place = stopPlaceNode.place;
   if (!place) return <></>;
 
   const description =
     place.description || t(DeparturesTexts.stopPlaceList.stopPlace);
-  const distance = stopPlacePosition.node?.distance?.toFixed(0);
+  const distance = stopPlaceNode.distance?.toFixed(0);
 
   return (
     <Sections.Section withPadding>

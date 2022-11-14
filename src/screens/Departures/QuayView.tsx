@@ -1,4 +1,4 @@
-import {Place, Quay} from '@atb/api/types/departures';
+import {StopPlace, Quay} from '@atb/api/types/departures';
 import {useFavorites} from '@atb/favorites';
 import {
   getLimitOfDeparturesPerLineByMode,
@@ -35,7 +35,7 @@ export type QuayViewProps = {
   showOnlyFavorites: boolean;
   setShowOnlyFavorites: (enabled: boolean) => void;
   testID?: string;
-  stopPlace: Place;
+  stopPlace: StopPlace;
   mode: StopPlacesMode;
 };
 

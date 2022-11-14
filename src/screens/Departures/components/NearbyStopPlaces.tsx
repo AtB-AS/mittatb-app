@@ -1,5 +1,4 @@
-import {Place, StopPlacePosition} from '@atb/api/types/departures';
-import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlacesQuery';
+import {StopPlace, NearestStopPlaceNode} from '@atb/api/types/departures';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
@@ -29,7 +28,7 @@ export const NearbyStopPlaces = ({
   navigation: NavigationProp<any>;
   fromLocation: Location | undefined;
   callerRouteName: string;
-  onSelect: (place: Place) => void;
+  onSelect: (place: StopPlace) => void;
   mode: StopPlacesMode;
 }) => {
   const {status, location, locationEnabled, requestPermission} =
@@ -245,24 +244,19 @@ const Header = React.memo(function Header({
 });
 
 function sortAndFilterStopPlaces(
-  data: NearestStopPlacesQuery | null,
-): StopPlacePosition[] {
-  const edges = data?.nearest?.edges;
-  if (!edges) return [];
+  data?: NearestStopPlaceNode[],
+): NearestStopPlaceNode[] {
+  if (!data) return [];
 
   // Sort StopPlaces on distance from search location
-  const sortedEdges = edges?.sort((edgeA, edgeB) => {
-    if (edgeA.node?.distance === undefined) return 1;
-    if (edgeB.node?.distance === undefined) return -1;
-    return edgeA.node?.distance > edgeB.node?.distance ? 1 : -1;
+  const sortedNodes = data?.sort((n1, n2) => {
+    if (n1.distance === undefined) return 1;
+    if (n2.distance === undefined) return -1;
+    return n1.distance > n2.distance ? 1 : -1;
   });
 
   // Remove all StopPlaces without Quays
-  const filteredEdges = sortedEdges.filter(
-    (place: StopPlacePosition) => place.node?.place?.quays?.length,
-  );
-
-  return filteredEdges;
+  return sortedNodes.filter((n) => n.place?.quays?.length);
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

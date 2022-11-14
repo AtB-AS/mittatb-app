@@ -1,4 +1,4 @@
-import {Place, Quay} from '@atb/api/types/departures';
+import {StopPlace, Quay} from '@atb/api/types/departures';
 import Button from '@atb/components/button';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {SearchTime} from '@atb/screens/Departures/utils';
@@ -15,7 +15,7 @@ import {DeparturesStackProps, StopPlacesMode} from './types';
 import {StopPlaceAndQuaySelection} from '@atb/screens/Departures/components/StopPlaceAndQuaySelection';
 
 export type PlaceScreenParams = {
-  place: Place;
+  place: StopPlace;
   selectedQuay?: Quay;
   showOnlyFavoritesByDefault?: boolean;
   mode: StopPlacesMode;

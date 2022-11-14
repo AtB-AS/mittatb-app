@@ -1,35 +1,27 @@
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 
 export type NearestStopPlacesQuery = {
-  nearest?: Types.Maybe<{
-    pageInfo: {endCursor?: Types.Maybe<string>; hasNextPage: boolean};
-    edges?: Types.Maybe<
-      Array<
-        Types.Maybe<{
-          node?: Types.Maybe<{
-            distance?: Types.Maybe<number>;
-            place?: Types.Maybe<{
+  nearest?: {
+    pageInfo: {endCursor?: string; hasNextPage: boolean};
+    edges?: Array<{
+      node?: {
+        distance?: number;
+        place?:
+          | {
               name: string;
-              transportMode?: Types.Maybe<
-                Array<Types.Maybe<Types.TransportMode>>
-              >;
-              description?: Types.Maybe<string>;
+              transportMode?: Array<Types.TransportMode>;
+              description?: string;
               id: string;
-              quays?: Types.Maybe<
-                Array<
-                  Types.Maybe<{
-                    id: string;
-                    description?: Types.Maybe<string>;
-                    name: string;
-                    publicCode?: Types.Maybe<string>;
-                    stopPlace?: Types.Maybe<{id: string}>;
-                  }>
-                >
-              >;
-            }>;
-          }>;
-        }>
-      >
-    >;
-  }>;
+              quays?: Array<{
+                id: string;
+                description?: string;
+                name: string;
+                publicCode?: string;
+                stopPlace?: {id: string};
+              }>;
+            }
+          | {};
+      };
+    }>;
+  };
 };

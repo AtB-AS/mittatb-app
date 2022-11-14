@@ -7,7 +7,7 @@ import {ScreenHeaderWithoutNavigation} from '../../screen-header';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import StopPlaceView from '@atb/screens/Departures/StopPlaceView';
 import {SearchTime} from '@atb/screens/Departures/utils';
-import {Place, Quay} from '@atb/api/types/departures';
+import {StopPlace, Quay} from '@atb/api/types/departures';
 import ThemeText from '../../text';
 import MessageBox from '@atb/components/message-box';
 import {Feature, Point} from 'geojson';
@@ -22,7 +22,7 @@ import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesD
 type DeparturesDialogSheetProps = {
   close: () => void;
   stopPlaceFeature: Feature<Point>;
-  navigateToQuay: (place: Place, quay: Quay) => void;
+  navigateToQuay: (stopPlace: StopPlace, quay: Quay) => void;
   navigateToDetails: (
     serviceJourneyId: string,
     serviceDate: string,
