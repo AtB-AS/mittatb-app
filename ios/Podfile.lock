@@ -885,7 +885,7 @@ PODS:
     - Libuv-gRPC (= 0.0.10)
   - gRPC-Core/Interface (1.44.0)
   - GTMSessionFetcher/Core (2.1.0)
-  - hermes-engine (0.70.1)
+  - hermes-engine (0.70.5)
   - Intercom (10.4.0)
   - Kronos (4.2.1)
   - leveldb-library (1.22.1)
@@ -1636,7 +1636,7 @@ SPEC CHECKSUMS:
   "gRPC-C++": 9675f953ace2b3de7c506039d77be1f2e77a8db2
   gRPC-Core: 943e491cb0d45598b0b0eb9e910c88080369290b
   GTMSessionFetcher: ffbb25ec00ebcb5201adab0a56d808f6f1902d9f
-  hermes-engine: 9cd393f741bfa14d1d0cd90cc373e3619c0bc7ea
+  hermes-engine: 7fe5fc6ef707b7fdcb161b63898ec500e285653d
   Intercom: fc68809088ec0b2452c441eae6f6466d5b906518
   Kronos: 0ca73a1c00dc9a49a0bab4a6ed42f282562a7058
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
