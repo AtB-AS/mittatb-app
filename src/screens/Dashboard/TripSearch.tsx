@@ -219,11 +219,10 @@ const TripSearch: React.FC<RootProps> = ({
         leftButton={{
           type: 'back',
           onPress: () => {
-            navigation.setParams({
-              callerRouteName: undefined,
-            });
-
             if (callerRouteName) {
+              navigation.setParams({
+                callerRouteName: undefined,
+              });
               return navigation.navigate({
                 name: callerRouteName as any,
                 params: {},
