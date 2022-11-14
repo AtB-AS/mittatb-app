@@ -63,8 +63,11 @@ const ConsequencesScreen = ({route, navigation}: ConsequencesProps) => {
           ? {
               screen: 'TabNavigator',
               params: {
-                screen: 'Assistant',
-                params: {},
+                screen: 'Dashboard',
+                params: {
+                  screen: 'DashboardRoot',
+                  params: {},
+                },
               },
             }
           : {

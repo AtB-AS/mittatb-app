@@ -56,6 +56,10 @@ export const useUpdateBottomSheetWhenSelectedStopPlaceChanges = (
                 closeBottomSheet();
                 mapProps.navigateToQuay(...params);
               }}
+              navigateToTripSearch={(...params) => {
+                closeBottomSheet();
+                mapProps.navigateToTripSearch(...params);
+              }}
             />
           ),
           undefined,
