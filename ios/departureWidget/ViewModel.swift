@@ -14,7 +14,7 @@ class ViewModel: ObservableObject {
     private let entryDate: Date
     private var calendar: Calendar
     private var locale: Locale
-    private var hasDeparturesNextDay: Bool = false
+    private var numberOfDeparturesNextDay: Int = 0
 
     init(quayGroup: QuayGroup?, date: Date) {
         self.quayGroup = quayGroup
@@ -60,15 +60,24 @@ class ViewModel: ObservableObject {
 
     func departureStrings(n: Int) -> [String] {
         var strings: [String] = []
+      
         for departure in departures(numberOfDepartures: n) {
             strings.append(dateText(date: departure))
         }
+        
+        //Making space for the extra text that comes with showing day
+        if numberOfDeparturesNextDay == 1 {
+            strings.removeLast()
+        } else if numberOfDeparturesNextDay >= 2 {
+            strings.removeLast(2)
+        }
+
         return strings
     }
 
     func dateText(date: Date) -> String {
-        if gapInDaysFromNow(date: date) > 0 {
-            hasDeparturesNextDay = true
+        if !Calendar.current.isDate(date, inSameDayAs: Date.now) {
+            numberOfDeparturesNextDay += 1
             let dayIndex = Calendar.current.component(.weekday, from: date)
             let weekDay = calendar.weekdaySymbols[dayIndex - 1]
             return String("\(weekDay.prefix(2))." + date.formatted(.dateTime.locale(locale).hour().minute()))
@@ -86,15 +95,12 @@ class ViewModel: ObservableObject {
 
     /// Returns the relevant departure times of the current departure
     func departures(numberOfDepartures: Int) -> [Date] {
-        var n = numberOfDepartures
-        if hasDeparturesNextDay { n = n - 1 }
-
         var times: [Date] = []
         let departures: [DepartureTime] = quayGroup?.group[0].departures ?? []
         var count = 0
 
         for departure in departures {
-            if count < n, departure.aimedTime > entryDate {
+            if count < numberOfDepartures, departure.aimedTime > entryDate {
                 times.append(departure.aimedTime)
                 count += 1
             }
