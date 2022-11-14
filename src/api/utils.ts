@@ -10,10 +10,11 @@ export type ErrorType =
 
 export const getAxiosErrorType = (
   error: AxiosError | Cancel | unknown,
+  didTimeOut: boolean = false,
 ): ErrorType => {
   if (error) {
     if (axios.isCancel(error)) {
-      return 'cancel';
+      return didTimeOut ? 'timeout' : 'cancel';
     }
     if (axios.isAxiosError(error)) {
       if (error.response) {

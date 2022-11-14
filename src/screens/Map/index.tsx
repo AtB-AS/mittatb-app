@@ -16,6 +16,9 @@ import QuayDepartures, {
 } from '../TripDetails/QuayDepartures';
 import TripDetails from '../TripDetails';
 import {DetailsStackParams} from '../TripDetails/types';
+import {TabNavigatorScreenProps} from '@atb/navigation/types';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {DashboardScreenProps} from '../Dashboard/types';
 
 export type MapStackNavigatorParams = {
   MapScreen: undefined;
@@ -26,8 +29,15 @@ export type MapStackNavigatorParams = {
   TripDetails: DetailsStackParams;
 };
 
+type RootMapScreenProps = TabNavigatorScreenProps<'MapScreen'>;
 export type MapScreenProps<T extends keyof MapStackNavigatorParams> =
-  StackScreenProps<MapStackNavigatorParams, T>;
+  CompositeScreenProps<
+    CompositeScreenProps<
+      StackScreenProps<MapStackNavigatorParams, T>,
+      RootMapScreenProps
+    >,
+    DashboardScreenProps<'TripSearch'>
+  >;
 
 const Stack = createStackNavigator<MapStackNavigatorParams>();
 

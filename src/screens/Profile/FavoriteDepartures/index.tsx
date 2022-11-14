@@ -92,6 +92,7 @@ export default function FavoriteDeparturesScreen({navigation}: Props) {
             onPress={() => {
               navigation.navigate(nearbyStopPlaceScreenName as any, {
                 location: undefined,
+                onCloseRoute: route.name,
               });
             }}
             testID="chooseLoginPhone"

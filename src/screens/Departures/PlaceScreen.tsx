@@ -19,13 +19,20 @@ export type PlaceScreenParams = {
   selectedQuay?: Quay;
   showOnlyFavoritesByDefault?: boolean;
   mode: StopPlacesMode;
+  onCloseRoute?: string;
 };
 export type PlaceScreenProps = DeparturesStackProps<'PlaceScreen'>;
 
 export default function PlaceScreen({
   navigation,
   route: {
-    params: {place, selectedQuay, showOnlyFavoritesByDefault, mode},
+    params: {
+      place,
+      selectedQuay,
+      showOnlyFavoritesByDefault,
+      mode,
+      onCloseRoute,
+    },
   },
 }: PlaceScreenProps) {
   const styles = useStyles();
@@ -68,7 +75,15 @@ export default function PlaceScreen({
     });
   };
   const navigateToQuay = (quay: Quay) => {
-    navigation.setParams({selectedQuay: quay});
+    if (mode === 'Favourite') {
+      navigation.push('PlaceScreen', {
+        selectedQuay: quay,
+        mode: mode,
+        place: place,
+      });
+    } else {
+      navigation.setParams({selectedQuay: quay});
+    }
   };
   const isFocused = useIsFocused();
 
@@ -122,7 +137,11 @@ export default function PlaceScreen({
           <Button
             interactiveColor="interactive_0"
             text={t(DeparturesTexts.closeButton.label)}
-            onPress={() => navigation.popToTop()}
+            onPress={() =>
+              onCloseRoute
+                ? navigation.navigate(onCloseRoute as any)
+                : navigation.popToTop()
+            }
             testID="confirmButton"
           />
         </View>

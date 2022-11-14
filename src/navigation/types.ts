@@ -1,4 +1,3 @@
-import {Location} from '@atb/favorites/types';
 import {LocationSearchStackParams} from '@atb/location-search';
 import {LoginInAppStackParams} from '@atb/login/types';
 import {NearbyStackParams} from '@atb/screens/Nearby/types';
@@ -18,6 +17,7 @@ import {
   NavigatorScreenParams,
 } from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
+import {DashboardParams} from '@atb/screens/Dashboard/types';
 
 export type RootStackParamList = {
   NotFound: undefined;
@@ -41,10 +41,7 @@ export type RootStackScreenProps<T extends keyof RootStackParamList> =
   StackScreenProps<RootStackParamList, T>;
 
 export type TabNavigatorParams = {
-  Assistant: {
-    fromLocation?: Location;
-    toLocation?: Location;
-  };
+  Dashboard: NavigatorScreenParams<DashboardParams>;
   Nearest: NavigatorScreenParams<NearbyStackParams>;
   Ticketing: NavigatorScreenParams<TicketingTabsNavigatorParams>;
   Profile: NavigatorScreenParams<ProfileStackParams>;

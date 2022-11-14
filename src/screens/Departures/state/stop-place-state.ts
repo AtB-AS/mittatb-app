@@ -23,6 +23,8 @@ import {
   getLimitOfDeparturesPerLineByMode,
   getTimeRangeByMode,
 } from '@atb/screens/Departures/utils';
+import {TimeoutRequest, useTimeoutRequest} from '@atb/api/client';
+import {AxiosRequestConfig} from 'axios';
 
 export const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 
@@ -72,6 +74,7 @@ type DepartureDataActions =
       timeRange?: number;
       favoriteDepartures?: UserFavoriteDepartures;
       limitPerLine?: number;
+      timeOut: TimeoutRequest;
     }
   | {
       type: 'LOAD_REALTIME_DATA';
@@ -94,6 +97,7 @@ type DepartureDataActions =
       timeRange?: number;
       favoriteDepartures?: UserFavoriteDepartures;
       limitPerLine?: number;
+      timeOut: TimeoutRequest;
     }
   | {
       type: 'SET_ERROR';
@@ -136,12 +140,16 @@ const reducer: ReducerWithSideEffects<
         },
         async (state, dispatch) => {
           try {
+            action.timeOut.start();
             const result = await fetchEstimatedCalls(
               queryInput,
               action.stopPlace,
               state.showOnlyFavorites ? action.favoriteDepartures : undefined,
+              {
+                signal: action.timeOut.signal,
+              },
             );
-
+            action.timeOut.clear();
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
@@ -152,7 +160,7 @@ const reducer: ReducerWithSideEffects<
             dispatch({
               type: 'SET_ERROR',
               reset: action.stopPlace.id !== state.locationId,
-              error: getAxiosErrorType(e),
+              error: getAxiosErrorType(e, action.timeOut.didTimeout),
             });
           } finally {
             dispatch({type: 'STOP_LOADER'});
@@ -215,6 +223,7 @@ const reducer: ReducerWithSideEffects<
             timeRange: action.timeRange,
             favoriteDepartures: action.favoriteDepartures,
             limitPerLine: action.limitPerLine,
+            timeOut: action.timeOut,
           });
         },
       );
@@ -270,18 +279,23 @@ export function useStopPlaceData(
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const {favoriteDepartures} = useFavorites();
+  const timeout = useTimeoutRequest();
   const timeRange = getTimeRangeByMode(mode, startTime);
   const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
+
+  const loadDepartures = () => {
+    dispatch({
+      type: 'LOAD_INITIAL_DEPARTURES',
+      stopPlace,
+      startTime,
+      timeRange,
+      limitPerLine,
+      favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
+      timeOut: timeout,
+    });
+  };
   const refresh = useCallback(
-    () =>
-      dispatch({
-        type: 'LOAD_INITIAL_DEPARTURES',
-        stopPlace,
-        startTime,
-        timeRange,
-        limitPerLine,
-        favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
-      }),
+    () => loadDepartures(),
     [stopPlace.id, startTime, showOnlyFavorites, favoriteDepartures],
   );
 
@@ -295,10 +309,15 @@ export function useStopPlaceData(
         showOnlyFavorites,
         favoriteDepartures,
         limitPerLine,
+        timeOut: timeout,
       }),
     [stopPlace.id, favoriteDepartures, showOnlyFavorites],
   );
-  useEffect(refresh, [stopPlace.id, startTime]);
+  useEffect(() => {
+    refresh();
+
+    return () => timeout.abort();
+  }, [stopPlace.id, startTime]);
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -325,6 +344,7 @@ export function useStopPlaceData(
   return {
     state,
     refresh,
+    forceRefresh: loadDepartures,
   };
 }
 
@@ -339,6 +359,7 @@ async function fetchEstimatedCalls(
   queryInput: QueryInput,
   stopPlace: StopPlace,
   favoriteDepartures?: UserFavoriteDepartures,
+  opts?: AxiosRequestConfig,
 ): Promise<EstimatedCall[]> {
   const result = await getStopPlaceDepartures(
     {
@@ -349,6 +370,7 @@ async function fetchEstimatedCalls(
       limitPerLine: queryInput.limitPerLine,
     },
     favoriteDepartures,
+    opts,
   );
 
   return flatMap(

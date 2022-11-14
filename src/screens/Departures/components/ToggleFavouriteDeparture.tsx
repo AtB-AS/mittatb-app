@@ -27,6 +27,10 @@ const ToggleFavouriteDeparture = ({
       accessibilityRole="checkbox"
       accessibilityState={{checked: !!existingFavorite}}
       accessibilityLabel={toggleFavouriteAccessibilityLabel}
+      accessible={!!toggleFavouriteAccessibilityLabel}
+      importantForAccessibility={
+        !!toggleFavouriteAccessibilityLabel ? 'yes' : 'no'
+      }
       hitSlop={insets.symmetric(14, 8)}
       style={style.favoriteButton}
       disabled={!onMarkFavourite}

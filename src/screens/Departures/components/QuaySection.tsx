@@ -18,6 +18,7 @@ type QuaySectionProps = {
   quay: Quay;
   departuresPerQuay?: number;
   data: EstimatedCall[] | null;
+  didLoadingDataFail: boolean;
   testID?: 'quaySection' | string;
   navigateToQuay?: (arg0: Quay) => void;
   navigateToDetails?: (
@@ -42,6 +43,7 @@ export default function QuaySection({
   quay,
   departuresPerQuay,
   data,
+  didLoadingDataFail,
   testID,
   navigateToQuay,
   navigateToDetails,
@@ -68,16 +70,18 @@ export default function QuaySection({
     );
   }, [showOnlyFavorites]);
 
+  const hasMoreItemsThanDisplayLimit =
+    departuresPerQuay && departuresToDisplay.length > departuresPerQuay;
+
   const shouldShowMoreItemsLink =
     navigateToQuay &&
     !isMinimized &&
-    departuresPerQuay &&
-    departuresToDisplay.length > departuresPerQuay;
+    (mode === 'Departure' || hasMoreItemsThanDisplayLimit);
+
   return (
     <View testID={testID}>
       <Sections.Section withPadding withBottomPadding>
         <Sections.GenericClickableItem
-          type="inline"
           onPress={() => {
             setIsMinimized(!isMinimized);
           }}
@@ -152,7 +156,7 @@ export default function QuaySection({
               <>
                 {data && (
                   <Sections.GenericItem
-                    radius={!navigateToQuay ? 'bottom' : undefined}
+                    radius={!shouldShowMoreItemsLink ? 'bottom' : undefined}
                   >
                     <ThemeText
                       color="secondary"
@@ -169,7 +173,16 @@ export default function QuaySection({
             }
           />
         )}
-        {!data && !isMinimized && (
+        {!isMinimized && didLoadingDataFail && (
+          <Sections.GenericItem>
+            <View style={styles.messageBox}>
+              <ThemeText type="body__secondary" color="secondary">
+                {t(DeparturesTexts.message.noData)}
+              </ThemeText>
+            </View>
+          </Sections.GenericItem>
+        )}
+        {!data && !isMinimized && !didLoadingDataFail && (
           <Sections.GenericItem>
             <View style={{width: '100%'}}>
               <ActivityIndicator></ActivityIndicator>
@@ -233,15 +246,18 @@ function compareByLineNameAndDesc(
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   stopPlaceHeader: {
     flexDirection: 'row',
-    maxWidth: '100%',
     alignItems: 'center',
   },
   stopPlaceHeaderText: {
     flexDirection: 'row',
+    flex: 1,
     flexWrap: 'wrap',
-    flexShrink: 1,
   },
   rightMargin: {
     marginRight: theme.spacings.medium,
+  },
+  messageBox: {
+    width: '100%',
+    alignItems: 'center',
   },
 }));
