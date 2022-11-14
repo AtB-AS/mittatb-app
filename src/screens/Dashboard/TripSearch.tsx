@@ -291,16 +291,15 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
         }
       >
         <ScreenReaderAnnouncement message={searchStateMessage} />
-        {!from ||
-          (!to && (
-            <ThemeText
-              color="secondary"
-              style={style.missingLocationText}
-              testID="missingLocation"
-            >
-              {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
-            </ThemeText>
-          ))}
+        {(!from || !to) && (
+          <ThemeText
+            color="secondary"
+            style={style.missingLocationText}
+            testID="missingLocation"
+          >
+            {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
+          </ThemeText>
+        )}
         {from && to && (
           <Results
             tripPatterns={tripPatterns}
@@ -533,7 +532,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   missingLocationText: {
     padding: theme.spacings.xLarge,
-    justifyContent: 'center',
+    textAlign: 'center',
   },
   loadMoreButton: {
     paddingVertical: theme.spacings.xLarge,
