@@ -60,21 +60,28 @@ class ViewModel: ObservableObject {
 
     func departureStrings(n: Int) -> [String] {
         var strings: [String] = []
-      
+
         for departure in departures(numberOfDepartures: n) {
             strings.append(dateText(date: departure))
         }
-        
-        //Making space for the extra text that comes with showing day
-        if numberOfDeparturesNextDay == 1 {
-            strings.removeLast()
-        } else if numberOfDeparturesNextDay >= 2 {
-            strings.removeLast(2)
+
+        // Making space for the extra characters that are added if departures are on a future day
+        if strings.count == n {
+            if numberOfDeparturesNextDay >= 4 {
+                strings.removeLast(2)
+            } else if numberOfDeparturesNextDay >= 1 {
+                strings.removeLast()
+            }
+        } else {
+            if numberOfDeparturesNextDay >= 4 {
+                strings.removeLast()
+            }
         }
 
         return strings
     }
 
+    /// Returns a text represantation of the depature time containging the hour and minutre of the departure, and showing day if it is in a future day
     func dateText(date: Date) -> String {
         if !Calendar.current.isDate(date, inSameDayAs: Date.now) {
             numberOfDeparturesNextDay += 1
