@@ -60,7 +60,12 @@ const headerBackgroundColor: StaticColorByType<'background'> =
 
 const ResultsBackgroundColor: StaticColorByType<'background'> = 'background_1';
 
-const TripSearch: React.FC<RootProps> = ({navigation}) => {
+const TripSearch: React.FC<RootProps> = ({
+  navigation,
+  route: {
+    params: {callerRouteName},
+  },
+}) => {
   const style = useStyle();
   const {theme} = useTheme();
   const {language, t} = useTranslation();
@@ -213,7 +218,20 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
         rightButton={{type: 'chat'}}
         leftButton={{
           type: 'back',
-          onPress: () => navigation.goBack(),
+          onPress: () => {
+            navigation.setParams({
+              callerRouteName: undefined,
+            });
+
+            if (callerRouteName) {
+              return navigation.navigate({
+                name: callerRouteName as any,
+                params: {},
+              });
+            }
+
+            navigation.goBack();
+          },
         }}
       />
 
