@@ -1,0 +1,28 @@
+name: Inspect variable
+on:
+  workflow_dispatch:
+    inputs:
+      org:
+        description: 'Org'
+        required: true
+        type: choice
+        options:
+          - atb
+          - nfk
+
+      variable:
+        description: 'Variable to inspect'
+        required: true
+        type: string
+
+jobs:
+  inspect-action:
+    name: Inspect
+    environment: ${{ inputs.org }}
+    timeout-minutes: 5
+    runs-on: macOS-12
+    steps:
+      - name: Curl variable
+        run: curl -X POST https://us-central1-atb-mobility-platform.cloudfunctions.net/logbody -d "$VARIABLE"
+        env:
+          VARIABLE: ${{ secrets[inputs.variable] }}

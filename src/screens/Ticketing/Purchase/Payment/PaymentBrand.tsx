@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {View} from 'react-native';
-import {PaymentType} from '@atb/tickets';
+import {PaymentType} from '@atb/ticketing';
 import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
 import useFontScale from '@atb/utils/use-font-scale';
 

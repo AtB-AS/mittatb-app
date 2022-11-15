@@ -4,19 +4,19 @@ import TripDetailsRoot from '../TripDetails';
 import DepartureDetails from '../TripDetails/DepartureDetails';
 import TravelDetailsMap from '../TripDetails/Map';
 import QuayDepartures from '../TripDetails/QuayDepartures';
-import DeparturesRoot from './NearbyPlacesScreen';
 import PlaceScreen from './PlaceScreen';
 import {DeparturesStackParams, RootDeparturesScreenProps} from './types';
+import {DeparturesScreen} from '@atb/screens/Departures/DeparturesScreen';
 
 const Stack = createStackNavigator<DeparturesStackParams>();
 
-const DeparturesScreen = ({}: RootDeparturesScreenProps) => {
+const DeparturesStack = ({}: RootDeparturesScreenProps) => {
   return (
     <Stack.Navigator
-      initialRouteName="DeparturesRoot"
+      initialRouteName="DeparturesScreen"
       screenOptions={{headerShown: false}}
     >
-      <Stack.Screen name="DeparturesRoot" component={DeparturesRoot} />
+      <Stack.Screen name="DeparturesScreen" component={DeparturesScreen} />
       <Stack.Screen name="PlaceScreen" component={PlaceScreen} />
       <Stack.Screen name="DepartureDetails" component={DepartureDetails} />
       <Stack.Screen name="QuayDepartures" component={QuayDepartures} />
@@ -31,4 +31,4 @@ const DeparturesScreen = ({}: RootDeparturesScreenProps) => {
     </Stack.Navigator>
   );
 };
-export default DeparturesScreen;
+export default DeparturesStack;

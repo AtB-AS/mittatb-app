@@ -1,12 +1,11 @@
-import {Location} from '@atb/favorites/types';
-import {RouteParams as LocationSearchParams} from '@atb/location-search/LocationSearch';
+import {LocationSearchStackParams} from '@atb/location-search';
 import {LoginInAppStackParams} from '@atb/login/types';
 import {NearbyStackParams} from '@atb/screens/Nearby/types';
 import {AddEditFavoriteRootParams} from '@atb/screens/Profile/AddEditFavorite/types';
 import {ProfileStackParams} from '@atb/screens/Profile/types';
-import {TicketingStackParams} from '@atb/screens/Ticketing/Purchase/types';
-import {TicketModalStackParams} from '@atb/screens/Ticketing/Ticket/Details/types';
-import {TicketTabsNavigatorParams} from '@atb/screens/Ticketing/Tickets/types';
+import {PurchaseStackParams} from '@atb/screens/Ticketing/Purchase/types';
+import {FareContractModalStackParams} from '@atb/screens/Ticketing/FareContracts/Details/types';
+import {TicketingTabsNavigatorParams} from '@atb/screens/Ticketing/types';
 import {
   BottomTabNavigationProp,
   BottomTabScreenProps,
@@ -16,23 +15,23 @@ import {
   CompositeScreenProps,
   NavigationProp,
   NavigatorScreenParams,
-  ParamListBase,
 } from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
+import {DashboardParams} from '@atb/screens/Dashboard/types';
 
 export type RootStackParamList = {
   NotFound: undefined;
   Onboarding: undefined;
   TabNavigator: NavigatorScreenParams<TabNavigatorParams>;
-  LocationSearch: LocationSearchParams;
+  LocationSearchStack: NavigatorScreenParams<LocationSearchStackParams>;
   SortableFavoriteList: undefined;
   AddEditFavorite: NavigatorScreenParams<AddEditFavoriteRootParams>;
   LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
-  TicketPurchase: NavigatorScreenParams<TicketingStackParams>;
-  TicketModal: NavigatorScreenParams<TicketModalStackParams>;
+  Purchase: NavigatorScreenParams<PurchaseStackParams>;
+  FareContractModal: NavigatorScreenParams<FareContractModalStackParams>;
   MobileTokenOnboarding: undefined;
   SelectTravelTokenRoot: undefined;
-  ConsequencesFromTicketPurchase: undefined;
+  ConsequencesFromPurchase: undefined;
 };
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;
@@ -41,20 +40,10 @@ export type RootStackProps = RootStackScreenProps<keyof RootStackParamList>;
 export type RootStackScreenProps<T extends keyof RootStackParamList> =
   StackScreenProps<RootStackParamList, T>;
 
-interface ISubNavigator<T extends ParamListBase, K extends keyof T> {
-  screen: K;
-  params?: T[K];
-}
-
 export type TabNavigatorParams = {
-  Assistant: {
-    fromLocation?: Location;
-    toLocation?: Location;
-  };
+  Dashboard: NavigatorScreenParams<DashboardParams>;
   Nearest: NavigatorScreenParams<NearbyStackParams>;
-  Ticketing:
-    | ISubNavigator<TicketTabsNavigatorParams, 'ActiveTickets'>
-    | ISubNavigator<TicketTabsNavigatorParams, 'BuyTickets'>;
+  Ticketing: NavigatorScreenParams<TicketingTabsNavigatorParams>;
   Profile: NavigatorScreenParams<ProfileStackParams>;
   MapScreen: undefined;
 };

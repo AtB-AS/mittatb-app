@@ -1,4 +1,4 @@
-import {PaymentType} from '@atb/tickets/types';
+import {PaymentType} from '@atb/ticketing/types';
 
 export const defaultModesWeSellTicketsFor: string[] = [
   'cityTram',

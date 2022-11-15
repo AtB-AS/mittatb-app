@@ -314,6 +314,32 @@ export default function DesignSystem() {
           </Sections.GenericItem>
         </Sections.Section>
 
+        <Sections.Section withPadding withTopPadding>
+          <Sections.HeaderItem text="Message section items" />
+
+          <Sections.MessageItem
+            messageType="info"
+            title="Information message!"
+            message="An information message with title"
+          />
+
+          <Sections.MessageItem
+            messageType="valid"
+            message="A success message without title"
+          />
+
+          <Sections.MessageItem
+            messageType="warning"
+            title="Warning message!"
+            message="A warning message with title"
+          />
+
+          <Sections.MessageItem
+            messageType="error"
+            message="An error message without title"
+          />
+        </Sections.Section>
+
         <View style={style.buttons}>
           <ButtonGroup>{buttons}</ButtonGroup>
         </View>

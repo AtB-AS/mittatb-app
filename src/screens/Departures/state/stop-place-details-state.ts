@@ -1,4 +1,4 @@
-import {useCallback, useEffect} from 'react';
+import {useEffect} from 'react';
 import useReducerWithSideEffects, {
   NoUpdate,
   ReducerWithSideEffects,
@@ -8,6 +8,7 @@ import useReducerWithSideEffects, {
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {getStopsDetails} from '@atb/api/departures/stops-nearest';
 import {StopsDetailsQuery} from '@atb/api/types/generated/StopsDetailsQuery';
+import {TimeoutRequest, useTimeoutRequest} from '@atb/api/client';
 
 export type StopsDetailsDataState = {
   data: StopsDetailsQuery | null;
@@ -27,6 +28,7 @@ type StopsDetailsDataActions =
   | {
       type: 'LOAD_DETAILS';
       locations?: Array<string>;
+      timeout: TimeoutRequest;
     }
   | {
       type: 'STOP_LOADER';
@@ -67,8 +69,16 @@ const reducer: ReducerWithSideEffects<
             });
             return;
           }
+          var didTimeOut = false;
           try {
-            const result = await getStopsDetails({ids: action.locations});
+            action.timeout.start();
+            const result = await getStopsDetails(
+              {ids: action.locations},
+              {
+                signal: action.timeout.signal,
+              },
+            );
+            action.timeout.clear();
             dispatch({
               type: 'UPDATE_STOP_DETAILS',
               ids: action.locations,
@@ -77,7 +87,7 @@ const reducer: ReducerWithSideEffects<
           } catch (e) {
             dispatch({
               type: 'SET_ERROR',
-              error: getAxiosErrorType(e),
+              error: getAxiosErrorType(e, action.timeout.didTimeout),
             });
           } finally {
             dispatch({type: 'STOP_LOADER'});
@@ -124,17 +134,22 @@ const reducer: ReducerWithSideEffects<
  */
 export function useStopsDetailsData(locationIds?: Array<string>) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
-
-  const refresh = () =>
+  const timeout = useTimeoutRequest();
+  const loadDetails = () =>
     dispatch({
       type: 'LOAD_DETAILS',
       locations: locationIds,
+      timeout: timeout,
     });
 
-  useEffect(refresh, [JSON.stringify(locationIds)]);
+  useEffect(() => {
+    loadDetails();
+
+    return () => timeout.abort();
+  }, [JSON.stringify(locationIds)]);
 
   return {
     state,
-    refresh,
+    forceRefresh: loadDetails,
   };
 }

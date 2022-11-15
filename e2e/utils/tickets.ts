@@ -19,7 +19,7 @@ export const newTicketExists = async (zoneInfo: string = '') => {
     0. Check if single ticket is processing
     1. Check if single ticket is captured
    */
-  let procExists = await idExists(by.id('ticketReservation'), 10000);
+  let procExists = await idExists(by.id('purchaseReservation'), 10000);
   let ticketExists = false;
 
   if (!procExists) {
@@ -102,7 +102,7 @@ export const verifyTravellerCounts = async (
 
 // Buy single ticket (only within a single zone, and for adult/senior/child)
 export const buySingleTicket = async (travellers: Traveller, zone: string) => {
-  await tapById('singleTicket');
+  await tapById('singleFareProduct');
 
   // Set zones
   await setZones(zone, zone);

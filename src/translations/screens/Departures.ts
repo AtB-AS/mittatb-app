@@ -63,7 +63,7 @@ const DeparturesTexts = {
     ),
   },
   line: _('Linje', 'Line'),
-  a11yEstimatedCallItemHint: _(
+  a11yViewDepartureDetailsHint: _(
     'Aktiver for å se detaljer',
     'Activate to view details',
   ),
@@ -73,26 +73,30 @@ const DeparturesTexts = {
   widget: {
     heading: _('Favorittavganger', 'Favourite departures'),
   },
-  resultType: {
-    all: _('Alle holdeplasser', 'All Stops'),
-    favourites: _('Favoritter', 'Favourites'),
-  },
   message: {
     noFavourites: _(
       'Det er ingen avganger som skal vises, da du ikke har noen stopp merket som favoritter.',
       'There are no departures to be shown, as you have no stops marked as favourites.',
     ),
     noFavouritesWidget: _(
-      'Du har ingen favorittavganger. Trykk på stjernesymbolet i Avganger-visningen for å lagre en avgang du bruker ofte.',
-      'You have no favorite departures. Tap a star in the Departures view to save a frequently used departure.',
+      'Du har ingen favorittavganger. \nTrykk “Legg til favorittavgang” for å lagre en avgang du bruker ofte.',
+      'You have no favorite departures. \nPress “Add favorite departure” to save a frequently used departure.',
     ),
-    readMoreUrl: _(
-      'Les mer og se flere nyttige tips',
-      'Read more and find other useful tips',
+    emptyResult: _(
+      'Fant ingen avganger på valgt sted.',
+      'No departures found at the specified location',
     ),
+    resultFailed: _(
+      'Kunne ikke laste avganger.',
+      'Could not load the departures.',
+    ),
+    noData: _('Ingen informasjon', 'No data'),
   },
   button: {
     text: _('Velg favorittavganger', 'Select favourite departures'),
+  },
+  closeButton: {
+    label: _('Lukk', 'Close'),
   },
 };
 export default DeparturesTexts;

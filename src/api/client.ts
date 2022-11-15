@@ -17,6 +17,7 @@ import auth from '@react-native-firebase/auth';
 export default createClient(API_BASE_URL);
 
 const RETRY_COUNT = 3;
+const DEFAULT_TIMEOUT = 15000;
 
 declare module 'axios' {
   export interface AxiosRequestConfig {
@@ -143,4 +144,35 @@ const shouldSkipLogging = (error: AxiosError) => {
     shouldRetry(error) &&
     (error.config?.['axios-retry'] as any)?.retryCount < RETRY_COUNT;
   return configuredToSkipLogging || willRetry;
+};
+
+export type TimeoutRequest = {
+  didTimeout: boolean;
+  signal: AbortSignal;
+  start(): void;
+  clear(): void;
+  abort(): void;
+};
+
+export const useTimeoutRequest = (): TimeoutRequest => {
+  const controller = new AbortController();
+  var didTimeout = false;
+  var timerId: NodeJS.Timeout | undefined;
+
+  const start = () => {
+    timerId = setTimeout(() => {
+      didTimeout = true;
+      controller.abort();
+    }, DEFAULT_TIMEOUT);
+  };
+
+  return {
+    didTimeout,
+    signal: controller.signal,
+    start,
+    clear: () => {
+      timerId && clearTimeout(timerId);
+    },
+    abort: () => controller.abort(),
+  };
 };

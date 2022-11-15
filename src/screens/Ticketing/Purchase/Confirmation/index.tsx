@@ -15,7 +15,7 @@ import {
 import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {PaymentType, ReserveOffer} from '@atb/tickets';
+import {PaymentType, ReserveOffer} from '@atb/ticketing';
 import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {formatToLongDateTime} from '@atb/utils/date';
@@ -28,7 +28,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {getOtherDeviceIsInspectableWarning} from '../../Ticket/utils';
+import {getOtherDeviceIsInspectableWarning} from '../../FareContracts/utils';
 import useOfferState from '../Overview/use-offer-state';
 import {SelectPaymentMethod} from '../Payment';
 import {usePreviousPaymentMethod} from '../saved-payment-utils';
@@ -37,7 +37,7 @@ import {
   CardPaymentMethod,
   PaymentMethod,
   SavedPaymentOption,
-  TicketPurchaseScreenProps,
+  PurchaseScreenProps,
 } from '../types';
 
 export type RouteParams = {
@@ -81,7 +81,7 @@ function getPreviousPaymentMethod(
   }
 }
 
-type ConfirmationProps = TicketPurchaseScreenProps<'Confirmation'>;
+type ConfirmationProps = PurchaseScreenProps<'Confirmation'>;
 
 const Confirmation: React.FC<ConfirmationProps> = ({
   navigation,
@@ -254,7 +254,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
         globalMessageContext="app-ticketing"
       />
 
-      <ScrollView style={styles.ticketInfoSection}>
+      <ScrollView style={styles.infoSection}>
         <View>
           {error && (
             <MessageBox
@@ -458,22 +458,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   buttonTopSpacing: {
     marginTop: theme.spacings.xLarge,
   },
-  ticketsContainer: {
-    backgroundColor: theme.static.background.background_0.background,
-    borderTopEndRadius: theme.border.radius.regular,
-    borderTopLeftRadius: theme.border.radius.regular,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.static.background.background_1.background,
-    padding: theme.spacings.medium,
-    marginTop: theme.spacings.small,
-  },
   errorMessage: {
     marginBottom: theme.spacings.medium,
   },
   warningMessage: {
     marginTop: theme.spacings.medium,
   },
-  ticketInfoSection: {padding: theme.spacings.medium},
+  infoSection: {padding: theme.spacings.medium},
   userProfileItem: {
     flex: 1,
     flexDirection: 'row',

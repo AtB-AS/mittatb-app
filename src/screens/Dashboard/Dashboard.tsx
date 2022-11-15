@@ -9,9 +9,10 @@ import FavoriteChips from '@atb/favorite-chips';
 import {useFavorites} from '@atb/favorites';
 import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import GlobalMessageBox from '@atb/global-messages/GlobalMessage';
-import {useLocationSearchValue} from '@atb/location-search';
-import {SelectableLocationData} from '@atb/location-search/types';
+import {
+  SelectableLocationType,
+  useLocationSearchValue,
+} from '@atb/location-search';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SearchForLocations} from '@atb/screens/Dashboard/TripSearch';
 import {useDoOnceWhen} from '@atb/screens/utils';
@@ -29,9 +30,10 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import CompactTickets from './CompactTickets';
+import CompactFareContracts from './CompactFareContracts';
 import DeparturesWidget from './DeparturesWidget';
 import {DashboardScreenProps} from './types';
+import {GlobalMessage} from '@atb/global-messages';
 
 type DashboardRouteName = 'DashboardRoot';
 const DashboardRouteNameStatic: DashboardRouteName = 'DashboardRoot';
@@ -112,15 +114,18 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
     callerRouteParam: keyof RootProps['route']['params'],
     initialLocation: Location | undefined,
   ) =>
-    navigation.navigate('LocationSearch', {
-      label:
-        callerRouteParam === 'fromLocation'
-          ? t(TripSearchTexts.location.departurePicker.label)
-          : t(TripSearchTexts.location.destinationPicker.label),
-      callerRouteName: DashboardRouteNameStatic,
-      callerRouteParam,
-      initialLocation,
-      includeJourneyHistory: true,
+    navigation.navigate('LocationSearchStack', {
+      screen: 'LocationSearchByTextScreen',
+      params: {
+        label:
+          callerRouteParam === 'fromLocation'
+            ? t(TripSearchTexts.location.departurePicker.label)
+            : t(TripSearchTexts.location.destinationPicker.label),
+        callerRouteName: DashboardRouteNameStatic,
+        callerRouteParam,
+        initialLocation,
+        includeJourneyHistory: true,
+      },
     });
 
   const setCurrentLocationOrRequest = useCallback(
@@ -182,7 +187,7 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
       >
         <View style={style.searchHeader}>
           <View style={style.paddedContainer}>
-            <GlobalMessageBox
+            <GlobalMessage
               style={style.dashboardGlobalmessages}
               globalMessageContext="app-assistant"
             />
@@ -257,14 +262,14 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
           />
         </View>
         {enable_ticketing && (
-          <CompactTickets
+          <CompactFareContracts
             onPressDetails={(
               isCarnet: boolean,
               isInspectable: boolean,
               orderId: string,
             ) => {
               if (isCarnet) {
-                return navigation.navigate('TicketModal', {
+                return navigation.navigate('FareContractModal', {
                   screen: 'CarnetDetailsScreen',
                   params: {
                     orderId,
@@ -273,17 +278,26 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
                 });
               }
 
-              return navigation.navigate('TicketModal', {
-                screen: 'TicketDetails',
+              return navigation.navigate('FareContractModal', {
+                screen: 'FareContractDetails',
                 params: {orderId},
               });
             }}
-            onPressBuyTickets={() =>
-              navigation.navigate('Ticketing', {screen: 'BuyTickets'})
+            onPressBuy={() =>
+              navigation.navigate('Ticketing', {screen: 'PurchaseTab'})
             }
           />
         )}
-        <DeparturesWidget />
+        <DeparturesWidget
+          onEditFavouriteDeparture={() =>
+            navigation.navigate('FavoriteDeparturesDashboardScreen')
+          }
+          onAddFavouriteDeparture={() =>
+            navigation.navigate('NearbyStopPlacesDashboardScreen', {
+              location: undefined,
+            })
+          }
+        />
       </ScrollView>
     </View>
   );
@@ -316,8 +330,8 @@ function useLocations(
 }
 
 function useUpdatedLocation(
-  searchedFromLocation: SelectableLocationData | undefined,
-  searchedToLocation: SelectableLocationData | undefined,
+  searchedFromLocation: SelectableLocationType | undefined,
+  searchedToLocation: SelectableLocationType | undefined,
   currentLocation: GeoLocation | undefined,
   favorites: UserFavorites,
 ): SearchForLocations {
@@ -326,7 +340,7 @@ function useUpdatedLocation(
   const navigation = useNavigation<RootProps['navigation']>();
 
   const setLocation = useCallback(
-    (direction: 'from' | 'to', searchedLocation?: SelectableLocationData) => {
+    (direction: 'from' | 'to', searchedLocation?: SelectableLocationType) => {
       const updater = direction === 'from' ? setFrom : setTo;
       if (!searchedLocation) return updater(searchedLocation);
 

@@ -15,8 +15,8 @@ import {Periodebillett} from '@atb/assets/svg/color/images';
 import {TouchableOpacity} from 'react-native';
 import {
   filterActiveOrCanBeUsedFareContracts,
-  useTicketState,
-} from '@atb/tickets';
+  useTicketingState,
+} from '@atb/ticketing';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -34,7 +34,7 @@ export default function LoginOnboarding({
   const styles = useThemeStyles();
   const focusRef = useFocusOnLoad();
 
-  const {fareContracts} = useTicketState();
+  const {fareContracts} = useTicketingState();
   const activeFareContracts =
     filterActiveOrCanBeUsedFareContracts(fareContracts);
   const onNext = async () => {

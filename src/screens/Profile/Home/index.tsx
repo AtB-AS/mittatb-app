@@ -22,8 +22,8 @@ import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
   filterActiveOrCanBeUsedFareContracts,
-  useTicketState,
-} from '@atb/tickets';
+  useTicketingState,
+} from '@atb/ticketing';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
@@ -41,7 +41,7 @@ import {ProfileScreenProps} from '../types';
 import {destructiveAlert} from './utils';
 import useIsLoading from '@atb/utils/use-is-loading';
 import {useNewFrontpage} from '@atb/screens/Dashboard/use-new-frontpage';
-import {useMapPage} from '@atb/components/map/use-map-page';
+import {useMapPage} from '@atb/components/map/hooks/use-map-page';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -49,8 +49,13 @@ const version = getVersion();
 type ProfileProps = ProfileScreenProps<'ProfileHome'>;
 
 export default function ProfileHome({navigation}: ProfileProps) {
-  const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login} =
-    useRemoteConfig();
+  const {
+    enable_i18n,
+    privacy_policy_url,
+    enable_ticketing,
+    enable_login,
+    enable_map_page,
+  } = useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {wipeToken} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
@@ -59,7 +64,7 @@ export default function ProfileHome({navigation}: ProfileProps) {
   const {authenticationType, signOut, user, customerNumber} = useAuthState();
   const config = useLocalConfig();
 
-  const {fareContracts, customerProfile} = useTicketState();
+  const {fareContracts, customerProfile} = useTicketingState();
   const activeFareContracts =
     filterActiveOrCanBeUsedFareContracts(fareContracts);
   const hasActiveFareContracts = activeFareContracts.length > 0;
@@ -89,7 +94,14 @@ export default function ProfileHome({navigation}: ProfileProps) {
   const {open: openBottomSheet} = useBottomSheet();
   async function selectFavourites() {
     openBottomSheet((close) => {
-      return <SelectFavouritesBottomSheet close={close} />;
+      return (
+        <SelectFavouritesBottomSheet
+          close={close}
+          onEditFavouriteDeparture={() =>
+            navigation.navigate('FavoriteDeparturesProfileScreen')
+          }
+        />
+      );
     });
   }
 
@@ -158,7 +170,7 @@ export default function ProfileHome({navigation}: ProfileProps) {
                 onPress={() => {
                   let screen: keyof LoginInAppStackParams = 'PhoneInputInApp';
                   if (hasActiveFareContracts) {
-                    screen = 'ActiveTicketPromptInApp';
+                    screen = 'activeFareContractPromptInApp';
                   } else if (enable_vipps_login) {
                     screen = 'LoginOptionsScreen';
                   }
@@ -306,6 +318,17 @@ export default function ProfileHome({navigation}: ProfileProps) {
               setPreference({newDepartures});
             }}
           />
+          {enable_map_page ? (
+            <Sections.ActionItem
+              mode="toggle"
+              text={t(ProfileTexts.sections.newFeatures.map)}
+              checked={showMapPage}
+              testID="enableMapPageToggle"
+              onPress={(enableMapPage) => {
+                setPreference({enableMapPage: enableMapPage});
+              }}
+            />
+          ) : null}
           <Sections.LinkItem
             text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
             onPress={() => navigation.navigate('Enrollment')}
@@ -334,7 +357,9 @@ export default function ProfileHome({navigation}: ProfileProps) {
               ),
             }}
             testID="favoriteDeparturesButton"
-            onPress={() => navigation.navigate('FavoriteDepartures')}
+            onPress={() =>
+              navigation.navigate('FavoriteDeparturesProfileScreen')
+            }
           />
         </Sections.Section>
         <Sections.Section withPadding>
@@ -426,15 +451,6 @@ export default function ProfileHome({navigation}: ProfileProps) {
                   'AtB-Beta-Frontpage': newFrontPage ? 'enabled' : 'disabled',
                 });
                 setPreference({newFrontPage});
-              }}
-            />
-            <Sections.ActionItem
-              mode="toggle"
-              text={t(ProfileTexts.sections.newFeatures.map)}
-              checked={showMapPage}
-              testID="enableMapPageToggle"
-              onPress={(enableMapPage) => {
-                setPreference({enableMapPage: enableMapPage});
               }}
             />
             <Sections.LinkItem

@@ -4,7 +4,7 @@ import {
   UserFavorites,
 } from '@atb/favorites/types';
 import {useSearchHistory} from '@atb/search-history';
-import {LocationSearchResult} from './types';
+import {LocationSearchResultType} from './types';
 import {getLocationLayer} from '@atb/utils/location';
 import {FeatureCategory} from '@atb/sdk';
 
@@ -25,8 +25,8 @@ export const filterPreviousLocations = (
   previousLocations: SearchLocation[],
   favorites?: UserFavorites,
   onlyLocalTariffZoneAuthority: boolean = false,
-): LocationSearchResult[] => {
-  const mappedHistory: LocationSearchResult[] =
+): LocationSearchResultType[] => {
+  const mappedHistory: LocationSearchResultType[] =
     previousLocations
       ?.map((location) => ({
         location,
@@ -40,7 +40,7 @@ export const filterPreviousLocations = (
     return mappedHistory;
   }
 
-  const filteredFavorites: LocationSearchResult[] = (favorites ?? [])
+  const filteredFavorites: LocationSearchResultType[] = (favorites ?? [])
     .filter(
       (
         favorite,
@@ -70,8 +70,8 @@ const matchLocation = (searchText: string, location: SearchLocation) =>
 
 export const filterCurrentLocation = (
   locations: SearchLocation[] | null,
-  previousLocations: LocationSearchResult[] | null,
-): LocationSearchResult[] => {
+  previousLocations: LocationSearchResultType[] | null,
+): LocationSearchResultType[] => {
   if (!previousLocations?.length || !locations)
     return locations?.map((location) => ({location})) ?? [];
   return locations

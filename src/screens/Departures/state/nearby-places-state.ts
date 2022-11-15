@@ -9,12 +9,12 @@ import {DepartureGroupMetadata} from '@atb/api/departures/departure-group';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {Location} from '@atb/favorites/types';
 import {getNearestStops} from '@atb/api/departures/stops-nearest';
-import {NearestStopPlacesQuery} from '@atb/api/types/generated/NearestStopPlacesQuery';
+import {NearestStopPlaceNode} from '@atb/api/types/departures';
 
 type LoadType = 'initial' | 'more';
 
 export type DepartureDataState = {
-  data: NearestStopPlacesQuery | null;
+  data?: NearestStopPlaceNode[];
   error?: {type: ErrorType; loadType: LoadType};
   locationId?: string;
   isLoading: boolean;
@@ -22,7 +22,7 @@ export type DepartureDataState = {
 };
 
 const initialState: DepartureDataState = {
-  data: null,
+  data: undefined,
   error: undefined,
   locationId: undefined,
   isLoading: false,
@@ -41,7 +41,7 @@ type DepartureDataActions =
       type: 'UPDATE_STOP_PLACES';
       locationId?: string;
       reset?: boolean;
-      result: NearestStopPlacesQuery;
+      result?: NearestStopPlaceNode[];
     }
   | {
       type: 'SET_ERROR';
@@ -72,10 +72,17 @@ const reducer: ReducerWithSideEffects<
               count: 10,
               distance: 3000,
             });
+
+            const nearestStopPlaceNodes =
+              result.nearest?.edges
+                // Cast to NearestStopPlaceNode, as it is the only possible type returned from bff
+                ?.map((e) => e.node as NearestStopPlaceNode)
+                .filter((n): n is NearestStopPlaceNode => !!n) || [];
+
             dispatch({
               type: 'UPDATE_STOP_PLACES',
               locationId: action.location?.id,
-              result,
+              result: nearestStopPlaceNodes,
             });
           } catch (e) {
             dispatch({
@@ -114,7 +121,7 @@ const reducer: ReducerWithSideEffects<
           type: action.error,
           loadType: action.loadType,
         },
-        data: action.reset ? null : state.data,
+        data: action.reset ? undefined : state.data,
       });
     }
 

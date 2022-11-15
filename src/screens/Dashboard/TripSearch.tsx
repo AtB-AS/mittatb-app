@@ -11,8 +11,10 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {useLocationSearchValue} from '@atb/location-search';
-import {SelectableLocationData} from '@atb/location-search/types';
+import {
+  useLocationSearchValue,
+  SelectableLocationType,
+} from '@atb/location-search';
 import {
   getSearchTimeLabel,
   SearchTime,
@@ -129,15 +131,18 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
     callerRouteParam: keyof RootProps['route']['params'],
     initialLocation: Location | undefined,
   ) =>
-    navigation.navigate('LocationSearch', {
-      label:
-        callerRouteParam === 'fromLocation'
-          ? t(TripSearchTexts.location.departurePicker.label)
-          : t(TripSearchTexts.location.destinationPicker.label),
-      callerRouteName: TripSearchRouteNameStatic,
-      callerRouteParam,
-      initialLocation,
-      includeJourneyHistory: true,
+    navigation.navigate('LocationSearchStack', {
+      screen: 'LocationSearchByTextScreen',
+      params: {
+        label:
+          callerRouteParam === 'fromLocation'
+            ? t(TripSearchTexts.location.departurePicker.label)
+            : t(TripSearchTexts.location.destinationPicker.label),
+        callerRouteName: TripSearchRouteNameStatic,
+        callerRouteParam,
+        initialLocation,
+        includeJourneyHistory: true,
+      },
     });
 
   const setCurrentLocationOrRequest = useCallback(
@@ -286,6 +291,15 @@ const TripSearch: React.FC<RootProps> = ({navigation}) => {
         }
       >
         <ScreenReaderAnnouncement message={searchStateMessage} />
+        {(!from || !to) && (
+          <ThemeText
+            color="secondary"
+            style={style.missingLocationText}
+            testID="missingLocation"
+          >
+            {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
+          </ThemeText>
+        )}
         {from && to && (
           <Results
             tripPatterns={tripPatterns}
@@ -366,10 +380,14 @@ function useLocations(
     ],
   );
 
-  const searchedFromLocation =
+  var searchedFromLocation =
     useLocationSearchValue<RootProps['route']>('fromLocation');
   const searchedToLocation =
     useLocationSearchValue<RootProps['route']>('toLocation');
+
+  if (searchedToLocation && !searchedFromLocation) {
+    searchedFromLocation = currentLocation;
+  }
 
   return useUpdatedLocation(
     searchedFromLocation,
@@ -380,8 +398,8 @@ function useLocations(
 }
 
 function useUpdatedLocation(
-  searchedFromLocation: SelectableLocationData | undefined,
-  searchedToLocation: SelectableLocationData | undefined,
+  searchedFromLocation: SelectableLocationType | undefined,
+  searchedToLocation: SelectableLocationType | undefined,
   currentLocation: GeoLocation | undefined,
   favorites: UserFavorites,
 ): SearchForLocations {
@@ -390,7 +408,7 @@ function useUpdatedLocation(
   const navigation = useNavigation<RootProps['navigation']>();
 
   const setLocation = useCallback(
-    (direction: 'from' | 'to', searchedLocation?: SelectableLocationData) => {
+    (direction: 'from' | 'to', searchedLocation?: SelectableLocationType) => {
       const updater = direction === 'from' ? setFrom : setTo;
       if (!searchedLocation) return updater(searchedLocation);
 
@@ -511,6 +529,10 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
 
   loadingText: {
     // marginTop: theme.spacings.xLarge,
+  },
+  missingLocationText: {
+    padding: theme.spacings.xLarge,
+    textAlign: 'center',
   },
   loadMoreButton: {
     paddingVertical: theme.spacings.xLarge,

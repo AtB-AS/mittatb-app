@@ -8,8 +8,8 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
   filterActiveOrCanBeUsedFareContracts,
-  useTicketState,
-} from '@atb/tickets';
+  useTicketingState,
+} from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import React, {useEffect, useState} from 'react';
@@ -23,7 +23,7 @@ export default function DeleteProfile({navigation}: DeleteProfileScreenProps) {
   const style = useStyle();
   const {t} = useTranslation();
   const {signOut, customerNumber} = useAuthState();
-  const {fareContracts} = useTicketState();
+  const {fareContracts} = useTicketingState();
   const activeFareContracts =
     filterActiveOrCanBeUsedFareContracts(fareContracts).length > 0;
 
@@ -82,7 +82,7 @@ export default function DeleteProfile({navigation}: DeleteProfileScreenProps) {
 
         {activeFareContracts && (
           <MessageBox
-            message={t(DeleteProfileTexts.unableToDeleteWithTickets)}
+            message={t(DeleteProfileTexts.unableToDeleteWithFareContracts)}
             type="warning"
             containerStyle={{...style.contentMargin, marginTop: 0}}
           />

@@ -1,4 +1,4 @@
-import {TicketPurchaseNavigationProps} from '../types';
+import {PurchaseNavigationProps} from '../types';
 
 export type OverviewNavigationProps =
-  TicketPurchaseNavigationProps<'PurchaseOverview'>;
+  PurchaseNavigationProps<'PurchaseOverview'>;

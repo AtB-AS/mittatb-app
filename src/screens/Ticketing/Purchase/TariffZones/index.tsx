@@ -34,8 +34,9 @@ import hexToRgba from 'hex-to-rgba';
 import React, {useEffect, useRef, useState} from 'react';
 import {PixelRatio, Platform, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {TicketPurchaseScreenProps} from '../types';
-import {flyToLocation, zoomIn, zoomOut} from '@atb/components/map/utils';
+import {PurchaseScreenProps} from '../types';
+import {zoomIn, zoomOut} from '@atb/components/map/utils';
+import {flyToLocation} from '@atb/components/map/hooks/use-trigger-camera-move-effect';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -63,7 +64,7 @@ type TariffZoneSelection = {
   selectNext: 'from' | 'to';
 };
 
-type TariffZonesProps = TicketPurchaseScreenProps<'TariffZones'>;
+type TariffZonesProps = PurchaseScreenProps<'TariffZones'>;
 
 const TariffZonesRoot: React.FC<TariffZonesProps> = ({navigation, route}) => {
   return <TariffZones navigation={navigation} route={route} />;
@@ -300,12 +301,12 @@ const TariffZones: React.FC<TariffZonesProps> = ({
 
   const selectFeature = (event: OnPressEvent) => {
     const feature = event.features[0];
-    flyToLocation(event.coordinates, 300, mapCameraRef);
+    flyToLocation(event.coordinates, mapCameraRef);
     updateSelectedZones(feature.id as string);
   };
 
   async function flyToCurrentLocation() {
-    flyToLocation(geolocation?.coordinates, 750, mapCameraRef);
+    flyToLocation(geolocation?.coordinates, mapCameraRef);
 
     if (mapViewRef.current && geolocation) {
       let point = await mapViewRef.current.getPointInView([

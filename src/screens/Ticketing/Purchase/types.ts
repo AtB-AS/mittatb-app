@@ -3,7 +3,7 @@ import {
   PreassignedFareProduct,
   PreassignedFareProductType,
 } from '@atb/reference-data/types';
-import {PaymentType, ReserveOffer} from '@atb/tickets';
+import {PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
   CompositeNavigationProp,
   CompositeScreenProps,
@@ -74,7 +74,7 @@ type PaymentParams = {
   preassignedFareProduct: PreassignedFareProduct;
 };
 
-export type TicketingStackParams = {
+export type PurchaseStackParams = {
   PurchaseOverview: PurchaseOverviewParams;
   TariffZones: TariffZonesParams;
   TariffZoneSearch: TariffZoneSearchParams;
@@ -82,21 +82,19 @@ export type TicketingStackParams = {
   PaymentCreditCard: PaymentParams & {paymentMethod: CardPaymentMethod};
   PaymentVipps: PaymentParams;
   Splash: undefined;
-  ConsequencesFromTicketPurchase: undefined;
+  ConsequencesFromPurchase: undefined;
 };
 
-export type TicketPurchaseStackRootProps =
-  RootStackScreenProps<'TicketPurchase'>;
+export type PurchaseStackRootProps = RootStackScreenProps<'Purchase'>;
 
-export type TicketPurchaseNavigationProps<
-  T extends keyof TicketingStackParams,
-> = CompositeNavigationProp<
-  StackNavigationProp<TicketingStackParams, T>,
-  RootNavigationProps
->;
+export type PurchaseNavigationProps<T extends keyof PurchaseStackParams> =
+  CompositeNavigationProp<
+    StackNavigationProp<PurchaseStackParams, T>,
+    RootNavigationProps
+  >;
 
-export type TicketPurchaseScreenProps<T extends keyof TicketingStackParams> =
+export type PurchaseScreenProps<T extends keyof PurchaseStackParams> =
   CompositeScreenProps<
-    StackScreenProps<TicketingStackParams, T>,
-    TicketPurchaseStackRootProps
+    StackScreenProps<PurchaseStackParams, T>,
+    PurchaseStackRootProps
   >;
