@@ -108,14 +108,6 @@ const NearbyTexts = {
         'Søk etter avganger fra holdeplasser eller i nærheten av steder.',
         'Search for departures from nearby stops or locations',
       ),
-      emptyResult: _(
-        'Fant ingen avganger på valgt sted.',
-        'No departures found at the specified location',
-      ),
-      resultFailed: _(
-        'Kunne ikke laste avganger. Prøv igjen.',
-        'Could not load the departures. Please try again.',
-      ),
       emptyResultFavorites: _(
         'Fant ingen favorittavganger på valgt plass.',
         'No favourite departures found at the specified location',

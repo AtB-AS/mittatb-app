@@ -1,6 +1,6 @@
 {
   "name": "atb",
-  "version": "1.28.0",
+  "version": "1.29.0",
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
@@ -23,7 +23,7 @@
     "link-assets": "react-native link"
   },
   "dependencies": {
-    "@atb-as/theme": "^6.1.3-alpha.0",
+    "@atb-as/theme": "^6.1.3",
     "@bugsnag/react-native": "^7.17.3",
     "@bugsnag/source-maps": "^2.3.1",
     "@entur-private/abt-mobile-client-sdk": "^1.1.6",
@@ -73,7 +73,7 @@
     "phone": "^3.1.27",
     "query-string": "^7.1.1",
     "react": "18.1.0",
-    "react-native": "0.70.1",
+    "react-native": "0.70.5",
     "react-native-bootsplash": "^4.3.2",
     "react-native-dash": "^0.0.11",
     "react-native-device-info": "^10.0.2",

@@ -1,5 +1,5 @@
 import ThemeText from '@atb/components/text';
-import {Place, StopPlacePosition} from '@atb/api/types/departures';
+import {StopPlace, NearestStopPlaceNode} from '@atb/api/types/departures';
 import StopPlaceItem from '@atb/screens/Departures/components/StopPlaceItem';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -14,8 +14,8 @@ const StopPlaces = ({
   testID,
 }: {
   header?: string;
-  stopPlaces: StopPlacePosition[];
-  navigateToPlace: (place: Place) => void;
+  stopPlaces: NearestStopPlaceNode[];
+  navigateToPlace: (place: StopPlace) => void;
   testID: string;
 }) => {
   const styles = useStyles();
@@ -30,12 +30,12 @@ const StopPlaces = ({
           {header}
         </ThemeText>
       )}
-      {stopPlaces.map((stopPlacePosition: StopPlacePosition) => (
+      {stopPlaces.map((node: NearestStopPlaceNode) => (
         <StopPlaceItem
-          key={stopPlacePosition.node?.place?.id}
-          stopPlacePosition={stopPlacePosition}
+          key={node?.place?.id}
+          stopPlaceNode={node}
           onPress={navigateToPlace}
-          testID={'stopPlaceItem' + stopPlaces.indexOf(stopPlacePosition)}
+          testID={'stopPlaceItem' + stopPlaces.indexOf(node)}
         />
       ))}
     </ScrollView>

@@ -1,12 +1,13 @@
-import {Place} from '@atb/api/types/departures';
+import {StopPlace} from '@atb/api/types/departures';
 import {Location} from '@atb/favorites/types';
 import {useOnlySingleLocation} from '@atb/location-search';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import React, {useEffect} from 'react';
 import {DeparturesStackProps} from './types';
-import {Departures} from '@atb/screens/Departures/components/Departures';
+import {NearbyStopPlaces} from '@atb/screens/Departures/components/NearbyStopPlaces';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
+import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {useShouldShowDeparturesOnboarding} from '@atb/screens/Departures/use-should-show-departures-onboarding';
 
 export type DeparturesScreenParams = {
@@ -19,9 +20,10 @@ export const DeparturesScreen = ({navigation}: RootProps) => {
   const fromLocation = useOnlySingleLocation<RootProps['route']>('location');
   const {t} = useTranslation();
 
-  const navigateToPlace = (place: Place) => {
+  const navigateToPlace = (place: StopPlace) => {
     navigation.navigate('PlaceScreen', {
       place,
+      mode: 'Departure',
     });
   };
   const {leftButton} = useServiceDisruptionSheet();
@@ -34,14 +36,20 @@ export const DeparturesScreen = ({navigation}: RootProps) => {
   }, [shouldShowDeparturesOnboarding]);
 
   return (
-    <Departures
-      navigation={navigation}
-      fromLocation={fromLocation}
-      callerRouteName={'DeparturesScreen'}
-      onSelect={navigateToPlace}
-      title={t(DeparturesTexts.header.title)}
-      leftButton={leftButton}
-      rightButton={{type: 'chat'}}
-    />
+    <>
+      <FullScreenHeader
+        title={t(DeparturesTexts.header.title)}
+        rightButton={{type: 'chat'}}
+        leftButton={leftButton}
+        globalMessageContext="app-departures"
+      />
+      <NearbyStopPlaces
+        navigation={navigation}
+        fromLocation={fromLocation}
+        callerRouteName={'DeparturesScreen'}
+        onSelect={navigateToPlace}
+        mode={'Departure'}
+      />
+    </>
   );
 };

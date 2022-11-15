@@ -231,6 +231,7 @@ const TripSection: React.FC<TripSectionProps> = ({
           id: quay.id,
           name: quay.name,
         },
+        mode: 'Departure',
       });
     } else {
       navigation.push('QuayDepartures', {

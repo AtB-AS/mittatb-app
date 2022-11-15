@@ -33,12 +33,12 @@ export function settingToRouteName(
 ): keyof TabNavigatorParams {
   switch (setting) {
     case 'assistant':
-      return 'Assistant';
+      return 'Dashboard';
     case 'departures':
       return 'Nearest';
     case 'ticketing':
       return 'Ticketing';
     default:
-      return 'Assistant';
+      return 'Dashboard';
   }
 }

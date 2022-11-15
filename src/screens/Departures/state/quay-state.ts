@@ -27,6 +27,13 @@ import useReducerWithSideEffects, {
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
 import {updateDeparturesWithRealtimeV2} from '../../../departure-list/utils';
+import {StopPlacesMode} from '@atb/screens/Departures/types';
+import {
+  getLimitOfDeparturesPerLineByMode,
+  getTimeRangeByMode,
+} from '@atb/screens/Departures/utils';
+import {TimeoutRequest, useTimeoutRequest} from '@atb/api/client';
+import {AxiosRequestConfig} from 'axios';
 
 const MAX_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
 
@@ -70,6 +77,9 @@ type DepartureDataActions =
       quay: DepartureTypes.Quay;
       startTime?: string;
       favoriteDepartures?: UserFavoriteDepartures;
+      limitPerLine?: number;
+      timeRange?: number;
+      timeout: TimeoutRequest;
     }
   | {
       type: 'LOAD_REALTIME_DATA';
@@ -89,7 +99,10 @@ type DepartureDataActions =
       showOnlyFavorites: boolean;
       quay: DepartureTypes.Quay;
       startTime?: string;
+      timeRange?: number;
       favoriteDepartures?: UserFavoriteDepartures;
+      limitPerLine?: number;
+      timeout: TimeoutRequest;
     }
   | {
       type: 'SET_ERROR';
@@ -110,12 +123,17 @@ const reducer: ReducerWithSideEffects<
 > = (state, action) => {
   switch (action.type) {
     case 'LOAD_INITIAL_DEPARTURES': {
+      if ((state.queryInput as QuayDeparturesVariables).id === action.quay.id)
+        return NoUpdate();
+
       // Update input data with new date as this
       // is a fresh fetch. We should fetch the latest information.
       const queryInput: QuayDeparturesVariables = {
         id: action.quay.id,
         numberOfDepartures: MAX_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
         startTime: action.startTime ?? new Date().toISOString(),
+        limitPerLine: action.limitPerLine,
+        timeRange: action.timeRange,
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -127,12 +145,16 @@ const reducer: ReducerWithSideEffects<
         },
         async (_, dispatch) => {
           try {
+            action.timeout.start();
             const result = await fetchEstimatedCalls(
               queryInput,
               action.quay,
               state.showOnlyFavorites ? action.favoriteDepartures : undefined,
+              {
+                signal: action.timeout.signal,
+              },
             );
-
+            action.timeout.clear();
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
@@ -143,7 +165,7 @@ const reducer: ReducerWithSideEffects<
             dispatch({
               type: 'SET_ERROR',
               reset: false,
-              error: getAxiosErrorType(e),
+              error: getAxiosErrorType(e, action.timeout.didTimeout),
             });
           } finally {
             dispatch({type: 'STOP_LOADER'});
@@ -206,7 +228,10 @@ const reducer: ReducerWithSideEffects<
             type: 'LOAD_INITIAL_DEPARTURES',
             quay: action.quay,
             startTime: action.startTime,
+            timeRange: action.timeRange,
             favoriteDepartures: action.favoriteDepartures,
+            limitPerLine: action.limitPerLine,
+            timeout: action.timeout,
           });
         },
       );
@@ -254,6 +279,7 @@ const reducer: ReducerWithSideEffects<
 export function useQuayData(
   quay: DepartureTypes.Quay,
   showOnlyFavorites: boolean,
+  mode: StopPlacesMode,
   startTime?: string,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
@@ -261,30 +287,42 @@ export function useQuayData(
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const isFocused = useIsFocused();
   const {favoriteDepartures} = useFavorites();
+  const timeRange = getTimeRangeByMode(mode, startTime);
+  const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
+  const timeout = useTimeoutRequest();
 
-  const refresh = useCallback(
-    () =>
-      dispatch({
-        type: 'LOAD_INITIAL_DEPARTURES',
-        quay,
-        startTime,
-        favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
-      }),
-    [quay.id, startTime, showOnlyFavorites, favoriteDepartures],
-  );
+  const loadDepartures = () => {
+    dispatch({
+      type: 'LOAD_INITIAL_DEPARTURES',
+      quay,
+      startTime,
+      favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
+      limitPerLine,
+      timeRange,
+      timeout,
+    });
+  };
+  const refresh = useCallback(() => {
+    loadDepartures();
+  }, [(quay.id, startTime, showOnlyFavorites, favoriteDepartures)]);
 
-  useEffect(
-    () =>
-      dispatch({
-        type: 'SET_SHOW_FAVORITES',
-        quay,
-        startTime,
-        showOnlyFavorites,
-        favoriteDepartures,
-      }),
-    [quay.id, favoriteDepartures, showOnlyFavorites],
-  );
-  useEffect(refresh, [startTime]);
+  useEffect(() => {
+    dispatch({
+      type: 'SET_SHOW_FAVORITES',
+      quay,
+      startTime,
+      timeRange,
+      showOnlyFavorites,
+      favoriteDepartures,
+      limitPerLine,
+      timeout,
+    });
+  }, [quay.id, favoriteDepartures, showOnlyFavorites]);
+  useEffect(() => {
+    refresh();
+    return () => timeout.abort();
+  }, [startTime]);
+
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -299,18 +337,19 @@ export function useQuayData(
     () => dispatch({type: 'LOAD_REALTIME_DATA', quay: quay}),
     updateFrequencyInSeconds * 1000,
     [quay.id],
-    !isFocused,
+    !isFocused || mode !== 'Departure',
   );
   useInterval(
     () => dispatch({type: 'TICK_TICK'}),
     tickRateInSeconds * 1000,
     [],
-    !isFocused,
+    !isFocused || mode !== 'Departure',
   );
 
   return {
     state,
     refresh,
+    forceRefresh: loadDepartures,
   };
 }
 
@@ -330,26 +369,25 @@ type QueryInput = {
   numberOfDepartures: number;
   startTime: string;
   timeRange?: number;
+  limitPerLine?: number;
 };
 
 async function fetchEstimatedCalls(
   queryInput: QueryInput,
   quay: DepartureTypes.Quay,
   favoriteDepartures?: UserFavoriteDepartures,
+  opts?: AxiosRequestConfig,
 ): Promise<DepartureTypes.EstimatedCall[]> {
-  const timeRange = getSecondsUntilMidnightOrMinimum(
-    queryInput.startTime,
-    MIN_TIME_RANGE,
-  );
-
   const result = await getQuayDepartures(
     {
       id: quay.id,
       startTime: queryInput.startTime,
       numberOfDepartures: queryInput.numberOfDepartures,
-      timeRange: timeRange,
+      timeRange: queryInput.timeRange,
+      limitPerLine: queryInput.limitPerLine,
     },
     favoriteDepartures,
+    opts,
   );
   return result.quay?.estimatedCalls as DepartureTypes.EstimatedCall[];
 }

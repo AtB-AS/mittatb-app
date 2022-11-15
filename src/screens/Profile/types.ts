@@ -9,13 +9,15 @@ import {
 } from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 
+import {NearbyStopPlacesScreenParams} from '@atb/screens/Dashboard/NearbyStopPlacesScreen';
+import {PlaceScreenParams} from '@atb/screens/Departures/PlaceScreen';
 export type ProfileStackParams = {
   ProfileHome: undefined;
   PaymentOptions: undefined;
   TicketHistory: undefined;
   DeleteProfile: undefined;
   FavoriteList: undefined;
-  FavoriteDepartures: undefined;
+  FavoriteDeparturesProfileScreen: undefined;
   SelectStartScreen: undefined;
   TravelToken: undefined;
   SelectTravelToken: undefined;
@@ -29,6 +31,8 @@ export type ProfileStackParams = {
   PaymentInformation: undefined;
   TermsInformation: undefined;
   TicketInspectionInformation: undefined;
+  NearbyStopPlacesProfileScreen: NearbyStopPlacesScreenParams;
+  PlaceScreen: PlaceScreenParams;
 };
 
 export type ProfileStackRootProps = TabNavigatorScreenProps<'Profile'>;

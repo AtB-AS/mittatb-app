@@ -1,17 +1,21 @@
 import React from 'react';
 import {Map} from '@atb/components/map';
 import {MapScreenProps} from '@atb/screens/Map/index';
-import {Place, Quay} from '@atb/api/types/departures';
+import {StopPlace, Quay} from '@atb/api/types/departures';
 import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import StatusBarOnFocus from '@atb/components/status-bar-on-focus';
+import {NavigateToTripSearchCallback as TravelFromAndToLocationsCallback} from '@atb/components/map/types';
 
 export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   if (isScreenReaderEnabled) return <MapDisabledForScreenReader />;
-
-  const navigateToQuay = (place: Place, quay: Quay) => {
-    navigation.navigate('PlaceScreen', {place, selectedQuay: quay});
+  const navigateToQuay = (place: StopPlace, quay: Quay) => {
+    navigation.navigate('PlaceScreen', {
+      place,
+      selectedQuay: quay,
+      mode: 'Departure',
+    });
   };
   const navigateToDetails = (
     serviceJourneyId: string,
@@ -34,6 +38,18 @@ export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
       activeItemIndex: 0,
     });
   };
+  const navigateToTripSearch: TravelFromAndToLocationsCallback = (
+    location,
+    destination,
+  ) => {
+    navigation.navigate({
+      name: 'TripSearch',
+      params: {
+        [destination]: location,
+      },
+      merge: true,
+    });
+  };
 
   return (
     <>
@@ -42,6 +58,7 @@ export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
         selectionMode={'ExploreStops'}
         navigateToQuay={navigateToQuay}
         navigateToDetails={navigateToDetails}
+        navigateToTripSearch={navigateToTripSearch}
       />
     </>
   );

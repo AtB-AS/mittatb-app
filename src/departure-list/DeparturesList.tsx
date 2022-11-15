@@ -11,6 +11,7 @@ import {ActivityIndicator, View} from 'react-native';
 import QuaySection from './section-items/quay-section';
 import {hasNoGroupsWithDepartures, hasNoQuaysWithDepartures} from './utils';
 import {StopPlace} from '@atb/api/types/trips';
+import DeparturesTexts from '@atb/translations/screens/Departures';
 
 type DeparturesListProps = {
   departures: StopPlaceGroup[] | null;
@@ -53,7 +54,7 @@ export default function DeparturesList({
 
   if (!isLoading && hasNoQuaysWithDepartures(departures)) {
     const message = !showOnlyFavorites
-      ? t(NearbyTexts.results.messages.emptyResult)
+      ? t(DeparturesTexts.message.emptyResult)
       : t(NearbyTexts.results.messages.emptyResultFavorites);
     return (
       <View style={styles.container}>

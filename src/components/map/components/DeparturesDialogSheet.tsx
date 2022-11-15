@@ -4,24 +4,25 @@ import {ActivityIndicator, View} from 'react-native';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '../../screen-header';
-import {
-  NearbyTexts,
-  ScreenHeaderTexts,
-  useTranslation,
-} from '@atb/translations';
+import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import StopPlaceView from '@atb/screens/Departures/StopPlaceView';
 import {SearchTime} from '@atb/screens/Departures/utils';
-import {Place, Quay} from '@atb/api/types/departures';
+import {StopPlace, Quay} from '@atb/api/types/departures';
 import ThemeText from '../../text';
 import MessageBox from '@atb/components/message-box';
 import {Feature, Point} from 'geojson';
 import {useReverseGeocoder} from '@atb/geocoder';
 import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
+import Button from '@atb/components/button';
+import {Location, SearchLocation} from '@atb/favorites/types';
+import {NavigateToTripSearchCallback} from '../types';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
 
 type DeparturesDialogSheetProps = {
   close: () => void;
   stopPlaceFeature: Feature<Point>;
-  navigateToQuay: (place: Place, quay: Quay) => void;
+  navigateToQuay: (stopPlace: StopPlace, quay: Quay) => void;
   navigateToDetails: (
     serviceJourneyId: string,
     serviceDate: string,
@@ -29,6 +30,7 @@ type DeparturesDialogSheetProps = {
     fromQuayId?: string,
     isTripCancelled?: boolean,
   ) => void;
+  navigateToTripSearch: NavigateToTripSearchCallback;
 };
 
 const DeparturesDialogSheet = ({
@@ -36,6 +38,7 @@ const DeparturesDialogSheet = ({
   stopPlaceFeature,
   navigateToDetails,
   navigateToQuay,
+  navigateToTripSearch,
 }: DeparturesDialogSheetProps) => {
   const {t} = useTranslation();
   const styles = useBottomSheetStyles();
@@ -44,10 +47,12 @@ const DeparturesDialogSheet = ({
     date: new Date().toISOString(),
   });
   const [longitude, latitude] = stopPlaceFeature.geometry.coordinates;
+  const {locationEnabled, location} = useGeolocationState();
   const {
     locations,
     isSearching: isGeocoderSearching,
     error: geocoderError,
+    forceRefresh: forceRefreshReverseGeocode,
   } = useReverseGeocoder({longitude, latitude} || null);
 
   const filteredLocations = locations?.filter(
@@ -58,9 +63,8 @@ const DeparturesDialogSheet = ({
 
   const closestLocation = filteredLocations?.[0];
 
-  const {state: stopDetailsState} = useStopsDetailsData(
-    closestLocation && [closestLocation.id],
-  );
+  const {state: stopDetailsState, forceRefresh: forceRefreshStopDetailsData} =
+    useStopsDetailsData(closestLocation && [closestLocation.id]);
   const {
     data: stopDetailsData,
     isLoading: isStopDetailsLoading,
@@ -70,6 +74,16 @@ const DeparturesDialogSheet = ({
   const stopPlace = stopDetailsData?.stopPlaces?.[0];
   const isLoading = isStopDetailsLoading || isGeocoderSearching;
   const didLoadingDataFail = !!geocoderError || !!stopDetailsError;
+
+  const refresh = () => {
+    if (!!geocoderError) {
+      return forceRefreshReverseGeocode();
+    }
+
+    if (!!stopDetailsError) {
+      return forceRefreshStopDetailsData();
+    }
+  };
 
   const StopPlaceViewOrError = () => {
     if (!isLoading && !didLoadingDataFail) {
@@ -89,6 +103,7 @@ const DeparturesDialogSheet = ({
             setShowOnlyFavorites={(_) => {}}
             testID="departuresContentView"
             allowFavouriteSelection={false}
+            mode={'Departure'}
           />
         );
       }
@@ -97,7 +112,7 @@ const DeparturesDialogSheet = ({
         <View style={styles.paddingHorizontal}>
           <MessageBox
             type="info"
-            message={t(NearbyTexts.results.messages.emptyResult)}
+            message={t(DeparturesTexts.message.emptyResult)}
           />
         </View>
       );
@@ -108,7 +123,10 @@ const DeparturesDialogSheet = ({
         <View style={styles.paddingHorizontal}>
           <MessageBox
             type="error"
-            message={t(NearbyTexts.results.messages.resultFailed)}
+            message={t(DeparturesTexts.message.resultFailed)}
+            onPress={() => {
+              refresh();
+            }}
           />
         </View>
       );
@@ -120,6 +138,17 @@ const DeparturesDialogSheet = ({
       </View>
     );
   };
+
+  const stopPlaceGeoLocation: Location | undefined =
+    (stopPlaceFeature.properties && {
+      ...(stopPlaceFeature.properties as SearchLocation),
+      label: stopPlaceFeature.properties.name,
+      coordinates: {latitude, longitude},
+      resultType: 'search',
+    }) ||
+    undefined;
+
+  const currentLocation = locationEnabled && location ? location : undefined;
 
   return (
     <BottomSheetContainer maxHeightValue={0.5} fullHeight>
@@ -133,6 +162,30 @@ const DeparturesDialogSheet = ({
         }}
       />
       <View style={styles.departuresContainer}>
+        <View style={styles.buttonsContainer}>
+          <View style={styles.travelButton}>
+            <Button
+              text={t(DeparturesDialogSheetTexts.travelFrom.title)}
+              onPress={() =>
+                stopPlaceGeoLocation &&
+                navigateToTripSearch(stopPlaceGeoLocation, 'fromLocation')
+              }
+              mode="primary"
+              style={styles.travelFromButtonPadding}
+            />
+          </View>
+          <View style={styles.travelButton}>
+            <Button
+              text={t(DeparturesDialogSheetTexts.travelTo.title)}
+              onPress={() =>
+                stopPlaceGeoLocation &&
+                navigateToTripSearch(stopPlaceGeoLocation, 'toLocation')
+              }
+              mode="primary"
+              style={styles.travelToButtonPadding}
+            />
+          </View>
+        </View>
         <ThemeText
           type="body__secondary"
           color="secondary"
@@ -149,6 +202,22 @@ const DeparturesDialogSheet = ({
 const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
   departuresContainer: {
     flex: 1,
+  },
+  buttonsContainer: {
+    padding: theme.spacings.medium,
+    flexDirection: 'row',
+  },
+  travelButton: {
+    flex: 1,
+  },
+  travelFromButtonPadding: {
+    marginRight: theme.spacings.small,
+  },
+  travelToButtonPadding: {
+    marginLeft: theme.spacings.small,
+  },
+  loadingIndicator: {
+    padding: theme.spacings.medium,
   },
   paddingHorizontal: {
     paddingHorizontal: theme.spacings.medium,
