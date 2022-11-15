@@ -73,7 +73,7 @@ export type UserCountState = {
   addCount: (userTypeString: string) => void;
   removeCount: (userTypeString: string) => void;
   updateSelectable: (selectableUserProfiles: UserProfileWithCount[]) => void;
-  ticketType?: PreassignedFareProductType;
+  fareProductType?: PreassignedFareProductType;
 };
 
 export default function useUserCountState(

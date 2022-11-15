@@ -7,7 +7,7 @@ const DashboardTexts = {
       logo: _('Nullstill reisesøk', 'Reset search'),
     },
   },
-  buyTicketsButton: _('Kjøp billetter', 'Buy tickets'),
+  buyButton: _('Kjøp billetter', 'Buy tickets'),
 };
 
 export default DashboardTexts;

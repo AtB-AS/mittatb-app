@@ -8,9 +8,8 @@ import {MapPin} from '../assets/svg/mono-icons/map';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {usePreferenceItems} from '@atb/preferences';
-import Assistant from '@atb/screens/Assistant';
 import Dashboard from '@atb/screens/Dashboard';
-import DeparturesScreen from '@atb/screens/Departures';
+import DeparturesStack from '@atb/screens/Departures';
 import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/screens/MobileTokenOnboarding/utils';
 import MapStack from '@atb/screens/Map';
 import TicketingScreen from '@atb/screens/Ticketing';
@@ -24,11 +23,10 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
-import {useNewFrontpage} from '@atb/screens/Dashboard/use-new-frontpage';
 import {TabNavigatorParams} from './types';
 import NearbyScreen from '@atb/screens/Nearby';
 import ProfileScreen from '@atb/screens/Profile';
-import {useMapPage} from '@atb/components/map/use-map-page';
+import {useMapPage} from '@atb/components/map/hooks/use-map-page';
 
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
@@ -37,7 +35,6 @@ const NavigationRoot = () => {
   const {t} = useTranslation();
   const {startScreen, newDepartures} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
-  const shouldUseNewFrontPage = useNewFrontpage();
 
   const showMapPage = useMapPage();
   useGoToMobileTokenOnboardingWhenNecessary();
@@ -58,8 +55,8 @@ const NavigationRoot = () => {
       initialRouteName={settingToRouteName(startScreen)}
     >
       <Tab.Screen
-        name="Assistant"
-        component={shouldUseNewFrontPage ? Dashboard : Assistant}
+        name="Dashboard"
+        component={Dashboard}
         options={tabSettings(
           t(dictionary.navigation.assistant),
           t(dictionary.navigation.assistant_a11y),
@@ -83,7 +80,7 @@ const NavigationRoot = () => {
       )}
       <Tab.Screen
         name="Nearest"
-        component={newDepartures ? DeparturesScreen : NearbyScreen}
+        component={newDepartures ? DeparturesStack : NearbyScreen}
         options={tabSettings(
           t(dictionary.navigation.nearby),
           t(dictionary.navigation.nearby),

@@ -1,7 +1,7 @@
 import {Language, PurchaseOverviewTexts} from '@atb/translations';
 import {TFunc} from '@leile/lobo-t';
 
-export function getTrainTicketNoticeText(
+export function getValidOnTrainNoticeText(
   t: TFunc<typeof Language>,
   fareProductType?: string,
 ) {

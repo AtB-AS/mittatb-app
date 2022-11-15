@@ -1,7 +1,7 @@
-export {default as BackArrow} from './BackArrow';
-export {default as MapControls} from './MapControls';
-export {default as PositionArrow} from './PositionArrow';
-export {default as shadows} from './shadows';
+export {default as BackArrow} from './components/BackArrow';
+export {default as MapControls} from './components/MapControls';
+export {default as PositionArrow} from './components/PositionArrow';
+export {default as shadows} from './components/shadows';
 export {MapViewConfig, MapCameraConfig} from './MapConfig';
-export {useControlPositionsStyle} from './use-control-styles';
+export {useControlPositionsStyle} from './hooks/use-control-styles';
 export {default as Map} from './Map';

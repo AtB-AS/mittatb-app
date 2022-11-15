@@ -5,8 +5,8 @@ import {
   PaymentType,
   ReserveOffer,
   reserveOffers,
-  TicketReservation,
-} from '@atb/tickets';
+  OfferReservation,
+} from '@atb/ticketing';
 import {AxiosError} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';
 import {Linking} from 'react-native';
@@ -18,13 +18,13 @@ export type ErrorContext = 'reserve-offer' | 'open-vipps-url';
 
 type VippsReducerState = {
   state: State;
-  reservation?: TicketReservation;
+  reservation?: OfferReservation;
   error?: {context: ErrorContext; type: ErrorType};
 };
 
 type VippsReducerAction =
   | {type: 'RESTART_RESERVATION'}
-  | {type: 'OFFER_RESERVED'; reservation: TicketReservation}
+  | {type: 'OFFER_RESERVED'; reservation: OfferReservation}
   | {type: 'VIPPS_APP_OPENED'}
   | {type: 'SET_ERROR'; errorType: ErrorType; errorContext: ErrorContext};
 

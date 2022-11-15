@@ -45,7 +45,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
     position: 'absolute',
     bottom: 0,
-    borderTopLeftRadius: theme.border.radius.regular,
-    borderTopRightRadius: theme.border.radius.regular,
+    borderTopLeftRadius: theme.border.radius.circle,
+    borderTopRightRadius: theme.border.radius.circle,
   },
 }));

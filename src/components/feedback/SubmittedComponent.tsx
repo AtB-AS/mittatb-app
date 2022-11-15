@@ -7,7 +7,8 @@ import {useTranslation, FeedbackTexts} from '@atb/translations';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Intercom from 'react-native-intercom';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {Chat, Support} from '@atb/assets/svg/mono-icons/actions';
+import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {FeedbackQuestionsViewContext} from './FeedbackContext';
 import {Opinions} from '.';
 
@@ -76,7 +77,7 @@ const SubmittedComponent = ({
           <Button
             onPress={handleButtonClick}
             text={t(FeedbackTexts.additionalFeedback.contactsheetButton)}
-            icon={Support}
+            icon={ExternalLink}
             interactiveColor="interactive_0"
             iconPosition="right"
           />

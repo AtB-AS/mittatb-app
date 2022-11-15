@@ -1,8 +1,4 @@
-import {
-  EstimatedCall,
-  Place as StopPlace,
-  Quay,
-} from '@atb/api/types/departures';
+import {EstimatedCall, StopPlace, Quay} from '@atb/api/types/departures';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import * as Sections from '@atb/components/sections';
 import SectionSeparator from '@atb/components/sections/section-separator';
@@ -16,14 +12,16 @@ import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import EstimatedCallItem from './EstimatedCallItem';
+import {StopPlacesMode} from '@atb/screens/Departures/types';
 
 type QuaySectionProps = {
   quay: Quay;
   departuresPerQuay?: number;
   data: EstimatedCall[] | null;
+  didLoadingDataFail: boolean;
   testID?: 'quaySection' | string;
   navigateToQuay?: (arg0: Quay) => void;
-  navigateToDetails: (
+  navigateToDetails?: (
     serviceJourneyId: string,
     serviceDate: string,
     date?: string,
@@ -32,6 +30,8 @@ type QuaySectionProps = {
   ) => void;
   stopPlace: StopPlace;
   showOnlyFavorites: boolean;
+  allowFavouriteSelection: boolean;
+  mode: StopPlacesMode;
 };
 
 type EstimatedCallRenderItem = {
@@ -43,18 +43,25 @@ export default function QuaySection({
   quay,
   departuresPerQuay,
   data,
+  didLoadingDataFail,
   testID,
   navigateToQuay,
   navigateToDetails,
   stopPlace,
   showOnlyFavorites,
+  allowFavouriteSelection,
+  mode,
 }: QuaySectionProps): JSX.Element {
   const {favoriteDepartures} = useFavorites();
   const [isMinimized, setIsMinimized] = useState(false);
   const styles = useStyles();
   const departures = getDeparturesForQuay(data, quay);
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
 
+  const departuresToDisplay =
+    mode === 'Favourite'
+      ? departures.sort(compareByLineNameAndDesc)
+      : departures;
   useEffect(() => {
     if (!showOnlyFavorites) return setIsMinimized(false);
     setIsMinimized(
@@ -63,11 +70,18 @@ export default function QuaySection({
     );
   }, [showOnlyFavorites]);
 
+  const hasMoreItemsThanDisplayLimit =
+    departuresPerQuay && departuresToDisplay.length > departuresPerQuay;
+
+  const shouldShowMoreItemsLink =
+    navigateToQuay &&
+    !isMinimized &&
+    (mode === 'Departure' || hasMoreItemsThanDisplayLimit);
+
   return (
     <View testID={testID}>
       <Sections.Section withPadding withBottomPadding>
         <Sections.GenericClickableItem
-          type="inline"
           onPress={() => {
             setIsMinimized(!isMinimized);
           }}
@@ -106,11 +120,16 @@ export default function QuaySection({
         {!isMinimized && (
           <FlatList
             ItemSeparatorComponent={SectionSeparator}
-            data={departures && departures.slice(0, departuresPerQuay)}
+            data={
+              departuresToDisplay &&
+              departuresToDisplay.slice(0, departuresPerQuay)
+            }
             renderItem={({item: departure, index}: EstimatedCallRenderItem) => (
               <Sections.GenericItem
                 radius={
-                  !navigateToQuay && index === departures.length - 1
+                  (!navigateToQuay &&
+                    index === departuresToDisplay.length - 1) ||
+                  !shouldShowMoreItemsLink
                     ? 'bottom'
                     : undefined
                 }
@@ -122,6 +141,8 @@ export default function QuaySection({
                   quay={quay}
                   stopPlace={stopPlace}
                   navigateToDetails={navigateToDetails}
+                  allowFavouriteSelection={allowFavouriteSelection}
+                  mode={mode}
                 />
               </Sections.GenericItem>
             )}
@@ -135,7 +156,7 @@ export default function QuaySection({
               <>
                 {data && (
                   <Sections.GenericItem
-                    radius={!navigateToQuay ? 'bottom' : undefined}
+                    radius={!shouldShowMoreItemsLink ? 'bottom' : undefined}
                   >
                     <ThemeText
                       color="secondary"
@@ -152,14 +173,23 @@ export default function QuaySection({
             }
           />
         )}
-        {!data && !isMinimized && (
+        {!isMinimized && didLoadingDataFail && (
+          <Sections.GenericItem>
+            <View style={styles.messageBox}>
+              <ThemeText type="body__secondary" color="secondary">
+                {t(DeparturesTexts.message.noData)}
+              </ThemeText>
+            </View>
+          </Sections.GenericItem>
+        )}
+        {!data && !isMinimized && !didLoadingDataFail && (
           <Sections.GenericItem>
             <View style={{width: '100%'}}>
               <ActivityIndicator></ActivityIndicator>
             </View>
           </Sections.GenericItem>
         )}
-        {navigateToQuay && !isMinimized && (
+        {shouldShowMoreItemsLink && (
           <Sections.LinkItem
             icon="arrow-right"
             text={
@@ -188,18 +218,46 @@ function getDeparturesForQuay(
   );
 }
 
+function compareByLineNameAndDesc(
+  d1: EstimatedCall,
+  d2: EstimatedCall,
+): number {
+  const lineNumber1 = d1.serviceJourney?.line.publicCode;
+  const lineNumber2 = d2.serviceJourney?.line.publicCode;
+  const lineDesc1 = d1?.destinationDisplay?.frontText;
+  const lineDesc2 = d2?.destinationDisplay?.frontText;
+
+  if (!lineNumber1) return 1;
+  if (!lineNumber2) return -1;
+  // If both public codes are numbers, compare as numbers (e.g. 2 < 10)
+  if (parseInt(lineNumber1) && parseInt(lineNumber2)) {
+    //if both line numbers are same, compare by front text i.e. line description
+    if (parseInt(lineNumber1) === parseInt(lineNumber2)) {
+      if (!lineDesc1) return 1;
+      if (!lineDesc2) return -1;
+      return lineDesc1.localeCompare(lineDesc2);
+    }
+    return parseInt(lineNumber1) - parseInt(lineNumber2);
+  }
+  // Otherwise compare as strings
+  return lineNumber1.localeCompare(lineNumber2);
+}
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   stopPlaceHeader: {
     flexDirection: 'row',
-    maxWidth: '100%',
     alignItems: 'center',
   },
   stopPlaceHeaderText: {
     flexDirection: 'row',
+    flex: 1,
     flexWrap: 'wrap',
-    flexShrink: 1,
   },
   rightMargin: {
     marginRight: theme.spacings.medium,
+  },
+  messageBox: {
+    width: '100%',
+    alignItems: 'center',
   },
 }));

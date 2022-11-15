@@ -1,14 +1,22 @@
-import {Place, Quay} from '@atb/api/types/departures';
+import {StopPlace, Quay} from '@atb/api/types/departures';
 import {useFavorites} from '@atb/favorites';
-import {SearchTime} from '@atb/screens/Departures/utils';
+import {
+  getLimitOfDeparturesPerLineByMode,
+  getTimeRangeByMode,
+  SearchTime,
+} from '@atb/screens/Departures/utils';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
-import DateNavigation from './components/DateNavigator';
+import DateSelection from './components/DateSelection';
 import FavoriteToggle from './components/FavoriteToggle';
 import QuaySection from './components/QuaySection';
 import {useQuayData} from './state/quay-state';
 import {hasFavorites} from './StopPlaceView';
+import {StopPlacesMode} from '@atb/screens/Departures/types';
+import MessageBox from '@atb/components/message-box';
+import DeparturesTexts from '@atb/translations/screens/Departures';
+import {useTranslation} from '@atb/translations';
 
 export type QuayViewParams = {
   quay: Quay;
@@ -16,7 +24,7 @@ export type QuayViewParams = {
 
 export type QuayViewProps = {
   quay: Quay;
-  navigateToDetails: (
+  navigateToDetails?: (
     serviceJourneyId: string,
     serviceDate: string,
     date?: string,
@@ -27,7 +35,8 @@ export type QuayViewProps = {
   showOnlyFavorites: boolean;
   setShowOnlyFavorites: (enabled: boolean) => void;
   testID?: string;
-  stopPlace: Place;
+  stopPlace: StopPlace;
+  mode: StopPlacesMode;
 };
 
 export default function QuayView({
@@ -39,16 +48,22 @@ export default function QuayView({
   setShowOnlyFavorites,
   testID,
   stopPlace,
+  mode,
 }: QuayViewProps) {
   const styles = useStyles();
+  const {t} = useTranslation();
   const {favoriteDepartures} = useFavorites();
-  const {state, refresh} = useQuayData(
+  const searchStartTime =
+    searchTime?.option !== 'now' ? searchTime.date : undefined;
+  const {state, refresh, forceRefresh} = useQuayData(
     quay,
     showOnlyFavorites,
-    searchTime?.option !== 'now' ? searchTime.date : undefined,
+    mode,
+    searchStartTime,
   );
 
   const quayListData: SectionListData<Quay>[] = [{data: [quay]}];
+  const didLoadingDataFail = !!state.error;
 
   const placeHasFavorites = hasFavorites(
     favoriteDepartures,
@@ -69,21 +84,44 @@ export default function QuayView({
   return (
     <SectionList
       ListHeaderComponent={
-        <View style={styles.header}>
-          {placeHasFavorites && (
-            <FavoriteToggle
-              enabled={showOnlyFavorites}
-              setEnabled={setShowOnlyFavorites}
-            />
+        <>
+          {didLoadingDataFail && (
+            <View
+              style={[
+                styles.messageBox,
+                mode !== 'Departure' ? styles.marginBottom : undefined,
+              ]}
+            >
+              <MessageBox
+                type="error"
+                message={t(DeparturesTexts.message.resultFailed)}
+                onPress={() => {
+                  forceRefresh();
+                }}
+              />
+            </View>
           )}
-          <DateNavigation
-            searchTime={searchTime}
-            setSearchTime={setSearchTime}
-          />
-        </View>
+          {mode === 'Departure' ? (
+            <View style={styles.header}>
+              {placeHasFavorites && (
+                <FavoriteToggle
+                  enabled={showOnlyFavorites}
+                  setEnabled={setShowOnlyFavorites}
+                />
+              )}
+              <DateSelection
+                searchTime={searchTime}
+                setSearchTime={setSearchTime}
+              />
+            </View>
+          ) : null}
+        </>
       }
       refreshControl={
-        <RefreshControl refreshing={state.isLoading} onRefresh={refresh} />
+        <RefreshControl
+          refreshing={state.isLoading}
+          onRefresh={didLoadingDataFail ? forceRefresh : refresh}
+        />
       }
       sections={quayListData}
       testID={testID}
@@ -92,10 +130,13 @@ export default function QuayView({
         <QuaySection
           quay={item}
           data={state.data}
+          didLoadingDataFail={!!state.error}
           navigateToDetails={navigateToDetails}
           testID={'quaySection'}
           stopPlace={stopPlace}
           showOnlyFavorites={showOnlyFavorites}
+          allowFavouriteSelection={true}
+          mode={mode}
         />
       )}
     />
@@ -106,5 +147,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
     paddingVertical: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
+  },
+  messageBox: {
+    marginHorizontal: theme.spacings.medium,
+  },
+  marginBottom: {
+    marginBottom: 100,
   },
 }));

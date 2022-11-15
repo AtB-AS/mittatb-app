@@ -66,18 +66,18 @@ describe('Tickets anonymous', () => {
   it('should get an offer for a single ticket', async () => {
     await expectToBeVisibleByText('Buy');
     await expectToBeVisibleByText('Valid');
-    await tapById('buyTicketsTab');
+    await tapById('purchaseTab');
     await expectToBeVisibleByText('Single ticket');
     //await expectToBeVisibleByText('Periodic ticket');
     await expectToBeVisibleByText('24 hour pass');
 
     // Choose single ticket
-    await tapById('singleTicket');
+    await tapById('singleFareProduct');
 
     await verifyTravellerCounts(1);
     await expectIdToHaveText(
       'offerTotalPriceText',
-      `Total ${ticketInfo.singleTicketAdultPrice}.00 kr`,
+      `Total ${ticketInfo.singleFareProductAdultPrice}.00 kr`,
     );
 
     await scroll('ticketingScrollView', 'bottom');
@@ -85,7 +85,9 @@ describe('Tickets anonymous', () => {
 
     await expectToBeVisibleByText('Single ticket');
     await expectToBeVisibleByText('1 Adult');
-    await expectToBeVisibleByText(`${ticketInfo.singleTicketAdultPrice}.00 kr`);
+    await expectToBeVisibleByText(
+      `${ticketInfo.singleFareProductAdultPrice}.00 kr`,
+    );
     await expectToBeVisibleByText('Single ticket bus/tram');
     //Zone is either A or C3 during the tests
     await expectToBeVisibleByPartOfText('Valid in zone');
@@ -93,13 +95,13 @@ describe('Tickets anonymous', () => {
   });
 
   it('should be able to change travellers on a single ticket', async () => {
-    await tapById('buyTicketsTab');
-    await tapById('singleTicket');
+    await tapById('purchaseTab');
+    await tapById('singleFareProduct');
 
     await verifyTravellerCounts(1);
     await expectIdToHaveText(
       'offerTotalPriceText',
-      `Total ${ticketInfo.singleTicketAdultPrice}.00 kr`,
+      `Total ${ticketInfo.singleFareProductAdultPrice}.00 kr`,
     );
 
     // Change the number of travellers
@@ -107,7 +109,8 @@ describe('Tickets anonymous', () => {
     await tapById('counterInput_child_add');
     await verifyTravellerCounts(2, 0, 1);
     const totPrice =
-      2 * ticketInfo.singleTicketAdultPrice + ticketInfo.singleTicketChildPrice;
+      2 * ticketInfo.singleFareProductAdultPrice +
+      ticketInfo.singleFareProductChildPrice;
 
     // Verify
     await expectIdToHaveText('offerTotalPriceText', `Total ${totPrice}.00 kr`);
@@ -124,8 +127,8 @@ describe('Tickets anonymous', () => {
 
   // TODO The app is crashing (https://github.com/AtB-AS/kundevendt/issues/1560#issuecomment-1252041408)
   xit('should be able to change zone on a single ticket', async () => {
-    await tapById('buyTicketsTab');
-    await tapById('singleTicket');
+    await tapById('purchaseTab');
+    await tapById('singleFareProduct');
 
     // Set zone A -> A
     await setZones('A', 'A');
@@ -135,7 +138,7 @@ describe('Tickets anonymous', () => {
     await expectToBeVisibleByText('Zone A');
     await expectIdToHaveText(
       'offerTotalPriceText',
-      `Total ${ticketInfo.singleTicketAdultPrice}.00 kr`,
+      `Total ${ticketInfo.singleFareProductAdultPrice}.00 kr`,
     );
     await scroll('ticketingScrollView', 'bottom');
     await tapById('goToPaymentButton');
@@ -150,7 +153,7 @@ describe('Tickets anonymous', () => {
     await expectToBeVisibleByText('Zone A to zone B1');
     await expectIdToHaveText(
       'offerTotalPriceText',
-      `Total ${ticketInfo.singleTicketZoneAZoneB1Price}.00 kr`,
+      `Total ${ticketInfo.singleFareProductZoneAZoneB1Price}.00 kr`,
     );
     await scroll('ticketingScrollView', 'bottom');
     await tapById('goToPaymentButton');
@@ -173,8 +176,8 @@ describe('Tickets anonymous', () => {
 
   // NOTE!! Currently not enabled due to no mobile tokens
   xit('should not be able to buy a periodic ticket as anonymous', async () => {
-    await tapById('buyTicketsTab');
-    await tapById('periodicTicket');
+    await tapById('purchaseTab');
+    await tapById('periodicFareProduct');
 
     await expectToBeVisibleByText('Periodic tickets – available now!');
     await expectToBeVisibleByText(
@@ -188,7 +191,7 @@ describe('Tickets anonymous', () => {
 
   // No recent tickets since this anonymous user has not bought any tickets
   it('should not be shown any recent tickets', async () => {
-    await tapById('buyTicketsTab');
+    await tapById('purchaseTab');
 
     // Verify
     await expectNotToExistsById('recent0');
@@ -245,15 +248,15 @@ xdescribe('Tickets authorized', () => {
   it('should buy a single ticket', async () => {
     if (isLoggedIn) {
       await goToTab('tickets');
-      await tapById('buyTicketsTab');
+      await tapById('purchaseTab');
 
       // Choose single ticket
       await expectToBeVisibleByText('Single ticket');
-      await tapById('singleTicket');
+      await tapById('singleFareProduct');
 
       await expectIdToHaveText(
         'offerTotalPriceText',
-        `Total ${ticketInfo.singleTicketAdultPrice}.00 kr`,
+        `Total ${ticketInfo.singleFareProductAdultPrice}.00 kr`,
       );
 
       // Set zone E1 -> E1
@@ -263,7 +266,9 @@ xdescribe('Tickets authorized', () => {
       await tapById('goToPaymentButton');
 
       await expectToBeVisibleByText('Single ticket');
-      await expectToBeVisibleByText(`${ticketInfo.singleTicketAdultPrice} kr`);
+      await expectToBeVisibleByText(
+        `${ticketInfo.singleFareProductAdultPrice} kr`,
+      );
       await expectToBeVisibleByText('Single ticket bus/tram');
       await expectToBeVisibleByText('Starting now');
 
@@ -305,11 +310,11 @@ xdescribe('Tickets authorized', () => {
   it('should be able to buy a period ticket', async () => {
     if (isLoggedIn) {
       await goToTab('tickets');
-      await tapById('buyTicketsTab');
+      await tapById('purchaseTab');
 
       // Choose period ticket
       await expectToBeVisibleByText('Periodic ticket');
-      await tapById('periodicTicket');
+      await tapById('periodicFareProduct');
 
       // Set product
       await tapById('chip30days');
@@ -358,10 +363,10 @@ xdescribe('Tickets authorized', () => {
       };
 
       await goToTab('tickets');
-      await tapById('buyTicketsTab');
+      await tapById('purchaseTab');
 
       // Choose period ticket
-      await tapById('periodicTicket');
+      await tapById('periodicFareProduct');
 
       // Set products and verify in summary
       for (let product of [product7days, product30days]) {
@@ -393,11 +398,11 @@ xdescribe('Tickets authorized', () => {
       const zone = 'E1';
 
       await goToTab('tickets');
-      await tapById('buyTicketsTab');
+      await tapById('purchaseTab');
 
       // Buy ticket
       await buySingleTicket(travellers, zone);
-      await tapById('buyTicketsTab');
+      await tapById('purchaseTab');
 
       // Verify recent tickets
       await expectToExistsById('recent0');
@@ -430,11 +435,11 @@ xdescribe('Tickets authorized', () => {
       const zone = 'E2';
 
       await goToTab('tickets');
-      await tapById('buyTicketsTab');
+      await tapById('purchaseTab');
 
       // Buy ticket
       await buySingleTicket(travellers, zone);
-      await tapById('buyTicketsTab');
+      await tapById('purchaseTab');
 
       // Verify recent tickets
       await expectToExistsById('recent0');
@@ -461,7 +466,7 @@ xdescribe('Tickets authorized', () => {
   it('should not show duplicate recent tickets', async () => {
     if (isLoggedIn) {
       await goToTab('tickets');
-      await tapById('buyTicketsTab');
+      await tapById('purchaseTab');
 
       await expectToExistsById('recent0');
       await expectToExistsById('recent1');

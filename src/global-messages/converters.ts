@@ -1,23 +1,30 @@
 import {Statuses} from '@atb-as/theme';
 import {LanguageAndText} from '@atb/reference-data/types';
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {isArray} from 'lodash';
-import {GlobalMessage, GlobalMessageContext} from './GlobalMessagesContext';
+import {APP_VERSION} from '@env';
+import {Platform} from 'react-native';
+import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
+import {
+  AppPlatformType,
+  GlobalMessageContextType,
+  GlobalMessageRaw,
+  GlobalMessageType,
+} from '@atb/global-messages/types';
 
 export function mapToGlobalMessages(
-  result: FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>[],
-): GlobalMessage[] {
+  result: FirebaseFirestoreTypes.QueryDocumentSnapshot<GlobalMessageRaw>[],
+): GlobalMessageType[] {
   if (!result) return [];
 
   return result
     .map((message) => mapToGlobalMessage(message.id, message.data()))
-    .filter(Boolean) as GlobalMessage[];
+    .filter((gm): gm is GlobalMessageType => !!gm);
 }
 
 function mapToGlobalMessage(
   id: string,
-  result: any,
-): GlobalMessage | undefined {
+  result: GlobalMessageRaw,
+): GlobalMessageType | undefined {
   if (!result) return;
 
   const body = mapToLanguageAndTexts(result.body);
@@ -25,8 +32,15 @@ function mapToGlobalMessage(
   const context = mapToContexts(result.context);
   const type = mapToMessageType(result.type);
   const isDismissable = result.isDismissable;
+  const appVersionMin = result.appVersionMin;
+  const appVersionMax = result.appVersionMax;
+  const platforms = result.appPlatforms;
 
   if (!result.active) return;
+  if (!isAppPlatformValid(platforms)) return;
+  if (appVersionMin && appVersionMin > APP_VERSION) return;
+  if (appVersionMax && appVersionMax < APP_VERSION) return;
+
   if (!body) return;
   if (!context) return;
   if (!type) return;
@@ -51,15 +65,22 @@ function mapToMessageType(type: any) {
   return type as Statuses;
 }
 
-function mapToContexts(data: any): GlobalMessageContext[] | undefined {
+function mapToContexts(data: any): GlobalMessageContextType[] | undefined {
   if (!isArray(data)) return;
 
   return data
     .map((context: any) => mapToContext(context))
-    .filter(Boolean) as GlobalMessageContext[];
+    .filter(Boolean) as GlobalMessageContextType[];
 }
 
-function mapToContext(data: any): GlobalMessageContext | undefined {
+function isAppPlatformValid(platforms: AppPlatformType[]) {
+  if (!platforms) return true;
+  return !!platforms.find(
+    (platform) => platform.toLowerCase() === Platform.OS.toLowerCase(),
+  );
+}
+
+function mapToContext(data: any): GlobalMessageContextType | undefined {
   const options = [
     'app-assistant',
     'app-departures',

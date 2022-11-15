@@ -9,8 +9,8 @@ import {
   PaymentType,
   ReserveOffer,
   reserveOffers,
-  TicketReservation,
-} from '@atb/tickets';
+  OfferReservation,
+} from '@atb/ticketing';
 import {useAuthState} from '@atb/auth';
 import {savePreviousPaymentMethodByUser} from '../../saved-payment-utils';
 import Bugsnag from '@bugsnag/react-native';
@@ -27,7 +27,7 @@ export default function useTerminalState(
   cancelTerminal: () => void,
 ) {
   const [isLoading, setIsLoading] = useState(true);
-  const [reservation, setReservation] = useState<TicketReservation>();
+  const [reservation, setReservation] = useState<OfferReservation>();
   const [error, setError] = useState<PaymentError>();
 
   const {user} = useAuthState();

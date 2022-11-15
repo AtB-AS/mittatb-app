@@ -6,6 +6,9 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {
   CancelledDepartureTexts,
   dictionary,
+  FavoriteDeparturesTexts,
+  Language,
+  TranslateFunction,
   useTranslation,
 } from '@atb/translations';
 import {
@@ -15,7 +18,7 @@ import {
 } from '@atb/utils/date';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
-import {EstimatedCall, Place, Quay} from '@atb/api/types/departures';
+import {EstimatedCall, StopPlace, Quay} from '@atb/api/types/departures';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import useFontScale from '@atb/utils/use-font-scale';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -23,19 +26,24 @@ import {Warning} from '../../../assets/svg/color/situations';
 import ToggleFavouriteDeparture from '@atb/screens/Departures/components/ToggleFavouriteDeparture';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {isToday, parseISO} from 'date-fns';
+import {useOnMarkFavouriteDepartures} from '@atb/screens/Departures/components/use-on-mark-favourite-departures';
+import {StopPlacesMode} from '@atb/screens/Departures/types';
+import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
   testID: string;
   quay: Quay;
-  stopPlace: Place;
-  navigateToDetails: (
+  stopPlace: StopPlace;
+  navigateToDetails?: (
     serviceJourneyId: string,
     serviceDate: string,
     date?: string,
     fromQuayId?: string,
     isTripCancelled?: boolean,
   ) => void;
+  allowFavouriteSelection: boolean;
+  mode: StopPlacesMode;
 };
 
 export default function EstimatedCallItem({
@@ -44,6 +52,8 @@ export default function EstimatedCallItem({
   quay,
   stopPlace,
   navigateToDetails,
+  allowFavouriteSelection,
+  mode,
 }: EstimatedCallItemProps): JSX.Element {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -62,12 +72,30 @@ export default function EstimatedCallItem({
   const isTripCancelled = departure.cancellation;
   const lineName = departure.destinationDisplay?.frontText;
   const lineNumber = line?.publicCode;
+  const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
+    useOnMarkFavouriteDepartures(
+      {...line, lineNumber: lineNumber, lineName: lineName},
+      quay,
+      stopPlace,
+    );
   return (
-    <View style={styles.container}>
+    <TouchableOpacityOrView
+      onClick={mode === 'Favourite' ? onMarkFavourite : undefined}
+      style={styles.container}
+      accessibilityLabel={
+        mode === 'Favourite' ? getLineA11yLabel(departure, t) : undefined
+      }
+      accessibilityHint={
+        mode === 'Favourite'
+          ? t(FavoriteDeparturesTexts.a11yMarkFavouriteHint)
+          : undefined
+      }
+    >
       <TouchableOpacity
         style={styles.actionableItem}
+        disabled={!navigateToDetails}
         onPress={() => {
-          if (departure?.serviceJourney)
+          if (navigateToDetails && departure?.serviceJourney) {
             navigateToDetails(
               departure.serviceJourney?.id,
               departure.date,
@@ -75,9 +103,20 @@ export default function EstimatedCallItem({
               departure.quay?.id,
               departure.cancellation,
             );
+          }
         }}
-        accessibilityHint={t(DeparturesTexts.a11yEstimatedCallItemHint)}
-        accessibilityLabel={getA11yLineLabel(departure, t, language)}
+        accessible={!!navigateToDetails}
+        importantForAccessibility={!!navigateToDetails ? 'yes' : 'no'}
+        accessibilityHint={
+          navigateToDetails
+            ? t(DeparturesTexts.a11yViewDepartureDetailsHint)
+            : undefined
+        }
+        accessibilityLabel={
+          navigateToDetails
+            ? getA11yDeparturesLabel(departure, t, language)
+            : undefined
+        }
       >
         <View style={styles.estimatedCallItem} testID={testID}>
           {line && (
@@ -91,36 +130,57 @@ export default function EstimatedCallItem({
           <ThemeText style={styles.lineName} testID={testID + 'Name'}>
             {departure.destinationDisplay?.frontText}
           </ThemeText>
-          {isTripCancelled && <Warning style={styles.warningIcon} />}
-          <ThemeText
-            type="body__primary--bold"
-            testID={testID + 'Time'}
-            style={isTripCancelled && styles.strikethrough}
-          >
-            {timeWithRealtimePrefix}
-          </ThemeText>
+          {mode === 'Departure' ? (
+            <DepartureTimeAndWarning
+              isTripCancelled={isTripCancelled}
+              timeWithRealtimePrefix={timeWithRealtimePrefix}
+              testID={testID}
+            ></DepartureTimeAndWarning>
+          ) : null}
         </View>
       </TouchableOpacity>
-      {lineName && lineNumber && (
+      {allowFavouriteSelection && (
         <ToggleFavouriteDeparture
-          line={{...line, lineNumber: lineNumber, lineName: lineName}}
-          quay={quay}
-          stop={stopPlace}
+          existingFavorite={existingFavorite}
+          onMarkFavourite={mode === 'Departure' ? onMarkFavourite : undefined}
+          toggleFavouriteAccessibilityLabel={
+            mode === 'Departure' ? toggleFavouriteAccessibilityLabel : undefined
+          }
         />
       )}
-    </View>
+    </TouchableOpacityOrView>
   );
 }
 
-function getA11yLineLabel(departure: any, t: any, language: any) {
-  const line = departure.serviceJourney?.line;
-  const a11yLine = line?.publicCode
-    ? `${t(DeparturesTexts.line)} ${line?.publicCode},`
-    : '';
-  const a11yFrontText = departure.destinationDisplay?.frontText
-    ? `${departure.destinationDisplay?.frontText}.`
-    : '';
+const DepartureTimeAndWarning = ({
+  isTripCancelled,
+  timeWithRealtimePrefix,
+  testID,
+}: {
+  isTripCancelled: boolean;
+  timeWithRealtimePrefix: string;
+  testID: string;
+}) => {
+  const styles = useStyles();
+  return (
+    <>
+      {isTripCancelled && <Warning style={styles.warningIcon} />}
+      <ThemeText
+        type="body__primary--bold"
+        testID={testID + 'Time'}
+        style={isTripCancelled && styles.strikethrough}
+      >
+        {timeWithRealtimePrefix}
+      </ThemeText>
+    </>
+  );
+};
 
+function getA11yDeparturesLabel(
+  departure: EstimatedCall,
+  t: TranslateFunction,
+  language: Language,
+) {
   let a11yDateInfo = '';
   if (departure.expectedDepartureTime) {
     const a11yClock = formatToClockOrLongRelativeMinutes(
@@ -141,7 +201,18 @@ function getA11yLineLabel(departure: any, t: any, language: any) {
 
   return `${
     departure.cancellation ? t(CancelledDepartureTexts.message) : ''
-  } ${a11yLine} ${a11yFrontText} ${a11yDateInfo}`;
+  } ${getLineA11yLabel(departure, t)} ${a11yDateInfo}`;
+}
+
+function getLineA11yLabel(departure: EstimatedCall, t: TranslateFunction) {
+  const line = departure.serviceJourney?.line;
+  const a11yLine = line?.publicCode
+    ? `${t(DeparturesTexts.line)} ${line?.publicCode},`
+    : '';
+  const a11yFrontText = departure.destinationDisplay?.frontText
+    ? `${departure.destinationDisplay?.frontText}.`
+    : '';
+  return `${a11yLine} ${a11yFrontText}`;
 }
 
 type LineChipProps = {
@@ -199,6 +270,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
   },
   actionableItem: {
     flex: 1,

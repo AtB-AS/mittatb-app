@@ -9,6 +9,10 @@ import {
 import {StackScreenProps} from '@react-navigation/stack';
 import {DetailsStackParams} from '../TripDetails/types';
 import {DateTimePickerParams, SearchTime} from './journey-date-picker';
+import NearbyStopPlacesScreen, {
+  NearbyStopPlacesScreenParams,
+} from '@atb/screens/Dashboard/NearbyStopPlacesScreen';
+import {PlaceScreenParams} from '@atb/screens/Departures/PlaceScreen';
 
 export type SearchStateType =
   | 'idle'
@@ -17,24 +21,24 @@ export type SearchStateType =
   | 'search-empty-result';
 
 export type TripPatternWithKey = TripPattern & {key: string};
+export type TripSearchParams = {
+  fromLocation?: Location;
+  toLocation?: Location;
+  searchTime?: SearchTime;
+};
+export type DashboardRootParams = {} & TripSearchParams;
 
 export type DashboardParams = {
-  DashboardRoot: {
-    fromLocation: Location | undefined;
-    toLocation: Location | undefined;
-    searchTime: SearchTime | undefined;
-  };
-  TripSearch: {
-    fromLocation: Location;
-    toLocation: Location;
-    searchTime: SearchTime | undefined;
-  };
-
+  DashboardRoot: DashboardRootParams;
+  TripSearch: TripSearchParams;
   TripDetails: NavigatorScreenParams<DetailsStackParams>;
   DateTimePicker: DateTimePickerParams;
+  FavoriteDeparturesDashboardScreen: undefined;
+  NearbyStopPlacesDashboardScreen: NearbyStopPlacesScreenParams;
+  PlaceScreen: PlaceScreenParams;
 };
 
-export type RootDashboardScreenProps = TabNavigatorScreenProps<'Assistant'>;
+export type RootDashboardScreenProps = TabNavigatorScreenProps<'Dashboard'>;
 
 export type DashboardScreenProps<T extends keyof DashboardParams> =
   CompositeScreenProps<

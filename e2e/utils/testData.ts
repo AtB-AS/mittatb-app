@@ -17,9 +17,9 @@ export const userInfo = {
 };
 
 export const ticketInfo = {
-  singleTicketAdultPrice: 42,
-  singleTicketChildPrice: 21,
-  singleTicketZoneAZoneB1Price: 84,
+  singleFareProductAdultPrice: 42,
+  singleFareProductChildPrice: 21,
+  singleFareProductZoneAZoneB1Price: 84,
   periodic180daysPrice: 4450,
   periodic30daysPrice: 890,
 };

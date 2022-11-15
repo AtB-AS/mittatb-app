@@ -9,21 +9,31 @@ import {
 
 export type StopPlaceQuayDepartures = Types.StopPlaceQuayDeparturesQuery;
 
-type StopPlace = Required<
+type StopPlaceWithEstimatedCalls = Required<
   Required<Types.StopPlaceQuayDeparturesQuery>['stopPlace']
 >;
 
-export type EstimatedCall = Required<
-  StopPlace['quays']
->[0]['estimatedCalls'][0];
+export type QuayWithEstimatedCalls =
+  Required<StopPlaceWithEstimatedCalls>['quays'][0];
 
-export type StopPlacePosition = Required<
+export type EstimatedCall = QuayWithEstimatedCalls['estimatedCalls'][0];
+
+type NearestEdges = Required<
   Required<Required<NearestStopPlacesQuery>['nearest']>['edges']
 >[0];
 
-export type Place = Required<Required<StopPlacePosition>['node']>['place'];
+type NearestPlaceNode = Required<NearestEdges>['node'];
 
-export type Quay = Required<Place>['quays'][0];
+type NearestPlace = Required<NearestPlaceNode>['place'];
+
+// Extract type for Stop Place, as other union types for place are empty types
+export type StopPlace = Extract<NearestPlace, {name: string}>;
+
+export type NearestStopPlaceNode = Omit<NearestPlaceNode, 'place'> & {
+  place: StopPlace;
+};
+
+export type Quay = Required<StopPlace>['quays'][0];
 
 export type FavouriteAPIParam = {
   quayId: string;

@@ -1,17 +1,15 @@
 import {getRealtimeDepartureV2} from '@atb/api/departures';
 import {getStopPlaceDepartures} from '@atb/api/departures/stops-nearest';
-import {EstimatedCall, Place as StopPlace} from '@atb/api/types/departures';
+import {EstimatedCall, StopPlace} from '@atb/api/types/departures';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavorites} from '@atb/favorites';
 import {UserFavoriteDepartures} from '@atb/favorites/types';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {animateNextChange} from '@atb/utils/animation';
 import useInterval from '@atb/utils/use-interval';
-import {useIsFocused} from '@react-navigation/native';
 import {differenceInMinutes} from 'date-fns';
 import {flatMap} from 'lodash';
 import {useCallback, useEffect} from 'react';
-import {LayoutAnimation} from 'react-native';
 import useReducerWithSideEffects, {
   NoUpdate,
   ReducerWithSideEffects,
@@ -20,7 +18,13 @@ import useReducerWithSideEffects, {
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
 import {updateDeparturesWithRealtimeV2} from '../../../departure-list/utils';
-import {getSecondsUntilMidnightOrMinimum} from './quay-state';
+import {StopPlacesMode} from '@atb/screens/Departures/types';
+import {
+  getLimitOfDeparturesPerLineByMode,
+  getTimeRangeByMode,
+} from '@atb/screens/Departures/utils';
+import {TimeoutRequest, useTimeoutRequest} from '@atb/api/client';
+import {AxiosRequestConfig} from 'axios';
 
 export const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 
@@ -32,7 +36,6 @@ const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED =
 // Used to re-trigger full refresh after N minutes.
 // To repopulate the view when we get fewer departures.
 const HARD_REFRESH_LIMIT_IN_MINUTES = 10;
-const MIN_TIME_RANGE = 3 * 60 * 60; // Three hours
 
 export type DepartureDataState = {
   data: EstimatedCall[] | null;
@@ -68,7 +71,10 @@ type DepartureDataActions =
       type: 'LOAD_INITIAL_DEPARTURES';
       stopPlace: StopPlace;
       startTime?: string;
+      timeRange?: number;
       favoriteDepartures?: UserFavoriteDepartures;
+      limitPerLine?: number;
+      timeOut: TimeoutRequest;
     }
   | {
       type: 'LOAD_REALTIME_DATA';
@@ -88,7 +94,10 @@ type DepartureDataActions =
       showOnlyFavorites: boolean;
       stopPlace: StopPlace;
       startTime?: string;
+      timeRange?: number;
       favoriteDepartures?: UserFavoriteDepartures;
+      limitPerLine?: number;
+      timeOut: TimeoutRequest;
     }
   | {
       type: 'SET_ERROR';
@@ -118,6 +127,8 @@ const reducer: ReducerWithSideEffects<
       const queryInput: QueryInput = {
         numberOfDepartures: DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_BE_FETCHED,
         startTime: action.startTime ?? new Date().toISOString(),
+        limitPerLine: action.limitPerLine,
+        timeRange: action.timeRange,
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -129,12 +140,16 @@ const reducer: ReducerWithSideEffects<
         },
         async (state, dispatch) => {
           try {
+            action.timeOut.start();
             const result = await fetchEstimatedCalls(
               queryInput,
               action.stopPlace,
               state.showOnlyFavorites ? action.favoriteDepartures : undefined,
+              {
+                signal: action.timeOut.signal,
+              },
             );
-
+            action.timeOut.clear();
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
@@ -145,7 +160,7 @@ const reducer: ReducerWithSideEffects<
             dispatch({
               type: 'SET_ERROR',
               reset: action.stopPlace.id !== state.locationId,
-              error: getAxiosErrorType(e),
+              error: getAxiosErrorType(e, action.timeOut.didTimeout),
             });
           } finally {
             dispatch({type: 'STOP_LOADER'});
@@ -205,7 +220,10 @@ const reducer: ReducerWithSideEffects<
             type: 'LOAD_INITIAL_DEPARTURES',
             stopPlace: action.stopPlace,
             startTime: action.startTime,
+            timeRange: action.timeRange,
             favoriteDepartures: action.favoriteDepartures,
+            limitPerLine: action.limitPerLine,
+            timeOut: action.timeOut,
           });
         },
       );
@@ -253,22 +271,31 @@ const reducer: ReducerWithSideEffects<
 export function useStopPlaceData(
   stopPlace: StopPlace,
   showOnlyFavorites: boolean,
+  isFocused: boolean,
+  mode: StopPlacesMode,
   startTime?: string,
   updateFrequencyInSeconds: number = 30,
   tickRateInSeconds: number = 10,
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
-  const isFocused = useIsFocused();
   const {favoriteDepartures} = useFavorites();
+  const timeout = useTimeoutRequest();
+  const timeRange = getTimeRangeByMode(mode, startTime);
+  const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
 
+  const loadDepartures = () => {
+    dispatch({
+      type: 'LOAD_INITIAL_DEPARTURES',
+      stopPlace,
+      startTime,
+      timeRange,
+      limitPerLine,
+      favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
+      timeOut: timeout,
+    });
+  };
   const refresh = useCallback(
-    () =>
-      dispatch({
-        type: 'LOAD_INITIAL_DEPARTURES',
-        stopPlace,
-        startTime,
-        favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
-      }),
+    () => loadDepartures(),
     [stopPlace.id, startTime, showOnlyFavorites, favoriteDepartures],
   );
 
@@ -278,12 +305,19 @@ export function useStopPlaceData(
         type: 'SET_SHOW_FAVORITES',
         stopPlace,
         startTime,
+        timeRange,
         showOnlyFavorites,
         favoriteDepartures,
+        limitPerLine,
+        timeOut: timeout,
       }),
     [stopPlace.id, favoriteDepartures, showOnlyFavorites],
   );
-  useEffect(refresh, [stopPlace.id, startTime]);
+  useEffect(() => {
+    refresh();
+
+    return () => timeout.abort();
+  }, [stopPlace.id, startTime]);
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -298,44 +332,45 @@ export function useStopPlaceData(
     () => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace}),
     updateFrequencyInSeconds * 1000,
     [stopPlace.id],
-    !isFocused,
+    !isFocused || mode !== 'Departure',
   );
   useInterval(
     () => dispatch({type: 'TICK_TICK'}),
     tickRateInSeconds * 1000,
     [],
-    !isFocused,
+    !isFocused || mode !== 'Departure',
   );
 
   return {
     state,
     refresh,
+    forceRefresh: loadDepartures,
   };
 }
 
 type QueryInput = {
   numberOfDepartures: number;
   startTime: string;
+  limitPerLine?: number;
+  timeRange?: number;
 };
 
 async function fetchEstimatedCalls(
   queryInput: QueryInput,
   stopPlace: StopPlace,
   favoriteDepartures?: UserFavoriteDepartures,
+  opts?: AxiosRequestConfig,
 ): Promise<EstimatedCall[]> {
-  const timeRange = getSecondsUntilMidnightOrMinimum(
-    queryInput.startTime ?? new Date().toISOString(),
-    MIN_TIME_RANGE,
-  );
-
   const result = await getStopPlaceDepartures(
     {
       id: stopPlace.id,
       startTime: queryInput.startTime,
       numberOfDepartures: queryInput.numberOfDepartures,
-      timeRange: timeRange,
+      timeRange: queryInput.timeRange,
+      limitPerLine: queryInput.limitPerLine,
     },
     favoriteDepartures,
+    opts,
   );
 
   return flatMap(

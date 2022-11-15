@@ -1,8 +1,8 @@
+import React from 'react';
 import useChatIcon from '@atb/chat/use-chat-icon';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import insets from '@atb/utils/insets';
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
 import {AccessibilityProps, TouchableOpacity} from 'react-native';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';

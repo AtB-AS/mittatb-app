@@ -85,7 +85,7 @@ project.ext.react = [
         devDisabledInStaging: true,
         bundleInStaging     : true,
         deleteDebugFilesForVariant: {
-          def variant -> variant.name.toLowerCase().contains("release") || variant.name.toLowerCase().contains("staging")
+          def variant -> variant.name.toLowerCase().contains("release") || variant.name.toLowerCase().contains("staging") || variant.name.toLowerCase().contains("store")
         }
 ]
 

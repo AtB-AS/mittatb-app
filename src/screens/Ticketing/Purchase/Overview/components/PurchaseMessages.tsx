@@ -5,11 +5,11 @@ import {
 } from '@atb/mobile-token/MobileTokenContext';
 import {PreassignedFareProductType} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
-import {useTicketState} from '@atb/tickets';
+import {useTicketingState} from '@atb/ticketing';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {getOtherDeviceIsInspectableWarning} from '../../../Ticket/utils';
-import {getTrainTicketNoticeText} from '../../../utils';
+import {getOtherDeviceIsInspectableWarning} from '../../../FareContracts/utils';
+import {getValidOnTrainNoticeText} from '../../../utils';
 import {TariffZoneWithMetadata} from '../../TariffZones';
 
 export type PurchaseWarningsProps = {
@@ -33,7 +33,7 @@ const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
     remoteTokens,
   } = useMobileTokenContextState();
   const tokensEnabled = useHasEnabledMobileToken();
-  const {customerProfile} = useTicketState();
+  const {customerProfile} = useTicketingState();
   const hasProfileTravelCard = !!customerProfile?.travelcard;
   const showProfileTravelcardWarning = !tokensEnabled && hasProfileTravelCard;
   const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
@@ -74,7 +74,7 @@ const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
       {shouldShowValidTrainTicketNotice && (
         <MessageBox
           containerStyle={styles.warning}
-          message={getTrainTicketNoticeText(t, preassignedFareProductType)}
+          message={getValidOnTrainNoticeText(t, preassignedFareProductType)}
           type="info"
         />
       )}
