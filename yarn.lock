@@ -9,22 +9,22 @@
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.0"
 
-"@atb-as/generate-assets@^5.3.0-alpha.4":
-  version "5.3.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-5.3.0-alpha.4.tgz#b6a4df723fdf991a0aff4dcc85f2e9c17f872baa"
-  integrity sha512-zHQXn6HDvzlDDs5Bx/KDcx32W8r9aLnYixR3V1ZJSmmAGhwFVX5A2zcwN2631J0yrwP5Epo7muovFTwHfCWQjQ==
+"@atb-as/generate-assets@^5.4.1-alpha.0":
+  version "5.4.1-alpha.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-5.4.1-alpha.0.tgz#0c6c703c5dd1aedd997445ecfaf7a337727e7c6f"
+  integrity sha512-CNDsM3BNMsHfLzYRGyVHccqM0BYOaSBuUA+iC8n2MqQMooO0XIJurLATQnJo5DK/9i5ScJuECqHoUd+XfM/Nxw==
   dependencies:
-    "@atb-as/theme" "^6.1.0-alpha.1"
+    "@atb-as/theme" "^6.1.3-alpha.0"
     commander "^9.4.0"
     fast-glob "^3.2.11"
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@^6.1.0-alpha.1":
-  version "6.1.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-6.1.0-alpha.1.tgz#0dd506b85c096fd37e71bf9192ce7eab47eb864e"
-  integrity sha512-nIAjoOMFPUxPzntgUy4gZsxuox+atk+ryvPRi07y0QMyw+CBZMhIreRAOoqU4KlCS0xGxu2KMKUu/OHmqGSj+w==
+"@atb-as/theme@^6.1.3-alpha.0":
+  version "6.1.3-alpha.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-6.1.3-alpha.0.tgz#3f387d7cf683cd425c9e105f92475a18d0802943"
+  integrity sha512-ZagW+ctIYM6T16uXFAng3c9YI2qfJfS3riqEMDwTrgYM+6mnxZAz/M3Ha1Fa8TAruRw15kPFRKXTpqVKRg5AnQ==
   dependencies:
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
