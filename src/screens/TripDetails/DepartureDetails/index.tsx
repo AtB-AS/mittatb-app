@@ -284,7 +284,11 @@ function TripItem({
     type === 'passed' || type === 'after' ? undefined : mode,
     subMode,
   );
-  const showSituations = type !== 'passed' && call.situations.length > 0;
+  // Make sure there is text to show in the situation message
+  const filteredSituations = call.situations.filter(
+    (s) => s.description[0]?.value || s.summary[0]?.value,
+  );
+  const showSituations = type !== 'passed' && filteredSituations.length > 0;
   const {newDepartures} = usePreferenceItems();
   return (
     <View style={[styles.place, isStart && styles.startPlace]}>
