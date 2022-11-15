@@ -81,7 +81,10 @@ export function getUniqueSituations(
       uniqueSituations[situation.situationNumber]
     )
       continue;
-    const value = situation.description[0]?.value;
+    let value = situation.description[0]?.value;
+    if (!value && 'summary' in situation && situation.summary[0]?.value) {
+      value = situation.summary[0]?.value;
+    }
     if (!value) continue;
     if (Object.values(uniqueSituations).includes(value)) continue;
     uniqueSituations[situation.situationNumber] = value;
