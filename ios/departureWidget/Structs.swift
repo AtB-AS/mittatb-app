@@ -212,7 +212,7 @@ extension QuayGroup {
                     quayId: ""
                 ),
                 departures: [Int](0 ..< 5).map { index in
-                    let timeInterval = CGFloat(index) * 500
+                    let timeInterval = CGFloat(index) * 300
                     let timeDate = Date.now.addingTimeInterval(timeInterval)
                     return DepartureTime(
                         time: timeDate,
