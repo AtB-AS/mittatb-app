@@ -29,7 +29,7 @@ struct DepartureWidgetEntryView: View {
 
             } else {
                 // TODO: Base language on preference from the app
-                Text("Du må velge en favorittavgang")
+                Text("Du må velge en favorittavgang").padding()
             }
         }
     }

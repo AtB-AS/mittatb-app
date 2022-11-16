@@ -1,19 +1,20 @@
 import Foundation
 import SwiftUI
 
-struct DepartureTilesView: View {
-    var departureStrings: [String]
+struct DepartureTimesView: View {
+    var aimedTimes: [String]
 
     var body: some View {
         HStack {
-            ForEach(departureStrings, id: \.self) { string in
-                Text(string)
+            ForEach(aimedTimes, id: \.self) { aimedTime in
+                Text(aimedTime)
                     .padding(8)
                     .background(Color("TimeTileBackgroundColor"))
                     .cornerRadius(8)
                     .lineLimit(1)
                     .bold()
+                    .minimumScaleFactor(0.5)
             }
-        }.scaledToFit().minimumScaleFactor(0.1)
+        }
     }
 }

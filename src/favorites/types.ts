@@ -57,9 +57,6 @@ export type FavoriteDeparture = FavoriteDepartureId & {
   visibleOnDashboard?: boolean;
   latitude?: number;
   longitude?: number;
-  lineId?: string;
-  lineName?: string;
-  stopId?: string;
 };
 
 export type FavoriteDepartureWithId = FavoriteDeparture & {

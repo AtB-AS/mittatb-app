@@ -7,7 +7,7 @@ private enum K {
 }
 
 enum ManifestError: Error {
-    case invalidType, parsingData
+    case invalidType, parsingData, decodingData
 }
 
 struct Manifest: Codable {
@@ -31,7 +31,12 @@ struct Manifest: Codable {
             throw ManifestError.parsingData
         }
 
-        favoriteDepartures = try? JSONDecoder().decode([FavoriteDeparture].self, from: departuresJsonData)
+        do {
+            favoriteDepartures = try JSONDecoder().decode([FavoriteDeparture].self, from: departuresJsonData)
+        } catch {
+            debugPrint("Error decoding data with error: \(error)")
+            throw ManifestError.decodingData
+        }
     }
 
     private static func buildManifest() -> Manifest? {

@@ -30,8 +30,16 @@ class ViewModel: ObservableObject {
         quayGroup?.quay.name
     }
 
+    var departureGroup: DepartureGroup? {
+        quayGroup?.group.first
+    }
+
+    var departureTimes: [DepartureTime] {
+        departureGroup?.departures ?? []
+    }
+
     var lineInfo: DepartureLineInfo? {
-        quayGroup?.group.first?.lineInfo
+        departureGroup?.lineInfo
     }
 
     var lineName: String? {
@@ -43,25 +51,13 @@ class ViewModel: ObservableObject {
     }
 
     var transportModeIcon: Image {
-        if lineInfo?.transportSubmode == "regionBus" || lineInfo?.transportSubmode == "nightBus" {
-            return Image("RegionBusIcon")
-        }
-        switch lineInfo?.transportMode {
-        case "water":
-            return Image("BoatIcon")
-        case "rail":
-            return Image("TrainIcon")
-        case "tram":
-            return Image("TramIcon")
-        default:
-            return Image("BusIcon")
-        }
+        lineInfo?.transportMode?.icon ?? lineInfo?.transportSubmode?.icon ?? TransportMode.bus.icon
     }
 
     func departureStrings(n: Int) -> [String] {
         var strings: [String] = []
 
-        for departure in departures(numberOfDepartures: n) {
+        for departure in getDepartureDates(max: n) {
             strings.append(dateText(date: departure))
         }
 
@@ -93,25 +89,8 @@ class ViewModel: ObservableObject {
         }
     }
 
-    func gapInDaysFromNow(date: Date) -> Int {
-        guard let gap = Calendar.current.dateComponents([.day], from: Date.now, to: date).day else {
-            return 0
-        }
-        return gap
-    }
-
-    /// Returns the relevant departure times of the current departure
-    func departures(numberOfDepartures: Int) -> [Date] {
-        var times: [Date] = []
-        let departures: [DepartureTime] = quayGroup?.group[0].departures ?? []
-        var count = 0
-
-        for departure in departures {
-            if count < numberOfDepartures, departure.aimedTime > entryDate {
-                times.append(departure.aimedTime)
-                count += 1
-            }
-        }
-        return times
+    /// Filter relevant departure and return `aimed time`
+    func getDepartureDates(max numberOfDepartures: Int) -> [Date] {
+        departureTimes.filter { $0.aimedTime > entryDate }.prefix(numberOfDepartures).map(\.aimedTime)
     }
 }

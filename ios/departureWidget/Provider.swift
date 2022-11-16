@@ -61,7 +61,7 @@ struct Provider: TimelineProvider {
         var smallestDistance: CLLocationDistance?
 
         for departure in departures {
-            let distance = departure.location.distance(from: locationManager.lastLocation ?? locationManager.defaultLocation)
+            let distance = departure.location.distance(from: locationManager.lastLocation ?? LocationManager.defaultLocation)
             if smallestDistance == nil || distance < smallestDistance! {
                 closestDeparture = departure
                 smallestDistance = distance
