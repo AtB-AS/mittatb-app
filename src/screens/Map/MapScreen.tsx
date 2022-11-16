@@ -46,7 +46,7 @@ export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
       name: 'TripSearch',
       params: {
         [destination]: location,
-        callerRouteName: 'MapScreen',
+        callerRoute: {name: 'MapScreen'},
       },
       merge: true,
     });

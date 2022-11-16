@@ -63,7 +63,7 @@ const ResultsBackgroundColor: StaticColorByType<'background'> = 'background_1';
 const TripSearch: React.FC<RootProps> = ({
   navigation,
   route: {
-    params: {callerRouteName},
+    params: {callerRoute},
   },
 }) => {
   const style = useStyle();
@@ -219,12 +219,13 @@ const TripSearch: React.FC<RootProps> = ({
         leftButton={{
           type: 'back',
           onPress: () => {
-            if (callerRouteName) {
+            if (callerRoute?.name) {
               navigation.setParams({
-                callerRouteName: undefined,
+                callerRoute: undefined,
               });
+
               return navigation.navigate({
-                name: callerRouteName as any,
+                name: callerRoute?.name as any,
                 params: {},
               });
             }

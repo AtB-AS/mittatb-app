@@ -25,7 +25,7 @@ export type TripSearchParams = {
   fromLocation?: Location;
   toLocation?: Location;
   searchTime?: SearchTime;
-  callerRouteName?: any;
+  callerRoute?: {name: string};
 };
 export type DashboardRootParams = {} & TripSearchParams;
 
