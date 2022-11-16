@@ -1,9 +1,5 @@
 import {Polygon} from 'geojson';
-
-export type LanguageAndText = {
-  lang: string;
-  value: string;
-};
+import {LanguageAndTextType} from '@atb/translations';
 
 export type PreassignedFareProductType =
   | 'single'
@@ -15,9 +11,9 @@ export type DistributionChannel = 'web' | 'app';
 
 export type PreassignedFareProduct = {
   id: string;
-  name: LanguageAndText;
-  description?: LanguageAndText;
-  alternativeNames: LanguageAndText[];
+  name: LanguageAndTextType;
+  description?: LanguageAndTextType;
+  alternativeNames: LanguageAndTextType[];
   distributionChannel: DistributionChannel[];
   version: string;
   type: PreassignedFareProductType;
@@ -34,15 +30,15 @@ export type UserProfile = {
   maxAge: number;
   userType: number;
   userTypeString: string;
-  name: LanguageAndText;
-  alternativeNames: LanguageAndText[];
-  description: LanguageAndText;
+  name: LanguageAndTextType;
+  alternativeNames: LanguageAndTextType[];
+  description: LanguageAndTextType;
   version: string;
 };
 
 export type TariffZone = {
   id: string;
-  name: LanguageAndText;
+  name: LanguageAndTextType;
   version: string;
   geometry: Omit<Polygon, 'type'> & {type: any};
 };
