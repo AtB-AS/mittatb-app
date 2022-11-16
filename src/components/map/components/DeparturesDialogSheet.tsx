@@ -104,6 +104,44 @@ const DeparturesDialogSheet = ({
             testID="departuresContentView"
             allowFavouriteSelection={false}
             mode={'Departure'}
+            extraHeaderView={() => (
+              <>
+                <View style={styles.buttonsContainer}>
+                  <View style={styles.travelButton}>
+                    <Button
+                      text={t(DeparturesDialogSheetTexts.travelFrom.title)}
+                      onPress={() =>
+                        stopPlaceGeoLocation &&
+                        navigateToTripSearch(
+                          stopPlaceGeoLocation,
+                          'fromLocation',
+                        )
+                      }
+                      mode="primary"
+                      style={styles.travelFromButtonPadding}
+                    />
+                  </View>
+                  <View style={styles.travelButton}>
+                    <Button
+                      text={t(DeparturesDialogSheetTexts.travelTo.title)}
+                      onPress={() =>
+                        stopPlaceGeoLocation &&
+                        navigateToTripSearch(stopPlaceGeoLocation, 'toLocation')
+                      }
+                      mode="primary"
+                      style={styles.travelToButtonPadding}
+                    />
+                  </View>
+                </View>
+                <ThemeText
+                  type="body__secondary"
+                  color="secondary"
+                  style={[styles.title, styles.paddingHorizontal]}
+                >
+                  {t(DeparturesTexts.header.title)}
+                </ThemeText>
+              </>
+            )}
           />
         );
       }
@@ -162,37 +200,6 @@ const DeparturesDialogSheet = ({
         }}
       />
       <View style={styles.departuresContainer}>
-        <View style={styles.buttonsContainer}>
-          <View style={styles.travelButton}>
-            <Button
-              text={t(DeparturesDialogSheetTexts.travelFrom.title)}
-              onPress={() =>
-                stopPlaceGeoLocation &&
-                navigateToTripSearch(stopPlaceGeoLocation, 'fromLocation')
-              }
-              mode="primary"
-              style={styles.travelFromButtonPadding}
-            />
-          </View>
-          <View style={styles.travelButton}>
-            <Button
-              text={t(DeparturesDialogSheetTexts.travelTo.title)}
-              onPress={() =>
-                stopPlaceGeoLocation &&
-                navigateToTripSearch(stopPlaceGeoLocation, 'toLocation')
-              }
-              mode="primary"
-              style={styles.travelToButtonPadding}
-            />
-          </View>
-        </View>
-        <ThemeText
-          type="body__secondary"
-          color="secondary"
-          style={[styles.title, styles.paddingHorizontal]}
-        >
-          {t(DeparturesTexts.header.title)}
-        </ThemeText>
         <StopPlaceViewOrError />
       </View>
     </BottomSheetContainer>

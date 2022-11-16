@@ -9,7 +9,7 @@ import {
   SearchTime,
 } from '@atb/screens/Departures/utils';
 import {StyleSheet} from '@atb/theme';
-import React, {useEffect, useMemo} from 'react';
+import React, {ReactElement, useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import QuaySection from './components/QuaySection';
 import {useStopPlaceData} from './state/stop-place-state';
@@ -38,6 +38,7 @@ type StopPlaceViewProps = {
   isFocused: boolean;
   testID?: string;
   mode: StopPlacesMode;
+  extraHeaderView?: () => ReactElement;
 };
 
 export default function StopPlaceView({
@@ -53,6 +54,7 @@ export default function StopPlaceView({
   isFocused,
   testID,
   mode,
+  extraHeaderView,
 }: StopPlaceViewProps) {
   const styles = useStyles();
   const {favoriteDepartures} = useFavorites();
@@ -115,6 +117,7 @@ export default function StopPlaceView({
               />
             </View>
           )}
+          {extraHeaderView && extraHeaderView()}
           {mode === 'Departure' ? (
             <View
               style={
