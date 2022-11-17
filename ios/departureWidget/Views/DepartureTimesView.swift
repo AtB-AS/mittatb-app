@@ -13,8 +13,10 @@ struct DepartureTimesView: View {
                     .cornerRadius(8)
                     .lineLimit(1)
                     .bold()
+                    .fixedSize()
                     .minimumScaleFactor(0.5)
             }
         }
+        .clipShape(Rectangle())
     }
 }

@@ -3,34 +3,19 @@ import WidgetKit
 
 struct DepartureWidgetEntryView: View {
     var entry: Provider.Entry
-    @ObservedObject var viewModel: ViewModel
+    @ObservedObject var viewModel: WidgetViewModel
     @Environment(\.widgetFamily) var family: WidgetFamily
     @Environment(\.sizeCategory) var sizeCategory: ContentSizeCategory
 
     init(entry: Provider.Entry) {
         self.entry = entry
-        viewModel = ViewModel(quayGroup: entry.quayGroup, date: entry.date)
+        viewModel = WidgetViewModel(quayGroup: entry.quayGroup, date: entry.date)
     }
 
     var body: some View {
         ZStack {
             Color("WidgetBackgroundColor")
-            if let _ = viewModel.lineInfo {
-                switch family {
-                case .systemMedium:
-                    MediumView(viewModel: viewModel, sizeCategory: sizeCategory)
-
-                case .systemSmall:
-                    SmallView(viewModel: viewModel)
-
-                default:
-                    EmptyView()
-                }
-
-            } else {
-                // TODO: Base language on preference from the app
-                Text("Du må velge en favorittavgang").padding()
-            }
+            WidgetInfoView(widgetFamily: family, viewModel: viewModel)
         }
     }
 }
