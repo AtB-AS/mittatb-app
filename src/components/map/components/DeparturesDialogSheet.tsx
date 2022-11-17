@@ -19,7 +19,7 @@ import {NavigateToTripSearchCallback} from '../types';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
 import ThemeIcon from '@atb/components/theme-icon';
-import walk from '@atb/assets/svg/mono-icons/transportation/Walk';
+import {Walk} from '@atb/assets/svg/mono-icons/transportation';
 
 type DeparturesDialogSheetProps = {
   close: () => void;
@@ -170,7 +170,7 @@ const DeparturesDialogSheet = ({
         {distance && (
           <View style={styles.distanceLabel}>
             <ThemeIcon
-              svg={walk}
+              svg={Walk}
               fill={theme.text.colors.secondary}
             ></ThemeIcon>
             <ThemeText type="body__secondary" color="secondary">
