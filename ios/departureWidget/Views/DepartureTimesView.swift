@@ -14,7 +14,7 @@ struct DepartureTimesView: View {
                     .lineLimit(1)
                     .bold()
                     .fixedSize()
-                    .minimumScaleFactor(0.5)
+                    .minimumScaleFactor(0.1)
             }
         }
         .clipShape(Rectangle())

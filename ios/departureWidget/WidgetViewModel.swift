@@ -63,13 +63,13 @@ class WidgetViewModel: ObservableObject {
     /// Returns a text represantation of the depature time containging the hour and minutre of the departure, and showing day if it is in a future day
     private func dateAsText(_ date: Date) -> String {
         let dateTime = date.formatted(.dateTime.locale(locale).hour().minute())
-        if !Calendar.current.isDate(date, inSameDayAs: Date.now) {
+        if Calendar.current.isDate(date, inSameDayAs: Date.now) {
             return dateTime
         }
 
         let dayIndex = Calendar.current.component(.weekday, from: date)
         let weekDay = calendar.weekdaySymbols[dayIndex - 1]
 
-        return String("\(weekDay.prefix(2))." + dateTime)
+        return "\(weekDay.prefix(2)).\(dateTime)"
     }
 }
