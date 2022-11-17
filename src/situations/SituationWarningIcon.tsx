@@ -1,11 +1,10 @@
 import {Warning} from '@atb/assets/svg/color/situations';
 import React, {ComponentProps} from 'react';
 import {hasSituations} from './utils';
-import {Situation as Situation_v1} from '@atb/sdk';
-import {Situation as Situation_from_Trips} from '@atb/api/types/trips';
+import {SituationsType} from '@atb/situations/types';
 
 type Props = {
-  situations: Situation_v1[] | Situation_from_Trips[];
+  situations: SituationsType;
   style?: ComponentProps<typeof Warning>['style'];
   accessibilityLabel?: string;
 };
