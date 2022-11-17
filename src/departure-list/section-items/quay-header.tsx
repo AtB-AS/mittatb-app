@@ -96,9 +96,9 @@ function Distance({distance}: DistanceProps) {
 }
 const humanizeDistance = (meters: number, t: TFunc<typeof Language>) => {
   if (meters >= 1000) {
-    return `${Math.round(meters / 1000)}${t(dictionary.distance.km)}`;
+    return `${Math.round(meters / 1000)} ${t(dictionary.distance.km)}`;
   }
-  return `${Math.round(meters)}${t(dictionary.distance.m)}`;
+  return `${Math.round(meters)} ${t(dictionary.distance.m)}`;
 };
 const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   situations: {
