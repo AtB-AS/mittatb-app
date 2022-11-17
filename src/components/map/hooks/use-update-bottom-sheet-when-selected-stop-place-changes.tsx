@@ -14,6 +14,7 @@ import {findStopPlaceAtClick} from '@atb/components/map/utils';
  */
 export const useUpdateBottomSheetWhenSelectedStopPlaceChanges = (
   mapProps: MapProps,
+  distance: number | undefined,
   mapSelectionAction: MapSelectionActionType | undefined,
   mapViewRef: RefObject<MapboxGL.MapView>,
   closeCallback: () => void,
@@ -47,6 +48,7 @@ export const useUpdateBottomSheetWhenSelectedStopPlaceChanges = (
           () => (
             <DeparturesDialogSheet
               close={closeWithCallback}
+              distance={distance}
               stopPlaceFeature={stopPlaceFeature}
               navigateToDetails={(...params) => {
                 closeBottomSheet();
@@ -69,5 +71,5 @@ export const useUpdateBottomSheetWhenSelectedStopPlaceChanges = (
         closeBottomSheet();
       }
     })();
-  }, [stopPlaceFeature, isFocused]);
+  }, [stopPlaceFeature, isFocused, distance]);
 };
