@@ -1,4 +1,4 @@
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import DeparturesTexts from '@atb/translations/screens/Departures';
@@ -18,9 +18,12 @@ import {Location, SearchLocation} from '@atb/favorites/types';
 import {NavigateToTripSearchCallback} from '../types';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
+import ThemeIcon from '@atb/components/theme-icon';
+import walk from '@atb/assets/svg/mono-icons/transportation/Walk';
 
 type DeparturesDialogSheetProps = {
   close: () => void;
+  distance: number | undefined;
   stopPlaceFeature: Feature<Point>;
   navigateToQuay: (stopPlace: StopPlace, quay: Quay) => void;
   navigateToDetails: (
@@ -35,12 +38,14 @@ type DeparturesDialogSheetProps = {
 
 const DeparturesDialogSheet = ({
   close,
+  distance,
   stopPlaceFeature,
   navigateToDetails,
   navigateToQuay,
   navigateToTripSearch,
 }: DeparturesDialogSheetProps) => {
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const styles = useBottomSheetStyles();
   const [searchTime, setSearchTime] = useState<SearchTime>({
     option: 'now',
@@ -162,6 +167,17 @@ const DeparturesDialogSheet = ({
         }}
       />
       <View style={styles.departuresContainer}>
+        {distance && (
+          <View style={styles.distanceLabel}>
+            <ThemeIcon
+              svg={walk}
+              fill={theme.text.colors.secondary}
+            ></ThemeIcon>
+            <ThemeText type="body__secondary" color="secondary">
+              {distance.toFixed() + ' m'}
+            </ThemeText>
+          </View>
+        )}
         <View style={styles.buttonsContainer}>
           <View style={styles.travelButton}>
             <Button
@@ -202,6 +218,10 @@ const DeparturesDialogSheet = ({
 const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
   departuresContainer: {
     flex: 1,
+  },
+  distanceLabel: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   buttonsContainer: {
     padding: theme.spacings.medium,

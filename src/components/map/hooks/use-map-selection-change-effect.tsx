@@ -1,4 +1,4 @@
-import {RefObject, useState} from 'react';
+import {RefObject, useEffect, useState} from 'react';
 import {getCoordinatesFromMapSelectionAction} from '@atb/components/map/utils';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {useGeolocationState} from '@atb/GeolocationContext';
@@ -29,6 +29,7 @@ export const useMapSelectionChangeEffect = (
   >({source: 'my-position', coords: startingCoordinates});
   const {location: currentLocation} = useGeolocationState();
   const [fromCoords, setFromCoords] = useState(currentLocation?.coordinates);
+  const [distance, setDistance] = useState<number | undefined>();
 
   const cameraFocusMode = useDecideCameraFocusMode(
     mapProps.selectionMode,
@@ -36,9 +37,18 @@ export const useMapSelectionChangeEffect = (
     mapSelectionAction,
     mapViewRef,
   );
+  useEffect(() => {
+    setDistance(
+      cameraFocusMode?.mode === 'map-lines'
+        ? cameraFocusMode.distance
+        : undefined,
+    );
+  }, [cameraFocusMode]);
+
   useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef);
   useUpdateBottomSheetWhenSelectedStopPlaceChanges(
     mapProps,
+    distance,
     mapSelectionAction,
     mapViewRef,
     () => setMapSelectionAction(undefined),
