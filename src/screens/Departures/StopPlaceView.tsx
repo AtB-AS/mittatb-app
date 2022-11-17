@@ -3,12 +3,8 @@ import Feedback from '@atb/components/feedback';
 import {useFavorites} from '@atb/favorites';
 import {UserFavoriteDepartures} from '@atb/favorites/types';
 import {DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW} from '@atb/screens/Departures/state/stop-place-state';
-import {
-  getLimitOfDeparturesPerLineByMode,
-  getTimeRangeByMode,
-  SearchTime,
-} from '@atb/screens/Departures/utils';
-import {StyleSheet} from '@atb/theme';
+import {SearchTime} from '@atb/screens/Departures/utils';
+import {StyleSheet, useTheme} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import QuaySection from './components/QuaySection';
@@ -19,6 +15,11 @@ import {StopPlacesMode} from '@atb/screens/Departures/types';
 import MessageBox from '@atb/components/message-box';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {useTranslation} from '@atb/translations';
+import Button from '@atb/components/button';
+import ThemeText from '@atb/components/text';
+import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
+import ThemeIcon from '@atb/components/theme-icon';
+import {Walk} from '@atb/assets/svg/mono-icons/transportation';
 
 type StopPlaceViewProps = {
   stopPlace: StopPlace;
@@ -38,25 +39,39 @@ type StopPlaceViewProps = {
   isFocused: boolean;
   testID?: string;
   mode: StopPlacesMode;
-};
+} & (
+  | {
+      mode: 'Map';
+      setTravelTarget?: (target: string) => void;
+      distance?: number | undefined;
+    }
+  | {
+      mode: 'Departure';
+    }
+  | {
+      mode: 'Favourite';
+    }
+);
 
-export default function StopPlaceView({
-  stopPlace,
-  showTimeNavigation = true,
-  navigateToQuay,
-  navigateToDetails,
-  allowFavouriteSelection,
-  searchTime,
-  setSearchTime,
-  showOnlyFavorites,
-  setShowOnlyFavorites,
-  isFocused,
-  testID,
-  mode,
-}: StopPlaceViewProps) {
+export default function StopPlaceView(props: StopPlaceViewProps) {
+  const {
+    stopPlace,
+    showTimeNavigation = true,
+    navigateToQuay,
+    navigateToDetails,
+    allowFavouriteSelection,
+    searchTime,
+    setSearchTime,
+    showOnlyFavorites,
+    setShowOnlyFavorites,
+    isFocused,
+    testID,
+    mode,
+  } = props;
   const styles = useStyles();
   const {favoriteDepartures} = useFavorites();
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
   const {state, refresh, forceRefresh} = useStopPlaceData(
@@ -115,6 +130,52 @@ export default function StopPlaceView({
               />
             </View>
           )}
+          {mode === 'Map' ? (
+            <>
+              {props.distance && (
+                <View style={styles.distanceLabel}>
+                  <ThemeIcon
+                    svg={Walk}
+                    fill={theme.text.colors.secondary}
+                  ></ThemeIcon>
+                  <ThemeText type="body__secondary" color="secondary">
+                    {props.distance.toFixed() + ' m'}
+                  </ThemeText>
+                </View>
+              )}
+              <View style={styles.buttonsContainer}>
+                <View style={styles.travelButton}>
+                  <Button
+                    text={t(DeparturesDialogSheetTexts.travelFrom.title)}
+                    onPress={() =>
+                      props.setTravelTarget &&
+                      props.setTravelTarget('fromLocation')
+                    }
+                    mode="primary"
+                    style={styles.travelFromButtonPadding}
+                  />
+                </View>
+                <View style={styles.travelButton}>
+                  <Button
+                    text={t(DeparturesDialogSheetTexts.travelTo.title)}
+                    onPress={() =>
+                      props.setTravelTarget &&
+                      props.setTravelTarget('toLocation')
+                    }
+                    mode="primary"
+                    style={styles.travelToButtonPadding}
+                  />
+                </View>
+              </View>
+              <ThemeText
+                type="body__secondary"
+                color="secondary"
+                style={[styles.title, styles.paddingHorizontal]}
+              >
+                {t(DeparturesTexts.header.title)}
+              </ThemeText>
+            </>
+          ) : undefined}
           {mode === 'Departure' ? (
             <View
               style={
@@ -213,5 +274,32 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   marginBottom: {
     marginBottom: theme.spacings.medium,
+  },
+  buttonsContainer: {
+    padding: theme.spacings.medium,
+    flexDirection: 'row',
+  },
+  travelButton: {
+    flex: 1,
+  },
+  travelFromButtonPadding: {
+    marginRight: theme.spacings.small,
+  },
+  travelToButtonPadding: {
+    marginLeft: theme.spacings.small,
+  },
+  loadingIndicator: {
+    padding: theme.spacings.medium,
+  },
+  paddingHorizontal: {
+    paddingHorizontal: theme.spacings.medium,
+  },
+  title: {
+    paddingBottom: theme.spacings.small,
+  },
+  distanceLabel: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingBottom: theme.spacings.medium,
   },
 }));
