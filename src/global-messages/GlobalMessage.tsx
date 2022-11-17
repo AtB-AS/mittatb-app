@@ -2,12 +2,12 @@ import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {useGlobalMessagesState} from '@atb/global-messages/GlobalMessagesContext';
 import MessageBox from '@atb/components/message-box';
-import {getReferenceDataText} from '@atb/reference-data/utils';
 import {StyleProp, ViewStyle} from 'react-native';
 import {
   GlobalMessageContextType,
   GlobalMessageType,
 } from '@atb/global-messages/types';
+import {getTextForLanguage} from '@atb/translations';
 
 type Props = {
   globalMessageContext?: GlobalMessageContextType;
@@ -42,18 +42,22 @@ const GlobalMessage = ({globalMessageContext, style}: Props) => {
     <>
       {globalMessages
         .filter(isNotADismissedMessage)
-        .map((globalMessage: GlobalMessageType) => (
-          <MessageBox
-            key={globalMessage.id}
-            containerStyle={style}
-            title={getReferenceDataText(globalMessage.title ?? [], language)}
-            message={getReferenceDataText(globalMessage.body, language)}
-            type={globalMessage.type}
-            isMarkdown={true}
-            isDismissable={globalMessage.isDismissable}
-            onDismiss={() => dismissGlobalMessage(globalMessage)}
-          />
-        ))}
+        .map((globalMessage: GlobalMessageType) => {
+          const message = getTextForLanguage(globalMessage.body, language);
+          if (!message) return null;
+          return (
+            <MessageBox
+              key={globalMessage.id}
+              containerStyle={style}
+              title={getTextForLanguage(globalMessage.title ?? [], language)}
+              message={message}
+              type={globalMessage.type}
+              isMarkdown={true}
+              isDismissable={globalMessage.isDismissable}
+              onDismiss={() => dismissGlobalMessage(globalMessage)}
+            />
+          );
+        })}
     </>
   );
 };

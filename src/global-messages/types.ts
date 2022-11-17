@@ -1,5 +1,5 @@
-import {LanguageAndText} from '@atb/reference-data/types';
 import {Statuses} from '@atb/theme';
+import {LanguageAndTextType} from '@atb/translations';
 
 export type AppPlatformType = 'ios' | 'android';
 
@@ -13,8 +13,8 @@ export type GlobalMessageContextType =
 export type GlobalMessageRaw = {
   id: string;
   active: boolean;
-  title?: LanguageAndText[];
-  body: LanguageAndText[];
+  title?: LanguageAndTextType[];
+  body: LanguageAndTextType[];
   type: Statuses;
   context: GlobalMessageContextType[];
   isDismissable?: boolean;
