@@ -18,6 +18,7 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 
 type DeparturesDialogSheetProps = {
   close: () => void;
+  distance: number | undefined;
   stopPlaceFeature: Feature<Point>;
   navigateToQuay: (stopPlace: StopPlace, quay: Quay) => void;
   navigateToDetails: (
@@ -32,6 +33,7 @@ type DeparturesDialogSheetProps = {
 
 const DeparturesDialogSheet = ({
   close,
+  distance,
   stopPlaceFeature,
   navigateToDetails,
   navigateToQuay,
@@ -101,6 +103,7 @@ const DeparturesDialogSheet = ({
             testID="departuresContentView"
             allowFavouriteSelection={false}
             mode={'Map'}
+            distance={distance}
             setTravelTarget={(target) => {
               stopPlaceGeoLocation &&
                 navigateToTripSearch(stopPlaceGeoLocation, target);

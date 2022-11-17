@@ -11,7 +11,7 @@ import {
 } from '@atb/components/sections/section-utils';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
-import SituationMessages from '@atb/situations';
+import {SituationMessagesBox} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
 import {
   dictionary,
@@ -69,7 +69,7 @@ export default function QuayHeaderItem({
         <Distance distance={humanized} />
       </View>
 
-      <SituationMessages
+      <SituationMessagesBox
         mode="icon"
         situations={quay.situations}
         containerStyle={styles.situations}
@@ -96,9 +96,9 @@ function Distance({distance}: DistanceProps) {
 }
 const humanizeDistance = (meters: number, t: TFunc<typeof Language>) => {
   if (meters >= 1000) {
-    return `${Math.round(meters / 1000)}${t(dictionary.distance.km)}`;
+    return `${Math.round(meters / 1000)} ${t(dictionary.distance.km)}`;
   }
-  return `${Math.round(meters)}${t(dictionary.distance.m)}`;
+  return `${Math.round(meters)} ${t(dictionary.distance.m)}`;
 };
 const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   situations: {

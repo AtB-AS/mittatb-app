@@ -1,5 +1,4 @@
 import {Statuses} from '@atb-as/theme';
-import {LanguageAndText} from '@atb/reference-data/types';
 import {isArray} from 'lodash';
 import {APP_VERSION} from '@env';
 import {Platform} from 'react-native';
@@ -10,6 +9,7 @@ import {
   GlobalMessageRaw,
   GlobalMessageType,
 } from '@atb/global-messages/types';
+import type {LanguageAndTextType} from '@atb/translations';
 
 export function mapToGlobalMessages(
   result: FirebaseFirestoreTypes.QueryDocumentSnapshot<GlobalMessageRaw>[],
@@ -93,16 +93,16 @@ function mapToContext(data: any): GlobalMessageContextType | undefined {
   return data;
 }
 
-function mapToLanguageAndTexts(data: any): LanguageAndText[] | undefined {
+function mapToLanguageAndTexts(data: any): LanguageAndTextType[] | undefined {
   if (!data) return;
   if (!isArray(data)) return;
 
   return data
     .map((ls: any) => mapToLanguageAndText(ls))
-    .filter(Boolean) as LanguageAndText[];
+    .filter((lv): lv is LanguageAndTextType => !!lv);
 }
 
-function mapToLanguageAndText(data: any): LanguageAndText | undefined {
+function mapToLanguageAndText(data: any): LanguageAndTextType | undefined {
   if (!data) return;
   if (data.lang != 'nob' && data.lang != 'eng') return;
 

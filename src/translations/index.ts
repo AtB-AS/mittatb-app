@@ -8,6 +8,9 @@ export {
   translation,
 } from './commons';
 
+export type {LanguageAndTextType} from './types';
+export {getTextForLanguage} from './utils';
+
 export {default as AssistantTexts} from './screens/Assistant';
 export {default as FavoriteTexts} from './components/FavoriteChips';
 export {default as PaginationTexts} from './components/Pagination';

@@ -36,9 +36,15 @@ export const useMapSelectionChangeEffect = (
     mapSelectionAction,
     mapViewRef,
   );
+  const distance =
+    cameraFocusMode?.mode === 'map-lines'
+      ? cameraFocusMode.distance
+      : undefined;
+
   useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef);
   useUpdateBottomSheetWhenSelectedStopPlaceChanges(
     mapProps,
+    distance,
     mapSelectionAction,
     mapViewRef,
     () => setMapSelectionAction(undefined),

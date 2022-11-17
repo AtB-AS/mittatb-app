@@ -3,11 +3,12 @@ import {Location} from '@atb/favorites/types';
 import {useOnlySingleLocation} from '@atb/location-search';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {DeparturesStackProps} from './types';
 import {NearbyStopPlaces} from '@atb/screens/Departures/components/NearbyStopPlaces';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {useShouldShowDeparturesOnboarding} from '@atb/screens/Departures/use-should-show-departures-onboarding';
 
 export type DeparturesScreenParams = {
   location: Location;
@@ -26,6 +27,13 @@ export const DeparturesScreen = ({navigation}: RootProps) => {
     });
   };
   const {leftButton} = useServiceDisruptionSheet();
+
+  const shouldShowDeparturesOnboarding = useShouldShowDeparturesOnboarding();
+  useEffect(() => {
+    if (shouldShowDeparturesOnboarding) {
+      navigation.navigate('DeparturesOnboardingScreen');
+    }
+  }, [shouldShowDeparturesOnboarding]);
 
   return (
     <>

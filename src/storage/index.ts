@@ -1,6 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Bugsnag from '@bugsnag/react-native';
 
+export enum StorageModelKeysEnum {
+  HasReadDeparturesV2Onboarding = '@ATB_has_read_departures_v2_onboarding',
+}
+
+type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;
+
 export type StorageModel = {
   stored_user_locations: string;
   '@ATB_user_departures': string;
@@ -18,7 +24,7 @@ export type StorageModel = {
   '@ATB_last_mobile_token_user': string;
 };
 
-export type StorageModelTypes = keyof StorageModel;
+export type StorageModelTypes = keyof StorageModel | StorageModelKeysTypes;
 
 const errorHandler = (error: any) => {
   Bugsnag.notify(typeof error === 'string' ? new Error(error) : error);

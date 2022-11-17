@@ -64,9 +64,13 @@ export const useDecideCameraFocusMode = (
             mapSelectionAction.feature,
             mapViewRef,
           );
-          const mapLines = await fetchMapLines(fromCoords, stopPlaceFeature);
-          if (mapLines) {
-            setCameraFocusMode({mode: 'map-lines', mapLines});
+          const result = await fetchMapLines(fromCoords, stopPlaceFeature);
+          if (result && result.mapLines) {
+            setCameraFocusMode({
+              mode: 'map-lines',
+              mapLines: result.mapLines,
+              distance: result.distance,
+            });
           } else if (stopPlaceFeature) {
             setCameraFocusMode({mode: 'stop-place', stopPlaceFeature});
           } else {
@@ -106,7 +110,9 @@ const fetchMapLines = async (
     walkingTripPattern.walkDistance <= MAX_LIMIT_TO_SHOW_WALKING_TRIP
   ) {
     const tripLegs = walkingTripPattern?.legs;
-    return tripLegs ? createMapLines(tripLegs) : undefined;
+    const distance = walkingTripPattern.walkDistance;
+    const mapLines = tripLegs ? createMapLines(tripLegs) : undefined;
+    return {mapLines, distance};
   }
   return undefined;
 };

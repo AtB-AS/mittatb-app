@@ -59,6 +59,7 @@ export type CameraFocusModeType =
   | {
       mode: 'map-lines';
       mapLines: MapLine[];
+      distance: number;
     }
   | {
       mode: 'stop-place';
