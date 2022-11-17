@@ -222,6 +222,7 @@ const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
   distanceLabel: {
     flexDirection: 'row',
     justifyContent: 'center',
+    paddingBottom: theme.spacings.medium,
   },
   buttonsContainer: {
     padding: theme.spacings.medium,

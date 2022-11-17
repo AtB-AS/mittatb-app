@@ -71,5 +71,5 @@ export const useUpdateBottomSheetWhenSelectedStopPlaceChanges = (
         closeBottomSheet();
       }
     })();
-  }, [stopPlaceFeature, isFocused]);
+  }, [stopPlaceFeature, isFocused, distance]);
 };
