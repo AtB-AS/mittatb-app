@@ -9,7 +9,7 @@ struct DepartureWidgetEntryView: View {
 
     init(entry: Provider.Entry) {
         self.entry = entry
-        viewModel = WidgetViewModel(quayGroup: entry.quayGroup, date: entry.date)
+        viewModel = WidgetViewModel(entry: entry)
     }
 
     var body: some View {
@@ -37,8 +37,8 @@ struct departureWidget: Widget {
 struct DepartureWidget_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 5), quayGroup: QuayGroup.dummy)).previewContext(WidgetPreviewContext(family: .systemSmall))
-            DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 5), quayGroup: QuayGroup.dummy)).previewContext(WidgetPreviewContext(family: .systemMedium))
+            DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 5), quayGroup: QuayGroup.dummy, isForPreview: true)).previewContext(WidgetPreviewContext(family: .systemSmall))
+            DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 5), quayGroup: QuayGroup.dummy, isForPreview: true)).previewContext(WidgetPreviewContext(family: .systemMedium))
         }
     }
 }

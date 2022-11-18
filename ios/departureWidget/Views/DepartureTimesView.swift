@@ -1,7 +1,15 @@
 import Foundation
 import SwiftUI
 
+private enum K {
+    static let fontSize: CGFloat = 14.0
+}
+
 struct DepartureTimesView: View {
+    private var scaledFontSize: CGFloat {
+        UIFontMetrics.default.scaledValue(for: K.fontSize)
+    }
+
     var aimedTimes: [String]
 
     var body: some View {
@@ -13,10 +21,9 @@ struct DepartureTimesView: View {
                     .cornerRadius(8)
                     .lineLimit(1)
                     .bold()
+                    .font(.system(size: scaledFontSize))
                     .fixedSize()
-                    .minimumScaleFactor(0.1)
             }
-        }
-        .clipShape(Rectangle())
+        }.clipShape(Rectangle())
     }
 }

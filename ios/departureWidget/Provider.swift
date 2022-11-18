@@ -5,7 +5,7 @@ import WidgetKit
 
 struct Provider: TimelineProvider {
     private enum K {
-        static var dummyEntry: Entry { Entry(date: Date.now, quayGroup: QuayGroup.dummy) }
+        static var dummyEntry: Entry { Entry(date: Date.now, quayGroup: QuayGroup.dummy, isForPreview: true) }
         static let oneEntryTimeline = Timeline<Entry>(entries: [Entry(date: Date.now, quayGroup: nil)], policy: .after(Date.now.addingTimeInterval(5 * 60)))
     }
 

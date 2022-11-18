@@ -23,7 +23,7 @@ class WidgetViewModel: ObservableObject {
     // MARK: Public vars
 
     let quayGroup: QuayGroup?
-    let entryDate: Date
+    let entry: Entry
 
     var quayName: String? {
         quayGroup?.quay.name
@@ -43,9 +43,9 @@ class WidgetViewModel: ObservableObject {
 
     // MARK: Initializers
 
-    init(quayGroup: QuayGroup?, date: Date) {
-        self.quayGroup = quayGroup
-        entryDate = date
+    init(entry: Entry) {
+        quayGroup = entry.quayGroup
+        self.entry = entry
 
         let preferredLanguage = Locale.preferredLanguages[0]
         calendar = Calendar(identifier: .gregorian)
@@ -55,15 +55,21 @@ class WidgetViewModel: ObservableObject {
 
     /// Filter relevant departure and return `aimed time`
     func getDepartureAimedTimes(limit numberOfDepartures: Int) -> [String] {
-        departureTimes.filter { $0.aimedTime > entryDate }.prefix(numberOfDepartures).map { departure in
-            dateAsText(departure.aimedTime)
+        if entry.isForPreview {
+            return departureTimes.map { departure in
+                dateAsText(departure.aimedTime)
+            }
+        } else {
+            return departureTimes.filter { $0.aimedTime > entry.date }.prefix(numberOfDepartures).map { departure in
+                dateAsText(departure.aimedTime)
+            }
         }
     }
 
     /// Returns a text represantation of the depature time containging the hour and minutre of the departure, and showing day if it is in a future day
     private func dateAsText(_ date: Date) -> String {
         let dateTime = date.formatted(.dateTime.locale(locale).hour().minute())
-        if Calendar.current.isDate(date, inSameDayAs: Date.now) {
+        if Calendar.current.isDate(date, inSameDayAs: Date.now) || entry.isForPreview {
             return dateTime
         }
 

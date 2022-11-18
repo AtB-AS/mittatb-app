@@ -117,6 +117,7 @@ struct Body: Codable {
 struct Entry: TimelineEntry {
     let date: Date
     let quayGroup: QuayGroup?
+    var isForPreview: Bool = false
 }
 
 /// Struct for favorite departures stored on device

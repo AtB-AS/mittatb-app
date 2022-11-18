@@ -6,7 +6,13 @@ private enum K {
     static let lineInformationColor = Color("LineInformationTextColor")
     static let transportIconSize: CGFloat = 20.0
     static let transportCityColor = Color("TransportCity")
+    static let backgroundColor = Color("WidgetBackgroundColor")
     static let transportIconCornerRadius: CGFloat = 2.0
+    static let widgetGradient = LinearGradient(gradient: Gradient(stops: [
+        .init(color: .clear, location: 0),
+        .init(color: backgroundColor, location: 1),
+    ]), startPoint: .leading, endPoint: .trailing)
+    static let widgetFadeWidth: CGFloat = 40.0
 }
 
 struct WidgetInfoView: View {
@@ -14,7 +20,7 @@ struct WidgetInfoView: View {
     @ObservedObject var viewModel: WidgetViewModel
 
     private var numberOfDepartures: Int {
-        widgetFamily == .systemMedium ? 4 : 2
+        widgetFamily == .systemMedium ? 5 : 2
     }
 
     private var aimedTimes: [String] {
@@ -25,20 +31,23 @@ struct WidgetInfoView: View {
     var body: some View {
         if let quayName = viewModel.quayName, let lineDetails = viewModel.lineDetails {
             GeometryReader { geometry in
-                VStack(alignment: .leading) {
-                    VStack(alignment: .center) {
+                ZStack {
+                    VStack(alignment: .leading) {
                         Text("Fra \(quayName)")
                             .bold()
                             .lineLimit(1)
-                        Spacer(minLength: K.padding)
+                            .frame(width: geometry.size.width - (K.padding * 2), alignment: .leading)
+
+                        Spacer()
                         if widgetFamily == .systemMedium {
-                            Divider()
-                            Spacer(minLength: K.padding)
+                            Divider().frame(width: geometry.size.width - (K.padding * 2))
+                            Spacer()
                         }
+
                         if widgetFamily == .systemSmall {
                             Text(lineDetails)
                                 .lineLimit(2)
-                                .multilineTextAlignment(.center)
+                                .multilineTextAlignment(.leading)
                                 .foregroundColor(K.lineInformationColor)
                         } else {
                             HStack {
@@ -55,13 +64,18 @@ struct WidgetInfoView: View {
                                 Spacer()
                             }
                         }
+
+                        Spacer()
+
+                        DepartureTimesView(aimedTimes: aimedTimes)
                     }
-                    .frame(width: geometry.size.width - (K.padding * 2))
-                    .padding(.trailing, K.padding)
-                    Spacer(minLength: K.padding)
-                    DepartureTimesView(aimedTimes: aimedTimes)
+                    .padding(K.padding)
                 }
-                .padding(EdgeInsets(top: K.padding, leading: K.padding, bottom: K.padding, trailing: 0))
+                HStack {
+                    Spacer()
+                    Rectangle()
+                        .fill(K.widgetGradient).frame(width: K.widgetFadeWidth, height: .infinity)
+                }.frame(width: geometry.size.width)
             }
         } else {
             // TODO: Refactor with a better error view
