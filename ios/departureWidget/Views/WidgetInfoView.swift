@@ -20,7 +20,7 @@ struct WidgetInfoView: View {
     @ObservedObject var viewModel: WidgetViewModel
 
     private var numberOfDepartures: Int {
-        widgetFamily == .systemMedium ? 5 : 2
+        widgetFamily == .systemMedium ? 6 : 3
     }
 
     private var aimedTimes: [String] {
