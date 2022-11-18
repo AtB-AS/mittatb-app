@@ -55,7 +55,7 @@ export default function QuayView({
   const {favoriteDepartures} = useFavorites();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
-  const {state, refresh, forceRefresh} = useQuayData(
+  const {state, forceRefresh} = useQuayData(
     quay,
     showOnlyFavorites,
     mode,
@@ -76,10 +76,6 @@ export default function QuayView({
   useEffect(() => {
     if (!placeHasFavorites) setShowOnlyFavorites(false);
   }, [favoriteDepartures]);
-
-  useEffect(() => {
-    refresh();
-  }, [quay]);
 
   return (
     <SectionList
@@ -118,10 +114,7 @@ export default function QuayView({
         </>
       }
       refreshControl={
-        <RefreshControl
-          refreshing={state.isLoading}
-          onRefresh={didLoadingDataFail ? forceRefresh : refresh}
-        />
+        <RefreshControl refreshing={state.isLoading} onRefresh={forceRefresh} />
       }
       sections={quayListData}
       testID={testID}

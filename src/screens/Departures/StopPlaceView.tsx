@@ -59,7 +59,7 @@ export default function StopPlaceView({
   const {t} = useTranslation();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
-  const {state, refresh, forceRefresh} = useStopPlaceData(
+  const {state, forceRefresh} = useStopPlaceData(
     stopPlace,
     showOnlyFavorites,
     isFocused,
@@ -82,10 +82,6 @@ export default function StopPlaceView({
   useEffect(() => {
     if (!placeHasFavorites) setShowOnlyFavorites(false);
   }, [favoriteDepartures]);
-
-  useEffect(() => {
-    refresh();
-  }, [stopPlace]);
 
   useMemo(
     () =>
@@ -140,10 +136,7 @@ export default function StopPlaceView({
         </>
       }
       refreshControl={
-        <RefreshControl
-          refreshing={state.isLoading}
-          onRefresh={didLoadingDataFail ? forceRefresh : refresh}
-        />
+        <RefreshControl refreshing={state.isLoading} onRefresh={forceRefresh} />
       }
       sections={quayListData}
       testID={testID}
