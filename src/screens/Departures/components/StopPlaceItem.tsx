@@ -38,7 +38,7 @@ export default function StopPlaceItem({
       <Sections.GenericClickableItem
         onPress={() => onPress(place)}
         accessibilityLabel={`${place.name}, ${description}, ${
-          humanizedDistance ? humanizedDistance : ''
+          humanizedDistance ?? ''
         }`}
         accessibilityHint={t(
           DeparturesTexts.stopPlaceList.a11yStopPlaceItemHint,
