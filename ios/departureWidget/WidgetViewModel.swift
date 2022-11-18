@@ -2,16 +2,15 @@ import Foundation
 import SwiftUI
 import WidgetKit
 
-
 private enum K {
-  static let locale : Locale = Locale(identifier: "nb")
+    static let locale = Locale(identifier: "nb")
 }
 
 class WidgetViewModel: ObservableObject {
     // MARK: Private vars
 
     private var calendar: Calendar
-  
+
     private var lineInfo: DepartureLineInfo? {
         departureGroup?.lineInfo
     }
@@ -57,7 +56,6 @@ class WidgetViewModel: ObservableObject {
 
     /// Filter relevant departure and return `aimed time`
     func getDepartureAimedTimes(limit numberOfDepartures: Int) -> [String] {
-      
         if entry.isForPreview {
             return departureTimes.map { departure in
                 dateAsText(departure.aimedTime)
@@ -71,7 +69,7 @@ class WidgetViewModel: ObservableObject {
 
     /// Returns a text represantation of the depature time containging the hour and minutre of the departure, and showing day if it is in a future day
     private func dateAsText(_ date: Date) -> String {
-      let dateTime = date.formatted(.dateTime.locale(K.locale).hour().minute())
+        let dateTime = date.formatted(.dateTime.locale(K.locale).hour().minute())
         if Calendar.current.isDate(date, inSameDayAs: Date.now) || entry.isForPreview {
             return dateTime
         }
