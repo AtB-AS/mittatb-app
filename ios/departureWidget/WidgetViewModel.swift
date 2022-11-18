@@ -79,6 +79,6 @@ class WidgetViewModel: ObservableObject {
         let dayIndex = Calendar.current.component(.weekday, from: date)
         let weekDay = calendar.weekdaySymbols[dayIndex - 1]
 
-        return "\(weekDay.prefix(2)).\(dateTime)"
+        return "\(weekDay.prefix(2)). \(dateTime)"
     }
 }
