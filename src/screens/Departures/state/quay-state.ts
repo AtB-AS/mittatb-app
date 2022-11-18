@@ -75,6 +75,7 @@ type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
       quay: DepartureTypes.Quay;
+      showOnlyFavorites: boolean;
       startTime?: string;
       favoriteDepartures?: UserFavoriteDepartures;
       limitPerLine?: number;
@@ -95,16 +96,6 @@ type DepartureDataActions =
       result: DepartureTypes.EstimatedCall[];
     }
   | {
-      type: 'SET_SHOW_FAVORITES';
-      showOnlyFavorites: boolean;
-      quay: DepartureTypes.Quay;
-      startTime?: string;
-      timeRange?: number;
-      favoriteDepartures?: UserFavoriteDepartures;
-      limitPerLine?: number;
-      timeout: TimeoutRequest;
-    }
-  | {
       type: 'SET_ERROR';
       error: ErrorType;
       reset?: boolean;
@@ -123,9 +114,6 @@ const reducer: ReducerWithSideEffects<
 > = (state, action) => {
   switch (action.type) {
     case 'LOAD_INITIAL_DEPARTURES': {
-      if ((state.queryInput as QuayDeparturesVariables).id === action.quay.id)
-        return NoUpdate();
-
       // Update input data with new date as this
       // is a fresh fetch. We should fetch the latest information.
       const queryInput: QuayDeparturesVariables = {
@@ -139,6 +127,7 @@ const reducer: ReducerWithSideEffects<
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
         {
           ...state,
+          showOnlyFavorites: action.showOnlyFavorites,
           isLoading: true,
           error: undefined,
           queryInput,
@@ -217,26 +206,6 @@ const reducer: ReducerWithSideEffects<
       });
     }
 
-    case 'SET_SHOW_FAVORITES': {
-      return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
-        {
-          ...state,
-          showOnlyFavorites: action.showOnlyFavorites,
-        },
-        async (_, dispatch) => {
-          dispatch({
-            type: 'LOAD_INITIAL_DEPARTURES',
-            quay: action.quay,
-            startTime: action.startTime,
-            timeRange: action.timeRange,
-            favoriteDepartures: action.favoriteDepartures,
-            limitPerLine: action.limitPerLine,
-            timeout: action.timeout,
-          });
-        },
-      );
-    }
-
     case 'UPDATE_DEPARTURES': {
       animateNextChange();
       return Update<DepartureDataState>({
@@ -287,41 +256,27 @@ export function useQuayData(
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const isFocused = useIsFocused();
   const {favoriteDepartures} = useFavorites();
-  const timeRange = getTimeRangeByMode(mode, startTime);
-  const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
   const timeout = useTimeoutRequest();
 
-  const loadDepartures = () => {
+  const loadDepartures = useCallback(() => {
+    const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
+    const timeRange = getTimeRangeByMode(mode, startTime);
     dispatch({
       type: 'LOAD_INITIAL_DEPARTURES',
       quay,
       startTime,
       favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
+      showOnlyFavorites,
       limitPerLine,
       timeRange,
       timeout,
     });
-  };
-  const refresh = useCallback(() => {
-    loadDepartures();
-  }, [(quay.id, startTime, showOnlyFavorites, favoriteDepartures)]);
+  }, [quay, startTime, showOnlyFavorites, favoriteDepartures, mode]);
 
   useEffect(() => {
-    dispatch({
-      type: 'SET_SHOW_FAVORITES',
-      quay,
-      startTime,
-      timeRange,
-      showOnlyFavorites,
-      favoriteDepartures,
-      limitPerLine,
-      timeout,
-    });
-  }, [quay.id, favoriteDepartures, showOnlyFavorites]);
-  useEffect(() => {
-    refresh();
+    loadDepartures();
     return () => timeout.abort();
-  }, [startTime]);
+  }, [loadDepartures]);
 
   useEffect(() => {
     if (!state.tick) {
@@ -330,7 +285,7 @@ export function useQuayData(
     const diff = differenceInMinutes(state.tick, state.lastRefreshTime);
 
     if (diff >= HARD_REFRESH_LIMIT_IN_MINUTES) {
-      refresh();
+      loadDepartures();
     }
   }, [state.tick, state.lastRefreshTime]);
   useInterval(
@@ -348,7 +303,6 @@ export function useQuayData(
 
   return {
     state,
-    refresh,
     forceRefresh: loadDepartures,
   };
 }
