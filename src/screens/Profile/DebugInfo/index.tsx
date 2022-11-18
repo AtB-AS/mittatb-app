@@ -9,7 +9,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
 import {useAppDispatch, useAppState} from '@atb/AppContext';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import storage, {KeyValuePair} from '@atb/storage';
+import storage, {KeyValuePair, StorageModelKeysEnum} from '@atb/storage';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
@@ -151,6 +151,16 @@ export default function DebugInfo() {
           <Sections.LinkItem
             text="Reset frontpage favourite departures"
             onPress={() => storage.set('@ATB_user_frontpage_departures', '[]')}
+          />
+
+          <Sections.LinkItem
+            text="Reset has read departures v2 onboarding"
+            onPress={() =>
+              storage.set(
+                StorageModelKeysEnum.HasReadDeparturesV2Onboarding,
+                JSON.stringify(false),
+              )
+            }
           />
         </Sections.Section>
 

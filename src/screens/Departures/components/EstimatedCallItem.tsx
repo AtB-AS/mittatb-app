@@ -130,7 +130,7 @@ export default function EstimatedCallItem({
           <ThemeText style={styles.lineName} testID={testID + 'Name'}>
             {departure.destinationDisplay?.frontText}
           </ThemeText>
-          {mode === 'Departure' ? (
+          {mode === 'Departure' || mode === 'Map' ? (
             <DepartureTimeAndWarning
               isTripCancelled={isTripCancelled}
               timeWithRealtimePrefix={timeWithRealtimePrefix}

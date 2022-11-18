@@ -16,6 +16,7 @@ export type DeparturesStackParams = {
   TripDetails: DetailsStackParams;
   DetailsMap: MapDetailRouteParams;
   DeparturesScreen: DeparturesScreenParams;
+  DeparturesOnboardingScreen: undefined;
 };
 
 export type RootDeparturesScreenProps = TabNavigatorScreenProps<'Nearest'>;
@@ -25,4 +26,4 @@ export type DeparturesStackProps<T extends keyof DeparturesStackParams> =
     StackScreenProps<DeparturesStackParams, T>,
     RootDeparturesScreenProps
   >;
-export type StopPlacesMode = 'Favourite' | 'Departure';
+export type StopPlacesMode = 'Favourite' | 'Departure' | 'Map';

@@ -76,7 +76,7 @@ export default function QuaySection({
   const shouldShowMoreItemsLink =
     navigateToQuay &&
     !isMinimized &&
-    (mode === 'Departure' || hasMoreItemsThanDisplayLimit);
+    (mode === 'Departure' || mode === 'Map' || hasMoreItemsThanDisplayLimit);
 
   return (
     <View testID={testID}>

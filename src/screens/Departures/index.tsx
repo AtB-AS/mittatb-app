@@ -7,6 +7,7 @@ import QuayDepartures from '../TripDetails/QuayDepartures';
 import PlaceScreen from './PlaceScreen';
 import {DeparturesStackParams, RootDeparturesScreenProps} from './types';
 import {DeparturesScreen} from '@atb/screens/Departures/DeparturesScreen';
+import {DeparturesOnboardingScreen} from '@atb/screens/Departures/DeparturesOnboardingScreen';
 
 const Stack = createStackNavigator<DeparturesStackParams>();
 
@@ -26,6 +27,13 @@ const DeparturesStack = ({}: RootDeparturesScreenProps) => {
         component={TravelDetailsMap}
         options={{
           ...TransitionPresets.SlideFromRightIOS,
+        }}
+      />
+      <Stack.Screen
+        name="DeparturesOnboardingScreen"
+        component={DeparturesOnboardingScreen}
+        options={{
+          ...TransitionPresets.ModalSlideFromBottomIOS,
         }}
       />
     </Stack.Navigator>
