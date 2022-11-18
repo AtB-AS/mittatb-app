@@ -1,4 +1,3 @@
-import {TFunc} from '@leile/lobo-t';
 import React from 'react';
 import {View} from 'react-native';
 import {QuayInfo} from '@atb/api/departures/types';
@@ -13,12 +12,8 @@ import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {SituationMessagesBox} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
-import {
-  dictionary,
-  Language,
-  NearbyTexts,
-  useTranslation,
-} from '@atb/translations';
+import {NearbyTexts, useTranslation} from '@atb/translations';
+import {useHumanizeDistance} from '@atb/utils/location';
 
 export type QuayHeaderItemProps = SectionItem<{
   quay: QuayInfo;
@@ -34,7 +29,7 @@ export default function QuayHeaderItem({
   const {contentContainer, topContainer} = useSectionItem(props);
   const sectionStyle = useSectionStyle();
   const {t} = useTranslation();
-  const humanized = distance ? humanizeDistance(distance, t) : undefined;
+  const humanized = useHumanizeDistance(distance);
 
   const label = humanized
     ? t(NearbyTexts.results.quayResult.platformHeader.distance.label(humanized))
@@ -94,12 +89,6 @@ function Distance({distance}: DistanceProps) {
     </View>
   );
 }
-const humanizeDistance = (meters: number, t: TFunc<typeof Language>) => {
-  if (meters >= 1000) {
-    return `${Math.round(meters / 1000)} ${t(dictionary.distance.km)}`;
-  }
-  return `${Math.round(meters)} ${t(dictionary.distance.m)}`;
-};
 const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   situations: {
     marginTop: theme.spacings.medium,
