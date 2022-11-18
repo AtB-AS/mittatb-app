@@ -38,7 +38,6 @@ export const DeparturesOnboardingScreen = ({navigation}: Props) => {
             style={styles.title}
             color={themeColor}
             type="heading--big"
-            accessible={true}
           >
             {t(DeparturesTexts.onboarding.title)}
           </ThemeText>
