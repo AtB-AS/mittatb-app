@@ -9,6 +9,7 @@ import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {StyleSheet} from '@atb/theme';
+import {useHumanizeDistance} from '@atb/utils/location';
 
 type StopPlaceItemProps = {
   stopPlaceNode: NearestStopPlaceNode;
@@ -24,19 +25,20 @@ export default function StopPlaceItem({
   const styles = useStyles();
   const {t} = useTranslation();
 
+  const humanizedDistance = useHumanizeDistance(stopPlaceNode.distance);
+
   const place = stopPlaceNode.place;
   if (!place) return <></>;
 
   const description =
     place.description || t(DeparturesTexts.stopPlaceList.stopPlace);
-  const distance = stopPlaceNode.distance?.toFixed(0);
 
   return (
     <Sections.Section withPadding>
       <Sections.GenericClickableItem
         onPress={() => onPress(place)}
         accessibilityLabel={`${place.name}, ${description}, ${
-          distance ? distance + 'm' : ''
+          humanizedDistance ?? ''
         }`}
         accessibilityHint={t(
           DeparturesTexts.stopPlaceList.a11yStopPlaceItemHint,
@@ -50,9 +52,9 @@ export default function StopPlaceItem({
             <ThemeText type="body__secondary" style={styles.stopDescription}>
               {description}
             </ThemeText>
-            {distance && (
+            {humanizedDistance && (
               <ThemeText type="body__secondary" color="secondary">
-                {distance + ' m'}
+                {humanizedDistance}
               </ThemeText>
             )}
           </View>
