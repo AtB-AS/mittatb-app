@@ -55,6 +55,8 @@ export type FavoriteDeparture = FavoriteDepartureId & {
   quayName: string;
   quayPublicCode?: string;
   visibleOnDashboard?: boolean;
+  latitude?: number;
+  longitude?: number;
 };
 
 export type FavoriteDepartureWithId = FavoriteDeparture & {

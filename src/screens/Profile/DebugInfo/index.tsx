@@ -20,6 +20,7 @@ import {get, keys} from 'lodash';
 import Button from '@atb/components/button';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useGlobalMessagesState} from '@atb/global-messages';
+import {APP_GROUP_NAME} from '@env';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -263,6 +264,7 @@ export default function DebugInfo() {
             expandContent={
               storedValues && (
                 <View>
+                  {mapEntry('App group name (iOS only!)', APP_GROUP_NAME)}
                   {storedValues.map(([key, value]) => mapEntry(key, value))}
                 </View>
               )

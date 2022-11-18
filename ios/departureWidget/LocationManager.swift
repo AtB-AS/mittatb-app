@@ -4,11 +4,11 @@ import Foundation
 
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let locationManager = CLLocationManager()
-    @Published var locationStatus: CLAuthorizationStatus?
-    @Published var lastLocation: CLLocation?
+    @Published private var locationStatus: CLAuthorizationStatus?
+    @Published private(set) var lastLocation: CLLocation?
 
-    // Default location at Trondheim city centre
-    @Published var defaultLocation = CLLocation(latitude: 63.43457, longitude: 10.39844)
+    /// Default location at Trondheim city centre
+    static let defaultLocation = CLLocation(latitude: 63.43457, longitude: 10.39844)
 
     override init() {
         super.init()

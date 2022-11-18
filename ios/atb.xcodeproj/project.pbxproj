@@ -29,8 +29,9 @@
 		5038614A28FD6EB900E16E13 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614928FD6EB900E16E13 /* APIService.swift */; };
 		5038614C28FD750A00E16E13 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationManager.swift */; };
 		5038614E28FD81B700E16E13 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614D28FD81B700E16E13 /* Structs.swift */; };
-		505D9ECE291537E500AEFF94 /* TimeTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9ECD291537E500AEFF94 /* TimeTileView.swift */; };
-		506538E028FEA57400A0DDCC /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506538DF28FEA57400A0DDCC /* ViewModel.swift */; };
+		505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */; };
+		506538E028FEA57400A0DDCC /* WidgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506538DF28FEA57400A0DDCC /* WidgetViewModel.swift */; };
+		50A14ED72918F97E00A661D9 /* WidgetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A14ED62918F97E00A661D9 /* WidgetInfoView.swift */; };
 		A1E701563B78F99B13487BE3 /* libPods-atb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B12A710282707BA8960F89A /* libPods-atb.a */; };
 		E6A5C3E919C3475F907B3CE4 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB1D1B473A9C41A79687569C /* Roboto-Regular.ttf */; };
 		F19471F4FCE444CF931BA221 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59E90F341F04DB2B427E0EF /* Roboto-Bold.ttf */; };
@@ -111,8 +112,9 @@
 		5038614B28FD750A00E16E13 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		5038614D28FD81B700E16E13 /* Structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
 		5051B09328F4092200B8EA18 /* departureWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = departureWidgetExtension.entitlements; sourceTree = "<group>"; };
-		505D9ECD291537E500AEFF94 /* TimeTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTileView.swift; sourceTree = "<group>"; };
-		506538DF28FEA57400A0DDCC /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartureTimesView.swift; sourceTree = "<group>"; };
+		506538DF28FEA57400A0DDCC /* WidgetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetViewModel.swift; sourceTree = "<group>"; };
+		50A14ED62918F97E00A661D9 /* WidgetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetInfoView.swift; sourceTree = "<group>"; };
 		86E9F6F8FAE78B8F34A96337 /* Pods-atb-atbTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb-atbTests.release.xcconfig"; path = "Target Support Files/Pods-atb-atbTests/Pods-atb-atbTests.release.xcconfig"; sourceTree = "<group>"; };
 		890F33DF27CF0C595F634586 /* libPods-atb-atbTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atb-atbTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93DD12AA3A71553A1E11F3E3 /* Pods-atb-departureWidgetExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb-departureWidgetExtension.release.xcconfig"; path = "Target Support Files/Pods-atb-departureWidgetExtension/Pods-atb-departureWidgetExtension.release.xcconfig"; sourceTree = "<group>"; };
@@ -244,6 +246,15 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		50A14EDA2918FAB600A661D9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */,
+				50A14ED62918F97E00A661D9 /* WidgetInfoView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -311,10 +322,10 @@
 				5038614528FD509400E16E13 /* Provider.swift */,
 				FE09922828FFF47300E5046D /* Storage.swift */,
 				5038614D28FD81B700E16E13 /* Structs.swift */,
-				506538DF28FEA57400A0DDCC /* ViewModel.swift */,
+				506538DF28FEA57400A0DDCC /* WidgetViewModel.swift */,
 				FE55264F28EC45EE0091F697 /* Assets.xcassets */,
 				FE09922A28FFF4F000E5046D /* Extensions */,
-				505D9ECD291537E500AEFF94 /* TimeTileView.swift */,
+				50A14EDA2918FAB600A661D9 /* Views */,
 			);
 			path = departureWidget;
 			sourceTree = "<group>";
@@ -357,6 +368,7 @@
 				95AA5F302A100DD0B4A437E7 /* [CP] Embed Pods Frameworks */,
 				3A32CD8D36697352A43C7AC9 /* [CP] Copy Pods Resources */,
 				545EA038E424106A9C1F1C1E /* [CP-User] [RNFB] Core Configuration */,
+				FE3B601729239F7D006FE71D /* Swift Lint */,
 			);
 			buildRules = (
 			);
@@ -665,6 +677,24 @@
 			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		FE3B601729239F7D006FE71D /* Swift Lint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Swift Lint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Do not run this on a CI!\nif [ -z \"$CI\" ]; then\n    # Adds support for Apple Silicon brew directory\n    export PATH=\"$PATH:/opt/homebrew/bin\"\n    if mint which swiftlint >/dev/null; then\n      mint run swiftlint\n    else\n      echo \"Warning: SwiftLint not installed, run either `sh bootstrap.sh` or `mint bootstrap`.\"\n    fi\nfi\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -695,12 +725,13 @@
 				5038614E28FD81B700E16E13 /* Structs.swift in Sources */,
 				5038614A28FD6EB900E16E13 /* APIService.swift in Sources */,
 				FE09922C28FFF50800E5046D /* Bundle.swift in Sources */,
-				505D9ECE291537E500AEFF94 /* TimeTileView.swift in Sources */,
+				505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */,
 				5038614C28FD750A00E16E13 /* LocationManager.swift in Sources */,
 				FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */,
+				50A14ED72918F97E00A661D9 /* WidgetInfoView.swift in Sources */,
 				FE09922928FFF47300E5046D /* Storage.swift in Sources */,
 				5038614628FD509400E16E13 /* Provider.swift in Sources */,
-				506538E028FEA57400A0DDCC /* ViewModel.swift in Sources */,
+				506538E028FEA57400A0DDCC /* WidgetViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

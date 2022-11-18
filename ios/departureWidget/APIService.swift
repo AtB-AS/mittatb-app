@@ -1,11 +1,7 @@
 import Foundation
 
-struct Body: Codable {
-    let favorites: [FavoriteDeparture]
-}
-
 enum AppEndPoint: String {
-    case favoriteDepartures, example
+    case favoriteDepartures
 
     var path: String? {
         switch self {
@@ -20,8 +16,6 @@ enum AppEndPoint: String {
             ]
 
             return url?.string
-        case .example:
-            return ""
         }
     }
 
@@ -68,9 +62,10 @@ class APIService {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 callback(.failure(error))
-                print(error)
+                debugPrint(error)
                 return
             }
+
             guard let response = response as? HTTPURLResponse,
                   (200 ... 299).contains(response.statusCode) else {
                 callback(.failure(APIError.errorFromServer))
@@ -86,6 +81,7 @@ class APIService {
 
             callback(.success(result))
         }
+
         task.resume()
     }
 
@@ -100,19 +96,19 @@ class APIService {
         fetchData(endPoint: .favoriteDepartures, data: uploadData) { (result: Result<DepartureData, Error>) in
             switch result {
             case let .success(object):
-                print(object)
+                debugPrint(object)
 
                 // Api may return empty quays, therefore needs to find the correct one
                 guard let quayGroup = object.data.first!.quays.first(where: { $0.quay.id.elementsEqual(departure.quayId) }) else {
-                    print(APIError.noDataError)
+                    debugPrint(APIError.noDataError)
                     callback(.failure(APIError.noDataError))
 
                     return
                 }
-                callback(.success(quayGroup))
 
+                callback(.success(quayGroup))
             case let .failure(error):
-                print(error)
+                debugPrint(error)
                 callback(.failure(error))
             }
         }
