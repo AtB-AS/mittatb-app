@@ -10,10 +10,12 @@ import FareProductTile from '@atb/screens/Ticketing/FareProducts/AvailableFarePr
 
 export const AvailableFareProducts = ({
   onBuySingleFareProduct,
+  onBuyNightFareProduct,
   onBuyPeriodFareProduct,
   onBuyHour24FareProduct,
 }: {
   onBuySingleFareProduct: () => void;
+  onBuyNightFareProduct: () => void;
   onBuyPeriodFareProduct: () => void;
   onBuyHour24FareProduct: () => void;
 }) => {
@@ -21,6 +23,8 @@ export const AvailableFareProducts = ({
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {preassignedFareProducts} = useFirestoreConfiguration();
   const {t} = useTranslation();
+
+  const shouldShowNightFareProduct = true;
 
   const shouldShowSingleFareProduct = preassignedFareProducts
     .filter(productIsSellableInApp)
@@ -70,8 +74,19 @@ export const AvailableFareProducts = ({
           />
         )}
       </View>
-      {shouldShowHour24FareProduct && (
-        <View style={styles.fareProductsContainer}>
+      <View style={styles.fareProductsContainer}>
+        {shouldShowNightFareProduct && (
+          <FareProductTile
+            transportationModeTexts={t(
+              TicketingTexts.availableFareProducts.night.transportModes,
+            )}
+            illustration="Night"
+            onPress={onBuyNightFareProduct}
+            testID="nightFareProduct"
+            type={'night'}
+          />
+        )}
+        {shouldShowHour24FareProduct && (
           <FareProductTile
             transportationModeTexts={t(
               TicketingTexts.availableFareProducts.hour24.transportModes,
@@ -81,8 +96,8 @@ export const AvailableFareProducts = ({
             testID="24HourFareProduct"
             type={'hour24'}
           />
-        </View>
-      )}
+        )}
+      </View>
       {shouldShowSummerPass && (
         <View style={styles.fareProductsContainer}>
           <FareProductTile

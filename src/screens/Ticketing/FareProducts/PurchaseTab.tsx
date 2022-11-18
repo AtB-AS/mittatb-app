@@ -82,6 +82,7 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
           onBuySingleFareProduct={onBuySingleFareProduct}
           onBuyPeriodFareProduct={onBuyPeriodFareProduct}
           onBuyHour24FareProduct={onBuyHour24FareProduct}
+          onBuyNightFareProduct={() => {}}
         />
       </View>
     </ScrollView>

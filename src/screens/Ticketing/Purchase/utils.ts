@@ -50,6 +50,13 @@ export const getPurchaseFlow = (
         travelDateSelectionEnabled: false,
         durationSelectionEnabled: false,
       };
+    case 'night':
+      // TODO: should `travellerSelectionMode` be `multiple`?
+      return {
+        travellerSelectionMode: 'multiple',
+        travelDateSelectionEnabled: false,
+        durationSelectionEnabled: false,
+      };
     case 'carnet':
       return {
         travellerSelectionMode: 'single',
