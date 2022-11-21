@@ -23,13 +23,11 @@ export type GroupsByIdQuery = {
         destinationDisplay?: {frontText?: string};
         notices: Array<{text?: string}>;
         situations: Array<{
+          id: string;
           situationNumber?: string;
           reportType?: Types.ReportType;
           summary: Array<{language?: string; value: string}>;
           description: Array<{language?: string; value: string}>;
-          advice: Array<{language?: string; value: string}>;
-          validityPeriod?: {startTime?: any; endTime?: any};
-          infoLinks?: Array<{uri: string; label?: string}>;
         }>;
         serviceJourney?: {id: string; line: {id: string}};
       }>;
@@ -51,13 +49,11 @@ export type GroupsByIdQuery = {
             publicCode?: string;
             notices: Array<{text?: string}>;
             situations: Array<{
+              id: string;
               situationNumber?: string;
               reportType?: Types.ReportType;
               summary: Array<{language?: string; value: string}>;
               description: Array<{language?: string; value: string}>;
-              advice: Array<{language?: string; value: string}>;
-              validityPeriod?: {startTime?: any; endTime?: any};
-              infoLinks?: Array<{uri: string; label?: string}>;
             }>;
           };
           journeyPattern?: {notices: Array<{text?: string}>};
@@ -65,13 +61,11 @@ export type GroupsByIdQuery = {
         };
       }>;
       situations: Array<{
+        id: string;
         situationNumber?: string;
         reportType?: Types.ReportType;
         summary: Array<{language?: string; value: string}>;
         description: Array<{language?: string; value: string}>;
-        advice: Array<{language?: string; value: string}>;
-        validityPeriod?: {startTime?: any; endTime?: any};
-        infoLinks?: Array<{uri: string; label?: string}>;
       }>;
     }>;
   }>;

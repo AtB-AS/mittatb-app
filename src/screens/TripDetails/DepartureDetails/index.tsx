@@ -6,7 +6,6 @@ import {
 import {
   ServiceJourneyEstimatedCallFragment,
   QuayFragment,
-  SituationFragment,
 } from '@atb/api/types/generated/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {Info, Warning} from '@atb/assets/svg/color/situations';
@@ -39,6 +38,7 @@ import CompactMap from '../Map/CompactMap';
 import {TripDetailsScreenProps} from '../types';
 import {ServiceJourneyDeparture} from './types';
 import useDepartureData, {CallListGroup} from './use-departure-data';
+import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -353,10 +353,7 @@ function TripItem({
           id: stopPlace.id,
           name: stopPlace.name,
         },
-        selectedQuay: {
-          id: quay.id,
-          name: quay.name,
-        },
+        selectedQuay: quay,
         mode: 'Departure',
       });
     } else {

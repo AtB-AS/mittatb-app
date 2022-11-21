@@ -20,12 +20,11 @@ export type ServiceJourneyDeparturesQuery = {
         name: string;
         publicCode?: string;
         situations: Array<{
+          id: string;
           situationNumber?: string;
           reportType?: Types.ReportType;
           summary: Array<{language?: string; value: string}>;
           description: Array<{language?: string; value: string}>;
-          advice: Array<{language?: string; value: string}>;
-          infoLinks?: Array<{uri: string; label?: string}>;
         }>;
         stopPlace?: {
           id: string;
@@ -47,12 +46,11 @@ export type ServiceJourneyDeparturesQuery = {
         };
       };
       situations: Array<{
+        id: string;
         situationNumber?: string;
         reportType?: Types.ReportType;
         summary: Array<{language?: string; value: string}>;
         description: Array<{language?: string; value: string}>;
-        advice: Array<{language?: string; value: string}>;
-        infoLinks?: Array<{uri: string; label?: string}>;
       }>;
     }>;
   };
@@ -76,12 +74,11 @@ export type ServiceJourneyEstimatedCallFragment = {
     name: string;
     publicCode?: string;
     situations: Array<{
+      id: string;
       situationNumber?: string;
       reportType?: Types.ReportType;
       summary: Array<{language?: string; value: string}>;
       description: Array<{language?: string; value: string}>;
-      advice: Array<{language?: string; value: string}>;
-      infoLinks?: Array<{uri: string; label?: string}>;
     }>;
     stopPlace?: {
       id: string;
@@ -103,12 +100,11 @@ export type ServiceJourneyEstimatedCallFragment = {
     };
   };
   situations: Array<{
+    id: string;
     situationNumber?: string;
     reportType?: Types.ReportType;
     summary: Array<{language?: string; value: string}>;
     description: Array<{language?: string; value: string}>;
-    advice: Array<{language?: string; value: string}>;
-    infoLinks?: Array<{uri: string; label?: string}>;
   }>;
 };
 
@@ -119,23 +115,13 @@ export type QuayFragment = {
   name: string;
   publicCode?: string;
   situations: Array<{
+    id: string;
     situationNumber?: string;
     reportType?: Types.ReportType;
     summary: Array<{language?: string; value: string}>;
     description: Array<{language?: string; value: string}>;
-    advice: Array<{language?: string; value: string}>;
-    infoLinks?: Array<{uri: string; label?: string}>;
   }>;
   stopPlace?: {id: string; name: string; latitude?: number; longitude?: number};
-};
-
-export type SituationFragment = {
-  situationNumber?: string;
-  reportType?: Types.ReportType;
-  summary: Array<{language?: string; value: string}>;
-  description: Array<{language?: string; value: string}>;
-  advice: Array<{language?: string; value: string}>;
-  infoLinks?: Array<{uri: string; label?: string}>;
 };
 
 export type LineFragment = {
