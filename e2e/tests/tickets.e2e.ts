@@ -65,7 +65,7 @@ describe('Tickets anonymous', () => {
 
   it('should get an offer for a single ticket', async () => {
     await expectToBeVisibleByText('Buy');
-    await expectToBeVisibleByText('Valid');
+    await expectToBeVisibleByText('Active');
     await tapById('purchaseTab');
     await expectToBeVisibleByText('Single ticket');
     //await expectToBeVisibleByText('Periodic ticket');
