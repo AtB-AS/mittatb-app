@@ -63,10 +63,14 @@ const SelectStartScreenTexts = {
         row4Value4: _('84', '84'),
       },
       part3Text_1: _(
+        'Kjøper du billett for sone A etter kl. 18 på hverdager eller hele lørdag, søndag og helligdager er den gyldig i tre timer.',
+        'If you buy a ticket for zone A after 18 on weekdays or all of Saturday, Sunday and public holidays, it is valid for three hours.',
+      ),
+      part3Text_2: _(
         'For å reise med sykkel kjøper du en barnebillett.',
         'To bring a bike, buy a child ticket.',
       ),
-      part3Text_2: _(
+      part3Text_3: _(
         'Ved avinstallering av appen vil også billettene fjernes. Vi advarer derfor mot avinstallering når du har kjøpt billetter. Da vil du ikke kunne framvise gyldig billett.',
         'If you uninstall the app, the tickets will be removed. We recommend that you do not uninstall once you have purchased tickets. If you uninstall, you will not be able to present a valid ticket.',
       ),
