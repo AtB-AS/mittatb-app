@@ -60,7 +60,7 @@ export default function TicketingTabs() {
             tabBarAccessibilityLabel: t(
               TicketingTexts.activeFareProductsAndReservationsTab.a11yLabel,
             ),
-            tabBarTestID: 'validTicketsTab',
+            tabBarTestID: 'activeTicketsTab',
           }}
         />
       </Tab.Navigator>

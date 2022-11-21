@@ -131,7 +131,7 @@ const SelectStartScreenTexts = {
         'Ved billettkontroll, åpne appen din og velg hovedmenyen «Billetter» nederst i appen. Velg fanen «Aktive». Her finner du din gyldige billett. Velg «Vis detaljer/kontroll». Du får nå opp informasjon om billetten og en barkode. Vis denne barkoden til kontrollør som vil scanne denne med eget utstyr for å kontrollere om billetten er gyldig.\n\n' +
           'Husk at når du reiser med rabattert billett må du kunne vise gyldig bevis som bekrefter din rett til rabatt.\n\n' +
           'Uten gyldig billett må du ved billettkontroll betale gebyr etter følgende satser:',
-        'During ticket inspections, open your app and select the main menu "Tickets" at the bottom of the app. Select the "Valid" tab. Here you will find your valid ticket. Select "Show details / inspection". You will now receive information about the ticket and a barcode. Show this barcode to the ticket inspector who will scan it with his own equipment to check if the ticket is valid.\n\n' +
+        'During ticket inspections, open your app and select the main menu "Tickets" at the bottom of the app. Select the "Active" tab. Here you will find your valid ticket. Select "Show details / inspection". You will now receive information about the ticket and a barcode. Show this barcode to the ticket inspector who will scan it with his own equipment to check if the ticket is valid.\n\n' +
           'When traveling with a discounted ticket, always remember to bring valid proof of you being eligible for the discount.\n\n' +
           'Without a valid ticket, you need to pay an additional fee as described below:',
       ),
