@@ -1,7 +1,7 @@
 import {by, element, expect} from 'detox';
 import {tapById} from './interactionHelpers';
 import {expectIdToHaveText, expectToBeVisibleByText} from './expectHelpers';
-import {chooseSearchResult, setInputById} from './commonHelpers';
+import { chooseSearchResult, idExists, setInputById } from "./commonHelpers";
 
 // Do a departure search
 export const departureSearch = async (departure: string) => {
@@ -10,6 +10,14 @@ export const departureSearch = async (departure: string) => {
   await chooseSearchResult('locationSearchItem0');
 
   await expectToBeVisibleByText('Departures');
+};
+
+// Check if departure onboarding is done
+export const ensureOnboardingIsConfirmed = async () => {
+  const haveToConfirmOnboarding = await idExists(by.id('departuresOnboardingConfirmButton'));
+  if (haveToConfirmOnboarding) {
+    await tapById('departuresOnboardingConfirmButton');
+  }
 };
 
 // v2: Choose bus stop

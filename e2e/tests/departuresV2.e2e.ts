@@ -21,8 +21,8 @@ import {
   departureSearch,
   numberOfDepartures,
   tapDeparture,
-  getLineTitleV2,
-} from '../utils/departures';
+  getLineTitleV2, ensureOnboardingIsConfirmed
+} from "../utils/departures";
 import {expectGreaterThan, expectNumber} from '../utils/jestAssertions';
 
 describe('Departures v2', () => {
@@ -64,6 +64,8 @@ describe('Departures v2', () => {
 
     // Go to departures
     await goToTab('departures');
+    //Confirm onboarding
+    await ensureOnboardingIsConfirmed()
 
     // Do a departure search
     await departureSearch(placeSearch);
@@ -155,6 +157,8 @@ describe('Departures v2', () => {
 
     // Go to departures
     await goToTab('departures');
+    //Confirm onboarding
+    await ensureOnboardingIsConfirmed()
 
     // Do a departure search - that should automatically display the stop
     await departureSearch(departureStop);
