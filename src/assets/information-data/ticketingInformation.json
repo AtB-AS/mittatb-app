@@ -138,7 +138,11 @@
             ]
         },
         {
-            "text": "For å reise med sykkel kjøper du en barnebillett.",
+            "text": "Kjøper du billett for sone A etter kl. 18 på hverdager eller hele lørdag, søndag og helligdager er den gyldig i tre timer.",
+            "type": "text"
+        },
+        {
+            "text": "\nFor å reise med sykkel kjøper du en barnebillett.",
             "type": "text"
         },
         {
@@ -294,7 +298,11 @@
             ]
         },
         {
-            "text": "To bring a bike, buy a child ticket.",
+            "text": "If you buy a ticket for zone A after 18 on weekdays or all of Saturday, Sunday and public holidays, it is valid for three hours.",
+            "type": "text"
+        },
+        {
+            "text": "\nTo bring a bike, buy a child ticket.",
             "type": "text"
         },
         {
