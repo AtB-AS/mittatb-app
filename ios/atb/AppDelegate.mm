@@ -11,6 +11,9 @@
 #import <Firebase.h>
 @import Intercom;
 
+
+#import <atb-Swift.h>
+
 #import "RNBootSplash.h"
 
 #if RCT_NEW_ARCH_ENABLED
@@ -53,6 +56,9 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  
+  LocationManager *locationManager = [[LocationManager alloc] init];
+  
   #ifdef FB_SONARKIT_ENABLED
     InitializeFlipper(application);
   #endif

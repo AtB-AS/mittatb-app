@@ -31,6 +31,7 @@
 		5038614E28FD81B700E16E13 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614D28FD81B700E16E13 /* Structs.swift */; };
 		505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */; };
 		506538E028FEA57400A0DDCC /* WidgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506538DF28FEA57400A0DDCC /* WidgetViewModel.swift */; };
+		507636CC292B898A001E8895 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507636CB292B898A001E8895 /* LocationManager.swift */; };
 		50A14ED72918F97E00A661D9 /* WidgetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A14ED62918F97E00A661D9 /* WidgetInfoView.swift */; };
 		A1E701563B78F99B13487BE3 /* libPods-atb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B12A710282707BA8960F89A /* libPods-atb.a */; };
 		E6A5C3E919C3475F907B3CE4 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB1D1B473A9C41A79687569C /* Roboto-Regular.ttf */; };
@@ -114,6 +115,7 @@
 		5051B09328F4092200B8EA18 /* departureWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = departureWidgetExtension.entitlements; sourceTree = "<group>"; };
 		505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartureTimesView.swift; sourceTree = "<group>"; };
 		506538DF28FEA57400A0DDCC /* WidgetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetViewModel.swift; sourceTree = "<group>"; };
+		507636CB292B898A001E8895 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		50A14ED62918F97E00A661D9 /* WidgetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetInfoView.swift; sourceTree = "<group>"; };
 		86E9F6F8FAE78B8F34A96337 /* Pods-atb-atbTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb-atbTests.release.xcconfig"; path = "Target Support Files/Pods-atb-atbTests/Pods-atb-atbTests.release.xcconfig"; sourceTree = "<group>"; };
 		890F33DF27CF0C595F634586 /* libPods-atb-atbTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atb-atbTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -207,6 +209,7 @@
 				38CD3275254B616300C6B978 /* AtBRootView.h */,
 				384D20EA25E4F9990019DF98 /* ChangeNativeBridge.h */,
 				384D20EB25E4FA2B0019DF98 /* ChangeNativeBridge.m */,
+				507636CB292B898A001E8895 /* LocationManager.swift */,
 			);
 			name = atb;
 			sourceTree = "<group>";
@@ -712,6 +715,7 @@
 			files = (
 				38CD3270254B612600C6B978 /* AtBRootView.m in Sources */,
 				385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */,
+				507636CC292B898A001E8895 /* LocationManager.swift in Sources */,
 				384D20F025E4FF730019DF98 /* ChangeNativeBridge.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
