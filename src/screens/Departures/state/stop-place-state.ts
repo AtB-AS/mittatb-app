@@ -39,7 +39,6 @@ const HARD_REFRESH_LIMIT_IN_MINUTES = 10;
 
 export type DepartureDataState = {
   data: EstimatedCall[] | null;
-  showOnlyFavorites: boolean;
   tick?: Date;
   error?: {type: ErrorType};
   locationId?: string;
@@ -54,7 +53,6 @@ const initialQueryInput: QueryInput = {
 };
 const initialState: DepartureDataState = {
   data: null,
-  showOnlyFavorites: false,
   error: undefined,
   locationId: undefined,
   isLoading: false,
@@ -70,7 +68,6 @@ type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
       stopPlace: StopPlace;
-      showOnlyFavorites: boolean;
       startTime?: string;
       timeRange?: number;
       favoriteDepartures?: UserFavoriteDepartures;
@@ -121,7 +118,6 @@ const reducer: ReducerWithSideEffects<
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
         {
           ...state,
-          showOnlyFavorites: action.showOnlyFavorites,
           isLoading: true,
           error: undefined,
           queryInput,
@@ -132,7 +128,7 @@ const reducer: ReducerWithSideEffects<
             const result = await fetchEstimatedCalls(
               queryInput,
               action.stopPlace,
-              state.showOnlyFavorites ? action.favoriteDepartures : undefined,
+              action.favoriteDepartures,
               {
                 signal: action.timeOut.signal,
               },
@@ -255,7 +251,6 @@ export function useStopPlaceData(
     dispatch({
       type: 'LOAD_INITIAL_DEPARTURES',
       stopPlace,
-      showOnlyFavorites,
       startTime,
       timeRange,
       limitPerLine,

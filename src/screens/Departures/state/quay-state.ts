@@ -44,7 +44,6 @@ const MIN_TIME_RANGE = 3 * 60 * 60; // Three hours
 
 export type DepartureDataState = {
   data: DepartureTypes.EstimatedCall[] | null;
-  showOnlyFavorites: boolean;
   tick?: Date;
   error?: {type: ErrorType};
   locationId?: string;
@@ -59,7 +58,6 @@ const initialQueryInput = {
 };
 const initialState: DepartureDataState = {
   data: null,
-  showOnlyFavorites: false,
   error: undefined,
   locationId: undefined,
   isLoading: false,
@@ -75,7 +73,6 @@ type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
       quay: DepartureTypes.Quay;
-      showOnlyFavorites: boolean;
       startTime?: string;
       favoriteDepartures?: UserFavoriteDepartures;
       limitPerLine?: number;
@@ -127,7 +124,6 @@ const reducer: ReducerWithSideEffects<
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
         {
           ...state,
-          showOnlyFavorites: action.showOnlyFavorites,
           isLoading: true,
           error: undefined,
           queryInput,
@@ -138,7 +134,7 @@ const reducer: ReducerWithSideEffects<
             const result = await fetchEstimatedCalls(
               queryInput,
               action.quay,
-              state.showOnlyFavorites ? action.favoriteDepartures : undefined,
+              action.favoriteDepartures,
               {
                 signal: action.timeout.signal,
               },
@@ -266,7 +262,6 @@ export function useQuayData(
       quay,
       startTime,
       favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
-      showOnlyFavorites,
       limitPerLine,
       timeRange,
       timeout,
