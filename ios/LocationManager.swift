@@ -3,17 +3,27 @@ import WidgetKit
 
 class LocationManager: NSObject, CLLocationManagerDelegate {
     private let locationManager = CLLocationManager()
+    private var locationStatus: CLAuthorizationStatus?
+
 
     override init() {
         super.init()
+      
+        debugPrint("Location manager initialized")
         locationManager.delegate = self
-        locationManager.startMonitoringSignificantLocationChanges()
-        locationManager.requestAlwaysAuthorization()
+        locationManager.startUpdatingLocation()
         locationManager.allowsBackgroundLocationUpdates = true
+        locationManager.startMonitoringSignificantLocationChanges()
     }
+  
+  func locationManager(_: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+      debugPrint("update in status")
+
+      locationStatus = status
+  }
 
     func locationManager(_: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-      debugPrint("so i got an update in location")
+      debugPrint("update in location")
       if #available(iOS 14.0, *) {
         WidgetCenter.shared.reloadAllTimelines()
       } else {
