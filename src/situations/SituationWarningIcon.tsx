@@ -4,7 +4,7 @@ import {hasSituations} from './utils';
 import {SituationsType} from '@atb/situations/types';
 
 type Props = {
-  situations: SituationsType;
+  situations?: SituationsType;
   style?: ComponentProps<typeof Warning>['style'];
   accessibilityLabel?: string;
 };
