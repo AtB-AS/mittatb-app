@@ -28,8 +28,6 @@ export const AvailableFareProducts = ({
     productIsSellableInApp,
   );
 
-  console.log(sellableProductsInApp);
-
   const shouldShowSingleFareProduct = sellableProductsInApp.some(
     (product) => product.type === 'single',
   );
