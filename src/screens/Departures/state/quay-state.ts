@@ -147,10 +147,13 @@ const reducer: ReducerWithSideEffects<
               result: result,
             });
           } catch (e) {
+            const errorType = getAxiosErrorType(e, action.timeout.didTimeout);
+            // Not show error msg if the request was cancelled by a new search
+            if (errorType === 'cancel') return;
             dispatch({
               type: 'SET_ERROR',
               reset: false,
-              error: getAxiosErrorType(e, action.timeout.didTimeout),
+              error: errorType,
             });
           } finally {
             dispatch({type: 'STOP_LOADER'});
