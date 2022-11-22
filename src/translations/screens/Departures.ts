@@ -10,6 +10,7 @@ const DeparturesTexts = {
       geoLoc: _('I nærheten', 'Nearby'),
       address: _(`Holdeplasser nær `, `Stops near `),
     },
+    withWarning: _('Med advarsler', 'With warnings'),
     a11yStopPlaceItemHint: _(
       'Aktiver for å se avganger',
       'Activate to view departures',

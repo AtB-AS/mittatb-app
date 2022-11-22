@@ -2,7 +2,7 @@ import {SituationsType, SituationType} from '@atb/situations/types';
 import {Language} from '@atb/translations';
 import {getTextForLanguage} from '@atb/translations';
 
-export const hasSituations = (situations: SituationsType) =>
+export const hasSituations = (situations?: SituationsType) =>
   situations?.some((s) => s.description.length) ?? false;
 
 export const getUniqueSituations = (
