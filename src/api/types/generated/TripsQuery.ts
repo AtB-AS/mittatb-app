@@ -50,8 +50,11 @@ export type TripsQuery = {
           notices: Array<{text?: string; id: string}>;
         };
         situations: Array<{
+          id: string;
           situationNumber?: string;
-          description: Array<{value: string}>;
+          reportType?: Types.ReportType;
+          summary: Array<{language?: string; value: string}>;
+          description: Array<{language?: string; value: string}>;
         }>;
         fromPlace: {
           name?: string;
