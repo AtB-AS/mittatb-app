@@ -91,8 +91,8 @@ const TicketingTexts = {
     night: {
       title: _('Nattbillett', 'Night ticket'),
       description: _(
-        `Fra 00:30 til 04:00 på nattbuss og trikk`,
-        `From 00:30 to 04:00 for night bus and train`,
+        `Fra 00:30 til 04:00 på nattbuss og -trikk`,
+        `From 00:30 to 04:00 for night bus and tram`,
       ),
       transportModes: _('Buss/trikk', 'Bus/tram'),
     },
