@@ -61,6 +61,7 @@ export const DeparturesOnboardingScreen = ({navigation}: Props) => {
             navigation.goBack();
           }}
           style={styles.button}
+          testID="departuresOnboardingConfirmButton"
         />
       </ScrollView>
     </SafeAreaView>
