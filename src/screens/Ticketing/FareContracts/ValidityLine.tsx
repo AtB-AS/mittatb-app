@@ -1,6 +1,5 @@
 import React, {ReactElement, useEffect, useRef} from 'react';
 import {Animated, Dimensions, Easing, View} from 'react-native';
-import Dash from 'react-native-dash';
 import {StyleSheet, useTheme} from '@atb/theme';
 import LinearGradient from 'react-native-linear-gradient';
 import {ValidityStatus} from '@atb/screens/Ticketing/FareContracts/utils';
@@ -96,12 +95,11 @@ const LineWithVerticalBars = ({
           <VerticalLine key={i} offset={animatedVerticalLineOffset} index={i} />
         ))}
       </View>
-      <Dash
-        style={{width: `${100 - validityPercent}%`}}
-        dashGap={0}
-        dashLength={1}
-        dashThickness={8}
-        dashColor={theme.static.background.background_1.background}
+      <View
+        style={{
+          width: `${100 - validityPercent}%`,
+          backgroundColor: theme.static.background.background_1.background,
+        }}
       />
     </View>
   );
