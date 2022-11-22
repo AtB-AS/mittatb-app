@@ -1,7 +1,8 @@
-import {Warning} from '@atb/assets/svg/color/situations';
+import {Warning} from '@atb/assets/svg/color/icons/status';
 import React, {ComponentProps} from 'react';
 import {hasSituations} from './utils';
 import {SituationsType} from '@atb/situations/types';
+import ThemeIcon from '@atb/components/theme-icon';
 
 type Props = {
   situations?: SituationsType;
@@ -18,5 +19,11 @@ export const SituationWarningIcon = ({
     return null;
   }
 
-  return <Warning accessibilityLabel={accessibilityLabel} style={style} />;
+  return (
+    <ThemeIcon
+      svg={Warning}
+      accessibilityLabel={accessibilityLabel}
+      style={style}
+    />
+  );
 };
