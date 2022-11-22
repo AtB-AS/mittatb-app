@@ -31,6 +31,87 @@
     }
   },
   {
+    "id": "ATB:PreassignedFareProduct:8f351521",
+    "version": "",
+    "type": "night",
+    "distributionChannel": [
+      "app"
+    ],
+    "name": {
+      "lang": "nob",
+      "value": "Nattbillett"
+    },
+    "alternativeNames": [
+      {
+        "lang": "eng",
+        "value": "Night ticket"
+      },
+      {
+        "lang": "nno",
+        "value": "Nattbillett"
+      }
+    ],
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:8ee842e3"
+      ]
+    }
+  },
+  {
+    "id": "ATB:PreassignedFareProduct:877baeff",
+    "version": "",
+    "type": "night",
+    "distributionChannel": [
+      "app"
+    ],
+    "name": {
+      "lang": "nob",
+      "value": "Nattbillett"
+    },
+    "alternativeNames": [
+      {
+        "lang": "eng",
+        "value": "Night ticket"
+      },
+      {
+        "lang": "nno",
+        "value": "Nattbillett"
+      }
+    ],
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:8ee842e3"
+      ]
+    }
+  },
+  {
+    "id": "ATB:PreassignedFareProduct:e317a807",
+    "version": "",
+    "type": "night",
+    "distributionChannel": [
+      "app"
+    ],
+    "name": {
+      "lang": "nob",
+      "value": "Nattbillett"
+    },
+    "alternativeNames": [
+      {
+        "lang": "eng",
+        "value": "Night ticket"
+      },
+      {
+        "lang": "nno",
+        "value": "Nattbillett"
+      }
+    ],
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:8ee842e3"
+      ]
+    }
+  },
+  {
     "id": "ATB:PreassignedFareProduct:1fb2d3e4",
     "version": "",
     "type": "hour24",

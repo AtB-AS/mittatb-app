@@ -24,23 +24,27 @@ export const AvailableFareProducts = ({
   const {preassignedFareProducts} = useFirestoreConfiguration();
   const {t} = useTranslation();
 
-  const shouldShowNightFareProduct = true;
+  const sellableProductsInApp = preassignedFareProducts.filter(
+    productIsSellableInApp,
+  );
 
-  const shouldShowSingleFareProduct = preassignedFareProducts
-    .filter(productIsSellableInApp)
-    .some((product) => {
-      return product.type === 'single';
-    });
+  console.log(sellableProductsInApp);
+
+  const shouldShowSingleFareProduct = sellableProductsInApp.some(
+    (product) => product.type === 'single',
+  );
 
   const shouldShowPeriodFareProduct =
     hasEnabledMobileToken &&
-    preassignedFareProducts.filter(productIsSellableInApp).some((product) => {
-      return product.type === 'period';
-    });
+    sellableProductsInApp.some((product) => product.type === 'period');
 
-  const shouldShowHour24FareProduct = preassignedFareProducts
-    .filter(productIsSellableInApp)
-    .some((product) => product.type === 'hour24');
+  const shouldShowHour24FareProduct = sellableProductsInApp.some(
+    (product) => product.type === 'hour24',
+  );
+
+  const shouldShowNightFareProduct = sellableProductsInApp.some(
+    (product) => product.type === 'night',
+  );
 
   const shouldShowSummerPass = false;
 
