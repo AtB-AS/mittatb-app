@@ -8,7 +8,7 @@ import {
   QuayFragment,
 } from '@atb/api/types/generated/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
-import {Info, Warning} from '@atb/assets/svg/color/situations';
+import {Info, Warning} from '@atb/assets/svg/color/icons/status';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
 import MessageBox, {TinyMessageBox} from '@atb/components/message-box';
