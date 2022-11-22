@@ -140,7 +140,7 @@ export default function EstimatedCallItem({
               isTripCancelled={isTripCancelled}
               timeWithRealtimePrefix={timeWithRealtimePrefix}
               testID={testID}
-            ></DepartureTime>
+            />
           ) : null}
         </View>
       </TouchableOpacity>
