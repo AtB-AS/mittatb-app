@@ -24,6 +24,13 @@ export type QuayDeparturesQuery = {
           transportSubmode?: Types.TransportSubmode;
         };
       };
+      situations: Array<{
+        id: string;
+        situationNumber?: string;
+        reportType?: Types.ReportType;
+        summary: Array<{language?: string; value: string}>;
+        description: Array<{language?: string; value: string}>;
+      }>;
     }>;
     situations: Array<{
       id: string;
