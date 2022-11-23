@@ -141,7 +141,10 @@ export default function useOfferState(
       } else {
         try {
           dispatch({type: 'SEARCHING_OFFER'});
+          const {offerEndpoint: offerEndpointMode} =
+            preassignedFareProduct.configurations;
           const response = await searchOffers(
+            offerEndpointMode,
             {
               zones,
               travellers: offerTravellers,

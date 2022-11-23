@@ -56,6 +56,13 @@
     ],
     "limitations": {
       "userProfileRefs": ["ATB:UserProfile:8ee842e3"]
+    },
+    "configurations": {
+      "zoneSelectionMode": "none",
+      "travellerSelectionMode": "none",
+      "timeSelectionMode": "none",
+      "productSelectionMode": "product",
+      "offerEndpoint": "authority"
     }
   },
   {
@@ -79,6 +86,13 @@
     ],
     "limitations": {
       "userProfileRefs": ["ATB:UserProfile:8ee842e3"]
+    },
+    "configurations": {
+      "zoneSelectionMode": "none",
+      "travellerSelectionMode": "none",
+      "timeSelectionMode": "none",
+      "productSelectionMode": "product",
+      "offerEndpoint": "authority"
     }
   },
   {
@@ -102,6 +116,13 @@
     ],
     "limitations": {
       "userProfileRefs": ["ATB:UserProfile:8ee842e3"]
+    },
+    "configurations": {
+      "zoneSelectionMode": "none",
+      "travellerSelectionMode": "none",
+      "timeSelectionMode": "none",
+      "productSelectionMode": "product",
+      "offerEndpoint": "authority"
     }
   },
   {
