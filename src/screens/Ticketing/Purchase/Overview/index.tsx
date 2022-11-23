@@ -9,6 +9,7 @@ import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {PurchaseScreenProps} from '../types';
 import DurationSelection from './components/DurationSelection';
+import ProductSelection from './components/ProductSelection';
 import PurchaseMessages from './components/PurchaseMessages';
 import StartTimeSelection from './components/StartTimeSelection';
 import Summary from './components/Summary';
@@ -104,7 +105,13 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             />
           )}
 
-          {productSelectionMode === 'product' && <></>}
+          {productSelectionMode === 'product' && (
+            <ProductSelection
+              selectedProduct={preassignedFareProduct}
+              setSelectedProduct={onSelectPreassignedFareProduct}
+              style={styles.selectionComponent}
+            />
+          )}
 
           {productSelectionMode === 'duration' && (
             <DurationSelection
