@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
-import ThemeText from '@atb/components/text';
-import {Platform, StyleProp, View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import useUserCountState, {
   UserProfileWithCount,
@@ -9,9 +8,8 @@ import {PreassignedFareProduct} from '@atb/reference-data/types';
 import SingleTravellerSelection from '../../Travellers/SingleTravellerSelection';
 import MultipleTravellersSelection from '../../Travellers/MultipleTravellersSelection';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import FixedSwitch from '@atb/components/switch';
-import {usePreferences} from '@atb/preferences';
 import useFontScale from '@atb/utils/use-font-scale';
+import InfoToggle from './InfoToggle';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -28,7 +26,6 @@ export default function TravellerSelection({
   selectableUserProfiles,
   preassignedFareProduct,
 }: TravellerSelectionProps) {
-  const styles = useStyles();
   const {t} = useTranslation();
   const {travellerSelectionMode} = preassignedFareProduct.configurations;
   const userCountState = useUserCountState(selectableUserProfiles);
@@ -36,11 +33,6 @@ export default function TravellerSelection({
     userCountState.userProfilesWithCount.filter((a) =>
       selectableUserProfiles.some((b) => a.id === b.id),
     );
-  const {
-    setPreference,
-    preferences: {hideTravellerDescriptions},
-  } = usePreferences();
-
   useEffect(() => {
     const filteredSelection = userCountState.userProfilesWithCount.filter((u) =>
       selectableUserProfiles.find((i) => i.id === u.id),
@@ -54,53 +46,13 @@ export default function TravellerSelection({
 
   return (
     <View style={style}>
-      <View
-        style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}
-      >
-        <View style={{flexGrow: 1}}>
-          <ThemeText
-            type="body__secondary"
-            color="secondary"
-            style={styles.title}
-          >
-            {travellerSelectionMode == 'multiple'
-              ? t(PurchaseOverviewTexts.travellerSelection.title_multiple)
-              : t(PurchaseOverviewTexts.travellerSelection.title_single)}
-          </ThemeText>
-        </View>
-
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            flexGrow: 1,
-            justifyContent: 'flex-end',
-          }}
-        >
-          <ThemeText
-            type="body__secondary"
-            accessible={false}
-            importantForAccessibility="no"
-          >
-            {t(PurchaseOverviewTexts.travellerSelection.infoToggle)}
-          </ThemeText>
-          <FixedSwitch
-            style={[
-              styles.toggle,
-              Platform.OS === 'android'
-                ? styles.androidToggle
-                : styles.iosToggle,
-            ]}
-            value={!hideTravellerDescriptions}
-            onValueChange={(checked) => {
-              setPreference({hideTravellerDescriptions: !checked});
-            }}
-            accessibilityLabel={t(
-              PurchaseOverviewTexts.travellerSelection.infoToggleA11y,
-            )}
-          />
-        </View>
-      </View>
+      <InfoToggle
+        title={
+          travellerSelectionMode == 'multiple'
+            ? t(PurchaseOverviewTexts.travellerSelection.title_multiple)
+            : t(PurchaseOverviewTexts.travellerSelection.title_single)
+        }
+      />
       {travellerSelectionMode === 'multiple' ? (
         <MultipleTravellersSelection
           fareProductType={preassignedFareProduct.type}

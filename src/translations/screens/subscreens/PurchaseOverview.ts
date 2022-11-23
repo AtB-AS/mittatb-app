@@ -72,12 +72,15 @@ const PurchaseOverviewTexts = {
     days: _('dager', 'days'),
     chipHint: _('Aktiver for å velge varighet', 'Activate to select duration'),
   },
+  productSelection: _('Velg billet', 'Select a ticket'),
   travellerSelection: {
     title_single: _('Velg passasjerkategori', 'Select a traveller'),
     title_multiple: _('Velg passasjerkategorier', 'Select travellers'),
     a11yHint: _('Aktiver for å velge reisende', 'Activate to select traveller'),
-    infoToggle: _('Vis info', 'Show info'),
-    infoToggleA11y: _(
+  },
+  infoToggle: {
+    label: _('Vis info', 'Show info'),
+    a11yLabel: _(
       'Vis informasjon om passasjerkategorier',
       'Show information about traveller categories',
     ),
