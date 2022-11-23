@@ -10,10 +10,12 @@ import FareProductTile from '@atb/screens/Ticketing/FareProducts/AvailableFarePr
 
 export const AvailableFareProducts = ({
   onBuySingleFareProduct,
+  onBuyNightFareProduct,
   onBuyPeriodFareProduct,
   onBuyHour24FareProduct,
 }: {
   onBuySingleFareProduct: () => void;
+  onBuyNightFareProduct: () => void;
   onBuyPeriodFareProduct: () => void;
   onBuyHour24FareProduct: () => void;
 }) => {
@@ -22,21 +24,25 @@ export const AvailableFareProducts = ({
   const {preassignedFareProducts} = useFirestoreConfiguration();
   const {t} = useTranslation();
 
-  const shouldShowSingleFareProduct = preassignedFareProducts
-    .filter(productIsSellableInApp)
-    .some((product) => {
-      return product.type === 'single';
-    });
+  const sellableProductsInApp = preassignedFareProducts.filter(
+    productIsSellableInApp,
+  );
+
+  const shouldShowSingleFareProduct = sellableProductsInApp.some(
+    (product) => product.type === 'single',
+  );
 
   const shouldShowPeriodFareProduct =
     hasEnabledMobileToken &&
-    preassignedFareProducts.filter(productIsSellableInApp).some((product) => {
-      return product.type === 'period';
-    });
+    sellableProductsInApp.some((product) => product.type === 'period');
 
-  const shouldShowHour24FareProduct = preassignedFareProducts
-    .filter(productIsSellableInApp)
-    .some((product) => product.type === 'hour24');
+  const shouldShowHour24FareProduct = sellableProductsInApp.some(
+    (product) => product.type === 'hour24',
+  );
+
+  const shouldShowNightFareProduct = sellableProductsInApp.some(
+    (product) => product.type === 'night',
+  );
 
   const shouldShowSummerPass = false;
 
@@ -70,8 +76,19 @@ export const AvailableFareProducts = ({
           />
         )}
       </View>
-      {shouldShowHour24FareProduct && (
-        <View style={styles.fareProductsContainer}>
+      <View style={styles.fareProductsContainer}>
+        {shouldShowNightFareProduct && (
+          <FareProductTile
+            transportationModeTexts={t(
+              TicketingTexts.availableFareProducts.night.transportModes,
+            )}
+            illustration="Night"
+            onPress={onBuyNightFareProduct}
+            testID="nightFareProduct"
+            type={'night'}
+          />
+        )}
+        {shouldShowHour24FareProduct && (
           <FareProductTile
             transportationModeTexts={t(
               TicketingTexts.availableFareProducts.hour24.transportModes,
@@ -81,8 +98,8 @@ export const AvailableFareProducts = ({
             testID="24HourFareProduct"
             type={'hour24'}
           />
-        </View>
-      )}
+        )}
+      </View>
       {shouldShowSummerPass && (
         <View style={styles.fareProductsContainer}>
           <FareProductTile
