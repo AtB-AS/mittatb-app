@@ -3,9 +3,7 @@
     "id": "ATB:PreassignedFareProduct:8808c360",
     "version": "ATB:Version:d918f8e3-eb23-4d62-9626-a5cbd02a1dee",
     "type": "single",
-    "distributionChannel": [
-      "app"
-    ],
+    "distributionChannel": ["app"],
     "name": {
       "lang": "nob",
       "value": "Enkeltbillett buss/trikk"
@@ -28,87 +26,82 @@
         "ATB:UserProfile:d3e4ec09",
         "ATB:UserProfile:1ae560ba"
       ]
+    },
+    "configurations": {
+      "zoneSelectionMode": "multiple",
+      "travellerSelectionMode": "multiple",
+      "timeSelectionMode": "datetime",
+      "productSelectionMode": "none",
+      "offerEndpoint": "zones"
     }
   },
   {
     "id": "ATB:PreassignedFareProduct:8f351521",
-    "version": "",
+    "version": "ATB:Version:fecb1f30-5b6a-473c-9987-d8ff1b649560",
     "type": "night",
-    "distributionChannel": [
-      "app"
-    ],
+    "distributionChannel": ["app"],
     "name": {
       "lang": "nob",
-      "value": "Nattbillett"
+      "value": "Natt 1"
     },
     "alternativeNames": [
       {
         "lang": "eng",
-        "value": "Night ticket"
+        "value": "Night 1"
       },
       {
         "lang": "nno",
-        "value": "Nattbillett"
+        "value": "Natt 1"
       }
     ],
     "limitations": {
-      "userProfileRefs": [
-        "ATB:UserProfile:8ee842e3"
-      ]
+      "userProfileRefs": ["ATB:UserProfile:8ee842e3"]
     }
   },
   {
     "id": "ATB:PreassignedFareProduct:877baeff",
-    "version": "",
+    "version": "ATB:Version:c463bb9c-7e63-4c84-a07b-837dc264694a",
     "type": "night",
-    "distributionChannel": [
-      "app"
-    ],
+    "distributionChannel": ["app"],
     "name": {
       "lang": "nob",
-      "value": "Nattbillett"
+      "value": "Natt 2"
     },
     "alternativeNames": [
       {
         "lang": "eng",
-        "value": "Night ticket"
+        "value": "Night 2"
       },
       {
         "lang": "nno",
-        "value": "Nattbillett"
+        "value": "Natt 2"
       }
     ],
     "limitations": {
-      "userProfileRefs": [
-        "ATB:UserProfile:8ee842e3"
-      ]
+      "userProfileRefs": ["ATB:UserProfile:8ee842e3"]
     }
   },
   {
     "id": "ATB:PreassignedFareProduct:e317a807",
-    "version": "",
+    "version": "ATB:Version:ffdc03c6-2003-429f-a0bc-b8ddaa6b8f9d",
     "type": "night",
-    "distributionChannel": [
-      "app"
-    ],
+    "distributionChannel": ["app"],
     "name": {
       "lang": "nob",
-      "value": "Nattbillett"
+      "value": "Natt 3"
     },
     "alternativeNames": [
       {
         "lang": "eng",
-        "value": "Night ticket"
+        "value": "Night 3"
       },
       {
         "lang": "nno",
-        "value": "Nattbillett"
+        "value": "Natt 3"
       }
     ],
     "limitations": {
-      "userProfileRefs": [
-        "ATB:UserProfile:8ee842e3"
-      ]
+      "userProfileRefs": ["ATB:UserProfile:8ee842e3"]
     }
   },
   {
@@ -116,11 +109,7 @@
     "version": "",
     "type": "hour24",
     "durationDays": 1,
-    "isApplicableOnSingleZoneOnly": true,
-    "distributionChannel": [
-      "app",
-      "web"
-    ],
+    "distributionChannel": ["app", "web"],
     "name": {
       "lang": "nob",
       "value": "24-timersbillett"
@@ -141,6 +130,13 @@
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
       ]
+    },
+    "configurations": {
+      "zoneSelectionMode": "multiple",
+      "travellerSelectionMode": "single",
+      "timeSelectionMode": "datetime",
+      "productSelectionMode": "none",
+      "offerEndpoint": "zones"
     }
   },
   {
@@ -148,10 +144,7 @@
     "version": "ATB:Version:c7e5a0d8-78e8-46e9-a019-07348b8328db",
     "type": "period",
     "durationDays": 7,
-    "distributionChannel": [
-      "app",
-      "web"
-    ],
+    "distributionChannel": ["app", "web"],
     "name": {
       "lang": "nob",
       "value": "7-dagersbillett"
@@ -172,6 +165,13 @@
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
       ]
+    },
+    "configurations": {
+      "zoneSelectionMode": "multiple",
+      "travellerSelectionMode": "single",
+      "timeSelectionMode": "datetime",
+      "productSelectionMode": "duration",
+      "offerEndpoint": "zones"
     }
   },
   {
@@ -179,10 +179,7 @@
     "version": "ATB:Version:12b94a4d-b347-41c9-a6c6-35bc3386d4f4",
     "type": "period",
     "durationDays": 30,
-    "distributionChannel": [
-      "app",
-      "web"
-    ],
+    "distributionChannel": ["app", "web"],
     "name": {
       "lang": "nob",
       "value": "30-dagersbillett"
@@ -204,6 +201,13 @@
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
       ]
+    },
+    "configurations": {
+      "zoneSelectionMode": "multiple",
+      "travellerSelectionMode": "single",
+      "timeSelectionMode": "datetime",
+      "productSelectionMode": "duration",
+      "offerEndpoint": "zones"
     }
   },
   {
@@ -211,10 +215,7 @@
     "version": "",
     "type": "period",
     "durationDays": 60,
-    "distributionChannel": [
-      "app",
-      "web"
-    ],
+    "distributionChannel": ["app", "web"],
     "name": {
       "lang": "nob",
       "value": "60-dagersbillett"
@@ -236,6 +237,13 @@
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
       ]
+    },
+    "configurations": {
+      "zoneSelectionMode": "multiple",
+      "travellerSelectionMode": "single",
+      "timeSelectionMode": "datetime",
+      "productSelectionMode": "duration",
+      "offerEndpoint": "zones"
     }
   },
   {
@@ -243,10 +251,7 @@
     "version": "",
     "type": "period",
     "durationDays": 90,
-    "distributionChannel": [
-      "app",
-      "web"
-    ],
+    "distributionChannel": ["app", "web"],
     "name": {
       "lang": "nob",
       "value": "90-dagersbillett"
@@ -268,6 +273,13 @@
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
       ]
+    },
+    "configurations": {
+      "zoneSelectionMode": "multiple",
+      "travellerSelectionMode": "single",
+      "timeSelectionMode": "datetime",
+      "productSelectionMode": "duration",
+      "offerEndpoint": "zones"
     }
   },
   {
@@ -275,10 +287,7 @@
     "version": "ATB:Version:62736d83-3854-4c71-b9f2-d2d9b52997ab",
     "type": "period",
     "durationDays": 180,
-    "distributionChannel": [
-      "app",
-      "web"
-    ],
+    "distributionChannel": ["app", "web"],
     "name": {
       "lang": "nob",
       "value": "180-dagersbillett"
@@ -300,15 +309,20 @@
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
       ]
+    },
+    "configurations": {
+      "zoneSelectionMode": "multiple",
+      "travellerSelectionMode": "single",
+      "timeSelectionMode": "datetime",
+      "productSelectionMode": "duration",
+      "offerEndpoint": "zones"
     }
   },
   {
     "id": "ATB:AmountOfPriceUnitProduct:KlippekortBuss",
     "version": "ATB:Version:AOPUP-KlippekortBuss-1",
     "type": "carnet",
-    "distributionChannel": [
-      "web"
-    ],
+    "distributionChannel": ["web"],
     "name": {
       "lang": "nob",
       "value": "10 billetter"

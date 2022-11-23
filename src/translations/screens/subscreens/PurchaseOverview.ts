@@ -57,11 +57,11 @@ const PurchaseOverviewTexts = {
   },
   zones: {
     label: {
-      singleZone: {
+      single: {
         text: _('Velg sone (kun én)', 'Select zone (only one)'),
         a11yLabel: _('Velg sone (kun én)', 'Select zone (only one)'),
       },
-      multipleZone: {
+      multiple: {
         text: _('Velg sone(r)', 'Select zone(s)'),
         a11yLabel: _('Velg soner', 'Select zones'),
       },

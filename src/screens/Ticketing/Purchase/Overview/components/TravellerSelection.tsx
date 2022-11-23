@@ -7,7 +7,6 @@ import useUserCountState, {
 } from '../../Travellers/use-user-count-state';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import SingleTravellerSelection from '../../Travellers/SingleTravellerSelection';
-import {getPurchaseFlow} from '../../utils';
 import MultipleTravellersSelection from '../../Travellers/MultipleTravellersSelection';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import FixedSwitch from '@atb/components/switch';
@@ -31,7 +30,7 @@ export default function TravellerSelection({
 }: TravellerSelectionProps) {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {travellerSelectionMode} = getPurchaseFlow(preassignedFareProduct.type);
+  const {travellerSelectionMode} = preassignedFareProduct.configurations;
   const userCountState = useUserCountState(selectableUserProfiles);
   const selectableUserProfilesWithCount =
     userCountState.userProfilesWithCount.filter((a) =>

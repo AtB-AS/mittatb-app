@@ -8,7 +8,6 @@ import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {PurchaseScreenProps} from '../types';
-import {getPurchaseFlow} from '../utils';
 import DurationSelection from './components/DurationSelection';
 import PurchaseMessages from './components/PurchaseMessages';
 import StartTimeSelection from './components/StartTimeSelection';
@@ -58,8 +57,12 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     travelDate,
   );
 
-  const {travelDateSelectionEnabled, durationSelectionEnabled} =
-    getPurchaseFlow(preassignedFareProduct.type);
+  const {
+    timeSelectionMode,
+    productSelectionMode,
+    travellerSelectionMode,
+    zoneSelectionMode,
+  } = preassignedFareProduct.configurations;
 
   useEffect(() => {
     if (params?.refreshOffer) {
@@ -101,7 +104,9 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             />
           )}
 
-          {durationSelectionEnabled && (
+          {productSelectionMode === 'product' && <></>}
+
+          {productSelectionMode === 'duration' && (
             <DurationSelection
               color="interactive_2"
               selectedProduct={preassignedFareProduct}
@@ -110,23 +115,26 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             />
           )}
 
-          <TravellerSelection
-            setTravellerSelection={setTravellerSelection}
-            preassignedFareProduct={preassignedFareProduct}
-            selectableUserProfiles={selectableTravellers}
-            style={styles.selectionComponent}
-          />
+          {travellerSelectionMode !== 'none' && (
+            // NOTE: The `selectionMode` is selected inside `TravellerSelection`!
+            <TravellerSelection
+              setTravellerSelection={setTravellerSelection}
+              preassignedFareProduct={preassignedFareProduct}
+              selectableUserProfiles={selectableTravellers}
+              style={styles.selectionComponent}
+            />
+          )}
 
-          <Zones
-            fromTariffZone={fromTariffZone}
-            toTariffZone={toTariffZone}
-            style={styles.selectionComponent}
-            isApplicableOnSingleZoneOnly={
-              preassignedFareProduct.isApplicableOnSingleZoneOnly
-            }
-          />
+          {zoneSelectionMode !== 'none' && (
+            <Zones
+              fromTariffZone={fromTariffZone}
+              toTariffZone={toTariffZone}
+              style={styles.selectionComponent}
+              selectionMode={zoneSelectionMode}
+            />
+          )}
 
-          {travelDateSelectionEnabled && (
+          {timeSelectionMode === 'datetime' && (
             <StartTimeSelection
               color="interactive_2"
               travelDate={travelDate}

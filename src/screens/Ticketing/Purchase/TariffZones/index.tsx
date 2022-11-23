@@ -14,7 +14,10 @@ import {ButtonInput, Section} from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {TariffZone} from '@atb/reference-data/types';
+import {
+  PreassignedFareProductZoneSelectionMode,
+  TariffZone,
+} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import TariffZoneResults from '@atb/screens/Ticketing/Purchase/TariffZones/search/TariffZoneResults';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -44,7 +47,7 @@ const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
 export type RouteParams = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
-  isApplicableOnSingleZoneOnly?: boolean;
+  selectionMode: Exclude<PreassignedFareProductZoneSelectionMode, 'none'>;
 };
 
 export type TariffZoneResultType = 'venue' | 'geolocation' | 'zone';
@@ -215,7 +218,8 @@ const TariffZones: React.FC<TariffZonesProps> = ({
   navigation,
   route: {params},
 }) => {
-  const {fromTariffZone, toTariffZone, isApplicableOnSingleZoneOnly} = params;
+  const {fromTariffZone, toTariffZone, selectionMode} = params;
+  const isApplicableOnSingleZoneOnly = selectionMode === 'single';
   const [regionEvent, setRegionEvent] = useState<RegionEvent>();
   const {tariffZones} = useFirestoreConfiguration();
   const [selectedZones, setSelectedZones] = useState<TariffZoneSelection>({
