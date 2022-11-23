@@ -1,15 +1,10 @@
 import React, {useState} from 'react';
-import {
-  getTextForLanguage,
-  PurchaseOverviewTexts,
-  useTranslation,
-} from '@atb/translations';
+import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {
   getReferenceDataName,
   productIsSellableInApp,
 } from '@atb/reference-data/utils';
 import {StyleProp, View, ViewStyle} from 'react-native';
-import {StyleSheet} from '@atb/theme';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import InfoToggle from './InfoToggle';
@@ -47,8 +42,8 @@ export default function ProductSelection({
           itemToSubtext={(fp) => getReferenceDataName(fp, language)}
           selected={selected}
           onSelect={(fp) => {
-            setProduct(fp)
-            setSelectedProduct(fp)
+            setProduct(fp);
+            setSelectedProduct(fp);
           }}
           color="interactive_2"
           accessibilityHint={t(
