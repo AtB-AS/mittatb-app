@@ -3,6 +3,7 @@ import {LanguageAndTextType} from '@atb/translations';
 
 export type PreassignedFareProductType =
   | 'single'
+  | 'night'
   | 'period'
   | 'carnet'
   | 'hour24';

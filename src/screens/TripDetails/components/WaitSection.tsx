@@ -1,5 +1,5 @@
 import {Time} from '@atb/assets/svg/mono-icons/time';
-import {Info} from '@atb/assets/svg/color/situations';
+import {Info} from '@atb/assets/svg/color/icons/status';
 import ThemeText from '@atb/components/text';
 import {TinyMessageBox} from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';
