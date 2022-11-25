@@ -273,30 +273,33 @@ const Confirmation: React.FC<ConfirmationProps> = ({
 
           <View>
             <Sections.Section>
-              <Sections.GenericItem>
-                {userProfilesWithCountAndOffer.map((u, i) => (
-                  <View
-                    accessible={true}
-                    key={u.id}
-                    style={[
-                      styles.userProfileItem,
-                      i != 0 ? styles.smallTopMargin : undefined,
-                    ]}
-                  >
-                    <ThemeText>
-                      {u.count} {getReferenceDataName(u, language)}
-                    </ThemeText>
-                    <ThemeText>
-                      {formatDecimalNumber(
-                        u.count * (u.offer.prices[0].amount_float || 0),
-                        language,
-                        2,
-                      )}{' '}
-                      kr
-                    </ThemeText>
-                  </View>
-                ))}
-              </Sections.GenericItem>
+              {preassignedFareProduct.configurations.travellerSelectionMode !==
+                'none' && (
+                <Sections.GenericItem>
+                  {userProfilesWithCountAndOffer.map((u, i) => (
+                    <View
+                      accessible={true}
+                      key={u.id}
+                      style={[
+                        styles.userProfileItem,
+                        i != 0 ? styles.smallTopMargin : undefined,
+                      ]}
+                    >
+                      <ThemeText>
+                        {u.count} {getReferenceDataName(u, language)}
+                      </ThemeText>
+                      <ThemeText>
+                        {formatDecimalNumber(
+                          u.count * (u.offer.prices[0].amount_float || 0),
+                          language,
+                          2,
+                        )}{' '}
+                        kr
+                      </ThemeText>
+                    </View>
+                  ))}
+                </Sections.GenericItem>
+              )}
               <Sections.GenericItem>
                 <View accessible={true}>
                   <ThemeText>
