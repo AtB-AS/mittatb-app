@@ -30,7 +30,7 @@
     "configurations": {
       "zoneSelectionMode": "multiple",
       "travellerSelectionMode": "multiple",
-      "timeSelectionMode": "datetime",
+      "timeSelectionMode": "none",
       "productSelectionMode": "none",
       "offerEndpoint": "zones"
     }
@@ -183,7 +183,7 @@
       ]
     },
     "configurations": {
-      "zoneSelectionMode": "multiple",
+      "zoneSelectionMode": "single",
       "travellerSelectionMode": "single",
       "timeSelectionMode": "datetime",
       "productSelectionMode": "none",
