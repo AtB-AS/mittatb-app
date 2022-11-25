@@ -45,7 +45,7 @@
     ],
     "en": [
         {
-            "text": "During ticket inspections, open your app and select the main menu «Tickets» at the bottom of the app. Select the «Valid» tab. Here you will find your valid ticket. Select «Show details / inspection». You will now receive information about the ticket and a barcode. Show this barcode to the ticket inspector who will scan it with his own equipment to check if the ticket is valid.\n",
+            "text": "During ticket inspections, open your app and select the main menu «Tickets» at the bottom of the app. Select the «Active» tab. Here you will find your valid ticket. Select «Show details / inspection». You will now receive information about the ticket and a barcode. Show this barcode to the ticket inspector who will scan it with his own equipment to check if the ticket is valid.\n",
             "type": "text"
         },
         {

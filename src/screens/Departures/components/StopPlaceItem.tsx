@@ -9,6 +9,10 @@ import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {StyleSheet} from '@atb/theme';
+import {useHumanizeDistance} from '@atb/utils/location';
+import {SituationWarningIcon} from '@atb/situations';
+import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
+import {getTranslatedModeName} from '@atb/utils/transportation-names';
 
 type StopPlaceItemProps = {
   stopPlaceNode: NearestStopPlaceNode;
@@ -24,20 +28,36 @@ export default function StopPlaceItem({
   const styles = useStyles();
   const {t} = useTranslation();
 
+  const humanizedDistance = useHumanizeDistance(stopPlaceNode.distance);
+
   const place = stopPlaceNode.place;
   if (!place) return <></>;
 
   const description =
     place.description || t(DeparturesTexts.stopPlaceList.stopPlace);
-  const distance = stopPlaceNode.distance?.toFixed(0);
+
+  const allQuaySituations = place?.quays?.reduce<SituationFragment[]>(
+    (all, quay) => [...all, ...quay.situations],
+    [],
+  );
+
+  const a11yLabel = [
+    place.name,
+    description,
+    humanizedDistance,
+    allQuaySituations?.length && t(DeparturesTexts.stopPlaceList.withWarning),
+    place.transportMode
+      ?.map((mode) => t(getTranslatedModeName(mode)))
+      .join(','),
+  ]
+    .filter(Boolean)
+    .join(',');
 
   return (
     <Sections.Section withPadding>
       <Sections.GenericClickableItem
         onPress={() => onPress(place)}
-        accessibilityLabel={`${place.name}, ${description}, ${
-          distance ? distance + 'm' : ''
-        }`}
+        accessibilityLabel={a11yLabel}
         accessibilityHint={t(
           DeparturesTexts.stopPlaceList.a11yStopPlaceItemHint,
         )}
@@ -50,12 +70,13 @@ export default function StopPlaceItem({
             <ThemeText type="body__secondary" style={styles.stopDescription}>
               {description}
             </ThemeText>
-            {distance && (
+            {humanizedDistance && (
               <ThemeText type="body__secondary" color="secondary">
-                {distance + ' m'}
+                {humanizedDistance}
               </ThemeText>
             )}
           </View>
+          <SituationWarningIcon situations={allQuaySituations} />
           {place.transportMode?.map((mode) => (
             <ThemeIcon
               key={mode}

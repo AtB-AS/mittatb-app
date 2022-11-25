@@ -71,6 +71,7 @@ export const getTransportationModes = (fareProductType?: string) => {
     case 'single':
     case 'hour24':
     case 'period':
+    case 'night':
     case 'carnet':
       return [{mode: Mode.Bus, subMode: TransportSubmode.LocalBus}];
     case 'summerPass': //TODO cross check this value

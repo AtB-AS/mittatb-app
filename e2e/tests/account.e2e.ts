@@ -101,7 +101,7 @@ xdescribe('Account', () => {
       await expectIdToHaveText('travelCardNumber', userInfo.travelCardNumber);
 
       await goToTab('tickets');
-      await tapById('validTicketsTab');
+      await tapById('activeTicketsTab');
       await expectToBeVisibleById('travelTokenBox');
       await expectToBeVisibleById('travelCardIcon');
       await expectIdToHaveText('travelCardNumber', userInfo.travelCardNumber);
@@ -142,7 +142,7 @@ xdescribe('Account', () => {
       await deviceNameIsDefined();
 
       await goToTab('tickets');
-      await tapById('validTicketsTab');
+      await tapById('activeTicketsTab');
       await expectToBeVisibleById('travelTokenBox');
       await expectToBeVisibleById('mobileIcon');
       await deviceNameIsDefined();

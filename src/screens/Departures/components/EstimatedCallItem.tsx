@@ -22,13 +22,14 @@ import {EstimatedCall, StopPlace, Quay} from '@atb/api/types/departures';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import useFontScale from '@atb/utils/use-font-scale';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Warning} from '../../../assets/svg/color/situations';
+import {Warning} from '../../../assets/svg/color/icons/status';
 import ToggleFavouriteDeparture from '@atb/screens/Departures/components/ToggleFavouriteDeparture';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {isToday, parseISO} from 'date-fns';
 import {useOnMarkFavouriteDepartures} from '@atb/screens/Departures/components/use-on-mark-favourite-departures';
 import {StopPlacesMode} from '@atb/screens/Departures/types';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
+import {SvgProps} from 'react-native-svg';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
@@ -70,6 +71,9 @@ export default function EstimatedCallItem({
     : t(dictionary.missingRealTimePrefix) + time;
 
   const isTripCancelled = departure.cancellation;
+
+  const showWarning = isTripCancelled || departure.situations.length;
+
   const lineName = departure.destinationDisplay?.frontText;
   const lineNumber = line?.publicCode;
   const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
@@ -124,18 +128,19 @@ export default function EstimatedCallItem({
               publicCode={line.publicCode}
               transportMode={line.transportMode}
               transportSubmode={line.transportSubmode}
+              icon={showWarning ? Warning : undefined}
               testID={testID}
-            ></LineChip>
+            />
           )}
           <ThemeText style={styles.lineName} testID={testID + 'Name'}>
             {departure.destinationDisplay?.frontText}
           </ThemeText>
           {mode === 'Departure' || mode === 'Map' ? (
-            <DepartureTimeAndWarning
+            <DepartureTime
               isTripCancelled={isTripCancelled}
               timeWithRealtimePrefix={timeWithRealtimePrefix}
               testID={testID}
-            ></DepartureTimeAndWarning>
+            />
           ) : null}
         </View>
       </TouchableOpacity>
@@ -152,7 +157,7 @@ export default function EstimatedCallItem({
   );
 }
 
-const DepartureTimeAndWarning = ({
+const DepartureTime = ({
   isTripCancelled,
   timeWithRealtimePrefix,
   testID,
@@ -164,7 +169,6 @@ const DepartureTimeAndWarning = ({
   const styles = useStyles();
   return (
     <>
-      {isTripCancelled && <Warning style={styles.warningIcon} />}
       <ThemeText
         type="body__primary--bold"
         testID={testID + 'Time'}
@@ -199,9 +203,13 @@ function getA11yDeparturesLabel(
     a11yDateInfo = `${a11yDate} ${a11yTimeWithRealtimePrefix}`;
   }
 
+  const a11yWarning = departure.situations.length
+    ? t(DeparturesTexts.estimatedCall.withWarning) + ','
+    : '';
+
   return `${
     departure.cancellation ? t(CancelledDepartureTexts.message) : ''
-  } ${getLineA11yLabel(departure, t)} ${a11yDateInfo}`;
+  } ${getLineA11yLabel(departure, t)} ${a11yWarning} ${a11yDateInfo}`;
 }
 
 function getLineA11yLabel(departure: EstimatedCall, t: TranslateFunction) {
@@ -219,6 +227,7 @@ type LineChipProps = {
   publicCode?: string;
   transportMode?: Types.TransportMode;
   transportSubmode?: Types.TransportSubmode;
+  icon?: (props: SvgProps) => JSX.Element;
   testID?: string;
 };
 
@@ -226,6 +235,7 @@ function LineChip({
   publicCode,
   transportMode,
   transportSubmode,
+  icon,
   testID,
 }: LineChipProps): JSX.Element {
   const styles = useStyles();
@@ -262,6 +272,7 @@ function LineChip({
           {publicCode}
         </ThemeText>
       )}
+      {icon && <ThemeIcon svg={icon} style={styles.lineChipIcon} />}
     </View>
   );
 }
@@ -290,6 +301,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
     marginRight: theme.spacings.medium,
     flexDirection: 'row',
+  },
+  lineChipIcon: {
+    position: 'absolute',
+    top: -theme.spacings.small,
+    left: -theme.spacings.small,
   },
   lineChipText: {
     color: theme.static.background.background_accent_3.text,

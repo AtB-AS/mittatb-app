@@ -32,6 +32,9 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
     });
   };
 
+  // TODO: Replace `onBuyNightFareProduct` with the proper navigation
+  const onBuyNightFareProduct = onBuySingleFareProduct;
+
   const onBuyPeriodFareProduct = () => {
     if (authenticationType === 'phone') {
       navigation.navigate('Purchase', {
@@ -82,6 +85,7 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
           onBuySingleFareProduct={onBuySingleFareProduct}
           onBuyPeriodFareProduct={onBuyPeriodFareProduct}
           onBuyHour24FareProduct={onBuyHour24FareProduct}
+          onBuyNightFareProduct={onBuyNightFareProduct}
         />
       </View>
     </ScrollView>

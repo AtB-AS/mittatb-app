@@ -6,10 +6,9 @@ import {
 import {
   ServiceJourneyEstimatedCallFragment,
   QuayFragment,
-  SituationFragment,
 } from '@atb/api/types/generated/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
-import {Info, Warning} from '@atb/assets/svg/color/situations';
+import {Info, Warning} from '@atb/assets/svg/color/icons/status';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
 import MessageBox, {TinyMessageBox} from '@atb/components/message-box';
@@ -39,6 +38,7 @@ import CompactMap from '../Map/CompactMap';
 import {TripDetailsScreenProps} from '../types';
 import {ServiceJourneyDeparture} from './types';
 import useDepartureData, {CallListGroup} from './use-departure-data';
+import {filterSituations} from '@atb/situations/utils';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -62,7 +62,7 @@ export default function DepartureDetails({navigation, route}: Props) {
 
   const isFocused = useIsFocused();
   const [
-    {callGroups, title, mode, subMode, situations: parentSituations},
+    {callGroups, title, mode, subMode, serviceJourneySituations},
     isLoading,
   ] = useDepartureData(activeItem, 30, !isFocused);
   const mapData = useMapData(activeItem);
@@ -128,7 +128,7 @@ export default function DepartureDetails({navigation, route}: Props) {
 
           {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
           <SituationMessagesBox
-            situations={parentSituations}
+            situations={serviceJourneySituations}
             containerStyle={styles.situationsContainer}
           />
 
@@ -167,7 +167,6 @@ export default function DepartureDetails({navigation, route}: Props) {
                 type={name}
                 mode={mode}
                 subMode={subMode}
-                parentSituations={parentSituations}
               />
             ))}
           </View>
@@ -193,15 +192,9 @@ type CallGroupProps = {
   type: keyof CallListGroup;
   mode?: TransportMode;
   subMode?: TransportSubmode;
-  parentSituations: SituationFragment[];
 };
-function CallGroup({
-  type,
-  calls,
-  mode,
-  subMode,
-  parentSituations,
-}: CallGroupProps) {
+
+function CallGroup({type, calls, mode, subMode}: CallGroupProps) {
   const isOnRoute = type === 'trip';
   const isBefore = type === 'passed';
   const showCollapsable = isBefore && calls.length > 1;
@@ -245,7 +238,6 @@ function CallGroup({
             type={type}
             mode={mode}
             subMode={subMode}
-            parentSituations={parentSituations}
             collapseButton={i === 0 ? collapseButton : null}
           />
         );
@@ -260,7 +252,6 @@ type TripItemProps = {
   type: string;
   mode: TransportMode | undefined;
   subMode: TransportSubmode | undefined;
-  parentSituations: SituationFragment[];
   collapseButton: JSX.Element | null;
   isStart: boolean;
   isEnd: boolean;
@@ -271,7 +262,6 @@ function TripItem({
   type,
   mode,
   subMode,
-  parentSituations,
   collapseButton,
   isStart,
   isEnd,
@@ -285,10 +275,8 @@ function TripItem({
     subMode,
   );
   // Make sure there is text to show in the situation message
-  const filteredSituations = call.situations.filter(
-    (s) => s.description[0]?.value || s.summary[0]?.value,
-  );
-  const showSituations = type !== 'passed' && filteredSituations.length > 0;
+  const quaySituations = filterSituations(call?.quay?.situations);
+  const showSituations = type !== 'passed' && !!quaySituations?.length;
   const {newDepartures} = usePreferenceItems();
   return (
     <View style={[styles.place, isStart && styles.startPlace]}>
@@ -315,7 +303,7 @@ function TripItem({
       </TripRow>
       {showSituations && (
         <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
-          <SituationMessagesBox mode="no-icon" situations={call.situations} />
+          <SituationMessagesBox mode="no-icon" situations={quaySituations} />
         </TripRow>
       )}
       {call.notices &&
@@ -353,10 +341,7 @@ function TripItem({
           id: stopPlace.id,
           name: stopPlace.name,
         },
-        selectedQuay: {
-          id: quay.id,
-          name: quay.name,
-        },
+        selectedQuay: quay,
         mode: 'Departure',
       });
     } else {

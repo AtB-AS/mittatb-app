@@ -50,6 +50,12 @@ export const getPurchaseFlow = (
         travelDateSelectionEnabled: false,
         durationSelectionEnabled: false,
       };
+    case 'night':
+      return {
+        travellerSelectionMode: 'single',
+        travelDateSelectionEnabled: false,
+        durationSelectionEnabled: false,
+      };
     case 'carnet':
       return {
         travellerSelectionMode: 'single',

@@ -39,12 +39,12 @@ const TicketingTexts = {
     },
   },
   activeFareProductsAndReservationsTab: {
-    label: _('Aktive', 'Valid'),
+    label: _('Aktive', 'Active'),
     a11yLabel: _('Aktive billetter', 'Active tickets'),
     noItems: _('Du har ingen aktive billetter.', 'You have no active tickets.'),
     noItemsHistoryHelpText: _(
       'Du har ingen aktive billetter. Billetthistorikk finner du under Min profil-fanen.',
-      'You have no valid tickets right now. Ticket history can be found under the My profile tab.',
+      'You have no active tickets right now. Ticket history can be found under the My profile tab.',
     ),
   },
   ticketHistoryTab: {
@@ -85,6 +85,14 @@ const TicketingTexts = {
       description: _(
         'Når du skal reise av og til',
         'When you travel occasionally',
+      ),
+      transportModes: _('Buss/trikk', 'Bus/tram'),
+    },
+    night: {
+      title: _('Nattbillett', 'Night ticket'),
+      description: _(
+        `Fra 00:30 til 04:00 på nattbuss og -trikk`,
+        `From 00:30 to 04:00 for night bus and tram`,
       ),
       transportModes: _('Buss/trikk', 'Bus/tram'),
     },
