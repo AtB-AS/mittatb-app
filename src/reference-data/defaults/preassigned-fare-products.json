@@ -44,6 +44,16 @@
       "lang": "nob",
       "value": "Natt 1"
     },
+    "description": [
+      {
+        "lang": "nob",
+        "value": "I Trondheim"
+      },
+      {
+        "lang": "eng",
+        "value": "At Trondheim"
+      }
+    ],
     "alternativeNames": [
       {
         "lang": "eng",
@@ -74,6 +84,16 @@
       "lang": "nob",
       "value": "Natt 2"
     },
+    "description": [
+      {
+        "lang": "nob",
+        "value": "Til Malvik, Melhus og Skaun"
+      },
+      {
+        "lang": "eng",
+        "value": "To Malvik, Melhus and Skaun"
+      }
+    ],
     "alternativeNames": [
       {
         "lang": "eng",
@@ -104,6 +124,16 @@
       "lang": "nob",
       "value": "Natt 3"
     },
+    "description": [
+      {
+        "lang": "nob",
+        "value": "Til Stjørdal og Orkdal"
+      },
+      {
+        "lang": "eng",
+        "value": "To Stjørdal and Orkdal"
+      }
+    ],
     "alternativeNames": [
       {
         "lang": "eng",

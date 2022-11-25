@@ -1,5 +1,9 @@
 import React, {useState} from 'react';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  PurchaseOverviewTexts,
+  useTranslation,
+} from '@atb/translations';
 import {
   getReferenceDataName,
   productIsSellableInApp,
@@ -9,6 +13,7 @@ import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import InfoToggle from './InfoToggle';
 import * as Sections from '../../../../../components/sections';
+import {usePreferences} from '@atb/preferences';
 
 type ProductSelectionProps = {
   selectedProduct: PreassignedFareProduct;
@@ -27,7 +32,9 @@ export default function ProductSelection({
   const selectableProducts = preassignedFareProducts
     .filter(productIsSellableInApp)
     .filter((p) => p.type === selectedProduct.type);
-
+  const {
+    preferences: {hideTravellerDescriptions},
+  } = usePreferences();
   const [selected, setProduct] = useState(selectableProducts[0]);
 
   return (
@@ -38,8 +45,10 @@ export default function ProductSelection({
           items={selectableProducts}
           keyExtractor={(u) => u.id}
           itemToText={(fp) => getReferenceDataName(fp, language)}
-          hideSubtext={false}
-          itemToSubtext={(fp) => getReferenceDataName(fp, language)}
+          hideSubtext={hideTravellerDescriptions}
+          itemToSubtext={(fp) =>
+            getTextForLanguage(fp.description ?? [], language) ?? 'Unknow'
+          }
           selected={selected}
           onSelect={(fp) => {
             setProduct(fp);
