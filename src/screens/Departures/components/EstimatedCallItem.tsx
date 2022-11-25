@@ -22,7 +22,7 @@ import {EstimatedCall, StopPlace, Quay} from '@atb/api/types/departures';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import useFontScale from '@atb/utils/use-font-scale';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Warning} from '../../../assets/svg/color/icons/status';
+import {Error} from '@atb/assets/svg/color/icons/status';
 import ToggleFavouriteDeparture from '@atb/screens/Departures/components/ToggleFavouriteDeparture';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {isToday, parseISO} from 'date-fns';
@@ -30,6 +30,8 @@ import {useOnMarkFavouriteDepartures} from '@atb/screens/Departures/components/u
 import {StopPlacesMode} from '@atb/screens/Departures/types';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {SvgProps} from 'react-native-svg';
+import {getSvgForMostCriticalSituation, SituationIcon} from '@atb/situations';
+import {getSituationA11yLabel} from "@atb/situations/utils";
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
@@ -71,8 +73,6 @@ export default function EstimatedCallItem({
     : t(dictionary.missingRealTimePrefix) + time;
 
   const isTripCancelled = departure.cancellation;
-
-  const showWarning = isTripCancelled || departure.situations.length;
 
   const lineName = departure.destinationDisplay?.frontText;
   const lineNumber = line?.publicCode;
@@ -128,7 +128,10 @@ export default function EstimatedCallItem({
               publicCode={line.publicCode}
               transportMode={line.transportMode}
               transportSubmode={line.transportSubmode}
-              icon={showWarning ? Warning : undefined}
+              icon={getSvgForMostCriticalSituation(
+                departure.situations,
+                departure.cancellation,
+              )}
               testID={testID}
             />
           )}
@@ -203,9 +206,8 @@ function getA11yDeparturesLabel(
     a11yDateInfo = `${a11yDate} ${a11yTimeWithRealtimePrefix}`;
   }
 
-  const a11yWarning = departure.situations.length
-    ? t(DeparturesTexts.estimatedCall.withWarning) + ','
-    : '';
+
+  const a11yWarning = getSituationA11yLabel(departure.situations, departure.cancellation, t);
 
   return `${
     departure.cancellation ? t(CancelledDepartureTexts.message) : ''

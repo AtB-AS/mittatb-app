@@ -22,7 +22,7 @@ import {usePreferenceItems} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import CancelledDepartureMessage from '@atb/screens/TripDetails/components/CancelledDepartureMessage';
 import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
-import {SituationMessagesBox} from '@atb/situations';
+import {SituationMessageBox} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
@@ -38,7 +38,6 @@ import CompactMap from '../Map/CompactMap';
 import {TripDetailsScreenProps} from '../types';
 import {ServiceJourneyDeparture} from './types';
 import useDepartureData, {CallListGroup} from './use-departure-data';
-import {filterSituations} from '@atb/situations/utils';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -127,10 +126,12 @@ export default function DepartureDetails({navigation, route}: Props) {
           )}
 
           {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
-          <SituationMessagesBox
-            situations={serviceJourneySituations}
-            containerStyle={styles.situationsContainer}
-          />
+          {serviceJourneySituations.map((situation) => (
+            <SituationMessageBox
+              situation={situation}
+              style={styles.messageBox}
+            />
+          ))}
 
           {isLoading && (
             <View>
@@ -148,14 +149,17 @@ export default function DepartureDetails({navigation, route}: Props) {
 
           {isTicketingEnabledAndWeCantSellTicketForDeparture && (
             <MessageBox
-              containerStyle={styles.ticketMessage}
-              type="warning"
-              message={
-                t(DepartureDetailsTexts.messages.ticketsWeDontSell) +
-                (someLegsAreByTrain
-                  ? `\n\n` + t(DepartureDetailsTexts.messages.collabTicketInfo)
-                  : ``)
-              }
+              containerStyle={styles.messageBox}
+              type="info"
+              message={t(DepartureDetailsTexts.messages.ticketsWeDontSell)}
+            />
+          )}
+
+          {someLegsAreByTrain && (
+            <MessageBox
+              containerStyle={styles.messageBox}
+              type="info"
+              message={t(DepartureDetailsTexts.messages.collabTicketInfo)}
             />
           )}
 
@@ -275,7 +279,7 @@ function TripItem({
     subMode,
   );
   // Make sure there is text to show in the situation message
-  const quaySituations = filterSituations(call?.quay?.situations);
+  const quaySituations = call?.quay?.situations;
   const showSituations = type !== 'passed' && !!quaySituations?.length;
   const {newDepartures} = usePreferenceItems();
   return (
@@ -303,7 +307,9 @@ function TripItem({
       </TripRow>
       {showSituations && (
         <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
-          <SituationMessagesBox mode="no-icon" situations={quaySituations} />
+          {quaySituations.map((situation) => (
+            <SituationMessageBox mode="no-icon" situation={situation} />
+          ))}
         </TripRow>
       )}
       {call.notices &&
@@ -422,9 +428,6 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   middleRow: {
     minHeight: 60,
   },
-  situationsContainer: {
-    marginBottom: theme.spacings.small,
-  },
   allGroups: {
     backgroundColor: theme.static.background.background_0.background,
     marginBottom: theme.spacings.xLarge,
@@ -432,8 +435,8 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   spinner: {
     paddingTop: theme.spacings.medium,
   },
-  ticketMessage: {
-    marginTop: theme.spacings.medium,
+  messageBox: {
+    marginBottom: theme.spacings.medium,
   },
   scrollView__content: {
     padding: theme.spacings.medium,
