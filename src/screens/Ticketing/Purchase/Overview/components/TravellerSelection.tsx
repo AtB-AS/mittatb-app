@@ -52,6 +52,9 @@ export default function TravellerSelection({
             ? t(PurchaseOverviewTexts.travellerSelection.title_multiple)
             : t(PurchaseOverviewTexts.travellerSelection.title_single)
         }
+        accessibilityLabel={t(
+          PurchaseOverviewTexts.infoToggle.travellerA11yLabel,
+        )}
       />
       {travellerSelectionMode === 'multiple' ? (
         <MultipleTravellersSelection

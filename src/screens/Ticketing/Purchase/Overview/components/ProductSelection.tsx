@@ -39,7 +39,12 @@ export default function ProductSelection({
 
   return (
     <View style={style}>
-      <InfoToggle title={t(PurchaseOverviewTexts.productSelection.title)} />
+      <InfoToggle
+        title={t(PurchaseOverviewTexts.productSelection.title)}
+        accessibilityLabel={t(
+          PurchaseOverviewTexts.infoToggle.nightTicketA11yLabel,
+        )}
+      />
       <Sections.Section>
         <Sections.RadioSection<PreassignedFareProduct>
           items={selectableProducts}

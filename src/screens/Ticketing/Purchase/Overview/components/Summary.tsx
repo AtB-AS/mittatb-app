@@ -68,7 +68,9 @@ export default function Summary({
             {t(PurchaseOverviewTexts.summary.price(formattedPrice))}
           </ThemeText>
           <ThemeText type="body__secondary" style={styles.message}>
-            {t(PurchaseOverviewTexts.summary.message)}
+            {preassignedFareProduct.configurations.zoneSelectionMode !== 'none'
+              ? t(PurchaseOverviewTexts.summary.messageInZone)
+              : t(PurchaseOverviewTexts.summary.messageInArea)}
           </ThemeText>
         </>
       )}

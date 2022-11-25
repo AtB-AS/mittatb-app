@@ -7,7 +7,13 @@ import {View, Platform} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 
-export default function InfoToggle({title}: {title: string}) {
+export default function InfoToggle({
+  title,
+  accessibilityLabel,
+}: {
+  title: string;
+  accessibilityLabel?: string;
+}) {
   const styles = useStyles();
   const {t} = useTranslation();
   const {
@@ -53,7 +59,7 @@ export default function InfoToggle({title}: {title: string}) {
           onValueChange={(checked) => {
             setPreference({hideTravellerDescriptions: !checked});
           }}
-          accessibilityLabel={t(PurchaseOverviewTexts.infoToggle.a11yLabel)}
+          accessibilityLabel={accessibilityLabel}
         />
       </View>
     </View>

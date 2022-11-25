@@ -83,9 +83,13 @@ const PurchaseOverviewTexts = {
   },
   infoToggle: {
     label: _('Vis info', 'Show info'),
-    a11yLabel: _(
+    travellerA11yLabel: _(
       'Vis informasjon om passasjerkategorier',
       'Show information about traveller categories',
+    ),
+    nightTicketA11yLabel: _(
+      'Vis informasjon om område for gyldighet',
+      'Show information about area of validity',
     ),
   },
   startTime: {
@@ -104,9 +108,13 @@ const PurchaseOverviewTexts = {
   summary: {
     price: (priceString: string) =>
       _(`Total ${priceString} kr`, `Total ${priceString} kr`),
-    message: _(
+    messageInZone: _(
       `Gjelder for buss/trikk i valgte soner`,
       `Applies for bus/tram in selected zones`,
+    ),
+    messageInArea: _(
+      `Gjelder for buss/trikk i valgt område`,
+      `Applies for bus/tram in selected area`,
     ),
     button: _('Til betaling', 'To payment'),
   },
