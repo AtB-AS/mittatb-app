@@ -220,11 +220,11 @@
 		2202D92626CB95E40032C7E9 /* Configs */ = {
 			isa = PBXGroup;
 			children = (
-				222B80A426D8C8B500EE86C9 /* Debug-tests.xcconfig */,
-				222B80A826D8C8DF00EE86C9 /* Release-tests.xcconfig */,
-				2202DA8F26CBC28F0032C7E9 /* Debug.xcconfig */,
-				2202DA9026CBC28F0032C7E9 /* Release.xcconfig */,
 				2202D92726CB95E40032C7E9 /* Config.xcconfig */,
+				222B80A426D8C8B500EE86C9 /* Debug-tests.xcconfig */,
+				2202DA8F26CBC28F0032C7E9 /* Debug.xcconfig */,
+				222B80A826D8C8DF00EE86C9 /* Release-tests.xcconfig */,
+				2202DA9026CBC28F0032C7E9 /* Release.xcconfig */,
 			);
 			path = Configs;
 			sourceTree = "<group>";
