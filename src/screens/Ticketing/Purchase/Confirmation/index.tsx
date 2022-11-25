@@ -16,7 +16,11 @@ import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';
-import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  PurchaseConfirmationTexts,
+  useTranslation,
+} from '@atb/translations';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
@@ -298,24 +302,38 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   <ThemeText>
                     {getReferenceDataName(preassignedFareProduct, language)}
                   </ThemeText>
-                  <ThemeText
-                    style={styles.smallTopMargin}
-                    type="body__secondary"
-                    color="secondary"
-                  >
-                    {fromTariffZone.id === toTariffZone.id
-                      ? t(
-                          PurchaseConfirmationTexts.validityTexts.zone.single(
-                            getReferenceDataName(fromTariffZone, language),
-                          ),
-                        )
-                      : t(
-                          PurchaseConfirmationTexts.validityTexts.zone.multiple(
-                            getReferenceDataName(fromTariffZone, language),
-                            getReferenceDataName(toTariffZone, language),
-                          ),
-                        )}
-                  </ThemeText>
+                  {preassignedFareProduct.configurations.zoneSelectionMode !==
+                  'none' ? (
+                    <ThemeText
+                      style={styles.smallTopMargin}
+                      type="body__secondary"
+                      color="secondary"
+                    >
+                      {fromTariffZone.id === toTariffZone.id
+                        ? t(
+                            PurchaseConfirmationTexts.validityTexts.zone.single(
+                              getReferenceDataName(fromTariffZone, language),
+                            ),
+                          )
+                        : t(
+                            PurchaseConfirmationTexts.validityTexts.zone.multiple(
+                              getReferenceDataName(fromTariffZone, language),
+                              getReferenceDataName(toTariffZone, language),
+                            ),
+                          )}
+                    </ThemeText>
+                  ) : (
+                    <ThemeText
+                      style={styles.smallTopMargin}
+                      type="body__secondary"
+                      color="secondary"
+                    >
+                      {getTextForLanguage(
+                        preassignedFareProduct.description ?? [],
+                        language,
+                      )}
+                    </ThemeText>
+                  )}
                   <ThemeText
                     style={styles.smallTopMargin}
                     type="body__secondary"
