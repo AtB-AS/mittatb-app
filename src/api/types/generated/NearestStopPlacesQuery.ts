@@ -18,6 +18,13 @@ export type NearestStopPlacesQuery = {
                 name: string;
                 publicCode?: string;
                 stopPlace?: {id: string};
+                situations: Array<{
+                  id: string;
+                  situationNumber?: string;
+                  reportType?: Types.ReportType;
+                  summary: Array<{language?: string; value: string}>;
+                  description: Array<{language?: string; value: string}>;
+                }>;
               }>;
             }
           | {};

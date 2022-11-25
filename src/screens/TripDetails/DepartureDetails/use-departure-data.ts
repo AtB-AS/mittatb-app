@@ -3,20 +3,18 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {
-  ServiceJourneyEstimatedCallFragment,
-  SituationFragment,
-} from '@atb/api/types/generated/serviceJourney';
+import {ServiceJourneyEstimatedCallFragment} from '@atb/api/types/generated/serviceJourney';
 import usePollableResource from '@atb/utils/use-pollable-resource';
 import {useCallback} from 'react';
 import {ServiceJourneyDeparture} from './types';
+import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 
 export type DepartureData = {
   callGroups: CallListGroup;
   mode?: TransportMode;
   title?: string;
   subMode?: TransportSubmode;
-  situations: SituationFragment[];
+  serviceJourneySituations: SituationFragment[];
 };
 
 export type CallListGroup = {
@@ -42,7 +40,7 @@ export default function useDepartureData(
         activeItem.toQuayId,
       );
       const line = callGroups.trip[0]?.serviceJourney?.journeyPattern?.line;
-      const parentSituation = callGroups.trip[0]?.situations;
+      const serviceJourneySituations = callGroups.trip[0]?.situations;
       const title = line?.publicCode
         ? `${line?.publicCode} ${callGroups.trip[0]?.destinationDisplay?.frontText}`
         : undefined;
@@ -52,7 +50,7 @@ export default function useDepartureData(
         title,
         subMode: line?.transportSubmode,
         callGroups,
-        situations: parentSituation,
+        serviceJourneySituations,
       };
     },
     [activeItem],
@@ -65,7 +63,7 @@ export default function useDepartureData(
         trip: [],
         after: [],
       },
-      situations: [],
+      serviceJourneySituations: [],
     },
     pollingTimeInSeconds,
     disabled: disabled || !activeItem,

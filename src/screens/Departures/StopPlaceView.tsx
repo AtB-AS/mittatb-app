@@ -20,6 +20,7 @@ import ThemeText from '@atb/components/text';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
 import ThemeIcon from '@atb/components/theme-icon';
 import {Walk} from '@atb/assets/svg/mono-icons/transportation';
+import {useHumanizeDistance} from '@atb/utils/location';
 
 type StopPlaceViewProps = {
   stopPlace: StopPlace;
@@ -74,12 +75,15 @@ export default function StopPlaceView(props: StopPlaceViewProps) {
   const {theme} = useTheme();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
-  const {state, refresh, forceRefresh} = useStopPlaceData(
+  const {state, forceRefresh} = useStopPlaceData(
     stopPlace,
     showOnlyFavorites,
     isFocused,
     mode,
     searchStartTime,
+  );
+  const humanizedDistance = useHumanizeDistance(
+    'distance' in props ? props.distance : undefined,
   );
   const didLoadingDataFail = !!state.error;
   const quayListData: SectionListData<Quay>[] = stopPlace.quays
@@ -97,10 +101,6 @@ export default function StopPlaceView(props: StopPlaceViewProps) {
   useEffect(() => {
     if (!placeHasFavorites) setShowOnlyFavorites(false);
   }, [favoriteDepartures]);
-
-  useEffect(() => {
-    refresh();
-  }, [stopPlace]);
 
   useMemo(
     () =>
@@ -132,14 +132,14 @@ export default function StopPlaceView(props: StopPlaceViewProps) {
           )}
           {mode === 'Map' ? (
             <>
-              {props.distance && (
+              {humanizedDistance && (
                 <View style={styles.distanceLabel}>
                   <ThemeIcon
                     svg={Walk}
                     fill={theme.text.colors.secondary}
                   ></ThemeIcon>
                   <ThemeText type="body__secondary" color="secondary">
-                    {props.distance.toFixed() + ' m'}
+                    {humanizedDistance}
                   </ThemeText>
                 </View>
               )}
@@ -201,10 +201,7 @@ export default function StopPlaceView(props: StopPlaceViewProps) {
         </>
       }
       refreshControl={
-        <RefreshControl
-          refreshing={state.isLoading}
-          onRefresh={didLoadingDataFail ? forceRefresh : refresh}
-        />
+        <RefreshControl refreshing={state.isLoading} onRefresh={forceRefresh} />
       }
       sections={quayListData}
       testID={testID}

@@ -2,7 +2,7 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {Situation} from '../types/trips';
+import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 
 type Notice = {text?: string};
 
@@ -21,7 +21,7 @@ export type DepartureTime = {
   aimedTime: string;
   realtime?: boolean;
   predictionInaccurate?: boolean;
-  situations: Situation[];
+  situations: SituationFragment[];
   serviceJourneyId?: string;
   serviceDate: string;
 };
@@ -46,7 +46,7 @@ export type QuayInfo = {
   publicCode?: string | undefined;
   latitude?: number | undefined;
   longitude?: number | undefined;
-  situations: Situation[];
+  situations: SituationFragment[];
 };
 
 export type QuayGroup = {

@@ -1,6 +1,7 @@
 import haversine from 'haversine-distance';
 import {Location} from '../favorites/types';
 import {Coordinates} from '@entur/sdk';
+import {dictionary, useTranslation} from '@atb/translations';
 
 type SortedLocation = {
   location: Location;
@@ -53,3 +54,12 @@ export function isValidTripLocations(from?: Location, to?: Location): boolean {
 
 export const getLocationLayer = (l: Location) =>
   l.resultType === 'geolocation' ? undefined : l.layer;
+
+export const useHumanizeDistance = (meters?: number) => {
+  const {t} = useTranslation();
+  if (!meters) return;
+  if (meters >= 1000) {
+    return `${Math.round(meters / 1000)} ${t(dictionary.distance.km)}`;
+  }
+  return `${Math.round(meters)} ${t(dictionary.distance.m)}`;
+};

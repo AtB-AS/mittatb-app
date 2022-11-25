@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 import ThemeIcon from '@atb/components/theme-icon';
-import {Warning} from '@atb/assets/svg/color/situations';
+import {Warning} from '@atb/assets/svg/color/icons/status';
 import ThemeText from '@atb/components/text';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';

@@ -1,5 +1,5 @@
 import {Leg, Place, Quay} from '@atb/api/types/trips';
-import {Warning} from '@atb/assets/svg/color/situations';
+import {Warning} from '@atb/assets/svg/color/icons/status';
 import {Interchange} from '@atb/assets/svg/mono-icons/actions';
 import AccessibleText, {
   screenReaderPause,
@@ -227,10 +227,7 @@ const TripSection: React.FC<TripSectionProps> = ({
           id: stopPlace.id,
           name: stopPlace.name,
         },
-        selectedQuay: {
-          id: quay.id,
-          name: quay.name,
-        },
+        selectedQuay: quay,
         mode: 'Departure',
       });
     } else {

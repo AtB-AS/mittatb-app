@@ -7,9 +7,9 @@ export type StopPlaceQuayDeparturesQuery = {
       id: string;
       estimatedCalls: Array<{
         date?: any;
-        expectedDepartureTime?: any;
-        aimedDepartureTime?: any;
-        realtime?: boolean;
+        expectedDepartureTime: any;
+        aimedDepartureTime: any;
+        realtime: boolean;
         cancellation: boolean;
         quay?: {id: string};
         destinationDisplay?: {frontText?: string};
@@ -23,6 +23,20 @@ export type StopPlaceQuayDeparturesQuery = {
             transportSubmode?: Types.TransportSubmode;
           };
         };
+        situations: Array<{
+          id: string;
+          situationNumber?: string;
+          reportType?: Types.ReportType;
+          summary: Array<{language?: string; value: string}>;
+          description: Array<{language?: string; value: string}>;
+        }>;
+      }>;
+      situations: Array<{
+        id: string;
+        situationNumber?: string;
+        reportType?: Types.ReportType;
+        summary: Array<{language?: string; value: string}>;
+        description: Array<{language?: string; value: string}>;
       }>;
     }>;
   };

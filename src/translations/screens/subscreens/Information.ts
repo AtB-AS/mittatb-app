@@ -63,10 +63,14 @@ const SelectStartScreenTexts = {
         row4Value4: _('84', '84'),
       },
       part3Text_1: _(
+        'Kjøper du billett for sone A etter kl. 18 på hverdager eller hele lørdag, søndag og helligdager er den gyldig i tre timer.',
+        'If you buy a ticket for zone A after 18 on weekdays or all of Saturday, Sunday and public holidays, it is valid for three hours.',
+      ),
+      part3Text_2: _(
         'For å reise med sykkel kjøper du en barnebillett.',
         'To bring a bike, buy a child ticket.',
       ),
-      part3Text_2: _(
+      part3Text_3: _(
         'Ved avinstallering av appen vil også billettene fjernes. Vi advarer derfor mot avinstallering når du har kjøpt billetter. Da vil du ikke kunne framvise gyldig billett.',
         'If you uninstall the app, the tickets will be removed. We recommend that you do not uninstall once you have purchased tickets. If you uninstall, you will not be able to present a valid ticket.',
       ),
@@ -131,7 +135,7 @@ const SelectStartScreenTexts = {
         'Ved billettkontroll, åpne appen din og velg hovedmenyen «Billetter» nederst i appen. Velg fanen «Aktive». Her finner du din gyldige billett. Velg «Vis detaljer/kontroll». Du får nå opp informasjon om billetten og en barkode. Vis denne barkoden til kontrollør som vil scanne denne med eget utstyr for å kontrollere om billetten er gyldig.\n\n' +
           'Husk at når du reiser med rabattert billett må du kunne vise gyldig bevis som bekrefter din rett til rabatt.\n\n' +
           'Uten gyldig billett må du ved billettkontroll betale gebyr etter følgende satser:',
-        'During ticket inspections, open your app and select the main menu "Tickets" at the bottom of the app. Select the "Valid" tab. Here you will find your valid ticket. Select "Show details / inspection". You will now receive information about the ticket and a barcode. Show this barcode to the ticket inspector who will scan it with his own equipment to check if the ticket is valid.\n\n' +
+        'During ticket inspections, open your app and select the main menu "Tickets" at the bottom of the app. Select the "Active" tab. Here you will find your valid ticket. Select "Show details / inspection". You will now receive information about the ticket and a barcode. Show this barcode to the ticket inspector who will scan it with his own equipment to check if the ticket is valid.\n\n' +
           'When traveling with a discounted ticket, always remember to bring valid proof of you being eligible for the discount.\n\n' +
           'Without a valid ticket, you need to pay an additional fee as described below:',
       ),
