@@ -21,7 +21,7 @@ struct DepartureWidgetEntryView: View {
 }
 
 @main
-struct departureWidget: Widget {
+struct DepartureWidget: Widget {
     let kind: String = "departureWidget"
 
     var body: some WidgetConfiguration {

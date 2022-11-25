@@ -11,7 +11,6 @@
 #import <Firebase.h>
 @import Intercom;
 
-
 #import <atb-Swift.h>
 
 #import "RNBootSplash.h"
@@ -30,6 +29,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   RCTSurfacePresenterBridgeAdapter *_bridgeAdapter;
   std::shared_ptr<const facebook::react::ReactNativeConfig> _reactNativeConfig;
   facebook::react::ContextContainer::Shared _contextContainer;
+  @property (nonatomic, strong) LocationManager *locationManager;
 }
 @end
 #endif
@@ -56,9 +56,6 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  
-  LocationManager *locationManager = [[LocationManager alloc] init];
-  
   #ifdef FB_SONARKIT_ENABLED
     InitializeFlipper(application);
   #endif
@@ -86,7 +83,6 @@ static void InitializeFlipper(UIApplication *application) {
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
 
-
 #if RCT_NEW_ARCH_ENABLED
   _contextContainer = std::make_shared<facebook::react::ContextContainer const>();
   _reactNativeConfig = std::make_shared<facebook::react::EmptyReactNativeConfig const>();
@@ -107,7 +103,11 @@ static void InitializeFlipper(UIApplication *application) {
   [rootView setBackgroundByTrait];
   [self.window makeKeyAndVisible];
   [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView];
-
+  
+  [[LocationChangeManager shared] setOnLocationDidChange:^(CLLocation *_) {
+    [WidgetUpdater requestUpdate];
+  }];
+  
   return YES;
 }
 

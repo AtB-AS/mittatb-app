@@ -45,7 +45,6 @@ struct StopPlaceGroup: Codable {
 }
 
 struct StopPlaceInfo: Codable {
-    var __typename: String
     let id: String
     let description: String?
     let name: String
@@ -59,7 +58,6 @@ struct QuayGroup: Codable {
 }
 
 struct QuayInfo: Codable {
-    let __typename: String
     let id: String
     let name: String
     let description: String?
@@ -193,7 +191,6 @@ extension FavoriteDeparture {
 extension QuayGroup {
     static let dummy = QuayGroup(
         quay: QuayInfo(
-            __typename: "",
             id: "",
             name: "Solsiden",
             description: nil,

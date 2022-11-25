@@ -10,7 +10,7 @@ enum AppEndPoint: String {
             url?.queryItems = [
                 /* Fetching a large number of departures to be able to give the widgetManager a better
                  estimate of the future rerenders needed */
-                URLQueryItem(name: "limitPerLine", value: "50"),
+                URLQueryItem(name: "limitPerLine", value: "10"),
                 URLQueryItem(name: "startTime", value: Date().ISO8601Format()),
                 URLQueryItem(name: "pageSize", value: "0"),
             ]

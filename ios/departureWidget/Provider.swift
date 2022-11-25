@@ -9,8 +9,7 @@ struct Provider: TimelineProvider {
         static let oneEntryTimeline = Timeline<Entry>(entries: [Entry(date: Date.now, quayGroup: nil)], policy: .after(Date.now.addingTimeInterval(5 * 60)))
     }
 
-    let locationManager = LocationManager()
-    let apiService = APIService()
+    private let apiService = APIService()
 
     /// The placeholder is shown in transitions and while loading the snapshot when adding the widget to the home screen
     func placeholder(in _: Context) -> Entry {
@@ -43,11 +42,6 @@ struct Provider: TimelineProvider {
 
                 entries.insert(Entry(date: Date.now, quayGroup: quayGroup), at: 0)
 
-                // Remove last entries so that the viewmodel always has enough quays to show.
-                if entries.count > 10 {
-                    entries.removeLast(5)
-                }
-
                 return completion(Timeline(entries: entries, policy: .atEnd))
             case .failure:
                 return completion(K.oneEntryTimeline)
@@ -57,17 +51,12 @@ struct Provider: TimelineProvider {
 
     /// Finds the closest favorite departure based on current location on the user
     private func findClosestDeparture(_ departures: [FavoriteDeparture]) -> FavoriteDeparture? {
-        var closestDeparture: FavoriteDeparture? = departures.first
-        var smallestDistance: CLLocationDistance?
-
-        for departure in departures {
-            let distance = departure.location.distance(from: locationManager.lastLocation ?? LocationManager.defaultLocation)
-            if smallestDistance == nil || distance < smallestDistance! {
-                closestDeparture = departure
-                smallestDistance = distance
+        if let currentLocation = LocationChangeManager.shared.lastKnownLocation {
+            return departures.min {
+                $0.location.distance(from: currentLocation) < $1.location.distance(from: currentLocation)
             }
         }
 
-        return closestDeparture
+        return departures.first
     }
 }
