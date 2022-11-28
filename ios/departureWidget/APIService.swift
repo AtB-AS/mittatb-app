@@ -1,7 +1,7 @@
 import Foundation
 
 enum AppEndPoint: String {
-    case favoriteDepartures
+    case favoriteDepartures, quayLocations
 
     var path: String? {
         switch self {
@@ -15,6 +15,9 @@ enum AppEndPoint: String {
                 URLQueryItem(name: "pageSize", value: "0"),
             ]
 
+            return url?.string
+        case .quayLocations:
+            let url = URLComponents(string: "http://10.100.0.105:8080/bff/v2/quay-locations")
             return url?.string
         }
     }
@@ -87,7 +90,7 @@ class APIService {
 
     /// Fetch departure times for a given departure
     func fetchDepartureTimes(departure: FavoriteDeparture, callback: @escaping (Result<QuayGroup, Error>) -> Void) {
-        let body = Body(favorites: [departure])
+        let body = DepartureRequestBody(favorites: [departure])
 
         guard let uploadData = try? JSONEncoder().encode(body) else {
             return
@@ -107,6 +110,26 @@ class APIService {
                 }
 
                 callback(.success(quayGroup))
+            case let .failure(error):
+                debugPrint(error)
+                callback(.failure(error))
+            }
+        }
+    }
+
+    /// Fetch locations of departures
+    func fetchLocations(quays: [FavoriteDeparture], callback: @escaping (Result<[QuayWithLocation], Error>) -> Void) {
+        
+        let body = QuayRequestBody(ids: quays.map { $0.quayId})
+      
+        guard let uploadData = try? JSONEncoder().encode(body) else {
+            return
+        }
+        print(uploadData)
+        fetchData(endPoint: .quayLocations, data: uploadData) { (result: Result<[QuayWithLocation], Error>) in
+            switch result {
+            case let .success(object):
+                callback(.success(object))
             case let .failure(error):
                 debugPrint(error)
                 callback(.failure(error))

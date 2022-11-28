@@ -108,14 +108,35 @@ struct DepartureTime: Codable {
     let serviceJourneyId: String
 }
 
-struct Body: Codable {
+struct DepartureRequestBody: Codable {
     let favorites: [FavoriteDeparture]
+}
+
+struct QuayRequestBody : Codable{
+  let ids: [String]
 }
 
 struct Entry: TimelineEntry {
     let date: Date
     let quayGroup: QuayGroup?
     var isForPreview: Bool = false
+}
+
+struct QuayWithLocation: Codable {
+    let id: String
+    let longitude: Double
+    let latitude: Double
+
+    var location: CLLocation {
+        CLLocation(latitude: latitude, longitude: longitude)
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        longitude = try container.decode(Double.self, forKey: .longitude)
+        latitude = try container.decode(Double.self, forKey: .latitude)
+    }
 }
 
 /// Struct for favorite departures stored on device
@@ -209,7 +230,7 @@ extension QuayGroup {
                     transportSubmode: TransportSubMode.nightBus,
                     quayId: ""
                 ),
-                departures: [Int](0 ..< 5).map { index in
+                departures: [Int](0 ..< 10).map { index in
                     let timeInterval = CGFloat(index) * 300
                     let timeDate = Date.now.addingTimeInterval(timeInterval)
                     return DepartureTime(

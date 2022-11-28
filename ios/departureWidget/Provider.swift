@@ -22,22 +22,44 @@ struct Provider: TimelineProvider {
     }
 
     func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
-        guard let favoriteDepartures = Manifest.data?.favoriteDepartures, let closestDeparture = findClosestDeparture(favoriteDepartures) else {
+        guard let favoriteDepartures = Manifest.data?.favoriteDepartures else {
             return completion(K.oneEntryTimeline)
         }
 
+        apiService.fetchLocations(quays: favoriteDepartures) { (result: Result<[QuayWithLocation], Error>) in
+            switch result {
+            case let .success(quays):
+
+                guard let closestQuay = findClosestQuay(quays) else {
+                    return completion(K.oneEntryTimeline)
+                }
+              
+                guard let closestFavorite = favoriteDepartures.first(where: {$0.quayId == closestQuay.id}) else{
+                    return completion(K.oneEntryTimeline)
+                }
+              
+                fetchDepartures(departure: closestFavorite, completion: completion)
+
+            case .failure:
+                return completion(K.oneEntryTimeline)
+            }
+        }
+    }
+
+  
+    /// Fetch departures for a given quay
+    private func fetchDepartures(departure: FavoriteDeparture, completion: @escaping (Timeline<Entry>) -> Void) {
         // Fetch departure data for the closest favorite
-        apiService.fetchDepartureTimes(departure: closestDeparture) { (result: Result<QuayGroup, Error>) in
+        apiService.fetchDepartureTimes(departure: departure) { (result: Result<QuayGroup, Error>) in
             switch result {
             case let .success(quayGroup):
+
                 guard let firstQuayGroup = quayGroup.group.first else {
                     return completion(K.oneEntryTimeline)
                 }
 
                 // Rerenders widget when a departure has passed, by giving IOS more information about future
                 // dates we hopefully get better timed rerenders
-                // This also relies on that location change asks for a new timeline, and not just rerenders
-                // TODO: Get new timeline if position changes
                 var entries = firstQuayGroup.departures.map { departure in Entry(date: departure.aimedTime, quayGroup: quayGroup) }
 
                 entries.insert(Entry(date: Date.now, quayGroup: quayGroup), at: 0)
@@ -48,6 +70,7 @@ struct Provider: TimelineProvider {
                 }
 
                 return completion(Timeline(entries: entries, policy: .atEnd))
+
             case .failure:
                 return completion(K.oneEntryTimeline)
             }
@@ -55,7 +78,7 @@ struct Provider: TimelineProvider {
     }
 
     /// Finds the closest favorite departure based on current location on the user
-    private func findClosestDeparture(_ departures: [FavoriteDeparture]) -> FavoriteDeparture? {
+    private func findClosestQuay(_ departures: [QuayWithLocation]) -> QuayWithLocation? {
         if let currentLocation = LocationChangeManager.shared.lastKnownLocation {
             return departures.min {
                 $0.location.distance(from: currentLocation) < $1.location.distance(from: currentLocation)
