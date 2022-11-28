@@ -274,7 +274,7 @@ function EstimatedCallRow({
           />
         }
         alignChildren={
-          isStartOfGroup ? 'flex-start' : isStartOfGroup ? 'flex-end' : 'center'
+          isStartOfGroup ? 'flex-start' : isEndOfGroup ? 'flex-end' : 'center'
         }
         style={[styles.row, isBetween && styles.middleRow]}
         onPress={() => handleQuayPress(call.quay)}
