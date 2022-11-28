@@ -11,7 +11,7 @@ import {
   UserFavorites,
 } from './types';
 
-import RCTWidgetUpdater from '../modules/RCTWidgetUpdater';
+import WidgetUpdater from '../widget-updater';
 
 type FavoriteContextState = {
   favorites: UserFavorites;
@@ -56,22 +56,18 @@ const FavoritesContextProvider: React.FC = ({children}) => {
     async addFavoriteLocation(favorite: LocationFavorite) {
       const favorites = await places.addFavorite(favorite);
       setFavoritesState(favorites);
-      RCTWidgetUpdater.refreshWidgets();
     },
     async removeFavoriteLocation(id: string) {
       const favorites = await places.removeFavorite(id);
       setFavoritesState(favorites);
-      RCTWidgetUpdater.refreshWidgets();
     },
     async updateFavoriteLocation(favorite: StoredType<LocationFavorite>) {
       const favorites = await places.updateFavorite(favorite);
       setFavoritesState(favorites);
-      RCTWidgetUpdater.refreshWidgets();
     },
     async setFavoriteLocations(favorites: StoredType<LocationFavorite>[]) {
       const newFavorites = await places.setFavorites(favorites);
       setFavoritesState(newFavorites);
-      RCTWidgetUpdater.refreshWidgets();
     },
 
     /**
@@ -91,14 +87,17 @@ const FavoritesContextProvider: React.FC = ({children}) => {
       }
       const favoritesUpdated = await departures.addFavorite(favoriteDeparture);
       setFavoriteDeparturesState(favoritesUpdated);
+      WidgetUpdater.refreshWidgets();
     },
     async removeFavoriteDeparture(id: string) {
       const favorites = await departures.removeFavorite(id);
       setFavoriteDeparturesState(favorites);
+      WidgetUpdater.refreshWidgets();
     },
     async setFavoriteDepartures(favorites: UserFavoriteDepartures) {
       setFavoriteDeparturesState(favorites);
       await departures.setFavorites(favorites);
+      WidgetUpdater.refreshWidgets();
     },
     async setDashboardFavorite(id: string, value: boolean) {
       const updatedFavorites = favoriteDepartures.map((f) =>
