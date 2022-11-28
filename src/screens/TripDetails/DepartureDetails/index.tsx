@@ -61,13 +61,7 @@ export default function DepartureDetails({navigation, route}: Props) {
 
   const isFocused = useIsFocused();
   const [
-    {
-      estimatedCallsWithMetadata,
-      title,
-      mode,
-      subMode,
-      serviceJourneySituations,
-    },
+    {estimatedCallsWithMetadata, title, mode, subMode, situations},
     isLoading,
   ] = useDepartureData(activeItem, 30, !isFocused);
   const mapData = useMapData(activeItem);
@@ -133,7 +127,7 @@ export default function DepartureDetails({navigation, route}: Props) {
 
           {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
           <SituationMessagesBox
-            situations={serviceJourneySituations}
+            situations={situations}
             containerStyle={styles.situationsContainer}
           />
 

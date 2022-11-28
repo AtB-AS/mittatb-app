@@ -14,7 +14,7 @@ export type DepartureData = {
   mode?: TransportMode;
   title?: string;
   subMode?: TransportSubmode;
-  serviceJourneySituations: SituationFragment[];
+  situations: SituationFragment[];
 };
 
 type EstimatedCallMetadata = {
@@ -61,7 +61,7 @@ export default function useDepartureData(
         title,
         subMode: line?.transportSubmode,
         estimatedCallsWithMetadata,
-        serviceJourneySituations: situations,
+        situations,
       };
     },
     [activeItem],
@@ -70,7 +70,7 @@ export default function useDepartureData(
   const [data, , isLoading] = usePollableResource<DepartureData>(getService, {
     initialValue: {
       estimatedCallsWithMetadata: [],
-      serviceJourneySituations: [],
+      situations: [],
     },
     pollingTimeInSeconds,
     disabled: disabled || !activeItem,
