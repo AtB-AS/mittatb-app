@@ -64,10 +64,7 @@ export default function QuayHeaderItem({
         <Distance distance={humanized} />
       </View>
       {quay.situations.map((situation) => (
-        <SituationMessageBox
-          situation={situation}
-          style={styles.situations}
-        />
+        <SituationMessageBox situation={situation} style={styles.situations} />
       ))}
     </View>
   );

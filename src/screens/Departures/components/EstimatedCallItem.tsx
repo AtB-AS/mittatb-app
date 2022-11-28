@@ -31,7 +31,7 @@ import {StopPlacesMode} from '@atb/screens/Departures/types';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {SvgProps} from 'react-native-svg';
 import {getSvgForMostCriticalSituation, SituationIcon} from '@atb/situations';
-import {getSituationA11yLabel} from "@atb/situations/utils";
+import {getSituationA11yLabel} from '@atb/situations/utils';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
@@ -206,8 +206,11 @@ function getA11yDeparturesLabel(
     a11yDateInfo = `${a11yDate} ${a11yTimeWithRealtimePrefix}`;
   }
 
-
-  const a11yWarning = getSituationA11yLabel(departure.situations, departure.cancellation, t);
+  const a11yWarning = getSituationA11yLabel(
+    departure.situations,
+    departure.cancellation,
+    t,
+  );
 
   return `${
     departure.cancellation ? t(CancelledDepartureTexts.message) : ''
