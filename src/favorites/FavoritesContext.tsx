@@ -11,7 +11,7 @@ import {
   UserFavorites,
 } from './types';
 
-import RCTWidgetUpdater from '../modules/WidgetModule';
+import RCTWidgetUpdater from '../modules/RCTWidgetUpdater';
 
 type FavoriteContextState = {
   favorites: UserFavorites;
@@ -21,7 +21,7 @@ type FavoriteContextState = {
   setFavoriteDepartures(favorite: UserFavoriteDepartures): Promise<void>;
   setDashboardFavorite(id: string, value: boolean): Promise<void>;
   updateFavoriteLocation(favorite: StoredLocationFavorite): Promise<void>;
-  setFavoriteLocationss(favorites: UserFavorites): Promise<void>;
+  setFavoriteLocations(favorites: UserFavorites): Promise<void>;
 
   getFavoriteDeparture(
     favoriteDeparture: FavoriteDepartureId,
@@ -68,7 +68,7 @@ const FavoritesContextProvider: React.FC = ({children}) => {
       setFavoritesState(favorites);
       RCTWidgetUpdater.refreshWidgets();
     },
-    async setFavoriteLocationss(favorites: StoredType<LocationFavorite>[]) {
+    async setFavoriteLocations(favorites: StoredType<LocationFavorite>[]) {
       const newFavorites = await places.setFavorites(favorites);
       setFavoritesState(newFavorites);
       RCTWidgetUpdater.refreshWidgets();
