@@ -1,5 +1,5 @@
-import orgSpecificTranslations from '@atb/translations/utils';
 import {translation as _} from '../../commons';
+
 const TripDetailsTexts = {
   header: {
     title: _('Reisedetaljer', 'Trip details'),
@@ -117,14 +117,6 @@ const TripDetailsTexts = {
       'Vær oppmerksom på kort byttetid',
       'Please note short changeover time',
     ),
-    ticketsWeDontSell: _(
-      'Om reisen din går utenfor sone A kan det kreve billetter som må kjøpes fra andre selskaper enn AtB.',
-      'If your trip goes outside zone A, it may require tickets that must be purchased from companies other than AtB.',
-    ),
-    collabTicketInfo: _(
-      `Med enkelt- og periodebillett for sone A fra AtB kan du reise med tog i denne sonen.\n\n`,
-      `With a single and period ticket for zone A from AtB, you can travel by train in this zone.\n\n`,
-    ),
     errorNetwork: _(
       'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.',
       `Are you online? We're unable to conduct a search since your device seems to be offline or the connection is unstable`,
@@ -157,13 +149,4 @@ const TripDetailsTexts = {
       ),
   },
 };
-export default orgSpecificTranslations(TripDetailsTexts, {
-  nfk: {
-    messages: {
-      ticketsWeDontSell: _(
-        'Reisen krever billett som ikke er tilgjengelig i denne appen, eller som må kjøpes fra et annet selskap enn Reis Nordland.',
-        'This journey requires a ticket that is not available from this app, or must be purchased from a provider other than Reis Nordland.',
-      ),
-    },
-  },
-});
+export default TripDetailsTexts;

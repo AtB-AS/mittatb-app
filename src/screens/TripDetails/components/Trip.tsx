@@ -5,7 +5,7 @@ import {secondsBetween} from '@atb/utils/date';
 import {AxiosError} from 'axios';
 import React from 'react';
 import {View} from 'react-native';
-import TripMessages from './TripMessages';
+import {TripMessages} from './DetailsMessages';
 import TripSection, {getPlaceName, InterchangeDetails} from './TripSection';
 import Summary from './TripSummary';
 import {WaitDetails} from './WaitSection';

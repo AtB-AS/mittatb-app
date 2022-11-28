@@ -4,8 +4,8 @@ import {
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {
-  ServiceJourneyEstimatedCallFragment,
   QuayFragment,
+  ServiceJourneyEstimatedCallFragment,
 } from '@atb/api/types/generated/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {Info, Warning} from '@atb/assets/svg/color/icons/status';
@@ -16,10 +16,7 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {canSellTicketsForSubMode} from '@atb/operator-config';
 import {usePreferenceItems} from '@atb/preferences';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import CancelledDepartureMessage from '@atb/screens/TripDetails/components/CancelledDepartureMessage';
 import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
 import {SituationMessagesBox} from '@atb/situations';
@@ -39,6 +36,7 @@ import {TripDetailsScreenProps} from '../types';
 import {ServiceJourneyDeparture} from './types';
 import useDepartureData, {CallListGroup} from './use-departure-data';
 import {filterSituations} from '@atb/situations/utils';
+import {TicketingMessages} from '@atb/screens/TripDetails/components/DetailsMessages';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -51,8 +49,6 @@ export default function DepartureDetails({navigation, route}: Props) {
   const {activeItemIndex, items} = route.params;
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useTheme();
-  const {modesWeSellTicketsFor} = useFirestoreConfiguration();
-  const {enable_ticketing} = useRemoteConfig();
 
   const activeItem = items[activeItemIndexState];
   const hasMultipleItems = items.length > 1;
@@ -66,15 +62,6 @@ export default function DepartureDetails({navigation, route}: Props) {
     isLoading,
   ] = useDepartureData(activeItem, 30, !isFocused);
   const mapData = useMapData(activeItem);
-
-  const canSellTicketsForDeparture = canSellTicketsForSubMode(
-    subMode,
-    modesWeSellTicketsFor,
-  );
-
-  const someLegsAreByTrain = mode === TransportMode.Rail;
-  const isTicketingEnabledAndWeCantSellTicketForDeparture =
-    enable_ticketing && !canSellTicketsForDeparture;
 
   const onPaginactionPress = (newPage: number) => {
     animateNextChange();
@@ -146,18 +133,12 @@ export default function DepartureDetails({navigation, route}: Props) {
             </View>
           )}
 
-          {isTicketingEnabledAndWeCantSellTicketForDeparture && (
-            <MessageBox
-              containerStyle={styles.ticketMessage}
-              type="warning"
-              message={
-                t(DepartureDetailsTexts.messages.ticketsWeDontSell) +
-                (someLegsAreByTrain
-                  ? `\n\n` + t(DepartureDetailsTexts.messages.collabTicketInfo)
-                  : ``)
-              }
-            />
-          )}
+          <TicketingMessages
+            item={items[0]}
+            trip={callGroups.trip}
+            mode={mode}
+            subMode={subMode}
+          />
 
           <View style={styles.allGroups}>
             {mapGroup(callGroups, (name, group) => (
@@ -224,7 +205,7 @@ function CallGroup({type, calls, mode, subMode}: CallGroupProps) {
   return (
     <>
       {items.map((call, i) => {
-        // Quay and ServiceJourney ID is not an unique key if a ServiceJourney
+        // Quay and ServiceJourney ID is not a unique key if a ServiceJourney
         // passes by the same stop several times, (e.g. Ringen in Oslo)
         // which is why it is used in combination with aimedDepartureTime.
         const key = `${call.quay?.id} ${call.serviceJourney?.id} ${call.aimedDepartureTime}`;
@@ -431,9 +412,6 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   },
   spinner: {
     paddingTop: theme.spacings.medium,
-  },
-  ticketMessage: {
-    marginTop: theme.spacings.medium,
   },
   scrollView__content: {
     padding: theme.spacings.medium,
