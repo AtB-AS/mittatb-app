@@ -44,7 +44,7 @@ struct Provider: TimelineProvider {
 
                 // Remove last entries so that the viewmodel always has enough quays to show.
                 if entries.count > 10 {
-                  entries.removeLast(5)
+                    entries.removeLast(5)
                 }
 
                 return completion(Timeline(entries: entries, policy: .atEnd))

@@ -29,6 +29,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   RCTSurfacePresenterBridgeAdapter *_bridgeAdapter;
   std::shared_ptr<const facebook::react::ReactNativeConfig> _reactNativeConfig;
   facebook::react::ContextContainer::Shared _contextContainer;
+  @property (nonatomic, strong) LocationManager *locationManager;
 }
 @end
 #endif
@@ -102,7 +103,11 @@ static void InitializeFlipper(UIApplication *application) {
   [rootView setBackgroundByTrait];
   [self.window makeKeyAndVisible];
   [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView];
-
+  
+  [[LocationChangeManager shared] setOnLocationDidChange:^(CLLocation *_) {
+    [WidgetUpdater requestUpdate];
+  }];
+  
   return YES;
 }
 
