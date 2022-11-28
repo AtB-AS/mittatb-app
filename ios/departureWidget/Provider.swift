@@ -42,6 +42,11 @@ struct Provider: TimelineProvider {
 
                 entries.insert(Entry(date: Date.now, quayGroup: quayGroup), at: 0)
 
+                // Remove last entries so that the viewmodel always has enough quays to show.
+                if entries.count > 10 {
+                  entries.removeLast(5)
+                }
+
                 return completion(Timeline(entries: entries, policy: .atEnd))
             case .failure:
                 return completion(K.oneEntryTimeline)
