@@ -46,6 +46,7 @@
 		FEBDDCD12931065D00C3755B /* WidgetUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */; };
 		FEBDDCD22931065D00C3755B /* WidgetUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */; };
 		FEBDDCD3293107D500C3755B /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE55264828EC45ED0091F697 /* WidgetKit.framework */; };
+		FEBDDCDB29310DFE00C3755B /* RCTWidgetUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBDDCDA29310DFE00C3755B /* RCTWidgetUpdater.m */; };
 		FED22489286F06AC0049ECE3 /* CoreNFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FED22488286F06AC0049ECE3 /* CoreNFC.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -139,6 +140,8 @@
 		FE8AF9EC28EC69FA00505277 /* departureWidgetExtensionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = departureWidgetExtensionDebug.entitlements; sourceTree = "<group>"; };
 		FE8AF9ED28EC6A0400505277 /* atbDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = atbDebug.entitlements; path = atb/atbDebug.entitlements; sourceTree = "<group>"; };
 		FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetUpdater.swift; sourceTree = "<group>"; };
+		FEBDDCD929310DFE00C3755B /* RCTWidgetUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTWidgetUpdater.h; sourceTree = "<group>"; };
+		FEBDDCDA29310DFE00C3755B /* RCTWidgetUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTWidgetUpdater.m; sourceTree = "<group>"; };
 		FED22488286F06AC0049ECE3 /* CoreNFC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreNFC.framework; path = System/Library/Frameworks/CoreNFC.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -213,6 +216,7 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				2202D92626CB95E40032C7E9 /* Configs */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
+				FEBDDCD829310DCB00C3755B /* Modules */,
 			);
 			name = atb;
 			sourceTree = "<group>";
@@ -335,6 +339,15 @@
 				FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		FEBDDCD829310DCB00C3755B /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				FEBDDCDA29310DFE00C3755B /* RCTWidgetUpdater.m */,
+				FEBDDCD929310DFE00C3755B /* RCTWidgetUpdater.h */,
+			);
+			path = Modules;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -722,6 +735,7 @@
 				385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */,
 				FEBDDCCD2931038400C3755B /* LocationChangeManager.swift in Sources */,
 				384D20F025E4FF730019DF98 /* ChangeNativeBridge.m in Sources */,
+				FEBDDCDB29310DFE00C3755B /* RCTWidgetUpdater.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
