@@ -10,17 +10,23 @@ import {ServiceJourneyDeparture} from './types';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 
 export type DepartureData = {
-  callGroups: CallListGroup;
+  estimatedCallsWithMetadata: EstimatedCallWithMetadata[];
   mode?: TransportMode;
   title?: string;
   subMode?: TransportSubmode;
   serviceJourneySituations: SituationFragment[];
 };
 
-export type CallListGroup = {
-  passed: ServiceJourneyEstimatedCallFragment[];
-  trip: ServiceJourneyEstimatedCallFragment[];
-  after: ServiceJourneyEstimatedCallFragment[];
+type EstimatedCallMetadata = {
+  group: 'passed' | 'trip' | 'after';
+  isStartOfServiceJourney: boolean;
+  isEndOfServiceJourney: boolean;
+  isStartOfGroup: boolean;
+  isEndOfGroup: boolean;
+};
+
+export type EstimatedCallWithMetadata = ServiceJourneyEstimatedCallFragment & {
+  metadata: EstimatedCallMetadata;
 };
 
 export default function useDepartureData(
@@ -30,27 +36,32 @@ export default function useDepartureData(
 ): [DepartureData, boolean] {
   const getService = useCallback(
     async function getServiceJourneyDepartures(): Promise<DepartureData> {
-      const deps = await getDepartures(
+      const estimatedCalls = await getDepartures(
         activeItem.serviceJourneyId,
         new Date(activeItem.serviceDate),
       );
-      const callGroups = groupAllCallsByQuaysInLeg(
-        deps,
+      const estimatedCallsWithMetadata = addMetadataToEstimatedCalls(
+        estimatedCalls,
         activeItem.fromQuayId,
         activeItem.toQuayId,
       );
-      const line = callGroups.trip[0]?.serviceJourney?.journeyPattern?.line;
-      const serviceJourneySituations = callGroups.trip[0]?.situations;
+
+      const firstCallOfTrip = estimatedCallsWithMetadata.find(
+        (e) => e.metadata.group === 'trip',
+      );
+
+      const line = firstCallOfTrip?.serviceJourney?.journeyPattern?.line;
+      const situations = firstCallOfTrip?.situations || [];
       const title = line?.publicCode
-        ? `${line?.publicCode} ${callGroups.trip[0]?.destinationDisplay?.frontText}`
+        ? `${line?.publicCode} ${firstCallOfTrip?.destinationDisplay?.frontText}`
         : undefined;
 
       return {
         mode: line?.transportMode,
         title,
         subMode: line?.transportSubmode,
-        callGroups,
-        serviceJourneySituations,
+        estimatedCallsWithMetadata,
+        serviceJourneySituations: situations,
       };
     },
     [activeItem],
@@ -58,11 +69,7 @@ export default function useDepartureData(
 
   const [data, , isLoading] = usePollableResource<DepartureData>(getService, {
     initialValue: {
-      callGroups: {
-        passed: [],
-        trip: [],
-        after: [],
-      },
+      estimatedCallsWithMetadata: [],
       serviceJourneySituations: [],
     },
     pollingTimeInSeconds,
@@ -72,59 +79,36 @@ export default function useDepartureData(
   return [data, isLoading];
 }
 
-const onType = (
-  obj: CallListGroup,
-  key: keyof CallListGroup,
-  call: ServiceJourneyEstimatedCallFragment,
-): CallListGroup => ({
-  ...obj,
-  [key]: obj[key].concat(call),
-});
-function groupAllCallsByQuaysInLeg(
-  calls: ServiceJourneyEstimatedCallFragment[],
+function addMetadataToEstimatedCalls(
+  estimatedCalls: ServiceJourneyEstimatedCallFragment[],
   fromQuayId?: string,
   toQuayId?: string,
-): CallListGroup {
-  let isAfterStart = false;
-  let isAfterStop = false;
+): EstimatedCallWithMetadata[] {
+  let currentGroup: EstimatedCallMetadata['group'] = 'passed';
 
-  if (!fromQuayId && !toQuayId) {
-    return {
-      passed: [],
-      trip: calls,
-      after: [],
-    };
-  }
-
-  return calls.reduce(
-    (obj, call) => {
-      // We are at start quay, update flag
-      if (call.quay?.id === fromQuayId) {
-        isAfterStart = true;
+  return estimatedCalls.reduce<EstimatedCallWithMetadata[]>(
+    (calls, currentCall, index) => {
+      const previousCall = calls[calls.length - 1];
+      if (currentCall.quay?.id === fromQuayId) {
+        if (previousCall) previousCall.metadata.isEndOfGroup = true;
+        currentGroup = 'trip';
       }
 
-      if (!isAfterStart && !isAfterStop) {
-        // is the first group
-        obj = onType(obj, 'passed', call);
-      } else if (isAfterStart && !isAfterStop) {
-        // is the current route (between start/stop)
-        obj = onType(obj, 'trip', call);
-      } else {
-        // is quays after stop
-        obj = onType(obj, 'after', call);
+      const metadata: EstimatedCallMetadata = {
+        group: currentGroup,
+        isStartOfServiceJourney: index === 0,
+        isStartOfGroup: currentGroup !== previousCall?.metadata.group,
+        isEndOfServiceJourney: index === estimatedCalls.length - 1,
+        isEndOfGroup: index === estimatedCalls.length - 1,
+      };
+
+      if (currentCall.quay?.id === toQuayId) {
+        metadata.isEndOfGroup = true;
+        currentGroup = 'after';
       }
 
-      // We are at stop, update flag
-      if (call.quay?.id === toQuayId) {
-        isAfterStop = true;
-      }
-
-      return obj;
+      return [...calls, {...currentCall, metadata}];
     },
-    {
-      passed: [],
-      trip: [],
-      after: [],
-    } as CallListGroup,
+    [],
   );
 }
