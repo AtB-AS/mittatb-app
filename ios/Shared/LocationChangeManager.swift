@@ -19,6 +19,7 @@ import Foundation
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         locationManager.requestLocation()
+        locationManager.startMonitoringSignificantLocationChanges()
     }
 
     deinit {

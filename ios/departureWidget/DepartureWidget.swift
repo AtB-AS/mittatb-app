@@ -23,6 +23,14 @@ struct DepartureWidgetEntryView: View {
 @main
 struct DepartureWidget: Widget {
     let kind: String = "departureWidget"
+  
+    let locationManager : LocationChangeManager = LocationChangeManager.shared
+  
+    init() {
+      locationManager.onLocationDidChange = { _ in
+        WidgetUpdater.requestUpdate()
+      }
+    }
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
