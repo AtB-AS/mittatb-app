@@ -11,6 +11,8 @@ import {
   UserFavorites,
 } from './types';
 
+import RCTWidgetUpdater from '../modules/WidgetModule';
+
 type FavoriteContextState = {
   favorites: UserFavorites;
   favoriteDepartures: UserFavoriteDepartures;
@@ -54,18 +56,22 @@ const FavoritesContextProvider: React.FC = ({children}) => {
     async addFavoriteLocation(favorite: LocationFavorite) {
       const favorites = await places.addFavorite(favorite);
       setFavoritesState(favorites);
+      RCTWidgetUpdater.refreshWidgets();
     },
     async removeFavoriteLocation(id: string) {
       const favorites = await places.removeFavorite(id);
       setFavoritesState(favorites);
+      RCTWidgetUpdater.refreshWidgets();
     },
     async updateFavoriteLocation(favorite: StoredType<LocationFavorite>) {
       const favorites = await places.updateFavorite(favorite);
       setFavoritesState(favorites);
+      RCTWidgetUpdater.refreshWidgets();
     },
     async setFavoriteLocationss(favorites: StoredType<LocationFavorite>[]) {
       const newFavorites = await places.setFavorites(favorites);
       setFavoritesState(newFavorites);
+      RCTWidgetUpdater.refreshWidgets();
     },
 
     /**
