@@ -11,8 +11,6 @@
 #import <Firebase.h>
 @import Intercom;
 
-#import <atb-Swift.h>
-
 #import "RNBootSplash.h"
 
 #if RCT_NEW_ARCH_ENABLED
@@ -29,7 +27,6 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   RCTSurfacePresenterBridgeAdapter *_bridgeAdapter;
   std::shared_ptr<const facebook::react::ReactNativeConfig> _reactNativeConfig;
   facebook::react::ContextContainer::Shared _contextContainer;
-  @property (nonatomic, strong) LocationManager *locationManager;
 }
 @end
 #endif
@@ -104,9 +101,11 @@ static void InitializeFlipper(UIApplication *application) {
   [self.window makeKeyAndVisible];
   [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView];
   
-  [[LocationChangeManager shared] setOnLocationDidChange:^(CLLocation *_) {
+  _locationManager = [[LocationChangeManager alloc] init];
+  [_locationManager setOnLocationDidChange:^(CLLocation *_) {
     [WidgetUpdater requestUpdate];
   }];
+  [_locationManager startMonitoringLocationChanges];
   
   return YES;
 }

@@ -2,28 +2,35 @@ import CoreLocation
 import Foundation
 
 @objc class LocationChangeManager: NSObject, CLLocationManagerDelegate {
-    /// Single instance `shared` var
-    @objc static let shared = LocationChangeManager()
+    // MARK: Private vars
 
-    private let locationManager = CLLocationManager()
+    private var locationManager: CLLocationManager
 
     // MARK: Public vars
 
-    @objc var onLocationDidChange: ((CLLocation) -> Void)?
-    private(set) var lastKnownLocation: CLLocation?
+    @objc var onLocationDidChange: ((CLLocation?) -> Void)?
 
-    override private init() {
+    @objc override init() {
+        locationManager = CLLocationManager()
+
         super.init()
+
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
-        locationManager.requestLocation()
-        locationManager.startMonitoringSignificantLocationChanges()
     }
 
     deinit {
         locationManager.delegate = nil
+    }
+
+    @objc func requestLocation() {
+        // TODO: If location is not enabled, response nil location
+        locationManager.requestLocation()
+    }
+
+    @objc func startMonitoringLocationChanges() {
+        locationManager.startMonitoringSignificantLocationChanges()
     }
 
     func locationManager(_: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -32,10 +39,7 @@ import Foundation
 
     func locationManager(_: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         debugPrint(#function, locations)
-        guard let location = locations.last else { return }
-
-        lastKnownLocation = location
-        onLocationDidChange?(location)
+        onLocationDidChange?(locations.last)
     }
 
     func locationManager(_: CLLocationManager, didFailWithError error: Swift.Error) {

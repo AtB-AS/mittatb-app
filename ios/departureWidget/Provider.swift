@@ -10,6 +10,7 @@ struct Provider: TimelineProvider {
     }
 
     private let apiService = APIService()
+    private let locationManager = LocationChangeManager()
 
     /// The placeholder is shown in transitions and while loading the snapshot when adding the widget to the home screen
     func placeholder(in _: Context) -> Entry {
@@ -22,24 +23,27 @@ struct Provider: TimelineProvider {
     }
 
     func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
-        guard let favoriteDepartures = Manifest.data?.favoriteDepartures else {
+        guard let favoriteDepartures = Manifest.data?.favoriteDepartures, let firstFavoriteDeparture = favoriteDepartures.first else {
             return completion(K.oneEntryTimeline)
         }
 
+        // TODO: Cache the response!
         apiService.fetchLocations(quays: favoriteDepartures) { (result: Result<QuaysCoordinatesResponse, Error>) in
             switch result {
             case let .success(quaysCoordinatesResponse):
-                guard let closestQuay = findClosestQuay(quaysCoordinatesResponse.quays) else {
-                    return completion(K.oneEntryTimeline)
-                }
+                locationManager.onLocationDidChange = { lastKnownLocation in
+                    guard let lastKnownLocation = lastKnownLocation,
+                          let closestQuay = findClosestQuay(quaysCoordinatesResponse.quays, at: lastKnownLocation),
+                          let favoriteDeparture = favoriteDepartures.first(where: { $0.quayId == closestQuay.id }) else {
+                        return fetchDepartures(departure: firstFavoriteDeparture, completion: completion)
+                    }
 
-                guard let favoriteDeparture = favoriteDepartures.first(where: { $0.quayId == closestQuay.id }) else {
-                    return completion(K.oneEntryTimeline)
+                    return fetchDepartures(departure: favoriteDeparture, completion: completion)
                 }
-
-                fetchDepartures(departure: favoriteDeparture, completion: completion)
+                locationManager.requestLocation()
+                return
             case .failure:
-                return completion(K.oneEntryTimeline)
+                return fetchDepartures(departure: firstFavoriteDeparture, completion: completion)
             }
         }
     }
@@ -61,7 +65,7 @@ struct Provider: TimelineProvider {
 
                 entries.insert(Entry(date: Date.now, quayGroup: quayGroup), at: 0)
 
-                // Remove last entries so that the viewmodel always has enough quays to show.
+                // Remove the last entries so the view model has enough quays to show.
                 if entries.count > 10 {
                     entries.removeLast(5)
                 }
@@ -74,14 +78,10 @@ struct Provider: TimelineProvider {
         }
     }
 
-    /// Finds the closest favorite departure based on current location on the user
-    private func findClosestQuay(_ departures: [QuayWithLocation]) -> QuayWithLocation? {
-        if let currentLocation = LocationChangeManager.shared.lastKnownLocation {
-            return departures.min {
-                $0.location.distance(from: currentLocation) < $1.location.distance(from: currentLocation)
-            }
+    /// Finds the closest quay based on the user `current location`
+    private func findClosestQuay(_ quays: [QuayWithLocation], at location: CLLocation) -> QuayWithLocation? {
+        quays.min {
+            $0.location.distance(from: location) < $1.location.distance(from: location)
         }
-
-        return departures.first
     }
 }

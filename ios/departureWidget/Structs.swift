@@ -35,7 +35,7 @@ enum TransportSubMode: String, Codable {
 
 // MARK: Structs
 
-struct DepartureData: Codable {
+struct DepartureResponse: Codable {
     let data: [StopPlaceGroup]
 }
 
@@ -104,8 +104,21 @@ struct DepartureTime: Codable {
     let aimedTime: Date
     let predictionInaccurate: Bool
     let realtime: Bool
-    let situations: [String]
+    let situations: [SituationElement]
     let serviceJourneyId: String
+}
+
+struct SituationElement: Codable {
+    let id: String
+    let situationNumber: String
+    let summary: [MultilingualString]
+    let description: [MultilingualString]
+    let reportType: String
+}
+
+struct MultilingualString: Codable {
+    let language: String?
+    let value: String
 }
 
 struct DepartureRequestBody: Codable {
@@ -151,26 +164,18 @@ struct FavoriteDeparture: Codable {
     let lineLineNumber: String
     let lineTransportationMode: TransportMode?
     let lineTransportationSubMode: TransportSubMode?
-    let longitude: Double
-    let latitude: Double
     let quayName: String
     let quayPublicCode: String
     let quayId: String
     let stopId: String
 
-    var location: CLLocation {
-        CLLocation(latitude: latitude, longitude: longitude)
-    }
-
-    init(id: String, lineId: String, lineName: String?, lineLineNumber: String, lineTransportationMode: TransportMode?, lineTransportationSubMode: TransportSubMode?, longitude: Double, latitude: Double, quayName: String, quayPublicCode: String, quayId: String, stopId: String) {
+    init(id: String, lineId: String, lineName: String?, lineLineNumber: String, lineTransportationMode: TransportMode?, lineTransportationSubMode: TransportSubMode?, quayName: String, quayPublicCode: String, quayId: String, stopId: String) {
         self.id = id
         self.lineId = lineId
         self.lineName = lineName
         self.lineLineNumber = lineLineNumber
         self.lineTransportationMode = lineTransportationMode
         self.lineTransportationSubMode = lineTransportationSubMode
-        self.longitude = longitude
-        self.latitude = latitude
         self.quayName = quayName
         self.quayPublicCode = quayPublicCode
         self.quayId = quayId
@@ -185,8 +190,6 @@ struct FavoriteDeparture: Codable {
         lineLineNumber = try container.decode(String.self, forKey: .lineLineNumber)
         lineTransportationMode = try? container.decodeIfPresent(TransportMode.self, forKey: .lineTransportationMode)
         lineTransportationSubMode = try? container.decodeIfPresent(TransportSubMode.self, forKey: .lineTransportationSubMode)
-        longitude = try container.decode(Double.self, forKey: .longitude)
-        latitude = try container.decode(Double.self, forKey: .latitude)
         quayName = try container.decode(String.self, forKey: .quayName)
         quayPublicCode = try container.decode(String.self, forKey: .quayPublicCode)
         quayId = try container.decode(String.self, forKey: .quayId)
@@ -204,8 +207,6 @@ extension FavoriteDeparture {
         lineLineNumber: "1",
         lineTransportationMode: TransportMode.bus,
         lineTransportationSubMode: TransportSubMode.nightBus,
-        longitude: 0,
-        latitude: 0,
         quayName: "Prinsens gate",
         quayPublicCode: "P1",
         quayId: "NSR:Quay:71184",
