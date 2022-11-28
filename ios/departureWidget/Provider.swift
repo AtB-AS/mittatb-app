@@ -26,20 +26,18 @@ struct Provider: TimelineProvider {
             return completion(K.oneEntryTimeline)
         }
 
-        apiService.fetchLocations(quays: favoriteDepartures) { (result: Result<[QuayWithLocation], Error>) in
+        apiService.fetchLocations(quays: favoriteDepartures) { (result: Result<QuaysCoordinatesResponse, Error>) in
             switch result {
-            case let .success(quays):
-
-                guard let closestQuay = findClosestQuay(quays) else {
+            case let .success(quaysCoordinatesResponse):
+                guard let closestQuay = findClosestQuay(quaysCoordinatesResponse.quays) else {
                     return completion(K.oneEntryTimeline)
                 }
 
-                guard let closestFavorite = favoriteDepartures.first(where: { $0.quayId == closestQuay.id }) else {
+                guard let favoriteDeparture = favoriteDepartures.first(where: { $0.quayId == closestQuay.id }) else {
                     return completion(K.oneEntryTimeline)
                 }
 
-                fetchDepartures(departure: closestFavorite, completion: completion)
-
+                fetchDepartures(departure: favoriteDeparture, completion: completion)
             case .failure:
                 return completion(K.oneEntryTimeline)
             }

@@ -3,11 +3,15 @@ import Foundation
 enum AppEndPoint: String {
     case favoriteDepartures, quayLocations
 
+    var host: String {
+        "http://10.100.0.105:8080" // https://api.staging.mittatb.no
+    }
+
     var path: String? {
         switch self {
         case .favoriteDepartures:
-            var url = URLComponents(string: "https://api.staging.mittatb.no/bff/v2/departure-favorites")
-            url?.queryItems = [
+            var urlComponents = URLComponents(string: "\(host)/bff/v2/departure-favorites")
+            urlComponents?.queryItems = [
                 /* Fetching a large number of departures to be able to give the widgetManager a better
                  estimate of the future rerenders needed */
                 URLQueryItem(name: "limitPerLine", value: "50"),
@@ -15,10 +19,9 @@ enum AppEndPoint: String {
                 URLQueryItem(name: "pageSize", value: "0"),
             ]
 
-            return url?.string
+            return urlComponents?.string
         case .quayLocations:
-            let url = URLComponents(string: "http://10.100.0.105:8080/bff/v2/quay-locations")
-            return url?.string
+            return "\(host)/bff/v2/quays-coordinates"
         }
     }
 
@@ -76,7 +79,7 @@ class APIService {
                 return
             }
 
-            guard let result = try? decoder.decode(T.self, from: data!) else {
+            guard let data = data, let result = try? decoder.decode(T.self, from: data) else {
                 callback(.failure(APIError.decodeError))
 
                 return
@@ -118,19 +121,18 @@ class APIService {
     }
 
     /// Fetch locations of departures
-    func fetchLocations(quays: [FavoriteDeparture], callback: @escaping (Result<[QuayWithLocation], Error>) -> Void) {
+    func fetchLocations(quays: [FavoriteDeparture], callback: @escaping (Result<QuaysCoordinatesResponse, Error>) -> Void) {
         let body = QuayRequestBody(ids: quays.map(\.quayId))
 
         guard let uploadData = try? JSONEncoder().encode(body) else {
             return
         }
-        print(uploadData)
-        fetchData(endPoint: .quayLocations, data: uploadData) { (result: Result<[QuayWithLocation], Error>) in
+
+        fetchData(endPoint: .quayLocations, data: uploadData) { (result: Result<QuaysCoordinatesResponse, Error>) in
             switch result {
             case let .success(object):
                 callback(.success(object))
             case let .failure(error):
-                debugPrint(error)
                 callback(.failure(error))
             }
         }

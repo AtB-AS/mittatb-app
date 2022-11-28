@@ -116,6 +116,10 @@ struct QuayRequestBody: Codable {
     let ids: [String]
 }
 
+struct QuaysCoordinatesResponse: Codable {
+    let quays: [QuayWithLocation]
+}
+
 struct Entry: TimelineEntry {
     let date: Date
     let quayGroup: QuayGroup?
