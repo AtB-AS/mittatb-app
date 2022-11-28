@@ -212,9 +212,9 @@
 				0FF6825E247FE01600FB80EE /* BootSplash.storyboard */,
 				385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				FEBDDCD829310DCB00C3755B /* BridgeModules */,
 				2202D92626CB95E40032C7E9 /* Configs */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
-				FEBDDCD829310DCB00C3755B /* Modules */,
 			);
 			name = atb;
 			sourceTree = "<group>";
@@ -339,7 +339,7 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
-		FEBDDCD829310DCB00C3755B /* Modules */ = {
+		FEBDDCD829310DCB00C3755B /* BridgeModules */ = {
 			isa = PBXGroup;
 			children = (
 				FEBDDCDC2934D49600C3755B /* ChangeNativeBridge.h */,
@@ -347,7 +347,7 @@
 				FEBDDCDD2934D49600C3755B /* ChangeNativeBridge.m */,
 				FEBDDCDA29310DFE00C3755B /* WidgetUpdaterBridge.m */,
 			);
-			path = Modules;
+			path = BridgeModules;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -119,9 +119,8 @@ class APIService {
 
     /// Fetch locations of departures
     func fetchLocations(quays: [FavoriteDeparture], callback: @escaping (Result<[QuayWithLocation], Error>) -> Void) {
-        
-        let body = QuayRequestBody(ids: quays.map { $0.quayId})
-      
+        let body = QuayRequestBody(ids: quays.map(\.quayId))
+
         guard let uploadData = try? JSONEncoder().encode(body) else {
             return
         }

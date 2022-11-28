@@ -112,8 +112,8 @@ struct DepartureRequestBody: Codable {
     let favorites: [FavoriteDeparture]
 }
 
-struct QuayRequestBody : Codable{
-  let ids: [String]
+struct QuayRequestBody: Codable {
+    let ids: [String]
 }
 
 struct Entry: TimelineEntry {

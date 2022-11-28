@@ -33,11 +33,11 @@ struct Provider: TimelineProvider {
                 guard let closestQuay = findClosestQuay(quays) else {
                     return completion(K.oneEntryTimeline)
                 }
-              
-                guard let closestFavorite = favoriteDepartures.first(where: {$0.quayId == closestQuay.id}) else{
+
+                guard let closestFavorite = favoriteDepartures.first(where: { $0.quayId == closestQuay.id }) else {
                     return completion(K.oneEntryTimeline)
                 }
-              
+
                 fetchDepartures(departure: closestFavorite, completion: completion)
 
             case .failure:
@@ -46,7 +46,6 @@ struct Provider: TimelineProvider {
         }
     }
 
-  
     /// Fetch departures for a given quay
     private func fetchDepartures(departure: FavoriteDeparture, completion: @escaping (Timeline<Entry>) -> Void) {
         // Fetch departure data for the closest favorite
