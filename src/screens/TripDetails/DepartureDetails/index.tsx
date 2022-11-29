@@ -303,7 +303,7 @@ function TripItem({
       </TripRow>
       {showSituations && (
         <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
-          <SituationMessagesBox mode="no-icon" situations={quaySituations} />
+          <SituationMessagesBox noStatusIcon={true} situations={quaySituations} />
         </TripRow>
       )}
       {call.notices &&

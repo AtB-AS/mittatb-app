@@ -8,13 +8,13 @@ import {SituationType} from '@atb/situations/types';
 
 export type Props = {
   situations?: SituationType[];
-  mode?: 'no-icon' | 'icon';
+  noStatusIcon?: MessageBoxProps['noStatusIcon'];
   containerStyle?: MessageBoxProps['containerStyle'];
 };
 
 export const SituationMessagesBox = ({
   situations,
-  mode,
+  noStatusIcon,
   containerStyle,
 }: Props) => {
   const {theme} = useTheme();
@@ -24,9 +24,8 @@ export const SituationMessagesBox = ({
   }
 
   const uniqueSituations = getUniqueSituations(situations, language);
-  const icon = mode === 'no-icon' ? null : undefined;
   return (
-    <MessageBox type="warning" icon={icon} containerStyle={containerStyle}>
+    <MessageBox type="warning" noStatusIcon={noStatusIcon} containerStyle={containerStyle}>
       {Object.entries(uniqueSituations).map(([id, situation]) => (
         <ThemeText key={id} style={{color: theme.static.status.warning.text}}>
           {situation}

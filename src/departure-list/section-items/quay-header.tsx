@@ -65,7 +65,6 @@ export default function QuayHeaderItem({
       </View>
 
       <SituationMessagesBox
-        mode="icon"
         situations={quay.situations}
         containerStyle={styles.situations}
       />

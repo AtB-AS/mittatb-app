@@ -12,7 +12,6 @@ const CancelledDepartureMessage = () => {
   return (
     <MessageBox
       type="warning"
-      icon={undefined}
       containerStyle={styles.cancellationContainer}
     >
       <ThemeText style={{color: theme.static.status.warning.text}}>
