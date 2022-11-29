@@ -17,6 +17,7 @@ import {
   Language,
   FareContractTexts,
   TranslateFunction,
+  LanguageAndTextType,
 } from '@atb/translations';
 import {
   findInspectable,
@@ -35,6 +36,28 @@ export type ValidityStatus =
   | 'inactive'
   | 'rejected'
   | 'approved';
+
+export type FareProductTypeConfig = {
+  type: 'single' | 'period' | 'hour24' | 'night';
+  name: LanguageAndTextType;
+  transportModes: Mode[];
+  description: LanguageAndTextType;
+  configuration: FareProductTypeConfigSettings;
+};
+
+export type FareProductTypeConfigSettings = {
+  zoneSelectionMode: ZoneSelectionMode;
+  travellerSelectionMode: TravellerSelectionMode;
+  timeSelectionMode: TimeSelectionMode;
+  productSelectionMode: ProductSelectionMode;
+  offerEndpoint: OfferEndpoint;
+};
+
+export type ZoneSelectionMode = 'single' | 'two' | 'none';
+export type TravellerSelectionMode = 'multiple' | 'single' | 'none';
+export type TimeSelectionMode = 'datetime' | 'none';
+export type ProductSelectionMode = 'duration' | 'product' | 'none';
+export type OfferEndpoint = 'zones' | 'authority';
 
 export function getRelativeValidity(
   now: number,
