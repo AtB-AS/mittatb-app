@@ -8,7 +8,7 @@ import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {Info, Warning} from '@atb/assets/svg/color/icons/status';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
-import MessageBox, {TinyMessageBox} from '@atb/components/message-box';
+import MessageBox from '@atb/components/message-box';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
@@ -292,13 +292,18 @@ function EstimatedCallRow({
               key={'notice-' + index}
               rowLabel={<ThemeIcon svg={Info} />}
             >
-              <TinyMessageBox type="info" message={notice.text} />
+              <MessageBox
+                noStatusIcon={true}
+                type="info"
+                message={notice.text}
+              />
             </TripRow>
           );
         })}
       {!call.forAlighting && (
         <TripRow>
-          <TinyMessageBox
+          <MessageBox
+            noStatusIcon={true}
             type="info"
             message={t(DepartureDetailsTexts.messages.noAlighting)}
           />
