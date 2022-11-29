@@ -1,6 +1,8 @@
 import CoreLocation
 import Foundation
 
+typealias LocationCallback = (CLLocation?) -> Void
+
 @objc class LocationChangeManager: NSObject, CLLocationManagerDelegate {
     // MARK: Private vars
 
@@ -8,7 +10,23 @@ import Foundation
 
     // MARK: Public vars
 
-    @objc var onLocationDidChange: ((CLLocation?) -> Void)?
+    private var onRequestLocation: LocationCallback?
+    @objc var onLocationDidChange: LocationCallback?
+
+    var isLocationEnabled: Bool {
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .notDetermined, .restricted, .denied:
+                return false
+            case .authorizedAlways, .authorizedWhenInUse:
+                return true
+            @unknown default:
+                return false
+            }
+        }
+
+        return false
+    }
 
     @objc override init() {
         locationManager = CLLocationManager()
@@ -16,7 +34,7 @@ import Foundation
         super.init()
 
         locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         locationManager.requestWhenInUseAuthorization()
     }
 
@@ -24,13 +42,19 @@ import Foundation
         locationManager.delegate = nil
     }
 
-    @objc func requestLocation() {
-        // TODO: If location is not enabled, response nil location
-        locationManager.requestLocation()
+    @objc func requestLocation(onCompete callback: @escaping LocationCallback) {
+        if isLocationEnabled {
+            onRequestLocation = callback
+            locationManager.requestLocation()
+            return
+        }
+
+        callback(nil)
     }
 
     @objc func startMonitoringLocationChanges() {
         locationManager.startMonitoringSignificantLocationChanges()
+        locationManager.requestLocation()
     }
 
     func locationManager(_: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -39,6 +63,11 @@ import Foundation
 
     func locationManager(_: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         debugPrint(#function, locations)
+        if let onRequestLocation = onRequestLocation {
+            onRequestLocation(locations.last)
+            self.onRequestLocation = nil
+        }
+
         onLocationDidChange?(locations.last)
     }
 

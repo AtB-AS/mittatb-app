@@ -1,7 +1,7 @@
 import Foundation
 
 enum AppEndPoint: String {
-    case favoriteDepartures, quayCoordinates
+    case departureFavourites, quayCoordinates
 
     private var host: String {
         "https://api.staging.mittatb.no"
@@ -9,7 +9,7 @@ enum AppEndPoint: String {
 
     private var path: String? {
         switch self {
-        case .favoriteDepartures:
+        case .departureFavourites:
             var urlComponents = URLComponents(string: "\(host)/bff/v2/departure-favorites")
             urlComponents?.queryItems = [
                 /* Fetching a large number of departures to be able to give the widgetManager a better
@@ -54,7 +54,7 @@ enum APIError: Error {
 }
 
 class APIService {
-    func fetchData<T: Codable>(endPoint: AppEndPoint, data: Data, callback: @escaping (Result<T, Error>) -> Void) {
+    private func fetchData<T: Codable>(endPoint: AppEndPoint, data: Data, callback: @escaping (Result<T, Error>) -> Void) {
         guard var request = endPoint.request else {
             return
         }
@@ -98,14 +98,14 @@ class APIService {
     }
 
     /// Fetch departure times for a given departure
-    func fetchDepartureTimes(departure: FavoriteDeparture, callback: @escaping (Result<QuayGroup, Error>) -> Void) {
-        let body = DepartureRequestBody(favorites: [departure])
+    func fetchFavouriteDepartureTimes(favouriteDeparture departure: FavouriteDeparture, callback: @escaping (Result<QuayGroup, Error>) -> Void) {
+        let requestBody = DepartureFavouritesRequestBody(favorites: [departure])
 
-        guard let departureRequestData = try? JSONEncoder().encode(body) else {
+        guard let requestData = try? JSONEncoder().encode(requestBody) else {
             return callback(.failure(APIError.encodingError))
         }
 
-        fetchData(endPoint: .favoriteDepartures, data: departureRequestData) { (result: Result<DepartureResponse, Error>) in
+        fetchData(endPoint: .departureFavourites, data: requestData) { (result: Result<DepartureResponse, Error>) in
             switch result {
             case let .success(object):
                 debugPrint(object)
@@ -126,15 +126,15 @@ class APIService {
         }
     }
 
-    /// Fetch locations of departures
-    func fetchLocations(quays: [FavoriteDeparture], callback: @escaping (Result<QuaysCoordinatesResponse, Error>) -> Void) {
-        let body = QuayRequestBody(ids: quays.map(\.quayId))
+    /// Fetch coordinates of quays
+    func fetchQuayCoordinates(favouriteDepartures: [FavouriteDeparture], callback: @escaping (Result<QuaysCoordinatesResponse, Error>) -> Void) {
+        let requestBody = QuayRequestBody(ids: favouriteDepartures.map(\.quayId))
 
-        guard let uploadData = try? JSONEncoder().encode(body) else {
+        guard let requestData = try? JSONEncoder().encode(requestBody) else {
             return
         }
 
-        fetchData(endPoint: .quayCoordinates, data: uploadData) { (result: Result<QuaysCoordinatesResponse, Error>) in
+        fetchData(endPoint: .quayCoordinates, data: requestData) { (result: Result<QuaysCoordinatesResponse, Error>) in
             switch result {
             case let .success(object):
                 callback(.success(object))

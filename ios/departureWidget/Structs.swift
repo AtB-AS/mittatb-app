@@ -121,8 +121,8 @@ struct MultilingualString: Codable {
     let value: String
 }
 
-struct DepartureRequestBody: Codable {
-    let favorites: [FavoriteDeparture]
+struct DepartureFavouritesRequestBody: Codable {
+    let favorites: [FavouriteDeparture]
 }
 
 struct QuayRequestBody: Codable {
@@ -133,10 +133,15 @@ struct QuaysCoordinatesResponse: Codable {
     let quays: [QuayWithLocation]
 }
 
+enum EntryState {
+    case noFavouriteDepartures, noDepartureQuays, complete, preview
+}
+
 struct Entry: TimelineEntry {
     let date: Date
+    let favouriteDeparture: FavouriteDeparture?
     let quayGroup: QuayGroup?
-    var isForPreview: Bool = false
+    let state: EntryState
 }
 
 struct QuayWithLocation: Codable {
@@ -156,8 +161,7 @@ struct QuayWithLocation: Codable {
     }
 }
 
-/// Struct for favorite departures stored on device
-struct FavoriteDeparture: Codable {
+struct FavouriteDeparture: Codable {
     let id: String
     let lineId: String
     let lineName: String?
@@ -199,8 +203,8 @@ struct FavoriteDeparture: Codable {
 
 // MARK: Extensions
 
-extension FavoriteDeparture {
-    static let dummy: FavoriteDeparture = .init(
+extension FavouriteDeparture {
+    static let dummy: FavouriteDeparture = .init(
         id: "",
         lineId: "ATB:Line:2_2",
         lineName: "Ranheim",
