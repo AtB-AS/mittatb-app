@@ -141,7 +141,10 @@ const TripSection: React.FC<TripSectionProps> = ({
         )}
         {!!leg.situations.length && (
           <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
-            <SituationMessagesBox noStatusIcon={true} situations={leg.situations} />
+            <SituationMessagesBox
+              noStatusIcon={true}
+              situations={leg.situations}
+            />
           </TripRow>
         )}
         {leg.transportSubmode === TransportSubmode.RailReplacementBus && (

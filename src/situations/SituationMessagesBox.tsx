@@ -25,7 +25,11 @@ export const SituationMessagesBox = ({
 
   const uniqueSituations = getUniqueSituations(situations, language);
   return (
-    <MessageBox type="warning" noStatusIcon={noStatusIcon} containerStyle={containerStyle}>
+    <MessageBox
+      type="warning"
+      noStatusIcon={noStatusIcon}
+      containerStyle={containerStyle}
+    >
       {Object.entries(uniqueSituations).map(([id, situation]) => (
         <ThemeText key={id} style={{color: theme.static.status.warning.text}}>
           {situation}

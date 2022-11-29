@@ -10,10 +10,7 @@ const CancelledDepartureMessage = () => {
   const {t} = useTranslation();
 
   return (
-    <MessageBox
-      type="warning"
-      containerStyle={styles.cancellationContainer}
-    >
+    <MessageBox type="warning" containerStyle={styles.cancellationContainer}>
       <ThemeText style={{color: theme.static.status.warning.text}}>
         {t(CancelledDepartureTexts.message)}
       </ThemeText>
