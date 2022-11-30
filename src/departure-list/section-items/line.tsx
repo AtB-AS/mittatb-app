@@ -54,6 +54,7 @@ import {
   View,
 } from 'react-native';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
+import {getSvgForMostCriticalSituation} from '@atb/situations';
 
 type RootProps = NearbyScreenProps<'NearbyRoot'>;
 
@@ -272,7 +273,7 @@ function DepartureTimeItem({
       text={formatTimeText(departure, searchDate, language, t)}
       style={styles.departure}
       textStyle={styles.departureText}
-      icon={hasSituations(departure) ? Warning : undefined}
+      icon={getSvgForMostCriticalSituation(departure.situations)}
       iconPosition="right"
       testID={testID}
     />
@@ -318,9 +319,6 @@ const addDatePrefixIfNecessary = (
   }
 };
 
-function hasSituations(departure: DepartureTime) {
-  return departure.situations.length > 0;
-}
 const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   transportationMode: {
     marginRight: theme.spacings.small,

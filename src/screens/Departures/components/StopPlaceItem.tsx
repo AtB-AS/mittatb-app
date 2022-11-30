@@ -10,9 +10,10 @@ import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {StyleSheet} from '@atb/theme';
 import {useHumanizeDistance} from '@atb/utils/location';
-import {SituationWarningIcon} from '@atb/situations';
+import {SituationIcon} from '@atb/situations';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
+import {getSituationA11yLabel} from '@atb/situations/utils';
 
 type StopPlaceItemProps = {
   stopPlaceNode: NearestStopPlaceNode;
@@ -36,16 +37,17 @@ export default function StopPlaceItem({
   const description =
     place.description || t(DeparturesTexts.stopPlaceList.stopPlace);
 
-  const allQuaySituations = place?.quays?.reduce<SituationFragment[]>(
-    (all, quay) => [...all, ...quay.situations],
-    [],
-  );
+  const allQuaySituations =
+    place.quays?.reduce<SituationFragment[]>(
+      (all, quay) => [...all, ...quay.situations],
+      [],
+    ) || [];
 
   const a11yLabel = [
     place.name,
     description,
     humanizedDistance,
-    allQuaySituations?.length && t(DeparturesTexts.stopPlaceList.withWarning),
+    getSituationA11yLabel(allQuaySituations, false, t),
     place.transportMode
       ?.map((mode) => t(getTranslatedModeName(mode)))
       .join(','),
@@ -76,7 +78,7 @@ export default function StopPlaceItem({
               </ThemeText>
             )}
           </View>
-          <SituationWarningIcon situations={allQuaySituations} />
+          <SituationIcon situations={allQuaySituations} />
           {place.transportMode?.map((mode) => (
             <ThemeIcon
               key={mode}

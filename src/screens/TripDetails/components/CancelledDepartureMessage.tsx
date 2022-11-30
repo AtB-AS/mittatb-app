@@ -11,14 +11,10 @@ const CancelledDepartureMessage = () => {
 
   return (
     <MessageBox
-      type="warning"
-      icon={undefined}
+      type="error"
       containerStyle={styles.cancellationContainer}
-    >
-      <ThemeText style={{color: theme.static.status.warning.text}}>
-        {t(CancelledDepartureTexts.message)}
-      </ThemeText>
-    </MessageBox>
+      message={t(CancelledDepartureTexts.message)}
+    />
   );
 };
 
