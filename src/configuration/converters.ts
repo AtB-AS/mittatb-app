@@ -42,7 +42,7 @@ function mapToFareProductTypeConfig(
     return;
   }
 
-  const fcTypes = ['single', 'period', 'hour24', 'night'];
+  const fcTypes = ['single', 'period', 'hour24', 'night', 'carnet'];
   const fcType = mapToStringAlternatives<FareProductType>(config.type, fcTypes);
   if (!fcType) {
     notifyWrongConfigurationType(config.type, 'type', fcTypes);
