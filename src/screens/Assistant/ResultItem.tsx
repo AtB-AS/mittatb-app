@@ -11,7 +11,7 @@ import TransportationIcon, {
   CollapsedLegs,
 } from '@atb/components/transportation-icon';
 
-import {SituationWarningIcon} from '@atb/situations';
+import {SituationIcon} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
 import {
   AssistantTexts,
@@ -116,7 +116,7 @@ const ResultItemHeader: React.FC<{
 
       <WarnWhenRailReplacementBus tripPattern={tripPattern} />
 
-      <SituationWarningIcon
+      <SituationIcon
         situations={flatMap(tripPattern.legs, (leg) => leg.situations)}
         accessibilityLabel={t(
           AssistantTexts.results.resultItem.hasSituationsTip,

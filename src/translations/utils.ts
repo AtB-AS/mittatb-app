@@ -20,23 +20,23 @@ export default function orgSpecificTranslations<T>(
  * Norwegian is found the first text in the provided texts array is returned.
  */
 export const getTextForLanguage = (
-  texts: LanguageAndTextType[],
+  texts: LanguageAndTextType[] | undefined,
   language: Language,
 ): string | undefined => {
   if (language === Language.English) {
-    const englishText = texts.find(
+    const englishText = texts?.find(
       (t) => getLanguage(t) === LanguageAndTextLanguagesEnum.eng,
     );
     if (englishText?.value) return englishText.value;
   }
-  const norwegianText = texts.find(
+  const norwegianText = texts?.find(
     (t) =>
       getLanguage(t) === LanguageAndTextLanguagesEnum.nor ||
       getLanguage(t) === LanguageAndTextLanguagesEnum.nob,
   );
   if (norwegianText?.value) return norwegianText.value;
 
-  return texts[0]?.value;
+  return texts?.[0]?.value;
 };
 
 const getLanguage = (lv: LanguageAndTextType) =>
