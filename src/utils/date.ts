@@ -67,6 +67,10 @@ export function secondsToDuration(
   });
 }
 
+/**
+ * Return seconds between start and end. If end is before start the returned
+ * value will be negative.
+ */
 export function secondsBetween(
   start: string | Date,
   end: string | Date,
