@@ -10,7 +10,7 @@ import {
 } from '@atb/components/sections/section-utils';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
-import {SituationMessagesBox} from '@atb/situations';
+import {SituationMessageBox} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import {useHumanizeDistance} from '@atb/utils/location';
@@ -63,12 +63,9 @@ export default function QuayHeaderItem({
         <ThemeText testID={testID + 'Title'}>{title}</ThemeText>
         <Distance distance={humanized} />
       </View>
-
-      <SituationMessagesBox
-        mode="icon"
-        situations={quay.situations}
-        containerStyle={styles.situations}
-      />
+      {quay.situations.map((situation) => (
+        <SituationMessageBox situation={situation} style={styles.situations} />
+      ))}
     </View>
   );
 }

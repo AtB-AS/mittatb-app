@@ -1,6 +1,5 @@
 import {secondsBetween} from '@atb/utils/date';
 
-// @TODO should be in external configuration at some point, or at least estimeted better.
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
 
 export type TimeValues = {
@@ -24,8 +23,8 @@ export function getTimeRepresentationType({
   if (!expectedTime) {
     return 'no-significant-difference';
   }
-  return secondsBetween(aimedTime, expectedTime) <=
-    DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES * 60
+  const secondsDifference = Math.abs(secondsBetween(aimedTime, expectedTime));
+  return secondsDifference <= DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES * 60
     ? 'no-significant-difference'
     : 'significant-difference';
 }

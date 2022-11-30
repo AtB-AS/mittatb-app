@@ -10,7 +10,7 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {usePreferenceItems} from '@atb/preferences';
 import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
-import {SituationMessagesBox} from '@atb/situations';
+import {SituationMessageBox, SituationIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   Language,
@@ -139,11 +139,11 @@ const TripSection: React.FC<TripSectionProps> = ({
             <ThemeText style={style.legLineName}>{getLineName(leg)}</ThemeText>
           </TripRow>
         )}
-        {!!leg.situations.length && (
-          <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
-            <SituationMessagesBox mode="no-icon" situations={leg.situations} />
+        {leg.situations.map((situation) => (
+          <TripRow rowLabel={<SituationIcon situation={situation} />}>
+            <SituationMessageBox mode="no-icon" situation={situation} />
           </TripRow>
-        )}
+        ))}
         {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
           <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
             <MessageBox
