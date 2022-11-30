@@ -6,7 +6,9 @@ import {
   TimeSelectionMode,
   TravellerSelectionMode,
   ZoneSelectionMode,
+  FareProductType,
 } from '@atb/screens/Ticketing/FareContracts/utils';
+import {LanguageAndTextType} from '@atb/translations/types';
 import {isArray} from 'lodash';
 
 export function mapToFareProductTypeConfigs(
@@ -31,7 +33,14 @@ function mapToFareProductTypeConfig(
   ];
   if (!fields.every((f) => f in config)) return;
 
-  const fcType = mapToStringAlternatives<OfferEndpoint>(config.type, [
+  if (!isArray(config.name) || !isArray(config.description)) return;
+
+  let name = mapLanguageAndTextType(config.name);
+  let description = mapLanguageAndTextType(config.description);
+
+  if (!name || !description) return;
+
+  const fcType = mapToStringAlternatives<FareProductType>(config.type, [
     'single',
     'period',
     'hour24',
@@ -40,16 +49,14 @@ function mapToFareProductTypeConfig(
   if (!fcType) return;
 
   const configuration = mapToFareProductConfigSettings(config.configuration);
-
   if (!configuration) return;
-  if (typeof config.description !== 'string') return;
 
   return {
-    type: config.type,
-    name: config.name,
+    type: fcType,
+    name,
+    description,
     transportModes: config.transportModes,
-    description: config.description,
-    configuration: configuration,
+    configuration,
   };
 }
 
@@ -58,7 +65,7 @@ function mapToFareProductConfigSettings(
 ): FareProductTypeConfigSettings | undefined {
   const zoneSelectionMode = mapToStringAlternatives<ZoneSelectionMode>(
     settings.zoneSelectionMode,
-    ['single', 'two', 'none'],
+    ['single', 'multiple', 'none'],
   );
   const travellerSelectionMode =
     mapToStringAlternatives<TravellerSelectionMode>(
@@ -75,7 +82,7 @@ function mapToFareProductConfigSettings(
   );
   const offerEndpoint = mapToStringAlternatives<OfferEndpoint>(
     settings.offerEndpoint,
-    ['duration', 'product', 'none'],
+    ['zones', 'authority'],
   );
 
   if (
@@ -103,4 +110,11 @@ function mapToStringAlternatives<T>(value: any, alternatives: string[]) {
   if (typeof value !== 'string') return;
   if (!alternatives.includes(value)) return;
   return value as T;
+}
+
+function mapLanguageAndTextType(text: any[]) {
+  if (!text.every((item: any) => ['lang', 'value'].every((f) => f in item)))
+    return;
+
+  return text as LanguageAndTextType[];
 }

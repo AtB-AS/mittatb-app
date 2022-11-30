@@ -38,10 +38,10 @@ export type ValidityStatus =
   | 'approved';
 
 export type FareProductTypeConfig = {
-  type: 'single' | 'period' | 'hour24' | 'night';
-  name: LanguageAndTextType;
+  type: FareProductType;
+  name: LanguageAndTextType[];
   transportModes: Mode[];
-  description: LanguageAndTextType;
+  description: LanguageAndTextType[];
   configuration: FareProductTypeConfigSettings;
 };
 
@@ -53,7 +53,13 @@ export type FareProductTypeConfigSettings = {
   offerEndpoint: OfferEndpoint;
 };
 
-export type ZoneSelectionMode = 'single' | 'two' | 'none';
+export type FareProductType =
+  | 'single'
+  | 'period'
+  | 'hour24'
+  | 'night'
+  | 'carnet';
+export type ZoneSelectionMode = 'single' | 'multiple' | 'none';
 export type TravellerSelectionMode = 'multiple' | 'single' | 'none';
 export type TimeSelectionMode = 'datetime' | 'none';
 export type ProductSelectionMode = 'duration' | 'product' | 'none';

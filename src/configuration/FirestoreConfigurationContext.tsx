@@ -18,6 +18,7 @@ import {
   defaultPreassignedFareProducts,
   defaultTariffZones,
   defaultUserProfiles,
+  defaultFareProductTypeConfig,
 } from '@atb/reference-data/defaults';
 import {
   defaultVatPercent,
@@ -35,6 +36,7 @@ type ConfigurationContextState = {
   modesWeSellTicketsFor: string[];
   paymentTypes: PaymentType[];
   vatPercent: number;
+  fareProductTypeConfigs: FareProductTypeConfig[];
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
@@ -44,6 +46,7 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   modesWeSellTicketsFor: defaultModesWeSellTicketsFor,
   paymentTypes: defaultPaymentTypes,
   vatPercent: defaultVatPercent,
+  fareProductTypeConfigs: defaultFareProductTypeConfig,
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
@@ -255,10 +258,11 @@ function getFareProductTypeConfigsFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
 ): FareProductTypeConfig[] | undefined {
   const fareProductTypeConfigs = snapshot.docs
-    .find((doc) => doc.id == 'fareProductTypesConfigs')
-    ?.get('fareProductTypesConfigs');
+    .find((doc) => doc.id == 'fareProductTypeConfigs')
+    ?.get('fareProductTypeConfigs');
   if (fareProductTypeConfigs !== undefined) {
     return mapToFareProductTypeConfigs(fareProductTypeConfigs);
   }
+
   return undefined;
 }
