@@ -41,6 +41,7 @@
 		FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE55264D28EC45ED0091F697 /* DepartureWidget.swift */; };
 		FE55265028EC45EE0091F697 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE55264F28EC45EE0091F697 /* Assets.xcassets */; };
 		FE55265428EC45EE0091F697 /* departureWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE55264728EC45ED0091F697 /* departureWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FE9C416D293744B100EC2D53 /* ChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9C416C293744B100EC2D53 /* ChipView.swift */; };
 		FEBDDCCD2931038400C3755B /* LocationChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationChangeManager.swift */; };
 		FEBDDCD12931065D00C3755B /* WidgetUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */; };
 		FEBDDCD22931065D00C3755B /* WidgetUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */; };
@@ -137,6 +138,7 @@
 		FE55265128EC45EE0091F697 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FE8AF9EC28EC69FA00505277 /* departureWidgetExtensionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = departureWidgetExtensionDebug.entitlements; sourceTree = "<group>"; };
 		FE8AF9ED28EC6A0400505277 /* atbDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = atbDebug.entitlements; path = atb/atbDebug.entitlements; sourceTree = "<group>"; };
+		FE9C416C293744B100EC2D53 /* ChipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipView.swift; sourceTree = "<group>"; };
 		FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetUpdater.swift; sourceTree = "<group>"; };
 		FEBDDCD929310DFE00C3755B /* WidgetUpdaterBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetUpdaterBridge.h; sourceTree = "<group>"; };
 		FEBDDCDA29310DFE00C3755B /* WidgetUpdaterBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetUpdaterBridge.m; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 		50A14EDA2918FAB600A661D9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FE9C416C293744B100EC2D53 /* ChipView.swift */,
 				505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */,
 				50A14ED62918F97E00A661D9 /* WidgetInfoView.swift */,
 			);
@@ -753,6 +756,7 @@
 				FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */,
 				50A14ED72918F97E00A661D9 /* WidgetInfoView.swift in Sources */,
 				FE09922928FFF47300E5046D /* Storage.swift in Sources */,
+				FE9C416D293744B100EC2D53 /* ChipView.swift in Sources */,
 				5038614628FD509400E16E13 /* Provider.swift in Sources */,
 				506538E028FEA57400A0DDCC /* WidgetViewModel.swift in Sources */,
 				FEBDDCD22931065D00C3755B /* WidgetUpdater.swift in Sources */,

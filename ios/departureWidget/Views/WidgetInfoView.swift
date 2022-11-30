@@ -70,9 +70,7 @@ struct WidgetInfoView: View {
                         Spacer()
 
                         if viewModel.entry.state == .noDepartureQuays {
-                            Text("No departure times")
-                                .bold()
-                                .lineLimit(1)
+                            ChipView(label: "Ingen avganger").frame(maxWidth: .infinity)
                         } else {
                             DepartureTimesView(aimedTimes: aimedTimes)
                         }
