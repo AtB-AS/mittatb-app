@@ -2,6 +2,7 @@ import Intercom from 'react-native-intercom';
 import {PlatformOSType} from 'react-native';
 import {PermissionStatus} from 'react-native-permissions';
 import pickBy from 'lodash.pickby';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 type Metadata = {
   'AtB-Firebase-Auth-Id': string;
@@ -23,11 +24,14 @@ type Metadata = {
 };
 
 export async function updateMetadata(metadata: Partial<Metadata>) {
-  const custom_attributes = pickBy(metadata, (v) => v !== undefined) as {
-    [key: string]: string;
-  };
+  const {enable_intercom} = useRemoteConfig();
+  if (enable_intercom) {
+    const custom_attributes = pickBy(metadata, (v) => v !== undefined) as {
+      [key: string]: string;
+    };
 
-  await Intercom.updateUser({
-    custom_attributes,
-  });
+    await Intercom.updateUser({
+      custom_attributes,
+    });
+  }
 }
