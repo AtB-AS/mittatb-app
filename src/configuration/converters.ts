@@ -51,7 +51,7 @@ function mapToFareProductTypeConfig(
 
   if (!isArray(config.name) || !isArray(config.description)) {
     Bugsnag.notify(
-      `fare product type: "${fcType}", fields "name" or "description" should be defined as an array.`,
+      `fare product type: "${fcType}", fields "name" or "description" should be defined as an "array".`,
     );
     return;
   }
