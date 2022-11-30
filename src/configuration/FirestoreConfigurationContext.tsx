@@ -66,7 +66,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [vatPercent, setVatPercent] = useState(defaultVatPercent);
   const [fareProductTypeConfigs, setFareProductTypeConfigs] = useState<
     FareProductTypeConfig[]
-  >([]);
+  >(defaultFareProductTypeConfig);
 
   useEffect(() => {
     firestore()
