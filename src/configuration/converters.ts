@@ -51,7 +51,7 @@ function mapToFareProductTypeConfig(
 
   if (!isArray(config.name) || !isArray(config.description)) {
     Bugsnag.notify(
-      `fare product type: "${fcType}", fields "name" or "description" should be defined as an "array".`,
+      `fare product of type: "${fcType}", fields "name" or "description" should be defined as an "array".`,
     );
     return;
   }
@@ -61,20 +61,20 @@ function mapToFareProductTypeConfig(
 
   if (!name || !description) {
     Bugsnag.notify(
-      `fare product type: "${fcType}", "name" or "description" should conform: "LanguageAndTextType"`,
+      `fare product of type: "${fcType}", "name" or "description" should conform: "LanguageAndTextType"`,
     );
     return;
   }
 
   if (!isArray(config.transportModes)) {
     Bugsnag.notify(
-      `fare product type: "${fcType}", "transportModes" should be of type "array"`,
+      `fare product of type: "${fcType}", "transportModes" should be of type "array"`,
     );
     return;
   }
   if (!config.transportModes.every((value: any) => typeof value === 'string')) {
     Bugsnag.notify(
-      `fare product type: "${fcType}", one or more of the "transportModes" values is not of type "string"`,
+      `fare product of type: "${fcType}", one or more of the "transportModes" values is not of type "string"`,
     );
     return;
   }
