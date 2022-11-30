@@ -280,7 +280,7 @@ function EstimatedCallRow({
       {group === 'trip' && call.quay?.situations.length ? (
         <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
           {call.quay.situations.map((situation) => (
-            <SituationMessageBox mode="no-icon" situation={situation} />
+            <SituationMessageBox noStatusIcon={true} situation={situation} />
           ))}
         </TripRow>
       ) : null}

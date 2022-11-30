@@ -7,19 +7,26 @@ import {SituationType} from '@atb/situations/types';
 
 export type Props = {
   situation: SituationType;
-  mode?: 'no-icon' | 'icon';
+  noStatusIcon?: MessageBoxProps['noStatusIcon'];
   style?: MessageBoxProps['containerStyle'];
 };
 
-export const SituationMessageBox = ({situation, mode, style}: Props) => {
+export const SituationMessageBox = ({
+  situation,
+  noStatusIcon,
+  style,
+}: Props) => {
   const {language} = useTranslation();
 
   const messageType = getMessageTypeForSituation(situation);
   const text = getSituationSummary(situation, language);
 
-  const icon = mode === 'no-icon' ? null : undefined;
   return (
-    <MessageBox type={messageType} icon={icon} containerStyle={style}>
+    <MessageBox
+      type={messageType}
+      noStatusIcon={noStatusIcon}
+      containerStyle={style}
+    >
       <ThemeText color={messageType}>{text}</ThemeText>
     </MessageBox>
   );
