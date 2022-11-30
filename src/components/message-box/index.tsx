@@ -120,30 +120,6 @@ const MessageBox: React.FC<MessageBoxProps> = ({
     </View>
   );
 };
-type TinyMessageProps = {type?: MessageType} & (WithChildren | WithMessage);
-export const TinyMessageBox: React.FC<TinyMessageProps> = ({
-  type = 'info',
-  message,
-  children,
-}) => {
-  const {theme} = useTheme();
-  const styles = useBoxStyle();
-  const colorStyle = {
-    color: theme.static.status[type].text,
-    backgroundColor: theme.static.status[type].background,
-  };
-  return (
-    <View style={[styles.container, colorStyle]}>
-      {message ? (
-        <ThemeText style={{...styles.text, color: colorStyle.color}}>
-          {message}
-        </ThemeText>
-      ) : (
-        {children}
-      )}
-    </View>
-  );
-};
 
 export default MessageBox;
 
