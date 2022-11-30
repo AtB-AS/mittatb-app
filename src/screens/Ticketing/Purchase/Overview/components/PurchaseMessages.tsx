@@ -1,4 +1,4 @@
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
@@ -56,7 +56,7 @@ const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
     <>
       {showProfileTravelcardWarning && (
         <MessageBox
-          containerStyle={styles.warning}
+          style={styles.warning}
           message={t(PurchaseOverviewTexts.warning)}
           type="warning"
         />
@@ -66,14 +66,14 @@ const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
         <MessageBox
           type="warning"
           message={inspectableTokenWarningText}
-          containerStyle={styles.warning}
+          style={styles.warning}
           isMarkdown={true}
         />
       )}
 
       {shouldShowValidTrainTicketNotice && (
         <MessageBox
-          containerStyle={styles.warning}
+          style={styles.warning}
           message={getValidOnTrainNoticeText(t, preassignedFareProductType)}
           type="info"
         />

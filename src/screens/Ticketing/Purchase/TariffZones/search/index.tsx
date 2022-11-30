@@ -1,5 +1,5 @@
 import {ErrorType} from '@atb/api/utils';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {TextInput} from '@atb/components/sections';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';

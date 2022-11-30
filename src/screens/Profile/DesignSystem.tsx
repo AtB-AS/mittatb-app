@@ -3,7 +3,7 @@ import {Delete, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {Check} from '@atb/assets/svg/mono-icons/status';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import Button, {ButtonGroup} from '@atb/components/button';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import RadioSegments from '@atb/components/radio-segments';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
@@ -139,11 +139,15 @@ export default function DesignSystem() {
           <Sections.HeaderItem text="Messages" />
 
           <Sections.GenericItem>
-            <MessageBox message="This is a message" />
+            <MessageBox type="info" message="This is a message" />
           </Sections.GenericItem>
 
           <Sections.GenericItem>
-            <MessageBox message="This is a message with title" title="Title" />
+            <MessageBox
+              type="info"
+              message="This is a message with title"
+              title="Title"
+            />
           </Sections.GenericItem>
 
           <Sections.GenericItem>
@@ -173,6 +177,7 @@ export default function DesignSystem() {
 
           <Sections.GenericItem>
             <MessageBox
+              type="info"
               isMarkdown={true}
               title="Markdown"
               message={`This is a message with markdown,\nSupporting **bold** and *italics*\nand special characters like ', " + æøå`}
@@ -181,6 +186,29 @@ export default function DesignSystem() {
 
           <Sections.GenericItem>
             <MessageBox
+              type="info"
+              isMarkdown={true}
+              title="Markdown"
+              onDismiss={() => {}}
+              message={`This is a message with dismiss button`}
+            />
+          </Sections.GenericItem>
+
+          <Sections.GenericItem>
+            <MessageBox
+              type="warning"
+              isMarkdown={true}
+              title="Markdown"
+              onDismiss={() => {}}
+              onPress={() => {}}
+              onPressText={'Test link'}
+              message={`This is a message with dismiss and link`}
+            />
+          </Sections.GenericItem>
+
+          <Sections.GenericItem>
+            <MessageBox
+              type="valid"
               isMarkdown={true}
               title="Without icon"
               noStatusIcon={true}
@@ -188,11 +216,6 @@ export default function DesignSystem() {
             />
           </Sections.GenericItem>
         </Sections.Section>
-
-        <MessageBox
-          message="This is a message with margin outside of generic component"
-          withMargin
-        />
 
         <View style={style.buttons}>
           <ButtonGroup>

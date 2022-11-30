@@ -1,4 +1,4 @@
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import {RootStackParamList} from '@atb/navigation/types';
 import FareContractOrReservation from '@atb/screens/Ticketing/FareContracts/FareContractOrReservation';
@@ -67,7 +67,7 @@ const FareContractAndReservationsScrollView: React.FC<Props> = ({
           ) : null)}
         {!fareContractsAndReservationsSorted.length && (
           <MessageBox
-            containerStyle={styles.messageBox}
+            style={styles.messageBox}
             type="info"
             message={noItemsLabel}
           />

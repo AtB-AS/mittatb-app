@@ -1,6 +1,6 @@
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import SvgReorder from '@atb/assets/svg/mono-icons/actions/Reorder';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
@@ -43,7 +43,7 @@ export default function FavoriteList({navigation}: FavoriteListProps) {
       <ScrollView>
         {!items?.length && (
           <MessageBox
-            containerStyle={style.empty}
+            style={style.empty}
             message={t(FavoriteListTexts.noFavorites)}
             type="info"
           />

@@ -2,10 +2,8 @@ import ThemeText from '@atb/components/text';
 import {StopPlace, NearestStopPlaceNode} from '@atb/api/types/departures';
 import StopPlaceItem from '@atb/screens/Departures/components/StopPlaceItem';
 import React from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {ScrollView} from 'react-native-gesture-handler';
-import {View} from 'react-native';
-import MessageBox from '@atb/components/message-box';
 
 const StopPlaces = ({
   header,
@@ -39,29 +37,6 @@ const StopPlaces = ({
         />
       ))}
     </ScrollView>
-  );
-};
-
-export const NoStopPlaceMessage = ({
-  header,
-  notStopPlaceMessage,
-}: {
-  header: string;
-  notStopPlaceMessage: string;
-}) => {
-  const styles = useStyles();
-  const {theme} = useTheme();
-  return (
-    <View style={styles.container}>
-      <ThemeText style={styles.header} type="body__secondary" color="secondary">
-        {header}
-      </ThemeText>
-      <MessageBox type="info" containerStyle={styles.noStopMessage}>
-        <ThemeText style={{color: theme.static.status.warning.text}}>
-          {notStopPlaceMessage}
-        </ThemeText>
-      </MessageBox>
-    </View>
   );
 };
 
