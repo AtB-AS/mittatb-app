@@ -36,7 +36,6 @@ type TripMessagesProps = {
 export const TripMessages: React.FC<TripMessagesProps> = ({
   tripPattern,
   error,
-  messageStyle,
 }) => {
   const {t} = useTranslation();
   const {modesWeSellTicketsFor} = useFirestoreConfiguration();
@@ -44,6 +43,7 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
     tripPattern,
     modesWeSellTicketsFor,
   );
+  const styles = useStyles();
   const canUseCollabTicket = someLegsAreByTrain(tripPattern);
   const shortWaitTime = hasShortWaitTime(tripPattern.legs);
   const {enable_ticketing} = useRemoteConfig();
@@ -65,22 +65,22 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
     <>
       {tripIncludesRailReplacementBus && (
         <MessageBox
-          containerStyle={messageStyle}
+          containerStyle={styles.messageBox}
           type="warning"
           message={t(TripDetailsTexts.messages.tripIncludesRailReplacementBus)}
         />
       )}
       {shortWaitTime && (
         <MessageBox
-          containerStyle={messageStyle}
+          containerStyle={styles.messageBox}
           type="info"
           message={t(TripDetailsTexts.messages.shortTime)}
         />
       )}
       {isTicketingEnabledAndSomeTicketsAreUnavailableInApp && (
         <MessageBox
-          containerStyle={messageStyle}
-          type="warning"
+          containerStyle={styles.messageBox}
+          type="info"
           message={
             canUseCollabTicket && allLegsInZoneA
               ? t(DetailsMessages.messages.collabTicketInfo)
@@ -92,7 +92,7 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
         <>
           <ScreenReaderAnnouncement message={translatedError(error, t)} />
           <MessageBox
-            containerStyle={messageStyle}
+            containerStyle={styles.messageBox}
             type="warning"
             message={translatedError(error, t)}
           />
@@ -130,7 +130,7 @@ export function TicketingMessages({
   trip,
 }: TicketingMessagesProps): JSX.Element | null {
   const {t} = useTranslation();
-  const styles = useStopsStyle();
+  const styles = useStyles();
 
   const {modesWeSellTicketsFor} = useFirestoreConfiguration();
   const {enable_ticketing} = useRemoteConfig();
@@ -156,24 +156,24 @@ export function TicketingMessages({
 
   const CollabTicketMessage = (
     <MessageBox
-      containerStyle={styles.ticketMessage}
-      type="warning"
+      containerStyle={styles.messageBox}
+      type="info"
       message={t(DetailsMessages.messages.collabTicketInfo)}
     />
   );
 
   const TrainOutsideZoneAMessage = (
     <MessageBox
-      containerStyle={styles.ticketMessage}
-      type="warning"
+      containerStyle={styles.messageBox}
+      type="info"
       message={t(DetailsMessages.messages.trainOutsideZoneA)}
     />
   );
 
   const TicketsWeDontSellMessage = (
     <MessageBox
-      containerStyle={styles.ticketMessage}
-      type="warning"
+      containerStyle={styles.messageBox}
+      type="info"
       message={t(DetailsMessages.messages.ticketsWeDontSell)}
     />
   );
@@ -192,8 +192,8 @@ export function TicketingMessages({
   return TicketsWeDontSellMessage;
 }
 
-const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
-  ticketMessage: {
-    marginTop: theme.spacings.medium,
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  messageBox: {
+    marginBottom: theme.spacings.medium,
   },
 }));
