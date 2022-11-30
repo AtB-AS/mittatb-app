@@ -5,7 +5,7 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {QuayFragment} from '@atb/api/types/generated/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
-import {Info, Warning} from '@atb/assets/svg/color/icons/status';
+import {Info} from '@atb/assets/svg/color/icons/status';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
 import MessageBox from '@atb/components/message-box';
@@ -19,7 +19,7 @@ import {usePreferenceItems} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import CancelledDepartureMessage from '@atb/screens/TripDetails/components/CancelledDepartureMessage';
 import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
-import {SituationMessageBox} from '@atb/situations';
+import {SituationIcon, SituationMessageBox} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
@@ -277,13 +277,13 @@ function EstimatedCallRow({
       >
         <ThemeText testID="quayName">{getQuayName(call.quay)} </ThemeText>
       </TripRow>
-      {group === 'trip' && call.quay?.situations.length ? (
-        <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
-          {call.quay.situations.map((situation) => (
-            <SituationMessageBox noStatusIcon={true} situation={situation} />
-          ))}
-        </TripRow>
-      ) : null}
+      {group === 'trip'
+        ? call.quay?.situations.map((situation) => (
+            <TripRow rowLabel={<SituationIcon situation={situation} />}>
+              <SituationMessageBox noStatusIcon={true} situation={situation} />
+            </TripRow>
+          ))
+        : null}
       {call.notices &&
         call.notices.map((notice, index) => {
           if (!notice.text) return null;
