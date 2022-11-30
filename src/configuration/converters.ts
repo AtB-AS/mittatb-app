@@ -51,6 +51,10 @@ function mapToFareProductTypeConfig(
   const configuration = mapToFareProductConfigSettings(config.configuration);
   if (!configuration) return;
 
+  if (!isArray(config.transportModes)) return;
+  if (!config.transportModes.every((value: any) => typeof value === 'string'))
+    return;
+
   return {
     type: fcType,
     name,
