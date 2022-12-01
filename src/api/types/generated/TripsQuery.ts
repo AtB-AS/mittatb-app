@@ -1,4 +1,5 @@
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
+
 export type TripsQueryVariables = Types.Exact<{
   from: Types.Location;
   to: Types.Location;
@@ -80,6 +81,7 @@ export type TripsQuery = {
               summary: Array<{language?: string; value: string}>;
               description: Array<{language?: string; value: string}>;
             }>;
+            tariffZones: Array<{id: string; name?: string}>;
           };
         };
         toPlace: {
@@ -105,6 +107,7 @@ export type TripsQuery = {
               summary: Array<{language?: string; value: string}>;
               description: Array<{language?: string; value: string}>;
             }>;
+            tariffZones: Array<{id: string; name?: string}>;
           };
         };
         serviceJourney?: {

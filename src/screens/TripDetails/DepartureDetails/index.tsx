@@ -13,10 +13,7 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {canSellTicketsForSubMode} from '@atb/operator-config';
 import {usePreferenceItems} from '@atb/preferences';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import CancelledDepartureMessage from '@atb/screens/TripDetails/components/CancelledDepartureMessage';
 import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
 import {SituationOrNoticeIcon, SituationMessageBox} from '@atb/situations';
@@ -51,8 +48,6 @@ export default function DepartureDetails({navigation, route}: Props) {
   const {activeItemIndex, items} = route.params;
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useTheme();
-  const {modesWeSellTicketsFor} = useFirestoreConfiguration();
-  const {enable_ticketing} = useRemoteConfig();
 
   const activeItem = items[activeItemIndexState];
   const hasMultipleItems = items.length > 1;
@@ -66,15 +61,6 @@ export default function DepartureDetails({navigation, route}: Props) {
     isLoading,
   ] = useDepartureData(activeItem, 30, !isFocused);
   const mapData = useMapData(activeItem);
-
-  const canSellTicketsForDeparture = canSellTicketsForSubMode(
-    subMode,
-    modesWeSellTicketsFor,
-  );
-
-  const someLegsAreByTrain = mode === TransportMode.Rail;
-  const isTicketingEnabledAndWeCantSellTicketForDeparture =
-    enable_ticketing && !canSellTicketsForDeparture;
 
   const onPaginationPress = (newPage: number) => {
     animateNextChange();
@@ -162,21 +148,12 @@ export default function DepartureDetails({navigation, route}: Props) {
             </View>
           )}
 
-          {isTicketingEnabledAndWeCantSellTicketForDeparture && (
-            <MessageBox
-              style={styles.messageBox}
-              type="info"
-              message={t(DepartureDetailsTexts.messages.ticketsWeDontSell)}
-            />
-          )}
-
-          {someLegsAreByTrain && (
-            <MessageBox
-              style={styles.messageBox}
-              type="info"
-              message={t(DepartureDetailsTexts.messages.collabTicketInfo)}
-            />
-          )}
+          <TicketingMessages
+            item={items[0]}
+            trip={estimatedCallsWithMetadata}
+            mode={mode}
+            subMode={subMode}
+          />
 
           <EstimatedCallRows
             calls={estimatedCallsWithMetadata}

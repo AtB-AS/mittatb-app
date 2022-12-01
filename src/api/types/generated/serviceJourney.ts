@@ -124,6 +124,7 @@ export type QuayFragment = {
     description: Array<{language?: string; value: string}>;
   }>;
   stopPlace?: {id: string; name: string; latitude?: number; longitude?: number};
+  tariffZones: Array<{id: string; name?: string}>;
 };
 
 export type LineFragment = {
