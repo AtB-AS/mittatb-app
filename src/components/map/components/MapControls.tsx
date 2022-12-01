@@ -22,7 +22,7 @@ const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
         accessibilityRole="button"
         accessibilityLabel={t(MapTexts.controls.zoomIn.a11yLabel)}
         onPress={zoomIn}
-        icon={Add}
+        leftIcon={Add}
       />
       <Button
         type="compact"
@@ -30,7 +30,7 @@ const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
         accessibilityRole="button"
         accessibilityLabel={t(MapTexts.controls.zoomOut.a11yLabel)}
         onPress={zoomOut}
-        icon={Subtract}
+        leftIcon={Subtract}
       />
     </View>
   );

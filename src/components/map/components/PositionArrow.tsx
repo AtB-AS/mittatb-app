@@ -17,7 +17,7 @@ const PositionArrow: React.FC<{onPress(): void} & AccessibilityProps> = ({
       interactiveColor="interactive_0"
       onPress={onPress}
       hitSlop={insets.symmetric(12, 20)}
-      icon={Location}
+      leftIcon={Location}
       style={styles.flyToButton}
     />
   );

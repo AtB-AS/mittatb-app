@@ -1,9 +1,9 @@
 import React from 'react';
-import {Linking, View, StyleProp, ViewStyle} from 'react-native';
+import {Linking, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import Button from '../button';
 import ThemeText from '@atb/components/text';
-import {useTranslation, FeedbackTexts} from '@atb/translations';
+import {FeedbackTexts, useTranslation} from '@atb/translations';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Intercom from 'react-native-intercom';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
@@ -69,17 +69,15 @@ const SubmittedComponent = ({
           <Button
             onPress={handleButtonClick}
             text={t(FeedbackTexts.additionalFeedback.intercomButton)}
-            icon={Chat}
+            rightIcon={Chat}
             interactiveColor="interactive_0"
-            iconPosition="right"
           />
         ) : (
           <Button
             onPress={handleButtonClick}
             text={t(FeedbackTexts.additionalFeedback.contactsheetButton)}
-            icon={ExternalLink}
+            rightIcon={ExternalLink}
             interactiveColor="interactive_0"
-            iconPosition="right"
           />
         )}
       </View>

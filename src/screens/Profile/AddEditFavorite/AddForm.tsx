@@ -217,8 +217,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
             <Button
               onPress={deleteItem}
               interactiveColor="interactive_destructive"
-              icon={SvgDelete}
-              iconPosition="right"
+              rightIcon={SvgDelete}
               text={t(AddEditFavoriteTexts.delete.label)}
               testID="deleteButton"
             />
@@ -226,8 +225,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
           <Button
             interactiveColor="interactive_0"
             onPress={save}
-            icon={SvgConfirm}
-            iconPosition="right"
+            rightIcon={SvgConfirm}
             text={t(AddEditFavoriteTexts.save.label)}
             testID="saveButton"
           />

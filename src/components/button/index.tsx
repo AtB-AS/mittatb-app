@@ -52,8 +52,8 @@ export type ButtonProps = {
   viewContainerStyle?: StyleProp<ViewStyle>;
   textContainerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-  icon?: ({fill}: {fill: string}) => JSX.Element;
-  iconPosition?: 'left' | 'right';
+  leftIcon?: ({fill}: {fill: string}) => JSX.Element;
+  rightIcon?: ({fill}: {fill: string}) => JSX.Element;
   active?: boolean;
 } & ButtonTypeAwareProps &
   TouchableOpacityProps;
@@ -67,8 +67,8 @@ const Button = React.forwardRef<any, ButtonProps>(
       interactiveColor = 'interactive_0',
       mode = 'primary',
       type = 'block',
-      icon: Icon,
-      iconPosition = 'left',
+      leftIcon,
+      rightIcon,
       text,
       disabled,
       active,
@@ -101,10 +101,8 @@ const Button = React.forwardRef<any, ButtonProps>(
 
     const spacing =
       type === 'compact' ? theme.spacings.small : theme.spacings.medium;
-    const leftIconSpacing =
-      Icon && iconPosition === 'left' ? spacing : undefined;
-    const rightIconSpacing =
-      Icon && iconPosition === 'right' ? spacing : undefined;
+    const leftIconSpacing = leftIcon ? spacing : undefined;
+    const rightIconSpacing = rightIcon ? spacing : undefined;
 
     const {background: backgroundColor, text: textColor} = themeColor
       ? theme.interactive[themeColor][active ? 'active' : 'default']
@@ -126,7 +124,8 @@ const Button = React.forwardRef<any, ButtonProps>(
     const textContainer: TextStyle = {
       flex: isInline ? undefined : 1,
       alignItems: 'center',
-      marginHorizontal: Icon && !isInline ? theme.spacings.xLarge : 0,
+      marginHorizontal:
+        (leftIcon || rightIcon) && !isInline ? theme.spacings.xLarge : 0,
     };
     const iconContainer: ViewStyle = isInline
       ? {
@@ -151,9 +150,9 @@ const Button = React.forwardRef<any, ButtonProps>(
           ref={ref}
           {...props}
         >
-          {Icon && iconPosition === 'left' && (
+          {leftIcon && (
             <View style={iconContainer}>
-              <ThemeIcon svg={Icon} fill={textColor} />
+              <ThemeIcon svg={leftIcon} fill={textColor} />
             </View>
           )}
           {text && (
@@ -168,9 +167,9 @@ const Button = React.forwardRef<any, ButtonProps>(
               </ThemeText>
             </View>
           )}
-          {Icon && iconPosition === 'right' && (
+          {rightIcon && (
             <View style={iconContainer}>
-              <ThemeIcon svg={Icon} fill={textColor} />
+              <ThemeIcon svg={rightIcon} fill={textColor} />
             </View>
           )}
         </TouchableOpacity>
