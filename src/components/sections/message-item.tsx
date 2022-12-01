@@ -42,7 +42,7 @@ export default function MessageItem({
         fill={themeColor.text}
         svg={messageTypeToIcon(messageType)}
       />
-      <View>
+      <View style={styles.textContent}>
         {title && (
           <ThemeText
             type="body__primary--bold"
@@ -52,9 +52,7 @@ export default function MessageItem({
             {title}
           </ThemeText>
         )}
-        <ThemeText style={styles.message} color={messageType}>
-          {message}
-        </ThemeText>
+        <ThemeText color={messageType}>{message}</ThemeText>
       </View>
     </View>
   );
@@ -76,6 +74,6 @@ const useA11yLabel = (
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flexDirection: 'row'},
   icon: {marginRight: theme.spacings.medium},
+  textContent: {flex: 1},
   title: {marginBottom: theme.spacings.small},
-  message: {flex: 1},
 }));

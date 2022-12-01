@@ -122,8 +122,8 @@ const TripDetailsTexts = {
       'If your trip goes outside zone A, it may require tickets that must be purchased from companies other than AtB.',
     ),
     collabTicketInfo: _(
-      `Med enkelt- og periodebillett for sone A fra AtB kan du reise med tog i denne sonen.\n\n`,
-      `With a single and period ticket for zone A from AtB, you can travel by train in this zone.\n\n`,
+      `Med enkelt- og periodebillett for sone A fra AtB kan du reise med tog i denne sonen.`,
+      `With a single and period ticket for zone A from AtB, you can travel by train in this zone.`,
     ),
     errorNetwork: _(
       'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.',

@@ -31,7 +31,7 @@ type WithChildren = {
 };
 export type MessageType = Statuses;
 export type MessageBoxProps = {
-  icon?: React.ReactNode;
+  noStatusIcon?: boolean;
   type?: MessageType;
   containerStyle?: StyleProp<ViewStyle>;
   title?: string;
@@ -41,7 +41,7 @@ export type MessageBoxProps = {
 } & (WithMessage | WithChildren);
 
 const MessageBox: React.FC<MessageBoxProps> = ({
-  icon,
+  noStatusIcon,
   type = 'info',
   containerStyle,
   message,
@@ -58,12 +58,9 @@ const MessageBox: React.FC<MessageBoxProps> = ({
   const styles = useBoxStyle();
   const {t} = useTranslation();
   const textColor = theme.static.status[type].text;
-  const iconElement =
-    typeof icon !== 'undefined' ? (
-      icon
-    ) : (
-      <ThemeIcon fill={textColor} svg={messageTypeToIcon(type)} />
-    );
+  const iconElement = noStatusIcon ? null : (
+    <ThemeIcon fill={textColor} svg={messageTypeToIcon(type)} />
+  );
   const child = message ? (
     <>
       <ThemeText
@@ -119,30 +116,6 @@ const MessageBox: React.FC<MessageBoxProps> = ({
         >
           <ThemeIcon fill={textColor} svg={Close} />
         </TouchableOpacity>
-      )}
-    </View>
-  );
-};
-type TinyMessageProps = {type?: MessageType} & (WithChildren | WithMessage);
-export const TinyMessageBox: React.FC<TinyMessageProps> = ({
-  type = 'info',
-  message,
-  children,
-}) => {
-  const {theme} = useTheme();
-  const styles = useBoxStyle();
-  const colorStyle = {
-    color: theme.static.status[type].text,
-    backgroundColor: theme.static.status[type].background,
-  };
-  return (
-    <View style={[styles.container, colorStyle]}>
-      {message ? (
-        <ThemeText style={{...styles.text, color: colorStyle.color}}>
-          {message}
-        </ThemeText>
-      ) : (
-        {children}
       )}
     </View>
   );

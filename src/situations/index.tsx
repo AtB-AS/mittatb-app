@@ -1,3 +1,4 @@
-export {SituationMessagesBox} from './SituationMessagesBox';
+export {SituationMessageBox} from './SituationMessageBox';
 export {SituationSectionItem} from './SituationSectionItem';
-export {SituationWarningIcon} from './SituationWarningIcon';
+export {SituationIcon} from './SituationIcon';
+export {getSvgForMostCriticalSituation} from './utils';

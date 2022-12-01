@@ -178,6 +178,15 @@ export default function DesignSystem() {
               message={`This is a message with markdown,\nSupporting **bold** and *italics*\nand special characters like ', " + æøå`}
             />
           </Sections.GenericItem>
+
+          <Sections.GenericItem>
+            <MessageBox
+              isMarkdown={true}
+              title="Without icon"
+              noStatusIcon={true}
+              message={`This is a message without status icon`}
+            />
+          </Sections.GenericItem>
         </Sections.Section>
 
         <MessageBox
