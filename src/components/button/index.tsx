@@ -101,8 +101,6 @@ const Button = React.forwardRef<any, ButtonProps>(
 
     const spacing =
       type === 'compact' ? theme.spacings.small : theme.spacings.medium;
-    const leftIconSpacing = leftIcon ? spacing : undefined;
-    const rightIconSpacing = rightIcon ? spacing : undefined;
 
     const {background: backgroundColor, text: textColor} = themeColor
       ? theme.interactive[themeColor][active ? 'active' : 'default']
@@ -127,17 +125,15 @@ const Button = React.forwardRef<any, ButtonProps>(
       marginHorizontal:
         (leftIcon || rightIcon) && !isInline ? theme.spacings.xLarge : 0,
     };
-    const iconContainer: ViewStyle = isInline
-      ? {
-          position: 'relative',
-          left: undefined,
-          right: undefined,
-        }
-      : {
-          position: 'absolute',
-          left: leftIconSpacing,
-          right: rightIconSpacing,
-        };
+    const leftStyling: ViewStyle = {
+      position: isInline ? 'relative' : 'absolute',
+      left: isInline ? undefined : spacing,
+    };
+
+    const rightStyling: ViewStyle = {
+      position: isInline ? 'relative' : 'absolute',
+      right: isInline ? undefined : spacing,
+    };
 
     return (
       <Animated.View style={[{opacity: fadeAnim}, viewContainerStyle]}>
@@ -151,7 +147,7 @@ const Button = React.forwardRef<any, ButtonProps>(
           {...props}
         >
           {leftIcon && (
-            <View style={iconContainer}>
+            <View style={leftStyling}>
               <ThemeIcon svg={leftIcon} fill={textColor} />
             </View>
           )}
@@ -168,7 +164,7 @@ const Button = React.forwardRef<any, ButtonProps>(
             </View>
           )}
           {rightIcon && (
-            <View style={iconContainer}>
+            <View style={rightStyling}>
               <ThemeIcon svg={rightIcon} fill={textColor} />
             </View>
           )}
