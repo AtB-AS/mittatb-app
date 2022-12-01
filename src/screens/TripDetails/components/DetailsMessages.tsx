@@ -55,11 +55,13 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
   const tariffZonesHaveZoneA = (tariffZones?: TariffZone[]) =>
     tariffZones?.some((a) => a.id === 'ATB:TariffZone:1');
 
-  const allLegsInZoneA = tripPattern.legs.every(
-    (a) =>
-      tariffZonesHaveZoneA(a.fromPlace.quay?.tariffZones) &&
-      tariffZonesHaveZoneA(a.toPlace.quay?.tariffZones),
-  );
+  const allLegsInZoneA = tripPattern.legs
+    .filter((a) => a.mode !== Mode.Foot)
+    .every(
+      (a) =>
+        tariffZonesHaveZoneA(a.fromPlace.quay?.tariffZones) &&
+        tariffZonesHaveZoneA(a.toPlace.quay?.tariffZones),
+    );
 
   return (
     <>
