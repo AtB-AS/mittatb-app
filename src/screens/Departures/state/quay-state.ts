@@ -44,7 +44,6 @@ const MIN_TIME_RANGE = 3 * 60 * 60; // Three hours
 
 export type DepartureDataState = {
   data: DepartureTypes.EstimatedCall[] | null;
-  showOnlyFavorites: boolean;
   tick?: Date;
   error?: {type: ErrorType};
   locationId?: string;
@@ -59,7 +58,6 @@ const initialQueryInput = {
 };
 const initialState: DepartureDataState = {
   data: null,
-  showOnlyFavorites: false,
   error: undefined,
   locationId: undefined,
   isLoading: false,
@@ -95,16 +93,6 @@ type DepartureDataActions =
       result: DepartureTypes.EstimatedCall[];
     }
   | {
-      type: 'SET_SHOW_FAVORITES';
-      showOnlyFavorites: boolean;
-      quay: DepartureTypes.Quay;
-      startTime?: string;
-      timeRange?: number;
-      favoriteDepartures?: UserFavoriteDepartures;
-      limitPerLine?: number;
-      timeout: TimeoutRequest;
-    }
-  | {
       type: 'SET_ERROR';
       error: ErrorType;
       reset?: boolean;
@@ -123,9 +111,6 @@ const reducer: ReducerWithSideEffects<
 > = (state, action) => {
   switch (action.type) {
     case 'LOAD_INITIAL_DEPARTURES': {
-      if ((state.queryInput as QuayDeparturesVariables).id === action.quay.id)
-        return NoUpdate();
-
       // Update input data with new date as this
       // is a fresh fetch. We should fetch the latest information.
       const queryInput: QuayDeparturesVariables = {
@@ -149,7 +134,7 @@ const reducer: ReducerWithSideEffects<
             const result = await fetchEstimatedCalls(
               queryInput,
               action.quay,
-              state.showOnlyFavorites ? action.favoriteDepartures : undefined,
+              action.favoriteDepartures,
               {
                 signal: action.timeout.signal,
               },
@@ -162,10 +147,13 @@ const reducer: ReducerWithSideEffects<
               result: result,
             });
           } catch (e) {
+            const errorType = getAxiosErrorType(e, action.timeout.didTimeout);
+            // Not show error msg if the request was cancelled by a new search
+            if (errorType === 'cancel') return;
             dispatch({
               type: 'SET_ERROR',
               reset: false,
-              error: getAxiosErrorType(e, action.timeout.didTimeout),
+              error: errorType,
             });
           } finally {
             dispatch({type: 'STOP_LOADER'});
@@ -215,26 +203,6 @@ const reducer: ReducerWithSideEffects<
         // know when to update components while still being performant.
         tick: new Date(),
       });
-    }
-
-    case 'SET_SHOW_FAVORITES': {
-      return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
-        {
-          ...state,
-          showOnlyFavorites: action.showOnlyFavorites,
-        },
-        async (_, dispatch) => {
-          dispatch({
-            type: 'LOAD_INITIAL_DEPARTURES',
-            quay: action.quay,
-            startTime: action.startTime,
-            timeRange: action.timeRange,
-            favoriteDepartures: action.favoriteDepartures,
-            limitPerLine: action.limitPerLine,
-            timeout: action.timeout,
-          });
-        },
-      );
     }
 
     case 'UPDATE_DEPARTURES': {
@@ -287,11 +255,11 @@ export function useQuayData(
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const isFocused = useIsFocused();
   const {favoriteDepartures} = useFavorites();
-  const timeRange = getTimeRangeByMode(mode, startTime);
-  const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
   const timeout = useTimeoutRequest();
 
-  const loadDepartures = () => {
+  const loadDepartures = useCallback(() => {
+    const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
+    const timeRange = getTimeRangeByMode(mode, startTime);
     dispatch({
       type: 'LOAD_INITIAL_DEPARTURES',
       quay,
@@ -301,27 +269,12 @@ export function useQuayData(
       timeRange,
       timeout,
     });
-  };
-  const refresh = useCallback(() => {
-    loadDepartures();
-  }, [(quay.id, startTime, showOnlyFavorites, favoriteDepartures)]);
+  }, [quay, startTime, showOnlyFavorites, favoriteDepartures, mode]);
 
   useEffect(() => {
-    dispatch({
-      type: 'SET_SHOW_FAVORITES',
-      quay,
-      startTime,
-      timeRange,
-      showOnlyFavorites,
-      favoriteDepartures,
-      limitPerLine,
-      timeout,
-    });
-  }, [quay.id, favoriteDepartures, showOnlyFavorites]);
-  useEffect(() => {
-    refresh();
+    loadDepartures();
     return () => timeout.abort();
-  }, [startTime]);
+  }, [loadDepartures]);
 
   useEffect(() => {
     if (!state.tick) {
@@ -330,7 +283,7 @@ export function useQuayData(
     const diff = differenceInMinutes(state.tick, state.lastRefreshTime);
 
     if (diff >= HARD_REFRESH_LIMIT_IN_MINUTES) {
-      refresh();
+      loadDepartures();
     }
   }, [state.tick, state.lastRefreshTime]);
   useInterval(
@@ -348,7 +301,6 @@ export function useQuayData(
 
   return {
     state,
-    refresh,
     forceRefresh: loadDepartures,
   };
 }

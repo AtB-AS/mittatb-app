@@ -1,12 +1,14 @@
-import {SituationsType, SituationType} from '@atb/situations/types';
+import {SituationType} from '@atb/situations/types';
 import {Language} from '@atb/translations';
 import {getTextForLanguage} from '@atb/translations';
 
-export const hasSituations = (situations?: SituationsType) =>
-  situations?.some((s) => s.description.length) ?? false;
+export const filterSituations = (situations?: SituationType[]) =>
+  situations?.filter(
+    (s: SituationType) => s.description.length || s.summary.length,
+  );
 
 export const getUniqueSituations = (
-  situations: SituationsType = [],
+  situations: SituationType[] = [],
   language: Language,
 ) => {
   let uniqueSituations: {[id: string]: string} = {};

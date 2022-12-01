@@ -14,7 +14,7 @@ export type DepartureData = {
   mode?: TransportMode;
   title?: string;
   subMode?: TransportSubmode;
-  situations: SituationFragment[];
+  serviceJourneySituations: SituationFragment[];
 };
 
 export type CallListGroup = {
@@ -40,7 +40,7 @@ export default function useDepartureData(
         activeItem.toQuayId,
       );
       const line = callGroups.trip[0]?.serviceJourney?.journeyPattern?.line;
-      const parentSituation = callGroups.trip[0]?.situations;
+      const serviceJourneySituations = callGroups.trip[0]?.situations;
       const title = line?.publicCode
         ? `${line?.publicCode} ${callGroups.trip[0]?.destinationDisplay?.frontText}`
         : undefined;
@@ -50,7 +50,7 @@ export default function useDepartureData(
         title,
         subMode: line?.transportSubmode,
         callGroups,
-        situations: parentSituation,
+        serviceJourneySituations,
       };
     },
     [activeItem],
@@ -63,7 +63,7 @@ export default function useDepartureData(
         trip: [],
         after: [],
       },
-      situations: [],
+      serviceJourneySituations: [],
     },
     pollingTimeInSeconds,
     disabled: disabled || !activeItem,
