@@ -18,6 +18,7 @@ import {
   defaultPreassignedFareProducts,
   defaultTariffZones,
   defaultUserProfiles,
+  defaultFareProductTypeConfig,
 } from '@atb/reference-data/defaults';
 import {
   defaultVatPercent,
@@ -25,6 +26,8 @@ import {
   defaultModesWeSellTicketsFor,
 } from '@atb/configuration/defaults';
 import {PaymentType} from '@atb/ticketing';
+import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
+import {mapToFareProductTypeConfigs} from './converters';
 
 type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
@@ -33,6 +36,7 @@ type ConfigurationContextState = {
   modesWeSellTicketsFor: string[];
   paymentTypes: PaymentType[];
   vatPercent: number;
+  fareProductTypeConfigs: FareProductTypeConfig[];
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
@@ -42,6 +46,7 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   modesWeSellTicketsFor: defaultModesWeSellTicketsFor,
   paymentTypes: defaultPaymentTypes,
   vatPercent: defaultVatPercent,
+  fareProductTypeConfigs: defaultFareProductTypeConfig,
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
@@ -59,6 +64,9 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   );
   const [paymentTypes, setPaymentTypes] = useState(defaultPaymentTypes);
   const [vatPercent, setVatPercent] = useState(defaultVatPercent);
+  const [fareProductTypeConfigs, setFareProductTypeConfigs] = useState<
+    FareProductTypeConfig[]
+  >(defaultFareProductTypeConfig);
 
   useEffect(() => {
     firestore()
@@ -96,6 +104,12 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (vatPercent) {
             setVatPercent(vatPercent);
           }
+
+          const fareProductTypeConfigs =
+            getFareProductTypeConfigsFromSnapshot(snapshot);
+          if (fareProductTypeConfigs) {
+            setFareProductTypeConfigs(fareProductTypeConfigs);
+          }
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -114,6 +128,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       modesWeSellTicketsFor,
       paymentTypes,
       vatPercent,
+      fareProductTypeConfigs,
     };
   }, [
     preassignedFareProducts,
@@ -122,6 +137,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     modesWeSellTicketsFor,
     paymentTypes,
     vatPercent,
+    fareProductTypeConfigs,
   ]);
 
   return (
@@ -236,4 +252,17 @@ function mapPaymentTypeStringsToEnums(
     }
   }
   return paymentTypes;
+}
+
+function getFareProductTypeConfigsFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): FareProductTypeConfig[] | undefined {
+  const fareProductTypeConfigs = snapshot.docs
+    .find((doc) => doc.id == 'fareProductTypeConfigs')
+    ?.get('fareProductTypeConfigs');
+  if (fareProductTypeConfigs !== undefined) {
+    return mapToFareProductTypeConfigs(fareProductTypeConfigs);
+  }
+
+  return undefined;
 }
