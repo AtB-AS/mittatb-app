@@ -21,6 +21,7 @@ import {
 import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {Info} from '@atb/assets/svg/color/icons/status';
 
 export default function DesignSystem() {
   const style = useProfileHomeStyle();
@@ -199,27 +200,33 @@ export default function DesignSystem() {
             <Button text="primary" onPress={presser} mode="primary" />
             <Button text="secondary" onPress={presser} mode="secondary" />
             <Button text="tertiary" onPress={presser} mode="tertiary" />
-            <Button
-              text="Press me"
-              onPress={presser}
-              icon={Delete}
-              iconPosition="right"
-            />
+            <Button text="Press me" onPress={presser} rightIcon={Delete} />
             <Button text="Press me" onPress={presser} type="inline" />
             <Button text="Press me" onPress={presser} type="compact" />
             <Button
               text="Press me"
               onPress={presser}
               type="compact"
-              icon={Delete}
-              iconPosition="right"
+              rightIcon={Delete}
             />
             <Button
               text="Press me"
               onPress={presser}
               type="inline"
-              icon={Delete}
-              iconPosition="left"
+              leftIcon={Delete}
+            />
+            <Button
+              text="Press me"
+              onPress={presser}
+              type="inline"
+              leftIcon={Delete}
+              rightIcon={Delete}
+            />
+            <Button
+              text="Press me"
+              onPress={presser}
+              leftIcon={Delete}
+              rightIcon={Info}
             />
           </ButtonGroup>
         </View>

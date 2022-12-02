@@ -2,7 +2,7 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {ScrollView, View} from 'react-native';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -12,7 +12,6 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
 import {Psst} from '@atb/assets/svg/color/illustrations';
 import {Periodebillett} from '@atb/assets/svg/color/images';
-import {TouchableOpacity} from 'react-native';
 import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketingState,
@@ -71,8 +70,7 @@ export default function LoginOnboarding({
             interactiveColor="interactive_0"
             onPress={onNext}
             text={t(LoginTexts.onboarding.button)}
-            icon={ArrowRight}
-            iconPosition="right"
+            rightIcon={ArrowRight}
             testID="loginButton"
           />
         </View>

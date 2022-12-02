@@ -69,8 +69,7 @@ export default function TicketingInformationalOverlay() {
         <View style={{marginVertical: theme.spacings.xLarge}}>
           <Button
             text={t(TicketingTexts.informational.button)}
-            icon={Confirm}
-            iconPosition="right"
+            rightIcon={Confirm}
             interactiveColor="interactive_0"
             onPress={onAccept}
             testID="acceptTicketingButton"
