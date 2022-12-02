@@ -26,13 +26,6 @@
         "ATB:UserProfile:d3e4ec09",
         "ATB:UserProfile:1ae560ba"
       ]
-    },
-    "configurations": {
-      "zoneSelectionMode": "multiple",
-      "travellerSelectionMode": "multiple",
-      "timeSelectionMode": "none",
-      "productSelectionMode": "none",
-      "offerEndpoint": "zones"
     }
   },
   {
@@ -66,13 +59,6 @@
     ],
     "limitations": {
       "userProfileRefs": ["ATB:UserProfile:8ee842e3"]
-    },
-    "configurations": {
-      "zoneSelectionMode": "none",
-      "travellerSelectionMode": "none",
-      "timeSelectionMode": "none",
-      "productSelectionMode": "product",
-      "offerEndpoint": "authority"
     }
   },
   {
@@ -106,13 +92,6 @@
     ],
     "limitations": {
       "userProfileRefs": ["ATB:UserProfile:8ee842e3"]
-    },
-    "configurations": {
-      "zoneSelectionMode": "none",
-      "travellerSelectionMode": "none",
-      "timeSelectionMode": "none",
-      "productSelectionMode": "product",
-      "offerEndpoint": "authority"
     }
   },
   {
@@ -146,13 +125,6 @@
     ],
     "limitations": {
       "userProfileRefs": ["ATB:UserProfile:8ee842e3"]
-    },
-    "configurations": {
-      "zoneSelectionMode": "none",
-      "travellerSelectionMode": "none",
-      "timeSelectionMode": "none",
-      "productSelectionMode": "product",
-      "offerEndpoint": "authority"
     }
   },
   {
@@ -181,13 +153,6 @@
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
       ]
-    },
-    "configurations": {
-      "zoneSelectionMode": "single",
-      "travellerSelectionMode": "single",
-      "timeSelectionMode": "datetime",
-      "productSelectionMode": "none",
-      "offerEndpoint": "zones"
     }
   },
   {
@@ -216,13 +181,6 @@
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
       ]
-    },
-    "configurations": {
-      "zoneSelectionMode": "multiple",
-      "travellerSelectionMode": "single",
-      "timeSelectionMode": "datetime",
-      "productSelectionMode": "duration",
-      "offerEndpoint": "zones"
     }
   },
   {
@@ -252,13 +210,6 @@
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
       ]
-    },
-    "configurations": {
-      "zoneSelectionMode": "multiple",
-      "travellerSelectionMode": "single",
-      "timeSelectionMode": "datetime",
-      "productSelectionMode": "duration",
-      "offerEndpoint": "zones"
     }
   },
   {
@@ -288,13 +239,6 @@
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
       ]
-    },
-    "configurations": {
-      "zoneSelectionMode": "multiple",
-      "travellerSelectionMode": "single",
-      "timeSelectionMode": "datetime",
-      "productSelectionMode": "duration",
-      "offerEndpoint": "zones"
     }
   },
   {
@@ -324,13 +268,6 @@
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
       ]
-    },
-    "configurations": {
-      "zoneSelectionMode": "multiple",
-      "travellerSelectionMode": "single",
-      "timeSelectionMode": "datetime",
-      "productSelectionMode": "duration",
-      "offerEndpoint": "zones"
     }
   },
   {
@@ -360,13 +297,6 @@
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
       ]
-    },
-    "configurations": {
-      "zoneSelectionMode": "multiple",
-      "travellerSelectionMode": "single",
-      "timeSelectionMode": "datetime",
-      "productSelectionMode": "duration",
-      "offerEndpoint": "zones"
     }
   },
   {
