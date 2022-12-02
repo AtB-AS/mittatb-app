@@ -69,8 +69,7 @@ const TravelDate = forwardRef<ScrollView, Props>(
             text={t(TravelDateTexts.primaryButton)}
             style={[styles.saveButton, {marginBottom: keyboardHeight}]}
             testID="confirmTimeButton"
-            icon={SvgConfirm}
-            iconPosition="right"
+            rightIcon={SvgConfirm}
           />
         </FullScreenFooter>
       </BottomSheetContainer>

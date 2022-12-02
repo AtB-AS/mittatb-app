@@ -6,7 +6,6 @@ import {
   QuaySectionMode,
   StopPlaceInfo,
 } from '@atb/api/departures/types';
-import Warning from '@atb/assets/svg/color/icons/status/Warning';
 import SvgFavorite from '@atb/assets/svg/mono-icons/places/Favorite';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
@@ -279,7 +278,6 @@ function DepartureTimeItem({
         departure.situations,
         notices,
       )}
-      leftIcon={departure.realtime ? Realtime : undefined}
       testID={testID}
     />
   );

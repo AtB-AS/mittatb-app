@@ -3,8 +3,8 @@ import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
 import {
-  ScreenHeaderTexts,
   ContactSheetTexts,
+  ScreenHeaderTexts,
   useTranslation,
 } from '@atb/translations';
 import React, {forwardRef} from 'react';
@@ -137,8 +137,7 @@ const ContactItem: React.FC<ContactProps> = ({
         text={buttonText}
         accessibilityHint={accessibilityHint}
         onPress={onPress}
-        iconPosition="right"
-        icon={icon}
+        rightIcon={icon}
       />
     </View>
   );

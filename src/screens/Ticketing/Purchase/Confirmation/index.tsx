@@ -36,8 +36,8 @@ import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import {
   CardPaymentMethod,
   PaymentMethod,
-  SavedPaymentOption,
   PurchaseScreenProps,
+  SavedPaymentOption,
 } from '../types';
 
 export type RouteParams = {
@@ -389,8 +389,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   text={getPaymentOptionTexts(previousMethod)}
                   interactiveColor="interactive_0"
                   disabled={!!error || !previousMethod}
-                  iconPosition="right"
-                  icon={
+                  rightIcon={
                     previousMethod.paymentType === PaymentType.Mastercard
                       ? MasterCard
                       : previousMethod.paymentType === PaymentType.Vipps

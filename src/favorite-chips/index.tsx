@@ -57,7 +57,7 @@ const FavoriteChips: React.FC<Props> = ({
               text={t(FavoriteTexts.chips.currentLocation)}
               accessibilityRole="button"
               accessibilityHint={chipActionHint ?? ''}
-              icon={LocationIcon}
+              leftIcon={LocationIcon}
               onPress={onCurrentLocation}
               testID="currentLocationChip"
             />
@@ -66,7 +66,7 @@ const FavoriteChips: React.FC<Props> = ({
             <FavoriteChip
               text={t(FavoriteTexts.chips.mapLocation)}
               accessibilityRole="button"
-              icon={Pin}
+              leftIcon={Pin}
               onPress={onMapSelection}
               interactiveColor={themeColor}
               mode="secondary"
@@ -90,7 +90,7 @@ const FavoriteChips: React.FC<Props> = ({
               accessibilityLabel={'Favoritt: ' + fav.name + screenReaderPause}
               accessibilityRole="button"
               accessibilityHint={chipActionHint ?? ''}
-              icon={({fill}) => <FavoriteIcon favorite={fav} fill={fill} />}
+              leftIcon={({fill}) => <FavoriteIcon favorite={fav} fill={fill} />}
               onPress={() =>
                 onSelectLocation({
                   ...fav.location,
@@ -112,7 +112,7 @@ const FavoriteChips: React.FC<Props> = ({
             mode="secondary"
             text={t(FavoriteTexts.chips.addFavorite)}
             accessibilityRole="button"
-            icon={Add}
+            leftIcon={Add}
             onPress={() =>
               navigation.navigate('AddEditFavorite', {screen: 'SearchLocation'})
             }

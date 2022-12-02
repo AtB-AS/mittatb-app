@@ -38,8 +38,7 @@ const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
               type="compact"
               mode="tertiary"
               disabled={!hasPrevious}
-              iconPosition="left"
-              icon={ArrowLeft}
+              leftIcon={ArrowLeft}
               interactiveColor="interactive_2"
               onPress={() => onNavigate(page - 1)}
               text={t(PaginationTexts.previous.label)}
@@ -62,8 +61,7 @@ const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
               type="compact"
               mode="tertiary"
               disabled={!hasNext}
-              iconPosition="right"
-              icon={ArrowRight}
+              rightIcon={ArrowRight}
               interactiveColor="interactive_2"
               onPress={() => onNavigate(page + 1)}
               text={t(PaginationTexts.next.label)}
