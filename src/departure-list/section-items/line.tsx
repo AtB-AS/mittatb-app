@@ -54,6 +54,7 @@ import {
 } from 'react-native';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 import {getSvgForMostCriticalSituation} from '@atb/situations';
+import {Realtime} from '@atb/assets/svg/color/icons/status';
 
 type RootProps = NearbyScreenProps<'NearbyRoot'>;
 
@@ -263,6 +264,7 @@ function DepartureTimeItem({
   if (!isValidDeparture(departure)) {
     return null;
   }
+  const realtime = departure.realtime ? Realtime : undefined;
   return (
     <Button
       key={departure.serviceJourneyId}
@@ -273,6 +275,7 @@ function DepartureTimeItem({
       style={styles.departure}
       textStyle={styles.departureText}
       rightIcon={getSvgForMostCriticalSituation(departure.situations)}
+      leftIcon={realtime}
       testID={testID}
     />
   );
@@ -289,16 +292,9 @@ const formatTimeText = (
     language,
     t(dictionary.date.units.now),
   );
-  text = addRealtimePrefixIfNecessary(text, departure.realtime, t);
   text = addDatePrefixIfNecessary(text, departure.time, searchDate);
   return text;
 };
-
-const addRealtimePrefixIfNecessary = (
-  timeText: string,
-  isRealtime: boolean = false,
-  t: TFunc<typeof Language>,
-) => (isRealtime ? timeText : t(dictionary.missingRealTimePrefix) + timeText);
 
 const addDatePrefixIfNecessary = (
   timeText: string,
