@@ -1,7 +1,7 @@
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {PreassignedFareProductWithConfig} from '@atb/reference-data/types';
 import {TariffZoneWithMetadata} from '@atb/screens/Ticketing/Purchase/TariffZones';
 import {UserProfileWithCount} from '@atb/screens/Ticketing/Purchase/Travellers/use-user-count-state';
 import {StyleSheet} from '@atb/theme';
@@ -19,7 +19,7 @@ type Props = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
   userProfilesWithCount: UserProfileWithCount[];
-  preassignedFareProduct: PreassignedFareProduct;
+  preassignedFareProduct: PreassignedFareProductWithConfig;
   travelDate?: string;
   style?: StyleProp<ViewStyle>;
 };
@@ -54,6 +54,10 @@ export default function Summary({
     });
   };
 
+  const {configuration: preassignedFareProductTypeConfiguration} =
+    preassignedFareProduct.config;
+  const {zoneSelectionMode} = preassignedFareProductTypeConfiguration;
+
   return (
     <View style={style}>
       {isLoading ? (
@@ -68,7 +72,7 @@ export default function Summary({
             {t(PurchaseOverviewTexts.summary.price(formattedPrice))}
           </ThemeText>
           <ThemeText type="body__secondary" style={styles.message}>
-            {preassignedFareProduct.configurations.zoneSelectionMode !== 'none'
+            {zoneSelectionMode !== 'none'
               ? t(PurchaseOverviewTexts.summary.messageInZone)
               : t(PurchaseOverviewTexts.summary.messageInArea)}
           </ThemeText>

@@ -1,6 +1,10 @@
 import {CancelToken as CancelTokenStatic} from '@atb/api';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
+import {
+  PreassignedFareProduct,
+  PreassignedFareProductWithConfig,
+  TariffZone,
+} from '@atb/reference-data/types';
 import {Offer, OfferPrice, searchOffers} from '@atb/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useMemo, useReducer} from 'react';
@@ -113,7 +117,7 @@ const initialState: OfferState = {
 };
 
 export default function useOfferState(
-  preassignedFareProduct: PreassignedFareProduct,
+  preassignedFareProduct: PreassignedFareProductWithConfig,
   fromTariffZone: TariffZone,
   toTariffZone: TariffZone,
   userProfilesWithCount: UserProfileWithCount[],
@@ -141,10 +145,12 @@ export default function useOfferState(
       } else {
         try {
           dispatch({type: 'SEARCHING_OFFER'});
-          const {offerEndpoint: offerEndpointMode} =
-            preassignedFareProduct.configurations;
+          const {configuration: preassignedFareProductConfigurations} =
+            preassignedFareProduct.config;
+          const {offerEndpoint} = preassignedFareProductConfigurations;
+
           const response = await searchOffers(
-            offerEndpointMode,
+            offerEndpoint,
             {
               zones,
               travellers: offerTravellers,

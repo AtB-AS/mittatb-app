@@ -14,10 +14,7 @@ import {ButtonInput, Section} from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {
-  PreassignedFareProductZoneSelectionMode,
-  TariffZone,
-} from '@atb/reference-data/types';
+import {TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import TariffZoneResults from '@atb/screens/Ticketing/Purchase/TariffZones/search/TariffZoneResults';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -40,6 +37,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {PurchaseScreenProps} from '../types';
 import {zoomIn, zoomOut} from '@atb/components/map/utils';
 import {flyToLocation} from '@atb/components/map/hooks/use-trigger-camera-move-effect';
+import {ZoneSelectionMode} from '../../FareContracts/utils';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -47,7 +45,7 @@ const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
 export type RouteParams = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
-  selectionMode: Exclude<PreassignedFareProductZoneSelectionMode, 'none'>;
+  selectionMode: Exclude<ZoneSelectionMode, 'none'>;
 };
 
 export type TariffZoneResultType = 'venue' | 'geolocation' | 'zone';

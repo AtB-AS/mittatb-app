@@ -58,12 +58,15 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     travelDate,
   );
 
+  const {configuration: preassignedFareProductTypeConfiguration} =
+    preassignedFareProduct.config;
+
   const {
     timeSelectionMode,
     productSelectionMode,
     travellerSelectionMode,
     zoneSelectionMode,
-  } = preassignedFareProduct.configurations;
+  } = preassignedFareProductTypeConfiguration;
 
   useEffect(() => {
     if (params?.refreshOffer) {

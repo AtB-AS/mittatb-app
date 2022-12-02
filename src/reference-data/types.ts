@@ -1,5 +1,6 @@
 import {Polygon} from 'geojson';
 import {LanguageAndTextType} from '@atb/translations';
+import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
 
 export type PreassignedFareProductType =
   | 'single'
@@ -7,28 +8,6 @@ export type PreassignedFareProductType =
   | 'period'
   | 'carnet'
   | 'hour24';
-export type PreassignedFareProductZoneSelectionMode =
-  | 'single'
-  | 'multiple'
-  | 'none';
-export type PreassignedFareProductTravellerSelectionMode =
-  | 'multiple'
-  | 'single'
-  | 'none';
-export type PreassignedFareProductTimeSelectionMode = 'datetime' | 'none';
-export type PreassignedFareProductProductSelectionMode =
-  | 'duration'
-  | 'product'
-  | 'none';
-export type PreassignedFareProductOfferEndpoint = 'zones' | 'authority';
-export type PreassignedFareProductConfigurations = {
-  zoneSelectionMode: PreassignedFareProductZoneSelectionMode;
-  travellerSelectionMode: PreassignedFareProductTravellerSelectionMode;
-  timeSelectionMode: PreassignedFareProductTimeSelectionMode;
-  productSelectionMode: PreassignedFareProductProductSelectionMode;
-  offerEndpoint: PreassignedFareProductOfferEndpoint;
-};
-
 export type DistributionChannel = 'web' | 'app';
 
 export type PreassignedFareProduct = {
@@ -43,7 +22,10 @@ export type PreassignedFareProduct = {
   limitations: {
     userProfileRefs: string[];
   };
-  configurations: PreassignedFareProductConfigurations;
+};
+
+export type PreassignedFareProductWithConfig = PreassignedFareProduct & {
+  config: FareProductTypeConfig;
 };
 
 export type UserProfile = {

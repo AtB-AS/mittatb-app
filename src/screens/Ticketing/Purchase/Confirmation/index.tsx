@@ -12,7 +12,11 @@ import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
+import {
+  PreassignedFareProduct,
+  PreassignedFareProductWithConfig,
+  TariffZone,
+} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';
@@ -45,7 +49,7 @@ import {
 } from '../types';
 
 export type RouteParams = {
-  preassignedFareProduct: PreassignedFareProduct;
+  preassignedFareProduct: PreassignedFareProductWithConfig;
   fromTariffZone: TariffZone;
   toTariffZone: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
@@ -141,6 +145,12 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     userProfilesWithCount,
     travelDate,
   );
+
+  const {configuration: preassignedFareProductTypeConfiguration} =
+    preassignedFareProduct.config;
+
+  const {travellerSelectionMode, zoneSelectionMode} =
+    preassignedFareProductTypeConfiguration;
 
   const offerExpirationTime =
     offerSearchTime && addMinutes(offerSearchTime, 30).getTime();
@@ -273,8 +283,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
 
           <View>
             <Sections.Section>
-              {preassignedFareProduct.configurations.travellerSelectionMode !==
-                'none' && (
+              {travellerSelectionMode !== 'none' && (
                 <Sections.GenericItem>
                   {userProfilesWithCountAndOffer.map((u, i) => (
                     <View
@@ -305,8 +314,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   <ThemeText>
                     {getReferenceDataName(preassignedFareProduct, language)}
                   </ThemeText>
-                  {preassignedFareProduct.configurations.zoneSelectionMode !==
-                  'none' ? (
+                  {zoneSelectionMode !== 'none' ? (
                     <ThemeText
                       style={styles.smallTopMargin}
                       type="body__secondary"

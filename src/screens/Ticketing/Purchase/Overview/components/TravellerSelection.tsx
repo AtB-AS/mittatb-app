@@ -4,7 +4,7 @@ import {StyleSheet} from '@atb/theme';
 import useUserCountState, {
   UserProfileWithCount,
 } from '../../Travellers/use-user-count-state';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {PreassignedFareProductWithConfig} from '@atb/reference-data/types';
 import SingleTravellerSelection from '../../Travellers/SingleTravellerSelection';
 import MultipleTravellersSelection from '../../Travellers/MultipleTravellersSelection';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
@@ -17,7 +17,7 @@ type TravellerSelectionProps = {
     userProfilesWithCount: UserProfileWithCount[],
   ) => void;
   style?: StyleProp<ViewStyle>;
-  preassignedFareProduct: PreassignedFareProduct;
+  preassignedFareProduct: PreassignedFareProductWithConfig;
 };
 
 export default function TravellerSelection({
@@ -27,7 +27,9 @@ export default function TravellerSelection({
   preassignedFareProduct,
 }: TravellerSelectionProps) {
   const {t} = useTranslation();
-  const {travellerSelectionMode} = preassignedFareProduct.configurations;
+  const {configuration: preassignedFareProductConfiguration} =
+    preassignedFareProduct.config;
+  const {travellerSelectionMode} = preassignedFareProductConfiguration;
   const userCountState = useUserCountState(selectableUserProfiles);
   const selectableUserProfilesWithCount =
     userCountState.userProfilesWithCount.filter((a) =>

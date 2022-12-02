@@ -1,7 +1,7 @@
 import {screenReaderPause} from '@atb/components/accessible-text';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
-import {PreassignedFareProductZoneSelectionMode} from '@atb/reference-data/types';
+import {ZoneSelectionMode} from '@atb/screens/Ticketing/FareContracts/utils';
 import {StyleSheet} from '@atb/theme';
 import {
   PurchaseOverviewTexts,
@@ -22,7 +22,7 @@ type ZonesProps = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
   style?: StyleProp<ViewStyle>;
-  selectionMode: Exclude<PreassignedFareProductZoneSelectionMode, 'none'>;
+  selectionMode: Exclude<ZoneSelectionMode, 'none'>;
 };
 
 export default function Zones({

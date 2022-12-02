@@ -1,8 +1,10 @@
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {useFareProductConfig} from '@atb/configuration/utils';
 import {usePreferences} from '@atb/preferences';
 import {
   PreassignedFareProduct,
   PreassignedFareProductType,
+  PreassignedFareProductWithConfig,
   TariffZone,
   UserProfile,
 } from '@atb/reference-data/types';
@@ -24,8 +26,12 @@ export function useOfferDefaults(
   fromTariffZone?: TariffZoneWithMetadata,
   toTariffZone?: TariffZoneWithMetadata,
 ) {
-  const {tariffZones, userProfiles, preassignedFareProducts} =
-    useFirestoreConfiguration();
+  const {
+    tariffZones,
+    userProfiles,
+    preassignedFareProducts,
+    fareProductTypeConfigs,
+  } = useFirestoreConfiguration();
 
   // Get default PreassignedFareProduct
   const productType = preassignedFareProduct?.type ?? selectableProductType;
@@ -59,8 +65,18 @@ export function useOfferDefaults(
     preSelectedUsers ?? [defaultPreSelectedUser],
   );
 
+  const preassignedFareProductConfig = useFareProductConfig(
+    defaultPreassignedFareProduct.type,
+  );
+
+  var preassignedFareProductWithConfigurations: PreassignedFareProductWithConfig =
+    {
+      ...defaultPreassignedFareProduct,
+      config: preassignedFareProductConfig,
+    };
+
   return {
-    preassignedFareProduct: defaultPreassignedFareProduct,
+    preassignedFareProduct: preassignedFareProductWithConfigurations,
     selectableTravellers: defaultSelectableTravellers,
     fromTariffZone: defaultFromTariffZone,
     toTariffZone: defaultToTariffZone,
