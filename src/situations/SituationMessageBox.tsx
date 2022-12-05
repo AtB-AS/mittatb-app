@@ -1,5 +1,4 @@
-import MessageBox, {MessageBoxProps} from '@atb/components/message-box';
-import ThemeText from '@atb/components/text';
+import {MessageBox, MessageBoxProps} from '@atb/components/message-box';
 import React from 'react';
 import {getMessageTypeForSituation, getSituationSummary} from './utils';
 import {useTranslation} from '@atb/translations';
@@ -8,7 +7,7 @@ import {SituationType} from '@atb/situations/types';
 export type Props = {
   situation: SituationType;
   noStatusIcon?: MessageBoxProps['noStatusIcon'];
-  style?: MessageBoxProps['containerStyle'];
+  style?: MessageBoxProps['style'];
 };
 
 export const SituationMessageBox = ({
@@ -21,13 +20,14 @@ export const SituationMessageBox = ({
   const messageType = getMessageTypeForSituation(situation);
   const text = getSituationSummary(situation, language);
 
+  if (!text) return null;
+
   return (
     <MessageBox
       type={messageType}
       noStatusIcon={noStatusIcon}
-      containerStyle={style}
-    >
-      <ThemeText color={messageType}>{text}</ThemeText>
-    </MessageBox>
+      style={style}
+      message={text}
+    />
   );
 };

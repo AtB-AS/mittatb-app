@@ -1,6 +1,6 @@
 import {getAxiosErrorType} from '@atb/api/utils';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import {
   DetailsMessages,
   TranslateFunction,
@@ -67,21 +67,21 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
     <>
       {tripIncludesRailReplacementBus && (
         <MessageBox
-          containerStyle={styles.messageBox}
+          style={styles.messageBox}
           type="warning"
           message={t(TripDetailsTexts.messages.tripIncludesRailReplacementBus)}
         />
       )}
       {shortWaitTime && (
         <MessageBox
-          containerStyle={styles.messageBox}
+          style={styles.messageBox}
           type="info"
           message={t(TripDetailsTexts.messages.shortTime)}
         />
       )}
       {isTicketingEnabledAndSomeTicketsAreUnavailableInApp && (
         <MessageBox
-          containerStyle={styles.messageBox}
+          style={styles.messageBox}
           type="info"
           message={
             canUseCollabTicket && allLegsInZoneA
@@ -94,7 +94,7 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
         <>
           <ScreenReaderAnnouncement message={translatedError(error, t)} />
           <MessageBox
-            containerStyle={styles.messageBox}
+            style={styles.messageBox}
             type="warning"
             message={translatedError(error, t)}
           />
@@ -158,7 +158,7 @@ export function TicketingMessages({
 
   const CollabTicketMessage = (
     <MessageBox
-      containerStyle={styles.messageBox}
+      style={styles.messageBox}
       type="info"
       message={t(DetailsMessages.messages.collabTicketInfo)}
     />
@@ -166,7 +166,7 @@ export function TicketingMessages({
 
   const TrainOutsideZoneAMessage = (
     <MessageBox
-      containerStyle={styles.messageBox}
+      style={styles.messageBox}
       type="info"
       message={t(DetailsMessages.messages.trainOutsideZoneA)}
     />
@@ -174,7 +174,7 @@ export function TicketingMessages({
 
   const TicketsWeDontSellMessage = (
     <MessageBox
-      containerStyle={styles.messageBox}
+      style={styles.messageBox}
       type="info"
       message={t(DetailsMessages.messages.ticketsWeDontSell)}
     />

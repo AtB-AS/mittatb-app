@@ -10,7 +10,7 @@ import {
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
 import useInterval from '@atb/utils/use-interval';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
 import {
   findInspectable,

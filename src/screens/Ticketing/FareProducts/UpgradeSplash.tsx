@@ -1,5 +1,5 @@
 import {TicketSplash} from '@atb/assets/svg/color/images';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';
 import {UpgradeSplashTexts, useTranslation} from '@atb/translations';
 import React from 'react';

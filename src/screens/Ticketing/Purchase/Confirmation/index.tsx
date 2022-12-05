@@ -2,7 +2,7 @@ import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
 import {useAuthState} from '@atb/auth';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import {LeftButtonProps} from '@atb/components/screen-header';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
@@ -263,7 +263,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               message={t(PurchaseConfirmationTexts.errorMessageBox.message)}
               onPress={refreshOffer}
               onPressText={t(MessageBoxTexts.tryAgainButton)}
-              containerStyle={styles.errorMessage}
+              style={styles.errorMessage}
             />
           )}
 
@@ -371,7 +371,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           <MessageBox
             type="warning"
             message={inspectableTokenWarningText}
-            containerStyle={styles.warningMessage}
+            style={styles.warningMessage}
             isMarkdown={true}
           />
         )}

@@ -3,7 +3,7 @@ import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {Pin} from '@atb/assets/svg/mono-icons/map';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button, {ButtonGroup} from '@atb/components/button';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
@@ -155,7 +155,11 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
       <ScrollView style={css.innerContainer}>
         <ScreenReaderAnnouncement message={errorMessage} />
         {errorMessage && (
-          <MessageBox withMargin message={errorMessage} type="error" />
+          <MessageBox
+            style={css.errorMessageBox}
+            message={errorMessage}
+            type="error"
+          />
         )}
 
         <Sections.Section withPadding>
@@ -242,5 +246,9 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   innerContainer: {
     flex: 1,
     paddingTop: theme.spacings.medium,
+  },
+  errorMessageBox: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
 }));

@@ -6,7 +6,7 @@ import {
 import {useAppState} from '@atb/AppContext';
 import {useAuthState} from '@atb/auth';
 import {VippsSignInErrorCode} from '@atb/auth/AuthContext';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
@@ -163,7 +163,7 @@ export default function LoginOptionsScreen({
           )}
           {error && error !== 'access_denied' && (
             <MessageBox
-              containerStyle={styles.errorMessage}
+              style={styles.errorMessage}
               type="error"
               message={t(LoginTexts.vipps.errors[error])}
             />
