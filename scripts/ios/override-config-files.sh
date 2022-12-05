@@ -4,6 +4,7 @@
 echo "Copy .netrc file for mapbox api token"
 cat .netrc >> ~/.netrc
 chmod 600 ~/.netrc
+ls -al ~/.netrc
 
 echo "Installing pre-build dependencies"
 brew install findutils # for git-crypt
