@@ -47,14 +47,11 @@ runs:
         uses: maxim-lobanov/setup-xcode@v1.3.0
         with:
           xcode-version: "13.1"
-      - name: LS NETRC 1
+      - name: Copy .netrc to fetch mapbox sdk pod
         shell: bash
         run: |
-          ls -al .netrc
-      - name: LS NETRC 2
-        shell: bash
-        run: |
-          ls -al ~/.netrc
+          cat .netrc >> ~/.netrc
+          chmod 600 ~/.netrc
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
         with:
