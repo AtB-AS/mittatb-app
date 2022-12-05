@@ -8,15 +8,12 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {useFareProductTypeConfigSettings} from '@atb/configuration/utils';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import {
-  PreassignedFareProduct,
-  PreassignedFareProductWithConfig,
-  TariffZone,
-} from '@atb/reference-data/types';
+import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';
@@ -49,7 +46,7 @@ import {
 } from '../types';
 
 export type RouteParams = {
-  preassignedFareProduct: PreassignedFareProductWithConfig;
+  preassignedFareProduct: PreassignedFareProduct;
   fromTariffZone: TariffZone;
   toTariffZone: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
@@ -131,6 +128,9 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     headerLeftButton,
   } = params;
 
+  const {travellerSelectionMode, zoneSelectionMode, offerEndpoint} =
+    useFareProductTypeConfigSettings(preassignedFareProduct.type);
+
   const {
     offerSearchTime,
     isSearchingOffer,
@@ -139,18 +139,13 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     refreshOffer,
     userProfilesWithCountAndOffer,
   } = useOfferState(
-    preassignedFareProduct,
+    offerEndpoint,
+    [preassignedFareProduct.id],
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
     travelDate,
   );
-
-  const {configuration: preassignedFareProductTypeConfiguration} =
-    preassignedFareProduct.config;
-
-  const {travellerSelectionMode, zoneSelectionMode} =
-    preassignedFareProductTypeConfiguration;
 
   const offerExpirationTime =
     offerSearchTime && addMinutes(offerSearchTime, 30).getTime();

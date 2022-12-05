@@ -4,12 +4,13 @@ import {StyleSheet} from '@atb/theme';
 import useUserCountState, {
   UserProfileWithCount,
 } from '../../Travellers/use-user-count-state';
-import {PreassignedFareProductWithConfig} from '@atb/reference-data/types';
 import SingleTravellerSelection from '../../Travellers/SingleTravellerSelection';
 import MultipleTravellersSelection from '../../Travellers/MultipleTravellersSelection';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import useFontScale from '@atb/utils/use-font-scale';
 import InfoToggle from './InfoToggle';
+import {PreassignedFareProductType} from '@atb/reference-data/types';
+import {TravellerSelectionMode} from '@atb/screens/Ticketing/FareContracts/utils';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -17,19 +18,18 @@ type TravellerSelectionProps = {
     userProfilesWithCount: UserProfileWithCount[],
   ) => void;
   style?: StyleProp<ViewStyle>;
-  preassignedFareProduct: PreassignedFareProductWithConfig;
+  travellerSelectionMode: TravellerSelectionMode;
+  fareProductType: PreassignedFareProductType;
 };
 
 export default function TravellerSelection({
   setTravellerSelection,
   style,
   selectableUserProfiles,
-  preassignedFareProduct,
+  travellerSelectionMode,
+  fareProductType,
 }: TravellerSelectionProps) {
   const {t} = useTranslation();
-  const {configuration: preassignedFareProductConfiguration} =
-    preassignedFareProduct.config;
-  const {travellerSelectionMode} = preassignedFareProductConfiguration;
   const userCountState = useUserCountState(selectableUserProfiles);
   const selectableUserProfilesWithCount =
     userCountState.userProfilesWithCount.filter((a) =>
@@ -40,7 +40,11 @@ export default function TravellerSelection({
       selectableUserProfiles.find((i) => i.id === u.id),
     );
     setTravellerSelection(filteredSelection);
-  }, [userCountState.userProfilesWithCount, preassignedFareProduct]);
+  }, [
+    userCountState.userProfilesWithCount,
+    fareProductType,
+    travellerSelectionMode,
+  ]);
 
   useEffect(() => {
     userCountState.updateSelectable(selectableUserProfiles);
@@ -60,13 +64,13 @@ export default function TravellerSelection({
       />
       {travellerSelectionMode === 'multiple' ? (
         <MultipleTravellersSelection
-          fareProductType={preassignedFareProduct.type}
+          fareProductType={fareProductType}
           {...userCountState}
           userProfilesWithCount={selectableUserProfilesWithCount}
         />
       ) : (
         <SingleTravellerSelection
-          fareProductType={preassignedFareProduct.type}
+          fareProductType={fareProductType}
           {...userCountState}
           userProfilesWithCount={selectableUserProfilesWithCount}
         />

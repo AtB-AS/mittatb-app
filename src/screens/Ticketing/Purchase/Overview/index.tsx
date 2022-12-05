@@ -1,6 +1,7 @@
 import MessageBox from '@atb/components/message-box';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {useFareProductTypeConfigSettings} from '@atb/configuration/utils';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
@@ -50,23 +51,22 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const hasSelection = travellerSelection.some((u) => u.count);
   const [travelDate, setTravelDate] = useState<string | undefined>();
 
-  const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
-    preassignedFareProduct,
-    fromTariffZone,
-    toTariffZone,
-    travellerSelection,
-    travelDate,
-  );
-
-  const {configuration: preassignedFareProductTypeConfiguration} =
-    preassignedFareProduct.config;
-
   const {
     timeSelectionMode,
     productSelectionMode,
     travellerSelectionMode,
     zoneSelectionMode,
-  } = preassignedFareProductTypeConfiguration;
+    offerEndpoint,
+  } = useFareProductTypeConfigSettings(preassignedFareProduct.type);
+
+  const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
+    offerEndpoint,
+    [preassignedFareProduct.id],
+    fromTariffZone,
+    toTariffZone,
+    travellerSelection,
+    travelDate,
+  );
 
   useEffect(() => {
     if (params?.refreshOffer) {
@@ -126,10 +126,10 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
           )}
 
           {travellerSelectionMode !== 'none' && (
-            // NOTE: The `selectionMode` is selected inside `TravellerSelection`!
             <TravellerSelection
               setTravellerSelection={setTravellerSelection}
-              preassignedFareProduct={preassignedFareProduct}
+              fareProductType={preassignedFareProduct.type}
+              travellerSelectionMode={travellerSelectionMode}
               selectableUserProfiles={selectableTravellers}
               style={styles.selectionComponent}
             />
@@ -172,6 +172,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             preassignedFareProduct={preassignedFareProduct}
             travelDate={travelDate}
             style={styles.summary}
+            zoneSelectionMode={zoneSelectionMode}
           />
         </FullScreenFooter>
       </ScrollView>

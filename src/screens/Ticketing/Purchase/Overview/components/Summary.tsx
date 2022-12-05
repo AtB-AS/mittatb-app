@@ -1,7 +1,8 @@
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
-import {PreassignedFareProductWithConfig} from '@atb/reference-data/types';
+import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {ZoneSelectionMode} from '@atb/screens/Ticketing/FareContracts/utils';
 import {TariffZoneWithMetadata} from '@atb/screens/Ticketing/Purchase/TariffZones';
 import {UserProfileWithCount} from '@atb/screens/Ticketing/Purchase/Travellers/use-user-count-state';
 import {StyleSheet} from '@atb/theme';
@@ -19,9 +20,10 @@ type Props = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
   userProfilesWithCount: UserProfileWithCount[];
-  preassignedFareProduct: PreassignedFareProductWithConfig;
+  preassignedFareProduct: PreassignedFareProduct;
   travelDate?: string;
   style?: StyleProp<ViewStyle>;
+  zoneSelectionMode: ZoneSelectionMode;
 };
 
 export default function Summary({
@@ -34,6 +36,7 @@ export default function Summary({
   preassignedFareProduct,
   travelDate,
   style,
+  zoneSelectionMode,
 }: Props) {
   const styles = useStyles();
   const {t, language} = useTranslation();
@@ -53,10 +56,6 @@ export default function Summary({
       headerLeftButton: {type: 'back'},
     });
   };
-
-  const {configuration: preassignedFareProductTypeConfiguration} =
-    preassignedFareProduct.config;
-  const {zoneSelectionMode} = preassignedFareProductTypeConfiguration;
 
   return (
     <View style={style}>

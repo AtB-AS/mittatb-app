@@ -1,7 +1,10 @@
+import {FareProductTypeConfigSettings} from '@atb/screens/Ticketing/FareContracts/utils';
 import Bugsnag from '@bugsnag/react-native';
 import {useFirestoreConfiguration} from './FirestoreConfigurationContext';
 
-export const useFareProductConfig = (type: string) => {
+export const useFareProductTypeConfigSettings = (
+  type: string,
+): FareProductTypeConfigSettings => {
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
 
   const productConfig = fareProductTypeConfigs.find(
@@ -14,5 +17,5 @@ export const useFareProductConfig = (type: string) => {
     throw errorMessage;
   }
 
-  return productConfig;
+  return productConfig.configuration;
 };

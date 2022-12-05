@@ -1,6 +1,5 @@
 import {Polygon} from 'geojson';
 import {LanguageAndTextType} from '@atb/translations';
-import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
 
 export type PreassignedFareProductType =
   | 'single'
@@ -22,10 +21,6 @@ export type PreassignedFareProduct = {
   limitations: {
     userProfileRefs: string[];
   };
-};
-
-export type PreassignedFareProductWithConfig = PreassignedFareProduct & {
-  config: FareProductTypeConfig;
 };
 
 export type UserProfile = {

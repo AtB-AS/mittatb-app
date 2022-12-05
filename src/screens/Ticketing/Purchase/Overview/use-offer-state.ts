@@ -1,13 +1,10 @@
 import {CancelToken as CancelTokenStatic} from '@atb/api';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {
-  PreassignedFareProduct,
-  PreassignedFareProductWithConfig,
-  TariffZone,
-} from '@atb/reference-data/types';
+import {TariffZone} from '@atb/reference-data/types';
 import {Offer, OfferPrice, searchOffers} from '@atb/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useMemo, useReducer} from 'react';
+import {OfferEndpoint} from '../../FareContracts/utils';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
@@ -117,7 +114,8 @@ const initialState: OfferState = {
 };
 
 export default function useOfferState(
-  preassignedFareProduct: PreassignedFareProductWithConfig,
+  offerEndpoint: OfferEndpoint,
+  preassignedFareProductIds: string[],
   fromTariffZone: TariffZone,
   toTariffZone: TariffZone,
   userProfilesWithCount: UserProfileWithCount[],
@@ -145,16 +143,12 @@ export default function useOfferState(
       } else {
         try {
           dispatch({type: 'SEARCHING_OFFER'});
-          const {configuration: preassignedFareProductConfigurations} =
-            preassignedFareProduct.config;
-          const {offerEndpoint} = preassignedFareProductConfigurations;
-
           const response = await searchOffers(
             offerEndpoint,
             {
               zones,
               travellers: offerTravellers,
-              products: [preassignedFareProduct.id],
+              products: preassignedFareProductIds,
               travel_date: travelDate,
             },
             {cancelToken, retry: true, authWithIdToken: true},
@@ -190,7 +184,8 @@ export default function useOfferState(
     [
       dispatch,
       userProfilesWithCount,
-      preassignedFareProduct,
+      preassignedFareProductIds,
+      offerEndpoint,
       zones,
       travelDate,
     ],
@@ -200,7 +195,12 @@ export default function useOfferState(
     const source = CancelTokenStatic.source();
     updateOffer(source.token);
     return () => source.cancel('Cancelling previous offer search');
-  }, [updateOffer, userProfilesWithCount, preassignedFareProduct]);
+  }, [
+    updateOffer,
+    offerEndpoint,
+    userProfilesWithCount,
+    preassignedFareProductIds,
+  ]);
 
   const refreshOffer = useCallback(
     async function () {
