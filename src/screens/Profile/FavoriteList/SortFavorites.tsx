@@ -48,8 +48,7 @@ export default function SortableFavoriteList({navigation}: RootProps) {
         <Button
           onPress={saveOrder}
           text={t(FavoriteListTexts.sortableScreen.buttons.save)}
-          icon={Confirm}
-          iconPosition="right"
+          rightIcon={Confirm}
           interactiveColor="interactive_0"
         />
       </FullScreenFooter>

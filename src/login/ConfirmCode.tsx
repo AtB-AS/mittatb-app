@@ -141,8 +141,7 @@ export default function ConfirmCode({
                   onPress={onLogin}
                   text={t(LoginTexts.confirmCode.mainButton)}
                   disabled={!code}
-                  icon={ArrowRight}
-                  iconPosition="right"
+                  rightIcon={ArrowRight}
                   style={styles.submitButton}
                   testID="submitButton"
                 />

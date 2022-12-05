@@ -5,7 +5,7 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {QuayFragment} from '@atb/api/types/generated/serviceJourney';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
-import {Info, Warning} from '@atb/assets/svg/color/icons/status';
+import {Info} from '@atb/assets/svg/color/icons/status';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
 import {MessageBox} from '@atb/components/message-box';
@@ -13,13 +13,10 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {canSellTicketsForSubMode} from '@atb/operator-config';
 import {usePreferenceItems} from '@atb/preferences';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import CancelledDepartureMessage from '@atb/screens/TripDetails/components/CancelledDepartureMessage';
 import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
-import {SituationMessageBox} from '@atb/situations';
+import {SituationIcon, SituationMessageBox} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
@@ -37,6 +34,7 @@ import {ServiceJourneyDeparture} from './types';
 import useDepartureData, {
   EstimatedCallWithMetadata,
 } from './use-departure-data';
+import {TicketingMessages} from '@atb/screens/TripDetails/components/DetailsMessages';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -49,8 +47,6 @@ export default function DepartureDetails({navigation, route}: Props) {
   const {activeItemIndex, items} = route.params;
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useTheme();
-  const {modesWeSellTicketsFor} = useFirestoreConfiguration();
-  const {enable_ticketing} = useRemoteConfig();
 
   const activeItem = items[activeItemIndexState];
   const hasMultipleItems = items.length > 1;
@@ -64,15 +60,6 @@ export default function DepartureDetails({navigation, route}: Props) {
     isLoading,
   ] = useDepartureData(activeItem, 30, !isFocused);
   const mapData = useMapData(activeItem);
-
-  const canSellTicketsForDeparture = canSellTicketsForSubMode(
-    subMode,
-    modesWeSellTicketsFor,
-  );
-
-  const someLegsAreByTrain = mode === TransportMode.Rail;
-  const isTicketingEnabledAndWeCantSellTicketForDeparture =
-    enable_ticketing && !canSellTicketsForDeparture;
 
   const onPaginationPress = (newPage: number) => {
     animateNextChange();
@@ -146,21 +133,12 @@ export default function DepartureDetails({navigation, route}: Props) {
             </View>
           )}
 
-          {isTicketingEnabledAndWeCantSellTicketForDeparture && (
-            <MessageBox
-              style={styles.messageBox}
-              type="info"
-              message={t(DepartureDetailsTexts.messages.ticketsWeDontSell)}
-            />
-          )}
-
-          {someLegsAreByTrain && (
-            <MessageBox
-              style={styles.messageBox}
-              type="info"
-              message={t(DepartureDetailsTexts.messages.collabTicketInfo)}
-            />
-          )}
+          <TicketingMessages
+            item={items[0]}
+            trip={estimatedCallsWithMetadata}
+            mode={mode}
+            subMode={subMode}
+          />
 
           <EstimatedCallRows
             calls={estimatedCallsWithMetadata}
@@ -277,13 +255,13 @@ function EstimatedCallRow({
       >
         <ThemeText testID="quayName">{getQuayName(call.quay)} </ThemeText>
       </TripRow>
-      {group === 'trip' && call.quay?.situations.length ? (
-        <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
-          {call.quay.situations.map((situation) => (
-            <SituationMessageBox noStatusIcon={true} situation={situation} />
-          ))}
-        </TripRow>
-      ) : null}
+      {group === 'trip'
+        ? call.quay?.situations.map((situation) => (
+            <TripRow rowLabel={<SituationIcon situation={situation} />}>
+              <SituationMessageBox noStatusIcon={true} situation={situation} />
+            </TripRow>
+          ))
+        : null}
       {call.notices &&
         call.notices.map((notice, index) => {
           if (!notice.text) return null;
