@@ -264,7 +264,6 @@ function DepartureTimeItem({
   if (!isValidDeparture(departure)) {
     return null;
   }
-  const realtime = departure.realtime ? Realtime : undefined;
   return (
     <Button
       key={departure.serviceJourneyId}
@@ -275,7 +274,7 @@ function DepartureTimeItem({
       style={styles.departure}
       textStyle={styles.departureText}
       rightIcon={getSvgForMostCriticalSituation(departure.situations)}
-      leftIcon={realtime}
+      leftIcon={departure.realtime ? Realtime : undefined}
       testID={testID}
     />
   );
