@@ -12,7 +12,7 @@ import {useStopPlaceData} from './state/stop-place-state';
 import FavoriteToggle from '@atb/screens/Departures/components/FavoriteToggle';
 import DateSelection from '@atb/screens/Departures/components/DateSelection';
 import {StopPlacesMode} from '@atb/screens/Departures/types';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {useTranslation} from '@atb/translations';
 import Button from '@atb/components/button';

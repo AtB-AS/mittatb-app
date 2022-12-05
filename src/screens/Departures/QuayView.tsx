@@ -14,7 +14,7 @@ import QuaySection from './components/QuaySection';
 import {useQuayData} from './state/quay-state';
 import {hasFavorites} from './StopPlaceView';
 import {StopPlacesMode} from '@atb/screens/Departures/types';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {useTranslation} from '@atb/translations';
 

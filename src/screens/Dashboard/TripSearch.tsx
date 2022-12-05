@@ -491,7 +491,7 @@ function computeNoResultReasons(
   date?: SearchTime,
   from?: Location,
   to?: Location,
-): String[] {
+): string[] {
   let reasons = [];
 
   if (!!from && !!to) {

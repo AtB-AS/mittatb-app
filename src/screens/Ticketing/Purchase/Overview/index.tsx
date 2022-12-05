@@ -1,4 +1,4 @@
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
@@ -97,7 +97,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
               message={t(PurchaseOverviewTexts.errorMessageBox.message)}
               onPress={refreshOffer}
               onPressText={t(MessageBoxTexts.tryAgainButton)}
-              containerStyle={styles.selectionComponent}
+              style={styles.selectionComponent}
             />
           )}
 
