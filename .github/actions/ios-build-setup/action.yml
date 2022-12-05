@@ -47,9 +47,14 @@ runs:
         uses: maxim-lobanov/setup-xcode@v1.3.0
         with:
           xcode-version: "13.1"
-      - name: LS NETRC
+      - name: LS NETRC 1
         shell: bash
-        run: ls -al ~/.netrc
+        run: |
+          ls -al .netrc
+      - name: LS NETRC 2
+        shell: bash
+        run: |
+          ls -al ~/.netrc
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
         with:
