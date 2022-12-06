@@ -12,6 +12,7 @@ const DepartureDetailsTexts = {
   messages: {
     loading: _('Laster detaljer', 'Loading details'),
     noAlighting: _('Ingen avstigning', 'No disembarking'),
+    noBoarding: _('Ingen påstigning', 'No boarding'),
     noActiveItem: _(
       'Ojda! Noe gikk galt med lasting av detaljer for denne reisen.',
       'Oops! We had some issues loading the details for this journey.',

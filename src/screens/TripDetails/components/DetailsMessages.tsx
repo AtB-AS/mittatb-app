@@ -25,8 +25,8 @@ import {hasShortWaitTime} from '@atb/screens/TripDetails/components/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
-import {ServiceJourneyEstimatedCallFragment} from '@atb/api/types/generated/serviceJourney';
 import {StyleSheet} from '@atb/theme';
+import {EstimatedCallWithMetadata} from '@atb/screens/TripDetails/DepartureDetails/use-departure-data';
 
 type TripMessagesProps = {
   tripPattern: TripPattern;
@@ -120,7 +120,7 @@ function someLegsAreByTrain(tripPattern: TripPattern): boolean {
 
 type TicketingMessagesProps = {
   item: ServiceJourneyDeparture;
-  trip: ServiceJourneyEstimatedCallFragment[];
+  trip: EstimatedCallWithMetadata[];
   mode: TransportMode | undefined;
   subMode: TransportSubmode | undefined;
 };
