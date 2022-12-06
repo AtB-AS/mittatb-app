@@ -41,8 +41,9 @@ platform :ios do
   desc 'Match certificates'
   lane :get_cert do
     ensure_env_vars(
-      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_SSH_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
+      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_SSH_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
     )
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER']]
     if is_ci
       create_keychain(
         name: "CI",
@@ -52,25 +53,29 @@ platform :ios do
         timeout: 10800,
         lock_when_sleeps: false
       )
-      match(
-        type: ENV["FASTLANE_MATCH_TYPE"],
-        app_identifier: ENV['IOS_BUNDLE_IDENTIFIER'],
-        storage_mode: 'git',
-        git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
-        readonly: true,
-        keychain_name: "CI",
-        keychain_password: ENV["MATCH_PASSWORD"],
-        team_id: ENV['IOS_DEVELOPMENT_TEAM_ID']
-      )
+      identifiers.each { |identifier|
+        match(
+          type: ENV["FASTLANE_MATCH_TYPE"],
+          app_identifier: identifier,
+          storage_mode: 'git',
+          git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
+          readonly: true,
+          keychain_name: "CI",
+          keychain_password: ENV["MATCH_PASSWORD"],
+          team_id: ENV['IOS_DEVELOPMENT_TEAM_ID']
+        )
+      }
     else
-      match(
-        type: ENV["FASTLANE_MATCH_TYPE"],
-        app_identifier: ENV['IOS_BUNDLE_IDENTIFIER'],
-        storage_mode: 'git',
-        git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
-        team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
-        readonly: true
-      )
+      identifiers.each { |identifier|
+        match(
+          type: ENV["FASTLANE_MATCH_TYPE"],
+          app_identifier: identifier,
+          storage_mode: 'git',
+          git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
+          team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
+          readonly: true
+        )
+      }
     end
   end
   # iOS Lanes
