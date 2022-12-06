@@ -1,6 +1,5 @@
 import {Platform} from 'react-native';
 import {translation as _} from './commons';
-import orgSpecificTranslations from './utils';
 
 const softhyphen = Platform.OS === 'ios' ? '\u00AD' : '\u200B';
 
@@ -21,7 +20,8 @@ const dictionary = {
     profile_a11y: _('Min profil', 'My profile'),
   },
   missingRealTimePrefix: _('ca. ', 'ca. '),
-  a11yMissingRealTimePrefix: _('cirka ', 'circa '),
+  a11yRouteTimePrefix: _('rutetid ', 'route time '),
+  a11yRealTimePrefix: _('sanntid ', 'realtime '),
   travel: {
     legModes: {
       bus: _('Buss', 'Bus'),
