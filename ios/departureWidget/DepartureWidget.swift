@@ -2,10 +2,11 @@ import SwiftUI
 import WidgetKit
 
 struct DepartureWidgetEntryView: View {
-    var entry: Provider.Entry
-    @ObservedObject var viewModel: WidgetViewModel
     @Environment(\.widgetFamily) var family: WidgetFamily
-    @Environment(\.sizeCategory) var sizeCategory: ContentSizeCategory
+
+    private let viewModel: WidgetViewModel
+
+    let entry: Provider.Entry
 
     init(entry: Provider.Entry) {
         self.entry = entry
@@ -21,8 +22,8 @@ struct DepartureWidgetEntryView: View {
 }
 
 @main
-struct departureWidget: Widget {
-    let kind: String = "departureWidget"
+struct DepartureWidget: Widget {
+    private let kind: String = "departureWidget"
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
@@ -37,8 +38,8 @@ struct departureWidget: Widget {
 struct DepartureWidget_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 5), quayGroup: QuayGroup.dummy, isForPreview: true)).previewContext(WidgetPreviewContext(family: .systemSmall))
-            DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 5), quayGroup: QuayGroup.dummy, isForPreview: true)).previewContext(WidgetPreviewContext(family: .systemMedium))
+            DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 5), favouriteDeparture: FavouriteDeparture.dummy, quayGroup: QuayGroup.dummy, state: .preview)).previewContext(WidgetPreviewContext(family: .systemSmall))
+            DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 5), favouriteDeparture: FavouriteDeparture.dummy, quayGroup: QuayGroup.dummy, state: .preview)).previewContext(WidgetPreviewContext(family: .systemMedium))
         }
     }
 }

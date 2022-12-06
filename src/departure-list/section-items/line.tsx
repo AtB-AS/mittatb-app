@@ -400,8 +400,6 @@ function ToggleFavoriteDepartureButton({
       lineLineNumber: line.lineNumber,
       lineTransportationMode: line.transportMode,
       lineTransportationSubMode: line.transportSubmode,
-      longitude: quay.longitude,
-      latitude: quay.latitude,
       quayName: quay.name,
       quayPublicCode: quay.publicCode,
       quayId: quay.id,

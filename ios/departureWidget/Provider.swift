@@ -5,69 +5,82 @@ import WidgetKit
 
 struct Provider: TimelineProvider {
     private enum K {
-        static var dummyEntry: Entry { Entry(date: Date.now, quayGroup: QuayGroup.dummy, isForPreview: true) }
-        static let oneEntryTimeline = Timeline<Entry>(entries: [Entry(date: Date.now, quayGroup: nil)], policy: .after(Date.now.addingTimeInterval(5 * 60)))
+        static var previewEntry: Entry { Entry(date: Date.now, favouriteDeparture: FavouriteDeparture.dummy, quayGroup: QuayGroup.dummy, state: .preview) }
+        static let noFavouritesTimeline = Timeline<Entry>(entries: [Entry(date: Date.now, favouriteDeparture: nil, quayGroup: nil, state: .noFavouriteDepartures)], policy: .never)
     }
 
-    let locationManager = LocationManager()
-    let apiService = APIService()
+    private let apiService = APIService()
+    private let locationManager = LocationChangeManager()
 
     /// The placeholder is shown in transitions and while loading the snapshot when adding the widget to the home screen
     func placeholder(in _: Context) -> Entry {
-        K.dummyEntry
+        K.previewEntry
     }
 
     /// The snapshot shows is used to preview the widget when adding it to the home screen
     func getSnapshot(in _: Context, completion: @escaping (Entry) -> Void) {
-        completion(K.dummyEntry)
+        completion(K.previewEntry)
     }
 
     func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
-        guard let favoriteDepartures = Manifest.data?.favoriteDepartures, let closestDeparture = findClosestDeparture(favoriteDepartures) else {
-            return completion(K.oneEntryTimeline)
+        // No favorite departures
+        guard let favoriteDepartures = Manifest.data?.favouriteDepartures,
+              let firstFavoriteDeparture = favoriteDepartures.first else {
+            return completion(K.noFavouritesTimeline)
         }
 
+        apiService.fetchQuayCoordinates(favouriteDepartures: favoriteDepartures) { (result: Result<QuaysCoordinatesResponse, Error>) in
+            switch result {
+            case let .success(quaysCoordinatesResponse):
+                locationManager.requestLocation { lastKnownLocation in
+                    guard let lastKnownLocation = lastKnownLocation,
+                          let closestQuay = findClosestQuay(quaysCoordinatesResponse.quays, at: lastKnownLocation),
+                          let closestFavouriteDeparture = favoriteDepartures.first(where: { $0.quayId == closestQuay.id }) else {
+                        return fetchFavouriteDepartureTimes(favouriteDeparture: firstFavoriteDeparture, completion: completion)
+                    }
+
+                    return fetchFavouriteDepartureTimes(favouriteDeparture: closestFavouriteDeparture, completion: completion)
+                }
+                return
+            case .failure:
+                return fetchFavouriteDepartureTimes(favouriteDeparture: firstFavoriteDeparture, completion: completion)
+            }
+        }
+    }
+
+    /// Fetch departures for a given quay
+    private func fetchFavouriteDepartureTimes(favouriteDeparture departure: FavouriteDeparture, completion: @escaping (Timeline<Entry>) -> Void) {
         // Fetch departure data for the closest favorite
-        apiService.fetchDepartureTimes(departure: closestDeparture) { (result: Result<QuayGroup, Error>) in
+        apiService.fetchFavouriteDepartureTimes(favouriteDeparture: departure) { (result: Result<QuayGroup, Error>) in
             switch result {
             case let .success(quayGroup):
                 guard let firstQuayGroup = quayGroup.group.first else {
-                    return completion(K.oneEntryTimeline)
+                    return completion(Timeline<Entry>(entries: [Entry(date: Date.now, favouriteDeparture: departure, quayGroup: nil, state: .noDepartureQuays)], policy: .after(Date.now.addingTimeInterval(5 * 60))))
                 }
 
                 // Rerenders widget when a departure has passed, by giving IOS more information about future
                 // dates we hopefully get better timed rerenders
-                // This also relies on that location change asks for a new timeline, and not just rerenders
-                // TODO: Get new timeline if position changes
-                var entries = firstQuayGroup.departures.map { departure in Entry(date: departure.aimedTime, quayGroup: quayGroup) }
+                var entries = firstQuayGroup.departures.map { departureTime in Entry(date: departureTime.aimedTime, favouriteDeparture: departure, quayGroup: quayGroup, state: .complete) }
 
-                entries.insert(Entry(date: Date.now, quayGroup: quayGroup), at: 0)
+                entries.insert(Entry(date: Date.now, favouriteDeparture: departure, quayGroup: quayGroup, state: .complete), at: 0)
 
-                // Remove last entries so that the viewmodel always has enough quays to show.
+                // Remove the last entries so the view model has enough quays to show.
                 if entries.count > 10 {
                     entries.removeLast(5)
                 }
 
                 return completion(Timeline(entries: entries, policy: .atEnd))
+
             case .failure:
-                return completion(K.oneEntryTimeline)
+                return completion(Timeline(entries: [Entry(date: Date.now, favouriteDeparture: departure, quayGroup: nil, state: .noDepartureQuays)], policy: .after(Date.now.addingTimeInterval(5 * 60))))
             }
         }
     }
 
-    /// Finds the closest favorite departure based on current location on the user
-    private func findClosestDeparture(_ departures: [FavoriteDeparture]) -> FavoriteDeparture? {
-        var closestDeparture: FavoriteDeparture? = departures.first
-        var smallestDistance: CLLocationDistance?
-
-        for departure in departures {
-            let distance = departure.location.distance(from: locationManager.lastLocation ?? LocationManager.defaultLocation)
-            if smallestDistance == nil || distance < smallestDistance! {
-                closestDeparture = departure
-                smallestDistance = distance
-            }
+    /// Finds the closest quay based on the user `current location`
+    private func findClosestQuay(_ quays: [QuayWithLocation], at location: CLLocation) -> QuayWithLocation? {
+        quays.min {
+            $0.location.distance(from: location) < $1.location.distance(from: location)
         }
-
-        return closestDeparture
     }
 }

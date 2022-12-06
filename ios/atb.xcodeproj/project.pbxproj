@@ -21,13 +21,12 @@
 		222B80A526D8C8B500EE86C9 /* Debug-tests.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 222B80A426D8C8B500EE86C9 /* Debug-tests.xcconfig */; };
 		222B80A926D8C8DF00EE86C9 /* Release-tests.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 222B80A826D8C8DF00EE86C9 /* Release-tests.xcconfig */; };
 		34E30028A5E30F62B2FB4AA9 /* libPods-atb-departureWidgetExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3887588DCC0270C66494CEA5 /* libPods-atb-departureWidgetExtension.a */; };
-		384D20F025E4FF730019DF98 /* ChangeNativeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 384D20EB25E4FA2B0019DF98 /* ChangeNativeBridge.m */; };
 		385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */; };
 		38CD3270254B612600C6B978 /* AtBRootView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38CD326F254B612600C6B978 /* AtBRootView.m */; };
 		3F87E069DD96FBECA2EEB7DD /* libPods-atb-atbTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 890F33DF27CF0C595F634586 /* libPods-atb-atbTests.a */; };
 		5038614628FD509400E16E13 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614528FD509400E16E13 /* Provider.swift */; };
 		5038614A28FD6EB900E16E13 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614928FD6EB900E16E13 /* APIService.swift */; };
-		5038614C28FD750A00E16E13 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationManager.swift */; };
+		5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationChangeManager.swift */; };
 		5038614E28FD81B700E16E13 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614D28FD81B700E16E13 /* Structs.swift */; };
 		505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */; };
 		506538E028FEA57400A0DDCC /* WidgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506538DF28FEA57400A0DDCC /* WidgetViewModel.swift */; };
@@ -42,6 +41,13 @@
 		FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE55264D28EC45ED0091F697 /* DepartureWidget.swift */; };
 		FE55265028EC45EE0091F697 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE55264F28EC45EE0091F697 /* Assets.xcassets */; };
 		FE55265428EC45EE0091F697 /* departureWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE55264728EC45ED0091F697 /* departureWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FE9C416D293744B100EC2D53 /* ChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9C416C293744B100EC2D53 /* ChipView.swift */; };
+		FEBDDCCD2931038400C3755B /* LocationChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationChangeManager.swift */; };
+		FEBDDCD12931065D00C3755B /* WidgetUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */; };
+		FEBDDCD22931065D00C3755B /* WidgetUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */; };
+		FEBDDCD3293107D500C3755B /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE55264828EC45ED0091F697 /* WidgetKit.framework */; };
+		FEBDDCDB29310DFE00C3755B /* WidgetUpdaterBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBDDCDA29310DFE00C3755B /* WidgetUpdaterBridge.m */; };
+		FEBDDCDE2934D49700C3755B /* ChangeNativeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBDDCDD2934D49600C3755B /* ChangeNativeBridge.m */; };
 		FED22489286F06AC0049ECE3 /* CoreNFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FED22488286F06AC0049ECE3 /* CoreNFC.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -99,8 +105,6 @@
 		2202DA9026CBC28F0032C7E9 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		222B80A426D8C8B500EE86C9 /* Debug-tests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug-tests.xcconfig"; sourceTree = "<group>"; };
 		222B80A826D8C8DF00EE86C9 /* Release-tests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release-tests.xcconfig"; sourceTree = "<group>"; };
-		384D20EA25E4F9990019DF98 /* ChangeNativeBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangeNativeBridge.h; sourceTree = "<group>"; };
-		384D20EB25E4FA2B0019DF98 /* ChangeNativeBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChangeNativeBridge.m; sourceTree = "<group>"; };
 		385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "enforce-bridge.swift"; sourceTree = "<group>"; };
 		3887588DCC0270C66494CEA5 /* libPods-atb-departureWidgetExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atb-departureWidgetExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		38CD326F254B612600C6B978 /* AtBRootView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AtBRootView.m; path = atb/AtBRootView.m; sourceTree = "<group>"; };
@@ -109,7 +113,7 @@
 		38F348B52542D8120073C300 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		5038614528FD509400E16E13 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		5038614928FD6EB900E16E13 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
-		5038614B28FD750A00E16E13 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		5038614B28FD750A00E16E13 /* LocationChangeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationChangeManager.swift; sourceTree = "<group>"; };
 		5038614D28FD81B700E16E13 /* Structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
 		5051B09328F4092200B8EA18 /* departureWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = departureWidgetExtension.entitlements; sourceTree = "<group>"; };
 		505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartureTimesView.swift; sourceTree = "<group>"; };
@@ -134,6 +138,12 @@
 		FE55265128EC45EE0091F697 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FE8AF9EC28EC69FA00505277 /* departureWidgetExtensionDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = departureWidgetExtensionDebug.entitlements; sourceTree = "<group>"; };
 		FE8AF9ED28EC6A0400505277 /* atbDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = atbDebug.entitlements; path = atb/atbDebug.entitlements; sourceTree = "<group>"; };
+		FE9C416C293744B100EC2D53 /* ChipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipView.swift; sourceTree = "<group>"; };
+		FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetUpdater.swift; sourceTree = "<group>"; };
+		FEBDDCD929310DFE00C3755B /* WidgetUpdaterBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetUpdaterBridge.h; sourceTree = "<group>"; };
+		FEBDDCDA29310DFE00C3755B /* WidgetUpdaterBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WidgetUpdaterBridge.m; sourceTree = "<group>"; };
+		FEBDDCDC2934D49600C3755B /* ChangeNativeBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeNativeBridge.h; sourceTree = "<group>"; };
+		FEBDDCDD2934D49600C3755B /* ChangeNativeBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeNativeBridge.m; sourceTree = "<group>"; };
 		FED22488286F06AC0049ECE3 /* CoreNFC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreNFC.framework; path = System/Library/Frameworks/CoreNFC.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -152,6 +162,7 @@
 			files = (
 				FED22489286F06AC0049ECE3 /* CoreNFC.framework in Frameworks */,
 				A1E701563B78F99B13487BE3 /* libPods-atb.a in Frameworks */,
+				FEBDDCD3293107D500C3755B /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,25 +199,24 @@
 		13B07FAE1A68108700A75B9A /* atb */ = {
 			isa = PBXGroup;
 			children = (
-				FE8AF9ED28EC6A0400505277 /* atbDebug.entitlements */,
-				2202D92626CB95E40032C7E9 /* Configs */,
 				0F1FBC3125CBDED600484CA4 /* AtB.entitlements */,
-				0FF6825E247FE01600FB80EE /* BootSplash.storyboard */,
-				0FF6825C247C33BC00FB80EE /* Intercom.plist */,
-				0FAAF32624069EFC00267583 /* GoogleService-Info.plist */,
-				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
+				FE8AF9ED28EC6A0400505277 /* atbDebug.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
-				13B07FB51A68108700A75B9A /* Images.xcassets */,
-				13B07FB61A68108700A75B9A /* Info.plist */,
-				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
-				13B07FB71A68108700A75B9A /* main.m */,
 				38E33D0D242C0838003D56ED /* atb-Bridging-Header.h */,
-				385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */,
-				38CD326F254B612600C6B978 /* AtBRootView.m */,
 				38CD3275254B616300C6B978 /* AtBRootView.h */,
-				384D20EA25E4F9990019DF98 /* ChangeNativeBridge.h */,
-				384D20EB25E4FA2B0019DF98 /* ChangeNativeBridge.m */,
+				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
+				38CD326F254B612600C6B978 /* AtBRootView.m */,
+				13B07FB71A68108700A75B9A /* main.m */,
+				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				0FAAF32624069EFC00267583 /* GoogleService-Info.plist */,
+				13B07FB61A68108700A75B9A /* Info.plist */,
+				0FF6825C247C33BC00FB80EE /* Intercom.plist */,
+				0FF6825E247FE01600FB80EE /* BootSplash.storyboard */,
+				385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */,
+				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				FEBDDCD829310DCB00C3755B /* BridgeModules */,
+				2202D92626CB95E40032C7E9 /* Configs */,
+				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 			);
 			name = atb;
 			sourceTree = "<group>";
@@ -214,11 +224,11 @@
 		2202D92626CB95E40032C7E9 /* Configs */ = {
 			isa = PBXGroup;
 			children = (
-				222B80A426D8C8B500EE86C9 /* Debug-tests.xcconfig */,
-				222B80A826D8C8DF00EE86C9 /* Release-tests.xcconfig */,
-				2202DA8F26CBC28F0032C7E9 /* Debug.xcconfig */,
-				2202DA9026CBC28F0032C7E9 /* Release.xcconfig */,
 				2202D92726CB95E40032C7E9 /* Config.xcconfig */,
+				222B80A426D8C8B500EE86C9 /* Debug-tests.xcconfig */,
+				2202DA8F26CBC28F0032C7E9 /* Debug.xcconfig */,
+				222B80A826D8C8DF00EE86C9 /* Release-tests.xcconfig */,
+				2202DA9026CBC28F0032C7E9 /* Release.xcconfig */,
 			);
 			path = Configs;
 			sourceTree = "<group>";
@@ -226,13 +236,13 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FED22488286F06AC0049ECE3 /* CoreNFC.framework */,
-				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				FE55264828EC45ED0091F697 /* WidgetKit.framework */,
-				FE55264A28EC45ED0091F697 /* SwiftUI.framework */,
-				0B12A710282707BA8960F89A /* libPods-atb.a */,
 				890F33DF27CF0C595F634586 /* libPods-atb-atbTests.a */,
 				3887588DCC0270C66494CEA5 /* libPods-atb-departureWidgetExtension.a */,
+				0B12A710282707BA8960F89A /* libPods-atb.a */,
+				FED22488286F06AC0049ECE3 /* CoreNFC.framework */,
+				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+				FE55264A28EC45ED0091F697 /* SwiftUI.framework */,
+				FE55264828EC45ED0091F697 /* WidgetKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -249,17 +259,11 @@
 		50A14EDA2918FAB600A661D9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FE9C416C293744B100EC2D53 /* ChipView.swift */,
 				505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */,
 				50A14ED62918F97E00A661D9 /* WidgetInfoView.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Libraries;
 			sourceTree = "<group>";
 		};
 		83CBB9F61A601CBA00E9B192 = {
@@ -268,13 +272,13 @@
 				5051B09328F4092200B8EA18 /* departureWidgetExtension.entitlements */,
 				FE8AF9EC28EC69FA00505277 /* departureWidgetExtensionDebug.entitlements */,
 				13B07FAE1A68108700A75B9A /* atb */,
-				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* atbTests */,
 				FE55264C28EC45ED0091F697 /* departureWidget */,
-				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				E233CBF5F47BEE60B243DCF8 /* Pods */,
+				83CBBA001A601CBA00E9B192 /* Products */,
 				42EE9D51FBCE481696E959A2 /* Resources */,
+				FEBDDCCC2931035E00C3755B /* Shared */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -318,7 +322,6 @@
 				FE55265128EC45EE0091F697 /* Info.plist */,
 				5038614928FD6EB900E16E13 /* APIService.swift */,
 				FE55264D28EC45ED0091F697 /* DepartureWidget.swift */,
-				5038614B28FD750A00E16E13 /* LocationManager.swift */,
 				5038614528FD509400E16E13 /* Provider.swift */,
 				FE09922828FFF47300E5046D /* Storage.swift */,
 				5038614D28FD81B700E16E13 /* Structs.swift */,
@@ -328,6 +331,26 @@
 				50A14EDA2918FAB600A661D9 /* Views */,
 			);
 			path = departureWidget;
+			sourceTree = "<group>";
+		};
+		FEBDDCCC2931035E00C3755B /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				5038614B28FD750A00E16E13 /* LocationChangeManager.swift */,
+				FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		FEBDDCD829310DCB00C3755B /* BridgeModules */ = {
+			isa = PBXGroup;
+			children = (
+				FEBDDCDC2934D49600C3755B /* ChangeNativeBridge.h */,
+				FEBDDCD929310DFE00C3755B /* WidgetUpdaterBridge.h */,
+				FEBDDCDD2934D49600C3755B /* ChangeNativeBridge.m */,
+				FEBDDCDA29310DFE00C3755B /* WidgetUpdaterBridge.m */,
+			);
+			path = BridgeModules;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -711,8 +734,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				38CD3270254B612600C6B978 /* AtBRootView.m in Sources */,
+				FEBDDCDE2934D49700C3755B /* ChangeNativeBridge.m in Sources */,
+				FEBDDCD12931065D00C3755B /* WidgetUpdater.swift in Sources */,
 				385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */,
-				384D20F025E4FF730019DF98 /* ChangeNativeBridge.m in Sources */,
+				FEBDDCCD2931038400C3755B /* LocationChangeManager.swift in Sources */,
+				FEBDDCDB29310DFE00C3755B /* WidgetUpdaterBridge.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
@@ -726,12 +752,14 @@
 				5038614A28FD6EB900E16E13 /* APIService.swift in Sources */,
 				FE09922C28FFF50800E5046D /* Bundle.swift in Sources */,
 				505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */,
-				5038614C28FD750A00E16E13 /* LocationManager.swift in Sources */,
+				5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */,
 				FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */,
 				50A14ED72918F97E00A661D9 /* WidgetInfoView.swift in Sources */,
 				FE09922928FFF47300E5046D /* Storage.swift in Sources */,
+				FE9C416D293744B100EC2D53 /* ChipView.swift in Sources */,
 				5038614628FD509400E16E13 /* Provider.swift in Sources */,
 				506538E028FEA57400A0DDCC /* WidgetViewModel.swift in Sources */,
+				FEBDDCD22931065D00C3755B /* WidgetUpdater.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1044,6 +1072,7 @@
 				INFOPLIST_FILE = departureWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = departureWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need your location to show bus departures near you";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1089,6 +1118,7 @@
 				INFOPLIST_FILE = departureWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = departureWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need your location to show bus departures near you";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

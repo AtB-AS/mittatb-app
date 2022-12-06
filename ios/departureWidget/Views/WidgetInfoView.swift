@@ -17,7 +17,7 @@ private enum K {
 
 struct WidgetInfoView: View {
     let widgetFamily: WidgetFamily
-    @ObservedObject var viewModel: WidgetViewModel
+    var viewModel: WidgetViewModel
 
     private var numberOfDepartures: Int {
         widgetFamily == .systemMedium ? 6 : 3
@@ -29,11 +29,13 @@ struct WidgetInfoView: View {
 
     // TODO: Localize texts
     var body: some View {
-        if let quayName = viewModel.quayName, let lineDetails = viewModel.lineDetails {
+        if viewModel.entry.state == .noFavouriteDepartures {
+            Text("Du må velge en favorittavgang").padding()
+        } else {
             GeometryReader { geometry in
                 ZStack {
                     VStack(alignment: .leading) {
-                        Text("Fra \(quayName)")
+                        Text("Fra \(viewModel.quayName)")
                             .bold()
                             .lineLimit(1)
                             .frame(width: geometry.size.width - (K.padding * 2), alignment: .leading)
@@ -45,7 +47,7 @@ struct WidgetInfoView: View {
                         }
 
                         if widgetFamily == .systemSmall {
-                            Text(lineDetails)
+                            Text(viewModel.lineDetails)
                                 .lineLimit(2)
                                 .multilineTextAlignment(.leading)
                                 .foregroundColor(K.lineInformationColor)
@@ -57,7 +59,7 @@ struct WidgetInfoView: View {
                                     .background(K.transportCityColor)
                                     .cornerRadius(K.transportIconCornerRadius)
 
-                                Text(lineDetails)
+                                Text(viewModel.lineDetails)
                                     .lineLimit(1)
                                     .foregroundColor(K.lineInformationColor)
 
@@ -67,7 +69,17 @@ struct WidgetInfoView: View {
 
                         Spacer()
 
-                        DepartureTimesView(aimedTimes: aimedTimes)
+                        if viewModel.entry.state == .noDepartureQuays {
+                            HStack {
+                                Spacer()
+                                ChipView(label: "Ingen avganger")
+                                Spacer()
+                            }.frame(maxWidth: .infinity)
+                            .background(Color("TimeTileBackgroundColor"))
+                            .cornerRadius(8)
+                        } else {
+                            DepartureTimesView(aimedTimes: aimedTimes)
+                        }
                     }
                     .padding(K.padding)
                 }
@@ -77,9 +89,6 @@ struct WidgetInfoView: View {
                         .fill(K.widgetGradient).frame(width: K.widgetFadeWidth, height: .infinity)
                 }.frame(width: geometry.size.width)
             }
-        } else {
-            // TODO: Refactor with a better error view
-            Text("Du må velge en favorittavgang").padding()
         }
     }
 }

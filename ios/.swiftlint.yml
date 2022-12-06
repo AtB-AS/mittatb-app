@@ -12,3 +12,7 @@ identifier_name:
 
 trailing_comma:
   mandatory_comma: true
+
+excluded:
+  - Carthage
+  - Pods

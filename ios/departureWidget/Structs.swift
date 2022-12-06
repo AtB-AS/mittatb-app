@@ -35,7 +35,7 @@ enum TransportSubMode: String, Codable {
 
 // MARK: Structs
 
-struct DepartureData: Codable {
+struct DepartureResponse: Codable {
     let data: [StopPlaceGroup]
 }
 
@@ -45,7 +45,6 @@ struct StopPlaceGroup: Codable {
 }
 
 struct StopPlaceInfo: Codable {
-    var __typename: String
     let id: String
     let description: String?
     let name: String
@@ -59,7 +58,6 @@ struct QuayGroup: Codable {
 }
 
 struct QuayInfo: Codable {
-    let __typename: String
     let id: String
     let name: String
     let description: String?
@@ -106,48 +104,82 @@ struct DepartureTime: Codable {
     let aimedTime: Date
     let predictionInaccurate: Bool
     let realtime: Bool
-    let situations: [String]
+    let situations: [SituationElement]
     let serviceJourneyId: String
 }
 
-struct Body: Codable {
-    let favorites: [FavoriteDeparture]
+struct SituationElement: Codable {
+    let id: String
+    let situationNumber: String
+    let summary: [MultilingualString]
+    let description: [MultilingualString]
+    let reportType: String
+}
+
+struct MultilingualString: Codable {
+    let language: String?
+    let value: String
+}
+
+struct DepartureFavouritesRequestBody: Codable {
+    let favorites: [FavouriteDeparture]
+}
+
+struct QuayRequestBody: Codable {
+    let ids: [String]
+}
+
+struct QuaysCoordinatesResponse: Codable {
+    let quays: [QuayWithLocation]
+}
+
+enum EntryState {
+    case noFavouriteDepartures, noDepartureQuays, complete, preview
 }
 
 struct Entry: TimelineEntry {
     let date: Date
+    let favouriteDeparture: FavouriteDeparture?
     let quayGroup: QuayGroup?
-    var isForPreview: Bool = false
+    let state: EntryState
 }
 
-/// Struct for favorite departures stored on device
-struct FavoriteDeparture: Codable {
+struct QuayWithLocation: Codable {
+    let id: String
+    let longitude: Double
+    let latitude: Double
+
+    var location: CLLocation {
+        CLLocation(latitude: latitude, longitude: longitude)
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        longitude = try container.decode(Double.self, forKey: .longitude)
+        latitude = try container.decode(Double.self, forKey: .latitude)
+    }
+}
+
+struct FavouriteDeparture: Codable {
     let id: String
     let lineId: String
     let lineName: String?
     let lineLineNumber: String
     let lineTransportationMode: TransportMode?
     let lineTransportationSubMode: TransportSubMode?
-    let longitude: Double
-    let latitude: Double
     let quayName: String
     let quayPublicCode: String
     let quayId: String
     let stopId: String
 
-    var location: CLLocation {
-        CLLocation(latitude: latitude, longitude: longitude)
-    }
-
-    init(id: String, lineId: String, lineName: String?, lineLineNumber: String, lineTransportationMode: TransportMode?, lineTransportationSubMode: TransportSubMode?, longitude: Double, latitude: Double, quayName: String, quayPublicCode: String, quayId: String, stopId: String) {
+    init(id: String, lineId: String, lineName: String?, lineLineNumber: String, lineTransportationMode: TransportMode?, lineTransportationSubMode: TransportSubMode?, quayName: String, quayPublicCode: String, quayId: String, stopId: String) {
         self.id = id
         self.lineId = lineId
         self.lineName = lineName
         self.lineLineNumber = lineLineNumber
         self.lineTransportationMode = lineTransportationMode
         self.lineTransportationSubMode = lineTransportationSubMode
-        self.longitude = longitude
-        self.latitude = latitude
         self.quayName = quayName
         self.quayPublicCode = quayPublicCode
         self.quayId = quayId
@@ -162,8 +194,6 @@ struct FavoriteDeparture: Codable {
         lineLineNumber = try container.decode(String.self, forKey: .lineLineNumber)
         lineTransportationMode = try? container.decodeIfPresent(TransportMode.self, forKey: .lineTransportationMode)
         lineTransportationSubMode = try? container.decodeIfPresent(TransportSubMode.self, forKey: .lineTransportationSubMode)
-        longitude = try container.decode(Double.self, forKey: .longitude)
-        latitude = try container.decode(Double.self, forKey: .latitude)
         quayName = try container.decode(String.self, forKey: .quayName)
         quayPublicCode = try container.decode(String.self, forKey: .quayPublicCode)
         quayId = try container.decode(String.self, forKey: .quayId)
@@ -173,16 +203,14 @@ struct FavoriteDeparture: Codable {
 
 // MARK: Extensions
 
-extension FavoriteDeparture {
-    static let dummy: FavoriteDeparture = .init(
+extension FavouriteDeparture {
+    static let dummy: FavouriteDeparture = .init(
         id: "",
         lineId: "ATB:Line:2_2",
         lineName: "Ranheim",
         lineLineNumber: "1",
         lineTransportationMode: TransportMode.bus,
         lineTransportationSubMode: TransportSubMode.nightBus,
-        longitude: 0,
-        latitude: 0,
         quayName: "Prinsens gate",
         quayPublicCode: "P1",
         quayId: "NSR:Quay:71184",
@@ -193,7 +221,6 @@ extension FavoriteDeparture {
 extension QuayGroup {
     static let dummy = QuayGroup(
         quay: QuayInfo(
-            __typename: "",
             id: "",
             name: "Solsiden",
             description: nil,
@@ -212,7 +239,7 @@ extension QuayGroup {
                     transportSubmode: TransportSubMode.nightBus,
                     quayId: ""
                 ),
-                departures: [Int](0 ..< 5).map { index in
+                departures: [Int](0 ..< 10).map { index in
                     let timeInterval = CGFloat(index) * 300
                     let timeDate = Date.now.addingTimeInterval(timeInterval)
                     return DepartureTime(
