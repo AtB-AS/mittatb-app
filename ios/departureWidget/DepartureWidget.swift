@@ -29,8 +29,8 @@ struct DepartureWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             DepartureWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("Favorittavganger")
-        .description("Se avganger for din nærmeste favoritt.")
+        .configurationDisplayName("Widget")
+        .description("about_widget")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
