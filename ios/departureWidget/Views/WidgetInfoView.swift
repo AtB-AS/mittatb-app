@@ -30,12 +30,12 @@ struct WidgetInfoView: View {
     // TODO: Localize texts
     var body: some View {
         if viewModel.entry.state == .noFavouriteDepartures {
-            Text("Du må velge en favorittavgang").padding()
+            Text("must_choose_favorite").padding()
         } else {
             GeometryReader { geometry in
                 ZStack {
                     VStack(alignment: .leading) {
-                        Text("Fra \(viewModel.quayName)")
+                        Text("From \(viewModel.quayName)")
                             .bold()
                             .lineLimit(1)
                             .frame(width: geometry.size.width - (K.padding * 2), alignment: .leading)
@@ -72,9 +72,14 @@ struct WidgetInfoView: View {
                         if viewModel.entry.state == .noDepartureQuays {
                             HStack {
                                 Spacer()
-                                ChipView(label: "Ingen avganger")
+                                Text("no_departures")
                                 Spacer()
                             }.frame(maxWidth: .infinity)
+                            .lineLimit(1)
+                            .bold()
+                            .fixedSize()
+                            .font(.system(size: UIFontMetrics.default.scaledValue(for: 14)))
+                            .padding(8)
                             .background(Color("TimeTileBackgroundColor"))
                             .cornerRadius(8)
                         } else {
