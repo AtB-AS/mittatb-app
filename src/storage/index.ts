@@ -46,11 +46,26 @@ const leaveBreadCrumb = (
 export type KeyValuePair = [string, string | null];
 
 const storage = {
-  setAppGroupName: async (groupName: string) => {
+  setAppGroupName: async (groupName?: string) => {
     await AsyncStorage.setAppGroupName(groupName).catch(errorHandler);
   },
-  setAppGroupNameAndMigrateDataIfNeeded: async (groupName: string) => {
-    await AsyncStorage.setAppGroupName(groupName).catch(errorHandler);
+  setAppGroupNameAndMigrateDataIfNeeded: async (
+    oldGroupName?: string,
+    newGroupName?: string,
+  ) => {
+    await storage.setAppGroupName(oldGroupName);
+    const oldValues = (await storage.getAll()) ?? [];
+
+    if (oldValues.length > 0) {
+      await storage.setAppGroupName(newGroupName);
+      oldValues.forEach(([key, value]) => storage.set(key, value as string));
+      await storage.setAppGroupName(oldGroupName);
+      oldValues.forEach(
+        async ([key]) => await AsyncStorage.removeItem(key).catch(errorHandler),
+      );
+    }
+
+    await storage.setAppGroupName(newGroupName);
   },
   get: async (key: string) => {
     const value = await AsyncStorage.getItem(key).catch(errorHandler);

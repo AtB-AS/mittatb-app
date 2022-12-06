@@ -8,7 +8,10 @@ import {loadLocalConfig} from './local-config';
 import storage from './storage';
 
 export async function setupConfig() {
-  storage.setAppGroupNameAndMigrateDataIfNeeded(APP_GROUP_NAME);
+  await storage.setAppGroupNameAndMigrateDataIfNeeded(
+    undefined,
+    APP_GROUP_NAME,
+  );
   await ensureFirstTimeSetup();
   const {installId} = await loadLocalConfig();
   Bugsnag.setUser(installId);
