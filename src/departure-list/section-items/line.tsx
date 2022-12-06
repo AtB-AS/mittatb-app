@@ -231,12 +231,12 @@ function getAccessibilityTextFirstDeparture(
           [secondResult, ...rest]
             .map((i) =>
               i.realtime
-                ? labelForTime(i.time, searchDate, t, language, true)
-                : t(
-                    NearbyTexts.results.departure.nextAccessibilityNotRealtime(
+                ? t(
+                    NearbyTexts.results.departure.nextAccessibilityRealtime(
                       labelForTime(i.time, searchDate, t, language, true),
                     ),
-                  ),
+                  )
+                : labelForTime(i.time, searchDate, t, language, true),
             )
             .join(', '),
         ),

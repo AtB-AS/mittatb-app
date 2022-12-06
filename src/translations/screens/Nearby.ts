@@ -167,22 +167,22 @@ const NearbyTexts = {
       hasPassedAccessibilityLabel: (time: string) =>
         _(
           `Avgangen ${time} har trolig passert plattformen.`,
-          `Departure ${time} has likely left the plattform.`,
+          `Departure ${time} has likely left the platform.`,
         ),
       upcomingRealtimeAccessibilityLabel: (time: string) =>
         _(
-          `Kommende avgang estimert til ${time}.`,
-          `Next departure estimated in ${time}.`,
+          `Kommende avgang har sanntid på ${time}.`,
+          `Next departure realtime ${time}.`,
         ),
       upcomingAccessibilityLabel: (time: string) =>
         _(
           `Kommende avgang har rutetid på ${time}.`,
-          `Next departures route time ${time}.`,
+          `Next departure route time ${time}.`,
         ),
       nextAccessibilityLabel: (time: string) =>
         _(`Neste avganger: ${time}`, `Next departures: ${time}`),
-      nextAccessibilityNotRealtime: (time: string) =>
-        _(`rutetid: ${time}`, `route time: ${time}`),
+      nextAccessibilityRealtime: (time: string) =>
+        _(`sanntid ${time}`, `realtime: ${time}`),
     },
   },
   favoriteDialogSheet: {
