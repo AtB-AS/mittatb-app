@@ -11,17 +11,13 @@ struct ChipView: View {
     let label: String
 
     var body: some View {
-        HStack {
-            Spacer()
-            Text(label)
-                .lineLimit(1)
-                .bold()
-                .font(.system(size: K.scaledFontSize))
-                .fixedSize()
-            Spacer()
-        }
-        .padding(8)
-        .background(Color("TimeTileBackgroundColor"))
-        .cornerRadius(8)
+        Text(label)
+            .lineLimit(1)
+            .bold()
+            .font(.system(size: K.scaledFontSize))
+            .fixedSize()
+            .padding(8)
+            .background(Color("TimeTileBackgroundColor"))
+            .cornerRadius(8)
     }
 }

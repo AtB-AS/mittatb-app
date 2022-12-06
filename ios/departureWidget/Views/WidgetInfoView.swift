@@ -70,7 +70,13 @@ struct WidgetInfoView: View {
                         Spacer()
 
                         if viewModel.entry.state == .noDepartureQuays {
-                            ChipView(label: "Ingen avganger").frame(maxWidth: .infinity)
+                            HStack {
+                                Spacer()
+                                ChipView(label: "Ingen avganger")
+                                Spacer()
+                            }.frame(maxWidth: .infinity)
+                            .background(Color("TimeTileBackgroundColor"))
+                            .cornerRadius(8)
                         } else {
                             DepartureTimesView(aimedTimes: aimedTimes)
                         }
