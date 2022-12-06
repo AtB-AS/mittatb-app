@@ -49,6 +49,9 @@ const storage = {
   setAppGroupName: async (groupName: string) => {
     await AsyncStorage.setAppGroupName(groupName).catch(errorHandler);
   },
+  setAppGroupNameAndMigrateDataIfNeeded: async (groupName: string) => {
+    await AsyncStorage.setAppGroupName(groupName).catch(errorHandler);
+  },
   get: async (key: string) => {
     const value = await AsyncStorage.getItem(key).catch(errorHandler);
     leaveBreadCrumb('read-single', key, value);
