@@ -3,7 +3,7 @@ import {ActivityIndicator, View} from 'react-native';
 import Button from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
 import {EnrollmentTexts, useTranslation} from '@atb/translations';
-import MessageBox, {MessageType} from '@atb/components/message-box';
+import {MessageBox, MessageBoxProps} from '@atb/components/message-box';
 import useEnroll from './use-enroll';
 import TextInput from '@atb/components/sections/text-input';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
@@ -16,7 +16,7 @@ export default function Splash() {
 
   const {onEnroll, hasError, isLoading, isEnrolled} = useEnroll();
 
-  const messageType: MessageType = isEnrolled
+  const messageType: MessageBoxProps['type'] = isEnrolled
     ? 'valid'
     : hasError
     ? 'warning'
@@ -47,7 +47,7 @@ export default function Splash() {
             <Button
               onPress={() => onEnroll(inviteCode)}
               text={t(EnrollmentTexts.button)}
-              icon={Confirm}
+              leftIcon={Confirm}
               disabled={isLoading || !inviteCode}
               style={styles.button}
               interactiveColor="interactive_0"
@@ -59,7 +59,7 @@ export default function Splash() {
   );
 }
 
-function useMessageText(type: MessageType) {
+function useMessageText(type: MessageBoxProps['type']) {
   const {t} = useTranslation();
   switch (type) {
     case 'valid':

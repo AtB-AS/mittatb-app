@@ -1,6 +1,6 @@
 import {ErrorType} from '@atb/api/utils';
 import Button from '@atb/components/button';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -64,7 +64,7 @@ export default function VippsPayment({
             <MessageBox
               message={translateError(error.context, error.type, t)}
               type="error"
-              containerStyle={styles.messageBox}
+              style={styles.messageBox}
             />
             {error.context === 'open-vipps-url' && (
               <Button

@@ -2,10 +2,15 @@ import {ErrorType} from '@atb/api/utils';
 import DayLabel from '@atb/components/day-label';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 
 import {StyleSheet, useTheme} from '@atb/theme';
-import {AssistantTexts, useTranslation} from '@atb/translations';
+import {
+  AssistantTexts,
+  TranslateFunction,
+  TripSearchTexts,
+  useTranslation,
+} from '@atb/translations';
 import {isSeveralDays} from '@atb/utils/date';
 import React, {Fragment, useEffect, useMemo, useState} from 'react';
 import {Text, View} from 'react-native';
@@ -20,7 +25,7 @@ type Props = {
   showEmptyScreen: boolean;
   isEmptyResult: boolean;
   isSearching: boolean;
-  resultReasons: String[];
+  resultReasons: string[];
   onDetailsPressed(tripPatterns?: TripPattern[], index?: number): void;
   errorType?: ErrorType;
   searchTime: SearchTime;
@@ -75,45 +80,19 @@ const Results: React.FC<Props> = ({
         <MessageBox
           type="warning"
           message={errorMessage}
-          containerStyle={styles.messageBoxContainer}
+          style={styles.messageBoxContainer}
         />
       </View>
     );
   }
 
   if (isEmptyResult) {
-    const hasResultReasons = !!resultReasons.length;
-    const pluralResultReasons = hasResultReasons && resultReasons.length > 1;
     return (
-      <View style={styles.container}>
-        <MessageBox containerStyle={styles.messageBoxContainer}>
-          <ThemeText
-            style={{
-              ...styles.infoBoxText,
-              color: theme.static.status.info.text,
-            }}
-          >
-            {t(AssistantTexts.results.info.emptyResult)}
-            {pluralResultReasons && (
-              <Text>
-                {' '}
-                {t(AssistantTexts.results.info.reasonsTitle)}
-                {resultReasons.map((reason, i) => (
-                  <Text key={i}>
-                    {'\n'}- {reason}
-                  </Text>
-                ))}
-              </Text>
-            )}
-            {hasResultReasons && !pluralResultReasons && (
-              <Text> {resultReasons[0]}.</Text>
-            )}
-            {!hasResultReasons && (
-              <Text>{t(AssistantTexts.results.info.genericHint)}</Text>
-            )}
-          </ThemeText>
-        </MessageBox>
-      </View>
+      <MessageBox
+        type="info"
+        style={styles.messageBoxContainer}
+        message={getTextForEmptyResult(resultReasons, t)}
+      />
     );
   }
 
@@ -141,6 +120,22 @@ const Results: React.FC<Props> = ({
 };
 
 export default Results;
+
+const getTextForEmptyResult = (
+  resultReasons: string[],
+  t: TranslateFunction,
+) => {
+  let text = t(TripSearchTexts.results.info.emptyResult) + '\n\n';
+  if (!resultReasons?.length) {
+    text += t(TripSearchTexts.results.info.genericHint);
+  } else if (resultReasons.length === 1) {
+    text += resultReasons[0];
+  } else {
+    text += t(TripSearchTexts.results.info.reasonsTitle);
+    resultReasons.forEach((reason) => (text += `\n- ${reason}`));
+  }
+  return text;
+};
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

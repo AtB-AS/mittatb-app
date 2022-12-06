@@ -2,7 +2,7 @@ import {StopPlaceGroup} from '@atb/api/departures/types';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {ActionItem} from '@atb/components/sections';
 import {Location} from '@atb/favorites/types';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';

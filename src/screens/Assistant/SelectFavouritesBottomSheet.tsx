@@ -14,17 +14,15 @@ import {
   useTranslation,
 } from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
-import TransportationIcon from '@atb/components/transportation-icon';
+import TransportationIcon, {AnyMode} from '@atb/components/transportation-icon';
 import {useFavorites} from '@atb/favorites';
 import useFontScale from '@atb/utils/use-font-scale';
-import {AnyMode} from '@atb/components/transportation-icon';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {LegMode} from '@entur/sdk';
 import SectionSeparator from '@atb/components/sections/section-separator';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
-import {NavigationProp} from '@react-navigation/native';
 
 type SelectableFavouriteDepartureData = {
   handleSwitchFlip: (favouriteId: string, active: boolean) => void;
@@ -184,6 +182,7 @@ const SelectFavouritesBottomSheet = ({
         )}
         {!favouriteItems.length && (
           <MessageBox
+            type="info"
             message={t(SelectFavouriteDeparturesText.noFavourites.text)}
           />
         )}
@@ -199,8 +198,7 @@ const SelectFavouritesBottomSheet = ({
             )}
             onPress={saveAndExit}
             disabled={false}
-            icon={Confirm}
-            iconPosition="right"
+            rightIcon={Confirm}
             testID="confirmButton"
           />
           <Button
@@ -213,8 +211,7 @@ const SelectFavouritesBottomSheet = ({
               close();
               onEditFavouriteDeparture();
             }}
-            icon={SvgArrowRight}
-            iconPosition="right"
+            rightIcon={SvgArrowRight}
             testID="editButton"
             mode="secondary"
           />

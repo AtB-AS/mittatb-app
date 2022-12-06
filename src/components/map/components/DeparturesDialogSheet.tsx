@@ -8,7 +8,7 @@ import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import StopPlaceView from '@atb/screens/Departures/StopPlaceView';
 import {SearchTime} from '@atb/screens/Departures/utils';
 import {StopPlace, Quay} from '@atb/api/types/departures';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import {Feature, Point} from 'geojson';
 import {useReverseGeocoder} from '@atb/geocoder';
 import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';

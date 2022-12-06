@@ -5,7 +5,7 @@ import {secondsBetween} from '@atb/utils/date';
 import {AxiosError} from 'axios';
 import React from 'react';
 import {View} from 'react-native';
-import TripMessages from './TripMessages';
+import {TripMessages} from './DetailsMessages';
 import TripSection, {getPlaceName, InterchangeDetails} from './TripSection';
 import Summary from './TripSummary';
 import {WaitDetails} from './WaitSection';
@@ -19,11 +19,7 @@ const Trip: React.FC<TripProps> = ({tripPattern, error}) => {
 
   return (
     <View style={styles.container}>
-      <TripMessages
-        tripPattern={tripPattern}
-        error={error}
-        messageStyle={styles.message}
-      />
+      <TripMessages tripPattern={tripPattern} error={error} />
       <View style={styles.trip}>
         {tripPattern &&
           tripPattern.legs.map((leg, index) => {
@@ -66,11 +62,8 @@ function legWaitDetails(index: number, legs: Leg[]): WaitDetails | undefined {
 }
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
-  message: {
-    marginTop: theme.spacings.medium,
-  },
   trip: {
-    paddingTop: theme.spacings.large,
+    paddingTop: theme.spacings.medium,
   },
   container: {
     paddingBottom: theme.spacings.medium,

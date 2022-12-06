@@ -10,7 +10,6 @@ const DeparturesTexts = {
       geoLoc: _('I nærheten', 'Nearby'),
       address: _(`Holdeplasser nær `, `Stops near `),
     },
-    withWarning: _('Med advarsler', 'With warnings'),
     a11yStopPlaceItemHint: _(
       'Aktiver for å se avganger',
       'Activate to view departures',
@@ -64,9 +63,6 @@ const DeparturesTexts = {
     ),
   },
   line: _('Linje', 'Line'),
-  estimatedCall: {
-    withWarning: _('Med advarsler', 'With warnings'),
-  },
   a11yViewDepartureDetailsHint: _(
     'Aktiver for å se detaljer',
     'Activate to view details',

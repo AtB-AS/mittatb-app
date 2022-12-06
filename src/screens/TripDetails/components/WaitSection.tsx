@@ -1,7 +1,7 @@
 import {Time} from '@atb/assets/svg/mono-icons/time';
 import {Info} from '@atb/assets/svg/color/icons/status';
 import ThemeText from '@atb/components/text';
-import {TinyMessageBox} from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {secondsToDuration} from '@atb/utils/date';
@@ -30,7 +30,8 @@ const WaitSection: React.FC<WaitDetails> = (wait) => {
       <TripLegDecoration color={iconColor} hasStart={false} hasEnd={false} />
       {shortWait && (
         <TripRow rowLabel={<ThemeIcon svg={Info} />}>
-          <TinyMessageBox
+          <MessageBox
+            noStatusIcon={true}
             type="info"
             message={t(TripDetailsTexts.trip.leg.wait.messages.shortTime)}
           />

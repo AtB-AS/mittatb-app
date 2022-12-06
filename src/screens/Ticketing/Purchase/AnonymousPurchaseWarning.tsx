@@ -1,4 +1,4 @@
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import AnonymousPurchases from '@atb/translations/screens/subscreens/AnonymousPurchases';

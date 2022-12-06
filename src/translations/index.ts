@@ -21,6 +21,7 @@ export {default as ScreenHeaderTexts} from './components/ScreenHeader';
 export {default as BottomSheetTexts} from './components/BottomSheet';
 export {default as ServiceDisruptionsTexts} from './components/ServiceDisruptions';
 export {default as CancelledDepartureTexts} from './components/CancelledDeparture';
+export {default as DetailsMessages} from './components/DetailsMessages';
 export {default as LocationSearchTexts} from './screens/subscreens/LocationSearch';
 export {default as ProductTexts} from './screens/subscreens/Product';
 export {default as TariffZonesTexts} from './screens/subscreens/TariffZones';
@@ -58,3 +59,4 @@ export {default as TicketTravellerTexts} from './screens/subscreens/TicketTravel
 export {default as DashboardTexts} from './screens/Dashboard';
 export {default as TripSearchTexts} from './screens/TripSearch';
 export {default as AnonymousPurchasesTexts} from './screens/subscreens/AnonymousPurchases';
+export {default as SituationsTexts} from './components/SituationsTexts';

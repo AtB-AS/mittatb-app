@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # copy file mapbox api download token
+echo "Copy .netrc file for mapbox api token"
 cat .netrc >> ~/.netrc
 chmod 600 ~/.netrc
 

@@ -1,7 +1,7 @@
 import deleteProfile from '@atb/api/delete_profile';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {useAuthState} from '@atb/auth';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
@@ -77,14 +77,14 @@ export default function DeleteProfile({navigation}: DeleteProfileScreenProps) {
         <MessageBox
           message={t(DeleteProfileTexts.deleteInfo)}
           type={'info'}
-          containerStyle={style.contentMargin}
+          style={style.contentMargin}
         />
 
         {activeFareContracts && (
           <MessageBox
             message={t(DeleteProfileTexts.unableToDeleteWithFareContracts)}
             type="warning"
-            containerStyle={{...style.contentMargin, marginTop: 0}}
+            style={{...style.contentMargin, marginTop: 0}}
           />
         )}
 

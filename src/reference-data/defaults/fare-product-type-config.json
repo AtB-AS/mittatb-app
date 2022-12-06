@@ -1,0 +1,126 @@
+[
+  {
+    "type": "single",
+    "name": [
+      {
+        "lang": "nob",
+        "value": "Enkeltbillett buss/trikk"
+      },
+      {
+        "lang": "eng",
+        "value": "Single ticket bus/tram"
+      }
+    ],
+    "transportModes": ["bus"],
+    "description": [
+      {
+        "lang": "nob",
+        "value": "Når du skal reise av og til"
+      },
+      {
+        "lang": "eng",
+        "value": "When you travel occasionally"
+      }
+    ],
+    "configuration": {
+      "zoneSelectionMode": "multiple",
+      "travellerSelectionMode": "multiple",
+      "timeSelectionMode": "none",
+      "productSelectionMode": "none",
+      "offerEndpoint": "zones"
+    }
+  },
+  {
+    "type": "period",
+    "name": [
+      {
+        "lang": "nob",
+        "value": "Periodebillett"
+      },
+      {
+        "lang": "eng",
+        "value": "Periodic ticket"
+      }
+    ],
+    "transportModes": ["bus"],
+    "description": [
+      {
+        "lang": "nob",
+        "value": "Når du reiser litt oftere"
+      },
+      {
+        "lang": "eng",
+        "value": "When you travel more frequently"
+      }
+    ],
+    "configuration": {
+      "zoneSelectionMode": "multiple",
+      "travellerSelectionMode": "single",
+      "timeSelectionMode": "datetime",
+      "productSelectionMode": "duration",
+      "offerEndpoint": "zones"
+    }
+  },
+  {
+    "type": "hour24",
+    "name": [
+      {
+        "lang": "nob",
+        "value": "24-timersbillett"
+      },
+      {
+        "lang": "eng",
+        "value": "24 hour pass"
+      }
+    ],
+    "transportModes": ["bus"],
+    "description": [
+      {
+        "lang": "nob",
+        "value": "Når du vil reise flere ganger på et døgn"
+      },
+      {
+        "lang": "eng",
+        "value": "For travelling several times in 24 hours"
+      }
+    ],
+    "configuration": {
+      "zoneSelectionMode": "single",
+      "travellerSelectionMode": "single",
+      "timeSelectionMode": "datetime",
+      "productSelectionMode": "none",
+      "offerEndpoint": "zones"
+    }
+  },
+  {
+    "type": "night",
+    "name": [
+      {
+        "lang": "nob",
+        "value": "Nattbillett"
+      },
+      {
+        "lang": "eng",
+        "value": "Night ticket"
+      }
+    ],
+    "transportModes": ["bus"],
+    "description": [
+      {
+        "lang": "nob",
+        "value": "Fra 00:30 til 04:00 på nattbuss og -trikk"
+      },
+      {
+        "lang": "eng",
+        "value": "From 00:30 to 04:00 for night bus and tram"
+      }
+    ],
+    "configuration": {
+      "zoneSelectionMode": "none",
+      "travellerSelectionMode": "none",
+      "timeSelectionMode": "none",
+      "productSelectionMode": "product",
+      "offerEndpoint": "authority"
+    }
+  }
+]

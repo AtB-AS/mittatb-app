@@ -13,7 +13,7 @@ import Button from '@atb/components/button';
 import {useAuthState} from '@atb/auth';
 import ThemeText from '@atb/components/text';
 import {PhoneSignInErrorCode} from '@atb/auth/AuthContext';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import {useNavigation} from '@react-navigation/native';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
@@ -140,7 +140,7 @@ export default function PhoneInput({
 
             {error && !isSubmitting && (
               <MessageBox
-                containerStyle={styles.errorMessage}
+                style={styles.errorMessage}
                 type="error"
                 message={t(LoginTexts.phoneInput.errors.invalid_phone)}
               />
@@ -153,8 +153,7 @@ export default function PhoneInput({
                 onPress={onNext}
                 text={t(LoginTexts.phoneInput.mainButton)}
                 disabled={!isValidPhoneNumber(phoneNumber)}
-                icon={ArrowRight}
-                iconPosition="right"
+                rightIcon={ArrowRight}
                 testID="sendCodeButton"
               />
             )}

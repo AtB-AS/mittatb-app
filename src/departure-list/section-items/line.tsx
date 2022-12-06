@@ -6,7 +6,6 @@ import {
   QuaySectionMode,
   StopPlaceInfo,
 } from '@atb/api/departures/types';
-import Warning from '@atb/assets/svg/color/icons/status/Warning';
 import SvgFavorite from '@atb/assets/svg/mono-icons/places/Favorite';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
@@ -54,6 +53,7 @@ import {
   View,
 } from 'react-native';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
+import {getSvgForMostCriticalSituation} from '@atb/situations';
 
 type RootProps = NearbyScreenProps<'NearbyRoot'>;
 
@@ -272,8 +272,7 @@ function DepartureTimeItem({
       text={formatTimeText(departure, searchDate, language, t)}
       style={styles.departure}
       textStyle={styles.departureText}
-      icon={hasSituations(departure) ? Warning : undefined}
-      iconPosition="right"
+      rightIcon={getSvgForMostCriticalSituation(departure.situations)}
       testID={testID}
     />
   );
@@ -318,9 +317,6 @@ const addDatePrefixIfNecessary = (
   }
 };
 
-function hasSituations(departure: DepartureTime) {
-  return departure.situations.length > 0;
-}
 const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
   transportationMode: {
     marginRight: theme.spacings.small,
