@@ -133,15 +133,13 @@ export default function EstimatedCallItem({
             {departure.destinationDisplay?.frontText}
           </ThemeText>
           {mode === 'Departure' || mode === 'Map' ? (
-            <>
-              <DepartureTime
-                isRealtime={departure.realtime}
-                isTripCancelled={isTripCancelled}
-                expectedTime={departure.expectedDepartureTime}
-                aimedTime={departure.aimedDepartureTime}
-                testID={testID}
-              />
-            </>
+            <DepartureTime
+              isRealtime={departure.realtime}
+              isTripCancelled={isTripCancelled}
+              expectedTime={departure.expectedDepartureTime}
+              aimedTime={departure.aimedDepartureTime}
+              testID={testID}
+            />
           ) : null}
         </View>
       </TouchableOpacity>
