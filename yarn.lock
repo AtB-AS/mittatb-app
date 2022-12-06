@@ -2731,8 +2731,9 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
-"@react-native-async-storage/async-storage@file:.yalc/@react-native-async-storage/async-storage":
+"@react-native-async-storage/async-storage@AtB-AS/async-storage#master":
   version "1.17.10"
+  resolved "https://codeload.github.com/AtB-AS/async-storage/tar.gz/678f50e347090a23d1eec41eeeb90bb889128be3"
   dependencies:
     merge-options "^3.0.4"
 
