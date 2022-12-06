@@ -53,29 +53,25 @@ platform :ios do
         timeout: 10800,
         lock_when_sleeps: false
       )
-      identifiers.each { |identifier|
-        match(
-          type: ENV["FASTLANE_MATCH_TYPE"],
-          app_identifier: identifier,
-          storage_mode: 'git',
-          git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
-          readonly: true,
-          keychain_name: "CI",
-          keychain_password: ENV["MATCH_PASSWORD"],
-          team_id: ENV['IOS_DEVELOPMENT_TEAM_ID']
-        )
-      }
+      match(
+        type: ENV["FASTLANE_MATCH_TYPE"],
+        app_identifier: identifiers,
+        storage_mode: 'git',
+        git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
+        readonly: true,
+        keychain_name: "CI",
+        keychain_password: ENV["MATCH_PASSWORD"],
+        team_id: ENV['IOS_DEVELOPMENT_TEAM_ID']
+      )
     else
-      identifiers.each { |identifier|
-        match(
-          type: ENV["FASTLANE_MATCH_TYPE"],
-          app_identifier: identifier,
-          storage_mode: 'git',
-          git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
-          team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
-          readonly: true
-        )
-      }
+      match(
+        type: ENV["FASTLANE_MATCH_TYPE"],
+        app_identifier: identifiers,
+        storage_mode: 'git',
+        git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
+        team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
+        readonly: true
+      )
     end
   end
   # iOS Lanes
@@ -100,6 +96,10 @@ platform :ios do
       workspace: './ios/atb.xcworkspace',
       export_options: {
         compileBitcode: false,
+        provisioningProfiles: {
+          ENV['IOS_BUNDLE_IDENTIFIER'] => ENV['IOS_PROVISIONING_PROFILE_SPECIFIER'],
+          ENV['IOS_APP_WIDGET_IDENTIFIER'] => ENV['IOS_WIDGET_PROVISIONING_PROFILE_SPECIFIER']
+      	}
       }
     )
   end
