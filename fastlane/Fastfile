@@ -96,10 +96,6 @@ platform :ios do
       workspace: './ios/atb.xcworkspace',
       export_options: {
         compileBitcode: false,
-        provisioningProfiles: {
-          ENV['IOS_BUNDLE_IDENTIFIER'] => ENV['IOS_PROVISIONING_PROFILE_SPECIFIER'],
-          ENV['IOS_APP_WIDGET_IDENTIFIER'] => ENV['IOS_WIDGET_PROVISIONING_PROFILE_SPECIFIER']
-      	}
       }
     )
   end
