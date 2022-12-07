@@ -260,7 +260,7 @@ function publicCodeCompare(a?: string, b?: string): number {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   headerWithNavigation: {
-    paddingVertical: theme.spacings.medium,
+    paddingTop: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
   },
   headerWithoutNavigation: {
