@@ -160,5 +160,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
     paddingHorizontal: theme.spacings.medium,
   },
-  quayData: {flex: 1, marginTop: theme.spacings.small},
+  quayData: {flex: 1},
 }));

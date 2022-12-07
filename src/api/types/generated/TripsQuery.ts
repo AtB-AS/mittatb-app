@@ -42,13 +42,14 @@ export type TripsQuery = {
           name?: string;
           transportSubmode?: Types.TransportSubmode;
           publicCode?: string;
+          notices: Array<{id: string; text?: string}>;
         };
         fromEstimatedCall?: {
           aimedDepartureTime: any;
           expectedDepartureTime: any;
           destinationDisplay?: {frontText?: string};
           quay?: {publicCode?: string; name: string};
-          notices: Array<{text?: string; id: string}>;
+          notices: Array<{id: string; text?: string}>;
         };
         situations: Array<{
           id: string;
@@ -109,7 +110,11 @@ export type TripsQuery = {
             tariffZones: Array<{id: string; name?: string}>;
           };
         };
-        serviceJourney?: {id: string};
+        serviceJourney?: {
+          id: string;
+          notices: Array<{id: string; text?: string}>;
+          journeyPattern?: {notices: Array<{id: string; text?: string}>};
+        };
         interchangeTo?: {guaranteed?: boolean; toServiceJourney?: {id: string}};
         pointsOnLink?: {points?: string; length?: number};
         intermediateEstimatedCalls: Array<{
