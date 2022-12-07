@@ -54,6 +54,7 @@ import {
 } from 'react-native';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 import {getSvgForMostCriticalSituation} from '@atb/situations';
+import {Realtime} from '@atb/assets/svg/color/icons/status';
 
 type RootProps = NearbyScreenProps<'NearbyRoot'>;
 
@@ -230,12 +231,12 @@ function getAccessibilityTextFirstDeparture(
           [secondResult, ...rest]
             .map((i) =>
               i.realtime
-                ? labelForTime(i.time, searchDate, t, language, true)
-                : t(
-                    NearbyTexts.results.departure.nextAccessibilityNotRealtime(
+                ? t(
+                    NearbyTexts.results.departure.nextAccessibilityRealtime(
                       labelForTime(i.time, searchDate, t, language, true),
                     ),
-                  ),
+                  )
+                : labelForTime(i.time, searchDate, t, language, true),
             )
             .join(', '),
         ),
@@ -273,6 +274,7 @@ function DepartureTimeItem({
       style={styles.departure}
       textStyle={styles.departureText}
       rightIcon={getSvgForMostCriticalSituation(departure.situations)}
+      leftIcon={departure.realtime ? Realtime : undefined}
       testID={testID}
     />
   );
@@ -289,16 +291,9 @@ const formatTimeText = (
     language,
     t(dictionary.date.units.now),
   );
-  text = addRealtimePrefixIfNecessary(text, departure.realtime, t);
   text = addDatePrefixIfNecessary(text, departure.time, searchDate);
   return text;
 };
-
-const addRealtimePrefixIfNecessary = (
-  timeText: string,
-  isRealtime: boolean = false,
-  t: TFunc<typeof Language>,
-) => (isRealtime ? timeText : t(dictionary.missingRealTimePrefix) + timeText);
 
 const addDatePrefixIfNecessary = (
   timeText: string,
