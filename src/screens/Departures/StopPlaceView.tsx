@@ -170,7 +170,7 @@ export default function StopPlaceView(props: StopPlaceViewProps) {
               <ThemeText
                 type="body__secondary"
                 color="secondary"
-                style={[styles.title, styles.paddingHorizontal]}
+                style={styles.title}
               >
                 {t(DeparturesTexts.header.title)}
               </ThemeText>
@@ -260,7 +260,7 @@ function publicCodeCompare(a?: string, b?: string): number {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   headerWithNavigation: {
-    paddingVertical: theme.spacings.medium,
+    paddingTop: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
   },
   headerWithoutNavigation: {
@@ -288,11 +288,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   loadingIndicator: {
     padding: theme.spacings.medium,
   },
-  paddingHorizontal: {
-    paddingHorizontal: theme.spacings.medium,
-  },
   title: {
-    paddingBottom: theme.spacings.small,
+    marginTop: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
   },
   distanceLabel: {
     flexDirection: 'row',
