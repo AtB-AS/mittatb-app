@@ -19,7 +19,7 @@ import {usePreferenceItems} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import CancelledDepartureMessage from '@atb/screens/TripDetails/components/CancelledDepartureMessage';
 import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
-import {SituationIcon, SituationMessageBox} from '@atb/situations';
+import {SituationOrNoticeIcon, SituationMessageBox} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
@@ -334,7 +334,7 @@ function EstimatedCallRow({
         <ThemeText testID="quayName">{getQuayName(call.quay)} </ThemeText>
       </TripRow>
       {situations.map((situation) => (
-        <TripRow rowLabel={<SituationIcon situation={situation} />}>
+        <TripRow rowLabel={<SituationOrNoticeIcon situation={situation} />}>
           <SituationMessageBox noStatusIcon={true} situation={situation} />
         </TripRow>
       ))}

@@ -21,7 +21,10 @@ export type StopPlaceQuayDeparturesQuery = {
             publicCode?: string;
             transportMode?: Types.TransportMode;
             transportSubmode?: Types.TransportSubmode;
+            notices: Array<{id: string; text?: string}>;
           };
+          journeyPattern?: {notices: Array<{id: string; text?: string}>};
+          notices: Array<{id: string; text?: string}>;
         };
         situations: Array<{
           id: string;
@@ -30,6 +33,7 @@ export type StopPlaceQuayDeparturesQuery = {
           summary: Array<{language?: string; value: string}>;
           description: Array<{language?: string; value: string}>;
         }>;
+        notices: Array<{id: string; text?: string}>;
       }>;
       situations: Array<{
         id: string;
