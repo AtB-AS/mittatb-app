@@ -68,13 +68,16 @@ export const getSvgForMostCriticalSituationOrNotice = (
     .reduce((svg, msgType) => (msgType === 'warning' ? Warning : svg), Info);
 };
 
-export const getSituationA11yLabel = (
+export const getSituationOrNoticeA11yLabel = (
   situations: SituationType[],
+  notices: NoticeFragment[],
   cancellation: boolean = false,
   t: TranslateFunction,
 ): string => {
   if (cancellation) return t(SituationsTexts.a11yLabel.error);
-  if (!situations.length) return '';
+  if (!situations.length) {
+    return notices.length ? t(SituationsTexts.a11yLabel.info) : '';
+  }
   const messageType = situations
     .map(getMessageTypeForSituation)
     .reduce(

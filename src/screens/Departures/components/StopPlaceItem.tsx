@@ -13,7 +13,7 @@ import {useHumanizeDistance} from '@atb/utils/location';
 import {SituationOrNoticeIcon} from '@atb/situations';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
-import {getSituationA11yLabel} from '@atb/situations/utils';
+import {getSituationOrNoticeA11yLabel} from '@atb/situations/utils';
 
 type StopPlaceItemProps = {
   stopPlaceNode: NearestStopPlaceNode;
@@ -47,7 +47,7 @@ export default function StopPlaceItem({
     place.name,
     description,
     humanizedDistance,
-    getSituationA11yLabel(allQuaySituations, false, t),
+    getSituationOrNoticeA11yLabel(allQuaySituations, [], false, t),
     place.transportMode
       ?.map((mode) => t(getTranslatedModeName(mode)))
       .join(','),
