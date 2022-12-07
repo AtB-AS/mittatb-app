@@ -15,7 +15,7 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {usePreferenceItems} from '@atb/preferences';
 import CancelledDepartureMessage from '@atb/screens/TripDetails/components/CancelledDepartureMessage';
 import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
-import {SituationOrNoticeIcon, SituationMessageBox} from '@atb/situations';
+import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
@@ -35,6 +35,7 @@ import useDepartureData, {
 } from './use-departure-data';
 import {TicketingMessages} from '@atb/screens/TripDetails/components/DetailsMessages';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
+import AccessibleText from '@atb/components/accessible-text';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -307,31 +308,36 @@ function EstimatedCallRow({
         onPress={() => handleQuayPress(call.quay)}
         testID={'legType_' + group}
       >
-        <ThemeText testID="quayName">{getQuayName(call.quay)} </ThemeText>
+        <ThemeText testID="quayName">{getQuayName(call.quay)}</ThemeText>
+        {!call.forAlighting && !call.metadata.isStartOfServiceJourney && (
+          <AccessibleText
+            type="body__secondary"
+            color="secondary"
+            style={styles.boardingInfo}
+            pause="before"
+          >
+            {t(DepartureDetailsTexts.messages.noAlighting)}
+          </AccessibleText>
+        )}
+        {!call.forBoarding && !call.metadata.isEndOfServiceJourney && (
+          <AccessibleText
+            type="body__secondary"
+            color="secondary"
+            style={styles.boardingInfo}
+            pause="before"
+          >
+            {t(DepartureDetailsTexts.messages.noBoarding)}
+          </AccessibleText>
+        )}
       </TripRow>
       {situations.map((situation) => (
-        <TripRow rowLabel={<SituationOrNoticeIcon situation={situation} />}>
+        <TripRow
+          rowLabel={<SituationOrNoticeIcon situation={situation} />}
+          style={styles.situationTripRow}
+        >
           <SituationMessageBox noStatusIcon={true} situation={situation} />
         </TripRow>
       ))}
-      {!call.forAlighting && (
-        <TripRow>
-          <MessageBox
-            noStatusIcon={true}
-            type="info"
-            message={t(DepartureDetailsTexts.messages.noAlighting)}
-          />
-        </TripRow>
-      )}
-      {!call.forBoarding && (
-        <TripRow>
-          <MessageBox
-            noStatusIcon={true}
-            type="info"
-            message={t(DepartureDetailsTexts.messages.noBoarding)}
-          />
-        </TripRow>
-      )}
 
       {collapseButton}
     </View>
@@ -428,9 +434,6 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   middleRow: {
     minHeight: 60,
   },
-  situationsContainer: {
-    marginBottom: theme.spacings.small,
-  },
   estimatedCallRows: {
     backgroundColor: theme.static.background.background_0.background,
     marginBottom: theme.spacings.xLarge,
@@ -444,6 +447,13 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   scrollView__content: {
     padding: theme.spacings.medium,
     paddingBottom: theme.spacings.large,
+  },
+  boardingInfo: {
+    marginTop: theme.spacings.xSmall,
+  },
+  situationTripRow: {
+    paddingTop: 0,
+    paddingBottom: theme.spacings.xLarge,
   },
 }));
 
