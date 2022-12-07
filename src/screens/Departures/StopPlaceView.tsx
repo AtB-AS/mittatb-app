@@ -290,7 +290,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   title: {
     marginTop: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
   },
   distanceLabel: {
     flexDirection: 'row',
