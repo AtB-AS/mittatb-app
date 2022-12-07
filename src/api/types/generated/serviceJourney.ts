@@ -110,36 +110,12 @@ export type ServiceJourneyEstimatedCallFragment = {
   }>;
 };
 
-export type NoticeFragment = {text?: string};
-
-export type QuayFragment = {
-  id: string;
-  name: string;
-  publicCode?: string;
-  situations: Array<{
-    id: string;
-    situationNumber?: string;
-    reportType?: Types.ReportType;
-    summary: Array<{language?: string; value: string}>;
-    description: Array<{language?: string; value: string}>;
-  }>;
-  stopPlace?: {id: string; name: string; latitude?: number; longitude?: number};
-  tariffZones: Array<{id: string; name?: string}>;
-};
-
 export type LineFragment = {
   id: string;
   name?: string;
   publicCode?: string;
   transportMode?: Types.TransportMode;
   transportSubmode?: Types.TransportSubmode;
-};
-
-export type StopPlaceFragment = {
-  id: string;
-  name: string;
-  latitude?: number;
-  longitude?: number;
 };
 
 export type ServiceJourneyFragment = {

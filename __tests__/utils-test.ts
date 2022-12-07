@@ -3,9 +3,8 @@ import {addMinutes} from 'date-fns';
 import {Leg} from '@atb/api/types/trips';
 import {TIME_LIMIT_IN_MINUTES} from '../src/screens/TripDetails/Details/utils';
 import {hasShortWaitTime} from '../src/screens/TripDetails/components/utils';
-import {defaultPreassignedFareProducts} from '@atb/reference-data/defaults';
-import {productIsSellableInApp} from '@atb/reference-data/utils';
 import {Flattened, flattenObject} from '@atb/utils/object';
+import {onlyUniques, onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 
 describe('IterateWithNext', () => {
   it('iterates correctly', () => {
@@ -88,28 +87,6 @@ describe('Short wait time evaluator', () => {
   });
 });
 
-describe('Default Fareproducts', () => {
-  it('can be filtered by distribution channel', () => {
-    const defaultsHaveproductsWithoutAppChannel =
-      defaultPreassignedFareProducts.some((product) => {
-        const productHasAppChannel = product.distributionChannel.some(
-          (channel) => channel === 'app',
-        );
-        return !productHasAppChannel;
-      });
-
-    expect(defaultsHaveproductsWithoutAppChannel).toBe(true);
-
-    const filteredByAppChannel = defaultPreassignedFareProducts.filter(
-      productIsSellableInApp,
-    );
-
-    expect(
-      defaultPreassignedFareProducts.length - filteredByAppChannel.length,
-    ).toBeGreaterThan(0);
-  });
-});
-
 describe('Function flattenObject()', () => {
   const inputObj = {
     a: 1,
@@ -135,5 +112,32 @@ describe('Function flattenObject()', () => {
 
   it('has expected type', () => {
     expect(flatObj as ExpectedObj).toBeTruthy();
+  });
+});
+
+describe('Function onlyUnique', () => {
+  const input = [1, 'a', 3, 'k', 3, 'a'];
+  const expected = [1, 'a', 3, 'k'];
+
+  it('only contains unique values', () => {
+    expect(input.filter(onlyUniques).sort()).toEqual(expected.sort());
+  });
+});
+
+describe('Function onlyUniqueBasedOnField', () => {
+  const input = [
+    {field1: 'test1', field2: 'what'},
+    {field1: 'test1', field2: 'what'},
+    {field1: 'test2', field2: 'what'},
+  ];
+  const expected = [
+    {field1: 'test1', field2: 'what'},
+    {field1: 'test2', field2: 'what'},
+  ];
+
+  it('only contains unique values', () => {
+    expect(input.filter(onlyUniquesBasedOnField('field1')).sort()).toEqual(
+      expected.sort(),
+    );
   });
 });
