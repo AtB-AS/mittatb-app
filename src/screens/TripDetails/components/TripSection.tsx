@@ -1,5 +1,5 @@
 import {Leg, Place, Quay} from '@atb/api/types/trips';
-import {Warning} from '@atb/assets/svg/color/icons/status';
+import {Info, Warning} from '@atb/assets/svg/color/icons/status';
 import {Interchange} from '@atb/assets/svg/mono-icons/actions';
 import AccessibleText, {
   screenReaderPause,
@@ -39,6 +39,7 @@ import Time from './Time';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
+import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -79,6 +80,15 @@ const TripSection: React.FC<TripSectionProps> = ({
   const {startTimes, endTimes} = mapLegToTimeValues(leg);
 
   const navigation = useNavigation<TripDetailsRootNavigation<'Details'>>();
+
+  const notices = [
+    ...(leg.line?.notices || []),
+    ...(leg.serviceJourney?.notices || []),
+    ...(leg.serviceJourney?.journeyPattern?.notices || []),
+    ...(leg.fromEstimatedCall?.notices || []),
+  ]
+    .filter(onlyUniquesBasedOnField('id'))
+    .sort((s1, s2) => s1.id.localeCompare(s2.id));
 
   const sectionOutput = (
     <>
@@ -144,6 +154,18 @@ const TripSection: React.FC<TripSectionProps> = ({
             <SituationMessageBox noStatusIcon={true} situation={situation} />
           </TripRow>
         ))}
+        {notices.map(
+          (notice) =>
+            notice.text && (
+              <TripRow rowLabel={<ThemeIcon svg={Info} />}>
+                <MessageBox
+                  noStatusIcon={true}
+                  type="info"
+                  message={notice.text}
+                />
+              </TripRow>
+            ),
+        )}
         {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
           <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
             <MessageBox
