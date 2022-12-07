@@ -30,11 +30,15 @@ import {useOnMarkFavouriteDepartures} from '@atb/screens/Departures/components/u
 import {StopPlacesMode} from '@atb/screens/Departures/types';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {SvgProps} from 'react-native-svg';
-import {getSvgForMostCriticalSituation} from '@atb/situations';
-import {getSituationA11yLabel} from '@atb/situations/utils';
+import {getSvgForMostCriticalSituationOrNotice} from '@atb/situations';
+import {getSituationOrNoticeA11yLabel} from '@atb/situations/utils';
 import Time from '@atb/screens/TripDetails/components/Time';
-import {getTimeRepresentationType} from '@atb/screens/TripDetails/utils';
+import {
+  getNoticesForEstimatedCall,
+  getTimeRepresentationType,
+} from '@atb/screens/TripDetails/utils';
 import {Realtime} from '@atb/assets/svg/color/icons/status';
+import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
@@ -70,6 +74,9 @@ export default function EstimatedCallItem({
 
   const lineName = departure.destinationDisplay?.frontText;
   const lineNumber = line?.publicCode;
+
+  const notices = getNoticesForEstimatedCall(departure);
+
   const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
     useOnMarkFavouriteDepartures(
       {...line, lineNumber: lineNumber, lineName: lineName},
@@ -112,7 +119,7 @@ export default function EstimatedCallItem({
         }
         accessibilityLabel={
           navigateToDetails
-            ? getA11yDeparturesLabel(departure, t, language)
+            ? getA11yDeparturesLabel(departure, notices, t, language)
             : undefined
         }
       >
@@ -122,8 +129,9 @@ export default function EstimatedCallItem({
               publicCode={line.publicCode}
               transportMode={line.transportMode}
               transportSubmode={line.transportSubmode}
-              icon={getSvgForMostCriticalSituation(
+              icon={getSvgForMostCriticalSituationOrNotice(
                 departure.situations,
+                notices,
                 departure.cancellation,
               )}
               testID={testID}
@@ -220,6 +228,7 @@ const DepartureTime = ({
 
 function getA11yDeparturesLabel(
   departure: EstimatedCall,
+  notices: NoticeFragment[],
   t: TranslateFunction,
   language: Language,
 ) {
@@ -265,15 +274,18 @@ function getA11yDeparturesLabel(
     a11yDateInfo = `${a11yDate} ${a11yTimeWithRealtimePrefix}`;
   }
 
-  const a11yWarning = getSituationA11yLabel(
+  const a11yWarning = getSituationOrNoticeA11yLabel(
     departure.situations,
+    notices,
     departure.cancellation,
     t,
   );
 
   return `${
     departure.cancellation ? t(CancelledDepartureTexts.message) : ''
-  } ${getLineA11yLabel(departure, t)} ${a11yWarning} ${a11yDateInfo}`;
+  } ${getLineA11yLabel(departure, t)} ${
+    a11yWarning ? a11yWarning + ',' : ''
+  } ${a11yDateInfo}`;
 }
 
 function getLineA11yLabel(departure: EstimatedCall, t: TranslateFunction) {

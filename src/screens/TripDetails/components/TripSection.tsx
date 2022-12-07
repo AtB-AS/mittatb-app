@@ -10,7 +10,7 @@ import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {usePreferenceItems} from '@atb/preferences';
 import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
-import {SituationMessageBox, SituationIcon} from '@atb/situations';
+import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   Language,
@@ -34,7 +34,11 @@ import {
   significantWalkTime,
 } from '../Details/utils';
 import {TripDetailsRootNavigation} from '../types';
-import {getTimeRepresentationType, TimeValues} from '../utils';
+import {
+  getNoticesForLeg,
+  getTimeRepresentationType,
+  TimeValues,
+} from '../utils';
 import Time from './Time';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
@@ -81,14 +85,7 @@ const TripSection: React.FC<TripSectionProps> = ({
 
   const navigation = useNavigation<TripDetailsRootNavigation<'Details'>>();
 
-  const notices = [
-    ...(leg.line?.notices || []),
-    ...(leg.serviceJourney?.notices || []),
-    ...(leg.serviceJourney?.journeyPattern?.notices || []),
-    ...(leg.fromEstimatedCall?.notices || []),
-  ]
-    .filter(onlyUniquesBasedOnField('id'))
-    .sort((s1, s2) => s1.id.localeCompare(s2.id));
+  const notices = getNoticesForLeg(leg);
 
   const sectionOutput = (
     <>
@@ -150,22 +147,15 @@ const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {leg.situations.map((situation) => (
-          <TripRow rowLabel={<SituationIcon situation={situation} />}>
+          <TripRow rowLabel={<SituationOrNoticeIcon situation={situation} />}>
             <SituationMessageBox noStatusIcon={true} situation={situation} />
           </TripRow>
         ))}
-        {notices.map(
-          (notice) =>
-            notice.text && (
-              <TripRow rowLabel={<ThemeIcon svg={Info} />}>
-                <MessageBox
-                  noStatusIcon={true}
-                  type="info"
-                  message={notice.text}
-                />
-              </TripRow>
-            ),
-        )}
+        {notices.map((notice) => (
+          <TripRow rowLabel={<ThemeIcon svg={Info} />}>
+            <MessageBox noStatusIcon={true} type="info" message={notice.text} />
+          </TripRow>
+        ))}
         {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
           <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
             <MessageBox
