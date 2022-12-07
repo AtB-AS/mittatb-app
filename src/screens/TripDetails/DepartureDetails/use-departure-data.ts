@@ -1,13 +1,15 @@
-import {getDepartures} from '@atb/api/serviceJourney';
+import {getServiceJourneyWithEstimatedCalls} from '@atb/api/serviceJourney';
 import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {ServiceJourneyEstimatedCallFragment} from '@atb/api/types/generated/serviceJourney';
 import usePollableResource from '@atb/utils/use-pollable-resource';
 import {useCallback} from 'react';
 import {ServiceJourneyDeparture} from './types';
+import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
+import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
+import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 
 export type DepartureData = {
   estimatedCallsWithMetadata: EstimatedCallWithMetadata[];
@@ -15,6 +17,7 @@ export type DepartureData = {
   title?: string;
   subMode?: TransportSubmode;
   situations: SituationFragment[];
+  notices: NoticeFragment[];
 };
 
 type EstimatedCallMetadata = {
@@ -25,7 +28,7 @@ type EstimatedCallMetadata = {
   isEndOfGroup: boolean;
 };
 
-export type EstimatedCallWithMetadata = ServiceJourneyEstimatedCallFragment & {
+export type EstimatedCallWithMetadata = EstimatedCallWithQuayFragment & {
   metadata: EstimatedCallMetadata;
 };
 
@@ -35,33 +38,47 @@ export default function useDepartureData(
   disabled?: boolean,
 ): [DepartureData, boolean] {
   const getService = useCallback(
-    async function getServiceJourneyDepartures(): Promise<DepartureData> {
-      const estimatedCalls = await getDepartures(
+    async function (): Promise<DepartureData> {
+      const serviceJourney = await getServiceJourneyWithEstimatedCalls(
         activeItem.serviceJourneyId,
         new Date(activeItem.serviceDate),
       );
       const estimatedCallsWithMetadata = addMetadataToEstimatedCalls(
-        estimatedCalls,
+        serviceJourney.estimatedCalls || [],
         activeItem.fromQuayId,
         activeItem.toQuayId,
       );
 
-      const firstCallOfTrip = estimatedCallsWithMetadata.find(
+      const focusedEstimatedCall = estimatedCallsWithMetadata.find(
         (e) => e.metadata.group === 'trip',
+      )!;
+
+      const publicCode =
+        serviceJourney.publicCode || serviceJourney.line?.publicCode;
+      const title = `${publicCode} ${
+        focusedEstimatedCall.destinationDisplay?.frontText || ''
+      }`;
+
+      const notices = [
+        ...serviceJourney.notices,
+        ...(serviceJourney.journeyPattern?.notices || []),
+        ...serviceJourney.line.notices,
+        ...focusedEstimatedCall.notices,
+      ]
+        .filter(onlyUniquesBasedOnField<NoticeFragment>('id'))
+        .sort((n1, n2) => n1.id.localeCompare(n2.id));
+
+      const situations = focusedEstimatedCall.situations.sort((n1, n2) =>
+        n1.id.localeCompare(n2.id),
       );
 
-      const line = firstCallOfTrip?.serviceJourney?.journeyPattern?.line;
-      const situations = firstCallOfTrip?.situations || [];
-      const title = line?.publicCode
-        ? `${line?.publicCode} ${firstCallOfTrip?.destinationDisplay?.frontText}`
-        : undefined;
-
       return {
-        mode: line?.transportMode,
+        mode: serviceJourney.transportMode,
         title,
-        subMode: line?.transportSubmode,
+        subMode: serviceJourney.transportSubmode,
         estimatedCallsWithMetadata,
         situations,
+        notices,
       };
     },
     [activeItem],
@@ -71,6 +88,7 @@ export default function useDepartureData(
     initialValue: {
       estimatedCallsWithMetadata: [],
       situations: [],
+      notices: [],
     },
     pollingTimeInSeconds,
     disabled: disabled || !activeItem,
@@ -80,7 +98,7 @@ export default function useDepartureData(
 }
 
 function addMetadataToEstimatedCalls(
-  estimatedCalls: ServiceJourneyEstimatedCallFragment[],
+  estimatedCalls: EstimatedCallWithQuayFragment[],
   fromQuayId?: string,
   toQuayId?: string,
 ): EstimatedCallWithMetadata[] {
