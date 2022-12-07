@@ -3,22 +3,19 @@ import client from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
-import {ServiceJourneyEstimatedCallFragment} from './types/generated/serviceJourney';
+import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 
-type ServiceJourneyDepartures = {
-  value: ServiceJourneyEstimatedCallFragment[];
-};
-
-export async function getDepartures(
+export async function getServiceJourneyWithEstimatedCalls(
   id: string,
-  date?: Date,
-): Promise<ServiceJourneyEstimatedCallFragment[]> {
-  let url = `bff/v2/servicejourney/${encodeURIComponent(id)}/departures`;
-  if (date) {
-    url = url + `?date=${formatISO(date, {representation: 'date'})}`;
-  }
-  const response = await client.get<ServiceJourneyDepartures>(url);
-  return response.data?.value ?? [];
+  date: Date,
+): Promise<ServiceJourneyWithEstCallsFragment> {
+  const encodedId = encodeURIComponent(id);
+  const formattedDate = formatISO(date, {representation: 'date'});
+  let url = `bff/v2/servicejourney/${encodedId}/calls?date=${formattedDate}`;
+  const response = await client.get<{
+    value: ServiceJourneyWithEstCallsFragment;
+  }>(url);
+  return response.data?.value;
 }
 
 export async function getServiceJourneyMapLegs(

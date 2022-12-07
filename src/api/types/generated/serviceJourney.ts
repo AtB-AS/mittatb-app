@@ -32,6 +32,7 @@ export type ServiceJourneyDeparturesQuery = {
           latitude?: number;
           longitude?: number;
         };
+        tariffZones: Array<{id: string; name?: string}>;
       };
       serviceJourney?: {
         id: string;
@@ -86,6 +87,7 @@ export type ServiceJourneyEstimatedCallFragment = {
       latitude?: number;
       longitude?: number;
     };
+    tariffZones: Array<{id: string; name?: string}>;
   };
   serviceJourney?: {
     id: string;
@@ -130,13 +132,6 @@ export type LineFragment = {
   publicCode?: string;
   transportMode?: Types.TransportMode;
   transportSubmode?: Types.TransportSubmode;
-};
-
-export type StopPlaceFragment = {
-  id: string;
-  name: string;
-  latitude?: number;
-  longitude?: number;
 };
 
 export type ServiceJourneyFragment = {
