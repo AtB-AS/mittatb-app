@@ -8,6 +8,7 @@ import {
 } from '@atb/translations';
 import {Error, Info, Warning} from '@atb/assets/svg/color/icons/status';
 import {SvgProps} from 'react-native-svg';
+import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 
 export const getUniqueSituations = (situations: SituationType[] = []) => {
   let seenIds: string[] = [];
@@ -53,12 +54,15 @@ export const getSvgForSituation = (
   }
 };
 
-export const getSvgForMostCriticalSituation = (
+export const getSvgForMostCriticalSituationOrNotice = (
   situations: SituationType[],
+  notices?: NoticeFragment[],
   cancellation: boolean = false,
 ) => {
   if (cancellation) return Error;
-  if (!situations.length) return undefined;
+  if (!situations.length) {
+    return notices?.length ? Info : undefined;
+  }
   return situations
     .map(getMessageTypeForSituation)
     .reduce((svg, msgType) => (msgType === 'warning' ? Warning : svg), Info);

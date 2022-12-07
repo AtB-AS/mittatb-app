@@ -30,10 +30,13 @@ import {useOnMarkFavouriteDepartures} from '@atb/screens/Departures/components/u
 import {StopPlacesMode} from '@atb/screens/Departures/types';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {SvgProps} from 'react-native-svg';
-import {getSvgForMostCriticalSituation} from '@atb/situations';
+import {getSvgForMostCriticalSituationOrNotice} from '@atb/situations';
 import {getSituationA11yLabel} from '@atb/situations/utils';
 import Time from '@atb/screens/TripDetails/components/Time';
-import {getTimeRepresentationType} from '@atb/screens/TripDetails/utils';
+import {
+  getNoticesForEstimatedCall,
+  getTimeRepresentationType,
+} from '@atb/screens/TripDetails/utils';
 import {Realtime} from '@atb/assets/svg/color/icons/status';
 
 type EstimatedCallItemProps = {
@@ -70,6 +73,9 @@ export default function EstimatedCallItem({
 
   const lineName = departure.destinationDisplay?.frontText;
   const lineNumber = line?.publicCode;
+
+  const notices = getNoticesForEstimatedCall(departure);
+
   const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
     useOnMarkFavouriteDepartures(
       {...line, lineNumber: lineNumber, lineName: lineName},
@@ -122,8 +128,9 @@ export default function EstimatedCallItem({
               publicCode={line.publicCode}
               transportMode={line.transportMode}
               transportSubmode={line.transportSubmode}
-              icon={getSvgForMostCriticalSituation(
+              icon={getSvgForMostCriticalSituationOrNotice(
                 departure.situations,
+                notices,
                 departure.cancellation,
               )}
               testID={testID}

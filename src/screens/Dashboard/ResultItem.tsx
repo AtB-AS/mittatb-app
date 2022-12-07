@@ -11,7 +11,7 @@ import TransportationIcon, {
   CollapsedLegs,
 } from '@atb/components/transportation-icon';
 
-import {SituationIcon} from '@atb/situations';
+import {SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
 import {
   TripSearchTexts,
@@ -44,6 +44,7 @@ import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {SearchTime} from '@atb/screens/Dashboard/journey-date-picker';
 import WarnWhenRailReplacementBus from '@atb/components/rail-replacement-bus-message';
+import {getNoticesForLeg} from '@atb/screens/TripDetails/utils';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -116,8 +117,9 @@ const ResultItemHeader: React.FC<{
 
       <WarnWhenRailReplacementBus tripPattern={tripPattern} />
 
-      <SituationIcon
+      <SituationOrNoticeIcon
         situations={flatMap(tripPattern.legs, (leg) => leg.situations)}
+        notices={flatMap(tripPattern.legs, getNoticesForLeg)}
         accessibilityLabel={t(
           TripSearchTexts.results.resultItem.hasSituationsTip,
         )}
