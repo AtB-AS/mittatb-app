@@ -37,7 +37,8 @@ import {
   getNoticesForEstimatedCall,
   getTimeRepresentationType,
 } from '@atb/screens/TripDetails/utils';
-import {Realtime} from '@atb/assets/svg/color/icons/status';
+import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
+import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 
 type EstimatedCallItemProps = {
@@ -179,6 +180,8 @@ const DepartureTime = ({
 }) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const {themeName} = useTheme();
+
   const timeRepresentationType = getTimeRepresentationType({
     expectedTime: expectedTime,
     aimedTime: aimedTime,
@@ -201,7 +204,11 @@ const DepartureTime = ({
   );
   const RealtimeWithIcon = (
     <View style={styles.realtime}>
-      <ThemeIcon style={styles.realtimeIcon} svg={Realtime}></ThemeIcon>
+      <ThemeIcon
+        style={styles.realtimeIcon}
+        svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
+        size={'small'}
+      ></ThemeIcon>
       {ExpectedText}
     </View>
   );
@@ -373,7 +380,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginRight: theme.spacings.xLarge,
   },
   realtimeIcon: {
-    marginRight: theme.spacings.xSmall / 2,
+    marginRight: theme.spacings.xSmall,
   },
   lineChip: {
     padding: theme.spacings.small,
@@ -399,6 +406,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   realtime: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   warningIcon: {
     marginRight: theme.spacings.small,
