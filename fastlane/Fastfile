@@ -98,8 +98,9 @@ platform :ios do
       export_options: {
         compileBitcode: false,
         signingStyle: "manual",
-        provisioningProfiles: {"#{ENV['IOS_BUNDLE_IDENTIFIER']}": "#{ENV['IOS_PROVISIONING_PROFILE_SPECIFIER']}"}, 
-                              {"#{ENV['IOS_APP_WIDGET_IDENTIFIER']}": "#{ENV['IOS_WIDGET_PROVISIONING_PROFILE_SPECIFIER']}"}
+        provisioningProfiles: {
+          "#{ENV['IOS_BUNDLE_IDENTIFIER']}": "#{ENV['IOS_PROVISIONING_PROFILE_SPECIFIER']}",
+          "#{ENV['IOS_APP_WIDGET_IDENTIFIER']}": "#{ENV['IOS_WIDGET_PROVISIONING_PROFILE_SPECIFIER']}"
       	}
       }
     )
