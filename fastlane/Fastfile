@@ -19,7 +19,7 @@ platform :ios do
     match(
       type: "adhoc", force_for_new_devices: true,
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
-      app_identifier:ENV['IOS_BUNDLE_IDENTIFIER'],
+      app_identifier: identifiers,
       git_url:ENV['FASTLANE_MATCH_GIT_URL'],
       username:ENV['FASTLANE_MATCH_USERNAME'])
   end
@@ -90,14 +90,32 @@ platform :ios do
       use_automatic_signing: false,
       path: "./ios/atb.xcodeproj"
     )
+    update_project_provisioning(
+      xcodeproj: "./ios/atb.xcodeproj",
+      target_filter: "atb",
+      profile:ENV['IOS_PROVISIONING_PROFILE_SPECIFIER'],
+      build_configuration: "Release"
+    )
+    update_project_provisioning(
+      xcodeproj: "./ios/atb.xcodeproj",
+      target_filter: "departureWidgetExtension",
+      profile:ENV['IOS_WIDGET_PROVISIONING_PROFILE_SPECIFIER'],
+      build_configuration: "Release"
+    )
     cocoapods(podfile: './ios/Podfile')
     build_app(
       scheme: 'atb',
       configuration: 'Release',
       export_method: ENV['EXPORT_METHOD'],
       workspace: './ios/atb.xcworkspace',
+      skip_profile_detection: true,
       export_options: {
         compileBitcode: false,
+        signingStyle: "manual",
+        provisioningProfiles: {
+          "#{ENV['IOS_BUNDLE_IDENTIFIER']}": "#{ENV['IOS_PROVISIONING_PROFILE_SPECIFIER']}",
+          "#{ENV['IOS_APP_WIDGET_IDENTIFIER']}": "#{ENV['IOS_WIDGET_PROVISIONING_PROFILE_SPECIFIER']}"
+      	}
       }
     )
   end
