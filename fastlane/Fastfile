@@ -107,14 +107,14 @@ platform :ios do
     )
     update_project_provisioning(
       xcodeproj: "./ios/atb.xcodeproj",
-      target_filter: "atb",
+      target_filter: "app",
       profile: app_prov_profile_path,
       build_configuration: "Release",
       code_signing_identity: app_signing_identity_name
     )
     update_project_provisioning(
       xcodeproj: "./ios/atb.xcodeproj",
-      target_filter: "departureWidgetExtension",
+      target_filter: "departureWidget",
       profile: widget_prov_profile_path,
       build_configuration: "Release",
       code_signing_identity: widget_signing_identity_name
