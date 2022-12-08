@@ -94,8 +94,14 @@ platform :ios do
       configuration: 'Release',
       export_method: ENV['EXPORT_METHOD'],
       workspace: './ios/atb.xcworkspace',
+      skip_profile_detection: true,
       export_options: {
         compileBitcode: false,
+        signingStyle: "manual",
+        provisioningProfiles: {
+          "#{ENV['IOS_BUNDLE_IDENTIFIER']}" => "#{ENV['IOS_PROVISIONING_PROFILE_SPECIFIER']}",
+          "#{ENV['IOS_APP_WIDGET_IDENTIFIER']}" => "#{ENV['IOS_WIDGET_PROVISIONING_PROFILE_SPECIFIER']}"
+      	}
       }
     )
   end
