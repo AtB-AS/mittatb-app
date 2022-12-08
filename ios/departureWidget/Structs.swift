@@ -93,8 +93,8 @@ struct DepartureLineInfo: Codable {
         lineId = try container.decode(String.self, forKey: .lineId)
         lineName = try container.decodeIfPresent(String.self, forKey: .lineName)
         lineNumber = try container.decode(String.self, forKey: .lineNumber)
-        transportMode = try? container.decodeIfPresent(TransportMode.self, forKey: .transportMode)
-        transportSubmode = try? container.decodeIfPresent(TransportSubMode.self, forKey: .transportSubmode)
+        transportMode = try container.decodeIfPresent(TransportMode.self, forKey: .transportMode)
+        transportSubmode = try container.decodeIfPresent(TransportSubMode.self, forKey: .transportSubmode)
         quayId = try container.decode(String.self, forKey: .quayId)
     }
 }
@@ -192,8 +192,8 @@ struct FavouriteDeparture: Codable {
         lineId = try container.decode(String.self, forKey: .lineId)
         lineName = try container.decodeIfPresent(String.self, forKey: .lineName)
         lineLineNumber = try container.decode(String.self, forKey: .lineLineNumber)
-        lineTransportationMode = try? container.decodeIfPresent(TransportMode.self, forKey: .lineTransportationMode)
-        lineTransportationSubMode = try? container.decodeIfPresent(TransportSubMode.self, forKey: .lineTransportationSubMode)
+        lineTransportationMode = try container.decodeIfPresent(TransportMode.self, forKey: .lineTransportationMode)
+        lineTransportationSubMode = try container.decodeIfPresent(TransportSubMode.self, forKey: .lineTransportationSubMode)
         quayName = try container.decode(String.self, forKey: .quayName)
         quayPublicCode = try container.decode(String.self, forKey: .quayPublicCode)
         quayId = try container.decode(String.self, forKey: .quayId)
