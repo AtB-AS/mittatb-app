@@ -261,7 +261,15 @@ function DepartureTimeItem({
 }: DepartureTimeItemProps) {
   const styles = useItemStyles();
   const {t, language} = useTranslation();
+
   const notices = filterNotices(departure.notices || []);
+
+  const rightIcon = getSvgForMostCriticalSituationOrNotice(
+    departure.situations,
+    notices,
+  );
+  const leftIcon = departure.realtime ? Realtime : undefined;
+
   if (!isValidDeparture(departure)) {
     return null;
   }
@@ -274,11 +282,12 @@ function DepartureTimeItem({
       text={formatTimeText(departure, searchDate, language, t)}
       style={styles.departure}
       textStyle={styles.departureText}
-      rightIcon={getSvgForMostCriticalSituationOrNotice(
-        departure.situations,
-        notices,
-      )}
-      leftIcon={departure.realtime ? Realtime : undefined}
+      rightIcon={
+        rightIcon && {
+          svg: rightIcon,
+        }
+      }
+      leftIcon={leftIcon && {svg: leftIcon, size: 'small'}}
       testID={testID}
     />
   );

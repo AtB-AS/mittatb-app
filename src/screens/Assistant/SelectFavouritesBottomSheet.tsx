@@ -198,7 +198,7 @@ const SelectFavouritesBottomSheet = ({
             )}
             onPress={saveAndExit}
             disabled={false}
-            rightIcon={Confirm}
+            rightIcon={{svg: Confirm}}
             testID="confirmButton"
           />
           <Button
@@ -211,7 +211,7 @@ const SelectFavouritesBottomSheet = ({
               close();
               onEditFavouriteDeparture();
             }}
-            rightIcon={SvgArrowRight}
+            rightIcon={{svg: SvgArrowRight}}
             testID="editButton"
             mode="secondary"
           />

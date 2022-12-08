@@ -153,7 +153,7 @@ export default function PhoneInput({
                 onPress={onNext}
                 text={t(LoginTexts.phoneInput.mainButton)}
                 disabled={!isValidPhoneNumber(phoneNumber)}
-                rightIcon={ArrowRight}
+                rightIcon={{svg: ArrowRight}}
                 testID="sendCodeButton"
               />
             )}

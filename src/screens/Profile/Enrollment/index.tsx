@@ -47,7 +47,7 @@ export default function Splash() {
             <Button
               onPress={() => onEnroll(inviteCode)}
               text={t(EnrollmentTexts.button)}
-              leftIcon={Confirm}
+              leftIcon={{svg: Confirm}}
               disabled={isLoading || !inviteCode}
               style={styles.button}
               interactiveColor="interactive_0"

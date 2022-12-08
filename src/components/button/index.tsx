@@ -45,6 +45,11 @@ type ButtonTypeAwareProps =
       type?: 'block';
     };
 
+type ButtonIconProps = {
+  svg: ({fill}: {fill: string}) => JSX.Element;
+  size?: keyof Theme['icon']['size'];
+};
+
 export type ButtonProps = {
   onPress(): void;
   interactiveColor?: InteractiveColor;
@@ -52,8 +57,8 @@ export type ButtonProps = {
   viewContainerStyle?: StyleProp<ViewStyle>;
   textContainerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-  leftIcon?: ({fill}: {fill: string}) => JSX.Element;
-  rightIcon?: ({fill}: {fill: string}) => JSX.Element;
+  leftIcon?: ButtonIconProps;
+  rightIcon?: ButtonIconProps;
   active?: boolean;
 } & ButtonTypeAwareProps &
   TouchableOpacityProps;
@@ -128,11 +133,13 @@ const Button = React.forwardRef<any, ButtonProps>(
     const leftStyling: ViewStyle = {
       position: isInline ? 'relative' : 'absolute',
       left: isInline ? undefined : spacing,
+      marginRight: isInline ? theme.spacings.xSmall : undefined,
     };
 
     const rightStyling: ViewStyle = {
       position: isInline ? 'relative' : 'absolute',
       right: isInline ? undefined : spacing,
+      marginLeft: isInline ? theme.spacings.xSmall : undefined,
     };
 
     return (
@@ -148,7 +155,11 @@ const Button = React.forwardRef<any, ButtonProps>(
         >
           {leftIcon && (
             <View style={leftStyling}>
-              <ThemeIcon svg={leftIcon} fill={textColor} />
+              <ThemeIcon
+                svg={leftIcon.svg}
+                fill={textColor}
+                size={leftIcon.size}
+              />
             </View>
           )}
           {text && (
@@ -165,7 +176,11 @@ const Button = React.forwardRef<any, ButtonProps>(
           )}
           {rightIcon && (
             <View style={rightStyling}>
-              <ThemeIcon svg={rightIcon} fill={textColor} />
+              <ThemeIcon
+                svg={rightIcon.svg}
+                fill={textColor}
+                size={rightIcon.size}
+              />
             </View>
           )}
         </TouchableOpacity>
