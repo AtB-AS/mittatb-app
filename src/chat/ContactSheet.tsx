@@ -137,7 +137,7 @@ const ContactItem: React.FC<ContactProps> = ({
         text={buttonText}
         accessibilityHint={accessibilityHint}
         onPress={onPress}
-        rightIcon={icon}
+        rightIcon={icon && {svg: icon}}
       />
     </View>
   );

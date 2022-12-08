@@ -45,7 +45,7 @@ export default function SkipLoginWarning({navigation}: SkipLoginWarningProps) {
           interactiveColor="interactive_0"
           onPress={finishOnboarding}
           text={t(LoginTexts.skipLoginWarning.mainButton)}
-          rightIcon={ArrowRight}
+          rightIcon={{svg: ArrowRight}}
         />
         <TouchableOpacity
           style={styles.goToLoginButton}

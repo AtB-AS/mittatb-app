@@ -14,7 +14,7 @@ const BackArrow: React.FC<{onBack(): void} & AccessibilityProps> = ({
       interactiveColor="interactive_0"
       onPress={onBack}
       hitSlop={insets.symmetric(12, 20)}
-      leftIcon={ArrowLeft}
+      leftIcon={{svg: ArrowLeft}}
       style={shadows}
     ></Button>
   );

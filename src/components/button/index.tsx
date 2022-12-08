@@ -45,6 +45,11 @@ type ButtonTypeAwareProps =
       type?: 'block';
     };
 
+type ButtonIconProps = {
+  svg: ({fill}: {fill: string}) => JSX.Element;
+  size?: keyof Theme['icon']['size'];
+};
+
 export type ButtonProps = {
   onPress(): void;
   interactiveColor?: InteractiveColor;
@@ -52,10 +57,8 @@ export type ButtonProps = {
   viewContainerStyle?: StyleProp<ViewStyle>;
   textContainerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-  leftIcon?: ({fill}: {fill: string}) => JSX.Element;
-  rightIcon?: ({fill}: {fill: string}) => JSX.Element;
-  leftIconSize?: keyof Theme['icon']['size'];
-  rightIconSize?: keyof Theme['icon']['size'];
+  leftIcon?: ButtonIconProps;
+  rightIcon?: ButtonIconProps;
   active?: boolean;
 } & ButtonTypeAwareProps &
   TouchableOpacityProps;
@@ -71,8 +74,6 @@ const Button = React.forwardRef<any, ButtonProps>(
       type = 'block',
       leftIcon,
       rightIcon,
-      leftIconSize = 'normal',
-      rightIconSize = 'normal',
       text,
       disabled,
       active,
@@ -154,7 +155,11 @@ const Button = React.forwardRef<any, ButtonProps>(
         >
           {leftIcon && (
             <View style={leftStyling}>
-              <ThemeIcon svg={leftIcon} fill={textColor} size={leftIconSize} />
+              <ThemeIcon
+                svg={leftIcon.svg}
+                fill={textColor}
+                size={leftIcon.size}
+              />
             </View>
           )}
           {text && (
@@ -172,9 +177,9 @@ const Button = React.forwardRef<any, ButtonProps>(
           {rightIcon && (
             <View style={rightStyling}>
               <ThemeIcon
-                svg={rightIcon}
+                svg={rightIcon.svg}
                 fill={textColor}
-                size={rightIconSize}
+                size={rightIcon.size}
               />
             </View>
           )}

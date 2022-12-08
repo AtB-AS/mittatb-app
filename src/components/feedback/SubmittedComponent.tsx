@@ -69,14 +69,14 @@ const SubmittedComponent = ({
           <Button
             onPress={handleButtonClick}
             text={t(FeedbackTexts.additionalFeedback.intercomButton)}
-            rightIcon={Chat}
+            rightIcon={{svg: Chat}}
             interactiveColor="interactive_0"
           />
         ) : (
           <Button
             onPress={handleButtonClick}
             text={t(FeedbackTexts.additionalFeedback.contactsheetButton)}
-            rightIcon={ExternalLink}
+            rightIcon={{svg: ExternalLink}}
             interactiveColor="interactive_0"
           />
         )}

@@ -82,7 +82,7 @@ export default function ActiveFareContractPrompt({
           interactiveColor="interactive_0"
           onPress={navigation.goBack}
           text={t(LoginTexts.activeFareContractPrompt.laterButton)}
-          rightIcon={ArrowRight}
+          rightIcon={{svg: ArrowRight}}
         />
         <TouchableOpacity
           style={styles.laterButton}

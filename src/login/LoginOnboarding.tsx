@@ -70,7 +70,7 @@ export default function LoginOnboarding({
             interactiveColor="interactive_0"
             onPress={onNext}
             text={t(LoginTexts.onboarding.button)}
-            rightIcon={ArrowRight}
+            rightIcon={{svg: ArrowRight}}
             testID="loginButton"
           />
         </View>

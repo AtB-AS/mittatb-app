@@ -261,6 +261,9 @@ function DepartureTimeItem({
   const styles = useItemStyles();
   const {t, language} = useTranslation();
 
+  const rightIcon = getSvgForMostCriticalSituation(departure.situations);
+  const leftIcon = departure.realtime ? Realtime : undefined;
+
   if (!isValidDeparture(departure)) {
     return null;
   }
@@ -273,8 +276,13 @@ function DepartureTimeItem({
       text={formatTimeText(departure, searchDate, language, t)}
       style={styles.departure}
       textStyle={styles.departureText}
-      rightIcon={getSvgForMostCriticalSituation(departure.situations)}
-      leftIcon={departure.realtime ? Realtime : undefined}
+      rightIcon={
+        rightIcon && {
+          svg: rightIcon,
+          size: 'small',
+        }
+      }
+      leftIcon={leftIcon && {svg: leftIcon, size: 'small'}}
       testID={testID}
     />
   );
