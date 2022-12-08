@@ -164,7 +164,7 @@ export default function DepartureDetails({navigation, route}: Props) {
 
           {isTicketingEnabledAndWeCantSellTicketForDeparture && (
             <MessageBox
-              containerStyle={styles.messageBox}
+              style={styles.messageBox}
               type="info"
               message={t(DepartureDetailsTexts.messages.ticketsWeDontSell)}
             />
@@ -172,7 +172,7 @@ export default function DepartureDetails({navigation, route}: Props) {
 
           {someLegsAreByTrain && (
             <MessageBox
-              containerStyle={styles.messageBox}
+              style={styles.messageBox}
               type="info"
               message={t(DepartureDetailsTexts.messages.collabTicketInfo)}
             />

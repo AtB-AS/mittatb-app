@@ -54,7 +54,6 @@ import {
 } from 'react-native';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 import {getSvgForMostCriticalSituationOrNotice} from '@atb/situations';
-import {Realtime} from '@atb/assets/svg/color/icons/status';
 import {filterNotices} from '@atb/screens/TripDetails/utils';
 
 type RootProps = NearbyScreenProps<'NearbyRoot'>;

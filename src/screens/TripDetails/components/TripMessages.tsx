@@ -1,6 +1,6 @@
 import {getAxiosErrorType} from '@atb/api/utils';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import {
   TranslateFunction,
   TripDetailsTexts,
@@ -44,28 +44,28 @@ const TripMessages: React.FC<TripMessagesProps> = ({tripPattern, error}) => {
     <>
       {tripIncludesRailReplacementBus && (
         <MessageBox
-          containerStyle={styles.messageBox}
+          style={styles.messageBox}
           type="warning"
           message={t(TripDetailsTexts.messages.tripIncludesRailReplacementBus)}
         />
       )}
       {shortWaitTime && (
         <MessageBox
-          containerStyle={styles.messageBox}
+          style={styles.messageBox}
           type="info"
           message={t(TripDetailsTexts.messages.shortTime)}
         />
       )}
       {isTicketingEnabledAndSomeTicketsAreUnavailableInApp && (
         <MessageBox
-          containerStyle={styles.messageBox}
+          style={styles.messageBox}
           type="info"
           message={t(TripDetailsTexts.messages.ticketsWeDontSell)}
         />
       )}
       {canUseCollabTicket && (
         <MessageBox
-          containerStyle={styles.messageBox}
+          style={styles.messageBox}
           type="info"
           message={t(TripDetailsTexts.messages.collabTicketInfo)}
         />
@@ -74,7 +74,7 @@ const TripMessages: React.FC<TripMessagesProps> = ({tripPattern, error}) => {
         <>
           <ScreenReaderAnnouncement message={translatedError(error, t)} />
           <MessageBox
-            containerStyle={styles.messageBox}
+            style={styles.messageBox}
             type="warning"
             message={translatedError(error, t)}
           />
