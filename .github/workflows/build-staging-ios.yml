@@ -42,10 +42,6 @@ jobs:
             AtB.ipa
             AtB.app.dSYM.zip
           key: ${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets/') }}
-      - name: Run fastlane cert match
-        run: bundle exec fastlane ios get_cert
-        env:
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       - name: Generate native assets
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn generate-native-assets
@@ -60,6 +56,7 @@ jobs:
           PROVISIONING_PROFILE: $IOS_PROVISIONING_PROFILE_SPECIFIER
           EXPORT_METHOD: 'ad-hoc'
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       - name: Replace ipa bundle
         if: steps.ipa-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/ios/replace-bundle.sh
