@@ -22,11 +22,8 @@ struct Manifest: Codable {
     }
 
     init(from decoder: Decoder) throws {
-        let container = try? decoder.container(keyedBy: CodingKeys.self)
-        guard let departuresJsonString = try? container?.decodeIfPresent(String.self, forKey: .favouriteDepartures) else {
-            throw ManifestError.invalidType
-        }
-
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let departuresJsonString = try container.decodeIfPresent(String.self, forKey: .favouriteDepartures)
         guard let departuresJsonData = departuresJsonString?.data(using: .utf8) else {
             throw ManifestError.parsingData
         }
