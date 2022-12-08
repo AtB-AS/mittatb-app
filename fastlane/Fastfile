@@ -90,18 +90,22 @@ platform :ios do
       use_automatic_signing: false,
       path: "./ios/atb.xcodeproj"
     )
+    app_profile_path = "sigh_#{ENV['IOS_BUNDLE_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}_profile-path"
     update_project_provisioning(
       xcodeproj: "./ios/atb.xcodeproj",
       target_filter: "atb",
-      profile:ENV['IOS_PROVISIONING_PROFILE_SPECIFIER'],
+      profile: app_profile_path,
       build_configuration: "Release"
     )
+    widget_profile_path = "sigh_#{ENV['IOS_APP_WIDGET_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}_profile-path"
     update_project_provisioning(
       xcodeproj: "./ios/atb.xcodeproj",
       target_filter: "departureWidgetExtension",
-      profile:ENV['IOS_WIDGET_PROVISIONING_PROFILE_SPECIFIER'],
+      profile: widget_profile_path,
       build_configuration: "Release"
     )
+    app_pp_name = "sigh_#{ENV['IOS_APP_WIDGET_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}_profile-name"
+    widget_pp_name = "sigh_#{ENV['IOS_APP_WIDGET_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}_profile-name"
     cocoapods(podfile: './ios/Podfile')
     build_app(
       scheme: 'atb',
@@ -113,8 +117,8 @@ platform :ios do
         compileBitcode: false,
         signingStyle: "manual",
         provisioningProfiles: {
-          "#{ENV['IOS_BUNDLE_IDENTIFIER']}": "#{ENV['IOS_PROVISIONING_PROFILE_SPECIFIER']}",
-          "#{ENV['IOS_APP_WIDGET_IDENTIFIER']}": "#{ENV['IOS_WIDGET_PROVISIONING_PROFILE_SPECIFIER']}"
+          ENV['IOS_BUNDLE_IDENTIFIER'] => app_pp_name,
+          ENV['IOS_APP_WIDGET_IDENTIFIER'] => widget_pp_name
       	}
       }
     )
