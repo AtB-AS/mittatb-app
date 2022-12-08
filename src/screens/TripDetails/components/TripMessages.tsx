@@ -17,6 +17,7 @@ import {hasShortWaitTime} from '@atb/screens/TripDetails/components/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import {StyleSheet} from '@atb/theme';
+import DetailsMessages from '@atb/translations/components/DetailsMessages';
 
 type TripMessagesProps = {
   tripPattern: TripPattern;
@@ -60,14 +61,14 @@ const TripMessages: React.FC<TripMessagesProps> = ({tripPattern, error}) => {
         <MessageBox
           style={styles.messageBox}
           type="info"
-          message={t(TripDetailsTexts.messages.ticketsWeDontSell)}
+          message={t(DetailsMessages.messages.ticketsWeDontSell)}
         />
       )}
       {canUseCollabTicket && (
         <MessageBox
           style={styles.messageBox}
           type="info"
-          message={t(TripDetailsTexts.messages.collabTicketInfo)}
+          message={t(DetailsMessages.messages.collabTicketInfo)}
         />
       )}
       {error && (
