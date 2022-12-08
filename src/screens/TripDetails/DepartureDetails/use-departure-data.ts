@@ -10,6 +10,7 @@ import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {getNoticesForServiceJourney} from '@atb/screens/TripDetails/utils';
 
 export type DepartureData = {
   estimatedCallsWithMetadata: EstimatedCallWithMetadata[];
@@ -59,14 +60,10 @@ export default function useDepartureData(
         focusedEstimatedCall.destinationDisplay?.frontText || ''
       }`;
 
-      const notices = [
-        ...serviceJourney.notices,
-        ...(serviceJourney.journeyPattern?.notices || []),
-        ...serviceJourney.line.notices,
-        ...focusedEstimatedCall.notices,
-      ]
-        .filter(onlyUniquesBasedOnField<NoticeFragment>('id'))
-        .sort((n1, n2) => n1.id.localeCompare(n2.id));
+      const notices = getNoticesForServiceJourney(
+        serviceJourney,
+        activeItem.fromQuayId,
+      );
 
       const situations = focusedEstimatedCall.situations.sort((n1, n2) =>
         n1.id.localeCompare(n2.id),
