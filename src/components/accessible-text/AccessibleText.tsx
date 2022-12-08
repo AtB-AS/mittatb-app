@@ -6,7 +6,7 @@ type LabelProps = ThemeTextProps & {
   prefix?: string;
   suffix?: string;
   children?: string;
-  pause?: 'before' | 'after' | 'none';
+  pause?: 'before' | 'after' | 'both' | 'none';
 };
 
 const AccessibleText = ({
@@ -16,12 +16,14 @@ const AccessibleText = ({
   pause = 'after',
   ...props
 }: LabelProps) => {
+  const pauseBefore = pause === 'before' || pause === 'both';
+  const pauseAfter = pause === 'after' || pause === 'both';
   return (
     <ThemeText
-      accessibilityLabel={`${pause === 'before' ? screenReaderPause : ''} ${
+      accessibilityLabel={`${pauseBefore ? screenReaderPause : ''} ${
         prefix ?? ''
       } ${children ?? ''} ${suffix ?? ''} ${
-        pause === 'after' ? screenReaderPause : ''
+        pauseAfter ? screenReaderPause : ''
       }`}
       {...props}
     >
