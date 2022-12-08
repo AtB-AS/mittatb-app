@@ -9,7 +9,7 @@ production = ENV["PRODUCTION"] == "1"
 ENV['REACT_NATIVE_MAPBOX_GL_USE_FRAMEWORKS'] = '1'
 $ReactNativeMapboxGLIOSVersion = '6.3.0'
 
-target 'atb' do
+target 'app' do
   pod 'Firebase', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
@@ -51,15 +51,6 @@ target 'atb' do
   end
   pod 'token-state-react-native-lib-ios', :path => '../node_modules/@entur-private/abt-token-state-react-native-lib/ios'
 
-  target 'atbTests' do
-    inherit! :complete
-    # Pods for testing
-  end
-  
-  target 'departureWidgetExtension' do
-    inherit! :complete
-  end
-
   post_install do |installer|
     react_native_post_install(
       installer,
@@ -77,9 +68,9 @@ target 'atb' do
             config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
         end
       end
-      target.build_configurations.each do |config|
-        config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'No'
-      end
+      # target.build_configurations.each do |config|
+      #   config.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'No'
+      # end
     end
   end
   
