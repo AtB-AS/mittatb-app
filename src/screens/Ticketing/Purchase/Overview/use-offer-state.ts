@@ -1,6 +1,6 @@
 import {CancelToken as CancelTokenStatic} from '@atb/api';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {TariffZone} from '@atb/reference-data/types';
+import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {Offer, OfferPrice, searchOffers} from '@atb/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useMemo, useReducer} from 'react';
@@ -115,7 +115,7 @@ const initialState: OfferState = {
 
 export default function useOfferState(
   offerEndpoint: OfferEndpoint,
-  preassignedFareProductIds: string[],
+  preassignedFareProduct: PreassignedFareProduct,
   fromTariffZone: TariffZone,
   toTariffZone: TariffZone,
   userProfilesWithCount: UserProfileWithCount[],
@@ -148,7 +148,7 @@ export default function useOfferState(
             {
               zones,
               travellers: offerTravellers,
-              products: preassignedFareProductIds,
+              products: [preassignedFareProduct.id],
               travel_date: travelDate,
             },
             {cancelToken, retry: true, authWithIdToken: true},
@@ -184,7 +184,7 @@ export default function useOfferState(
     [
       dispatch,
       userProfilesWithCount,
-      preassignedFareProductIds,
+      preassignedFareProduct,
       offerEndpoint,
       zones,
       travelDate,
@@ -196,10 +196,13 @@ export default function useOfferState(
     updateOffer(source.token);
     return () => source.cancel('Cancelling previous offer search');
   }, [
+    dispatch,
     updateOffer,
-    offerEndpoint,
     userProfilesWithCount,
-    preassignedFareProductIds,
+    preassignedFareProduct,
+    offerEndpoint,
+    zones,
+    travelDate,
   ]);
 
   const refreshOffer = useCallback(

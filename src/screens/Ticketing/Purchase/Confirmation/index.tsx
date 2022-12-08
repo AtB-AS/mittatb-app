@@ -140,7 +140,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     userProfilesWithCountAndOffer,
   } = useOfferState(
     offerEndpoint,
-    [preassignedFareProduct.id],
+    preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,

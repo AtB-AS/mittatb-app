@@ -61,7 +61,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
   const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
     offerEndpoint,
-    [preassignedFareProduct.id],
+    preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
     travellerSelection,
