@@ -14,7 +14,7 @@ import DateSelection from '@atb/screens/Departures/components/DateSelection';
 import {StopPlacesMode} from '@atb/screens/Departures/types';
 import {MessageBox} from '@atb/components/message-box';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
@@ -124,8 +124,9 @@ export default function StopPlaceView(props: StopPlaceViewProps) {
               <MessageBox
                 type="error"
                 message={t(DeparturesTexts.message.resultFailed)}
-                onPress={() => {
-                  forceRefresh();
+                onPressConfig={{
+                  action: forceRefresh,
+                  text: t(dictionary.retry),
                 }}
               />
             </View>

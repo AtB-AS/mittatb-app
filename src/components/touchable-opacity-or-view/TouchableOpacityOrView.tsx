@@ -1,5 +1,6 @@
 import {
   AccessibilityProps,
+  StyleProp,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -12,7 +13,7 @@ const TouchableOpacityOrView = ({
   children,
   ...a11yProps
 }: {
-  style: ViewStyle;
+  style: StyleProp<ViewStyle>;
   children: ReactNode;
   onClick?: () => void;
 } & AccessibilityProps) => {

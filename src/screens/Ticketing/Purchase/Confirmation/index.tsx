@@ -16,7 +16,11 @@ import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';
-import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
+import {
+  dictionary,
+  PurchaseConfirmationTexts,
+  useTranslation,
+} from '@atb/translations';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
@@ -261,8 +265,10 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               type="error"
               title={t(PurchaseConfirmationTexts.errorMessageBox.title)}
               message={t(PurchaseConfirmationTexts.errorMessageBox.message)}
-              onPress={refreshOffer}
-              onPressText={t(MessageBoxTexts.tryAgainButton)}
+              onPressConfig={{
+                action: refreshOffer,
+                text: t(dictionary.retry),
+              }}
               style={styles.errorMessage}
             />
           )}
