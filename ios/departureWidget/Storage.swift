@@ -27,7 +27,7 @@ struct Manifest: Codable {
             throw ManifestError.invalidType
         }
 
-        guard let departuresJsonData = departuresJsonString.data(using: .utf8) else {
+        guard let departuresJsonData = departuresJsonString?.data(using: .utf8) else {
             throw ManifestError.parsingData
         }
 
