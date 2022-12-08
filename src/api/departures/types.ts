@@ -3,6 +3,7 @@ import {
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
+import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 
 type Notice = {text?: string};
 
@@ -24,6 +25,7 @@ export type DepartureTime = {
   situations: SituationFragment[];
   serviceJourneyId?: string;
   serviceDate: string;
+  notices?: NoticeFragment[];
 };
 
 export type DepartureGroup = {

@@ -53,8 +53,9 @@ import {
   View,
 } from 'react-native';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
-import {getSvgForMostCriticalSituation} from '@atb/situations';
+import {getSvgForMostCriticalSituationOrNotice} from '@atb/situations';
 import {Realtime} from '@atb/assets/svg/color/icons/status';
+import {filterNotices} from '@atb/screens/TripDetails/utils';
 
 type RootProps = NearbyScreenProps<'NearbyRoot'>;
 
@@ -261,7 +262,9 @@ function DepartureTimeItem({
   const styles = useItemStyles();
   const {t, language} = useTranslation();
 
-  const rightIcon = getSvgForMostCriticalSituation(departure.situations);
+  const notices = filterNotices(departure.notices || []);
+
+  const rightIcon = getSvgForMostCriticalSituationOrNotice(departure.situations,notices);
   const leftIcon = departure.realtime ? Realtime : undefined;
 
   if (!isValidDeparture(departure)) {
