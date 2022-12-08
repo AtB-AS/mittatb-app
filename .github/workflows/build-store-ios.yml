@@ -47,6 +47,7 @@ jobs:
           # so this sets a higher value for TIMEOUT and reduces the number of retries
           FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
           FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 1
+          PROVISIONING_PROFILE: $IOS_PROVISIONING_PROFILE_SPECIFIER
           EXPORT_METHOD: 'app-store'
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
       - name: Distribute to TestFlight

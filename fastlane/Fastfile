@@ -15,6 +15,7 @@ platform :ios do
       devices_file: ENV['IOS_DEVICES_FILE'],
       username:ENV['FASTLANE_MATCH_USERNAME']
     )
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER']]
     match(
       type: "adhoc", force_for_new_devices: true,
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
@@ -28,10 +29,11 @@ platform :ios do
     ensure_env_vars(
       env_vars: ['IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_USERNAME', 'FASTLANE_MATCH_TYPE']
     )
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER']]
     match(
       readonly: false,
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
-      app_identifier:ENV['IOS_BUNDLE_IDENTIFIER'],
+      app_identifier: identifiers,
       git_url:ENV['FASTLANE_MATCH_GIT_URL'],
       type:ENV['FASTLANE_MATCH_TYPE'],
       username:ENV['FASTLANE_MATCH_USERNAME']
@@ -94,14 +96,8 @@ platform :ios do
       configuration: 'Release',
       export_method: ENV['EXPORT_METHOD'],
       workspace: './ios/atb.xcworkspace',
-      skip_profile_detection: true,
       export_options: {
         compileBitcode: false,
-        signingStyle: "manual",
-        provisioningProfiles: {
-          "#{ENV['IOS_BUNDLE_IDENTIFIER']}": "#{ENV['IOS_PROVISIONING_PROFILE_SPECIFIER']}",
-          "#{ENV['IOS_APP_WIDGET_IDENTIFIER']}": "#{ENV['IOS_WIDGET_PROVISIONING_PROFILE_SPECIFIER']}"
-      	}
       }
     )
   end
