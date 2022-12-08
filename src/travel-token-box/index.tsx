@@ -4,7 +4,7 @@ import ThemeText from '@atb/components/text';
 
 import React from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
 import {MessageBox} from '@atb/components/message-box';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
@@ -161,7 +161,10 @@ const ErrorMessages = (alwaysShowErrors?: boolean) => {
         title={t(TravelTokenBoxTexts.errorMessages.tokensNotLoadedTitle)}
         message={t(TravelTokenBoxTexts.errorMessages.tokensNotLoaded)}
         style={styles.errorMessage}
-        onPress={retry}
+        onPressConfig={{
+          action: retry,
+          text: t(dictionary.retry),
+        }}
       />
     );
   }
