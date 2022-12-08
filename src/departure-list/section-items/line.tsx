@@ -264,7 +264,10 @@ function DepartureTimeItem({
 
   const notices = filterNotices(departure.notices || []);
 
-  const rightIcon = getSvgForMostCriticalSituationOrNotice(departure.situations,notices);
+  const rightIcon = getSvgForMostCriticalSituationOrNotice(
+    departure.situations,
+    notices,
+  );
   const leftIcon = departure.realtime ? Realtime : undefined;
 
   if (!isValidDeparture(departure)) {
