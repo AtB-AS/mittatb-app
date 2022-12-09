@@ -6,7 +6,7 @@ import React from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {
   findInspectable,
@@ -160,7 +160,7 @@ const ErrorMessages = (alwaysShowErrors?: boolean) => {
         type={'warning'}
         title={t(TravelTokenBoxTexts.errorMessages.tokensNotLoadedTitle)}
         message={t(TravelTokenBoxTexts.errorMessages.tokensNotLoaded)}
-        containerStyle={styles.errorMessage}
+        style={styles.errorMessage}
         onPress={retry}
       />
     );
@@ -175,7 +175,7 @@ const ErrorMessages = (alwaysShowErrors?: boolean) => {
         isMarkdown={true}
         title={t(TravelTokenBoxTexts.errorMessages.noInspectableTokenTitle)}
         message={t(TravelTokenBoxTexts.errorMessages.noInspectableToken)}
-        containerStyle={styles.errorMessage}
+        style={styles.errorMessage}
       />
     );
   }

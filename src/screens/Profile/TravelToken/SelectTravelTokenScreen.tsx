@@ -1,5 +1,5 @@
 import Button from '@atb/components/button';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import RadioBox from '@atb/components/radio-icon/radio-box';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
@@ -134,7 +134,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
           <MessageBox
             type={'warning'}
             message={t(TravelTokenTexts.toggleToken.noTravelCard)}
-            containerStyle={styles.errorMessageBox}
+            style={styles.errorMessageBox}
             isMarkdown={true}
           />
         )}
@@ -143,7 +143,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
           <MessageBox
             type={'warning'}
             message={t(TravelTokenTexts.toggleToken.noMobileToken)}
-            containerStyle={styles.errorMessageBox}
+            style={styles.errorMessageBox}
             isMarkdown={false}
           />
         )}
@@ -157,7 +157,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
             <MessageBox
               type={'warning'}
               message={t(TravelTokenTexts.toggleToken.hasCarnet)}
-              containerStyle={styles.errorMessageBox}
+              style={styles.errorMessageBox}
               isMarkdown={false}
             />
           )}
@@ -190,7 +190,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
           <MessageBox
             type="error"
             message={t(TravelTokenTexts.toggleToken.errorMessage)}
-            containerStyle={styles.errorMessageBox}
+            style={styles.errorMessageBox}
           />
         )}
 

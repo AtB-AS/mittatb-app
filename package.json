@@ -101,7 +101,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@atb-as/generate-assets": "^5.5.1",
+    "@atb-as/generate-assets": "^5.6.0",
     "@babel/core": "^7.18.13",
     "@babel/runtime": "^7.18.9",
     "@entur-private/abt-token-server-javascript-interface": "1.1.5",

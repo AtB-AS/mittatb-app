@@ -1,16 +1,16 @@
 import {Leg, Place, Quay} from '@atb/api/types/trips';
-import {Warning} from '@atb/assets/svg/color/icons/status';
+import {Info, Warning} from '@atb/assets/svg/color/icons/status';
 import {Interchange} from '@atb/assets/svg/mono-icons/actions';
 import AccessibleText, {
   screenReaderPause,
 } from '@atb/components/accessible-text';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {usePreferenceItems} from '@atb/preferences';
 import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
-import {SituationMessageBox, SituationIcon} from '@atb/situations';
+import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   Language,
@@ -34,11 +34,16 @@ import {
   significantWalkTime,
 } from '../Details/utils';
 import {TripDetailsRootNavigation} from '../types';
-import {getTimeRepresentationType, TimeValues} from '../utils';
+import {
+  getNoticesForLeg,
+  getTimeRepresentationType,
+  TimeValues,
+} from '../utils';
 import Time from './Time';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
+import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -79,6 +84,8 @@ const TripSection: React.FC<TripSectionProps> = ({
   const {startTimes, endTimes} = mapLegToTimeValues(leg);
 
   const navigation = useNavigation<TripDetailsRootNavigation<'Details'>>();
+
+  const notices = getNoticesForLeg(leg);
 
   const sectionOutput = (
     <>
@@ -140,8 +147,13 @@ const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {leg.situations.map((situation) => (
-          <TripRow rowLabel={<SituationIcon situation={situation} />}>
+          <TripRow rowLabel={<SituationOrNoticeIcon situation={situation} />}>
             <SituationMessageBox noStatusIcon={true} situation={situation} />
+          </TripRow>
+        ))}
+        {notices.map((notice) => (
+          <TripRow rowLabel={<ThemeIcon svg={Info} />}>
+            <MessageBox noStatusIcon={true} type="info" message={notice.text} />
           </TripRow>
         ))}
         {leg.transportSubmode === TransportSubmode.RailReplacementBus && (

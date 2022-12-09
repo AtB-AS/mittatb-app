@@ -86,7 +86,7 @@ export default function DateSelection({
         text={t(DeparturesTexts.dateNavigation.prevDay)}
         type="inline"
         mode="tertiary"
-        icon={ArrowLeft}
+        leftIcon={{svg: ArrowLeft}}
         disabled={disablePreviousDayNavigation}
         accessibilityHint={
           disablePreviousDayNavigation
@@ -110,8 +110,7 @@ export default function DateSelection({
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yChangeDateHint)}
         type="compact"
         mode="tertiary"
-        iconPosition="right"
-        icon={DateIcon}
+        rightIcon={{svg: DateIcon}}
         textStyle={{
           textAlign: 'center',
           marginRight: theme.spacings.xSmall,
@@ -125,9 +124,8 @@ export default function DateSelection({
         }}
         text={t(DeparturesTexts.dateNavigation.nextDay)}
         type="compact"
-        iconPosition="right"
         mode="tertiary"
-        icon={ArrowRight}
+        rightIcon={{svg: ArrowRight}}
         textStyle={{
           marginRight: theme.spacings.xSmall,
         }}

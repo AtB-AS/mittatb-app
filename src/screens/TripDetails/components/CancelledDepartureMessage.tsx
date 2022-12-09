@@ -1,4 +1,4 @@
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {CancelledDepartureTexts, useTranslation} from '@atb/translations';
@@ -10,7 +10,7 @@ const CancelledDepartureMessage = () => {
   return (
     <MessageBox
       type="error"
-      containerStyle={styles.cancellationContainer}
+      style={styles.cancellationContainer}
       message={t(CancelledDepartureTexts.message)}
     />
   );

@@ -25,6 +25,7 @@
 		38CD3270254B612600C6B978 /* AtBRootView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38CD326F254B612600C6B978 /* AtBRootView.m */; };
 		6172F2D35A4C3AA820D92908 /* libPods-atb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6423831EA8574132BED9D8CC /* libPods-atb.a */; };
 		7EF68E3733C33B6898317E18 /* libPods-atb-atbTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFE59519B596E51CEFDCCC0 /* libPods-atb-atbTests.a */; };
+		86ADA222293F651800F1E080 /* hermes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86ADA221293F651800F1E080 /* hermes.xcframework */; };
 		E6A5C3E919C3475F907B3CE4 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB1D1B473A9C41A79687569C /* Roboto-Regular.ttf */; };
 		F19471F4FCE444CF931BA221 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59E90F341F04DB2B427E0EF /* Roboto-Bold.ttf */; };
 		FED22489286F06AC0049ECE3 /* CoreNFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FED22488286F06AC0049ECE3 /* CoreNFC.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -71,6 +72,7 @@
 		38F348B52542D8120073C300 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		6423831EA8574132BED9D8CC /* libPods-atb.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atb.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C97AB639B58BBB4B15BBE30 /* Pods-atb-atbTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atb-atbTests.debug.xcconfig"; path = "Target Support Files/Pods-atb-atbTests/Pods-atb-atbTests.debug.xcconfig"; sourceTree = "<group>"; };
+		86ADA221293F651800F1E080 /* hermes.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = hermes.xcframework; path = "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"; sourceTree = "<group>"; };
 		ABFE59519B596E51CEFDCCC0 /* libPods-atb-atbTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atb-atbTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B59E90F341F04DB2B427E0EF /* Roboto-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Bold.ttf"; path = "../assets/fonts/Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		BB1D1B473A9C41A79687569C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86ADA222293F651800F1E080 /* hermes.xcframework in Frameworks */,
 				6172F2D35A4C3AA820D92908 /* libPods-atb.a in Frameworks */,
 				FED22489286F06AC0049ECE3 /* CoreNFC.framework in Frameworks */,
 			);
@@ -158,6 +161,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				86ADA221293F651800F1E080 /* hermes.xcframework */,
 				FED22488286F06AC0049ECE3 /* CoreNFC.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				6423831EA8574132BED9D8CC /* libPods-atb.a */,

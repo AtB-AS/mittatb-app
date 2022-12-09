@@ -7,7 +7,6 @@ import ThemeText from '@atb/components/text';
 import QuaySection from '@atb/departure-list/section-items/quay-section';
 import {useFavorites} from '@atb/favorites';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import SelectFavouritesBottomSheet from '@atb/screens/Assistant/SelectFavouritesBottomSheet';
 import {StyleSheet} from '@atb/theme';
 import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
@@ -15,7 +14,7 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import {Coordinates} from '@entur/sdk';
 import haversineDistance from 'haversine-distance';
 import React, {useEffect, useRef} from 'react';
-import {ActivityIndicator, Linking, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {useFavoriteDepartureData} from './state';
 import * as Sections from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
@@ -116,8 +115,7 @@ const DeparturesWidget = ({
           type="block"
           onPress={openFrontpageFavouritesBottomSheet}
           text={t(DeparturesTexts.button.text)}
-          icon={Edit}
-          iconPosition="right"
+          rightIcon={{svg: Edit}}
           ref={closeRef}
         />
       )}

@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 
 type ErrorProps = {
   message: string;

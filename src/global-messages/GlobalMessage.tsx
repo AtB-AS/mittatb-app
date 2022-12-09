@@ -1,7 +1,7 @@
 import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {useGlobalMessagesState} from '@atb/global-messages/GlobalMessagesContext';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import {StyleProp, ViewStyle} from 'react-native';
 import {
   GlobalMessageContextType,
@@ -48,13 +48,16 @@ const GlobalMessage = ({globalMessageContext, style}: Props) => {
           return (
             <MessageBox
               key={globalMessage.id}
-              containerStyle={style}
+              style={style}
               title={getTextForLanguage(globalMessage.title ?? [], language)}
               message={message}
               type={globalMessage.type}
               isMarkdown={true}
-              isDismissable={globalMessage.isDismissable}
-              onDismiss={() => dismissGlobalMessage(globalMessage)}
+              onDismiss={
+                globalMessage.isDismissable
+                  ? () => dismissGlobalMessage(globalMessage)
+                  : undefined
+              }
             />
           );
         })}

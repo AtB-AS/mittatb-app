@@ -96,7 +96,7 @@ export const CompactMap: React.FC<MapProps> = ({
             onPress={expandMap}
             hitSlop={insets.symmetric(8, 12)}
             text={t(MapTexts.expandButton.label)}
-            icon={MapIcon}
+            leftIcon={{svg: MapIcon}}
           ></Button>
         </View>
       )}

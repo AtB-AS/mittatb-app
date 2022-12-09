@@ -9,10 +9,10 @@
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.0"
 
-"@atb-as/generate-assets@^5.5.1":
-  version "5.5.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-5.5.1.tgz#61b26c55a34a63d62cee01d1659c8834174f2cc5"
-  integrity sha512-IC1NSDUyN4s3lzr/cE9Lb+HLlv0F9/zfSnte5JMCcEkGcAY3dx120W0+hcJrZDzzAVBBnyHy2MBkFMCNxd/wBw==
+"@atb-as/generate-assets@^5.6.0":
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-5.6.0.tgz#7678b2a625bbdf7e3617c4ed4cd223f4ca8db4a2"
+  integrity sha512-BNposchvZ7UpAd4z88+uIjPPV89wRX/HVYMNmhsMjqXtTCaM/e2Z1+aCNkwAhVD9v+/VavYEU4ZKQxpFPYn9wg==
   dependencies:
     "@atb-as/theme" "^6.1.3"
     commander "^9.4.0"

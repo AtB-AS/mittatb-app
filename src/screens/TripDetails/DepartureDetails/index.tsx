@@ -3,12 +3,11 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {QuayFragment} from '@atb/api/types/generated/serviceJourney';
+import {QuayFragment} from '@atb/api/types/generated/fragments/quays';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
-import {Info} from '@atb/assets/svg/color/icons/status';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
@@ -16,7 +15,7 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {usePreferenceItems} from '@atb/preferences';
 import CancelledDepartureMessage from '@atb/screens/TripDetails/components/CancelledDepartureMessage';
 import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
-import {SituationIcon, SituationMessageBox} from '@atb/situations';
+import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
@@ -35,6 +34,8 @@ import useDepartureData, {
   EstimatedCallWithMetadata,
 } from './use-departure-data';
 import {TicketingMessages} from '@atb/screens/TripDetails/components/DetailsMessages';
+import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
+import AccessibleText from '@atb/components/accessible-text';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -56,7 +57,7 @@ export default function DepartureDetails({navigation, route}: Props) {
 
   const isFocused = useIsFocused();
   const [
-    {estimatedCallsWithMetadata, title, mode, subMode, situations},
+    {estimatedCallsWithMetadata, title, mode, subMode, situations, notices},
     isLoading,
   ] = useDepartureData(activeItem, 30, !isFocused);
   const mapData = useMapData(activeItem);
@@ -65,6 +66,10 @@ export default function DepartureDetails({navigation, route}: Props) {
     animateNextChange();
     setActiveItem(newPage - 1);
   };
+
+  const alreadyShownSituationNumbers = situations
+    .map((s) => s.situationNumber)
+    .filter((s): s is string => !!s);
 
   return (
     <View style={styles.container}>
@@ -118,6 +123,16 @@ export default function DepartureDetails({navigation, route}: Props) {
               style={styles.messageBox}
             />
           ))}
+          {notices.map(
+            (notice) =>
+              notice.text && (
+                <MessageBox
+                  type="info"
+                  message={notice.text}
+                  style={styles.messageBox}
+                />
+              ),
+          )}
 
           {isLoading && (
             <View>
@@ -144,6 +159,8 @@ export default function DepartureDetails({navigation, route}: Props) {
             calls={estimatedCallsWithMetadata}
             mode={mode}
             subMode={subMode}
+            toQuayId={activeItem.toQuayId}
+            alreadyShownSituationNumbers={alreadyShownSituationNumbers}
           />
         </View>
       </ContentWithDisappearingHeader>
@@ -155,9 +172,17 @@ type CallGroupProps = {
   calls: EstimatedCallWithMetadata[];
   mode?: TransportMode;
   subMode?: TransportSubmode;
+  toQuayId?: string;
+  alreadyShownSituationNumbers: string[];
 };
 
-function EstimatedCallRows({calls, mode, subMode}: CallGroupProps) {
+function EstimatedCallRows({
+  calls,
+  mode,
+  subMode,
+  toQuayId,
+  alreadyShownSituationNumbers,
+}: CallGroupProps) {
   const styles = useStopsStyle();
   const passedCalls = calls.filter((c) => c.metadata.group === 'passed');
   const showCollapsable = passedCalls.length > 1;
@@ -189,33 +214,63 @@ function EstimatedCallRows({calls, mode, subMode}: CallGroupProps) {
     <View style={styles.estimatedCallRows}>
       {estimatedCallsToShow.map((call) => (
         <EstimatedCallRow
-          // Quay and ServiceJourney ID is not a unique key if a ServiceJourney
-          // passes by the same stop several times, (e.g. Ringen in Oslo)
-          // which is why it is used in combination with aimedDepartureTime.
-          key={`${call.quay?.id} ${call.serviceJourney?.id} ${call.aimedDepartureTime}`}
+          // Quay ID is not a unique key if a ServiceJourney passes by the
+          // same stop several times, (e.g. Ringen in Oslo) which is why it
+          // is used in combination with aimedDepartureTime.
+          key={`${call.quay?.id}-${call.aimedDepartureTime}`}
           call={call}
           mode={mode}
           subMode={subMode}
           collapseButton={
             call.metadata.isStartOfServiceJourney ? collapseButton : null
           }
+          situations={getSituationsToShowForCall(
+            call,
+            alreadyShownSituationNumbers,
+            toQuayId,
+          )}
         />
       ))}
     </View>
   );
 }
 
+/**
+ * Get the situations to show for an estimated call. Based on the following
+ * rules:
+ * - We don't show situations on passed calls or calls which are after the trip
+ * - We don't show situations which are already shown at the top, above the
+ *   service journey
+ * - If the trip have an end quay we only show situations on the end quay of the
+ *   trip, or else we show situations on all intermediate quays on the trip
+ */
+const getSituationsToShowForCall = (
+  {situations, metadata: {group, isEndOfGroup}}: EstimatedCallWithMetadata,
+  alreadyShownSituationNumbers: string[],
+  toQuayId?: string,
+) => {
+  if (group === 'passed' || group === 'after') return [];
+  if (toQuayId && !isEndOfGroup) return [];
+  return situations.filter(
+    (s) =>
+      !s.situationNumber ||
+      !alreadyShownSituationNumbers.includes(s.situationNumber),
+  );
+};
+
 type TripItemProps = {
   call: EstimatedCallWithMetadata;
   mode: TransportMode | undefined;
   subMode: TransportSubmode | undefined;
   collapseButton: JSX.Element | null;
+  situations: SituationFragment[];
 };
 function EstimatedCallRow({
   call,
   mode,
   subMode,
   collapseButton,
+  situations,
 }: TripItemProps) {
   const navigation = useNavigation<Props['navigation']>();
   const {t} = useTranslation();
@@ -253,40 +308,36 @@ function EstimatedCallRow({
         onPress={() => handleQuayPress(call.quay)}
         testID={'legType_' + group}
       >
-        <ThemeText testID="quayName">{getQuayName(call.quay)} </ThemeText>
+        <ThemeText testID="quayName">{getQuayName(call.quay)}</ThemeText>
+        {!call.forAlighting && !call.metadata.isStartOfServiceJourney && (
+          <AccessibleText
+            type="body__secondary"
+            color="secondary"
+            style={styles.boardingInfo}
+            pause="before"
+          >
+            {t(DepartureDetailsTexts.messages.noAlighting)}
+          </AccessibleText>
+        )}
+        {!call.forBoarding && !call.metadata.isEndOfServiceJourney && (
+          <AccessibleText
+            type="body__secondary"
+            color="secondary"
+            style={styles.boardingInfo}
+            pause="before"
+          >
+            {t(DepartureDetailsTexts.messages.noBoarding)}
+          </AccessibleText>
+        )}
       </TripRow>
-      {group === 'trip'
-        ? call.quay?.situations.map((situation) => (
-            <TripRow rowLabel={<SituationIcon situation={situation} />}>
-              <SituationMessageBox noStatusIcon={true} situation={situation} />
-            </TripRow>
-          ))
-        : null}
-      {call.notices &&
-        call.notices.map((notice, index) => {
-          if (!notice.text) return null;
-          return (
-            <TripRow
-              key={'notice-' + index}
-              rowLabel={<ThemeIcon svg={Info} />}
-            >
-              <MessageBox
-                noStatusIcon={true}
-                type="info"
-                message={notice.text}
-              />
-            </TripRow>
-          );
-        })}
-      {!call.forAlighting && (
-        <TripRow>
-          <MessageBox
-            noStatusIcon={true}
-            type="info"
-            message={t(DepartureDetailsTexts.messages.noAlighting)}
-          />
+      {situations.map((situation) => (
+        <TripRow
+          rowLabel={<SituationOrNoticeIcon situation={situation} />}
+          style={styles.situationTripRow}
+        >
+          <SituationMessageBox noStatusIcon={true} situation={situation} />
         </TripRow>
-      )}
+      ))}
 
       {collapseButton}
     </View>
@@ -302,7 +353,7 @@ function EstimatedCallRow({
           id: stopPlace.id,
           name: stopPlace.name,
         },
-        selectedQuay: quay,
+        selectedQuay: {...quay, situations: []},
         mode: 'Departure',
       });
     } else {
@@ -383,9 +434,6 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   middleRow: {
     minHeight: 60,
   },
-  situationsContainer: {
-    marginBottom: theme.spacings.small,
-  },
   estimatedCallRows: {
     backgroundColor: theme.static.background.background_0.background,
     marginBottom: theme.spacings.xLarge,
@@ -399,6 +447,13 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   scrollView__content: {
     padding: theme.spacings.medium,
     paddingBottom: theme.spacings.large,
+  },
+  boardingInfo: {
+    marginTop: theme.spacings.xSmall,
+  },
+  situationTripRow: {
+    paddingTop: 0,
+    paddingBottom: theme.spacings.xLarge,
   },
 }));
 

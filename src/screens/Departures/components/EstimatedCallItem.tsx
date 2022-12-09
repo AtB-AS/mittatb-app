@@ -12,17 +12,17 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {
+  formatLocaleTime,
   formatToClockOrLongRelativeMinutes,
   formatToClockOrRelativeMinutes,
   formatToSimpleDate,
 } from '@atb/utils/date';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
-import {EstimatedCall, StopPlace, Quay} from '@atb/api/types/departures';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
+import {EstimatedCall, Quay, StopPlace} from '@atb/api/types/departures';
 import useFontScale from '@atb/utils/use-font-scale';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Error} from '@atb/assets/svg/color/icons/status';
 import ToggleFavouriteDeparture from '@atb/screens/Departures/components/ToggleFavouriteDeparture';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {isToday, parseISO} from 'date-fns';
@@ -30,8 +30,16 @@ import {useOnMarkFavouriteDepartures} from '@atb/screens/Departures/components/u
 import {StopPlacesMode} from '@atb/screens/Departures/types';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {SvgProps} from 'react-native-svg';
-import {getSvgForMostCriticalSituation, SituationIcon} from '@atb/situations';
-import {getSituationA11yLabel} from '@atb/situations/utils';
+import {getSvgForMostCriticalSituationOrNotice} from '@atb/situations';
+import {getSituationOrNoticeA11yLabel} from '@atb/situations/utils';
+import Time from '@atb/screens/TripDetails/components/Time';
+import {
+  getNoticesForEstimatedCall,
+  getTimeRepresentationType,
+} from '@atb/screens/TripDetails/utils';
+import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
+import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
+import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
@@ -63,19 +71,13 @@ export default function EstimatedCallItem({
 
   const line = departure.serviceJourney?.line;
 
-  const time = formatToClockOrRelativeMinutes(
-    departure.expectedDepartureTime,
-    language,
-    t(dictionary.date.units.now),
-  );
-  const timeWithRealtimePrefix = departure.realtime
-    ? time
-    : t(dictionary.missingRealTimePrefix) + time;
-
   const isTripCancelled = departure.cancellation;
 
   const lineName = departure.destinationDisplay?.frontText;
   const lineNumber = line?.publicCode;
+
+  const notices = getNoticesForEstimatedCall(departure);
+
   const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
     useOnMarkFavouriteDepartures(
       {...line, lineNumber: lineNumber, lineName: lineName},
@@ -118,7 +120,7 @@ export default function EstimatedCallItem({
         }
         accessibilityLabel={
           navigateToDetails
-            ? getA11yDeparturesLabel(departure, t, language)
+            ? getA11yDeparturesLabel(departure, notices, t, language)
             : undefined
         }
       >
@@ -128,8 +130,9 @@ export default function EstimatedCallItem({
               publicCode={line.publicCode}
               transportMode={line.transportMode}
               transportSubmode={line.transportSubmode}
-              icon={getSvgForMostCriticalSituation(
+              icon={getSvgForMostCriticalSituationOrNotice(
                 departure.situations,
+                notices,
                 departure.cancellation,
               )}
               testID={testID}
@@ -140,8 +143,10 @@ export default function EstimatedCallItem({
           </ThemeText>
           {mode === 'Departure' || mode === 'Map' ? (
             <DepartureTime
+              isRealtime={departure.realtime}
               isTripCancelled={isTripCancelled}
-              timeWithRealtimePrefix={timeWithRealtimePrefix}
+              expectedTime={departure.expectedDepartureTime}
+              aimedTime={departure.aimedDepartureTime}
               testID={testID}
             />
           ) : null}
@@ -162,43 +167,113 @@ export default function EstimatedCallItem({
 
 const DepartureTime = ({
   isTripCancelled,
-  timeWithRealtimePrefix,
+  expectedTime,
+  aimedTime,
   testID,
+  isRealtime,
 }: {
   isTripCancelled: boolean;
-  timeWithRealtimePrefix: string;
+  expectedTime: string;
+  aimedTime: string;
   testID: string;
+  isRealtime: boolean;
 }) => {
   const styles = useStyles();
-  return (
-    <>
-      <ThemeText
-        type="body__primary--bold"
-        testID={testID + 'Time'}
-        style={isTripCancelled && styles.strikethrough}
-      >
-        {timeWithRealtimePrefix}
-      </ThemeText>
-    </>
+  const {t, language} = useTranslation();
+  const {themeName} = useTheme();
+
+  const timeRepresentationType = getTimeRepresentationType({
+    expectedTime: expectedTime,
+    aimedTime: aimedTime,
+    missingRealTime: !isRealtime,
+  });
+  const readableExpectedTime = formatToClockOrRelativeMinutes(
+    expectedTime,
+    language,
+    t(dictionary.date.units.now),
   );
+  const readableAimedTime = formatLocaleTime(aimedTime, language);
+  const ExpectedText = (
+    <ThemeText
+      type="body__primary--bold"
+      testID={testID + 'Time'}
+      style={isTripCancelled && styles.strikethrough}
+    >
+      {readableExpectedTime}
+    </ThemeText>
+  );
+  const RealtimeWithIcon = (
+    <View style={styles.realtime}>
+      <ThemeIcon
+        style={styles.realtimeIcon}
+        svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
+        size={'small'}
+      ></ThemeIcon>
+      {ExpectedText}
+    </View>
+  );
+  switch (timeRepresentationType) {
+    case 'significant-difference':
+      return (
+        <View style={styles.delayedRealtime}>
+          {RealtimeWithIcon}
+          <ThemeText
+            type="body__tertiary--strike"
+            color={'secondary'}
+            testID={testID + 'Time'}
+          >
+            {readableAimedTime}
+          </ThemeText>
+        </View>
+      );
+    case 'no-significant-difference':
+      return RealtimeWithIcon;
+    case 'no-realtime':
+      return ExpectedText;
+  }
 };
 
 function getA11yDeparturesLabel(
   departure: EstimatedCall,
+  notices: NoticeFragment[],
   t: TranslateFunction,
   language: Language,
 ) {
   let a11yDateInfo = '';
   if (departure.expectedDepartureTime) {
-    const a11yClock = formatToClockOrLongRelativeMinutes(
+    const a11yClockExpected = formatToClockOrLongRelativeMinutes(
       departure.expectedDepartureTime,
       language,
       t(dictionary.date.units.now),
       9,
     );
-    const a11yTimeWithRealtimePrefix = departure.realtime
-      ? a11yClock
-      : t(dictionary.a11yMissingRealTimePrefix) + a11yClock;
+    const a11yClockAimed = formatLocaleTime(
+      departure.aimedDepartureTime,
+      language,
+    );
+    const timeRepresentationType = getTimeRepresentationType({
+      expectedTime: departure.expectedDepartureTime,
+      aimedTime: departure.aimedDepartureTime,
+      missingRealTime: !departure.realtime,
+    });
+    let a11yTimeWithRealtimePrefix;
+    switch (timeRepresentationType) {
+      case 'significant-difference':
+        a11yTimeWithRealtimePrefix =
+          t(dictionary.a11yRealTimePrefix) +
+          a11yClockExpected +
+          ',' +
+          t(dictionary.a11yRouteTimePrefix) +
+          a11yClockAimed;
+        break;
+      case 'no-significant-difference':
+        a11yTimeWithRealtimePrefix =
+          t(dictionary.a11yRealTimePrefix) + a11yClockExpected;
+        break;
+      case 'no-realtime':
+        a11yTimeWithRealtimePrefix =
+          t(dictionary.a11yRouteTimePrefix) + a11yClockExpected;
+    }
     const parsedDepartureTime = parseISO(departure.expectedDepartureTime);
     const a11yDate = !isToday(parsedDepartureTime)
       ? formatToSimpleDate(parsedDepartureTime, language) + ','
@@ -206,15 +281,18 @@ function getA11yDeparturesLabel(
     a11yDateInfo = `${a11yDate} ${a11yTimeWithRealtimePrefix}`;
   }
 
-  const a11yWarning = getSituationA11yLabel(
+  const a11yWarning = getSituationOrNoticeA11yLabel(
     departure.situations,
+    notices,
     departure.cancellation,
     t,
   );
 
   return `${
     departure.cancellation ? t(CancelledDepartureTexts.message) : ''
-  } ${getLineA11yLabel(departure, t)} ${a11yWarning} ${a11yDateInfo}`;
+  } ${getLineA11yLabel(departure, t)} ${
+    a11yWarning ? a11yWarning + ',' : ''
+  } ${a11yDateInfo}`;
 }
 
 function getLineA11yLabel(departure: EstimatedCall, t: TranslateFunction) {
@@ -301,6 +379,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexShrink: 1,
     marginRight: theme.spacings.xLarge,
   },
+  realtimeIcon: {
+    marginRight: theme.spacings.xSmall,
+  },
   lineChip: {
     padding: theme.spacings.small,
     borderRadius: theme.border.radius.regular,
@@ -318,6 +399,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   strikethrough: {
     textDecorationLine: 'line-through',
+  },
+  delayedRealtime: {
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+  },
+  realtime: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   warningIcon: {
     marginRight: theme.spacings.small,

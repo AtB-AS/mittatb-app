@@ -83,8 +83,7 @@ export default function Summary({
         text={t(PurchaseOverviewTexts.summary.button)}
         disabled={isLoading || !hasSelection || isError}
         onPress={toPaymentFunction}
-        icon={ArrowRight}
-        iconPosition="right"
+        rightIcon={{svg: ArrowRight}}
         testID="goToPaymentButton"
         style={styles.button}
       />

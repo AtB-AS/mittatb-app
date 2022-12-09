@@ -2,7 +2,7 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {ScrollView, View} from 'react-native';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -10,7 +10,6 @@ import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
-import {TouchableOpacity} from 'react-native';
 import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketingState,
@@ -83,8 +82,7 @@ export default function ActiveFareContractPrompt({
           interactiveColor="interactive_0"
           onPress={navigation.goBack}
           text={t(LoginTexts.activeFareContractPrompt.laterButton)}
-          icon={ArrowRight}
-          iconPosition="right"
+          rightIcon={{svg: ArrowRight}}
         />
         <TouchableOpacity
           style={styles.laterButton}

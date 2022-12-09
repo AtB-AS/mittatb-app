@@ -16,7 +16,7 @@ import {
   ConfirmationErrorCode,
   PhoneSignInErrorCode,
 } from '@atb/auth/AuthContext';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
@@ -128,7 +128,7 @@ export default function ConfirmCode({
 
             {error && !isLoading && (
               <MessageBox
-                containerStyle={styles.messageBox}
+                style={styles.messageBox}
                 type="error"
                 message={t(LoginTexts.confirmCode.errors[error])}
               />
@@ -141,8 +141,7 @@ export default function ConfirmCode({
                   onPress={onLogin}
                   text={t(LoginTexts.confirmCode.mainButton)}
                   disabled={!code}
-                  icon={ArrowRight}
-                  iconPosition="right"
+                  rightIcon={{svg: ArrowRight}}
                   style={styles.submitButton}
                   testID="submitButton"
                 />

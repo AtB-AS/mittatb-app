@@ -2,7 +2,7 @@ import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
 import {useAuthState} from '@atb/auth';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import {LeftButtonProps} from '@atb/components/screen-header';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
@@ -41,8 +41,8 @@ import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 import {
   CardPaymentMethod,
   PaymentMethod,
-  SavedPaymentOption,
   PurchaseScreenProps,
+  SavedPaymentOption,
 } from '../types';
 
 export type RouteParams = {
@@ -272,7 +272,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               message={t(PurchaseConfirmationTexts.errorMessageBox.message)}
               onPress={refreshOffer}
               onPressText={t(MessageBoxTexts.tryAgainButton)}
-              containerStyle={styles.errorMessage}
+              style={styles.errorMessage}
             />
           )}
 
@@ -395,7 +395,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           <MessageBox
             type="warning"
             message={inspectableTokenWarningText}
-            containerStyle={styles.warningMessage}
+            style={styles.warningMessage}
             isMarkdown={true}
           />
         )}
@@ -413,14 +413,14 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   text={getPaymentOptionTexts(previousMethod)}
                   interactiveColor="interactive_0"
                   disabled={!!error || !previousMethod}
-                  iconPosition="right"
-                  icon={
-                    previousMethod.paymentType === PaymentType.Mastercard
-                      ? MasterCard
-                      : previousMethod.paymentType === PaymentType.Vipps
-                      ? Vipps
-                      : Visa
-                  }
+                  rightIcon={{
+                    svg:
+                      previousMethod.paymentType === PaymentType.Mastercard
+                        ? MasterCard
+                        : previousMethod.paymentType === PaymentType.Vipps
+                        ? Vipps
+                        : Visa,
+                  }}
                   viewContainerStyle={styles.paymentButton}
                   onPress={() => {
                     if (previousMethod) {

@@ -1,6 +1,6 @@
 import {getAxiosErrorType} from '@atb/api/utils';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
-import MessageBox from '@atb/components/message-box';
+import {MessageBox} from '@atb/components/message-box';
 import {
   DetailsMessages,
   TranslateFunction,
@@ -25,8 +25,8 @@ import {hasShortWaitTime} from '@atb/screens/TripDetails/components/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
-import {ServiceJourneyEstimatedCallFragment} from '@atb/api/types/generated/serviceJourney';
 import {StyleSheet} from '@atb/theme';
+import {EstimatedCallWithMetadata} from '@atb/screens/TripDetails/DepartureDetails/use-departure-data';
 
 type TripMessagesProps = {
   tripPattern: TripPattern;
@@ -67,21 +67,21 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
     <>
       {tripIncludesRailReplacementBus && (
         <MessageBox
-          containerStyle={styles.messageBox}
+          style={styles.messageBox}
           type="warning"
           message={t(TripDetailsTexts.messages.tripIncludesRailReplacementBus)}
         />
       )}
       {shortWaitTime && (
         <MessageBox
-          containerStyle={styles.messageBox}
+          style={styles.messageBox}
           type="info"
           message={t(TripDetailsTexts.messages.shortTime)}
         />
       )}
       {isTicketingEnabledAndSomeTicketsAreUnavailableInApp && (
         <MessageBox
-          containerStyle={styles.messageBox}
+          style={styles.messageBox}
           type="info"
           message={
             canUseCollabTicket && allLegsInZoneA
@@ -94,7 +94,7 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
         <>
           <ScreenReaderAnnouncement message={translatedError(error, t)} />
           <MessageBox
-            containerStyle={styles.messageBox}
+            style={styles.messageBox}
             type="warning"
             message={translatedError(error, t)}
           />
@@ -120,7 +120,7 @@ function someLegsAreByTrain(tripPattern: TripPattern): boolean {
 
 type TicketingMessagesProps = {
   item: ServiceJourneyDeparture;
-  trip: ServiceJourneyEstimatedCallFragment[];
+  trip: EstimatedCallWithMetadata[];
   mode: TransportMode | undefined;
   subMode: TransportSubmode | undefined;
 };
@@ -158,7 +158,7 @@ export function TicketingMessages({
 
   const CollabTicketMessage = (
     <MessageBox
-      containerStyle={styles.messageBox}
+      style={styles.messageBox}
       type="info"
       message={t(DetailsMessages.messages.collabTicketInfo)}
     />
@@ -166,7 +166,7 @@ export function TicketingMessages({
 
   const TrainOutsideZoneAMessage = (
     <MessageBox
-      containerStyle={styles.messageBox}
+      style={styles.messageBox}
       type="info"
       message={t(DetailsMessages.messages.trainOutsideZoneA)}
     />
@@ -174,7 +174,7 @@ export function TicketingMessages({
 
   const TicketsWeDontSellMessage = (
     <MessageBox
-      containerStyle={styles.messageBox}
+      style={styles.messageBox}
       type="info"
       message={t(DetailsMessages.messages.ticketsWeDontSell)}
     />

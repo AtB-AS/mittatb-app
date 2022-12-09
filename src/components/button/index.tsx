@@ -45,6 +45,11 @@ type ButtonTypeAwareProps =
       type?: 'block';
     };
 
+type ButtonIconProps = {
+  svg: ({fill}: {fill: string}) => JSX.Element;
+  size?: keyof Theme['icon']['size'];
+};
+
 export type ButtonProps = {
   onPress(): void;
   interactiveColor?: InteractiveColor;
@@ -52,8 +57,8 @@ export type ButtonProps = {
   viewContainerStyle?: StyleProp<ViewStyle>;
   textContainerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-  icon?: ({fill}: {fill: string}) => JSX.Element;
-  iconPosition?: 'left' | 'right';
+  leftIcon?: ButtonIconProps;
+  rightIcon?: ButtonIconProps;
   active?: boolean;
 } & ButtonTypeAwareProps &
   TouchableOpacityProps;
@@ -67,8 +72,8 @@ const Button = React.forwardRef<any, ButtonProps>(
       interactiveColor = 'interactive_0',
       mode = 'primary',
       type = 'block',
-      icon: Icon,
-      iconPosition = 'left',
+      leftIcon,
+      rightIcon,
       text,
       disabled,
       active,
@@ -101,10 +106,6 @@ const Button = React.forwardRef<any, ButtonProps>(
 
     const spacing =
       type === 'compact' ? theme.spacings.small : theme.spacings.medium;
-    const leftIconSpacing =
-      Icon && iconPosition === 'left' ? spacing : undefined;
-    const rightIconSpacing =
-      Icon && iconPosition === 'right' ? spacing : undefined;
 
     const {background: backgroundColor, text: textColor} = themeColor
       ? theme.interactive[themeColor][active ? 'active' : 'default']
@@ -126,19 +127,20 @@ const Button = React.forwardRef<any, ButtonProps>(
     const textContainer: TextStyle = {
       flex: isInline ? undefined : 1,
       alignItems: 'center',
-      marginHorizontal: Icon && !isInline ? theme.spacings.xLarge : 0,
+      marginHorizontal:
+        (leftIcon || rightIcon) && !isInline ? theme.spacings.xLarge : 0,
     };
-    const iconContainer: ViewStyle = isInline
-      ? {
-          position: 'relative',
-          left: undefined,
-          right: undefined,
-        }
-      : {
-          position: 'absolute',
-          left: leftIconSpacing,
-          right: rightIconSpacing,
-        };
+    const leftStyling: ViewStyle = {
+      position: isInline ? 'relative' : 'absolute',
+      left: isInline ? undefined : spacing,
+      marginRight: isInline ? theme.spacings.xSmall : undefined,
+    };
+
+    const rightStyling: ViewStyle = {
+      position: isInline ? 'relative' : 'absolute',
+      right: isInline ? undefined : spacing,
+      marginLeft: isInline ? theme.spacings.xSmall : undefined,
+    };
 
     return (
       <Animated.View style={[{opacity: fadeAnim}, viewContainerStyle]}>
@@ -151,9 +153,13 @@ const Button = React.forwardRef<any, ButtonProps>(
           ref={ref}
           {...props}
         >
-          {Icon && iconPosition === 'left' && (
-            <View style={iconContainer}>
-              <ThemeIcon svg={Icon} fill={textColor} />
+          {leftIcon && (
+            <View style={leftStyling}>
+              <ThemeIcon
+                svg={leftIcon.svg}
+                fill={textColor}
+                size={leftIcon.size}
+              />
             </View>
           )}
           {text && (
@@ -168,9 +174,13 @@ const Button = React.forwardRef<any, ButtonProps>(
               </ThemeText>
             </View>
           )}
-          {Icon && iconPosition === 'right' && (
-            <View style={iconContainer}>
-              <ThemeIcon svg={Icon} fill={textColor} />
+          {rightIcon && (
+            <View style={rightStyling}>
+              <ThemeIcon
+                svg={rightIcon.svg}
+                fill={textColor}
+                size={rightIcon.size}
+              />
             </View>
           )}
         </TouchableOpacity>

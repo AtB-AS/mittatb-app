@@ -6,7 +6,6 @@ import {
   QuaySectionMode,
   StopPlaceInfo,
 } from '@atb/api/departures/types';
-import Warning from '@atb/assets/svg/color/icons/status/Warning';
 import SvgFavorite from '@atb/assets/svg/mono-icons/places/Favorite';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
@@ -27,7 +26,7 @@ import {StoredType} from '@atb/favorites/storage';
 import {FavoriteDeparture} from '@atb/favorites/types';
 import {NearbyScreenProps} from '@atb/screens/Nearby/types';
 import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   dictionary,
   Language,
@@ -54,7 +53,10 @@ import {
   View,
 } from 'react-native';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
-import {getSvgForMostCriticalSituation} from '@atb/situations';
+import {getSvgForMostCriticalSituationOrNotice} from '@atb/situations';
+import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
+import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
+import {filterNotices} from '@atb/screens/TripDetails/utils';
 
 type RootProps = NearbyScreenProps<'NearbyRoot'>;
 
@@ -231,12 +233,12 @@ function getAccessibilityTextFirstDeparture(
           [secondResult, ...rest]
             .map((i) =>
               i.realtime
-                ? labelForTime(i.time, searchDate, t, language, true)
-                : t(
-                    NearbyTexts.results.departure.nextAccessibilityNotRealtime(
+                ? t(
+                    NearbyTexts.results.departure.nextAccessibilityRealtime(
                       labelForTime(i.time, searchDate, t, language, true),
                     ),
-                  ),
+                  )
+                : labelForTime(i.time, searchDate, t, language, true),
             )
             .join(', '),
         ),
@@ -260,6 +262,19 @@ function DepartureTimeItem({
 }: DepartureTimeItemProps) {
   const styles = useItemStyles();
   const {t, language} = useTranslation();
+  const {themeName} = useTheme();
+
+  const notices = filterNotices(departure.notices || []);
+
+  const rightIcon = getSvgForMostCriticalSituationOrNotice(
+    departure.situations,
+    notices,
+  );
+  const leftIcon = departure.realtime
+    ? themeName === 'dark'
+      ? RealtimeDark
+      : RealtimeLight
+    : undefined;
 
   if (!isValidDeparture(departure)) {
     return null;
@@ -273,8 +288,12 @@ function DepartureTimeItem({
       text={formatTimeText(departure, searchDate, language, t)}
       style={styles.departure}
       textStyle={styles.departureText}
-      icon={getSvgForMostCriticalSituation(departure.situations)}
-      iconPosition="right"
+      rightIcon={
+        rightIcon && {
+          svg: rightIcon,
+        }
+      }
+      leftIcon={leftIcon && {svg: leftIcon, size: 'small'}}
       testID={testID}
     />
   );
@@ -291,16 +310,9 @@ const formatTimeText = (
     language,
     t(dictionary.date.units.now),
   );
-  text = addRealtimePrefixIfNecessary(text, departure.realtime, t);
   text = addDatePrefixIfNecessary(text, departure.time, searchDate);
   return text;
 };
-
-const addRealtimePrefixIfNecessary = (
-  timeText: string,
-  isRealtime: boolean = false,
-  t: TFunc<typeof Language>,
-) => (isRealtime ? timeText : t(dictionary.missingRealTimePrefix) + timeText);
 
 const addDatePrefixIfNecessary = (
   timeText: string,
