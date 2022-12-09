@@ -119,6 +119,14 @@ platform :ios do
       build_configuration: "Release",
       code_signing_identity: widget_signing_identity_name
     )
+    update_app_group_identifiers(
+      entitlements_file: "./ios/departureWidget.entitlements",
+      app_group_identifiers: [ENV["APP_GROUP_NAME"]]
+    )
+    update_app_group_identifiers(
+      entitlements_file: "./ios/atb/AtB.entitlements",
+      app_group_identifiers: [ENV["APP_GROUP_NAME"]]
+    )
     cocoapods(podfile: './ios/Podfile')
     build_app(
       scheme: 'atb',
