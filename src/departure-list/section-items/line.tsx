@@ -26,7 +26,7 @@ import {StoredType} from '@atb/favorites/storage';
 import {FavoriteDeparture} from '@atb/favorites/types';
 import {NearbyScreenProps} from '@atb/screens/Nearby/types';
 import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   dictionary,
   Language,
@@ -54,7 +54,8 @@ import {
 } from 'react-native';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 import {getSvgForMostCriticalSituationOrNotice} from '@atb/situations';
-import {Realtime} from '@atb/assets/svg/color/icons/status';
+import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
+import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {filterNotices} from '@atb/screens/TripDetails/utils';
 
 type RootProps = NearbyScreenProps<'NearbyRoot'>;
@@ -261,7 +262,20 @@ function DepartureTimeItem({
 }: DepartureTimeItemProps) {
   const styles = useItemStyles();
   const {t, language} = useTranslation();
+  const {themeName} = useTheme();
+
   const notices = filterNotices(departure.notices || []);
+
+  const rightIcon = getSvgForMostCriticalSituationOrNotice(
+    departure.situations,
+    notices,
+  );
+  const leftIcon = departure.realtime
+    ? themeName === 'dark'
+      ? RealtimeDark
+      : RealtimeLight
+    : undefined;
+
   if (!isValidDeparture(departure)) {
     return null;
   }
@@ -274,11 +288,12 @@ function DepartureTimeItem({
       text={formatTimeText(departure, searchDate, language, t)}
       style={styles.departure}
       textStyle={styles.departureText}
-      rightIcon={getSvgForMostCriticalSituationOrNotice(
-        departure.situations,
-        notices,
-      )}
-      leftIcon={departure.realtime ? Realtime : undefined}
+      rightIcon={
+        rightIcon && {
+          svg: rightIcon,
+        }
+      }
+      leftIcon={leftIcon && {svg: leftIcon, size: 'small'}}
       testID={testID}
     />
   );

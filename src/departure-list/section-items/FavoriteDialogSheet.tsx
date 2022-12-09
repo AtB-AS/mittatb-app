@@ -57,7 +57,7 @@ const FavoriteDialogSheet = forwardRef<View, Props>(
                   lineName,
                 ),
               )}
-              rightIcon={SvgFavoriteSemi}
+              rightIcon={{svg: SvgFavoriteSemi}}
             />
             <Button
               interactiveColor="interactive_0"
@@ -66,7 +66,7 @@ const FavoriteDialogSheet = forwardRef<View, Props>(
                 addFavorite(false);
               }}
               text={t(NearbyTexts.favoriteDialogSheet.buttons.all(lineNumber))}
-              rightIcon={SvgFavoriteFill}
+              rightIcon={{svg: SvgFavoriteFill}}
             />
           </ButtonGroup>
         </FullScreenFooter>

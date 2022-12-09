@@ -244,7 +244,7 @@ const SelectPaymentMethod: React.FC<Props> = ({
               }
             }}
             disabled={!selectedOption}
-            rightIcon={ArrowRight}
+            rightIcon={{svg: ArrowRight}}
             testID="confirmButton"
           />
         </FullScreenFooter>

@@ -115,7 +115,7 @@ const DeparturesWidget = ({
           type="block"
           onPress={openFrontpageFavouritesBottomSheet}
           text={t(DeparturesTexts.button.text)}
-          rightIcon={Edit}
+          rightIcon={{svg: Edit}}
           ref={closeRef}
         />
       )}

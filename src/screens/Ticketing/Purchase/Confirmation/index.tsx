@@ -389,13 +389,14 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                   text={getPaymentOptionTexts(previousMethod)}
                   interactiveColor="interactive_0"
                   disabled={!!error || !previousMethod}
-                  rightIcon={
-                    previousMethod.paymentType === PaymentType.Mastercard
-                      ? MasterCard
-                      : previousMethod.paymentType === PaymentType.Vipps
-                      ? Vipps
-                      : Visa
-                  }
+                  rightIcon={{
+                    svg:
+                      previousMethod.paymentType === PaymentType.Mastercard
+                        ? MasterCard
+                        : previousMethod.paymentType === PaymentType.Vipps
+                        ? Vipps
+                        : Visa,
+                  }}
                   viewContainerStyle={styles.paymentButton}
                   onPress={() => {
                     if (previousMethod) {

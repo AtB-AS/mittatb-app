@@ -223,33 +223,37 @@ export default function DesignSystem() {
             <Button text="primary" onPress={presser} mode="primary" />
             <Button text="secondary" onPress={presser} mode="secondary" />
             <Button text="tertiary" onPress={presser} mode="tertiary" />
-            <Button text="Press me" onPress={presser} rightIcon={Delete} />
+            <Button
+              text="Press me"
+              onPress={presser}
+              rightIcon={{svg: Delete}}
+            />
             <Button text="Press me" onPress={presser} type="inline" />
             <Button text="Press me" onPress={presser} type="compact" />
             <Button
               text="Press me"
               onPress={presser}
               type="compact"
-              rightIcon={Delete}
+              rightIcon={{svg: Delete}}
             />
             <Button
               text="Press me"
               onPress={presser}
               type="inline"
-              leftIcon={Delete}
+              leftIcon={{svg: Delete}}
             />
             <Button
               text="Press me"
               onPress={presser}
               type="inline"
-              leftIcon={Delete}
-              rightIcon={Delete}
+              leftIcon={{svg: Delete}}
+              rightIcon={{svg: Delete}}
             />
             <Button
               text="Press me"
               onPress={presser}
-              leftIcon={Delete}
-              rightIcon={Info}
+              leftIcon={{svg: Delete}}
+              rightIcon={{svg: Info}}
             />
           </ButtonGroup>
         </View>
