@@ -377,7 +377,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   lineName: {
     flexGrow: 1,
     flexShrink: 1,
-    marginRight: theme.spacings.xLarge,
+    marginRight: theme.spacings.medium,
   },
   realtimeIcon: {
     marginRight: theme.spacings.xSmall,
