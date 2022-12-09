@@ -35,6 +35,7 @@
 		FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE55264D28EC45ED0091F697 /* DepartureWidget.swift */; };
 		FE55265028EC45EE0091F697 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE55264F28EC45EE0091F697 /* Assets.xcassets */; };
 		FE55265428EC45EE0091F697 /* departureWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE55264728EC45ED0091F697 /* departureWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FE7E785F29433F3900C57A1F /* DefaultFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7E785D29433F3900C57A1F /* DefaultFonts.swift */; };
 		FE9A677C29426E57008921BD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE9A677B29426E57008921BD /* CoreLocation.framework */; };
 		FE9C416D293744B100EC2D53 /* ChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9C416C293744B100EC2D53 /* ChipView.swift */; };
 		FEBDDCCD2931038400C3755B /* LocationChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationChangeManager.swift */; };
@@ -113,6 +114,7 @@
 		FE55264D28EC45ED0091F697 /* DepartureWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartureWidget.swift; sourceTree = "<group>"; };
 		FE55264F28EC45EE0091F697 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FE55265128EC45EE0091F697 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FE7E785D29433F3900C57A1F /* DefaultFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultFonts.swift; sourceTree = "<group>"; };
 		FE8AF9EC28EC69FA00505277 /* departureWidgetDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = departureWidgetDebug.entitlements; sourceTree = "<group>"; };
 		FE8AF9ED28EC6A0400505277 /* atbDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = atbDebug.entitlements; path = atb/atbDebug.entitlements; sourceTree = "<group>"; };
 		FE9A677B29426E57008921BD /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -256,6 +258,7 @@
 			children = (
 				FE55265128EC45EE0091F697 /* Info.plist */,
 				5038614928FD6EB900E16E13 /* APIService.swift */,
+				FE7E785D29433F3900C57A1F /* DefaultFonts.swift */,
 				FE55264D28EC45ED0091F697 /* DepartureWidget.swift */,
 				5038614528FD509400E16E13 /* Provider.swift */,
 				FE09922828FFF47300E5046D /* Storage.swift */,
@@ -547,6 +550,7 @@
 				FE09922C28FFF50800E5046D /* Bundle.swift in Sources */,
 				505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */,
 				5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */,
+				FE7E785F29433F3900C57A1F /* DefaultFonts.swift in Sources */,
 				FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */,
 				50A14ED72918F97E00A661D9 /* WidgetInfoView.swift in Sources */,
 				FE09922928FFF47300E5046D /* Storage.swift in Sources */,

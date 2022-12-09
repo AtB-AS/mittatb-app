@@ -27,7 +27,6 @@ struct WidgetInfoView: View {
         viewModel.getDepartureAimedTimes(limit: numberOfDepartures)
     }
 
-    // TODO: Localize texts
     var body: some View {
         if viewModel.entry.state == .noFavouriteDepartures {
             Text("must_choose_favorite").padding()
@@ -36,9 +35,9 @@ struct WidgetInfoView: View {
                 ZStack {
                     VStack(alignment: .leading) {
                         Text("From \(viewModel.quayName)")
-                            .bold()
                             .lineLimit(1)
                             .frame(width: geometry.size.width - (K.padding * 2), alignment: .leading)
+                            .font(DefaultFonts.body)
 
                         Spacer()
                         if widgetFamily == .systemMedium {
@@ -72,7 +71,7 @@ struct WidgetInfoView: View {
                         if viewModel.entry.state == .noDepartureQuays {
                             HStack {
                                 Spacer()
-                                Text("no_departures")
+                                Text("no_departures").font(DefaultFonts.body)
                                 Spacer()
                             }.frame(maxWidth: .infinity)
                                 .lineLimit(1)
@@ -80,8 +79,7 @@ struct WidgetInfoView: View {
                                 .padding(8)
                                 .background(Color("TimeTileBackgroundColor"))
                                 .cornerRadius(8)
-                                .font(Font.system(size: UIFontMetrics.default.scaledValue(for: 14)))
-                                .bold()
+                                .font(DefaultFonts.subtitle)
                         } else {
                             DepartureTimesView(aimedTimes: aimedTimes)
                         }
