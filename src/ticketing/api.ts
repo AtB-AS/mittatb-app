@@ -65,7 +65,7 @@ export async function searchOffers(
   params: OfferSearchParams,
   opts?: AxiosRequestConfig,
 ): Promise<Offer[]> {
-  var url: string;
+  let url: string;
   switch (offerEndpoint) {
     case 'zones':
       url = 'ticket/v1/search/zones';

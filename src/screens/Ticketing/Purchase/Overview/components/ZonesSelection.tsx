@@ -18,22 +18,23 @@ import {
 } from '../../TariffZones';
 import {OverviewNavigationProps} from '../types';
 
-type ZonesProps = {
+type ZonesSelectionProps = {
+  selectionMode: ZoneSelectionMode;
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
   style?: StyleProp<ViewStyle>;
-  selectionMode: Exclude<ZoneSelectionMode, 'none'>;
 };
 
-export default function Zones({
+export default function ZonesSelection({
   fromTariffZone,
   toTariffZone,
-  style,
   selectionMode,
-}: ZonesProps) {
+  style,
+}: ZonesSelectionProps) {
   const itemStyle = useStyles();
   const {t, language} = useTranslation();
   const navigation = useNavigation<OverviewNavigationProps>();
+
   const accessibility: AccessibilityProps = {
     accessible: true,
     accessibilityRole: 'button',
@@ -42,6 +43,10 @@ export default function Zones({
       screenReaderPause,
     accessibilityHint: t(PurchaseOverviewTexts.tariffZones.a11yHint),
   };
+
+  if (selectionMode === 'none') {
+    return <></>;
+  }
 
   return (
     <View style={style}>

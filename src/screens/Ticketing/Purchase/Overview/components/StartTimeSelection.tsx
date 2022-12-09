@@ -11,21 +11,24 @@ import {
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import TravelDateSheet from '@atb/screens/Ticketing/Purchase/TravelDate/TravelDateSheet';
 import RadioSegments from '@atb/components/radio-segments';
+import {TimeSelectionMode} from '@atb/screens/Ticketing/FareContracts/utils';
 
 type StartTimeSelectionProps = {
   color: InteractiveColor;
   setTravelDate: (date?: string) => void;
-  style?: StyleProp<ViewStyle>;
   validFromTime?: string;
   travelDate?: string;
+  selectionMode: TimeSelectionMode;
+  style?: StyleProp<ViewStyle>;
 };
 
 export default function StartTimeSelection({
   color,
   setTravelDate,
-  style,
   validFromTime,
   travelDate,
+  selectionMode,
+  style,
 }: StartTimeSelectionProps) {
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
@@ -50,6 +53,10 @@ export default function StartTimeSelection({
       ', ' +
       formatToVerboseDateTime(validFromTime, language)
     : undefined;
+
+  if (selectionMode === 'none') {
+    return <></>;
+  }
 
   return (
     <View style={style}>

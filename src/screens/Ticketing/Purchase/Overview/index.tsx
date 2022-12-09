@@ -9,13 +9,12 @@ import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {PurchaseScreenProps} from '../types';
-import DurationSelection from './components/DurationSelection';
 import ProductSelection from './components/ProductSelection';
 import PurchaseMessages from './components/PurchaseMessages';
 import StartTimeSelection from './components/StartTimeSelection';
 import Summary from './components/Summary';
 import TravellerSelection from './components/TravellerSelection';
-import Zones from './components/Zones';
+import ZonesSelection from './components/ZonesSelection';
 import {useOfferDefaults} from './use-offer-defaults';
 import useOfferState from './use-offer-state';
 
@@ -108,51 +107,36 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             />
           )}
 
-          {productSelectionMode === 'product' && (
-            <ProductSelection
-              selectedProduct={preassignedFareProduct}
-              setSelectedProduct={onSelectPreassignedFareProduct}
-              style={styles.selectionComponent}
-            />
-          )}
+          <ProductSelection
+            preassignedFareProduct={preassignedFareProduct}
+            selectionMode={productSelectionMode}
+            setSelectedProduct={onSelectPreassignedFareProduct}
+            style={styles.selectionComponent}
+          ></ProductSelection>
 
-          {productSelectionMode === 'duration' && (
-            <DurationSelection
-              color="interactive_2"
-              selectedProduct={preassignedFareProduct}
-              setSelectedProduct={onSelectPreassignedFareProduct}
-              style={styles.selectionComponent}
-            />
-          )}
+          <TravellerSelection
+            setTravellerSelection={setTravellerSelection}
+            fareProductType={preassignedFareProduct.type}
+            selectionMode={travellerSelectionMode}
+            selectableUserProfiles={selectableTravellers}
+            style={styles.selectionComponent}
+          />
 
-          {travellerSelectionMode !== 'none' && (
-            <TravellerSelection
-              setTravellerSelection={setTravellerSelection}
-              fareProductType={preassignedFareProduct.type}
-              travellerSelectionMode={travellerSelectionMode}
-              selectableUserProfiles={selectableTravellers}
-              style={styles.selectionComponent}
-            />
-          )}
+          <ZonesSelection
+            fromTariffZone={fromTariffZone}
+            toTariffZone={toTariffZone}
+            style={styles.selectionComponent}
+            selectionMode={zoneSelectionMode}
+          />
 
-          {zoneSelectionMode !== 'none' && (
-            <Zones
-              fromTariffZone={fromTariffZone}
-              toTariffZone={toTariffZone}
-              style={styles.selectionComponent}
-              selectionMode={zoneSelectionMode}
-            />
-          )}
-
-          {timeSelectionMode === 'datetime' && (
-            <StartTimeSelection
-              color="interactive_2"
-              travelDate={travelDate}
-              setTravelDate={setTravelDate}
-              validFromTime={travelDate}
-              style={styles.selectionComponent}
-            />
-          )}
+          <StartTimeSelection
+            selectionMode={timeSelectionMode}
+            color="interactive_2"
+            travelDate={travelDate}
+            setTravelDate={setTravelDate}
+            validFromTime={travelDate}
+            style={styles.selectionComponent}
+          />
         </View>
 
         <PurchaseMessages

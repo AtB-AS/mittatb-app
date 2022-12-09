@@ -1,70 +1,44 @@
-import React, {useState} from 'react';
-import {
-  getTextForLanguage,
-  PurchaseOverviewTexts,
-  useTranslation,
-} from '@atb/translations';
-import {
-  getReferenceDataName,
-  productIsSellableInApp,
-} from '@atb/reference-data/utils';
-import {StyleProp, View, ViewStyle} from 'react-native';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import InfoToggle from './InfoToggle';
-import * as Sections from '../../../../../components/sections';
-import {usePreferences} from '@atb/preferences';
+import {ProductSelectionMode} from '@atb/screens/Ticketing/FareContracts/utils';
+import ProductSelectionByDuration from './ProductSelectionByDuration';
+import ProductSelectionByProducts from './ProductSelectionByProducts';
+import {StyleProp, ViewStyle} from 'react-native';
 
 type ProductSelectionProps = {
-  selectedProduct: PreassignedFareProduct;
+  preassignedFareProduct: PreassignedFareProduct;
+  selectionMode: ProductSelectionMode;
   setSelectedProduct: (product: PreassignedFareProduct) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export default function ProductSelection({
-  selectedProduct,
+  preassignedFareProduct,
+  selectionMode,
   setSelectedProduct,
   style,
 }: ProductSelectionProps) {
-  const {t, language} = useTranslation();
-  const {preassignedFareProducts} = useFirestoreConfiguration();
-
-  const selectableProducts = preassignedFareProducts
-    .filter(productIsSellableInApp)
-    .filter((p) => p.type === selectedProduct.type);
-  const {
-    preferences: {hideTravellerDescriptions},
-  } = usePreferences();
-  const [selected, setProduct] = useState(selectableProducts[0]);
+  if (selectionMode === 'none') {
+    return <></>;
+  }
 
   return (
-    <View style={style}>
-      <InfoToggle
-        title={t(PurchaseOverviewTexts.productSelection.title)}
-        accessibilityLabel={t(
-          PurchaseOverviewTexts.infoToggle.nightTicketA11yLabel,
-        )}
-      />
-      <Sections.Section>
-        <Sections.RadioSection<PreassignedFareProduct>
-          items={selectableProducts}
-          keyExtractor={(u) => u.id}
-          itemToText={(fp) => getReferenceDataName(fp, language)}
-          hideSubtext={hideTravellerDescriptions}
-          itemToSubtext={(fp) =>
-            getTextForLanguage(fp.description ?? [], language) ?? 'Unknow'
-          }
-          selected={selected}
-          onSelect={(fp) => {
-            setProduct(fp);
-            setSelectedProduct(fp);
-          }}
-          color="interactive_2"
-          accessibilityHint={t(
-            PurchaseOverviewTexts.productSelection.a11yTitle,
-          )}
+    <>
+      {selectionMode === 'product' && (
+        <ProductSelectionByProducts
+          selectedProduct={preassignedFareProduct}
+          setSelectedProduct={setSelectedProduct}
+          style={style}
         />
-      </Sections.Section>
-    </View>
+      )}
+
+      {selectionMode === 'duration' && (
+        <ProductSelectionByDuration
+          color="interactive_2"
+          selectedProduct={preassignedFareProduct}
+          setSelectedProduct={setSelectedProduct}
+          style={style}
+        />
+      )}
+    </>
   );
 }

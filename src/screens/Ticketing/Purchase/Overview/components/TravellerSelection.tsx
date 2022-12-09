@@ -18,7 +18,7 @@ type TravellerSelectionProps = {
     userProfilesWithCount: UserProfileWithCount[],
   ) => void;
   style?: StyleProp<ViewStyle>;
-  travellerSelectionMode: TravellerSelectionMode;
+  selectionMode: TravellerSelectionMode;
   fareProductType: PreassignedFareProductType;
 };
 
@@ -26,10 +26,11 @@ export default function TravellerSelection({
   setTravellerSelection,
   style,
   selectableUserProfiles,
-  travellerSelectionMode,
+  selectionMode,
   fareProductType,
 }: TravellerSelectionProps) {
   const {t} = useTranslation();
+
   const userCountState = useUserCountState(selectableUserProfiles);
   const selectableUserProfilesWithCount =
     userCountState.userProfilesWithCount.filter((a) =>
@@ -40,21 +41,21 @@ export default function TravellerSelection({
       selectableUserProfiles.find((i) => i.id === u.id),
     );
     setTravellerSelection(filteredSelection);
-  }, [
-    userCountState.userProfilesWithCount,
-    fareProductType,
-    travellerSelectionMode,
-  ]);
+  }, [userCountState.userProfilesWithCount, fareProductType, selectionMode]);
 
   useEffect(() => {
     userCountState.updateSelectable(selectableUserProfiles);
   }, [selectableUserProfiles]);
 
+  if (selectionMode === 'none') {
+    return <></>;
+  }
+
   return (
     <View style={style}>
       <InfoToggle
         title={
-          travellerSelectionMode == 'multiple'
+          selectionMode == 'multiple'
             ? t(PurchaseOverviewTexts.travellerSelection.title_multiple)
             : t(PurchaseOverviewTexts.travellerSelection.title_single)
         }
@@ -62,7 +63,7 @@ export default function TravellerSelection({
           PurchaseOverviewTexts.infoToggle.travellerA11yLabel,
         )}
       />
-      {travellerSelectionMode === 'multiple' ? (
+      {selectionMode === 'multiple' ? (
         <MultipleTravellersSelection
           fareProductType={fareProductType}
           {...userCountState}
