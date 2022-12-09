@@ -76,12 +76,12 @@ struct WidgetInfoView: View {
                                 Spacer()
                             }.frame(maxWidth: .infinity)
                                 .lineLimit(1)
-                                .bold()
                                 .fixedSize()
-                                .font(.system(size: UIFontMetrics.default.scaledValue(for: 14)))
                                 .padding(8)
                                 .background(Color("TimeTileBackgroundColor"))
                                 .cornerRadius(8)
+                                .font(Font.system(size: UIFontMetrics.default.scaledValue(for: 14)))
+                                .bold()
                         } else {
                             DepartureTimesView(aimedTimes: aimedTimes)
                         }

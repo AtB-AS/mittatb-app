@@ -13,11 +13,11 @@ struct ChipView: View {
     var body: some View {
         Text(label)
             .lineLimit(1)
-            .bold()
-            .font(.system(size: K.scaledFontSize))
             .fixedSize()
             .padding(8)
             .background(Color("TimeTileBackgroundColor"))
             .cornerRadius(8)
+            .font(Font.system(size: K.scaledFontSize))
+            .bold()
     }
 }

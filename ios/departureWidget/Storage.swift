@@ -42,7 +42,7 @@ struct Manifest: Codable {
         }
 
         let pathUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: K.applicationGroupIdentifier)
-        guard let path = pathUrl?.appending(components: bundleIdentifier).appending(path: K.RCTStorageDirectory).appending(path: K.RCTManifestFileName).relativePath, FileManager.default.fileExists(atPath: path)
+        guard let path: String = pathUrl?.appending(components: bundleIdentifier).appending(path: K.RCTStorageDirectory).appending(path: K.RCTManifestFileName).relativePath, FileManager.default.fileExists(atPath: path)
         else {
             return nil
         }
