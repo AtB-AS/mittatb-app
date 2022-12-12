@@ -17,10 +17,6 @@ export default function ProductSelection({
   setSelectedProduct,
   style,
 }: ProductSelectionProps) {
-  if (selectionMode === 'none') {
-    return <></>;
-  }
-
   return (
     <>
       {selectionMode === 'product' && (
