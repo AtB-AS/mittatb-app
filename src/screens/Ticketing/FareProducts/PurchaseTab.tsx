@@ -9,6 +9,7 @@ import {RecentFareContracts} from './RecentFareProducts/RecentFareContracts';
 import {TicketingScreenProps} from '../types';
 import UpgradeSplash from './UpgradeSplash';
 import useRecentFareContracts from './use-recent-fare-contracts';
+import {PreassignedFareProductType} from '@atb/reference-data/types';
 
 type Props = TicketingScreenProps<'PurchaseTab'>;
 
@@ -23,26 +24,24 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
-  const onBuySingleFareProduct = () => {
+  const navigateToPurchaseOverview = (
+    productType: PreassignedFareProductType,
+  ) => {
     navigation.navigate('Purchase', {
       screen: 'PurchaseOverview',
       params: {
-        selectableProductType: 'single',
+        selectableProductType: productType,
       },
     });
   };
 
-  // TODO: Replace `onBuyNightFareProduct` with the proper navigation
-  const onBuyNightFareProduct = onBuySingleFareProduct;
+  const onBuySingleFareProduct = () => navigateToPurchaseOverview('single');
+
+  const onBuyNightFareProduct = () => navigateToPurchaseOverview('night');
 
   const onBuyPeriodFareProduct = () => {
     if (authenticationType === 'phone') {
-      navigation.navigate('Purchase', {
-        screen: 'PurchaseOverview',
-        params: {
-          selectableProductType: 'period',
-        },
-      });
+      navigateToPurchaseOverview('period');
     } else {
       navigation.navigate('LoginInApp', {
         screen: 'LoginOnboardingInApp',
@@ -61,14 +60,7 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
     }
   };
 
-  const onBuyHour24FareProduct = () => {
-    navigation.navigate('Purchase', {
-      screen: 'PurchaseOverview',
-      params: {
-        selectableProductType: 'hour24',
-      },
-    });
-  };
+  const onBuyHour24FareProduct = () => navigateToPurchaseOverview('hour24');
 
   return isSignedInAsAbtCustomer ? (
     <ScrollView>

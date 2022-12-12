@@ -1,3 +1,4 @@
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {translation as _} from '../commons';
 
 const FareContractTexts = {
@@ -140,6 +141,37 @@ const FareContractTexts = {
       'This ticket will be connected to your t:card. If you would rather use tickets on this phone, you can switch to this device from **My profile**.',
     ),
     unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
+  },
+  transportMode: (mode: Mode) => {
+    switch (mode) {
+      case Mode.Bus:
+        return _('buss', 'bus');
+      case Mode.Rail:
+        return _('tog', 'train');
+      case Mode.Tram:
+        return _('trikk', 'tram');
+      case Mode.Water:
+        return _('båt', 'boat');
+      case Mode.Air:
+        return _('fly', 'plane');
+      case Mode.Foot:
+        return _('gange', 'walk');
+      case Mode.Metro:
+        return _('T-bane', 'metro');
+      default:
+        return _('ukjent transportmiddel', 'unknown transport');
+      /*
+                bus: _('buss', 'bus'),
+                rail: _('tog', 'train'),
+                tram: _('trikk', 'tram'),
+                water: _('båt', 'boat'),
+                air: _('fly', 'plane'),
+                foot: _('gange', 'walk'),
+                metro: _('T-bane', 'metro'),
+                unknown: _('ukjent transportmiddel', 'unknown transport'),
+                several: _('Flere reisemåter', 'Several transport modes'),
+                */
+    }
   },
 };
 

@@ -57,11 +57,11 @@ const PurchaseOverviewTexts = {
   },
   zones: {
     label: {
-      singleZone: {
+      single: {
         text: _('Velg sone (kun én)', 'Select zone (only one)'),
         a11yLabel: _('Velg sone (kun én)', 'Select zone (only one)'),
       },
-      multipleZone: {
+      multiple: {
         text: _('Velg sone(r)', 'Select zone(s)'),
         a11yLabel: _('Velg soner', 'Select zones'),
       },
@@ -72,14 +72,24 @@ const PurchaseOverviewTexts = {
     days: _('dager', 'days'),
     chipHint: _('Aktiver for å velge varighet', 'Activate to select duration'),
   },
+  productSelection: {
+    title: _('Velg billet', 'Select a ticket'),
+    a11yTitle: _('Aktiver for å velge billet', 'Activate to select ticket'),
+  },
   travellerSelection: {
     title_single: _('Velg passasjerkategori', 'Select a traveller'),
     title_multiple: _('Velg passasjerkategorier', 'Select travellers'),
     a11yHint: _('Aktiver for å velge reisende', 'Activate to select traveller'),
-    infoToggle: _('Vis info', 'Show info'),
-    infoToggleA11y: _(
+  },
+  infoToggle: {
+    label: _('Vis info', 'Show info'),
+    travellerA11yLabel: _(
       'Vis informasjon om passasjerkategorier',
       'Show information about traveller categories',
+    ),
+    productTicketA11yLabel: _(
+      'Vis informasjon om produkter',
+      'Show information about products',
     ),
   },
   startTime: {
@@ -98,10 +108,12 @@ const PurchaseOverviewTexts = {
   summary: {
     price: (priceString: string) =>
       _(`Total ${priceString} kr`, `Total ${priceString} kr`),
-    message: _(
+    messageInZone: _(
       `Gjelder for buss/trikk i valgte soner`,
       `Applies for bus/tram in selected zones`,
     ),
+    messageAppliesFor: (text: string) =>
+      _(`Gjelder for ${text}`, `Applies for ${text}`),
     button: _('Til betaling', 'To payment'),
   },
 };

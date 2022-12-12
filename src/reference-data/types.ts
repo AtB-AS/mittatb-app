@@ -7,19 +7,17 @@ export type PreassignedFareProductType =
   | 'period'
   | 'carnet'
   | 'hour24';
-
 export type DistributionChannel = 'web' | 'app';
 
 export type PreassignedFareProduct = {
   id: string;
   name: LanguageAndTextType;
-  description?: LanguageAndTextType;
-  alternativeNames: LanguageAndTextType[];
-  distributionChannel: DistributionChannel[];
   version: string;
+  description?: LanguageAndTextType[];
   type: PreassignedFareProductType;
   durationDays: number;
-  isApplicableOnSingleZoneOnly?: boolean;
+  distributionChannel: DistributionChannel[];
+  alternativeNames: LanguageAndTextType[];
   limitations: {
     userProfileRefs: string[];
   };

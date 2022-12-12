@@ -1,3 +1,4 @@
+import {OfferEndpoint} from '@atb/screens/Ticketing/FareContracts/utils';
 import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
 import {CancelPaymentRequest, ReserveOfferRequestBody} from '.';
@@ -60,10 +61,20 @@ export type ReserveOfferWithRecurringParams = ReserveOfferParams & {
 };
 
 export async function searchOffers(
+  offerEndpoint: OfferEndpoint,
   params: OfferSearchParams,
   opts?: AxiosRequestConfig,
 ): Promise<Offer[]> {
-  const url = 'ticket/v1/search/zones';
+  let url: string;
+  switch (offerEndpoint) {
+    case 'zones':
+      url = 'ticket/v1/search/zones';
+      break;
+    case 'authority':
+      url = 'ticket/v3/search/authority';
+      break;
+  }
+
   const response = await client.post<Offer[]>(url, params, opts);
 
   return response.data;

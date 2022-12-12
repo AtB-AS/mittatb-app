@@ -1,6 +1,6 @@
 import React from 'react';
 import ThemeText from '@atb/components/text';
-import {useTranslation} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import {RecentFareContract} from '../use-recent-fare-contracts';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -80,7 +80,7 @@ export const RecentFareContractComponent = ({
       return t(RecentFareContractsTexts.severalTransportModes);
     else
       return modes
-        .map((mode) => t(RecentFareContractsTexts.transportMode(mode.mode)))
+        .map((mode) => t(FareContractTexts.transportMode(mode.mode)))
         .join(joinSymbol);
   };
 

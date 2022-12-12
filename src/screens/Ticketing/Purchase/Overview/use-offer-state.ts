@@ -4,6 +4,7 @@ import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {Offer, OfferPrice, searchOffers} from '@atb/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useMemo, useReducer} from 'react';
+import {OfferEndpoint} from '../../FareContracts/utils';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
@@ -113,6 +114,7 @@ const initialState: OfferState = {
 };
 
 export default function useOfferState(
+  offerEndpoint: OfferEndpoint,
   preassignedFareProduct: PreassignedFareProduct,
   fromTariffZone: TariffZone,
   toTariffZone: TariffZone,
@@ -142,6 +144,7 @@ export default function useOfferState(
         try {
           dispatch({type: 'SEARCHING_OFFER'});
           const response = await searchOffers(
+            offerEndpoint,
             {
               zones,
               travellers: offerTravellers,
@@ -182,6 +185,7 @@ export default function useOfferState(
       dispatch,
       userProfilesWithCount,
       preassignedFareProduct,
+      offerEndpoint,
       zones,
       travelDate,
     ],
@@ -191,7 +195,15 @@ export default function useOfferState(
     const source = CancelTokenStatic.source();
     updateOffer(source.token);
     return () => source.cancel('Cancelling previous offer search');
-  }, [updateOffer, userProfilesWithCount, preassignedFareProduct]);
+  }, [
+    dispatch,
+    updateOffer,
+    userProfilesWithCount,
+    preassignedFareProduct,
+    offerEndpoint,
+    zones,
+    travelDate,
+  ]);
 
   const refreshOffer = useCallback(
     async function () {
