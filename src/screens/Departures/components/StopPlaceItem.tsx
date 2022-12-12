@@ -10,10 +10,12 @@ import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {StyleSheet} from '@atb/theme';
 import {useHumanizeDistance} from '@atb/utils/location';
-import {SituationOrNoticeIcon} from '@atb/situations';
+import {
+  getSituationOrNoticeA11yLabel,
+  SituationOrNoticeIcon,
+} from '@atb/situations';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
-import {getSituationOrNoticeA11yLabel} from '@atb/situations/utils';
 
 type StopPlaceItemProps = {
   stopPlaceNode: NearestStopPlaceNode;

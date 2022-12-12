@@ -71,6 +71,7 @@ const dictionary = {
     error: _('Feil', 'Error'),
   },
   retry: _('Prøv på nytt', 'Try again'),
+  readMore: _('Les mer', 'Read more'),
 };
 
 export default dictionary;

@@ -1,19 +1,18 @@
 import React from 'react';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {MessageItem} from '@atb/components/sections';
-import {
-  getMessageTypeForSituation,
-  getSituationSummary,
-} from '@atb/situations/utils';
-import {SituationType} from '@atb/situations/types';
+import {getMessageTypeForSituation, getSituationSummary} from './utils';
+import {SituationType} from './types';
+import {useSituationBottomSheet} from './use-situation-bottom-sheet';
 
 type Props = {
   situation: SituationType;
 };
 
 export const SituationSectionItem = ({situation}: Props) => {
-  const {language} = useTranslation();
+  const {t, language} = useTranslation();
   const situationText = getSituationSummary(situation, language);
+  const {openSituation} = useSituationBottomSheet();
 
   if (!situationText) return null;
 
@@ -21,6 +20,10 @@ export const SituationSectionItem = ({situation}: Props) => {
     <MessageItem
       messageType={getMessageTypeForSituation(situation)}
       message={situationText}
+      onPressConfig={{
+        text: t(dictionary.readMore),
+        action: () => openSituation(situation),
+      }}
     />
   );
 };

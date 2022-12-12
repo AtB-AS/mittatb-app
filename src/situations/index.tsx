@@ -1,4 +1,7 @@
 export {SituationMessageBox} from './SituationMessageBox';
 export {SituationSectionItem} from './SituationSectionItem';
 export {SituationOrNoticeIcon} from './SituationOrNoticeIcon';
-export {getSvgForMostCriticalSituationOrNotice} from './utils';
+export {
+  getSvgForMostCriticalSituationOrNotice,
+  getSituationOrNoticeA11yLabel,
+} from './utils';
