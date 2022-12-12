@@ -61,7 +61,7 @@ export default function Summary({
     });
   };
 
-  const transportModes = fareProductTypeConfig.transportModes
+  const transportModesText = fareProductTypeConfig.transportModes
     .map((tm) => t(FareContractTexts.transportMode(tm)))
     .filter(Boolean)
     .join('/');
@@ -78,7 +78,11 @@ export default function Summary({
       case 'none':
         return (
           <ThemeText type="body__secondary" style={styles.message}>
-            {t(PurchaseOverviewTexts.summary.messageAppliesFor(transportModes))}
+            {t(
+              PurchaseOverviewTexts.summary.messageAppliesFor(
+                transportModesText,
+              ),
+            )}
           </ThemeText>
         );
     }
