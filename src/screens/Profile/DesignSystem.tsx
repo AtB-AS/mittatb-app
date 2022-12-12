@@ -392,12 +392,20 @@ export default function DesignSystem() {
           <Sections.MessageItem
             messageType="warning"
             title="Warning message!"
-            message="A warning message with title"
+            message="A warning message with title link"
+            onPressConfig={{
+              url: 'https://atb.no',
+              text: 'Go to atb.no',
+            }}
           />
 
           <Sections.MessageItem
             messageType="error"
-            message="An error message without title"
+            message="An error message without title and with action"
+            onPressConfig={{
+              action: presser,
+              text: t(dictionary.retry),
+            }}
           />
         </Sections.Section>
 
