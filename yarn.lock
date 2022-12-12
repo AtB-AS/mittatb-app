@@ -2733,7 +2733,7 @@
 
 "@react-native-async-storage/async-storage@https://github.com/AtB-AS/async-storage":
   version "1.17.11"
-  resolved "https://github.com/AtB-AS/async-storage#bd5a0887539ca85bcf54ddf87fbaa60da137a662"
+  resolved "https://github.com/AtB-AS/async-storage#44cf2004a69612fbd8cf9defe5980cfb786f183f"
   dependencies:
     merge-options "^3.0.4"
 
