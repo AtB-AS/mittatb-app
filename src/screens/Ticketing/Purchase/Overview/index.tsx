@@ -1,6 +1,7 @@
 import {MessageBox} from '@atb/components/message-box';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {useFareProductTypeConfig} from '@atb/configuration/utils';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
@@ -8,13 +9,12 @@ import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {PurchaseScreenProps} from '../types';
-import {getPurchaseFlow} from '../utils';
-import DurationSelection from './components/DurationSelection';
+import ProductSelection from './components/ProductSelection';
 import PurchaseMessages from './components/PurchaseMessages';
 import StartTimeSelection from './components/StartTimeSelection';
 import Summary from './components/Summary';
 import TravellerSelection from './components/TravellerSelection';
-import Zones from './components/Zones';
+import ZonesSelection from './components/ZonesSelection';
 import {useOfferDefaults} from './use-offer-defaults';
 import useOfferState from './use-offer-state';
 
@@ -49,17 +49,25 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     useState(selectableTravellers);
   const hasSelection = travellerSelection.some((u) => u.count);
   const [travelDate, setTravelDate] = useState<string | undefined>();
+  const fareProductTypeConfig = useFareProductTypeConfig(
+    preassignedFareProduct.type,
+  );
+  const {
+    timeSelectionMode,
+    productSelectionMode,
+    travellerSelectionMode,
+    zoneSelectionMode,
+    offerEndpoint,
+  } = fareProductTypeConfig.configuration;
 
   const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
+    offerEndpoint,
     preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
     travellerSelection,
     travelDate,
   );
-
-  const {travelDateSelectionEnabled, durationSelectionEnabled} =
-    getPurchaseFlow(preassignedFareProduct.type);
 
   useEffect(() => {
     if (params?.refreshOffer) {
@@ -101,40 +109,36 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             />
           )}
 
-          {durationSelectionEnabled && (
-            <DurationSelection
-              color="interactive_2"
-              selectedProduct={preassignedFareProduct}
-              setSelectedProduct={onSelectPreassignedFareProduct}
-              style={styles.selectionComponent}
-            />
-          )}
+          <ProductSelection
+            preassignedFareProduct={preassignedFareProduct}
+            selectionMode={productSelectionMode}
+            setSelectedProduct={onSelectPreassignedFareProduct}
+            style={styles.selectionComponent}
+          />
 
           <TravellerSelection
             setTravellerSelection={setTravellerSelection}
-            preassignedFareProduct={preassignedFareProduct}
+            fareProductType={preassignedFareProduct.type}
+            selectionMode={travellerSelectionMode}
             selectableUserProfiles={selectableTravellers}
             style={styles.selectionComponent}
           />
 
-          <Zones
+          <ZonesSelection
             fromTariffZone={fromTariffZone}
             toTariffZone={toTariffZone}
             style={styles.selectionComponent}
-            isApplicableOnSingleZoneOnly={
-              preassignedFareProduct.isApplicableOnSingleZoneOnly
-            }
+            selectionMode={zoneSelectionMode}
           />
 
-          {travelDateSelectionEnabled && (
-            <StartTimeSelection
-              color="interactive_2"
-              travelDate={travelDate}
-              setTravelDate={setTravelDate}
-              validFromTime={travelDate}
-              style={styles.selectionComponent}
-            />
-          )}
+          <StartTimeSelection
+            selectionMode={timeSelectionMode}
+            color="interactive_2"
+            travelDate={travelDate}
+            setTravelDate={setTravelDate}
+            validFromTime={travelDate}
+            style={styles.selectionComponent}
+          />
         </View>
 
         <PurchaseMessages
@@ -154,6 +158,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             preassignedFareProduct={preassignedFareProduct}
             travelDate={travelDate}
             style={styles.summary}
+            fareProductTypeConfig={fareProductTypeConfig}
           />
         </FullScreenFooter>
       </ScrollView>

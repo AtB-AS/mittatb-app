@@ -9,19 +9,19 @@ import {ScrollView} from 'react-native';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
-type DurationSelectionProps = {
+type ProductSelectionByDurationProps = {
   color: InteractiveColor;
   selectedProduct: PreassignedFareProduct;
   setSelectedProduct: (product: PreassignedFareProduct) => void;
   style?: StyleProp<ViewStyle>;
 };
 
-export default function DurationSelection({
+export default function ProductSelectionByDuration({
   color,
   selectedProduct,
   setSelectedProduct,
   style,
-}: DurationSelectionProps) {
+}: ProductSelectionByDurationProps) {
   const {t} = useTranslation();
   const styles = useStyles();
   const {preassignedFareProducts} = useFirestoreConfiguration();

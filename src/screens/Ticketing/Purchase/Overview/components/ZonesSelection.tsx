@@ -1,6 +1,7 @@
 import {screenReaderPause} from '@atb/components/accessible-text';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
+import {ZoneSelectionMode} from '@atb/screens/Ticketing/FareContracts/utils';
 import {StyleSheet} from '@atb/theme';
 import {
   PurchaseOverviewTexts,
@@ -17,22 +18,23 @@ import {
 } from '../../TariffZones';
 import {OverviewNavigationProps} from '../types';
 
-type ZonesProps = {
+type ZonesSelectionProps = {
+  selectionMode: ZoneSelectionMode;
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
   style?: StyleProp<ViewStyle>;
-  isApplicableOnSingleZoneOnly?: boolean;
 };
 
-export default function Zones({
+export default function ZonesSelection({
   fromTariffZone,
   toTariffZone,
+  selectionMode,
   style,
-  isApplicableOnSingleZoneOnly,
-}: ZonesProps) {
+}: ZonesSelectionProps) {
   const itemStyle = useStyles();
   const {t, language} = useTranslation();
   const navigation = useNavigation<OverviewNavigationProps>();
+
   const accessibility: AccessibilityProps = {
     accessible: true,
     accessibilityRole: 'button',
@@ -42,6 +44,10 @@ export default function Zones({
     accessibilityHint: t(PurchaseOverviewTexts.tariffZones.a11yHint),
   };
 
+  if (selectionMode === 'none') {
+    return <></>;
+  }
+
   return (
     <View style={style}>
       <ThemeText
@@ -49,16 +55,10 @@ export default function Zones({
         color="secondary"
         style={itemStyle.sectionText}
         accessibilityLabel={t(
-          PurchaseOverviewTexts.zones.label[
-            isApplicableOnSingleZoneOnly ? 'singleZone' : 'multipleZone'
-          ].a11yLabel,
+          PurchaseOverviewTexts.zones.label[selectionMode].a11yLabel,
         )}
       >
-        {t(
-          PurchaseOverviewTexts.zones.label[
-            isApplicableOnSingleZoneOnly ? 'singleZone' : 'multipleZone'
-          ].text,
-        )}
+        {t(PurchaseOverviewTexts.zones.label[selectionMode].text)}
       </ThemeText>
       <Sections.Section {...accessibility}>
         <Sections.ButtonInput
@@ -75,7 +75,7 @@ export default function Zones({
             navigation.push('TariffZones', {
               fromTariffZone,
               toTariffZone,
-              isApplicableOnSingleZoneOnly: isApplicableOnSingleZoneOnly,
+              selectionMode,
             });
           }}
           testID="selectZonesButton"

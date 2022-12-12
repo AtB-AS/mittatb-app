@@ -2,10 +2,15 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
 import {TariffZoneWithMetadata} from '@atb/screens/Ticketing/Purchase/TariffZones';
 import {UserProfileWithCount} from '@atb/screens/Ticketing/Purchase/Travellers/use-user-count-state';
 import {StyleSheet} from '@atb/theme';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {
+  FareContractTexts,
+  PurchaseOverviewTexts,
+  useTranslation,
+} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
@@ -22,6 +27,7 @@ type Props = {
   preassignedFareProduct: PreassignedFareProduct;
   travelDate?: string;
   style?: StyleProp<ViewStyle>;
+  fareProductTypeConfig: FareProductTypeConfig;
 };
 
 export default function Summary({
@@ -32,6 +38,7 @@ export default function Summary({
   toTariffZone,
   userProfilesWithCount,
   preassignedFareProduct,
+  fareProductTypeConfig,
   travelDate,
   style,
 }: Props) {
@@ -54,6 +61,33 @@ export default function Summary({
     });
   };
 
+  const transportModesText = fareProductTypeConfig.transportModes
+    .map((tm) => t(FareContractTexts.transportMode(tm)))
+    .filter(Boolean)
+    .join('/');
+
+  const SummaryText = () => {
+    switch (fareProductTypeConfig.configuration.zoneSelectionMode) {
+      case 'single':
+      case 'multiple':
+        return (
+          <ThemeText type="body__secondary" style={styles.message}>
+            {t(PurchaseOverviewTexts.summary.messageInZone)}
+          </ThemeText>
+        );
+      case 'none':
+        return (
+          <ThemeText type="body__secondary" style={styles.message}>
+            {t(
+              PurchaseOverviewTexts.summary.messageAppliesFor(
+                transportModesText,
+              ),
+            )}
+          </ThemeText>
+        );
+    }
+  };
+
   return (
     <View style={style}>
       {isLoading ? (
@@ -67,9 +101,7 @@ export default function Summary({
           >
             {t(PurchaseOverviewTexts.summary.price(formattedPrice))}
           </ThemeText>
-          <ThemeText type="body__secondary" style={styles.message}>
-            {t(PurchaseOverviewTexts.summary.message)}
-          </ThemeText>
+          <SummaryText />
         </>
       )}
 
@@ -88,9 +120,8 @@ export default function Summary({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   price: {
-    marginBottom: theme.spacings.medium,
     textAlign: 'center',
   },
-  message: {textAlign: 'center'},
+  message: {textAlign: 'center', marginTop: theme.spacings.medium},
   button: {marginTop: theme.spacings.xLarge},
 }));
