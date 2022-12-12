@@ -8,7 +8,7 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {useFareProductTypeConfigSettings} from '@atb/configuration/utils';
+import {useFareProductTypeConfig} from '@atb/configuration/utils';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
@@ -128,8 +128,10 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     headerLeftButton,
   } = params;
 
+  const {configuration: fareProductTypeConfiguration} =
+    useFareProductTypeConfig(preassignedFareProduct.type);
   const {travellerSelectionMode, zoneSelectionMode, offerEndpoint} =
-    useFareProductTypeConfigSettings(preassignedFareProduct.type);
+    fareProductTypeConfiguration;
 
   const {
     offerSearchTime,

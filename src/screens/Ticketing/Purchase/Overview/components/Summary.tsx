@@ -2,11 +2,15 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import Button from '@atb/components/button';
 import ThemeText from '@atb/components/text';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
-import {ZoneSelectionMode} from '@atb/screens/Ticketing/FareContracts/utils';
+import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
 import {TariffZoneWithMetadata} from '@atb/screens/Ticketing/Purchase/TariffZones';
 import {UserProfileWithCount} from '@atb/screens/Ticketing/Purchase/Travellers/use-user-count-state';
 import {StyleSheet} from '@atb/theme';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {
+  FareContractTexts,
+  PurchaseOverviewTexts,
+  useTranslation,
+} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
@@ -23,7 +27,7 @@ type Props = {
   preassignedFareProduct: PreassignedFareProduct;
   travelDate?: string;
   style?: StyleProp<ViewStyle>;
-  zoneSelectionMode: ZoneSelectionMode;
+  fareProductTypeConfig: FareProductTypeConfig;
 };
 
 export default function Summary({
@@ -34,9 +38,9 @@ export default function Summary({
   toTariffZone,
   userProfilesWithCount,
   preassignedFareProduct,
+  fareProductTypeConfig,
   travelDate,
   style,
-  zoneSelectionMode,
 }: Props) {
   const styles = useStyles();
   const {t, language} = useTranslation();
@@ -57,8 +61,13 @@ export default function Summary({
     });
   };
 
-  const ZoneOrAreaText = () => {
-    switch (zoneSelectionMode) {
+  const transportModes = fareProductTypeConfig.transportModes
+    .map((tm) => t(FareContractTexts.transportMode(tm)))
+    .filter(Boolean)
+    .join('/');
+
+  const SummaryText = () => {
+    switch (fareProductTypeConfig.configuration.zoneSelectionMode) {
       case 'single':
       case 'multiple':
         return (
@@ -67,16 +76,12 @@ export default function Summary({
           </ThemeText>
         );
       case 'none':
-        if (preassignedFareProduct.type === 'night') {
-          return (
-            <ThemeText type="body__secondary" style={styles.message}>
-              {t(PurchaseOverviewTexts.summary.messageInArea)}
-            </ThemeText>
-          );
-        }
+        return (
+          <ThemeText type="body__secondary" style={styles.message}>
+            {t(PurchaseOverviewTexts.summary.messageAppliesFor(transportModes))}
+          </ThemeText>
+        );
     }
-
-    return <></>;
   };
 
   return (
@@ -92,7 +97,7 @@ export default function Summary({
           >
             {t(PurchaseOverviewTexts.summary.price(formattedPrice))}
           </ThemeText>
-          <ZoneOrAreaText />
+          <SummaryText />
         </>
       )}
 

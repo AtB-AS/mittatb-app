@@ -36,14 +36,15 @@ export default function ProductSelectionByProducts({
     preferences: {hideTravellerDescriptions},
   } = usePreferences();
   const [selected, setProduct] = useState(selectableProducts[0]);
+  const showInfoToggle = selectableProducts.some((p) => p.description);
 
   return (
     <View style={style}>
-      {selectedProduct.type === 'night' && (
+      {showInfoToggle && (
         <InfoToggle
           title={t(PurchaseOverviewTexts.productSelection.title)}
           accessibilityLabel={t(
-            PurchaseOverviewTexts.infoToggle.nightTicketA11yLabel,
+            PurchaseOverviewTexts.infoToggle.productTicketA11yLabel,
           )}
         />
       )}

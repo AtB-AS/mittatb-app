@@ -87,9 +87,9 @@ const PurchaseOverviewTexts = {
       'Vis informasjon om passasjerkategorier',
       'Show information about traveller categories',
     ),
-    nightTicketA11yLabel: _(
-      'Vis informasjon om område for gyldighet',
-      'Show information about area of validity',
+    productTicketA11yLabel: _(
+      'Vis informasjon om produkter',
+      'Show information about products',
     ),
   },
   startTime: {
@@ -112,10 +112,8 @@ const PurchaseOverviewTexts = {
       `Gjelder for buss/trikk i valgte soner`,
       `Applies for bus/tram in selected zones`,
     ),
-    messageInArea: _(
-      `Gjelder for buss/trikk i valgt område`,
-      `Applies for bus/tram in selected area`,
-    ),
+    messageAppliesFor: (text: string) =>
+      _(`Gjelder for ${text}`, `Applies for ${text}`),
     button: _('Til betaling', 'To payment'),
   },
 };

@@ -1,7 +1,7 @@
 import {MessageBox} from '@atb/components/message-box';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {useFareProductTypeConfigSettings} from '@atb/configuration/utils';
+import {useFareProductTypeConfig} from '@atb/configuration/utils';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
@@ -49,14 +49,16 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     useState(selectableTravellers);
   const hasSelection = travellerSelection.some((u) => u.count);
   const [travelDate, setTravelDate] = useState<string | undefined>();
-
+  const fareProductTypeConfig = useFareProductTypeConfig(
+    preassignedFareProduct.type,
+  );
   const {
     timeSelectionMode,
     productSelectionMode,
     travellerSelectionMode,
     zoneSelectionMode,
     offerEndpoint,
-  } = useFareProductTypeConfigSettings(preassignedFareProduct.type);
+  } = fareProductTypeConfig.configuration;
 
   const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
     offerEndpoint,
@@ -156,7 +158,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             preassignedFareProduct={preassignedFareProduct}
             travelDate={travelDate}
             style={styles.summary}
-            zoneSelectionMode={zoneSelectionMode}
+            fareProductTypeConfig={fareProductTypeConfig}
           />
         </FullScreenFooter>
       </ScrollView>
