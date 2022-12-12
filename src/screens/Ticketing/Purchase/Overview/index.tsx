@@ -112,7 +112,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             selectionMode={productSelectionMode}
             setSelectedProduct={onSelectPreassignedFareProduct}
             style={styles.selectionComponent}
-          ></ProductSelection>
+          />
 
           <TravellerSelection
             setTravellerSelection={setTravellerSelection}
