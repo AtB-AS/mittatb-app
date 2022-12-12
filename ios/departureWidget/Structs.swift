@@ -6,9 +6,21 @@ import WidgetKit
 // MARK: Enums
 
 enum TransportMode: String, Codable {
-    case water, rail, tram, bus
+    case air,
+         bus,
+         cableway,
+         coach,
+         funicular,
+         lift,
+         metro,
+         monorail,
+         rail,
+         tram,
+         trolleybus,
+         unknown,
+         water
 
-    var icon: Image {
+    var icon: Image? {
         switch self {
         case .water:
             return Image("BoatIcon")
@@ -18,17 +30,132 @@ enum TransportMode: String, Codable {
             return Image("TramIcon")
         case .bus:
             return Image("BusIcon")
+        default:
+            return nil
         }
     }
 }
 
 enum TransportSubMode: String, Codable {
-    case regionBus, nightBus
+    case schengenAreaFlight,
+         airportBoatLink,
+         airportLinkBus,
+         airportLinkRail,
+         airshipService,
+         allFunicularServices,
+         allHireVehicles,
+         allTaxiServices,
+         bikeTaxi,
+         blackCab,
+         cableCar,
+         cableFerry,
+         canalBarge,
+         carTransportRailService,
+         chairLift,
+         charterTaxi,
+         cityTram,
+         communalTaxi,
+         commuterCoach,
+         crossCountryRail,
+         dedicatedLaneBus,
+         demandAndResponseBus,
+         domesticCharterFlight,
+         domesticFlight,
+         domesticScheduledFlight,
+         dragLift,
+         expressBus,
+         funicular,
+         helicopterService,
+         highFrequencyBus,
+         highSpeedPassengerService,
+         highSpeedRail,
+         highSpeedVehicleService,
+         hireCar,
+         hireCycle,
+         hireMotorbike,
+         hireVan,
+         intercontinentalCharterFlight,
+         intercontinentalFlight,
+         international,
+         internationalCarFerry,
+         internationalCharterFlight,
+         internationalCoach,
+         internationalFlight,
+         internationalPassengerFerry,
+         interregionalRail,
+         lift,
+         local,
+         localBus,
+         localCarFerry,
+         localPassengerFerry,
+         localTram,
+         longDistance,
+         metro,
+         miniCab,
+         mobilityBus,
+         mobilityBusForRegisteredDisabled,
+         nationalCarFerry,
+         nationalCoach,
+         nationalPassengerFerry,
+         nightBus,
+         nightRail,
+         postBoat,
+         postBus,
+         rackAndPinionRailway,
+         railReplacementBus,
+         railShuttle,
+         railTaxi,
+         regionalBus,
+         regionalCarFerry,
+         regionalCoach,
+         regionalPassengerFerry,
+         regionalRail,
+         regionalTram,
+         replacementRailService,
+         riverBus,
+         roadFerryLink,
+         roundTripCharterFlight,
+         scheduledFerry,
+         schoolAndPublicServiceBus,
+         schoolBoat,
+         schoolBus,
+         schoolCoach,
+         shortHaulInternationalFlight,
+         shuttleBus,
+         shuttleCoach,
+         shuttleFerryService,
+         shuttleFlight,
+         shuttleTram,
+         sightseeingBus,
+         sightseeingCoach,
+         sightseeingFlight,
+         sightseeingService,
+         sightseeingTram,
+         sleeperRailService,
+         specialCoach,
+         specialNeedsBus,
+         specialTrain,
+         streetCableCar,
+         suburbanRailway,
+         telecabin,
+         telecabinLink,
+         touristCoach,
+         touristRailway,
+         trainFerry,
+         trainTram,
+         tube,
+         undefined,
+         undefinedFunicular,
+         unknown,
+         urbanRailway,
+         waterTaxi
 
-    var icon: Image {
+    var icon: Image? {
         switch self {
-        case .regionBus, .nightBus:
+        case .regionalBus, .nightBus:
             return Image("RegionBusIcon")
+        default:
+            return nil
         }
     }
 }

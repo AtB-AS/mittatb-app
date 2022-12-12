@@ -52,11 +52,13 @@ struct WidgetInfoView: View {
                                 .foregroundColor(K.lineInformationColor)
                         } else {
                             HStack {
-                                viewModel.transportModeIcon
-                                    .resizable()
-                                    .frame(width: K.transportIconSize, height: K.transportIconSize)
-                                    .background(K.transportCityColor)
-                                    .cornerRadius(K.transportIconCornerRadius)
+                                if let icon = viewModel.transportModeIcon {
+                                    icon
+                                        .resizable()
+                                        .frame(width: K.transportIconSize, height: K.transportIconSize)
+                                        .background(K.transportCityColor)
+                                        .cornerRadius(K.transportIconCornerRadius)
+                                }
 
                                 Text(viewModel.lineDetails)
                                     .lineLimit(1)

@@ -33,7 +33,7 @@ struct WidgetViewModel {
         return "\(lineNumber) \(lineName)"
     }
 
-    var transportModeIcon: Image {
+    var transportModeIcon: Image? {
         entry.favouriteDeparture?.lineTransportationMode?.icon ?? entry.favouriteDeparture?.lineTransportationSubMode?.icon ?? TransportMode.bus.icon
     }
 
