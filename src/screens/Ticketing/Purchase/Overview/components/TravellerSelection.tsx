@@ -1,13 +1,11 @@
 import React, {useEffect} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
-import {StyleSheet} from '@atb/theme';
 import useUserCountState, {
   UserProfileWithCount,
 } from '../../Travellers/use-user-count-state';
 import SingleTravellerSelection from '../../Travellers/SingleTravellerSelection';
 import MultipleTravellersSelection from '../../Travellers/MultipleTravellersSelection';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import useFontScale from '@atb/utils/use-font-scale';
 import InfoToggle from './InfoToggle';
 import {PreassignedFareProductType} from '@atb/reference-data/types';
 import {TravellerSelectionMode} from '@atb/screens/Ticketing/FareContracts/utils';
@@ -79,22 +77,3 @@ export default function TravellerSelection({
     </View>
   );
 }
-
-const useStyles = StyleSheet.createThemeHook((theme) => {
-  const scale = useFontScale();
-  return {
-    title: {
-      marginBottom: theme.spacings.medium,
-    },
-    toggle: {
-      alignSelf: 'center',
-    },
-    androidToggle: {
-      transform: [{scale: scale}, {translateY: -6}],
-    },
-    iosToggle: {
-      marginLeft: theme.spacings.xSmall,
-      transform: [{scale: 0.7 * scale}, {translateY: -10}],
-    },
-  };
-});
