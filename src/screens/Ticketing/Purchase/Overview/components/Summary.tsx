@@ -57,6 +57,28 @@ export default function Summary({
     });
   };
 
+  const ZoneOrAreaText = () => {
+    switch (zoneSelectionMode) {
+      case 'single':
+      case 'multiple':
+        return (
+          <ThemeText type="body__secondary" style={styles.message}>
+            {t(PurchaseOverviewTexts.summary.messageInZone)}
+          </ThemeText>
+        );
+      case 'none':
+        if (preassignedFareProduct.type === 'night') {
+          return (
+            <ThemeText type="body__secondary" style={styles.message}>
+              {t(PurchaseOverviewTexts.summary.messageInArea)}
+            </ThemeText>
+          );
+        }
+    }
+
+    return <></>;
+  };
+
   return (
     <View style={style}>
       {isLoading ? (
@@ -70,11 +92,7 @@ export default function Summary({
           >
             {t(PurchaseOverviewTexts.summary.price(formattedPrice))}
           </ThemeText>
-          <ThemeText type="body__secondary" style={styles.message}>
-            {zoneSelectionMode !== 'none'
-              ? t(PurchaseOverviewTexts.summary.messageInZone)
-              : t(PurchaseOverviewTexts.summary.messageInArea)}
-          </ThemeText>
+          <ZoneOrAreaText />
         </>
       )}
 
@@ -93,9 +111,8 @@ export default function Summary({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   price: {
-    marginBottom: theme.spacings.medium,
     textAlign: 'center',
   },
-  message: {textAlign: 'center'},
+  message: {textAlign: 'center', marginTop: theme.spacings.medium},
   button: {marginTop: theme.spacings.xLarge},
 }));
