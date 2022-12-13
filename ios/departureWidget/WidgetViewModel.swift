@@ -17,17 +17,29 @@ struct WidgetViewModel {
         departureGroup?.departures ?? []
     }
 
+    private var lineInfo: DepartureLineInfo? {
+        departureGroup?.lineInfo
+    }
+
+    private var lineName: String? {
+        entry.favouriteDeparture?.lineName ?? lineInfo?.lineName
+    }
+
+    private var lineNumber: String? {
+        entry.favouriteDeparture?.lineLineNumber ?? lineInfo?.lineNumber
+    }
+
     // MARK: Public vars
 
     let entry: Entry
 
-    var quayName: String {
-        entry.favouriteDeparture?.quayName ?? "Unknow"
+    var quayName: String? {
+        entry.favouriteDeparture?.quayName ?? entry.quayGroup?.quay.name
     }
 
-    var lineDetails: String {
-        guard let lineName = entry.favouriteDeparture?.lineName, let lineNumber = entry.favouriteDeparture?.lineLineNumber else {
-            return "No line information"
+    var lineDetails: String? {
+        guard let lineName = lineName, let lineNumber = lineNumber else {
+            return nil
         }
 
         return "\(lineNumber) \(lineName)"

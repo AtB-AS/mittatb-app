@@ -34,7 +34,8 @@ struct WidgetInfoView: View {
             GeometryReader { geometry in
                 ZStack {
                     VStack(alignment: .leading) {
-                        Text("From \(viewModel.quayName)")
+                        let quayName = viewModel.quayName ?? NSLocalizedString("no_quay_name", comment: "")
+                        Text("From \(quayName)")
                             .lineLimit(1)
                             .frame(width: geometry.size.width - (K.padding * 2), alignment: .leading)
                             .font(DefaultFonts.body)
@@ -45,8 +46,9 @@ struct WidgetInfoView: View {
                             Spacer()
                         }
 
+                        let noLineInfoText = NSLocalizedString("no_line_info", comment: "")
                         if widgetFamily == .systemSmall {
-                            Text(viewModel.lineDetails)
+                            Text(viewModel.lineDetails ?? noLineInfoText)
                                 .lineLimit(2)
                                 .multilineTextAlignment(.leading)
                                 .foregroundColor(K.lineInformationColor)
@@ -60,7 +62,7 @@ struct WidgetInfoView: View {
                                         .cornerRadius(K.transportIconCornerRadius)
                                 }
 
-                                Text(viewModel.lineDetails)
+                                Text(viewModel.lineDetails ?? noLineInfoText)
                                     .lineLimit(1)
                                     .foregroundColor(K.lineInformationColor)
 
@@ -77,7 +79,6 @@ struct WidgetInfoView: View {
                                 Spacer()
                             }.frame(maxWidth: .infinity)
                                 .lineLimit(1)
-                                .fixedSize()
                                 .padding(8)
                                 .background(Color("TimeTileBackgroundColor"))
                                 .cornerRadius(8)
@@ -91,7 +92,7 @@ struct WidgetInfoView: View {
                 HStack {
                     Spacer()
                     Rectangle()
-                        .fill(K.widgetGradient).frame(width: K.widgetFadeWidth, height: .infinity)
+                        .fill(K.widgetGradient).frame(width: K.widgetFadeWidth)
                 }.frame(width: geometry.size.width)
             }
         }

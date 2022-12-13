@@ -1,9 +1,13 @@
 
 "From %@" = "From %@";
 
-"about_widget" = "See scheduled times for your favourite departures. Click a departure to see realtime in the app";
+"about_widget" = "See scheduled times for your favourite departures. Tap a departure to see real-time in the app";
 
 "no_departures" = "No departures";
 
-"must_choose_favorite" = "You need to select a favorite";
+"must_choose_favorite" = "You need to select a favorite departure in the app";
+
+"no_line_info" = "No line information";
+
+"no_quay_name" = "Unknown";
 

@@ -65,6 +65,10 @@ class APIService {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
 
+        #if DEBUG
+            debugPrint(request)
+        #endif
+
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 callback(.failure(error))

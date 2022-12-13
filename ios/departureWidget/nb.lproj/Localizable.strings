@@ -5,4 +5,8 @@
 
 "no_departures" = "Ingen avganger";
 
-"must_choose_favorite" = "Du må velge en favorittavgang";
+"must_choose_favorite" = "Du må velge en favorittavgang i appen";
+
+"no_line_info" = "Ingen linjeinformasjon";
+
+"no_quay_name" = "Ukjent";
