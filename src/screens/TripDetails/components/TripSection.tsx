@@ -44,6 +44,7 @@ import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-new-departures';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -72,7 +73,7 @@ const TripSection: React.FC<TripSectionProps> = ({
   const {t, language} = useTranslation();
   const style = useSectionStyles();
   const {theme} = useTheme();
-  const {newDepartures} = usePreferenceItems();
+  const departuresV2Enabled = useDeparturesV2Enabled();
 
   const isWalkSection = leg.mode === 'foot';
   const legColor = useTransportationColor(leg.mode, leg.line?.transportSubmode);
@@ -234,7 +235,7 @@ const TripSection: React.FC<TripSectionProps> = ({
     const stopPlace = quay?.stopPlace;
     if (!stopPlace) return;
 
-    if (newDepartures) {
+    if (departuresV2Enabled) {
       navigation.push('PlaceScreen', {
         place: {
           id: stopPlace.id,

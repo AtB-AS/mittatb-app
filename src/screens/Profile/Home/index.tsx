@@ -42,6 +42,7 @@ import {destructiveAlert} from './utils';
 import useIsLoading from '@atb/utils/use-is-loading';
 import {useNewFrontpage} from '@atb/screens/Dashboard/use-new-frontpage';
 import {useMapPage} from '@atb/components/map/hooks/use-map-page';
+import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-new-departures';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -75,11 +76,24 @@ export default function ProfileHome({navigation}: ProfileProps) {
     FadeContainer: ClipboardFadeContainer,
   } = useCopyWithOpacityFade(1500);
 
-  const {
-    setPreference,
-    preferences: {newDepartures},
-  } = usePreferences();
+  const {setPreference} = usePreferences();
+  const isDeparuresV2Enabled = useDeparturesV2Enabled();
   const showMapPage = useMapPage();
+
+  const {enable_departures_v2_as_default} = useRemoteConfig();
+  const setDeparturesV2Enabled = (value: boolean) => {
+    if (enable_departures_v2_as_default) {
+      updateMetadata({
+        'AtB-Departures-V2': value ? 'enabled' : 'disabled',
+      });
+      setPreference({departuresV2: value});
+    } else {
+      updateMetadata({
+        'AtB-Beta-Departures': value ? 'enabled' : 'disabled',
+      });
+      setPreference({newDepartures: value});
+    }
+  };
 
   const shouldUseNewFrontPage = useNewFrontpage();
 
@@ -306,17 +320,9 @@ export default function ProfileHome({navigation}: ProfileProps) {
           <Sections.ActionItem
             mode="toggle"
             text={t(ProfileTexts.sections.newFeatures.departures)}
-            checked={newDepartures}
+            checked={isDeparuresV2Enabled}
+            onPress={setDeparturesV2Enabled}
             testID="newDeparturesToggle"
-            onPress={(newDepartures) => {
-              analytics().logEvent('toggle_beta_departures', {
-                toggle: newDepartures ? 'enable' : 'disable',
-              });
-              updateMetadata({
-                'AtB-Beta-Departures': newDepartures ? 'enabled' : 'disabled',
-              });
-              setPreference({newDepartures});
-            }}
           />
           {enable_map_page ? (
             <Sections.ActionItem
