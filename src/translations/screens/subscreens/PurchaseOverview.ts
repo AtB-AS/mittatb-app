@@ -73,8 +73,8 @@ const PurchaseOverviewTexts = {
     chipHint: _('Aktiver for å velge varighet', 'Activate to select duration'),
   },
   productSelection: {
-    title: _('Velg billet', 'Select a ticket'),
-    a11yTitle: _('Aktiver for å velge billet', 'Activate to select ticket'),
+    title: _('Velg billett', 'Select a ticket'),
+    a11yTitle: _('Aktiver for å velge billett', 'Activate to select ticket'),
   },
   travellerSelection: {
     title_single: _('Velg passasjerkategori', 'Select a traveller'),
@@ -107,7 +107,7 @@ const PurchaseOverviewTexts = {
   },
   summary: {
     price: (priceString: string) =>
-      _(`Total ${priceString} kr`, `Total ${priceString} kr`),
+      _(`Totalt ${priceString} kr`, `Total ${priceString} kr`),
     messageInZone: _(
       `Gjelder for buss/trikk i valgte soner`,
       `Applies for bus/tram in selected zones`,
