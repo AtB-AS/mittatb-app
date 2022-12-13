@@ -14,18 +14,11 @@ typealias LocationCallback = (CLLocation?) -> Void
     @objc var onLocationDidChange: LocationCallback?
 
     var isLocationEnabled: Bool {
-        if CLLocationManager.locationServicesEnabled() {
-            switch CLLocationManager.authorizationStatus() {
-            case .notDetermined, .restricted, .denied:
-                return false
-            case .authorizedAlways, .authorizedWhenInUse:
-                return true
-            @unknown default:
-                return false
-            }
+        if #available(iOS 14.0, *) {
+            return locationManager.isAuthorizedForWidgetUpdates
+        } else {
+            return false
         }
-
-        return false
     }
 
     @objc override init() {
@@ -34,11 +27,6 @@ typealias LocationCallback = (CLLocation?) -> Void
         super.init()
 
         locationManager.delegate = self
-        locationManager.distanceFilter = 300 // meters
-        locationManager.showsBackgroundLocationIndicator = false
-        locationManager.allowsBackgroundLocationUpdates = true
-        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        locationManager.requestAlwaysAuthorization()
     }
 
     deinit {
@@ -57,6 +45,11 @@ typealias LocationCallback = (CLLocation?) -> Void
     }
 
     @objc func startMonitoringLocationChanges() {
+        locationManager.distanceFilter = 300 // meters
+        locationManager.showsBackgroundLocationIndicator = false
+        locationManager.allowsBackgroundLocationUpdates = true
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        locationManager.requestAlwaysAuthorization()
         locationManager.startMonitoringSignificantLocationChanges()
         locationManager.requestLocation()
     }
