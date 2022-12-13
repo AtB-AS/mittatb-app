@@ -3,7 +3,7 @@ import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import React, {useEffect, useState} from 'react';
-import {Alert, View} from 'react-native';
+import {Alert, TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
@@ -15,7 +15,7 @@ import {
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
 import Slider from '@react-native-community/slider';
-import {usePreferences} from '@atb/preferences';
+import {usePreferences, UserPreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import Button from '@atb/components/button';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
@@ -82,10 +82,8 @@ export default function DebugInfo() {
       );
   }
 
-  const {
-    setPreference,
-    preferences: {tripSearchPreferences, showTestIds},
-  } = usePreferences();
+  const {setPreference, preferences} = usePreferences();
+  const {showTestIds, tripSearchPreferences} = preferences;
 
   const tripSearchDefaults = {
     transferPenalty: 10,
@@ -274,6 +272,29 @@ export default function DebugInfo() {
               storedValues && (
                 <View>
                   {storedValues.map(([key, value]) => mapEntry(key, value))}
+                </View>
+              )
+            }
+          />
+        </Sections.Section>
+
+        <Sections.Section withPadding withTopPadding>
+          <Sections.ExpandableItem
+            text="Preferences"
+            showIconText={true}
+            expandContent={
+              preferences && (
+                <View>
+                  <ThemeText type="body__secondary">
+                    Press a line to reset to undefined {'\n'}
+                  </ThemeText>
+                  {Object.keys(preferences).map((key) => (
+                    <TouchableOpacity
+                      onPress={() => setPreference({[key]: undefined})}
+                    >
+                      {mapEntry(key, preferences[key as keyof UserPreferences])}
+                    </TouchableOpacity>
+                  ))}
                 </View>
               )
             }
