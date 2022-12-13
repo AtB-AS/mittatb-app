@@ -21,19 +21,22 @@ export type GroupsByIdQuery = {
         predictionInaccurate: boolean;
         realtime: boolean;
         destinationDisplay?: {frontText?: string};
-        notices: Array<{text?: string}>;
+        notices: Array<{id: string; text?: string}>;
         situations: Array<{
           id: string;
           situationNumber?: string;
           reportType?: Types.ReportType;
           summary: Array<{language?: string; value: string}>;
           description: Array<{language?: string; value: string}>;
+          advice: Array<{language?: string; value: string}>;
+          infoLinks?: Array<{uri: string; label?: string}>;
+          validityPeriod?: {startTime?: any; endTime?: any};
         }>;
         serviceJourney?: {id: string; line: {id: string}};
       }>;
       estimatedCalls: Array<{
         destinationDisplay?: {frontText?: string};
-        notices: Array<{text?: string}>;
+        notices: Array<{id: string; text?: string}>;
         serviceJourney?: {
           id: string;
           directionType?: Types.DirectionType;
@@ -47,17 +50,20 @@ export type GroupsByIdQuery = {
             transportMode?: Types.TransportMode;
             transportSubmode?: Types.TransportSubmode;
             publicCode?: string;
-            notices: Array<{text?: string}>;
+            notices: Array<{id: string; text?: string}>;
             situations: Array<{
               id: string;
               situationNumber?: string;
               reportType?: Types.ReportType;
               summary: Array<{language?: string; value: string}>;
               description: Array<{language?: string; value: string}>;
+              advice: Array<{language?: string; value: string}>;
+              infoLinks?: Array<{uri: string; label?: string}>;
+              validityPeriod?: {startTime?: any; endTime?: any};
             }>;
           };
-          journeyPattern?: {notices: Array<{text?: string}>};
-          notices: Array<{text?: string}>;
+          journeyPattern?: {notices: Array<{id: string; text?: string}>};
+          notices: Array<{id: string; text?: string}>;
         };
       }>;
       situations: Array<{
@@ -66,6 +72,9 @@ export type GroupsByIdQuery = {
         reportType?: Types.ReportType;
         summary: Array<{language?: string; value: string}>;
         description: Array<{language?: string; value: string}>;
+        advice: Array<{language?: string; value: string}>;
+        infoLinks?: Array<{uri: string; label?: string}>;
+        validityPeriod?: {startTime?: any; endTime?: any};
       }>;
     }>;
   }>;

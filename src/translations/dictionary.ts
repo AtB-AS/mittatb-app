@@ -70,6 +70,7 @@ const dictionary = {
     valid: _('Suksess', 'Success'),
     error: _('Feil', 'Error'),
   },
+  retry: _('Prøv på nytt', 'Try again'),
 };
 
 export default dictionary;

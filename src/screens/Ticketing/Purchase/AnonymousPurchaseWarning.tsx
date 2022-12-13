@@ -19,8 +19,10 @@ const AnonymousPurchaseWarning = () => {
       <MessageBox
         title={t(AnonymousPurchases.warning.title)}
         message={t(AnonymousPurchases.warning.message)}
-        onPress={navigateToConsequencesScreen}
-        onPressText={t(AnonymousPurchases.warning.checkHere)}
+        onPressConfig={{
+          action: navigateToConsequencesScreen,
+          text: t(AnonymousPurchases.warning.checkHere),
+        }}
         type={'warning'}
         isMarkdown={true}
       />

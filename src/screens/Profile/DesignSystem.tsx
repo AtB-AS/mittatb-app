@@ -22,10 +22,12 @@ import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Info} from '@atb/assets/svg/color/icons/status';
+import {dictionary, useTranslation} from '@atb/translations';
 
 export default function DesignSystem() {
   const style = useProfileHomeStyle();
   const {theme} = useTheme();
+  const {t} = useTranslation();
 
   const [segmentedSelection, setSegmentedSelection] = useState(0);
 
@@ -172,7 +174,10 @@ export default function DesignSystem() {
               message="This is an error with retry link"
               title="Title"
               type="error"
-              onPress={presser}
+              onPressConfig={{
+                action: presser,
+                text: t(dictionary.retry),
+              }}
             />
           </Sections.GenericItem>
 
@@ -188,9 +193,8 @@ export default function DesignSystem() {
           <Sections.GenericItem>
             <MessageBox
               type="info"
-              isMarkdown={true}
-              title="Markdown"
-              onDismiss={() => {}}
+              title="With dismiss"
+              onDismiss={() => Alert.alert('Closed')}
               message={`This is a message with dismiss button`}
             />
           </Sections.GenericItem>
@@ -198,11 +202,25 @@ export default function DesignSystem() {
           <Sections.GenericItem>
             <MessageBox
               type="warning"
-              isMarkdown={true}
-              title="Markdown"
-              onDismiss={() => {}}
-              onPress={() => {}}
-              onPressText={'Test link'}
+              title="With dismiss and action"
+              onDismiss={() => Alert.alert('Closed')}
+              onPressConfig={{
+                action: presser,
+                text: 'Do action',
+              }}
+              message={`This is a message with dismiss and action`}
+            />
+          </Sections.GenericItem>
+
+          <Sections.GenericItem>
+            <MessageBox
+              type="error"
+              title="With dismiss and link"
+              onDismiss={() => Alert.alert('Closed')}
+              onPressConfig={{
+                url: 'https://atb.no',
+                text: 'Go to atb.no',
+              }}
               message={`This is a message with dismiss and link`}
             />
           </Sections.GenericItem>
@@ -374,12 +392,20 @@ export default function DesignSystem() {
           <Sections.MessageItem
             messageType="warning"
             title="Warning message!"
-            message="A warning message with title"
+            message="A warning message with title link"
+            onPressConfig={{
+              url: 'https://atb.no',
+              text: 'Go to atb.no',
+            }}
           />
 
           <Sections.MessageItem
             messageType="error"
-            message="An error message without title"
+            message="An error message without title and with action"
+            onPressConfig={{
+              action: presser,
+              text: t(dictionary.retry),
+            }}
           />
         </Sections.Section>
 
