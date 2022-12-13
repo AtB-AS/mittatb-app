@@ -36,7 +36,7 @@ import useDepartureData, {
 import {TicketingMessages} from '@atb/screens/TripDetails/components/DetailsMessages';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import AccessibleText from '@atb/components/accessible-text';
-import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-new-departures';
+import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];

@@ -44,7 +44,7 @@ import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
-import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-new-departures';
+import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
 
 type TripSectionProps = {
   isLast?: boolean;

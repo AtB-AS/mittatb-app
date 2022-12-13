@@ -27,7 +27,7 @@ import {TabNavigatorParams} from './types';
 import NearbyScreen from '@atb/screens/Nearby';
 import ProfileScreen from '@atb/screens/Profile';
 import {useMapPage} from '@atb/components/map/hooks/use-map-page';
-import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-new-departures';
+import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
 
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 

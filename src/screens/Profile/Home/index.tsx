@@ -42,7 +42,7 @@ import {destructiveAlert} from './utils';
 import useIsLoading from '@atb/utils/use-is-loading';
 import {useNewFrontpage} from '@atb/screens/Dashboard/use-new-frontpage';
 import {useMapPage} from '@atb/components/map/hooks/use-map-page';
-import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-new-departures';
+import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
