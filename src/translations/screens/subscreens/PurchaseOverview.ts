@@ -107,7 +107,7 @@ const PurchaseOverviewTexts = {
   },
   summary: {
     price: (priceString: string) =>
-      _(`Total ${priceString} kr`, `Total ${priceString} kr`),
+      _(`Totalt ${priceString} kr`, `Total ${priceString} kr`),
     messageInZone: _(
       `Gjelder for buss/trikk i valgte soner`,
       `Applies for bus/tram in selected zones`,
