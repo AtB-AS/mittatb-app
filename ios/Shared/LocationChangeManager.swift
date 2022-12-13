@@ -34,12 +34,16 @@ typealias LocationCallback = (CLLocation?) -> Void
         super.init()
 
         locationManager.delegate = self
+        locationManager.distanceFilter = 300 // meters
+        locationManager.showsBackgroundLocationIndicator = false
+        locationManager.allowsBackgroundLocationUpdates = true
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestAlwaysAuthorization()
     }
 
     deinit {
         locationManager.delegate = nil
+        locationManager.stopUpdatingLocation()
     }
 
     @objc func requestLocation(onCompete callback: @escaping LocationCallback) {

@@ -1,11 +1,11 @@
 
 "From %@" = "Fra %@";
 
-"about_widget" = "Se planlagt rutetid for dine favoritteravganger. Trykk på avgangen for å se sanntid i appen";
+"about_widget" = "Se planlagt rutetid for dine favorittavganger. Trykk på avgangen for å se sanntid i appen.";
 
 "no_departures" = "Ingen avganger";
 
-"must_choose_favorite" = "Du må velge en favorittavgang i appen";
+"must_choose_favorite" = "Legg til favorittavganger i appen";
 
 "no_line_info" = "Ingen linjeinformasjon";
 
