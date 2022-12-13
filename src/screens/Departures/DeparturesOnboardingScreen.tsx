@@ -11,7 +11,6 @@ import {DeparturesStackProps} from '@atb/screens/Departures/types';
 import storage, {StorageModelKeysEnum} from '@atb/storage';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {DeparturesOnboarding} from '@atb/assets/svg/color/images';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {updateMetadata} from '@atb/chat/metadata';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -22,18 +21,15 @@ export const DeparturesOnboardingScreen = ({navigation}: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const focusRef = useFocusOnLoad();
-  const {enable_departures_v2_as_default} = useRemoteConfig();
 
   const setOnboardingCompleted = async () => {
     await storage.set(
       StorageModelKeysEnum.HasReadDeparturesV2Onboarding,
       JSON.stringify(true),
     );
-    if (enable_departures_v2_as_default) {
-      updateMetadata({
-        'AtB-Departures-V2': 'enabled',
-      });
-    }
+    updateMetadata({
+      'AtB-Departures-V2': 'enabled',
+    });
   };
 
   return (
