@@ -18,9 +18,10 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
-  getTextForLanguage,
+  dictionary,
   PurchaseConfirmationTexts,
   useTranslation,
+  getTextForLanguage,
 } from '@atb/translations';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {formatToLongDateTime} from '@atb/utils/date';
@@ -272,8 +273,10 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               type="error"
               title={t(PurchaseConfirmationTexts.errorMessageBox.title)}
               message={t(PurchaseConfirmationTexts.errorMessageBox.message)}
-              onPress={refreshOffer}
-              onPressText={t(MessageBoxTexts.tryAgainButton)}
+              onPressConfig={{
+                action: refreshOffer,
+                text: t(dictionary.retry),
+              }}
               style={styles.errorMessage}
             />
           )}

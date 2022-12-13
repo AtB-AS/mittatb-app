@@ -4,7 +4,11 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {useFareProductTypeConfig} from '@atb/configuration/utils';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {
+  dictionary,
+  PurchaseOverviewTexts,
+  useTranslation,
+} from '@atb/translations';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
@@ -103,8 +107,10 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
               type="error"
               title={t(PurchaseOverviewTexts.errorMessageBox.title)}
               message={t(PurchaseOverviewTexts.errorMessageBox.message)}
-              onPress={refreshOffer}
-              onPressText={t(MessageBoxTexts.tryAgainButton)}
+              onPressConfig={{
+                action: refreshOffer,
+                text: t(dictionary.retry),
+              }}
               style={styles.selectionComponent}
             />
           )}

@@ -2,7 +2,7 @@ import React from 'react';
 import ThemeText, {ThemeTextProps} from '@atb/components/text';
 import {screenReaderPause} from './utils';
 
-type LabelProps = ThemeTextProps & {
+type LabelProps = Omit<ThemeTextProps, 'isMarkdown'> & {
   prefix?: string;
   suffix?: string;
   children?: string;
