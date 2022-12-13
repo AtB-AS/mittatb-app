@@ -4,15 +4,15 @@ import Button from '@atb/components/button';
 import {ScrollView, View} from 'react-native';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StaticColorByType} from '@atb/theme/colors';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {DeparturesStackProps} from '@atb/screens/Departures/types';
 import storage, {StorageModelKeysEnum} from '@atb/storage';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {screenReaderPause} from '@atb/components/accessible-text';
 import {DeparturesOnboarding} from '@atb/assets/svg/color/images';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {updateMetadata} from '@atb/chat/metadata';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -22,6 +22,19 @@ export const DeparturesOnboardingScreen = ({navigation}: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const focusRef = useFocusOnLoad();
+  const {enable_departures_v2_as_default} = useRemoteConfig();
+
+  const setOnboardingCompleted = async () => {
+    await storage.set(
+      StorageModelKeysEnum.HasReadDeparturesV2Onboarding,
+      JSON.stringify(true),
+    );
+    if (enable_departures_v2_as_default) {
+      updateMetadata({
+        'AtB-Departures-V2': 'enabled',
+      });
+    }
+  };
 
   return (
     <SafeAreaView edges={['top', 'left', 'right']} style={styles.container}>
@@ -54,10 +67,7 @@ export const DeparturesOnboardingScreen = ({navigation}: Props) => {
         <Button
           text={t(DeparturesTexts.onboarding.button)}
           onPress={async () => {
-            await storage.set(
-              StorageModelKeysEnum.HasReadDeparturesV2Onboarding,
-              JSON.stringify(true),
-            );
+            await setOnboardingCompleted();
             navigation.goBack();
           }}
           style={styles.button}
