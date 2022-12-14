@@ -7,7 +7,7 @@ const SituationsTexts = {
     info: _('Med ekstra info', 'With extra information'),
   },
   bottomSheet: {
-    button: _('Lukk', 'close'),
+    button: _('Lukk', 'Close'),
     validity: {
       from: (fromDate: string) =>
         _(`Gyldig fra ${fromDate}`, `Valid from ${fromDate}`),
