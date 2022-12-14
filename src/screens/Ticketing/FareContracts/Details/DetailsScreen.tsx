@@ -56,10 +56,9 @@ export default function DetailsScreen({navigation, route}: Props) {
       firstTravelRight.endDateTime.toMillis(),
       fc.state,
     ) === 'valid' &&
-    firstTravelRight.tariffZoneRefs.every(
+    firstTravelRight.tariffZoneRefs?.every(
       (val: string) => val === 'ATB:TariffZone:1',
-    ) &&
-    preassignedFareProduct?.type !== 'night';
+    );
 
   return (
     <View style={styles.container}>

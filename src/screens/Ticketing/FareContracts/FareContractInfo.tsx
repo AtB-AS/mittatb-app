@@ -84,8 +84,8 @@ const FareContractInfo = ({
 
   const firstTravelRight = travelRights[0];
   const {fareProductRef: productRef, tariffZoneRefs} = firstTravelRight;
-  const [firstZone] = tariffZoneRefs;
-  const [lastZone] = tariffZoneRefs.slice(-1);
+  const [firstZone] = tariffZoneRefs ?? [];
+  const [lastZone] = tariffZoneRefs?.slice(-1) ?? [];
 
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
@@ -177,7 +177,7 @@ const FareContractInfoHeader = ({
             {productName}
           </ThemeText>
         )}
-        {producDescription && preassignedFareProduct?.type === 'night' && (
+        {producDescription && (
           <ThemeText
             type="body__secondary"
             style={styles.product}
@@ -220,7 +220,7 @@ const FareContractInfoDetails = (props: FareContractInfoDetailsProps) => {
               userProfileCountAndName(u, omitUserProfileCount, language),
             )}
           />
-          {tariffZoneSummary && preassignedFareProduct?.type !== 'night' && (
+          {tariffZoneSummary && (
             <FareContractDetail
               header={t(FareContractTexts.label.zone)}
               children={[tariffZoneSummary]}
@@ -271,8 +271,8 @@ export const getFareContractInfoDetails = (
     fareContractState,
   );
 
-  const [firstZone] = tariffZoneRefs;
-  const [lastZone] = tariffZoneRefs.slice(-1);
+  const [firstZone] = tariffZoneRefs ?? [];
+  const [lastZone] = tariffZoneRefs?.slice(-1) ?? [];
   const fromTariffZone = findReferenceDataById(tariffZones, firstZone);
   const toTariffZone = findReferenceDataById(tariffZones, lastZone);
   const preassignedFareProduct = findReferenceDataById(
