@@ -45,7 +45,7 @@ typealias LocationCallback = (CLLocation?) -> Void
     }
 
     @objc func startMonitoringLocationChanges() {
-        locationManager.distanceFilter = 300 // meters
+        locationManager.distanceFilter = 100 // meters
         locationManager.showsBackgroundLocationIndicator = false
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters

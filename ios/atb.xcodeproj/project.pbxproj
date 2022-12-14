@@ -35,6 +35,7 @@
 		FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE55264D28EC45ED0091F697 /* DepartureWidget.swift */; };
 		FE55265028EC45EE0091F697 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE55264F28EC45EE0091F697 /* Assets.xcassets */; };
 		FE55265428EC45EE0091F697 /* departureWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE55264728EC45ED0091F697 /* departureWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FE7DE4F5294A2EDC009BE6DB /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7DE4F4294A2EDC009BE6DB /* String.swift */; };
 		FE7E785F29433F3900C57A1F /* DefaultFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7E785D29433F3900C57A1F /* DefaultFonts.swift */; };
 		FE9A677C29426E57008921BD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE9A677B29426E57008921BD /* CoreLocation.framework */; };
 		FE9C416D293744B100EC2D53 /* ChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9C416C293744B100EC2D53 /* ChipView.swift */; };
@@ -114,6 +115,7 @@
 		FE55264D28EC45ED0091F697 /* DepartureWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartureWidget.swift; sourceTree = "<group>"; };
 		FE55264F28EC45EE0091F697 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FE55265128EC45EE0091F697 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FE7DE4F4294A2EDC009BE6DB /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		FE7E785D29433F3900C57A1F /* DefaultFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultFonts.swift; sourceTree = "<group>"; };
 		FE8AF9EC28EC69FA00505277 /* departureWidgetDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = departureWidgetDebug.entitlements; sourceTree = "<group>"; };
 		FE8AF9ED28EC6A0400505277 /* atbDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = atbDebug.entitlements; path = atb/atbDebug.entitlements; sourceTree = "<group>"; };
@@ -249,6 +251,7 @@
 			isa = PBXGroup;
 			children = (
 				FE09922B28FFF50800E5046D /* Bundle.swift */,
+				FE7DE4F4294A2EDC009BE6DB /* String.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -549,6 +552,7 @@
 				5038614A28FD6EB900E16E13 /* APIService.swift in Sources */,
 				FE09922C28FFF50800E5046D /* Bundle.swift in Sources */,
 				505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */,
+				FE7DE4F5294A2EDC009BE6DB /* String.swift in Sources */,
 				5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */,
 				FE7E785F29433F3900C57A1F /* DefaultFonts.swift in Sources */,
 				FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */,
@@ -827,7 +831,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = departureWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need your location to show bus departures near you";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -846,7 +850,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -875,7 +879,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = departureWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need your location to show bus departures near you";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -890,7 +894,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
