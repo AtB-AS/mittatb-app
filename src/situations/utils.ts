@@ -1,14 +1,14 @@
-import {SituationType} from '@atb/situations/types';
+import {SituationType} from './types';
 import {
   getTextForLanguage,
   Language,
   SituationsTexts,
-  TranslatedString,
   TranslateFunction,
 } from '@atb/translations';
 import {Error, Info, Warning} from '@atb/assets/svg/color/icons/status';
 import {SvgProps} from 'react-native-svg';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
+import {isAfter, isBefore, isBetween} from '@atb/utils/date';
 
 export const getUniqueSituations = (situations: SituationType[] = []) => {
   let seenIds: string[] = [];
@@ -86,3 +86,25 @@ export const getSituationOrNoticeA11yLabel = (
     );
   return t(SituationsTexts.a11yLabel[messageType]);
 };
+
+/**
+ * Check if a situation is valid at a specific date by comparing it to the
+ * validity period of the situation. If the situation has neither start time nor
+ * end time it will be considered valid at all times.
+ *
+ * This function uses currying of the date to enable inline use in filter
+ * functions.
+ */
+export const isSituationValidAtDate =
+  (date: string | Date = new Date()) =>
+  (situation: SituationType) => {
+    const {startTime, endTime} = situation.validityPeriod || {};
+    if (startTime && endTime) {
+      return isBetween(date, startTime, endTime);
+    } else if (startTime) {
+      return isAfter(date, startTime);
+    } else if (endTime) {
+      return isBefore(date, startTime);
+    }
+    return true;
+  };

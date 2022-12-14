@@ -130,6 +130,7 @@ export default function QuayView({
           stopPlace={stopPlace}
           showOnlyFavorites={showOnlyFavorites}
           allowFavouriteSelection={true}
+          searchDate={searchStartTime}
           mode={mode}
         />
       )}

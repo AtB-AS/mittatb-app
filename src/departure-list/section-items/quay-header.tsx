@@ -10,7 +10,7 @@ import {
 } from '@atb/components/sections/section-utils';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
-import {SituationMessageBox} from '@atb/situations';
+import {isSituationValidAtDate, SituationMessageBox} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import {useHumanizeDistance} from '@atb/utils/location';
@@ -18,10 +18,12 @@ import {useHumanizeDistance} from '@atb/utils/location';
 export type QuayHeaderItemProps = SectionItem<{
   quay: QuayInfo;
   distance?: number;
+  searchDate: string;
 }>;
 export default function QuayHeaderItem({
   quay,
   distance,
+  searchDate,
   testID,
   ...props
 }: QuayHeaderItemProps) {
@@ -52,6 +54,8 @@ export default function QuayHeaderItem({
     ? quay.name
     : `${quay.name} ${quay.publicCode}`;
 
+  const situations = quay.situations.filter(isSituationValidAtDate(searchDate));
+
   return (
     <View style={topContainer}>
       <View
@@ -63,7 +67,7 @@ export default function QuayHeaderItem({
         <ThemeText testID={testID + 'Title'}>{title}</ThemeText>
         <Distance distance={humanized} />
       </View>
-      {quay.situations.map((situation) => (
+      {situations.map((situation) => (
         <SituationMessageBox situation={situation} style={styles.situations} />
       ))}
     </View>

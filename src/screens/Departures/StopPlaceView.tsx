@@ -220,6 +220,7 @@ export default function StopPlaceView(props: StopPlaceViewProps) {
             stopPlace={stopPlace}
             showOnlyFavorites={showOnlyFavorites}
             allowFavouriteSelection={allowFavouriteSelection}
+            searchDate={searchStartTime}
             mode={mode}
           />
           {mode === 'Departure' && index === 0 && (

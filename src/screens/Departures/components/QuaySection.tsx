@@ -13,7 +13,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import EstimatedCallItem from './EstimatedCallItem';
 import {StopPlacesMode} from '@atb/screens/Departures/types';
-import {SituationSectionItem} from '@atb/situations';
+import {isSituationValidAtDate, SituationSectionItem} from '@atb/situations';
 
 type QuaySectionProps = {
   quay: Quay;
@@ -32,6 +32,7 @@ type QuaySectionProps = {
   stopPlace: StopPlace;
   showOnlyFavorites: boolean;
   allowFavouriteSelection: boolean;
+  searchDate?: string | Date;
   mode: StopPlacesMode;
 };
 
@@ -51,6 +52,7 @@ export default function QuaySection({
   stopPlace,
   showOnlyFavorites,
   allowFavouriteSelection,
+  searchDate,
   mode,
 }: QuaySectionProps): JSX.Element {
   const {favoriteDepartures} = useFavorites();
@@ -78,6 +80,8 @@ export default function QuaySection({
     navigateToQuay &&
     !isMinimized &&
     (mode === 'Departure' || mode === 'Map' || hasMoreItemsThanDisplayLimit);
+
+  const situations = quay.situations.filter(isSituationValidAtDate(searchDate));
 
   return (
     <View testID={testID}>
@@ -123,7 +127,7 @@ export default function QuaySection({
            This is under its own 'isMinimized' as nesting section items in React
            fragment breaks the section separator.
            */
-          quay.situations.map((s) => <SituationSectionItem situation={s} />)}
+          situations.map((s) => <SituationSectionItem situation={s} />)}
         {!isMinimized && (
           <FlatList
             ItemSeparatorComponent={SectionSeparator}
