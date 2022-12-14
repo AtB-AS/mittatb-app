@@ -12,7 +12,6 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
-import {usePreferenceItems} from '@atb/preferences';
 import CancelledDepartureMessage from '@atb/screens/TripDetails/components/CancelledDepartureMessage';
 import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
@@ -37,6 +36,9 @@ import {TicketingMessages} from '@atb/screens/TripDetails/components/DetailsMess
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import AccessibleText from '@atb/components/accessible-text';
 import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
+import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
+import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
+import {formatToClock} from '@atb/utils/date';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -48,13 +50,13 @@ type Props = TripDetailsScreenProps<'DepartureDetails'>;
 export default function DepartureDetails({navigation, route}: Props) {
   const {activeItemIndex, items} = route.params;
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
 
   const activeItem = items[activeItemIndexState];
   const hasMultipleItems = items.length > 1;
 
   const styles = useStopsStyle();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const isFocused = useIsFocused();
   const [
@@ -62,6 +64,10 @@ export default function DepartureDetails({navigation, route}: Props) {
     isLoading,
   ] = useDepartureData(activeItem, 30, !isFocused);
   const mapData = useMapData(activeItem);
+
+  const lastPassedStop = estimatedCallsWithMetadata
+    .filter((a) => a.actualDepartureTime)
+    .pop();
 
   const onPaginationPress = (newPage: number) => {
     animateNextChange();
@@ -165,6 +171,23 @@ export default function DepartureDetails({navigation, route}: Props) {
           />
         </View>
       </ContentWithDisappearingHeader>
+      {lastPassedStop?.quay?.name && (
+        <View style={styles.realtime}>
+          <ThemeIcon
+            svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
+            size={'small'}
+            style={styles.realtimeIcon}
+          ></ThemeIcon>
+          <ThemeText type={'body__secondary'}>
+            {t(
+              DepartureDetailsTexts.lastPassedStop(
+                lastPassedStop.quay?.name,
+                formatToClock(lastPassedStop?.actualDepartureTime, language),
+              ),
+            )}
+          </ThemeText>
+        </View>
+      )}
     </View>
   );
 }
@@ -456,6 +479,14 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     paddingTop: 0,
     paddingBottom: theme.spacings.xLarge,
   },
+  realtime: {
+    padding: theme.spacings.medium,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: theme.static.background.background_1.background,
+  },
+  realtimeIcon: {marginRight: theme.spacings.xSmall},
 }));
 
 function useMapData(activeItem: ServiceJourneyDeparture) {
