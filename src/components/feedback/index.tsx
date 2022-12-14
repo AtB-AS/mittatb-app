@@ -106,7 +106,7 @@ export const Feedback = ({
   const incrementCounterAndSetDisplayStats = async () => {
     if (feedbackConfig) {
       const defaultDisplayStatObject: VersionStats = {
-        answeredAtDisplayCount: undefined,
+        answeredAtDisplayCount: 1,
         doNotShowAgain: false,
         displayCount: 1,
         surveyVersion: feedbackConfig.surveyVersion,
@@ -216,7 +216,7 @@ export const Feedback = ({
       const organization = APP_ORG;
       const submitTime = Date.now();
       const displayCount = currentVersionStats.displayCount;
-      const isReprompt = currentVersionStats?.answeredAtDisplayCount;
+      const isReprompt = currentVersionStats.answeredAtDisplayCount || 1;
 
       const dataToServer = {
         submitTime,
