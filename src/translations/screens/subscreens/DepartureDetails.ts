@@ -9,6 +9,11 @@ const DepartureDetailsTexts = {
     label: (numberStops: number) =>
       _(`${numberStops} mellomstopp`, `${numberStops} intermediate stops`),
   },
+  lastPassedStop: (stopPlaceName: string, time: string) =>
+    _(
+      `Passerte ${stopPlaceName} kl. ${time}`,
+      `Passed ${stopPlaceName} at ${time}`,
+    ),
   messages: {
     loading: _('Laster detaljer', 'Loading details'),
     noAlighting: _('Ingen avstigning', 'No disembarking'),
