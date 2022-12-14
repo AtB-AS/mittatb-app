@@ -18,7 +18,7 @@ import {StyleSheet} from '@atb/theme';
 import {SituationType} from './types';
 import * as Sections from '@atb/components/sections';
 import {SituationOrNoticeIcon} from './SituationOrNoticeIcon';
-import {formatToLongDateTime} from '@atb/utils/date';
+import {daysBetween, formatToLongDateTime} from '@atb/utils/date';
 import ThemeIcon from '@atb/components/theme-icon';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 import {screenReaderPause} from '@atb/components/accessible-text';
@@ -131,11 +131,13 @@ const filterInfoLinks = (
 
 const useValidityPeriodText = (period?: SituationType['validityPeriod']) => {
   const {t, language} = useTranslation();
-  if (period?.startTime && period?.endTime) {
+
+  const endTime = validateEndTime(period?.endTime);
+  if (period?.startTime && endTime) {
     return t(
       SituationsTexts.bottomSheet.validity.fromAndTo(
         formatToLongDateTime(period.startTime, language),
-        formatToLongDateTime(period.endTime, language),
+        formatToLongDateTime(endTime, language),
       ),
     );
   }
@@ -146,16 +148,24 @@ const useValidityPeriodText = (period?: SituationType['validityPeriod']) => {
       ),
     );
   }
-  if (period?.endTime) {
+  if (endTime) {
     return t(
       SituationsTexts.bottomSheet.validity.to(
-        formatToLongDateTime(period.endTime, language),
+        formatToLongDateTime(endTime, language),
       ),
     );
   }
 
   return undefined;
 };
+
+/**
+ * If end time is further ahead than 1 year, than return undefined. This is
+ * because some companies set an end time really far ahead (2050, 9999 etc.)
+ * when they don't know when the situation message will end.
+ */
+const validateEndTime = (endTime?: string) =>
+  endTime && daysBetween(new Date(), endTime) <= 365 ? endTime : undefined;
 
 const InfoLink = ({infoLink}: {infoLink: InfoLinkFragment}) => {
   const {t} = useTranslation();
