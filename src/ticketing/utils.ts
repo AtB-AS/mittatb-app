@@ -28,6 +28,12 @@ export function isPreActivatedTravelRight(
   );
 }
 
+export function isNightTravelRight(
+  travelRight: TravelRight | undefined,
+): travelRight is PreActivatedTravelRight {
+  return travelRight?.type === 'NightTicket';
+}
+
 export function isSingleTravelRight(
   travelRight: TravelRight | undefined,
 ): travelRight is PreActivatedSingleTravelRight {
@@ -74,6 +80,8 @@ export function isValidRightNowFareContract(f: FareContract): boolean {
 
   const firstTravelRight = f.travelRights?.[0];
   if (isPreActivatedTravelRight(firstTravelRight)) {
+    return isValidPreActivatedTravelRight(firstTravelRight);
+  } else if (isNightTravelRight(firstTravelRight)) {
     return isValidPreActivatedTravelRight(firstTravelRight);
   } else if (isCarnetTravelRight(firstTravelRight)) {
     return hasValidCarnetTravelRight(
@@ -137,6 +145,8 @@ function isActiveFareContractNowOrCanBeUsed(f: FareContract): boolean {
 
   const firstTravelRight = f.travelRights?.[0];
   if (isPreActivatedTravelRight(firstTravelRight)) {
+    return isValidPreActivatedTravelRight(firstTravelRight);
+  } else if (isNightTravelRight(firstTravelRight)) {
     return isValidPreActivatedTravelRight(firstTravelRight);
   } else if (isCarnetTravelRight(firstTravelRight)) {
     return hasActiveOrUsableCarnetTravelRight(

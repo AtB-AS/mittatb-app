@@ -19,7 +19,11 @@ import {
   NormalTravelRight,
   PreActivatedTravelRight,
 } from '@atb/ticketing';
-import {FareContractTexts, useTranslation} from '@atb/translations';
+import {
+  FareContractTexts,
+  getTextForLanguage,
+  useTranslation,
+} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
@@ -146,6 +150,9 @@ const FareContractInfoHeader = ({
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)
     : undefined;
+  const producDescription = preassignedFareProduct
+    ? getTextForLanguage(preassignedFareProduct.description, language)
+    : undefined;
   const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
   const {t} = useTranslation();
   const warning = getNonInspectableTokenWarning(
@@ -170,6 +177,16 @@ const FareContractInfoHeader = ({
             {productName}
           </ThemeText>
         )}
+        {producDescription && preassignedFareProduct?.type === 'night' && (
+          <ThemeText
+            type="body__secondary"
+            style={styles.product}
+            accessibilityLabel={producDescription + screenReaderPause}
+            testID={testID + 'ProductDescription'}
+          >
+            {producDescription}
+          </ThemeText>
+        )}
       </View>
       {status === 'valid' && warning && <WarningMessage message={warning} />}
     </View>
@@ -183,6 +200,7 @@ const FareContractInfoDetails = (props: FareContractInfoDetailsProps) => {
     userProfilesWithCount,
     omitUserProfileCount,
     status,
+    preassignedFareProduct,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -202,7 +220,7 @@ const FareContractInfoDetails = (props: FareContractInfoDetailsProps) => {
               userProfileCountAndName(u, omitUserProfileCount, language),
             )}
           />
-          {tariffZoneSummary && (
+          {tariffZoneSummary && preassignedFareProduct?.type !== 'night' && (
             <FareContractDetail
               header={t(FareContractTexts.label.zone)}
               children={[tariffZoneSummary]}
@@ -306,9 +324,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
   },
   fareContractHeader: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'center',
     marginTop: theme.spacings.xSmall,
   },
 }));
