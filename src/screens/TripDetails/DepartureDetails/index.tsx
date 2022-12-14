@@ -36,6 +36,7 @@ import useDepartureData, {
 import {TicketingMessages} from '@atb/screens/TripDetails/components/DetailsMessages';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import AccessibleText from '@atb/components/accessible-text';
+import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
 
 export type DepartureDetailsRouteParams = {
   items: ServiceJourneyDeparture[];
@@ -284,7 +285,7 @@ function EstimatedCallRow({
     group === 'trip' ? mode : undefined,
     subMode,
   );
-  const {newDepartures} = usePreferenceItems();
+  const departuresV2Enabled = useDeparturesV2Enabled();
   return (
     <View style={[styles.place, isStartOfGroup && styles.startPlace]}>
       <TripLegDecoration
@@ -347,7 +348,7 @@ function EstimatedCallRow({
     const stopPlace = quay?.stopPlace;
     if (!stopPlace) return;
 
-    if (newDepartures) {
+    if (departuresV2Enabled) {
       navigation.push('PlaceScreen', {
         place: {
           id: stopPlace.id,
