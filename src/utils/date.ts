@@ -289,8 +289,8 @@ export function formatToWeekday(
   });
 }
 
-export function daysBetween(base: Date, target: Date) {
-  return differenceInCalendarDays(target, base);
+export function daysBetween(base: string | Date, target: string | Date) {
+  return differenceInCalendarDays(parseIfNeeded(target), parseIfNeeded(base));
 }
 
 export function isSeveralDays(items: string[]) {

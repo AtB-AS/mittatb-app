@@ -1,12 +1,12 @@
-import {Info, Warning} from '@atb/assets/svg/color/icons/status';
-import React, {ComponentProps} from 'react';
+import React from 'react';
 import {getSvgForMostCriticalSituationOrNotice} from './utils';
-import {SituationType} from '@atb/situations/types';
+import {SituationType} from './types';
 import ThemeIcon from '@atb/components/theme-icon';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
+import {StyleProp, ViewStyle} from 'react-native';
 
 type Props = {
-  style?: ComponentProps<typeof Warning>['style'];
+  style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
   notices?: NoticeFragment[];
   cancellation?: boolean;

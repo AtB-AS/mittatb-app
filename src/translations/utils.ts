@@ -25,14 +25,17 @@ export const getTextForLanguage = (
 ): string | undefined => {
   if (language === Language.English) {
     const englishText = texts?.find(
-      (t) => getLanguage(t) === LanguageAndTextLanguagesEnum.eng,
+      (t) =>
+        getLanguage(t) === LanguageAndTextLanguagesEnum.eng ||
+        getLanguage(t) === LanguageAndTextLanguagesEnum.en,
     );
     if (englishText?.value) return englishText.value;
   }
   const norwegianText = texts?.find(
     (t) =>
       getLanguage(t) === LanguageAndTextLanguagesEnum.nor ||
-      getLanguage(t) === LanguageAndTextLanguagesEnum.nob,
+      getLanguage(t) === LanguageAndTextLanguagesEnum.nob ||
+      getLanguage(t) === LanguageAndTextLanguagesEnum.no,
   );
   if (norwegianText?.value) return norwegianText.value;
 
