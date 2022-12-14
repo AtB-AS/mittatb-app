@@ -241,7 +241,7 @@ const TripSection: React.FC<TripSectionProps> = ({
           id: stopPlace.id,
           name: stopPlace.name,
         },
-        selectedQuay: quay,
+        selectedQuayId: quay?.id,
         mode: 'Departure',
       });
     } else {

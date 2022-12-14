@@ -377,7 +377,7 @@ function EstimatedCallRow({
           id: stopPlace.id,
           name: stopPlace.name,
         },
-        selectedQuay: {...quay, situations: []},
+        selectedQuayId: quay?.id,
         mode: 'Departure',
       });
     } else {
