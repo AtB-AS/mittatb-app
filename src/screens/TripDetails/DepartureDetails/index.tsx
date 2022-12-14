@@ -12,7 +12,6 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
-import {usePreferenceItems} from '@atb/preferences';
 import CancelledDepartureMessage from '@atb/screens/TripDetails/components/CancelledDepartureMessage';
 import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
@@ -66,10 +65,9 @@ export default function DepartureDetails({navigation, route}: Props) {
   ] = useDepartureData(activeItem, 30, !isFocused);
   const mapData = useMapData(activeItem);
 
-  let passedStops = estimatedCallsWithMetadata.filter(
-    (a) => a.actualDepartureTime,
-  );
-  let lastDeparture = passedStops.pop();
+  const lastPassedStop = estimatedCallsWithMetadata
+    .filter((a) => a.actualDepartureTime)
+    .pop();
 
   const onPaginationPress = (newPage: number) => {
     animateNextChange();
@@ -173,7 +171,7 @@ export default function DepartureDetails({navigation, route}: Props) {
           />
         </View>
       </ContentWithDisappearingHeader>
-      {lastDeparture && lastDeparture.quay?.name && (
+      {lastPassedStop?.quay?.name && (
         <View style={styles.realtime}>
           <ThemeIcon
             svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
@@ -183,8 +181,8 @@ export default function DepartureDetails({navigation, route}: Props) {
           <ThemeText type={'body__secondary'}>
             {t(
               DepartureDetailsTexts.lastPassedStop(
-                lastDeparture.quay?.name,
-                formatToClock(lastDeparture?.actualDepartureTime, language),
+                lastPassedStop.quay?.name,
+                formatToClock(lastPassedStop?.actualDepartureTime, language),
               ),
             )}
           </ThemeText>
