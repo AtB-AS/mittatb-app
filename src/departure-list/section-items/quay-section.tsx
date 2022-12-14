@@ -65,6 +65,7 @@ const QuaySection = React.memo(function QuaySection({
         <QuayHeaderItem
           quay={quayGroup.quay}
           distance={getDistanceInfo(quayGroup, locationOrStopPlace)}
+          searchDate={searchDate}
           testID={testID}
         />
 

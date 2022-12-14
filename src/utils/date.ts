@@ -6,6 +6,8 @@ import {
   format,
   getHours,
   getMinutes,
+  isAfter as fnsIsAfter,
+  isBefore as fnsIsBefore,
   isPast,
   isSameDay,
   isToday,
@@ -165,6 +167,19 @@ export function formatLocaleTime(date: Date | string, language: Language) {
 export function isInThePast(isoDate: string | Date) {
   return isPast(parseIfNeeded(isoDate));
 }
+
+export const isBetween = (
+  date: string | Date,
+  startDate: string | Date,
+  endDate: string | Date,
+) => isAfter(date, startDate) && isBefore(date, endDate);
+
+export const isAfter = (date: string | Date, dateToCompare: string | Date) =>
+  fnsIsAfter(parseIfNeeded(date), parseIfNeeded(dateToCompare));
+
+export const isBefore = (date: string | Date, dateToCompare: string | Date) =>
+  fnsIsBefore(parseIfNeeded(date), parseIfNeeded(dateToCompare));
+
 export function isNumberOfMinutesInThePast(
   isoDate: string | Date,
   minutes: number,

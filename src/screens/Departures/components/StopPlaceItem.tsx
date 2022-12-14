@@ -12,6 +12,7 @@ import {StyleSheet} from '@atb/theme';
 import {useHumanizeDistance} from '@atb/utils/location';
 import {
   getSituationOrNoticeA11yLabel,
+  isSituationValidAtDate,
   SituationOrNoticeIcon,
 } from '@atb/situations';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
@@ -41,7 +42,10 @@ export default function StopPlaceItem({
 
   const allQuaySituations =
     place.quays?.reduce<SituationFragment[]>(
-      (all, quay) => [...all, ...quay.situations],
+      (all, quay) => [
+        ...all,
+        ...quay.situations.filter(isSituationValidAtDate(new Date())),
+      ],
       [],
     ) || [];
 
