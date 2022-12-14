@@ -11,7 +11,11 @@ const TripDetailsTexts = {
           `Steg ${stepNumber}, ${travelMode}`,
           `Step ${stepNumber}, ${travelMode}`,
         ),
-
+      lastPassedStop: (stopPlaceName: string, time: string) =>
+        _(
+          `Passerte ${stopPlaceName} kl. ${time}`,
+          `Passed ${stopPlaceName} at ${time}`,
+        ),
       start: {
         a11yLabel: {
           noRealTime: (placeName: string, aimedTime: string) =>
