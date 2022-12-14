@@ -30,6 +30,7 @@ export type RemoteConfig = {
   enable_map_page: boolean;
   favourite_departures_poll_interval: number;
   new_favourites_info_url: string;
+  enable_departures_v2_as_default: boolean;
   enable_departures_v2_onboarding: boolean;
 };
 
@@ -62,6 +63,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_map_page: false,
   favourite_departures_poll_interval: 30000,
   new_favourites_info_url: '',
+  enable_departures_v2_as_default: false,
   enable_departures_v2_onboarding: false,
 };
 
@@ -143,6 +145,10 @@ export function getConfig(): RemoteConfig {
     values['new_favourites_info_url']?.asString() ??
     defaultRemoteConfig.new_favourites_info_url;
 
+  const enable_departures_v2_as_default =
+    values['enable_departures_v2_as_default']?.asBoolean() ??
+    defaultRemoteConfig.enable_departures_v2_as_default;
+
   const enable_departures_v2_onboarding =
     values['enable_departures_v2_onboarding']?.asBoolean() ??
     defaultRemoteConfig.enable_departures_v2_onboarding;
@@ -176,6 +182,7 @@ export function getConfig(): RemoteConfig {
     enable_map_page: enable_map_tab,
     favourite_departures_poll_interval,
     new_favourites_info_url,
+    enable_departures_v2_as_default,
     enable_departures_v2_onboarding,
   };
 }

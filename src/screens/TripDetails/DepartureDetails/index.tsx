@@ -36,6 +36,7 @@ import useDepartureData, {
 import {TicketingMessages} from '@atb/screens/TripDetails/components/DetailsMessages';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import AccessibleText from '@atb/components/accessible-text';
+import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {formatToClock} from '@atb/utils/date';
@@ -62,7 +63,7 @@ export default function DepartureDetails({navigation, route}: Props) {
   const [
     {estimatedCallsWithMetadata, title, mode, subMode, situations, notices},
     isLoading,
-  ] = useDepartureData(activeItem, 5, !isFocused);
+  ] = useDepartureData(activeItem, 30, !isFocused);
   const mapData = useMapData(activeItem);
 
   let passedStops = estimatedCallsWithMetadata.filter(
@@ -309,7 +310,7 @@ function EstimatedCallRow({
     group === 'trip' ? mode : undefined,
     subMode,
   );
-  const {newDepartures} = usePreferenceItems();
+  const departuresV2Enabled = useDeparturesV2Enabled();
   return (
     <View style={[styles.place, isStartOfGroup && styles.startPlace]}>
       <TripLegDecoration
@@ -372,7 +373,7 @@ function EstimatedCallRow({
     const stopPlace = quay?.stopPlace;
     if (!stopPlace) return;
 
-    if (newDepartures) {
+    if (departuresV2Enabled) {
       navigation.push('PlaceScreen', {
         place: {
           id: stopPlace.id,

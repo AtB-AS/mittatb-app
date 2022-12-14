@@ -8,6 +8,7 @@ type Metadata = {
   'AtB-Auth-Type': string;
   'AtB-Install-Id': string;
   'AtB-Build-Number': string;
+  'AtB-Departures-V2': string;
   'AtB-Device-Type': string;
   'AtB-Device-Location-Enabled': boolean;
   'AtB-App-Location-Status': PermissionStatus;

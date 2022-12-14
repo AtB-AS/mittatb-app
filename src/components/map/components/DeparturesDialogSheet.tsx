@@ -4,7 +4,7 @@ import {ActivityIndicator, View} from 'react-native';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '../../screen-header';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {dictionary, ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import StopPlaceView from '@atb/screens/Departures/StopPlaceView';
 import {SearchTime} from '@atb/screens/Departures/utils';
 import {StopPlace, Quay} from '@atb/api/types/departures';
@@ -128,8 +128,9 @@ const DeparturesDialogSheet = ({
           <MessageBox
             type="error"
             message={t(DeparturesTexts.message.resultFailed)}
-            onPress={() => {
-              refresh();
+            onPressConfig={{
+              action: refresh,
+              text: t(dictionary.retry),
             }}
           />
         </View>

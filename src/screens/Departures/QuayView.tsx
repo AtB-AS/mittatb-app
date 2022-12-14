@@ -16,7 +16,7 @@ import {hasFavorites} from './StopPlaceView';
 import {StopPlacesMode} from '@atb/screens/Departures/types';
 import {MessageBox} from '@atb/components/message-box';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 
 export type QuayViewParams = {
   quay: Quay;
@@ -91,8 +91,9 @@ export default function QuayView({
               <MessageBox
                 type="error"
                 message={t(DeparturesTexts.message.resultFailed)}
-                onPress={() => {
-                  forceRefresh();
+                onPressConfig={{
+                  action: forceRefresh,
+                  text: t(dictionary.retry),
                 }}
               />
             </View>

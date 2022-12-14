@@ -18,6 +18,9 @@ export type QuayWithSituationsFragment = {
     reportType?: Types.ReportType;
     summary: Array<{language?: string; value: string}>;
     description: Array<{language?: string; value: string}>;
+    advice: Array<{language?: string; value: string}>;
+    infoLinks?: Array<{uri: string; label?: string}>;
+    validityPeriod?: {startTime?: any; endTime?: any};
   }>;
   stopPlace?: {id: string; name: string; latitude?: number; longitude?: number};
   tariffZones: Array<{id: string; name?: string}>;
