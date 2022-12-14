@@ -2,7 +2,6 @@ import {
   FareContract,
   isCarnetTravelRight,
   isInspectableTravelRight,
-  isNightTravelRight,
   isPreActivatedTravelRight,
 } from '@atb/ticketing';
 import React from 'react';
@@ -52,18 +51,6 @@ const SimpleFareContract: React.FC<Props> = ({
       <PreActivatedFareContractInfo
         fareContractState={fc.state}
         travelRights={fc.travelRights.filter(isPreActivatedTravelRight)}
-        now={now}
-        isInspectable={isInspectable}
-        hideDetails={hideDetails}
-        onPressDetails={onPressDetails}
-        testID={testID}
-      />
-    );
-  } else if (isNightTravelRight(firstTravelRight)) {
-    return (
-      <PreActivatedFareContractInfo
-        fareContractState={fc.state}
-        travelRights={fc.travelRights.filter(isNightTravelRight)}
         now={now}
         isInspectable={isInspectable}
         hideDetails={hideDetails}

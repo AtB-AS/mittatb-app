@@ -58,7 +58,8 @@ export default function DetailsScreen({navigation, route}: Props) {
     ) === 'valid' &&
     firstTravelRight.tariffZoneRefs.every(
       (val: string) => val === 'ATB:TariffZone:1',
-    );
+    ) &&
+    preassignedFareProduct?.type !== 'night';
 
   return (
     <View style={styles.container}>
