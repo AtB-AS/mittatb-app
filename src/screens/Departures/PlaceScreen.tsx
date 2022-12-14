@@ -16,7 +16,7 @@ import {StopPlaceAndQuaySelection} from '@atb/screens/Departures/components/Stop
 
 export type PlaceScreenParams = {
   place: StopPlace;
-  selectedQuay?: Quay;
+  selectedQuayId?: string;
   showOnlyFavoritesByDefault?: boolean;
   mode: StopPlacesMode;
   onCloseRoute?: string;
@@ -28,7 +28,7 @@ export default function PlaceScreen({
   route: {
     params: {
       place,
-      selectedQuay,
+      selectedQuayId,
       showOnlyFavoritesByDefault,
       mode,
       onCloseRoute,
@@ -77,15 +77,19 @@ export default function PlaceScreen({
   const navigateToQuay = (quay: Quay) => {
     if (mode === 'Favourite') {
       navigation.push('PlaceScreen', {
-        selectedQuay: quay,
+        selectedQuayId: quay.id,
         mode: mode,
         place: place,
       });
     } else {
-      navigation.setParams({selectedQuay: quay});
+      navigation.setParams({selectedQuayId: quay.id});
     }
   };
   const isFocused = useIsFocused();
+
+  const selectedQuay = selectedQuayId
+    ? place.quays?.find((q) => q.id === selectedQuayId)
+    : undefined;
 
   return (
     <View style={styles.container}>
@@ -94,7 +98,7 @@ export default function PlaceScreen({
         <StopPlaceAndQuaySelection
           place={place}
           selectedQuay={selectedQuay}
-          navigation={navigation}
+          onPress={(quayId) => navigation.setParams({selectedQuayId: quayId})}
         />
       )}
 

@@ -27,14 +27,17 @@ import {TabNavigatorParams} from './types';
 import NearbyScreen from '@atb/screens/Nearby';
 import ProfileScreen from '@atb/screens/Profile';
 import {useMapPage} from '@atb/components/map/hooks/use-map-page';
+import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
 
 const Tab = createBottomTabNavigator<TabNavigatorParams>();
 
 const NavigationRoot = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const {startScreen, newDepartures} = usePreferenceItems();
+  const {startScreen} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
+
+  const departuresV2Enabled = useDeparturesV2Enabled();
 
   const showMapPage = useMapPage();
   useGoToMobileTokenOnboardingWhenNecessary();
@@ -80,7 +83,7 @@ const NavigationRoot = () => {
       )}
       <Tab.Screen
         name="Nearest"
-        component={newDepartures ? DeparturesStack : NearbyScreen}
+        component={departuresV2Enabled ? DeparturesStack : NearbyScreen}
         options={tabSettings(
           t(dictionary.navigation.nearby),
           t(dictionary.navigation.nearby),

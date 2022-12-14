@@ -27,6 +27,7 @@ export type UserPreferences = {
   useSystemLanguage?: boolean;
   defaultUserTypeString?: string;
   departuresShowOnlyFavorites?: boolean;
+  departuresV2?: boolean;
   newDepartures?: boolean;
   showTestIds?: boolean;
   tripSearchPreferences?: TripSearchPreferences;

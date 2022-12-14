@@ -6,7 +6,6 @@ import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {StopPlace, Quay} from '@atb/api/types/departures';
-import {NavigationProp} from '@react-navigation/native';
 
 type quayChipData = {
   item: Quay;
@@ -15,11 +14,11 @@ type quayChipData = {
 const StopPlaceAndQuaySelection = ({
   place,
   selectedQuay,
-  navigation,
+  onPress,
 }: {
   place: StopPlace;
   selectedQuay?: Quay;
-  navigation: NavigationProp<any>;
+  onPress: (selectedQuayId?: string) => void;
 }) => {
   const styles = useStyles();
   const {theme} = useTheme();
@@ -40,9 +39,7 @@ const StopPlaceAndQuaySelection = ({
             <ActivityIndicator size="large" />
           ) : (
             <Button
-              onPress={() => {
-                navigation.setParams({selectedQuay: undefined});
-              }}
+              onPress={() => onPress()}
               text={t(DeparturesTexts.quayChips.allStops)}
               interactiveColor="interactive_1"
               active={!selectedQuay}
@@ -55,9 +52,7 @@ const StopPlaceAndQuaySelection = ({
       }
       renderItem={({item}: quayChipData) => (
         <Button
-          onPress={() => {
-            navigation.setParams({selectedQuay: item});
-          }}
+          onPress={() => onPress(item.id)}
           text={getQuayName(item)}
           interactiveColor="interactive_1"
           active={selectedQuay?.id === item.id}

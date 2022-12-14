@@ -30,8 +30,10 @@ import {useOnMarkFavouriteDepartures} from '@atb/screens/Departures/components/u
 import {StopPlacesMode} from '@atb/screens/Departures/types';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {SvgProps} from 'react-native-svg';
-import {getSvgForMostCriticalSituationOrNotice} from '@atb/situations';
-import {getSituationOrNoticeA11yLabel} from '@atb/situations/utils';
+import {
+  getSvgForMostCriticalSituationOrNotice,
+  getSituationOrNoticeA11yLabel,
+} from '@atb/situations';
 import Time from '@atb/screens/TripDetails/components/Time';
 import {
   getNoticesForEstimatedCall,

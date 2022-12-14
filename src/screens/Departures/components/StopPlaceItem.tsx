@@ -10,10 +10,13 @@ import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {StyleSheet} from '@atb/theme';
 import {useHumanizeDistance} from '@atb/utils/location';
-import {SituationOrNoticeIcon} from '@atb/situations';
+import {
+  getSituationOrNoticeA11yLabel,
+  isSituationValidAtDate,
+  SituationOrNoticeIcon,
+} from '@atb/situations';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
-import {getSituationOrNoticeA11yLabel} from '@atb/situations/utils';
 
 type StopPlaceItemProps = {
   stopPlaceNode: NearestStopPlaceNode;
@@ -39,7 +42,10 @@ export default function StopPlaceItem({
 
   const allQuaySituations =
     place.quays?.reduce<SituationFragment[]>(
-      (all, quay) => [...all, ...quay.situations],
+      (all, quay) => [
+        ...all,
+        ...quay.situations.filter(isSituationValidAtDate(new Date())),
+      ],
       [],
     ) || [];
 

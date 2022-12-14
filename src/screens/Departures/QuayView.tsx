@@ -130,6 +130,7 @@ export default function QuayView({
           stopPlace={stopPlace}
           showOnlyFavorites={showOnlyFavorites}
           allowFavouriteSelection={true}
+          searchDate={searchStartTime}
           mode={mode}
         />
       )}
@@ -139,7 +140,7 @@ export default function QuayView({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
-    paddingVertical: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
   },
   messageBox: {

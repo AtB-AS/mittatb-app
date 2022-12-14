@@ -13,7 +13,7 @@ export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
   const navigateToQuay = (place: StopPlace, quay: Quay) => {
     navigation.navigate('PlaceScreen', {
       place,
-      selectedQuay: quay,
+      selectedQuayId: quay.id,
       mode: 'Departure',
     });
   };
