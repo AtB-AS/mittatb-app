@@ -89,7 +89,8 @@ export const getSituationOrNoticeA11yLabel = (
 
 /**
  * Check if a situation is valid at a specific date by comparing it to the
- * validity period of the situation.
+ * validity period of the situation. If the situation has neither start time nor
+ * end time it will be considered valid at all times.
  *
  * This function uses currying of the date to enable inline use in filter
  * functions.
@@ -105,5 +106,5 @@ export const isSituationValidAtDate =
     } else if (endTime) {
       return isBefore(date, startTime);
     }
-    return true; // If neither start nor end time, consider it valid at all times
+    return true;
   };
