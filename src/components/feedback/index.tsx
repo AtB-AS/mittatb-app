@@ -106,7 +106,7 @@ export const Feedback = ({
   const incrementCounterAndSetDisplayStats = async () => {
     if (feedbackConfig) {
       const defaultDisplayStatObject: VersionStats = {
-        answeredAtDisplayCount: 1,
+        answeredAtDisplayCount: undefined,
         doNotShowAgain: false,
         displayCount: 1,
         surveyVersion: feedbackConfig.surveyVersion,
@@ -216,7 +216,7 @@ export const Feedback = ({
       const organization = APP_ORG;
       const submitTime = Date.now();
       const displayCount = currentVersionStats.displayCount;
-      const isReprompt = currentVersionStats.answeredAtDisplayCount || 1;
+      const isReprompt = currentVersionStats.answeredAtDisplayCount;
 
       const dataToServer = {
         submitTime,
@@ -231,7 +231,9 @@ export const Feedback = ({
         metadata,
       };
 
-      const submittedFeedbackDoc = await firestore()
+      const db = firestore();
+      await db.settings({ignoreUndefinedProperties: true});
+      const submittedFeedbackDoc = await db
         .collection('feedback')
         .add(dataToServer);
       setFirebaseId(submittedFeedbackDoc.id);
