@@ -65,7 +65,7 @@ const InspectableContent = ({
 }) => {
   const {language} = useTranslation();
   const styles = useStyles();
-  if (!fromTariffZone || !toTariffZone) return null;
+
   const shouldFill =
     preassignedFareProduct?.type === 'period' ||
     preassignedFareProduct?.type === 'hour24';
@@ -79,15 +79,17 @@ const InspectableContent = ({
         },
       ]}
     >
-      <ThemeText
-        type="body__primary--bold"
-        allowFontScaling={false}
-        color={shouldFill ? themeColor : undefined}
-      >
-        {getReferenceDataName(fromTariffZone, language)}
-        {fromTariffZone.id !== toTariffZone.id &&
-          '-' + getReferenceDataName(toTariffZone, language)}
-      </ThemeText>
+      {fromTariffZone && toTariffZone && (
+        <ThemeText
+          type="body__primary--bold"
+          allowFontScaling={false}
+          color={shouldFill ? themeColor : undefined}
+        >
+          {getReferenceDataName(fromTariffZone, language)}
+          {fromTariffZone.id !== toTariffZone.id &&
+            '-' + getReferenceDataName(toTariffZone, language)}
+        </ThemeText>
+      )}
       <ThemeIcon
         svg={Bus}
         fill={shouldFill ? themeColor.text : undefined}
