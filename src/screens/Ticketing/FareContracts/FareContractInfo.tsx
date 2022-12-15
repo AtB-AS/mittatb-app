@@ -84,15 +84,19 @@ const FareContractInfo = ({
 
   const firstTravelRight = travelRights[0];
   const {fareProductRef: productRef, tariffZoneRefs} = firstTravelRight;
-  const [firstZone] = tariffZoneRefs ?? [];
-  const [lastZone] = tariffZoneRefs?.slice(-1) ?? [];
+  const firstZone = tariffZoneRefs?.[0];
+  const lastZone = tariffZoneRefs?.slice(-1)?.[0];
 
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     productRef,
   );
-  const fromTariffZone = findReferenceDataById(tariffZones, firstZone);
-  const toTariffZone = findReferenceDataById(tariffZones, lastZone);
+  const fromTariffZone = firstZone
+    ? findReferenceDataById(tariffZones, firstZone)
+    : undefined;
+  const toTariffZone = lastZone
+    ? findReferenceDataById(tariffZones, lastZone)
+    : undefined;
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
     travelRights.map((tr) => tr.userProfileRef),
@@ -271,10 +275,14 @@ export const getFareContractInfoDetails = (
     fareContractState,
   );
 
-  const [firstZone] = tariffZoneRefs ?? [];
-  const [lastZone] = tariffZoneRefs?.slice(-1) ?? [];
-  const fromTariffZone = findReferenceDataById(tariffZones, firstZone);
-  const toTariffZone = findReferenceDataById(tariffZones, lastZone);
+  const firstZone = tariffZoneRefs?.[0];
+  const lastZone = tariffZoneRefs?.slice(-1)?.[0];
+  const fromTariffZone = firstZone
+    ? findReferenceDataById(tariffZones, firstZone)
+    : undefined;
+  const toTariffZone = lastZone
+    ? findReferenceDataById(tariffZones, lastZone)
+    : undefined;
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     productRef,
