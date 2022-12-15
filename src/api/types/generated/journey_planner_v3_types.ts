@@ -14,27 +14,13 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** List of coordinates like: [[60.89, 11.12], [62.56, 12.10]] */
   Coordinates: any;
-  /** Local date using the ISO 8601 format: `YYYY-MM-DD`. Example: `2020-05-17`. */
   Date: any;
-  /**
-   * DateTime format accepting ISO 8601 dates with time zone offset.
-   *
-   * Format:  `YYYY-MM-DD'T'hh:mm[:ss](Z|±01:00)`
-   *
-   * Example: `2017-04-23T18:25:43+02:00` or `2017-04-23T16:25:43Z`
-   */
   DateTime: any;
-  /** A linear function to calculate a value(y) based on a parameter (x): `y = f(x) = a + bx`. It allows setting both a constant(a) and a coefficient(b) and the use those in the computation. Format: `a + b x`. Example: `1800 + 2.0 x` */
   DoubleFunction: any;
-  /** Duration in a lenient ISO-8601 duration format. Example P2DT2H12M40S, 2d2h12m40s or 1h */
   Duration: any;
-  /** Time using the format: HH:mm:SS. Example: 18:25:SS */
   LocalTime: any;
-  /** A 64-bit signed integer */
   Long: any;
-  /** Time using the format: `HH:MM:SS`. Example: `18:25:43` */
   Time: any;
 };
 
@@ -232,9 +218,9 @@ export type EstimatedCall = {
   expectedArrivalTime: Scalars['DateTime'];
   /** Expected time of departure from quay. Updated with real time information if available. Will be null if an actualDepartureTime exists */
   expectedDepartureTime: Scalars['DateTime'];
-  /** Whether vehicle may be alighted at quay according to the planned data. If the cancellation flag is set, alighting is not possible, even if this field is set to true. */
+  /** Whether vehicle may be alighted at quay. */
   forAlighting: Scalars['Boolean'];
-  /** Whether vehicle may be boarded at quay according to the planned data. If the cancellation flag is set, boarding is not possible, even if this field is set to true. */
+  /** Whether vehicle may be boarded at quay. */
   forBoarding: Scalars['Boolean'];
   notices: Array<Notice>;
   occupancyStatus: OccupancyStatus;
@@ -714,7 +700,7 @@ export type PtSituationElement = {
   lines: Array<Maybe<Line>>;
   /** Priority of this situation  */
   priority?: Maybe<Scalars['Int']>;
-  quays: Array<Maybe<Quay>>;
+  quays: Array<Quay>;
   /**
    * Authority that reported this situation
    * @deprecated Not yet officially supported. May be removed or renamed.
@@ -727,6 +713,7 @@ export type PtSituationElement = {
   severity?: Maybe<Severity>;
   /** Operator's internal id for this situation */
   situationNumber?: Maybe<Scalars['String']>;
+  stopPlaces: Array<StopPlace>;
   /** Summary of situation in all different translations available */
   summary: Array<MultilingualString>;
   /** Period this situation is in effect */
@@ -1028,10 +1015,12 @@ export type QueryTypeTripArgs = {
   includePlannedCancellations?: InputMaybe<Scalars['Boolean']>;
   itineraryFilters?: InputMaybe<ItineraryFilters>;
   locale?: InputMaybe<Locale>;
+  maximumAdditionalTransfers?: InputMaybe<Scalars['Int']>;
   maximumTransfers?: InputMaybe<Scalars['Int']>;
   modes?: InputMaybe<Modes>;
   numTripPatterns?: InputMaybe<Scalars['Int']>;
   pageCursor?: InputMaybe<Scalars['String']>;
+  relaxTransitSearchGeneralizedCostAtDestination?: InputMaybe<Scalars['Float']>;
   searchWindow?: InputMaybe<Scalars['Int']>;
   timetableView?: InputMaybe<Scalars['Boolean']>;
   to: Location;
@@ -1203,6 +1192,8 @@ export type RoutingParameters = {
   includedPlannedCancellations?: Maybe<Scalars['Boolean']>;
   /** @deprecated Parking is specified by modes */
   kissAndRide?: Maybe<Scalars['Boolean']>;
+  /** Maximum number of transfers allowed in addition to the result with least number of transfers */
+  maxAdditionalTransfers?: Maybe<Scalars['Int']>;
   /** This is the maximum duration in seconds for a direct street search. This is a performance limit and should therefore be set high. Use filters to limit what is presented to the client. */
   maxDirectStreetDuration?: Maybe<Scalars['Int']>;
   /** The maximum slope of streets for wheelchair trips. */
@@ -1444,10 +1435,14 @@ export type TimetabledPassingTime = {
   /** Scheduled time of departure from quay */
   departure?: Maybe<TimeAndDayOffset>;
   destinationDisplay?: Maybe<DestinationDisplay>;
+  /** Earliest possible departure time for a service journey with a service window. */
+  earliestDepartureTime?: Maybe<TimeAndDayOffset>;
   /** Whether vehicle may be alighted at quay. */
   forAlighting?: Maybe<Scalars['Boolean']>;
   /** Whether vehicle may be boarded at quay. */
   forBoarding?: Maybe<Scalars['Boolean']>;
+  /** Latest possible (planned) arrival time for a service journey with a service window. */
+  latestArrivalTime?: Maybe<TimeAndDayOffset>;
   notices: Array<Notice>;
   quay?: Maybe<Quay>;
   /** Whether vehicle will only stop on request. */

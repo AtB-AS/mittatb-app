@@ -131,6 +131,13 @@ export type TripsQuery = {
           quay?: {name: string; id: string};
         }>;
         authority?: {id: string};
+        datedServiceJourney?: {
+          estimatedCalls?: Array<{
+            actualDepartureTime?: any;
+            predictionInaccurate: boolean;
+            quay?: {name: string};
+          }>;
+        };
       }>;
     }>;
   };

@@ -8,7 +8,6 @@ import {MessageBox} from '@atb/components/message-box';
 import ThemeText from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
-import {usePreferenceItems} from '@atb/preferences';
 import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -43,7 +42,8 @@ import Time from './Time';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
-import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
+import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
 
 type TripSectionProps = {
@@ -72,7 +72,7 @@ const TripSection: React.FC<TripSectionProps> = ({
 }) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
-  const {theme} = useTheme();
+  const {themeName} = useTheme();
   const departuresV2Enabled = useDeparturesV2Enabled();
 
   const isWalkSection = leg.mode === 'foot';
@@ -87,6 +87,10 @@ const TripSection: React.FC<TripSectionProps> = ({
   const navigation = useNavigation<TripDetailsRootNavigation<'Details'>>();
 
   const notices = getNoticesForLeg(leg);
+
+  const lastPassedStop = leg.datedServiceJourney?.estimatedCalls
+    ?.filter((a) => !a.predictionInaccurate && a.actualDepartureTime)
+    .pop();
 
   const sectionOutput = (
     <>
@@ -168,7 +172,25 @@ const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
-
+        {lastPassedStop?.quay?.name && (
+          <TripRow>
+            <View style={style.realtime}>
+              <ThemeIcon
+                svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
+                size={'small'}
+                style={style.realtimeIcon}
+              ></ThemeIcon>
+              <ThemeText type={'body__secondary'} color={'secondary'}>
+                {t(
+                  TripDetailsTexts.trip.leg.lastPassedStop(
+                    lastPassedStop.quay.name,
+                    formatToClock(lastPassedStop.actualDepartureTime, language),
+                  ),
+                )}
+              </ThemeText>
+            </View>
+          </TripRow>
+        )}
         {leg.intermediateEstimatedCalls.length > 0 && (
           <IntermediateInfo {...leg} />
         )}
@@ -394,6 +416,13 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   legLineName: {
     fontWeight: 'bold',
+  },
+  realtime: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  realtimeIcon: {
+    marginRight: theme.spacings.xSmall,
   },
 }));
 export default TripSection;
