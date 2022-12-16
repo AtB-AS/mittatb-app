@@ -39,24 +39,22 @@ const OrderDetails = ({
         color="secondary"
         style={style.marginTop}
       >
-        {validFrom &&
-          t(
-            FareContractTexts.details.validFrom(
-              fullDateTime(fromUnixTime(validFrom / 1000), language),
-            ),
-          )}
+        {t(
+          FareContractTexts.details.validFrom(
+            fullDateTime(fromUnixTime(validFrom / 1000), language),
+          ),
+        )}
       </ThemeText>
       <ThemeText
         type="body__secondary"
         color="secondary"
         style={style.marginTop}
       >
-        {validTo &&
-          t(
-            FareContractTexts.details.validTo(
-              fullDateTime(fromUnixTime(validTo / 1000), language),
-            ),
-          )}
+        {t(
+          FareContractTexts.details.validTo(
+            fullDateTime(fromUnixTime(validTo / 1000), language),
+          ),
+        )}
       </ThemeText>
       <ThemeText
         type="body__secondary"
