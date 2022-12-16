@@ -247,7 +247,6 @@ export const useAvailabilityMessage = (
   );
 
   // TODO: Use translated texts
-  // TODO: Move out `kun tilgjenjelig` and `ikke tilgjenjelig` to support multiple ranges without repeating wording!
   if (disableAt) {
     return `ikke tilgjenjelig mellom ${formatToVerboseDateTime(
       disableAt.from.toDate(),
