@@ -6,6 +6,7 @@ import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {
   dictionary,
+  Language,
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
@@ -78,14 +79,22 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const availabilityDummy = {
     alwaysEnableAt: [
       {
-        from: firestore.Timestamp.fromDate(new Date('2022-12-17T00:30:00')),
-        to: firestore.Timestamp.fromDate(new Date('2022-12-18T04:00:00')),
+        from: firestore.Timestamp.fromDate(new Date('2022-12-16T15:25:00')),
+        to: firestore.Timestamp.fromDate(new Date('2022-12-17T15:30:00')),
+      },
+      {
+        from: firestore.Timestamp.fromDate(new Date('2022-12-12T15:25:00')),
+        to: firestore.Timestamp.fromDate(new Date('2022-12-12T15:30:00')),
       },
     ],
     disableAt: [
       {
-        from: firestore.Timestamp.fromDate(new Date('2022-12-20T14:00:00')),
+        from: firestore.Timestamp.fromDate(new Date('2022-12-15T14:00:00')),
         to: firestore.Timestamp.fromDate(new Date('2022-12-20T15:00:00')),
+      },
+      {
+        from: firestore.Timestamp.fromDate(new Date('2022-12-15T14:00:00')),
+        to: firestore.Timestamp.fromDate(new Date('2022-12-15T15:00:00')),
       },
     ],
   } as FareProductTypeAvailability;
@@ -247,24 +256,39 @@ export const useAvailabilityMessage = (
   }
 
   if (!isEnabledForToday) {
-    return availability.alwaysEnableAt
-      .map(
-        (tr) =>
-          `kun tilgjenjelig ${formatToFullWeekday(
-            tr.from.toDate(),
-            language,
-          )} til ${formatToFullWeekday(
-            tr.to.toDate(),
-            language,
-          )} mellom ${formatLocaleTime(
-            tr.from.toDate(),
-            language,
-          )} og ${formatLocaleTime(tr.to.toDate(), language)}`,
-      )
-      .join(', ');
+    const formatedDates = availability.alwaysEnableAt.map((tr) =>
+      formatDatesRange(tr.from.toDate(), tr.to.toDate(), language),
+    );
+    return `kun tilgjenjelig ${formatedDates.join(' og ')}`;
   }
 
   return undefined;
+};
+
+const formatDatesRange = (fromDate: Date, toDate: Date, language: Language) => {
+  return `${formatWeekDaysRange(
+    fromDate,
+    toDate,
+    language,
+  )} mellom ${formatLocaleTime(fromDate, language)} - ${formatLocaleTime(
+    toDate,
+    language,
+  )}`;
+};
+
+const formatWeekDaysRange = (
+  fromDate: Date,
+  toDate: Date,
+  language: Language,
+) => {
+  if (fromDate.getDay() === toDate.getDay()) {
+    return formatToFullWeekday(fromDate, language);
+  }
+
+  return `${formatToFullWeekday(fromDate, language)} til ${formatToFullWeekday(
+    toDate,
+    language,
+  )}`;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
