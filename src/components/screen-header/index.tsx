@@ -135,6 +135,7 @@ const BaseHeader = ({
         ref={focusRef}
       >
         <ThemeText
+          accessible={false}
           onLayout={setLayoutFor('title')}
           type="body__primary--bold"
           color={themeColor}
