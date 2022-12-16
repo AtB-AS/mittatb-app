@@ -86,8 +86,8 @@ const DetailsContent: React.FC<Props> = ({
         <Sections.GenericItem>
           <OrderDetails
             fareContract={fc}
-            validFrom={validFrom}
-            validTo={validTo}
+            validFrom={firstTravelRight.startDateTime.toDate()}
+            validTo={firstTravelRight.endDateTime.toDate()}
           />
         </Sections.GenericItem>
         <Sections.LinkItem

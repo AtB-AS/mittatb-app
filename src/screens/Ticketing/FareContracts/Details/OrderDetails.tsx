@@ -14,8 +14,8 @@ const OrderDetails = ({
   validTo,
 }: {
   fareContract: FareContract;
-  validFrom: number;
-  validTo: number;
+  validFrom: Date;
+  validTo: Date;
 }) => {
   const style = useStyles();
   const {t, language} = useTranslation();
@@ -41,7 +41,7 @@ const OrderDetails = ({
       >
         {t(
           FareContractTexts.details.validFrom(
-            fullDateTime(fromUnixTime(validFrom / 1000), language),
+            fullDateTime(validFrom, language),
           ),
         )}
       </ThemeText>
@@ -50,11 +50,7 @@ const OrderDetails = ({
         color="secondary"
         style={style.marginTop}
       >
-        {t(
-          FareContractTexts.details.validTo(
-            fullDateTime(fromUnixTime(validTo / 1000), language),
-          ),
-        )}
+        {t(FareContractTexts.details.validTo(fullDateTime(validTo, language)))}
       </ThemeText>
       <ThemeText
         type="body__secondary"
