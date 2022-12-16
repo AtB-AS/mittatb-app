@@ -31,7 +31,11 @@ const CarnetDetailedView: React.FC<Props> = ({
           fareContract={fc}
         />
         <Sections.GenericItem>
-          <OrderDetails fareContract={fc} />
+          <OrderDetails
+            fareContract={fc}
+            validTo={firstTravelRight.endDateTime.toMillis()}
+            validFrom={firstTravelRight.startDateTime.toMillis()}
+          />
         </Sections.GenericItem>
         <Sections.LinkItem
           text={t(FareContractTexts.details.askForReceipt)}
