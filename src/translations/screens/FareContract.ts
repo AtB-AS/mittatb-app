@@ -39,9 +39,13 @@ const FareContractTexts = {
       _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`),
     purchaseTime: (dateTime: string) =>
       _(`Kjøpt ${dateTime}`, `Purchased ${dateTime}`),
+    validFrom: (dateTime: string) =>
+      _(`Gyldig fra ${dateTime}`, `Valid from ${dateTime}`),
+    validTo: (dateTime: string) =>
+      _(`Gyldig til ${dateTime}`, `Valid to ${dateTime}`),
     askForReceipt: _('Få kvittering tilsendt', 'Get receipt sent'),
     barcodeA11yLabel: _(
-      'Barkode. Vis frem denne koden ved billett kontroll',
+      'Barkode. Vis frem denne koden ved billettkontroll',
       'Barcode. Show this code in case of inspection. ',
     ),
     barcodeErrors: {
