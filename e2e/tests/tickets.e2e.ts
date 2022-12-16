@@ -127,7 +127,10 @@ describe('Tickets anonymous', () => {
      */
     await goBack();
   });
+});
 
+// Note! Place skipped tests in a separate 'describe' without app start-up to save run time
+xdescribe('Tickets anonymous - skipped', () => {
   // TODO The app is crashing (https://github.com/AtB-AS/kundevendt/issues/1560#issuecomment-1252041408)
   xit('should be able to change zone on a single ticket', async () => {
     await tapById('purchaseTab');
