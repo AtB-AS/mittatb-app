@@ -103,15 +103,6 @@ describe('My profile', () => {
     await expectToBeVisibleByText('Log in');
   });
 
-  xit('Settings: should change the appearance', async () => {
-    /*
-        How to check change of appearance?
-        - Potentially possible to run device.captureViewHiarchy() and encode the stored file?
-        - Another crazy idea is to run device.takeScreenshot() and interpret the colours with ImageMagick or something?
-        - A third approach is to print the colour codes within the "Design system"-view and check that it is changed?
-        */
-  });
-
   // Validates language change
   it('Settings: should change language', async () => {
     await scrollToText('profileHomeScrollView', 'Settings', 'up');
@@ -235,6 +226,18 @@ describe('My profile', () => {
     await expectNumberOfFavourites(2);
 
     await goBack();
+  });
+});
+
+// Note! Place skipped tests in a separate 'describe' without app start-up to save run time
+describe('My profile - skipped', () => {
+  xit('Settings: should change the appearance', async () => {
+    /*
+        How to check change of appearance?
+        - Potentially possible to run device.captureViewHiarchy() and encode the stored file?
+        - Another crazy idea is to run device.takeScreenshot() and interpret the colours with ImageMagick or something?
+        - A third approach is to print the colour codes within the "Design system"-view and check that it is changed?
+        */
   });
 
   xit('should change start page', async () => {
