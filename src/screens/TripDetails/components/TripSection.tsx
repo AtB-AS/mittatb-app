@@ -177,10 +177,14 @@ const TripSection: React.FC<TripSectionProps> = ({
             <View style={style.realtime}>
               <ThemeIcon
                 svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
-                size={'small'}
+                size="small"
                 style={style.realtimeIcon}
               ></ThemeIcon>
-              <ThemeText type={'body__secondary'} color={'secondary'}>
+              <ThemeText
+                style={style.realtimeText}
+                type="body__secondary"
+                color="secondary"
+              >
                 {t(
                   TripDetailsTexts.trip.leg.lastPassedStop(
                     lastPassedStop.quay.name,
@@ -423,6 +427,9 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   realtimeIcon: {
     marginRight: theme.spacings.xSmall,
+  },
+  realtimeText: {
+    flex: 1,
   },
 }));
 export default TripSection;
