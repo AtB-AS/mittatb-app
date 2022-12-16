@@ -84,7 +84,11 @@ const DetailsContent: React.FC<Props> = ({
           />
         </Sections.GenericItem>
         <Sections.GenericItem>
-          <OrderDetails fareContract={fc} />
+          <OrderDetails
+            fareContract={fc}
+            validFrom={validFrom}
+            validTo={validTo}
+          />
         </Sections.GenericItem>
         <Sections.LinkItem
           text={t(FareContractTexts.details.askForReceipt)}

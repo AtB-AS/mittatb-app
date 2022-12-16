@@ -2,13 +2,21 @@ import {FareContract} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import ThemeText from '@atb/components/text';
-import {formatToLongDateTime} from '@atb/utils/date';
+import {fullDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import _ from 'lodash';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 
-const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
+const OrderDetails = ({
+  fareContract,
+  validFrom,
+  validTo,
+}: {
+  fareContract: FareContract;
+  validFrom: number;
+  validTo: number;
+}) => {
   const style = useStyles();
   const {t, language} = useTranslation();
   const orderIdText = t(
@@ -19,12 +27,36 @@ const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
       <ThemeText type="body__secondary" color="secondary">
         {t(
           FareContractTexts.details.purchaseTime(
-            formatToLongDateTime(
+            fullDateTime(
               fromUnixTime(fareContract.created.toMillis() / 1000),
               language,
             ),
           ),
         )}
+      </ThemeText>
+      <ThemeText
+        type="body__secondary"
+        color="secondary"
+        style={style.marginTop}
+      >
+        {validFrom &&
+          t(
+            FareContractTexts.details.validFrom(
+              fullDateTime(fromUnixTime(validFrom / 1000), language),
+            ),
+          )}
+      </ThemeText>
+      <ThemeText
+        type="body__secondary"
+        color="secondary"
+        style={style.marginTop}
+      >
+        {validTo &&
+          t(
+            FareContractTexts.details.validTo(
+              fullDateTime(fromUnixTime(validTo / 1000), language),
+            ),
+          )}
       </ThemeText>
       <ThemeText
         type="body__secondary"
