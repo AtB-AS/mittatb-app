@@ -122,7 +122,7 @@ const BaseHeader = ({
       <View
         accessibilityLabel={titleA11yLabel}
         accessible={!!title}
-        importantForAccessibility={!!title ? 'yes' : 'no'}
+        importantForAccessibility={!!title ? 'yes' : 'no-hide-descendants'}
         accessibilityRole="header"
         style={[
           css.headerTitle,
