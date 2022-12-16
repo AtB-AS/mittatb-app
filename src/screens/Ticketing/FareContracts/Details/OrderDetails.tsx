@@ -1,4 +1,4 @@
-import {FareContract} from '@atb/ticketing';
+import {FareContract, isPreActivatedTravelRight} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import ThemeText from '@atb/components/text';
@@ -8,20 +8,13 @@ import _ from 'lodash';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 
-const OrderDetails = ({
-  fareContract,
-  validFrom,
-  validTo,
-}: {
-  fareContract: FareContract;
-  validFrom: Date;
-  validTo: Date;
-}) => {
+const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
   const style = useStyles();
   const {t, language} = useTranslation();
   const orderIdText = t(
     FareContractTexts.details.orderId(fareContract.orderId),
   );
+  const firstTravelRight = fareContract.travelRights[0];
   return (
     <View accessible={true}>
       <ThemeText type="body__secondary" color="secondary">
@@ -34,24 +27,32 @@ const OrderDetails = ({
           ),
         )}
       </ThemeText>
-      <ThemeText
-        type="body__secondary"
-        color="secondary"
-        style={style.marginTop}
-      >
-        {t(
-          FareContractTexts.details.validFrom(
-            fullDateTime(validFrom, language),
-          ),
-        )}
-      </ThemeText>
-      <ThemeText
-        type="body__secondary"
-        color="secondary"
-        style={style.marginTop}
-      >
-        {t(FareContractTexts.details.validTo(fullDateTime(validTo, language)))}
-      </ThemeText>
+      {isPreActivatedTravelRight(firstTravelRight) && (
+        <>
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={style.marginTop}
+          >
+            {t(
+              FareContractTexts.details.validFrom(
+                fullDateTime(firstTravelRight.startDateTime.toDate(), language),
+              ),
+            )}
+          </ThemeText>
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={style.marginTop}
+          >
+            {t(
+              FareContractTexts.details.validTo(
+                fullDateTime(firstTravelRight.endDateTime.toDate(), language),
+              ),
+            )}
+          </ThemeText>
+        </>
+      )}
       <ThemeText
         type="body__secondary"
         color="secondary"
