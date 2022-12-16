@@ -45,7 +45,7 @@ const FareContractTexts = {
       _(`Gyldig til ${dateTime}`, `Valid to ${dateTime}`),
     askForReceipt: _('Få kvittering tilsendt', 'Get receipt sent'),
     barcodeA11yLabel: _(
-      'Barkode. Vis frem denne koden ved billett kontroll',
+      'Barkode. Vis frem denne koden ved billettkontroll',
       'Barcode. Show this code in case of inspection. ',
     ),
     barcodeErrors: {
