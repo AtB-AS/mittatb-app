@@ -7,10 +7,13 @@ import {
   TravellerSelectionMode,
   ZoneSelectionMode,
   FareProductType,
+  FareProductTypeAvailability,
+  FareProductTypeTimeRange,
 } from '@atb/screens/Ticketing/FareContracts/utils';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
 import {isArray} from 'lodash';
+import firestore from '@react-native-firebase/firestore';
 
 export function mapToFareProductTypeConfigs(
   config: any,
@@ -84,13 +87,96 @@ function mapToFareProductTypeConfig(
   );
   if (!configuration) return;
 
+  // Optional!
+  const availability = mapToAvailability(fcType, config);
+
   return {
     type: fcType,
     name,
     description,
     transportModes: config.transportModes,
     configuration,
+    availability,
   };
+}
+
+function mapToAvailability(
+  fareProductType: FareProductType,
+  config: any,
+): FareProductTypeAvailability | undefined {
+  const availabilityField = 'availability';
+  if (!(availabilityField in config)) {
+    return;
+  }
+
+  const availability = config.availability;
+  const fields = ['alwaysEnableAt', 'disableAt'];
+  if (!fields.every((f) => f in availability)) {
+    Bugsnag.notify(
+      `attribute "${availabilityField}" for fare product "${fareProductType}" is missing one or more of the following fields: ${fields.join(
+        ',',
+      )}`,
+    );
+    return;
+  }
+
+  if (!fields.every((f) => isArray(availability[f]))) {
+    Bugsnag.notify(
+      `attribute "${availabilityField}" for fare product "${fareProductType}", fields: ${fields.join(
+        ',',
+      )} should be of type "array"`,
+    );
+    return;
+  }
+
+  const timeFields = ['from', 'to'];
+  if (
+    !fields.every((f) =>
+      availability[f].every((item: any) =>
+        timeFields.every((tf) => tf in item),
+      ),
+    )
+  ) {
+    Bugsnag.notify(
+      `attribute "${availabilityField}" for fare product "${fareProductType}", one or more of the following fields: ${timeFields.join(
+        ',',
+      )} in ${fields.join(',')} are missing`,
+    );
+    return;
+  }
+
+  const timestampFields = ['seconds', 'nanoseconds'];
+  if (
+    !fields.every((f) =>
+      availability[f].every((item: any) =>
+        timeFields.every((tf) =>
+          timestampFields.every((tsf) => tsf in item[tf]),
+        ),
+      ),
+    )
+  ) {
+    Bugsnag.notify(
+      `attribute "${availabilityField}" for fare product "${fareProductType}", one or more of the following fields: ${timeFields.join(
+        ',',
+      )} in ${fields.join(',')} should be of type "Timestamp"`,
+    );
+    return;
+  }
+
+  return {
+    alwaysEnableAt: mapToTimestamp(config.availability.alwaysEnableAt),
+    disableAt: mapToTimestamp(config.availability.disableAt),
+  } as FareProductTypeAvailability;
+}
+
+function mapToTimestamp(items: any[]) {
+  return items.map(
+    (item: any) =>
+      ({
+        from: new firestore.Timestamp(item.from.seconds, item.from.nanoseconds),
+        to: new firestore.Timestamp(item.to.seconds, item.to.nanoseconds),
+      } as FareProductTypeTimeRange),
+  );
 }
 
 function mapToFareProductConfigSettings(

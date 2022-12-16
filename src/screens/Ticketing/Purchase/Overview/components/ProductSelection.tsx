@@ -8,6 +8,7 @@ type ProductSelectionProps = {
   preassignedFareProduct: PreassignedFareProduct;
   selectionMode: ProductSelectionMode;
   setSelectedProduct: (product: PreassignedFareProduct) => void;
+  restrictionMessage: string | undefined;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -15,6 +16,7 @@ export default function ProductSelection({
   preassignedFareProduct,
   selectionMode,
   setSelectedProduct,
+  restrictionMessage,
   style,
 }: ProductSelectionProps) {
   return (
@@ -23,6 +25,7 @@ export default function ProductSelection({
         <ProductSelectionByProducts
           selectedProduct={preassignedFareProduct}
           setSelectedProduct={setSelectedProduct}
+          restrictionMessage={restrictionMessage}
           style={style}
         />
       )}

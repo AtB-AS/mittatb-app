@@ -104,7 +104,7 @@
         "value": "Night ticket"
       }
     ],
-    "transportModes": ["bus"],
+    "transportModes": ["bus", "tram"],
     "description": [
       {
         "lang": "nob",
@@ -121,6 +121,15 @@
       "timeSelectionMode": "none",
       "productSelectionMode": "product",
       "offerEndpoint": "authority"
+    },
+    "availability": {
+      "alwaysEnableAt": [
+        {
+          "from": {"seconds": 1671233400, "nanoseconds": 0},
+          "to": {"seconds": 1671332400, "nanoseconds": 0}
+        }
+      ],
+      "disableAt": []
     }
   }
 ]

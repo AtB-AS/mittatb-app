@@ -18,12 +18,14 @@ import {usePreferences} from '@atb/preferences';
 type ProductSelectionByProductsProps = {
   selectedProduct: PreassignedFareProduct;
   setSelectedProduct: (product: PreassignedFareProduct) => void;
+  restrictionMessage: string | undefined;
   style?: StyleProp<ViewStyle>;
 };
 
 export default function ProductSelectionByProducts({
   selectedProduct,
   setSelectedProduct,
+  restrictionMessage,
   style,
 }: ProductSelectionByProductsProps) {
   const {t, language} = useTranslation();
@@ -57,6 +59,7 @@ export default function ProductSelectionByProducts({
           itemToSubtext={(fp) =>
             getTextForLanguage(fp.description ?? [], language) ?? 'Unknow'
           }
+          itemToWarningText={() => restrictionMessage}
           selected={selected}
           onSelect={(fp) => {
             setProduct(fp);

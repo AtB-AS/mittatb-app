@@ -20,6 +20,7 @@ export type ActionModes = 'check' | 'toggle' | 'heading-expand';
 export type ActionItemProps = SectionItem<{
   text: string;
   subtext?: string;
+  warningText?: string;
   hideSubtext?: boolean;
   onPress?(checked: boolean): void;
   checked?: boolean;
@@ -30,6 +31,7 @@ export type ActionItemProps = SectionItem<{
 export default function ActionItem({
   text,
   subtext,
+  warningText,
   hideSubtext,
   onPress,
   mode = 'check',
@@ -100,6 +102,15 @@ export default function ActionItem({
             style={{marginTop: theme.spacings.small}}
           >
             {subtext}
+          </ThemeText>
+        )}
+        {warningText && (
+          <ThemeText
+            type="body__secondary"
+            color="error" // TODO: Replace with destructive color
+            style={{marginTop: theme.spacings.small}}
+          >
+            {warningText}
           </ThemeText>
         )}
       </View>

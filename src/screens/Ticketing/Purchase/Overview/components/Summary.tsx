@@ -28,6 +28,7 @@ type Props = {
   travelDate?: string;
   style?: StyleProp<ViewStyle>;
   fareProductTypeConfig: FareProductTypeConfig;
+  disablePurchaseButton: boolean | undefined;
 };
 
 export default function Summary({
@@ -40,6 +41,7 @@ export default function Summary({
   preassignedFareProduct,
   fareProductTypeConfig,
   travelDate,
+  disablePurchaseButton = false,
   style,
 }: Props) {
   const styles = useStyles();
@@ -108,7 +110,9 @@ export default function Summary({
       <Button
         interactiveColor="interactive_0"
         text={t(PurchaseOverviewTexts.summary.button)}
-        disabled={isLoading || !hasSelection || isError}
+        disabled={
+          isLoading || disablePurchaseButton || !hasSelection || isError
+        }
         onPress={toPaymentFunction}
         rightIcon={{svg: ArrowRight}}
         testID="goToPaymentButton"

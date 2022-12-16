@@ -6,6 +6,7 @@ import {
   format,
   getHours,
   getMinutes,
+  getSeconds,
   isAfter as fnsIsAfter,
   isBefore as fnsIsBefore,
   isPast,
@@ -304,6 +305,16 @@ export function formatToWeekday(
   });
 }
 
+export function formatToFullWeekday(
+  date: Date | string,
+  language: Language,
+  dateFormat?: string,
+) {
+  return format(parseIfNeeded(date), dateFormat ? dateFormat : 'EEEE', {
+    locale: languageToLocale(language),
+  });
+}
+
 export function daysBetween(base: string | Date, target: string | Date) {
   return differenceInCalendarDays(parseIfNeeded(target), parseIfNeeded(base));
 }
@@ -324,6 +335,15 @@ export function dateWithReplacedTime(date: Date | string, time: string) {
   return set(parseIfNeeded(date), {
     hours: getHours(parsedTime),
     minutes: getMinutes(parsedTime),
+  });
+}
+
+export function replaceTimeOn(on: Date | string, date: Date | string) {
+  const parsedTime = parseIfNeeded(date);
+  return set(parseIfNeeded(on), {
+    hours: getHours(parsedTime),
+    minutes: getMinutes(parsedTime),
+    seconds: getSeconds(parsedTime),
   });
 }
 

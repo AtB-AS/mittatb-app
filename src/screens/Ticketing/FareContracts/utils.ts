@@ -1,4 +1,4 @@
-import {FareContractState} from '@atb/ticketing';
+import {FareContractState, Timestamp} from '@atb/ticketing';
 import {
   Mode,
   TransportSubmode,
@@ -43,6 +43,17 @@ export type FareProductTypeConfig = {
   transportModes: Mode[];
   description: LanguageAndTextType[];
   configuration: FareProductTypeConfigSettings;
+  availability?: FareProductTypeAvailability;
+};
+
+export type FareProductTypeAvailability = {
+  alwaysEnableAt: FareProductTypeTimeRange[]; // This applies at week days between the selected time
+  disableAt: FareProductTypeTimeRange[];
+};
+
+export type FareProductTypeTimeRange = {
+  from: Timestamp;
+  to: Timestamp;
 };
 
 export type FareProductTypeConfigSettings = {

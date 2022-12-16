@@ -9,9 +9,9 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
+import {FareProductTypeAvailability} from '../../FareContracts/utils';
 import {PurchaseScreenProps} from '../types';
 import ProductSelection from './components/ProductSelection';
 import PurchaseMessages from './components/PurchaseMessages';
@@ -21,6 +21,15 @@ import TravellerSelection from './components/TravellerSelection';
 import ZonesSelection from './components/ZonesSelection';
 import {useOfferDefaults} from './use-offer-defaults';
 import useOfferState from './use-offer-state';
+import {Timestamp} from '@atb/ticketing';
+import {
+  formatToVerboseDateTime,
+  formatLocaleTime,
+  formatToFullWeekday,
+  isBetween,
+  replaceTimeOn,
+} from '@atb/utils/date';
+import firestore from '@react-native-firebase/firestore';
 
 type OverviewProps = PurchaseScreenProps<'PurchaseOverview'>;
 
@@ -56,13 +65,32 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const fareProductTypeConfig = useFareProductTypeConfig(
     preassignedFareProduct.type,
   );
+  const {configuration: fareProductTypeConfiguration, availability} =
+    fareProductTypeConfig;
   const {
     timeSelectionMode,
     productSelectionMode,
     travellerSelectionMode,
     zoneSelectionMode,
     offerEndpoint,
-  } = fareProductTypeConfig.configuration;
+  } = fareProductTypeConfiguration;
+  // TODO: Remove it when tests are not needed, in that case, use `availability` instead!
+  const availabilityDummy = {
+    alwaysEnableAt: [
+      {
+        from: firestore.Timestamp.fromDate(new Date('2022-12-17T00:30:00')),
+        to: firestore.Timestamp.fromDate(new Date('2022-12-18T04:00:00')),
+      },
+    ],
+    disableAt: [
+      {
+        from: firestore.Timestamp.fromDate(new Date('2022-12-20T14:00:00')),
+        to: firestore.Timestamp.fromDate(new Date('2022-12-20T15:00:00')),
+      },
+    ],
+  } as FareProductTypeAvailability;
+
+  const restrictionMessage = useAvailabilityMessage(availabilityDummy);
 
   const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
     offerEndpoint,
@@ -120,6 +148,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             selectionMode={productSelectionMode}
             setSelectedProduct={onSelectPreassignedFareProduct}
             style={styles.selectionComponent}
+            restrictionMessage={restrictionMessage}
           />
 
           <TravellerSelection
@@ -165,11 +194,77 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             travelDate={travelDate}
             style={styles.summary}
             fareProductTypeConfig={fareProductTypeConfig}
+            disablePurchaseButton={!!restrictionMessage}
           />
         </FullScreenFooter>
       </ScrollView>
     </View>
   );
+};
+
+export const isDateBetweenWeekAndTime = (
+  currentDate: Date,
+  fromTimestamp: Timestamp,
+  toTimestamp: Timestamp,
+) => {
+  const fromDate = fromTimestamp.toDate();
+  const toDate = toTimestamp.toDate();
+  const newfromDate = replaceTimeOn(currentDate, fromDate);
+  const newtoDate = replaceTimeOn(currentDate, toDate);
+  // Swap sundays from 0 to 7
+  const fromWeekDay = fromDate.getDay() == 0 ? 7 : fromDate.getDay();
+  const toWeekDay = toDate.getDay() == 0 ? 7 : toDate.getDay();
+
+  return (
+    currentDate.getDay() >= fromWeekDay &&
+    currentDate.getDay() <= toWeekDay &&
+    isBetween(currentDate, newfromDate, newtoDate)
+  );
+};
+
+export const useAvailabilityMessage = (
+  availability?: FareProductTypeAvailability,
+) => {
+  const {language} = useTranslation();
+
+  if (!availability) return;
+
+  let currentDate = new Date(); // TODO: Replace with a more trusted time source
+  let isEnabledForToday = availability.alwaysEnableAt.some((tr) =>
+    isDateBetweenWeekAndTime(currentDate, tr.from, tr.to),
+  );
+  let disableAt = availability.disableAt.find((tr) =>
+    isBetween(currentDate, tr.from.toDate(), tr.to.toDate()),
+  );
+
+  // TODO: Use translated texts
+  // TODO: Move out `kun tilgjenjelig` and `ikke tilgjenjelig` to support multiple ranges without repeating wording!
+  if (disableAt) {
+    return `ikke tilgjenjelig mellom ${formatToVerboseDateTime(
+      disableAt.from.toDate(),
+      language,
+    )} til ${formatToVerboseDateTime(disableAt.to.toDate(), language)}`;
+  }
+
+  if (!isEnabledForToday) {
+    return availability.alwaysEnableAt
+      .map(
+        (tr) =>
+          `kun tilgjenjelig ${formatToFullWeekday(
+            tr.from.toDate(),
+            language,
+          )} til ${formatToFullWeekday(
+            tr.to.toDate(),
+            language,
+          )} mellom ${formatLocaleTime(
+            tr.from.toDate(),
+            language,
+          )} og ${formatLocaleTime(tr.to.toDate(), language)}`,
+      )
+      .join(', ');
+  }
+
+  return undefined;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
