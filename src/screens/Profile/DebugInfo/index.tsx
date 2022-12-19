@@ -18,7 +18,10 @@ import Slider from '@react-native-community/slider';
 import {usePreferences, UserPreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import Button from '@atb/components/button';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {
+  RemoteConfigContextState,
+  useRemoteConfig,
+} from '@atb/RemoteConfigContext';
 import {useGlobalMessagesState} from '@atb/global-messages';
 import ThemeIcon from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
@@ -65,7 +68,7 @@ export default function DebugInfo() {
     isError,
   } = useMobileTokenContextState();
 
-  const {refresh: refreshRemoteConfig} = useRemoteConfig();
+  const remoteConfig = useRemoteConfig();
 
   const mobileTokenEnabled = useHasEnabledMobileToken();
 
@@ -139,7 +142,7 @@ export default function DebugInfo() {
 
           <Sections.LinkItem
             text="Force refresh remote config"
-            onPress={refreshRemoteConfig}
+            onPress={remoteConfig.refresh}
           />
 
           <Sections.LinkItem
@@ -262,6 +265,27 @@ export default function DebugInfo() {
                   <ThemeText>No id token</ThemeText>
                 )}
               </View>
+            }
+          />
+        </Sections.Section>
+
+        <Sections.Section withPadding withTopPadding>
+          <Sections.ExpandableItem
+            text="Remote config"
+            showIconText={true}
+            expandContent={
+              remoteConfig && (
+                <View>
+                  {Object.keys(remoteConfig).map((key) => (
+                    <MapEntry
+                      title={key}
+                      value={
+                        remoteConfig[key as keyof RemoteConfigContextState]
+                      }
+                    />
+                  ))}
+                </View>
+              )
             }
           />
         </Sections.Section>
