@@ -43,6 +43,7 @@ import useIsLoading from '@atb/utils/use-is-loading';
 import {useNewFrontpage} from '@atb/screens/Dashboard/use-new-frontpage';
 import {useMapPage} from '@atb/components/map/hooks/use-map-page';
 import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
+import LogIn from '@atb/assets/svg/mono-icons/profile/LogIn';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -202,6 +203,7 @@ export default function ProfileHome({navigation}: ProfileProps) {
                     },
                   });
                 }}
+                icon={<ThemeIcon svg={LogIn} />}
                 testID="loginButton"
               />
             )}
