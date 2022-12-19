@@ -1,4 +1,5 @@
 import {translation as _} from '../../commons';
+
 const SelectTravelTokenTexts = {
   travelToken: {
     header: {
@@ -39,18 +40,18 @@ const SelectTravelTokenTexts = {
           'What happens if I lose my t:card or phone?',
         ),
         answer: _(
-          'Du kan enkelt velge å bruke billetten din på et annet t:kort eller mobil. Det gjør du på **Min profil**.',
-          'You can easily head over to **My profile** to switch and use your ticket on another t:card or phone.',
+          'Billetten din ligger trygt lagret i Min profil. Velg å bruke billetten på en annen mobil eller t:kort.',
+          'Your ticket is safely stored in My profile. Switch to use the ticket on another mobile phone or t:card.',
         ),
       },
       {
         question: _(
           'Kan jeg bruke billetten på både t:kort og mobil samtidig?',
-          'Can I use the ticket on both t:card and phone at the same time?',
+          'Can I use the ticket on both t:card and mobile phone at the same time?',
         ),
         answer: _(
-          'Nei. Du du kan kun bruke en av gangen, og billetten kan ikke deles.',
-          'No. You can only use one at a time, and the ticket cannot be shared.',
+          'Nei, du kan kun bruke en av gangen, og billetten kan ikke deles med andre reisende.',
+          'No, you can only use one at a time and the ticket cannot be shared with other travellers.',
         ),
       },
       {
@@ -59,8 +60,18 @@ const SelectTravelTokenTexts = {
           'Can I travel without my t:card or phone?',
         ),
         answer: _(
-          'Nei. Du må alltid ha med deg det t:kortet eller den mobilen du har valgt å bruke billetten på.',
-          'No. You must always bring the t:card or the phone you have chosen to use the ticket on.',
+          'Du må alltid ha med deg det t:kortet eller mobilen du har valgt å bruke billetten på.',
+          'You must always travel with the t:card or mobile phone you have chosen to use the ticket on.',
+        ),
+      },
+      {
+        question: _(
+          `Jeg får ikke logget inn i appen AtB med e-post`,
+          `I can not log into the AtB app with email`,
+        ),
+        answer: _(
+          `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke t:kort eller opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret vedrørende refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
+          `It is not possible to log into the app with e-mail as of today. You can continue to use your t:card or create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user profile. You can contact customer service regarding a refund if you still want to create a new user profile in the app.`,
         ),
       },
       {
@@ -81,8 +92,8 @@ const SelectTravelTokenTexts = {
       ),
       answer: (toggleMaxLimit: number) =>
         _(
-          `Du kan bytte inntil ${toggleMaxLimit} ganger i måneden. Du får nye bytter den 1. hver måned.`,
-          `You can switch up to ${toggleMaxLimit} times a month. You get new switches on the 1st of every month.`,
+          `Du kan bytte inntil ${toggleMaxLimit} ganger i måneden. Du får nye bytter den 1. hver måned. Merk at byttet må være fullført før du går om bord og du kan ikke bytte mens du reiser.`,
+          `You can switch up to ${toggleMaxLimit} times a month. You get new switches on the 1st of every month. Note that the switch must be completed before boarding and you can not switch while travelling.`,
         ),
     },
   },
