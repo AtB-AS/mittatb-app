@@ -110,7 +110,7 @@ function mapToAvailability(
   }
 
   const availability = config.availability;
-  const fields = ['alwaysEnableAt', 'disableAt'];
+  const fields = ['alwaysEnableAt', 'enabledAt', 'disableAt'];
   if (!fields.every((f) => f in availability)) {
     Bugsnag.notify(
       `attribute "${availabilityField}" for fare product "${fareProductType}" is missing one or more of the following fields: ${fields.join(
@@ -165,6 +165,7 @@ function mapToAvailability(
 
   return {
     alwaysEnableAt: mapToTimestamp(config.availability.alwaysEnableAt),
+    enabledAt: mapToTimestamp(config.availability.enabledAt),
     disableAt: mapToTimestamp(config.availability.disableAt),
   } as FareProductTypeAvailability;
 }

@@ -79,24 +79,17 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const availabilityDummy = {
     alwaysEnableAt: [
       {
-        from: firestore.Timestamp.fromDate(new Date('2022-12-16T15:25:00')),
-        to: firestore.Timestamp.fromDate(new Date('2022-12-17T15:30:00')),
-      },
-      {
-        from: firestore.Timestamp.fromDate(new Date('2022-12-12T15:25:00')),
-        to: firestore.Timestamp.fromDate(new Date('2022-12-12T15:30:00')),
+        from: firestore.Timestamp.fromDate(new Date('2022-12-20T00:30:00')),
+        to: firestore.Timestamp.fromDate(new Date('2022-12-21T09:30:00')),
       },
     ],
-    disableAt: [
+    enabledAt: [
       {
-        from: firestore.Timestamp.fromDate(new Date('2022-12-15T14:00:00')),
-        to: firestore.Timestamp.fromDate(new Date('2022-12-20T15:00:00')),
-      },
-      {
-        from: firestore.Timestamp.fromDate(new Date('2022-12-15T14:00:00')),
-        to: firestore.Timestamp.fromDate(new Date('2022-12-15T15:00:00')),
+        from: firestore.Timestamp.fromDate(new Date('2022-12-19T10:30:00')),
+        to: firestore.Timestamp.fromDate(new Date('2022-12-19T13:00:00')),
       },
     ],
+    disableAt: [],
   } as FareProductTypeAvailability;
 
   const restrictionMessage = useAvailabilityMessage(availabilityDummy);
@@ -242,16 +235,22 @@ export const useAvailabilityMessage = (
   let isEnabledForToday = availability.alwaysEnableAt.some((tr) =>
     isDateBetweenWeekAndTime(currentDate, tr.from, tr.to),
   );
+  let isEnabledAt = availability.enabledAt.some((tr) =>
+    isBetween(currentDate, tr.from.toDate(), tr.to.toDate()),
+  );
   let disableAt = availability.disableAt.find((tr) =>
     isBetween(currentDate, tr.from.toDate(), tr.to.toDate()),
   );
-
   // TODO: Use translated texts
   if (disableAt) {
     return `ikke tilgjenjelig mellom ${formatToVerboseDateTime(
       disableAt.from.toDate(),
       language,
     )} til ${formatToVerboseDateTime(disableAt.to.toDate(), language)}`;
+  }
+
+  if (isEnabledAt) {
+    return;
   }
 
   if (!isEnabledForToday) {
@@ -261,7 +260,7 @@ export const useAvailabilityMessage = (
     return `kun tilgjenjelig ${formatedDates.join(' og ')}`;
   }
 
-  return undefined;
+  return;
 };
 
 const formatDatesRange = (fromDate: Date, toDate: Date, language: Language) => {

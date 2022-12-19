@@ -18,8 +18,8 @@ import {
   defaultPreassignedFareProducts,
   defaultTariffZones,
   defaultUserProfiles,
-  defaultFareProductTypeConfig,
 } from '@atb/reference-data/defaults';
+import {defaultFareProductTypeConfig} from '@atb/configuration/defaults';
 import {
   defaultVatPercent,
   defaultPaymentTypes,

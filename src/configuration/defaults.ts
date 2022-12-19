@@ -1,4 +1,6 @@
+import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
 import {PaymentType} from '@atb/ticketing/types';
+import fareProductTypeConfig from './defaults/fare-product-type-config.json';
 
 export const defaultModesWeSellTicketsFor: string[] = [
   'cityTram',
@@ -14,3 +16,6 @@ export const defaultPaymentTypes: PaymentType[] = [
   PaymentType.Mastercard,
 ];
 export const defaultVatPercent: number = 12;
+
+export const defaultFareProductTypeConfig =
+  fareProductTypeConfig as FareProductTypeConfig[];

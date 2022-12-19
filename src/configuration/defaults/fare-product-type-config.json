@@ -129,6 +129,7 @@
           "to": {"seconds": 1671332400, "nanoseconds": 0}
         }
       ],
+      "enabledAt": [],
       "disableAt": []
     }
   }

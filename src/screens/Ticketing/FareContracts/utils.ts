@@ -48,6 +48,7 @@ export type FareProductTypeConfig = {
 
 export type FareProductTypeAvailability = {
   alwaysEnableAt: FareProductTypeTimeRange[]; // This applies at week days between the selected time
+  enabledAt: FareProductTypeTimeRange[];
   disableAt: FareProductTypeTimeRange[];
 };
 
