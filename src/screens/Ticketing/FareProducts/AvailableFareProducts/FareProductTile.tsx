@@ -57,7 +57,7 @@ const FareProductTile = ({
         style={styles.spreadContent}
       >
         <View style={styles.contentContainer}>
-          <TransportMode fareProductType={config.type} iconSize={'small'} />
+          <TransportMode modes={config.transportModes} iconSize={'small'} />
           <ThemeText
             type="body__secondary--bold"
             style={styles.title}

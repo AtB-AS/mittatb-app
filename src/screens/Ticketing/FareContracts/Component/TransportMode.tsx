@@ -1,18 +1,17 @@
 import {View} from 'react-native';
-import {getTransportationModes} from '@atb/screens/Ticketing/FareContracts/utils';
 import TransportationIcon from '@atb/components/transportation-icon';
 import ThemeText from '@atb/components/text';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {PreassignedFareProductType} from '@atb/reference-data/types';
 import {StyleSheet, Theme} from '@atb/theme';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 const TransportMode = ({
-  fareProductType,
+  modes,
   iconSize,
   disabled,
 }: {
-  fareProductType: PreassignedFareProductType | 'summerPass';
+  modes: Mode[];
   iconSize?: keyof Theme['icon']['size'];
   disabled?: boolean;
 }) => {
@@ -20,19 +19,16 @@ const TransportMode = ({
   const {t} = useTranslation();
   return (
     <View style={styles.transportationMode}>
-      {getTransportationModes(fareProductType)?.map((mode: any) => (
+      {modes.map((mode: Mode) => (
         <TransportationIcon
           key={mode}
-          mode={mode.mode}
-          subMode={mode.subMode}
+          mode={mode}
           size={iconSize}
           disabled={disabled}
         />
       ))}
       <ThemeText type="label__uppercase" color={'secondary'}>
-        {t(
-          TicketingTexts.availableFareProducts[fareProductType].transportModes,
-        )}
+        {modes.map((tm) => t(FareContractTexts.transportMode(tm))).join('/')}
       </ThemeText>
     </View>
   );
