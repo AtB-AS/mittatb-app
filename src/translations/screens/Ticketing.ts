@@ -80,6 +80,24 @@ const TicketingTexts = {
       'Aktivér for å gå til kjøp',
       'Activate to go to purchasing',
     ),
+    single: {
+      transportModes: _('Buss/trikk', 'Bus/tram'),
+    },
+    night: {
+      transportModes: _('Buss/trikk', 'Bus/tram'),
+    },
+    period: {
+      transportModes: _('Buss/trikk', 'Bus/tram'),
+    },
+    hour24: {
+      transportModes: _('Buss/trikk', 'Bus/tram'),
+    },
+    summerPass: {
+      transportModes: _('Flere reisemåter', 'Several travel modes'),
+    },
+    carnet: {
+      transportModes: _('Buss/trikk', 'Bus/tram'),
+    },
   },
   reservation: {
     reserving: _(
@@ -180,3 +198,4 @@ export default orgSpecificTranslations(TicketingTexts, {
     },
   },
 });
+
