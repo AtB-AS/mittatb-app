@@ -122,5 +122,36 @@
       "productSelectionMode": "product",
       "offerEndpoint": "authority"
     }
+  },
+  {
+    "type": "carnet",
+    "name": [
+      {
+        "lang": "nob",
+        "value": "Klippekort"
+      },
+      {
+        "lang": "eng",
+        "value": "Punch card"
+      }
+    ],
+    "transportModes": ["bus"],
+    "description": [
+      {
+        "lang": "nob",
+        "value": "10 forhåndskjøpte enkeltbilletter som må aktiveres før du går om bord"
+      },
+      {
+        "lang": "eng",
+        "value": "10 pre-purchased tickets that you have to validate before boarding"
+      }
+    ],
+    "configuration": {
+      "zoneSelectionMode": "multiple",
+      "travellerSelectionMode": "single",
+      "timeSelectionMode": "none",
+      "productSelectionMode": "none",
+      "offerEndpoint": "zones"
+    }
   }
 ]
