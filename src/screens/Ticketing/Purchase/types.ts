@@ -1,8 +1,5 @@
 import {RootNavigationProps, RootStackScreenProps} from '@atb/navigation/types';
-import {
-  PreassignedFareProduct,
-  PreassignedFareProductType,
-} from '@atb/reference-data/types';
+import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
   CompositeNavigationProp,
@@ -16,6 +13,7 @@ import {
 } from './TariffZones';
 import {RouteParams as TariffZoneSearchParams} from './TariffZones/search';
 import {UserProfileWithCount} from './Travellers/use-user-count-state';
+import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
 
 export type CardPaymentMethod =
   | {paymentType: PaymentType.Visa | PaymentType.Mastercard; save: boolean}
@@ -61,9 +59,9 @@ export type SavedPaymentOption =
 
 type PurchaseOverviewParams = {
   refreshOffer?: boolean;
+  fareProductTypeConfig: FareProductTypeConfig;
   preassignedFareProduct?: PreassignedFareProduct;
   userProfilesWithCount?: UserProfileWithCount[];
-  selectableProductType?: PreassignedFareProductType;
   fromTariffZone?: TariffZoneWithMetadata;
   toTariffZone?: TariffZoneWithMetadata;
   travelDate?: string;

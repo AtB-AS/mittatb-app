@@ -8,7 +8,6 @@ import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import ThemeText from '@atb/components/text';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {useFareProductTypeConfig} from '@atb/configuration/utils';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
@@ -23,7 +22,6 @@ import {
   useTranslation,
   getTextForLanguage,
 } from '@atb/translations';
-import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {addMinutes} from 'date-fns';
@@ -34,7 +32,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {getOtherDeviceIsInspectableWarning} from '../../FareContracts/utils';
+import {
+  FareProductTypeConfig,
+  getOtherDeviceIsInspectableWarning,
+} from '../../FareContracts/utils';
 import useOfferState from '../Overview/use-offer-state';
 import {SelectPaymentMethod} from '../Payment';
 import {usePreviousPaymentMethod} from '../saved-payment-utils';
@@ -47,6 +48,7 @@ import {
 } from '../types';
 
 export type RouteParams = {
+  fareProductTypeConfig: FareProductTypeConfig;
   preassignedFareProduct: PreassignedFareProduct;
   fromTariffZone: TariffZone;
   toTariffZone: TariffZone;
@@ -121,6 +123,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   );
 
   const {
+    fareProductTypeConfig,
     fromTariffZone,
     toTariffZone,
     preassignedFareProduct,
@@ -129,10 +132,8 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     headerLeftButton,
   } = params;
 
-  const {configuration: fareProductTypeConfiguration} =
-    useFareProductTypeConfig(preassignedFareProduct.type);
   const {travellerSelectionMode, zoneSelectionMode, offerEndpoint} =
-    fareProductTypeConfiguration;
+    fareProductTypeConfig.configuration;
 
   const {
     offerSearchTime,
@@ -259,9 +260,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title={t(
-          PurchaseConfirmationTexts.header.title[preassignedFareProduct.type],
-        )}
+        title={getTextForLanguage(fareProductTypeConfig.name, language)}
         leftButton={headerLeftButton}
         globalMessageContext="app-ticketing"
       />

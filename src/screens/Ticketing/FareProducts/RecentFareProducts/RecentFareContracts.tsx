@@ -12,6 +12,7 @@ import useRecentFareContracts, {
 } from '../use-recent-fare-contracts';
 import {RecentFareContractComponent} from './RecentFareContractComponent';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
 
 export const RecentFareContracts = () => {
   const navigation = useNavigation<TicketingNavigationProps<'PurchaseTab'>>();
@@ -21,10 +22,14 @@ export const RecentFareContracts = () => {
   const {recentFareContracts, loading} = useRecentFareContracts();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
 
-  const onSelect = (rfc: RecentFareContract) => {
+  const onSelect = (
+    rfc: RecentFareContract,
+    fareProductTypeConfig: FareProductTypeConfig,
+  ) => {
     navigation.navigate('Purchase', {
       screen: 'PurchaseOverview',
       params: {
+        fareProductTypeConfig,
         preassignedFareProduct: rfc.preassignedFareProduct,
         userProfilesWithCount: rfc.userProfilesWithCount,
         fromTariffZone: {...rfc.fromTariffZone, resultType: 'zone'},
