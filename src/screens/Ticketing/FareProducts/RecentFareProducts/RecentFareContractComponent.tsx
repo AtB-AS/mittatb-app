@@ -9,13 +9,11 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import TransportationIcon from '@atb/components/transportation-icon';
 import ThemeIcon from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
-  fareProductTypeConfig?: FareProductTypeConfig;
   onSelect: (rfc: RecentFareContract) => void;
   testID: string;
 };
