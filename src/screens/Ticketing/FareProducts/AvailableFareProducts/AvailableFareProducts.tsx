@@ -47,13 +47,13 @@ export const AvailableFareProducts = ({
         <View style={styles.fareProductsContainer}>
           <FareProductTile
             onPress={() => onProductSelect(firstConfig)}
-            testID={`fareProductConfig-${firstConfig.type}`}
+            testID={`${firstConfig.type}FareProduct`}
             config={firstConfig}
           />
           {secondConfig && (
             <FareProductTile
               onPress={() => onProductSelect(secondConfig)}
-              testID={`fareProductConfig-${secondConfig.type}`}
+              testID={`${secondConfig.type}FareProduct`}
               config={secondConfig}
             />
           )}
