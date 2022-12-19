@@ -37,7 +37,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {PurchaseScreenProps} from '../types';
 import {zoomIn, zoomOut} from '@atb/components/map/utils';
 import {flyToLocation} from '@atb/components/map/hooks/use-trigger-camera-move-effect';
-import {ZoneSelectionMode} from '../../FareContracts/utils';
+import {FareProductTypeConfig} from '../../FareContracts/utils';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -45,7 +45,7 @@ const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
 export type RouteParams = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
-  selectionMode: Exclude<ZoneSelectionMode, 'none'>;
+  fareProductTypeConfig: FareProductTypeConfig;
 };
 
 export type TariffZoneResultType = 'venue' | 'geolocation' | 'zone';
@@ -216,7 +216,8 @@ const TariffZones: React.FC<TariffZonesProps> = ({
   navigation,
   route: {params},
 }) => {
-  const {fromTariffZone, toTariffZone, selectionMode} = params;
+  const {fromTariffZone, toTariffZone, fareProductTypeConfig} = params;
+  const selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
   const isApplicableOnSingleZoneOnly = selectionMode === 'single';
   const [regionEvent, setRegionEvent] = useState<RegionEvent>();
   const {tariffZones} = useFirestoreConfiguration();
@@ -274,6 +275,7 @@ const TariffZones: React.FC<TariffZonesProps> = ({
     navigation.navigate({
       name: 'PurchaseOverview',
       params: {
+        fareProductTypeConfig,
         fromTariffZone: selectedZones.from,
         toTariffZone: isApplicableOnSingleZoneOnly
           ? selectedZones.from

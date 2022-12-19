@@ -11,10 +11,14 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
-  onSelect: (rfc: RecentFareContract) => void;
+  onSelect: (
+    rfc: RecentFareContract,
+    fareProductTypeConfig: FareProductTypeConfig,
+  ) => void;
   testID: string;
 };
 
@@ -126,7 +130,7 @@ export const RecentFareContractComponent = ({
     <TouchableOpacity
       style={styles.container}
       accessible={true}
-      onPress={() => onSelect(recentFareContract)}
+      onPress={() => onSelect(recentFareContract, fareProductTypeConfig)}
       accessibilityLabel={currentAccessibilityLabel}
       accessibilityHint={t(RecentFareContractsTexts.repeatPurchase.a11yHint)}
       testID={testID}

@@ -52,6 +52,7 @@ export default function Summary({
 
   const toPaymentFunction = () => {
     navigation.navigate('Confirmation', {
+      fareProductTypeConfig,
       fromTariffZone,
       toTariffZone,
       userProfilesWithCount,

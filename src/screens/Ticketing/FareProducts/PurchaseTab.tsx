@@ -37,7 +37,7 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
             params: {
               screen: 'PurchaseOverview',
               params: {
-                selectableProductType: fareProductTypeConfig.type,
+                fareProductTypeConfig,
               },
             },
           },
@@ -47,7 +47,7 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
       navigation.navigate('Purchase', {
         screen: 'PurchaseOverview',
         params: {
-          selectableProductType: fareProductTypeConfig.type,
+          fareProductTypeConfig: fareProductTypeConfig,
         },
       });
     }
