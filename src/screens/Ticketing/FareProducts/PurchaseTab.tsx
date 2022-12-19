@@ -26,12 +26,13 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
 
   const onProductSelect = (fareProductTypeConfig: FareProductTypeConfig) => {
     if (
-      fareProductTypeConfig.type === 'period' &&
+      fareProductTypeConfig.configuration.requiresLogin &&
       authenticationType !== 'phone'
     ) {
       navigation.navigate('LoginInApp', {
         screen: 'LoginOnboardingInApp',
         params: {
+          fareProductTypeConfig,
           afterLogin: {
             screen: 'Purchase',
             params: {

@@ -30,7 +30,8 @@
       "travellerSelectionMode": "multiple",
       "timeSelectionMode": "none",
       "productSelectionMode": "none",
-      "offerEndpoint": "zones"
+      "offerEndpoint": "zones",
+      "requiresLogin": false
     }
   },
   {
@@ -64,7 +65,8 @@
       "travellerSelectionMode": "single",
       "timeSelectionMode": "datetime",
       "productSelectionMode": "duration",
-      "offerEndpoint": "zones"
+      "offerEndpoint": "zones",
+      "requiresLogin": true
     }
   },
   {
@@ -98,7 +100,8 @@
       "travellerSelectionMode": "single",
       "timeSelectionMode": "datetime",
       "productSelectionMode": "none",
-      "offerEndpoint": "zones"
+      "offerEndpoint": "zones",
+      "requiresLogin": false
     }
   },
   {
@@ -132,7 +135,8 @@
       "travellerSelectionMode": "none",
       "timeSelectionMode": "none",
       "productSelectionMode": "product",
-      "offerEndpoint": "authority"
+      "offerEndpoint": "authority",
+      "requiresLogin": false
     }
   },
   {
