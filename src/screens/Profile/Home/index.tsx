@@ -1,6 +1,6 @@
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {LogOut} from '@atb/assets/svg/mono-icons/profile';
+import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {useAuthState} from '@atb/auth';
 import {updateMetadata} from '@atb/chat/metadata';
 import ActivityIndicatorOverlay from '@atb/components/activity-indicator-overlay';
@@ -43,7 +43,6 @@ import useIsLoading from '@atb/utils/use-is-loading';
 import {useNewFrontpage} from '@atb/screens/Dashboard/use-new-frontpage';
 import {useMapPage} from '@atb/components/map/hooks/use-map-page';
 import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
-import LogIn from '@atb/assets/svg/mono-icons/profile/LogIn';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
