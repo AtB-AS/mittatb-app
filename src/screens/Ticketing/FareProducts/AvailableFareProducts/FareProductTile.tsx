@@ -34,7 +34,7 @@ const FareProductTile = ({
   const title = useTextForLanguage(config.name);
   const description = useTextForLanguage(config.description);
   const transportModesText = config.transportModes
-    .map((tm) => t(FareContractTexts.transportMode(tm)))
+    .map((tm) => t(FareContractTexts.transportMode(tm.mode)))
     .join('/');
   const accessibilityLabel = [title, transportModesText, description].join(
     '. ',

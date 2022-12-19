@@ -4,14 +4,14 @@ import ThemeText from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {TransportModeType} from '@atb/configuration/types';
 
 const TransportMode = ({
   modes,
   iconSize,
   disabled,
 }: {
-  modes: Mode[];
+  modes: TransportModeType[];
   iconSize?: keyof Theme['icon']['size'];
   disabled?: boolean;
 }) => {
@@ -19,16 +19,19 @@ const TransportMode = ({
   const {t} = useTranslation();
   return (
     <View style={styles.transportationMode}>
-      {modes.map((mode: Mode) => (
+      {modes.map(({mode, subMode}) => (
         <TransportationIcon
-          key={mode}
+          key={mode + subMode}
           mode={mode}
+          subMode={subMode}
           size={iconSize}
           disabled={disabled}
         />
       ))}
       <ThemeText type="label__uppercase" color={'secondary'}>
-        {modes.map((tm) => t(FareContractTexts.transportMode(tm))).join('/')}
+        {modes
+          .map((tm) => t(FareContractTexts.transportMode(tm.mode)))
+          .join('/')}
       </ThemeText>
     </View>
   );

@@ -1,4 +1,4 @@
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {translation as _} from '../commons';
 
 const FareContractTexts = {
@@ -146,35 +146,23 @@ const FareContractTexts = {
     ),
     unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },
-  transportMode: (mode: Mode) => {
+  transportMode: (mode: TransportMode) => {
     switch (mode) {
-      case Mode.Bus:
+      case TransportMode.Bus:
+      case TransportMode.Coach:
         return _('buss', 'bus');
-      case Mode.Rail:
+      case TransportMode.Rail:
         return _('tog', 'train');
-      case Mode.Tram:
+      case TransportMode.Tram:
         return _('trikk', 'tram');
-      case Mode.Water:
+      case TransportMode.Water:
         return _('båt', 'boat');
-      case Mode.Air:
+      case TransportMode.Air:
         return _('fly', 'plane');
-      case Mode.Foot:
-        return _('gange', 'walk');
-      case Mode.Metro:
+      case TransportMode.Metro:
         return _('T-bane', 'metro');
       default:
         return _('ukjent transportmiddel', 'unknown transport');
-      /*
-                bus: _('buss', 'bus'),
-                rail: _('tog', 'train'),
-                tram: _('trikk', 'tram'),
-                water: _('båt', 'boat'),
-                air: _('fly', 'plane'),
-                foot: _('gange', 'walk'),
-                metro: _('T-bane', 'metro'),
-                unknown: _('ukjent transportmiddel', 'unknown transport'),
-                several: _('Flere reisemåter', 'Several transport modes'),
-                */
     }
   },
 };

@@ -1,5 +1,4 @@
 import {FareContractState} from '@atb/ticketing';
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {
   PreassignedFareProductType,
   UserProfile,
@@ -22,6 +21,7 @@ import {
   isMobileToken,
   isTravelCardToken,
 } from '@atb/mobile-token/utils';
+import {TransportModeType} from '@atb/configuration/types';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -37,7 +37,7 @@ export type ValidityStatus =
 export type FareProductTypeConfig = {
   type: FareProductType;
   name: LanguageAndTextType[];
-  transportModes: Mode[];
+  transportModes: TransportModeType[];
   description: LanguageAndTextType[];
   configuration: FareProductTypeConfigSettings;
 };

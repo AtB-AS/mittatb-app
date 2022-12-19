@@ -9,9 +9,9 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import TransportationIcon from '@atb/components/transportation-icon';
 import ThemeIcon from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
+import {TransportModeType} from '@atb/configuration/types';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
@@ -78,7 +78,7 @@ export const RecentFareContractComponent = ({
   if (!fareProductTypeConfig) return null;
 
   type ModeNameProps = {
-    modes: Mode[];
+    modes: TransportModeType[];
     joinSymbol?: string;
   };
 
@@ -88,7 +88,7 @@ export const RecentFareContractComponent = ({
       return t(RecentFareContractsTexts.severalTransportModes);
     else
       return modes
-        .map((mode) => t(FareContractTexts.transportMode(mode)))
+        .map((tm) => t(FareContractTexts.transportMode(tm.mode)))
         .join(joinSymbol);
   };
 
@@ -137,8 +137,13 @@ export const RecentFareContractComponent = ({
     >
       <View style={[styles.upperPart, {minWidth: width * 0.6}]}>
         <View style={styles.travelModeWrapper}>
-          {fareProductTypeConfig.transportModes.map((mode) => (
-            <TransportationIcon mode={mode} key={mode} size="small" />
+          {fareProductTypeConfig.transportModes.map(({mode, subMode}) => (
+            <TransportationIcon
+              mode={mode}
+              subMode={subMode}
+              key={mode + subMode}
+              size="small"
+            />
           ))}
 
           <ThemeText type="label__uppercase">

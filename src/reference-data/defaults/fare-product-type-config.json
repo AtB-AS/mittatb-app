@@ -11,7 +11,10 @@
         "value": "Single ticket bus/tram"
       }
     ],
-    "transportModes": ["bus"],
+    "transportModes": [
+      {"mode": "bus", "subMode": "localBus"},
+      {"mode": "tram"}
+    ],
     "description": [
       {
         "lang": "nob",
@@ -42,7 +45,10 @@
         "value": "Periodic ticket"
       }
     ],
-    "transportModes": ["bus"],
+    "transportModes": [
+      {"mode": "bus", "subMode": "localBus"},
+      {"mode": "tram"}
+    ],
     "description": [
       {
         "lang": "nob",
@@ -73,7 +79,10 @@
         "value": "24 hour pass"
       }
     ],
-    "transportModes": ["bus"],
+    "transportModes": [
+      {"mode": "bus", "subMode": "localBus"},
+      {"mode": "tram"}
+    ],
     "description": [
       {
         "lang": "nob",
@@ -104,7 +113,10 @@
         "value": "Night ticket"
       }
     ],
-    "transportModes": ["bus"],
+    "transportModes": [
+      {"mode": "bus", "subMode": "localBus"},
+      {"mode": "tram"}
+    ],
     "description": [
       {
         "lang": "nob",
@@ -135,7 +147,10 @@
         "value": "Punch card"
       }
     ],
-    "transportModes": ["bus"],
+    "transportModes": [
+      {"mode": "bus", "subMode": "localBus"},
+      {"mode": "tram"}
+    ],
     "description": [
       {
         "lang": "nob",

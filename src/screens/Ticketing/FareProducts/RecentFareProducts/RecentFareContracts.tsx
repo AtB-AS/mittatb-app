@@ -76,7 +76,7 @@ export const RecentFareContracts = () => {
         </View>
       )}
 
-      {!loading && !!recentFareContracts.length && (
+      {!loading && !!memoizedRecentFareContracts.length && (
         <>
           <ThemeText type="body__secondary" style={styles.header}>
             {t(RecentFareContractsTexts.repeatPurchase.label)}
