@@ -31,6 +31,7 @@ import {
   replaceTimeOn,
 } from '@atb/utils/date';
 import firestore from '@react-native-firebase/firestore';
+import {TFunc} from '@leile/lobo-t';
 
 type OverviewProps = PurchaseScreenProps<'PurchaseOverview'>;
 
@@ -83,12 +84,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
         to: firestore.Timestamp.fromDate(new Date('2022-12-21T09:30:00')),
       },
     ],
-    enabledAt: [
-      {
-        from: firestore.Timestamp.fromDate(new Date('2022-12-19T10:30:00')),
-        to: firestore.Timestamp.fromDate(new Date('2022-12-19T13:00:00')),
-      },
-    ],
+    enabledAt: [],
     disableAt: [],
   } as FareProductTypeAvailability;
 
@@ -227,12 +223,12 @@ export const isDateBetweenWeekAndTime = (
 export const useAvailabilityMessage = (
   availability?: FareProductTypeAvailability,
 ) => {
-  const {language} = useTranslation();
+  const {t, language} = useTranslation();
 
   if (!availability) return;
 
-  let currentDate = new Date(); // TODO: Replace with a more trusted time source
-  let isEnabledForToday = availability.alwaysEnableAt.some((tr) =>
+  let currentDate = new Date();
+  let isBetweenAvailableTime = availability.alwaysEnableAt.some((tr) =>
     isDateBetweenWeekAndTime(currentDate, tr.from, tr.to),
   );
   let isEnabledAt = availability.enabledAt.some((tr) =>
@@ -241,34 +237,43 @@ export const useAvailabilityMessage = (
   let disableAt = availability.disableAt.find((tr) =>
     isBetween(currentDate, tr.from.toDate(), tr.to.toDate()),
   );
-  // TODO: Use translated texts
+
   if (disableAt) {
-    return `ikke tilgjenjelig mellom ${formatToVerboseDateTime(
-      disableAt.from.toDate(),
-      language,
-    )} til ${formatToVerboseDateTime(disableAt.to.toDate(), language)}`;
+    return t(
+      PurchaseOverviewTexts.availability.disabled(
+        formatToVerboseDateTime(disableAt.from.toDate(), language),
+        formatToVerboseDateTime(disableAt.to.toDate(), language),
+      ),
+    );
   }
 
   if (isEnabledAt) {
     return;
   }
 
-  if (!isEnabledForToday) {
+  if (!isBetweenAvailableTime) {
     const formatedDates = availability.alwaysEnableAt.map((tr) =>
-      formatDatesRange(tr.from.toDate(), tr.to.toDate(), language),
+      formatDatesRange(tr.from.toDate(), tr.to.toDate(), t, language),
     );
-    return `kun tilgjenjelig ${formatedDates.join(' og ')}`;
+    return t(
+      PurchaseOverviewTexts.availability.isNotBetweenAvailableTime(
+        formatedDates.join(t(PurchaseOverviewTexts.availability.separator)),
+      ),
+    );
   }
 
   return;
 };
 
-const formatDatesRange = (fromDate: Date, toDate: Date, language: Language) => {
-  return `${formatWeekDaysRange(
-    fromDate,
-    toDate,
-    language,
-  )} mellom ${formatLocaleTime(fromDate, language)} - ${formatLocaleTime(
+const formatDatesRange = (
+  fromDate: Date,
+  toDate: Date,
+  t: TFunc<typeof Language>,
+  language: Language,
+) => {
+  return `${formatWeekDaysRange(fromDate, toDate, t, language)} ${t(
+    PurchaseOverviewTexts.availability.between,
+  )} ${formatLocaleTime(fromDate, language)} - ${formatLocaleTime(
     toDate,
     language,
   )}`;
@@ -277,16 +282,16 @@ const formatDatesRange = (fromDate: Date, toDate: Date, language: Language) => {
 const formatWeekDaysRange = (
   fromDate: Date,
   toDate: Date,
+  t: TFunc<typeof Language>,
   language: Language,
 ) => {
   if (fromDate.getDay() === toDate.getDay()) {
     return formatToFullWeekday(fromDate, language);
   }
 
-  return `${formatToFullWeekday(fromDate, language)} til ${formatToFullWeekday(
-    toDate,
-    language,
-  )}`;
+  return `${formatToFullWeekday(fromDate, language)} ${t(
+    PurchaseOverviewTexts.availability.to,
+  )} ${formatToFullWeekday(toDate, language)}`;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

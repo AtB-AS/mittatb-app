@@ -2,6 +2,18 @@ import {translation as _} from '../../commons';
 import orgSpecificTranslations from '@atb/translations/utils';
 
 const PurchaseOverviewTexts = {
+  availability: {
+    separator: _(' og ', ' and '),
+    to: _('to', 'til'),
+    between: _('mellom', 'between'),
+    disabled: (days: string, time: string) =>
+      _(
+        `Ikke tilgjenjelig mellom ${days} til ${time}`,
+        `Not available between ${days} to ${time}`,
+      ),
+    isNotBetweenAvailableTime: (time: string) =>
+      _(`Kun tilgjenjelig ${time}`, `Only available at ${time}`),
+  },
   header: {
     title: {
       single: _('Enkeltbillett', 'Single ticket'),

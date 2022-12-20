@@ -44,8 +44,12 @@ export default function ActionItem({
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
   const {theme} = useTheme();
-  const interactiveColor =
-    color && checked ? theme.interactive[color].active : undefined;
+  const interactiveColor = color ? theme.interactive[color] : undefined;
+  const activeColor =
+    interactiveColor && checked ? interactiveColor.active : undefined;
+  const destructiveColor = interactiveColor
+    ? interactiveColor.destructive
+    : undefined;
 
   if (mode === 'toggle') {
     return (
@@ -71,8 +75,8 @@ export default function ActionItem({
         style.spaceBetween,
         topContainer,
         {
-          backgroundColor: interactiveColor
-            ? interactiveColor.background
+          backgroundColor: activeColor
+            ? activeColor.background
             : topContainer.backgroundColor,
         },
       ]}
@@ -90,7 +94,7 @@ export default function ActionItem({
           }
           style={[
             contentContainer,
-            interactiveColor ? {color: interactiveColor.text} : undefined,
+            activeColor ? {color: activeColor.text} : undefined,
           ]}
         >
           {text}
@@ -107,8 +111,10 @@ export default function ActionItem({
         {warningText && (
           <ThemeText
             type="body__secondary"
-            color="error" // TODO: Replace with destructive color
-            style={{marginTop: theme.spacings.small}}
+            style={{
+              marginTop: theme.spacings.small,
+              color: destructiveColor ? destructiveColor.background : undefined,
+            }}
           >
             {warningText}
           </ThemeText>
