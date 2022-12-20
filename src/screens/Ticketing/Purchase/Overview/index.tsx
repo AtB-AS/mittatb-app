@@ -73,19 +73,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     travellerSelectionMode,
     offerEndpoint,
   } = fareProductTypeConfiguration;
-  // TODO: Remove it when tests are not needed, in that case, use `availability` instead!
-  const availabilityDummy = {
-    alwaysEnableAt: [
-      {
-        from: firestore.Timestamp.fromDate(new Date('2022-12-20T00:30:00')),
-        to: firestore.Timestamp.fromDate(new Date('2022-12-21T09:30:00')),
-      },
-    ],
-    enabledAt: [],
-    disableAt: [],
-  } as FareProductTypeAvailability;
-
-  const restrictionMessage = useAvailabilityMessage(availabilityDummy);
+  const restrictionMessage = useAvailabilityMessage(availability);
 
   const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
     offerEndpoint,
