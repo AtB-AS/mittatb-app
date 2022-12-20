@@ -172,13 +172,22 @@ function mapToFareProductConfigSettings(
     return;
   }
 
+  const requiresLogin = settings.requiresLogin;
+  if (requiresLogin === undefined) {
+    Bugsnag.notify(
+      `fare product of type: "${fareProductType}" is missing 'requiresLogin' in configuration`,
+    );
+    return;
+  }
+
   return {
     zoneSelectionMode,
     travellerSelectionMode,
     timeSelectionMode,
     productSelectionMode,
     offerEndpoint,
-  } as FareProductTypeConfigSettings;
+    requiresLogin,
+  };
 }
 
 function notifyWrongConfigurationType(
