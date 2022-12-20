@@ -170,7 +170,8 @@
       "travellerSelectionMode": "single",
       "timeSelectionMode": "none",
       "productSelectionMode": "none",
-      "offerEndpoint": "zones"
+      "offerEndpoint": "zones",
+      "requiresLogin": true
     }
   }
 ]
