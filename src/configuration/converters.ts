@@ -11,6 +11,7 @@ import {
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
 import {isArray} from 'lodash';
+import {TransportModeType} from '@atb/configuration/types';
 
 export function mapToFareProductTypeConfigs(
   config: any,
@@ -42,7 +43,7 @@ function mapToFareProductTypeConfig(
     return;
   }
 
-  const fcTypes = ['single', 'period', 'hour24', 'night'];
+  const fcTypes = ['single', 'period', 'hour24', 'night', 'carnet'];
   const fcType = mapToStringAlternatives<FareProductType>(config.type, fcTypes);
   if (!fcType) {
     return;
@@ -71,9 +72,12 @@ function mapToFareProductTypeConfig(
     );
     return;
   }
-  if (!config.transportModes.every((value: any) => typeof value === 'string')) {
+
+  const transportModes = mapTransportModeTypes(config.transportModes);
+
+  if (!transportModes) {
     Bugsnag.notify(
-      `fare product of type: "${fcType}", one or more of the "transportModes" values is not of type "string"`,
+      `fare product of type: "${fcType}", "transportModes" should conform: "TransportModeType"`,
     );
     return;
   }
@@ -88,7 +92,7 @@ function mapToFareProductTypeConfig(
     type: fcType,
     name,
     description,
-    transportModes: config.transportModes,
+    transportModes,
     configuration,
   };
 }
@@ -198,4 +202,18 @@ function mapLanguageAndTextType(text: any[]) {
     return;
 
   return text as LanguageAndTextType[];
+}
+
+function mapTransportModeTypes(transportModes: any[]) {
+  if (
+    !transportModes.every(
+      (item: any) =>
+        typeof item === 'object' &&
+        'mode' in item &&
+        typeof item.mode === 'string',
+    )
+  )
+    return;
+
+  return transportModes as TransportModeType[];
 }
