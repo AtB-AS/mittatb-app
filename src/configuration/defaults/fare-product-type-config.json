@@ -32,6 +32,16 @@
       "productSelectionMode": "none",
       "offerEndpoint": "zones",
       "requiresLogin": false
+    },
+    "availability": {
+      "alwaysEnableAt": [
+        {
+          "from": {"seconds": 1671233400, "nanoseconds": 0},
+          "to": {"seconds": 1671332400, "nanoseconds": 0}
+        }
+      ],
+      "enabledAt": [],
+      "disableAt": []
     }
   },
   {
