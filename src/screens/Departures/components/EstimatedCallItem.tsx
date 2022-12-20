@@ -132,11 +132,15 @@ export default function EstimatedCallItem({
               publicCode={line.publicCode}
               transportMode={line.transportMode}
               transportSubmode={line.transportSubmode}
-              icon={getSvgForMostCriticalSituationOrNotice(
-                departure.situations,
-                notices,
-                departure.cancellation,
-              )}
+              icon={
+                mode !== 'Favourite'
+                  ? getSvgForMostCriticalSituationOrNotice(
+                      departure.situations,
+                      notices,
+                      departure.cancellation,
+                    )
+                  : undefined
+              }
               testID={testID}
             />
           )}
