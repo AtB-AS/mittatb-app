@@ -1,7 +1,3 @@
-import {
-  Mode,
-  TransportSubmode,
-} from '@atb/api/types/generated/journey_planner_v3_types';
 import {TouchableOpacity, View} from 'react-native';
 import ThemeText from '@atb/components/text';
 import React from 'react';
@@ -9,41 +5,42 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import ThemedFareProductIllustration, {
   FareProductIllustration,
 } from '@atb/components/ticket-illustration';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {
+  FareContractTexts,
+  TicketingTexts,
+  useTranslation,
+} from '@atb/translations';
 import {getStaticColor, StaticColor} from '@atb/theme/colors';
 import TransportMode from '@atb/screens/Ticketing/FareContracts/Component/TransportMode';
-import {PreassignedFareProductType} from '@atb/reference-data/types';
-
-export type TransportationModeIconProperties = {
-  mode: Mode;
-  subMode?: TransportSubmode;
-};
+import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
+import {useTextForLanguage} from '@atb/translations/utils';
 
 const FareProductTile = ({
-  transportationModeTexts,
-  illustration,
   accented = false,
   onPress,
   testID,
-  type,
+  config,
 }: {
-  transportationModeTexts: string;
-  illustration: FareProductIllustration;
   accented?: boolean;
   onPress: () => void;
   testID: string;
-  type: Exclude<PreassignedFareProductType | 'summerPass', 'carnet'>;
+  config: FareProductTypeConfig;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {themeName} = useTheme();
   const color: StaticColor = accented ? 'background_accent_3' : 'background_0';
   const themeColor = getStaticColor(themeName, color);
-  const title = t(TicketingTexts.availableFareProducts[type].title);
-  const description = t(TicketingTexts.availableFareProducts[type].description);
-  const accessibilityLabel = [title, transportationModeTexts, description].join(
+  const title = useTextForLanguage(config.name);
+  const description = useTextForLanguage(config.description);
+  const transportModesText = config.transportModes
+    .map((tm) => t(FareContractTexts.transportMode(tm.mode)))
+    .join('/');
+  const accessibilityLabel = [title, transportModesText, description].join(
     '. ',
   );
+
+  const illustration = getIllustration(config);
 
   return (
     <View
@@ -60,7 +57,7 @@ const FareProductTile = ({
         style={styles.spreadContent}
       >
         <View style={styles.contentContainer}>
-          <TransportMode fareProductType={type} iconSize={'small'} />
+          <TransportMode modes={config.transportModes} iconSize={'small'} />
           <ThemeText
             type="body__secondary--bold"
             style={styles.title}
@@ -78,12 +75,33 @@ const FareProductTile = ({
             {description}
           </ThemeText>
         </View>
-        <View style={styles.illustrationContainer}>
-          <ThemedFareProductIllustration name={illustration} />
-        </View>
+        {illustration && (
+          <View style={styles.illustrationContainer}>
+            <ThemedFareProductIllustration name={illustration} />
+          </View>
+        )}
       </TouchableOpacity>
     </View>
   );
+};
+
+const getIllustration = (
+  config: FareProductTypeConfig,
+): FareProductIllustration | undefined => {
+  switch (config.type) {
+    case 'single':
+      return 'Single';
+    case 'period':
+      return 'Period';
+    case 'hour24':
+      return 'H24';
+    case 'carnet':
+      return 'Carnet';
+    case 'night':
+      return 'Night';
+    default:
+      return undefined;
+  }
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

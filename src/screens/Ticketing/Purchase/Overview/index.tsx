@@ -1,11 +1,11 @@
 import {MessageBox} from '@atb/components/message-box';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {useFareProductTypeConfig} from '@atb/configuration/utils';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {
   dictionary,
+  getTextForLanguage,
   Language,
   PurchaseOverviewTexts,
   useTranslation,
@@ -40,7 +40,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   route: {params},
 }) => {
   const styles = useStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const {
     preassignedFareProduct,
@@ -49,7 +49,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     toTariffZone,
   } = useOfferDefaults(
     params.preassignedFareProduct,
-    params.selectableProductType,
+    params.fareProductTypeConfig.type,
     params.userProfilesWithCount,
     params.fromTariffZone,
     params.toTariffZone,
@@ -64,18 +64,15 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     useState(selectableTravellers);
   const hasSelection = travellerSelection.some((u) => u.count);
   const [travelDate, setTravelDate] = useState<string | undefined>();
-  const fareProductTypeConfig = useFareProductTypeConfig(
-    preassignedFareProduct.type,
-  );
+
   const {configuration: fareProductTypeConfiguration, availability} =
     fareProductTypeConfig;
   const {
     timeSelectionMode,
     productSelectionMode,
     travellerSelectionMode,
-    zoneSelectionMode,
     offerEndpoint,
-  } = fareProductTypeConfiguration;
+  } = params.fareProductTypeConfiguration;
   // TODO: Remove it when tests are not needed, in that case, use `availability` instead!
   const availabilityDummy = {
     alwaysEnableAt: [
@@ -116,9 +113,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title={t(
-          PurchaseOverviewTexts.header.title[preassignedFareProduct.type],
-        )}
+        title={getTextForLanguage(params.fareProductTypeConfig.name, language)}
         leftButton={{
           type: 'cancel',
           onPress: closeModal,
@@ -161,7 +156,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             fromTariffZone={fromTariffZone}
             toTariffZone={toTariffZone}
             style={styles.selectionComponent}
-            selectionMode={zoneSelectionMode}
+            fareProductTypeConfig={params.fareProductTypeConfig}
           />
 
           <StartTimeSelection
@@ -191,7 +186,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             preassignedFareProduct={preassignedFareProduct}
             travelDate={travelDate}
             style={styles.summary}
-            fareProductTypeConfig={fareProductTypeConfig}
+            fareProductTypeConfig={params.fareProductTypeConfig}
             disablePurchaseButton={!!restrictionMessage}
           />
         </FullScreenFooter>

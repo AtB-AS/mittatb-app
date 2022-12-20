@@ -1,4 +1,4 @@
-import {EstimatedCall, StopPlace, Quay} from '@atb/api/types/departures';
+import {EstimatedCall, Quay, StopPlace} from '@atb/api/types/departures';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import * as Sections from '@atb/components/sections';
 import SectionSeparator from '@atb/components/sections/section-separator';
@@ -202,9 +202,7 @@ export default function QuaySection({
         {shouldShowMoreItemsLink && (
           <Sections.LinkItem
             icon="arrow-right"
-            text={
-              quay.publicCode ? quay.name + ' ' + quay.publicCode : quay.name
-            }
+            text={t(DeparturesTexts.quaySection.moreDepartures)}
             textType="body__primary--bold"
             onPress={() => navigateToQuay(quay)}
             accessibility={{

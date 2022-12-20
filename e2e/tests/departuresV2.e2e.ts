@@ -21,8 +21,9 @@ import {
   departureSearch,
   numberOfDepartures,
   tapDeparture,
-  getLineTitleV2, ensureOnboardingIsConfirmed
-} from "../utils/departures";
+  getLineTitleV2,
+  ensureOnboardingIsConfirmed,
+} from '../utils/departures';
 import {expectGreaterThan, expectNumber} from '../utils/jestAssertions';
 
 describe('Departures v2', () => {
@@ -65,7 +66,7 @@ describe('Departures v2', () => {
     // Go to departures
     await goToTab('departures');
     //Confirm onboarding
-    await ensureOnboardingIsConfirmed()
+    await ensureOnboardingIsConfirmed();
 
     // Do a departure search
     await departureSearch(placeSearch);
@@ -130,10 +131,10 @@ describe('Departures v2', () => {
     await tapDeparture('quaySection0', 'departureItem0');
 
     await expectToBeVisibleByText(lineTitle);
-    await expectToBeVisibleByText(departureQuay0 + ' ');
+    await expectToBeVisibleByText(departureQuay0 + '');
 
     // Choose a stop place on the line
-    await tapByText(nextDepartureStop + ' ');
+    await tapByText(nextDepartureStop + '');
     await expectIdToHaveText('quaySectionName', nextDepartureStop);
 
     // Go back
@@ -158,7 +159,7 @@ describe('Departures v2', () => {
     // Go to departures
     await goToTab('departures');
     //Confirm onboarding
-    await ensureOnboardingIsConfirmed()
+    await ensureOnboardingIsConfirmed();
 
     // Do a departure search - that should automatically display the stop
     await departureSearch(departureStop);
@@ -195,7 +196,10 @@ describe('Departures v2', () => {
     let noDepTimesQuay1Expanded = await numberOfDepartures('quaySection1');
     expectGreaterThan(noDepTimesQuay1Expanded, 0);
   });
+});
 
+// Note! Place skipped tests in a separate 'describe' without app start-up to save run time
+xdescribe('Departures v2 - skipped', () => {
   xit('should show departures depending on given time', async () => {
     /*
          1. Set a different time in the date/time picker and assert

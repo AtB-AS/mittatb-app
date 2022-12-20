@@ -1,6 +1,6 @@
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {LogOut} from '@atb/assets/svg/mono-icons/profile';
+import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {useAuthState} from '@atb/auth';
 import {updateMetadata} from '@atb/chat/metadata';
 import ActivityIndicatorOverlay from '@atb/components/activity-indicator-overlay';
@@ -202,6 +202,7 @@ export default function ProfileHome({navigation}: ProfileProps) {
                     },
                   });
                 }}
+                icon={<ThemeIcon svg={LogIn} />}
                 testID="loginButton"
               />
             )}

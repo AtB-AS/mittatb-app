@@ -1,9 +1,5 @@
 import {FareContractState, Timestamp} from '@atb/ticketing';
 import {
-  Mode,
-  TransportSubmode,
-} from '@atb/api/types/generated/journey_planner_v3_types';
-import {
   PreassignedFareProductType,
   UserProfile,
 } from '@atb/reference-data/types';
@@ -25,6 +21,7 @@ import {
   isMobileToken,
   isTravelCardToken,
 } from '@atb/mobile-token/utils';
+import {TransportModeType} from '@atb/configuration/types';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -40,7 +37,7 @@ export type ValidityStatus =
 export type FareProductTypeConfig = {
   type: FareProductType;
   name: LanguageAndTextType[];
-  transportModes: Mode[];
+  transportModes: TransportModeType[];
   description: LanguageAndTextType[];
   configuration: FareProductTypeConfigSettings;
   availability?: FareProductTypeAvailability;
@@ -63,6 +60,7 @@ export type FareProductTypeConfigSettings = {
   timeSelectionMode: TimeSelectionMode;
   productSelectionMode: ProductSelectionMode;
   offerEndpoint: OfferEndpoint;
+  requiresLogin: boolean;
 };
 
 export type FareProductType =
@@ -106,25 +104,6 @@ export function getValidityStatus(
   if (state === FareContractState.Refunded) return 'refunded';
   return getRelativeValidity(now, validFrom, validTo);
 }
-
-export const getTransportationModes = (fareProductType?: string) => {
-  switch (fareProductType) {
-    case 'single':
-    case 'hour24':
-    case 'period':
-    case 'night':
-    case 'carnet':
-      return [{mode: Mode.Bus, subMode: TransportSubmode.LocalBus}];
-    case 'summerPass': //TODO cross check this value
-      return [
-        {mode: Mode.Bus, subMode: TransportSubmode.LocalBus},
-        {mode: Mode.Rail},
-        {mode: Mode.Water},
-      ];
-    default:
-      return null;
-  }
-};
 
 export const mapToUserProfilesWithCount = (
   userProfileRefs: string[],

@@ -81,45 +81,18 @@ const TicketingTexts = {
       'Activate to go to purchasing',
     ),
     single: {
-      title: _('Enkeltbillett', 'Single ticket'),
-      description: _(
-        'Når du skal reise av og til',
-        'When you travel occasionally',
-      ),
       transportModes: _('Buss/trikk', 'Bus/tram'),
     },
     night: {
-      title: _('Nattbillett', 'Night ticket'),
-      description: _(
-        `Fra 00:30 til 04:00 på nattbuss og -trikk`,
-        `From 00:30 to 04:00 for night bus and tram`,
-      ),
       transportModes: _('Buss/trikk', 'Bus/tram'),
     },
     period: {
-      title: _('Periodebillett', 'Periodic ticket'),
-      description: _(
-        'Når du reiser litt oftere',
-        'When you travel more frequently',
-      ),
-      pilot_description: _('', ''),
       transportModes: _('Buss/trikk', 'Bus/tram'),
     },
     hour24: {
-      title: _('24-timersbillett', '24 hour pass'),
-      description: _(
-        'Når du vil reise flere ganger på et døgn',
-        'For travelling several times in 24 hours',
-      ),
-      pilot_description: _('', ''),
       transportModes: _('Buss/trikk', 'Bus/tram'),
     },
     summerPass: {
-      title: _('AtB SommerPass', 'Summer pass'),
-      description: _(
-        'Utforsk Trøndelag med buss, tog, hurtigbåt, ferge og trikk i sju dager. Reis så mye du vil! ',
-        'Explore Trøndelag by bus, train, tram, passenger boat or ferry, for 7 days. Travel as much as you like!',
-      ),
       transportModes: _('Flere reisemåter', 'Several travel modes'),
     },
     carnet: {

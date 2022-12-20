@@ -23,6 +23,7 @@ import {
   numberOfDepartureTimes,
   tapDepartureTime,
 } from '../utils/departures';
+import {toggleDeparturesV2} from '../utils/myprofile';
 
 describe('Departures v1', () => {
   beforeAll(async () => {
@@ -55,6 +56,12 @@ describe('Departures v1', () => {
     const departureQuay1 = 'Prinsens gate P2';
     const nextDepartureStop = 'Nidarosdomen';
 
+    // Enable v1
+    await goToTab('profile');
+    await toggleDeparturesV2(false);
+
+    // Go to departures
+    await goToTab('departures');
     // Do a departure search
     await departureSearch(departureStop);
 
@@ -107,10 +114,10 @@ describe('Departures v1', () => {
     await expectToBeVisibleByText(lineTitle);
     await expectToBeVisibleByText('Next');
     await expectToBeVisibleByText('Previous');
-    await expectToBeVisibleByText(departureQuay0 + ' ');
+    await expectToBeVisibleByText(departureQuay0);
 
     // Choose a stop place on the line
-    await tapByText(nextDepartureStop + ' ');
+    await tapByText(nextDepartureStop);
     await expectIdToHaveText('quaySection0Title', nextDepartureStop);
 
     // Go back
@@ -118,7 +125,10 @@ describe('Departures v1', () => {
     await goBack();
     await expectToBeVisibleByText('Departures');
   });
+});
 
+// Note! Place skipped tests in a separate 'describe' without app start-up to save run time
+xdescribe('Departures v1 - skipped', () => {
   xit('departure times should be sorted', async () => {
     /*
          1. Expect that the departure times per line is sorted

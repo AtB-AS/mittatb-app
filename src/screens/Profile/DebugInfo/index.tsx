@@ -18,8 +18,13 @@ import Slider from '@react-native-community/slider';
 import {usePreferences, UserPreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import Button from '@atb/components/button';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {
+  RemoteConfigContextState,
+  useRemoteConfig,
+} from '@atb/RemoteConfigContext';
 import {useGlobalMessagesState} from '@atb/global-messages';
+import ThemeIcon from '@atb/components/theme-icon';
+import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -63,7 +68,7 @@ export default function DebugInfo() {
     isError,
   } = useMobileTokenContextState();
 
-  const {refresh: refreshRemoteConfig} = useRemoteConfig();
+  const remoteConfig = useRemoteConfig();
 
   const mobileTokenEnabled = useHasEnabledMobileToken();
 
@@ -137,7 +142,7 @@ export default function DebugInfo() {
 
           <Sections.LinkItem
             text="Force refresh remote config"
-            onPress={refreshRemoteConfig}
+            onPress={remoteConfig.refresh}
           />
 
           <Sections.LinkItem
@@ -238,9 +243,9 @@ export default function DebugInfo() {
             showIconText={true}
             expandContent={
               <View>
-                {Object.entries(user?.toJSON() ?? {}).map(([key, value]) =>
-                  mapEntry(key, value),
-                )}
+                {Object.entries(user?.toJSON() ?? {}).map(([key, value]) => (
+                  <MapEntry title={key} value={value} />
+                ))}
               </View>
             }
           />
@@ -253,13 +258,34 @@ export default function DebugInfo() {
             expandContent={
               <View>
                 {!!idToken ? (
-                  Object.entries(idToken).map(([key, value]) =>
-                    mapEntry(key, value),
-                  )
+                  Object.entries(idToken).map(([key, value]) => (
+                    <MapEntry title={key} value={value} />
+                  ))
                 ) : (
                   <ThemeText>No id token</ThemeText>
                 )}
               </View>
+            }
+          />
+        </Sections.Section>
+
+        <Sections.Section withPadding withTopPadding>
+          <Sections.ExpandableItem
+            text="Remote config"
+            showIconText={true}
+            expandContent={
+              remoteConfig && (
+                <View>
+                  {Object.keys(remoteConfig).map((key) => (
+                    <MapEntry
+                      title={key}
+                      value={
+                        remoteConfig[key as keyof RemoteConfigContextState]
+                      }
+                    />
+                  ))}
+                </View>
+              )
             }
           />
         </Sections.Section>
@@ -271,7 +297,9 @@ export default function DebugInfo() {
             expandContent={
               storedValues && (
                 <View>
-                  {storedValues.map(([key, value]) => mapEntry(key, value))}
+                  {storedValues.map(([key, value]) => (
+                    <MapEntry title={key} value={value} />
+                  ))}
                 </View>
               )
             }
@@ -292,7 +320,10 @@ export default function DebugInfo() {
                     <TouchableOpacity
                       onPress={() => setPreference({[key]: undefined})}
                     >
-                      {mapEntry(key, preferences[key as keyof UserPreferences])}
+                      <MapEntry
+                        title={key}
+                        value={preferences[key as keyof UserPreferences]}
+                      />
                     </TouchableOpacity>
                   ))}
                 </View>
@@ -382,7 +413,7 @@ export default function DebugInfo() {
   );
 }
 
-function mapValue(value: any) {
+function MapValue({value}: {value: any}) {
   if (value === undefined) {
     return <ThemeText>undefined</ThemeText>;
   }
@@ -402,15 +433,17 @@ function mapValue(value: any) {
       );
     case 'object':
       const entries = Object.entries(value);
-      if (entries.length) {
-        return (
-          <View style={{flexDirection: 'column'}}>
-            {Object.entries(value).map(([key, value]) => mapEntry(key, value))}
-          </View>
-        );
-      } else {
-        return <ThemeText>Empty object</ThemeText>;
-      }
+      return (
+        <View style={{flexDirection: 'column'}}>
+          {entries.length ? (
+            Object.entries(value).map(([key, value]) => (
+              <MapEntry title={key} value={value} />
+            ))
+          ) : (
+            <ThemeText color="secondary">Empty object</ThemeText>
+          )}
+        </View>
+      );
     default:
       const stringified = value.toString();
       return (
@@ -421,25 +454,48 @@ function mapValue(value: any) {
   }
 }
 
-function mapEntry(key: string, value: any) {
+function MapEntry({title, value}: {title: string; value: any}) {
+  const styles = useProfileHomeStyle();
+  const isLongString =
+    !!value && typeof value === 'string' && value.length > 300;
+  const [isExpanded, setIsExpanded] = useState<boolean>(
+    isLongString ? false : true,
+  );
+
   if (!!value && typeof value === 'object') {
     return (
-      <View key={key} style={{flexDirection: 'column', marginVertical: 12}}>
-        <ThemeText type="heading__title" color="secondary">
-          {key} (object):
-        </ThemeText>
-        {mapValue(value)}
+      <View key={title} style={styles.objectEntry}>
+        <TouchableOpacity
+          style={{flexDirection: 'row'}}
+          onPress={() => setIsExpanded(!isExpanded)}
+        >
+          <ThemeText type="heading__title" color="secondary">
+            {title}
+          </ThemeText>
+          <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
+        </TouchableOpacity>
+        {isExpanded && <MapValue value={value} />}
       </View>
     );
   } else {
     return (
       <View
-        key={key}
+        key={title}
         style={{flexDirection: 'row', flexWrap: 'wrap'}}
-        testID={key === 'user_id' ? 'userId' : ''}
+        testID={title === 'user_id' ? 'userId' : ''}
       >
-        <ThemeText type="body__primary--bold">{key}: </ThemeText>
-        {mapValue(value)}
+        {isLongString ? (
+          <TouchableOpacity
+            style={{flexDirection: 'row'}}
+            onPress={() => setIsExpanded(!isExpanded)}
+          >
+            <ThemeText type="body__primary--bold">{title}: </ThemeText>
+            <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
+          </TouchableOpacity>
+        ) : (
+          <ThemeText type="body__primary--bold">{title}: </ThemeText>
+        )}
+        {isExpanded && <MapValue value={value} />}
       </View>
     );
   }
@@ -507,5 +563,12 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   remoteToken: {
     marginBottom: theme.spacings.large,
+  },
+  objectEntry: {
+    flexDirection: 'column',
+    marginVertical: 12,
+    borderLeftColor: theme.text.colors.secondary,
+    borderLeftWidth: 1,
+    paddingLeft: 4,
   },
 }));

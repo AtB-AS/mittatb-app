@@ -47,8 +47,8 @@ export default function DetailsScreen({navigation, route}: Props) {
       orderVersion: fc.version,
     });
 
-  const shouldShowValidOnTrainNotice =
-    fc &&
+  const shouldShowValidOnTrainNotice: boolean =
+    fc !== undefined &&
     isPreActivatedTravelRight(firstTravelRight) &&
     getValidityStatus(
       now,
@@ -56,9 +56,9 @@ export default function DetailsScreen({navigation, route}: Props) {
       firstTravelRight.endDateTime.toMillis(),
       fc.state,
     ) === 'valid' &&
-    firstTravelRight.tariffZoneRefs.every(
+    firstTravelRight.tariffZoneRefs?.every(
       (val: string) => val === 'ATB:TariffZone:1',
-    );
+    ) === true;
 
   return (
     <View style={styles.container}>

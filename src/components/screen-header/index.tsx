@@ -122,7 +122,7 @@ const BaseHeader = ({
       <View
         accessibilityLabel={titleA11yLabel}
         accessible={!!title}
-        importantForAccessibility={!!title ? 'yes' : 'no'}
+        importantForAccessibility={!!title ? 'yes' : 'no-hide-descendants'}
         accessibilityRole="header"
         style={[
           css.headerTitle,
@@ -135,6 +135,7 @@ const BaseHeader = ({
         ref={focusRef}
       >
         <ThemeText
+          accessible={false}
           onLayout={setLayoutFor('title')}
           type="body__primary--bold"
           color={themeColor}

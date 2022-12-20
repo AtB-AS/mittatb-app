@@ -5,7 +5,6 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -16,7 +15,7 @@ import {
   LayoutChangeEvent,
   View,
 } from 'react-native';
-import {giveFocus} from '@atb/utils/use-focus-on-load';
+import useFocusOnLoad, {giveFocus} from '@atb/utils/use-focus-on-load';
 import Backdrop from '@atb/components/bottom-sheet/Backdrop';
 import ClickableBackground from '@atb/components/bottom-sheet/ClickableBackground';
 import AnimatedBottomSheet from '@atb/components/bottom-sheet/AnimatedBottomSheet';
@@ -53,7 +52,7 @@ const BottomSheetProvider: React.FC = ({children}) => {
   >(() => () => null);
 
   const animatedOffset = useMemo(() => new Animated.Value(0), []);
-  const focusRef = useRef(null);
+  const focusRef = useFocusOnLoad();
   const [closeRef, setCloseRef] = useState<RefObject<any> | undefined>();
 
   useEffect(
@@ -84,7 +83,6 @@ const BottomSheetProvider: React.FC = ({children}) => {
     setCloseRef(closeRef);
     setBackdropEnabled(useBackdrop);
     setIsOpen(true);
-    setTimeout(() => giveFocus(focusRef), 300);
   };
 
   useEffect(() => {

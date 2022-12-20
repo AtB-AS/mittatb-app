@@ -54,6 +54,7 @@ export default function Summary({
 
   const toPaymentFunction = () => {
     navigation.navigate('Confirmation', {
+      fareProductTypeConfig,
       fromTariffZone,
       toTariffZone,
       userProfilesWithCount,
@@ -64,7 +65,7 @@ export default function Summary({
   };
 
   const transportModesText = fareProductTypeConfig.transportModes
-    .map((tm) => t(FareContractTexts.transportMode(tm)))
+    .map((tm) => t(FareContractTexts.transportMode(tm.mode)))
     .filter(Boolean)
     .join('/');
 

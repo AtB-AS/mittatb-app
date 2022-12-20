@@ -86,15 +86,19 @@ const CompactFareContractInfoTexts = (
         {timeUntilExpire}
       </ThemeText>
       {userProfilesWithCount.map((u) => (
-        <ThemeText type="body__secondary">
+        <ThemeText type="body__secondary" color="secondary">
           {userProfileCountAndName(u, omitUserProfileCount, language)}
         </ThemeText>
       ))}
       {productName && (
-        <ThemeText type="body__secondary">{productName}</ThemeText>
+        <ThemeText type="body__secondary" color="secondary">
+          {productName}
+        </ThemeText>
       )}
       {tariffZoneSummary && (
-        <ThemeText type="body__secondary">{tariffZoneSummary}</ThemeText>
+        <ThemeText type="body__secondary" color="secondary">
+          {tariffZoneSummary}
+        </ThemeText>
       )}
     </View>
   );

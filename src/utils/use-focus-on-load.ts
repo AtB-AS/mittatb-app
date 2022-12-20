@@ -12,18 +12,27 @@ import {useNavigation} from '@react-navigation/native';
  */
 export default function useFocusOnLoad(setFocusOnLoad: boolean = true) {
   const focusRef = useRef(null);
+
   useEffect(() => {
-    setTimeout(() => giveFocus(focusRef, setFocusOnLoad), 200);
+    if (!setFocusOnLoad || !focusRef.current) return;
+
+    const timeoutId = setTimeout(() => giveFocus(focusRef), 200);
+    return () => clearTimeout(timeoutId);
   }, [focusRef.current, setFocusOnLoad]);
 
   const navigation = useNavigationSafe();
-  useEffect(
-    () =>
-      navigation?.addListener('focus', () => {
-        setTimeout(() => giveFocus(focusRef, setFocusOnLoad), 200);
-      }),
-    [navigation, focusRef.current, setFocusOnLoad],
-  );
+  useEffect(() => {
+    if (!navigation || !focusRef.current || !setFocusOnLoad) return;
+
+    let timeoutId: NodeJS.Timeout | undefined = undefined;
+    const unsubscribe = navigation.addListener('focus', () => {
+      timeoutId = setTimeout(() => giveFocus(focusRef), 200);
+    });
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      unsubscribe();
+    };
+  }, [navigation, focusRef.current, setFocusOnLoad]);
 
   return focusRef;
 }
@@ -40,11 +49,8 @@ const useNavigationSafe = () => {
   }
 };
 
-export const giveFocus = (
-  focusRef: React.MutableRefObject<any>,
-  shouldFocus: boolean = true,
-) => {
-  if (shouldFocus && focusRef.current) {
+export const giveFocus = (focusRef: React.MutableRefObject<any>) => {
+  if (focusRef.current) {
     const reactTag = findNodeHandle(focusRef.current);
     if (reactTag) {
       AccessibilityInfo.setAccessibilityFocus(reactTag);
