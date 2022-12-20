@@ -66,13 +66,13 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const [travelDate, setTravelDate] = useState<string | undefined>();
 
   const {configuration: fareProductTypeConfiguration, availability} =
-    fareProductTypeConfig;
+    params.fareProductTypeConfig;
   const {
     timeSelectionMode,
     productSelectionMode,
     travellerSelectionMode,
     offerEndpoint,
-  } = params.fareProductTypeConfiguration;
+  } = fareProductTypeConfiguration;
   // TODO: Remove it when tests are not needed, in that case, use `availability` instead!
   const availabilityDummy = {
     alwaysEnableAt: [
