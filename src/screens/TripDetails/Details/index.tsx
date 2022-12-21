@@ -1,65 +1,39 @@
-import {singleTripSearch} from '@atb/api/trips_v2';
 import {TripPattern} from '@atb/api/types/trips';
 import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
 import Header from '@atb/components/screen-header';
 import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
-import usePollableResource from '@atb/utils/use-pollable-resource';
-import {useIsFocused} from '@react-navigation/native';
-import Axios, {AxiosError} from 'axios';
-import React, {useCallback, useEffect, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import React, {useState} from 'react';
+import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Trip from '../components/Trip';
 import CompactMap from '../Map/CompactMap';
 import {TripDetailsScreenProps} from '../types';
+import {useCurrentTripPatternWithUpdates} from '@atb/screens/TripDetails/Details/use-current-trip-pattern-with-updates';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export type DetailsRouteParams = {
-  tripPatterns?: TripPattern[];
+  tripPatterns: TripPattern[];
   startIndex?: number;
 };
 
 type Props = TripDetailsScreenProps<'Details'>;
 const Details: React.FC<Props> = (props) => {
   const {
-    params: {tripPatterns: initialTripPatterns, startIndex},
+    params: {tripPatterns, startIndex},
   } = props.route;
-  const {theme} = useTheme();
   const {t} = useTranslation();
-  const isFocused = useIsFocused();
   const styles = useStyle();
 
-  const [currentIndex, setCurrentIndex] = useState<number>(startIndex ?? 0);
+  const [currentIndex, setCurrentIndex] = useState(startIndex ?? 0);
 
-  const [tripPattern, setTripPattern] = useState<TripPattern | undefined>(
-    initialTripPatterns ? initialTripPatterns[currentIndex] : undefined,
-  );
-  const [updatedTripPattern, , loading, error] = useTripPattern(
+  const {tripPattern, error} = useCurrentTripPatternWithUpdates(
     currentIndex,
-    initialTripPatterns ? initialTripPatterns[currentIndex] : undefined,
-    !isFocused,
+    tripPatterns,
   );
-  const tripPatterns = initialTripPatterns ?? [updatedTripPattern];
-
-  const showActivityIndicator = (!tripPattern && !error) || loading;
-
-  useEffect(() => {
-    const initialPatternForPage = tripPatterns[currentIndex];
-    if (initialPatternForPage) {
-      setTripPattern(
-        updatedTripPattern?.compressedQuery ===
-          initialPatternForPage.compressedQuery
-          ? updatedTripPattern
-          : initialPatternForPage,
-      );
-    } else if (updatedTripPattern) {
-      setTripPattern(updatedTripPattern);
-    }
-  }, [currentIndex, updatedTripPattern]);
 
   function navigate(page: number) {
     const newIndex = page - 1;
@@ -99,14 +73,6 @@ const Details: React.FC<Props> = (props) => {
           )
         }
       >
-        {showActivityIndicator && (
-          <ActivityIndicator
-            style={styles.activityIndicator}
-            color={theme.text.colors.disabled}
-            animating={true}
-            size="large"
-          />
-        )}
         {tripPattern && (
           <View style={styles.paddedContainer} testID="tripDetailsContentView">
             {tripPatterns.length > 1 && (
@@ -126,31 +92,6 @@ const Details: React.FC<Props> = (props) => {
   );
 };
 
-function useTripPattern(
-  currentIndex: number,
-  tripPattern?: TripPattern,
-  disabled?: boolean,
-) {
-  const fetchTripPattern = useCallback(
-    async function reload(signal?: AbortSignal) {
-      const tripQuery = await singleTripSearch(
-        tripPattern?.compressedQuery ?? null,
-        {signal},
-      );
-      return tripQuery?.trip?.tripPatterns[0] ?? undefined;
-    },
-    [currentIndex],
-  );
-
-  return usePollableResource<TripPattern | undefined, AxiosError>(
-    fetchTripPattern,
-    {
-      initialValue: tripPattern,
-      pollingTimeInSeconds: 30,
-      disabled,
-    },
-  );
-}
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   header: {
     backgroundColor: theme.static.background[themeColor].background,
@@ -161,11 +102,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   paddedContainer: {
     paddingHorizontal: theme.spacings.medium,
-  },
-  activityIndicator: {
-    position: 'absolute',
-    width: '100%',
-    zIndex: 1,
   },
   scrollViewContent: {},
   pagination: {
