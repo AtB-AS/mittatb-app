@@ -15,7 +15,7 @@ const Time: React.FC<{timeValues: TimeValues; showRealtimeIcon?: boolean}> = ({
   showRealtimeIcon = true,
 }) => {
   const {t, language} = useTranslation();
-  const {themeName} = useTheme();
+  const {themeName, theme} = useTheme();
   const {aimedTime, expectedTime} = timeValues;
   const representationType = getTimeRepresentationType(timeValues);
   const scheduled = formatToClock(aimedTime, language);
@@ -25,7 +25,7 @@ const Time: React.FC<{timeValues: TimeValues; showRealtimeIcon?: boolean}> = ({
     <ThemeIcon
       svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
       size="small"
-      style={{marginRight: 4}}
+      style={{marginRight: theme.spacings.xSmall}}
     />
   );
 
