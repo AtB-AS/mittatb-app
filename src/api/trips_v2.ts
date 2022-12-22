@@ -1,6 +1,6 @@
 import client from './client';
 import {AxiosRequestConfig} from 'axios';
-import {TripsQuery} from '@atb/api/types/trips';
+import {TripPattern, TripsQuery} from '@atb/api/types/trips';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import Bugsnag from '@bugsnag/react-native';
 
@@ -40,17 +40,17 @@ export async function tripsSearch(
 }
 
 export async function singleTripSearch(
-  queryString: string | null,
+  queryString?: string,
   opts?: AxiosRequestConfig,
-): Promise<TripsQuery | null> {
+): Promise<TripPattern | undefined> {
   if (!queryString) {
-    return null;
+    return undefined;
   }
   const url = '/bff/v2/singleTrip';
   const query = {
     compressedQuery: queryString,
   };
-  return await post<TripsQuery>(url, query, opts);
+  return await post<TripPattern>(url, query, opts);
 }
 
 async function post<T>(
