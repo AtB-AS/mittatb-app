@@ -320,9 +320,12 @@ function EstimatedCallRow({
       <TripRow
         rowLabel={
           <Time
-            aimedTime={call.aimedDepartureTime}
-            expectedTime={call.expectedDepartureTime}
-            missingRealTime={!call.realtime && isStartOfServiceJourney}
+            timeValues={{
+              aimedTime: call.aimedDepartureTime,
+              expectedTime: call.expectedDepartureTime,
+              missingRealTime: !call.realtime && isStartOfServiceJourney,
+            }}
+            showRealtime={false}
           />
         }
         alignChildren={
