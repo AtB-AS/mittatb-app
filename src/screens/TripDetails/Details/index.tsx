@@ -132,9 +132,10 @@ function useTripPattern(
   disabled?: boolean,
 ) {
   const fetchTripPattern = useCallback(
-    async function reload() {
+    async function reload(signal?: AbortSignal) {
       const tripQuery = await singleTripSearch(
         tripPattern?.compressedQuery ?? null,
+        {signal},
       );
       return tripQuery?.trip?.tripPatterns[0] ?? undefined;
     },
@@ -146,7 +147,6 @@ function useTripPattern(
     {
       initialValue: tripPattern,
       pollingTimeInSeconds: 30,
-      filterError: (err) => !Axios.isCancel(err),
       disabled,
     },
   );
