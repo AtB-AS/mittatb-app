@@ -10,9 +10,9 @@ import {useTheme} from '@atb/theme';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 
-const Time: React.FC<{timeValues: TimeValues; showRealtime?: boolean}> = ({
+const Time: React.FC<{timeValues: TimeValues; showRealtimeIcon?: boolean}> = ({
   timeValues,
-  showRealtime = true,
+  showRealtimeIcon = true,
 }) => {
   const {t, language} = useTranslation();
   const {themeName} = useTheme();
@@ -26,7 +26,7 @@ const Time: React.FC<{timeValues: TimeValues; showRealtime?: boolean}> = ({
       svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
       size="small"
       style={{marginRight: 4}}
-    ></ThemeIcon>
+    />
   );
 
   switch (representationType) {
@@ -34,7 +34,7 @@ const Time: React.FC<{timeValues: TimeValues; showRealtime?: boolean}> = ({
       return (
         <View style={{flexDirection: 'column', alignItems: 'flex-end'}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            {showRealtime && realtimeIcon}
+            {showRealtimeIcon && realtimeIcon}
             <AccessibleText
               prefix={t(dictionary.travel.time.expectedPrefix)}
               testID="expTime"
@@ -60,8 +60,8 @@ const Time: React.FC<{timeValues: TimeValues; showRealtime?: boolean}> = ({
     default: {
       return (
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          {showRealtime && realtimeIcon}
-          <ThemeText testID="schTime">{scheduled}</ThemeText>
+          {showRealtimeIcon && realtimeIcon}
+          <ThemeText testID="schTime">{expected}</ThemeText>
         </View>
       );
     }

@@ -325,7 +325,7 @@ function EstimatedCallRow({
               expectedTime: call.expectedDepartureTime,
               missingRealTime: !call.realtime && isStartOfServiceJourney,
             }}
-            showRealtime={false}
+            showRealtimeIcon={false}
           />
         }
         alignChildren={
