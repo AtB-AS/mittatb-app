@@ -1,5 +1,5 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {
@@ -33,7 +33,6 @@ export default function ConfirmCode({
   doAfterLogin: () => void;
 }) {
   const {t} = useTranslation();
-  const {theme} = useTheme();
   const styles = useThemeStyles();
   const {authenticationType, confirmCode, signInWithPhoneNumber} =
     useAuthState();

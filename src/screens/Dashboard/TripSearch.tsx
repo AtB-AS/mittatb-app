@@ -69,14 +69,10 @@ const TripSearch: React.FC<RootProps> = ({
   const style = useStyle();
   const {theme} = useTheme();
   const {language, t} = useTranslation();
-  const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
+  const [updatingLocation] = useState<boolean>(false);
 
-  const {
-    status,
-    locationEnabled,
-    location,
-    requestPermission: requestGeoPermission,
-  } = useGeolocationState();
+  const {location, requestPermission: requestGeoPermission} =
+    useGeolocationState();
 
   const currentLocation = location || undefined;
 
@@ -85,7 +81,7 @@ const TripSearch: React.FC<RootProps> = ({
     option: 'now',
     date: new Date().toISOString(),
   });
-  const {tripPatterns, timeOfLastSearch, loadMore, clear, searchState, error} =
+  const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
     useTripsQuery(from, to, searchTime);
 
   const isSearching = searchState === 'searching';
@@ -398,7 +394,7 @@ function useLocations(
     ],
   );
 
-  var searchedFromLocation =
+  let searchedFromLocation =
     useLocationSearchValue<RootProps['route']>('fromLocation');
   const searchedToLocation =
     useLocationSearchValue<RootProps['route']>('toLocation');

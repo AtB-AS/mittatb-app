@@ -183,7 +183,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     setPreviousMethod(prevMethod);
   }, [previousPaymentMethod]);
 
-  async function payWithVipps(option: PaymentMethod) {
+  async function payWithVipps() {
     if (offerExpirationTime && totalPrice > 0) {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
@@ -213,7 +213,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   function selectPaymentOption(option: PaymentMethod) {
     switch (option.paymentType) {
       case PaymentType.Vipps:
-        payWithVipps(option);
+        payWithVipps();
         break;
       default:
         payWithCard(option);

@@ -4,7 +4,6 @@ import {
   FavoriteDeparture,
   Location,
   UserFavoriteDepartures,
-  UserFavorites,
 } from '@atb/favorites/types';
 import {
   DeparturesMetadata,
@@ -19,7 +18,6 @@ import {
   DepartureGroupsQuery,
 } from './departure-group';
 import {StopPlaceGroup} from './types';
-import {FavouriteAPIParam} from '../types/departures';
 
 export type DeparturesInputQuery = {
   numberOfDepartures: number; // Number of departures to fetch per quay.

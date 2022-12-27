@@ -446,7 +446,6 @@ const RadioView: React.FC<CheckedProps> = ({checked}) => {
 };
 
 const SavedCheckbox: React.FC<CheckedProps> = ({checked}) => {
-  const {theme} = useTheme();
   const styles = useStyles();
   return (
     <View

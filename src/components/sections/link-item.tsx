@@ -1,11 +1,9 @@
 import React from 'react';
 import {
   AccessibilityProps,
-  ColorValue,
   GestureResponderEvent,
   TouchableOpacity,
   View,
-  ViewStyle,
 } from 'react-native';
 import ThemeText from '@atb/components/text';
 import NavigationIcon, {

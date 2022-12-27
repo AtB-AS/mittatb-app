@@ -2,7 +2,7 @@ import React from 'react';
 import {Pin} from '../assets/svg/mono-icons/map';
 import ThemeText from '../components/text';
 import ThemeIcon from '../components/theme-icon';
-import {FavoriteDeparture, UserFavoriteDepartures} from './types';
+import {UserFavoriteDepartures} from './types';
 
 export type FavoriteIconProps = {
   favorite?: {emoji?: string};

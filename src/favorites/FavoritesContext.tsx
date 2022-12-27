@@ -1,9 +1,8 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import {places, departures, StoredType} from './storage';
+import {departures, places, StoredType} from './storage';
 import {
   FavoriteDeparture,
   FavoriteDepartureId,
-  FavoriteDepartureWithId,
   LocationFavorite,
   StoredFavoriteDeparture,
   StoredLocationFavorite,

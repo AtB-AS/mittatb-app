@@ -3,7 +3,7 @@ import * as Sections from '@atb/components/sections';
 import {ActivityIndicator, View} from 'react-native';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {SvgXml} from 'react-native-svg';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   useHasEnabledMobileToken,
@@ -11,7 +11,6 @@ import {
 } from '@atb/mobile-token/MobileTokenContext';
 import useInterval from '@atb/utils/use-interval';
 import {MessageBox} from '@atb/components/message-box';
-import ThemeText from '@atb/components/text';
 import {
   findInspectable,
   getDeviceName,

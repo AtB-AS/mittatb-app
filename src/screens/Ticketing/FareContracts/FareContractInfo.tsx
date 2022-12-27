@@ -204,7 +204,6 @@ const FareContractInfoDetails = (props: FareContractInfoDetailsProps) => {
     userProfilesWithCount,
     omitUserProfileCount,
     status,
-    preassignedFareProduct,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -266,7 +265,7 @@ export const getFareContractInfoDetails = (
     fallbackEnabled,
   );
   const fareContractState = fareContract.state;
-  var validTo = endDateTime.toMillis();
+  let validTo = endDateTime.toMillis();
   const validFrom = startDateTime.toMillis();
   const validityStatus = getValidityStatus(
     now,

@@ -1,5 +1,5 @@
-import orgSpecificTranslations from '@atb/translations/utils';
 import {translation as _} from '../../commons';
+
 const LoginTexts = {
   logInOptions: {
     title: _('Logg inn', 'Log in'),

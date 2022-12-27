@@ -50,7 +50,7 @@ const getFavoriteIcon = (existingFavorite?: StoredType<FavoriteDeparture>) => {
   }
 };
 
-const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   favoriteButton: {
     paddingLeft: theme.spacings.medium,
   },

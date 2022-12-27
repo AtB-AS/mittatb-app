@@ -1,10 +1,9 @@
 import React from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {View, TouchableOpacity} from 'react-native';
+import {StyleSheet} from '@atb/theme';
+import {TouchableOpacity, View} from 'react-native';
 import ThemeText from '../text';
 import {Opinions} from '.';
-import {useSectionItem} from '../sections/section-utils';
-import {useTranslation, FeedbackTexts} from '@atb/translations';
+import {FeedbackTexts, useTranslation} from '@atb/translations';
 import {StaticColorByType} from '@atb/theme/colors';
 
 export type GoodOrBadButtonProps = {
@@ -21,7 +20,6 @@ export const GoodOrBadButton = ({
   setSelectedOpinion,
 }: GoodOrBadButtonProps) => {
   const styles = useButtonStyle();
-  const {theme} = useTheme();
   const {t} = useTranslation();
 
   return (

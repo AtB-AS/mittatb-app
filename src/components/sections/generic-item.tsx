@@ -12,7 +12,7 @@ export default function GenericItem({
   accessibility,
   ...props
 }: GenericItemProps) {
-  const {contentContainer, topContainer} = useSectionItem(props);
+  const {topContainer} = useSectionItem(props);
   const style = useSectionStyle();
 
   return (

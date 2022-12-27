@@ -37,7 +37,7 @@ const TransportMode = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   transportationMode: {
     flexDirection: 'row',
     alignItems: 'center',

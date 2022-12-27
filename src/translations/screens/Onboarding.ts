@@ -1,5 +1,6 @@
-import {TranslatedString, translation as _} from '../commons';
+import {translation as _} from '../commons';
 import orgSpecificTranslations from '../utils';
+
 const OnboardingTexts = {
   welcome: {
     title: _('Velkommen til appen AtB', 'Welcome to the AtB app'),

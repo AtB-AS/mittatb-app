@@ -28,7 +28,7 @@ export default function Backdrop({
   );
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   backdrop: {
     backgroundColor: 'black',
     position: 'absolute',

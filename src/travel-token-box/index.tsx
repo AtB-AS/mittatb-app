@@ -27,7 +27,7 @@ export default function TravelTokenBox({
 }) {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {deviceIsInspectable, remoteTokens, isLoading, fallbackEnabled} =
+  const {deviceIsInspectable, remoteTokens, isLoading} =
     useMobileTokenContextState();
 
   if (isLoading) {

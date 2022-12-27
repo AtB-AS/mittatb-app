@@ -176,7 +176,6 @@ const Card = (props: {
 };
 
 const NoCardsInfo = () => {
-  const {theme} = useTheme();
   const style = useStyle();
   const {t} = useTranslation();
   return (
@@ -191,7 +190,6 @@ const NoCardsInfo = () => {
 };
 
 const GenericError = () => {
-  const {theme} = useTheme();
   const style = useStyle();
   const {t} = useTranslation();
   return (

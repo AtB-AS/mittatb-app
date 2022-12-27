@@ -1,5 +1,4 @@
 import storage, {StorageModelTypes} from '../storage';
-import {v4 as uuid} from 'uuid';
 import {PreferenceItem, UserPreferences} from './types';
 
 const STORAGE_KEY: StorageModelTypes = '@ATB_user_preferences';

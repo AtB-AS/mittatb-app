@@ -1,5 +1,5 @@
-import {Animated, TouchableWithoutFeedback, View} from 'react-native';
-import React, {useMemo} from 'react';
+import {TouchableWithoutFeedback, View} from 'react-native';
+import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {BottomSheetTexts, useTranslation} from '@atb/translations';
 
@@ -33,7 +33,7 @@ export default function ClickableBackground({
   );
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   clickableBackground: {
     backgroundColor: 'none',
     position: 'absolute',

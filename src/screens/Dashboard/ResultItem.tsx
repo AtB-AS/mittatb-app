@@ -1,5 +1,4 @@
 import {ArrowRight, ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
-import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {Walk} from '@atb/assets/svg/mono-icons/transportation';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 import AccessibleText, {
@@ -14,10 +13,10 @@ import TransportationIcon, {
 import {SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
 import {
-  TripSearchTexts,
   dictionary,
   Language,
   TranslateFunction,
+  TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
 import {screenReaderHidden} from '@atb/utils/accessibility';
@@ -34,10 +33,9 @@ import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import React, {useEffect, useRef, useState} from 'react';
 import {
   AccessibilityProps,
-  View,
-  TouchableOpacity,
-  LayoutChangeEvent,
   Animated,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Leg, TripPattern} from '@atb/api/types/trips';
@@ -386,20 +384,6 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
           subMode={leg.line?.transportSubmode}
           lineNumber={leg.line?.publicCode}
         />
-      </View>
-    </View>
-  );
-};
-
-const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
-  const styles = useLegStyles();
-  const lastLeg = tripPattern.legs[tripPattern.legs.length - 1];
-  if (!lastLeg) return null;
-
-  return (
-    <View style={styles.legContainer}>
-      <View style={styles.iconContainer}>
-        <ThemeIcon svg={Destination} />
       </View>
     </View>
   );
