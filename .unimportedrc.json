@@ -1,0 +1,16 @@
+{
+  "ignoreUnresolved": [
+    "@env",
+    "geojson"
+  ],
+  "ignoreUnused": [
+    "@bugsnag/source-maps",
+    "react",
+    "react-dom",
+    "react-native"
+  ],
+  "ignoreUnimported": [
+    "src/api/types/generated/**/*.ts",
+    "src/assets/svg/**/*.tsx"
+  ]
+}

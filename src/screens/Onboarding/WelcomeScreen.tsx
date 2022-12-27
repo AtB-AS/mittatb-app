@@ -14,14 +14,6 @@ export const themeColor: StaticColorByType<'background'> =
 export type WelcomeScreenProps =
   OnboardingScreenProps<'WelcomeScreenWithoutLogin'>;
 
-export const WelcomeScreenLogin = ({navigation}: WelcomeScreenProps) => {
-  const onNext = () => {
-    navigation.navigate('PhoneInputInOnboarding');
-  };
-
-  return <WelcomeScreen inLoginContext={true} onNext={onNext} />;
-};
-
 export const WelcomeScreenWithoutLogin = ({navigation}: WelcomeScreenProps) => {
   const onNext = () => {
     navigation.navigate('IntercomInfo');
