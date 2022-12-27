@@ -4,16 +4,9 @@ import {useEffect, useState} from 'react';
 import {parseBoolean} from '@atb/utils/parse-boolean';
 
 export const useTravelSearchFiltersEnabled = () => {
-  const [debugOverride, setDebugOverride] = useState<boolean>();
+  const [debugOverride] = useTravelSearchFiltersDebugOverride();
   const {enable_travel_search_filters: enabledInRemoteConfig} =
     useRemoteConfig();
-
-  useEffect(() => {
-    storage
-      .get(StorageModelKeysEnum.EnableTravelSearchFiltersDebugOverride)
-      .then(parseBoolean)
-      .then(setDebugOverride);
-  }, []);
 
   if (debugOverride !== undefined) {
     return debugOverride;
