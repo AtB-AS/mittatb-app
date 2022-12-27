@@ -42,7 +42,6 @@ const ProfileTexts = {
       heading: _('Ny funksjonalitet', 'New features'),
       departures: _('Prøv ny avganger-visning', 'Try the new departure view'),
       assistant: _('Prøv ny reisesøkmotor', 'Try the new travel search engine'),
-      frontPage: _('Prøv ny forside', 'Try the new Front Page'),
       map: _('Prøv ny kartside', 'Try the new map page'),
     },
     settings: {

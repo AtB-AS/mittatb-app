@@ -17,7 +17,7 @@ import {
 } from '@atb/mobile-token/MobileTokenContext';
 import {usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import SelectFavouritesBottomSheet from '@atb/screens/Assistant/SelectFavouritesBottomSheet';
+import SelectFavouritesBottomSheet from '@atb/screens/Dashboard/SelectFavouritesBottomSheet';
 import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
@@ -31,7 +31,6 @@ import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
 import useLocalConfig from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {IS_QA_ENV} from '@env';
-import analytics from '@react-native-firebase/analytics';
 import parsePhoneNumber from 'libphonenumber-js';
 import React from 'react';
 import {Linking, View} from 'react-native';
@@ -40,7 +39,6 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from '../types';
 import {destructiveAlert} from './utils';
 import useIsLoading from '@atb/utils/use-is-loading';
-import {useNewFrontpage} from '@atb/screens/Dashboard/use-new-frontpage';
 import {useMapPage} from '@atb/components/map/hooks/use-map-page';
 import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
 
@@ -94,8 +92,6 @@ export default function ProfileHome({navigation}: ProfileProps) {
       setPreference({newDepartures: value});
     }
   };
-
-  const shouldUseNewFrontPage = useNewFrontpage();
 
   function copyInstallId() {
     if (config?.installId) setClipboard(config.installId);
@@ -445,21 +441,6 @@ export default function ProfileHome({navigation}: ProfileProps) {
           customerProfile?.debug) && (
           <Sections.Section withPadding>
             <Sections.HeaderItem text="Developer menu" />
-            <Sections.ActionItem
-              mode="toggle"
-              text={t(ProfileTexts.sections.newFeatures.frontPage)}
-              checked={shouldUseNewFrontPage}
-              testID="newFrontpageToggle"
-              onPress={(newFrontPage) => {
-                analytics().logEvent('toggle_beta_frontPage', {
-                  toggle: newFrontPage ? 'enable' : 'disable',
-                });
-                updateMetadata({
-                  'AtB-Beta-Frontpage': newFrontPage ? 'enabled' : 'disabled',
-                });
-                setPreference({newFrontPage});
-              }}
-            />
             <Sections.LinkItem
               text={t(
                 ProfileTexts.sections.favorites.linkItems.frontpageFavourites
