@@ -1,10 +1,6 @@
 import {v4 as uuid} from 'uuid';
 import storage, {StorageModelTypes} from '../storage';
-import {
-  FavoriteDeparture,
-  FavoriteDepartureWithId,
-  LocationFavorite,
-} from './types';
+import {FavoriteDeparture, LocationFavorite} from './types';
 
 export type StoredType<T> = {
   id: string;

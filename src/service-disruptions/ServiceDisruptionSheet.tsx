@@ -4,13 +4,12 @@ import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import {
-  ServiceDisruptionsTexts,
   ScreenHeaderTexts,
+  ServiceDisruptionsTexts,
   useTranslation,
 } from '@atb/translations';
 import React, {forwardRef} from 'react';
 import {Linking, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import ThemeText from '../components/text';
 
 type Props = {

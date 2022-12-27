@@ -54,12 +54,7 @@ type InformationProps = {
   title: string;
 };
 
-const Information: React.FC<InformationProps> = ({
-  children,
-  title,
-  informations,
-  ...props
-}) => {
+const Information: React.FC<InformationProps> = ({title, informations}) => {
   const styles = useStyles();
 
   const informationElements = informations.map((item, index) => {

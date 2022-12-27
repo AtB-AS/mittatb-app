@@ -37,7 +37,7 @@ export default function MoreItem({
     </TouchableOpacity>
   );
 }
-const useItemStyles = StyleSheet.createThemeHook((theme) => ({
+const useItemStyles = StyleSheet.createThemeHook(() => ({
   center: {
     textAlign: 'center',
   },

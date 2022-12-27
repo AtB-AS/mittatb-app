@@ -103,7 +103,7 @@ const useIconButton = (
       };
     }
     case 'status-disruption': {
-      const {type, color, onPress, testID, ...accessibilityProps} = buttonProps;
+      const {type, color, onPress, ...accessibilityProps} = buttonProps;
       return {
         icon: <ThemeIcon colorType={color} svg={ServiceDisruption} />,
         onPress: onPress,
@@ -115,7 +115,7 @@ const useIconButton = (
     case 'chat':
       return chatIcon;
     case 'custom': {
-      const {type, text, color, onPress, ...accessibilityProps} = buttonProps;
+      const {text, color, onPress, ...accessibilityProps} = buttonProps;
       return {
         icon: <ThemeText color={color}>{text}</ThemeText>,
         onPress: onPress,

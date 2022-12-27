@@ -7,10 +7,9 @@ import useFontScale from '@atb/utils/use-font-scale';
 export type Brand = {
   icon: PaymentType;
   size?: number;
-  fill?: string;
 };
 
-const PaymentBrand: React.FC<Brand> = ({icon, size = 40, fill = 'black'}) => {
+const PaymentBrand: React.FC<Brand> = ({icon, size = 40}) => {
   const fontScale = useFontScale();
   const BrandLogo =
     icon == PaymentType.Vipps ? (

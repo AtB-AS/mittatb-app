@@ -1,5 +1,4 @@
 import React, {ReactNode} from 'react';
-import {ViewStyle} from 'react-native';
 import {useWindowDimensions, View} from 'react-native';
 
 export type BottomSheetContainerProps = {

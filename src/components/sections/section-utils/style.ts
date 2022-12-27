@@ -1,6 +1,6 @@
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 
-const useSectionStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+const useSectionStyle = StyleSheet.createThemeHook(() => ({
   spaceBetween: {
     flexDirection: 'row',
     alignItems: 'center',

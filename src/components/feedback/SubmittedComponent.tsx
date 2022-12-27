@@ -1,5 +1,5 @@
 import React from 'react';
-import {Linking, StyleProp, View, ViewStyle} from 'react-native';
+import {Linking, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import Button from '../button';
 import ThemeText from '@atb/components/text';
@@ -17,7 +17,6 @@ type SubmittedComponentProps = {
   opinion: Opinions;
   selectedTextAlternatives: (string | undefined)[];
   firebaseId?: string;
-  style?: StyleProp<ViewStyle>;
 };
 
 const SubmittedComponent = ({
@@ -25,7 +24,6 @@ const SubmittedComponent = ({
   opinion,
   selectedTextAlternatives,
   firebaseId,
-  style,
 }: SubmittedComponentProps) => {
   const styles = useSubmittedComponentStyles();
   const {t} = useTranslation();

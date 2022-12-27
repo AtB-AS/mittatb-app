@@ -47,7 +47,6 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useRef} from 'react';
 import {
   AccessibilityInfo,
-  AccessibilityProps,
   ScrollView,
   TouchableOpacity,
   View,
@@ -64,7 +63,6 @@ export type LineItemProps = SectionItem<{
   group: DepartureGroup;
   stop: StopPlaceInfo;
   quay: QuayInfo;
-  accessibility?: AccessibilityProps;
   searchDate: string;
   mode: QuaySectionMode;
 }>;
@@ -72,7 +70,6 @@ export default function LineItem({
   group,
   stop,
   quay,
-  accessibility,
   searchDate,
   testID,
   mode,
@@ -331,7 +328,7 @@ const addDatePrefixIfNecessary = (
   }
 };
 
-const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
+const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   transportationMode: {
     marginRight: theme.spacings.small,
   },

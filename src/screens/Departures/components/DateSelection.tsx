@@ -157,7 +157,7 @@ function formatToTwoLineDateTime(isoDate: string, language: Language) {
   );
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   dateNavigator: {
     flexDirection: 'row',
     flexGrow: 1,

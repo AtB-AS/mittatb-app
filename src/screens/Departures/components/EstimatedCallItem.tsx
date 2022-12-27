@@ -31,10 +31,9 @@ import {StopPlacesMode} from '@atb/screens/Departures/types';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {SvgProps} from 'react-native-svg';
 import {
-  getSvgForMostCriticalSituationOrNotice,
   getSituationOrNoticeA11yLabel,
+  getSvgForMostCriticalSituationOrNotice,
 } from '@atb/situations';
-import Time from '@atb/screens/TripDetails/components/Time';
 import {
   getNoticesForEstimatedCall,
   getTimeRepresentationType,

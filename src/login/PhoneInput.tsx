@@ -1,5 +1,5 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {
@@ -33,7 +33,6 @@ export default function PhoneInput({
   headerRightButton?: RightButtonProps;
 }) {
   const {t} = useTranslation();
-  const {theme} = useTheme();
   const styles = useThemeStyles();
   const {signInWithPhoneNumber} = useAuthState();
   const [phoneNumber, setPhoneNumber] = useState('');

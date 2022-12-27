@@ -23,7 +23,6 @@ type Props = {
 };
 
 const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
-  const styles = useStyles();
   const {t} = useTranslation();
   const unreadCount = useChatUnreadCount();
   const {customer_service_url, enable_intercom, customer_feedback_url} =

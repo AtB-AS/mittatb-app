@@ -1,7 +1,6 @@
 import React, {PropsWithChildren} from 'react';
-import {AccessibilityProps, View} from 'react-native';
-import {TouchableOpacity} from 'react-native';
-import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
+import {AccessibilityProps, TouchableOpacity, View} from 'react-native';
+import {SectionItem, useSectionItem} from './section-utils';
 
 export type GenericClickableItemProps = PropsWithChildren<
   SectionItem<

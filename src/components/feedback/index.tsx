@@ -283,7 +283,6 @@ export const Feedback = ({
         opinion={selectedOpinion}
         selectedTextAlternatives={selectedTextAlternatives}
         firebaseId={firebaseId}
-        style={styles.submittedComponent}
       />
     );
   }
@@ -389,10 +388,6 @@ const useFeedbackStyles = StyleSheet.createThemeHook((theme) => ({
   submittedView: {
     flex: 1,
     alignItems: 'center',
-  },
-  submittedComponent: {
-    marginBottom: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium,
   },
 }));
 

@@ -27,12 +27,6 @@ type Props = {
   allowTimeInPast?: boolean;
 };
 
-export type DateTimePickerParams = {
-  searchTime: string;
-  callerRouteName: string;
-  callerRouteParam: string;
-};
-
 const DepartureTimeSheet = forwardRef<ScrollView, Props>(
   ({close, initialTime, setSearchTime, allowTimeInPast = true}, focusRef) => {
     const styles = useStyles();
@@ -54,7 +48,6 @@ const DepartureTimeSheet = forwardRef<ScrollView, Props>(
     };
 
     const keyboardHeight = useKeyboardHeight();
-    const selectedTimeIsInPast = isInThePast(dateWithReplacedTime(date, time));
 
     return (
       <BottomSheetContainer>
