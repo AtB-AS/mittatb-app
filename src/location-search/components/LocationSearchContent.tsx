@@ -1,5 +1,5 @@
 import {useFavorites} from '@atb/favorites';
-import {useSearchHistory} from '@atb/search-history';
+import {useSearchHistory, JourneySearchHistoryEntry} from '@atb/search-history';
 import {
   LocationSearchTexts,
   TranslateFunction,
@@ -11,7 +11,6 @@ import {filterCurrentLocation, filterPreviousLocations} from '../utils';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {useGeocoder} from '@atb/geocoder';
 import {LocationSearchResultType, SelectableLocationType} from '../types';
-import {JourneySearchHistoryEntry} from '@atb/search-history/types';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {Keyboard, View} from 'react-native';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';

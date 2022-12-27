@@ -7,6 +7,8 @@ import {
   SearchHistoryEntry,
 } from './types';
 
+export type {JourneySearchHistoryEntry} from './types';
+
 type SearchHistoryContextState = {
   history: SearchHistory;
   addSearchEntry(searchEntry: SearchHistoryEntry): Promise<void>;
