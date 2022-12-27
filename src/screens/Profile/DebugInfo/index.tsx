@@ -25,6 +25,8 @@ import {
 import {useGlobalMessagesState} from '@atb/global-messages';
 import ThemeIcon from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
+import RadioSegments from '@atb/components/radio-segments';
+import {useTravelSearchFiltersDebugOverride} from '@atb/screens/Dashboard/use-travel-search-filters-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -40,6 +42,9 @@ export default function DebugInfo() {
   const [idToken, setIdToken] = useState<
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
+
+  const [travelSearchFilterOverride, setTravelSearchFilterOverride] =
+    useTravelSearchFiltersDebugOverride();
 
   useEffect(() => {
     async function run() {
@@ -164,6 +169,39 @@ export default function DebugInfo() {
               )
             }
           />
+
+          <Sections.GenericItem>
+            <ThemeText>
+              Debug override for enable travel search filter. If undefined the
+              value from Remote Config will be used. Needs reload of app after
+              change.
+            </ThemeText>
+            <RadioSegments
+              activeIndex={
+                travelSearchFilterOverride
+                  ? 0
+                  : travelSearchFilterOverride === undefined
+                  ? 1
+                  : 2
+              }
+              color="interactive_2"
+              style={{marginTop: 8}}
+              options={[
+                {
+                  text: 'True',
+                  onPress: () => setTravelSearchFilterOverride(true),
+                },
+                {
+                  text: 'Undefined',
+                  onPress: () => setTravelSearchFilterOverride(undefined),
+                },
+                {
+                  text: 'False',
+                  onPress: () => setTravelSearchFilterOverride(false),
+                },
+              ]}
+            />
+          </Sections.GenericItem>
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
