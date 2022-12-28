@@ -1,7 +1,7 @@
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ThemeText} from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {TouchableOpacity, View} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
 import vippsLogo from '@atb/assets/svg/color/icons/ticketing/VippsLogo';

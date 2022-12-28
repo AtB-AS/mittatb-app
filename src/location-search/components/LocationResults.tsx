@@ -1,7 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import LocationIcon from '@atb/components/location-icon';
+import {LocationIcon} from '@atb/components/location-icon';
 import insets from '@atb/utils/insets';
 import {LocationSearchResultType} from '../types';
 import {FavoriteIcon} from '@atb/favorites';

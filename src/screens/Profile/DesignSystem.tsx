@@ -4,12 +4,12 @@ import {Check} from '@atb/assets/svg/mono-icons/status';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import {Button, ButtonGroup} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
-import RadioSegments from '@atb/components/radio-segments';
+import {RadioSegments} from '@atb/components/radio';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import TransportationIcon from '@atb/components/transportation-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {TransportationIcon} from '@atb/components/transportation-icon';
 import {LegMode, TransportSubmode} from '@atb/sdk';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {

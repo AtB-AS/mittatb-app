@@ -9,11 +9,11 @@ import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
-import NavigationIcon from '@atb/components/theme-icon/navigation-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {NavigationIcon} from '@atb/components/theme-icon';
 import {useSectionItem, SectionItem, useSectionStyle} from './section-utils';
 import InternalLabeledItem from './internals/internal-labeled-item';
-import FixedSwitch from '../switch';
+import {FixedSwitch} from '@atb/components/switch';
 import {InteractiveColor} from '@atb/theme/colors';
 
 export type ActionModes = 'check' | 'toggle' | 'heading-expand';

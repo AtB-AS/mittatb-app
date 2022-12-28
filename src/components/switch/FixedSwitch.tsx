@@ -5,11 +5,7 @@ import {Switch, SwitchProps} from 'react-native';
 // A bug in RN borks Switch animations when Switch is used inside react navigation
 // for Android. A small delay to render and setting value through state
 // seems to mitigate the bug
-export default function FixedSwitch({
-  value,
-  onValueChange,
-  ...props
-}: SwitchProps) {
+export function FixedSwitch({value, onValueChange, ...props}: SwitchProps) {
   const [checked, setChecked] = useState(value);
 
   // Preserve outside changes

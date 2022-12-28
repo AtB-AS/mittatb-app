@@ -16,9 +16,9 @@ import {
   View,
 } from 'react-native';
 import useFocusOnLoad, {giveFocus} from '@atb/utils/use-focus-on-load';
-import Backdrop from '@atb/components/bottom-sheet/Backdrop';
-import ClickableBackground from '@atb/components/bottom-sheet/ClickableBackground';
-import AnimatedBottomSheet from '@atb/components/bottom-sheet/AnimatedBottomSheet';
+import {Backdrop} from './Backdrop';
+import {ClickableBackground} from './ClickableBackground';
+import {AnimatedBottomSheet} from './AnimatedBottomSheet';
 
 type BottomSheetContentFunction = (
   close: () => void,
@@ -42,7 +42,7 @@ const BottomSheetContext = createContext<BottomSheetState | undefined>(
   undefined,
 );
 
-const BottomSheetProvider: React.FC = ({children}) => {
+export const BottomSheetProvider: React.FC = ({children}) => {
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -158,5 +158,3 @@ export function useBottomSheet() {
   }
   return context;
 }
-
-export default BottomSheetProvider;

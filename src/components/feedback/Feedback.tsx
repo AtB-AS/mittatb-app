@@ -1,20 +1,19 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {View} from 'react-native';
-import {StyleSheet} from '@atb/theme';
-import {ThemeText} from '@atb/components/text';
-import {Button} from '@atb/components/button';
 import {FeedbackTexts, useTranslation} from '@atb/translations';
 import {
   FeedbackQuestionsViewContext,
   useFeedbackQuestion,
 } from './FeedbackContext';
-import GoodOrBadButton from './GoodOrBadButton';
-import SubmittedComponent from './SubmittedComponent';
-import {RenderQuestion} from './RenderQuestions';
+import React, {useCallback, useEffect, useState} from 'react';
+import storage from '@atb/storage';
+import {APP_ORG, APP_VERSION} from '@env';
 import firestore from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
-import {APP_ORG, APP_VERSION} from '@env';
-import storage from '@atb/storage';
+import {SubmittedComponent} from './SubmittedComponent';
+import {View} from 'react-native';
+import {RenderQuestion} from './RenderQuestions';
+import {Button} from '@atb/components/button';
+import {GoodOrBadQuestion} from './GoodOrBadQuestion';
+import {StyleSheet} from '@atb/theme';
 
 export enum Opinions {
   Good = 'GOOD',
@@ -22,48 +21,13 @@ export enum Opinions {
   NotClickedYet = 'NOTCLICKEDYET',
 }
 
-interface GoodOrBadQuestionProps {
+type VersionStats = {
+  // answered is a number so that we know at which render the user answered
+  answeredAtDisplayCount?: number;
+  displayCount: number;
+  surveyVersion: number;
+  doNotShowAgain: boolean;
   viewContext: FeedbackQuestionsViewContext;
-  setSelectedOpinion: (e: Opinions) => void;
-  selectedOpinion: Opinions;
-}
-
-const GoodOrBadQuestion = ({
-  setSelectedOpinion,
-  selectedOpinion,
-  viewContext,
-}: GoodOrBadQuestionProps) => {
-  const styles = useFeedbackStyles();
-  const {language} = useTranslation();
-  const category = useFeedbackQuestion(viewContext);
-
-  if (!category) {
-    return null;
-  }
-
-  return (
-    <>
-      <ThemeText type="heading__component" style={styles.questionText}>
-        {category.introText[language]}
-      </ThemeText>
-
-      <View style={styles.feedbackRow} accessibilityRole="radiogroup">
-        <GoodOrBadButton
-          opinion={Opinions.Good}
-          checked={selectedOpinion === Opinions.Good}
-          setSelectedOpinion={setSelectedOpinion}
-        />
-
-        <View style={styles.spacing} accessibilityRole="none" />
-
-        <GoodOrBadButton
-          opinion={Opinions.Bad}
-          checked={selectedOpinion === Opinions.Bad}
-          setSelectedOpinion={setSelectedOpinion}
-        />
-      </View>
-    </>
-  );
 };
 
 type FeedbackProps = {
@@ -76,21 +40,12 @@ type FeedbackProps = {
   avoidResetOnMetadataUpdate?: boolean;
 };
 
-type VersionStats = {
-  // answered is a number so that we know at which render the user answered
-  answeredAtDisplayCount?: number;
-  displayCount: number;
-  surveyVersion: number;
-  doNotShowAgain: boolean;
-  viewContext: FeedbackQuestionsViewContext;
-};
-
 export const Feedback = ({
   viewContext,
   metadata,
   avoidResetOnMetadataUpdate,
 }: FeedbackProps) => {
-  const styles = useFeedbackStyles();
+  const styles = useStyles();
   const {t} = useTranslation();
   const feedbackConfig = useFeedbackQuestion(viewContext);
   const [submitted, setSubmitted] = useState(false);
@@ -360,7 +315,7 @@ export const Feedback = ({
   return null;
 };
 
-const useFeedbackStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.static.background.background_1.background,
     borderRadius: theme.border.radius.regular,
@@ -390,5 +345,3 @@ const useFeedbackStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
 }));
-
-export default Feedback;

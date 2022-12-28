@@ -10,7 +10,7 @@ type OptionalNextDayLabelProps = {
   previousDepartureTime?: string;
   allSameDay: boolean;
 };
-export default function DayLabel({
+export function DayLabel({
   departureTime,
   previousDepartureTime,
 }: OptionalNextDayLabelProps) {

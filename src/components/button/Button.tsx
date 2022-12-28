@@ -12,7 +12,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';
 

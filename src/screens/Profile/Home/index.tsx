@@ -3,13 +3,13 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {useAuthState} from '@atb/auth';
 import {updateMetadata} from '@atb/chat/metadata';
-import ActivityIndicatorOverlay from '@atb/components/activity-indicator-overlay';
+import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {LoginInAppStackParams} from '@atb/login/types';
 import {
   useHasEnabledMobileToken,

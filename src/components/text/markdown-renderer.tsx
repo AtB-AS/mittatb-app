@@ -4,7 +4,7 @@ import {Linking, Text} from 'react-native';
 import {textTypeStyles} from '@atb/theme/colors';
 import Bugsnag from '@bugsnag/react-native';
 
-export default function render(markdown: string): React.ReactElement[] {
+export function renderMarkdown(markdown: string): React.ReactElement[] {
   const tree = marked.lexer(markdown, {smartypants: true});
   return tree.map(renderToken);
 }

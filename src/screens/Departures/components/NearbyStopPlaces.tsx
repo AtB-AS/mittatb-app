@@ -1,9 +1,9 @@
 import {StopPlace, NearestStopPlaceNode} from '@atb/api/types/departures';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
-import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import {SimpleDisappearingHeader} from '@atb/components/disappearing-header';
+import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LocationInput, Section} from '@atb/components/sections';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import FavoriteChips from '@atb/favorite-chips';
 import {Location} from '@atb/favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';

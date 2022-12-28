@@ -51,7 +51,7 @@ type Scrollable = {
   scrollTo(opts: {y: number}): void;
 };
 
-const SimpleDisappearingHeader: React.FC<Props> = ({
+export const SimpleDisappearingHeader: React.FC<Props> = ({
   header,
   children,
   isRefreshing = false,
@@ -187,7 +187,6 @@ const SimpleDisappearingHeader: React.FC<Props> = ({
     </>
   );
 };
-export default SimpleDisappearingHeader;
 
 const hasReachedEnd = (
   {layoutMeasurement, contentOffset, contentSize}: NativeScrollEvent,

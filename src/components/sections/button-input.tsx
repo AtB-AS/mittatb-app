@@ -1,8 +1,9 @@
 import {ThemeText} from '@atb/components/text';
-import NavigationIcon, {
+import {
+  NavigationIcon,
   isNavigationIcon,
   NavigationIconTypes,
-} from '@atb/components/theme-icon/navigation-icon';
+} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
 import insets from '@atb/utils/insets';
 import React from 'react';

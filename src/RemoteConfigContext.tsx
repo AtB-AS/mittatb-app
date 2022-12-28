@@ -4,7 +4,7 @@ import {RemoteConfig, defaultRemoteConfig, getConfig} from './remote-config';
 import Bugsnag from '@bugsnag/react-native';
 
 import {useAppState} from './AppContext';
-import {FeedbackConfiguration} from './components/feedback/FeedbackContext';
+import {FeedbackConfiguration} from '@atb/components/feedback';
 
 export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;

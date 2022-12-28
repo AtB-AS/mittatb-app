@@ -3,9 +3,9 @@ import {Platform, ScrollView, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button, ButtonGroup} from '@atb/components/button';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import FixedSwitch from '@atb/components/switch';
+import {FixedSwitch} from '@atb/components/switch';
 import {ThemeText} from '@atb/components/text';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -14,7 +14,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
-import TransportationIcon, {AnyMode} from '@atb/components/transportation-icon';
+import {TransportationIcon, AnyMode} from '@atb/components/transportation-icon';
 import {useFavorites} from '@atb/favorites';
 import useFontScale from '@atb/utils/use-font-scale';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';

@@ -9,7 +9,7 @@ import {
   useSectionStyle,
 } from '@atb/components/sections/section-utils';
 import {ThemeText} from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {isSituationValidAtDate, SituationMessageBox} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';

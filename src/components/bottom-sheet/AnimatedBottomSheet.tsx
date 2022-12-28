@@ -2,7 +2,7 @@ import {Animated, LayoutChangeEvent, useWindowDimensions} from 'react-native';
 import React, {ReactNode, useMemo} from 'react';
 import {StyleSheet} from '@atb/theme';
 
-export default function AnimatedBottomSheet({
+export function AnimatedBottomSheet({
   animatedOffset,
   children,
   onLayout,

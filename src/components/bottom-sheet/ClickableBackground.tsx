@@ -3,7 +3,7 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {BottomSheetTexts, useTranslation} from '@atb/translations';
 
-export default function ClickableBackground({
+export function ClickableBackground({
   isOpen,
   close,
   height,

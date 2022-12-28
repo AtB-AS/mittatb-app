@@ -13,7 +13,7 @@ import {useGeocoder} from '@atb/geocoder';
 import {LocationSearchResultType, SelectableLocationType} from '../types';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {Keyboard, View} from 'react-native';
-import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {TextInput} from '@atb/components/sections';
 import FavoriteChips, {ChipTypeGroup} from '@atb/favorite-chips';
 import {MessageBox} from '@atb/components/message-box';

@@ -1,6 +1,6 @@
 import {TouchableOpacity} from 'react-native';
 import insets from '@atb/utils/insets';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import SvgFavorite from '@atb/assets/svg/mono-icons/places/Favorite';

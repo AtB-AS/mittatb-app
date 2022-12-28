@@ -1,6 +1,6 @@
 import {singleTripSearch} from '@atb/api/trips_v2';
 import {TripPattern} from '@atb/api/types/trips';
-import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
+import {ContentWithDisappearingHeader} from '@atb/components/disappearing-header';
 import Header from '@atb/components/screen-header';
 import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
 import {StyleSheet, useTheme} from '@atb/theme';

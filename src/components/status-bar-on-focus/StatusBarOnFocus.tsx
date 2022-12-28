@@ -2,9 +2,7 @@ import {useIsFocused} from '@react-navigation/native';
 import React from 'react';
 import {StatusBar, StatusBarProps} from 'react-native';
 
-export default function StatusBarOnFocus(
-  props: StatusBarProps,
-): JSX.Element | null {
+export function StatusBarOnFocus(props: StatusBarProps): JSX.Element | null {
   const isFocused = useIsFocused();
   if (!isFocused) return null;
 

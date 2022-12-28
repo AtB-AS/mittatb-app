@@ -1,6 +1,6 @@
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {FullScreenFooter} from '@atb/components/screen-footer';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import {

@@ -8,10 +8,7 @@ type ScreenFooterProps = {
   avoidKeyboard?: boolean;
 };
 
-export default function FullScreenFooter({
-  children,
-  avoidKeyboard,
-}: ScreenFooterProps) {
+export function FullScreenFooter({children, avoidKeyboard}: ScreenFooterProps) {
   const styles = useStyles();
 
   return avoidKeyboard ? (

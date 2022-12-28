@@ -4,7 +4,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {ContrastColor} from '@atb-as/theme';

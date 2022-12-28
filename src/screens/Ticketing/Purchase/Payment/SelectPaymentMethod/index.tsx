@@ -21,7 +21,7 @@ import {PaymentMethod, SavedPaymentOption} from '../../types';
 import {useAuthState} from '@atb/auth';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {FullScreenFooter} from '@atb/components/screen-footer';
 import hexToRgba from 'hex-to-rgba';
 import LinearGradient from 'react-native-linear-gradient';
 import PaymentBrand from '../PaymentBrand';

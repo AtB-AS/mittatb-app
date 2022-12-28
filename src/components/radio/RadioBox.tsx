@@ -2,7 +2,7 @@ import {TouchableOpacity, View, ViewStyle} from 'react-native';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {ThemeText} from '@atb/components/text';
-import RadioIcon from '@atb/components/radio-icon/radio-icon';
+import {RadioIcon} from './RadioIcon';
 import React from 'react';
 
 type ContainerSizingType = 'compact' | 'standard' | 'spacious';
@@ -20,7 +20,7 @@ type Props = {
   style?: ViewStyle;
   testID?: string;
 };
-export default function RadioBox({
+export function RadioBox({
   title,
   description,
   a11yLabel,

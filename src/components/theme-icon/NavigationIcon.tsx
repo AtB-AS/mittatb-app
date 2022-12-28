@@ -1,5 +1,5 @@
 import React from 'react';
-import ThemeIcon from './theme-icon';
+import {ThemeIcon} from './ThemeIcon';
 import {
   ArrowLeft,
   ArrowRight,
@@ -30,7 +30,7 @@ export type NavigationIconTypes = typeof navigationTypes[number];
 type NavigationIconProps = {
   mode?: NavigationIconTypes;
 } & SvgProps;
-export default function NavigationIcon({
+export function NavigationIcon({
   mode = 'arrow-right',
   ...props
 }: NavigationIconProps) {

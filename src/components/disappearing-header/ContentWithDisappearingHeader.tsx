@@ -8,7 +8,7 @@ export type ContentWithDisappearingHeaderProps = PropsWithChildren<{
   onRefresh?(): void;
   isRefreshing?: boolean;
 }>;
-export default function ContentWithDisappearingHeader({
+export function ContentWithDisappearingHeader({
   header,
   children,
   isRefreshing = false,

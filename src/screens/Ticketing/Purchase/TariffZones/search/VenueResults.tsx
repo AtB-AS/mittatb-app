@@ -1,5 +1,5 @@
 import {screenReaderPause} from '@atb/components/text';
-import LocationIcon from '@atb/components/location-icon';
+import {LocationIcon} from '@atb/components/location-icon';
 import {ThemeText} from '@atb/components/text';
 import {SearchLocation} from '@atb/favorites/types';
 import {TariffZone} from '@atb/reference-data/types';

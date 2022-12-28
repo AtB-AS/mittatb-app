@@ -1,5 +1,5 @@
 import React from 'react';
-import {Opinions} from '.';
+import {Opinions} from './Feedback';
 import {QuestionType, AlternativeType} from './FeedbackContext';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';

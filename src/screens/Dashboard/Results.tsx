@@ -1,6 +1,6 @@
 import {ErrorType} from '@atb/api/utils';
-import DayLabel from '@atb/components/day-label';
-import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import {DayLabel} from './DayLabel';
+import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {MessageBox} from '@atb/components/message-box';
 
 import {StyleSheet} from '@atb/theme';
@@ -27,10 +27,6 @@ type Props = {
   onDetailsPressed(tripPatterns?: TripPattern[], index?: number): void;
   errorType?: ErrorType;
   searchTime: SearchTime;
-};
-
-export type ResultTabParams = {
-  [key: string]: {tripPattern: TripPattern};
 };
 
 const Results: React.FC<Props> = ({

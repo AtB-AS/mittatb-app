@@ -17,7 +17,7 @@ import React, {useEffect, useRef} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useFavoriteDepartureData} from './state';
 import * as Sections from '@atb/components/sections';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 type Props = {
   onEditFavouriteDeparture: () => void;

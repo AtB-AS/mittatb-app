@@ -33,7 +33,7 @@ export type AlternativeType = {
 
 const FeedbackQuestionsContext = createContext<FeedbackConfiguration[]>([]);
 
-const FeedbackQuestionsProvider: React.FC = ({children}) => {
+export const FeedbackQuestionsProvider: React.FC = ({children}) => {
   const [categories, setCategories] = useState<FeedbackConfiguration[]>([]);
   const {feedback_questions} = useRemoteConfig();
 
@@ -62,5 +62,3 @@ export function useFeedbackQuestion(viewContext: FeedbackQuestionsViewContext) {
   const allCategories = useFeedbackQuestionsState();
   return allCategories.find((category) => category.viewContext === viewContext);
 }
-
-export default FeedbackQuestionsProvider;

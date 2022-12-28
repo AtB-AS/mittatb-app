@@ -11,7 +11,7 @@ import {Button} from '@atb/components/button';
 import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {FullScreenFooter} from '@atb/components/screen-footer';
 import useKeyboardHeight from '@atb/utils/use-keyboard-height';
 import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
 

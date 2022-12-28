@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {TouchableOpacity, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {Opinions} from '.';
+import {Opinions} from './Feedback';
 import {FeedbackTexts, useTranslation} from '@atb/translations';
 import {StaticColorByType} from '@atb/theme/colors';
 
@@ -89,5 +89,3 @@ const useButtonStyle = StyleSheet.createThemeHook((theme) => ({
     borderColor: theme.interactive.interactive_2.outline.background,
   },
 }));
-
-export default GoodOrBadButton;

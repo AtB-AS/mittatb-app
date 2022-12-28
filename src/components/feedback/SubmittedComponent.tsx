@@ -10,7 +10,7 @@ import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {FeedbackQuestionsViewContext} from './FeedbackContext';
-import {Opinions} from '.';
+import {Opinions} from './Feedback';
 
 type SubmittedComponentProps = {
   viewContext: FeedbackQuestionsViewContext;
@@ -19,7 +19,7 @@ type SubmittedComponentProps = {
   firebaseId?: string;
 };
 
-const SubmittedComponent = ({
+export const SubmittedComponent = ({
   viewContext,
   opinion,
   selectedTextAlternatives,
@@ -100,5 +100,3 @@ const useSubmittedComponentStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.large,
   },
 }));
-
-export default SubmittedComponent;

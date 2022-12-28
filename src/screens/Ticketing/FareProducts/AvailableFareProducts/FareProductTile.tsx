@@ -2,9 +2,10 @@ import {TouchableOpacity, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
-import ThemedFareProductIllustration, {
-  FareProductIllustration,
-} from '@atb/components/ticket-illustration';
+import {
+  FareProductTypeIllustration,
+  FareProductIllustrationType,
+} from './FareProductTypeIllustration';
 import {
   FareContractTexts,
   TicketingTexts,
@@ -77,7 +78,7 @@ const FareProductTile = ({
         </View>
         {illustration && (
           <View style={styles.illustrationContainer}>
-            <ThemedFareProductIllustration name={illustration} />
+            <FareProductTypeIllustration name={illustration} />
           </View>
         )}
       </TouchableOpacity>
@@ -87,7 +88,7 @@ const FareProductTile = ({
 
 const getIllustration = (
   config: FareProductTypeConfig,
-): FareProductIllustration | undefined => {
+): FareProductIllustrationType | undefined => {
   switch (config.type) {
     case 'single':
       return 'Single';

@@ -21,7 +21,7 @@ type RadioSegmentsProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export default function RadioSegments({
+export function RadioSegments({
   color,
   activeIndex,
   options,

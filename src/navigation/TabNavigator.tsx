@@ -6,7 +6,7 @@ import {
 } from '@atb/assets/svg/mono-icons/tab-bar';
 import {MapPin} from '../assets/svg/mono-icons/map';
 import {ThemeText} from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {usePreferenceItems} from '@atb/preferences';
 import Dashboard from '@atb/screens/Dashboard';
 import DeparturesStack from '@atb/screens/Departures';

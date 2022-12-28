@@ -9,7 +9,7 @@ import {
 } from '@atb/translations';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ThemeText} from '@atb/components/text';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import React, {forwardRef} from 'react';
 import {Linking, TouchableOpacity, View} from 'react-native';
@@ -19,7 +19,7 @@ import {SituationType} from './types';
 import * as Sections from '@atb/components/sections';
 import {SituationOrNoticeIcon} from './SituationOrNoticeIcon';
 import {daysBetween, formatToLongDateTime} from '@atb/utils/date';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 import {screenReaderPause} from '@atb/components/text';
 

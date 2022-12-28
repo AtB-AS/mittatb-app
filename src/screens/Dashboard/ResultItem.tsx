@@ -6,11 +6,9 @@ import {
   screenReaderPause,
   ThemeText,
 } from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
-import TransportationIcon, {
-  CollapsedLegs,
-} from '@atb/components/transportation-icon';
-
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {TransportationIcon} from '@atb/components/transportation-icon';
+import {CollapsedLegs} from './CollapsedLegs';
 import {SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -42,7 +40,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {SearchTime} from '@atb/screens/Dashboard/journey-date-picker';
-import WarnWhenRailReplacementBus from '@atb/components/rail-replacement-bus-message';
+import {RailReplacementBusMessage} from './RailReplacementBusMessage';
 import {getNoticesForLeg} from '@atb/screens/TripDetails/utils';
 
 type ResultItemProps = {
@@ -114,7 +112,7 @@ const ResultItemHeader: React.FC<{
         </AccessibleText>
       </View>
 
-      <WarnWhenRailReplacementBus tripPattern={tripPattern} />
+      <RailReplacementBusMessage tripPattern={tripPattern} />
 
       <SituationOrNoticeIcon
         situations={flatMap(tripPattern.legs, (leg) => leg.situations)}
