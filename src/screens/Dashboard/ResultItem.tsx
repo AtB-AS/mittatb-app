@@ -1,10 +1,11 @@
 import {ArrowRight, ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Walk} from '@atb/assets/svg/mono-icons/transportation';
 import {Time} from '@atb/assets/svg/mono-icons/time';
-import AccessibleText, {
+import {
+  AccessibleText,
   screenReaderPause,
-} from '@atb/components/accessible-text';
-import ThemeText from '@atb/components/text';
+  ThemeText,
+} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import TransportationIcon, {
   CollapsedLegs,

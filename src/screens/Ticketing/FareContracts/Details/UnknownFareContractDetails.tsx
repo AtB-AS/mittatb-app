@@ -2,7 +2,7 @@ import {FareContract} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import * as Sections from '@atb/components/sections';
 import ValidityLine from '@atb/screens/Ticketing/FareContracts/ValidityLine';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import React from 'react';
 
 export function UnknownFareContractDetails({fc}: {fc: FareContract}) {

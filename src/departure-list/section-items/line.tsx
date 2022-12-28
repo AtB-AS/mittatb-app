@@ -9,7 +9,7 @@ import {
 import SvgFavorite from '@atb/assets/svg/mono-icons/places/Favorite';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
-import {screenReaderPause} from '@atb/components/accessible-text';
+import {screenReaderPause} from '@atb/components/text';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
 import {
@@ -17,7 +17,7 @@ import {
   useSectionItem,
   useSectionStyle,
 } from '@atb/components/sections/section-utils';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
 import FavoriteDialogSheet from '@atb/departure-list/section-items/FavoriteDialogSheet';

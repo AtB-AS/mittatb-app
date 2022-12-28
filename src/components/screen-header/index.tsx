@@ -12,7 +12,7 @@ import HeaderButton, {
   HeaderButtonWithoutNavigation,
   HeaderButtonWithoutNavigationProps,
 } from './HeaderButton';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {getStaticColor, StaticColor} from '@atb/theme/colors';
 import {GlobalMessageContextType, GlobalMessage} from '@atb/global-messages';

@@ -8,7 +8,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {ScrollView} from 'react-native-gesture-handler';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import Button from '@atb/components/button';
 import React, {forwardRef} from 'react';
@@ -21,7 +21,7 @@ import {SituationOrNoticeIcon} from './SituationOrNoticeIcon';
 import {daysBetween, formatToLongDateTime} from '@atb/utils/date';
 import ThemeIcon from '@atb/components/theme-icon';
 import {Time} from '@atb/assets/svg/mono-icons/time';
-import {screenReaderPause} from '@atb/components/accessible-text';
+import {screenReaderPause} from '@atb/components/text';
 
 type Props = {
   situation: SituationType;

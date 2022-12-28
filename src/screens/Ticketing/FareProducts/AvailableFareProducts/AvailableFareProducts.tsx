@@ -2,7 +2,7 @@ import {View} from 'react-native';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {productIsSellableInApp} from '@atb/reference-data/utils';
 import FareProductTile from '@atb/screens/Ticketing/FareProducts/AvailableFareProducts/FareProductTile';

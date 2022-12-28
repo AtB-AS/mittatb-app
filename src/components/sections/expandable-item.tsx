@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {AccessibilityProps, TouchableOpacity, View} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import NavigationIcon from '@atb/components/theme-icon/navigation-icon';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 

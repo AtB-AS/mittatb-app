@@ -2,13 +2,13 @@ import React from 'react';
 import {View} from 'react-native';
 import {QuayInfo} from '@atb/api/departures/types';
 import {Walk} from '@atb/assets/svg/mono-icons/transportation';
-import {screenReaderPause} from '@atb/components/accessible-text';
+import {screenReaderPause} from '@atb/components/text';
 import {
   SectionItem,
   useSectionItem,
   useSectionStyle,
 } from '@atb/components/sections/section-utils';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {isSituationValidAtDate, SituationMessageBox} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';

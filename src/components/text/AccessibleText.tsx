@@ -1,5 +1,5 @@
 import React from 'react';
-import ThemeText, {ThemeTextProps} from '@atb/components/text';
+import {ThemeText, ThemeTextProps} from './ThemeText';
 import {screenReaderPause} from './utils';
 
 type LabelProps = Omit<ThemeTextProps, 'isMarkdown'> & {
@@ -9,7 +9,7 @@ type LabelProps = Omit<ThemeTextProps, 'isMarkdown'> & {
   pause?: 'before' | 'after' | 'both' | 'none';
 };
 
-const AccessibleText = ({
+export const AccessibleText = ({
   prefix,
   suffix,
   children,
@@ -31,4 +31,3 @@ const AccessibleText = ({
     </ThemeText>
   );
 };
-export default AccessibleText;

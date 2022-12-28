@@ -9,7 +9,7 @@ import {VippsSignInErrorCode} from '@atb/auth/AuthContext';
 import {MessageBox} from '@atb/components/message-box';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {VippsLoginButton} from '@atb/components/vipps-login-button';
 import {AfterLoginParams, LoginInAppScreenProps} from '@atb/login/types';
 import storage from '@atb/storage';

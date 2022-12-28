@@ -1,5 +1,5 @@
-import {screenReaderPause} from '@atb/components/accessible-text';
-import ThemeText from '@atb/components/text';
+import {screenReaderPause} from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemedMapImage} from '@atb/theme/ThemedAssets';
 import {MapTexts, useTranslation} from '@atb/translations';

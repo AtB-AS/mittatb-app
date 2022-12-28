@@ -1,12 +1,12 @@
 import {Filter, Swap} from '@atb/assets/svg/mono-icons/actions';
 import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import {screenReaderPause} from '@atb/components/accessible-text';
+import {screenReaderPause} from '@atb/components/text';
 import Button from '@atb/components/button';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {LocationInput, Section} from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';

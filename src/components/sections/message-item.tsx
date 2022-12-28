@@ -1,7 +1,7 @@
 import React from 'react';
 import {Linking, View} from 'react-native';
 import {SectionItem, useSectionItem} from './section-utils';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Statuses} from '@atb-as/theme';
 import ThemeIcon from '@atb/components/theme-icon';

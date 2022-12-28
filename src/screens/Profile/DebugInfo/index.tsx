@@ -1,6 +1,6 @@
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import React, {useEffect, useState} from 'react';
 import {Alert, TouchableOpacity, View} from 'react-native';

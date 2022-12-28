@@ -1,5 +1,5 @@
 import React from 'react';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import {RecentFareContract} from '../use-recent-fare-contracts';

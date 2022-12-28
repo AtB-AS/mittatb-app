@@ -1,4 +1,4 @@
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
@@ -14,7 +14,7 @@ import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {secondsToDuration} from '@atb/utils/date';
 import {FareContractInfoDetailsProps} from './FareContractInfo';
 import * as Sections from '@atb/components/sections';
-import {screenReaderPause} from '@atb/components/accessible-text';
+import {screenReaderPause} from '@atb/components/text';
 import InspectionSymbol from '@atb/screens/Ticketing/FareContracts/Component/InspectionSymbol';
 
 type CompactFareContractInfoProps = FareContractInfoDetailsProps & {

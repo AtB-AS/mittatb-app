@@ -8,7 +8,7 @@ import {
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import NavigationIcon from '@atb/components/theme-icon/navigation-icon';
 import {useSectionItem, SectionItem, useSectionStyle} from './section-utils';

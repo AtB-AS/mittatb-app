@@ -1,5 +1,5 @@
 import Button from '@atb/components/button';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Reservation, PaymentType} from '@atb/ticketing';
 import {TicketingTexts, useTranslation} from '@atb/translations';

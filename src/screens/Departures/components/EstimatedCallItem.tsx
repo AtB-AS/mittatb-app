@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {

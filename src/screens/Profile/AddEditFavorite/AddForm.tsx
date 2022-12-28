@@ -8,7 +8,7 @@ import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {SearchLocation, StoredLocationFavorite} from '@atb/favorites/types';

@@ -1,5 +1,5 @@
 import {TouchableOpacity, View} from 'react-native';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
 import ThemedFareProductIllustration, {

@@ -1,5 +1,5 @@
 import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {FareContract} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';

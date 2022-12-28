@@ -2,7 +2,7 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import SvgError from '@atb/assets/svg/mono-icons/status/Error';
 import SvgInfo from '@atb/assets/svg/mono-icons/status/Info';
 import LocationIcon from '@atb/components/location-icon';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import React, {useMemo} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';

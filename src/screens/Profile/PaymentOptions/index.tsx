@@ -2,7 +2,7 @@ import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {useAuthState} from '@atb/auth';
 import {MessageBox} from '@atb/components/message-box';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import PaymentBrand from '@atb/screens/Ticketing/Purchase/Payment/PaymentBrand';
 import {
   getExpireDate,

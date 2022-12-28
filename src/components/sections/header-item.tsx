@@ -1,4 +1,4 @@
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {View} from 'react-native';
 import {SectionItem, useSectionItem} from './section-utils';

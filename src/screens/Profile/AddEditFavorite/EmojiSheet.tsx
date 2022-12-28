@@ -4,7 +4,7 @@
  * Modifications: Copyright (c) 2020 Andre 'Staltz' Medeiros
  * MIT
  */
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import emoji from 'emoji-datasource';
 import groupBy from 'lodash.groupby';

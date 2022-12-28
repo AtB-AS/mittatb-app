@@ -1,7 +1,7 @@
 import {TouchableOpacity, View, ViewStyle} from 'react-native';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import RadioIcon from '@atb/components/radio-icon/radio-icon';
 import React from 'react';
 

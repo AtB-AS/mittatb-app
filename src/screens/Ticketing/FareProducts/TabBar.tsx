@@ -1,4 +1,4 @@
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {MaterialTopTabBarProps} from '@react-navigation/material-top-tabs';
 import {Route} from '@react-navigation/native';

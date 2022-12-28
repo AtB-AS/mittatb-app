@@ -12,7 +12,7 @@ import * as Sections from '@atb/components/sections';
 import ThemeIcon from '@atb/components/theme-icon';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {ActivityIndicator, View} from 'react-native';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 
 const ChangeTokenAction = ({

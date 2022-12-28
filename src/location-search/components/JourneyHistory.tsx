@@ -4,8 +4,7 @@ import {JourneySearchHistoryEntry} from '@atb/search-history';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {screenReaderPause} from '@atb/components/accessible-text';
-import ThemeText from '../../components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {useFilteredJourneySearch} from '../utils';
 
 type JourneyHistoryProps = {

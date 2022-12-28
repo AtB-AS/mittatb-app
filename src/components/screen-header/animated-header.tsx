@@ -2,7 +2,7 @@ import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {Animated, View, ViewProps} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import HeaderButton from './HeaderButton';
 import {LeftButtonProps, RightButtonProps} from '.';
 import useFontScale from '@atb/utils/use-font-scale';

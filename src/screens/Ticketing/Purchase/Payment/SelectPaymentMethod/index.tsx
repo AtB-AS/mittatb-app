@@ -14,7 +14,7 @@ import {
 } from '@atb/translations';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {listRecurringPayments, PaymentType} from '@atb/ticketing';
 import {PaymentMethod, SavedPaymentOption} from '../../types';

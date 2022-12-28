@@ -1,4 +1,4 @@
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import React, {PropsWithChildren} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
