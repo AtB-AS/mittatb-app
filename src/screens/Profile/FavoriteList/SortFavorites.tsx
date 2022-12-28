@@ -1,5 +1,5 @@
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import FullScreenHeader from '@atb/components/screen-header/full-header';

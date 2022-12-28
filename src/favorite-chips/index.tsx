@@ -2,7 +2,7 @@ import {Add} from '@atb/assets/svg/mono-icons/actions';
 import {Pin} from '@atb/assets/svg/mono-icons/map';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/text';
-import Button, {ButtonProps} from '@atb/components/button';
+import {Button, ButtonProps} from '@atb/components/button';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {RootStackProps} from '@atb/navigation/types';
 import {StyleSheet, useTheme} from '@atb/theme';

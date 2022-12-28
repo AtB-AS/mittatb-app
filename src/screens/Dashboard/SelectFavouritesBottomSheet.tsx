@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Platform, ScrollView, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import Button, {ButtonGroup} from '@atb/components/button';
+import {Button, ButtonGroup} from '@atb/components/button';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import FixedSwitch from '@atb/components/switch';
 import {ThemeText} from '@atb/components/text';

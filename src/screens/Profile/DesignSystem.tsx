@@ -2,7 +2,7 @@ import {ContrastColor} from '@atb-as/theme';
 import {Delete, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {Check} from '@atb/assets/svg/mono-icons/status';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
-import Button, {ButtonGroup} from '@atb/components/button';
+import {Button, ButtonGroup} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import RadioSegments from '@atb/components/radio-segments';
 import FullScreenHeader from '@atb/components/screen-header/full-header';

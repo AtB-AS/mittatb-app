@@ -1,4 +1,4 @@
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {
   DateInputItem,

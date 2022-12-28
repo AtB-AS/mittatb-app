@@ -10,7 +10,7 @@ import {
 import {ScrollView} from 'react-native-gesture-handler';
 import {ThemeText} from '@atb/components/text';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import React, {forwardRef} from 'react';
 import {Linking, TouchableOpacity, View} from 'react-native';
 import {InfoLinkFragment} from '@atb/api/types/generated/fragments/shared';

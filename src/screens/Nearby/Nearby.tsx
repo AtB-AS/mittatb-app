@@ -2,7 +2,7 @@ import {ErrorType} from '@atb/api/utils';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {AccessibleText} from '@atb/components/text';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
 import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
 import {ActionItem, LocationInput, Section} from '@atb/components/sections';

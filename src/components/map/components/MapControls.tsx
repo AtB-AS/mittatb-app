@@ -4,7 +4,7 @@ import {MapTexts, useTranslation} from '@atb/translations/';
 import React from 'react';
 import {View} from 'react-native';
 import shadows from './shadows';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 
 export type Props = {
   zoomIn(): void;

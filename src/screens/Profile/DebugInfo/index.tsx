@@ -17,7 +17,7 @@ import {
 import Slider from '@react-native-community/slider';
 import {usePreferences, UserPreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {
   RemoteConfigContextState,
   useRemoteConfig,

@@ -15,7 +15,7 @@ import {StopPlacesMode} from '@atb/screens/Departures/types';
 import {MessageBox} from '@atb/components/message-box';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {dictionary, useTranslation} from '@atb/translations';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
 import ThemeIcon from '@atb/components/theme-icon';

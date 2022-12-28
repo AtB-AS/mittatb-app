@@ -1,7 +1,7 @@
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {Location} from '@atb/assets/svg/mono-icons/places';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {
   MapCameraConfig,
   MapControls,

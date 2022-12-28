@@ -1,7 +1,7 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {Language, useTranslation} from '@atb/translations';
 import {
   formatToClock,

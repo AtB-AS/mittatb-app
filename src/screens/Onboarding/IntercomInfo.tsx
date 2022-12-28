@@ -1,5 +1,5 @@
 import {Onboarding2} from '@atb/assets/svg/color/images';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';

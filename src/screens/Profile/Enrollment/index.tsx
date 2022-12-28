@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
 import {EnrollmentTexts, useTranslation} from '@atb/translations';
 import {MessageBox, MessageBoxProps} from '@atb/components/message-box';
