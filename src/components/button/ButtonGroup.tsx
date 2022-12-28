@@ -4,7 +4,7 @@ import {StyleSheet, Theme} from '@atb/theme';
 
 type ButtonGroupProps = PropsWithChildren<{}>;
 
-export default function ButtonGroup({children}: ButtonGroupProps) {
+export function ButtonGroup({children}: ButtonGroupProps) {
   const style = useGroupStyle();
   const len = React.Children.count(children) - 1;
 

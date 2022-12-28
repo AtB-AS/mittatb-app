@@ -1,5 +1,5 @@
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {MessageBox, MessageBoxProps} from '@atb/components/message-box';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';

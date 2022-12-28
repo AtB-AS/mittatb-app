@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {
   PurchaseConfirmationTexts,
   ScreenHeaderTexts,

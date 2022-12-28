@@ -11,7 +11,7 @@ import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
 import {screenReaderPause} from '@atb/components/text';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {
   SectionItem,
   useSectionItem,

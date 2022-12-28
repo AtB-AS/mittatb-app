@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
-import Button from '../button';
+import {Button} from '@atb/components/button';
 import {FeedbackTexts, useTranslation} from '@atb/translations';
 import {
   FeedbackQuestionsViewContext,

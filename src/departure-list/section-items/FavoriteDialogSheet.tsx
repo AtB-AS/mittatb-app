@@ -7,7 +7,7 @@ import {
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
-import Button, {ButtonGroup} from '@atb/components/button';
+import {Button, ButtonGroup} from '@atb/components/button';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';

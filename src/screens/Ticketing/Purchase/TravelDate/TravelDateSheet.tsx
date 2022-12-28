@@ -7,7 +7,7 @@ import {
   TravelDateTexts,
   useTranslation,
 } from '@atb/translations';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';

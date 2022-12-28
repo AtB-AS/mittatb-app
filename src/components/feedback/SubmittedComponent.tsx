@@ -1,7 +1,7 @@
 import React from 'react';
 import {Linking, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import Button from '../button';
+import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {FeedbackTexts, useTranslation} from '@atb/translations';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';

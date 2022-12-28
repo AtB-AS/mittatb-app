@@ -1,4 +1,4 @@
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import React from 'react';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';

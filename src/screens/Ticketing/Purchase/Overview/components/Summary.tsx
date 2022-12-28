@@ -1,5 +1,5 @@
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';

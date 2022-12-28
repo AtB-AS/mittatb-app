@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import * as Sections from '@atb/components/sections';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {useAuthState} from '@atb/auth';
 import {
   ConfirmationErrorCode,

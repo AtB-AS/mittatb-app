@@ -2,7 +2,7 @@ import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {Pin} from '@atb/assets/svg/mono-icons/map';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import Button, {ButtonGroup} from '@atb/components/button';
+import {Button, ButtonGroup} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import FullScreenHeader from '@atb/components/screen-header/full-header';

@@ -1,5 +1,5 @@
 import {Crash} from '@atb/assets/svg/color/images';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import ScreenHeader from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';

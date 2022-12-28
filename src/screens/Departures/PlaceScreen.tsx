@@ -1,5 +1,5 @@
 import {StopPlace, Quay} from '@atb/api/types/departures';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {SearchTime} from '@atb/screens/Departures/utils';
 import {StyleSheet} from '@atb/theme';

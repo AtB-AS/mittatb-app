@@ -1,7 +1,7 @@
 import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
 import {useAuthState} from '@atb/auth';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import {LeftButtonProps} from '@atb/components/screen-header';
 import FullScreenHeader from '@atb/components/screen-header/full-header';

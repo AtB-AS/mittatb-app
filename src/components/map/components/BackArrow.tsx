@@ -2,7 +2,7 @@ import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
 import insets from '@atb/utils/insets';
 import React from 'react';
 import {AccessibilityProps} from 'react-native';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import shadows from './shadows';
 
 const BackArrow: React.FC<{onBack(): void} & AccessibilityProps> = ({

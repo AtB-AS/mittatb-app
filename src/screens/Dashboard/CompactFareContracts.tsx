@@ -12,7 +12,7 @@ import {
   DashboardTexts,
   useTranslation,
 } from '@atb/translations';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {getFareContractInfoDetails} from '../Ticketing/FareContracts/FareContractInfo';
 import {
   useHasEnabledMobileToken,

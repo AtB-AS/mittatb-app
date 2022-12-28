@@ -3,7 +3,7 @@ import {StyleSheet} from '@atb/theme';
 import insets from '@atb/utils/insets';
 import React from 'react';
 import {AccessibilityProps} from 'react-native';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import shadows from './shadows';
 
 const PositionArrow: React.FC<{onPress(): void} & AccessibilityProps> = ({

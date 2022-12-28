@@ -1,4 +1,4 @@
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import RadioBox from '@atb/components/radio-icon/radio-box';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
