@@ -3,6 +3,7 @@ import Bugsnag from '@bugsnag/react-native';
 
 export enum StorageModelKeysEnum {
   HasReadDeparturesV2Onboarding = '@ATB_has_read_departures_v2_onboarding',
+  EnableTravelSearchFiltersDebugOverride = '@ATB_enable_travel_search_filters_debug_override',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;

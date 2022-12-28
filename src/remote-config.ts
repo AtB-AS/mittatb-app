@@ -31,6 +31,7 @@ export type RemoteConfig = {
   new_favourites_info_url: string;
   enable_departures_v2_as_default: boolean;
   enable_departures_v2_onboarding: boolean;
+  enable_travel_search_filters: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -63,6 +64,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   new_favourites_info_url: '',
   enable_departures_v2_as_default: false,
   enable_departures_v2_onboarding: false,
+  enable_travel_search_filters: false,
 };
 
 export function getConfig(): RemoteConfig {
@@ -148,6 +150,10 @@ export function getConfig(): RemoteConfig {
     values['enable_departures_v2_onboarding']?.asBoolean() ??
     defaultRemoteConfig.enable_departures_v2_onboarding;
 
+  const enable_travel_search_filters =
+    values['enable_travel_search_filters']?.asBoolean() ??
+    defaultRemoteConfig.enable_travel_search_filters;
+
   return {
     enable_network_logging,
     enable_ticketing,
@@ -178,6 +184,7 @@ export function getConfig(): RemoteConfig {
     new_favourites_info_url,
     enable_departures_v2_as_default,
     enable_departures_v2_onboarding,
+    enable_travel_search_filters,
   };
 }
 
