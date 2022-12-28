@@ -35,7 +35,8 @@ const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
         <View style={styles.container}>
           <View style={styles.buttonLeft}>
             <Button
-              type="compact"
+              type="inline"
+              compact={true}
               mode="tertiary"
               disabled={!hasPrevious}
               leftIcon={{svg: ArrowLeft}}
@@ -58,7 +59,8 @@ const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
           </ThemeText>
           <View style={styles.buttonRight}>
             <Button
-              type="compact"
+              type="inline"
+              compact={true}
               mode="tertiary"
               disabled={!hasNext}
               rightIcon={{svg: ArrowRight}}

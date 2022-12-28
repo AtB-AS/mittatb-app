@@ -39,11 +39,8 @@ const DefaultModeStyles: {[key in ButtonMode]: ButtonSettings} = {
 };
 
 type ButtonTypeAwareProps =
-  | {text?: string; type: 'inline' | 'compact'}
-  | {
-      text: string;
-      type?: 'block';
-    };
+  | {text?: string; type: 'inline'}
+  | {text: string; type?: 'block'};
 
 type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
@@ -60,6 +57,7 @@ export type ButtonProps = {
   leftIcon?: ButtonIconProps;
   rightIcon?: ButtonIconProps;
   active?: boolean;
+  compact?: boolean;
 } & ButtonTypeAwareProps &
   TouchableOpacityProps;
 
@@ -77,6 +75,7 @@ const Button = React.forwardRef<any, ButtonProps>(
       text,
       disabled,
       active,
+      compact = false,
       style,
       viewContainerStyle,
       textContainerStyle,
@@ -102,10 +101,9 @@ const Button = React.forwardRef<any, ButtonProps>(
       }).start();
     }, [disabled, fadeAnim]);
 
-    const isInline = type === 'compact' || type === 'inline';
+    const isInline = type === 'inline';
 
-    const spacing =
-      type === 'compact' ? theme.spacings.small : theme.spacings.medium;
+    const spacing = compact ? theme.spacings.small : theme.spacings.medium;
 
     const {background: backgroundColor, text: textColor} = themeColor
       ? theme.interactive[themeColor][active ? 'active' : 'default']

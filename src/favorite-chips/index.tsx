@@ -135,7 +135,8 @@ const FavoriteChip: React.FC<ButtonProps> = (props) => {
       style={{
         marginRight: theme.spacings.small,
       }}
-      type="compact"
+      type="inline"
+      compact={true}
     />
   );
 };

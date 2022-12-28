@@ -279,7 +279,8 @@ function DepartureTimeItem({
   return (
     <Button
       key={departure.serviceJourneyId}
-      type="compact"
+      type="inline"
+      compact={true}
       interactiveColor="interactive_2"
       onPress={() => onPress(departure)}
       text={formatTimeText(departure, searchDate, language, t)}
