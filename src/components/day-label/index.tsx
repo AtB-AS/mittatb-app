@@ -1,5 +1,5 @@
 import {StyleSheet} from '@atb/theme';
-import {AssistantTexts, useTranslation} from '@atb/translations';
+import {TripSearchTexts, useTranslation} from '@atb/translations';
 import {daysBetween, formatToSimpleDate, isSameDay} from '@atb/utils/date';
 import {parseISO} from 'date-fns';
 import React from 'react';
@@ -29,14 +29,14 @@ export default function DayLabel({
   let dateLabel = dateString;
 
   if (numberOfDays === 0) {
-    dateLabel = t(AssistantTexts.results.dayHeader.today());
+    dateLabel = t(TripSearchTexts.results.dayHeader.today());
   }
   if (numberOfDays == 1) {
-    dateLabel = t(AssistantTexts.results.dayHeader.tomorrow(dateString));
+    dateLabel = t(TripSearchTexts.results.dayHeader.tomorrow(dateString));
   }
   if (numberOfDays == 2) {
     dateLabel = t(
-      AssistantTexts.results.dayHeader.dayAfterTomorrow(dateString),
+      TripSearchTexts.results.dayHeader.dayAfterTomorrow(dateString),
     );
   }
 
