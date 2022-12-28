@@ -1,6 +1,7 @@
 import {
   addHours,
   differenceInCalendarDays,
+  differenceInCalendarYears,
   differenceInMinutes,
   differenceInSeconds,
   format,
@@ -10,6 +11,7 @@ import {
   isBefore as fnsIsBefore,
   isPast,
   isSameDay,
+  isSameYear,
   isToday,
   isWithinInterval,
   Locale,
@@ -195,7 +197,10 @@ export function formatToLongDateTime(
   if (isSameDay(parsed, new Date())) {
     return formatToClock(parsed, language);
   }
-  return format(parsed, 'PPp', {locale: languageToLocale(language)});
+  if (isSameYear(parsed, new Date())) {
+    return formatToShortDateTimeWithoutYear(parsed, language);
+  }
+  return fullDateTime(parsed, language);
 }
 
 export function formatToShortDateTimeWithoutYear(
