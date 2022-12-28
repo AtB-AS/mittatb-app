@@ -4,7 +4,7 @@ import {
   useSectionItem,
   useSectionStyle,
 } from '@atb/components/sections/section-utils';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';

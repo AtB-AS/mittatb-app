@@ -1,6 +1,6 @@
 import {Onboarding1} from '@atb/assets/svg/color/images/';
 import Button from '@atb/components/button';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {OnboardingTexts, useTranslation} from '@atb/translations';

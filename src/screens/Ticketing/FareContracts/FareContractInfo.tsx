@@ -1,4 +1,4 @@
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {
   PreassignedFareProduct,
   PreassignedFareProductType,
@@ -36,7 +36,7 @@ import {
   userProfileCountAndName,
   getValidityStatus,
 } from '@atb/screens/Ticketing/FareContracts/utils';
-import {screenReaderPause} from '@atb/components/accessible-text';
+import {screenReaderPause} from '@atb/components/text';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import FareContractDetail from '@atb/screens/Ticketing/FareContracts/Component/FareContractDetail';

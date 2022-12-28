@@ -2,7 +2,7 @@ import {EstimatedCall, Quay, StopPlace} from '@atb/api/types/departures';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import * as Sections from '@atb/components/sections';
 import SectionSeparator from '@atb/components/sections/section-separator';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';

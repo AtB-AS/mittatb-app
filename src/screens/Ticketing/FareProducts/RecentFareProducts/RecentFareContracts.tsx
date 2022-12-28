@@ -1,4 +1,4 @@
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {productIsSellableInApp} from '@atb/reference-data/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {TicketingTexts, useTranslation} from '@atb/translations';

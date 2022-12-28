@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {TouchableOpacity, View} from 'react-native';
-import ThemeText from '../text';
+import {ThemeText} from '@atb/components/text';
 import {Opinions} from '.';
 import {FeedbackTexts, useTranslation} from '@atb/translations';
 import {StaticColorByType} from '@atb/theme/colors';

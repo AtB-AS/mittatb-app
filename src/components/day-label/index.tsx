@@ -3,7 +3,7 @@ import {TripSearchTexts, useTranslation} from '@atb/translations';
 import {daysBetween, formatToSimpleDate, isSameDay} from '@atb/utils/date';
 import {parseISO} from 'date-fns';
 import React from 'react';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 
 type OptionalNextDayLabelProps = {
   departureTime: string;

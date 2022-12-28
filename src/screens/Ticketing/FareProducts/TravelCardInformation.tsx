@@ -1,4 +1,4 @@
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {flatStaticColors, StaticColor} from '@atb/theme/colors';
 import {TravelCard} from '@atb/ticketing';

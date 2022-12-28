@@ -1,4 +1,4 @@
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {InteractiveColor} from '@atb/theme/colors';
 import React, {useRef} from 'react';

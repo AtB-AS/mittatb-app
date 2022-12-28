@@ -1,6 +1,6 @@
 import {TicketSplash} from '@atb/assets/svg/color/images';
 import Header from '@atb/components/screen-header';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {StaticColor} from '@atb/theme/colors';
 import {TicketingSplashTexts, useTranslation} from '@atb/translations';

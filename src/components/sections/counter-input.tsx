@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 import insets from '@atb/utils/insets';
 import ThemeIcon from '@atb/components/theme-icon';

@@ -6,7 +6,7 @@ import {
   filterValidRightNowFareContract,
   useTicketingState,
 } from '@atb/ticketing';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {
   TicketingTexts,
   DashboardTexts,

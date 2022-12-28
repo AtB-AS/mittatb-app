@@ -9,8 +9,8 @@ import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {FavoriteIcon} from '@atb/favorites';
 import {StoredLocationFavorite} from '@atb/favorites/types';
 import {StyleSheet} from '@atb/theme';
-import {screenReaderPause} from '@atb/components/accessible-text';
-import ThemeText from '@atb/components/text';
+import {screenReaderPause} from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 

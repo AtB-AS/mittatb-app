@@ -1,7 +1,7 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {ActivityIndicator, View} from 'react-native';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import ThemeIcon from '@atb/components/theme-icon';

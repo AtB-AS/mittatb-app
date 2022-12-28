@@ -3,7 +3,7 @@ import {StopPlaceInfo} from '@atb/api/departures/types';
 import {NoFavouriteDeparture} from '@atb/assets/svg/color/images/';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import QuaySection from '@atb/departure-list/section-items/quay-section';
 import {useFavorites} from '@atb/favorites';
 import {useGeolocationState} from '@atb/GeolocationContext';

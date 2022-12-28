@@ -4,7 +4,7 @@ import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import insets from '@atb/utils/insets';
 import {useNavigation} from '@react-navigation/native';
 import {AccessibilityProps, TouchableOpacity} from 'react-native';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {StaticColor, TextColor} from '@atb/theme/colors';
 import ServiceDisruption from '@atb/assets/svg/mono-icons/status/ServiceDisruption';

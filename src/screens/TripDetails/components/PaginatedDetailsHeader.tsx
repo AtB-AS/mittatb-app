@@ -5,7 +5,7 @@ import {fullDateTime} from '@atb/utils/date';
 import React from 'react';
 import {View, ViewProps} from 'react-native';
 import Button from '@atb/components/button';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 
 type PaginatedDetailsHeader = ViewProps & {
   page: number;

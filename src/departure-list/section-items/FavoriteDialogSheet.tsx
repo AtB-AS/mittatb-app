@@ -5,7 +5,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {View} from 'react-native';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import Button, {ButtonGroup} from '@atb/components/button';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';

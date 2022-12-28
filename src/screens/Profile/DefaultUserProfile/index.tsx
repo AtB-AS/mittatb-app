@@ -6,7 +6,7 @@ import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {UserProfile} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {View} from 'react-native';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';

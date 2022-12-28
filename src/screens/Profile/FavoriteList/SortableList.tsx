@@ -1,11 +1,11 @@
 import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
-import {screenReaderPause} from '@atb/components/accessible-text';
+import {screenReaderPause} from '@atb/components/text';
 import {
   SectionItem,
   useSectionItem,
   useSectionStyle,
 } from '@atb/components/sections/section-utils';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {FavoriteIcon} from '@atb/favorites';
 import {LocationFavorite, UserFavorites} from '@atb/favorites/types';

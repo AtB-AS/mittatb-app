@@ -10,7 +10,7 @@ import {
 } from '@atb/translations';
 import React, {forwardRef} from 'react';
 import {Linking, View} from 'react-native';
-import ThemeText from '../components/text';
+import {ThemeText} from '@atb/components/text';
 
 type Props = {
   close: () => void;

@@ -1,6 +1,6 @@
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
 

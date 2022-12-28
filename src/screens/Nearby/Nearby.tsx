@@ -1,6 +1,6 @@
 import {ErrorType} from '@atb/api/utils';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import AccessibleText from '@atb/components/accessible-text';
+import {AccessibleText} from '@atb/components/text';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import Button from '@atb/components/button';
 import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';

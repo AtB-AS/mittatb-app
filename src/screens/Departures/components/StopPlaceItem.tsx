@@ -2,7 +2,7 @@ import ThemeIcon from '@atb/components/theme-icon';
 import {useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import * as Sections from '@atb/components/sections';
 import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';

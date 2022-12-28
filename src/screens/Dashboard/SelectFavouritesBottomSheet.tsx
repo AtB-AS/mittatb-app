@@ -4,7 +4,7 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import Button, {ButtonGroup} from '@atb/components/button';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import FixedSwitch from '@atb/components/switch';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import FullScreenFooter from '@atb/components/screen-footer/full-footer';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';

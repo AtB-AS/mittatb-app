@@ -7,7 +7,7 @@ import {MessageBox} from '@atb/components/message-box';
 import RadioSegments from '@atb/components/radio-segments';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import TransportationIcon from '@atb/components/transportation-icon';
 import {LegMode, TransportSubmode} from '@atb/sdk';

@@ -5,7 +5,7 @@ import {
   Ticketing,
 } from '@atb/assets/svg/mono-icons/tab-bar';
 import {MapPin} from '../assets/svg/mono-icons/map';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon/theme-icon';
 import {usePreferenceItems} from '@atb/preferences';
 import Dashboard from '@atb/screens/Dashboard';

@@ -11,7 +11,7 @@ import {
 import * as Sections from '@atb/components/sections';
 import Button from '@atb/components/button';
 import {useAuthState} from '@atb/auth';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {PhoneSignInErrorCode} from '@atb/auth/AuthContext';
 import {MessageBox} from '@atb/components/message-box';
 import {useNavigation} from '@react-navigation/native';

@@ -2,7 +2,7 @@ import React from 'react';
 import {AccessibilityProps, ActivityIndicator} from 'react-native';
 import {Location} from '@atb/favorites/types';
 import {useTheme} from '@atb/theme';
-import {screenReaderPause} from '@atb/components/accessible-text';
+import {screenReaderPause} from '@atb/components/text';
 import ButtonInput, {ButtonInputProps} from './button-input';
 import {SectionTexts} from '@atb/translations';
 import {useTranslation} from '@atb/translations';

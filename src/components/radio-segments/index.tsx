@@ -2,7 +2,7 @@ import React from 'react';
 import {InteractiveColor} from '@atb/theme/colors';
 import {View, ViewStyle, StyleProp, TouchableOpacity} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
-import ThemeText from '../text';
+import {ThemeText} from '@atb/components/text';
 
 export type SegmentOptions = {
   onPress: () => void;

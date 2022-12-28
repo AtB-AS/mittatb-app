@@ -2,7 +2,7 @@ import {Support} from '@atb/assets/svg/mono-icons/actions';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {Receipt} from '@atb/assets/svg/mono-icons/ticketing';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import ThemeIcon from '@atb/components/theme-icon';
 import {RootStackScreenProps} from '@atb/navigation/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
