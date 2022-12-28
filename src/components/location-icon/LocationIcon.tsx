@@ -4,10 +4,10 @@ import * as TransportationIcons from '@atb/assets/svg/mono-icons/transportation'
 import * as EnturTransportationIcons from '@atb/assets/svg/mono-icons/transportation-entur';
 import {Location} from '@atb/favorites/types';
 import React from 'react';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {getVenueIconTypes} from '@atb/location-search';
 
-const LocationIcon = ({
+export const LocationIcon = ({
   location,
   multiple,
 }: {
@@ -90,5 +90,3 @@ const mapTypeToIconComponent = (iconType: VenueIconType) => {
 };
 
 type VenueIconType = 'bus' | 'tram' | 'rail' | 'airport' | 'boat' | 'unknown';
-
-export default LocationIcon;

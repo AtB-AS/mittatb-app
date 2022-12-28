@@ -1,4 +1,4 @@
-import FixedSwitch from '@atb/components/switch';
+import {FixedSwitch} from '@atb/components/switch';
 import {ThemeText} from '@atb/components/text';
 import {usePreferences} from '@atb/preferences';
 import useFontScale from '@atb/utils/use-font-scale';

@@ -10,7 +10,7 @@ import {StoredFavoriteDeparture} from '@atb/favorites/types';
 import {useTheme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import TransportationIcon from '@atb/components/transportation-icon';
+import {TransportationIcon} from '@atb/components/transportation-icon';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 import {StyleSheet, Theme} from '@atb/theme';
 

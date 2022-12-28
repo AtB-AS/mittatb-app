@@ -3,7 +3,7 @@ import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {Receipt} from '@atb/assets/svg/mono-icons/ticketing';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {ThemeText} from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {RootStackScreenProps} from '@atb/navigation/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Actions from '@atb/screens/AnonymousPurchase/components/Actions';

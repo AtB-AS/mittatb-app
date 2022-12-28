@@ -1,7 +1,7 @@
 import React from 'react';
 import {Pin} from '../assets/svg/mono-icons/map';
 import {ThemeText} from '@atb/components/text';
-import ThemeIcon from '../components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {UserFavoriteDepartures} from './types';
 
 export type FavoriteIconProps = {

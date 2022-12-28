@@ -1,5 +1,5 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
-import Feedback from '@atb/components/feedback';
+import {Feedback} from '@atb/components/feedback';
 import {StyleSheet} from '@atb/theme';
 import {secondsBetween} from '@atb/utils/date';
 import {AxiosError} from 'axios';

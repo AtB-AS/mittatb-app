@@ -18,8 +18,8 @@ import {
   useSectionStyle,
 } from '@atb/components/sections/section-utils';
 import {ThemeText} from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
-import TransportationIcon from '@atb/components/transportation-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {TransportationIcon} from '@atb/components/transportation-icon';
 import FavoriteDialogSheet from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import {useFavorites} from '@atb/favorites';
 import {StoredType} from '@atb/favorites/storage';

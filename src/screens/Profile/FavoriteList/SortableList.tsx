@@ -6,7 +6,7 @@ import {
   useSectionStyle,
 } from '@atb/components/sections/section-utils';
 import {ThemeText} from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {FavoriteIcon} from '@atb/favorites';
 import {LocationFavorite, UserFavorites} from '@atb/favorites/types';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';

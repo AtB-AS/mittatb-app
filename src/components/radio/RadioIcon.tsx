@@ -13,7 +13,7 @@ type CheckedProps = {
   color?: TextColor | StaticColor;
 };
 
-export default function RadioIcon({checked, color = 'primary'}: CheckedProps) {
+export function RadioIcon({checked, color = 'primary'}: CheckedProps) {
   const styles = useStyles();
   const {theme, themeName} = useTheme();
 

@@ -11,7 +11,7 @@ import {View} from 'react-native';
 import {timeIsShort} from '../Details/utils';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 export type WaitDetails = {
   mustWaitForNextLeg: boolean;

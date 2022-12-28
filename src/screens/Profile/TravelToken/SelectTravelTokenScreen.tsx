@@ -1,6 +1,6 @@
 import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
-import RadioBox from '@atb/components/radio-icon/radio-box';
+import {RadioBox} from '@atb/components/radio';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import * as Sections from '@atb/components/sections';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';

@@ -19,7 +19,7 @@ type ThemeIconProps = {
   size?: keyof Theme['icon']['size'];
 } & SvgProps;
 
-const ThemeIcon = ({
+export const ThemeIcon = ({
   svg,
   colorType,
   size = 'normal',
@@ -41,7 +41,6 @@ const ThemeIcon = ({
   };
   return svg(settings);
 };
-export default ThemeIcon;
 
 function getFill(theme: Theme, themeType: Mode, colorType?: IconColor): string {
   if (isStatusColor(colorType)) {

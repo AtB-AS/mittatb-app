@@ -1,14 +1,5 @@
-import React, {useEffect} from 'react';
+import {useEffect} from 'react';
 import {AccessibilityInfo} from 'react-native';
-type AnnouncementProps = {
-  message?: string;
-};
-const ScreenReaderAnnouncement: React.FC<AnnouncementProps> = ({
-  message,
-}: AnnouncementProps) => {
-  useScreenReaderAnnouncement(message);
-  return null;
-};
 
 export const useScreenReaderAnnouncement = (
   message?: string,
@@ -23,5 +14,3 @@ export const useScreenReaderAnnouncement = (
     }
   }, [message, enabled]);
 };
-
-export default ScreenReaderAnnouncement;

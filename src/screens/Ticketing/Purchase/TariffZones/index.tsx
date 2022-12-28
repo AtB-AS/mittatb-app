@@ -11,7 +11,7 @@ import {
 } from '@atb/components/map';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {ButtonInput, Section} from '@atb/components/sections';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {TariffZone} from '@atb/reference-data/types';

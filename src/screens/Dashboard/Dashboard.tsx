@@ -4,7 +4,7 @@ import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/text';
 import FullScreenHeader from '@atb/components/screen-header/full-header';
 import {LocationInput, Section} from '@atb/components/sections';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import FavoriteChips from '@atb/favorite-chips';
 import {useFavorites} from '@atb/favorites';
 import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';

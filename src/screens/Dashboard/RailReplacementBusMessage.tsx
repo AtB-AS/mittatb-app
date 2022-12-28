@@ -5,9 +5,9 @@ import {useTranslation} from '@atb/translations';
 import RailReplacementBusTexts from '@atb/translations/components/RailReplacementBusMessage';
 import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import React from 'react';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
-const WarnWhenRailReplacementBus: React.FC<{
+export const RailReplacementBusMessage: React.FC<{
   tripPattern: TripPattern;
 }> = ({tripPattern}) => {
   const {t} = useTranslation();
@@ -24,5 +24,3 @@ const WarnWhenRailReplacementBus: React.FC<{
     />
   ) : null;
 };
-
-export default WarnWhenRailReplacementBus;

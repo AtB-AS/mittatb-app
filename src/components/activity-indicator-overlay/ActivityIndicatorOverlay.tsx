@@ -2,7 +2,7 @@ import React from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 
-const ActivityIndicatorOverlay = () => {
+export const ActivityIndicatorOverlay = () => {
   const style = useStyles();
   return (
     <View style={style.spinner}>
@@ -24,5 +24,3 @@ const useStyles = StyleSheet.createThemeHook(() => ({
     opacity: 0.4,
   },
 }));
-
-export default ActivityIndicatorOverlay;

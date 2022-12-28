@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {Statuses, StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';

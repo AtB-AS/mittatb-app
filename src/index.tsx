@@ -22,12 +22,12 @@ configureAndStartBugsnag();
 
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import AppLanguageProvider from './translations/LanguageContext';
+import AppLanguageProvider from '@atb/translations/LanguageContext';
 import {BottomSheetProvider} from '@atb/components/bottom-sheet';
 import LocaleContextProvider from '@atb/LocaleProvider';
 import {setupConfig} from './setup';
 import {MobileTokenContextProvider} from '@atb/mobile-token';
-import FeedbackQuestionsProvider from './components/feedback/FeedbackContext';
+import {FeedbackQuestionsProvider} from '@atb/components/feedback';
 import {FirestoreConfigurationContextProvider} from '@atb/configuration/FirestoreConfigurationContext';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Platform, UIManager} from 'react-native';

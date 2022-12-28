@@ -9,7 +9,7 @@ import Warning from '@atb/assets/svg/color/icons/status/Warning';
 import Info from '@atb/assets/svg/color/icons/status/Info';
 import Error from '@atb/assets/svg/color/icons/status/Error';
 import * as Sections from '@atb/components/sections';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';

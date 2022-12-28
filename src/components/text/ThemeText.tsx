@@ -1,7 +1,7 @@
 import React from 'react';
 import {useTheme} from '@atb/theme';
 import {Platform, Text, TextProps, TextStyle} from 'react-native';
-import renderMarkdown from './markdown-renderer';
+import {renderMarkdown} from './markdown-renderer';
 import {MAX_FONT_SCALE} from './utils';
 import {
   getStaticColor,

@@ -23,9 +23,9 @@ import {
   useRemoteConfig,
 } from '@atb/RemoteConfigContext';
 import {useGlobalMessagesState} from '@atb/global-messages';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
-import RadioSegments from '@atb/components/radio-segments';
+import {RadioSegments} from '@atb/components/radio';
 import {useTravelSearchFiltersDebugOverride} from '@atb/screens/Dashboard/use-travel-search-filters-enabled';
 
 function setClipboard(content: string) {

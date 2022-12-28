@@ -3,10 +3,10 @@ import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {AccessibleText} from '@atb/components/text';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
-import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
-import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import {SimpleDisappearingHeader} from '@atb/components/disappearing-header';
+import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {ActionItem, LocationInput, Section} from '@atb/components/sections';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import DeparturesList from '@atb/departure-list/DeparturesList';
 import {GeoLocation, Location} from '@atb/favorites/types';
 import {

@@ -1,4 +1,4 @@
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';

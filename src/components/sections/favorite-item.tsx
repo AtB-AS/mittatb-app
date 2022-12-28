@@ -11,7 +11,7 @@ import {StoredLocationFavorite} from '@atb/favorites/types';
 import {StyleSheet} from '@atb/theme';
 import {screenReaderPause} from '@atb/components/text';
 import {ThemeText} from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 
 type BaseProps = {

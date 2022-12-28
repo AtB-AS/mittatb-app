@@ -1,0 +1,1 @@
+export {FixedSwitch} from './FixedSwitch';

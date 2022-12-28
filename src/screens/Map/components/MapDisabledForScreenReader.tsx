@@ -6,7 +6,7 @@ import {MapTexts, useTranslation} from '@atb/translations';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import StatusBarOnFocus from '@atb/components/status-bar-on-focus';
+import {StatusBarOnFocus} from '@atb/components/status-bar-on-focus';
 
 export function MapDisabledForScreenReader() {
   const styles = useStyles();

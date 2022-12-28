@@ -6,10 +6,11 @@ import {
   View,
 } from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import NavigationIcon, {
+import {
+  NavigationIcon,
   isNavigationIcon,
   NavigationIconTypes,
-} from '@atb/components/theme-icon/navigation-icon';
+} from '@atb/components/theme-icon';
 import {SectionItem, useSectionItem, useSectionStyle} from './section-utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {InteractiveColor, TextNames} from '@atb/theme/colors';
