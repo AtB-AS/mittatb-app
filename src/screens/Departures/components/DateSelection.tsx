@@ -108,7 +108,8 @@ export default function DateSelection({
           ),
         )}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yChangeDateHint)}
-        type="compact"
+        type="inline"
+        compact={true}
         mode="tertiary"
         rightIcon={{svg: DateIcon}}
         textStyle={{
@@ -123,7 +124,8 @@ export default function DateSelection({
           setSearchTime(changeDay(searchTime, 1));
         }}
         text={t(DeparturesTexts.dateNavigation.nextDay)}
-        type="compact"
+        type="inline"
+        compact={true}
         mode="tertiary"
         rightIcon={{svg: ArrowRight}}
         textStyle={{

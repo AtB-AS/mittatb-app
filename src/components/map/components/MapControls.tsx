@@ -17,7 +17,8 @@ const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
   return (
     <View style={styles.zoomContainer}>
       <Button
-        type="compact"
+        type="inline"
+        compact={true}
         interactiveColor="interactive_2"
         accessibilityRole="button"
         accessibilityLabel={t(MapTexts.controls.zoomIn.a11yLabel)}
@@ -25,7 +26,8 @@ const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
         leftIcon={{svg: Add}}
       />
       <Button
-        type="compact"
+        type="inline"
+        compact={true}
         interactiveColor="interactive_2"
         accessibilityRole="button"
         accessibilityLabel={t(MapTexts.controls.zoomOut.a11yLabel)}

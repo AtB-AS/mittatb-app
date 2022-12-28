@@ -247,11 +247,17 @@ export default function DesignSystem() {
               rightIcon={{svg: Delete}}
             />
             <Button text="Press me" onPress={presser} type="inline" />
-            <Button text="Press me" onPress={presser} type="compact" />
             <Button
               text="Press me"
               onPress={presser}
-              type="compact"
+              type="inline"
+              compact={true}
+            />
+            <Button
+              text="Press me"
+              onPress={presser}
+              type="inline"
+              compact={true}
               rightIcon={{svg: Delete}}
             />
             <Button

@@ -13,7 +13,8 @@ const PositionArrow: React.FC<{onPress(): void} & AccessibilityProps> = ({
 
   return (
     <Button
-      type="compact"
+      type="inline"
+      compact={true}
       interactiveColor="interactive_0"
       onPress={onPress}
       hitSlop={insets.symmetric(12, 20)}
