@@ -1,4 +1,4 @@
-import {Swap} from '@atb/assets/svg/mono-icons/actions';
+import {Filter, Swap} from '@atb/assets/svg/mono-icons/actions';
 import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/accessible-text';
@@ -44,6 +44,8 @@ import {
   View,
 } from 'react-native';
 import {DashboardScreenProps} from './types';
+import {Time} from '@atb/assets/svg/mono-icons/time';
+import {useTravelSearchFiltersEnabled} from '@atb/screens/Dashboard/use-travel-search-filters-enabled';
 
 type TripSearchRouteName = 'TripSearch';
 const TripSearchRouteNameStatic: TripSearchRouteName = 'TripSearch';
@@ -95,6 +97,8 @@ const TripSearch: React.FC<RootProps> = ({
   >();
 
   const screenHasFocus = useIsFocused();
+
+  const travelSearchFiltersEnabled = useTravelSearchFiltersEnabled();
 
   useEffect(() => {
     if (!screenHasFocus) return;
@@ -283,14 +287,32 @@ const TripSearch: React.FC<RootProps> = ({
             />
           </Section>
         </View>
-        <View style={[style.paddedContainer, style.fadeChild]} key="dateInput">
+        <View style={style.searchParametersButtons}>
           <Button
             text={getSearchTimeLabel(searchTime, timeOfLastSearch, t, language)}
             accessibilityHint={t(TripSearchTexts.dateInput.a11yHint)}
             interactiveColor="interactive_0"
+            mode="secondary"
+            compact={true}
             onPress={onSearchTimePress}
             testID="dashboardDateTimePicker"
+            rightIcon={{svg: Time}}
+            viewContainerStyle={style.searchTimeButton}
           />
+          {travelSearchFiltersEnabled && (
+            <Button
+              text={t(TripSearchTexts.filterButton.text)}
+              accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
+              interactiveColor="interactive_1"
+              mode="secondary"
+              type="inline"
+              compact={true}
+              onPress={() => {}}
+              testID="dashboardDateTimePicker"
+              rightIcon={{svg: Filter}}
+              viewContainerStyle={style.filterButton}
+            />
+          )}
         </View>
       </View>
 
@@ -529,9 +551,12 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   paddedContainer: {
     marginHorizontal: theme.spacings.medium,
   },
-  fadeChild: {
-    marginVertical: theme.spacings.medium,
+  searchParametersButtons: {
+    margin: theme.spacings.medium,
+    flexDirection: 'row',
   },
+  searchTimeButton: {flex: 1},
+  filterButton: {marginLeft: theme.spacings.medium},
   searchHeader: {
     backgroundColor: theme.static.background[headerBackgroundColor].background,
     elevation: 1,
