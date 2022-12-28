@@ -121,12 +121,18 @@ const Button = React.forwardRef<any, ButtonProps>(
         alignSelf: isInline ? 'flex-start' : undefined,
       },
     ];
+
+    const textMarginHorizontal = useTextMarginHorizontal(
+      isInline,
+      leftIcon,
+      rightIcon,
+    );
+
     const styleText: TextStyle = {color: textColor};
     const textContainer: TextStyle = {
       flex: isInline ? undefined : 1,
       alignItems: 'center',
-      marginHorizontal:
-        (leftIcon || rightIcon) && !isInline ? theme.spacings.xLarge : 0,
+      marginHorizontal: textMarginHorizontal,
     };
     const leftStyling: ViewStyle = {
       position: isInline ? 'relative' : 'absolute',
@@ -187,6 +193,27 @@ const Button = React.forwardRef<any, ButtonProps>(
   },
 );
 export default Button;
+
+/**
+ * Get the extra horizontal margin for the button text. This is for normal
+ * "block" type (not inline) buttons as the icons are placed with absolute
+ * position, to not offset the centering of the text. This method calculates the
+ * necessary horizontal margin based on the largest icon size.
+ */
+const useTextMarginHorizontal = (
+  isInline: boolean,
+  leftIcon?: ButtonIconProps,
+  rightIcon?: ButtonIconProps,
+) => {
+  const {theme} = useTheme();
+  if (isInline) return 0;
+  if (!leftIcon && !rightIcon) return 0;
+  const maxIconSize = Math.max(
+    theme.icon.size[leftIcon?.size || 'normal'],
+    theme.icon.size[rightIcon?.size || 'normal'],
+  );
+  return maxIconSize + theme.spacings.xSmall;
+};
 
 const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   button: {
