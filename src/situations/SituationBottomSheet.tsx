@@ -54,7 +54,7 @@ export const SituationBottomSheet = forwardRef<View, Props>(
         <ScrollView centerContent={true}>
           <View>
             <Sections.Section style={styles.section}>
-              <Sections.GenericItem type="spacious">
+              <Sections.GenericSectionItem type="spacious">
                 <View
                   accessibilityLabel={[summary, description, advice].join(
                     screenReaderPause,
@@ -104,7 +104,7 @@ export const SituationBottomSheet = forwardRef<View, Props>(
                     </ThemeText>
                   </View>
                 )}
-              </Sections.GenericItem>
+              </Sections.GenericSectionItem>
             </Sections.Section>
           </View>
         </ScrollView>

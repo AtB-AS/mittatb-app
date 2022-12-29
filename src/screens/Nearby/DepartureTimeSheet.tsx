@@ -3,7 +3,11 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {DateInputItem, Section, TimeInputItem} from '@atb/components/sections';
+import {
+  DateInputSectionItem,
+  Section,
+  TimeInputSectionItem,
+} from '@atb/components/sections';
 import {StyleSheet} from '@atb/theme';
 import {
   NearbyTexts,
@@ -68,8 +72,8 @@ const DepartureTimeSheet = forwardRef<ScrollView, Props>(
           ref={focusRef}
         >
           <Section withBottomPadding>
-            <DateInputItem value={date} onChange={setDate} />
-            <TimeInputItem value={time} onChange={setTime} />
+            <DateInputSectionItem value={date} onChange={setDate} />
+            <TimeInputSectionItem value={time} onChange={setTime} />
           </Section>
 
           <Button

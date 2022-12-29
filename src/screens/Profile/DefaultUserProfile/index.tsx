@@ -1,4 +1,4 @@
-import {RadioSection} from '@atb/components/sections';
+import {RadioGroupSection} from '@atb/components/sections';
 import {usePreferences} from '@atb/preferences';
 import {StyleSheet, Theme} from '@atb/theme';
 import {UserProfileSettingsTexts, useTranslation} from '@atb/translations';
@@ -38,7 +38,7 @@ export default function DefaultUserProfile() {
           {t(UserProfileSettingsTexts.description)}
         </ThemeText>
 
-        <RadioSection<UserProfile>
+        <RadioGroupSection<UserProfile>
           items={userProfiles}
           keyExtractor={(u) => u.id}
           itemToText={(u) => getReferenceDataName(u, language)}

@@ -1,6 +1,10 @@
 import React, {forwardRef, useState} from 'react';
 import {StyleSheet} from '@atb/theme';
-import {DateInputItem, Section, TimeInputItem} from '@atb/components/sections';
+import {
+  DateInputSectionItem,
+  Section,
+  TimeInputSectionItem,
+} from '@atb/components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
   ScreenHeaderTexts,
@@ -58,8 +62,8 @@ const TravelDate = forwardRef<ScrollView, Props>(
           centerContent={true}
         >
           <Section>
-            <DateInputItem value={dateString} onChange={setDate} />
-            <TimeInputItem value={timeString} onChange={setTime} />
+            <DateInputSectionItem value={dateString} onChange={setDate} />
+            <TimeInputSectionItem value={timeString} onChange={setTime} />
           </Section>
         </ScrollView>
         <FullScreenFooter>

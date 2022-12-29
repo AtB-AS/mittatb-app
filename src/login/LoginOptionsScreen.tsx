@@ -179,7 +179,7 @@ export default function LoginOptionsScreen({
             {t(LoginTexts.logInOptions.or)}
           </ThemeText>
           <Sections.Section>
-            <Sections.LinkItem
+            <Sections.LinkSectionItem
               text={t(LoginTexts.logInOptions.options.phoneAndCode)}
               onPress={() => {
                 navigation.navigate('LoginInApp', {

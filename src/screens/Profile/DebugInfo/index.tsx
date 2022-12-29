@@ -112,7 +112,7 @@ export default function DebugInfo() {
 
       <ScrollView testID="debugInfoScrollView">
         <Sections.Section withPadding withTopPadding>
-          <Sections.ActionItem
+          <Sections.ActionSectionItem
             mode="toggle"
             text="Toggle test-ID"
             checked={showTestIds}
@@ -120,47 +120,47 @@ export default function DebugInfo() {
               setPreference({showTestIds});
             }}
           />
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Restart onboarding"
             onPress={() => {
               appDispatch({type: 'RESTART_ONBOARDING'});
             }}
           />
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Set mobile token onboarded to false"
             onPress={restartMobileTokenOnboarding}
           />
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Reset dismissed Global messages"
             onPress={resetDismissedGlobalMessages}
           />
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Copy link to customer in Firestore (staging)"
             icon="arrow-upleft"
             onPress={() => copyFirestoreLink()}
           />
 
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Force refresh id token"
             onPress={() => auth().currentUser?.getIdToken(true)}
           />
 
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Force refresh remote config"
             onPress={remoteConfig.refresh}
           />
 
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Reset feedback displayStats"
             onPress={() => storage.set('@ATB_feedback_display_stats', '')}
           />
 
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Reset frontpage favourite departures"
             onPress={() => storage.set('@ATB_user_frontpage_departures', '[]')}
           />
 
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Reset has read departures v2 onboarding"
             onPress={() =>
               storage.set(
@@ -170,7 +170,7 @@ export default function DebugInfo() {
             }
           />
 
-          <Sections.GenericItem>
+          <Sections.GenericSectionItem>
             <ThemeText>
               Debug override for enable travel search filter. If undefined the
               value from Remote Config will be used. Needs reload of app after
@@ -201,11 +201,11 @@ export default function DebugInfo() {
                 },
               ]}
             />
-          </Sections.GenericItem>
+          </Sections.GenericSectionItem>
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text={'Trip search parameters'}
             showIconText={true}
             expandContent={
@@ -276,7 +276,7 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text="Firebase Auth user info"
             showIconText={true}
             expandContent={
@@ -290,7 +290,7 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text="Firebase Auth user claims"
             showIconText={true}
             expandContent={
@@ -308,7 +308,7 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text="Remote config"
             showIconText={true}
             expandContent={
@@ -329,7 +329,7 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text="Storage"
             showIconText={true}
             expandContent={
@@ -345,7 +345,7 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text="Preferences"
             showIconText={true}
             expandContent={
@@ -371,7 +371,7 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text="Mobile token state"
             showIconText={true}
             expandContent={
@@ -422,7 +422,7 @@ export default function DebugInfo() {
                       onPress={renewToken}
                     />
                   )}
-                  <Sections.ExpandableItem
+                  <Sections.ExpandableSectionItem
                     text="Remote tokens"
                     showIconText={true}
                     expandContent={remoteTokens?.map((token) => (
@@ -559,7 +559,7 @@ function LabeledSlider({
   const [pref, setPref] = useState(initialValue || defaultValue);
 
   return (
-    <Sections.GenericItem>
+    <Sections.GenericSectionItem>
       <ThemeText
         onPress={
           defaultValue
@@ -581,7 +581,7 @@ function LabeledSlider({
         onValueChange={setPref}
         onSlidingComplete={onSetValue}
       />
-    </Sections.GenericItem>
+    </Sections.GenericSectionItem>
   );
 }
 

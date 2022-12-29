@@ -76,7 +76,7 @@ export default function ReceiptScreen({route}: Props) {
           />
         </View>
         <Sections.Section withTopPadding withBottomPadding>
-          <Sections.TextInput
+          <Sections.TextInputSectionItem
             label={t(FareContractTexts.receipt.inputLabel)}
             value={email}
             onChangeText={setEmail}

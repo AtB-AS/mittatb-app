@@ -283,7 +283,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           <View>
             <Sections.Section>
               {travellerSelectionMode !== 'none' && (
-                <Sections.GenericItem>
+                <Sections.GenericSectionItem>
                   {userProfilesWithCountAndOffer.map((u, i) => (
                     <View
                       accessible={true}
@@ -306,9 +306,9 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                       </ThemeText>
                     </View>
                   ))}
-                </Sections.GenericItem>
+                </Sections.GenericSectionItem>
               )}
-              <Sections.GenericItem>
+              <Sections.GenericSectionItem>
                 <View accessible={true}>
                   <ThemeText>
                     {getReferenceDataName(preassignedFareProduct, language)}
@@ -352,7 +352,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                     {travelDateText}
                   </ThemeText>
                 </View>
-              </Sections.GenericItem>
+              </Sections.GenericSectionItem>
             </Sections.Section>
           </View>
         </View>

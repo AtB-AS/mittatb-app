@@ -30,10 +30,10 @@ const CarnetDetailedView: React.FC<Props> = ({
           travelRights={fc.travelRights.filter(isCarnetTravelRight)}
           fareContract={fc}
         />
-        <Sections.GenericItem>
+        <Sections.GenericSectionItem>
           <OrderDetails fareContract={fc} />
-        </Sections.GenericItem>
-        <Sections.LinkItem
+        </Sections.GenericSectionItem>
+        <Sections.LinkSectionItem
           text={t(FareContractTexts.details.askForReceipt)}
           onPress={onReceiptNavigate}
           accessibility={{accessibilityRole: 'button'}}

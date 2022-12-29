@@ -1,16 +1,16 @@
 import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {
-  SectionItem,
+  SectionItemProps,
   useSectionItem,
   useSectionStyle,
-} from '@atb/components/sections/section-utils';
+} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {AccessibilityProps, View, TouchableOpacity} from 'react-native';
 
-export type MoreItemProps = SectionItem<{
+export type MoreItemProps = SectionItemProps<{
   text: string;
   onPress(): void;
   accessibility?: AccessibilityProps;

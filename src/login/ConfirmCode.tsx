@@ -104,7 +104,7 @@ export default function ConfirmCode({
             </ThemeText>
           </View>
           <Sections.Section>
-            <Sections.TextInput
+            <Sections.TextInputSectionItem
               label={t(LoginTexts.confirmCode.input.label)}
               placeholder={t(LoginTexts.confirmCode.input.placeholder)}
               onChangeText={setCode}

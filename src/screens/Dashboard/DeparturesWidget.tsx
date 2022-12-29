@@ -67,7 +67,7 @@ const DeparturesWidget = ({
 
       {!favoriteDepartures.length && (
         <Sections.Section>
-          <Sections.GenericItem>
+          <Sections.GenericSectionItem>
             <View style={styles.noFavouritesView}>
               <NoFavouriteDeparture />
               <View style={styles.noFavouritesTextContainer}>
@@ -80,8 +80,8 @@ const DeparturesWidget = ({
                 </ThemeText>
               </View>
             </View>
-          </Sections.GenericItem>
-          <Sections.LinkItem
+          </Sections.GenericSectionItem>
+          <Sections.LinkSectionItem
             textType="body__secondary"
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={onAddFavouriteDeparture}

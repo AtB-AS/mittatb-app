@@ -1,4 +1,8 @@
-import {ActionItem, RadioSection, Section} from '@atb/components/sections';
+import {
+  ActionSectionItem,
+  RadioGroupSection,
+  Section,
+} from '@atb/components/sections';
 import {Preference_Language, usePreferences} from '@atb/preferences';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
@@ -32,7 +36,7 @@ export default function Language() {
       />
       <ScrollView>
         <Section withPadding withTopPadding>
-          <ActionItem
+          <ActionSectionItem
             mode="toggle"
             text={t(LanguageSettingsTexts.usePhoneSettings)}
             checked={useSystemLanguage}
@@ -45,7 +49,7 @@ export default function Language() {
           />
         </Section>
         {!useSystemLanguage && (
-          <RadioSection<Preference_Language>
+          <RadioGroupSection<Preference_Language>
             withPadding
             items={languages}
             keyExtractor={identity}

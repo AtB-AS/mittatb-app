@@ -3,7 +3,7 @@ import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/text';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {LocationInput, Section} from '@atb/components/sections';
+import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import FavoriteChips from '@atb/favorite-chips';
 import {useFavorites} from '@atb/favorites';
@@ -192,7 +192,7 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
               globalMessageContext="app-assistant"
             />
             <Section>
-              <LocationInput
+              <LocationInputSectionItem
                 accessibilityLabel={
                   t(TripSearchTexts.location.departurePicker.a11yLabel) +
                   screenReaderPause
@@ -223,7 +223,7 @@ const DashboardRoot: React.FC<RootProps> = ({navigation}) => {
                 testID="searchFromButton"
               />
 
-              <LocationInput
+              <LocationInputSectionItem
                 accessibilityLabel={t(
                   TripSearchTexts.location.destinationPicker.a11yLabel,
                 )}

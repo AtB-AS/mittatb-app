@@ -51,7 +51,7 @@ export default function FavoriteList({navigation}: FavoriteListProps) {
 
         <Sections.Section withTopPadding withPadding>
           {items.map((favorite, i) => (
-            <Sections.FavoriteItem
+            <Sections.FavoriteSectionItem
               key={favorite.name + favorite.location.id}
               favorite={favorite}
               accessibility={{
@@ -65,14 +65,14 @@ export default function FavoriteList({navigation}: FavoriteListProps) {
 
         <Sections.Section withPadding>
           {!!items.length && (
-            <Sections.LinkItem
+            <Sections.LinkSectionItem
               text={t(FavoriteListTexts.buttons.changeOrder)}
               onPress={onSortClick}
               icon={<ThemeIcon svg={SvgReorder} />}
               testID="changeOrderButton"
             />
           )}
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text={t(FavoriteListTexts.buttons.addFavorite)}
             onPress={onAddButtonClick}
             icon={<ThemeIcon svg={Add} />}

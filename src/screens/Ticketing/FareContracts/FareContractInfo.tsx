@@ -42,7 +42,7 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import FareContractDetail from '@atb/screens/Ticketing/FareContracts/Component/FareContractDetail';
 import WarningMessage from '@atb/screens/Ticketing/FareContracts/Component/WarningMessage';
 import Barcode from '@atb/screens/Ticketing/FareContracts/Details/Barcode';
-import SectionSeparator from '@atb/components/sections/section-separator';
+import {SectionSeparator} from '@atb/components/sections';
 import {getLastUsedAccess} from './Carnet/CarnetDetails';
 import InspectionSymbol from '@atb/screens/Ticketing/FareContracts/Component/InspectionSymbol';
 

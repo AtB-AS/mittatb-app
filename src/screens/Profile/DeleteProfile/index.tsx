@@ -89,7 +89,7 @@ export default function DeleteProfile({navigation}: DeleteProfileScreenProps) {
         )}
 
         <Sections.Section withPadding>
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             subtitle={`${customerNumber}`}
             text={t(DeleteProfileTexts.customerNumber)}
             accessibility={{

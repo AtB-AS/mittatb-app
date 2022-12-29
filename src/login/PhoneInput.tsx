@@ -116,7 +116,7 @@ export default function PhoneInput({
             </ThemeText>
           </View>
           <Sections.Section>
-            <Sections.PhoneInput
+            <Sections.PhoneInputSectionItem
               label={t(LoginTexts.phoneInput.input.heading)}
               value={phoneNumber}
               onChangeText={setPhoneNumber}

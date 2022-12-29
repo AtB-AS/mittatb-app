@@ -10,17 +10,17 @@ export default function UnknownFareContract({fc}: {fc: FareContract}) {
 
   return (
     <Sections.Section withBottomPadding>
-      <Sections.GenericItem>
+      <Sections.GenericSectionItem>
         <ValidityLine status="unknown" />
         <ThemeText>
           {t(FareContractTexts.unknownFareContract.message)}
         </ThemeText>
-      </Sections.GenericItem>
-      <Sections.GenericItem>
+      </Sections.GenericSectionItem>
+      <Sections.GenericSectionItem>
         <ThemeText>
           {t(FareContractTexts.unknownFareContract.orderId(fc.orderId))}
         </ThemeText>
-      </Sections.GenericItem>
+      </Sections.GenericSectionItem>
     </Sections.Section>
   );
 }

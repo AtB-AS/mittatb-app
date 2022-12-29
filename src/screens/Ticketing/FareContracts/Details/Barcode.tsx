@@ -99,7 +99,7 @@ const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
   }
 
   return (
-    <Sections.GenericItem>
+    <Sections.GenericSectionItem>
       <View style={{alignItems: 'center'}}>
         <View
           style={styles.aztecCode}
@@ -110,7 +110,7 @@ const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
           <SvgXml xml={aztecXml} width="100%" height="100%" />
         </View>
       </View>
-    </Sections.GenericItem>
+    </Sections.GenericSectionItem>
   );
 };
 
@@ -118,7 +118,7 @@ const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
 //   const {t} = useTranslation();
 //
 //   return (
-//     <Sections.GenericItem>
+//     <Sections.GenericSectionItem>
 //       <MessageBox
 //         type={'error'}
 //         title={t(TicketTexts.details.barcodeErrors.generic.title)}
@@ -126,7 +126,7 @@ const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
 //         onPress={retry && (() => retry(true))}
 //         onPressText={retry && t(TicketTexts.details.barcodeErrors.generic.retry)}
 //       />
-//     </Sections.GenericItem>
+//     </Sections.GenericSectionItem>
 //   );
 // };
 
@@ -147,7 +147,7 @@ const DeviceNotInspectable = () => {
         ),
       );
   return (
-    <Sections.GenericItem>
+    <Sections.GenericSectionItem>
       <MessageBox
         type={'warning'}
         title={t(
@@ -156,18 +156,18 @@ const DeviceNotInspectable = () => {
         message={message}
         isMarkdown={true}
       />
-    </Sections.GenericItem>
+    </Sections.GenericSectionItem>
   );
 };
 
 const LoadingBarcode = () => {
   const {theme} = useTheme();
   return (
-    <Sections.GenericItem>
+    <Sections.GenericSectionItem>
       <View style={{flex: 1}}>
         <ActivityIndicator animating={true} color={theme.text.colors.primary} />
       </View>
-    </Sections.GenericItem>
+    </Sections.GenericSectionItem>
   );
 };
 
@@ -185,7 +185,7 @@ const StaticAztec = ({fc}: {fc: FareContract}) => {
   if (!aztecXml) return null;
 
   return (
-    <Sections.GenericItem>
+    <Sections.GenericSectionItem>
       <View
         style={styles.aztecCode}
         accessible={true}
@@ -194,7 +194,7 @@ const StaticAztec = ({fc}: {fc: FareContract}) => {
       >
         <SvgXml xml={aztecXml} width="100%" height="100%" />
       </View>
-    </Sections.GenericItem>
+    </Sections.GenericSectionItem>
   );
 };
 

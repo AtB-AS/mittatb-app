@@ -10,7 +10,7 @@ import {
   shadows,
 } from '@atb/components/map';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {ButtonInput, Section} from '@atb/components/sections';
+import {ButtonSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useGeolocationState} from '@atb/GeolocationContext';
@@ -353,7 +353,7 @@ const TariffZones: React.FC<TariffZonesProps> = ({
         />
 
         <Section withPadding>
-          <ButtonInput
+          <ButtonSectionItem
             label={
               isApplicableOnSingleZoneOnly
                 ? t(TariffZonesTexts.location.singleZone.label)
@@ -378,7 +378,7 @@ const TariffZones: React.FC<TariffZonesProps> = ({
             testID="searchFromButton"
           />
           {!isApplicableOnSingleZoneOnly && (
-            <ButtonInput
+            <ButtonSectionItem
               label={t(TariffZonesTexts.location.destinationPicker.label)}
               value={destinationPickerValue(
                 selectedZones.from,

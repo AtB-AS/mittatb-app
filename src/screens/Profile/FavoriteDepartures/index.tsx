@@ -74,7 +74,7 @@ export default function FavoriteDeparturesScreen({navigation}: Props) {
       <ScrollView>
         <Sections.Section withFullPadding>
           {favoriteDepartures.map((favorite) => (
-            <Sections.FavoriteDepartureItem
+            <Sections.FavoriteDepartureSectionItem
               key={favorite.id}
               favorite={favorite}
               accessibility={{
@@ -87,7 +87,7 @@ export default function FavoriteDeparturesScreen({navigation}: Props) {
           ))}
         </Sections.Section>
         <Sections.Section withPadding>
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={() => {
               navigation.navigate(nearbyStopPlaceScreenName as any, {

@@ -164,7 +164,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
 
         {selectedType === 'mobile' && mobileTokens?.length && (
           <Sections.Section type="spacious" style={styles.selectDeviceSection}>
-            <Sections.RadioSection<RemoteToken>
+            <Sections.RadioGroupSection<RemoteToken>
               items={mobileTokens}
               keyExtractor={(rt) => rt.id}
               itemToText={(rt) =>

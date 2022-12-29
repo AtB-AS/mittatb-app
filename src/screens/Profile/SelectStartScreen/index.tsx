@@ -1,4 +1,4 @@
-import {RadioSection} from '@atb/components/sections';
+import {RadioGroupSection} from '@atb/components/sections';
 import {
   Preference_ScreenAlternatives,
   preference_screenAlternatives,
@@ -47,7 +47,7 @@ export default function SelectStartScreen() {
       />
 
       <ScrollView>
-        <RadioSection<Preference_ScreenAlternatives>
+        <RadioGroupSection<Preference_ScreenAlternatives>
           withPadding
           withTopPadding
           items={items}

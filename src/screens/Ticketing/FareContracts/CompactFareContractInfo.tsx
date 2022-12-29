@@ -55,14 +55,14 @@ export const CompactFareContractInfo = (
 
   return (
     <Sections.Section withPadding {...accessibility}>
-      <Sections.GenericClickableItem onPress={props.onPressDetails}>
+      <Sections.GenericClickableSectionItem onPress={props.onPressDetails}>
         <View style={styles.container}>
           <View style={styles.ticketDetails}>
             <CompactFareContractInfoTexts {...fareContractInfoTextsProps} />
             {isValid && <InspectionSymbol {...props} isLoading={isLoading} />}
           </View>
         </View>
-      </Sections.GenericClickableItem>
+      </Sections.GenericClickableSectionItem>
     </Sections.Section>
   );
 };

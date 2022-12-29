@@ -63,7 +63,7 @@ export default function StopPlaceItem({
 
   return (
     <Sections.Section withPadding>
-      <Sections.GenericClickableItem
+      <Sections.GenericClickableSectionItem
         onPress={() => onPress(place)}
         accessibilityLabel={a11yLabel}
         accessibilityHint={t(
@@ -94,7 +94,7 @@ export default function StopPlaceItem({
             />
           ))}
         </View>
-      </Sections.GenericClickableItem>
+      </Sections.GenericClickableSectionItem>
     </Sections.Section>
   );
 }

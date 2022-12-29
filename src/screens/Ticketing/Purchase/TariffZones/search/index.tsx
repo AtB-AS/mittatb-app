@@ -1,7 +1,7 @@
 import {ErrorType} from '@atb/api/utils';
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {TextInput} from '@atb/components/sections';
+import {TextInputSectionItem} from '@atb/components/sections';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {SearchLocation} from '@atb/favorites/types';
 import {useGeocoder} from '@atb/geocoder';
@@ -139,7 +139,7 @@ const Index: React.FC<Props> = ({
 
       <View style={styles.header}>
         <View style={styles.withMargin}>
-          <TextInput
+          <TextInputSectionItem
             ref={inputRef}
             radius="top-bottom"
             label={label}
