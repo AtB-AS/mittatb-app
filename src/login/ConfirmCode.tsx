@@ -1,4 +1,4 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
@@ -104,7 +104,7 @@ export default function ConfirmCode({
             </ThemeText>
           </View>
           <Sections.Section>
-            <Sections.TextInput
+            <Sections.TextInputSectionItem
               label={t(LoginTexts.confirmCode.input.label)}
               placeholder={t(LoginTexts.confirmCode.input.placeholder)}
               onChangeText={setCode}

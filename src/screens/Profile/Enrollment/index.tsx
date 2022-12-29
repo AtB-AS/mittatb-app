@@ -5,9 +5,9 @@ import {StyleSheet} from '@atb/theme';
 import {EnrollmentTexts, useTranslation} from '@atb/translations';
 import {MessageBox, MessageBoxProps} from '@atb/components/message-box';
 import useEnroll from './use-enroll';
-import TextInput from '@atb/components/sections/text-input';
+import {TextInputSectionItem} from '@atb/components/sections';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 
 export default function Splash() {
   const styles = useStyles();
@@ -37,7 +37,7 @@ export default function Splash() {
           <ActivityIndicator />
         ) : (
           <>
-            <TextInput
+            <TextInputSectionItem
               radius="top-bottom"
               label={t(EnrollmentTexts.label)}
               value={inviteCode}

@@ -5,7 +5,11 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {SimpleDisappearingHeader} from '@atb/components/disappearing-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
-import {ActionItem, LocationInput, Section} from '@atb/components/sections';
+import {
+  ActionSectionItem,
+  LocationInputSectionItem,
+  Section,
+} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import DeparturesList from '@atb/departure-list/DeparturesList';
 import {GeoLocation, Location} from '@atb/favorites/types';
@@ -249,7 +253,7 @@ const NearbyOverview: React.FC<Props> = ({
 
       {data !== null && (
         <View style={styles.container}>
-          <ActionItem
+          <ActionSectionItem
             transparent
             text={t(NearbyTexts.favorites.toggle)}
             mode="toggle"
@@ -301,7 +305,7 @@ const Header = React.memo(function Header({
   return (
     <>
       <Section withPadding>
-        <LocationInput
+        <LocationInputSectionItem
           label={t(NearbyTexts.location.departurePicker.label)}
           updatingLocation={updatingLocation}
           location={fromLocation}

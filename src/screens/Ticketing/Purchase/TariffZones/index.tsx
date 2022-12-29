@@ -9,8 +9,8 @@ import {
   PositionArrow,
   shadows,
 } from '@atb/components/map';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {ButtonInput, Section} from '@atb/components/sections';
+import {FullScreenHeader} from '@atb/components/screen-header';
+import {ButtonSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useGeolocationState} from '@atb/GeolocationContext';
@@ -35,8 +35,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {PixelRatio, Platform, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {PurchaseScreenProps} from '../types';
-import {zoomIn, zoomOut} from '@atb/components/map/utils';
-import {flyToLocation} from '@atb/components/map/hooks/use-trigger-camera-move-effect';
+import {flyToLocation, zoomIn, zoomOut} from '@atb/components/map';
 import {FareProductTypeConfig} from '../../FareContracts/utils';
 
 type TariffZonesRouteName = 'TariffZones';
@@ -354,7 +353,7 @@ const TariffZones: React.FC<TariffZonesProps> = ({
         />
 
         <Section withPadding>
-          <ButtonInput
+          <ButtonSectionItem
             label={
               isApplicableOnSingleZoneOnly
                 ? t(TariffZonesTexts.location.singleZone.label)
@@ -379,7 +378,7 @@ const TariffZones: React.FC<TariffZonesProps> = ({
             testID="searchFromButton"
           />
           {!isApplicableOnSingleZoneOnly && (
-            <ButtonInput
+            <ButtonSectionItem
               label={t(TariffZonesTexts.location.destinationPicker.label)}
               value={destinationPickerValue(
                 selectedZones.from,

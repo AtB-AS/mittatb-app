@@ -63,7 +63,7 @@ export default function ZonesSelection({
         {t(PurchaseOverviewTexts.zones.label[selectionMode].text)}
       </ThemeText>
       <Sections.Section {...accessibility}>
-        <Sections.ButtonInput
+        <Sections.ButtonSectionItem
           label={t(TariffZonesTexts.zoneTitle)}
           value={tariffZonesDescription(
             fromTariffZone,

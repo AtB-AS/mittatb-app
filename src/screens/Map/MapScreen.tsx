@@ -5,7 +5,7 @@ import {StopPlace, Quay} from '@atb/api/types/departures';
 import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {StatusBarOnFocus} from '@atb/components/status-bar-on-focus';
-import {NavigateToTripSearchCallback as TravelFromAndToLocationsCallback} from '@atb/components/map/types';
+import {NavigateToTripSearchCallback as TravelFromAndToLocationsCallback} from '@atb/components/map';
 
 export const MapScreen = ({navigation}: MapScreenProps<'MapScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();

@@ -1,5 +1,5 @@
 import {MessageBox} from '@atb/components/message-box';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {findReferenceDataById} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';

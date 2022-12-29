@@ -1,4 +1,4 @@
-import {ActionItem} from '@atb/components/sections';
+import {ActionSectionItem} from '@atb/components/sections';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import React from 'react';
@@ -15,7 +15,7 @@ export default function FavoriteToggle({
   const {t} = useTranslation();
 
   return (
-    <ActionItem
+    <ActionSectionItem
       transparent
       text={t(DeparturesTexts.favorites.toggle)}
       mode="toggle"

@@ -43,7 +43,7 @@ export default function MultipleTravellersSelection({
   return (
     <Sections.Section>
       {userProfilesWithCount.map((u) => (
-        <Sections.CounterInput
+        <Sections.CounterSectionItem
           key={u.userTypeString}
           text={getReferenceDataName(u, language)}
           count={u.count}

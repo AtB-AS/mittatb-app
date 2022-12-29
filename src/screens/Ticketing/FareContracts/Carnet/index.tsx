@@ -35,7 +35,7 @@ const CarnetFareContractInfo: React.FC<Props> = ({
         testID={testID}
         fareContract={fareContract}
       />
-      <Sections.LinkItem
+      <Sections.LinkSectionItem
         text={t(FareContractTexts.detailsLink.notValid)}
         onPress={() =>
           navigation.navigate('FareContractModal', {

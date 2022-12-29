@@ -1,5 +1,5 @@
 import {TicketSplash} from '@atb/assets/svg/color/images';
-import Header from '@atb/components/screen-header';
+import {ScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {StaticColor} from '@atb/theme/colors';
@@ -18,7 +18,7 @@ export default function SplashInfo() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
+      <ScreenHeader
         title={t(TicketingSplashTexts.header.title)}
         rightButton={{type: 'chat'}}
         color={bgcolor}

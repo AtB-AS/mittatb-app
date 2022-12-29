@@ -13,10 +13,10 @@ import {screenReaderPause} from '@atb/components/text';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {
-  SectionItem,
+  SectionItemProps,
   useSectionItem,
   useSectionStyle,
-} from '@atb/components/sections/section-utils';
+} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIcon} from '@atb/components/transportation-icon';
@@ -59,7 +59,7 @@ import {filterNotices} from '@atb/screens/TripDetails/utils';
 
 type RootProps = NearbyScreenProps<'NearbyRoot'>;
 
-export type LineItemProps = SectionItem<{
+export type LineItemProps = SectionItemProps<{
   group: DepartureGroup;
   stop: StopPlaceInfo;
   quay: QuayInfo;

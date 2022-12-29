@@ -5,7 +5,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button, ButtonGroup} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenFooter} from '@atb/components/screen-footer';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
@@ -163,7 +163,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         )}
 
         <Sections.Section withPadding>
-          <Sections.LocationInput
+          <Sections.LocationInputSectionItem
             label={t(AddEditFavoriteTexts.fields.location.label)}
             location={location}
             onPress={() =>
@@ -183,7 +183,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         </Sections.Section>
 
         <Sections.Section withPadding>
-          <Sections.TextInput
+          <Sections.TextInputSectionItem
             label={t(AddEditFavoriteTexts.fields.name.label)}
             onChangeText={setName}
             value={name}
@@ -196,7 +196,7 @@ export default function AddEditFavorite({navigation, route}: AddEditProps) {
         </Sections.Section>
 
         <Sections.Section withPadding>
-          <Sections.ButtonInput
+          <Sections.ButtonSectionItem
             onPress={openEmojiPopup}
             accessibilityLabel={t(AddEditFavoriteTexts.fields.icon.a11yLabel)}
             accessibilityHint={t(AddEditFavoriteTexts.fields.icon.a11yHint)}

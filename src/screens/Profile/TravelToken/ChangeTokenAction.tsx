@@ -72,7 +72,7 @@ const ChangeTokenAction = ({
 
   return (
     <Sections.Section style={styles.changeTokenButton}>
-      <Sections.LinkItem
+      <Sections.LinkSectionItem
         type="spacious"
         text={t(TravelTokenTexts.travelToken.changeTokenButton)}
         disabled={isError || isLoading || toggleLimit === 0}
@@ -82,11 +82,11 @@ const ChangeTokenAction = ({
       />
 
       {shouldShowLoader ? (
-        <Sections.GenericItem>
+        <Sections.GenericSectionItem>
           <ActivityIndicator style={styles.loader} />
-        </Sections.GenericItem>
+        </Sections.GenericSectionItem>
       ) : toggleLimit !== undefined ? (
-        <Sections.GenericItem>
+        <Sections.GenericSectionItem>
           <View style={styles.tokenInfoView}>
             <ThemeIcon svg={getToggleInfoIcon(toggleLimit)} />
             <ThemeText
@@ -100,7 +100,7 @@ const ChangeTokenAction = ({
               {getToggleInfo(toggleLimit, countRenewalDate)}
             </ThemeText>
           </View>
-        </Sections.GenericItem>
+        </Sections.GenericSectionItem>
       ) : null}
     </Sections.Section>
   );

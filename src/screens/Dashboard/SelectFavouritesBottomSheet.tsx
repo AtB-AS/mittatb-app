@@ -19,7 +19,7 @@ import {useFavorites} from '@atb/favorites';
 import useFontScale from '@atb/utils/use-font-scale';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {LegMode} from '@entur/sdk';
-import SectionSeparator from '@atb/components/sections/section-separator';
+import {SectionSeparator} from '@atb/components/sections';
 import {MessageBox} from '@atb/components/message-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';

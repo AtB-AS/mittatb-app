@@ -10,7 +10,7 @@ import ValidityHeader from '@atb/screens/Ticketing/FareContracts/ValidityHeader'
 import UsedAccessValidityHeader from '@atb/screens/Ticketing/FareContracts/Carnet/UsedAccessValidityHeader';
 import ValidityLine from '@atb/screens/Ticketing/FareContracts/ValidityLine';
 import {View} from 'react-native';
-import SectionSeparator from '@atb/components/sections/section-separator';
+import {SectionSeparator} from '@atb/components/sections';
 import FareContractInfo from '@atb/screens/Ticketing/FareContracts/FareContractInfo';
 import CarnetFooter from '@atb/screens/Ticketing/FareContracts/Carnet/CarnetFooter';
 import React from 'react';
@@ -46,7 +46,7 @@ export function CarnetDetails(props: {
 
   return (
     <>
-      <Sections.GenericItem radius="top">
+      <Sections.GenericSectionItem radius="top">
         {fareContractValidityStatus !== 'valid' ? (
           <ValidityHeader
             now={now}
@@ -87,14 +87,14 @@ export function CarnetDetails(props: {
           testID={props.testID}
           fareProductType={'carnet'}
         />
-      </Sections.GenericItem>
-      <Sections.GenericItem>
+      </Sections.GenericSectionItem>
+      <Sections.GenericSectionItem>
         <CarnetFooter
           active={usedAccessValidityStatus === 'valid'}
           maximumNumberOfAccesses={maximumNumberOfAccesses}
           numberOfUsedAccesses={numberOfUsedAccesses}
         />
-      </Sections.GenericItem>
+      </Sections.GenericSectionItem>
     </>
   );
 }

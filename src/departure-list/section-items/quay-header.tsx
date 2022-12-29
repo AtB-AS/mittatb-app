@@ -4,10 +4,10 @@ import {QuayInfo} from '@atb/api/departures/types';
 import {Walk} from '@atb/assets/svg/mono-icons/transportation';
 import {screenReaderPause} from '@atb/components/text';
 import {
-  SectionItem,
+  SectionItemProps,
   useSectionItem,
   useSectionStyle,
-} from '@atb/components/sections/section-utils';
+} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {isSituationValidAtDate, SituationMessageBox} from '@atb/situations';
@@ -15,7 +15,7 @@ import {StyleSheet} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import {useHumanizeDistance} from '@atb/utils/location';
 
-export type QuayHeaderItemProps = SectionItem<{
+export type QuayHeaderItemProps = SectionItemProps<{
   quay: QuayInfo;
   distance?: number;
   searchDate: string;

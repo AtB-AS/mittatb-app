@@ -3,7 +3,7 @@ import {StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations/';
 import React from 'react';
 import {View} from 'react-native';
-import shadows from './shadows';
+import {shadows} from './shadows';
 import {Button} from '@atb/components/button';
 
 export type Props = {
@@ -11,7 +11,7 @@ export type Props = {
   zoomOut(): void;
 };
 
-const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
+export const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
   const styles = useStyles();
   const {t} = useTranslation();
   return (
@@ -46,4 +46,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     ...shadows,
   },
 }));
-export default MapControls;

@@ -30,7 +30,7 @@ type Props = {
  */
 const CURRENT_LOCATION_THRESHOLD_METERS = 30;
 
-const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
+export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
   const styles = useStyles();
   const {location: geolocation} = useGeolocationState();
   const {closestLocation, isSearching, error} = useReverseGeocoder(
@@ -181,5 +181,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
   },
 }));
-
-export default LocationBar;

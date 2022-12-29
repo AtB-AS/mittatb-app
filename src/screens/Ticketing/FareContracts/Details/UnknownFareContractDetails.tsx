@@ -9,14 +9,14 @@ export function UnknownFareContractDetails({fc}: {fc: FareContract}) {
   const {t} = useTranslation();
   return (
     <Sections.Section withBottomPadding>
-      <Sections.GenericItem>
+      <Sections.GenericSectionItem>
         <ValidityLine status="unknown" />
-      </Sections.GenericItem>
-      <Sections.GenericItem>
+      </Sections.GenericSectionItem>
+      <Sections.GenericSectionItem>
         <ThemeText>
           {t(FareContractTexts.details.orderId(fc.orderId))}
         </ThemeText>
-      </Sections.GenericItem>
+      </Sections.GenericSectionItem>
     </Sections.Section>
   );
 }

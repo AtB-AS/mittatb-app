@@ -30,7 +30,7 @@ type DeparturesDialogSheetProps = {
   navigateToTripSearch: NavigateToTripSearchCallback;
 };
 
-const DeparturesDialogSheet = ({
+export const DeparturesDialogSheet = ({
   close,
   distance,
   stopPlaceFeature,
@@ -177,5 +177,3 @@ const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.medium,
   },
 }));
-
-export default DeparturesDialogSheet;

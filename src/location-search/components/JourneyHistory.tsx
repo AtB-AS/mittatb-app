@@ -1,5 +1,5 @@
-import {GenericItem, HeaderItem} from '@atb/components/sections';
-import SectionGroup from '@atb/components/sections/section';
+import {GenericSectionItem, HeaderSectionItem} from '@atb/components/sections';
+import {Section} from '@atb/components/sections';
 import {JourneySearchHistoryEntry} from '@atb/search-history';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -24,8 +24,8 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
   }
 
   return (
-    <SectionGroup withTopPadding withBottomPadding>
-      <HeaderItem
+    <Section withTopPadding withBottomPadding>
+      <HeaderSectionItem
         transparent
         text={t(
           LocationSearchTexts.journeySearch.previousJourneyResults.heading,
@@ -55,15 +55,15 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
               onPress={() => onSelect(searchResult.selectable)}
               testID={'journeyHistoryItem' + idx}
             >
-              <GenericItem transparent>
+              <GenericSectionItem transparent>
                 <ThemeText type="body__primary--bold">
                   {searchResult.text}
                 </ThemeText>
-              </GenericItem>
+              </GenericSectionItem>
             </TouchableOpacity>
           ))}
       </View>
-    </SectionGroup>
+    </Section>
   );
 }
 

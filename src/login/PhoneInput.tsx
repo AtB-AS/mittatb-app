@@ -1,4 +1,4 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
@@ -116,7 +116,7 @@ export default function PhoneInput({
             </ThemeText>
           </View>
           <Sections.Section>
-            <Sections.PhoneInput
+            <Sections.PhoneInputSectionItem
               label={t(LoginTexts.phoneInput.input.heading)}
               value={phoneNumber}
               onChangeText={setPhoneNumber}
