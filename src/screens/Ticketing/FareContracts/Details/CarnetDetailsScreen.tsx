@@ -1,4 +1,4 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {useTicketingState} from '@atb/ticketing';
 import {useTranslation, FareContractTexts} from '@atb/translations';

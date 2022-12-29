@@ -3,7 +3,7 @@ import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {AppearanceSettingsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {Platform, View} from 'react-native';
 
 export default function Appearance() {

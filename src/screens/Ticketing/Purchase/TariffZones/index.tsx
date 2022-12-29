@@ -9,7 +9,7 @@ import {
   PositionArrow,
   shadows,
 } from '@atb/components/map';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {ButtonInput, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
@@ -35,8 +35,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {PixelRatio, Platform, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {PurchaseScreenProps} from '../types';
-import {zoomIn, zoomOut} from '@atb/components/map/utils';
-import {flyToLocation} from '@atb/components/map/hooks/use-trigger-camera-move-effect';
+import {flyToLocation, zoomIn, zoomOut} from '@atb/components/map';
 import {FareProductTypeConfig} from '../../FareContracts/utils';
 
 type TariffZonesRouteName = 'TariffZones';

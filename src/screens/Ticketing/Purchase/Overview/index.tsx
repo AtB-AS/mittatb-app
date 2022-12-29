@@ -1,6 +1,6 @@
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenFooter} from '@atb/components/screen-footer';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {

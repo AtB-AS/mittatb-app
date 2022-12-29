@@ -5,7 +5,7 @@ import {useAuthState} from '@atb/auth';
 import {updateMetadata} from '@atb/chat/metadata';
 import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
@@ -39,7 +39,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from '../types';
 import {destructiveAlert} from './utils';
 import useIsLoading from '@atb/utils/use-is-loading';
-import {useMapPage} from '@atb/components/map/hooks/use-map-page';
+import {useMapPage} from '@atb/components/map';
 import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
 
 const buildNumber = getBuildNumber();

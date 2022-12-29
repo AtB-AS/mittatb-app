@@ -4,11 +4,11 @@ import insets from '@atb/utils/insets';
 import React from 'react';
 import {AccessibilityProps} from 'react-native';
 import {Button} from '@atb/components/button';
-import shadows from './shadows';
+import {shadows} from './shadows';
 
-const PositionArrow: React.FC<{onPress(): void} & AccessibilityProps> = ({
-  onPress,
-}) => {
+export const PositionArrow: React.FC<
+  {onPress(): void} & AccessibilityProps
+> = ({onPress}) => {
   const styles = useStyles();
 
   return (
@@ -29,4 +29,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     ...shadows,
   },
 }));
-export default PositionArrow;

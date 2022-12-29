@@ -1,7 +1,7 @@
 import {ErrorType} from '@atb/api/utils';
 import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {
   PaymentVippsTexts,

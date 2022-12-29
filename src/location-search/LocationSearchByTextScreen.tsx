@@ -1,7 +1,7 @@
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import React from 'react';
 import {View} from 'react-native';
-import FullScreenHeader from '../components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {LocationSearchTexts, useTranslation} from '../translations/';
 import {SelectableLocationType} from './types';
 import {LocationSearchContent} from './components/LocationSearchContent';

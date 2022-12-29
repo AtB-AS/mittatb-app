@@ -12,7 +12,7 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {View} from 'react-native';
 
 const identity = (s: string) => s;

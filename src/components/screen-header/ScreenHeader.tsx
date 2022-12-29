@@ -6,8 +6,9 @@ import {
 } from 'react-native';
 import React, {ReactNode, useMemo, useState} from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
-import HeaderButton, {
+import {
   ButtonModes,
+  HeaderButton,
   HeaderButtonProps,
   HeaderButtonWithoutNavigation,
   HeaderButtonWithoutNavigationProps,
@@ -15,9 +16,9 @@ import HeaderButton, {
 import {ThemeText} from '@atb/components/text';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {getStaticColor, StaticColor} from '@atb/theme/colors';
-import {GlobalMessageContextType, GlobalMessage} from '@atb/global-messages';
+import {GlobalMessage, GlobalMessageContextType} from '@atb/global-messages';
 
-export {default as AnimatedScreenHeader} from './animated-header';
+export {AnimatedScreenHeader} from './AnimatedScreenHeader';
 
 export type LeftButtonProps = HeaderButtonProps & {
   type: Exclude<ButtonModes, 'chat' | 'skip' | 'custom'>;
@@ -48,7 +49,7 @@ export type ScreenHeaderProps = {
   setFocusOnLoad?: boolean;
 };
 
-const ScreenHeader: React.FC<ScreenHeaderProps> = (props) => {
+export const ScreenHeader: React.FC<ScreenHeaderProps> = (props) => {
   const themeColor = props.color ?? 'background_accent_0';
 
   const leftIcon = props.leftButton ? (
@@ -163,8 +164,6 @@ const BaseHeader = ({
     </View>
   );
 };
-
-export default ScreenHeader;
 
 const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
   container: {

@@ -5,7 +5,7 @@ import {DashboardScreenProps} from '@atb/screens/Dashboard/types';
 import {StopPlace} from '@atb/api/types/departures';
 import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import {NearbyStopPlaces} from '@atb/screens/Departures/components/NearbyStopPlaces';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {ProfileScreenProps} from '@atb/screens/Profile/types';
 import {useRoute} from '@react-navigation/native';
 

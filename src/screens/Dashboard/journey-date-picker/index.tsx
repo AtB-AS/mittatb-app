@@ -1,5 +1,5 @@
 import {Button} from '@atb/components/button';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {
   DateInputItem,
   RadioSection,

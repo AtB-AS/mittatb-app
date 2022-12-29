@@ -8,7 +8,7 @@ import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {ContentWithDisappearingHeader} from '@atb/components/disappearing-header';
 import {MessageBox} from '@atb/components/message-box';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';

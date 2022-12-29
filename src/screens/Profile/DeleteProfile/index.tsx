@@ -2,7 +2,7 @@ import deleteProfile from '@atb/api/delete_profile';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {useAuthState} from '@atb/auth';
 import {MessageBox} from '@atb/components/message-box';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet, Theme} from '@atb/theme';

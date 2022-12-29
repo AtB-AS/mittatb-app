@@ -7,7 +7,7 @@ import {MessageBox, MessageBoxProps} from '@atb/components/message-box';
 import useEnroll from './use-enroll';
 import TextInput from '@atb/components/sections/text-input';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 
 export default function Splash() {
   const styles = useStyles();

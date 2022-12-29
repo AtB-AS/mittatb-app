@@ -5,7 +5,7 @@ import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import {Button, ButtonGroup} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import {RadioSegments} from '@atb/components/radio';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';

@@ -6,7 +6,7 @@ import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {animateNextChange} from '@atb/utils/animation';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';

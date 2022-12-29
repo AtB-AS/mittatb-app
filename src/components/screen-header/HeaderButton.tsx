@@ -25,11 +25,11 @@ export type HeaderButtonProps = {
   testID?: string;
 } & AccessibilityProps;
 
-export type IconButton = Omit<HeaderButtonProps, 'type'> & {
+export type IconButtonProps = Omit<HeaderButtonProps, 'type'> & {
   icon: React.ReactNode;
 };
 
-const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
+export const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
   const iconButton = useIconButton(buttonProps);
   if (!iconButton) {
     return null;
@@ -64,7 +64,7 @@ const BaseHeaderButton = ({
   icon,
   onPress,
   ...accessibilityProps
-}: IconButton) => (
+}: IconButtonProps) => (
   <TouchableOpacity
     onPress={onPress}
     hitSlop={insets.all(12)}
@@ -77,7 +77,7 @@ const BaseHeaderButton = ({
 
 const useIconButton = (
   buttonProps: HeaderButtonProps,
-): IconButton | undefined => {
+): IconButtonProps | undefined => {
   const navigation = useNavigation();
   const chatIcon = useChatIcon(buttonProps.color, buttonProps.testID);
   const {t} = useTranslation();
@@ -124,5 +124,3 @@ const useIconButton = (
     }
   }
 };
-
-export default HeaderButton;

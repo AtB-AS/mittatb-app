@@ -3,7 +3,7 @@ import React from 'react';
 import {Animated, View, ViewProps} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ThemeText} from '@atb/components/text';
-import HeaderButton from './HeaderButton';
+import {HeaderButton} from './HeaderButton';
 import {LeftButtonProps, RightButtonProps} from '.';
 import useFontScale from '@atb/utils/use-font-scale';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
@@ -23,7 +23,7 @@ const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 const BASE_HEADER_HEIGHT = 20;
 
-const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
+export const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
   leftButton,
   rightButton,
   title,
@@ -93,7 +93,6 @@ const AnimatedScreenHeader: React.FC<ScreenHeaderProps> = ({
     </View>
   );
 };
-export default AnimatedScreenHeader;
 
 const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
   container: {

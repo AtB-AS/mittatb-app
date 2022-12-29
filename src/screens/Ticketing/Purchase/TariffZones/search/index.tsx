@@ -1,6 +1,6 @@
 import {ErrorType} from '@atb/api/utils';
 import {MessageBox} from '@atb/components/message-box';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {TextInput} from '@atb/components/sections';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {SearchLocation} from '@atb/favorites/types';

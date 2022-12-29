@@ -5,7 +5,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button, ButtonGroup} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenFooter} from '@atb/components/screen-footer';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
