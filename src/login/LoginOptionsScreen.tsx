@@ -10,7 +10,7 @@ import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
-import {VippsLoginButton} from '@atb/components/vipps-login-button/VippsLoginButton';
+import {VippsLoginButton} from '@atb/components/vipps-login-button';
 import {AfterLoginParams, LoginInAppScreenProps} from '@atb/login/types';
 import storage from '@atb/storage';
 import {StyleSheet} from '@atb/theme';

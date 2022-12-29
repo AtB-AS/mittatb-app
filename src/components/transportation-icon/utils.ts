@@ -1,6 +1,6 @@
 import * as TransportIcons from '@atb/assets/svg/mono-icons/transportation';
 import * as EnturTransportIcons from '@atb/assets/svg/mono-icons/transportation-entur';
-import {AnyMode} from '@atb/components/transportation-icon/TransportationIcon';
+import {AnyMode} from './TransportationIcon';
 
 export function getTransportModeSvg(mode?: AnyMode) {
   switch (mode) {

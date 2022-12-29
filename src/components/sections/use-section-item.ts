@@ -1,10 +1,7 @@
 import {ViewStyle} from 'react-native';
 import {Theme, useTheme} from '@atb/theme';
 import {RadiusSizes} from '@atb/theme/colors';
-import {
-  ContainerSizingType,
-  RadiusModeType,
-} from '@atb/components/sections/types';
+import {ContainerSizingType, RadiusModeType} from './types';
 
 export type BaseSectionItemProps = {
   transparent?: boolean;
