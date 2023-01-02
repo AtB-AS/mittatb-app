@@ -10,6 +10,6 @@ struct ChipView: View {
             .padding(8)
             .background(Color("TimeTileBackgroundColor"))
             .cornerRadius(8)
-            .font(DefaultFonts.subtitle)
+            .font(DefaultFonts.bold)
     }
 }

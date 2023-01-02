@@ -38,7 +38,7 @@ struct WidgetInfoView: View {
                         Text("From \(quayName)")
                             .lineLimit(1)
                             .frame(width: geometry.size.width - (K.padding * 2), alignment: .leading)
-                            .font(DefaultFonts.body)
+                            .font(DefaultFonts.bold_header)
 
                         Spacer()
                         if widgetFamily == .systemMedium {
@@ -75,14 +75,14 @@ struct WidgetInfoView: View {
                         if viewModel.entry.state == .noDepartureQuays {
                             HStack {
                                 Spacer()
-                                Text("no_departures").font(DefaultFonts.body)
+                                Text("no_departures").font(DefaultFonts.bold)
                                 Spacer()
                             }.frame(maxWidth: .infinity)
                                 .lineLimit(1)
                                 .padding(8)
                                 .background(Color("TimeTileBackgroundColor"))
                                 .cornerRadius(8)
-                                .font(DefaultFonts.subtitle)
+                                .font(DefaultFonts.bold_header)
                         } else {
                             DepartureTimesView(aimedTimes: aimedTimes)
                         }
