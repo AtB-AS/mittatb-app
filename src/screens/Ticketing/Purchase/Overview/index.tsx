@@ -30,7 +30,6 @@ import {
   isBetween,
   replaceTimeOn,
 } from '@atb/utils/date';
-import firestore from '@react-native-firebase/firestore';
 import {TFunc} from '@leile/lobo-t';
 
 type OverviewProps = PurchaseScreenProps<'PurchaseOverview'>;
