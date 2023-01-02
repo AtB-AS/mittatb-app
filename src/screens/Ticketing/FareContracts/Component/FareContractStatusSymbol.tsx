@@ -1,5 +1,5 @@
 import React from 'react';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {TicketInvalid} from '@atb/assets/svg/mono-icons/ticketing';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 import {ValidityStatus} from '@atb/screens/Ticketing/FareContracts/utils';

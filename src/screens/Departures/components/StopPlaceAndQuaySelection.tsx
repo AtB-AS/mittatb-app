@@ -1,6 +1,6 @@
 import {FlatList} from 'react-native-gesture-handler';
 import {ActivityIndicator} from 'react-native';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';

@@ -1,7 +1,7 @@
 import {singleTripSearch} from '@atb/api/trips_v2';
 import {TripPattern} from '@atb/api/types/trips';
-import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
-import Header from '@atb/components/screen-header';
+import {ContentWithDisappearingHeader} from '@atb/components/disappearing-header';
+import {ScreenHeader} from '@atb/components/screen-header';
 import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
@@ -74,7 +74,7 @@ const Details: React.FC<Props> = (props) => {
   return (
     <View style={styles.container}>
       <View style={[styles.header, {paddingTop}]}>
-        <Header
+        <ScreenHeader
           leftButton={{type: 'back'}}
           title={t(TripDetailsTexts.header.title)}
           color={themeColor}

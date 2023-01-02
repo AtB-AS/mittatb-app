@@ -1,13 +1,13 @@
 import React from 'react';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import {RecentFareContract} from '../use-recent-fare-contracts';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Dimensions, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import TransportationIcon from '@atb/components/transportation-icon';
-import ThemeIcon from '@atb/components/theme-icon';
+import {TransportationIcon} from '@atb/components/transportation-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';

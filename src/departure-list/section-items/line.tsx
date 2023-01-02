@@ -9,17 +9,17 @@ import {
 import SvgFavorite from '@atb/assets/svg/mono-icons/places/Favorite';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
-import {screenReaderPause} from '@atb/components/accessible-text';
+import {screenReaderPause} from '@atb/components/text';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {
-  SectionItem,
+  SectionItemProps,
   useSectionItem,
   useSectionStyle,
-} from '@atb/components/sections/section-utils';
-import ThemeText from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
-import TransportationIcon from '@atb/components/transportation-icon';
+} from '@atb/components/sections';
+import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {TransportationIcon} from '@atb/components/transportation-icon';
 import FavoriteDialogSheet from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import {useFavorites} from '@atb/favorites';
 import {StoredType} from '@atb/favorites/storage';
@@ -47,7 +47,6 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useRef} from 'react';
 import {
   AccessibilityInfo,
-  AccessibilityProps,
   ScrollView,
   TouchableOpacity,
   View,
@@ -60,11 +59,10 @@ import {filterNotices} from '@atb/screens/TripDetails/utils';
 
 type RootProps = NearbyScreenProps<'NearbyRoot'>;
 
-export type LineItemProps = SectionItem<{
+export type LineItemProps = SectionItemProps<{
   group: DepartureGroup;
   stop: StopPlaceInfo;
   quay: QuayInfo;
-  accessibility?: AccessibilityProps;
   searchDate: string;
   mode: QuaySectionMode;
 }>;
@@ -72,7 +70,6 @@ export default function LineItem({
   group,
   stop,
   quay,
-  accessibility,
   searchDate,
   testID,
   mode,
@@ -282,7 +279,8 @@ function DepartureTimeItem({
   return (
     <Button
       key={departure.serviceJourneyId}
-      type="compact"
+      type="inline"
+      compact={true}
       interactiveColor="interactive_2"
       onPress={() => onPress(departure)}
       text={formatTimeText(departure, searchDate, language, t)}
@@ -331,7 +329,7 @@ const addDatePrefixIfNecessary = (
   }
 };
 
-const useItemStyles = StyleSheet.createThemeHook((theme, themeName) => ({
+const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   transportationMode: {
     marginRight: theme.spacings.small,
   },

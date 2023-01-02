@@ -9,7 +9,6 @@ import {ServiceJourneyDeparture} from './types';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
-import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {getNoticesForServiceJourney} from '@atb/screens/TripDetails/utils';
 
 export type DepartureData = {

@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 

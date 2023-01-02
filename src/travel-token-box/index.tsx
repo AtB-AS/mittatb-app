@@ -1,6 +1,6 @@
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {ActivityIndicator, View} from 'react-native';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 
 import React from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
@@ -27,7 +27,7 @@ export default function TravelTokenBox({
 }) {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {deviceIsInspectable, remoteTokens, isLoading, fallbackEnabled} =
+  const {deviceIsInspectable, remoteTokens, isLoading} =
     useMobileTokenContextState();
 
   if (isLoading) {

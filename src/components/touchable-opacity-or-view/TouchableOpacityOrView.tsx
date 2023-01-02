@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import {ReactNode} from 'react';
 
-const TouchableOpacityOrView = ({
+export const TouchableOpacityOrView = ({
   style,
   onClick,
   children,
@@ -27,5 +27,3 @@ const TouchableOpacityOrView = ({
     </View>
   );
 };
-
-export {TouchableOpacityOrView};

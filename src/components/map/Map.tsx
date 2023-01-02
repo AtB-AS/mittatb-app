@@ -1,27 +1,24 @@
-import {
-  MapCameraConfig,
-  MapControls,
-  MapViewConfig,
-  PositionArrow,
-  shadows,
-  useControlPositionsStyle,
-} from '@atb/components/map/index';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Feature} from 'geojson';
 import React, {useMemo, useRef} from 'react';
 import {View} from 'react-native';
-import LocationBar from '@atb/components/map/components/LocationBar';
+import {LocationBar} from './components/LocationBar';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import MapRoute from '@atb/screens/TripDetails/Map/MapRoute';
-import {isFeaturePoint, zoomIn, zoomOut} from '@atb/components/map/utils';
+import {isFeaturePoint, zoomIn, zoomOut} from './utils';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
 import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
 import {MapProps} from './types';
+import {useControlPositionsStyle} from './hooks/use-control-styles';
+import {MapCameraConfig, MapViewConfig} from './MapConfig';
+import {PositionArrow} from './components/PositionArrow';
+import {MapControls} from './components/MapControls';
+import {shadows} from './components/shadows';
 
-const Map = (props: MapProps) => {
+export const Map = (props: MapProps) => {
   const {initialLocation} = props;
   const {location: currentLocation} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
@@ -120,5 +117,3 @@ const useMapStyles = StyleSheet.createThemeHook(() => ({
   container: {flex: 1},
   pin: {...shadows},
 }));
-
-export default Map;

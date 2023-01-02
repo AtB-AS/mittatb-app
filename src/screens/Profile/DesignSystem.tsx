@@ -2,14 +2,14 @@ import {ContrastColor} from '@atb-as/theme';
 import {Delete, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {Check} from '@atb/assets/svg/mono-icons/status';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
-import Button, {ButtonGroup} from '@atb/components/button';
+import {Button, ButtonGroup} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
-import RadioSegments from '@atb/components/radio-segments';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {RadioSegments} from '@atb/components/radio';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import TransportationIcon from '@atb/components/transportation-icon';
+import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {TransportationIcon} from '@atb/components/transportation-icon';
 import {LegMode, TransportSubmode} from '@atb/sdk';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {
@@ -115,9 +115,9 @@ export default function DesignSystem() {
 
       <ScrollView>
         <Sections.Section withPadding withTopPadding>
-          <Sections.HeaderItem text="Icons" />
+          <Sections.HeaderSectionItem text="Icons" />
 
-          <Sections.GenericItem>
+          <Sections.GenericSectionItem>
             <View style={style.icons}>
               <ThemeIcon svg={Check} />
               <ThemeIcon svg={Check} colorType="info" />
@@ -135,41 +135,41 @@ export default function DesignSystem() {
                 <TransportationIcon mode={mode} />
               ))}
             </View>
-          </Sections.GenericItem>
+          </Sections.GenericSectionItem>
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.HeaderItem text="Messages" />
+          <Sections.HeaderSectionItem text="Messages" />
 
-          <Sections.GenericItem>
+          <Sections.GenericSectionItem>
             <MessageBox type="info" message="This is a message" />
-          </Sections.GenericItem>
+          </Sections.GenericSectionItem>
 
-          <Sections.GenericItem>
+          <Sections.GenericSectionItem>
             <MessageBox
               type="info"
               message="This is a message with title"
               title="Title"
             />
-          </Sections.GenericItem>
+          </Sections.GenericSectionItem>
 
-          <Sections.GenericItem>
+          <Sections.GenericSectionItem>
             <MessageBox
               message="This is a warning"
               title="Title"
               type="warning"
             />
-          </Sections.GenericItem>
+          </Sections.GenericSectionItem>
 
-          <Sections.GenericItem>
+          <Sections.GenericSectionItem>
             <MessageBox
               message="This is a success message"
               title="Title"
               type="valid"
             />
-          </Sections.GenericItem>
+          </Sections.GenericSectionItem>
 
-          <Sections.GenericItem>
+          <Sections.GenericSectionItem>
             <MessageBox
               message="This is an error with retry link"
               title="Title"
@@ -179,27 +179,27 @@ export default function DesignSystem() {
                 text: t(dictionary.retry),
               }}
             />
-          </Sections.GenericItem>
+          </Sections.GenericSectionItem>
 
-          <Sections.GenericItem>
+          <Sections.GenericSectionItem>
             <MessageBox
               type="info"
               isMarkdown={true}
               title="Markdown"
               message={`This is a message with markdown,\nSupporting **bold** and *italics*\nand special characters like ', " + æøå`}
             />
-          </Sections.GenericItem>
+          </Sections.GenericSectionItem>
 
-          <Sections.GenericItem>
+          <Sections.GenericSectionItem>
             <MessageBox
               type="info"
               title="With dismiss"
               onDismiss={() => Alert.alert('Closed')}
               message={`This is a message with dismiss button`}
             />
-          </Sections.GenericItem>
+          </Sections.GenericSectionItem>
 
-          <Sections.GenericItem>
+          <Sections.GenericSectionItem>
             <MessageBox
               type="warning"
               title="With dismiss and action"
@@ -210,9 +210,9 @@ export default function DesignSystem() {
               }}
               message={`This is a message with dismiss and action`}
             />
-          </Sections.GenericItem>
+          </Sections.GenericSectionItem>
 
-          <Sections.GenericItem>
+          <Sections.GenericSectionItem>
             <MessageBox
               type="error"
               title="With dismiss and link"
@@ -223,9 +223,9 @@ export default function DesignSystem() {
               }}
               message={`This is a message with dismiss and link`}
             />
-          </Sections.GenericItem>
+          </Sections.GenericSectionItem>
 
-          <Sections.GenericItem>
+          <Sections.GenericSectionItem>
             <MessageBox
               type="valid"
               isMarkdown={true}
@@ -233,7 +233,7 @@ export default function DesignSystem() {
               noStatusIcon={true}
               message={`This is a message without status icon`}
             />
-          </Sections.GenericItem>
+          </Sections.GenericSectionItem>
         </Sections.Section>
 
         <View style={style.buttons}>
@@ -247,11 +247,17 @@ export default function DesignSystem() {
               rightIcon={{svg: Delete}}
             />
             <Button text="Press me" onPress={presser} type="inline" />
-            <Button text="Press me" onPress={presser} type="compact" />
             <Button
               text="Press me"
               onPress={presser}
-              type="compact"
+              type="inline"
+              compact={true}
+            />
+            <Button
+              text="Press me"
+              onPress={presser}
+              type="inline"
+              compact={true}
               rightIcon={{svg: Delete}}
             />
             <Button
@@ -277,13 +283,13 @@ export default function DesignSystem() {
         </View>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ActionItem
+          <Sections.ActionSectionItem
             text="Some very long text over here which goes over multiple lines"
             mode="check"
             checked
           />
-          <Sections.ActionItem text="Some short text" mode="toggle" />
-          <Sections.ActionItem
+          <Sections.ActionSectionItem text="Some short text" mode="toggle" />
+          <Sections.ActionSectionItem
             text="Some short text"
             mode="check"
             checked
@@ -292,12 +298,12 @@ export default function DesignSystem() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.LocationInput
+          <Sections.LocationInputSectionItem
             label="Label"
             placeholder="My very long placeholder over here. Yes over multiple lines"
             onPress={() => {}}
           />
-          <Sections.LocationInput
+          <Sections.LocationInputSectionItem
             label="Label"
             placeholder="Short"
             onPress={() => {}}
@@ -306,31 +312,31 @@ export default function DesignSystem() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ButtonInput
+          <Sections.ButtonSectionItem
             label="Label"
             placeholder="My very long placeholder over here. Yes over multiple lines"
             onPress={() => {}}
             icon="arrow-left"
           />
 
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Some longer text"
             onPress={() => {}}
             disabled
             icon={<ThemeIcon svg={Edit} />}
           />
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Some longer text"
             onPress={() => {}}
             icon={<ThemeIcon svg={Edit} />}
           />
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Dangerous Link Item"
             subtitle="Subtitle text"
             onPress={() => {}}
             icon={<ThemeIcon svg={Delete} colorType="error" />}
           />
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Disabled Dangerous Link Item text"
             subtitle="Disabled Subtitle text"
             disabled={true}
@@ -340,7 +346,7 @@ export default function DesignSystem() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.TextInput
+          <Sections.TextInputSectionItem
             label="Input"
             placeholder="My very long placeholder over here. Yes over multiple lines"
             onChangeText={() => {}}
@@ -350,7 +356,7 @@ export default function DesignSystem() {
             inlineLabel={false}
           />
 
-          <Sections.TextInput
+          <Sections.TextInputSectionItem
             label="Input"
             placeholder="Short placeholder"
             onChangeText={() => {}}
@@ -362,9 +368,9 @@ export default function DesignSystem() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.HeaderItem text="Texts" />
+          <Sections.HeaderSectionItem text="Texts" />
 
-          <Sections.GenericItem>
+          <Sections.GenericSectionItem>
             {textNames.map(function (t: TextNames) {
               return (
                 <ThemeText type={t} key={t}>
@@ -372,24 +378,24 @@ export default function DesignSystem() {
                 </ThemeText>
               );
             })}
-          </Sections.GenericItem>
+          </Sections.GenericSectionItem>
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.HeaderItem text="Message section items" />
+          <Sections.HeaderSectionItem text="Message section items" />
 
-          <Sections.MessageItem
+          <Sections.MessageSectionItem
             messageType="info"
             title="Information message!"
             message="An information message with title"
           />
 
-          <Sections.MessageItem
+          <Sections.MessageSectionItem
             messageType="valid"
             message="A success message without title"
           />
 
-          <Sections.MessageItem
+          <Sections.MessageSectionItem
             messageType="warning"
             title="Warning message!"
             message="A warning message with title link"
@@ -399,7 +405,7 @@ export default function DesignSystem() {
             }}
           />
 
-          <Sections.MessageItem
+          <Sections.MessageSectionItem
             messageType="error"
             message="An error message without title and with action"
             onPressConfig={{

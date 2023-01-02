@@ -1,4 +1,4 @@
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {
   PreassignedFareProduct,
   PreassignedFareProductType,
@@ -36,13 +36,13 @@ import {
   userProfileCountAndName,
   getValidityStatus,
 } from '@atb/screens/Ticketing/FareContracts/utils';
-import {screenReaderPause} from '@atb/components/accessible-text';
+import {screenReaderPause} from '@atb/components/text';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import FareContractDetail from '@atb/screens/Ticketing/FareContracts/Component/FareContractDetail';
 import WarningMessage from '@atb/screens/Ticketing/FareContracts/Component/WarningMessage';
 import Barcode from '@atb/screens/Ticketing/FareContracts/Details/Barcode';
-import SectionSeparator from '@atb/components/sections/section-separator';
+import {SectionSeparator} from '@atb/components/sections';
 import {getLastUsedAccess} from './Carnet/CarnetDetails';
 import InspectionSymbol from '@atb/screens/Ticketing/FareContracts/Component/InspectionSymbol';
 
@@ -204,7 +204,6 @@ const FareContractInfoDetails = (props: FareContractInfoDetailsProps) => {
     userProfilesWithCount,
     omitUserProfileCount,
     status,
-    preassignedFareProduct,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -266,7 +265,7 @@ export const getFareContractInfoDetails = (
     fallbackEnabled,
   );
   const fareContractState = fareContract.state;
-  var validTo = endDateTime.toMillis();
+  let validTo = endDateTime.toMillis();
   const validFrom = startDateTime.toMillis();
   const validityStatus = getValidityStatus(
     now,

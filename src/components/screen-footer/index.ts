@@ -1,0 +1,1 @@
+export {FullScreenFooter} from './FullScreenFooter';

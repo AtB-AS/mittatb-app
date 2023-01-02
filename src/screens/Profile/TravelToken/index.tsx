@@ -1,4 +1,4 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet, Theme} from '@atb/theme';
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import TravelTokenBox from '@atb/travel-token-box';

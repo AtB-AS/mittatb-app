@@ -18,8 +18,7 @@ import {TripDetailsScreenProps} from '../types';
 import MapLabel from './MapLabel';
 import MapRoute from './MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
-import {zoomIn, zoomOut} from '@atb/components/map/utils';
-import {flyToLocation} from '@atb/components/map/hooks/use-trigger-camera-move-effect';
+import {flyToLocation, zoomIn, zoomOut} from '@atb/components/map';
 
 export type MapDetailRouteParams = {
   legs: MapLeg[];

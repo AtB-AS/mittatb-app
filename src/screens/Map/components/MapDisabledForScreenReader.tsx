@@ -1,12 +1,12 @@
-import {screenReaderPause} from '@atb/components/accessible-text';
-import ThemeText from '@atb/components/text';
+import {screenReaderPause} from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemedMapImage} from '@atb/theme/ThemedAssets';
 import {MapTexts, useTranslation} from '@atb/translations';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import StatusBarOnFocus from '@atb/components/status-bar-on-focus';
+import {StatusBarOnFocus} from '@atb/components/status-bar-on-focus';
 
 export function MapDisabledForScreenReader() {
   const styles = useStyles();

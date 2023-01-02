@@ -2,7 +2,7 @@ import {RefObject} from 'react';
 import MapboxGL, {Expression} from '@react-native-mapbox-gl/maps';
 import {Coordinates} from '@atb/screens/TripDetails/Map/types';
 import {Feature, Point, Position} from 'geojson';
-import {MapSelectionActionType} from '@atb/components/map/types';
+import {MapSelectionActionType} from './types';
 import {PixelRatio, Platform} from 'react-native';
 
 export async function zoomIn(
@@ -87,3 +87,14 @@ export const getFeaturesAtClick = async (
   );
   return featuresAtPoint?.features;
 };
+
+export function flyToLocation(
+  coordinates: Coordinates | undefined,
+  mapCameraRef: RefObject<MapboxGL.Camera>,
+) {
+  coordinates &&
+    mapCameraRef.current?.flyTo(
+      [coordinates.longitude, coordinates.latitude],
+      750,
+    );
+}

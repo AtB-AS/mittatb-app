@@ -1,4 +1,3 @@
-import {ConfirmCodeInOnboardingRouteParams} from '@atb/login/in-onboarding/ConfirmCodeInOnboarding';
 import {LoginInAppStackParams} from '@atb/login/types';
 import {RootStackScreenProps} from '@atb/navigation/types';
 import {
@@ -11,9 +10,6 @@ export type OnboardingStackParams = {
   WelcomeScreenLogin: undefined;
   WelcomeScreenWithoutLogin: undefined;
   IntercomInfo: undefined;
-  PhoneInputInOnboarding: undefined;
-  ConfirmCodeInOnboarding: ConfirmCodeInOnboardingRouteParams;
-  SkipLoginWarning: undefined;
   ConsequencesFromOnboarding: undefined;
   LoginInApp: NavigatorScreenParams<LoginInAppStackParams>;
 };

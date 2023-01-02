@@ -6,13 +6,13 @@ import {
   filterValidRightNowFareContract,
   useTicketingState,
 } from '@atb/ticketing';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {
   TicketingTexts,
   DashboardTexts,
   useTranslation,
 } from '@atb/translations';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {getFareContractInfoDetails} from '../Ticketing/FareContracts/FareContractInfo';
 import {
   useHasEnabledMobileToken,

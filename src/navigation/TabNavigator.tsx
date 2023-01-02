@@ -5,8 +5,8 @@ import {
   Ticketing,
 } from '@atb/assets/svg/mono-icons/tab-bar';
 import {MapPin} from '../assets/svg/mono-icons/map';
-import ThemeText from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
+import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {usePreferenceItems} from '@atb/preferences';
 import Dashboard from '@atb/screens/Dashboard';
 import DeparturesStack from '@atb/screens/Departures';
@@ -26,7 +26,7 @@ import {SvgProps} from 'react-native-svg';
 import {TabNavigatorParams} from './types';
 import NearbyScreen from '@atb/screens/Nearby';
 import ProfileScreen from '@atb/screens/Profile';
-import {useMapPage} from '@atb/components/map/hooks/use-map-page';
+import {useMapPage} from '@atb/components/map';
 import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
 
 const Tab = createBottomTabNavigator<TabNavigatorParams>();

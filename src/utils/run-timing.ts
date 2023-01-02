@@ -5,7 +5,6 @@ import Animated, {
   clockRunning,
   cond,
   debug,
-  Easing,
   EasingNode,
   set,
   startClock,

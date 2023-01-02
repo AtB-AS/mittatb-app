@@ -2,20 +2,20 @@ import React from 'react';
 import {View} from 'react-native';
 import {QuayInfo} from '@atb/api/departures/types';
 import {Walk} from '@atb/assets/svg/mono-icons/transportation';
-import {screenReaderPause} from '@atb/components/accessible-text';
+import {screenReaderPause} from '@atb/components/text';
 import {
-  SectionItem,
+  SectionItemProps,
   useSectionItem,
   useSectionStyle,
-} from '@atb/components/sections/section-utils';
-import ThemeText from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
+} from '@atb/components/sections';
+import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {isSituationValidAtDate, SituationMessageBox} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import {useHumanizeDistance} from '@atb/utils/location';
 
-export type QuayHeaderItemProps = SectionItem<{
+export type QuayHeaderItemProps = SectionItemProps<{
   quay: QuayInfo;
   distance?: number;
   searchDate: string;
@@ -64,7 +64,9 @@ export default function QuayHeaderItem({
         accessibilityLabel={`${accessibilityLabel} ${label} ${screenReaderPause}`}
         accessibilityRole="header"
       >
-        <ThemeText testID={testID + 'Title'}>{title}</ThemeText>
+        <ThemeText type={'body__primary--bold'} testID={testID + 'Title'}>
+          {title}
+        </ThemeText>
         <Distance distance={humanized} />
       </View>
       {situations.map((situation) => (

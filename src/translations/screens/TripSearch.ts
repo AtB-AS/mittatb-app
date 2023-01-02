@@ -83,6 +83,13 @@ const TripSearchTexts = {
       'Activate to change time of travel',
     ),
   },
+  filterButton: {
+    text: _(`Filter`, `Filter`),
+    a11yHint: _(
+      'Aktivér for å velge filtere for reisesøket',
+      'Activate to select filters for the travel search',
+    ),
+  },
   results: {
     fetchMore: _('Last inn flere reiseforslag', 'Load more results'),
     fetchingMore: _('Søker etter flere reiseforslag', 'Loading more results'),

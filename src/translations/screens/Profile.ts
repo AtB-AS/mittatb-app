@@ -7,7 +7,7 @@ const ProfileTexts = {
   sections: {
     account: {
       heading: _('Min konto', 'My account'),
-      linkItems: {
+      linkSectionItems: {
         login: {
           label: _('Logg inn', 'Log in'),
         },
@@ -42,12 +42,11 @@ const ProfileTexts = {
       heading: _('Ny funksjonalitet', 'New features'),
       departures: _('Prøv ny avganger-visning', 'Try the new departure view'),
       assistant: _('Prøv ny reisesøkmotor', 'Try the new travel search engine'),
-      frontPage: _('Prøv ny forside', 'Try the new Front Page'),
       map: _('Prøv ny kartside', 'Try the new map page'),
     },
     settings: {
       heading: _('Innstillinger', 'Settings'),
-      linkItems: {
+      linkSectionItems: {
         userProfile: {
           label: _('Standard reisende', 'Default traveller'),
         },
@@ -74,7 +73,7 @@ const ProfileTexts = {
     },
     favorites: {
       heading: _('Favoritter', 'Favourites'),
-      linkItems: {
+      linkSectionItems: {
         places: {
           label: _('Steder', 'Locations'),
           a11yHint: _(
@@ -100,7 +99,7 @@ const ProfileTexts = {
     },
     privacy: {
       heading: _('Personvern', 'Privacy'),
-      linkItems: {
+      linkSectionItems: {
         privacy: {
           label: _('Personvernerklæring', 'Privacy statement'),
           a11yHint: _(
@@ -127,7 +126,7 @@ const ProfileTexts = {
     },
     information: {
       heading: _('Info og priser', 'Info and prices'),
-      linkItems: {
+      linkSectionItems: {
         ticketing: {
           label: _('Billettkjøp', 'Ticketing'),
         },

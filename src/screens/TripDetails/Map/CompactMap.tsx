@@ -1,5 +1,5 @@
 import {MapIcon} from '@atb/assets/svg/color/map';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {MapCameraConfig, MapViewConfig} from '@atb/components/map';
 
 import {StyleSheet, useTheme} from '@atb/theme';

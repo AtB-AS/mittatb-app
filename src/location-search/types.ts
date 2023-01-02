@@ -1,4 +1,4 @@
-import {JourneySearchHistoryEntry} from '@atb/search-history/types';
+import {JourneySearchHistoryEntry} from '@atb/search-history';
 import {
   Location,
   SearchLocation,

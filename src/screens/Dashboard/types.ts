@@ -9,9 +9,7 @@ import {
 import {StackScreenProps} from '@react-navigation/stack';
 import {DetailsStackParams} from '../TripDetails/types';
 import {DateTimePickerParams, SearchTime} from './journey-date-picker';
-import NearbyStopPlacesScreen, {
-  NearbyStopPlacesScreenParams,
-} from '@atb/screens/Dashboard/NearbyStopPlacesScreen';
+import {NearbyStopPlacesScreenParams} from '@atb/screens/Dashboard/NearbyStopPlacesScreen';
 import {PlaceScreenParams} from '@atb/screens/Departures/PlaceScreen';
 
 export type SearchStateType =

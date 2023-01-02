@@ -1,10 +1,6 @@
-import {StopPlace, Quay} from '@atb/api/types/departures';
+import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useFavorites} from '@atb/favorites';
-import {
-  getLimitOfDeparturesPerLineByMode,
-  getTimeRangeByMode,
-  SearchTime,
-} from '@atb/screens/Departures/utils';
+import {SearchTime} from '@atb/screens/Departures/utils';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';

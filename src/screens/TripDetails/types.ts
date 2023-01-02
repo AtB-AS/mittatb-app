@@ -4,7 +4,6 @@ import {
   CompositeScreenProps,
 } from '@react-navigation/native';
 import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
-import {AssistantScreenProps} from '../Assistant/types';
 import {DashboardScreenProps} from '../Dashboard/types';
 import {PlaceScreenParams} from '../Departures/PlaceScreen';
 import {DeparturesStackProps} from '../Departures/types';
@@ -25,7 +24,6 @@ export type DetailsStackParams = {
 // Can be used several places. Each place should be a condition.
 export type TripDetailsRootProps =
   | NearbyScreenProps<'TripDetails'>
-  | AssistantScreenProps<'TripDetails'>
   | DashboardScreenProps<'TripDetails'>
   | DeparturesStackProps<'TripDetails'>;
 

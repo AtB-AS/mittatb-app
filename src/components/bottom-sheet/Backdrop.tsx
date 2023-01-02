@@ -2,11 +2,7 @@ import {Animated} from 'react-native';
 import React, {useMemo} from 'react';
 import {StyleSheet} from '@atb/theme';
 
-export default function Backdrop({
-  animatedOffset,
-}: {
-  animatedOffset: Animated.Value;
-}) {
+export function Backdrop({animatedOffset}: {animatedOffset: Animated.Value}) {
   const styles = useStyles();
   const opacity = useMemo(
     () =>
@@ -28,7 +24,7 @@ export default function Backdrop({
   );
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   backdrop: {
     backgroundColor: 'black',
     position: 'absolute',

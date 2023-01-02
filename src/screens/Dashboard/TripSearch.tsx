@@ -1,13 +1,13 @@
-import {Swap} from '@atb/assets/svg/mono-icons/actions';
+import {Filter, Swap} from '@atb/assets/svg/mono-icons/actions';
 import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import {screenReaderPause} from '@atb/components/accessible-text';
-import Button from '@atb/components/button';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
-import {LocationInput, Section} from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
+import {screenReaderPause} from '@atb/components/text';
+import {Button} from '@atb/components/button';
+import {FullScreenHeader} from '@atb/components/screen-header';
+import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
+import {LocationInputSectionItem, Section} from '@atb/components/sections';
+import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';
@@ -44,6 +44,8 @@ import {
   View,
 } from 'react-native';
 import {DashboardScreenProps} from './types';
+import {Time} from '@atb/assets/svg/mono-icons/time';
+import {useTravelSearchFiltersEnabled} from '@atb/screens/Dashboard/use-travel-search-filters-enabled';
 
 type TripSearchRouteName = 'TripSearch';
 const TripSearchRouteNameStatic: TripSearchRouteName = 'TripSearch';
@@ -69,14 +71,10 @@ const TripSearch: React.FC<RootProps> = ({
   const style = useStyle();
   const {theme} = useTheme();
   const {language, t} = useTranslation();
-  const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
+  const [updatingLocation] = useState<boolean>(false);
 
-  const {
-    status,
-    locationEnabled,
-    location,
-    requestPermission: requestGeoPermission,
-  } = useGeolocationState();
+  const {location, requestPermission: requestGeoPermission} =
+    useGeolocationState();
 
   const currentLocation = location || undefined;
 
@@ -85,7 +83,7 @@ const TripSearch: React.FC<RootProps> = ({
     option: 'now',
     date: new Date().toISOString(),
   });
-  const {tripPatterns, timeOfLastSearch, loadMore, clear, searchState, error} =
+  const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
     useTripsQuery(from, to, searchTime);
 
   const isSearching = searchState === 'searching';
@@ -99,6 +97,8 @@ const TripSearch: React.FC<RootProps> = ({
   >();
 
   const screenHasFocus = useIsFocused();
+
+  const travelSearchFiltersEnabled = useTravelSearchFiltersEnabled();
 
   useEffect(() => {
     if (!screenHasFocus) return;
@@ -238,7 +238,7 @@ const TripSearch: React.FC<RootProps> = ({
       <View style={style.searchHeader}>
         <View style={style.paddedContainer}>
           <Section>
-            <LocationInput
+            <LocationInputSectionItem
               accessibilityLabel={
                 t(TripSearchTexts.location.departurePicker.a11yLabel) +
                 screenReaderPause
@@ -267,7 +267,7 @@ const TripSearch: React.FC<RootProps> = ({
               testID="searchFromButton"
             />
 
-            <LocationInput
+            <LocationInputSectionItem
               accessibilityLabel={t(
                 TripSearchTexts.location.destinationPicker.a11yLabel,
               )}
@@ -287,14 +287,32 @@ const TripSearch: React.FC<RootProps> = ({
             />
           </Section>
         </View>
-        <View style={[style.paddedContainer, style.fadeChild]} key="dateInput">
+        <View style={style.searchParametersButtons}>
           <Button
             text={getSearchTimeLabel(searchTime, timeOfLastSearch, t, language)}
             accessibilityHint={t(TripSearchTexts.dateInput.a11yHint)}
             interactiveColor="interactive_0"
+            mode="secondary"
+            compact={true}
             onPress={onSearchTimePress}
             testID="dashboardDateTimePicker"
+            rightIcon={{svg: Time}}
+            viewContainerStyle={style.searchTimeButton}
           />
+          {travelSearchFiltersEnabled && (
+            <Button
+              text={t(TripSearchTexts.filterButton.text)}
+              accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
+              interactiveColor="interactive_1"
+              mode="secondary"
+              type="inline"
+              compact={true}
+              onPress={() => {}}
+              testID="dashboardDateTimePicker"
+              rightIcon={{svg: Filter}}
+              viewContainerStyle={style.filterButton}
+            />
+          )}
         </View>
       </View>
 
@@ -398,7 +416,7 @@ function useLocations(
     ],
   );
 
-  var searchedFromLocation =
+  let searchedFromLocation =
     useLocationSearchValue<RootProps['route']>('fromLocation');
   const searchedToLocation =
     useLocationSearchValue<RootProps['route']>('toLocation');
@@ -533,9 +551,12 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   paddedContainer: {
     marginHorizontal: theme.spacings.medium,
   },
-  fadeChild: {
-    marginVertical: theme.spacings.medium,
+  searchParametersButtons: {
+    margin: theme.spacings.medium,
+    flexDirection: 'row',
   },
+  searchTimeButton: {flex: 1},
+  filterButton: {marginLeft: theme.spacings.medium},
   searchHeader: {
     backgroundColor: theme.static.background[headerBackgroundColor].background,
     elevation: 1,

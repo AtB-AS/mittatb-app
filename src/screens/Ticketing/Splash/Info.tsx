@@ -1,7 +1,6 @@
 import {TicketSplash} from '@atb/assets/svg/color/images';
-import Button from '@atb/components/button';
-import Header from '@atb/components/screen-header';
-import ThemeText from '@atb/components/text';
+import {ScreenHeader} from '@atb/components/screen-header';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {StaticColor} from '@atb/theme/colors';
 import {TicketingSplashTexts, useTranslation} from '@atb/translations';
@@ -9,13 +8,8 @@ import React from 'react';
 import {useWindowDimensions, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {TicketSplashNavigationProp} from './';
 
-type Props = {
-  navigation: TicketSplashNavigationProp;
-};
-
-export default function SplashInfo({navigation}: Props) {
+export default function SplashInfo() {
   const styles = useStyles();
   const {width: windowWidth} = useWindowDimensions();
   const {t} = useTranslation();
@@ -24,7 +18,7 @@ export default function SplashInfo({navigation}: Props) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
+      <ScreenHeader
         title={t(TicketingSplashTexts.header.title)}
         rightButton={{type: 'chat'}}
         color={bgcolor}

@@ -1,8 +1,8 @@
 import {useTranslation} from '@atb/translations';
 import {ScrollView, View} from 'react-native';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {StaticColorByType} from '@atb/theme/colors';

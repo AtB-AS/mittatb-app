@@ -1,13 +1,11 @@
 import {Leg, Place, Quay} from '@atb/api/types/trips';
 import {Info, Warning} from '@atb/assets/svg/color/icons/status';
 import {Interchange} from '@atb/assets/svg/mono-icons/actions';
-import AccessibleText, {
-  screenReaderPause,
-} from '@atb/components/accessible-text';
+import {AccessibleText, screenReaderPause} from '@atb/components/text';
 import {MessageBox} from '@atb/components/message-box';
-import ThemeText from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import TransportationIcon from '@atb/components/transportation-icon';
+import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {TransportationIcon} from '@atb/components/transportation-icon';
 import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';

@@ -1,8 +1,5 @@
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {
-  PreassignedFareProductType,
-  TariffZone,
-} from '@atb/reference-data/types';
+import {TariffZone} from '@atb/reference-data/types';
 import {PaymentType} from '@atb/ticketing/types';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {format, parseISO} from 'date-fns';

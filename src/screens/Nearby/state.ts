@@ -1,6 +1,5 @@
 import {useIsFocused} from '@react-navigation/native';
 import {useCallback, useEffect} from 'react';
-import {LayoutAnimation} from 'react-native';
 import useReducerWithSideEffects, {
   NoUpdate,
   ReducerWithSideEffects,
@@ -10,10 +9,10 @@ import useReducerWithSideEffects, {
 } from 'use-reducer-with-side-effects';
 import {getDepartureGroups, getRealtimeDeparture} from '@atb/api/departures';
 import {
-  DepartureGroupMetadata,
   DepartureFavoritesQuery,
-  getNextDepartureGroups,
+  DepartureGroupMetadata,
   DepartureGroupsPayloadLocation,
+  getNextDepartureGroups,
 } from '@atb/api/departures/departure-group';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavorites} from '@atb/favorites';

@@ -51,7 +51,7 @@ export default function ProductSelectionByProducts({
         />
       )}
       <Sections.Section>
-        <Sections.RadioSection<PreassignedFareProduct>
+        <Sections.RadioGroupSection<PreassignedFareProduct>
           items={selectableProducts}
           keyExtractor={(u) => u.id}
           itemToText={(fp) => getReferenceDataName(fp, language)}

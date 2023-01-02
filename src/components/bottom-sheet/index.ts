@@ -1,6 +1,2 @@
-export {
-  default as BottomSheetProvider,
-  useBottomSheet,
-} from './BottomSheetContext';
-
-export {default as BottomSheetContainer} from './BottomSheetContainer';
+export {BottomSheetProvider, useBottomSheet} from './BottomSheetContext';
+export {BottomSheetContainer} from './BottomSheetContainer';

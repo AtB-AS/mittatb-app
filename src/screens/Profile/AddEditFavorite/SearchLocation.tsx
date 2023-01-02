@@ -1,4 +1,4 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {SearchLocation} from '@atb/favorites/types';
 import {LocationSearchContent} from '@atb/location-search';
 import {StyleSheet} from '@atb/theme';

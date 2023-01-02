@@ -1,7 +1,7 @@
 import {Cloud} from '@atb/assets/svg/color/illustrations';
 import TravelPlanning from '@atb/assets/svg/color/images/TravelPlanning';
-import Button from '@atb/components/button';
-import ThemeText from '@atb/components/text';
+import {Button} from '@atb/components/button';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';

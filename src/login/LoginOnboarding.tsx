@@ -1,10 +1,10 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
-import Button from '@atb/components/button';
-import ThemeText from '@atb/components/text';
+import {Button} from '@atb/components/button';
+import {ThemeText} from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';

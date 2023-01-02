@@ -1,6 +1,6 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import React, {useEffect, useState} from 'react';
 import {Alert, TouchableOpacity, View} from 'react-native';
@@ -17,14 +17,16 @@ import {
 import Slider from '@react-native-community/slider';
 import {usePreferences, UserPreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {
   RemoteConfigContextState,
   useRemoteConfig,
 } from '@atb/RemoteConfigContext';
 import {useGlobalMessagesState} from '@atb/global-messages';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
+import {RadioSegments} from '@atb/components/radio';
+import {useTravelSearchFiltersDebugOverride} from '@atb/screens/Dashboard/use-travel-search-filters-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -40,6 +42,9 @@ export default function DebugInfo() {
   const [idToken, setIdToken] = useState<
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
+
+  const [travelSearchFilterOverride, setTravelSearchFilterOverride] =
+    useTravelSearchFiltersDebugOverride();
 
   useEffect(() => {
     async function run() {
@@ -107,7 +112,7 @@ export default function DebugInfo() {
 
       <ScrollView testID="debugInfoScrollView">
         <Sections.Section withPadding withTopPadding>
-          <Sections.ActionItem
+          <Sections.ActionSectionItem
             mode="toggle"
             text="Toggle test-ID"
             checked={showTestIds}
@@ -115,47 +120,47 @@ export default function DebugInfo() {
               setPreference({showTestIds});
             }}
           />
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Restart onboarding"
             onPress={() => {
               appDispatch({type: 'RESTART_ONBOARDING'});
             }}
           />
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Set mobile token onboarded to false"
             onPress={restartMobileTokenOnboarding}
           />
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Reset dismissed Global messages"
             onPress={resetDismissedGlobalMessages}
           />
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Copy link to customer in Firestore (staging)"
             icon="arrow-upleft"
             onPress={() => copyFirestoreLink()}
           />
 
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Force refresh id token"
             onPress={() => auth().currentUser?.getIdToken(true)}
           />
 
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Force refresh remote config"
             onPress={remoteConfig.refresh}
           />
 
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Reset feedback displayStats"
             onPress={() => storage.set('@ATB_feedback_display_stats', '')}
           />
 
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Reset frontpage favourite departures"
             onPress={() => storage.set('@ATB_user_frontpage_departures', '[]')}
           />
 
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Reset has read departures v2 onboarding"
             onPress={() =>
               storage.set(
@@ -164,10 +169,43 @@ export default function DebugInfo() {
               )
             }
           />
+
+          <Sections.GenericSectionItem>
+            <ThemeText>
+              Debug override for enable travel search filter. If undefined the
+              value from Remote Config will be used. Needs reload of app after
+              change.
+            </ThemeText>
+            <RadioSegments
+              activeIndex={
+                travelSearchFilterOverride
+                  ? 0
+                  : travelSearchFilterOverride === undefined
+                  ? 1
+                  : 2
+              }
+              color="interactive_2"
+              style={{marginTop: 8}}
+              options={[
+                {
+                  text: 'True',
+                  onPress: () => setTravelSearchFilterOverride(true),
+                },
+                {
+                  text: 'Undefined',
+                  onPress: () => setTravelSearchFilterOverride(undefined),
+                },
+                {
+                  text: 'False',
+                  onPress: () => setTravelSearchFilterOverride(false),
+                },
+              ]}
+            />
+          </Sections.GenericSectionItem>
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text={'Trip search parameters'}
             showIconText={true}
             expandContent={
@@ -238,7 +276,7 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text="Firebase Auth user info"
             showIconText={true}
             expandContent={
@@ -252,7 +290,7 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text="Firebase Auth user claims"
             showIconText={true}
             expandContent={
@@ -270,7 +308,7 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text="Remote config"
             showIconText={true}
             expandContent={
@@ -291,7 +329,7 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text="Storage"
             showIconText={true}
             expandContent={
@@ -307,7 +345,7 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text="Preferences"
             showIconText={true}
             expandContent={
@@ -333,7 +371,7 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text="Mobile token state"
             showIconText={true}
             expandContent={
@@ -384,7 +422,7 @@ export default function DebugInfo() {
                       onPress={renewToken}
                     />
                   )}
-                  <Sections.ExpandableItem
+                  <Sections.ExpandableSectionItem
                     text="Remote tokens"
                     showIconText={true}
                     expandContent={remoteTokens?.map((token) => (
@@ -521,7 +559,7 @@ function LabeledSlider({
   const [pref, setPref] = useState(initialValue || defaultValue);
 
   return (
-    <Sections.GenericItem>
+    <Sections.GenericSectionItem>
       <ThemeText
         onPress={
           defaultValue
@@ -543,7 +581,7 @@ function LabeledSlider({
         onValueChange={setPref}
         onSlidingComplete={onSetValue}
       />
-    </Sections.GenericItem>
+    </Sections.GenericSectionItem>
   );
 }
 

@@ -1,11 +1,10 @@
 import {
-  TouchableWithoutFeedback,
-  View,
   ScrollView,
   Switch,
   Text,
   TextInput,
-  ViewStyle,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import React from 'react';
 import {v4 as uuid} from 'uuid';

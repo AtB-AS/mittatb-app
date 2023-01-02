@@ -1,4 +1,4 @@
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {MaterialTopTabBarProps} from '@react-navigation/material-top-tabs';
 import {Route} from '@react-navigation/native';
@@ -9,7 +9,6 @@ const TicketingTabBar: React.FC<MaterialTopTabBarProps> = ({
   state,
   descriptors,
   navigation,
-  position,
 }) => {
   const styles = useStyles();
   const {theme} = useTheme();

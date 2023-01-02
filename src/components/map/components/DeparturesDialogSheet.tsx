@@ -7,14 +7,13 @@ import {ScreenHeaderWithoutNavigation} from '../../screen-header';
 import {dictionary, ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import StopPlaceView from '@atb/screens/Departures/StopPlaceView';
 import {SearchTime} from '@atb/screens/Departures/utils';
-import {StopPlace, Quay} from '@atb/api/types/departures';
+import {Quay, StopPlace} from '@atb/api/types/departures';
 import {MessageBox} from '@atb/components/message-box';
 import {Feature, Point} from 'geojson';
 import {useReverseGeocoder} from '@atb/geocoder';
 import {useStopsDetailsData} from '@atb/screens/Departures/state/stop-place-details-state';
 import {Location, SearchLocation} from '@atb/favorites/types';
 import {NavigateToTripSearchCallback} from '../types';
-import {useGeolocationState} from '@atb/GeolocationContext';
 
 type DeparturesDialogSheetProps = {
   close: () => void;
@@ -31,7 +30,7 @@ type DeparturesDialogSheetProps = {
   navigateToTripSearch: NavigateToTripSearchCallback;
 };
 
-const DeparturesDialogSheet = ({
+export const DeparturesDialogSheet = ({
   close,
   distance,
   stopPlaceFeature,
@@ -46,7 +45,6 @@ const DeparturesDialogSheet = ({
     date: new Date().toISOString(),
   });
   const [longitude, latitude] = stopPlaceFeature.geometry.coordinates;
-  const {locationEnabled, location} = useGeolocationState();
   const {
     locations,
     isSearching: isGeocoderSearching,
@@ -179,5 +177,3 @@ const useBottomSheetStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.medium,
   },
 }));
-
-export default DeparturesDialogSheet;

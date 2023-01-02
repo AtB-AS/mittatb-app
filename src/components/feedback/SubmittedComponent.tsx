@@ -1,8 +1,8 @@
 import React from 'react';
-import {Linking, StyleProp, View, ViewStyle} from 'react-native';
+import {Linking, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import Button from '../button';
-import ThemeText from '@atb/components/text';
+import {Button} from '@atb/components/button';
+import {ThemeText} from '@atb/components/text';
 import {FeedbackTexts, useTranslation} from '@atb/translations';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import Intercom from 'react-native-intercom';
@@ -10,22 +10,20 @@ import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {FeedbackQuestionsViewContext} from './FeedbackContext';
-import {Opinions} from '.';
+import {Opinions} from './Feedback';
 
 type SubmittedComponentProps = {
   viewContext: FeedbackQuestionsViewContext;
   opinion: Opinions;
   selectedTextAlternatives: (string | undefined)[];
   firebaseId?: string;
-  style?: StyleProp<ViewStyle>;
 };
 
-const SubmittedComponent = ({
+export const SubmittedComponent = ({
   viewContext,
   opinion,
   selectedTextAlternatives,
   firebaseId,
-  style,
 }: SubmittedComponentProps) => {
   const styles = useSubmittedComponentStyles();
   const {t} = useTranslation();
@@ -102,5 +100,3 @@ const useSubmittedComponentStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.large,
   },
 }));
-
-export default SubmittedComponent;

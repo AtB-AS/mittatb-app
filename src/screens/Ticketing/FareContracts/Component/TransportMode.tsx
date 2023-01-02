@@ -1,6 +1,6 @@
 import {View} from 'react-native';
-import TransportationIcon from '@atb/components/transportation-icon';
-import ThemeText from '@atb/components/text';
+import {TransportationIcon} from '@atb/components/transportation-icon';
+import {ThemeText} from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
@@ -37,7 +37,7 @@ const TransportMode = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   transportationMode: {
     flexDirection: 'row',
     alignItems: 'center',

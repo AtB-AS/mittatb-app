@@ -1,6 +1,6 @@
-import Button from '@atb/components/button';
-import ThemeText from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
+import {Button} from '@atb/components/button';
+import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
 import {
   ContactSheetTexts,
@@ -9,7 +9,7 @@ import {
 } from '@atb/translations';
 import React, {forwardRef} from 'react';
 import {AccessibilityProps, Linking, View} from 'react-native';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {FullScreenFooter} from '@atb/components/screen-footer';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ChatUnread} from '@atb/assets/svg/color/icons/actions';
@@ -23,7 +23,6 @@ type Props = {
 };
 
 const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
-  const styles = useStyles();
   const {t} = useTranslation();
   const unreadCount = useChatUnreadCount();
   const {customer_service_url, enable_intercom, customer_feedback_url} =

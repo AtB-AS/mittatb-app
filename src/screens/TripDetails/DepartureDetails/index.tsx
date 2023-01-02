@@ -6,12 +6,12 @@ import {
 import {QuayFragment} from '@atb/api/types/generated/fragments/quays';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
-import ContentWithDisappearingHeader from '@atb/components/disappearing-header/content';
+import {ContentWithDisappearingHeader} from '@atb/components/disappearing-header';
 import {MessageBox} from '@atb/components/message-box';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
-import ThemeText from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
+import {FullScreenHeader} from '@atb/components/screen-header';
+import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
+import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import CancelledDepartureMessage from '@atb/screens/TripDetails/components/CancelledDepartureMessage';
 import PaginatedDetailsHeader from '@atb/screens/TripDetails/components/PaginatedDetailsHeader';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
@@ -34,7 +34,7 @@ import useDepartureData, {
 } from './use-departure-data';
 import {TicketingMessages} from '@atb/screens/TripDetails/components/DetailsMessages';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
-import AccessibleText from '@atb/components/accessible-text';
+import {AccessibleText} from '@atb/components/text';
 import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';

@@ -1,5 +1,5 @@
 import {RefObject, useState} from 'react';
-import {getCoordinatesFromMapSelectionAction} from '@atb/components/map/utils';
+import {getCoordinatesFromMapSelectionAction} from '../utils';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {MapProps, MapSelectionActionType} from '../types';

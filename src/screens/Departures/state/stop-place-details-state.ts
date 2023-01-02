@@ -69,7 +69,6 @@ const reducer: ReducerWithSideEffects<
             });
             return;
           }
-          var didTimeOut = false;
           try {
             action.timeout.start();
             const result = await getStopsDetails(

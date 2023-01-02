@@ -6,10 +6,10 @@ import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {animateNextChange} from '@atb/utils/animation';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {ProfileScreenProps} from '@atb/screens/Profile/types';
 import {useRoute} from '@react-navigation/native';
 import {DashboardScreenProps} from '@atb/screens/Dashboard/types';
@@ -74,7 +74,7 @@ export default function FavoriteDeparturesScreen({navigation}: Props) {
       <ScrollView>
         <Sections.Section withFullPadding>
           {favoriteDepartures.map((favorite) => (
-            <Sections.FavoriteDepartureItem
+            <Sections.FavoriteDepartureSectionItem
               key={favorite.id}
               favorite={favorite}
               accessibility={{
@@ -87,7 +87,7 @@ export default function FavoriteDeparturesScreen({navigation}: Props) {
           ))}
         </Sections.Section>
         <Sections.Section withPadding>
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={() => {
               navigation.navigate(nearbyStopPlaceScreenName as any, {

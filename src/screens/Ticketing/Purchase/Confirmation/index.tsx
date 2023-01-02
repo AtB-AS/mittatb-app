@@ -1,12 +1,12 @@
 import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
 import {useAuthState} from '@atb/auth';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import {LeftButtonProps} from '@atb/components/screen-header';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {
   useHasEnabledMobileToken,
@@ -183,7 +183,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     setPreviousMethod(prevMethod);
   }, [previousPaymentMethod]);
 
-  async function payWithVipps(option: PaymentMethod) {
+  async function payWithVipps() {
     if (offerExpirationTime && totalPrice > 0) {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
@@ -213,7 +213,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   function selectPaymentOption(option: PaymentMethod) {
     switch (option.paymentType) {
       case PaymentType.Vipps:
-        payWithVipps(option);
+        payWithVipps();
         break;
       default:
         payWithCard(option);
@@ -283,7 +283,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
           <View>
             <Sections.Section>
               {travellerSelectionMode !== 'none' && (
-                <Sections.GenericItem>
+                <Sections.GenericSectionItem>
                   {userProfilesWithCountAndOffer.map((u, i) => (
                     <View
                       accessible={true}
@@ -306,9 +306,9 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                       </ThemeText>
                     </View>
                   ))}
-                </Sections.GenericItem>
+                </Sections.GenericSectionItem>
               )}
-              <Sections.GenericItem>
+              <Sections.GenericSectionItem>
                 <View accessible={true}>
                   <ThemeText>
                     {getReferenceDataName(preassignedFareProduct, language)}
@@ -352,7 +352,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
                     {travelDateText}
                   </ThemeText>
                 </View>
-              </Sections.GenericItem>
+              </Sections.GenericSectionItem>
             </Sections.Section>
           </View>
         </View>

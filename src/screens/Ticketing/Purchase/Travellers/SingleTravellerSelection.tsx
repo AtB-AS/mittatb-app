@@ -41,7 +41,7 @@ export default function SingleTravellerSelection({
 
   return (
     <Sections.Section>
-      <Sections.RadioSection<UserProfileWithCount>
+      <Sections.RadioGroupSection<UserProfileWithCount>
         items={userProfilesWithCount}
         keyExtractor={(u) => u.userTypeString}
         itemToText={(u) => getReferenceDataName(u, language)}
