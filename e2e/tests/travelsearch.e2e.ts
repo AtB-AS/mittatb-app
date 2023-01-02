@@ -57,7 +57,6 @@ import {
   addFavouriteLocation,
   deleteFavouriteLocation,
   removeSearchHistory,
-  toggleFrontpage,
 } from '../utils/myprofile';
 
 describe('Travel Search', () => {
@@ -73,10 +72,6 @@ describe('Travel Search', () => {
     });
     await setLocation(62.4305, 9.3951);
     await skipOnboarding();
-
-    // Enable frontpage
-    await goToTab('profile');
-    await toggleFrontpage(true);
   });
 
   beforeEach(async () => {
