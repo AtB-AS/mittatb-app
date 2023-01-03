@@ -267,7 +267,7 @@ enum EntryState {
 struct Entry: TimelineEntry {
     let date: Date
     let favouriteDeparture: FavouriteDeparture?
-    let quayGroup: QuayGroup?
+    let stopPlaceGroup: StopPlaceGroup?
     let state: EntryState
 }
 
@@ -342,6 +342,19 @@ extension FavouriteDeparture {
         quayPublicCode: "P1",
         quayId: "NSR:Quay:71184",
         stopId: "NSR:StopPlace:41613"
+    )
+}
+
+extension StopPlaceGroup {
+    static let dummy = StopPlaceGroup(
+        stopPlace: StopPlaceInfo(
+            id: "",
+            description: "",
+            name: "Solsiden",
+            latitude: 1.0,
+            longitude: 1.0
+        ),
+        quays: [QuayGroup.dummy]
     )
 }
 

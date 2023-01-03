@@ -5,8 +5,8 @@ import WidgetKit
 
 struct Provider: TimelineProvider {
     private enum K {
-        static var previewEntry: Entry { Entry(date: Date.now, favouriteDeparture: FavouriteDeparture.dummy, quayGroup: QuayGroup.dummy, state: .preview) }
-        static let noFavouritesTimeline = Timeline<Entry>(entries: [Entry(date: Date.now, favouriteDeparture: nil, quayGroup: nil, state: .noFavouriteDepartures)], policy: .never)
+        static var previewEntry: Entry { Entry(date: Date.now, favouriteDeparture: FavouriteDeparture.dummy, stopPlaceGroup: StopPlaceGroup.dummy, state: .preview) }
+        static let noFavouritesTimeline = Timeline<Entry>(entries: [Entry(date: Date.now, favouriteDeparture: nil, stopPlaceGroup: nil, state: .noFavouriteDepartures)], policy: .never)
     }
 
     private let apiService = APIService()
@@ -51,18 +51,19 @@ struct Provider: TimelineProvider {
     /// Fetch departures for a given quay
     private func fetchFavouriteDepartureTimes(favouriteDeparture departure: FavouriteDeparture, completion: @escaping (Timeline<Entry>) -> Void) {
         // Fetch departure data for the closest favorite
-        apiService.fetchFavouriteDepartureTimes(favouriteDeparture: departure) { (result: Result<QuayGroup, Error>) in
+        apiService.fetchFavouriteDepartureTimes(favouriteDeparture: departure) { (result: Result<StopPlaceGroup, Error>) in
             switch result {
-            case let .success(quayGroup):
-                guard let firstQuayGroup = quayGroup.group.first else {
-                    return completion(Timeline<Entry>(entries: [Entry(date: Date.now, favouriteDeparture: departure, quayGroup: nil, state: .noDepartureQuays)], policy: .after(Date.now.addingTimeInterval(5 * 60))))
+            case let .success(stopPlaceGroup):
+             
+              guard let firstQuayGroup =  stopPlaceGroup.quays.first(where: { $0.quay.id == departure.quayId })?.group.first else {
+                    return completion(Timeline<Entry>(entries: [Entry(date: Date.now, favouriteDeparture: departure, stopPlaceGroup: nil, state: .noDepartureQuays)], policy: .after(Date.now.addingTimeInterval(5 * 60))))
                 }
 
                 // Rerenders widget when a departure has passed, by giving IOS more information about future
                 // dates we hopefully get better timed rerenders
-                var entries = firstQuayGroup.departures.map { departureTime in Entry(date: departureTime.aimedTime, favouriteDeparture: departure, quayGroup: quayGroup, state: .complete) }
+              var entries = firstQuayGroup.departures.map { departureTime in Entry(date: departureTime.aimedTime, favouriteDeparture: departure, stopPlaceGroup: stopPlaceGroup, state: .complete) }
 
-                entries.insert(Entry(date: Date.now, favouriteDeparture: departure, quayGroup: quayGroup, state: .complete), at: 0)
+                entries.insert(Entry(date: Date.now, favouriteDeparture: departure, stopPlaceGroup: stopPlaceGroup, state: .complete), at: 0)
 
                 // Remove the last entries so the view model has enough quays to show.
                 if entries.count > 10 {
@@ -72,7 +73,7 @@ struct Provider: TimelineProvider {
                 return completion(Timeline(entries: entries, policy: .atEnd))
 
             case .failure:
-                return completion(Timeline(entries: [Entry(date: Date.now, favouriteDeparture: departure, quayGroup: nil, state: .noDepartureQuays)], policy: .after(Date.now.addingTimeInterval(5 * 60))))
+                return completion(Timeline(entries: [Entry(date: Date.now, favouriteDeparture: departure, stopPlaceGroup: nil, state: .noDepartureQuays)], policy: .after(Date.now.addingTimeInterval(5 * 60))))
             }
         }
     }

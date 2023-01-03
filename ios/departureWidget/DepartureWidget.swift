@@ -11,13 +11,17 @@ struct DepartureWidgetEntryView: View {
     init(entry: Provider.Entry) {
         self.entry = entry
         viewModel = WidgetViewModel(entry: entry)
+        debugPrint("")
     }
 
     var body: some View {
+
         ZStack {
             Color("WidgetBackgroundColor")
             WidgetInfoView(widgetFamily: family, viewModel: viewModel)
+            .widgetURL(URL(string: viewModel.deepLink))
         }
+    
     }
 }
 
@@ -38,8 +42,8 @@ struct DepartureWidget: Widget {
 struct DepartureWidget_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 5), favouriteDeparture: FavouriteDeparture.dummy, quayGroup: QuayGroup.dummy, state: .preview)).previewContext(WidgetPreviewContext(family: .systemSmall))
-            DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 5), favouriteDeparture: FavouriteDeparture.dummy, quayGroup: QuayGroup.dummy, state: .preview)).previewContext(WidgetPreviewContext(family: .systemMedium))
+          DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 5), favouriteDeparture: FavouriteDeparture.dummy, stopPlaceGroup: StopPlaceGroup.dummy, state: .preview)).previewContext(WidgetPreviewContext(family: .systemSmall))
+          DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 5), favouriteDeparture: FavouriteDeparture.dummy, stopPlaceGroup: StopPlaceGroup.dummy, state: .preview)).previewContext(WidgetPreviewContext(family: .systemMedium))
         }
     }
 }

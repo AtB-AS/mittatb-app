@@ -102,7 +102,7 @@ class APIService {
     }
 
     /// Fetch departure times for a given departure
-    func fetchFavouriteDepartureTimes(favouriteDeparture departure: FavouriteDeparture, callback: @escaping (Result<QuayGroup, Error>) -> Void) {
+    func fetchFavouriteDepartureTimes(favouriteDeparture departure: FavouriteDeparture, callback: @escaping (Result<StopPlaceGroup, Error>) -> Void) {
         let requestBody = DepartureFavouritesRequestBody(favorites: [departure])
 
         guard let requestData = try? JSONEncoder().encode(requestBody) else {
@@ -114,15 +114,10 @@ class APIService {
             case let .success(object):
                 debugPrint(object)
 
-                // Api may return empty quays, therefore needs to find the correct one
-                guard let quayGroup = object.data.first?.quays.first(where: { $0.quay.id == departure.quayId }) else {
-                    debugPrint(APIError.noDataError)
-                    callback(.failure(APIError.noDataError))
-
+                guard let stopPlaceGroup = object.data.first else {
                     return
                 }
-
-                return callback(.success(quayGroup))
+                return callback(.success(stopPlaceGroup))
             case let .failure(error):
                 debugPrint(error)
                 return callback(.failure(error))

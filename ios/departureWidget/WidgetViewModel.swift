@@ -6,7 +6,15 @@ struct WidgetViewModel {
     // MARK: Private vars
 
     private var quayGroup: QuayGroup? {
-        entry.quayGroup
+        // Api may return empty quays, therefore needs to find the correct one
+        guard let quayGroup = entry.stopPlaceGroup?.quays.first(where: { $0.quay.id == entry.favouriteDeparture?.quayId }) else {
+            return nil
+        }
+        return quayGroup
+    }
+  
+    private var stopPlaceInfo : StopPlaceInfo?{
+        entry.stopPlaceGroup?.stopPlace
     }
 
     private var departureGroup: DepartureGroup? {
@@ -32,9 +40,16 @@ struct WidgetViewModel {
     // MARK: Public vars
 
     let entry: Entry
-
+  
+    var deepLink : String {
+      guard let stopId = stopPlaceInfo?.id, let name = stopPlaceInfo?.name, let quayId = quayGroup?.quay.id else{
+        return String("hello")
+      }
+      return String("atb-dev://departure/\(stopId)-\(name)/Departure/\(quayId)/true")
+    }
+  
     var quayName: String? {
-        entry.favouriteDeparture?.quayName ?? entry.quayGroup?.quay.name
+        entry.favouriteDeparture?.quayName ?? quayGroup?.quay.name
     }
 
     var lineDetails: String? {

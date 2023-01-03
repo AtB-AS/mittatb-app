@@ -15,12 +15,15 @@ import {APP_SCHEME} from '@env';
 import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
-import {StatusBar} from 'react-native';
+import {Linking, StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
 import TabNavigator from './TabNavigator';
 import transitionSpec from './transitionSpec';
 import {RootStackParamList} from './types';
 import useTestIds from './use-test-ids';
+import {StopPlace} from '@atb/api/types/departures';
+import { getStopsDetails, StopsDetailsVariables } from "@atb/api/departures/stops-nearest";
+
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -59,11 +62,34 @@ const NavigationRoot = () => {
           theme={ReactNavigationTheme}
           linking={{
             prefixes: [`${APP_SCHEME}://`],
+            async getInitialURL() {
+              const url = await Linking.getInitialURL();
+              console.log(url);
+              return url;
+            },
             config: {
               screens: {
                 TabNavigator: {
                   screens: {
                     Profile: 'profile',
+                    Nearest: {
+                      screens: {
+                        PlaceScreen: {
+                          path: 'departure/:place/:mode/:selectedQuayId/:showOnlyFavoritesByDefault',
+                          parse: {
+                            place: (place: string) => {
+                              console.log("PARSING", place);
+                              const object: StopPlace = {
+                                id: place.split('-')[0],
+                                name: place.split('-')[1],
+                              };
+                              return object;
+                            },
+                            showOnlyFavoritesByDefault: Boolean,
+                          },
+                        },
+                      },
+                    },
                     Ticketing: {
                       screens: {
                         ActiveFareProductsAndReservationsTab: 'ticketing',
