@@ -119,7 +119,7 @@ const TripSection: React.FC<TripSectionProps> = ({
               language,
               t,
             )}
-            rowLabel={<Time {...startTimes} />}
+            rowLabel={<Time timeValues={startTimes} />}
             onPress={() => handleQuayPress(leg.fromPlace.quay)}
             testID="fromPlace"
           >
@@ -206,7 +206,7 @@ const TripSection: React.FC<TripSectionProps> = ({
               language,
               t,
             )}
-            rowLabel={<Time {...endTimes} />}
+            rowLabel={<Time timeValues={endTimes} />}
             onPress={() => handleQuayPress(leg.toPlace.quay)}
             testID="toPlace"
           >
@@ -357,7 +357,7 @@ export function getPlaceName(place: Place): string {
   return place.quay ? getQuayName(place.quay) ?? fallback : fallback;
 }
 export function mapLegToTimeValues(leg: Leg) {
-  const legIsMissingRealTime = !leg.realtime && leg.mode !== 'foot';
+  const legIsMissingRealTime = !leg.realtime;
   return {
     startTimes: {
       expectedTime: leg.expectedStartTime,
