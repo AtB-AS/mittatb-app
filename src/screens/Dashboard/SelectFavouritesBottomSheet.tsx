@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Platform, ScrollView, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button, ButtonGroup} from '@atb/components/button';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
@@ -16,7 +16,6 @@ import {
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
 import {TransportationIcon, AnyMode} from '@atb/components/transportation-icon';
 import {useFavorites} from '@atb/favorites';
-import useFontScale from '@atb/utils/use-font-scale';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {LegMode} from '@entur/sdk';
 import {SectionSeparator} from '@atb/components/sections';

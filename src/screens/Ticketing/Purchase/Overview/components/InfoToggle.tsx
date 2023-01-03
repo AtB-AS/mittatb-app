@@ -3,7 +3,7 @@ import {ThemeText} from '@atb/components/text';
 import {usePreferences} from '@atb/preferences';
 import React from 'react';
 import {View} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 
 export default function InfoToggle({
