@@ -23,6 +23,7 @@ import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Info} from '@atb/assets/svg/color/icons/status';
 import {dictionary, useTranslation} from '@atb/translations';
+import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 
 export default function DesignSystem() {
   const style = useProfileHomeStyle();
@@ -299,15 +300,25 @@ export default function DesignSystem() {
         <Sections.Section withPadding withTopPadding>
           <Sections.ActionSectionItem
             text="Some very long text over here which goes over multiple lines"
+            subtext="With a subtext"
             mode="check"
+            onPress={() => {}}
+            leftIcon={Bus}
             checked
           />
-          <Sections.ActionSectionItem text="Some short text" mode="toggle" />
+          <Sections.ActionSectionItem
+            text="Some short text"
+            mode="toggle"
+            leftIcon={Bus}
+            onPress={() => {}}
+          />
           <Sections.ActionSectionItem
             text="Some short text"
             mode="check"
             checked
             type="compact"
+            leftIcon={Bus}
+            onPress={() => {}}
           />
         </Sections.Section>
 
