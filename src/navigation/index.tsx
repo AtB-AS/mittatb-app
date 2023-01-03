@@ -62,11 +62,6 @@ const NavigationRoot = () => {
           theme={ReactNavigationTheme}
           linking={{
             prefixes: [`${APP_SCHEME}://`],
-            async getInitialURL() {
-              const url = await Linking.getInitialURL();
-              console.log(url);
-              return url;
-            },
             config: {
               screens: {
                 TabNavigator: {
