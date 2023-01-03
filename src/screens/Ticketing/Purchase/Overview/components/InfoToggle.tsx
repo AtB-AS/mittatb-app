@@ -1,10 +1,9 @@
 import {FixedSwitch} from '@atb/components/switch';
 import {ThemeText} from '@atb/components/text';
 import {usePreferences} from '@atb/preferences';
-import useFontScale from '@atb/utils/use-font-scale';
 import React from 'react';
-import {View, Platform} from 'react-native';
-import {StyleSheet} from '@atb/theme';
+import {View} from 'react-native';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 
 export default function InfoToggle({
@@ -22,39 +21,23 @@ export default function InfoToggle({
   } = usePreferences();
 
   return (
-    <View
-      style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}
-    >
-      <View style={{flexGrow: 1}}>
-        <ThemeText
-          type="body__secondary"
-          color="secondary"
-          style={styles.title}
-        >
+    <View style={styles.container}>
+      <View style={{flexShrink: 1}}>
+        <ThemeText type="body__secondary" color="secondary">
           {title}
         </ThemeText>
       </View>
 
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          flexGrow: 1,
-          justifyContent: 'flex-end',
-        }}
-      >
+      <View style={styles.switchAndLabel}>
         <ThemeText
           type="body__secondary"
           accessible={false}
           importantForAccessibility="no"
+          style={styles.label}
         >
           {t(PurchaseOverviewTexts.infoToggle.label)}
         </ThemeText>
         <FixedSwitch
-          style={[
-            styles.toggle,
-            Platform.OS === 'android' ? styles.androidToggle : styles.iosToggle,
-          ]}
           value={!hideDescriptions}
           onValueChange={(checked) => {
             setPreference({hideTravellerDescriptions: !checked});
@@ -67,20 +50,18 @@ export default function InfoToggle({
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const scale = useFontScale();
   return {
-    title: {
+    container: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
       marginBottom: theme.spacings.medium,
+      alignItems: 'center',
     },
-    toggle: {
-      alignSelf: 'center',
+    switchAndLabel: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
     },
-    androidToggle: {
-      transform: [{scale: scale}, {translateY: -6}],
-    },
-    iosToggle: {
-      marginLeft: theme.spacings.xSmall,
-      transform: [{scale: 0.7 * scale}, {translateY: -10}],
-    },
+    label: {marginRight: theme.spacings.xSmall},
   };
 });

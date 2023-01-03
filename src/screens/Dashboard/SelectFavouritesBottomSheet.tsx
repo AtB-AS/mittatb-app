@@ -86,11 +86,7 @@ const SelectableFavouriteDeparture = ({
         <FixedSwitch
           importantForAccessibility="no"
           value={active}
-          onChange={() => handleSwitchFlip(favouriteId, !active)}
-          style={[
-            styles.toggle,
-            Platform.OS === 'android' ? styles.androidToggle : styles.iosToggle,
-          ]}
+          onValueChange={(value) => handleSwitchFlip(favouriteId, value)}
         />
       </View>
     </View>
@@ -224,7 +220,6 @@ const SelectFavouritesBottomSheet = ({
 export default SelectFavouritesBottomSheet;
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
-  const scale = useFontScale();
   return {
     container: {
       flex: 1,
@@ -257,16 +252,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     lineIdentiferText: {
       marginBottom: theme.spacings.small,
-    },
-    toggle: {
-      alignSelf: 'center',
-    },
-    androidToggle: {
-      transform: [{scale: scale}, {translateY: -6}],
-    },
-    iosToggle: {
-      marginLeft: theme.spacings.xSmall,
-      transform: [{scale: scale}],
     },
   };
 });
