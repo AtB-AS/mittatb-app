@@ -11,17 +11,15 @@ struct DepartureWidgetEntryView: View {
     init(entry: Provider.Entry) {
         self.entry = entry
         viewModel = WidgetViewModel(entry: entry)
-        debugPrint("")
+      
     }
 
     var body: some View {
-
         ZStack {
             Color("WidgetBackgroundColor")
             WidgetInfoView(widgetFamily: family, viewModel: viewModel)
             .widgetURL(URL(string: viewModel.deepLink))
         }
-    
     }
 }
 

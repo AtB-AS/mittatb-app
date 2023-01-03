@@ -78,7 +78,6 @@ const NavigationRoot = () => {
                           path: 'departure/:place/:mode/:selectedQuayId/:showOnlyFavoritesByDefault',
                           parse: {
                             place: (place: string) => {
-                              console.log("PARSING", place);
                               const object: StopPlace = {
                                 id: place.split('-')[0],
                                 name: place.split('-')[1],
