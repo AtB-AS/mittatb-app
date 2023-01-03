@@ -49,7 +49,8 @@ export function FixedSwitch({
 }
 
 const useStyles = StyleSheet.createThemeHook(() => {
-  const scale = useFontScale();
+  const fontScale = useFontScale();
+  const scale = Math.max(fontScale, 1);
   return {
     android: {
       transform: [{scale}],
