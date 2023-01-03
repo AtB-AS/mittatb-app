@@ -8,6 +8,7 @@ import {DashboardParams} from './types';
 import NearbyStopPlacesScreen from '@atb/screens/Dashboard/NearbyStopPlacesScreen';
 import FavoriteDeparturesScreen from '@atb/screens/Profile/FavoriteDepartures';
 import PlaceScreen from '@atb/screens/Departures/PlaceScreen';
+import {TravelSearchFilterOnboardingScreen} from '@atb/screens/Dashboard/TravelSearchFilterOnboardingScreen';
 
 const Stack = createStackNavigator<DashboardParams>();
 
@@ -47,6 +48,13 @@ const Dashboard = () => {
       <Stack.Screen
         name="FavoriteDeparturesDashboardScreen"
         component={FavoriteDeparturesScreen}
+      />
+      <Stack.Screen
+        name="TravelSearchFilterOnboardingScreen"
+        component={TravelSearchFilterOnboardingScreen}
+        options={{
+          ...TransitionPresets.ModalSlideFromBottomIOS,
+        }}
       />
     </Stack.Navigator>
   );

@@ -35,6 +35,7 @@ export type DashboardParams = {
   FavoriteDeparturesDashboardScreen: undefined;
   NearbyStopPlacesDashboardScreen: NearbyStopPlacesScreenParams;
   PlaceScreen: PlaceScreenParams;
+  TravelSearchFilterOnboardingScreen: undefined;
 };
 
 export type RootDashboardScreenProps = TabNavigatorScreenProps<'Dashboard'>;

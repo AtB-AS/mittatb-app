@@ -169,6 +169,15 @@ export default function DebugInfo() {
               )
             }
           />
+          <Sections.LinkSectionItem
+            text="Reset has read filter onboarding"
+            onPress={() =>
+              storage.set(
+                StorageModelKeysEnum.HasReadTravelSearchFilterOnboarding,
+                JSON.stringify(false),
+              )
+            }
+          />
 
           <Sections.GenericSectionItem>
             <ThemeText>
