@@ -18,7 +18,9 @@ export const useTravelSearchFiltersDebugOverride = (): [
   boolean | undefined,
   (v?: boolean) => void,
 ] => {
-  const [debugOverride, setDebugOverride] = useState<boolean>();
+  const [debugOverride, setDebugOverride] = useState<boolean | undefined>(
+    false,
+  );
 
   useEffect(() => {
     storage

@@ -1,19 +1,18 @@
 import {Filter, Swap} from '@atb/assets/svg/mono-icons/actions';
 import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import {screenReaderPause} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
-import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {
-  useLocationSearchValue,
   SelectableLocationType,
+  useLocationSearchValue,
 } from '@atb/location-search';
 import {
   getSearchTimeLabel,
@@ -46,6 +45,7 @@ import {
 import {DashboardScreenProps} from './types';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 import {useTravelSearchFiltersEnabled} from '@atb/screens/Dashboard/use-travel-search-filters-enabled';
+import storage, {StorageModelKeysEnum} from '@atb/storage';
 
 type TripSearchRouteName = 'TripSearch';
 const TripSearchRouteNameStatic: TripSearchRouteName = 'TripSearch';
@@ -72,6 +72,14 @@ const TripSearch: React.FC<RootProps> = ({
   const {theme} = useTheme();
   const {language, t} = useTranslation();
   const [updatingLocation] = useState<boolean>(false);
+
+  const shouldShowTravelSearchFilterOnboarding =
+    useShouldShowTravelSearchFilterOnboarding();
+  useEffect(() => {
+    if (shouldShowTravelSearchFilterOnboarding) {
+      navigation.navigate('TravelSearchFilterOnboardingScreen');
+    }
+  }, [shouldShowTravelSearchFilterOnboarding]);
 
   const {location, requestPermission: requestGeoPermission} =
     useGeolocationState();
@@ -538,6 +546,26 @@ function computeNoResultReasons(
   }
   return reasons;
 }
+
+export const useShouldShowTravelSearchFilterOnboarding = () => {
+  const [shouldShow, setShouldShow] = useState(false);
+  const isFocused = useIsFocused();
+  const enabled = useTravelSearchFiltersEnabled();
+
+  useEffect(() => {
+    if (isFocused && enabled) {
+      (async function () {
+        const hasRead = await storage.get(
+          StorageModelKeysEnum.HasReadTravelSearchFilterOnboarding,
+        );
+        setShouldShow(hasRead ? !JSON.parse(hasRead) : true);
+      })();
+    } else {
+      setShouldShow(false);
+    }
+  }, [isFocused, enabled]);
+  return shouldShow;
+};
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
