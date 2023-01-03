@@ -5,7 +5,7 @@ import {formatToClock} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
 import {getTimeRepresentationType, TimeValues} from '../utils';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {useTheme} from '@atb/theme';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';

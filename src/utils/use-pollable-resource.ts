@@ -2,7 +2,7 @@ import {useState, useCallback, useEffect} from 'react';
 import useInterval from './use-interval';
 import useIsLoading from './use-is-loading';
 
-type PollableResourceOptions<T, E> = {
+type PollableResourceOptions<T> = {
   initialValue: T;
   pollingTimeInSeconds?: number;
   disabled?: boolean;
@@ -21,7 +21,7 @@ type PollableResourceOptions<T, E> = {
  */
 export default function usePollableResource<T, E extends Error = Error>(
   callback: (signal?: AbortSignal) => Promise<T>,
-  opts: PollableResourceOptions<T, E>,
+  opts: PollableResourceOptions<T>,
 ): [T, () => Promise<void>, boolean, E?] {
   const {initialValue, pollingTimeInSeconds = 30} = opts;
   const [isLoading, setIsLoading] = useIsLoading(false);
