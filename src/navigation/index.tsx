@@ -12,24 +12,33 @@ import Purchase from '@atb/screens/Ticketing/Purchase';
 import FareContractModalScreen from '@atb/screens/Ticketing/FareContracts/Details';
 import {useTheme} from '@atb/theme';
 import {APP_SCHEME} from '@env';
-import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import {
+  DefaultTheme,
+  NavigationContainer,
+  PartialRoute,
+  Route,
+} from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
-import {Linking, StatusBar} from 'react-native';
+import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
 import TabNavigator from './TabNavigator';
 import transitionSpec from './transitionSpec';
 import {RootStackParamList} from './types';
 import useTestIds from './use-test-ids';
-import {StopPlace} from '@atb/api/types/departures';
-import { getStopsDetails, StopsDetailsVariables } from "@atb/api/departures/stops-nearest";
-
+import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
+import type {NavigationState, PartialState} from '@react-navigation/routers';
 
 const Stack = createStackNavigator<RootStackParamList>();
+
+type ResultState = PartialState<NavigationState> & {
+  state?: ResultState;
+};
 
 const NavigationRoot = () => {
   const {isLoading, onboarded} = useAppState();
   const {theme} = useTheme();
+  const departuresV2Enabled = useDeparturesV2Enabled();
 
   useTestIds();
 
@@ -67,23 +76,6 @@ const NavigationRoot = () => {
                 TabNavigator: {
                   screens: {
                     Profile: 'profile',
-                    Nearest: {
-                      screens: {
-                        PlaceScreen: {
-                          path: 'departure/:place/:mode/:selectedQuayId/:showOnlyFavoritesByDefault',
-                          parse: {
-                            place: (place: string) => {
-                              const object: StopPlace = {
-                                id: place.split('-')[0],
-                                name: place.split('-')[1],
-                              };
-                              return object;
-                            },
-                            showOnlyFavoritesByDefault: Boolean,
-                          },
-                        },
-                      },
-                    },
                     Ticketing: {
                       screens: {
                         ActiveFareProductsAndReservationsTab: 'ticketing',
@@ -92,6 +84,71 @@ const NavigationRoot = () => {
                   },
                 },
               },
+            },
+            getStateFromPath(path) {
+              console.log(path);
+              if (!path.includes('widget')) return;
+
+              const paramArr = path.slice(path.indexOf('?') + 1).split('&');
+              const params: {[name: string]: string} = {};
+              paramArr.map((param) => {
+                const [key, val] = param.split('=');
+                params[key] = val;
+              });
+
+              let destination: PartialRoute<Route<string>> | undefined;
+
+              if (departuresV2Enabled) {
+                destination = {
+                  name: 'PlaceScreen',
+                  params: {
+                    place: {
+                      name: params.stopName,
+                      id: params.stopId,
+                    },
+                    selectedQuayId: params.quayId,
+                    showOnlyFavoritesByDefault: true,
+                    mode: 'Departure',
+                  },
+                };
+              } else {
+                destination = {
+                  name: 'NearbyScreen',
+                  params: {
+                    location: {
+                      id: `geo-${params.latitude}-${params.longitude}`,
+                      name: params.stopName,
+                      layer: 'venue',
+                      coordinates: {
+                        latitude: params.latitude,
+                        longitude: params.longitude,
+                      },
+                      locality: '',
+                      category: [],
+                    },
+                    resultType: 'favorite',
+                  },
+                };
+              }
+
+              const state: ResultState = {
+                routes: [
+                  {
+                    name: 'TabNavigator',
+                    state: {
+                      routes: [
+                        {
+                          name: 'Nearest',
+                          state: {
+                            routes: [destination],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              };
+              return state;
             },
           }}
         >

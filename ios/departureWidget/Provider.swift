@@ -25,7 +25,8 @@ struct Provider: TimelineProvider {
     func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
         // No favorite departures
         guard let favoriteDepartures = Manifest.data?.favouriteDepartures,
-              let firstFavoriteDeparture = favoriteDepartures.first else {
+              let firstFavoriteDeparture = favoriteDepartures.first
+        else {
             return completion(K.noFavouritesTimeline)
         }
 
@@ -54,14 +55,14 @@ struct Provider: TimelineProvider {
         apiService.fetchFavouriteDepartureTimes(favouriteDeparture: departure) { (result: Result<StopPlaceGroup, Error>) in
             switch result {
             case let .success(stopPlaceGroup):
-             
-              guard let firstQuayGroup =  stopPlaceGroup.quays.first(where: { $0.quay.id == departure.quayId })?.group.first else {
+
+                guard let firstQuayGroup = stopPlaceGroup.quays.first(where: { $0.quay.id == departure.quayId })?.group.first else {
                     return completion(Timeline<Entry>(entries: [Entry(date: Date.now, favouriteDeparture: departure, stopPlaceGroup: nil, state: .noDepartureQuays)], policy: .after(Date.now.addingTimeInterval(5 * 60))))
                 }
 
                 // Rerenders widget when a departure has passed, by giving IOS more information about future
                 // dates we hopefully get better timed rerenders
-              var entries = firstQuayGroup.departures.map { departureTime in Entry(date: departureTime.aimedTime, favouriteDeparture: departure, stopPlaceGroup: stopPlaceGroup, state: .complete) }
+                var entries = firstQuayGroup.departures.map { departureTime in Entry(date: departureTime.aimedTime, favouriteDeparture: departure, stopPlaceGroup: stopPlaceGroup, state: .complete) }
 
                 entries.insert(Entry(date: Date.now, favouriteDeparture: departure, stopPlaceGroup: stopPlaceGroup, state: .complete), at: 0)
 
@@ -69,13 +70,13 @@ struct Provider: TimelineProvider {
                 if entries.count > 10 {
                     entries.removeLast(5)
                 }
-              
-              // Making it so that the timeline refreshes at midnight
-              let currentDate = Date()
-              let midnight = Calendar.current.startOfDay(for: currentDate)
-              let nextMidnight = Calendar.current.date(byAdding: .day, value: 1, to: midnight)!
 
-              return completion(Timeline(entries: entries, policy: .after(nextMidnight)))
+                // Making it so that the timeline refreshes at midnight
+                let currentDate = Date()
+                let midnight = Calendar.current.startOfDay(for: currentDate)
+                let nextMidnight = Calendar.current.date(byAdding: .day, value: 1, to: midnight)!
+
+                return completion(Timeline(entries: entries, policy: .after(nextMidnight)))
 
             case .failure:
                 return completion(Timeline(entries: [Entry(date: Date.now, favouriteDeparture: departure, stopPlaceGroup: nil, state: .noDepartureQuays)], policy: .after(Date.now.addingTimeInterval(5 * 60))))

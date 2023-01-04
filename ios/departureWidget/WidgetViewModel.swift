@@ -12,8 +12,8 @@ struct WidgetViewModel {
         }
         return quayGroup
     }
-  
-    private var stopPlaceInfo : StopPlaceInfo?{
+
+    private var stopPlaceInfo: StopPlaceInfo? {
         entry.stopPlaceGroup?.stopPlace
     }
 
@@ -40,14 +40,19 @@ struct WidgetViewModel {
     // MARK: Public vars
 
     let entry: Entry
-  
-    var deepLink : String {
-      guard let stopId = stopPlaceInfo?.id, let name = stopPlaceInfo?.name, let quayId = quayGroup?.quay.id else{
-        return String("hello")
-      }
-      return String("atb-dev://departure/\(stopId)-\(name)/Departure/\(quayId)/true")
+
+    var deepLink: String {
+        guard let stopId = stopPlaceInfo?.id,
+              let stopName = stopPlaceInfo?.name,
+              let quayId = quayGroup?.quay.id,
+              let latitude = stopPlaceInfo?.latitude,
+              let longitude = stopPlaceInfo?.longitude
+        else {
+            return String("hello")
+        }
+        return String("atb-dev://widget?stopId=\(stopId)&stopName=\(stopName)&quayId=\(quayId)&latitude=\(latitude)&longitude=\(longitude)")
     }
-  
+
     var quayName: String? {
         entry.favouriteDeparture?.quayName ?? quayGroup?.quay.name
     }
