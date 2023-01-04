@@ -331,6 +331,7 @@ const TripSearch: React.FC<RootProps> = ({
               testID="dashboardDateTimePicker"
               rightIcon={{svg: Filter}}
               viewContainerStyle={style.filterButton}
+              ref={travelSearchFiltersState.closeRef}
             />
           )}
         </View>

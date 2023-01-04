@@ -1,5 +1,5 @@
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import React, {useState} from 'react';
+import React, {MutableRefObject, RefObject, useRef, useState} from 'react';
 import {
   TransportModeFilterOption,
   TravelSearchFiltersBottomSheet,
@@ -14,8 +14,9 @@ export type TravelSearchFilters = {
 export type TravelSearchFiltersState =
   | {
       enabled: true;
-      openBottomSheet: () => void;
+      openBottomSheet: (closeRef: RefObject<any>) => void;
       selectedFilters: TravelSearchFilters;
+      closeRef: MutableRefObject<any>;
     }
   | {enabled: false; selectedFilters?: undefined};
 
@@ -31,21 +32,25 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
   const [selectedFilters, setSelectedFilters] = useState<TravelSearchFilters>({
     transportModes: transportModeFilterOptions,
   });
+  const closeRef = useRef();
 
   if (!travelSearchFiltersEnabled) return {enabled: false};
   if (!travelSearchFilters?.transportModes) return {enabled: false};
 
   const openBottomSheet = () => {
-    open((close, focusRef) => (
-      <TravelSearchFiltersBottomSheet
-        close={close}
-        ref={focusRef}
-        filters={{transportModes: transportModeFilterOptions}}
-        initialSelection={selectedFilters}
-        onSave={setSelectedFilters}
-      />
-    ));
+    open(
+      (close, focusRef) => (
+        <TravelSearchFiltersBottomSheet
+          close={close}
+          ref={focusRef}
+          filters={{transportModes: transportModeFilterOptions}}
+          initialSelection={selectedFilters}
+          onSave={setSelectedFilters}
+        />
+      ),
+      closeRef,
+    );
   };
 
-  return {enabled: true, openBottomSheet, selectedFilters};
+  return {enabled: true, openBottomSheet, selectedFilters, closeRef};
 };

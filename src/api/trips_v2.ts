@@ -61,7 +61,6 @@ async function post<T>(
   const response = await client.post<T>(url, query, {
     ...opts,
     skipErrorLogging: (error) => error.response?.status === 410,
-    baseURL: 'http://gorandalum-mpb.local:8080/',
   });
 
   return response.data;
