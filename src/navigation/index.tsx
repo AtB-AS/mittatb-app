@@ -126,35 +126,20 @@ const NavigationRoot = () => {
                       {
                         name: 'NearbyRoot',
                         params: {
-                          currentLocation: {
-                            id: `geo-${params.latitude}-${params.longitude}`,
-                            name: params.stopName,
-                            layer: 'venue',
-                            coordinates: {
-                              latitude: params.latitude,
-                              longitude: params.longitude,
+                          props: {
+                            location: {
+                              id: `geo-${params.latitude}-${params.longitude}`,
+                              name: params.stopName,
+                              coordinates: {
+                                latitude: params.latitude,
+                                longitude: params.longitude,
+                              },
                             },
-                            locality: '',
-                            category: [],
                           },
                           resultType: 'favorite',
                         },
                       },
                     ],
-                  },
-                  params: {
-                    currentLocation: {
-                      id: `geo-${params.latitude}-${params.longitude}`,
-                      name: params.stopName,
-                      layer: 'venue',
-                      coordinates: {
-                        latitude: params.latitude,
-                        longitude: params.longitude,
-                      },
-                      locality: '',
-                      category: [],
-                    },
-                    resultType: 'favorite',
                   },
                 };
               }
