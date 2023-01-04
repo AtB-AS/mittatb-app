@@ -5,23 +5,21 @@ import {CancelPaymentRequest, ReserveOfferRequestBody} from '.';
 import {client} from '../api';
 import {
   Offer,
-  PaymentResponse,
+  OfferReservation,
   PaymentType,
   RecentFareContractBackend,
   RecurringPayment,
   ReserveOffer,
   SendReceiptResponse,
-  OfferReservation,
 } from './types';
 
 export async function listRecentFareContracts(): Promise<
   RecentFareContractBackend[]
 > {
-  const url = 'ticket/v2/ticket/recent';
+  const url = 'ticket/v3/recent';
   const response = await client.get<RecentFareContractBackend[]>(url, {
     authWithIdToken: true,
   });
-
   return response.data;
 }
 
@@ -33,7 +31,7 @@ export type OfferSearchParams = {
 };
 
 export async function listRecurringPayments(): Promise<RecurringPayment[]> {
-  const url = 'ticket/v2/recurring-payments';
+  const url = 'ticket/v3/recurring-payments';
   const response = await client.get<RecurringPayment[]>(url, {
     authWithIdToken: true,
   });
@@ -41,7 +39,7 @@ export async function listRecurringPayments(): Promise<RecurringPayment[]> {
 }
 
 export async function deleteRecurringPayment(paymentId: number) {
-  const url = `ticket/v2/recurring-payments/${paymentId}`;
+  const url = `ticket/v3/recurring-payments/${paymentId}`;
   await client.delete<void>(url, {authWithIdToken: true});
 }
 
@@ -65,15 +63,7 @@ export async function searchOffers(
   params: OfferSearchParams,
   opts?: AxiosRequestConfig,
 ): Promise<Offer[]> {
-  let url: string;
-  switch (offerEndpoint) {
-    case 'zones':
-      url = 'ticket/v1/search/zones';
-      break;
-    case 'authority':
-      url = 'ticket/v3/search/authority';
-      break;
-  }
+  const url = `ticket/v3/search/${offerEndpoint}`;
 
   const response = await client.post<Offer[]>(url, params, opts);
 
@@ -85,7 +75,7 @@ export async function sendReceipt(
   order_version: number,
   email: string,
 ) {
-  const url = 'ticket/v1/receipt';
+  const url = 'ticket/v3/receipt';
   const response = await client.post<SendReceiptResponse>(url, {
     order_id,
     order_version,
@@ -110,7 +100,7 @@ export async function reserveOffers({
 }:
   | ReserveOfferWithSavePaymentParams
   | ReserveOfferWithRecurringParams): Promise<OfferReservation> {
-  const url = 'ticket/v2/reserve';
+  const url = 'ticket/v3/reserve';
   let body: ReserveOfferRequestBody = {
     payment_redirect_url: `${APP_SCHEME}://ticketing?transaction_id={transaction_id}&payment_id={payment_id}`,
     offers,
@@ -128,23 +118,13 @@ export async function reserveOffers({
   return response.data;
 }
 
-export async function getPayment(paymentId: number): Promise<PaymentResponse> {
-  const url = 'ticket/v1/payments/' + paymentId;
-  const response = await client.get<PaymentResponse>(url);
-  return response.data;
-}
-
 export async function cancelPayment(
   payment_id: number,
   transaction_id: number,
 ): Promise<void> {
-  const url = 'ticket/v1/cancel';
-  await client.put<void>(
-    url,
-    {
-      payment_id,
-      transaction_id,
-    } as CancelPaymentRequest,
-    {authWithIdToken: true, retry: true},
-  );
+  const url = `ticket/v3/payments/${payment_id}/transactions/${transaction_id}/cancel`;
+  await client.put<void>(url, {} as CancelPaymentRequest, {
+    authWithIdToken: true,
+    retry: true,
+  });
 }
