@@ -299,6 +299,12 @@ const TripSearch: React.FC<RootProps> = ({
           <Button
             text={getSearchTimeLabel(searchTime, timeOfLastSearch, t, language)}
             accessibilityHint={t(TripSearchTexts.dateInput.a11yHint)}
+            accessibilityLabel={getSearchTimeLabel(
+              searchTime,
+              timeOfLastSearch,
+              t,
+              language,
+            )}
             interactiveColor="interactive_0"
             mode="secondary"
             compact={true}
@@ -310,7 +316,7 @@ const TripSearch: React.FC<RootProps> = ({
           {travelSearchFiltersEnabled && (
             <Button
               text={t(TripSearchTexts.filterButton.text)}
-              accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
+              // accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
               interactiveColor="interactive_1"
               mode="secondary"
               type="inline"
