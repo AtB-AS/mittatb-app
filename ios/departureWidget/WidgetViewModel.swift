@@ -42,15 +42,21 @@ struct WidgetViewModel {
     let entry: Entry
 
     var deepLink: String {
+        if entry.state == .noFavouriteDepartures {
+            return "atb-dev://addFavoriteDeparture"
+        }
+
         guard let stopId = stopPlaceInfo?.id,
-              let stopName = stopPlaceInfo?.name,
+              // let stopName = stopPlaceInfo?.name,
               let quayId = quayGroup?.quay.id,
               let latitude = stopPlaceInfo?.latitude,
               let longitude = stopPlaceInfo?.longitude
         else {
             return String("hello")
         }
-        return String("atb-dev://widget?stopId=\(stopId)&stopName=\(stopName)&quayId=\(quayId)&latitude=\(latitude)&longitude=\(longitude)")
+
+        // TODO: find solution to spaces in stopName, using placeholder for now.
+        return String("atb-dev://widget?stopId=\(stopId)&stopName=placeholder&quayId=\(quayId)&latitude=\(latitude)&longitude=\(longitude)")
     }
 
     var quayName: String? {

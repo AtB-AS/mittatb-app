@@ -14,13 +14,14 @@ import {useTheme} from '@atb/theme';
 import {APP_SCHEME} from '@env';
 import {
   DefaultTheme,
+  getStateFromPath,
   NavigationContainer,
   PartialRoute,
   Route,
 } from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
-import {StatusBar} from 'react-native';
+import {Linking, StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
 import TabNavigator from './TabNavigator';
 import transitionSpec from './transitionSpec';
@@ -76,6 +77,11 @@ const NavigationRoot = () => {
                 TabNavigator: {
                   screens: {
                     Profile: 'profile',
+                    Dashboard: {
+                      screens: {
+                        NearbyStopPlacesDashboardScreen: 'addFavoriteDeparture',
+                      },
+                    },
                     Ticketing: {
                       screens: {
                         ActiveFareProductsAndReservationsTab: 'ticketing',
@@ -85,10 +91,11 @@ const NavigationRoot = () => {
                 },
               },
             },
-            getStateFromPath(path) {
-              console.log(path);
-              if (!path.includes('widget')) return;
-
+            getStateFromPath(path, config) {
+              console.log('path :' + path);
+              if (!path.includes('widget')) {
+                return getStateFromPath(path, config);
+              }
               const paramArr = path.slice(path.indexOf('?') + 1).split('&');
               const params: {[name: string]: string} = {};
               paramArr.map((param) => {
@@ -114,8 +121,29 @@ const NavigationRoot = () => {
               } else {
                 destination = {
                   name: 'NearbyScreen',
+                  state: {
+                    routes: [
+                      {
+                        name: 'NearbyRoot',
+                        params: {
+                          currentLocation: {
+                            id: `geo-${params.latitude}-${params.longitude}`,
+                            name: params.stopName,
+                            layer: 'venue',
+                            coordinates: {
+                              latitude: params.latitude,
+                              longitude: params.longitude,
+                            },
+                            locality: '',
+                            category: [],
+                          },
+                          resultType: 'favorite',
+                        },
+                      },
+                    ],
+                  },
                   params: {
-                    location: {
+                    currentLocation: {
                       id: `geo-${params.latitude}-${params.longitude}`,
                       name: params.stopName,
                       layer: 'venue',
