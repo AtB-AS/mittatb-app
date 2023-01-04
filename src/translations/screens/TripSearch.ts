@@ -213,6 +213,14 @@ const TripSearchTexts = {
       'Filters in travel search! You can now use filters in travel searches and get travel suggestions adapted to your needs. Select the means of transport you want to use for your trip.',
     ),
   },
+  filters: {
+    heading: _('Filter', 'Filter'),
+    modes: {
+      heading: _('Hva vil du reise med?', 'What do you want to travel with?'),
+      all: _('Alle', 'All'),
+    },
+    save: _('Lagre valg', 'Save selection'),
+  },
 };
 
 export default TripSearchTexts;

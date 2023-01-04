@@ -56,12 +56,13 @@ export function ActionSectionItem({
         label={text}
         leftIcon={leftIcon}
         accessibleLabel={false}
+        subtext={hideSubtext ? undefined : subtext}
         {...props}
       >
         <FixedSwitch
           value={checked}
           onValueChange={(value) => onPress?.(value)}
-          accessibilityLabel={text}
+          accessibilityLabel={text + (subtext ? ',' + subtext : '')}
           testID={testID}
           {...accessibility}
         />
