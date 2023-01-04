@@ -1,5 +1,5 @@
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import React, {MutableRefObject, RefObject, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   TransportModeFilterOption,
   TravelSearchFiltersBottomSheet,
@@ -14,9 +14,9 @@ export type TravelSearchFilters = {
 export type TravelSearchFiltersState =
   | {
       enabled: true;
-      openBottomSheet: (closeRef: RefObject<any>) => void;
+      openBottomSheet: () => void;
       selectedFilters: TravelSearchFilters;
-      closeRef: MutableRefObject<any>;
+      closeRef: React.Ref<any>;
     }
   | {enabled: false; selectedFilters?: undefined};
 
