@@ -69,8 +69,13 @@ struct Provider: TimelineProvider {
                 if entries.count > 10 {
                     entries.removeLast(5)
                 }
+              
+              // Making it so that the timeline refreshes at midnight
+              let currentDate = Date()
+              let midnight = Calendar.current.startOfDay(for: currentDate)
+              let nextMidnight = Calendar.current.date(byAdding: .day, value: 1, to: midnight)!
 
-                return completion(Timeline(entries: entries, policy: .atEnd))
+              return completion(Timeline(entries: entries, policy: .after(nextMidnight)))
 
             case .failure:
                 return completion(Timeline(entries: [Entry(date: Date.now, favouriteDeparture: departure, stopPlaceGroup: nil, state: .noDepartureQuays)], policy: .after(Date.now.addingTimeInterval(5 * 60))))
