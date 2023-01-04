@@ -202,7 +202,10 @@ const TripSearchTexts = {
         'Nå kan du bruke filter i reisesøk og få reiseforslag tilpasset dine behov.',
         'You can now use filters in travel searches and get travel suggestions adapted to your needs.',
       ),
-      part2: _('Velg hvilke transportmiddel du ønsker å reise med.', 'Select the means of transport you want to use for your trip.'),
+      part2: _(
+        'Velg hvilke transportmiddel du ønsker å reise med.',
+        'Select the means of transport you want to use for your trip.',
+      ),
     },
     button: _('Den er grei!', 'Sounds good!'),
     a11yLabel: _(
