@@ -209,8 +209,8 @@ const TripSearchTexts = {
     },
     button: _('Den er grei!', 'Sounds good!'),
     a11yLabel: _(
-      'Filter i reisesøk! Nå kan du bruke filter i reisesøk og få reiseforslag tilpasset dine behov. Velg transportmiddel.',
-      'Filters in travel search! You can now use filters in travel searches and get travel suggestions adapted to your needs. Choose your means of transport.',
+      'Filter i reisesøk! Nå kan du bruke filter i reisesøk og få reiseforslag tilpasset dine behov. Velg hvilke transportmiddel du ønsker å reise med.',
+      'Filters in travel search! You can now use filters in travel searches and get travel suggestions adapted to your needs. Select the means of transport you want to use for your trip.',
     ),
   },
 };
