@@ -14,12 +14,14 @@ const SectionTexts = {
   timeInput: {
     label: _('Tid', 'Time'),
   },
-  actionSectionItem: {
-    headingExpand: {
-      toggle: {
-        expand: _('Vis', 'Show'),
-        contract: _('Skjul', 'Hide'),
-      },
+  expandableSectionItem: {
+    a11yHint: {
+      expand: _('Aktiver for å vise', 'Activate to show'),
+      contract: _('Aktiver for å skjule', 'Activate to hide'),
+    },
+    iconText: {
+      expand: _('Vis', 'Show'),
+      contract: _('Skjul', 'Hide'),
     },
   },
   textInput: {

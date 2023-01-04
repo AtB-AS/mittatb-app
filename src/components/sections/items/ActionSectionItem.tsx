@@ -7,9 +7,8 @@ import {
 } from 'react-native';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {SectionTexts, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
-import {NavigationIcon, ThemeIcon} from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
@@ -18,7 +17,7 @@ import {FixedSwitch} from '@atb/components/switch';
 import {InteractiveColor} from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 
-type ActionModes = 'check' | 'toggle' | 'heading-expand';
+type ActionModes = 'check' | 'toggle';
 type Props = SectionItemProps<{
   text: string;
   subtext?: string;
@@ -94,9 +93,7 @@ export function ActionSectionItem({
       {leftIcon && <ThemeIcon svg={leftIcon} style={styles.leftIcon} />}
       <View style={{flexShrink: 1}}>
         <ThemeText
-          type={
-            mode === 'heading-expand' ? 'body__primary--bold' : 'body__primary'
-          }
+          type="body__primary"
           style={[
             contentContainer,
             interactiveColor ? {color: interactiveColor.text} : undefined,
@@ -128,8 +125,6 @@ function ActionModeIcon({
   checked,
   color,
 }: Pick<Props, 'mode' | 'checked' | 'color'>) {
-  const styles = useStyles();
-  const {t} = useTranslation();
   const {theme} = useTheme();
 
   switch (mode) {
@@ -142,23 +137,6 @@ function ActionModeIcon({
             : undefined)}
           fillOpacity={checked ? 1 : 0}
         />
-      );
-    }
-    case 'heading-expand': {
-      const text = checked
-        ? t(SectionTexts.actionSectionItem.headingExpand.toggle.contract)
-        : t(SectionTexts.actionSectionItem.headingExpand.toggle.expand);
-      const icon = checked ? 'expand-less' : 'expand-more';
-      return (
-        <View style={styles.headerExpandIconGroup}>
-          <ThemeText
-            style={styles.headerExpandIconGroup__text}
-            type="body__secondary"
-          >
-            {text}
-          </ThemeText>
-          <NavigationIcon mode={icon} />
-        </View>
       );
     }
   }
