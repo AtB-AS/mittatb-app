@@ -203,14 +203,14 @@ const TripSearchTexts = {
         'You can now use filters in travel searches and get travel suggestions adapted to your needs.',
       ),
       part2: _(
-        'Velg transportmiddel, hvor lang tid du ønsker å ha mellom bytter og hvor raskt du beveger deg.',
-        'Choose your means of transport, how long time you prefer between changes and how fast you walk.',
+        'Velg hvilke transportmiddel du ønsker å reise med.',
+        'Select the means of transport you want to use for your trip.',
       ),
     },
     button: _('Den er grei!', 'Sounds good!'),
     a11yLabel: _(
-      'Filter i reisesøk! Nå kan du bruke filter i reisesøk og få reiseforslag tilpasset dine behov. Velg transportmiddel, hvor lang tid du ønsker å ha mellom bytter og hvor raskt du beveger deg.',
-      'Filters in travel search! You can now use filters in travel searches and get travel suggestions adapted to your needs. Choose your means of transport, how long time you prefer between changes and how fast you walk.',
+      'Filter i reisesøk! Nå kan du bruke filter i reisesøk og få reiseforslag tilpasset dine behov. Velg hvilke transportmiddel du ønsker å reise med.',
+      'Filters in travel search! You can now use filters in travel searches and get travel suggestions adapted to your needs. Select the means of transport you want to use for your trip.',
     ),
   },
 };
