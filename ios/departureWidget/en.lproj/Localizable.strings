@@ -5,7 +5,9 @@
 
 "no_departures" = "No departures";
 
-"must_choose_favorite" = "Add favorite departures in the app";
+"no_favorites_small" = "Press to add\n a favorite.";
+
+"no_favorites_medium" = "You have no favorite departures.\n Press the widget to add.";
 
 "no_line_info" = "No line information";
 

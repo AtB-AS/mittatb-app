@@ -29,7 +29,16 @@ struct WidgetInfoView: View {
 
     var body: some View {
         if viewModel.entry.state == .noFavouriteDepartures {
-            Text("must_choose_favorite").padding()
+            switch widgetFamily {
+            case .systemMedium:
+                NoFavoriteViewMedium()
+
+            case .systemSmall:
+                NoFavoriteViewSmall()
+            default:
+                Text("Error")
+            }
+
         } else {
             GeometryReader { geometry in
                 ZStack {
