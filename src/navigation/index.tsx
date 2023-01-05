@@ -21,7 +21,7 @@ import {
 } from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
-import {Linking, StatusBar} from 'react-native';
+import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
 import TabNavigator from './TabNavigator';
 import transitionSpec from './transitionSpec';
@@ -59,6 +59,80 @@ const NavigationRoot = () => {
     },
   };
 
+  function getParamsFromQuery(query: string): {[name: string]: string} {
+    const paramArr = query.slice(query.indexOf('?') + 1).split('&');
+    const params: {[name: string]: string} = {};
+    paramArr.map((param) => {
+      const [key, val] = param.split('=');
+      params[key] = val.replace('%20', ' ');
+    });
+    return params;
+  }
+
+  function stateFromWidget(params: {[name: string]: string}): ResultState {
+    let destination: PartialRoute<any>[] | undefined;
+
+    if (departuresV2Enabled) {
+      destination = [
+        {
+          // Index is needed so that the user can go back after
+          //opening the app with the widget when it was not open previously
+          index: 0,
+          name: 'DeparturesScreen',
+        },
+        {
+          name: 'PlaceScreen',
+          params: {
+            place: {
+              name: params.stopName,
+              id: params.stopId,
+            },
+            selectedQuayId: params.quayId,
+            showOnlyFavoritesByDefault: true,
+            mode: 'Departure',
+          },
+        },
+      ];
+    } else {
+      destination = [
+        {
+          name: 'NearbyRoot',
+          params: {
+            location: {
+              id: params.stopId,
+              name: params.stopName,
+              label: params.stopName,
+              layer: 'address',
+              coordinates: {
+                latitude: params.latitude,
+                longitude: params.longitude,
+              },
+              resultType: 'search',
+            },
+          },
+        },
+      ];
+    }
+
+    return {
+      routes: [
+        {
+          name: 'TabNavigator',
+          state: {
+            routes: [
+              {
+                name: 'Nearest',
+                state: {
+                  routes: destination as PartialRoute<Route<string>>[],
+                },
+              },
+            ],
+          },
+        },
+      ],
+    };
+  }
+
   return (
     <>
       <StatusBar
@@ -77,11 +151,6 @@ const NavigationRoot = () => {
                 TabNavigator: {
                   screens: {
                     Profile: 'profile',
-                    Dashboard: {
-                      screens: {
-                        NearbyStopPlacesDashboardScreen: 'addFavoriteDeparture',
-                      },
-                    },
                     Ticketing: {
                       screens: {
                         ActiveFareProductsAndReservationsTab: 'ticketing',
@@ -92,76 +161,40 @@ const NavigationRoot = () => {
               },
             },
             getStateFromPath(path, config) {
-              console.log('path :' + path);
+              console.log('path', path);
+              //If the path is not from the widget, behave as usual
               if (!path.includes('widget')) {
                 return getStateFromPath(path, config);
               }
-              const paramArr = path.slice(path.indexOf('?') + 1).split('&');
-              const params: {[name: string]: string} = {};
-              paramArr.map((param) => {
-                const [key, val] = param.split('=');
-                params[key] = val;
-              });
 
-              let destination: PartialRoute<Route<string>> | undefined;
-
-              if (departuresV2Enabled) {
-                destination = {
-                  name: 'PlaceScreen',
-                  params: {
-                    place: {
-                      name: params.stopName,
-                      id: params.stopId,
-                    },
-                    selectedQuayId: params.quayId,
-                    showOnlyFavoritesByDefault: true,
-                    mode: 'Departure',
-                  },
-                };
-              } else {
-                destination = {
-                  name: 'NearbyScreen',
-                  state: {
-                    routes: [
-                      {
-                        name: 'NearbyRoot',
-                        params: {
-                          props: {
-                            location: {
-                              id: `geo-${params.latitude}-${params.longitude}`,
-                              name: params.stopName,
-                              coordinates: {
-                                latitude: params.latitude,
-                                longitude: params.longitude,
-                              },
+              //User get redirected to add new favorite departure
+              if (path.includes('addFavoriteDeparture')) {
+                return {
+                  routes: [
+                    {
+                      name: 'TabNavigator',
+                      state: {
+                        routes: [
+                          {
+                            name: 'Dashboard',
+                            state: {
+                              routes: [
+                                {name: 'DashboardRoot', index: 0},
+                                {name: 'NearbyStopPlacesDashboardScreen'},
+                              ],
                             },
                           },
-                          resultType: 'favorite',
-                        },
+                        ],
                       },
-                    ],
-                  },
-                };
+                    },
+                  ],
+                } as ResultState;
               }
 
-              const state: ResultState = {
-                routes: [
-                  {
-                    name: 'TabNavigator',
-                    state: {
-                      routes: [
-                        {
-                          name: 'Nearest',
-                          state: {
-                            routes: [destination],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                ],
-              };
-              return state;
+              const params = getParamsFromQuery(path);
+
+              //Get redirected to the preferred departures view
+              return stateFromWidget(params);
             },
           }}
         >

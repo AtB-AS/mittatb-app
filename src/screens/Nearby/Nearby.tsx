@@ -39,7 +39,7 @@ const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type RootProps = NearbyScreenProps<'NearbyRoot'>;
 
-export default function NearbyScreen({navigation}: RootProps) {
+export default function NearbyScreen({navigation, route: {params}}: RootProps) {
   const {status, location, locationEnabled, requestPermission} =
     useGeolocationState();
 
@@ -51,7 +51,9 @@ export default function NearbyScreen({navigation}: RootProps) {
     <NearbyOverview
       requestGeoPermission={requestPermission}
       hasLocationPermission={locationEnabled && status === 'granted'}
-      currentLocation={location || undefined}
+      currentLocation={
+        params && params.location ? undefined : location || undefined
+      }
       navigation={navigation}
     />
   );
