@@ -1,17 +1,16 @@
 import {StopPlaceGroup} from '@atb/api/departures/types';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
-import {ActionSectionItem} from '@atb/components/sections';
+import {ExpandableSectionItem} from '@atb/components/sections';
 import {Location} from '@atb/favorites/types';
 import {MessageBox} from '@atb/components/message-box';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
-import {animateNextChange} from '@atb/utils/animation';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import QuaySection from './section-items/quay-section';
 import {hasNoGroupsWithDepartures, hasNoQuaysWithDepartures} from './utils';
 import {StopPlace} from '@atb/api/types/trips';
 import DeparturesTexts from '@atb/translations/screens/Departures';
+import QuaySection from '@atb/departure-list/section-items/quay-section';
 
 type DeparturesListProps = {
   departures: StopPlaceGroup[] | null;
@@ -142,7 +141,6 @@ const StopDepartures = React.memo(function StopDepartures({
   searchDate,
   testID,
 }: StopDeparturesProps) {
-  const {t} = useTranslation();
   const [expanded, setExpanded] = useState(
     defaultExpanded || disableCollapsing,
   );
@@ -159,25 +157,17 @@ const StopDepartures = React.memo(function StopDepartures({
   }
 
   return (
-    <View accessibilityState={{expanded}} testID={testID}>
+    <View testID={testID}>
       {!disableCollapsing && (
-        <ActionSectionItem
+        <ExpandableSectionItem
           transparent
           text={stopPlaceGroup.stopPlace.name}
-          mode="heading-expand"
-          onPress={() => {
-            animateNextChange();
-            setExpanded(!expanded);
-          }}
-          checked={expanded}
-          accessibility={{
-            accessibilityHint: t(
-              NearbyTexts.results.stops.header[
-                expanded ? 'hintHide' : 'hintShow'
-              ],
-            ),
-          }}
+          textType="body__primary--bold"
+          onPress={() => setExpanded(!expanded)}
+          initiallyExpanded={defaultExpanded}
           testID={testID + 'HideAction'}
+          showIconText={true}
+          expanded={expanded}
         />
       )}
 
