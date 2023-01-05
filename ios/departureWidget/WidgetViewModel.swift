@@ -42,21 +42,32 @@ struct WidgetViewModel {
     let entry: Entry
 
     var deepLink: String {
+        guard let appScheme = Bundle.app.object(forInfoDictionaryKey: "AppScheme") else {
+            return ("atb-dev://error")
+        }
+
         if entry.state == .noFavouriteDepartures {
-            return "atb-dev://addFavoriteDeparture"
+            return "\(appScheme)://widget/addFavoriteDeparture"
         }
 
-        guard let stopId = stopPlaceInfo?.id,
-              // let stopName = stopPlaceInfo?.name,
-              let quayId = quayGroup?.quay.id,
-              let latitude = stopPlaceInfo?.latitude,
-              let longitude = stopPlaceInfo?.longitude
-        else {
-            return String("hello")
+        guard let stopPlace = stopPlaceInfo, let quay = quayGroup?.quay else {
+            return String("error")
         }
 
-        // TODO: find solution to spaces in stopName, using placeholder for now.
-        return String("atb-dev://widget?stopId=\(stopId)&stopName=placeholder&quayId=\(quayId)&latitude=\(latitude)&longitude=\(longitude)")
+        var urlComponents = URLComponents(string: "\(appScheme)://widget")
+        urlComponents?.queryItems = [
+            URLQueryItem(name: "stopId", value: stopPlace.id),
+            URLQueryItem(name: "stopName", value: stopPlace.name),
+            URLQueryItem(name: "quayId", value: quay.id),
+            URLQueryItem(name: "latitude", value: String(stopPlace.latitude)),
+            URLQueryItem(name: "longitude", value: String(stopPlace.longitude)),
+        ]
+
+        guard let url = urlComponents?.string else {
+            return String("error")
+        }
+
+        return url
     }
 
     var quayName: String? {
