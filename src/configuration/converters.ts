@@ -12,10 +12,10 @@ import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
 import {isArray} from 'lodash';
 import {TransportModeType} from '@atb/configuration/types';
-import {
+import type {
   TransportIconModeType,
-  TransportModeFilterOption,
-} from '@atb/screens/Dashboard/TravelSearchFiltersBottomSheet';
+  TransportModeFilterOptionType,
+} from '@atb/screens/Dashboard/types';
 import {
   TransportMode,
   TransportModes,
@@ -212,7 +212,7 @@ function notifyWrongConfigurationType(
 
 export const mapToTransportModeFilterOptions = (
   filters: any,
-): TransportModeFilterOption[] | undefined => {
+): TransportModeFilterOptionType[] | undefined => {
   if (!isArray(filters)) {
     Bugsnag.notify(`Transport mode filters should be of type "array"`);
     return;
@@ -220,12 +220,12 @@ export const mapToTransportModeFilterOptions = (
 
   return filters
     .map(mapToTransportModeFilterOption)
-    .filter((f): f is TransportModeFilterOption => !!f?.modes);
+    .filter((f): f is TransportModeFilterOptionType => !!f?.modes);
 };
 
 const mapToTransportModeFilterOption = (
   filter: any,
-): TransportModeFilterOption | undefined => {
+): TransportModeFilterOptionType | undefined => {
   const fields = ['id', 'text', 'modes'];
   if (!fields.every((f) => f in filter)) {
     Bugsnag.notify(

@@ -563,8 +563,7 @@ function computeNoResultReasons(
 export const useShouldShowTravelSearchFilterOnboarding = () => {
   const [shouldShow, setShouldShow] = useState(false);
   const isFocused = useIsFocused();
-  const travelSearchFiltersState = useTravelSearchFiltersState();
-  const enabled = travelSearchFiltersState.enabled;
+  const {enabled} = useTravelSearchFiltersState();
 
   useEffect(() => {
     if (isFocused && enabled) {

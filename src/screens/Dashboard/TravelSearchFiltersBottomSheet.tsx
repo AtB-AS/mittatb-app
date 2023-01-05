@@ -2,7 +2,6 @@ import {ScrollView} from 'react-native';
 import React, {forwardRef, useState} from 'react';
 import {
   getTextForLanguage,
-  LanguageAndTextType,
   ScreenHeaderTexts,
   TripSearchTexts,
   useTranslation,
@@ -12,44 +11,28 @@ import * as Sections from '@atb/components/sections';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import {Add, Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {TransportModes} from '@atb/api/types/generated/journey_planner_v3_types';
-import {TravelSearchFilters} from '@atb/screens/Dashboard/use-travel-search-filters-state';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-
-export type TransportModesRaw = {
-  transportMode: string;
-  transportSubModes?: string[];
-};
-
-export type TransportIconModeType = Omit<
-  TransportModes,
-  'transportSubModes'
-> & {
-  transportSubMode?: Required<TransportModes>['transportSubModes'][0];
-};
-
-export type TransportModeFilterOption = {
-  id: string;
-  icon: TransportIconModeType;
-  text: LanguageAndTextType[];
-  description?: LanguageAndTextType[];
-  modes: TransportModes[];
-};
+import {StyleSheet} from '@atb/theme';
+import type {
+  TransportModeFilterOptionType,
+  TravelSearchFiltersType,
+} from './types';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
   {
     close: () => void;
-    filters: TravelSearchFilters;
-    initialSelection: TravelSearchFilters;
-    onSave: (t: TravelSearchFilters) => void;
+    filters: TravelSearchFiltersType;
+    initialSelection: TravelSearchFiltersType;
+    onSave: (t: TravelSearchFiltersType) => void;
   }
 >(({close, filters, initialSelection, onSave}, focusRef) => {
   const {t, language} = useTranslation();
+  const styles = useStyles();
 
   const [selectedModes, setSelectedModes] = useState<
-    TransportModeFilterOption[] | undefined
+    TransportModeFilterOptionType[] | undefined
   >(initialSelection.transportModes);
 
   const save = () => {
@@ -72,10 +55,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
         color="background_1"
         setFocusOnLoad={false}
       />
-      <ScrollView
-        style={{marginHorizontal: 12, marginBottom: 12}}
-        ref={focusRef}
-      >
+      <ScrollView style={styles.filtersContainer} ref={focusRef}>
         <Sections.Section>
           <Sections.HeaderSectionItem
             text={t(TripSearchTexts.filters.modes.heading)}
@@ -129,3 +109,10 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
     </BottomSheetContainer>
   );
 });
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  filtersContainer: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
+  },
+}));

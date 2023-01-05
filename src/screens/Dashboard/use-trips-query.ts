@@ -19,7 +19,7 @@ import {useSearchHistory} from '@atb/search-history';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {TripSearchPreferences, usePreferences} from '@atb/preferences';
 import {isValidTripLocations} from '@atb/utils/location';
-import {TravelSearchFilters} from '@atb/screens/Dashboard/use-travel-search-filters-state';
+import type {TravelSearchFiltersType} from '@atb/screens/Dashboard/types';
 import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {flatMap} from '@atb/utils/array';
 
@@ -30,7 +30,7 @@ export default function useTripsQuery(
     option: 'now',
     date: new Date().toISOString(),
   },
-  selectedFilters: TravelSearchFilters | undefined,
+  selectedFilters: TravelSearchFiltersType | undefined,
 ): {
   tripPatterns: TripPatternWithKey[];
   timeOfLastSearch: DateString;
@@ -207,7 +207,7 @@ async function doSearch(
   {searchTime, cursor}: SearchInput,
   cancelToken: CancelTokenSource,
   tripSearchPreferences: TripSearchPreferences | undefined,
-  travelSearchFilters: TravelSearchFilters | undefined,
+  travelSearchFilters: TravelSearchFiltersType | undefined,
 ) {
   const from = {
     ...fromLocation,

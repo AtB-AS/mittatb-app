@@ -31,7 +31,7 @@ import {
   mapToFareProductTypeConfigs,
   mapToTransportModeFilterOptions,
 } from './converters';
-import {TravelSearchFilters} from '@atb/screens/Dashboard/use-travel-search-filters-state';
+import type {TravelSearchFiltersType} from '@atb/screens/Dashboard/types';
 
 type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
@@ -41,7 +41,7 @@ type ConfigurationContextState = {
   paymentTypes: PaymentType[];
   vatPercent: number;
   fareProductTypeConfigs: FareProductTypeConfig[];
-  travelSearchFilters: TravelSearchFilters | undefined;
+  travelSearchFilters: TravelSearchFiltersType | undefined;
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
@@ -74,7 +74,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     FareProductTypeConfig[]
   >(defaultFareProductTypeConfig);
   const [travelSearchFilters, setTravelSearchFilters] =
-    useState<TravelSearchFilters>();
+    useState<TravelSearchFiltersType>();
 
   useEffect(() => {
     firestore()
@@ -285,7 +285,7 @@ function getFareProductTypeConfigsFromSnapshot(
 
 function getTravelSearchFiltersFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): TravelSearchFilters | undefined {
+): TravelSearchFiltersType | undefined {
   const transportModeOptions = snapshot.docs
     .find((doc) => doc.id == 'travelSearchFilters')
     ?.get('transportModes');

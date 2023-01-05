@@ -1,21 +1,15 @@
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import React, {useRef, useState} from 'react';
-import {
-  TransportModeFilterOption,
-  TravelSearchFiltersBottomSheet,
-} from '@atb/screens/Dashboard/TravelSearchFiltersBottomSheet';
+import {TravelSearchFiltersBottomSheet} from '@atb/screens/Dashboard/TravelSearchFiltersBottomSheet';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useTravelSearchFiltersEnabled} from '@atb/screens/Dashboard/use-travel-search-filters-enabled';
+import type {TravelSearchFiltersType} from '@atb/screens/Dashboard/types';
 
-export type TravelSearchFilters = {
-  transportModes?: TransportModeFilterOption[];
-};
-
-export type TravelSearchFiltersState =
+type TravelSearchFiltersState =
   | {
       enabled: true;
       openBottomSheet: () => void;
-      selectedFilters: TravelSearchFilters;
+      selectedFilters: TravelSearchFiltersType;
       closeRef: React.Ref<any>;
     }
   | {enabled: false; selectedFilters?: undefined};
@@ -29,9 +23,10 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
   const travelSearchFiltersEnabled = useTravelSearchFiltersEnabled();
   const {travelSearchFilters} = useFirestoreConfiguration();
   const transportModeFilterOptions = travelSearchFilters?.transportModes;
-  const [selectedFilters, setSelectedFilters] = useState<TravelSearchFilters>({
-    transportModes: transportModeFilterOptions,
-  });
+  const [selectedFilters, setSelectedFilters] =
+    useState<TravelSearchFiltersType>({
+      transportModes: transportModeFilterOptions,
+    });
   const closeRef = useRef();
 
   if (!travelSearchFiltersEnabled) return {enabled: false};
