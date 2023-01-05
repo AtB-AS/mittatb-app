@@ -44,8 +44,8 @@ import {
 } from 'react-native';
 import {DashboardScreenProps} from './types';
 import {Time} from '@atb/assets/svg/mono-icons/time';
-import {useTravelSearchFiltersEnabled} from '@atb/screens/Dashboard/use-travel-search-filters-enabled';
 import storage, {StorageModelKeysEnum} from '@atb/storage';
+import {useTravelSearchFiltersState} from '@atb/screens/Dashboard/use-travel-search-filters-state';
 
 type TripSearchRouteName = 'TripSearch';
 const TripSearchRouteNameStatic: TripSearchRouteName = 'TripSearch';
@@ -91,8 +91,16 @@ const TripSearch: React.FC<RootProps> = ({
     option: 'now',
     date: new Date().toISOString(),
   });
+
+  const travelSearchFiltersState = useTravelSearchFiltersState();
+
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
-    useTripsQuery(from, to, searchTime);
+    useTripsQuery(
+      from,
+      to,
+      searchTime,
+      travelSearchFiltersState?.selectedFilters,
+    );
 
   const isSearching = searchState === 'searching';
   const showEmptyScreen = !tripPatterns && !isSearching && !error;
@@ -105,8 +113,6 @@ const TripSearch: React.FC<RootProps> = ({
   >();
 
   const screenHasFocus = useIsFocused();
-
-  const travelSearchFiltersEnabled = useTravelSearchFiltersEnabled();
 
   useEffect(() => {
     if (!screenHasFocus) return;
@@ -313,18 +319,19 @@ const TripSearch: React.FC<RootProps> = ({
             rightIcon={{svg: Time}}
             viewContainerStyle={style.searchTimeButton}
           />
-          {travelSearchFiltersEnabled && (
+          {travelSearchFiltersState.enabled && (
             <Button
               text={t(TripSearchTexts.filterButton.text)}
-              // accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
+              accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
               interactiveColor="interactive_1"
               mode="secondary"
               type="inline"
               compact={true}
-              onPress={() => {}}
+              onPress={travelSearchFiltersState.openBottomSheet}
               testID="dashboardDateTimePicker"
               rightIcon={{svg: Filter}}
               viewContainerStyle={style.filterButton}
+              ref={travelSearchFiltersState.closeRef}
             />
           )}
         </View>
@@ -556,7 +563,7 @@ function computeNoResultReasons(
 export const useShouldShowTravelSearchFilterOnboarding = () => {
   const [shouldShow, setShouldShow] = useState(false);
   const isFocused = useIsFocused();
-  const enabled = useTravelSearchFiltersEnabled();
+  const {enabled} = useTravelSearchFiltersState();
 
   useEffect(() => {
     if (isFocused && enabled) {
