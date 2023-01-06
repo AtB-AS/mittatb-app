@@ -96,7 +96,7 @@ export default function PlaceScreen({
           style={styles.messageBox}
           type="error"
           message={t(DeparturesTexts.message.resultNotFound)}
-        ></MessageBox>
+        />
       </View>
     );
   }
