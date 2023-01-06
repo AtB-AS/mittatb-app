@@ -100,7 +100,7 @@ platform :ios do
     widget_prov_profile_name = ENV["sigh_#{widget_prefix}_profile-name"]
     widget_signing_identity_name = ENV["sigh_#{app_prefix}_certificate-name"]
 
-    widget_enabled = !(ENV["DISABLE_WIDGET"])
+    widget_enabled = ENV["DISABLE_WIDGET"] == "false"
     puts "Is widget enabled: #{widget_enabled}"
 
     update_project_team(
