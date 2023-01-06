@@ -1,7 +1,7 @@
 import {
-  ActionSectionItem,
   RadioGroupSection,
   Section,
+  ToggleSectionItem,
 } from '@atb/components/sections';
 import {Preference_Language, usePreferences} from '@atb/preferences';
 import {StyleSheet, Theme} from '@atb/theme';
@@ -36,11 +36,10 @@ export default function Language() {
       />
       <ScrollView>
         <Section withPadding withTopPadding>
-          <ActionSectionItem
-            mode="toggle"
+          <ToggleSectionItem
             text={t(LanguageSettingsTexts.usePhoneSettings)}
-            checked={useSystemLanguage}
-            onPress={(checked) => {
+            value={useSystemLanguage}
+            onValueChange={(checked) => {
               setPreference({
                 useSystemLanguage: checked,
                 language: language || DEFAULT_LANGUAGE,

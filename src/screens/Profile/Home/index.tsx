@@ -329,20 +329,18 @@ export default function ProfileHome({navigation}: ProfileProps) {
               </View>
             </View>
           </Sections.GenericSectionItem>
-          <Sections.ActionSectionItem
-            mode="toggle"
+          <Sections.ToggleSectionItem
             text={t(ProfileTexts.sections.newFeatures.departures)}
-            checked={isDeparuresV2Enabled}
-            onPress={setDeparturesV2Enabled}
+            value={isDeparuresV2Enabled}
+            onValueChange={setDeparturesV2Enabled}
             testID="newDeparturesToggle"
           />
           {enable_map_page ? (
-            <Sections.ActionSectionItem
-              mode="toggle"
+            <Sections.ToggleSectionItem
               text={t(ProfileTexts.sections.newFeatures.map)}
-              checked={showMapPage}
+              value={showMapPage}
               testID="enableMapPageToggle"
-              onPress={(enableMapPage) => {
+              onValueChange={(enableMapPage) => {
                 setPreference({enableMapPage: enableMapPage});
               }}
             />

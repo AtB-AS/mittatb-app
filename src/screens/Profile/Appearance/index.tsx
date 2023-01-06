@@ -1,4 +1,4 @@
-import {ActionSectionItem, Section} from '@atb/components/sections';
+import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {AppearanceSettingsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -27,19 +27,17 @@ export default function Appearance() {
 
       <ScrollView>
         <Section withTopPadding withPadding>
-          <ActionSectionItem
-            mode="toggle"
+          <ToggleSectionItem
             text={t(AppearanceSettingsTexts.actions.usePhoneTheme)}
-            checked={!overrideSystemAppearance}
-            onPress={(checked) => overrideOSThemePreference(!checked)}
+            value={!overrideSystemAppearance}
+            onValueChange={(checked) => overrideOSThemePreference(!checked)}
           />
 
           {overrideSystemAppearance && (
-            <ActionSectionItem
-              mode="toggle"
+            <ToggleSectionItem
               text={t(AppearanceSettingsTexts.actions.darkMode)}
-              checked={storedColorScheme === 'dark'}
-              onPress={(checked) =>
+              value={storedColorScheme === 'dark'}
+              onValueChange={(checked) =>
                 updateThemePreference(checked ? 'dark' : 'light')
               }
             />
@@ -47,11 +45,10 @@ export default function Appearance() {
         </Section>
         {Platform.OS === 'android' && (
           <Section withTopPadding withPadding>
-            <ActionSectionItem
-              mode="toggle"
+            <ToggleSectionItem
               text={t(AppearanceSettingsTexts.actions.useSystemFont)}
-              checked={useAndroidSystemFont}
-              onPress={(checked) => updateAndroidFontOverride(checked)}
+              value={useAndroidSystemFont}
+              onValueChange={(checked) => updateAndroidFontOverride(checked)}
             />
           </Section>
         )}
