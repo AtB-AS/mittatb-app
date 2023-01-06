@@ -161,7 +161,6 @@ const NavigationRoot = () => {
               },
             },
             getStateFromPath(path, config) {
-              console.log('path', path);
               //If the path is not from the widget, behave as usual
               if (!path.includes('widget')) {
                 return getStateFromPath(path, config);
