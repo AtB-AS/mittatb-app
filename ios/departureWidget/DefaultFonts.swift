@@ -6,5 +6,5 @@ struct DefaultFonts {
     }
 
     static let bold = Font.system(size: 14).weight(Font.Weight.bold)
-    static let bold_header = Font.system(size: 16).weight(Font.Weight.bold)
+    static let boldHeader = Font.system(size: 16).weight(Font.Weight.bold)
 }

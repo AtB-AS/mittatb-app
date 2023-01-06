@@ -48,6 +48,8 @@
 		FEBDDCDB29310DFE00C3755B /* WidgetUpdaterBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBDDCDA29310DFE00C3755B /* WidgetUpdaterBridge.m */; };
 		FEBDDCDE2934D49700C3755B /* ChangeNativeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = FEBDDCDD2934D49600C3755B /* ChangeNativeBridge.m */; };
 		FED22489286F06AC0049ECE3 /* CoreNFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FED22488286F06AC0049ECE3 /* CoreNFC.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		FED3D5DF2968501400B7DEC4 /* NoFavoriteViewSmall.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED3D5DD2968501400B7DEC4 /* NoFavoriteViewSmall.swift */; };
+		FED3D5E02968501400B7DEC4 /* NoFavoriteViewMedium.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED3D5DE2968501400B7DEC4 /* NoFavoriteViewMedium.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,6 +131,8 @@
 		FEBDDCDC2934D49600C3755B /* ChangeNativeBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeNativeBridge.h; sourceTree = "<group>"; };
 		FEBDDCDD2934D49600C3755B /* ChangeNativeBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeNativeBridge.m; sourceTree = "<group>"; };
 		FED22488286F06AC0049ECE3 /* CoreNFC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreNFC.framework; path = System/Library/Frameworks/CoreNFC.framework; sourceTree = SDKROOT; };
+		FED3D5DD2968501400B7DEC4 /* NoFavoriteViewSmall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoFavoriteViewSmall.swift; sourceTree = "<group>"; };
+		FED3D5DE2968501400B7DEC4 /* NoFavoriteViewMedium.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoFavoriteViewMedium.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,6 +221,8 @@
 			children = (
 				FE9C416C293744B100EC2D53 /* ChipView.swift */,
 				505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */,
+				FED3D5DE2968501400B7DEC4 /* NoFavoriteViewMedium.swift */,
+				FED3D5DD2968501400B7DEC4 /* NoFavoriteViewSmall.swift */,
 				50A14ED62918F97E00A661D9 /* WidgetInfoView.swift */,
 			);
 			path = Views;
@@ -552,7 +558,9 @@
 			files = (
 				5038614E28FD81B700E16E13 /* Structs.swift in Sources */,
 				5038614A28FD6EB900E16E13 /* APIService.swift in Sources */,
+				FED3D5E02968501400B7DEC4 /* NoFavoriteViewMedium.swift in Sources */,
 				FE09922C28FFF50800E5046D /* Bundle.swift in Sources */,
+				FED3D5DF2968501400B7DEC4 /* NoFavoriteViewSmall.swift in Sources */,
 				505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */,
 				FE7DE4F5294A2EDC009BE6DB /* String.swift in Sources */,
 				503D2E5C2967436E002E0A6A /* (null) in Sources */,

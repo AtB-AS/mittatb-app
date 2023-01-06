@@ -118,7 +118,7 @@ class APIService {
                     callback(.failure(APIError.noDataError))
                     return
                 }
-                
+
                 return callback(.success(stopPlaceGroup))
             case let .failure(error):
                 debugPrint(error)

@@ -47,7 +47,7 @@ struct WidgetInfoView: View {
                         Text("From \(quayName)")
                             .lineLimit(1)
                             .frame(width: geometry.size.width - (K.padding * 2), alignment: .leading)
-                            .font(DefaultFonts.bold_header)
+                            .font(DefaultFonts.boldHeader)
 
                         Spacer()
                         if widgetFamily == .systemMedium {
@@ -91,7 +91,7 @@ struct WidgetInfoView: View {
                                 .padding(8)
                                 .background(Color("TimeTileBackgroundColor"))
                                 .cornerRadius(8)
-                                .font(DefaultFonts.bold_header)
+                                .font(DefaultFonts.boldHeader)
                         } else {
                             DepartureTimesView(aimedTimes: aimedTimes)
                         }
