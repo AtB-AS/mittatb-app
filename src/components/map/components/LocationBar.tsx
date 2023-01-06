@@ -1,9 +1,9 @@
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import SvgError from '@atb/assets/svg/mono-icons/status/Error';
 import SvgInfo from '@atb/assets/svg/mono-icons/status/Info';
-import LocationIcon from '@atb/components/location-icon';
-import ThemeText from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
+import {LocationIcon} from '@atb/components/location-icon';
+import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import React, {useMemo} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {ErrorType} from '@atb/api/utils';
@@ -30,7 +30,7 @@ type Props = {
  */
 const CURRENT_LOCATION_THRESHOLD_METERS = 30;
 
-const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
+export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
   const styles = useStyles();
   const {location: geolocation} = useGeolocationState();
   const {closestLocation, isSearching, error} = useReverseGeocoder(
@@ -181,5 +181,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
   },
 }));
-
-export default LocationBar;

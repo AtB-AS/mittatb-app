@@ -1,5 +1,5 @@
-import orgSpecificTranslations from '@atb/translations/utils';
 import {translation as _} from '../../commons';
+
 const LoginTexts = {
   logInOptions: {
     title: _('Logg inn', 'Log in'),
@@ -29,13 +29,10 @@ const LoginTexts = {
     continueButton: _('Jeg vil logge inn likevel', 'I want to log in anyway'),
   },
   onboarding: {
-    title: _(
-      'Nå kan du kjøpe periodebilletter!',
-      'Periodic tickets – available now!',
-    ),
+    title: _('Logg inn for å kjøpe!', 'Log in to purchase!'),
     description: _(
-      'Når du logger inn kan du kjøpe periodebilletter på 7, 30, 60, 90 eller 180 dagers varighet.',
-      'Log in to purchase 7, 30, 60, 90 or 180-day tickets.',
+      'Denne billetten krever at du er innlogget for å kunne kjøpe.',
+      'This ticket requires that you are logged in to purchase.',
     ),
     button: _('Ta meg til innlogging', 'Take me to login'),
     laterButton: _('Jeg vil logge inn senere', 'I want to log in later'),

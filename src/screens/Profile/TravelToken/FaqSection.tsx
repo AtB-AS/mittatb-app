@@ -1,6 +1,6 @@
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
 
@@ -10,9 +10,11 @@ const FaqSection = ({toggleMaxLimit}: {toggleMaxLimit?: number}) => {
 
   return (
     <Sections.Section style={styles.faqSection}>
-      <Sections.HeaderItem text={t(TravelTokenTexts.travelToken.faq.title)} />
+      <Sections.HeaderSectionItem
+        text={t(TravelTokenTexts.travelToken.faq.title)}
+      />
       {toggleMaxLimit ? (
-        <Sections.ExpandableItem
+        <Sections.ExpandableSectionItem
           text={t(TravelTokenTexts.travelToken.tokenToggleFaq.question)}
           showIconText={false}
           expandContent={
@@ -28,7 +30,7 @@ const FaqSection = ({toggleMaxLimit}: {toggleMaxLimit?: number}) => {
       ) : null}
       {/*eslint-disable-next-line rulesdir/translations-warning*/}
       {TravelTokenTexts.travelToken.faqs.map(({question, answer}, index) => (
-        <Sections.ExpandableItem
+        <Sections.ExpandableSectionItem
           key={index}
           text={t(question)}
           showIconText={false}

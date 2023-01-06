@@ -1,10 +1,10 @@
-import Button from '@atb/components/button';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {Button} from '@atb/components/button';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {
-  DateInputItem,
-  RadioSection,
+  DateInputSectionItem,
+  RadioGroupSection,
   Section,
-  TimeInputItem,
+  TimeInputSectionItem,
 } from '@atb/components/sections';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -81,7 +81,7 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
       />
 
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <RadioSection<DateOptionType>
+        <RadioGroupSection<DateOptionType>
           selected={option ?? dateItems[0]}
           keyExtractor={(s: string) => s}
           items={dateItems}
@@ -92,8 +92,8 @@ const JourneyDatePicker: React.FC<JourneyDatePickerProps> = ({
 
         {option !== 'now' && (
           <Section withBottomPadding testID="dateTimePickerSection">
-            <DateInputItem value={dateString} onChange={setDate} />
-            <TimeInputItem value={timeString} onChange={setTime} />
+            <DateInputSectionItem value={dateString} onChange={setDate} />
+            <TimeInputSectionItem value={timeString} onChange={setTime} />
           </Section>
         )}
 

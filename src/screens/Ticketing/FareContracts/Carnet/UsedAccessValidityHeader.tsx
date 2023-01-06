@@ -1,4 +1,4 @@
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {
   Language,
@@ -11,6 +11,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {UsedAccessStatus} from './types';
 import TransportMode from '@atb/screens/Ticketing/FareContracts/Component/TransportMode';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 type Props = {
   now: number;
@@ -24,14 +25,20 @@ function UsedAccessValidityHeader(props: Props) {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const usedAccessValidityText = getUsedAccessValidityText(props, t, language);
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (c) => c.type === 'carnet',
+  );
 
   return (
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
-        <TransportMode
-          fareProductType={'carnet'}
-          disabled={props.status === 'inactive'}
-        />
+        {fareProductTypeConfig && (
+          <TransportMode
+            modes={fareProductTypeConfig?.transportModes}
+            disabled={props.status === 'inactive'}
+          />
+        )}
         <ThemeText
           style={styles.label}
           type="body__secondary"

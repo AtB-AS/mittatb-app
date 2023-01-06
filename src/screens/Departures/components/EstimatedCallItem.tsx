@@ -1,8 +1,8 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   CancelledDepartureTexts,
   dictionary,
@@ -31,10 +31,9 @@ import {StopPlacesMode} from '@atb/screens/Departures/types';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {SvgProps} from 'react-native-svg';
 import {
-  getSvgForMostCriticalSituationOrNotice,
   getSituationOrNoticeA11yLabel,
+  getSvgForMostCriticalSituationOrNotice,
 } from '@atb/situations';
-import Time from '@atb/screens/TripDetails/components/Time';
 import {
   getNoticesForEstimatedCall,
   getTimeRepresentationType,
@@ -132,11 +131,15 @@ export default function EstimatedCallItem({
               publicCode={line.publicCode}
               transportMode={line.transportMode}
               transportSubmode={line.transportSubmode}
-              icon={getSvgForMostCriticalSituationOrNotice(
-                departure.situations,
-                notices,
-                departure.cancellation,
-              )}
+              icon={
+                mode !== 'Favourite'
+                  ? getSvgForMostCriticalSituationOrNotice(
+                      departure.situations,
+                      notices,
+                      departure.cancellation,
+                    )
+                  : undefined
+              }
               testID={testID}
             />
           )}

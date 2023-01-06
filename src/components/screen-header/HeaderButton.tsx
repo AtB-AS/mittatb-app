@@ -4,8 +4,8 @@ import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import insets from '@atb/utils/insets';
 import {useNavigation} from '@react-navigation/native';
 import {AccessibilityProps, TouchableOpacity} from 'react-native';
-import ThemeText from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {StaticColor, TextColor} from '@atb/theme/colors';
 import ServiceDisruption from '@atb/assets/svg/mono-icons/status/ServiceDisruption';
 
@@ -25,11 +25,11 @@ export type HeaderButtonProps = {
   testID?: string;
 } & AccessibilityProps;
 
-export type IconButton = Omit<HeaderButtonProps, 'type'> & {
+export type IconButtonProps = Omit<HeaderButtonProps, 'type'> & {
   icon: React.ReactNode;
 };
 
-const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
+export const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
   const iconButton = useIconButton(buttonProps);
   if (!iconButton) {
     return null;
@@ -64,7 +64,7 @@ const BaseHeaderButton = ({
   icon,
   onPress,
   ...accessibilityProps
-}: IconButton) => (
+}: IconButtonProps) => (
   <TouchableOpacity
     onPress={onPress}
     hitSlop={insets.all(12)}
@@ -77,7 +77,7 @@ const BaseHeaderButton = ({
 
 const useIconButton = (
   buttonProps: HeaderButtonProps,
-): IconButton | undefined => {
+): IconButtonProps | undefined => {
   const navigation = useNavigation();
   const chatIcon = useChatIcon(buttonProps.color, buttonProps.testID);
   const {t} = useTranslation();
@@ -103,7 +103,7 @@ const useIconButton = (
       };
     }
     case 'status-disruption': {
-      const {type, color, onPress, testID, ...accessibilityProps} = buttonProps;
+      const {type, color, onPress, ...accessibilityProps} = buttonProps;
       return {
         icon: <ThemeIcon colorType={color} svg={ServiceDisruption} />,
         onPress: onPress,
@@ -115,7 +115,7 @@ const useIconButton = (
     case 'chat':
       return chatIcon;
     case 'custom': {
-      const {type, text, color, onPress, ...accessibilityProps} = buttonProps;
+      const {text, color, onPress, ...accessibilityProps} = buttonProps;
       return {
         icon: <ThemeText color={color}>{text}</ThemeText>,
         onPress: onPress,
@@ -124,5 +124,3 @@ const useIconButton = (
     }
   }
 };
-
-export default HeaderButton;

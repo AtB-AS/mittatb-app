@@ -1,10 +1,10 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {ActivityIndicator, View} from 'react-native';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {ContrastColor} from '@atb-as/theme';
@@ -65,7 +65,7 @@ const InspectableContent = ({
 }) => {
   const {language} = useTranslation();
   const styles = useStyles();
-  if (!fromTariffZone || !toTariffZone) return null;
+
   const shouldFill =
     preassignedFareProduct?.type === 'period' ||
     preassignedFareProduct?.type === 'hour24';
@@ -79,15 +79,17 @@ const InspectableContent = ({
         },
       ]}
     >
-      <ThemeText
-        type="body__primary--bold"
-        allowFontScaling={false}
-        color={shouldFill ? themeColor : undefined}
-      >
-        {getReferenceDataName(fromTariffZone, language)}
-        {fromTariffZone.id !== toTariffZone.id &&
-          '-' + getReferenceDataName(toTariffZone, language)}
-      </ThemeText>
+      {fromTariffZone && toTariffZone && (
+        <ThemeText
+          type="body__primary--bold"
+          allowFontScaling={false}
+          color={shouldFill ? themeColor : undefined}
+        >
+          {getReferenceDataName(fromTariffZone, language)}
+          {fromTariffZone.id !== toTariffZone.id &&
+            '-' + getReferenceDataName(toTariffZone, language)}
+        </ThemeText>
+      )}
       <ThemeIcon
         svg={Bus}
         fill={shouldFill ? themeColor.text : undefined}

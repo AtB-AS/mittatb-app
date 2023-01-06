@@ -3,21 +3,22 @@ import {StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations/';
 import React from 'react';
 import {View} from 'react-native';
-import shadows from './shadows';
-import Button from '@atb/components/button';
+import {shadows} from './shadows';
+import {Button} from '@atb/components/button';
 
 export type Props = {
   zoomIn(): void;
   zoomOut(): void;
 };
 
-const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
+export const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
   const styles = useStyles();
   const {t} = useTranslation();
   return (
     <View style={styles.zoomContainer}>
       <Button
-        type="compact"
+        type="inline"
+        compact={true}
         interactiveColor="interactive_2"
         accessibilityRole="button"
         accessibilityLabel={t(MapTexts.controls.zoomIn.a11yLabel)}
@@ -25,7 +26,8 @@ const MapControls: React.FC<Props> = ({zoomIn, zoomOut}) => {
         leftIcon={{svg: Add}}
       />
       <Button
-        type="compact"
+        type="inline"
+        compact={true}
         interactiveColor="interactive_2"
         accessibilityRole="button"
         accessibilityLabel={t(MapTexts.controls.zoomOut.a11yLabel)}
@@ -44,4 +46,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     ...shadows,
   },
 }));
-export default MapControls;

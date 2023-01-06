@@ -1,50 +1,41 @@
-import {View, ViewStyle} from 'react-native';
+import {View} from 'react-native';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
-import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {productIsSellableInApp} from '@atb/reference-data/utils';
 import FareProductTile from '@atb/screens/Ticketing/FareProducts/AvailableFareProducts/FareProductTile';
+import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
 
 export const AvailableFareProducts = ({
-  onBuySingleFareProduct,
-  onBuyNightFareProduct,
-  onBuyPeriodFareProduct,
-  onBuyHour24FareProduct,
+  onProductSelect,
 }: {
-  onBuySingleFareProduct: () => void;
-  onBuyNightFareProduct: () => void;
-  onBuyPeriodFareProduct: () => void;
-  onBuyHour24FareProduct: () => void;
+  onProductSelect: (config: FareProductTypeConfig) => void;
 }) => {
   const styles = useStyles();
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {preassignedFareProducts} = useFirestoreConfiguration();
+  const {preassignedFareProducts, fareProductTypeConfigs} =
+    useFirestoreConfiguration();
   const {t} = useTranslation();
 
   const sellableProductsInApp = preassignedFareProducts.filter(
     productIsSellableInApp,
   );
 
-  const shouldShowSingleFareProduct = sellableProductsInApp.some(
-    (product) => product.type === 'single',
+  const sellableFareProductTypeConfigs = fareProductTypeConfigs.filter(
+    (config) => sellableProductsInApp.some((p) => p.type === config.type),
   );
 
-  const shouldShowPeriodFareProduct =
-    hasEnabledMobileToken &&
-    sellableProductsInApp.some((product) => product.type === 'period');
-
-  const shouldShowHour24FareProduct = sellableProductsInApp.some(
-    (product) => product.type === 'hour24',
-  );
-
-  const shouldShowNightFareProduct = sellableProductsInApp.some(
-    (product) => product.type === 'night',
-  );
-
-  const shouldShowSummerPass = false;
+  /*
+  Group by two and two, as two fare products are shown side by side on each row
+  in the purchase tab.
+   */
+  const groupedConfigs = sellableFareProductTypeConfigs.reduce<
+    [FareProductTypeConfig, FareProductTypeConfig | undefined][]
+  >((grouped, current, index, arr) => {
+    if (index % 2 === 0) return [...grouped, [current, arr[index + 1]]];
+    return grouped;
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -52,68 +43,22 @@ export const AvailableFareProducts = ({
         {t(TicketingTexts.availableFareProducts.allTickets)}
       </ThemeText>
 
-      <View style={styles.fareProductsContainer}>
-        {shouldShowSingleFareProduct && (
-          <FareProductTile
-            transportationModeTexts={t(
-              TicketingTexts.availableFareProducts.single.transportModes,
-            )}
-            illustration="Single"
-            onPress={onBuySingleFareProduct}
-            testID="singleFareProduct"
-            type={'single'}
-          />
-        )}
-        {shouldShowPeriodFareProduct && (
-          <FareProductTile
-            transportationModeTexts={t(
-              TicketingTexts.availableFareProducts.period.transportModes,
-            )}
-            illustration="Period"
-            onPress={onBuyPeriodFareProduct}
-            testID="periodicFareProduct"
-            type={'period'}
-          />
-        )}
-      </View>
-      <View style={styles.fareProductsContainer}>
-        {shouldShowNightFareProduct && (
-          <FareProductTile
-            transportationModeTexts={t(
-              TicketingTexts.availableFareProducts.night.transportModes,
-            )}
-            illustration="Night"
-            onPress={onBuyNightFareProduct}
-            testID="nightFareProduct"
-            type={'night'}
-          />
-        )}
-        {shouldShowHour24FareProduct && (
-          <FareProductTile
-            transportationModeTexts={t(
-              TicketingTexts.availableFareProducts.hour24.transportModes,
-            )}
-            illustration="H24"
-            onPress={onBuyHour24FareProduct}
-            testID="24HourFareProduct"
-            type={'hour24'}
-          />
-        )}
-      </View>
-      {shouldShowSummerPass && (
+      {groupedConfigs.map(([firstConfig, secondConfig]) => (
         <View style={styles.fareProductsContainer}>
           <FareProductTile
-            transportationModeTexts={t(
-              TicketingTexts.availableFareProducts.summerPass.transportModes,
-            )}
-            illustration="Summer"
-            accented={true}
-            onPress={onBuyPeriodFareProduct}
-            testID="summerFareProduct"
-            type={'summerPass'}
+            onPress={() => onProductSelect(firstConfig)}
+            testID={`${firstConfig.type}FareProduct`}
+            config={firstConfig}
           />
+          {secondConfig && (
+            <FareProductTile
+              onPress={() => onProductSelect(secondConfig)}
+              testID={`${secondConfig.type}FareProduct`}
+              config={secondConfig}
+            />
+          )}
         </View>
-      )}
+      ))}
     </View>
   );
 };

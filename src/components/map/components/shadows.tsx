@@ -1,6 +1,6 @@
 import {ViewStyle} from 'react-native';
 
-const shadows: ViewStyle = {
+export const shadows: ViewStyle = {
   shadowColor: '#000000',
   shadowOffset: {
     width: 0,
@@ -10,5 +10,3 @@ const shadows: ViewStyle = {
   shadowRadius: 8,
   elevation: 8,
 };
-
-export default shadows;

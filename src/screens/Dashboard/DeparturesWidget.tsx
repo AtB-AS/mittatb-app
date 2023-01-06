@@ -2,12 +2,12 @@ import {Add, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {StopPlaceInfo} from '@atb/api/departures/types';
 import {NoFavouriteDeparture} from '@atb/assets/svg/color/images/';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import Button from '@atb/components/button';
-import ThemeText from '@atb/components/text';
+import {Button} from '@atb/components/button';
+import {ThemeText} from '@atb/components/text';
 import QuaySection from '@atb/departure-list/section-items/quay-section';
 import {useFavorites} from '@atb/favorites';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import SelectFavouritesBottomSheet from '@atb/screens/Assistant/SelectFavouritesBottomSheet';
+import SelectFavouritesBottomSheet from '@atb/screens/Dashboard/SelectFavouritesBottomSheet';
 import {StyleSheet} from '@atb/theme';
 import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
@@ -17,7 +17,7 @@ import React, {useEffect, useRef} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useFavoriteDepartureData} from './state';
 import * as Sections from '@atb/components/sections';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 type Props = {
   onEditFavouriteDeparture: () => void;
@@ -67,7 +67,7 @@ const DeparturesWidget = ({
 
       {!favoriteDepartures.length && (
         <Sections.Section>
-          <Sections.GenericItem>
+          <Sections.GenericSectionItem>
             <View style={styles.noFavouritesView}>
               <NoFavouriteDeparture />
               <View style={styles.noFavouritesTextContainer}>
@@ -80,8 +80,8 @@ const DeparturesWidget = ({
                 </ThemeText>
               </View>
             </View>
-          </Sections.GenericItem>
-          <Sections.LinkItem
+          </Sections.GenericSectionItem>
+          <Sections.LinkSectionItem
             textType="body__secondary"
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={onAddFavouriteDeparture}

@@ -1,7 +1,7 @@
 import React from 'react';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {productIsSellableInApp} from '@atb/reference-data/utils';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {InteractiveColor} from '@atb/theme/colors';
 import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';

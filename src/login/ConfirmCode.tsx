@@ -1,5 +1,5 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {FullScreenHeader} from '@atb/components/screen-header';
+import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {
@@ -10,14 +10,14 @@ import {
   View,
 } from 'react-native';
 import * as Sections from '@atb/components/sections';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {useAuthState} from '@atb/auth';
 import {
   ConfirmationErrorCode,
   PhoneSignInErrorCode,
 } from '@atb/auth/AuthContext';
 import {MessageBox} from '@atb/components/message-box';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
@@ -33,7 +33,6 @@ export default function ConfirmCode({
   doAfterLogin: () => void;
 }) {
   const {t} = useTranslation();
-  const {theme} = useTheme();
   const styles = useThemeStyles();
   const {authenticationType, confirmCode, signInWithPhoneNumber} =
     useAuthState();
@@ -105,7 +104,7 @@ export default function ConfirmCode({
             </ThemeText>
           </View>
           <Sections.Section>
-            <Sections.TextInput
+            <Sections.TextInputSectionItem
               label={t(LoginTexts.confirmCode.input.label)}
               placeholder={t(LoginTexts.confirmCode.input.placeholder)}
               onChangeText={setCode}

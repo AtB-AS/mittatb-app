@@ -1,8 +1,8 @@
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import {Pin} from '@atb/assets/svg/mono-icons/map';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import {screenReaderPause} from '@atb/components/accessible-text';
-import Button, {ButtonProps} from '@atb/components/button';
+import {screenReaderPause} from '@atb/components/text';
+import {Button, ButtonProps} from '@atb/components/button';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {RootStackProps} from '@atb/navigation/types';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -135,7 +135,8 @@ const FavoriteChip: React.FC<ButtonProps> = (props) => {
       style={{
         marginRight: theme.spacings.small,
       }}
-      type="compact"
+      type="inline"
+      compact={true}
     />
   );
 };

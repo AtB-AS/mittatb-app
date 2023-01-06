@@ -1,14 +1,11 @@
 import {Leg, Place, Quay} from '@atb/api/types/trips';
 import {Info, Warning} from '@atb/assets/svg/color/icons/status';
 import {Interchange} from '@atb/assets/svg/mono-icons/actions';
-import AccessibleText, {
-  screenReaderPause,
-} from '@atb/components/accessible-text';
+import {AccessibleText, screenReaderPause} from '@atb/components/text';
 import {MessageBox} from '@atb/components/message-box';
-import ThemeText from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
-import TransportationIcon from '@atb/components/transportation-icon';
-import {usePreferenceItems} from '@atb/preferences';
+import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {TransportationIcon} from '@atb/components/transportation-icon';
 import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -43,7 +40,8 @@ import Time from './Time';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
 import WaitSection, {WaitDetails} from './WaitSection';
-import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
+import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
 
 type TripSectionProps = {
@@ -72,7 +70,7 @@ const TripSection: React.FC<TripSectionProps> = ({
 }) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
-  const {theme} = useTheme();
+  const {themeName} = useTheme();
   const departuresV2Enabled = useDeparturesV2Enabled();
 
   const isWalkSection = leg.mode === 'foot';
@@ -87,6 +85,10 @@ const TripSection: React.FC<TripSectionProps> = ({
   const navigation = useNavigation<TripDetailsRootNavigation<'Details'>>();
 
   const notices = getNoticesForLeg(leg);
+
+  const lastPassedStop = leg.datedServiceJourney?.estimatedCalls
+    ?.filter((a) => !a.predictionInaccurate && a.actualDepartureTime)
+    .pop();
 
   const sectionOutput = (
     <>
@@ -117,7 +119,7 @@ const TripSection: React.FC<TripSectionProps> = ({
               language,
               t,
             )}
-            rowLabel={<Time {...startTimes} />}
+            rowLabel={<Time timeValues={startTimes} />}
             onPress={() => handleQuayPress(leg.fromPlace.quay)}
             testID="fromPlace"
           >
@@ -168,7 +170,29 @@ const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
-
+        {lastPassedStop?.quay?.name && (
+          <TripRow>
+            <View style={style.realtime}>
+              <ThemeIcon
+                svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
+                size="small"
+                style={style.realtimeIcon}
+              ></ThemeIcon>
+              <ThemeText
+                style={style.realtimeText}
+                type="body__secondary"
+                color="secondary"
+              >
+                {t(
+                  TripDetailsTexts.trip.leg.lastPassedStop(
+                    lastPassedStop.quay.name,
+                    formatToClock(lastPassedStop.actualDepartureTime, language),
+                  ),
+                )}
+              </ThemeText>
+            </View>
+          </TripRow>
+        )}
         {leg.intermediateEstimatedCalls.length > 0 && (
           <IntermediateInfo {...leg} />
         )}
@@ -182,7 +206,7 @@ const TripSection: React.FC<TripSectionProps> = ({
               language,
               t,
             )}
-            rowLabel={<Time {...endTimes} />}
+            rowLabel={<Time timeValues={endTimes} />}
             onPress={() => handleQuayPress(leg.toPlace.quay)}
             testID="toPlace"
           >
@@ -333,7 +357,7 @@ export function getPlaceName(place: Place): string {
   return place.quay ? getQuayName(place.quay) ?? fallback : fallback;
 }
 export function mapLegToTimeValues(leg: Leg) {
-  const legIsMissingRealTime = !leg.realtime && leg.mode !== 'foot';
+  const legIsMissingRealTime = !leg.realtime;
   return {
     startTimes: {
       expectedTime: leg.expectedStartTime,
@@ -394,6 +418,16 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   legLineName: {
     fontWeight: 'bold',
+  },
+  realtime: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  realtimeIcon: {
+    marginRight: theme.spacings.xSmall,
+  },
+  realtimeText: {
+    flex: 1,
   },
 }));
 export default TripSection;

@@ -1,4 +1,4 @@
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {
   Language,
@@ -17,6 +17,7 @@ import {
 import {PreassignedFareProductType} from '@atb/reference-data/types';
 import TransportMode from '@atb/screens/Ticketing/FareContracts/Component/TransportMode';
 import FareContractStatusSymbol from '@atb/screens/Ticketing/FareContracts/Component/FareContractStatusSymbol';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 const ValidityHeader: React.FC<{
   status: ValidityStatus;
@@ -28,6 +29,10 @@ const ValidityHeader: React.FC<{
 }> = ({status, now, validFrom, validTo, isInspectable, fareProductType}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (c) => c.type === fareProductType,
+  );
 
   const validityTime: string = validityTimeText(
     status,
@@ -42,7 +47,9 @@ const ValidityHeader: React.FC<{
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
         {isValidFareContract(status) ? (
-          fareProductType && <TransportMode fareProductType={fareProductType} />
+          fareProductTypeConfig && (
+            <TransportMode modes={fareProductTypeConfig.transportModes} />
+          )
         ) : (
           <FareContractStatusSymbol status={status} />
         )}

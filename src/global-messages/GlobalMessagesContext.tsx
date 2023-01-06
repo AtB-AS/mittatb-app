@@ -30,7 +30,7 @@ type GlobalMessageContextState = {
 const defaultGlobalMessageState = {
   findGlobalMessages: () => [],
   dismissedGlobalMessages: [],
-  addDismissedGlobalMessages: (dismissedMessage: GlobalMessageType) => {},
+  addDismissedGlobalMessages: () => {},
   resetDismissedGlobalMessages: () => {},
 };
 const GlobalMessagesContext = createContext<GlobalMessageContextState>(
@@ -42,7 +42,6 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   const [dismissedGlobalMessages, setDismissedGlobalMessages] = useState<
     GlobalMessageType[]
   >([]);
-  const [error, setError] = useState(false);
   useEffect(
     () =>
       firestore()
@@ -58,11 +57,9 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
             const globalMessages = mapToGlobalMessages(snapshot.docs);
             setGlobalMessages(globalMessages);
             await setLatestDismissedGlobalMessages(globalMessages);
-            setError(false);
           },
           (err) => {
             console.warn(err);
-            setError(true);
           },
         ),
     [],

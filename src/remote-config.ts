@@ -10,7 +10,6 @@ export type RemoteConfig = {
   enable_recent_tickets: boolean;
   enable_period_tickets: boolean;
   enable_login: boolean;
-  enable_frontpage: boolean;
   feedback_questions: string;
   must_upgrade_ticketing: boolean;
   news_enabled: boolean;
@@ -32,6 +31,7 @@ export type RemoteConfig = {
   new_favourites_info_url: string;
   enable_departures_v2_as_default: boolean;
   enable_departures_v2_onboarding: boolean;
+  enable_travel_search_filters: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -43,7 +43,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_recent_tickets: false,
   enable_period_tickets: false,
   enable_login: true,
-  enable_frontpage: true,
   feedback_questions: '',
   must_upgrade_ticketing: false,
   news_enabled: false,
@@ -65,6 +64,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   new_favourites_info_url: '',
   enable_departures_v2_as_default: false,
   enable_departures_v2_onboarding: false,
+  enable_travel_search_filters: false,
 };
 
 export function getConfig(): RemoteConfig {
@@ -89,9 +89,6 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.enable_flex_tickets;
   const enable_login =
     values['enable_login']?.asBoolean() ?? defaultRemoteConfig.enable_login;
-  const enable_frontpage =
-    values['enable_frontpage']?.asBoolean() ??
-    defaultRemoteConfig.enable_frontpage;
   const feedback_questions =
     values['feedback_questions']?.asString() ??
     defaultRemoteConfig.feedback_questions;
@@ -153,6 +150,10 @@ export function getConfig(): RemoteConfig {
     values['enable_departures_v2_onboarding']?.asBoolean() ??
     defaultRemoteConfig.enable_departures_v2_onboarding;
 
+  const enable_travel_search_filters =
+    values['enable_travel_search_filters']?.asBoolean() ??
+    defaultRemoteConfig.enable_travel_search_filters;
+
   return {
     enable_network_logging,
     enable_ticketing,
@@ -162,7 +163,6 @@ export function getConfig(): RemoteConfig {
     enable_recent_tickets,
     enable_period_tickets,
     enable_login,
-    enable_frontpage,
     feedback_questions,
     must_upgrade_ticketing,
     news_enabled,
@@ -184,6 +184,7 @@ export function getConfig(): RemoteConfig {
     new_favourites_info_url,
     enable_departures_v2_as_default,
     enable_departures_v2_onboarding,
+    enable_travel_search_filters,
   };
 }
 

@@ -1,7 +1,7 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {Language, useTranslation} from '@atb/translations';
 import {
   formatToClock,
@@ -108,7 +108,8 @@ export default function DateSelection({
           ),
         )}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yChangeDateHint)}
-        type="compact"
+        type="inline"
+        compact={true}
         mode="tertiary"
         rightIcon={{svg: DateIcon}}
         textStyle={{
@@ -123,7 +124,8 @@ export default function DateSelection({
           setSearchTime(changeDay(searchTime, 1));
         }}
         text={t(DeparturesTexts.dateNavigation.nextDay)}
-        type="compact"
+        type="inline"
+        compact={true}
         mode="tertiary"
         rightIcon={{svg: ArrowRight}}
         textStyle={{
@@ -157,7 +159,7 @@ function formatToTwoLineDateTime(isoDate: string, language: Language) {
   );
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   dateNavigator: {
     flexDirection: 'row',
     flexGrow: 1,

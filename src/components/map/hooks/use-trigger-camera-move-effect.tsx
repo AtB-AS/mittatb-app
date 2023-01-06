@@ -5,8 +5,8 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {Coordinates} from '@atb/screens/TripDetails/Map/types';
-import {fitBounds, mapPositionToCoordinates} from '@atb/components/map/utils';
-import {CameraFocusModeType} from '@atb/components/map/types';
+import {fitBounds, flyToLocation, mapPositionToCoordinates} from '../utils';
+import {CameraFocusModeType} from '../types';
 import {Dimensions, PixelRatio, Platform, StatusBar} from 'react-native';
 
 type BoundingBox = {
@@ -114,17 +114,6 @@ const moveCameraToStopPlace = (
   );
   fitCameraWithinLocation(stopPlaceCoordinates, mapCameraRef, padding, 0.001);
 };
-
-export function flyToLocation(
-  coordinates: Coordinates | undefined,
-  mapCameraRef: RefObject<MapboxGL.Camera>,
-) {
-  coordinates &&
-    mapCameraRef.current?.flyTo(
-      [coordinates.longitude, coordinates.latitude],
-      750,
-    );
-}
 
 /**
  * Move the map camera to a bounded area based on the coordinates and a displacement

@@ -18,7 +18,6 @@ import {
   parseISO,
 } from 'date-fns';
 import {useCallback, useEffect} from 'react';
-import {LayoutAnimation} from 'react-native';
 import useReducerWithSideEffects, {
   NoUpdate,
   ReducerWithSideEffects,
@@ -40,7 +39,6 @@ const MAX_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
 // Used to re-trigger full refresh after N minutes.
 // To repopulate the view when we get fewer departures.
 const HARD_REFRESH_LIMIT_IN_MINUTES = 10;
-const MIN_TIME_RANGE = 3 * 60 * 60; // Three hours
 
 export type DepartureDataState = {
   data: DepartureTypes.EstimatedCall[] | null;

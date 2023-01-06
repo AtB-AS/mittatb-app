@@ -1,11 +1,11 @@
-import {MapProps, MapSelectionActionType} from '@atb/components/map/types';
+import {MapProps, MapSelectionActionType} from '../types';
 import React, {RefObject, useEffect, useState} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import DeparturesDialogSheet from '@atb/components/map/components/DeparturesDialogSheet';
+import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Feature, Point} from 'geojson';
-import {findStopPlaceAtClick} from '@atb/components/map/utils';
+import {findStopPlaceAtClick} from '../utils';
 
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also

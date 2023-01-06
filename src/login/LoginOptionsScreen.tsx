@@ -7,9 +7,9 @@ import {useAppState} from '@atb/AppContext';
 import {useAuthState} from '@atb/auth';
 import {VippsSignInErrorCode} from '@atb/auth/AuthContext';
 import {MessageBox} from '@atb/components/message-box';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {VippsLoginButton} from '@atb/components/vipps-login-button';
 import {AfterLoginParams, LoginInAppScreenProps} from '@atb/login/types';
 import storage from '@atb/storage';
@@ -179,7 +179,7 @@ export default function LoginOptionsScreen({
             {t(LoginTexts.logInOptions.or)}
           </ThemeText>
           <Sections.Section>
-            <Sections.LinkItem
+            <Sections.LinkSectionItem
               text={t(LoginTexts.logInOptions.options.phoneAndCode)}
               onPress={() => {
                 navigation.navigate('LoginInApp', {

@@ -2,15 +2,12 @@ import {
   CameraFocusModeType,
   MapSelectionMode,
   MapSelectionActionType,
-} from '@atb/components/map/types';
+} from '../types';
 import {Coordinates} from '@atb/screens/TripDetails/Map/types';
 import {RefObject, useEffect, useState} from 'react';
 import {Feature, Point} from 'geojson';
 import {createMapLines} from '@atb/screens/TripDetails/Map/utils';
-import {
-  findStopPlaceAtClick,
-  mapPositionToCoordinates,
-} from '@atb/components/map/utils';
+import {findStopPlaceAtClick, mapPositionToCoordinates} from '../utils';
 import {tripsSearch} from '@atb/api/trips_v2';
 import {StreetMode} from '@entur/sdk/lib/journeyPlanner/types';
 import MapboxGL from '@react-native-mapbox-gl/maps';

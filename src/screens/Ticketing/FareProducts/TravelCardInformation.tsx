@@ -1,4 +1,4 @@
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {flatStaticColors, StaticColor} from '@atb/theme/colors';
 import {TravelCard} from '@atb/ticketing';
@@ -11,7 +11,6 @@ type Props = {
 };
 
 const TravelCardInformation: React.FC<Props> = ({travelCard}) => {
-  const {theme} = useTheme();
   const styles = useStyles();
   const {t} = useTranslation();
 
@@ -54,7 +53,7 @@ export function ActiveTravelCard(props: ActiveTravelCardProps): JSX.Element {
   const {cardId = '000000000', color = 'background_accent_2'} = props;
   const formatedTravelCardId = cardId.substr(0, 2) + ' ' + cardId.substr(2);
   const styles = useStyles();
-  const {theme, themeName} = useTheme();
+  const {themeName} = useTheme();
 
   const {t} = useTranslation();
 

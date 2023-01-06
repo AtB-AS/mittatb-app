@@ -1,15 +1,15 @@
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {LogOut} from '@atb/assets/svg/mono-icons/profile';
+import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {useAuthState} from '@atb/auth';
 import {updateMetadata} from '@atb/chat/metadata';
-import ActivityIndicatorOverlay from '@atb/components/activity-indicator-overlay';
+import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import {FullScreenHeader} from '@atb/components/screen-header';
+import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {LoginInAppStackParams} from '@atb/login/types';
 import {
   useHasEnabledMobileToken,
@@ -17,7 +17,7 @@ import {
 } from '@atb/mobile-token/MobileTokenContext';
 import {usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import SelectFavouritesBottomSheet from '@atb/screens/Assistant/SelectFavouritesBottomSheet';
+import SelectFavouritesBottomSheet from '@atb/screens/Dashboard/SelectFavouritesBottomSheet';
 import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
@@ -31,7 +31,6 @@ import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
 import useLocalConfig from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {IS_QA_ENV} from '@env';
-import analytics from '@react-native-firebase/analytics';
 import parsePhoneNumber from 'libphonenumber-js';
 import React from 'react';
 import {Linking, View} from 'react-native';
@@ -40,8 +39,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from '../types';
 import {destructiveAlert} from './utils';
 import useIsLoading from '@atb/utils/use-is-loading';
-import {useNewFrontpage} from '@atb/screens/Dashboard/use-new-frontpage';
-import {useMapPage} from '@atb/components/map/hooks/use-map-page';
+import {useMapPage} from '@atb/components/map';
 import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
 
 const buildNumber = getBuildNumber();
@@ -95,8 +93,6 @@ export default function ProfileHome({navigation}: ProfileProps) {
     }
   };
 
-  const shouldUseNewFrontPage = useNewFrontpage();
-
   function copyInstallId() {
     if (config?.installId) setClipboard(config.installId);
   }
@@ -132,21 +128,21 @@ export default function ProfileHome({navigation}: ProfileProps) {
       >
         {enable_login ? (
           <Sections.Section withPadding>
-            <Sections.HeaderItem
+            <Sections.HeaderSectionItem
               text={t(ProfileTexts.sections.account.heading)}
             />
             {authenticationType === 'phone' && (
-              <Sections.GenericItem>
+              <Sections.GenericSectionItem>
                 <ThemeText style={style.customerNumberHeading}>
                   {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
                 </ThemeText>
                 <ThemeText type="body__secondary" color="secondary">
                   {phoneNumber?.formatInternational()}
                 </ThemeText>
-              </Sections.GenericItem>
+              </Sections.GenericSectionItem>
             )}
             {customerNumber && (
-              <Sections.GenericItem>
+              <Sections.GenericSectionItem>
                 <ThemeText style={style.customerNumberHeading}>
                   {t(ProfileTexts.sections.account.infoItems.customerNumber)}
                 </ThemeText>
@@ -159,28 +155,32 @@ export default function ProfileHome({navigation}: ProfileProps) {
                 >
                   {customerNumber}
                 </ThemeText>
-              </Sections.GenericItem>
+              </Sections.GenericSectionItem>
             )}
 
             {authenticationType == 'phone' && (
-              <Sections.LinkItem
+              <Sections.LinkSectionItem
                 text={t(
-                  ProfileTexts.sections.account.linkItems.paymentOptions.label,
+                  ProfileTexts.sections.account.linkSectionItems.paymentOptions
+                    .label,
                 )}
                 onPress={() => navigation.navigate('PaymentOptions')}
-              ></Sections.LinkItem>
+              ></Sections.LinkSectionItem>
             )}
 
-            <Sections.LinkItem
+            <Sections.LinkSectionItem
               text={t(
-                ProfileTexts.sections.account.linkItems.ticketHistory.label,
+                ProfileTexts.sections.account.linkSectionItems.ticketHistory
+                  .label,
               )}
               onPress={() => navigation.navigate('TicketHistory')}
               testID="ticketHistoryButton"
             />
             {authenticationType !== 'phone' && (
-              <Sections.LinkItem
-                text={t(ProfileTexts.sections.account.linkItems.login.label)}
+              <Sections.LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.account.linkSectionItems.login.label,
+                )}
                 onPress={() => {
                   let screen: keyof LoginInAppStackParams = 'PhoneInputInApp';
                   if (hasActiveFareContracts) {
@@ -202,36 +202,39 @@ export default function ProfileHome({navigation}: ProfileProps) {
                     },
                   });
                 }}
+                icon={<ThemeIcon svg={LogIn} />}
                 testID="loginButton"
               />
             )}
             {authenticationType === 'phone' && (
-              <Sections.LinkItem
+              <Sections.LinkSectionItem
                 text={t(DeleteProfileTexts.header.title)}
                 onPress={() => navigation.navigate('DeleteProfile')}
               />
             )}
             {authenticationType === 'phone' && (
-              <Sections.LinkItem
-                text={t(ProfileTexts.sections.account.linkItems.logout.label)}
+              <Sections.LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.account.linkSectionItems.logout.label,
+                )}
                 icon={<ThemeIcon svg={LogOut} />}
                 onPress={() =>
                   destructiveAlert({
                     alertTitleString: t(
-                      ProfileTexts.sections.account.linkItems.logout
+                      ProfileTexts.sections.account.linkSectionItems.logout
                         .confirmTitle,
                     ),
                     alertMessageString: t(
-                      ProfileTexts.sections.account.linkItems.logout
+                      ProfileTexts.sections.account.linkSectionItems.logout
                         .confirmMessage,
                     ),
                     cancelAlertString: t(
-                      ProfileTexts.sections.account.linkItems.logout.alert
-                        .cancel,
+                      ProfileTexts.sections.account.linkSectionItems.logout
+                        .alert.cancel,
                     ),
                     confirmAlertString: t(
-                      ProfileTexts.sections.account.linkItems.logout.alert
-                        .confirm,
+                      ProfileTexts.sections.account.linkSectionItems.logout
+                        .alert.confirm,
                     ),
                     destructiveArrowFunction: async () => {
                       setIsLoading(true);
@@ -258,13 +261,14 @@ export default function ProfileHome({navigation}: ProfileProps) {
           </Sections.Section>
         ) : null}
         <Sections.Section withPadding>
-          <Sections.HeaderItem
+          <Sections.HeaderSectionItem
             text={t(ProfileTexts.sections.settings.heading)}
           />
           {enable_ticketing ? (
-            <Sections.LinkItem
+            <Sections.LinkSectionItem
               text={t(
-                ProfileTexts.sections.settings.linkItems.userProfile.label,
+                ProfileTexts.sections.settings.linkSectionItems.userProfile
+                  .label,
               )}
               onPress={() => navigation.navigate('DefaultUserProfile')}
               testID="defaultTravellerButton"
@@ -272,37 +276,45 @@ export default function ProfileHome({navigation}: ProfileProps) {
           ) : null}
 
           {authenticationType === 'phone' && hasEnabledMobileToken && (
-            <Sections.LinkItem
+            <Sections.LinkSectionItem
               text={t(
-                ProfileTexts.sections.settings.linkItems.travelToken.label,
+                ProfileTexts.sections.settings.linkSectionItems.travelToken
+                  .label,
               )}
               flag={t(
-                ProfileTexts.sections.settings.linkItems.travelToken.flag,
+                ProfileTexts.sections.settings.linkSectionItems.travelToken
+                  .flag,
               )}
               onPress={() => navigation.navigate('TravelToken')}
               testID="travelTokenButton"
             />
           )}
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.settings.linkItems.appearance.label)}
+          <Sections.LinkSectionItem
+            text={t(
+              ProfileTexts.sections.settings.linkSectionItems.appearance.label,
+            )}
             onPress={() => navigation.navigate('Appearance')}
             testID="appearanceButton"
           />
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.settings.linkItems.startScreen.label)}
+          <Sections.LinkSectionItem
+            text={t(
+              ProfileTexts.sections.settings.linkSectionItems.startScreen.label,
+            )}
             onPress={() => navigation.navigate('SelectStartScreen')}
             testID="startScreenButton"
           />
           {enable_i18n && (
-            <Sections.LinkItem
-              text={t(ProfileTexts.sections.settings.linkItems.language.label)}
+            <Sections.LinkSectionItem
+              text={t(
+                ProfileTexts.sections.settings.linkSectionItems.language.label,
+              )}
               onPress={() => navigation.navigate('Language')}
               testID="languageButton"
             />
           )}
         </Sections.Section>
         <Sections.Section withPadding>
-          <Sections.GenericItem>
+          <Sections.GenericSectionItem>
             <View style={style.betaSectionHeader}>
               <ThemeText type="heading__component">
                 {t(ProfileTexts.sections.newFeatures.heading)}
@@ -316,8 +328,8 @@ export default function ProfileHome({navigation}: ProfileProps) {
                 </ThemeText>
               </View>
             </View>
-          </Sections.GenericItem>
-          <Sections.ActionItem
+          </Sections.GenericSectionItem>
+          <Sections.ActionSectionItem
             mode="toggle"
             text={t(ProfileTexts.sections.newFeatures.departures)}
             checked={isDeparuresV2Enabled}
@@ -325,7 +337,7 @@ export default function ProfileHome({navigation}: ProfileProps) {
             testID="newDeparturesToggle"
           />
           {enable_map_page ? (
-            <Sections.ActionItem
+            <Sections.ActionSectionItem
               mode="toggle"
               text={t(ProfileTexts.sections.newFeatures.map)}
               checked={showMapPage}
@@ -335,31 +347,39 @@ export default function ProfileHome({navigation}: ProfileProps) {
               }}
             />
           ) : null}
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.settings.linkItems.enrollment.label)}
+          <Sections.LinkSectionItem
+            text={t(
+              ProfileTexts.sections.settings.linkSectionItems.enrollment.label,
+            )}
             onPress={() => navigation.navigate('Enrollment')}
             testID="invitationCodeButton"
           />
         </Sections.Section>
         <Sections.Section withPadding>
-          <Sections.HeaderItem
+          <Sections.HeaderSectionItem
             text={t(ProfileTexts.sections.favorites.heading)}
           />
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.favorites.linkItems.places.label)}
+          <Sections.LinkSectionItem
+            text={t(
+              ProfileTexts.sections.favorites.linkSectionItems.places.label,
+            )}
             accessibility={{
               accessibilityHint: t(
-                ProfileTexts.sections.favorites.linkItems.places.a11yHint,
+                ProfileTexts.sections.favorites.linkSectionItems.places
+                  .a11yHint,
               ),
             }}
             testID="favoriteLocationsButton"
             onPress={() => navigation.navigate('FavoriteList')}
           />
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.favorites.linkItems.departures.label)}
+          <Sections.LinkSectionItem
+            text={t(
+              ProfileTexts.sections.favorites.linkSectionItems.departures.label,
+            )}
             accessibility={{
               accessibilityHint: t(
-                ProfileTexts.sections.favorites.linkItems.departures.a11yHint,
+                ProfileTexts.sections.favorites.linkSectionItems.departures
+                  .a11yHint,
               ),
             }}
             testID="favoriteDeparturesButton"
@@ -369,42 +389,47 @@ export default function ProfileHome({navigation}: ProfileProps) {
           />
         </Sections.Section>
         <Sections.Section withPadding>
-          <Sections.HeaderItem
+          <Sections.HeaderSectionItem
             text={t(ProfileTexts.sections.privacy.heading)}
           />
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.privacy.linkItems.privacy.label)}
+          <Sections.LinkSectionItem
+            text={t(
+              ProfileTexts.sections.privacy.linkSectionItems.privacy.label,
+            )}
             icon={<ThemeIcon svg={ExternalLink} />}
             accessibility={{
               accessibilityHint: t(
-                ProfileTexts.sections.privacy.linkItems.privacy.a11yHint,
+                ProfileTexts.sections.privacy.linkSectionItems.privacy.a11yHint,
               ),
             }}
             testID="privacyButton"
             onPress={() => Linking.openURL(privacy_policy_url)}
           />
-          <Sections.LinkItem
-            text={t(ProfileTexts.sections.privacy.linkItems.clearHistory.label)}
+          <Sections.LinkSectionItem
+            text={t(
+              ProfileTexts.sections.privacy.linkSectionItems.clearHistory.label,
+            )}
             icon={<ThemeIcon svg={Delete} />}
             accessibility={{
               accessibilityHint: t(
-                ProfileTexts.sections.privacy.linkItems.clearHistory.a11yHint,
+                ProfileTexts.sections.privacy.linkSectionItems.clearHistory
+                  .a11yHint,
               ),
             }}
             testID="clearHistoryButton"
             onPress={() =>
               destructiveAlert({
                 alertTitleString: t(
-                  ProfileTexts.sections.privacy.linkItems.clearHistory
+                  ProfileTexts.sections.privacy.linkSectionItems.clearHistory
                     .confirmTitle,
                 ),
                 cancelAlertString: t(
-                  ProfileTexts.sections.privacy.linkItems.clearHistory.alert
-                    .cancel,
+                  ProfileTexts.sections.privacy.linkSectionItems.clearHistory
+                    .alert.cancel,
                 ),
                 confirmAlertString: t(
-                  ProfileTexts.sections.privacy.linkItems.clearHistory.alert
-                    .confirm,
+                  ProfileTexts.sections.privacy.linkSectionItems.clearHistory
+                    .alert.confirm,
                 ),
                 destructiveArrowFunction: async () => {
                   await clearHistory();
@@ -415,24 +440,28 @@ export default function ProfileHome({navigation}: ProfileProps) {
         </Sections.Section>
         {enable_ticketing && (
           <Sections.Section withPadding>
-            <Sections.HeaderItem
+            <Sections.HeaderSectionItem
               text={t(ProfileTexts.sections.information.heading)}
             />
-            <Sections.LinkItem
+            <Sections.LinkSectionItem
               text={t(
-                ProfileTexts.sections.information.linkItems.ticketing.label,
+                ProfileTexts.sections.information.linkSectionItems.ticketing
+                  .label,
               )}
               testID="ticketingInfoButton"
               onPress={() => navigation.navigate('TicketingInformation')}
             />
-            <Sections.LinkItem
-              text={t(ProfileTexts.sections.information.linkItems.terms.label)}
+            <Sections.LinkSectionItem
+              text={t(
+                ProfileTexts.sections.information.linkSectionItems.terms.label,
+              )}
               testID="termsInfoButton"
               onPress={() => navigation.navigate('TermsInformation')}
             />
-            <Sections.LinkItem
+            <Sections.LinkSectionItem
               text={t(
-                ProfileTexts.sections.information.linkItems.inspection.label,
+                ProfileTexts.sections.information.linkSectionItems.inspection
+                  .label,
               )}
               testID="inspectionInfoButton"
               onPress={() => navigation.navigate('TicketInspectionInformation')}
@@ -443,42 +472,27 @@ export default function ProfileHome({navigation}: ProfileProps) {
           __DEV__ ||
           customerProfile?.debug) && (
           <Sections.Section withPadding>
-            <Sections.HeaderItem text="Developer menu" />
-            <Sections.ActionItem
-              mode="toggle"
-              text={t(ProfileTexts.sections.newFeatures.frontPage)}
-              checked={shouldUseNewFrontPage}
-              testID="newFrontpageToggle"
-              onPress={(newFrontPage) => {
-                analytics().logEvent('toggle_beta_frontPage', {
-                  toggle: newFrontPage ? 'enable' : 'disable',
-                });
-                updateMetadata({
-                  'AtB-Beta-Frontpage': newFrontPage ? 'enabled' : 'disabled',
-                });
-                setPreference({newFrontPage});
-              }}
-            />
-            <Sections.LinkItem
+            <Sections.HeaderSectionItem text="Developer menu" />
+            <Sections.LinkSectionItem
               text={t(
-                ProfileTexts.sections.favorites.linkItems.frontpageFavourites
-                  .label,
+                ProfileTexts.sections.favorites.linkSectionItems
+                  .frontpageFavourites.label,
               )}
               accessibility={{
                 accessibilityHint: t(
-                  ProfileTexts.sections.favorites.linkItems.frontpageFavourites
-                    .a11yHint,
+                  ProfileTexts.sections.favorites.linkSectionItems
+                    .frontpageFavourites.a11yHint,
                 ),
               }}
               testID="favoriteDeparturesButton"
               onPress={selectFavourites}
             />
-            <Sections.LinkItem
+            <Sections.LinkSectionItem
               text="Design system"
               testID="designSystemButton"
               onPress={() => navigation.navigate('DesignSystem')}
             />
-            <Sections.LinkItem
+            <Sections.LinkSectionItem
               text="Debug"
               testID="debugButton"
               onPress={() => navigation.navigate('DebugInfo')}

@@ -1,5 +1,4 @@
 import React, {ReactNode} from 'react';
-import {ViewStyle} from 'react-native';
 import {useWindowDimensions, View} from 'react-native';
 
 export type BottomSheetContainerProps = {
@@ -8,7 +7,7 @@ export type BottomSheetContainerProps = {
   fullHeight?: boolean;
 };
 
-export default function BottomSheetContainer({
+export function BottomSheetContainer({
   children,
   maxHeightValue = 0.8,
   fullHeight,

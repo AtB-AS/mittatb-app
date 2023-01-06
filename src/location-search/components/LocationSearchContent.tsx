@@ -1,5 +1,5 @@
 import {useFavorites} from '@atb/favorites';
-import {useSearchHistory} from '@atb/search-history';
+import {useSearchHistory, JourneySearchHistoryEntry} from '@atb/search-history';
 import {
   LocationSearchTexts,
   TranslateFunction,
@@ -11,11 +11,10 @@ import {filterCurrentLocation, filterPreviousLocations} from '../utils';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {useGeocoder} from '@atb/geocoder';
 import {LocationSearchResultType, SelectableLocationType} from '../types';
-import {JourneySearchHistoryEntry} from '@atb/search-history/types';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {Keyboard, View} from 'react-native';
-import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
-import {TextInput} from '@atb/components/sections';
+import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
+import {TextInputSectionItem} from '@atb/components/sections';
 import FavoriteChips, {ChipTypeGroup} from '@atb/favorite-chips';
 import {MessageBox} from '@atb/components/message-box';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -115,7 +114,7 @@ export function LocationSearchContent({
         <ScreenReaderAnnouncement message={errorMessage} />
 
         <View style={styles.withMargin}>
-          <TextInput
+          <TextInputSectionItem
             radius="top-bottom"
             label={label}
             value={text}

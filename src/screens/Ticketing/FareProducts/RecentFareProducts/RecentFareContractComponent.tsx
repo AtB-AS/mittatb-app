@@ -1,21 +1,24 @@
 import React from 'react';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import {RecentFareContract} from '../use-recent-fare-contracts';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Dimensions, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import TransportationIcon from '@atb/components/transportation-icon';
-import {TransportationModeIconProperties} from '../AvailableFareProducts/FareProductTile';
-import ThemeIcon from '@atb/components/theme-icon';
+import {TransportationIcon} from '@atb/components/transportation-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
+import {TransportModeType} from '@atb/configuration/types';
 
-type recentFareContractProps = {
+type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
-  transportModeTexts: TransportationModeIconProperties[];
-  transportModeIcons: TransportationModeIconProperties[];
-  onSelect: (rfc: RecentFareContract) => void;
+  onSelect: (
+    rfc: RecentFareContract,
+    fareProductTypeConfig: FareProductTypeConfig,
+  ) => void;
   testID: string;
 };
 
@@ -50,11 +53,9 @@ export const FloatingLabel = ({
 
 export const RecentFareContractComponent = ({
   recentFareContract,
-  transportModeIcons,
-  transportModeTexts,
   onSelect,
   testID,
-}: recentFareContractProps) => {
+}: RecentFareContractProps) => {
   const {
     preassignedFareProduct,
     fromTariffZone,
@@ -69,27 +70,34 @@ export const RecentFareContractComponent = ({
   const toZone = toTariffZone.name.value;
   const {width} = Dimensions.get('window');
 
-  type modeNameProps = {
-    modes: TransportationModeIconProperties[];
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (c) => c.type === recentFareContract.preassignedFareProduct.type,
+  );
+
+  if (!fareProductTypeConfig) return null;
+
+  type ModeNameProps = {
+    modes: TransportModeType[];
     joinSymbol?: string;
   };
 
-  const modeNames = ({modes, joinSymbol = '/'}: modeNameProps) => {
+  const modeNames = ({modes, joinSymbol = '/'}: ModeNameProps) => {
     if (!modes) return null;
     if (modes.length > 2)
       return t(RecentFareContractsTexts.severalTransportModes);
     else
       return modes
-        .map((mode) => t(FareContractTexts.transportMode(mode.mode)))
+        .map((tm) => t(FareContractTexts.transportMode(tm.mode)))
         .join(joinSymbol);
   };
 
-  const returnAccessabilityLabel = () => {
+  const returnAccessibilityLabel = () => {
     const modeInfo = `${getReferenceDataName(
       preassignedFareProduct,
       language,
     )}${t(RecentFareContractsTexts.a11yPreLabels.transportModes)} ${modeNames({
-      modes: transportModeTexts,
+      modes: fareProductTypeConfig.transportModes,
       joinSymbol: t(RecentFareContractsTexts.a11yPreLabels.and),
     })}`;
 
@@ -114,7 +122,7 @@ export const RecentFareContractComponent = ({
     )} ${modeInfo} ${travellerInfo} ${zoneInfo}`;
   };
 
-  const currentAccessabilityLabel = returnAccessabilityLabel();
+  const currentAccessibilityLabel = returnAccessibilityLabel();
 
   const buttonColor = theme.interactive.interactive_0.default;
 
@@ -122,24 +130,24 @@ export const RecentFareContractComponent = ({
     <TouchableOpacity
       style={styles.container}
       accessible={true}
-      onPress={() => onSelect(recentFareContract)}
-      accessibilityLabel={currentAccessabilityLabel}
+      onPress={() => onSelect(recentFareContract, fareProductTypeConfig)}
+      accessibilityLabel={currentAccessibilityLabel}
       accessibilityHint={t(RecentFareContractsTexts.repeatPurchase.a11yHint)}
       testID={testID}
     >
       <View style={[styles.upperPart, {minWidth: width * 0.6}]}>
         <View style={styles.travelModeWrapper}>
-          {transportModeIcons.map((icon) => (
+          {fareProductTypeConfig.transportModes.map(({mode, subMode}) => (
             <TransportationIcon
-              mode={icon.mode}
-              subMode={icon.subMode}
-              key={icon.mode + icon.subMode}
+              mode={mode}
+              subMode={subMode}
+              key={mode + subMode}
               size="small"
             />
           ))}
 
           <ThemeText type="label__uppercase">
-            {modeNames({modes: transportModeTexts})}
+            {modeNames({modes: fareProductTypeConfig.transportModes})}
           </ThemeText>
         </View>
 
@@ -221,7 +229,7 @@ export const RecentFareContractComponent = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     marginHorizontal: theme.spacings.small,
     backgroundColor: theme.static.background.background_0.background,

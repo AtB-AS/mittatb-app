@@ -19,14 +19,18 @@ import {useSearchHistory} from '@atb/search-history';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {TripSearchPreferences, usePreferences} from '@atb/preferences';
 import {isValidTripLocations} from '@atb/utils/location';
+import type {TravelSearchFiltersType} from '@atb/screens/Dashboard/types';
+import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {flatMap} from '@atb/utils/array';
 
 export default function useTripsQuery(
-  fromLocation?: Location,
-  toLocation?: Location,
+  fromLocation: Location | undefined,
+  toLocation: Location | undefined,
   searchTime: SearchTime = {
     option: 'now',
     date: new Date().toISOString(),
   },
+  selectedFilters: TravelSearchFiltersType | undefined,
 ): {
   tripPatterns: TripPatternWithKey[];
   timeOfLastSearch: DateString;
@@ -119,6 +123,7 @@ export default function useTripsQuery(
                 searchInput,
                 cancelTokenSource,
                 tripSearchPreferences,
+                selectedFilters,
               );
 
               const tripPatternsWithKeys = decorateTripPatternWithKey(
@@ -164,7 +169,7 @@ export default function useTripsQuery(
         cancelTokenSource.cancel('Unmounting use trips hook');
       };
     },
-    [fromLocation, toLocation, searchTime],
+    [fromLocation, toLocation, searchTime, selectedFilters],
   );
 
   useEffect(() => search(), [search]);
@@ -201,7 +206,8 @@ async function doSearch(
   arriveBy: boolean,
   {searchTime, cursor}: SearchInput,
   cancelToken: CancelTokenSource,
-  tripSearchPreferences?: TripSearchPreferences,
+  tripSearchPreferences: TripSearchPreferences | undefined,
+  travelSearchFilters: TravelSearchFiltersType | undefined,
 ) {
   const from = {
     ...fromLocation,
@@ -229,6 +235,18 @@ async function doSearch(
     walkReluctance: tripSearchPreferences?.walkReluctance,
     walkSpeed: tripSearchPreferences?.walkSpeed,
   };
+
+  if (travelSearchFilters?.transportModes) {
+    query.modes = {
+      accessMode: StreetMode.Foot,
+      directMode: StreetMode.Foot,
+      egressMode: StreetMode.Foot,
+      transportModes: flatMap(
+        travelSearchFilters.transportModes,
+        (tm) => tm.modes,
+      ),
+    };
+  }
 
   Bugsnag.leaveBreadcrumb('searching', {
     fromLocation: query.from,

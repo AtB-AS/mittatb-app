@@ -1,5 +1,5 @@
 import {getAxiosErrorType} from '@atb/api/utils';
-import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
+import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {MessageBox} from '@atb/components/message-box';
 import {
   DetailsMessages,

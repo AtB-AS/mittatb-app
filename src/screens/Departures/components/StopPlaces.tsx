@@ -1,4 +1,4 @@
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StopPlace, NearestStopPlaceNode} from '@atb/api/types/departures';
 import StopPlaceItem from '@atb/screens/Departures/components/StopPlaceItem';
 import React from 'react';

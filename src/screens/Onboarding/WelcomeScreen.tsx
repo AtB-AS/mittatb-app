@@ -1,6 +1,6 @@
 import {Onboarding1} from '@atb/assets/svg/color/images/';
-import Button from '@atb/components/button';
-import ThemeText from '@atb/components/text';
+import {Button} from '@atb/components/button';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {OnboardingTexts, useTranslation} from '@atb/translations';
@@ -13,14 +13,6 @@ export const themeColor: StaticColorByType<'background'> =
 
 export type WelcomeScreenProps =
   OnboardingScreenProps<'WelcomeScreenWithoutLogin'>;
-
-export const WelcomeScreenLogin = ({navigation}: WelcomeScreenProps) => {
-  const onNext = () => {
-    navigation.navigate('PhoneInputInOnboarding');
-  };
-
-  return <WelcomeScreen inLoginContext={true} onNext={onNext} />;
-};
 
 export const WelcomeScreenWithoutLogin = ({navigation}: WelcomeScreenProps) => {
   const onNext = () => {

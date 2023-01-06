@@ -1,11 +1,10 @@
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useAuthState} from '@atb/auth';
-import {usePreferences} from '@atb/preferences';
 import {
+  OfferReservation,
   PaymentType,
   ReserveOffer,
   reserveOffers,
-  OfferReservation,
 } from '@atb/ticketing';
 import {AxiosError} from 'axios';
 import {useCallback, useEffect, useReducer} from 'react';

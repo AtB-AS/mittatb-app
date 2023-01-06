@@ -1,5 +1,5 @@
 import {StopPlace} from '@atb/api/types/trips';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import DeparturesList from '@atb/departure-list/DeparturesList';
 import {useDepartureData} from '@atb/screens/Nearby/state';
 import {StyleSheet} from '@atb/theme';

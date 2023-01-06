@@ -1,23 +1,21 @@
 import {ArrowRight, ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
-import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {Walk} from '@atb/assets/svg/mono-icons/transportation';
 import {Time} from '@atb/assets/svg/mono-icons/time';
-import AccessibleText, {
+import {
+  AccessibleText,
   screenReaderPause,
-} from '@atb/components/accessible-text';
-import ThemeText from '@atb/components/text';
-import ThemeIcon from '@atb/components/theme-icon';
-import TransportationIcon, {
-  CollapsedLegs,
-} from '@atb/components/transportation-icon';
-
+  ThemeText,
+} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {TransportationIcon} from '@atb/components/transportation-icon';
+import {CollapsedLegs} from './CollapsedLegs';
 import {SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
 import {
-  TripSearchTexts,
   dictionary,
   Language,
   TranslateFunction,
+  TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
 import {screenReaderHidden} from '@atb/utils/accessibility';
@@ -34,16 +32,15 @@ import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import React, {useEffect, useRef, useState} from 'react';
 import {
   AccessibilityProps,
-  View,
-  TouchableOpacity,
-  LayoutChangeEvent,
   Animated,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {SearchTime} from '@atb/screens/Dashboard/journey-date-picker';
-import WarnWhenRailReplacementBus from '@atb/components/rail-replacement-bus-message';
+import {RailReplacementBusMessage} from './RailReplacementBusMessage';
 import {getNoticesForLeg} from '@atb/screens/TripDetails/utils';
 
 type ResultItemProps = {
@@ -115,7 +112,7 @@ const ResultItemHeader: React.FC<{
         </AccessibleText>
       </View>
 
-      <WarnWhenRailReplacementBus tripPattern={tripPattern} />
+      <RailReplacementBusMessage tripPattern={tripPattern} />
 
       <SituationOrNoticeIcon
         situations={flatMap(tripPattern.legs, (leg) => leg.situations)}
@@ -386,20 +383,6 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
           subMode={leg.line?.transportSubmode}
           lineNumber={leg.line?.publicCode}
         />
-      </View>
-    </View>
-  );
-};
-
-const DestinationLeg = ({tripPattern}: {tripPattern: TripPattern}) => {
-  const styles = useLegStyles();
-  const lastLeg = tripPattern.legs[tripPattern.legs.length - 1];
-  if (!lastLeg) return null;
-
-  return (
-    <View style={styles.legContainer}>
-      <View style={styles.iconContainer}>
-        <ThemeIcon svg={Destination} />
       </View>
     </View>
   );

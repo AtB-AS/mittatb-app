@@ -57,7 +57,6 @@ import {
   addFavouriteLocation,
   deleteFavouriteLocation,
   removeSearchHistory,
-  toggleFrontpage,
 } from '../utils/myprofile';
 
 describe('Travel Search', () => {
@@ -73,10 +72,6 @@ describe('Travel Search', () => {
     });
     await setLocation(62.4305, 9.3951);
     await skipOnboarding();
-
-    // Enable frontpage
-    await goToTab('profile');
-    await toggleFrontpage(true);
   });
 
   beforeEach(async () => {
@@ -121,12 +116,12 @@ describe('Travel Search', () => {
     // Note space at the end
     await scrollContentToText(
       'departureDetailsContentView',
-      intermediateStop + ' ',
+      intermediateStop,
       'down',
     );
-    await tapByText(intermediateStop + ' ');
+    await tapByText(intermediateStop);
     await expectToBeVisibleByText(intermediateStop);
-    await expectIdToHaveText('quaySection0Title', intermediateStop);
+    await expectIdToHaveText('quaySectionName', intermediateStop);
 
     // Go back
     await goBack();
@@ -200,7 +195,10 @@ describe('Travel Search', () => {
       await expectEndLocationInTravelDetails(arrival);
     }
   });
+});
 
+// Note! Place skipped tests in a separate 'describe' without app start-up to save run time
+xdescribe('Travel Search - skipped', () => {
   // Check that the number of legs is correct on the suggestions
   // TODO An error in here (https://github.com/AtB-AS/kundevendt/issues/1560#issuecomment-1252057310)
   xit('should show correct number of legs', async () => {

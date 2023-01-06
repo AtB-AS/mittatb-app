@@ -1,4 +1,4 @@
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
@@ -14,7 +14,7 @@ import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {secondsToDuration} from '@atb/utils/date';
 import {FareContractInfoDetailsProps} from './FareContractInfo';
 import * as Sections from '@atb/components/sections';
-import {screenReaderPause} from '@atb/components/accessible-text';
+import {screenReaderPause} from '@atb/components/text';
 import InspectionSymbol from '@atb/screens/Ticketing/FareContracts/Component/InspectionSymbol';
 
 type CompactFareContractInfoProps = FareContractInfoDetailsProps & {
@@ -55,14 +55,14 @@ export const CompactFareContractInfo = (
 
   return (
     <Sections.Section withPadding {...accessibility}>
-      <Sections.GenericClickableItem onPress={props.onPressDetails}>
+      <Sections.GenericClickableSectionItem onPress={props.onPressDetails}>
         <View style={styles.container}>
           <View style={styles.ticketDetails}>
             <CompactFareContractInfoTexts {...fareContractInfoTextsProps} />
             {isValid && <InspectionSymbol {...props} isLoading={isLoading} />}
           </View>
         </View>
-      </Sections.GenericClickableItem>
+      </Sections.GenericClickableSectionItem>
     </Sections.Section>
   );
 };
@@ -86,15 +86,19 @@ const CompactFareContractInfoTexts = (
         {timeUntilExpire}
       </ThemeText>
       {userProfilesWithCount.map((u) => (
-        <ThemeText type="body__secondary">
+        <ThemeText type="body__secondary" color="secondary">
           {userProfileCountAndName(u, omitUserProfileCount, language)}
         </ThemeText>
       ))}
       {productName && (
-        <ThemeText type="body__secondary">{productName}</ThemeText>
+        <ThemeText type="body__secondary" color="secondary">
+          {productName}
+        </ThemeText>
       )}
       {tariffZoneSummary && (
-        <ThemeText type="body__secondary">{tariffZoneSummary}</ThemeText>
+        <ThemeText type="body__secondary" color="secondary">
+          {tariffZoneSummary}
+        </ThemeText>
       )}
     </View>
   );

@@ -1,4 +1,4 @@
-import {RadioSection} from '@atb/components/sections';
+import {RadioGroupSection} from '@atb/components/sections';
 import {
   Preference_ScreenAlternatives,
   preference_screenAlternatives,
@@ -12,7 +12,7 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {View} from 'react-native';
 
 const identity = (s: string) => s;
@@ -47,7 +47,7 @@ export default function SelectStartScreen() {
       />
 
       <ScrollView>
-        <RadioSection<Preference_ScreenAlternatives>
+        <RadioGroupSection<Preference_ScreenAlternatives>
           withPadding
           withTopPadding
           items={items}

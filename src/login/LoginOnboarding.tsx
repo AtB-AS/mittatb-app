@@ -1,21 +1,23 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
-import Button from '@atb/components/button';
-import ThemeText from '@atb/components/text';
+import {Button} from '@atb/components/button';
+import {ThemeText} from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
 import {Psst} from '@atb/assets/svg/color/illustrations';
-import {Periodebillett} from '@atb/assets/svg/color/images';
+import {Ticket} from '@atb/assets/svg/color/images';
 import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
+import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
+import {useTextForLanguage} from '@atb/translations/utils';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -23,10 +25,12 @@ export default function LoginOnboarding({
   headerLeftButton,
   doAfterSubmit,
   headerRightButton,
+  fareProductTypeConfig,
 }: {
   doAfterSubmit: (hasActiveFareContracts: boolean) => void;
   headerLeftButton?: LeftButtonProps;
   headerRightButton?: RightButtonProps;
+  fareProductTypeConfig: FareProductTypeConfig;
 }) {
   const {t} = useTranslation();
   const navigation = useNavigation();
@@ -39,6 +43,8 @@ export default function LoginOnboarding({
   const onNext = async () => {
     doAfterSubmit(activeFareContracts.length > 0);
   };
+
+  const productName = useTextForLanguage(fareProductTypeConfig.name);
 
   return (
     <View style={styles.container}>
@@ -56,7 +62,7 @@ export default function LoginOnboarding({
             style={styles.title}
             color={themeColor}
           >
-            {t(LoginTexts.onboarding.title)}
+            {productName + ' - ' + t(LoginTexts.onboarding.title)}
           </ThemeText>
         </View>
         <View accessible={true}>
@@ -64,7 +70,7 @@ export default function LoginOnboarding({
             {t(LoginTexts.onboarding.description)}
           </ThemeText>
         </View>
-        <Periodebillett style={styles.illustation} />
+        <Ticket style={styles.illustration} />
         <View style={styles.buttonView}>
           <Button
             interactiveColor="interactive_0"
@@ -128,7 +134,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   buttonView: {
     marginTop: theme.spacings.medium,
   },
-  illustation: {
+  illustration: {
     alignSelf: 'center',
     marginVertical: theme.spacings.medium,
   },

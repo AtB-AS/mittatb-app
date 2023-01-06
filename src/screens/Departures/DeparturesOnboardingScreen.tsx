@@ -1,6 +1,6 @@
 import {useTranslation} from '@atb/translations';
-import ThemeText from '@atb/components/text';
-import Button from '@atb/components/button';
+import {ThemeText} from '@atb/components/text';
+import {Button} from '@atb/components/button';
 import {ScrollView, View} from 'react-native';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';

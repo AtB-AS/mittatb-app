@@ -48,7 +48,7 @@ const PreActivatedFareContractInfo: React.FC<Props> = ({
   );
   return (
     <Sections.Section withBottomPadding testID={testID}>
-      <Sections.GenericItem>
+      <Sections.GenericSectionItem>
         <ValidityHeader
           status={validityStatus}
           isInspectable={isInspectable}
@@ -72,9 +72,9 @@ const PreActivatedFareContractInfo: React.FC<Props> = ({
           testID={testID}
           fareProductType={preassignedFareProduct?.type}
         />
-      </Sections.GenericItem>
+      </Sections.GenericSectionItem>
       {!hideDetails && (
-        <Sections.LinkItem
+        <Sections.LinkSectionItem
           text={t(
             validityStatus === 'valid' && isInspectable
               ? FareContractTexts.detailsLink.valid

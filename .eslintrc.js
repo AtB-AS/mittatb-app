@@ -11,7 +11,13 @@ module.exports = {
   root: true,
   extends: ['plugin:prettier/recommended'],
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'react-hooks', 'react-native', 'rulesdir'],
+  plugins: [
+    '@typescript-eslint',
+    'react-hooks',
+    'react-native',
+    'rulesdir',
+    'unused-imports',
+  ],
   rules: {
     // eslint
     'no-console': [1, {allow: ['warn', 'error']}],
@@ -28,6 +34,16 @@ module.exports = {
 
     'react-native/no-single-element-style-arrays': 1,
     'react-native/no-unused-styles': 1,
+    'unused-imports/no-unused-imports': 2,
+    'unused-imports/no-unused-vars': [
+      2,
+      {
+        vars: 'all',
+        varsIgnorePattern: '^_',
+        args: 'after-used',
+        argsIgnorePattern: '^_',
+      },
+    ],
 
     'rulesdir/translations-warning': 'warn',
     'rulesdir/avoid-imports': [

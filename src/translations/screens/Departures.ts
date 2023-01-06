@@ -61,6 +61,7 @@ const DeparturesTexts = {
       'Aktiver for å vise flere avganger',
       'Activate to show more departures',
     ),
+    moreDepartures: _('Se flere avganger', 'See more departures'),
   },
   line: _('Linje', 'Line'),
   a11yViewDepartureDetailsHint: _(

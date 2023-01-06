@@ -1,7 +1,7 @@
 import {translation as _} from '../commons';
 
 const SectionTexts = {
-  locationInput: {
+  LocationInputSectionItem: {
     myPosition: _('Min posisjon', 'My current position'),
     updatingLocation: _('Oppdaterer posisjon', 'Updating current location'),
     placeholder: _('Sted eller adresse', 'Place or address'),
@@ -14,12 +14,14 @@ const SectionTexts = {
   timeInput: {
     label: _('Tid', 'Time'),
   },
-  actionItem: {
-    headingExpand: {
-      toggle: {
-        expand: _('Vis', 'Show'),
-        contract: _('Skjul', 'Hide'),
-      },
+  expandableSectionItem: {
+    a11yHint: {
+      expand: _('Aktiver for å vise', 'Activate to show'),
+      contract: _('Aktiver for å skjule', 'Activate to hide'),
+    },
+    iconText: {
+      expand: _('Vis', 'Show'),
+      contract: _('Skjul', 'Hide'),
     },
   },
   textInput: {
