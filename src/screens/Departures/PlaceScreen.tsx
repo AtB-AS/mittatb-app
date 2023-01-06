@@ -177,6 +177,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   quayData: {flex: 1},
   messageBox: {
     margin: theme.spacings.medium,
-    padding: theme.spacings.medium,
   },
 }));
