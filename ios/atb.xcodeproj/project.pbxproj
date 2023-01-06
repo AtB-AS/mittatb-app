@@ -20,6 +20,8 @@
 		5038614A28FD6EB900E16E13 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614928FD6EB900E16E13 /* APIService.swift */; };
 		5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationChangeManager.swift */; };
 		5038614E28FD81B700E16E13 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614D28FD81B700E16E13 /* Structs.swift */; };
+		503D2E5A29674028002E0A6A /* NoFavoriteViewMedium.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503D2E5929674028002E0A6A /* NoFavoriteViewMedium.swift */; };
+		503D2E5C2967436E002E0A6A /* NoFavoriteViewSmall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503D2E5B2967436E002E0A6A /* NoFavoriteViewSmall.swift */; };
 		50488981293F4B660016DD7A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50488983293F4B660016DD7A /* Localizable.strings */; };
 		505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */; };
 		506538E028FEA57400A0DDCC /* WidgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506538DF28FEA57400A0DDCC /* WidgetViewModel.swift */; };
@@ -216,6 +218,8 @@
 				FE9C416C293744B100EC2D53 /* ChipView.swift */,
 				505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */,
 				50A14ED62918F97E00A661D9 /* WidgetInfoView.swift */,
+				503D2E5929674028002E0A6A /* NoFavoriteViewMedium.swift */,
+				503D2E5B2967436E002E0A6A /* NoFavoriteViewSmall.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -553,6 +557,8 @@
 				FE09922C28FFF50800E5046D /* Bundle.swift in Sources */,
 				505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */,
 				FE7DE4F5294A2EDC009BE6DB /* String.swift in Sources */,
+				503D2E5C2967436E002E0A6A /* NoFavoriteViewSmall.swift in Sources */,
+				503D2E5A29674028002E0A6A /* NoFavoriteViewMedium.swift in Sources */,
 				5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */,
 				FE7E785F29433F3900C57A1F /* DefaultFonts.swift in Sources */,
 				FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */,
@@ -620,13 +626,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "$(APP_VERSION)";
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "$(IOS_BUNDLE_IDENTIFIER)";
+				PRODUCT_BUNDLE_IDENTIFIER = no.mittatb.debug;
 				PRODUCT_NAME = AtB;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development no.mittatb.debug";
