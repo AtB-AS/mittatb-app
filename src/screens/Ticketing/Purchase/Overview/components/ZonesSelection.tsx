@@ -1,7 +1,7 @@
-import {screenReaderPause} from '@atb/components/accessible-text';
+import {screenReaderPause} from '@atb/components/text';
 import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
-import {ZoneSelectionMode} from '@atb/screens/Ticketing/FareContracts/utils';
+import {ThemeText} from '@atb/components/text';
+import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
 import {StyleSheet} from '@atb/theme';
 import {
   PurchaseOverviewTexts,
@@ -19,16 +19,16 @@ import {
 import {OverviewNavigationProps} from '../types';
 
 type ZonesSelectionProps = {
-  selectionMode: ZoneSelectionMode;
+  fareProductTypeConfig: FareProductTypeConfig;
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
   style?: StyleProp<ViewStyle>;
 };
 
 export default function ZonesSelection({
+  fareProductTypeConfig,
   fromTariffZone,
   toTariffZone,
-  selectionMode,
   style,
 }: ZonesSelectionProps) {
   const itemStyle = useStyles();
@@ -43,6 +43,8 @@ export default function ZonesSelection({
       screenReaderPause,
     accessibilityHint: t(PurchaseOverviewTexts.tariffZones.a11yHint),
   };
+
+  const selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
 
   if (selectionMode === 'none') {
     return <></>;
@@ -61,7 +63,7 @@ export default function ZonesSelection({
         {t(PurchaseOverviewTexts.zones.label[selectionMode].text)}
       </ThemeText>
       <Sections.Section {...accessibility}>
-        <Sections.ButtonInput
+        <Sections.ButtonSectionItem
           label={t(TariffZonesTexts.zoneTitle)}
           value={tariffZonesDescription(
             fromTariffZone,
@@ -75,7 +77,7 @@ export default function ZonesSelection({
             navigation.push('TariffZones', {
               fromTariffZone,
               toTariffZone,
-              selectionMode,
+              fareProductTypeConfig,
             });
           }}
           testID="selectZonesButton"

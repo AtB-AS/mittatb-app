@@ -10,6 +10,7 @@ import {
   isBefore as fnsIsBefore,
   isPast,
   isSameDay,
+  isSameYear,
   isToday,
   isWithinInterval,
   Locale,
@@ -195,7 +196,10 @@ export function formatToLongDateTime(
   if (isSameDay(parsed, new Date())) {
     return formatToClock(parsed, language);
   }
-  return format(parsed, 'PPp', {locale: languageToLocale(language)});
+  if (isSameYear(parsed, new Date())) {
+    return formatToShortDateTimeWithoutYear(parsed, language);
+  }
+  return fullDateTime(parsed, language);
 }
 
 export function formatToShortDateTimeWithoutYear(
@@ -211,7 +215,7 @@ export function formatToShortDateTimeWithoutYear(
 
 export function fullDateTime(isoDate: string | Date, language: Language) {
   const parsed = parseIfNeeded(isoDate);
-  return format(parsed, 'PPp', {locale: languageToLocale(language)});
+  return format(parsed, 'PP, p', {locale: languageToLocale(language)});
 }
 
 export {isSameDay};

@@ -1,7 +1,7 @@
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {MessageBox, MessageBoxProps} from '@atb/components/message-box';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import {StyleSheet} from '@atb/theme';
 import {sendReceipt} from '@atb/ticketing';
@@ -76,7 +76,7 @@ export default function ReceiptScreen({route}: Props) {
           />
         </View>
         <Sections.Section withTopPadding withBottomPadding>
-          <Sections.TextInput
+          <Sections.TextInputSectionItem
             label={t(FareContractTexts.receipt.inputLabel)}
             value={email}
             onChangeText={setEmail}

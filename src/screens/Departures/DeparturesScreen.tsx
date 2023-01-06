@@ -7,7 +7,7 @@ import React, {useEffect} from 'react';
 import {DeparturesStackProps} from './types';
 import {NearbyStopPlaces} from '@atb/screens/Departures/components/NearbyStopPlaces';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {useShouldShowDeparturesOnboarding} from '@atb/screens/Departures/use-should-show-departures-onboarding';
 
 export type DeparturesScreenParams = {

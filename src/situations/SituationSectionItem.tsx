@@ -1,6 +1,6 @@
 import React from 'react';
 import {dictionary, useTranslation} from '@atb/translations';
-import {MessageItem} from '@atb/components/sections';
+import {MessageSectionItem} from '@atb/components/sections';
 import {getMessageTypeForSituation, getSituationSummary} from './utils';
 import {SituationType} from './types';
 import {useSituationBottomSheet} from './use-situation-bottom-sheet';
@@ -17,7 +17,7 @@ export const SituationSectionItem = ({situation}: Props) => {
   if (!situationText) return null;
 
   return (
-    <MessageItem
+    <MessageSectionItem
       messageType={getMessageTypeForSituation(situation)}
       message={situationText}
       onPressConfig={{

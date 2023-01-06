@@ -104,7 +104,7 @@ export const isSituationValidAtDate =
     } else if (startTime) {
       return isAfter(date, startTime);
     } else if (endTime) {
-      return isBefore(date, startTime);
+      return isBefore(date, endTime);
     }
     return true;
   };

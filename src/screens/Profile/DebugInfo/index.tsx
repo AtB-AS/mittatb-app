@@ -1,6 +1,6 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import React, {useEffect, useState} from 'react';
 import {Alert, TouchableOpacity, View} from 'react-native';
@@ -17,10 +17,17 @@ import {
 import Slider from '@react-native-community/slider';
 import {usePreferences, UserPreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
-import Button from '@atb/components/button';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {Button} from '@atb/components/button';
+import {
+  RemoteConfigContextState,
+  useRemoteConfig,
+} from '@atb/RemoteConfigContext';
 import {useGlobalMessagesState} from '@atb/global-messages';
 import {APP_GROUP_NAME} from '@env';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
+import {RadioSegments} from '@atb/components/radio';
+import {useTravelSearchFiltersDebugOverride} from '@atb/screens/Dashboard/use-travel-search-filters-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -36,6 +43,9 @@ export default function DebugInfo() {
   const [idToken, setIdToken] = useState<
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
+
+  const [travelSearchFilterOverride, setTravelSearchFilterOverride] =
+    useTravelSearchFiltersDebugOverride();
 
   useEffect(() => {
     async function run() {
@@ -64,7 +74,7 @@ export default function DebugInfo() {
     isError,
   } = useMobileTokenContextState();
 
-  const {refresh: refreshRemoteConfig} = useRemoteConfig();
+  const remoteConfig = useRemoteConfig();
 
   const mobileTokenEnabled = useHasEnabledMobileToken();
 
@@ -103,7 +113,7 @@ export default function DebugInfo() {
 
       <ScrollView testID="debugInfoScrollView">
         <Sections.Section withPadding withTopPadding>
-          <Sections.ActionItem
+          <Sections.ActionSectionItem
             mode="toggle"
             text="Toggle test-ID"
             checked={showTestIds}
@@ -111,47 +121,47 @@ export default function DebugInfo() {
               setPreference({showTestIds});
             }}
           />
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Restart onboarding"
             onPress={() => {
               appDispatch({type: 'RESTART_ONBOARDING'});
             }}
           />
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Set mobile token onboarded to false"
             onPress={restartMobileTokenOnboarding}
           />
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Reset dismissed Global messages"
             onPress={resetDismissedGlobalMessages}
           />
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Copy link to customer in Firestore (staging)"
             icon="arrow-upleft"
             onPress={() => copyFirestoreLink()}
           />
 
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Force refresh id token"
             onPress={() => auth().currentUser?.getIdToken(true)}
           />
 
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Force refresh remote config"
-            onPress={refreshRemoteConfig}
+            onPress={remoteConfig.refresh}
           />
 
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Reset feedback displayStats"
             onPress={() => storage.set('@ATB_feedback_display_stats', '')}
           />
 
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Reset frontpage favourite departures"
             onPress={() => storage.set('@ATB_user_frontpage_departures', '[]')}
           />
 
-          <Sections.LinkItem
+          <Sections.LinkSectionItem
             text="Reset has read departures v2 onboarding"
             onPress={() =>
               storage.set(
@@ -160,10 +170,52 @@ export default function DebugInfo() {
               )
             }
           />
+          <Sections.LinkSectionItem
+            text="Reset has read filter onboarding"
+            onPress={() =>
+              storage.set(
+                StorageModelKeysEnum.HasReadTravelSearchFilterOnboarding,
+                JSON.stringify(false),
+              )
+            }
+          />
+
+          <Sections.GenericSectionItem>
+            <ThemeText>
+              Debug override for enable travel search filter. If undefined the
+              value from Remote Config will be used. Needs reload of app after
+              change.
+            </ThemeText>
+            <RadioSegments
+              activeIndex={
+                travelSearchFilterOverride
+                  ? 0
+                  : travelSearchFilterOverride === undefined
+                  ? 1
+                  : 2
+              }
+              color="interactive_2"
+              style={{marginTop: 8}}
+              options={[
+                {
+                  text: 'True',
+                  onPress: () => setTravelSearchFilterOverride(true),
+                },
+                {
+                  text: 'Undefined',
+                  onPress: () => setTravelSearchFilterOverride(undefined),
+                },
+                {
+                  text: 'False',
+                  onPress: () => setTravelSearchFilterOverride(false),
+                },
+              ]}
+            />
+          </Sections.GenericSectionItem>
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text={'Trip search parameters'}
             showIconText={true}
             expandContent={
@@ -234,29 +286,29 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text="Firebase Auth user info"
             showIconText={true}
             expandContent={
               <View>
-                {Object.entries(user?.toJSON() ?? {}).map(([key, value]) =>
-                  mapEntry(key, value),
-                )}
+                {Object.entries(user?.toJSON() ?? {}).map(([key, value]) => (
+                  <MapEntry title={key} value={value} />
+                ))}
               </View>
             }
           />
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text="Firebase Auth user claims"
             showIconText={true}
             expandContent={
               <View>
                 {!!idToken ? (
-                  Object.entries(idToken).map(([key, value]) =>
-                    mapEntry(key, value),
-                  )
+                  Object.entries(idToken).map(([key, value]) => (
+                    <MapEntry title={key} value={value} />
+                  ))
                 ) : (
                   <ThemeText>No id token</ThemeText>
                 )}
@@ -266,14 +318,28 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
-            text="Storage"
+          <Sections.ExpandableSectionItem
+            text="Remote config"
             showIconText={true}
             expandContent={
-              storedValues && (
+              remoteConfig && (
                 <View>
-                  {mapEntry('App group name (iOS only!)', APP_GROUP_NAME)}
-                  {storedValues.map(([key, value]) => mapEntry(key, value))}
+                  <MapEntry
+                    title={APP_GROUP_NAME}
+                    value={
+                      remoteConfig[
+                        APP_GROUP_NAME as keyof RemoteConfigContextState
+                      ]
+                    }
+                  />
+                  {Object.keys(remoteConfig).map((key) => (
+                    <MapEntry
+                      title={key}
+                      value={
+                        remoteConfig[key as keyof RemoteConfigContextState]
+                      }
+                    />
+                  ))}
                 </View>
               )
             }
@@ -281,7 +347,23 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
+            text="Storage"
+            showIconText={true}
+            expandContent={
+              storedValues && (
+                <View>
+                  {storedValues.map(([key, value]) => (
+                    <MapEntry title={key} value={value} />
+                  ))}
+                </View>
+              )
+            }
+          />
+        </Sections.Section>
+
+        <Sections.Section withPadding withTopPadding>
+          <Sections.ExpandableSectionItem
             text="Preferences"
             showIconText={true}
             expandContent={
@@ -294,7 +376,10 @@ export default function DebugInfo() {
                     <TouchableOpacity
                       onPress={() => setPreference({[key]: undefined})}
                     >
-                      {mapEntry(key, preferences[key as keyof UserPreferences])}
+                      <MapEntry
+                        title={key}
+                        value={preferences[key as keyof UserPreferences]}
+                      />
                     </TouchableOpacity>
                   ))}
                 </View>
@@ -304,7 +389,7 @@ export default function DebugInfo() {
         </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableItem
+          <Sections.ExpandableSectionItem
             text="Mobile token state"
             showIconText={true}
             expandContent={
@@ -355,7 +440,7 @@ export default function DebugInfo() {
                       onPress={renewToken}
                     />
                   )}
-                  <Sections.ExpandableItem
+                  <Sections.ExpandableSectionItem
                     text="Remote tokens"
                     showIconText={true}
                     expandContent={remoteTokens?.map((token) => (
@@ -384,7 +469,7 @@ export default function DebugInfo() {
   );
 }
 
-function mapValue(value: any) {
+function MapValue({value}: {value: any}) {
   if (value === undefined) {
     return <ThemeText>undefined</ThemeText>;
   }
@@ -404,15 +489,17 @@ function mapValue(value: any) {
       );
     case 'object':
       const entries = Object.entries(value);
-      if (entries.length) {
-        return (
-          <View style={{flexDirection: 'column'}}>
-            {Object.entries(value).map(([key, value]) => mapEntry(key, value))}
-          </View>
-        );
-      } else {
-        return <ThemeText>Empty object</ThemeText>;
-      }
+      return (
+        <View style={{flexDirection: 'column'}}>
+          {entries.length ? (
+            Object.entries(value).map(([key, value]) => (
+              <MapEntry title={key} value={value} />
+            ))
+          ) : (
+            <ThemeText color="secondary">Empty object</ThemeText>
+          )}
+        </View>
+      );
     default:
       const stringified = value.toString();
       return (
@@ -423,25 +510,48 @@ function mapValue(value: any) {
   }
 }
 
-function mapEntry(key: string, value: any) {
+function MapEntry({title, value}: {title: string; value: any}) {
+  const styles = useProfileHomeStyle();
+  const isLongString =
+    !!value && typeof value === 'string' && value.length > 300;
+  const [isExpanded, setIsExpanded] = useState<boolean>(
+    isLongString ? false : true,
+  );
+
   if (!!value && typeof value === 'object') {
     return (
-      <View key={key} style={{flexDirection: 'column', marginVertical: 12}}>
-        <ThemeText type="heading__title" color="secondary">
-          {key} (object):
-        </ThemeText>
-        {mapValue(value)}
+      <View key={title} style={styles.objectEntry}>
+        <TouchableOpacity
+          style={{flexDirection: 'row'}}
+          onPress={() => setIsExpanded(!isExpanded)}
+        >
+          <ThemeText type="heading__title" color="secondary">
+            {title}
+          </ThemeText>
+          <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
+        </TouchableOpacity>
+        {isExpanded && <MapValue value={value} />}
       </View>
     );
   } else {
     return (
       <View
-        key={key}
+        key={title}
         style={{flexDirection: 'row', flexWrap: 'wrap'}}
-        testID={key === 'user_id' ? 'userId' : ''}
+        testID={title === 'user_id' ? 'userId' : ''}
       >
-        <ThemeText type="body__primary--bold">{key}: </ThemeText>
-        {mapValue(value)}
+        {isLongString ? (
+          <TouchableOpacity
+            style={{flexDirection: 'row'}}
+            onPress={() => setIsExpanded(!isExpanded)}
+          >
+            <ThemeText type="body__primary--bold">{title}: </ThemeText>
+            <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
+          </TouchableOpacity>
+        ) : (
+          <ThemeText type="body__primary--bold">{title}: </ThemeText>
+        )}
+        {isExpanded && <MapValue value={value} />}
       </View>
     );
   }
@@ -467,7 +577,7 @@ function LabeledSlider({
   const [pref, setPref] = useState(initialValue || defaultValue);
 
   return (
-    <Sections.GenericItem>
+    <Sections.GenericSectionItem>
       <ThemeText
         onPress={
           defaultValue
@@ -489,7 +599,7 @@ function LabeledSlider({
         onValueChange={setPref}
         onSlidingComplete={onSetValue}
       />
-    </Sections.GenericItem>
+    </Sections.GenericSectionItem>
   );
 }
 
@@ -509,5 +619,12 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   remoteToken: {
     marginBottom: theme.spacings.large,
+  },
+  objectEntry: {
+    flexDirection: 'column',
+    marginVertical: 12,
+    borderLeftColor: theme.text.colors.secondary,
+    borderLeftWidth: 1,
+    paddingLeft: 4,
   },
 }));

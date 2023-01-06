@@ -8,9 +8,9 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {ScrollView} from 'react-native-gesture-handler';
-import ThemeText from '@atb/components/text';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
-import Button from '@atb/components/button';
+import {ThemeText} from '@atb/components/text';
+import {FullScreenFooter} from '@atb/components/screen-footer';
+import {Button} from '@atb/components/button';
 import React, {forwardRef} from 'react';
 import {Linking, TouchableOpacity, View} from 'react-native';
 import {InfoLinkFragment} from '@atb/api/types/generated/fragments/shared';
@@ -19,9 +19,9 @@ import {SituationType} from './types';
 import * as Sections from '@atb/components/sections';
 import {SituationOrNoticeIcon} from './SituationOrNoticeIcon';
 import {daysBetween, formatToLongDateTime} from '@atb/utils/date';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {Time} from '@atb/assets/svg/mono-icons/time';
-import {screenReaderPause} from '@atb/components/accessible-text';
+import {screenReaderPause} from '@atb/components/text';
 
 type Props = {
   situation: SituationType;
@@ -54,7 +54,7 @@ export const SituationBottomSheet = forwardRef<View, Props>(
         <ScrollView centerContent={true}>
           <View>
             <Sections.Section style={styles.section}>
-              <Sections.GenericItem type="spacious">
+              <Sections.GenericSectionItem type="spacious">
                 <View
                   accessibilityLabel={[summary, description, advice].join(
                     screenReaderPause,
@@ -104,7 +104,7 @@ export const SituationBottomSheet = forwardRef<View, Props>(
                     </ThemeText>
                   </View>
                 )}
-              </Sections.GenericItem>
+              </Sections.GenericSectionItem>
             </Sections.Section>
           </View>
         </ScrollView>

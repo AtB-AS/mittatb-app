@@ -11,7 +11,10 @@
         "value": "Single ticket bus/tram"
       }
     ],
-    "transportModes": ["bus"],
+    "transportModes": [
+      {"mode": "bus", "subMode": "localBus"},
+      {"mode": "tram"}
+    ],
     "description": [
       {
         "lang": "nob",
@@ -27,7 +30,8 @@
       "travellerSelectionMode": "multiple",
       "timeSelectionMode": "none",
       "productSelectionMode": "none",
-      "offerEndpoint": "zones"
+      "offerEndpoint": "zones",
+      "requiresLogin": false
     }
   },
   {
@@ -42,7 +46,10 @@
         "value": "Periodic ticket"
       }
     ],
-    "transportModes": ["bus"],
+    "transportModes": [
+      {"mode": "bus", "subMode": "localBus"},
+      {"mode": "tram"}
+    ],
     "description": [
       {
         "lang": "nob",
@@ -58,7 +65,8 @@
       "travellerSelectionMode": "single",
       "timeSelectionMode": "datetime",
       "productSelectionMode": "duration",
-      "offerEndpoint": "zones"
+      "offerEndpoint": "zones",
+      "requiresLogin": true
     }
   },
   {
@@ -73,7 +81,10 @@
         "value": "24 hour pass"
       }
     ],
-    "transportModes": ["bus"],
+    "transportModes": [
+      {"mode": "bus", "subMode": "localBus"},
+      {"mode": "tram"}
+    ],
     "description": [
       {
         "lang": "nob",
@@ -89,7 +100,8 @@
       "travellerSelectionMode": "single",
       "timeSelectionMode": "datetime",
       "productSelectionMode": "none",
-      "offerEndpoint": "zones"
+      "offerEndpoint": "zones",
+      "requiresLogin": false
     }
   },
   {
@@ -104,7 +116,10 @@
         "value": "Night ticket"
       }
     ],
-    "transportModes": ["bus"],
+    "transportModes": [
+      {"mode": "bus", "subMode": "localBus"},
+      {"mode": "tram"}
+    ],
     "description": [
       {
         "lang": "nob",
@@ -120,7 +135,43 @@
       "travellerSelectionMode": "none",
       "timeSelectionMode": "none",
       "productSelectionMode": "product",
-      "offerEndpoint": "authority"
+      "offerEndpoint": "authority",
+      "requiresLogin": false
+    }
+  },
+  {
+    "type": "carnet",
+    "name": [
+      {
+        "lang": "nob",
+        "value": "Klippekort"
+      },
+      {
+        "lang": "eng",
+        "value": "Punch card"
+      }
+    ],
+    "transportModes": [
+      {"mode": "bus", "subMode": "localBus"},
+      {"mode": "tram"}
+    ],
+    "description": [
+      {
+        "lang": "nob",
+        "value": "10 forhåndskjøpte enkeltbilletter som må aktiveres før du går om bord"
+      },
+      {
+        "lang": "eng",
+        "value": "10 pre-purchased tickets that you have to validate before boarding"
+      }
+    ],
+    "configuration": {
+      "zoneSelectionMode": "multiple",
+      "travellerSelectionMode": "single",
+      "timeSelectionMode": "none",
+      "productSelectionMode": "none",
+      "offerEndpoint": "zones",
+      "requiresLogin": true
     }
   }
 ]

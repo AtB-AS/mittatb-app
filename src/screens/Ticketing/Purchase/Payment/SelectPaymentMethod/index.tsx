@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {
   PurchaseConfirmationTexts,
   ScreenHeaderTexts,
@@ -14,14 +14,14 @@ import {
 } from '@atb/translations';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {listRecurringPayments, PaymentType} from '@atb/ticketing';
 import {PaymentMethod, SavedPaymentOption} from '../../types';
 import {useAuthState} from '@atb/auth';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {FullScreenFooter} from '@atb/components/screen-footer';
 import hexToRgba from 'hex-to-rgba';
 import LinearGradient from 'react-native-linear-gradient';
 import PaymentBrand from '../PaymentBrand';
@@ -446,7 +446,6 @@ const RadioView: React.FC<CheckedProps> = ({checked}) => {
 };
 
 const SavedCheckbox: React.FC<CheckedProps> = ({checked}) => {
-  const {theme} = useTheme();
   const styles = useStyles();
   return (
     <View

@@ -1,8 +1,8 @@
-import {FareContract} from '@atb/ticketing';
+import {FareContract, isPreActivatedTravelRight} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
-import ThemeText from '@atb/components/text';
-import {formatToLongDateTime} from '@atb/utils/date';
+import {ThemeText} from '@atb/components/text';
+import {fullDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import _ from 'lodash';
 import React from 'react';
@@ -14,18 +14,45 @@ const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
   const orderIdText = t(
     FareContractTexts.details.orderId(fareContract.orderId),
   );
+  const firstTravelRight = fareContract.travelRights[0];
   return (
     <View accessible={true}>
       <ThemeText type="body__secondary" color="secondary">
         {t(
           FareContractTexts.details.purchaseTime(
-            formatToLongDateTime(
+            fullDateTime(
               fromUnixTime(fareContract.created.toMillis() / 1000),
               language,
             ),
           ),
         )}
       </ThemeText>
+      {isPreActivatedTravelRight(firstTravelRight) && (
+        <>
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={style.marginTop}
+          >
+            {t(
+              FareContractTexts.details.validFrom(
+                fullDateTime(firstTravelRight.startDateTime.toDate(), language),
+              ),
+            )}
+          </ThemeText>
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={style.marginTop}
+          >
+            {t(
+              FareContractTexts.details.validTo(
+                fullDateTime(firstTravelRight.endDateTime.toDate(), language),
+              ),
+            )}
+          </ThemeText>
+        </>
+      )}
       <ThemeText
         type="body__secondary"
         color="secondary"

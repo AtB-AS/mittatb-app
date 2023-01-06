@@ -11,6 +11,17 @@ import {
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
 import {isArray} from 'lodash';
+import {TransportModeType} from '@atb/configuration/types';
+import type {
+  TransportIconModeType,
+  TransportModeFilterOptionType,
+} from '@atb/screens/Dashboard/types';
+import {
+  TransportMode,
+  TransportModes,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
+import {enumFromString} from '@atb/utils/enum-from-string';
 
 export function mapToFareProductTypeConfigs(
   config: any,
@@ -42,7 +53,7 @@ function mapToFareProductTypeConfig(
     return;
   }
 
-  const fcTypes = ['single', 'period', 'hour24', 'night'];
+  const fcTypes = ['single', 'period', 'hour24', 'night', 'carnet'];
   const fcType = mapToStringAlternatives<FareProductType>(config.type, fcTypes);
   if (!fcType) {
     return;
@@ -71,9 +82,12 @@ function mapToFareProductTypeConfig(
     );
     return;
   }
-  if (!config.transportModes.every((value: any) => typeof value === 'string')) {
+
+  const transportModes = mapTransportModeTypes(config.transportModes);
+
+  if (!transportModes) {
     Bugsnag.notify(
-      `fare product of type: "${fcType}", one or more of the "transportModes" values is not of type "string"`,
+      `fare product of type: "${fcType}", "transportModes" should conform: "TransportModeType"`,
     );
     return;
   }
@@ -88,7 +102,7 @@ function mapToFareProductTypeConfig(
     type: fcType,
     name,
     description,
-    transportModes: config.transportModes,
+    transportModes,
     configuration,
   };
 }
@@ -168,13 +182,22 @@ function mapToFareProductConfigSettings(
     return;
   }
 
+  const requiresLogin = settings.requiresLogin;
+  if (requiresLogin === undefined) {
+    Bugsnag.notify(
+      `fare product of type: "${fareProductType}" is missing 'requiresLogin' in configuration`,
+    );
+    return;
+  }
+
   return {
     zoneSelectionMode,
     travellerSelectionMode,
     timeSelectionMode,
     productSelectionMode,
     offerEndpoint,
-  } as FareProductTypeConfigSettings;
+    requiresLogin,
+  };
 }
 
 function notifyWrongConfigurationType(
@@ -187,15 +210,120 @@ function notifyWrongConfigurationType(
   );
 }
 
+export const mapToTransportModeFilterOptions = (
+  filters: any,
+): TransportModeFilterOptionType[] | undefined => {
+  if (!isArray(filters)) {
+    Bugsnag.notify(`Transport mode filters should be of type "array"`);
+    return;
+  }
+
+  return filters
+    .map(mapToTransportModeFilterOption)
+    .filter((f): f is TransportModeFilterOptionType => !!f?.modes);
+};
+
+const mapToTransportModeFilterOption = (
+  filter: any,
+): TransportModeFilterOptionType | undefined => {
+  const fields = ['id', 'text', 'modes'];
+  if (!fields.every((f) => f in filter)) {
+    Bugsnag.notify(
+      `Transport mode filter is missing one or more of the following mandatory fields: ${fields}`,
+    );
+    return;
+  }
+
+  const text = mapLanguageAndTextType(filter.text);
+  const description = mapLanguageAndTextType(filter.description);
+
+  if (!text) {
+    Bugsnag.notify(
+      `Transport mode filter with id: "${filter.id}", "text": "LanguageAndTextType"`,
+    );
+    return;
+  }
+
+  const icon = mapIconMode(filter.icon);
+
+  const modes = filter.modes.map(mapToTransportModes);
+  if (modes.includes(undefined)) {
+    // Already notified Bugsnag in mapping function
+    return;
+  }
+
+  return {
+    ...filter,
+    icon,
+    text,
+    description,
+    modes: modes as TransportModes[],
+  };
+};
+
+const mapIconMode = (raw: any): TransportIconModeType | undefined => {
+  if (!raw) return undefined;
+  const mappedMode = enumFromString(TransportMode, raw.transportMode);
+  if (!mappedMode) {
+    Bugsnag.notify('Unknown icon transport mode: ' + raw.transportMode);
+    return undefined;
+  }
+  const mappedSubMode = enumFromString(TransportSubmode, raw.transportSubMode);
+  return {
+    transportMode: mappedMode,
+    transportSubMode: mappedSubMode,
+  };
+};
+
+const mapToTransportModes = (raw: any): TransportModes | undefined => {
+  const mappedMode = enumFromString(TransportMode, raw.transportMode);
+  if (!mappedMode) {
+    Bugsnag.notify('Unknown transport mode: ' + raw.transportMode);
+    return undefined;
+  }
+  const newSubModes = raw.transportSubModes?.map((sm: any) => {
+    const mappedSubMode = enumFromString(TransportSubmode, sm);
+    if (!mappedSubMode) {
+      Bugsnag.notify('Unknown transport mode: ' + raw.transportMode);
+      return undefined;
+    }
+    return mappedSubMode;
+  });
+
+  if (newSubModes && newSubModes.includes(undefined)) {
+    return undefined;
+  }
+
+  return {
+    transportMode: mappedMode,
+    transportSubModes: newSubModes as TransportSubmode[],
+  };
+};
+
 function mapToStringAlternatives<T>(value: any, alternatives: string[]) {
   if (typeof value !== 'string') return;
   if (!alternatives.includes(value)) return;
   return value as T;
 }
 
-function mapLanguageAndTextType(text: any[]) {
+function mapLanguageAndTextType(text?: any[]) {
+  if (!text) return;
   if (!text.every((item: any) => ['lang', 'value'].every((f) => f in item)))
     return;
 
   return text as LanguageAndTextType[];
+}
+
+function mapTransportModeTypes(transportModes: any[]) {
+  if (
+    !transportModes.every(
+      (item: any) =>
+        typeof item === 'object' &&
+        'mode' in item &&
+        typeof item.mode === 'string',
+    )
+  )
+    return;
+
+  return transportModes as TransportModeType[];
 }

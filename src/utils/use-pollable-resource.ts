@@ -2,15 +2,15 @@ import {useState, useCallback, useEffect} from 'react';
 import useInterval from './use-interval';
 import useIsLoading from './use-is-loading';
 
-type PollableResourceOptions<T, E> = {
+type PollableResourceOptions<T> = {
   initialValue: T;
   pollingTimeInSeconds?: number;
   disabled?: boolean;
-  filterError?(error: E): boolean;
 };
 
 /**
- * Pattern for creating a pollable resource as a hook. Pass data reciever function as first argument.
+ * Pattern for creating a pollable resource as a hook. Pass data receiver function as first argument. The
+ * receiver function may take an AbortSignal if it should be aborted when the callback function changes.
  * NOTE: callback should be cached as it is used as dependency in useEffect. Remember to use `useCallback`.
  *
  * Polling time of 0 equals no polling.
@@ -20,34 +20,31 @@ type PollableResourceOptions<T, E> = {
  * @returns [T, () => Promise<void>, boolean, E]
  */
 export default function usePollableResource<T, E extends Error = Error>(
-  callback: () => Promise<T>,
-  opts: PollableResourceOptions<T, E>,
+  callback: (signal?: AbortSignal) => Promise<T>,
+  opts: PollableResourceOptions<T>,
 ): [T, () => Promise<void>, boolean, E?] {
-  const {initialValue, pollingTimeInSeconds = 30, filterError} = opts;
+  const {initialValue, pollingTimeInSeconds = 30} = opts;
   const [isLoading, setIsLoading] = useIsLoading(false);
   const [error, setError] = useState<E | undefined>(undefined);
   const [state, setState] = useState<T>(initialValue);
+  const [abortController, setAbortController] = useState<AbortController>();
   const pollTime = pollingTimeInSeconds * 1000;
 
   const reload = useCallback(
     async function reload(
       loading: 'NO_LOADING' | 'WITH_LOADING' = 'WITH_LOADING',
+      abortController?: AbortController,
     ) {
       // Only fetch if there is a location and the screen is in focus.
-
       if (loading === 'WITH_LOADING') {
         setIsLoading(true);
       }
       try {
+        const newState = await callback(abortController?.signal);
         setError(undefined);
-        const newState = await callback();
         setState(newState);
       } catch (e: any) {
-        // only way to type guard e here is to have the consumer of
-        // use-pollable-resource send in a type guarding function
-        // or accept that arguments sent to filterError and setError
-        // can also be 'unknown'. So for simplicity we're setting e to 'any'
-        if (!filterError || filterError(e)) setError(e);
+        if (!abortController?.signal.aborted) setError(e);
       } finally {
         if (loading === 'WITH_LOADING') {
           setIsLoading(false);
@@ -58,10 +55,18 @@ export default function usePollableResource<T, E extends Error = Error>(
   );
 
   useEffect(() => {
-    reload('WITH_LOADING');
+    const abortController = new AbortController();
+    setAbortController(abortController);
+    reload('WITH_LOADING', abortController);
+    return () => abortController.abort();
   }, [reload]);
 
-  useInterval(() => reload('NO_LOADING'), pollTime, [reload], opts.disabled);
+  useInterval(
+    () => reload('NO_LOADING', abortController),
+    pollTime,
+    [reload],
+    opts.disabled,
+  );
 
   return [state, reload, isLoading, error];
 }

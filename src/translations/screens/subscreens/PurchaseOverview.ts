@@ -2,15 +2,6 @@ import {translation as _} from '../../commons';
 import orgSpecificTranslations from '@atb/translations/utils';
 
 const PurchaseOverviewTexts = {
-  header: {
-    title: {
-      single: _('Enkeltbillett', 'Single ticket'),
-      night: _('Nattbillett', 'Night ticket'),
-      period: _('Periodebillett', 'Periodic ticket'),
-      carnet: _('Klippekort', 'Carnet ticket'),
-      hour24: _('24-timersbillett', '24 hour pass'),
-    },
-  },
   errorMessageBox: {
     title: _('Det oppstod en feil', 'An error occurred'),
     message: _(

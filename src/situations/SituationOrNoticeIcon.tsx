@@ -1,7 +1,7 @@
 import React from 'react';
 import {getSvgForMostCriticalSituationOrNotice} from './utils';
 import {SituationType} from './types';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {StyleProp, ViewStyle} from 'react-native';
 

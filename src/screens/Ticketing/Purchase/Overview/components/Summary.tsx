@@ -1,6 +1,6 @@
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import Button from '@atb/components/button';
-import ThemeText from '@atb/components/text';
+import {Button} from '@atb/components/button';
+import {ThemeText} from '@atb/components/text';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
 import {TariffZoneWithMetadata} from '@atb/screens/Ticketing/Purchase/TariffZones';
@@ -52,6 +52,7 @@ export default function Summary({
 
   const toPaymentFunction = () => {
     navigation.navigate('Confirmation', {
+      fareProductTypeConfig,
       fromTariffZone,
       toTariffZone,
       userProfilesWithCount,
@@ -62,7 +63,7 @@ export default function Summary({
   };
 
   const transportModesText = fareProductTypeConfig.transportModes
-    .map((tm) => t(FareContractTexts.transportMode(tm)))
+    .map((tm) => t(FareContractTexts.transportMode(tm.mode)))
     .filter(Boolean)
     .join('/');
 

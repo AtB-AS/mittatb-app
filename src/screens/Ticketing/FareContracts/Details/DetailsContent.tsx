@@ -58,7 +58,7 @@ const DetailsContent: React.FC<Props> = ({
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
     return (
       <Sections.Section withBottomPadding>
-        <Sections.GenericItem>
+        <Sections.GenericSectionItem>
           <ValidityHeader
             status={validityStatus}
             now={now}
@@ -82,11 +82,11 @@ const DetailsContent: React.FC<Props> = ({
             fareContract={fc}
             fareProductType={preassignedFareProduct?.type}
           />
-        </Sections.GenericItem>
-        <Sections.GenericItem>
+        </Sections.GenericSectionItem>
+        <Sections.GenericSectionItem>
           <OrderDetails fareContract={fc} />
-        </Sections.GenericItem>
-        <Sections.LinkItem
+        </Sections.GenericSectionItem>
+        <Sections.LinkSectionItem
           text={t(FareContractTexts.details.askForReceipt)}
           onPress={onReceiptNavigate}
           accessibility={{accessibilityRole: 'button'}}

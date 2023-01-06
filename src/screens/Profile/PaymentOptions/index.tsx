@@ -1,8 +1,8 @@
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {useAuthState} from '@atb/auth';
 import {MessageBox} from '@atb/components/message-box';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import ThemeText from '@atb/components/text';
+import {FullScreenHeader} from '@atb/components/screen-header';
+import {ThemeText} from '@atb/components/text';
 import PaymentBrand from '@atb/screens/Ticketing/Purchase/Payment/PaymentBrand';
 import {
   getExpireDate,
@@ -176,7 +176,6 @@ const Card = (props: {
 };
 
 const NoCardsInfo = () => {
-  const {theme} = useTheme();
   const style = useStyle();
   const {t} = useTranslation();
   return (
@@ -191,7 +190,6 @@ const NoCardsInfo = () => {
 };
 
 const GenericError = () => {
-  const {theme} = useTheme();
   const style = useStyle();
   const {t} = useTranslation();
   return (

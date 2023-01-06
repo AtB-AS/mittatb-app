@@ -1,6 +1,6 @@
 import React from 'react';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {InteractiveColor} from '@atb/theme/colors';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
@@ -10,7 +10,7 @@ import {
 } from '@atb/utils/date';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import TravelDateSheet from '@atb/screens/Ticketing/Purchase/TravelDate/TravelDateSheet';
-import RadioSegments from '@atb/components/radio-segments';
+import {RadioSegments} from '@atb/components/radio';
 import {TimeSelectionMode} from '@atb/screens/Ticketing/FareContracts/utils';
 
 type StartTimeSelectionProps = {

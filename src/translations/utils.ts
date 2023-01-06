@@ -1,7 +1,7 @@
 import merge from 'lodash.merge';
 import {AppOrgs} from '../../types/app-orgs';
 import {APP_ORG} from '@env';
-import {Language} from './commons';
+import {Language, useTranslation} from './commons';
 import {LanguageAndTextLanguagesEnum, LanguageAndTextType} from './types';
 
 type Overrides<T> = {
@@ -40,6 +40,18 @@ export const getTextForLanguage = (
   if (norwegianText?.value) return norwegianText.value;
 
   return texts?.[0]?.value;
+};
+
+/**
+ * Get the text in the current language. If English is requested, it will
+ * fall back to Norwegian if no English text is found. If neither English nor
+ * Norwegian is found the first text in the provided texts array is returned.
+ */
+export const useTextForLanguage = (
+  texts?: LanguageAndTextType[] | undefined,
+): string | undefined => {
+  const {language} = useTranslation();
+  return getTextForLanguage(texts, language);
 };
 
 const getLanguage = (lv: LanguageAndTextType) =>

@@ -1,5 +1,6 @@
 import {translation as _} from '../../commons';
 import {PreassignedFareProductType} from '@atb/reference-data/types';
+import {APP_ORG} from '@env';
 
 enum TravellerType {
   adult = 'ADULT',
@@ -31,10 +32,16 @@ function specificOverrides(
             '6 to 19 years. Valid for night bus.',
           );
         case TravellerType.student:
-          return _(
-            'Fulltidsstudenter og elever under 35 år. Gyldig på nattbuss.',
-            'Fulltime students under 35. Valid for night bus. ',
-          );
+          if (APP_ORG === 'atb')
+            return _(
+              'Fulltidsstudenter og elever under 35 år. Gyldig på nattbuss.',
+              'Fulltime students under 35. Valid for night bus. ',
+            );
+          else
+            return _(
+              'Fulltidsstudenter og elever under 30 år.',
+              'Fulltime students under 30.',
+            );
         case TravellerType.senior:
           return _(
             'Over 67 eller med gyldig honnørbevis. Gyldig på nattbuss.',
@@ -53,10 +60,16 @@ function generic(travellerType: string) {
     case TravellerType.adult:
       return _('20 til og med 66 år.', '20 to 66 years.');
     case TravellerType.student:
-      return _(
-        'Fulltidsstudenter og elever under 35 år.',
-        'Fulltime students under 35.',
-      );
+      if (APP_ORG === 'atb')
+        return _(
+          'Fulltidsstudenter og elever under 35 år.',
+          'Fulltime students under 35.',
+        );
+      else
+        return _(
+          'Fulltidsstudenter og elever under 30 år.',
+          'Fulltime students under 30.',
+        );
     case TravellerType.senior:
       return _(
         'Over 67 eller med gyldig honnørbevis.',

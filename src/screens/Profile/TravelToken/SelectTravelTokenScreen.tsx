@@ -1,7 +1,7 @@
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
-import RadioBox from '@atb/components/radio-icon/radio-box';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {RadioBox} from '@atb/components/radio';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {RemoteToken} from '@atb/mobile-token/types';
@@ -164,7 +164,7 @@ export default function SelectTravelTokenScreen({navigation}: Props) {
 
         {selectedType === 'mobile' && mobileTokens?.length && (
           <Sections.Section type="spacious" style={styles.selectDeviceSection}>
-            <Sections.RadioSection<RemoteToken>
+            <Sections.RadioGroupSection<RemoteToken>
               items={mobileTokens}
               keyExtractor={(rt) => rt.id}
               itemToText={(rt) =>

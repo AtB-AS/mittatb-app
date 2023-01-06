@@ -1,12 +1,16 @@
 import {ErrorType} from '@atb/api/utils';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import AccessibleText from '@atb/components/accessible-text';
+import {AccessibleText} from '@atb/components/text';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import Button from '@atb/components/button';
-import SimpleDisappearingHeader from '@atb/components/disappearing-header/simple';
-import ScreenReaderAnnouncement from '@atb/components/screen-reader-announcement';
-import {ActionItem, LocationInput, Section} from '@atb/components/sections';
-import ThemeIcon from '@atb/components/theme-icon';
+import {Button} from '@atb/components/button';
+import {SimpleDisappearingHeader} from '@atb/components/disappearing-header';
+import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
+import {
+  ActionSectionItem,
+  LocationInputSectionItem,
+  Section,
+} from '@atb/components/sections';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import DeparturesList from '@atb/departure-list/DeparturesList';
 import {GeoLocation, Location} from '@atb/favorites/types';
 import {
@@ -249,7 +253,7 @@ const NearbyOverview: React.FC<Props> = ({
 
       {data !== null && (
         <View style={styles.container}>
-          <ActionItem
+          <ActionSectionItem
             transparent
             text={t(NearbyTexts.favorites.toggle)}
             mode="toggle"
@@ -301,7 +305,7 @@ const Header = React.memo(function Header({
   return (
     <>
       <Section withPadding>
-        <LocationInput
+        <LocationInputSectionItem
           label={t(NearbyTexts.location.departurePicker.label)}
           updatingLocation={updatingLocation}
           location={fromLocation}

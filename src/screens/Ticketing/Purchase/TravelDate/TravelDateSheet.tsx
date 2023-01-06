@@ -1,17 +1,21 @@
 import React, {forwardRef, useState} from 'react';
 import {StyleSheet} from '@atb/theme';
-import {DateInputItem, Section, TimeInputItem} from '@atb/components/sections';
+import {
+  DateInputSectionItem,
+  Section,
+  TimeInputSectionItem,
+} from '@atb/components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
   ScreenHeaderTexts,
   TravelDateTexts,
   useTranslation,
 } from '@atb/translations';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import FullScreenFooter from '@atb/components/screen-footer/full-footer';
+import {FullScreenFooter} from '@atb/components/screen-footer';
 import useKeyboardHeight from '@atb/utils/use-keyboard-height';
 import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
 
@@ -58,8 +62,8 @@ const TravelDate = forwardRef<ScrollView, Props>(
           centerContent={true}
         >
           <Section>
-            <DateInputItem value={dateString} onChange={setDate} />
-            <TimeInputItem value={timeString} onChange={setTime} />
+            <DateInputSectionItem value={dateString} onChange={setDate} />
+            <TimeInputSectionItem value={timeString} onChange={setTime} />
           </Section>
         </ScrollView>
         <FullScreenFooter>

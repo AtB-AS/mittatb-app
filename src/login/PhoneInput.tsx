@@ -1,5 +1,5 @@
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {FullScreenHeader} from '@atb/components/screen-header';
+import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {
@@ -9,9 +9,9 @@ import {
   View,
 } from 'react-native';
 import * as Sections from '@atb/components/sections';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {useAuthState} from '@atb/auth';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {PhoneSignInErrorCode} from '@atb/auth/AuthContext';
 import {MessageBox} from '@atb/components/message-box';
 import {useNavigation} from '@react-navigation/native';
@@ -33,7 +33,6 @@ export default function PhoneInput({
   headerRightButton?: RightButtonProps;
 }) {
   const {t} = useTranslation();
-  const {theme} = useTheme();
   const styles = useThemeStyles();
   const {signInWithPhoneNumber} = useAuthState();
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -117,7 +116,7 @@ export default function PhoneInput({
             </ThemeText>
           </View>
           <Sections.Section>
-            <Sections.PhoneInput
+            <Sections.PhoneInputSectionItem
               label={t(LoginTexts.phoneInput.input.heading)}
               value={phoneNumber}
               onChangeText={setPhoneNumber}

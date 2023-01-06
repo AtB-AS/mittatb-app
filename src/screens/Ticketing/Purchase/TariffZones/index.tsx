@@ -1,7 +1,7 @@
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {Location} from '@atb/assets/svg/mono-icons/places';
-import Button from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {
   MapCameraConfig,
   MapControls,
@@ -9,9 +9,9 @@ import {
   PositionArrow,
   shadows,
 } from '@atb/components/map';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
-import {ButtonInput, Section} from '@atb/components/sections';
-import ThemeIcon from '@atb/components/theme-icon';
+import {FullScreenHeader} from '@atb/components/screen-header';
+import {ButtonSectionItem, Section} from '@atb/components/sections';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {TariffZone} from '@atb/reference-data/types';
@@ -35,9 +35,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import {PixelRatio, Platform, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {PurchaseScreenProps} from '../types';
-import {zoomIn, zoomOut} from '@atb/components/map/utils';
-import {flyToLocation} from '@atb/components/map/hooks/use-trigger-camera-move-effect';
-import {ZoneSelectionMode} from '../../FareContracts/utils';
+import {flyToLocation, zoomIn, zoomOut} from '@atb/components/map';
+import {FareProductTypeConfig} from '../../FareContracts/utils';
 
 type TariffZonesRouteName = 'TariffZones';
 const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
@@ -45,7 +44,7 @@ const TariffZonesRouteNameStatic: TariffZonesRouteName = 'TariffZones';
 export type RouteParams = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
-  selectionMode: Exclude<ZoneSelectionMode, 'none'>;
+  fareProductTypeConfig: FareProductTypeConfig;
 };
 
 export type TariffZoneResultType = 'venue' | 'geolocation' | 'zone';
@@ -216,7 +215,8 @@ const TariffZones: React.FC<TariffZonesProps> = ({
   navigation,
   route: {params},
 }) => {
-  const {fromTariffZone, toTariffZone, selectionMode} = params;
+  const {fromTariffZone, toTariffZone, fareProductTypeConfig} = params;
+  const selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
   const isApplicableOnSingleZoneOnly = selectionMode === 'single';
   const [regionEvent, setRegionEvent] = useState<RegionEvent>();
   const {tariffZones} = useFirestoreConfiguration();
@@ -274,6 +274,7 @@ const TariffZones: React.FC<TariffZonesProps> = ({
     navigation.navigate({
       name: 'PurchaseOverview',
       params: {
+        fareProductTypeConfig,
         fromTariffZone: selectedZones.from,
         toTariffZone: isApplicableOnSingleZoneOnly
           ? selectedZones.from
@@ -352,7 +353,7 @@ const TariffZones: React.FC<TariffZonesProps> = ({
         />
 
         <Section withPadding>
-          <ButtonInput
+          <ButtonSectionItem
             label={
               isApplicableOnSingleZoneOnly
                 ? t(TariffZonesTexts.location.singleZone.label)
@@ -377,7 +378,7 @@ const TariffZones: React.FC<TariffZonesProps> = ({
             testID="searchFromButton"
           />
           {!isApplicableOnSingleZoneOnly && (
-            <ButtonInput
+            <ButtonSectionItem
               label={t(TariffZonesTexts.location.destinationPicker.label)}
               value={destinationPickerValue(
                 selectedZones.from,

@@ -22,6 +22,7 @@ export type TravelRight = {
     | 'PreActivatedSingleTicket'
     | 'PreActivatedPeriodTicket'
     | 'CarnetTicket'
+    | 'NightTicket'
     | 'UnknownTicket';
 };
 
@@ -33,7 +34,7 @@ export type NormalTravelRight = TravelRight & {
   endDateTime: Timestamp;
   usageValidityPeriodRef: string;
   userProfileRef: string;
-  tariffZoneRefs: string[];
+  tariffZoneRefs: string[] | undefined;
 };
 
 export type PreActivatedTravelRight = NormalTravelRight;

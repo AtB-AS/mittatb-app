@@ -3,11 +3,9 @@ import {
   BikeRentalStation,
   Coordinates,
   DestinationDisplay,
-  InfoLink,
   Interchange,
   LegMode,
   Line,
-  MultilingualString,
   Notice,
   Operator,
   PointsOnLink,
@@ -15,14 +13,9 @@ import {
   ServiceJourney,
   StopPlace,
   StopPlaceDetails,
-  TransportMode,
   TransportSubmode,
-  ValidityPeriod,
 } from '@entur/sdk';
-import {
-  Mode,
-  PointsOnLink as PointsOnLink_v2,
-} from '@atb/api/types/generated/journey_planner_v3_types';
+import {PointsOnLink as PointsOnLink_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import {Feature, LineString} from 'geojson';
 
 export * from '@entur/sdk';

@@ -4,7 +4,7 @@ import {TicketingTexts, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {filterExpiredFareContracts, useTicketingState} from '@atb/ticketing';
 import FareContractAndReservationsScrollView from '@atb/screens/Ticketing/FareContracts/FareContractAndReservationsScrollView';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import TicketHistoryTexts from '@atb/translations/screens/subscreens/TicketHistory';
 
 export const TicketHistory: React.FC = () => {

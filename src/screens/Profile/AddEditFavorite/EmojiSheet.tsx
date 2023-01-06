@@ -4,7 +4,7 @@
  * Modifications: Copyright (c) 2020 Andre 'Staltz' Medeiros
  * MIT
  */
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import emoji from 'emoji-datasource';
 import groupBy from 'lodash.groupby';
@@ -179,7 +179,6 @@ const EmojiCategory: React.FC<EmojiCategory> = ({
 };
 
 type Props = Omit<EmojiCategory, 'category'> & {
-  hideClearButton?: boolean;
   closeOnSelect?: boolean;
   clearButtonStyle?: ViewStyle;
   clearButtonText?: string;
@@ -187,10 +186,7 @@ type Props = Omit<EmojiCategory, 'category'> & {
   close: () => void;
 };
 const EmojiSheet = forwardRef<ScrollView, Props>(
-  (
-    {value, onEmojiSelected, hideClearButton, closeOnSelect, close, ...props},
-    focusRef,
-  ) => {
+  ({value, onEmojiSelected, closeOnSelect, close, ...props}, focusRef) => {
     const {t} = useTranslation();
     const onClick = (emoji: string | null) => {
       onEmojiSelected(emoji);

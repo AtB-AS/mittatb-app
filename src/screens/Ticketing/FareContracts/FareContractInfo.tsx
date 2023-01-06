@@ -1,4 +1,4 @@
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {
   PreassignedFareProduct,
   PreassignedFareProductType,
@@ -19,7 +19,11 @@ import {
   NormalTravelRight,
   PreActivatedTravelRight,
 } from '@atb/ticketing';
-import {FareContractTexts, useTranslation} from '@atb/translations';
+import {
+  FareContractTexts,
+  getTextForLanguage,
+  useTranslation,
+} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
@@ -32,13 +36,13 @@ import {
   userProfileCountAndName,
   getValidityStatus,
 } from '@atb/screens/Ticketing/FareContracts/utils';
-import {screenReaderPause} from '@atb/components/accessible-text';
+import {screenReaderPause} from '@atb/components/text';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import FareContractDetail from '@atb/screens/Ticketing/FareContracts/Component/FareContractDetail';
 import WarningMessage from '@atb/screens/Ticketing/FareContracts/Component/WarningMessage';
 import Barcode from '@atb/screens/Ticketing/FareContracts/Details/Barcode';
-import SectionSeparator from '@atb/components/sections/section-separator';
+import {SectionSeparator} from '@atb/components/sections';
 import {getLastUsedAccess} from './Carnet/CarnetDetails';
 import InspectionSymbol from '@atb/screens/Ticketing/FareContracts/Component/InspectionSymbol';
 
@@ -80,15 +84,19 @@ const FareContractInfo = ({
 
   const firstTravelRight = travelRights[0];
   const {fareProductRef: productRef, tariffZoneRefs} = firstTravelRight;
-  const [firstZone] = tariffZoneRefs;
-  const [lastZone] = tariffZoneRefs.slice(-1);
+  const firstZone = tariffZoneRefs?.[0];
+  const lastZone = tariffZoneRefs?.slice(-1)?.[0];
 
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     productRef,
   );
-  const fromTariffZone = findReferenceDataById(tariffZones, firstZone);
-  const toTariffZone = findReferenceDataById(tariffZones, lastZone);
+  const fromTariffZone = firstZone
+    ? findReferenceDataById(tariffZones, firstZone)
+    : undefined;
+  const toTariffZone = lastZone
+    ? findReferenceDataById(tariffZones, lastZone)
+    : undefined;
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
     travelRights.map((tr) => tr.userProfileRef),
@@ -146,6 +154,9 @@ const FareContractInfoHeader = ({
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)
     : undefined;
+  const producDescription = preassignedFareProduct
+    ? getTextForLanguage(preassignedFareProduct.description, language)
+    : undefined;
   const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
   const {t} = useTranslation();
   const warning = getNonInspectableTokenWarning(
@@ -168,6 +179,16 @@ const FareContractInfoHeader = ({
             testID={testID + 'Product'}
           >
             {productName}
+          </ThemeText>
+        )}
+        {producDescription && (
+          <ThemeText
+            type="body__secondary"
+            style={styles.product}
+            accessibilityLabel={producDescription + screenReaderPause}
+            testID={testID + 'ProductDescription'}
+          >
+            {producDescription}
           </ThemeText>
         )}
       </View>
@@ -244,7 +265,7 @@ export const getFareContractInfoDetails = (
     fallbackEnabled,
   );
   const fareContractState = fareContract.state;
-  var validTo = endDateTime.toMillis();
+  let validTo = endDateTime.toMillis();
   const validFrom = startDateTime.toMillis();
   const validityStatus = getValidityStatus(
     now,
@@ -253,10 +274,14 @@ export const getFareContractInfoDetails = (
     fareContractState,
   );
 
-  const [firstZone] = tariffZoneRefs;
-  const [lastZone] = tariffZoneRefs.slice(-1);
-  const fromTariffZone = findReferenceDataById(tariffZones, firstZone);
-  const toTariffZone = findReferenceDataById(tariffZones, lastZone);
+  const firstZone = tariffZoneRefs?.[0];
+  const lastZone = tariffZoneRefs?.slice(-1)?.[0];
+  const fromTariffZone = firstZone
+    ? findReferenceDataById(tariffZones, firstZone)
+    : undefined;
+  const toTariffZone = lastZone
+    ? findReferenceDataById(tariffZones, lastZone)
+    : undefined;
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     productRef,
@@ -306,9 +331,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
   },
   fareContractHeader: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'center',
     marginTop: theme.spacings.xSmall,
   },
 }));

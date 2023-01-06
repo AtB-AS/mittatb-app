@@ -1,9 +1,9 @@
-import {ActionItem, Section} from '@atb/components/sections';
+import {ActionSectionItem, Section} from '@atb/components/sections';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {AppearanceSettingsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {Platform, View} from 'react-native';
 
 export default function Appearance() {
@@ -27,7 +27,7 @@ export default function Appearance() {
 
       <ScrollView>
         <Section withTopPadding withPadding>
-          <ActionItem
+          <ActionSectionItem
             mode="toggle"
             text={t(AppearanceSettingsTexts.actions.usePhoneTheme)}
             checked={!overrideSystemAppearance}
@@ -35,7 +35,7 @@ export default function Appearance() {
           />
 
           {overrideSystemAppearance && (
-            <ActionItem
+            <ActionSectionItem
               mode="toggle"
               text={t(AppearanceSettingsTexts.actions.darkMode)}
               checked={storedColorScheme === 'dark'}
@@ -47,7 +47,7 @@ export default function Appearance() {
         </Section>
         {Platform.OS === 'android' && (
           <Section withTopPadding withPadding>
-            <ActionItem
+            <ActionSectionItem
               mode="toggle"
               text={t(AppearanceSettingsTexts.actions.useSystemFont)}
               checked={useAndroidSystemFont}

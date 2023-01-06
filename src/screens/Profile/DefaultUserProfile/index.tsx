@@ -1,4 +1,4 @@
-import {RadioSection} from '@atb/components/sections';
+import {RadioGroupSection} from '@atb/components/sections';
 import {usePreferences} from '@atb/preferences';
 import {StyleSheet, Theme} from '@atb/theme';
 import {UserProfileSettingsTexts, useTranslation} from '@atb/translations';
@@ -6,9 +6,9 @@ import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {UserProfile} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {View} from 'react-native';
-import FullScreenHeader from '@atb/components/screen-header/full-header';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 export default function DefaultUserProfile() {
@@ -38,7 +38,7 @@ export default function DefaultUserProfile() {
           {t(UserProfileSettingsTexts.description)}
         </ThemeText>
 
-        <RadioSection<UserProfile>
+        <RadioGroupSection<UserProfile>
           items={userProfiles}
           keyExtractor={(u) => u.id}
           itemToText={(u) => getReferenceDataName(u, language)}

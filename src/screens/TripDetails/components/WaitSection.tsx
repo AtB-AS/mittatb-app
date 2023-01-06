@@ -1,6 +1,6 @@
 import {Time} from '@atb/assets/svg/mono-icons/time';
 import {Info} from '@atb/assets/svg/color/icons/status';
-import ThemeText from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {MessageBox} from '@atb/components/message-box';
 import {StyleSheet} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
@@ -11,7 +11,7 @@ import {View} from 'react-native';
 import {timeIsShort} from '../Details/utils';
 import TripLegDecoration from './TripLegDecoration';
 import TripRow from './TripRow';
-import ThemeIcon from '@atb/components/theme-icon/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 export type WaitDetails = {
   mustWaitForNextLeg: boolean;

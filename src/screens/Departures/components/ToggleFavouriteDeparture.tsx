@@ -1,6 +1,6 @@
 import {TouchableOpacity} from 'react-native';
 import insets from '@atb/utils/insets';
-import ThemeIcon from '@atb/components/theme-icon';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import SvgFavorite from '@atb/assets/svg/mono-icons/places/Favorite';
@@ -50,7 +50,7 @@ const getFavoriteIcon = (existingFavorite?: StoredType<FavoriteDeparture>) => {
   }
 };
 
-const useStyles = StyleSheet.createThemeHook((theme, themeName) => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   favoriteButton: {
     paddingLeft: theme.spacings.medium,
   },
