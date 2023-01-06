@@ -29,6 +29,7 @@ import {RootStackParamList} from './types';
 import useTestIds from './use-test-ids';
 import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
 import type {NavigationState, PartialState} from '@react-navigation/routers';
+import {parse} from 'search-params';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -59,24 +60,15 @@ const NavigationRoot = () => {
     },
   };
 
-  function getParamsFromQuery(query: string): {[name: string]: string} {
-    const paramArr = query.slice(query.indexOf('?') + 1).split('&');
-    const params: {[name: string]: string} = {};
-    paramArr.map((param) => {
-      const [key, val] = param.split('=');
-      params[key] = val.replace('%20', ' ');
-    });
-    return params;
-  }
-
-  function stateFromWidget(params: {[name: string]: string}): ResultState {
+  function getResultStateFromPath(path: string): ResultState {
+    const params = parse(path);
     let destination: PartialRoute<any>[] | undefined;
 
     if (departuresV2Enabled) {
       destination = [
         {
           // Index is needed so that the user can go back after
-          //opening the app with the widget when it was not open previously
+          // opening the app with the widget when it was not open previously
           index: 0,
           name: 'DeparturesScreen',
         },
@@ -161,12 +153,12 @@ const NavigationRoot = () => {
               },
             },
             getStateFromPath(path, config) {
-              //If the path is not from the widget, behave as usual
+              // If the path is not from the widget, behave as usual
               if (!path.includes('widget')) {
                 return getStateFromPath(path, config);
               }
 
-              //User get redirected to add new favorite departure
+              // User get redirected to add new favorite departure
               if (path.includes('addFavoriteDeparture')) {
                 return {
                   routes: [
@@ -190,10 +182,8 @@ const NavigationRoot = () => {
                 } as ResultState;
               }
 
-              const params = getParamsFromQuery(path);
-
-              //Get redirected to the preferred departures view
-              return stateFromWidget(params);
+              // Get redirected to the preferred departures view
+              return getResultStateFromPath(path);
             },
           }}
         >
