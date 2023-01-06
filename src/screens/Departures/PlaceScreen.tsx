@@ -94,7 +94,7 @@ export default function PlaceScreen({
         <FullScreenHeader title={place.name} leftButton={{type: 'back'}} />
         <MessageBox
           style={styles.messageBox}
-          type={'error'}
+          type="error"
           message={t(DeparturesTexts.message.resultNotFound)}
         ></MessageBox>
       </View>
