@@ -55,12 +55,7 @@ export function InternalLabeledSectionItem({
 
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   icon: {marginRight: theme.spacings.small},
-  label: {
-    // @TODO Find a better way to do this.
-    minWidth: 60 - theme.spacings.medium,
-    flex: 1,
-    flexWrap: 'wrap',
-  },
+  label: {flex: 1},
   subtext: {
     marginTop: theme.spacings.small,
   },

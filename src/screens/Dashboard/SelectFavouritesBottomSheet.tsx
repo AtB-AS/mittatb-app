@@ -142,9 +142,10 @@ const SelectFavouritesBottomSheet = ({
 
             <View>
               {updatedFavorites &&
-                updatedFavorites.map((favorite, index) => {
+                updatedFavorites.map((favorite) => {
                   return (
                     <View key={favorite.id}>
+                      <SectionSeparator />
                       <SelectableFavouriteDeparture
                         handleSwitchFlip={handleSwitchFlip}
                         favouriteId={favorite.id}
@@ -166,9 +167,6 @@ const SelectFavouritesBottomSheet = ({
                           favorite.lineTransportationSubMode
                         }
                       />
-                      {favouriteItems.length - 1 !== index && (
-                        <SectionSeparator />
-                      )}
                     </View>
                   );
                 })}
