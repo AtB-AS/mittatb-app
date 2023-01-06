@@ -624,13 +624,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = $(APP_VERSION);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = no.mittatb.debug;
+				PRODUCT_BUNDLE_IDENTIFIER = $(IOS_BUNDLE_IDENTIFIER);
 				PRODUCT_NAME = AtB;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development no.mittatb.debug";
