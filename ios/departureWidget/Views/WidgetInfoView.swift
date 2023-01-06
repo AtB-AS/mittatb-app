@@ -29,7 +29,16 @@ struct WidgetInfoView: View {
 
     var body: some View {
         if viewModel.entry.state == .noFavouriteDepartures {
-            Text("must_choose_favorite").padding()
+            switch widgetFamily {
+            case .systemMedium:
+                NoFavoriteViewMedium()
+
+            case .systemSmall:
+                NoFavoriteViewSmall()
+            default:
+                Text("Error")
+            }
+
         } else {
             GeometryReader { geometry in
                 ZStack {
@@ -38,7 +47,7 @@ struct WidgetInfoView: View {
                         Text("From \(quayName)")
                             .lineLimit(1)
                             .frame(width: geometry.size.width - (K.padding * 2), alignment: .leading)
-                            .font(DefaultFonts.body)
+                            .font(DefaultFonts.boldHeader)
 
                         Spacer()
                         if widgetFamily == .systemMedium {
@@ -75,14 +84,14 @@ struct WidgetInfoView: View {
                         if viewModel.entry.state == .noDepartureQuays {
                             HStack {
                                 Spacer()
-                                Text("no_departures").font(DefaultFonts.body)
+                                Text("no_departures").font(DefaultFonts.bold)
                                 Spacer()
                             }.frame(maxWidth: .infinity)
                                 .lineLimit(1)
                                 .padding(8)
                                 .background(Color("TimeTileBackgroundColor"))
                                 .cornerRadius(8)
-                                .font(DefaultFonts.subtitle)
+                                .font(DefaultFonts.boldHeader)
                         } else {
                             DepartureTimesView(aimedTimes: aimedTimes)
                         }

@@ -267,7 +267,7 @@ enum EntryState {
 struct Entry: TimelineEntry {
     let date: Date
     let favouriteDeparture: FavouriteDeparture?
-    let quayGroup: QuayGroup?
+    let stopPlaceGroup: StopPlaceGroup?
     let state: EntryState
 }
 
@@ -345,11 +345,24 @@ extension FavouriteDeparture {
     )
 }
 
+extension StopPlaceGroup {
+    static let dummy = StopPlaceGroup(
+        stopPlace: StopPlaceInfo(
+            id: "",
+            description: "",
+            name: "Solsiden",
+            latitude: 1.0,
+            longitude: 1.0
+        ),
+        quays: [QuayGroup.dummy]
+    )
+}
+
 extension QuayGroup {
     static let dummy = QuayGroup(
         quay: QuayInfo(
-            id: "",
-            name: "Solsiden",
+            id: "NSR:Quay:71184",
+            name: "Prinsens gate",
             description: nil,
             publicCode: "",
             latitude: 63.43457,
@@ -360,11 +373,11 @@ extension QuayGroup {
                 lineInfo:
                 DepartureLineInfo(
                     lineId: "",
-                    lineName: "Kattem via sentrum-Tiller",
+                    lineName: "Ranheim",
                     lineNumber: "1",
                     transportMode: TransportMode.bus,
                     transportSubmode: TransportSubMode.nightBus,
-                    quayId: ""
+                    quayId: "NSR:Quay:71184"
                 ),
                 departures: [Int](0 ..< 10).map { index in
                     let timeInterval = CGFloat(index) * 300

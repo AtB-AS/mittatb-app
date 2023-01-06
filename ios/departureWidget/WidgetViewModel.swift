@@ -6,7 +6,15 @@ struct WidgetViewModel {
     // MARK: Private vars
 
     private var quayGroup: QuayGroup? {
-        entry.quayGroup
+        // Api may return empty quays, therefore needs to find the correct one
+        guard let quayGroup = entry.stopPlaceGroup?.quays.first(where: { $0.quay.id == entry.favouriteDeparture?.quayId }) else {
+            return nil
+        }
+        return quayGroup
+    }
+
+    private var stopPlaceInfo: StopPlaceInfo? {
+        entry.stopPlaceGroup?.stopPlace
     }
 
     private var departureGroup: DepartureGroup? {
@@ -33,8 +41,37 @@ struct WidgetViewModel {
 
     let entry: Entry
 
+    var deepLink: String {
+        guard let appScheme = Bundle.app.object(forInfoDictionaryKey: "AppScheme") else {
+            return ("atb-dev://error")
+        }
+
+        if entry.state == .noFavouriteDepartures {
+            return "\(appScheme)://widget/addFavoriteDeparture"
+        }
+
+        guard let stopPlace = stopPlaceInfo, let quay = quayGroup?.quay else {
+            return String("error")
+        }
+
+        var urlComponents = URLComponents(string: "\(appScheme)://widget")
+        urlComponents?.queryItems = [
+            URLQueryItem(name: "stopId", value: stopPlace.id),
+            URLQueryItem(name: "stopName", value: stopPlace.name),
+            URLQueryItem(name: "quayId", value: quay.id),
+            URLQueryItem(name: "latitude", value: String(stopPlace.latitude)),
+            URLQueryItem(name: "longitude", value: String(stopPlace.longitude)),
+        ]
+
+        guard let url = urlComponents?.string else {
+            return String("error")
+        }
+
+        return url
+    }
+
     var quayName: String? {
-        entry.favouriteDeparture?.quayName ?? entry.quayGroup?.quay.name
+        entry.favouriteDeparture?.quayName ?? quayGroup?.quay.name
     }
 
     var lineDetails: String? {

@@ -1,11 +1,10 @@
 import SwiftUI
 
 struct DefaultFonts {
-    private static let fontSize: CGFloat = 14.0
-    static var scaledFontSize: CGFloat {
-        UIFontMetrics.default.scaledValue(for: fontSize)
+    private func scaledFontSize(size: CGFloat) -> CGFloat {
+        UIFontMetrics.default.scaledValue(for: size)
     }
 
-    static let body = Font.system(size: DefaultFonts.scaledFontSize)
-    static let subtitle = body.weight(Font.Weight.bold)
+    static let bold = Font.system(size: 14).weight(Font.Weight.bold)
+    static let boldHeader = Font.system(size: 16).weight(Font.Weight.bold)
 }
