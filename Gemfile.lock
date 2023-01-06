@@ -76,6 +76,8 @@ GEM
     commander (4.6.0)
       highline (~> 2.0.0)
     concurrent-ruby (1.1.10)
+    configure_extensions (1.0.0)
+      xcodeproj (~> 1.2)
     declarative (0.0.20)
     digest-crc (0.6.4)
       rake (>= 12.0.0, < 14.0.0)
@@ -281,6 +283,7 @@ PLATFORMS
 
 DEPENDENCIES
   cocoapods (= 1.11.3)
+  configure_extensions
   dotenv
   fastlane
   fastlane-plugin-appcenter
