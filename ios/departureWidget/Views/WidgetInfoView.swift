@@ -46,7 +46,7 @@ struct WidgetInfoView: View {
                         let quayName = viewModel.quayName ?? NSLocalizedString("no_quay_name", comment: "")
                         Text("From \(quayName)")
                             .lineLimit(1)
-                            .frame(width: geometry.size.width - (K.padding * 2), alignment: .leading)
+                            .frame(width: geometry.size.width - (K.padding * 2), alignment: widgetFamily == .systemMedium ? .leading : .center)
                             .font(DefaultFonts.boldHeader)
 
                         Spacer()
@@ -59,7 +59,8 @@ struct WidgetInfoView: View {
                         if widgetFamily == .systemSmall {
                             Text(viewModel.lineDetails ?? noLineInfoText)
                                 .lineLimit(2)
-                                .multilineTextAlignment(.leading)
+                                .multilineTextAlignment(.center)
+                                .frame(width: geometry.size.width - (K.padding * 2), alignment: .center)
                                 .foregroundColor(K.lineInformationColor)
                         } else {
                             HStack {
