@@ -118,11 +118,6 @@ export type PaymentResponse = {
   status: PaymentStatus;
 };
 
-export type CancelPaymentRequest = {
-  payment_id: number;
-  transaction_id: number;
-};
-
 export type OfferPrice = {
   amount: string | null;
   amount_float: number | null;

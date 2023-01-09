@@ -1,7 +1,7 @@
 import {OfferEndpoint} from '@atb/screens/Ticketing/FareContracts/utils';
 import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
-import {CancelPaymentRequest, ReserveOfferRequestBody} from '.';
+import {ReserveOfferRequestBody} from '.';
 import {client} from '../api';
 import {
   Offer,
@@ -123,8 +123,12 @@ export async function cancelPayment(
   transaction_id: number,
 ): Promise<void> {
   const url = `ticket/v3/payments/${payment_id}/transactions/${transaction_id}/cancel`;
-  await client.put<void>(url, {} as CancelPaymentRequest, {
-    authWithIdToken: true,
-    retry: true,
-  });
+  await client.put<void>(
+    url,
+    {},
+    {
+      authWithIdToken: true,
+      retry: true,
+    },
+  );
 }
