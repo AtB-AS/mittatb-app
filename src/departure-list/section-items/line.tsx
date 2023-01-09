@@ -131,15 +131,15 @@ export default function LineItem({
             {title}
           </ThemeText>
         </TouchableOpacity>
-        <ToggleFavouriteDeparture
-          existingFavorite={existingFavorite}
-          onMarkFavourite={onMarkFavourite}
-          toggleFavouriteAccessibilityLabel={
-            mode === 'departures'
-              ? toggleFavouriteAccessibilityLabel
-              : undefined
-          }
-        />
+        {mode === 'departures' && (
+          <ToggleFavouriteDeparture
+            existingFavorite={existingFavorite}
+            onMarkFavourite={onMarkFavourite}
+            toggleFavouriteAccessibilityLabel={
+              toggleFavouriteAccessibilityLabel
+            }
+          />
+        )}
       </View>
       <ScrollView
         horizontal
