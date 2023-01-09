@@ -50,6 +50,10 @@ export default function PlaceScreen({
     place.quays === undefined ? [place.id] : undefined,
   );
 
+  if (state.data && place.quays === undefined) {
+    place = state.data.stopPlaces[0];
+  }
+
   const navigateToDetails = (
     serviceJourneyId: string,
     serviceDate: string,
@@ -99,8 +103,6 @@ export default function PlaceScreen({
         />
       </View>
     );
-  } else if (state.data && place.quays === undefined) {
-    place = state.data.stopPlaces[0];
   }
 
   return (
