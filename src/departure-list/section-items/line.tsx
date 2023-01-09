@@ -1,29 +1,18 @@
 import {
   DepartureGroup,
-  DepartureLineInfo,
   DepartureTime,
   QuayInfo,
   QuaySectionMode,
   StopPlaceInfo,
 } from '@atb/api/departures/types';
-import SvgFavorite from '@atb/assets/svg/mono-icons/places/Favorite';
-import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
-import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
-import {screenReaderPause} from '@atb/components/text';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
 import {
   SectionItemProps,
   useSectionItem,
   useSectionStyle,
 } from '@atb/components/sections';
-import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIcon} from '@atb/components/transportation-icon';
-import FavoriteDialogSheet from '@atb/departure-list/section-items/FavoriteDialogSheet';
-import {useFavorites} from '@atb/favorites';
-import {StoredType} from '@atb/favorites/storage';
-import {FavoriteDeparture} from '@atb/favorites/types';
 import {NearbyScreenProps} from '@atb/screens/Nearby/types';
 import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -44,18 +33,15 @@ import {
 import insets from '@atb/utils/insets';
 import {TFunc} from '@leile/lobo-t';
 import {useNavigation} from '@react-navigation/native';
-import React, {useRef} from 'react';
-import {
-  AccessibilityInfo,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React from 'react';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 import {getSvgForMostCriticalSituationOrNotice} from '@atb/situations';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {filterNotices} from '@atb/screens/TripDetails/utils';
+import {useOnMarkFavouriteDepartures} from '@atb/screens/Departures/components/use-on-mark-favourite-departures';
+import ToggleFavouriteDeparture from '@atb/screens/Departures/components/ToggleFavouriteDeparture';
 
 type RootProps = NearbyScreenProps<'NearbyRoot'>;
 
@@ -81,6 +67,13 @@ export default function LineItem({
   // @TODO this shouldn't refer to useNavigation but instead have "onPress"
   const navigation = useNavigation<RootProps['navigation']>();
   const {t, language} = useTranslation();
+
+  const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
+    useOnMarkFavouriteDepartures(
+      {...group.lineInfo, id: group.lineInfo?.lineId},
+      quay,
+      stop,
+    );
 
   if (hasNoDeparturesOnGroup(group)) {
     return null;
@@ -138,11 +131,14 @@ export default function LineItem({
             {title}
           </ThemeText>
         </TouchableOpacity>
-        <ToggleFavoriteDepartureButton
-          line={group.lineInfo}
-          stop={stop}
-          quay={quay}
-          mode={mode}
+        <ToggleFavouriteDeparture
+          existingFavorite={existingFavorite}
+          onMarkFavourite={onMarkFavourite}
+          toggleFavouriteAccessibilityLabel={
+            mode === 'departures'
+              ? toggleFavouriteAccessibilityLabel
+              : undefined
+          }
         />
       </View>
       <ScrollView
@@ -353,109 +349,3 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
     paddingLeft: theme.spacings.medium,
   },
 }));
-
-type FavoriteStarProps = {
-  line?: DepartureLineInfo;
-  stop: StopPlaceInfo;
-  quay: QuayInfo;
-  mode: QuaySectionMode;
-};
-function ToggleFavoriteDepartureButton({
-  line,
-  stop,
-  quay,
-  mode = 'departures',
-}: FavoriteStarProps) {
-  const {getFavoriteDeparture, addFavoriteDeparture, removeFavoriteDeparture} =
-    useFavorites();
-  const {t} = useTranslation();
-  const styles = useItemStyles();
-  const closeRef = useRef(null);
-
-  const {open: openBottomSheet} = useBottomSheet();
-
-  if (mode === 'frontpage') {
-    return null;
-  }
-  if (!line) {
-    return null;
-  }
-
-  const existingFavorite = getFavoriteDeparture({...line, stopId: stop.id});
-
-  const onFavoritePress = async () => {
-    if (existingFavorite) {
-      await removeFavoriteDeparture(existingFavorite.id);
-      AccessibilityInfo.announceForAccessibility(
-        t(NearbyTexts.results.lines.favorite.message.removed),
-      );
-    } else {
-      openBottomSheet(
-        (close, focusRef) => (
-          <FavoriteDialogSheet
-            lineNumber={line.lineNumber}
-            lineName={line.lineName}
-            addFavorite={addFavorite}
-            close={close}
-            ref={focusRef}
-          />
-        ),
-        closeRef,
-      );
-    }
-  };
-
-  const addFavorite = async (forSpecificLineName: boolean) => {
-    await addFavoriteDeparture({
-      lineId: line.lineId,
-      lineName: forSpecificLineName ? line.lineName : undefined,
-      lineLineNumber: line.lineNumber,
-      lineTransportationMode: line.transportMode,
-      lineTransportationSubMode: line.transportSubmode,
-      quayName: quay.name,
-      quayPublicCode: quay.publicCode,
-      quayId: quay.id,
-      stopId: stop.id,
-    });
-    AccessibilityInfo.announceForAccessibility(
-      t(NearbyTexts.results.lines.favorite.message.saved),
-    );
-  };
-
-  const label = existingFavorite
-    ? t(
-        NearbyTexts.results.lines.favorite.removeFavorite(
-          `${line.lineNumber} ${existingFavorite.lineName ?? ''}`,
-          stop.name,
-        ),
-      )
-    : t(
-        NearbyTexts.results.lines.favorite.addFavorite(
-          `${line.lineNumber} ${line.lineName}`,
-          stop.name,
-        ),
-      );
-  return (
-    <TouchableOpacity
-      ref={closeRef}
-      onPress={onFavoritePress}
-      accessibilityRole="checkbox"
-      accessibilityState={{checked: !!existingFavorite}}
-      accessibilityLabel={label}
-      hitSlop={insets.symmetric(14, 8)}
-      style={styles.favoriteButton}
-    >
-      <ThemeIcon svg={getFavoriteIcon(existingFavorite)} />
-    </TouchableOpacity>
-  );
-}
-
-const getFavoriteIcon = (existingFavorite?: StoredType<FavoriteDeparture>) => {
-  if (!existingFavorite) {
-    return SvgFavorite;
-  } else if (existingFavorite.lineName) {
-    return SvgFavoriteSemi;
-  } else {
-    return SvgFavoriteFill;
-  }
-};
