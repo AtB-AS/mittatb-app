@@ -12,11 +12,12 @@ import {
 import {useEffect, useMemo, useReducer} from 'react';
 import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {FareProductTypeConfig} from '../FareContracts/utils';
 
 export type RecentFareContract = {
   preassignedFareProduct: PreassignedFareProduct;
-  fromTariffZone: TariffZone;
-  toTariffZone: TariffZone;
+  fromTariffZone?: TariffZone;
+  toTariffZone?: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
 };
 
@@ -90,6 +91,7 @@ const mapUsers = (
 const mapBackendRecentFareContracts = (
   recentFareContract: RecentFareContractBackend,
   preassignedFareProducts: PreassignedFareProduct[],
+  fareProductTypeConfigs: FareProductTypeConfig[],
   tariffZones: TariffZone[],
   userProfiles: UserProfile[],
 ): RecentFareContract | null => {
@@ -98,6 +100,32 @@ const mapBackendRecentFareContracts = (
     recentFareContract.products[0],
   );
 
+  if (!preassignedFareProduct) {
+    return null;
+  }
+
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (c) => c.type === preassignedFareProduct.type,
+  );
+
+  if (!fareProductTypeConfig) {
+    return null;
+  }
+
+  const userProfilesWithCount = mapUsers(
+    recentFareContract.users,
+    userProfiles,
+  );
+
+  if (fareProductTypeConfig.configuration.zoneSelectionMode === 'none') {
+    return {
+      preassignedFareProduct,
+      fromTariffZone: undefined,
+      toTariffZone: undefined,
+      userProfilesWithCount,
+    };
+  }
+
   const fromTariffZone = findReferenceDataById(
     tariffZones,
     recentFareContract.zones[0],
@@ -105,11 +133,6 @@ const mapBackendRecentFareContracts = (
   const toTariffZone = findReferenceDataById(
     tariffZones,
     recentFareContract.zones.slice(-1)[0],
-  );
-
-  const userProfilesWithCount = mapUsers(
-    recentFareContract.users,
-    userProfiles,
   );
 
   if (
@@ -150,8 +173,8 @@ const isRecentFareContractEqual = (
   t2: RecentFareContract,
 ) =>
   t1.preassignedFareProduct.id === t2.preassignedFareProduct.id &&
-  t1.fromTariffZone.id === t2.fromTariffZone.id &&
-  t1.toTariffZone.id === t2.toTariffZone.id &&
+  t1.fromTariffZone?.id === t2.fromTariffZone?.id &&
+  t1.toTariffZone?.id === t2.toTariffZone?.id &&
   isUsersEqual(t1.userProfilesWithCount, t2.userProfilesWithCount);
 
 const containsFareContract = (
@@ -175,6 +198,7 @@ const containsFareContract = (
 const mapToLastThreeUniqueRecentFareContracts = (
   recentFareContracts: RecentFareContractBackend[],
   preassignedFareProducts: PreassignedFareProduct[],
+  fareProductTypeConfigs: FareProductTypeConfig[],
   tariffZones: TariffZone[],
   userProfiles: UserProfile[],
 ): RecentFareContract[] => {
@@ -184,6 +208,7 @@ const mapToLastThreeUniqueRecentFareContracts = (
       const maybeFareContract = mapBackendRecentFareContracts(
         recentFareContract,
         preassignedFareProducts,
+        fareProductTypeConfigs,
         tariffZones,
         userProfiles,
       );
@@ -202,8 +227,12 @@ const mapToLastThreeUniqueRecentFareContracts = (
 export default function useRecentFareContracts() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const {fareContracts} = useTicketingState();
-  const {preassignedFareProducts, tariffZones, userProfiles} =
-    useFirestoreConfiguration();
+  const {
+    preassignedFareProducts,
+    fareProductTypeConfigs,
+    tariffZones,
+    userProfiles,
+  } = useFirestoreConfiguration();
 
   const fetchRecentFareContracts = async () => {
     dispatch({type: 'FETCH'});
@@ -229,6 +258,7 @@ export default function useRecentFareContracts() {
       mapToLastThreeUniqueRecentFareContracts(
         state.recentFareContracts,
         preassignedFareProducts,
+        fareProductTypeConfigs,
         tariffZones,
         userProfiles,
       ),
