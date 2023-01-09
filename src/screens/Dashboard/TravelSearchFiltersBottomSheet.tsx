@@ -60,11 +60,10 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
           <Sections.HeaderSectionItem
             text={t(TripSearchTexts.filters.modes.heading)}
           />
-          <Sections.ActionSectionItem
-            mode="toggle"
+          <Sections.ToggleSectionItem
             text={t(TripSearchTexts.filters.modes.all)}
-            checked={selectedModes?.length === filters.transportModes?.length}
-            onPress={(checked) => {
+            value={selectedModes?.length === filters.transportModes?.length}
+            onValueChange={(checked) => {
               setSelectedModes(checked ? filters.transportModes : []);
             }}
           />
@@ -75,9 +74,8 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
               language,
             );
             return text ? (
-              <Sections.ActionSectionItem
+              <Sections.ToggleSectionItem
                 key={option.id}
-                mode="toggle"
                 text={text}
                 leftIcon={
                   getTransportModeSvg(
@@ -86,8 +84,8 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                   ) || Add
                 }
                 subtext={description}
-                checked={selectedModes?.some(({id}) => id === option.id)}
-                onPress={(checked) => {
+                value={selectedModes?.some(({id}) => id === option.id)}
+                onValueChange={(checked) => {
                   setSelectedModes(
                     checked
                       ? selectedModes?.concat(option)

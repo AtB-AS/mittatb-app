@@ -1,4 +1,4 @@
-import {FixedSwitch} from '@atb/components/switch';
+import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
 import {usePreferences} from '@atb/preferences';
 import React from 'react';
@@ -37,7 +37,7 @@ export default function InfoToggle({
         >
           {t(PurchaseOverviewTexts.infoToggle.label)}
         </ThemeText>
-        <FixedSwitch
+        <Toggle
           value={!hideDescriptions}
           onValueChange={(checked) => {
             setPreference({hideTravellerDescriptions: !checked});

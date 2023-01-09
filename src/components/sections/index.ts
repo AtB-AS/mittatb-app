@@ -12,6 +12,7 @@ export {GenericClickableSectionItem} from './items/GenericClickableSectionItem';
 export {FavoriteSectionItem} from './items/FavoriteSectionItem';
 export {FavoriteDepartureSectionItem} from './items/FavoriteDepartureSectionItem';
 export {ExpandableSectionItem} from './items/ExpandableSectionItem';
+export {ToggleSectionItem} from './items/ToggleSectionItem';
 
 // Inputs
 export {TimeInputSectionItem} from './items/time-input';
