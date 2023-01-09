@@ -135,7 +135,7 @@ describe('Departures v2', () => {
 
     // Choose a stop place on the line
     await tapByText(nextDepartureStop + '');
-    await expectIdToHaveText('quaySectionName', nextDepartureStop);
+    await expectIdToHaveText('quaySection0Name', nextDepartureStop);
 
     // Go back
     await goBack();

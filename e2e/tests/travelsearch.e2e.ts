@@ -121,7 +121,7 @@ describe('Travel Search', () => {
     );
     await tapByText(intermediateStop);
     await expectToBeVisibleByText(intermediateStop);
-    await expectIdToHaveText('quaySectionName', intermediateStop);
+    await expectIdToHaveText('quaySection0Name', intermediateStop);
 
     // Go back
     await goBack();
