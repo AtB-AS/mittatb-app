@@ -16,6 +16,7 @@ type Props = SectionItemProps<
     text: string;
     textType?: TextNames;
     showIconText: boolean;
+    testID?: string;
     accessibility?: AccessibilityProps;
   } & (
     | {
@@ -39,6 +40,7 @@ export function ExpandableSectionItem({
   textType,
   showIconText,
   accessibility,
+  testID,
   ...props
 }: Props) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -73,6 +75,7 @@ export function ExpandableSectionItem({
         accessibilityState={{
           expanded: expanded,
         }}
+        testID={testID}
         {...accessibility}
       >
         <ThemeText style={contentContainer} type={textType}>
