@@ -91,6 +91,10 @@ const DeparturesTexts = {
       'Kunne ikke laste avganger.',
       'Could not load the departures.',
     ),
+    resultNotFound: _(
+      'Kunne ikke finne holdeplassen du leter etter.',
+      'Could not find the stop place you are looking for.',
+    ),
     noData: _('Ingen informasjon', 'No data'),
   },
   button: {

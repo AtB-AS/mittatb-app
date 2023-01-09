@@ -12,12 +12,10 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {InternalLabeledSectionItem} from './InternalLabeledSectionItem';
-import {FixedSwitch} from '@atb/components/switch';
 import {InteractiveColor} from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 
-type ActionModes = 'check' | 'toggle';
+type ActionModes = 'check';
 type Props = SectionItemProps<{
   text: string;
   subtext?: string;
@@ -48,26 +46,6 @@ export function ActionSectionItem({
   const {theme} = useTheme();
   const interactiveColor =
     color && checked ? theme.interactive[color].active : undefined;
-
-  if (mode === 'toggle') {
-    return (
-      <InternalLabeledSectionItem
-        label={text}
-        leftIcon={leftIcon}
-        accessibleLabel={false}
-        subtext={hideSubtext ? undefined : subtext}
-        {...props}
-      >
-        <FixedSwitch
-          value={checked}
-          onValueChange={(value) => onPress?.(value)}
-          accessibilityLabel={text + (subtext ? ',' + subtext : '')}
-          testID={testID}
-          {...accessibility}
-        />
-      </InternalLabeledSectionItem>
-    );
-  }
 
   const role: AccessibilityRole = mode === 'check' ? 'radio' : 'switch';
   const stateName = mode === 'check' ? 'selected' : 'expanded';

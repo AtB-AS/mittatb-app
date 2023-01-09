@@ -12,7 +12,7 @@ type Props = Pick<SwitchProps, 'value' | 'onValueChange' | 'testID'> & {
 // A bug in RN borks Switch animations when Switch is used inside react navigation
 // for Android. A small delay to render and setting value through state
 // seems to mitigate the bug
-export function FixedSwitch({
+export function Toggle({
   value,
   onValueChange,
   interactiveColor = 'interactive_1',

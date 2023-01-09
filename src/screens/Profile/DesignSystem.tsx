@@ -306,11 +306,10 @@ export default function DesignSystem() {
             leftIcon={Bus}
             checked
           />
-          <Sections.ActionSectionItem
+          <Sections.ToggleSectionItem
             text="Some short text"
-            mode="toggle"
             leftIcon={Bus}
-            onPress={() => {}}
+            onValueChange={() => {}}
           />
           <Sections.ActionSectionItem
             text="Some short text"

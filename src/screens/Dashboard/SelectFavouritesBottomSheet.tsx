@@ -3,7 +3,7 @@ import {ScrollView, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button, ButtonGroup} from '@atb/components/button';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {FixedSwitch} from '@atb/components/switch';
+import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
@@ -82,7 +82,7 @@ const SelectableFavouriteDeparture = ({
       </View>
 
       <View>
-        <FixedSwitch
+        <Toggle
           importantForAccessibility="no"
           value={active}
           onValueChange={(value) => handleSwitchFlip(favouriteId, value)}
