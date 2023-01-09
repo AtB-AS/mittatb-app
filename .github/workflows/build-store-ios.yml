@@ -43,7 +43,7 @@ jobs:
       - name: Run fastlane build
         run: bundle exec fastlane ios build
         env:
-          # A workaround for Github Actions which breaks for a timeout in some cases, 
+          # A workaround for Github Actions which breaks for a timeout in some cases,
           # so this sets a higher value for TIMEOUT and reduces the number of retries
           FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
           FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 1
@@ -67,7 +67,6 @@ jobs:
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Register app version
-        if: matrix.org == 'atb'
         run: sh ./scripts/ios/register-app-version.sh
         env:
           ENTUR_CLIENT_ID: ${{ secrets.ATB_ENTUR_CLIENT_ID_PRODUCTION}}
