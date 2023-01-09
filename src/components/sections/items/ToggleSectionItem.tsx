@@ -73,7 +73,7 @@ export function ToggleSectionItem({
         )}
       </View>
       <Toggle
-        importantForAccessibility={'no-hide-descendants'}
+        importantForAccessibility="no-hide-descendants"
         accessible={false}
         value={checked}
         onValueChange={onChange}
