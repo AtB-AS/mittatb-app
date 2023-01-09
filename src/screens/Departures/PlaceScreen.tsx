@@ -99,6 +99,8 @@ export default function PlaceScreen({
         />
       </View>
     );
+  } else if (state.data && place.quays === undefined) {
+    place = state.data.stopPlaces[0];
   }
 
   return (
