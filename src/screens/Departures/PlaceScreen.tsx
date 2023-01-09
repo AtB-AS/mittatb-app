@@ -51,11 +51,17 @@ export default function PlaceScreen({
   );
   const isFocused = useIsFocused();
 
+  let missingStopData = false;
+
   if (state.data && place.quays === undefined) {
-    place = state.data.stopPlaces[0];
+    if (state.data.stopPlaces[0]) {
+      place = state.data.stopPlaces[0];
+    } else {
+      missingStopData = true;
+    }
   }
 
-  if (state.error || !place) {
+  if (state.error || missingStopData) {
     return (
       <View style={styles.container}>
         <FullScreenHeader title={place.name} leftButton={{type: 'back'}} />
