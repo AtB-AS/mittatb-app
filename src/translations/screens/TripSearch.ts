@@ -195,6 +195,32 @@ const TripSearchTexts = {
       },
     },
   },
+  onboarding: {
+    title: _('Filter i reisesøk 🎉', 'Filters in travel search 🎉'),
+    body: {
+      part1: _(
+        'Nå kan du bruke filter i reisesøk og få reiseforslag tilpasset dine behov.',
+        'You can now use filters in travel searches and get travel suggestions adapted to your needs.',
+      ),
+      part2: _(
+        'Velg hvilke transportmiddel du ønsker å reise med.',
+        'Select the means of transport you want to use for your trip.',
+      ),
+    },
+    button: _('Den er grei!', 'Sounds good!'),
+    a11yLabel: _(
+      'Filter i reisesøk! Nå kan du bruke filter i reisesøk og få reiseforslag tilpasset dine behov. Velg hvilke transportmiddel du ønsker å reise med.',
+      'Filters in travel search! You can now use filters in travel searches and get travel suggestions adapted to your needs. Select the means of transport you want to use for your trip.',
+    ),
+  },
+  filters: {
+    heading: _('Filter', 'Filter'),
+    modes: {
+      heading: _('Hva vil du reise med?', 'What do you want to travel with?'),
+      all: _('Alle', 'All'),
+    },
+    save: _('Lagre valg', 'Save selection'),
+  },
 };
 
 export default TripSearchTexts;

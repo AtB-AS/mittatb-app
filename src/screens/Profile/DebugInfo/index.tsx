@@ -112,11 +112,10 @@ export default function DebugInfo() {
 
       <ScrollView testID="debugInfoScrollView">
         <Sections.Section withPadding withTopPadding>
-          <Sections.ActionSectionItem
-            mode="toggle"
+          <Sections.ToggleSectionItem
             text="Toggle test-ID"
-            checked={showTestIds}
-            onPress={(showTestIds) => {
+            value={showTestIds}
+            onValueChange={(showTestIds) => {
               setPreference({showTestIds});
             }}
           />
@@ -165,6 +164,15 @@ export default function DebugInfo() {
             onPress={() =>
               storage.set(
                 StorageModelKeysEnum.HasReadDeparturesV2Onboarding,
+                JSON.stringify(false),
+              )
+            }
+          />
+          <Sections.LinkSectionItem
+            text="Reset has read filter onboarding"
+            onPress={() =>
+              storage.set(
+                StorageModelKeysEnum.HasReadTravelSearchFilterOnboarding,
                 JSON.stringify(false),
               )
             }

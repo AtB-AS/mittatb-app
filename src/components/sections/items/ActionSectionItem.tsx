@@ -7,24 +7,22 @@ import {
 } from 'react-native';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {SectionTexts, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {NavigationIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import {InternalLabeledSectionItem} from './InternalLabeledSectionItem';
-import {FixedSwitch} from '@atb/components/switch';
 import {InteractiveColor} from '@atb/theme/colors';
+import {SvgProps} from 'react-native-svg';
 
-type ActionModes = 'check' | 'toggle' | 'heading-expand';
+type ActionModes = 'check';
 type Props = SectionItemProps<{
   text: string;
   subtext?: string;
   warningText?: string;
   hideSubtext?: boolean;
-  onPress?(checked: boolean): void;
+  onPress(checked: boolean): void;
+  leftIcon?: (props: SvgProps) => JSX.Element;
   checked?: boolean;
   mode?: ActionModes;
   accessibility?: AccessibilityProps;
@@ -36,6 +34,7 @@ export function ActionSectionItem({
   warningText,
   hideSubtext,
   onPress,
+  leftIcon,
   mode = 'check',
   checked = false,
   accessibility,
@@ -45,6 +44,7 @@ export function ActionSectionItem({
 }: Props) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
+  const styles = useStyles();
   const {theme} = useTheme();
   const interactiveColor = color ? theme.interactive[color] : undefined;
   const activeColor =
@@ -53,30 +53,12 @@ export function ActionSectionItem({
     ? interactiveColor.destructive
     : undefined;
 
-  if (mode === 'toggle') {
-    return (
-      <InternalLabeledSectionItem
-        label={text}
-        accessibleLabel={false}
-        {...props}
-      >
-        <FixedSwitch
-          value={checked}
-          onValueChange={(value) => onPress?.(value)}
-          accessibilityLabel={text}
-          testID={testID}
-          {...accessibility}
-        />
-      </InternalLabeledSectionItem>
-    );
-  }
-
   const role: AccessibilityRole = mode === 'check' ? 'radio' : 'switch';
   const stateName = mode === 'check' ? 'selected' : 'expanded';
 
   return (
     <TouchableOpacity
-      onPress={() => onPress?.(!checked)}
+      onPress={() => onPress(!checked)}
       style={[
         style.spaceBetween,
         topContainer,
@@ -93,11 +75,10 @@ export function ActionSectionItem({
       }}
       {...accessibility}
     >
+      {leftIcon && <ThemeIcon svg={leftIcon} style={styles.leftIcon} />}
       <View style={{flexShrink: 1}}>
         <ThemeText
-          type={
-            mode === 'heading-expand' ? 'body__primary--bold' : 'body__primary'
-          }
+          type="body__primary"
           style={[
             contentContainer,
             activeColor ? {color: activeColor.text} : undefined,
@@ -140,8 +121,6 @@ function ActionModeIcon({
   checked,
   color,
 }: Pick<Props, 'mode' | 'checked' | 'color'>) {
-  const style = useHeaderExpandStyle();
-  const {t} = useTranslation();
   const {theme} = useTheme();
 
   switch (mode) {
@@ -156,28 +135,11 @@ function ActionModeIcon({
         />
       );
     }
-    case 'heading-expand': {
-      const text = checked
-        ? t(SectionTexts.actionSectionItem.headingExpand.toggle.contract)
-        : t(SectionTexts.actionSectionItem.headingExpand.toggle.expand);
-      const icon = checked ? 'expand-less' : 'expand-more';
-      return (
-        <View style={style.headerExpandIconGroup}>
-          <ThemeText
-            style={style.headerExpandIconGroup__text}
-            type="body__secondary"
-          >
-            {text}
-          </ThemeText>
-          <NavigationIcon mode={icon} />
-        </View>
-      );
-    }
   }
   return null;
 }
 
-const useHeaderExpandStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   headerExpandIconGroup: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -185,5 +147,8 @@ const useHeaderExpandStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   headerExpandIconGroup__text: {
     marginRight: theme.spacings.xSmall,
+  },
+  leftIcon: {
+    marginRight: theme.spacings.small,
   },
 }));

@@ -27,7 +27,11 @@ import {
 } from '@atb/configuration/defaults';
 import {PaymentType} from '@atb/ticketing';
 import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
-import {mapToFareProductTypeConfigs} from './converters';
+import {
+  mapToFareProductTypeConfigs,
+  mapToTransportModeFilterOptions,
+} from './converters';
+import type {TravelSearchFiltersType} from '@atb/screens/Dashboard/types';
 
 type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
@@ -37,6 +41,7 @@ type ConfigurationContextState = {
   paymentTypes: PaymentType[];
   vatPercent: number;
   fareProductTypeConfigs: FareProductTypeConfig[];
+  travelSearchFilters: TravelSearchFiltersType | undefined;
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
@@ -47,6 +52,7 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   paymentTypes: defaultPaymentTypes,
   vatPercent: defaultVatPercent,
   fareProductTypeConfigs: defaultFareProductTypeConfig,
+  travelSearchFilters: undefined,
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
@@ -67,6 +73,8 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [fareProductTypeConfigs, setFareProductTypeConfigs] = useState<
     FareProductTypeConfig[]
   >(defaultFareProductTypeConfig);
+  const [travelSearchFilters, setTravelSearchFilters] =
+    useState<TravelSearchFiltersType>();
 
   useEffect(() => {
     firestore()
@@ -110,6 +118,12 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (fareProductTypeConfigs) {
             setFareProductTypeConfigs(fareProductTypeConfigs);
           }
+
+          const travelSearchFilters =
+            getTravelSearchFiltersFromSnapshot(snapshot);
+          if (travelSearchFilters) {
+            setTravelSearchFilters(travelSearchFilters);
+          }
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -129,6 +143,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       paymentTypes,
       vatPercent,
       fareProductTypeConfigs,
+      travelSearchFilters,
     };
   }, [
     preassignedFareProducts,
@@ -138,6 +153,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     paymentTypes,
     vatPercent,
     fareProductTypeConfigs,
+    travelSearchFilters,
   ]);
 
   return (
@@ -262,6 +278,25 @@ function getFareProductTypeConfigsFromSnapshot(
     ?.get('fareProductTypeConfigs');
   if (fareProductTypeConfigs !== undefined) {
     return mapToFareProductTypeConfigs(fareProductTypeConfigs);
+  }
+
+  return undefined;
+}
+
+function getTravelSearchFiltersFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): TravelSearchFiltersType | undefined {
+  const transportModeOptions = snapshot.docs
+    .find((doc) => doc.id == 'travelSearchFilters')
+    ?.get('transportModes');
+
+  const mappedTransportModes =
+    mapToTransportModeFilterOptions(transportModeOptions);
+
+  if (mappedTransportModes) {
+    return {
+      transportModes: mappedTransportModes,
+    };
   }
 
   return undefined;

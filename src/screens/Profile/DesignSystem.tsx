@@ -23,6 +23,7 @@ import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Info} from '@atb/assets/svg/color/icons/status';
 import {dictionary, useTranslation} from '@atb/translations';
+import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 
 export default function DesignSystem() {
   const style = useProfileHomeStyle();
@@ -55,7 +56,7 @@ export default function DesignSystem() {
         padding: theme.spacings.medium,
       }}
     >
-      {name}
+      {name} {color.text} / {color.background}
     </ThemeText>
   );
 
@@ -77,6 +78,20 @@ export default function DesignSystem() {
     const staticColor =
       theme.static.status[color as StaticColorByType<'status'>];
     return <Swatch color={staticColor} name={color} key={color} />;
+  });
+
+  const textSwatches = Object.keys(theme.text.colors).map((color) => {
+    const textColors = theme.text.colors;
+    return (
+      <Swatch
+        color={{
+          text: theme.static.background.background_0.background,
+          background: textColors[color as keyof typeof textColors],
+        }}
+        name={color}
+        key={color}
+      />
+    );
   });
 
   const radioSegmentsOptions = [
@@ -285,15 +300,24 @@ export default function DesignSystem() {
         <Sections.Section withPadding withTopPadding>
           <Sections.ActionSectionItem
             text="Some very long text over here which goes over multiple lines"
+            subtext="With a subtext"
             mode="check"
+            onPress={() => {}}
+            leftIcon={Bus}
             checked
           />
-          <Sections.ActionSectionItem text="Some short text" mode="toggle" />
+          <Sections.ToggleSectionItem
+            text="Some short text"
+            leftIcon={Bus}
+            onValueChange={() => {}}
+          />
           <Sections.ActionSectionItem
             text="Some short text"
             mode="check"
             checked
             type="compact"
+            leftIcon={Bus}
+            onPress={() => {}}
           />
         </Sections.Section>
 
@@ -422,6 +446,10 @@ export default function DesignSystem() {
         <View style={style.swatchGroup}>{backgroundSwatches}</View>
         <View style={style.swatchGroup}>{transportSwatches}</View>
         <View style={style.swatchGroup}>{statusSwatches}</View>
+        <View style={style.swatchGroup}>
+          <ThemeText>Text colors:</ThemeText>
+          {textSwatches}
+        </View>
 
         <View style={{margin: theme.spacings.medium}}>
           <ThemeText>Segmented controls:</ThemeText>

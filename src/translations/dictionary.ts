@@ -41,7 +41,7 @@ const dictionary = {
     },
     time: {
       aimedPrefix: _('Rutetid', 'Route time'),
-      expectedPrefix: _('Forventet tid', 'Time expected'),
+      expectedPrefix: _('Sanntid', 'Realtime'),
     },
   },
   date: {
