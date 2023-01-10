@@ -169,7 +169,10 @@ const SelectFavouritesBottomSheet = ({
                         lineTransportationSubmode={
                           favorite.lineTransportationSubMode
                         }
-                        testID={'selectFavoriteToggle' + index}
+                        testID={
+                          'selectFavoriteToggle' +
+                          updatedFavorites.indexOf(favorite)
+                        }
                       />
                     </View>
                   );
