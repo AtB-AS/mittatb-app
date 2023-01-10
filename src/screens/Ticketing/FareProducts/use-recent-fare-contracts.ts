@@ -117,6 +117,10 @@ const mapBackendRecentFareContracts = (
     userProfiles,
   );
 
+  if (!userProfilesWithCount?.length) {
+    return null;
+  }
+
   if (fareProductTypeConfig.configuration.zoneSelectionMode === 'none') {
     return {
       preassignedFareProduct,
@@ -135,12 +139,7 @@ const mapBackendRecentFareContracts = (
     recentFareContract.zones.slice(-1)[0],
   );
 
-  if (
-    !preassignedFareProduct ||
-    !fromTariffZone ||
-    !toTariffZone ||
-    !userProfilesWithCount?.length
-  ) {
+  if (!fromTariffZone || !toTariffZone) {
     return null;
   }
 
