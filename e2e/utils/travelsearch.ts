@@ -25,8 +25,21 @@ export async function travelSearch(departure: string, arrival: string) {
   await setInputById('locationSearchInput', arrival);
   await chooseSearchResult('locationSearchItem0');
 
+  //Confirm onboarding
+  await ensureFiltersOnboardingIsConfirmed();
+
   await expectToBeVisibleByText('Travel search');
 }
+
+// Check if travel search filters onboarding is done
+export const ensureFiltersOnboardingIsConfirmed = async () => {
+  const haveToConfirmOnboarding = await idExists(
+    by.id('filterOnboardingConfirmButton'),
+  );
+  if (haveToConfirmOnboarding) {
+    await tapById('filterOnboardingConfirmButton');
+  }
+};
 
 // Get the number of travel suggestions
 export const numberOfTravelSuggestions = async () => {
@@ -128,7 +141,7 @@ export const expectCorrectStartAndEndTimesInTravelDetails = async (
   timeId = hasExpTime ? 'expTime' : timeId;
   timeId = hasScCaTime ? 'schCaTime' : timeId;
   timeId = hasScTime ? 'schTime' : timeId;
-  let startTimeEdit = hasScCaTime ? 'ca. ' + startTime : startTime;
+  //let startTimeEdit = hasScCaTime ? 'ca. ' + startTime : startTime;
 
   // Expect that the text is present on the timeId
   await expectToExistsByIdHierarchy(
@@ -137,7 +150,8 @@ export const expectCorrectStartAndEndTimesInTravelDetails = async (
       .withDescendant(
         by
           .id('fromPlace')
-          .withDescendant(by.id(timeId).and(by.text(startTimeEdit))),
+          //.withDescendant(by.id(timeId).and(by.text(startTimeEdit))),
+          .withDescendant(by.id(timeId).and(by.text(startTime))),
       ),
   );
 

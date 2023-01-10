@@ -45,6 +45,7 @@ export default function Language() {
                 language: language || DEFAULT_LANGUAGE,
               });
             }}
+            testID="toggleLanguage"
           />
         </Section>
         {!useSystemLanguage && (

@@ -33,6 +33,7 @@ type SelectableFavouriteDepartureData = {
   lineName: string | TranslatedString;
   departureStation: string;
   departureQuay?: string;
+  testID?: string;
 };
 
 const SelectableFavouriteDeparture = ({
@@ -45,6 +46,7 @@ const SelectableFavouriteDeparture = ({
   lineName,
   departureStation,
   departureQuay,
+  testID,
 }: SelectableFavouriteDepartureData) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -86,6 +88,7 @@ const SelectableFavouriteDeparture = ({
           importantForAccessibility="no"
           value={active}
           onValueChange={(value) => handleSwitchFlip(favouriteId, value)}
+          testID={testID}
         />
       </View>
     </View>
@@ -165,6 +168,10 @@ const SelectFavouritesBottomSheet = ({
                         }
                         lineTransportationSubmode={
                           favorite.lineTransportationSubMode
+                        }
+                        testID={
+                          'selectFavoriteToggle' +
+                          updatedFavorites.indexOf(favorite)
                         }
                       />
                     </View>
