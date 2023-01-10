@@ -1,4 +1,4 @@
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {View} from 'react-native';
 import {ThemeIconProps} from './ThemeIcon';
 import {
@@ -6,7 +6,6 @@ import {
   isInteractiveColor,
   isStaticColor,
   isStatusColor,
-  Mode,
 } from '@atb/theme/colors';
 import type {NotificationColor} from './types';
 
@@ -17,9 +16,8 @@ export const NotificationIndicator = ({
   color: NotificationColor;
   iconSize: ThemeIconProps['size'];
 }) => {
-  const {theme, themeName} = useTheme();
-  const notificationColor = getNotificationColor(theme, themeName, color);
   const styles = useStyles();
+  const notificationColor = useNotificationColor(color);
   const indicatorSize = getIndicatorSize(iconSize);
   return (
     <View
@@ -33,19 +31,16 @@ export const NotificationIndicator = ({
   );
 };
 
-function getNotificationColor(
-  theme: Theme,
-  themeType: Mode,
-  colorType: NotificationColor,
-): string {
-  if (isStatusColor(colorType)) {
-    return theme.static.status[colorType].background;
-  } else if (isStaticColor(colorType)) {
-    return flatStaticColors[themeType][colorType].background;
-  } else if (isInteractiveColor(colorType)) {
-    return theme.interactive[colorType].outline.background;
+function useNotificationColor(color: NotificationColor): string {
+  const {theme, themeName} = useTheme();
+  if (isStatusColor(color)) {
+    return theme.static.status[color].background;
+  } else if (isStaticColor(color)) {
+    return flatStaticColors[themeName][color].background;
+  } else if (isInteractiveColor(color)) {
+    return theme.interactive[color].outline.background;
   } else {
-    return theme.text.colors[colorType];
+    return theme.text.colors[color];
   }
 }
 
