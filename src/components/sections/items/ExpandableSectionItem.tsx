@@ -15,7 +15,7 @@ type Props = SectionItemProps<
   {
     text: string;
     textType?: TextNames;
-    showIconText: boolean;
+    showIconText?: boolean;
     accessibility?: AccessibilityProps;
   } & (
     | {
@@ -37,7 +37,7 @@ type Props = SectionItemProps<
 export function ExpandableSectionItem({
   text,
   textType,
-  showIconText,
+  showIconText = false,
   accessibility,
   ...props
 }: Props) {
