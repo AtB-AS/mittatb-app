@@ -12,7 +12,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {ThemeIcon} from '@atb/components/theme-icon';
+import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';
 
@@ -44,6 +44,7 @@ type ButtonTypeAwareProps =
 type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
   size?: keyof Theme['icon']['size'];
+  notificationColor?: ThemeIconProps['notificationColor'];
 };
 
 export type ButtonProps = {
@@ -166,11 +167,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
         >
           {leftIcon && (
             <View style={leftStyling}>
-              <ThemeIcon
-                svg={leftIcon.svg}
-                fill={textColor}
-                size={leftIcon.size}
-              />
+              <ThemeIcon fill={textColor} {...leftIcon} />
             </View>
           )}
           {text && (
@@ -189,11 +186,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
           )}
           {rightIcon && (
             <View style={rightStyling}>
-              <ThemeIcon
-                svg={rightIcon.svg}
-                fill={textColor}
-                size={rightIcon.size}
-              />
+              <ThemeIcon fill={textColor} {...rightIcon} />
             </View>
           )}
         </TouchableOpacity>
