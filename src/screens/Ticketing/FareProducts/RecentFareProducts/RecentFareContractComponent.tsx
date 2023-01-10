@@ -66,8 +66,8 @@ export const RecentFareContractComponent = ({
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const fromZone = fromTariffZone.name.value;
-  const toZone = toTariffZone.name.value;
+  const fromZoneName = fromTariffZone?.name.value;
+  const toZoneName = toTariffZone?.name.value;
   const {width} = Dimensions.get('window');
 
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
@@ -107,14 +107,20 @@ export const RecentFareContractComponent = ({
       .map((u) => u.count + ' ' + getReferenceDataName(u, language))
       .join(', ')}`;
 
+    if (fareProductTypeConfig.configuration.zoneSelectionMode === 'none') {
+      return `${t(
+        RecentFareContractsTexts.repeatPurchase.label,
+      )} ${modeInfo} ${travellerInfo}`;
+    }
+
     const zoneInfo = `${
-      fromZone === toZone
+      fromZoneName === toZoneName
         ? `${t(
             RecentFareContractsTexts.a11yPreLabels.zones.oneZone,
-          )} ${fromZone}`
+          )} ${fromZoneName}`
         : `${t(
             RecentFareContractsTexts.a11yPreLabels.zones.multipleZones,
-          )} ${fromZone}, ${toZone}`
+          )} ${fromZoneName}, ${toZoneName}`
     }`;
 
     return `${t(
@@ -201,19 +207,26 @@ export const RecentFareContractComponent = ({
               </View>
             </View>
           </View>
-          <View>
-            <ThemeText type="label__uppercase" color="secondary">
-              {t(RecentFareContractsTexts.titles.zone)}
-            </ThemeText>
-            {fromZone === toZone ? (
-              <FloatingLabel text={`${fromZone}`} testID={`${testID}Zone`} />
-            ) : (
-              <FloatingLabel
-                text={`${fromZone} - ${toZone}`}
-                testID={`${testID}Zones`}
-              />
+          {fareProductTypeConfig.configuration.zoneSelectionMode !== 'none' &&
+            fromZoneName &&
+            toZoneName && (
+              <View>
+                <ThemeText type="label__uppercase" color="secondary">
+                  {t(RecentFareContractsTexts.titles.zone)}
+                </ThemeText>
+                {fromZoneName === toZoneName ? (
+                  <FloatingLabel
+                    text={`${fromZoneName}`}
+                    testID={`${testID}Zone`}
+                  />
+                ) : (
+                  <FloatingLabel
+                    text={`${fromZoneName} - ${toZoneName}`}
+                    testID={`${testID}Zones`}
+                  />
+                )}
+              </View>
             )}
-          </View>
         </View>
       </View>
       <View
