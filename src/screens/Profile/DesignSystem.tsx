@@ -1,5 +1,5 @@
 import {ContrastColor} from '@atb-as/theme';
-import {Add, Delete, Edit} from '@atb/assets/svg/mono-icons/actions';
+import {Add, Delete, Edit, Feedback} from '@atb/assets/svg/mono-icons/actions';
 import {Check} from '@atb/assets/svg/mono-icons/status';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import {Button, ButtonGroup} from '@atb/components/button';
@@ -137,8 +137,34 @@ export default function DesignSystem() {
               <ThemeIcon svg={Check} colorType="info" />
               <ThemeIcon svg={Check} colorType="warning" />
 
-              <ThemeIcon svg={Ticket} colorType="error" />
               <ThemeIcon svg={Ticket} colorType="disabled" size="small" />
+              <ThemeIcon svg={Ticket} colorType="error" />
+              <ThemeIcon svg={Ticket} size="large" />
+            </View>
+            <View style={style.icons}>
+              <ThemeText style={{marginRight: 12}}>
+                With notification indicators:
+              </ThemeText>
+
+              <ThemeIcon
+                style={{marginRight: 12}}
+                svg={Feedback}
+                size="small"
+                notificationColor="valid"
+              />
+              <ThemeIcon
+                style={{marginRight: 12}}
+                svg={Feedback}
+                colorType="error"
+                notificationColor="info"
+              />
+              <ThemeIcon
+                style={{marginRight: 12}}
+                svg={Feedback}
+                colorType="disabled"
+                size="large"
+                notificationColor="error"
+              />
             </View>
             <View style={style.icons}>
               <TransportationIcon
@@ -883,6 +909,17 @@ export default function DesignSystem() {
                     onPress={presser}
                     mode="primary"
                     interactiveColor={'interactive_0'}
+                    rightIcon={{
+                      svg: Delete,
+                      notificationColor: 'interactive_0',
+                    }}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Example"
+                    onPress={presser}
+                    mode="primary"
+                    interactiveColor={'interactive_0'}
                     disabled={true}
                     leftIcon={{svg: Add}}
                     rightIcon={{svg: Delete}}
@@ -900,7 +937,7 @@ export default function DesignSystem() {
                       mode="primary"
                       type="inline"
                       interactiveColor={'interactive_0'}
-                      leftIcon={{svg: Add}}
+                      leftIcon={{svg: Add, notificationColor: 'valid'}}
                       style={{margin: 4}}
                     />
                     <Button

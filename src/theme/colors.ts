@@ -78,10 +78,9 @@ export type Theme = Themes['light'];
 export type InteractiveColor = keyof Theme['interactive'];
 
 export const isInteractiveColor = (
-  theme: Theme,
   color?: string,
 ): color is InteractiveColor => {
-  return !!color && color in theme.interactive;
+  return !!color && color in themes.light.interactive;
 };
 
 /**
