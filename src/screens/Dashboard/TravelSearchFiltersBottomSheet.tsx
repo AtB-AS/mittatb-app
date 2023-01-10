@@ -15,25 +15,24 @@ import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {StyleSheet} from '@atb/theme';
 import type {
-  TransportModeFilterOptionType,
-  TravelSearchFiltersType,
+  TransportModeFilterOptionWithSelectionType,
+  TravelSearchFiltersSelectionType,
 } from './types';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
   {
     close: () => void;
-    filters: TravelSearchFiltersType;
-    initialSelection: TravelSearchFiltersType;
-    onSave: (t: TravelSearchFiltersType) => void;
+    filtersSelection: TravelSearchFiltersSelectionType;
+    onSave: (t: TravelSearchFiltersSelectionType) => void;
   }
->(({close, filters, initialSelection, onSave}, focusRef) => {
+>(({close, filtersSelection, onSave}, focusRef) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
 
   const [selectedModes, setSelectedModes] = useState<
-    TransportModeFilterOptionType[] | undefined
-  >(initialSelection.transportModes);
+    TransportModeFilterOptionWithSelectionType[] | undefined
+  >(filtersSelection.transportModes);
 
   const save = () => {
     onSave({
@@ -42,8 +41,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
     close();
   };
 
-  const allModesSelected =
-    (selectedModes?.length || 0) >= (filters.transportModes?.length || 0);
+  const allModesSelected = selectedModes?.every((m) => m.selected);
 
   return (
     <BottomSheetContainer maxHeightValue={0.9}>
@@ -54,23 +52,28 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
           text: t(ScreenHeaderTexts.headerButton.cancel.text),
           testID: 'cancelButton',
         }}
-        title={t(TripSearchTexts.filters.heading)}
+        title={t(TripSearchTexts.filters.bottomSheet.heading)}
         color="background_1"
         setFocusOnLoad={false}
       />
       <ScrollView style={styles.filtersContainer} ref={focusRef}>
         <Sections.Section>
           <Sections.HeaderSectionItem
-            text={t(TripSearchTexts.filters.modes.heading)}
+            text={t(TripSearchTexts.filters.bottomSheet.modes.heading)}
           />
           <Sections.ToggleSectionItem
-            text={t(TripSearchTexts.filters.modes.all)}
+            text={t(TripSearchTexts.filters.bottomSheet.modes.all)}
             value={allModesSelected}
             onValueChange={(checked) => {
-              setSelectedModes(checked ? filters.transportModes : []);
+              setSelectedModes(
+                filtersSelection.transportModes?.map((m) => ({
+                  ...m,
+                  selected: checked,
+                })),
+              );
             }}
           />
-          {filters.transportModes?.map((option) => {
+          {filtersSelection.transportModes?.map((option) => {
             const text = getTextForLanguage(option.text, language);
             const description = getTextForLanguage(
               option.description,
@@ -87,12 +90,14 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                   ) || Add
                 }
                 subtext={description}
-                value={selectedModes?.some(({id}) => id === option.id)}
+                value={
+                  selectedModes?.find(({id}) => id === option.id)?.selected
+                }
                 onValueChange={(checked) => {
                   setSelectedModes(
-                    checked
-                      ? selectedModes?.concat(option)
-                      : selectedModes?.filter((m) => m.id !== option.id),
+                    selectedModes?.map((m) =>
+                      m.id === option.id ? {...m, selected: checked} : m,
+                    ),
                   );
                 }}
               />
@@ -102,7 +107,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
       </ScrollView>
       <FullScreenFooter>
         <Button
-          text={t(TripSearchTexts.filters.save)}
+          text={t(TripSearchTexts.filters.bottomSheet.save)}
           onPress={save}
           rightIcon={{svg: Confirm}}
         />

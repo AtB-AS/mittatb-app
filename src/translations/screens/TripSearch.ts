@@ -117,6 +117,10 @@ const TripSearchTexts = {
         'Prøv å justere på sted eller tidspunkt.',
         'Try adjusting your time or location input.',
       ),
+      genericHintWithFilters: _(
+        'Prøv å justere på sted, filtere eller tidspunkt.',
+        'Try adjusting your time, filters or location input.',
+      ),
     },
     resultList: {
       listPositionExplanation: (
@@ -214,12 +218,23 @@ const TripSearchTexts = {
     ),
   },
   filters: {
-    heading: _('Filter', 'Filter'),
-    modes: {
-      heading: _('Hva vil du reise med?', 'What do you want to travel with?'),
-      all: _('Alle', 'All'),
+    bottomSheet: {
+      heading: _('Filter', 'Filter'),
+      modes: {
+        heading: _('Hva vil du reise med?', 'What do you want to travel with?'),
+        all: _('Alle', 'All'),
+      },
+      save: _('Lagre valg', 'Save selection'),
     },
-    save: _('Lagre valg', 'Save selection'),
+    selection: {
+      transportModes: (selected: number, total: number) =>
+        _(
+          `${selected} av ${total} transportmidler er valgt`,
+          `${selected} of ${total} trasportation modes are selected`,
+        ),
+      a11yLabelPrefix: _('Filter: ', 'Filter: '),
+      a11yHint: _('Aktiver for å fjerne filter.', 'Activate to remove filter.'),
+    },
   },
 };
 

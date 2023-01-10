@@ -27,6 +27,7 @@ type Props = {
   onDetailsPressed(tripPatterns?: TripPattern[], index?: number): void;
   errorType?: ErrorType;
   searchTime: SearchTime;
+  anyFiltersApplied: boolean;
 };
 
 const Results: React.FC<Props> = ({
@@ -37,6 +38,7 @@ const Results: React.FC<Props> = ({
   onDetailsPressed,
   errorType,
   searchTime,
+  anyFiltersApplied,
 }) => {
   const styles = useThemeStyles();
 
@@ -84,7 +86,7 @@ const Results: React.FC<Props> = ({
       <MessageBox
         type="info"
         style={styles.messageBoxContainer}
-        message={getTextForEmptyResult(resultReasons, t)}
+        message={getTextForEmptyResult(resultReasons, anyFiltersApplied, t)}
       />
     );
   }
@@ -116,11 +118,14 @@ export default Results;
 
 const getTextForEmptyResult = (
   resultReasons: string[],
+  anyFiltersApplied: boolean,
   t: TranslateFunction,
 ) => {
   let text = t(TripSearchTexts.results.info.emptyResult) + '\n\n';
   if (!resultReasons?.length) {
-    text += t(TripSearchTexts.results.info.genericHint);
+    text += anyFiltersApplied
+      ? t(TripSearchTexts.results.info.genericHintWithFilters)
+      : t(TripSearchTexts.results.info.genericHint);
   } else if (resultReasons.length === 1) {
     text += resultReasons[0];
   } else {
