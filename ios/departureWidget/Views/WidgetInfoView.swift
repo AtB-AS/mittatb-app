@@ -26,7 +26,7 @@ struct WidgetInfoView: View {
     private var aimedTimes: [String] {
         viewModel.getDepartureAimedTimes(limit: numberOfDepartures)
     }
-
+   
     var body: some View {
         if viewModel.entry.state == .noFavouriteDepartures {
             switch widgetFamily {
@@ -64,13 +64,18 @@ struct WidgetInfoView: View {
                                 .foregroundColor(K.lineInformationColor)
                         } else {
                             HStack {
-                                if let icon = viewModel.transportModeIcon {
-                                    icon
-                                        .resizable()
-                                        .frame(width: K.transportIconSize, height: K.transportIconSize)
-                                        .background(K.transportCityColor)
-                                        .cornerRadius(K.transportIconCornerRadius)
-                                }
+                              if let icon = viewModel.transportModeIcon {
+                                icon
+                                  .resizable()
+                                  .renderingMode(.template)
+                                  .scaledToFit()
+                                  .foregroundColor(viewModel.transportModeIconForegroundColor)
+                                  .padding(K.transportIconSize/7)
+                                  .frame(width: K.transportIconSize, height: K.transportIconSize)
+                                  .background(viewModel.transportModeIconBackgroundColor)
+                                  .cornerRadius(K.transportIconCornerRadius)
+                              }
+                              
 
                                 Text(viewModel.lineDetails ?? noLineInfoText)
                                     .lineLimit(1)

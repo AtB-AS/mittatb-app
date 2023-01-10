@@ -3,7 +3,7 @@ import SwiftUI
 struct NoFavoriteViewMedium: View {
     var body: some View {
         HStack(spacing: 16) {
-            Image("ManAndTreeIcon")
+          Image("NoFavoriteDeparture/Medium")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 60)
