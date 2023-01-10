@@ -23,7 +23,7 @@ export const SelectedFiltersButtons = ({
   const selectedModesCount = filtersSelection.transportModes.filter(
     (m) => m.selected,
   ).length;
-  const allModesCount = filtersSelection.transportModes?.length;
+  const allModesCount = filtersSelection.transportModes.length;
   if (selectedModesCount === allModesCount) return null;
 
   const text = t(
