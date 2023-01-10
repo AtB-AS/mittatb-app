@@ -42,6 +42,9 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
     close();
   };
 
+  const allModesSelected =
+    (selectedModes?.length || 0) >= (filters.transportModes?.length || 0);
+
   return (
     <BottomSheetContainer maxHeightValue={0.9}>
       <ScreenHeaderWithoutNavigation
@@ -62,7 +65,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
           />
           <Sections.ToggleSectionItem
             text={t(TripSearchTexts.filters.modes.all)}
-            value={selectedModes?.length === filters.transportModes?.length}
+            value={allModesSelected}
             onValueChange={(checked) => {
               setSelectedModes(checked ? filters.transportModes : []);
             }}
