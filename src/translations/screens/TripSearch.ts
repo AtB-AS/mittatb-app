@@ -118,7 +118,7 @@ const TripSearchTexts = {
         'Try adjusting your time or location input.',
       ),
       genericHintWithFilters: _(
-        'Prøv å justere på sted, filtere eller tidspunkt.',
+        'Prøv å justere sted, filter eller tidspunkt.',
         'Try adjusting your time, filters or location input.',
       ),
     },
