@@ -87,5 +87,5 @@ export function ToggleSectionItem({
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   leftIcon: {marginRight: theme.spacings.small},
   textContainer: {flex: 1, marginRight: theme.spacings.small},
-  subtext: {marginTop: theme.spacings.small},
+  subtext: {marginTop: theme.spacings.xSmall},
 }));

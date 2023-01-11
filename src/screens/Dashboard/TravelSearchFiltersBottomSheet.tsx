@@ -10,7 +10,7 @@ import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
-import {Add, Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {StyleSheet} from '@atb/theme';
@@ -80,12 +80,10 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
               <Sections.ToggleSectionItem
                 key={option.id}
                 text={text}
-                leftIcon={
-                  getTransportModeSvg(
-                    option.icon?.transportMode,
-                    option.icon?.transportSubMode,
-                  ) || Add
-                }
+                leftIcon={getTransportModeSvg(
+                  option.icon?.transportMode,
+                  option.icon?.transportSubMode,
+                )}
                 subtext={description}
                 value={selectedModes?.some(({id}) => id === option.id)}
                 onValueChange={(checked) => {
