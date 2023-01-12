@@ -10,13 +10,16 @@ import {SvgProps} from 'react-native-svg';
 import useFontScale from '@atb/utils/use-font-scale';
 import {View} from 'react-native';
 import type {IconColor, NotificationColor} from './types';
-import {NotificationIndicator} from '@atb/components/theme-icon/NotificationIndicator';
+import {
+  NotificationIndicator,
+  NotificationIndicatorProps,
+} from '@atb/components/theme-icon/NotificationIndicator';
 
 export type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
   colorType?: IconColor;
   size?: keyof Theme['icon']['size'];
-  notificationColor?: NotificationColor;
+  notification?: Omit<NotificationIndicatorProps, 'iconSize'>;
 } & SvgProps;
 
 export const ThemeIcon = ({
@@ -24,7 +27,7 @@ export const ThemeIcon = ({
   colorType,
   size = 'normal',
   fill,
-  notificationColor,
+  notification,
   style,
   ...props
 }: ThemeIconProps): JSX.Element => {
@@ -45,8 +48,8 @@ export const ThemeIcon = ({
   return (
     <View style={style}>
       {svg(settings)}
-      {notificationColor && (
-        <NotificationIndicator color={notificationColor} iconSize={size} />
+      {notification && (
+        <NotificationIndicator {...notification} iconSize={size} />
       )}
     </View>
   );

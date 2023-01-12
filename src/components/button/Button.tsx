@@ -44,7 +44,7 @@ type ButtonTypeAwareProps =
 type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
   size?: keyof Theme['icon']['size'];
-  notificationColor?: ThemeIconProps['notificationColor'];
+  notification?: ThemeIconProps['notification'];
 };
 
 export type ButtonProps = {

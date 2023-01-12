@@ -150,20 +150,45 @@ export default function DesignSystem() {
                 style={{marginRight: 12}}
                 svg={Feedback}
                 size="small"
-                notificationColor="valid"
+                notification={{color: 'valid'}}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
                 svg={Feedback}
                 colorType="error"
-                notificationColor="info"
+                notification={{color: 'info'}}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
                 svg={Feedback}
                 colorType="disabled"
                 size="large"
-                notificationColor="error"
+                notification={{color: 'error'}}
+              />
+            </View>
+            <View style={style.icons}>
+              <ThemeText style={{marginRight: 12}}>
+                And notification spacing:
+              </ThemeText>
+
+              <ThemeIcon
+                style={{marginRight: 12}}
+                svg={Feedback}
+                size="small"
+                notification={{color: 'valid', backgroundColor: 'background_0'}}
+              />
+              <ThemeIcon
+                style={{marginRight: 12}}
+                svg={Feedback}
+                colorType="error"
+                notification={{color: 'info', backgroundColor: 'background_0'}}
+              />
+              <ThemeIcon
+                style={{marginRight: 12}}
+                svg={Feedback}
+                colorType="disabled"
+                size="large"
+                notification={{color: 'error', backgroundColor: 'background_0'}}
               />
             </View>
             <View style={style.icons}>
@@ -911,7 +936,7 @@ export default function DesignSystem() {
                     interactiveColor={'interactive_0'}
                     rightIcon={{
                       svg: Delete,
-                      notificationColor: 'interactive_0',
+                      notification: {color: 'interactive_0'},
                     }}
                     style={{margin: 4}}
                   />
@@ -937,7 +962,7 @@ export default function DesignSystem() {
                       mode="primary"
                       type="inline"
                       interactiveColor={'interactive_0'}
-                      leftIcon={{svg: Add, notificationColor: 'valid'}}
+                      leftIcon={{svg: Add, notification: {color: 'valid'}}}
                       style={{margin: 4}}
                     />
                     <Button

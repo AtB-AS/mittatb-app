@@ -9,30 +9,49 @@ import {
 } from '@atb/theme/colors';
 import type {NotificationColor} from './types';
 
+export type NotificationIndicatorProps = {
+  color: NotificationColor;
+  /**
+   * An optional background color that will be applied as a border/spacing
+   * around the indicator. Use the same color as the background under the
+   * ThemeIcon to make the notification indicator "pop" out a little more.
+   */
+  backgroundColor?: NotificationColor;
+  iconSize: ThemeIconProps['size'];
+};
+
 export const NotificationIndicator = ({
   color,
+  backgroundColor,
   iconSize,
-}: {
-  color: NotificationColor;
-  iconSize: ThemeIconProps['size'];
-}) => {
+}: NotificationIndicatorProps) => {
   const styles = useStyles();
   const notificationColor = useNotificationColor(color);
-  const indicatorSize = getIndicatorSize(iconSize);
+  const borderColor = useNotificationColor(backgroundColor);
+  const indicatorSize = getIndicatorSize(iconSize, !!borderColor);
   return (
     <View
       style={{
         ...styles.indicator,
-        backgroundColor: notificationColor,
+        borderWidth: borderColor ? (iconSize === 'small' ? 1 : 2) : 0,
+        borderColor,
         height: indicatorSize,
         width: indicatorSize,
       }}
-    />
+    >
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: notificationColor,
+        }}
+      />
+    </View>
   );
 };
 
-function useNotificationColor(color: NotificationColor): string {
+function useNotificationColor(color?: NotificationColor): string | undefined {
   const {theme, themeName} = useTheme();
+  if (!color) return undefined;
   if (isStatusColor(color)) {
     return theme.static.status[color].background;
   } else if (isStaticColor(color)) {
@@ -44,14 +63,14 @@ function useNotificationColor(color: NotificationColor): string {
   }
 }
 
-const getIndicatorSize = (size: ThemeIconProps['size']) => {
+const getIndicatorSize = (size: ThemeIconProps['size'], hasBorder: boolean) => {
   switch (size) {
     case 'small':
-      return 4;
+      return hasBorder ? 6 : 4;
     case 'large':
-      return 8;
+      return hasBorder ? 12 : 8;
     default:
-      return 6;
+      return hasBorder ? 10 : 6;
   }
 };
 
@@ -62,5 +81,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     top: 0,
     borderRadius: theme.border.radius.circle,
     zIndex: 10,
+    overflow: 'hidden',
   },
 }));
