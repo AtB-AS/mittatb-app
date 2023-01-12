@@ -366,7 +366,7 @@ extension FavouriteDeparture {
         lineName: "Ranheim",
         lineLineNumber: "1",
         lineTransportationMode: TransportMode.bus,
-        lineTransportationSubMode: TransportSubMode.nightBus,
+        lineTransportationSubMode: TransportSubMode.undefined,
         quayName: "Prinsens gate",
         quayPublicCode: "P1",
         quayId: "NSR:Quay:71184",
@@ -405,7 +405,7 @@ extension QuayGroup {
                     lineName: "Ranheim",
                     lineNumber: "1",
                     transportMode: TransportMode.bus,
-                    transportSubmode: TransportSubMode.nightBus,
+                    transportSubmode: TransportSubMode.undefined,
                     quayId: "NSR:Quay:71184"
                 ),
                 departures: [Int](0 ..< 10).map { index in
