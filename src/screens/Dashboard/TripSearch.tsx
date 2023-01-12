@@ -314,8 +314,10 @@ const TripSearch: React.FC<RootProps> = ({
             testID="dashboardDateTimePicker"
             rightIcon={{
               svg: Time,
-              notificationColor:
-                searchTime.option !== 'now' ? 'valid' : undefined,
+              notification:
+                searchTime.option !== 'now'
+                  ? {color: 'valid', backgroundColor: 'background_accent_0'}
+                  : undefined,
             }}
             viewContainerStyle={style.searchTimeButton}
           />
@@ -331,8 +333,8 @@ const TripSearch: React.FC<RootProps> = ({
               testID="dashboardDateTimePicker"
               rightIcon={{
                 svg: Filter,
-                notificationColor: filtersState.anyFiltersApplied
-                  ? 'valid'
+                notification: filtersState.anyFiltersApplied
+                  ? {color: 'valid', backgroundColor: 'background_accent_0'}
                   : undefined,
               }}
               viewContainerStyle={style.filterButton}
