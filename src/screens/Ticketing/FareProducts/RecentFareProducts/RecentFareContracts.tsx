@@ -32,8 +32,14 @@ export const RecentFareContracts = () => {
         fareProductTypeConfig,
         preassignedFareProduct: rfc.preassignedFareProduct,
         userProfilesWithCount: rfc.userProfilesWithCount,
-        fromTariffZone: {...rfc.fromTariffZone, resultType: 'zone'},
-        toTariffZone: {...rfc.toTariffZone, resultType: 'zone'},
+        fromTariffZone: rfc.fromTariffZone && {
+          ...rfc.fromTariffZone,
+          resultType: 'zone',
+        },
+        toTariffZone: rfc.toTariffZone && {
+          ...rfc.toTariffZone,
+          resultType: 'zone',
+        },
       },
     });
   };

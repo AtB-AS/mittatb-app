@@ -30,7 +30,8 @@ export function getTransportModeSvg(mode?: AnyMode, subMode?: AnySubMode) {
       return TransportIcons.Walk;
     case 'metro':
       return EnturTransportIcons.Subway;
+    case 'unknown':
     default:
-      return undefined;
+      return TransportIcons.Unknown;
   }
 }
