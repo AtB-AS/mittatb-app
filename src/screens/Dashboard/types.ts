@@ -66,3 +66,10 @@ export type TransportModeFilterOptionType = {
 export type TravelSearchFiltersType = {
   transportModes?: TransportModeFilterOptionType[];
 };
+
+export type TransportModeFilterOptionWithSelectionType =
+  TransportModeFilterOptionType & {selected: boolean};
+
+export type TravelSearchFiltersSelectionType = {
+  transportModes?: TransportModeFilterOptionWithSelectionType[];
+};
