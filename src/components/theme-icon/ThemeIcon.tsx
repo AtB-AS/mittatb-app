@@ -9,7 +9,7 @@ import {
 import {SvgProps} from 'react-native-svg';
 import useFontScale from '@atb/utils/use-font-scale';
 import {View} from 'react-native';
-import type {IconColor, NotificationColor} from './types';
+import type {IconColor} from './types';
 import {
   NotificationIndicator,
   NotificationIndicatorProps,
