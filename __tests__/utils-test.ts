@@ -158,7 +158,7 @@ describe('Function compareVersion', () => {
   ];
 
   versions.forEach((v) => {
-    it('only contains unique values', () => {
+    it('returns correct comparison', () => {
       expectNumber(compareVersion(v[0], v[1]), v[2]);
     });
   });
