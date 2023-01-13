@@ -43,6 +43,7 @@ export default function InfoToggle({
             setPreference({hideTravellerDescriptions: !checked});
           }}
           accessibilityLabel={accessibilityLabel}
+          testID="infoToggle"
         />
       </View>
     </View>

@@ -3,16 +3,18 @@ import React, {useRef, useState} from 'react';
 import {TravelSearchFiltersBottomSheet} from '@atb/screens/Dashboard/TravelSearchFiltersBottomSheet';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useTravelSearchFiltersEnabled} from '@atb/screens/Dashboard/use-travel-search-filters-enabled';
-import type {TravelSearchFiltersType} from '@atb/screens/Dashboard/types';
+import type {TravelSearchFiltersSelectionType} from '@atb/screens/Dashboard/types';
 
 type TravelSearchFiltersState =
   | {
       enabled: true;
       openBottomSheet: () => void;
-      selectedFilters: TravelSearchFiltersType;
+      filtersSelection: TravelSearchFiltersSelectionType;
+      anyFiltersApplied: boolean;
+      resetTransportModes: () => void;
       closeRef: React.Ref<any>;
     }
-  | {enabled: false; selectedFilters?: undefined};
+  | {enabled: false; filtersSelection?: undefined};
 
 /**
  * THe travel search filters state, including whether it is enabled or not, the
@@ -23,9 +25,17 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
   const travelSearchFiltersEnabled = useTravelSearchFiltersEnabled();
   const {travelSearchFilters} = useFirestoreConfiguration();
   const transportModeFilterOptions = travelSearchFilters?.transportModes;
-  const [selectedFilters, setSelectedFilters] =
-    useState<TravelSearchFiltersType>({
-      transportModes: transportModeFilterOptions,
+
+  const initialTransportModesSelection = transportModeFilterOptions?.map(
+    (option) => ({
+      ...option,
+      selected: true,
+    }),
+  );
+
+  const [filtersSelection, setFiltersSelection] =
+    useState<TravelSearchFiltersSelectionType>({
+      transportModes: initialTransportModesSelection,
     });
   const closeRef = useRef();
 
@@ -38,14 +48,22 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
         <TravelSearchFiltersBottomSheet
           close={close}
           ref={focusRef}
-          filters={{transportModes: transportModeFilterOptions}}
-          initialSelection={selectedFilters}
-          onSave={setSelectedFilters}
+          filtersSelection={filtersSelection}
+          onSave={setFiltersSelection}
         />
       ),
       closeRef,
     );
   };
 
-  return {enabled: true, openBottomSheet, selectedFilters, closeRef};
+  return {
+    enabled: true,
+    openBottomSheet,
+    filtersSelection,
+    anyFiltersApplied:
+      filtersSelection.transportModes?.some((m) => !m.selected) || false,
+    resetTransportModes: () =>
+      setFiltersSelection({transportModes: initialTransportModesSelection}),
+    closeRef,
+  };
 };

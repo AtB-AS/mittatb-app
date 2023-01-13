@@ -49,6 +49,30 @@ export default function PlaceScreen({
   const {state} = useStopsDetailsData(
     place.quays === undefined ? [place.id] : undefined,
   );
+  const isFocused = useIsFocused();
+
+  let missingStopData = false;
+
+  if (state.data && place.quays === undefined) {
+    if (state.data.stopPlaces[0]) {
+      place = state.data.stopPlaces[0];
+    } else {
+      missingStopData = true;
+    }
+  }
+
+  if (state.error || missingStopData) {
+    return (
+      <View style={styles.container}>
+        <FullScreenHeader title={place.name} leftButton={{type: 'back'}} />
+        <MessageBox
+          style={styles.messageBox}
+          type="error"
+          message={t(DeparturesTexts.message.resultNotFound)}
+        />
+      </View>
+    );
+  }
 
   const navigateToDetails = (
     serviceJourneyId: string,
@@ -82,24 +106,10 @@ export default function PlaceScreen({
       navigation.setParams({selectedQuayId: quay.id});
     }
   };
-  const isFocused = useIsFocused();
 
   const selectedQuay = selectedQuayId
     ? place.quays?.find((q) => q.id === selectedQuayId)
     : undefined;
-
-  if (state.error) {
-    return (
-      <View style={styles.container}>
-        <FullScreenHeader title={place.name} leftButton={{type: 'back'}} />
-        <MessageBox
-          style={styles.messageBox}
-          type="error"
-          message={t(DeparturesTexts.message.resultNotFound)}
-        />
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>

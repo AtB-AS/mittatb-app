@@ -313,7 +313,7 @@ export const mapToTransportModeFilterOptions = (
 const mapToTransportModeFilterOption = (
   filter: any,
 ): TransportModeFilterOptionType | undefined => {
-  const fields = ['id', 'text', 'modes'];
+  const fields = ['id', 'text', 'icon', 'modes'];
   if (!fields.every((f) => f in filter)) {
     Bugsnag.notify(
       `Transport mode filter is missing one or more of the following mandatory fields: ${fields}`,
@@ -333,6 +333,15 @@ const mapToTransportModeFilterOption = (
 
   const icon = mapIconMode(filter.icon);
 
+  if (!icon) {
+    Bugsnag.notify(
+      `Transport mode filter with id: "${
+        filter.id
+      }", Unknown icon config "${JSON.stringify(filter.icon)}"`,
+    );
+    return;
+  }
+
   const modes = filter.modes.map(mapToTransportModes);
   if (modes.includes(undefined)) {
     // Already notified Bugsnag in mapping function
@@ -351,10 +360,7 @@ const mapToTransportModeFilterOption = (
 const mapIconMode = (raw: any): TransportIconModeType | undefined => {
   if (!raw) return undefined;
   const mappedMode = enumFromString(TransportMode, raw.transportMode);
-  if (!mappedMode) {
-    Bugsnag.notify('Unknown icon transport mode: ' + raw.transportMode);
-    return undefined;
-  }
+  if (!mappedMode) return undefined;
   const mappedSubMode = enumFromString(TransportSubmode, raw.transportSubMode);
   return {
     transportMode: mappedMode,

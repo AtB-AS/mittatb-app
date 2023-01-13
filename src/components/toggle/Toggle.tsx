@@ -44,6 +44,7 @@ export function Toggle({
       thumbColor="white"
       style={Platform.OS === 'android' ? styles.android : styles.ios}
       {...props}
+      testID={props.testID}
     />
   ) : null;
 }

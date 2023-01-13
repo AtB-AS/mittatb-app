@@ -37,7 +37,7 @@ export default function ProductSelectionByProducts({
   const {
     preferences: {hideTravellerDescriptions},
   } = usePreferences();
-  const [selected, setProduct] = useState(selectableProducts[0]);
+  const [selected, setProduct] = useState(selectedProduct);
   const showInfoToggle = selectableProducts.some((p) => p.description);
 
   return (

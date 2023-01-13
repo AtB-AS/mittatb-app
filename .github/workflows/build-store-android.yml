@@ -87,12 +87,10 @@ jobs:
           GOOGLE_PLAY_SERVICE_ACCOUNT_PATH: google-play-service-account.json
           ANDROID_PACKAGE_NAME: ${{ env.ANDROID_APPLICATION_ID }}
       - name: Upload bundle and source maps
-        if: matrix.org == 'atb'
         run: bash ./scripts/android/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Register app version
-        if: matrix.org == 'atb'
         run: bash ./scripts/android/register-app-version.sh
         env:
           ENTUR_CLIENT_ID: ${{ secrets.ABT_ENTUR_CLIENT_ID_PRODUCTION}}
