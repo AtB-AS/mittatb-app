@@ -11,7 +11,7 @@ export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;
 };
 
-type OfferError = {
+export type OfferError = {
   type: ErrorType | 'empty-offers';
 };
 

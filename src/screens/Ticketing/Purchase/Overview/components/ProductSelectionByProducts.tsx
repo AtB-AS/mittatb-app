@@ -58,6 +58,9 @@ export default function ProductSelectionByProducts({
             getTextForLanguage(fp.description ?? [], language) ?? 'Unknow'
           }
           selected={selected}
+          itemToWarningText={(fp) =>
+            getTextForLanguage(fp.warningMessage, language)
+          }
           onSelect={(fp) => {
             setProduct(fp);
             setSelectedProduct(fp);

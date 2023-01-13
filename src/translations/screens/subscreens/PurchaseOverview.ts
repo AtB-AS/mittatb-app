@@ -8,6 +8,11 @@ const PurchaseOverviewTexts = {
       'Oops - vi klarte ikke å søke opp prisen. Supert om du prøver igjen 🤞',
       'Whoops - we were unable to retrieve cost. Please try again 🤞',
     ),
+    producUnavailable: (productName: string) =>
+      _(
+        `Produktet ${productName} er kanskje ikke tilgjengelig akkurat nå.`,
+        `Product ${productName} might not be available right now.`,
+      ),
   },
   travellers: {
     prefix: _('Nåværende valg: ', 'Current selection: '),

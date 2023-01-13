@@ -47,6 +47,16 @@
         "value": "In Trondheim"
       }
     ],
+    "warningMessage": [
+      {
+        "lang": "nob",
+        "value": "Fra 00:30 til 04:00 på nattbuss og -trikk"
+      },
+      {
+        "lang": "eng",
+        "value": "From 00:30 to 04:00 for night bus and tram"
+      }
+    ],
     "alternativeNames": [
       {
         "lang": "eng",
@@ -80,6 +90,16 @@
         "value": "To Malvik, Melhus and Skaun"
       }
     ],
+    "warningMessage": [
+      {
+        "lang": "nob",
+        "value": "Fra 00:30 til 04:00 på nattbuss og -trikk"
+      },
+      {
+        "lang": "eng",
+        "value": "From 00:30 to 04:00 for night bus and tram"
+      }
+    ],
     "alternativeNames": [
       {
         "lang": "eng",
@@ -111,6 +131,16 @@
       {
         "lang": "eng",
         "value": "To Stjørdal and Orkdal"
+      }
+    ],
+    "warningMessage": [
+      {
+        "lang": "nob",
+        "value": "Fra 00:30 til 04:00 på nattbuss og -trikk"
+      },
+      {
+        "lang": "eng",
+        "value": "From 00:30 to 04:00 for night bus and tram"
       }
     ],
     "alternativeNames": [
