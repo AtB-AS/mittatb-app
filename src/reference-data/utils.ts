@@ -1,9 +1,11 @@
 import {PreassignedFareProduct, TariffZone, UserProfile} from './types';
 import {
   getTextForLanguage,
-  LanguageAndTextType,
   Language,
+  LanguageAndTextType,
 } from '@atb/translations';
+import {APP_VERSION} from '@env';
+import {compareVersion} from '@atb/utils/compare-version';
 
 /**
  * Wrapper for getting the name of a NeTeX entity in the given language.
@@ -33,5 +35,12 @@ export const findReferenceDataById = <
 ) => elements.find((p) => p.id === id);
 
 export const productIsSellableInApp = (product: PreassignedFareProduct) => {
+  if (
+    (product.limitations.appVersionMin &&
+      compareVersion(product.limitations.appVersionMin, APP_VERSION) > 0) ||
+    (product.limitations.appVersionMax &&
+      compareVersion(product.limitations.appVersionMax, APP_VERSION) < 0)
+  )
+    return false;
   return product.distributionChannel.some((channel) => channel === 'app');
 };

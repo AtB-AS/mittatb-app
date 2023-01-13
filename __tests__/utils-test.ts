@@ -1,10 +1,12 @@
-import {iterateWithNext} from '../src/utils/array';
+import {iterateWithNext} from '@atb/utils/array';
 import {addMinutes} from 'date-fns';
 import {Leg} from '@atb/api/types/trips';
-import {TIME_LIMIT_IN_MINUTES} from '../src/screens/TripDetails/Details/utils';
-import {hasShortWaitTime} from '../src/screens/TripDetails/components/utils';
+import {TIME_LIMIT_IN_MINUTES} from '@atb/screens/TripDetails/Details/utils';
+import {hasShortWaitTime} from '@atb/screens/TripDetails/components/utils';
 import {Flattened, flattenObject} from '@atb/utils/object';
 import {onlyUniques, onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {compareVersion} from '@atb/utils/compare-version';
+import {expectNumber} from '../e2e/utils/jestAssertions';
 
 describe('IterateWithNext', () => {
   it('iterates correctly', () => {
@@ -139,5 +141,25 @@ describe('Function onlyUniqueBasedOnField', () => {
     expect(input.filter(onlyUniquesBasedOnField('field1')).sort()).toEqual(
       expected.sort(),
     );
+  });
+});
+
+describe('Function compareVersion', () => {
+  const versions: [string, string, number][] = [
+    ['1.2', '1.1', 1],
+    ['1.4', '1.31', -1],
+    ['1.4.1', '1.31.1', -1],
+    ['1.1.1', '1.1', 1],
+    ['1.1', '1.1.1', -1],
+    ['2.1', '1.1', 1],
+    ['1.1', '2.1', -1],
+    ['1.1', '1.1', 0],
+    ['1', '1', 0],
+  ];
+
+  versions.forEach((v) => {
+    it('only contains unique values', () => {
+      expectNumber(compareVersion(v[0], v[1]), v[2]);
+    });
   });
 });
