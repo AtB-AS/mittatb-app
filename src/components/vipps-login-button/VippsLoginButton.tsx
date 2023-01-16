@@ -26,7 +26,7 @@ export const VippsLoginButton = ({
         <ThemeText type="body__primary--bold" style={style.label}>
           {t(LoginTexts.logInOptions.options.vipps.label)}
         </ThemeText>
-        <ThemeIcon svg={vippsLogo} style={style.icon} />
+        <ThemeIcon svg={vippsLogo} size="large" style={style.icon} />
       </View>
     </TouchableOpacity>
   );
@@ -34,6 +34,7 @@ export const VippsLoginButton = ({
 
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
+    flex: 1,
     flexDirection: 'row',
     backgroundColor: VIPPS_BACKGROUND_COLOR,
     borderRadius: theme.border.radius.regular,
@@ -43,7 +44,6 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     opacity: 0.2,
   },
   icon: {
-    minWidth: '15%',
     minHeight: '30%',
     alignSelf: 'center',
     marginTop: theme.spacings.xSmall,
