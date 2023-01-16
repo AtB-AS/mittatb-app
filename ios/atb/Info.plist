@@ -5,7 +5,7 @@
 	<key>NFCReaderUsageDescription</key>
 	<string>Vi må bruke NFC for sikkerhetsformål.</string>
 	<key>AppTeamIdentifier</key>
-	<string>CSV447Q97L</string>
+	<string>$(IOS_DEVELOPMENT_TEAM_ID)</string>
 	<key>AppEnvironment</key>
 	<string>PRODUCTION</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
