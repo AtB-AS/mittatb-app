@@ -84,7 +84,7 @@ export function ActionSectionItem({
           <ThemeText
             type="body__secondary"
             color="secondary"
-            style={styles.textMarginTop}
+            style={{marginTop: theme.spacings.small}}
           >
             {subtext}
           </ThemeText>
@@ -127,9 +127,6 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  textMarginTop: {
-    marginTop: theme.spacings.small,
   },
   headerExpandIconGroup__text: {
     marginRight: theme.spacings.xSmall,
