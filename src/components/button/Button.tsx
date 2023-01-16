@@ -12,7 +12,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {ThemeIcon} from '@atb/components/theme-icon';
+import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';
 
@@ -38,11 +38,13 @@ const DefaultModeStyles: {[key in ButtonMode]: ButtonSettings} = {
 
 type ButtonTypeAwareProps =
   | {text?: string; type: 'inline'}
-  | {text: string; type?: 'block'};
+  | {text: string; type?: 'block'}
+  | {text: string; type: 'pill'};
 
 type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
   size?: keyof Theme['icon']['size'];
+  notification?: ThemeIconProps['notification'];
 };
 
 export type ButtonProps = {
@@ -99,24 +101,32 @@ export const Button = React.forwardRef<any, ButtonProps>(
       }).start();
     }, [disabled, fadeAnim]);
 
-    const isInline = type === 'inline';
+    const isInline = type === 'inline' || type === 'pill';
 
     const spacing = compact ? theme.spacings.small : theme.spacings.medium;
 
-    const {background: backgroundColor, text: textColor} = themeColor
-      ? theme.interactive[themeColor][active ? 'active' : 'default']
-      : {
-          background: 'transparent',
-          text: theme.text.colors.primary,
-        };
+    const {background: backgroundColor, text: textColor} =
+      theme.interactive[themeColor][active ? 'active' : 'default'];
 
     const styleContainer: ViewStyle[] = [
       css.button,
       {
-        backgroundColor: modeData.withBackground ? backgroundColor : undefined,
-        borderColor: modeData.visibleBorder ? textColor : 'transparent',
-        padding: spacing,
+        backgroundColor: modeData.withBackground
+          ? backgroundColor
+          : 'transparent',
+        borderColor:
+          active && type === 'pill' && mode === 'primary'
+            ? theme.interactive[themeColor].default.background
+            : modeData.visibleBorder
+            ? textColor
+            : 'transparent',
+        paddingHorizontal: spacing,
+        paddingVertical: type === 'pill' ? theme.spacings.xSmall : spacing,
         alignSelf: isInline ? 'flex-start' : undefined,
+        borderRadius:
+          type === 'pill'
+            ? theme.border.radius.circle
+            : theme.border.radius.regular,
       },
     ];
 
@@ -157,18 +167,16 @@ export const Button = React.forwardRef<any, ButtonProps>(
         >
           {leftIcon && (
             <View style={leftStyling}>
-              <ThemeIcon
-                svg={leftIcon.svg}
-                fill={textColor}
-                size={leftIcon.size}
-              />
+              <ThemeIcon fill={textColor} {...leftIcon} />
             </View>
           )}
           {text && (
             <View style={[textContainer, textContainerStyle]}>
               <ThemeText
                 type={
-                  mode === 'tertiary' ? 'body__primary' : 'body__primary--bold'
+                  mode === 'tertiary' || type === 'pill'
+                    ? 'body__primary'
+                    : 'body__primary--bold'
                 }
                 style={[styleText, textStyle]}
               >
@@ -178,11 +186,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
           )}
           {rightIcon && (
             <View style={rightStyling}>
-              <ThemeIcon
-                svg={rightIcon.svg}
-                fill={textColor}
-                size={rightIcon.size}
-              />
+              <ThemeIcon fill={textColor} {...rightIcon} />
             </View>
           )}
         </TouchableOpacity>
@@ -216,7 +220,6 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: theme.border.radius.regular,
     borderWidth: theme.border.width.medium,
   },
 }));

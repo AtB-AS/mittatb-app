@@ -1,4 +1,4 @@
-import {StopPlace, Quay} from '@atb/api/types/departures';
+import {Quay, StopPlace} from '@atb/api/types/departures';
 import {Button} from '@atb/components/button';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {SearchTime} from '@atb/screens/Departures/utils';
@@ -13,6 +13,7 @@ import {useStopsDetailsData} from './state/stop-place-details-state';
 import StopPlaceView from './StopPlaceView';
 import {DeparturesStackProps, StopPlacesMode} from './types';
 import {StopPlaceAndQuaySelection} from '@atb/screens/Departures/components/StopPlaceAndQuaySelection';
+import {MessageBox} from '@atb/components/message-box';
 
 export type PlaceScreenParams = {
   place: StopPlace;
@@ -48,9 +49,29 @@ export default function PlaceScreen({
   const {state} = useStopsDetailsData(
     place.quays === undefined ? [place.id] : undefined,
   );
+  const isFocused = useIsFocused();
+
+  let missingStopData = false;
 
   if (state.data && place.quays === undefined) {
-    place = state.data.stopPlaces[0];
+    if (state.data.stopPlaces[0]) {
+      place = state.data.stopPlaces[0];
+    } else {
+      missingStopData = true;
+    }
+  }
+
+  if (state.error || missingStopData) {
+    return (
+      <View style={styles.container}>
+        <FullScreenHeader title={place.name} leftButton={{type: 'back'}} />
+        <MessageBox
+          style={styles.messageBox}
+          type="error"
+          message={t(DeparturesTexts.message.resultNotFound)}
+        />
+      </View>
+    );
   }
 
   const navigateToDetails = (
@@ -85,7 +106,6 @@ export default function PlaceScreen({
       navigation.setParams({selectedQuayId: quay.id});
     }
   };
-  const isFocused = useIsFocused();
 
   const selectedQuay = selectedQuayId
     ? place.quays?.find((q) => q.id === selectedQuayId)
@@ -165,4 +185,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.medium,
   },
   quayData: {flex: 1},
+  messageBox: {
+    margin: theme.spacings.medium,
+  },
 }));

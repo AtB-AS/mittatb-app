@@ -63,8 +63,7 @@ jobs:
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Register app version
-        if: matrix.org == 'atb'
         run: sh ./scripts/ios/register-app-version.sh
         env:
-          ENTUR_CLIENT_ID: ${{ secrets.ATB_ENTUR_CLIENT_ID_PRODUCTION}}
-          ENTUR_CLIENT_SECRET: ${{ secrets.ATB_ENTUR_CLIENT_SECRET_PRODUCTION}}
+          ENTUR_CLIENT_ID: ${{ secrets.ABT_ENTUR_CLIENT_ID_PRODUCTION}}
+          ENTUR_CLIENT_SECRET: ${{ secrets.ABT_ENTUR_CLIENT_SECRET_PRODUCTION}}

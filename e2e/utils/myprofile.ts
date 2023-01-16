@@ -6,7 +6,7 @@ import {chooseSearchResult, goToTab, setInputById} from './commonHelpers';
 // Toggle language
 export const toggleLanguage = async (useMyPhoneSettings: boolean) => {
   const toggle = await element(
-    by.type('RCTSwitch').and(by.label('Use my phone settings')),
+    by.id('toggleLanguage')
   )
     .getAttributes()
     .then((elem) => {
@@ -15,15 +15,12 @@ export const toggleLanguage = async (useMyPhoneSettings: boolean) => {
 
   // Enable my phone settings if not enabled
   if (toggle == 0 && useMyPhoneSettings) {
-    await element(
-      by.type('RCTSwitch').and(by.label('Use my phone settings')),
-    ).tap();
+    await tapById('toggleLanguage');
   }
+
   // Disable my phone settings if not enabled
   if (toggle == 1 && !useMyPhoneSettings) {
-    await element(
-      by.type('RCTSwitch').and(by.label('Use my phone settings')),
-    ).tap();
+    await tapById('toggleLanguage');
   }
 };
 

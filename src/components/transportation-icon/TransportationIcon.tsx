@@ -49,7 +49,7 @@ export const TransportationIcon: React.FC<TransportationIconProps> = ({
     </ThemeText>
   ) : null;
 
-  return svg ? (
+  return (
     <View style={[iconStyle, {backgroundColor}]}>
       <ThemeIcon
         size={size}
@@ -59,7 +59,7 @@ export const TransportationIcon: React.FC<TransportationIconProps> = ({
       />
       {lineNumberElement}
     </View>
-  ) : null;
+  );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

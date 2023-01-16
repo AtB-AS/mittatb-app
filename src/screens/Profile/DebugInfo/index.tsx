@@ -113,11 +113,10 @@ export default function DebugInfo() {
 
       <ScrollView testID="debugInfoScrollView">
         <Sections.Section withPadding withTopPadding>
-          <Sections.ActionSectionItem
-            mode="toggle"
+          <Sections.ToggleSectionItem
             text="Toggle test-ID"
-            checked={showTestIds}
-            onPress={(showTestIds) => {
+            value={showTestIds}
+            onValueChange={(showTestIds) => {
               setPreference({showTestIds});
             }}
           />

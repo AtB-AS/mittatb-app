@@ -10,30 +10,29 @@ import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
-import {Add, Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {StyleSheet} from '@atb/theme';
 import type {
-  TransportModeFilterOptionType,
-  TravelSearchFiltersType,
+  TransportModeFilterOptionWithSelectionType,
+  TravelSearchFiltersSelectionType,
 } from './types';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
   {
     close: () => void;
-    filters: TravelSearchFiltersType;
-    initialSelection: TravelSearchFiltersType;
-    onSave: (t: TravelSearchFiltersType) => void;
+    filtersSelection: TravelSearchFiltersSelectionType;
+    onSave: (t: TravelSearchFiltersSelectionType) => void;
   }
->(({close, filters, initialSelection, onSave}, focusRef) => {
+>(({close, filtersSelection, onSave}, focusRef) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
 
   const [selectedModes, setSelectedModes] = useState<
-    TransportModeFilterOptionType[] | undefined
-  >(initialSelection.transportModes);
+    TransportModeFilterOptionWithSelectionType[] | undefined
+  >(filtersSelection.transportModes);
 
   const save = () => {
     onSave({
@@ -41,6 +40,8 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
     });
     close();
   };
+
+  const allModesSelected = selectedModes?.every((m) => m.selected);
 
   return (
     <BottomSheetContainer maxHeightValue={0.9}>
@@ -51,47 +52,50 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
           text: t(ScreenHeaderTexts.headerButton.cancel.text),
           testID: 'cancelButton',
         }}
-        title={t(TripSearchTexts.filters.heading)}
+        title={t(TripSearchTexts.filters.bottomSheet.heading)}
         color="background_1"
         setFocusOnLoad={false}
       />
       <ScrollView style={styles.filtersContainer} ref={focusRef}>
         <Sections.Section>
           <Sections.HeaderSectionItem
-            text={t(TripSearchTexts.filters.modes.heading)}
+            text={t(TripSearchTexts.filters.bottomSheet.modes.heading)}
           />
-          <Sections.ActionSectionItem
-            mode="toggle"
-            text={t(TripSearchTexts.filters.modes.all)}
-            checked={selectedModes?.length === filters.transportModes?.length}
-            onPress={(checked) => {
-              setSelectedModes(checked ? filters.transportModes : []);
+          <Sections.ToggleSectionItem
+            text={t(TripSearchTexts.filters.bottomSheet.modes.all)}
+            value={allModesSelected}
+            onValueChange={(checked) => {
+              setSelectedModes(
+                filtersSelection.transportModes?.map((m) => ({
+                  ...m,
+                  selected: checked,
+                })),
+              );
             }}
           />
-          {filters.transportModes?.map((option) => {
+          {filtersSelection.transportModes?.map((option) => {
             const text = getTextForLanguage(option.text, language);
             const description = getTextForLanguage(
               option.description,
               language,
             );
             return text ? (
-              <Sections.ActionSectionItem
+              <Sections.ToggleSectionItem
                 key={option.id}
-                mode="toggle"
                 text={text}
-                leftIcon={
-                  getTransportModeSvg(
-                    option.icon?.transportMode,
-                    option.icon?.transportSubMode,
-                  ) || Add
-                }
+                leftIcon={getTransportModeSvg(
+                  option.icon?.transportMode,
+                  option.icon?.transportSubMode,
+                )}
                 subtext={description}
-                checked={selectedModes?.some(({id}) => id === option.id)}
-                onPress={(checked) => {
+                value={
+                  selectedModes?.find(({id}) => id === option.id)?.selected
+                }
+                onValueChange={(checked) => {
                   setSelectedModes(
-                    checked
-                      ? selectedModes?.concat(option)
-                      : selectedModes?.filter((m) => m.id !== option.id),
+                    selectedModes?.map((m) =>
+                      m.id === option.id ? {...m, selected: checked} : m,
+                    ),
                   );
                 }}
               />
@@ -101,7 +105,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
       </ScrollView>
       <FullScreenFooter>
         <Button
-          text={t(TripSearchTexts.filters.save)}
+          text={t(TripSearchTexts.filters.bottomSheet.save)}
           onPress={save}
           rightIcon={{svg: Confirm}}
         />

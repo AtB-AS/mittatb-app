@@ -1,11 +1,12 @@
 import {useFavorites} from '@atb/favorites';
-import {AccessibilityInfo} from 'react-native';
+import {AccessibilityInfo, Alert} from 'react-native';
 import {NearbyTexts, useTranslation} from '@atb/translations';
-import {StopPlace, Quay} from '@atb/api/types/departures';
+import {Quay, StopPlace} from '@atb/api/types/departures';
 import FavoriteDialogSheet from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import React, {useRef} from 'react';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
+import {animateNextChange} from '@atb/utils/animation';
 
 type FavouriteDepartureLine = {
   id?: string;
@@ -70,9 +71,26 @@ export function useOnMarkFavouriteDepartures(
 
   const onMarkFavourite = () => {
     if (existingFavorite) {
-      removeFavoriteDeparture(existingFavorite.id);
-      AccessibilityInfo.announceForAccessibility(
-        t(NearbyTexts.results.lines.favorite.message.removed),
+      Alert.alert(
+        t(NearbyTexts.results.lines.favorite.delete.label),
+        t(NearbyTexts.results.lines.favorite.delete.confirmWarning),
+        [
+          {
+            text: t(NearbyTexts.results.lines.favorite.delete.cancel),
+            style: 'cancel',
+          },
+          {
+            text: t(NearbyTexts.results.lines.favorite.delete.delete),
+            style: 'destructive',
+            onPress: async () => {
+              animateNextChange();
+              await removeFavoriteDeparture(existingFavorite.id);
+              AccessibilityInfo.announceForAccessibility(
+                t(NearbyTexts.results.lines.favorite.message.removed),
+              );
+            },
+          },
+        ],
       );
     } else if (line.lineName && line.lineNumber) {
       openBottomSheet(
