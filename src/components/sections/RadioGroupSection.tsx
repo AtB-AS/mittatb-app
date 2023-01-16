@@ -10,7 +10,6 @@ type Props<T> = Omit<SectionProps, 'children'> & {
   keyExtractor(item: T, index: number): string;
   itemToText(item: T, index: number): string;
   itemToSubtext?(item: T, index: number): string;
-  itemToWarningText?(item: T, index: number): string | undefined;
   hideSubtext?: boolean;
   onSelect?(item: T, index: number): void;
   headerText?: string;
@@ -21,7 +20,6 @@ export function RadioGroupSection<T>({
   keyExtractor,
   itemToText,
   itemToSubtext,
-  itemToWarningText,
   hideSubtext,
   items,
   selected,
@@ -37,9 +35,6 @@ export function RadioGroupSection<T>({
       {items.map((item: T, index) => {
         const text = itemToText(item, index);
         const subtext = itemToSubtext ? itemToSubtext(item, index) : undefined;
-        const warningText = itemToWarningText
-          ? itemToWarningText(item, index)
-          : undefined;
         const a11yLabel = `${text}, ${hideSubtext ? '' : subtext}`;
         const checked = item === selected;
         return (
@@ -50,7 +45,6 @@ export function RadioGroupSection<T>({
             text={itemToText(item, index)}
             hideSubtext={hideSubtext}
             subtext={subtext}
-            warningText={warningText}
             onPress={() => onSelect?.(item, index)}
             testID={'radioButton' + itemToText(item, index)}
             color={color}

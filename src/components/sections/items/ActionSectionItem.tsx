@@ -19,7 +19,6 @@ type ActionModes = 'check';
 type Props = SectionItemProps<{
   text: string;
   subtext?: string;
-  warningText?: string;
   hideSubtext?: boolean;
   onPress(checked: boolean): void;
   leftIcon?: (props: SvgProps) => JSX.Element;
@@ -31,7 +30,6 @@ type Props = SectionItemProps<{
 export function ActionSectionItem({
   text,
   subtext,
-  warningText,
   hideSubtext,
   onPress,
   leftIcon,
@@ -89,15 +87,6 @@ export function ActionSectionItem({
             style={styles.textMarginTop}
           >
             {subtext}
-          </ThemeText>
-        )}
-        {warningText && (
-          <ThemeText
-            type="body__secondary"
-            color="secondary"
-            style={styles.textMarginTop}
-          >
-            {warningText}
           </ThemeText>
         )}
       </View>
