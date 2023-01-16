@@ -14,7 +14,6 @@ export type PreassignedFareProduct = {
   name: LanguageAndTextType;
   version: string;
   description?: LanguageAndTextType[];
-  warningMessage?: LanguageAndTextType[];
   type: PreassignedFareProductType;
   durationDays: number;
   distributionChannel: DistributionChannel[];
