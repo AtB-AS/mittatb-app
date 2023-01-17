@@ -40,11 +40,11 @@
     "description": [
       {
         "lang": "nob",
-        "value": "I Trondheim"
+        "value": "I Trondheim\nFra 00:30 til 04:00 på nattbuss og -trikk"
       },
       {
         "lang": "eng",
-        "value": "In Trondheim"
+        "value": "In Trondheim\nFrom 00:30 to 04:00 for night bus and tram"
       }
     ],
     "alternativeNames": [
@@ -73,11 +73,11 @@
     "description": [
       {
         "lang": "nob",
-        "value": "Til Malvik, Melhus og Skaun"
+        "value": "Til Malvik, Melhus og Skaun\nFra 00:30 til 04:00 på nattbuss og -trikk"
       },
       {
         "lang": "eng",
-        "value": "To Malvik, Melhus and Skaun"
+        "value": "To Malvik, Melhus and Skaun\nFrom 00:30 to 04:00 for night bus and tram"
       }
     ],
     "alternativeNames": [
@@ -106,11 +106,11 @@
     "description": [
       {
         "lang": "nob",
-        "value": "Til Stjørdal og Orkdal"
+        "value": "Til Stjørdal og Orkdal\nFra 00:30 til 04:00 på nattbuss og -trikk"
       },
       {
         "lang": "eng",
-        "value": "To Stjørdal and Orkdal"
+        "value": "To Stjørdal and Orkdal\nFrom 00:30 to 04:00 for night bus and tram"
       }
     ],
     "alternativeNames": [

@@ -7,7 +7,7 @@
 	<key>AppScheme</key>
 	<string>$(APP_SCHEME)</string>
 	<key>AppTeamIdentifier</key>
-	<string>CSV447Q97L</string>
+	<string>$(IOS_DEVELOPMENT_TEAM_ID)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>nb</string>
 	<key>CFBundleDisplayName</key>

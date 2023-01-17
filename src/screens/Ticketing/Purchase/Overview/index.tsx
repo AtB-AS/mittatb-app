@@ -2,6 +2,7 @@ import {MessageBox} from '@atb/components/message-box';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
 import {
   dictionary,
@@ -69,6 +70,8 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
     travelDate,
   );
 
+  const isEmptyOffer = error?.type === 'empty-offers';
+
   useEffect(() => {
     if (params?.refreshOffer) {
       refreshOffer();
@@ -100,11 +103,23 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             <MessageBox
               type="error"
               title={t(PurchaseOverviewTexts.errorMessageBox.title)}
-              message={t(PurchaseOverviewTexts.errorMessageBox.message)}
-              onPressConfig={{
-                action: refreshOffer,
-                text: t(dictionary.retry),
-              }}
+              message={
+                isEmptyOffer
+                  ? t(
+                      PurchaseOverviewTexts.errorMessageBox.producUnavailable(
+                        getReferenceDataName(preassignedFareProduct, language),
+                      ),
+                    )
+                  : t(PurchaseOverviewTexts.errorMessageBox.message)
+              }
+              onPressConfig={
+                !isEmptyOffer
+                  ? {
+                      action: refreshOffer,
+                      text: t(dictionary.retry),
+                    }
+                  : undefined
+              }
               style={styles.selectionComponent}
             />
           )}

@@ -5,7 +5,7 @@ const MIN_TIME_RANGE = 3 * 60 * 60; // Three hours
 const ONE_WEEK_TIME_RANGE = 7 * 24 * 60 * 60;
 
 export const DateOptions = ['now', 'departure'] as const;
-export type DateOptionType = typeof DateOptions[number];
+export type DateOptionType = (typeof DateOptions)[number];
 export type SearchTime = {
   option: DateOptionType;
   date: string;
