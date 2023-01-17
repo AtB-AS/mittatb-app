@@ -67,8 +67,12 @@ struct WidgetInfoView: View {
                                 if let icon = viewModel.transportModeIcon {
                                     icon
                                         .resizable()
+                                        .renderingMode(.template)
+                                        .scaledToFit()
+                                        .foregroundColor(viewModel.transportModeIconForegroundColor)
+                                        .padding(K.transportIconSize / 7)
                                         .frame(width: K.transportIconSize, height: K.transportIconSize)
-                                        .background(K.transportCityColor)
+                                        .background(viewModel.transportModeIconBackgroundColor)
                                         .cornerRadius(K.transportIconCornerRadius)
                                 }
 

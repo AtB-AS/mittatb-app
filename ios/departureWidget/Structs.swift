@@ -23,15 +23,35 @@ enum TransportMode: String, Codable {
     var icon: Image? {
         switch self {
         case .water:
-            return Image("BoatIcon")
+            return Image("Boat")
         case .rail:
-            return Image("TrainIcon")
+            return Image("Train")
         case .tram:
-            return Image("TramIcon")
+            return Image("Tram")
         case .bus:
-            return Image("BusIcon")
+            return Image("Bus")
         default:
             return nil
+        }
+    }
+
+    var iconForegroundColor: Color {
+        switch self {
+        case .rail:
+            return .white
+        default:
+            return .black
+        }
+    }
+
+    var iconBackgroundColor: Color {
+        switch self {
+        case .water:
+            return Color("Transport/Boat")
+        case .rail:
+            return Color("Transport/Rail")
+        default:
+            return Color("Transport/City")
         }
     }
 }
@@ -150,10 +170,19 @@ enum TransportSubMode: String, Codable {
          urbanRailway,
          waterTaxi
 
-    var icon: Image? {
+    var iconForegroundColor: Color? {
         switch self {
         case .regionalBus, .nightBus:
-            return Image("RegionBusIcon")
+            return .white
+        default:
+            return nil
+        }
+    }
+
+    var iconBackgroundColor: Color? {
+        switch self {
+        case .regionalBus, .nightBus:
+            return Color("Transport/Region")
         default:
             return nil
         }
@@ -337,7 +366,7 @@ extension FavouriteDeparture {
         lineName: "Ranheim",
         lineLineNumber: "1",
         lineTransportationMode: TransportMode.bus,
-        lineTransportationSubMode: TransportSubMode.nightBus,
+        lineTransportationSubMode: TransportSubMode.undefined,
         quayName: "Prinsens gate",
         quayPublicCode: "P1",
         quayId: "NSR:Quay:71184",
@@ -376,7 +405,7 @@ extension QuayGroup {
                     lineName: "Ranheim",
                     lineNumber: "1",
                     transportMode: TransportMode.bus,
-                    transportSubmode: TransportSubMode.nightBus,
+                    transportSubmode: TransportSubMode.undefined,
                     quayId: "NSR:Quay:71184"
                 ),
                 departures: [Int](0 ..< 10).map { index in
