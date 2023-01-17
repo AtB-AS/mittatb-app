@@ -10,8 +10,8 @@ const PurchaseOverviewTexts = {
     ),
     producUnavailable: (productName: string) =>
       _(
-        `Produktet ${productName} er kanskje ikke tilgjengelig akkurat nå.`,
-        `Product ${productName} might not be available right now.`,
+        `${productName} er ikke tilgjengelig akkurat nå.`,
+        `${productName} is not available right now.`,
       ),
   },
   travellers: {
