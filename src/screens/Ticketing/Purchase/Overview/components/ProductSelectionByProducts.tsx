@@ -54,9 +54,19 @@ export default function ProductSelectionByProducts({
           keyExtractor={(u) => u.id}
           itemToText={(fp) => getReferenceDataName(fp, language)}
           hideSubtext={hideTravellerDescriptions}
-          itemToSubtext={(fp) =>
-            getTextForLanguage(fp.description ?? [], language) ?? 'Unknow'
-          }
+          itemToSubtext={(fp) => {
+            const descriptionMessage =
+              getTextForLanguage(fp.description ?? [], language) ?? 'Unknow';
+            if (!fp.warningMessage) {
+              const warningMessage = getTextForLanguage(
+                fp.warningMessage,
+                language,
+              );
+              return `${descriptionMessage}\n${warningMessage}`;
+            }
+
+            return descriptionMessage;
+          }}
           selected={selected}
           onSelect={(fp) => {
             setProduct(fp);
