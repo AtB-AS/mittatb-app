@@ -57,7 +57,7 @@ export default function ProductSelectionByProducts({
           itemToSubtext={(fp) => {
             const descriptionMessage =
               getTextForLanguage(fp.description ?? [], language) ?? 'Unknow';
-            if (!fp.warningMessage) {
+            if (fp.warningMessage) {
               const warningMessage = getTextForLanguage(
                 fp.warningMessage,
                 language,
