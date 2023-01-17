@@ -1,5 +1,6 @@
 import {ColorSchemeName} from 'react-native';
 import {appLanguages} from '../translations';
+
 export const preference_screenAlternatives = [
   'assistant',
   'departures',
@@ -7,9 +8,9 @@ export const preference_screenAlternatives = [
 ] as const;
 
 export type Preference_ScreenAlternatives =
-  typeof preference_screenAlternatives[number];
+  (typeof preference_screenAlternatives)[number];
 
-export type Preference_Language = typeof appLanguages[number];
+export type Preference_Language = (typeof appLanguages)[number];
 
 export type TripSearchPreferences = {
   transferPenalty?: number;
