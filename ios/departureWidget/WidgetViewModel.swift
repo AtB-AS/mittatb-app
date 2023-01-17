@@ -85,12 +85,13 @@ struct WidgetViewModel {
     var transportModeIcon: Image? {
         entry.favouriteDeparture?.lineTransportationMode?.icon ?? TransportMode.bus.icon
     }
-    
-    var transportModeIconForegroundColor : Color? {
-      entry.favouriteDeparture?.lineTransportationSubMode?.iconForegroundColor ?? entry.favouriteDeparture?.lineTransportationMode?.iconForegroundColor ?? TransportMode.bus.iconForegroundColor
+
+    var transportModeIconForegroundColor: Color? {
+        entry.favouriteDeparture?.lineTransportationSubMode?.iconForegroundColor ?? entry.favouriteDeparture?.lineTransportationMode?.iconForegroundColor ?? TransportMode.bus.iconForegroundColor
     }
-    var transportModeIconBackgroundColor : Color? {
-      entry.favouriteDeparture?.lineTransportationSubMode?.iconBackgroundColor ?? entry.favouriteDeparture?.lineTransportationMode?.iconBackgroundColor ?? TransportMode.bus.iconBackgroundColor
+
+    var transportModeIconBackgroundColor: Color? {
+        entry.favouriteDeparture?.lineTransportationSubMode?.iconBackgroundColor ?? entry.favouriteDeparture?.lineTransportationMode?.iconBackgroundColor ?? TransportMode.bus.iconBackgroundColor
     }
 
     /// Filter relevant departure and return `aimed time`

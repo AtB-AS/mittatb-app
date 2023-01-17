@@ -34,26 +34,26 @@ enum TransportMode: String, Codable {
             return nil
         }
     }
-  
-  var iconForegroundColor: Color {
-    switch self {
-    case .rail:
-      return .white
-    default:
-      return .black
+
+    var iconForegroundColor: Color {
+        switch self {
+        case .rail:
+            return .white
+        default:
+            return .black
+        }
     }
-  }
-  
-  var iconBackgroundColor: Color {
-    switch self {
-    case .water:
-        return Color("Transport/Boat")
-    case .rail:
-        return Color("Transport/Rail")
-    default:
-        return Color("Transport/City")
+
+    var iconBackgroundColor: Color {
+        switch self {
+        case .water:
+            return Color("Transport/Boat")
+        case .rail:
+            return Color("Transport/Rail")
+        default:
+            return Color("Transport/City")
+        }
     }
-  }
 }
 
 enum TransportSubMode: String, Codable {
@@ -170,23 +170,23 @@ enum TransportSubMode: String, Codable {
          urbanRailway,
          waterTaxi
 
-  var iconForegroundColor: Color? {
-    switch self {
-    case .regionalBus, .nightBus:
-      return .white
-    default:
-      return nil
+    var iconForegroundColor: Color? {
+        switch self {
+        case .regionalBus, .nightBus:
+            return .white
+        default:
+            return nil
+        }
     }
-  }
-  
-  var iconBackgroundColor: Color? {
-    switch self {
-    case .regionalBus, .nightBus:
-        return Color("Transport/Region")
-    default:
-        return nil
+
+    var iconBackgroundColor: Color? {
+        switch self {
+        case .regionalBus, .nightBus:
+            return Color("Transport/Region")
+        default:
+            return nil
+        }
     }
-  }
 }
 
 // MARK: Structs
