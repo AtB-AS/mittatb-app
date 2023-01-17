@@ -6,9 +6,9 @@ import {Button} from '@atb/components/button';
 import {SimpleDisappearingHeader} from '@atb/components/disappearing-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {
-  ActionSectionItem,
   LocationInputSectionItem,
   Section,
+  ToggleSectionItem,
 } from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import DeparturesList from '@atb/departure-list/DeparturesList';
@@ -255,12 +255,11 @@ const NearbyOverview: React.FC<Props> = ({
 
       {data !== null && (
         <View style={styles.container}>
-          <ActionSectionItem
+          <ToggleSectionItem
             transparent
             text={t(NearbyTexts.favorites.toggle)}
-            mode="toggle"
-            checked={showOnlyFavorites}
-            onPress={toggleShowFavorites}
+            value={showOnlyFavorites}
+            onValueChange={toggleShowFavorites}
             testID="showOnlyFavoritesButton"
           />
         </View>

@@ -113,10 +113,7 @@ describe('Tickets anonymous', () => {
       ticketInfo.singleFareProductChildPrice;
 
     // Verify
-    // TODO Disabled until fixed by Entur
-    /*
     await expectIdToHaveText('offerTotalPriceText', `Total ${totPrice}.00 kr`);
-
     await scroll('ticketingScrollView', 'bottom');
     await tapById('goToPaymentButton');
     await expectToBeVisibleByText('2 Adult');
@@ -124,7 +121,6 @@ describe('Tickets anonymous', () => {
     await expectToBeVisibleByText(`${totPrice}.00 kr`);
 
     await goBack();
-     */
     await goBack();
   });
 });

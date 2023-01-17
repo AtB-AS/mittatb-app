@@ -22,6 +22,7 @@ import {parseUrl} from 'query-string';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -143,91 +144,83 @@ export default function LoginOptionsScreen({
         color={themeColor}
         title={t(LoginTexts.logInOptions.title)}
       />
-      <View style={styles.mainView}>
-        <ScrollView
-          centerContent={true}
-          style={styles.scrollView}
-          contentContainerStyle={styles.contentContainerStyle}
-        >
-          <View accessible={true} accessibilityRole="header">
-            <ThemeText
-              type={'body__primary--jumbo--bold'}
-              style={styles.title}
-              color={themeColor}
-            >
-              {t(LoginTexts.logInOptions.title)}
-            </ThemeText>
-          </View>
-          {isLoading && (
-            <ActivityIndicator style={styles.activityIndicator} size="large" />
-          )}
-          {error && error !== 'access_denied' && (
-            <MessageBox
-              style={styles.errorMessage}
-              type="error"
-              message={t(LoginTexts.vipps.errors[error])}
-            />
-          )}
-          <ThemeText style={styles.description} color={themeColor}>
-            {t(LoginTexts.logInOptions.selectLoginMethod)}
+      <ScrollView contentContainerStyle={styles.scrollView} bounces={false}>
+        <View accessible={true} accessibilityRole="header">
+          <ThemeText
+            type={'body__primary--jumbo--bold'}
+            style={styles.title}
+            color={themeColor}
+          >
+            {t(LoginTexts.logInOptions.title)}
           </ThemeText>
-          <VippsLoginButton
-            onPress={authenticateUserByVipps}
-            disabled={isLoading}
+        </View>
+        {isLoading && (
+          <ActivityIndicator style={styles.activityIndicator} size="large" />
+        )}
+        {error && error !== 'access_denied' && (
+          <MessageBox
+            style={styles.errorMessage}
+            type="error"
+            message={t(LoginTexts.vipps.errors[error])}
           />
-          <ThemeText style={styles.description} color={themeColor}>
-            {t(LoginTexts.logInOptions.or)}
-          </ThemeText>
-          <Sections.Section>
-            <Sections.LinkSectionItem
-              text={t(LoginTexts.logInOptions.options.phoneAndCode)}
-              onPress={() => {
-                navigation.navigate('LoginInApp', {
-                  screen: 'PhoneInputInApp',
-                  params: {afterLogin: afterLogin},
-                });
-              }}
-              disabled={isLoading}
-              testID="chooseLoginPhone"
-            />
-          </Sections.Section>
-        </ScrollView>
-      </View>
+        )}
+        <ThemeText style={styles.description} color={themeColor}>
+          {t(LoginTexts.logInOptions.selectLoginMethod)}
+        </ThemeText>
+        <VippsLoginButton
+          onPress={authenticateUserByVipps}
+          disabled={isLoading}
+        />
+        <ThemeText style={styles.description} color={themeColor}>
+          {t(LoginTexts.logInOptions.or)}
+        </ThemeText>
+        <Sections.Section>
+          <Sections.LinkSectionItem
+            text={t(LoginTexts.logInOptions.options.phoneAndCode)}
+            onPress={() => {
+              navigation.navigate('LoginInApp', {
+                screen: 'PhoneInputInApp',
+                params: {afterLogin: afterLogin},
+              });
+            }}
+            disabled={isLoading}
+            testID="chooseLoginPhone"
+          />
+        </Sections.Section>
+      </ScrollView>
     </View>
   );
 }
 
-const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    backgroundColor: theme.static.background[themeColor].background,
-    flex: 1,
-  },
-  mainView: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  scrollView: {
-    paddingBottom: theme.spacings.xLarge,
-  },
-  contentContainerStyle: {
-    paddingHorizontal: theme.spacings.large,
-    flexDirection: 'column',
-    paddingBottom: theme.spacings.xLarge,
-  },
-  title: {
-    textAlign: 'center',
-    marginVertical: theme.spacings.medium,
-  },
-  description: {
-    marginVertical: theme.spacings.large,
-    textAlign: 'center',
-  },
-  activityIndicator: {
-    marginVertical: theme.spacings.large,
-  },
-  errorMessage: {
-    marginBottom: theme.spacings.medium,
-  },
-}));
+const useThemeStyles = StyleSheet.createThemeHook((theme) => {
+  const {bottom: safeAreaBottom} = useSafeAreaInsets();
+  return {
+    container: {
+      backgroundColor: theme.static.background[themeColor].background,
+      flex: 1,
+    },
+    mainView: {
+      flex: 1,
+    },
+    scrollView: {
+      flexGrow: 1,
+      justifyContent: 'center',
+      paddingHorizontal: theme.spacings.xLarge,
+      paddingBottom: safeAreaBottom,
+    },
+    title: {
+      textAlign: 'center',
+      marginBottom: theme.spacings.medium,
+    },
+    description: {
+      marginVertical: theme.spacings.large,
+      textAlign: 'center',
+    },
+    activityIndicator: {
+      marginVertical: theme.spacings.large,
+    },
+    errorMessage: {
+      marginBottom: theme.spacings.medium,
+    },
+  };
+});

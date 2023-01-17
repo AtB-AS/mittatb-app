@@ -157,6 +157,19 @@ const NearbyTexts = {
             `Fjern favorittavgang: ${name} fra ${place}`,
             `Delete favourite departure: ${name} from ${place}`,
           ),
+        delete: {
+          label: _('Fjerne avgang?', 'Delete departure?'),
+          confirmWarning: _(
+            'Sikker på at du vil fjerne favorittavgang?',
+            'Sure you want to delete this favourite?',
+          ),
+          cancel: _('Avbryt', 'Cancel'),
+          delete: _('Slett', 'Delete'),
+        },
+        a11yMarkFavouriteHint: _(
+          'Aktiver for å merke som favoritt',
+          'Activate to mark as favourite',
+        ),
         message: {
           saved: _(`Lagt til.`, 'Added'),
           removed: _(`Fjernet.`, 'Removed'),

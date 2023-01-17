@@ -46,6 +46,7 @@ import {DashboardScreenProps} from './types';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 import storage, {StorageModelKeysEnum} from '@atb/storage';
 import {useTravelSearchFiltersState} from '@atb/screens/Dashboard/use-travel-search-filters-state';
+import {SelectedFiltersButtons} from '@atb/screens/Dashboard/SelectedFiltersButtons';
 
 type TripSearchRouteName = 'TripSearch';
 const TripSearchRouteNameStatic: TripSearchRouteName = 'TripSearch';
@@ -92,15 +93,10 @@ const TripSearch: React.FC<RootProps> = ({
     date: new Date().toISOString(),
   });
 
-  const travelSearchFiltersState = useTravelSearchFiltersState();
+  const filtersState = useTravelSearchFiltersState();
 
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
-    useTripsQuery(
-      from,
-      to,
-      searchTime,
-      travelSearchFiltersState?.selectedFilters,
-    );
+    useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);
 
   const isSearching = searchState === 'searching';
   const showEmptyScreen = !tripPatterns && !isSearching && !error;
@@ -316,10 +312,16 @@ const TripSearch: React.FC<RootProps> = ({
             compact={true}
             onPress={onSearchTimePress}
             testID="dashboardDateTimePicker"
-            rightIcon={{svg: Time}}
+            rightIcon={{
+              svg: Time,
+              notification:
+                searchTime.option !== 'now'
+                  ? {color: 'valid', backgroundColor: 'background_accent_0'}
+                  : undefined,
+            }}
             viewContainerStyle={style.searchTimeButton}
           />
-          {travelSearchFiltersState.enabled && (
+          {filtersState.enabled && (
             <Button
               text={t(TripSearchTexts.filterButton.text)}
               accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
@@ -327,11 +329,16 @@ const TripSearch: React.FC<RootProps> = ({
               mode="secondary"
               type="inline"
               compact={true}
-              onPress={travelSearchFiltersState.openBottomSheet}
+              onPress={filtersState.openBottomSheet}
               testID="dashboardDateTimePicker"
-              rightIcon={{svg: Filter}}
+              rightIcon={{
+                svg: Filter,
+                notification: filtersState.anyFiltersApplied
+                  ? {color: 'valid', backgroundColor: 'background_accent_0'}
+                  : undefined,
+              }}
               viewContainerStyle={style.filterButton}
-              ref={travelSearchFiltersState.closeRef}
+              ref={filtersState.closeRef}
             />
           )}
         </View>
@@ -358,16 +365,27 @@ const TripSearch: React.FC<RootProps> = ({
           </ThemeText>
         )}
         {from && to && (
-          <Results
-            tripPatterns={tripPatterns}
-            isSearching={isSearching}
-            showEmptyScreen={showEmptyScreen}
-            isEmptyResult={isEmptyResult}
-            resultReasons={noResultReasons}
-            onDetailsPressed={onPressed}
-            errorType={error}
-            searchTime={searchTime}
-          />
+          <View>
+            {filtersState.enabled && (
+              <SelectedFiltersButtons
+                filtersSelection={filtersState.filtersSelection}
+                resetTransportModes={filtersState.resetTransportModes}
+              />
+            )}
+            <Results
+              tripPatterns={tripPatterns}
+              isSearching={isSearching}
+              showEmptyScreen={showEmptyScreen}
+              isEmptyResult={isEmptyResult}
+              resultReasons={noResultReasons}
+              onDetailsPressed={onPressed}
+              errorType={error}
+              searchTime={searchTime}
+              anyFiltersApplied={
+                filtersState.enabled && filtersState.anyFiltersApplied
+              }
+            />
+          </View>
         )}
         {!tripPatterns.length && <View style={style.emptyResultsSpacer}></View>}
         {!error && isValidLocations && (

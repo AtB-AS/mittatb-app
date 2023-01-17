@@ -3,7 +3,7 @@ import {ScrollView, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button, ButtonGroup} from '@atb/components/button';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {FixedSwitch} from '@atb/components/switch';
+import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
@@ -33,6 +33,7 @@ type SelectableFavouriteDepartureData = {
   lineName: string | TranslatedString;
   departureStation: string;
   departureQuay?: string;
+  testID?: string;
 };
 
 const SelectableFavouriteDeparture = ({
@@ -45,6 +46,7 @@ const SelectableFavouriteDeparture = ({
   lineName,
   departureStation,
   departureQuay,
+  testID,
 }: SelectableFavouriteDepartureData) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -82,10 +84,11 @@ const SelectableFavouriteDeparture = ({
       </View>
 
       <View>
-        <FixedSwitch
+        <Toggle
           importantForAccessibility="no"
           value={active}
           onValueChange={(value) => handleSwitchFlip(favouriteId, value)}
+          testID={testID}
         />
       </View>
     </View>
@@ -142,9 +145,10 @@ const SelectFavouritesBottomSheet = ({
 
             <View>
               {updatedFavorites &&
-                updatedFavorites.map((favorite, index) => {
+                updatedFavorites.map((favorite) => {
                   return (
                     <View key={favorite.id}>
+                      <SectionSeparator />
                       <SelectableFavouriteDeparture
                         handleSwitchFlip={handleSwitchFlip}
                         favouriteId={favorite.id}
@@ -165,10 +169,11 @@ const SelectFavouritesBottomSheet = ({
                         lineTransportationSubmode={
                           favorite.lineTransportationSubMode
                         }
+                        testID={
+                          'selectFavoriteToggle' +
+                          updatedFavorites.indexOf(favorite)
+                        }
                       />
-                      {favouriteItems.length - 1 !== index && (
-                        <SectionSeparator />
-                      )}
                     </View>
                   );
                 })}

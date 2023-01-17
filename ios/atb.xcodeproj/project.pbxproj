@@ -20,8 +20,8 @@
 		5038614A28FD6EB900E16E13 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614928FD6EB900E16E13 /* APIService.swift */; };
 		5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationChangeManager.swift */; };
 		5038614E28FD81B700E16E13 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614D28FD81B700E16E13 /* Structs.swift */; };
-		503D2E5A29674028002E0A6A /* (null) in Sources */ = {isa = PBXBuildFile; };
-		503D2E5C2967436E002E0A6A /* (null) in Sources */ = {isa = PBXBuildFile; };
+		503D2E5A29674028002E0A6A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		503D2E5C2967436E002E0A6A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		50488981293F4B660016DD7A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50488983293F4B660016DD7A /* Localizable.strings */; };
 		505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */; };
 		506538E028FEA57400A0DDCC /* WidgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506538DF28FEA57400A0DDCC /* WidgetViewModel.swift */; };
@@ -39,6 +39,9 @@
 		FE55265428EC45EE0091F697 /* departureWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE55264728EC45ED0091F697 /* departureWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FE7DE4F5294A2EDC009BE6DB /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7DE4F4294A2EDC009BE6DB /* String.swift */; };
 		FE7E785F29433F3900C57A1F /* DefaultFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7E785D29433F3900C57A1F /* DefaultFonts.swift */; };
+		FE8186B0297593DA000D2195 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = FE8186AD297593DA000D2195 /* Debug.xcconfig */; };
+		FE8186B1297593DA000D2195 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = FE8186AE297593DA000D2195 /* Release.xcconfig */; };
+		FE8186B2297593DA000D2195 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = FE8186AF297593DA000D2195 /* Config.xcconfig */; };
 		FE9A677C29426E57008921BD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE9A677B29426E57008921BD /* CoreLocation.framework */; };
 		FE9C416D293744B100EC2D53 /* ChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9C416C293744B100EC2D53 /* ChipView.swift */; };
 		FEBDDCCD2931038400C3755B /* LocationChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationChangeManager.swift */; };
@@ -121,6 +124,9 @@
 		FE55265128EC45EE0091F697 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FE7DE4F4294A2EDC009BE6DB /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		FE7E785D29433F3900C57A1F /* DefaultFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultFonts.swift; sourceTree = "<group>"; };
+		FE8186AD297593DA000D2195 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		FE8186AE297593DA000D2195 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		FE8186AF297593DA000D2195 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FE8AF9EC28EC69FA00505277 /* departureWidgetDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = departureWidgetDebug.entitlements; sourceTree = "<group>"; };
 		FE8AF9ED28EC6A0400505277 /* atbDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = atbDebug.entitlements; path = atb/atbDebug.entitlements; sourceTree = "<group>"; };
 		FE9A677B29426E57008921BD /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -188,6 +194,7 @@
 				385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				FEBDDCD829310DCB00C3755B /* BridgeModules */,
+				FE8186AC297593DA000D2195 /* Configs */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 			);
 			name = atb;
@@ -281,6 +288,16 @@
 				50A14EDA2918FAB600A661D9 /* Views */,
 			);
 			path = departureWidget;
+			sourceTree = "<group>";
+		};
+		FE8186AC297593DA000D2195 /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				FE8186AD297593DA000D2195 /* Debug.xcconfig */,
+				FE8186AE297593DA000D2195 /* Release.xcconfig */,
+				FE8186AF297593DA000D2195 /* Config.xcconfig */,
+			);
+			path = Configs;
 			sourceTree = "<group>";
 		};
 		FEBDDCCC2931035E00C3755B /* Shared */ = {
@@ -394,8 +411,11 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				0FF6825D247C33BC00FB80EE /* Intercom.plist in Resources */,
+				FE8186B1297593DA000D2195 /* Release.xcconfig in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				0FAAF32724069EFC00267583 /* GoogleService-Info.plist in Resources */,
+				FE8186B0297593DA000D2195 /* Debug.xcconfig in Resources */,
+				FE8186B2297593DA000D2195 /* Config.xcconfig in Resources */,
 				0FF6825F247FE01600FB80EE /* BootSplash.storyboard in Resources */,
 				F19471F4FCE444CF931BA221 /* Roboto-Bold.ttf in Resources */,
 				E6A5C3E919C3475F907B3CE4 /* Roboto-Regular.ttf in Resources */,
@@ -563,8 +583,8 @@
 				FED3D5DF2968501400B7DEC4 /* NoFavoriteViewSmall.swift in Sources */,
 				505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */,
 				FE7DE4F5294A2EDC009BE6DB /* String.swift in Sources */,
-				503D2E5C2967436E002E0A6A /* (null) in Sources */,
-				503D2E5A29674028002E0A6A /* (null) in Sources */,
+				503D2E5C2967436E002E0A6A /* BuildFile in Sources */,
+				503D2E5A29674028002E0A6A /* BuildFile in Sources */,
 				5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */,
 				FE7E785F29433F3900C57A1F /* DefaultFonts.swift in Sources */,
 				FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */,
@@ -612,7 +632,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5BEB6EBA5F4C1B526596F507 /* Pods-app.debug.xcconfig */;
+			baseConfigurationReference = FE8186AD297593DA000D2195 /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -651,7 +671,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1B3E08ED93DC5BE9AD87FD16 /* Pods-app.release.xcconfig */;
+			baseConfigurationReference = FE8186AE297593DA000D2195 /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
