@@ -323,14 +323,6 @@ export default function DebugInfo() {
             expandContent={
               remoteConfig && (
                 <View>
-                  <MapEntry
-                    title={APP_GROUP_NAME}
-                    value={
-                      remoteConfig[
-                        APP_GROUP_NAME as keyof RemoteConfigContextState
-                      ]
-                    }
-                  />
                   {Object.keys(remoteConfig).map((key) => (
                     <MapEntry
                       title={key}
@@ -350,13 +342,18 @@ export default function DebugInfo() {
             text="Storage"
             showIconText={true}
             expandContent={
-              storedValues && (
+              <>
                 <View>
-                  {storedValues.map(([key, value]) => (
-                    <MapEntry title={key} value={value} />
-                  ))}
+                  <MapEntry title={'app_group_name'} value={APP_GROUP_NAME} />
                 </View>
-              )
+                {storedValues && (
+                  <View>
+                    {storedValues.map(([key, value]) => (
+                      <MapEntry title={key} value={value} />
+                    ))}
+                  </View>
+                )}
+              </>
             }
           />
         </Sections.Section>
