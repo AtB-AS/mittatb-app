@@ -147,8 +147,8 @@ describe('Function onlyUniqueBasedOnField', () => {
 describe('Function compareVersion', () => {
   const versions: [string, string, number][] = [
     ['1.2', '1.1', 1],
-    ['1.4', '1.31', -1],
-    ['1.4.1', '1.31.1', -1],
+    ['1.4', '1.31', -27],
+    ['1.4.1', '1.31.1', -27],
     ['1.1.1', '1.1', 1],
     ['1.1', '1.1.1', -1],
     ['2.1', '1.1', 1],

@@ -20,8 +20,8 @@ export type PreassignedFareProduct = {
   alternativeNames: LanguageAndTextType[];
   limitations: {
     userProfileRefs: string[];
-    appVersionMin: string;
-    appVersionMax: string;
+    appVersionMin: string | undefined;
+    appVersionMax: string | undefined;
   };
 };
 
