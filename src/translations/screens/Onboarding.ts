@@ -16,7 +16,7 @@ const OnboardingTexts = {
       ),
       part3: _(
         'Du vil også kunne administrere billetter og eventuelle t:kort på den nye nettbutikken med samme konto.',
-        'You will also be able to manage your tickets and t:kort on the webshop with the same account',
+        'You will also be able to manage your tickets and t:card on the webshop with the same account',
       ),
     },
     mainButton: _('Neste', 'Next'),
@@ -42,7 +42,7 @@ export default orgSpecificTranslations(OnboardingTexts, {
         ),
         part3: _(
           'Du vil også kunne administrere billetter og eventuelle reisekort på den nye nettbutikken med samme konto.',
-          'You will also be able to manage your tickets and travelcards on the webshop with the same account',
+          'You will also be able to manage your tickets and travel cards on the webshop with the same account',
         ),
       },
     },
