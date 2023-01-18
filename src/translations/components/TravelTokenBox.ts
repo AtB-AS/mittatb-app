@@ -76,6 +76,6 @@ export default orgSpecificTranslations(TravelTokenBoxTexts, {
         'Billetter må brukes på enten et reisekort eller en mobil, og det ser ikke ut som du har valgt en av dem.\n\nGå til **Min profil, Bytt mellom reisekort / mobil** for å velge.',
         `Tickets must be used on either a travel card or a phone, and it looks like you haven't chosen one. Go to **My profile, switch between travel card / phone** to select`,
       ),
-    }
+    },
   },
 });

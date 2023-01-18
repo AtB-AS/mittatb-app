@@ -1,5 +1,5 @@
 import {translation as _} from '../commons';
-import orgSpecificTranslations from "@atb/translations/utils";
+import orgSpecificTranslations from '@atb/translations/utils';
 
 const ProfileTexts = {
   header: {
@@ -158,10 +158,10 @@ export default orgSpecificTranslations(ProfileTexts, {
             label: _(
               'Bruk billett på reisekort / mobil',
               'Use ticket on travel card / phone',
-            )
+            ),
           },
         },
       },
-    }
+    },
   }
 })
