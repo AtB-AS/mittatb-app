@@ -1,5 +1,5 @@
 import {translation as _} from '../../commons';
-import orgSpecificTranslations from "@atb/translations/utils";
+import orgSpecificTranslations from '@atb/translations/utils';
 
 const MobileTokenOnboardingTexts = {
   flexibilityInfo: {
@@ -81,8 +81,7 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
         'Du kan bruke billetten din på et reisekort eller en mobil med appen AtB installert — men kun en av gangen.',
         'You can use your ticket on a travel card or a phone with the app AtB installed — but only one at a time.',
       ),
-    }
-    ,
+    },
     ticketSafetyInfo: {
       description: _(
         'Billetten din er trygt lagret på **Min profil**. Dermed vil du aldri miste den — selv om du mister reisekortet eller bytter mobil.',
@@ -91,7 +90,10 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
     },
     tCard: {
       label: _('Reisekort', 'Travel card'),
-      heading: _('Du bruker nå **reisekort**', 'You are now using your **travel card**'),
+      heading: _(
+        'Du bruker nå **reisekort**',
+        'You are now using your **travel card**'
+      ),
       reminder: _(
         'Ta med deg reisekortet når du er ute og reiser.',
         'Remember to bring your travel card while travelling.',
@@ -102,7 +104,10 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
         'Du kan alltid bytte til reisekort eller en annen mobil ved logge inn og gå til **Min profil**.',
         'You can always switch to a travel card or a different phone by logging in, and heading over to **My profile**.',
       ),
-      button: _('Bytt til reisekort eller annen mobil', 'Switch to travel card or phone'),
+      button: _(
+        'Bytt til reisekort eller annen mobil',
+        'Switch to travel card or phone'
+      ),
     },
     error: {
       description: _(
@@ -110,6 +115,6 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
         "We can't connect a travel card or phone to your profile. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact AtB service center.",
       ),
     },
-  }
-})
+  },
+});
 

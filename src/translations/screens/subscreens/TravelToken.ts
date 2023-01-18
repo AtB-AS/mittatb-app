@@ -1,5 +1,5 @@
 import {translation as _} from '../../commons';
-import orgSpecificTranslations from "@atb/translations/utils";
+import orgSpecificTranslations from '@atb/translations/utils';
 
 const SelectTravelTokenTexts = {
   travelToken: {
@@ -211,10 +211,13 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
             `See how to contact us at atb.no/en/contact`,
           ),
         },
-      ]
+      ],
     },
     toggleToken: {
-      title: _('Bytt mellom reisekort / mobil', 'Switch between travel card / phone'),
+      title: _(
+        'Bytt mellom reisekort / mobil',
+        'Switch between travel card / phone'
+      ),
       radioBox: {
         tCard: {
           title: _('reisekort', 'travel card'),
@@ -233,7 +236,6 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
         'Du har ikke et reisekort registrert. Hvis du ønsker å bruke reisekort kan du legge til dette på din profil i [nettbutikken](https://nettbutikk.atb.no).',
         'You have no travel card registered, if you wish to use travel card as travel token you may add this to your profile in the [webshop](https://nettbutikk.atb.no).',
       ),
-    }
-  }
-})
-
+    },
+  },
+});
