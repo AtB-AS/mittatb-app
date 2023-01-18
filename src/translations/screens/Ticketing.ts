@@ -188,12 +188,12 @@ export default orgSpecificTranslations(TicketingTexts, {
       illustrationa11yLabel: (travelCardId: string) =>
         _(
           `Illustrasjon av reisekort med kortnummer som inneholder ${travelCardId}`,
-          `Illustration of travelcard with card number that contains ${travelCardId}`,
+          `Illustration of travel card with card number that contains ${travelCardId}`,
         ),
-      cardType: _('reisekort', 'travelcard'),
+      cardType: _('reisekort', 'travel card'),
       onInspection: _(
         'I billettkontroll må du vise reisekortet ditt',
-        'In the event of an inspection, please present your travelcard',
+        'In the event of an inspection, please present your travel card',
       ),
     },
   },
