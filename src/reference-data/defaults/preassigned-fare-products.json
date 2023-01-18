@@ -40,11 +40,21 @@
     "description": [
       {
         "lang": "nob",
-        "value": "I Trondheim\nFra 00:30 til 04:00 på nattbuss og -trikk"
+        "value": "I Trondheim"
       },
       {
         "lang": "eng",
-        "value": "In Trondheim\nFrom 00:30 to 04:00 for night bus and tram"
+        "value": "In Trondheim"
+      }
+    ],
+    "warningMessage": [
+      {
+        "lang": "nob",
+        "value": "Billettkjøp fra kl. 00:30-04:00 natt til lørdag og søndag"
+      },
+      {
+        "lang": "eng",
+        "value": "Ticket purchase from 00:30-04:00 night on Saturday and Sunday"
       }
     ],
     "alternativeNames": [
@@ -73,11 +83,21 @@
     "description": [
       {
         "lang": "nob",
-        "value": "Til Malvik, Melhus og Skaun\nFra 00:30 til 04:00 på nattbuss og -trikk"
+        "value": "Til Malvik, Melhus og Skaun"
       },
       {
         "lang": "eng",
-        "value": "To Malvik, Melhus and Skaun\nFrom 00:30 to 04:00 for night bus and tram"
+        "value": "To Malvik, Melhus and Skaun"
+      }
+    ],
+    "warningMessage": [
+      {
+        "lang": "nob",
+        "value": "Billettkjøp fra kl. 00:30-04:00 natt til lørdag og søndag"
+      },
+      {
+        "lang": "eng",
+        "value": "Ticket purchase from 00:30-04:00 night on Saturday and Sunday"
       }
     ],
     "alternativeNames": [
@@ -106,11 +126,21 @@
     "description": [
       {
         "lang": "nob",
-        "value": "Til Stjørdal og Orkdal\nFra 00:30 til 04:00 på nattbuss og -trikk"
+        "value": "Til Stjørdal og Orkdal"
       },
       {
         "lang": "eng",
-        "value": "To Stjørdal and Orkdal\nFrom 00:30 to 04:00 for night bus and tram"
+        "value": "To Stjørdal and Orkdal"
+      }
+    ],
+    "warningMessage": [
+      {
+        "lang": "nob",
+        "value": "Billettkjøp fra kl. 00:30-04:00 natt til lørdag og søndag"
+      },
+      {
+        "lang": "eng",
+        "value": "Ticket purchase from 00:30-04:00 night on Saturday and Sunday"
       }
     ],
     "alternativeNames": [
