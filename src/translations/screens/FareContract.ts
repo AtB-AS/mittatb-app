@@ -1,6 +1,6 @@
 import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {translation as _} from '../commons';
-import orgSpecificTranslations from "@atb/translations/utils";
+import orgSpecificTranslations from '@atb/translations/utils';
 
 const FareContractTexts = {
   organizationName: _('AtB', 'AtB'),
@@ -182,8 +182,8 @@ export default orgSpecificTranslations(FareContractTexts, {
             'Du bruker billetten på ditt reisekort. Husk å ta det med deg når du reiser.\nDu kan alltid bytte til en mobil ved å gå til **Min profil**.',
             `Seems like you\'re using your ticket on your travel card. Remember to bring it with you while traveling.\nYou can always switch to your phone by heading over to **My profile**.`,
           ),
-        }
-      }
+        },
+      },
     },
     warning: {
       unableToRetrieveToken: _(
@@ -206,6 +206,6 @@ export default orgSpecificTranslations(FareContractTexts, {
         'Merk at billetter du kjøper nå vil være tilknyttet ditt reisekort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.',
         'This ticket will be connected to your travel card. If you would rather use tickets on this phone, you can switch to this device from **My profile**.',
       ),
-    }
-  }
-})
+    },
+  },
+});
