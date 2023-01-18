@@ -92,7 +92,7 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
       label: _('Reisekort', 'Travel card'),
       heading: _(
         'Du bruker nå **reisekort**',
-        'You are now using your **travel card**'
+        'You are now using your **travel card**',
       ),
       reminder: _(
         'Ta med deg reisekortet når du er ute og reiser.',
@@ -106,7 +106,7 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
       ),
       button: _(
         'Bytt til reisekort eller annen mobil',
-        'Switch to travel card or phone'
+        'Switch to travel card or phone',
       ),
     },
     error: {
@@ -117,4 +117,3 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
     },
   },
 });
-

@@ -216,7 +216,7 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
     toggleToken: {
       title: _(
         'Bytt mellom reisekort / mobil',
-        'Switch between travel card / phone'
+        'Switch between travel card / phone',
       ),
       radioBox: {
         tCard: {
@@ -229,7 +229,10 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
             'reisekort. Les av reisekortet ditt på holdeplass eller om bord. Kortet leses av ved kontroll.',
             'travel card. Validate your travel card at the bus stop or on board. The card will be scanned in a ticket inspection.',
           ),
-          a11yHint: _('Aktivér for å velge reisekort.', 'Activate to select travel card'),
+          a11yHint: _(
+            'Aktivér for å velge reisekort.',
+            'Activate to select travel card',
+          ),
         },
       },
       noTravelCard: _(
