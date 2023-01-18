@@ -9,7 +9,7 @@ type Props<T> = Omit<SectionProps, 'children'> & {
   selected?: T;
   keyExtractor(item: T, index: number): string;
   itemToText(item: T, index: number): string;
-  itemToSubtext?(item: T, index: number): string;
+  itemToSubtext?(item: T, index: number): string | undefined;
   hideSubtext?: boolean;
   onSelect?(item: T, index: number): void;
   headerText?: string;

@@ -11,9 +11,7 @@ import {
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import InfoToggle from './InfoToggle';
 import * as Sections from '../../../../../components/sections';
-import {usePreferences} from '@atb/preferences';
 
 type ProductSelectionByProductsProps = {
   selectedProduct: PreassignedFareProduct;
@@ -32,40 +30,30 @@ export default function ProductSelectionByProducts({
   const selectableProducts = preassignedFareProducts
     .filter(productIsSellableInApp)
     .filter((p) => p.type === selectedProduct.type);
-  const {
-    preferences: {hideTravellerDescriptions},
-  } = usePreferences();
   const [selected, setProduct] = useState(selectedProduct);
-  const showInfoToggle = selectableProducts.some((p) => p.description);
 
   return (
     <View style={style}>
-      {showInfoToggle && (
-        <InfoToggle
-          title={t(PurchaseOverviewTexts.productSelection.title)}
-          accessibilityLabel={t(
-            PurchaseOverviewTexts.infoToggle.productTicketA11yLabel,
-          )}
-        />
-      )}
       <Sections.Section>
         <Sections.RadioGroupSection<PreassignedFareProduct>
           items={selectableProducts}
           keyExtractor={(u) => u.id}
           itemToText={(fp) => getReferenceDataName(fp, language)}
-          hideSubtext={hideTravellerDescriptions}
+          hideSubtext={false}
           itemToSubtext={(fp) => {
-            const descriptionMessage =
-              getTextForLanguage(fp.description ?? [], language) ?? 'Unknow';
-            if (fp.warningMessage) {
-              const warningMessage = getTextForLanguage(
-                fp.warningMessage,
-                language,
-              );
+            const descriptionMessage = getTextForLanguage(
+              fp.description ?? [],
+              language,
+            );
+            const warningMessage = getTextForLanguage(
+              fp.warningMessage,
+              language,
+            );
+            if (descriptionMessage && warningMessage) {
               return `${descriptionMessage}\n${warningMessage}`;
             }
 
-            return descriptionMessage;
+            return descriptionMessage ?? warningMessage;
           }}
           selected={selected}
           onSelect={(fp) => {
