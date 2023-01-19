@@ -1,10 +1,3 @@
-//
-//  ChangeNativeBridge.m
-//  atb
-//
-//  Created by Mikael Brevik on 23/02/2021.
-//
-
 #import <Foundation/Foundation.h>
 #import "AppDelegate.h"
 #import "ChangeNativeBridge.h"

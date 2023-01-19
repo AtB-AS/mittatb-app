@@ -12,7 +12,13 @@ import Purchase from '@atb/screens/Ticketing/Purchase';
 import FareContractModalScreen from '@atb/screens/Ticketing/FareContracts/Details';
 import {useTheme} from '@atb/theme';
 import {APP_SCHEME} from '@env';
-import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import {
+  DefaultTheme,
+  getStateFromPath,
+  NavigationContainer,
+  PartialRoute,
+  Route,
+} from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
 import {StatusBar} from 'react-native';
@@ -21,12 +27,20 @@ import TabNavigator from './TabNavigator';
 import transitionSpec from './transitionSpec';
 import {RootStackParamList} from './types';
 import useTestIds from './use-test-ids';
+import {useDeparturesV2Enabled} from '@atb/screens/Departures/use-departures-v2-enabled';
+import type {NavigationState, PartialState} from '@react-navigation/routers';
+import {parse} from 'search-params';
 
 const Stack = createStackNavigator<RootStackParamList>();
+
+type ResultState = PartialState<NavigationState> & {
+  state?: ResultState;
+};
 
 const NavigationRoot = () => {
   const {isLoading, onboarded} = useAppState();
   const {theme} = useTheme();
+  const departuresV2Enabled = useDeparturesV2Enabled();
 
   useTestIds();
 
@@ -45,6 +59,71 @@ const NavigationRoot = () => {
       background: theme.static.background.background_1.background,
     },
   };
+
+  function getResultStateFromPath(path: string): ResultState {
+    const params = parse(path);
+    let destination: PartialRoute<any>[] | undefined;
+
+    if (departuresV2Enabled) {
+      destination = [
+        {
+          // Index is needed so that the user can go back after
+          // opening the app with the widget when it was not open previously
+          index: 0,
+          name: 'DeparturesScreen',
+        },
+        {
+          name: 'PlaceScreen',
+          params: {
+            place: {
+              name: params.stopName,
+              id: params.stopId,
+            },
+            selectedQuayId: params.quayId,
+            showOnlyFavoritesByDefault: true,
+            mode: 'Departure',
+          },
+        },
+      ];
+    } else {
+      destination = [
+        {
+          name: 'NearbyRoot',
+          params: {
+            location: {
+              id: params.stopId,
+              name: params.stopName,
+              label: params.stopName,
+              layer: 'address',
+              coordinates: {
+                latitude: params.latitude,
+                longitude: params.longitude,
+              },
+              resultType: 'search',
+            },
+          },
+        },
+      ];
+    }
+
+    return {
+      routes: [
+        {
+          name: 'TabNavigator',
+          state: {
+            routes: [
+              {
+                name: 'Nearest',
+                state: {
+                  routes: destination as PartialRoute<Route<string>>[],
+                },
+              },
+            ],
+          },
+        },
+      ],
+    };
+  }
 
   return (
     <>
@@ -72,6 +151,39 @@ const NavigationRoot = () => {
                   },
                 },
               },
+            },
+            getStateFromPath(path, config) {
+              // If the path is not from the widget, behave as usual
+              if (!path.includes('widget')) {
+                return getStateFromPath(path, config);
+              }
+
+              // User get redirected to add new favorite departure
+              if (path.includes('addFavoriteDeparture')) {
+                return {
+                  routes: [
+                    {
+                      name: 'TabNavigator',
+                      state: {
+                        routes: [
+                          {
+                            name: 'Dashboard',
+                            state: {
+                              routes: [
+                                {name: 'DashboardRoot', index: 0},
+                                {name: 'NearbyStopPlacesDashboardScreen'},
+                              ],
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                } as ResultState;
+              }
+
+              // Get redirected to the preferred departures view
+              return getResultStateFromPath(path);
             },
           }}
         >

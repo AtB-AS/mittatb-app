@@ -9,7 +9,7 @@ production = ENV["PRODUCTION"] == "1"
 ENV['REACT_NATIVE_MAPBOX_GL_USE_FRAMEWORKS'] = '1'
 $ReactNativeMapboxGLIOSVersion = '6.3.0'
 
-target 'atb' do
+target 'app' do
   pod 'Firebase', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
@@ -51,11 +51,6 @@ target 'atb' do
   end
   pod 'token-state-react-native-lib-ios', :path => '../node_modules/@entur-private/abt-token-state-react-native-lib/ios'
 
-  target 'atbTests' do
-    inherit! :complete
-    # Pods for testing
-  end
-
   post_install do |installer|
     react_native_post_install(
       installer,
@@ -64,6 +59,16 @@ target 'atb' do
       :mac_catalyst_enabled => false
     )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    # Xcode 14 workaround: https://github.com/CocoaPods/CocoaPods/issues/11402#issuecomment-1201464693
+    # https://stackoverflow.com/questions/48122769/facebook-cocoapods-sharedapplication-is-unavailable-not-available-on-ios-app
+    # TODO: Find a better way to exclude react-native from extensions
+    installer.pods_project.targets.each do |target|
+      if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
+        target.build_configurations.each do |config|
+            config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+        end
+      end
+    end
   end
   
   pre_install do |installer|
