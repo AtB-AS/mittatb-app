@@ -7,7 +7,7 @@ import {
   TravellerSelectionMode,
   ZoneSelectionMode,
   FareProductType,
-} from '@atb/screens/Ticketing/FareContracts/utils';
+} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
 import {isArray} from 'lodash';
@@ -15,7 +15,7 @@ import {TransportModeType} from '@atb/configuration/types';
 import type {
   TransportIconModeType,
   TransportModeFilterOptionType,
-} from '@atb/screens/Dashboard/types';
+} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {
   TransportMode,
   TransportModes,

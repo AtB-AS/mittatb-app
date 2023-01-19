@@ -1,12 +1,14 @@
 import {useAppState} from '@atb/AppContext';
 import PhoneInput from '@atb/login/PhoneInput';
 import {AfterLoginParams} from '@atb/login/types';
-import {useFinishOnboarding} from '@atb/screens/Onboarding/use-finish-onboarding';
+import {useFinishOnboarding} from '@atb/stacks-hierarchy/Root_OnboardingStack/use-finish-onboarding';
 import React from 'react';
 import {LoginInAppScreenProps} from '../types';
 
 export type PhoneInputInAppRouteParams = {
-  afterLogin: AfterLoginParams<'TabNavigator'> | AfterLoginParams<'Purchase'>;
+  afterLogin:
+    | AfterLoginParams<'Root_TabNavigatorStack'>
+    | AfterLoginParams<'Purchase'>;
 };
 
 type PhoneInputInAppProps = LoginInAppScreenProps<'PhoneInputInApp'>;

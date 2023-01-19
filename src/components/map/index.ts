@@ -7,4 +7,4 @@ export {useControlPositionsStyle} from './hooks/use-control-styles';
 export {useMapPage} from './hooks/use-map-page';
 export {Map} from './Map';
 export {flyToLocation, zoomIn, zoomOut} from './utils';
-export type {NavigateToTripSearchCallback} from './types';
+export type {NavigateToTripSearchCallback, MapLeg, MapLine} from './types';

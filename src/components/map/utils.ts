@@ -1,6 +1,6 @@
 import {RefObject} from 'react';
 import MapboxGL, {Expression} from '@react-native-mapbox-gl/maps';
-import {Coordinates} from '@atb/screens/TripDetails/Map/types';
+import {Coordinates} from '@atb/utils/coordinates';
 import {Feature, Point, Position} from 'geojson';
 import {MapSelectionActionType} from './types';
 import {PixelRatio, Platform} from 'react-native';

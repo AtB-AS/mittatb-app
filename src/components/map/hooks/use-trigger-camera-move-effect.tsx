@@ -1,10 +1,10 @@
 import {Feature, Point} from 'geojson';
-import {MapLine} from '@atb/screens/TripDetails/Map/utils';
+import {MapLine} from '@atb/travel-details-map-screen/utils';
 import {RefObject, useEffect} from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
-import {Coordinates} from '@atb/screens/TripDetails/Map/types';
+import {Coordinates} from '@atb/utils/coordinates';
 import {fitBounds, flyToLocation, mapPositionToCoordinates} from '../utils';
 import {CameraFocusModeType} from '../types';
 import {Dimensions, PixelRatio, Platform, StatusBar} from 'react-native';
