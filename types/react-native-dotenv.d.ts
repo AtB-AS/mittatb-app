@@ -7,6 +7,7 @@ declare module '@env' {
   export const MAPBOX_STOP_PLACES_STYLE_URL: string;
   export const AUTHORITY: string;
   export const APP_ORG: import('./app-orgs').AppOrgs;
+  export const APP_GROUP_NAME: string;
   export const APP_SCHEME: string;
   export const TARIFF_ZONE_AUTHORITY: import('./app-orgs').TariffZoneAuthorities;
   export const FOCUS_LATITUDE: string;

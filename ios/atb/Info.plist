@@ -2,16 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NFCReaderUsageDescription</key>
-	<string>Vi må bruke NFC for sikkerhetsformål.</string>
-	<key>AppTeamIdentifier</key>
-	<string>$(IOS_DEVELOPMENT_TEAM_ID)</string>
 	<key>AppEnvironment</key>
 	<string>PRODUCTION</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>For å kunne tilby raskere inspeksjon av reisebevis kan vi ha behov for tilgang til Bluetooth</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>For å kunne tilby raskere inspeksjon av reisebevis kan vi ha behov for tilgang til Bluetooth</string>
+	<key>AppScheme</key>
+	<string>$(APP_SCHEME)</string>
+	<key>AppTeamIdentifier</key>
+	<string>$(IOS_DEVELOPMENT_TEAM_ID)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>nb</string>
 	<key>CFBundleDisplayName</key>
@@ -19,7 +15,7 @@
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>$(IOS_BUNDLE_IDENTIFIER)</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -62,6 +58,8 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NFCReaderUsageDescription</key>
+	<string>Vi må bruke NFC for sikkerhetsformål.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
@@ -73,6 +71,10 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>For å kunne tilby raskere inspeksjon av reisebevis kan vi ha behov for tilgang til Bluetooth</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>For å kunne tilby raskere inspeksjon av reisebevis kan vi ha behov for tilgang til Bluetooth</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -81,9 +83,15 @@
 	<string>Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Send bilder for å hjelpe til med å løse problemer i appen</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Roboto-Bold.ttf</string>
+		<string>Roboto-Regular.ttf</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
+		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
@@ -98,10 +106,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Roboto-Bold.ttf</string>
-		<string>Roboto-Regular.ttf</string>
-	</array>
 </dict>
 </plist>

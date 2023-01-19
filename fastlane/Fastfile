@@ -15,10 +15,11 @@ platform :ios do
       devices_file: ENV['IOS_DEVICES_FILE'],
       username:ENV['FASTLANE_MATCH_USERNAME']
     )
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER']]
     match(
       type: "adhoc", force_for_new_devices: true,
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
-      app_identifier:ENV['IOS_BUNDLE_IDENTIFIER'],
+      app_identifier: identifiers,
       git_url:ENV['FASTLANE_MATCH_GIT_URL'],
       username:ENV['FASTLANE_MATCH_USERNAME'])
   end
@@ -28,10 +29,11 @@ platform :ios do
     ensure_env_vars(
       env_vars: ['IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_USERNAME', 'FASTLANE_MATCH_TYPE']
     )
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER']]
     match(
       readonly: false,
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
-      app_identifier:ENV['IOS_BUNDLE_IDENTIFIER'],
+      app_identifier: identifiers,
       git_url:ENV['FASTLANE_MATCH_GIT_URL'],
       type:ENV['FASTLANE_MATCH_TYPE'],
       username:ENV['FASTLANE_MATCH_USERNAME']
@@ -41,8 +43,9 @@ platform :ios do
   desc 'Match certificates'
   lane :get_cert do
     ensure_env_vars(
-      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_SSH_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
+      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_SSH_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
     )
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER']]
     if is_ci
       create_keychain(
         name: "CI",
@@ -54,7 +57,7 @@ platform :ios do
       )
       match(
         type: ENV["FASTLANE_MATCH_TYPE"],
-        app_identifier: ENV['IOS_BUNDLE_IDENTIFIER'],
+        app_identifier: identifiers,
         storage_mode: 'git',
         git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
         readonly: true,
@@ -65,7 +68,7 @@ platform :ios do
     else
       match(
         type: ENV["FASTLANE_MATCH_TYPE"],
-        app_identifier: ENV['IOS_BUNDLE_IDENTIFIER'],
+        app_identifier: identifiers,
         storage_mode: 'git',
         git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
         team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
@@ -79,6 +82,7 @@ platform :ios do
     ensure_env_vars(
       env_vars: ['BUILD_ID', 'EXPORT_METHOD']
     )
+    get_cert
     increment_build_number(
       build_number: ENV["BUILD_ID"],
       xcodeproj: './ios/atb.xcodeproj/'
@@ -86,6 +90,47 @@ platform :ios do
     update_code_signing_settings(
       use_automatic_signing: false,
       path: "./ios/atb.xcodeproj"
+    )
+    app_prefix = "#{ENV['IOS_BUNDLE_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
+    app_prov_profile_path = ENV["sigh_#{app_prefix}_profile-path"]
+    app_prov_profile_name = ENV["sigh_#{app_prefix}_profile-name"]
+    app_signing_identity_name = ENV["sigh_#{app_prefix}_certificate-name"]
+    widget_prefix = "#{ENV['IOS_APP_WIDGET_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
+    widget_prov_profile_path = ENV["sigh_#{widget_prefix}_profile-path"]
+    widget_prov_profile_name = ENV["sigh_#{widget_prefix}_profile-name"]
+    widget_signing_identity_name = ENV["sigh_#{app_prefix}_certificate-name"]
+
+    widget_enabled = ENV["DISABLE_WIDGET"] == "false"
+    puts "Is widget enabled: #{widget_enabled}"
+
+    update_project_team(
+      path: "./ios/atb.xcodeproj",
+      teamid: ENV["IOS_DEVELOPMENT_TEAM_ID"]
+    )
+    update_project_provisioning(
+      xcodeproj: "./ios/atb.xcodeproj",
+      target_filter: "app",
+      profile: app_prov_profile_path,
+      build_configuration: "Release",
+      code_signing_identity: app_signing_identity_name
+    )
+    if widget_enabled
+      update_project_provisioning(
+        xcodeproj: "./ios/atb.xcodeproj",
+        target_filter: "departureWidget",
+        profile: widget_prov_profile_path,
+        build_configuration: "Release",
+        code_signing_identity: widget_signing_identity_name
+      )
+      update_app_group_identifiers(
+        entitlements_file: "./ios/departureWidget.entitlements",
+        app_group_identifiers: [ENV["APP_GROUP_NAME"]]
+      )
+    end
+
+    update_app_group_identifiers(
+      entitlements_file: "./ios/atb/AtB.entitlements",
+      app_group_identifiers: [ENV["APP_GROUP_NAME"]]
     )
     cocoapods(podfile: './ios/Podfile')
     build_app(
@@ -95,6 +140,11 @@ platform :ios do
       workspace: './ios/atb.xcworkspace',
       export_options: {
         compileBitcode: false,
+        signingStyle: "manual",
+        provisioningProfiles: {
+          ENV['IOS_BUNDLE_IDENTIFIER'] => app_prov_profile_name,
+          ENV['IOS_APP_WIDGET_IDENTIFIER'] => widget_prov_profile_name
+      	}
       }
     )
   end

@@ -18,7 +18,7 @@ type RootProps =
 
 export default function SortableFavoriteList({navigation}: RootProps) {
   const style = useProfileStyle();
-  const {favorites, setFavoriteLocationss: setFavorites} = useFavorites();
+  const {favorites, setFavoriteLocations: setFavorites} = useFavorites();
   const items = favorites ?? [];
   const [sortedItems, setSortedItems] = useState(items);
   const [error, setError] = useState<string | null>(null);
