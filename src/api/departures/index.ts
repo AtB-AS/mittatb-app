@@ -37,26 +37,16 @@ export async function getDepartures(
   return response.data;
 }
 
-export async function getRealtimeDeparture(
+export async function getStopPlaceGroupRealtime(
   stops: StopPlaceGroup[],
   query: DepartureGroupsQuery,
   opts?: AxiosRequestConfig,
 ): Promise<DeparturesRealtimeData> {
   const quayIds = flatMap(stops, (s) => s.quays.map((q) => q.quay.id));
-  const startTime = query.startTime;
-
-  const params = build({
-    quayIds,
-    startTime,
-    limit: query.limitPerLine,
-  });
-
-  let url = `bff/v1/departures-realtime?${params}`;
-  const response = await client.get<DeparturesRealtimeData>(url, opts);
-  return response.data;
+  return getRealtimeDepartures(quayIds, query, opts);
 }
 
-export async function getRealtimeDepartureV2(
+export async function getRealtimeDepartures(
   quayIds: string[] | undefined,
   query: DepartureGroupsQuery,
   opts?: AxiosRequestConfig,
