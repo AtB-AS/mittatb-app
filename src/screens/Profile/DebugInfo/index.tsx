@@ -23,6 +23,7 @@ import {
   useRemoteConfig,
 } from '@atb/RemoteConfigContext';
 import {useGlobalMessagesState} from '@atb/global-messages';
+import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {RadioSegments} from '@atb/components/radio';
@@ -341,13 +342,18 @@ export default function DebugInfo() {
             text="Storage"
             showIconText={true}
             expandContent={
-              storedValues && (
+              <>
                 <View>
-                  {storedValues.map(([key, value]) => (
-                    <MapEntry title={key} value={value} />
-                  ))}
+                  <MapEntry title={'app_group_name'} value={APP_GROUP_NAME} />
                 </View>
-              )
+                {storedValues && (
+                  <View>
+                    {storedValues.map(([key, value]) => (
+                      <MapEntry title={key} value={value} />
+                    ))}
+                  </View>
+                )}
+              </>
             }
           />
         </Sections.Section>
