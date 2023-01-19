@@ -20,8 +20,8 @@
 		5038614A28FD6EB900E16E13 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614928FD6EB900E16E13 /* APIService.swift */; };
 		5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationChangeManager.swift */; };
 		5038614E28FD81B700E16E13 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614D28FD81B700E16E13 /* Structs.swift */; };
-		503D2E5A29674028002E0A6A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
-		503D2E5C2967436E002E0A6A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		503D2E5A29674028002E0A6A /* (null) in Sources */ = {isa = PBXBuildFile; };
+		503D2E5C2967436E002E0A6A /* (null) in Sources */ = {isa = PBXBuildFile; };
 		50488981293F4B660016DD7A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50488983293F4B660016DD7A /* Localizable.strings */; };
 		505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */; };
 		506538E028FEA57400A0DDCC /* WidgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506538DF28FEA57400A0DDCC /* WidgetViewModel.swift */; };
@@ -583,8 +583,8 @@
 				FED3D5DF2968501400B7DEC4 /* NoFavoriteViewSmall.swift in Sources */,
 				505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */,
 				FE7DE4F5294A2EDC009BE6DB /* String.swift in Sources */,
-				503D2E5C2967436E002E0A6A /* BuildFile in Sources */,
-				503D2E5A29674028002E0A6A /* BuildFile in Sources */,
+				503D2E5C2967436E002E0A6A /* (null) in Sources */,
+				503D2E5A29674028002E0A6A /* (null) in Sources */,
 				5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */,
 				FE7E785F29433F3900C57A1F /* DefaultFonts.swift in Sources */,
 				FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */,
@@ -644,7 +644,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = CSV447Q97L;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = atb/Info.plist;
@@ -681,6 +681,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = atb/Info.plist;
@@ -735,6 +736,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = "$(IOS_DEVELOPMENT_TEAM_ID)";
+				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
@@ -808,6 +810,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = "$(IOS_DEVELOPMENT_TEAM_ID)";
+				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
@@ -857,6 +860,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = CSV447Q97L;
+				ENABLE_BITCODE = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = departureWidget/Info.plist;
@@ -905,6 +909,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = departureWidget/Info.plist;

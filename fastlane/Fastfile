@@ -138,9 +138,7 @@ platform :ios do
       configuration: 'Release',
       export_method: ENV['EXPORT_METHOD'],
       workspace: './ios/atb.xcworkspace',
-      include_bitcode: "false",
       export_options: {
-        compileBitcode: "false",
         signingStyle: "manual",
         provisioningProfiles: {
           ENV['IOS_BUNDLE_IDENTIFIER'] => app_prov_profile_name,
