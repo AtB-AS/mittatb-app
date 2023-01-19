@@ -7,6 +7,7 @@ import {
   isStaticColor,
   isStatusColor,
 } from '@atb/theme/colors';
+import useFontScale from '@atb/utils/use-font-scale';
 import type {NotificationColor} from './types';
 
 export type NotificationIndicatorProps = {
@@ -28,12 +29,14 @@ export const NotificationIndicator = ({
   const styles = useStyles();
   const notificationColor = useNotificationColor(color);
   const borderColor = useNotificationColor(backgroundColor);
-  const indicatorSize = getIndicatorSize(iconSize, !!borderColor);
+  const fontScale = useFontScale();
+  const indicatorSize = getIndicatorSize(iconSize, !!borderColor, fontScale);
+  const borderWidth = (iconSize === 'small' ? 1 : 2) * fontScale;
   return (
     <View
       style={{
         ...styles.indicator,
-        borderWidth: borderColor ? (iconSize === 'small' ? 1 : 2) : 0,
+        borderWidth: borderColor ? borderWidth : 0,
         borderColor,
         height: indicatorSize,
         width: indicatorSize,
@@ -63,14 +66,18 @@ function useNotificationColor(color?: NotificationColor): string | undefined {
   }
 }
 
-const getIndicatorSize = (size: ThemeIconProps['size'], hasBorder: boolean) => {
+const getIndicatorSize = (
+  size: ThemeIconProps['size'],
+  hasBorder: boolean,
+  fontScale: number,
+) => {
   switch (size) {
     case 'small':
-      return hasBorder ? 6 : 4;
+      return (hasBorder ? 6 : 4) * fontScale;
     case 'large':
-      return hasBorder ? 12 : 8;
+      return (hasBorder ? 12 : 8) * fontScale;
     default:
-      return hasBorder ? 10 : 6;
+      return (hasBorder ? 10 : 6) * fontScale;
   }
 };
 
