@@ -47,6 +47,16 @@
         "value": "In Trondheim"
       }
     ],
+    "warningMessage": [
+      {
+        "lang": "nob",
+        "value": "Billettkjøp fra kl. 00:30-04:00 natt til lørdag og søndag"
+      },
+      {
+        "lang": "eng",
+        "value": "Ticket purchase from 00:30-04:00 night on Saturday and Sunday"
+      }
+    ],
     "alternativeNames": [
       {
         "lang": "eng",
@@ -80,6 +90,16 @@
         "value": "To Malvik, Melhus and Skaun"
       }
     ],
+    "warningMessage": [
+      {
+        "lang": "nob",
+        "value": "Billettkjøp fra kl. 00:30-04:00 natt til lørdag og søndag"
+      },
+      {
+        "lang": "eng",
+        "value": "Ticket purchase from 00:30-04:00 night on Saturday and Sunday"
+      }
+    ],
     "alternativeNames": [
       {
         "lang": "eng",
@@ -111,6 +131,16 @@
       {
         "lang": "eng",
         "value": "To Stjørdal and Orkdal"
+      }
+    ],
+    "warningMessage": [
+      {
+        "lang": "nob",
+        "value": "Billettkjøp fra kl. 00:30-04:00 natt til lørdag og søndag"
+      },
+      {
+        "lang": "eng",
+        "value": "Ticket purchase from 00:30-04:00 night on Saturday and Sunday"
       }
     ],
     "alternativeNames": [

@@ -33,7 +33,7 @@ export type DateTimePickerParams = {
 type JourneyDatePickerProps = DashboardScreenProps<'DateTimePicker'>;
 
 const DateOptions = ['now', 'departure', 'arrival'] as const;
-type DateOptionType = typeof DateOptions[number];
+type DateOptionType = (typeof DateOptions)[number];
 export type DateString = string;
 
 export type SearchTime = {

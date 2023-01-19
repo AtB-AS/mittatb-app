@@ -1,19 +1,18 @@
 import {Filter, Swap} from '@atb/assets/svg/mono-icons/actions';
 import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import {screenReaderPause} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
-import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {
-  useLocationSearchValue,
   SelectableLocationType,
+  useLocationSearchValue,
 } from '@atb/location-search';
 import {
   getSearchTimeLabel,
@@ -45,7 +44,9 @@ import {
 } from 'react-native';
 import {DashboardScreenProps} from './types';
 import {Time} from '@atb/assets/svg/mono-icons/time';
-import {useTravelSearchFiltersEnabled} from '@atb/screens/Dashboard/use-travel-search-filters-enabled';
+import storage, {StorageModelKeysEnum} from '@atb/storage';
+import {useTravelSearchFiltersState} from '@atb/screens/Dashboard/use-travel-search-filters-state';
+import {SelectedFiltersButtons} from '@atb/screens/Dashboard/SelectedFiltersButtons';
 
 type TripSearchRouteName = 'TripSearch';
 const TripSearchRouteNameStatic: TripSearchRouteName = 'TripSearch';
@@ -73,6 +74,14 @@ const TripSearch: React.FC<RootProps> = ({
   const {language, t} = useTranslation();
   const [updatingLocation] = useState<boolean>(false);
 
+  const shouldShowTravelSearchFilterOnboarding =
+    useShouldShowTravelSearchFilterOnboarding();
+  useEffect(() => {
+    if (shouldShowTravelSearchFilterOnboarding) {
+      navigation.navigate('TravelSearchFilterOnboardingScreen');
+    }
+  }, [shouldShowTravelSearchFilterOnboarding]);
+
   const {location, requestPermission: requestGeoPermission} =
     useGeolocationState();
 
@@ -83,8 +92,11 @@ const TripSearch: React.FC<RootProps> = ({
     option: 'now',
     date: new Date().toISOString(),
   });
+
+  const filtersState = useTravelSearchFiltersState();
+
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
-    useTripsQuery(from, to, searchTime);
+    useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);
 
   const isSearching = searchState === 'searching';
   const showEmptyScreen = !tripPatterns && !isSearching && !error;
@@ -97,8 +109,6 @@ const TripSearch: React.FC<RootProps> = ({
   >();
 
   const screenHasFocus = useIsFocused();
-
-  const travelSearchFiltersEnabled = useTravelSearchFiltersEnabled();
 
   useEffect(() => {
     if (!screenHasFocus) return;
@@ -291,15 +301,27 @@ const TripSearch: React.FC<RootProps> = ({
           <Button
             text={getSearchTimeLabel(searchTime, timeOfLastSearch, t, language)}
             accessibilityHint={t(TripSearchTexts.dateInput.a11yHint)}
+            accessibilityLabel={getSearchTimeLabel(
+              searchTime,
+              timeOfLastSearch,
+              t,
+              language,
+            )}
             interactiveColor="interactive_0"
             mode="secondary"
             compact={true}
             onPress={onSearchTimePress}
             testID="dashboardDateTimePicker"
-            rightIcon={{svg: Time}}
+            rightIcon={{
+              svg: Time,
+              notification:
+                searchTime.option !== 'now'
+                  ? {color: 'valid', backgroundColor: 'background_accent_0'}
+                  : undefined,
+            }}
             viewContainerStyle={style.searchTimeButton}
           />
-          {travelSearchFiltersEnabled && (
+          {filtersState.enabled && (
             <Button
               text={t(TripSearchTexts.filterButton.text)}
               accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
@@ -307,10 +329,16 @@ const TripSearch: React.FC<RootProps> = ({
               mode="secondary"
               type="inline"
               compact={true}
-              onPress={() => {}}
+              onPress={filtersState.openBottomSheet}
               testID="dashboardDateTimePicker"
-              rightIcon={{svg: Filter}}
+              rightIcon={{
+                svg: Filter,
+                notification: filtersState.anyFiltersApplied
+                  ? {color: 'valid', backgroundColor: 'background_accent_0'}
+                  : undefined,
+              }}
               viewContainerStyle={style.filterButton}
+              ref={filtersState.closeRef}
             />
           )}
         </View>
@@ -337,16 +365,27 @@ const TripSearch: React.FC<RootProps> = ({
           </ThemeText>
         )}
         {from && to && (
-          <Results
-            tripPatterns={tripPatterns}
-            isSearching={isSearching}
-            showEmptyScreen={showEmptyScreen}
-            isEmptyResult={isEmptyResult}
-            resultReasons={noResultReasons}
-            onDetailsPressed={onPressed}
-            errorType={error}
-            searchTime={searchTime}
-          />
+          <View>
+            {filtersState.enabled && (
+              <SelectedFiltersButtons
+                filtersSelection={filtersState.filtersSelection}
+                resetTransportModes={filtersState.resetTransportModes}
+              />
+            )}
+            <Results
+              tripPatterns={tripPatterns}
+              isSearching={isSearching}
+              showEmptyScreen={showEmptyScreen}
+              isEmptyResult={isEmptyResult}
+              resultReasons={noResultReasons}
+              onDetailsPressed={onPressed}
+              errorType={error}
+              searchTime={searchTime}
+              anyFiltersApplied={
+                filtersState.enabled && filtersState.anyFiltersApplied
+              }
+            />
+          </View>
         )}
         {!tripPatterns.length && <View style={style.emptyResultsSpacer}></View>}
         {!error && isValidLocations && (
@@ -538,6 +577,26 @@ function computeNoResultReasons(
   }
   return reasons;
 }
+
+export const useShouldShowTravelSearchFilterOnboarding = () => {
+  const [shouldShow, setShouldShow] = useState(false);
+  const isFocused = useIsFocused();
+  const {enabled} = useTravelSearchFiltersState();
+
+  useEffect(() => {
+    if (isFocused && enabled) {
+      (async function () {
+        const hasRead = await storage.get(
+          StorageModelKeysEnum.HasReadTravelSearchFilterOnboarding,
+        );
+        setShouldShow(hasRead ? !JSON.parse(hasRead) : true);
+      })();
+    } else {
+      setShouldShow(false);
+    }
+  }, [isFocused, enabled]);
+  return shouldShow;
+};
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {

@@ -1,22 +1,25 @@
 import {useTheme} from '@atb/theme';
 import {
-  TextColor,
-  Theme,
-  Mode,
-  StaticColor,
-  isStaticColor,
   flatStaticColors,
+  isStaticColor,
   isStatusColor,
+  Mode,
+  Theme,
 } from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 import useFontScale from '@atb/utils/use-font-scale';
+import {View} from 'react-native';
+import type {IconColor} from './types';
+import {
+  NotificationIndicator,
+  NotificationIndicatorProps,
+} from '@atb/components/theme-icon/NotificationIndicator';
 
-type IconColor = StaticColor | TextColor;
-
-type ThemeIconProps = {
+export type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
   colorType?: IconColor;
   size?: keyof Theme['icon']['size'];
+  notification?: Omit<NotificationIndicatorProps, 'iconSize'>;
 } & SvgProps;
 
 export const ThemeIcon = ({
@@ -24,6 +27,8 @@ export const ThemeIcon = ({
   colorType,
   size = 'normal',
   fill,
+  notification,
+  style,
   ...props
 }: ThemeIconProps): JSX.Element => {
   const {theme, themeName} = useTheme();
@@ -39,7 +44,15 @@ export const ThemeIcon = ({
     width: iconSize,
     ...props,
   };
-  return svg(settings);
+
+  return (
+    <View style={style}>
+      {svg(settings)}
+      {notification && (
+        <NotificationIndicator {...notification} iconSize={size} />
+      )}
+    </View>
+  );
 };
 
 function getFill(theme: Theme, themeType: Mode, colorType?: IconColor): string {

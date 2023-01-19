@@ -117,6 +117,10 @@ const TripSearchTexts = {
         'Prøv å justere på sted eller tidspunkt.',
         'Try adjusting your time or location input.',
       ),
+      genericHintWithFilters: _(
+        'Prøv å justere sted, filter eller tidspunkt.',
+        'Try adjusting your time, filters or location input.',
+      ),
     },
     resultList: {
       listPositionExplanation: (
@@ -193,6 +197,43 @@ const TripSearchTexts = {
             `From ${fromPlace}, at ${fromPlaceDepartureTime}`,
           ),
       },
+    },
+  },
+  onboarding: {
+    title: _('Filter i reisesøk 🎉', 'Filters in travel search 🎉'),
+    body: {
+      part1: _(
+        'Nå kan du bruke filter i reisesøk og få reiseforslag tilpasset dine behov.',
+        'You can now use filters in travel searches and get travel suggestions adapted to your needs.',
+      ),
+      part2: _(
+        'Velg hvilke transportmiddel du ønsker å reise med.',
+        'Select the means of transport you want to use for your trip.',
+      ),
+    },
+    button: _('Den er grei!', 'Sounds good!'),
+    a11yLabel: _(
+      'Filter i reisesøk! Nå kan du bruke filter i reisesøk og få reiseforslag tilpasset dine behov. Velg hvilke transportmiddel du ønsker å reise med.',
+      'Filters in travel search! You can now use filters in travel searches and get travel suggestions adapted to your needs. Select the means of transport you want to use for your trip.',
+    ),
+  },
+  filters: {
+    bottomSheet: {
+      heading: _('Filter', 'Filter'),
+      modes: {
+        heading: _('Hva vil du reise med?', 'What do you want to travel with?'),
+        all: _('Alle', 'All'),
+      },
+      save: _('Lagre valg', 'Save selection'),
+    },
+    selection: {
+      transportModes: (selected: number, total: number) =>
+        _(
+          `${selected} av ${total} transportmidler er valgt`,
+          `${selected} of ${total} trasportation modes are selected`,
+        ),
+      a11yLabelPrefix: _('Filter: ', 'Filter: '),
+      a11yHint: _('Aktiver for å fjerne filter.', 'Activate to remove filter.'),
     },
   },
 };

@@ -6,6 +6,7 @@ import {
 import {TripPattern} from '@atb/api/types/trips';
 import {
   SearchStateType,
+  TravelSearchFiltersSelectionType,
   TripPatternWithKey,
 } from '@atb/screens/Dashboard/types';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
@@ -19,14 +20,17 @@ import {useSearchHistory} from '@atb/search-history';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {TripSearchPreferences, usePreferences} from '@atb/preferences';
 import {isValidTripLocations} from '@atb/utils/location';
+import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {flatMap} from '@atb/utils/array';
 
 export default function useTripsQuery(
-  fromLocation?: Location,
-  toLocation?: Location,
+  fromLocation: Location | undefined,
+  toLocation: Location | undefined,
   searchTime: SearchTime = {
     option: 'now',
     date: new Date().toISOString(),
   },
+  filtersSelection: TravelSearchFiltersSelectionType | undefined,
 ): {
   tripPatterns: TripPatternWithKey[];
   timeOfLastSearch: DateString;
@@ -119,6 +123,7 @@ export default function useTripsQuery(
                 searchInput,
                 cancelTokenSource,
                 tripSearchPreferences,
+                filtersSelection,
               );
 
               const tripPatternsWithKeys = decorateTripPatternWithKey(
@@ -164,7 +169,7 @@ export default function useTripsQuery(
         cancelTokenSource.cancel('Unmounting use trips hook');
       };
     },
-    [fromLocation, toLocation, searchTime],
+    [fromLocation, toLocation, searchTime, filtersSelection],
   );
 
   useEffect(() => search(), [search]);
@@ -201,7 +206,8 @@ async function doSearch(
   arriveBy: boolean,
   {searchTime, cursor}: SearchInput,
   cancelToken: CancelTokenSource,
-  tripSearchPreferences?: TripSearchPreferences,
+  tripSearchPreferences: TripSearchPreferences | undefined,
+  travelSearchFiltersSelection: TravelSearchFiltersSelectionType | undefined,
 ) {
   const from = {
     ...fromLocation,
@@ -229,6 +235,18 @@ async function doSearch(
     walkReluctance: tripSearchPreferences?.walkReluctance,
     walkSpeed: tripSearchPreferences?.walkSpeed,
   };
+
+  if (travelSearchFiltersSelection?.transportModes) {
+    const selectedFilters = travelSearchFiltersSelection.transportModes.filter(
+      (m) => m.selected,
+    );
+    query.modes = {
+      accessMode: StreetMode.Foot,
+      directMode: StreetMode.Foot,
+      egressMode: StreetMode.Foot,
+      transportModes: flatMap(selectedFilters, (tm) => tm.modes),
+    };
+  }
 
   Bugsnag.leaveBreadcrumb('searching', {
     fromLocation: query.from,

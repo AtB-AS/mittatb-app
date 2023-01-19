@@ -131,11 +131,15 @@ export default function EstimatedCallItem({
               publicCode={line.publicCode}
               transportMode={line.transportMode}
               transportSubmode={line.transportSubmode}
-              icon={getSvgForMostCriticalSituationOrNotice(
-                departure.situations,
-                notices,
-                departure.cancellation,
-              )}
+              icon={
+                mode !== 'Favourite'
+                  ? getSvgForMostCriticalSituationOrNotice(
+                      departure.situations,
+                      notices,
+                      departure.cancellation,
+                    )
+                  : undefined
+              }
               testID={testID}
             />
           )}
@@ -325,7 +329,7 @@ function LineChip({
   const styles = useStyles();
   const fontScale = useFontScale();
   const {theme} = useTheme();
-  const svg = getTransportModeSvg(transportMode as Mode_v2 | undefined);
+  const svg = getTransportModeSvg(transportMode, transportSubmode);
   const transportColor = useTransportationColor(
     transportMode as Mode_v2 | undefined,
     transportSubmode,
@@ -337,13 +341,11 @@ function LineChip({
   );
   return (
     <View style={[styles.lineChip, {backgroundColor: transportColor}]}>
-      {svg && (
-        <ThemeIcon
-          fill={transportTextColor}
-          style={{marginRight: publicCode ? theme.spacings.small : 0}}
-          svg={svg}
-        ></ThemeIcon>
-      )}
+      <ThemeIcon
+        fill={transportTextColor}
+        style={{marginRight: publicCode ? theme.spacings.small : 0}}
+        svg={svg}
+      />
       {publicCode && (
         <ThemeText
           style={[

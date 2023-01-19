@@ -6,8 +6,8 @@ import {
   ArrowUpLeft,
   ChevronLeft,
   ChevronRight,
-  ExpandMore,
   ExpandLess,
+  ExpandMore,
   UnfoldLess,
   UnfoldMore,
 } from '@atb/assets/svg/mono-icons/navigation';
@@ -25,7 +25,7 @@ const navigationTypes = [
   'unfold-more',
 ] as const;
 
-export type NavigationIconTypes = typeof navigationTypes[number];
+export type NavigationIconTypes = (typeof navigationTypes)[number];
 
 type NavigationIconProps = {
   mode?: NavigationIconTypes;

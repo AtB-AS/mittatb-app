@@ -6,10 +6,10 @@ import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {
   cancelPayment,
   listRecurringPayments,
+  OfferReservation,
   PaymentType,
   ReserveOffer,
   reserveOffers,
-  OfferReservation,
 } from '@atb/ticketing';
 import {useAuthState} from '@atb/auth';
 import {savePreviousPaymentMethodByUser} from '../../saved-payment-utils';
@@ -94,7 +94,7 @@ export default function useTerminalState(
 
   const onWebViewNavigationChange = (event: WebViewNavigation) => {
     const {url} = event;
-    if (url.includes('/ticket/v2/payments/')) {
+    if (url.includes('/ticket/v3/payments/')) {
       const responseCode = getResponseCode(event);
       if (responseCode === 'Cancel') {
         cancel();

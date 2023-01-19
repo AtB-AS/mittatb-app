@@ -14,12 +14,15 @@ export type PreassignedFareProduct = {
   name: LanguageAndTextType;
   version: string;
   description?: LanguageAndTextType[];
+  warningMessage?: LanguageAndTextType[];
   type: PreassignedFareProductType;
   durationDays: number;
   distributionChannel: DistributionChannel[];
   alternativeNames: LanguageAndTextType[];
   limitations: {
     userProfileRefs: string[];
+    appVersionMin: string | undefined;
+    appVersionMax: string | undefined;
   };
 };
 

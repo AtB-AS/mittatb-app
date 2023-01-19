@@ -4,7 +4,6 @@ import React from 'react';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import * as Sections from '@atb/components/sections';
-import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 import {getTransportModeSvg} from '@atb/components/transportation-icon';
 import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
@@ -90,7 +89,7 @@ export default function StopPlaceItem({
               key={mode}
               style={styles.stopPlaceIcon}
               size="large"
-              svg={getTransportModeSvg(mode) || Bus}
+              svg={getTransportModeSvg(mode)}
             />
           ))}
         </View>
