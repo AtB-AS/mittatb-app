@@ -15,32 +15,6 @@ import {ScrollView, View} from 'react-native';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-// type ConsequencesScreenProps =
-//   RootStackScreenProps<'Root_ConsequencesFromPurchase'>;
-//
-// type ConsequencesFromOnboardingScreenProps =
-//   OnboardingScreenProps<'ConsequencesFromOnboarding'>;
-//
-// type ConsequencesFromPurchaseScreenProps =
-//   PurchaseScreenProps<'ConsequencesFromPurchase'>;
-//
-// type ConsequencesPropsInternal =
-//   | ConsequencesScreenProps
-//   | ConsequencesFromOnboardingScreenProps
-//   | ConsequencesFromPurchaseScreenProps;
-//
-// type NavigationProps = ConsequencesScreenProps['navigation'] &
-//   ConsequencesFromOnboardingScreenProps['navigation'] &
-//   ConsequencesFromPurchaseScreenProps['navigation'];
-//
-// // Having issues doing proper typing where the navigation
-// // gets all overlapping types of routes as this is used from
-// // several places. For routes and properties this works
-// // but having to _combine_ everything for navigation to work.
-// type ConsequencesProps = ConsequencesPropsInternal & {
-//   navigation: NavigationProps;
-// };
-
 type Props = {
   onPressLogin: () => void;
   onPressContinueWithoutLogin: () => void;
@@ -57,40 +31,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
   const {themeName} = useTheme();
   const focusRef = useFocusOnLoad();
 
-  // const isCallerRouteOnboarding = route?.name === 'ConsequencesFromOnboarding';
   const fillColor = getStaticColor(themeName, themeColor).text;
-  // const finishOnboarding = useFinishOnboarding();
-  // const {enable_vipps_login} = useRemoteConfig();
-  // const navigateTologIn = async () => {
-  //   navigation.navigate('LoginInApp', {
-  //     screen: enable_vipps_login ? 'LoginOptionsScreen' : 'PhoneInputInApp',
-  //     params: {
-  //       afterLogin: isCallerRouteOnboarding
-  //         ? {
-  //             screen: 'Root_TabNavigatorStack',
-  //             params: {
-  //               screen: 'TabNav_DashboardStack',
-  //               params: {
-  //                 screen: 'Dashboard_RootScreen',
-  //                 params: {},
-  //               },
-  //             },
-  //           }
-  //         : {
-  //             screen: 'Root_TabNavigatorStack',
-  //             params: {
-  //               screen: 'TabNav_TicketingStack',
-  //               params: {
-  //                 screen: 'PurchaseTab',
-  //               },
-  //             },
-  //           },
-  //     },
-  //   });
-  // };
-
-  // const secondaryAction = () =>
-  //   isCallerRouteOnboarding ? finishOnboarding() : navigation.goBack();
 
   return (
     <>
