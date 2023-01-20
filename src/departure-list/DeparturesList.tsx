@@ -10,7 +10,9 @@ import {ActivityIndicator, View} from 'react-native';
 import {hasNoGroupsWithDepartures, hasNoQuaysWithDepartures} from './utils';
 import {StopPlace} from '@atb/api/types/trips';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import QuaySection from '@atb/departure-list/section-items/quay-section';
+import QuaySection, {
+  QuaySectionProps,
+} from '@atb/departure-list/section-items/quay-section';
 
 type DeparturesListProps = {
   departures: StopPlaceGroup[] | null;
@@ -23,6 +25,7 @@ type DeparturesListProps = {
   showOnlyFavorites: boolean;
   disableCollapsing?: boolean;
   searchDate: string;
+  onPressDeparture: QuaySectionProps['onPressDeparture'];
 };
 
 export default function DeparturesList({
@@ -36,6 +39,7 @@ export default function DeparturesList({
   showOnlyFavorites,
   disableCollapsing = false,
   searchDate,
+  onPressDeparture,
 }: DeparturesListProps) {
   const styles = useDeparturesListStyle();
   const {t} = useTranslation();
@@ -85,6 +89,7 @@ export default function DeparturesList({
               disableCollapsing={disableCollapsing}
               searchDate={searchDate}
               testID={'stopDeparture' + i}
+              onPressDeparture={onPressDeparture}
             />
           ))}
           <FooterLoader isFetchingMore={isFetchingMore} />
@@ -131,6 +136,7 @@ type StopDeparturesProps = {
   disableCollapsing?: boolean;
   searchDate: string;
   testID?: string;
+  onPressDeparture: QuaySectionProps['onPressDeparture'];
 };
 const StopDepartures = React.memo(function StopDepartures({
   stopPlaceGroup,
@@ -140,6 +146,7 @@ const StopDepartures = React.memo(function StopDepartures({
   disableCollapsing = false,
   searchDate,
   testID,
+  onPressDeparture,
 }: StopDeparturesProps) {
   const [expanded, setExpanded] = useState(
     defaultExpanded || disableCollapsing,
@@ -181,6 +188,7 @@ const StopDepartures = React.memo(function StopDepartures({
             lastUpdated={lastUpdated}
             searchDate={searchDate}
             testID={'quaySection' + i}
+            onPressDeparture={onPressDeparture}
           />
         ))}
     </View>

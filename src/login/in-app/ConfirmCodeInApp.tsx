@@ -6,7 +6,9 @@ import {LoginInAppScreenProps} from '../types';
 
 export type ConfirmCodeInAppRouteParams = {
   phoneNumber: string;
-  afterLogin: AfterLoginParams<'TabNavigator'> | AfterLoginParams<'Purchase'>;
+  afterLogin:
+    | AfterLoginParams<'Root_TabNavigatorStack'>
+    | AfterLoginParams<'Purchase'>;
 };
 
 type Props = LoginInAppScreenProps<'ConfirmCodeInApp'>;

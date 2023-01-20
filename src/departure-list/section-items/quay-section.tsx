@@ -16,10 +16,11 @@ import MoreItem from './more';
 import QuayHeaderItem from './quay-header';
 import {Location} from '@atb/favorites/types';
 import {StopPlace} from '@atb/api/types/trips';
+import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 
 const LIMIT_SIZE = 5;
 
-type QuaySectionProps = {
+export type QuaySectionProps = {
   quayGroup: QuayGroup;
   stop: StopPlaceInfo;
   locationOrStopPlace?: Location | StopPlace;
@@ -28,6 +29,10 @@ type QuaySectionProps = {
   searchDate: string;
   testID?: string;
   mode?: QuaySectionMode;
+  onPressDeparture: (
+    items: ServiceJourneyDeparture[],
+    activeIndex: number,
+  ) => void;
 };
 
 const QuaySection = React.memo(function QuaySection({
@@ -38,6 +43,7 @@ const QuaySection = React.memo(function QuaySection({
   searchDate,
   testID,
   mode = 'departures',
+  onPressDeparture,
 }: QuaySectionProps) {
   const [limit, setLimit] = useState(LIMIT_SIZE);
   const {t} = useTranslation();
@@ -78,6 +84,7 @@ const QuaySection = React.memo(function QuaySection({
             searchDate={searchDate}
             testID={'lineItem' + i}
             mode={mode}
+            onPressDeparture={onPressDeparture}
           />
         ))}
         {hasMoreItems && mode !== 'frontpage' && (

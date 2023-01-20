@@ -13,8 +13,7 @@ import {
   useSectionStyle,
 } from '@atb/components/sections';
 import {TransportationIcon} from '@atb/components/transportation-icon';
-import {NearbyScreenProps} from '@atb/screens/Nearby/types';
-import {ServiceJourneyDeparture} from '@atb/screens/TripDetails/DepartureDetails/types';
+import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   dictionary,
@@ -32,18 +31,16 @@ import {
 } from '@atb/utils/date';
 import insets from '@atb/utils/insets';
 import {TFunc} from '@leile/lobo-t';
-import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 import {getSvgForMostCriticalSituationOrNotice} from '@atb/situations';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
-import {filterNotices} from '@atb/screens/TripDetails/utils';
-import {useOnMarkFavouriteDepartures} from '@atb/screens/Departures/components/use-on-mark-favourite-departures';
-import ToggleFavouriteDeparture from '@atb/screens/Departures/components/ToggleFavouriteDeparture';
-
-type RootProps = NearbyScreenProps<'NearbyRoot'>;
+import {filterNotices} from '@atb/travel-details-screens/utils';
+import {useOnMarkFavouriteDepartures} from '@atb/favorites/use-on-mark-favourite-departures';
+import {QuaySectionProps} from '@atb/departure-list/section-items/quay-section';
+import ToggleFavouriteDeparture from '@atb/favorites/ToggleFavouriteDeparture';
 
 export type LineItemProps = SectionItemProps<{
   group: DepartureGroup;
@@ -51,6 +48,7 @@ export type LineItemProps = SectionItemProps<{
   quay: QuayInfo;
   searchDate: string;
   mode: QuaySectionMode;
+  onPressDeparture: QuaySectionProps['onPressDeparture'];
 }>;
 export default function LineItem({
   group,
@@ -59,13 +57,12 @@ export default function LineItem({
   searchDate,
   testID,
   mode,
+  onPressDeparture,
   ...props
 }: LineItemProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
   const sectionStyle = useSectionStyle();
   const styles = useItemStyles();
-  // @TODO this shouldn't refer to useNavigation but instead have "onPress"
-  const navigation = useNavigation<RootProps['navigation']>();
   const {t, language} = useTranslation();
 
   const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
@@ -88,16 +85,6 @@ export default function LineItem({
     serviceDate: dep.serviceDate,
   }));
 
-  const onPress = (activeItemIndex: number) => {
-    navigation.push('TripDetails', {
-      screen: 'DepartureDetails',
-      params: {
-        activeItemIndex,
-        items,
-      },
-    });
-  };
-
   // we know we have a departure as we've checked hasNoDeparturesOnGroup
   const nextValids = group.departures.filter(isValidDeparture);
 
@@ -106,7 +93,7 @@ export default function LineItem({
       <View style={[topContainer, sectionStyle.spaceBetween]}>
         <TouchableOpacity
           style={[styles.lineHeader, contentContainer]}
-          onPress={() => onPress(0)}
+          onPress={() => onPressDeparture(items, 0)}
           hitSlop={insets.symmetric(12, 0)}
           accessibilityRole="button"
           accessibilityHint={
@@ -151,7 +138,7 @@ export default function LineItem({
           <DepartureTimeItem
             departure={departure}
             key={departure.serviceJourneyId + departure.aimedTime}
-            onPress={() => onPress(i)}
+            onPress={() => onPressDeparture(items, i)}
             searchDate={searchDate}
             testID={'depTime' + i}
           />

@@ -26,12 +26,12 @@ import {
   defaultModesWeSellTicketsFor,
 } from '@atb/configuration/defaults';
 import {PaymentType} from '@atb/ticketing';
-import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
+import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {
   mapToFareProductTypeConfigs,
   mapToTransportModeFilterOptions,
 } from './converters';
-import type {TravelSearchFiltersType} from '@atb/screens/Dashboard/types';
+import type {TravelSearchFiltersType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 
 type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
