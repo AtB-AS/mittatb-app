@@ -1110,7 +1110,7 @@ PODS:
   - React-jsinspector (0.70.6)
   - React-logger (0.70.6):
     - glog
-  - react-native-geolocation-service (5.3.0):
+  - react-native-geolocation-service (5.3.1):
     - React
   - react-native-get-random-values (1.8.0):
     - React-Core
@@ -1126,17 +1126,17 @@ PODS:
     - Mapbox-iOS-SDK (= 6.3.0)
     - React
     - React-Core
-  - react-native-pager-view (5.4.25):
+  - react-native-pager-view (6.1.2):
     - React-Core
-  - react-native-safe-area-context (4.3.3):
+  - react-native-safe-area-context (4.5.0):
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
     - React-Core
     - ReactCommon/turbomodule/core
-  - react-native-slider (4.3.1):
+  - react-native-slider (4.4.0):
     - React-Core
-  - react-native-webview (11.23.0):
+  - react-native-webview (11.26.0):
     - React-Core
   - React-perflogger (0.70.6)
   - React-RCTActionSheet (0.70.6):
@@ -1204,15 +1204,15 @@ PODS:
     - React-jsi (= 0.70.6)
     - React-logger (= 0.70.6)
     - React-perflogger (= 0.70.6)
-  - RNBootSplash (4.3.2):
+  - RNBootSplash (4.4.1):
     - React-Core
   - RNCAsyncStorage (1.17.11):
     - React-Core
-  - RNCClipboard (1.11.0):
+  - RNCClipboard (1.11.1):
     - React-Core
-  - RNDateTimePicker (6.3.2):
+  - RNDateTimePicker (6.7.2):
     - React-Core
-  - RNDeviceInfo (10.0.2):
+  - RNDeviceInfo (10.3.0):
     - React-Core
   - RNFBAnalytics (16.5.0):
     - Firebase/Analytics (= 10.3.0)
@@ -1234,15 +1234,15 @@ PODS:
     - Firebase/RemoteConfig (= 10.3.0)
     - React-Core
     - RNFBApp
-  - RNGestureHandler (2.6.0):
+  - RNGestureHandler (2.9.0):
     - React-Core
   - RNInAppBrowser (3.7.0):
     - React-Core
-  - RNLocalize (2.2.3):
+  - RNLocalize (2.2.4):
     - React-Core
   - RNPermissions (3.6.1):
     - React-Core
-  - RNReanimated (2.10.0):
+  - RNReanimated (2.14.4):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -1269,10 +1269,10 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.17.0):
+  - RNScreens (3.19.0):
     - React-Core
     - React-RCTImage
-  - RNSVG (13.2.0):
+  - RNSVG (13.7.0):
     - React-Core
   - SocketRocket (0.6.0)
   - SwiftProtobuf (1.20.3)
@@ -1559,7 +1559,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
   AbtTokenCoreSDK: 37dfb8d3f22568be581a7dbd04e290cb4b46b83f
-  boost: a7c83b31436843459a1961bfd74b96033dc77234
+  boost: 57d2868c099736d80fcd648bf211b4431e51a558
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   BugsnagReactNative: 24f614fbd87c52821e380cf9b429e4a93f523e7b
   BVLinearGradient: 34a999fda29036898a09c6a6b728b0b4189e1a44
@@ -1604,7 +1604,7 @@ SPEC CHECKSUMS:
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   Permission-LocationWhenInUse: 3ba99e45c852763f730eabecec2870c2382b7bd4
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
-  RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
+  RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: e1866f61af7049eb3d8e08e8b133abd38bc1ca7a
   RCTTypeSafety: 27c2ac1b00609a432ced1ae701247593f07f901e
   React: bb3e06418d2cc48a84f9666a576c7b38e89cd7db
@@ -1619,14 +1619,14 @@ SPEC CHECKSUMS:
   React-jsiexecutor: b4a65947391c658450151275aa406f2b8263178f
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
-  react-native-geolocation-service: f32ef48fa665bd710207a3ac39bc127cac9cb993
+  react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-intercom: fb708ee880fd1d102c232e9e3b5d27c5ebe7bd8d
   react-native-mapbox-gl: bffacc7783a77b1e2d040018a8212ed344105e10
-  react-native-pager-view: da490aa1f902c9a5aeecf0909cc975ad0e92e53e
-  react-native-safe-area-context: b456e1c40ec86f5593d58b275bd0e9603169daca
-  react-native-slider: d3ae4270cf8a8cc45a69912db0cc42b151560d5a
-  react-native-webview: e771bc375f789ebfa02a26939a57dbc6fa897336
+  react-native-pager-view: 54bed894cecebe28cede54c01038d9d1e122de43
+  react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
+  react-native-slider: d2938a12c4e439a227c70eec65d119136eb4aeb5
+  react-native-webview: 994b9f8fbb504d6314dc40d83f94f27c6831b3bf
   React-perflogger: 8c79399b0500a30ee8152d0f9f11beae7fc36595
   React-RCTActionSheet: 7316773acabb374642b926c19aef1c115df5c466
   React-RCTAnimation: 5341e288375451297057391227f691d9b2326c3d
@@ -1639,23 +1639,23 @@ SPEC CHECKSUMS:
   React-RCTVibration: c75ceef7aa60a33b2d5731ebe5800ddde40cefc4
   React-runtimeexecutor: 15437b576139df27635400de0599d9844f1ab817
   ReactCommon: 349be31adeecffc7986a0de875d7fb0dcf4e251c
-  RNBootSplash: 5f346163977573d6b2aeba1b25df9d2245c0d73c
+  RNBootSplash: 4f968c1e098c7ec97939ace039f735e3d335bd4b
   RNCAsyncStorage: 8616bd5a58af409453ea4e1b246521bb76578d60
-  RNCClipboard: 4b8bec7c195e27bcec746f52dff7601161683249
-  RNDateTimePicker: 4f1fc917f5af9d9ae4c5fc0c63a4474d61338693
-  RNDeviceInfo: 0a7c1d2532aa7691f9b9925a27e43af006db4dae
+  RNCClipboard: 2834e1c4af68697089cdd455ee4a4cdd198fa7dd
+  RNDateTimePicker: aade709a5a728c04b9736c7dbe84f172e9d6aec4
+  RNDeviceInfo: 4701f0bf2a06b34654745053db0ce4cb0c53ada7
   RNFBAnalytics: 116338d7e03126a5782412dbd7410139898cdb35
   RNFBApp: 9295dac8a4e8857918bcff90328b197807ee0dc1
   RNFBAuth: 751f700af31914ed7cf1ec401066f884834fe5de
   RNFBFirestore: 90f51e71ff11fbe2e8cb7760e57050c2a2961dbd
   RNFBRemoteConfig: c6c5e360b34ca49251a8c4e2c3ae2e652e1ac5c7
-  RNGestureHandler: 920eb17f5b1e15dae6e5ed1904045f8f90e0b11e
+  RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
-  RNLocalize: a64514b46a01375fdfae9349036b4dc7130333b5
+  RNLocalize: 0df7970cfc60389f00eb62fd7c097dc75af3fb4f
   RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c
-  RNReanimated: 60e291d42c77752a0f6d6f358387bdf225a87c6e
-  RNScreens: 0df01424e9e0ed7827200d6ed1087ddd06c493f9
-  RNSVG: 07037623c36f12e41312730622d5f6b3656227ca
+  RNReanimated: 6668b0587bebd4b15dd849b99e5a9c70fc12ed95
+  RNScreens: ea4cd3a853063cda19a4e3c28d2e52180c80f4eb
+  RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   SwiftProtobuf: b02b5075dcf60c9f5f403000b3b0c202a11b6ae1
   token-state-react-native-lib-ios: 6548b638164e281d10fcf05e0832ed5d28b74caa
