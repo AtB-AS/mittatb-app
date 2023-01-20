@@ -46,7 +46,7 @@ jobs:
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn generate-native-assets
       - name: Disable widget
-        if: ENV['DISABLE_WIDGET'] == 'true'
+        if: ${{ env.DISABLE_WIDGET }} == 'true'
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget
       - name: Run fastlane build
         if: steps.ipa-cache.outputs.cache-hit != 'true'
