@@ -78,8 +78,8 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
         'Choose between travel card or phone',
       ),
       description: _(
-        'Du kan bruke billetten din på et reisekort eller en mobil med appen AtB installert — men kun en av gangen.',
-        'You can use your ticket on a travel card or a phone with the app AtB installed — but only one at a time.',
+        'Du kan bruke billetten din på et reisekort eller en mobil med Reis-appen installert — men kun en av gangen.',
+        'You can use your ticket on a travel card or a phone with the Reis app installed — but only one at a time.',
       ),
     },
     ticketSafetyInfo: {
