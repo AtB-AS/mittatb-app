@@ -220,7 +220,7 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
       ),
       radioBox: {
         tCard: {
-          title: _('reisekort', 'travel card'),
+          title: _('Reisekort', 'Travel card'),
           description: _(
             'Les av reisekortet ditt på holdeplass eller om bord. Kortet leses av ved kontroll.',
             'Validate your travel card at the bus stop or on board. The card will be scanned in a ticket inspection.',
