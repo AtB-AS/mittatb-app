@@ -22,7 +22,7 @@ import {DeparturesRealtimeData} from '@atb/sdk';
 import {differenceInMinutes} from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '@atb/departure-list/utils';
-import {SearchTime} from "@atb/journey-date-picker";
+import {SearchTime} from '@atb/journey-date-picker';
 import {animateNextChange} from '@atb/utils/animation';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
