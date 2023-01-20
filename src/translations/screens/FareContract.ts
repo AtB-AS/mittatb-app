@@ -1,5 +1,6 @@
 import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {translation as _} from '../commons';
+import orgSpecificTranslations from '@atb/translations/utils';
 
 const FareContractTexts = {
   organizationName: _('AtB', 'AtB'),
@@ -116,7 +117,7 @@ const FareContractTexts = {
   warning: {
     unableToRetrieveToken: _(
       'Feil ved uthenting av t:kort / mobil',
-      'Error retrieving  t:card / phone',
+      'Error retrieving t:card / phone',
     ),
     noInspectableTokenFound: _(
       'Du må bruke billett på t:kort eller mobil',
@@ -167,4 +168,44 @@ const FareContractTexts = {
   },
 };
 
-export default FareContractTexts;
+export default orgSpecificTranslations(FareContractTexts, {
+  nfk: {
+    details: {
+      barcodeErrors: {
+        notInspectableDevice: {
+          wrongDevice: (deviceName: string) =>
+            _(
+              `Du bruker billetter på din mobil, "${deviceName}". Husk å ta den med deg når du reiser.\nDu kan alltid bytte til reisekort eller en annen mobil ved å gå til **Min profil**.`,
+              `Seems like you\'re using your ticket on your phone, "${deviceName}". Remember to bring it with you while traveling.\nYou can always switch to a travel card or a different phone by heading over to **My profile**.`,
+            ),
+          tCard: _(
+            'Du bruker billetten på ditt reisekort. Husk å ta det med deg når du reiser.\nDu kan alltid bytte til en mobil ved å gå til **Min profil**.',
+            `Seems like you\'re using your ticket on your travel card. Remember to bring it with you while traveling.\nYou can always switch to your phone by heading over to **My profile**.`,
+          ),
+        },
+      },
+    },
+    warning: {
+      unableToRetrieveToken: _(
+        'Feil ved uthenting av reisekort / mobil',
+        'Error retrieving travel card / phone',
+      ),
+      noInspectableTokenFound: _(
+        'Du må bruke billett på reisekort eller mobil',
+        'You must use a ticket on travel card or phone',
+      ),
+      travelCardAstoken: _(
+        'Bruk reisekort når du reiser',
+        'Bring your travel card when you travel',
+      ),
+      carnetWarning: _(
+        'Vennligst bytt til reisekort for å kunne bruke dette klippekortet.',
+        'Please switch to travel card to be able to use this punch card.',
+      ),
+      tcardIsInspectableWarning: _(
+        'Merk at billetter du kjøper nå vil være tilknyttet ditt reisekort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.',
+        'This ticket will be connected to your travel card. If you would rather use tickets on this phone, you can switch to this device from **My profile**.',
+      ),
+    },
+  },
+});
