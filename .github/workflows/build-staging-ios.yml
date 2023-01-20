@@ -35,7 +35,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
       - name: Disable widget
-        if: ${{ env.ENABLE_WIDGET }} != true
+        if: ${{ env.ENABLE_WIDGET }} == 'false'
         run: echo "Widget is enabled is:${{ env.ENABLE_WIDGET }}" && bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget
       - name: Get potential cached ipa & dsym
         uses: actions/cache@v2
