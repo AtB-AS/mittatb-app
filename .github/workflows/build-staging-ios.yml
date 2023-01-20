@@ -17,6 +17,9 @@ jobs:
     timeout-minutes: 360
     runs-on: macOS-12
     steps:
+      - name: Disable widget
+        if: matrix.org != 'atb'
+        run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget
       - name: Checkout project
         uses: actions/checkout@v1
       - name: Add Entur private registry credentials
@@ -45,9 +48,7 @@ jobs:
       - name: Generate native assets
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn generate-native-assets
-      - name: Disable widget
-        if: matrix.org != 'atb'
-        run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget
+
       - name: Run fastlane build
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane ios build
