@@ -1,4 +1,4 @@
-import {getRealtimeDepartureV2} from '@atb/api/departures';
+import {getRealtimeDepartures} from '@atb/api/departures';
 import {
   getQuayDepartures,
   QuayDeparturesVariables,
@@ -167,7 +167,7 @@ const reducer: ReducerWithSideEffects<
           try {
             const quayIds = [action.quay.id];
 
-            const realtimeData = await getRealtimeDepartureV2(quayIds, {
+            const realtimeData = await getRealtimeDepartures(quayIds, {
               limitPerLine: state.queryInput.numberOfDepartures,
               startTime: state.queryInput.startTime,
             });

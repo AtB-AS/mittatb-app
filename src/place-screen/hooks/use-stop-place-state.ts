@@ -1,4 +1,4 @@
-import {getRealtimeDepartureV2} from '@atb/api/departures';
+import {getRealtimeDepartures} from '@atb/api/departures';
 import {getStopPlaceDepartures} from '@atb/api/departures/stops-nearest';
 import {EstimatedCall, StopPlace} from '@atb/api/types/departures';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
@@ -161,7 +161,7 @@ const reducer: ReducerWithSideEffects<
           // we get the same result.
           try {
             const quayIds = action.stopPlace.quays?.map((q) => q.id);
-            const realtimeData = await getRealtimeDepartureV2(quayIds, {
+            const realtimeData = await getRealtimeDepartures(quayIds, {
               limitPerLine: state.queryInput.numberOfDepartures,
               startTime: state.queryInput.startTime,
             });

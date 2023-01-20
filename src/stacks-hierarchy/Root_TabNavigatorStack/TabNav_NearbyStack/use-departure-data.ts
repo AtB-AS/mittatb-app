@@ -7,7 +7,10 @@ import useReducerWithSideEffects, {
   Update,
   UpdateWithSideEffect,
 } from 'use-reducer-with-side-effects';
-import {getDepartureGroups, getRealtimeDeparture} from '@atb/api/departures';
+import {
+  getDepartureGroups,
+  getStopPlaceGroupRealtime,
+} from '@atb/api/departures';
 import {
   DepartureFavoritesQuery,
   DepartureGroupMetadata,
@@ -227,7 +230,7 @@ const reducer: ReducerWithSideEffects<
           // Use same query input with same startTime to ensure that
           // we get the same result.
           try {
-            const realtimeData = await getRealtimeDeparture(
+            const realtimeData = await getStopPlaceGroupRealtime(
               state.data ?? [],
               state.queryInput,
             );

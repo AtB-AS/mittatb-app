@@ -52,6 +52,12 @@ target 'app' do
   pod 'token-state-react-native-lib-ios', :path => '../node_modules/@entur-private/abt-token-state-react-native-lib/ios'
 
   post_install do |installer|
+    # Patch for issue using use_frameworks with hermes
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['ENABLE_BITCODE'] = 'NO'
+      end
+    end
     react_native_post_install(
       installer,
       # Set `mac_catalyst_enabled` to `true` in order to apply patches
