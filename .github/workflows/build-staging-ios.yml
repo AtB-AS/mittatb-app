@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Disable widget
         if: ${{ env.ENABLE_WIDGET }} != 'true'
-        run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget
+        run: echo "Widget is enabled is:${{ env.ENABLE_WIDGET }}" && bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget
       - name: Checkout project
         uses: actions/checkout@v1
       - name: Add Entur private registry credentials
