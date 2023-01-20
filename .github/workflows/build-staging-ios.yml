@@ -34,9 +34,6 @@ jobs:
       - uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
-      - name: Disable widget
-        if: ${{ env.ENABLE_WIDGET != 'true' }}
-        run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget
       - name: Get potential cached ipa & dsym
         uses: actions/cache@v2
         id: ipa-cache
@@ -48,6 +45,9 @@ jobs:
       - name: Generate native assets
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn generate-native-assets
+      - name: Disable widget
+        if: ${{ env.ENABLE_WIDGET != 'true' }}
+        run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget
       - name: Run fastlane build
         if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane ios build
