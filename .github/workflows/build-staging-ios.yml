@@ -18,7 +18,7 @@ jobs:
     runs-on: macOS-12
     steps:
       - name: Disable widget
-        if: ${{ ENABLE_WIDGET }} != 'true'
+        if: ${{ env.ENABLE_WIDGET }} != 'true'
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget
       - name: Checkout project
         uses: actions/checkout@v1
