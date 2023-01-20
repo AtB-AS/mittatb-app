@@ -9,7 +9,7 @@ import useReducerWithSideEffects, {
 } from 'use-reducer-with-side-effects';
 import {
   getFavouriteDepartures,
-  getRealtimeDepartureV2,
+  getStopPlaceGroupRealtime,
 } from '@atb/api/departures';
 import {
   DepartureFavoritesQuery,
@@ -23,7 +23,6 @@ import {differenceInMinutes} from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '../../departure-list/utils';
 import {SearchTime} from '../Nearby/types';
-import {flatMap} from '@atb/utils/array';
 import {animateNextChange} from '@atb/utils/animation';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
@@ -153,8 +152,8 @@ const reducer: ReducerWithSideEffects<
           // Use same query input with same startTime to ensure that
           // we get the same result.
           try {
-            const realtimeData = await getRealtimeDepartureV2(
-              flatMap(state.data ?? [], (f) => f.quays.map((q) => q.quay.id)),
+            const realtimeData = await getStopPlaceGroupRealtime(
+              state.data ?? [],
               state.queryInput,
             );
             dispatch({
