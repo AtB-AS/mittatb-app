@@ -4,7 +4,7 @@ import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/text';
 import {Button, ButtonProps} from '@atb/components/button';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {RootStackProps} from '@atb/navigation/types';
+import {RootStackProps} from '@atb/stacks-hierarchy';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {InteractiveColor} from '@atb/theme/colors';
 import {FavoriteTexts, useTranslation} from '@atb/translations';

@@ -5,7 +5,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppContextProvider from './AppContext';
 import {GlobalMessagesContextProvider} from './global-messages';
 import GeolocationContextProvider from './GeolocationContext';
-import NavigationRoot from './navigation';
+import {RootStack} from '@atb/stacks-hierarchy';
 import trackAppState from './diagnostics/trackAppState';
 import ThemeContextProvider from './theme/ThemeContext';
 import FavoritesContextProvider from './favorites/FavoritesContext';
@@ -80,7 +80,7 @@ const App = () => {
                                     <GlobalMessagesContextProvider>
                                       <BottomSheetProvider>
                                         <FeedbackQuestionsProvider>
-                                          <NavigationRoot />
+                                          <RootStack />
                                         </FeedbackQuestionsProvider>
                                       </BottomSheetProvider>
                                     </GlobalMessagesContextProvider>

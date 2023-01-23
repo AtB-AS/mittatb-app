@@ -6,7 +6,9 @@ import ActiveFareContractPrompt from '../ActiveFareContractPrompt';
 import {LoginInAppScreenProps} from '../types';
 
 export type activeFareContractPromptInAppRouteParams = {
-  afterLogin: AfterLoginParams<'TabNavigator'> | AfterLoginParams<'Purchase'>;
+  afterLogin:
+    | AfterLoginParams<'Root_TabNavigatorStack'>
+    | AfterLoginParams<'Purchase'>;
 };
 
 type Props = LoginInAppScreenProps<'activeFareContractPromptInApp'>;

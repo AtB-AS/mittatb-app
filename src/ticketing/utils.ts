@@ -1,4 +1,4 @@
-import {getLastUsedAccess} from '@atb/screens/Ticketing/FareContracts/Carnet/CarnetDetails';
+import {getLastUsedAccess} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Carnet/CarnetDetails';
 import {flatten, sumBy} from 'lodash';
 import {
   CarnetTravelRightUsedAccess,
