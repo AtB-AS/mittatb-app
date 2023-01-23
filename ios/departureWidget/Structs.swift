@@ -30,6 +30,8 @@ enum TransportMode: String, Codable {
             return Image("Tram")
         case .bus:
             return Image("Bus")
+        case .metro:
+            return Image("Metro")
         default:
             return nil
         }
@@ -37,7 +39,7 @@ enum TransportMode: String, Codable {
 
     var iconForegroundColor: Color {
         switch self {
-        case .rail:
+        case .rail, .metro:
             return .white
         default:
             return .black
@@ -48,8 +50,8 @@ enum TransportMode: String, Codable {
         switch self {
         case .water:
             return Color("Transport/Boat")
-        case .rail:
-            return Color("Transport/Rail")
+        case .rail, .metro:
+            return Color("Transport/Train")
         default:
             return Color("Transport/City")
         }
@@ -172,7 +174,7 @@ enum TransportSubMode: String, Codable {
 
     var iconForegroundColor: Color? {
         switch self {
-        case .regionalBus, .nightBus:
+        case .regionalBus, .nightBus, .airportLinkBus, .metro:
             return .white
         default:
             return nil
@@ -181,7 +183,7 @@ enum TransportSubMode: String, Codable {
 
     var iconBackgroundColor: Color? {
         switch self {
-        case .regionalBus, .nightBus:
+        case .regionalBus, .nightBus, .airportLinkBus:
             return Color("Transport/Region")
         default:
             return nil
