@@ -1,4 +1,6 @@
 import {translation as _} from '../../commons';
+import orgSpecificTranslations from '@atb/translations/utils';
+
 const DeleteProfileTexts = {
   header: {
     title: _('Slett Min profil', 'Delete My profile'),
@@ -22,8 +24,8 @@ const DeleteProfileTexts = {
       }`,
     ),
   unableToDeleteWithFareContracts: _(
-    'Kan ikke slette Min profil mens du har aktive billetter. Kontakt Reis Nordland kundeservice for refusjon eller vent til billettene har utløpt.',
-    'Unable to delete My profile while you have active tickets. Please contact Reis Nordland customer support for refund or wait until tickets expire.',
+    'Kan ikke slette Min profil mens du har aktive billetter. Kontakt AtB kundeservice for refusjon eller vent til billettene har utløpt.',
+    'Unable to delete My profile while you have active tickets. Please contact customer support to refund or wait until tickets expire.',
   ),
   customerNumber: _('Kundenummer', 'Customer number'),
   deleteConfirmation: {
@@ -44,4 +46,11 @@ const DeleteProfileTexts = {
   },
 };
 
-export default DeleteProfileTexts;
+export default orgSpecificTranslations(DeleteProfileTexts, {
+  nfk: {
+    unableToDeleteWithFareContracts: _(
+      'Kan ikke slette Min profil mens du har aktive billetter. Kontakt Reis Nordland kundeservice for refusjon eller vent til billettene har utløpt.',
+      'Unable to delete My profile while you have active tickets. Please contact Reis Nordland customer support for refund or wait until tickets expire.',
+    ),
+  },
+});
