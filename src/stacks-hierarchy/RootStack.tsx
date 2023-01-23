@@ -70,10 +70,10 @@ export const RootStack = () => {
           // Index is needed so that the user can go back after
           // opening the app with the widget when it was not open previously
           index: 0,
-          name: 'DeparturesScreen',
+          name: 'Departures_NearbyStopPlacesScreen',
         },
         {
-          name: 'PlaceScreen',
+          name: 'Departures_PlaceScreen',
           params: {
             place: {
               name: params.stopName,
@@ -109,11 +109,11 @@ export const RootStack = () => {
     return {
       routes: [
         {
-          name: 'TabNavigator',
+          name: 'Root_TabNavigatorStack',
           state: {
             routes: [
               {
-                name: 'Nearest',
+                name: 'TabNav_NearestStack',
                 state: {
                   routes: destination as PartialRoute<Route<string>>[],
                 },
@@ -170,7 +170,7 @@ export const RootStack = () => {
                             name: 'TabNav_DashboardStack',
                             state: {
                               routes: [
-                                {name: 'Dashboard_Root', index: 0},
+                                {name: 'Dashboard_RootScreen', index: 0},
                                 {name: 'Dashboard_NearbyStopPlacesScreen'},
                               ],
                             },
