@@ -17,7 +17,7 @@ import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {MapControls} from './components/MapControls';
 import {shadows} from './components/shadows';
-import {useVehicles} from '@atb/screens/Map/hooks/use-vehicles';
+import {useVehicles} from './hooks/use-vehicles';
 import {Vehicle} from '@atb/components/map/components/Vehicle';
 import {useRegion} from '@atb/components/map/hooks/use-region';
 
@@ -45,11 +45,10 @@ export const Map = (props: MapProps) => {
       startingCoordinates,
     );
 
-  const {region, onRegionChange} = useRegion(startingCoordinates);
-  //console.log('region', region);
+  const {currentCoordinates, currentZoom, onRegionChange} =
+    useRegion(startingCoordinates);
 
-  const vehicles = useVehicles({...region, range: 500});
-  //console.log(`${vehicles.length} vehicles loaded`);
+  const vehicles = useVehicles(currentCoordinates, currentZoom);
 
   return (
     <View style={styles.container}>
@@ -62,6 +61,7 @@ export const Map = (props: MapProps) => {
       <View style={{flex: 1}}>
         <MapboxGL.MapView
           ref={mapViewRef}
+          style={{
             flex: 1,
           }}
           onRegionWillChange={onRegionChange}
