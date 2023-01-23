@@ -16,7 +16,7 @@ export const Map_PlaceScreen = ({navigation, route}: Props) => (
           })
     }
     onPressDeparture={(items, activeItemIndex) =>
-      navigation.navigate('Map_DepartureDetailsScreen', {
+      navigation.push('Map_DepartureDetailsScreen', {
         items,
         activeItemIndex,
       })

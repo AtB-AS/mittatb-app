@@ -16,7 +16,7 @@ export const Dashboard_PlaceScreen = ({navigation, route}: Props) => (
           })
     }
     onPressDeparture={(items, activeItemIndex) =>
-      navigation.navigate('Dashboard_DepartureDetailsScreen', {
+      navigation.push('Dashboard_DepartureDetailsScreen', {
         items,
         activeItemIndex,
       })
