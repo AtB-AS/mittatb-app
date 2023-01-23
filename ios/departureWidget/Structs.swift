@@ -219,7 +219,7 @@ struct QuayInfo: Codable {
     let id: String
     let name: String
     let description: String?
-    let publicCode: String
+    let publicCode: String?
     let latitude: Double
     let longitude: Double
 }
@@ -327,7 +327,7 @@ struct FavouriteDeparture: Codable {
     let lineTransportationMode: TransportMode?
     let lineTransportationSubMode: TransportSubMode?
     let quayName: String
-    let quayPublicCode: String
+    let quayPublicCode: String?
     let quayId: String
     let stopId: String
 
@@ -353,7 +353,7 @@ struct FavouriteDeparture: Codable {
         lineTransportationMode = try container.decodeIfPresent(TransportMode.self, forKey: .lineTransportationMode)
         lineTransportationSubMode = try container.decodeIfPresent(TransportSubMode.self, forKey: .lineTransportationSubMode)
         quayName = try container.decode(String.self, forKey: .quayName)
-        quayPublicCode = try container.decode(String.self, forKey: .quayPublicCode)
+        quayPublicCode = try container.decodeIfPresent(String.self, forKey: .quayPublicCode)
         quayId = try container.decode(String.self, forKey: .quayId)
         stopId = try container.decode(String.self, forKey: .stopId)
     }
