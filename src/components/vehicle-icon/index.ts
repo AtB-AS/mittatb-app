@@ -1,0 +1,1 @@
+export {VehicleIcon} from './VehicleIcon';

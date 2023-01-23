@@ -17,6 +17,9 @@ import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {MapControls} from './components/MapControls';
 import {shadows} from './components/shadows';
+import {useVehicles} from '@atb/screens/Map/hooks/use-vehicles';
+import {Vehicle} from '@atb/components/map/components/Vehicle';
+import {useRegion} from '@atb/components/map/hooks/use-region';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -42,6 +45,12 @@ export const Map = (props: MapProps) => {
       startingCoordinates,
     );
 
+  const {region, onRegionChange} = useRegion(startingCoordinates);
+  //console.log('region', region);
+
+  const vehicles = useVehicles({...region, range: 500});
+  //console.log(`${vehicles.length} vehicles loaded`);
+
   return (
     <View style={styles.container}>
       {props.selectionMode === 'ExploreLocation' && (
@@ -53,9 +62,9 @@ export const Map = (props: MapProps) => {
       <View style={{flex: 1}}>
         <MapboxGL.MapView
           ref={mapViewRef}
-          style={{
             flex: 1,
           }}
+          onRegionWillChange={onRegionChange}
           onPress={async (feature: Feature) => {
             if (isFeaturePoint(feature)) {
               onMapClick({
@@ -91,6 +100,9 @@ export const Map = (props: MapProps) => {
               </View>
             </MapboxGL.PointAnnotation>
           )}
+          {vehicles.map((vehicle) => (
+            <Vehicle key={vehicle.id} vehicle={vehicle} />
+          ))}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
           {currentLocation && (
