@@ -17,7 +17,7 @@ import {
 import {useReverseGeocoder} from '@atb/geocoder';
 import {coordinatesDistanceInMetres} from '@atb/utils/location';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {Coordinates} from '@atb/screens/TripDetails/Map/types';
+import {Coordinates} from '@atb/utils/coordinates';
 
 type Props = {
   coordinates?: Coordinates;

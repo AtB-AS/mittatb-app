@@ -1,4 +1,4 @@
-import {TabNavigatorParams} from '@atb/navigation/types';
+import {TabNavigatorStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack';
 import useFontScale from '@atb/utils/use-font-scale';
 import {Platform} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -30,15 +30,15 @@ export const useBottomNavigationStyles = () => {
 
 export function settingToRouteName(
   setting?: Preference_ScreenAlternatives,
-): keyof TabNavigatorParams {
+): keyof TabNavigatorStackParams {
   switch (setting) {
     case 'assistant':
-      return 'Dashboard';
+      return 'TabNav_DashboardStack';
     case 'departures':
-      return 'Nearest';
+      return 'TabNav_NearestStack';
     case 'ticketing':
-      return 'Ticketing';
+      return 'TabNav_TicketingStack';
     default:
-      return 'Dashboard';
+      return 'TabNav_DashboardStack';
   }
 }

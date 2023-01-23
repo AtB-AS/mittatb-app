@@ -1,12 +1,14 @@
 import {iterateWithNext} from '@atb/utils/array';
 import {addMinutes} from 'date-fns';
 import {Leg} from '@atb/api/types/trips';
-import {TIME_LIMIT_IN_MINUTES} from '@atb/screens/TripDetails/Details/utils';
-import {hasShortWaitTime} from '@atb/screens/TripDetails/components/utils';
 import {Flattened, flattenObject} from '@atb/utils/object';
 import {onlyUniques, onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {compareVersion} from '@atb/utils/compare-version';
 import {expectNumber} from '../e2e/utils/jestAssertions';
+import {
+  hasShortWaitTime,
+  TIME_LIMIT_IN_MINUTES,
+} from '@atb/travel-details-screens/utils';
 
 describe('IterateWithNext', () => {
   it('iterates correctly', () => {

@@ -1,7 +1,12 @@
-import {StopPlace, Quay} from '@atb/api/types/departures';
+import {Quay, StopPlace} from '@atb/api/types/departures';
 import {GeoLocation, Location, SearchLocation} from '@atb/favorites/types';
-import {Feature, Point} from 'geojson';
-import {Coordinates, MapLine} from '@atb/screens/TripDetails/Map/types';
+import {Feature, LineString, Point} from 'geojson';
+import {Coordinates} from '@atb/utils/coordinates';
+import {
+  Mode,
+  PointsOnLink,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -73,3 +78,16 @@ export type CameraFocusModeType =
       mode: 'my-position';
       coordinates: Coordinates;
     };
+
+export type MapLeg = {
+  mode?: Mode;
+  faded?: boolean;
+  transportSubmode?: TransportSubmode;
+  pointsOnLink?: PointsOnLink;
+};
+
+export interface MapLine extends Feature<LineString> {
+  travelType?: Mode;
+  subMode?: TransportSubmode;
+  faded?: boolean;
+}

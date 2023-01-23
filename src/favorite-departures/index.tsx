@@ -1,0 +1,1 @@
+export {FavoriteDeparturesScreenComponent} from './FavoriteDeparturesScreenComponent';

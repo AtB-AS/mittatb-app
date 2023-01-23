@@ -3,10 +3,10 @@ import {
   MapSelectionMode,
   MapSelectionActionType,
 } from '../types';
-import {Coordinates} from '@atb/screens/TripDetails/Map/types';
+import {Coordinates} from '@atb/utils/coordinates';
 import {RefObject, useEffect, useState} from 'react';
 import {Feature, Point} from 'geojson';
-import {createMapLines} from '@atb/screens/TripDetails/Map/utils';
+import {createMapLines} from '@atb/travel-details-map-screen/utils';
 import {findStopPlaceAtClick, mapPositionToCoordinates} from '../utils';
 import {tripsSearch} from '@atb/api/trips_v2';
 import {StreetMode} from '@entur/sdk/lib/journeyPlanner/types';

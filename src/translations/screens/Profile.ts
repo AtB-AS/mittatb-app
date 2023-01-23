@@ -1,4 +1,5 @@
 import {translation as _} from '../commons';
+import orgSpecificTranslations from '@atb/translations/utils';
 
 const ProfileTexts = {
   header: {
@@ -148,4 +149,19 @@ const ProfileTexts = {
     ),
   },
 };
-export default ProfileTexts;
+export default orgSpecificTranslations(ProfileTexts, {
+  nfk: {
+    sections: {
+      settings: {
+        linkSectionItems: {
+          travelToken: {
+            label: _(
+              'Bruk billett på reisekort / mobil',
+              'Use ticket on travel card / phone',
+            ),
+          },
+        },
+      },
+    },
+  },
+});

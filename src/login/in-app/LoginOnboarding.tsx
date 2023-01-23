@@ -4,10 +4,12 @@ import LoginOnboarding from '@atb/login/LoginOnboarding';
 import {AfterLoginParams} from '@atb/login/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {LoginInAppScreenProps} from '../types';
-import {FareProductTypeConfig} from '@atb/screens/Ticketing/FareContracts/utils';
+import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 
 export type LoginOnboardingInAppRouteParams = {
-  afterLogin: AfterLoginParams<'TabNavigator'> | AfterLoginParams<'Purchase'>;
+  afterLogin:
+    | AfterLoginParams<'Root_TabNavigatorStack'>
+    | AfterLoginParams<'Purchase'>;
   fareProductTypeConfig: FareProductTypeConfig;
 };
 

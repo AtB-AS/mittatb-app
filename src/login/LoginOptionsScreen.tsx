@@ -27,7 +27,9 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export type LoginOptionsRouteParams = {
-  afterLogin: AfterLoginParams<'TabNavigator'> | AfterLoginParams<'Purchase'>;
+  afterLogin:
+    | AfterLoginParams<'Root_TabNavigatorStack'>
+    | AfterLoginParams<'Purchase'>;
 };
 
 type LoginOptionsProps = LoginInAppScreenProps<'LoginOptionsScreen'>;

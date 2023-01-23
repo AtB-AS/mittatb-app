@@ -1,4 +1,4 @@
-import {OfferEndpoint} from '@atb/screens/Ticketing/FareContracts/utils';
+import {OfferEndpoint} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
 import {ReserveOfferRequestBody} from '.';
