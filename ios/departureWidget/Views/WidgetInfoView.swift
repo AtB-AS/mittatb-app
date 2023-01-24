@@ -87,16 +87,11 @@ struct WidgetInfoView: View {
                         Spacer()
 
                         if viewModel.entry.state == .noDepartureQuays {
-                            HStack {
-                                Spacer()
-                                Text("no_departures").font(DefaultFonts.bold)
-                                Spacer()
-                            }.frame(maxWidth: .infinity)
+                              Text("no_departures").font(DefaultFonts.bold).frame(maxWidth: .infinity)
                                 .lineLimit(1)
                                 .padding(8)
                                 .background(Color("TimeTileBackgroundColor"))
                                 .cornerRadius(8)
-                                .font(DefaultFonts.boldHeader)
                         } else {
                             DepartureTimesView(aimedTimes: aimedTimes)
                         }
