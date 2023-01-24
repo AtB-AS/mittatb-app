@@ -4,6 +4,8 @@ import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 import {EstimatedCall} from '@atb/api/types/departures';
+import {iterateWithNext} from '@atb/utils/array';
+import {differenceInSeconds, parseISO} from 'date-fns';
 
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
 
@@ -103,9 +105,6 @@ export function getLineName(leg: Leg) {
   return leg.line?.publicCode ? `${leg.line.publicCode} ${name}` : name;
 }
 
-import {iterateWithNext} from '@atb/utils/array';
-import {differenceInSeconds, parseISO} from 'date-fns';
-
 export function hasShortWaitTime(legs: Leg[]) {
   return iterateWithNext(legs)
     .map((pair) => {
@@ -124,4 +123,17 @@ function parseDateIfString(date: any): Date {
   } else {
     return date;
   }
+}
+
+export function walkOrWait(leg: Leg, nextLeg?: Leg) {
+  if (leg.mode !== 'foot') return true;
+
+  const showWaitTime = !!nextLeg;
+  const waitTimeInSeconds = !nextLeg
+    ? 0
+    : secondsBetween(leg.expectedEndTime, nextLeg?.expectedStartTime);
+  const mustWalk = significantWalkTime(leg.duration);
+  const mustWait = showWaitTime && significantWaitTime(waitTimeInSeconds);
+
+  return mustWait || mustWalk;
 }
