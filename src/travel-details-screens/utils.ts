@@ -125,7 +125,7 @@ function parseDateIfString(date: any): Date {
   }
 }
 
-export function walkOrWait(leg: Leg, nextLeg?: Leg) {
+export function isSignificantFootLegWalkOrWaitTime(leg: Leg, nextLeg?: Leg) {
   if (leg.mode !== 'foot') return true;
 
   const showWaitTime = !!nextLeg;

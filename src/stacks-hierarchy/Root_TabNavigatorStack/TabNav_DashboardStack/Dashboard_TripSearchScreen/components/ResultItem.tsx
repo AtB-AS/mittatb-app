@@ -42,9 +42,9 @@ import {SearchTime} from '@atb/journey-date-picker';
 import {RailReplacementBusMessage} from './RailReplacementBusMessage';
 import {
   getNoticesForLeg,
+  isSignificantFootLegWalkOrWaitTime,
   significantWaitTime,
   significantWalkTime,
-  walkOrWait,
 } from '@atb/travel-details-screens/utils';
 
 type ResultItemProps = {
@@ -172,7 +172,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     tripPattern.legs.length,
   );
   const legs = expandedLegs.filter((leg, i) =>
-    walkOrWait(leg, tripPattern.legs[i + 1]),
+    isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
   );
 
   const isInPast =

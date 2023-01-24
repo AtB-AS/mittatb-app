@@ -11,7 +11,7 @@ import Summary from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {walkOrWait} from '@atb/travel-details-screens/utils';
+import {isSignificantFootLegWalkOrWaitTime} from '@atb/travel-details-screens/utils';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -30,7 +30,7 @@ const Trip: React.FC<TripProps> = ({
 }) => {
   const styles = useStyle();
   const legs = tripPattern.legs.filter((leg, i) =>
-    walkOrWait(leg, tripPattern.legs[i + 1]),
+    isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
   );
   return (
     <View style={styles.container}>
