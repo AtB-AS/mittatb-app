@@ -8,6 +8,7 @@ export const Profile_FavoriteDeparturesScreen = ({navigation}: Props) => (
     onPressAddFavorite={() =>
       navigation.navigate('Profile_NearbyStopPlacesScreen', {
         location: undefined,
+        mode: 'Favourite',
       })
     }
   />
