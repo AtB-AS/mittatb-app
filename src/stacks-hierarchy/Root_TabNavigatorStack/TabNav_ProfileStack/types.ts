@@ -10,7 +10,7 @@ import {
 import {StackScreenProps} from '@react-navigation/stack';
 
 import {PlaceScreenParams} from '@atb/place-screen/PlaceScreenComponent';
-import { NearbyStopPlacesScreenParams } from "@atb/nearby-stop-places/NearbyStopPlacesScreenComponent";
+import {NearbyStopPlacesScreenParams} from '@atb/nearby-stop-places/NearbyStopPlacesScreenComponent';
 
 export type ProfileStackParams = {
   ProfileHome: undefined;

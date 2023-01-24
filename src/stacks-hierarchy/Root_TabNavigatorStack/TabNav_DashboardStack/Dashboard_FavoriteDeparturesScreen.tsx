@@ -3,13 +3,16 @@ import {DashboardScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack
 
 type Props = DashboardScreenProps<'Dashboard_FavoriteDeparturesScreen'>;
 
-export const Dashboard_FavoriteDeparturesScreen = ({navigation, route}: Props) => (
+export const Dashboard_FavoriteDeparturesScreen = ({
+  navigation,
+  route,
+}: Props) => (
   <FavoriteDeparturesScreenComponent
     onPressAddFavorite={() =>
       navigation.navigate('Dashboard_NearbyStopPlacesScreen', {
         location: undefined,
         mode: 'Favourite',
-        onCloseRoute: route.name
+        onCloseRoute: route.name,
       })
     }
   />

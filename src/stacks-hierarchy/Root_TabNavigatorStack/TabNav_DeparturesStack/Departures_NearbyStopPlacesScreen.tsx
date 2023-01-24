@@ -1,5 +1,4 @@
 import {StopPlace} from '@atb/api/types/departures';
-import {Location} from '@atb/favorites/types';
 import {useOnlySingleLocation} from '@atb/location-search';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
