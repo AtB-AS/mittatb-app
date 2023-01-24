@@ -11,6 +11,7 @@ import Summary from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {isSignificantFootLegWalkOrWaitTime} from '@atb/travel-details-screens/utils';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -28,22 +29,24 @@ const Trip: React.FC<TripProps> = ({
   onPressQuay,
 }) => {
   const styles = useStyle();
-
+  const legs = tripPattern.legs.filter((leg, i) =>
+    isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
+  );
   return (
     <View style={styles.container}>
       <TripMessages tripPattern={tripPattern} error={error} />
       <View style={styles.trip}>
         {tripPattern &&
-          tripPattern.legs.map((leg, index) => {
+          legs.map((leg, index) => {
             return (
               <TripSection
                 key={index}
                 isFirst={index == 0}
-                wait={legWaitDetails(index, tripPattern.legs)}
-                isLast={index == tripPattern.legs.length - 1}
+                wait={legWaitDetails(index, legs)}
+                isLast={index == legs.length - 1}
                 step={index + 1}
                 interchangeDetails={getInterchangeDetails(
-                  tripPattern,
+                  legs,
                   leg.interchangeTo?.toServiceJourney?.id,
                 )}
                 leg={leg}
@@ -85,11 +88,11 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
 }));
 
 function getInterchangeDetails(
-  tripPattern: TripPattern,
+  legs: Leg[],
   id: string | undefined,
 ): InterchangeDetails | undefined {
   if (!id) return undefined;
-  const interchangeLeg = tripPattern.legs.find(
+  const interchangeLeg = legs.find(
     (leg) => leg.line && leg.serviceJourney?.id === id,
   );
 
