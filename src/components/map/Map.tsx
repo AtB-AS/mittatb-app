@@ -18,7 +18,6 @@ import {PositionArrow} from './components/PositionArrow';
 import {MapControls} from './components/MapControls';
 import {shadows} from './components/shadows';
 import {useVehicles} from './hooks/use-vehicles';
-import {Vehicle} from '@atb/components/map/components/Vehicle';
 import {useRegion} from '@atb/components/map/hooks/use-region';
 
 export const Map = (props: MapProps) => {
@@ -48,7 +47,10 @@ export const Map = (props: MapProps) => {
   const {currentCoordinates, currentZoom, onRegionChange} =
     useRegion(startingCoordinates);
 
-  const vehicles = useVehicles(currentCoordinates, currentZoom);
+  const {vehiclesFeatureCollection} = useVehicles(
+    currentCoordinates,
+    currentZoom,
+  );
 
   return (
     <View style={styles.container}>
@@ -100,9 +102,50 @@ export const Map = (props: MapProps) => {
               </View>
             </MapboxGL.PointAnnotation>
           )}
-          {vehicles.map((vehicle) => (
-            <Vehicle key={vehicle.id} vehicle={vehicle} />
-          ))}
+          <MapboxGL.ShapeSource
+            id={'vehicles'}
+            shape={vehiclesFeatureCollection}
+            cluster
+          >
+            <MapboxGL.SymbolLayer
+              id="icon"
+              filter={['!', ['has', 'point_count']]}
+              style={{
+                textField: '20%',
+                textAnchor: 'top-left',
+                textOffset: [0.4, 0.7],
+                textColor: '#920695',
+                textSize: 12,
+                iconImage: 'PinScooter',
+                iconSize: 0.75,
+              }}
+            />
+            <MapboxGL.SymbolLayer
+              id="clusterIcon"
+              filter={['has', 'point_count']}
+              style={{
+                iconImage: 'Scooter',
+                iconSize: 0.75,
+              }}
+            />
+            <MapboxGL.CircleLayer
+              id="cluster"
+              filter={['has', 'point_count']}
+              belowLayerID="clusterIcon"
+              style={{
+                circleColor: '#920695',
+                circleStrokeColor: '#920695',
+                circleOpacity: 0.7,
+                circleStrokeOpacity: 0.2,
+                circleStrokeWidth: [
+                  'min',
+                  ['+', 2, ['get', 'point_count']],
+                  12,
+                ],
+                circleRadius: 12,
+              }}
+            />
+          </MapboxGL.ShapeSource>
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
           {currentLocation && (
