@@ -23,9 +23,11 @@ import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {dictionary, useTranslation} from '@atb/translations';
 import {Bus} from '@atb/assets/svg/mono-icons/transportation';
+import useFontScale from '@atb/utils/use-font-scale';
 
 export default function DesignSystem() {
   const style = useProfileHomeStyle();
+  const fontScale = useFontScale();
   const {theme} = useTheme();
   const {t} = useTranslation();
 
@@ -128,6 +130,11 @@ export default function DesignSystem() {
       />
 
       <ScrollView>
+        <Sections.Section withPadding withTopPadding>
+          <Sections.HeaderSectionItem
+            text={'Current font scale: ' + fontScale.toFixed(3)}
+          />
+        </Sections.Section>
         <Sections.Section withPadding withTopPadding>
           <Sections.HeaderSectionItem text="Icons" />
 
