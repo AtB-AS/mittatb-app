@@ -107,5 +107,7 @@ const PurchaseConfirmationTexts = {
       'Activate to pay with MasterCard',
     ),
   },
+  ordinaryPricePrefix: _(`Ord. pris`, `Ord. price`),
+  ordinaryPricePrefixA11yLabel: _(`Ordinær pris`, `Ordinary price`),
 };
 export default PurchaseConfirmationTexts;
