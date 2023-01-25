@@ -26,8 +26,9 @@ import {useGlobalMessagesState} from '@atb/global-messages';
 import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
-import {RadioSegments} from '@atb/components/radio';
 import {useTravelSearchFiltersDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-enabled';
+import {useVehiclesInMapDebugOverride} from '@atb/vehicles';
+import {DebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/DebugInfo/components/DebugOverride';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -44,8 +45,8 @@ export default function DebugInfo() {
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
 
-  const [travelSearchFilterOverride, setTravelSearchFilterOverride] =
-    useTravelSearchFiltersDebugOverride();
+  const travelSearchDebugOverride = useTravelSearchFiltersDebugOverride();
+  const vehiclesInMapDebugOverride = useVehiclesInMapDebugOverride();
 
   useEffect(() => {
     async function run() {
@@ -178,37 +179,23 @@ export default function DebugInfo() {
               )
             }
           />
-
+        </Sections.Section>
+        <Sections.Section withPadding withTopPadding>
+          <Sections.HeaderSectionItem
+            text="Remove config override"
+            subtitle="If undefined the value
+        from Remote Config will be used. Needs reload of app after change."
+          />
           <Sections.GenericSectionItem>
-            <ThemeText>
-              Debug override for enable travel search filter. If undefined the
-              value from Remote Config will be used. Needs reload of app after
-              change.
-            </ThemeText>
-            <RadioSegments
-              activeIndex={
-                travelSearchFilterOverride
-                  ? 0
-                  : travelSearchFilterOverride === undefined
-                  ? 1
-                  : 2
-              }
-              color="interactive_2"
-              style={{marginTop: 8}}
-              options={[
-                {
-                  text: 'True',
-                  onPress: () => setTravelSearchFilterOverride(true),
-                },
-                {
-                  text: 'Undefined',
-                  onPress: () => setTravelSearchFilterOverride(undefined),
-                },
-                {
-                  text: 'False',
-                  onPress: () => setTravelSearchFilterOverride(false),
-                },
-              ]}
+            <DebugOverride
+              description="Enable travel search filter."
+              override={travelSearchDebugOverride}
+            />
+          </Sections.GenericSectionItem>
+          <Sections.GenericSectionItem>
+            <DebugOverride
+              description="Enable vehicles in map."
+              override={vehiclesInMapDebugOverride}
             />
           </Sections.GenericSectionItem>
         </Sections.Section>
