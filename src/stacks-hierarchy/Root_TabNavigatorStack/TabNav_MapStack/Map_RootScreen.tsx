@@ -8,16 +8,13 @@ import {Quay, StopPlace} from '@atb/api/types/departures';
 import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {StatusBarOnFocus} from '@atb/components/status-bar-on-focus';
-import {Coordinates} from '@atb/utils/coordinates';
-import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
-import {getVehicles} from '@atb/api/vehicles';
-import {toFeatureCollection, toGeoJSONFeature} from '@atb/components/map/utils';
-import {FetchEntitiesCallback} from '@atb/components/map/types';
+import {useVehicles} from '@atb/vehicles';
 
 export const Map_RootScreen = ({
   navigation,
 }: MapScreenProps<'Map_RootScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
+  const vehicles = useVehicles();
   if (isScreenReaderEnabled) return <MapDisabledForScreenReader />;
   const navigateToQuay = (place: StopPlace, quay: Quay) => {
     navigation.navigate('Map_PlaceScreen', {
@@ -61,20 +58,12 @@ export const Map_RootScreen = ({
     });
   };
 
-  const fetchVehicles: FetchEntitiesCallback<VehicleFragment> = async (
-    {latitude: lat, longitude: lon}: Coordinates,
-    radius = 500,
-  ) =>
-    getVehicles({lat, lon, range: radius})
-      .then(toGeoJSONFeature)
-      .then(toFeatureCollection);
-
   return (
     <>
       <StatusBarOnFocus barStyle="dark-content" />
       <Map
         selectionMode={'ExploreStops'}
-        fetchVehicles={fetchVehicles}
+        vehicles={vehicles}
         navigateToQuay={navigateToQuay}
         navigateToDetails={navigateToDetails}
         navigateToTripSearch={navigateToTripSearch}

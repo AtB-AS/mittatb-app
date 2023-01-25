@@ -1,7 +1,7 @@
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
-import MapboxGL from '@react-native-mapbox-gl/maps';
-import {Feature} from 'geojson';
+import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
+import {Feature, GeoJSON} from 'geojson';
 import React, {useMemo, useRef} from 'react';
 import {View} from 'react-native';
 import {LocationBar} from './components/LocationBar';
@@ -17,7 +17,7 @@ import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {MapControls} from './components/MapControls';
 import {shadows} from './components/shadows';
-import {useVehicles} from './hooks/use-vehicles';
+import {Vehicles} from '@atb/components/map/components/Vehicles';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -43,7 +43,13 @@ export const Map = (props: MapProps) => {
       startingCoordinates,
     );
 
-  const {vehicles, onRegionChange} = useVehicles(props);
+  const onRegionChange = (
+    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
+  ) => {
+    if (!props.vehicles) return;
+    const [longitude, latitude] = feature.geometry.coordinates;
+    props.vehicles.fetchVehicles({longitude, latitude});
+  };
 
   return (
     <View style={styles.container}>
@@ -95,46 +101,7 @@ export const Map = (props: MapProps) => {
               </View>
             </MapboxGL.PointAnnotation>
           )}
-          <MapboxGL.ShapeSource id={'vehicles'} shape={vehicles} cluster>
-            <MapboxGL.SymbolLayer
-              id="icon"
-              filter={['!', ['has', 'point_count']]}
-              style={{
-                textField: '20%',
-                textAnchor: 'top-left',
-                textOffset: [0.4, 0.7],
-                textColor: '#920695',
-                textSize: 12,
-                iconImage: 'PinScooter',
-                iconSize: 0.75,
-              }}
-            />
-            <MapboxGL.SymbolLayer
-              id="clusterIcon"
-              filter={['has', 'point_count']}
-              style={{
-                iconImage: 'Scooter',
-                iconSize: 0.75,
-              }}
-            />
-            <MapboxGL.CircleLayer
-              id="cluster"
-              filter={['has', 'point_count']}
-              belowLayerID="clusterIcon"
-              style={{
-                circleColor: '#920695',
-                circleStrokeColor: '#920695',
-                circleOpacity: 0.7,
-                circleStrokeOpacity: 0.2,
-                circleStrokeWidth: [
-                  'min',
-                  ['+', 2, ['get', 'point_count']],
-                  12,
-                ],
-                circleRadius: 12,
-              }}
-            />
-          </MapboxGL.ShapeSource>
+          {props.vehicles && <Vehicles vehicles={props.vehicles.vehicles} />}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
           {currentLocation && (

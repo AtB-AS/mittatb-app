@@ -23,10 +23,10 @@ export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
 ) => void;
-export type FetchEntitiesCallback<EntityType> = (
-  coordinates: Coordinates,
-  radius?: number,
-) => Promise<FeatureCollection<GeoJSON.Point, EntityType>>;
+export type VehiclesState = {
+  vehicles: FeatureCollection<GeoJSON.Point, VehicleFragment>;
+  fetchVehicles: (coordinates: Coordinates, radius?: number) => void;
+};
 export type NavigateToTripSearchCallback = (
   location: GeoLocation | SearchLocation,
   destination: string,
@@ -42,6 +42,7 @@ export type NavigateToDetailsCallback = (
 
 export type MapProps = {
   initialLocation?: Location;
+  vehicles?: VehiclesState;
 } & (
   | {
       selectionMode: 'ExploreLocation';
@@ -49,7 +50,6 @@ export type MapProps = {
     }
   | {
       selectionMode: 'ExploreStops';
-      fetchVehicles: FetchEntitiesCallback<VehicleFragment>;
       navigateToQuay: NavigateToQuayCallback;
       navigateToDetails: NavigateToDetailsCallback;
       navigateToTripSearch: NavigateToTripSearchCallback;
