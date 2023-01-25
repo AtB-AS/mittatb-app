@@ -23,12 +23,8 @@ export const useThemeColorForTransportMode = (
         return 'transport_city';
       }
       return 'transport_region';
-    case 'car':
-      return 'transport_other'; // TODO: Change when car is added to design system
     case 'rail':
       return 'transport_train';
-    case 'scooter':
-      return 'transport_other'; // TODO: Change when car is added to design system
     case 'tram':
       return 'transport_city';
     case 'water':
