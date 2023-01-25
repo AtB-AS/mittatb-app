@@ -8,7 +8,6 @@ import {
 import * as Sections from '../../../../../components/sections';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {usePreferences} from '@atb/preferences';
-import {PreassignedFareProductType} from '@atb/reference-data/types';
 
 export default function SingleTravellerSelection({
   userProfilesWithCount,
@@ -29,9 +28,7 @@ export default function SingleTravellerSelection({
     addCount(u.userTypeString);
   };
 
-  function travellerInfoByFareProductType(
-    fareProductType: PreassignedFareProductType | undefined,
-  ) {
+  function travellerInfoByFareProductType(fareProductType: string | undefined) {
     return (u: UserProfileWithCount) => {
       return t(
         TicketTravellerTexts.information(u.userTypeString, fareProductType),

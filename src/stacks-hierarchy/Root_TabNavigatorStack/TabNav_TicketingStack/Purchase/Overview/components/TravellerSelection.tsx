@@ -7,7 +7,6 @@ import SingleTravellerSelection from '../../Travellers/SingleTravellerSelection'
 import MultipleTravellersSelection from '../../Travellers/MultipleTravellersSelection';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import InfoToggle from './InfoToggle';
-import {PreassignedFareProductType} from '@atb/reference-data/types';
 import {TravellerSelectionMode} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 
 type TravellerSelectionProps = {
@@ -17,7 +16,7 @@ type TravellerSelectionProps = {
   ) => void;
   style?: StyleProp<ViewStyle>;
   selectionMode: TravellerSelectionMode;
-  fareProductType: PreassignedFareProductType;
+  fareProductType: string;
 };
 
 export default function TravellerSelection({
