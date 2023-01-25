@@ -1,8 +1,12 @@
 export type Maybe<T> = T;
 export type InputMaybe<T> = T;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Exact<T extends {[key: string]: unknown}> = {[K in keyof T]: T[K]};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -44,7 +48,7 @@ export enum FormFactor {
   Other = 'OTHER',
   Scooter = 'SCOOTER',
   ScooterSeated = 'SCOOTER_SEATED',
-  ScooterStanding = 'SCOOTER_STANDING'
+  ScooterStanding = 'SCOOTER_STANDING',
 }
 
 export type GeofencingZoneProperties = {
@@ -68,7 +72,9 @@ export type GeofencingZones = {
 };
 
 export type MultiPolygon = {
-  coordinates?: Maybe<Array<Maybe<Array<Maybe<Array<Maybe<Array<Maybe<Scalars['Float']>>>>>>>>>;
+  coordinates?: Maybe<
+    Array<Maybe<Array<Maybe<Array<Maybe<Array<Maybe<Scalars['Float']>>>>>>>>
+  >;
   type?: Maybe<Scalars['String']>;
 };
 
@@ -82,7 +88,7 @@ export enum ParkingType {
   ParkingLot = 'PARKING_LOT',
   SidewalkParking = 'SIDEWALK_PARKING',
   StreetParking = 'STREET_PARKING',
-  UndergroundParking = 'UNDERGROUND_PARKING'
+  UndergroundParking = 'UNDERGROUND_PARKING',
 }
 
 export type PricingPlan = {
@@ -113,7 +119,7 @@ export enum PropulsionType {
   Human = 'HUMAN',
   Hybrid = 'HYBRID',
   HydrogenFuelCell = 'HYDROGEN_FUEL_CELL',
-  PlugInHybrid = 'PLUG_IN_HYBRID'
+  PlugInHybrid = 'PLUG_IN_HYBRID',
 }
 
 export type Query = {
@@ -125,11 +131,9 @@ export type Query = {
   vehicles?: Maybe<Array<Maybe<Vehicle>>>;
 };
 
-
 export type QueryGeofencingZonesArgs = {
   systemIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
-
 
 export type QueryStationsArgs = {
   availableFormFactors?: InputMaybe<Array<InputMaybe<FormFactor>>>;
@@ -143,11 +147,9 @@ export type QueryStationsArgs = {
   systems?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
-
 export type QueryStationsByIdArgs = {
   ids: Array<InputMaybe<Scalars['String']>>;
 };
-
 
 export type QueryVehiclesArgs = {
   codespaces?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -186,7 +188,7 @@ export enum RentalMethod {
   Key = 'KEY',
   Paypass = 'PAYPASS',
   Phone = 'PHONE',
-  Transitcard = 'TRANSITCARD'
+  Transitcard = 'TRANSITCARD',
 }
 
 export type RentalUris = {
@@ -199,7 +201,7 @@ export enum ReturnConstraint {
   AnyStation = 'ANY_STATION',
   FreeFloating = 'FREE_FLOATING',
   Hybrid = 'HYBRID',
-  RoundtripStation = 'ROUNDTRIP_STATION'
+  RoundtripStation = 'ROUNDTRIP_STATION',
 }
 
 export type Station = {
@@ -295,7 +297,7 @@ export enum VehicleAccessory {
   Doors_4 = 'DOORS_4',
   Doors_5 = 'DOORS_5',
   Manual = 'MANUAL',
-  Navigation = 'NAVIGATION'
+  Navigation = 'NAVIGATION',
 }
 
 export type VehicleAssets = {
@@ -314,7 +316,7 @@ export enum VehicleEquipment {
   ChildSeatB = 'CHILD_SEAT_B',
   ChildSeatC = 'CHILD_SEAT_C',
   SnowChains = 'SNOW_CHAINS',
-  WinterTires = 'WINTER_TIRES'
+  WinterTires = 'WINTER_TIRES',
 }
 
 export type VehicleType = {
