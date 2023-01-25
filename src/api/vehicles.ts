@@ -16,12 +16,6 @@ export const getVehicles = ({lat, lon, range}: GetVehiclesQueryVariables) => {
     formFactors: FormFactor.Scooter, //TODO: Read from variables
   });
   return client
-    .get<GetVehiclesQuery>(stringifyUrl(url, query), {
-      baseURL: 'http://localhost:8080', // TODO: Remove
-    })
-    .then((res) => {
-      console.log(`${res.data.vehicles?.length ?? 0} vehicles loaded`); // TODO: Remove
-      return res;
-    })
+    .get<GetVehiclesQuery>(stringifyUrl(url, query))
     .then((res) => res.data.vehicles ?? []);
 };
