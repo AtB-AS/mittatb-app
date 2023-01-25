@@ -18,7 +18,6 @@ import {PositionArrow} from './components/PositionArrow';
 import {MapControls} from './components/MapControls';
 import {shadows} from './components/shadows';
 import {useVehicles} from './hooks/use-vehicles';
-import {useRegion} from '@atb/components/map/hooks/use-region';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -44,13 +43,7 @@ export const Map = (props: MapProps) => {
       startingCoordinates,
     );
 
-  const {currentCoordinates, currentZoom, onRegionChange} =
-    useRegion(startingCoordinates);
-
-  const {vehiclesFeatureCollection} = useVehicles(
-    currentCoordinates,
-    currentZoom,
-  );
+  const {vehicles, onRegionChange} = useVehicles(props);
 
   return (
     <View style={styles.container}>
@@ -66,7 +59,7 @@ export const Map = (props: MapProps) => {
           style={{
             flex: 1,
           }}
-          onRegionWillChange={onRegionChange}
+          onRegionDidChange={onRegionChange}
           onPress={async (feature: Feature) => {
             if (isFeaturePoint(feature)) {
               onMapClick({
@@ -102,11 +95,7 @@ export const Map = (props: MapProps) => {
               </View>
             </MapboxGL.PointAnnotation>
           )}
-          <MapboxGL.ShapeSource
-            id={'vehicles'}
-            shape={vehiclesFeatureCollection}
-            cluster
-          >
+          <MapboxGL.ShapeSource id={'vehicles'} shape={vehicles} cluster>
             <MapboxGL.SymbolLayer
               id="icon"
               filter={['!', ['has', 'point_count']]}

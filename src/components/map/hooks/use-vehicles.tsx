@@ -1,58 +1,25 @@
-import {useEffect, useState} from 'react';
-import {getVehicles} from '@atb/api/vehicles';
+import {useState} from 'react';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
-import {Coordinates} from '@atb/utils/coordinates';
-import {
-  Feature,
-  FeatureCollection,
-  GeoJSON,
-  GeoJsonProperties,
-  Geometry,
-} from 'geojson';
+import {FeatureCollection, GeoJSON} from 'geojson';
+import {MapProps} from '@atb/components/map/types';
+import {RegionPayload} from '@react-native-mapbox-gl/maps';
+import {toFeatureCollection} from '@atb/components/map/utils';
 
-const toGeoJSONFeature = (vehicleFragments: VehicleFragment[]) =>
-  vehicleFragments.map<GeoJSON.Feature<GeoJSON.Point, VehicleFragment>>(
-    (v) => ({
-      id: v.id,
-      type: 'Feature',
-      geometry: {
-        type: 'Point',
-        coordinates: [v.lon, v.lat],
-      },
-      properties: v,
-    }),
-  );
+export const useVehicles = (mapProps: MapProps) => {
+  const [vehicles, setVehicles] = useState<
+    FeatureCollection<GeoJSON.Point, VehicleFragment>
+  >(toFeatureCollection([]));
 
-const toFeatureCollection = <
-  G extends Geometry | null = Geometry,
-  P = GeoJsonProperties,
->(
-  features: Array<Feature<G, P>>,
-): FeatureCollection<G, P> => ({
-  type: 'FeatureCollection',
-  features,
-});
-
-export const useVehicles = (
-  {latitude: lat, longitude: lon}: Coordinates,
-  zoom: number,
-) => {
-  const [vehicles, setVehicles] = useState<VehicleFragment[]>([]);
-  useEffect(() => {
-    if (zoom > 13) {
-      console.log(
-        `useVehicles: Deps changed. Loading vehicles: ${JSON.stringify({
-          lat,
-          lon,
-          zoom,
-        })}`,
-      );
-      getVehicles({lat, lon, range: 500}).then(setVehicles);
-    }
-  }, [lat, lon, zoom]);
+  const onRegionChange = (
+    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
+  ) => {
+    if (mapProps.selectionMode !== 'ExploreStops') return;
+    const [longitude, latitude] = feature.geometry.coordinates;
+    mapProps.fetchVehicles({longitude, latitude}).then(setVehicles);
+  };
 
   return {
     vehicles,
-    vehiclesFeatureCollection: toFeatureCollection(toGeoJSONFeature(vehicles)),
+    onRegionChange,
   };
 };

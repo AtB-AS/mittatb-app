@@ -1,12 +1,13 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {GeoLocation, Location, SearchLocation} from '@atb/favorites/types';
-import {Feature, LineString, Point} from 'geojson';
+import {Feature, FeatureCollection, GeoJSON, LineString, Point} from 'geojson';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   Mode,
   PointsOnLink,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
+import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -22,6 +23,10 @@ export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
 ) => void;
+export type FetchEntitiesCallback<EntityType> = (
+  coordinates: Coordinates,
+  radius?: number,
+) => Promise<FeatureCollection<GeoJSON.Point, EntityType>>;
 export type NavigateToTripSearchCallback = (
   location: GeoLocation | SearchLocation,
   destination: string,
@@ -44,6 +49,7 @@ export type MapProps = {
     }
   | {
       selectionMode: 'ExploreStops';
+      fetchVehicles: FetchEntitiesCallback<VehicleFragment>;
       navigateToQuay: NavigateToQuayCallback;
       navigateToDetails: NavigateToDetailsCallback;
       navigateToTripSearch: NavigateToTripSearchCallback;
