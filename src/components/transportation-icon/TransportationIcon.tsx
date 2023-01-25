@@ -15,6 +15,7 @@ export type TransportationIconProps = {
   subMode?: AnySubMode;
   lineNumber?: string;
   size?: keyof Theme['icon']['size'];
+  wide?: boolean;
   disabled?: boolean;
 };
 
@@ -23,6 +24,7 @@ export const TransportationIcon: React.FC<TransportationIconProps> = ({
   subMode,
   lineNumber,
   size = 'normal',
+  wide,
   disabled,
 }) => {
   const {t} = useTranslation();
@@ -38,7 +40,7 @@ export const TransportationIcon: React.FC<TransportationIconProps> = ({
     size == 'small'
       ? styles.transportationIcon_small
       : styles.transportationIcon;
-
+  const minWidth = wide ? styles.transportationIcon_wide : undefined;
   const lineNumberElement = lineNumber ? (
     <ThemeText
       type="body__primary--bold"
@@ -50,7 +52,16 @@ export const TransportationIcon: React.FC<TransportationIconProps> = ({
   ) : null;
 
   return (
-    <View style={[iconStyle, {backgroundColor}]}>
+    <View
+      style={[
+        iconStyle,
+        minWidth,
+        {
+          backgroundColor,
+          justifyContent: 'center',
+        },
+      ]}
+    >
       <ThemeIcon
         size={size}
         svg={svg}
@@ -78,6 +89,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.xSmall,
     borderRadius: theme.border.radius.small,
     marginRight: theme.spacings.xSmall,
+  },
+  transportationIcon_wide: {
+    minWidth: theme.tripLegDetail.labelWidth,
   },
   lineNumberText: {
     marginLeft: theme.spacings.xSmall,
