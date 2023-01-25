@@ -33,6 +33,7 @@ type LocationSearchContentProps = {
   onlyLocalTariffZoneAuthority?: boolean;
   includeHistory?: boolean;
   includeJourneyHistory?: boolean;
+  onAddFavorite: () => void;
 };
 
 export function LocationSearchContent({
@@ -45,6 +46,7 @@ export function LocationSearchContent({
   onlyLocalTariffZoneAuthority = false,
   includeHistory = true,
   includeJourneyHistory = false,
+  onAddFavorite,
 }: LocationSearchContentProps) {
   const styles = useThemeStyles();
   const {favorites} = useFavorites();
@@ -136,6 +138,7 @@ export function LocationSearchContent({
             chipTypes={favoriteChipTypes}
             containerStyle={styles.chipBox}
             contentContainerStyle={styles.contentBlock}
+            onAddFavorite={onAddFavorite}
           />
         </View>
       </View>

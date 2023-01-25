@@ -27,7 +27,9 @@ export const MobileTokenOnboarding_CurrentTokenScreen = ({
     <InspectableTokenInfo
       inspectableToken={inspectableToken}
       close={close}
-      navigateToSelectToken={() => navigation.navigate('SelectTravelTokenRoot')}
+      navigateToSelectToken={() =>
+        navigation.navigate('MobileTokenOnboarding_SelectTravelTokenScreen')
+      }
     />
   );
 };

@@ -27,6 +27,7 @@ type Props = NearbyStopPlacesScreenParams & {
   onPressLocationSearch: (location?: Location) => void;
   onSelectStopPlace: (place: StopPlace) => void;
   onUpdateLocation: (location?: Location) => void;
+  onAddFavorite: () => void;
 };
 
 export const NearbyStopPlacesScreenComponent = ({
@@ -35,6 +36,7 @@ export const NearbyStopPlacesScreenComponent = ({
   onPressLocationSearch,
   onSelectStopPlace,
   onUpdateLocation,
+  onAddFavorite,
 }: Props) => {
   const {
     status,
@@ -164,6 +166,7 @@ export const NearbyStopPlacesScreenComponent = ({
                 : onUpdateLocation(location);
             }}
             mode={mode}
+            onAddFavorite={onAddFavorite}
           />
         }
         useScroll={activateScroll}
@@ -188,6 +191,7 @@ type HeaderProps = {
   setCurrentLocationOrRequest(): Promise<void>;
   setLocation: (location: Location) => void;
   mode: StopPlacesMode;
+  onAddFavorite: Props['onAddFavorite'];
 };
 
 const Header = React.memo(function Header({
@@ -197,6 +201,7 @@ const Header = React.memo(function Header({
   setCurrentLocationOrRequest,
   setLocation,
   mode,
+  onAddFavorite,
 }: HeaderProps) {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -232,6 +237,7 @@ const Header = React.memo(function Header({
           }}
           chipTypes={['favorites', 'add-favorite']}
           contentContainerStyle={styles.favoriteChips}
+          onAddFavorite={onAddFavorite}
         />
       )}
     </View>

@@ -44,6 +44,7 @@ const Dashboard_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
           });
         }}
         onUpdateLocation={(location) => navigation.setParams({location})}
+        onAddFavorite={() => navigation.navigate('Root_SearchStopPlaceScreen')}
       />
     </>
   );
