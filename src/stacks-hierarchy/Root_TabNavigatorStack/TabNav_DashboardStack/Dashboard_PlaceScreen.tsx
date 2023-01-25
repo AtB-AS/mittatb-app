@@ -21,8 +21,10 @@ export const Dashboard_PlaceScreen = ({navigation, route}: Props) => (
         activeItemIndex,
       })
     }
-    onPressClose={() =>
-      navigation.navigate('Dashboard_FavoriteDeparturesScreen')
+    onPressClose={
+      route.params.onCloseRoute
+        ? () => navigation.navigate(route.params.onCloseRoute as any)
+        : undefined
     }
   />
 );

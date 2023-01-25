@@ -1,31 +1,23 @@
 import {StopPlace} from '@atb/api/types/departures';
-import {Location} from '@atb/favorites/types';
 import {useOnlySingleLocation} from '@atb/location-search';
-import {useTranslation} from '@atb/translations';
+import {NearbyTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import React, {useEffect} from 'react';
 import {DeparturesStackProps} from './navigation-types';
-import {NearbyStopPlaces} from '../../../nearby-stop-places/NearbyStopPlaces';
+import {NearbyStopPlacesScreenComponent} from '@atb/nearby-stop-places';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {useShouldShowDeparturesOnboarding} from './use-should-show-departures-onboarding';
 
-export type DeparturesScreenParams = {
-  location: Location;
-};
-
 type Props = DeparturesStackProps<'Departures_NearbyStopPlacesScreen'>;
 
-export const Departures_NearbyStopPlacesScreen = ({navigation}: Props) => {
-  const fromLocation = useOnlySingleLocation<Props['route']>('location');
+export const Departures_NearbyStopPlacesScreen = ({
+  navigation,
+  route,
+}: Props) => {
+  const fromLocation = useOnlySingleLocation('location');
   const {t} = useTranslation();
 
-  const navigateToPlace = (place: StopPlace) => {
-    navigation.navigate('Departures_PlaceScreen', {
-      place,
-      mode: 'Departure',
-    });
-  };
   const {leftButton} = useServiceDisruptionSheet();
 
   const shouldShowDeparturesOnboarding = useShouldShowDeparturesOnboarding();
@@ -43,12 +35,27 @@ export const Departures_NearbyStopPlacesScreen = ({navigation}: Props) => {
         leftButton={leftButton}
         globalMessageContext="app-departures"
       />
-      <NearbyStopPlaces
-        navigation={navigation}
-        fromLocation={fromLocation}
-        callerRouteName={'Departures_NearbyStopPlacesScreen'}
-        onSelect={navigateToPlace}
-        mode={'Departure'}
+      <NearbyStopPlacesScreenComponent
+        location={fromLocation}
+        mode={route.params.mode}
+        onPressLocationSearch={(location) =>
+          navigation.navigate('LocationSearchStack', {
+            screen: 'LocationSearchByTextScreen',
+            params: {
+              label: t(NearbyTexts.search.label),
+              callerRouteName: route.name,
+              callerRouteParam: 'location',
+              initialLocation: location,
+            },
+          })
+        }
+        onSelectStopPlace={(place: StopPlace) => {
+          navigation.navigate('Departures_PlaceScreen', {
+            place,
+            mode: route.params.mode,
+          });
+        }}
+        onUpdateLocation={(location) => navigation.setParams({location})}
       />
     </>
   );

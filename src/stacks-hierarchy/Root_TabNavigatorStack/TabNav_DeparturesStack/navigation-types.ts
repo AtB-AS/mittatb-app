@@ -2,15 +2,15 @@ import {TabNavigatorScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorSt
 import {CompositeScreenProps} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {PlaceScreenParams} from '@atb/place-screen/PlaceScreenComponent';
-import {DeparturesScreenParams} from './Departures_NearbyStopPlacesScreen';
 import {DepartureDetailsScreenParams} from '@atb/travel-details-screens/DepartureDetailsScreenComponent';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
+import {NearbyStopPlacesScreenParams} from '@atb/nearby-stop-places/NearbyStopPlacesScreenComponent';
 
 export type DeparturesStackParams = {
   Departures_DepartureDetailsScreen: DepartureDetailsScreenParams;
   Departures_TravelDetailsMapScreen: TravelDetailsMapScreenParams;
   Departures_PlaceScreen: PlaceScreenParams;
-  Departures_NearbyStopPlacesScreen: DeparturesScreenParams;
+  Departures_NearbyStopPlacesScreen: NearbyStopPlacesScreenParams;
   Departures_OnboardingScreen: undefined;
 };
 

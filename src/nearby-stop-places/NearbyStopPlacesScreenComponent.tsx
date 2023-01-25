@@ -1,4 +1,4 @@
-import {StopPlace, NearestStopPlaceNode} from '@atb/api/types/departures';
+import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {SimpleDisappearingHeader} from '@atb/components/disappearing-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
@@ -13,30 +13,38 @@ import {useDoOnceWhen} from '@atb/stacks-hierarchy/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import {NavigationProp, useIsFocused} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {StopPlacesMode} from './types';
 
-// TODO: Decouple from navigation.
-export const NearbyStopPlaces = ({
-  navigation,
-  fromLocation,
-  callerRouteName,
-  onSelect,
-  mode,
-}: {
-  navigation: NavigationProp<any>;
-  fromLocation: Location | undefined;
-  callerRouteName: string;
-  onSelect: (place: StopPlace) => void;
+export type NearbyStopPlacesScreenParams = {
+  location: Location | undefined;
   mode: StopPlacesMode;
-}) => {
-  const {status, location, locationEnabled, requestPermission} =
-    useGeolocationState();
+};
+
+type Props = NearbyStopPlacesScreenParams & {
+  onPressLocationSearch: (location?: Location) => void;
+  onSelectStopPlace: (place: StopPlace) => void;
+  onUpdateLocation: (location?: Location) => void;
+};
+
+export const NearbyStopPlacesScreenComponent = ({
+  location,
+  mode,
+  onPressLocationSearch,
+  onSelectStopPlace,
+  onUpdateLocation,
+}: Props) => {
+  const {
+    status,
+    location: geolocation,
+    locationEnabled,
+    requestPermission,
+  } = useGeolocationState();
 
   const requestGeoPermission = requestPermission;
-  const currentLocation = location || undefined;
+  const currentLocation = geolocation || undefined;
   const hasLocationPermission = locationEnabled && status === 'granted';
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
 
@@ -49,9 +57,9 @@ export const NearbyStopPlaces = ({
     Boolean(currentLocation) && screenHasFocus,
   );
 
-  const updatingLocation = !fromLocation && hasLocationPermission;
+  const updatingLocation = !location && hasLocationPermission;
 
-  const {state} = useNearestStopsData(fromLocation);
+  const {state} = useNearestStopsData(location);
 
   const {data, isLoading, error} = state;
   const isInitialScreen = data == null && !isLoading && !error;
@@ -62,38 +70,29 @@ export const NearbyStopPlaces = ({
     [data],
   );
 
-  const openLocationSearch = () =>
-    navigation.navigate('LocationSearchStack', {
-      screen: 'LocationSearchByTextScreen',
-      params: {
-        label: t(NearbyTexts.search.label),
-        callerRouteName: callerRouteName,
-        callerRouteParam: 'location',
-        initialLocation: fromLocation,
-      },
-    });
+  const openLocationSearch = () => onPressLocationSearch(location);
 
   useEffect(() => {
     if (
-      (fromLocation?.resultType == 'search' ||
-        fromLocation?.resultType === 'favorite') &&
-      fromLocation?.layer === 'venue'
+      (location?.resultType == 'search' ||
+        location?.resultType === 'favorite') &&
+      location?.layer === 'venue'
     ) {
-      onSelect(fromLocation);
+      onSelectStopPlace(location);
     }
-  }, [fromLocation?.id]);
+  }, [location?.id]);
 
   function setCurrentLocationAsFrom() {
-    navigation.setParams({
-      location: currentLocation && {
+    onUpdateLocation(
+      currentLocation && {
         ...currentLocation,
         resultType: 'geolocation',
       },
-    });
+    );
   }
 
   function setCurrentLocationAsFromIfEmpty() {
-    if (fromLocation) {
+    if (location) {
       return;
     }
     setCurrentLocationAsFrom();
@@ -111,15 +110,15 @@ export const NearbyStopPlaces = ({
   }
 
   const getListDescription = () => {
-    if (!fromLocation) return;
-    switch (fromLocation.resultType) {
+    if (!location) return;
+    switch (location.resultType) {
       case 'geolocation':
         return t(DeparturesTexts.stopPlaceList.listDescription.geoLoc);
       case 'search':
       case 'favorite':
         return (
           t(DeparturesTexts.stopPlaceList.listDescription.address) +
-          fromLocation.name
+          location.name
         );
       case undefined:
         return;
@@ -129,13 +128,13 @@ export const NearbyStopPlaces = ({
   useEffect(() => {
     if (updatingLocation)
       setLoadAnnouncement(t(NearbyTexts.stateAnnouncements.updatingLocation));
-    if (isLoading && !!fromLocation) {
+    if (isLoading && !!location) {
       setLoadAnnouncement(
-        fromLocation?.resultType == 'geolocation'
+        location?.resultType == 'geolocation'
           ? t(NearbyTexts.stateAnnouncements.loadingFromCurrentLocation)
           : t(
               NearbyTexts.stateAnnouncements.loadingFromGivenLocation(
-                fromLocation.name,
+                location.name,
               ),
             ),
       );
@@ -143,12 +142,9 @@ export const NearbyStopPlaces = ({
   }, [updatingLocation, isLoading]);
 
   function refresh() {
-    navigation.setParams({
-      location:
-        fromLocation?.resultType === 'geolocation'
-          ? currentLocation
-          : fromLocation,
-    });
+    onUpdateLocation(
+      location?.resultType === 'geolocation' ? currentLocation : location,
+    );
   }
 
   return (
@@ -158,16 +154,14 @@ export const NearbyStopPlaces = ({
         isRefreshing={isLoading}
         header={
           <Header
-            fromLocation={fromLocation}
+            fromLocation={location}
             updatingLocation={updatingLocation}
             openLocationSearch={openLocationSearch}
             setCurrentLocationOrRequest={setCurrentLocationOrRequest}
             setLocation={(location: Location) => {
               location.resultType === 'search' && location.layer === 'venue'
-                ? onSelect(location)
-                : navigation.setParams({
-                    location,
-                  });
+                ? onSelectStopPlace(location)
+                : onUpdateLocation(location);
             }}
             mode={mode}
           />
@@ -179,7 +173,7 @@ export const NearbyStopPlaces = ({
         <StopPlaces
           header={getListDescription()}
           stopPlaces={orderedStopPlaces}
-          navigateToPlace={onSelect}
+          navigateToPlace={onSelectStopPlace}
           testID={'nearbyStopsContainerView'}
         />
       </SimpleDisappearingHeader>

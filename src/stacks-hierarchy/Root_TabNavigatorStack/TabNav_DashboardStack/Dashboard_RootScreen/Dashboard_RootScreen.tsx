@@ -43,7 +43,10 @@ type RootProps = DashboardScreenProps<'Dashboard_RootScreen'>;
 const themeBackgroundColor: StaticColorByType<'background'> =
   'background_accent_0';
 
-export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
+export const Dashboard_RootScreen: React.FC<RootProps> = ({
+  navigation,
+  route,
+}) => {
   const style = useStyle();
   const {theme} = useTheme();
   const {t} = useTranslation();
@@ -296,7 +299,9 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({navigation}) => {
           }
           onAddFavouriteDeparture={() =>
             navigation.navigate('Dashboard_NearbyStopPlacesScreen', {
+              mode: 'Favourite',
               location: undefined,
+              onCloseRoute: route.name,
             })
           }
           onPressDeparture={(items, activeItemIndex) =>
