@@ -7,7 +7,7 @@ export type MobileTokenOnboardingParams = {
   MobileTokenOnboarding_OptionsInfoScreen: undefined;
   MobileTokenOnboarding_TicketSafetyInfoScreen: undefined;
   MobileTokenOnboarding_CurrentTokenScreen: undefined;
-  MobileTokenOnboarding_SelectTravelToken: undefined;
+  MobileTokenOnboarding_SelectTravelTokenScreen: undefined;
 };
 
 export type MobileTokenOnboardingRootProps =

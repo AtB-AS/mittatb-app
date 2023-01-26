@@ -4,12 +4,10 @@ import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/text';
 import {Button, ButtonProps} from '@atb/components/button';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {RootStackProps} from '@atb/stacks-hierarchy';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {InteractiveColor} from '@atb/theme/colors';
 import {FavoriteTexts, useTranslation} from '@atb/translations';
 import useDisableMapCheck from '@atb/utils/use-disable-map-check';
-import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -25,6 +23,7 @@ type Props = {
   contentContainerStyle?: StyleProp<ViewStyle>;
   chipTypes?: ChipTypeGroup[];
   chipActionHint?: string;
+  onAddFavorite: () => void;
 };
 
 export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
@@ -36,9 +35,8 @@ const FavoriteChips: React.FC<Props> = ({
   onMapSelection = () => {},
   chipTypes = ['favorites', 'location', 'map'],
   chipActionHint,
+  onAddFavorite,
 }) => {
-  // @TODO this shouldn't refer to useNavigation but have onEditPress or something
-  const navigation = useNavigation<RootStackProps['navigation']>();
   const {favorites} = useFavorites();
   const styles = useStyles();
   const {t} = useTranslation();
@@ -115,9 +113,7 @@ const FavoriteChips: React.FC<Props> = ({
             text={t(FavoriteTexts.chips.addFavorite)}
             accessibilityRole="button"
             leftIcon={{svg: Add}}
-            onPress={() =>
-              navigation.navigate('AddEditFavorite', {screen: 'SearchLocation'})
-            }
+            onPress={onAddFavorite}
             style={{marginRight: 0}}
             testID={'addFavoriteButton'}
           />

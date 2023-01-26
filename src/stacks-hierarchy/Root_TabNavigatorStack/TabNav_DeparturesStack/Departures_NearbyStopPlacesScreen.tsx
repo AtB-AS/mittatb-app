@@ -56,6 +56,7 @@ export const Departures_NearbyStopPlacesScreen = ({
           });
         }}
         onUpdateLocation={(location) => navigation.setParams({location})}
+        onAddFavorite={() => navigation.navigate('Root_SearchStopPlaceScreen')}
       />
     </>
   );

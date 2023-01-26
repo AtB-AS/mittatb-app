@@ -1,6 +1,6 @@
 import {useOnlySingleLocation} from '@atb/location-search';
 import React from 'react';
-import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/types';
+import {ProfileScreenProps} from './navigation-types';
 import {StopPlace} from '@atb/api/types/departures';
 import {
   FavoriteDeparturesTexts,
@@ -44,6 +44,7 @@ export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
           });
         }}
         onUpdateLocation={(location) => navigation.setParams({location})}
+        onAddFavorite={() => navigation.navigate('Root_SearchStopPlaceScreen')}
       />
     </>
   );
