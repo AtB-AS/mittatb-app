@@ -262,6 +262,9 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
               t(!!from ? dictionary.toPlace : dictionary.fromPlace) +
               screenReaderPause
             }
+            onAddFavorite={() =>
+              navigation.navigate('Root_SearchStopPlaceScreen')
+            }
           />
         </View>
         {enable_ticketing && (
