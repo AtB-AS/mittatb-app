@@ -119,11 +119,14 @@ export type PaymentResponse = {
 };
 
 export type OfferPrice = {
-  amount: string | null;
-  amount_float: number | null;
+  amount?: string;
+  amount_float?: number;
   currency: string;
   vat_group?: string;
   tax_amount?: string;
+  original_amount?: string;
+  original_amount_float?: number;
+  original_tax_amount?: string;
 };
 
 export type Offer = {
