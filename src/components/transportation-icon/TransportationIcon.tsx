@@ -90,7 +90,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   transportationIcon_wide: {
     flex: 1,
-    flexShrink: 1,
     width: '100%',
     justifyContent: 'center',
   },
