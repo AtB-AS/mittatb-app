@@ -58,7 +58,6 @@ export const TransportationIcon: React.FC<TransportationIconProps> = ({
         minWidth,
         {
           backgroundColor,
-          justifyContent: 'center',
         },
       ]}
     >
@@ -80,7 +79,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingVertical: theme.spacings.small,
     paddingHorizontal: theme.spacings.small,
     borderRadius: theme.border.radius.small,
-    marginRight: theme.spacings.xSmall,
   },
   transportationIcon_small: {
     display: 'flex',
@@ -91,7 +89,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginRight: theme.spacings.xSmall,
   },
   transportationIcon_wide: {
-    minWidth: theme.tripLegDetail.labelWidth,
+    flex: 1,
+    flexShrink: 1,
+    width: '100%',
+    justifyContent: 'center',
   },
   lineNumberText: {
     marginLeft: theme.spacings.xSmall,
