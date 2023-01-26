@@ -1,7 +1,7 @@
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
-import MapboxGL from '@react-native-mapbox-gl/maps';
-import {Feature} from 'geojson';
+import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
+import {Feature, GeoJSON} from 'geojson';
 import React, {useMemo, useRef} from 'react';
 import {View} from 'react-native';
 import {LocationBar} from './components/LocationBar';
@@ -17,6 +17,7 @@ import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {MapControls} from './components/MapControls';
 import {shadows} from './components/shadows';
+import {Vehicles} from '@atb/components/map/components/Vehicles';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -42,6 +43,14 @@ export const Map = (props: MapProps) => {
       startingCoordinates,
     );
 
+  const onRegionChange = (
+    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
+  ) => {
+    if (!props.vehicles) return;
+    const [longitude, latitude] = feature.geometry.coordinates;
+    props.vehicles.fetchVehicles({longitude, latitude});
+  };
+
   return (
     <View style={styles.container}>
       {props.selectionMode === 'ExploreLocation' && (
@@ -56,6 +65,7 @@ export const Map = (props: MapProps) => {
           style={{
             flex: 1,
           }}
+          onRegionDidChange={onRegionChange}
           onPress={async (feature: Feature) => {
             if (isFeaturePoint(feature)) {
               onMapClick({
@@ -91,6 +101,7 @@ export const Map = (props: MapProps) => {
               </View>
             </MapboxGL.PointAnnotation>
           )}
+          {props.vehicles && <Vehicles vehicles={props.vehicles.vehicles} />}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
           {currentLocation && (
