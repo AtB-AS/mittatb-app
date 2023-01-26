@@ -39,15 +39,15 @@ jobs:
       - name: Set environment
         shell: bash
         run: |
-          ENV_FOLDER=env/${{ inputs.org }}/${{ inputs.environment }}
-
-          echo "Copying ${{ inputs.org }} .env file to root"
+          echo "Copying $ENV_FOLDER/.env file to root"
           cp $ENV_FOLDER/.env .
 
-          echo "Copying ${{ inputs.org }} .env file to fastlane"
+          echo "Copying $ENV_FOLDER/.env file to fastlane/.env.default"
           cp $ENV_FOLDER/.env fastlane/.env.default
+        env:
+          ENV_FOLDER: env/${{ inputs.org }}/${{ inputs.environment }}
       - name: Run fastlane generate certificates
-        run: bundle exec fastlane ios generate_new_certificates
+        run: fastlane ios generate_new_certificates
         env:
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
