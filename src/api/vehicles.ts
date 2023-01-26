@@ -6,8 +6,14 @@ import {
 } from '@atb/api/types/generated/VehiclesQuery';
 import {stringifyUrl} from '@atb/api/utils';
 import qs from 'query-string';
+import {AxiosRequestConfig} from 'axios';
 
-export const getVehicles = ({lat, lon, range}: GetVehiclesQueryVariables) => {
+type GetVehiclesOpts = Pick<AxiosRequestConfig, 'signal'>;
+
+export const getVehicles = (
+  {lat, lon, range}: GetVehiclesQueryVariables,
+  opts?: GetVehiclesOpts,
+) => {
   const url = '/bff/v2/mobility/vehicles';
   const query = qs.stringify({
     lat,
@@ -16,6 +22,9 @@ export const getVehicles = ({lat, lon, range}: GetVehiclesQueryVariables) => {
     formFactors: FormFactor.Scooter, //TODO: Read from variables
   });
   return client
-    .get<GetVehiclesQuery>(stringifyUrl(url, query))
+    .get<GetVehiclesQuery>(stringifyUrl(url, query), {
+      ...opts,
+      baseURL: 'http://localhost:8080',
+    })
     .then((res) => res.data.vehicles ?? []);
 };

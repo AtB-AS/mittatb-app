@@ -18,12 +18,14 @@ export const useVehicles = () => {
   const isVehiclesEnabled = useIsVehiclesEnabled();
 
   useEffect(() => {
+    const abortCtrl = new AbortController();
     if (isVehiclesEnabled) {
-      getVehicles(area)
+      getVehicles(area, {signal: abortCtrl.signal})
         .then(toGeoJSONFeature)
         .then(toFeatureCollection)
         .then(setVehicles);
     }
+    return () => abortCtrl.abort();
   }, [area, isVehiclesEnabled]);
 
   const fetchVehicles = async (
