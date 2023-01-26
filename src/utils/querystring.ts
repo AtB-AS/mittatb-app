@@ -1,4 +1,4 @@
-import {stringify, StringifyOptions} from 'query-string';
+import {stringify, StringifyOptions} from 'query-string/base';
 
 export function stringifyWithDate(
   obj: {[key: string]: any},

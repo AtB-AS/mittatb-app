@@ -27,10 +27,12 @@ import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import React from 'react';
 import {View} from 'react-native';
-import {getLineName, significantWaitTime, significantWalkTime} from '../utils';
 import {
+  getLineName,
   getNoticesForLeg,
   getTimeRepresentationType,
+  significantWaitTime,
+  significantWalkTime,
   TimeValues,
 } from '../utils';
 import Time from './Time';
@@ -315,9 +317,7 @@ const IntermediateInfo = ({
 const WalkSection = (leg: Leg) => {
   const {t, language} = useTranslation();
   const isWalkTimeOfSignificance = significantWalkTime(leg.duration);
-  if (!isWalkTimeOfSignificance) {
-    return null;
-  }
+
   return (
     <TripRow
       rowLabel={
@@ -329,11 +329,13 @@ const WalkSection = (leg: Leg) => {
       testID="footLeg"
     >
       <ThemeText type="body__secondary" color="secondary">
-        {t(
-          TripDetailsTexts.trip.leg.walk.label(
-            secondsToDuration(leg.duration ?? 0, language),
-          ),
-        )}
+        {isWalkTimeOfSignificance
+          ? t(
+              TripDetailsTexts.trip.leg.walk.label(
+                secondsToDuration(leg.duration ?? 0, language),
+              ),
+            )
+          : t(TripDetailsTexts.trip.leg.shortWalk)}
       </ThemeText>
     </TripRow>
   );

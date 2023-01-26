@@ -4,10 +4,10 @@ import {stringifyWithDate} from '@atb/utils/querystring';
 import client from '../client';
 import {FavoriteDeparture, UserFavoriteDepartures} from '@atb/favorites/types';
 import {StopPlaceQuayDepartures} from '../types/departures';
-import {stringifyUrl} from 'query-string';
 import {QuayDeparturesQuery} from '../types/generated/QuayDeparturesQuery';
 import {NearestStopPlacesQuery} from '../types/generated/NearestStopPlacesQuery';
 import {StopsDetailsQuery} from '../types/generated/StopsDetailsQuery';
+import {stringifyUrl} from 'query-string/base';
 
 export type StopsNearestQuery = CursoredQuery<{
   latitude: number;

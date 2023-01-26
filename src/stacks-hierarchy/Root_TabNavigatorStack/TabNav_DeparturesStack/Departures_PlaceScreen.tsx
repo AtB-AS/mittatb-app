@@ -12,11 +12,11 @@ export const Departures_PlaceScreen = ({navigation, route}: Props) => (
         : navigation.push('Departures_PlaceScreen', {
             place: stopPlace,
             selectedQuayId: quayId,
-            mode: 'Departure',
+            mode: route.params.mode,
           })
     }
     onPressDeparture={(items, activeItemIndex) =>
-      navigation.navigate('Departures_DepartureDetailsScreen', {
+      navigation.push('Departures_DepartureDetailsScreen', {
         items,
         activeItemIndex,
       })

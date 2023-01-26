@@ -1,6 +1,5 @@
 import {ArrowRight, ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Walk} from '@atb/assets/svg/mono-icons/transportation';
-import {Time} from '@atb/assets/svg/mono-icons/time';
 import {
   AccessibleText,
   screenReaderPause,
@@ -41,7 +40,12 @@ import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {SearchTime} from '@atb/journey-date-picker';
 import {RailReplacementBusMessage} from './RailReplacementBusMessage';
-import {getNoticesForLeg} from '@atb/travel-details-screens/utils';
+import {
+  getNoticesForLeg,
+  isSignificantFootLegWalkOrWaitTime,
+  significantWaitTime,
+  significantWalkTime,
+} from '@atb/travel-details-screens/utils';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -167,6 +171,9 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     numberOfExpandedLegs,
     tripPattern.legs.length,
   );
+  const legs = expandedLegs.filter((leg, i) =>
+    isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
+  );
 
   const isInPast =
     isInThePast(tripPattern.legs[0].expectedStartTime) &&
@@ -202,7 +209,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         >
           <View style={styles.legOutput}>
             {interpose(
-              expandedLegs.map((leg, i) => (
+              legs.map((leg, i) => (
                 <View key={leg.aimedStartTime}>
                   {leg.mode === 'foot' ? (
                     <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
@@ -321,7 +328,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
 }));
 
 const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
-  const MINIMUM_WAIT_IN_SECONDS = 30;
   const styles = useLegStyles();
   const showWaitTime = Boolean(nextLeg);
   const {t, language} = useTranslation();
@@ -331,12 +337,8 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   const waitDuration = secondsToDuration(waitTimeInSeconds, language);
   const walkDuration = secondsToDuration(leg.duration ?? 0, language);
 
-  const mustWalk = leg.duration > MINIMUM_WAIT_IN_SECONDS;
-  const mustWait = showWaitTime && waitTimeInSeconds > MINIMUM_WAIT_IN_SECONDS;
-
-  if (!mustWait && !mustWalk) {
-    return null;
-  }
+  const mustWalk = significantWalkTime(leg.duration);
+  const mustWait = showWaitTime && significantWaitTime(waitTimeInSeconds);
 
   const a11yText =
     mustWalk && mustWait
@@ -356,7 +358,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       accessibilityLabel={a11yText}
       testID="fLeg"
     >
-      {!mustWalk ? <ThemeIcon svg={Time} /> : <ThemeIcon svg={Walk} />}
+      <ThemeIcon svg={Walk} />
     </View>
   );
 };

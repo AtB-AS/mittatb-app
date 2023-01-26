@@ -3,7 +3,6 @@ import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import {PreassignedFareProductType} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {useTicketingState} from '@atb/ticketing';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
@@ -13,7 +12,7 @@ import {getValidOnTrainNoticeText} from '../../../utils';
 import {TariffZoneWithMetadata} from '../../TariffZones';
 
 export type PurchaseWarningsProps = {
-  preassignedFareProductType: PreassignedFareProductType;
+  preassignedFareProductType: string;
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
 };

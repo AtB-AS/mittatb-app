@@ -7,7 +7,7 @@ import {
 import {DashboardStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
 import {NearbyStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_NearbyStack';
 import {TicketingTabsNavigatorParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/types';
-import {ProfileStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/types';
+import {ProfileStackParams} from './TabNav_ProfileStack/navigation-types';
 import {MapStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_MapStack';
 import {
   BottomTabNavigationProp,

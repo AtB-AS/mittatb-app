@@ -70,6 +70,7 @@ export const LocationSearchByTextScreen = ({
             : undefined
         }
         includeJourneyHistory={includeJourneyHistory}
+        onAddFavorite={() => navigation.navigate('Root_SearchStopPlaceScreen')}
       />
     </View>
   );
