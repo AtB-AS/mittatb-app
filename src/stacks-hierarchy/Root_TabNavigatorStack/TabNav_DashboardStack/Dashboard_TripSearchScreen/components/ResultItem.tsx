@@ -11,7 +11,6 @@ import {CollapsedLegs} from './CollapsedLegs';
 import {SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
 import {
-  dictionary,
   Language,
   TranslateFunction,
   TripSearchTexts,
@@ -26,7 +25,10 @@ import {
   secondsToDuration,
   secondsToDurationShort,
 } from '@atb/utils/date';
-import {getTranslatedModeName} from '@atb/utils/transportation-names';
+import {
+  getQuayName,
+  getTranslatedModeName,
+} from '@atb/utils/transportation-names';
 
 import React, {useEffect, useRef, useState} from 'react';
 import {
@@ -37,7 +39,6 @@ import {
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Leg, TripPattern} from '@atb/api/types/trips';
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {SearchTime} from '@atb/journey-date-picker';
 import {RailReplacementBusMessage} from './RailReplacementBusMessage';
 import {
@@ -54,56 +55,32 @@ type ResultItemProps = {
   testID?: string;
 };
 
-function legWithQuay(leg: Leg) {
-  if (leg.fromEstimatedCall?.quay) {
-    return true;
-  }
-  if (!leg.mode) return false;
-
-  // Manually find name of from place based on mode as in some cases
-  // (from adresses that are also quays) you won't have quay information in from place.
-  const modesWithoutQuay: Mode[] = [Mode.Bicycle, Mode.Foot];
-  return !modesWithoutQuay.includes(leg.mode);
-}
-
-function getFirstQuayName(legs: Leg[]) {
-  const found = legs.find(legWithQuay);
-  const fromQuay = (found?.fromEstimatedCall ?? found?.fromPlace)?.quay;
-  if (!fromQuay) {
-    return legs[0].fromPlace.name;
-  }
-  const publicCodeOutput = fromQuay.publicCode ? ' ' + fromQuay.publicCode : '';
-  return fromQuay.name + publicCodeOutput;
-}
 const ResultItemHeader: React.FC<{
   tripPattern: TripPattern;
-  strikethrough: boolean;
-}> = ({tripPattern, strikethrough}) => {
+}> = ({tripPattern}) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
+  let start = tripPattern.legs[0];
+  let startName = start.fromPlace.name;
+  if (tripPattern.legs[0].mode === 'foot' && tripPattern.legs[1]) {
+    start = tripPattern.legs[1];
+    startName = getQuayName(start.fromPlace.quay);
+  }
+
   const durationText = secondsToDurationShort(tripPattern.duration, language);
-  const startTime = tripPattern.legs[0].expectedStartTime;
-  const endTime = tripPattern.legs[tripPattern.legs.length - 1].expectedEndTime;
+  const transportName = t(getTranslatedModeName(start.mode));
 
   return (
     <View style={styles.resultHeader}>
-      <ThemeText
-        type="body__secondary"
-        color="secondary"
-        style={[
-          styles.resultHeaderLabel,
-          strikethrough && styles.strikethrough,
-        ]}
-        accessibilityLabel={t(
-          TripSearchTexts.results.resultItem.header.time(
-            formatToClock(tripPattern.expectedStartTime, language),
-            formatToClock(tripPattern.expectedEndTime, language),
-          ),
-        )}
-        testID="resultStartAndEndTime"
-      >
-        {formatToClock(startTime, language)} –{' '}
-        {formatToClock(endTime, language)}
+      <ThemeText type={'body__secondary--bold'}>
+        {startName
+          ? t(
+              TripSearchTexts.results.resultItem.header.title(
+                transportName,
+                startName,
+              ),
+            )
+          : transportName}
       </ThemeText>
       <View style={styles.durationContainer}>
         <AccessibleText
@@ -199,7 +176,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         accessible={false}
         onLayout={(e) => setCollapsableParentWidth(e.nativeEvent.layout.width)}
       >
-        <ResultItemHeader tripPattern={tripPattern} strikethrough={isInPast} />
+        <ResultItemHeader tripPattern={tripPattern} />
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -225,37 +202,17 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
             <CollapsedLegs legs={collapsedLegs} />
           </View>
         </ScrollView>
-        <ResultItemFooter legs={tripPattern.legs} />
+        <ResultItemFooter />
       </Animated.View>
     </TouchableOpacity>
   );
 };
-function ResultItemFooter({legs}: {legs: Leg[]}) {
+function ResultItemFooter() {
   const styles = useThemeStyles();
-  const {t, language} = useTranslation();
-  const quayName =
-    getFirstQuayName(legs) ?? t(dictionary.travel.quay.defaultName);
-  const quayLeg = legs.find(legWithQuay);
-  const timePrefix =
-    !!quayLeg && !quayLeg.realtime ? t(dictionary.missingRealTimePrefix) : '';
-  const quayStartTime = quayLeg?.expectedStartTime ?? legs[0].expectedStartTime;
+  const {t} = useTranslation();
 
   return (
     <View style={styles.resultFooter}>
-      <View style={styles.resultFooterText}>
-        <ThemeText
-          type="body__secondary"
-          style={styles.fromPlaceText}
-          numberOfLines={1}
-          testID="resultDeparturePlace"
-        >
-          {t(TripSearchTexts.results.resultItem.footer.fromPlace(quayName)) +
-            ' '}
-        </ThemeText>
-        <ThemeText type="body__secondary" testID="resultDepartureTime">
-          {timePrefix + formatToClock(quayStartTime, language)}
-        </ThemeText>
-      </View>
       <View style={styles.detailsTextWrapper}>
         <ThemeText type="body__secondary">
           {t(TripSearchTexts.results.resultItem.footer.detailsLabel)}
@@ -283,7 +240,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     padding: theme.spacings.medium,
-    paddingBottom: 0,
+    paddingBottom: theme.spacings.medium,
+    borderBottomColor: theme.border.primary,
+    borderBottomWidth: theme.border.width.slim,
   },
   resultHeaderLabel: {
     flex: 3,
@@ -296,12 +255,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   resultFooter: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     borderTopColor: theme.border.primary,
     borderTopWidth: theme.border.width.slim,
     padding: theme.spacings.medium,
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-end',
   },
   resultFooterText: {
     flexShrink: 1,
