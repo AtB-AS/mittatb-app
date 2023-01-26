@@ -22,20 +22,25 @@ jobs:
     name: Renew certificates
     environment: ${{ inputs.org }}
     timeout-minutes: 180
-    runs-on: macOS-12
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout project
         uses: actions/checkout@v1
-      - name: Setup build dependencies, environment and assets
-        uses: ./.github/actions/ios-build-setup
+      - name: Setup ruby and bundle install
+        uses: ruby/setup-ruby@v1
         with:
-          use-build-cache: 'false'
-          app-environment: ${{ inputs.environment }}
-          app-org: ${{ inputs.org }}
+          ruby-version: 2.7.6
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Decrypt env files
+        shell: bash
+        run: sh ./scripts/git-crypt-unlock.sh
+        env:
+          GIT_CRYPT_KEY: ${{ inputs.git-crypt-key }}
+        with:
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
-      - uses: webfactory/ssh-agent@v0.4.1
-        with:
-          ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
+      - name: Set environment
+        shell: bash
+        run: sh ./scripts/override-environment.sh ${{ inputs.environment }} ${{ inputs.org }}
       - name: Run fastlane generate certificates
         run: bundle exec fastlane ios generate_new_certificates
         env:
