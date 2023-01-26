@@ -14,7 +14,7 @@ export const Vehicles = ({vehicles}: Props) => {
         id="icon"
         filter={['!', ['has', 'point_count']]}
         style={{
-          textField: '20%',
+          textField: ['concat', ['get', 'currentFuelPercent'], '%'],
           textAnchor: 'top-left',
           textOffset: [0.4, 0.7],
           textColor: '#920695',
