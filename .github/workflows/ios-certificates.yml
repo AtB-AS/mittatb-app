@@ -35,9 +35,7 @@ jobs:
         shell: bash
         run: sh ./scripts/git-crypt-unlock.sh
         env:
-          GIT_CRYPT_KEY: ${{ inputs.git-crypt-key }}
-        with:
-          git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Set environment
         shell: bash
         run: sh ./scripts/override-environment.sh ${{ inputs.environment }} ${{ inputs.org }}
