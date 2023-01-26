@@ -12,6 +12,8 @@ else
     brew install git-crypt 
     # git-crypt for decryption
 
+    echo $GIT_CRYPT_KEY
+
     echo "Decoding git-crypt key"
     echo $GIT_CRYPT_KEY | openssl base64 -d -A -out mittatb.key
 
