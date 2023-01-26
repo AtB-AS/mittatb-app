@@ -38,7 +38,14 @@ jobs:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Set environment
         shell: bash
-        run: sh ./scripts/override-environment.sh ${{ inputs.environment }} ${{ inputs.org }}
+        run: |
+          ENV_FOLDER=env/${{ inputs.org }}/${{ inputs.environment }}
+
+          echo "Copying ${{ inputs.org }} .env file to root"
+          cp $ENV_FOLDER/.env .
+
+          echo "Copying ${{ inputs.org }} .env file to fastlane"
+          cp $ENV_FOLDER/.env fastlane/.env.default
       - name: Run fastlane generate certificates
         run: bundle exec fastlane ios generate_new_certificates
         env:
