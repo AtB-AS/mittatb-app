@@ -500,6 +500,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   totalContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
     padding: theme.spacings.medium,
     marginVertical: theme.spacings.medium,
