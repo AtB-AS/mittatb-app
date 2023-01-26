@@ -1,0 +1,40 @@
+name: Renew certificates
+on:
+  workflow_dispatch:
+    inputs:
+      org:
+        description: 'Org'
+        required: true
+        type: choice
+        options:
+          - atb
+          - nfk
+      environment: 
+        description: 'App environment'
+        required: true
+        type: choice
+        options:
+          - staging
+          - store
+          - development
+jobs:
+  renew-certificates:
+    name: Renew certificates
+    environment: ${{ inputs.org }}
+    timeout-minutes: 180
+    runs-on: macOS-12
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v1
+      - name: Setup build dependencies, environment and assets
+        uses: ./.github/actions/ios-build-setup
+        with:
+          use-build-cache: 'false'
+          app-environment: ${{ inputs.environment }}
+          app-org: ${{ inputs.org }}
+          git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+      - name: Run fastlane generate certificates
+        run: fastlane ios generate_new_certificates
+        env:
+          GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
