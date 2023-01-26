@@ -1,2 +1,2 @@
-export {NearbyStopPlaces} from './NearbyStopPlaces';
+export {NearbyStopPlacesScreenComponent} from './NearbyStopPlacesScreenComponent';
 export type {StopPlacesMode} from './types';

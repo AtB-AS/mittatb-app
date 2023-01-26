@@ -2,10 +2,7 @@ import {TouchableOpacity, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {
-  FareProductTypeIllustration,
-  FareProductIllustrationType,
-} from './FareProductTypeIllustration';
+import {FareProductIllustration} from './FareProductIllustration';
 import {
   FareContractTexts,
   TicketingTexts,
@@ -41,8 +38,6 @@ const FareProductTile = ({
     '. ',
   );
 
-  const illustration = getIllustration(config);
-
   return (
     <View
       style={[styles.fareProduct, {backgroundColor: themeColor.background}]}
@@ -76,33 +71,10 @@ const FareProductTile = ({
             {description}
           </ThemeText>
         </View>
-        {illustration && (
-          <View style={styles.illustrationContainer}>
-            <FareProductTypeIllustration name={illustration} />
-          </View>
-        )}
+        <FareProductIllustration style={styles.illustration} config={config} />
       </TouchableOpacity>
     </View>
   );
-};
-
-const getIllustration = (
-  config: FareProductTypeConfig,
-): FareProductIllustrationType | undefined => {
-  switch (config.type) {
-    case 'single':
-      return 'Single';
-    case 'period':
-      return 'Period';
-    case 'hour24':
-      return 'H24';
-    case 'carnet':
-      return 'Carnet';
-    case 'night':
-      return 'Night';
-    default:
-      return undefined;
-  }
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
@@ -127,7 +99,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
   },
   label: {marginLeft: theme.spacings.xSmall},
-  illustrationContainer: {
+  illustration: {
     marginTop: theme.spacings.small,
   },
   title: {
