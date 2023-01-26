@@ -1,7 +1,6 @@
 import {ThemeText} from '@atb/components/text';
 import {
   PreassignedFareProduct,
-  PreassignedFareProductType,
   TariffZone,
   UserProfile,
 } from '@atb/reference-data/types';
@@ -53,7 +52,7 @@ export type FareContractInfoProps = {
   omitUserProfileCount?: boolean;
   testID?: string;
   fareContract?: FareContract;
-  fareProductType?: PreassignedFareProductType;
+  fareProductType?: string;
 };
 
 export type FareContractInfoDetailsProps = {
@@ -147,14 +146,14 @@ const FareContractInfoHeader = ({
   isInspectable?: boolean;
   testID?: string;
   status: FareContractInfoProps['status'];
-  fareProductType?: PreassignedFareProductType;
+  fareProductType?: string;
 }) => {
   const styles = useStyles();
   const {language} = useTranslation();
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)
     : undefined;
-  const producDescription = preassignedFareProduct
+  const productDescription = preassignedFareProduct
     ? getTextForLanguage(preassignedFareProduct.description, language)
     : undefined;
   const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
@@ -181,14 +180,14 @@ const FareContractInfoHeader = ({
             {productName}
           </ThemeText>
         )}
-        {producDescription && (
+        {productDescription && (
           <ThemeText
             type="body__secondary"
             style={styles.product}
-            accessibilityLabel={producDescription + screenReaderPause}
+            accessibilityLabel={productDescription + screenReaderPause}
             testID={testID + 'ProductDescription'}
           >
-            {producDescription}
+            {productDescription}
           </ThemeText>
         )}
       </View>

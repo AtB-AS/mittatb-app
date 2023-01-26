@@ -18,11 +18,11 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {StackActions} from '@react-navigation/native';
-import {parseUrl} from 'query-string';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {parseUrl} from 'query-string/base';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 

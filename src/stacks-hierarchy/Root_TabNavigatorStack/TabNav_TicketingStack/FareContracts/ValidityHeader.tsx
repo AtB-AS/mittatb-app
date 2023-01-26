@@ -14,7 +14,6 @@ import {
   isValidFareContract,
   ValidityStatus,
 } from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
-import {PreassignedFareProductType} from '@atb/reference-data/types';
 import TransportMode from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Component/TransportMode';
 import FareContractStatusSymbol from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Component/FareContractStatusSymbol';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
@@ -25,7 +24,7 @@ const ValidityHeader: React.FC<{
   validFrom: number;
   validTo: number;
   isInspectable: boolean;
-  fareProductType: PreassignedFareProductType | undefined;
+  fareProductType: string | undefined;
 }> = ({status, now, validFrom, validTo, isInspectable, fareProductType}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();

@@ -62,6 +62,7 @@ const TripDetailsTexts = {
         label: (duration: string) =>
           _(`Gå i ${duration}`, `Walk for ${duration}`),
       },
+      shortWalk: _(`Gå i mindre enn ett minutt`, `Walk for less than a minute`),
       wait: {
         label: (time: string) => _(`Vent i ${time}`, `Wait for ${time}`),
         messages: {

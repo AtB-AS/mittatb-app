@@ -1,5 +1,5 @@
 import {PlaceScreenComponent} from '@atb/place-screen';
-import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/types';
+import {ProfileScreenProps} from './navigation-types';
 
 type Props = ProfileScreenProps<'Profile_PlaceScreen'>;
 

@@ -49,9 +49,6 @@ import storage, {StorageModelKeysEnum} from '@atb/storage';
 import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-state';
 import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/SelectedFiltersButtons';
 
-type TripSearchRouteName = 'TripSearch';
-const TripSearchRouteNameStatic: TripSearchRouteName = 'TripSearch';
-
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
 const headerBackgroundColor: StaticColorByType<'background'> =
@@ -61,10 +58,9 @@ const ResultsBackgroundColor: StaticColorByType<'background'> = 'background_1';
 
 export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   navigation,
-  route: {
-    params: {callerRoute},
-  },
+  route,
 }) => {
+  const {callerRoute} = route.params;
   const style = useStyle();
   const {theme} = useTheme();
   const {language, t} = useTranslation();
@@ -149,7 +145,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           callerRouteParam === 'fromLocation'
             ? t(TripSearchTexts.location.departurePicker.label)
             : t(TripSearchTexts.location.destinationPicker.label),
-        callerRouteName: TripSearchRouteNameStatic,
+        callerRouteName: route.name,
         callerRouteParam,
         initialLocation,
         includeJourneyHistory: true,
