@@ -11,11 +11,11 @@ on:
           - nfk
       environment: 
         description: 'App environment'
-          required: true
-          type: choice
-          options:
-            - staging
-            - store
+        required: true
+        type: choice
+        options:
+          - staging
+          - store
 jobs:
   renew-certificates:
     name: Renew certificates
