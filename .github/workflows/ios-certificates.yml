@@ -39,6 +39,7 @@ jobs:
       - name: Set environment
         shell: bash
         run: |
+          cat $ENV_FOLDER/.env
           echo "Copying $ENV_FOLDER/.env file to root"
           cp $ENV_FOLDER/.env .
 
