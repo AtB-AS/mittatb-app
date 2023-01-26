@@ -33,6 +33,9 @@ jobs:
           app-environment: ${{ inputs.environment }}
           app-org: ${{ inputs.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+      - uses: webfactory/ssh-agent@v0.4.1
+        with:
+          ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
       - name: Run fastlane generate certificates
         run: bundle exec fastlane ios generate_new_certificates
         env:
