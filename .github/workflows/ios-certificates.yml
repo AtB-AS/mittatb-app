@@ -16,6 +16,7 @@ on:
         options:
           - staging
           - store
+          - development
 jobs:
   renew-certificates:
     name: Renew certificates
