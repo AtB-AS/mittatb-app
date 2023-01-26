@@ -28,10 +28,10 @@ import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   ScrollView,
+  StyleProp,
+  Text,
   TouchableOpacity,
   View,
-  Text,
-  StyleProp,
   ViewStyle,
 } from 'react-native';
 import {
@@ -498,23 +498,25 @@ const PricePerUserProfile = ({
       accessibilityLabel={a11yLabel}
       style={[style, styles.userProfileItem]}
     >
-      <ThemeText>
+      <ThemeText style={styles.userProfileCountAndName}>
         {count} {userProfileName}
       </ThemeText>
-      {hasFlexDiscount && (
-        <ThemeText
-          type="body__secondary"
-          color="secondary"
-          style={styles.originalPriceText}
-        >
-          ({`${t(PurchaseConfirmationTexts.ordinaryPricePrefix)} `}
-          <Text style={styles.originalPriceAmount}>
-            {originalPriceString} kr
-          </Text>
-          )
-        </ThemeText>
-      )}
-      <ThemeText>{priceString} kr</ThemeText>
+      <View style={styles.userProfilePrice}>
+        {hasFlexDiscount && (
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={styles.userProfileOriginalPriceText}
+          >
+            ({`${t(PurchaseConfirmationTexts.ordinaryPricePrefix)} `}
+            <Text style={styles.userProfileOriginalPriceAmount}>
+              {originalPriceString} kr
+            </Text>
+            )
+          </ThemeText>
+        )}
+        <ThemeText>{priceString} kr</ThemeText>
+      </View>
     </View>
   );
 };
@@ -546,7 +548,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   userProfileItem: {
     flex: 1,
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
+  },
+  userProfileCountAndName: {marginRight: theme.spacings.small},
+  userProfilePrice: {flexDirection: 'row', flexWrap: 'wrap'},
+  userProfileOriginalPriceText: {
+    marginRight: theme.spacings.small,
+  },
+  userProfileOriginalPriceAmount: {
+    textDecorationLine: 'line-through',
   },
   totalContainer: {
     flexDirection: 'row',
@@ -564,13 +575,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   paymentButton: {
     marginTop: theme.spacings.medium,
-  },
-  originalPriceText: {
-    marginLeft: 'auto',
-    marginRight: theme.spacings.small,
-  },
-  originalPriceAmount: {
-    textDecorationLine: 'line-through',
   },
 }));
 
