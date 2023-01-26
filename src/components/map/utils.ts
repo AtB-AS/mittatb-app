@@ -1,7 +1,15 @@
 import {RefObject} from 'react';
 import MapboxGL, {Expression} from '@react-native-mapbox-gl/maps';
 import {Coordinates} from '@atb/utils/coordinates';
-import {Feature, Point, Position} from 'geojson';
+import {
+  Feature,
+  FeatureCollection,
+  GeoJSON,
+  GeoJsonProperties,
+  Geometry,
+  Point,
+  Position,
+} from 'geojson';
 import {MapSelectionActionType} from './types';
 import {PixelRatio, Platform} from 'react-native';
 
@@ -98,3 +106,28 @@ export function flyToLocation(
       750,
     );
 }
+
+export const toGeoJSONFeature = <
+  T extends {id: string; lat: number; lon: number},
+>(
+  properties: T[],
+) =>
+  properties.map<GeoJSON.Feature<GeoJSON.Point, T>>((p) => ({
+    id: p.id,
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [p.lon, p.lat],
+    },
+    properties: p,
+  }));
+
+export const toFeatureCollection = <
+  G extends Geometry | null = Geometry,
+  P = GeoJsonProperties,
+>(
+  features: Array<Feature<G, P>>,
+): FeatureCollection<G, P> => ({
+  type: 'FeatureCollection',
+  features,
+});
