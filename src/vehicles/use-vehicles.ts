@@ -7,9 +7,11 @@ import {getVehicles} from '@atb/api/vehicles';
 import {useIsVehiclesEnabled} from '@atb/vehicles/use-vehicles-enabled';
 
 export const useVehicles = () => {
-  const [lat, setLat] = useState(0);
-  const [lon, setLon] = useState(0);
-  const [range, setRange] = useState(500);
+  const [area, setArea] = useState({
+    lat: 0,
+    lon: 0,
+    range: 0,
+  });
   const [vehicles, setVehicles] = useState<
     FeatureCollection<GeoJSON.Point, VehicleFragment>
   >(toFeatureCollection([]));
@@ -17,20 +19,22 @@ export const useVehicles = () => {
 
   useEffect(() => {
     if (isVehiclesEnabled) {
-      getVehicles({lat, lon, range})
+      getVehicles(area)
         .then(toGeoJSONFeature)
         .then(toFeatureCollection)
         .then(setVehicles);
     }
-  }, [lon, lat, range, isVehiclesEnabled]);
+  }, [area, isVehiclesEnabled]);
 
   const fetchVehicles = async (
     {latitude, longitude}: Coordinates,
     radius = 500,
   ) => {
-    setLat(latitude);
-    setLon(longitude);
-    setRange(radius);
+    setArea({
+      lat: latitude,
+      lon: longitude,
+      range: radius,
+    });
   };
 
   return {vehicles, fetchVehicles};

@@ -6,7 +6,10 @@ export const useIsVehiclesEnabled = () => {
   const [debugOverride] = useVehiclesInMapDebugOverride();
   const {enable_vehicles_in_map: enabledInRemoteConfig} = useRemoteConfig();
 
-  return debugOverride ?? enabledInRemoteConfig;
+  if (debugOverride !== undefined) {
+    return debugOverride;
+  }
+  return enabledInRemoteConfig;
 };
 export const useVehiclesInMapDebugOverride = (): [
   boolean | undefined,
