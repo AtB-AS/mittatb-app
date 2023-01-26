@@ -34,7 +34,7 @@ jobs:
           app-org: ${{ inputs.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Run fastlane generate certificates
-        run: fastlane ios generate_new_certificates
+        run: bundle exec fastlane ios generate_new_certificates
         env:
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
