@@ -10,7 +10,7 @@ export type PreassignedFareProduct = {
   description?: LanguageAndTextType[];
   warningMessage?: LanguageAndTextType[];
   type: string;
-  durationDays: number;
+  productAlias?: LanguageAndTextType[];
   distributionChannel: DistributionChannel[];
   alternativeNames: LanguageAndTextType[];
   limitations: {
