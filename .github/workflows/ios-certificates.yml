@@ -29,12 +29,12 @@ jobs:
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
-          use-build-cache: 'false'
+          use-build-cache: 'true'
           app-environment: ${{ inputs.environment }}
           app-org: ${{ inputs.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Run fastlane generate certificates
-        run: fastlane ios generate_new_certificates
+        run: bundle exec fastlane ios generate_new_certificates
         env:
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
