@@ -16,14 +16,14 @@ private enum K {
 }
 
 struct DepartureTimesView: View {
-    var aimedTimes: [String]
     let parentSize: CGSize
+    var departures: [DepartureLinkLabel]
 
     var body: some View {
         HStack {
             HStack {
-                ForEach(aimedTimes, id: \.self) {
-                    ChipView(label: $0)
+                ForEach(departures, id: \.self) {
+                    ChipView(departure: $0)
                 }
             }.frame(maxWidth: parentSize.width - K.padding * 2 - 36, alignment: .leading).clipped()
                 .mask(LinearGradient(gradient: Gradient(stops: [

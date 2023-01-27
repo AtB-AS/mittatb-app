@@ -23,7 +23,7 @@ struct WidgetInfoView: View {
         widgetFamily == .systemMedium ? 6 : 3
     }
 
-    private var aimedTimes: [String] {
+    private var departures: [DepartureLinkLabel] {
         viewModel.getDepartureAimedTimes(limit: numberOfDepartures)
     }
 
@@ -93,7 +93,7 @@ struct WidgetInfoView: View {
                                 .background(Color("TimeTileBackgroundColor"))
                                 .cornerRadius(8)
                         } else {
-                          DepartureTimesView(aimedTimes: aimedTimes, parentSize: geometry.size)
+                          DepartureTimesView(departures: departures, parentSize: geometry.size)
                         }
                     }
                     .padding(K.padding)

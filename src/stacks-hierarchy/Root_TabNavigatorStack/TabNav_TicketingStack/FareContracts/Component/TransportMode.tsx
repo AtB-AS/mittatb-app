@@ -41,6 +41,7 @@ const useStyles = StyleSheet.createThemeHook(() => ({
   transportationMode: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'wrap',
   },
 }));
 
