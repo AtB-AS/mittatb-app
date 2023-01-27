@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 
-public enum K {
+private enum K {
     static let padding: CGFloat = 16.0
     static let lineInformationColor = Color("LineInformationTextColor")
     static let transportIconSize: CGFloat = 20.0
