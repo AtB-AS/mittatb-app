@@ -87,22 +87,17 @@ struct WidgetInfoView: View {
                         Spacer()
 
                         if viewModel.entry.state == .noDepartureQuays {
-                              Text("no_departures").font(DefaultFonts.bold).frame(maxWidth: .infinity)
+                            Text("no_departures").font(DefaultFonts.bold).frame(maxWidth: .infinity)
                                 .lineLimit(1)
                                 .padding(8)
                                 .background(Color("TimeTileBackgroundColor"))
                                 .cornerRadius(8)
                         } else {
-                            DepartureTimesView(aimedTimes: aimedTimes)
+                          DepartureTimesView(aimedTimes: aimedTimes, parentSize: geometry.size)
                         }
                     }
                     .padding(K.padding)
                 }
-                HStack {
-                    Spacer()
-                    Rectangle()
-                        .fill(K.widgetGradient).frame(width: K.widgetFadeWidth)
-                }.frame(width: geometry.size.width)
             }
         }
     }
