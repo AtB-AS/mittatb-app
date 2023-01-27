@@ -2,12 +2,12 @@ import Foundation
 import SwiftUI
 
 struct DepartureTimesView: View {
-    var aimedTimes: [String]
+    var departures: [DepartureLinkLabel]
 
     var body: some View {
         HStack {
-            ForEach(aimedTimes, id: \.self) {
-                ChipView(label: $0)
+            ForEach(departures, id: \.self) {
+                ChipView(departure: $0)
             }
         }.clipShape(Rectangle())
     }

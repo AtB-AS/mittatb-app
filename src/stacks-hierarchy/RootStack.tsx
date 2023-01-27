@@ -63,7 +63,43 @@ export const RootStack = () => {
     const params = parse(path);
     let destination: PartialRoute<any>[] | undefined;
 
-    if (departuresV2Enabled) {
+    if (path.includes('details')) {
+      destination = [
+        {
+          // Index is needed so that the user can go back after
+          // opening the app with the widget when it was not open previously
+          index: 0,
+          name: 'Departures_NearbyStopPlacesScreen',
+        },
+        {
+          name: 'Departures_PlaceScreen',
+          index: 1,
+          params: {
+            place: {
+              name: params.stopName,
+              id: params.stopId,
+            },
+            selectedQuayId: params.quayId,
+            showOnlyFavoritesByDefault: true,
+            mode: 'Departure',
+          },
+        },
+        {
+          name: 'Departures_DepartureDetailsScreen',
+          params: {
+            activeItemIndex: 0,
+            items: [
+              {
+                serviceJourneyId: params.serviceJourneyId,
+                serviceDate: params.serviceDate,
+                date: new Date(),
+                fromQuayId: params.quayId,
+              },
+            ],
+          },
+        },
+      ];
+    } else if (departuresV2Enabled) {
       destination = [
         {
           // Index is needed so that the user can go back after

@@ -23,7 +23,7 @@ struct WidgetInfoView: View {
         widgetFamily == .systemMedium ? 6 : 3
     }
 
-    private var aimedTimes: [String] {
+    private var departures: [DepartureLinkLabel] {
         viewModel.getDepartureAimedTimes(limit: numberOfDepartures)
     }
 
@@ -87,13 +87,13 @@ struct WidgetInfoView: View {
                         Spacer()
 
                         if viewModel.entry.state == .noDepartureQuays {
-                              Text("no_departures").font(DefaultFonts.bold).frame(maxWidth: .infinity)
+                            Text("no_departures").font(DefaultFonts.bold).frame(maxWidth: .infinity)
                                 .lineLimit(1)
                                 .padding(8)
                                 .background(Color("TimeTileBackgroundColor"))
                                 .cornerRadius(8)
                         } else {
-                            DepartureTimesView(aimedTimes: aimedTimes)
+                            DepartureTimesView(departures: departures)
                         }
                     }
                     .padding(K.padding)

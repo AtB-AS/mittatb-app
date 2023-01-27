@@ -264,6 +264,7 @@ struct DepartureTime: Codable {
     let realtime: Bool
     let situations: [SituationElement]
     let serviceJourneyId: String
+    let serviceDate: String
 }
 
 struct SituationElement: Codable {
@@ -317,6 +318,11 @@ struct QuayWithLocation: Codable {
         longitude = try container.decode(Double.self, forKey: .longitude)
         latitude = try container.decode(Double.self, forKey: .latitude)
     }
+}
+
+struct DepartureLinkLabel: Hashable {
+    let label: String
+    let link: String
 }
 
 struct FavouriteDeparture: Codable {
@@ -419,7 +425,8 @@ extension QuayGroup {
                         predictionInaccurate: false,
                         realtime: false,
                         situations: [],
-                        serviceJourneyId: ""
+                        serviceJourneyId: "",
+                        serviceDate: ""
                     )
                 }
             ),

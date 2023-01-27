@@ -41,7 +41,7 @@ struct WidgetViewModel {
 
     let entry: Entry
 
-    var deepLink: String {
+    func deepLink(departure: DepartureTime?) -> String {
         guard let appScheme = Bundle.app.object(forInfoDictionaryKey: "AppScheme") else {
             return ("atb-dev://error")
         }
@@ -54,14 +54,26 @@ struct WidgetViewModel {
             return String("error")
         }
 
-        var urlComponents = URLComponents(string: "\(appScheme)://widget")
-        urlComponents?.queryItems = [
+        var link = "\(appScheme)://widget"
+
+        var queryItems = [
             URLQueryItem(name: "stopId", value: stopPlace.id),
             URLQueryItem(name: "stopName", value: stopPlace.name),
             URLQueryItem(name: "quayId", value: quay.id),
             URLQueryItem(name: "latitude", value: String(stopPlace.latitude)),
             URLQueryItem(name: "longitude", value: String(stopPlace.longitude)),
         ]
+
+        if let departure = departure {
+            link.append("details")
+            queryItems.append(contentsOf: [
+                URLQueryItem(name: "serviceJourneyId", value: departure.serviceJourneyId),
+                URLQueryItem(name: "serviceDate", value: departure.serviceDate),
+            ])
+        }
+
+        var urlComponents = URLComponents(string: link)
+        urlComponents?.queryItems = queryItems
 
         guard let url = urlComponents?.string else {
             return String("error")
@@ -95,29 +107,32 @@ struct WidgetViewModel {
     }
 
     /// Filter relevant departure and return `aimed time`
-    func getDepartureAimedTimes(limit numberOfDepartures: Int) -> [String] {
+    func getDepartureAimedTimes(limit numberOfDepartures: Int) -> [DepartureLinkLabel] {
         if entry.state == .preview {
             return departureTimes.map { departure in
-                dateAsText(departure.aimedTime)
+                dateAsText(departure)
             }
         }
 
         return departureTimes.filter { $0.aimedTime > entry.date }.prefix(numberOfDepartures).map { departure in
-            dateAsText(departure.aimedTime)
+            dateAsText(departure)
         }
     }
 
     /// Returns a text represantation of the depature time containging the hour and minutre of the departure, and showing day if it is in a future day
-    private func dateAsText(_ date: Date) -> String {
-        let dateTime = formatDate(date)
-        if Calendar.current.isDate(date, inSameDayAs: Date.now) {
-            return dateTime
+    private func dateAsText(_ departureTime: DepartureTime) -> DepartureLinkLabel {
+        let dateTime = formatDate(departureTime.aimedTime)
+
+        if Calendar.current.isDate(departureTime.aimedTime, inSameDayAs: Date.now) {
+            return DepartureLinkLabel(label: dateTime, link: deepLink(departure: departureTime))
         }
 
-        let dayIndex = Calendar.current.component(.weekday, from: date)
+        let dayIndex = Calendar.current.component(.weekday, from: departureTime.aimedTime)
         let weekDay = Calendar.current.weekdaySymbols[dayIndex - 1]
 
-        return "\(weekDay.prefix(2)). \(dateTime)"
+        let string = "\(weekDay.prefix(2)). \(dateTime)"
+
+        return DepartureLinkLabel(label: string, link: deepLink(departure: departureTime))
     }
 
     private func formatDate(_ date: Date) -> String {
