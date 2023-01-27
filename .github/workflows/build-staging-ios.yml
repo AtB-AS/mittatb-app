@@ -52,7 +52,7 @@ jobs:
             AtB.app.dSYM.zip
           key: ${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets/') }}
       - name: Generate native assets
-        if: steps.ipa-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn generate-native-assets
       - name: Disable widget
         if: ${{ env.ENABLE_WIDGET != 'true' }}
