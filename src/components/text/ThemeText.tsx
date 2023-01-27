@@ -18,6 +18,7 @@ export type ThemeTextProps = TextProps & {
   type?: TextNames;
   color?: ColorType;
   isMarkdown?: boolean;
+  maxFontScale?: number;
 };
 
 export const ThemeText: React.FC<ThemeTextProps> = ({
@@ -26,6 +27,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   isMarkdown = false,
   style,
   children,
+  maxFontScale,
   ...props
 }) => {
   const {theme, useAndroidSystemFont} = useTheme();
@@ -55,7 +57,7 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   return (
     <Text
       style={[textStyle, style]}
-      maxFontSizeMultiplier={MAX_FONT_SCALE}
+      maxFontSizeMultiplier={maxFontScale ?? MAX_FONT_SCALE}
       {...props}
     >
       {content}

@@ -33,6 +33,8 @@ import {dictionary, useTranslation} from '@atb/translations';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
+const MAX_FONT_SCALE = 1.7;
+
 export const Root_TabNavigatorStack = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
@@ -150,6 +152,7 @@ function tabSettings(
         style={{color, textAlign: 'center', lineHeight}}
         accessibilityLabel={tabBarA11yLabel}
         testID={testID}
+        maxFontScale={MAX_FONT_SCALE}
       >
         {tabBarLabel}
       </ThemeText>
