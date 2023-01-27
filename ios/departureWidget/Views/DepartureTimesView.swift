@@ -4,20 +4,25 @@ import SwiftUI
 private enum K {
     static let padding: CGFloat = 16.0
     static let lineInformationColor = Color("LineInformationTextColor")
-    static let transportIconSize: CGFloat = 20.0
-    static let transportCityColor = Color("TransportCity")
     static let backgroundColor = Color("WidgetBackgroundColor")
-    static let transportIconCornerRadius: CGFloat = 2.0
     static let widgetGradient = LinearGradient(gradient: Gradient(stops: [
-        .init(color: .clear, location: 0),
-        .init(color: backgroundColor, location: 1),
+        .init(color: backgroundColor, location: 0.95),
+        .init(color: .clear, location: 1),
     ]), startPoint: .leading, endPoint: .trailing)
-    static let widgetFadeWidth: CGFloat = 40.0
+    static let iconWidth: CGFloat = 20
 }
 
 struct DepartureTimesView: View {
-    let parentSize: CGSize
     var departures: [DepartureLinkLabel]
+    let parentSize: CGSize
+
+    var width: CGFloat {
+        parentSize.width - K.padding * 2
+    }
+
+    var departuresWidth: CGFloat {
+        width - K.iconWidth - K.padding
+    }
 
     var body: some View {
         HStack {
@@ -25,16 +30,13 @@ struct DepartureTimesView: View {
                 ForEach(departures, id: \.self) {
                     ChipView(departure: $0)
                 }
-            }.frame(maxWidth: parentSize.width - K.padding * 2 - 36, alignment: .leading).clipped()
-                .mask(LinearGradient(gradient: Gradient(stops: [
-                    .init(color: .black, location: 0.95),
-                    .init(color: .clear, location: 1),
-                ]), startPoint: .leading, endPoint: .trailing))
+            }.frame(maxWidth: departuresWidth, alignment: .leading).clipped()
+                .mask(K.widgetGradient)
 
             Image(systemName: "ellipsis")
-            .font(Font.system(size: 16, weight: .regular))
-            .padding(8)
-            .foregroundColor(K.lineInformationColor)
-        }.frame(maxWidth: parentSize.width - K.padding * 2, alignment: .leading)
+                .frame(width: K.iconWidth)
+                .padding(8)
+                .foregroundColor(K.lineInformationColor)
+        }.frame(maxWidth: width, alignment: .leading)
     }
 }
