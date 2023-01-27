@@ -136,7 +136,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     headerLeftButton,
   } = params;
 
-  const {travellerSelectionMode, zoneSelectionMode, offerEndpoint} =
+  const {travellerSelectionMode, zoneSelectionMode} =
     fareProductTypeConfig.configuration;
 
   const {
@@ -147,7 +147,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     refreshOffer,
     userProfilesWithCountAndOffer,
   } = useOfferState(
-    offerEndpoint,
+    zoneSelectionMode === 'none' ? 'authority' : 'zones',
     preassignedFareProduct,
     fromTariffZone,
     toTariffZone,

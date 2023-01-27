@@ -63,11 +63,6 @@ const PurchaseOverviewTexts = {
       },
     },
   },
-  duration: {
-    title: _('Velg varighet', 'Select duration'),
-    days: _('dager', 'days'),
-    chipHint: _('Aktiver for å velge varighet', 'Activate to select duration'),
-  },
   productSelection: {
     title: _('Velg billett', 'Select a ticket'),
     a11yTitle: _('Aktiver for å velge billett', 'Activate to select ticket'),
