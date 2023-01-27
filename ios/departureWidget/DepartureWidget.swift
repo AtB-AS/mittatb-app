@@ -31,7 +31,7 @@ struct DepartureWidget: Widget {
         }
         .configurationDisplayName("Widget")
         .description("about_widget")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemMedium])
     }
 }
 
