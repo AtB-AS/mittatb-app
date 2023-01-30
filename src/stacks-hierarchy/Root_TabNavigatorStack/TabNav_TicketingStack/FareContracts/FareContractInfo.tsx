@@ -218,14 +218,14 @@ const FareContractInfoDetails = (props: FareContractInfoDetailsProps) => {
         <View style={styles.details}>
           <FareContractDetail
             header={t(FareContractTexts.label.travellers)}
-            children={userProfilesWithCount.map((u) =>
+            content={userProfilesWithCount.map((u) =>
               userProfileCountAndName(u, omitUserProfileCount, language),
             )}
           />
           {tariffZoneSummary && (
             <FareContractDetail
               header={t(FareContractTexts.label.zone)}
-              children={[tariffZoneSummary]}
+              content={[tariffZoneSummary]}
             />
           )}
         </View>
