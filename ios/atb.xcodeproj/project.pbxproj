@@ -46,8 +46,9 @@
 		505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */; };
 		506538E028FEA57400A0DDCC /* WidgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506538DF28FEA57400A0DDCC /* WidgetViewModel.swift */; };
 		50A14ED72918F97E00A661D9 /* WidgetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A14ED62918F97E00A661D9 /* WidgetInfoView.swift */; };
-		50AAE5802989752300BA7611 /* WidgetConfiguration.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 50AAE57F2989752300BA7611 /* WidgetConfiguration.intentdefinition */; };
-		50AAE5812989752300BA7611 /* WidgetConfiguration.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 50AAE57F2989752300BA7611 /* WidgetConfiguration.intentdefinition */; };
+		50AAE58229897C4A00BA7611 /* WidgetConfiguration.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 50AAE58529897C4A00BA7611 /* WidgetConfiguration.intentdefinition */; };
+		50AAE58329897C4A00BA7611 /* WidgetConfiguration.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 50AAE58529897C4A00BA7611 /* WidgetConfiguration.intentdefinition */; };
+		50AAE58829897F2E00BA7611 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50488983293F4B660016DD7A /* Localizable.strings */; };
 		50F2C8F929895B27003A40B7 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE09922828FFF47300E5046D /* Storage.swift */; };
 		86ADA222293F651800F1E080 /* hermes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86ADA221293F651800F1E080 /* hermes.xcframework */; };
 		E6A5C3E919C3475F907B3CE4 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB1D1B473A9C41A79687569C /* Roboto-Regular.ttf */; };
@@ -143,7 +144,8 @@
 		506538DF28FEA57400A0DDCC /* WidgetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetViewModel.swift; sourceTree = "<group>"; };
 		50A14ED62918F97E00A661D9 /* WidgetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetInfoView.swift; sourceTree = "<group>"; };
 		50AAE56829896E3900BA7611 /* AtbAppIntentDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AtbAppIntentDebug.entitlements; sourceTree = "<group>"; };
-		50AAE57F2989752300BA7611 /* WidgetConfiguration.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = WidgetConfiguration.intentdefinition; sourceTree = "<group>"; };
+		50AAE58429897C4A00BA7611 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = Base; path = Base.lproj/WidgetConfiguration.intentdefinition; sourceTree = "<group>"; };
+		50AAE58729897C4C00BA7611 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/WidgetConfiguration.strings; sourceTree = "<group>"; };
 		63B81D4D1BE848A39569DB2B /* Pods-app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-app.release.xcconfig"; path = "Target Support Files/Pods-app/Pods-app.release.xcconfig"; sourceTree = "<group>"; };
 		86ADA221293F651800F1E080 /* hermes.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = hermes.xcframework; path = "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"; sourceTree = "<group>"; };
 		B59E90F341F04DB2B427E0EF /* Roboto-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Bold.ttf"; path = "../assets/fonts/Roboto-Bold.ttf"; sourceTree = "<group>"; };
@@ -335,7 +337,7 @@
 				5038614928FD6EB900E16E13 /* APIService.swift */,
 				FE7E785D29433F3900C57A1F /* DefaultFonts.swift */,
 				FE55264D28EC45ED0091F697 /* DepartureWidget.swift */,
-				50AAE57F2989752300BA7611 /* WidgetConfiguration.intentdefinition */,
+				50AAE58529897C4A00BA7611 /* WidgetConfiguration.intentdefinition */,
 				5038614528FD509400E16E13 /* Provider.swift */,
 				FE09922828FFF47300E5046D /* Storage.swift */,
 				5038614D28FD81B700E16E13 /* Structs.swift */,
@@ -506,6 +508,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50AAE58829897F2E00BA7611 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -674,7 +677,7 @@
 				500752ED29855E6900AC5A7F /* Bundle.swift in Sources */,
 				500752FB2985620A00AC5A7F /* Provider.swift in Sources */,
 				500752FC2985622900AC5A7F /* ChipView.swift in Sources */,
-				50AAE5812989752300BA7611 /* WidgetConfiguration.intentdefinition in Sources */,
+				50AAE58329897C4A00BA7611 /* WidgetConfiguration.intentdefinition in Sources */,
 				500753002985622900AC5A7F /* WidgetInfoView.swift in Sources */,
 				500753022985624B00AC5A7F /* LocationChangeManager.swift in Sources */,
 				500752F62985620A00AC5A7F /* APIService.swift in Sources */,
@@ -689,7 +692,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5038614E28FD81B700E16E13 /* Structs.swift in Sources */,
-				50AAE5802989752300BA7611 /* WidgetConfiguration.intentdefinition in Sources */,
+				50AAE58229897C4A00BA7611 /* WidgetConfiguration.intentdefinition in Sources */,
 				5038614A28FD6EB900E16E13 /* APIService.swift in Sources */,
 				FED3D5E02968501400B7DEC4 /* NoFavoriteViewMedium.swift in Sources */,
 				FE09922C28FFF50800E5046D /* Bundle.swift in Sources */,
@@ -744,6 +747,15 @@
 				50488984293F4B680016DD7A /* nb */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		50AAE58529897C4A00BA7611 /* WidgetConfiguration.intentdefinition */ = {
+			isa = PBXVariantGroup;
+			children = (
+				50AAE58429897C4A00BA7611 /* Base */,
+				50AAE58729897C4C00BA7611 /* nb */,
+			);
+			name = WidgetConfiguration.intentdefinition;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

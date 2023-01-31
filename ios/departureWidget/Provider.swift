@@ -22,12 +22,19 @@ struct Provider: IntentTimelineProvider {
         completion(K.previewEntry)
     }
 
-    func getTimeline(for _: UseLocationIntent, in _: Context, completion: @escaping (Timeline<DepartureWidgetEntry>) -> Void) {
+    func getTimeline(for intent: UseLocationIntent, in _: Context, completion: @escaping (Timeline<DepartureWidgetEntry>) -> Void) {
         // No favorite departures
         guard let favoriteDepartures = Manifest.data?.favouriteDepartures,
-              let firstFavoriteDeparture = favoriteDepartures.first
-        else {
+              let firstFavoriteDeparture = favoriteDepartures.first,
+              let intentDeparture = intent.FavoriteDeparture else {
             return completion(K.noFavouritesTimeline)
+        }
+
+        if intentDeparture.identifier != "showClosest" {
+            guard let chosenFavoriteDeparture = favoriteDepartures.first(where: { $0.id == intentDeparture.identifier }) else {
+                return completion(K.noFavouritesTimeline)
+            }
+            fetchFavouriteDepartureTimes(favouriteDeparture: chosenFavoriteDeparture, completion: completion)
         }
 
         apiService.fetchQuayCoordinates(favouriteDepartures: favoriteDepartures) { (result: Result<QuaysCoordinatesResponse, Error>) in

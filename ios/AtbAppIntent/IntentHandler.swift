@@ -1,19 +1,21 @@
-import Intents
 import CoreLocation
 import Foundation
+import Intents
 import SwiftUI
 import WidgetKit
 
 class IntentHandler: INExtension, UseLocationIntentHandling {
-  
-    func provideFavoriteDepartureOptionsCollection(for intent: UseLocationIntent, with completion: @escaping (INObjectCollection<FavoriteDeparture>?, Error?) -> Void) {
-      
+    private let myPositionOption = FavoriteDeparture(
+        identifier: "showClosest",
+        display: NSLocalizedString("show_closest", comment: "")
+    )
+
+    func provideFavoriteDepartureOptionsCollection(for _: UseLocationIntent, with completion: @escaping (INObjectCollection<FavoriteDeparture>?, Error?) -> Void) {
         // No favorite departures
-      guard let favoriteDepartures = Manifest.data?.favouriteDepartures else {
+        guard let favoriteDepartures = Manifest.data?.favouriteDepartures else {
             return
         }
-      
-        
+
         var options: [FavoriteDeparture] = favoriteDepartures.map { departure in
             let favoriteDeparture = FavoriteDeparture(
                 identifier: departure.id,
@@ -22,22 +24,15 @@ class IntentHandler: INExtension, UseLocationIntentHandling {
 
             return favoriteDeparture
         }
-      
-      let position = FavoriteDeparture(
-          identifier: "0",
-          display: "Min posisjon"
-      )
-      
-    
-      options.insert(position, at: 0)
-      
-    
+
+        options.insert(myPositionOption, at: 0)
 
         let collection = INObjectCollection(items: options)
-      
 
         completion(collection, nil)
-      
-      
+    }
+
+    func defaultFavoriteDeparture(for _: UseLocationIntent) -> FavoriteDeparture? {
+        myPositionOption
     }
 }
