@@ -11,23 +11,34 @@ class IntentHandler: INExtension, UseLocationIntentHandling {
     )
 
     func provideFavoriteDepartureOptionsCollection(for _: UseLocationIntent, with completion: @escaping (INObjectCollection<FavoriteDeparture>?, Error?) -> Void) {
-        // No favorite departures
         guard let favoriteDepartures = Manifest.data?.favouriteDepartures else {
             return
         }
 
-        var options: [FavoriteDeparture] = favoriteDepartures.map { departure in
-            let favoriteDeparture = FavoriteDeparture(
-                identifier: departure.id,
-                display: departure.lineLineNumber + " fra " + departure.quayName
-            )
+        let quays = Dictionary(grouping: favoriteDepartures) { $0.quayName }
 
-            return favoriteDeparture
+        var sections: [INObjectSection<FavoriteDeparture>] = []
+
+        quays.keys.forEach { quay in
+
+            if let departures = quays[quay] {
+                let options: [FavoriteDeparture] = departures.map { departure in
+
+                    let favoriteDeparture = FavoriteDeparture(
+                        identifier: departure.id,
+                        display: "\(departure.lineLineNumber) \(departure.lineName ?? "")"
+                    )
+
+                    return favoriteDeparture
+                }
+
+                sections.append(INObjectSection(title: quay, items: options))
+            }
         }
 
-        options.insert(myPositionOption, at: 0)
+        sections.insert(INObjectSection(title: nil, items: [myPositionOption]), at: 0)
 
-        let collection = INObjectCollection(items: options)
+        let collection = INObjectCollection(sections: sections)
 
         completion(collection, nil)
     }
