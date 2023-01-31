@@ -106,7 +106,7 @@ export default function EstimatedCallItem({
             navigateToDetails(
               departure.serviceJourney?.id,
               departure.date,
-              departure.expectedDepartureTime,
+              departure.aimedDepartureTime,
               departure.quay?.id,
               departure.cancellation,
             );
