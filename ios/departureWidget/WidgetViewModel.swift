@@ -39,7 +39,7 @@ struct WidgetViewModel {
 
     // MARK: Public vars
 
-    let entry: Entry
+    let entry: DepartureWidgetEntry
 
     func deepLink(departure: DepartureTime?) -> String {
         guard let appScheme = Bundle.app.object(forInfoDictionaryKey: "AppScheme") else {

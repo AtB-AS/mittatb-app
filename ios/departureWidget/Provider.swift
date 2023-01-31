@@ -3,9 +3,9 @@ import Foundation
 import SwiftUI
 import WidgetKit
 
-struct Provider: TimelineProvider {
+struct Provider: IntentTimelineProvider {
     private enum K {
-        static var previewEntry: Entry { Entry(date: Date.now, favouriteDeparture: FavouriteDeparture.dummy, stopPlaceGroup: StopPlaceGroup.dummy, state: .preview) }
+        static var previewEntry: DepartureWidgetEntry { Entry(date: Date.now, favouriteDeparture: FavouriteDeparture.dummy, stopPlaceGroup: StopPlaceGroup.dummy, state: .preview) }
         static let noFavouritesTimeline = Timeline<Entry>(entries: [Entry(date: Date.now, favouriteDeparture: nil, stopPlaceGroup: nil, state: .noFavouriteDepartures)], policy: .never)
     }
 
@@ -13,16 +13,16 @@ struct Provider: TimelineProvider {
     private let locationManager = LocationChangeManager()
 
     /// The placeholder is shown in transitions and while loading the snapshot when adding the widget to the home screen
-    func placeholder(in _: Context) -> Entry {
+    func placeholder(in _: Context) -> DepartureWidgetEntry {
         K.previewEntry
     }
 
     /// The snapshot shows is used to preview the widget when adding it to the home screen
-    func getSnapshot(in _: Context, completion: @escaping (Entry) -> Void) {
+    func getSnapshot(for _: UseLocationIntent, in _: Context, completion: @escaping (DepartureWidgetEntry) -> Void) {
         completion(K.previewEntry)
     }
 
-    func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
+    func getTimeline(for _: UseLocationIntent, in _: Context, completion: @escaping (Timeline<DepartureWidgetEntry>) -> Void) {
         // No favorite departures
         guard let favoriteDepartures = Manifest.data?.favouriteDepartures,
               let firstFavoriteDeparture = favoriteDepartures.first

@@ -296,7 +296,7 @@ enum EntryState {
     case noFavouriteDepartures, noDepartureQuays, complete, preview
 }
 
-struct Entry: TimelineEntry {
+struct DepartureWidgetEntry: TimelineEntry {
     let date: Date
     let favouriteDeparture: FavouriteDeparture?
     let stopPlaceGroup: StopPlaceGroup?
