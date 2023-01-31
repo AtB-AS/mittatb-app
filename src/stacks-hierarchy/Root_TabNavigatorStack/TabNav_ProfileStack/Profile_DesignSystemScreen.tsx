@@ -315,26 +315,44 @@ export const Profile_DesignSystemScreen = () => {
             showIconText={false}
             textType={'heading__title'}
             expandContent={
-              <View style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: -theme.spacings.small}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  marginTop: -theme.spacings.small,
+                }}
+              >
                 <InfoChip
                   text="Interactive/0"
                   interactiveColor={'interactive_0'}
-                  style={{marginRight: theme.spacings.small, marginTop: theme.spacings.small}}
+                  style={{
+                    marginRight: theme.spacings.small,
+                    marginTop: theme.spacings.small,
+                  }}
                 />
                 <InfoChip
                   text="Interactive/1"
                   interactiveColor={'interactive_1'}
-                  style={{marginRight: theme.spacings.small, marginTop: theme.spacings.small}}
+                  style={{
+                    marginRight: theme.spacings.small,
+                    marginTop: theme.spacings.small,
+                  }}
                 />
                 <InfoChip
                   text="Interactive/2"
                   interactiveColor={'interactive_2'}
-                  style={{marginRight: theme.spacings.small, marginTop: theme.spacings.small}}
+                  style={{
+                    marginRight: theme.spacings.small,
+                    marginTop: theme.spacings.small,
+                  }}
                 />
                 <InfoChip
                   text="Interactive/destructive"
                   interactiveColor={'interactive_destructive'}
-                  style={{marginRight: theme.spacings.small, marginTop: theme.spacings.small}}
+                  style={{
+                    marginRight: theme.spacings.small,
+                    marginTop: theme.spacings.small,
+                  }}
                 />
               </View>
             }
