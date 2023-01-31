@@ -14,7 +14,6 @@ export const CollapsedLegs = ({legs}: {legs: any[]}) => {
     <View style={[styles.transportationIcon, {backgroundColor}]}>
       <ThemeText
         color={'transport_other'}
-        style={styles.lineNumberText}
         type="body__primary--bold"
         testID="collapsedLegs"
       >
@@ -26,12 +25,9 @@ export const CollapsedLegs = ({legs}: {legs: any[]}) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   transportationIcon: {
-    display: 'flex',
-    flexDirection: 'row',
     paddingVertical: theme.spacings.small,
     paddingHorizontal: theme.spacings.small,
     borderRadius: theme.border.radius.small,
-    marginRight: theme.spacings.xSmall,
+    marginRight: theme.spacings.small,
   },
-  lineNumberText: {marginLeft: theme.spacings.xSmall},
 }));

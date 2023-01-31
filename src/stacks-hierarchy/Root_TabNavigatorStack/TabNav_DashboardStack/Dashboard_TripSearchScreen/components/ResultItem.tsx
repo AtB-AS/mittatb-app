@@ -7,9 +7,8 @@ import {
 } from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIcon} from '@atb/components/transportation-icon';
-import {CollapsedLegs} from './CollapsedLegs';
 import {SituationOrNoticeIcon} from '@atb/situations';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   Language,
   TranslateFunction,
@@ -34,10 +33,11 @@ import React, {useEffect, useRef, useState} from 'react';
 import {
   AccessibilityProps,
   Animated,
+  StyleProp,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {SearchTime} from '@atb/journey-date-picker';
 import {RailReplacementBusMessage} from './RailReplacementBusMessage';
@@ -47,6 +47,9 @@ import {
   significantWaitTime,
   significantWalkTime,
 } from '@atb/travel-details-screens/utils';
+import {Destination} from '@atb/assets/svg/mono-icons/places';
+import {CollapsedLegs} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/CollapsedLegs';
+import useFontScale from '@atb/utils/use-font-scale';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -72,7 +75,7 @@ const ResultItemHeader: React.FC<{
 
   return (
     <View style={styles.resultHeader}>
-      <ThemeText type={'body__secondary--bold'}>
+      <ThemeText style={styles.fromPlaceText} type={'body__secondary--bold'}>
         {startName
           ? t(
               TripSearchTexts.results.resultItem.header.title(
@@ -116,8 +119,10 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 }) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
-  const [collapsableParentWidth, setCollapsableParentWidth] = useState(0);
-  const [collapsableWidth, setCollapsableWidth] = useState(0);
+  const {theme} = useTheme();
+  const fontScale = useFontScale();
+  const [legIconsParentWidth, setLegIconsParentWidth] = useState(0);
+  const [legIconsContentWidth, setLegIconsContentWidth] = useState(0);
 
   const [numberOfExpandedLegs, setNumberOfExpandedLegs] = useState(
     tripPattern.legs.length,
@@ -126,14 +131,14 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 
   // Dynamically collapse legs to fit horizontally
   useEffect(() => {
-    if (collapsableParentWidth && collapsableWidth) {
-      if (collapsableWidth >= collapsableParentWidth) {
-        setNumberOfExpandedLegs(numberOfExpandedLegs - 1);
+    if (legIconsParentWidth && legIconsContentWidth) {
+      if (legIconsContentWidth >= legIconsParentWidth) {
+        setNumberOfExpandedLegs((val) => val - 1);
       } else {
         fadeIn.start();
       }
     }
-  }, [collapsableParentWidth, collapsableWidth]);
+  }, [legIconsParentWidth, legIconsContentWidth]);
 
   const fadeIn = Animated.timing(fadeInValue, {
     toValue: 1,
@@ -174,34 +179,54 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         ]}
         {...props}
         accessible={false}
-        onLayout={(e) => setCollapsableParentWidth(e.nativeEvent.layout.width)}
       >
         <ResultItemHeader tripPattern={tripPattern} />
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.detailsContainer}
-          {...screenReaderHidden}
-          onContentSizeChange={(width) => setCollapsableWidth(width)}
-        >
-          <View style={styles.legOutput}>
-            {interpose(
-              legs.map((leg, i) => (
-                <View key={leg.aimedStartTime}>
-                  {leg.mode === 'foot' ? (
-                    <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
-                  ) : (
-                    <TransportationLeg leg={leg} />
-                  )}
-                </View>
-              )),
-              <ThemeIcon svg={ChevronRight} size="small" />,
-            )}
+        <View style={styles.detailsContainer} {...screenReaderHidden}>
+          <View
+            style={styles.flexRow}
+            onLayout={(ev) => {
+              setLegIconsParentWidth(ev.nativeEvent.layout.width);
+            }}
+          >
+            <View
+              style={styles.row}
+              onLayout={(ev) => {
+                setLegIconsContentWidth(
+                  ev.nativeEvent.layout.width +
+                    theme.spacings.small +
+                    theme.spacings.small * 2,
+                );
+              }}
+            >
+              <View style={styles.legOutput}>
+                {interpose(
+                  legs.map((leg, i) => (
+                    <View
+                      key={tripPattern.compressedQuery + leg.aimedStartTime}
+                    >
+                      {leg.mode === 'foot' ? (
+                        <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
+                      ) : (
+                        <TransportationLeg leg={leg} />
+                      )}
+                    </View>
+                  )),
+                  <ThemeIcon svg={ChevronRight} size="small" />,
+                )}
+              </View>
+              <CollapsedLegs legs={collapsedLegs} />
+            </View>
+            <View style={styles.destinationLineContainer}>
+              <View
+                style={[
+                  styles.destinationLine,
+                  {height: (theme.spacings.xSmall / 2) * fontScale},
+                ]}
+              ></View>
+            </View>
           </View>
-          <View style={styles.legOutput}>
-            <CollapsedLegs legs={collapsedLegs} />
-          </View>
-        </ScrollView>
+          <DestinationIcon style={styles.iconContainer} />
+        </View>
         <ResultItemFooter />
       </Animated.View>
     </TouchableOpacity>
@@ -234,6 +259,24 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   detailsContainer: {
     padding: theme.spacings.medium,
+    flexDirection: 'row',
+  },
+  destinationLineContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    flexGrow: 1,
+  },
+  destinationLine: {
+    backgroundColor: theme.static.background.background_3.background,
+    flexDirection: 'row',
+    borderRadius: theme.border.radius.regular,
+    marginRight: theme.spacings.small,
+  },
+  iconContainer: {
+    backgroundColor: theme.static.background.background_2.background,
+    paddingVertical: theme.spacings.small,
+    paddingHorizontal: theme.spacings.small,
+    borderRadius: theme.border.radius.small,
   },
   resultHeader: {
     flexDirection: 'row',
@@ -244,13 +287,15 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     borderBottomColor: theme.border.primary,
     borderBottomWidth: theme.border.width.slim,
   },
-  resultHeaderLabel: {
-    flex: 3,
+  row: {
+    flexDirection: 'row',
   },
-  strikethrough: {
-    textDecorationLine: 'line-through',
+  flexRow: {
+    flex: 1,
+    flexDirection: 'row',
   },
   legOutput: {
+    marginHorizontal: theme.spacings.small,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -261,12 +306,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.medium,
     alignItems: 'flex-end',
   },
-  resultFooterText: {
-    flexShrink: 1,
-    flexDirection: 'row',
-  },
   fromPlaceText: {
-    flexShrink: 1,
+    flex: 3,
   },
   detailsTextWrapper: {
     flexDirection: 'row',
@@ -277,7 +318,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginLeft: theme.spacings.xSmall,
   },
   durationContainer: {
-    flex: 2,
+    flex: 1,
     alignItems: 'flex-end',
   },
   warningIcon: {
@@ -418,6 +459,10 @@ const tripSummary = (
         ),
       )}  ${screenReaderPause}
   `;
+};
+
+const DestinationIcon = ({style}: {style?: StyleProp<ViewStyle>}) => {
+  return <ThemeIcon style={style} svg={Destination} />;
 };
 
 export default ResultItem;
