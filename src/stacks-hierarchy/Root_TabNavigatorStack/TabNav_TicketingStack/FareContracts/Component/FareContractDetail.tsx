@@ -2,15 +2,17 @@ import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
-import {StaticColorByType} from '@atb/theme/colors';
-const themeColor: StaticColorByType<'background'> = 'background_accent_2';
+import {InteractiveColor} from '@atb/theme/colors';
+import {InfoChip} from '@atb/components/info-chip';
+
+const themeColor: InteractiveColor = 'interactive_2';
 
 function FareContractDetail({
   header,
-  children,
+  content,
 }: {
   header: string;
-  children: any;
+  content: string[];
 }) {
   const styles = useStyles();
   return (
@@ -23,12 +25,13 @@ function FareContractDetail({
         >
           {header}
         </ThemeText>
-        {children.map((c: any) => (
-          <View style={styles.children} key={c}>
-            <ThemeText type="body__tertiary" color={themeColor}>
-              {c}
-            </ThemeText>
-          </View>
+        {content.map((c) => (
+          <InfoChip
+            text={c}
+            key={c}
+            style={styles.infoChip}
+            interactiveColor={themeColor}
+          />
         ))}
       </View>
     </View>
@@ -43,11 +46,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     marginVertical: theme.spacings.xSmall,
   },
-  children: {
-    backgroundColor: theme.static.background.background_accent_2.background,
-    borderRadius: theme.spacings.small,
-    paddingHorizontal: theme.spacings.small,
-    paddingVertical: theme.spacings.xSmall,
+  infoChip: {
     marginTop: theme.spacings.small,
   },
 }));
