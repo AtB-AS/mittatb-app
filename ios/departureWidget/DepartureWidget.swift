@@ -29,7 +29,7 @@ struct DepartureWidget: Widget {
         IntentConfiguration(kind: kind, intent: UseLocationIntent.self, provider: Provider()) { entry in
             DepartureWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("Widget")
+        .configurationDisplayName("departure_widget")
         .description("about_widget")
         .supportedFamilies([.systemMedium])
     }
