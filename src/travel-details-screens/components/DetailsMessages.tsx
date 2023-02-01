@@ -37,7 +37,7 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
   tripPattern,
   error,
 }) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {modesWeSellTicketsFor} = useFirestoreConfiguration();
   const someTicketsAreUnavailableInApp = hasLegsWeCantSellTicketsFor(
     tripPattern,
@@ -46,6 +46,8 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
   const styles = useStyles();
   const canUseCollabTicket = someLegsAreByTrain(tripPattern);
   const shortWaitTime = hasShortWaitTime(tripPattern.legs);
+  const leg = tripPattern.legs.filter((leg) => leg.bookingArrangements).shift();
+
   const {enable_ticketing} = useRemoteConfig();
   const isTicketingEnabledAndSomeTicketsAreUnavailableInApp =
     enable_ticketing && someTicketsAreUnavailableInApp;
@@ -90,6 +92,24 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
           }
         />
       )}
+      {leg &&
+        leg.bookingArrangements &&
+        leg.bookingArrangements.bookingContact?.phone && (
+          <MessageBox
+            type="warning"
+            title={t(
+              TripDetailsTexts.trip.leg.contactFlexibleTransportTitle(
+                leg.bookingArrangements.bookingContact.phone,
+              ),
+            )}
+            message={t(
+              DetailsMessages.messages.flexibleTransport(
+                leg.aimedStartTime,
+                language,
+              ),
+            )}
+          />
+        )}
       {error && (
         <>
           <ScreenReaderAnnouncement message={translatedError(error, t)} />

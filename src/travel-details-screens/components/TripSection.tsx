@@ -170,6 +170,15 @@ const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
+        {leg.bookingArrangements && (
+          <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
+            <MessageBox
+              type="warning"
+              noStatusIcon={true}
+              message={`Ring ${leg.bookingArrangements.bookingContact?.phone} for å reserve transport`}
+            />
+          </TripRow>
+        )}
         {lastPassedStop?.quay?.name && (
           <TripRow>
             <View style={style.realtime}>
