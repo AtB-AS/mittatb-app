@@ -19,9 +19,9 @@ echo "Adding Bugsnag API key and release stage to Info.plist"
 /usr/libexec/PlistBuddy -c "Add :BugsnagReleaseStage string $BUGSNAG_RELEASE_STAGE" ./ios/atb/Info.plist
 
 echo "Deleting all reCAPTCHA reversed client ids"
-/usr/libexec/PlistBuddy -c "Delete :CFBundleURLTypes:1:CFBundleURLSchemes $REVERSED_CLIENT_ID" ./ios/atb/Info.plist
+/usr/libexec/PlistBuddy -c "Delete :CFBundleURLTypes:1:CFBundleURLSchemes" ./ios/atb/Info.plist
 echo "Creating array to store correct reCAPTCHA reversed client id"
-/usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:1:CFBundleURLSchemes array $REVERSED_CLIENT_ID" ./ios/atb/Info.plist
+/usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:1:CFBundleURLSchemes array" ./ios/atb/Info.plist
 echo "Adding correct reversed client into array as custom URL scheme"
 REVERSED_CLIENT_ID=`/usr/libexec/PlistBuddy -c "Print :REVERSED_CLIENT_ID" ./ios/atb/GoogleService-Info.plist`
 /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:1:CFBundleURLSchemes:0 string $REVERSED_CLIENT_ID" ./ios/atb/Info.plist
