@@ -4,7 +4,7 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import {RecentFareContract} from '../use-recent-fare-contracts';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Dimensions, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {Dimensions, TouchableOpacity, View} from 'react-native';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {TransportationIcon} from '@atb/components/transportation-icon';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -12,6 +12,8 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {TransportModeType} from '@atb/configuration/types';
+import {InfoChip} from '@atb/components/info-chip';
+import {InteractiveColor} from '@atb/theme/colors';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
@@ -22,34 +24,7 @@ type RecentFareContractProps = {
   testID: string;
 };
 
-export const FloatingLabel = ({
-  text,
-  additionalStyles,
-  testID = '',
-}: {
-  text: string;
-  additionalStyles?: ViewStyle;
-  testID?: string;
-}) => {
-  const styles = useStyles();
-  return (
-    <View
-      style={
-        additionalStyles
-          ? [styles.blueLabel, additionalStyles]
-          : styles.blueLabel
-      }
-    >
-      <ThemeText
-        type="body__tertiary"
-        color="background_accent_2"
-        testID={testID}
-      >
-        {text}
-      </ThemeText>
-    </View>
-  );
-};
+const interactiveColorName: InteractiveColor = 'interactive_2';
 
 export const RecentFareContractComponent = ({
   recentFareContract,
@@ -130,7 +105,7 @@ export const RecentFareContractComponent = ({
 
   const currentAccessibilityLabel = returnAccessibilityLabel();
 
-  const buttonColor = theme.interactive.interactive_0.default;
+  const interactiveColor = theme.interactive[interactiveColorName];
 
   return (
     <TouchableOpacity
@@ -152,13 +127,16 @@ export const RecentFareContractComponent = ({
             />
           ))}
 
-          <ThemeText type="label__uppercase">
+          <ThemeText type="label__uppercase" color={interactiveColor.default}>
             {modeNames({modes: fareProductTypeConfig.transportModes})}
           </ThemeText>
         </View>
 
         <View style={styles.productName} testID={testID + 'Title'}>
-          <ThemeText type="body__secondary--bold">
+          <ThemeText
+            type="body__secondary--bold"
+            color={interactiveColor.default}
+          >
             {getReferenceDataName(preassignedFareProduct, language)}
           </ThemeText>
         </View>
@@ -172,12 +150,11 @@ export const RecentFareContractComponent = ({
               <View style={styles.travellersTileWrapper}>
                 {userProfilesWithCount.length <= 2 &&
                   userProfilesWithCount.map((u) => (
-                    <FloatingLabel
+                    <InfoChip
+                      interactiveColor={interactiveColorName}
                       key={u.id}
                       text={`${u.count} ${getReferenceDataName(u, language)}`}
-                      additionalStyles={{
-                        marginRight: theme.spacings.xSmall,
-                      }}
+                      style={[styles.infoChip, styles.infoChip_travellers]}
                       testID={`${testID}Travellers${userProfilesWithCount.indexOf(
                         u,
                       )}`}
@@ -186,7 +163,9 @@ export const RecentFareContractComponent = ({
                 {userProfilesWithCount.length > 2 && (
                   <>
                     {userProfilesWithCount.slice(0, 1).map((u) => (
-                      <FloatingLabel
+                      <InfoChip
+                        interactiveColor={interactiveColorName}
+                        style={styles.infoChip}
                         text={`${u.count} ${getReferenceDataName(u, language)}`}
                         testID={`${testID}Travellers${userProfilesWithCount.indexOf(
                           u,
@@ -197,6 +176,7 @@ export const RecentFareContractComponent = ({
                       <ThemeText
                         type="body__tertiary"
                         testID={`${testID}TravellersOthers`}
+                        color={interactiveColor.default}
                       >
                         + {userProfilesWithCount.slice(1).length}{' '}
                         {t(RecentFareContractsTexts.titles.moreTravelers)}
@@ -215,12 +195,16 @@ export const RecentFareContractComponent = ({
                   {t(RecentFareContractsTexts.titles.zone)}
                 </ThemeText>
                 {fromZoneName === toZoneName ? (
-                  <FloatingLabel
+                  <InfoChip
+                    interactiveColor={interactiveColorName}
+                    style={styles.infoChip}
                     text={`${fromZoneName}`}
                     testID={`${testID}Zone`}
                   />
                 ) : (
-                  <FloatingLabel
+                  <InfoChip
+                    interactiveColor={interactiveColorName}
+                    style={styles.infoChip}
                     text={`${fromZoneName} - ${toZoneName}`}
                     testID={`${testID}Zones`}
                   />
@@ -230,13 +214,16 @@ export const RecentFareContractComponent = ({
         </View>
       </View>
       <View
-        style={[styles.buyButton, {backgroundColor: buttonColor.background}]}
+        style={[
+          styles.buyButton,
+          {backgroundColor: interactiveColor.outline.background},
+        ]}
         testID={testID + 'BuyButton'}
       >
-        <ThemeText color={buttonColor}>
+        <ThemeText color={interactiveColor.outline}>
           {t(RecentFareContractsTexts.repeatPurchase.label)}
         </ThemeText>
-        <ThemeIcon svg={ArrowRight} fill={buttonColor.text} />
+        <ThemeIcon svg={ArrowRight} fill={interactiveColor.outline.text} />
       </View>
     </TouchableOpacity>
   );
@@ -245,7 +232,7 @@ export const RecentFareContractComponent = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     marginHorizontal: theme.spacings.small,
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.interactive[interactiveColorName].default.background,
     borderRadius: theme.border.radius.regular,
     overflow: 'hidden',
   },
@@ -272,13 +259,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  blueLabel: {
+  infoChip: {
     marginVertical: theme.spacings.xSmall,
-    alignSelf: 'flex-start',
-    paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.xSmall,
-    backgroundColor: theme.static.background.background_accent_2.background,
-    borderRadius: theme.border.radius.regular,
+  },
+  infoChip_travellers: {
+    marginRight: theme.spacings.xSmall,
   },
   additionalCategories: {
     marginHorizontal: theme.spacings.small,

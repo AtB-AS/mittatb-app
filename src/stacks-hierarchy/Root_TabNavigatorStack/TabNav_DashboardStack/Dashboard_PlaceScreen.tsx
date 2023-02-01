@@ -12,7 +12,8 @@ export const Dashboard_PlaceScreen = ({navigation, route}: Props) => (
         : navigation.push('Dashboard_PlaceScreen', {
             place: stopPlace,
             selectedQuayId: quayId,
-            mode: 'Departure',
+            mode: route.params.mode,
+            onCloseRoute: route.params.onCloseRoute,
           })
     }
     onPressDeparture={(items, activeItemIndex) =>
@@ -21,8 +22,10 @@ export const Dashboard_PlaceScreen = ({navigation, route}: Props) => (
         activeItemIndex,
       })
     }
-    onPressClose={() =>
-      navigation.navigate('Dashboard_FavoriteDeparturesScreen')
+    onPressClose={
+      route.params.onCloseRoute
+        ? () => navigation.navigate(route.params.onCloseRoute as any)
+        : undefined
     }
   />
 );

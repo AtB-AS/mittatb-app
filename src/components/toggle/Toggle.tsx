@@ -51,7 +51,9 @@ export function Toggle({
 
 const useStyles = StyleSheet.createThemeHook(() => {
   const fontScale = useFontScale();
-  const scale = Math.max(fontScale, 1);
+
+  // Limit scale between 1, and 1.5
+  const scale = Math.min(1.5, Math.max(fontScale, 1));
   return {
     android: {
       transform: [{scale}],

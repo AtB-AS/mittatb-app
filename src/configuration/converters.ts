@@ -1,12 +1,10 @@
 import {
-  FareProductTypeConfigSettings,
   FareProductTypeConfig,
-  OfferEndpoint,
+  FareProductTypeConfigSettings,
   ProductSelectionMode,
   TimeSelectionMode,
   TravellerSelectionMode,
   ZoneSelectionMode,
-  FareProductType,
 } from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
@@ -53,11 +51,12 @@ function mapToFareProductTypeConfig(
     return;
   }
 
-  const fcTypes = ['single', 'period', 'hour24', 'night', 'carnet'];
-  const fcType = mapToStringAlternatives<FareProductType>(config.type, fcTypes);
+  const fcType = mapToString(config.type);
   if (!fcType) {
     return;
   }
+
+  const illustration = mapToString(config.illustration);
 
   if (!isArray(config.name) || !isArray(config.description)) {
     Bugsnag.notify(
@@ -100,6 +99,7 @@ function mapToFareProductTypeConfig(
 
   return {
     type: fcType,
+    illustration,
     name,
     description,
     transportModes,
@@ -108,7 +108,7 @@ function mapToFareProductTypeConfig(
 }
 
 function mapToFareProductConfigSettings(
-  fareProductType: FareProductType,
+  fareProductType: string,
   settings: any,
 ): FareProductTypeConfigSettings | undefined {
   const zoneSelectionModeTypes = ['single', 'multiple', 'none'];
@@ -154,7 +154,12 @@ function mapToFareProductConfigSettings(
     return;
   }
 
-  const productSelectionModeTypes = ['duration', 'product', 'none'];
+  const productSelectionModeTypes = [
+    'duration',
+    'product',
+    'productAlias',
+    'none',
+  ];
   const productSelectionMode = mapToStringAlternatives<ProductSelectionMode>(
     settings.productSelectionMode,
     productSelectionModeTypes,
@@ -168,19 +173,9 @@ function mapToFareProductConfigSettings(
     return;
   }
 
-  const offerEndpointTypes = ['zones', 'authority'];
-  const offerEndpoint = mapToStringAlternatives<OfferEndpoint>(
-    settings.offerEndpoint,
-    offerEndpointTypes,
+  const productSelectionTitle = mapLanguageAndTextType(
+    settings.productSelectionTitle,
   );
-  if (!offerEndpoint) {
-    notifyWrongConfigurationType(
-      fareProductType,
-      'offerEndpoint',
-      offerEndpointTypes,
-    );
-    return;
-  }
 
   const requiresLogin = settings.requiresLogin;
   if (requiresLogin === undefined) {
@@ -195,7 +190,7 @@ function mapToFareProductConfigSettings(
     travellerSelectionMode,
     timeSelectionMode,
     productSelectionMode,
-    offerEndpoint,
+    productSelectionTitle,
     requiresLogin,
   };
 }
@@ -305,6 +300,9 @@ const mapToTransportModes = (raw: any): TransportModes | undefined => {
     transportSubModes: newSubModes as TransportSubmode[],
   };
 };
+
+const mapToString = (value: any) =>
+  typeof value == 'string' ? value : undefined;
 
 function mapToStringAlternatives<T>(value: any, alternatives: string[]) {
   if (typeof value !== 'string') return;

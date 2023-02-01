@@ -80,7 +80,7 @@ export default function LineItem({
 
   const items = group.departures.map<ServiceJourneyDeparture>((dep) => ({
     serviceJourneyId: dep.serviceJourneyId!,
-    date: dep.time,
+    date: dep.aimedTime,
     fromQuayId: group.lineInfo?.quayId,
     serviceDate: dep.serviceDate,
   }));
