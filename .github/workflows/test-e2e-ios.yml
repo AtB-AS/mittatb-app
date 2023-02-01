@@ -47,7 +47,7 @@ jobs:
         uses: ./.github/actions/ios-build-setup
         with:
           use-build-cache: ${{ env.INPUT_USE_CACHE }}
-          app-environment: 'dev'
+          app-environment: 'staging'
           app-org: 'atb'
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Get potentially cached app
