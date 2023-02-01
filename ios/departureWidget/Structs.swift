@@ -300,6 +300,7 @@ struct DepartureWidgetEntry: TimelineEntry {
     let date: Date
     let favouriteDeparture: FavouriteDeparture?
     let stopPlaceGroup: StopPlaceGroup?
+    let departures: [DepartureTime]?
     let state: EntryState
 }
 

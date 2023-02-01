@@ -34,12 +34,3 @@ struct DepartureWidget: Widget {
         .supportedFamilies([.systemMedium])
     }
 }
-
-struct DepartureWidget_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            DepartureWidgetEntryView(entry: DepartureWidgetEntry(date: Date.now.addingTimeInterval(60 * 5), favouriteDeparture: FavouriteDeparture.dummy, stopPlaceGroup: StopPlaceGroup.dummy, state: .preview)).previewContext(WidgetPreviewContext(family: .systemSmall))
-            DepartureWidgetEntryView(entry: DepartureWidgetEntry(date: Date.now.addingTimeInterval(60 * 5), favouriteDeparture: FavouriteDeparture.dummy, stopPlaceGroup: StopPlaceGroup.dummy, state: .preview)).previewContext(WidgetPreviewContext(family: .systemMedium))
-        }
-    }
-}

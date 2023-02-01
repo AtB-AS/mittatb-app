@@ -5,8 +5,8 @@ import WidgetKit
 
 struct Provider: IntentTimelineProvider {
     private enum K {
-        static var previewEntry: DepartureWidgetEntry { Entry(date: Date.now, favouriteDeparture: FavouriteDeparture.dummy, stopPlaceGroup: StopPlaceGroup.dummy, state: .preview) }
-        static let noFavouritesTimeline = Timeline<Entry>(entries: [Entry(date: Date.now, favouriteDeparture: nil, stopPlaceGroup: nil, state: .noFavouriteDepartures)], policy: .never)
+        static var previewEntry: DepartureWidgetEntry { Entry(date: Date.now, favouriteDeparture: FavouriteDeparture.dummy, stopPlaceGroup: StopPlaceGroup.dummy,departures: nil, state: .preview) }
+      static let noFavouritesTimeline = Timeline<Entry>(entries: [Entry(date: Date.now, favouriteDeparture: nil, stopPlaceGroup: nil, departures: nil, state: .noFavouriteDepartures)], policy: .never)
     }
 
     private let apiService = APIService()
@@ -58,20 +58,40 @@ struct Provider: IntentTimelineProvider {
 
     /// Fetch departures for a given quay
     private func fetchFavouriteDepartureTimes(favouriteDeparture departure: FavouriteDeparture, completion: @escaping (Timeline<Entry>) -> Void) {
+      
+        let noDeparturesTimeline = Timeline<Entry>(entries: [Entry(date: Date.now, favouriteDeparture: departure, stopPlaceGroup: nil, departures: nil, state: .noDepartureQuays)], policy: .after(Date.now.addingTimeInterval(5 * 60)))
         // Fetch departure data for the closest favorite
         apiService.fetchFavouriteDepartureTimes(favouriteDeparture: departure) { (result: Result<StopPlaceGroup, Error>) in
             switch result {
             case let .success(stopPlaceGroup):
+              
+             
 
-                guard let firstQuayGroup = stopPlaceGroup.quays.first(where: { $0.quay.id == departure.quayId })?.group.first else {
-                    return completion(Timeline<Entry>(entries: [Entry(date: Date.now, favouriteDeparture: departure, stopPlaceGroup: nil, state: .noDepartureQuays)], policy: .after(Date.now.addingTimeInterval(5 * 60))))
+                guard let quayGroup = stopPlaceGroup.quays.first(where: { $0.quay.id == departure.quayId }) else {
+                    return completion(noDeparturesTimeline)
                 }
+                var departures: [DepartureTime] = []
+             
+                if departure.lineName == nil {
+                      
+                 quayGroup.group.forEach { line in
+                     departures.append(contentsOf: line.departures )
+                   
+                 }
+                } else {
+                    guard let lineDepartures = quayGroup.group.first(where: { $0.lineInfo.lineName == departure.lineName })?.departures else {
+                        return completion(noDeparturesTimeline)
+                    }
+                    departures = lineDepartures
+                }
+
+                departures = departures.sorted(by: {$0.aimedTime.compare($1.aimedTime) == .orderedAscending})
 
                 // Rerenders widget when a departure has passed, by giving IOS more information about future
                 // dates we hopefully get better timed rerenders
-                var entries = firstQuayGroup.departures.map { departureTime in Entry(date: departureTime.aimedTime, favouriteDeparture: departure, stopPlaceGroup: stopPlaceGroup, state: .complete) }
+                var entries = departures.map { departureTime in Entry(date: departureTime.aimedTime, favouriteDeparture: departure, stopPlaceGroup: stopPlaceGroup,departures: departures, state: .complete) }
 
-                entries.insert(Entry(date: Date.now, favouriteDeparture: departure, stopPlaceGroup: stopPlaceGroup, state: .complete), at: 0)
+                entries.insert(Entry(date: Date.now, favouriteDeparture: departure, stopPlaceGroup: stopPlaceGroup, departures: departures, state: .complete), at: 0)
 
                 // Remove the last entries so the view model has enough quays to show.
                 if entries.count > 10 {
@@ -86,7 +106,7 @@ struct Provider: IntentTimelineProvider {
                 return completion(Timeline(entries: entries, policy: .after(nextMidnight)))
 
             case .failure:
-                return completion(Timeline(entries: [Entry(date: Date.now, favouriteDeparture: departure, stopPlaceGroup: nil, state: .noDepartureQuays)], policy: .after(Date.now.addingTimeInterval(5 * 60))))
+                return completion(noDeparturesTimeline)
             }
         }
     }
