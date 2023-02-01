@@ -40,7 +40,7 @@ export const TransportationIcon: React.FC<TransportationIconProps> = ({
     size == 'small'
       ? styles.transportationIcon_small
       : styles.transportationIcon;
-  const minWidth = wide ? styles.transportationIcon_wide : undefined;
+  const wideIconStyle = wide ? styles.transportationIcon_wide : undefined;
   const lineNumberElement = lineNumber ? (
     <ThemeText
       type="body__primary--bold"
@@ -55,7 +55,7 @@ export const TransportationIcon: React.FC<TransportationIconProps> = ({
     <View
       style={[
         iconStyle,
-        minWidth,
+        wideIconStyle,
         {
           backgroundColor,
         },
