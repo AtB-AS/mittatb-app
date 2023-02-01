@@ -15,18 +15,19 @@ class IntentHandler: INExtension, UseLocationIntentHandling {
             return
         }
 
-        let quays = Dictionary(grouping: favoriteDepartures) { $0.quayName }
-
+        let quays = (Dictionary(grouping: favoriteDepartures) { $0.quayName })
+        
         var sections: [INObjectSection<FavoriteDeparture>] = []
 
-        quays.keys.forEach { quay in
+        // iterates the keys sorted alphabetically
+        quays.keys.sorted(by: { $0 < $1 } ).forEach { quay in
 
             if let departures = quays[quay] {
                 let options: [FavoriteDeparture] = departures.map { departure in
 
                     let favoriteDeparture = FavoriteDeparture(
                         identifier: departure.id,
-                        display: "\(departure.lineLineNumber) \(departure.lineName ?? "")"
+                        display: "\(departure.lineLineNumber) \(departure.lineName ?? NSLocalizedString("all_variations", comment: ""))"
                     )
 
                     return favoriteDeparture
