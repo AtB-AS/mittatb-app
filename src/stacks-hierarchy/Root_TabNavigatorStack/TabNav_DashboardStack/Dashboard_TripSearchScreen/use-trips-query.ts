@@ -231,6 +231,9 @@ async function doSearch(
     waitReluctance: tripSearchPreferences?.waitReluctance,
     walkReluctance: tripSearchPreferences?.walkReluctance,
     walkSpeed: tripSearchPreferences?.walkSpeed,
+    modes: {
+      egressMode: StreetMode.Flexible,
+    },
   };
 
   if (travelSearchFiltersSelection?.transportModes) {
@@ -240,7 +243,7 @@ async function doSearch(
     query.modes = {
       accessMode: StreetMode.Foot,
       directMode: StreetMode.Foot,
-      egressMode: StreetMode.Foot,
+      egressMode: StreetMode.Flexible,
       transportModes: flatMap(selectedFilters, (tm) => tm.modes),
     };
   }
