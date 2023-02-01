@@ -1,5 +1,5 @@
 import {translation as _} from '@atb/translations';
-import orgSpecificTranslations from '@atb/translations/utils';
+import {orgSpecificTranslations} from '@atb/translations';
 
 const DetailsMessages = {
   messages: {

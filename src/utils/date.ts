@@ -21,7 +21,7 @@ import {
 import en from 'date-fns/locale/en-GB';
 import nb from 'date-fns/locale/nb';
 import humanizeDuration from 'humanize-duration';
-import {DEFAULT_LANGUAGE, Language} from '../translations';
+import {DEFAULT_LANGUAGE, Language} from '../translations/commons';
 
 const humanizer = humanizeDuration.humanizer({});
 
