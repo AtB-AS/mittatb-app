@@ -1,4 +1,4 @@
-import {ArrowRight, ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Walk} from '@atb/assets/svg/mono-icons/transportation';
 import {
   AccessibleText,
@@ -43,12 +43,14 @@ import {SearchTime} from '@atb/journey-date-picker';
 import {RailReplacementBusMessage} from './RailReplacementBusMessage';
 import {
   getNoticesForLeg,
+  getTimeRepresentationType,
   isSignificantFootLegWalkOrWaitTime,
   significantWaitTime,
   significantWalkTime,
 } from '@atb/travel-details-screens/utils';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {CollapsedLegs} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/CollapsedLegs';
+import TripDetails from '@atb/translations/screens/subscreens/TripDetails';
 import useFontScale from '@atb/utils/use-font-scale';
 
 type ResultItemProps = {
@@ -160,6 +162,8 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   const isInPast =
     isInThePast(tripPattern.legs[0].expectedStartTime) &&
     searchTime?.option !== 'now';
+  const iconHeight =
+    theme.icon.size['normal'] * fontScale + theme.spacings.small * 2;
 
   return (
     <TouchableOpacity
@@ -189,7 +193,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
             }}
           >
             <View
-              style={styles.row}
+              style={styles.legOutput}
               onLayout={(ev) => {
                 setLegIconsContentWidth(
                   ev.nativeEvent.layout.width +
@@ -198,25 +202,45 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                 );
               }}
             >
-              <View style={styles.legOutput}>
-                {interpose(
-                  legs.map((leg, i) => (
-                    <View
-                      key={tripPattern.compressedQuery + leg.aimedStartTime}
-                    >
-                      {leg.mode === 'foot' ? (
-                        <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
-                      ) : (
-                        <TransportationLeg leg={leg} />
+              {interpose(
+                legs.map((leg, i) => (
+                  <View key={leg.aimedStartTime + leg.aimedEndTime}>
+                    {leg.mode === 'foot' ? (
+                      <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
+                    ) : (
+                      <TransportationLeg
+                        wide={isSignificantDifference(leg)}
+                        leg={leg}
+                      />
+                    )}
+                    <View style={styles.departureTimes}>
+                      <ThemeText type="body__tertiary" color="primary">
+                        {formatToClock(leg.expectedStartTime, language)}
+                      </ThemeText>
+                      {isSignificantDifference(leg) && (
+                        <ThemeText
+                          style={styles.scheduledTime}
+                          type="body__tertiary--strike"
+                          color="secondary"
+                        >
+                          {formatToClock(leg.aimedStartTime, language)}
+                        </ThemeText>
                       )}
                     </View>
-                  )),
-                  <ThemeIcon svg={ChevronRight} size="small" />,
-                )}
-              </View>
+                  </View>
+                )),
+                <View style={[styles.dashContainer, {height: iconHeight}]}>
+                  <LegDash />
+                </View>,
+              )}
+              {collapsedLegs.length ? (
+                <View style={[styles.dashContainer, {height: iconHeight}]}>
+                  <LegDash />
+                </View>
+              ) : null}
               <CollapsedLegs legs={collapsedLegs} />
             </View>
-            <View style={styles.destinationLineContainer}>
+            <View style={[styles.lineContainer, {height: iconHeight}]}>
               <View
                 style={[
                   styles.destinationLine,
@@ -225,7 +249,14 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
               ></View>
             </View>
           </View>
-          <DestinationIcon style={styles.iconContainer} />
+          <View>
+            <DestinationIcon style={styles.iconContainer} />
+            <View style={styles.departureTimes}>
+              <ThemeText type="body__tertiary" color="primary">
+                {formatToClock(tripPattern.expectedEndTime, language)}
+              </ThemeText>
+            </View>
+          </View>
         </View>
         <ResultItemFooter />
       </Animated.View>
@@ -260,17 +291,24 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   detailsContainer: {
     padding: theme.spacings.medium,
     flexDirection: 'row',
+    alignItems: 'flex-start',
   },
-  destinationLineContainer: {
+  lineContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
     flexGrow: 1,
   },
   destinationLine: {
-    backgroundColor: theme.static.background.background_3.background,
+    backgroundColor: theme.static.background.background_2.background,
     flexDirection: 'row',
     borderRadius: theme.border.radius.regular,
     marginRight: theme.spacings.small,
+  },
+  legLine: {
+    backgroundColor: theme.static.background.background_2.background,
+    flexDirection: 'row',
+    borderRadius: theme.border.radius.regular,
+    width: theme.spacings.xSmall,
   },
   iconContainer: {
     backgroundColor: theme.static.background.background_2.background,
@@ -294,10 +332,22 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
   },
+  dashContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
   legOutput: {
     marginHorizontal: theme.spacings.small,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+  },
+  departureTimes: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginVertical: theme.spacings.xSmall,
+  },
+  scheduledTime: {
+    marginLeft: theme.spacings.xSmall,
   },
   resultFooter: {
     flexDirection: 'column',
@@ -326,8 +376,41 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
+const LegDash = () => {
+  const styles = useThemeStyles();
+  const {theme} = useTheme();
+  const fontScale = useFontScale();
+  const lineHeight = (theme.spacings.xSmall / 2) * fontScale;
+  return (
+    <>
+      <View style={styles.lineContainer}>
+        <View
+          style={[
+            styles.legLine,
+            {
+              height: lineHeight,
+              marginLeft: theme.spacings.small,
+              marginRight: theme.spacings.xSmall,
+            },
+          ]}
+        ></View>
+      </View>
+      <View style={styles.lineContainer}>
+        <View
+          style={[
+            styles.legLine,
+            {
+              height: lineHeight,
+              marginRight: theme.spacings.small,
+            },
+          ]}
+        ></View>
+      </View>
+    </>
+  );
+};
 const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
-  const styles = useLegStyles();
+  const styles = useThemeStyles();
   const showWaitTime = Boolean(nextLeg);
   const {t, language} = useTranslation();
   const waitTimeInSeconds = !nextLeg
@@ -352,40 +435,23 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       : t(TripSearchTexts.results.resultItem.footLeg.walkLabel(walkDuration));
 
   return (
-    <View
-      style={styles.legContainer}
+    <ThemeIcon
+      style={styles.iconContainer}
       accessibilityLabel={a11yText}
       testID="fLeg"
-    >
-      <ThemeIcon svg={Walk} />
-    </View>
+      svg={Walk}
+    />
   );
 };
 
-const useLegStyles = StyleSheet.createThemeHook((theme) => ({
-  legContainer: {
-    marginHorizontal: theme.spacings.xSmall,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  iconContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-}));
-
-const TransportationLeg = ({leg}: {leg: Leg}) => {
-  const styles = useLegStyles();
+const TransportationLeg = ({leg, wide}: {leg: Leg; wide?: boolean}) => {
   return (
-    <View style={styles.legContainer}>
-      <View style={styles.iconContainer} testID="trLeg">
-        <TransportationIcon
-          mode={leg.mode}
-          subMode={leg.line?.transportSubmode}
-          lineNumber={leg.line?.publicCode}
-        />
-      </View>
-    </View>
+    <TransportationIcon
+      wide={wide}
+      mode={leg.mode}
+      subMode={leg.line?.transportSubmode}
+      lineNumber={leg.line?.publicCode}
+    />
   );
 };
 
@@ -403,12 +469,20 @@ const tripSummary = (
 
     ${
       firstLeg
-        ? t(
-            TripSearchTexts.results.resultItem.footer.fromPlaceWithTime(
-              firstLeg.fromPlace?.name ?? '',
-              formatToClock(firstLeg.expectedStartTime, language),
-            ),
-          )
+        ? isSignificantDifference(firstLeg)
+          ? t(
+              TripDetails.trip.leg.start.a11yLabel.realAndAimed(
+                firstLeg.fromPlace?.name ?? '',
+                formatToClock(firstLeg.expectedStartTime, language),
+                formatToClock(firstLeg.aimedStartTime, language),
+              ),
+            )
+          : t(
+              TripDetails.trip.leg.start.a11yLabel.noRealTime(
+                firstLeg.fromPlace?.name ?? '',
+                formatToClock(firstLeg.expectedStartTime, language),
+              ),
+            )
         : ''
     }
 
@@ -460,6 +534,16 @@ const tripSummary = (
       )}  ${screenReaderPause}
   `;
 };
+
+function isSignificantDifference(leg: Leg) {
+  return (
+    getTimeRepresentationType({
+      missingRealTime: !leg.realtime,
+      aimedTime: leg.aimedStartTime,
+      expectedTime: leg.expectedStartTime,
+    }) === 'significant-difference'
+  );
+}
 
 const DestinationIcon = ({style}: {style?: StyleProp<ViewStyle>}) => {
   return <ThemeIcon style={style} svg={Destination} />;

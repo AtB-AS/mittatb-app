@@ -28,6 +28,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingVertical: theme.spacings.small,
     paddingHorizontal: theme.spacings.small,
     borderRadius: theme.border.radius.small,
-    marginRight: theme.spacings.small,
   },
 }));
