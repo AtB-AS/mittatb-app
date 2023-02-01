@@ -310,7 +310,7 @@ function mapToStringAlternatives<T>(value: any, alternatives: string[]) {
   return value as T;
 }
 
-function mapLanguageAndTextType(text?: any[]) {
+export function mapLanguageAndTextType(text?: any) {
   if (!text) return;
   if (!text.every((item: any) => ['lang', 'value'].every((f) => f in item)))
     return;
