@@ -1,8 +1,5 @@
 import {FareContractState} from '@atb/ticketing';
-import {
-  PreassignedFareProductType,
-  UserProfile,
-} from '@atb/reference-data/types';
+import {UserProfile} from '@atb/reference-data/types';
 import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Purchase/Travellers/use-user-count-state';
 import {
   findReferenceDataById,
@@ -10,10 +7,10 @@ import {
 } from '@atb/reference-data/utils';
 import {RemoteToken} from '@atb/mobile-token/types';
 import {
-  Language,
   FareContractTexts,
-  TranslateFunction,
+  Language,
   LanguageAndTextType,
+  TranslateFunction,
 } from '@atb/translations';
 import {
   findInspectable,
@@ -35,7 +32,8 @@ export type ValidityStatus =
   | 'approved';
 
 export type FareProductTypeConfig = {
-  type: FareProductType;
+  type: string;
+  illustration?: string;
   name: LanguageAndTextType[];
   transportModes: TransportModeType[];
   description: LanguageAndTextType[];
@@ -47,21 +45,18 @@ export type FareProductTypeConfigSettings = {
   travellerSelectionMode: TravellerSelectionMode;
   timeSelectionMode: TimeSelectionMode;
   productSelectionMode: ProductSelectionMode;
-  offerEndpoint: OfferEndpoint;
+  productSelectionTitle?: LanguageAndTextType[];
   requiresLogin: boolean;
 };
 
-export type FareProductType =
-  | 'single'
-  | 'period'
-  | 'hour24'
-  | 'night'
-  | 'carnet';
 export type ZoneSelectionMode = 'single' | 'multiple' | 'none';
 export type TravellerSelectionMode = 'multiple' | 'single' | 'none';
 export type TimeSelectionMode = 'datetime' | 'none';
-export type ProductSelectionMode = 'duration' | 'product' | 'none';
-export type OfferEndpoint = 'zones' | 'authority';
+export type ProductSelectionMode =
+  | 'duration'
+  | 'product'
+  | 'productAlias'
+  | 'none';
 
 export function getRelativeValidity(
   now: number,
@@ -129,7 +124,7 @@ export const getNonInspectableTokenWarning = (
   t: TranslateFunction,
   remoteTokens?: RemoteToken[],
   isInspectable?: boolean,
-  fareProductType?: PreassignedFareProductType,
+  fareProductType?: string,
 ) => {
   const inspectableToken = findInspectable(remoteTokens);
   if (isError && fallbackEnabled) return null;

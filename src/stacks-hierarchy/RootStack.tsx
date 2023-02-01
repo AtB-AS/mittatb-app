@@ -2,12 +2,9 @@ import {useAppState} from '@atb/AppContext';
 import trackNavigation from '@atb/diagnostics/trackNavigation';
 import {LocationSearchStack} from '@atb/location-search';
 import LoginInAppStack from '@atb/login/in-app/LoginInAppStack';
-import {Root_OnboardingStack} from '@atb/stacks-hierarchy/Root_OnboardingStack';
-import AddEditFavorite from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/AddEditFavorite';
-import SortableFavoriteList from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/FavoriteList/SortFavorites';
-import SelectTravelTokenScreen from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/TravelToken/SelectTravelTokenScreen';
-import Purchase from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Purchase';
-import FareContractModalScreen from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Details';
+import {Root_OnboardingStack} from './Root_OnboardingStack';
+import Purchase from './Root_TabNavigatorStack/TabNav_TicketingStack/Purchase';
+import FareContractModalScreen from './Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Details';
 import {useTheme} from '@atb/theme';
 import {APP_SCHEME} from '@env';
 import {
@@ -28,8 +25,10 @@ import useTestIds from './use-test-ids';
 import {parse} from 'search-params';
 
 import type {NavigationState, PartialState} from '@react-navigation/routers';
-import {Root_MobileTokenOnboardingStack} from '@atb/stacks-hierarchy/Root_MobileTokenOnboarding';
-import {useDeparturesV2Enabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
+import {Root_MobileTokenOnboardingStack} from './Root_MobileTokenOnboarding';
+import {useDeparturesV2Enabled} from './Root_TabNavigatorStack/TabNav_DeparturesStack';
+import {Root_AddEditFavoritePlaceScreen} from './Root_AddEditFavoritePlaceScreen';
+import {Root_SearchStopPlaceScreen} from './Root_SearchStopPlaceScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -70,10 +69,11 @@ export const RootStack = () => {
           // Index is needed so that the user can go back after
           // opening the app with the widget when it was not open previously
           index: 0,
-          name: 'DeparturesScreen',
+          name: 'Departures_NearbyStopPlacesScreen',
         },
         {
-          name: 'PlaceScreen',
+          name: 'Departures_PlaceScreen',
+          index: 1,
           params: {
             place: {
               name: params.stopName,
@@ -88,7 +88,8 @@ export const RootStack = () => {
     } else {
       destination = [
         {
-          name: 'NearbyRoot',
+          name: 'Nearby_RootScreen',
+          index: 0,
           params: {
             location: {
               id: params.stopId,
@@ -105,15 +106,33 @@ export const RootStack = () => {
         },
       ];
     }
+    if (path.includes('details')) {
+      destination.push({
+        name: departuresV2Enabled
+          ? 'Departures_DepartureDetailsScreen'
+          : 'Nearby_DepartureDetailsScreen',
+        params: {
+          activeItemIndex: 0,
+          items: [
+            {
+              serviceJourneyId: params.serviceJourneyId,
+              serviceDate: params.serviceDate,
+              date: new Date(),
+              fromQuayId: params.quayId,
+            },
+          ],
+        },
+      });
+    }
 
     return {
       routes: [
         {
-          name: 'TabNavigator',
+          name: 'Root_TabNavigatorStack',
           state: {
             routes: [
               {
-                name: 'Nearest',
+                name: 'TabNav_NearestStack',
                 state: {
                   routes: destination as PartialRoute<Route<string>>[],
                 },
@@ -170,7 +189,7 @@ export const RootStack = () => {
                             name: 'TabNav_DashboardStack',
                             state: {
                               routes: [
-                                {name: 'Dashboard_Root', index: 0},
+                                {name: 'Dashboard_RootScreen', index: 0},
                                 {name: 'Dashboard_NearbyStopPlacesScreen'},
                               ],
                             },
@@ -226,24 +245,12 @@ export const RootStack = () => {
                   component={Root_MobileTokenOnboardingStack}
                 />
                 <Stack.Screen
-                  name="SelectTravelTokenRoot"
-                  component={SelectTravelTokenScreen}
+                  name="Root_AddEditFavoritePlaceScreen"
+                  component={Root_AddEditFavoritePlaceScreen}
                 />
                 <Stack.Screen
-                  name="AddEditFavorite"
-                  component={AddEditFavorite}
-                  options={TransitionPresets.ModalSlideFromBottomIOS}
-                />
-                <Stack.Screen
-                  name="SortableFavoriteList"
-                  component={SortableFavoriteList}
-                  options={{
-                    gestureResponseDistance: 100,
-                    transitionSpec: {
-                      open: transitionSpec,
-                      close: transitionSpec,
-                    },
-                  }}
+                  name="Root_SearchStopPlaceScreen"
+                  component={Root_SearchStopPlaceScreen}
                 />
                 <Stack.Screen
                   name="LoginInApp"

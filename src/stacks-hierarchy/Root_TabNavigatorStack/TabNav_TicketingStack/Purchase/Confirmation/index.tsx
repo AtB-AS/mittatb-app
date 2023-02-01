@@ -3,8 +3,7 @@ import {useAuthState} from '@atb/auth';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
-import {LeftButtonProps} from '@atb/components/screen-header';
-import {FullScreenHeader} from '@atb/components/screen-header';
+import {FullScreenHeader, LeftButtonProps} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
@@ -18,9 +17,9 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
   dictionary,
+  getTextForLanguage,
   PurchaseConfirmationTexts,
   useTranslation,
-  getTextForLanguage,
 } from '@atb/translations';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
@@ -29,14 +28,19 @@ import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   ScrollView,
+  StyleProp,
+  Text,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
 import {
   FareProductTypeConfig,
   getOtherDeviceIsInspectableWarning,
 } from '../../FareContracts/utils';
-import useOfferState from '../Overview/use-offer-state';
+import useOfferState, {
+  UserProfileWithCountAndOffer,
+} from '../Overview/use-offer-state';
 import {SelectPaymentMethod} from '../Payment';
 import {usePreviousPaymentMethod} from '../saved-payment-utils';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
@@ -132,7 +136,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     headerLeftButton,
   } = params;
 
-  const {travellerSelectionMode, zoneSelectionMode, offerEndpoint} =
+  const {travellerSelectionMode, zoneSelectionMode} =
     fareProductTypeConfig.configuration;
 
   const {
@@ -143,7 +147,7 @@ const Confirmation: React.FC<ConfirmationProps> = ({
     refreshOffer,
     userProfilesWithCountAndOffer,
   } = useOfferState(
-    offerEndpoint,
+    zoneSelectionMode === 'none' ? 'authority' : 'zones',
     preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
@@ -285,26 +289,11 @@ const Confirmation: React.FC<ConfirmationProps> = ({
               {travellerSelectionMode !== 'none' && (
                 <Sections.GenericSectionItem>
                   {userProfilesWithCountAndOffer.map((u, i) => (
-                    <View
-                      accessible={true}
+                    <PricePerUserProfile
                       key={u.id}
-                      style={[
-                        styles.userProfileItem,
-                        i != 0 ? styles.smallTopMargin : undefined,
-                      ]}
-                    >
-                      <ThemeText>
-                        {u.count} {getReferenceDataName(u, language)}
-                      </ThemeText>
-                      <ThemeText>
-                        {formatDecimalNumber(
-                          u.count * (u.offer.prices[0].amount_float || 0),
-                          language,
-                          2,
-                        )}{' '}
-                        kr
-                      </ThemeText>
-                    </View>
+                      userProfile={u}
+                      style={i != 0 ? styles.smallTopMargin : undefined}
+                    />
                   ))}
                 </Sections.GenericSectionItem>
               )}
@@ -469,6 +458,69 @@ const Confirmation: React.FC<ConfirmationProps> = ({
   );
 };
 
+const PricePerUserProfile = ({
+  userProfile,
+  style,
+}: {
+  userProfile: UserProfileWithCountAndOffer;
+  style: StyleProp<ViewStyle>;
+}) => {
+  const styles = useStyles();
+  const {t, language} = useTranslation();
+  const {count, offer} = userProfile;
+
+  const price = count * (offer.prices[0].amount_float || 0);
+  const originalPrice = count * (offer.prices[0].original_amount_float || 0);
+
+  const priceString = formatDecimalNumber(price, language, 2);
+  const originalPriceString = originalPrice
+    ? formatDecimalNumber(originalPrice, language, 2)
+    : undefined;
+
+  const hasFlexDiscount = price < originalPrice;
+
+  const userProfileName = getReferenceDataName(userProfile, language);
+  const a11yLabel = [
+    `${count} ${userProfileName}`,
+    `${priceString} kr`,
+    `${
+      hasFlexDiscount
+        ? `${t(
+            PurchaseConfirmationTexts.ordinaryPricePrefixA11yLabel,
+          )} ${originalPriceString} kr`
+        : ''
+    }`,
+  ].join(',');
+
+  return (
+    <View
+      accessible={true}
+      accessibilityLabel={a11yLabel}
+      style={[style, styles.userProfileItem]}
+    >
+      <ThemeText style={styles.userProfileCountAndName}>
+        {count} {userProfileName}
+      </ThemeText>
+      <View style={styles.userProfilePrice}>
+        {hasFlexDiscount && (
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={styles.userProfileOriginalPriceText}
+          >
+            ({`${t(PurchaseConfirmationTexts.ordinaryPricePrefix)} `}
+            <Text style={styles.userProfileOriginalPriceAmount}>
+              {originalPriceString} kr
+            </Text>
+            )
+          </ThemeText>
+        )}
+        <ThemeText>{priceString} kr</ThemeText>
+      </View>
+    </View>
+  );
+};
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
@@ -496,10 +548,20 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   userProfileItem: {
     flex: 1,
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
+  },
+  userProfileCountAndName: {marginRight: theme.spacings.small},
+  userProfilePrice: {flexDirection: 'row', flexWrap: 'wrap'},
+  userProfileOriginalPriceText: {
+    marginRight: theme.spacings.small,
+  },
+  userProfileOriginalPriceAmount: {
+    textDecorationLine: 'line-through',
   },
   totalContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
     padding: theme.spacings.medium,
     marginVertical: theme.spacings.medium,

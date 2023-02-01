@@ -2,7 +2,6 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {usePreferences} from '@atb/preferences';
 import {
   PreassignedFareProduct,
-  PreassignedFareProductType,
   TariffZone,
   UserProfile,
 } from '@atb/reference-data/types';
@@ -19,7 +18,7 @@ type UserProfileTypeWithCount = {
 
 export function useOfferDefaults(
   preassignedFareProduct?: PreassignedFareProduct,
-  selectableProductType?: PreassignedFareProductType,
+  selectableProductType?: string,
   userProfilesWithCount?: UserProfileWithCount[],
   fromTariffZone?: TariffZoneWithMetadata,
   toTariffZone?: TariffZoneWithMetadata,

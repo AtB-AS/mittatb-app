@@ -11,7 +11,11 @@ export const Dashboard_JourneyDatePickerScreen = ({
     <JourneyDatePickerScreenComponent
       {...route.params}
       onSave={(searchTime) =>
-        navigation.navigate('Dashboard_TripSearchScreen', {searchTime})
+        navigation.navigate({
+          name: 'Dashboard_TripSearchScreen',
+          params: {searchTime},
+          merge: true,
+        })
       }
     />
   );

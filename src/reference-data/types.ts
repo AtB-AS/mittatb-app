@@ -1,12 +1,6 @@
 import {Polygon} from 'geojson';
 import {LanguageAndTextType} from '@atb/translations';
 
-export type PreassignedFareProductType =
-  | 'single'
-  | 'night'
-  | 'period'
-  | 'carnet'
-  | 'hour24';
 export type DistributionChannel = 'web' | 'app';
 
 export type PreassignedFareProduct = {
@@ -15,8 +9,8 @@ export type PreassignedFareProduct = {
   version: string;
   description?: LanguageAndTextType[];
   warningMessage?: LanguageAndTextType[];
-  type: PreassignedFareProductType;
-  durationDays: number;
+  type: string;
+  productAlias?: LanguageAndTextType[];
   distributionChannel: DistributionChannel[];
   alternativeNames: LanguageAndTextType[];
   limitations: {

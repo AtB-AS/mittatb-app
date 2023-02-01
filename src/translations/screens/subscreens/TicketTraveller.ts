@@ -1,5 +1,4 @@
 import {translation as _} from '../../commons';
-import {PreassignedFareProductType} from '@atb/reference-data/types';
 import {APP_ORG} from '@env';
 
 enum TravellerType {
@@ -12,7 +11,7 @@ enum TravellerType {
 
 function specificOverrides(
   travellerType: string,
-  ticketType: PreassignedFareProductType | undefined,
+  ticketType: string | undefined,
 ) {
   if (ticketType == undefined) return false;
 
@@ -86,10 +85,7 @@ function generic(travellerType: string) {
 }
 
 const TicketTravellerTexts = {
-  information: (
-    travellerType: string,
-    ticketType: PreassignedFareProductType | undefined,
-  ) => {
+  information: (travellerType: string, ticketType: string | undefined) => {
     return (
       specificOverrides(travellerType, ticketType) || generic(travellerType)
     );

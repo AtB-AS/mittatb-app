@@ -193,8 +193,8 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
         },
         {
           question: _(
-            `Jeg får ikke logget inn i appen AtB med e-post`,
-            `I can not log into the AtB app with e-mail`,
+            `Jeg får ikke logget inn i Reis-appen med e-post`,
+            `I can not log into the Reis app with e-mail`,
           ),
           answer: _(
             `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke reisekort eller opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret vedrørende refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
@@ -207,8 +207,8 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
             `Do you have any other questions about ticket purchases?`,
           ),
           answer: _(
-            `Se flere måter å kontakte oss på atb.no/kontakt`,
-            `See how to contact us at atb.no/en/contact`,
+            `Se flere måter å kontakte oss på reisnordland.no/kontakt-oss`,
+            `See how to contact us at reisnordland.com/contact-us`,
           ),
         },
       ],

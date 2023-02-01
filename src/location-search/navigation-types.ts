@@ -1,6 +1,8 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import {ChipTypeGroup} from '@atb/favorite-chips';
 import {Location} from '@atb/favorites/types';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 
 type LocationSearchByTextScreenParams = {
   callerRouteName: string;
@@ -24,4 +26,7 @@ export type LocationSearchStackParams = {
 
 export type LocationSearchStackScreenProps<
   T extends keyof LocationSearchStackParams,
-> = StackScreenProps<LocationSearchStackParams, T>;
+> = CompositeScreenProps<
+  StackScreenProps<LocationSearchStackParams, T>,
+  RootStackScreenProps<'LocationSearchStack'>
+>;

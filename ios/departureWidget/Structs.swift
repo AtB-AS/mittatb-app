@@ -30,6 +30,8 @@ enum TransportMode: String, Codable {
             return Image("Tram")
         case .bus:
             return Image("Bus")
+        case .metro:
+            return Image("Metro")
         default:
             return nil
         }
@@ -37,7 +39,7 @@ enum TransportMode: String, Codable {
 
     var iconForegroundColor: Color {
         switch self {
-        case .rail:
+        case .rail, .metro:
             return .white
         default:
             return .black
@@ -48,8 +50,8 @@ enum TransportMode: String, Codable {
         switch self {
         case .water:
             return Color("Transport/Boat")
-        case .rail:
-            return Color("Transport/Rail")
+        case .rail, .metro:
+            return Color("Transport/Train")
         default:
             return Color("Transport/City")
         }
@@ -172,7 +174,7 @@ enum TransportSubMode: String, Codable {
 
     var iconForegroundColor: Color? {
         switch self {
-        case .regionalBus, .nightBus:
+        case .regionalBus, .nightBus, .airportLinkBus, .metro:
             return .white
         default:
             return nil
@@ -181,7 +183,7 @@ enum TransportSubMode: String, Codable {
 
     var iconBackgroundColor: Color? {
         switch self {
-        case .regionalBus, .nightBus:
+        case .regionalBus, .nightBus, .airportLinkBus:
             return Color("Transport/Region")
         default:
             return nil
@@ -217,7 +219,7 @@ struct QuayInfo: Codable {
     let id: String
     let name: String
     let description: String?
-    let publicCode: String
+    let publicCode: String?
     let latitude: Double
     let longitude: Double
 }
@@ -262,6 +264,7 @@ struct DepartureTime: Codable {
     let realtime: Bool
     let situations: [SituationElement]
     let serviceJourneyId: String
+    let serviceDate: String
 }
 
 struct SituationElement: Codable {
@@ -317,6 +320,11 @@ struct QuayWithLocation: Codable {
     }
 }
 
+struct DepartureLinkLabel: Hashable {
+    let label: String
+    let link: String
+}
+
 struct FavouriteDeparture: Codable {
     let id: String
     let lineId: String
@@ -325,7 +333,7 @@ struct FavouriteDeparture: Codable {
     let lineTransportationMode: TransportMode?
     let lineTransportationSubMode: TransportSubMode?
     let quayName: String
-    let quayPublicCode: String
+    let quayPublicCode: String?
     let quayId: String
     let stopId: String
 
@@ -351,7 +359,7 @@ struct FavouriteDeparture: Codable {
         lineTransportationMode = try container.decodeIfPresent(TransportMode.self, forKey: .lineTransportationMode)
         lineTransportationSubMode = try container.decodeIfPresent(TransportSubMode.self, forKey: .lineTransportationSubMode)
         quayName = try container.decode(String.self, forKey: .quayName)
-        quayPublicCode = try container.decode(String.self, forKey: .quayPublicCode)
+        quayPublicCode = try container.decodeIfPresent(String.self, forKey: .quayPublicCode)
         quayId = try container.decode(String.self, forKey: .quayId)
         stopId = try container.decode(String.self, forKey: .stopId)
     }
@@ -417,7 +425,8 @@ extension QuayGroup {
                         predictionInaccurate: false,
                         realtime: false,
                         situations: [],
-                        serviceJourneyId: ""
+                        serviceJourneyId: "",
+                        serviceDate: ""
                     )
                 }
             ),

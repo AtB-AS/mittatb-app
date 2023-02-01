@@ -54,15 +54,11 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const hasSelection = travellerSelection.some((u) => u.count);
   const [travelDate, setTravelDate] = useState<string | undefined>();
 
-  const {
-    timeSelectionMode,
-    productSelectionMode,
-    travellerSelectionMode,
-    offerEndpoint,
-  } = params.fareProductTypeConfig.configuration;
+  const {timeSelectionMode, travellerSelectionMode, zoneSelectionMode} =
+    params.fareProductTypeConfig.configuration;
 
   const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
-    offerEndpoint,
+    zoneSelectionMode === 'none' ? 'authority' : 'zones',
     preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
@@ -126,7 +122,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
           <ProductSelection
             preassignedFareProduct={preassignedFareProduct}
-            selectionMode={productSelectionMode}
+            fareProductTypeConfig={params.fareProductTypeConfig}
             setSelectedProduct={onSelectPreassignedFareProduct}
             style={styles.selectionComponent}
           />
