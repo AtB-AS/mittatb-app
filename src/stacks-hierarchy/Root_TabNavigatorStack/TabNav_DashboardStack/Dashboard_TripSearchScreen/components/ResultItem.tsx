@@ -317,12 +317,12 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: theme.spacings.large,
   },
   destinationLine_grow: {
-    backgroundColor: theme.static.background.background_3.background,
+    backgroundColor: theme.static.background.background_2.background,
     borderBottomLeftRadius: theme.border.radius.regular,
     borderTopLeftRadius: theme.border.radius.regular,
   },
   destinationLine: {
-    backgroundColor: theme.static.background.background_3.background,
+    backgroundColor: theme.static.background.background_2.background,
     marginRight: theme.spacings.small,
     borderBottomRightRadius: theme.border.radius.regular,
     borderTopRightRadius: theme.border.radius.regular,
