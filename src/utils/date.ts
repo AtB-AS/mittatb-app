@@ -94,7 +94,7 @@ export function formatToClock(
   language: Language,
   roundingMethod?: RoundingMethod,
 ) {
-  const parsed = isoDate instanceof Date ? isoDate : parseISO(isoDate);
+  const parsed = parseIfNeeded(isoDate);
   const rounded = roundingMethod ? roundMinute(parsed, roundingMethod) : parsed;
 
   return formatLocaleTime(rounded, language);
