@@ -111,8 +111,8 @@ const PurchaseOverviewTexts = {
     heading: _('Rabatt', 'Discount'),
     expandableLabel: _('Din rabatt og pris', 'Your discount and price'),
     description: _(
-      'Voksen får rabatt i sone A basert på antall kjøp de siste 14 dagene',
-      'Adult get a discount in Zone A based on number of purchases the last 14 days',
+      'Voksen får rabatt i sone A basert på antall kjøp de siste 14 dagene.',
+      'Adult get a discount in Zone A based on number of purchases the last 14 days.',
     ),
   },
 };
