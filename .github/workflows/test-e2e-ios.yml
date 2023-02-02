@@ -39,9 +39,6 @@ jobs:
         env:
           ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
-      - name: Remove logs from dev app
-        shell: bash
-        run: sh ./e2e/removeLogsFromDevApp.sh
       - name: Pre-boot simulator
         run: sh e2e/boot.sh
       - name: Setup build dependencies, environment and assets
@@ -52,12 +49,15 @@ jobs:
           app-environment: 'dev'
           app-org: 'atb'
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+      - name: Remove logs from dev app
+        shell: bash
+        run: sh ./e2e/removeLogsFromDevApp.sh
       - name: Get potentially cached app
         uses: actions/cache@v3
         id: detox-app-cache
         with:
           path: |
-            build/detox/ios/Build/Products/Release-iphonesimulator/AtB.app
+            build/detox/ios/Build/Products/Debug-iphonesimulator/AtB.app
           key: detox-app-cache-${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}
       - name: Generate native assets
         if: steps.detox-app-cache.outputs.cache-hit != 'true'
