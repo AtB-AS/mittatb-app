@@ -40,7 +40,8 @@ jobs:
           ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Remove logs from dev app
-        run: cp e2e/index_noLogs/index.js .
+        shell: bash
+        run: sh ./e2e/removeLogsFromDevApp.sh
       - name: Pre-boot simulator
         run: sh e2e/boot.sh
       - name: Setup build dependencies, environment and assets
