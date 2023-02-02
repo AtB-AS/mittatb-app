@@ -178,103 +178,66 @@ describe('Date rounding', () => {
   const mid = '2070-01-18T12:46:30.000+01:00';
   const exact = '2070-01-18T12:46:00.000+01:00';
 
+  const lang = Language.Norwegian;
+
   it('formatToClockOrRelativeMinutes rounds down', () => {
     const shouldRoundTo = '12:46';
     expectStringEqual(
-      formatToClockOrRelativeMinutes(upper, Language.Norwegian, 'Now'),
+      formatToClockOrRelativeMinutes(upper, lang, 'Now'),
       shouldRoundTo,
     );
     expectStringEqual(
-      formatToClockOrRelativeMinutes(lower, Language.Norwegian, 'Now'),
+      formatToClockOrRelativeMinutes(lower, lang, 'Now'),
       shouldRoundTo,
     );
     expectStringEqual(
-      formatToClockOrRelativeMinutes(exact, Language.Norwegian, 'Now'),
+      formatToClockOrRelativeMinutes(exact, lang, 'Now'),
       shouldRoundTo,
     );
   });
 
   it('fullDateTime rounds down', () => {
     const shouldRoundTo = '18. jan. 2070, 12:46';
-    expectStringEqual(fullDateTime(upper, Language.Norwegian), shouldRoundTo);
-    expectStringEqual(fullDateTime(lower, Language.Norwegian), shouldRoundTo);
-    expectStringEqual(fullDateTime(exact, Language.Norwegian), shouldRoundTo);
+    expectStringEqual(fullDateTime(upper, lang), shouldRoundTo);
+    expectStringEqual(fullDateTime(lower, lang), shouldRoundTo);
+    expectStringEqual(fullDateTime(exact, lang), shouldRoundTo);
   });
 
   it('formatToClock rounds down', () => {
     const shouldRoundTo = '12:46';
-    expectStringEqual(formatToClock(upper, Language.Norwegian), shouldRoundTo);
-    expectStringEqual(formatToClock(lower, Language.Norwegian), shouldRoundTo);
-    expectStringEqual(formatToClock(exact, Language.Norwegian), shouldRoundTo);
-    expectStringEqual(
-      formatToClock(upper, Language.Norwegian, 'floor'),
-      shouldRoundTo,
-    );
-    expectStringEqual(
-      formatToClock(lower, Language.Norwegian, 'floor'),
-      shouldRoundTo,
-    );
-    expectStringEqual(
-      formatToClock(exact, Language.Norwegian, 'floor'),
-      shouldRoundTo,
-    );
+    expectStringEqual(formatToClock(upper, lang), shouldRoundTo);
+    expectStringEqual(formatToClock(lower, lang), shouldRoundTo);
+    expectStringEqual(formatToClock(exact, lang), shouldRoundTo);
+    expectStringEqual(formatToClock(upper, lang, 'floor'), shouldRoundTo);
+    expectStringEqual(formatToClock(lower, lang, 'floor'), shouldRoundTo);
+    expectStringEqual(formatToClock(exact, lang, 'floor'), shouldRoundTo);
   });
 
   it('formatToClock rounds down', () => {
     const shouldRoundTo = '12:46';
-    expectStringEqual(formatToClock(lower, Language.Norwegian), shouldRoundTo);
-    expectStringEqual(formatToClock(exact, Language.Norwegian), shouldRoundTo);
-    expectStringEqual(
-      formatToClock(upper, Language.Norwegian, 'floor'),
-      shouldRoundTo,
-    );
-    expectStringEqual(
-      formatToClock(lower, Language.Norwegian, 'floor'),
-      shouldRoundTo,
-    );
+    expectStringEqual(formatToClock(lower, lang), shouldRoundTo);
+    expectStringEqual(formatToClock(exact, lang), shouldRoundTo);
+    expectStringEqual(formatToClock(upper, lang, 'floor'), shouldRoundTo);
+    expectStringEqual(formatToClock(lower, lang, 'floor'), shouldRoundTo);
   });
 
   it('formatToClock rounds up', () => {
     const shouldRoundTo = '12:47';
-    expectStringEqual(
-      formatToClock(upper, Language.Norwegian, 'ceil'),
-      shouldRoundTo,
-    );
-    expectStringEqual(
-      formatToClock(lower, Language.Norwegian, 'ceil'),
-      shouldRoundTo,
-    );
+    expectStringEqual(formatToClock(upper, lang, 'ceil'), shouldRoundTo);
+    expectStringEqual(formatToClock(lower, lang, 'ceil'), shouldRoundTo);
   });
 
   it('formatToClock rounds to nearest', () => {
-    expectStringEqual(
-      formatToClock(upper, Language.Norwegian, 'nearest'),
-      '12:47',
-    );
-    expectStringEqual(
-      formatToClock(lower, Language.Norwegian, 'nearest'),
-      '12:46',
-    );
-    expectStringEqual(
-      formatToClock(mid, Language.Norwegian, 'nearest'),
-      '12:47',
-    );
+    expectStringEqual(formatToClock(upper, lang, 'nearest'), '12:47');
+    expectStringEqual(formatToClock(lower, lang, 'nearest'), '12:46');
+    expectStringEqual(formatToClock(mid, lang, 'nearest'), '12:47');
   });
 
   it('formatToClock stays exact', () => {
     const shouldRoundTo = '12:46';
-    expectStringEqual(formatToClock(upper, Language.Norwegian), shouldRoundTo);
-    expectStringEqual(
-      formatToClock(exact, Language.Norwegian, 'ceil'),
-      shouldRoundTo,
-    );
-    expectStringEqual(
-      formatToClock(exact, Language.Norwegian, 'floor'),
-      shouldRoundTo,
-    );
-    expectStringEqual(
-      formatToClock(exact, Language.Norwegian, 'nearest'),
-      shouldRoundTo,
-    );
+    expectStringEqual(formatToClock(upper, lang), shouldRoundTo);
+    expectStringEqual(formatToClock(exact, lang, 'ceil'), shouldRoundTo);
+    expectStringEqual(formatToClock(exact, lang, 'floor'), shouldRoundTo);
+    expectStringEqual(formatToClock(exact, lang, 'nearest'), shouldRoundTo);
   });
 });
