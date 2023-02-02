@@ -12,6 +12,7 @@ import {UserProfileWithCountAndOffer} from '@atb/stacks-hierarchy/Root_TabNaviga
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {formatDecimalNumber} from '@atb/utils/numbers';
+import {StyleSheet} from '@atb/theme';
 
 type Props = {
   userProfiles: UserProfileWithCountAndOffer[];
@@ -21,6 +22,7 @@ type Props = {
 export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
   const {t, language} = useTranslation();
   const [expanded, setExpanded] = useState(true);
+  const styles = useStyles();
   const {appTexts} = useFirestoreConfiguration();
 
   if (!userProfiles.some((u) => u.offer.flex_discount_ladder)) return null;
@@ -33,7 +35,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
       <ThemeText
         type="body__secondary"
         color="secondary"
-        style={{marginBottom: 12}}
+        style={styles.heading}
       >
         {t(PurchaseOverviewTexts.flexDiscount.heading)}
       </ThemeText>
@@ -72,20 +74,15 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                 }}
                 key={userProfileName}
               >
-                <View
-                  style={{
-                    flex: 1,
-                    flexWrap: 'wrap',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}
-                >
+                <View style={styles.userProfileDiscountInfo}>
                   <ThemeText type="body__secondary" color="secondary">
                     {userProfileName}
                   </ThemeText>
-                  <View style={{flexDirection: 'row'}}>
-                    <InfoChip style={{marginRight: 8}} text={discountText} />
+                  <View style={styles.infoChips}>
+                    <InfoChip
+                      style={styles.infoChips_first}
+                      text={discountText}
+                    />
                     <InfoChip text={priceText} />
                   </View>
                 </View>
@@ -96,3 +93,16 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
     </View>
   );
 };
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  heading: {marginBottom: theme.spacings.medium},
+  userProfileDiscountInfo: {
+    flex: 1,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  infoChips: {flexDirection: 'row'},
+  infoChips_first: {marginRight: theme.spacings.small},
+}));
