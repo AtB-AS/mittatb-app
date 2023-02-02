@@ -93,11 +93,16 @@ export function formatToClock(
   isoDate: string | Date,
   language: Language,
   roundingMethod?: RoundingMethod,
+  showSeconds?: boolean,
 ) {
   const parsed = parseIfNeeded(isoDate);
-  const rounded = roundingMethod ? roundMinute(parsed, roundingMethod) : parsed;
+  const rounded =
+    roundingMethod && !showSeconds
+      ? roundMinute(parsed, roundingMethod)
+      : parsed;
 
-  return formatLocaleTime(rounded, language);
+  const seconds = showSeconds ? ':' + format(parsed, 'ss') : '';
+  return formatLocaleTime(rounded, language) + seconds;
 }
 
 /**

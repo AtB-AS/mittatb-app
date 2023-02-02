@@ -42,6 +42,7 @@ import WaitSection, {WaitDetails} from './WaitSection';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {TripProps} from '@atb/travel-details-screens/components/Trip';
+import {usePreferences} from '@atb/preferences';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -74,6 +75,9 @@ const TripSection: React.FC<TripSectionProps> = ({
   const {t, language} = useTranslation();
   const style = useSectionStyles();
   const {themeName} = useTheme();
+  const {
+    preferences: {debugShowSeconds},
+  } = usePreferences();
 
   const isWalkSection = leg.mode === 'foot';
   const legColor = useTransportationColor(leg.mode, leg.line?.transportSubmode);
@@ -190,6 +194,7 @@ const TripSection: React.FC<TripSectionProps> = ({
                       lastPassedStop.actualDepartureTime,
                       language,
                       'nearest',
+                      debugShowSeconds,
                     ),
                   ),
                 )}

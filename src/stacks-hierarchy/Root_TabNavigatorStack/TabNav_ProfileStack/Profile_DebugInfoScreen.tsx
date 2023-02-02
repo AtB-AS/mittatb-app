@@ -95,7 +95,7 @@ export const Profile_DebugInfoScreen = () => {
   }
 
   const {setPreference, preferences} = usePreferences();
-  const {showTestIds, tripSearchPreferences} = preferences;
+  const {showTestIds, tripSearchPreferences, debugShowSeconds} = preferences;
 
   const tripSearchDefaults = {
     transferPenalty: 10,
@@ -119,6 +119,13 @@ export const Profile_DebugInfoScreen = () => {
             value={showTestIds}
             onValueChange={(showTestIds) => {
               setPreference({showTestIds});
+            }}
+          />
+          <Sections.ToggleSectionItem
+            text="Display seconds in trip planner"
+            value={debugShowSeconds}
+            onValueChange={(debugShowSeconds) => {
+              setPreference({debugShowSeconds});
             }}
           />
           <Sections.LinkSectionItem

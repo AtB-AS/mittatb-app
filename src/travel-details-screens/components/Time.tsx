@@ -9,19 +9,29 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {useTheme} from '@atb/theme';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
+import {usePreferences} from '@atb/preferences';
 
 const Time: React.FC<{
   timeValues: TimeValues;
   roundingMethod: RoundingMethod;
   showRealtimeIcon?: boolean;
 }> = ({timeValues, showRealtimeIcon = true, roundingMethod}) => {
+  const {
+    preferences: {debugShowSeconds},
+  } = usePreferences();
+
   const {t, language} = useTranslation();
   const {themeName, theme} = useTheme();
   const {aimedTime, expectedTime} = timeValues;
   const representationType = getTimeRepresentationType(timeValues);
-  const scheduled = formatToClock(aimedTime, language, roundingMethod);
+  const scheduled = formatToClock(
+    aimedTime,
+    language,
+    roundingMethod,
+    debugShowSeconds,
+  );
   const expected = expectedTime
-    ? formatToClock(expectedTime, language, roundingMethod)
+    ? formatToClock(expectedTime, language, roundingMethod, debugShowSeconds)
     : '';
 
   const realtimeIcon = (
