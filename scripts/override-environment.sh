@@ -34,6 +34,8 @@ else
 
     echo "Copying $APP_ENVIRONMENT .env file to Config file in ios"
     # TODO REMOVE PRINTING after testing
+    echo "- root index.js"
+    cat index.js
     echo "- The ENV_FOLDER is $ENV_FOLDER"
     echo "- root env"
     head -2 .env | tail -1
