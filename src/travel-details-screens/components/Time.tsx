@@ -1,7 +1,7 @@
 import {AccessibleText} from '@atb/components/text';
 import {ThemeText} from '@atb/components/text';
 import {dictionary, useTranslation} from '@atb/translations';
-import {formatToClock} from '@atb/utils/date';
+import {formatToClock, RoundingMethod} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
 import {getTimeRepresentationType, TimeValues} from '../utils';
@@ -10,16 +10,19 @@ import {useTheme} from '@atb/theme';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 
-const Time: React.FC<{timeValues: TimeValues; showRealtimeIcon?: boolean}> = ({
-  timeValues,
-  showRealtimeIcon = true,
-}) => {
+const Time: React.FC<{
+  timeValues: TimeValues;
+  roundingMethod: RoundingMethod;
+  showRealtimeIcon?: boolean;
+}> = ({timeValues, showRealtimeIcon = true, roundingMethod}) => {
   const {t, language} = useTranslation();
   const {themeName, theme} = useTheme();
   const {aimedTime, expectedTime} = timeValues;
   const representationType = getTimeRepresentationType(timeValues);
-  const scheduled = formatToClock(aimedTime, language);
-  const expected = expectedTime ? formatToClock(expectedTime, language) : '';
+  const scheduled = formatToClock(aimedTime, language, roundingMethod);
+  const expected = expectedTime
+    ? formatToClock(expectedTime, language, roundingMethod)
+    : '';
 
   const realtimeIcon = (
     <ThemeIcon

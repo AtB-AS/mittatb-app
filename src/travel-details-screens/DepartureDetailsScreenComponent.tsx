@@ -189,7 +189,11 @@ export const DepartureDetailsScreenComponent = ({
             {t(
               DepartureDetailsTexts.lastPassedStop(
                 lastPassedStop.quay?.name,
-                formatToClock(lastPassedStop?.actualDepartureTime, language),
+                formatToClock(
+                  lastPassedStop?.actualDepartureTime,
+                  language,
+                  'nearest',
+                ),
               ),
             )}
           </ThemeText>
@@ -335,6 +339,7 @@ function EstimatedCallRow({
               expectedTime: call.expectedDepartureTime,
               missingRealTime: !call.realtime && isStartOfServiceJourney,
             }}
+            roundingMethod="floor"
             showRealtimeIcon={false}
           />
         }
