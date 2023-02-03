@@ -21,6 +21,7 @@ import TravellerSelection from './components/TravellerSelection';
 import ZonesSelection from './components/ZonesSelection';
 import {useOfferDefaults} from './use-offer-defaults';
 import useOfferState from './use-offer-state';
+import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 
 type OverviewProps = PurchaseScreenProps<'PurchaseOverview'>;
 
@@ -57,7 +58,13 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const {timeSelectionMode, travellerSelectionMode, zoneSelectionMode} =
     params.fareProductTypeConfig.configuration;
 
-  const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
+  const {
+    isSearchingOffer,
+    error,
+    totalPrice,
+    refreshOffer,
+    userProfilesWithCountAndOffer,
+  } = useOfferState(
     zoneSelectionMode === 'none' ? 'authority' : 'zones',
     preassignedFareProduct,
     fromTariffZone,
@@ -148,6 +155,11 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             travelDate={travelDate}
             setTravelDate={setTravelDate}
             validFromTime={travelDate}
+            style={styles.selectionComponent}
+          />
+
+          <FlexTicketDiscountInfo
+            userProfiles={userProfilesWithCountAndOffer}
             style={styles.selectionComponent}
           />
         </View>

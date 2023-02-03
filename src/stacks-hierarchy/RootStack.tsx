@@ -190,7 +190,10 @@ export const RootStack = () => {
                             state: {
                               routes: [
                                 {name: 'Dashboard_RootScreen', index: 0},
-                                {name: 'Dashboard_NearbyStopPlacesScreen'},
+                                {
+                                  name: 'Dashboard_NearbyStopPlacesScreen',
+                                  params: {mode: 'favorite'},
+                                },
                               ],
                             },
                           },

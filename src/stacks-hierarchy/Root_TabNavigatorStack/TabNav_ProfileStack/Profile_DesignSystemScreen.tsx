@@ -201,11 +201,15 @@ export const Profile_DesignSystemScreen = () => {
             </View>
             <View style={style.icons}>
               <TransportationIcon
+                style={style.transportationIcon}
                 mode={LegMode.BUS}
                 subMode={TransportSubmode.LOCAL_BUS}
               />
               {Object.values(LegMode).map((mode) => (
-                <TransportationIcon mode={mode} />
+                <TransportationIcon
+                  style={style.transportationIcon}
+                  mode={mode}
+                />
               ))}
             </View>
           </Sections.GenericSectionItem>
@@ -1300,6 +1304,9 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     backgroundColor: theme.static.background.background_1.background,
     flex: 1,
+  },
+  transportationIcon: {
+    marginRight: theme.spacings.xSmall,
   },
   icons: {
     flexDirection: 'row',

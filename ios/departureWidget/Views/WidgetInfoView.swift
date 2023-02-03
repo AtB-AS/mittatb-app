@@ -8,11 +8,6 @@ private enum K {
     static let transportCityColor = Color("TransportCity")
     static let backgroundColor = Color("WidgetBackgroundColor")
     static let transportIconCornerRadius: CGFloat = 2.0
-    static let widgetGradient = LinearGradient(gradient: Gradient(stops: [
-        .init(color: .clear, location: 0),
-        .init(color: backgroundColor, location: 1),
-    ]), startPoint: .leading, endPoint: .trailing)
-    static let widgetFadeWidth: CGFloat = 40.0
 }
 
 struct WidgetInfoView: View {
@@ -93,16 +88,11 @@ struct WidgetInfoView: View {
                                 .background(Color("TimeTileBackgroundColor"))
                                 .cornerRadius(8)
                         } else {
-                            DepartureTimesView(departures: departures)
+                            DepartureTimesView(departures: departures, parentSize: geometry.size)
                         }
                     }
                     .padding(K.padding)
                 }
-                HStack {
-                    Spacer()
-                    Rectangle()
-                        .fill(K.widgetGradient).frame(width: K.widgetFadeWidth)
-                }.frame(width: geometry.size.width)
             }
         }
     }

@@ -108,12 +108,11 @@ export default function LineItem({
             language,
           )}
         >
-          <View style={styles.transportationMode}>
-            <TransportationIcon
-              mode={group.lineInfo?.transportMode}
-              subMode={group.lineInfo?.transportSubmode}
-            />
-          </View>
+          <TransportationIcon
+            style={styles.transportationMode}
+            mode={group.lineInfo?.transportMode}
+            subMode={group.lineInfo?.transportSubmode}
+          />
           <ThemeText style={{flex: 1}} testID={testID + 'Title'}>
             {title}
           </ThemeText>
