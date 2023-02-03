@@ -14,7 +14,7 @@ type Props = {
 };
 
 const FlexibleTransportContactDetails = forwardRef<View, Props>(
-  ({close, leg}, focusRef) => {
+  ({close, leg}) => {
     const {t} = useTranslation();
     const styles = useStyles();
 
