@@ -81,9 +81,13 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                   <View style={styles.infoChips}>
                     <InfoChip
                       style={styles.infoChips_first}
+                      interactiveColor={'interactive_2'}
                       text={discountText}
                     />
-                    <InfoChip text={priceText} />
+                    <InfoChip
+                      text={priceText}
+                      interactiveColor={'interactive_2'}
+                    />
                   </View>
                 </View>
               </Sections.GenericSectionItem>
