@@ -13,6 +13,7 @@ import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
+  dictionary,
   Language,
   TranslateFunction,
   TripDetailsTexts,
@@ -42,6 +43,8 @@ import WaitSection, {WaitDetails} from './WaitSection';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {TripProps} from '@atb/travel-details-screens/components/Trip';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
+import FlexibleTransportContactDetails from './FlexibeTransportContactDetails';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -74,6 +77,7 @@ const TripSection: React.FC<TripSectionProps> = ({
   const {t, language} = useTranslation();
   const style = useSectionStyles();
   const {themeName} = useTheme();
+  const {open: openBottomSheet} = useBottomSheet();
 
   const isWalkSection = leg.mode === 'foot';
   const legColor = useTransportationColor(leg.mode, leg.line?.transportSubmode);
@@ -89,6 +93,12 @@ const TripSection: React.FC<TripSectionProps> = ({
   const lastPassedStop = leg.datedServiceJourney?.estimatedCalls
     ?.filter((a) => !a.predictionInaccurate && a.actualDepartureTime)
     .pop();
+
+  const openContactFlexibleTransport = (leg: Leg) => {
+    openBottomSheet((close, focusRef) => (
+      <FlexibleTransportContactDetails close={close} leg={leg} ref={focusRef} />
+    ));
+  };
 
   const sectionOutput = (
     <>
@@ -170,15 +180,26 @@ const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
-        {leg.bookingArrangements && (
-          <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
-            <MessageBox
-              type="warning"
-              noStatusIcon={true}
-              message={`Ring ${leg.bookingArrangements.bookingContact?.phone} for å reserve transport`}
-            />
-          </TripRow>
-        )}
+        {leg.bookingArrangements &&
+          leg.bookingArrangements.bookingContact?.phone && (
+            <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
+              <MessageBox
+                type="warning"
+                noStatusIcon={true}
+                message={t(
+                  TripDetailsTexts.trip.leg.contactFlexibleTransportTitle(
+                    leg.bookingArrangements.bookingContact?.phone,
+                  ),
+                )}
+                onPressConfig={{
+                  text: t(dictionary.seeMore),
+                  action: () => {
+                    openContactFlexibleTransport(leg);
+                  },
+                }}
+              />
+            </TripRow>
+          )}
         {lastPassedStop?.quay?.name && (
           <TripRow>
             <View style={style.realtime}>
