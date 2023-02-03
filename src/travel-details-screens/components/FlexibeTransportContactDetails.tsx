@@ -1,12 +1,6 @@
 import {Button} from '@atb/components/button';
-import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
-import {
-  ContactSheetTexts,
-  ScreenHeaderTexts,
-  useTranslation,
-} from '@atb/translations';
+import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import React, {forwardRef} from 'react';
 import {View} from 'react-native';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
