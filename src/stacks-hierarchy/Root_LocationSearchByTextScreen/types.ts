@@ -3,7 +3,7 @@ import {
   Location,
   SearchLocation,
   StoredLocationFavorite,
-} from '../favorites/types';
+} from '../../favorites/types';
 
 export type LocationSearchResultType = {
   location: SearchLocation;

@@ -13,7 +13,7 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {
   SelectableLocationType,
   useLocationSearchValue,
-} from '@atb/location-search';
+} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {
   getSearchTimeLabel,
   SearchTime,
@@ -138,18 +138,15 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     callerRouteParam: keyof RootProps['route']['params'],
     initialLocation: Location | undefined,
   ) =>
-    navigation.navigate('LocationSearchStack', {
-      screen: 'LocationSearchByTextScreen',
-      params: {
-        label:
-          callerRouteParam === 'fromLocation'
-            ? t(TripSearchTexts.location.departurePicker.label)
-            : t(TripSearchTexts.location.destinationPicker.label),
-        callerRouteName: route.name,
-        callerRouteParam,
-        initialLocation,
-        includeJourneyHistory: true,
-      },
+    navigation.navigate('Root_LocationSearchByTextScreen', {
+      label:
+        callerRouteParam === 'fromLocation'
+          ? t(TripSearchTexts.location.departurePicker.label)
+          : t(TripSearchTexts.location.destinationPicker.label),
+      callerRouteName: route.name,
+      callerRouteParam,
+      initialLocation,
+      includeJourneyHistory: true,
     });
 
   const setCurrentLocationOrRequest = useCallback(
