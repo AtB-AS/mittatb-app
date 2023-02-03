@@ -5,6 +5,8 @@ export enum StorageModelKeysEnum {
   HasReadDeparturesV2Onboarding = '@ATB_has_read_departures_v2_onboarding',
   HasReadTravelSearchFilterOnboarding = '@ATB_has_read_travel_search_filter_onboarding',
   EnableTravelSearchFiltersDebugOverride = '@ATB_enable_travel_search_filters_debug_override',
+  EnableNewTravelSearchDebugOverride = '@ATB_enable_new_travel_search_debug_override',
+  EnableVehiclesInMapDebugOverride = '@ATB_enable_vehicles_in_map_debug_override',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;

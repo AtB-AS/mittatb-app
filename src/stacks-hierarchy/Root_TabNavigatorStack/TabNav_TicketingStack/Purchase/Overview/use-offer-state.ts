@@ -1,10 +1,14 @@
 import {CancelToken as CancelTokenStatic} from '@atb/api';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
-import {Offer, OfferPrice, searchOffers} from '@atb/ticketing';
+import {
+  FlexDiscountLadder,
+  Offer,
+  OfferPrice,
+  searchOffers,
+} from '@atb/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useMemo, useReducer} from 'react';
-import {OfferEndpoint} from '../../FareContracts/utils';
 import {UserProfileWithCount} from '../Travellers/use-user-count-state';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
@@ -21,6 +25,7 @@ type OfferState = {
   totalPrice: number;
   error?: OfferError;
   userProfilesWithCountAndOffer: UserProfileWithCountAndOffer[];
+  flexDiscountLadder?: FlexDiscountLadder;
 };
 
 type OfferReducerAction =
@@ -114,7 +119,7 @@ const initialState: OfferState = {
 };
 
 export default function useOfferState(
-  offerEndpoint: OfferEndpoint,
+  offerEndpoint: 'zones' | 'authority',
   preassignedFareProduct: PreassignedFareProduct,
   fromTariffZone: TariffZone,
   toTariffZone: TariffZone,
@@ -200,7 +205,6 @@ export default function useOfferState(
     updateOffer,
     userProfilesWithCount,
     preassignedFareProduct,
-    offerEndpoint,
     zones,
     travelDate,
   ]);

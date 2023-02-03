@@ -1,5 +1,5 @@
 import {translation as _} from '../commons';
-import orgSpecificTranslations from '../utils';
+import {orgSpecificTranslations} from '@atb/translations';
 
 const TicketingSplashTexts = {
   header: {

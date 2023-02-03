@@ -1,7 +1,6 @@
 import {
   FareProductTypeConfig,
   FareProductTypeConfigSettings,
-  OfferEndpoint,
   ProductSelectionMode,
   TimeSelectionMode,
   TravellerSelectionMode,
@@ -155,7 +154,12 @@ function mapToFareProductConfigSettings(
     return;
   }
 
-  const productSelectionModeTypes = ['duration', 'product', 'none'];
+  const productSelectionModeTypes = [
+    'duration',
+    'product',
+    'productAlias',
+    'none',
+  ];
   const productSelectionMode = mapToStringAlternatives<ProductSelectionMode>(
     settings.productSelectionMode,
     productSelectionModeTypes,
@@ -169,19 +173,9 @@ function mapToFareProductConfigSettings(
     return;
   }
 
-  const offerEndpointTypes = ['zones', 'authority'];
-  const offerEndpoint = mapToStringAlternatives<OfferEndpoint>(
-    settings.offerEndpoint,
-    offerEndpointTypes,
+  const productSelectionTitle = mapLanguageAndTextType(
+    settings.productSelectionTitle,
   );
-  if (!offerEndpoint) {
-    notifyWrongConfigurationType(
-      fareProductType,
-      'offerEndpoint',
-      offerEndpointTypes,
-    );
-    return;
-  }
 
   const requiresLogin = settings.requiresLogin;
   if (requiresLogin === undefined) {
@@ -196,7 +190,7 @@ function mapToFareProductConfigSettings(
     travellerSelectionMode,
     timeSelectionMode,
     productSelectionMode,
-    offerEndpoint,
+    productSelectionTitle,
     requiresLogin,
   };
 }
@@ -316,7 +310,7 @@ function mapToStringAlternatives<T>(value: any, alternatives: string[]) {
   return value as T;
 }
 
-function mapLanguageAndTextType(text?: any[]) {
+export function mapLanguageAndTextType(text?: any) {
   if (!text) return;
   if (!text.every((item: any) => ['lang', 'value'].every((f) => f in item)))
     return;

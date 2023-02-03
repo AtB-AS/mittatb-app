@@ -1,98 +1,141 @@
 fastlane documentation
-================
+----
+
 # Installation
 
 Make sure you have the latest version of the Xcode command line tools installed:
 
-```
+```sh
 xcode-select --install
 ```
 
-Install _fastlane_ using
-```
-[sudo] gem install fastlane -NV
-```
-or alternatively using `brew install fastlane`
+For _fastlane_ installation instructions, see [Installing _fastlane_](https://docs.fastlane.tools/#installing-fastlane)
 
 # Available Actions
+
 ## iOS
+
 ### ios update_devices
+
+```sh
+[bundle exec] fastlane ios update_devices
 ```
-fastlane ios update_devices
-```
+
 Update ad hoc devices
+
 ### ios generate_new_certificates
+
+```sh
+[bundle exec] fastlane ios generate_new_certificates
 ```
-fastlane ios generate_new_certificates
-```
+
 Generate new certificates
+
 ### ios get_cert
+
+```sh
+[bundle exec] fastlane ios get_cert
 ```
-fastlane ios get_cert
-```
+
 Match certificates
+
 ### ios build
+
+```sh
+[bundle exec] fastlane ios build
 ```
-fastlane ios build
-```
+
 Build the iOS application.
+
 ### ios pods
+
+```sh
+[bundle exec] fastlane ios pods
 ```
-fastlane ios pods
-```
+
 Install pods.
+
 ### ios firebase_distribution_staging
+
+```sh
+[bundle exec] fastlane ios firebase_distribution_staging
 ```
-fastlane ios firebase_distribution_staging
-```
+
 Upload the build to Firebase App Distribution
+
 ### ios testflight_prod
+
+```sh
+[bundle exec] fastlane ios testflight_prod
 ```
-fastlane ios testflight_prod
-```
+
 Upload app to testflight
+
 ### ios appcenter_staging
+
+```sh
+[bundle exec] fastlane ios appcenter_staging
 ```
-fastlane ios appcenter_staging
-```
+
 Upload the build to AppCenter
+
 ### ios appcenter_testflight
+
+```sh
+[bundle exec] fastlane ios appcenter_testflight
 ```
-fastlane ios appcenter_testflight
-```
+
 Upload the build to AppCenter for distribution to TestFlight
 
 ----
 
+
 ## Android
+
 ### android build
+
+```sh
+[bundle exec] fastlane android build
 ```
-fastlane android build
-```
+
 Upload the build to AppCenter
+
 ### android firebase_distribution_staging
+
+```sh
+[bundle exec] fastlane android firebase_distribution_staging
 ```
-fastlane android firebase_distribution_staging
-```
+
+
 
 ### android playstore_internal
+
+```sh
+[bundle exec] fastlane android playstore_internal
 ```
-fastlane android playstore_internal
-```
+
+
 
 ### android appcenter_staging
-```
-fastlane android appcenter_staging
+
+```sh
+[bundle exec] fastlane android appcenter_staging
 ```
 
+
+
 ### android appcenter_alpha
+
+```sh
+[bundle exec] fastlane android appcenter_alpha
 ```
-fastlane android appcenter_alpha
-```
+
 
 
 ----
 
-This README.md is auto-generated and will be re-generated every time [fastlane](https://fastlane.tools) is run.
-More information about fastlane can be found on [fastlane.tools](https://fastlane.tools).
-The documentation of fastlane can be found on [docs.fastlane.tools](https://docs.fastlane.tools).
+This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
+
+More information about _fastlane_ can be found on [fastlane.tools](https://fastlane.tools).
+
+The documentation of _fastlane_ can be found on [docs.fastlane.tools](https://docs.fastlane.tools).

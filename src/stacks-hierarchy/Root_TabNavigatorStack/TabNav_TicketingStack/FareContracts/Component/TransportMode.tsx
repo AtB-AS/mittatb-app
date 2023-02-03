@@ -21,6 +21,7 @@ const TransportMode = ({
     <View style={styles.transportationMode}>
       {modes.map(({mode, subMode}) => (
         <TransportationIcon
+          style={styles.transportationIcon}
           key={mode + subMode}
           mode={mode}
           subMode={subMode}
@@ -37,10 +38,14 @@ const TransportMode = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook(() => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   transportationMode: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'wrap',
+  },
+  transportationIcon: {
+    marginRight: theme.spacings.xSmall,
   },
 }));
 

@@ -73,6 +73,7 @@ export const RootStack = () => {
         },
         {
           name: 'Departures_PlaceScreen',
+          index: 1,
           params: {
             place: {
               name: params.stopName,
@@ -87,7 +88,8 @@ export const RootStack = () => {
     } else {
       destination = [
         {
-          name: 'NearbyRoot',
+          name: 'Nearby_RootScreen',
+          index: 0,
           params: {
             location: {
               id: params.stopId,
@@ -103,6 +105,24 @@ export const RootStack = () => {
           },
         },
       ];
+    }
+    if (path.includes('details')) {
+      destination.push({
+        name: departuresV2Enabled
+          ? 'Departures_DepartureDetailsScreen'
+          : 'Nearby_DepartureDetailsScreen',
+        params: {
+          activeItemIndex: 0,
+          items: [
+            {
+              serviceJourneyId: params.serviceJourneyId,
+              serviceDate: params.serviceDate,
+              date: new Date(),
+              fromQuayId: params.quayId,
+            },
+          ],
+        },
+      });
     }
 
     return {
@@ -170,7 +190,10 @@ export const RootStack = () => {
                             state: {
                               routes: [
                                 {name: 'Dashboard_RootScreen', index: 0},
-                                {name: 'Dashboard_NearbyStopPlacesScreen'},
+                                {
+                                  name: 'Dashboard_NearbyStopPlacesScreen',
+                                  params: {mode: 'favorite'},
+                                },
                               ],
                             },
                           },

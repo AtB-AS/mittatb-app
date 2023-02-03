@@ -21,6 +21,7 @@ import TravellerSelection from './components/TravellerSelection';
 import ZonesSelection from './components/ZonesSelection';
 import {useOfferDefaults} from './use-offer-defaults';
 import useOfferState from './use-offer-state';
+import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 
 type OverviewProps = PurchaseScreenProps<'PurchaseOverview'>;
 
@@ -54,15 +55,17 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
   const hasSelection = travellerSelection.some((u) => u.count);
   const [travelDate, setTravelDate] = useState<string | undefined>();
 
-  const {
-    timeSelectionMode,
-    productSelectionMode,
-    travellerSelectionMode,
-    offerEndpoint,
-  } = params.fareProductTypeConfig.configuration;
+  const {timeSelectionMode, travellerSelectionMode, zoneSelectionMode} =
+    params.fareProductTypeConfig.configuration;
 
-  const {isSearchingOffer, error, totalPrice, refreshOffer} = useOfferState(
-    offerEndpoint,
+  const {
+    isSearchingOffer,
+    error,
+    totalPrice,
+    refreshOffer,
+    userProfilesWithCountAndOffer,
+  } = useOfferState(
+    zoneSelectionMode === 'none' ? 'authority' : 'zones',
     preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
@@ -126,7 +129,7 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
 
           <ProductSelection
             preassignedFareProduct={preassignedFareProduct}
-            selectionMode={productSelectionMode}
+            fareProductTypeConfig={params.fareProductTypeConfig}
             setSelectedProduct={onSelectPreassignedFareProduct}
             style={styles.selectionComponent}
           />
@@ -152,6 +155,11 @@ const PurchaseOverview: React.FC<OverviewProps> = ({
             travelDate={travelDate}
             setTravelDate={setTravelDate}
             validFromTime={travelDate}
+            style={styles.selectionComponent}
+          />
+
+          <FlexTicketDiscountInfo
+            userProfiles={userProfilesWithCountAndOffer}
             style={styles.selectionComponent}
           />
         </View>

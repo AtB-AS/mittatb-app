@@ -45,15 +45,18 @@ export type FareProductTypeConfigSettings = {
   travellerSelectionMode: TravellerSelectionMode;
   timeSelectionMode: TimeSelectionMode;
   productSelectionMode: ProductSelectionMode;
-  offerEndpoint: OfferEndpoint;
+  productSelectionTitle?: LanguageAndTextType[];
   requiresLogin: boolean;
 };
 
 export type ZoneSelectionMode = 'single' | 'multiple' | 'none';
 export type TravellerSelectionMode = 'multiple' | 'single' | 'none';
 export type TimeSelectionMode = 'datetime' | 'none';
-export type ProductSelectionMode = 'duration' | 'product' | 'none';
-export type OfferEndpoint = 'zones' | 'authority';
+export type ProductSelectionMode =
+  | 'duration'
+  | 'product'
+  | 'productAlias'
+  | 'none';
 
 export function getRelativeValidity(
   now: number,

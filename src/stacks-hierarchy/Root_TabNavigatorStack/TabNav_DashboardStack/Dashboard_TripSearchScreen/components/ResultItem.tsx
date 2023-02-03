@@ -50,8 +50,8 @@ import {
 } from '@atb/travel-details-screens/utils';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {CollapsedLegs} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/CollapsedLegs';
-import TripDetails from '@atb/translations/screens/subscreens/TripDetails';
 import useFontScale from '@atb/utils/use-font-scale';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -184,7 +184,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         {...props}
         accessible={false}
       >
-        <ResultItemHeader tripPattern={tripPattern} />
+        <ResultItemHeader tripPattern={tripPattern} strikethrough={isInPast} />
         <View style={styles.detailsContainer} {...screenReaderHidden}>
           <View
             style={styles.flexRow}
@@ -193,61 +193,65 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
             }}
           >
             <View
-              style={styles.legOutput}
+              style={styles.row}
               onLayout={(ev) => {
-                setLegIconsContentWidth(
-                  ev.nativeEvent.layout.width +
-                    theme.spacings.small +
-                    theme.spacings.small * 2,
-                );
+                setLegIconsContentWidth(ev.nativeEvent.layout.width);
               }}
             >
-              {interpose(
-                legs.map((leg, i) => (
-                  <View key={leg.aimedStartTime + leg.aimedEndTime}>
-                    {leg.mode === 'foot' ? (
-                      <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
-                    ) : (
-                      <TransportationLeg
-                        wide={isSignificantDifference(leg)}
-                        leg={leg}
-                      />
-                    )}
-                    <View style={styles.departureTimes}>
-                      <ThemeText type="body__tertiary" color="primary">
-                        {formatToClock(leg.expectedStartTime, language)}
-                      </ThemeText>
-                      {isSignificantDifference(leg) && (
-                        <ThemeText
-                          style={styles.scheduledTime}
-                          type="body__tertiary--strike"
-                          color="secondary"
-                        >
-                          {formatToClock(leg.aimedStartTime, language)}
-                        </ThemeText>
+              <View style={styles.legOutput}>
+                {interpose(
+                  legs.map((leg, i) => (
+                    <View
+                      key={tripPattern.compressedQuery + leg.aimedStartTime}
+                    >
+                      {leg.mode === 'foot' ? (
+                        <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
+                      ) : (
+                        <TransportationLeg leg={leg} />
                       )}
+                      <View style={styles.departureTimes}>
+                        <ThemeText type="body__tertiary" color="primary">
+                          {formatToClock(leg.expectedStartTime, language)}
+                        </ThemeText>
+                        {isSignificantDifference(leg) && (
+                            <ThemeText
+                                style={styles.scheduledTime}
+                                type="body__tertiary--strike"
+                                color="secondary"
+                            >
+                              {formatToClock(leg.aimedStartTime, language)}
+                            </ThemeText>
+                        )}
+                      </View>
                     </View>
-                  </View>
-                )),
-                <View style={[styles.dashContainer, {height: iconHeight}]}>
-                  <LegDash />
-                </View>,
-              )}
+                  )),
+                    <View style={[styles.dashContainer, {height: iconHeight}]}>
+                      <LegDash />
+                    </View>,                )}
+              </View>
               {collapsedLegs.length ? (
-                <View style={[styles.dashContainer, {height: iconHeight}]}>
-                  <LegDash />
-                </View>
+                  <View style={[styles.dashContainer, {height: iconHeight}]}>
+                    <LegDash />
+                  </View>
               ) : null}
               <CollapsedLegs legs={collapsedLegs} />
             </View>
-            <View style={[styles.lineContainer, {height: iconHeight}]}>
+            <View style={styles.destinationLineContainer_grow}>
               <View
                 style={[
-                  styles.destinationLine,
+                  styles.destinationLine_grow,
                   {height: (theme.spacings.xSmall / 2) * fontScale},
                 ]}
-              ></View>
+              />
             </View>
+          </View>
+          <View style={styles.destinationLineContainer}>
+            <View
+              style={[
+                styles.destinationLine,
+                {height: (theme.spacings.xSmall / 2) * fontScale},
+              ]}
+            />
           </View>
           <View>
             <DestinationIcon style={styles.iconContainer} />
@@ -256,8 +260,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                 {formatToClock(tripPattern.expectedEndTime, language)}
               </ThemeText>
             </View>
-          </View>
-        </View>
+          </View>        </View>
         <ResultItemFooter />
       </Animated.View>
     </TouchableOpacity>
@@ -304,11 +307,46 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
     marginRight: theme.spacings.small,
   },
+  destinationLineContainer_grow: {
+    justifyContent: 'center',
+    flexGrow: 1,
+  },
+  destinationLine_grow: {
+    backgroundColor: theme.static.background.background_2.background,
+    borderBottomLeftRadius: theme.border.radius.regular,
+    borderTopLeftRadius: theme.border.radius.regular,
+  },
   legLine: {
     backgroundColor: theme.static.background.background_2.background,
     flexDirection: 'row',
     borderRadius: theme.border.radius.regular,
     width: theme.spacings.xSmall,
+  },
+  iconContainer: {
+    backgroundColor: theme.static.background.background_2.background,
+    paddingVertical: theme.spacings.small,
+    paddingHorizontal: theme.spacings.small,
+    borderRadius: theme.border.radius.small,
+    flexDirection: 'row',
+  },
+  destinationLineContainer_grow: {
+    justifyContent: 'center',
+    flexGrow: 1,
+  },
+  destinationLineContainer: {
+    justifyContent: 'center',
+    width: theme.spacings.large,
+  },
+  destinationLine_grow: {
+    backgroundColor: theme.static.background.background_2.background,
+    borderBottomLeftRadius: theme.border.radius.regular,
+    borderTopLeftRadius: theme.border.radius.regular,
+  },
+  destinationLine: {
+    backgroundColor: theme.static.background.background_2.background,
+    marginRight: theme.spacings.small,
+    borderBottomRightRadius: theme.border.radius.regular,
+    borderTopRightRadius: theme.border.radius.regular,
   },
   iconContainer: {
     backgroundColor: theme.static.background.background_2.background,
@@ -328,8 +366,18 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   row: {
     flexDirection: 'row',
   },
+  row: {
+    flexDirection: 'row',
+  },
+  strikethrough: {
+    textDecorationLine: 'line-through',
+  },
   flexRow: {
     flex: 1,
+    flexDirection: 'row',
+  },
+  legOutput: {
+    marginHorizontal: theme.spacings.xSmall,
     flexDirection: 'row',
   },
   dashContainer: {

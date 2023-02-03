@@ -1,0 +1,87 @@
+import React from 'react';
+import {
+  getTextForLanguage,
+  PurchaseOverviewTexts,
+  useTranslation,
+} from '@atb/translations';
+import {productIsSellableInApp} from '@atb/reference-data/utils';
+import {ThemeText} from '@atb/components/text';
+import {InteractiveColor} from '@atb/theme/colors';
+import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
+import {StyleSheet} from '@atb/theme';
+import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
+import {useTextForLanguage} from '@atb/translations/utils';
+import {ProductAliasChip} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Purchase/Overview/components/ProductAliasChip';
+
+type Props = {
+  color: InteractiveColor;
+  selectedProduct: PreassignedFareProduct;
+  fareProductTypeConfig: FareProductTypeConfig;
+  setSelectedProduct: (product: PreassignedFareProduct) => void;
+  style?: StyleProp<ViewStyle>;
+};
+
+export default function ProductSelectionByAlias({
+  color,
+  selectedProduct,
+  fareProductTypeConfig,
+  setSelectedProduct,
+  style,
+}: Props) {
+  const {t, language} = useTranslation();
+  const styles = useStyles();
+  const {preassignedFareProducts} = useFirestoreConfiguration();
+
+  const selectableProducts = preassignedFareProducts
+    .filter(productIsSellableInApp)
+    .filter((p) => p.type === selectedProduct.type);
+
+  const title = useTextForLanguage(
+    fareProductTypeConfig.configuration.productSelectionTitle,
+  );
+
+  return (
+    <View style={style}>
+      <ThemeText type="body__secondary" color="secondary">
+        {title || t(PurchaseOverviewTexts.productSelection.title)}
+      </ThemeText>
+      <ScrollView
+        style={styles.durationScrollView}
+        contentContainerStyle={styles.durationContentContainer}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        testID={'selectDurationScrollView'}
+      >
+        {selectableProducts.map((fp, i) => {
+          const text = getTextForLanguage(fp.productAlias, language);
+          if (!text) return null;
+
+          return (
+            <ProductAliasChip
+              color={color}
+              text={text}
+              selected={selectedProduct == fp}
+              onPress={() => setSelectedProduct(fp)}
+              key={i}
+            />
+          );
+        })}
+      </ScrollView>
+    </View>
+  );
+}
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  durationScrollView: {
+    marginTop: theme.spacings.medium,
+    marginLeft: -theme.spacings.medium,
+    marginRight: -theme.spacings.medium,
+  },
+  durationContentContainer: {
+    flexDirection: 'row',
+    marginLeft: theme.spacings.medium,
+    paddingRight: theme.spacings.medium,
+  },
+}));

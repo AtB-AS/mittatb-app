@@ -17,7 +17,7 @@ struct DepartureWidgetEntryView: View {
         ZStack {
             Color("WidgetBackgroundColor")
             WidgetInfoView(widgetFamily: family, viewModel: viewModel)
-        }.widgetURL(URL(string: viewModel.deepLink))
+        }.widgetURL(URL(string: viewModel.deepLink(departure: nil)))
     }
 }
 
@@ -31,7 +31,7 @@ struct DepartureWidget: Widget {
         }
         .configurationDisplayName("Widget")
         .description("about_widget")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemMedium])
     }
 }
 

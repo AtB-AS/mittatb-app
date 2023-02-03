@@ -106,7 +106,7 @@ export default function EstimatedCallItem({
             navigateToDetails(
               departure.serviceJourney?.id,
               departure.date,
-              departure.expectedDepartureTime,
+              departure.aimedDepartureTime,
               departure.quay?.id,
               departure.cancellation,
             );
@@ -126,26 +126,28 @@ export default function EstimatedCallItem({
         }
       >
         <View style={styles.estimatedCallItem} testID={testID}>
-          {line && (
-            <LineChip
-              publicCode={line.publicCode}
-              transportMode={line.transportMode}
-              transportSubmode={line.transportSubmode}
-              icon={
-                mode !== 'Favourite'
-                  ? getSvgForMostCriticalSituationOrNotice(
-                      departure.situations,
-                      notices,
-                      departure.cancellation,
-                    )
-                  : undefined
-              }
-              testID={testID}
-            />
-          )}
-          <ThemeText style={styles.lineName} testID={testID + 'Name'}>
-            {departure.destinationDisplay?.frontText}
-          </ThemeText>
+          <View style={styles.transportInfo}>
+            {line && (
+              <LineChip
+                publicCode={line.publicCode}
+                transportMode={line.transportMode}
+                transportSubmode={line.transportSubmode}
+                icon={
+                  mode !== 'Favourite'
+                    ? getSvgForMostCriticalSituationOrNotice(
+                        departure.situations,
+                        notices,
+                        departure.cancellation,
+                      )
+                    : undefined
+                }
+                testID={testID}
+              />
+            )}
+            <ThemeText style={styles.lineName} testID={testID + 'Name'}>
+              {departure.destinationDisplay?.frontText}
+            </ThemeText>
+          </View>
           {mode === 'Departure' || mode === 'Map' ? (
             <DepartureTime
               isRealtime={departure.realtime}
@@ -155,17 +157,21 @@ export default function EstimatedCallItem({
               testID={testID}
             />
           ) : null}
+          {allowFavouriteSelection && (
+            <ToggleFavouriteDeparture
+              existingFavorite={existingFavorite}
+              onMarkFavourite={
+                mode === 'Departure' ? onMarkFavourite : undefined
+              }
+              toggleFavouriteAccessibilityLabel={
+                mode === 'Departure'
+                  ? toggleFavouriteAccessibilityLabel
+                  : undefined
+              }
+            />
+          )}
         </View>
       </TouchableOpacity>
-      {allowFavouriteSelection && (
-        <ToggleFavouriteDeparture
-          existingFavorite={existingFavorite}
-          onMarkFavourite={mode === 'Departure' ? onMarkFavourite : undefined}
-          toggleFavouriteAccessibilityLabel={
-            mode === 'Departure' ? toggleFavouriteAccessibilityLabel : undefined
-          }
-        />
-      )}
     </TouchableOpacityOrView>
   );
 }
@@ -377,10 +383,17 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  transportInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexShrink: 1,
+    flexWrap: 'wrap',
+  },
   lineName: {
     flexGrow: 1,
     flexShrink: 1,
     marginRight: theme.spacings.medium,
+    minWidth: '30%',
   },
   realtimeIcon: {
     marginRight: theme.spacings.xSmall,
