@@ -5,7 +5,7 @@ import {InteractiveColor} from '@atb/theme/colors';
 
 type Props = {
   text: string;
-  interactiveColor?: InteractiveColor;
+  interactiveColor: InteractiveColor;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 };
@@ -16,7 +16,7 @@ type Props = {
  */
 export const InfoChip = ({
   text,
-  interactiveColor = 'interactive_0',
+  interactiveColor,
   style = {},
   testID = '',
 }: Props) => {
