@@ -8,7 +8,7 @@ end
 def remove_background_location
   update_info_plist(
     xcodeproj: "./ios/atb.xcodeproj",
-    plist_path: "./ios/atb/Info.plist",
+    plist_path: "./atb/Info.plist",
     block: proc do |plist|
       puts "Deleting location from UIBackgroundModes..."
       plist["UIBackgroundModes"].delete("location")
