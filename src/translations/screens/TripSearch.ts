@@ -144,6 +144,11 @@ const TripSearchTexts = {
         title: (mode: string, placeName: string) =>
           _(`${mode} fra ${placeName}`, `${mode} from ${placeName}`),
         totalDuration: _('Reisetid', 'Trip duration'),
+        time: (startTime: string, endTime: string) =>
+          _(
+            `Fra klokken ${startTime}, til klokken ${endTime}`,
+            `From ${startTime}, to ${endTime}`,
+          ),
       },
       hasSituationsTip: _(
         'Denne reisen har driftsmeldinger. Se detaljer for mer info',

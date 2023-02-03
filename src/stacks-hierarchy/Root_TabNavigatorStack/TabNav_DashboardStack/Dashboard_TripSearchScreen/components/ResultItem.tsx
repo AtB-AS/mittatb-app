@@ -51,7 +51,7 @@ import {
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {CollapsedLegs} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/CollapsedLegs';
 import useFontScale from '@atb/utils/use-font-scale';
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import TripDetails from '@atb/translations/screens/subscreens/TripDetails';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -162,8 +162,10 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   const isInPast =
     isInThePast(tripPattern.legs[0].expectedStartTime) &&
     searchTime?.option !== 'now';
-  const iconHeight =
-    theme.icon.size['normal'] * fontScale + theme.spacings.small * 2;
+  const iconHeight = {
+    height: theme.icon.size['normal'] * fontScale + theme.spacings.small * 2,
+  };
+  const lineHeight = {height: (theme.spacings.xSmall / 2) * fontScale};
 
   return (
     <TouchableOpacity
@@ -184,7 +186,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         {...props}
         accessible={false}
       >
-        <ResultItemHeader tripPattern={tripPattern} strikethrough={isInPast} />
+        <ResultItemHeader tripPattern={tripPattern} />
         <View style={styles.detailsContainer} {...screenReaderHidden}>
           <View
             style={styles.flexRow}
@@ -207,51 +209,49 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                       {leg.mode === 'foot' ? (
                         <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
                       ) : (
-                        <TransportationLeg leg={leg} />
+                        <TransportationLeg
+                          leg={leg}
+                          style={
+                            isSignificantDifference(leg)
+                              ? styles.transportationIcon_wide
+                              : undefined
+                          }
+                        />
                       )}
                       <View style={styles.departureTimes}>
                         <ThemeText type="body__tertiary" color="primary">
                           {formatToClock(leg.expectedStartTime, language)}
                         </ThemeText>
                         {isSignificantDifference(leg) && (
-                            <ThemeText
-                                style={styles.scheduledTime}
-                                type="body__tertiary--strike"
-                                color="secondary"
-                            >
-                              {formatToClock(leg.aimedStartTime, language)}
-                            </ThemeText>
+                          <ThemeText
+                            style={styles.scheduledTime}
+                            type="body__tertiary--strike"
+                            color="secondary"
+                          >
+                            {formatToClock(leg.aimedStartTime, language)}
+                          </ThemeText>
                         )}
                       </View>
                     </View>
                   )),
-                    <View style={[styles.dashContainer, {height: iconHeight}]}>
-                      <LegDash />
-                    </View>,                )}
+                  <View style={[styles.dashContainer, iconHeight]}>
+                    <LegDash />
+                  </View>,
+                )}
               </View>
               {collapsedLegs.length ? (
-                  <View style={[styles.dashContainer, {height: iconHeight}]}>
-                    <LegDash />
-                  </View>
+                <View style={[styles.dashContainer, iconHeight]}>
+                  <LegDash />
+                </View>
               ) : null}
               <CollapsedLegs legs={collapsedLegs} />
             </View>
-            <View style={styles.destinationLineContainer_grow}>
-              <View
-                style={[
-                  styles.destinationLine_grow,
-                  {height: (theme.spacings.xSmall / 2) * fontScale},
-                ]}
-              />
+            <View style={[styles.destinationLineContainer_grow, iconHeight]}>
+              <View style={[styles.destinationLine_grow, lineHeight]} />
             </View>
           </View>
-          <View style={styles.destinationLineContainer}>
-            <View
-              style={[
-                styles.destinationLine,
-                {height: (theme.spacings.xSmall / 2) * fontScale},
-              ]}
-            />
+          <View style={[styles.destinationLineContainer, iconHeight]}>
+            <View style={[styles.destinationLine, lineHeight]} />
           </View>
           <View>
             <DestinationIcon style={styles.iconContainer} />
@@ -260,7 +260,8 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                 {formatToClock(tripPattern.expectedEndTime, language)}
               </ThemeText>
             </View>
-          </View>        </View>
+          </View>
+        </View>
         <ResultItemFooter />
       </Animated.View>
     </TouchableOpacity>
@@ -294,27 +295,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   detailsContainer: {
     padding: theme.spacings.medium,
     flexDirection: 'row',
-    alignItems: 'flex-start',
   },
   lineContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
     flexGrow: 1,
-  },
-  destinationLine: {
-    backgroundColor: theme.static.background.background_2.background,
-    flexDirection: 'row',
-    borderRadius: theme.border.radius.regular,
-    marginRight: theme.spacings.small,
-  },
-  destinationLineContainer_grow: {
-    justifyContent: 'center',
-    flexGrow: 1,
-  },
-  destinationLine_grow: {
-    backgroundColor: theme.static.background.background_2.background,
-    borderBottomLeftRadius: theme.border.radius.regular,
-    borderTopLeftRadius: theme.border.radius.regular,
   },
   legLine: {
     backgroundColor: theme.static.background.background_2.background,
@@ -322,12 +307,12 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
     width: theme.spacings.xSmall,
   },
-  iconContainer: {
-    backgroundColor: theme.static.background.background_2.background,
-    paddingVertical: theme.spacings.small,
-    paddingHorizontal: theme.spacings.small,
-    borderRadius: theme.border.radius.small,
-    flexDirection: 'row',
+  leftLegLine: {
+    marginLeft: theme.spacings.xSmall,
+    marginRight: theme.spacings.xSmall,
+  },
+  rightLegLine: {
+    marginRight: theme.spacings.xSmall,
   },
   destinationLineContainer_grow: {
     justifyContent: 'center',
@@ -339,6 +324,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   destinationLine_grow: {
     backgroundColor: theme.static.background.background_2.background,
+    marginLeft: theme.spacings.small,
     borderBottomLeftRadius: theme.border.radius.regular,
     borderTopLeftRadius: theme.border.radius.regular,
   },
@@ -365,29 +351,22 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   row: {
     flexDirection: 'row',
-  },
-  row: {
-    flexDirection: 'row',
-  },
-  strikethrough: {
-    textDecorationLine: 'line-through',
+    alignItems: 'flex-start',
   },
   flexRow: {
     flex: 1,
     flexDirection: 'row',
   },
-  legOutput: {
-    marginHorizontal: theme.spacings.xSmall,
-    flexDirection: 'row',
+  transportationIcon_wide: {
+    flex: 1,
+    justifyContent: 'center',
   },
   dashContainer: {
     alignItems: 'center',
     flexDirection: 'row',
   },
   legOutput: {
-    marginHorizontal: theme.spacings.small,
     flexDirection: 'row',
-    alignItems: 'flex-start',
   },
   departureTimes: {
     flexDirection: 'row',
@@ -428,31 +407,14 @@ const LegDash = () => {
   const styles = useThemeStyles();
   const {theme} = useTheme();
   const fontScale = useFontScale();
-  const lineHeight = (theme.spacings.xSmall / 2) * fontScale;
+  const lineHeight = {height: (theme.spacings.xSmall / 2) * fontScale};
   return (
     <>
       <View style={styles.lineContainer}>
-        <View
-          style={[
-            styles.legLine,
-            {
-              height: lineHeight,
-              marginLeft: theme.spacings.small,
-              marginRight: theme.spacings.xSmall,
-            },
-          ]}
-        ></View>
+        <View style={[styles.legLine, styles.leftLegLine, lineHeight]}></View>
       </View>
       <View style={styles.lineContainer}>
-        <View
-          style={[
-            styles.legLine,
-            {
-              height: lineHeight,
-              marginRight: theme.spacings.small,
-            },
-          ]}
-        ></View>
+        <View style={[styles.legLine, styles.rightLegLine, lineHeight]}></View>
       </View>
     </>
   );
@@ -492,10 +454,16 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   );
 };
 
-const TransportationLeg = ({leg, wide}: {leg: Leg; wide?: boolean}) => {
+const TransportationLeg = ({
+  leg,
+  style,
+}: {
+  leg: Leg;
+  style?: StyleProp<ViewStyle>;
+}) => {
   return (
     <TransportationIcon
-      wide={wide}
+      style={style}
       mode={leg.mode}
       subMode={leg.line?.transportSubmode}
       lineNumber={leg.line?.publicCode}
