@@ -35,9 +35,7 @@ import {Root_PurchaseTariffZonesSearchByMapScreen} from '@atb/stacks-hierarchy/R
 import {Root_PurchaseTariffZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen';
 import {Root_PurchasePaymentWithCreditCardScreen} from '@atb/stacks-hierarchy/Root_PurchasePaymentWithCreditCardScreen';
 import {Root_PurchasePaymentWithVippsScreen} from '@atb/stacks-hierarchy/Root_PurchasePaymentWithVippsScreen';
-import {
-  Root_PurchaseAsAnonymousConsequencesScreen
-} from "@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen";
+import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
