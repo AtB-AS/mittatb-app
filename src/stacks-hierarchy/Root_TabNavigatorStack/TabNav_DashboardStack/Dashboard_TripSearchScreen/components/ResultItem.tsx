@@ -302,14 +302,14 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   legLine: {
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.static.background.background_3.background,
     flexDirection: 'row',
     borderRadius: theme.border.radius.regular,
-    width: theme.spacings.xSmall,
+    width: 5,
   },
   leftLegLine: {
     marginLeft: theme.spacings.xSmall,
-    marginRight: theme.spacings.xSmall,
+    marginRight: 2,
   },
   rightLegLine: {
     marginRight: theme.spacings.xSmall,
@@ -323,14 +323,14 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: theme.spacings.large,
   },
   destinationLine_grow: {
-    backgroundColor: theme.static.background.background_2.background,
-    marginLeft: theme.spacings.small,
+    backgroundColor: theme.static.background.background_3.background,
+    marginLeft: theme.spacings.xSmall,
     borderBottomLeftRadius: theme.border.radius.regular,
     borderTopLeftRadius: theme.border.radius.regular,
   },
   destinationLine: {
-    backgroundColor: theme.static.background.background_2.background,
-    marginRight: theme.spacings.small,
+    backgroundColor: theme.static.background.background_3.background,
+    marginRight: theme.spacings.xSmall,
     borderBottomRightRadius: theme.border.radius.regular,
     borderTopRightRadius: theme.border.radius.regular,
   },
