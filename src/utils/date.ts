@@ -443,10 +443,6 @@ export type RoundingMethod = 'ceil' | 'floor' | 'nearest';
  * doesn't work correctly: https://github.com/date-fns/date-fns/issues/3129
  *
  * TODO: Replace with date-fns `roundToNearestMinutes`
- *
- * @param date
- * @param roundingMethod
- * @returns
  */
 function roundMinute(date: Date, roundingMethod: RoundingMethod) {
   // Round based on minutes (60000 milliseconds)
