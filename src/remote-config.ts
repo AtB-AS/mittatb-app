@@ -34,6 +34,7 @@ export type RemoteConfig = {
   enable_travel_search_filters: boolean;
   enable_new_travel_search: boolean;
   enable_vehicles_in_map: boolean;
+  enable_realtime_map: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -69,6 +70,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_travel_search_filters: false,
   enable_new_travel_search: false,
   enable_vehicles_in_map: false,
+  enable_realtime_map: false,
 };
 
 export function getConfig(): RemoteConfig {
@@ -166,6 +168,10 @@ export function getConfig(): RemoteConfig {
     values['enable_vehicles_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_vehicles_in_map;
 
+  const enable_realtime_map =
+    values['enable_realtime_map']?.asBoolean() ??
+    defaultRemoteConfig.enable_realtime_map;
+
   return {
     enable_network_logging,
     enable_ticketing,
@@ -199,6 +205,7 @@ export function getConfig(): RemoteConfig {
     enable_travel_search_filters,
     enable_new_travel_search,
     enable_vehicles_in_map: enable_vehicles_in_map,
+    enable_realtime_map,
   };
 }
 
