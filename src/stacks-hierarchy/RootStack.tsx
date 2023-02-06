@@ -1,6 +1,5 @@
 import {useAppState} from '@atb/AppContext';
 import trackNavigation from '@atb/diagnostics/trackNavigation';
-import {LocationSearchStack} from '@atb/location-search';
 import LoginInAppStack from '@atb/login/in-app/LoginInAppStack';
 import {Root_OnboardingStack} from './Root_OnboardingStack';
 import Purchase from './Root_TabNavigatorStack/TabNav_TicketingStack/Purchase';
@@ -29,6 +28,8 @@ import {Root_MobileTokenOnboardingStack} from './Root_MobileTokenOnboarding';
 import {useDeparturesV2Enabled} from './Root_TabNavigatorStack/TabNav_DeparturesStack';
 import {Root_AddEditFavoritePlaceScreen} from './Root_AddEditFavoritePlaceScreen';
 import {Root_SearchStopPlaceScreen} from './Root_SearchStopPlaceScreen';
+import {Root_LocationSearchByMapScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByMapScreen';
+import {Root_LocationSearchByTextScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -234,9 +235,16 @@ export const RootStack = () => {
                   component={Root_TabNavigatorStack}
                 />
                 <Stack.Screen
-                  name="LocationSearchStack"
-                  component={LocationSearchStack}
-                  options={TransitionPresets.ModalSlideFromBottomIOS}
+                  name="Root_LocationSearchByTextScreen"
+                  component={Root_LocationSearchByTextScreen}
+                />
+                <Stack.Screen
+                  name="Root_LocationSearchByMapScreen"
+                  component={Root_LocationSearchByMapScreen}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                    headerShown: false,
+                  }}
                 />
                 <Stack.Screen name="Purchase" component={Purchase} />
                 <Stack.Screen
