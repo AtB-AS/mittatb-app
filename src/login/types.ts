@@ -1,4 +1,4 @@
-import {activeFareContractPromptInAppRouteParams} from '@atb/login/in-app/ActiveFareContractPrompt';
+import {ActiveFareContractPromptInAppRouteParams} from '@atb/login/in-app/ActiveFareContractPrompt';
 import {ConfirmCodeInAppRouteParams} from '@atb/login/in-app/ConfirmCodeInApp';
 import {LoginOnboardingInAppRouteParams} from '@atb/login/in-app/LoginOnboarding';
 import {PhoneInputInAppRouteParams} from '@atb/login/in-app/PhoneInputInApp';
@@ -9,7 +9,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 
 export type LoginInAppStackParams = {
   LoginOnboardingInApp: LoginOnboardingInAppRouteParams;
-  activeFareContractPromptInApp: activeFareContractPromptInAppRouteParams;
+  ActiveFareContractPromptInApp: ActiveFareContractPromptInAppRouteParams;
   PhoneInputInApp: PhoneInputInAppRouteParams;
   ConfirmCodeInApp: ConfirmCodeInAppRouteParams;
   LoginOptionsScreen: LoginOptionsRouteParams;

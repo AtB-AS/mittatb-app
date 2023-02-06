@@ -25,8 +25,8 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
-import {tariffZonesSummary} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Purchase/TariffZones';
+import {UserProfileWithCount} from '../../../Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
+import {tariffZonesSummary} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {
   getNonInspectableTokenWarning,
   isValidFareContract,

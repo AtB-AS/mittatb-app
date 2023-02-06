@@ -1,6 +1,6 @@
 import {FareContractState} from '@atb/ticketing';
 import {UserProfile} from '@atb/reference-data/types';
-import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Purchase/Travellers/use-user-count-state';
+import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
 import {
   findReferenceDataById,
   getReferenceDataName,
