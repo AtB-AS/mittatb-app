@@ -214,7 +214,7 @@ const service: TokenService = {
             },
             authWithIdToken: true,
             timeout: 15000,
-            // skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
+            skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
           })
           .catch(grpcErrorHandler),
       token,
