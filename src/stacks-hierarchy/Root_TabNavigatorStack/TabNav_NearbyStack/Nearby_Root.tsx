@@ -17,7 +17,6 @@ import {
   RequestPermissionFn,
   useGeolocationState,
 } from '@atb/GeolocationContext';
-import {useOnlySingleLocation} from '@atb/location-search';
 import {usePreferences} from '@atb/preferences';
 import {useDoOnceWhen} from '@atb/stacks-hierarchy/utils';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
@@ -39,6 +38,7 @@ import DepartureTimeSheet from '../../../place-screen/components/DepartureTimeSh
 import {useDepartureData} from './use-departure-data';
 import {SearchTime} from './types';
 import {NearbyScreenProps} from './navigation-types';
+import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -133,14 +133,11 @@ const NearbyOverview: React.FC<Props> = ({
   const onScrollViewEndReached = () => data?.length && loadMore();
 
   const openLocationSearch = () =>
-    navigation.navigate('LocationSearchStack', {
-      screen: 'LocationSearchByTextScreen',
-      params: {
-        label: t(NearbyTexts.search.label),
-        callerRouteName: 'Nearby_RootScreen',
-        callerRouteParam: 'location',
-        initialLocation: fromLocation,
-      },
+    navigation.navigate('Root_LocationSearchByTextScreen', {
+      label: t(NearbyTexts.search.label),
+      callerRouteName: 'Nearby_RootScreen',
+      callerRouteParam: 'location',
+      initialLocation: fromLocation,
     });
 
   const {open: openBottomSheet} = useBottomSheet();
