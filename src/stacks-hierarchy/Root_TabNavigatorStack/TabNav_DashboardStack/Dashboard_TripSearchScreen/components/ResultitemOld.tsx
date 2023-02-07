@@ -96,14 +96,14 @@ const ResultItemHeader: React.FC<{
         ]}
         accessibilityLabel={t(
           TripSearchTexts.results.resultItem.header.time(
-            formatToClock(tripPattern.expectedStartTime, language),
-            formatToClock(tripPattern.expectedEndTime, language),
+            formatToClock(tripPattern.expectedStartTime, language, 'floor'),
+            formatToClock(tripPattern.expectedEndTime, language, 'ceil'),
           ),
         )}
         testID="resultStartAndEndTime"
       >
-        {formatToClock(startTime, language)} –{' '}
-        {formatToClock(endTime, language)}
+        {formatToClock(startTime, language, 'floor')} –{' '}
+        {formatToClock(endTime, language, 'ceil')}
       </ThemeText>
       <View style={styles.durationContainer}>
         <AccessibleText
@@ -253,7 +253,7 @@ function ResultItemFooter({legs}: {legs: Leg[]}) {
             ' '}
         </ThemeText>
         <ThemeText type="body__secondary" testID="resultDepartureTime">
-          {timePrefix + formatToClock(quayStartTime, language)}
+          {timePrefix + formatToClock(quayStartTime, language, 'floor')}
         </ThemeText>
       </View>
       <View style={styles.detailsTextWrapper}>
@@ -407,7 +407,7 @@ const tripSummary = (
         ? t(
             TripSearchTexts.results.resultItem.footer.fromPlaceWithTime(
               firstLeg.fromPlace?.name ?? '',
-              formatToClock(firstLeg.expectedStartTime, language),
+              formatToClock(firstLeg.expectedStartTime, language, 'floor'),
             ),
           )
         : ''
