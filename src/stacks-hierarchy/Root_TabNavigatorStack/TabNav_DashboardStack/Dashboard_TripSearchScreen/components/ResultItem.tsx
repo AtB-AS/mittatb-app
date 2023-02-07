@@ -572,8 +572,8 @@ const tripSummary = (
       
       ${t(
         TripSearchTexts.results.resultItem.journeySummary.travelTimes(
-          formatToClock(tripPattern.expectedStartTime, language),
-          formatToClock(tripPattern.expectedEndTime, language),
+          formatToClock(tripPattern.expectedStartTime, language, 'floor'),
+          formatToClock(tripPattern.expectedEndTime, language, 'ceil'),
           secondsToDuration(tripPattern.duration, language),
         ),
       )}
