@@ -197,8 +197,8 @@ const TripSearchTexts = {
           _(`Totalt ${meters} meter å gå`, `Total of ${meters} meters to walk`),
         travelTimes: (startTime: string, endTime: string, duration: string) =>
           _(
-            `Start klokken ${startTime}, slutt klokken ${endTime}. Total reisetid ${duration}.`,
-            `Start time ${startTime}, end time ${endTime}. Total travel time ${duration}`,
+            `Start klokken ${startTime}, ankomst klokken ${endTime}. Total reisetid ${duration}.`,
+            `Start time ${startTime}, arrival time ${endTime}. Total travel time ${duration}`,
           ),
         realtime: (
           fromPlace: string,
@@ -207,10 +207,10 @@ const TripSearchTexts = {
         ) =>
           _(
             `Klokken ${realtimeDepartureTime} sanntid, klokken ${scheduledDepartureTime} rutetid`,
-            `From ${fromPlace}, at ${realtimeDepartureTime} realtime, at ${scheduledDepartureTime} scheduled time`,
+            `At ${realtimeDepartureTime} realtime, at ${scheduledDepartureTime} scheduled time`,
           ),
         noRealTime: (placeName: string, aimedTime: string) =>
-          _(`Klokken ${aimedTime}`, `At time ${aimedTime}`),
+          _(`Klokken ${aimedTime}`, `At ${aimedTime}`),
       },
     },
   },
