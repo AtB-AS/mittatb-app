@@ -83,16 +83,10 @@ export function secondsBetween(
   return differenceInSeconds(parsedEnd, parsedStart);
 }
 
-/**
- * @param isoDate
- * @param language
- * @param roundingMethod rounding of minutes. Default: ignores seconds
- * @returns
- */
 export function formatToClock(
   isoDate: string | Date,
   language: Language,
-  roundingMethod?: RoundingMethod,
+  roundingMethod: RoundingMethod,
   showSeconds?: boolean,
 ) {
   const parsed = parseIfNeeded(isoDate);
@@ -211,7 +205,7 @@ export function formatToLongDateTime(
 ) {
   const parsed = parseIfNeeded(isoDate);
   if (isSameDay(parsed, new Date())) {
-    return formatToClock(parsed, language);
+    return formatToClock(parsed, language, 'floor');
   }
   if (isSameYear(parsed, new Date())) {
     return formatToShortDateTimeWithoutYear(parsed, language);
@@ -225,7 +219,7 @@ export function formatToShortDateTimeWithoutYear(
 ) {
   const parsed = parseIfNeeded(isoDate);
   if (isSameDay(parsed, new Date())) {
-    return formatToClock(parsed, language);
+    return formatToClock(parsed, language, 'floor');
   }
   return format(parsed, 'dd. MMM HH:mm', {locale: languageToLocale(language)});
 }

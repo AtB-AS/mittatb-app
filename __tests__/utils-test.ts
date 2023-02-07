@@ -205,9 +205,6 @@ describe('Date rounding', () => {
 
   it('formatToClock rounds down', () => {
     const shouldRoundTo = '12:46';
-    expectStringEqual(formatToClock(upper, lang), shouldRoundTo);
-    expectStringEqual(formatToClock(lower, lang), shouldRoundTo);
-    expectStringEqual(formatToClock(exact, lang), shouldRoundTo);
     expectStringEqual(formatToClock(upper, lang, 'floor'), shouldRoundTo);
     expectStringEqual(formatToClock(lower, lang, 'floor'), shouldRoundTo);
     expectStringEqual(formatToClock(exact, lang, 'floor'), shouldRoundTo);
@@ -215,8 +212,6 @@ describe('Date rounding', () => {
 
   it('formatToClock rounds down', () => {
     const shouldRoundTo = '12:46';
-    expectStringEqual(formatToClock(lower, lang), shouldRoundTo);
-    expectStringEqual(formatToClock(exact, lang), shouldRoundTo);
     expectStringEqual(formatToClock(upper, lang, 'floor'), shouldRoundTo);
     expectStringEqual(formatToClock(lower, lang, 'floor'), shouldRoundTo);
   });
@@ -235,7 +230,6 @@ describe('Date rounding', () => {
 
   it('formatToClock stays exact', () => {
     const shouldRoundTo = '12:46';
-    expectStringEqual(formatToClock(upper, lang), shouldRoundTo);
     expectStringEqual(formatToClock(exact, lang, 'ceil'), shouldRoundTo);
     expectStringEqual(formatToClock(exact, lang, 'floor'), shouldRoundTo);
     expectStringEqual(formatToClock(exact, lang, 'nearest'), shouldRoundTo);
