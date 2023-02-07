@@ -353,6 +353,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   walkDuration: {
     fontSize: 10,
     marginLeft: -2,
+    color: theme.text.colors.primary,
   },
   resultHeader: {
     flexDirection: 'row',
