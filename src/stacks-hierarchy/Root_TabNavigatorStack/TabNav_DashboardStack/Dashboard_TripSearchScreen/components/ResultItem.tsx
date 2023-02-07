@@ -220,7 +220,11 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                       )}
                       <View style={styles.departureTimes}>
                         <ThemeText type="body__tertiary" color="primary">
-                          {formatToClock(leg.expectedStartTime, language)}
+                          {formatToClock(
+                            leg.expectedStartTime,
+                            language,
+                            'floor',
+                          )}
                         </ThemeText>
                         {isSignificantDifference(leg) && (
                           <ThemeText
@@ -228,7 +232,11 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                             type="body__tertiary--strike"
                             color="secondary"
                           >
-                            {formatToClock(leg.aimedStartTime, language)}
+                            {formatToClock(
+                              leg.aimedStartTime,
+                              language,
+                              'floor',
+                            )}
                           </ThemeText>
                         )}
                       </View>
@@ -257,7 +265,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
             <DestinationIcon style={styles.iconContainer} />
             <View style={styles.departureTimes}>
               <ThemeText type="body__tertiary" color="primary">
-                {formatToClock(tripPattern.expectedEndTime, language)}
+                {formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
               </ThemeText>
             </View>
           </View>
@@ -489,14 +497,14 @@ const tripSummary = (
           ? t(
               TripDetails.trip.leg.start.a11yLabel.realAndAimed(
                 firstLeg.fromPlace?.name ?? '',
-                formatToClock(firstLeg.expectedStartTime, language),
-                formatToClock(firstLeg.aimedStartTime, language),
+                formatToClock(firstLeg.expectedStartTime, language, 'floor'),
+                formatToClock(firstLeg.aimedStartTime, language, 'floor'),
               ),
             )
           : t(
               TripDetails.trip.leg.start.a11yLabel.noRealTime(
                 firstLeg.fromPlace?.name ?? '',
-                formatToClock(firstLeg.expectedStartTime, language),
+                formatToClock(firstLeg.expectedStartTime, language, 'floor'),
               ),
             )
         : ''

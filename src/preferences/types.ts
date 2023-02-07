@@ -34,6 +34,7 @@ export type UserPreferences = {
   tripSearchPreferences?: TripSearchPreferences;
   hideTravellerDescriptions?: boolean;
   enableMapPage?: boolean;
+  debugShowSeconds?: boolean;
 };
 
 export type PreferenceItem = keyof UserPreferences;
