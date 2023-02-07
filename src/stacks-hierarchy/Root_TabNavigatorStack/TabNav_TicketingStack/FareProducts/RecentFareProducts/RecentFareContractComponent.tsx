@@ -120,6 +120,7 @@ export const RecentFareContractComponent = ({
         <View style={styles.travelModeWrapper}>
           {fareProductTypeConfig.transportModes.map(({mode, subMode}) => (
             <TransportationIcon
+              style={styles.transportationIcon}
               mode={mode}
               subMode={subMode}
               key={mode + subMode}
@@ -246,6 +247,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginBottom: theme.spacings.medium,
+  },
+  transportationIcon: {
+    marginRight: theme.spacings.xSmall,
   },
   productName: {
     marginBottom: theme.spacings.medium,

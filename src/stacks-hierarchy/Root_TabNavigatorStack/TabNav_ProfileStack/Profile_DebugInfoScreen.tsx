@@ -29,6 +29,7 @@ import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {useTravelSearchFiltersDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-enabled';
 import {useVehiclesInMapDebugOverride} from '@atb/vehicles';
 import {DebugOverride} from './components/DebugOverride';
+import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -46,6 +47,7 @@ export const Profile_DebugInfoScreen = () => {
   >(undefined);
 
   const travelSearchDebugOverride = useTravelSearchFiltersDebugOverride();
+  const newTravelSearchDebugOverride = useNewTravelSearchDebugOverride();
   const vehiclesInMapDebugOverride = useVehiclesInMapDebugOverride();
 
   useEffect(() => {
@@ -197,6 +199,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable travel search filter."
               override={travelSearchDebugOverride}
+            />
+          </Sections.GenericSectionItem>
+          <Sections.GenericSectionItem>
+            <DebugOverride
+              description="Enable new travel search."
+              override={newTravelSearchDebugOverride}
             />
           </Sections.GenericSectionItem>
           <Sections.GenericSectionItem>
