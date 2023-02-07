@@ -90,12 +90,9 @@ export function formatToClock(
   showSeconds?: boolean,
 ) {
   const parsed = parseIfNeeded(isoDate);
-  const rounded =
-    roundingMethod && !showSeconds
-      ? roundMinute(parsed, roundingMethod)
-      : parsed;
-
+  const rounded = roundMinute(parsed, roundingMethod);
   const seconds = showSeconds ? ':' + format(parsed, 'ss') : '';
+
   return formatLocaleTime(rounded, language) + seconds;
 }
 
