@@ -30,6 +30,7 @@ import {useTravelSearchFiltersDebugOverride} from '@atb/stacks-hierarchy/Root_Ta
 import {useVehiclesInMapDebugOverride} from '@atb/vehicles';
 import {DebugOverride} from './components/DebugOverride';
 import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
+import {useRealtimeMapDebugOverride} from '@atb/components/map/hooks/use-realtime-map-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -49,6 +50,7 @@ export const Profile_DebugInfoScreen = () => {
   const travelSearchDebugOverride = useTravelSearchFiltersDebugOverride();
   const newTravelSearchDebugOverride = useNewTravelSearchDebugOverride();
   const vehiclesInMapDebugOverride = useVehiclesInMapDebugOverride();
+  const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
 
   useEffect(() => {
     async function run() {
@@ -184,7 +186,7 @@ export const Profile_DebugInfoScreen = () => {
         </Sections.Section>
         <Sections.Section withPadding withTopPadding>
           <Sections.HeaderSectionItem
-            text="Remove config override"
+            text="Remote config override"
             subtitle="If undefined the value
         from Remote Config will be used. Needs reload of app after change."
           />
@@ -204,6 +206,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable vehicles in map."
               override={vehiclesInMapDebugOverride}
+            />
+          </Sections.GenericSectionItem>
+          <Sections.GenericSectionItem>
+            <DebugOverride
+              description="Enable realtime positions in map."
+              override={realtimeMapDebugOverride}
             />
           </Sections.GenericSectionItem>
         </Sections.Section>
