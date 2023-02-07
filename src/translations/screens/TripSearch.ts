@@ -161,6 +161,8 @@ const TripSearchTexts = {
             `Walk ${walkTime}. Wait ${waitTime}`,
           ),
         walkLabel: (time: string) => _(`Gå ${time}`, `Walk ${time}`),
+        walkToStopLabel: (distance: string, stopPlace: string) =>
+          _(`Gå til ${stopPlace}`, `Walk ${distance} to ${stopPlace}`),
         waitLabel: (time: string) => _(`Vent ${time}`, `Wait ${time}`),
       },
       destination: {
@@ -193,15 +195,22 @@ const TripSearchTexts = {
           _(`nummer ${number}`, `number ${number}`),
         totalWalkDistance: (meters: string) =>
           _(`Totalt ${meters} meter å gå`, `Total of ${meters} meters to walk`),
+        travelTimes: (startTime: string, endTime: string, duration: string) =>
+          _(
+            `Start klokken ${startTime}, slutt klokken ${endTime}. Total reisetid ${duration}.`,
+            `Start time ${startTime}, end time ${endTime}. Total travel time ${duration}`,
+          ),
         realtime: (
           fromPlace: string,
           realtimeDepartureTime: string,
           scheduledDepartureTime: string,
         ) =>
           _(
-            `Fra ${fromPlace}, klokken ${realtimeDepartureTime} sanntid, klokken ${scheduledDepartureTime} rutetid`,
+            `Klokken ${realtimeDepartureTime} sanntid, klokken ${scheduledDepartureTime} rutetid`,
             `From ${fromPlace}, at ${realtimeDepartureTime} realtime, at ${scheduledDepartureTime} scheduled time`,
           ),
+        noRealTime: (placeName: string, aimedTime: string) =>
+          _(`Klokken ${aimedTime}`, `At time ${aimedTime}`),
       },
     },
   },

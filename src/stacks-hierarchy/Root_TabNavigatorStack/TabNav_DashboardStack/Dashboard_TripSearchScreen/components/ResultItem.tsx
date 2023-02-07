@@ -10,6 +10,7 @@ import {TransportationIcon} from '@atb/components/transportation-icon';
 import {SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
+  dictionary,
   Language,
   TranslateFunction,
   TripSearchTexts,
@@ -51,7 +52,6 @@ import {
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {CollapsedLegs} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/CollapsedLegs';
 import useFontScale from '@atb/utils/use-font-scale';
-import TripDetails from '@atb/translations/screens/subscreens/TripDetails';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -477,48 +477,62 @@ const tripSummary = (
   language: Language,
   isInPast: boolean,
 ) => {
+  let start = '';
+
+  if (tripPattern.legs[0].mode === 'foot' && tripPattern.legs[1]) {
+    let distance = Math.round(tripPattern.legs[0].distance);
+    let humanizedDistance;
+    if (distance >= 1000) {
+      humanizedDistance = `${distance / 1000} ${t(dictionary.distance.km)}`;
+    } else {
+      humanizedDistance = `${distance.toString()} ${t(dictionary.distance.m)}`;
+    }
+    {
+      tripPattern.legs[1].fromPlace.quay?.stopPlace?.name
+        ? (start = t(
+            TripSearchTexts.results.resultItem.footLeg.walkToStopLabel(
+              humanizedDistance,
+              tripPattern.legs[1].fromPlace.quay.stopPlace.name,
+            ),
+          ))
+        : undefined;
+    }
+  }
+
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
   const firstLeg = nonFootLegs[0];
 
   return `
     ${isInPast ? t(TripSearchTexts.results.resultItem.passedTrip) : ''}
-
+    ${start}
+    
+    ${t(getTranslatedModeName(firstLeg.mode))} ${
+    firstLeg.line?.publicCode
+      ? t(
+          TripSearchTexts.results.resultItem.journeySummary.prefixedLineNumber(
+            firstLeg.line.publicCode,
+          ),
+        )
+      : ''
+  }
     ${
       firstLeg
         ? isSignificantDifference(firstLeg)
           ? t(
-              TripDetails.trip.leg.start.a11yLabel.realAndAimed(
+              TripSearchTexts.results.resultItem.journeySummary.realtime(
                 firstLeg.fromPlace?.name ?? '',
                 formatToClock(firstLeg.expectedStartTime, language),
                 formatToClock(firstLeg.aimedStartTime, language),
               ),
             )
           : t(
-              TripDetails.trip.leg.start.a11yLabel.noRealTime(
+              TripSearchTexts.results.resultItem.journeySummary.noRealTime(
                 firstLeg.fromPlace?.name ?? '',
                 formatToClock(firstLeg.expectedStartTime, language),
               ),
             )
         : ''
     }
-
-    ${nonFootLegs
-      ?.map((l) => {
-        return `${t(getTranslatedModeName(l.mode))} ${
-          l.line?.publicCode
-            ? t(
-                TripSearchTexts.results.resultItem.journeySummary.prefixedLineNumber(
-                  l.line.publicCode,
-                ),
-              )
-            : ''
-        }
-
-        ${l.fromEstimatedCall?.destinationDisplay?.frontText ?? l.line?.name}
-
-        `;
-      })
-      .join(', ')}
 
       ${
         !nonFootLegs.length
@@ -538,16 +552,25 @@ const tripSummary = (
             )
           : t(
               TripSearchTexts.results.resultItem.journeySummary.legsDescription.someSwitches(
-                nonFootLegs.length,
+                nonFootLegs.length - 1,
               ),
             )
       }
-
       ${t(
         TripSearchTexts.results.resultItem.journeySummary.totalWalkDistance(
           (tripPattern.walkDistance ?? 0).toFixed(),
         ),
-      )}  ${screenReaderPause}
+      )}
+      
+      ${t(
+        TripSearchTexts.results.resultItem.journeySummary.travelTimes(
+          formatToClock(tripPattern.expectedStartTime, language),
+          formatToClock(tripPattern.expectedEndTime, language),
+          secondsToDuration(tripPattern.duration, language),
+        ),
+      )}
+
+        ${screenReaderPause}
   `;
 };
 
