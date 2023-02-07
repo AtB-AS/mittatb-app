@@ -345,18 +345,14 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   walkContainer: {
     backgroundColor: theme.static.background.background_2.background,
     paddingVertical: theme.spacings.small,
-    paddingHorizontal: 6,
-    borderRadius: theme.border.radius.small,
-    display: 'flex',
+    paddingHorizontal: theme.spacings.small,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    alignSelf: 'stretch',
+    borderRadius: theme.border.radius.small,
   },
   walkDuration: {
     fontSize: 10,
-  },
-  walkIcon: {
-    marginRight: -3,
+    marginLeft: -2,
   },
   resultHeader: {
     flexDirection: 'row',
@@ -464,12 +460,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
   return (
     <View style={styles.walkContainer}>
-      <ThemeIcon
-        style={styles.walkIcon}
-        accessibilityLabel={a11yText}
-        testID="fLeg"
-        svg={Walk}
-      />
+      <ThemeIcon accessibilityLabel={a11yText} testID="fLeg" svg={Walk} />
       <Text style={styles.walkDuration}>{secondsToMinutes(leg.duration)}</Text>
     </View>
   );
