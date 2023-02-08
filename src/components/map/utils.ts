@@ -1,5 +1,5 @@
 import {RefObject} from 'react';
-import MapboxGL, {Expression} from '@react-native-mapbox-gl/maps';
+import MapboxGL, {Expression} from '@rnmapbox/maps';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   Feature,

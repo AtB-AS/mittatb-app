@@ -24,10 +24,7 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import MapboxGL, {
-  OnPressEvent,
-  RegionPayload,
-} from '@react-native-mapbox-gl/maps';
+import MapboxGL, {OnPressEvent, RegionPayload} from '@rnmapbox/maps';
 import turfCentroid from '@turf/centroid';
 import {FeatureCollection, Polygon} from 'geojson';
 import hexToRgba from 'hex-to-rgba';

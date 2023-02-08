@@ -1,20 +1,18 @@
 import {MapIcon} from '@atb/assets/svg/color/map';
 import {Button} from '@atb/components/button';
-import {MapCameraConfig, MapViewConfig} from '@atb/components/map';
+import {MapCameraConfig, MapLeg, MapViewConfig} from '@atb/components/map';
 
 import {StyleSheet, useTheme} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import insets from '@atb/utils/insets';
 import useDisableMapCheck from '@atb/utils/use-disable-map-check';
-import Bugsnag from '@bugsnag/react-native';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
-import React, {useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import {View} from 'react-native';
 import MapLabel from './MapLabel';
 import MapRoute from './MapRoute';
 import {createMapLines, getMapBounds, pointOf} from '../utils';
-import {MapLeg} from '@atb/components/map';
 import {Coordinates} from '@atb/utils/coordinates';
 
 export type MapProps = {
@@ -37,14 +35,11 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   const features = useMemo(() => createMapLines(mapLegs), [mapLegs]);
   const bounds = useMemo(() => getMapBounds(features), [features]);
 
-  const [loadingMap, setLoadingMap] = useState(true);
+  console.log('THE BOUNDS', bounds);
+
   const styles = useStyles();
 
   const darkmode = themeName === 'dark';
-
-  const expandMap = () => {
-    if (!loadingMap) onExpand?.();
-  };
 
   if (disableMap) {
     return null;
@@ -57,15 +52,10 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
         scrollEnabled={false}
         rotateEnabled={false}
         zoomEnabled={false}
-        onWillStartRenderingMap={() => log('Start loading map')}
-        onDidFinishRenderingMapFully={() => {
-          setLoadingMap(false);
-          log('Finished loading map');
-        }}
         {...MapViewConfig}
         styleURL={darkmode ? 'mapbox://styles/mapbox/dark-v10' : undefined}
         compassEnabled={false}
-        onPress={expandMap}
+        onPress={onExpand}
       >
         <MapboxGL.Camera
           bounds={bounds}
@@ -94,7 +84,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
             style={styles.toggler}
             type="inline"
             mode="tertiary"
-            onPress={expandMap}
+            onPress={onExpand}
             hitSlop={insets.symmetric(8, 12)}
             text={t(MapTexts.expandButton.label)}
             leftIcon={{svg: MapIcon}}
@@ -130,7 +120,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginLeft: theme.spacings.xSmall,
   },
 }));
-
-function log(message: string) {
-  Bugsnag.leaveBreadcrumb(message, {component: 'CompactMap'});
-}
