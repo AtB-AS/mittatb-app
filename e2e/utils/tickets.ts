@@ -48,7 +48,7 @@ export const newTicketExists = async (zoneInfo: string = '') => {
 // Helper for handling keyboard-popup
 const tapZone = async (zoneId: string) => {
   await tapById(zoneId);
-  const zoneIdExists = await idExists(by.id(zoneId));
+  const zoneIdExists = await idExists(by.id(zoneId), 5000);
   if (zoneIdExists) {
     await tapById(zoneId);
   }

@@ -32,8 +32,8 @@ describe('My profile', () => {
         location: 'inuse',
       },
       languageAndLocale: {
-        language: 'en',
-        locale: 'US',
+        language: 'en-GB',
+        locale: 'en_GB',
       },
     });
     await setLocation(62.4305, 9.3951);

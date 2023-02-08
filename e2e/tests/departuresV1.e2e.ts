@@ -32,8 +32,8 @@ describe('Departures v1', () => {
         location: 'inuse',
       },
       languageAndLocale: {
-        language: 'en',
-        locale: 'US',
+        language: 'en-GB',
+        locale: 'en_GB',
       },
       // If problems with 'hanging' network requests (on iossimulator15.4)
       //launchArgs: { detoxURLBlacklistRegex: ' \\("https://firebaselogging-pa.googleapis.com/v1/firelog/legacy/batchlog"\\)' },

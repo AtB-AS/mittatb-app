@@ -26,6 +26,23 @@ import {
 } from '../utils/departures';
 import {expectGreaterThan, expectNumber} from '../utils/jestAssertions';
 
+/*
+    // If problems with 'hanging' network requests (on iossimulator15.4)
+    // NOTE! Haven't gotten this to work with e.g. atb-staging.api.mittatb.no (see also https://github.com/wix/Detox/issues/1861)
+    const getDetoxURLBlacklistRegexFromDomains = (domains: string[]): string =>
+      '\(' + domains.map(domain => `".*${domain}.*"`).join(',') + '\)';
+    const domains = ['api.mapbox.com']
+    const detoxURLBlacklist = getDetoxURLBlacklistRegexFromDomains(domains)
+    await device.launchApp({
+    launchArgs: {
+      detoxURLBlacklistRegex: detoxURLBlacklist
+      'DTXEnableVerboseSyncSystem': 'YES',
+      'DTXEnableVerboseSyncResources': 'YES'
+    },
+    OR
+    await device.setURLBlacklist(['.*api.mapbox.com.*'])
+*/
+
 describe('Departures v2', () => {
   beforeAll(async () => {
     await device.launchApp({
@@ -34,13 +51,11 @@ describe('Departures v2', () => {
       },
       languageAndLocale: {
         language: 'en-GB',
-        locale: 'en-GB',
+        locale: 'en_GB',
+        //language: 'nb',
+        //locale: 'nb_NO',
       },
-      // If problems with 'hanging' network requests (on iossimulator15.4)
-      //launchArgs: { detoxURLBlacklistRegex: ' \\("https://firebaselogging-pa.googleapis.com/v1/firelog/legacy/batchlog"\\)' },
     });
-    // If problems with 'hanging' network requests (on iossimulator15.4)
-    //await device.setURLBlacklist(['.*firebaselogging-pa.googleapis.com/v1/firelog/legacy/batchlog']);
     await setLocation(62.4305, 9.3951);
     await skipOnboarding();
   });
