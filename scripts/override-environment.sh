@@ -33,21 +33,7 @@ else
     cp -a $ENV_FOLDER/icons/. icons/
 
     echo "Copying $APP_ENVIRONMENT .env file to Config file in ios"
-    # TODO REMOVE PRINTING after testing
-    echo "- root index.js"
-    cat index.js
-    echo "- The ENV_FOLDER is $ENV_FOLDER"
-    echo "- root env"
-    head -2 .env | tail -1
-    echo "- dev env"
-    head -2 env/atb/dev/.env | tail -1
-    echo "- locale: "
-    locale
-
     cp $ENV_FOLDER/.env ios/Configs/Config.xcconfig
-    # TODO REMOVE PRINTING after testing
-    echo "- Config.xcconfig"
-    head -2 ios/Configs/Config.xcconfig | tail -1
     #replace urls containing :// with :/$()/ to be compatiable with xcconfig format
     sed -i '' -e "s,://,:/\$()/,g" ios/Configs/Config.xcconfig
 

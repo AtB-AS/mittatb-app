@@ -30,6 +30,7 @@ jobs:
         run: |
           echo "INPUT_BRANCH=${{ github.event.inputs.branch || env.DEFAULT_BRANCH }}" >> $GITHUB_ENV
           echo "INPUT_USE_CACHE=${{ github.event.inputs.useCache || env.DEFAULT_USE_CACHE }}" >> $GITHUB_ENV
+          echo "ENABLE_WIDGET=false" >> $GITHUB_ENV
       - name: Checkout project
         uses: actions/checkout@v3
         with:
@@ -62,6 +63,8 @@ jobs:
       - name: Generate native assets
         if: steps.detox-app-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn generate-native-assets
+      - name: Disable widget
+        run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget
       - name: Install Pods
         if: steps.detox-app-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane ios pods
