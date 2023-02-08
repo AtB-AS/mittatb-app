@@ -287,6 +287,9 @@ export function useStopPlaceData(
     [],
     !isFocused || mode !== 'Departure',
   );
+  useEffect(() => {
+    if (isFocused) dispatch({type: 'TICK_TICK'});
+  }, [isFocused]);
 
   return {
     state,

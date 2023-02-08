@@ -274,6 +274,9 @@ export function useFavoriteDepartureData(
       loadInitialDepartures();
     }
   }, [state.tick, state.lastRefreshTime]);
+  useEffect(() => {
+    if (isFocused) dispatch({type: 'TICK_TICK'});
+  }, [isFocused]);
   useInterval(
     () => dispatch({type: 'LOAD_REALTIME_DATA'}),
     updateFrequencyInSeconds * 1000,

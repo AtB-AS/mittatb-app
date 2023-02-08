@@ -293,6 +293,9 @@ export function useQuayData(
     [],
     !isFocused || mode !== 'Departure',
   );
+  useEffect(() => {
+    if (isFocused) dispatch({type: 'TICK_TICK'});
+  }, [isFocused]);
 
   return {
     state,
