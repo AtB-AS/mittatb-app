@@ -294,7 +294,14 @@ export function useQuayData(
     !isFocused || mode !== 'Departure',
   );
   useEffect(() => {
-    if (isFocused) dispatch({type: 'TICK_TICK'});
+    if (!isFocused || !state.tick) return;
+
+    const timeSinceLastTick = differenceInSeconds(Date.now(), state.tick);
+    if (timeSinceLastTick / 60 >= HARD_REFRESH_LIMIT_IN_MINUTES) {
+      loadDepartures();
+    } else if (timeSinceLastTick >= updateFrequencyInSeconds) {
+      dispatch({type: 'LOAD_REALTIME_DATA', quay});
+    }
   }, [isFocused]);
 
   return {
