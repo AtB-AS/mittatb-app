@@ -30,7 +30,7 @@ export default orgSpecificTranslations(OnboardingTexts, {
       description: {
         part1: _(
           'Her kan du planlegge, betale og gjennomføre reisen din i en og samme app. Appen oppdateres jevnlig med flere billettyper og innovative funksjoner!',
-          'Plan trips and buy tickets throughout Nordland. The app will be continously updated with more products and new functionality.',
+          'Plan trips and buy tickets throughout Nordland. The app will be continuously updated with more products and new functionality.',
         ),
       },
     },
