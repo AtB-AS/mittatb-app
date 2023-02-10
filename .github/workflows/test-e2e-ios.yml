@@ -45,7 +45,6 @@ jobs:
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
-          # ADD PRINTING
           use-build-cache: ${{ env.INPUT_USE_CACHE }}
           app-environment: 'dev'
           app-org: 'atb'
@@ -61,12 +60,12 @@ jobs:
             build/detox/ios/Build/Products/Debug-iphonesimulator/AtB.app
           key: detox-app-cache-${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}
       - name: Generate native assets
-        if: steps.detox-app-cache.outputs.cache-hit != 'true'
+        if: steps.detox-app-cache.outputs.cache-hit != 'true' || ${{ env.INPUT_USE_CACHE }} == 'false'
         run: brew install imagemagick && yarn generate-native-assets
       - name: Disable widget
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget
       - name: Install Pods
-        if: steps.detox-app-cache.outputs.cache-hit != 'true'
+        if: steps.detox-app-cache.outputs.cache-hit != 'true' || ${{ env.INPUT_USE_CACHE }} == 'false'
         run: bundle exec fastlane ios pods
         env:
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
@@ -79,11 +78,11 @@ jobs:
       - name: Build Detox framework
         run: detox clean-framework-cache && detox build-framework-cache
       - name: Build Detox-version of app
-        if: steps.detox-app-cache.outputs.cache-hit != 'true'
+        if: steps.detox-app-cache.outputs.cache-hit != 'true' || ${{ env.INPUT_USE_CACHE }} == 'false'
         run: detox build --configuration ios.debug
       - name: Replace bundle in app cache
         if: steps.detox-app-cache.outputs.cache-hit == 'true'
-        run: npx react-native bundle --platform ios --dev false --reset-cache --entry-file index.js --bundle-output main.jsbundle && mv main.jsbundle build/detox/ios/Build/Products/Release-iphonesimulator/AtB.app/
+        run: npx react-native bundle --platform ios --dev false --reset-cache --entry-file index.js --bundle-output main.jsbundle && mv main.jsbundle build/detox/ios/Build/Products/Debug-iphonesimulator/AtB.app/
       - name: Run tests
         run: detox test --configuration ios.debug --retries 2 --take-screenshots failing --testNamePattern 'should search for a place and find nearby departures'
       - name: Upload test report json
