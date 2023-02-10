@@ -275,7 +275,6 @@ export function useFavoriteDepartureData(
       loadInitialDepartures();
     }
   }, [state.tick, state.lastRefreshTime]);
-
   useRefreshOnFocus(
     state.tick,
     HARD_REFRESH_LIMIT_IN_MINUTES * 60,
@@ -283,6 +282,7 @@ export function useFavoriteDepartureData(
     updateFrequencyInSeconds,
     () => dispatch({type: 'LOAD_REALTIME_DATA'}),
   );
+
   useInterval(
     () => dispatch({type: 'LOAD_REALTIME_DATA'}),
     updateFrequencyInSeconds * 1000,

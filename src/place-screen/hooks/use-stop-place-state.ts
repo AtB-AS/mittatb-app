@@ -7,7 +7,7 @@ import {UserFavoriteDepartures} from '@atb/favorites/types';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {animateNextChange} from '@atb/utils/animation';
 import useInterval from '@atb/utils/use-interval';
-import {differenceInMinutes, differenceInSeconds} from 'date-fns';
+import {differenceInMinutes} from 'date-fns';
 import {flatMap} from 'lodash';
 import {useCallback, useEffect} from 'react';
 import useReducerWithSideEffects, {
@@ -295,16 +295,6 @@ export function useStopPlaceData(
     updateFrequencyInSeconds,
     () => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace}),
   );
-  useEffect(() => {
-    if (!isFocused || !state.tick) return;
-
-    const timeSinceLastTick = differenceInSeconds(Date.now(), state.tick);
-    if (timeSinceLastTick / 60 >= HARD_REFRESH_LIMIT_IN_MINUTES) {
-      loadDepartures();
-    } else if (timeSinceLastTick >= updateFrequencyInSeconds) {
-      dispatch({type: 'LOAD_REALTIME_DATA', stopPlace});
-    }
-  }, [isFocused]);
 
   return {
     state,
