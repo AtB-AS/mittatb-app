@@ -28,7 +28,7 @@ const dictionary = {
       rail: _('Tog', 'Train'),
       tram: _('Trikk', 'Tram'),
       water: _('Båt', 'Boat'),
-      air: _('Fly', 'Plain'),
+      air: _('Fly', 'Plane'),
       foot: _('Gange', 'Walk'),
       metro: _('T-bane', 'Metro'),
       unknown: _('Ukjent transportmiddel', 'Unknown transport'),

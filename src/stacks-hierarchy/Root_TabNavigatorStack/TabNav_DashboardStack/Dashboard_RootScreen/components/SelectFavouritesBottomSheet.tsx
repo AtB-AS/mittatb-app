@@ -66,14 +66,13 @@ const SelectableFavouriteDeparture = ({
       accessibilityHint={t(SelectFavouriteDeparturesText.switch.a11yhint)}
       accessibilityState={{checked: active}}
     >
-      <View style={styles.lineModeIcon}>
-        <TransportationIcon
-          mode={lineTransportationMode}
-          subMode={lineTransportationSubmode}
-        />
-      </View>
+      <TransportationIcon
+        style={styles.lineModeIcon}
+        mode={lineTransportationMode}
+        subMode={lineTransportationSubmode}
+      />
       <View style={styles.selectableDepartureTextView}>
-        <ThemeText type="body__primary" style={styles.lineIdentiferText}>
+        <ThemeText type="body__primary" style={styles.lineIdentifierText}>
           {lineIdentifier} {lineName}
         </ThemeText>
 
@@ -254,7 +253,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     lineModeIcon: {
       marginRight: theme.spacings.small,
     },
-    lineIdentiferText: {
+    lineIdentifierText: {
       marginBottom: theme.spacings.small,
     },
   };

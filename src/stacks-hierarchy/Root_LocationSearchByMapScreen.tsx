@@ -3,13 +3,13 @@ import {StyleSheet} from '@atb/theme';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import {LocationSearchStackScreenProps} from './navigation-types';
 import {Map} from '@atb/components/map';
 import {Location} from '@atb/favorites/types';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 
-export type Props = LocationSearchStackScreenProps<'LocationSearchByMapScreen'>;
+export type Props = RootStackScreenProps<'Root_LocationSearchByMapScreen'>;
 
-export const LocationSearchByMapScreen: React.FC<Props> = ({
+export const Root_LocationSearchByMapScreen: React.FC<Props> = ({
   navigation,
   route: {
     params: {callerRouteName, callerRouteParam, initialLocation},

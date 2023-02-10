@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
@@ -15,6 +15,7 @@ export type TransportationIconProps = {
   subMode?: AnySubMode;
   lineNumber?: string;
   size?: keyof Theme['icon']['size'];
+  style?: StyleProp<ViewStyle>;
   disabled?: boolean;
 };
 
@@ -23,6 +24,7 @@ export const TransportationIcon: React.FC<TransportationIconProps> = ({
   subMode,
   lineNumber,
   size = 'normal',
+  style,
   disabled,
 }) => {
   const {t} = useTranslation();
@@ -38,7 +40,6 @@ export const TransportationIcon: React.FC<TransportationIconProps> = ({
     size == 'small'
       ? styles.transportationIcon_small
       : styles.transportationIcon;
-
   const lineNumberElement = lineNumber ? (
     <ThemeText
       type="body__primary--bold"
@@ -50,7 +51,15 @@ export const TransportationIcon: React.FC<TransportationIconProps> = ({
   ) : null;
 
   return (
-    <View style={[iconStyle, {backgroundColor}]}>
+    <View
+      style={[
+        iconStyle,
+        style,
+        {
+          backgroundColor,
+        },
+      ]}
+    >
       <ThemeIcon
         size={size}
         svg={svg}
@@ -69,7 +78,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingVertical: theme.spacings.small,
     paddingHorizontal: theme.spacings.small,
     borderRadius: theme.border.radius.small,
-    marginRight: theme.spacings.xSmall,
   },
   transportationIcon_small: {
     display: 'flex',
@@ -77,7 +85,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingVertical: theme.spacings.xSmall,
     paddingHorizontal: theme.spacings.xSmall,
     borderRadius: theme.border.radius.small,
-    marginRight: theme.spacings.xSmall,
   },
   lineNumberText: {
     marginLeft: theme.spacings.xSmall,

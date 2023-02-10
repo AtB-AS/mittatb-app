@@ -24,6 +24,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {dictionary, useTranslation} from '@atb/translations';
 import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 import useFontScale from '@atb/utils/use-font-scale';
+import {InfoChip} from '@atb/components/info-chip';
 
 export const Profile_DesignSystemScreen = () => {
   const style = useProfileHomeStyle();
@@ -200,11 +201,15 @@ export const Profile_DesignSystemScreen = () => {
             </View>
             <View style={style.icons}>
               <TransportationIcon
+                style={style.transportationIcon}
                 mode={LegMode.BUS}
                 subMode={TransportSubmode.LOCAL_BUS}
               />
               {Object.values(LegMode).map((mode) => (
-                <TransportationIcon mode={mode} />
+                <TransportationIcon
+                  style={style.transportationIcon}
+                  mode={mode}
+                />
               ))}
             </View>
           </Sections.GenericSectionItem>
@@ -308,777 +313,825 @@ export const Profile_DesignSystemScreen = () => {
           </Sections.GenericSectionItem>
         </Sections.Section>
 
-        <View style={style.buttons}>
-          <Sections.Section>
-            <Sections.ExpandableSectionItem
-              text={'Buttons'}
-              showIconText={false}
-              textType={'heading__title'}
-              expandContent={
-                <View>
-                  <ThemeText
-                    style={{marginTop: 24, marginBottom: 12}}
-                    type={'heading__paragraph'}
-                  >
-                    Primary - block - interactive/0
-                  </ThemeText>
-                  <ButtonGroup>
-                    <Button
-                      text="Default"
-                      onPress={presser}
-                      mode="primary"
-                      interactiveColor={'interactive_0'}
-                    />
-                    <Button
-                      text="Active"
-                      onPress={presser}
-                      mode="primary"
-                      active={true}
-                      interactiveColor={'interactive_0'}
-                    />
-                    <Button
-                      text="Disabled"
-                      onPress={presser}
-                      mode="primary"
-                      disabled={true}
-                      interactiveColor={'interactive_0'}
-                    />
-                    <Button
-                      text="Compact"
-                      onPress={presser}
-                      mode="primary"
-                      compact={true}
-                      interactiveColor={'interactive_0'}
-                    />
-                  </ButtonGroup>
+        <Sections.Section style={style.section}>
+          <Sections.ExpandableSectionItem
+            text={'InfoChip'}
+            showIconText={false}
+            textType={'heading__title'}
+            expandContent={
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  marginTop: -theme.spacings.small,
+                }}
+              >
+                <InfoChip
+                  text="Interactive/0"
+                  interactiveColor={'interactive_0'}
+                  style={{
+                    marginRight: theme.spacings.small,
+                    marginTop: theme.spacings.small,
+                  }}
+                />
+                <InfoChip
+                  text="Interactive/1"
+                  interactiveColor={'interactive_1'}
+                  style={{
+                    marginRight: theme.spacings.small,
+                    marginTop: theme.spacings.small,
+                  }}
+                />
+                <InfoChip
+                  text="Interactive/2"
+                  interactiveColor={'interactive_2'}
+                  style={{
+                    marginRight: theme.spacings.small,
+                    marginTop: theme.spacings.small,
+                  }}
+                />
+                <InfoChip
+                  text="Interactive/destructive"
+                  interactiveColor={'interactive_destructive'}
+                  style={{
+                    marginRight: theme.spacings.small,
+                    marginTop: theme.spacings.small,
+                  }}
+                />
+              </View>
+            }
+          />
+        </Sections.Section>
 
-                  <ThemeText
-                    style={{marginTop: 24, marginBottom: 12}}
-                    type={'heading__paragraph'}
-                  >
-                    Primary - block - interactive/1
-                  </ThemeText>
-                  <ButtonGroup>
-                    <Button
-                      text="Default - block"
-                      onPress={presser}
-                      mode="primary"
-                      interactiveColor={'interactive_1'}
-                    />
-                    <Button
-                      text="Active"
-                      onPress={presser}
-                      mode="primary"
-                      active={true}
-                      interactiveColor={'interactive_1'}
-                    />
-                    <Button
-                      text="Disabled"
-                      onPress={presser}
-                      mode="primary"
-                      disabled={true}
-                      interactiveColor={'interactive_1'}
-                    />
-                    <Button
-                      text="Compact"
-                      onPress={presser}
-                      mode="primary"
-                      compact={true}
-                      interactiveColor={'interactive_1'}
-                    />
-                  </ButtonGroup>
-
-                  <ThemeText
-                    style={{marginTop: 24, marginBottom: 12}}
-                    type={'heading__paragraph'}
-                  >
-                    Primary - block - interactive/2
-                  </ThemeText>
-                  <ButtonGroup>
-                    <Button
-                      text="Default"
-                      onPress={presser}
-                      mode="primary"
-                      interactiveColor={'interactive_2'}
-                    />
-                    <Button
-                      text="Active"
-                      onPress={presser}
-                      mode="primary"
-                      active={true}
-                      interactiveColor={'interactive_2'}
-                    />
-                    <Button
-                      text="Disabled"
-                      onPress={presser}
-                      mode="primary"
-                      disabled={true}
-                      interactiveColor={'interactive_2'}
-                    />
-                    <Button
-                      text="Compact"
-                      onPress={presser}
-                      mode="primary"
-                      compact={true}
-                      interactiveColor={'interactive_2'}
-                    />
-                  </ButtonGroup>
-
-                  <ThemeText
-                    style={{marginTop: 24, marginBottom: 12}}
-                    type={'heading__paragraph'}
-                  >
-                    Primary - block - interactive/destructive
-                  </ThemeText>
-                  <ButtonGroup>
-                    <Button
-                      text="Default"
-                      onPress={presser}
-                      mode="primary"
-                      interactiveColor={'interactive_destructive'}
-                    />
-                    <Button
-                      text="Active"
-                      onPress={presser}
-                      mode="primary"
-                      active={true}
-                      interactiveColor={'interactive_destructive'}
-                    />
-                    <Button
-                      text="Disabled"
-                      onPress={presser}
-                      mode="primary"
-                      disabled={true}
-                      interactiveColor={'interactive_destructive'}
-                    />
-                    <Button
-                      text="Compact"
-                      onPress={presser}
-                      mode="primary"
-                      compact={true}
-                      interactiveColor={'interactive_destructive'}
-                    />
-                  </ButtonGroup>
-
-                  <ThemeText
-                    style={{marginTop: 24, marginBottom: 12}}
-                    type={'heading__paragraph'}
-                  >
-                    Secondary - block - interactive/0
-                  </ThemeText>
-                  <ButtonGroup>
-                    <Button
-                      text="Default"
-                      onPress={presser}
-                      mode="secondary"
-                      interactiveColor={'interactive_0'}
-                    />
-                    <Button
-                      text="Active"
-                      onPress={presser}
-                      mode="secondary"
-                      active={true}
-                      interactiveColor={'interactive_0'}
-                    />
-                    <Button
-                      text="Disabled"
-                      onPress={presser}
-                      mode="secondary"
-                      disabled={true}
-                      interactiveColor={'interactive_0'}
-                    />
-                    <Button
-                      text="Compact"
-                      onPress={presser}
-                      mode="secondary"
-                      compact={true}
-                      interactiveColor={'interactive_0'}
-                    />
-                  </ButtonGroup>
-
-                  <ThemeText
-                    style={{marginTop: 24, marginBottom: 12}}
-                    type={'heading__paragraph'}
-                  >
-                    Secondary - block - interactive/1
-                  </ThemeText>
-                  <ButtonGroup>
-                    <Button
-                      text="Default"
-                      onPress={presser}
-                      mode="secondary"
-                      interactiveColor={'interactive_1'}
-                    />
-                    <Button
-                      text="Active"
-                      onPress={presser}
-                      mode="secondary"
-                      active={true}
-                      interactiveColor={'interactive_1'}
-                    />
-                    <Button
-                      text="Disabled"
-                      onPress={presser}
-                      mode="secondary"
-                      disabled={true}
-                      interactiveColor={'interactive_1'}
-                    />
-                    <Button
-                      text="Compact"
-                      onPress={presser}
-                      mode="secondary"
-                      compact={true}
-                      interactiveColor={'interactive_1'}
-                    />
-                  </ButtonGroup>
-
-                  <ThemeText
-                    style={{marginTop: 24, marginBottom: 12}}
-                    type={'heading__paragraph'}
-                  >
-                    Secondary - block - interactive/2
-                  </ThemeText>
-                  <ButtonGroup>
-                    <Button
-                      text="Default"
-                      onPress={presser}
-                      mode="secondary"
-                      interactiveColor={'interactive_2'}
-                    />
-                    <Button
-                      text="Active"
-                      onPress={presser}
-                      mode="secondary"
-                      active={true}
-                      interactiveColor={'interactive_2'}
-                    />
-                    <Button
-                      text="Disabled"
-                      onPress={presser}
-                      mode="secondary"
-                      disabled={true}
-                      interactiveColor={'interactive_2'}
-                    />
-                    <Button
-                      text="Compact"
-                      onPress={presser}
-                      mode="secondary"
-                      compact={true}
-                      interactiveColor={'interactive_2'}
-                    />
-                  </ButtonGroup>
-
-                  <ThemeText
-                    style={{marginTop: 24, marginBottom: 12}}
-                    type={'heading__paragraph'}
-                  >
-                    Secondary - block - interactive/destructive
-                  </ThemeText>
-                  <ButtonGroup>
-                    <Button
-                      text="Default"
-                      onPress={presser}
-                      mode="secondary"
-                      interactiveColor={'interactive_destructive'}
-                    />
-                    <Button
-                      text="Active"
-                      onPress={presser}
-                      mode="secondary"
-                      active={true}
-                      interactiveColor={'interactive_destructive'}
-                    />
-                    <Button
-                      text="Disabled"
-                      onPress={presser}
-                      mode="secondary"
-                      disabled={true}
-                      interactiveColor={'interactive_destructive'}
-                    />
-                    <Button
-                      text="Compact"
-                      onPress={presser}
-                      mode="secondary"
-                      compact={true}
-                      interactiveColor={'interactive_destructive'}
-                    />
-                  </ButtonGroup>
-
-                  <ThemeText
-                    style={{marginTop: 24, marginBottom: 12}}
-                    type={'heading__paragraph'}
-                  >
-                    tertiary - block - interactive/0
-                  </ThemeText>
-                  <ButtonGroup>
-                    <Button
-                      text="Default"
-                      onPress={presser}
-                      mode="tertiary"
-                      interactiveColor={'interactive_0'}
-                    />
-                    <Button
-                      text="Active"
-                      onPress={presser}
-                      mode="tertiary"
-                      active={true}
-                      interactiveColor={'interactive_0'}
-                    />
-                    <Button
-                      text="Disabled"
-                      onPress={presser}
-                      mode="tertiary"
-                      disabled={true}
-                      interactiveColor={'interactive_0'}
-                    />
-                    <Button
-                      text="Compact"
-                      onPress={presser}
-                      mode="tertiary"
-                      compact={true}
-                      interactiveColor={'interactive_0'}
-                    />
-                  </ButtonGroup>
-
-                  <ThemeText
-                    style={{marginTop: 24, marginBottom: 12}}
-                    type={'heading__paragraph'}
-                  >
-                    tertiary - block - interactive/1
-                  </ThemeText>
-                  <ButtonGroup>
-                    <Button
-                      text="Default"
-                      onPress={presser}
-                      mode="tertiary"
-                      interactiveColor={'interactive_1'}
-                    />
-                    <Button
-                      text="Active"
-                      onPress={presser}
-                      mode="tertiary"
-                      active={true}
-                      interactiveColor={'interactive_1'}
-                    />
-                    <Button
-                      text="Disabled"
-                      onPress={presser}
-                      mode="tertiary"
-                      disabled={true}
-                      interactiveColor={'interactive_1'}
-                    />
-                    <Button
-                      text="Compact"
-                      onPress={presser}
-                      mode="tertiary"
-                      compact={true}
-                      interactiveColor={'interactive_1'}
-                    />
-                  </ButtonGroup>
-
-                  <ThemeText
-                    style={{marginTop: 24, marginBottom: 12}}
-                    type={'heading__paragraph'}
-                  >
-                    tertiary - block - interactive/2
-                  </ThemeText>
-                  <ButtonGroup>
-                    <Button
-                      text="Default"
-                      onPress={presser}
-                      mode="tertiary"
-                      interactiveColor={'interactive_2'}
-                    />
-                    <Button
-                      text="Active"
-                      onPress={presser}
-                      mode="tertiary"
-                      active={true}
-                      interactiveColor={'interactive_2'}
-                    />
-                    <Button
-                      text="Disabled"
-                      onPress={presser}
-                      mode="tertiary"
-                      disabled={true}
-                      interactiveColor={'interactive_2'}
-                    />
-                    <Button
-                      text="Compact"
-                      onPress={presser}
-                      mode="tertiary"
-                      compact={true}
-                      interactiveColor={'interactive_2'}
-                    />
-                  </ButtonGroup>
-
-                  <ThemeText
-                    style={{marginTop: 24, marginBottom: 12}}
-                    type={'heading__paragraph'}
-                  >
-                    tertiary - block - interactive/destructive
-                  </ThemeText>
-                  <ButtonGroup>
-                    <Button
-                      text="Default"
-                      onPress={presser}
-                      mode="tertiary"
-                      interactiveColor={'interactive_destructive'}
-                    />
-                    <Button
-                      text="Active"
-                      onPress={presser}
-                      mode="tertiary"
-                      active={true}
-                      interactiveColor={'interactive_destructive'}
-                    />
-                    <Button
-                      text="Disabled"
-                      onPress={presser}
-                      mode="tertiary"
-                      disabled={true}
-                      interactiveColor={'interactive_destructive'}
-                    />
-                    <Button
-                      text="Compact"
-                      onPress={presser}
-                      mode="tertiary"
-                      compact={true}
-                      interactiveColor={'interactive_destructive'}
-                    />
-                  </ButtonGroup>
-
-                  <ThemeText
-                    style={{marginTop: 24, marginBottom: 12}}
-                    type={'heading__paragraph'}
-                  >
-                    Inline button examples (interactive_0)
-                  </ThemeText>
-                  <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                    <Button
-                      text="Primary"
-                      onPress={presser}
-                      mode="primary"
-                      type="inline"
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Primary - active"
-                      onPress={presser}
-                      mode="primary"
-                      type="inline"
-                      active={true}
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Primary - disabled"
-                      onPress={presser}
-                      mode="primary"
-                      type="inline"
-                      disabled={true}
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Primary - compact"
-                      onPress={presser}
-                      mode="primary"
-                      type="inline"
-                      compact={true}
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Secondary"
-                      onPress={presser}
-                      mode="secondary"
-                      type="inline"
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Secondary - active"
-                      onPress={presser}
-                      mode="secondary"
-                      type="inline"
-                      active={true}
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Secondary - compact"
-                      onPress={presser}
-                      mode="secondary"
-                      type="inline"
-                      compact={true}
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Tertiary"
-                      onPress={presser}
-                      mode="tertiary"
-                      type="inline"
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Tertiary - disabled"
-                      onPress={presser}
-                      mode="tertiary"
-                      type="inline"
-                      disabled={true}
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                  </View>
-
-                  <ThemeText
-                    style={{marginTop: 24, marginBottom: 12}}
-                    type={'heading__paragraph'}
-                  >
-                    Pill button examples (interactive_0)
-                  </ThemeText>
-                  <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                    <Button
-                      text="Primary"
-                      onPress={presser}
-                      mode="primary"
-                      type="pill"
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Primary - active"
-                      onPress={presser}
-                      mode="primary"
-                      type="pill"
-                      active={true}
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Primary - disabled"
-                      onPress={presser}
-                      mode="primary"
-                      type="pill"
-                      disabled={true}
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Primary - compact"
-                      onPress={presser}
-                      mode="primary"
-                      type="pill"
-                      compact={true}
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Secondary"
-                      onPress={presser}
-                      mode="secondary"
-                      type="pill"
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Secondary - active"
-                      onPress={presser}
-                      mode="secondary"
-                      type="pill"
-                      active={true}
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Secondary - compact"
-                      onPress={presser}
-                      mode="secondary"
-                      type="pill"
-                      compact={true}
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Tertiary"
-                      onPress={presser}
-                      mode="tertiary"
-                      type="pill"
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Tertiary - disabled"
-                      onPress={presser}
-                      mode="tertiary"
-                      type="pill"
-                      disabled={true}
-                      interactiveColor={'interactive_0'}
-                      style={{margin: 4}}
-                    />
-                  </View>
-
-                  <ThemeText
-                    style={{marginTop: 24, marginBottom: 12}}
-                    type={'heading__paragraph'}
-                  >
-                    With icons examples (interactive_0)
-                  </ThemeText>
+        <Sections.Section style={style.section}>
+          <Sections.ExpandableSectionItem
+            text={'Buttons'}
+            showIconText={false}
+            textType={'heading__title'}
+            expandContent={
+              <View>
+                <ThemeText
+                  style={{marginTop: 24, marginBottom: 12}}
+                  type={'heading__paragraph'}
+                >
+                  Primary - block - interactive/0
+                </ThemeText>
+                <ButtonGroup>
                   <Button
-                    text="Example"
+                    text="Default"
                     onPress={presser}
                     mode="primary"
                     interactiveColor={'interactive_0'}
-                    leftIcon={{svg: Add}}
-                    style={{margin: 4}}
                   />
                   <Button
-                    text="Example"
+                    text="Active"
                     onPress={presser}
                     mode="primary"
+                    active={true}
                     interactiveColor={'interactive_0'}
-                    rightIcon={{
-                      svg: Delete,
-                      notification: {color: 'interactive_0'},
-                    }}
-                    style={{margin: 4}}
                   />
                   <Button
-                    text="Example"
+                    text="Disabled"
                     onPress={presser}
                     mode="primary"
-                    interactiveColor={'interactive_0'}
                     disabled={true}
-                    leftIcon={{svg: Add}}
+                    interactiveColor={'interactive_0'}
+                  />
+                  <Button
+                    text="Compact"
+                    onPress={presser}
+                    mode="primary"
+                    compact={true}
+                    interactiveColor={'interactive_0'}
+                  />
+                </ButtonGroup>
+
+                <ThemeText
+                  style={{marginTop: 24, marginBottom: 12}}
+                  type={'heading__paragraph'}
+                >
+                  Primary - block - interactive/1
+                </ThemeText>
+                <ButtonGroup>
+                  <Button
+                    text="Default - block"
+                    onPress={presser}
+                    mode="primary"
+                    interactiveColor={'interactive_1'}
+                  />
+                  <Button
+                    text="Active"
+                    onPress={presser}
+                    mode="primary"
+                    active={true}
+                    interactiveColor={'interactive_1'}
+                  />
+                  <Button
+                    text="Disabled"
+                    onPress={presser}
+                    mode="primary"
+                    disabled={true}
+                    interactiveColor={'interactive_1'}
+                  />
+                  <Button
+                    text="Compact"
+                    onPress={presser}
+                    mode="primary"
+                    compact={true}
+                    interactiveColor={'interactive_1'}
+                  />
+                </ButtonGroup>
+
+                <ThemeText
+                  style={{marginTop: 24, marginBottom: 12}}
+                  type={'heading__paragraph'}
+                >
+                  Primary - block - interactive/2
+                </ThemeText>
+                <ButtonGroup>
+                  <Button
+                    text="Default"
+                    onPress={presser}
+                    mode="primary"
+                    interactiveColor={'interactive_2'}
+                  />
+                  <Button
+                    text="Active"
+                    onPress={presser}
+                    mode="primary"
+                    active={true}
+                    interactiveColor={'interactive_2'}
+                  />
+                  <Button
+                    text="Disabled"
+                    onPress={presser}
+                    mode="primary"
+                    disabled={true}
+                    interactiveColor={'interactive_2'}
+                  />
+                  <Button
+                    text="Compact"
+                    onPress={presser}
+                    mode="primary"
+                    compact={true}
+                    interactiveColor={'interactive_2'}
+                  />
+                </ButtonGroup>
+
+                <ThemeText
+                  style={{marginTop: 24, marginBottom: 12}}
+                  type={'heading__paragraph'}
+                >
+                  Primary - block - interactive/destructive
+                </ThemeText>
+                <ButtonGroup>
+                  <Button
+                    text="Default"
+                    onPress={presser}
+                    mode="primary"
+                    interactiveColor={'interactive_destructive'}
+                  />
+                  <Button
+                    text="Active"
+                    onPress={presser}
+                    mode="primary"
+                    active={true}
+                    interactiveColor={'interactive_destructive'}
+                  />
+                  <Button
+                    text="Disabled"
+                    onPress={presser}
+                    mode="primary"
+                    disabled={true}
+                    interactiveColor={'interactive_destructive'}
+                  />
+                  <Button
+                    text="Compact"
+                    onPress={presser}
+                    mode="primary"
+                    compact={true}
+                    interactiveColor={'interactive_destructive'}
+                  />
+                </ButtonGroup>
+
+                <ThemeText
+                  style={{marginTop: 24, marginBottom: 12}}
+                  type={'heading__paragraph'}
+                >
+                  Secondary - block - interactive/0
+                </ThemeText>
+                <ButtonGroup>
+                  <Button
+                    text="Default"
+                    onPress={presser}
+                    mode="secondary"
+                    interactiveColor={'interactive_0'}
+                  />
+                  <Button
+                    text="Active"
+                    onPress={presser}
+                    mode="secondary"
+                    active={true}
+                    interactiveColor={'interactive_0'}
+                  />
+                  <Button
+                    text="Disabled"
+                    onPress={presser}
+                    mode="secondary"
+                    disabled={true}
+                    interactiveColor={'interactive_0'}
+                  />
+                  <Button
+                    text="Compact"
+                    onPress={presser}
+                    mode="secondary"
+                    compact={true}
+                    interactiveColor={'interactive_0'}
+                  />
+                </ButtonGroup>
+
+                <ThemeText
+                  style={{marginTop: 24, marginBottom: 12}}
+                  type={'heading__paragraph'}
+                >
+                  Secondary - block - interactive/1
+                </ThemeText>
+                <ButtonGroup>
+                  <Button
+                    text="Default"
+                    onPress={presser}
+                    mode="secondary"
+                    interactiveColor={'interactive_1'}
+                  />
+                  <Button
+                    text="Active"
+                    onPress={presser}
+                    mode="secondary"
+                    active={true}
+                    interactiveColor={'interactive_1'}
+                  />
+                  <Button
+                    text="Disabled"
+                    onPress={presser}
+                    mode="secondary"
+                    disabled={true}
+                    interactiveColor={'interactive_1'}
+                  />
+                  <Button
+                    text="Compact"
+                    onPress={presser}
+                    mode="secondary"
+                    compact={true}
+                    interactiveColor={'interactive_1'}
+                  />
+                </ButtonGroup>
+
+                <ThemeText
+                  style={{marginTop: 24, marginBottom: 12}}
+                  type={'heading__paragraph'}
+                >
+                  Secondary - block - interactive/2
+                </ThemeText>
+                <ButtonGroup>
+                  <Button
+                    text="Default"
+                    onPress={presser}
+                    mode="secondary"
+                    interactiveColor={'interactive_2'}
+                  />
+                  <Button
+                    text="Active"
+                    onPress={presser}
+                    mode="secondary"
+                    active={true}
+                    interactiveColor={'interactive_2'}
+                  />
+                  <Button
+                    text="Disabled"
+                    onPress={presser}
+                    mode="secondary"
+                    disabled={true}
+                    interactiveColor={'interactive_2'}
+                  />
+                  <Button
+                    text="Compact"
+                    onPress={presser}
+                    mode="secondary"
+                    compact={true}
+                    interactiveColor={'interactive_2'}
+                  />
+                </ButtonGroup>
+
+                <ThemeText
+                  style={{marginTop: 24, marginBottom: 12}}
+                  type={'heading__paragraph'}
+                >
+                  Secondary - block - interactive/destructive
+                </ThemeText>
+                <ButtonGroup>
+                  <Button
+                    text="Default"
+                    onPress={presser}
+                    mode="secondary"
+                    interactiveColor={'interactive_destructive'}
+                  />
+                  <Button
+                    text="Active"
+                    onPress={presser}
+                    mode="secondary"
+                    active={true}
+                    interactiveColor={'interactive_destructive'}
+                  />
+                  <Button
+                    text="Disabled"
+                    onPress={presser}
+                    mode="secondary"
+                    disabled={true}
+                    interactiveColor={'interactive_destructive'}
+                  />
+                  <Button
+                    text="Compact"
+                    onPress={presser}
+                    mode="secondary"
+                    compact={true}
+                    interactiveColor={'interactive_destructive'}
+                  />
+                </ButtonGroup>
+
+                <ThemeText
+                  style={{marginTop: 24, marginBottom: 12}}
+                  type={'heading__paragraph'}
+                >
+                  tertiary - block - interactive/0
+                </ThemeText>
+                <ButtonGroup>
+                  <Button
+                    text="Default"
+                    onPress={presser}
+                    mode="tertiary"
+                    interactiveColor={'interactive_0'}
+                  />
+                  <Button
+                    text="Active"
+                    onPress={presser}
+                    mode="tertiary"
+                    active={true}
+                    interactiveColor={'interactive_0'}
+                  />
+                  <Button
+                    text="Disabled"
+                    onPress={presser}
+                    mode="tertiary"
+                    disabled={true}
+                    interactiveColor={'interactive_0'}
+                  />
+                  <Button
+                    text="Compact"
+                    onPress={presser}
+                    mode="tertiary"
+                    compact={true}
+                    interactiveColor={'interactive_0'}
+                  />
+                </ButtonGroup>
+
+                <ThemeText
+                  style={{marginTop: 24, marginBottom: 12}}
+                  type={'heading__paragraph'}
+                >
+                  tertiary - block - interactive/1
+                </ThemeText>
+                <ButtonGroup>
+                  <Button
+                    text="Default"
+                    onPress={presser}
+                    mode="tertiary"
+                    interactiveColor={'interactive_1'}
+                  />
+                  <Button
+                    text="Active"
+                    onPress={presser}
+                    mode="tertiary"
+                    active={true}
+                    interactiveColor={'interactive_1'}
+                  />
+                  <Button
+                    text="Disabled"
+                    onPress={presser}
+                    mode="tertiary"
+                    disabled={true}
+                    interactiveColor={'interactive_1'}
+                  />
+                  <Button
+                    text="Compact"
+                    onPress={presser}
+                    mode="tertiary"
+                    compact={true}
+                    interactiveColor={'interactive_1'}
+                  />
+                </ButtonGroup>
+
+                <ThemeText
+                  style={{marginTop: 24, marginBottom: 12}}
+                  type={'heading__paragraph'}
+                >
+                  tertiary - block - interactive/2
+                </ThemeText>
+                <ButtonGroup>
+                  <Button
+                    text="Default"
+                    onPress={presser}
+                    mode="tertiary"
+                    interactiveColor={'interactive_2'}
+                  />
+                  <Button
+                    text="Active"
+                    onPress={presser}
+                    mode="tertiary"
+                    active={true}
+                    interactiveColor={'interactive_2'}
+                  />
+                  <Button
+                    text="Disabled"
+                    onPress={presser}
+                    mode="tertiary"
+                    disabled={true}
+                    interactiveColor={'interactive_2'}
+                  />
+                  <Button
+                    text="Compact"
+                    onPress={presser}
+                    mode="tertiary"
+                    compact={true}
+                    interactiveColor={'interactive_2'}
+                  />
+                </ButtonGroup>
+
+                <ThemeText
+                  style={{marginTop: 24, marginBottom: 12}}
+                  type={'heading__paragraph'}
+                >
+                  tertiary - block - interactive/destructive
+                </ThemeText>
+                <ButtonGroup>
+                  <Button
+                    text="Default"
+                    onPress={presser}
+                    mode="tertiary"
+                    interactiveColor={'interactive_destructive'}
+                  />
+                  <Button
+                    text="Active"
+                    onPress={presser}
+                    mode="tertiary"
+                    active={true}
+                    interactiveColor={'interactive_destructive'}
+                  />
+                  <Button
+                    text="Disabled"
+                    onPress={presser}
+                    mode="tertiary"
+                    disabled={true}
+                    interactiveColor={'interactive_destructive'}
+                  />
+                  <Button
+                    text="Compact"
+                    onPress={presser}
+                    mode="tertiary"
+                    compact={true}
+                    interactiveColor={'interactive_destructive'}
+                  />
+                </ButtonGroup>
+
+                <ThemeText
+                  style={{marginTop: 24, marginBottom: 12}}
+                  type={'heading__paragraph'}
+                >
+                  Inline button examples (interactive_0)
+                </ThemeText>
+                <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                  <Button
+                    text="Primary"
+                    onPress={presser}
+                    mode="primary"
+                    type="inline"
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Primary - active"
+                    onPress={presser}
+                    mode="primary"
+                    type="inline"
+                    active={true}
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Primary - disabled"
+                    onPress={presser}
+                    mode="primary"
+                    type="inline"
+                    disabled={true}
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Primary - compact"
+                    onPress={presser}
+                    mode="primary"
+                    type="inline"
+                    compact={true}
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Secondary"
+                    onPress={presser}
+                    mode="secondary"
+                    type="inline"
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Secondary - active"
+                    onPress={presser}
+                    mode="secondary"
+                    type="inline"
+                    active={true}
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Secondary - compact"
+                    onPress={presser}
+                    mode="secondary"
+                    type="inline"
+                    compact={true}
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Tertiary"
+                    onPress={presser}
+                    mode="tertiary"
+                    type="inline"
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Tertiary - disabled"
+                    onPress={presser}
+                    mode="tertiary"
+                    type="inline"
+                    disabled={true}
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                </View>
+
+                <ThemeText
+                  style={{marginTop: 24, marginBottom: 12}}
+                  type={'heading__paragraph'}
+                >
+                  Pill button examples (interactive_0)
+                </ThemeText>
+                <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                  <Button
+                    text="Primary"
+                    onPress={presser}
+                    mode="primary"
+                    type="pill"
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Primary - active"
+                    onPress={presser}
+                    mode="primary"
+                    type="pill"
+                    active={true}
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Primary - disabled"
+                    onPress={presser}
+                    mode="primary"
+                    type="pill"
+                    disabled={true}
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Primary - compact"
+                    onPress={presser}
+                    mode="primary"
+                    type="pill"
+                    compact={true}
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Secondary"
+                    onPress={presser}
+                    mode="secondary"
+                    type="pill"
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Secondary - active"
+                    onPress={presser}
+                    mode="secondary"
+                    type="pill"
+                    active={true}
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Secondary - compact"
+                    onPress={presser}
+                    mode="secondary"
+                    type="pill"
+                    compact={true}
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Tertiary"
+                    onPress={presser}
+                    mode="tertiary"
+                    type="pill"
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Tertiary - disabled"
+                    onPress={presser}
+                    mode="tertiary"
+                    type="pill"
+                    disabled={true}
+                    interactiveColor={'interactive_0'}
+                    style={{margin: 4}}
+                  />
+                </View>
+
+                <ThemeText
+                  style={{marginTop: 24, marginBottom: 12}}
+                  type={'heading__paragraph'}
+                >
+                  With icons examples (interactive_0)
+                </ThemeText>
+                <Button
+                  text="Example"
+                  onPress={presser}
+                  mode="primary"
+                  interactiveColor={'interactive_0'}
+                  leftIcon={{svg: Add}}
+                  style={{margin: 4}}
+                />
+                <Button
+                  text="Example"
+                  onPress={presser}
+                  mode="primary"
+                  interactiveColor={'interactive_0'}
+                  rightIcon={{
+                    svg: Delete,
+                    notification: {color: 'interactive_0'},
+                  }}
+                  style={{margin: 4}}
+                />
+                <Button
+                  text="Example"
+                  onPress={presser}
+                  mode="primary"
+                  interactiveColor={'interactive_0'}
+                  disabled={true}
+                  leftIcon={{svg: Add}}
+                  rightIcon={{svg: Delete}}
+                  style={{margin: 4}}
+                />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  <Button
+                    text="Example"
+                    onPress={presser}
+                    mode="primary"
+                    type="inline"
+                    interactiveColor={'interactive_0'}
+                    leftIcon={{svg: Add, notification: {color: 'valid'}}}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Example"
+                    onPress={presser}
+                    mode="primary"
+                    type="inline"
+                    active={true}
+                    interactiveColor={'interactive_0'}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      flexWrap: 'wrap',
-                    }}
-                  >
-                    <Button
-                      text="Example"
-                      onPress={presser}
-                      mode="primary"
-                      type="inline"
-                      interactiveColor={'interactive_0'}
-                      leftIcon={{svg: Add, notification: {color: 'valid'}}}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Example"
-                      onPress={presser}
-                      mode="primary"
-                      type="inline"
-                      active={true}
-                      interactiveColor={'interactive_0'}
-                      rightIcon={{svg: Delete}}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Example"
-                      onPress={presser}
-                      mode="secondary"
-                      type="inline"
-                      active={true}
-                      interactiveColor={'interactive_0'}
-                      rightIcon={{svg: Delete}}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Example"
-                      onPress={presser}
-                      mode="tertiary"
-                      type="inline"
-                      active={true}
-                      interactiveColor={'interactive_0'}
-                      rightIcon={{svg: Delete}}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Example"
-                      onPress={presser}
-                      mode="primary"
-                      type="inline"
-                      active={true}
-                      interactiveColor={'interactive_0'}
-                      rightIcon={{svg: Delete}}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      onPress={presser}
-                      mode="primary"
-                      type="inline"
-                      interactiveColor={'interactive_0'}
-                      leftIcon={{svg: Add}}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      onPress={presser}
-                      mode="primary"
-                      type="inline"
-                      compact={true}
-                      interactiveColor={'interactive_0'}
-                      rightIcon={{svg: Delete}}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      onPress={presser}
-                      mode="secondary"
-                      type="inline"
-                      interactiveColor={'interactive_0'}
-                      rightIcon={{svg: Delete}}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      onPress={presser}
-                      mode="tertiary"
-                      type="inline"
-                      interactiveColor={'interactive_0'}
-                      rightIcon={{svg: Delete}}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Example"
-                      onPress={presser}
-                      mode="primary"
-                      type="pill"
-                      interactiveColor={'interactive_0'}
-                      leftIcon={{svg: Add}}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Example"
-                      onPress={presser}
-                      mode="secondary"
-                      type="pill"
-                      compact={true}
-                      interactiveColor={'interactive_0'}
-                      rightIcon={{svg: Delete}}
-                      style={{margin: 4}}
-                    />
-                    <Button
-                      text="Example"
-                      onPress={presser}
-                      mode="tertiary"
-                      type="pill"
-                      interactiveColor={'interactive_0'}
-                      rightIcon={{svg: Delete}}
-                      style={{margin: 4}}
-                    />
-                  </View>
+                  <Button
+                    text="Example"
+                    onPress={presser}
+                    mode="secondary"
+                    type="inline"
+                    active={true}
+                    interactiveColor={'interactive_0'}
+                    rightIcon={{svg: Delete}}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Example"
+                    onPress={presser}
+                    mode="tertiary"
+                    type="inline"
+                    active={true}
+                    interactiveColor={'interactive_0'}
+                    rightIcon={{svg: Delete}}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Example"
+                    onPress={presser}
+                    mode="primary"
+                    type="inline"
+                    active={true}
+                    interactiveColor={'interactive_0'}
+                    rightIcon={{svg: Delete}}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    onPress={presser}
+                    mode="primary"
+                    type="inline"
+                    interactiveColor={'interactive_0'}
+                    leftIcon={{svg: Add}}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    onPress={presser}
+                    mode="primary"
+                    type="inline"
+                    compact={true}
+                    interactiveColor={'interactive_0'}
+                    rightIcon={{svg: Delete}}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    onPress={presser}
+                    mode="secondary"
+                    type="inline"
+                    interactiveColor={'interactive_0'}
+                    rightIcon={{svg: Delete}}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    onPress={presser}
+                    mode="tertiary"
+                    type="inline"
+                    interactiveColor={'interactive_0'}
+                    rightIcon={{svg: Delete}}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Example"
+                    onPress={presser}
+                    mode="primary"
+                    type="pill"
+                    interactiveColor={'interactive_0'}
+                    leftIcon={{svg: Add}}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Example"
+                    onPress={presser}
+                    mode="secondary"
+                    type="pill"
+                    compact={true}
+                    interactiveColor={'interactive_0'}
+                    rightIcon={{svg: Delete}}
+                    style={{margin: 4}}
+                  />
+                  <Button
+                    text="Example"
+                    onPress={presser}
+                    mode="tertiary"
+                    type="pill"
+                    interactiveColor={'interactive_0'}
+                    rightIcon={{svg: Delete}}
+                    style={{margin: 4}}
+                  />
                 </View>
-              }
-            />
-          </Sections.Section>
-        </View>
+              </View>
+            }
+          />
+        </Sections.Section>
 
         <Sections.Section withPadding withTopPadding>
           <Sections.ActionSectionItem
@@ -1222,7 +1275,7 @@ export const Profile_DesignSystemScreen = () => {
           />
         </Sections.Section>
 
-        <View style={style.buttons}>
+        <View style={style.section}>
           <ButtonGroup>{buttons}</ButtonGroup>
         </View>
 
@@ -1252,12 +1305,15 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
+  transportationIcon: {
+    marginRight: theme.spacings.xSmall,
+  },
   icons: {
     flexDirection: 'row',
     marginBottom: theme.spacings.small,
   },
-  buttons: {
-    marginHorizontal: theme.spacings.medium,
+  section: {
+    margin: theme.spacings.medium,
   },
   swatchGroup: {
     margin: theme.spacings.medium,
