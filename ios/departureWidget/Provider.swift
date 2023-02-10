@@ -89,7 +89,8 @@ struct Provider: IntentTimelineProvider {
 
                 // Rerenders widget when a departure has passed, by giving IOS more information about future
                 // dates we hopefully get better timed rerenders
-                var entries = departures.map { departureTime in Entry(date: departureTime.aimedTime, favouriteDeparture: departure, stopPlaceGroup: stopPlaceGroup,departures: departures, state: .complete) }
+                // Rerenders widget 1 minute after departure have passed
+              var entries = departures.map { departureTime in Entry(date: departureTime.aimedTime.addingTimeInterval(60), favouriteDeparture: departure, stopPlaceGroup: stopPlaceGroup,departures: departures, state: .complete) }
 
                 entries.insert(Entry(date: Date.now, favouriteDeparture: departure, stopPlaceGroup: stopPlaceGroup, departures: departures, state: .complete), at: 0)
 
