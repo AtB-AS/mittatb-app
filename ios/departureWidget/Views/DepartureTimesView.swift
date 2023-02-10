@@ -15,6 +15,7 @@ private enum K {
 struct DepartureTimesView: View {
     var departures: [DepartureLinkLabel]
     let parentSize: CGSize
+    let deepLink: String
 
     var width: CGFloat {
         parentSize.width - K.padding * 2
@@ -33,10 +34,19 @@ struct DepartureTimesView: View {
             }.frame(maxWidth: departuresWidth, alignment: .leading).clipped()
                 .mask(K.widgetGradient)
 
-            Image(systemName: "ellipsis")
-                .frame(width: K.iconWidth)
-                .padding(8)
-                .foregroundColor(K.lineInformationColor)
+          
+          if let url = URL(string: deepLink) {
+            Link(destination: url) {
+              
+              Image(systemName: "ellipsis")
+                  .frame(width: K.iconWidth)
+                  .padding(8)
+                  .foregroundColor(K.lineInformationColor)
+              
+            }}
+          
+          
+           
         }.frame(maxWidth: width, alignment: .leading)
     }
 }
