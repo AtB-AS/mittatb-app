@@ -95,6 +95,9 @@ vendor/bundle
 assets/design-assets
 src/assets/svg
 
+# Information files
+src/assets/information-data
+
 # Yalc
 .yalc/
 yalc.lock
