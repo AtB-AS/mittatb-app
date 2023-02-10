@@ -44,7 +44,10 @@ export const AvailableFareProducts = ({
       </ThemeText>
 
       {groupedConfigs.map(([firstConfig, secondConfig]) => (
-        <View style={styles.fareProductsContainer}>
+        <View
+          style={styles.fareProductsContainer}
+          key={firstConfig.type + secondConfig?.type}
+        >
           <FareProductTile
             onPress={() => onProductSelect(firstConfig)}
             testID={`${firstConfig.type}FareProduct`}
