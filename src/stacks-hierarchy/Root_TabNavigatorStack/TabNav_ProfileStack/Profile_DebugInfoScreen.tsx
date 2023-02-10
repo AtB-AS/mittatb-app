@@ -29,8 +29,6 @@ import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {useTravelSearchFiltersDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-enabled';
 import {useVehiclesInMapDebugOverride} from '@atb/vehicles';
 import {DebugOverride} from './components/DebugOverride';
-import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
-import {useRealtimeMapDebugOverride} from '@atb/components/map/hooks/use-realtime-map-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -48,9 +46,7 @@ export const Profile_DebugInfoScreen = () => {
   >(undefined);
 
   const travelSearchDebugOverride = useTravelSearchFiltersDebugOverride();
-  const newTravelSearchDebugOverride = useNewTravelSearchDebugOverride();
   const vehiclesInMapDebugOverride = useVehiclesInMapDebugOverride();
-  const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
 
   useEffect(() => {
     async function run() {
@@ -99,7 +95,7 @@ export const Profile_DebugInfoScreen = () => {
   }
 
   const {setPreference, preferences} = usePreferences();
-  const {showTestIds, tripSearchPreferences, debugShowSeconds} = preferences;
+  const {showTestIds, tripSearchPreferences} = preferences;
 
   const tripSearchDefaults = {
     transferPenalty: 10,
@@ -123,13 +119,6 @@ export const Profile_DebugInfoScreen = () => {
             value={showTestIds}
             onValueChange={(showTestIds) => {
               setPreference({showTestIds});
-            }}
-          />
-          <Sections.ToggleSectionItem
-            text="Display seconds in trip planner"
-            value={debugShowSeconds}
-            onValueChange={(debugShowSeconds) => {
-              setPreference({debugShowSeconds});
             }}
           />
           <Sections.LinkSectionItem
@@ -193,7 +182,7 @@ export const Profile_DebugInfoScreen = () => {
         </Sections.Section>
         <Sections.Section withPadding withTopPadding>
           <Sections.HeaderSectionItem
-            text="Remote config override"
+            text="Remove config override"
             subtitle="If undefined the value
         from Remote Config will be used. Needs reload of app after change."
           />
@@ -205,20 +194,8 @@ export const Profile_DebugInfoScreen = () => {
           </Sections.GenericSectionItem>
           <Sections.GenericSectionItem>
             <DebugOverride
-              description="Enable new travel search."
-              override={newTravelSearchDebugOverride}
-            />
-          </Sections.GenericSectionItem>
-          <Sections.GenericSectionItem>
-            <DebugOverride
               description="Enable vehicles in map."
               override={vehiclesInMapDebugOverride}
-            />
-          </Sections.GenericSectionItem>
-          <Sections.GenericSectionItem>
-            <DebugOverride
-              description="Enable realtime positions in map."
-              override={realtimeMapDebugOverride}
             />
           </Sections.GenericSectionItem>
         </Sections.Section>

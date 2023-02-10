@@ -1,5 +1,5 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {
@@ -34,7 +34,6 @@ export default function PhoneInput({
 }) {
   const {t} = useTranslation();
   const styles = useThemeStyles();
-  const {theme} = useTheme();
   const {signInWithPhoneNumber} = useAuthState();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [prefix, setPrefix] = useState('47');
@@ -135,7 +134,6 @@ export default function PhoneInput({
               <ActivityIndicator
                 style={styles.activityIndicator}
                 size="large"
-                color={theme.text.colors.primary}
               />
             )}
 

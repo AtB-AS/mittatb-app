@@ -118,14 +118,6 @@ export type PaymentResponse = {
   status: PaymentStatus;
 };
 
-export type FlexDiscountLadder = {
-  current: number;
-  steps: {
-    expires: string;
-    discount: number; // The discount percentage
-  }[];
-};
-
 export type OfferPrice = {
   amount?: string;
   amount_float?: number;
@@ -141,7 +133,6 @@ export type Offer = {
   offer_id: string;
   traveller_id: string;
   prices: OfferPrice[];
-  flex_discount_ladder?: FlexDiscountLadder;
 };
 
 export type OfferSearchResponse = Offer[];

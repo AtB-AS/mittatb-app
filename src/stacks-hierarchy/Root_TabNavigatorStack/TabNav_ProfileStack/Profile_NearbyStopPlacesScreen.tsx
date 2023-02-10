@@ -1,4 +1,4 @@
-import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+import {useOnlySingleLocation} from '@atb/location-search';
 import React from 'react';
 import {ProfileScreenProps} from './navigation-types';
 import {StopPlace} from '@atb/api/types/departures';
@@ -27,11 +27,14 @@ export const Profile_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
         location={fromLocation}
         mode={route.params.mode}
         onPressLocationSearch={(location) =>
-          navigation.navigate('Root_LocationSearchByTextScreen', {
-            label: t(NearbyTexts.search.label),
-            callerRouteName: route.name,
-            callerRouteParam: 'location',
-            initialLocation: location,
+          navigation.navigate('LocationSearchStack', {
+            screen: 'LocationSearchByTextScreen',
+            params: {
+              label: t(NearbyTexts.search.label),
+              callerRouteName: route.name,
+              callerRouteParam: 'location',
+              initialLocation: location,
+            },
           })
         }
         onSelectStopPlace={(place: StopPlace) => {

@@ -1,7 +1,6 @@
 import {
   ActivatedToken,
   GrpcError,
-  GrpcErrorType,
   handleReattest,
   handleRemoteError,
   RemoteTokenServiceWithInitiate,
@@ -45,14 +44,11 @@ export type TokenService = RemoteTokenServiceWithInitiate & {
   getTokenToggleDetails: () => Promise<TokenLimitResponse>;
 };
 
-const isGrpcErrorType = (errorData: any): errorData is GrpcErrorType =>
-  errorData && 'grpcErrorCode' in errorData;
-
 const grpcErrorHandler = (err: any) => {
   if (axios.isAxiosError(err)) {
     const errorData = err.response?.data as any;
-    if (isGrpcErrorType(errorData)) {
-      return Promise.reject(new GrpcError(errorData.message, errorData));
+    if (errorData && 'grpcErrorCode' in errorData) {
+      return Promise.reject(new GrpcError('TEST', errorData));
     }
   }
   return Promise.reject(err);
@@ -71,7 +67,6 @@ const service: TokenService = {
           [IsEmulatorHeaderName]: String(isEmulator),
         },
         authWithIdToken: true,
-        skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
         timeout: 15000,
       })
       .then((res) => res.data.pendingTokenDetails)
@@ -85,7 +80,6 @@ const service: TokenService = {
         },
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
       })
       .then((res) => res.data.activeTokenDetails)
       .catch(grpcErrorHandler),
@@ -100,7 +94,6 @@ const service: TokenService = {
         },
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
       })
       .then((res) => res.data.pendingTokenDetails)
       .catch(grpcErrorHandler),
@@ -121,7 +114,6 @@ const service: TokenService = {
         },
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
       })
       .then((res) => res.data.activeTokenDetails)
       .catch(grpcErrorHandler),
@@ -136,7 +128,6 @@ const service: TokenService = {
         },
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
       })
       .then((res) => res.data.activeTokenDetails)
       .catch(grpcErrorHandler),
@@ -152,7 +143,6 @@ const service: TokenService = {
             },
             authWithIdToken: true,
             timeout: 15000,
-            skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
           },
         )
         .then((res) => res.data.removed)
@@ -167,7 +157,6 @@ const service: TokenService = {
           },
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
         })
         .then((res) => res.data.tokens)
         .catch(grpcErrorHandler),
@@ -184,7 +173,6 @@ const service: TokenService = {
             },
             authWithIdToken: true,
             timeout: 15000,
-            skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
           },
         )
         .then((res) => res.data.tokens)
@@ -196,7 +184,6 @@ const service: TokenService = {
         .get<TokenLimitResponse>('/tokens/v3/toggle/details', {
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
         })
         .then((res) => res.data)
         .catch(grpcErrorHandler),
@@ -214,7 +201,6 @@ const service: TokenService = {
             },
             authWithIdToken: true,
             timeout: 15000,
-            skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
           })
           .catch(grpcErrorHandler),
       token,

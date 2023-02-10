@@ -7,7 +7,7 @@
 echo "Loading all env variables from .env file"
 export $(grep -v '^#' .env | gxargs -d '\n') > /dev/null 2>&1
 
-credentials=$(gcloud secrets versions access --project atb-staging-c420 --secret=entur-client-credentials-publish latest)
+credentials=$(gcloud secrets versions access --project atb-mobility-platform-staging --secret=client-credentials-abt latest)
 
 export APP_ENVIRONMENT=staging
 export ENTUR_CLIENT_ID=$(echo $credentials | jq '.clientId' -r)

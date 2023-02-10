@@ -38,7 +38,6 @@ import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/ligh
 import {formatToClock} from '@atb/utils/date';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
-import {usePreferences} from '@atb/preferences';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -58,9 +57,6 @@ export const DepartureDetailsScreenComponent = ({
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme, themeName} = useTheme();
-  const {
-    preferences: {debugShowSeconds},
-  } = usePreferences();
 
   const activeItem = items[activeItemIndexState];
   const hasMultipleItems = items.length > 1;
@@ -193,12 +189,7 @@ export const DepartureDetailsScreenComponent = ({
             {t(
               DepartureDetailsTexts.lastPassedStop(
                 lastPassedStop.quay?.name,
-                formatToClock(
-                  lastPassedStop?.actualDepartureTime,
-                  language,
-                  'nearest',
-                  debugShowSeconds,
-                ),
+                formatToClock(lastPassedStop?.actualDepartureTime, language),
               ),
             )}
           </ThemeText>
@@ -344,7 +335,6 @@ function EstimatedCallRow({
               expectedTime: call.expectedDepartureTime,
               missingRealTime: !call.realtime && isStartOfServiceJourney,
             }}
-            roundingMethod="floor"
             showRealtimeIcon={false}
           />
         }

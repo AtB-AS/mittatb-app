@@ -1,5 +1,5 @@
 import {StopPlace} from '@atb/api/types/departures';
-import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+import {useOnlySingleLocation} from '@atb/location-search';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import React, {useEffect} from 'react';
@@ -39,11 +39,14 @@ export const Departures_NearbyStopPlacesScreen = ({
         location={fromLocation}
         mode={route.params.mode}
         onPressLocationSearch={(location) =>
-          navigation.navigate('Root_LocationSearchByTextScreen', {
-            label: t(NearbyTexts.search.label),
-            callerRouteName: route.name,
-            callerRouteParam: 'location',
-            initialLocation: location,
+          navigation.navigate('LocationSearchStack', {
+            screen: 'LocationSearchByTextScreen',
+            params: {
+              label: t(NearbyTexts.search.label),
+              callerRouteName: route.name,
+              callerRouteParam: 'location',
+              initialLocation: location,
+            },
           })
         }
         onSelectStopPlace={(place: StopPlace) => {

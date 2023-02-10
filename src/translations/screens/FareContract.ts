@@ -1,6 +1,6 @@
 import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {translation as _} from '../commons';
-import {orgSpecificTranslations} from '@atb/translations';
+import orgSpecificTranslations from '@atb/translations/utils';
 
 const FareContractTexts = {
   organizationName: _('AtB', 'AtB'),

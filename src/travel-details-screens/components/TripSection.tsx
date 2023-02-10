@@ -42,7 +42,6 @@ import WaitSection, {WaitDetails} from './WaitSection';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {TripProps} from '@atb/travel-details-screens/components/Trip';
-import {usePreferences} from '@atb/preferences';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -75,9 +74,6 @@ const TripSection: React.FC<TripSectionProps> = ({
   const {t, language} = useTranslation();
   const style = useSectionStyles();
   const {themeName} = useTheme();
-  const {
-    preferences: {debugShowSeconds},
-  } = usePreferences();
 
   const isWalkSection = leg.mode === 'foot';
   const legColor = useTransportationColor(leg.mode, leg.line?.transportSubmode);
@@ -123,7 +119,7 @@ const TripSection: React.FC<TripSectionProps> = ({
               language,
               t,
             )}
-            rowLabel={<Time timeValues={startTimes} roundingMethod="floor" />}
+            rowLabel={<Time timeValues={startTimes} />}
             onPress={() => handleQuayPress(leg.fromPlace.quay)}
             testID="fromPlace"
           >
@@ -190,12 +186,7 @@ const TripSection: React.FC<TripSectionProps> = ({
                 {t(
                   TripDetailsTexts.trip.leg.lastPassedStop(
                     lastPassedStop.quay.name,
-                    formatToClock(
-                      lastPassedStop.actualDepartureTime,
-                      language,
-                      'nearest',
-                      debugShowSeconds,
-                    ),
+                    formatToClock(lastPassedStop.actualDepartureTime, language),
                   ),
                 )}
               </ThemeText>
@@ -215,7 +206,7 @@ const TripSection: React.FC<TripSectionProps> = ({
               language,
               t,
             )}
-            rowLabel={<Time timeValues={endTimes} roundingMethod="ceil" />}
+            rowLabel={<Time timeValues={endTimes} />}
             onPress={() => handleQuayPress(leg.toPlace.quay)}
             testID="toPlace"
           >
@@ -377,12 +368,8 @@ function getStopRowA11yTranslated(
   t: TranslateFunction,
 ): string {
   const timeType = getTimeRepresentationType(values);
-  const time = formatToClock(
-    values.expectedTime ?? values.aimedTime,
-    language,
-    'floor',
-  );
-  const aimedTime = formatToClock(values.aimedTime, language, 'floor');
+  const time = formatToClock(values.expectedTime ?? values.aimedTime, language);
+  const aimedTime = formatToClock(values.aimedTime, language);
 
   switch (timeType) {
     case 'no-realtime':

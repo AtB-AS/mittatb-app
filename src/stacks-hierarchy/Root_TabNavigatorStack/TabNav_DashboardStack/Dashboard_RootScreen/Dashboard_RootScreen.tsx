@@ -12,7 +12,7 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {
   SelectableLocationType,
   useLocationSearchValue,
-} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+} from '@atb/location-search';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SearchForLocations} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
 import {useDoOnceWhen} from '@atb/stacks-hierarchy/utils';
@@ -117,15 +117,18 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
     callerRouteParam: keyof RootProps['route']['params'],
     initialLocation: Location | undefined,
   ) =>
-    navigation.navigate('Root_LocationSearchByTextScreen', {
-      label:
-        callerRouteParam === 'fromLocation'
-          ? t(TripSearchTexts.location.departurePicker.label)
-          : t(TripSearchTexts.location.destinationPicker.label),
-      callerRouteName: DashboardRouteNameStatic,
-      callerRouteParam,
-      initialLocation,
-      includeJourneyHistory: true,
+    navigation.navigate('LocationSearchStack', {
+      screen: 'LocationSearchByTextScreen',
+      params: {
+        label:
+          callerRouteParam === 'fromLocation'
+            ? t(TripSearchTexts.location.departurePicker.label)
+            : t(TripSearchTexts.location.destinationPicker.label),
+        callerRouteName: DashboardRouteNameStatic,
+        callerRouteParam,
+        initialLocation,
+        includeJourneyHistory: true,
+      },
     });
 
   const setCurrentLocationOrRequest = useCallback(

@@ -88,7 +88,7 @@ struct WidgetInfoView: View {
                                 .background(Color("TimeTileBackgroundColor"))
                                 .cornerRadius(8)
                         } else {
-                            DepartureTimesView(departures: departures, parentSize: geometry.size, deepLink: viewModel.deepLink(departure: nil))
+                            DepartureTimesView(departures: departures, parentSize: geometry.size)
                         }
                     }
                     .padding(K.padding)

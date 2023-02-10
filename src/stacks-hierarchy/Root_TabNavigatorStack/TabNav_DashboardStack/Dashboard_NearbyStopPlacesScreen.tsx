@@ -1,3 +1,4 @@
+import {useOnlySingleLocation} from '@atb/location-search';
 import React from 'react';
 import {DashboardScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
 import {StopPlace} from '@atb/api/types/departures';
@@ -8,7 +9,6 @@ import {
 } from '@atb/translations';
 import {NearbyStopPlacesScreenComponent} from '@atb/nearby-stop-places';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 
 type Props = DashboardScreenProps<'Dashboard_NearbyStopPlacesScreen'>;
 
@@ -26,11 +26,14 @@ const Dashboard_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
         location={fromLocation}
         mode={route.params.mode}
         onPressLocationSearch={(location) =>
-          navigation.navigate('Root_LocationSearchByTextScreen', {
-            label: t(NearbyTexts.search.label),
-            callerRouteName: route.name,
-            callerRouteParam: 'location',
-            initialLocation: location,
+          navigation.navigate('LocationSearchStack', {
+            screen: 'LocationSearchByTextScreen',
+            params: {
+              label: t(NearbyTexts.search.label),
+              callerRouteName: route.name,
+              callerRouteParam: 'location',
+              initialLocation: location,
+            },
           })
         }
         onSelectStopPlace={(place: StopPlace) => {

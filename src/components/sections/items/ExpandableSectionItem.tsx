@@ -61,23 +61,20 @@ export function ExpandableSectionItem({
   };
 
   return (
-    <View
-      style={topContainer}
-      accessible={true}
-      accessibilityLabel={text}
-      accessibilityHint={
-        expanded
-          ? t(SectionTexts.expandableSectionItem.a11yHint.contract)
-          : t(SectionTexts.expandableSectionItem.a11yHint.expand)
-      }
-      accessibilityRole="button"
-      accessibilityState={{
-        expanded: expanded,
-      }}
-    >
+    <View style={topContainer}>
       <TouchableOpacity
         onPress={onPress}
         style={sectionStyle.spaceBetween}
+        accessibilityLabel={text}
+        accessibilityHint={
+          expanded
+            ? t(SectionTexts.expandableSectionItem.a11yHint.contract)
+            : t(SectionTexts.expandableSectionItem.a11yHint.expand)
+        }
+        accessibilityRole="button"
+        accessibilityState={{
+          expanded: expanded,
+        }}
         testID={testID}
         {...accessibility}
       >

@@ -1,11 +1,11 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {SearchLocation} from '@atb/favorites/types';
-import {LocationSearchContent} from './Root_LocationSearchByTextScreen';
+import {LocationSearchContent} from '@atb/location-search';
 import {StyleSheet} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {Keyboard, View} from 'react-native';
-import {RootStackScreenProps} from './navigation-types';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 
 export type SearchStopPlaceProps =
   RootStackScreenProps<'Root_SearchStopPlaceScreen'>;

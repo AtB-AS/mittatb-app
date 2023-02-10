@@ -1,5 +1,18 @@
+import merge from 'lodash.merge';
+import {AppOrgs} from '../../types/app-orgs';
+import {APP_ORG} from '@env';
 import {Language, useTranslation} from './commons';
 import {LanguageAndTextLanguagesEnum, LanguageAndTextType} from './types';
+
+type Overrides<T> = {
+  [P in keyof T]?: Overrides<T[P]>;
+};
+export default function orgSpecificTranslations<T>(
+  translationTexts: T,
+  overrides: Partial<{[org in AppOrgs]: Overrides<T>}>,
+) {
+  return merge(translationTexts, overrides[APP_ORG]);
+}
 
 /**
  * Get the text in the requested language. If English is requested, it will

@@ -60,18 +60,19 @@ function withOnPress(a: any): a is WithOnPress {
 
 function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
   const {contentContainer, topContainer} = useSectionItem(props);
-  const sectionStyle = useSectionStyle();
+  const sectonStyle = useSectionStyle();
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
 
   return (
-    <View style={[sectionStyle.spaceBetween, topContainer, styles.flexStart]}>
-      <TransportationIcon
-        style={styles.transportation__icon}
-        mode={favorite.lineTransportationMode}
-        subMode={favorite.lineTransportationSubMode}
-      />
+    <View style={[sectonStyle.spaceBetween, topContainer, styles.flexStart]}>
+      <View style={styles.favorite__icon}>
+        <TransportationIcon
+          mode={favorite.lineTransportationMode}
+          subMode={favorite.lineTransportationSubMode}
+        />
+      </View>
       <View style={contentContainer}>
         <ThemeText>
           {favorite.lineLineNumber}{' '}
@@ -96,7 +97,7 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  transportation__icon: {
+  favorite__icon: {
     marginRight: theme.spacings.medium,
   },
 }));

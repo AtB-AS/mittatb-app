@@ -141,14 +141,12 @@ const TripSearchTexts = {
     resultItem: {
       passedTrip: _('Passert reise, ', 'Passed trip, '),
       header: {
-        title: (mode: string, placeName: string) =>
-          _(`${mode} fra ${placeName}`, `${mode} from ${placeName}`),
-        totalDuration: _('Reisetid', 'Trip duration'),
         time: (startTime: string, endTime: string) =>
           _(
             `Fra klokken ${startTime}, til klokken ${endTime}`,
             `From ${startTime}, to ${endTime}`,
           ),
+        totalDuration: _('Reisetid', 'Trip duration'),
       },
       hasSituationsTip: _(
         'Denne reisen har driftsmeldinger. Se detaljer for mer info',
@@ -193,14 +191,10 @@ const TripSearchTexts = {
           _(`nummer ${number}`, `number ${number}`),
         totalWalkDistance: (meters: string) =>
           _(`Totalt ${meters} meter å gå`, `Total of ${meters} meters to walk`),
-        realtime: (
-          fromPlace: string,
-          realtimeDepartureTime: string,
-          scheduledDepartureTime: string,
-        ) =>
+        departureInfo: (fromPlace: string, fromPlaceDepartureTime: string) =>
           _(
-            `Fra ${fromPlace}, klokken ${realtimeDepartureTime} sanntid, klokken ${scheduledDepartureTime} rutetid`,
-            `From ${fromPlace}, at ${realtimeDepartureTime} realtime, at ${scheduledDepartureTime} scheduled time`,
+            `Fra ${fromPlace}, klokken ${fromPlaceDepartureTime}`,
+            `From ${fromPlace}, at ${fromPlaceDepartureTime}`,
           ),
       },
     },

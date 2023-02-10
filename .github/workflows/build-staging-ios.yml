@@ -1,15 +1,6 @@
 name: Build staging iOS project
 on:
   workflow_dispatch:
-    inputs:
-      force-build:
-        description: 'Forces a new build and ignores the cache'
-        required: false
-        type: choice
-        default: false
-        options:
-          - true
-          - false
   push:
     branches:
       - master
@@ -52,13 +43,13 @@ jobs:
             AtB.app.dSYM.zip
           key: ${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets/') }}
       - name: Generate native assets
-        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn generate-native-assets
       - name: Disable widget
         if: ${{ env.ENABLE_WIDGET != 'true' }}
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget
       - name: Run fastlane build
-        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane ios build
         env:
           # A workaround for Github Actions which breaks for a timeout in some cases, 
@@ -69,7 +60,7 @@ jobs:
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       - name: Replace ipa bundle
-        if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
+        if: steps.ipa-cache.outputs.cache-hit == 'true'
         run: sh ./scripts/ios/replace-bundle.sh
         env:
           IPA_FILE_NAME: 'AtB.ipa'
@@ -90,14 +81,14 @@ jobs:
         env:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_IOS_API_KEY }}
       - name: Create bundle and source maps
-        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: sh ./scripts/ios/create-sourcemaps.sh
       - name: Upload bundle and source maps
         run: sh ./scripts/ios/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Upload dSYMs
-        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
+        if: steps.ipa-cache.outputs.cache-hit != 'true'
         run: sh ./scripts/ios/upload-dsyms.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}

@@ -2,15 +2,15 @@ import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import React from 'react';
 import {View} from 'react-native';
 import {FullScreenHeader} from '@atb/components/screen-header';
+import {LocationSearchTexts, useTranslation} from '../translations/';
 import {SelectableLocationType} from './types';
 import {LocationSearchContent} from './components/LocationSearchContent';
 import {StyleSheet} from '@atb/theme';
-import {LocationSearchTexts, useTranslation} from '@atb/translations';
-import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {LocationSearchStackScreenProps} from './navigation-types';
 
-type Props = RootStackScreenProps<'Root_LocationSearchByTextScreen'>;
+type Props = LocationSearchStackScreenProps<'LocationSearchByTextScreen'>;
 
-export const Root_LocationSearchByTextScreen = ({
+export const LocationSearchByTextScreen = ({
   navigation,
   route: {
     params: {
@@ -38,7 +38,7 @@ export const Root_LocationSearchByTextScreen = ({
 
   const onMapSelection = () => {
     navigation.navigate({
-      name: 'Root_LocationSearchByMapScreen',
+      name: 'LocationSearchByMapScreen',
       params: {
         callerRouteName,
         callerRouteParam,

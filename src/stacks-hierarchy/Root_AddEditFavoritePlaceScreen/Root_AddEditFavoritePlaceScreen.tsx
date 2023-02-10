@@ -11,7 +11,7 @@ import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
-import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+import {useOnlySingleLocation} from '@atb/location-search';
 import {StyleSheet, Theme} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
@@ -155,12 +155,15 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
             label={t(AddEditFavoriteTexts.fields.location.label)}
             location={location}
             onPress={() =>
-              navigation.navigate('Root_LocationSearchByTextScreen', {
-                callerRouteName: route.name,
-                callerRouteParam: 'searchLocation',
-                label: t(AddEditFavoriteTexts.fields.location.label),
-                favoriteChipTypes: ['location', 'map'],
-                initialLocation: location,
+              navigation.navigate('LocationSearchStack', {
+                screen: 'LocationSearchByTextScreen',
+                params: {
+                  callerRouteName: route.name,
+                  callerRouteParam: 'searchLocation',
+                  label: t(AddEditFavoriteTexts.fields.location.label),
+                  favoriteChipTypes: ['location', 'map'],
+                  initialLocation: location,
+                },
               })
             }
             testID="locationSearchButton"

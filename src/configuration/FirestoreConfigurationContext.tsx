@@ -15,29 +15,23 @@ import {
 } from '@atb/reference-data/types';
 import Bugsnag from '@bugsnag/react-native';
 import {
-  defaultFareProductTypeConfig,
   defaultPreassignedFareProducts,
   defaultTariffZones,
   defaultUserProfiles,
+  defaultFareProductTypeConfig,
 } from '@atb/reference-data/defaults';
 import {
-  defaultModesWeSellTicketsFor,
-  defaultPaymentTypes,
   defaultVatPercent,
+  defaultPaymentTypes,
+  defaultModesWeSellTicketsFor,
 } from '@atb/configuration/defaults';
 import {PaymentType} from '@atb/ticketing';
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {
-  mapLanguageAndTextType,
   mapToFareProductTypeConfigs,
   mapToTransportModeFilterOptions,
 } from './converters';
 import type {TravelSearchFiltersType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
-import {LanguageAndTextType} from '@atb/translations';
-
-export type AppTexts = {
-  discountInfo: LanguageAndTextType[];
-};
 
 type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
@@ -48,7 +42,6 @@ type ConfigurationContextState = {
   vatPercent: number;
   fareProductTypeConfigs: FareProductTypeConfig[];
   travelSearchFilters: TravelSearchFiltersType | undefined;
-  appTexts: AppTexts | undefined;
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
@@ -60,7 +53,6 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   vatPercent: defaultVatPercent,
   fareProductTypeConfigs: defaultFareProductTypeConfig,
   travelSearchFilters: undefined,
-  appTexts: undefined,
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
@@ -83,7 +75,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   >(defaultFareProductTypeConfig);
   const [travelSearchFilters, setTravelSearchFilters] =
     useState<TravelSearchFiltersType>();
-  const [appTexts, setAppTexts] = useState<AppTexts>();
 
   useEffect(() => {
     firestore()
@@ -133,11 +124,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (travelSearchFilters) {
             setTravelSearchFilters(travelSearchFilters);
           }
-
-          const appTexts = getAppTextsFromSnapshot(snapshot);
-          if (appTexts) {
-            setAppTexts(appTexts);
-          }
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -158,7 +144,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       vatPercent,
       fareProductTypeConfigs,
       travelSearchFilters,
-      appTexts,
     };
   }, [
     preassignedFareProducts,
@@ -169,7 +154,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     vatPercent,
     fareProductTypeConfigs,
     travelSearchFilters,
-    appTexts,
   ]);
 
   return (
@@ -316,21 +300,4 @@ function getTravelSearchFiltersFromSnapshot(
   }
 
   return undefined;
-}
-
-function getAppTextsFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): AppTexts | undefined {
-  const appTextsRaw = snapshot.docs.find((doc) => doc.id == 'appTexts');
-  if (!appTextsRaw) return undefined;
-
-  const discountInfo = mapLanguageAndTextType(appTextsRaw.get('discountInfo'));
-  if (!discountInfo) {
-    Bugsnag.notify(
-      `App text field "discountInfo" should conform: "LanguageAndTextType"`,
-    );
-    return undefined;
-  }
-
-  return {discountInfo};
 }

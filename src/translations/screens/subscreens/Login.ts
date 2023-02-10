@@ -61,7 +61,7 @@ const LoginTexts = {
       'Log in with a one-time code sent to your phone',
     ),
     input: {
-      heading: _('Mobilnummer', 'Phone number'),
+      heading: _('Mobilnummer', 'phone number'),
       label: _('+47', '+47'),
       placeholder: _(
         'Skriv inn ditt telefonnummer',
