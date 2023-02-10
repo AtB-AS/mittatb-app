@@ -457,10 +457,13 @@ const TariffZones: React.FC<TariffZonesProps> = ({
                     // Mapbox Expression syntax
                     'case',
                     ['==', selectedZones.from.id, ['id']],
-                    hexToRgba(theme.static.status.valid.background, 0.6),
+                    hexToRgba(theme.static.zone_selection.from.background, 0.6),
                     ['==', selectedZones.to.id, ['id']],
                     !isApplicableOnSingleZoneOnly
-                      ? hexToRgba(theme.static.status.info.background, 0.6)
+                      ? hexToRgba(
+                          theme.static.zone_selection.to.background,
+                          0.6,
+                        )
                       : 'transparent',
                     'transparent',
                   ],
