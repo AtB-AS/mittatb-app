@@ -19,11 +19,12 @@ import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavorites} from '@atb/favorites';
 import {UserFavoriteDepartures} from '@atb/favorites/types';
 import {DeparturesRealtimeData} from '@atb/sdk';
-import {differenceInMinutes, differenceInSeconds} from 'date-fns';
+import {differenceInMinutes} from 'date-fns';
 import useInterval from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '@atb/departure-list/utils';
 import {SearchTime} from '@atb/journey-date-picker';
 import {animateNextChange} from '@atb/utils/animation';
+import {useRefreshOnFocus} from '@atb/utils/use-refresh-on-focus';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
@@ -274,15 +275,14 @@ export function useFavoriteDepartureData(
       loadInitialDepartures();
     }
   }, [state.tick, state.lastRefreshTime]);
-  useEffect(() => {
-    if (!isFocused || !state.tick) return;
-    const timeSinceLastTick = differenceInSeconds(Date.now(), state.tick);
-    if (timeSinceLastTick / 60 >= HARD_REFRESH_LIMIT_IN_MINUTES) {
-      loadInitialDepartures();
-    } else if (timeSinceLastTick >= updateFrequencyInSeconds) {
-      dispatch({type: 'LOAD_REALTIME_DATA'});
-    }
-  }, [isFocused]);
+
+  useRefreshOnFocus(
+    state.tick,
+    HARD_REFRESH_LIMIT_IN_MINUTES * 60,
+    () => loadInitialDepartures(),
+    updateFrequencyInSeconds,
+    () => dispatch({type: 'LOAD_REALTIME_DATA'}),
+  );
   useInterval(
     () => dispatch({type: 'LOAD_REALTIME_DATA'}),
     updateFrequencyInSeconds * 1000,

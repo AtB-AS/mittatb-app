@@ -30,6 +30,7 @@ import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {getLimitOfDeparturesPerLineByMode, getTimeRangeByMode} from '../utils';
 import {TimeoutRequest, useTimeoutRequest} from '@atb/api/client';
 import {AxiosRequestConfig} from 'axios';
+import {useRefreshOnFocus} from '@atb/utils/use-refresh-on-focus';
 
 const MAX_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
 
@@ -293,16 +294,13 @@ export function useQuayData(
     [],
     !isFocused || mode !== 'Departure',
   );
-  useEffect(() => {
-    if (!isFocused || !state.tick) return;
-
-    const timeSinceLastTick = differenceInSeconds(Date.now(), state.tick);
-    if (timeSinceLastTick / 60 >= HARD_REFRESH_LIMIT_IN_MINUTES) {
-      loadDepartures();
-    } else if (timeSinceLastTick >= updateFrequencyInSeconds) {
-      dispatch({type: 'LOAD_REALTIME_DATA', quay});
-    }
-  }, [isFocused]);
+  useRefreshOnFocus(
+    state.tick,
+    HARD_REFRESH_LIMIT_IN_MINUTES * 60,
+    () => loadDepartures(),
+    updateFrequencyInSeconds,
+    () => dispatch({type: 'LOAD_REALTIME_DATA', quay}),
+  );
 
   return {
     state,
