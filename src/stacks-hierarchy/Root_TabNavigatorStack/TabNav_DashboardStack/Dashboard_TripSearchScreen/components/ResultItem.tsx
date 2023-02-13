@@ -1,4 +1,4 @@
-import {ArrowRight, ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Walk} from '@atb/assets/svg/mono-icons/transportation';
 import {
   AccessibleText,
@@ -10,7 +10,6 @@ import {TransportationIcon} from '@atb/components/transportation-icon';
 import {SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
-  dictionary,
   Language,
   TranslateFunction,
   TripSearchTexts,
@@ -25,13 +24,17 @@ import {
   secondsToDuration,
   secondsToDurationShort,
 } from '@atb/utils/date';
-import {getTranslatedModeName} from '@atb/utils/transportation-names';
+import {
+  getQuayName,
+  getTranslatedModeName,
+} from '@atb/utils/transportation-names';
 
 import React, {useEffect, useRef, useState} from 'react';
 import {
   AccessibilityProps,
   Animated,
   StyleProp,
+  Text,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -41,6 +44,7 @@ import {SearchTime} from '@atb/journey-date-picker';
 import {RailReplacementBusMessage} from './RailReplacementBusMessage';
 import {
   getNoticesForLeg,
+  getTimeRepresentationType,
   isSignificantFootLegWalkOrWaitTime,
   significantWaitTime,
   significantWalkTime,
@@ -48,7 +52,8 @@ import {
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {CollapsedLegs} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/CollapsedLegs';
 import useFontScale from '@atb/utils/use-font-scale';
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import TripDetails from '@atb/translations/screens/subscreens/TripDetails';
+import {secondsToMinutes} from 'date-fns';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -57,56 +62,32 @@ type ResultItemProps = {
   testID?: string;
 };
 
-function legWithQuay(leg: Leg) {
-  if (leg.fromEstimatedCall?.quay) {
-    return true;
-  }
-  if (!leg.mode) return false;
-
-  // Manually find name of from place based on mode as in some cases
-  // (from adresses that are also quays) you won't have quay information in from place.
-  const modesWithoutQuay: Mode[] = [Mode.Bicycle, Mode.Foot];
-  return !modesWithoutQuay.includes(leg.mode);
-}
-
-function getFirstQuayName(legs: Leg[]) {
-  const found = legs.find(legWithQuay);
-  const fromQuay = (found?.fromEstimatedCall ?? found?.fromPlace)?.quay;
-  if (!fromQuay) {
-    return legs[0].fromPlace.name;
-  }
-  const publicCodeOutput = fromQuay.publicCode ? ' ' + fromQuay.publicCode : '';
-  return fromQuay.name + publicCodeOutput;
-}
 const ResultItemHeader: React.FC<{
   tripPattern: TripPattern;
-  strikethrough: boolean;
-}> = ({tripPattern, strikethrough}) => {
+}> = ({tripPattern}) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
+  let start = tripPattern.legs[0];
+  let startName = start.fromPlace.name;
+  if (tripPattern.legs[0].mode === 'foot' && tripPattern.legs[1]) {
+    start = tripPattern.legs[1];
+    startName = getQuayName(start.fromPlace.quay);
+  }
+
   const durationText = secondsToDurationShort(tripPattern.duration, language);
-  const startTime = tripPattern.legs[0].expectedStartTime;
-  const endTime = tripPattern.legs[tripPattern.legs.length - 1].expectedEndTime;
+  const transportName = t(getTranslatedModeName(start.mode));
 
   return (
     <View style={styles.resultHeader}>
-      <ThemeText
-        type="body__secondary"
-        color="secondary"
-        style={[
-          styles.resultHeaderLabel,
-          strikethrough && styles.strikethrough,
-        ]}
-        accessibilityLabel={t(
-          TripSearchTexts.results.resultItem.header.time(
-            formatToClock(tripPattern.expectedStartTime, language),
-            formatToClock(tripPattern.expectedEndTime, language),
-          ),
-        )}
-        testID="resultStartAndEndTime"
-      >
-        {formatToClock(startTime, language)} –{' '}
-        {formatToClock(endTime, language)}
+      <ThemeText style={styles.fromPlaceText} type={'body__secondary--bold'}>
+        {startName
+          ? t(
+              TripSearchTexts.results.resultItem.header.title(
+                transportName,
+                startName,
+              ),
+            )
+          : transportName}
       </ThemeText>
       <View style={styles.durationContainer}>
         <AccessibleText
@@ -183,6 +164,10 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   const isInPast =
     isInThePast(tripPattern.legs[0].expectedStartTime) &&
     searchTime?.option !== 'now';
+  const iconHeight = {
+    height: theme.icon.size['normal'] * fontScale + theme.spacings.small * 2,
+  };
+  const lineHeight = {height: (theme.spacings.xSmall / 2) * fontScale};
 
   return (
     <TouchableOpacity
@@ -203,7 +188,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         {...props}
         accessible={false}
       >
-        <ResultItemHeader tripPattern={tripPattern} strikethrough={isInPast} />
+        <ResultItemHeader tripPattern={tripPattern} />
         <View style={styles.detailsContainer} {...screenReaderHidden}>
           <View
             style={styles.flexRow}
@@ -226,65 +211,78 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                       {leg.mode === 'foot' ? (
                         <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
                       ) : (
-                        <TransportationLeg leg={leg} />
+                        <TransportationLeg
+                          leg={leg}
+                          style={
+                            isSignificantDifference(leg)
+                              ? styles.transportationIcon_wide
+                              : undefined
+                          }
+                        />
                       )}
+                      <View style={styles.departureTimes}>
+                        <ThemeText type="body__tertiary" color="primary">
+                          {formatToClock(
+                            leg.expectedStartTime,
+                            language,
+                            'floor',
+                          )}
+                        </ThemeText>
+                        {isSignificantDifference(leg) && (
+                          <ThemeText
+                            style={styles.scheduledTime}
+                            type="body__tertiary--strike"
+                            color="secondary"
+                          >
+                            {formatToClock(
+                              leg.aimedStartTime,
+                              language,
+                              'floor',
+                            )}
+                          </ThemeText>
+                        )}
+                      </View>
                     </View>
                   )),
-                  <ThemeIcon svg={ChevronRight} size="small" />,
+                  <View style={[styles.dashContainer, iconHeight]}>
+                    <LegDash />
+                  </View>,
                 )}
               </View>
+              {collapsedLegs.length ? (
+                <View style={[styles.dashContainer, iconHeight]}>
+                  <LegDash />
+                </View>
+              ) : null}
               <CollapsedLegs legs={collapsedLegs} />
             </View>
-            <View style={styles.destinationLineContainer_grow}>
-              <View
-                style={[
-                  styles.destinationLine_grow,
-                  {height: (theme.spacings.xSmall / 2) * fontScale},
-                ]}
-              />
+            <View style={[styles.destinationLineContainer_grow, iconHeight]}>
+              <View style={[styles.destinationLine_grow, lineHeight]} />
             </View>
           </View>
-          <View style={styles.destinationLineContainer}>
-            <View
-              style={[
-                styles.destinationLine,
-                {height: (theme.spacings.xSmall / 2) * fontScale},
-              ]}
-            />
+          <View style={[styles.destinationLineContainer, iconHeight]}>
+            <View style={[styles.destinationLine, lineHeight]} />
           </View>
-          <DestinationIcon style={styles.iconContainer} />
+          <View>
+            <DestinationIcon style={styles.iconContainer} />
+            <View style={styles.departureTimes}>
+              <ThemeText type="body__tertiary" color="primary">
+                {formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
+              </ThemeText>
+            </View>
+          </View>
         </View>
-        <ResultItemFooter legs={legs} />
+        <ResultItemFooter />
       </Animated.View>
     </TouchableOpacity>
   );
 };
-function ResultItemFooter({legs}: {legs: Leg[]}) {
+function ResultItemFooter() {
   const styles = useThemeStyles();
-  const {t, language} = useTranslation();
-  const quayName =
-    getFirstQuayName(legs) ?? t(dictionary.travel.quay.defaultName);
-  const quayLeg = legs.find(legWithQuay);
-  const timePrefix =
-    !!quayLeg && !quayLeg.realtime ? t(dictionary.missingRealTimePrefix) : '';
-  const quayStartTime = quayLeg?.expectedStartTime ?? legs[0].expectedStartTime;
+  const {t} = useTranslation();
 
   return (
     <View style={styles.resultFooter}>
-      <View style={styles.resultFooterText}>
-        <ThemeText
-          type="body__secondary"
-          style={styles.fromPlaceText}
-          numberOfLines={1}
-          testID="resultDeparturePlace"
-        >
-          {t(TripSearchTexts.results.resultItem.footer.fromPlace(quayName)) +
-            ' '}
-        </ThemeText>
-        <ThemeText type="body__secondary" testID="resultDepartureTime">
-          {timePrefix + formatToClock(quayStartTime, language)}
-        </ThemeText>
-      </View>
       <View style={styles.detailsTextWrapper}>
         <ThemeText type="body__secondary">
           {t(TripSearchTexts.results.resultItem.footer.detailsLabel)}
@@ -308,6 +306,24 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.medium,
     flexDirection: 'row',
   },
+  lineContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    flexGrow: 1,
+  },
+  legLine: {
+    backgroundColor: theme.static.background.background_3.background,
+    flexDirection: 'row',
+    borderRadius: theme.border.radius.regular,
+    width: 5,
+  },
+  leftLegLine: {
+    marginLeft: theme.spacings.xSmall,
+    marginRight: 2,
+  },
+  rightLegLine: {
+    marginRight: theme.spacings.xSmall,
+  },
   destinationLineContainer_grow: {
     justifyContent: 'center',
     flexGrow: 1,
@@ -317,13 +333,14 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: theme.spacings.large,
   },
   destinationLine_grow: {
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.static.background.background_3.background,
+    marginLeft: theme.spacings.xSmall,
     borderBottomLeftRadius: theme.border.radius.regular,
     borderTopLeftRadius: theme.border.radius.regular,
   },
   destinationLine: {
-    backgroundColor: theme.static.background.background_2.background,
-    marginRight: theme.spacings.small,
+    backgroundColor: theme.static.background.background_3.background,
+    marginRight: theme.spacings.xSmall,
     borderBottomRightRadius: theme.border.radius.regular,
     borderTopRightRadius: theme.border.radius.regular,
   },
@@ -333,45 +350,64 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.small,
     borderRadius: theme.border.radius.small,
   },
+  walkContainer: {
+    backgroundColor: theme.static.background.background_2.background,
+    paddingVertical: theme.spacings.small,
+    paddingHorizontal: theme.spacings.small,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    borderRadius: theme.border.radius.small,
+  },
+  walkDuration: {
+    fontSize: 10,
+    marginLeft: -2,
+    color: theme.text.colors.primary,
+  },
   resultHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     padding: theme.spacings.medium,
-    paddingBottom: 0,
-  },
-  resultHeaderLabel: {
-    flex: 3,
+    paddingBottom: theme.spacings.medium,
+    borderBottomColor: theme.border.primary,
+    borderBottomWidth: theme.border.width.slim,
   },
   row: {
     flexDirection: 'row',
-  },
-  strikethrough: {
-    textDecorationLine: 'line-through',
+    alignItems: 'flex-start',
   },
   flexRow: {
     flex: 1,
     flexDirection: 'row',
   },
-  legOutput: {
-    marginHorizontal: theme.spacings.xSmall,
-    flexDirection: 'row',
+  transportationIcon_wide: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  dashContainer: {
     alignItems: 'center',
+    flexDirection: 'row',
+  },
+  legOutput: {
+    flexDirection: 'row',
+  },
+  departureTimes: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginVertical: theme.spacings.xSmall,
+  },
+  scheduledTime: {
+    marginLeft: theme.spacings.xSmall,
   },
   resultFooter: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     borderTopColor: theme.border.primary,
     borderTopWidth: theme.border.width.slim,
     padding: theme.spacings.medium,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  resultFooterText: {
-    flexShrink: 1,
-    flexDirection: 'row',
+    alignItems: 'flex-end',
   },
   fromPlaceText: {
-    flexShrink: 1,
+    flex: 3,
   },
   detailsTextWrapper: {
     flexDirection: 'row',
@@ -382,7 +418,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginLeft: theme.spacings.xSmall,
   },
   durationContainer: {
-    flex: 2,
+    flex: 1,
     alignItems: 'flex-end',
   },
   warningIcon: {
@@ -390,8 +426,24 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
+const LegDash = () => {
+  const styles = useThemeStyles();
+  const {theme} = useTheme();
+  const fontScale = useFontScale();
+  const lineHeight = {height: (theme.spacings.xSmall / 2) * fontScale};
+  return (
+    <>
+      <View style={styles.lineContainer}>
+        <View style={[styles.legLine, styles.leftLegLine, lineHeight]}></View>
+      </View>
+      <View style={styles.lineContainer}>
+        <View style={[styles.legLine, styles.rightLegLine, lineHeight]}></View>
+      </View>
+    </>
+  );
+};
 const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
-  const styles = useLegStyles();
+  const styles = useThemeStyles();
   const showWaitTime = Boolean(nextLeg);
   const {t, language} = useTranslation();
   const waitTimeInSeconds = !nextLeg
@@ -416,40 +468,27 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       : t(TripSearchTexts.results.resultItem.footLeg.walkLabel(walkDuration));
 
   return (
-    <View
-      style={styles.legContainer}
-      accessibilityLabel={a11yText}
-      testID="fLeg"
-    >
-      <ThemeIcon svg={Walk} />
+    <View style={styles.walkContainer}>
+      <ThemeIcon accessibilityLabel={a11yText} testID="fLeg" svg={Walk} />
+      <Text style={styles.walkDuration}>{secondsToMinutes(leg.duration)}</Text>
     </View>
   );
 };
 
-const useLegStyles = StyleSheet.createThemeHook((theme) => ({
-  legContainer: {
-    marginHorizontal: theme.spacings.xSmall,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  iconContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-}));
-
-const TransportationLeg = ({leg}: {leg: Leg}) => {
-  const styles = useLegStyles();
+const TransportationLeg = ({
+  leg,
+  style,
+}: {
+  leg: Leg;
+  style?: StyleProp<ViewStyle>;
+}) => {
   return (
-    <View style={styles.legContainer}>
-      <View style={styles.iconContainer} testID="trLeg">
-        <TransportationIcon
-          mode={leg.mode}
-          subMode={leg.line?.transportSubmode}
-          lineNumber={leg.line?.publicCode}
-        />
-      </View>
-    </View>
+    <TransportationIcon
+      style={style}
+      mode={leg.mode}
+      subMode={leg.line?.transportSubmode}
+      lineNumber={leg.line?.publicCode}
+    />
   );
 };
 
@@ -467,12 +506,20 @@ const tripSummary = (
 
     ${
       firstLeg
-        ? t(
-            TripSearchTexts.results.resultItem.footer.fromPlaceWithTime(
-              firstLeg.fromPlace?.name ?? '',
-              formatToClock(firstLeg.expectedStartTime, language),
-            ),
-          )
+        ? isSignificantDifference(firstLeg)
+          ? t(
+              TripDetails.trip.leg.start.a11yLabel.realAndAimed(
+                firstLeg.fromPlace?.name ?? '',
+                formatToClock(firstLeg.expectedStartTime, language, 'floor'),
+                formatToClock(firstLeg.aimedStartTime, language, 'floor'),
+              ),
+            )
+          : t(
+              TripDetails.trip.leg.start.a11yLabel.noRealTime(
+                firstLeg.fromPlace?.name ?? '',
+                formatToClock(firstLeg.expectedStartTime, language, 'floor'),
+              ),
+            )
         : ''
     }
 
@@ -524,6 +571,16 @@ const tripSummary = (
       )}  ${screenReaderPause}
   `;
 };
+
+function isSignificantDifference(leg: Leg) {
+  return (
+    getTimeRepresentationType({
+      missingRealTime: !leg.realtime,
+      aimedTime: leg.aimedStartTime,
+      expectedTime: leg.expectedStartTime,
+    }) === 'significant-difference'
+  );
+}
 
 const DestinationIcon = ({style}: {style?: StyleProp<ViewStyle>}) => {
   return <ThemeIcon style={style} svg={Destination} />;
