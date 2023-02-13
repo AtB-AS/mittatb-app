@@ -22,6 +22,7 @@ import {StopPlacesMode} from '../../nearby-stop-places/types';
 import {getLimitOfDeparturesPerLineByMode, getTimeRangeByMode} from '../utils';
 import {TimeoutRequest, useTimeoutRequest} from '@atb/api/client';
 import {AxiosRequestConfig} from 'axios';
+import {useRefreshOnFocus} from '@atb/utils/use-refresh-on-focus';
 
 export const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 
@@ -286,6 +287,13 @@ export function useStopPlaceData(
     tickRateInSeconds * 1000,
     [],
     !isFocused || mode !== 'Departure',
+  );
+  useRefreshOnFocus(
+    state.tick,
+    HARD_REFRESH_LIMIT_IN_MINUTES * 60,
+    loadDepartures,
+    updateFrequencyInSeconds,
+    useCallback(() => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace}), []),
   );
 
   return {

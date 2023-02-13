@@ -24,6 +24,7 @@ import useInterval from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '@atb/departure-list/utils';
 import {SearchTime} from '@atb/journey-date-picker';
 import {animateNextChange} from '@atb/utils/animation';
+import {useRefreshOnFocus} from '@atb/utils/use-refresh-on-focus';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
@@ -261,7 +262,7 @@ export function useFavoriteDepartureData(
         type: 'LOAD_INITIAL_DEPARTURES',
         favoriteDepartures: dashboardFavorites,
       }),
-    [dashboardFavoriteIds],
+    [JSON.stringify(dashboardFavoriteIds)],
   );
 
   useEffect(() => {
@@ -274,6 +275,14 @@ export function useFavoriteDepartureData(
       loadInitialDepartures();
     }
   }, [state.tick, state.lastRefreshTime]);
+  useRefreshOnFocus(
+    state.tick,
+    HARD_REFRESH_LIMIT_IN_MINUTES * 60,
+    loadInitialDepartures,
+    updateFrequencyInSeconds,
+    useCallback(() => dispatch({type: 'LOAD_REALTIME_DATA'}), []),
+  );
+
   useInterval(
     () => dispatch({type: 'LOAD_REALTIME_DATA'}),
     updateFrequencyInSeconds * 1000,
