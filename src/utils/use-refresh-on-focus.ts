@@ -3,7 +3,7 @@ import {differenceInSeconds} from 'date-fns';
 import {useEffect} from 'react';
 
 export function useRefreshOnFocus(
-  tick: Date | undefined,
+  lastUpdate: Date | undefined,
   hardRefreshLimitInSeconds: number,
   hardRefresh: () => void,
   softRefreshLimitInSeconds: number,
@@ -11,8 +11,8 @@ export function useRefreshOnFocus(
 ) {
   const isFocused = useIsFocused();
   useEffect(() => {
-    if (!isFocused || !tick) return;
-    const timeSinceLastTick = differenceInSeconds(Date.now(), tick);
+    if (!isFocused || !lastUpdate) return;
+    const timeSinceLastTick = differenceInSeconds(Date.now(), lastUpdate);
 
     if (timeSinceLastTick >= hardRefreshLimitInSeconds) {
       hardRefresh();
