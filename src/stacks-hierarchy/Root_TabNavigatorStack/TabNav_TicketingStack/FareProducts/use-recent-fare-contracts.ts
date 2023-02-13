@@ -10,7 +10,7 @@ import {
   useTicketingState,
 } from '@atb/ticketing';
 import {useEffect, useMemo, useReducer} from 'react';
-import {UserProfileWithCount} from '../Purchase/Travellers/use-user-count-state';
+import {UserProfileWithCount} from '../../../Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {FareProductTypeConfig} from '../FareContracts/utils';
 
