@@ -262,7 +262,7 @@ export function useFavoriteDepartureData(
         type: 'LOAD_INITIAL_DEPARTURES',
         favoriteDepartures: dashboardFavorites,
       }),
-    [dashboardFavoriteIds],
+    [JSON.stringify(dashboardFavoriteIds)],
   );
 
   useEffect(() => {
@@ -278,9 +278,9 @@ export function useFavoriteDepartureData(
   useRefreshOnFocus(
     state.tick,
     HARD_REFRESH_LIMIT_IN_MINUTES * 60,
-    () => loadInitialDepartures(),
+    loadInitialDepartures,
     updateFrequencyInSeconds,
-    () => dispatch({type: 'LOAD_REALTIME_DATA'}),
+    useCallback(() => dispatch({type: 'LOAD_REALTIME_DATA'}), []),
   );
 
   useInterval(

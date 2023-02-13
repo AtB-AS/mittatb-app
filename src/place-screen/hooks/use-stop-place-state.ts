@@ -291,9 +291,9 @@ export function useStopPlaceData(
   useRefreshOnFocus(
     state.tick,
     HARD_REFRESH_LIMIT_IN_MINUTES * 60,
-    () => loadDepartures(),
+    loadDepartures,
     updateFrequencyInSeconds,
-    () => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace}),
+    useCallback(() => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace}), []),
   );
 
   return {

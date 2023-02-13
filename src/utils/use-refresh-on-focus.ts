@@ -19,5 +19,11 @@ export function useRefreshOnFocus(
     } else if (timeSinceLastTick >= softRefreshLimitInSeconds) {
       softRefresh();
     }
-  }, [isFocused]);
+  }, [
+    isFocused,
+    hardRefreshLimitInSeconds,
+    hardRefresh,
+    softRefreshLimitInSeconds,
+    softRefresh,
+  ]);
 }

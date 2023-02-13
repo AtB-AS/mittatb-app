@@ -297,9 +297,9 @@ export function useQuayData(
   useRefreshOnFocus(
     state.tick,
     HARD_REFRESH_LIMIT_IN_MINUTES * 60,
-    () => loadDepartures(),
+    loadDepartures,
     updateFrequencyInSeconds,
-    () => dispatch({type: 'LOAD_REALTIME_DATA', quay}),
+    useCallback(() => dispatch({type: 'LOAD_REALTIME_DATA', quay}), []),
   );
 
   return {
