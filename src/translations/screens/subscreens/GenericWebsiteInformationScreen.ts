@@ -4,7 +4,7 @@ import {orgSpecificTranslations} from '@atb/translations';
 const GenericWebsiteInformationScreenTextsInternal = {
   message: _(
     'Gjeldende informasjon finner du på www.atb.no',
-    'Current information can be found on atb.no',
+    'Current information can be found on www.atb.no/en',
   ),
 };
 
@@ -14,7 +14,7 @@ export default orgSpecificTranslations(
     nfk: {
       message: _(
         'Gjeldende informasjon finner du på www.reisnordland.no',
-        'Current information can be found on reisnordland.com',
+        'Current information can be found on www.reisnordland.com',
       ),
     },
   },
