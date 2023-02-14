@@ -230,7 +230,23 @@ const TripSearchTexts = {
         heading: _('Hva vil du reise med?', 'What do you want to travel with?'),
         all: _('Alle', 'All'),
       },
-      save: _('Lagre valg', 'Save selection'),
+      use: _('Bruk', 'Use'),
+      saveFilters: {
+        text: _(
+          'Lagre valg for fremtidige reisesøk',
+          'Save selection for future travel searches',
+        ),
+        a11yHint: {
+          save: _(
+            'Aktiver for å lagre valg for fremtidige reisesøk',
+            'Activate to save selection for future travel searches',
+          ),
+          notSave: _(
+            'Aktiver for å ikke lagre valg for fremtidige reisesøk',
+            'Activate to not save selection for future travel searches',
+          ),
+        },
+      },
     },
     selection: {
       transportModes: (selected: number, total: number) =>
