@@ -35,7 +35,7 @@ import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
 import useLocalConfig from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
-import {IS_QA_ENV} from '@env';
+import {APP_ORG, IS_QA_ENV} from '@env';
 import parsePhoneNumber from 'libphonenumber-js';
 import React from 'react';
 import {Linking, View} from 'react-native';
@@ -477,7 +477,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 )}
                 testID="ticketingInfoButton"
                 onPress={() =>
-                  navigation.navigate('Profile_TicketingInformationScreen')
+                  navigation.navigate(
+                    APP_ORG === 'atb'
+                      ? 'Profile_TicketingInformationScreen'
+                      : 'Profile_GenericWebsiteInformationScreen',
+                  )
                 }
               />
             )}
@@ -501,7 +505,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 )}
                 testID="termsInfoButton"
                 onPress={() =>
-                  navigation.navigate('Profile_TermsInformationScreen')
+                  navigation.navigate(
+                    APP_ORG === 'atb'
+                      ? 'Profile_TermsInformationScreen'
+                      : 'Profile_GenericWebsiteInformationScreen',
+                  )
                 }
               />
             )}
@@ -527,7 +535,9 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 testID="inspectionInfoButton"
                 onPress={() =>
                   navigation.navigate(
-                    'Profile_TicketInspectionInformationScreen',
+                    APP_ORG === 'atb'
+                      ? 'Profile_TicketInspectionInformationScreen'
+                      : 'Profile_GenericWebsiteInformationScreen',
                   )
                 }
               />
