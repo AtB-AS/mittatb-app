@@ -13,10 +13,10 @@ export default function LoginInAppStack() {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName="activeFareContractPromptInApp"
+      initialRouteName="ActiveFareContractPromptInApp"
     >
       <Stack.Screen
-        name="activeFareContractPromptInApp"
+        name="ActiveFareContractPromptInApp"
         component={ActiveFareContractPromptInApp}
       />
       <Stack.Screen
