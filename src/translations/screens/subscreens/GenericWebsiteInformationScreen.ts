@@ -2,6 +2,7 @@ import {translation as _} from '../../commons';
 import {orgSpecificTranslations} from '@atb/translations';
 
 const GenericWebsiteInformationScreenTextsInternal = {
+  title: _('Informasjon', 'Information'),
   message: _(
     'Gjeldende informasjon finner du på www.atb.no',
     'Current information can be found on www.atb.no/en',
