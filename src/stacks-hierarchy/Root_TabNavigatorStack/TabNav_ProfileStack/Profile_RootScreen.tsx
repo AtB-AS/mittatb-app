@@ -84,7 +84,18 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const showMapPage = useMapPage();
 
   const {profileInfoUrls} = useFirestoreConfiguration();
-  const {ticketingInfo, termsInfo, inspectionInfo} = profileInfoUrls;
+  const ticketingInfo = profileInfoUrls?.ticketingInfo
+    ? profileInfoUrls?.ticketingInfo
+    : undefined;
+  const termsInfo = profileInfoUrls?.termsInfo
+    ? profileInfoUrls?.termsInfo
+    : undefined;
+  const inspectionInfo = profileInfoUrls?.inspectionInfo
+    ? profileInfoUrls?.inspectionInfo
+    : undefined;
+  const ticketingInfoUrl = getTextForLanguage(ticketingInfo, language);
+  const termsInfoUrl = getTextForLanguage(termsInfo, language);
+  const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
 
   const {enable_departures_v2_as_default} = useRemoteConfig();
   const setDeparturesV2Enabled = (value: boolean) => {
@@ -457,7 +468,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             <Sections.HeaderSectionItem
               text={t(ProfileTexts.sections.information.heading)}
             />
-            {ticketingInfo ? (
+            {ticketingInfoUrl ? (
               <Sections.LinkSectionItem
                 icon={<ThemeIcon svg={ExternalLink} />}
                 text={t(
@@ -465,9 +476,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                     .label,
                 )}
                 testID="ticketingInfoButton"
-                onPress={() =>
-                  Linking.openURL(getTextForLanguage(ticketingInfo, language))
-                }
+                onPress={() => Linking.openURL(ticketingInfoUrl)}
               />
             ) : (
               <Sections.LinkSectionItem
@@ -485,7 +494,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 }
               />
             )}
-            {termsInfo ? (
+            {termsInfoUrl ? (
               <Sections.LinkSectionItem
                 icon={<ThemeIcon svg={ExternalLink} />}
                 text={t(
@@ -493,9 +502,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                     .label,
                 )}
                 testID="termsInfoButton"
-                onPress={() =>
-                  Linking.openURL(getTextForLanguage(termsInfo, language))
-                }
+                onPress={() => Linking.openURL(termsInfoUrl)}
               />
             ) : (
               <Sections.LinkSectionItem
@@ -514,7 +521,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               />
             )}
 
-            {inspectionInfo ? (
+            {inspectionInfoUrl ? (
               <Sections.LinkSectionItem
                 icon={<ThemeIcon svg={ExternalLink} />}
                 text={t(
@@ -522,9 +529,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                     .label,
                 )}
                 testID="inspectionInfoButton"
-                onPress={() =>
-                  Linking.openURL(getTextForLanguage(inspectionInfo, language))
-                }
+                onPress={() => Linking.openURL(inspectionInfoUrl)}
               />
             ) : (
               <Sections.LinkSectionItem
