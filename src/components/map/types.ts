@@ -26,6 +26,7 @@ export type SelectionLocationCallback = (
 export type VehiclesState = {
   vehicles: FeatureCollection<GeoJSON.Point, VehicleFragment>;
   fetchVehicles: (coordinates: Coordinates, radius?: number) => void;
+  onPress: (type: MapSelectionActionType) => void;
 };
 export type NavigateToTripSearchCallback = (
   location: GeoLocation | SearchLocation,
@@ -56,10 +57,21 @@ export type MapProps = {
     }
 );
 
+export type Cluster = {
+  cluster_id: number;
+  cluster: boolean;
+  point_count_abbreviated: string;
+  point_count: number;
+};
+
 export type MapSelectionActionType =
   | {
       source: 'map-click';
       feature: Feature<Point>;
+    }
+  | {
+      source: 'cluster-click';
+      feature: Feature<Point, Cluster>;
     }
   | {
       source: 'my-position';
