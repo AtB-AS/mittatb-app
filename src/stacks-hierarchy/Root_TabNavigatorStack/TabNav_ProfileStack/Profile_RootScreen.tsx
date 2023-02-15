@@ -15,6 +15,7 @@ import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import SelectFavouritesBottomSheet from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
@@ -24,13 +25,17 @@ import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
-import {ProfileTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  ProfileTexts,
+  useTranslation,
+} from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
 import useLocalConfig from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
-import {IS_QA_ENV} from '@env';
+import {APP_ORG, IS_QA_ENV} from '@env';
 import parsePhoneNumber from 'libphonenumber-js';
 import React from 'react';
 import {Linking, View} from 'react-native';
@@ -59,7 +64,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {wipeToken} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {authenticationType, signOut, user, customerNumber} = useAuthState();
   const config = useLocalConfig();
 
@@ -77,6 +82,20 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {setPreference} = usePreferences();
   const isDeparturesV2Enabled = useDeparturesV2Enabled();
   const showMapPage = useMapPage();
+
+  const {configurableLinks} = useFirestoreConfiguration();
+  const ticketingInfo = configurableLinks?.ticketingInfo
+    ? configurableLinks?.ticketingInfo
+    : undefined;
+  const termsInfo = configurableLinks?.termsInfo
+    ? configurableLinks?.termsInfo
+    : undefined;
+  const inspectionInfo = configurableLinks?.inspectionInfo
+    ? configurableLinks?.inspectionInfo
+    : undefined;
+  const ticketingInfoUrl = getTextForLanguage(ticketingInfo, language);
+  const termsInfoUrl = getTextForLanguage(termsInfo, language);
+  const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
 
   const {enable_departures_v2_as_default} = useRemoteConfig();
   const setDeparturesV2Enabled = (value: boolean) => {
@@ -449,35 +468,85 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             <Sections.HeaderSectionItem
               text={t(ProfileTexts.sections.information.heading)}
             />
-            <Sections.LinkSectionItem
-              text={t(
-                ProfileTexts.sections.information.linkSectionItems.ticketing
-                  .label,
-              )}
-              testID="ticketingInfoButton"
-              onPress={() =>
-                navigation.navigate('Profile_TicketingInformationScreen')
-              }
-            />
-            <Sections.LinkSectionItem
-              text={t(
-                ProfileTexts.sections.information.linkSectionItems.terms.label,
-              )}
-              testID="termsInfoButton"
-              onPress={() =>
-                navigation.navigate('Profile_TermsInformationScreen')
-              }
-            />
-            <Sections.LinkSectionItem
-              text={t(
-                ProfileTexts.sections.information.linkSectionItems.inspection
-                  .label,
-              )}
-              testID="inspectionInfoButton"
-              onPress={() =>
-                navigation.navigate('Profile_TicketInspectionInformationScreen')
-              }
-            />
+            {ticketingInfoUrl ? (
+              <Sections.LinkSectionItem
+                icon={<ThemeIcon svg={ExternalLink} />}
+                text={t(
+                  ProfileTexts.sections.information.linkSectionItems.ticketing
+                    .label,
+                )}
+                testID="ticketingInfoButton"
+                onPress={() => Linking.openURL(ticketingInfoUrl)}
+              />
+            ) : (
+              <Sections.LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.information.linkSectionItems.ticketing
+                    .label,
+                )}
+                testID="ticketingInfoButton"
+                onPress={() =>
+                  navigation.navigate(
+                    APP_ORG === 'atb'
+                      ? 'Profile_TicketingInformationScreen'
+                      : 'Profile_GenericWebsiteInformationScreen',
+                  )
+                }
+              />
+            )}
+            {termsInfoUrl ? (
+              <Sections.LinkSectionItem
+                icon={<ThemeIcon svg={ExternalLink} />}
+                text={t(
+                  ProfileTexts.sections.information.linkSectionItems.terms
+                    .label,
+                )}
+                testID="termsInfoButton"
+                onPress={() => Linking.openURL(termsInfoUrl)}
+              />
+            ) : (
+              <Sections.LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.information.linkSectionItems.terms
+                    .label,
+                )}
+                testID="termsInfoButton"
+                onPress={() =>
+                  navigation.navigate(
+                    APP_ORG === 'atb'
+                      ? 'Profile_TermsInformationScreen'
+                      : 'Profile_GenericWebsiteInformationScreen',
+                  )
+                }
+              />
+            )}
+
+            {inspectionInfoUrl ? (
+              <Sections.LinkSectionItem
+                icon={<ThemeIcon svg={ExternalLink} />}
+                text={t(
+                  ProfileTexts.sections.information.linkSectionItems.inspection
+                    .label,
+                )}
+                testID="inspectionInfoButton"
+                onPress={() => Linking.openURL(inspectionInfoUrl)}
+              />
+            ) : (
+              <Sections.LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.information.linkSectionItems.inspection
+                    .label,
+                )}
+                testID="inspectionInfoButton"
+                onPress={() =>
+                  navigation.navigate(
+                    APP_ORG === 'atb'
+                      ? 'Profile_TicketInspectionInformationScreen'
+                      : 'Profile_GenericWebsiteInformationScreen',
+                  )
+                }
+              />
+            )}
           </Sections.Section>
         )}
         {(!!JSON.parse(IS_QA_ENV || 'false') ||
