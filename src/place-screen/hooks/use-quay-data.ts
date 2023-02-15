@@ -295,6 +295,7 @@ export function useQuayData(
     !isFocused || mode !== 'Departure',
   );
   useRefreshOnFocus(
+    isFocused,
     state.tick,
     HARD_REFRESH_LIMIT_IN_MINUTES * 60,
     loadDepartures,
