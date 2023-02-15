@@ -6,7 +6,6 @@ export function useRefreshOnFocus(
   lastUpdate: Date | undefined,
   hardRefreshLimitInSeconds: number,
   hardRefresh: () => void,
-  softRefreshLimitInSeconds: number,
   softRefresh: () => void,
 ) {
   const isFocused = useIsFocused();
@@ -16,14 +15,8 @@ export function useRefreshOnFocus(
 
     if (timeSinceLastTick >= hardRefreshLimitInSeconds) {
       hardRefresh();
-    } else if (timeSinceLastTick >= softRefreshLimitInSeconds) {
+    } else {
       softRefresh();
     }
-  }, [
-    isFocused,
-    hardRefreshLimitInSeconds,
-    hardRefresh,
-    softRefreshLimitInSeconds,
-    softRefresh,
-  ]);
+  }, [isFocused, hardRefreshLimitInSeconds, hardRefresh, softRefresh]);
 }
