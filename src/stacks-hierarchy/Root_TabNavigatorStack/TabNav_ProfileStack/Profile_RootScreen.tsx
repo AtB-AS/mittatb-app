@@ -83,15 +83,15 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const isDeparturesV2Enabled = useDeparturesV2Enabled();
   const showMapPage = useMapPage();
 
-  const {profileInfoUrls} = useFirestoreConfiguration();
-  const ticketingInfo = profileInfoUrls?.ticketingInfo
-    ? profileInfoUrls?.ticketingInfo
+  const {configurableLinks} = useFirestoreConfiguration();
+  const ticketingInfo = configurableLinks?.ticketingInfo
+    ? configurableLinks?.ticketingInfo
     : undefined;
-  const termsInfo = profileInfoUrls?.termsInfo
-    ? profileInfoUrls?.termsInfo
+  const termsInfo = configurableLinks?.termsInfo
+    ? configurableLinks?.termsInfo
     : undefined;
-  const inspectionInfo = profileInfoUrls?.inspectionInfo
-    ? profileInfoUrls?.inspectionInfo
+  const inspectionInfo = configurableLinks?.inspectionInfo
+    ? configurableLinks?.inspectionInfo
     : undefined;
   const ticketingInfoUrl = getTextForLanguage(ticketingInfo, language);
   const termsInfoUrl = getTextForLanguage(termsInfo, language);

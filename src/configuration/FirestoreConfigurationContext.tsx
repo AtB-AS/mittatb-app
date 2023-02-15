@@ -39,7 +39,7 @@ export type AppTexts = {
   discountInfo: LanguageAndTextType[];
 };
 
-type ProfileInfoUrls = {
+type ConfigurableLinks = {
   ticketingInfo: LanguageAndTextType[];
   termsInfo: LanguageAndTextType[];
   inspectionInfo: LanguageAndTextType[];
@@ -55,7 +55,7 @@ type ConfigurationContextState = {
   fareProductTypeConfigs: FareProductTypeConfig[];
   travelSearchFilters: TravelSearchFiltersType | undefined;
   appTexts: AppTexts | undefined;
-  profileInfoUrls: ProfileInfoUrls | undefined;
+  configurableLinks: ConfigurableLinks | undefined;
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
@@ -68,7 +68,7 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   fareProductTypeConfigs: defaultFareProductTypeConfig,
   travelSearchFilters: undefined,
   appTexts: undefined,
-  profileInfoUrls: undefined,
+  configurableLinks: undefined,
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
@@ -92,7 +92,8 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [travelSearchFilters, setTravelSearchFilters] =
     useState<TravelSearchFiltersType>();
   const [appTexts, setAppTexts] = useState<AppTexts>();
-  const [profileInfoUrls, setProfileInfoUrls] = useState<ProfileInfoUrls>();
+  const [configurableLinks, setConfigurableLinks] =
+    useState<ConfigurableLinks>();
 
   useEffect(() => {
     firestore()
@@ -148,9 +149,9 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
             setAppTexts(appTexts);
           }
 
-          const profileInfoUrls = getProfileInfoUrlsFromSnapshot(snapshot);
-          if (profileInfoUrls) {
-            setProfileInfoUrls(profileInfoUrls);
+          const configurableLinks = getConfigurableLinksFromSnapshot(snapshot);
+          if (configurableLinks) {
+            setConfigurableLinks(configurableLinks);
           }
         },
         (error) => {
@@ -173,7 +174,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       fareProductTypeConfigs,
       travelSearchFilters,
       appTexts,
-      profileInfoUrls,
+      configurableLinks,
     };
   }, [
     preassignedFareProducts,
@@ -185,7 +186,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     fareProductTypeConfigs,
     travelSearchFilters,
     appTexts,
-    profileInfoUrls,
+    configurableLinks,
   ]);
 
   return (
@@ -351,9 +352,9 @@ function getAppTextsFromSnapshot(
   return {discountInfo};
 }
 
-function getProfileInfoUrlsFromSnapshot(
+function getConfigurableLinksFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): ProfileInfoUrls | undefined {
+): ConfigurableLinks | undefined {
   const urls = snapshot.docs.find((doc) => doc.id == 'urls');
 
   const ticketingInfo = mapLanguageAndTextType(urls?.get('ticketingInfo'));
