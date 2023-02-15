@@ -298,7 +298,6 @@ export function useQuayData(
     state.tick,
     HARD_REFRESH_LIMIT_IN_MINUTES * 60,
     loadDepartures,
-    updateFrequencyInSeconds,
     useCallback(() => dispatch({type: 'LOAD_REALTIME_DATA', quay}), []),
   );
 

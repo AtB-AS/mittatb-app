@@ -279,7 +279,6 @@ export function useFavoriteDepartureData(
     state.tick,
     HARD_REFRESH_LIMIT_IN_MINUTES * 60,
     loadInitialDepartures,
-    updateFrequencyInSeconds,
     useCallback(() => dispatch({type: 'LOAD_REALTIME_DATA'}), []),
   );
 
