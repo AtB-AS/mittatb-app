@@ -1,4 +1,4 @@
-import {by, element} from 'detox';
+import { by, device, element } from "detox";
 import {goToTab, idExists} from './commonHelpers';
 import {tapById, tapByText, waitToExistByElem} from './interactionHelpers';
 import {toggleLanguage} from './myprofile';
@@ -25,6 +25,14 @@ const checkLanguage = async () => {
   const correctTitle = await idExists(by.text('Travel search'));
   if (!correctTitle) {
     await goToTab('profile');
+
+    // Had some problems with missing language button
+    const languageExists = await idExists(by.id('languageButton'));
+    if (!languageExists) {
+      await device.reloadReactNative();
+      await goToTab('profile');
+    }
+
     await tapById('languageButton');
     await toggleLanguage(false);
     await tapByText('English');
