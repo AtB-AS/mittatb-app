@@ -40,6 +40,7 @@ export default function TicketingTabs() {
       <Tab.Navigator
         tabBar={(props: MaterialTopTabBarProps) => <TabBar {...props} />}
         initialRouteName={initialRoute}
+        screenOptions={{animationEnabled: false}}
       >
         <Tab.Screen
           name="PurchaseTab"
