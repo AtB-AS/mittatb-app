@@ -34,6 +34,7 @@ import {
   AccessibilityProps,
   Animated,
   StyleProp,
+  Text,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -52,6 +53,7 @@ import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {CollapsedLegs} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/CollapsedLegs';
 import useFontScale from '@atb/utils/use-font-scale';
 import TripDetails from '@atb/translations/screens/subscreens/TripDetails';
+import {secondsToMinutes} from 'date-fns';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -348,6 +350,19 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.small,
     borderRadius: theme.border.radius.small,
   },
+  walkContainer: {
+    backgroundColor: theme.static.background.background_2.background,
+    paddingVertical: theme.spacings.small,
+    paddingHorizontal: theme.spacings.small,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    borderRadius: theme.border.radius.small,
+  },
+  walkDuration: {
+    fontSize: 10,
+    marginLeft: -2,
+    color: theme.text.colors.primary,
+  },
   resultHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -453,12 +468,10 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       : t(TripSearchTexts.results.resultItem.footLeg.walkLabel(walkDuration));
 
   return (
-    <ThemeIcon
-      style={styles.iconContainer}
-      accessibilityLabel={a11yText}
-      testID="fLeg"
-      svg={Walk}
-    />
+    <View style={styles.walkContainer}>
+      <ThemeIcon accessibilityLabel={a11yText} testID="fLeg" svg={Walk} />
+      <Text style={styles.walkDuration}>{secondsToMinutes(leg.duration)}</Text>
+    </View>
   );
 };
 
