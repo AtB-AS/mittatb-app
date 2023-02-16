@@ -10,12 +10,12 @@ import {
   DeparturesRealtimeData,
   PaginationInput,
 } from '@atb/sdk';
-import {flatMap} from '@atb/utils/array';
+import {flatMap, uniqueItems} from '@atb/utils/array';
 import client from '../client';
 import {
   DepartureFavoritesQuery,
   DepartureGroupMetadata,
-  DepartureGroupsQuery,
+  DepartureRealtimeQuery,
 } from './departure-group';
 import {StopPlaceGroup} from './types';
 
@@ -37,30 +37,45 @@ export async function getDepartures(
   return response.data;
 }
 
+type StopPlaceGroupRealtimeParams = {
+  startTime: string;
+  limitPerLine: number;
+  lineIds?: string[];
+  limit?: number;
+};
 export async function getStopPlaceGroupRealtime(
   stops: StopPlaceGroup[],
-  query: DepartureGroupsQuery,
+  query: StopPlaceGroupRealtimeParams,
   opts?: AxiosRequestConfig,
 ): Promise<DeparturesRealtimeData> {
-  const quayIds = flatMap(stops, (s) => s.quays.map((q) => q.quay.id));
-  return getRealtimeDepartures(quayIds, query, opts);
+  const quayIds = flatMap(stops, (stopPlaceGroup) =>
+    flatMap(stopPlaceGroup.quays, (quayGroup) =>
+      quayGroup.group.map((y) => y.lineInfo?.quayId),
+    ),
+  ).filter(Boolean) as string[];
+  return getRealtimeDepartures(
+    {
+      ...query,
+      quayIds,
+      limit: query.limit ?? 100,
+    },
+    opts,
+  );
 }
 
 export async function getRealtimeDepartures(
-  quayIds: string[] | undefined,
-  query: DepartureGroupsQuery,
+  query: DepartureRealtimeQuery,
   opts?: AxiosRequestConfig,
 ): Promise<DeparturesRealtimeData> {
-  if (!quayIds || quayIds.length === 0) return {};
-  const startTime = query.startTime;
+  if (query.quayIds.length === 0) return {};
 
   const params = build({
-    quayIds,
-    startTime,
-    limit: query.limitPerLine,
+    ...query,
+    quayIds: uniqueItems(query.quayIds),
+    lineIds: query.lineIds ? uniqueItems(query.lineIds) : undefined,
   });
+  const url = `bff/v2/departures/realtime?${params}`;
 
-  let url = `bff/v2/departures/realtime?${params}`;
   const response = await client.get<DeparturesRealtimeData>(url, opts);
   return response.data;
 }

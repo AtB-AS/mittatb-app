@@ -232,7 +232,10 @@ const reducer: ReducerWithSideEffects<
           try {
             const realtimeData = await getStopPlaceGroupRealtime(
               state.data ?? [],
-              state.queryInput,
+              {
+                limitPerLine: state.queryInput.limitPerLine,
+                startTime: state.queryInput.startTime,
+              },
             );
             dispatch({
               type: 'UPDATE_REALTIME',
