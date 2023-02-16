@@ -21,7 +21,7 @@ on:
 jobs:
   run_tests:
     name: E2E test
-    runs-on: macOS-12
+    runs-on: macOS-11
     steps:
       - name: Set variables
         env:
