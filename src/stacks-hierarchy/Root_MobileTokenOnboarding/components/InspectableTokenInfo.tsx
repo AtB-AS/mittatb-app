@@ -11,6 +11,7 @@ import TravelTokenBox from '@atb/travel-token-box';
 import {RemoteToken} from '@atb/mobile-token/types';
 import {isTravelCardToken} from '@atb/mobile-token/utils';
 import {useAppState} from '@atb/AppContext';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -28,64 +29,63 @@ export function InspectableTokenInfo({
   const focusRef = useFocusOnLoad();
   const {completeMobileTokenOnboarding} = useAppState();
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.containerContent}
-    >
-      <View style={styles.viewContent}>
-        <View style={styles.mainView}>
-          <View accessible={true} ref={focusRef}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.containerContent}>
+        <View style={styles.viewContent}>
+          <View style={styles.mainView}>
+            <View accessible={true} ref={focusRef}>
+              <ThemeText
+                type="heading--jumbo"
+                style={styles.header}
+                color={themeColor}
+                isMarkdown={true}
+              >
+                {isTravelCardToken(inspectableToken)
+                  ? t(MobileTokenOnboardingTexts.tCard.heading)
+                  : t(MobileTokenOnboardingTexts.phone.heading)}
+              </ThemeText>
+            </View>
+            <View style={styles.illustration}>
+              <TravelTokenBox showIfThisDevice={true} alwaysShowErrors={true} />
+            </View>
             <ThemeText
-              type="heading--jumbo"
-              style={styles.header}
+              style={styles.description}
               color={themeColor}
               isMarkdown={true}
             >
               {isTravelCardToken(inspectableToken)
-                ? t(MobileTokenOnboardingTexts.tCard.heading)
-                : t(MobileTokenOnboardingTexts.phone.heading)}
+                ? t(MobileTokenOnboardingTexts.tCard.description)
+                : t(MobileTokenOnboardingTexts.phone.description)}
             </ThemeText>
           </View>
-          <View style={styles.illustration}>
-            <TravelTokenBox showIfThisDevice={true} alwaysShowErrors={true} />
+          <View style={styles.buttons}>
+            <Button
+              onPress={() => {
+                completeMobileTokenOnboarding();
+                close();
+              }}
+              text={t(MobileTokenOnboardingTexts.ok)}
+              testID="nextButton"
+              style={styles.okButton}
+            />
+            <Button
+              interactiveColor="interactive_1"
+              mode="secondary"
+              onPress={() => {
+                completeMobileTokenOnboarding();
+                navigateToSelectToken();
+              }}
+              text={
+                isTravelCardToken(inspectableToken)
+                  ? t(MobileTokenOnboardingTexts.tCard.button)
+                  : t(MobileTokenOnboardingTexts.phone.button)
+              }
+              testID="switchButton"
+            />
           </View>
-          <ThemeText
-            style={styles.description}
-            color={themeColor}
-            isMarkdown={true}
-          >
-            {isTravelCardToken(inspectableToken)
-              ? t(MobileTokenOnboardingTexts.tCard.description)
-              : t(MobileTokenOnboardingTexts.phone.description)}
-          </ThemeText>
         </View>
-        <View style={styles.buttons}>
-          <Button
-            onPress={() => {
-              completeMobileTokenOnboarding();
-              close();
-            }}
-            text={t(MobileTokenOnboardingTexts.ok)}
-            testID="nextButton"
-            style={styles.okButton}
-          />
-          <Button
-            interactiveColor="interactive_1"
-            mode="secondary"
-            onPress={() => {
-              completeMobileTokenOnboarding();
-              navigateToSelectToken();
-            }}
-            text={
-              isTravelCardToken(inspectableToken)
-                ? t(MobileTokenOnboardingTexts.tCard.button)
-                : t(MobileTokenOnboardingTexts.phone.button)
-            }
-            testID="switchButton"
-          />
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
