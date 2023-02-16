@@ -26,15 +26,14 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
   const travelSearchFiltersEnabled = useTravelSearchFiltersEnabled();
   const {travelSearchFilters} = useFirestoreConfiguration();
   const transportModeFilterOptions = travelSearchFilters?.transportModes;
-  const {filters} = useFilters();
+  const {filters, setFilters} = useFilters();
 
-  const initialTransportModesSelection =
-    filters ??
-    transportModeFilterOptions?.map((option) => ({
-      ...option,
-      selected: true,
-    }));
+  const allAvailableModes = transportModeFilterOptions?.map((option) => ({
+    ...option,
+    selected: true,
+  }));
 
+  const initialTransportModesSelection = filters ?? allAvailableModes;
   const [filtersSelection, setFiltersSelection] =
     useState<TravelSearchFiltersSelectionType>({
       transportModes: initialTransportModesSelection,
@@ -64,8 +63,10 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
     filtersSelection,
     anyFiltersApplied:
       filtersSelection.transportModes?.some((m) => !m.selected) || false,
-    resetTransportModes: () =>
-      setFiltersSelection({transportModes: initialTransportModesSelection}),
+    resetTransportModes: () => {
+      setFilters(allAvailableModes);
+      setFiltersSelection({transportModes: allAvailableModes});
+    },
     closeRef,
   };
 };
