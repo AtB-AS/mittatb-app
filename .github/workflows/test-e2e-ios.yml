@@ -84,7 +84,7 @@ jobs:
         if: steps.detox-app-cache.outputs.cache-hit == 'true'
         run: npx react-native bundle --platform ios --dev false --reset-cache --entry-file index.js --bundle-output main.jsbundle && mv main.jsbundle build/detox/ios/Build/Products/Debug-iphonesimulator/AtB.app/
       - name: Run tests
-        run: detox test --configuration ios.debug --retries 2 --take-screenshots failing --testNamePattern 'should search for a place and find nearby departures'
+        run: detox test --configuration ios.debug --retries 2 --take-screenshots failing
       - name: Upload test report json
         if: always()
         uses: actions/upload-artifact@v3
