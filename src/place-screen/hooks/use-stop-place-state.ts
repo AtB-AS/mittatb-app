@@ -289,10 +289,10 @@ export function useStopPlaceData(
     !isFocused || mode !== 'Departure',
   );
   useRefreshOnFocus(
+    isFocused,
     state.tick,
     HARD_REFRESH_LIMIT_IN_MINUTES * 60,
     loadDepartures,
-    updateFrequencyInSeconds,
     useCallback(() => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace}), []),
   );
 
