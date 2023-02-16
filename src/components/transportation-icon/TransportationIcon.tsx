@@ -17,6 +17,7 @@ export type TransportationIconProps = {
   size?: keyof Theme['icon']['size'];
   style?: StyleProp<ViewStyle>;
   disabled?: boolean;
+  testID?: string;
 };
 
 export const TransportationIcon: React.FC<TransportationIconProps> = ({
@@ -26,6 +27,7 @@ export const TransportationIcon: React.FC<TransportationIconProps> = ({
   size = 'normal',
   style,
   disabled,
+  testID,
 }) => {
   const {t} = useTranslation();
   const {theme} = useTheme();
@@ -65,6 +67,7 @@ export const TransportationIcon: React.FC<TransportationIconProps> = ({
         svg={svg}
         colorType={themeColor}
         accessibilityLabel={t(getTranslatedModeName(mode))}
+        testID={testID}
       />
       {lineNumberElement}
     </View>
