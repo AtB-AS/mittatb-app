@@ -4,6 +4,8 @@ import {MobileTokenOnboardingScreenProps} from '@atb/stacks-hierarchy/Root_Mobil
 type Props =
   MobileTokenOnboardingScreenProps<'MobileTokenOnboarding_SelectTravelTokenScreen'>;
 
-export const Profile_SelectTravelTokenScreen = ({navigation}: Props) => (
+export const MobileTokenOnboarding_SelectTravelTokenScreen = ({
+  navigation,
+}: Props) => (
   <SelectTravelTokenScreenComponent onAfterSave={navigation.goBack} />
 );
