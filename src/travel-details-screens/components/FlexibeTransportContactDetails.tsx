@@ -5,17 +5,22 @@ import React, {forwardRef} from 'react';
 import {View} from 'react-native';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {Leg} from '@atb/api/types/trips';
 import {MessageBox} from '@atb/components/message-box';
+import FlexibleTransportText from '@atb/translations/components/FlexibleTransportDetails';
+
+export type BookingDetails = {
+  phoneNumber: string;
+  aimedStartTime: Date | string;
+};
 
 type Props = {
   close: () => void;
-  leg: Leg;
+  contactDetails: BookingDetails;
 };
 
 const FlexibleTransportContactDetails = forwardRef<View, Props>(
-  ({close, leg}) => {
-    const {t} = useTranslation();
+  ({close, contactDetails}) => {
+    const {t, language} = useTranslation();
     const styles = useStyles();
 
     return (
@@ -35,16 +40,27 @@ const FlexibleTransportContactDetails = forwardRef<View, Props>(
         <View style={styles.padding}>
           <MessageBox
             type="info"
-            title="Ring 02857 for å bestille sete"
+            title={t(
+              FlexibleTransportText.contactMessage.title(
+                contactDetails.phoneNumber,
+              ),
+            )}
             style={styles.infoBox}
-            message={
-              'Fleksibel transport for denne reisen krever bestilling før kl. 19.00 i dag.'
-            }
+            message={t(
+              FlexibleTransportText.infoMessage(
+                contactDetails.aimedStartTime,
+                language,
+              ),
+            )}
           />
         </View>
         <Button
           style={styles.padding}
-          text={'Ring 858585555'}
+          text={t(
+            FlexibleTransportText.contactMessage.callAction(
+              contactDetails.phoneNumber,
+            ),
+          )}
           onPress={() => {}}
           mode="primary"
           interactiveColor="interactive_0"

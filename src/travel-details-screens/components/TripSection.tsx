@@ -44,7 +44,9 @@ import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark'
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {TripProps} from '@atb/travel-details-screens/components/Trip';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import FlexibleTransportContactDetails from './FlexibeTransportContactDetails';
+import FlexibleTransportContactDetails, {
+  BookingDetails as BookingDetails,
+} from './FlexibeTransportContactDetails';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -76,11 +78,16 @@ const TripSection: React.FC<TripSectionProps> = ({
 }) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
-  const {themeName} = useTheme();
+  const {themeName, theme} = useTheme();
   const {open: openBottomSheet} = useBottomSheet();
 
   const isWalkSection = leg.mode === 'foot';
-  const legColor = useTransportationColor(leg.mode, leg.line?.transportSubmode);
+  const isFlexible = !!leg.bookingArrangements;
+  // TODO: Add to the design system `#DEA076`
+  const legColor = useTransportationColor(
+    isFlexible ? 'flex' : leg.mode,
+    leg.line?.transportSubmode,
+  );
   const iconColor = useTransportationColor();
 
   const showFrom = !isWalkSection || !!(isFirst && isWalkSection);
@@ -94,9 +101,20 @@ const TripSection: React.FC<TripSectionProps> = ({
     ?.filter((a) => !a.predictionInaccurate && a.actualDepartureTime)
     .pop();
 
-  const openContactFlexibleTransport = (leg: Leg) => {
+  const bookingDetails: BookingDetails | undefined = leg?.bookingArrangements
+    ?.bookingContact?.phone &&
+    leg.aimedEndTime && {
+      phoneNumber: leg.bookingArrangements.bookingContact.phone,
+      aimedStartTime: leg.aimedEndTime,
+    };
+
+  const openContactFlexibleTransport = (contactDetails: BookingDetails) => {
     openBottomSheet((close, focusRef) => (
-      <FlexibleTransportContactDetails close={close} leg={leg} ref={focusRef} />
+      <FlexibleTransportContactDetails
+        close={close}
+        contactDetails={contactDetails}
+        ref={focusRef}
+      />
     ));
   };
 
@@ -151,7 +169,7 @@ const TripSection: React.FC<TripSectionProps> = ({
             )}
             rowLabel={
               <TransportationIcon
-                mode={leg.mode}
+                mode={!!leg.bookingArrangements ? 'flex' : leg.mode}
                 subMode={leg.line?.transportSubmode}
               />
             }
@@ -180,26 +198,25 @@ const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
-        {leg.bookingArrangements &&
-          leg.bookingArrangements.bookingContact?.phone && (
-            <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
-              <MessageBox
-                type="warning"
-                noStatusIcon={true}
-                message={t(
-                  TripDetailsTexts.trip.leg.contactFlexibleTransportTitle(
-                    leg.bookingArrangements.bookingContact?.phone,
-                  ),
-                )}
-                onPressConfig={{
-                  text: t(dictionary.seeMore),
-                  action: () => {
-                    openContactFlexibleTransport(leg);
-                  },
-                }}
-              />
-            </TripRow>
-          )}
+        {bookingDetails && (
+          <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
+            <MessageBox
+              type="warning"
+              noStatusIcon={true}
+              message={t(
+                TripDetailsTexts.trip.leg.contactFlexibleTransportTitle(
+                  bookingDetails.phoneNumber,
+                ),
+              )}
+              onPressConfig={{
+                text: t(dictionary.seeMore),
+                action: () => {
+                  openContactFlexibleTransport(bookingDetails);
+                },
+              }}
+            />
+          </TripRow>
+        )}
         {lastPassedStop?.quay?.name && (
           <TripRow>
             <View style={style.realtime}>

@@ -2,6 +2,7 @@ import {
   CameraFocusModeType,
   MapSelectionMode,
   MapSelectionActionType,
+  MapLeg,
 } from '../types';
 import {Coordinates} from '@atb/utils/coordinates';
 import {RefObject, useEffect, useState} from 'react';
@@ -11,6 +12,8 @@ import {findStopPlaceAtClick, mapPositionToCoordinates} from '../utils';
 import {tripsSearch} from '@atb/api/trips_v2';
 import {StreetMode} from '@entur/sdk/lib/journeyPlanner/types';
 import MapboxGL from '@react-native-mapbox-gl/maps';
+import {MapLine} from '@atb/sdk';
+import {log} from 'detox';
 
 const MAX_LIMIT_TO_SHOW_WALKING_TRIP = 5000;
 
@@ -106,7 +109,12 @@ const fetchMapLines = async (
     walkingTripPattern?.walkDistance &&
     walkingTripPattern.walkDistance <= MAX_LIMIT_TO_SHOW_WALKING_TRIP
   ) {
-    const tripLegs = walkingTripPattern?.legs;
+    const tripLegs: MapLeg[] = walkingTripPattern?.legs.map((leg) => {
+      return {
+        ...leg,
+        mode: !!leg.bookingArrangements ? 'flex' : leg.mode,
+      };
+    });
     const distance = walkingTripPattern.walkDistance;
     const mapLines = tripLegs ? createMapLines(tripLegs) : undefined;
     return {mapLines, distance};

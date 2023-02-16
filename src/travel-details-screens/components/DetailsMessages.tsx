@@ -3,6 +3,7 @@ import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announceme
 import {MessageBox} from '@atb/components/message-box';
 import {
   DetailsMessages,
+  dictionary,
   TranslateFunction,
   TripDetailsTexts,
   useTranslation,
@@ -27,6 +28,11 @@ import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StyleSheet} from '@atb/theme';
 import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data';
+import FlexibleTransportText from '@atb/translations/components/FlexibleTransportDetails';
+import FlexibleTransportContactDetails, {
+  BookingDetails,
+} from './FlexibeTransportContactDetails';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 
 type TripMessagesProps = {
   tripPattern: TripPattern;
@@ -38,6 +44,7 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
   error,
 }) => {
   const {t, language} = useTranslation();
+  const {open: openBottomSheet} = useBottomSheet();
   const {modesWeSellTicketsFor} = useFirestoreConfiguration();
   const someTicketsAreUnavailableInApp = hasLegsWeCantSellTicketsFor(
     tripPattern,
@@ -64,6 +71,23 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
         tariffZonesHaveZoneA(a.fromPlace.quay?.tariffZones) &&
         tariffZonesHaveZoneA(a.toPlace.quay?.tariffZones),
     );
+
+  const contactDetails: BookingDetails | undefined = leg?.bookingArrangements
+    ?.bookingContact?.phone &&
+    leg.aimedEndTime && {
+      phoneNumber: leg.bookingArrangements.bookingContact.phone,
+      aimedStartTime: leg.aimedEndTime,
+    };
+
+  const openContactFlexibleTransport = (contactDetails: BookingDetails) => {
+    openBottomSheet((close, focusRef) => (
+      <FlexibleTransportContactDetails
+        close={close}
+        contactDetails={contactDetails}
+        ref={focusRef}
+      />
+    ));
+  };
 
   return (
     <>
@@ -92,24 +116,28 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
           }
         />
       )}
-      {leg &&
-        leg.bookingArrangements &&
-        leg.bookingArrangements.bookingContact?.phone && (
-          <MessageBox
-            type="warning"
-            title={t(
-              TripDetailsTexts.trip.leg.contactFlexibleTransportTitle(
-                leg.bookingArrangements.bookingContact.phone,
-              ),
-            )}
-            message={t(
-              DetailsMessages.messages.flexibleTransport(
-                leg.aimedStartTime,
-                language,
-              ),
-            )}
-          />
-        )}
+      {contactDetails && (
+        <MessageBox
+          type="warning"
+          title={t(
+            TripDetailsTexts.trip.leg.contactFlexibleTransportTitle(
+              contactDetails.phoneNumber,
+            ),
+          )}
+          message={t(
+            FlexibleTransportText.infoMessage(
+              contactDetails.aimedStartTime,
+              language,
+            ),
+          )}
+          onPressConfig={{
+            text: t(dictionary.seeMore),
+            action: () => {
+              openContactFlexibleTransport(contactDetails);
+            },
+          }}
+        />
+      )}
       {error && (
         <>
           <ScreenReaderAnnouncement message={translatedError(error, t)} />

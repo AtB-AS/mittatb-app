@@ -1,6 +1,5 @@
-import {Language, translation as _} from '@atb/translations';
+import {translation as _} from '@atb/translations';
 import orgSpecificTranslations from '@atb/translations/utils';
-import {formatToVerboseDateTime} from '@atb/utils/date';
 
 const DetailsMessages = {
   messages: {
@@ -16,18 +15,6 @@ const DetailsMessages = {
       `Med enkelt- og periodebillett for sone A fra AtB kan du reise med tog innen sone A.`,
       `With a single or periodic ticket for zone A from AtB, you can travel by train within zone A.`,
     ),
-    flexibleTransport: (aimedStartTime: Date | string, language: Language) => {
-      return _(
-        `Fleksibel transport for denne reisen krever reservasjon før ${formatToVerboseDateTime(
-          aimedStartTime,
-          language,
-        )}`,
-        `Flexible transportation for this trip requires prior reservation for ${formatToVerboseDateTime(
-          aimedStartTime,
-          language,
-        )}`,
-      );
-    },
   },
 };
 export default orgSpecificTranslations(DetailsMessages, {

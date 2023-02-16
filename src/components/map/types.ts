@@ -8,6 +8,7 @@ import {
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
+import {AnyMode} from '../transportation-icon';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -86,14 +87,14 @@ export type CameraFocusModeType =
     };
 
 export type MapLeg = {
-  mode?: Mode;
+  mode?: AnyMode;
   faded?: boolean;
   transportSubmode?: TransportSubmode;
   pointsOnLink?: PointsOnLink;
 };
 
 export interface MapLine extends Feature<LineString> {
-  travelType?: Mode;
+  travelType?: AnyMode;
   subMode?: TransportSubmode;
   faded?: boolean;
 }
