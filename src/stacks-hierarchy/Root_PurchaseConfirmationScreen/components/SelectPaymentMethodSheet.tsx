@@ -398,17 +398,21 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
             setSave(!save);
           }}
           style={styles.saveOptionSection}
-          accessibilityHint={t(
-            save
-              ? SelectPaymentMethodTexts.a11yHint.notSave
-              : SelectPaymentMethodTexts.a11yHint.save,
-          )}
         >
           <ThemeText style={styles.saveOptionTextPadding}>
             {t(SelectPaymentMethodTexts.save_payment_option_description.text)}
           </ThemeText>
           <View style={styles.saveButton}>
-            <Checkbox checked={save} />
+            <Checkbox
+              checked={save}
+              accessibility={{
+                accessibilityHint: t(
+                  save
+                    ? SelectPaymentMethodTexts.a11yHint.notSave
+                    : SelectPaymentMethodTexts.a11yHint.save,
+                ),
+              }}
+            />
             <ThemeText>{t(SelectPaymentMethodTexts.save_card)}</ThemeText>
           </View>
         </TouchableOpacity>

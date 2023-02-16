@@ -1,18 +1,20 @@
 import React from 'react';
-import {View} from 'react-native';
+import {AccessibilityProps, View} from 'react-native';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';
 
 type CheckedProps = {
   checked: boolean;
+  accessibility?: AccessibilityProps;
 };
 
-export const Checkbox: React.FC<CheckedProps> = ({checked}) => {
+export const Checkbox: React.FC<CheckedProps> = ({checked, accessibility}) => {
   const styles = useStyles();
   return (
     <View
       accessibilityRole="checkbox"
       accessibilityState={{selected: checked}}
+      {...accessibility}
       style={[
         styles.saveCheckbox,
         checked ? styles.saveCheckboxChecked : styles.saveCheckboxDefault,

@@ -117,13 +117,18 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
           setSaveFilters(!saveFilters);
         }}
         style={[styles.saveOptionSection, styles.filtersContainer]}
-        accessibilityHint={t(
-          saveFilters
-            ? TripSearchTexts.filters.bottomSheet.saveFilters.a11yHint.notSave
-            : TripSearchTexts.filters.bottomSheet.saveFilters.a11yHint.save,
-        )}
       >
-        <Checkbox checked={saveFilters} />
+        <Checkbox
+          checked={saveFilters}
+          accessibility={{
+            accessibilityHint: t(
+              saveFilters
+                ? TripSearchTexts.filters.bottomSheet.saveFilters.a11yHint
+                    .notSave
+                : TripSearchTexts.filters.bottomSheet.saveFilters.a11yHint.save,
+            ),
+          }}
+        />
         <ThemeText type={'body__secondary'} color={'secondary'}>
           {t(TripSearchTexts.filters.bottomSheet.saveFilters.text)}
         </ThemeText>
