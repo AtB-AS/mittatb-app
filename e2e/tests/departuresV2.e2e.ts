@@ -15,7 +15,6 @@ import {
 } from '../utils/expectHelpers';
 import {skipOnboarding} from '../utils/onboarding';
 import {toggleDeparturesV2} from '../utils/myprofile';
-import setLocation from '../utils';
 import {
   chooseBusStop,
   departureSearch,
@@ -47,7 +46,7 @@ describe('Departures v2', () => {
   beforeAll(async () => {
     await device.launchApp({
       permissions: {
-        location: 'inuse',
+        location: 'never',
       },
       languageAndLocale: {
         language: 'en-GB',
@@ -56,7 +55,7 @@ describe('Departures v2', () => {
         //locale: 'nb_NO',
       },
     });
-    await setLocation(62.4305, 9.3951);
+    //await setLocation(62.4305, 9.3951);
     await skipOnboarding();
   });
 

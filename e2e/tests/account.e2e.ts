@@ -11,7 +11,6 @@ import {
   expectToExistsById,
 } from '../utils/expectHelpers';
 import {skipOnboarding} from '../utils/onboarding';
-import setLocation from '../utils';
 import {
   deviceNameIsDefined,
   mobileIsSelected,
@@ -34,14 +33,14 @@ xdescribe('Account', () => {
   beforeAll(async () => {
     await device.launchApp({
       permissions: {
-        location: 'inuse',
+        location: 'never',
       },
       languageAndLocale: {
         language: 'en-GB',
         locale: 'en_GB',
       },
     });
-    await setLocation(62.4305, 9.3951);
+    //await setLocation(62.4305, 9.3951);
     await skipOnboarding();
 
     // Log in before all tests

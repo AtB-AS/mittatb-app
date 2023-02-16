@@ -23,20 +23,19 @@ import {
   expectNumberOfFavourites,
   toggleLanguage,
 } from '../utils/myprofile';
-import setLocation from '../utils';
 
 describe('My profile', () => {
   beforeAll(async () => {
     await device.launchApp({
       permissions: {
-        location: 'inuse',
+        location: 'never',
       },
       languageAndLocale: {
         language: 'en-GB',
         locale: 'en_GB',
       },
     });
-    await setLocation(62.4305, 9.3951);
+    //await setLocation(62.4305, 9.3951);
     await skipOnboarding();
 
     await goToTab('profile');

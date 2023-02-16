@@ -31,7 +31,6 @@ import {
   expectNotToBeVisibleById,
 } from '../utils/expectHelpers';
 import {skipOnboarding} from '../utils/onboarding';
-import setLocation from '../utils';
 import {
   expectCorrectTransportationDeparture,
   expectCorrectStartAndEndTimesInTravelDetails,
@@ -63,14 +62,14 @@ describe('Travel Search', () => {
   beforeAll(async () => {
     await device.launchApp({
       permissions: {
-        location: 'inuse',
+        location: 'never',
       },
       languageAndLocale: {
         language: 'en-GB',
         locale: 'en_GB',
       },
     });
-    await setLocation(62.4305, 9.3951);
+    //await setLocation(62.4305, 9.3951);
     await skipOnboarding();
   });
 
