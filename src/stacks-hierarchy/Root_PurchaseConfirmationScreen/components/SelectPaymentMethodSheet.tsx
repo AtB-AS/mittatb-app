@@ -26,7 +26,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import PaymentBrand from './PaymentBrand';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {getExpireDate, getPaymentTypeName} from '../../utils';
-import {SavedCheckbox} from '@atb/components/checkbox/Checkbox';
+import {Checkbox} from '@atb/components/checkbox/Checkbox';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
@@ -403,14 +403,12 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
               ? SelectPaymentMethodTexts.a11yHint.notSave
               : SelectPaymentMethodTexts.a11yHint.save,
           )}
-          accessibilityRole="checkbox"
-          accessibilityState={{selected: save}}
         >
           <ThemeText style={styles.saveOptionTextPadding}>
             {t(SelectPaymentMethodTexts.save_payment_option_description.text)}
           </ThemeText>
           <View style={styles.saveButton}>
-            <SavedCheckbox checked={save} />
+            <Checkbox checked={save} />
             <ThemeText>{t(SelectPaymentMethodTexts.save_card)}</ThemeText>
           </View>
         </TouchableOpacity>

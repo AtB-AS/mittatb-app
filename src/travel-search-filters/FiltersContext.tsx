@@ -6,7 +6,7 @@ type FiltersContextState = {
   filters: TransportModeFilterOptionWithSelectionType[];
   setFilters(
     filters: TransportModeFilterOptionWithSelectionType[] | undefined,
-  ): Promise<void>;
+  ): void;
 };
 const FiltersContext = createContext<FiltersContextState | undefined>(
   undefined,
@@ -16,13 +16,9 @@ const FiltersContextProvider: React.FC = ({children}) => {
   const [filters, setFiltersState] = useState<
     TransportModeFilterOptionWithSelectionType[]
   >([]);
-  async function populateFilters() {
-    const [filters] = await Promise.all([storedFilters.getFilters()]);
-    setFiltersState(filters ?? []);
-  }
 
   useEffect(() => {
-    populateFilters();
+    storedFilters.getFilters().then((filters) => setFiltersState(filters));
   }, []);
 
   const contextValue: FiltersContextState = {

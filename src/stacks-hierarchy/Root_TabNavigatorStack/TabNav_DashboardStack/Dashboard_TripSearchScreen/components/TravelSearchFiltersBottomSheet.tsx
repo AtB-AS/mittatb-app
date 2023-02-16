@@ -20,7 +20,7 @@ import type {
 } from '../../types';
 import {useFilters} from '@atb/travel-search-filters';
 import {ThemeText} from '@atb/components/text';
-import {SavedCheckbox} from '@atb/components/checkbox/Checkbox';
+import {Checkbox} from '@atb/components/checkbox/Checkbox';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
@@ -122,10 +122,8 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
             ? TripSearchTexts.filters.bottomSheet.saveFilters.a11yHint.notSave
             : TripSearchTexts.filters.bottomSheet.saveFilters.a11yHint.save,
         )}
-        accessibilityRole="checkbox"
-        accessibilityState={{selected: saveFilters}}
       >
-        <SavedCheckbox checked={saveFilters} />
+        <Checkbox checked={saveFilters} />
         <ThemeText type={'body__secondary'} color={'secondary'}>
           {t(TripSearchTexts.filters.bottomSheet.saveFilters.text)}
         </ThemeText>

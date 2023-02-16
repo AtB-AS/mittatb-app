@@ -7,16 +7,18 @@ type CheckedProps = {
   checked: boolean;
 };
 
-export const SavedCheckbox: React.FC<CheckedProps> = ({checked}) => {
+export const Checkbox: React.FC<CheckedProps> = ({checked}) => {
   const styles = useStyles();
   return (
     <View
+      accessibilityRole="checkbox"
+      accessibilityState={{selected: checked}}
       style={[
         styles.saveCheckbox,
         checked ? styles.saveCheckboxChecked : styles.saveCheckboxDefault,
       ]}
     >
-      {checked ? <Confirm fill="white"></Confirm> : null}
+      {checked ? <Confirm fill="white" /> : null}
     </View>
   );
 };
