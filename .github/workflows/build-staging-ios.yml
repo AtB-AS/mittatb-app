@@ -27,7 +27,7 @@ jobs:
     runs-on: macOS-12
     steps:
       - name: Checkout project
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
       - name: Add Entur private registry credentials
         run: sh ./scripts/add-entur-private-registry.sh
         env:
@@ -44,13 +44,13 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
       - name: Get potential cached ipa & dsym
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: ipa-cache
         with:
           path: |
             AtB.ipa
             AtB.app.dSYM.zip
-          key: ${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets/') }}
+          key: ${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets/') }}
       - name: Generate native assets
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: brew install imagemagick && yarn generate-native-assets
@@ -90,7 +90,7 @@ jobs:
         env:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_IOS_API_KEY }}
       - name: Create bundle and source maps
-        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
+        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: sh ./scripts/ios/create-sourcemaps.sh
       - name: Upload bundle and source maps
         run: sh ./scripts/ios/upload-sourcemaps.sh
