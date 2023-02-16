@@ -79,7 +79,11 @@ const ResultItemHeader: React.FC<{
 
   return (
     <View style={styles.resultHeader}>
-      <ThemeText style={styles.fromPlaceText} type={'body__secondary--bold'}>
+      <ThemeText
+        style={styles.fromPlaceText}
+        type={'body__secondary--bold'}
+        testID="resultDeparturePlace"
+      >
         {startName
           ? t(
               TripSearchTexts.results.resultItem.header.title(
@@ -221,7 +225,11 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                         />
                       )}
                       <View style={styles.departureTimes}>
-                        <ThemeText type="body__tertiary" color="primary">
+                        <ThemeText
+                          type="body__tertiary"
+                          color="primary"
+                          testID={'schTime' + i}
+                        >
                           {formatToClock(
                             leg.expectedStartTime,
                             language,
@@ -233,6 +241,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                             style={styles.scheduledTime}
                             type="body__tertiary--strike"
                             color="secondary"
+                            testID={'aimTime' + i}
                           >
                             {formatToClock(
                               leg.aimedStartTime,
@@ -266,7 +275,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
           <View>
             <DestinationIcon style={styles.iconContainer} />
             <View style={styles.departureTimes}>
-              <ThemeText type="body__tertiary" color="primary">
+              <ThemeText type="body__tertiary" color="primary" testID="endTime">
                 {formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
               </ThemeText>
             </View>
@@ -488,6 +497,7 @@ const TransportationLeg = ({
       mode={leg.mode}
       subMode={leg.line?.transportSubmode}
       lineNumber={leg.line?.publicCode}
+      testID="trLeg"
     />
   );
 };
