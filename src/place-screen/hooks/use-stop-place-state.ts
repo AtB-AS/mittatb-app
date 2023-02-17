@@ -75,6 +75,7 @@ type DepartureDataActions =
   | {
       type: 'LOAD_REALTIME_DATA';
       stopPlace: StopPlace;
+      favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
       type: 'STOP_LOADER';
@@ -155,15 +156,18 @@ const reducer: ReducerWithSideEffects<
     }
 
     case 'LOAD_REALTIME_DATA': {
-      if (!state.data?.length) return NoUpdate();
+      if (!state.data?.length || !action.stopPlace.quays) return NoUpdate();
       return SideEffect<DepartureDataState, DepartureDataActions>(
         async (_, dispatch) => {
           // Use same query input with same startTime to ensure that
           // we get the same result.
           try {
-            const quayIds = action.stopPlace.quays?.map((q) => q.id);
-            const realtimeData = await getRealtimeDepartures(quayIds, {
-              limitPerLine: state.queryInput.numberOfDepartures,
+            const quayIds = action.stopPlace.quays?.map((q) => q.id) ?? [];
+            const lineIds = action.favoriteDepartures?.map((f) => f.lineId);
+            const realtimeData = await getRealtimeDepartures({
+              quayIds,
+              lineIds,
+              limit: state.queryInput.numberOfDepartures,
               startTime: state.queryInput.startTime,
             });
             dispatch({
@@ -244,6 +248,9 @@ export function useStopPlaceData(
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const {favoriteDepartures} = useFavorites();
+  const activeFavoriteDepartures = showOnlyFavorites
+    ? favoriteDepartures
+    : undefined;
   const timeout = useTimeoutRequest();
 
   const loadDepartures = useCallback(() => {
@@ -255,10 +262,10 @@ export function useStopPlaceData(
       startTime,
       timeRange,
       limitPerLine,
-      favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
+      favoriteDepartures: activeFavoriteDepartures,
       timeOut: timeout,
     });
-  }, [stopPlace, startTime, showOnlyFavorites, favoriteDepartures, mode]);
+  }, [stopPlace, startTime, activeFavoriteDepartures, mode]);
 
   useEffect(() => {
     loadDepartures();
@@ -277,7 +284,12 @@ export function useStopPlaceData(
   }, [state.tick, state.lastRefreshTime]);
 
   useInterval(
-    () => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace}),
+    () =>
+      dispatch({
+        type: 'LOAD_REALTIME_DATA',
+        stopPlace,
+        favoriteDepartures: activeFavoriteDepartures,
+      }),
     updateFrequencyInSeconds * 1000,
     [stopPlace.id],
     !isFocused || mode !== 'Departure',
@@ -293,7 +305,15 @@ export function useStopPlaceData(
     state.tick,
     HARD_REFRESH_LIMIT_IN_MINUTES * 60,
     loadDepartures,
-    useCallback(() => dispatch({type: 'LOAD_REALTIME_DATA', stopPlace}), []),
+    useCallback(
+      () =>
+        dispatch({
+          type: 'LOAD_REALTIME_DATA',
+          stopPlace,
+          favoriteDepartures: activeFavoriteDepartures,
+        }),
+      [],
+    ),
   );
 
   return {
