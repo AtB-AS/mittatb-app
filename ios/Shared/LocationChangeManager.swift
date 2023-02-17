@@ -52,7 +52,7 @@ typealias LocationCallback = (CLLocation?) -> Void
         //  locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         //  locationManager.requestAlwaysAuthorization()
         locationManager.startMonitoringSignificantLocationChanges()
-        locationManager.requestLocation()
+        //locationManager.requestLocation()
     }
 
     func locationManager(_: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
