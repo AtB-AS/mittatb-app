@@ -8,7 +8,7 @@ export type ConfirmCodeInAppRouteParams = {
   phoneNumber: string;
   afterLogin:
     | AfterLoginParams<'Root_TabNavigatorStack'>
-    | AfterLoginParams<'Purchase'>;
+    | AfterLoginParams<'Root_PurchaseOverviewScreen'>;
 };
 
 type Props = LoginInAppScreenProps<'ConfirmCodeInApp'>;

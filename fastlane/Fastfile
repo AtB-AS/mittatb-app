@@ -5,6 +5,17 @@ before_all do
   # git_pull
 end
 
+def remove_background_location
+  update_info_plist(
+    xcodeproj: "./ios/atb.xcodeproj",
+    plist_path: "./atb/Info.plist",
+    block: proc do |plist|
+      puts "Deleting location from UIBackgroundModes..."
+      plist["UIBackgroundModes"].delete("location")
+    end
+  )
+end
+
 platform :ios do
   desc 'Update ad hoc devices'
   lane :update_devices do
@@ -36,14 +47,9 @@ platform :ios do
       git_url:ENV['FASTLANE_MATCH_GIT_URL'],
       type:ENV['FASTLANE_MATCH_TYPE'],
       skip_confirmation: true,
+      username: ENV['FASTLANE_MATCH_USERNAME'],
     )
-    match(
-      readonly: false,
-      team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
-      app_identifier: identifiers,
-      git_url:ENV['FASTLANE_MATCH_GIT_URL'],
-      type:ENV['FASTLANE_MATCH_TYPE'],
-    )
+    get_cert
   end
 
   desc 'Match certificates'
@@ -132,6 +138,8 @@ platform :ios do
         entitlements_file: "./ios/departureWidget.entitlements",
         app_group_identifiers: [ENV["APP_GROUP_NAME"]]
       )
+    else
+      remove_background_location()
     end
 
     update_app_group_identifiers(

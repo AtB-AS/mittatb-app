@@ -1,13 +1,21 @@
-import {by, element, expect} from 'detox';
-import {scroll, scrollToId, tapById, tapByText} from './interactionHelpers';
-import {expectToBeVisibleByText} from './expectHelpers';
-import {chooseSearchResult, goToTab, setInputById} from './commonHelpers';
+import {by, element} from 'detox';
+import {
+  scroll,
+  scrollToId,
+  tapByElement,
+  tapById,
+  tapByText,
+} from './interactionHelpers';
+import {
+  expectNotToExistsByElement,
+  expectToBeVisibleByText,
+  expectToExistsByElement,
+} from './expectHelpers';
+import {chooseSearchResult, setInputById} from './commonHelpers';
 
 // Toggle language
 export const toggleLanguage = async (useMyPhoneSettings: boolean) => {
-  const toggle = await element(
-    by.id('toggleLanguage')
-  )
+  const toggle = await element(by.id('toggleLanguage'))
     .getAttributes()
     .then((elem) => {
       return !('elements' in elem) ? elem.value : undefined;
@@ -78,24 +86,26 @@ export const deleteFavouriteLocation = async (locationName: string) => {
 
   // Delete
   await tapById('deleteButton');
-  await element(
-    by
-      .type('_UIAlertControllerActionView')
-      .and(by.label('Delete favourite location')),
-  ).tap();
+  await tapByElement(
+    element(
+      by
+        .type('_UIAlertControllerActionView')
+        .and(by.label('Delete favourite location')),
+    ),
+  );
 };
 
 // Check number of favourites
 export const expectNumberOfFavourites = async (numFav: number) => {
   if (numFav === 0) {
-    await expect(element(by.id('favorite0'))).not.toExist();
+    await expectNotToExistsByElement(element(by.id('favorite0')));
   } else {
     for (let i = 0; i < numFav; i++) {
       let favId = 'favorite' + i;
-      await expect(element(by.id(favId))).toExist();
+      await expectToExistsByElement(element(by.id(favId)));
     }
     let favId = 'favorite' + numFav;
-    await expect(element(by.id(favId))).not.toExist();
+    await expectNotToExistsByElement(element(by.id(favId)));
   }
 };
 
@@ -104,7 +114,9 @@ export const removeSearchHistory = async () => {
   await scroll('profileHomeScrollView', 'top');
   await scrollToId('profileHomeScrollView', 'clearHistoryButton', 'down');
   await tapById('clearHistoryButton');
-  await element(
-    by.type('_UIAlertControllerActionView').and(by.label('Clear history')),
-  ).tap();
+  await tapByElement(
+    element(
+      by.type('_UIAlertControllerActionView').and(by.label('Clear history')),
+    ),
+  );
 };

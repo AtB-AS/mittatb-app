@@ -1,4 +1,4 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
 import {Button} from '@atb/components/button';
@@ -16,6 +16,7 @@ import DepartureTimeSheet from './DepartureTimeSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {SearchTime} from '../types';
+import useFontScale from '@atb/utils/use-font-scale';
 
 type DateSelectionProps = {
   searchTime: SearchTime;
@@ -27,9 +28,11 @@ export default function DateSelection({
   setSearchTime,
 }: DateSelectionProps): JSX.Element {
   const styles = useStyles();
-  const {theme} = useTheme();
   const {t, language} = useTranslation();
   const disablePreviousDayNavigation = isToday(parseISO(searchTime.date));
+
+  const fontScale = useFontScale();
+  const shouldShowNextPrevTexts = fontScale < 1.7;
 
   const searchTimeText =
     searchTime.option === 'now'
@@ -46,7 +49,7 @@ export default function DateSelection({
       return (
         t(DeparturesTexts.dateNavigation.today) +
         ', ' +
-        formatToClock(parsed, language)
+        formatToClock(parsed, language, 'floor')
       );
 
     return formatToVerboseDateTime(parsed, language);
@@ -83,7 +86,11 @@ export default function DateSelection({
         onPress={() => {
           setSearchTime(changeDay(searchTime, -1));
         }}
-        text={t(DeparturesTexts.dateNavigation.prevDay)}
+        text={
+          shouldShowNextPrevTexts
+            ? t(DeparturesTexts.dateNavigation.prevDay)
+            : undefined
+        }
         type="inline"
         mode="tertiary"
         leftIcon={{svg: ArrowLeft}}
@@ -93,9 +100,15 @@ export default function DateSelection({
             ? t(DeparturesTexts.dateNavigation.a11yDisabled)
             : t(DeparturesTexts.dateNavigation.a11yPreviousDayHint)
         }
-        textStyle={{
-          marginLeft: theme.spacings.xSmall,
-        }}
+        style={styles.button}
+        textStyle={[
+          styles.buttonText,
+          {
+            alignSelf: 'flex-start', // Align text to left side of button
+          },
+        ]}
+        textContainerStyle={styles.nextPrevButtonTextContainer}
+        viewContainerStyle={styles.nextPrevButtonContainer}
         testID="previousDayButton"
       ></Button>
       <Button
@@ -112,10 +125,8 @@ export default function DateSelection({
         compact={true}
         mode="tertiary"
         rightIcon={{svg: DateIcon}}
-        textStyle={{
-          textAlign: 'center',
-          marginRight: theme.spacings.xSmall,
-        }}
+        style={styles.button}
+        textStyle={styles.buttonText}
         testID="setDateButton"
       ></Button>
       <Button
@@ -123,14 +134,29 @@ export default function DateSelection({
         onPress={() => {
           setSearchTime(changeDay(searchTime, 1));
         }}
-        text={t(DeparturesTexts.dateNavigation.nextDay)}
+        text={
+          shouldShowNextPrevTexts
+            ? t(DeparturesTexts.dateNavigation.nextDay)
+            : undefined
+        }
         type="inline"
         compact={true}
         mode="tertiary"
         rightIcon={{svg: ArrowRight}}
-        textStyle={{
-          marginRight: theme.spacings.xSmall,
-        }}
+        style={[
+          styles.button,
+          {
+            alignSelf: 'flex-end', // Align button to right side of View
+          },
+        ]}
+        textStyle={[
+          styles.buttonText,
+          {
+            alignSelf: 'flex-end', // Align text to right side of button
+          },
+        ]}
+        textContainerStyle={styles.nextPrevButtonTextContainer}
+        viewContainerStyle={styles.nextPrevButtonContainer}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yNextDayHint)}
         testID="nextDayButton"
       ></Button>
@@ -152,18 +178,31 @@ function changeDay(searchTime: SearchTime, days: number): SearchTime {
 function formatToTwoLineDateTime(isoDate: string, language: Language) {
   const parsed = parseISO(isoDate);
   if (isSameDay(parsed, new Date())) {
-    return formatToClock(parsed, language);
+    return formatToClock(parsed, language, 'floor');
   }
   return (
-    formatToShortDate(parsed, language) + '\n' + formatToClock(parsed, language)
+    formatToShortDate(parsed, language) +
+    '\n' +
+    formatToClock(parsed, language, 'floor')
   );
 }
 
 const useStyles = StyleSheet.createThemeHook(() => ({
   dateNavigator: {
     flexDirection: 'row',
+  },
+  button: {
+    flexGrow: 1, // Fill vertically
+  },
+  nextPrevButtonContainer: {
+    flexGrow: 1, // Fill horizontally
+  },
+  buttonText: {
+    textAlign: 'center',
+  },
+  nextPrevButtonTextContainer: {
+    // Wrap text and fit availiable space
+    flex: 1,
     flexGrow: 1,
-    justifyContent: 'space-between',
-    alignItems: 'center',
   },
 }));

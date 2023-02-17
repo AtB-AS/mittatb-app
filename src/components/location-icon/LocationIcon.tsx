@@ -5,7 +5,7 @@ import * as EnturTransportationIcons from '@atb/assets/svg/mono-icons/transporta
 import {Location} from '@atb/favorites/types';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {getVenueIconTypes} from '@atb/location-search';
+import {getVenueIconTypes} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 
 export const LocationIcon = ({
   location,

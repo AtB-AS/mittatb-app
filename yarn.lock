@@ -21,14 +21,6 @@
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@^6.2.1":
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-6.2.1.tgz#820e3e7cee8814d02e28b9366b88d1f24095ecc8"
-  integrity sha512-Xfh3RqjkZMFvjGU+57XZIEM8085pRRA3Lw22ov2H+oEEDThxsKeT0QjBDgncKXwk2RcOSFyELV1sNQ4RUkpA/Q==
-  dependencies:
-    hex-to-rgba "^2.0.1"
-    ts-deepmerge "^4.0.0"
-
 "@atb-as/theme@^6.2.2":
   version "6.2.3"
   resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-6.2.3.tgz#8127743ece55fabf312e1aed222d60b109267567"
@@ -3838,6 +3830,14 @@
   dependencies:
     "@turf/helpers" "^6.3.0"
     "@turf/invariant" "^6.3.0"
+
+"@turf/distance@^6.5.0":
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/@turf/distance/-/distance-6.5.0.tgz#21f04d5f86e864d54e2abde16f35c15b4f36149a"
+  integrity sha512-xzykSLfoURec5qvQJcfifw/1mJa+5UwByZZ5TZ8iaqjGYN0vomhV9aiSLeYdUGtYRESZ+DYC/OzY+4RclZYgMg==
+  dependencies:
+    "@turf/helpers" "^6.5.0"
+    "@turf/invariant" "^6.5.0"
 
 "@turf/helpers@6.x", "@turf/helpers@>= 4.6.0 <7.0.0", "@turf/helpers@^6.3.0":
   version "6.3.0"

@@ -12,6 +12,7 @@ import {
 } from 'geojson';
 import {Cluster, MapSelectionActionType} from './types';
 import {PixelRatio, Platform} from 'react-native';
+import distance from '@turf/distance';
 
 export async function zoomIn(
   mapViewRef: RefObject<MapboxGL.MapView>,
@@ -135,3 +136,12 @@ export const toFeatureCollection = <
   type: 'FeatureCollection',
   features,
 });
+
+/**
+ * Calculates the distance in meters between the northern most point and the southern most point of the given bounds.
+ * @param visibleBounds
+ */
+export const getVisibleRange = (visibleBounds: Position[]) => {
+  const [[_, latNE], [lonSW, latSW]] = visibleBounds;
+  return distance([lonSW, latSW], [lonSW, latNE], {units: 'meters'});
+};

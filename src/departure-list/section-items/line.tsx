@@ -80,7 +80,7 @@ export default function LineItem({
 
   const items = group.departures.map<ServiceJourneyDeparture>((dep) => ({
     serviceJourneyId: dep.serviceJourneyId!,
-    date: dep.time,
+    date: dep.aimedTime,
     fromQuayId: group.lineInfo?.quayId,
     serviceDate: dep.serviceDate,
   }));
@@ -108,12 +108,11 @@ export default function LineItem({
             language,
           )}
         >
-          <View style={styles.transportationMode}>
-            <TransportationIcon
-              mode={group.lineInfo?.transportMode}
-              subMode={group.lineInfo?.transportSubmode}
-            />
-          </View>
+          <TransportationIcon
+            style={styles.transportationMode}
+            mode={group.lineInfo?.transportMode}
+            subMode={group.lineInfo?.transportSubmode}
+          />
           <ThemeText style={{flex: 1}} testID={testID + 'Title'}>
             {title}
           </ThemeText>
@@ -192,7 +191,7 @@ function getAccessibilityTextFirstDeparture(
   const upcoming = inPast
     ? t(
         NearbyTexts.results.departure.hasPassedAccessibilityLabel(
-          formatToClock(firstResult.time, language),
+          formatToClock(firstResult.time, language, 'floor'),
         ),
       )
     : firstResult.realtime

@@ -9,6 +9,7 @@ import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {MobileTokenOnboardingScreenProps} from './navigation_types';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -23,41 +24,40 @@ export const MobileTokenOnboarding_FlexibilityInfoScreen = ({
   const focusRef = useFocusOnLoad();
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.containerContent}
-    >
-      <View style={styles.viewContent}>
-        <View style={styles.mainView}>
-          <View accessible={true} ref={focusRef}>
-            <ThemeText
-              type="heading--jumbo"
-              style={styles.header}
-              color={themeColor}
-            >
-              {t(MobileTokenOnboardingTexts.flexibilityInfo.heading)}
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.containerContent}>
+        <View style={styles.viewContent}>
+          <View style={styles.mainView}>
+            <View accessible={true} ref={focusRef}>
+              <ThemeText
+                type="heading--jumbo"
+                style={styles.header}
+                color={themeColor}
+              >
+                {t(MobileTokenOnboardingTexts.flexibilityInfo.heading)}
+              </ThemeText>
+            </View>
+            <View style={styles.illustration}>
+              <TravelPlanning />
+            </View>
+            <ThemeText color={themeColor} style={styles.description}>
+              {t(MobileTokenOnboardingTexts.flexibilityInfo.description)}
             </ThemeText>
           </View>
-          <View style={styles.illustration}>
-            <TravelPlanning />
+          <View style={styles.buttons}>
+            <Button
+              interactiveColor="interactive_0"
+              onPress={() => {
+                navigation.navigate('MobileTokenOnboarding_OptionsInfoScreen');
+              }}
+              text={t(MobileTokenOnboardingTexts.next)}
+              testID="nextButton"
+              accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
+            />
           </View>
-          <ThemeText color={themeColor} style={styles.description}>
-            {t(MobileTokenOnboardingTexts.flexibilityInfo.description)}
-          </ThemeText>
         </View>
-        <View style={styles.buttons}>
-          <Button
-            interactiveColor="interactive_0"
-            onPress={() => {
-              navigation.navigate('MobileTokenOnboarding_OptionsInfoScreen');
-            }}
-            text={t(MobileTokenOnboardingTexts.next)}
-            testID="nextButton"
-            accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
-          />
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
