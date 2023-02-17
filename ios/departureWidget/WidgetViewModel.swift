@@ -22,7 +22,7 @@ struct WidgetViewModel {
     }
 
     private var departureTimes: [DepartureTime] {
-      entry.departures ?? departureGroup?.departures ?? []
+        entry.departures ?? departureGroup?.departures ?? []
     }
 
     private var lineInfo: DepartureLineInfo? {

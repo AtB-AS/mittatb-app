@@ -5,8 +5,8 @@ import WidgetKit
 
 struct Provider: IntentTimelineProvider {
     private enum K {
-        static var previewEntry: DepartureWidgetEntry { Entry(date: Date.now, favouriteDeparture: FavouriteDeparture.dummy, stopPlaceGroup: StopPlaceGroup.dummy,departures: nil, state: .preview) }
-      static let noFavouritesTimeline = Timeline<Entry>(entries: [Entry(date: Date.now, favouriteDeparture: nil, stopPlaceGroup: nil, departures: nil, state: .noFavouriteDepartures)], policy: .never)
+        static var previewEntry: DepartureWidgetEntry { Entry(date: Date.now, favouriteDeparture: FavouriteDeparture.dummy, stopPlaceGroup: StopPlaceGroup.dummy, departures: nil, state: .preview) }
+        static let noFavouritesTimeline = Timeline<Entry>(entries: [Entry(date: Date.now, favouriteDeparture: nil, stopPlaceGroup: nil, departures: nil, state: .noFavouriteDepartures)], policy: .never)
     }
 
     private let apiService = APIService()
@@ -58,26 +58,21 @@ struct Provider: IntentTimelineProvider {
 
     /// Fetch departures for a given quay
     private func fetchFavouriteDepartureTimes(favouriteDeparture departure: FavouriteDeparture, completion: @escaping (Timeline<Entry>) -> Void) {
-      
         let noDeparturesTimeline = Timeline<Entry>(entries: [Entry(date: Date.now, favouriteDeparture: departure, stopPlaceGroup: nil, departures: nil, state: .noDepartureQuays)], policy: .after(Date.now.addingTimeInterval(5 * 60)))
         // Fetch departure data for the closest favorite
         apiService.fetchFavouriteDepartureTimes(favouriteDeparture: departure) { (result: Result<StopPlaceGroup, Error>) in
             switch result {
             case let .success(stopPlaceGroup):
-              
-             
 
                 guard let quayGroup = stopPlaceGroup.quays.first(where: { $0.quay.id == departure.quayId }) else {
                     return completion(noDeparturesTimeline)
                 }
                 var departures: [DepartureTime] = []
-             
+
                 if departure.lineName == nil {
-                      
-                 quayGroup.group.forEach { line in
-                     departures.append(contentsOf: line.departures )
-                   
-                 }
+                    quayGroup.group.forEach { line in
+                        departures.append(contentsOf: line.departures)
+                    }
                 } else {
                     guard let lineDepartures = quayGroup.group.first(where: { $0.lineInfo.lineName == departure.lineName })?.departures else {
                         return completion(noDeparturesTimeline)
@@ -85,12 +80,12 @@ struct Provider: IntentTimelineProvider {
                     departures = lineDepartures
                 }
 
-                departures = departures.sorted(by: {$0.aimedTime.compare($1.aimedTime) == .orderedAscending})
+                departures = departures.sorted(by: { $0.aimedTime.compare($1.aimedTime) == .orderedAscending })
 
                 // Rerenders widget when a departure has passed, by giving IOS more information about future
                 // dates we hopefully get better timed rerenders
                 // Rerenders widget 1 minute after departure have passed
-              var entries = departures.map { departureTime in Entry(date: departureTime.aimedTime.addingTimeInterval(60), favouriteDeparture: departure, stopPlaceGroup: stopPlaceGroup,departures: departures, state: .complete) }
+                var entries = departures.map { departureTime in Entry(date: departureTime.aimedTime.addingTimeInterval(60), favouriteDeparture: departure, stopPlaceGroup: stopPlaceGroup, departures: departures, state: .complete) }
 
                 entries.insert(Entry(date: Date.now, favouriteDeparture: departure, stopPlaceGroup: stopPlaceGroup, departures: departures, state: .complete), at: 0)
 
