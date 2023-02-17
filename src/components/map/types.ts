@@ -23,9 +23,14 @@ export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
 ) => void;
+export type FetchVehicleOpts = {
+  coordinates: Coordinates;
+  zoom: number;
+  radius?: number;
+};
 export type VehiclesState = {
   vehicles: FeatureCollection<GeoJSON.Point, VehicleFragment>;
-  fetchVehicles: (coordinates: Coordinates, radius?: number) => void;
+  fetchVehicles: (opts: FetchVehicleOpts) => void;
 };
 export type NavigateToTripSearchCallback = (
   location: GeoLocation | SearchLocation,

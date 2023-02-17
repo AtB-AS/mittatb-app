@@ -18,7 +18,7 @@ export const getVehicles = (
   const query = qs.stringify({
     lat,
     lon,
-    range,
+    range: Math.ceil(range),
     formFactors: FormFactor.Scooter, //TODO: Read from variables
   });
   return client
