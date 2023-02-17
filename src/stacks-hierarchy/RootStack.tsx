@@ -199,7 +199,7 @@ export const RootStack = () => {
                                 {name: 'Dashboard_RootScreen', index: 0},
                                 {
                                   name: 'Dashboard_NearbyStopPlacesScreen',
-                                  params: {mode: 'favorite'},
+                                  params: {mode: 'Favourite'},
                                 },
                               ],
                             },
