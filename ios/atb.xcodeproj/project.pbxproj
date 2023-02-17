@@ -40,8 +40,8 @@
 		5038614A28FD6EB900E16E13 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614928FD6EB900E16E13 /* APIService.swift */; };
 		5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationChangeManager.swift */; };
 		5038614E28FD81B700E16E13 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614D28FD81B700E16E13 /* Structs.swift */; };
-		503D2E5A29674028002E0A6A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
-		503D2E5C2967436E002E0A6A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		503D2E5A29674028002E0A6A /* (null) in Sources */ = {isa = PBXBuildFile; };
+		503D2E5C2967436E002E0A6A /* (null) in Sources */ = {isa = PBXBuildFile; };
 		50488981293F4B660016DD7A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50488983293F4B660016DD7A /* Localizable.strings */; };
 		505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */; };
 		506538E028FEA57400A0DDCC /* WidgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506538DF28FEA57400A0DDCC /* WidgetViewModel.swift */; };
@@ -162,6 +162,7 @@
 		FE55265128EC45EE0091F697 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FE7DE4F4294A2EDC009BE6DB /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		FE7E785D29433F3900C57A1F /* DefaultFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultFonts.swift; sourceTree = "<group>"; };
+		FE8007B6299FAA2500A46FF8 /* AtbAppIntentRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AtbAppIntentRelease.entitlements; sourceTree = "<group>"; };
 		FE8186AD297593DA000D2195 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		FE8186AE297593DA000D2195 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		FE8186AF297593DA000D2195 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
@@ -274,8 +275,9 @@
 			isa = PBXGroup;
 			children = (
 				50AAE56829896E3900BA7611 /* AtbAppIntentDebug.entitlements */,
-				500752DE29855BD100AC5A7F /* IntentHandler.swift */,
+				FE8007B6299FAA2500A46FF8 /* AtbAppIntentRelease.entitlements */,
 				500752E029855BD100AC5A7F /* Info.plist */,
+				500752DE29855BD100AC5A7F /* IntentHandler.swift */,
 			);
 			path = AtbAppIntent;
 			sourceTree = "<group>";
@@ -337,7 +339,6 @@
 				5038614928FD6EB900E16E13 /* APIService.swift */,
 				FE7E785D29433F3900C57A1F /* DefaultFonts.swift */,
 				FE55264D28EC45ED0091F697 /* DepartureWidget.swift */,
-				50AAE58529897C4A00BA7611 /* WidgetConfiguration.intentdefinition */,
 				5038614528FD509400E16E13 /* Provider.swift */,
 				FE09922828FFF47300E5046D /* Storage.swift */,
 				5038614D28FD81B700E16E13 /* Structs.swift */,
@@ -346,6 +347,7 @@
 				FE09922A28FFF4F000E5046D /* Extensions */,
 				50488983293F4B660016DD7A /* Localizable.strings */,
 				50A14EDA2918FAB600A661D9 /* Views */,
+				50AAE58529897C4A00BA7611 /* WidgetConfiguration.intentdefinition */,
 			);
 			path = departureWidget;
 			sourceTree = "<group>";
@@ -353,9 +355,9 @@
 		FE8186AC297593DA000D2195 /* Configs */ = {
 			isa = PBXGroup;
 			children = (
+				FE8186AF297593DA000D2195 /* Config.xcconfig */,
 				FE8186AD297593DA000D2195 /* Debug.xcconfig */,
 				FE8186AE297593DA000D2195 /* Release.xcconfig */,
-				FE8186AF297593DA000D2195 /* Config.xcconfig */,
 			);
 			path = Configs;
 			sourceTree = "<group>";
@@ -700,8 +702,8 @@
 				505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */,
 				500752EC29855E4D00AC5A7F /* IntentHandler.swift in Sources */,
 				FE7DE4F5294A2EDC009BE6DB /* String.swift in Sources */,
-				503D2E5C2967436E002E0A6A /* BuildFile in Sources */,
-				503D2E5A29674028002E0A6A /* BuildFile in Sources */,
+				503D2E5C2967436E002E0A6A /* (null) in Sources */,
+				503D2E5A29674028002E0A6A /* (null) in Sources */,
 				5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */,
 				FE7E785F29433F3900C57A1F /* DefaultFonts.swift in Sources */,
 				FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */,
@@ -886,6 +888,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = AtbAppIntent/AtbAppIntentRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
