@@ -1,13 +1,17 @@
 import {by, element, expect} from 'detox';
 import {expectBoolean} from './jestAssertions';
+import {conf} from './configValues';
+import {waitToExistByElem, waitToNotExistByElem} from './interactionHelpers';
 
 //** VISIBILITY **
 
 export const expectVisible = async (elementRef: Detox.NativeElement) => {
+  await waitFor(elementRef).toBeVisible().withTimeout(conf.elemTO);
   await expect(elementRef).toBeVisible();
 };
 
 const expectNotVisible = async (elementRef: Detox.NativeElement) => {
+  await waitFor(elementRef).not.toBeVisible().withTimeout(conf.elemTO);
   await expect(elementRef).not.toBeVisible();
 };
 
@@ -44,7 +48,7 @@ export async function expectToBeVisibleByPartOfText(searchTerm: string) {
         : 'NotFound';
     })
     .catch((e) => (e == undefined ? 'NotFound' : e));
-  await expect(element(by.text(elemName))).toBeVisible();
+  await expectVisible(element(by.text(elemName)));
 }
 
 // ** CONTAINS TEXT / ID / LABEL **
@@ -60,16 +64,16 @@ export const expectIdToNotHaveText = async (id: string, text: string) => {
 };
 
 export const expectIdToHaveLabel = async (id: string, label: string) => {
-  await expect(element(by.id(id).and(by.label(label)))).toExist();
+  await expectExists(element(by.id(id).and(by.label(label))));
 };
 
 export const expectIdToHaveChildText = async (
   parentId: string,
   childText: string,
 ) => {
-  await expect(
+  await expectExists(
     element(by.id(parentId).withDescendant(by.text(childText))),
-  ).toExist();
+  );
 };
 
 // Expect that a given element has a text attribute that contains param: text
@@ -78,6 +82,7 @@ export async function expectElementToIncludeText(
   elementRef: Detox.NativeElement,
   index: number = 0,
 ) {
+  await expectExists(elementRef);
   let isIncluded = await elementRef
     .getAttributes()
     .then((e) => {
@@ -97,27 +102,27 @@ export const expectIdToHaveChildId = async (
   parentId: string,
   childId: string,
 ) => {
-  await expect(
-    element(by.id(parentId).withDescendant(by.id(childId))),
-  ).toExist();
+  await expectExists(element(by.id(parentId).withDescendant(by.id(childId))));
 };
 
 export const expectIdNotToHaveChildId = async (
   parentId: string,
   childId: string,
 ) => {
-  await expect(
+  await expectNotToExists(
     element(by.id(parentId).withDescendant(by.id(childId))),
-  ).not.toExist();
+  );
 };
 
 // ** EXIST **
 
 const expectExists = async (elementRef: Detox.NativeElement) => {
+  await waitToExistByElem(elementRef, conf.elemTO);
   await expect(elementRef).toExist();
 };
 
 const expectNotToExists = async (elementRef: Detox.NativeElement) => {
+  await waitToNotExistByElem(elementRef, conf.elemTO);
   await expect(elementRef).not.toExist();
 };
 
@@ -135,6 +140,10 @@ export const expectToExistsByIdHierarchy = async (
   await expectExists(element(elementMatcher));
 };
 
+export const expectToExistsByElement = async (element: Detox.NativeElement) => {
+  await expectExists(element);
+};
+
 export const expectNotToExistsByIdHierarchy = async (
   elementMatcher: Detox.NativeMatcher,
 ) => {
@@ -147,6 +156,10 @@ export const expectNotToExistsById = async (id: string) => {
 
 export const expectNotToExistsByText = async (text: string) => {
   await expectNotToExists(element(by.text(text)));
+};
+
+export const expectNotToExistsByElement = async (elem: Detox.NativeElement) => {
+  await expectNotToExists(elem);
 };
 
 // ** ENABLED **

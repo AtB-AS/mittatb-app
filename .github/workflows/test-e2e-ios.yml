@@ -6,20 +6,31 @@ on:
         description: 'Define branch to test'
         required: true
         default: 'master'
-  push:
-    branches:
-      - master
+      useCache:
+        description: 'Whether to use the build cache'
+        required: true
+        default: 'true'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+  #push:
+  #  branches:
+  #    - master
 
 jobs:
   run_tests:
     name: E2E test
-    runs-on: macOS-12
+    runs-on: macOS-11
     steps:
       - name: Set variables
         env:
           DEFAULT_BRANCH: 'master'
+          DEFAULT_USE_CACHE: 'true'
         run: |
           echo "INPUT_BRANCH=${{ github.event.inputs.branch || env.DEFAULT_BRANCH }}" >> $GITHUB_ENV
+          echo "INPUT_USE_CACHE=${{ github.event.inputs.useCache || env.DEFAULT_USE_CACHE }}" >> $GITHUB_ENV
+          echo "ENABLE_WIDGET=false" >> $GITHUB_ENV
       - name: Checkout project
         uses: actions/checkout@v3
         with:
@@ -34,22 +45,27 @@ jobs:
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
-          use-build-cache: 'true'
-          app-environment: 'staging'
+          use-build-cache: ${{ env.INPUT_USE_CACHE }}
+          app-environment: 'dev'
           app-org: 'atb'
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+      - name: Remove logs from dev app
+        shell: bash
+        run: sh ./e2e/removeLogsFromDevApp.sh
       - name: Get potentially cached app
         uses: actions/cache@v3
         id: detox-app-cache
         with:
           path: |
-            build/detox/ios/Build/Products/Release-iphonesimulator/AtB.app
+            build/detox/ios/Build/Products/Debug-iphonesimulator/AtB.app
           key: detox-app-cache-${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}
       - name: Generate native assets
-        if: steps.detox-app-cache.outputs.cache-hit != 'true'
+        if: steps.detox-app-cache.outputs.cache-hit != 'true' || ${{ env.INPUT_USE_CACHE }} == 'false'
         run: brew install imagemagick && yarn generate-native-assets
+      - name: Disable widget
+        run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget
       - name: Install Pods
-        if: steps.detox-app-cache.outputs.cache-hit != 'true'
+        if: steps.detox-app-cache.outputs.cache-hit != 'true' || ${{ env.INPUT_USE_CACHE }} == 'false'
         run: bundle exec fastlane ios pods
         env:
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
@@ -62,24 +78,24 @@ jobs:
       - name: Build Detox framework
         run: detox clean-framework-cache && detox build-framework-cache
       - name: Build Detox-version of app
-        if: steps.detox-app-cache.outputs.cache-hit != 'true'
-        run: detox build --configuration ios.release
+        if: steps.detox-app-cache.outputs.cache-hit != 'true' || ${{ env.INPUT_USE_CACHE }} == 'false'
+        run: detox build --configuration ios.debug
       - name: Replace bundle in app cache
         if: steps.detox-app-cache.outputs.cache-hit == 'true'
-        run: npx react-native bundle --platform ios --dev false --reset-cache --entry-file index.js --bundle-output main.jsbundle && mv main.jsbundle build/detox/ios/Build/Products/Release-iphonesimulator/AtB.app/
+        run: npx react-native bundle --platform ios --dev false --reset-cache --entry-file index.js --bundle-output main.jsbundle && mv main.jsbundle build/detox/ios/Build/Products/Debug-iphonesimulator/AtB.app/
       - name: Run tests
-        run: detox test --configuration ios.release --retries 2 --take-screenshots failing
+        run: detox test --configuration ios.debug --retries 2 --take-screenshots failing
       - name: Upload test report json
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: junit-results
           path: ./e2e/results/*.xml
-          retention-days: 5
+          retention-days: 3
       - name: Upload test artifacts
         if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: e2e-artifacts
           path: artifacts
-          retention-days: 5
+          retention-days: 3

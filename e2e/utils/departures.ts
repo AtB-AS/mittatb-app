@@ -1,7 +1,8 @@
 import {by, element, expect} from 'detox';
-import {tapById} from './interactionHelpers';
+import {tapById, waitToExistByElem} from './interactionHelpers';
 import {expectIdToHaveText, expectToBeVisibleByText} from './expectHelpers';
 import {chooseSearchResult, idExists, setInputById} from './commonHelpers';
+import {conf} from './configValues';
 
 // Do a departure search
 export const departureSearch = async (departure: string) => {
@@ -62,14 +63,20 @@ export const tapDepartureTime = async (
   lineId: string,
   departureId: string,
 ) => {
-  await element(
+  const timeElem: Detox.NativeElement = element(
     by.id(departureId).withAncestor(by.id(lineId).withAncestor(by.id(quayId))),
-  ).tap();
+  );
+  await waitToExistByElem(timeElem, conf.elemTO);
+  await timeElem.tap();
 };
 
 // v2: Tap departure time within the quay
 export const tapDeparture = async (quayId: string, departureId: string) => {
-  await element(by.id(departureId).withAncestor(by.id(quayId))).tap();
+  const depElem: Detox.NativeElement = element(
+    by.id(departureId).withAncestor(by.id(quayId)),
+  );
+  await waitToExistByElem(depElem, conf.elemTO);
+  await depElem.tap();
 };
 
 // v1: Get the number of departure times for a quay-line combination
