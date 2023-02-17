@@ -9,6 +9,7 @@ import {Button} from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {StaticColorByType} from '@atb/theme/colors';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -22,45 +23,44 @@ export const MobileTokenOnboarding_TicketSafetyInfoScreen = ({
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.containerContent}
-    >
-      <View style={styles.viewContent}>
-        <View style={styles.mainView}>
-          <View accessible={true} ref={focusRef}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.containerContent}>
+        <View style={styles.viewContent}>
+          <View style={styles.mainView}>
+            <View accessible={true} ref={focusRef}>
+              <ThemeText
+                type="heading--jumbo"
+                style={styles.header}
+                color={themeColor}
+              >
+                {t(MobileTokenOnboardingTexts.ticketSafetyInfo.heading)}
+              </ThemeText>
+            </View>
+            <View style={styles.illustration}>
+              <Cloud />
+            </View>
             <ThemeText
-              type="heading--jumbo"
-              style={styles.header}
               color={themeColor}
+              style={styles.description}
+              isMarkdown={true}
             >
-              {t(MobileTokenOnboardingTexts.ticketSafetyInfo.heading)}
+              {t(MobileTokenOnboardingTexts.ticketSafetyInfo.description)}
             </ThemeText>
           </View>
-          <View style={styles.illustration}>
-            <Cloud />
+          <View style={styles.buttons}>
+            <Button
+              interactiveColor="interactive_0"
+              onPress={() => {
+                navigation.navigate('MobileTokenOnboarding_CurrentTokenScreen');
+              }}
+              text={t(MobileTokenOnboardingTexts.next)}
+              testID="nextButton"
+              accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
+            />
           </View>
-          <ThemeText
-            color={themeColor}
-            style={styles.description}
-            isMarkdown={true}
-          >
-            {t(MobileTokenOnboardingTexts.ticketSafetyInfo.description)}
-          </ThemeText>
         </View>
-        <View style={styles.buttons}>
-          <Button
-            interactiveColor="interactive_0"
-            onPress={() => {
-              navigation.navigate('MobileTokenOnboarding_CurrentTokenScreen');
-            }}
-            text={t(MobileTokenOnboardingTexts.next)}
-            testID="nextButton"
-            accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
-          />
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

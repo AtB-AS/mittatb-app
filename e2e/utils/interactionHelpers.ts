@@ -1,4 +1,5 @@
 import {by, element} from 'detox';
+import {expectToExistsByElement} from './expectHelpers';
 
 // ** TAP **
 
@@ -7,11 +8,20 @@ export const tap = async (elementRef: Detox.NativeElement) => {
 };
 
 export const tapById = async (id: string, index: number = 0) => {
-  await tap(element(by.id(id)).atIndex(index));
+  const elem = element(by.id(id)).atIndex(index);
+  await expectToExistsByElement(elem);
+  await tap(elem);
 };
 
 export const tapByText = async (text: string, index: number = 0) => {
-  await tap(element(by.text(text)).atIndex(index));
+  const elem = element(by.text(text)).atIndex(index);
+  await expectToExistsByElement(elem);
+  await tap(elem);
+};
+
+export const tapByElement = async (elem: Detox.NativeElement) => {
+  await expectToExistsByElement(elem);
+  await tap(elem);
 };
 
 // ** SCROLL **
@@ -109,4 +119,26 @@ export const waitToExistById = async (id: string, timeout: number) => {
   await waitFor(element(by.id(id)))
     .toExist()
     .withTimeout(timeout);
+};
+
+export const waitToExistByElem = async (
+  elem: Detox.NativeElement,
+  timeout: number,
+) => {
+  await waitFor(elem).toExist().withTimeout(timeout);
+};
+
+export const waitToNotExistByElem = async (
+  elem: Detox.NativeElement,
+  timeout: number,
+) => {
+  await waitFor(elem).not.toExist().withTimeout(timeout);
+};
+
+// Wait for element to be visible
+export const waitToBeVisibleByElem = async (
+  elem: Detox.NativeElement,
+  timeout: number,
+) => {
+  await waitFor(elem).toBeVisible().withTimeout(timeout);
 };

@@ -245,7 +245,7 @@ const TripSearchTexts = {
       transportModes: (selected: number, total: number) =>
         _(
           `${selected} av ${total} transportmidler er valgt`,
-          `${selected} of ${total} trasportation modes are selected`,
+          `${selected} of ${total} transportation modes are selected`,
         ),
       a11yLabelPrefix: _('Filter: ', 'Filter: '),
       a11yHint: _('Aktiver for å fjerne filter.', 'Activate to remove filter.'),

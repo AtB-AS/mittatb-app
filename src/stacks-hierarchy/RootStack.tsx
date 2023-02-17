@@ -2,7 +2,6 @@ import {useAppState} from '@atb/AppContext';
 import trackNavigation from '@atb/diagnostics/trackNavigation';
 import LoginInAppStack from '@atb/login/in-app/LoginInAppStack';
 import {Root_OnboardingStack} from './Root_OnboardingStack';
-import Purchase from './Root_TabNavigatorStack/TabNav_TicketingStack/Purchase';
 import FareContractModalScreen from './Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Details';
 import {useTheme} from '@atb/theme';
 import {APP_SCHEME} from '@env';
@@ -30,6 +29,13 @@ import {Root_AddEditFavoritePlaceScreen} from './Root_AddEditFavoritePlaceScreen
 import {Root_SearchStopPlaceScreen} from './Root_SearchStopPlaceScreen';
 import {Root_LocationSearchByMapScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByMapScreen';
 import {Root_LocationSearchByTextScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+import {Root_PurchaseOverviewScreen} from './Root_PurchaseOverviewScreen';
+import {Root_PurchaseConfirmationScreen} from './Root_PurchaseConfirmationScreen';
+import {Root_PurchaseTariffZonesSearchByMapScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
+import {Root_PurchaseTariffZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen';
+import {Root_PurchasePaymentWithCreditCardScreen} from '@atb/stacks-hierarchy/Root_PurchasePaymentWithCreditCardScreen';
+import {Root_PurchasePaymentWithVippsScreen} from '@atb/stacks-hierarchy/Root_PurchasePaymentWithVippsScreen';
+import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -246,7 +252,49 @@ export const RootStack = () => {
                     headerShown: false,
                   }}
                 />
-                <Stack.Screen name="Purchase" component={Purchase} />
+                <Stack.Screen
+                  name="Root_PurchaseOverviewScreen"
+                  component={Root_PurchaseOverviewScreen}
+                />
+                <Stack.Screen
+                  name="Root_PurchaseConfirmationScreen"
+                  component={Root_PurchaseConfirmationScreen}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                  }}
+                />
+                <Stack.Screen
+                  name="Root_PurchaseTariffZonesSearchByMapScreen"
+                  component={Root_PurchaseTariffZonesSearchByMapScreen}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                  }}
+                />
+                <Stack.Screen
+                  name="Root_PurchaseTariffZonesSearchByTextScreen"
+                  component={Root_PurchaseTariffZonesSearchByTextScreen}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                  }}
+                />
+                <Stack.Screen
+                  name="Root_PurchasePaymentWithCreditCardScreen"
+                  component={Root_PurchasePaymentWithCreditCardScreen}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                  }}
+                />
+                <Stack.Screen
+                  name="Root_PurchasePaymentWithVippsScreen"
+                  component={Root_PurchasePaymentWithVippsScreen}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                  }}
+                />
+                <Stack.Screen
+                  name="Root_PurchaseAsAnonymousConsequencesScreen"
+                  component={Root_PurchaseAsAnonymousConsequencesScreen}
+                />
                 <Stack.Screen
                   name="FareContractModal"
                   component={FareContractModalScreen}

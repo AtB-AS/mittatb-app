@@ -1,8 +1,9 @@
-import {by, element, expect} from 'detox';
+import {by, element} from 'detox';
 import {tapById} from './interactionHelpers';
 import {
   expectElementToIncludeText,
   expectToBeVisibleByText,
+  expectToExistsByElement,
   expectToExistsByIdHierarchy,
 } from './expectHelpers';
 import {
@@ -35,6 +36,7 @@ export async function travelSearch(departure: string, arrival: string) {
 export const ensureFiltersOnboardingIsConfirmed = async () => {
   const haveToConfirmOnboarding = await idExists(
     by.id('filterOnboardingConfirmButton'),
+    2000,
   );
   if (haveToConfirmOnboarding) {
     await tapById('filterOnboardingConfirmButton');
@@ -145,14 +147,12 @@ export const expectCorrectStartAndEndTimesInTravelDetails = async (
 
   // Expect that the text is present on the timeId
   await expectToExistsByIdHierarchy(
-    by
-      .id('legContainer0')
-      .withDescendant(
-        by
-          .id('fromPlace')
-          //.withDescendant(by.id(timeId).and(by.text(startTimeEdit))),
-          .withDescendant(by.id(timeId).and(by.text(startTime))),
-      ),
+    by.id('legContainer0').withDescendant(
+      by
+        .id('fromPlace')
+        //.withDescendant(by.id(timeId).and(by.text(startTimeEdit))),
+        .withDescendant(by.id(timeId).and(by.text(startTime))),
+    ),
   );
 
   // ** END TIME **
@@ -227,6 +227,7 @@ export const getNumberOfLegs = async (resultId: string, legId: string) => {
 export const getNumberOfCollapsedLegs = async (resultId: string) => {
   const hasCollapsed = await idExists(
     by.id('collapsedLegs').withAncestor(by.id(resultId)),
+    1000,
   );
 
   if (hasCollapsed) {
@@ -310,9 +311,9 @@ export const verifyLegTypeOnQuays = async (
     legType = quayName.trim() === departure ? 'trip' : legType;
 
     // Verify
-    await expect(
+    await expectToExistsByElement(
       element(by.text(quayName).withAncestor(by.id('legType_' + legType))),
-    ).toExist();
+    );
 
     // Change legType after arrival quay
     legType = quayName.trim() === arrival ? 'after' : legType;
@@ -329,5 +330,6 @@ const timeIdExists = async (
     by
       .id('legContainer' + legNo)
       .withDescendant(by.id(fromToPlaceId).withDescendant(by.id(timeId))),
+    5000,
   );
 };

@@ -35,6 +35,7 @@ import {
   AccessibilityProps,
   Animated,
   StyleProp,
+  Text,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -52,6 +53,7 @@ import {
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {CollapsedLegs} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/CollapsedLegs';
 import useFontScale from '@atb/utils/use-font-scale';
+import {secondsToMinutes} from 'date-fns';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -77,7 +79,11 @@ const ResultItemHeader: React.FC<{
 
   return (
     <View style={styles.resultHeader}>
-      <ThemeText style={styles.fromPlaceText} type={'body__secondary--bold'}>
+      <ThemeText
+        style={styles.fromPlaceText}
+        type={'body__secondary--bold'}
+        testID="resultDeparturePlace"
+      >
         {startName
           ? t(
               TripSearchTexts.results.resultItem.header.title(
@@ -219,7 +225,11 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                         />
                       )}
                       <View style={styles.departureTimes}>
-                        <ThemeText type="body__tertiary" color="primary">
+                        <ThemeText
+                          type="body__tertiary"
+                          color="primary"
+                          testID={'schTime' + i}
+                        >
                           {formatToClock(
                             leg.expectedStartTime,
                             language,
@@ -231,6 +241,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                             style={styles.scheduledTime}
                             type="body__tertiary--strike"
                             color="secondary"
+                            testID={'aimTime' + i}
                           >
                             {formatToClock(
                               leg.aimedStartTime,
@@ -264,7 +275,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
           <View>
             <DestinationIcon style={styles.iconContainer} />
             <View style={styles.departureTimes}>
-              <ThemeText type="body__tertiary" color="primary">
+              <ThemeText type="body__tertiary" color="primary" testID="endTime">
                 {formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
               </ThemeText>
             </View>
@@ -347,6 +358,19 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingVertical: theme.spacings.small,
     paddingHorizontal: theme.spacings.small,
     borderRadius: theme.border.radius.small,
+  },
+  walkContainer: {
+    backgroundColor: theme.static.background.background_2.background,
+    paddingVertical: theme.spacings.small,
+    paddingHorizontal: theme.spacings.small,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    borderRadius: theme.border.radius.small,
+  },
+  walkDuration: {
+    fontSize: 10,
+    marginLeft: -2,
+    color: theme.text.colors.primary,
   },
   resultHeader: {
     flexDirection: 'row',
@@ -453,12 +477,10 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       : t(TripSearchTexts.results.resultItem.footLeg.walkLabel(walkDuration));
 
   return (
-    <ThemeIcon
-      style={styles.iconContainer}
-      accessibilityLabel={a11yText}
-      testID="fLeg"
-      svg={Walk}
-    />
+    <View style={styles.walkContainer}>
+      <ThemeIcon accessibilityLabel={a11yText} testID="fLeg" svg={Walk} />
+      <Text style={styles.walkDuration}>{secondsToMinutes(leg.duration)}</Text>
+    </View>
   );
 };
 
@@ -475,6 +497,7 @@ const TransportationLeg = ({
       mode={leg.mode}
       subMode={leg.line?.transportSubmode}
       lineNumber={leg.line?.publicCode}
+      testID="trLeg"
     />
   );
 };
