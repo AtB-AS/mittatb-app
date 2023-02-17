@@ -48,14 +48,9 @@ platform :ios do
       git_url:ENV['FASTLANE_MATCH_GIT_URL'],
       type:ENV['FASTLANE_MATCH_TYPE'],
       skip_confirmation: true,
+      username: ENV['FASTLANE_MATCH_USERNAME'],
     )
-    match(
-      readonly: false,
-      team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
-      app_identifier: identifiers,
-      git_url:ENV['FASTLANE_MATCH_GIT_URL'],
-      type:ENV['FASTLANE_MATCH_TYPE'],
-    )
+    get_cert
   end
 
   desc 'Match certificates'

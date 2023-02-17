@@ -18,7 +18,7 @@ jobs:
         if: ${{ (matrix.org == 'atb' && contains(github.ref, 'nfk')) || (matrix.org == 'nfk' && contains(github.ref, 'atb')) }}
         run: exit 1
       - name: Checkout project
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
       - name: Add Entur private registry credentials
         run: sh ./scripts/add-entur-private-registry.sh
         env:
