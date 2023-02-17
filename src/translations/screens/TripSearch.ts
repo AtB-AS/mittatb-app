@@ -182,6 +182,8 @@ const TripSearchTexts = {
         ),
       },
       journeySummary: {
+        resultNumber: (number: number) =>
+          _(`Reiseresultat ${number}`, `Result number ${number}`),
         duration: (duration: string) =>
           _(`Reisetid: ${duration}`, `Travel time: ${duration}`),
         legsDescription: {

@@ -60,6 +60,7 @@ type ResultItemProps = {
   onDetailsPressed(): void;
   searchTime: SearchTime;
   testID?: string;
+  listPosition: number;
 };
 
 const ResultItemHeader: React.FC<{
@@ -123,6 +124,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   onDetailsPressed,
   testID,
   searchTime,
+  listPosition,
   ...props
 }) => {
   const styles = useThemeStyles();
@@ -175,7 +177,13 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 
   return (
     <TouchableOpacity
-      accessibilityLabel={tripSummary(tripPattern, t, language, isInPast)}
+      accessibilityLabel={tripSummary(
+        tripPattern,
+        t,
+        language,
+        isInPast,
+        listPosition,
+      )}
       accessibilityHint={t(
         TripSearchTexts.results.resultItem.footer.detailsHint,
       )}
@@ -507,16 +515,17 @@ const tripSummary = (
   t: TranslateFunction,
   language: Language,
   isInPast: boolean,
+  listPosition: number,
 ) => {
   let start = '';
 
   if (tripPattern.legs[0].mode === 'foot' && tripPattern.legs[1]) {
-    let distance = Math.round(tripPattern.legs[0].distance);
+    const distance = Math.round(tripPattern.legs[0].distance);
     let humanizedDistance;
     if (distance >= 1000) {
       humanizedDistance = `${distance / 1000} ${t(dictionary.distance.km)}`;
     } else {
-      humanizedDistance = `${distance.toString()} ${t(dictionary.distance.m)}`;
+      humanizedDistance = `${distance} ${t(dictionary.distance.m)}`;
     }
     {
       tripPattern.legs[1].fromPlace.quay?.stopPlace?.name
@@ -534,6 +543,11 @@ const tripSummary = (
   const firstLeg = nonFootLegs[0];
 
   return `
+    ${t(
+      TripSearchTexts.results.resultItem.journeySummary.resultNumber(
+        listPosition,
+      ),
+    )}
     ${isInPast ? t(TripSearchTexts.results.resultItem.passedTrip) : ''}
     ${start}
     
