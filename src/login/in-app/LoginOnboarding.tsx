@@ -9,7 +9,7 @@ import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStac
 export type LoginOnboardingInAppRouteParams = {
   afterLogin:
     | AfterLoginParams<'Root_TabNavigatorStack'>
-    | AfterLoginParams<'Purchase'>;
+    | AfterLoginParams<'Root_PurchaseOverviewScreen'>;
   fareProductTypeConfig: FareProductTypeConfig;
 };
 
@@ -27,7 +27,7 @@ export const LoginOnboardingInApp = ({
       fareProductTypeConfig={fareProductTypeConfig}
       doAfterSubmit={(hasActiveFareContracts: boolean) => {
         if (hasActiveFareContracts) {
-          navigation.navigate('activeFareContractPromptInApp', {
+          navigation.navigate('ActiveFareContractPromptInApp', {
             afterLogin,
           });
         } else {

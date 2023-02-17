@@ -26,20 +26,17 @@ export const RecentFareContracts = () => {
     rfc: RecentFareContract,
     fareProductTypeConfig: FareProductTypeConfig,
   ) => {
-    navigation.navigate('Purchase', {
-      screen: 'PurchaseOverview',
-      params: {
-        fareProductTypeConfig,
-        preassignedFareProduct: rfc.preassignedFareProduct,
-        userProfilesWithCount: rfc.userProfilesWithCount,
-        fromTariffZone: rfc.fromTariffZone && {
-          ...rfc.fromTariffZone,
-          resultType: 'zone',
-        },
-        toTariffZone: rfc.toTariffZone && {
-          ...rfc.toTariffZone,
-          resultType: 'zone',
-        },
+    navigation.navigate('Root_PurchaseOverviewScreen', {
+      fareProductTypeConfig,
+      preassignedFareProduct: rfc.preassignedFareProduct,
+      userProfilesWithCount: rfc.userProfilesWithCount,
+      fromTariffZone: rfc.fromTariffZone && {
+        ...rfc.fromTariffZone,
+        resultType: 'zone',
+      },
+      toTariffZone: rfc.toTariffZone && {
+        ...rfc.toTariffZone,
+        resultType: 'zone',
       },
     });
   };

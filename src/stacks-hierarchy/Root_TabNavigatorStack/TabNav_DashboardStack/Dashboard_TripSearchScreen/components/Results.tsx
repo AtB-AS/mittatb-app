@@ -13,10 +13,12 @@ import {isSeveralDays} from '@atb/utils/date';
 import React, {Fragment, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 
-import ResultItem from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
 import {TripPattern} from '@atb/api/types/trips';
 import {TripPatternWithKey} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {SearchTime} from '@atb/journey-date-picker';
+import ResultItem from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
+import ResultItemOld from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultitemOld';
+import {useNewTravelSearchEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
@@ -41,6 +43,7 @@ const Results: React.FC<Props> = ({
   anyFiltersApplied,
 }) => {
   const styles = useThemeStyles();
+  const newTravelSearchEnabled = useNewTravelSearchEnabled();
 
   const [errorMessage, setErrorMessage] = useState<string>('');
   const {t} = useTranslation();
@@ -100,14 +103,25 @@ const Results: React.FC<Props> = ({
             previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
             allSameDay={allSameDay}
           />
-          <ResultItem
-            tripPattern={tripPattern}
-            onDetailsPressed={() => {
-              onDetailsPressed(tripPatterns, i);
-            }}
-            searchTime={searchTime}
-            testID={'tripSearchSearchResult' + i}
-          />
+          {newTravelSearchEnabled ? (
+            <ResultItem
+              tripPattern={tripPattern}
+              onDetailsPressed={() => {
+                onDetailsPressed(tripPatterns, i);
+              }}
+              searchTime={searchTime}
+              testID={'tripSearchSearchResult' + i}
+            />
+          ) : (
+            <ResultItemOld
+              tripPattern={tripPattern}
+              onDetailsPressed={() => {
+                onDetailsPressed(tripPatterns, i);
+              }}
+              searchTime={searchTime}
+              testID={'tripSearchSearchResult' + i}
+            ></ResultItemOld>
+          )}
         </Fragment>
       ))}
     </View>

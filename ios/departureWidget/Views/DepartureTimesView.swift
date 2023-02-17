@@ -34,19 +34,19 @@ struct DepartureTimesView: View {
             }.frame(maxWidth: departuresWidth, alignment: .leading).clipped()
                 .mask(K.widgetGradient)
 
-          
+
           if let url = URL(string: deepLink) {
             Link(destination: url) {
-              
+
               Image(systemName: "ellipsis")
                   .frame(width: K.iconWidth)
                   .padding(8)
                   .foregroundColor(K.lineInformationColor)
-              
+
             }}
-          
-          
-           
+
+
+
         }.frame(maxWidth: width, alignment: .leading)
     }
 }

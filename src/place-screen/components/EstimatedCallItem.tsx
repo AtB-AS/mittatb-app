@@ -106,7 +106,7 @@ export default function EstimatedCallItem({
             navigateToDetails(
               departure.serviceJourney?.id,
               departure.date,
-              departure.expectedDepartureTime,
+              departure.aimedDepartureTime,
               departure.quay?.id,
               departure.cancellation,
             );
@@ -228,13 +228,16 @@ const DepartureTime = ({
       return (
         <View style={styles.delayedRealtime}>
           {RealtimeWithIcon}
-          <ThemeText
-            type="body__tertiary--strike"
-            color={'secondary'}
-            testID={testID + 'Time'}
-          >
-            {readableAimedTime}
-          </ThemeText>
+          <View style={styles.aimedTimeContainer}>
+            <ThemeText
+              type="body__tertiary--strike"
+              color={'secondary'}
+              testID={testID + 'Time'}
+              style={styles.aimedTime}
+            >
+              {readableAimedTime}
+            </ThemeText>
+          </View>
         </View>
       );
     case 'no-significant-difference':
@@ -423,6 +426,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   realtime: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  aimedTimeContainer: {
+    flexDirection: 'row',
+  },
+  aimedTime: {
+    flexGrow: 1,
+    textAlign: 'right',
   },
   warningIcon: {
     marginRight: theme.spacings.small,

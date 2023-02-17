@@ -1,4 +1,4 @@
-import jestExpect from "expect";
+import jestExpect from 'expect';
 
 export const expectBoolean = (
   value: boolean,

@@ -93,7 +93,7 @@ export const TripDetailsScreenComponent = ({
                 totalPages={tripPatterns.length}
                 onNavigate={navigate}
                 style={styles.pagination}
-                currentDate={tripPattern.legs[0]?.expectedStartTime}
+                currentDate={tripPattern.legs[0]?.aimedStartTime}
               />
             )}
             <Trip
