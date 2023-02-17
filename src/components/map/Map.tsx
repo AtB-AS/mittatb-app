@@ -1,6 +1,6 @@
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
-import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
+import MapboxGL, {RegionPayload} from '@rnmapbox/maps';
 import {Feature, GeoJSON} from 'geojson';
 import React, {useMemo, useRef} from 'react';
 import {View} from 'react-native';

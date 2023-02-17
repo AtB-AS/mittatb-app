@@ -1,7 +1,7 @@
 import React from 'react';
 import {FeatureCollection, GeoJSON} from 'geojson';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@rnmapbox/maps';
 import {MapSelectionActionType} from '@atb/components/map/types';
 import {isClusterFeature, isFeaturePoint} from '@atb/components/map/utils';
 
@@ -40,7 +40,7 @@ export const Vehicles = ({vehicles, onPress}: Props) => {
           textOffset: [0.4, 0.7],
           textColor: '#920695',
           textSize: 12,
-          iconImage: 'PinScooter',
+          iconImage: {uri: 'PinScooter'},
           iconSize: 0.75,
         }}
       />
@@ -48,7 +48,7 @@ export const Vehicles = ({vehicles, onPress}: Props) => {
         id="clusterIcon"
         filter={['has', 'point_count']}
         style={{
-          iconImage: 'Scooter',
+          iconImage: {uri: 'Scooter'},
           iconSize: 0.75,
         }}
       />

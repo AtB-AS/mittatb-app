@@ -1,7 +1,7 @@
 import {Feature, Point} from 'geojson';
 import {MapLine} from '@atb/travel-details-map-screen/utils';
 import {RefObject, useEffect} from 'react';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@rnmapbox/maps';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {Coordinates} from '@atb/utils/coordinates';
