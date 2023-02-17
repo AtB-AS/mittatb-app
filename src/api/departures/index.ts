@@ -10,7 +10,8 @@ import {
   DeparturesRealtimeData,
   PaginationInput,
 } from '@atb/sdk';
-import {flatMap, uniqueItems} from '@atb/utils/array';
+import {flatMap} from '@atb/utils/array';
+import {onlyUniques} from '@atb/utils/only-uniques';
 import client from '../client';
 import {
   DepartureFavoritesQuery,
@@ -71,8 +72,8 @@ export async function getRealtimeDepartures(
 
   const params = build({
     ...query,
-    quayIds: uniqueItems(query.quayIds),
-    lineIds: query.lineIds ? uniqueItems(query.lineIds) : undefined,
+    quayIds: query.quayIds.filter(onlyUniques),
+    lineIds: query.lineIds?.filter(onlyUniques),
   });
   const url = `bff/v2/departures/realtime?${params}`;
 

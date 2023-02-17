@@ -35,10 +35,3 @@ export function iterateWithNext<T>(
   }
   return [...generator(iterable)];
 }
-
-/**
- * Returns an array with duplicates removed
- */
-export function uniqueItems<T>(iterable: T[]) {
-  return [...new Set(iterable)];
-}
