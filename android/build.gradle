@@ -8,6 +8,7 @@ buildscript {
         targetSdkVersion = 31
         // Setting androidXBrowser to avoid react-native-reborn picking newest alpha requiring SDK 33
         androidXBrowser = "1.4.0"
+        RNMapboxMapsImpl = "mapbox"
 
         if (System.properties['os.arch'] == "aarch64") {
             // For M1 Users we need to use the NDK 24 which added support for aarch64

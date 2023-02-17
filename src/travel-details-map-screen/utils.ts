@@ -8,8 +8,7 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {MapLeg} from '@atb/components/map';
 import {Coordinates} from '@atb/utils/coordinates';
-import MapboxGL from "@rnmapbox/maps";
-import CameraBounds = MapboxGL.CameraBounds;
+import {CameraBounds} from '@rnmapbox/maps';
 
 export interface MapLine extends Feature<LineString> {
   travelType?: Mode;

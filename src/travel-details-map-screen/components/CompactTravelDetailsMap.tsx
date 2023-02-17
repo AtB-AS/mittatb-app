@@ -35,8 +35,6 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   const features = useMemo(() => createMapLines(mapLegs), [mapLegs]);
   const bounds = useMemo(() => getMapBounds(features), [features]);
 
-  console.log('THE BOUNDS', bounds);
-
   const styles = useStyles();
 
   const darkmode = themeName === 'dark';

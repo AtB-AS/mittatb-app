@@ -56,7 +56,7 @@ export const TravelDetailsMapScreenComponent = ({
           animationDuration={0}
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
-        <MapRoute lines={features}/>
+        <MapRoute lines={features} />
         {toPlace && (
           <MapLabel
             point={pointOf(toPlace)}

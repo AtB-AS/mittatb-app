@@ -1,4 +1,4 @@
-import { CameraStop, MapViewProps } from "@rnmapbox/maps";
+import {CameraStop, MapViewProps} from '@rnmapbox/maps';
 import {Platform} from 'react-native';
 import {MAPBOX_STOP_PLACES_STYLE_URL} from '@env';
 
