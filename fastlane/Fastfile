@@ -60,9 +60,9 @@ platform :ios do
   desc 'Match certificates'
   lane :get_cert do
     ensure_env_vars(
-      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_SSH_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
+      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_SSH_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
     )
-    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER']]
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
     if is_ci
       create_keychain(
         name: "CI",
@@ -108,14 +108,21 @@ platform :ios do
       use_automatic_signing: false,
       path: "./ios/atb.xcodeproj"
     )
+    # App provisioning profile
     app_prefix = "#{ENV['IOS_BUNDLE_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
     app_prov_profile_path = ENV["sigh_#{app_prefix}_profile-path"]
     app_prov_profile_name = ENV["sigh_#{app_prefix}_profile-name"]
     app_signing_identity_name = ENV["sigh_#{app_prefix}_certificate-name"]
+
+    # Widget provisioning profile
     widget_prefix = "#{ENV['IOS_APP_WIDGET_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
     widget_prov_profile_path = ENV["sigh_#{widget_prefix}_profile-path"]
     widget_prov_profile_name = ENV["sigh_#{widget_prefix}_profile-name"]
-    widget_signing_identity_name = ENV["sigh_#{app_prefix}_certificate-name"]
+
+    # Intent provisioning profile
+    intent_prefix = "#{ENV['IOS_APP_INTENT_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
+    intent_prov_profile_path = ENV["sigh_#{intent_prefix}_profile-path"]
+    intent_prov_profile_name = ENV["sigh_#{intent_prefix}_profile-name"]
 
     widget_enabled = ENV["ENABLE_WIDGET"] == "true"
     puts "Is widget enabled: #{widget_enabled}"
@@ -137,7 +144,14 @@ platform :ios do
         target_filter: "departureWidget",
         profile: widget_prov_profile_path,
         build_configuration: "Release",
-        code_signing_identity: widget_signing_identity_name
+        code_signing_identity: app_signing_identity_name
+      )
+      update_project_provisioning(
+        xcodeproj: "./ios/atb.xcodeproj",
+        target_filter: "AtbAppIntent",
+        profile: intent_prov_profile_path,
+        build_configuration: "Release",
+        code_signing_identity: app_signing_identity_name
       )
       update_app_group_identifiers(
         entitlements_file: "./ios/departureWidget.entitlements",
@@ -161,7 +175,8 @@ platform :ios do
         signingStyle: "manual",
         provisioningProfiles: {
           ENV['IOS_BUNDLE_IDENTIFIER'] => app_prov_profile_name,
-          ENV['IOS_APP_WIDGET_IDENTIFIER'] => widget_prov_profile_name
+          ENV['IOS_APP_WIDGET_IDENTIFIER'] => widget_prov_profile_name,
+          ENV['IOS_APP_INTENT_IDENTIFIER'] => intent_prov_profile_name
       	}
       }
     )
