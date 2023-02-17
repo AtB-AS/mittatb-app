@@ -20,14 +20,15 @@ platform :ios do
   desc 'Update ad hoc devices'
   lane :update_devices do
     ensure_env_vars(
-      env_vars: ['IOS_DEVICES_FILE','IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_TYPE']
+      env_vars: ['IOS_DEVICES_FILE','IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_TYPE']
     )
     register_devices(
       devices_file: ENV['IOS_DEVICES_FILE'],
     )
-    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER']]
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
     match(
-      type: "adhoc", force_for_new_devices: true,
+      type: "adhoc",
+      force_for_new_devices: true,
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
       app_identifier: identifiers,
       git_url:ENV['FASTLANE_MATCH_GIT_URL'],
@@ -37,9 +38,9 @@ platform :ios do
   desc "Generate new certificates"
   lane :generate_new_certificates do
     ensure_env_vars(
-      env_vars: ['IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_TYPE']
+      env_vars: ['IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_TYPE']
     )
-    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER']]
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
     match_nuke(
       readonly: false,
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
