@@ -1,6 +1,6 @@
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import React from 'react';
-import {Linking, Platform} from 'react-native';
+import {Linking, Platform, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {
@@ -10,7 +10,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
-import {Battery} from '@atb/assets/svg/mono-icons/map';
+import {Battery} from '@atb/assets/svg/mono-icons/vehicles';
 import {Button} from '@atb/components/button';
 import ScooterTexts from '@atb/translations/screens/subscreens/ScooterTexts';
 import {VehicleStat} from '@atb/vehicles/components/VehicleStat';
@@ -18,6 +18,7 @@ import {Section} from '@atb/components/sections';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {PricingPlan} from '@atb/vehicles/components/PricingPlan';
+import {ScooterImage} from '@atb/vehicles/components/ScooterImage';
 
 type Props = {
   vehicle: VehicleFragment;
@@ -47,14 +48,17 @@ export const ScooterSheet = ({vehicle, close}: Props) => {
         setFocusOnLoad={false}
       />
 
-      <Section withFullPadding>
-        <VehicleStat
-          style={style.vehicleStat}
-          svg={Battery}
-          primaryStat={vehicle.currentFuelPercent + '%'}
-          secondaryStat={getRange(vehicle.currentRangeMeters, language)}
-        />
-        <PricingPlan operator={operatorName} plan={vehicle.pricingPlan} />
+      <Section withFullPadding style={style.container}>
+        <View style={style.vehicleStats}>
+          <VehicleStat
+            style={style.vehicleStat}
+            svg={Battery}
+            primaryStat={vehicle.currentFuelPercent + '%'}
+            secondaryStat={getRange(vehicle.currentRangeMeters, language)}
+          />
+          <PricingPlan operator={operatorName} plan={vehicle.pricingPlan} />
+        </View>
+        <ScooterImage style={style.vehicleImage} />
       </Section>
 
       {operatorAppUri && (
@@ -82,11 +86,22 @@ const getRange = (rangeInMeters: number, language: Language) => {
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
   button: {
-    marginTop: theme.spacings.large,
+    marginTop: theme.spacings.medium,
   },
   container: {
-    padding: theme.spacings.medium,
-    backgroundColor: theme.static.background.background_1.background,
+    flexGrow: 1,
+    flexShrink: 0,
+    flexDirection: 'row',
+    display: 'flex',
+  },
+  vehicleStats: {
+    flex: 0,
+    justifyContent: 'flex-end',
+  },
+  vehicleImage: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    marginBottom: theme.spacings.medium,
   },
   vehicleStat: {
     marginBottom: theme.spacings.medium,
