@@ -107,6 +107,7 @@ const reducer: ReducerWithSideEffects<
       const queryInput: DepartureFavoritesQuery = {
         limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
         startTime,
+        includeCancelledTrips: true,
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -246,6 +247,7 @@ export function useFavoriteDepartureData(
     queryInput: {
       limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
       startTime: searchDate,
+      includeCancelledTrips: true,
     },
     lastRefreshTime: new Date(),
   });
