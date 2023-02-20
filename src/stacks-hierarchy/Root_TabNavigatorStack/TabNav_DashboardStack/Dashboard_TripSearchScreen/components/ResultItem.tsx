@@ -463,7 +463,6 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
 
   const mustWalk = significantWalkTime(leg.duration);
   const mustWait = showWaitTime && significantWaitTime(waitTimeInSeconds);
-  const walkMinutes = secondsToMinutes(leg.duration);
 
   const a11yText =
     mustWalk && mustWait
@@ -480,7 +479,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   return (
     <View style={styles.walkContainer}>
       <ThemeIcon accessibilityLabel={a11yText} testID="fLeg" svg={Walk} />
-      <Text style={styles.walkDuration}>{walkMinutes}</Text>
+      <Text style={styles.walkDuration}>{secondsToMinutes(leg.duration)}</Text>
     </View>
   );
 };
