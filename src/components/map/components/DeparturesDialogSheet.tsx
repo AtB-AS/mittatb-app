@@ -95,7 +95,7 @@ export const DeparturesDialogSheet = ({
             navigateToQuay={(quay) => {
               navigateToQuay(stopPlace, quay);
             }}
-            isFocused={false}
+            isFocused={true}
             searchTime={searchTime}
             setSearchTime={setSearchTime}
             showOnlyFavorites={false}
