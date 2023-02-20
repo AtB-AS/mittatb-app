@@ -107,7 +107,9 @@ static void InitializeFlipper(UIApplication *application) {
   [_locationManager setOnLocationDidChange:^(CLLocation *_) {
     [WidgetUpdater requestUpdate];
   }];
+   
   [_locationManager startMonitoringLocationChanges];
+   
 #endif
 */
   return YES;
