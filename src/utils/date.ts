@@ -38,6 +38,10 @@ export function secondsToDurationShort(
     round: true,
   });
 }
+// Translates seconds to minutes without postfix. Returns minimum 1
+export function secondsToMinutes(seconds: number): string {
+  return Math.max(Math.round(seconds / 60), 1).toString();
+}
 
 export function secondsToMinutesShort(
   seconds: number,
@@ -49,7 +53,10 @@ export function secondsToMinutesShort(
   });
 }
 
-export function secondsToMinutes(seconds: number, language: Language): string {
+export function secondsToMinutesLong(
+  seconds: number,
+  language: Language,
+): string {
   return getHumanizer(seconds * 1000, language, {
     units: ['m'],
     round: true,
@@ -147,7 +154,7 @@ export function formatToClockOrLongRelativeMinutes(
     return now;
   }
 
-  return secondsToMinutes(diff, language);
+  return secondsToMinutesLong(diff, language);
 }
 
 export function isRelativeButNotNow(
