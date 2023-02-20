@@ -519,7 +519,7 @@ const tripSummary = (
 ) => {
   let start = '';
 
-  if (tripPattern.legs[0].mode === 'foot' && tripPattern.legs[1]) {
+  if (tripPattern.legs[0]?.mode === 'foot' && tripPattern.legs[1]) {
     const distance = Math.round(tripPattern.legs[0].distance);
     let humanizedDistance;
     if (distance >= 1000) {
@@ -537,6 +537,15 @@ const tripSummary = (
           ))
         : undefined;
     }
+  } else {
+    if (tripPattern.legs[0]?.fromPlace.quay?.stopPlace?.name) {
+      start = t(
+        TripSearchTexts.results.resultItem.header.title(
+          t(getTranslatedModeName(tripPattern.legs[0].mode)),
+          tripPattern.legs[0]?.fromPlace.quay?.stopPlace?.name,
+        ),
+      );
+    }
   }
 
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
@@ -551,33 +560,40 @@ const tripSummary = (
     ${isInPast ? t(TripSearchTexts.results.resultItem.passedTrip) : ''}
     ${start}
     
-    ${t(getTranslatedModeName(firstLeg.mode))} ${
-    firstLeg.line?.publicCode
-      ? t(
-          TripSearchTexts.results.resultItem.journeySummary.prefixedLineNumber(
-            firstLeg.line.publicCode,
-          ),
-        )
-      : ''
-  }
-    ${
-      firstLeg
-        ? isSignificantDifference(firstLeg)
-          ? t(
-              TripSearchTexts.results.resultItem.journeySummary.realtime(
-                firstLeg.fromPlace?.name ?? '',
-                formatToClock(firstLeg.expectedStartTime, language, 'floor'),
-                formatToClock(firstLeg.aimedStartTime, language, 'floor'),
-              ),
-            )
-          : t(
-              TripSearchTexts.results.resultItem.journeySummary.noRealTime(
-                firstLeg.fromPlace?.name ?? '',
-                formatToClock(firstLeg.expectedStartTime, language, 'floor'),
-              ),
-            )
-        : ''
-    }
+        ${
+          firstLeg
+            ? t(getTranslatedModeName(firstLeg.mode)) +
+              (firstLeg.line?.publicCode
+                ? t(
+                    TripSearchTexts.results.resultItem.journeySummary.prefixedLineNumber(
+                      firstLeg.line.publicCode,
+                    ),
+                  )
+                : '') +
+              (isSignificantDifference(firstLeg)
+                ? t(
+                    TripSearchTexts.results.resultItem.journeySummary.realtime(
+                      firstLeg.fromPlace?.name ?? '',
+                      formatToClock(
+                        firstLeg.expectedStartTime,
+                        language,
+                        'floor',
+                      ),
+                      formatToClock(firstLeg.aimedStartTime, language, 'floor'),
+                    ),
+                  )
+                : t(
+                    TripSearchTexts.results.resultItem.journeySummary.noRealTime(
+                      firstLeg.fromPlace?.name ?? '',
+                      formatToClock(
+                        firstLeg.expectedStartTime,
+                        language,
+                        'floor',
+                      ),
+                    ),
+                  ))
+            : ''
+        }
 
       ${
         !nonFootLegs.length
