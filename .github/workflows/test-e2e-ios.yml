@@ -18,23 +18,19 @@ on:
     #branches:
       #- master
 
+env:
+  ENABLE_WIDGET: false
+
 jobs:
   run_tests:
     name: E2E test
     runs-on: macOS-11
     steps:
-      - name: Set variables
-        env:
-          DEFAULT_BRANCH: 'master'
-          DEFAULT_USE_CACHE: 'false'
-        run: |
-          echo "INPUT_BRANCH=${{ github.event.inputs.branch || env.DEFAULT_BRANCH }}" >> $GITHUB_ENV
-          echo "INPUT_USE_CACHE=${{ github.event.inputs.useCache || env.DEFAULT_USE_CACHE }}" >> $GITHUB_ENV
-          echo "ENABLE_WIDGET=false" >> $GITHUB_ENV
       - name: Checkout project
         uses: actions/checkout@v3
         with:
-          ref: ${{ env.INPUT_BRANCH }}
+          ref: ${{ github.event.inputs.branch}}
+      # TODO is written as '' and not '***' in output. Some setup in secrets?
       - name: Add Entur private registry credentials
         run: sh ./scripts/add-entur-private-registry.sh
         env:
@@ -45,7 +41,7 @@ jobs:
       - name: Setup build dependencies, environment and assets
         uses: ./.github/actions/ios-build-setup
         with:
-          use-build-cache: ${{ env.INPUT_USE_CACHE }}
+          use-build-cache: ${{ github.event.inputs.useCache }}
           app-environment: 'dev'
           app-org: 'atb'
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
@@ -61,12 +57,12 @@ jobs:
             build/detox/ios/Build/Products/Debug-iphonesimulator/AtB.app
           key: detox-app-cache-${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}
       - name: Generate native assets
-        if: steps.detox-app-cache.outputs.cache-hit != 'true' || ${{ env.INPUT_USE_CACHE }} == 'false'
+        if: steps.detox-app-cache.outputs.cache-hit != 'true' || ${{ github.event.inputs.useCache }} == 'false'
         run: brew install imagemagick && yarn generate-native-assets
       - name: Disable widget
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget
       - name: Install Pods
-        if: steps.detox-app-cache.outputs.cache-hit != 'true' || ${{ env.INPUT_USE_CACHE }} == 'false'
+        if: steps.detox-app-cache.outputs.cache-hit != 'true' || ${{ github.event.inputs.useCache }} == 'false'
         run: bundle exec fastlane ios pods
         env:
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
@@ -79,7 +75,7 @@ jobs:
       - name: Build Detox framework
         run: detox clean-framework-cache && detox build-framework-cache
       - name: Build Detox-version of app
-        if: steps.detox-app-cache.outputs.cache-hit != 'true' || ${{ env.INPUT_USE_CACHE }} == 'false'
+        if: steps.detox-app-cache.outputs.cache-hit != 'true' || ${{ github.event.inputs.useCache }} == 'false'
         run: detox build --configuration ios.debug
       - name: Replace bundle in app cache
         if: steps.detox-app-cache.outputs.cache-hit == 'true'
