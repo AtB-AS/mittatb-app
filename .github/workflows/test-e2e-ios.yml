@@ -9,14 +9,14 @@ on:
       useCache:
         description: 'Whether to use the build cache'
         required: true
-        default: 'true'
+        default: 'false'
         type: choice
         options:
           - 'false'
           - 'true'
-  push:
-    branches:
-      - master
+  #push:
+    #branches:
+      #- master
 
 jobs:
   run_tests:
@@ -26,7 +26,7 @@ jobs:
       - name: Set variables
         env:
           DEFAULT_BRANCH: 'master'
-          DEFAULT_USE_CACHE: 'true'
+          DEFAULT_USE_CACHE: 'false'
         run: |
           echo "INPUT_BRANCH=${{ github.event.inputs.branch || env.DEFAULT_BRANCH }}" >> $GITHUB_ENV
           echo "INPUT_USE_CACHE=${{ github.event.inputs.useCache || env.DEFAULT_USE_CACHE }}" >> $GITHUB_ENV
@@ -49,6 +49,7 @@ jobs:
           app-environment: 'dev'
           app-org: 'atb'
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+          xcode-version: '13.0.2'
       - name: Remove logs from dev app
         shell: bash
         run: sh ./e2e/removeLogsFromDevApp.sh
