@@ -271,6 +271,15 @@ export function useQuayData(
       timeout,
     });
   }, [quay, startTime, activeFavoriteDepartures, mode]);
+  const loadRealTimeData = useCallback(
+    () =>
+      dispatch({
+        type: 'LOAD_REALTIME_DATA',
+        quay,
+        favoriteDepartures: activeFavoriteDepartures,
+      }),
+    [JSON.stringify(activeFavoriteDepartures)],
+  );
 
   useEffect(() => {
     loadDepartures();
@@ -288,12 +297,7 @@ export function useQuayData(
     }
   }, [state.tick, state.lastRefreshTime]);
   useInterval(
-    () =>
-      dispatch({
-        type: 'LOAD_REALTIME_DATA',
-        quay: quay,
-        favoriteDepartures: activeFavoriteDepartures,
-      }),
+    loadRealTimeData,
     updateFrequencyInSeconds * 1000,
     [quay.id],
     !isFocused || mode !== 'Departure',
@@ -309,15 +313,7 @@ export function useQuayData(
     state.tick,
     HARD_REFRESH_LIMIT_IN_MINUTES * 60,
     loadDepartures,
-    useCallback(
-      () =>
-        dispatch({
-          type: 'LOAD_REALTIME_DATA',
-          quay,
-          favoriteDepartures: activeFavoriteDepartures,
-        }),
-      [],
-    ),
+    loadRealTimeData,
   );
 
   return {
