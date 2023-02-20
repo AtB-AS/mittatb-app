@@ -36,6 +36,12 @@ jobs:
         env:
           ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+      - name: Secret is set
+        if: ${{ env.ENTUR_REGISTRY_USER != '' }}
+        run: echo 'This step will only run if the secret has a value set.'
+      - name: Secret is NOT set
+        if: ${{ env.ENTUR_REGISTRY_USER == '' }}
+        run: echo 'This step will only run if the secret does not have a value set.'
       - name: Pre-boot simulator
         run: sh e2e/boot.sh
       - name: Setup build dependencies, environment and assets
