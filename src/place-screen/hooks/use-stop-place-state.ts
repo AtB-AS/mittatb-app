@@ -266,6 +266,15 @@ export function useStopPlaceData(
       timeOut: timeout,
     });
   }, [stopPlace, startTime, activeFavoriteDepartures, mode]);
+  const loadRealTimeData = useCallback(
+    () =>
+      dispatch({
+        type: 'LOAD_REALTIME_DATA',
+        stopPlace,
+        favoriteDepartures: activeFavoriteDepartures,
+      }),
+    [JSON.stringify(activeFavoriteDepartures)],
+  );
 
   useEffect(() => {
     loadDepartures();
@@ -284,12 +293,7 @@ export function useStopPlaceData(
   }, [state.tick, state.lastRefreshTime]);
 
   useInterval(
-    () =>
-      dispatch({
-        type: 'LOAD_REALTIME_DATA',
-        stopPlace,
-        favoriteDepartures: activeFavoriteDepartures,
-      }),
+    loadRealTimeData,
     updateFrequencyInSeconds * 1000,
     [stopPlace.id],
     !isFocused || mode !== 'Departure',
@@ -305,15 +309,7 @@ export function useStopPlaceData(
     state.tick,
     HARD_REFRESH_LIMIT_IN_MINUTES * 60,
     loadDepartures,
-    useCallback(
-      () =>
-        dispatch({
-          type: 'LOAD_REALTIME_DATA',
-          stopPlace,
-          favoriteDepartures: activeFavoriteDepartures,
-        }),
-      [],
-    ),
+    loadRealTimeData,
   );
 
   return {
