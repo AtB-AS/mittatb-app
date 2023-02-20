@@ -100,7 +100,7 @@ static void InitializeFlipper(UIApplication *application) {
   [rootView setBackgroundByTrait];
   [self.window makeKeyAndVisible];
   [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView];
-  
+  /*
 #if IS_WIDGET_ENABLE
   // NOTE: This could be called at another time in the app, right now is being called at the very beginning which might annoy the user.
   _locationManager = [[LocationChangeManager alloc] init];
@@ -109,7 +109,7 @@ static void InitializeFlipper(UIApplication *application) {
   }];
   [_locationManager startMonitoringLocationChanges];
 #endif
-
+*/
   return YES;
 }
 
