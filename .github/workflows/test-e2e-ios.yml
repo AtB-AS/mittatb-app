@@ -52,7 +52,7 @@ jobs:
           app-environment: 'dev'
           app-org: 'atb'
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
-          xcode-version: '13.0.2'
+          xcode-version: '13.2.1'
         env:
           ENABLE_WIDGET: false
       - name: Remove logs from dev app
