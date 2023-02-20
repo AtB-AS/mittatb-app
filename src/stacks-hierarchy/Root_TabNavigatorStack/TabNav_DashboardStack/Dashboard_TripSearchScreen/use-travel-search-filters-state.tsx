@@ -33,7 +33,8 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
     selected: true,
   }));
 
-  const initialTransportModesSelection = filters ?? allAvailableModes;
+  const initialTransportModesSelection =
+    filters.length !== 0 ? filters : allAvailableModes;
   const [filtersSelection, setFiltersSelection] =
     useState<TravelSearchFiltersSelectionType>({
       transportModes: initialTransportModesSelection,
