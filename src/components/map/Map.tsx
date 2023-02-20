@@ -109,6 +109,7 @@ export const Map = (props: MapProps) => {
           )}
           {props.vehicles && (
             <Vehicles
+              mapCameraRef={mapCameraRef}
               vehicles={props.vehicles.vehicles}
               onPress={props.vehicles.onPress}
             />

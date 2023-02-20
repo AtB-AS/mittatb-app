@@ -1,28 +1,38 @@
-import React from 'react';
+import React, {RefObject, useRef} from 'react';
 import {FeatureCollection, GeoJSON} from 'geojson';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import MapboxGL from '@rnmapbox/maps';
 import {MapSelectionActionType} from '@atb/components/map/types';
-import {isClusterFeature, isFeaturePoint} from '@atb/components/map/utils';
+import {
+  isClusterFeature,
+  isFeatureCollection,
+  isFeaturePoint,
+} from '@atb/components/map/utils';
 
 type Props = {
+  mapCameraRef: RefObject<MapboxGL.Camera>;
   vehicles: FeatureCollection<GeoJSON.Point, VehicleFragment>;
   onPress: (type: MapSelectionActionType) => void;
 };
 
-export const Vehicles = ({vehicles, onPress}: Props) => {
+export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
+  const shapeSource = useRef<MapboxGL.ShapeSource>(null);
   return (
     <MapboxGL.ShapeSource
       id={'vehicles'}
+      ref={shapeSource}
       shape={vehicles}
       cluster
-      onPress={(e) => {
+      onPress={async (e) => {
         const [feature, ..._] = e.features;
         if (isClusterFeature(feature)) {
-          onPress({
-            source: 'cluster-click',
-            feature: feature,
-          });
+          const children = await shapeSource.current?.getClusterChildren(
+            feature,
+          );
+          if (isFeatureCollection(children)) {
+            const {ne, sw} = await getClusterChildrenBounds(children);
+            mapCameraRef.current?.fitBounds(ne, sw, 100, 400);
+          }
         } else if (isFeaturePoint(feature)) {
           onPress({
             source: 'map-click',
@@ -67,4 +77,35 @@ export const Vehicles = ({vehicles, onPress}: Props) => {
       />
     </MapboxGL.ShapeSource>
   );
+};
+
+const getClusterChildrenBounds = async (
+  featureCollection: FeatureCollection,
+) => {
+  const points = featureCollection.features
+    .map((f) => (isFeaturePoint(f) ? f.geometry.coordinates : null))
+    .filter((f) => f);
+
+  const longitudes = points
+    .map((p) => {
+      const [lon, _] = p ?? [];
+      return lon;
+    })
+    .sort();
+  const [minLon] = longitudes.slice(0, 1);
+  const [maxLon] = longitudes.slice(-1);
+
+  const latitudes = points
+    .map((p) => {
+      const [_, lat] = p ?? [];
+      return lat;
+    })
+    .sort();
+  const [minLat] = latitudes.slice(0, 1);
+  const [maxLat] = latitudes.slice(-1);
+
+  return {
+    sw: [minLon, minLat],
+    ne: [maxLon, maxLat],
+  };
 };

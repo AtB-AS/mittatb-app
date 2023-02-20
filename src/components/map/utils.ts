@@ -64,6 +64,13 @@ export const isClusterFeature = (
   feature: Feature,
 ): feature is Feature<Point, Cluster> => feature.properties?.cluster;
 
+export const isFeatureCollection = (obj: unknown): obj is FeatureCollection =>
+  typeof obj === 'object' &&
+  obj !== null &&
+  'type' in obj &&
+  typeof obj.type === 'string' &&
+  obj.type === 'FeatureCollection';
+
 export const mapPositionToCoordinates = (p: Position): Coordinates => ({
   longitude: p[0],
   latitude: p[1],
