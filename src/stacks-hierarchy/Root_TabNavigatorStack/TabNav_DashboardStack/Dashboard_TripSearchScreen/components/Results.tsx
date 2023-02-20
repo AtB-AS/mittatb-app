@@ -111,6 +111,7 @@ const Results: React.FC<Props> = ({
               }}
               searchTime={searchTime}
               testID={'tripSearchSearchResult' + i}
+              resultNumber={i + 1}
             />
           ) : (
             <ResultItemOld

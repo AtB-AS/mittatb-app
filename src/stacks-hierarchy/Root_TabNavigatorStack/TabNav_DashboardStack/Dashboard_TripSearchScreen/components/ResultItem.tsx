@@ -10,6 +10,7 @@ import {TransportationIcon} from '@atb/components/transportation-icon';
 import {SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
+  dictionary,
   Language,
   TranslateFunction,
   TripSearchTexts,
@@ -53,13 +54,13 @@ import {
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {CollapsedLegs} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/CollapsedLegs';
 import useFontScale from '@atb/utils/use-font-scale';
-import TripDetails from '@atb/translations/screens/subscreens/TripDetails';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
   onDetailsPressed(): void;
   searchTime: SearchTime;
   testID?: string;
+  resultNumber: number;
 };
 
 const ResultItemHeader: React.FC<{
@@ -123,6 +124,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   onDetailsPressed,
   testID,
   searchTime,
+  resultNumber,
   ...props
 }) => {
   const styles = useThemeStyles();
@@ -175,7 +177,13 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 
   return (
     <TouchableOpacity
-      accessibilityLabel={tripSummary(tripPattern, t, language, isInPast)}
+      accessibilityLabel={tripSummary(
+        tripPattern,
+        t,
+        language,
+        isInPast,
+        resultNumber,
+      )}
       accessibilityHint={t(
         TripSearchTexts.results.resultItem.footer.detailsHint,
       )}
@@ -507,49 +515,69 @@ const tripSummary = (
   t: TranslateFunction,
   language: Language,
   isInPast: boolean,
+  listPosition: number,
 ) => {
+  let start = '';
+
+  if (tripPattern.legs[0].mode === 'foot' && tripPattern.legs[1]) {
+    const distance = Math.round(tripPattern.legs[0].distance);
+    let humanizedDistance;
+    if (distance >= 1000) {
+      humanizedDistance = `${distance / 1000} ${t(dictionary.distance.km)}`;
+    } else {
+      humanizedDistance = `${distance} ${t(dictionary.distance.m)}`;
+    }
+    {
+      tripPattern.legs[1].fromPlace.quay?.stopPlace?.name
+        ? (start = t(
+            TripSearchTexts.results.resultItem.footLeg.walkToStopLabel(
+              humanizedDistance,
+              tripPattern.legs[1].fromPlace.quay.stopPlace.name,
+            ),
+          ))
+        : undefined;
+    }
+  }
+
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
   const firstLeg = nonFootLegs[0];
 
   return `
+    ${t(
+      TripSearchTexts.results.resultItem.journeySummary.resultNumber(
+        listPosition,
+      ),
+    )}
     ${isInPast ? t(TripSearchTexts.results.resultItem.passedTrip) : ''}
-
+    ${start}
+    
+    ${t(getTranslatedModeName(firstLeg.mode))} ${
+    firstLeg.line?.publicCode
+      ? t(
+          TripSearchTexts.results.resultItem.journeySummary.prefixedLineNumber(
+            firstLeg.line.publicCode,
+          ),
+        )
+      : ''
+  }
     ${
       firstLeg
         ? isSignificantDifference(firstLeg)
           ? t(
-              TripDetails.trip.leg.start.a11yLabel.realAndAimed(
+              TripSearchTexts.results.resultItem.journeySummary.realtime(
                 firstLeg.fromPlace?.name ?? '',
                 formatToClock(firstLeg.expectedStartTime, language, 'floor'),
                 formatToClock(firstLeg.aimedStartTime, language, 'floor'),
               ),
             )
           : t(
-              TripDetails.trip.leg.start.a11yLabel.noRealTime(
+              TripSearchTexts.results.resultItem.journeySummary.noRealTime(
                 firstLeg.fromPlace?.name ?? '',
                 formatToClock(firstLeg.expectedStartTime, language, 'floor'),
               ),
             )
         : ''
     }
-
-    ${nonFootLegs
-      ?.map((l) => {
-        return `${t(getTranslatedModeName(l.mode))} ${
-          l.line?.publicCode
-            ? t(
-                TripSearchTexts.results.resultItem.journeySummary.prefixedLineNumber(
-                  l.line.publicCode,
-                ),
-              )
-            : ''
-        }
-
-        ${l.fromEstimatedCall?.destinationDisplay?.frontText ?? l.line?.name}
-
-        `;
-      })
-      .join(', ')}
 
       ${
         !nonFootLegs.length
@@ -569,16 +597,25 @@ const tripSummary = (
             )
           : t(
               TripSearchTexts.results.resultItem.journeySummary.legsDescription.someSwitches(
-                nonFootLegs.length,
+                nonFootLegs.length - 1,
               ),
             )
       }
-
       ${t(
         TripSearchTexts.results.resultItem.journeySummary.totalWalkDistance(
           (tripPattern.walkDistance ?? 0).toFixed(),
         ),
-      )}  ${screenReaderPause}
+      )}
+      
+      ${t(
+        TripSearchTexts.results.resultItem.journeySummary.travelTimes(
+          formatToClock(tripPattern.expectedStartTime, language, 'floor'),
+          formatToClock(tripPattern.expectedEndTime, language, 'ceil'),
+          secondsToDuration(tripPattern.duration, language),
+        ),
+      )}
+
+        ${screenReaderPause}
   `;
 };
 
