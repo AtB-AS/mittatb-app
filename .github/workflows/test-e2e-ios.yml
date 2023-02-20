@@ -24,6 +24,7 @@ on:
 jobs:
   run_tests:
     name: E2E test
+    environment: atb
     runs-on: macOS-11
     steps:
       - name: Checkout project
