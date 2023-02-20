@@ -20,14 +20,15 @@ platform :ios do
   desc 'Update ad hoc devices'
   lane :update_devices do
     ensure_env_vars(
-      env_vars: ['IOS_DEVICES_FILE','IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_TYPE']
+      env_vars: ['IOS_DEVICES_FILE','IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_TYPE']
     )
     register_devices(
       devices_file: ENV['IOS_DEVICES_FILE'],
     )
-    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER']]
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
     match(
-      type: "adhoc", force_for_new_devices: true,
+      type: "adhoc",
+      force_for_new_devices: true,
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
       app_identifier: identifiers,
       git_url:ENV['FASTLANE_MATCH_GIT_URL'],
@@ -37,9 +38,9 @@ platform :ios do
   desc "Generate new certificates"
   lane :generate_new_certificates do
     ensure_env_vars(
-      env_vars: ['IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_TYPE']
+      env_vars: ['IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_TYPE']
     )
-    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER']]
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
     match_nuke(
       readonly: false,
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
@@ -47,22 +48,17 @@ platform :ios do
       git_url:ENV['FASTLANE_MATCH_GIT_URL'],
       type:ENV['FASTLANE_MATCH_TYPE'],
       skip_confirmation: true,
+      username: ENV['FASTLANE_MATCH_USERNAME'],
     )
-    match(
-      readonly: false,
-      team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
-      app_identifier: identifiers,
-      git_url:ENV['FASTLANE_MATCH_GIT_URL'],
-      type:ENV['FASTLANE_MATCH_TYPE'],
-    )
+    get_cert
   end
 
   desc 'Match certificates'
   lane :get_cert do
     ensure_env_vars(
-      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_SSH_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
+      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_SSH_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
     )
-    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER']]
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
     if is_ci
       create_keychain(
         name: "CI",
@@ -108,14 +104,21 @@ platform :ios do
       use_automatic_signing: false,
       path: "./ios/atb.xcodeproj"
     )
+    # App provisioning profile
     app_prefix = "#{ENV['IOS_BUNDLE_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
     app_prov_profile_path = ENV["sigh_#{app_prefix}_profile-path"]
     app_prov_profile_name = ENV["sigh_#{app_prefix}_profile-name"]
     app_signing_identity_name = ENV["sigh_#{app_prefix}_certificate-name"]
+
+    # Widget provisioning profile
     widget_prefix = "#{ENV['IOS_APP_WIDGET_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
     widget_prov_profile_path = ENV["sigh_#{widget_prefix}_profile-path"]
     widget_prov_profile_name = ENV["sigh_#{widget_prefix}_profile-name"]
-    widget_signing_identity_name = ENV["sigh_#{app_prefix}_certificate-name"]
+
+    # Intent provisioning profile
+    intent_prefix = "#{ENV['IOS_APP_INTENT_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
+    intent_prov_profile_path = ENV["sigh_#{intent_prefix}_profile-path"]
+    intent_prov_profile_name = ENV["sigh_#{intent_prefix}_profile-name"]
 
     widget_enabled = ENV["ENABLE_WIDGET"] == "true"
     puts "Is widget enabled: #{widget_enabled}"
@@ -137,10 +140,21 @@ platform :ios do
         target_filter: "departureWidget",
         profile: widget_prov_profile_path,
         build_configuration: "Release",
-        code_signing_identity: widget_signing_identity_name
+        code_signing_identity: app_signing_identity_name
+      )
+      update_project_provisioning(
+        xcodeproj: "./ios/atb.xcodeproj",
+        target_filter: "AtbAppIntent",
+        profile: intent_prov_profile_path,
+        build_configuration: "Release",
+        code_signing_identity: app_signing_identity_name
       )
       update_app_group_identifiers(
         entitlements_file: "./ios/departureWidget.entitlements",
+        app_group_identifiers: [ENV["APP_GROUP_NAME"]]
+      )
+      update_app_group_identifiers(
+        entitlements_file: "./ios/AtbAppIntent/AtbAppIntentRelease.entitlements",
         app_group_identifiers: [ENV["APP_GROUP_NAME"]]
       )
     else
@@ -161,7 +175,8 @@ platform :ios do
         signingStyle: "manual",
         provisioningProfiles: {
           ENV['IOS_BUNDLE_IDENTIFIER'] => app_prov_profile_name,
-          ENV['IOS_APP_WIDGET_IDENTIFIER'] => widget_prov_profile_name
+          ENV['IOS_APP_WIDGET_IDENTIFIER'] => widget_prov_profile_name,
+          ENV['IOS_APP_INTENT_IDENTIFIER'] => intent_prov_profile_name
       	}
       }
     )

@@ -24,6 +24,7 @@ import {
   secondsBetween,
   secondsToDuration,
   secondsToDurationShort,
+  secondsToMinutes,
 } from '@atb/utils/date';
 import {
   getQuayName,
@@ -54,6 +55,7 @@ import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {CollapsedLegs} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/CollapsedLegs';
 import useFontScale from '@atb/utils/use-font-scale';
 import {secondsToMinutes} from 'date-fns';
+import TripDetails from '@atb/translations/screens/subscreens/TripDetails';
 
 type ResultItemProps = {
   tripPattern: TripPattern;

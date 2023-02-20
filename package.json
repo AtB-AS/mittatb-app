@@ -48,6 +48,7 @@
     "@seznam/compose-react-refs": "^1.0.6",
     "@turf/boolean-point-in-polygon": "^6.5.0",
     "@turf/centroid": "^6.5.0",
+    "@turf/distance": "^6.5.0",
     "axios": "^0.27.2",
     "axios-better-stacktrace": "^2.1.2",
     "axios-retry": "^3.3.1",

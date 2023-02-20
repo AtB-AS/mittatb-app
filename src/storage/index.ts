@@ -23,6 +23,7 @@ export type StorageModel = {
   '@ATB_search-history': string;
   '@ATB_journey_search-history': string;
   '@ATB_ticket_informational_accepted': string;
+  '@ATB_user_travel_search_filters': string;
   '@ATB_previous_build_number': string;
   '@ATB_saved_payment_methods': string;
   '@ATB_feedback_display_stats': string;
