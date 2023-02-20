@@ -60,7 +60,7 @@ type ResultItemProps = {
   onDetailsPressed(): void;
   searchTime: SearchTime;
   testID?: string;
-  listPosition: number;
+  resultNumber: number;
 };
 
 const ResultItemHeader: React.FC<{
@@ -124,7 +124,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   onDetailsPressed,
   testID,
   searchTime,
-  listPosition,
+  resultNumber,
   ...props
 }) => {
   const styles = useThemeStyles();
@@ -182,7 +182,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         t,
         language,
         isInPast,
-        listPosition,
+        resultNumber,
       )}
       accessibilityHint={t(
         TripSearchTexts.results.resultItem.footer.detailsHint,
