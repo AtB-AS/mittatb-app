@@ -60,7 +60,7 @@ jobs:
         if: steps.detox-app-cache.outputs.cache-hit != 'true' || ${{ github.event.inputs.useCache }} == 'false'
         run: brew install imagemagick && yarn generate-native-assets
       - name: Disable widget
-        run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget
+        run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget AtbAppIntent
       - name: Install Pods
         if: steps.detox-app-cache.outputs.cache-hit != 'true' || ${{ github.event.inputs.useCache }} == 'false'
         run: bundle exec fastlane ios pods
