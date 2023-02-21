@@ -31,7 +31,7 @@
       "app": {
         "type": "ios.app",
         "binaryPath": "build/detox/ios/Build/Products/Debug-iphonesimulator/AtB.app",
-        "build": "export FORCE_BUNDLING=true && export CODE_SIGNING_REQUIRED=NO && export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild ONLY_ACTIVE_ARCH=YES -workspace ios/atb.xcworkspace -UseNewBuildSystem=YES -configuration Debug -scheme atb -sdk iphonesimulator -derivedDataPath build/detox/ios -destination 'platform=iOS Simulator,OS=15.0,name=iPhone 13'"
+        "build": "export FORCE_BUNDLING=true && export CODE_SIGNING_REQUIRED=NO && export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild ONLY_ACTIVE_ARCH=YES -workspace ios/atb.xcworkspace -UseNewBuildSystem=YES -configuration Debug -scheme atb -sdk iphonesimulator -derivedDataPath build/detox/ios -destination 'platform=iOS Simulator,OS=15.2,name=iPhone 13'"
       }
     },
     "ios.release": {
@@ -39,7 +39,7 @@
       "app": {
         "type": "ios.app",
         "binaryPath": "build/detox/ios/Build/Products/Release-iphonesimulator/AtB.app",
-        "build": "export CODE_SIGNING_REQUIRED=NO && export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild ONLY_ACTIVE_ARCH=YES -workspace ios/atb.xcworkspace -UseNewBuildSystem=YES -configuration Release -scheme atb -sdk iphonesimulator -derivedDataPath build/detox/ios -destination 'platform=iOS Simulator,OS=15.0,name=iPhone 13'"
+        "build": "export CODE_SIGNING_REQUIRED=NO && export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild ONLY_ACTIVE_ARCH=YES -workspace ios/atb.xcworkspace -UseNewBuildSystem=YES -configuration Release -scheme atb -sdk iphonesimulator -derivedDataPath build/detox/ios -destination 'platform=iOS Simulator,OS=15.2,name=iPhone 13'"
       }
     },
     "android": {
