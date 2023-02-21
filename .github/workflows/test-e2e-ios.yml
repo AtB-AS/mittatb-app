@@ -42,7 +42,7 @@ jobs:
         uses: ./.github/actions/ios-build-setup
         with:
           use-build-cache: ${{ github.event.inputs.useCache }}
-          app-environment: 'dev'
+          app-environment: 'dev-e2e-test'
           app-org: 'atb'
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
           xcode-version: '13.2.1'
