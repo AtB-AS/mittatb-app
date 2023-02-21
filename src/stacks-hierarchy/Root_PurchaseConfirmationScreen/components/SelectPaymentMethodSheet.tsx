@@ -167,7 +167,7 @@ export const SelectPaymentMethod: React.FC<Props> = ({
           color={'background_1'}
           setFocusOnLoad={false}
         />
-        <View style={{flexGrow: 1}}>
+        <View style={{flexShrink: 1, flexGrow: 1}}>
           <ScrollView style={styles.paymentOptions}>
             {defaultPaymentOptions.map((option, index) => {
               return (
