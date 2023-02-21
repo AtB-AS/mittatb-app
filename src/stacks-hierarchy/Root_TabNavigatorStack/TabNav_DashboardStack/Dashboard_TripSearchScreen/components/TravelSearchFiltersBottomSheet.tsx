@@ -1,4 +1,4 @@
-import {ScrollView, TouchableOpacity} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import React, {forwardRef, useState} from 'react';
 import {
   getTextForLanguage,
@@ -111,28 +111,33 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
             ) : null;
           })}
         </Sections.Section>
+        <Sections.Section style={styles.saveFiltersContainer}>
+          <Sections.GenericClickableSectionItem
+            onPress={() => {
+              setSaveFilters(!saveFilters);
+            }}
+          >
+            <View style={styles.saveOptionSection}>
+              <Checkbox
+                checked={saveFilters}
+                accessibility={{
+                  accessibilityLabel: t(
+                    saveFilters
+                      ? TripSearchTexts.filters.bottomSheet.saveFilters.a11yHint
+                          .notSave
+                      : TripSearchTexts.filters.bottomSheet.saveFilters.a11yHint
+                          .save,
+                  ),
+                }}
+              />
+              <ThemeText type={'body__secondary'} color={'secondary'}>
+                {t(TripSearchTexts.filters.bottomSheet.saveFilters.text)}
+              </ThemeText>
+            </View>
+          </Sections.GenericClickableSectionItem>
+        </Sections.Section>
       </ScrollView>
-      <TouchableOpacity
-        onPress={() => {
-          setSaveFilters(!saveFilters);
-        }}
-        style={[styles.saveOptionSection, styles.filtersContainer]}
-      >
-        <Checkbox
-          checked={saveFilters}
-          accessibility={{
-            accessibilityHint: t(
-              saveFilters
-                ? TripSearchTexts.filters.bottomSheet.saveFilters.a11yHint
-                    .notSave
-                : TripSearchTexts.filters.bottomSheet.saveFilters.a11yHint.save,
-            ),
-          }}
-        />
-        <ThemeText type={'body__secondary'} color={'secondary'}>
-          {t(TripSearchTexts.filters.bottomSheet.saveFilters.text)}
-        </ThemeText>
-      </TouchableOpacity>
+
       <FullScreenFooter>
         <Button
           text={t(TripSearchTexts.filters.bottomSheet.use)}
@@ -149,12 +154,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
+  saveFiltersContainer: {
+    marginTop: theme.spacings.medium,
+  },
   saveOptionSection: {
-    backgroundColor: theme.interactive.interactive_2.default.background,
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: theme.border.radius.regular,
-    paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.xSmall,
+    paddingVertical: theme.spacings.xSmall,
   },
 }));

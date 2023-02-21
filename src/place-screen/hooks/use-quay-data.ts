@@ -300,13 +300,13 @@ export function useQuayData(
     loadRealTimeData,
     updateFrequencyInSeconds * 1000,
     [quay.id],
-    !isFocused || mode !== 'Departure',
+    !isFocused || mode === 'Favourite',
   );
   useInterval(
     () => dispatch({type: 'TICK_TICK'}),
     tickRateInSeconds * 1000,
     [],
-    !isFocused || mode !== 'Departure',
+    !isFocused || mode === 'Favourite',
   );
   useRefreshOnFocus(
     isFocused,
