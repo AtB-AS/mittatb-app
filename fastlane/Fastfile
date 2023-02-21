@@ -157,8 +157,6 @@ platform :ios do
         entitlements_file: "./ios/AtbAppIntent/AtbAppIntentRelease.entitlements",
         app_group_identifiers: [ENV["APP_GROUP_NAME"]]
       )
-    else
-      remove_background_location()
     end
 
     update_app_group_identifiers(

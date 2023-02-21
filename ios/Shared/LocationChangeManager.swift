@@ -44,16 +44,17 @@ typealias LocationCallback = (CLLocation?) -> Void
         callback(nil)
     }
 
-    @objc func startMonitoringLocationChanges() {
+    // Not needed
+    //@objc func startMonitoringLocationChanges() {
         // NOTE: Commented out because of battery drain, this was an experimental test that turned out to be bad for the battery
         //  locationManager.distanceFilter = 100 // meters
         //  locationManager.showsBackgroundLocationIndicator = false
         //  locationManager.allowsBackgroundLocationUpdates = true
         //  locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         //  locationManager.requestAlwaysAuthorization()
-        locationManager.startMonitoringSignificantLocationChanges()
+        //locationManager.startMonitoringSignificantLocationChanges()
         //locationManager.requestLocation()
-    }
+    //}
 
     func locationManager(_: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         debugPrint(#function, status)
