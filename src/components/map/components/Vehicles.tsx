@@ -4,6 +4,7 @@ import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import MapboxGL from '@rnmapbox/maps';
 import {MapSelectionActionType} from '@atb/components/map/types';
 import {
+  fitBounds,
   isClusterFeature,
   isFeatureCollection,
   isFeaturePoint,
@@ -30,8 +31,8 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
             feature,
           );
           if (isFeatureCollection(children)) {
-            const {ne, sw} = await getClusterChildrenBounds(children);
-            mapCameraRef.current?.fitBounds(ne, sw, 100, 400);
+            const {from, to} = await getClusterChildrenBounds(children);
+            fitBounds(from, to, mapCameraRef);
           }
         } else if (isFeaturePoint(feature)) {
           onPress({
@@ -105,7 +106,7 @@ const getClusterChildrenBounds = async (
   const [maxLat] = latitudes.slice(-1);
 
   return {
-    sw: [minLon, minLat],
-    ne: [maxLon, maxLat],
+    from: {longitude: minLon, latitude: minLat},
+    to: {longitude: maxLon, latitude: maxLat},
   };
 };

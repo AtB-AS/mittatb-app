@@ -115,20 +115,24 @@ export function flyToLocation(
     );
 }
 
-export const toGeoJSONFeature = <
+export const toFeaturePoint = <
+  T extends {id?: string; lat: number; lon: number},
+>(
+  item: T,
+): GeoJSON.Feature<GeoJSON.Point, T> => ({
+  type: 'Feature',
+  geometry: {
+    type: 'Point',
+    coordinates: [item.lon, item.lat],
+  },
+  properties: item,
+});
+
+export const toFeaturePoints = <
   T extends {id: string; lat: number; lon: number},
 >(
-  properties: T[],
-) =>
-  properties.map<GeoJSON.Feature<GeoJSON.Point, T>>((p) => ({
-    id: p.id,
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: [p.lon, p.lat],
-    },
-    properties: p,
-  }));
+  items: T[],
+) => items.map(toFeaturePoint);
 
 export const toFeatureCollection = <
   G extends Geometry | null = Geometry,

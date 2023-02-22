@@ -7,7 +7,7 @@ import {View} from 'react-native';
 import {LocationBar} from './components/LocationBar';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import MapRoute from '@atb/travel-details-map-screen/components/MapRoute';
-import {getVisibleRange, isFeaturePoint, zoomIn, zoomOut} from './utils';
+import {isFeaturePoint, zoomIn, zoomOut} from './utils';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
 import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
@@ -44,17 +44,10 @@ export const Map = (props: MapProps) => {
     );
 
   const onRegionChange = (
-    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
+    region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => {
     if (!props.vehicles) return;
-    const [longitude, latitude] = feature.geometry.coordinates;
-    const zoom = feature.properties.zoomLevel;
-    const range = getVisibleRange(feature.properties.visibleBounds);
-    props.vehicles.fetchVehicles({
-      coordinates: {longitude, latitude},
-      zoom,
-      radius: range / 2,
-    });
+    props.vehicles.fetchVehicles(region);
   };
 
   return (
