@@ -84,6 +84,10 @@
 	<string>Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Send bilder for å hjelpe til med å løse problemer i appen</string>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>UseLocationIntent</string>
+	</array>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Bold.ttf</string>

@@ -29,6 +29,7 @@ export type UserProfile = {
   name: LanguageAndTextType;
   alternativeNames: LanguageAndTextType[];
   description: LanguageAndTextType;
+  alternativeDescriptions: LanguageAndTextType[];
   version: string;
 };
 

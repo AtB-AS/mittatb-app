@@ -69,6 +69,7 @@ type DepartureDataActions =
     }
   | {
       type: 'LOAD_REALTIME_DATA';
+      favoriteDepartureIds: string[];
     }
   | {
       type: 'STOP_LOADER';
@@ -107,6 +108,7 @@ const reducer: ReducerWithSideEffects<
       const queryInput: DepartureFavoritesQuery = {
         limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
         startTime,
+        includeCancelledTrips: true,
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -155,7 +157,11 @@ const reducer: ReducerWithSideEffects<
           try {
             const realtimeData = await getStopPlaceGroupRealtime(
               state.data ?? [],
-              state.queryInput,
+              {
+                limitPerLine: state.queryInput.limitPerLine,
+                startTime: state.queryInput.startTime,
+                lineIds: action.favoriteDepartureIds,
+              },
             );
             dispatch({
               type: 'UPDATE_REALTIME',
@@ -246,6 +252,7 @@ export function useFavoriteDepartureData(
     queryInput: {
       limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
       startTime: searchDate,
+      includeCancelledTrips: true,
     },
     lastRefreshTime: new Date(),
   });
@@ -264,6 +271,15 @@ export function useFavoriteDepartureData(
       }),
     [JSON.stringify(dashboardFavoriteIds)],
   );
+  const dashboardFavoriteLineIds = dashboardFavorites.map((f) => f.lineId);
+  const loadRealTimeData = useCallback(
+    () =>
+      dispatch({
+        type: 'LOAD_REALTIME_DATA',
+        favoriteDepartureIds: dashboardFavoriteLineIds,
+      }),
+    [JSON.stringify(dashboardFavoriteLineIds)],
+  );
 
   useEffect(() => {
     if (!state.tick) {
@@ -280,11 +296,11 @@ export function useFavoriteDepartureData(
     state.tick,
     HARD_REFRESH_LIMIT_IN_MINUTES * 60,
     loadInitialDepartures,
-    useCallback(() => dispatch({type: 'LOAD_REALTIME_DATA'}), []),
+    loadRealTimeData,
   );
 
   useInterval(
-    () => dispatch({type: 'LOAD_REALTIME_DATA'}),
+    loadRealTimeData,
     updateFrequencyInSeconds * 1000,
     [],
     !isFocused,

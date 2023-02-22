@@ -4,6 +4,7 @@ import {TravelSearchFiltersBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavi
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useTravelSearchFiltersEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-enabled';
 import type {TravelSearchFiltersSelectionType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+import {useFilters} from '@atb/travel-search-filters';
 
 type TravelSearchFiltersState =
   | {
@@ -25,14 +26,15 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
   const travelSearchFiltersEnabled = useTravelSearchFiltersEnabled();
   const {travelSearchFilters} = useFirestoreConfiguration();
   const transportModeFilterOptions = travelSearchFilters?.transportModes;
+  const {filters, setFilters} = useFilters();
 
-  const initialTransportModesSelection = transportModeFilterOptions?.map(
-    (option) => ({
-      ...option,
-      selected: true,
-    }),
-  );
+  const allAvailableModes = transportModeFilterOptions?.map((option) => ({
+    ...option,
+    selected: true,
+  }));
 
+  const initialTransportModesSelection =
+    filters.length !== 0 ? filters : allAvailableModes;
   const [filtersSelection, setFiltersSelection] =
     useState<TravelSearchFiltersSelectionType>({
       transportModes: initialTransportModesSelection,
@@ -62,8 +64,10 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
     filtersSelection,
     anyFiltersApplied:
       filtersSelection.transportModes?.some((m) => !m.selected) || false,
-    resetTransportModes: () =>
-      setFiltersSelection({transportModes: initialTransportModesSelection}),
+    resetTransportModes: () => {
+      setFilters(allAvailableModes);
+      setFiltersSelection({transportModes: allAvailableModes});
+    },
     closeRef,
   };
 };
