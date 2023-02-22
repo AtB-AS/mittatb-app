@@ -10,6 +10,16 @@
       "lang": "nob",
       "value": "Fra 20 til og med 66 år."
     },
+    "alternativeDescriptions": [
+      {
+        "lang": "eng",
+        "value": "20 to 66 years."
+      },
+      {
+        "lang": "nob",
+        "value": "20 til og med 66 år."
+      }
+    ],
     "alternativeNames": [
       {
         "lang": "eng",
@@ -36,6 +46,16 @@
       "lang": "nob",
       "value": "Fra 67 år, personer med norsk uføretrygd, blinde og døvblinde."
     },
+    "alternativeDescriptions": [
+      {
+        "lang": "eng",
+        "value": "Over 67 or with concessionary card."
+      },
+      {
+        "lang": "nob",
+        "value": "Over 67 eller med gyldig honnørbevis."
+      }
+    ],
     "alternativeNames": [
       {
         "lang": "eng",
@@ -62,6 +82,16 @@
       "lang": "nob",
       "value": "Fra 6 til og med 19 år. Kjøp barnebillett om du skal ha med sykkel."
     },
+    "alternativeDescriptions": [
+      {
+        "lang": "eng",
+        "value": "6 to 19 years."
+      },
+      {
+        "lang": "nob",
+        "value": "6 til og med 19 år."
+      }
+    ],
     "alternativeNames": [
       {
         "lang": "eng",
@@ -88,6 +118,16 @@
       "lang": "nob",
       "value": "Studenter og elever på videregående skole til og med 34 år."
     },
+    "alternativeDescriptions": [
+      {
+        "lang": "eng",
+        "value": "Fulltime students under 35."
+      },
+      {
+        "lang": "nob",
+        "value": "Fulltidsstudenter og elever under 35 år."
+      }
+    ],
     "alternativeNames": [
       {
         "lang": "eng",
@@ -114,6 +154,16 @@
       "lang": "nob",
       "value": "Fra 16 til og med 19 år."
     },
+    "alternativeDescriptions": [
+      {
+        "lang": "eng",
+        "value": "16 to 19 years."
+      },
+      {
+        "lang": "nob",
+        "value": "Fra 16 til og med 19 år"
+      }
+    ],
     "alternativeNames": [
       {
         "lang": "eng",
@@ -140,6 +190,16 @@
       "lang": "nob",
       "value": "Vernepliktig i norsk førstegangstjeneste."
     },
+    "alternativeDescriptions": [
+      {
+        "lang": "eng",
+        "value": "Soldiers in mandatory service."
+      },
+      {
+        "lang": "nob",
+        "value": "Vernepliktig i førstegangstjeneste."
+      }
+    ],
     "alternativeNames": [
       {
         "lang": "eng",

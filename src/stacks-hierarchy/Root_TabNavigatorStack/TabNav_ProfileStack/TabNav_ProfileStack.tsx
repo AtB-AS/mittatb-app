@@ -17,6 +17,7 @@ import {Profile_NearbyStopPlacesScreen} from './Profile_NearbyStopPlacesScreen';
 import {Profile_FavoriteDeparturesScreen} from './Profile_FavoriteDeparturesScreen';
 import {Profile_TermsInformationScreen} from './Profile_TermsInformationScreen';
 import {Profile_TicketInspectionInformationScreen} from './Profile_TicketInspectionInformationScreen';
+import {Profile_GenericWebsiteInformationScreen} from './Profile_GenericWebsiteInformationScreen';
 import {Profile_DeleteProfileScreen} from './Profile_DeleteProfileScreen';
 import {Profile_TravelTokenScreen} from './Profile_TravelTokenScreen';
 import {Profile_SelectTravelTokenScreen} from './Profile_SelectTravelTokenScreen';
@@ -106,6 +107,10 @@ export const TabNav_ProfileStack = () => {
       <Stack.Screen
         name="Profile_TicketInspectionInformationScreen"
         component={Profile_TicketInspectionInformationScreen}
+      />
+      <Stack.Screen
+        name="Profile_GenericWebsiteInformationScreen"
+        component={Profile_GenericWebsiteInformationScreen}
       />
       <Stack.Screen
         name="Profile_NearbyStopPlacesScreen"
