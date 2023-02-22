@@ -3,11 +3,8 @@ import {useAuthState} from '@atb/auth';
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import PaymentBrand from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Purchase/Payment/PaymentBrand';
-import {
-  getExpireDate,
-  getPaymentTypeName,
-} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Purchase/utils';
+import PaymentBrand from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
+import {getExpireDate, getPaymentTypeName} from '@atb/stacks-hierarchy/utils';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {
   deleteRecurringPayment,

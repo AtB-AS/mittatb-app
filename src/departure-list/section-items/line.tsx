@@ -83,6 +83,7 @@ export default function LineItem({
     date: dep.aimedTime,
     fromQuayId: group.lineInfo?.quayId,
     serviceDate: dep.serviceDate,
+    isTripCancelled: dep.cancellation,
   }));
 
   // we know we have a departure as we've checked hasNoDeparturesOnGroup
@@ -191,7 +192,7 @@ function getAccessibilityTextFirstDeparture(
   const upcoming = inPast
     ? t(
         NearbyTexts.results.departure.hasPassedAccessibilityLabel(
-          formatToClock(firstResult.time, language),
+          formatToClock(firstResult.time, language, 'floor'),
         ),
       )
     : firstResult.realtime
@@ -248,6 +249,7 @@ function DepartureTimeItem({
   const rightIcon = getSvgForMostCriticalSituationOrNotice(
     departure.situations,
     notices,
+    departure.cancellation,
   );
   const leftIcon = departure.realtime
     ? themeName === 'dark'
@@ -267,7 +269,10 @@ function DepartureTimeItem({
       onPress={() => onPress(departure)}
       text={formatTimeText(departure, searchDate, language, t)}
       style={styles.departure}
-      textStyle={styles.departureText}
+      textStyle={[
+        styles.departureText,
+        departure.cancellation && styles.strikethrough,
+      ]}
       rightIcon={
         rightIcon && {
           svg: rightIcon,
@@ -322,6 +327,9 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   scrollContainer: {
     marginBottom: theme.spacings.medium,
     paddingLeft: theme.spacings.medium,
+  },
+  strikethrough: {
+    textDecorationLine: 'line-through',
   },
   departure: {
     backgroundColor: theme.static.background.background_1.background,

@@ -141,12 +141,14 @@ const TripSearchTexts = {
     resultItem: {
       passedTrip: _('Passert reise, ', 'Passed trip, '),
       header: {
+        title: (mode: string, placeName: string) =>
+          _(`${mode} fra ${placeName}`, `${mode} from ${placeName}`),
+        totalDuration: _('Reisetid', 'Trip duration'),
         time: (startTime: string, endTime: string) =>
           _(
             `Fra klokken ${startTime}, til klokken ${endTime}`,
             `From ${startTime}, to ${endTime}`,
           ),
-        totalDuration: _('Reisetid', 'Trip duration'),
       },
       hasSituationsTip: _(
         'Denne reisen har driftsmeldinger. Se detaljer for mer info',
@@ -159,6 +161,8 @@ const TripSearchTexts = {
             `Walk ${walkTime}. Wait ${waitTime}`,
           ),
         walkLabel: (time: string) => _(`Gå ${time}`, `Walk ${time}`),
+        walkToStopLabel: (distance: string, stopPlace: string) =>
+          _(`Gå til ${stopPlace}`, `Walk ${distance} to ${stopPlace}`),
         waitLabel: (time: string) => _(`Vent ${time}`, `Wait ${time}`),
       },
       destination: {
@@ -178,6 +182,8 @@ const TripSearchTexts = {
         ),
       },
       journeySummary: {
+        resultNumber: (number: number) =>
+          _(`Reiseresultat ${number}`, `Result number ${number}`),
         duration: (duration: string) =>
           _(`Reisetid: ${duration}`, `Travel time: ${duration}`),
         legsDescription: {
@@ -191,11 +197,22 @@ const TripSearchTexts = {
           _(`nummer ${number}`, `number ${number}`),
         totalWalkDistance: (meters: string) =>
           _(`Totalt ${meters} meter å gå`, `Total of ${meters} meters to walk`),
-        departureInfo: (fromPlace: string, fromPlaceDepartureTime: string) =>
+        travelTimes: (startTime: string, endTime: string, duration: string) =>
           _(
-            `Fra ${fromPlace}, klokken ${fromPlaceDepartureTime}`,
-            `From ${fromPlace}, at ${fromPlaceDepartureTime}`,
+            `Start klokken ${startTime}, ankomst klokken ${endTime}. Total reisetid ${duration}.`,
+            `Start time ${startTime}, arrival time ${endTime}. Total travel time ${duration}`,
           ),
+        realtime: (
+          fromPlace: string,
+          realtimeDepartureTime: string,
+          scheduledDepartureTime: string,
+        ) =>
+          _(
+            `Klokken ${realtimeDepartureTime} sanntid, klokken ${scheduledDepartureTime} rutetid`,
+            `At ${realtimeDepartureTime} realtime, at ${scheduledDepartureTime} scheduled time`,
+          ),
+        noRealTime: (placeName: string, aimedTime: string) =>
+          _(`Klokken ${aimedTime}`, `At ${aimedTime}`),
       },
     },
   },
@@ -224,13 +241,29 @@ const TripSearchTexts = {
         heading: _('Hva vil du reise med?', 'What do you want to travel with?'),
         all: _('Alle', 'All'),
       },
-      save: _('Lagre valg', 'Save selection'),
+      use: _('Bruk', 'Use'),
+      saveFilters: {
+        text: _(
+          'Lagre valg for fremtidige reisesøk',
+          'Save selection for future travel searches',
+        ),
+        a11yHint: {
+          save: _(
+            'Aktiver for å lagre valg for fremtidige reisesøk',
+            'Activate to save selection for future travel searches',
+          ),
+          notSave: _(
+            'Aktiver for å ikke lagre valg for fremtidige reisesøk',
+            'Activate to not save selection for future travel searches',
+          ),
+        },
+      },
     },
     selection: {
       transportModes: (selected: number, total: number) =>
         _(
           `${selected} av ${total} transportmidler er valgt`,
-          `${selected} of ${total} trasportation modes are selected`,
+          `${selected} of ${total} transportation modes are selected`,
         ),
       a11yLabelPrefix: _('Filter: ', 'Filter: '),
       a11yHint: _('Aktiver for å fjerne filter.', 'Activate to remove filter.'),

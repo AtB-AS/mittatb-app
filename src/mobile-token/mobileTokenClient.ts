@@ -1,6 +1,4 @@
 import {useCallback, useEffect, useMemo} from 'react';
-// import {NoTokenError} from '@entur/abt-mobile-client-sdk/token/token-state-react-native-lib/src/native/errors';
-// import {Token} from '@entur/abt-mobile-client-sdk/token/token-core-javascript-lib';
 import {
   AbtClient,
   encodeAsSecureContainer,
@@ -10,7 +8,6 @@ import {
   ActivatedToken,
 } from '@entur-private/abt-mobile-client-sdk';
 import Bugsnag from '@bugsnag/react-native';
-// import {ActivatedToken} from '@entur/atb-mobile-client-sdk/token/token-core-javascript-lib/src';
 
 export default function useMobileTokenClient(
   abtClient: AbtClient,

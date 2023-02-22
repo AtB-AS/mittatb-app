@@ -205,7 +205,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 onPress={() => {
                   let screen: keyof LoginInAppStackParams = 'PhoneInputInApp';
                   if (hasActiveFareContracts) {
-                    screen = 'activeFareContractPromptInApp';
+                    screen = 'ActiveFareContractPromptInApp';
                   } else if (enable_vipps_login) {
                     screen = 'LoginOptionsScreen';
                   }

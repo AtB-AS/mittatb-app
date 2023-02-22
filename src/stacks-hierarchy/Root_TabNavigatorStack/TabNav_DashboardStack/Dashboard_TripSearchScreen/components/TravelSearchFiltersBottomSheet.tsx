@@ -1,4 +1,4 @@
-import {ScrollView} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import React, {forwardRef, useState} from 'react';
 import {
   getTextForLanguage,
@@ -18,6 +18,9 @@ import type {
   TransportModeFilterOptionWithSelectionType,
   TravelSearchFiltersSelectionType,
 } from '../../types';
+import {useFilters} from '@atb/travel-search-filters';
+import {ThemeText} from '@atb/components/text';
+import {Checkbox} from '@atb/components/checkbox/Checkbox';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
@@ -30,6 +33,9 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   const {t, language} = useTranslation();
   const styles = useStyles();
 
+  const {setFilters} = useFilters();
+  const [saveFilters, setSaveFilters] = useState(false);
+
   const [selectedModes, setSelectedModes] = useState<
     TransportModeFilterOptionWithSelectionType[] | undefined
   >(filtersSelection.transportModes);
@@ -38,6 +44,9 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
     onSave({
       transportModes: selectedModes,
     });
+    if (saveFilters) {
+      setFilters(selectedModes);
+    }
     close();
   };
 
@@ -102,10 +111,36 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
             ) : null;
           })}
         </Sections.Section>
+        <Sections.Section style={styles.saveFiltersContainer}>
+          <Sections.GenericClickableSectionItem
+            onPress={() => {
+              setSaveFilters(!saveFilters);
+            }}
+          >
+            <View style={styles.saveOptionSection}>
+              <Checkbox
+                checked={saveFilters}
+                accessibility={{
+                  accessibilityLabel: t(
+                    saveFilters
+                      ? TripSearchTexts.filters.bottomSheet.saveFilters.a11yHint
+                          .notSave
+                      : TripSearchTexts.filters.bottomSheet.saveFilters.a11yHint
+                          .save,
+                  ),
+                }}
+              />
+              <ThemeText type={'body__secondary'} color={'secondary'}>
+                {t(TripSearchTexts.filters.bottomSheet.saveFilters.text)}
+              </ThemeText>
+            </View>
+          </Sections.GenericClickableSectionItem>
+        </Sections.Section>
       </ScrollView>
+
       <FullScreenFooter>
         <Button
-          text={t(TripSearchTexts.filters.bottomSheet.save)}
+          text={t(TripSearchTexts.filters.bottomSheet.use)}
           onPress={save}
           rightIcon={{svg: Confirm}}
         />
@@ -118,5 +153,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   filtersContainer: {
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
+  },
+  saveFiltersContainer: {
+    marginTop: theme.spacings.medium,
+  },
+  saveOptionSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: theme.spacings.xSmall,
+    paddingVertical: theme.spacings.xSmall,
   },
 }));

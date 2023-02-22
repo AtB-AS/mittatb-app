@@ -6,27 +6,32 @@ These are the steps for releasing a new major version to TestFlight / Play Store
 
 If you want to release only for a given organization, the release tag must include the orgId specifier for the organization. The uploading jobs for other organizations will then exit and fail. An example tag for an NFK-only release is the tag `v1.20-rc3-nfk`. Please note that the releases after an org specific release may miss some information from the auto generated changelogs that may have to be manually added.
 
-Skip the first step of bumping the project files if the release is a new release candidate on an existing major version.
+Skip the first two steps of creating release-branch and bumping version number on master if the release is a new release candidate on an existing major version.
 
-### Bump version number in project files
+### Create release branch
+Branch out from master to a new branch with prefix `release/`, like `release/1.30`.
 
-There are some project files where the version number must be bumped. This is a candidate for later automation, bus as of now it is a manual process.
+### On master: Bump version number and register new version at Entur
+
+Now that a release branch is created, the version-number on master should be increased. So if `release/1.30` is created, then master should be incremented to `1.31` as version number.
 
 Bump the version number in these files:
 
-  - All .env-files
-  - package.json
+- All .env-files
+- package.json
 
-Do this in a commit with message "chore: Bump to version x.xx".
+Do this in a commit with message "chore: Bump to version x.xx". You can check earlier commits with the message "chore: Bump to version x.xx" to see if all necessary files are bumped.
 
-Tip: You can check earlier commits with the message "chore: Bump to version x.xx" to see if all necessary files are bumped.
+After bumping the version number the new version should be registered at Entur for mobile token to work. This is done by running this command:
+
+`./scripts/register-local-app-version.sh`
 
 ### Create release candidate with the command line
 
 This will create a draft release in GitHub.
 
 - `git fetch` to locally pull all existing tags
-- Make sure you've checked out the branch from which you want to make the release (`master` or `release/x.x`).
+- Make sure you've checked out the release branch from which you want to make the release.
 - `yarn release-draft` to create a tag for the new release.
 - You are asked to specify version. This should be the major-version with a release candidate version suffix, for example `v1.16-rc2`.
 - If this is the first release for the current major version use `rc1` as suffix like this: `v1.16-rc1`.
@@ -38,7 +43,7 @@ Follow these steps in GitHub:
 
 - Go to this repository in GitHub and select _Releases_.
 - Find the previously created draft release with the correct release candidate version and click _Edit_.
-- Set the target branch to the same branch the release draft was created from.
+- Set the target branch to the release branch the release draft was created from.
 - Click _Publish release_.
 
 This makes GitHub Actions build the release and send it to TestFlight / Play Store Alpha. This is configured with [fastlane](https://fastlane.tools/). The build itself will take approximately an hour, and there may be additional review time at Apple / Google. The exception is if the release is an update to an existing major version, then TestFlight will automatically accept the release without a new review.
@@ -89,6 +94,9 @@ This makes GitHub Actions build the release and send it to TestFlight / Play Sto
 - Possible with delayed rollout, manually handled
 - Start rollout to production -> Rollout
 - Will be automatically rolled out after review
+
+## Merge release branch into master
+After releasing to production the release branch should be merged into master. This should not be a "Squash and merge", but be a "Create a merge commit" to keep the history retained.
 
 ## Finding build number
 

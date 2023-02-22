@@ -1,6 +1,6 @@
 import {useAuthState} from '@atb/auth';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import AnonymousPurchaseWarning from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Purchase/AnonymousPurchaseWarning';
+import AnonymousPurchaseWarning from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareProducts/AnonymousPurchaseWarning';
 import {AvailableFareProducts} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareProducts/AvailableFareProducts/AvailableFareProducts';
 import {useTheme} from '@atb/theme';
 import React from 'react';
@@ -34,22 +34,16 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
         params: {
           fareProductTypeConfig,
           afterLogin: {
-            screen: 'Purchase',
+            screen: 'Root_PurchaseOverviewScreen',
             params: {
-              screen: 'PurchaseOverview',
-              params: {
-                fareProductTypeConfig,
-              },
+              fareProductTypeConfig,
             },
           },
         },
       });
     } else {
-      navigation.navigate('Purchase', {
-        screen: 'PurchaseOverview',
-        params: {
-          fareProductTypeConfig: fareProductTypeConfig,
-        },
+      navigation.navigate('Root_PurchaseOverviewScreen', {
+        fareProductTypeConfig: fareProductTypeConfig,
       });
     }
   };
@@ -67,9 +61,7 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
         {authenticationType !== 'phone' && (
           <AnonymousPurchaseWarning
             onPress={() =>
-              navigation.navigate('Purchase', {
-                screen: 'Purchase_AnonymousPurchaseConsequencesScreen',
-              })
+              navigation.navigate('Root_PurchaseAsAnonymousConsequencesScreen')
             }
           />
         )}
