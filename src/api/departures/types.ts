@@ -26,6 +26,7 @@ export type DepartureTime = {
   serviceJourneyId?: string;
   serviceDate: string;
   notices?: NoticeFragment[];
+  cancellation?: boolean;
 };
 
 export type DepartureGroup = {

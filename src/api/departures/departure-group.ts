@@ -36,6 +36,7 @@ export type DepartureRealtimeQuery = {
 export type DepartureFavoritesQuery = CursoredQuery<{
   startTime: string;
   limitPerLine: number;
+  includeCancelledTrips?: boolean;
 }>;
 
 export type DepartureGroupMetadata = CursoredData<StopPlaceGroup[]>;
