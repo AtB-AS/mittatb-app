@@ -296,13 +296,13 @@ export function useStopPlaceData(
     loadRealTimeData,
     updateFrequencyInSeconds * 1000,
     [stopPlace.id],
-    !isFocused || mode !== 'Departure',
+    !isFocused || mode === 'Favourite',
   );
   useInterval(
     () => dispatch({type: 'TICK_TICK'}),
     tickRateInSeconds * 1000,
     [],
-    !isFocused || mode !== 'Departure',
+    !isFocused || mode === 'Favourite',
   );
   useRefreshOnFocus(
     isFocused,

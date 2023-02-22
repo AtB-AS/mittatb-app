@@ -73,6 +73,8 @@ const ResultItemHeader: React.FC<{
   if (tripPattern.legs[0].mode === 'foot' && tripPattern.legs[1]) {
     start = tripPattern.legs[1];
     startName = getQuayName(start.fromPlace.quay);
+  } else if (tripPattern.legs[0].mode !== 'foot') {
+    startName = getQuayName(start.fromPlace.quay);
   }
 
   const durationText = secondsToDurationShort(tripPattern.duration, language);
@@ -527,22 +529,25 @@ const tripSummary = (
     } else {
       humanizedDistance = `${distance} ${t(dictionary.distance.m)}`;
     }
+    const quayName = getQuayName(tripPattern.legs[1]?.fromPlace.quay);
+
     {
-      tripPattern.legs[1].fromPlace.quay?.stopPlace?.name
+      quayName
         ? (start = t(
             TripSearchTexts.results.resultItem.footLeg.walkToStopLabel(
               humanizedDistance,
-              tripPattern.legs[1].fromPlace.quay.stopPlace.name,
+              quayName,
             ),
           ))
         : undefined;
     }
   } else {
-    if (tripPattern.legs[0]?.fromPlace.quay?.stopPlace?.name) {
+    const quayName = getQuayName(tripPattern.legs[0]?.fromPlace.quay);
+    if (quayName) {
       start = t(
         TripSearchTexts.results.resultItem.header.title(
           t(getTranslatedModeName(tripPattern.legs[0].mode)),
-          tripPattern.legs[0]?.fromPlace.quay?.stopPlace?.name,
+          quayName,
         ),
       );
     }
