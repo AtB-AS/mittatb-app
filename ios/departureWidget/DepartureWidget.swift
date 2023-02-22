@@ -26,20 +26,11 @@ struct DepartureWidget: Widget {
     private let kind: String = "departureWidget"
 
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider()) { entry in
+        IntentConfiguration(kind: kind, intent: UseLocationIntent.self, provider: Provider()) { entry in
             DepartureWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("Widget")
+        .configurationDisplayName("departure_widget")
         .description("about_widget")
         .supportedFamilies([.systemMedium])
-    }
-}
-
-struct DepartureWidget_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 5), favouriteDeparture: FavouriteDeparture.dummy, stopPlaceGroup: StopPlaceGroup.dummy, state: .preview)).previewContext(WidgetPreviewContext(family: .systemSmall))
-            DepartureWidgetEntryView(entry: Entry(date: Date.now.addingTimeInterval(60 * 5), favouriteDeparture: FavouriteDeparture.dummy, stopPlaceGroup: StopPlaceGroup.dummy, state: .preview)).previewContext(WidgetPreviewContext(family: .systemMedium))
-        }
     }
 }

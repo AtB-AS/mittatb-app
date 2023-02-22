@@ -5,13 +5,13 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import ActiveFareContractPrompt from '../ActiveFareContractPrompt';
 import {LoginInAppScreenProps} from '../types';
 
-export type activeFareContractPromptInAppRouteParams = {
+export type ActiveFareContractPromptInAppRouteParams = {
   afterLogin:
     | AfterLoginParams<'Root_TabNavigatorStack'>
-    | AfterLoginParams<'Purchase'>;
+    | AfterLoginParams<'Root_PurchaseOverviewScreen'>;
 };
 
-type Props = LoginInAppScreenProps<'activeFareContractPromptInApp'>;
+type Props = LoginInAppScreenProps<'ActiveFareContractPromptInApp'>;
 
 export const ActiveFareContractPromptInApp = ({
   navigation,

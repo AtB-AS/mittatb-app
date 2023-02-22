@@ -16,6 +16,7 @@ import {Feature, Point} from 'geojson';
 import {useReverseGeocoder} from '@atb/geocoder';
 import {Location, SearchLocation} from '@atb/favorites/types';
 import {NavigateToTripSearchCallback} from '../types';
+import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 
 type DeparturesDialogSheetProps = {
   close: () => void;
@@ -53,6 +54,7 @@ export const DeparturesDialogSheet = ({
     error: geocoderError,
     forceRefresh: forceRefreshReverseGeocode,
   } = useReverseGeocoder({longitude, latitude} || null);
+  const appStateStatus = useAppStateStatus();
 
   const filteredLocations = locations?.filter(
     (location) =>
@@ -95,7 +97,7 @@ export const DeparturesDialogSheet = ({
             navigateToQuay={(quay) => {
               navigateToQuay(stopPlace, quay);
             }}
-            isFocused={false}
+            isFocused={appStateStatus === 'active'}
             searchTime={searchTime}
             setSearchTime={setSearchTime}
             showOnlyFavorites={false}

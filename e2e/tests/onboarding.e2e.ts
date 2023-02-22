@@ -1,5 +1,4 @@
 import {device} from 'detox';
-import setLocation from '../utils';
 import {tapById} from '../utils/interactionHelpers';
 import {expectToBeVisibleByText} from '../utils/expectHelpers';
 
@@ -7,14 +6,14 @@ describe('Onboarding', () => {
   beforeAll(async () => {
     await device.launchApp({
       permissions: {
-        location: 'inuse',
+        location: 'never',
       },
       languageAndLocale: {
-        language: 'en',
-        locale: 'US',
+        language: 'en-GB',
+        locale: 'en_GB',
       },
     });
-    await setLocation(62.4305, 9.3951);
+    //await setLocation(62.4305, 9.3951);
   });
 
   it('should have welcome screen', async () => {
