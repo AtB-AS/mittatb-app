@@ -184,13 +184,13 @@ const NearbyTexts = {
         ),
       upcomingRealtimeAccessibilityLabel: (time: string) =>
         _(
-          `Kommende avgang sanntid ${time}.`,
-          `Next departure realtime ${time}.`,
+          `Kommende avgang sanntid ${time} `,
+          `Next departure realtime ${time}`,
         ),
       upcomingAccessibilityLabel: (time: string) =>
-        _(`Kommende avgang ${time}.`, `Next departure ${time}.`),
+        _(`Kommende avgang ${time} `, `Next departure ${time}`),
       nextAccessibilityLabel: (time: string) =>
-        _(`Neste avganger: ${time}`, `Next departures: ${time}`),
+        _(`Neste avganger: ${time} `, `Next departures: ${time}`),
       nextAccessibilityRealtime: (time: string) =>
         _(`sanntid ${time}`, `realtime: ${time}`),
     },
