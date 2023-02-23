@@ -16,6 +16,7 @@ import {TransportationIcon} from '@atb/components/transportation-icon';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
+  CancelledDepartureTexts,
   dictionary,
   Language,
   NearbyTexts,
@@ -200,7 +201,7 @@ function getAccessibilityTextFirstDeparture(
         NearbyTexts.results.departure.upcomingRealtimeAccessibilityLabel(
           firstResultScreenReaderTimeText,
         ),
-      )
+      ) + (firstResult.cancellation ? t(CancelledDepartureTexts.cancelled) : '')
     : t(
         NearbyTexts.results.departure.upcomingAccessibilityLabel(
           firstResultScreenReaderTimeText,
@@ -217,7 +218,8 @@ function getAccessibilityTextFirstDeparture(
                     NearbyTexts.results.departure.nextAccessibilityRealtime(
                       labelForTime(i.time, searchDate, t, language, true),
                     ),
-                  )
+                  ) +
+                  (i.cancellation ? t(CancelledDepartureTexts.cancelled) : '')
                 : labelForTime(i.time, searchDate, t, language, true),
             )
             .join(', '),
