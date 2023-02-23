@@ -16,6 +16,7 @@ import {TransportationIcon} from '@atb/components/transportation-icon';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
+  CancelledDepartureTexts,
   dictionary,
   Language,
   NearbyTexts,
@@ -189,36 +190,40 @@ function getAccessibilityTextFirstDeparture(
   );
 
   const inPast = isInThePast(firstResult.time);
-  const upcoming = inPast
-    ? t(
-        NearbyTexts.results.departure.hasPassedAccessibilityLabel(
-          formatToClock(firstResult.time, language, 'floor'),
-        ),
-      )
-    : firstResult.realtime
-    ? t(
-        NearbyTexts.results.departure.upcomingRealtimeAccessibilityLabel(
-          firstResultScreenReaderTimeText,
-        ),
-      )
-    : t(
-        NearbyTexts.results.departure.upcomingAccessibilityLabel(
-          firstResultScreenReaderTimeText,
-        ),
-      );
+  const upcoming =
+    (inPast
+      ? t(
+          NearbyTexts.results.departure.hasPassedAccessibilityLabel(
+            formatToClock(firstResult.time, language, 'floor'),
+          ),
+        )
+      : firstResult.realtime
+      ? t(
+          NearbyTexts.results.departure.upcomingRealtimeAccessibilityLabel(
+            firstResultScreenReaderTimeText,
+          ),
+        )
+      : t(
+          NearbyTexts.results.departure.upcomingAccessibilityLabel(
+            firstResultScreenReaderTimeText,
+          ),
+        )) +
+    (firstResult.cancellation ? t(CancelledDepartureTexts.cancelled) : '');
 
   const nextLabel = secondResult
     ? t(
         NearbyTexts.results.departure.nextAccessibilityLabel(
           [secondResult, ...rest]
-            .map((i) =>
-              i.realtime
-                ? t(
-                    NearbyTexts.results.departure.nextAccessibilityRealtime(
-                      labelForTime(i.time, searchDate, t, language, true),
-                    ),
-                  )
-                : labelForTime(i.time, searchDate, t, language, true),
+            .map(
+              (i) =>
+                (i.realtime
+                  ? t(
+                      NearbyTexts.results.departure.nextAccessibilityRealtime(
+                        labelForTime(i.time, searchDate, t, language, true),
+                      ),
+                    )
+                  : labelForTime(i.time, searchDate, t, language, true)) +
+                (i.cancellation ? t(CancelledDepartureTexts.cancelled) : ''),
             )
             .join(', '),
         ),
