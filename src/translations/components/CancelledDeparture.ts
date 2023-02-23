@@ -5,6 +5,7 @@ const CancelledDepartureTexts = {
     'Denne avgangen er kansellert.',
     'This departure has been cancelled.',
   ),
+  cancelled: _('Kansellert', 'Cancelled'),
 };
 
 export default CancelledDepartureTexts;
