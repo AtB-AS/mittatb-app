@@ -1,6 +1,16 @@
 name: iOS build setup
 description: 'Sets up the necessarry dependencies, environment and assets for building the iOS app'
 inputs:
+  # Dev dependencies
+  node-version:
+    default: "16"
+    required: false
+  ruby-version:
+    default: "2.7.6"
+    required: false
+  xcode-version:
+    default: "latest-stable"
+    required: false
   use-build-cache:
     description: "Wether to use the build cache for artifacts and dependencies (will speed up subsequent builds if no native changes have happened)"
     default: 'false'
@@ -28,35 +38,38 @@ runs:
         run: sh ./scripts/git-crypt-unlock.sh
         env:
           GIT_CRYPT_KEY: ${{ inputs.git-crypt-key }}
-      - name: install node v16
-        uses: actions/setup-node@v1
+      - name: Install Node
+        uses: actions/setup-node@v3
         with:
-          node-version: 16
-      - name: Get potential cached node_modules
-        uses: actions/cache@v2
+          node-version: ${{ inputs.node-version }}
+      - name: Setup ruby and bundle install
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ inputs.ruby-version }}
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Get potential cached dependencies
+        uses: actions/cache@v3
         id: modules-cache
         if: ${{ inputs.use-build-cache }} == 'true'
         with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+          path: |
+            "**/node_modules"
+            "vendor/bundle"
+            "ios/Pods"
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/*.lock') }}-${{ hashFiles('**/patches/**.patch') }}
       - name: Install node_modules
         shell: bash
         if: ${{ inputs.use-build-cache }} != 'true' || steps.modules-cache.outputs.cache-hit != 'true'
         run: yarn install
       - name: Setup Xcode version
-        uses: maxim-lobanov/setup-xcode@v1.3.0
+        uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: "13.1"
+          xcode-version: ${{ inputs.xcode-version }}
       - name: Copy .netrc
         shell: bash
         run: |
           cat .netrc >> ~/.netrc
           chmod 600 ~/.netrc
-      - name: Setup ruby and bundle install
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.7.6
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Set environment
         shell: bash
         run: sh ./scripts/override-environment.sh ${{ inputs.app-environment }} ${{ inputs.app-org }}

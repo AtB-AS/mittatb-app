@@ -110,6 +110,8 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
     [stopPlace],
   );
 
+  const lastIndex = stopPlace?.quays?.length ? stopPlace.quays.length - 1 : 0;
+
   return (
     <SectionList
       ListHeaderComponent={
@@ -223,7 +225,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
             searchDate={searchStartTime}
             mode={mode}
           />
-          {mode === 'Departure' && index === 0 && (
+          {mode === 'Departure' && index === lastIndex && (
             <Feedback
               viewContext="departures"
               metadata={quayListData}

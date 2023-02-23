@@ -78,6 +78,7 @@ type DepartureDataActions =
   | {
       type: 'LOAD_REALTIME_DATA';
       quay: DepartureTypes.Quay;
+      favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
       type: 'STOP_LOADER';
@@ -166,10 +167,11 @@ const reducer: ReducerWithSideEffects<
           // Use same query input with same startTime to ensure that
           // we get the same result.
           try {
-            const quayIds = [action.quay.id];
-
-            const realtimeData = await getRealtimeDepartures(quayIds, {
-              limitPerLine: state.queryInput.numberOfDepartures,
+            const lineIds = action.favoriteDepartures?.map((f) => f.lineId);
+            const realtimeData = await getRealtimeDepartures({
+              quayIds: [action.quay.id],
+              lineIds,
+              limit: state.queryInput.numberOfDepartures,
               startTime: state.queryInput.startTime,
             });
 
@@ -251,6 +253,9 @@ export function useQuayData(
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const isFocused = useIsFocused();
   const {favoriteDepartures} = useFavorites();
+  const activeFavoriteDepartures = showOnlyFavorites
+    ? favoriteDepartures
+    : undefined;
   const timeout = useTimeoutRequest();
 
   const loadDepartures = useCallback(() => {
@@ -260,12 +265,21 @@ export function useQuayData(
       type: 'LOAD_INITIAL_DEPARTURES',
       quay,
       startTime,
-      favoriteDepartures: showOnlyFavorites ? favoriteDepartures : undefined,
+      favoriteDepartures: activeFavoriteDepartures,
       limitPerLine,
       timeRange,
       timeout,
     });
-  }, [quay, startTime, showOnlyFavorites, favoriteDepartures, mode]);
+  }, [quay, startTime, activeFavoriteDepartures, mode]);
+  const loadRealTimeData = useCallback(
+    () =>
+      dispatch({
+        type: 'LOAD_REALTIME_DATA',
+        quay,
+        favoriteDepartures: activeFavoriteDepartures,
+      }),
+    [JSON.stringify(activeFavoriteDepartures)],
+  );
 
   useEffect(() => {
     loadDepartures();
@@ -283,22 +297,23 @@ export function useQuayData(
     }
   }, [state.tick, state.lastRefreshTime]);
   useInterval(
-    () => dispatch({type: 'LOAD_REALTIME_DATA', quay: quay}),
+    loadRealTimeData,
     updateFrequencyInSeconds * 1000,
     [quay.id],
-    !isFocused || mode !== 'Departure',
+    !isFocused || mode === 'Favourite',
   );
   useInterval(
     () => dispatch({type: 'TICK_TICK'}),
     tickRateInSeconds * 1000,
     [],
-    !isFocused || mode !== 'Departure',
+    !isFocused || mode === 'Favourite',
   );
   useRefreshOnFocus(
+    isFocused,
     state.tick,
     HARD_REFRESH_LIMIT_IN_MINUTES * 60,
     loadDepartures,
-    useCallback(() => dispatch({type: 'LOAD_REALTIME_DATA', quay}), []),
+    loadRealTimeData,
   );
 
   return {
