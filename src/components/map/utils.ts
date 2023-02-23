@@ -62,7 +62,8 @@ export const isFeaturePoint = (f: Feature): f is Feature<Point> =>
 
 export const isClusterFeature = (
   feature: Feature,
-): feature is Feature<Point, Cluster> => feature.properties?.cluster;
+): feature is Feature<Point, Cluster> =>
+  isFeaturePoint(feature) && feature.properties?.cluster;
 
 export const mapPositionToCoordinates = (p: Position): Coordinates => ({
   longitude: p[0],
