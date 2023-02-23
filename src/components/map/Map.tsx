@@ -107,7 +107,12 @@ export const Map = (props: MapProps) => {
               </View>
             </MapboxGL.PointAnnotation>
           )}
-          {props.vehicles && <Vehicles vehicles={props.vehicles.vehicles} />}
+          {props.vehicles && (
+            <Vehicles
+              vehicles={props.vehicles.vehicles}
+              onPress={props.vehicles.onPress}
+            />
+          )}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
           {currentLocation && (

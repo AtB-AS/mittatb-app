@@ -10,7 +10,7 @@ import {
   Point,
   Position,
 } from 'geojson';
-import {MapSelectionActionType} from './types';
+import {Cluster, MapSelectionActionType} from './types';
 import distance from '@turf/distance';
 
 export async function zoomIn(
@@ -59,6 +59,11 @@ export const findStopPlaceAtClick = async (
 
 export const isFeaturePoint = (f: Feature): f is Feature<Point> =>
   f.geometry.type === 'Point';
+
+export const isClusterFeature = (
+  feature: Feature,
+): feature is Feature<Point, Cluster> =>
+  isFeaturePoint(feature) && feature.properties?.cluster;
 
 export const mapPositionToCoordinates = (p: Position): Coordinates => ({
   longitude: p[0],
