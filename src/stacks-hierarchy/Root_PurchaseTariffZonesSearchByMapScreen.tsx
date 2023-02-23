@@ -27,15 +27,12 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import MapboxGL, {
-  OnPressEvent,
-  RegionPayload,
-} from '@react-native-mapbox-gl/maps';
+import MapboxGL, {OnPressEvent, RegionPayload} from '@rnmapbox/maps';
 import turfCentroid from '@turf/centroid';
 import {FeatureCollection, Polygon} from 'geojson';
 import hexToRgba from 'hex-to-rgba';
 import React, {useEffect, useRef, useState} from 'react';
-import {PixelRatio, Platform, View} from 'react-native';
+import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
   Root_PurchaseTariffZonesSearchByMapScreenParams,
@@ -309,10 +306,6 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
         geolocation.coordinates.longitude,
         geolocation.coordinates.latitude,
       ]);
-      if (Platform.OS == 'android') {
-        // Necessary hack (https://github.com/react-native-mapbox-gl/maps/issues/1085)
-        point = point.map((p) => p * PixelRatio.get());
-      }
       const featuresAtPoint =
         await mapViewRef.current.queryRenderedFeaturesAtPoint(
           point,

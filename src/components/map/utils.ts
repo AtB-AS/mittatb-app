@@ -1,5 +1,5 @@
 import {RefObject} from 'react';
-import MapboxGL, {Expression} from '@react-native-mapbox-gl/maps';
+import MapboxGL, {Expression} from '@rnmapbox/maps';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   Feature,
@@ -11,7 +11,6 @@ import {
   Position,
 } from 'geojson';
 import {MapSelectionActionType} from './types';
-import {PixelRatio, Platform} from 'react-native';
 import distance from '@turf/distance';
 
 export async function zoomIn(
@@ -85,10 +84,7 @@ export const getFeaturesAtClick = async (
     coords.longitude,
     coords.latitude,
   ]);
-  if (Platform.OS == 'android') {
-    // Necessary hack (https://github.com/react-native-mapbox-gl/maps/issues/1085)
-    point = point.map((p) => p * PixelRatio.get());
-  }
+
   const featuresAtPoint = await mapViewRef.current.queryRenderedFeaturesAtPoint(
     point,
     filter,

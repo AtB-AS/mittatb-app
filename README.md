@@ -38,9 +38,14 @@ We love feedback and suggestions. The AtB app and service is continously improve
 1. Install dependencies:
    1. React Native: `yarn`
    1. Install Ruby dependencies `bundle install`
-   1. iOS specific: `cd ios/` and `pod install`
-      > If there is an issue related to Mapbox please refer to the `Common errors section` below.
+   1. Install ImageMagick `brew install imagemagick`
 1. Decrypt sensitive files `git-crypt unlock <path/to/key>` (Key given to internal members)
+1. Install iOS Pods:
+   1. Mapbox v6 requires token for installing dependencies. This means you need to set proper auth on curl for MapBox API. `git-crypt` should decrypt a `.netrc` file in root. You can copy this to set user info:
+       ```
+       cp .netrc ~/
+       ```
+   1. Pod install: `cd ios/` and `pod install`
 1. From root folder run: `yarn setup dev <organization>` where organization is either `atb` or `nfk`, to set root .env for local development and generate all icons and launch screens for iOS and Android
 
 For external contributors, we need to fix [#35](https://github.com/AtB-AS/mittatb-app/issues/35) before they are able to run the app.
@@ -73,22 +78,6 @@ See [`@atb-as/generate-assets`](https://github.com/AtB-AS/design-system/tree/mai
 
 ### Common errors
 
-#### `401` When running `pod install`
-
-Mapbox v6 requires token for installing dependencies. This means you need to set proper auth on curl for MapBox API. `git-crypt` should decrypt a `.netrc` file in root. You can copy this to set user info:
-
-```
-cp .netrc ~/
-```
-
-If you don't have access to `git-crypt` you can use your own `.netrc` with the following info:
-
-```
-machine api.mapbox.com
-login mapbox
-password <YOUR_TOKEN_HERE>
-```
-
 #### Missing `ANDROID_SDK_ROOT`
 
 By following [React Native Guide](https://reactnative.dev/docs/getting-started) you can get an error saying ANDROID_SDK_ROOT is undefined. Set this in addition to your bashrc (or similar), such as:
@@ -97,7 +86,14 @@ By following [React Native Guide](https://reactnative.dev/docs/getting-started) 
 export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
 ```
 
-#### `Command failed: xcrun simctl list --json devices`
+You may also add relevant tools to your path:
+
+```                                                                                                                                                                      │    at ThemeProvider (http://localhost:8081/index.bundle?platform=android&dev=true&minify=false&app=no.mittatb.debug&modulesOnly=false&runModule=true:145236:21)
+export PATH=$PATH:$ANDROID_HOME/emulator                                                                                                                                                                              │    at NavigationContainerInner (http://localhost:8081/index.bundle?platform=android&dev=true&minify=false&app=no.mittatb.debug&modulesOnly=false&runModule=true:145129:26)
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+```
+
+#### Command failed: `xcrun simctl list --json devices`
 
 You might have Command Line Tools set without Xcode (eg. when using homebrew without xcode). Change Command Line Tool to Xcode:
 
@@ -117,7 +113,7 @@ error: /mittatb-app/ios/Pods/Target Support Files/Pods-atb/Pods-atb.debug.xcconf
 
 You might be missing iOS dependencies (Cocopods). See dependency step in [Starting locally](#starting-locally).
 
-### Building and running on Apple Silicon Macs
+### Building and running on Apple Silicon Macs with Rosetta enabled
 
 Some steps may fail when building on an Apple Silicon Mac.
 We got it building on a Macbook pro M1 by doing a few extra steps:

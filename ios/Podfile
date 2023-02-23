@@ -6,8 +6,7 @@ install! 'cocoapods', :deterministic_uuids => false
 
 production = ENV["PRODUCTION"] == "1"
 
-ENV['REACT_NATIVE_MAPBOX_GL_USE_FRAMEWORKS'] = '1'
-$ReactNativeMapboxGLIOSVersion = '6.3.0'
+$RNMapboxMapsImpl = 'mapbox'
 
 target 'app' do
   pod 'Firebase', :modular_headers => true
@@ -52,6 +51,8 @@ target 'app' do
   pod 'token-state-react-native-lib-ios', :path => '../node_modules/@entur-private/abt-token-state-react-native-lib/ios'
 
   post_install do |installer|
+    $RNMapboxMaps.post_install(installer)
+
     # Patch for issue using use_frameworks with hermes
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
@@ -78,16 +79,7 @@ target 'app' do
   end
   
   pre_install do |installer|
-    fix_mapbox_events(installer)
+    $RNMapboxMaps.pre_install(installer)
   end
 
-  def fix_mapbox_events(installer)
-    installer.pod_targets.each do |pod|
-      if pod.name == 'MapboxMobileEvents'
-        def pod.build_type;
-          Pod::BuildType.dynamic_framework
-        end
-      end
-    end
-  end
 end
