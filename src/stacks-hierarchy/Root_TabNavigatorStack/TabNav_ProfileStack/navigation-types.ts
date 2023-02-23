@@ -26,6 +26,7 @@ export type ProfileStackParams = {
   Profile_TicketingInformationScreen: undefined;
   Profile_TermsInformationScreen: undefined;
   Profile_TicketInspectionInformationScreen: undefined;
+  Profile_GenericWebsiteInformationScreen: undefined;
   Profile_NearbyStopPlacesScreen: NearbyStopPlacesScreenParams;
   Profile_PlaceScreen: PlaceScreenParams;
 };

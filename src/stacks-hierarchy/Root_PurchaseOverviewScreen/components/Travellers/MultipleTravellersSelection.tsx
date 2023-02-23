@@ -6,6 +6,7 @@ import {
   PurchaseOverviewTexts,
   TranslateFunction,
   Language,
+  getTextForLanguage,
 } from '@atb/translations';
 import * as Sections from '../../../../components/sections';
 import {getReferenceDataName} from '@atb/reference-data/utils';
@@ -53,9 +54,15 @@ export default function MultipleTravellersSelection({
           testID={'counterInput_' + u.userTypeString.toLowerCase()}
           color="interactive_2"
           hideSubtext={hideTravellerDescriptions}
-          subtext={t(
-            TicketTravellerTexts.information(u.userTypeString, fareProductType),
-          )}
+          subtext={[
+            getTextForLanguage(u.alternativeDescriptions, language),
+            t(
+              TicketTravellerTexts.information(
+                u.userTypeString,
+                fareProductType,
+              ),
+            ),
+          ].join(' ')}
         />
       ))}
     </Sections.Section>

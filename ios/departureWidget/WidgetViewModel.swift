@@ -22,7 +22,7 @@ struct WidgetViewModel {
     }
 
     private var departureTimes: [DepartureTime] {
-        departureGroup?.departures ?? []
+        entry.departures ?? departureGroup?.departures ?? []
     }
 
     private var lineInfo: DepartureLineInfo? {
@@ -30,7 +30,7 @@ struct WidgetViewModel {
     }
 
     private var lineName: String? {
-        entry.favouriteDeparture?.lineName ?? lineInfo?.lineName
+        entry.favouriteDeparture?.lineName ?? NSLocalizedString("all_variations", comment: "")
     }
 
     private var lineNumber: String? {
@@ -39,7 +39,7 @@ struct WidgetViewModel {
 
     // MARK: Public vars
 
-    let entry: Entry
+    let entry: DepartureWidgetEntry
 
     func deepLink(departure: DepartureTime?) -> String {
         guard let appScheme = Bundle.app.object(forInfoDictionaryKey: "AppScheme") else {

@@ -39,6 +39,12 @@ export type AppTexts = {
   discountInfo: LanguageAndTextType[];
 };
 
+type ConfigurableLinks = {
+  ticketingInfo: LanguageAndTextType[];
+  termsInfo: LanguageAndTextType[];
+  inspectionInfo: LanguageAndTextType[];
+};
+
 type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
   tariffZones: TariffZone[];
@@ -49,6 +55,7 @@ type ConfigurationContextState = {
   fareProductTypeConfigs: FareProductTypeConfig[];
   travelSearchFilters: TravelSearchFiltersType | undefined;
   appTexts: AppTexts | undefined;
+  configurableLinks: ConfigurableLinks | undefined;
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
@@ -61,6 +68,7 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   fareProductTypeConfigs: defaultFareProductTypeConfig,
   travelSearchFilters: undefined,
   appTexts: undefined,
+  configurableLinks: undefined,
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
@@ -84,6 +92,8 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [travelSearchFilters, setTravelSearchFilters] =
     useState<TravelSearchFiltersType>();
   const [appTexts, setAppTexts] = useState<AppTexts>();
+  const [configurableLinks, setConfigurableLinks] =
+    useState<ConfigurableLinks>();
 
   useEffect(() => {
     firestore()
@@ -138,6 +148,11 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (appTexts) {
             setAppTexts(appTexts);
           }
+
+          const configurableLinks = getConfigurableLinksFromSnapshot(snapshot);
+          if (configurableLinks) {
+            setConfigurableLinks(configurableLinks);
+          }
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -159,6 +174,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       fareProductTypeConfigs,
       travelSearchFilters,
       appTexts,
+      configurableLinks,
     };
   }, [
     preassignedFareProducts,
@@ -170,6 +186,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     fareProductTypeConfigs,
     travelSearchFilters,
     appTexts,
+    configurableLinks,
   ]);
 
   return (
@@ -333,4 +350,22 @@ function getAppTextsFromSnapshot(
   }
 
   return {discountInfo};
+}
+
+function getConfigurableLinksFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): ConfigurableLinks | undefined {
+  const urls = snapshot.docs.find((doc) => doc.id == 'urls');
+
+  const ticketingInfo = mapLanguageAndTextType(urls?.get('ticketingInfo'));
+  const inspectionInfo = mapLanguageAndTextType(urls?.get('inspectionInfo'));
+  const termsInfo = mapLanguageAndTextType(urls?.get('termsInfo'));
+
+  if (!ticketingInfo || !inspectionInfo || !termsInfo) return undefined;
+
+  return {
+    ticketingInfo,
+    termsInfo,
+    inspectionInfo,
+  };
 }

@@ -13,7 +13,6 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {listRecurringPayments, PaymentType} from '@atb/ticketing';
@@ -27,6 +26,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import PaymentBrand from './PaymentBrand';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {getExpireDate, getPaymentTypeName} from '../../utils';
+import {Checkbox} from '@atb/components/checkbox/Checkbox';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
@@ -133,16 +133,16 @@ export const SelectPaymentMethod: React.FC<Props> = ({
     // False if types doesn't match
     if (!(selectedOption?.paymentType === item.paymentType)) return false;
 
-    const itemIsReccurring = !!selectedOption && isRecurring(selectedOption);
+    const itemIsRecurring = !!selectedOption && isRecurring(selectedOption);
     const selectedIsRecurring = item.savedType === 'recurring';
 
     // True if recurring ID matches
-    if (itemIsReccurring && selectedIsRecurring) {
+    if (itemIsRecurring && selectedIsRecurring) {
       return item.recurringCard.id === selectedOption.recurringPaymentId;
     }
 
     // True if both are not recurring, false otherwise
-    return !itemIsReccurring && !selectedIsRecurring;
+    return !itemIsRecurring && !selectedIsRecurring;
   };
 
   useEffect(() => {
@@ -167,7 +167,7 @@ export const SelectPaymentMethod: React.FC<Props> = ({
           color={'background_1'}
           setFocusOnLoad={false}
         />
-        <View style={{flexShrink: 100, flexGrow: 100}}>
+        <View style={{flexShrink: 1, flexGrow: 1}}>
           <ScrollView style={styles.paymentOptions}>
             {defaultPaymentOptions.map((option, index) => {
               return (
@@ -398,31 +398,22 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
             setSave(!save);
           }}
           style={styles.saveOptionSection}
-          accessibilityLabel={t(
-            save
-              ? SelectPaymentMethodTexts.not_save_card.a11yhint
-              : SelectPaymentMethodTexts.save_card.a11yhint,
-          )}
-          accessibilityHint={t(
-            save
-              ? SelectPaymentMethodTexts.not_save_card.a11yhint
-              : SelectPaymentMethodTexts.save_card.a11yhint,
-          )}
-          accessibilityRole="checkbox"
-          accessibilityState={{selected: save}}
         >
           <ThemeText style={styles.saveOptionTextPadding}>
             {t(SelectPaymentMethodTexts.save_payment_option_description.text)}
           </ThemeText>
           <View style={styles.saveButton}>
-            <SavedCheckbox checked={save} />
-            <ThemeText>
-              {t(
-                save
-                  ? SelectPaymentMethodTexts.not_save_card.text
-                  : SelectPaymentMethodTexts.save_card.text,
-              )}
-            </ThemeText>
+            <Checkbox
+              checked={save}
+              accessibility={{
+                accessibilityHint: t(
+                  save
+                    ? SelectPaymentMethodTexts.a11yHint.notSave
+                    : SelectPaymentMethodTexts.a11yHint.save,
+                ),
+              }}
+            />
+            <ThemeText>{t(SelectPaymentMethodTexts.save_card)}</ThemeText>
           </View>
         </TouchableOpacity>
       ) : null}
@@ -440,21 +431,7 @@ const RadioView: React.FC<CheckedProps> = ({checked}) => {
     <View
       style={[styles.radio, checked ? styles.radioSelected : styles.radioBlank]}
     >
-      {checked ? <View style={styles.radioInnner} /> : null}
-    </View>
-  );
-};
-
-const SavedCheckbox: React.FC<CheckedProps> = ({checked}) => {
-  const styles = useStyles();
-  return (
-    <View
-      style={[
-        styles.saveCheckbox,
-        checked ? styles.saveCheckboxChecked : styles.saveCheckboxDefault,
-      ]}
-    >
-      {checked ? <Confirm fill="white"></Confirm> : null}
+      {checked ? <View style={styles.radioInner} /> : null}
     </View>
   );
 };
@@ -525,26 +502,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  radioInnner: {
+  radioInner: {
     height: 12,
     width: 12,
     borderRadius: 6,
-    backgroundColor: theme.static.background.background_0.background,
-  },
-  saveCheckbox: {
-    marginRight: theme.spacings.medium,
-    height: 24,
-    width: 24,
-    borderRadius: 4,
-    borderWidth: 2,
-    borderColor: theme.static.background.background_accent_3.background,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  saveCheckboxChecked: {
-    backgroundColor: theme.static.background.background_accent_3.background,
-  },
-  saveCheckboxDefault: {
     backgroundColor: theme.static.background.background_0.background,
   },
   saveButton: {
