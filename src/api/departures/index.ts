@@ -90,10 +90,7 @@ export async function getFavouriteDepartures(
     return null;
   }
 
-  const params = build({
-    startTime: query.startTime,
-    limitPerLine: query.limitPerLine,
-  });
+  const params = build(query);
 
   const favorites: FavoriteDeparture[] = favourites.map((f) => ({
     lineId: f.lineId,

@@ -41,7 +41,7 @@ export const useCurrentTripPatternWithUpdates = (
     AxiosError
   >(fetchTripPattern, {
     initialValue: originalTripPatterns[currentIndex],
-    pollingTimeInSeconds: 30,
+    pollingTimeInSeconds: 20,
     disabled: !isFocused,
   });
 

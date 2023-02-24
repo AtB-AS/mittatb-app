@@ -1,15 +1,36 @@
 import React from 'react';
 import {FeatureCollection, GeoJSON} from 'geojson';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@rnmapbox/maps';
+import {MapSelectionActionType} from '@atb/components/map/types';
+import {isClusterFeature, isFeaturePoint} from '@atb/components/map/utils';
 
 type Props = {
   vehicles: FeatureCollection<GeoJSON.Point, VehicleFragment>;
+  onPress: (type: MapSelectionActionType) => void;
 };
 
-export const Vehicles = ({vehicles}: Props) => {
+export const Vehicles = ({vehicles, onPress}: Props) => {
   return (
-    <MapboxGL.ShapeSource id={'vehicles'} shape={vehicles} cluster>
+    <MapboxGL.ShapeSource
+      id={'vehicles'}
+      shape={vehicles}
+      cluster
+      onPress={(e) => {
+        const [feature, ..._] = e.features;
+        if (isClusterFeature(feature)) {
+          onPress({
+            source: 'cluster-click',
+            feature: feature,
+          });
+        } else if (isFeaturePoint(feature)) {
+          onPress({
+            source: 'map-click',
+            feature,
+          });
+        }
+      }}
+    >
       <MapboxGL.SymbolLayer
         id="icon"
         filter={['!', ['has', 'point_count']]}
@@ -19,7 +40,7 @@ export const Vehicles = ({vehicles}: Props) => {
           textOffset: [0.4, 0.7],
           textColor: '#920695',
           textSize: 12,
-          iconImage: 'PinScooter',
+          iconImage: {uri: 'PinScooter'},
           iconSize: 0.75,
         }}
       />
@@ -27,7 +48,7 @@ export const Vehicles = ({vehicles}: Props) => {
         id="clusterIcon"
         filter={['has', 'point_count']}
         style={{
-          iconImage: 'Scooter',
+          iconImage: {uri: 'Scooter'},
           iconSize: 0.75,
         }}
       />

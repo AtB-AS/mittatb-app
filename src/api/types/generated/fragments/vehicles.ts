@@ -5,6 +5,8 @@ import {
   TranslatedStringFragment,
 } from './mobility-shared';
 
+export type RentalUrisFragment = {android?: string; ios?: string};
+
 export type VehicleFragment = {
   id: string;
   lat: number;
@@ -17,7 +19,9 @@ export type VehicleFragment = {
   vehicleType: VehicleTypeFragment;
   pricingPlan: PricingPlanFragment;
   system: {operator: OperatorFragment; name: TranslatedStringFragment};
+  rentalUris?: RentalUrisFragment;
 };
+
 export type VehicleTypeFragment = {
   id: string;
   formFactor: Types.FormFactor;

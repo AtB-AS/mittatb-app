@@ -72,7 +72,7 @@ export const DepartureDetailsScreenComponent = ({
   const [
     {estimatedCallsWithMetadata, title, mode, subMode, situations, notices},
     isLoading,
-  ] = useDepartureData(activeItem, 30, !isFocused);
+  ] = useDepartureData(activeItem, 20, !isFocused);
   const mapData = useMapData(activeItem);
 
   const lastPassedStop = estimatedCallsWithMetadata

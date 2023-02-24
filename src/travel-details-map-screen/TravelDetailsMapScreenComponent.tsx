@@ -3,6 +3,7 @@ import {
   flyToLocation,
   MapCameraConfig,
   MapControls,
+  MapLeg,
   MapViewConfig,
   PositionArrow,
   useControlPositionsStyle,
@@ -10,11 +11,9 @@ import {
   zoomOut,
 } from '@atb/components/map';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {MapLeg} from '@atb/components/map';
 import {Coordinates} from '@atb/utils/coordinates';
 import {MapTexts, useTranslation} from '@atb/translations';
-import Bugsnag from '@bugsnag/react-native';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
 import React, {useMemo, useRef} from 'react';
 import {StyleSheet, View} from 'react-native';
@@ -49,21 +48,7 @@ export const TravelDetailsMapScreenComponent = ({
   const controlStyles = useControlPositionsStyle();
   return (
     <View style={styles.mapView}>
-      <MapboxGL.MapView
-        ref={mapViewRef}
-        style={styles.map}
-        {...MapViewConfig}
-        onWillStartRenderingMap={() =>
-          Bugsnag.leaveBreadcrumb('Start loading map', {
-            component: 'DetailsMap',
-          })
-        }
-        onDidFinishRenderingMapFully={() =>
-          Bugsnag.leaveBreadcrumb('Finished loading map', {
-            component: 'DetailsMap',
-          })
-        }
-      >
+      <MapboxGL.MapView ref={mapViewRef} style={styles.map} {...MapViewConfig}>
         <MapboxGL.Camera
           ref={mapCameraRef}
           bounds={bounds}
@@ -71,7 +56,7 @@ export const TravelDetailsMapScreenComponent = ({
           animationDuration={0}
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
-        <MapRoute lines={features}></MapRoute>
+        <MapRoute lines={features} />
         {toPlace && (
           <MapLabel
             point={pointOf(toPlace)}

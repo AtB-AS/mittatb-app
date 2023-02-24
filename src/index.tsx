@@ -21,7 +21,7 @@ import AccessibilityContextProvider from '@atb/AccessibilityContext';
 configureAndStartBugsnag();
 
 import {MAPBOX_API_TOKEN} from '@env';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@rnmapbox/maps';
 import AppLanguageProvider from '@atb/translations/LanguageContext';
 import {BottomSheetProvider} from '@atb/components/bottom-sheet';
 import LocaleContextProvider from '@atb/LocaleProvider';

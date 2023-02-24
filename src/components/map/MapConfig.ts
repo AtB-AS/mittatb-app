@@ -1,10 +1,11 @@
-import {MapViewProps, CameraProps} from '@react-native-mapbox-gl/maps';
+import {CameraStop, MapViewProps} from '@rnmapbox/maps';
 import {Platform} from 'react-native';
 import {MAPBOX_STOP_PLACES_STYLE_URL} from '@env';
 
 export const MapViewConfig: MapViewProps = {
   compassViewPosition: 1, // Upper right
   compassEnabled: true,
+  scaleBarEnabled: false,
   compassViewMargins: {
     x: Platform.select({default: 10, android: 6}),
     y: 60,
@@ -16,6 +17,6 @@ export const MapViewConfig: MapViewProps = {
   styleURL: MAPBOX_STOP_PLACES_STYLE_URL,
 };
 
-export const MapCameraConfig: CameraProps = {
+export const MapCameraConfig: CameraStop = {
   animationMode: 'moveTo',
 };
