@@ -5,17 +5,6 @@ before_all do
   # git_pull
 end
 
-def remove_background_location
-  update_info_plist(
-    xcodeproj: "./ios/atb.xcodeproj",
-    plist_path: "./atb/Info.plist",
-    block: proc do |plist|
-      puts "Deleting location from UIBackgroundModes..."
-      plist["UIBackgroundModes"].delete("location")
-    end
-  )
-end
-
 platform :ios do
   desc 'Update ad hoc devices'
   lane :update_devices do
@@ -157,8 +146,6 @@ platform :ios do
         entitlements_file: "./ios/AtbAppIntent/AtbAppIntentRelease.entitlements",
         app_group_identifiers: [ENV["APP_GROUP_NAME"]]
       )
-    else
-      remove_background_location()
     end
 
     update_app_group_identifiers(
