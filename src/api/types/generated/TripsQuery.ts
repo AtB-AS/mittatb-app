@@ -48,7 +48,7 @@ export type TripsQuery = {
           aimedDepartureTime: any;
           expectedDepartureTime: any;
           destinationDisplay?: {frontText?: string};
-          quay?: {publicCode?: string; name: string};
+          quay: {publicCode?: string; name: string};
           notices: Array<{id: string; text?: string}>;
         };
         situations: Array<{
@@ -127,17 +127,15 @@ export type TripsQuery = {
         interchangeTo?: {guaranteed?: boolean; toServiceJourney?: {id: string}};
         pointsOnLink?: {points?: string; length?: number};
         intermediateEstimatedCalls: Array<{
-          date?: any;
-          quay?: {name: string; id: string};
+          date: any;
+          quay: {name: string; id: string};
         }>;
         authority?: {id: string};
-        datedServiceJourney?: {
-          estimatedCalls?: Array<{
-            actualDepartureTime?: any;
-            predictionInaccurate: boolean;
-            quay?: {name: string};
-          }>;
-        };
+        serviceJourneyEstimatedCalls: Array<{
+          actualDepartureTime?: any;
+          predictionInaccurate: boolean;
+          quay: {name: string};
+        }>;
       }>;
     }>;
   };
