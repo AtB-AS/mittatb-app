@@ -60,6 +60,7 @@
 		FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE55264D28EC45ED0091F697 /* DepartureWidget.swift */; };
 		FE55265028EC45EE0091F697 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE55264F28EC45EE0091F697 /* Assets.xcassets */; };
 		FE55265428EC45EE0091F697 /* departureWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE55264728EC45ED0091F697 /* departureWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FE6B434C29ACD9E900CB1865 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500752DE29855BD100AC5A7F /* IntentHandler.swift */; };
 		FE7DE4F5294A2EDC009BE6DB /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7DE4F4294A2EDC009BE6DB /* String.swift */; };
 		FE7E785F29433F3900C57A1F /* DefaultFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7E785D29433F3900C57A1F /* DefaultFonts.swift */; };
 		FE8186B0297593DA000D2195 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = FE8186AD297593DA000D2195 /* Debug.xcconfig */; };
@@ -654,6 +655,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				38CD3270254B612600C6B978 /* AtBRootView.m in Sources */,
+				FE6B434C29ACD9E900CB1865 /* IntentHandler.swift in Sources */,
 				FEBDDCDE2934D49700C3755B /* ChangeNativeBridge.m in Sources */,
 				FEBDDCD12931065D00C3755B /* WidgetUpdater.swift in Sources */,
 				385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */,
