@@ -65,6 +65,13 @@ export const isClusterFeature = (
 ): feature is Feature<Point, Cluster> =>
   isFeaturePoint(feature) && feature.properties?.cluster;
 
+export const isFeatureCollection = (obj: unknown): obj is FeatureCollection =>
+  typeof obj === 'object' &&
+  obj !== null &&
+  'type' in obj &&
+  typeof obj.type === 'string' &&
+  obj.type === 'FeatureCollection';
+
 export const mapPositionToCoordinates = (p: Position): Coordinates => ({
   longitude: p[0],
   latitude: p[1],
@@ -109,20 +116,24 @@ export function flyToLocation(
     );
 }
 
-export const toGeoJSONFeature = <
+export const toFeaturePoint = <
+  T extends {id?: string; lat: number; lon: number},
+>(
+  item: T,
+): GeoJSON.Feature<GeoJSON.Point, T> => ({
+  type: 'Feature',
+  geometry: {
+    type: 'Point',
+    coordinates: [item.lon, item.lat],
+  },
+  properties: item,
+});
+
+export const toFeaturePoints = <
   T extends {id: string; lat: number; lon: number},
 >(
-  properties: T[],
-) =>
-  properties.map<GeoJSON.Feature<GeoJSON.Point, T>>((p) => ({
-    id: p.id,
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: [p.lon, p.lat],
-    },
-    properties: p,
-  }));
+  items: T[],
+) => items.map(toFeaturePoint);
 
 export const toFeatureCollection = <
   G extends Geometry | null = Geometry,

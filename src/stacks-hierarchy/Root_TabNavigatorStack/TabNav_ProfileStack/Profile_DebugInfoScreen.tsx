@@ -32,6 +32,7 @@ import {DebugOverride} from './components/DebugOverride';
 import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
 import {useRealtimeMapDebugOverride} from '@atb/components/map/hooks/use-realtime-map-enabled';
 import {useFromTravelSearchToTicketDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
+import {useMapDebugOverride} from '@atb/components/map/hooks/use-map-page';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -54,6 +55,7 @@ export const Profile_DebugInfoScreen = () => {
     useFromTravelSearchToTicketDebugOverride();
   const vehiclesInMapDebugOverride = useVehiclesInMapDebugOverride();
   const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
+  const mapDebugOverride = useMapDebugOverride();
 
   useEffect(() => {
     async function run() {
@@ -228,6 +230,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable realtime positions in map."
               override={realtimeMapDebugOverride}
+            />
+          </Sections.GenericSectionItem>
+          <Sections.GenericSectionItem>
+            <DebugOverride
+              description="Enable map"
+              override={mapDebugOverride}
             />
           </Sections.GenericSectionItem>
         </Sections.Section>

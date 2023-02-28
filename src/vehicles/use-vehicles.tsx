@@ -1,16 +1,27 @@
 import React, {useEffect, useState} from 'react';
-import {FeatureCollection, GeoJSON} from 'geojson';
+import {
+  Feature,
+  FeatureCollection,
+  GeoJSON,
+  MultiPolygon,
+  Polygon,
+} from 'geojson';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
-import {toFeatureCollection, toGeoJSONFeature} from '@atb/components/map/utils';
+import {
+  toFeatureCollection,
+  toFeaturePoint,
+  toFeaturePoints,
+} from '@atb/components/map/utils';
 import {getVehicles} from '@atb/api/vehicles';
 import {useIsVehiclesEnabled} from '@atb/vehicles/use-vehicles-enabled';
 import {MapSelectionActionType} from '@atb/components/map/types';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {isVehicle} from '@atb/vehicles/utils';
+import {extend, getRadius, isVehicle, needsReload} from '@atb/vehicles/utils';
 import {ScooterSheet} from '@atb/vehicles/components/ScooterSheet';
-import {FetchVehicleOpts} from '@atb/components/map/types';
+import {RegionPayload} from '@rnmapbox/maps';
 
 const MIN_ZOOM_LEVEL = 13.5;
+const BUFFER_DISTANCE_IN_METERS = 500;
 
 export const useVehicles = () => {
   const [area, setArea] = useState({
@@ -18,9 +29,18 @@ export const useVehicles = () => {
     lon: 0,
     zoom: 15,
     range: 0,
+    visibleBounds: [
+      [0, 0],
+      [0, 0],
+    ],
   });
 
+  // The area in which vehicles are already loaded
+  const [loadedArea, setLoadedArea] =
+    useState<Feature<Polygon | MultiPolygon>>();
+
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+
   const [vehicles, setVehicles] = useState<
     FeatureCollection<GeoJSON.Point, VehicleFragment>
   >(toFeatureCollection([]));
@@ -30,27 +50,41 @@ export const useVehicles = () => {
     const abortCtrl = new AbortController();
     if (isVehiclesEnabled) {
       if (area.zoom > MIN_ZOOM_LEVEL) {
-        getVehicles(area, {signal: abortCtrl.signal})
-          .then(toGeoJSONFeature)
-          .then(toFeatureCollection)
-          .then(setVehicles);
+        if (needsReload(area.visibleBounds, loadedArea)) {
+          getVehicles(area, {signal: abortCtrl.signal})
+            .then(toFeaturePoints)
+            .then(toFeatureCollection)
+            .then(setVehicles)
+            .then(() => {
+              setLoadedArea(
+                extend(
+                  toFeaturePoint(area),
+                  getRadius(area.visibleBounds, BUFFER_DISTANCE_IN_METERS),
+                ),
+              );
+            });
+        }
       } else {
         setVehicles(toFeatureCollection([]));
+        setLoadedArea(undefined);
       }
     }
     return () => abortCtrl.abort();
   }, [area, isVehiclesEnabled]);
 
-  const fetchVehicles = async ({
-    coordinates: {latitude, longitude},
-    zoom,
-    radius,
-  }: FetchVehicleOpts) => {
+  const fetchVehicles = async (
+    region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
+  ) => {
+    const zoom = region.properties.zoomLevel;
+    const [lon, lat] = region.geometry.coordinates;
+    const visibleBounds = region.properties.visibleBounds;
+    const range = getRadius(visibleBounds, BUFFER_DISTANCE_IN_METERS);
     setArea({
-      lat: latitude,
-      lon: longitude,
+      lat,
+      lon,
       zoom,
-      range: radius ?? 500,
+      range,
+      visibleBounds,
     });
   };
 
