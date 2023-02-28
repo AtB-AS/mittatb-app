@@ -9,6 +9,7 @@ import {Button} from '@atb/components/button';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -23,56 +24,55 @@ export const MobileTokenOnboarding_OptionsInfoScreen = ({
   const focusRef = useFocusOnLoad();
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.containerContent}
-    >
-      <View style={styles.viewContent}>
-        <View style={styles.mainView}>
-          <View accessible={true} ref={focusRef}>
-            <ThemeText
-              type="heading--jumbo"
-              style={styles.header}
-              color={themeColor}
-            >
-              {t(MobileTokenOnboardingTexts.optionsInfo.heading)}
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.containerContent}>
+        <View style={styles.viewContent}>
+          <View style={styles.mainView}>
+            <View accessible={true} ref={focusRef}>
+              <ThemeText
+                type="heading--jumbo"
+                style={styles.header}
+                color={themeColor}
+              >
+                {t(MobileTokenOnboardingTexts.optionsInfo.heading)}
+              </ThemeText>
+            </View>
+
+            <View style={styles.illustration}>
+              <View style={styles.cardOrPhoneIllustration}>
+                <ThemedTokenTravelCard />
+                <ThemeText
+                  color={themeColor}
+                  style={styles.cardOrPhoneText}
+                  accessible={false}
+                  importantForAccessibility="no"
+                >
+                  {t(MobileTokenOnboardingTexts.optionsInfo.or)}
+                </ThemeText>
+                <ThemedTokenPhone />
+              </View>
+            </View>
+            <ThemeText color={themeColor} style={styles.description}>
+              {t(MobileTokenOnboardingTexts.optionsInfo.description)}
             </ThemeText>
           </View>
 
-          <View style={styles.illustration}>
-            <View style={styles.cardOrPhoneIllustration}>
-              <ThemedTokenTravelCard />
-              <ThemeText
-                color={themeColor}
-                style={styles.cardOrPhoneText}
-                accessible={false}
-                importantForAccessibility="no"
-              >
-                {t(MobileTokenOnboardingTexts.optionsInfo.or)}
-              </ThemeText>
-              <ThemedTokenPhone />
-            </View>
+          <View style={styles.buttons}>
+            <Button
+              interactiveColor="interactive_0"
+              onPress={() => {
+                navigation.navigate(
+                  'MobileTokenOnboarding_TicketSafetyInfoScreen',
+                );
+              }}
+              text={t(MobileTokenOnboardingTexts.next)}
+              testID="nextButton"
+              accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
+            />
           </View>
-          <ThemeText color={themeColor} style={styles.description}>
-            {t(MobileTokenOnboardingTexts.optionsInfo.description)}
-          </ThemeText>
         </View>
-
-        <View style={styles.buttons}>
-          <Button
-            interactiveColor="interactive_0"
-            onPress={() => {
-              navigation.navigate(
-                'MobileTokenOnboarding_TicketSafetyInfoScreen',
-              );
-            }}
-            text={t(MobileTokenOnboardingTexts.next)}
-            testID="nextButton"
-            accessibilityHint={t(MobileTokenOnboardingTexts.a11yNextPageHint)}
-          />
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

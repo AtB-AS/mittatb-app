@@ -3,7 +3,7 @@ import React, {RefObject, useEffect, useState} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@rnmapbox/maps';
 import {Feature, Point} from 'geojson';
 import {findStopPlaceAtClick} from '../utils';
 

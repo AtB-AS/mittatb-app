@@ -24,6 +24,7 @@ import useInterval from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '@atb/departure-list/utils';
 import {SearchTime} from '@atb/journey-date-picker';
 import {animateNextChange} from '@atb/utils/animation';
+import {useRefreshOnFocus} from '@atb/utils/use-refresh-on-focus';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
@@ -68,6 +69,7 @@ type DepartureDataActions =
     }
   | {
       type: 'LOAD_REALTIME_DATA';
+      favoriteDepartureIds: string[];
     }
   | {
       type: 'STOP_LOADER';
@@ -106,6 +108,7 @@ const reducer: ReducerWithSideEffects<
       const queryInput: DepartureFavoritesQuery = {
         limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
         startTime,
+        includeCancelledTrips: true,
       };
 
       return UpdateWithSideEffect<DepartureDataState, DepartureDataActions>(
@@ -154,7 +157,11 @@ const reducer: ReducerWithSideEffects<
           try {
             const realtimeData = await getStopPlaceGroupRealtime(
               state.data ?? [],
-              state.queryInput,
+              {
+                limitPerLine: state.queryInput.limitPerLine,
+                startTime: state.queryInput.startTime,
+                lineIds: action.favoriteDepartureIds,
+              },
             );
             dispatch({
               type: 'UPDATE_REALTIME',
@@ -245,6 +252,7 @@ export function useFavoriteDepartureData(
     queryInput: {
       limitPerLine: DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW,
       startTime: searchDate,
+      includeCancelledTrips: true,
     },
     lastRefreshTime: new Date(),
   });
@@ -261,7 +269,16 @@ export function useFavoriteDepartureData(
         type: 'LOAD_INITIAL_DEPARTURES',
         favoriteDepartures: dashboardFavorites,
       }),
-    [dashboardFavoriteIds],
+    [JSON.stringify(dashboardFavoriteIds)],
+  );
+  const dashboardFavoriteLineIds = dashboardFavorites.map((f) => f.lineId);
+  const loadRealTimeData = useCallback(
+    () =>
+      dispatch({
+        type: 'LOAD_REALTIME_DATA',
+        favoriteDepartureIds: dashboardFavoriteLineIds,
+      }),
+    [JSON.stringify(dashboardFavoriteLineIds)],
   );
 
   useEffect(() => {
@@ -274,8 +291,16 @@ export function useFavoriteDepartureData(
       loadInitialDepartures();
     }
   }, [state.tick, state.lastRefreshTime]);
+  useRefreshOnFocus(
+    isFocused,
+    state.tick,
+    HARD_REFRESH_LIMIT_IN_MINUTES * 60,
+    loadInitialDepartures,
+    loadRealTimeData,
+  );
+
   useInterval(
-    () => dispatch({type: 'LOAD_REALTIME_DATA'}),
+    loadRealTimeData,
     updateFrequencyInSeconds * 1000,
     [],
     !isFocused,

@@ -1,4 +1,4 @@
-import {ArrowRight, ChevronRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Walk} from '@atb/assets/svg/mono-icons/transportation';
 import {
   AccessibleText,
@@ -7,9 +7,8 @@ import {
 } from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIcon} from '@atb/components/transportation-icon';
-import {CollapsedLegs} from './CollapsedLegs';
 import {SituationOrNoticeIcon} from '@atb/situations';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   dictionary,
   Language,
@@ -25,85 +24,77 @@ import {
   secondsBetween,
   secondsToDuration,
   secondsToDurationShort,
+  secondsToMinutes,
 } from '@atb/utils/date';
-import {getTranslatedModeName} from '@atb/utils/transportation-names';
+import {
+  getQuayName,
+  getTranslatedModeName,
+} from '@atb/utils/transportation-names';
 
 import React, {useEffect, useRef, useState} from 'react';
 import {
   AccessibilityProps,
   Animated,
+  StyleProp,
+  Text,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {Leg, TripPattern} from '@atb/api/types/trips';
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {SearchTime} from '@atb/journey-date-picker';
 import {RailReplacementBusMessage} from './RailReplacementBusMessage';
 import {
   getNoticesForLeg,
+  getTimeRepresentationType,
   isSignificantFootLegWalkOrWaitTime,
   significantWaitTime,
   significantWalkTime,
 } from '@atb/travel-details-screens/utils';
+import {Destination} from '@atb/assets/svg/mono-icons/places';
+import {CollapsedLegs} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/CollapsedLegs';
+import useFontScale from '@atb/utils/use-font-scale';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
   onDetailsPressed(): void;
   searchTime: SearchTime;
   testID?: string;
+  resultNumber: number;
 };
 
-function legWithQuay(leg: Leg) {
-  if (leg.fromEstimatedCall?.quay) {
-    return true;
-  }
-  if (!leg.mode) return false;
-
-  // Manually find name of from place based on mode as in some cases
-  // (from adresses that are also quays) you won't have quay information in from place.
-  const modesWithoutQuay: Mode[] = [Mode.Bicycle, Mode.Foot];
-  return !modesWithoutQuay.includes(leg.mode);
-}
-
-function getFirstQuayName(legs: Leg[]) {
-  const found = legs.find(legWithQuay);
-  const fromQuay = (found?.fromEstimatedCall ?? found?.fromPlace)?.quay;
-  if (!fromQuay) {
-    return legs[0].fromPlace.name;
-  }
-  const publicCodeOutput = fromQuay.publicCode ? ' ' + fromQuay.publicCode : '';
-  return fromQuay.name + publicCodeOutput;
-}
 const ResultItemHeader: React.FC<{
   tripPattern: TripPattern;
-  strikethrough: boolean;
-}> = ({tripPattern, strikethrough}) => {
+}> = ({tripPattern}) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
+  let start = tripPattern.legs[0];
+  let startName = start.fromPlace.name;
+  if (tripPattern.legs[0].mode === 'foot' && tripPattern.legs[1]) {
+    start = tripPattern.legs[1];
+    startName = getQuayName(start.fromPlace.quay);
+  } else if (tripPattern.legs[0].mode !== 'foot') {
+    startName = getQuayName(start.fromPlace.quay);
+  }
+
   const durationText = secondsToDurationShort(tripPattern.duration, language);
-  const startTime = tripPattern.legs[0].expectedStartTime;
-  const endTime = tripPattern.legs[tripPattern.legs.length - 1].expectedEndTime;
+  const transportName = t(getTranslatedModeName(start.mode));
 
   return (
     <View style={styles.resultHeader}>
       <ThemeText
-        type="body__secondary"
-        color="secondary"
-        style={[
-          styles.resultHeaderLabel,
-          strikethrough && styles.strikethrough,
-        ]}
-        accessibilityLabel={t(
-          TripSearchTexts.results.resultItem.header.time(
-            formatToClock(tripPattern.expectedStartTime, language),
-            formatToClock(tripPattern.expectedEndTime, language),
-          ),
-        )}
-        testID="resultStartAndEndTime"
+        style={styles.fromPlaceText}
+        type={'body__secondary--bold'}
+        testID="resultDeparturePlace"
       >
-        {formatToClock(startTime, language)} –{' '}
-        {formatToClock(endTime, language)}
+        {startName
+          ? t(
+              TripSearchTexts.results.resultItem.header.title(
+                transportName,
+                startName,
+              ),
+            )
+          : transportName}
       </ThemeText>
       <View style={styles.durationContainer}>
         <AccessibleText
@@ -135,12 +126,15 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   onDetailsPressed,
   testID,
   searchTime,
+  resultNumber,
   ...props
 }) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
-  const [collapsableParentWidth, setCollapsableParentWidth] = useState(0);
-  const [collapsableWidth, setCollapsableWidth] = useState(0);
+  const {theme} = useTheme();
+  const fontScale = useFontScale();
+  const [legIconsParentWidth, setLegIconsParentWidth] = useState(0);
+  const [legIconsContentWidth, setLegIconsContentWidth] = useState(0);
 
   const [numberOfExpandedLegs, setNumberOfExpandedLegs] = useState(
     tripPattern.legs.length,
@@ -149,14 +143,14 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 
   // Dynamically collapse legs to fit horizontally
   useEffect(() => {
-    if (collapsableParentWidth && collapsableWidth) {
-      if (collapsableWidth >= collapsableParentWidth) {
-        setNumberOfExpandedLegs(numberOfExpandedLegs - 1);
+    if (legIconsParentWidth && legIconsContentWidth) {
+      if (legIconsContentWidth >= legIconsParentWidth) {
+        setNumberOfExpandedLegs((val) => val - 1);
       } else {
         fadeIn.start();
       }
     }
-  }, [collapsableParentWidth, collapsableWidth]);
+  }, [legIconsParentWidth, legIconsContentWidth]);
 
   const fadeIn = Animated.timing(fadeInValue, {
     toValue: 1,
@@ -178,10 +172,20 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   const isInPast =
     isInThePast(tripPattern.legs[0].expectedStartTime) &&
     searchTime?.option !== 'now';
+  const iconHeight = {
+    height: theme.icon.size['normal'] * fontScale + theme.spacings.small * 2,
+  };
+  const lineHeight = {height: (theme.spacings.xSmall / 2) * fontScale};
 
   return (
     <TouchableOpacity
-      accessibilityLabel={tripSummary(tripPattern, t, language, isInPast)}
+      accessibilityLabel={tripSummary(
+        tripPattern,
+        t,
+        language,
+        isInPast,
+        resultNumber,
+      )}
       accessibilityHint={t(
         TripSearchTexts.results.resultItem.footer.detailsHint,
       )}
@@ -197,65 +201,107 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         ]}
         {...props}
         accessible={false}
-        onLayout={(e) => setCollapsableParentWidth(e.nativeEvent.layout.width)}
       >
-        <ResultItemHeader tripPattern={tripPattern} strikethrough={isInPast} />
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.detailsContainer}
-          {...screenReaderHidden}
-          onContentSizeChange={(width) => setCollapsableWidth(width)}
-        >
-          <View style={styles.legOutput}>
-            {interpose(
-              legs.map((leg, i) => (
-                <View key={leg.aimedStartTime}>
-                  {leg.mode === 'foot' ? (
-                    <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
-                  ) : (
-                    <TransportationLeg leg={leg} />
-                  )}
+        <ResultItemHeader tripPattern={tripPattern} />
+        <View style={styles.detailsContainer} {...screenReaderHidden}>
+          <View
+            style={styles.flexRow}
+            onLayout={(ev) => {
+              setLegIconsParentWidth(ev.nativeEvent.layout.width);
+            }}
+          >
+            <View
+              style={styles.row}
+              onLayout={(ev) => {
+                setLegIconsContentWidth(ev.nativeEvent.layout.width);
+              }}
+            >
+              <View style={styles.legOutput}>
+                {interpose(
+                  legs.map((leg, i) => (
+                    <View
+                      key={tripPattern.compressedQuery + leg.aimedStartTime}
+                    >
+                      {leg.mode === 'foot' ? (
+                        <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
+                      ) : (
+                        <TransportationLeg
+                          leg={leg}
+                          style={
+                            isSignificantDifference(leg)
+                              ? styles.transportationIcon_wide
+                              : undefined
+                          }
+                        />
+                      )}
+                      <View style={styles.departureTimes}>
+                        <ThemeText
+                          type="body__tertiary"
+                          color="primary"
+                          testID={'schTime' + i}
+                        >
+                          {formatToClock(
+                            leg.expectedStartTime,
+                            language,
+                            'floor',
+                          )}
+                        </ThemeText>
+                        {isSignificantDifference(leg) && (
+                          <ThemeText
+                            style={styles.scheduledTime}
+                            type="body__tertiary--strike"
+                            color="secondary"
+                            testID={'aimTime' + i}
+                          >
+                            {formatToClock(
+                              leg.aimedStartTime,
+                              language,
+                              'floor',
+                            )}
+                          </ThemeText>
+                        )}
+                      </View>
+                    </View>
+                  )),
+                  <View style={[styles.dashContainer, iconHeight]}>
+                    <LegDash />
+                  </View>,
+                )}
+              </View>
+              {collapsedLegs.length ? (
+                <View style={[styles.dashContainer, iconHeight]}>
+                  <LegDash />
                 </View>
-              )),
-              <ThemeIcon svg={ChevronRight} size="small" />,
-            )}
+              ) : null}
+              <CollapsedLegs legs={collapsedLegs} />
+            </View>
+            <View style={[styles.destinationLineContainer_grow, iconHeight]}>
+              <View style={[styles.destinationLine_grow, lineHeight]} />
+            </View>
           </View>
-          <View style={styles.legOutput}>
-            <CollapsedLegs legs={collapsedLegs} />
+          <View style={[styles.destinationLineContainer, iconHeight]}>
+            <View style={[styles.destinationLine, lineHeight]} />
           </View>
-        </ScrollView>
-        <ResultItemFooter legs={tripPattern.legs} />
+          <View>
+            <DestinationIcon style={styles.iconContainer} />
+            <View style={styles.departureTimes}>
+              <ThemeText type="body__tertiary" color="primary" testID="endTime">
+                {formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
+              </ThemeText>
+            </View>
+          </View>
+        </View>
+        <ResultItemFooter />
       </Animated.View>
     </TouchableOpacity>
   );
 };
-function ResultItemFooter({legs}: {legs: Leg[]}) {
+function ResultItemFooter() {
   const styles = useThemeStyles();
-  const {t, language} = useTranslation();
-  const quayName =
-    getFirstQuayName(legs) ?? t(dictionary.travel.quay.defaultName);
-  const quayLeg = legs.find(legWithQuay);
-  const timePrefix =
-    !!quayLeg && !quayLeg.realtime ? t(dictionary.missingRealTimePrefix) : '';
-  const quayStartTime = quayLeg?.expectedStartTime ?? legs[0].expectedStartTime;
+  const {t} = useTranslation();
 
   return (
     <View style={styles.resultFooter}>
-      <View style={styles.resultFooterText}>
-        <ThemeText
-          type="body__secondary"
-          style={styles.fromPlaceText}
-          numberOfLines={1}
-          testID="resultDeparturePlace"
-        >
-          {t(TripSearchTexts.results.resultItem.footer.fromPlace(quayName)) +
-            ' '}
-        </ThemeText>
-        <ThemeText type="body__secondary" testID="resultDepartureTime">
-          {timePrefix + formatToClock(quayStartTime, language)}
-        </ThemeText>
-      </View>
       <View style={styles.detailsTextWrapper}>
         <ThemeText type="body__secondary">
           {t(TripSearchTexts.results.resultItem.footer.detailsLabel)}
@@ -277,38 +323,110 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   detailsContainer: {
     padding: theme.spacings.medium,
+    flexDirection: 'row',
+  },
+  lineContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    flexGrow: 1,
+  },
+  legLine: {
+    backgroundColor: theme.static.background.background_3.background,
+    flexDirection: 'row',
+    borderRadius: theme.border.radius.regular,
+    width: 5,
+  },
+  leftLegLine: {
+    marginLeft: theme.spacings.xSmall,
+    marginRight: 2,
+  },
+  rightLegLine: {
+    marginRight: theme.spacings.xSmall,
+  },
+  destinationLineContainer_grow: {
+    justifyContent: 'center',
+    flexGrow: 1,
+  },
+  destinationLineContainer: {
+    justifyContent: 'center',
+    width: theme.spacings.large,
+  },
+  destinationLine_grow: {
+    backgroundColor: theme.static.background.background_3.background,
+    marginLeft: theme.spacings.xSmall,
+    borderBottomLeftRadius: theme.border.radius.regular,
+    borderTopLeftRadius: theme.border.radius.regular,
+  },
+  destinationLine: {
+    backgroundColor: theme.static.background.background_3.background,
+    marginRight: theme.spacings.xSmall,
+    borderBottomRightRadius: theme.border.radius.regular,
+    borderTopRightRadius: theme.border.radius.regular,
+  },
+  iconContainer: {
+    backgroundColor: theme.static.background.background_2.background,
+    paddingVertical: theme.spacings.small,
+    paddingHorizontal: theme.spacings.small,
+    borderRadius: theme.border.radius.small,
+  },
+  walkContainer: {
+    backgroundColor: theme.static.background.background_2.background,
+    paddingVertical: theme.spacings.small,
+    paddingHorizontal: theme.spacings.small,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    borderRadius: theme.border.radius.small,
+  },
+  walkDuration: {
+    fontSize: 10,
+    marginLeft: -2,
+    color: theme.text.colors.primary,
   },
   resultHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     padding: theme.spacings.medium,
-    paddingBottom: 0,
+    paddingBottom: theme.spacings.medium,
+    borderBottomColor: theme.border.primary,
+    borderBottomWidth: theme.border.width.slim,
   },
-  resultHeaderLabel: {
-    flex: 3,
+  row: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
   },
-  strikethrough: {
-    textDecorationLine: 'line-through',
+  flexRow: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  transportationIcon_wide: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  dashContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   legOutput: {
     flexDirection: 'row',
-    alignItems: 'center',
+  },
+  departureTimes: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginVertical: theme.spacings.xSmall,
+  },
+  scheduledTime: {
+    marginLeft: theme.spacings.xSmall,
   },
   resultFooter: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     borderTopColor: theme.border.primary,
     borderTopWidth: theme.border.width.slim,
     padding: theme.spacings.medium,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  resultFooterText: {
-    flexShrink: 1,
-    flexDirection: 'row',
+    alignItems: 'flex-end',
   },
   fromPlaceText: {
-    flexShrink: 1,
+    flex: 3,
   },
   detailsTextWrapper: {
     flexDirection: 'row',
@@ -319,7 +437,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginLeft: theme.spacings.xSmall,
   },
   durationContainer: {
-    flex: 2,
+    flex: 1,
     alignItems: 'flex-end',
   },
   warningIcon: {
@@ -327,8 +445,24 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
+const LegDash = () => {
+  const styles = useThemeStyles();
+  const {theme} = useTheme();
+  const fontScale = useFontScale();
+  const lineHeight = {height: (theme.spacings.xSmall / 2) * fontScale};
+  return (
+    <>
+      <View style={styles.lineContainer}>
+        <View style={[styles.legLine, styles.leftLegLine, lineHeight]}></View>
+      </View>
+      <View style={styles.lineContainer}>
+        <View style={[styles.legLine, styles.rightLegLine, lineHeight]}></View>
+      </View>
+    </>
+  );
+};
 const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
-  const styles = useLegStyles();
+  const styles = useThemeStyles();
   const showWaitTime = Boolean(nextLeg);
   const {t, language} = useTranslation();
   const waitTimeInSeconds = !nextLeg
@@ -353,40 +487,28 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       : t(TripSearchTexts.results.resultItem.footLeg.walkLabel(walkDuration));
 
   return (
-    <View
-      style={styles.legContainer}
-      accessibilityLabel={a11yText}
-      testID="fLeg"
-    >
-      <ThemeIcon svg={Walk} />
+    <View style={styles.walkContainer}>
+      <ThemeIcon accessibilityLabel={a11yText} testID="fLeg" svg={Walk} />
+      <Text style={styles.walkDuration}>{secondsToMinutes(leg.duration)}</Text>
     </View>
   );
 };
 
-const useLegStyles = StyleSheet.createThemeHook((theme) => ({
-  legContainer: {
-    marginHorizontal: theme.spacings.xSmall,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  iconContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-}));
-
-const TransportationLeg = ({leg}: {leg: Leg}) => {
-  const styles = useLegStyles();
+const TransportationLeg = ({
+  leg,
+  style,
+}: {
+  leg: Leg;
+  style?: StyleProp<ViewStyle>;
+}) => {
   return (
-    <View style={styles.legContainer}>
-      <View style={styles.iconContainer} testID="trLeg">
-        <TransportationIcon
-          mode={leg.mode}
-          subMode={leg.line?.transportSubmode}
-          lineNumber={leg.line?.publicCode}
-        />
-      </View>
-    </View>
+    <TransportationIcon
+      style={style}
+      mode={leg.mode}
+      subMode={leg.line?.transportSubmode}
+      lineNumber={leg.line?.publicCode}
+      testID="trLeg"
+    />
   );
 };
 
@@ -395,41 +517,88 @@ const tripSummary = (
   t: TranslateFunction,
   language: Language,
   isInPast: boolean,
+  listPosition: number,
 ) => {
+  let start = '';
+
+  if (tripPattern.legs[0]?.mode === 'foot' && tripPattern.legs[1]) {
+    const distance = Math.round(tripPattern.legs[0].distance);
+    let humanizedDistance;
+    if (distance >= 1000) {
+      humanizedDistance = `${distance / 1000} ${t(dictionary.distance.km)}`;
+    } else {
+      humanizedDistance = `${distance} ${t(dictionary.distance.m)}`;
+    }
+    const quayName = getQuayName(tripPattern.legs[1]?.fromPlace.quay);
+
+    {
+      quayName
+        ? (start = t(
+            TripSearchTexts.results.resultItem.footLeg.walkToStopLabel(
+              humanizedDistance,
+              quayName,
+            ),
+          ))
+        : undefined;
+    }
+  } else {
+    const quayName = getQuayName(tripPattern.legs[0]?.fromPlace.quay);
+    if (quayName) {
+      start = t(
+        TripSearchTexts.results.resultItem.header.title(
+          t(getTranslatedModeName(tripPattern.legs[0].mode)),
+          quayName,
+        ),
+      );
+    }
+  }
+
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
   const firstLeg = nonFootLegs[0];
 
   return `
+    ${t(
+      TripSearchTexts.results.resultItem.journeySummary.resultNumber(
+        listPosition,
+      ),
+    )}
     ${isInPast ? t(TripSearchTexts.results.resultItem.passedTrip) : ''}
-
-    ${
-      firstLeg
-        ? t(
-            TripSearchTexts.results.resultItem.footer.fromPlaceWithTime(
-              firstLeg.fromPlace?.name ?? '',
-              formatToClock(firstLeg.expectedStartTime, language),
-            ),
-          )
-        : ''
-    }
-
-    ${nonFootLegs
-      ?.map((l) => {
-        return `${t(getTranslatedModeName(l.mode))} ${
-          l.line?.publicCode
-            ? t(
-                TripSearchTexts.results.resultItem.journeySummary.prefixedLineNumber(
-                  l.line.publicCode,
-                ),
-              )
+    ${start}
+    
+        ${
+          firstLeg
+            ? t(getTranslatedModeName(firstLeg.mode)) +
+              (firstLeg.line?.publicCode
+                ? t(
+                    TripSearchTexts.results.resultItem.journeySummary.prefixedLineNumber(
+                      firstLeg.line.publicCode,
+                    ),
+                  )
+                : '') +
+              (isSignificantDifference(firstLeg)
+                ? t(
+                    TripSearchTexts.results.resultItem.journeySummary.realtime(
+                      firstLeg.fromPlace?.name ?? '',
+                      formatToClock(
+                        firstLeg.expectedStartTime,
+                        language,
+                        'floor',
+                      ),
+                      formatToClock(firstLeg.aimedStartTime, language, 'floor'),
+                    ),
+                  )
+                : t(
+                    TripSearchTexts.results.resultItem.journeySummary.noRealTime(
+                      firstLeg.fromPlace?.name ?? '',
+                      formatToClock(
+                        firstLeg.expectedStartTime,
+                        language,
+                        'floor',
+                      ),
+                    ),
+                  ))
             : ''
         }
-
-        ${l.fromEstimatedCall?.destinationDisplay?.frontText ?? l.line?.name}
-
-        `;
-      })
-      .join(', ')}
 
       ${
         !nonFootLegs.length
@@ -449,17 +618,40 @@ const tripSummary = (
             )
           : t(
               TripSearchTexts.results.resultItem.journeySummary.legsDescription.someSwitches(
-                nonFootLegs.length,
+                nonFootLegs.length - 1,
               ),
             )
       }
-
       ${t(
         TripSearchTexts.results.resultItem.journeySummary.totalWalkDistance(
           (tripPattern.walkDistance ?? 0).toFixed(),
         ),
-      )}  ${screenReaderPause}
+      )}
+      
+      ${t(
+        TripSearchTexts.results.resultItem.journeySummary.travelTimes(
+          formatToClock(tripPattern.expectedStartTime, language, 'floor'),
+          formatToClock(tripPattern.expectedEndTime, language, 'ceil'),
+          secondsToDuration(tripPattern.duration, language),
+        ),
+      )}
+
+        ${screenReaderPause}
   `;
+};
+
+function isSignificantDifference(leg: Leg) {
+  return (
+    getTimeRepresentationType({
+      missingRealTime: !leg.realtime,
+      aimedTime: leg.aimedStartTime,
+      expectedTime: leg.expectedStartTime,
+    }) === 'significant-difference'
+  );
+}
+
+const DestinationIcon = ({style}: {style?: StyleProp<ViewStyle>}) => {
+  return <ThemeIcon style={style} svg={Destination} />;
 };
 
 export default ResultItem;

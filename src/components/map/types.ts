@@ -8,7 +8,7 @@ import {
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
-import {AnyMode} from '../transportation-icon';
+import {RegionPayload} from '@rnmapbox/maps';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -24,9 +24,13 @@ export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
 ) => void;
+
 export type VehiclesState = {
   vehicles: FeatureCollection<GeoJSON.Point, VehicleFragment>;
-  fetchVehicles: (coordinates: Coordinates, radius?: number) => void;
+  fetchVehicles: (
+    region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
+  ) => void;
+  onPress: (type: MapSelectionActionType) => void;
 };
 export type NavigateToTripSearchCallback = (
   location: GeoLocation | SearchLocation,
@@ -57,10 +61,21 @@ export type MapProps = {
     }
 );
 
+export type Cluster = {
+  cluster_id: number;
+  cluster: boolean;
+  point_count_abbreviated: string;
+  point_count: number;
+};
+
 export type MapSelectionActionType =
   | {
       source: 'map-click';
       feature: Feature<Point>;
+    }
+  | {
+      source: 'cluster-click';
+      feature: Feature<Point, Cluster>;
     }
   | {
       source: 'my-position';

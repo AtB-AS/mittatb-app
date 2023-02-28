@@ -36,7 +36,7 @@ const TripDetailsTexts = {
             aimedTime: string,
           ) =>
             _(
-              `Fra ${placeName}, sanntid tid klokken ${realTime}. Rutetid klokken ${aimedTime}.`,
+              `Fra ${placeName}, sanntid klokken ${realTime}. Rutetid klokken ${aimedTime}.`,
               `From ${placeName}, realtime ${realTime}. Route time ${aimedTime}.`,
             ),
         },

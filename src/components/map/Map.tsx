@@ -1,6 +1,6 @@
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
-import MapboxGL, {RegionPayload} from '@react-native-mapbox-gl/maps';
+import MapboxGL, {RegionPayload} from '@rnmapbox/maps';
 import {Feature, GeoJSON} from 'geojson';
 import React, {useMemo, useRef} from 'react';
 import {View} from 'react-native';
@@ -44,11 +44,10 @@ export const Map = (props: MapProps) => {
     );
 
   const onRegionChange = (
-    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
+    region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => {
     if (!props.vehicles) return;
-    const [longitude, latitude] = feature.geometry.coordinates;
-    props.vehicles.fetchVehicles({longitude, latitude});
+    props.vehicles.fetchVehicles(region);
   };
 
   return (
@@ -101,7 +100,13 @@ export const Map = (props: MapProps) => {
               </View>
             </MapboxGL.PointAnnotation>
           )}
-          {props.vehicles && <Vehicles vehicles={props.vehicles.vehicles} />}
+          {props.vehicles && (
+            <Vehicles
+              mapCameraRef={mapCameraRef}
+              vehicles={props.vehicles.vehicles}
+              onPress={props.vehicles.onPress}
+            />
+          )}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
           {currentLocation && (

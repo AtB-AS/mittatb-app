@@ -16,6 +16,7 @@ import {TransportationIcon} from '@atb/components/transportation-icon';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
+  CancelledDepartureTexts,
   dictionary,
   Language,
   NearbyTexts,
@@ -83,6 +84,7 @@ export default function LineItem({
     date: dep.aimedTime,
     fromQuayId: group.lineInfo?.quayId,
     serviceDate: dep.serviceDate,
+    isTripCancelled: dep.cancellation,
   }));
 
   // we know we have a departure as we've checked hasNoDeparturesOnGroup
@@ -108,12 +110,11 @@ export default function LineItem({
             language,
           )}
         >
-          <View style={styles.transportationMode}>
-            <TransportationIcon
-              mode={group.lineInfo?.transportMode}
-              subMode={group.lineInfo?.transportSubmode}
-            />
-          </View>
+          <TransportationIcon
+            style={styles.transportationMode}
+            mode={group.lineInfo?.transportMode}
+            subMode={group.lineInfo?.transportSubmode}
+          />
           <ThemeText style={{flex: 1}} testID={testID + 'Title'}>
             {title}
           </ThemeText>
@@ -189,36 +190,40 @@ function getAccessibilityTextFirstDeparture(
   );
 
   const inPast = isInThePast(firstResult.time);
-  const upcoming = inPast
-    ? t(
-        NearbyTexts.results.departure.hasPassedAccessibilityLabel(
-          formatToClock(firstResult.time, language),
-        ),
-      )
-    : firstResult.realtime
-    ? t(
-        NearbyTexts.results.departure.upcomingRealtimeAccessibilityLabel(
-          firstResultScreenReaderTimeText,
-        ),
-      )
-    : t(
-        NearbyTexts.results.departure.upcomingAccessibilityLabel(
-          firstResultScreenReaderTimeText,
-        ),
-      );
+  const upcoming =
+    (inPast
+      ? t(
+          NearbyTexts.results.departure.hasPassedAccessibilityLabel(
+            formatToClock(firstResult.time, language, 'floor'),
+          ),
+        )
+      : firstResult.realtime
+      ? t(
+          NearbyTexts.results.departure.upcomingRealtimeAccessibilityLabel(
+            firstResultScreenReaderTimeText,
+          ),
+        )
+      : t(
+          NearbyTexts.results.departure.upcomingAccessibilityLabel(
+            firstResultScreenReaderTimeText,
+          ),
+        )) +
+    (firstResult.cancellation ? t(CancelledDepartureTexts.cancelled) : '');
 
   const nextLabel = secondResult
     ? t(
         NearbyTexts.results.departure.nextAccessibilityLabel(
           [secondResult, ...rest]
-            .map((i) =>
-              i.realtime
-                ? t(
-                    NearbyTexts.results.departure.nextAccessibilityRealtime(
-                      labelForTime(i.time, searchDate, t, language, true),
-                    ),
-                  )
-                : labelForTime(i.time, searchDate, t, language, true),
+            .map(
+              (i) =>
+                (i.realtime
+                  ? t(
+                      NearbyTexts.results.departure.nextAccessibilityRealtime(
+                        labelForTime(i.time, searchDate, t, language, true),
+                      ),
+                    )
+                  : labelForTime(i.time, searchDate, t, language, true)) +
+                (i.cancellation ? t(CancelledDepartureTexts.cancelled) : ''),
             )
             .join(', '),
         ),
@@ -249,6 +254,7 @@ function DepartureTimeItem({
   const rightIcon = getSvgForMostCriticalSituationOrNotice(
     departure.situations,
     notices,
+    departure.cancellation,
   );
   const leftIcon = departure.realtime
     ? themeName === 'dark'
@@ -268,7 +274,10 @@ function DepartureTimeItem({
       onPress={() => onPress(departure)}
       text={formatTimeText(departure, searchDate, language, t)}
       style={styles.departure}
-      textStyle={styles.departureText}
+      textStyle={[
+        styles.departureText,
+        departure.cancellation && styles.strikethrough,
+      ]}
       rightIcon={
         rightIcon && {
           svg: rightIcon,
@@ -323,6 +332,9 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   scrollContainer: {
     marginBottom: theme.spacings.medium,
     paddingLeft: theme.spacings.medium,
+  },
+  strikethrough: {
+    textDecorationLine: 'line-through',
   },
   departure: {
     backgroundColor: theme.static.background.background_1.background,

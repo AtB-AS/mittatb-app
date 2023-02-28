@@ -1,6 +1,6 @@
 import {RefObject, useState} from 'react';
 import {getCoordinatesFromMapSelectionAction} from '../utils';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@rnmapbox/maps';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {MapProps, MapSelectionActionType} from '../types';
 import {useTriggerCameraMoveEffect} from './use-trigger-camera-move-effect';

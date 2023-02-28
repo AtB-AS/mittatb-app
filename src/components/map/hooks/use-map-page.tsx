@@ -1,8 +1,13 @@
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {usePreferenceItems} from '@atb/preferences';
+import {useDebugOverride} from '@atb/debug';
+import {StorageModelKeysEnum} from '@atb/storage';
 
 export const useMapPage = () => {
   const {enable_map_page} = useRemoteConfig();
-  const {enableMapPage} = usePreferenceItems();
-  return enableMapPage !== undefined ? enableMapPage : enable_map_page;
+  const [debugOverride] = useMapDebugOverride();
+  return debugOverride !== undefined ? debugOverride : enable_map_page;
+};
+
+export const useMapDebugOverride = () => {
+  return useDebugOverride(StorageModelKeysEnum.EnableMapDebugOverride);
 };

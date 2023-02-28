@@ -47,6 +47,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import FlexibleTransportContactDetails, {
   BookingDetails as BookingDetails,
 } from './FlexibeTransportContactDetails';
+import {usePreferences} from '@atb/preferences';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -78,8 +79,11 @@ const TripSection: React.FC<TripSectionProps> = ({
 }) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
-  const {themeName, theme} = useTheme();
   const {open: openBottomSheet} = useBottomSheet();
+  const {themeName} = useTheme();
+  const {
+    preferences: {debugShowSeconds},
+  } = usePreferences();
 
   const isWalkSection = leg.mode === 'foot';
   const isFlexible = !!leg.bookingArrangements;
@@ -147,7 +151,7 @@ const TripSection: React.FC<TripSectionProps> = ({
               language,
               t,
             )}
-            rowLabel={<Time timeValues={startTimes} />}
+            rowLabel={<Time timeValues={startTimes} roundingMethod="floor" />}
             onPress={() => handleQuayPress(leg.fromPlace.quay)}
             testID="fromPlace"
           >
@@ -233,7 +237,12 @@ const TripSection: React.FC<TripSectionProps> = ({
                 {t(
                   TripDetailsTexts.trip.leg.lastPassedStop(
                     lastPassedStop.quay.name,
-                    formatToClock(lastPassedStop.actualDepartureTime, language),
+                    formatToClock(
+                      lastPassedStop.actualDepartureTime,
+                      language,
+                      'nearest',
+                      debugShowSeconds,
+                    ),
                   ),
                 )}
               </ThemeText>
@@ -253,7 +262,7 @@ const TripSection: React.FC<TripSectionProps> = ({
               language,
               t,
             )}
-            rowLabel={<Time timeValues={endTimes} />}
+            rowLabel={<Time timeValues={endTimes} roundingMethod="ceil" />}
             onPress={() => handleQuayPress(leg.toPlace.quay)}
             testID="toPlace"
           >
@@ -415,8 +424,12 @@ function getStopRowA11yTranslated(
   t: TranslateFunction,
 ): string {
   const timeType = getTimeRepresentationType(values);
-  const time = formatToClock(values.expectedTime ?? values.aimedTime, language);
-  const aimedTime = formatToClock(values.aimedTime, language);
+  const time = formatToClock(
+    values.expectedTime ?? values.aimedTime,
+    language,
+    'floor',
+  );
+  const aimedTime = formatToClock(values.aimedTime, language, 'floor');
 
   switch (timeType) {
     case 'no-realtime':

@@ -1,5 +1,5 @@
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@rnmapbox/maps';
 import {Point} from 'geojson';
 import hexToRgba from 'hex-to-rgba';
 import React from 'react';

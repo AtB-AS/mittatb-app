@@ -49,7 +49,7 @@ export default function DateSelection({
       return (
         t(DeparturesTexts.dateNavigation.today) +
         ', ' +
-        formatToClock(parsed, language)
+        formatToClock(parsed, language, 'floor')
       );
 
     return formatToVerboseDateTime(parsed, language);
@@ -178,10 +178,12 @@ function changeDay(searchTime: SearchTime, days: number): SearchTime {
 function formatToTwoLineDateTime(isoDate: string, language: Language) {
   const parsed = parseISO(isoDate);
   if (isSameDay(parsed, new Date())) {
-    return formatToClock(parsed, language);
+    return formatToClock(parsed, language, 'floor');
   }
   return (
-    formatToShortDate(parsed, language) + '\n' + formatToClock(parsed, language)
+    formatToShortDate(parsed, language) +
+    '\n' +
+    formatToClock(parsed, language, 'floor')
   );
 }
 

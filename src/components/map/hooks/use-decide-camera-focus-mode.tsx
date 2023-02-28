@@ -11,9 +11,7 @@ import {createMapLines} from '@atb/travel-details-map-screen/utils';
 import {findStopPlaceAtClick, mapPositionToCoordinates} from '../utils';
 import {tripsSearch} from '@atb/api/trips_v2';
 import {StreetMode} from '@entur/sdk/lib/journeyPlanner/types';
-import MapboxGL from '@react-native-mapbox-gl/maps';
-import {MapLine} from '@atb/sdk';
-import {log} from 'detox';
+import MapboxGL from '@rnmapbox/maps';
 
 const MAX_LIMIT_TO_SHOW_WALKING_TRIP = 5000;
 

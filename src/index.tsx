@@ -21,7 +21,7 @@ import AccessibilityContextProvider from '@atb/AccessibilityContext';
 configureAndStartBugsnag();
 
 import {MAPBOX_API_TOKEN} from '@env';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@rnmapbox/maps';
 import AppLanguageProvider from '@atb/translations/LanguageContext';
 import {BottomSheetProvider} from '@atb/components/bottom-sheet';
 import LocaleContextProvider from '@atb/LocaleProvider';
@@ -31,6 +31,7 @@ import {FeedbackQuestionsProvider} from '@atb/components/feedback';
 import {FirestoreConfigurationContextProvider} from '@atb/configuration/FirestoreConfigurationContext';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Platform, UIManager} from 'react-native';
+import FiltersContextProvider from '@atb/travel-search-filters/FiltersContext';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
@@ -70,27 +71,29 @@ const App = () => {
                 <AccessibilityContextProvider>
                   <ThemeContextProvider>
                     <FavoritesContextProvider>
-                      <SearchHistoryContextProvider>
-                        <GeolocationContextProvider>
-                          <RemoteConfigContextProvider>
-                            <FirestoreConfigurationContextProvider>
-                              <TicketingContextProvider>
-                                <MobileTokenContextProvider>
-                                  <AppLanguageProvider>
-                                    <GlobalMessagesContextProvider>
-                                      <BottomSheetProvider>
-                                        <FeedbackQuestionsProvider>
-                                          <RootStack />
-                                        </FeedbackQuestionsProvider>
-                                      </BottomSheetProvider>
-                                    </GlobalMessagesContextProvider>
-                                  </AppLanguageProvider>
-                                </MobileTokenContextProvider>
-                              </TicketingContextProvider>
-                            </FirestoreConfigurationContextProvider>
-                          </RemoteConfigContextProvider>
-                        </GeolocationContextProvider>
-                      </SearchHistoryContextProvider>
+                      <FiltersContextProvider>
+                        <SearchHistoryContextProvider>
+                          <GeolocationContextProvider>
+                            <RemoteConfigContextProvider>
+                              <FirestoreConfigurationContextProvider>
+                                <TicketingContextProvider>
+                                  <MobileTokenContextProvider>
+                                    <AppLanguageProvider>
+                                      <GlobalMessagesContextProvider>
+                                        <BottomSheetProvider>
+                                          <FeedbackQuestionsProvider>
+                                            <RootStack />
+                                          </FeedbackQuestionsProvider>
+                                        </BottomSheetProvider>
+                                      </GlobalMessagesContextProvider>
+                                    </AppLanguageProvider>
+                                  </MobileTokenContextProvider>
+                                </TicketingContextProvider>
+                              </FirestoreConfigurationContextProvider>
+                            </RemoteConfigContextProvider>
+                          </GeolocationContextProvider>
+                        </SearchHistoryContextProvider>
+                      </FiltersContextProvider>
                     </FavoritesContextProvider>
                   </ThemeContextProvider>
                 </AccessibilityContextProvider>

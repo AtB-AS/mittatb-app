@@ -15,23 +15,35 @@ import {
 } from '@atb/reference-data/types';
 import Bugsnag from '@bugsnag/react-native';
 import {
+  defaultFareProductTypeConfig,
   defaultPreassignedFareProducts,
   defaultTariffZones,
   defaultUserProfiles,
-  defaultFareProductTypeConfig,
 } from '@atb/reference-data/defaults';
 import {
-  defaultVatPercent,
-  defaultPaymentTypes,
   defaultModesWeSellTicketsFor,
+  defaultPaymentTypes,
+  defaultVatPercent,
 } from '@atb/configuration/defaults';
 import {PaymentType} from '@atb/ticketing';
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {
+  mapLanguageAndTextType,
   mapToFareProductTypeConfigs,
   mapToTransportModeFilterOptions,
 } from './converters';
 import type {TravelSearchFiltersType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+import {LanguageAndTextType} from '@atb/translations';
+
+export type AppTexts = {
+  discountInfo: LanguageAndTextType[];
+};
+
+type ConfigurableLinks = {
+  ticketingInfo: LanguageAndTextType[];
+  termsInfo: LanguageAndTextType[];
+  inspectionInfo: LanguageAndTextType[];
+};
 
 type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
@@ -42,6 +54,8 @@ type ConfigurationContextState = {
   vatPercent: number;
   fareProductTypeConfigs: FareProductTypeConfig[];
   travelSearchFilters: TravelSearchFiltersType | undefined;
+  appTexts: AppTexts | undefined;
+  configurableLinks: ConfigurableLinks | undefined;
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
@@ -53,6 +67,8 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   vatPercent: defaultVatPercent,
   fareProductTypeConfigs: defaultFareProductTypeConfig,
   travelSearchFilters: undefined,
+  appTexts: undefined,
+  configurableLinks: undefined,
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
@@ -75,6 +91,9 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   >(defaultFareProductTypeConfig);
   const [travelSearchFilters, setTravelSearchFilters] =
     useState<TravelSearchFiltersType>();
+  const [appTexts, setAppTexts] = useState<AppTexts>();
+  const [configurableLinks, setConfigurableLinks] =
+    useState<ConfigurableLinks>();
 
   useEffect(() => {
     firestore()
@@ -124,6 +143,16 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (travelSearchFilters) {
             setTravelSearchFilters(travelSearchFilters);
           }
+
+          const appTexts = getAppTextsFromSnapshot(snapshot);
+          if (appTexts) {
+            setAppTexts(appTexts);
+          }
+
+          const configurableLinks = getConfigurableLinksFromSnapshot(snapshot);
+          if (configurableLinks) {
+            setConfigurableLinks(configurableLinks);
+          }
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -144,6 +173,8 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       vatPercent,
       fareProductTypeConfigs,
       travelSearchFilters,
+      appTexts,
+      configurableLinks,
     };
   }, [
     preassignedFareProducts,
@@ -154,6 +185,8 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     vatPercent,
     fareProductTypeConfigs,
     travelSearchFilters,
+    appTexts,
+    configurableLinks,
   ]);
 
   return (
@@ -300,4 +333,39 @@ function getTravelSearchFiltersFromSnapshot(
   }
 
   return undefined;
+}
+
+function getAppTextsFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): AppTexts | undefined {
+  const appTextsRaw = snapshot.docs.find((doc) => doc.id == 'appTexts');
+  if (!appTextsRaw) return undefined;
+
+  const discountInfo = mapLanguageAndTextType(appTextsRaw.get('discountInfo'));
+  if (!discountInfo) {
+    Bugsnag.notify(
+      `App text field "discountInfo" should conform: "LanguageAndTextType"`,
+    );
+    return undefined;
+  }
+
+  return {discountInfo};
+}
+
+function getConfigurableLinksFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): ConfigurableLinks | undefined {
+  const urls = snapshot.docs.find((doc) => doc.id == 'urls');
+
+  const ticketingInfo = mapLanguageAndTextType(urls?.get('ticketingInfo'));
+  const inspectionInfo = mapLanguageAndTextType(urls?.get('inspectionInfo'));
+  const termsInfo = mapLanguageAndTextType(urls?.get('termsInfo'));
+
+  if (!ticketingInfo || !inspectionInfo || !termsInfo) return undefined;
+
+  return {
+    ticketingInfo,
+    termsInfo,
+    inspectionInfo,
+  };
 }

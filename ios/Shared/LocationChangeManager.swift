@@ -44,16 +44,6 @@ typealias LocationCallback = (CLLocation?) -> Void
         callback(nil)
     }
 
-    @objc func startMonitoringLocationChanges() {
-        locationManager.distanceFilter = 100 // meters
-        locationManager.showsBackgroundLocationIndicator = false
-        locationManager.allowsBackgroundLocationUpdates = true
-        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        locationManager.requestAlwaysAuthorization()
-        locationManager.startMonitoringSignificantLocationChanges()
-        locationManager.requestLocation()
-    }
-
     func locationManager(_: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         debugPrint(#function, status)
     }

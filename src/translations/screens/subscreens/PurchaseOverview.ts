@@ -1,5 +1,5 @@
 import {translation as _} from '../../commons';
-import orgSpecificTranslations from '@atb/translations/utils';
+import {orgSpecificTranslations} from '@atb/translations';
 
 const PurchaseOverviewTexts = {
   errorMessageBox: {
@@ -107,6 +107,14 @@ const PurchaseOverviewTexts = {
       _(`Gjelder for ${text}`, `Applies for ${text}`),
     button: _('Til betaling', 'To payment'),
   },
+  flexDiscount: {
+    heading: _('Rabatt', 'Discount'),
+    expandableLabel: _('Din rabatt og pris', 'Your discount and price'),
+    description: _(
+      'Voksen får rabatt i sone A basert på antall kjøp de siste 14 dagene.',
+      'Adult get a discount in Zone A based on number of purchases the last 14 days.',
+    ),
+  },
 };
 
 export default orgSpecificTranslations(PurchaseOverviewTexts, {
@@ -115,5 +123,11 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
       'Når du er ute og reiser må du ha med reisekortet som er registrert på din profil.',
       'When traveling, you need to bring the travel card registered on your profile.',
     ),
+    summary: {
+      messageInZone: _(
+        `Gjelder for buss i valgte soner`,
+        `Applies for bus in selected zones`,
+      ),
+    },
   },
 });
