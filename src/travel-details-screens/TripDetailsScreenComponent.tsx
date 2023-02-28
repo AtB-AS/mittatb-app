@@ -16,6 +16,9 @@ import {
 import {useCurrentTripPatternWithUpdates} from '@atb/travel-details-screens/use-current-trip-pattern-with-updates';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {Button} from '@atb/components/button';
+import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
+import {useFromTravelSearchToTicketEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -46,6 +49,7 @@ export const TripDetailsScreenComponent = ({
     currentIndex,
     tripPatterns,
   );
+  const fromTripsSearchToTicketEnabled = useFromTravelSearchToTicketEnabled();
 
   function navigate(page: number) {
     const newIndex = page - 1;
@@ -105,6 +109,15 @@ export const TripDetailsScreenComponent = ({
           </View>
         )}
       </ContentWithDisappearingHeader>
+      {fromTripsSearchToTicketEnabled && (
+        <Button
+          onPress={() => {}}
+          type={'inline'}
+          text={'Kjøp billett'}
+          rightIcon={{svg: Ticket}}
+          style={styles.purchaseButton}
+        />
+      )}
     </View>
   );
 };
@@ -120,7 +133,16 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   paddedContainer: {
     paddingHorizontal: theme.spacings.medium,
   },
-  scrollViewContent: {},
+  purchaseButton: {
+    position: 'absolute',
+    marginHorizontal: theme.spacings.large,
+    marginBottom: theme.spacings.large,
+    bottom: 0,
+    right: 0,
+    shadowRadius: theme.spacings.small,
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+  },
   pagination: {
     marginVertical: theme.spacings.medium,
   },
