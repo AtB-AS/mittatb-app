@@ -113,7 +113,7 @@ export const TripDetailsScreenComponent = ({
         <Button
           onPress={() => {}}
           type={'inline'}
-          text={'Kjøp billett'}
+          text={t(TripDetailsTexts.trip.purchaseTicket)}
           rightIcon={{svg: Ticket}}
           style={styles.purchaseButton}
         />
