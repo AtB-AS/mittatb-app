@@ -112,6 +112,7 @@ const TripDetailsTexts = {
           ),
       },
     },
+    purchaseTicket: _('Kjøp billett', 'Purchase ticket'),
   },
 
   messages: {

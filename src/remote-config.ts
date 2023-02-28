@@ -33,6 +33,7 @@ export type RemoteConfig = {
   enable_departures_v2_onboarding: boolean;
   enable_travel_search_filters: boolean;
   enable_new_travel_search: boolean;
+  enable_from_travel_search_to_ticket: boolean;
   enable_vehicles_in_map: boolean;
   enable_realtime_map: boolean;
 };
@@ -69,18 +70,18 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_departures_v2_onboarding: false,
   enable_travel_search_filters: false,
   enable_new_travel_search: false,
+  enable_from_travel_search_to_ticket: false,
   enable_vehicles_in_map: false,
   enable_realtime_map: false,
 };
 
 export function getConfig(): RemoteConfig {
   const values = remoteConfig().getAll();
-  const enable_network_logging = !!(
-    values['enable_network_logging']?.asBoolean() ?? true
-  );
-  const enable_ticketing = !!(values['enable_ticketing']?.asBoolean() ?? false);
-  const enable_intercom = !!(values['enable_intercom']?.asBoolean() ?? true);
-  const enable_i18n = !!(values['enable_i18n']?.asBoolean() ?? false);
+  const enable_network_logging =
+    values['enable_network_logging']?.asBoolean() ?? true;
+  const enable_ticketing = values['enable_ticketing']?.asBoolean() ?? false;
+  const enable_intercom = values['enable_intercom']?.asBoolean() ?? true;
+  const enable_i18n = values['enable_i18n']?.asBoolean() ?? false;
   const enable_creditcard =
     values['enable_creditcard']?.asBoolean() ??
     defaultRemoteConfig.enable_creditcard;
@@ -164,6 +165,10 @@ export function getConfig(): RemoteConfig {
     values['enable_new_travel_search']?.asBoolean() ??
     defaultRemoteConfig.enable_new_travel_search;
 
+  const enable_from_travel_search_to_ticket =
+    values['enable_from_travel_search_to_ticket']?.asBoolean() ??
+    defaultRemoteConfig.enable_from_travel_search_to_ticket;
+
   const enable_vehicles_in_map =
     values['enable_vehicles_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_vehicles_in_map;
@@ -204,6 +209,7 @@ export function getConfig(): RemoteConfig {
     enable_departures_v2_onboarding,
     enable_travel_search_filters,
     enable_new_travel_search,
+    enable_from_travel_search_to_ticket,
     enable_vehicles_in_map: enable_vehicles_in_map,
     enable_realtime_map,
   };
