@@ -131,13 +131,11 @@ export type TripsQuery = {
           quay: {name: string; id: string};
         }>;
         authority?: {id: string};
-        datedServiceJourney?: {
-          estimatedCalls?: Array<{
-            actualDepartureTime?: any;
-            predictionInaccurate: boolean;
-            quay: {name: string};
-          }>;
-        };
+        serviceJourneyEstimatedCalls: Array<{
+          actualDepartureTime?: any;
+          predictionInaccurate: boolean;
+          quay: {name: string};
+        }>;
         bookingArrangements?: {
           bookingMethods?: Array<Types.BookingMethod>;
           latestBookingTime?: any;
@@ -151,6 +149,13 @@ export type TripsQuery = {
             phone?: string;
             furtherDetails?: string;
           };
+        };
+        datedServiceJourney?: {
+          estimatedCalls?: Array<{
+            actualDepartureTime?: any;
+            predictionInaccurate: boolean;
+            quay: {name: string};
+          }>;
         };
       }>;
     }>;
