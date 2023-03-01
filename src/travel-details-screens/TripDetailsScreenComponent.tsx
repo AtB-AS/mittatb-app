@@ -24,6 +24,7 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import {TariffZone} from '@atb/reference-data/types';
+import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -91,6 +92,8 @@ export const TripDetailsScreenComponent = ({
     enable_ticketing && !someTicketsAreUnavailableInApp;
 
   const {top: paddingTop} = useSafeAreaInsets();
+
+  const screenReaderEnabled = useIsScreenReaderEnabled();
   return (
     <View style={styles.container}>
       <View style={[styles.header, {paddingTop}]}>
@@ -144,7 +147,10 @@ export const TripDetailsScreenComponent = ({
         singleTicketConfig &&
         tariffZoneFrom &&
         tariffZoneTo && (
+          <View style={screenReaderEnabled ? styles.borderTop : undefined}>
           <Button
+            accessibilityRole={'button'}
+            accessibilityLabel={t(TripDetailsTexts.trip.buyTicket.a11yLabel)}
             accessibilityRole={'button'}
             accessible={true}
             accessibilityLabel={'kjøp billett'}
@@ -155,12 +161,16 @@ export const TripDetailsScreenComponent = ({
                 toTariffZone: {resultType: 'zone', ...tariffZoneTo},
               })
             }
-            type={'inline'}
-            text={t(TripDetailsTexts.trip.purchaseTicket)}
+            type={screenReaderEnabled ? 'block' : 'inline'}
+            text={t(TripDetailsTexts.trip.buyTicket.text)}
             rightIcon={{svg: Ticket}}
-            style={styles.purchaseButton}
-          />
-        )}
+            style={screenReaderEnabled
+                ? styles.purchaseButtonAccessible
+                : styles.purchaseButton
+          }
+        />
+        </View>
+      )}
     </View>
   );
 };
@@ -201,6 +211,18 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     shadowRadius: theme.spacings.small,
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
+    elevation: 3,
+  },
+  purchaseButtonAccessible: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginHorizontal: theme.spacings.medium,
+    marginVertical: theme.spacings.xSmall,
+    flexDirection: 'row',
+  },
+  borderTop: {
+    borderTopColor: theme.border.primary,
+    borderTopWidth: theme.border.width.slim,
   },
   pagination: {
     marginVertical: theme.spacings.medium,
