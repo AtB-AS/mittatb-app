@@ -66,6 +66,7 @@ fastlane/report.xml
 # CocoaPods
 /ios/Pods/
 ios/atb/Images.xcassets/AppIcon.appiconset/*.png
+ios/departureWidget/Assets.xcassets/AppIcon.appiconset/*.png
 
 # vscode-react-native work folder
 .vscode/.react
