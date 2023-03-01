@@ -19,7 +19,6 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {Button} from '@atb/components/button';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import {useFromTravelSearchToTicketEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
-import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -31,7 +30,6 @@ export type TripDetailsScreenParams = {
 
 type Props = TripDetailsScreenParams & {
   onPressDetailsMap: (params: TravelDetailsMapScreenParams) => void;
-  onPressBuyTicket: (params: Root_PurchaseOverviewScreenParams) => void;
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
   onPressDeparture: (items: ServiceJourneyDeparture[], index: number) => void;
 };
