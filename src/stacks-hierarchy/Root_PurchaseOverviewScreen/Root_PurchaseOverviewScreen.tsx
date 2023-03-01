@@ -109,7 +109,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               message={
                 isEmptyOffer
                   ? t(
-                      PurchaseOverviewTexts.errorMessageBox.producUnavailable(
+                      PurchaseOverviewTexts.errorMessageBox.productUnavailable(
                         getReferenceDataName(preassignedFareProduct, language),
                       ),
                     )
