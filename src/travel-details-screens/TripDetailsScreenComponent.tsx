@@ -19,6 +19,7 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {Button} from '@atb/components/button';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import {useFromTravelSearchToTicketEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
+import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -61,6 +62,7 @@ export const TripDetailsScreenComponent = ({
 
   const {top: paddingTop} = useSafeAreaInsets();
 
+  const screenReaderEnabled = useIsScreenReaderEnabled();
   return (
     <View style={styles.container}>
       <View style={[styles.header, {paddingTop}]}>
@@ -110,13 +112,21 @@ export const TripDetailsScreenComponent = ({
         )}
       </ContentWithDisappearingHeader>
       {fromTripsSearchToTicketEnabled && (
-        <Button
-          onPress={() => {}}
-          type={'inline'}
-          text={t(TripDetailsTexts.trip.purchaseTicket)}
-          rightIcon={{svg: Ticket}}
-          style={styles.purchaseButton}
-        />
+        <View style={screenReaderEnabled ? styles.borderTop : undefined}>
+          <Button
+            accessibilityRole={'button'}
+            accessibilityLabel={t(TripDetailsTexts.trip.buyTicket.a11yLabel)}
+            onPress={() => {}}
+            type={screenReaderEnabled ? 'block' : 'inline'}
+            text={t(TripDetailsTexts.trip.buyTicket.text)}
+            rightIcon={{svg: Ticket}}
+            style={
+              screenReaderEnabled
+                ? styles.purchaseButtonAccessible
+                : styles.purchaseButton
+            }
+          />
+        </View>
       )}
     </View>
   );
@@ -142,6 +152,18 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     shadowRadius: theme.spacings.small,
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
+    elevation: 3,
+  },
+  purchaseButtonAccessible: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginHorizontal: theme.spacings.medium,
+    marginVertical: theme.spacings.xSmall,
+    flexDirection: 'row',
+  },
+  borderTop: {
+    borderTopColor: theme.border.primary,
+    borderTopWidth: theme.border.width.slim,
   },
   pagination: {
     marginVertical: theme.spacings.medium,
