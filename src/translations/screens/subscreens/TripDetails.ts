@@ -112,7 +112,10 @@ const TripDetailsTexts = {
           ),
       },
     },
-    purchaseTicket: _('Kjøp billett', 'Purchase ticket'),
+    buyTicket: {
+      text: _('Kjøp billett', 'Buy ticket'),
+      a11yLabel: _('Aktiver for å kjøpe billett', 'Activate to buy ticket'),
+    },
   },
 
   messages: {
