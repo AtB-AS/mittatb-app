@@ -148,29 +148,28 @@ export const TripDetailsScreenComponent = ({
         tariffZoneFrom &&
         tariffZoneTo && (
           <View style={screenReaderEnabled ? styles.borderTop : undefined}>
-          <Button
-            accessibilityRole={'button'}
-            accessibilityLabel={t(TripDetailsTexts.trip.buyTicket.a11yLabel)}
-            accessibilityRole={'button'}
-            accessible={true}
-            accessibilityLabel={'kjøp billett'}
-            onPress={() =>
-              onPressBuyTicket({
-                fareProductTypeConfig: singleTicketConfig,
-                fromTariffZone: {resultType: 'zone', ...tariffZoneFrom},
-                toTariffZone: {resultType: 'zone', ...tariffZoneTo},
-              })
-            }
-            type={screenReaderEnabled ? 'block' : 'inline'}
-            text={t(TripDetailsTexts.trip.buyTicket.text)}
-            rightIcon={{svg: Ticket}}
-            style={screenReaderEnabled
-                ? styles.purchaseButtonAccessible
-                : styles.purchaseButton
-          }
-        />
-        </View>
-      )}
+            <Button
+              accessibilityRole={'button'}
+              accessibilityLabel={t(TripDetailsTexts.trip.buyTicket.a11yLabel)}
+              accessible={true}
+              onPress={() =>
+                onPressBuyTicket({
+                  fareProductTypeConfig: singleTicketConfig,
+                  fromTariffZone: {resultType: 'zone', ...tariffZoneFrom},
+                  toTariffZone: {resultType: 'zone', ...tariffZoneTo},
+                })
+              }
+              type={screenReaderEnabled ? 'block' : 'inline'}
+              text={t(TripDetailsTexts.trip.buyTicket.text)}
+              rightIcon={{svg: Ticket}}
+              style={
+                screenReaderEnabled
+                  ? styles.purchaseButtonAccessible
+                  : styles.purchaseButton
+              }
+            />
+          </View>
+        )}
     </View>
   );
 };
