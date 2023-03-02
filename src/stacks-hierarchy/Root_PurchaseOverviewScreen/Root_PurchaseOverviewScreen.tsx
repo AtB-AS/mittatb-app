@@ -81,13 +81,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     }
   }, [params?.refreshOffer]);
 
-  const closeModal = () =>
-    navigation.navigate('Root_TabNavigatorStack', {
-      screen: 'TabNav_TicketingStack',
-      params: {
-        screen: 'PurchaseTab',
-      },
-    });
+  const closeModal = () => navigation.goBack();
 
   return (
     <View style={styles.container}>
