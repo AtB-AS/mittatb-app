@@ -19,7 +19,6 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {Button} from '@atb/components/button';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import {useFromTravelSearchToTicketEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
-import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -62,7 +61,6 @@ export const TripDetailsScreenComponent = ({
 
   const {top: paddingTop} = useSafeAreaInsets();
 
-  const screenReaderEnabled = useIsScreenReaderEnabled();
   return (
     <View style={styles.container}>
       <View style={[styles.header, {paddingTop}]}>
@@ -112,19 +110,15 @@ export const TripDetailsScreenComponent = ({
         )}
       </ContentWithDisappearingHeader>
       {fromTripsSearchToTicketEnabled && (
-        <View style={screenReaderEnabled ? styles.borderTop : undefined}>
+        <View style={styles.borderTop}>
           <Button
             accessibilityRole={'button'}
             accessibilityLabel={t(TripDetailsTexts.trip.buyTicket.a11yLabel)}
             onPress={() => {}}
-            type={screenReaderEnabled ? 'block' : 'inline'}
+            type={'block'}
             text={t(TripDetailsTexts.trip.buyTicket.text)}
             rightIcon={{svg: Ticket}}
-            style={
-              screenReaderEnabled
-                ? styles.purchaseButtonAccessible
-                : styles.purchaseButton
-            }
+            style={styles.purchaseButtonAccessible}
           />
         </View>
       )}
