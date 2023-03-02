@@ -53,7 +53,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const [travellerSelection, setTravellerSelection] =
     useState(selectableTravellers);
   const hasSelection = travellerSelection.some((u) => u.count);
-  const [travelDate, setTravelDate] = useState<string | undefined>();
+  const [travelDate, setTravelDate] = useState<string | undefined>(
+    params.travelDate,
+  );
 
   const {timeSelectionMode, travellerSelectionMode, zoneSelectionMode} =
     params.fareProductTypeConfig.configuration;
