@@ -62,7 +62,6 @@ export const TripDetailsScreenComponent = ({
     tripPatterns,
   );
   const fromTripsSearchToTicketEnabled = useFromTravelSearchToTicketEnabled();
-  const {modesWeSellTicketsFor} = useFirestoreConfiguration();
 
   const nonFootLegs = tripPattern.legs.filter((leg) => leg.mode !== 'foot');
 
@@ -82,14 +81,18 @@ export const TripDetailsScreenComponent = ({
     setCurrentIndex(newIndex);
   }
 
-  const someTicketsAreUnavailableInApp = hasLegsWeCantSellTicketsFor(
-    tripPattern,
-    modesWeSellTicketsFor,
-  );
+  const someLegsAreNotSingleTicket = hasLegsWeCantSellTicketsFor(tripPattern, [
+    'cityTram',
+    'expressBus',
+    'localBus',
+    'localTram',
+    'regionalBus',
+    'shuttleBus',
+  ]);
 
   const {enable_ticketing} = useRemoteConfig();
   const isTicketingEnabledAndTicketsAreAvailableInApp =
-    enable_ticketing && !someTicketsAreUnavailableInApp;
+    enable_ticketing && !someLegsAreNotSingleTicket;
 
   const {top: paddingTop} = useSafeAreaInsets();
 
