@@ -24,7 +24,6 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import {TariffZone} from '@atb/reference-data/types';
-import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 import {addMinutes, formatISO, parseISO} from 'date-fns';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -94,7 +93,6 @@ export const TripDetailsScreenComponent = ({
 
   const {top: paddingTop} = useSafeAreaInsets();
 
-  const screenReaderEnabled = useIsScreenReaderEnabled();
 
   const tripStartTime = parseISO(tripPattern.expectedStartTime);
   const tripStartWithBuffer = addMinutes(tripStartTime, -5);
@@ -156,7 +154,7 @@ export const TripDetailsScreenComponent = ({
         singleTicketConfig &&
         tariffZoneFrom &&
         tariffZoneTo && (
-          <View style={screenReaderEnabled ? styles.borderTop : undefined}>
+          <View style={styles.borderTop}>
             <Button
               accessibilityRole={'button'}
               accessibilityLabel={t(TripDetailsTexts.trip.buyTicket.a11yLabel)}
@@ -169,13 +167,12 @@ export const TripDetailsScreenComponent = ({
                   travelDate: ticketStartTime,
                 })
               }
-              type={screenReaderEnabled ? 'block' : 'inline'}
+              type="block"
               text={t(TripDetailsTexts.trip.buyTicket.text)}
               rightIcon={{svg: Ticket}}
               style={
-                screenReaderEnabled
-                  ? styles.purchaseButtonAccessible
-                  : styles.purchaseButton
+                 styles.purchaseButtonAccessible
+
               }
             />
           </View>
