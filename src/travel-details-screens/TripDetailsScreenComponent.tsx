@@ -93,7 +93,6 @@ export const TripDetailsScreenComponent = ({
 
   const {top: paddingTop} = useSafeAreaInsets();
 
-
   const tripStartTime = parseISO(tripPattern.expectedStartTime);
   const tripStartWithBuffer = addMinutes(tripStartTime, -5);
   const ticketStartTime =
@@ -170,10 +169,7 @@ export const TripDetailsScreenComponent = ({
               type="block"
               text={t(TripDetailsTexts.trip.buyTicket.text)}
               rightIcon={{svg: Ticket}}
-              style={
-                 styles.purchaseButtonAccessible
-
-              }
+              style={styles.purchaseButtonAccessible}
             />
           </View>
         )}
