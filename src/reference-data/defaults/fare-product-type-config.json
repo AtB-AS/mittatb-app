@@ -28,7 +28,7 @@
     "configuration": {
       "zoneSelectionMode": "multiple",
       "travellerSelectionMode": "multiple",
-      "timeSelectionMode": "datetime",
+      "timeSelectionMode": "none",
       "productSelectionMode": "none",
       "offerEndpoint": "zones",
       "requiresLogin": false
