@@ -61,18 +61,6 @@ export const TripDetailsScreenComponent = ({
     currentIndex,
     tripPatterns,
   );
-  const fromTripsSearchToTicketEnabled = useFromTravelSearchToTicketEnabled();
-
-  const nonFootLegs = tripPattern.legs.filter((leg) => leg.mode !== 'foot');
-
-  const fromNonFootLeg = nonFootLegs[0];
-  const fromTariffZones = fromNonFootLeg?.fromPlace.quay?.tariffZones;
-  const tariffZoneFrom = useGetFirstTariffZoneWeSellTicketFor(fromTariffZones);
-
-  const toNonFootLeg = nonFootLegs[nonFootLegs.length - 1];
-  const toTariffZones = toNonFootLeg?.toPlace.quay?.tariffZones;
-  const tariffZoneTo = useGetFirstTariffZoneWeSellTicketFor(toTariffZones);
-
   function navigate(page: number) {
     const newIndex = page - 1;
     if (page > tripPatterns.length || page < 1 || currentIndex === newIndex) {
@@ -81,28 +69,9 @@ export const TripDetailsScreenComponent = ({
     setCurrentIndex(newIndex);
   }
 
-  const someLegsAreNotSingleTicket = hasLegsWeCantSellTicketsFor(tripPattern, [
-    'cityTram',
-    'expressBus',
-    'localBus',
-    'localTram',
-    'regionalBus',
-    'shuttleBus',
-  ]);
-
-  const {enable_ticketing} = useRemoteConfig();
-  const isTicketingEnabledAndTicketsAreAvailableInApp =
-    enable_ticketing && !someLegsAreNotSingleTicket;
-
   const {top: paddingTop} = useSafeAreaInsets();
 
-  const tripStartTime = parseISO(tripPattern.expectedStartTime);
-  const tripStartWithBuffer = addMinutes(tripStartTime, -5);
-  const ticketStartTime =
-    tripStartWithBuffer.getTime() <= Date.now()
-      ? undefined
-      : formatISO(tripStartWithBuffer);
-
+  const tripTicketDetails = useGetTicketInfoFromTrip(tripPattern);
   return (
     <View style={styles.container}>
       <View style={[styles.header, {paddingTop}]}>
@@ -151,34 +120,82 @@ export const TripDetailsScreenComponent = ({
           </View>
         )}
       </ContentWithDisappearingHeader>
-      {fromTripsSearchToTicketEnabled &&
-        isTicketingEnabledAndTicketsAreAvailableInApp &&
-        singleTicketConfig &&
-        tariffZoneFrom &&
-        tariffZoneTo && (
-          <View style={styles.borderTop}>
-            <Button
-              accessibilityRole={'button'}
-              accessibilityLabel={t(TripDetailsTexts.trip.buyTicket.a11yLabel)}
-              accessible={true}
-              onPress={() =>
-                onPressBuyTicket({
-                  fareProductTypeConfig: singleTicketConfig,
-                  fromTariffZone: {resultType: 'zone', ...tariffZoneFrom},
-                  toTariffZone: {resultType: 'zone', ...tariffZoneTo},
-                  travelDate: ticketStartTime,
-                })
-              }
-              type="block"
-              text={t(TripDetailsTexts.trip.buyTicket.text)}
-              rightIcon={{svg: Ticket}}
-              style={styles.purchaseButtonAccessible}
-            />
-          </View>
-        )}
+      {tripTicketDetails && singleTicketConfig && (
+        <View style={styles.borderTop}>
+          <Button
+            accessibilityRole={'button'}
+            accessibilityLabel={t(TripDetailsTexts.trip.buyTicket.a11yLabel)}
+            accessible={true}
+            onPress={() =>
+              onPressBuyTicket({
+                fareProductTypeConfig: singleTicketConfig,
+                fromTariffZone: {
+                  resultType: 'zone',
+                  ...tripTicketDetails.tariffZoneFrom,
+                },
+                toTariffZone: {
+                  resultType: 'zone',
+                  ...tripTicketDetails.tariffZoneTo,
+                },
+                travelDate: tripTicketDetails.ticketStartTime,
+              })
+            }
+            type="block"
+            text={t(TripDetailsTexts.trip.buyTicket.text)}
+            rightIcon={{svg: Ticket}}
+            style={styles.purchaseButtonAccessible}
+          />
+        </View>
+      )}
     </View>
   );
 };
+
+function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
+  const fromTripsSearchToTicketEnabled = useFromTravelSearchToTicketEnabled();
+
+  const nonFootLegs = tripPattern.legs.filter((leg) => leg.mode !== 'foot');
+
+  const fromNonFootLeg = nonFootLegs[0];
+  const fromTariffZones = fromNonFootLeg?.fromPlace.quay?.tariffZones;
+  const tariffZoneFrom = useGetFirstTariffZoneWeSellTicketFor(fromTariffZones);
+  const {enable_ticketing} = useRemoteConfig();
+
+  const toNonFootLeg = nonFootLegs[nonFootLegs.length - 1];
+  const toTariffZones = toNonFootLeg?.toPlace.quay?.tariffZones;
+  const tariffZoneTo = useGetFirstTariffZoneWeSellTicketFor(toTariffZones);
+
+  if (!fromTripsSearchToTicketEnabled) return;
+
+  const someLegsAreNotSingleTicket = hasLegsWeCantSellTicketsFor(tripPattern, [
+    'cityTram',
+    'expressBus',
+    'localBus',
+    'localTram',
+    'regionalBus',
+    'shuttleBus',
+  ]);
+
+  const isTicketingEnabledAndTicketsAreAvailableInApp =
+    enable_ticketing && !someLegsAreNotSingleTicket;
+
+  if (!isTicketingEnabledAndTicketsAreAvailableInApp) return;
+
+  const tripStartTime = parseISO(tripPattern.expectedStartTime);
+  const tripStartWithBuffer = addMinutes(tripStartTime, -5);
+  const ticketStartTime =
+    tripStartWithBuffer.getTime() <= Date.now()
+      ? undefined
+      : formatISO(tripStartWithBuffer);
+
+  if (!(tariffZoneFrom && tariffZoneTo)) return;
+
+  return {
+    tariffZoneFrom,
+    tariffZoneTo,
+    ticketStartTime,
+  };
+}
 
 function useGetFirstTariffZoneWeSellTicketFor(
   tripTariffZones?: {id: string; name?: string}[],
