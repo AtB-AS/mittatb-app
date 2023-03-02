@@ -115,7 +115,7 @@ export const TripDetailsScreenComponent = ({
             accessibilityRole={'button'}
             accessibilityLabel={t(TripDetailsTexts.trip.buyTicket.a11yLabel)}
             onPress={() => {}}
-            type={'block'}
+            type="block"
             text={t(TripDetailsTexts.trip.buyTicket.text)}
             rightIcon={{svg: Ticket}}
             style={styles.purchaseButtonAccessible}
