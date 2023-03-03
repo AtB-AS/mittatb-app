@@ -97,6 +97,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       />
 
       <ScrollView testID="ticketingScrollView">
+        {params.mode === 'TravelSearch' && (
+          <MessageBox
+            style={styles.travelSearchInfo}
+            type={'valid'}
+            message={t(PurchaseOverviewTexts.travelSearchInfo)}
+          />
+        )}
         <View style={styles.selectionLinks}>
           {error && (
             <MessageBox
@@ -203,6 +210,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   selectionComponent: {
     marginVertical: theme.spacings.medium,
   },
-  selectionLinks: {margin: theme.spacings.medium},
-  summary: {marginTop: theme.spacings.medium},
+  selectionLinks: {
+    margin: theme.spacings.medium,
+  },
+  summary: {
+    marginTop: theme.spacings.medium,
+  },
+  travelSearchInfo: {
+    marginHorizontal: theme.spacings.medium,
+    marginTop: theme.spacings.xLarge,
+    marginBottom: theme.spacings.medium,
+  },
 }));

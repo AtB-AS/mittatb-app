@@ -2,6 +2,10 @@ import {translation as _} from '../../commons';
 import {orgSpecificTranslations} from '@atb/translations';
 
 const PurchaseOverviewTexts = {
+  travelSearchInfo: _(
+    'Vi har fylt inn oppstartstidpunkt og holdeplasser for din reise. Vennligst sjekk at detaljene stemmer.',
+    'We have filled in the start time and stops for your journey. Please check that the details are correct.',
+  ),
   errorMessageBox: {
     title: _('Det oppstod en feil', 'An error occurred'),
     message: _(
