@@ -152,7 +152,6 @@ const getTextForEmptyResult = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    paddingHorizontal: theme.spacings.medium,
     paddingBottom: theme.spacings.medium,
   },
   infoBoxText: theme.typography.body__primary,
