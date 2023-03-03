@@ -153,20 +153,27 @@ export const TripDetailsScreenComponent = ({
 
 function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
   const fromTripsSearchToTicketEnabled = useFromTravelSearchToTicketEnabled();
-
-  const nonFootLegs = tripPattern.legs.filter((leg) => leg.mode !== 'foot');
-
-  const fromNonFootLeg = nonFootLegs[0];
-  const fromTariffZones = fromNonFootLeg?.fromPlace.quay?.tariffZones;
-  const tariffZoneFrom = useGetFirstTariffZoneWeSellTicketFor(fromTariffZones);
   const {enable_ticketing} = useRemoteConfig();
 
-  const toNonFootLeg = nonFootLegs[nonFootLegs.length - 1];
-  const toTariffZones = toNonFootLeg?.toPlace.quay?.tariffZones;
-  const tariffZoneTo = useGetFirstTariffZoneWeSellTicketFor(toTariffZones);
+  const nonFootLegs = tripPattern.legs.filter((leg) => leg.mode !== 'foot');
+  const fromTariffZones = nonFootLegs[0]?.fromPlace.quay?.tariffZones;
+  const toTariffZones =
+    nonFootLegs[nonFootLegs.length - 1]?.toPlace.quay?.tariffZones;
+  const fromTariffZoneWeSellSingleTicketsFor =
+    useGetFirstTariffZoneWeSellTicketFor(fromTariffZones);
+  const toTariffZoneWeSellTicketFor =
+    useGetFirstTariffZoneWeSellTicketFor(toTariffZones);
+  if (
+    !(
+      fromTripsSearchToTicketEnabled &&
+      fromTariffZoneWeSellSingleTicketsFor &&
+      toTariffZoneWeSellTicketFor
+    )
+  )
+    return;
 
-  if (!fromTripsSearchToTicketEnabled) return;
-
+  // modes we can sell single tickets for. Might not always match modes we sell tickets for,
+  // as from travel search to ticket currently only supports single ticket
   const someLegsAreNotSingleTicket = hasLegsWeCantSellTicketsFor(tripPattern, [
     'cityTram',
     'expressBus',
@@ -175,24 +182,19 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
     'regionalBus',
     'shuttleBus',
   ]);
+  if (!(enable_ticketing && !someLegsAreNotSingleTicket)) return;
 
-  const isTicketingEnabledAndTicketsAreAvailableInApp =
-    enable_ticketing && !someLegsAreNotSingleTicket;
-
-  if (!isTicketingEnabledAndTicketsAreAvailableInApp) return;
-
-  const tripStartTime = parseISO(tripPattern.expectedStartTime);
-  const tripStartWithBuffer = addMinutes(tripStartTime, -5);
+  const tripStartWithBuffer = addMinutes(
+    parseISO(tripPattern.expectedStartTime),
+    -5,
+  );
   const ticketStartTime =
     tripStartWithBuffer.getTime() <= Date.now()
       ? undefined
       : formatISO(tripStartWithBuffer);
-
-  if (!(tariffZoneFrom && tariffZoneTo)) return;
-
   return {
-    tariffZoneFrom,
-    tariffZoneTo,
+    tariffZoneFrom: fromTariffZoneWeSellSingleTicketsFor,
+    tariffZoneTo: toTariffZoneWeSellTicketFor,
     ticketStartTime,
   };
 }
@@ -204,6 +206,7 @@ function useGetFirstTariffZoneWeSellTicketFor(
 
   if (!tripTariffZones) return;
 
+  // match tariff zone to zones in reference data to find zones we sell tickets for
   const matchingZones = referenceTariffZones.filter((referenceTariffZone) =>
     tripTariffZones.find((z2) => referenceTariffZone.id === z2.id),
   );
