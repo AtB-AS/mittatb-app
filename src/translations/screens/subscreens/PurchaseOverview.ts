@@ -2,13 +2,17 @@ import {translation as _} from '../../commons';
 import {orgSpecificTranslations} from '@atb/translations';
 
 const PurchaseOverviewTexts = {
+  travelSearchInfo: _(
+    'Vi har fylt inn oppstartstidpunkt og holdeplasser for din reise. Vennligst sjekk at detaljene stemmer.',
+    'We have filled in the start time and stops for your journey. Please check that the details are correct.',
+  ),
   errorMessageBox: {
     title: _('Det oppstod en feil', 'An error occurred'),
     message: _(
       'Oops - vi klarte ikke å søke opp prisen. Supert om du prøver igjen 🤞',
       'Whoops - we were unable to retrieve cost. Please try again 🤞',
     ),
-    producUnavailable: (productName: string) =>
+    productUnavailable: (productName: string) =>
       _(
         `${productName} er ikke tilgjengelig akkurat nå.`,
         `${productName} is not available right now.`,

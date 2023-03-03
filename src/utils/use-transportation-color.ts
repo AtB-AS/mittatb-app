@@ -21,11 +21,11 @@ export const useThemeColorForTransportMode = (
       return 'transport_plane'; //'transport_flexible';
     case 'bus':
     case 'coach':
-      if (subMode === 'localBus') {
-        return 'transport_city';
-      }
+      if (subMode === 'localBus') return 'transport_city';
+      if (subMode === 'airportLinkBus') return 'transport_airport_express';
       return 'transport_region';
     case 'rail':
+      if (subMode === 'airportLinkRail') return 'transport_airport_express';
       return 'transport_train';
     case 'tram':
       return 'transport_city';

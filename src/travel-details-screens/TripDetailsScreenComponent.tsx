@@ -17,6 +17,15 @@ import {useCurrentTripPatternWithUpdates} from '@atb/travel-details-screens/use-
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {MapLeg} from '@atb/components/map';
+import {Button} from '@atb/components/button';
+import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
+import {useFromTravelSearchToTicketEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
+import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
+import {TariffZone} from '@atb/reference-data/types';
+import {addMinutes, formatISO, parseISO} from 'date-fns';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -27,6 +36,7 @@ export type TripDetailsScreenParams = {
 
 type Props = TripDetailsScreenParams & {
   onPressDetailsMap: (params: TravelDetailsMapScreenParams) => void;
+  onPressBuyTicket: (params: Root_PurchaseOverviewScreenParams) => void;
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
   onPressDeparture: (items: ServiceJourneyDeparture[], index: number) => void;
 };
@@ -35,6 +45,7 @@ export const TripDetailsScreenComponent = ({
   tripPatterns,
   startIndex,
   onPressDetailsMap,
+  onPressBuyTicket,
   onPressDeparture,
   onPressQuay,
 }: Props) => {
@@ -42,6 +53,10 @@ export const TripDetailsScreenComponent = ({
   const styles = useStyle();
 
   const [currentIndex, setCurrentIndex] = useState(startIndex ?? 0);
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const singleTicketConfig = fareProductTypeConfigs.find(
+    (fareProductTypeConfig) => fareProductTypeConfig.type === 'single',
+  );
 
   const {tripPattern, error} = useCurrentTripPatternWithUpdates(
     currentIndex,
@@ -65,6 +80,7 @@ export const TripDetailsScreenComponent = ({
 
   const {top: paddingTop} = useSafeAreaInsets();
 
+  const tripTicketDetails = useGetTicketInfoFromTrip(tripPattern);
   return (
     <View style={styles.container}>
       <View style={[styles.header, {paddingTop}]}>
@@ -112,9 +128,102 @@ export const TripDetailsScreenComponent = ({
           </View>
         )}
       </ContentWithDisappearingHeader>
+      {tripTicketDetails && singleTicketConfig && (
+        <View style={styles.borderTop}>
+          <Button
+            accessibilityRole={'button'}
+            accessibilityLabel={t(TripDetailsTexts.trip.buyTicket.a11yLabel)}
+            accessible={true}
+            onPress={() =>
+              onPressBuyTicket({
+                fareProductTypeConfig: singleTicketConfig,
+                fromTariffZone: {
+                  resultType: 'zone',
+                  ...tripTicketDetails.tariffZoneFrom,
+                },
+                toTariffZone: {
+                  resultType: 'zone',
+                  ...tripTicketDetails.tariffZoneTo,
+                },
+                travelDate: tripTicketDetails.ticketStartTime,
+                mode: 'TravelSearch',
+              })
+            }
+            type="block"
+            text={t(TripDetailsTexts.trip.buyTicket.text)}
+            rightIcon={{svg: Ticket}}
+            style={styles.purchaseButtonAccessible}
+          />
+        </View>
+      )}
     </View>
   );
 };
+
+function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
+  const fromTripsSearchToTicketEnabled = useFromTravelSearchToTicketEnabled();
+  const {enable_ticketing} = useRemoteConfig();
+
+  const nonFootLegs = tripPattern.legs.filter((leg) => leg.mode !== 'foot');
+  const fromTariffZones = nonFootLegs[0]?.fromPlace.quay?.tariffZones;
+  const toTariffZones =
+    nonFootLegs[nonFootLegs.length - 1]?.toPlace.quay?.tariffZones;
+  const fromTariffZoneWeSellSingleTicketsFor =
+    useGetFirstTariffZoneWeSellTicketFor(fromTariffZones);
+  const toTariffZoneWeSellTicketFor =
+    useGetFirstTariffZoneWeSellTicketFor(toTariffZones);
+  if (
+    !(
+      fromTripsSearchToTicketEnabled &&
+      fromTariffZoneWeSellSingleTicketsFor &&
+      toTariffZoneWeSellTicketFor
+    )
+  )
+    return;
+
+  // modes we can sell single tickets for. Might not always match modes we sell tickets for,
+  // as from travel search to ticket currently only supports single ticket
+  const someLegsAreNotSingleTicket = hasLegsWeCantSellTicketsFor(tripPattern, [
+    'cityTram',
+    'expressBus',
+    'localBus',
+    'localTram',
+    'regionalBus',
+    'shuttleBus',
+  ]);
+  if (!(enable_ticketing && !someLegsAreNotSingleTicket)) return;
+
+  const tripStartWithBuffer = addMinutes(
+    parseISO(tripPattern.expectedStartTime),
+    -5,
+  );
+  const ticketStartTime =
+    tripStartWithBuffer.getTime() <= Date.now()
+      ? undefined
+      : formatISO(tripStartWithBuffer);
+  return {
+    tariffZoneFrom: fromTariffZoneWeSellSingleTicketsFor,
+    tariffZoneTo: toTariffZoneWeSellTicketFor,
+    ticketStartTime,
+  };
+}
+
+function useGetFirstTariffZoneWeSellTicketFor(
+  tripTariffZones?: {id: string; name?: string}[],
+): TariffZone | undefined {
+  const {tariffZones: referenceTariffZones} = useFirestoreConfiguration();
+
+  if (!tripTariffZones) return;
+
+  // match tariff zone to zones in reference data to find zones we sell tickets for
+  const matchingZones = referenceTariffZones.filter((referenceTariffZone) =>
+    tripTariffZones.find((z2) => referenceTariffZone.id === z2.id),
+  );
+
+  if (!matchingZones[0]) return;
+
+  return matchingZones[0];
+}
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   header: {
@@ -127,7 +236,28 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   paddedContainer: {
     paddingHorizontal: theme.spacings.medium,
   },
-  scrollViewContent: {},
+  purchaseButton: {
+    position: 'absolute',
+    marginHorizontal: theme.spacings.large,
+    marginBottom: theme.spacings.large,
+    bottom: 0,
+    right: 0,
+    shadowRadius: theme.spacings.small,
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    elevation: 3,
+  },
+  purchaseButtonAccessible: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginHorizontal: theme.spacings.medium,
+    marginVertical: theme.spacings.xSmall,
+    flexDirection: 'row',
+  },
+  borderTop: {
+    borderTopColor: theme.border.primary,
+    borderTopWidth: theme.border.width.slim,
+  },
   pagination: {
     marginVertical: theme.spacings.medium,
   },

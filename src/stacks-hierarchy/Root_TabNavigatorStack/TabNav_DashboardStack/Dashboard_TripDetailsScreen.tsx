@@ -12,6 +12,9 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
       onPressDetailsMap={(params) =>
         navigation.navigate('Dashboard_TravelDetailsMapScreen', params)
       }
+      onPressBuyTicket={(params) =>
+        navigation.navigate('Root_PurchaseOverviewScreen', params)
+      }
       onPressQuay={(stopPlace, selectedQuayId) =>
         departuresV2Enabled
           ? navigation.push('Dashboard_PlaceScreen', {

@@ -3,7 +3,7 @@ import {
   PricingPlanFragment,
   PricingSegmentFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
-import ScooterTexts from '@atb/translations/screens/subscreens/ScooterTexts';
+import {ScooterTexts} from '@atb/translations/screens/subscreens/VehicleTexts';
 import {VehicleStat} from '@atb/vehicles/components/VehicleStat';
 import {Language, useTranslation} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';

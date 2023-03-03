@@ -31,6 +31,7 @@ import {useVehiclesInMapDebugOverride} from '@atb/vehicles';
 import {DebugOverride} from './components/DebugOverride';
 import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
 import {useRealtimeMapDebugOverride} from '@atb/components/map/hooks/use-realtime-map-enabled';
+import {useFromTravelSearchToTicketDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
 import {useMapDebugOverride} from '@atb/components/map/hooks/use-map-page';
 
 function setClipboard(content: string) {
@@ -50,6 +51,8 @@ export const Profile_DebugInfoScreen = () => {
 
   const travelSearchDebugOverride = useTravelSearchFiltersDebugOverride();
   const newTravelSearchDebugOverride = useNewTravelSearchDebugOverride();
+  const fromTravelSearchToTicketDebugOverride =
+    useFromTravelSearchToTicketDebugOverride();
   const vehiclesInMapDebugOverride = useVehiclesInMapDebugOverride();
   const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
   const mapDebugOverride = useMapDebugOverride();
@@ -209,6 +212,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable new travel search."
               override={newTravelSearchDebugOverride}
+            />
+          </Sections.GenericSectionItem>
+          <Sections.GenericSectionItem>
+            <DebugOverride
+              description="Enable from travel search to ticket purchase."
+              override={fromTravelSearchToTicketDebugOverride}
             />
           </Sections.GenericSectionItem>
           <Sections.GenericSectionItem>
@@ -528,9 +537,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
   const styles = useProfileHomeStyle();
   const isLongString =
     !!value && typeof value === 'string' && value.length > 300;
-  const [isExpanded, setIsExpanded] = useState<boolean>(
-    isLongString ? false : true,
-  );
+  const [isExpanded, setIsExpanded] = useState<boolean>(!isLongString);
 
   if (!!value && typeof value === 'object') {
     return (

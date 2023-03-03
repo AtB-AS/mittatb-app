@@ -1,6 +1,6 @@
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
-import React from 'react';
-import {Linking, Platform, View} from 'react-native';
+import React, {useCallback} from 'react';
+import {Alert, AlertButton, Linking, Platform, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {
@@ -12,7 +12,10 @@ import {
 import {StyleSheet} from '@atb/theme';
 import {Battery} from '@atb/assets/svg/mono-icons/vehicles';
 import {Button} from '@atb/components/button';
-import ScooterTexts from '@atb/translations/screens/subscreens/ScooterTexts';
+import {
+  ScooterTexts,
+  VehicleTexts,
+} from '@atb/translations/screens/subscreens/VehicleTexts';
 import {VehicleStat} from '@atb/vehicles/components/VehicleStat';
 import {Section} from '@atb/components/sections';
 import {FullScreenFooter} from '@atb/components/screen-footer';
@@ -30,10 +33,70 @@ export const ScooterSheet = ({vehicle, close}: Props) => {
   const operatorName =
     getTextForLanguage(vehicle.system.operator.name.translation, language) ??
     t(ScooterTexts.unknownOperator);
-  const operatorAppUri =
+  const appStoreUri =
+    Platform.OS === 'ios'
+      ? vehicle.system.rentalApps?.ios?.storeUri
+      : vehicle.system.rentalApps?.android?.storeUri;
+  const rentalAppUri =
     Platform.OS === 'ios'
       ? vehicle.rentalUris?.ios
       : vehicle.rentalUris?.android;
+
+  const appStoreOpenError = (operatorName: string) => {
+    const appStore = t(VehicleTexts.appStore());
+    Alert.alert(
+      '',
+      t(VehicleTexts.appStoreOpenError.text(appStore, operatorName)),
+      [
+        {
+          text: t(VehicleTexts.appStoreOpenError.button),
+          style: 'cancel',
+        },
+      ],
+    );
+  };
+
+  type AppMissingAlertArgs = {
+    operatorName: string;
+    appStoreUri: string | undefined;
+  };
+  const appMissingAlert = ({
+    operatorName,
+    appStoreUri,
+  }: AppMissingAlertArgs) => {
+    const buttons: AlertButton[] = [
+      {
+        text: t(VehicleTexts.appMissingAlert.buttons.cancel),
+        style: 'cancel',
+      },
+    ];
+    if (appStoreUri) {
+      buttons.push({
+        text: t(
+          VehicleTexts.appMissingAlert.buttons.openAppStore(
+            t(VehicleTexts.appStore()),
+          ),
+        ),
+        style: 'default',
+        onPress: () =>
+          Linking.openURL(appStoreUri).catch(() =>
+            appStoreOpenError(operatorName),
+          ),
+      });
+    }
+    Alert.alert(
+      t(VehicleTexts.appMissingAlert.title(operatorName)),
+      t(VehicleTexts.appMissingAlert.text(operatorName)),
+      buttons,
+    );
+  };
+
+  const openOperatorApp = useCallback(async () => {
+    if (!rentalAppUri) return;
+    await Linking.openURL(rentalAppUri).catch(() =>
+      appMissingAlert({operatorName, appStoreUri}),
+    );
+  }, [rentalAppUri, operatorName, appStoreUri]);
 
   return (
     <BottomSheetContainer>
@@ -61,12 +124,12 @@ export const ScooterSheet = ({vehicle, close}: Props) => {
         <ScooterImage style={style.vehicleImage} />
       </Section>
 
-      {operatorAppUri && (
+      {rentalAppUri && (
         <FullScreenFooter>
           <Button
             style={style.button}
             text={t(ScooterTexts.primaryButton.text(operatorName))}
-            onPress={async () => await Linking.openURL(operatorAppUri)}
+            onPress={openOperatorApp}
             mode="primary"
             interactiveColor={'interactive_0'}
           />
