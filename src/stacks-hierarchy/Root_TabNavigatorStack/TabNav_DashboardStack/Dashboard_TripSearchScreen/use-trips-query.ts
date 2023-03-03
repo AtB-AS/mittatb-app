@@ -241,8 +241,8 @@ async function doSearch(
       (m) => m.selected,
     );
     query.modes = {
-      accessMode: StreetMode.Foot,
-      directMode: StreetMode.Foot,
+      accessMode: StreetMode.Flexible,
+      directMode: StreetMode.Flexible,
       egressMode: StreetMode.Flexible,
       transportModes: flatMap(selectedFilters, (tm) => tm.modes),
     };

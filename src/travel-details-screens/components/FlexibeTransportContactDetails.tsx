@@ -1,12 +1,15 @@
 import {Button} from '@atb/components/button';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import React, {forwardRef} from 'react';
-import {View} from 'react-native';
+import {Linking, View} from 'react-native';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {MessageBox} from '@atb/components/message-box';
 import FlexibleTransportText from '@atb/translations/components/FlexibleTransportDetails';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {ThemeText} from '@atb/components/text';
+import Warning from '@atb/assets/svg/color/icons/status/Warning';
+import {FullScreenFooter} from '@atb/components/screen-footer';
 
 export type BookingDetails = {
   phoneNumber: string;
@@ -22,49 +25,59 @@ const FlexibleTransportContactDetails = forwardRef<View, Props>(
   ({close, contactDetails}) => {
     const {t, language} = useTranslation();
     const styles = useStyles();
+    const {theme} = useTheme();
 
     return (
       <BottomSheetContainer>
         <View>
           <ScreenHeaderWithoutNavigation
-            title={''}
             leftButton={{
-              type: 'cancel',
+              type: 'close',
               onPress: close,
-              text: t(ScreenHeaderTexts.headerButton.cancel.text),
+              text: t(ScreenHeaderTexts.headerButton.close.text),
             }}
             color={'background_1'}
             setFocusOnLoad={false}
           />
         </View>
-        <View style={styles.padding}>
-          <MessageBox
-            type="info"
-            title={t(
-              FlexibleTransportText.contactMessage.title(
-                contactDetails.phoneNumber,
-              ),
-            )}
-            style={styles.infoBox}
-            message={t(
-              FlexibleTransportText.infoMessage(
-                contactDetails.aimedStartTime,
-                language,
-              ),
-            )}
-          />
-        </View>
-        <Button
-          style={styles.padding}
-          text={t(
-            FlexibleTransportText.contactMessage.callAction(
-              contactDetails.phoneNumber,
-            ),
-          )}
-          onPress={() => {}}
-          mode="primary"
-          interactiveColor="interactive_0"
-        />
+        <FullScreenFooter>
+          <View style={styles.container}>
+            <View style={styles.tittleContainer}>
+              <ThemeIcon svg={Warning} />
+              <ThemeText type="heading__title" style={styles.tittlePadding}>
+                {t(
+                  FlexibleTransportText.contactMessage.title(
+                    contactDetails.phoneNumber,
+                  ),
+                )}
+              </ThemeText>
+            </View>
+            <View>
+              <ThemeText type="body__primary" style={[styles.messageContainer]}>
+                {t(
+                  FlexibleTransportText.infoMessage(
+                    contactDetails.aimedStartTime,
+                    language,
+                  ),
+                )}
+              </ThemeText>
+            </View>
+          </View>
+          <View style={styles.contactButtonContainer}>
+            <Button
+              text={t(
+                FlexibleTransportText.contactMessage.callAction(
+                  contactDetails.phoneNumber,
+                ),
+              )}
+              onPress={() => {
+                Linking.openURL(`tel:${contactDetails.phoneNumber}`);
+              }}
+              mode="primary"
+              interactiveColor="interactive_0"
+            />
+          </View>
+        </FullScreenFooter>
       </BottomSheetContainer>
     );
   },
@@ -72,13 +85,23 @@ const FlexibleTransportContactDetails = forwardRef<View, Props>(
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
-    padding: {
-      marginBottom: theme.spacings.small,
-      marginLeft: theme.spacings.medium,
-      marginRight: theme.spacings.medium,
-    },
-    infoBox: {
+    container: {
+      marginHorizontal: theme.spacings.medium,
+      padding: theme.spacings.large,
+      borderRadius: theme.border.radius.regular,
       backgroundColor: theme.static.background.background_0.background,
+    },
+    tittleContainer: {
+      flexDirection: 'row',
+    },
+    tittlePadding: {
+      paddingLeft: theme.spacings.small,
+    },
+    messageContainer: {
+      paddingTop: theme.spacings.medium,
+    },
+    contactButtonContainer: {
+      margin: theme.spacings.medium,
     },
   };
 });
