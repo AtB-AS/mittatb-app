@@ -10,6 +10,6 @@ export type Root_PurchaseOverviewScreenParams = {
   userProfilesWithCount?: UserProfileWithCount[];
   fromTariffZone?: TariffZoneWithMetadata;
   toTariffZone?: TariffZoneWithMetadata;
-  mode?: 'ticket' | 'travelSearch';
+  mode?: 'Ticket' | 'TravelSearch';
   travelDate?: string;
 };
