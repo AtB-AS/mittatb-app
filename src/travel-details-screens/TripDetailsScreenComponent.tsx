@@ -138,7 +138,7 @@ export const TripDetailsScreenComponent = ({
                   ...tripTicketDetails.tariffZoneTo,
                 },
                 travelDate: tripTicketDetails.ticketStartTime,
-                mode: 'travelSearch',
+                mode: 'TravelSearch',
               })
             }
             type="block"
