@@ -103,7 +103,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       />
 
       <ScrollView testID="ticketingScrollView">
-        {params.mode === 'travelSearch' && (
+        {params.mode === 'TravelSearch' && (
           <MessageBox
             style={styles.travelSearchInfo}
             type={'valid'}
