@@ -9,9 +9,10 @@ import {
 import {MapLeg} from '@atb/components/map';
 import {Coordinates} from '@atb/utils/coordinates';
 import {CameraBounds} from '@rnmapbox/maps';
+import {AnyMode} from '@atb/components/transportation-icon/types';
 
 export interface MapLine extends Feature<LineString> {
-  travelType?: Mode;
+  travelType?: AnyMode;
   subMode?: TransportSubmode;
   faded?: boolean;
 }

@@ -3,13 +3,12 @@ import {GeoLocation, Location, SearchLocation} from '@atb/favorites/types';
 import {Feature, FeatureCollection, GeoJSON, LineString, Point} from 'geojson';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
-  Mode,
   PointsOnLink,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {RegionPayload} from '@rnmapbox/maps';
-import { AnyMode } from '../transportation-icon/types';
+import {AnyMode} from '../transportation-icon/types';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -110,7 +109,7 @@ export type MapLeg = {
 };
 
 export interface MapLine extends Feature<LineString> {
-  travelType?: Mode;
+  travelType?: AnyMode;
   subMode?: TransportSubmode;
   faded?: boolean;
 }

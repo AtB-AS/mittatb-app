@@ -1,5 +1,5 @@
 import {Button} from '@atb/components/button';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import React, {forwardRef} from 'react';
 import {Linking, View} from 'react-native';
@@ -25,7 +25,6 @@ const FlexibleTransportContactDetails = forwardRef<View, Props>(
   ({close, contactDetails}) => {
     const {t, language} = useTranslation();
     const styles = useStyles();
-    const {theme} = useTheme();
 
     return (
       <BottomSheetContainer>
@@ -52,16 +51,14 @@ const FlexibleTransportContactDetails = forwardRef<View, Props>(
                 )}
               </ThemeText>
             </View>
-            <View>
-              <ThemeText type="body__primary" style={[styles.messageContainer]}>
-                {t(
-                  FlexibleTransportText.infoMessage(
-                    contactDetails.aimedStartTime,
-                    language,
-                  ),
-                )}
-              </ThemeText>
-            </View>
+            <ThemeText type="body__primary" style={styles.messageContainer}>
+              {t(
+                FlexibleTransportText.infoMessage(
+                  contactDetails.aimedStartTime,
+                  language,
+                ),
+              )}
+            </ThemeText>
           </View>
           <View style={styles.contactButtonContainer}>
             <Button
