@@ -5,6 +5,7 @@ import MapboxGL from '@rnmapbox/maps';
 import {MapSelectionActionType} from '@atb/components/map/types';
 import {
   fitBounds,
+  flyToLocation,
   isClusterFeature,
   isFeatureCollection,
   isFeaturePoint,
@@ -35,6 +36,8 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
             fitBounds(from, to, mapCameraRef);
           }
         } else if (isFeaturePoint(feature)) {
+          const [longitude, latitude] = feature.geometry.coordinates;
+          flyToLocation({longitude, latitude}, mapCameraRef);
           onPress({
             source: 'map-click',
             feature,
