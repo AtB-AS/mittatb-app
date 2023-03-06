@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   Feature,
   FeatureCollection,
@@ -14,7 +14,10 @@ import {
 } from '@atb/components/map/utils';
 import {getVehicles} from '@atb/api/vehicles';
 import {useIsVehiclesEnabled} from '@atb/vehicles/use-vehicles-enabled';
-import {MapSelectionActionType} from '@atb/components/map/types';
+import {
+  MapSelectionActionType,
+  VehiclesFilter,
+} from '@atb/components/map/types';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {extend, getRadius, isVehicle, needsReload} from '@atb/vehicles/utils';
 import {ScooterSheet} from '@atb/vehicles/components/ScooterSheet';
@@ -40,15 +43,24 @@ export const useVehicles = () => {
     useState<Feature<Polygon | MultiPolygon>>();
 
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const isVehiclesEnabled = useIsVehiclesEnabled();
 
   const [vehicles, setVehicles] = useState<
     FeatureCollection<GeoJSON.Point, VehicleFragment>
   >(toFeatureCollection([]));
-  const isVehiclesEnabled = useIsVehiclesEnabled();
+
+  const initialFilter: VehiclesFilter = useMemo(
+    () => ({
+      showVehicles: isVehiclesEnabled,
+    }),
+    [isVehiclesEnabled],
+  );
+
+  const [filter, setFilter] = useState(initialFilter);
 
   useEffect(() => {
     const abortCtrl = new AbortController();
-    if (isVehiclesEnabled) {
+    if (isVehiclesEnabled && filter.showVehicles) {
       if (area.zoom > MIN_ZOOM_LEVEL) {
         if (needsReload(area.visibleBounds, loadedArea)) {
           getVehicles(area, {signal: abortCtrl.signal})
@@ -88,6 +100,10 @@ export const useVehicles = () => {
     });
   };
 
+  const onFilterChange = (filter: VehiclesFilter) => {
+    setFilter(filter);
+  };
+
   const onPress = (type: MapSelectionActionType) => {
     if (type.source !== 'map-click') return;
     const vehicle = type.feature.properties;
@@ -98,5 +114,5 @@ export const useVehicles = () => {
     }
   };
 
-  return {vehicles, onPress, fetchVehicles};
+  return {vehicles, initialFilter, onFilterChange, onPress, fetchVehicles};
 };

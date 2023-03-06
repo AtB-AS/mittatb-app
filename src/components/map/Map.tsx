@@ -11,13 +11,14 @@ import {isFeaturePoint, zoomIn, zoomOut} from './utils';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
 import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
-import {MapProps} from './types';
+import {MapProps, MapFilter as MapFilterType} from './types';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {MapControls} from './components/MapControls';
 import {shadows} from './components/shadows';
 import {Vehicles} from '@atb/components/map/components/Vehicles';
+import {MapFilter} from '@atb/components/map/components/MapFilter';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -35,6 +36,15 @@ export const Map = (props: MapProps) => {
     [],
   );
 
+  const startingFilters: MapFilterType = useMemo(
+    () => ({
+      vehicles: {
+        showVehicles: true,
+      },
+    }),
+    [],
+  );
+
   const {mapLines, selectedCoordinates, onMapClick} =
     useMapSelectionChangeEffect(
       props,
@@ -48,6 +58,10 @@ export const Map = (props: MapProps) => {
   ) => {
     if (!props.vehicles) return;
     props.vehicles.fetchVehicles(region);
+  };
+
+  const onFilterChange = (filter: MapFilterType) => {
+    console.log('Show scooters: ', filter);
   };
 
   return (
@@ -109,6 +123,12 @@ export const Map = (props: MapProps) => {
           )}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
+          {props.vehicles && (
+            <MapFilter
+              initialState={startingFilters}
+              onFilterChange={onFilterChange}
+            />
+          )}
           {currentLocation && (
             <PositionArrow
               onPress={() => {
