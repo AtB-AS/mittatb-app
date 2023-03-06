@@ -170,7 +170,6 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
   vehicleInfo: {
     flexGrow: 1,
     flexShrink: 0,
-    gapCol: theme.spacings.medium,
     flexDirection: 'row',
     padding: theme.spacings.medium,
   },
