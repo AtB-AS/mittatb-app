@@ -14,6 +14,12 @@ export type RentalAppsFragment = {
   ios?: RentalAppFragment;
 };
 
+export type BrandAssetsFragment = {
+  brandImageUrl: string;
+  brandImageUrlDark?: string;
+  brandLastModified: string;
+};
+
 export type VehicleFragment = {
   id: string;
   lat: number;
@@ -28,6 +34,7 @@ export type VehicleFragment = {
   system: {
     operator: OperatorFragment;
     name: TranslatedStringFragment;
+    brandAssets?: BrandAssetsFragment;
     rentalApps?: RentalAppsFragment;
   };
   rentalUris?: RentalUrisFragment;
