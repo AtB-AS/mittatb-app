@@ -55,18 +55,26 @@ export const useVehicles = () => {
     }),
     [isVehiclesEnabled],
   );
-
   const [filter, setFilter] = useState(initialFilter);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setFilter({
+      showVehicles: isVehiclesEnabled,
+    });
+  }, [isVehiclesEnabled]);
 
   useEffect(() => {
     const abortCtrl = new AbortController();
-    if (isVehiclesEnabled && filter.showVehicles) {
-      if (area.zoom > MIN_ZOOM_LEVEL) {
+    if (isVehiclesEnabled) {
+      if (area.zoom > MIN_ZOOM_LEVEL && filter.showVehicles) {
         if (needsReload(area.visibleBounds, loadedArea)) {
+          setIsLoading(true);
           getVehicles(area, {signal: abortCtrl.signal})
             .then(toFeaturePoints)
             .then(toFeatureCollection)
             .then(setVehicles)
+            .then(() => setIsLoading(false))
             .then(() => {
               setLoadedArea(
                 extend(
@@ -82,7 +90,7 @@ export const useVehicles = () => {
       }
     }
     return () => abortCtrl.abort();
-  }, [area, isVehiclesEnabled]);
+  }, [area, isVehiclesEnabled, filter]);
 
   const fetchVehicles = async (
     region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
@@ -114,5 +122,14 @@ export const useVehicles = () => {
     }
   };
 
-  return {vehicles, initialFilter, onFilterChange, onPress, fetchVehicles};
+  return isVehiclesEnabled
+    ? {
+        vehicles,
+        initialFilter,
+        onFilterChange,
+        onPress,
+        fetchVehicles,
+        isLoading,
+      }
+    : undefined;
 };

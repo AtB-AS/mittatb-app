@@ -38,11 +38,9 @@ export const Map = (props: MapProps) => {
 
   const startingFilters: MapFilterType = useMemo(
     () => ({
-      vehicles: {
-        showVehicles: true,
-      },
+      vehicles: props.vehicles?.initialFilter,
     }),
-    [],
+    [props.vehicles?.initialFilter],
   );
 
   const {mapLines, selectedCoordinates, onMapClick} =
@@ -61,7 +59,9 @@ export const Map = (props: MapProps) => {
   };
 
   const onFilterChange = (filter: MapFilterType) => {
-    console.log('Show scooters: ', filter);
+    if (filter.vehicles) {
+      props.vehicles?.onFilterChange(filter.vehicles);
+    }
   };
 
   return (
@@ -125,6 +125,7 @@ export const Map = (props: MapProps) => {
         <View style={controlStyles.controlsContainer}>
           {props.vehicles && (
             <MapFilter
+              isLoading={props.vehicles.isLoading}
               initialState={startingFilters}
               onFilterChange={onFilterChange}
             />
