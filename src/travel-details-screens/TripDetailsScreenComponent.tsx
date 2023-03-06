@@ -194,7 +194,7 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
   if (!(enable_ticketing && !someLegsAreNotSingleTicket)) return;
 
   const tripStartWithBuffer = addMinutes(
-    parseISO(tripPattern.expectedStartTime),
+    parseISO(nonFootLegs[0]?.aimedStartTime),
     -5,
   );
   const ticketStartTime =
