@@ -145,13 +145,15 @@ export const Button = React.forwardRef<any, ButtonProps>(
     const leftStyling: ViewStyle = {
       position: isInline ? 'relative' : 'absolute',
       left: isInline ? undefined : spacing,
-      marginRight: isInline ? theme.spacings.xSmall : undefined,
+      marginRight:
+        isInline && (text || rightIcon) ? theme.spacings.xSmall : undefined,
     };
 
     const rightStyling: ViewStyle = {
       position: isInline ? 'relative' : 'absolute',
       right: isInline ? undefined : spacing,
-      marginLeft: isInline ? theme.spacings.xSmall : undefined,
+      marginLeft:
+        isInline && (text || leftIcon) ? theme.spacings.xSmall : undefined,
     };
 
     return (
