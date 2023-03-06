@@ -36,6 +36,10 @@ export type RemoteConfig = {
   enable_from_travel_search_to_ticket: boolean;
   enable_vehicles_in_map: boolean;
   enable_realtime_map: boolean;
+  enable_flexible_transport: boolean;
+  use_flexible_on_accessMode: boolean;
+  use_flexible_on_directMode: boolean;
+  use_flexible_on_egressMode: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -73,6 +77,10 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_from_travel_search_to_ticket: false,
   enable_vehicles_in_map: false,
   enable_realtime_map: false,
+  enable_flexible_transport: false,
+  use_flexible_on_accessMode: true,
+  use_flexible_on_directMode: true,
+  use_flexible_on_egressMode: true,
 };
 
 export function getConfig(): RemoteConfig {
@@ -177,6 +185,22 @@ export function getConfig(): RemoteConfig {
     values['enable_realtime_map']?.asBoolean() ??
     defaultRemoteConfig.enable_realtime_map;
 
+  const enable_flexible_transport =
+    values['enable_flexible_transport']?.asBoolean() ??
+    defaultRemoteConfig.enable_flexible_transport;
+
+  const use_flexible_on_accessMode =
+    values['use_flexible_on_accessMode']?.asBoolean() ??
+    defaultRemoteConfig.use_flexible_on_accessMode;
+
+  const use_flexible_on_directMode =
+    values['use_flexible_on_directMode']?.asBoolean() ??
+    defaultRemoteConfig.use_flexible_on_directMode;
+
+  const use_flexible_on_egressMode =
+    values['use_flexible_on_egressMode']?.asBoolean() ??
+    defaultRemoteConfig.use_flexible_on_egressMode;
+
   return {
     enable_network_logging,
     enable_ticketing,
@@ -212,6 +236,10 @@ export function getConfig(): RemoteConfig {
     enable_from_travel_search_to_ticket,
     enable_vehicles_in_map: enable_vehicles_in_map,
     enable_realtime_map,
+    enable_flexible_transport,
+    use_flexible_on_accessMode,
+    use_flexible_on_directMode,
+    use_flexible_on_egressMode,
   };
 }
 

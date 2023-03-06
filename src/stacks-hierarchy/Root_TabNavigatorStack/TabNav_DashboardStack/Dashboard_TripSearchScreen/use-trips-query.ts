@@ -17,8 +17,13 @@ import {useSearchHistory} from '@atb/search-history';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {TripSearchPreferences, usePreferences} from '@atb/preferences';
 import {isValidTripLocations} from '@atb/utils/location';
-import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {
+  InputMaybe,
+  StreetMode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 import {flatMap} from '@atb/utils/array';
+import {IS_QA_ENV} from '@env';
+import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 
 export default function useTripsQuery(
   fromLocation: Location | undefined,
@@ -59,6 +64,8 @@ export default function useTripsQuery(
   const clearTrips = useCallback(() => {
     setTripPatterns([]);
   }, [setTripPatterns]);
+
+  const journeySearchModes = useJourneySearchModes(StreetMode.Foot);
 
   const search = useCallback(
     (cursor?: string, existingTrips?: TripPatternWithKey[]) => {
@@ -121,6 +128,7 @@ export default function useTripsQuery(
                 cancelTokenSource,
                 tripSearchPreferences,
                 filtersSelection,
+                journeySearchModes,
               );
 
               const tripPatternsWithKeys = decorateTripPatternWithKey(
@@ -205,6 +213,7 @@ async function doSearch(
   cancelToken: CancelTokenSource,
   tripSearchPreferences: TripSearchPreferences | undefined,
   travelSearchFiltersSelection: TravelSearchFiltersSelectionType | undefined,
+  journeySearchModes: Types.Modes,
 ) {
   const from = {
     ...fromLocation,
@@ -231,9 +240,7 @@ async function doSearch(
     waitReluctance: tripSearchPreferences?.waitReluctance,
     walkReluctance: tripSearchPreferences?.walkReluctance,
     walkSpeed: tripSearchPreferences?.walkSpeed,
-    modes: {
-      egressMode: StreetMode.Flexible,
-    },
+    modes: journeySearchModes,
   };
 
   if (travelSearchFiltersSelection?.transportModes) {
@@ -241,9 +248,7 @@ async function doSearch(
       (m) => m.selected,
     );
     query.modes = {
-      accessMode: StreetMode.Flexible,
-      directMode: StreetMode.Flexible,
-      egressMode: StreetMode.Flexible,
+      ...journeySearchModes,
       transportModes: flatMap(selectedFilters, (tm) => tm.modes),
     };
   }
@@ -306,4 +311,57 @@ function filterDuplicateTripPatterns(
     existing.set(tp.key, tp);
     return true;
   });
+}
+
+function useJourneySearchModes(
+  defaultValue: InputMaybe<StreetMode>,
+): Types.Modes {
+  const {
+    preferences: {
+      flexibleTransport,
+      useFlexibleTransportOnAccessMode,
+      useFlexibleTransportOnDirectMode,
+      useFlexibleTransportOnEgressMode,
+    },
+  } = usePreferences();
+
+  const {
+    enable_flexible_transport,
+    use_flexible_on_accessMode,
+    use_flexible_on_directMode,
+    use_flexible_on_egressMode,
+  } = useRemoteConfig();
+
+  // If is DEV or QA env prioritizes local configuration
+  if ((!!JSON.parse(IS_QA_ENV || 'false') || __DEV__) && !!flexibleTransport) {
+    return {
+      accessMode: !!useFlexibleTransportOnAccessMode
+        ? StreetMode.Flexible
+        : StreetMode.Foot,
+      directMode: !!useFlexibleTransportOnDirectMode
+        ? StreetMode.Flexible
+        : StreetMode.Foot,
+      egressMode: !!useFlexibleTransportOnEgressMode
+        ? StreetMode.Flexible
+        : StreetMode.Foot,
+    };
+  }
+
+  return {
+    accessMode: enable_flexible_transport
+      ? use_flexible_on_accessMode
+        ? StreetMode.Flexible
+        : defaultValue
+      : defaultValue,
+    directMode: enable_flexible_transport
+      ? use_flexible_on_directMode
+        ? StreetMode.Flexible
+        : defaultValue
+      : defaultValue,
+    egressMode: enable_flexible_transport
+      ? use_flexible_on_egressMode
+        ? StreetMode.Flexible
+        : defaultValue
+      : defaultValue,
+  };
 }
