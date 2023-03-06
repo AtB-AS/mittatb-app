@@ -20,17 +20,7 @@ const TariffZonesTexts = {
     },
   },
   zoneTitle: _(`Reisesone(r)`, `Travel zone(s)`),
-  zoneDescription: {
-    text: {
-      singleZone: (zoneName: string) =>
-        _(`Sone ${zoneName}`, `Zone ${zoneName}`),
-      multipleZone: (zoneNameFrom: string, zoneNameTo: string) =>
-        _(
-          `Sone ${zoneNameFrom} til sone ${zoneNameTo}`,
-          `Zone ${zoneNameFrom} to zone ${zoneNameTo}`,
-        ),
-    },
-  },
+  zoneName: (zoneName: string) => _(`Sone ${zoneName}`, `Zone ${zoneName}`),
 
   location: {
     singleZone: {

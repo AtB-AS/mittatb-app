@@ -10,10 +10,10 @@ import {
 import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
-  tariffZonesDescription,
   tariffZonesSummary,
   TariffZoneWithMetadata,
 } from '../../Root_PurchaseTariffZonesSearchByMapScreen';
+import {getReferenceDataName} from '@atb/reference-data/utils';
 
 type ZonesSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -34,7 +34,7 @@ export default function ZonesSelection({
   onSelect,
   style,
 }: ZonesSelectionProps) {
-  const itemStyle = useStyles();
+  const styles = useStyles();
   const {t, language} = useTranslation();
 
   const accessibility: AccessibilityProps = {
@@ -57,37 +57,73 @@ export default function ZonesSelection({
       <ThemeText
         type="body__secondary"
         color="secondary"
-        style={itemStyle.sectionText}
+        style={styles.sectionText}
         accessibilityLabel={t(
-          PurchaseOverviewTexts.zones.label[selectionMode].a11yLabel,
+          PurchaseOverviewTexts.zones.title[selectionMode].a11yLabel,
         )}
       >
-        {t(PurchaseOverviewTexts.zones.label[selectionMode].text)}
+        {t(PurchaseOverviewTexts.zones.title[selectionMode].text)}
       </ThemeText>
       <Sections.Section {...accessibility}>
-        <Sections.ButtonSectionItem
-          label={t(TariffZonesTexts.zoneTitle)}
-          value={tariffZonesDescription(
-            fromTariffZone,
-            toTariffZone,
-            language,
-            t,
-          )}
-          highlighted={true}
-          inlineValue={false}
-          onPress={() => {
+        <Sections.GenericClickableSectionItem
+          onPress={() =>
             onSelect({
               fromTariffZone,
               toTariffZone,
               fareProductTypeConfig,
-            });
-          }}
+            })
+          }
           testID="selectZonesButton"
-        />
+        >
+          {selectionMode === 'single' ? (
+            <ZoneLabel tariffZone={fromTariffZone} />
+          ) : (
+            <>
+              <View style={styles.fromZone}>
+                <ThemeText
+                  color="secondary"
+                  type="body__secondary"
+                  style={styles.toFromLabel}
+                >
+                  {t(PurchaseOverviewTexts.zones.label.from)}
+                </ThemeText>
+                <ZoneLabel tariffZone={fromTariffZone} />
+              </View>
+              <View style={styles.toZone}>
+                <ThemeText
+                  color="secondary"
+                  type="body__secondary"
+                  style={styles.toFromLabel}
+                >
+                  {t(PurchaseOverviewTexts.zones.label.to)}
+                </ThemeText>
+                <ZoneLabel tariffZone={toTariffZone} />
+              </View>
+            </>
+          )}
+        </Sections.GenericClickableSectionItem>
       </Sections.Section>
     </View>
   );
 }
+
+const ZoneLabel = ({tariffZone}: {tariffZone: TariffZoneWithMetadata}) => {
+  const {t, language} = useTranslation();
+  const zoneName = t(
+    TariffZonesTexts.zoneName(getReferenceDataName(tariffZone, language)),
+  );
+
+  return tariffZone.venueName ? (
+    <ThemeText style={{flexShrink: 1}}>
+      <ThemeText type="body__primary--bold">
+        {tariffZone.venueName + ' '}
+      </ThemeText>
+      ({zoneName})
+    </ThemeText>
+  ) : (
+    <ThemeText type="body__primary--bold">{zoneName}</ThemeText>
+  );
+};
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   subtitleStyle: {
@@ -95,5 +131,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   sectionText: {
     marginBottom: theme.spacings.medium,
+  },
+  fromZone: {
+    flexDirection: 'row',
+  },
+  toZone: {
+    flexDirection: 'row',
+    marginTop: theme.spacings.small,
+  },
+  toFromLabel: {
+    minWidth: 36,
+    marginRight: theme.spacings.small,
   },
 }));

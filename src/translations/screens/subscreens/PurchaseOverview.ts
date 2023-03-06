@@ -56,15 +56,22 @@ const PurchaseOverviewTexts = {
     ),
   },
   zones: {
-    label: {
+    title: {
       single: {
-        text: _('Velg sone (kun én)', 'Select zone (only one)'),
-        a11yLabel: _('Velg sone (kun én)', 'Select zone (only one)'),
+        text: _('Velg holdeplass/sone (kun én)', 'Select stop/zone (only one)'),
+        a11yLabel: _(
+          'Velg holdeplass eller sone (kun én)',
+          'Select stop or zone (only one)',
+        ),
       },
       multiple: {
-        text: _('Velg sone(r)', 'Select zone(s)'),
-        a11yLabel: _('Velg soner', 'Select zones'),
+        text: _('Velg holdeplass/sone(r)', 'Select stop/zone(s)'),
+        a11yLabel: _('Velg holeplass eller soner', 'Select stop or zones'),
       },
+    },
+    label: {
+      from: _('Fra', 'From'),
+      to: _('Til', 'To'),
     },
   },
   productSelection: {
