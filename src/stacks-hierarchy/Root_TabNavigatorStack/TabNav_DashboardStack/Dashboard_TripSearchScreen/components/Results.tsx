@@ -73,7 +73,7 @@ const Results: React.FC<Props> = ({
 
   if (errorType) {
     return (
-      <View style={styles.container}>
+      <View style={styles.errorContainer}>
         <ScreenReaderAnnouncement message={errorMessage} />
         <MessageBox
           type="warning"
@@ -152,6 +152,10 @@ const getTextForEmptyResult = (
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
+    paddingHorizontal: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
+  },
+  errorContainer: {
     paddingBottom: theme.spacings.medium,
   },
   infoBoxText: theme.typography.body__primary,
