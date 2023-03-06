@@ -3,8 +3,8 @@ import {translation as _} from '../../commons';
 const TariffZonesTexts = {
   header: {
     title: {
-      singleZone: _('Velg sone', 'Select zone'),
-      multipleZone: _('Velg soner', 'Select zones'),
+      singleZone: _('Velg holdeplass/sone', 'Select stop/zone'), // see that both singular and plural works
+      multipleZone: _('Velg holdeplasser/soner', 'Select stops/zones'),
     },
   },
   zoneSummary: {
@@ -42,8 +42,8 @@ const TariffZonesTexts = {
           _(`Sone ${zoneName}`, `Zone ${zoneName}`),
         withVenue: (zoneName: string, venueName: string) =>
           _(
-            `Sone ${zoneName} (${venueName})`,
-            `Zone ${zoneName} (${venueName})`,
+            `${venueName} (Sone ${zoneName})`,
+            `${venueName} (Zone ${zoneName})`,
           ),
       },
       label: _('Fra', 'From'),
@@ -55,8 +55,8 @@ const TariffZonesTexts = {
           ),
         withVenue: (zoneName: string, venueName: string) =>
           _(
-            `Valgt avreisesone er ${zoneName} basert på stoppested ${venueName}`,
-            'Selected zone of departure is ${zoneName} based on stop place ${venueName}',
+            `Valgt stoppested er ${venueName} basert på avreisesone ${zoneName}`,
+            `Selected stop place of departure is ${venueName} based on zone ${zoneName}`,
           ),
       },
       a11yHint: _(
