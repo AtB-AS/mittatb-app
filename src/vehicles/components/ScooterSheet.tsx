@@ -160,7 +160,7 @@ const getRange = (rangeInMeters: number, language: Language) => {
     rangeInMeters > 5000
       ? (rangeInMeters / 1000).toFixed(0)
       : formatDecimalNumber(rangeInMeters / 1000, language, 1);
-  return `ca ${rangeInKm} km`;
+  return `ca. ${rangeInKm} km`;
 };
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
