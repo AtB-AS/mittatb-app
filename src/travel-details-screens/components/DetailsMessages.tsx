@@ -30,7 +30,7 @@ import {StyleSheet} from '@atb/theme';
 import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data';
 import FlexibleTransportText from '@atb/translations/components/FlexibleTransportDetails';
 import FlexibleTransportContactDetails, {
-  BookingDetails,
+  ContactDetails,
 } from './FlexibeTransportContactDetails';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 
@@ -72,14 +72,14 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
         tariffZonesHaveZoneA(a.toPlace.quay?.tariffZones),
     );
 
-  const contactDetails: BookingDetails | undefined = leg?.bookingArrangements
+  const contactDetails: ContactDetails | undefined = leg?.bookingArrangements
     ?.bookingContact?.phone &&
     leg.aimedEndTime && {
       phoneNumber: leg.bookingArrangements.bookingContact.phone,
-      aimedStartTime: leg.aimedEndTime,
+      aimedStartTime: leg.aimedStartTime,
     };
 
-  const openContactFlexibleTransport = (contactDetails: BookingDetails) => {
+  const openContactFlexibleTransport = (contactDetails: ContactDetails) => {
     openBottomSheet((close, focusRef) => (
       <FlexibleTransportContactDetails
         close={close}

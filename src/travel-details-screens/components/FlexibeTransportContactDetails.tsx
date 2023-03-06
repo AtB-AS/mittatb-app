@@ -11,14 +11,14 @@ import {ThemeText} from '@atb/components/text';
 import Warning from '@atb/assets/svg/color/icons/status/Warning';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 
-export type BookingDetails = {
+export type ContactDetails = {
   phoneNumber: string;
   aimedStartTime: Date | string;
 };
 
 type Props = {
   close: () => void;
-  contactDetails: BookingDetails;
+  contactDetails: ContactDetails;
 };
 
 const FlexibleTransportContactDetails = forwardRef<View, Props>(

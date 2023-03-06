@@ -504,7 +504,7 @@ const TransportationLeg = ({
   return (
     <TransportationIcon
       style={style}
-      mode={leg.mode}
+      mode={!!leg.bookingArrangements ? 'flex' : leg.mode}
       subMode={leg.line?.transportSubmode}
       lineNumber={leg.line?.publicCode}
       testID="trLeg"

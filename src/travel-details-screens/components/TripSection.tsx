@@ -45,7 +45,7 @@ import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/ligh
 import {TripProps} from '@atb/travel-details-screens/components/Trip';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import FlexibleTransportContactDetails, {
-  BookingDetails as BookingDetails,
+  ContactDetails as ContactDetails,
 } from './FlexibeTransportContactDetails';
 import {usePreferences} from '@atb/preferences';
 
@@ -105,14 +105,14 @@ const TripSection: React.FC<TripSectionProps> = ({
     ?.filter((a) => !a.predictionInaccurate && a.actualDepartureTime)
     .pop();
 
-  const bookingDetails: BookingDetails | undefined = leg?.bookingArrangements
+  const bookingDetails: ContactDetails | undefined = leg?.bookingArrangements
     ?.bookingContact?.phone &&
     leg.aimedEndTime && {
       phoneNumber: leg.bookingArrangements.bookingContact.phone,
-      aimedStartTime: leg.aimedEndTime,
+      aimedStartTime: leg.aimedStartTime,
     };
 
-  const openContactFlexibleTransport = (contactDetails: BookingDetails) => {
+  const openContactFlexibleTransport = (contactDetails: ContactDetails) => {
     openBottomSheet((close, focusRef) => (
       <FlexibleTransportContactDetails
         close={close}
