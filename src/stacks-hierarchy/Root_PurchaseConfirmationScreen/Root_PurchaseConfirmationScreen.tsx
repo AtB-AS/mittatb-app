@@ -41,6 +41,7 @@ import {SelectPaymentMethod} from './components/SelectPaymentMethodSheet';
 import {usePreviousPaymentMethod} from '../saved-payment-utils';
 import {CardPaymentMethod, PaymentMethod, SavedPaymentOption} from '../types';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
+import analytics from '@react-native-firebase/analytics';
 
 function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
@@ -386,7 +387,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 <Button
                   text={getPaymentOptionTexts(previousMethod)}
                   interactiveColor="interactive_0"
-                  disabled={!!error || !previousMethod}
+                  disabled={!!error}
                   rightIcon={{
                     svg:
                       previousMethod.paymentType === PaymentType.Mastercard
@@ -397,9 +398,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   }}
                   viewContainerStyle={styles.paymentButton}
                   onPress={() => {
-                    if (previousMethod) {
-                      selectPaymentOption(previousMethod);
-                    }
+                    params.mode === 'TravelSearch' &&
+                      analytics().logEvent('purchase_from_travel_search');
+                    selectPaymentOption(previousMethod);
                   }}
                 />
                 <TouchableOpacity
@@ -427,7 +428,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 accessibilityHint={t(
                   PurchaseConfirmationTexts.choosePaymentOption.a11yHint,
                 )}
-                onPress={selectPaymentMethod}
+                onPress={() => {
+                  params.mode === 'TravelSearch' &&
+                    analytics().logEvent('purchase_from_travel_search');
+                  selectPaymentMethod;
+                }}
                 viewContainerStyle={styles.paymentButton}
                 testID="choosePaymentOptionButton"
               />

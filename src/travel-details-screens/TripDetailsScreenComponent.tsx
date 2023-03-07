@@ -25,6 +25,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import {TariffZone} from '@atb/reference-data/types';
 import {addMinutes, formatISO, parseISO} from 'date-fns';
+import analytics from '@react-native-firebase/analytics';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -126,7 +127,8 @@ export const TripDetailsScreenComponent = ({
             accessibilityRole={'button'}
             accessibilityLabel={t(TripDetailsTexts.trip.buyTicket.a11yLabel)}
             accessible={true}
-            onPress={() =>
+            onPress={() => {
+              analytics().logEvent('click_trip_purchase_button');
               onPressBuyTicket({
                 fareProductTypeConfig: singleTicketConfig,
                 fromTariffZone: {
@@ -139,8 +141,8 @@ export const TripDetailsScreenComponent = ({
                 },
                 travelDate: tripTicketDetails.ticketStartTime,
                 mode: 'TravelSearch',
-              })
-            }
+              });
+            }}
             type="block"
             text={t(TripDetailsTexts.trip.buyTicket.text)}
             rightIcon={{svg: Ticket}}

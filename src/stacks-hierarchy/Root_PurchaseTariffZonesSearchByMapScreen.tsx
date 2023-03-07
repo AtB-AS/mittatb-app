@@ -262,6 +262,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
     navigation.navigate({
       name: 'Root_PurchaseOverviewScreen',
       params: {
+        mode: 'Ticket',
         fareProductTypeConfig,
         fromTariffZone: selectedZones.from,
         toTariffZone: isApplicableOnSingleZoneOnly
