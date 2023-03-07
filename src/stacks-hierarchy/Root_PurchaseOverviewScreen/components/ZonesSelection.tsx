@@ -2,11 +2,7 @@ import {screenReaderPause, ThemeText} from '@atb/components/text';
 import * as Sections from '@atb/components/sections';
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {StyleSheet} from '@atb/theme';
-import {
-  PurchaseOverviewTexts,
-  TariffZonesTexts,
-  useTranslation,
-} from '@atb/translations';
+import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
@@ -109,19 +105,18 @@ export default function ZonesSelection({
 
 const ZoneLabel = ({tariffZone}: {tariffZone: TariffZoneWithMetadata}) => {
   const {t, language} = useTranslation();
-  const zoneName = t(
-    TariffZonesTexts.zoneName(getReferenceDataName(tariffZone, language)),
-  );
+  const zoneName = getReferenceDataName(tariffZone, language);
+  const zoneLabel = t(PurchaseOverviewTexts.zones.zoneName(zoneName));
 
   return tariffZone.venueName ? (
     <ThemeText style={{flexShrink: 1}}>
       <ThemeText type="body__primary--bold">
         {tariffZone.venueName + ' '}
       </ThemeText>
-      ({zoneName})
+      ({zoneLabel})
     </ThemeText>
   ) : (
-    <ThemeText type="body__primary--bold">{zoneName}</ThemeText>
+    <ThemeText type="body__primary--bold">{zoneLabel}</ThemeText>
   );
 };
 

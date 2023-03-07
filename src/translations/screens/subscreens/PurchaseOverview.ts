@@ -73,6 +73,7 @@ const PurchaseOverviewTexts = {
       from: _('Fra', 'From'),
       to: _('Til', 'To'),
     },
+    zoneName: (zoneName: string) => _(`Sone ${zoneName}`, `Zone ${zoneName}`),
   },
   productSelection: {
     title: _('Velg billett', 'Select a ticket'),
