@@ -36,13 +36,6 @@ export const Map = (props: MapProps) => {
     [],
   );
 
-  const startingFilters: MapFilterType = useMemo(
-    () => ({
-      vehicles: props.vehicles?.initialFilter,
-    }),
-    [props.vehicles?.initialFilter],
-  );
-
   const {mapLines, selectedCoordinates, onMapClick} =
     useMapSelectionChangeEffect(
       props,
@@ -126,7 +119,6 @@ export const Map = (props: MapProps) => {
           {props.vehicles && (
             <MapFilter
               isLoading={props.vehicles.isLoading}
-              initialState={startingFilters}
               onFilterChange={onFilterChange}
             />
           )}

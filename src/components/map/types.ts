@@ -31,7 +31,6 @@ export type VehiclesState = {
     region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => void;
   isLoading: boolean;
-  initialFilter: VehiclesFilter;
   onFilterChange: (filter: VehiclesFilter) => void;
   onPress: (type: MapSelectionActionType) => void;
 };

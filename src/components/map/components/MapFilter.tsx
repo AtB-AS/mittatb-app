@@ -7,10 +7,10 @@ import {InteractiveColor} from '@atb/theme/colors';
 import {StyleSheet} from '@atb/theme';
 import {shadows} from '@atb/components/map';
 import {Duration} from '@atb/assets/svg/mono-icons/time';
+import {useUserMapFilters} from '@atb/components/map/hooks/use-map-filter';
 
 type MapFilterProps = {
   isLoading: boolean;
-  initialState: MapFilterType;
   onFilterChange: (filter: MapFilterType) => void;
 };
 type IconColors =
@@ -18,12 +18,12 @@ type IconColors =
   | Extract<InteractiveColor, 'interactive_2'>;
 export const MapFilter = ({
   isLoading,
-  initialState,
+
   onFilterChange,
 }: MapFilterProps) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const [filter, setFilter] = useState<MapFilterType>(initialState);
+  const {getMapFilter, setMapFilter} = useUserMapFilters();
   const [iconColor, setIconColor] = useState<IconColors>('interactive_0');
   const iconColors: {[key: string]: IconColors} = {
     showScooters: 'interactive_0',
@@ -31,27 +31,29 @@ export const MapFilter = ({
   };
 
   useEffect(() => {
-    setFilter(initialState);
-    setIconColor(
-      initialState.vehicles?.showVehicles
-        ? iconColors.showScooters
-        : iconColors.hideScooters,
-    );
-  }, [initialState]);
+    getMapFilter().then((initialFilter) => {
+      setIconColor(
+        initialFilter.vehicles?.showVehicles
+          ? iconColors.showScooters
+          : iconColors.hideScooters,
+      );
+    });
+  }, []);
 
   const toggleIconColor = (current: InteractiveColor) =>
     current === iconColors.showScooters
       ? iconColors.hideScooters
       : iconColors.showScooters;
 
-  const onScooterToggle = () => {
+  const onScooterToggle = async () => {
+    const currentFilter = await getMapFilter();
     const newFilter = {
-      ...filter,
+      ...currentFilter,
       vehicles: {
-        showVehicles: !filter.vehicles?.showVehicles,
+        showVehicles: !currentFilter.vehicles?.showVehicles,
       },
     };
-    setFilter(newFilter);
+    setMapFilter(newFilter);
     setIconColor(toggleIconColor);
     onFilterChange(newFilter);
   };

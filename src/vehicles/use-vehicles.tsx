@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Feature,
   FeatureCollection,
@@ -22,6 +22,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {extend, getRadius, isVehicle, needsReload} from '@atb/vehicles/utils';
 import {ScooterSheet} from '@atb/vehicles/components/ScooterSheet';
 import {RegionPayload} from '@rnmapbox/maps';
+import {useUserMapFilters} from '@atb/components/map/hooks/use-map-filter';
 
 const MIN_ZOOM_LEVEL = 13.5;
 const BUFFER_DISTANCE_IN_METERS = 500;
@@ -44,30 +45,25 @@ export const useVehicles = () => {
 
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const isVehiclesEnabled = useIsVehiclesEnabled();
+  const {getMapFilter} = useUserMapFilters();
 
   const [vehicles, setVehicles] = useState<
     FeatureCollection<GeoJSON.Point, VehicleFragment>
   >(toFeatureCollection([]));
 
-  const initialFilter: VehiclesFilter = useMemo(
-    () => ({
-      showVehicles: isVehiclesEnabled,
-    }),
-    [isVehiclesEnabled],
-  );
-  const [filter, setFilter] = useState(initialFilter);
+  const [filter, setFilter] = useState<VehiclesFilter>();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setFilter({
-      showVehicles: isVehiclesEnabled,
+    getMapFilter().then((initialFilter) => {
+      setFilter(initialFilter.vehicles);
     });
   }, [isVehiclesEnabled]);
 
   useEffect(() => {
     const abortCtrl = new AbortController();
     if (isVehiclesEnabled) {
-      if (area.zoom > MIN_ZOOM_LEVEL && filter.showVehicles) {
+      if (area.zoom > MIN_ZOOM_LEVEL && filter?.showVehicles) {
         if (needsReload(area.visibleBounds, loadedArea)) {
           setIsLoading(true);
           getVehicles(area, {signal: abortCtrl.signal})
@@ -125,7 +121,6 @@ export const useVehicles = () => {
   return isVehiclesEnabled
     ? {
         vehicles,
-        initialFilter,
         onFilterChange,
         onPress,
         fetchVehicles,
