@@ -109,14 +109,14 @@ const departurePickerAccessibilityLabel = (
 ): string => {
   if (fromTariffZone.venueName)
     return t(
-      TariffZonesTexts.location.departurePicker.a11yLabel.withVenue(
+      TariffZonesTexts.location.zonePicker.a11yLabelFrom.withVenue(
         getReferenceDataName(fromTariffZone, language),
         fromTariffZone.venueName,
       ),
     );
   else {
     return t(
-      TariffZonesTexts.location.departurePicker.a11yLabel.noVenue(
+      TariffZonesTexts.location.zonePicker.a11yLabelFrom.noVenue(
         getReferenceDataName(fromTariffZone, language),
       ),
     );
@@ -130,14 +130,14 @@ const destinationPickerAccessibilityLabel = (
 ): string => {
   if (toTariffZone.venueName)
     return t(
-      TariffZonesTexts.location.destinationPicker.a11yLabel.withVenue(
+      TariffZonesTexts.location.zonePicker.a11yLabelTo.withVenue(
         getReferenceDataName(toTariffZone, language),
         toTariffZone.venueName,
       ),
     );
   else {
     return t(
-      TariffZonesTexts.location.destinationPicker.a11yLabel.noVenue(
+      TariffZonesTexts.location.zonePicker.a11yLabelTo.noVenue(
         getReferenceDataName(toTariffZone, language),
       ),
     );
@@ -151,14 +151,14 @@ const departurePickerValue = (
 ): string => {
   if (fromTariffZone.venueName)
     return t(
-      TariffZonesTexts.location.departurePicker.value.withVenue(
+      TariffZonesTexts.location.zonePicker.value.withVenue(
         getReferenceDataName(fromTariffZone, language),
         fromTariffZone.venueName,
       ),
     );
   else {
     return t(
-      TariffZonesTexts.location.departurePicker.value.noVenue(
+      TariffZonesTexts.location.zonePicker.value.noVenue(
         getReferenceDataName(fromTariffZone, language),
       ),
     );
@@ -171,28 +171,16 @@ const destinationPickerValue = (
   language: Language,
   t: TranslateFunction,
 ): string => {
-  if (fromTariffZone.id === toTariffZone.id && toTariffZone.venueName) {
+  if (toTariffZone.venueName) {
     return t(
-      TariffZonesTexts.location.destinationPicker.value.withVenueSameZone(
-        toTariffZone.venueName,
-      ),
-    );
-  } else if (fromTariffZone.id === toTariffZone.id && !toTariffZone.venueName) {
-    return t(
-      TariffZonesTexts.location.destinationPicker.value.noVenueSameZone(
-        getReferenceDataName(toTariffZone, language),
-      ),
-    );
-  } else if (toTariffZone.venueName) {
-    return t(
-      TariffZonesTexts.location.departurePicker.value.withVenue(
+      TariffZonesTexts.location.zonePicker.value.withVenue(
         getReferenceDataName(toTariffZone, language),
         toTariffZone.venueName,
       ),
     );
   } else {
     return t(
-      TariffZonesTexts.location.departurePicker.value.noVenue(
+      TariffZonesTexts.location.zonePicker.value.noVenue(
         getReferenceDataName(toTariffZone, language),
       ),
     );
@@ -280,8 +268,8 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
       params: {
         label:
           callerRouteParam === 'fromTariffZone'
-            ? t(TariffZonesTexts.location.departurePicker.label)
-            : t(TariffZonesTexts.location.destinationPicker.label),
+            ? t(TariffZonesTexts.location.zonePicker.labelFrom)
+            : t(TariffZonesTexts.location.zonePicker.labelTo),
         callerRouteName: route.name,
         callerRouteParam,
       },
@@ -343,7 +331,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
             label={
               isApplicableOnSingleZoneOnly
                 ? t(TariffZonesTexts.location.singleZone.label)
-                : t(TariffZonesTexts.location.departurePicker.label)
+                : t(TariffZonesTexts.location.zonePicker.labelFrom)
             }
             value={departurePickerValue(selectedZones.from, language, t)}
             accessibilityLabel={departurePickerAccessibilityLabel(
@@ -352,7 +340,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
               t,
             )}
             accessibilityHint={t(
-              TariffZonesTexts.location.departurePicker.a11yHint,
+              TariffZonesTexts.location.zonePicker.a11yHintFrom,
             )}
             onPress={() => onVenueSearchClick('fromTariffZone')}
             icon={
@@ -365,7 +353,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
           />
           {!isApplicableOnSingleZoneOnly && (
             <ButtonSectionItem
-              label={t(TariffZonesTexts.location.destinationPicker.label)}
+              label={t(TariffZonesTexts.location.zonePicker.labelTo)}
               value={destinationPickerValue(
                 selectedZones.from,
                 selectedZones.to,
@@ -378,7 +366,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
                 t,
               )}
               accessibilityHint={t(
-                TariffZonesTexts.location.departurePicker.a11yHint,
+                TariffZonesTexts.location.zonePicker.a11yHintTo,
               )}
               onPress={() => onVenueSearchClick('toTariffZone')}
               icon={
