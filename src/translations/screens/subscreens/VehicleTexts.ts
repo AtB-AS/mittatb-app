@@ -43,4 +43,16 @@ export const ScooterTexts = {
         : _('Ingen oppstartskostnad', 'Free to unlock'),
   },
   unknownOperator: _('Ukjent operatør', 'Unknown operator'),
+  onboarding: {
+    title: _('El-sparkesykler i kartet 🎉', 'Electrical scooters in map 🎉'),
+    body: _(
+      'Nå kan du se alle sparkesyklene i byen på ett sted! Skru på tjenesten i kartet',
+      'You can now see all electric scooters in town in one app! Enable this feature through the map.',
+    ),
+    button: _('Den er grei!', 'Sounds good!'),
+    a11yLabel: _(
+      'Nå kan du se alle el-sparkesyklene i byen på ett sted! Skru på tjenesten i kartet',
+      'You can now see all electric scooters in town in one app! Enable this feature through the map.',
+    ),
+  },
 };
