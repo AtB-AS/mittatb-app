@@ -175,7 +175,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
   },
   vehicleInfoItem: {
     flex: 1,
-    backgroundColor: theme.static.background['background_0'].background,
+    backgroundColor: theme.static.background.background_0.background,
     borderRadius: theme.border.radius.regular,
     padding: theme.spacings.medium,
   },
