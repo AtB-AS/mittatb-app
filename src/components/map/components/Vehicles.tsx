@@ -24,6 +24,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
       id={'vehicles'}
       ref={shapeSource}
       shape={vehicles}
+      tolerance={0}
       cluster
       onPress={async (e) => {
         const [feature, ..._] = e.features;
