@@ -48,6 +48,10 @@ export default function ZonesSelection({
     return <></>;
   }
 
+  const displayAsOneZone =
+    fromTariffZone.id === toTariffZone.id &&
+    fromTariffZone.venueName === toTariffZone.venueName;
+
   return (
     <View style={style}>
       <ThemeText
@@ -71,7 +75,7 @@ export default function ZonesSelection({
           }
           testID="selectZonesButton"
         >
-          {selectionMode === 'single' ? (
+          {displayAsOneZone ? (
             <ZoneLabel tariffZone={fromTariffZone} />
           ) : (
             <>
@@ -135,7 +139,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.small,
   },
   toFromLabel: {
-    minWidth: 36,
+    minWidth: 40,
     marginRight: theme.spacings.small,
   },
 }));
