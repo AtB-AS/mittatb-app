@@ -1,21 +1,25 @@
 import {MapFilter} from '@atb/components/map/types';
-import {useState} from 'react';
+import storage from '@atb/storage';
 
-const defaultFilter: MapFilter = {
+const DEFAULT_FILTER: MapFilter = {
   vehicles: {
     showVehicles: true,
   },
 };
+const STORAGE_KEY = '@ATB_user_map_filters';
 
 export const useUserMapFilters = () => {
-  const [userFilter, setUserFilter] = useState<MapFilter>(defaultFilter);
+  const getMapFilter = () =>
+    storage
+      .get(STORAGE_KEY)
+      .then((storedFilters) =>
+        storedFilters
+          ? (JSON.parse(storedFilters) as MapFilter)
+          : DEFAULT_FILTER,
+      );
 
-  const getMapFilter = () => {
-    return Promise.resolve(userFilter);
-  };
-  const setMapFilter = (f: MapFilter) => {
-    setUserFilter(f);
-  };
+  const setMapFilter = (filters: MapFilter) =>
+    storage.set(STORAGE_KEY, JSON.stringify(filters));
 
   return {
     getMapFilter,

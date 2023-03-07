@@ -53,7 +53,7 @@ export const MapFilter = ({
         showVehicles: !currentFilter.vehicles?.showVehicles,
       },
     };
-    setMapFilter(newFilter);
+    await setMapFilter(newFilter);
     setIconColor(toggleIconColor);
     onFilterChange(newFilter);
   };
