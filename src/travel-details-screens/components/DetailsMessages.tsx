@@ -17,7 +17,6 @@ import {
 import {TripPattern} from '@atb/api/types/trips';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {
-  Mode,
   TariffZone,
   TransportMode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
@@ -27,6 +26,7 @@ import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StyleSheet} from '@atb/theme';
 import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data';
+import {useCanSellCollabTicket} from '@atb/travel-details-screens/components/use-can-sell-collab-ticket';
 
 type TripMessagesProps = {
   tripPattern: TripPattern;
@@ -44,7 +44,7 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
     modesWeSellTicketsFor,
   );
   const styles = useStyles();
-  const canUseCollabTicket = someLegsAreByTrain(tripPattern);
+  const canSellCollabTicket = useCanSellCollabTicket(tripPattern);
   const shortWaitTime = hasShortWaitTime(tripPattern.legs);
   const {enable_ticketing} = useRemoteConfig();
   const isTicketingEnabledAndSomeTicketsAreUnavailableInApp =
@@ -52,16 +52,6 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
   const tripIncludesRailReplacementBus = tripPattern.legs.some(
     (leg) => leg.transportSubmode === TransportSubmode.RailReplacementBus,
   );
-  const tariffZonesHaveZoneA = (tariffZones?: TariffZone[]) =>
-    tariffZones?.some((a) => a.id === 'ATB:TariffZone:1');
-
-  const allLegsInZoneA = tripPattern.legs
-    .filter((a) => a.mode !== Mode.Foot)
-    .every(
-      (a) =>
-        tariffZonesHaveZoneA(a.fromPlace.quay?.tariffZones) &&
-        tariffZonesHaveZoneA(a.toPlace.quay?.tariffZones),
-    );
 
   return (
     <>
@@ -84,7 +74,7 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
           style={styles.messageBox}
           type="info"
           message={
-            canUseCollabTicket && allLegsInZoneA
+            canSellCollabTicket
               ? t(DetailsMessages.messages.collabTicketInfo)
               : t(DetailsMessages.messages.ticketsWeDontSell)
           }
@@ -112,10 +102,6 @@ function translatedError(error: AxiosError, t: TranslateFunction): string {
     default:
       return t(TripDetailsTexts.messages.errorDefault);
   }
-}
-
-function someLegsAreByTrain(tripPattern: TripPattern): boolean {
-  return tripPattern.legs.some((leg) => leg.mode === Mode.Rail);
 }
 
 type TicketingMessagesProps = {

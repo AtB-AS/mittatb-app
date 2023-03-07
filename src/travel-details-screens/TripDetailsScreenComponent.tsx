@@ -9,6 +9,7 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Trip from './components/Trip';
+
 import {
   CompactTravelDetailsMap,
   TravelDetailsMapScreenParams,
@@ -25,6 +26,8 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import {TariffZone} from '@atb/reference-data/types';
 import {addMinutes, formatISO, parseISO} from 'date-fns';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {useCanSellCollabTicket} from '@atb/travel-details-screens/components/use-can-sell-collab-ticket';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -156,7 +159,7 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
   const fromTripsSearchToTicketEnabled = useFromTravelSearchToTicketEnabled();
   const {enable_ticketing} = useRemoteConfig();
 
-  const nonFootLegs = tripPattern.legs.filter((leg) => leg.mode !== 'foot');
+  const nonFootLegs = tripPattern.legs.filter((leg) => leg.mode !== Mode.Foot);
   const fromTariffZones = nonFootLegs[0]?.fromPlace.quay?.tariffZones;
   const toTariffZones =
     nonFootLegs[nonFootLegs.length - 1]?.toPlace.quay?.tariffZones;
@@ -164,6 +167,9 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
     useGetFirstTariffZoneWeSellTicketFor(fromTariffZones);
   const toTariffZoneWeSellTicketFor =
     useGetFirstTariffZoneWeSellTicketFor(toTariffZones);
+
+  const canSellCollabTicket = useCanSellCollabTicket(tripPattern);
+
   if (
     !(
       fromTripsSearchToTicketEnabled &&
@@ -183,7 +189,8 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
     'regionalBus',
     'shuttleBus',
   ]);
-  if (!(enable_ticketing && !someLegsAreNotSingleTicket)) return;
+  if (!enable_ticketing || (someLegsAreNotSingleTicket && !canSellCollabTicket))
+    return;
 
   const tripStartWithBuffer = addMinutes(
     parseISO(nonFootLegs[0]?.aimedStartTime),
