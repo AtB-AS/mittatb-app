@@ -41,6 +41,7 @@ import {SelectPaymentMethod} from './components/SelectPaymentMethodSheet';
 import {usePreviousPaymentMethod} from '../saved-payment-utils';
 import {CardPaymentMethod, PaymentMethod, SavedPaymentOption} from '../types';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
+import analytics from '@react-native-firebase/analytics';
 
 function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
@@ -427,7 +428,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 accessibilityHint={t(
                   PurchaseConfirmationTexts.choosePaymentOption.a11yHint,
                 )}
-                onPress={selectPaymentMethod}
+                onPress={() => {
+                  params.mode === 'TravelSearch' &&
+                    analytics().logEvent('purchase_from_travel_search');
+                  selectPaymentMethod;
+                }}
                 viewContainerStyle={styles.paymentButton}
                 testID="choosePaymentOptionButton"
               />
