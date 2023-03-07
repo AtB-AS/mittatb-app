@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Button} from '@atb/components/button';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {MapFilter as MapFilterType} from '../types';
-import * as EnturTransportationIcons from '@atb/assets/svg/mono-icons/transportation-entur';
+import {Scooter} from '@atb/assets/svg/mono-icons/transportation-entur';
 import {InteractiveColor} from '@atb/theme/colors';
 import {StyleSheet} from '@atb/theme';
 import {shadows} from '@atb/components/map';
@@ -68,7 +68,7 @@ export const MapFilter = ({
       accessibilityLabel={t(MapTexts.controls.filter.vehicles.a11yLabel)}
       accessibilityHint={t(MapTexts.controls.filter.vehicles.a11yHint)}
       onPress={onScooterToggle}
-      leftIcon={{svg: isLoading ? Duration : EnturTransportationIcons.Scooter}}
+      leftIcon={{svg: isLoading ? Duration : Scooter}}
       style={styles.filterButton}
     />
   );
