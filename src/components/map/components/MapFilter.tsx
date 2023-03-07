@@ -6,7 +6,7 @@ import * as EnturTransportationIcons from '@atb/assets/svg/mono-icons/transporta
 import {InteractiveColor} from '@atb/theme/colors';
 import {StyleSheet} from '@atb/theme';
 import {shadows} from '@atb/components/map';
-import {Spinner} from '@atb/assets/svg/mono-icons/status';
+import {Duration} from '@atb/assets/svg/mono-icons/time';
 
 type MapFilterProps = {
   isLoading: boolean;
@@ -61,11 +61,12 @@ export const MapFilter = ({
       type="inline"
       compact={true}
       interactiveColor={iconColor}
+      disabled={isLoading}
       accessibilityRole="button"
       accessibilityLabel={t(MapTexts.controls.filter.vehicles.a11yLabel)}
       accessibilityHint={t(MapTexts.controls.filter.vehicles.a11yHint)}
       onPress={onScooterToggle}
-      leftIcon={{svg: isLoading ? Spinner : EnturTransportationIcons.Scooter}}
+      leftIcon={{svg: isLoading ? Duration : EnturTransportationIcons.Scooter}}
       style={styles.filterButton}
     />
   );
