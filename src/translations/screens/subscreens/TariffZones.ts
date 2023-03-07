@@ -3,7 +3,7 @@ import {translation as _} from '../../commons';
 const TariffZonesTexts = {
   header: {
     title: {
-      singleZone: _('Velg holdeplass/sone', 'Select stop/zone'), // see that both singular and plural works
+      singleZone: _('Velg holdeplass/sone', 'Select stop/zone'),
       multipleZone: _('Velg holdeplasser/soner', 'Select stops/zones'),
     },
   },
@@ -68,8 +68,8 @@ const TariffZonesTexts = {
           ),
         withVenue: (zoneName: string, venueName: string) =>
           _(
-            `Valgt ankomstsone er ${zoneName} basert på stoppested ${venueName}`,
-            'Selected zone of arrival is ${zoneName} based on stop place ${venueName}',
+            `Valgt stoppested er ${venueName} basert på ankomstsone ${zoneName}`,
+            `Selected stop place of arrival is ${venueName} based on zone ${zoneName}`,
           ),
       },
       a11yHintFrom: _(
