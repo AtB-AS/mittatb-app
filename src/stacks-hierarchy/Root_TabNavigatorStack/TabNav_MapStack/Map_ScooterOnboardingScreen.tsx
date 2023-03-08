@@ -8,7 +8,7 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import storage, {StorageModelKeysEnum} from '@atb/storage';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
-import {DeparturesOnboarding} from '@atb/assets/svg/color/images';
+import {ScooterOnboarding} from '@atb/assets/svg/color/images';
 import {MapScreenProps} from './navigation-types';
 import {ScooterTexts} from '@atb/translations/screens/subscreens/VehicleTexts';
 
@@ -47,7 +47,7 @@ export const Map_ScooterOnboardingScreen = ({navigation}: Props) => {
             {t(ScooterTexts.onboarding.title)}
           </ThemeText>
           <View style={styles.illustration}>
-            <DeparturesOnboarding />
+            <ScooterOnboarding />
           </View>
           <ThemeText color={themeColor} style={styles.body}>
             {t(ScooterTexts.onboarding.body)}
