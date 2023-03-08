@@ -192,6 +192,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 preassignedFareProduct,
                 travelDate,
                 headerLeftButton: {type: 'back'},
+                mode: params.mode,
               })
             }
             style={styles.summary}

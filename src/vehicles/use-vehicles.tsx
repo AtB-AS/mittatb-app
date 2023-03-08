@@ -14,11 +14,15 @@ import {
 } from '@atb/components/map/utils';
 import {getVehicles} from '@atb/api/vehicles';
 import {useIsVehiclesEnabled} from '@atb/vehicles/use-vehicles-enabled';
-import {MapSelectionActionType} from '@atb/components/map/types';
+import {
+  MapSelectionActionType,
+  VehiclesFilter,
+} from '@atb/components/map/types';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {extend, getRadius, isVehicle, needsReload} from '@atb/vehicles/utils';
 import {ScooterSheet} from '@atb/vehicles/components/ScooterSheet';
 import {RegionPayload} from '@rnmapbox/maps';
+import {useUserMapFilters} from '@atb/components/map/hooks/use-map-filter';
 
 const MIN_ZOOM_LEVEL = 13.5;
 const BUFFER_DISTANCE_IN_METERS = 500;
@@ -40,21 +44,33 @@ export const useVehicles = () => {
     useState<Feature<Polygon | MultiPolygon>>();
 
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const isVehiclesEnabled = useIsVehiclesEnabled();
+  const {getMapFilter} = useUserMapFilters();
 
   const [vehicles, setVehicles] = useState<
     FeatureCollection<GeoJSON.Point, VehicleFragment>
   >(toFeatureCollection([]));
-  const isVehiclesEnabled = useIsVehiclesEnabled();
+
+  const [filter, setFilter] = useState<VehiclesFilter>();
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    getMapFilter().then((initialFilter) => {
+      setFilter(initialFilter.vehicles);
+    });
+  }, [isVehiclesEnabled]);
 
   useEffect(() => {
     const abortCtrl = new AbortController();
     if (isVehiclesEnabled) {
-      if (area.zoom > MIN_ZOOM_LEVEL) {
+      if (area.zoom > MIN_ZOOM_LEVEL && filter?.showVehicles) {
         if (needsReload(area.visibleBounds, loadedArea)) {
+          setIsLoading(true);
           getVehicles(area, {signal: abortCtrl.signal})
             .then(toFeaturePoints)
             .then(toFeatureCollection)
             .then(setVehicles)
+            .then(() => setIsLoading(false))
             .then(() => {
               setLoadedArea(
                 extend(
@@ -70,7 +86,7 @@ export const useVehicles = () => {
       }
     }
     return () => abortCtrl.abort();
-  }, [area, isVehiclesEnabled]);
+  }, [area, isVehiclesEnabled, filter]);
 
   const fetchVehicles = async (
     region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
@@ -88,6 +104,10 @@ export const useVehicles = () => {
     });
   };
 
+  const onFilterChange = (filter: VehiclesFilter) => {
+    setFilter(filter);
+  };
+
   const onPress = (type: MapSelectionActionType) => {
     if (type.source !== 'map-click') return;
     const vehicle = type.feature.properties;
@@ -98,5 +118,13 @@ export const useVehicles = () => {
     }
   };
 
-  return {vehicles, onPress, fetchVehicles};
+  return isVehiclesEnabled
+    ? {
+        vehicles,
+        onFilterChange,
+        onPress,
+        fetchVehicles,
+        isLoading,
+      }
+    : undefined;
 };

@@ -80,28 +80,6 @@ export const tariffZonesSummary = (
   }
 };
 
-export const tariffZonesDescription = (
-  fromTariffZone: TariffZone,
-  toTariffZone: TariffZone,
-  language: Language,
-  t: TranslateFunction,
-): string => {
-  if (fromTariffZone.id === toTariffZone.id) {
-    return t(
-      TariffZonesTexts.zoneDescription.text.singleZone(
-        getReferenceDataName(fromTariffZone, language),
-      ),
-    );
-  } else {
-    return t(
-      TariffZonesTexts.zoneDescription.text.multipleZone(
-        getReferenceDataName(fromTariffZone, language),
-        getReferenceDataName(toTariffZone, language),
-      ),
-    );
-  }
-};
-
 const departurePickerAccessibilityLabel = (
   fromTariffZone: TariffZoneWithMetadata,
   language: Language,
@@ -262,6 +240,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
     navigation.navigate({
       name: 'Root_PurchaseOverviewScreen',
       params: {
+        mode: 'Ticket',
         fareProductTypeConfig,
         fromTariffZone: selectedZones.from,
         toTariffZone: isApplicableOnSingleZoneOnly
