@@ -58,28 +58,6 @@ type TariffZoneSelection = {
 
 type Props = RootStackScreenProps<'Root_PurchaseTariffZonesSearchByMapScreen'>;
 
-export const tariffZonesSummary = (
-  fromTariffZone: TariffZone,
-  toTariffZone: TariffZone,
-  language: Language,
-  t: TranslateFunction,
-): string => {
-  if (fromTariffZone.id === toTariffZone.id) {
-    return t(
-      TariffZonesTexts.zoneSummary.text.singleZone(
-        getReferenceDataName(fromTariffZone, language),
-      ),
-    );
-  } else {
-    return t(
-      TariffZonesTexts.zoneSummary.text.multipleZone(
-        getReferenceDataName(fromTariffZone, language),
-        getReferenceDataName(toTariffZone, language),
-      ),
-    );
-  }
-};
-
 const departurePickerAccessibilityLabel = (
   fromTariffZone: TariffZoneWithMetadata,
   language: Language,

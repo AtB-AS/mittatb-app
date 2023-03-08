@@ -5,10 +5,7 @@ import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
-import {
-  tariffZonesSummary,
-  TariffZoneWithMetadata,
-} from '../../Root_PurchaseTariffZonesSearchByMapScreen';
+import {TariffZoneWithMetadata} from '../../Root_PurchaseTariffZonesSearchByMapScreen';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 
 type ZonesSelectionProps = {
