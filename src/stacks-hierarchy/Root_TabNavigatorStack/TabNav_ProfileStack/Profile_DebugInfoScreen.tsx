@@ -195,6 +195,15 @@ export const Profile_DebugInfoScreen = () => {
               )
             }
           />
+          <Sections.LinkSectionItem
+            text="Reset has read scooter onboarding"
+            onPress={() =>
+              storage.set(
+                StorageModelKeysEnum.HasReadScooterOnboarding,
+                JSON.stringify(false),
+              )
+            }
+          />
         </Sections.Section>
         <Sections.Section withPadding withTopPadding>
           <Sections.HeaderSectionItem
