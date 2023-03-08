@@ -1,6 +1,7 @@
 import OnboardingPage from '../pageobjects/onboarding.page';
 import AppHelper from '../utils/app.helper';
 import ElementHelper from '../utils/element.helper';
+import { HeadingTexts } from "../texts";
 
 describe('Onboarding', () => {
   before(async () => {
@@ -20,10 +21,9 @@ describe('Onboarding', () => {
 
       await OnboardingPage.denyLocation();
 
-      await ElementHelper.waitForElement('text', 'Travel search');
-      await expect(
-        ElementHelper.getElementText('Travel search'),
-      ).toHaveTextContaining('Travel search');
+      await ElementHelper.waitForElement('id', 'dashboardScrollView');
+      //await ElementHelper.expectText(ONBOARDING_heading);
+      await ElementHelper.expectText(HeadingTexts.travelsearch);
     } catch (errMsg) {
       await AppHelper.screenshot('error_onboarding_should_onboard');
       throw errMsg;
