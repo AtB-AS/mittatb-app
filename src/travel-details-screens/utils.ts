@@ -1,11 +1,16 @@
 import {secondsBetween} from '@atb/utils/date';
-import {Leg} from '@atb/api/types/trips';
+import {Leg, TripPattern} from '@atb/api/types/trips';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {iterateWithNext} from '@atb/utils/array';
 import {differenceInSeconds, parseISO} from 'date-fns';
+import {
+  Mode,
+  TariffZone,
+} from '@atb/api/types/generated/journey_planner_v3_types';
+import {APP_ORG} from '@env';
 
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
 
@@ -136,4 +141,22 @@ export function isSignificantFootLegWalkOrWaitTime(leg: Leg, nextLeg?: Leg) {
   const mustWait = showWaitTime && significantWaitTime(waitTimeInSeconds);
 
   return mustWait || mustWalk;
+}
+
+export function canSellCollabTicket(tripPattern: TripPattern) {
+  const someLegsByTrain = someLegsAreByTrain(tripPattern);
+  const tariffZonesHaveZoneA = (tariffZones?: TariffZone[]) =>
+    tariffZones?.some((a) => a.id === 'ATB:TariffZone:1');
+  const allLegsInZoneA = tripPattern.legs
+    .filter((a) => a.mode !== Mode.Foot)
+    .every(
+      (a) =>
+        tariffZonesHaveZoneA(a.fromPlace.quay?.tariffZones) &&
+        tariffZonesHaveZoneA(a.toPlace.quay?.tariffZones),
+    );
+  return someLegsByTrain && allLegsInZoneA && APP_ORG === 'atb';
+}
+
+function someLegsAreByTrain(tripPattern: TripPattern): boolean {
+  return tripPattern.legs.some((leg) => leg.mode === Mode.Rail);
 }
