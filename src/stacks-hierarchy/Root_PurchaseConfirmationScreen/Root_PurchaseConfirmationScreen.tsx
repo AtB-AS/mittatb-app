@@ -266,94 +266,97 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             />
           )}
 
-          <View>
-            <Sections.Section>
-              {travellerSelectionMode !== 'none' && (
-                <Sections.GenericSectionItem>
-                  {userProfilesWithCountAndOffer.map((u, i) => (
-                    <PricePerUserProfile
-                      key={u.id}
-                      userProfile={u}
-                      style={i != 0 ? styles.smallTopMargin : undefined}
-                    />
-                  ))}
-                </Sections.GenericSectionItem>
-              )}
-              <Sections.GenericSectionItem>
-                <View accessible={true}>
-                  <ThemeText>
-                    {getReferenceDataName(preassignedFareProduct, language)}
-                  </ThemeText>
-                  {zoneSelectionMode !== 'none' ? (
-                    <ThemeText
-                      style={styles.smallTopMargin}
-                      type="body__secondary"
-                      color="secondary"
-                    >
-                      {fromTariffZone.id === toTariffZone.id
-                        ? t(
-                            PurchaseConfirmationTexts.validityTexts.zone.single(
-                              getReferenceDataName(fromTariffZone, language),
-                            ),
-                          )
-                        : t(
-                            PurchaseConfirmationTexts.validityTexts.zone.multiple(
-                              getReferenceDataName(fromTariffZone, language),
-                              getReferenceDataName(toTariffZone, language),
-                            ),
-                          )}
-                    </ThemeText>
-                  ) : (
-                    <ThemeText
-                      style={styles.smallTopMargin}
-                      type="body__secondary"
-                      color="secondary"
-                    >
-                      {getTextForLanguage(
-                        preassignedFareProduct.description ?? [],
-                        language,
+          <View style={styles.summaryContainer}>
+            <View accessible={true}>
+              <ThemeText>
+                {getReferenceDataName(preassignedFareProduct, language)}
+              </ThemeText>
+              {zoneSelectionMode !== 'none' ? (
+                <ThemeText
+                  style={styles.smallTopMargin}
+                  type="body__secondary"
+                  color="secondary"
+                >
+                  {fromTariffZone.id === toTariffZone.id
+                    ? t(
+                        PurchaseConfirmationTexts.validityTexts.zone.single(
+                          getReferenceDataName(fromTariffZone, language),
+                        ),
+                      )
+                    : t(
+                        PurchaseConfirmationTexts.validityTexts.zone.multiple(
+                          getReferenceDataName(fromTariffZone, language),
+                          getReferenceDataName(toTariffZone, language),
+                        ),
                       )}
-                    </ThemeText>
+                </ThemeText>
+              ) : (
+                <ThemeText
+                  style={styles.smallTopMargin}
+                  type="body__secondary"
+                  color="secondary"
+                >
+                  {getTextForLanguage(
+                    preassignedFareProduct.description ?? [],
+                    language,
                   )}
-                  <ThemeText
-                    style={styles.smallTopMargin}
-                    type="body__secondary"
-                    color="secondary"
-                  >
-                    {travelDateText}
+                </ThemeText>
+              )}
+              <ThemeText
+                style={styles.smallTopMargin}
+                type="body__secondary"
+                color="secondary"
+              >
+                {travelDateText}
+              </ThemeText>
+            </View>
+          </View>
+        </View>
+        <View>
+          <Sections.Section>
+            {travellerSelectionMode !== 'none' && (
+              <Sections.GenericSectionItem>
+                {userProfilesWithCountAndOffer.map((u, i) => (
+                  <PricePerUserProfile
+                    key={u.id}
+                    userProfile={u}
+                    style={i != 0 ? styles.smallTopMargin : undefined}
+                  />
+                ))}
+              </Sections.GenericSectionItem>
+            )}
+            <Sections.GenericSectionItem>
+              <View style={styles.totalContainer} accessible={true}>
+                <View style={styles.totalContainerHeadings}>
+                  <ThemeText type="body__primary">
+                    {t(PurchaseConfirmationTexts.totalCost.title)}
+                  </ThemeText>
+                  <ThemeText type="body__tertiary" color="secondary">
+                    {t(
+                      PurchaseConfirmationTexts.totalCost.label(
+                        vatPercentString,
+                        vatAmountString,
+                      ),
+                    )}
                   </ThemeText>
                 </View>
-              </Sections.GenericSectionItem>
-            </Sections.Section>
-          </View>
-        </View>
-        <View style={styles.totalContainer} accessible={true}>
-          <View style={styles.totalContainerHeadings}>
-            <ThemeText type="body__primary">
-              {t(PurchaseConfirmationTexts.totalCost.title)}
-            </ThemeText>
-            <ThemeText type="body__tertiary" color="secondary">
-              {t(
-                PurchaseConfirmationTexts.totalCost.label(
-                  vatPercentString,
-                  vatAmountString,
-                ),
-              )}
-            </ThemeText>
-          </View>
 
-          {!isSearchingOffer ? (
-            <ThemeText type="body__primary--jumbo">
-              {totalPriceString} kr
-            </ThemeText>
-          ) : (
-            <ActivityIndicator
-              size={theme.spacings.medium}
-              color={theme.text.colors.primary}
-              style={{margin: theme.spacings.medium}}
-            />
-          )}
+                {!isSearchingOffer ? (
+                  <ThemeText type="body__primary--jumbo">
+                    {totalPriceString} kr
+                  </ThemeText>
+                ) : (
+                  <ActivityIndicator
+                    size={theme.spacings.medium}
+                    color={theme.text.colors.primary}
+                    style={{margin: theme.spacings.medium}}
+                  />
+                )}
+              </View>
+            </Sections.GenericSectionItem>
+          </Sections.Section>
         </View>
+
         <MessageBox
           type="info"
           message={
@@ -545,12 +548,21 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   userProfileOriginalPriceAmount: {
     textDecorationLine: 'line-through',
   },
-  totalContainer: {
+  summaryContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     padding: theme.spacings.medium,
     marginVertical: theme.spacings.medium,
+    backgroundColor: theme.static.background.background_0.background,
+    borderRadius: theme.border.radius.regular,
+  },
+  totalContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    // padding: theme.spacings.medium,
+    // marginVertical: theme.spacings.medium,
     backgroundColor: theme.static.background.background_0.background,
     borderRadius: theme.border.radius.regular,
   },
