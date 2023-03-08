@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {Text, View} from 'react-native';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
@@ -7,6 +7,8 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {productIsSellableInApp} from '@atb/reference-data/utils';
 import FareProductTile from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareProducts/AvailableFareProducts/FareProductTile';
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
+import TicketAssistant from '../../TicketingAssistant/TicketAssistant';
+import {useTicketingAssistant} from '../../TicketingAssistant/use-ticketing-assistant';
 
 export const AvailableFareProducts = ({
   onProductSelect,
@@ -37,6 +39,13 @@ export const AvailableFareProducts = ({
     return grouped;
   }, []);
 
+  const ticketAssistantConfig = {
+    name: 'ticketAssistant',
+    description: 'ticketAssistantDescription',
+  };
+
+  const useTicketAssistant = useTicketingAssistant();
+
   return (
     <View style={styles.container}>
       <ThemeText type="body__secondary" style={styles.heading}>
@@ -62,6 +71,15 @@ export const AvailableFareProducts = ({
           )}
         </View>
       ))}
+      {useTicketAssistant && (
+        <TicketAssistant
+          config={ticketAssistantConfig}
+          onPress={() => {
+            console.log('ticketAssistant pressed');
+          }}
+          testID="ticketAssistant"
+        />
+      )}
     </View>
   );
 };
