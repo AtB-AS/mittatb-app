@@ -21,6 +21,8 @@ export const config: WebdriverIO.Config = {
     capabilities: [{
       //appiumVersion: '',
       platformName: 'Android',
+      'appium:language': 'en',
+      'appium:locale': 'US',
       //noReset: true,
       //fullReset: false,
       maxInstances: 1,
