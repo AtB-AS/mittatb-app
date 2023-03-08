@@ -9,7 +9,6 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Trip from './components/Trip';
-
 import {
   CompactTravelDetailsMap,
   TravelDetailsMapScreenParams,
