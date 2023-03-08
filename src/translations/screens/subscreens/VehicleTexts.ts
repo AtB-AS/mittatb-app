@@ -39,7 +39,7 @@ export const ScooterTexts = {
   pricingPlan: {
     price: (price: number) =>
       price > 0
-        ? _(`+ ${price} kr oppstart`, `+ ${price} kr to unlock`)
+        ? _(`+ ${price} kr for oppstart`, `+ ${price} kr to unlock`)
         : _('Ingen oppstartskostnad', 'Free to unlock'),
   },
   unknownOperator: _('Ukjent operatør', 'Unknown operator'),
