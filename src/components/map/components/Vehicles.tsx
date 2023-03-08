@@ -4,11 +4,12 @@ import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import MapboxGL from '@rnmapbox/maps';
 import {MapSelectionActionType} from '@atb/components/map/types';
 import {
-  fitBounds,
   flyToLocation,
   isClusterFeature,
   isFeatureCollection,
   isFeaturePoint,
+  toCoordinates,
+  zoomToCluster,
 } from '@atb/components/map/utils';
 
 type Props = {
@@ -19,6 +20,7 @@ type Props = {
 
 export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
   const shapeSource = useRef<MapboxGL.ShapeSource>(null);
+
   return (
     <MapboxGL.ShapeSource
       id={'vehicles'}
@@ -33,12 +35,13 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
             feature,
           );
           if (isFeatureCollection(children)) {
-            const {from, to} = await getClusterChildrenBounds(children);
-            fitBounds(from, to, mapCameraRef);
+            await zoomToCluster(children, mapCameraRef);
           }
         } else if (isFeaturePoint(feature)) {
-          const [longitude, latitude] = feature.geometry.coordinates;
-          flyToLocation({longitude, latitude}, mapCameraRef);
+          flyToLocation(
+            toCoordinates(feature.geometry.coordinates),
+            mapCameraRef,
+          );
           onPress({
             source: 'map-click',
             feature,
@@ -82,35 +85,4 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
       />
     </MapboxGL.ShapeSource>
   );
-};
-
-const getClusterChildrenBounds = async (
-  featureCollection: FeatureCollection,
-) => {
-  const points = featureCollection.features
-    .map((f) => (isFeaturePoint(f) ? f.geometry.coordinates : null))
-    .filter((f) => f);
-
-  const longitudes = points
-    .map((p) => {
-      const [lon, _] = p ?? [];
-      return lon;
-    })
-    .sort();
-  const [minLon] = longitudes.slice(0, 1);
-  const [maxLon] = longitudes.slice(-1);
-
-  const latitudes = points
-    .map((p) => {
-      const [_, lat] = p ?? [];
-      return lat;
-    })
-    .sort();
-  const [minLat] = latitudes.slice(0, 1);
-  const [maxLat] = latitudes.slice(-1);
-
-  return {
-    from: {longitude: minLon, latitude: minLat},
-    to: {longitude: maxLon, latitude: maxLat},
-  };
 };
