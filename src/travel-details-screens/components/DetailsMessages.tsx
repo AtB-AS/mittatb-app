@@ -20,13 +20,15 @@ import {
   TariffZone,
   TransportMode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {hasShortWaitTime} from '@atb/travel-details-screens/utils';
+import {
+  canSellCollabTicket,
+  hasShortWaitTime,
+} from '@atb/travel-details-screens/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StyleSheet} from '@atb/theme';
 import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data';
-import {useCanSellCollabTicket} from '@atb/travel-details-screens/components/use-can-sell-collab-ticket';
 
 type TripMessagesProps = {
   tripPattern: TripPattern;
@@ -44,7 +46,7 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
     modesWeSellTicketsFor,
   );
   const styles = useStyles();
-  const canSellCollabTicket = useCanSellCollabTicket(tripPattern);
+  const canSellCollab = canSellCollabTicket(tripPattern);
   const shortWaitTime = hasShortWaitTime(tripPattern.legs);
   const {enable_ticketing} = useRemoteConfig();
   const isTicketingEnabledAndSomeTicketsAreUnavailableInApp =
@@ -74,7 +76,7 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
           style={styles.messageBox}
           type="info"
           message={
-            canSellCollabTicket
+            canSellCollab
               ? t(DetailsMessages.messages.collabTicketInfo)
               : t(DetailsMessages.messages.ticketsWeDontSell)
           }

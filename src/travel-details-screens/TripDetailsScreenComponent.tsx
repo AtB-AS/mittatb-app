@@ -26,8 +26,8 @@ import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_Purc
 import {TariffZone} from '@atb/reference-data/types';
 import {addMinutes, formatISO, parseISO} from 'date-fns';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {useCanSellCollabTicket} from '@atb/travel-details-screens/components/use-can-sell-collab-ticket';
 import analytics from '@react-native-firebase/analytics';
+import {canSellCollabTicket} from '@atb/travel-details-screens/utils';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -169,7 +169,7 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
   const toTariffZoneWeSellTicketFor =
     useGetFirstTariffZoneWeSellTicketFor(toTariffZones);
 
-  const canSellCollabTicket = useCanSellCollabTicket(tripPattern);
+  const canSellCollab = canSellCollabTicket(tripPattern);
 
   if (
     !(
@@ -190,7 +190,7 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
     'regionalBus',
     'shuttleBus',
   ]);
-  if (!enable_ticketing || (someLegsAreNotSingleTicket && !canSellCollabTicket))
+  if (!enable_ticketing || (someLegsAreNotSingleTicket && !canSellCollab))
     return;
 
   const tripStartWithBuffer = addMinutes(
