@@ -26,6 +26,7 @@ import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_Purc
 import {TariffZone} from '@atb/reference-data/types';
 import {addMinutes, formatISO, parseISO} from 'date-fns';
 import analytics from '@react-native-firebase/analytics';
+import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -131,14 +132,8 @@ export const TripDetailsScreenComponent = ({
               analytics().logEvent('click_trip_purchase_button');
               onPressBuyTicket({
                 fareProductTypeConfig: singleTicketConfig,
-                fromTariffZone: {
-                  resultType: 'zone',
-                  ...tripTicketDetails.tariffZoneFrom,
-                },
-                toTariffZone: {
-                  resultType: 'zone',
-                  ...tripTicketDetails.tariffZoneTo,
-                },
+                fromTariffZone: tripTicketDetails.tariffZoneFrom,
+                toTariffZone: tripTicketDetails.tariffZoneTo,
                 travelDate: tripTicketDetails.ticketStartTime,
                 mode: 'TravelSearch',
               });
@@ -195,9 +190,21 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
     tripStartWithBuffer.getTime() <= Date.now()
       ? undefined
       : formatISO(tripStartWithBuffer);
+
+  const tariffZoneTo: TariffZoneWithMetadata = {
+    resultType: 'zone',
+    venueName: nonFootLegs[nonFootLegs.length - 1]?.fromPlace?.name,
+    ...toTariffZoneWeSellTicketFor,
+  };
+  const tariffZoneFrom: TariffZoneWithMetadata = {
+    resultType: 'zone',
+    venueName: nonFootLegs[0]?.fromPlace?.name,
+    ...fromTariffZoneWeSellSingleTicketsFor,
+  };
+
   return {
-    tariffZoneFrom: fromTariffZoneWeSellSingleTicketsFor,
-    tariffZoneTo: toTariffZoneWeSellTicketFor,
+    tariffZoneFrom,
+    tariffZoneTo,
     ticketStartTime,
   };
 }
