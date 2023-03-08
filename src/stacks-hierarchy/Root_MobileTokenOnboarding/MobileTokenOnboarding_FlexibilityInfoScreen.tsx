@@ -1,4 +1,4 @@
-import TravelPlanning from '@atb/assets/svg/color/images/TravelPlanning';
+import TravelPlanning from '@atb/assets/svg/color/images/light/TravelPlanning';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
