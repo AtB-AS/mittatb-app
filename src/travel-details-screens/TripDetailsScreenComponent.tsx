@@ -28,6 +28,7 @@ import {addMinutes, formatISO, parseISO} from 'date-fns';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import analytics from '@react-native-firebase/analytics';
 import {canSellCollabTicket} from '@atb/travel-details-screens/utils';
+import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -133,14 +134,8 @@ export const TripDetailsScreenComponent = ({
               analytics().logEvent('click_trip_purchase_button');
               onPressBuyTicket({
                 fareProductTypeConfig: singleTicketConfig,
-                fromTariffZone: {
-                  resultType: 'zone',
-                  ...tripTicketDetails.tariffZoneFrom,
-                },
-                toTariffZone: {
-                  resultType: 'zone',
-                  ...tripTicketDetails.tariffZoneTo,
-                },
+                fromTariffZone: tripTicketDetails.tariffZoneFrom,
+                toTariffZone: tripTicketDetails.tariffZoneTo,
                 travelDate: tripTicketDetails.ticketStartTime,
                 mode: 'TravelSearch',
               });
@@ -180,6 +175,17 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
   )
     return;
 
+  const tariffZoneTo: TariffZoneWithMetadata = {
+    resultType: 'zone',
+    venueName: nonFootLegs[nonFootLegs.length - 1]?.fromPlace?.name,
+    ...toTariffZoneWeSellTicketFor,
+  };
+  const tariffZoneFrom: TariffZoneWithMetadata = {
+    resultType: 'zone',
+    venueName: nonFootLegs[0]?.fromPlace?.name,
+    ...fromTariffZoneWeSellSingleTicketsFor,
+  };
+
   // modes we can sell single tickets for. Might not always match modes we sell tickets for,
   // as from travel search to ticket currently only supports single ticket
   const someLegsAreNotSingleTicket = hasLegsWeCantSellTicketsFor(tripPattern, [
@@ -201,9 +207,10 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
     tripStartWithBuffer.getTime() <= Date.now()
       ? undefined
       : formatISO(tripStartWithBuffer);
+
   return {
-    tariffZoneFrom: fromTariffZoneWeSellSingleTicketsFor,
-    tariffZoneTo: toTariffZoneWeSellTicketFor,
+    tariffZoneFrom,
+    tariffZoneTo,
     ticketStartTime,
   };
 }
