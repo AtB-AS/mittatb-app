@@ -2,7 +2,12 @@ import {screenReaderPause, ThemeText} from '@atb/components/text';
 import * as Sections from '@atb/components/sections';
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {StyleSheet} from '@atb/theme';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {
+  Language,
+  PurchaseOverviewTexts,
+  TranslateFunction,
+  useTranslation,
+} from '@atb/translations';
 import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {TariffZoneWithMetadata} from '../../Root_PurchaseTariffZonesSearchByMapScreen';
@@ -34,9 +39,8 @@ export default function ZonesSelection({
     accessible: true,
     accessibilityRole: 'button',
     accessibilityLabel:
-      tariffZonesSummary(fromTariffZone, toTariffZone, language, t) +
-      screenReaderPause,
-    accessibilityHint: t(PurchaseOverviewTexts.tariffZones.a11yHint),
+      a11yLabel(fromTariffZone, toTariffZone, language, t) + screenReaderPause,
+    accessibilityHint: t(PurchaseOverviewTexts.zones.a11yHint),
   };
 
   const selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
@@ -119,6 +123,35 @@ const ZoneLabel = ({tariffZone}: {tariffZone: TariffZoneWithMetadata}) => {
   ) : (
     <ThemeText type="body__primary--bold">{zoneLabel}</ThemeText>
   );
+};
+
+const a11yLabel = (
+  from: TariffZoneWithMetadata,
+  to: TariffZoneWithMetadata,
+  language: Language,
+  t: TranslateFunction,
+): string => {
+  const displayAsOneZone = from.id === to.id && from.venueName === to.venueName;
+
+  const getZoneText = (tz: TariffZoneWithMetadata) => {
+    const venueName = tz.venueName ? `${tz.venueName}, ` : '';
+    const zoneName = getReferenceDataName(tz, language);
+    return venueName + t(PurchaseOverviewTexts.zones.zoneName(zoneName));
+  };
+
+  if (displayAsOneZone) {
+    const prefix = t(PurchaseOverviewTexts.zones.a11yLabelPrefixSingle);
+    return `${prefix} ${getZoneText(from)}`;
+  } else {
+    const prefix = t(PurchaseOverviewTexts.zones.a11yLabelPrefixMultiple);
+    const fromLabel = `${t(
+      PurchaseOverviewTexts.zones.label.from,
+    )} ${getZoneText(from)}`;
+    const toLabel = `${t(PurchaseOverviewTexts.zones.label.to)} ${getZoneText(
+      to,
+    )}`;
+    return `${prefix} ${fromLabel}, ${toLabel}`;
+  }
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
