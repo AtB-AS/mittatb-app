@@ -250,7 +250,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         leftButton={headerLeftButton}
         globalMessageContext="app-ticketing"
       />
-
       <ScrollView style={styles.infoSection}>
         <View>
           {error && (
@@ -265,97 +264,97 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               style={styles.errorMessage}
             />
           )}
-
-          <View style={styles.summaryContainer}>
-            <View accessible={true}>
-              <ThemeText>
-                {getReferenceDataName(preassignedFareProduct, language)}
-              </ThemeText>
-              {zoneSelectionMode !== 'none' ? (
-                <ThemeText
-                  style={styles.smallTopMargin}
-                  type="body__secondary"
-                  color="secondary"
-                >
-                  {fromTariffZone.id === toTariffZone.id
-                    ? t(
-                        PurchaseConfirmationTexts.validityTexts.zone.single(
-                          getReferenceDataName(fromTariffZone, language),
-                        ),
-                      )
-                    : t(
-                        PurchaseConfirmationTexts.validityTexts.zone.multiple(
-                          getReferenceDataName(fromTariffZone, language),
-                          getReferenceDataName(toTariffZone, language),
-                        ),
-                      )}
-                </ThemeText>
-              ) : (
-                <ThemeText
-                  style={styles.smallTopMargin}
-                  type="body__secondary"
-                  color="secondary"
-                >
-                  {getTextForLanguage(
-                    preassignedFareProduct.description ?? [],
-                    language,
-                  )}
-                </ThemeText>
-              )}
-              <ThemeText
-                style={styles.smallTopMargin}
-                type="body__secondary"
-                color="secondary"
-              >
-                {travelDateText}
-              </ThemeText>
-            </View>
-          </View>
-        </View>
-        <View>
           <Sections.Section>
-            {travellerSelectionMode !== 'none' && (
-              <Sections.GenericSectionItem>
-                {userProfilesWithCountAndOffer.map((u, i) => (
-                  <PricePerUserProfile
-                    key={u.id}
-                    userProfile={u}
-                    style={i != 0 ? styles.smallTopMargin : undefined}
-                  />
-                ))}
-              </Sections.GenericSectionItem>
-            )}
             <Sections.GenericSectionItem>
-              <View style={styles.totalContainer} accessible={true}>
-                <View style={styles.totalContainerHeadings}>
-                  <ThemeText type="body__primary">
-                    {t(PurchaseConfirmationTexts.totalCost.title)}
-                  </ThemeText>
-                  <ThemeText type="body__tertiary" color="secondary">
-                    {t(
-                      PurchaseConfirmationTexts.totalCost.label(
-                        vatPercentString,
-                        vatAmountString,
-                      ),
-                    )}
-                  </ThemeText>
-                </View>
-
-                {!isSearchingOffer ? (
-                  <ThemeText type="body__primary--jumbo">
-                    {totalPriceString} kr
+              <View accessible={true}>
+                <ThemeText>
+                  {getReferenceDataName(preassignedFareProduct, language)}
+                </ThemeText>
+                {zoneSelectionMode !== 'none' ? (
+                  <ThemeText
+                    style={styles.smallTopMargin}
+                    type="body__secondary"
+                    color="secondary"
+                  >
+                    {fromTariffZone.id === toTariffZone.id
+                      ? t(
+                          PurchaseConfirmationTexts.validityTexts.zone.single(
+                            getReferenceDataName(fromTariffZone, language),
+                          ),
+                        )
+                      : t(
+                          PurchaseConfirmationTexts.validityTexts.zone.multiple(
+                            getReferenceDataName(fromTariffZone, language),
+                            getReferenceDataName(toTariffZone, language),
+                          ),
+                        )}
                   </ThemeText>
                 ) : (
-                  <ActivityIndicator
-                    size={theme.spacings.medium}
-                    color={theme.text.colors.primary}
-                    style={{margin: theme.spacings.medium}}
-                  />
+                  <ThemeText
+                    style={styles.smallTopMargin}
+                    type="body__secondary"
+                    color="secondary"
+                  >
+                    {getTextForLanguage(
+                      preassignedFareProduct.description ?? [],
+                      language,
+                    )}
+                  </ThemeText>
                 )}
+                <ThemeText
+                  style={styles.smallTopMargin}
+                  type="body__secondary"
+                  color="secondary"
+                >
+                  {travelDateText}
+                </ThemeText>
               </View>
             </Sections.GenericSectionItem>
           </Sections.Section>
         </View>
+
+        <Sections.Section style={styles.paymentSummaryContainer}>
+          {travellerSelectionMode !== 'none' && (
+            <Sections.GenericSectionItem>
+              {userProfilesWithCountAndOffer.map((u, i) => (
+                <PricePerUserProfile
+                  key={u.id}
+                  userProfile={u}
+                  style={i != 0 ? styles.smallTopMargin : undefined}
+                />
+              ))}
+            </Sections.GenericSectionItem>
+          )}
+          <Sections.GenericSectionItem>
+            <View style={styles.totalPaymentContainer} accessible={true}>
+              <View style={styles.totalContainerHeadings}>
+                <ThemeText type="body__primary">
+                  {t(PurchaseConfirmationTexts.totalCost.title)}
+                </ThemeText>
+                <ThemeText type="body__tertiary" color="secondary">
+                  {t(
+                    PurchaseConfirmationTexts.totalCost.label(
+                      vatPercentString,
+                      vatAmountString,
+                    ),
+                  )}
+                </ThemeText>
+              </View>
+
+              {!isSearchingOffer ? (
+                <ThemeText type="body__primary--jumbo">
+                  {totalPriceString} kr
+                </ThemeText>
+              ) : (
+                <ActivityIndicator
+                  size={theme.spacings.medium}
+                  color={theme.text.colors.primary}
+                  style={{margin: theme.spacings.medium}}
+                />
+              )}
+            </View>
+          </Sections.GenericSectionItem>
+        </Sections.Section>
 
         <MessageBox
           type="info"
@@ -487,13 +486,17 @@ const PricePerUserProfile = ({
       accessibilityLabel={a11yLabel}
       style={[style, styles.userProfileItem]}
     >
-      <ThemeText style={styles.userProfileCountAndName}>
+      <ThemeText
+        style={styles.userProfileCountAndName}
+        color="secondary"
+        type="body__secondary"
+      >
         {count} {userProfileName}
       </ThemeText>
       <View style={styles.userProfilePrice}>
         {hasFlexDiscount && (
           <ThemeText
-            type="body__secondary"
+            type="body__tertiary"
             color="secondary"
             style={styles.userProfileOriginalPriceText}
           >
@@ -504,7 +507,9 @@ const PricePerUserProfile = ({
             )
           </ThemeText>
         )}
-        <ThemeText>{priceString} kr</ThemeText>
+        <ThemeText color="secondary" type="body__secondary">
+          {priceString} kr
+        </ThemeText>
       </View>
     </View>
   );
@@ -544,27 +549,19 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   userProfilePrice: {flexDirection: 'row', flexWrap: 'wrap'},
   userProfileOriginalPriceText: {
     marginRight: theme.spacings.small,
+    alignSelf: 'center',
   },
   userProfileOriginalPriceAmount: {
     textDecorationLine: 'line-through',
   },
-  summaryContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    padding: theme.spacings.medium,
+  paymentSummaryContainer: {
     marginVertical: theme.spacings.medium,
-    backgroundColor: theme.static.background.background_0.background,
-    borderRadius: theme.border.radius.regular,
   },
-  totalContainer: {
+  totalPaymentContainer: {
     flexDirection: 'row',
+    width: '100%',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    // padding: theme.spacings.medium,
-    // marginVertical: theme.spacings.medium,
-    backgroundColor: theme.static.background.background_0.background,
-    borderRadius: theme.border.radius.regular,
   },
   totalContainerHeadings: {
     paddingVertical: theme.spacings.xSmall,
