@@ -28,9 +28,6 @@ const PurchaseOverviewTexts = {
       `Activate to select travellers`,
     ),
   },
-  tariffZones: {
-    a11yHint: _('Aktivér for å velge soner', 'Activate to select zones'),
-  },
   product: {
     a11yHint: _(
       'Aktivér for å velge billettype',
@@ -74,6 +71,9 @@ const PurchaseOverviewTexts = {
       to: _('Til', 'To'),
     },
     zoneName: (zoneName: string) => _(`Sone ${zoneName}`, `Zone ${zoneName}`),
+    a11yLabelPrefixSingle: _('Valgt sone:', 'Selected zone:'),
+    a11yLabelPrefixMultiple: _('Valgte soner:', 'Selected zones:'),
+    a11yHint: _('Aktivér for å velge soner', 'Activate to select zones'),
   },
   productSelection: {
     title: _('Velg billett', 'Select a ticket'),
