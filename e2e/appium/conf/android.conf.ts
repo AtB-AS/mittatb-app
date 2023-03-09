@@ -3,6 +3,7 @@ import { config as sharedConfig } from './wdio.conf';
 export const config: WebdriverIO.Config = {
   ...sharedConfig,
   ...{
+    //runnerEnv: { ['APP_PATH']: process.env.APP_PATH || "/dummyPath/" },
     port: 4723,
     //path: '/wd/hub',
     services: [
@@ -44,7 +45,8 @@ export const config: WebdriverIO.Config = {
       //'appium:appPackage': 'no.mittatb.staging',
       //'appium:appActivity': '.MainActivity',
       //'appium:app': '../../android/app/build/outputs/apk/debug/app-debug.apk',
-      'appium:app': '/Users/tormos/Documents/atb/mittatb-app/e2e/appium/app/app-staging.apk',
+      //'appium:app': '/Users/tormos/Documents/atb/mittatb-app/e2e/appium/app/app-staging.apk',
+      'appium:app': `${process.env.APP_PATH || "EMPTY_ENV_APP_PATH"}/mittatb-app/android/app/build/outputs/apk/staging/app-staging.apk`,
       //'appium:appWaitForLaunch': true,
       //'appium:skipDeviceInitialization': true
     }],
