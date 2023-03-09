@@ -1,4 +1,4 @@
-import {useFavorites} from '@atb/favorites/index';
+import {useFavorites} from '@atb/favorites/FavoriteIcon';
 import {AccessibilityInfo, Alert} from 'react-native';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import {Quay, StopPlace} from '@atb/api/types/departures';

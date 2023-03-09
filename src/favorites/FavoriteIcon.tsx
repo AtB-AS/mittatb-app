@@ -4,7 +4,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {UserFavoriteDepartures} from './types';
 
-export type FavoriteIconProps = {
+type FavoriteIconProps = {
   favorite?: {emoji?: string};
   fill?: string;
 };
@@ -38,11 +38,3 @@ export function getFavoriteDeparture(
     );
   });
 }
-
-export {
-  useFavorites,
-  default as FavoritesContextProvider,
-} from './FavoritesContext';
-
-export type {ChipTypeGroup} from './types';
-export {FavoriteChips} from './FavoriteChips';
