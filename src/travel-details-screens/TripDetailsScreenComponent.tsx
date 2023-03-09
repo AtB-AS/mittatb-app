@@ -222,9 +222,9 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
 }
 
 function waitTimeIsMoreThanAnHour(leg: Leg, nextLeg?: Leg) {
-  const waitTimeInSeconds = !nextLeg
-    ? 0
-    : secondsBetween(leg.expectedEndTime, nextLeg?.expectedStartTime);
+  const waitTimeInSeconds = nextLeg
+    ? secondsBetween(leg.expectedEndTime, nextLeg?.expectedStartTime)
+    : 0;
   return waitTimeInSeconds >= hoursToSeconds(1);
 }
 
