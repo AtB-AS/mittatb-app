@@ -1,4 +1,4 @@
-import {TripPattern} from '@atb/api/types/trips';
+import {Leg, TripPattern} from '@atb/api/types/trips';
 import {ContentWithDisappearingHeader} from '@atb/components/disappearing-header';
 import {ScreenHeader} from '@atb/components/screen-header';
 import PaginatedDetailsHeader from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
@@ -24,11 +24,12 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import {TariffZone} from '@atb/reference-data/types';
-import {addMinutes, formatISO, parseISO} from 'date-fns';
+import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import analytics from '@react-native-firebase/analytics';
 import {canSellCollabTicket} from '@atb/travel-details-screens/utils';
 import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
+import {secondsBetween} from '@atb/utils/date';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -164,6 +165,10 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
   const toTariffZoneWeSellTicketFor =
     useGetFirstTariffZoneWeSellTicketFor(toTariffZones);
 
+  const hasTooLongWaitTime = tripPattern.legs.find((leg, i) =>
+    waitTimeIsMoreThanAnHour(leg, tripPattern.legs[i + 1]),
+  );
+
   const canSellCollab = canSellCollabTicket(tripPattern);
 
   if (
@@ -171,13 +176,14 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
       fromTripsSearchToTicketEnabled &&
       fromTariffZoneWeSellSingleTicketsFor &&
       toTariffZoneWeSellTicketFor
-    )
+    ) ||
+    hasTooLongWaitTime
   )
     return;
 
   const tariffZoneTo: TariffZoneWithMetadata = {
     resultType: 'zone',
-    venueName: nonFootLegs[nonFootLegs.length - 1]?.fromPlace?.name,
+    venueName: nonFootLegs[nonFootLegs.length - 1]?.toPlace?.name,
     ...toTariffZoneWeSellTicketFor,
   };
   const tariffZoneFrom: TariffZoneWithMetadata = {
@@ -213,6 +219,13 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
     tariffZoneTo,
     ticketStartTime,
   };
+}
+
+function waitTimeIsMoreThanAnHour(leg: Leg, nextLeg?: Leg) {
+  const waitTimeInSeconds = nextLeg
+    ? secondsBetween(leg.expectedEndTime, nextLeg?.expectedStartTime)
+    : 0;
+  return waitTimeInSeconds >= hoursToSeconds(1);
 }
 
 function useGetFirstTariffZoneWeSellTicketFor(
