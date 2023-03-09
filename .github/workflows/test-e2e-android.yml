@@ -105,17 +105,30 @@ jobs:
         run: yarn install
         working-directory: e2e/appium
       - name: Run tests on Android emulator
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@v2.27.0
         with:
+          #TODO If not working, try api 29
+          # https://github.com/ReactiveCircus/android-emulator-runner/issues/161
+          #Downgrade to 7425822
+          #adb kill-server
+          #
+          #adb start-server
+
+          # system-images;android-30;default;x86_64
+          # system-images;android-29;default;x86_64
           avd-name: emulator-api30
           api-level: 30
+          arch: x86_64
           profile: Pixel 5
           emulator-build: 9536276
           disable-spellchecker: true
           working-directory: e2e/appium
           script: yarn test:android
+          #pre-emulator-launch-script: ./restart-adb.sh
         env:
           APP_PATH: ${{ github.workspace }}
+      - name: debug - sdkmanager
+        run: /bin/sh -c \sdkmanager --list
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v3
