@@ -431,7 +431,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 onPress={() => {
                   params.mode === 'TravelSearch' &&
                     analytics().logEvent('purchase_from_travel_search');
-                  selectPaymentMethod;
+                  selectPaymentMethod();
                 }}
                 viewContainerStyle={styles.paymentButton}
                 testID="choosePaymentOptionButton"
