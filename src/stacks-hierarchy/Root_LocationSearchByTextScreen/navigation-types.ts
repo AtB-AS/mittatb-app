@@ -1,4 +1,4 @@
-import {ChipTypeGroup} from '@atb/favorite-chips';
+import {ChipTypeGroup} from '@atb/favorites/FavoriteChips';
 import {Location} from '@atb/favorites/types';
 
 export type Root_LocationSearchByTextScreenParams = {

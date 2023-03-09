@@ -15,7 +15,7 @@ import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {Keyboard, View} from 'react-native';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {TextInputSectionItem} from '@atb/components/sections';
-import FavoriteChips, {ChipTypeGroup} from '@atb/favorite-chips';
+import {FavoriteChips, ChipTypeGroup} from '@atb/favorites/FavoriteChips';
 import {MessageBox} from '@atb/components/message-box';
 import {ScrollView} from 'react-native-gesture-handler';
 import {JourneyHistory} from './JourneyHistory';

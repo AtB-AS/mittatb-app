@@ -4,7 +4,7 @@ import {SimpleDisappearingHeader} from '@atb/components/disappearing-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import FavoriteChips from '@atb/favorite-chips';
+import {FavoriteChips} from '@atb/favorites/FavoriteChips';
 import {Location} from '@atb/favorites/types';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StopPlaces} from './components/StopPlaces';
