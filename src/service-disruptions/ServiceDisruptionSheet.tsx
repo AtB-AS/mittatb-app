@@ -17,7 +17,7 @@ type Props = {
   serviceDisruptionUrl: string;
 };
 
-const ServiceDisruptionSheet = forwardRef<View, Props>(
+export const ServiceDisruptionSheet = forwardRef<View, Props>(
   ({close, serviceDisruptionUrl}, focusRef) => {
     const {t} = useTranslation();
 
@@ -57,4 +57,3 @@ const ServiceDisruptionSheet = forwardRef<View, Props>(
     );
   },
 );
-export default ServiceDisruptionSheet;
