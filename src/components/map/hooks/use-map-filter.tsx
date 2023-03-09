@@ -12,7 +12,7 @@ export const useUserMapFilters = () => {
       .then((storedFilters) =>
         storedFilters
           ? (JSON.parse(storedFilters) as MapFilter)
-          : default_map_filter,
+          : (JSON.parse(default_map_filter) as MapFilter),
       );
 
   const setMapFilter = (filters: MapFilter) =>

@@ -1,6 +1,5 @@
 import remoteConfig from '@react-native-firebase/remote-config';
-import {PRIVACY_POLICY_URL, ENABLE_TICKETING} from '@env';
-import {MapFilter} from '@atb/components/map/types';
+import {ENABLE_TICKETING, PRIVACY_POLICY_URL} from '@env';
 
 export type RemoteConfig = {
   enable_network_logging: boolean;
@@ -37,7 +36,7 @@ export type RemoteConfig = {
   enable_from_travel_search_to_ticket: boolean;
   enable_vehicles_in_map: boolean;
   enable_vehicle_operator_logo: boolean;
-  default_map_filter: MapFilter;
+  default_map_filter: string;
   enable_realtime_map: boolean;
 };
 
@@ -76,11 +75,11 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_from_travel_search_to_ticket: false,
   enable_vehicles_in_map: false,
   enable_vehicle_operator_logo: false,
-  default_map_filter: {
+  default_map_filter: JSON.stringify({
     vehicles: {
       showVehicles: false,
     },
-  },
+  }),
   enable_realtime_map: false,
 };
 
@@ -187,7 +186,7 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.enable_vehicle_operator_logo;
 
   const default_map_filter =
-    (JSON.parse(values['default_map_filter']?.asString()) as MapFilter) ??
+    values['default_map_filter']?.asString() ??
     defaultRemoteConfig.default_map_filter;
 
   const enable_realtime_map =
