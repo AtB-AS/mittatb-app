@@ -109,6 +109,8 @@ jobs:
         with:
           avd-name: emulator-api30
           api-level: 30
+          profile: Pixel 5
+          emulator-build: 9536276
           disable-spellchecker: true
           working-directory: e2e/appium
           script: yarn test:android
