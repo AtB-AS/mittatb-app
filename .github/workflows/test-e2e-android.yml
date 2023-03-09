@@ -1,0 +1,125 @@
+name: E2E tests on Android
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Define branch to test'
+        required: true
+        default: 'master'
+  push:
+    branches:
+      - tor/e2e-appium
+
+jobs:
+  run_tests:
+    name: E2E test Android
+    runs-on: macos-latest
+    environment: atb
+    timeout-minutes: 90
+    steps:
+      - name: Set initial variables
+        env:
+          DEFAULT_BRANCH: 'master'
+        run: |
+          echo "INPUT_BRANCH=${{ github.event.inputs.branch || env.DEFAULT_BRANCH }}" >> $GITHUB_ENV
+      - name: Checkout project
+        uses: actions/checkout@v3
+        with:
+          #ref: ${{ env.INPUT_BRANCH }}
+          ref: tor/e2e-appium
+
+      - name: Set global env vars
+        run: |
+          echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
+          echo "APP_ENVIRONMENT=staging" >> $GITHUB_ENV
+          echo "KEYSTORE_PATH=./android/app/keystore.jks" >> $GITHUB_ENV
+          echo "APK_FILE_NAME=app-staging.apk" >> $GITHUB_ENV
+          echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
+          echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
+      - name: Decrypt env files
+        run: bash ./scripts/git-crypt-unlock.sh
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+      - name: Add Entur private registry credentials
+        run: bash ./scripts/add-entur-private-registry.sh
+        env:
+          ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
+      - name: install node v16
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: Get potential cached node_modules
+        uses: actions/cache@v2
+        id: modules-cache
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}
+      - name: Install node_modules
+        if: steps.modules-cache.outputs.cache-hit != 'true'
+        run: yarn install
+      - name: Setup ruby and bundle install
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.6
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Set environment
+        run: bash ./scripts/override-environment.sh $APP_ENVIRONMENT atb
+      - name: Export workflow env variables based on environment
+        run: bash ./scripts/export-workflow-parameters.sh
+      - name: Override native config files
+        run: bash ./scripts/android/override-config-files.sh
+      - name: Get potential cached APK
+        uses: actions/cache@v2
+        id: apk-cache
+        with:
+          path: app-staging.apk
+          key: atb-${{ runner.os }}-android-cache-${{ hashFiles('android/**') }}-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/patches/**.patch') }}-${{ hashFiles('.env') }}
+      - name: Decode Android keystore
+        run: bash ./scripts/android/create-keystore-file.sh
+        env:
+          KEYSTORE: ${{ secrets.KEYSTORE }}
+      - name: Generate native assets
+        if: steps.apk-cache.outputs.cache-hit != 'true'
+        run: yarn generate-native-assets
+      - name: Run fastlane build
+        if: steps.apk-cache.outputs.cache-hit != 'true'
+        run: bundle exec fastlane android build
+        env:
+          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+          KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
+          KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+      - name: Replace apk bundle
+        if: steps.apk-cache.outputs.cache-hit == 'true'
+        run: bash ./scripts/android/replace-bundle.sh
+        env:
+          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+          KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
+          KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+
+      - name: debug - ls
+        run: ls -la android/app/build/outputs/apk/
+      - name: debug - ls
+        run: ls -la android/app/build/outputs/apk/staging
+      - name: Install e2e test
+        run: yarn install
+        working-directory: e2e/appium
+      - name: Run tests on Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          avd-name: emulator-api30
+          api-level: 30
+          disable-spellchecker: true
+          working-directory: e2e/appium
+          script: yarn test:android
+        env:
+          APP_PATH: ${{ github.workspace }}
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: |
+            ./e2e/appium/results/*.xml
+            ./e2e/appium/results/results-mochawesome.json
+          retention-days: 3
