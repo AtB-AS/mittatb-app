@@ -177,7 +177,7 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
 
   const tariffZoneTo: TariffZoneWithMetadata = {
     resultType: 'zone',
-    venueName: nonFootLegs[nonFootLegs.length - 1]?.fromPlace?.name,
+    venueName: nonFootLegs[nonFootLegs.length - 1]?.toPlace?.name,
     ...toTariffZoneWeSellTicketFor,
   };
   const tariffZoneFrom: TariffZoneWithMetadata = {
