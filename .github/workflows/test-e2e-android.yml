@@ -6,9 +6,9 @@ on:
         description: 'Define branch to test'
         required: true
         default: 'master'
-  push:
-    branches:
-      - tor/e2e-appium
+  #push:
+  #  branches:
+  #    - tor/e2e-appium
 
 jobs:
   run_tests:
@@ -107,19 +107,22 @@ jobs:
       - name: Run tests on Android emulator
         uses: reactivecircus/android-emulator-runner@v2.27.0
         with:
-          #TODO If not working, try api 29
+          #TODO If not working, try api 29 or pre-script
           # https://github.com/ReactiveCircus/android-emulator-runner/issues/161
           #Downgrade to 7425822
           #adb kill-server
-          #
           #adb start-server
 
-          # system-images;android-30;default;x86_64
-          # system-images;android-29;default;x86_64
+          # To find supported images and profiles:
+          # $ cd /Users/tormos/Library/Android/sdk/cmdline-tools/9.0/bin
+          # $ ./avdmanager list device
+          # $ ./sdkmanager --list
+          #  -> system-images;android-30;default;x86_64
+          #  -> system-images;android-29;default;x86_64
           avd-name: emulator-api30
           api-level: 30
           arch: x86_64
-          profile: Pixel 5
+          profile: pixel_5
           emulator-build: 9536276
           disable-spellchecker: true
           working-directory: e2e/appium

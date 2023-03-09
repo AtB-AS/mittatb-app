@@ -1,0 +1,54 @@
+name: Testing AVD Android
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Define branch to test'
+        required: true
+        default: 'master'
+  push:
+    branches:
+      - tor/e2e-appium
+
+jobs:
+  run_tests:
+    name: Testing AVD Android
+    runs-on: macos-latest
+    environment: atb
+    timeout-minutes: 90
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v3
+        with:
+          #ref: ${{ env.INPUT_BRANCH }}
+          ref: tor/e2e-appium
+
+      - name: Install e2e test
+        run: yarn install
+        working-directory: e2e/appium
+      - name: Run tests on Android emulator
+        uses: reactivecircus/android-emulator-runner@v2.27.0
+        with:
+          #TODO If not working, try api 29 or pre-script
+          # https://github.com/ReactiveCircus/android-emulator-runner/issues/161
+          #Downgrade to 7425822
+          #adb kill-server
+          #adb start-server
+
+          # To find supported images and profiles:
+          # $ cd /Users/tormos/Library/Android/sdk/cmdline-tools/9.0/bin
+          # $ ./avdmanager list device
+          # $ ./sdkmanager --list
+          #  -> system-images;android-30;default;x86_64
+          #  -> system-images;android-29;default;x86_64
+          avd-name: emulator-api30
+          api-level: 30
+          arch: x86_64
+          profile: pixel_5
+          emulator-build: 9536276
+          disable-spellchecker: true
+          working-directory: e2e/appium
+          script: yarn test:android
+          #pre-emulator-launch-script: ./restart-adb.sh
+        env:
+          APP_PATH: ${{ github.workspace }}
