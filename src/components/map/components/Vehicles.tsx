@@ -27,7 +27,10 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
       ref={shapeSource}
       shape={vehicles}
       tolerance={0}
+      buffer={0}
       cluster
+      maxZoomLevel={22}
+      clusterMaxZoomLevel={21}
       onPress={async (e) => {
         const [feature, ..._] = e.features;
         if (isClusterFeature(feature)) {
