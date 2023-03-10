@@ -108,12 +108,15 @@ export const getFeaturesAtClick = async (
 export function flyToLocation(
   coordinates: Coordinates | undefined,
   mapCameraRef: RefObject<MapboxGL.Camera>,
+  zoomLevel?: number,
 ) {
   coordinates &&
-    mapCameraRef.current?.flyTo(
-      [coordinates.longitude, coordinates.latitude],
-      750,
-    );
+    mapCameraRef.current?.setCamera({
+      centerCoordinate: [coordinates.longitude, coordinates.latitude],
+      zoomLevel,
+      animationMode: 'flyTo',
+      animationDuration: 750,
+    });
 }
 
 export const toFeaturePoint = <
@@ -157,51 +160,4 @@ export const toCoordinates = (position: Position): Coordinates => {
 export const getVisibleRange = (visibleBounds: Position[]) => {
   const [[_, latNE], [lonSW, latSW]] = visibleBounds;
   return distance([lonSW, latSW], [lonSW, latNE], {units: 'meters'});
-};
-
-export const getClusterChildrenBounds = async (
-  featureCollection: FeatureCollection,
-) => {
-  const points = featureCollection.features
-    .map((f) => (isFeaturePoint(f) ? f.geometry.coordinates : null))
-    .filter((f) => f);
-
-  const longitudes = points
-    .map((p) => {
-      const [lon, _] = p ?? [];
-      return lon;
-    })
-    .sort();
-  const [minLon] = longitudes.slice(0, 1);
-  const [maxLon] = longitudes.slice(-1);
-
-  const latitudes = points
-    .map((p) => {
-      const [_, lat] = p ?? [];
-      return lat;
-    })
-    .sort();
-  const [minLat] = latitudes.slice(0, 1);
-  const [maxLat] = latitudes.slice(-1);
-
-  return {
-    from: {longitude: minLon, latitude: minLat},
-    to: {longitude: maxLon, latitude: maxLat},
-  };
-};
-
-export const zoomToCluster = async (
-  collection: FeatureCollection<GeoJSON.Geometry, GeoJSON.GeoJsonProperties>,
-  mapCameraRef: RefObject<MapboxGL.Camera>,
-) => {
-  // For some strange reason, clusters sometimes contain only one element.
-  if (collection.features.length == 1) {
-    const child = collection.features[0];
-    if (isFeaturePoint(child)) {
-      flyToLocation(toCoordinates(child.geometry.coordinates), mapCameraRef);
-    }
-  } else {
-    const {from, to} = await getClusterChildrenBounds(collection);
-    fitBounds(from, to, mapCameraRef);
-  }
 };
