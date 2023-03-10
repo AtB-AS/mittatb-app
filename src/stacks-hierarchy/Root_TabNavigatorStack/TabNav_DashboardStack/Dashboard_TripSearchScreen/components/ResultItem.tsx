@@ -177,9 +177,6 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   };
   const lineHeight = {height: (theme.spacings.xSmall / 2) * fontScale};
 
-  //Set specific letter spacing, as 0.4 leads to errors on newer pixel phones
-  const letterSpacing = {letterSpacing: 0.39};
-
   return (
     <TouchableOpacity
       accessibilityLabel={tripSummary(
@@ -239,7 +236,6 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                       )}
                       <View style={styles.departureTimes}>
                         <ThemeText
-                          style={letterSpacing}
                           type="body__tertiary"
                           color="primary"
                           testID={'schTime' + i}
@@ -252,7 +248,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                         </ThemeText>
                         {isSignificantDifference(leg) && (
                           <ThemeText
-                            style={[styles.scheduledTime, letterSpacing]}
+                            style={styles.scheduledTime}
                             type="body__tertiary--strike"
                             color="secondary"
                             testID={'aimTime' + i}
@@ -289,12 +285,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
           <View>
             <DestinationIcon style={styles.iconContainer} />
             <View style={styles.departureTimes}>
-              <ThemeText
-                style={letterSpacing}
-                type="body__tertiary"
-                color="primary"
-                testID="endTime"
-              >
+              <ThemeText type="body__tertiary" color="primary" testID="endTime">
                 {formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
               </ThemeText>
             </View>
