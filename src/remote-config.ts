@@ -36,6 +36,7 @@ export type RemoteConfig = {
   enable_from_travel_search_to_ticket: boolean;
   enable_vehicles_in_map: boolean;
   enable_vehicle_operator_logo: boolean;
+  default_map_filter: string;
   enable_realtime_map: boolean;
 };
 
@@ -74,6 +75,11 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_from_travel_search_to_ticket: false,
   enable_vehicles_in_map: false,
   enable_vehicle_operator_logo: false,
+  default_map_filter: JSON.stringify({
+    vehicles: {
+      showVehicles: false,
+    },
+  }),
   enable_realtime_map: false,
 };
 
@@ -179,6 +185,10 @@ export function getConfig(): RemoteConfig {
     values['enable_vehicle_operator_logo']?.asBoolean() ??
     defaultRemoteConfig.enable_vehicle_operator_logo;
 
+  const default_map_filter =
+    values['default_map_filter']?.asString() ??
+    defaultRemoteConfig.default_map_filter;
+
   const enable_realtime_map =
     values['enable_realtime_map']?.asBoolean() ??
     defaultRemoteConfig.enable_realtime_map;
@@ -218,6 +228,7 @@ export function getConfig(): RemoteConfig {
     enable_from_travel_search_to_ticket,
     enable_vehicles_in_map,
     enable_vehicle_operator_logo,
+    default_map_filter,
     enable_realtime_map,
   };
 }
