@@ -43,3 +43,6 @@ export {
   useFavorites,
   default as FavoritesContextProvider,
 } from './FavoritesContext';
+
+export type {ChipTypeGroup} from './types';
+export {FavoriteChips} from './FavoriteChips';
