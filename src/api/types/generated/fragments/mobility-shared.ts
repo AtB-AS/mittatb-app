@@ -1,3 +1,18 @@
+export type BrandAssetsFragment = {
+  brandImageUrl: string;
+  brandImageUrlDark?: string;
+  brandLastModified: string;
+};
+
+export type RentalUrisFragment = {android?: string; ios?: string};
+
+export type RentalAppFragment = {discoveryUri?: string; storeUri?: string};
+
+export type RentalAppsFragment = {
+  android?: RentalAppFragment;
+  ios?: RentalAppFragment;
+};
+
 export type OperatorFragment = {id: string; name: TranslatedStringFragment};
 
 export type PricingPlanFragment = {

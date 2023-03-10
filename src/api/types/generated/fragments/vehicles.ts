@@ -1,24 +1,12 @@
 import * as Types from '../mobility-types_v2';
 import {
+  BrandAssetsFragment,
   OperatorFragment,
   PricingPlanFragment,
+  RentalAppsFragment,
+  RentalUrisFragment,
   TranslatedStringFragment,
 } from './mobility-shared';
-
-export type RentalUrisFragment = {android?: string; ios?: string};
-
-export type RentalAppFragment = {discoveryUri?: string; storeUri?: string};
-
-export type RentalAppsFragment = {
-  android?: RentalAppFragment;
-  ios?: RentalAppFragment;
-};
-
-export type BrandAssetsFragment = {
-  brandImageUrl: string;
-  brandImageUrlDark?: string;
-  brandLastModified: string;
-};
 
 export type VehicleFragment = {
   id: string;
