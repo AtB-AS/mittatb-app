@@ -33,8 +33,10 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
       onPress={async (e) => {
         const [feature, ..._] = e.features;
         if (isClusterFeature(feature)) {
-          const children = await shapeSource.current?.getClusterChildren(
+          const children = await shapeSource.current?.getClusterLeaves(
             feature,
+            Number.MAX_VALUE,
+            0,
           );
           if (isFeatureCollection(children)) {
             await zoomToCluster(children, mapCameraRef);
