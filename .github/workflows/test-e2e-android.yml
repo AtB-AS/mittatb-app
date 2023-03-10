@@ -101,6 +101,8 @@ jobs:
         run: ls -la android/app/build/outputs/apk/
       - name: debug - ls
         run: ls -la android/app/build/outputs/apk/staging
+      - name: Install Appium
+        run: npm install -g appium
       - name: Install e2e test
         run: yarn install
         working-directory: e2e/appium
@@ -130,8 +132,6 @@ jobs:
           #pre-emulator-launch-script: ./restart-adb.sh
         env:
           APP_PATH: ${{ github.workspace }}
-      - name: debug - sdkmanager
-        run: /bin/sh -c \sdkmanager --list
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v3
