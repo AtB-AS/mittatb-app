@@ -2,7 +2,7 @@ import {Pin} from '@atb/assets/svg/mono-icons/map';
 import {Location as LocationMonoIcon} from '@atb/assets/svg/mono-icons/places';
 import * as TransportationIcons from '@atb/assets/svg/mono-icons/transportation';
 import * as EnturTransportationIcons from '@atb/assets/svg/mono-icons/transportation-entur';
-import {Location} from '@atb/favorites/types';
+import {Location} from '@atb/favorites';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {getVenueIconTypes} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';

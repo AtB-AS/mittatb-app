@@ -1,6 +1,6 @@
 import * as Sections from '@atb/components/sections';
 import {useFavorites} from '@atb/favorites';
-import {StoredFavoriteDeparture} from '@atb/favorites/types';
+import {StoredFavoriteDeparture} from '@atb/favorites';
 import {StyleSheet, Theme} from '@atb/theme';
 import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import React from 'react';

@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {FavoriteIcon} from '@atb/favorites';
-import {StoredLocationFavorite} from '@atb/favorites/types';
+import {StoredLocationFavorite} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
 import {screenReaderPause} from '@atb/components/text';
 import {ThemeText} from '@atb/components/text';

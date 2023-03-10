@@ -1,5 +1,4 @@
-import {ChipTypeGroup} from '@atb/favorites';
-import {Location} from '@atb/favorites/types';
+import {ChipTypeGroup, Location} from '@atb/favorites';
 
 export type Root_LocationSearchByTextScreenParams = {
   callerRouteName: string;

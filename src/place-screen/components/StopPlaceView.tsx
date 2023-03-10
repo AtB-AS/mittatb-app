@@ -1,7 +1,7 @@
 import {StopPlace, Quay} from '@atb/api/types/departures';
 import {Feedback} from '@atb/components/feedback';
 import {useFavorites} from '@atb/favorites';
-import {UserFavoriteDepartures} from '@atb/favorites/types';
+import {UserFavoriteDepartures} from '@atb/favorites';
 import {DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW} from '../hooks/use-stop-place-state';
 import {SearchTime} from '../types';
 import {StyleSheet, useTheme} from '@atb/theme';
