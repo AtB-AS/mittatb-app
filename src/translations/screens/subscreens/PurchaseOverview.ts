@@ -63,7 +63,7 @@ const PurchaseOverviewTexts = {
       },
       multiple: {
         text: _('Velg holdeplass/sone(r)', 'Select stop/zone(s)'),
-        a11yLabel: _('Velg holeplass eller soner', 'Select stop or zones'),
+        a11yLabel: _('Velg holdeplass eller soner', 'Select stop or zones'),
       },
     },
     label: {
