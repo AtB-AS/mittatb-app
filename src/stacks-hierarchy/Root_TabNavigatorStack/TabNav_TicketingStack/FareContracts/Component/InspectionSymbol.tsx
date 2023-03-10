@@ -8,6 +8,8 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {ContrastColor} from '@atb-as/theme';
+import {Moon} from '@atb/assets/svg/mono-icons/ticketing';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 export type InspectionSymbolProps = {
   preassignedFareProduct?: PreassignedFareProduct;
@@ -66,9 +68,15 @@ const InspectableContent = ({
   const {language} = useTranslation();
   const styles = useStyles();
 
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (c) => c.type === preassignedFareProduct?.type,
+  );
   const shouldFill =
     preassignedFareProduct?.type === 'period' ||
     preassignedFareProduct?.type === 'hour24';
+  const InspectionSvg =
+    fareProductTypeConfig?.illustration === 'night' ? Moon : Bus;
 
   return (
     <View
@@ -91,7 +99,7 @@ const InspectableContent = ({
         </ThemeText>
       )}
       <ThemeIcon
-        svg={Bus}
+        svg={InspectionSvg}
         fill={shouldFill ? themeColor.text : undefined}
         size={'large'}
       />
