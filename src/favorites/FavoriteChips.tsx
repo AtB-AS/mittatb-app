@@ -12,7 +12,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {FavoriteIcon, useFavorites} from './index';
-import {GeoLocation, Location} from './types';
+import {ChipTypeGroup, GeoLocation, Location} from './types';
 
 const themeColor: InteractiveColor = 'interactive_0';
 
@@ -25,8 +25,6 @@ type Props = {
   chipActionHint?: string;
   onAddFavorite: () => void;
 };
-
-export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
 
 export const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
