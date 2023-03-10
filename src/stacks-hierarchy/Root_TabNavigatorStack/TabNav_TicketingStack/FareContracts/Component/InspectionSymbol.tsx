@@ -73,8 +73,8 @@ const InspectableContent = ({
     (c) => c.type === preassignedFareProduct?.type,
   );
   const shouldFill =
-    preassignedFareProduct?.type === 'period' ||
-    preassignedFareProduct?.type === 'hour24';
+    fareProductTypeConfig?.illustration === 'period' ||
+    fareProductTypeConfig?.illustration === 'hour24';
   const InspectionSvg =
     fareProductTypeConfig?.illustration === 'night' ? Moon : Bus;
 
