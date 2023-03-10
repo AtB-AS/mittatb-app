@@ -46,6 +46,17 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
       fontWeight: 'normal',
     };
   }
+  // Set specific letter spacing for android phones, as 0.4 leads to errors on newer pixel phones
+  // https://github.com/facebook/react-native/issues/35039
+  if (
+    Platform.OS === 'android' &&
+    (textStyle.letterSpacing === 0.4 || textStyle.letterSpacing === 1.6)
+  ) {
+    textStyle = {
+      ...textStyle,
+      letterSpacing: textStyle.letterSpacing - 0.01,
+    };
+  }
 
   const content =
     isMarkdown && typeof children === 'string'
