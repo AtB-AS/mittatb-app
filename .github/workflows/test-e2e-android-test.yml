@@ -23,6 +23,12 @@ jobs:
           #ref: ${{ env.INPUT_BRANCH }}
           ref: tor/e2e-appium
 
+      # Settes i vanlig Android-bygg
+      - name: Set global env vars
+        run: echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
+
+      - name: Install Appium
+        run: npm install -g appium
       - name: Install e2e test
         run: yarn install
         working-directory: e2e/appium
@@ -50,5 +56,14 @@ jobs:
           working-directory: e2e/appium
           script: yarn test:android
           #pre-emulator-launch-script: ./restart-adb.sh
+
+          # SDK
+          # uses: android-actions/setup-android@v2
+          # Create
+          # sdkmanager --install "system-images;android-31;google_apis;x86_64"
+          # echo "no" | avdmanager --verbose create avd --force --name testAVD --abi google_apis/x86_64 --package 'system-images;android-31;google_apis;x86_64'
+          # $ANDROID_SDK_ROOT/emulator/emulator -avd testAVD
+          # Wait
+          # $ANDROID_HOME/platform-tools/adb wait-for-device
         env:
           APP_PATH: ${{ github.workspace }}
