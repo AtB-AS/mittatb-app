@@ -2,6 +2,7 @@ export {FavoriteIcon} from './FavoriteIcon';
 export {useFavorites, FavoritesContextProvider} from './FavoritesContext';
 export {useOnMarkFavouriteDepartures} from './use-on-mark-favourite-departures';
 export {FavouriteDepartureToggle} from './FavouriteDepartureToggle';
+export {FavoriteChips} from './FavoriteChips';
 export type {
   GeoLocation,
   SearchLocation,
@@ -13,4 +14,5 @@ export type {
   StoredFavoriteDeparture,
   FavoriteDeparture,
   FavoriteDepartureId,
+  ChipTypeGroup,
 } from './types';
