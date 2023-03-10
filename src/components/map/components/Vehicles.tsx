@@ -6,10 +6,8 @@ import {MapSelectionActionType} from '@atb/components/map/types';
 import {
   flyToLocation,
   isClusterFeature,
-  isFeatureCollection,
   isFeaturePoint,
   toCoordinates,
-  zoomToCluster,
 } from '@atb/components/map/utils';
 
 type Props = {
@@ -33,12 +31,14 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
       onPress={async (e) => {
         const [feature, ..._] = e.features;
         if (isClusterFeature(feature)) {
-          const children = await shapeSource.current?.getClusterChildren(
+          const zoom = await shapeSource.current?.getClusterExpansionZoom(
             feature,
           );
-          if (isFeatureCollection(children)) {
-            await zoomToCluster(children, mapCameraRef);
-          }
+          flyToLocation(
+            toCoordinates(feature.geometry.coordinates),
+            mapCameraRef,
+            zoom,
+          );
         } else if (isFeaturePoint(feature)) {
           flyToLocation(
             toCoordinates(feature.geometry.coordinates),
