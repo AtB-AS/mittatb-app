@@ -41,7 +41,7 @@ export type RemoteConfig = {
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
-  enable_network_logging: true,
+  enable_network_logging: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
   enable_intercom: true,
   enable_i18n: false,
