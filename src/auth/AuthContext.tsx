@@ -137,7 +137,6 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
         ) {
           return 'invalid_code';
         }
-        console.warn(error);
         if (isAuthError(error)) Bugsnag.notify(error);
         return 'unknown_error';
       }
