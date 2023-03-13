@@ -206,7 +206,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.static.background.background_1.background,
   },
   selectionComponent: {
     marginVertical: theme.spacings.medium,
