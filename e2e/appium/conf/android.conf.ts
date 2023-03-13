@@ -24,7 +24,8 @@ export const config: WebdriverIO.Config = {
       platformName: 'Android',
       'appium:language': 'en',
       'appium:locale': 'US',
-      adbExecTimeout: 120000,
+      // @ts-ignore
+      'appium:adbExecTimeout': 120000,
       //noReset: true,
       //fullReset: false,
       maxInstances: 1,
