@@ -44,7 +44,6 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
 import useIsLoading from '@atb/utils/use-is-loading';
-import {useMapPage} from '@atb/components/map';
 import {useDeparturesV2Enabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
 
 const buildNumber = getBuildNumber();
@@ -53,13 +52,8 @@ const version = getVersion();
 type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
-  const {
-    enable_i18n,
-    privacy_policy_url,
-    enable_ticketing,
-    enable_login,
-    enable_map_page,
-  } = useRemoteConfig();
+  const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login} =
+    useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {wipeToken} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
@@ -81,7 +75,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
   const {setPreference} = usePreferences();
   const isDeparturesV2Enabled = useDeparturesV2Enabled();
-  const showMapPage = useMapPage();
 
   const {configurableLinks} = useFirestoreConfiguration();
   const ticketingInfo = configurableLinks?.ticketingInfo
@@ -362,16 +355,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             onValueChange={setDeparturesV2Enabled}
             testID="newDeparturesToggle"
           />
-          {enable_map_page ? (
-            <Sections.ToggleSectionItem
-              text={t(ProfileTexts.sections.newFeatures.map)}
-              value={showMapPage}
-              testID="enableMapPageToggle"
-              onValueChange={(enableMapPage) => {
-                setPreference({enableMapPage: enableMapPage});
-              }}
-            />
-          ) : null}
+
           <Sections.LinkSectionItem
             text={t(
               ProfileTexts.sections.settings.linkSectionItems.enrollment.label,

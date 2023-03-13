@@ -7,17 +7,18 @@ import {View} from 'react-native';
 import {LocationBar} from './components/LocationBar';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import MapRoute from '@atb/travel-details-map-screen/components/MapRoute';
-import {getVisibleRange, isFeaturePoint, zoomIn, zoomOut} from './utils';
+import {isFeaturePoint, zoomIn, zoomOut} from './utils';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
 import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
-import {MapProps} from './types';
+import {MapProps, MapFilter as MapFilterType} from './types';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {MapControls} from './components/MapControls';
 import {shadows} from './components/shadows';
 import {Vehicles} from '@atb/components/map/components/Vehicles';
+import {MapFilter} from '@atb/components/map/components/MapFilter';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -44,17 +45,16 @@ export const Map = (props: MapProps) => {
     );
 
   const onRegionChange = (
-    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
+    region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => {
     if (!props.vehicles) return;
-    const [longitude, latitude] = feature.geometry.coordinates;
-    const zoom = feature.properties.zoomLevel;
-    const range = getVisibleRange(feature.properties.visibleBounds);
-    props.vehicles.fetchVehicles({
-      coordinates: {longitude, latitude},
-      zoom,
-      radius: range / 2,
-    });
+    props.vehicles.fetchVehicles(region);
+  };
+
+  const onFilterChange = (filter: MapFilterType) => {
+    if (filter.vehicles) {
+      props.vehicles?.onFilterChange(filter.vehicles);
+    }
   };
 
   return (
@@ -109,12 +109,19 @@ export const Map = (props: MapProps) => {
           )}
           {props.vehicles && (
             <Vehicles
+              mapCameraRef={mapCameraRef}
               vehicles={props.vehicles.vehicles}
               onPress={props.vehicles.onPress}
             />
           )}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
+          {props.vehicles && (
+            <MapFilter
+              isLoading={props.vehicles.isLoading}
+              onFilterChange={onFilterChange}
+            />
+          )}
           {currentLocation && (
             <PositionArrow
               onPress={() => {

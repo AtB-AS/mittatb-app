@@ -3,11 +3,10 @@ import {
   PricingPlanFragment,
   PricingSegmentFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
-import ScooterTexts from '@atb/translations/screens/subscreens/ScooterTexts';
+import {ScooterTexts} from '@atb/translations/screens/subscreens/VehicleTexts';
 import {VehicleStat} from '@atb/vehicles/components/VehicleStat';
 import {Language, useTranslation} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
-import {StyleSheet} from '@atb/theme';
 import {hasMultiplePricingPlans} from '@atb/vehicles/utils';
 
 type PricingPlanProps = {
@@ -16,12 +15,8 @@ type PricingPlanProps = {
 };
 export const PricingPlan = ({operator, plan}: PricingPlanProps) => {
   const {t} = useTranslation();
-  const style = useSheetStyle();
   const seAppForPrices = (
-    <VehicleStat
-      style={style.vehicleStat}
-      primaryStat={t(ScooterTexts.seeAppForPrices(operator))}
-    />
+    <VehicleStat primaryStat={t(ScooterTexts.seeAppForPrices(operator))} />
   );
 
   if (hasMultiplePricingPlans(plan)) {
@@ -59,7 +54,6 @@ type PriceInfoProps = {
 
 const PriceInfo = ({price, pricingSegment, unit}: PriceInfoProps) => {
   const {t, language} = useTranslation();
-  const style = useSheetStyle();
 
   const formatPrice = (
     segmentFragment: PricingSegmentFragment,
@@ -73,15 +67,8 @@ const PriceInfo = ({price, pricingSegment, unit}: PriceInfoProps) => {
 
   return (
     <VehicleStat
-      style={style.vehicleStat}
       primaryStat={`${formatPrice(pricingSegment, language)} kr/${unit}`}
       secondaryStat={t(ScooterTexts.pricingPlan.price(price))}
     />
   );
 };
-
-const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
-  vehicleStat: {
-    marginBottom: theme.spacings.medium,
-  },
-}));

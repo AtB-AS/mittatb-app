@@ -53,7 +53,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const [travellerSelection, setTravellerSelection] =
     useState(selectableTravellers);
   const hasSelection = travellerSelection.some((u) => u.count);
-  const [travelDate, setTravelDate] = useState<string | undefined>();
+  const [travelDate, setTravelDate] = useState<string | undefined>(
+    params.travelDate,
+  );
 
   const {timeSelectionMode, travellerSelectionMode, zoneSelectionMode} =
     params.fareProductTypeConfig.configuration;
@@ -81,13 +83,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     }
   }, [params?.refreshOffer]);
 
-  const closeModal = () =>
-    navigation.navigate('Root_TabNavigatorStack', {
-      screen: 'TabNav_TicketingStack',
-      params: {
-        screen: 'PurchaseTab',
-      },
-    });
+  const closeModal = () => navigation.goBack();
 
   return (
     <View style={styles.container}>
@@ -101,6 +97,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       />
 
       <ScrollView testID="ticketingScrollView">
+        {params.mode === 'TravelSearch' && (
+          <MessageBox
+            style={styles.travelSearchInfo}
+            type={'valid'}
+            message={t(PurchaseOverviewTexts.travelSearchInfo)}
+          />
+        )}
         <View style={styles.selectionLinks}>
           {error && (
             <MessageBox
@@ -109,7 +112,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               message={
                 isEmptyOffer
                   ? t(
-                      PurchaseOverviewTexts.errorMessageBox.producUnavailable(
+                      PurchaseOverviewTexts.errorMessageBox.productUnavailable(
                         getReferenceDataName(preassignedFareProduct, language),
                       ),
                     )
@@ -189,6 +192,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 preassignedFareProduct,
                 travelDate,
                 headerLeftButton: {type: 'back'},
+                mode: params.mode,
               })
             }
             style={styles.summary}
@@ -207,6 +211,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   selectionComponent: {
     marginVertical: theme.spacings.medium,
   },
-  selectionLinks: {margin: theme.spacings.medium},
-  summary: {marginTop: theme.spacings.medium},
+  selectionLinks: {
+    margin: theme.spacings.medium,
+  },
+  summary: {
+    marginTop: theme.spacings.medium,
+  },
+  travelSearchInfo: {
+    marginHorizontal: theme.spacings.medium,
+    marginTop: theme.spacings.xLarge,
+    marginBottom: theme.spacings.medium,
+  },
 }));

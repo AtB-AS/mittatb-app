@@ -4,10 +4,13 @@ import Bugsnag from '@bugsnag/react-native';
 export enum StorageModelKeysEnum {
   HasReadDeparturesV2Onboarding = '@ATB_has_read_departures_v2_onboarding',
   HasReadTravelSearchFilterOnboarding = '@ATB_has_read_travel_search_filter_onboarding',
+  HasReadScooterOnboarding = '@ATB_has_read_scooter_onboarding',
   EnableTravelSearchFiltersDebugOverride = '@ATB_enable_travel_search_filters_debug_override',
   EnableNewTravelSearchDebugOverride = '@ATB_enable_new_travel_search_debug_override',
+  EnableFromTravelSearchToTicketDebugOverride = '@ATB_enable_from_travel_search_to_ticket_debug_override',
   EnableVehiclesInMapDebugOverride = '@ATB_enable_vehicles_in_map_debug_override',
   EnableRealtimeMapDebugOverride = '@ATB_enable_realtime_map_debug_override',
+  EnableMapDebugOverride = '@ATB_enable_map_debug_override',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;
@@ -28,6 +31,7 @@ export type StorageModel = {
   '@ATB_saved_payment_methods': string;
   '@ATB_feedback_display_stats': string;
   '@ATB_last_mobile_token_user': string;
+  '@ATB_user_map_filters': string;
 };
 
 export type StorageModelTypes = keyof StorageModel | StorageModelKeysTypes;

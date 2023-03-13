@@ -2,13 +2,17 @@ import {translation as _} from '../../commons';
 import {orgSpecificTranslations} from '@atb/translations';
 
 const PurchaseOverviewTexts = {
+  travelSearchInfo: _(
+    'Vi har fylt inn oppstartstidpunkt og holdeplasser for din reise. Vennligst sjekk at detaljene stemmer.',
+    'We have filled in the start time and stops for your journey. Please check that the details are correct.',
+  ),
   errorMessageBox: {
     title: _('Det oppstod en feil', 'An error occurred'),
     message: _(
       'Oops - vi klarte ikke å søke opp prisen. Supert om du prøver igjen 🤞',
       'Whoops - we were unable to retrieve cost. Please try again 🤞',
     ),
-    producUnavailable: (productName: string) =>
+    productUnavailable: (productName: string) =>
       _(
         `${productName} er ikke tilgjengelig akkurat nå.`,
         `${productName} is not available right now.`,
@@ -23,9 +27,6 @@ const PurchaseOverviewTexts = {
       'Aktivér for å velge reisende',
       `Activate to select travellers`,
     ),
-  },
-  tariffZones: {
-    a11yHint: _('Aktivér for å velge soner', 'Activate to select zones'),
   },
   product: {
     a11yHint: _(
@@ -52,16 +53,27 @@ const PurchaseOverviewTexts = {
     ),
   },
   zones: {
-    label: {
+    title: {
       single: {
-        text: _('Velg sone (kun én)', 'Select zone (only one)'),
-        a11yLabel: _('Velg sone (kun én)', 'Select zone (only one)'),
+        text: _('Velg holdeplass/sone (kun én)', 'Select stop/zone (only one)'),
+        a11yLabel: _(
+          'Velg holdeplass eller sone (kun én)',
+          'Select stop or zone (only one)',
+        ),
       },
       multiple: {
-        text: _('Velg sone(r)', 'Select zone(s)'),
-        a11yLabel: _('Velg soner', 'Select zones'),
+        text: _('Velg holdeplass/sone(r)', 'Select stop/zone(s)'),
+        a11yLabel: _('Velg holdeplass eller soner', 'Select stop or zones'),
       },
     },
+    label: {
+      from: _('Fra', 'From'),
+      to: _('Til', 'To'),
+    },
+    zoneName: (zoneName: string) => _(`Sone ${zoneName}`, `Zone ${zoneName}`),
+    a11yLabelPrefixSingle: _('Valgt sone:', 'Selected zone:'),
+    a11yLabelPrefixMultiple: _('Valgte soner:', 'Selected zones:'),
+    a11yHint: _('Aktivér for å velge soner', 'Activate to select zones'),
   },
   productSelection: {
     title: _('Velg billett', 'Select a ticket'),

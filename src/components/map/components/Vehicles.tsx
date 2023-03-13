@@ -1,29 +1,49 @@
-import React from 'react';
+import React, {RefObject, useRef} from 'react';
 import {FeatureCollection, GeoJSON} from 'geojson';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import MapboxGL from '@rnmapbox/maps';
 import {MapSelectionActionType} from '@atb/components/map/types';
-import {isClusterFeature, isFeaturePoint} from '@atb/components/map/utils';
+import {
+  flyToLocation,
+  isClusterFeature,
+  isFeaturePoint,
+  toCoordinates,
+} from '@atb/components/map/utils';
 
 type Props = {
+  mapCameraRef: RefObject<MapboxGL.Camera>;
   vehicles: FeatureCollection<GeoJSON.Point, VehicleFragment>;
   onPress: (type: MapSelectionActionType) => void;
 };
 
-export const Vehicles = ({vehicles, onPress}: Props) => {
+export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
+  const shapeSource = useRef<MapboxGL.ShapeSource>(null);
+
   return (
     <MapboxGL.ShapeSource
       id={'vehicles'}
+      ref={shapeSource}
       shape={vehicles}
+      tolerance={0}
       cluster
-      onPress={(e) => {
+      maxZoomLevel={22}
+      clusterMaxZoomLevel={21}
+      onPress={async (e) => {
         const [feature, ..._] = e.features;
         if (isClusterFeature(feature)) {
-          onPress({
-            source: 'cluster-click',
-            feature: feature,
-          });
+          const zoom = await shapeSource.current?.getClusterExpansionZoom(
+            feature,
+          );
+          flyToLocation(
+            toCoordinates(feature.geometry.coordinates),
+            mapCameraRef,
+            zoom,
+          );
         } else if (isFeaturePoint(feature)) {
+          flyToLocation(
+            toCoordinates(feature.geometry.coordinates),
+            mapCameraRef,
+          );
           onPress({
             source: 'map-click',
             feature,

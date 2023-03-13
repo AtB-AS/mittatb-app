@@ -26,7 +26,6 @@ import {
 import React from 'react';
 import {View} from 'react-native';
 import {UserProfileWithCount} from '../../../Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
-import {tariffZonesSummary} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {
   getNonInspectableTokenWarning,
   isValidFareContract,
@@ -34,6 +33,7 @@ import {
   ValidityStatus,
   userProfileCountAndName,
   getValidityStatus,
+  tariffZonesSummary,
 } from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {screenReaderPause} from '@atb/components/text';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';

@@ -7,6 +7,19 @@ import {
 
 export type RentalUrisFragment = {android?: string; ios?: string};
 
+export type RentalAppFragment = {discoveryUri?: string; storeUri?: string};
+
+export type RentalAppsFragment = {
+  android?: RentalAppFragment;
+  ios?: RentalAppFragment;
+};
+
+export type BrandAssetsFragment = {
+  brandImageUrl: string;
+  brandImageUrlDark?: string;
+  brandLastModified: string;
+};
+
 export type VehicleFragment = {
   id: string;
   lat: number;
@@ -18,7 +31,12 @@ export type VehicleFragment = {
   availableUntil?: string;
   vehicleType: VehicleTypeFragment;
   pricingPlan: PricingPlanFragment;
-  system: {operator: OperatorFragment; name: TranslatedStringFragment};
+  system: {
+    operator: OperatorFragment;
+    name: TranslatedStringFragment;
+    brandAssets?: BrandAssetsFragment;
+    rentalApps?: RentalAppsFragment;
+  };
   rentalUris?: RentalUrisFragment;
 };
 
