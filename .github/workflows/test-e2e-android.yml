@@ -97,13 +97,9 @@ jobs:
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
 
-      - name: debug - ls
-        run: ls -la android/app/build/outputs/apk/
-      - name: debug - ls
-        run: ls -la android/app/build/outputs/apk/staging
       - name: Install Appium
         run: npm install -g appium
-      - name: Install e2e test
+      - name: Install E2E tests
         run: yarn install
         working-directory: e2e/appium
       - name: Run tests on Android emulator
