@@ -13,7 +13,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {getVenueIconTypes} from '../utils';
-import {SearchLocation} from '@atb/favorites/types';
+import {SearchLocation} from '@atb/favorites';
 
 type Props = {
   title?: string;

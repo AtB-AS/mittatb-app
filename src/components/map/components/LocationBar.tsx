@@ -7,7 +7,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import React, {useMemo} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {ErrorType} from '@atb/api/utils';
-import {GeoLocation, Location, SearchLocation} from '@atb/favorites/types';
+import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   LocationSearchTexts,

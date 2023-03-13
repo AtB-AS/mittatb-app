@@ -2,7 +2,7 @@ import {AxiosRequestConfig} from 'axios';
 import {CursoredData, CursoredQuery, StopPlaceDetails} from '@atb/sdk';
 import {stringifyWithDate} from '@atb/utils/querystring';
 import client from '../client';
-import {FavoriteDeparture, UserFavoriteDepartures} from '@atb/favorites/types';
+import {FavoriteDeparture, UserFavoriteDepartures} from '@atb/favorites';
 import {StopPlaceQuayDepartures} from '../types/departures';
 import {QuayDeparturesQuery} from '../types/generated/QuayDeparturesQuery';
 import {NearestStopPlacesQuery} from '../types/generated/NearestStopPlacesQuery';

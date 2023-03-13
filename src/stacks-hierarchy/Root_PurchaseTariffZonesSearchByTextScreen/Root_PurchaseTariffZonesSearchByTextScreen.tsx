@@ -3,7 +3,7 @@ import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {TextInputSectionItem} from '@atb/components/sections';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {SearchLocation} from '@atb/favorites/types';
+import {SearchLocation} from '@atb/favorites';
 import {useGeocoder} from '@atb/geocoder';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {TariffZone} from '@atb/reference-data/types';

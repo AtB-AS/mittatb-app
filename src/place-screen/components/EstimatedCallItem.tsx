@@ -23,11 +23,13 @@ import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types
 import {EstimatedCall, Quay, StopPlace} from '@atb/api/types/departures';
 import useFontScale from '@atb/utils/use-font-scale';
 import {StyleSheet, useTheme} from '@atb/theme';
-import ToggleFavouriteDeparture from '../../favorites/ToggleFavouriteDeparture';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {isToday, parseISO} from 'date-fns';
-import {useOnMarkFavouriteDepartures} from '../../favorites/use-on-mark-favourite-departures';
-import {StopPlacesMode} from '../../nearby-stop-places/types';
+import {
+  useOnMarkFavouriteDepartures,
+  FavouriteDepartureToggle,
+} from '@atb/favorites';
+import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {SvgProps} from 'react-native-svg';
 import {
@@ -158,7 +160,7 @@ export default function EstimatedCallItem({
             />
           ) : null}
           {allowFavouriteSelection && (
-            <ToggleFavouriteDeparture
+            <FavouriteDepartureToggle
               existingFavorite={existingFavorite}
               onMarkFavourite={
                 mode === 'Departure' ? onMarkFavourite : undefined

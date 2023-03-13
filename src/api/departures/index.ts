@@ -4,7 +4,7 @@ import {
   FavoriteDeparture,
   Location,
   UserFavoriteDepartures,
-} from '@atb/favorites/types';
+} from '@atb/favorites';
 import {
   DeparturesMetadata,
   DeparturesRealtimeData,

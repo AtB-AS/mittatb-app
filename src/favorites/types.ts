@@ -57,10 +57,6 @@ export type FavoriteDeparture = FavoriteDepartureId & {
   visibleOnDashboard?: boolean;
 };
 
-export type FavoriteDepartureWithId = FavoriteDeparture & {
-  id: string;
-};
-
 export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
 
 export type StoredFavoriteDeparture = StoredType<FavoriteDeparture>;

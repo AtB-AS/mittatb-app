@@ -11,8 +11,13 @@ import useDisableMapCheck from '@atb/utils/use-disable-map-check';
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {FavoriteIcon, useFavorites} from './index';
-import {ChipTypeGroup, GeoLocation, Location} from './types';
+import {
+  FavoriteIcon,
+  useFavorites,
+  GeoLocation,
+  ChipTypeGroup,
+  Location,
+} from '@atb/favorites';
 
 const themeColor: InteractiveColor = 'interactive_0';
 
