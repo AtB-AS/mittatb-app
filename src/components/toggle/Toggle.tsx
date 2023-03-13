@@ -40,6 +40,7 @@ export function Toggle({
       onValueChange={(value) => handleValueChange(value)}
       trackColor={{
         true: theme.interactive[interactiveColor].outline.background,
+        false: theme.static.background.background_3.background,
       }}
       thumbColor="white"
       style={Platform.OS === 'android' ? styles.android : styles.ios}
