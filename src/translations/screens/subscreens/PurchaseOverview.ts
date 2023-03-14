@@ -123,8 +123,17 @@ const PurchaseOverviewTexts = {
     heading: _('Rabatt', 'Discount'),
     expandableLabel: _('Din rabatt og pris', 'Your discount and price'),
     description: _(
-      'Voksen får rabatt i sone A basert på antall kjøp de siste 14 dagene.',
-      'Adult get a discount in Zone A based on number of purchases the last 14 days.',
+      'Enkeltbillett voksen har rabatt i Sone A basert på antall kjøp de siste 14 dagene når du er med i pilot for Fleksibel billett.',
+      "Adult single tickets get discounts in zone A based on the number of purchases in the last 14 days when you're participating in the Flexible ticket pilot.",
+    ),
+    per: (userProfileName: string) =>
+      _(`Pr. ${userProfileName}`, `Per ${userProfileName}`),
+    discountPercentage: (discount: string) =>
+      _(`${discount} % rabatt`, `${discount} % discount`),
+    link: _('Les mer og se rabattabell', 'Read more and see discount details'),
+    a11yHint: _(
+      'Aktivér for å lese mer om rabatt på fleksibel billett på ekstern side',
+      'Activate to read more about the details for discount on flexible tickets (external content)',
     ),
   },
 };
