@@ -332,7 +332,7 @@ export const Profile_DebugInfoScreen = () => {
             expandContent={
               <View>
                 {Object.entries(user?.toJSON() ?? {}).map(([key, value]) => (
-                  <MapEntry title={key} value={value} />
+                  <MapEntry key={key} title={key} value={value} />
                 ))}
               </View>
             }
@@ -347,7 +347,7 @@ export const Profile_DebugInfoScreen = () => {
               <View>
                 {!!idToken ? (
                   Object.entries(idToken).map(([key, value]) => (
-                    <MapEntry title={key} value={value} />
+                    <MapEntry key={key} title={key} value={value} />
                   ))
                 ) : (
                   <ThemeText>No id token</ThemeText>
@@ -366,6 +366,7 @@ export const Profile_DebugInfoScreen = () => {
                 <View>
                   {Object.keys(remoteConfig).map((key) => (
                     <MapEntry
+                      key={key}
                       title={key}
                       value={
                         remoteConfig[key as keyof RemoteConfigContextState]
@@ -390,7 +391,7 @@ export const Profile_DebugInfoScreen = () => {
                 {storedValues && (
                   <View>
                     {storedValues.map(([key, value]) => (
-                      <MapEntry title={key} value={value} />
+                      <MapEntry key={key} title={key} value={value} />
                     ))}
                   </View>
                 )}
@@ -411,6 +412,7 @@ export const Profile_DebugInfoScreen = () => {
                   </ThemeText>
                   {Object.keys(preferences).map((key) => (
                     <TouchableOpacity
+                      key={key}
                       onPress={() => setPreference({[key]: undefined})}
                     >
                       <MapEntry
@@ -530,7 +532,7 @@ function MapValue({value}: {value: any}) {
         <View style={{flexDirection: 'column'}}>
           {entries.length ? (
             Object.entries(value).map(([key, value]) => (
-              <MapEntry title={key} value={value} />
+              <MapEntry key={key} title={key} value={value} />
             ))
           ) : (
             <ThemeText color="secondary">Empty object</ThemeText>

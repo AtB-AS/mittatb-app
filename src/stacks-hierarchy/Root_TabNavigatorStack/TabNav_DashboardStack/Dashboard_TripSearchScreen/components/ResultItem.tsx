@@ -217,11 +217,12 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
               }}
             >
               <View style={styles.legOutput}>
-                {interpose(
-                  legs.map((leg, i) => (
-                    <View
-                      key={tripPattern.compressedQuery + leg.aimedStartTime}
-                    >
+                {legs.map((leg, i) => (
+                  <View
+                    key={tripPattern.compressedQuery + leg.aimedStartTime}
+                    style={styles.legAndDash}
+                  >
+                    <View>
                       {leg.mode === 'foot' ? (
                         <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
                       ) : (
@@ -262,11 +263,13 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                         )}
                       </View>
                     </View>
-                  )),
-                  <View style={[styles.dashContainer, iconHeight]}>
-                    <LegDash />
-                  </View>,
-                )}
+                    {i < legs.length - 1 ? (
+                      <View style={[styles.dashContainer, iconHeight]}>
+                        <LegDash />
+                      </View>
+                    ) : null}
+                  </View>
+                ))}
               </View>
               {collapsedLegs.length ? (
                 <View style={[styles.dashContainer, iconHeight]}>
@@ -410,6 +413,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   legOutput: {
     flexDirection: 'row',
   },
+  legAndDash: {flexDirection: 'row'},
   departureTimes: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
