@@ -7,12 +7,13 @@ import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import DateSelection from './DateSelection';
 import FavoriteToggle from './FavoriteToggle';
 import QuaySection from './QuaySection';
-import {useQuayData} from '../hooks/use-quay-data';
+import {useQuayData} from '../hooks/use-departure-data';
 import {hasFavorites} from './StopPlaceView';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {MessageBox} from '@atb/components/message-box';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {dictionary, useTranslation} from '@atb/translations';
+import {useIsFocused} from '@react-navigation/native';
 
 export type QuayViewParams = {
   quay: Quay;
@@ -51,9 +52,12 @@ export default function QuayView({
   const {favoriteDepartures} = useFavorites();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
+  const isFocused = useIsFocused();
+
   const {state, forceRefresh} = useQuayData(
-    quay,
+    [quay.id],
     showOnlyFavorites,
+    isFocused,
     mode,
     searchStartTime,
   );

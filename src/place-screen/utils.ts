@@ -1,5 +1,5 @@
 import {StopPlacesMode} from '../nearby-stop-places';
-import {getSecondsUntilMidnightOrMinimum} from './hooks/use-quay-data';
+import {getSecondsUntilMidnightOrMinimum} from './hooks/use-departure-data';
 
 const MIN_TIME_RANGE = 3 * 60 * 60; // Three hours
 const ONE_WEEK_TIME_RANGE = 7 * 24 * 60 * 60;
