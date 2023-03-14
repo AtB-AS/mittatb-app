@@ -228,7 +228,7 @@ function totalWaitTimeIsMoreThanAnHour(legs: Leg[]) {
   );
 }
 
-function getWaitTime(leg: Leg, nextLeg?: Leg) {
+function getWaitTime(leg: Leg, nextLeg: Leg) {
   return nextLeg
     ? secondsBetween(leg.expectedEndTime, nextLeg?.expectedStartTime)
     : 0;
