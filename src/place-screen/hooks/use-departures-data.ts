@@ -242,7 +242,7 @@ const reducer: ReducerWithSideEffects<
   }
 };
 
-export function useQuayData(
+export function useDeparturesData(
   quayIds: string[],
   showOnlyFavorites: boolean,
   isFocused: boolean,

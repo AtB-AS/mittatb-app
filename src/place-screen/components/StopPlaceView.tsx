@@ -19,7 +19,7 @@ import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesD
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Walk} from '@atb/assets/svg/mono-icons/transportation';
 import {useHumanizeDistance} from '@atb/utils/location';
-import {useQuayData} from '../hooks/use-departure-data';
+import {useDeparturesData} from '../hooks/use-departures-data';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 
@@ -76,7 +76,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
   const {theme} = useTheme();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
-  const {state, forceRefresh} = useQuayData(
+  const {state, forceRefresh} = useDeparturesData(
     stopPlace.quays?.map((q) => q.id) ?? [],
     showOnlyFavorites,
     isFocused,
