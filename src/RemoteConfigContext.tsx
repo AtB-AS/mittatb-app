@@ -1,10 +1,18 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import remoteConfig from '@react-native-firebase/remote-config';
-import {RemoteConfig, defaultRemoteConfig, getConfig} from './remote-config';
+import {defaultRemoteConfig, getConfig, RemoteConfig} from './remote-config';
 import Bugsnag from '@bugsnag/react-native';
 
 import {useAppState} from './AppContext';
 import {FeedbackConfiguration} from '@atb/components/feedback';
+import useInterval from '@atb/utils/use-interval';
+
+/**
+ * The retry interval values for retrying Remote Config data fetch with
+ * exponential backoff.
+ */
+const RETRY_INTERVAL_MS_START = 1000;
+const RETRY_INTERVAL_MS_MAX = 30000;
 
 export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
@@ -35,25 +43,41 @@ function isUserInfo(a: any): a is UserInfoErrorFromFirebase {
   return a && 'code' in a && 'message' in a;
 }
 
+const useRetryIntervalWithBackoff = (): [number, () => void] => {
+  const [retryInterval, setRetryInterval] = useState(RETRY_INTERVAL_MS_START);
+  return [
+    retryInterval,
+    () => setRetryInterval((val) => Math.min(val * 2, RETRY_INTERVAL_MS_MAX)),
+  ];
+};
+
 const RemoteConfigContextProvider: React.FC = ({children}) => {
   const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);
+  const [fetchError, setFetchError] = useState(false);
   const {isLoading: isLoadingAppState, newBuildSincePreviousLaunch} =
     useAppState();
+  const [retryInterval, incrementRetryInterval] = useRetryIntervalWithBackoff();
 
   async function fetchConfig() {
     try {
       await remoteConfig().fetchAndActivate();
       const currentConfig = await getConfig();
       setConfig(currentConfig);
+      setFetchError(false);
     } catch (e) {
+      setFetchError(true);
       if (isRemoteConfigError(e) && isUserInfo(e.userInfo)) {
         const {userInfo} = e;
 
         if (userInfo.code === 'failure' || userInfo.fatal) {
-          Bugsnag.notify(e, function (event) {
-            event.addMetadata('metadata', {userInfo});
-            event.severity = 'info';
-          });
+          if (config.enable_network_logging) {
+            Bugsnag.notify(e, function (event) {
+              event.addMetadata('metadata', {userInfo});
+              event.severity = 'info';
+            });
+          } else {
+            Bugsnag.leaveBreadcrumb('Remote config fetch error', userInfo);
+          }
         }
       } else {
         Bugsnag.notify(e as any);
@@ -79,6 +103,16 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
       setupRemoteConfig();
     }
   }, [isLoadingAppState, newBuildSincePreviousLaunch]);
+
+  useInterval(
+    () => {
+      fetchConfig();
+      incrementRetryInterval();
+    },
+    retryInterval,
+    undefined,
+    !fetchError,
+  );
 
   async function refresh() {
     const configApi = remoteConfig();
