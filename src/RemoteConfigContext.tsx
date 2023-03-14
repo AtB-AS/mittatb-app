@@ -7,8 +7,12 @@ import {useAppState} from './AppContext';
 import {FeedbackConfiguration} from '@atb/components/feedback';
 import useInterval from '@atb/utils/use-interval';
 
-/** The retry interval when the Remote Config fetch failed */
-const RETRY_INTERVAL_MS = 15000;
+/**
+ * The retry interval values for retrying Remote Config data fetch with
+ * exponential backoff.
+ */
+const RETRY_INTERVAL_MS_START = 1000;
+const RETRY_INTERVAL_MS_MAX = 30000;
 
 export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
@@ -39,11 +43,20 @@ function isUserInfo(a: any): a is UserInfoErrorFromFirebase {
   return a && 'code' in a && 'message' in a;
 }
 
+const useRetryIntervalWithBackoff = (): [number, () => void] => {
+  const [retryInterval, setRetryInterval] = useState(RETRY_INTERVAL_MS_START);
+  return [
+    retryInterval,
+    () => setRetryInterval((val) => Math.min(val * 2, RETRY_INTERVAL_MS_MAX)),
+  ];
+};
+
 const RemoteConfigContextProvider: React.FC = ({children}) => {
   const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);
   const [fetchError, setFetchError] = useState(false);
   const {isLoading: isLoadingAppState, newBuildSincePreviousLaunch} =
     useAppState();
+  const [retryInterval, incrementRetryInterval] = useRetryIntervalWithBackoff();
 
   async function fetchConfig() {
     try {
@@ -91,7 +104,15 @@ const RemoteConfigContextProvider: React.FC = ({children}) => {
     }
   }, [isLoadingAppState, newBuildSincePreviousLaunch]);
 
-  useInterval(fetchConfig, RETRY_INTERVAL_MS, undefined, !fetchError);
+  useInterval(
+    () => {
+      fetchConfig();
+      incrementRetryInterval();
+    },
+    retryInterval,
+    undefined,
+    !fetchError,
+  );
 
   async function refresh() {
     const configApi = remoteConfig();
