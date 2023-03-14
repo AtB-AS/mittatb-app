@@ -166,6 +166,7 @@ const FareContractTexts = {
         return _('ukjent transportmiddel', 'unknown transport');
     }
   },
+  multipleTravelModes: _('Flere reisemåter', 'Several travel modes'),
 };
 
 export default orgSpecificTranslations(FareContractTexts, {

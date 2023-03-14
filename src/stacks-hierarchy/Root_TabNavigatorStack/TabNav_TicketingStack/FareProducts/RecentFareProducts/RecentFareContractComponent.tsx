@@ -1,19 +1,18 @@
 import React from 'react';
 import {ThemeText} from '@atb/components/text';
-import {FareContractTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import {RecentFareContract} from '../use-recent-fare-contracts';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Dimensions, TouchableOpacity, View} from 'react-native';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import {TransportationIcon} from '@atb/components/transportation-icon';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
-import {TransportModeType} from '@atb/configuration/types';
 import {InfoChip} from '@atb/components/info-chip';
 import {InteractiveColor} from '@atb/theme/colors';
+import {TransportMode} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Component/TransportMode';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
@@ -51,30 +50,11 @@ export const RecentFareContractComponent = ({
   );
 
   if (!fareProductTypeConfig) return null;
-
-  type ModeNameProps = {
-    modes: TransportModeType[];
-    joinSymbol?: string;
-  };
-
-  const modeNames = ({modes, joinSymbol = '/'}: ModeNameProps) => {
-    if (!modes) return null;
-    if (modes.length > 2)
-      return t(RecentFareContractsTexts.severalTransportModes);
-    else
-      return modes
-        .map((tm) => t(FareContractTexts.transportMode(tm.mode)))
-        .join(joinSymbol);
-  };
-
   const returnAccessibilityLabel = () => {
     const modeInfo = `${getReferenceDataName(
       preassignedFareProduct,
       language,
-    )}${t(RecentFareContractsTexts.a11yPreLabels.transportModes)} ${modeNames({
-      modes: fareProductTypeConfig.transportModes,
-      joinSymbol: t(RecentFareContractsTexts.a11yPreLabels.and),
-    })}`;
+    )}${t(RecentFareContractsTexts.a11yPreLabels.transportModes)}`;
 
     const travellerInfo = `${t(
       RecentFareContractsTexts.a11yPreLabels.travellers,
@@ -118,19 +98,10 @@ export const RecentFareContractComponent = ({
     >
       <View style={[styles.upperPart, {minWidth: width * 0.6}]}>
         <View style={styles.travelModeWrapper}>
-          {fareProductTypeConfig.transportModes.map(({mode, subMode}) => (
-            <TransportationIcon
-              style={styles.transportationIcon}
-              mode={mode}
-              subMode={subMode}
-              key={mode + subMode}
-              size="small"
-            />
-          ))}
-
-          <ThemeText type="label__uppercase" color={interactiveColor.default}>
-            {modeNames({modes: fareProductTypeConfig.transportModes})}
-          </ThemeText>
+          <TransportMode
+            iconSize={'small'}
+            modes={fareProductTypeConfig.transportModes}
+          />
         </View>
 
         <View style={styles.productName} testID={testID + 'Title'}>
@@ -243,9 +214,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   travelModeWrapper: {
     flexShrink: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
     marginBottom: theme.spacings.medium,
   },
   transportationIcon: {

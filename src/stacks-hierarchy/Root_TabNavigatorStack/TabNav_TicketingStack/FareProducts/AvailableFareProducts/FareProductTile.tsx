@@ -9,7 +9,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {getStaticColor, StaticColor} from '@atb/theme/colors';
-import TransportMode from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Component/TransportMode';
+import {TransportMode} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Component/TransportMode';
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {useTextForLanguage} from '@atb/translations/utils';
 
