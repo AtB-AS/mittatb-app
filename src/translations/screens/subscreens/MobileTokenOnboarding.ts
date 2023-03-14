@@ -1,5 +1,5 @@
 import {translation as _} from '../../commons';
-import {orgSpecificTranslations} from '@atb/translations';
+import {orgSpecificTranslations} from '../../orgSpecificTranslations';
 
 const MobileTokenOnboardingTexts = {
   flexibilityInfo: {
