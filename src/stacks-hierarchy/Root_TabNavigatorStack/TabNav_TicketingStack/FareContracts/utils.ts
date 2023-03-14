@@ -1,5 +1,5 @@
 import {FareContractState} from '@atb/ticketing';
-import {UserProfile} from '@atb/reference-data/types';
+import {UserProfile, TariffZone} from '@atb/reference-data/types';
 import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
 import {
   findReferenceDataById,
@@ -11,6 +11,7 @@ import {
   Language,
   LanguageAndTextType,
   TranslateFunction,
+  TariffZonesTexts,
 } from '@atb/translations';
 import {
   findInspectable,
@@ -173,3 +174,25 @@ export const getOtherDeviceIsInspectableWarning = (
 
 export const isValidFareContract = (status: ValidityStatus) =>
   status === 'valid';
+
+export function tariffZonesSummary(
+  fromTariffZone: TariffZone,
+  toTariffZone: TariffZone,
+  language: Language,
+  t: TranslateFunction,
+): string {
+  if (fromTariffZone.id === toTariffZone.id) {
+    return t(
+      TariffZonesTexts.zoneSummary.text.singleZone(
+        getReferenceDataName(fromTariffZone, language),
+      ),
+    );
+  } else {
+    return t(
+      TariffZonesTexts.zoneSummary.text.multipleZone(
+        getReferenceDataName(fromTariffZone, language),
+        getReferenceDataName(toTariffZone, language),
+      ),
+    );
+  }
+}

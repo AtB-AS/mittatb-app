@@ -28,9 +28,6 @@ const PurchaseOverviewTexts = {
       `Activate to select travellers`,
     ),
   },
-  tariffZones: {
-    a11yHint: _('Aktivér for å velge soner', 'Activate to select zones'),
-  },
   product: {
     a11yHint: _(
       'Aktivér for å velge billettype',
@@ -56,16 +53,27 @@ const PurchaseOverviewTexts = {
     ),
   },
   zones: {
-    label: {
+    title: {
       single: {
-        text: _('Velg sone (kun én)', 'Select zone (only one)'),
-        a11yLabel: _('Velg sone (kun én)', 'Select zone (only one)'),
+        text: _('Velg holdeplass/sone (kun én)', 'Select stop/zone (only one)'),
+        a11yLabel: _(
+          'Velg holdeplass eller sone (kun én)',
+          'Select stop or zone (only one)',
+        ),
       },
       multiple: {
-        text: _('Velg sone(r)', 'Select zone(s)'),
-        a11yLabel: _('Velg soner', 'Select zones'),
+        text: _('Velg holdeplass/sone(r)', 'Select stop/zone(s)'),
+        a11yLabel: _('Velg holdeplass eller soner', 'Select stop or zones'),
       },
     },
+    label: {
+      from: _('Fra', 'From'),
+      to: _('Til', 'To'),
+    },
+    zoneName: (zoneName: string) => _(`Sone ${zoneName}`, `Zone ${zoneName}`),
+    a11yLabelPrefixSingle: _('Valgt sone:', 'Selected zone:'),
+    a11yLabelPrefixMultiple: _('Valgte soner:', 'Selected zones:'),
+    a11yHint: _('Aktivér for å velge soner', 'Activate to select zones'),
   },
   productSelection: {
     title: _('Velg billett', 'Select a ticket'),
@@ -115,8 +123,17 @@ const PurchaseOverviewTexts = {
     heading: _('Rabatt', 'Discount'),
     expandableLabel: _('Din rabatt og pris', 'Your discount and price'),
     description: _(
-      'Voksen får rabatt i sone A basert på antall kjøp de siste 14 dagene.',
-      'Adult get a discount in Zone A based on number of purchases the last 14 days.',
+      'Enkeltbillett voksen har rabatt i Sone A basert på antall kjøp de siste 14 dagene når du er med i pilot for Fleksibel billett.',
+      "Adult single tickets get discounts in zone A based on the number of purchases in the last 14 days when you're participating in the Flexible ticket pilot.",
+    ),
+    per: (userProfileName: string) =>
+      _(`Pr. ${userProfileName}`, `Per ${userProfileName}`),
+    discountPercentage: (discount: string) =>
+      _(`${discount} % rabatt`, `${discount} % discount`),
+    link: _('Les mer og se rabattabell', 'Read more and see discount details'),
+    a11yHint: _(
+      'Aktivér for å lese mer om rabatt på fleksibel billett på ekstern side',
+      'Activate to read more about the details for discount on flexible tickets (external content)',
     ),
   },
 };

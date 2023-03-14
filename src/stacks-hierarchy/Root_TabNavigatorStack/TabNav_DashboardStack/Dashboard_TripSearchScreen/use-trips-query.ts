@@ -1,4 +1,4 @@
-import {Location} from '@atb/favorites/types';
+import {Location} from '@atb/favorites';
 import {DateString, SearchTime} from '@atb/journey-date-picker';
 import {TripPattern} from '@atb/api/types/trips';
 import {

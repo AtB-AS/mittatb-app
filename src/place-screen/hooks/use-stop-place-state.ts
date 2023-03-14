@@ -3,7 +3,7 @@ import {getStopPlaceDepartures} from '@atb/api/departures/stops-nearest';
 import {EstimatedCall, StopPlace} from '@atb/api/types/departures';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavorites} from '@atb/favorites';
-import {UserFavoriteDepartures} from '@atb/favorites/types';
+import {UserFavoriteDepartures} from '@atb/favorites';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {animateNextChange} from '@atb/utils/animation';
 import useInterval from '@atb/utils/use-interval';

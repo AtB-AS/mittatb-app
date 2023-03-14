@@ -14,7 +14,7 @@ import {hasNoGroupsWithDepartures, isValidDeparture} from '../utils';
 import LineItem from './line';
 import MoreItem from './more';
 import QuayHeaderItem from './quay-header';
-import {Location} from '@atb/favorites/types';
+import {Location} from '@atb/favorites';
 import {StopPlace} from '@atb/api/types/trips';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 

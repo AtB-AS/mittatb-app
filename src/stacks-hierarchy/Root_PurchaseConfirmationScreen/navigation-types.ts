@@ -11,4 +11,5 @@ export type Root_PurchaseConfirmationScreenParams = {
   userProfilesWithCount: UserProfileWithCount[];
   travelDate?: string;
   headerLeftButton: LeftButtonProps;
+  mode?: 'TravelSearch' | 'Ticket';
 };

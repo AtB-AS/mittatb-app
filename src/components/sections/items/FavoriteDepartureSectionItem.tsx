@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
-import {StoredFavoriteDeparture} from '@atb/favorites/types';
+import {StoredFavoriteDeparture} from '@atb/favorites';
 import {useTheme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {screenReaderPause, ThemeText} from '@atb/components/text';

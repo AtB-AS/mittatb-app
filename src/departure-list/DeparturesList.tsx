@@ -1,7 +1,7 @@
 import {StopPlaceGroup} from '@atb/api/departures/types';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {ExpandableSectionItem} from '@atb/components/sections';
-import {Location} from '@atb/favorites/types';
+import {Location} from '@atb/favorites';
 import {MessageBox} from '@atb/components/message-box';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';

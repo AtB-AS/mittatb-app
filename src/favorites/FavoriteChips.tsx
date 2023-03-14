@@ -11,8 +11,13 @@ import useDisableMapCheck from '@atb/utils/use-disable-map-check';
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {FavoriteIcon, useFavorites} from '../favorites';
-import {GeoLocation, Location} from '../favorites/types';
+import {
+  FavoriteIcon,
+  useFavorites,
+  GeoLocation,
+  ChipTypeGroup,
+  Location,
+} from '@atb/favorites';
 
 const themeColor: InteractiveColor = 'interactive_0';
 
@@ -26,9 +31,7 @@ type Props = {
   onAddFavorite: () => void;
 };
 
-export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
-
-const FavoriteChips: React.FC<Props> = ({
+export const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
   containerStyle,
   contentContainerStyle,
@@ -136,8 +139,6 @@ const FavoriteChip: React.FC<ButtonProps> = (props) => {
     />
   );
 };
-
-export default FavoriteChips;
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   staticChipsContainer: {

@@ -101,7 +101,7 @@ const TripSection: React.FC<TripSectionProps> = ({
 
   const notices = getNoticesForLeg(leg);
 
-  const lastPassedStop = leg.datedServiceJourney?.estimatedCalls
+  const lastPassedStop = leg.serviceJourneyEstimatedCalls
     ?.filter((a) => !a.predictionInaccurate && a.actualDepartureTime)
     .pop();
 

@@ -25,6 +25,7 @@ export type RemoteConfig = {
   service_disruption_url: string;
   enable_token_fallback: boolean;
   enable_flex_tickets: boolean;
+  flex_ticket_url: string;
   enable_vipps_login: boolean;
   enable_map_page: boolean;
   favourite_departures_poll_interval: number;
@@ -35,6 +36,8 @@ export type RemoteConfig = {
   enable_new_travel_search: boolean;
   enable_from_travel_search_to_ticket: boolean;
   enable_vehicles_in_map: boolean;
+  enable_vehicle_operator_logo: boolean;
+  default_map_filter: string;
   enable_realtime_map: boolean;
   enable_flexible_transport: boolean;
   use_flexible_on_accessMode: boolean;
@@ -66,6 +69,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   service_disruption_url: '',
   enable_token_fallback: true,
   enable_flex_tickets: false,
+  flex_ticket_url: '',
   enable_vipps_login: false,
   enable_map_page: false,
   favourite_departures_poll_interval: 30000,
@@ -76,6 +80,12 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_new_travel_search: false,
   enable_from_travel_search_to_ticket: false,
   enable_vehicles_in_map: false,
+  enable_vehicle_operator_logo: false,
+  default_map_filter: JSON.stringify({
+    vehicles: {
+      showVehicles: false,
+    },
+  }),
   enable_realtime_map: false,
   enable_flexible_transport: false,
   use_flexible_on_accessMode: true,
@@ -102,6 +112,9 @@ export function getConfig(): RemoteConfig {
   const enable_flex_tickets =
     values['enable_flex_tickets']?.asBoolean() ??
     defaultRemoteConfig.enable_flex_tickets;
+  const flex_ticket_url =
+    values['flex_ticket_url']?.asString() ??
+    defaultRemoteConfig.flex_ticket_url;
   const enable_login =
     values['enable_login']?.asBoolean() ?? defaultRemoteConfig.enable_login;
   const feedback_questions =
@@ -181,6 +194,14 @@ export function getConfig(): RemoteConfig {
     values['enable_vehicles_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_vehicles_in_map;
 
+  const enable_vehicle_operator_logo =
+    values['enable_vehicle_operator_logo']?.asBoolean() ??
+    defaultRemoteConfig.enable_vehicle_operator_logo;
+
+  const default_map_filter =
+    values['default_map_filter']?.asString() ??
+    defaultRemoteConfig.default_map_filter;
+
   const enable_realtime_map =
     values['enable_realtime_map']?.asBoolean() ??
     defaultRemoteConfig.enable_realtime_map;
@@ -225,6 +246,7 @@ export function getConfig(): RemoteConfig {
     service_disruption_url,
     enable_token_fallback,
     enable_flex_tickets,
+    flex_ticket_url,
     enable_vipps_login,
     enable_map_page: enable_map_tab,
     favourite_departures_poll_interval,
@@ -234,7 +256,9 @@ export function getConfig(): RemoteConfig {
     enable_travel_search_filters,
     enable_new_travel_search,
     enable_from_travel_search_to_ticket,
-    enable_vehicles_in_map: enable_vehicles_in_map,
+    enable_vehicles_in_map,
+    enable_vehicle_operator_logo,
+    default_map_filter,
     enable_realtime_map,
     enable_flexible_transport,
     use_flexible_on_accessMode,

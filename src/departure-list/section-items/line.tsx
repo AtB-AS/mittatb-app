@@ -39,9 +39,11 @@ import {getSvgForMostCriticalSituationOrNotice} from '@atb/situations';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {filterNotices} from '@atb/travel-details-screens/utils';
-import {useOnMarkFavouriteDepartures} from '@atb/favorites/use-on-mark-favourite-departures';
+import {
+  FavouriteDepartureToggle,
+  useOnMarkFavouriteDepartures,
+} from '@atb/favorites';
 import {QuaySectionProps} from '@atb/departure-list/section-items/quay-section';
-import ToggleFavouriteDeparture from '@atb/favorites/ToggleFavouriteDeparture';
 
 export type LineItemProps = SectionItemProps<{
   group: DepartureGroup;
@@ -120,7 +122,7 @@ export default function LineItem({
           </ThemeText>
         </TouchableOpacity>
         {mode === 'departures' && (
-          <ToggleFavouriteDeparture
+          <FavouriteDepartureToggle
             existingFavorite={existingFavorite}
             onMarkFavourite={onMarkFavourite}
             toggleFavouriteAccessibilityLabel={

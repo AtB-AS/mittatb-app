@@ -186,6 +186,11 @@ export const Profile_DebugInfoScreen = () => {
           />
 
           <Sections.LinkSectionItem
+            text="Reset user map filters"
+            onPress={() => storage.set('@ATB_user_map_filters', '')}
+          />
+
+          <Sections.LinkSectionItem
             text="Reset has read departures v2 onboarding"
             onPress={() =>
               storage.set(
@@ -199,6 +204,15 @@ export const Profile_DebugInfoScreen = () => {
             onPress={() =>
               storage.set(
                 StorageModelKeysEnum.HasReadTravelSearchFilterOnboarding,
+                JSON.stringify(false),
+              )
+            }
+          />
+          <Sections.LinkSectionItem
+            text="Reset has read scooter onboarding"
+            onPress={() =>
+              storage.set(
+                StorageModelKeysEnum.HasReadScooterOnboarding,
                 JSON.stringify(false),
               )
             }
