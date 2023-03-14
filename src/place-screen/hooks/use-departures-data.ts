@@ -10,12 +10,7 @@ import {UserFavoriteDepartures} from '@atb/favorites';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {animateNextChange} from '@atb/utils/animation';
 import useInterval from '@atb/utils/use-interval';
-import {
-  addDays,
-  differenceInMinutes,
-  differenceInSeconds,
-  parseISO,
-} from 'date-fns';
+import {differenceInMinutes} from 'date-fns';
 import {useCallback, useEffect} from 'react';
 import useReducerWithSideEffects, {
   NoUpdate,
@@ -320,18 +315,6 @@ export function useDeparturesData(
     state,
     forceRefresh: loadDepartures,
   };
-}
-
-// Get seconds until midnight, but a minimum of `minSeconds`
-export function getSecondsUntilMidnightOrMinimum(
-  isoTime: string,
-  minimumSeconds: number = 0,
-): number {
-  const timeUntilMidnight = differenceInSeconds(
-    addDays(parseISO(isoTime), 1).setHours(0, 0, 0),
-    parseISO(isoTime),
-  );
-  return Math.round(Math.max(timeUntilMidnight, minimumSeconds));
 }
 
 type QueryInput = {
