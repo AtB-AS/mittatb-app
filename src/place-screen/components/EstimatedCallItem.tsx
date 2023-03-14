@@ -86,6 +86,7 @@ export default function EstimatedCallItem({
       {...line, lineNumber: lineNumber, lineName: lineName},
       quay,
       stopPlace,
+      mode,
     );
   return (
     <TouchableOpacityOrView
