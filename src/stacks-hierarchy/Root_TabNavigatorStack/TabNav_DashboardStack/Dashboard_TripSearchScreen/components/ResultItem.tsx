@@ -17,7 +17,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {screenReaderHidden} from '@atb/utils/accessibility';
-import {flatMap, interpose} from '@atb/utils/array';
+import {flatMap} from '@atb/utils/array';
 import {
   formatToClock,
   isInThePast,
