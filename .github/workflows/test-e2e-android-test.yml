@@ -49,6 +49,7 @@ jobs:
           arch: x86_64
           profile: pixel_5
           emulator-build: 9536276
+          emulator-options: -no-skin -no-window
           disable-spellchecker: true
           working-directory: e2e/appium
           script: yarn test:android
