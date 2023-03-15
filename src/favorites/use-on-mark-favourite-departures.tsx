@@ -21,6 +21,7 @@ export function useOnMarkFavouriteDepartures(
   line: FavouriteDepartureLine,
   quay: Quay,
   stopPlace: StopPlace,
+  addedFavoritesVisibleOnDashboard?: boolean,
 ) {
   const {addFavoriteDeparture, removeFavoriteDeparture, getFavoriteDeparture} =
     useFavorites();
@@ -42,6 +43,7 @@ export function useOnMarkFavouriteDepartures(
         quayPublicCode: quay.publicCode,
         quayId: quay.id,
         stopId: stopPlace.id,
+        visibleOnDashboard: addedFavoritesVisibleOnDashboard,
       }));
     AccessibilityInfo.announceForAccessibility(
       t(NearbyTexts.results.lines.favorite.message.saved),
