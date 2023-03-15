@@ -12,7 +12,10 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {InfoChip} from '@atb/components/info-chip';
 import {InteractiveColor} from '@atb/theme/colors';
-import {TransportMode} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Component/TransportMode';
+import {
+  getTransportModeText,
+  TransportMode,
+} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Component/TransportMode';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
@@ -54,11 +57,13 @@ export const RecentFareContractComponent = ({
     const modeInfo = `${getReferenceDataName(
       preassignedFareProduct,
       language,
-    )}${t(RecentFareContractsTexts.a11yPreLabels.transportModes)}`;
+    )} ${t(
+      RecentFareContractsTexts.a11yPreLabels.transportModes,
+    )}${getTransportModeText(fareProductTypeConfig.transportModes, t)}`;
 
     const travellerInfo = `${t(
       RecentFareContractsTexts.a11yPreLabels.travellers,
-    )}: ${userProfilesWithCount
+    )}${userProfilesWithCount
       .map((u) => u.count + ' ' + getReferenceDataName(u, language))
       .join(', ')}`;
 

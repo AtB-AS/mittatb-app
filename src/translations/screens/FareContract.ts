@@ -147,6 +147,14 @@ const FareContractTexts = {
     ),
     unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },
+  transportModes: {
+    multipleTravelModes: _('Flere reisemåter', 'Several travel modes'),
+    a11yLabel: (transportModes: string) =>
+      _(
+        `Billetten gjelder ${transportModes}`,
+        `Ticket is valid on ${transportModes}`,
+      ),
+  },
   transportMode: (mode: TransportMode) => {
     switch (mode) {
       case TransportMode.Bus:
@@ -166,7 +174,6 @@ const FareContractTexts = {
         return _('ukjent transportmiddel', 'unknown transport');
     }
   },
-  multipleTravelModes: _('Flere reisemåter', 'Several travel modes'),
 };
 
 export default orgSpecificTranslations(FareContractTexts, {
