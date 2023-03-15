@@ -7,7 +7,6 @@ import React, {useRef} from 'react';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 import {animateNextChange} from '@atb/utils/animation';
-import {StopPlacesMode} from '@atb/nearby-stop-places';
 
 type FavouriteDepartureLine = {
   id?: string;
@@ -22,7 +21,7 @@ export function useOnMarkFavouriteDepartures(
   line: FavouriteDepartureLine,
   quay: Quay,
   stopPlace: StopPlace,
-  mode?: StopPlacesMode,
+  addToFrontPageOnFavourite?: boolean,
 ) {
   const {addFavoriteDeparture, removeFavoriteDeparture, getFavoriteDeparture} =
     useFavorites();
@@ -44,7 +43,7 @@ export function useOnMarkFavouriteDepartures(
         quayPublicCode: quay.publicCode,
         quayId: quay.id,
         stopId: stopPlace.id,
-        visibleOnDashboard: mode === 'Favourite',
+        visibleOnDashboard: addToFrontPageOnFavourite,
       }));
     AccessibilityInfo.announceForAccessibility(
       t(NearbyTexts.results.lines.favorite.message.saved),

@@ -39,6 +39,7 @@ type StopPlaceViewProps = {
   setShowOnlyFavorites: (enabled: boolean) => void;
   isFocused: boolean;
   testID?: string;
+  addToFrontPageOnFavourite?: boolean;
   mode: StopPlacesMode;
 } & (
   | {
@@ -68,6 +69,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
     isFocused,
     testID,
     mode,
+    addToFrontPageOnFavourite,
   } = props;
   const styles = useStyles();
   const {favoriteDepartures} = useFavorites();
@@ -222,6 +224,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
             stopPlace={stopPlace}
             showOnlyFavorites={showOnlyFavorites}
             allowFavouriteSelection={allowFavouriteSelection}
+            addToFrontPageOnFavourite={addToFrontPageOnFavourite}
             searchDate={searchStartTime}
             mode={mode}
           />
