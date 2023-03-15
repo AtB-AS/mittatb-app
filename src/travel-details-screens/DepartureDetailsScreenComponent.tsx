@@ -379,6 +379,7 @@ function EstimatedCallRow({
       </TripRow>
       {situations.map((situation) => (
         <TripRow
+          key={situation.situationNumber}
           rowLabel={<SituationOrNoticeIcon situation={situation} />}
           style={styles.situationTripRow}
         >

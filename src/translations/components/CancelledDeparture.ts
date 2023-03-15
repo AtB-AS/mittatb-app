@@ -1,4 +1,4 @@
-import {translation as _} from '@atb/translations';
+import {translation as _} from '../commons';
 
 const CancelledDepartureTexts = {
   message: _(

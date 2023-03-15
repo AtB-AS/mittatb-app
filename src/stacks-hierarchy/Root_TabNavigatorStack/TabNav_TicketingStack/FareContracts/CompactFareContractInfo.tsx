@@ -86,7 +86,7 @@ const CompactFareContractInfoTexts = (
         {timeUntilExpire}
       </ThemeText>
       {userProfilesWithCount.map((u) => (
-        <ThemeText type="body__secondary" color="secondary">
+        <ThemeText key={u.id} type="body__secondary" color="secondary">
           {userProfileCountAndName(u, omitUserProfileCount, language)}
         </ThemeText>
       ))}

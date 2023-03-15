@@ -1,4 +1,4 @@
-import {orgSpecificTranslations} from '@atb/translations';
+import {orgSpecificTranslations} from '../orgSpecificTranslations';
 import {translation as _} from '../commons';
 
 const bulletPoint = '\u2022';
