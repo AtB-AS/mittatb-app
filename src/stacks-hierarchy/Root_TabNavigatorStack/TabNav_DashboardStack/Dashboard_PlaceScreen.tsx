@@ -6,7 +6,7 @@ type Props = DashboardScreenProps<'Dashboard_PlaceScreen'>;
 export const Dashboard_PlaceScreen = ({navigation, route}: Props) => (
   <PlaceScreenComponent
     {...route.params}
-    addToFrontPageOnFavourite={true}
+    addedFavoritesVisibleOnDashboard={true}
     onPressQuay={(stopPlace, quayId, onlyReplaceParam) =>
       onlyReplaceParam
         ? navigation.setParams({selectedQuayId: quayId})
@@ -15,7 +15,7 @@ export const Dashboard_PlaceScreen = ({navigation, route}: Props) => (
             selectedQuayId: quayId,
             mode: route.params.mode,
             onCloseRoute: route.params.onCloseRoute,
-            addToFrontPageOnFavourite: true,
+            addedFavoritesVisibleOnDashboard: true,
           })
     }
     onPressDeparture={(items, activeItemIndex) =>

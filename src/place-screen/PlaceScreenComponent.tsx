@@ -20,7 +20,7 @@ export type PlaceScreenParams = {
   place: StopPlace;
   selectedQuayId?: string;
   showOnlyFavoritesByDefault?: boolean;
-  addToFrontPageOnFavourite?: boolean;
+  addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
 };
 
@@ -42,7 +42,7 @@ export const PlaceScreenComponent = ({
   selectedQuayId,
   showOnlyFavoritesByDefault,
   mode,
-  addToFrontPageOnFavourite,
+  addedFavoritesVisibleOnDashboard,
   onPressQuay,
   onPressDeparture,
   onPressClose,
@@ -137,7 +137,7 @@ export const PlaceScreenComponent = ({
             setSearchTime={setSearchTime}
             showOnlyFavorites={showOnlyFavorites}
             setShowOnlyFavorites={setShowOnlyFavorites}
-            addToFrontPageOnFavourite={addToFrontPageOnFavourite}
+            addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
             testID="departuresContentView"
             stopPlace={place}
             mode={mode}
@@ -153,7 +153,7 @@ export const PlaceScreenComponent = ({
             searchTime={searchTime}
             setSearchTime={setSearchTime}
             showOnlyFavorites={showOnlyFavorites}
-            addToFrontPageOnFavourite={addToFrontPageOnFavourite}
+            addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
             setShowOnlyFavorites={setShowOnlyFavorites}
             testID="departuresContentView"
             allowFavouriteSelection={true}

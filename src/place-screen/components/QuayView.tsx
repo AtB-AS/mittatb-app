@@ -32,7 +32,7 @@ export type QuayViewProps = {
   setShowOnlyFavorites: (enabled: boolean) => void;
   testID?: string;
   stopPlace: StopPlace;
-  addToFrontPageOnFavourite?: boolean;
+  addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
 };
 
@@ -45,7 +45,7 @@ export default function QuayView({
   setShowOnlyFavorites,
   testID,
   stopPlace,
-  addToFrontPageOnFavourite,
+  addedFavoritesVisibleOnDashboard,
   mode,
 }: QuayViewProps) {
   const styles = useStyles();
@@ -127,7 +127,7 @@ export default function QuayView({
           testID={'quaySection'}
           stopPlace={stopPlace}
           showOnlyFavorites={showOnlyFavorites}
-          addToFrontPageOnFavourite={addToFrontPageOnFavourite}
+          addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
           allowFavouriteSelection={true}
           searchDate={searchStartTime}
           mode={mode}

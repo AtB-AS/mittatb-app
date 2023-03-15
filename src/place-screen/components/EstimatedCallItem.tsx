@@ -57,7 +57,7 @@ type EstimatedCallItemProps = {
     isTripCancelled?: boolean,
   ) => void;
   allowFavouriteSelection: boolean;
-  addToFrontPageOnFavourite?: boolean;
+  addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
 };
 
@@ -68,7 +68,7 @@ export default function EstimatedCallItem({
   stopPlace,
   navigateToDetails,
   allowFavouriteSelection,
-  addToFrontPageOnFavourite,
+  addedFavoritesVisibleOnDashboard,
   mode,
 }: EstimatedCallItemProps): JSX.Element {
   const {t, language} = useTranslation();
@@ -88,7 +88,7 @@ export default function EstimatedCallItem({
       {...line, lineNumber: lineNumber, lineName: lineName},
       quay,
       stopPlace,
-      addToFrontPageOnFavourite,
+      addedFavoritesVisibleOnDashboard,
     );
   return (
     <TouchableOpacityOrView

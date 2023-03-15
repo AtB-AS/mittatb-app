@@ -33,7 +33,7 @@ type QuaySectionProps = {
   showOnlyFavorites: boolean;
   allowFavouriteSelection: boolean;
   searchDate?: string | Date;
-  addToFrontPageOnFavourite?: boolean;
+  addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
 };
 
@@ -53,7 +53,7 @@ export default function QuaySection({
   stopPlace,
   showOnlyFavorites,
   allowFavouriteSelection,
-  addToFrontPageOnFavourite,
+  addedFavoritesVisibleOnDashboard,
   searchDate,
   mode,
 }: QuaySectionProps): JSX.Element {
@@ -153,7 +153,9 @@ export default function QuaySection({
                   quay={quay}
                   stopPlace={stopPlace}
                   navigateToDetails={navigateToDetails}
-                  addToFrontPageOnFavourite={addToFrontPageOnFavourite}
+                  addedFavoritesVisibleOnDashboard={
+                    addedFavoritesVisibleOnDashboard
+                  }
                   allowFavouriteSelection={allowFavouriteSelection}
                   mode={mode}
                 />
