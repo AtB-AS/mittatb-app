@@ -258,7 +258,7 @@ export function useDeparturesData(
     const timeRange = getTimeRangeByMode(mode, startTime);
     dispatch({
       type: 'LOAD_INITIAL_DEPARTURES',
-      quayIds: quayIds,
+      quayIds,
       startTime,
       favoriteDepartures: activeFavoriteDepartures,
       limitPerLine,

@@ -7,8 +7,7 @@ import {
   TransportSubmode,
 } from './generated/journey_planner_v3_types';
 
-export type QuayWithEstimatedCalls =
-  Required<Types.DeparturesQuery>['quays'][0];
+type QuayWithEstimatedCalls = Required<Types.DeparturesQuery>['quays'][0];
 
 export type EstimatedCall = QuayWithEstimatedCalls['estimatedCalls'][0];
 
