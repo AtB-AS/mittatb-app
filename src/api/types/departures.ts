@@ -1,4 +1,4 @@
-import * as Types from './generated/StopQuayDeparturesQuery';
+import * as Types from './generated/DeparturesQuery';
 import {NearestStopPlacesQuery} from './generated/NearestStopPlacesQuery';
 import {
   Notice,
@@ -7,14 +7,7 @@ import {
   TransportSubmode,
 } from './generated/journey_planner_v3_types';
 
-export type StopPlaceQuayDepartures = Types.StopPlaceQuayDeparturesQuery;
-
-type StopPlaceWithEstimatedCalls = Required<
-  Required<Types.StopPlaceQuayDeparturesQuery>['stopPlace']
->;
-
-export type QuayWithEstimatedCalls =
-  Required<StopPlaceWithEstimatedCalls>['quays'][0];
+type QuayWithEstimatedCalls = Required<Types.DeparturesQuery>['quays'][0];
 
 export type EstimatedCall = QuayWithEstimatedCalls['estimatedCalls'][0];
 
