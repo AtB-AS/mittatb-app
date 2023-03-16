@@ -90,7 +90,7 @@ jobs:
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
       - name: Replace apk bundle
-        if: steps.apk-cache.outputs.cache-hit == 'true'
+        #if: steps.apk-cache.outputs.cache-hit == 'true'
         run: bash ./scripts/android/replace-bundle.sh
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
@@ -131,6 +131,12 @@ jobs:
           pre-emulator-launch-script: ./restart-adb.sh
         env:
           APP_PATH: ${{ github.workspace }}
+      - name: print ls
+        run: |
+          ls -al ./android/app/build/outputs/**/**
+      - name: print ls
+        run: |
+          ls -al ./bundle/**/**
       - name: Upload apk
         if: always()
         uses: actions/upload-artifact@v3
@@ -138,7 +144,7 @@ jobs:
           name: apk
           path: |
             ./android/app/build/outputs/apk/staging/app-staging.apk
-          retention-days: 3
+          retention-days: 1
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v3
@@ -147,4 +153,4 @@ jobs:
           path: |
             ./e2e/appium/results/*.xml
             ./e2e/appium/results/results-mochawesome.json
-          retention-days: 3
+          retention-days: 1
