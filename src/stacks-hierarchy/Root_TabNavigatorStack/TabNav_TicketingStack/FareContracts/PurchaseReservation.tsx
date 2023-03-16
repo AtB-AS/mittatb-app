@@ -10,6 +10,7 @@ import ValidityLine from './ValidityLine';
 import FareContractStatusSymbol from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Component/FareContractStatusSymbol';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
+import {useAuthState} from '@atb/auth';
 
 type Props = {
   reservation: Reservation;
@@ -18,6 +19,7 @@ type Props = {
 const PurchaseReservation: React.FC<Props> = ({reservation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
+  const {user} = useAuthState();
   const {t, language} = useTranslation();
 
   async function openVippsUrl(vippsUrl: string) {
@@ -38,6 +40,9 @@ const PurchaseReservation: React.FC<Props> = ({reservation}) => {
         return 'reserving';
     }
   };
+
+  // Filter out reservations for subaccounts
+  if (user?.uid && reservation.customerAccountId !== user?.uid) return null;
 
   const status = getStatus();
 

@@ -86,6 +86,7 @@ export type Reservation = {
   transactionId: number;
   paymentType: PaymentType;
   paymentStatus?: PaymentStatus;
+  customerAccountId?: string;
   url: string;
 };
 
