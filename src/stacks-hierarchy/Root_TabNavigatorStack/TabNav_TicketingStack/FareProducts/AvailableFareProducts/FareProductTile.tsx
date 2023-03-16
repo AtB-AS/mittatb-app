@@ -9,7 +9,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {getStaticColor, StaticColor} from '@atb/theme/colors';
-import {TransportMode} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Component/TransportMode';
+import {TransportModes} from '@atb/components/transportation-modes';
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {useTextForLanguage} from '@atb/translations/utils';
 
@@ -53,7 +53,7 @@ const FareProductTile = ({
         style={styles.spreadContent}
       >
         <View style={styles.contentContainer}>
-          <TransportMode modes={config.transportModes} iconSize={'small'} />
+          <TransportModes modes={config.transportModes} iconSize={'small'} />
           <ThemeText
             type="body__secondary--bold"
             style={styles.title}

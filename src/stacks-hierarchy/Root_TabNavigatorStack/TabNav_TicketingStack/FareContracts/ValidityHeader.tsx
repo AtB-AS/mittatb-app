@@ -14,7 +14,7 @@ import {
   isValidFareContract,
   ValidityStatus,
 } from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
-import {TransportMode} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Component/TransportMode';
+import {TransportModes} from '@atb/components/transportation-modes';
 import FareContractStatusSymbol from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Component/FareContractStatusSymbol';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
@@ -47,9 +47,10 @@ export const ValidityHeader: React.FC<{
       <View style={styles.validityContainer}>
         {isValidFareContract(status) ? (
           fareProductTypeConfig && (
-            <TransportMode
+            <TransportModes
               modes={fareProductTypeConfig.transportModes}
               iconSize={'small'}
+              style={{flex: 2}}
             />
           )
         ) : (

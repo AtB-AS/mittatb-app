@@ -14,8 +14,8 @@ import {InfoChip} from '@atb/components/info-chip';
 import {InteractiveColor} from '@atb/theme/colors';
 import {
   getTransportModeText,
-  TransportMode,
-} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Component/TransportMode';
+  TransportModes,
+} from '@atb/components/transportation-modes';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
@@ -103,9 +103,10 @@ export const RecentFareContractComponent = ({
     >
       <View style={[styles.upperPart, {minWidth: width * 0.6}]}>
         <View style={styles.travelModeWrapper}>
-          <TransportMode
+          <TransportModes
             iconSize={'small'}
             modes={fareProductTypeConfig.transportModes}
+            style={{flex: 2}}
           />
         </View>
 

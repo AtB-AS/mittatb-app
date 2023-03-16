@@ -154,6 +154,8 @@ const FareContractTexts = {
         `Billetten gjelder ${transportModes}`,
         `Ticket is valid on ${transportModes}`,
       ),
+    a11yLabelMultipleTravelModes: (count: number) =>
+      _(`Totalt ${count} reisemåter`, `In total ${count} travel modes`),
   },
   transportMode: (mode: TransportMode) => {
     switch (mode) {

@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {View, ViewStyle} from 'react-native';
 import {TransportationIcon} from '@atb/components/transportation-icon';
 import {ThemeText} from '@atb/components/text';
 import {
@@ -28,14 +28,16 @@ export const getTransportModeText = (
     .map((tm) => t(FareContractTexts.transportMode(tm.mode)))
     .join('/');
 };
-export const TransportMode = ({
+export const TransportModes = ({
   modes,
   iconSize,
   disabled,
+  style,
 }: {
   modes: TransportModeType[];
   iconSize?: keyof Theme['icon']['size'];
   disabled?: boolean;
+  style?: ViewStyle;
 }) => {
   const styles = useStyles();
   const {theme} = useTheme();
@@ -47,9 +49,14 @@ export const TransportMode = ({
   const boxHeight = {
     height: theme.icon.size['small'] * fontScale + theme.spacings.xSmall * 2,
   };
+  const transportModeText: string = getTransportModeText(
+    modes,
+    t,
+    modesDisplayLimit,
+  );
 
   return (
-    <View style={styles.transportationMode}>
+    <View style={[styles.transportationMode, style]}>
       {modesToDisplay.map(({mode, subMode}) => (
         <TransportationIcon
           style={styles.transportationIcon}
@@ -62,7 +69,15 @@ export const TransportMode = ({
       ))}
       {modesCount > modesDisplayLimit && (
         <View style={[styles.multipleModes, boxHeight]}>
-          <ThemeText color={'transport_other'} type="label__uppercase">
+          <ThemeText
+            color={'transport_other'}
+            type="label__uppercase"
+            accessibilityLabel={t(
+              FareContractTexts.transportModes.a11yLabelMultipleTravelModes(
+                modesCount,
+              ),
+            )}
+          >
             +{modesCount - modesDisplayLimit}
           </ThemeText>
         </View>
@@ -71,12 +86,10 @@ export const TransportMode = ({
         type="label__uppercase"
         color={'secondary'}
         accessibilityLabel={t(
-          FareContractTexts.transportModes.a11yLabel(
-            getTransportModeText(modesToDisplay, t, modesDisplayLimit),
-          ),
+          FareContractTexts.transportModes.a11yLabel(transportModeText),
         )}
       >
-        {getTransportModeText(modes, t, modesDisplayLimit)}
+        {transportModeText}
       </ThemeText>
     </View>
   );
@@ -84,7 +97,6 @@ export const TransportMode = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   transportationMode: {
-    flex: 2,
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
