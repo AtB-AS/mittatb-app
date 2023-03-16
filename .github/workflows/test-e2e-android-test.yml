@@ -6,6 +6,9 @@ on:
         description: 'Define branch to test'
         required: true
         default: 'master'
+  push:
+    branches:
+      - tor/e2e-appium
 
 jobs:
   run_tests:
@@ -49,11 +52,12 @@ jobs:
           arch: x86_64
           profile: pixel_5
           emulator-build: 9536276
-          emulator-options: -no-skin -no-window
+          #emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          #emulator-options: -no-window
           disable-spellchecker: true
           working-directory: e2e/appium
           script: yarn test:android
-          #pre-emulator-launch-script: ./restart-adb.sh
+          pre-emulator-launch-script: ./restart-adb.sh
 
           # SDK
           # uses: android-actions/setup-android@v2

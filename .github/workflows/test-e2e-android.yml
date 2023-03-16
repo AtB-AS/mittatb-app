@@ -6,9 +6,9 @@ on:
         description: 'Define branch to test'
         required: true
         default: 'master'
-  push:
-    branches:
-      - tor/e2e-appium
+  #push:
+  #  branches:
+  #    - tor/e2e-appium
 
 jobs:
   run_tests:
@@ -125,7 +125,7 @@ jobs:
           disable-spellchecker: true
           working-directory: e2e/appium
           script: yarn test:android
-          #pre-emulator-launch-script: ./restart-adb.sh
+          pre-emulator-launch-script: ./restart-adb.sh
         env:
           APP_PATH: ${{ github.workspace }}
       - name: Upload test reports
