@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Bugsnag from '@bugsnag/react-native';
+import {Platform} from 'react-native';
 
 export enum StorageModelKeysEnum {
   HasReadDeparturesV2Onboarding = '@ATB_has_read_departures_v2_onboarding',
@@ -56,6 +57,12 @@ const leaveBreadCrumb = (
 export type KeyValuePair = [string, string | null];
 
 const storage = {
+  /** Necessary for communication between App and iOS Widget */
+  setAppGroupName: async (groupName?: string) => {
+    if (Platform.OS === 'ios') {
+      await AsyncStorage.setAppGroupName(groupName).catch(errorHandler);
+    }
+  },
   get: async (key: string) => {
     const value = await AsyncStorage.getItem(key).catch(errorHandler);
     leaveBreadCrumb('read-single', key, value);
