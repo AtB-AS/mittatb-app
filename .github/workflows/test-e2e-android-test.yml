@@ -56,7 +56,7 @@ jobs:
           #emulator-options: -no-window
           disable-spellchecker: true
           working-directory: e2e/appium
-          script: yarn test:android
+          script: yarn test:android:local
           pre-emulator-launch-script: ./restart-adb.sh
 
           # SDK
