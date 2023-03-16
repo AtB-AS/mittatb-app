@@ -98,11 +98,14 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
 
       - name: Install Appium
+        if: env.INPUT_BRANCH == 'x'
         run: npm install -g appium
       - name: Install E2E tests
+        if: env.INPUT_BRANCH == 'x'
         run: yarn install
         working-directory: e2e/appium
       - name: Run tests on Android emulator
+        if: env.INPUT_BRANCH == 'x'
         uses: reactivecircus/android-emulator-runner@v2.27.0
         with:
           #TODO If not working, try api 29 or pre-script
@@ -128,6 +131,14 @@ jobs:
           pre-emulator-launch-script: ./restart-adb.sh
         env:
           APP_PATH: ${{ github.workspace }}
+      - name: Upload apk
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk
+          path: |
+            ./android/app/build/outputs/apk/staging/app-staging.apk
+          retention-days: 3
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v3
