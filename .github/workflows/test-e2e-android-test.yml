@@ -6,9 +6,9 @@ on:
         description: 'Define branch to test'
         required: true
         default: 'master'
-  push:
-    branches:
-      - tor/e2e-appium
+  #push:
+  #  branches:
+  #    - tor/e2e-appium
 
 jobs:
   run_tests:
