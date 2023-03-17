@@ -80,10 +80,10 @@ jobs:
         env:
           KEYSTORE: ${{ secrets.KEYSTORE }}
       - name: Generate native assets
-        if: steps.apk-cache.outputs.cache-hit != 'true'
+        #if: steps.apk-cache.outputs.cache-hit != 'true'
         run: yarn generate-native-assets
       - name: Run fastlane build
-        if: steps.apk-cache.outputs.cache-hit != 'true'
+        #if: steps.apk-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane android build
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
