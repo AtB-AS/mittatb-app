@@ -3,7 +3,7 @@
 <network-security-config>
     <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
-            <certificates src="system" />
+            <certificates src="system" overridePins="true" />
         </trust-anchors>
     </base-config>
 
