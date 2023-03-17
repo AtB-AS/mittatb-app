@@ -6,7 +6,7 @@ import {
 } from '@atb/ticketing';
 import {getValidityStatus} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import * as Sections from '@atb/components/sections';
-import ValidityHeader from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/ValidityHeader';
+import {ValidityHeader} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/ValidityHeader';
 import UsedAccessValidityHeader from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Carnet/UsedAccessValidityHeader';
 import ValidityLine from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/ValidityLine';
 import {View} from 'react-native';

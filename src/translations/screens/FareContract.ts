@@ -147,6 +147,16 @@ const FareContractTexts = {
     ),
     unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },
+  transportModes: {
+    multipleTravelModes: _('Flere reisemåter', 'Several travel modes'),
+    a11yLabel: (transportModes: string) =>
+      _(
+        `Billetten gjelder ${transportModes}`,
+        `Ticket is valid on ${transportModes}`,
+      ),
+    a11yLabelMultipleTravelModes: (count: number) =>
+      _(`Totalt ${count} reisemåter`, `In total ${count} travel modes`),
+  },
   transportMode: (mode: TransportMode) => {
     switch (mode) {
       case TransportMode.Bus:
