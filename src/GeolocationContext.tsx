@@ -16,7 +16,7 @@ import {
 } from 'react-native-permissions';
 import {updateMetadata as updateChatUserMetadata} from './chat/metadata';
 import {useAppStateStatus} from './utils/use-app-state-status';
-import {GeoLocation} from '@atb/favorites/types';
+import {GeoLocation} from '@atb/favorites';
 import {dictionary, useTranslation} from '@atb/translations';
 
 type GeolocationState = {

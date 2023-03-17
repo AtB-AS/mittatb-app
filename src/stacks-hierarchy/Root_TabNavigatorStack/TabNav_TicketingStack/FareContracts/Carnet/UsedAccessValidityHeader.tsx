@@ -10,7 +10,7 @@ import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
 import {UsedAccessStatus} from './types';
-import TransportMode from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Component/TransportMode';
+import {TransportModes} from '@atb/components/transportation-modes';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 type Props = {
@@ -34,7 +34,7 @@ function UsedAccessValidityHeader(props: Props) {
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
         {fareProductTypeConfig && (
-          <TransportMode
+          <TransportModes
             modes={fareProductTypeConfig?.transportModes}
             disabled={props.status === 'inactive'}
           />

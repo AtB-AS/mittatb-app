@@ -108,12 +108,15 @@ export const getFeaturesAtClick = async (
 export function flyToLocation(
   coordinates: Coordinates | undefined,
   mapCameraRef: RefObject<MapboxGL.Camera>,
+  zoomLevel?: number,
 ) {
   coordinates &&
-    mapCameraRef.current?.flyTo(
-      [coordinates.longitude, coordinates.latitude],
-      750,
-    );
+    mapCameraRef.current?.setCamera({
+      centerCoordinate: [coordinates.longitude, coordinates.latitude],
+      zoomLevel,
+      animationMode: 'flyTo',
+      animationDuration: 750,
+    });
 }
 
 export const toFeaturePoint = <
@@ -144,6 +147,11 @@ export const toFeatureCollection = <
   type: 'FeatureCollection',
   features,
 });
+
+export const toCoordinates = (position: Position): Coordinates => {
+  const [longitude, latitude] = position;
+  return {longitude, latitude};
+};
 
 /**
  * Calculates the distance in meters between the northern most point and the southern most point of the given bounds.

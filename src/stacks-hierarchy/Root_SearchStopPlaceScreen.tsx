@@ -1,5 +1,5 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {SearchLocation} from '@atb/favorites/types';
+import {SearchLocation} from '@atb/favorites';
 import {LocationSearchContent} from './Root_LocationSearchByTextScreen';
 import {StyleSheet} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';

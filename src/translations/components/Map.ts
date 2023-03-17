@@ -20,6 +20,15 @@ const MapTexts = {
     zoomOut: {
       a11yLabel: _('Zoom ut', 'Zoom out'),
     },
+    filter: {
+      vehicles: {
+        a11yLabel: _('Sparkesykler', 'Electric scooters'),
+        a11yHint: _(
+          'Aktivér visning av elektriske sparkesykler i kartet',
+          'Show or hide electric scooters in the map',
+        ),
+      },
+    },
     position: {
       a11yLabel: _('Min posisjon', 'My location'),
       a11yHint: _(

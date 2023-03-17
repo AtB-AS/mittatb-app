@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Map,
   NavigateToTripSearchCallback as TravelFromAndToLocationsCallback,
@@ -9,13 +9,23 @@ import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {StatusBarOnFocus} from '@atb/components/status-bar-on-focus';
 import {useVehicles} from '@atb/vehicles';
+import {useShouldShowScooterOnboarding} from './use-should-show-scooter-onboarding';
 
 export const Map_RootScreen = ({
   navigation,
 }: MapScreenProps<'Map_RootScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const vehicles = useVehicles();
+
+  const shouldShowScooterOnboarding = useShouldShowScooterOnboarding();
+  useEffect(() => {
+    if (shouldShowScooterOnboarding && !isScreenReaderEnabled) {
+      navigation.navigate('Map_ScooterOnboardingScreen');
+    }
+  }, [shouldShowScooterOnboarding, isScreenReaderEnabled]);
+
   if (isScreenReaderEnabled) return <MapDisabledForScreenReader />;
+
   const navigateToQuay = (place: StopPlace, quay: Quay) => {
     navigation.navigate('Map_PlaceScreen', {
       place,

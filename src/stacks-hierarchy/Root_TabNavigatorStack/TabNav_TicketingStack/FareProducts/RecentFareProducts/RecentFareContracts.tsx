@@ -38,6 +38,7 @@ export const RecentFareContracts = () => {
         ...rfc.toTariffZone,
         resultType: 'zone',
       },
+      mode: 'Ticket',
     });
   };
 

@@ -1,4 +1,4 @@
-import {Location} from '@atb/favorites/types';
+import {Location} from '@atb/favorites';
 import {TabNavigatorScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';

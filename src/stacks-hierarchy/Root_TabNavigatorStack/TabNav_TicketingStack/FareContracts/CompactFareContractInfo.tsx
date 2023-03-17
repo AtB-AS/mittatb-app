@@ -4,10 +4,10 @@ import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {AccessibilityProps, View} from 'react-native';
-import {tariffZonesSummary} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {
   getNonInspectableTokenWarning,
   isValidFareContract,
+  tariffZonesSummary,
   userProfileCountAndName,
 } from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
@@ -86,7 +86,7 @@ const CompactFareContractInfoTexts = (
         {timeUntilExpire}
       </ThemeText>
       {userProfilesWithCount.map((u) => (
-        <ThemeText type="body__secondary" color="secondary">
+        <ThemeText key={u.id} type="body__secondary" color="secondary">
           {userProfileCountAndName(u, omitUserProfileCount, language)}
         </ThemeText>
       ))}

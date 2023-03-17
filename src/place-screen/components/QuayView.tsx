@@ -7,12 +7,13 @@ import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import DateSelection from './DateSelection';
 import FavoriteToggle from './FavoriteToggle';
 import QuaySection from './QuaySection';
-import {useQuayData} from '../hooks/use-quay-data';
+import {useDeparturesData} from '../hooks/use-departures-data';
 import {hasFavorites} from './StopPlaceView';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {MessageBox} from '@atb/components/message-box';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {dictionary, useTranslation} from '@atb/translations';
+import {useIsFocused} from '@react-navigation/native';
 
 export type QuayViewParams = {
   quay: Quay;
@@ -32,6 +33,7 @@ export type QuayViewProps = {
   setShowOnlyFavorites: (enabled: boolean) => void;
   testID?: string;
   stopPlace: StopPlace;
+  addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
 };
 
@@ -44,6 +46,7 @@ export default function QuayView({
   setShowOnlyFavorites,
   testID,
   stopPlace,
+  addedFavoritesVisibleOnDashboard,
   mode,
 }: QuayViewProps) {
   const styles = useStyles();
@@ -51,9 +54,12 @@ export default function QuayView({
   const {favoriteDepartures} = useFavorites();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
-  const {state, forceRefresh} = useQuayData(
-    quay,
+  const isFocused = useIsFocused();
+
+  const {state, forceRefresh} = useDeparturesData(
+    [quay.id],
     showOnlyFavorites,
+    isFocused,
     mode,
     searchStartTime,
   );
@@ -125,6 +131,7 @@ export default function QuayView({
           testID={'quaySection'}
           stopPlace={stopPlace}
           showOnlyFavorites={showOnlyFavorites}
+          addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
           allowFavouriteSelection={true}
           searchDate={searchStartTime}
           mode={mode}

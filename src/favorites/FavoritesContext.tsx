@@ -32,7 +32,7 @@ const FavoritesContext = createContext<FavoriteContextState | undefined>(
   undefined,
 );
 
-const FavoritesContextProvider: React.FC = ({children}) => {
+export const FavoritesContextProvider: React.FC = ({children}) => {
   const [favorites, setFavoritesState] = useState<UserFavorites>([]);
   const [favoriteDepartures, setFavoriteDeparturesState] =
     useState<UserFavoriteDepartures>([]);
@@ -133,5 +133,3 @@ export function useFavorites() {
   }
   return context;
 }
-
-export default FavoritesContextProvider;

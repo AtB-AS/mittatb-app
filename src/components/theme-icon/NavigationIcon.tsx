@@ -8,6 +8,7 @@ import {
   ChevronRight,
   ExpandLess,
   ExpandMore,
+  ExternalLink,
   UnfoldLess,
   UnfoldMore,
 } from '@atb/assets/svg/mono-icons/navigation';
@@ -21,6 +22,7 @@ const navigationTypes = [
   'chevron-right',
   'expand-less',
   'expand-more',
+  'external-link',
   'unfold-less',
   'unfold-more',
 ] as const;
@@ -57,6 +59,8 @@ function mapMode(mode: NavigationIconTypes) {
       return ExpandLess;
     case 'expand-more':
       return ExpandMore;
+    case 'external-link':
+      return ExternalLink;
     case 'unfold-less':
       return UnfoldLess;
     case 'unfold-more':

@@ -12,7 +12,7 @@ import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import EstimatedCallItem from './EstimatedCallItem';
-import {StopPlacesMode} from '../../nearby-stop-places/types';
+import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {isSituationValidAtDate, SituationSectionItem} from '@atb/situations';
 
 type QuaySectionProps = {
@@ -33,6 +33,7 @@ type QuaySectionProps = {
   showOnlyFavorites: boolean;
   allowFavouriteSelection: boolean;
   searchDate?: string | Date;
+  addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
 };
 
@@ -52,6 +53,7 @@ export default function QuaySection({
   stopPlace,
   showOnlyFavorites,
   allowFavouriteSelection,
+  addedFavoritesVisibleOnDashboard,
   searchDate,
   mode,
 }: QuaySectionProps): JSX.Element {
@@ -151,6 +153,9 @@ export default function QuaySection({
                   quay={quay}
                   stopPlace={stopPlace}
                   navigateToDetails={navigateToDetails}
+                  addedFavoritesVisibleOnDashboard={
+                    addedFavoritesVisibleOnDashboard
+                  }
                   allowFavouriteSelection={allowFavouriteSelection}
                   mode={mode}
                 />

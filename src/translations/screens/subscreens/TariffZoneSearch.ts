@@ -5,7 +5,7 @@ const TariffZoneSearchTexts = {
     placeholder: _('Søk etter holdeplass', 'Search for a stop place'),
   },
   header: {
-    title: _('Søk', 'Search'),
+    title: _('Søk etter holdeplass/sone', 'Search for stop/zone'),
   },
   zones: {
     heading: _('Soner', 'Zones'),

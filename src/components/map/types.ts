@@ -1,5 +1,5 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
-import {GeoLocation, Location, SearchLocation} from '@atb/favorites/types';
+import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
 import {Feature, FeatureCollection, GeoJSON, LineString, Point} from 'geojson';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
@@ -30,6 +30,8 @@ export type VehiclesState = {
   fetchVehicles: (
     region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => void;
+  isLoading: boolean;
+  onFilterChange: (filter: VehiclesFilter) => void;
   onPress: (type: MapSelectionActionType) => void;
 };
 export type NavigateToTripSearchCallback = (
@@ -113,3 +115,11 @@ export interface MapLine extends Feature<LineString> {
   subMode?: TransportSubmode;
   faded?: boolean;
 }
+
+export type VehiclesFilter = {
+  showVehicles: boolean;
+};
+
+export type MapFilter = {
+  vehicles?: VehiclesFilter;
+};

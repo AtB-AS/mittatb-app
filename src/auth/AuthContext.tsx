@@ -9,6 +9,7 @@ import React, {
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {useTranslation} from '../translations';
 import {updateMetadata} from '@atb/chat/metadata';
+import Bugsnag from '@bugsnag/react-native';
 
 const ERROR_INVALID_PHONE_NUMBER = 'auth/invalid-phone-number';
 const ERROR_INVALID_CONFIRMATION_CODE = 'auth/invalid-verification-code';
@@ -136,7 +137,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
         ) {
           return 'invalid_code';
         }
-        console.warn(error);
+        if (isAuthError(error)) Bugsnag.notify(error);
         return 'unknown_error';
       }
     },
@@ -176,7 +177,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
    * is created immediately at Firebase, but created asynchronously at Entur.
    * When receiving the user created callback from Entur then additional custom
    * claims get added to the user's id token. This method force refreshes the id
-   * token and checks whether these custom claims has been set.
+   * token and checks whether these custom claims have been set.
    *
    * Will retry up to 10 times with an interval of 1 second.
    */
@@ -202,8 +203,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
 
   // Subscribe to user changes. Will fire a onChangeEvent immediately on subscription.
   useEffect(() => {
-    const subscriber = auth().onUserChanged(onUserChanged);
-    return subscriber;
+    return auth().onUserChanged(onUserChanged);
   }, [onUserChanged]);
 
   const signInWithPhoneNumber = useCallback(

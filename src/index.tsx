@@ -8,7 +8,7 @@ import GeolocationContextProvider from './GeolocationContext';
 import {RootStack} from '@atb/stacks-hierarchy';
 import trackAppState from './diagnostics/trackAppState';
 import ThemeContextProvider from './theme/ThemeContext';
-import FavoritesContextProvider from './favorites/FavoritesContext';
+import {FavoritesContextProvider} from './favorites';
 import SearchHistoryContextProvider from './search-history';
 import {TicketingContextProvider} from './ticketing';
 import RemoteConfigContextProvider from './RemoteConfigContext';

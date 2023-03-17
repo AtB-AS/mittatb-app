@@ -1,10 +1,10 @@
 import React, {useCallback} from 'react';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import ServiceDisruptionSheet from './ServiceDisruptionSheet';
+import {ServiceDisruptionSheet} from './ServiceDisruptionSheet';
 import {LeftButtonProps} from '@atb/components/screen-header';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
-export default function useServiceDisruptionModal(): {
+export function useServiceDisruptionSheet(): {
   leftButton?: LeftButtonProps;
 } {
   const {open: openBottomSheet} = useBottomSheet();

@@ -25,7 +25,6 @@ const RecentFareContractsTexts = {
     travellers: _('for følgende reisende: ', 'for the following travellers: '),
     and: _(' og ', ' and '),
   },
-  severalTransportModes: _('ukjent transportmiddel', 'unknown transport'),
   options: {
     now: _('Nå', 'Now'),
     futureDate: _('Fremtidig starttidspunkt', 'Future start time'),
