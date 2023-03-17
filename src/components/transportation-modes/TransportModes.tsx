@@ -7,9 +7,8 @@ import {
   useTranslation,
 } from '@atb/translations';
 import React from 'react';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {TransportModeType} from '@atb/configuration/types';
-import useFontScale from '@atb/utils/use-font-scale';
 
 const modesDisplayLimit: number = 2;
 
@@ -40,15 +39,10 @@ export const TransportModes = ({
   style?: ViewStyle;
 }) => {
   const styles = useStyles();
-  const {theme} = useTheme();
-  const fontScale = useFontScale();
   const {t} = useTranslation();
 
   const modesCount: number = modes.length;
   const modesToDisplay = modes.slice(0, modesDisplayLimit);
-  const boxHeight = {
-    height: theme.icon.size['small'] * fontScale + theme.spacings.xSmall * 2,
-  };
   const transportModeText: string = getTransportModeText(
     modes,
     t,
@@ -68,10 +62,11 @@ export const TransportModes = ({
         />
       ))}
       {modesCount > modesDisplayLimit && (
-        <View style={[styles.multipleModes, boxHeight]}>
+        <View style={styles.multipleModes}>
           <ThemeText
             color={'transport_other'}
             type="label__uppercase"
+            style={styles.additionalModesCounter}
             accessibilityLabel={t(
               FareContractTexts.transportModes.a11yLabelMultipleTravelModes(
                 modesCount,
@@ -104,9 +99,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   transportationIcon: {
     marginRight: theme.spacings.xSmall,
   },
+  additionalModesCounter: {
+    lineHeight: 10,
+  },
   multipleModes: {
     marginRight: theme.spacings.xSmall,
     paddingHorizontal: theme.spacings.xSmall,
+    paddingVertical: theme.spacings.xSmall,
     borderRadius: theme.border.radius.small,
     backgroundColor: theme.static.transport.transport_other.background,
   },
