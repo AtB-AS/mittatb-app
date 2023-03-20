@@ -7,7 +7,7 @@ import {
 } from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIcon} from '@atb/components/transportation-icon';
-import {CollapsedLegs} from './CollapsedLegs';
+import {CounterBox} from '@atb/components/counter-box';
 import {SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -222,7 +222,7 @@ const ResultItemOld: React.FC<ResultItemProps & AccessibilityProps> = ({
             )}
           </View>
           <View style={styles.legOutput}>
-            <CollapsedLegs legs={collapsedLegs} />
+            <CounterBox count={collapsedLegs.length} />
           </View>
         </ScrollView>
         <ResultItemFooter legs={tripPattern.legs} />

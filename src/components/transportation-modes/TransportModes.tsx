@@ -9,6 +9,7 @@ import {
 import React from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
 import {TransportModeType} from '@atb/configuration/types';
+import {CounterBox} from '@atb/components/counter-box';
 
 const modesDisplayLimit: number = 2;
 
@@ -62,20 +63,15 @@ export const TransportModes = ({
         />
       ))}
       {modesCount > modesDisplayLimit && (
-        <View style={styles.multipleModes}>
-          <ThemeText
-            color={'transport_other'}
-            type="label__uppercase"
-            style={styles.additionalModesCounter}
-            accessibilityLabel={t(
-              FareContractTexts.transportModes.a11yLabelMultipleTravelModes(
-                modesCount,
-              ),
-            )}
-          >
-            +{modesCount - modesDisplayLimit}
-          </ThemeText>
-        </View>
+        <CounterBox
+          count={modesCount - modesDisplayLimit}
+          size={'small'}
+          accessibilityLabel={t(
+            FareContractTexts.transportModes.a11yLabelMultipleTravelModes(
+              modesCount,
+            ),
+          )}
+        />
       )}
       <ThemeText
         type="label__uppercase"
@@ -98,15 +94,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   transportationIcon: {
     marginRight: theme.spacings.xSmall,
-  },
-  additionalModesCounter: {
-    lineHeight: 10,
-  },
-  multipleModes: {
-    marginRight: theme.spacings.xSmall,
-    paddingHorizontal: theme.spacings.xSmall,
-    paddingVertical: theme.spacings.xSmall,
-    borderRadius: theme.border.radius.small,
-    backgroundColor: theme.static.transport.transport_other.background,
   },
 }));
