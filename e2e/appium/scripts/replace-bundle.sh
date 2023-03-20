@@ -46,8 +46,8 @@ else
     apktool b decompiled-apk -o temp-$APK_FILE_NAME
 
     echo "The APK must be aligned to 4 byte boundaries to work on Android"
-    /usr/local/lib/android/sdk/build-tools/33.0.0/zipalign -p -f 4 temp-$APK_FILE_NAME $APK_FILE_NAME
+    /Users/runner/Library/Android/sdk/build-tools/33.0.0/zipalign -p -f 4 temp-$APK_FILE_NAME $APK_FILE_NAME
 
     echo "Re-sign APK"
-    /usr/local/lib/android/sdk/build-tools/33.0.0/apksigner sign --ks $KEYSTORE_PATH --ks-pass pass:"$KEYSTORE_PASS" --key-pass pass:"$KEY_PASS" --ks-key-alias $KEY_ALIAS $APK_FILE_NAME
+    /Users/runner/Library/Android/sdk/build-tools/33.0.0/apksigner sign --ks $KEYSTORE_PATH --ks-pass pass:"$KEYSTORE_PASS" --key-pass pass:"$KEY_PASS" --ks-key-alias $KEY_ALIAS $APK_FILE_NAME
 fi
