@@ -98,6 +98,8 @@ jobs:
       - name: Replace apk bundle
         #if: steps.apk-cache.outputs.cache-hit == 'true'
         #run: bash ./scripts/android/replace-bundle.sh
+        # TODO
+        if: env.INPUT_BRANCH == 'x'
         run: bash ./e2e/appium/scripts/replace-bundle.sh
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
