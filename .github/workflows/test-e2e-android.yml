@@ -92,6 +92,9 @@ jobs:
       - name: print ls 1
         run: |
           ls -al ./android/app/build/outputs/**/**
+      - name: print ls root 1
+        run: |
+          ls -al
       - name: Replace apk bundle
         #if: steps.apk-cache.outputs.cache-hit == 'true'
         #run: bash ./scripts/android/replace-bundle.sh
@@ -138,7 +141,10 @@ jobs:
       - name: print ls 2
         run: |
           ls -al ./android/app/build/outputs/**/**
-      - name: print ls
+      - name: print ls root 2
+        run: |
+          ls -al
+      - name: print ls bundle
         run: |
           ls -al ./bundle/**/**
       - name: Upload apk
