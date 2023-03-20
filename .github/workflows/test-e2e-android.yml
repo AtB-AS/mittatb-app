@@ -89,6 +89,9 @@ jobs:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+      - name: print ls android sdk path
+        run: |
+          ls -al /Users/runner/Library/Android/sdk/**/**
       - name: Replace apk bundle
         #if: steps.apk-cache.outputs.cache-hit == 'true'
         #run: bash ./scripts/android/replace-bundle.sh
