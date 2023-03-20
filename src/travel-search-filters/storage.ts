@@ -1,5 +1,5 @@
-import storage, {StorageModelTypes} from '../storage';
 import {TransportModeFilterOptionWithSelectionType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+import {storage, StorageModelTypes} from '@atb/storage';
 
 class FilterStore<TransportModeFilterOptionWithSelectionType> {
   key: StorageModelTypes;

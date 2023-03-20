@@ -4,7 +4,7 @@ import {RootStackParamList} from '@atb/stacks-hierarchy';
 import FareContractOrReservation from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/FareContractOrReservation';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {FareContract, Reservation, TravelCard} from '@atb/ticketing';
-import TravelTokenBox from '@atb/travel-token-box';
+import {TravelTokenBox} from '@atb/travel-token-box';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import hexToRgba from 'hex-to-rgba';
 import React, {useMemo} from 'react';

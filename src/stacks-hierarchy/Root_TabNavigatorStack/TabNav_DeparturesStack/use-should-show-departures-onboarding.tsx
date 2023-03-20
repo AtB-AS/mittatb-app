@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import storage, {StorageModelKeysEnum} from '@atb/storage';
+import {storage, StorageModelKeysEnum} from '@atb/storage';
 
 /**
  * Show the departures onboarding if the screen is focused, departures v2 is
