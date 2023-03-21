@@ -52,7 +52,7 @@ import {
   significantWalkTime,
 } from '@atb/travel-details-screens/utils';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
-import {CounterBox} from '@atb/components/counter-box/';
+import {CounterContainer} from '@atb/components/counter-container/';
 import useFontScale from '@atb/utils/use-font-scale';
 
 type ResultItemProps = {
@@ -276,7 +276,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                   <LegDash />
                 </View>
               ) : null}
-              <CounterBox count={collapsedLegs.length} />
+              <CounterContainer count={collapsedLegs.length} />
             </View>
             <View style={[styles.destinationLineContainer_grow, iconHeight]}>
               <View style={[styles.destinationLine_grow, lineHeight]} />

@@ -1,5 +1,5 @@
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {View} from 'react-native';
+import {AccessibilityProps, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {iconSizes} from '@atb-as/theme';
@@ -10,20 +10,20 @@ interface StylingCounter {
   lineHeight: number;
   type: TextNames;
 }
-export const CounterBox = ({
+export const CounterContainer = ({
   count,
   size = 'normal',
-  accessibilityLabel,
+  style,
+  ...a11yProps
 }: {
   count: number;
   size?: keyof Theme['icon']['size'];
-  accessibilityLabel?: string;
-}) => {
+  style?: ViewStyle;
+} & AccessibilityProps) => {
   const styles = useStyles();
   const {theme} = useTheme();
 
   if (count < 1) return null;
-  const isSmall: boolean = size === 'small';
 
   const smallStyling: StylingCounter = {
     padding: theme.spacings.xSmall,
@@ -37,24 +37,40 @@ export const CounterBox = ({
     type: 'body__primary--bold',
   };
 
-  const styling = isSmall ? smallStyling : normalStyling;
+  const largeStyling: StylingCounter = {
+    padding: theme.spacings.small,
+    lineHeight: iconSizes.large,
+    type: 'body__primary--big',
+  };
+
+  const styling = (): StylingCounter => {
+    switch (size) {
+      case 'small':
+        return smallStyling;
+      case 'normal':
+        return normalStyling;
+      case 'large':
+        return largeStyling;
+    }
+  };
 
   return (
     <View
       style={[
         styles.transportationIcon,
+        style,
         {
-          padding: styling.padding,
+          padding: styling().padding,
         },
       ]}
+      {...a11yProps}
     >
       <ThemeText
         color={'transport_other'}
-        type={styling.type}
+        type={styling().type}
         testID="counterBox"
-        accessibilityLabel={accessibilityLabel}
         style={{
-          lineHeight: styling.lineHeight,
+          lineHeight: styling().lineHeight,
         }}
       >
         +{count}

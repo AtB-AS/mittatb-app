@@ -9,7 +9,7 @@ import {
 import React from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
 import {TransportModeType} from '@atb/configuration/types';
-import {CounterBox} from '@atb/components/counter-box';
+import {CounterContainer} from '@atb/components/counter-container';
 
 const modesDisplayLimit: number = 2;
 
@@ -63,7 +63,7 @@ export const TransportModes = ({
         />
       ))}
       {modesCount > modesDisplayLimit && (
-        <CounterBox
+        <CounterContainer
           count={modesCount - modesDisplayLimit}
           size={'small'}
           accessibilityLabel={t(
