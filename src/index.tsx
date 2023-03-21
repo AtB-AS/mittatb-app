@@ -32,6 +32,7 @@ import {FirestoreConfigurationContextProvider} from '@atb/configuration/Firestor
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Platform, UIManager} from 'react-native';
 import FiltersContextProvider from '@atb/travel-search-filters/FiltersContext';
+import NotificationProvider from '@atb/NotificationContext';
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
@@ -73,25 +74,27 @@ const App = () => {
                     <FavoritesContextProvider>
                       <FiltersContextProvider>
                         <SearchHistoryContextProvider>
-                          <GeolocationContextProvider>
-                            <RemoteConfigContextProvider>
-                              <FirestoreConfigurationContextProvider>
-                                <TicketingContextProvider>
-                                  <MobileTokenContextProvider>
-                                    <AppLanguageProvider>
-                                      <GlobalMessagesContextProvider>
-                                        <BottomSheetProvider>
-                                          <FeedbackQuestionsProvider>
-                                            <RootStack />
-                                          </FeedbackQuestionsProvider>
-                                        </BottomSheetProvider>
-                                      </GlobalMessagesContextProvider>
-                                    </AppLanguageProvider>
-                                  </MobileTokenContextProvider>
-                                </TicketingContextProvider>
-                              </FirestoreConfigurationContextProvider>
-                            </RemoteConfigContextProvider>
-                          </GeolocationContextProvider>
+                          <NotificationProvider>
+                            <GeolocationContextProvider>
+                              <RemoteConfigContextProvider>
+                                <FirestoreConfigurationContextProvider>
+                                  <TicketingContextProvider>
+                                    <MobileTokenContextProvider>
+                                      <AppLanguageProvider>
+                                        <GlobalMessagesContextProvider>
+                                          <BottomSheetProvider>
+                                            <FeedbackQuestionsProvider>
+                                              <RootStack />
+                                            </FeedbackQuestionsProvider>
+                                          </BottomSheetProvider>
+                                        </GlobalMessagesContextProvider>
+                                      </AppLanguageProvider>
+                                    </MobileTokenContextProvider>
+                                  </TicketingContextProvider>
+                                </FirestoreConfigurationContextProvider>
+                              </RemoteConfigContextProvider>
+                            </GeolocationContextProvider>
+                          </NotificationProvider>
                         </SearchHistoryContextProvider>
                       </FiltersContextProvider>
                     </FavoritesContextProvider>

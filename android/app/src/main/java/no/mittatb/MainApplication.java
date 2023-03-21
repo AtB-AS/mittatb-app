@@ -6,6 +6,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
+import com.wix.reactnativenotifications.RNNotificationsPackage;
 
 import com.bugsnag.android.Bugsnag;
 import com.bugsnag.android.Configuration;
