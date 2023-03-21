@@ -47,7 +47,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
       setTimeout(
         () =>
           cameraRef.current?.fitBounds(bounds.ne, bounds.sw, undefined, 100),
-        50,
+        100,
       );
     }
   }, [bounds]);
