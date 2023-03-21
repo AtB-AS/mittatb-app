@@ -1,9 +1,7 @@
 import {
-  BrandAssetsFragment,
-  OperatorFragment,
   PricingPlanFragment,
-  RentalAppsFragment,
   RentalUrisFragment,
+  SystemFragment,
   TranslatedStringFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
 
@@ -16,11 +14,6 @@ export type StationFragment = {
   numDocksAvailable?: number;
   name: TranslatedStringFragment;
   pricingPlans: Array<PricingPlanFragment>;
-  system: {
-    operator: OperatorFragment;
-    name: TranslatedStringFragment;
-    brandAssets?: BrandAssetsFragment;
-    rentalApps?: RentalAppsFragment;
-  };
+  system: SystemFragment;
   rentalUris?: RentalUrisFragment;
 };
