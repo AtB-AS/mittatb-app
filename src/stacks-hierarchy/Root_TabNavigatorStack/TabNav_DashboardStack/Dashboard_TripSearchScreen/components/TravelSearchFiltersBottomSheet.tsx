@@ -20,7 +20,7 @@ import type {
 } from '../../types';
 import {useFilters} from '@atb/travel-search-filters';
 import {ThemeText} from '@atb/components/text';
-import {Checkbox} from '@atb/components/checkbox/Checkbox';
+import {Checkbox} from '@atb/components/checkbox';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,

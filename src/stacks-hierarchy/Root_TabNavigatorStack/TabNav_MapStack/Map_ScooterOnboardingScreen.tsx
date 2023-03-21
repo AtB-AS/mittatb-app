@@ -6,7 +6,7 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import storage, {StorageModelKeysEnum} from '@atb/storage';
+import {storage, StorageModelKeysEnum} from '@atb/storage';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ScooterOnboarding} from '@atb/assets/svg/color/images';
 import {MapScreenProps} from './navigation-types';

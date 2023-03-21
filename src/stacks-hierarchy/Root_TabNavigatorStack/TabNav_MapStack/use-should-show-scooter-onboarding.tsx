@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useIsFocused} from '@react-navigation/native';
-import storage, {StorageModelKeysEnum} from '@atb/storage';
+import {storage, StorageModelKeysEnum} from '@atb/storage';
 import {useIsVehiclesEnabled} from '@atb/vehicles';
 
 /**

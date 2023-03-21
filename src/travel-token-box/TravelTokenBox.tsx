@@ -16,7 +16,7 @@ import {
 } from '@atb/mobile-token/utils';
 import {RemoteToken} from '@atb/mobile-token/types';
 
-export default function TravelTokenBox({
+export function TravelTokenBox({
   showIfThisDevice,
   showHowToChangeHint,
   alwaysShowErrors,
