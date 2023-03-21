@@ -1,53 +1,117 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, {createContext, useContext, useEffect, useReducer} from 'react';
+import {
+  check,
+  request,
+  PERMISSIONS,
+  PermissionStatus,
+} from 'react-native-permissions';
 import messaging from '@react-native-firebase/messaging';
+import {Platform} from 'react-native';
 
-interface NotificationContextType {
-  requestUserPermission: () => void;
-}
-
-const NotificationContext = createContext<NotificationContextType>({
-  requestUserPermission: () => {},
-});
-
-export const useNotification = () => {
-  return useContext(NotificationContext);
+type PushNotificationsState = {
+  status: PermissionStatus | null;
 };
 
-const NotificationProvider: React.FC = ({children}) => {
-  const [authorizationStatus, setAuthorizationStatus] =
-    useState<messaging.AuthorizationStatus.NOT_DETERMINED | null>(null);
+type PushNotificationsReducerAction = {
+  status: PermissionStatus | null;
+  type: 'PERMISSION_CHANGED';
+};
 
-  const requestUserPermission = async () => {
-    const authStatus = await messaging().requestPermission();
-    const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+type PushNotificationsReducer = (
+  prevState: PushNotificationsState,
+  action: PushNotificationsReducerAction,
+) => PushNotificationsState;
 
-    if (enabled) {
-      console.log('Authorization status:', authStatus);
-      setAuthorizationStatus(authStatus);
-    }
-  };
+const pushNotificationsReducer: PushNotificationsReducer = (
+  prevState,
+  action,
+) => {
+  switch (action.type) {
+    case 'PERMISSION_CHANGED':
+      return {
+        ...prevState,
+        status: action.status,
+      };
+  }
+};
+
+type RequestPermissionFn = () => Promise<PermissionStatus | undefined>;
+
+type PushNotificationsContextState = PushNotificationsState & {
+  requestPermission: RequestPermissionFn;
+};
+
+const PushNotificationsContext = createContext<
+  PushNotificationsContextState | undefined
+>(undefined);
+
+const defaultState: PushNotificationsState = {
+  status: null,
+};
+
+const PushNotificationsContextProvider: React.FC = ({children}) => {
+  const [state, dispatch] = useReducer<PushNotificationsReducer>(
+    pushNotificationsReducer,
+    defaultState,
+  );
+
+  async function requestPermission() {
+    const status = await requestPushNotificationPermission();
+    dispatch({type: 'PERMISSION_CHANGED', status});
+    return status;
+  }
 
   useEffect(() => {
-    const checkPermission = async () => {
-      const authStatus = await messaging().hasPermission();
-      setAuthorizationStatus(authStatus);
+    const unsubscribe = messaging().onMessage((remoteMessage) => {
+      console.log('Message received: ', remoteMessage);
+    });
 
-      // Request permission if it has not been granted yet
-      if (authStatus === messaging.AuthorizationStatus.NOT_DETERMINED) {
-        requestUserPermission();
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    async function checkPermission() {
+      const status = await checkPushNotificationPermission();
+      if (state.status !== status) {
+        dispatch({type: 'PERMISSION_CHANGED', status});
       }
-    };
-
+    }
     checkPermission();
   }, []);
 
   return (
-    <NotificationContext.Provider value={{requestUserPermission}}>
+    <PushNotificationsContext.Provider value={{...state, requestPermission}}>
       {children}
-    </NotificationContext.Provider>
+    </PushNotificationsContext.Provider>
   );
 };
 
-export default NotificationProvider;
+export default PushNotificationsContextProvider;
+
+export function usePushNotificationsState() {
+  const context = useContext(PushNotificationsContext);
+  if (context === undefined) {
+    throw new Error(
+      'usePushNotificationsState must be used within a PushNotificationsContextProvider',
+    );
+  }
+  return context;
+}
+
+async function checkPushNotificationPermission(): Promise<PermissionStatus> {
+  if (Platform.OS === 'ios') {
+    return await check(PERMISSIONS.IOS.);
+  } else {
+    return await check(PERMISSIONS.ANDROID.N);
+  }
+}
+
+async function requestPushNotificationPermission(): Promise<PermissionStatus> {
+  const rationale = {
+    title: 'Push Notifications Permission',
+    message: 'We need your permission to send push notifications',
+    buttonPositive: 'Allow',
+    buttonNegative: 'Deny',
+  };
+  return await request(PERMISSIONS.ANDROID., rationale);
+}

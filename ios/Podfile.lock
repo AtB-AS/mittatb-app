@@ -905,7 +905,7 @@ PODS:
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
   - OpenSSL-Universal (1.1.1100)
-  - Permission-LocationWhenInUse (3.6.1):
+  - Permission-LocationWhenInUse (3.8.0):
     - RNPermissions
   - PromisesObjC (2.1.1)
   - RCT-Folly (2021.07.22.00):
@@ -1273,7 +1273,7 @@ PODS:
     - React
     - React-Core
     - Turf
-  - RNPermissions (3.6.1):
+  - RNPermissions (3.8.0):
     - React-Core
   - RNReanimated (2.14.4):
     - DoubleConversion
@@ -1653,7 +1653,7 @@ SPEC CHECKSUMS:
   MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  Permission-LocationWhenInUse: 3ba99e45c852763f730eabecec2870c2382b7bd4
+  Permission-LocationWhenInUse: 1c80e4797ae587642a83125e80b86686cefeba53
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
   RCTRequired: e1866f61af7049eb3d8e08e8b133abd38bc1ca7a
@@ -1705,7 +1705,7 @@ SPEC CHECKSUMS:
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNLocalize: 0df7970cfc60389f00eb62fd7c097dc75af3fb4f
   rnmapbox-maps: ab65faa9675f833e74693f0ca949d3f1647508b6
-  RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c
+  RNPermissions: 215c54462104b3925b412b0fb3c9c497b21c358b
   RNReanimated: 6668b0587bebd4b15dd849b99e5a9c70fc12ed95
   RNScreens: ea4cd3a853063cda19a4e3c28d2e52180c80f4eb
   RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
