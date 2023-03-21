@@ -99,12 +99,17 @@ jobs:
         #if: steps.apk-cache.outputs.cache-hit == 'true'
         #run: bash ./scripts/android/replace-bundle.sh
         # TODO
-        if: env.INPUT_BRANCH == 'x'
+        #if: env.INPUT_BRANCH == 'x'
         run: bash ./e2e/appium/scripts/replace-bundle.sh
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+      - name: Register app version
+        run: bash ./scripts/android/register-app-version.sh
+        env:
+          ENTUR_CLIENT_ID: ${{ secrets.ABT_ENTUR_CLIENT_ID_STAGING}}
+          ENTUR_CLIENT_SECRET: ${{ secrets.ABT_ENTUR_CLIENT_SECRET_STAGING}}
 
       - name: Install Appium
         if: env.INPUT_BRANCH == 'x'
