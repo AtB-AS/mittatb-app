@@ -36,25 +36,16 @@ export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
       }}
     >
       <MapboxGL.SymbolLayer
-        id="stationIcon"
+        id="stationPin"
         minZoomLevel={13.5}
         style={{
-          iconImage: {uri: 'Bicycle'},
+          textField: ['get', 'numBikesAvailable'],
+          textAnchor: 'top-left',
+          textOffset: [0.4, 0.7],
+          textColor: '#DE5D00',
+          textSize: 12,
+          iconImage: {uri: 'PinBicycle'},
           iconSize: 0.75,
-          iconColor: '#fff',
-        }}
-      />
-      <MapboxGL.CircleLayer
-        id="station"
-        belowLayerID="stationIcon"
-        minZoomLevel={13.5}
-        style={{
-          circleColor: '#DE5D00',
-          circleStrokeColor: '#DE5D00',
-          circleOpacity: 0.7,
-          circleStrokeOpacity: 0.2,
-          circleStrokeWidth: 7,
-          circleRadius: 12,
         }}
       />
       <MapboxGL.CircleLayer

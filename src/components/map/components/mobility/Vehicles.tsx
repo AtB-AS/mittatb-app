@@ -54,6 +54,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
       <MapboxGL.SymbolLayer
         id="icon"
         filter={['!', ['has', 'point_count']]}
+        minZoomLevel={13.5}
         style={{
           textField: ['concat', ['get', 'currentFuelPercent'], '%'],
           textAnchor: 'top-left',
@@ -67,6 +68,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
       <MapboxGL.SymbolLayer
         id="clusterIcon"
         filter={['has', 'point_count']}
+        minZoomLevel={13.5}
         style={{
           iconImage: {uri: 'Scooter'},
           iconSize: 0.75,
@@ -75,6 +77,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
       <MapboxGL.CircleLayer
         id="cluster"
         filter={['has', 'point_count']}
+        minZoomLevel={13.5}
         belowLayerID="clusterIcon"
         style={{
           circleColor: '#920695',
