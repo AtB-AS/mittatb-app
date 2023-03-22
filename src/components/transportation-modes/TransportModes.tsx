@@ -1,5 +1,5 @@
 import {View, ViewStyle} from 'react-native';
-import {TransportationIcon} from '@atb/components/transportation-icon';
+import {TransportationIconBox, CounterIconBox} from '@atb/components/icon-box';
 import {ThemeText} from '@atb/components/text';
 import {
   FareContractTexts,
@@ -9,7 +9,6 @@ import {
 import React from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
 import {TransportModeType} from '@atb/configuration/types';
-import {CounterContainer} from '@atb/components/counter-container';
 
 const modesDisplayLimit: number = 2;
 
@@ -53,7 +52,7 @@ export const TransportModes = ({
   return (
     <View style={[styles.transportationMode, style]}>
       {modesToDisplay.map(({mode, subMode}) => (
-        <TransportationIcon
+        <TransportationIconBox
           style={styles.transportationIcon}
           key={mode + subMode}
           mode={mode}
@@ -63,7 +62,7 @@ export const TransportModes = ({
         />
       ))}
       {modesCount > modesDisplayLimit && (
-        <CounterContainer
+        <CounterIconBox
           count={modesCount - modesDisplayLimit}
           size={'small'}
           accessibilityLabel={t(

@@ -6,8 +6,7 @@ import {
   ThemeText,
 } from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {TransportationIcon} from '@atb/components/transportation-icon';
-import {CounterContainer} from '@atb/components/counter-container';
+import {TransportationIconBox, CounterIconBox} from '@atb/components/icon-box';
 import {SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -222,7 +221,7 @@ const ResultItemOld: React.FC<ResultItemProps & AccessibilityProps> = ({
             )}
           </View>
           <View style={styles.legOutput}>
-            <CounterContainer count={collapsedLegs.length} />
+            <CounterIconBox count={collapsedLegs.length} />
           </View>
         </ScrollView>
         <ResultItemFooter legs={tripPattern.legs} />
@@ -380,7 +379,7 @@ const TransportationLeg = ({leg}: {leg: Leg}) => {
   return (
     <View style={styles.legContainer}>
       <View style={styles.iconContainer} testID="trLeg">
-        <TransportationIcon
+        <TransportationIconBox
           mode={leg.mode}
           subMode={leg.line?.transportSubmode}
           lineNumber={leg.line?.publicCode}

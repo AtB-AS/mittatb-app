@@ -6,7 +6,7 @@ import {
   ThemeText,
 } from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {TransportationIcon} from '@atb/components/transportation-icon';
+import {TransportationIconBox, CounterIconBox} from '@atb/components/icon-box';
 import {SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
@@ -52,7 +52,6 @@ import {
   significantWalkTime,
 } from '@atb/travel-details-screens/utils';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
-import {CounterContainer} from '@atb/components/counter-container/';
 import useFontScale from '@atb/utils/use-font-scale';
 
 type ResultItemProps = {
@@ -276,7 +275,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                   <LegDash />
                 </View>
               ) : null}
-              <CounterContainer count={collapsedLegs.length} />
+              <CounterIconBox count={collapsedLegs.length} />
             </View>
             <View style={[styles.destinationLineContainer_grow, iconHeight]}>
               <View style={[styles.destinationLine_grow, lineHeight]} />
@@ -506,7 +505,7 @@ const TransportationLeg = ({
   style?: StyleProp<ViewStyle>;
 }) => {
   return (
-    <TransportationIcon
+    <TransportationIconBox
       style={style}
       mode={leg.mode}
       subMode={leg.line?.transportSubmode}

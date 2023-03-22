@@ -1,16 +1,16 @@
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {AccessibilityProps, View, ViewStyle} from 'react-native';
+import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {iconSizes} from '@atb-as/theme';
 import {TextNames} from '@atb/theme/colors';
 
-interface StylingCounter {
+interface CounterStyling {
   padding: number;
   lineHeight: number;
   type: TextNames;
 }
-export const CounterContainer = ({
+export const CounterIconBox = ({
   count,
   size = 'normal',
   style,
@@ -18,32 +18,32 @@ export const CounterContainer = ({
 }: {
   count: number;
   size?: keyof Theme['icon']['size'];
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 } & AccessibilityProps) => {
   const styles = useStyles();
   const {theme} = useTheme();
 
   if (count < 1) return null;
 
-  const smallStyling: StylingCounter = {
+  const smallStyling: CounterStyling = {
     padding: theme.spacings.xSmall,
     lineHeight: iconSizes.small,
     type: 'label__uppercase',
   };
 
-  const normalStyling: StylingCounter = {
+  const normalStyling: CounterStyling = {
     padding: theme.spacings.small,
     lineHeight: iconSizes.normal,
     type: 'body__primary--bold',
   };
 
-  const largeStyling: StylingCounter = {
+  const largeStyling: CounterStyling = {
     padding: theme.spacings.small,
     lineHeight: iconSizes.large,
     type: 'body__primary--big',
   };
 
-  const styling = (): StylingCounter => {
+  const styling = (): CounterStyling => {
     switch (size) {
       case 'small':
         return smallStyling;
@@ -57,7 +57,7 @@ export const CounterContainer = ({
   return (
     <View
       style={[
-        styles.transportationIcon,
+        styles.counterContainer,
         style,
         {
           padding: styling().padding,
@@ -80,7 +80,7 @@ export const CounterContainer = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  transportationIcon: {
+  counterContainer: {
     backgroundColor: theme.static.transport.transport_other.background,
     borderRadius: theme.border.radius.small,
   },
