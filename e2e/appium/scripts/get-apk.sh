@@ -29,24 +29,33 @@ echo "Get APK for latest mitt-atb android"
 #  --data "$json"\
 #  ${appcenter_url}/a/publikasjoner/pdf/rapp_9617/rapp_9617.pdf)
 
-apk=$(curl -v \
+latest=$(curl -v \
   --header "X-API-Token: ${APPCENTER_API_KEY}" \
   --create-dirs\
   --output apk/app-staging.apk\
-  ${appcenter_url}/v0.1/public/sdk/apps/${APPCENTER_APP_SECRET}/releases/latest)
+  ${appcenter_url}/v0.1/sdk/apps/${APPCENTER_APP_SECRET}/releases/latest)
 
-apk_status=$?
-
-if [ $apk_status -ne 0 ]; then
+latest_status=$?
+if [ $latest_status -ne 0 ]; then
     echo "Get APK failed: $apk_status"
     exit 7
 fi
 
-echo "Response: $apk"
+download_url=$(echo $latest | jq -j '.download_url')
+latest_id=$(echo $latest | jq -j '.id')
+version=$(echo $latest | jq -j '.version')
+
+echo "URL: $download_url"
+echo "ID: $latest_id"
+echo "VERSION: $version"
+
+echo "Response: $latest"
 
 #if [[ $register != {} ]]; then
 #  echo "Unexpected response from register: $register"
 #  exit 8
 #fi
+
+concat_app_version="${version}-${latest_id}"
 
 echo "Get APK complete for version $concat_app_version"
