@@ -7,27 +7,21 @@
 
 # Check for secrets from env vars
 if [[
-  -z ${APP_VERSION}
-  || -z ${BUILD_ID}
-  || -z ${APPCENTER_API_KEY}
+  -z ${APPCENTER_API_KEY}
   || -z ${APPCENTER_APP_SECRET}
 ]]; then
   echo "Argument error!"
   echo "Expected environment variables:
-  - APP_VERSION
-  - BUILD_ID
   - APPCENTER_API_KEY
   - APPCENTER_APP_SECRET
   "
   exit 2
 fi
 
-concat_app_version="${APP_VERSION}-${BUILD_ID}"
 appcenter_url="https://api.appcenter.ms"
 
-
 # Get APK
-echo "Get APK for mitt-atb version $concat_app_version"
+echo "Get APK for latest mitt-atb android"
 #register=$(curl -v --header "Content-Type: application/json" \
 #  --header "Authorization: Bearer $access_token" \
 #  --header "X-Correlation-Id: $request_id" \
@@ -47,6 +41,8 @@ if [ $apk_status -ne 0 ]; then
     echo "Get APK failed: $apk_status"
     exit 7
 fi
+
+echo "Response: $apk"
 
 #if [[ $register != {} ]]; then
 #  echo "Unexpected response from register: $register"
