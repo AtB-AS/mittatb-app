@@ -9,6 +9,8 @@ import FareProductTile from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import TicketAssistantTile from '../../Assistant/TicketAssistantTile';
 import {useTicketingAssistant} from '../../../../Root_TicketingAssistant/use-ticketing-assistant';
+import {useTipsAndInformation} from '../../../../Root_TipsAndInformation/use-tips-and-information';
+import TipsAndInformationTile from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TipsAndInformationTile';
 
 export const AvailableFareProducts = ({
   onProductSelect,
@@ -44,18 +46,35 @@ export const AvailableFareProducts = ({
     description: 'ticketAssistantDescription',
   };
 
-  const useTicketAssistant = useTicketingAssistant();
+  const tipsAndInformationConfig = {
+    name: 'tipsAndInformation',
+    description: 'Tips and information description',
+  };
+
+  const showTipsAndInformation = useTipsAndInformation();
+  const showTicketAssistant = useTicketingAssistant();
 
   return (
     <View style={styles.container}>
       <View style={styles.tipsButtonContainer}>
-        {useTicketAssistant && (
+        {showTicketAssistant && (
           <TicketAssistantTile
             config={ticketAssistantConfig}
             onPress={() => {
               console.log('ticketAssistant pressed');
             }}
             testID="ticketAssistant"
+          />
+        )}
+      </View>
+      <View style={styles.tipsButtonContainer}>
+        {showTipsAndInformation && (
+          <TipsAndInformationTile
+            config={tipsAndInformationConfig}
+            onPress={() => {
+              console.log('tips and info pressed');
+            }}
+            testID="tipsAndInformation"
           />
         )}
       </View>

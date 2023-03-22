@@ -42,7 +42,7 @@ const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
             color={themeColor}
             testID={testID + 'Title'}
           >
-            {'Billettveileder'}
+            {'Tips og informasjon'}
           </ThemeText>
         </View>
       </TouchableOpacity>
