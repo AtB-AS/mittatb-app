@@ -31,11 +31,11 @@ echo "Get APK for latest mitt-atb android"
 #  --data "$json"\
 #  ${appcenter_url}/a/publikasjoner/pdf/rapp_9617/rapp_9617.pdf)
 
+#--output apk/app-staging.apk\
 latest=$(curl --silent \
   --header "X-API-Token: ${APPCENTER_USER_API_TOKEN}" \
   --header "Accept: application/json" \
   --create-dirs\
-  #--output apk/app-staging.apk\
   ${appcenter_url}/v0.1/sdk/apps/${APPCENTER_APP_SECRET}/releases/latest)
 
 latest_status=$?
