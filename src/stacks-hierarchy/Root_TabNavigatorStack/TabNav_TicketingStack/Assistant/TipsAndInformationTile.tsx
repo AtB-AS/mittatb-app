@@ -4,6 +4,8 @@ import {View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {Unknown} from '@atb/assets/svg/mono-icons/status';
 
 type TicketAssistantProps = {
   accented?: boolean;
@@ -14,7 +16,7 @@ type TicketAssistantProps = {
     description: string;
   };
 };
-const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
+const TipsAndInformationTile: React.FC<TicketAssistantProps> = ({
   accented,
   onPress,
   testID,
@@ -26,7 +28,10 @@ const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
 
   return (
     <View
-      style={[styles.fareProduct, {backgroundColor: themeColor.background}]}
+      style={[
+        styles.tipsAndInformation,
+        {backgroundColor: themeColor.background},
+      ]}
       testID={testID}
     >
       <TouchableOpacity
@@ -35,14 +40,15 @@ const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
         style={styles.spreadContent}
       >
         <View style={styles.contentContainer}>
+          <ThemeIcon svg={Unknown} />
           <ThemeText
             type="body__secondary--bold"
             style={styles.title}
-            accessibilityLabel={'Bilettveileder'}
+            accessibilityLabel={'Tips og'}
             color={themeColor}
             testID={testID + 'Title'}
           >
-            {'Tips og informasjon'}
+            {'Tips og informasjon om billetter'}
           </ThemeText>
         </View>
       </TouchableOpacity>
@@ -51,34 +57,23 @@ const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  fareProduct: {
-    width: '100%',
+  tipsAndInformation: {
     flexShrink: 1,
-    alignSelf: 'stretch',
-    marginRight: theme.spacings.medium,
-    padding: theme.spacings.xLarge,
+    marginTop: theme.spacings.large,
+    padding: theme.spacings.medium,
     borderRadius: theme.border.radius.regular,
+    marginLeft: theme.spacings.medium,
+    marginRight: theme.spacings.medium,
   },
-  contentContainer: {
-    flexShrink: 1,
+  title: {
+    marginLeft: theme.spacings.small,
   },
-  iconContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+
+  contentContainer: {flex: 1, flexDirection: 'row'},
   spreadContent: {
     flex: 1,
     justifyContent: 'space-between',
   },
-  label: {marginLeft: theme.spacings.xSmall},
-  illustration: {
-    marginTop: theme.spacings.small,
-  },
-  title: {
-    marginBottom: theme.spacings.small,
-    marginTop: theme.spacings.medium,
-  },
 }));
 
-export default TicketAssistantTile;
+export default TipsAndInformationTile;

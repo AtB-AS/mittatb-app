@@ -56,28 +56,25 @@ export const AvailableFareProducts = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.tipsButtonContainer}>
-        {showTicketAssistant && (
-          <TicketAssistantTile
-            config={ticketAssistantConfig}
-            onPress={() => {
-              console.log('ticketAssistant pressed');
-            }}
-            testID="ticketAssistant"
-          />
-        )}
-      </View>
-      <View style={styles.tipsButtonContainer}>
-        {showTipsAndInformation && (
-          <TipsAndInformationTile
-            config={tipsAndInformationConfig}
-            onPress={() => {
-              console.log('tips and info pressed');
-            }}
-            testID="tipsAndInformation"
-          />
-        )}
-      </View>
+      {showTicketAssistant && (
+        <TicketAssistantTile
+          config={ticketAssistantConfig}
+          onPress={() => {
+            console.log('ticketAssistant pressed');
+          }}
+          testID="ticketAssistant"
+        />
+      )}
+
+      {showTipsAndInformation && (
+        <TipsAndInformationTile
+          config={tipsAndInformationConfig}
+          onPress={() => {
+            console.log('tips and info pressed');
+          }}
+          testID="tipsAndInformation"
+        />
+      )}
 
       <ThemeText type="body__secondary" style={styles.heading}>
         {t(TicketingTexts.availableFareProducts.allTickets)}
@@ -119,10 +116,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     paddingLeft: theme.spacings.medium,
     paddingBottom: theme.spacings.medium,
-    alignItems: 'stretch',
-  },
-  tipsButtonContainer: {
-    paddingLeft: theme.spacings.medium,
     alignItems: 'stretch',
   },
 }));
