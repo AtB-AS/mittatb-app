@@ -1,4 +1,4 @@
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
@@ -7,8 +7,8 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {productIsSellableInApp} from '@atb/reference-data/utils';
 import FareProductTile from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareProducts/AvailableFareProducts/FareProductTile';
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
-import TicketAssistant from '../../TicketingAssistant/TicketAssistant';
-import {useTicketingAssistant} from '../../TicketingAssistant/use-ticketing-assistant';
+import TicketAssistantTile from '../../Assistant/TicketAssistantTile';
+import {useTicketingAssistant} from '../../../../Root_TicketingAssistant/use-ticketing-assistant';
 
 export const AvailableFareProducts = ({
   onProductSelect,
@@ -48,6 +48,18 @@ export const AvailableFareProducts = ({
 
   return (
     <View style={styles.container}>
+      <View style={styles.tipsButtonContainer}>
+        {useTicketAssistant && (
+          <TicketAssistantTile
+            config={ticketAssistantConfig}
+            onPress={() => {
+              console.log('ticketAssistant pressed');
+            }}
+            testID="ticketAssistant"
+          />
+        )}
+      </View>
+
       <ThemeText type="body__secondary" style={styles.heading}>
         {t(TicketingTexts.availableFareProducts.allTickets)}
       </ThemeText>
@@ -71,15 +83,6 @@ export const AvailableFareProducts = ({
           )}
         </View>
       ))}
-      {useTicketAssistant && (
-        <TicketAssistant
-          config={ticketAssistantConfig}
-          onPress={() => {
-            console.log('ticketAssistant pressed');
-          }}
-          testID="ticketAssistant"
-        />
-      )}
     </View>
   );
 };
@@ -91,13 +94,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
     margin: theme.spacings.medium,
     marginLeft: theme.spacings.xLarge,
-    marginTop: theme.spacings.xLarge,
   },
   fareProductsContainer: {
     flex: 1,
     flexDirection: 'row',
     paddingLeft: theme.spacings.medium,
     paddingBottom: theme.spacings.medium,
+    alignItems: 'stretch',
+  },
+  tipsButtonContainer: {
+    paddingLeft: theme.spacings.medium,
     alignItems: 'stretch',
   },
 }));

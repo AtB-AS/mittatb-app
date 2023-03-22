@@ -33,7 +33,8 @@ import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNav
 import {useRealtimeMapDebugOverride} from '@atb/components/map/hooks/use-realtime-map-enabled';
 import {useFromTravelSearchToTicketDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
 import {useMapDebugOverride} from '@atb/components/map/hooks/use-map-page';
-import {useTicketingAssistantOverride} from '../TabNav_TicketingStack/TicketingAssistant/use-ticketing-assistant';
+import {useTicketingAssistantOverride} from '../../Root_TicketingAssistant/use-ticketing-assistant';
+import {useTipsAndInformationOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -58,6 +59,7 @@ export const Profile_DebugInfoScreen = () => {
   const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
   const mapDebugOverride = useMapDebugOverride();
   const ticketingAssistantOverride = useTicketingAssistantOverride();
+  const tipsAndInformationOverride = useTipsAndInformationOverride();
 
   useEffect(() => {
     async function run() {
@@ -258,6 +260,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable ticketing assistant"
               override={ticketingAssistantOverride}
+            />
+          </Sections.GenericSectionItem>
+          <Sections.GenericSectionItem>
+            <DebugOverride
+              description="Enable tips and information for tickets"
+              override={tipsAndInformationOverride}
             />
           </Sections.GenericSectionItem>
         </Sections.Section>

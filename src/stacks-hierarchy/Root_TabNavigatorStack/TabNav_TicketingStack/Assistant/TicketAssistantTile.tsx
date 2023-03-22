@@ -1,13 +1,9 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import {StaticColor, getStaticColor} from '@atb/theme/colors';
-import {FareContractTexts, useTranslation} from '@atb/translations';
-import {useTextForLanguage} from '@atb/translations/utils';
-import {FareProductTypeConfig} from '../FareContracts/utils';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import TransportMode from '../FareContracts/Component/TransportMode';
 import {ThemeText} from '@atb/components/text';
-import {FareProductIllustration} from '../FareProducts/AvailableFareProducts/FareProductIllustration';
+import React from 'react';
 
 type TicketAssistantProps = {
   accented?: boolean;
@@ -18,10 +14,9 @@ type TicketAssistantProps = {
     description: string;
   };
 };
-const TicketAssistant: React.FC<TicketAssistantProps> = ({
+const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
   accented,
   onPress,
-  config,
   testID,
 }) => {
   const styles = useStyles();
@@ -43,18 +38,11 @@ const TicketAssistant: React.FC<TicketAssistantProps> = ({
           <ThemeText
             type="body__secondary--bold"
             style={styles.title}
-            accessibilityLabel={config.name}
+            accessibilityLabel={'Bilettveileder'}
             color={themeColor}
             testID={testID + 'Title'}
           >
-            Ticket assistant
-          </ThemeText>
-          <ThemeText
-            type="body__tertiary"
-            style={styles.description}
-            color={'secondary'}
-          >
-            {config.description}
+            {'Billettveileder'}
           </ThemeText>
         </View>
       </TouchableOpacity>
@@ -91,7 +79,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.small,
     marginTop: theme.spacings.medium,
   },
-  description: {marginBottom: theme.spacings.small},
 }));
 
-export default TicketAssistant;
+export default TicketAssistantTile;
