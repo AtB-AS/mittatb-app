@@ -1,9 +1,7 @@
 #!/bin/bash
 
-# This script will register a specific Android application version with Entur's
-# MobileApplicationRegistryService API.
-# a base64 encoded SHA256 fingerprint as bytes of the signing certificate for the APK must be provided as an environment variable,
-# in addition to client ID and client secret for Entur ABT OAuth login.
+# This script downloads the latest APK build from Appcenter
+# and places it in folder 'apk' relative to 'e2e/appium'
 
 # Check for secrets from env vars
 if [[
@@ -22,16 +20,8 @@ fi
 
 appcenter_url="https://api.appcenter.ms"
 
-# Get APK
-echo "Get APK for latest mitt-atb android"
-#register=$(curl -v --header "Content-Type: application/json" \
-#  --header "Authorization: Bearer $access_token" \
-#  --header "X-Correlation-Id: $request_id" \
-#  --user-agent "mittatb-app build script" \
-#  --data "$json"\
-#  ${appcenter_url}/a/publikasjoner/pdf/rapp_9617/rapp_9617.pdf)
-
-#--output apk/app-staging.apk\
+# Get latest APK info
+echo "Get info about latest APK in mitt-atb android"
 latest=$(curl --silent \
   --header "X-API-Token: ${APPCENTER_USER_API_TOKEN}" \
   --header "Accept: application/json" \
@@ -40,25 +30,36 @@ latest=$(curl --silent \
 
 latest_status=$?
 if [ $latest_status -ne 0 ]; then
-    echo "Get APK failed: $apk_status"
+    echo "Get APK info failed: ${latest_status}"
     exit 7
 fi
+if [[ $latest == {} ]]; then
+  echo "Unexpected response from APK info: ${latest}"
+  exit 8
+fi
 
+# Get information from the response
 download_url=$(echo ${latest} | jq -j '.download_url')
 latest_id=$(echo ${latest} | jq -j '.version')
 version=$(echo ${latest} | jq -j '.short_version')
-
-echo "URL: ${download_url}"
-echo "ID: ${latest_id}"
-echo "VERSION: ${version}"
-
-echo "Response: ${latest}"
-
-#if [[ $register != {} ]]; then
-#  echo "Unexpected response from register: $register"
-#  exit 8
-#fi
-
 concat_app_version="${version}-${latest_id}"
+
+if ! [[ $download_url =~ ^http ]]; then
+  echo "Failed to find download url in response"
+  exit 6
+fi
+
+# Download APK
+echo "Download APK version ${concat_app_version}"
+apk=$(curl \
+  --output apk/app-staging.apk\
+  --create-dirs\
+  ${download_url})
+
+apk_status=$?
+if [ $apk_status -ne 0 ]; then
+    echo "Get APK download failed: ${apk_status}"
+    exit 7
+fi
 
 echo "Get APK complete for version ${concat_app_version}"
