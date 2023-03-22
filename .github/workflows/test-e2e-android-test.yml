@@ -38,6 +38,7 @@ jobs:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Set environment
         run: bash ./scripts/copy-environment.sh staging atb
+        working-directory: e2e/appium
       - name: Get APK
         run: bash ./scripts/get-apk.sh
         working-directory: e2e/appium
