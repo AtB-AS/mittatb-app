@@ -46,6 +46,7 @@ export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
           textSize: 12,
           iconImage: {uri: 'PinBicycle'},
           iconSize: 0.75,
+          iconAllowOverlap: true,
         }}
       />
       <MapboxGL.CircleLayer

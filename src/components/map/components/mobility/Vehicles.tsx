@@ -63,6 +63,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
           textSize: 12,
           iconImage: {uri: 'PinScooter'},
           iconSize: 0.75,
+          iconAllowOverlap: true,
         }}
       />
       <MapboxGL.SymbolLayer
@@ -72,6 +73,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
         style={{
           iconImage: {uri: 'Scooter'},
           iconSize: 0.75,
+          iconAllowOverlap: true,
         }}
       />
       <MapboxGL.CircleLayer
