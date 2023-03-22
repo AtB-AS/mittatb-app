@@ -9,11 +9,13 @@
 if [[
   -z ${APPCENTER_API_KEY}
   || -z ${APPCENTER_APP_SECRET}
+  || -z ${APPCENTER_USER_API_TOKEN}
 ]]; then
   echo "Argument error!"
   echo "Expected environment variables:
   - APPCENTER_API_KEY
   - APPCENTER_APP_SECRET
+  - APPCENTER_USER_API_TOKEN
   "
   exit 2
 fi
@@ -30,7 +32,7 @@ echo "Get APK for latest mitt-atb android"
 #  ${appcenter_url}/a/publikasjoner/pdf/rapp_9617/rapp_9617.pdf)
 
 latest=$(curl -v \
-  --header "X-API-Token: ${APPCENTER_API_KEY}" \
+  --header "X-API-Token: ${APPCENTER_USER_API_TOKEN}" \
   --create-dirs\
   --output apk/app-staging.apk\
   ${appcenter_url}/v0.1/sdk/apps/${APPCENTER_APP_SECRET}/releases/latest)
