@@ -25,20 +25,19 @@ jobs:
 
       # Settes i vanlig Android-bygg
       - name: Set global env vars
-        run: |
-          echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
-          echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
+        run: echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
+        #echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
 
       - name: print ls appium 1
         run: |
           ls -al ./e2e/appium/**/**
-      - name: Decrypt env files
-        run: bash ./scripts/git-crypt-unlock.sh
-        env:
-          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
-      - name: Set environment
-        run: bash ./scripts/copy-environment.sh staging atb
-        working-directory: e2e/appium
+      #- name: Decrypt env files
+      #  run: bash ./scripts/git-crypt-unlock.sh
+      #  env:
+      #    GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+      #- name: Set environment
+      #  run: bash ./scripts/copy-environment.sh staging atb
+      #  working-directory: e2e/appium
       - name: Get APK
         run: bash ./scripts/get-apk.sh
         working-directory: e2e/appium
@@ -47,7 +46,15 @@ jobs:
           APPCENTER_APP_SECRET: ${{ secrets.APPCENTER_ANDROID_APP_SECRET }}
       - name: print ls appium 2
         run: |
-          ls -al ./e2e/appium/**/**          
+          ls -al ./e2e/appium/**/**
+      - name: Upload apk
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk
+          path: |
+            e2e/appium/apk/app-staging.apk
+          retention-days: 1
 
       - name: Install Appium
         run: npm install -g appium
