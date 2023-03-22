@@ -15,9 +15,9 @@ import {
 import {getRentalAppUri} from '@atb/mobility/utils';
 import {StyleSheet} from '@atb/theme';
 import {useOperatorApp} from '@atb/mobility/use-operator-app';
-import {View} from 'react-native';
 import {VehicleStat} from '@atb/mobility/components/VehicleStat';
 import {Bicycle, Parking} from '@atb/assets/svg/mono-icons/vehicles';
+import {VehicleStats} from '@atb/mobility/components/VehicleStats';
 
 type Props = {
   station: StationFragment;
@@ -50,15 +50,15 @@ export const CityBikeStationSheet = ({station, close}: Props) => {
           <OperatorLogo operatorName={operatorName} logoUrl={brandLogoUrl} />
         </GenericSectionItem>
       </Section>
-      <View style={style.vehicleInfo}>
-        <View style={[style.vehicleInfoItem, style.vehicleInfoItem__first]}>
+      <VehicleStats
+        left={
           <VehicleStat
             svg={Bicycle}
             primaryStat={station.numBikesAvailable}
             secondaryStat={t(BicycleTexts.stations.numBikesAvailable)}
           />
-        </View>
-        <View style={[style.vehicleInfoItem, style.vehicleInfoItem__last]}>
+        }
+        right={
           <VehicleStat
             svg={Parking}
             primaryStat={
@@ -67,8 +67,8 @@ export const CityBikeStationSheet = ({station, close}: Props) => {
             }
             secondaryStat={t(BicycleTexts.stations.numDocksAvailable)}
           />
-        </View>
-      </View>
+        }
+      />
       {rentalAppUri && (
         <FullScreenFooter>
           <Button
@@ -87,28 +87,5 @@ export const CityBikeStationSheet = ({station, close}: Props) => {
 const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
   button: {
     marginTop: theme.spacings.medium,
-  },
-  vehicleInfo: {
-    flexGrow: 1,
-    flexShrink: 0,
-    flexDirection: 'row',
-    padding: theme.spacings.medium,
-  },
-  vehicleInfoItem: {
-    flex: 1,
-    backgroundColor: theme.static.background.background_0.background,
-    borderRadius: theme.border.radius.regular,
-    padding: theme.spacings.medium,
-  },
-  // Hack until 'gap' is supported properly.
-  // https://github.com/styled-components/styled-components/issues/3628
-  vehicleInfoItem__first: {
-    marginRight: theme.spacings.medium,
-  },
-  vehicleInfoItem__last: {
-    marginLeft: theme.spacings.medium,
-  },
-  vehicleStat: {
-    marginBottom: theme.spacings.medium,
   },
 }));
