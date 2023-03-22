@@ -111,6 +111,7 @@ export const Profile_DesignSystemScreen = () => {
 
   const radioSegments = Object.keys(theme.interactive).map((color) => (
     <RadioSegments
+      key={color}
       activeIndex={segmentedSelection}
       style={{
         marginTop: theme.spacings.small,
@@ -207,6 +208,7 @@ export const Profile_DesignSystemScreen = () => {
               />
               {Object.values(LegMode).map((mode) => (
                 <TransportationIcon
+                  key={mode}
                   style={style.transportationIcon}
                   mode={mode}
                 />

@@ -8,7 +8,7 @@ import {StaticColorByType} from '@atb/theme/colors';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {DeparturesStackProps} from './navigation-types';
-import storage, {StorageModelKeysEnum} from '@atb/storage';
+import {storage, StorageModelKeysEnum} from '@atb/storage';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {DeparturesOnboarding} from '@atb/assets/svg/color/images';
 import {updateMetadata} from '@atb/chat/metadata';

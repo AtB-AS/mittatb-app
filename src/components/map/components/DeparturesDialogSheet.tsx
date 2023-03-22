@@ -14,7 +14,7 @@ import {Quay, StopPlace} from '@atb/api/types/departures';
 import {MessageBox} from '@atb/components/message-box';
 import {Feature, Point} from 'geojson';
 import {useReverseGeocoder} from '@atb/geocoder';
-import {Location, SearchLocation} from '@atb/favorites/types';
+import {Location, SearchLocation} from '@atb/favorites';
 import {NavigateToTripSearchCallback} from '../types';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 

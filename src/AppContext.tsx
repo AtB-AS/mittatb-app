@@ -9,7 +9,7 @@ import React, {
 import RNBootSplash from 'react-native-bootsplash';
 import {getBuildNumber} from 'react-native-device-info';
 import {register as registerChatUser} from './chat/user';
-import storage from './storage';
+import {storage} from '@atb/storage';
 
 const buildNumber = getBuildNumber();
 

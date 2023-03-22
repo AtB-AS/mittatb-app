@@ -4,8 +4,8 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import SvgFavorite from '@atb/assets/svg/mono-icons/places/Favorite';
-import {StoredType} from '@atb/favorites/storage';
-import {FavoriteDeparture} from '@atb/favorites/types';
+import {StoredType} from './storage';
+import {FavoriteDeparture} from './types';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
 
@@ -15,7 +15,7 @@ type Props = {
   toggleFavouriteAccessibilityLabel?: string;
 };
 
-const ToggleFavouriteDeparture = ({
+export const FavouriteDepartureToggle = ({
   onMarkFavourite,
   existingFavorite,
   toggleFavouriteAccessibilityLabel,
@@ -55,5 +55,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingLeft: theme.spacings.medium,
   },
 }));
-
-export default ToggleFavouriteDeparture;

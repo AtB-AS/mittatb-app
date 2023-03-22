@@ -1,4 +1,4 @@
-import {SearchLocation} from '../favorites/types';
+import {SearchLocation} from '@atb/favorites';
 import {useReducer} from 'react';
 import {ErrorType} from '../api/utils';
 

@@ -113,7 +113,7 @@ const translateStateMessage = (loadingState: State, t: TranslateFunction) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_2.background,
+    backgroundColor: theme.static.background.background_1.background,
   },
   content: {
     flex: 1,

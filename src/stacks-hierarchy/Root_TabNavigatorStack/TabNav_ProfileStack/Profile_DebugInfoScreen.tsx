@@ -9,7 +9,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
 import {useAppDispatch, useAppState} from '@atb/AppContext';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import storage, {KeyValuePair, StorageModelKeysEnum} from '@atb/storage';
+import {storage, KeyValuePair, StorageModelKeysEnum} from '@atb/storage';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
@@ -180,6 +180,11 @@ export const Profile_DebugInfoScreen = () => {
           />
 
           <Sections.LinkSectionItem
+            text="Reset user map filters"
+            onPress={() => storage.set('@ATB_user_map_filters', '')}
+          />
+
+          <Sections.LinkSectionItem
             text="Reset has read departures v2 onboarding"
             onPress={() =>
               storage.set(
@@ -193,6 +198,15 @@ export const Profile_DebugInfoScreen = () => {
             onPress={() =>
               storage.set(
                 StorageModelKeysEnum.HasReadTravelSearchFilterOnboarding,
+                JSON.stringify(false),
+              )
+            }
+          />
+          <Sections.LinkSectionItem
+            text="Reset has read scooter onboarding"
+            onPress={() =>
+              storage.set(
+                StorageModelKeysEnum.HasReadScooterOnboarding,
                 JSON.stringify(false),
               )
             }
@@ -326,7 +340,7 @@ export const Profile_DebugInfoScreen = () => {
             expandContent={
               <View>
                 {Object.entries(user?.toJSON() ?? {}).map(([key, value]) => (
-                  <MapEntry title={key} value={value} />
+                  <MapEntry key={key} title={key} value={value} />
                 ))}
               </View>
             }
@@ -341,7 +355,7 @@ export const Profile_DebugInfoScreen = () => {
               <View>
                 {!!idToken ? (
                   Object.entries(idToken).map(([key, value]) => (
-                    <MapEntry title={key} value={value} />
+                    <MapEntry key={key} title={key} value={value} />
                   ))
                 ) : (
                   <ThemeText>No id token</ThemeText>
@@ -360,6 +374,7 @@ export const Profile_DebugInfoScreen = () => {
                 <View>
                   {Object.keys(remoteConfig).map((key) => (
                     <MapEntry
+                      key={key}
                       title={key}
                       value={
                         remoteConfig[key as keyof RemoteConfigContextState]
@@ -384,7 +399,7 @@ export const Profile_DebugInfoScreen = () => {
                 {storedValues && (
                   <View>
                     {storedValues.map(([key, value]) => (
-                      <MapEntry title={key} value={value} />
+                      <MapEntry key={key} title={key} value={value} />
                     ))}
                   </View>
                 )}
@@ -405,6 +420,7 @@ export const Profile_DebugInfoScreen = () => {
                   </ThemeText>
                   {Object.keys(preferences).map((key) => (
                     <TouchableOpacity
+                      key={key}
                       onPress={() => setPreference({[key]: undefined})}
                     >
                       <MapEntry
@@ -524,7 +540,7 @@ function MapValue({value}: {value: any}) {
         <View style={{flexDirection: 'column'}}>
           {entries.length ? (
             Object.entries(value).map(([key, value]) => (
-              <MapEntry title={key} value={value} />
+              <MapEntry key={key} title={key} value={value} />
             ))
           ) : (
             <ThemeText color="secondary">Empty object</ThemeText>

@@ -1,4 +1,4 @@
-import {TripPattern} from '@atb/api/types/trips';
+import {Leg, TripPattern} from '@atb/api/types/trips';
 import {ContentWithDisappearingHeader} from '@atb/components/disappearing-header';
 import {ScreenHeader} from '@atb/components/screen-header';
 import PaginatedDetailsHeader from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
@@ -24,7 +24,12 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import {TariffZone} from '@atb/reference-data/types';
-import {addMinutes, formatISO, parseISO} from 'date-fns';
+import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import analytics from '@react-native-firebase/analytics';
+import {canSellCollabTicket} from '@atb/travel-details-screens/utils';
+import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
+import {secondsBetween} from '@atb/utils/date';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -126,21 +131,16 @@ export const TripDetailsScreenComponent = ({
             accessibilityRole={'button'}
             accessibilityLabel={t(TripDetailsTexts.trip.buyTicket.a11yLabel)}
             accessible={true}
-            onPress={() =>
+            onPress={() => {
+              analytics().logEvent('click_trip_purchase_button');
               onPressBuyTicket({
                 fareProductTypeConfig: singleTicketConfig,
-                fromTariffZone: {
-                  resultType: 'zone',
-                  ...tripTicketDetails.tariffZoneFrom,
-                },
-                toTariffZone: {
-                  resultType: 'zone',
-                  ...tripTicketDetails.tariffZoneTo,
-                },
+                fromTariffZone: tripTicketDetails.tariffZoneFrom,
+                toTariffZone: tripTicketDetails.tariffZoneTo,
                 travelDate: tripTicketDetails.ticketStartTime,
                 mode: 'TravelSearch',
-              })
-            }
+              });
+            }}
             type="block"
             text={t(TripDetailsTexts.trip.buyTicket.text)}
             rightIcon={{svg: Ticket}}
@@ -156,7 +156,7 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
   const fromTripsSearchToTicketEnabled = useFromTravelSearchToTicketEnabled();
   const {enable_ticketing} = useRemoteConfig();
 
-  const nonFootLegs = tripPattern.legs.filter((leg) => leg.mode !== 'foot');
+  const nonFootLegs = tripPattern.legs.filter((leg) => leg.mode !== Mode.Foot);
   const fromTariffZones = nonFootLegs[0]?.fromPlace.quay?.tariffZones;
   const toTariffZones =
     nonFootLegs[nonFootLegs.length - 1]?.toPlace.quay?.tariffZones;
@@ -164,14 +164,30 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
     useGetFirstTariffZoneWeSellTicketFor(fromTariffZones);
   const toTariffZoneWeSellTicketFor =
     useGetFirstTariffZoneWeSellTicketFor(toTariffZones);
+
+  const hasTooLongWaitTime = totalWaitTimeIsMoreThanAnHour(tripPattern.legs);
+  const canSellCollab = canSellCollabTicket(tripPattern);
+
   if (
     !(
       fromTripsSearchToTicketEnabled &&
       fromTariffZoneWeSellSingleTicketsFor &&
       toTariffZoneWeSellTicketFor
-    )
+    ) ||
+    hasTooLongWaitTime
   )
     return;
+
+  const tariffZoneTo: TariffZoneWithMetadata = {
+    resultType: 'zone',
+    venueName: nonFootLegs[nonFootLegs.length - 1]?.toPlace?.name,
+    ...toTariffZoneWeSellTicketFor,
+  };
+  const tariffZoneFrom: TariffZoneWithMetadata = {
+    resultType: 'zone',
+    venueName: nonFootLegs[0]?.fromPlace?.name,
+    ...fromTariffZoneWeSellSingleTicketsFor,
+  };
 
   // modes we can sell single tickets for. Might not always match modes we sell tickets for,
   // as from travel search to ticket currently only supports single ticket
@@ -183,7 +199,8 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
     'regionalBus',
     'shuttleBus',
   ]);
-  if (!(enable_ticketing && !someLegsAreNotSingleTicket)) return;
+  if (!enable_ticketing || (someLegsAreNotSingleTicket && !canSellCollab))
+    return;
 
   const tripStartWithBuffer = addMinutes(
     parseISO(nonFootLegs[0]?.aimedStartTime),
@@ -193,11 +210,28 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
     tripStartWithBuffer.getTime() <= Date.now()
       ? undefined
       : formatISO(tripStartWithBuffer);
+
   return {
-    tariffZoneFrom: fromTariffZoneWeSellSingleTicketsFor,
-    tariffZoneTo: toTariffZoneWeSellTicketFor,
+    tariffZoneFrom,
+    tariffZoneTo,
     ticketStartTime,
   };
+}
+
+function totalWaitTimeIsMoreThanAnHour(legs: Leg[]) {
+  return (
+    legs.reduce(
+      (sum, leg, currentIndex) =>
+        sum + getWaitTime(leg, legs[currentIndex + 1]),
+      0,
+    ) >= hoursToSeconds(1)
+  );
+}
+
+function getWaitTime(leg: Leg, nextLeg: Leg) {
+  return nextLeg
+    ? secondsBetween(leg.expectedEndTime, nextLeg.expectedStartTime)
+    : 0;
 }
 
 function useGetFirstTariffZoneWeSellTicketFor(

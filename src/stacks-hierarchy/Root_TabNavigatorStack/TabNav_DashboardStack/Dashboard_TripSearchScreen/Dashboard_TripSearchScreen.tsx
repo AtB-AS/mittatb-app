@@ -8,7 +8,7 @@ import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announceme
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
-import {GeoLocation, Location, UserFavorites} from '@atb/favorites/types';
+import {GeoLocation, Location, UserFavorites} from '@atb/favorites';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {
   SelectableLocationType,
@@ -45,7 +45,7 @@ import {
 import {DashboardScreenProps} from '../navigation-types';
 import {SearchForLocations} from '../types';
 import {Time} from '@atb/assets/svg/mono-icons/time';
-import storage, {StorageModelKeysEnum} from '@atb/storage';
+import {storage, StorageModelKeysEnum} from '@atb/storage';
 import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-state';
 import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/SelectedFiltersButtons';
 

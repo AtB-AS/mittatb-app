@@ -37,6 +37,7 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
             screen: 'Root_PurchaseOverviewScreen',
             params: {
               fareProductTypeConfig,
+              mode: 'Ticket',
             },
           },
         },
@@ -44,6 +45,7 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
     } else {
       navigation.navigate('Root_PurchaseOverviewScreen', {
         fareProductTypeConfig: fareProductTypeConfig,
+        mode: 'Ticket',
       });
     }
   };

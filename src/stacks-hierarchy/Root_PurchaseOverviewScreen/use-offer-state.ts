@@ -172,10 +172,9 @@ export default function useOfferState(
             });
           }
         } catch (err) {
-          console.warn(err);
-
           const errorType = getAxiosErrorType(err);
           if (errorType !== 'cancel') {
+            console.warn(err);
             dispatch({
               type: 'SET_ERROR',
               error: {

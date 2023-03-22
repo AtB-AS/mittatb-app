@@ -42,6 +42,22 @@ platform :ios do
     get_cert
   end
 
+  desc 'Generate new certificates without nuking old ones'
+  lane :generate_new_certificates_without_nuke do
+    ensure_env_vars(
+      env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_SSH_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
+    )
+    identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
+    match(
+      type: ENV["FASTLANE_MATCH_TYPE"],
+      app_identifier: identifiers,
+      storage_mode: 'git',
+      git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
+      team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
+      readonly: false
+    )
+  end
+
   desc 'Match certificates'
   lane :get_cert do
     ensure_env_vars(
@@ -78,6 +94,7 @@ platform :ios do
       )
     end
   end
+  
   # iOS Lanes
   desc 'Build the iOS application.'
   lane :build do

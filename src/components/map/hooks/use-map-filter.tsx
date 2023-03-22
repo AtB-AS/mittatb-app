@@ -1,21 +1,18 @@
 import {MapFilter} from '@atb/components/map/types';
-import storage from '@atb/storage';
+import {storage} from '@atb/storage';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
-const DEFAULT_FILTER: MapFilter = {
-  vehicles: {
-    showVehicles: true,
-  },
-};
 const STORAGE_KEY = '@ATB_user_map_filters';
 
 export const useUserMapFilters = () => {
+  const {default_map_filter} = useRemoteConfig();
   const getMapFilter = () =>
     storage
       .get(STORAGE_KEY)
       .then((storedFilters) =>
         storedFilters
           ? (JSON.parse(storedFilters) as MapFilter)
-          : DEFAULT_FILTER,
+          : (JSON.parse(default_map_filter) as MapFilter),
       );
 
   const setMapFilter = (filters: MapFilter) =>

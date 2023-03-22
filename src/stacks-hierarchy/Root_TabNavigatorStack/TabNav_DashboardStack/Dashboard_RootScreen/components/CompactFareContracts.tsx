@@ -84,6 +84,7 @@ const CompactFareContracts: React.FC<Props> = ({
           );
           return (
             <CompactFareContractInfo
+              key={fareContract.id}
               {...fareContractInfoDetailsProps}
               now={now}
               onPressDetails={() => {
