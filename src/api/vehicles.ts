@@ -24,7 +24,6 @@ export const getVehicles = (
   return client
     .get<GetVehiclesQuery>(stringifyUrl(url, query), {
       ...opts,
-      baseURL: 'http://localhost:8080',
     })
     .then((res) => res.data.vehicles ?? []);
 };

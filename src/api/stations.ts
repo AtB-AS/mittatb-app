@@ -21,7 +21,6 @@ export const getStations = (
   return client
     .get<GetStationsQuery>(stringifyUrl(url, query), {
       ...opts,
-      baseURL: 'http://localhost:8080',
     })
     .then((res) => res.data.stations ?? []);
 };
