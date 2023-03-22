@@ -13,7 +13,7 @@ export enum StorageModelKeysEnum {
   EnableRealtimeMapDebugOverride = '@ATB_enable_realtime_map_debug_override',
   EnableMapDebugOverride = '@ATB_enable_map_debug_override',
   EnableTicketingAssistantOverride = '@ATB_enable_ticketing_assistant_override',
-  EnableTipsAndInformationOverride = '@ATB_enable_ticketing_assistant_override',
+  EnableTipsAndInformationOverride = '@ATB_enable_tips_and_information_override',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;
