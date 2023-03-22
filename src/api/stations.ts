@@ -11,7 +11,7 @@ export const getStations = (
   {lat, lon, range, availableFormFactors}: GetStationsQueryVariables,
   opts?: AxiosRequestConfig,
 ) => {
-  const url = '/bff/v2/mobility/vehicles';
+  const url = '/bff/v2/mobility/stations';
   const query = qs.stringify({
     lat,
     lon,
@@ -21,6 +21,7 @@ export const getStations = (
   return client
     .get<GetStationsQuery>(stringifyUrl(url, query), {
       ...opts,
+      baseURL: 'http://localhost:8080',
     })
     .then((res) => res.data.stations ?? []);
 };

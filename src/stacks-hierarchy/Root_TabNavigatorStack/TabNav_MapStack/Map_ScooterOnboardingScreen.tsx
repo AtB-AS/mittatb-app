@@ -10,7 +10,7 @@ import storage, {StorageModelKeysEnum} from '@atb/storage';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {ScooterOnboarding} from '@atb/assets/svg/color/images';
 import {MapScreenProps} from './navigation-types';
-import {ScooterTexts} from '@atb/translations/screens/subscreens/VehicleTexts';
+import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 

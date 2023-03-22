@@ -1,4 +1,17 @@
 import React, {useEffect, useState} from 'react';
+import {extend, getRadius, isStation, needsReload} from '@atb/mobility/utils';
+import {
+  toFeatureCollection,
+  toFeaturePoint,
+  toFeaturePoints,
+} from '@atb/components/map/utils';
+import {useIsCityBikesEnabled} from '@atb/mobility/use-city-bikes-enabled';
+import {
+  MapSelectionActionType,
+  StationsFilter,
+  StationsState,
+} from '@atb/components/map/types';
+import {useUserMapFilters} from '@atb/components/map/hooks/use-map-filter';
 import {
   Feature,
   FeatureCollection,
@@ -6,28 +19,16 @@ import {
   MultiPolygon,
   Polygon,
 } from 'geojson';
-import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
-import {
-  toFeatureCollection,
-  toFeaturePoint,
-  toFeaturePoints,
-} from '@atb/components/map/utils';
-import {getVehicles} from '@atb/api/vehicles';
-import {useIsVehiclesEnabled} from '@atb/vehicles/use-vehicles-enabled';
-import {
-  MapSelectionActionType,
-  VehiclesFilter,
-} from '@atb/components/map/types';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {extend, getRadius, isVehicle, needsReload} from '@atb/vehicles/utils';
-import {ScooterSheet} from '@atb/vehicles/components/ScooterSheet';
+import {StationFragment} from '@atb/api/types/generated/fragments/stations';
+import {getStations} from '@atb/api/stations';
 import {RegionPayload} from '@rnmapbox/maps';
-import {useUserMapFilters} from '@atb/components/map/hooks/use-map-filter';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {CityBikeStationSheet} from '@atb/mobility/components/CityBikeStationBottomSheet';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
-const MIN_ZOOM_LEVEL = 13.5;
+const MIN_ZOOM_LEVEL = 12;
 const BUFFER_DISTANCE_IN_METERS = 500;
-
-export const useVehicles = () => {
+export const useCityBikeStations: () => StationsState | undefined = () => {
   const [area, setArea] = useState({
     lat: 0,
     lon: 0,
@@ -38,38 +39,40 @@ export const useVehicles = () => {
       [0, 0],
     ],
   });
-
-  // The area in which vehicles are already loaded
+  const isCityBikesEnabled = useIsCityBikesEnabled();
+  const [filter, setFilter] = useState<StationsFilter>();
+  const [isLoading, setIsLoading] = useState(false);
+  const {getMapFilter} = useUserMapFilters();
   const [loadedArea, setLoadedArea] =
     useState<Feature<Polygon | MultiPolygon>>();
-
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
-  const isVehiclesEnabled = useIsVehiclesEnabled();
-  const {getMapFilter} = useUserMapFilters();
 
-  const [vehicles, setVehicles] = useState<
-    FeatureCollection<GeoJSON.Point, VehicleFragment>
+  const [stations, setStations] = useState<
+    FeatureCollection<GeoJSON.Point, StationFragment>
   >(toFeatureCollection([]));
-
-  const [filter, setFilter] = useState<VehiclesFilter>();
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getMapFilter().then((initialFilter) => {
-      setFilter(initialFilter.vehicles);
+      setFilter(initialFilter.stations);
     });
-  }, [isVehiclesEnabled]);
+  }, [isCityBikesEnabled]);
 
   useEffect(() => {
     const abortCtrl = new AbortController();
-    if (isVehiclesEnabled) {
-      if (area.zoom > MIN_ZOOM_LEVEL && filter?.showVehicles) {
+    if (isCityBikesEnabled) {
+      if (area.zoom > MIN_ZOOM_LEVEL && filter?.showCityBikeStations) {
         if (needsReload(area.visibleBounds, loadedArea)) {
           setIsLoading(true);
-          getVehicles(area, {signal: abortCtrl.signal})
+          getStations(
+            {
+              ...area,
+              availableFormFactors: FormFactor.Bicycle,
+            },
+            {signal: abortCtrl.signal},
+          )
             .then(toFeaturePoints)
             .then(toFeatureCollection)
-            .then(setVehicles)
+            .then(setStations)
             .then(() => setIsLoading(false))
             .then(() => {
               setLoadedArea(
@@ -81,14 +84,14 @@ export const useVehicles = () => {
             });
         }
       } else {
-        setVehicles(toFeatureCollection([]));
+        setStations(toFeatureCollection([]));
         setLoadedArea(undefined);
       }
     }
     return () => abortCtrl.abort();
-  }, [area, isVehiclesEnabled, filter]);
+  }, [area, isCityBikesEnabled, filter]);
 
-  const fetchVehicles = async (
+  const fetchStations = async (
     region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => {
     const zoom = region.properties.zoomLevel;
@@ -104,26 +107,26 @@ export const useVehicles = () => {
     });
   };
 
-  const onFilterChange = (filter: VehiclesFilter) => {
+  const onFilterChange = (filter: StationsFilter) => {
     setFilter(filter);
   };
 
   const onPress = (type: MapSelectionActionType) => {
     if (type.source !== 'map-click') return;
-    const vehicle = type.feature.properties;
-    if (isVehicle(vehicle)) {
+    const station = type.feature.properties;
+    if (isStation(station)) {
       openBottomSheet(() => (
-        <ScooterSheet vehicle={vehicle} close={closeBottomSheet} />
+        <CityBikeStationSheet station={station} close={closeBottomSheet} />
       ));
     }
   };
 
-  return isVehiclesEnabled
+  return isCityBikesEnabled
     ? {
-        vehicles,
+        stations,
         onFilterChange,
         onPress,
-        fetchVehicles,
+        fetchStations,
         isLoading,
       }
     : undefined;
