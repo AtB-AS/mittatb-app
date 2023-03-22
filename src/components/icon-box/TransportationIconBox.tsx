@@ -8,9 +8,9 @@ import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemeText} from '@atb/components/text';
 import {getTransportModeSvg} from './utils';
-import {AnyMode, AnySubMode} from '@atb/components/transportation-icon/types';
+import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 
-export type TransportationIconProps = {
+export type TransportationIconBoxProps = {
   mode?: AnyMode;
   subMode?: AnySubMode;
   lineNumber?: string;
@@ -20,7 +20,7 @@ export type TransportationIconProps = {
   testID?: string;
 };
 
-export const TransportationIcon: React.FC<TransportationIconProps> = ({
+export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   mode,
   subMode,
   lineNumber,
@@ -40,8 +40,8 @@ export const TransportationIcon: React.FC<TransportationIconProps> = ({
 
   const iconStyle =
     size == 'small'
-      ? styles.transportationIcon_small
-      : styles.transportationIcon;
+      ? styles.transportationIconBox_small
+      : styles.transportationIconBox;
   const lineNumberElement = lineNumber ? (
     <ThemeText
       type="body__primary--bold"
@@ -75,14 +75,14 @@ export const TransportationIcon: React.FC<TransportationIconProps> = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  transportationIcon: {
+  transportationIconBox: {
     display: 'flex',
     flexDirection: 'row',
     paddingVertical: theme.spacings.small,
     paddingHorizontal: theme.spacings.small,
     borderRadius: theme.border.radius.small,
   },
-  transportationIcon_small: {
+  transportationIconBox_small: {
     display: 'flex',
     flexDirection: 'row',
     paddingVertical: theme.spacings.xSmall,
