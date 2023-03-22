@@ -6,9 +6,9 @@ on:
         description: 'Define branch to test'
         required: true
         default: 'master'
-  #push:
-  #  branches:
-  #    - tor/e2e-appium
+  push:
+    branches:
+      - tor/e2e-appium
 
 jobs:
   run_tests:
@@ -25,7 +25,22 @@ jobs:
 
       # Settes i vanlig Android-bygg
       - name: Set global env vars
-        run: echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
+        run: |
+          echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
+          echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
+
+      - name: print ls appium 1
+        run: |
+          ls -al ./e2e/appium/**/**
+      - name: Get APK
+        run: bash ./scripts/get-apk.sh
+        working-directory: e2e/appium
+        env:
+          APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
+          APPCENTER_APP_SECRET: ${{ secrets.APPCENTER_ANDROID_APP_SECRET }}
+      - name: print ls appium 2
+        run: |
+          ls -al ./e2e/appium/**/**          
 
       - name: Install Appium
         run: npm install -g appium
@@ -56,7 +71,7 @@ jobs:
           #emulator-options: -no-window
           disable-spellchecker: true
           working-directory: e2e/appium
-          script: yarn test:android:local
+          script: yarn test:android:local --spec "test/specs/onboarding.e2e.ts"
           pre-emulator-launch-script: ./restart-adb.sh
 
           # SDK
