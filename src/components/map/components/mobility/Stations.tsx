@@ -40,12 +40,12 @@ export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
         minZoomLevel={13.5}
         style={{
           textField: ['get', 'numBikesAvailable'],
-          textAnchor: 'top-left',
-          textOffset: [0.4, 0.7],
+          textAnchor: 'top',
+          textOffset: [0, -2.5],
           textColor: '#DE5D00',
           textSize: 12,
-          iconImage: {uri: 'PinBicycle'},
-          iconSize: 0.75,
+          iconImage: {uri: 'BikeStation'},
+          iconSize: 0.9,
           iconAllowOverlap: true,
         }}
       />
