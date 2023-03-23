@@ -47,27 +47,6 @@ const TicketingTexts = {
       'You have no active tickets right now. Ticket history can be found under the My profile tab.',
     ),
   },
-  ticketAssistant: {
-    label: _('Bilettveileder', 'Ticket Assistant'),
-    a11yLabel: _('Aktive billetter', 'Active tickets'),
-    noItems: _('Du har ingen aktive billetter.', 'You have no active tickets.'),
-    noItemsHistoryHelpText: _(
-      'Du har ingen aktive billetter. Billetthistorikk finner du under Min profil-fanen.',
-      'You have no active tickets right now. Ticket history can be found under the My profile tab.',
-    ),
-  },
-  tipsAndInformation: {
-    label: _(
-      'Tips of informasjon om billetter',
-      'Tips and information about tickets',
-    ),
-    a11yLabel: _('Aktive billetter', 'Active tickets'),
-    noItems: _('Du har ingen aktive billetter.', 'You have no active tickets.'),
-    noItemsHistoryHelpText: _(
-      'Du har ingen aktive billetter. Billetthistorikk finner du under Min profil-fanen.',
-      'You have no active tickets right now. Ticket history can be found under the My profile tab.',
-    ),
-  },
   ticketHistoryTab: {
     noItems: _(
       'Fant ingen billetthistorikk.',
