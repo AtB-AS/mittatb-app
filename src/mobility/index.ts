@@ -4,3 +4,4 @@ export {
   useIsVehiclesEnabled,
   useVehiclesInMapDebugOverride,
 } from './use-vehicles-enabled';
+export {useIsCityBikesEnabled} from './use-city-bikes-enabled';

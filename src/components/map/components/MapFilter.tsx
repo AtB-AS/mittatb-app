@@ -9,6 +9,7 @@ import {shadows} from '@atb/components/map';
 import {Duration} from '@atb/assets/svg/mono-icons/time';
 import {useUserMapFilters} from '@atb/components/map/hooks/use-map-filter';
 import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
+import {useIsCityBikesEnabled, useIsVehiclesEnabled} from '@atb/mobility';
 
 type MapFilterProps = {
   isLoading: {
@@ -24,6 +25,8 @@ export const MapFilter = ({isLoading, onFilterChange}: MapFilterProps) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const {getMapFilter, setMapFilter} = useUserMapFilters();
+  const isCityBikesEnabled = useIsCityBikesEnabled();
+  const isVehiclesEnabled = useIsVehiclesEnabled();
   const iconColors: {[key: string]: IconColors} = {
     active: 'interactive_0',
     disabled: 'interactive_2',
@@ -39,6 +42,11 @@ export const MapFilter = ({isLoading, onFilterChange}: MapFilterProps) => {
     getMapFilter().then((initialFilter) => {
       setScooterButtonColor(
         initialFilter.vehicles?.showVehicles
+          ? iconColors.active
+          : iconColors.disabled,
+      );
+      setBicycleButtonColor(
+        initialFilter.stations?.showCityBikeStations
           ? iconColors.active
           : iconColors.disabled,
       );
@@ -76,30 +84,34 @@ export const MapFilter = ({isLoading, onFilterChange}: MapFilterProps) => {
 
   return (
     <>
-      <Button
-        type="inline"
-        compact={true}
-        interactiveColor={scooterButtonColor}
-        disabled={isLoading.vehicles}
-        accessibilityRole="button"
-        accessibilityLabel={t(MapTexts.controls.filter.vehicles.a11yLabel)}
-        accessibilityHint={t(MapTexts.controls.filter.vehicles.a11yHint)}
-        onPress={onScooterToggle}
-        leftIcon={{svg: isLoading.vehicles ? Duration : Scooter}}
-        style={styles.filterButton}
-      />
-      <Button
-        type="inline"
-        compact={true}
-        interactiveColor={bicycleButtonColor}
-        disabled={isLoading.stations}
-        accessibilityRole="button"
-        accessibilityLabel={t(MapTexts.controls.filter.vehicles.a11yLabel)}
-        accessibilityHint={t(MapTexts.controls.filter.vehicles.a11yHint)}
-        onPress={onBicycleToggle}
-        leftIcon={{svg: isLoading.stations ? Duration : Bicycle}}
-        style={styles.filterButton}
-      />
+      {isVehiclesEnabled && (
+        <Button
+          type="inline"
+          compact={true}
+          interactiveColor={scooterButtonColor}
+          disabled={isLoading.vehicles}
+          accessibilityRole="button"
+          accessibilityLabel={t(MapTexts.controls.filter.vehicles.a11yLabel)}
+          accessibilityHint={t(MapTexts.controls.filter.vehicles.a11yHint)}
+          onPress={onScooterToggle}
+          leftIcon={{svg: isLoading.vehicles ? Duration : Scooter}}
+          style={styles.filterButton}
+        />
+      )}
+      {isCityBikesEnabled && (
+        <Button
+          type="inline"
+          compact={true}
+          interactiveColor={bicycleButtonColor}
+          disabled={isLoading.stations}
+          accessibilityRole="button"
+          accessibilityLabel={t(MapTexts.controls.filter.vehicles.a11yLabel)}
+          accessibilityHint={t(MapTexts.controls.filter.vehicles.a11yHint)}
+          onPress={onBicycleToggle}
+          leftIcon={{svg: isLoading.stations ? Duration : Bicycle}}
+          style={styles.filterButton}
+        />
+      )}
     </>
   );
 };
