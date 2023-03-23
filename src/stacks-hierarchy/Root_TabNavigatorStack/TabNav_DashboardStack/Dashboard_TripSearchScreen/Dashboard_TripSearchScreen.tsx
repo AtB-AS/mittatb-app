@@ -45,7 +45,7 @@ import {
 import {DashboardScreenProps} from '../navigation-types';
 import {SearchForLocations} from '../types';
 import {Time} from '@atb/assets/svg/mono-icons/time';
-import storage, {StorageModelKeysEnum} from '@atb/storage';
+import {storage, StorageModelKeysEnum} from '@atb/storage';
 import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-state';
 import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/SelectedFiltersButtons';
 

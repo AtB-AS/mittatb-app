@@ -22,7 +22,7 @@ const SearchHistoryContext = createContext<
   SearchHistoryContextState | undefined
 >(undefined);
 
-const SearchHistoryContextProvider: React.FC = ({children}) => {
+export const SearchHistoryContextProvider: React.FC = ({children}) => {
   const [history, setSearchHistory] = useState<SearchHistory>([]);
   const [journeyHistory, setJourneySearchHistory] = useState<
     JourneySearchHistoryEntry[]
@@ -71,5 +71,3 @@ export function useSearchHistory() {
   }
   return context;
 }
-
-export default SearchHistoryContextProvider;

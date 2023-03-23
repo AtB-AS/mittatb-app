@@ -1,9 +1,5 @@
 import {JourneySearchHistoryEntry} from '@atb/search-history';
-import {
-  Location,
-  SearchLocation,
-  StoredLocationFavorite,
-} from '../../favorites/types';
+import {Location, SearchLocation, StoredLocationFavorite} from '@atb/favorites';
 
 export type LocationSearchResultType = {
   location: SearchLocation;

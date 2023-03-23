@@ -1,5 +1,5 @@
 import {View, ViewStyle} from 'react-native';
-import {TransportationIcon} from '@atb/components/transportation-icon';
+import {TransportationIconBox, CounterIconBox} from '@atb/components/icon-box';
 import {ThemeText} from '@atb/components/text';
 import {
   FareContractTexts,
@@ -52,7 +52,7 @@ export const TransportModes = ({
   return (
     <View style={[styles.transportationMode, style]}>
       {modesToDisplay.map(({mode, subMode}) => (
-        <TransportationIcon
+        <TransportationIconBox
           style={styles.transportationIcon}
           key={mode + subMode}
           mode={mode}
@@ -62,20 +62,15 @@ export const TransportModes = ({
         />
       ))}
       {modesCount > modesDisplayLimit && (
-        <View style={styles.multipleModes}>
-          <ThemeText
-            color={'transport_other'}
-            type="label__uppercase"
-            style={styles.additionalModesCounter}
-            accessibilityLabel={t(
-              FareContractTexts.transportModes.a11yLabelMultipleTravelModes(
-                modesCount,
-              ),
-            )}
-          >
-            +{modesCount - modesDisplayLimit}
-          </ThemeText>
-        </View>
+        <CounterIconBox
+          count={modesCount - modesDisplayLimit}
+          size={'small'}
+          accessibilityLabel={t(
+            FareContractTexts.transportModes.a11yLabelMultipleTravelModes(
+              modesCount,
+            ),
+          )}
+        />
       )}
       <ThemeText
         type="label__uppercase"
@@ -98,15 +93,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   transportationIcon: {
     marginRight: theme.spacings.xSmall,
-  },
-  additionalModesCounter: {
-    lineHeight: 10,
-  },
-  multipleModes: {
-    marginRight: theme.spacings.xSmall,
-    paddingHorizontal: theme.spacings.xSmall,
-    paddingVertical: theme.spacings.xSmall,
-    borderRadius: theme.border.radius.small,
-    backgroundColor: theme.static.transport.transport_other.background,
   },
 }));

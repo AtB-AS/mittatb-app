@@ -11,7 +11,7 @@ import * as Sections from '@atb/components/sections';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {getTransportModeSvg} from '@atb/components/transportation-icon';
+import {getTransportModeSvg} from '@atb/components/icon-box';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {StyleSheet} from '@atb/theme';
 import type {
@@ -20,7 +20,7 @@ import type {
 } from '../../types';
 import {useFilters} from '@atb/travel-search-filters';
 import {ThemeText} from '@atb/components/text';
-import {Checkbox} from '@atb/components/checkbox/Checkbox';
+import {Checkbox} from '@atb/components/checkbox';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
