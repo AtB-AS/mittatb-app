@@ -5,13 +5,11 @@
 
 # Check for secrets from env vars
 if [[
-  -z ${APPCENTER_API_KEY}
-  || -z ${APPCENTER_APP_SECRET}
+  -z ${APPCENTER_APP_SECRET}
   || -z ${APPCENTER_USER_API_TOKEN}
 ]]; then
   echo "Argument error!"
   echo "Expected environment variables:
-  - APPCENTER_API_KEY
   - APPCENTER_APP_SECRET
   - APPCENTER_USER_API_TOKEN
   "
