@@ -11,7 +11,10 @@ import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {LoginInAppStackParams} from '@atb/login/types';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {
+  useHasEnabledMobileToken,
+  useMobileTokenContextState,
+} from '@atb/mobile-token/MobileTokenContext';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
@@ -51,7 +54,7 @@ type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login} =
     useRemoteConfig();
-  const hasEnabledMobileToken = true;
+  const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {wipeToken} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
