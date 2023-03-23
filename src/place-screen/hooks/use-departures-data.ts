@@ -26,8 +26,7 @@ import {TimeoutRequest, useTimeoutRequest} from '@atb/api/client';
 import {AxiosRequestConfig} from 'axios';
 import {useRefreshOnFocus} from '@atb/utils/use-refresh-on-focus';
 import {flatMap} from '@atb/utils/array';
-
-const MAX_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
+import {DepartureRealtimeQuery} from '@atb/api/departures/departure-group';
 
 // Used to re-trigger full refresh after N minutes.
 // To repopulate the view when we get fewer departures.
@@ -39,20 +38,14 @@ export type DepartureDataState = {
   error?: {type: ErrorType};
   locationId?: string[];
   isLoading: boolean;
-  queryInput: QueryInput;
   lastRefreshTime: Date;
 };
 
-const initialQueryInput = {
-  numberOfDepartures: MAX_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
-  startTime: new Date().toISOString(),
-};
 const initialState: DepartureDataState = {
   data: null,
   error: undefined,
   locationId: undefined,
   isLoading: false,
-  queryInput: initialQueryInput,
   lastRefreshTime: new Date(),
 
   // Store date as update tick to know when to rerender
@@ -64,7 +57,8 @@ type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
       quayIds: string[];
-      startTime?: string;
+      startTime: string;
+      limitPerQuay: number;
       favoriteDepartures?: UserFavoriteDepartures;
       limitPerLine?: number;
       timeRange?: number;
@@ -73,6 +67,10 @@ type DepartureDataActions =
   | {
       type: 'LOAD_REALTIME_DATA';
       quayIds: string[];
+      startTime: string;
+      limitPerQuay: number;
+      limitPerLine?: number;
+      timeRange: number;
       favoriteDepartures?: UserFavoriteDepartures;
     }
   | {
@@ -107,8 +105,8 @@ const reducer: ReducerWithSideEffects<
       // is a fresh fetch. We should fetch the latest information.
       const queryInput: DeparturesVariables = {
         ids: action.quayIds,
-        numberOfDepartures: MAX_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
-        startTime: action.startTime ?? new Date().toISOString(),
+        numberOfDepartures: action.limitPerQuay,
+        startTime: action.startTime,
         limitPerLine: action.limitPerLine,
         timeRange: action.timeRange,
       };
@@ -118,14 +116,12 @@ const reducer: ReducerWithSideEffects<
           ...state,
           isLoading: true,
           error: undefined,
-          queryInput,
         },
         async (_, dispatch) => {
           try {
             action.timeout.start();
             const result = await fetchEstimatedCalls(
               queryInput,
-              action.quayIds,
               action.favoriteDepartures,
               {
                 signal: action.timeout.signal,
@@ -156,20 +152,19 @@ const reducer: ReducerWithSideEffects<
 
     case 'LOAD_REALTIME_DATA': {
       if (!state.data?.length) return NoUpdate();
-
+      const lineIds = action.favoriteDepartures?.map((f) => f.lineId);
+      const queryInput: DepartureRealtimeQuery = {
+        quayIds: action.quayIds,
+        startTime: action.startTime,
+        limit: action.limitPerQuay,
+        limitPerLine: action.limitPerLine,
+        timeRange: action.timeRange,
+        lineIds,
+      };
       return SideEffect<DepartureDataState, DepartureDataActions>(
         async (_, dispatch) => {
-          // Use same query input with same startTime to ensure that
-          // we get the same result.
           try {
-            const lineIds = action.favoriteDepartures?.map((f) => f.lineId);
-            const realtimeData = await getRealtimeDepartures({
-              quayIds: action.quayIds,
-              lineIds,
-              limit: state.queryInput.numberOfDepartures,
-              startTime: state.queryInput.startTime,
-            });
-
+            const realtimeData = await getRealtimeDepartures(queryInput);
             dispatch({
               type: 'UPDATE_REALTIME',
               realtimeData,
@@ -239,6 +234,7 @@ const reducer: ReducerWithSideEffects<
 
 export function useDeparturesData(
   quayIds: string[],
+  limitPerQuay: number,
   showOnlyFavorites: boolean,
   isFocused: boolean,
   mode: StopPlacesMode,
@@ -248,29 +244,37 @@ export function useDeparturesData(
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const {favoriteDepartures} = useFavorites();
+  let queryStartTime = startTime ?? new Date().toISOString();
   const activeFavoriteDepartures = showOnlyFavorites
     ? favoriteDepartures
     : undefined;
+  const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
+  const timeRange = getTimeRangeByMode(mode, queryStartTime);
   const timeout = useTimeoutRequest();
 
   const loadDepartures = useCallback(() => {
-    const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
-    const timeRange = getTimeRangeByMode(mode, startTime);
+    queryStartTime = startTime ?? new Date().toISOString();
     dispatch({
       type: 'LOAD_INITIAL_DEPARTURES',
       quayIds,
-      startTime,
-      favoriteDepartures: activeFavoriteDepartures,
+      startTime: queryStartTime,
       limitPerLine,
+      limitPerQuay,
       timeRange,
+      favoriteDepartures: activeFavoriteDepartures,
       timeout,
     });
   }, [JSON.stringify(quayIds), startTime, activeFavoriteDepartures, mode]);
+
   const loadRealTimeData = useCallback(
     () =>
       dispatch({
         type: 'LOAD_REALTIME_DATA',
-        quayIds: quayIds,
+        quayIds,
+        startTime: queryStartTime,
+        limitPerLine,
+        limitPerQuay,
+        timeRange,
         favoriteDepartures: activeFavoriteDepartures,
       }),
     [JSON.stringify(activeFavoriteDepartures)],
@@ -280,7 +284,6 @@ export function useDeparturesData(
     loadDepartures();
     return () => timeout.abort();
   }, [loadDepartures]);
-
   useEffect(() => {
     if (!state.tick) {
       return;
@@ -317,30 +320,12 @@ export function useDeparturesData(
   };
 }
 
-type QueryInput = {
-  numberOfDepartures: number;
-  startTime: string;
-  timeRange?: number;
-  limitPerLine?: number;
-};
-
 async function fetchEstimatedCalls(
-  queryInput: QueryInput,
-  quayIds: string[],
+  queryInput: DeparturesVariables,
   favoriteDepartures?: UserFavoriteDepartures,
   opts?: AxiosRequestConfig,
 ): Promise<DepartureTypes.EstimatedCall[]> {
-  const result = await getDepartures(
-    {
-      ids: quayIds,
-      startTime: queryInput.startTime,
-      numberOfDepartures: queryInput.numberOfDepartures,
-      timeRange: queryInput.timeRange,
-      limitPerLine: queryInput.limitPerLine,
-    },
-    favoriteDepartures,
-    opts,
-  );
+  const result = await getDepartures(queryInput, favoriteDepartures, opts);
   return flatMap(
     result.quays,
     (q) => q.estimatedCalls,

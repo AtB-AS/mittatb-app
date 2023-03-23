@@ -15,6 +15,8 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import {dictionary, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
 
+const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
+
 export type QuayViewParams = {
   quay: Quay;
 };
@@ -58,6 +60,7 @@ export default function QuayView({
 
   const {state, forceRefresh} = useDeparturesData(
     [quay.id],
+    NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW,
     showOnlyFavorites,
     isFocused,
     mode,
