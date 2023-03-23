@@ -39,10 +39,9 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
             },
           }}
           rightButton={{type: 'close'}}
-          style={styles.header}
         />
       ) : (
-        <FullScreenHeader rightButton={{type: 'close'}} style={styles.header} />
+        <FullScreenHeader rightButton={{type: 'close'}} />
       )}
       <SafeAreaView style={styles.container}>
         <Tab.Navigator
@@ -89,8 +88,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.static.background[themeColor].background,
-  },
-  header: {
-    paddingHorizontal: theme.spacings.xLarge,
   },
 }));
