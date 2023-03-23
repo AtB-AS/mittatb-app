@@ -111,7 +111,7 @@ function mapToFareProductConfigSettings(
   fareProductType: string,
   settings: any,
 ): FareProductTypeConfigSettings | undefined {
-  const zoneSelectionModeTypes = ['single', 'multiple', 'none'];
+  const zoneSelectionModeTypes = ['single', 'single-zone', 'single-stop', 'multiple', 'multiple-zone', 'multiple-stop', 'none'];
   const zoneSelectionMode = mapToStringAlternatives<ZoneSelectionMode>(
     settings.zoneSelectionMode,
     zoneSelectionModeTypes,
