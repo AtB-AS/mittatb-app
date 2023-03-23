@@ -59,4 +59,5 @@ export {default as DashboardTexts} from './screens/Dashboard';
 export {default as TripSearchTexts} from './screens/TripSearch';
 export {default as AnonymousPurchasesTexts} from './screens/subscreens/AnonymousPurchases';
 export {default as SituationsTexts} from './components/SituationsTexts';
+export {default as TipsAndInformationTexts} from './screens/TipsAndInformation';
 export {default as TicketAssistantTexts} from './screens/TicketAssistant';
