@@ -7,10 +7,6 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {productIsSellableInApp} from '@atb/reference-data/utils';
 import FareProductTile from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareProducts/AvailableFareProducts/FareProductTile';
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
-import TicketAssistantTile from '../../Assistant/TicketAssistantTile';
-import {useTicketingAssistant} from '../../../../Root_TicketAssistantStack/use-ticketing-assistant';
-import {useTipsAndInformation} from '../../../../Root_TipsAndInformation/use-tips-and-information';
-import TipsAndInformationTile from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TipsAndInformationTile';
 
 export const AvailableFareProducts = ({
   navigation,
@@ -43,21 +39,8 @@ export const AvailableFareProducts = ({
     return grouped;
   }, []);
 
-  const showTipsAndInformation = useTipsAndInformation();
-  const showTicketAssistant = useTicketingAssistant();
-
   return (
     <View style={styles.container}>
-      {showTipsAndInformation && (
-        <TipsAndInformationTile
-          onPress={() => {
-            console.log('tips and info pressed');
-            navigation.navigate('Root_TipsAndInformation');
-          }}
-          testID="tipsAndInformation"
-        />
-      )}
-
       <ThemeText type="body__secondary" style={styles.heading}>
         {t(TicketingTexts.availableFareProducts.allTickets)}
       </ThemeText>
@@ -81,15 +64,6 @@ export const AvailableFareProducts = ({
           )}
         </View>
       ))}
-      {showTicketAssistant && (
-        <TicketAssistantTile
-          onPress={() => {
-            console.log('ticketAssistant pressed');
-            navigation.navigate('Root_TicketAssistantStack');
-          }}
-          testID="ticketAssistant"
-        />
-      )}
     </View>
   );
 };

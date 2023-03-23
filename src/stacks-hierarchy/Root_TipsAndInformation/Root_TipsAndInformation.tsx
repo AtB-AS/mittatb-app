@@ -7,11 +7,12 @@ import {ThemeText} from '@atb/components/text';
 import {themeColor} from '@atb/stacks-hierarchy/Root_OnboardingStack/Onboarding_WelcomeScreen';
 import * as Sections from '@atb/components/sections';
 import {Button} from '@atb/components/button';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 
-export const Root_TipsAndInformation = ({navigation}: {navigation: any}) => {
-  //const {enable_ticketing} = useRemoteConfig();
+type Props = RootStackScreenProps<'Root_TipsAndInformation'>;
+
+export const Root_TipsAndInformation = ({navigation}: Props) => {
   const styles = useScreenStyle();
-
   const {t} = useTranslation();
 
   return (
