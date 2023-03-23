@@ -52,6 +52,7 @@ export const AvailableFareProducts = ({
         <TipsAndInformationTile
           onPress={() => {
             console.log('tips and info pressed');
+            navigation.navigate('Root_TipsAndInformation');
           }}
           testID="tipsAndInformation"
         />

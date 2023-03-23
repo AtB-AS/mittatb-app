@@ -1,1 +1,1 @@
-export {Root_TipsAndInformationStack} from './Root_TipsAndInformationStack';
+export {Root_TipsAndInformation} from './Root_TipsAndInformation';
