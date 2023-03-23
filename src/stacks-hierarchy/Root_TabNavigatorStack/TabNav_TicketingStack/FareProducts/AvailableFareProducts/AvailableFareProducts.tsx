@@ -8,14 +8,16 @@ import {productIsSellableInApp} from '@atb/reference-data/utils';
 import FareProductTile from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareProducts/AvailableFareProducts/FareProductTile';
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import TicketAssistantTile from '../../Assistant/TicketAssistantTile';
-import {useTicketingAssistant} from '../../../../Root_TicketingAssistant/use-ticketing-assistant';
+import {useTicketingAssistant} from '../../../../Root_TicketAssistantStack/use-ticketing-assistant';
 import {useTipsAndInformation} from '../../../../Root_TipsAndInformation/use-tips-and-information';
 import TipsAndInformationTile from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TipsAndInformationTile';
 
 export const AvailableFareProducts = ({
+  navigation,
   onProductSelect,
 }: {
   onProductSelect: (config: FareProductTypeConfig) => void;
+  navigation: any;
 }) => {
   const styles = useStyles();
   const {preassignedFareProducts, fareProductTypeConfigs} =
@@ -82,6 +84,7 @@ export const AvailableFareProducts = ({
         <TicketAssistantTile
           onPress={() => {
             console.log('ticketAssistant pressed');
+            navigation.navigate('Root_TicketAssistantStack');
           }}
           testID="ticketAssistant"
         />

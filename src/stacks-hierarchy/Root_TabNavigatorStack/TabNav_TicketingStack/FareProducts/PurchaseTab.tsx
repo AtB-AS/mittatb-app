@@ -67,7 +67,10 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
             }
           />
         )}
-        <AvailableFareProducts onProductSelect={onProductSelect} />
+        <AvailableFareProducts
+          onProductSelect={onProductSelect}
+          navigation={navigation}
+        />
       </View>
     </ScrollView>
   ) : null;

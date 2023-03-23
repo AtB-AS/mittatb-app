@@ -33,7 +33,7 @@ import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNav
 import {useRealtimeMapDebugOverride} from '@atb/components/map/hooks/use-realtime-map-enabled';
 import {useFromTravelSearchToTicketDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
 import {useMapDebugOverride} from '@atb/components/map/hooks/use-map-page';
-import {useTicketingAssistantOverride} from '../../Root_TicketingAssistant/use-ticketing-assistant';
+import {useTicketingAssistantOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant';
 import {useTipsAndInformationOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information';
 
 function setClipboard(content: string) {
