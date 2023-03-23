@@ -39,6 +39,8 @@ export type RemoteConfig = {
   enable_vehicle_operator_logo: boolean;
   default_map_filter: string;
   enable_realtime_map: boolean;
+  enable_ticketing_assistant: boolean;
+  enable_tips_and_information: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -83,6 +85,9 @@ export const defaultRemoteConfig: RemoteConfig = {
     },
   }),
   enable_realtime_map: false,
+  //Bachelor
+  enable_ticketing_assistant: false,
+  enable_tips_and_information: false,
 };
 
 export function getConfig(): RemoteConfig {
@@ -198,6 +203,14 @@ export function getConfig(): RemoteConfig {
     values['enable_realtime_map']?.asBoolean() ??
     defaultRemoteConfig.enable_realtime_map;
 
+  const enable_ticketing_assistant =
+    values['enable_ticketing_assistant']?.asBoolean() ??
+    defaultRemoteConfig.enable_ticketing_assistant;
+
+  const enable_tips_and_information =
+    values['enable_tips_and_information']?.asBoolean() ??
+    defaultRemoteConfig.enable_tips_and_information;
+
   return {
     enable_network_logging,
     enable_ticketing,
@@ -236,6 +249,8 @@ export function getConfig(): RemoteConfig {
     enable_vehicle_operator_logo,
     default_map_filter,
     enable_realtime_map,
+    enable_ticketing_assistant,
+    enable_tips_and_information,
   };
 }
 

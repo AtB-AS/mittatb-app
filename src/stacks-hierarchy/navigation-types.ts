@@ -39,6 +39,8 @@ type PaymentParams = {
 export type RootStackParamList = {
   NotFound: undefined;
   Root_OnboardingStack: undefined;
+  Root_TicketingAssistant: undefined;
+  Root_TipsAndInformation: undefined;
   Root_TabNavigatorStack: NavigatorScreenParams<TabNavigatorStackParams>;
   Root_LocationSearchByTextScreen: Root_LocationSearchByTextScreenParams;
   Root_LocationSearchByMapScreen: Root_LocationSearchByMapScreenParams;

@@ -7,6 +7,10 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {productIsSellableInApp} from '@atb/reference-data/utils';
 import FareProductTile from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareProducts/AvailableFareProducts/FareProductTile';
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
+import TicketAssistantTile from '../../Assistant/TicketAssistantTile';
+import {useTicketingAssistant} from '../../../../Root_TicketingAssistant/use-ticketing-assistant';
+import {useTipsAndInformation} from '../../../../Root_TipsAndInformation/use-tips-and-information';
+import TipsAndInformationTile from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TipsAndInformationTile';
 
 export const AvailableFareProducts = ({
   onProductSelect,
@@ -37,8 +41,44 @@ export const AvailableFareProducts = ({
     return grouped;
   }, []);
 
+  const ticketAssistantConfig = {
+    name: 'ticketAssistant',
+    description: 'ticketAssistantDescription',
+  };
+
+  const tipsAndInformationConfig = {
+    name: 'tipsAndInformation',
+    description: 'Tips and information description',
+  };
+
+  const showTipsAndInformation = useTipsAndInformation();
+  const showTicketAssistant = useTicketingAssistant();
+
   return (
     <View style={styles.container}>
+      <View style={styles.tipsButtonContainer}>
+        {showTicketAssistant && (
+          <TicketAssistantTile
+            config={ticketAssistantConfig}
+            onPress={() => {
+              console.log('ticketAssistant pressed');
+            }}
+            testID="ticketAssistant"
+          />
+        )}
+      </View>
+      <View style={styles.tipsButtonContainer}>
+        {showTipsAndInformation && (
+          <TipsAndInformationTile
+            config={tipsAndInformationConfig}
+            onPress={() => {
+              console.log('tips and info pressed');
+            }}
+            testID="tipsAndInformation"
+          />
+        )}
+      </View>
+
       <ThemeText type="body__secondary" style={styles.heading}>
         {t(TicketingTexts.availableFareProducts.allTickets)}
       </ThemeText>
@@ -73,13 +113,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
     margin: theme.spacings.medium,
     marginLeft: theme.spacings.xLarge,
-    marginTop: theme.spacings.xLarge,
   },
   fareProductsContainer: {
     flex: 1,
     flexDirection: 'row',
     paddingLeft: theme.spacings.medium,
     paddingBottom: theme.spacings.medium,
+    alignItems: 'stretch',
+  },
+  tipsButtonContainer: {
+    paddingLeft: theme.spacings.medium,
     alignItems: 'stretch',
   },
 }));
