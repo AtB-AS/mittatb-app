@@ -41,34 +41,13 @@ export const AvailableFareProducts = ({
     return grouped;
   }, []);
 
-  const ticketAssistantConfig = {
-    name: 'ticketAssistant',
-    description: 'ticketAssistantDescription',
-  };
-
-  const tipsAndInformationConfig = {
-    name: 'tipsAndInformation',
-    description: 'Tips and information description',
-  };
-
   const showTipsAndInformation = useTipsAndInformation();
   const showTicketAssistant = useTicketingAssistant();
 
   return (
     <View style={styles.container}>
-      {showTicketAssistant && (
-        <TicketAssistantTile
-          config={ticketAssistantConfig}
-          onPress={() => {
-            console.log('ticketAssistant pressed');
-          }}
-          testID="ticketAssistant"
-        />
-      )}
-
       {showTipsAndInformation && (
         <TipsAndInformationTile
-          config={tipsAndInformationConfig}
           onPress={() => {
             console.log('tips and info pressed');
           }}
@@ -99,6 +78,14 @@ export const AvailableFareProducts = ({
           )}
         </View>
       ))}
+      {showTicketAssistant && (
+        <TicketAssistantTile
+          onPress={() => {
+            console.log('ticketAssistant pressed');
+          }}
+          testID="ticketAssistant"
+        />
+      )}
     </View>
   );
 };

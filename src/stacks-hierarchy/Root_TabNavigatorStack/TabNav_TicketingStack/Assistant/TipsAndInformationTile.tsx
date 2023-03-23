@@ -6,15 +6,12 @@ import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Unknown} from '@atb/assets/svg/mono-icons/status';
+import {translation as _, useTranslation} from '@atb/translations';
 
 type TicketAssistantProps = {
   accented?: boolean;
   onPress: () => void;
   testID: string;
-  config: {
-    name: string;
-    description: string;
-  };
 };
 const TipsAndInformationTile: React.FC<TicketAssistantProps> = ({
   accented,
@@ -25,6 +22,18 @@ const TipsAndInformationTile: React.FC<TicketAssistantProps> = ({
   const {themeName} = useTheme();
   const color: StaticColor = accented ? 'background_accent_3' : 'background_0';
   const themeColor = getStaticColor(themeName, color);
+  const {t} = useTranslation();
+
+  const texts = {
+    label: _(
+      'Tips og informasjon om biletter',
+      'Tips and information about tickets',
+    ),
+    a11yHint: _(
+      'Aktiver for å få tips og informasjon om biletter',
+      'Activate to get tips and information about tickets',
+    ),
+  };
 
   return (
     <View
@@ -44,11 +53,11 @@ const TipsAndInformationTile: React.FC<TicketAssistantProps> = ({
           <ThemeText
             type="body__secondary--bold"
             style={styles.title}
-            accessibilityLabel={'Tips og'}
+            accessibilityLabel={t(texts.a11yHint)}
             color={themeColor}
             testID={testID + 'Title'}
           >
-            {'Tips og informasjon om billetter'}
+            {t(texts.label)}
           </ThemeText>
         </View>
       </TouchableOpacity>
