@@ -4,15 +4,12 @@ import {View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
+import {translation as _, useTranslation} from '@atb/translations';
 
 type TicketAssistantProps = {
   accented?: boolean;
   onPress: () => void;
   testID: string;
-  config: {
-    name: string;
-    description: string;
-  };
 };
 const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
   accented,
@@ -23,10 +20,26 @@ const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
   const {themeName} = useTheme();
   const color: StaticColor = accented ? 'background_accent_3' : 'background_0';
   const themeColor = getStaticColor(themeName, color);
+  const {t} = useTranslation();
+
+  const texts = {
+    title: _('Bilettveileder', 'Ticket assistant'),
+    description: _(
+      'Få hjelp til å velge billetten som passer deg best.',
+      'Get help choosing the ticket that suits you the best',
+    ),
+    a11yHint: _(
+      'Aktiver for å åpne bilettveilederen',
+      'Activate to get tips and information about tickets',
+    ),
+  };
 
   return (
     <View
-      style={[styles.fareProduct, {backgroundColor: themeColor.background}]}
+      style={[
+        styles.tipsAndInformation,
+        {backgroundColor: themeColor.background},
+      ]}
       testID={testID}
     >
       <TouchableOpacity
@@ -38,11 +51,18 @@ const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
           <ThemeText
             type="body__secondary--bold"
             style={styles.title}
-            accessibilityLabel={'Bilettveileder'}
+            accessibilityLabel={t(texts.title)}
             color={themeColor}
             testID={testID + 'Title'}
           >
-            {'Billettveileder'}
+            {t(texts.title)}
+          </ThemeText>
+          <ThemeText
+            type="body__tertiary"
+            style={styles.description}
+            color={'secondary'}
+          >
+            {t(texts.description)}
           </ThemeText>
         </View>
       </TouchableOpacity>
@@ -51,33 +71,26 @@ const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  fareProduct: {
-    width: '100%',
+  tipsAndInformation: {
     flexShrink: 1,
     alignSelf: 'stretch',
-    marginRight: theme.spacings.medium,
     padding: theme.spacings.xLarge,
     borderRadius: theme.border.radius.regular,
+    marginLeft: theme.spacings.medium,
+    marginRight: theme.spacings.medium,
   },
+
+  title: {
+    marginBottom: theme.spacings.small,
+  },
+  description: {},
+
   contentContainer: {
     flexShrink: 1,
-  },
-  iconContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   spreadContent: {
     flex: 1,
     justifyContent: 'space-between',
-  },
-  label: {marginLeft: theme.spacings.xSmall},
-  illustration: {
-    marginTop: theme.spacings.small,
-  },
-  title: {
-    marginBottom: theme.spacings.small,
-    marginTop: theme.spacings.medium,
   },
 }));
 
