@@ -1,0 +1,10 @@
+
+# If reactivecircus/android-emulator-runner@v2.27.0 is not working:
+- try api 29 (https://github.com/ReactiveCircus/android-emulator-runner/issues/161)
+
+# To find supported images and profiles
+$ cd /Users/tormos/Library/Android/sdk/cmdline-tools/9.0/bin
+$ ./avdmanager list device
+$ ./sdkmanager --list
+ -> system-images;android-30;default;x86_64
+ -> system-images;android-29;default;x86_64
