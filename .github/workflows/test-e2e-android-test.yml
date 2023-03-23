@@ -31,41 +31,22 @@ jobs:
       - name: print ls appium 1
         run: |
           ls -al ./e2e/appium/**/**
-      #- name: Decrypt env files
-      #  run: bash ./scripts/git-crypt-unlock.sh
-      #  env:
-      #    GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
-      #- name: Set environment
-      #  run: bash ./scripts/copy-environment.sh staging atb
-      #  working-directory: e2e/appium
-      - name: Get APK
-        run: bash ./scripts/get-apk.sh
+      - name: Get AppCenter APK
+        run: bash ./scripts/get-appcenter-apk.sh
         working-directory: e2e/appium
         env:
-          APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
-          APPCENTER_USER_API_TOKEN: ${{ secrets.APPCENTER_USER_API_TOKEN }}
           APPCENTER_APP_SECRET: ${{ secrets.APPCENTER_ANDROID_APP_SECRET }}
+          APPCENTER_USER_API_TOKEN: ${{ secrets.APPCENTER_USER_API_TOKEN }}
       - name: print ls appium 2
         run: |
           ls -al ./e2e/appium/**/**
-      - name: Upload apk
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: apk
-          path: |
-            e2e/appium/apk/app-staging.apk
-          retention-days: 1
 
       - name: Install Appium
-        if: env.INPUT_BRANCH == 'x'
         run: npm install -g appium
       - name: Install e2e test
-        if: env.INPUT_BRANCH == 'x'
         run: yarn install
         working-directory: e2e/appium
       - name: Run tests on Android emulator
-        if: env.INPUT_BRANCH == 'x'
         uses: reactivecircus/android-emulator-runner@v2.27.0
         with:
           #TODO If not working, try api 29 or pre-script
