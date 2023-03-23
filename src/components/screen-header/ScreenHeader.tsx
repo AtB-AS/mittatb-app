@@ -26,7 +26,7 @@ export type LeftButtonProps = HeaderButtonProps & {
 
 export type RightButtonProps =
   | (HeaderButtonProps & {
-      type: 'chat' | 'skip';
+      type: 'chat' | 'skip' | 'close';
     })
   | (HeaderButtonProps & {
       type: 'custom';
