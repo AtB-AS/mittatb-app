@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {useTranslation, TipsAndInformationTexts} from '@atb/translations';
@@ -14,12 +14,6 @@ export const Root_TipsAndInformation = ({navigation}: {navigation: any}) => {
 
   const {t} = useTranslation();
 
-  const [current, setCurrentExpanded] = useState<number>(1);
-
-  const setCurrentExpandedFunc = (index: number) => {
-    setCurrentExpanded(index);
-    console.log(index);
-  };
   return (
     <View style={styles.container}>
       <FullScreenHeader leftButton={{type: 'close'}} />
@@ -35,6 +29,7 @@ export const Root_TipsAndInformation = ({navigation}: {navigation: any}) => {
 
       <View style={styles.innerContainer}>
         <Sections.Section style={styles.tipsContainer}>
+          {/*eslint-disable-next-line rulesdir/translations-warning*/}
           {TipsAndInformationTexts.tips.map(({emoji, title, tip}, index) => (
             <Sections.ExpandableSectionItem
               key={index}
@@ -42,10 +37,6 @@ export const Root_TipsAndInformation = ({navigation}: {navigation: any}) => {
               leftIcon={emoji}
               text={t(title)}
               showIconText={false}
-              onPress={() => {
-                setCurrentExpandedFunc(index);
-              }}
-              expanded={current === index}
               expandContent={
                 <ThemeText
                   type={'body__tertiary'}
@@ -113,8 +104,6 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     marginVertical: theme.spacings.xLarge,
   },
   innerContainer: {
-    marginTop: theme.spacings.xLarge,
-    paddingTop: theme.spacings.xLarge,
     paddingHorizontal: theme.spacings.xLarge,
   },
 }));
