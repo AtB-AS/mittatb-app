@@ -13,10 +13,12 @@ import {
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {getRentalAppUri} from '@atb/mobility/utils';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {useOperatorApp} from '@atb/mobility/use-operator-app';
 import {VehicleStat} from '@atb/mobility/components/VehicleStat';
-import {Bicycle, Parking} from '@atb/assets/svg/mono-icons/vehicles';
+import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
+import {Parking as ParkingDark} from '@atb/assets/svg/color/icons/vehicles/dark';
+import {Parking as ParkingLight} from '@atb/assets/svg/color/icons/vehicles/light';
 import {VehicleStats} from '@atb/mobility/components/VehicleStats';
 
 type Props = {
@@ -25,6 +27,7 @@ type Props = {
 };
 export const CityBikeStationSheet = ({station, close}: Props) => {
   const {t} = useTranslation();
+  const {themeName} = useTheme();
   const style = useSheetStyle();
   const {appStoreUri, brandLogoUrl, operatorName} = useSystem(station);
   const rentalAppUri = getRentalAppUri(station);
@@ -60,7 +63,7 @@ export const CityBikeStationSheet = ({station, close}: Props) => {
         }
         right={
           <VehicleStat
-            svg={Parking}
+            svg={themeName === 'dark' ? ParkingDark : ParkingLight}
             primaryStat={
               station.numDocksAvailable ??
               t(BicycleTexts.stations.unknownDocksAvailable)
