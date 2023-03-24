@@ -10,7 +10,7 @@ import {StoredFavoriteDeparture} from '@atb/favorites';
 import {useTheme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import {TransportationIcon} from '@atb/components/transportation-icon';
+import {TransportationIconBox} from '@atb/components/icon-box';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
@@ -67,7 +67,7 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
 
   return (
     <View style={[sectionStyle.spaceBetween, topContainer, styles.flexStart]}>
-      <TransportationIcon
+      <TransportationIconBox
         style={styles.transportation__icon}
         mode={favorite.lineTransportationMode}
         subMode={favorite.lineTransportationSubMode}

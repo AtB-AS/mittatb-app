@@ -1,5 +1,5 @@
 import {useTheme} from '@atb/theme';
-import {AnyMode, AnySubMode} from '@atb/components/transportation-icon';
+import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {StaticColorByType} from '@atb/theme/colors';
 
 export function useTransportationColor(

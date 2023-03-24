@@ -4,7 +4,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import * as Sections from '@atb/components/sections';
-import {getTransportModeSvg} from '@atb/components/transportation-icon';
+import {getTransportModeSvg} from '@atb/components/icon-box';
 import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {StyleSheet} from '@atb/theme';

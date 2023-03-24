@@ -1,7 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {getTransportModeSvg} from '@atb/components/transportation-icon';
+import {getTransportModeSvg} from '@atb/components/icon-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   CancelledDepartureTexts,

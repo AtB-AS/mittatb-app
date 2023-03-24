@@ -27,7 +27,7 @@ import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {useTravelSearchFiltersDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-enabled';
-import {useVehiclesInMapDebugOverride} from '@atb/vehicles';
+import {useVehiclesInMapDebugOverride} from '@atb/mobility';
 import {DebugOverride} from './components/DebugOverride';
 import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
 import {useRealtimeMapDebugOverride} from '@atb/components/map/hooks/use-realtime-map-enabled';
@@ -35,6 +35,7 @@ import {useFromTravelSearchToTicketDebugOverride} from '@atb/stacks-hierarchy/Ro
 import {useMapDebugOverride} from '@atb/components/map/hooks/use-map-page';
 import {useTicketingAssistantOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant';
 import {useTipsAndInformationOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information';
+import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -56,6 +57,7 @@ export const Profile_DebugInfoScreen = () => {
   const fromTravelSearchToTicketDebugOverride =
     useFromTravelSearchToTicketDebugOverride();
   const vehiclesInMapDebugOverride = useVehiclesInMapDebugOverride();
+  const cityBikesInMapDebugOverride = useCityBikesInMapDebugOverride();
   const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
   const mapDebugOverride = useMapDebugOverride();
   const ticketingAssistantOverride = useTicketingAssistantOverride();
@@ -242,6 +244,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable vehicles in map."
               override={vehiclesInMapDebugOverride}
+            />
+          </Sections.GenericSectionItem>
+          <Sections.GenericSectionItem>
+            <DebugOverride
+              description="Enable city bike stations in map."
+              override={cityBikesInMapDebugOverride}
             />
           </Sections.GenericSectionItem>
           <Sections.GenericSectionItem>
