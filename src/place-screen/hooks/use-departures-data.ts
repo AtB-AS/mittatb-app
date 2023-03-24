@@ -299,7 +299,7 @@ export function useDeparturesData(
   useInterval(
     loadRealTimeData,
     updateFrequencyInSeconds * 1000,
-    JSON.stringify(quayIds),
+    [JSON.stringify(quayIds)],
     !isFocused || mode === 'Favourite',
   );
   useInterval(
