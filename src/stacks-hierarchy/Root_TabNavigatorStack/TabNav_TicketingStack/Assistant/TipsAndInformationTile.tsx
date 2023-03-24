@@ -1,7 +1,7 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import {StaticColor, getStaticColor} from '@atb/theme/colors';
 import {View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
