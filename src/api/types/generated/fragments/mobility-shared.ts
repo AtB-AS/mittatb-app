@@ -18,3 +18,25 @@ export type TranslatedStringFragment = {
 };
 
 export type TranslationFragment = {language: string; value: string};
+
+export type RentalUrisFragment = {android?: string; ios?: string};
+
+export type RentalAppFragment = {discoveryUri?: string; storeUri?: string};
+
+export type RentalAppsFragment = {
+  android?: RentalAppFragment;
+  ios?: RentalAppFragment;
+};
+
+export type BrandAssetsFragment = {
+  brandImageUrl: string;
+  brandImageUrlDark?: string;
+  brandLastModified: string;
+};
+
+export type SystemFragment = {
+  operator: OperatorFragment;
+  name: TranslatedStringFragment;
+  brandAssets?: BrandAssetsFragment;
+  rentalApps?: RentalAppsFragment;
+};
