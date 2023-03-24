@@ -8,7 +8,7 @@ export async function tripsSearch(
   query: TripsQueryVariables,
   opts?: AxiosRequestConfig,
 ): Promise<TripsQuery> {
-  const url = 'bff-dev/v2/trips';
+  const url = 'bff/v2/trips';
   const cleanQuery: TripsQueryVariables = {
     to: {
       name: query.to.name,
@@ -46,7 +46,7 @@ export async function singleTripSearch(
   if (!queryString) {
     return undefined;
   }
-  const url = '/bff-dev/v2/singleTrip';
+  const url = '/bff/v2/singleTrip';
   const query = {
     compressedQuery: queryString,
   };
