@@ -9,11 +9,9 @@ import FareProductTile from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 
 export const AvailableFareProducts = ({
-  navigation,
   onProductSelect,
 }: {
   onProductSelect: (config: FareProductTypeConfig) => void;
-  navigation: any;
 }) => {
   const styles = useStyles();
   const {preassignedFareProducts, fareProductTypeConfigs} =
