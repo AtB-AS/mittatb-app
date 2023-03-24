@@ -11,8 +11,6 @@ import useDisableMapCheck from '@atb/utils/use-disable-map-check';
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {v4 as uuid} from 'uuid';
-
 import {
   FavoriteIcon,
   useFavorites,
@@ -88,7 +86,7 @@ export const FavoriteChips: React.FC<Props> = ({
           favorites.map((fav, i) => (
             <FavoriteChip
               interactiveColor={themeColor}
-              key={fav.name + uuid()}
+              key={fav.name}
               text={fav.name ?? ''}
               accessibilityLabel={'Favoritt: ' + fav.name + screenReaderPause}
               accessibilityRole="button"

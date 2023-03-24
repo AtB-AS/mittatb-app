@@ -12,7 +12,6 @@ import React from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from './navigation-types';
-import {v4 as uuid} from 'uuid';
 
 type Props = ProfileScreenProps<'Profile_FavoriteListScreen'>;
 
@@ -49,7 +48,7 @@ export const Profile_FavoriteListScreen = ({navigation}: Props) => {
         <Sections.Section withTopPadding withPadding>
           {items.map((favorite, i) => (
             <Sections.FavoriteSectionItem
-              key={favorite.name + favorite.location.id + uuid()}
+              key={favorite.name + favorite.location.id}
               favorite={favorite}
               accessibility={{
                 accessibilityHint: t(FavoriteListTexts.favoriteItem.a11yHint),
