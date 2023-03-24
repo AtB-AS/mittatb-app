@@ -17,7 +17,7 @@ import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {MapControls} from './components/MapControls';
 import {shadows} from './components/shadows';
-import {Vehicles} from '@atb/components/map/components/Vehicles';
+import * as Mobility from '@atb/components/map/components/mobility';
 import {MapFilter} from '@atb/components/map/components/MapFilter';
 
 export const Map = (props: MapProps) => {
@@ -47,13 +47,20 @@ export const Map = (props: MapProps) => {
   const onRegionChange = (
     region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => {
-    if (!props.vehicles) return;
-    props.vehicles.fetchVehicles(region);
+    if (props.vehicles) {
+      props.vehicles.fetchVehicles(region);
+    }
+    if (props.stations) {
+      props.stations.fetchStations(region);
+    }
   };
 
   const onFilterChange = (filter: MapFilterType) => {
     if (filter.vehicles) {
       props.vehicles?.onFilterChange(filter.vehicles);
+    }
+    if (filter.stations) {
+      props.stations?.onFilterChange(filter.stations);
     }
   };
 
@@ -108,17 +115,27 @@ export const Map = (props: MapProps) => {
             </MapboxGL.PointAnnotation>
           )}
           {props.vehicles && (
-            <Vehicles
+            <Mobility.Vehicles
               mapCameraRef={mapCameraRef}
               vehicles={props.vehicles.vehicles}
               onPress={props.vehicles.onPress}
             />
           )}
+          {props.stations && (
+            <Mobility.Stations
+              mapCameraRef={mapCameraRef}
+              stations={props.stations.stations}
+              onPress={props.stations.onPress}
+            />
+          )}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
-          {props.vehicles && (
+          {(props.vehicles || props.stations) && (
             <MapFilter
-              isLoading={props.vehicles.isLoading}
+              isLoading={{
+                vehicles: props.vehicles?.isLoading ?? false,
+                stations: props.stations?.isLoading ?? false,
+              }}
               onFilterChange={onFilterChange}
             />
           )}

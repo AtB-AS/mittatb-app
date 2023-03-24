@@ -1,5 +1,11 @@
 import Bugsnag, {Event} from '@bugsnag/react-native';
 
+/**
+ * Set to true if you want Bugsnag breadcrumbs to be written to console.log
+ * locally
+ * */
+const LOG_BREADCRUMBS_LOCALLY = false;
+
 export default function configureAndStartBugsnag() {
   if (!__DEV__) {
     Bugsnag.start();
@@ -31,9 +37,12 @@ export default function configureAndStartBugsnag() {
       onError?.(event, () => {});
       console.error('[BUGSNAG]', error, JSON.stringify(metadata, null, 2));
     };
-    Bugsnag.leaveBreadcrumb = (message, metadata) =>
-      // eslint-disable-next-line
-      console.log(message, metadata || "");
+    Bugsnag.leaveBreadcrumb = (message, metadata) => {
+      if (LOG_BREADCRUMBS_LOCALLY) {
+        // eslint-disable-next-line
+        console.log(message, metadata || '');
+      }
+    };
     Bugsnag.setUser = () => {};
   }
 }

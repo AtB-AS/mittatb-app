@@ -1,6 +1,6 @@
 import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {translation as _} from '../commons';
-import {orgSpecificTranslations} from '@atb/translations';
+import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
 const FareContractTexts = {
   organizationName: _('AtB', 'AtB'),
@@ -146,6 +146,16 @@ const FareContractTexts = {
       'This ticket will be connected to your t:card. If you would rather use tickets on this phone, you can switch to this device from **My profile**.',
     ),
     unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
+  },
+  transportModes: {
+    multipleTravelModes: _('Flere reisemåter', 'Several travel modes'),
+    a11yLabel: (transportModes: string) =>
+      _(
+        `Billetten gjelder ${transportModes}`,
+        `Ticket is valid on ${transportModes}`,
+      ),
+    a11yLabelMultipleTravelModes: (count: number) =>
+      _(`Totalt ${count} reisemåter`, `In total ${count} travel modes`),
   },
   transportMode: (mode: TransportMode) => {
     switch (mode) {

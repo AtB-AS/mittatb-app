@@ -1,5 +1,5 @@
 import {StopPlacesMode} from '../nearby-stop-places';
-import {getSecondsUntilMidnightOrMinimum} from './hooks/use-quay-data';
+import {addDays, differenceInSeconds, parseISO} from 'date-fns';
 
 const MIN_TIME_RANGE = 3 * 60 * 60; // Three hours
 const ONE_WEEK_TIME_RANGE = 7 * 24 * 60 * 60;
@@ -15,10 +15,21 @@ export type SearchTime = {
 export const getLimitOfDeparturesPerLineByMode = (mode: StopPlacesMode) =>
   mode === 'Favourite' ? 1 : undefined;
 
-export const getTimeRangeByMode = (mode: StopPlacesMode, startTime?: string) =>
+export const getTimeRangeByMode = (mode: StopPlacesMode, startTime: string) =>
   mode === 'Favourite'
     ? ONE_WEEK_TIME_RANGE
-    : getSecondsUntilMidnightOrMinimum(
-        startTime ?? new Date().toISOString(),
-        MIN_TIME_RANGE,
-      );
+    : getSecondsUntilMidnightOrMinimum(startTime, MIN_TIME_RANGE);
+
+/**
+ * Get seconds until midnight, but a minimum of `minimumSeconds`
+ */
+function getSecondsUntilMidnightOrMinimum(
+  isoTime: string,
+  minimumSeconds: number = 0,
+): number {
+  const timeUntilMidnight = differenceInSeconds(
+    addDays(parseISO(isoTime), 1).setHours(0, 0, 0),
+    parseISO(isoTime),
+  );
+  return Math.round(Math.max(timeUntilMidnight, minimumSeconds));
+}

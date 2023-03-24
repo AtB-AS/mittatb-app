@@ -1,7 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {getTransportModeSvg} from '@atb/components/transportation-icon';
+import {getTransportModeSvg} from '@atb/components/icon-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   CancelledDepartureTexts,
@@ -57,6 +57,7 @@ type EstimatedCallItemProps = {
     isTripCancelled?: boolean,
   ) => void;
   allowFavouriteSelection: boolean;
+  addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
 };
 
@@ -67,6 +68,7 @@ export default function EstimatedCallItem({
   stopPlace,
   navigateToDetails,
   allowFavouriteSelection,
+  addedFavoritesVisibleOnDashboard,
   mode,
 }: EstimatedCallItemProps): JSX.Element {
   const {t, language} = useTranslation();
@@ -86,6 +88,7 @@ export default function EstimatedCallItem({
       {...line, lineNumber: lineNumber, lineName: lineName},
       quay,
       stopPlace,
+      addedFavoritesVisibleOnDashboard,
     );
   return (
     <TouchableOpacityOrView

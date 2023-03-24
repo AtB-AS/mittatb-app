@@ -6,7 +6,7 @@ import {
   ThemeText,
 } from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {TransportationIcon} from '@atb/components/transportation-icon';
+import {TransportationIconBox, CounterIconBox} from '@atb/components/icon-box';
 import {SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
@@ -17,7 +17,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {screenReaderHidden} from '@atb/utils/accessibility';
-import {flatMap, interpose} from '@atb/utils/array';
+import {flatMap} from '@atb/utils/array';
 import {
   formatToClock,
   isInThePast,
@@ -52,7 +52,6 @@ import {
   significantWalkTime,
 } from '@atb/travel-details-screens/utils';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
-import {CollapsedLegs} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/CollapsedLegs';
 import useFontScale from '@atb/utils/use-font-scale';
 
 type ResultItemProps = {
@@ -217,11 +216,12 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
               }}
             >
               <View style={styles.legOutput}>
-                {interpose(
-                  legs.map((leg, i) => (
-                    <View
-                      key={tripPattern.compressedQuery + leg.aimedStartTime}
-                    >
+                {legs.map((leg, i) => (
+                  <View
+                    key={tripPattern.compressedQuery + leg.aimedStartTime}
+                    style={styles.legAndDash}
+                  >
+                    <View>
                       {leg.mode === 'foot' ? (
                         <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
                       ) : (
@@ -262,18 +262,20 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                         )}
                       </View>
                     </View>
-                  )),
-                  <View style={[styles.dashContainer, iconHeight]}>
-                    <LegDash />
-                  </View>,
-                )}
+                    {i < legs.length - 1 ? (
+                      <View style={[styles.dashContainer, iconHeight]}>
+                        <LegDash />
+                      </View>
+                    ) : null}
+                  </View>
+                ))}
               </View>
               {collapsedLegs.length ? (
                 <View style={[styles.dashContainer, iconHeight]}>
                   <LegDash />
                 </View>
               ) : null}
-              <CollapsedLegs legs={collapsedLegs} />
+              <CounterIconBox count={collapsedLegs.length} />
             </View>
             <View style={[styles.destinationLineContainer_grow, iconHeight]}>
               <View style={[styles.destinationLine_grow, lineHeight]} />
@@ -410,6 +412,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   legOutput: {
     flexDirection: 'row',
   },
+  legAndDash: {flexDirection: 'row'},
   departureTimes: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -502,7 +505,7 @@ const TransportationLeg = ({
   style?: StyleProp<ViewStyle>;
 }) => {
   return (
-    <TransportationIcon
+    <TransportationIconBox
       style={style}
       mode={!!leg.bookingArrangements ? 'flex' : leg.mode}
       subMode={leg.line?.transportSubmode}

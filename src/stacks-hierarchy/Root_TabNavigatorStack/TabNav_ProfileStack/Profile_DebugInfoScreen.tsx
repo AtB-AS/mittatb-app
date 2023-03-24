@@ -9,7 +9,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
 import {useAppDispatch, useAppState} from '@atb/AppContext';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import storage, {KeyValuePair, StorageModelKeysEnum} from '@atb/storage';
+import {storage, KeyValuePair, StorageModelKeysEnum} from '@atb/storage';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
@@ -27,12 +27,13 @@ import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {useTravelSearchFiltersDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-enabled';
-import {useVehiclesInMapDebugOverride} from '@atb/vehicles';
+import {useVehiclesInMapDebugOverride} from '@atb/mobility';
 import {DebugOverride} from './components/DebugOverride';
 import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
 import {useRealtimeMapDebugOverride} from '@atb/components/map/hooks/use-realtime-map-enabled';
 import {useFromTravelSearchToTicketDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
 import {useMapDebugOverride} from '@atb/components/map/hooks/use-map-page';
+import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -54,6 +55,7 @@ export const Profile_DebugInfoScreen = () => {
   const fromTravelSearchToTicketDebugOverride =
     useFromTravelSearchToTicketDebugOverride();
   const vehiclesInMapDebugOverride = useVehiclesInMapDebugOverride();
+  const cityBikesInMapDebugOverride = useCityBikesInMapDebugOverride();
   const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
   const mapDebugOverride = useMapDebugOverride();
 
@@ -302,6 +304,12 @@ export const Profile_DebugInfoScreen = () => {
           </Sections.GenericSectionItem>
           <Sections.GenericSectionItem>
             <DebugOverride
+              description="Enable city bike stations in map."
+              override={cityBikesInMapDebugOverride}
+            />
+          </Sections.GenericSectionItem>
+          <Sections.GenericSectionItem>
+            <DebugOverride
               description="Enable realtime positions in map."
               override={realtimeMapDebugOverride}
             />
@@ -392,7 +400,7 @@ export const Profile_DebugInfoScreen = () => {
             expandContent={
               <View>
                 {Object.entries(user?.toJSON() ?? {}).map(([key, value]) => (
-                  <MapEntry title={key} value={value} />
+                  <MapEntry key={key} title={key} value={value} />
                 ))}
               </View>
             }
@@ -407,7 +415,7 @@ export const Profile_DebugInfoScreen = () => {
               <View>
                 {!!idToken ? (
                   Object.entries(idToken).map(([key, value]) => (
-                    <MapEntry title={key} value={value} />
+                    <MapEntry key={key} title={key} value={value} />
                   ))
                 ) : (
                   <ThemeText>No id token</ThemeText>
@@ -426,6 +434,7 @@ export const Profile_DebugInfoScreen = () => {
                 <View>
                   {Object.keys(remoteConfig).map((key) => (
                     <MapEntry
+                      key={key}
                       title={key}
                       value={
                         remoteConfig[key as keyof RemoteConfigContextState]
@@ -450,7 +459,7 @@ export const Profile_DebugInfoScreen = () => {
                 {storedValues && (
                   <View>
                     {storedValues.map(([key, value]) => (
-                      <MapEntry title={key} value={value} />
+                      <MapEntry key={key} title={key} value={value} />
                     ))}
                   </View>
                 )}
@@ -471,6 +480,7 @@ export const Profile_DebugInfoScreen = () => {
                   </ThemeText>
                   {Object.keys(preferences).map((key) => (
                     <TouchableOpacity
+                      key={key}
                       onPress={() => setPreference({[key]: undefined})}
                     >
                       <MapEntry
@@ -590,7 +600,7 @@ function MapValue({value}: {value: any}) {
         <View style={{flexDirection: 'column'}}>
           {entries.length ? (
             Object.entries(value).map(([key, value]) => (
-              <MapEntry title={key} value={value} />
+              <MapEntry key={key} title={key} value={value} />
             ))
           ) : (
             <ThemeText color="secondary">Empty object</ThemeText>

@@ -1,5 +1,5 @@
 import {MapFilter} from '@atb/components/map/types';
-import storage from '@atb/storage';
+import {storage} from '@atb/storage';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const STORAGE_KEY = '@ATB_user_map_filters';

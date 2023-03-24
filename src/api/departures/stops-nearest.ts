@@ -1,13 +1,12 @@
 import {AxiosRequestConfig} from 'axios';
-import {CursoredData, CursoredQuery, StopPlaceDetails} from '@atb/sdk';
+import {CursoredQuery} from '@atb/sdk';
 import {stringifyWithDate} from '@atb/utils/querystring';
 import client from '../client';
 import {FavoriteDeparture, UserFavoriteDepartures} from '@atb/favorites';
-import {StopPlaceQuayDepartures} from '../types/departures';
-import {QuayDeparturesQuery} from '../types/generated/QuayDeparturesQuery';
 import {NearestStopPlacesQuery} from '../types/generated/NearestStopPlacesQuery';
 import {StopsDetailsQuery} from '../types/generated/StopsDetailsQuery';
 import {stringifyUrl} from 'query-string/base';
+import {DeparturesQuery} from '../types/generated/DeparturesQuery';
 
 export type StopsNearestQuery = CursoredQuery<{
   latitude: number;
@@ -21,35 +20,17 @@ export type StopsDetailsVariables = CursoredQuery<{
   ids: string[];
 }>;
 
-export type StopPlaceDeparturesPayload = {
-  location: {
-    layer: 'venue';
-    id: string;
-  };
-  favorites?: FavoriteDeparture[];
-};
-
 export type DeparturesPayload = {
   favorites?: FavoriteDeparture[];
 };
 
-export type StopPlaceDeparturesQuery = {
-  id: string;
+export type DeparturesVariables = {
+  ids: string[];
   numberOfDepartures: number;
   startTime: string;
   timeRange?: number;
   limitPerLine?: number;
 };
-
-export type QuayDeparturesVariables = {
-  id: string;
-  numberOfDepartures: number;
-  startTime: string;
-  timeRange?: number;
-  limitPerLine?: number;
-};
-
-export type StopPlaceMetadata = CursoredData<StopPlaceDetails[]>;
 
 const BASE_URL = 'bff/v2/departures';
 
@@ -59,7 +40,7 @@ export async function getNearestStops(
 ): Promise<NearestStopPlacesQuery> {
   const queryString = stringifyWithDate(query);
   const url = `${BASE_URL}/stops-nearest?${queryString}`;
-  return request(url, opts);
+  return requestNearestStops(url, opts);
 }
 
 export async function getStopsDetails(
@@ -70,30 +51,17 @@ export async function getStopsDetails(
   return requestStopsDetails(stringifyUrl({url, query}), opts);
 }
 
-export async function getStopPlaceDepartures(
-  query: StopPlaceDeparturesQuery,
+export async function getDepartures(
+  query: DeparturesVariables,
   favorites?: UserFavoriteDepartures,
   opts?: AxiosRequestConfig,
-): Promise<StopPlaceQuayDepartures> {
-  const url = `${BASE_URL}/stop-departures`;
-  return requestStopPlaceDepartures(
-    stringifyUrl({url, query}),
-    {favorites},
-    opts,
-  );
-}
-
-export async function getQuayDepartures(
-  query: QuayDeparturesVariables,
-  favorites?: UserFavoriteDepartures,
-  opts?: AxiosRequestConfig,
-): Promise<QuayDeparturesQuery> {
+): Promise<DeparturesQuery> {
   const queryString = stringifyWithDate(query);
-  const url = `${BASE_URL}/quay-departures?${queryString}`;
-  return requestQuayDepartures(url, {favorites}, opts);
+  const url = `${BASE_URL}/departures?${queryString}`;
+  return requestDepartures(url, {favorites}, opts);
 }
 
-async function request(
+async function requestNearestStops(
   url: string,
   opts?: AxiosRequestConfig,
 ): Promise<NearestStopPlacesQuery> {
@@ -109,24 +77,11 @@ async function requestStopsDetails(
   return response.data;
 }
 
-async function requestQuayDepartures(
+async function requestDepartures(
   url: string,
   payload: DeparturesPayload,
   opts?: AxiosRequestConfig,
-): Promise<QuayDeparturesQuery> {
-  const response = await client.post<QuayDeparturesQuery>(url, payload, opts);
-  return response.data;
-}
-
-async function requestStopPlaceDepartures(
-  url: string,
-  payload: DeparturesPayload,
-  opts?: AxiosRequestConfig,
-): Promise<StopPlaceQuayDepartures> {
-  const response = await client.post<StopPlaceQuayDepartures>(
-    url,
-    payload,
-    opts,
-  );
+): Promise<DeparturesQuery> {
+  const response = await client.post<DeparturesQuery>(url, payload, opts);
   return response.data;
 }

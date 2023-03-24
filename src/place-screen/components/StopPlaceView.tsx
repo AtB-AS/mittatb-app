@@ -2,13 +2,11 @@ import {StopPlace, Quay} from '@atb/api/types/departures';
 import {Feedback} from '@atb/components/feedback';
 import {useFavorites} from '@atb/favorites';
 import {UserFavoriteDepartures} from '@atb/favorites';
-import {DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW} from '../hooks/use-stop-place-state';
 import {SearchTime} from '../types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import QuaySection from './QuaySection';
-import {useStopPlaceData} from '../hooks/use-stop-place-state';
 import FavoriteToggle from './FavoriteToggle';
 import DateSelection from './DateSelection';
 import {StopPlacesMode} from '@atb/nearby-stop-places/types';
@@ -21,6 +19,10 @@ import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesD
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Walk} from '@atb/assets/svg/mono-icons/transportation';
 import {useHumanizeDistance} from '@atb/utils/location';
+import {useDeparturesData} from '../hooks/use-departures-data';
+
+const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
+const NUMBER_OF_DEPARTURES_IN_BUFFER = 5;
 
 type StopPlaceViewProps = {
   stopPlace: StopPlace;
@@ -39,6 +41,7 @@ type StopPlaceViewProps = {
   setShowOnlyFavorites: (enabled: boolean) => void;
   isFocused: boolean;
   testID?: string;
+  addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
 } & (
   | {
@@ -68,6 +71,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
     isFocused,
     testID,
     mode,
+    addedFavoritesVisibleOnDashboard,
   } = props;
   const styles = useStyles();
   const {favoriteDepartures} = useFavorites();
@@ -75,8 +79,9 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
   const {theme} = useTheme();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
-  const {state, forceRefresh} = useStopPlaceData(
-    stopPlace,
+  const {state, forceRefresh} = useDeparturesData(
+    stopPlace.quays?.map((q) => q.id) ?? [],
+    NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW + NUMBER_OF_DEPARTURES_IN_BUFFER,
     showOnlyFavorites,
     isFocused,
     mode,
@@ -213,7 +218,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
         <>
           <QuaySection
             quay={item}
-            departuresPerQuay={DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW}
+            departuresPerQuay={NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW}
             data={state.data}
             didLoadingDataFail={didLoadingDataFail}
             navigateToDetails={navigateToDetails}
@@ -222,6 +227,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
             stopPlace={stopPlace}
             showOnlyFavorites={showOnlyFavorites}
             allowFavouriteSelection={allowFavouriteSelection}
+            addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
             searchDate={searchStartTime}
             mode={mode}
           />

@@ -7,7 +7,7 @@ import {
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import FareContractInfo from '../FareContractInfo';
-import ValidityHeader from '../ValidityHeader';
+import {ValidityHeader} from '../ValidityHeader';
 import ValidityLine from '../ValidityLine';
 import {getValidityStatus} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {

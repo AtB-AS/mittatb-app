@@ -173,10 +173,7 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
   const toTariffZoneWeSellTicketFor =
     useGetFirstTariffZoneWeSellTicketFor(toTariffZones);
 
-  const hasTooLongWaitTime = tripPattern.legs.find((leg, i) =>
-    waitTimeIsMoreThanAnHour(leg, tripPattern.legs[i + 1]),
-  );
-
+  const hasTooLongWaitTime = totalWaitTimeIsMoreThanAnHour(tripPattern.legs);
   const canSellCollab = canSellCollabTicket(tripPattern);
 
   if (
@@ -229,11 +226,20 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
   };
 }
 
-function waitTimeIsMoreThanAnHour(leg: Leg, nextLeg?: Leg) {
-  const waitTimeInSeconds = nextLeg
-    ? secondsBetween(leg.expectedEndTime, nextLeg?.expectedStartTime)
+function totalWaitTimeIsMoreThanAnHour(legs: Leg[]) {
+  return (
+    legs.reduce(
+      (sum, leg, currentIndex) =>
+        sum + getWaitTime(leg, legs[currentIndex + 1]),
+      0,
+    ) >= hoursToSeconds(1)
+  );
+}
+
+function getWaitTime(leg: Leg, nextLeg: Leg) {
+  return nextLeg
+    ? secondsBetween(leg.expectedEndTime, nextLeg.expectedStartTime)
     : 0;
-  return waitTimeInSeconds >= hoursToSeconds(1);
 }
 
 function useGetFirstTariffZoneWeSellTicketFor(

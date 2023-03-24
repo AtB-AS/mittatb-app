@@ -1,23 +1,16 @@
 import * as Types from '../mobility-types_v2';
 import {
-  OperatorFragment,
   PricingPlanFragment,
+  RentalUrisFragment,
+  SystemFragment,
   TranslatedStringFragment,
 } from './mobility-shared';
 
-export type RentalUrisFragment = {android?: string; ios?: string};
-
-export type RentalAppFragment = {discoveryUri?: string; storeUri?: string};
-
-export type RentalAppsFragment = {
-  android?: RentalAppFragment;
-  ios?: RentalAppFragment;
-};
-
-export type BrandAssetsFragment = {
-  brandImageUrl: string;
-  brandImageUrlDark?: string;
-  brandLastModified: string;
+export type VehicleTypeFragment = {
+  id: string;
+  formFactor: Types.FormFactor;
+  maxRangeMeters?: number;
+  name?: TranslatedStringFragment;
 };
 
 export type VehicleFragment = {
@@ -31,18 +24,6 @@ export type VehicleFragment = {
   availableUntil?: string;
   vehicleType: VehicleTypeFragment;
   pricingPlan: PricingPlanFragment;
-  system: {
-    operator: OperatorFragment;
-    name: TranslatedStringFragment;
-    brandAssets?: BrandAssetsFragment;
-    rentalApps?: RentalAppsFragment;
-  };
+  system: SystemFragment;
   rentalUris?: RentalUrisFragment;
-};
-
-export type VehicleTypeFragment = {
-  id: string;
-  formFactor: Types.FormFactor;
-  maxRangeMeters?: number;
-  name?: TranslatedStringFragment;
 };

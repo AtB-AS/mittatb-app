@@ -9,7 +9,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {TransportationIcon} from '@atb/components/transportation-icon';
+import {TransportationIconBox} from '@atb/components/icon-box';
 import {LegMode, TransportSubmode} from '@atb/sdk';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {
@@ -111,6 +111,7 @@ export const Profile_DesignSystemScreen = () => {
 
   const radioSegments = Object.keys(theme.interactive).map((color) => (
     <RadioSegments
+      key={color}
       activeIndex={segmentedSelection}
       style={{
         marginTop: theme.spacings.small,
@@ -200,13 +201,14 @@ export const Profile_DesignSystemScreen = () => {
               />
             </View>
             <View style={style.icons}>
-              <TransportationIcon
+              <TransportationIconBox
                 style={style.transportationIcon}
                 mode={LegMode.BUS}
                 subMode={TransportSubmode.LOCAL_BUS}
               />
               {Object.values(LegMode).map((mode) => (
-                <TransportationIcon
+                <TransportationIconBox
+                  key={mode}
                   style={style.transportationIcon}
                   mode={mode}
                 />

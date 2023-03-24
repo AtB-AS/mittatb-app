@@ -8,8 +8,8 @@ import insets from '@atb/utils/insets';
 import useDisableMapCheck from '@atb/utils/use-disable-map-check';
 import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
-import React, {useMemo} from 'react';
-import {View} from 'react-native';
+import React, {useEffect, useMemo, useRef} from 'react';
+import {Platform, View} from 'react-native';
 import MapLabel from './MapLabel';
 import MapRoute from './MapRoute';
 import {createMapLines, getMapBounds, pointOf} from '../utils';
@@ -31,9 +31,22 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   const {themeName} = useTheme();
   const disableMap = useDisableMapCheck();
   const {t} = useTranslation();
+  const cameraRef = useRef<MapboxGL.Camera>(null);
 
   const features = useMemo(() => createMapLines(mapLegs), [mapLegs]);
   const bounds = useMemo(() => getMapBounds(features), [features]);
+
+  /*
+   * Workaround for iOS as setting default bounds on camera is not working fully
+   * as expected. This will on iOS give a quick zooming-out effect when opening
+   * a travel search result, but this is acceptable for now.
+   * https://github.com/rnmapbox/maps/issues/2705
+   */
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      cameraRef.current?.fitBounds(bounds.ne, bounds.sw, undefined, 100);
+    }
+  }, [bounds]);
 
   const styles = useStyles();
 
@@ -56,9 +69,9 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
         onPress={onExpand}
       >
         <MapboxGL.Camera
-          bounds={bounds}
           {...MapCameraConfig}
-          animationDuration={0}
+          defaultSettings={{bounds}}
+          ref={cameraRef}
         />
         <MapRoute lines={features}></MapRoute>
         {toPlace && (

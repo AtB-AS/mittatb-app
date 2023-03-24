@@ -36,6 +36,7 @@ export type RemoteConfig = {
   enable_new_travel_search: boolean;
   enable_from_travel_search_to_ticket: boolean;
   enable_vehicles_in_map: boolean;
+  enable_city_bikes_in_map: boolean;
   enable_vehicle_operator_logo: boolean;
   default_map_filter: string;
   enable_realtime_map: boolean;
@@ -46,7 +47,7 @@ export type RemoteConfig = {
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
-  enable_network_logging: true,
+  enable_network_logging: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
   enable_intercom: true,
   enable_i18n: false,
@@ -80,6 +81,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_new_travel_search: false,
   enable_from_travel_search_to_ticket: false,
   enable_vehicles_in_map: false,
+  enable_city_bikes_in_map: false,
   enable_vehicle_operator_logo: false,
   default_map_filter: JSON.stringify({
     vehicles: {
@@ -194,6 +196,10 @@ export function getConfig(): RemoteConfig {
     values['enable_vehicles_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_vehicles_in_map;
 
+  const enable_city_bikes_in_map =
+    values['enable_city_bikes_in_map']?.asBoolean() ??
+    defaultRemoteConfig.enable_city_bikes_in_map;
+
   const enable_vehicle_operator_logo =
     values['enable_vehicle_operator_logo']?.asBoolean() ??
     defaultRemoteConfig.enable_vehicle_operator_logo;
@@ -257,6 +263,7 @@ export function getConfig(): RemoteConfig {
     enable_new_travel_search,
     enable_from_travel_search_to_ticket,
     enable_vehicles_in_map,
+    enable_city_bikes_in_map,
     enable_vehicle_operator_logo,
     default_map_filter,
     enable_realtime_map,

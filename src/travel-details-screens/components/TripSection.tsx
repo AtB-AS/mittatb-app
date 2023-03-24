@@ -8,7 +8,7 @@ import {
 } from '@atb/components/text';
 import {MessageBox} from '@atb/components/message-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {TransportationIcon} from '@atb/components/transportation-icon';
+import {TransportationIconBox} from '@atb/components/icon-box';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -172,7 +172,7 @@ const TripSection: React.FC<TripSectionProps> = ({
               ),
             )}
             rowLabel={
-              <TransportationIcon
+              <TransportationIconBox
                 mode={!!leg.bookingArrangements ? 'flex' : leg.mode}
                 subMode={leg.line?.transportSubmode}
               />
@@ -377,7 +377,7 @@ const WalkSection = (leg: Leg) => {
   return (
     <TripRow
       rowLabel={
-        <TransportationIcon
+        <TransportationIconBox
           mode={leg.mode}
           subMode={leg.line?.transportSubmode}
         />
