@@ -53,27 +53,16 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
     favorites,
     favoriteDepartures,
     async addFavoriteLocation(favorite: LocationFavorite) {
-      if (
-        favorites.find(
-          (f) =>
-            f.location.id == favorite.location.id || f.name == favorite.name,
-        )
-      ) {
-        return;
-      }
-      const updatedFavorites = await places.addFavorite(favorite);
-      setFavoritesState(updatedFavorites);
+      const newFavorites = await places.addFavorite(favorite);
+      setFavoritesState(newFavorites);
     },
     async removeFavoriteLocation(id: string) {
-      const favorites = await places.removeFavorite(id);
-      setFavoritesState(favorites);
+      const newFavorites = await places.removeFavorite(id);
+      setFavoritesState(newFavorites);
     },
     async updateFavoriteLocation(favorite: StoredType<LocationFavorite>) {
-      if (favorites.find((f) => f.name == favorite.name)) {
-        return;
-      }
-      const updatedFavorites = await places.updateFavorite(favorite);
-      setFavoritesState(updatedFavorites);
+      const newFavorites = await places.updateFavorite(favorite);
+      setFavoritesState(newFavorites);
     },
     async setFavoriteLocations(favorites: StoredType<LocationFavorite>[]) {
       const newFavorites = await places.setFavorites(favorites);
