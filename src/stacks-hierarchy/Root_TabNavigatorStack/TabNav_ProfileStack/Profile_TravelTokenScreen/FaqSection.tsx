@@ -32,14 +32,9 @@ const FaqSection = ({toggleMaxLimit}: {toggleMaxLimit?: number}) => {
       {TravelTokenTexts.travelToken.faqs.map(({question, answer}, index) => (
         <Sections.ExpandableSectionItem
           key={index}
-          textType={'body__primary--bold'}
           text={t(question)}
           showIconText={false}
-          expandContent={
-            <ThemeText type={'body__tertiary'} isMarkdown={true}>
-              {t(answer)}
-            </ThemeText>
-          }
+          expandContent={<ThemeText isMarkdown={true}>{t(answer)}</ThemeText>}
         />
       ))}
     </Sections.Section>
