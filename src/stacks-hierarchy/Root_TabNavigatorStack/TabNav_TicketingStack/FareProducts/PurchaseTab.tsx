@@ -78,20 +78,15 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
         {showTipsAndInformation && (
           <TipsAndInformationTile
             onPress={() => {
-              console.log('tips and info pressed');
               navigation.navigate('Root_TipsAndInformation');
             }}
             testID="tipsAndInformation"
           />
         )}
-        <AvailableFareProducts
-          onProductSelect={onProductSelect}
-          navigation={navigation}
-        />
+        <AvailableFareProducts onProductSelect={onProductSelect} />
         {showTicketAssistant && (
           <TicketAssistantTile
             onPress={() => {
-              console.log('ticketAssistant pressed');
               navigation.navigate('Root_TicketAssistantStack');
             }}
             testID="ticketAssistant"
