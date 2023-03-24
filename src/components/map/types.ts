@@ -8,7 +8,7 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {RegionPayload} from '@rnmapbox/maps';
-import {AnyMode} from '../transportation-icon/types';
+import {AnyMode} from '@atb/components/icon-box';
 import {StationFragment} from '@atb/api/types/generated/fragments/stations';
 
 /**
