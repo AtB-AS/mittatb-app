@@ -72,8 +72,4 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.xLarge,
     paddingBottom: theme.spacings.xLarge,
   },
-  fullScreenHeader: {
-    paddingBottom: theme.spacings.xLarge,
-    paddingHorizontal: theme.spacings.large,
-  },
 }));

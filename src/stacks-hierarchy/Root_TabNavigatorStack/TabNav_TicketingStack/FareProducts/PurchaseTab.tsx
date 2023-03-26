@@ -10,10 +10,10 @@ import {TicketingScreenProps} from '../types';
 import UpgradeSplash from './UpgradeSplash';
 import useRecentFareContracts from './use-recent-fare-contracts';
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
-import TicketAssistantTile from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
+import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
 import {useTipsAndInformation} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information';
 import {useTicketingAssistant} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant';
-import TipsAndInformationTile from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TipsAndInformationTile';
+import {TipsAndInformationTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TipsAndInformationTile';
 
 type Props = TicketingScreenProps<'PurchaseTab'>;
 

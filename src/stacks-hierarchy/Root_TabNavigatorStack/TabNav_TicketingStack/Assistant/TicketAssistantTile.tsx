@@ -4,14 +4,14 @@ import {View} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
-import {translation as _, useTranslation} from '@atb/translations';
+import {TicketingTexts, useTranslation} from '@atb/translations';
 
 type TicketAssistantProps = {
   accented?: boolean;
   onPress: () => void;
   testID: string;
 };
-const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
+export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
   accented,
   onPress,
   testID,
@@ -21,18 +21,6 @@ const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
   const color: StaticColor = accented ? 'background_accent_3' : 'background_0';
   const themeColor = getStaticColor(themeName, color);
   const {t} = useTranslation();
-
-  const texts = {
-    title: _('Bilettveileder', 'Ticket assistant'),
-    description: _(
-      'Få hjelp til å velge billetten som passer deg best.',
-      'Get help choosing the ticket that suits you the best',
-    ),
-    a11yHint: _(
-      'Aktiver for å åpne bilettveilederen',
-      'Activate to get tips and information about tickets',
-    ),
-  };
 
   return (
     <View
@@ -51,18 +39,14 @@ const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
           <ThemeText
             type="body__secondary--bold"
             style={styles.title}
-            accessibilityLabel={t(texts.title)}
+            accessibilityLabel={t(TicketingTexts.ticketAssistantTile.title)}
             color={themeColor}
             testID={testID + 'Title'}
           >
-            {t(texts.title)}
+            {t(TicketingTexts.ticketAssistantTile.title)}
           </ThemeText>
-          <ThemeText
-            type="body__tertiary"
-            style={styles.description}
-            color={'secondary'}
-          >
-            {t(texts.description)}
+          <ThemeText type="body__tertiary" color={'secondary'}>
+            {t(TicketingTexts.ticketAssistantTile.description)}
           </ThemeText>
         </View>
       </TouchableOpacity>
@@ -83,7 +67,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   title: {
     marginBottom: theme.spacings.small,
   },
-  description: {},
 
   contentContainer: {
     flexShrink: 1,
@@ -93,5 +76,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
   },
 }));
-
-export default TicketAssistantTile;
