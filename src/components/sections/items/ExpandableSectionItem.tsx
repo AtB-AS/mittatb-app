@@ -17,7 +17,6 @@ type Props = SectionItemProps<
     textType?: TextNames;
     showIconText?: boolean;
     testID?: string;
-    leftIcon?: string;
     accessibility?: AccessibilityProps;
   } & (
     | {
@@ -40,7 +39,6 @@ export function ExpandableSectionItem({
   text,
   textType,
   showIconText = false,
-  leftIcon,
   accessibility,
   testID,
   ...props
@@ -83,11 +81,6 @@ export function ExpandableSectionItem({
         testID={testID}
         {...accessibility}
       >
-        {leftIcon && (
-          <ThemeText style={styles.leftIcon} type={textType}>
-            {leftIcon}
-          </ThemeText>
-        )}
         <ThemeText style={contentContainer} type={textType}>
           {text}
         </ThemeText>
@@ -133,9 +126,6 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  leftIcon: {
-    marginRight: theme.spacings.small,
   },
   expandIcon__text: {
     marginRight: theme.spacings.xSmall,

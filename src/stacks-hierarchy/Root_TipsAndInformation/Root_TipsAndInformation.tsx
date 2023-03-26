@@ -31,11 +31,10 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
       <View style={styles.innerContainer}>
         <Sections.Section style={styles.tipsContainer}>
           {/*eslint-disable-next-line rulesdir/translations-warning*/}
-          {TipsAndInformationTexts.tips.map(({emoji, title, tip}, index) => (
+          {TipsAndInformationTexts.tips.map(({title, tip}, index) => (
             <Sections.ExpandableSectionItem
               key={index}
               textType={'body__primary--bold'}
-              leftIcon={emoji}
               text={t(title)}
               showIconText={false}
               expandContent={
@@ -51,7 +50,6 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
           ))}
           <Sections.ExpandableSectionItem
             textType={'body__primary--bold'}
-            leftIcon={TipsAndInformationTexts.ticketAssistantTip.emoji}
             text={t(TipsAndInformationTexts.ticketAssistantTip.title)}
             showIconText={false}
             expandContent={
