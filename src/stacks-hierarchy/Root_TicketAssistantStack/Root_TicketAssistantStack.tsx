@@ -26,7 +26,7 @@ type Props = RootStackScreenProps<'Root_TicketAssistantStack'>;
 export const Root_TicketAssistantStack = ({navigation}: Props) => {
   const styles = useStyles();
   const [activeTab, setActiveTab] = useState(0);
-  const [lastTab, setLastTab] = useState<any>();
+  const [previousTab, setPreviousTab] = useState<any>();
   return (
     <>
       {activeTab !== 0 ? (
@@ -35,7 +35,7 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
             type: 'back',
             //Navigate to previous tab
             onPress: () => {
-              navigation.navigate(lastTab);
+              navigation.navigate(previousTab);
             },
           }}
           rightButton={{type: 'close'}}
@@ -47,7 +47,7 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
         <Tab.Navigator
           tabBar={(props: MaterialTopTabBarProps) => {
             setActiveTab(props.state.index);
-            setLastTab(props.state.routes[props.state.index - 1]);
+            setPreviousTab(props.state.routes[props.state.index - 1]);
             return <PageIndicator {...props} />;
           }}
           tabBarPosition="bottom"
