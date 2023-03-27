@@ -21,7 +21,6 @@ import {TicketAssistant_ZonePickerScreen} from './TicketAssistant_ZonePickerScre
 import {TicketAssistant_SummaryScreen} from './TicketAssistant_SummaryScreen';
 
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 
 const Tab = createMaterialTopTabNavigator<TicketAssistantStackParams>();
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
