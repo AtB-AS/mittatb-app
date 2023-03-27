@@ -9,10 +9,7 @@ import {StyleSheet} from '@atb/theme';
 
 import {StaticColorByType} from '@atb/theme/colors';
 
-import {
-  WelcomeScreenProps,
-  TicketAssistant_WelcomeScreen,
-} from './TicketAssistant_WelcomeScreen';
+import {TicketAssistant_WelcomeScreen} from './TicketAssistant_WelcomeScreen';
 import {TicketAssistantStackParams} from './navigation-types';
 import {TicketAssistant_FrequencyScreen} from './TicketAssistant_FrequencyScreen';
 import {TicketAssistant_CategoryPickerScreen} from './TicketAssistant_CategoryPickerScreen';
@@ -21,11 +18,13 @@ import {TicketAssistant_ZonePickerScreen} from './TicketAssistant_ZonePickerScre
 import {TicketAssistant_SummaryScreen} from './TicketAssistant_SummaryScreen';
 
 import {FullScreenHeader} from '@atb/components/screen-header';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 
 const Tab = createMaterialTopTabNavigator<TicketAssistantStackParams>();
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+type Props = RootStackScreenProps<'Root_TicketAssistantStack'>;
 
-export const Root_TicketAssistantStack = ({navigation}: WelcomeScreenProps) => {
+export const Root_TicketAssistantStack = ({navigation}: Props) => {
   const styles = useStyles();
   const [activeTab, setActiveTab] = useState(0);
   const [previousTab, setPreviousTab] = useState<any>();
