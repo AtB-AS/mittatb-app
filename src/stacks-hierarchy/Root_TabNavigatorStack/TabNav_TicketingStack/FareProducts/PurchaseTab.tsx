@@ -11,8 +11,8 @@ import UpgradeSplash from './UpgradeSplash';
 import useRecentFareContracts from './use-recent-fare-contracts';
 import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
-import {useTipsAndInformation} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information';
-import {useTicketingAssistant} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant';
+import {useTipsAndInformationEnabled} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information-enabled';
+import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {TipsAndInformationTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TipsAndInformationTile';
 
 type Props = TicketingScreenProps<'PurchaseTab'>;
@@ -26,8 +26,8 @@ export const PurchaseTab: React.FC<Props> = ({navigation}) => {
   const hasRecentFareContracts =
     enable_recent_tickets && !!recentFareContracts.length;
 
-  const showTipsAndInformation = useTipsAndInformation();
-  const showTicketAssistant = useTicketingAssistant();
+  const showTipsAndInformation = useTipsAndInformationEnabled();
+  const showTicketAssistant = useTicketingAssistantEnabled();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
