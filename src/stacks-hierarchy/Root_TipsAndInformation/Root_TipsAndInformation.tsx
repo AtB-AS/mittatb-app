@@ -30,7 +30,7 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
 
       <View style={styles.innerContainer}>
         <Sections.Section style={styles.tipsContainer}>
-          {/*eslint-disable-next-line rulesdir/translations-warning*/}
+          {/* eslint-disable-next-line rulesdir/translations-warning */}
           {TipsAndInformationTexts.tips.map(({title, tip}, index) => (
             <Sections.ExpandableSectionItem
               key={index}
@@ -79,7 +79,6 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
 
 const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    alignContent: 'center',
     flex: 1,
     backgroundColor: theme.static.background.background_accent_0.background,
   },
@@ -103,6 +102,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     marginVertical: theme.spacings.xLarge,
   },
   innerContainer: {
+    marginTop: theme.spacings.xLarge,
     paddingHorizontal: theme.spacings.xLarge,
   },
 }));
