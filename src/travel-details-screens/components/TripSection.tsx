@@ -87,7 +87,6 @@ const TripSection: React.FC<TripSectionProps> = ({
 
   const isWalkSection = leg.mode === 'foot';
   const isFlexible = !!leg.bookingArrangements;
-  // TODO: Add to the design system `#DEA076`
   const legColor = useTransportationColor(
     isFlexible ? 'flex' : leg.mode,
     leg.line?.transportSubmode,
