@@ -16,7 +16,6 @@ import {
 import {useCurrentTripPatternWithUpdates} from '@atb/travel-details-screens/use-current-trip-pattern-with-updates';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {MapLeg} from '@atb/components/map';
 import {Button} from '@atb/components/button';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import {useFromTravelSearchToTicketEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
