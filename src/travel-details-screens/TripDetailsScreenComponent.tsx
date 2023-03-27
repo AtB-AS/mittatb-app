@@ -69,9 +69,10 @@ export const TripDetailsScreenComponent = ({
   );
 
   const tripPatternLegs = tripPattern?.legs.map((leg) => {
+    let mode: AnyMode = !!leg.bookingArrangements ? 'flex' : leg.mode;
     return {
       ...leg,
-      mode: (!!leg.bookingArrangements ? 'flex' : leg.mode) as AnyMode,
+      mode,
     };
   });
 
