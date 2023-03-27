@@ -180,6 +180,24 @@ const TicketingTexts = {
     upcoming: _('Kommende billett', 'Upcoming ticket'),
     approved: _('Godkjent billett', 'Approved ticket'),
   },
+  ticketAssistantTile: {
+    title: _('Bilettveileder', 'Ticket assistant'),
+    description: _(
+      'Få hjelp til å velge billetten som passer deg best.',
+      'Get help choosing the ticket that suits you the best',
+    ),
+    a11yHint: _(
+      'Aktiver for å åpne bilettveilederen',
+      'Activate to get tips and information about tickets',
+    ),
+  },
+  tipsAndInformationTile: {
+    title: _('Tips og informasjon', 'Tips and information'),
+    a11yHint: _(
+      'Aktiver for å få tips og informasjon om biletter',
+      'Activate to get tips and information about tickets',
+    ),
+  },
 };
 
 export default orgSpecificTranslations(TicketingTexts, {

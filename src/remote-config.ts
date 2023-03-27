@@ -40,6 +40,8 @@ export type RemoteConfig = {
   enable_vehicle_operator_logo: boolean;
   default_map_filter: string;
   enable_realtime_map: boolean;
+  enable_ticketing_assistant: boolean;
+  enable_tips_and_information: boolean;
   enable_flexible_transport: boolean;
   use_flexible_on_accessMode: boolean;
   use_flexible_on_directMode: boolean;
@@ -89,6 +91,8 @@ export const defaultRemoteConfig: RemoteConfig = {
     },
   }),
   enable_realtime_map: false,
+  enable_ticketing_assistant: false,
+  enable_tips_and_information: false,
   enable_flexible_transport: false,
   use_flexible_on_accessMode: true,
   use_flexible_on_directMode: true,
@@ -212,6 +216,14 @@ export function getConfig(): RemoteConfig {
     values['enable_realtime_map']?.asBoolean() ??
     defaultRemoteConfig.enable_realtime_map;
 
+  const enable_ticketing_assistant =
+    values['enable_ticketing_assistant']?.asBoolean() ??
+    defaultRemoteConfig.enable_ticketing_assistant;
+
+  const enable_tips_and_information =
+    values['enable_tips_and_information']?.asBoolean() ??
+    defaultRemoteConfig.enable_tips_and_information;
+
   const enable_flexible_transport =
     values['enable_flexible_transport']?.asBoolean() ??
     defaultRemoteConfig.enable_flexible_transport;
@@ -267,6 +279,8 @@ export function getConfig(): RemoteConfig {
     enable_vehicle_operator_logo,
     default_map_filter,
     enable_realtime_map,
+    enable_ticketing_assistant,
+    enable_tips_and_information,
     enable_flexible_transport,
     use_flexible_on_accessMode,
     use_flexible_on_directMode,

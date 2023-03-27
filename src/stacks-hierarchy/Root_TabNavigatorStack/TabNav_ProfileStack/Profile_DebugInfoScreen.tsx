@@ -33,6 +33,8 @@ import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNav
 import {useRealtimeMapDebugOverride} from '@atb/components/map/hooks/use-realtime-map-enabled';
 import {useFromTravelSearchToTicketDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
 import {useMapDebugOverride} from '@atb/components/map/hooks/use-map-page';
+import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant-enabled';
+import {useTipsAndInformationDebugOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information-enabled';
 import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
 
 function setClipboard(content: string) {
@@ -58,6 +60,8 @@ export const Profile_DebugInfoScreen = () => {
   const cityBikesInMapDebugOverride = useCityBikesInMapDebugOverride();
   const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
   const mapDebugOverride = useMapDebugOverride();
+  const ticketingAssistantOverride = useTicketingAssistantDebugOverride();
+  const tipsAndInformationOverride = useTipsAndInformationDebugOverride();
 
   useEffect(() => {
     async function run() {
@@ -318,6 +322,18 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable map"
               override={mapDebugOverride}
+            />
+          </Sections.GenericSectionItem>
+          <Sections.GenericSectionItem>
+            <DebugOverride
+              description="Enable ticketing assistant"
+              override={ticketingAssistantOverride}
+            />
+          </Sections.GenericSectionItem>
+          <Sections.GenericSectionItem>
+            <DebugOverride
+              description="Enable tips and information for tickets"
+              override={tipsAndInformationOverride}
             />
           </Sections.GenericSectionItem>
         </Sections.Section>
