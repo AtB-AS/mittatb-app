@@ -60,8 +60,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'stretch',
     padding: theme.spacings.xLarge,
     borderRadius: theme.border.radius.regular,
-    marginLeft: theme.spacings.medium,
-    marginRight: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.large,
   },
 
   title: {
