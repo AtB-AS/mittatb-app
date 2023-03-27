@@ -83,7 +83,6 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
   );
 };
 
-// @ts-ignore
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
