@@ -11,10 +11,13 @@ import {storage, StorageModelKeysEnum} from '@atb/storage';
 export const useShouldShowDeparturesOnboarding = () => {
   const [shouldShow, setShouldShow] = useState(false);
   const isFocused = useIsFocused();
-  const {enable_departures_v2_as_default: enabled} = useRemoteConfig();
+  const {
+    enable_departures_v2_as_default: enabled,
+    enable_departures_v2_onboarding: isOnboardingEnabled,
+  } = useRemoteConfig();
 
   useEffect(() => {
-    if (isFocused && enabled) {
+    if (isFocused && enabled && isOnboardingEnabled) {
       (async function () {
         const hasRead = await storage.get(
           StorageModelKeysEnum.HasReadDeparturesV2Onboarding,
@@ -24,7 +27,7 @@ export const useShouldShowDeparturesOnboarding = () => {
     } else {
       setShouldShow(false);
     }
-  }, [isFocused, enabled]);
+  }, [isFocused, enabled, isOnboardingEnabled]);
 
   return shouldShow;
 };
