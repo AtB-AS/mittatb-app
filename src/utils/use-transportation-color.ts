@@ -1,5 +1,5 @@
 import {useTheme} from '@atb/theme';
-import {AnyMode, AnySubMode} from '@atb/components/transportation-icon';
+import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {StaticColorByType} from '@atb/theme/colors';
 
 export function useTransportationColor(
@@ -17,6 +17,8 @@ export const useThemeColorForTransportMode = (
   subMode?: AnySubMode,
 ): StaticColorByType<'transport'> => {
   switch (mode) {
+    case 'flex':
+      return 'transport_flexible';
     case 'bus':
     case 'coach':
       if (subMode === 'localBus') return 'transport_city';

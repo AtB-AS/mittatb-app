@@ -30,7 +30,7 @@ export const StopPlaces = ({
       )}
       {stopPlaces.map((node: NearestStopPlaceNode) => (
         <StopPlaceItem
-          key={node?.place?.id}
+          key={node.place.id}
           stopPlaceNode={node}
           onPress={navigateToPlace}
           testID={'stopPlaceItem' + stopPlaces.indexOf(node)}

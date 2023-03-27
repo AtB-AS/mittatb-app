@@ -6,6 +6,11 @@ const TripDetailsTexts = {
   },
   trip: {
     leg: {
+      contactFlexibleTransportTitle: (phone: string) =>
+        _(
+          `Ring ${phone} for å reserve transport`,
+          `Call ${phone} to make a transport reservation`,
+        ),
       a11yHelper: (stepNumber: number, travelMode: string) =>
         _(
           `Steg ${stepNumber}, ${travelMode}`,
