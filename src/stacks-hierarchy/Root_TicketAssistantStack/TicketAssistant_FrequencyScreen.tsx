@@ -35,7 +35,7 @@ export const TicketAssistant_FrequencyScreen = ({
   function updateFrequency(value: number) {
     const newData = {...data, frequency: value};
     updateData(newData);
-    console.log('Context Data \n' + JSON.stringify(newData, null, 2));
+    //console.log('Context Data \n' + JSON.stringify(newData, null, 2));
   }
 
   return (
@@ -59,7 +59,7 @@ export const TicketAssistant_FrequencyScreen = ({
           <View style={styles.horizontalLine}>
             {numbers.map((number) => {
               return (
-                <View style={styles.numberContainer}>
+                <View key={number} style={styles.numberContainer}>
                   <ThemeText
                     key={number}
                     style={styles.number}
