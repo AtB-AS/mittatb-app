@@ -8,22 +8,25 @@ import {PageIndicator} from '@atb/components/page-indicator';
 import {StyleSheet} from '@atb/theme';
 
 import {StaticColorByType} from '@atb/theme/colors';
-import {TicketAssistant_WelcomeScreen} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
-import {TicketAssistantStackParams} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
-import {TicketAssistant_FrequencyScreen} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_FrequencyScreen';
-import {TicketAssistant_CategoryPickerScreen} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_CategoryPickerScreen';
-import {TicketAssistant_DurationScreen} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen';
-import {TicketAssistant_ZonePickerScreen} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_ZonePickerScreen';
-import {TicketAssistant_SummaryScreen} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen';
+
+import {
+  WelcomeScreenProps,
+  TicketAssistant_WelcomeScreen,
+} from './TicketAssistant_WelcomeScreen';
+import {TicketAssistantStackParams} from './navigation-types';
+import {TicketAssistant_FrequencyScreen} from './TicketAssistant_FrequencyScreen';
+import {TicketAssistant_CategoryPickerScreen} from './TicketAssistant_CategoryPickerScreen';
+import {TicketAssistant_DurationScreen} from './TicketAssistant_DurationScreen';
+import {TicketAssistant_ZonePickerScreen} from './TicketAssistant_ZonePickerScreen';
+import {TicketAssistant_SummaryScreen} from './TicketAssistant_SummaryScreen';
+
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 
 const Tab = createMaterialTopTabNavigator<TicketAssistantStackParams>();
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-type Props = RootStackScreenProps<'Root_TicketAssistantStack'>;
-
-export const Root_TicketAssistantStack = ({navigation}: Props) => {
+export const Root_TicketAssistantStack = ({navigation}: WelcomeScreenProps) => {
   const styles = useStyles();
   const [activeTab, setActiveTab] = useState(0);
   const [previousTab, setPreviousTab] = useState<any>();

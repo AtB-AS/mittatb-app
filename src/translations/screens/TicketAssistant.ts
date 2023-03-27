@@ -19,6 +19,24 @@ const TicketAssistantTexts = {
     mainButton: _('Start', 'Start'),
   },
   closeButton: _('Lukk', 'Close'),
+  frequency: {
+    title: _(
+      'Hvor ofte reiser du i uka? ',
+      'How often do you travel per week?',
+    ),
+    description: _(
+      'Tur-retur teller som 2 ganger. \n' +
+        'Eksempel: Til og fra jobb 3 ganger i uka, er 6 reiser.',
+      'Round trip counts as 2 times. \n' +
+        'Example: To and from work 3 times a week, is 6 trips.',
+    ),
+    result: (amount: {value: number}) =>
+      _(
+        `Du reiser ${amount.value} ganger i uka`,
+        `You travel ${amount.value} times a week`,
+      ),
+    mainButton: _('Neste', 'Next'),
+  },
   intercom: {
     title: _('Bidra til å gjøre appen bedre', 'Help us make the app better'),
     description: _(
