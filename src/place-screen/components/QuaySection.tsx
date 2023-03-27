@@ -19,6 +19,7 @@ type QuaySectionProps = {
   quay: Quay;
   departuresPerQuay?: number;
   data: EstimatedCall[] | null;
+  isLoading: boolean;
   didLoadingDataFail: boolean;
   testID?: 'quaySection' | string;
   navigateToQuay?: (arg0: Quay) => void;
@@ -46,6 +47,7 @@ export default function QuaySection({
   quay,
   departuresPerQuay,
   data,
+  isLoading,
   didLoadingDataFail,
   testID,
   navigateToQuay,
@@ -169,7 +171,7 @@ export default function QuaySection({
             }
             ListEmptyComponent={
               <>
-                {data && (
+                {data && !isLoading && (
                   <Sections.GenericSectionItem
                     radius={!shouldShowMoreItemsLink ? 'bottom' : undefined}
                   >
@@ -188,7 +190,7 @@ export default function QuaySection({
             }
           />
         )}
-        {!isMinimized && didLoadingDataFail && (
+        {!isMinimized && didLoadingDataFail && !isLoading && (
           <Sections.GenericSectionItem>
             <View style={styles.messageBox}>
               <ThemeText type="body__secondary" color="secondary">
@@ -197,7 +199,7 @@ export default function QuaySection({
             </View>
           </Sections.GenericSectionItem>
         )}
-        {!data && !isMinimized && !didLoadingDataFail && (
+        {isLoading && !isMinimized && (
           <Sections.GenericSectionItem>
             <View style={{width: '100%'}}>
               <ActivityIndicator></ActivityIndicator>

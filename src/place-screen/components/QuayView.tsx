@@ -129,7 +129,8 @@ export default function QuayView({
         <QuaySection
           quay={item}
           data={state.data}
-          didLoadingDataFail={!!state.error}
+          isLoading={state.isLoading}
+          didLoadingDataFail={didLoadingDataFail}
           navigateToDetails={navigateToDetails}
           testID={'quaySection'}
           stopPlace={stopPlace}
