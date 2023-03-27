@@ -101,6 +101,8 @@ const reducer: ReducerWithSideEffects<
 > = (state, action) => {
   switch (action.type) {
     case 'LOAD_INITIAL_DEPARTURES': {
+      if (!action.quayIds.length) return NoUpdate();
+
       // Update input data with new date as this
       // is a fresh fetch. We should fetch the latest information.
       const queryInput: DeparturesVariables = {
@@ -297,7 +299,7 @@ export function useDeparturesData(
   useInterval(
     loadRealTimeData,
     updateFrequencyInSeconds * 1000,
-    quayIds,
+    [JSON.stringify(quayIds)],
     !isFocused || mode === 'Favourite',
   );
   useInterval(

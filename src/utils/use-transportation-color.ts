@@ -17,6 +17,8 @@ export const useThemeColorForTransportMode = (
   subMode?: AnySubMode,
 ): StaticColorByType<'transport'> => {
   switch (mode) {
+    case 'flex':
+      return 'transport_flexible';
     case 'bus':
     case 'coach':
       if (subMode === 'localBus') return 'transport_city';

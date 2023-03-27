@@ -21,15 +21,7 @@
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@^6.3.0":
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-6.3.0.tgz#7c7007334da9fd7d65fcdd6a5c277ab0d6ee5dcf"
-  integrity sha512-ul8hXljnv9CFln75sS6hLgWvp/EgVp30n0JYQKykh0Gul4NJKF4fRHt9uokrt3isVV8WOcwdEzbL/yVv/sVzAw==
-  dependencies:
-    hex-to-rgba "^2.0.1"
-    ts-deepmerge "^4.0.0"
-
-"@atb-as/theme@^6.4.4":
+"@atb-as/theme@^6.4.0", "@atb-as/theme@^6.4.4":
   version "6.4.4"
   resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-6.4.4.tgz#b6623de80c97c8700b94d70e78831f788545130f"
   integrity sha512-I9+XqBxTjS7f122MYDFxUNvZDcRTnDP4GtMhwOlzNxkqYOWH2KOFc+5aamAzNaGX6gxFWlnzpvvcBN0ZFpFRaQ==
