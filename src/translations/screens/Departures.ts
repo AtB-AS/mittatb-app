@@ -103,23 +103,5 @@ const DeparturesTexts = {
   closeButton: {
     label: _('Lukk', 'Close'),
   },
-  onboarding: {
-    title: _('Avganger i ny drakt 🎉', 'Departures with new design 🎉'),
-    body: {
-      part1: _(
-        'Det har nå kommet en ny visning av avganger i appen.',
-        'There is now a new design of departures in the app.',
-      ),
-      part2: _(
-        'Endringene er basert på tilbakemeldinger fra våre brukere. Foreløpig er det fortsatt mulig å bruke den gamle visningen ved å gå til *Min profil*.',
-        'The changes are based on feedback from our users. For the time being it is still possible to use the old design by changing it in *My profile*.',
-      ),
-    },
-    button: _('Den er grei!', 'Sounds good!'),
-    a11yLabel: _(
-      'Avganger i ny drakt! Det har nå kommet en ny visning av avganger i appen. Endringene er basert på tilbakemeldinger fra våre brukere. Foreløpig er det fortsatt mulig å bruke den gamle visningen ved å gå til Min profil.',
-      'Departures with new design! There is now a new design of departures in the app. The changes are based on feedback from our users. For the time being it is still possible to use the old design by changing it in My profile.',
-    ),
-  },
 };
 export default DeparturesTexts;

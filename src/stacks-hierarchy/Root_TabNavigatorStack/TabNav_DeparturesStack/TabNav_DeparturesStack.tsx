@@ -1,11 +1,10 @@
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import {
   DeparturesStackParams,
   RootDeparturesScreenProps,
 } from './navigation-types';
 import {Departures_NearbyStopPlacesScreen} from './Departures_NearbyStopPlacesScreen';
-import {Departures_OnboardingScreen} from './Departures_OnboardingScreen';
 import {Departures_DepartureDetailsScreen} from './Departures_DepartureDetailsScreen';
 import {Departures_TravelDetailsMapScreen} from './Departures_TravelDetailsMapScreen';
 import {Departures_PlaceScreen} from './Departures_PlaceScreen';
@@ -34,13 +33,6 @@ export const TabNav_DeparturesStack = ({}: RootDeparturesScreenProps) => {
       <Stack.Screen
         name="Departures_TravelDetailsMapScreen"
         component={Departures_TravelDetailsMapScreen}
-      />
-      <Stack.Screen
-        name="Departures_OnboardingScreen"
-        component={Departures_OnboardingScreen}
-        options={{
-          ...TransitionPresets.ModalSlideFromBottomIOS,
-        }}
       />
     </Stack.Navigator>
   );
