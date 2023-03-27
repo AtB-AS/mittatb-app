@@ -26,7 +26,7 @@ export const TicketAssistant_WelcomeScreen = ({
     >
       <View style={styles.mainView}>
         <ThemeText
-          type={'body__primary--jumbo--bold'}
+          type="body__primary--jumbo--bold"
           style={styles.header}
           color={themeColor}
           accessibilityLabel={t(TicketAssistantTexts.welcome.titleA11yLabel)}
@@ -74,9 +74,5 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   bottomView: {
     paddingHorizontal: theme.spacings.xLarge,
     paddingBottom: theme.spacings.xLarge,
-  },
-  fullScreenHeader: {
-    paddingBottom: theme.spacings.xLarge,
-    paddingHorizontal: theme.spacings.large,
   },
 }));

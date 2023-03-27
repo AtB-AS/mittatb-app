@@ -36,11 +36,16 @@ export type RemoteConfig = {
   enable_new_travel_search: boolean;
   enable_from_travel_search_to_ticket: boolean;
   enable_vehicles_in_map: boolean;
+  enable_city_bikes_in_map: boolean;
   enable_vehicle_operator_logo: boolean;
   default_map_filter: string;
   enable_realtime_map: boolean;
   enable_ticketing_assistant: boolean;
   enable_tips_and_information: boolean;
+  enable_flexible_transport: boolean;
+  use_flexible_on_accessMode: boolean;
+  use_flexible_on_directMode: boolean;
+  use_flexible_on_egressMode: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -78,6 +83,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_new_travel_search: false,
   enable_from_travel_search_to_ticket: false,
   enable_vehicles_in_map: false,
+  enable_city_bikes_in_map: false,
   enable_vehicle_operator_logo: false,
   default_map_filter: JSON.stringify({
     vehicles: {
@@ -85,9 +91,12 @@ export const defaultRemoteConfig: RemoteConfig = {
     },
   }),
   enable_realtime_map: false,
-  //Bachelor
   enable_ticketing_assistant: false,
   enable_tips_and_information: false,
+  enable_flexible_transport: false,
+  use_flexible_on_accessMode: true,
+  use_flexible_on_directMode: true,
+  use_flexible_on_egressMode: true,
 };
 
 export function getConfig(): RemoteConfig {
@@ -191,6 +200,10 @@ export function getConfig(): RemoteConfig {
     values['enable_vehicles_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_vehicles_in_map;
 
+  const enable_city_bikes_in_map =
+    values['enable_city_bikes_in_map']?.asBoolean() ??
+    defaultRemoteConfig.enable_city_bikes_in_map;
+
   const enable_vehicle_operator_logo =
     values['enable_vehicle_operator_logo']?.asBoolean() ??
     defaultRemoteConfig.enable_vehicle_operator_logo;
@@ -210,6 +223,22 @@ export function getConfig(): RemoteConfig {
   const enable_tips_and_information =
     values['enable_tips_and_information']?.asBoolean() ??
     defaultRemoteConfig.enable_tips_and_information;
+
+  const enable_flexible_transport =
+    values['enable_flexible_transport']?.asBoolean() ??
+    defaultRemoteConfig.enable_flexible_transport;
+
+  const use_flexible_on_accessMode =
+    values['use_flexible_on_accessMode']?.asBoolean() ??
+    defaultRemoteConfig.use_flexible_on_accessMode;
+
+  const use_flexible_on_directMode =
+    values['use_flexible_on_directMode']?.asBoolean() ??
+    defaultRemoteConfig.use_flexible_on_directMode;
+
+  const use_flexible_on_egressMode =
+    values['use_flexible_on_egressMode']?.asBoolean() ??
+    defaultRemoteConfig.use_flexible_on_egressMode;
 
   return {
     enable_network_logging,
@@ -246,11 +275,16 @@ export function getConfig(): RemoteConfig {
     enable_new_travel_search,
     enable_from_travel_search_to_ticket,
     enable_vehicles_in_map,
+    enable_city_bikes_in_map,
     enable_vehicle_operator_logo,
     default_map_filter,
     enable_realtime_map,
     enable_ticketing_assistant,
     enable_tips_and_information,
+    enable_flexible_transport,
+    use_flexible_on_accessMode,
+    use_flexible_on_directMode,
+    use_flexible_on_egressMode,
   };
 }
 

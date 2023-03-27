@@ -18,7 +18,9 @@ import {TicketAssistant_CategoryPickerScreen} from './TicketAssistant_CategoryPi
 import {TicketAssistant_DurationScreen} from './TicketAssistant_DurationScreen';
 import {TicketAssistant_ZonePickerScreen} from './TicketAssistant_ZonePickerScreen';
 import {TicketAssistant_SummaryScreen} from './TicketAssistant_SummaryScreen';
+
 import {FullScreenHeader} from '@atb/components/screen-header';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 
 const Tab = createMaterialTopTabNavigator<TicketAssistantStackParams>();
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -26,7 +28,7 @@ const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 export const Root_TicketAssistantStack = ({navigation}: WelcomeScreenProps) => {
   const styles = useStyles();
   const [activeTab, setActiveTab] = useState(0);
-  const [lastTab, setLastTab] = useState<any>();
+  const [previousTab, setPreviousTab] = useState<any>();
   return (
     <>
       {activeTab !== 0 ? (
@@ -35,7 +37,7 @@ export const Root_TicketAssistantStack = ({navigation}: WelcomeScreenProps) => {
             type: 'back',
             //Navigate to previous tab
             onPress: () => {
-              navigation.navigate(lastTab);
+              navigation.navigate(previousTab);
             },
           }}
           rightButton={{type: 'close'}}
@@ -47,7 +49,7 @@ export const Root_TicketAssistantStack = ({navigation}: WelcomeScreenProps) => {
         <Tab.Navigator
           tabBar={(props: MaterialTopTabBarProps) => {
             setActiveTab(props.state.index);
-            setLastTab(props.state.routes[props.state.index - 1]);
+            setPreviousTab(props.state.routes[props.state.index - 1]);
             return <PageIndicator {...props} />;
           }}
           tabBarPosition="bottom"

@@ -12,7 +12,7 @@ import {
   useSectionItem,
   useSectionStyle,
 } from '@atb/components/sections';
-import {TransportationIcon} from '@atb/components/transportation-icon';
+import {TransportationIconBox} from '@atb/components/icon-box';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
@@ -112,7 +112,7 @@ export default function LineItem({
             language,
           )}
         >
-          <TransportationIcon
+          <TransportationIconBox
             style={styles.transportationMode}
             mode={group.lineInfo?.transportMode}
             subMode={group.lineInfo?.transportSubmode}

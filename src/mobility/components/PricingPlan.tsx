@@ -3,11 +3,11 @@ import {
   PricingPlanFragment,
   PricingSegmentFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
-import {ScooterTexts} from '@atb/translations/screens/subscreens/VehicleTexts';
-import {VehicleStat} from '@atb/vehicles/components/VehicleStat';
+import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {VehicleStat} from '@atb/mobility/components/VehicleStat';
 import {Language, useTranslation} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
-import {hasMultiplePricingPlans} from '@atb/vehicles/utils';
+import {hasMultiplePricingPlans} from '@atb/mobility/utils';
 
 type PricingPlanProps = {
   operator: string;

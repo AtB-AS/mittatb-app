@@ -37,6 +37,7 @@ import {Root_PurchasePaymentWithCreditCardScreen} from '@atb/stacks-hierarchy/Ro
 import {Root_PurchasePaymentWithVippsScreen} from '@atb/stacks-hierarchy/Root_PurchasePaymentWithVippsScreen';
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
 import {Root_TicketAssistantStack} from '@atb/stacks-hierarchy/Root_TicketAssistantStack';
+import {Root_TipsAndInformation} from '@atb/stacks-hierarchy/Root_TipsAndInformation';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -315,6 +316,10 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_TicketAssistantStack"
                   component={Root_TicketAssistantStack}
+                />
+                <Stack.Screen
+                  name="Root_TipsAndInformation"
+                  component={Root_TipsAndInformation}
                 />
                 <Stack.Screen
                   name="LoginInApp"

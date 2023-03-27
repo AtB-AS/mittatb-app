@@ -1,7 +1,10 @@
 import {translation as _} from '../../commons';
 import {Platform} from 'react-native';
 
-export const VehicleTexts = {
+export const MobilityTexts = {
+  unknownOperator: _('Ukjent operatør', 'Unknown operator'),
+  operatorAppSwitchButton: (operator: string) =>
+    _(`Åpne ${operator}`, `Open ${operator}`),
   appMissingAlert: {
     title: (operator: string) =>
       _(`Last ned ${operator}`, `Download ${operator}`),
@@ -33,16 +36,12 @@ export const VehicleTexts = {
 export const ScooterTexts = {
   seeAppForPrices: (operator: string) =>
     _(`Se ${operator}-appen for priser`, `See ${operator} app for prices`),
-  primaryButton: {
-    text: (operator: string) => _(`Åpne ${operator}`, `Open ${operator}`),
-  },
   pricingPlan: {
     price: (price: number) =>
       price > 0
         ? _(`+ ${price} kr for oppstart`, `+ ${price} kr to unlock`)
         : _('Ingen oppstartskostnad', 'Free to unlock'),
   },
-  unknownOperator: _('Ukjent operatør', 'Unknown operator'),
   onboarding: {
     title: _('El-sparkesykler i kartet 🎉', 'Electrical scooters in map 🎉'),
     body: _(
@@ -54,5 +53,13 @@ export const ScooterTexts = {
       'Nå kan du se alle el-sparkesyklene i byen på ett sted! Skru på tjenesten i kartet',
       'You can now see all electric scooters in town in one app! Enable this feature through the map.',
     ),
+  },
+};
+
+export const BicycleTexts = {
+  stations: {
+    numBikesAvailable: _('Tilgjengelige sykler', 'Available bikes'),
+    numDocksAvailable: _('Ledige plasser', 'Available docks'),
+    unknownDocksAvailable: _('Ukjent antall', 'Unknown'),
   },
 };

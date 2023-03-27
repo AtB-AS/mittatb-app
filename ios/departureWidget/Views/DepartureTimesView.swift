@@ -36,7 +36,7 @@ struct DepartureTimesView: View {
 
             if let url = URL(string: deepLink) {
                 Link(destination: url) {
-                    Image(systemName: "chevron.right")
+                    Image(systemName: "arrow.up.forward.app")
                         .frame(width: K.iconWidth)
                         .padding(8)
                         .foregroundColor(K.lineInformationColor)

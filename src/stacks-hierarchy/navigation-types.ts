@@ -40,7 +40,7 @@ export type RootStackParamList = {
   NotFound: undefined;
   Root_OnboardingStack: undefined;
   Root_TipsAndInformation: undefined;
-  Root_TicketAssistantStack: NavigatorScreenParams<TabNavigatorStackParams>;
+  Root_TicketAssistantStack: undefined;
   Root_TabNavigatorStack: NavigatorScreenParams<TabNavigatorStackParams>;
   Root_LocationSearchByTextScreen: Root_LocationSearchByTextScreenParams;
   Root_LocationSearchByMapScreen: Root_LocationSearchByMapScreenParams;
