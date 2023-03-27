@@ -4,11 +4,12 @@ import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Ticket
 import {SliderComponent} from '@atb/components/slider';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
-import React from 'react';
+import React, {useContext} from 'react';
 import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {StaticColorByType} from '@atb/theme/colors';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
+import TicketAssistantContext from './TicketAssistantContext';
 
 export const sliderColorMax: StaticColorByType<'background'> =
   'background_accent_2';
@@ -26,7 +27,17 @@ export const TicketAssistant_FrequencyScreen = ({
   const {t} = useTranslation();
   // Create an array of every second number from 1 to 14
   const numbers = Array.from({length: 8}, (_, i) => i * 2);
-  const [value, setValue] = React.useState(0 as number);
+  const contextValue = useContext(TicketAssistantContext);
+
+  if (!contextValue) throw new Error('Context is undefined!');
+
+  const {data, updateData} = contextValue;
+  function updateFrequency(value: number) {
+    const newData = {...data, frequency: value};
+    updateData(newData);
+    console.log('Context Data \n' + JSON.stringify(newData, null, 2));
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.backdrop}>
@@ -52,7 +63,7 @@ export const TicketAssistant_FrequencyScreen = ({
           <View style={styles.horizontalLine}>
             {numbers.map((number) => {
               return (
-                <View style={styles.numberContainer}>
+                <View key={number} style={styles.numberContainer}>
                   <ThemeText
                     key={number}
                     style={styles.number}
@@ -75,7 +86,9 @@ export const TicketAssistant_FrequencyScreen = ({
               step={1}
               tapToSeek={true}
               thumbTintColor={themeColor}
-              onValueChange={(value) => setValue(value)}
+              onValueChange={(value) => {
+                updateFrequency(value);
+              }}
             />
           </View>
           <ThemeText
@@ -83,7 +96,7 @@ export const TicketAssistant_FrequencyScreen = ({
             color={themeColor}
             style={styles.number}
           >
-            {t(TicketAssistantTexts.frequency.result({value}))}
+            {t(TicketAssistantTexts.frequency.result({value: data.frequency}))}
           </ThemeText>
         </View>
 
