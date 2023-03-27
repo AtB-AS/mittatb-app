@@ -3,14 +3,26 @@ import {StyleSheet} from '@atb/theme';
 import * as Sections from '@atb/components/sections';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
-import React from 'react';
+import React, {useContext} from 'react';
 import {Button} from '@atb/components/button';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
+import TicketAssistantContext from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 
 export const TicketAssistant_CategoryPickerScreen = () => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
+
+  const contextValue = useContext(TicketAssistantContext);
+
+  if (!contextValue) throw new Error('Context is undefined!');
+
+  const {data, updateData} = contextValue;
+  function updateCategory(value: number) {
+    const newData = {...data, category: value.toString()};
+    updateData(newData);
+    console.log('Context Data \n' + JSON.stringify(newData, null, 2));
+  }
 
   return (
     <View style={styles.container}>
@@ -47,7 +59,9 @@ export const TicketAssistant_CategoryPickerScreen = () => {
                     </ThemeText>
                     <Button
                       style={styles.chooseButton}
-                      onPress={() => {}}
+                      onPress={() => {
+                        updateCategory(index);
+                      }}
                       text={t(TicketAssistantTexts.categoryPicker.chooseButton)}
                     />
                   </View>
