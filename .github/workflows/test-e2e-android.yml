@@ -45,9 +45,8 @@ jobs:
         working-directory: e2e/appium
       # TEST TSC
       - name: tsc
-        uses: icrawl/action-tsc@v1
-        with:
-          project: e2e/appium
+        run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
+        working-directory: e2e/appium
 
       # E2E run
       - name: Run tests on Android emulator
