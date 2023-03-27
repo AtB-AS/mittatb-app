@@ -332,8 +332,8 @@ function useJourneySearchModes(
     use_flexible_on_egressMode,
   } = useRemoteConfig();
 
-  // If is DEV or QA env prioritizes local configuration
-  if ((!!JSON.parse(IS_QA_ENV || 'false') || __DEV__) && !!flexibleTransport) {
+  // Prioritizes local configurations
+  if (!!flexibleTransport) {
     return {
       accessMode: !!useFlexibleTransportOnAccessMode
         ? StreetMode.Flexible
