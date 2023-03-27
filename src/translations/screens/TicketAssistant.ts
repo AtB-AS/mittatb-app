@@ -30,6 +30,11 @@ const TicketAssistantTexts = {
       'Round trip counts as 2 times. \n' +
         'Example: To and from work 3 times a week, is 6 trips.',
     ),
+    result: (amount: {value: number}) =>
+      _(
+        `Du reiser ${amount.value} ganger i uka`,
+        `You travel ${amount.value} times a week`,
+      ),
     mainButton: _('Neste', 'Next'),
   },
   intercom: {

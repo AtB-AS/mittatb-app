@@ -11,8 +11,11 @@ import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssis
 export const themeColor: StaticColorByType<'background'> =
   'background_accent_0';
 
-export type Props = TicketAssistantScreenProps<'TicketAssistant_WelcomeScreen'>;
-export const TicketAssistant_WelcomeScreen = ({navigation}: Props) => {
+export type WelcomeScreenProps =
+  TicketAssistantScreenProps<'TicketAssistant_WelcomeScreen'>;
+export const TicketAssistant_WelcomeScreen = ({
+  navigation,
+}: WelcomeScreenProps) => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {width: windowWidth} = useWindowDimensions();

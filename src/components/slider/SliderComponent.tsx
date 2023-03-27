@@ -40,7 +40,7 @@ export function SliderComponent({
         minimumValue={minimumValue}
         maximumValue={maximumValue}
         minimumTrackTintColor={useColorBackground(minimumTrackTintColor)}
-        maximumTrackTintColor={useColor(maximumTrackTintColor)}
+        maximumTrackTintColor={useColorBackground(maximumTrackTintColor)}
         step={step}
         tapToSeek={tapToSeek}
         thumbTintColor={useColor(thumbTintColor)}
