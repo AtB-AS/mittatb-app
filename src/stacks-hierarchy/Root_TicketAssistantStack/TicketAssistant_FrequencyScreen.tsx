@@ -28,11 +28,11 @@ export const TicketAssistant_FrequencyScreen = ({
   const numbers = Array.from({length: 8}, (_, i) => i * 2);
   const [value, setValue] = React.useState(0 as number);
   return (
-    <>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}
-      >
+    <View style={styles.container}>
+      <View style={styles.backdrop}>
+        <DashboardBackground width={'100%'} height={'100%'} />
+      </View>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.mainView}>
           <ThemeText
             type={'body__primary--jumbo--bold'}
@@ -42,7 +42,11 @@ export const TicketAssistant_FrequencyScreen = ({
           >
             {t(TicketAssistantTexts.frequency.title)}
           </ThemeText>
-          <ThemeText color={themeColor} style={styles.description}>
+          <ThemeText
+            color={themeColor}
+            type={'body__secondary'}
+            style={styles.description}
+          >
             {t(TicketAssistantTexts.frequency.description)}
           </ThemeText>
           <View style={styles.horizontalLine}>
@@ -75,7 +79,7 @@ export const TicketAssistant_FrequencyScreen = ({
             />
           </View>
           <ThemeText
-            type={'body__primary--bold'}
+            type={'body__secondary'}
             color={themeColor}
             style={styles.number}
           >
@@ -94,10 +98,7 @@ export const TicketAssistant_FrequencyScreen = ({
           />
         </View>
       </ScrollView>
-      <View style={styles.backdrop}>
-        <DashboardBackground width={'100%'} height={'100%'} />
-      </View>
-    </>
+    </View>
   );
 };
 
@@ -106,6 +107,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   container: {
+    flex: 1,
     backgroundColor: theme.static.background[themeColor].background,
     width: '100%',
   },
