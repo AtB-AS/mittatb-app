@@ -197,15 +197,6 @@ export const Profile_DebugInfoScreen = () => {
           />
 
           <Sections.LinkSectionItem
-            text="Reset has read departures v2 onboarding"
-            onPress={() =>
-              storage.set(
-                StorageModelKeysEnum.HasReadDeparturesV2Onboarding,
-                JSON.stringify(false),
-              )
-            }
-          />
-          <Sections.LinkSectionItem
             text="Reset has read filter onboarding"
             onPress={() =>
               storage.set(

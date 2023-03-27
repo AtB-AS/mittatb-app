@@ -2,12 +2,11 @@ import {StopPlace} from '@atb/api/types/departures';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {DeparturesStackProps} from './navigation-types';
 import {NearbyStopPlacesScreenComponent} from '@atb/nearby-stop-places';
 import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {useShouldShowDeparturesOnboarding} from './use-should-show-departures-onboarding';
 
 type Props = DeparturesStackProps<'Departures_NearbyStopPlacesScreen'>;
 
@@ -19,13 +18,6 @@ export const Departures_NearbyStopPlacesScreen = ({
   const {t} = useTranslation();
 
   const {leftButton} = useServiceDisruptionSheet();
-
-  const shouldShowDeparturesOnboarding = useShouldShowDeparturesOnboarding();
-  useEffect(() => {
-    if (shouldShowDeparturesOnboarding) {
-      navigation.navigate('Departures_OnboardingScreen');
-    }
-  }, [shouldShowDeparturesOnboarding]);
 
   return (
     <>
