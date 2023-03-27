@@ -22,6 +22,7 @@ export const SituationOrNoticeIcon = ({
   const situations =
     'situation' in props ? [props.situation] : props.situations;
 
+  // TODO: It might be needed to check if the transport is flexible and shows a yellow icon (warning)
   const svg = getSvgForMostCriticalSituationOrNotice(
     situations,
     notices,
