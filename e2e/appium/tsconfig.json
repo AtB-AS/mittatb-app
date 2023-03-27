@@ -2,6 +2,7 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "module": "commonjs",
+    "skipLibCheck": true,
     "types": [
       "node",
       "@wdio/globals/types",

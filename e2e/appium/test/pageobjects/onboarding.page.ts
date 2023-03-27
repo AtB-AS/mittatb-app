@@ -1,21 +1,26 @@
 import Page from './page';
 import ElementHelper from '../utils/element.helper';
+import AppHelper from '../utils/app.helper';
 
 class OnboardingPage extends Page {
   /**
-   * define elements
+   * Next button
    */
   get nextButton() {
     const reqId = `//*[@resource-id="nextButton"]`;
     return $(reqId);
   }
+
+  /**
+   * Accept restrictions
+   */
   get accRestrButton() {
     const reqId = `//*[@resource-id="acceptRestrictionsButton"]`;
     return $(reqId);
   }
 
   /**
-   * define or overwrite page methods
+   * Deny use of location
    */
   async denyLocation() {
     await ElementHelper.waitForElement(
@@ -28,17 +33,19 @@ class OnboardingPage extends Page {
       )
       .click();
   }
+
+  /**
+   * Tap through the onboarding
+   */
   async skipOnboarding() {
     await ElementHelper.waitForElement('id', 'nextButton');
     await this.nextButton.click();
+    await AppHelper.pause(2000);
     await ElementHelper.waitForElement('id', 'nextButton');
     await this.nextButton.click();
     await ElementHelper.waitForElement('id', 'acceptRestrictionsButton');
     await this.accRestrButton.click();
     await this.denyLocation();
-  }
-  async open() {
-    return super.open();
   }
 }
 

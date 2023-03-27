@@ -2,22 +2,37 @@ import ElementHelper from './element.helper';
 
 const screenshotsFolder: string = './screenshots';
 
+/**
+ * Different helper methods related to the app in general
+ */
 class AppHelper {
+  /**
+   * Launch app
+   */
   async launchApp() {
     await driver.launchApp();
     await this.pause(5000);
   }
+
+  /***
+   * Pause in ms
+   * @param ms: how long to pause in ms
+   */
   async pause(ms: number = 500) {
     await driver.pause(ms);
   }
-  async back() {
-    const backId = `//*[@resource-id="lhb"]`;
-    await $(backId).click();
-    await this.pause(2000);
-  }
+
+  /**
+   * Take a screenshot
+   * @param fileName: The filename as <filename>.png
+   */
   async screenshot(fileName: string) {
     await driver.saveScreenshot(`${screenshotsFolder}/${fileName}.png`);
   }
+
+  /**
+   * Scroll down with default scroll parameters
+   */
   async scrollDown() {
     await driver.touchAction([
       {action: 'longPress', x: 0, y: 1000},
@@ -25,6 +40,10 @@ class AppHelper {
       'release',
     ]);
   }
+
+  /**
+   * Scroll up with default scroll parameters
+   */
   async scrollUp() {
     await driver.touchAction([
       {action: 'longPress', x: 0, y: 10},
@@ -32,6 +51,11 @@ class AppHelper {
       'release',
     ]);
   }
+
+  /**
+   * Scroll down until given id is visisble
+   * @param id: id to scroll to
+   */
   async scrollDownUntilId(id: string) {
     let elem = await ElementHelper.getElement(id);
     let j = 0;
@@ -42,6 +66,11 @@ class AppHelper {
     }
     await expect(elem).toBeDisplayed({wait: 200, interval: 100});
   }
+
+  /**
+   * Scroll up until given id is visisble
+   * @param id: id to scroll to
+   */
   async scrollUpUntilId(id: string) {
     let elem = await ElementHelper.getElement(id);
     let j = 0;
