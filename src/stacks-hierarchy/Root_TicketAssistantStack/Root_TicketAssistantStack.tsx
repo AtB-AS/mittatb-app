@@ -8,6 +8,7 @@ import {PageIndicator} from '@atb/components/page-indicator';
 import {StyleSheet} from '@atb/theme';
 
 import {StaticColorByType} from '@atb/theme/colors';
+
 import {
   WelcomeScreenProps,
   TicketAssistant_WelcomeScreen,
