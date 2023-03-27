@@ -87,7 +87,6 @@ export const defaultRemoteConfig: RemoteConfig = {
     },
   }),
   enable_realtime_map: false,
-  //Bachelor
   enable_ticketing_assistant: false,
   enable_tips_and_information: false,
 };
