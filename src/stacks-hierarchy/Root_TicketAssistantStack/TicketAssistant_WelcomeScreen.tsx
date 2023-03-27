@@ -23,7 +23,7 @@ export const TicketAssistant_WelcomeScreen = ({navigation}: Props) => {
     >
       <View style={styles.mainView}>
         <ThemeText
-          type={'body__primary--jumbo--bold'}
+          type="body__primary--jumbo--bold"
           style={styles.header}
           color={themeColor}
           accessibilityLabel={t(TicketAssistantTexts.welcome.titleA11yLabel)}

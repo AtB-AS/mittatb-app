@@ -34,12 +34,12 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
           {TipsAndInformationTexts.tips.map(({title, tip}, index) => (
             <Sections.ExpandableSectionItem
               key={index}
-              textType={'body__primary--bold'}
+              textType="body__primary--bold"
               text={t(title)}
               showIconText={false}
               expandContent={
                 <ThemeText
-                  type={'body__tertiary'}
+                  type="body__tertiary"
                   style={styles.expandedContent}
                   isMarkdown={true}
                 >
@@ -49,13 +49,13 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
             />
           ))}
           <Sections.ExpandableSectionItem
-            textType={'body__primary--bold'}
+            textType="body__primary--bold"
             text={t(TipsAndInformationTexts.ticketAssistantTip.title)}
             showIconText={false}
             expandContent={
               <View>
                 <ThemeText
-                  type={'body__tertiary'}
+                  type="body__tertiary"
                   style={styles.expandedContent}
                   isMarkdown={true}
                 >
