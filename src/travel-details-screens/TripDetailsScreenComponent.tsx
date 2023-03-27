@@ -31,6 +31,7 @@ import analytics from '@react-native-firebase/analytics';
 import {canSellCollabTicket} from '@atb/travel-details-screens/utils';
 import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {secondsBetween} from '@atb/utils/date';
+import {AnyMode} from '@atb/components/icon-box';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -71,7 +72,7 @@ export const TripDetailsScreenComponent = ({
   const tripPatternLegs = tripPattern?.legs.map((leg) => {
     return {
       ...leg,
-      mode: !!leg.bookingArrangements ? 'flex' : leg.mode,
+      mode: (!!leg.bookingArrangements ? 'flex' : leg.mode) as AnyMode,
     };
   });
 
@@ -99,12 +100,12 @@ export const TripDetailsScreenComponent = ({
         header={
           tripPatternLegs && (
             <CompactTravelDetailsMap
-              mapLegs={tripPatternLegs as MapLeg[]}
+              mapLegs={tripPatternLegs}
               fromPlace={tripPatternLegs[0].fromPlace}
               toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
               onExpand={() => {
                 onPressDetailsMap({
-                  legs: tripPatternLegs as MapLeg[],
+                  legs: tripPatternLegs,
                   fromPlace: tripPatternLegs[0].fromPlace,
                   toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
                 });
