@@ -3,28 +3,30 @@ import ElementHelper from '../utils/element.helper';
 
 class SearchPage extends Page {
   /**
-   * define elements
+   * The input field for searching
    */
   get locationInput() {
     const reqId = `//*[@resource-id="locationSearchInput"]`;
     return $(reqId);
   }
+
+  /**
+   * Return the first search result
+   */
   get searchResult() {
     const reqId = `//*[@resource-id="locationSearchItem0"]`;
     return $(reqId);
   }
 
   /**
-   * define or overwrite page methods
+   * Search for a location
+   * @param: location: location to search for
    */
   async setSearchLocation(location: string) {
     await ElementHelper.waitForElement('id', 'locationSearchInput');
     await this.locationInput.setValue(location);
     await ElementHelper.waitForElement('id', 'locationSearchItem0');
     await this.searchResult.click();
-  }
-  async open() {
-    return super.open();
   }
 }
 

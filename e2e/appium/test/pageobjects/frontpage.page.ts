@@ -2,22 +2,19 @@ import Page from './page';
 
 class FrontPagePage extends Page {
   /**
-   * define elements
+   * Search from
    */
   get searchFrom() {
     const reqId = `//*[@resource-id="searchFromButton"]`;
     return $(reqId);
   }
+
+  /**
+   * Search to
+   */
   get searchTo() {
     const reqId = `//*[@resource-id="searchToButton"]`;
     return $(reqId);
-  }
-
-  /**
-   * define or overwrite page methods
-   */
-  async open() {
-    return super.open();
   }
 }
 

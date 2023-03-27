@@ -1,3 +1,11 @@
+# TODO Missing test-ids:
+- id for legNumber (earlier trLeg > fLeg > ...) to find number of legs and last leg index - including 2+/3+/etc
+    > add in tests
+- Change from 'nextButton' to 'nextButtonOnboardingWelcome' in 'src/stacks-hierarchy/Root_OnboardingStack/Onboarding_WelcomeScreen.tsx'
+- Change from 'nextButton' to 'nextButtonIntercomOnboarding' in 'src/stacks-hierarchy/Root_OnboardingStack/Onboarding_IntercomInfoScreen.tsx'
+    > and change in test code afterwards
+- Change 'mapPage' > 'mapTab' and update NavigationHelper
+
 
 # If reactivecircus/android-emulator-runner@v2.27.0 is not working:
 - try api 29 (https://github.com/ReactiveCircus/android-emulator-runner/issues/161)
