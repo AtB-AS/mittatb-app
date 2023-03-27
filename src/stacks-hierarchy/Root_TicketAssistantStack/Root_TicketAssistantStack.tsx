@@ -8,6 +8,7 @@ import {PageIndicator} from '@atb/components/page-indicator';
 import {StyleSheet} from '@atb/theme';
 
 import {StaticColorByType} from '@atb/theme/colors';
+
 import {
   WelcomeScreenProps,
   TicketAssistant_WelcomeScreen,
@@ -20,7 +21,7 @@ import {TicketAssistant_ZonePickerScreen} from './TicketAssistant_ZonePickerScre
 import {TicketAssistant_SummaryScreen} from './TicketAssistant_SummaryScreen';
 
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {TicketAssistantProvider} from './TicketAssistantContext';
 
 const Tab = createMaterialTopTabNavigator<TicketAssistantStackParams>();
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -30,7 +31,7 @@ export const Root_TicketAssistantStack = ({navigation}: WelcomeScreenProps) => {
   const [activeTab, setActiveTab] = useState(0);
   const [previousTab, setPreviousTab] = useState<any>();
   return (
-    <>
+    <TicketAssistantProvider>
       {activeTab !== 0 ? (
         <FullScreenHeader
           leftButton={{
@@ -81,7 +82,7 @@ export const Root_TicketAssistantStack = ({navigation}: WelcomeScreenProps) => {
           />
         </Tab.Navigator>
       </SafeAreaView>
-    </>
+    </TicketAssistantProvider>
   );
 };
 
