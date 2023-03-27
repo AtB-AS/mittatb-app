@@ -16,7 +16,7 @@ export const sliderColorMax: StaticColorByType<'background'> =
 export const sliderColorMin: StaticColorByType<'background'> =
   'background_accent_3';
 
-export type FrequencyScreenProps =
+type FrequencyScreenProps =
   TicketAssistantScreenProps<'TicketAssistant_FrequencyScreen'>;
 
 export const TicketAssistant_FrequencyScreen = ({
