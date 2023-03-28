@@ -1,4 +1,3 @@
-import {Scooter} from '@atb/assets/svg/mono-icons/transportation-entur';
 import React from 'react';
 import {Button} from '@atb/components/button';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
@@ -6,6 +5,7 @@ import {MapFilterSheet} from '@atb/components/map/components/filter/MapFilterShe
 import {MapFilterType} from '@atb/components/map/types';
 import {StyleSheet} from '@atb/theme';
 import {shadows} from '@atb/components/map';
+import {Filter} from '@atb/assets/svg/mono-icons/map';
 
 type MapFilterProps = {
   onFilterChange: (filter: MapFilterType) => void;
@@ -30,7 +30,7 @@ export const MapFilter = ({onFilterChange}: MapFilterProps) => {
       interactiveColor={'interactive_2'}
       accessibilityRole="button"
       onPress={onPress}
-      leftIcon={{svg: Scooter}}
+      leftIcon={{svg: Filter}}
     />
   );
 };
