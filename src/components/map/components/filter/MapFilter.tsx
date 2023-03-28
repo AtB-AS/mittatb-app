@@ -5,7 +5,7 @@ import {MapFilterSheet} from '@atb/components/map/components/filter/MapFilterShe
 import {MapFilterType} from '@atb/components/map/types';
 import {StyleSheet} from '@atb/theme';
 import {shadows} from '@atb/components/map';
-import {Filter} from '@atb/assets/svg/mono-icons/map';
+import {Filter} from '@atb/assets/svg/mono-icons/actions';
 
 type MapFilterProps = {
   onFilterChange: (filter: MapFilterType) => void;
