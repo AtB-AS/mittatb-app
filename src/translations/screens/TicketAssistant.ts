@@ -78,11 +78,33 @@ const TicketAssistantTexts = {
       ),
     mainButton: _('Neste', 'Next'),
   },
-  intercom: {
-    title: _('Bidra til å gjøre appen bedre', 'Help us make the app better'),
-    description: _(
-      'Vi ønsker dine tilbakemeldinger for å gjøre appen bedre. Dette gjør du enklest i chatten i høyre hjørne. Chatten er anonym.',
-      'We appreciate your feedback to make the app better. Use the chat in the upper right corner. The chat is anonymous.',
+  duration: {
+    title: (amount: {value: number}) =>
+      _(
+        `Hvor langt frem i tid skal du reise ${amount.value} ganger i uka?`,
+        `How far in advance do you want to travel ${amount.value} times a week?`,
+      ),
+    datePickerHeader: _('Frem til', 'Until'),
+    minLimit: _('1 dag', '1 day'),
+    maxLimit: _('180 dager +', '180 days +'),
+    resultMonths: (amount: {value: number}) =>
+      _(
+        `Du skal reise i ${amount.value} mnd.`,
+        `You will travel for ${amount.value} months.`,
+      ),
+    resultWeeks: (amount: {value: number}) =>
+      _(
+        `Du skal reise i ${amount.value} uke(r).`,
+        `You will travel for ${amount.value} week(s).`,
+      ),
+    resultDays: (amount: {value: number}) =>
+      _(
+        `Du skal reise i ${amount.value} dag(er).`,
+        `You will travel for ${amount.value} day(s).`,
+      ),
+    resultMoreThan180Days: _(
+      'Du skal reise i mer enn et halvt år.',
+      'You will travel for more than half a year.',
     ),
     mainButton: _('Neste', 'Next'),
   },
