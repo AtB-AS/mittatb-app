@@ -8,6 +8,8 @@ import {useUserMapFilters} from '@atb/components/map/hooks/use-map-filter';
 import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {Scooter} from '@atb/assets/svg/mono-icons/transportation-entur';
 import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
+import {StyleSheet} from '@atb/theme';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 
 type MapFilterSheetProps = {
   close: () => void;
@@ -18,6 +20,7 @@ export const MapFilterSheet = ({
   onFilterChange,
 }: MapFilterSheetProps) => {
   const {t} = useTranslation();
+  const style = useStyle();
   const {getMapFilter, setMapFilter} = useUserMapFilters();
   const [initialFilter, setInitialFilter] = useState<MapFilterType>();
 
@@ -56,9 +59,9 @@ export const MapFilterSheet = ({
   };
 
   return (
-    <BottomSheetContainer maxHeightValue={0.5} fullHeight>
+    <BottomSheetContainer>
       <ScreenHeaderWithoutNavigation
-        title="Filter"
+        title=" "
         color="background_1"
         leftButton={{
           text: t(ScreenHeaderTexts.headerButton.close.text),
@@ -66,17 +69,17 @@ export const MapFilterSheet = ({
           onPress: close,
         }}
       />
-      <View>
+      <View style={style.container}>
         <Section withPadding>
           <ToggleSectionItem
             leftIcon={Scooter}
-            text={'Sparkesykkel'}
+            text={t(MobilityTexts.scooter)}
             value={initialFilter?.vehicles?.showVehicles}
             onValueChange={onScooterToggle}
           />
           <ToggleSectionItem
             leftIcon={Bicycle}
-            text={'Sykkel'}
+            text={t(MobilityTexts.bicycle)}
             value={initialFilter?.stations?.showCityBikeStations}
             onValueChange={onBicycleToggle}
           />
@@ -85,3 +88,9 @@ export const MapFilterSheet = ({
     </BottomSheetContainer>
   );
 };
+
+const useStyle = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    marginBottom: theme.spacings.large,
+  },
+}));
