@@ -105,30 +105,29 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           />
         )}
         <View style={styles.selectionLinks}>
-          {error && (
-            <MessageBox
-              type="error"
-              title={t(PurchaseOverviewTexts.errorMessageBox.title)}
-              message={
-                isEmptyOffer
-                  ? t(
-                      PurchaseOverviewTexts.errorMessageBox.productUnavailable(
-                        getReferenceDataName(preassignedFareProduct, language),
-                      ),
-                    )
-                  : t(PurchaseOverviewTexts.errorMessageBox.message)
-              }
-              onPressConfig={
-                !isEmptyOffer
-                  ? {
-                      action: refreshOffer,
-                      text: t(dictionary.retry),
-                    }
-                  : undefined
-              }
-              style={styles.selectionComponent}
-            />
-          )}
+          {error &&
+            (isEmptyOffer ? (
+              <MessageBox
+                type="info"
+                message={t(
+                  PurchaseOverviewTexts.errorMessageBox.productUnavailable(
+                    getReferenceDataName(preassignedFareProduct, language),
+                  ),
+                )}
+                onPressConfig={{
+                  action: refreshOffer,
+                  text: t(dictionary.retry),
+                }}
+                style={styles.selectionComponent}
+              />
+            ) : (
+              <MessageBox
+                type="error"
+                title={t(PurchaseOverviewTexts.errorMessageBox.title)}
+                message={t(PurchaseOverviewTexts.errorMessageBox.message)}
+                style={styles.selectionComponent}
+              />
+            ))}
 
           <ProductSelection
             preassignedFareProduct={preassignedFareProduct}
