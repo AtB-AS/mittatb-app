@@ -3,7 +3,6 @@ import Bugsnag from '@bugsnag/react-native';
 import {Platform} from 'react-native';
 
 export enum StorageModelKeysEnum {
-  HasReadDeparturesV2Onboarding = '@ATB_has_read_departures_v2_onboarding',
   HasReadTravelSearchFilterOnboarding = '@ATB_has_read_travel_search_filter_onboarding',
   HasReadScooterOnboarding = '@ATB_has_read_scooter_onboarding',
   EnableTravelSearchFiltersDebugOverride = '@ATB_enable_travel_search_filters_debug_override',
@@ -13,6 +12,8 @@ export enum StorageModelKeysEnum {
   EnableCityBikesInMapDebugOverride = 'ATB_enable_city_bikes_in_map_debug_override',
   EnableRealtimeMapDebugOverride = '@ATB_enable_realtime_map_debug_override',
   EnableMapDebugOverride = '@ATB_enable_map_debug_override',
+  EnableTicketingAssistantOverride = '@ATB_enable_ticketing_assistant_override',
+  EnableTipsAndInformationOverride = '@ATB_enable_tips_and_information_override',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;

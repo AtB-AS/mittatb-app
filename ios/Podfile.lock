@@ -872,11 +872,11 @@ PODS:
   - Libuv-gRPC/Implementation (0.0.10):
     - Libuv-gRPC/Interface (= 0.0.10)
   - Libuv-gRPC/Interface (0.0.10)
-  - MapboxCommon (23.2.1)
+  - MapboxCommon (23.2.3)
   - MapboxCoreMaps (10.10.0):
     - MapboxCommon (~> 23.2)
-  - MapboxMaps (10.10.1):
-    - MapboxCommon (= 23.2.1)
+  - MapboxMaps (10.10.2):
+    - MapboxCommon (= 23.2.3)
     - MapboxCoreMaps (= 10.10.0)
     - MapboxMobileEvents (= 1.0.10)
     - Turf (~> 2.0)
@@ -1610,9 +1610,9 @@ SPEC CHECKSUMS:
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
-  MapboxCommon: 235bb9c27a8985d982e17f216795b1f7ab526782
+  MapboxCommon: e7948335faacbe6f8b9b115511fd0dd0354bf565
   MapboxCoreMaps: 4075a9e415b9b3ab6229d09623fef5f791826a5b
-  MapboxMaps: 0c2f7722016bc56aa27b5e6bcf72ae4df7a98670
+  MapboxMaps: d8cf7d214d94ec18790c338f3a3fe59dd4048e97
   MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c

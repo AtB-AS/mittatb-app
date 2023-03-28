@@ -218,6 +218,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
         <>
           <QuaySection
             quay={item}
+            isLoading={state.isLoading}
             departuresPerQuay={NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW}
             data={state.data}
             didLoadingDataFail={didLoadingDataFail}

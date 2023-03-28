@@ -136,6 +136,27 @@ export type TripsQuery = {
           predictionInaccurate: boolean;
           quay: {name: string};
         }>;
+        bookingArrangements?: {
+          bookingMethods?: Array<Types.BookingMethod>;
+          latestBookingTime?: any;
+          bookingNote?: string;
+          bookWhen?: Types.PurchaseWhen;
+          minimumBookingPeriod?: string;
+          bookingContact?: {
+            contactPerson?: string;
+            email?: string;
+            url?: string;
+            phone?: string;
+            furtherDetails?: string;
+          };
+        };
+        datedServiceJourney?: {
+          estimatedCalls?: Array<{
+            actualDepartureTime?: any;
+            predictionInaccurate: boolean;
+            quay: {name: string};
+          }>;
+        };
       }>;
     }>;
   };

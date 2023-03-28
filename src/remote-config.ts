@@ -31,7 +31,6 @@ export type RemoteConfig = {
   favourite_departures_poll_interval: number;
   new_favourites_info_url: string;
   enable_departures_v2_as_default: boolean;
-  enable_departures_v2_onboarding: boolean;
   enable_travel_search_filters: boolean;
   enable_new_travel_search: boolean;
   enable_from_travel_search_to_ticket: boolean;
@@ -40,6 +39,12 @@ export type RemoteConfig = {
   enable_vehicle_operator_logo: boolean;
   default_map_filter: string;
   enable_realtime_map: boolean;
+  enable_ticketing_assistant: boolean;
+  enable_tips_and_information: boolean;
+  enable_flexible_transport: boolean;
+  use_flexible_on_accessMode: boolean;
+  use_flexible_on_directMode: boolean;
+  use_flexible_on_egressMode: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -72,7 +77,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   favourite_departures_poll_interval: 30000,
   new_favourites_info_url: '',
   enable_departures_v2_as_default: false,
-  enable_departures_v2_onboarding: false,
   enable_travel_search_filters: false,
   enable_new_travel_search: false,
   enable_from_travel_search_to_ticket: false,
@@ -85,6 +89,12 @@ export const defaultRemoteConfig: RemoteConfig = {
     },
   }),
   enable_realtime_map: false,
+  enable_ticketing_assistant: false,
+  enable_tips_and_information: false,
+  enable_flexible_transport: false,
+  use_flexible_on_accessMode: true,
+  use_flexible_on_directMode: true,
+  use_flexible_on_egressMode: true,
 };
 
 export function getConfig(): RemoteConfig {
@@ -168,10 +178,6 @@ export function getConfig(): RemoteConfig {
     values['enable_departures_v2_as_default']?.asBoolean() ??
     defaultRemoteConfig.enable_departures_v2_as_default;
 
-  const enable_departures_v2_onboarding =
-    values['enable_departures_v2_onboarding']?.asBoolean() ??
-    defaultRemoteConfig.enable_departures_v2_onboarding;
-
   const enable_travel_search_filters =
     values['enable_travel_search_filters']?.asBoolean() ??
     defaultRemoteConfig.enable_travel_search_filters;
@@ -204,6 +210,30 @@ export function getConfig(): RemoteConfig {
     values['enable_realtime_map']?.asBoolean() ??
     defaultRemoteConfig.enable_realtime_map;
 
+  const enable_ticketing_assistant =
+    values['enable_ticketing_assistant']?.asBoolean() ??
+    defaultRemoteConfig.enable_ticketing_assistant;
+
+  const enable_tips_and_information =
+    values['enable_tips_and_information']?.asBoolean() ??
+    defaultRemoteConfig.enable_tips_and_information;
+
+  const enable_flexible_transport =
+    values['enable_flexible_transport']?.asBoolean() ??
+    defaultRemoteConfig.enable_flexible_transport;
+
+  const use_flexible_on_accessMode =
+    values['use_flexible_on_accessMode']?.asBoolean() ??
+    defaultRemoteConfig.use_flexible_on_accessMode;
+
+  const use_flexible_on_directMode =
+    values['use_flexible_on_directMode']?.asBoolean() ??
+    defaultRemoteConfig.use_flexible_on_directMode;
+
+  const use_flexible_on_egressMode =
+    values['use_flexible_on_egressMode']?.asBoolean() ??
+    defaultRemoteConfig.use_flexible_on_egressMode;
+
   return {
     enable_network_logging,
     enable_ticketing,
@@ -234,7 +264,6 @@ export function getConfig(): RemoteConfig {
     favourite_departures_poll_interval,
     new_favourites_info_url,
     enable_departures_v2_as_default,
-    enable_departures_v2_onboarding,
     enable_travel_search_filters,
     enable_new_travel_search,
     enable_from_travel_search_to_ticket,
@@ -243,6 +272,12 @@ export function getConfig(): RemoteConfig {
     enable_vehicle_operator_logo,
     default_map_filter,
     enable_realtime_map,
+    enable_ticketing_assistant,
+    enable_tips_and_information,
+    enable_flexible_transport,
+    use_flexible_on_accessMode,
+    use_flexible_on_directMode,
+    use_flexible_on_egressMode,
   };
 }
 
