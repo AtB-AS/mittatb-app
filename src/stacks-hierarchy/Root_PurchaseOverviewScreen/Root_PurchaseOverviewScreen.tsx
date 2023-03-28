@@ -114,10 +114,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                     getReferenceDataName(preassignedFareProduct, language),
                   ),
                 )}
-                onPressConfig={{
-                  action: refreshOffer,
-                  text: t(dictionary.retry),
-                }}
                 style={styles.selectionComponent}
               />
             ) : (
@@ -125,6 +121,10 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 type="error"
                 title={t(PurchaseOverviewTexts.errorMessageBox.title)}
                 message={t(PurchaseOverviewTexts.errorMessageBox.message)}
+                onPressConfig={{
+                  action: refreshOffer,
+                  text: t(dictionary.retry),
+                }}
                 style={styles.selectionComponent}
               />
             ))}
