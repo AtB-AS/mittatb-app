@@ -48,6 +48,10 @@ import FlexibleTransportContactDetails, {
   ContactDetails as ContactDetails,
 } from './FlexibeTransportContactDetails';
 import {usePreferences} from '@atb/preferences';
+import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
+import {Button} from '@atb/components/button';
+import {Map} from '@atb/assets/svg/mono-icons/map';
+import {VehiclePosition} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -57,8 +61,10 @@ type TripSectionProps = {
   interchangeDetails?: InterchangeDetails;
   leg: Leg;
   testID?: string;
+  onExpand?(): void;
   onPressDeparture: TripProps['onPressDeparture'];
   onPressQuay: TripProps['onPressQuay'];
+  realtimePosition?: VehiclePosition;
 };
 
 export type InterchangeDetails = {
@@ -74,8 +80,10 @@ const TripSection: React.FC<TripSectionProps> = ({
   interchangeDetails,
   leg,
   testID,
+  onExpand,
   onPressDeparture,
   onPressQuay,
+  realtimePosition,
 }) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
@@ -99,6 +107,8 @@ const TripSection: React.FC<TripSectionProps> = ({
   const {startTimes, endTimes} = mapLegToTimeValues(leg);
 
   const notices = getNoticesForLeg(leg);
+
+  const realtimeMapEnabled = useRealtimeMapEnabled();
 
   const lastPassedStop = leg.serviceJourneyEstimatedCalls
     ?.filter((a) => !a.predictionInaccurate && a.actualDepartureTime)
@@ -180,6 +190,17 @@ const TripSection: React.FC<TripSectionProps> = ({
             <ThemeText style={style.legLineName}>{getLineName(leg)}</ThemeText>
           </TripRow>
         )}
+        {realtimeMapEnabled && realtimePosition && onExpand ? (
+          <TripRow>
+            <Button
+              type="pill"
+              leftIcon={{svg: Map}}
+              text={t(TripDetailsTexts.trip.leg.live)}
+              interactiveColor="interactive_3"
+              onPress={onExpand}
+            />
+          </TripRow>
+        ) : null}
         {leg.situations.map((situation) => (
           <TripRow rowLabel={<SituationOrNoticeIcon situation={situation} />}>
             <SituationMessageBox noStatusIcon={true} situation={situation} />

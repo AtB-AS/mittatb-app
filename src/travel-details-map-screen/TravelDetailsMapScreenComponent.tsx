@@ -20,9 +20,11 @@ import {StyleSheet, View} from 'react-native';
 import MapLabel from './components/MapLabel';
 import MapRoute from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
+import {VehiclePosition} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
+  vehiclePosition?: VehiclePosition;
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
 };
@@ -33,6 +35,7 @@ type Props = TravelDetailsMapScreenParams & {
 
 export const TravelDetailsMapScreenComponent = ({
   legs,
+  vehiclePosition,
   toPlace,
   fromPlace,
   onPressBack,

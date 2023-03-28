@@ -12,10 +12,13 @@ import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {isSignificantFootLegWalkOrWaitTime} from '@atb/travel-details-screens/utils';
+import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
+import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
 
 export type TripProps = {
   tripPattern: TripPattern;
   error?: AxiosError;
+  onPressDetailsMap: (params: TravelDetailsMapScreenParams) => void;
   onPressDeparture: (
     items: ServiceJourneyDeparture[],
     activeItemIndex: number,
@@ -25,6 +28,7 @@ export type TripProps = {
 const Trip: React.FC<TripProps> = ({
   tripPattern,
   error,
+  onPressDetailsMap,
   onPressDeparture,
   onPressQuay,
 }) => {
@@ -32,12 +36,24 @@ const Trip: React.FC<TripProps> = ({
   const legs = tripPattern.legs.filter((leg, i) =>
     isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
   );
+
+  const ids = tripPattern.legs
+    .map((leg) => leg.serviceJourney?.id)
+    .filter(Boolean) as string[];
+  const serviceJourneyVehicles = useGetServiceJourneyVehicles(ids);
+
   return (
     <View style={styles.container}>
       <TripMessages tripPattern={tripPattern} error={error} />
       <View style={styles.trip}>
         {tripPattern &&
           legs.map((leg, index) => {
+            const tripVehiclePosition =
+              serviceJourneyVehicles.vehiclePositions?.find(
+                (vehicle) =>
+                  vehicle.serviceJourney?.id === leg.serviceJourney?.id,
+              );
+
             return (
               <TripSection
                 key={index}
@@ -51,6 +67,16 @@ const Trip: React.FC<TripProps> = ({
                 )}
                 leg={leg}
                 testID={'legContainer' + index}
+                realtimePosition={tripVehiclePosition}
+                onExpand={() =>
+                  onPressDetailsMap({
+                    legs: tripPattern.legs,
+                    fromPlace: tripPattern.legs[0].fromPlace,
+                    toPlace:
+                      tripPattern.legs[tripPattern.legs.length - 1].toPlace,
+                    vehiclePosition: tripVehiclePosition,
+                  })
+                }
                 onPressDeparture={onPressDeparture}
                 onPressQuay={onPressQuay}
               />

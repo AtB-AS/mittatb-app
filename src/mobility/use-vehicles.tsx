@@ -12,7 +12,6 @@ import {
   toFeaturePoint,
   toFeaturePoints,
 } from '@atb/components/map/utils';
-import {getVehicles} from '@atb/api/vehicles';
 import {useIsVehiclesEnabled} from '@atb/mobility/use-vehicles-enabled';
 import {
   MapSelectionActionType,
@@ -24,6 +23,7 @@ import {extend, getRadius, isVehicle, needsReload} from '@atb/mobility/utils';
 import {ScooterSheet} from '@atb/mobility/components/ScooterSheet';
 import {RegionPayload} from '@rnmapbox/maps';
 import {useUserMapFilters} from '@atb/components/map/hooks/use-map-filter';
+import {getVehicles} from '@atb/api/mobility';
 
 const MIN_ZOOM_LEVEL = 13.5;
 const BUFFER_DISTANCE_IN_METERS = 500;

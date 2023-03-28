@@ -1,29 +1,26 @@
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {client} from '@atb/api/index';
-import {
-  GetVehiclesQuery,
-  GetVehiclesQueryVariables,
-} from '@atb/api/types/generated/VehiclesQuery';
 import {stringifyUrl} from '@atb/api/utils';
 import qs from 'query-string';
 import {AxiosRequestConfig} from 'axios';
+import {GetServiceJourneyVehicles} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
 
-type GetVehiclesOpts = Pick<AxiosRequestConfig, 'signal'>;
-
-export const getVehicles = (
-  {lat, lon, range}: GetVehiclesQueryVariables,
-  opts?: GetVehiclesOpts,
-) => {
-  const url = '/bff/v2/mobility/vehicles';
+export const getServiceJourneyVehicles = async (
+  serviceJourneyIds?: string[],
+  opts?: AxiosRequestConfig,
+): Promise<GetServiceJourneyVehicles | undefined> => {
+  if (!serviceJourneyIds?.length) {
+    return;
+  }
+  const url = '/bff/v2/vehicles/service-journey';
   const query = qs.stringify({
-    lat,
-    lon,
-    range: Math.ceil(range),
-    formFactors: FormFactor.Scooter, //TODO: Read from variables
+    serviceJourneyIds,
   });
-  return client
-    .get<GetVehiclesQuery>(stringifyUrl(url, query), {
+  const result = await client.get<GetServiceJourneyVehicles>(
+    stringifyUrl(url, query),
+    {
       ...opts,
-    })
-    .then((res) => res.data.vehicles ?? []);
+    },
+  );
+
+  return result.data;
 };
