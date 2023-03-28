@@ -17,7 +17,7 @@ import RNDateTimePicker from '@react-native-community/datetimepicker';
 import {useLocaleContext} from '@atb/LocaleProvider';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgDate from '@atb/assets/svg/mono-icons/time/Date';
-import {parseISO} from 'date-fns';
+import {format, parseISO} from 'date-fns';
 import {dateToDateString} from '@atb/components/sections/items/date-input/utils';
 type DurationProps =
   TicketAssistantScreenProps<'TicketAssistant_DurationScreen'>;
@@ -27,6 +27,7 @@ const durations = [1, 7, 14, 21, 30, 60, 90, 120, 150, 180];
 
 export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   const [date, setDate] = useState(dateToDateString(currentDate));
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
@@ -92,7 +93,11 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
           <View style={styles.durationPickerContainer}>
             <View style={styles.topPart}>
               <View style={styles.datePickerHeader}>
-                <ThemeIcon svg={SvgDate} size={'large'} />
+                <ThemeIcon
+                  svg={SvgDate}
+                  size={'large'}
+                  style={styles.dateIcon}
+                />
                 <ThemeText
                   type={'body__primary--bold'}
                   style={styles.sliderText}
@@ -102,27 +107,57 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                 </ThemeText>
               </View>
               <View style={styles.datePicker}>
-                <RNDateTimePicker
-                  value={parseISO(date)}
-                  mode="date"
-                  locale={locale.localeString}
-                  style={{
-                    ...style,
-                    alignItems: 'flex-end',
-                    justifyContent: 'flex-end',
-                    alignSelf: 'flex-end',
-                  }}
-                  textColor={'primary'}
-                  display="compact"
-                  testID="dateInput"
-                  minimumDate={new Date()}
-                  onChange={(_, date) => {
-                    if (date) {
-                      setDate(dateToDateString(date));
-                      updateDuration(dateDiffInDays(currentDate, date), true);
-                    }
-                  }}
-                />
+                {Platform.OS === 'ios' ? (
+                  <RNDateTimePicker
+                    value={parseISO(date)}
+                    mode="date"
+                    locale={locale.localeString}
+                    style={{
+                      ...style,
+                      alignItems: 'flex-end',
+                      justifyContent: 'flex-end',
+                      alignSelf: 'flex-end',
+                    }}
+                    textColor={'primary'}
+                    display="compact"
+                    testID="dateInput"
+                    minimumDate={new Date()}
+                    onChange={(_, date) => {
+                      if (date) {
+                        setDate(dateToDateString(date));
+                        updateDuration(dateDiffInDays(currentDate, date), true);
+                      }
+                    }}
+                  />
+                ) : (
+                  <Button
+                    style={styles.datePickerButton}
+                    interactiveColor="interactive_2"
+                    type="inline"
+                    mode="tertiary"
+                    onPress={() => setShowDatePicker(true)}
+                    text={format(parseISO(date), 'dd. MMM. yyyy')}
+                  />
+                )}
+
+                {Platform.OS === 'android' && showDatePicker && (
+                  <RNDateTimePicker
+                    value={parseISO(date)}
+                    mode="date"
+                    locale={locale.localeString}
+                    textColor={'primary'}
+                    display="default"
+                    testID="dateInput"
+                    minimumDate={new Date()}
+                    onChange={(_, date) => {
+                      setShowDatePicker(false);
+                      if (date) {
+                        setDate(dateToDateString(date));
+                        updateDuration(dateDiffInDays(currentDate, date), true);
+                      }
+                    }}
+                  />
+                )}
               </View>
             </View>
             <View style={styles.sliderContainer}>
@@ -249,6 +284,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     borderBottomColor: theme.border.primary,
     borderBottomWidth: 1,
     paddingHorizontal: theme.spacings.medium,
@@ -257,13 +293,18 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  dateIcon: {
+    marginRight: theme.spacings.xSmall,
+  },
   datePicker: {
-    alignItems: 'center',
     paddingVertical: theme.spacings.medium,
   },
   datePickerText: {
     marginLeft: theme.spacings.medium,
     textAlign: 'center',
+  },
+  datePickerButton: {
+    backgroundColor: theme.static.background.background_1.background,
   },
   sliderContainer: {
     width: '100%',
@@ -283,6 +324,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   sliderText: {
     textAlign: 'center',
+    height: '100%',
   },
   description: {
     textAlign: 'center',
