@@ -8,11 +8,12 @@ import {
 } from '@atb/components/text';
 import {MessageBox} from '@atb/components/message-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {TransportationIcon} from '@atb/components/transportation-icon';
+import {TransportationIconBox} from '@atb/components/icon-box';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
+  dictionary,
   Language,
   TranslateFunction,
   TripDetailsTexts,
@@ -42,6 +43,10 @@ import WaitSection, {WaitDetails} from './WaitSection';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {TripProps} from '@atb/travel-details-screens/components/Trip';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
+import FlexibleTransportContactDetails, {
+  ContactDetails as ContactDetails,
+} from './FlexibeTransportContactDetails';
 import {usePreferences} from '@atb/preferences';
 
 type TripSectionProps = {
@@ -74,13 +79,18 @@ const TripSection: React.FC<TripSectionProps> = ({
 }) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
+  const {open: openBottomSheet} = useBottomSheet();
   const {themeName} = useTheme();
   const {
     preferences: {debugShowSeconds},
   } = usePreferences();
 
   const isWalkSection = leg.mode === 'foot';
-  const legColor = useTransportationColor(leg.mode, leg.line?.transportSubmode);
+  const isFlexible = !!leg.bookingArrangements;
+  const legColor = useTransportationColor(
+    isFlexible ? 'flex' : leg.mode,
+    leg.line?.transportSubmode,
+  );
   const iconColor = useTransportationColor();
 
   const showFrom = !isWalkSection || !!(isFirst && isWalkSection);
@@ -93,6 +103,23 @@ const TripSection: React.FC<TripSectionProps> = ({
   const lastPassedStop = leg.serviceJourneyEstimatedCalls
     ?.filter((a) => !a.predictionInaccurate && a.actualDepartureTime)
     .pop();
+
+  const bookingDetails: ContactDetails | undefined = leg?.bookingArrangements
+    ?.bookingContact?.phone &&
+    leg.aimedEndTime && {
+      phoneNumber: leg.bookingArrangements.bookingContact.phone,
+      aimedStartTime: leg.aimedStartTime,
+    };
+
+  const openContactFlexibleTransport = (contactDetails: ContactDetails) => {
+    openBottomSheet((close, focusRef) => (
+      <FlexibleTransportContactDetails
+        close={close}
+        contactDetails={contactDetails}
+        ref={focusRef}
+      />
+    ));
+  };
 
   const sectionOutput = (
     <>
@@ -144,8 +171,8 @@ const TripSection: React.FC<TripSectionProps> = ({
               ),
             )}
             rowLabel={
-              <TransportationIcon
-                mode={leg.mode}
+              <TransportationIconBox
+                mode={!!leg.bookingArrangements ? 'flex' : leg.mode}
                 subMode={leg.line?.transportSubmode}
               />
             }
@@ -171,6 +198,25 @@ const TripSection: React.FC<TripSectionProps> = ({
               message={t(
                 TripDetailsTexts.messages.departureIsRailReplacementBus,
               )}
+            />
+          </TripRow>
+        )}
+        {bookingDetails && (
+          <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
+            <MessageBox
+              type="warning"
+              noStatusIcon={true}
+              message={t(
+                TripDetailsTexts.trip.leg.contactFlexibleTransportTitle(
+                  bookingDetails.phoneNumber,
+                ),
+              )}
+              onPressConfig={{
+                text: t(dictionary.seeMore),
+                action: () => {
+                  openContactFlexibleTransport(bookingDetails);
+                },
+              }}
             />
           </TripRow>
         )}
@@ -330,7 +376,7 @@ const WalkSection = (leg: Leg) => {
   return (
     <TripRow
       rowLabel={
-        <TransportationIcon
+        <TransportationIconBox
           mode={leg.mode}
           subMode={leg.line?.transportSubmode}
         />

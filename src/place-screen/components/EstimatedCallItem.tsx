@@ -1,7 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {getTransportModeSvg} from '@atb/components/transportation-icon';
+import {getTransportModeSvg} from '@atb/components/icon-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   CancelledDepartureTexts,
@@ -26,8 +26,8 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {isToday, parseISO} from 'date-fns';
 import {
-  useOnMarkFavouriteDepartures,
   FavouriteDepartureToggle,
+  useOnMarkFavouriteDepartures,
 } from '@atb/favorites';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';

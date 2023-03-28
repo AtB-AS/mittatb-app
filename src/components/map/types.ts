@@ -3,12 +3,13 @@ import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
 import {Feature, FeatureCollection, GeoJSON, LineString, Point} from 'geojson';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
-  Mode,
   PointsOnLink,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {RegionPayload} from '@rnmapbox/maps';
+import {AnyMode} from '@atb/components/icon-box';
+import {StationFragment} from '@atb/api/types/generated/fragments/stations';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -34,6 +35,17 @@ export type VehiclesState = {
   onFilterChange: (filter: VehiclesFilter) => void;
   onPress: (type: MapSelectionActionType) => void;
 };
+
+export type StationsState = {
+  stations: FeatureCollection<GeoJSON.Point, StationFragment>;
+  fetchStations: (
+    region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
+  ) => void;
+  isLoading: boolean;
+  onFilterChange: (filter: StationsFilter) => void;
+  onPress: (type: MapSelectionActionType) => void;
+};
+
 export type NavigateToTripSearchCallback = (
   location: GeoLocation | SearchLocation,
   destination: string,
@@ -50,6 +62,7 @@ export type NavigateToDetailsCallback = (
 export type MapProps = {
   initialLocation?: Location;
   vehicles?: VehiclesState;
+  stations?: StationsState;
 } & (
   | {
       selectionMode: 'ExploreLocation';
@@ -104,14 +117,14 @@ export type CameraFocusModeType =
     };
 
 export type MapLeg = {
-  mode?: Mode;
+  mode?: AnyMode;
   faded?: boolean;
   transportSubmode?: TransportSubmode;
   pointsOnLink?: PointsOnLink;
 };
 
 export interface MapLine extends Feature<LineString> {
-  travelType?: Mode;
+  travelType?: AnyMode;
   subMode?: TransportSubmode;
   faded?: boolean;
 }
@@ -120,6 +133,11 @@ export type VehiclesFilter = {
   showVehicles: boolean;
 };
 
+export type StationsFilter = {
+  showCityBikeStations: boolean;
+};
+
 export type MapFilter = {
   vehicles?: VehiclesFilter;
+  stations?: StationsFilter;
 };

@@ -14,7 +14,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
-import {TransportationIcon, AnyMode} from '@atb/components/transportation-icon';
+import {AnyMode, TransportationIconBox} from '@atb/components/icon-box';
 import {useFavorites} from '@atb/favorites';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {LegMode} from '@entur/sdk';
@@ -66,7 +66,7 @@ const SelectableFavouriteDeparture = ({
       accessibilityHint={t(SelectFavouriteDeparturesText.switch.a11yhint)}
       accessibilityState={{checked: active}}
     >
-      <TransportationIcon
+      <TransportationIconBox
         style={styles.lineModeIcon}
         mode={lineTransportationMode}
         subMode={lineTransportationSubmode}

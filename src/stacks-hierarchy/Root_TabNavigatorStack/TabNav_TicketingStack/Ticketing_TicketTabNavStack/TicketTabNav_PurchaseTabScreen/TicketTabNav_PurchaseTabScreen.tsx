@@ -11,6 +11,10 @@ import {UpgradeSplash} from './Components/UpgradeSplash';
 import {useRecentFareContracts} from './use-recent-fare-contracts';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {RecentFareContract} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/types';
+import {useTipsAndInformationEnabled} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information-enabled';
+import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant-enabled';
+import {TipsAndInformationTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TipsAndInformationTile';
+import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -22,6 +26,9 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {recentFareContracts} = useRecentFareContracts();
   const hasRecentFareContracts =
     enable_recent_tickets && !!recentFareContracts.length;
+
+  const showTipsAndInformation = useTipsAndInformationEnabled();
+  const showTicketAssistant = useTicketingAssistantEnabled();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -90,7 +97,24 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
             }
           />
         )}
+
+        {showTipsAndInformation && (
+          <TipsAndInformationTile
+            onPress={() => {
+              navigation.navigate('Root_TipsAndInformation');
+            }}
+            testID="tipsAndInformation"
+          />
+        )}
         <FareProducts onProductSelect={onProductSelect} />
+        {showTicketAssistant && (
+          <TicketAssistantTile
+            onPress={() => {
+              navigation.navigate('Root_TicketAssistantStack');
+            }}
+            testID="ticketAssistant"
+          />
+        )}
       </View>
     </ScrollView>
   ) : null;

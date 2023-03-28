@@ -1,7 +1,6 @@
-import {StopPlace, Quay} from '@atb/api/types/departures';
+import {Quay, StopPlace} from '@atb/api/types/departures';
 import {Feedback} from '@atb/components/feedback';
-import {useFavorites} from '@atb/favorites';
-import {UserFavoriteDepartures} from '@atb/favorites';
+import {useFavorites, UserFavoriteDepartures} from '@atb/favorites';
 import {SearchTime} from '../types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
@@ -21,7 +20,8 @@ import {Walk} from '@atb/assets/svg/mono-icons/transportation';
 import {useHumanizeDistance} from '@atb/utils/location';
 import {useDeparturesData} from '../hooks/use-departures-data';
 
-const DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
+const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
+const NUMBER_OF_DEPARTURES_IN_BUFFER = 5;
 
 type StopPlaceViewProps = {
   stopPlace: StopPlace;
@@ -80,6 +80,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
     searchTime?.option !== 'now' ? searchTime.date : undefined;
   const {state, forceRefresh} = useDeparturesData(
     stopPlace.quays?.map((q) => q.id) ?? [],
+    NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW + NUMBER_OF_DEPARTURES_IN_BUFFER,
     showOnlyFavorites,
     isFocused,
     mode,
@@ -216,7 +217,8 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
         <>
           <QuaySection
             quay={item}
-            departuresPerQuay={DEFAULT_NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW}
+            isLoading={state.isLoading}
+            departuresPerQuay={NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW}
             data={state.data}
             didLoadingDataFail={didLoadingDataFail}
             navigateToDetails={navigateToDetails}

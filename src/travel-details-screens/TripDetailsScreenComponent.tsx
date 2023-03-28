@@ -30,6 +30,7 @@ import analytics from '@react-native-firebase/analytics';
 import {canSellCollabTicket} from '@atb/travel-details-screens/utils';
 import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {secondsBetween} from '@atb/utils/date';
+import {AnyMode} from '@atb/components/icon-box';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -66,6 +67,15 @@ export const TripDetailsScreenComponent = ({
     currentIndex,
     tripPatterns,
   );
+
+  const tripPatternLegs = tripPattern?.legs.map((leg) => {
+    let mode: AnyMode = !!leg.bookingArrangements ? 'flex' : leg.mode;
+    return {
+      ...leg,
+      mode,
+    };
+  });
+
   function navigate(page: number) {
     const newIndex = page - 1;
     if (page > tripPatterns.length || page < 1 || currentIndex === newIndex) {
@@ -88,17 +98,16 @@ export const TripDetailsScreenComponent = ({
       </View>
       <ContentWithDisappearingHeader
         header={
-          tripPattern?.legs && (
+          tripPatternLegs && (
             <CompactTravelDetailsMap
-              mapLegs={tripPattern.legs}
-              fromPlace={tripPattern.legs[0].fromPlace}
-              toPlace={tripPattern.legs[tripPattern.legs.length - 1].toPlace}
+              mapLegs={tripPatternLegs}
+              fromPlace={tripPatternLegs[0].fromPlace}
+              toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
               onExpand={() => {
                 onPressDetailsMap({
-                  legs: tripPattern.legs,
-                  fromPlace: tripPattern.legs[0].fromPlace,
-                  toPlace:
-                    tripPattern.legs[tripPattern.legs.length - 1].toPlace,
+                  legs: tripPatternLegs,
+                  fromPlace: tripPatternLegs[0].fromPlace,
+                  toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
                 });
               }}
             />
@@ -113,7 +122,7 @@ export const TripDetailsScreenComponent = ({
                 totalPages={tripPatterns.length}
                 onNavigate={navigate}
                 style={styles.pagination}
-                currentDate={tripPattern.legs[0]?.aimedStartTime}
+                currentDate={tripPatternLegs[0]?.aimedStartTime}
               />
             )}
             <Trip

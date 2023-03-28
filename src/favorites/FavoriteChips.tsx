@@ -12,11 +12,11 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
-  FavoriteIcon,
-  useFavorites,
-  GeoLocation,
   ChipTypeGroup,
+  FavoriteIcon,
+  GeoLocation,
   Location,
+  useFavorites,
 } from '@atb/favorites';
 
 const themeColor: InteractiveColor = 'interactive_0';
@@ -86,7 +86,7 @@ export const FavoriteChips: React.FC<Props> = ({
           favorites.map((fav, i) => (
             <FavoriteChip
               interactiveColor={themeColor}
-              key={fav.name}
+              key={fav.id}
               text={fav.name ?? ''}
               accessibilityLabel={'Favoritt: ' + fav.name + screenReaderPause}
               accessibilityRole="button"

@@ -9,7 +9,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
 import {useAppDispatch, useAppState} from '@atb/AppContext';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import storage, {KeyValuePair, StorageModelKeysEnum} from '@atb/storage';
+import {KeyValuePair, storage, StorageModelKeysEnum} from '@atb/storage';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
@@ -27,12 +27,15 @@ import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {useTravelSearchFiltersDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-enabled';
-import {useVehiclesInMapDebugOverride} from '@atb/vehicles';
+import {useVehiclesInMapDebugOverride} from '@atb/mobility';
 import {DebugOverride} from './components/DebugOverride';
 import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
 import {useRealtimeMapDebugOverride} from '@atb/components/map/hooks/use-realtime-map-enabled';
 import {useFromTravelSearchToTicketDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
 import {useMapDebugOverride} from '@atb/components/map/hooks/use-map-page';
+import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant-enabled';
+import {useTipsAndInformationDebugOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information-enabled';
+import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -54,8 +57,11 @@ export const Profile_DebugInfoScreen = () => {
   const fromTravelSearchToTicketDebugOverride =
     useFromTravelSearchToTicketDebugOverride();
   const vehiclesInMapDebugOverride = useVehiclesInMapDebugOverride();
+  const cityBikesInMapDebugOverride = useCityBikesInMapDebugOverride();
   const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
   const mapDebugOverride = useMapDebugOverride();
+  const ticketingAssistantOverride = useTicketingAssistantDebugOverride();
+  const tipsAndInformationOverride = useTipsAndInformationDebugOverride();
 
   useEffect(() => {
     async function run() {
@@ -104,7 +110,15 @@ export const Profile_DebugInfoScreen = () => {
   }
 
   const {setPreference, preferences} = usePreferences();
-  const {showTestIds, tripSearchPreferences, debugShowSeconds} = preferences;
+  const {
+    showTestIds,
+    tripSearchPreferences,
+    debugShowSeconds,
+    flexibleTransport,
+    useFlexibleTransportOnAccessMode,
+    useFlexibleTransportOnDirectMode,
+    useFlexibleTransportOnEgressMode,
+  } = preferences;
 
   const tripSearchDefaults = {
     transferPenalty: 10,
@@ -183,15 +197,6 @@ export const Profile_DebugInfoScreen = () => {
           />
 
           <Sections.LinkSectionItem
-            text="Reset has read departures v2 onboarding"
-            onPress={() =>
-              storage.set(
-                StorageModelKeysEnum.HasReadDeparturesV2Onboarding,
-                JSON.stringify(false),
-              )
-            }
-          />
-          <Sections.LinkSectionItem
             text="Reset has read filter onboarding"
             onPress={() =>
               storage.set(
@@ -210,6 +215,58 @@ export const Profile_DebugInfoScreen = () => {
             }
           />
         </Sections.Section>
+        <Sections.Section withPadding withTopPadding>
+          <Sections.HeaderSectionItem
+            text="Flexible transport"
+            subtitle={
+              'If undefined, the value from Remote Config will be used. Works when the app is either QA or Debug, ONLY!.\n\nNOTE: When enabled, this value has more preference than remote config.'
+            }
+          />
+          <Sections.GenericSectionItem>
+            <MapEntry
+              title="Flexible transport enabled"
+              value={flexibleTransport}
+            />
+          </Sections.GenericSectionItem>
+          <Sections.ToggleSectionItem
+            text="Flexible transport enabled"
+            value={flexibleTransport}
+            onValueChange={(flexibleTransport) => {
+              setPreference({flexibleTransport});
+            }}
+          />
+        </Sections.Section>
+        {flexibleTransport && (
+          <Sections.Section withPadding withTopPadding>
+            <Sections.HeaderSectionItem
+              text="Flexible transport modes"
+              subtitle={
+                'If `Flexible transport is enabled`, these values will take effect when the app is either QA or Debug ONLY!.\n\nThe default values are `Foot`.'
+              }
+            />
+            <Sections.ToggleSectionItem
+              text="Use Flexible on AccessMode"
+              value={useFlexibleTransportOnAccessMode}
+              onValueChange={(useFlexibleTransportOnAccessMode) => {
+                setPreference({useFlexibleTransportOnAccessMode});
+              }}
+            />
+            <Sections.ToggleSectionItem
+              text="Use Flexible on DirectMode"
+              value={useFlexibleTransportOnDirectMode}
+              onValueChange={(useFlexibleTransportOnDirectMode) => {
+                setPreference({useFlexibleTransportOnDirectMode});
+              }}
+            />
+            <Sections.ToggleSectionItem
+              text="Use Flexible on EgreessMode"
+              value={useFlexibleTransportOnEgressMode}
+              onValueChange={(useFlexibleTransportOnEgressMode) => {
+                setPreference({useFlexibleTransportOnEgressMode});
+              }}
+            />
+          </Sections.Section>
+        )}
         <Sections.Section withPadding withTopPadding>
           <Sections.HeaderSectionItem
             text="Remote config override"
@@ -242,6 +299,12 @@ export const Profile_DebugInfoScreen = () => {
           </Sections.GenericSectionItem>
           <Sections.GenericSectionItem>
             <DebugOverride
+              description="Enable city bike stations in map."
+              override={cityBikesInMapDebugOverride}
+            />
+          </Sections.GenericSectionItem>
+          <Sections.GenericSectionItem>
+            <DebugOverride
               description="Enable realtime positions in map."
               override={realtimeMapDebugOverride}
             />
@@ -250,6 +313,18 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable map"
               override={mapDebugOverride}
+            />
+          </Sections.GenericSectionItem>
+          <Sections.GenericSectionItem>
+            <DebugOverride
+              description="Enable ticketing assistant"
+              override={ticketingAssistantOverride}
+            />
+          </Sections.GenericSectionItem>
+          <Sections.GenericSectionItem>
+            <DebugOverride
+              description="Enable tips and information for tickets"
+              override={tipsAndInformationOverride}
             />
           </Sections.GenericSectionItem>
         </Sections.Section>

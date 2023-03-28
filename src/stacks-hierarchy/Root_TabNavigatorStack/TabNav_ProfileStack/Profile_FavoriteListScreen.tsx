@@ -4,8 +4,7 @@ import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useFavorites} from '@atb/favorites';
-import {StoredLocationFavorite} from '@atb/favorites';
+import {StoredLocationFavorite, useFavorites} from '@atb/favorites';
 import {StyleSheet, Theme} from '@atb/theme';
 import {FavoriteListTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -48,7 +47,7 @@ export const Profile_FavoriteListScreen = ({navigation}: Props) => {
         <Sections.Section withTopPadding withPadding>
           {items.map((favorite, i) => (
             <Sections.FavoriteSectionItem
-              key={favorite.name + favorite.location.id}
+              key={favorite.id}
               favorite={favorite}
               accessibility={{
                 accessibilityHint: t(FavoriteListTexts.favoriteItem.a11yHint),

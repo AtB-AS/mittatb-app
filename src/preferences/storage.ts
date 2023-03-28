@@ -1,13 +1,12 @@
-import storage, {StorageModelTypes} from '../storage';
 import {PreferenceItem, UserPreferences} from './types';
+import {storage, StorageModelTypes} from '@atb/storage';
 
 const STORAGE_KEY: StorageModelTypes = '@ATB_user_preferences';
 
 export async function getPreferences(): Promise<UserPreferences> {
   const preferences = await storage.get(STORAGE_KEY);
   if (!preferences) return {};
-  let data = (preferences ? JSON.parse(preferences) : []) as UserPreferences;
-  return data;
+  return (preferences ? JSON.parse(preferences) : []) as UserPreferences;
 }
 
 async function setPreferences(
