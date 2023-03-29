@@ -79,7 +79,7 @@ export const Root_TabNavigatorStack = () => {
             t(dictionary.navigation.map),
             MapPin,
             lineHeight,
-            'mapPage',
+            'mapTab',
           )}
         />
       )}

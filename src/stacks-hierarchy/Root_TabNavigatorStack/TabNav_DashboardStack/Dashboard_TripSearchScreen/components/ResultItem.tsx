@@ -221,7 +221,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                     key={tripPattern.compressedQuery + leg.aimedStartTime}
                     style={styles.legAndDash}
                   >
-                    <View>
+                    <View testID="tripLeg">
                       {leg.mode === 'foot' ? (
                         <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
                       ) : (
@@ -490,8 +490,8 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       : t(TripSearchTexts.results.resultItem.footLeg.walkLabel(walkDuration));
 
   return (
-    <View style={styles.walkContainer}>
-      <ThemeIcon accessibilityLabel={a11yText} testID="fLeg" svg={Walk} />
+    <View style={styles.walkContainer} testID="fLeg">
+      <ThemeIcon accessibilityLabel={a11yText} svg={Walk} />
       <Text style={styles.walkDuration}>{secondsToMinutes(leg.duration)}</Text>
     </View>
   );

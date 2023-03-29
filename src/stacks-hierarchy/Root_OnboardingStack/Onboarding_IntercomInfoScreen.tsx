@@ -53,7 +53,7 @@ export const Onboarding_IntercomInfoScreen = ({
               : finishOnboarding()
           }
           text={t(OnboardingTexts.intercom.mainButton)}
-          testID="nextButton"
+          testID="nextButtonIntercomOnboarding"
         />
       </View>
     </ScrollView>
