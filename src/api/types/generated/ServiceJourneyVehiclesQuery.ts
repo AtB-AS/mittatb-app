@@ -1,6 +1,6 @@
 import * as Types from '@atb/api/types/generated/vehicles-types_v1';
 
-type GetServiceJourneyVehiclesQuery = {
+export type GetServiceJourneyVehicleQuery = {
   vehicles?: Array<{
     lastUpdated?: any;
     bearing?: number;
@@ -11,7 +11,7 @@ type GetServiceJourneyVehiclesQuery = {
 };
 
 export type GetServiceJourneyVehicles = Required<
-  Required<GetServiceJourneyVehiclesQuery>['vehicles']
+  Required<GetServiceJourneyVehicleQuery>['vehicles']
 >;
 
 export type VehiclePosition = GetServiceJourneyVehicles[0];
