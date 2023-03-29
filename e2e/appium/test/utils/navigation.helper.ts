@@ -17,7 +17,7 @@ class NavigationHelper {
    * Go to the chosen tab
    * @param page: tab to open
    */
-  async tapMenu(page: 'assistant' | 'departure' | 'tickets' | 'profile') {
+  async tapMenu(page: 'assistant' | 'departures' | 'tickets' | 'profile') {
     const menuId = `//*[@resource-id="${page}Tab"]`;
     await $(menuId).click();
     await AppHelper.pause(1000);
