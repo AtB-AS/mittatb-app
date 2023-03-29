@@ -57,12 +57,12 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
         minZoomLevel={13.5}
         style={{
           textField: ['concat', ['get', 'currentFuelPercent'], '%'],
-          textAnchor: 'top-left',
-          textOffset: [0.4, 0.7],
-          textColor: '#920695',
-          textSize: 12,
+          textAnchor: 'center',
+          textOffset: [0.7, -0.25],
+          textColor: '#fff',
+          textSize: 11,
           iconImage: {uri: 'PinScooter'},
-          iconSize: 0.75,
+          iconSize: 0.85,
           iconAllowOverlap: true,
         }}
       />
@@ -72,7 +72,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
         minZoomLevel={13.5}
         style={{
           iconImage: {uri: 'Scooter'},
-          iconSize: 0.75,
+          iconSize: 0.85,
           iconAllowOverlap: true,
         }}
       />
@@ -82,11 +82,11 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
         minZoomLevel={13.5}
         belowLayerID="clusterIcon"
         style={{
-          circleColor: '#920695',
-          circleStrokeColor: '#920695',
-          circleOpacity: 0.7,
-          circleStrokeOpacity: 0.2,
-          circleStrokeWidth: ['min', ['+', 2, ['get', 'point_count']], 12],
+          circleColor: '#4A753A',
+          circleStrokeColor: '#4A753A',
+          circleOpacity: 1,
+          circleStrokeOpacity: 0.3,
+          circleStrokeWidth: 8,
           circleRadius: 12,
         }}
       />
