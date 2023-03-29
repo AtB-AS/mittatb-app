@@ -48,7 +48,7 @@ export const Profile_FavoriteListScreen = ({navigation}: Props) => {
         <Sections.Section withTopPadding withPadding>
           {items.map((favorite, i) => (
             <Sections.FavoriteSectionItem
-              key={favorite.name + favorite.location.id}
+              key={favorite.id}
               favorite={favorite}
               accessibility={{
                 accessibilityHint: t(FavoriteListTexts.favoriteItem.a11yHint),
