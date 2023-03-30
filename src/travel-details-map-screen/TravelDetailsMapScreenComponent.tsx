@@ -24,7 +24,7 @@ import {VehiclePosition} from '@atb/api/types/generated/ServiceJourneyVehiclesQu
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
-  vehiclePosition?: VehiclePosition;
+  _vehiclePosition?: VehiclePosition;
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
 };
@@ -35,7 +35,7 @@ type Props = TravelDetailsMapScreenParams & {
 
 export const TravelDetailsMapScreenComponent = ({
   legs,
-  vehiclePosition,
+  _vehiclePosition,
   toPlace,
   fromPlace,
   onPressBack,
