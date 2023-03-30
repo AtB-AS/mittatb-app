@@ -8,7 +8,6 @@ import {
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Location} from '@atb/assets/svg/mono-icons/places';
 import React from 'react';
-import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {
   TariffZoneSelection,
@@ -22,9 +21,7 @@ export type ZonesSelectorButtonsComponentParams = {
 };
 
 type Props = ZonesSelectorButtonsComponentParams & {
-  onVenueSearchClick: (
-    callerRouteParam: keyof Root_PurchaseTariffZonesSearchByMapScreenParams,
-  ) => void;
+  onVenueSearchClick: (caller: 'fromTariffZone' | 'toTariffZone') => void;
 };
 
 export const ZonesSelectorButtonsComponent = ({

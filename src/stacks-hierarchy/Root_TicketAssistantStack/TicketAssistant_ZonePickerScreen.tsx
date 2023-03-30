@@ -16,7 +16,6 @@ import {
   TariffZoneWithMetadata,
 } from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 import {ZonesMapSelectorComponent} from '@atb/zones-selectors/zones-selector-map/ZonesMapSelectorComponent';
 import {ZonesSelectorButtonsComponent} from '@atb/zones-selectors/zones-selector-buttons/ZonesSelectorButtonsComponent';
 
@@ -32,41 +31,40 @@ export const TicketAssistant_ZonePickerScreen = ({
 
   const {tariffZones} = useFirestoreConfiguration();
 
-  const fromTariffZone: TariffZoneWithMetadata = {
-    id: tariffZones[0].id,
-    name: tariffZones[0].name,
-    version: tariffZones[0].version,
-    geometry: tariffZones[0].geometry,
-    resultType: 'zone',
-  };
-
-  const toTariffZone: TariffZoneWithMetadata = {
-    id: tariffZones[0].id,
-    name: tariffZones[0].name,
-    version: tariffZones[0].version,
-    geometry: tariffZones[0].geometry,
-    resultType: 'zone',
-  };
+  const from: TariffZoneWithMetadata = route.params?.fromTariffZone
+    ? route.params?.fromTariffZone
+    : {
+        id: tariffZones[0].id,
+        name: tariffZones[0].name,
+        resultType: 'zone',
+        geometry: tariffZones[0].geometry,
+        version: tariffZones[0].version,
+      };
+  const to: TariffZoneWithMetadata = route.params?.fromTariffZone
+    ? route.params?.fromTariffZone
+    : {
+        id: tariffZones[0].id,
+        name: tariffZones[0].name,
+        resultType: 'zone',
+        geometry: tariffZones[0].geometry,
+        version: tariffZones[0].version,
+      };
 
   const isApplicableOnSingleZoneOnly = false;
 
   const [selectedZones, setSelectedZones] = useState<TariffZoneSelection>({
-    from: fromTariffZone,
-    to: toTariffZone,
+    from: from,
+    to: to,
     selectNext: isApplicableOnSingleZoneOnly ? 'from' : 'to',
   });
-  const onVenueSearchClick = (
-    callerRouteParam: keyof Root_PurchaseTariffZonesSearchByMapScreenParams,
-  ) => {
+
+  const onVenueSearchClick = (caller: 'fromTariffZone' | 'toTariffZone') => {
     navigation.navigate({
       name: 'Root_PurchaseTariffZonesSearchByTextScreen',
       params: {
-        label:
-          callerRouteParam === 'fromTariffZone'
-            ? t(TariffZonesTexts.location.zonePicker.labelFrom)
-            : t(TariffZonesTexts.location.zonePicker.labelTo),
+        label: t(TariffZonesTexts.location.zonePicker.labelTo),
         callerRouteName: route.name,
-        callerRouteParam,
+        callerRouteParam: caller,
       },
       merge: true,
     });
