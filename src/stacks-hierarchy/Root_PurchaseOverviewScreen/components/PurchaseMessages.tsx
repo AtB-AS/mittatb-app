@@ -7,7 +7,7 @@ import {StyleSheet} from '@atb/theme';
 import {useTicketingState} from '@atb/ticketing';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {getOtherDeviceIsInspectableWarning} from '../../Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
+import {getOtherDeviceIsInspectableWarning} from '../../../fare-contracts/utils';
 import {getValidOnTrainNoticeText} from '../../Root_TabNavigatorStack/TabNav_TicketingStack/utils';
 import {TariffZoneWithMetadata} from '../../Root_PurchaseTariffZonesSearchByMapScreen';
 
