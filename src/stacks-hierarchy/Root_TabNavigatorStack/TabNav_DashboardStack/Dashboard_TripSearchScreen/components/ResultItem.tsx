@@ -6,7 +6,7 @@ import {
   ThemeText,
 } from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {TransportationIconBox, CounterIconBox} from '@atb/components/icon-box';
+import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
 import {SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {

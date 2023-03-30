@@ -1,5 +1,5 @@
 import {PreassignedFareProduct} from '@atb/reference-data/types';
-import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
+import {FareProductTypeConfig} from '@atb/configuration';
 import ProductSelectionByAlias from './ProductSelectionByAlias';
 import ProductSelectionByProducts from './ProductSelectionByProducts';
 import {StyleProp, ViewStyle} from 'react-native';

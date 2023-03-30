@@ -7,7 +7,7 @@ import SingleTravellerSelection from './Travellers/SingleTravellerSelection';
 import MultipleTravellersSelection from './Travellers/MultipleTravellersSelection';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import InfoToggle from './InfoToggle';
-import {TravellerSelectionMode} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
+import {TravellerSelectionMode} from '@atb/configuration';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
