@@ -79,7 +79,7 @@ const Trip: React.FC<TripProps> = ({
                     fromPlace: tripPattern.legs[0].fromPlace,
                     toPlace:
                       tripPattern.legs[tripPattern.legs.length - 1].toPlace,
-                    vehiclePosition: tripVehiclePosition,
+                    _vehiclePosition: tripVehiclePosition,
                   })
                 }
                 onPressDeparture={onPressDeparture}
