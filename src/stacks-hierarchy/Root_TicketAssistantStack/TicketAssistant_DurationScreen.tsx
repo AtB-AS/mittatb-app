@@ -17,7 +17,7 @@ import RNDateTimePicker from '@react-native-community/datetimepicker';
 import {useLocaleContext} from '@atb/LocaleProvider';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgDate from '@atb/assets/svg/mono-icons/time/Date';
-import {format, parseISO} from 'date-fns';
+import {addDays, format, parseISO} from 'date-fns';
 import {dateToDateString} from '@atb/components/sections/items/date-input/utils';
 type DurationProps =
   TicketAssistantScreenProps<'TicketAssistant_DurationScreen'>;
@@ -28,6 +28,7 @@ const durations = [1, 7, 14, 21, 30, 60, 90, 120, 150, 180];
 export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   const [date, setDate] = useState(dateToDateString(currentDate));
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [usedSlider, setUsedSlider] = useState(false);
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
@@ -109,7 +110,11 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
               <View style={styles.datePicker}>
                 {Platform.OS === 'ios' ? (
                   <RNDateTimePicker
-                    value={parseISO(date)}
+                    value={
+                      usedSlider
+                        ? parseISO(getDateFromSlider(data.duration))
+                        : parseISO(date)
+                    }
                     mode="date"
                     locale={locale.localeString}
                     style={{
@@ -124,6 +129,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                     minimumDate={new Date()}
                     onChange={(_, date) => {
                       if (date) {
+                        setUsedSlider(false);
                         setDate(dateToDateString(date));
                         updateDuration(dateDiffInDays(currentDate, date), true);
                       }
@@ -142,7 +148,11 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
 
                 {Platform.OS === 'android' && showDatePicker && (
                   <RNDateTimePicker
-                    value={parseISO(date)}
+                    value={
+                      usedSlider
+                        ? parseISO(getDateFromSlider(data.duration))
+                        : parseISO(date)
+                    }
                     mode="date"
                     locale={locale.localeString}
                     textColor={'primary'}
@@ -152,6 +162,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                     onChange={(_, date) => {
                       setShowDatePicker(false);
                       if (date) {
+                        setUsedSlider(false);
                         setDate(dateToDateString(date));
                         updateDuration(dateDiffInDays(currentDate, date), true);
                       }
@@ -188,6 +199,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                 tapToSeek={true}
                 thumbTintColor={sliderColorMin}
                 onValueChange={(value) => {
+                  setUsedSlider(true);
                   updateDuration(value, false);
                 }}
               />
@@ -254,6 +266,13 @@ function getSliderIndex(days: number) {
   }
 
   return closestIndex;
+}
+
+// Functions for getting the date from the slider
+function getDateFromSlider(days: number) {
+  // Current date + days from slider
+  const date = addDays(new Date(), days);
+  return dateToDateString(date);
 }
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
