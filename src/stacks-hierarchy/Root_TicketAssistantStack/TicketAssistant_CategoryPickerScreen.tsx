@@ -8,8 +8,13 @@ import {Button} from '@atb/components/button';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import TicketAssistantContext from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
+import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 
-export const TicketAssistant_CategoryPickerScreen = () => {
+type CategoryPickerProps =
+  TicketAssistantScreenProps<'TicketAssistant_FrequencyScreen'>;
+export const TicketAssistant_CategoryPickerScreen = ({
+  navigation,
+}: CategoryPickerProps) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
@@ -19,7 +24,7 @@ export const TicketAssistant_CategoryPickerScreen = () => {
 
   const {data, updateData} = contextValue;
   function updateCategory(value: number) {
-    const newData = {...data, category: value.toString()};
+    const newData = {...data, traveller: convertIndexToTraveller(value)};
     updateData(newData);
     console.log('Context Data \n' + JSON.stringify(newData, null, 2));
   }
@@ -61,6 +66,7 @@ export const TicketAssistant_CategoryPickerScreen = () => {
                       style={styles.chooseButton}
                       onPress={() => {
                         updateCategory(index);
+                        navigation.navigate('TicketAssistant_DurationScreen');
                       }}
                       text={t(TicketAssistantTexts.categoryPicker.chooseButton)}
                     />
@@ -74,6 +80,42 @@ export const TicketAssistant_CategoryPickerScreen = () => {
     </View>
   );
 };
+
+function convertIndexToTraveller(index: number) {
+  switch (index) {
+    case 0:
+      return {
+        id: 'ADULT',
+        user_type: 'ADULT',
+      };
+    case 1:
+      return {
+        id: 'YOUTH',
+        user_type: 'YOUTH',
+      };
+    case 2:
+      return {
+        id: 'STUDENT',
+        user_type: 'STUDENT',
+      };
+    case 3:
+      return {
+        id: 'SENIOR',
+        user_type: 'SENIOR',
+      };
+    case 4:
+      return {
+        id: 'MILITARY',
+        user_type: 'MILITARY',
+      };
+    default:
+      return {
+        id: 'ADULT',
+        user_type: 'ADULT',
+      };
+  }
+}
+
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   backdrop: {
     position: 'absolute',
