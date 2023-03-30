@@ -41,12 +41,14 @@ export type ZonesSelectorButtonsComponentParams = {
 
 type Props = ZonesSelectorButtonsComponentParams & {
   setSelectedZones: (selectedZOnes: TariffZoneSelection) => void;
+  onSave?: () => void;
 };
 
 export const ZonesMapSelectorComponent = ({
   selectedZones,
   isApplicableOnSingleZoneOnly,
   setSelectedZones,
+  onSave,
 }: Props) => {
   const {tariffZones} = useFirestoreConfiguration();
   const styles = useMapStyles();
@@ -124,20 +126,28 @@ export const ZonesMapSelectorComponent = ({
             tariffZones={tariffZones}
             onSelect={(t) => updateSelectedZones(t.id)}
           />
-          <View
-            style={[
-              styles.saveButton,
-              {paddingBottom: Math.max(safeAreaBottom, theme.spacings.medium)},
-            ]}
-          >
-            <Button
-              onPress={() => {}}
-              interactiveColor="interactive_0"
-              text={t(TariffZonesTexts.saveButton.text)}
-              accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
-              testID="saveZonesButton"
-            />
-          </View>
+
+          {onSave && (
+            <View
+              style={[
+                styles.saveButton,
+                {
+                  paddingBottom: Math.max(
+                    safeAreaBottom,
+                    theme.spacings.medium,
+                  ),
+                },
+              ]}
+            >
+              <Button
+                onPress={onSave}
+                interactiveColor="interactive_0"
+                text={t(TariffZonesTexts.saveButton.text)}
+                accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
+                testID="saveZonesButton"
+              />
+            </View>
+          )}
         </>
       ) : (
         <>
@@ -223,15 +233,18 @@ export const ZonesMapSelectorComponent = ({
                 />
               </View>
             </View>
-            <View style={styles.saveButton}>
-              <Button
-                onPress={() => {}}
-                interactiveColor="interactive_0"
-                text={t(TariffZonesTexts.saveButton.text)}
-                accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
-                testID="saveZonesButton"
-              />
-            </View>
+
+            {onSave && (
+              <View style={styles.saveButton}>
+                <Button
+                  onPress={onSave}
+                  interactiveColor="interactive_0"
+                  text={t(TariffZonesTexts.saveButton.text)}
+                  accessibilityHint={t(TariffZonesTexts.saveButton.a11yHint)}
+                  testID="saveZonesButton"
+                />
+              </View>
+            )}
           </View>
         </>
       )}

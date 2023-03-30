@@ -111,6 +111,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
         selectedZones={selectedZones}
         isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
         setSelectedZones={setSelectedZones}
+        onSave={onSave}
       />
     </View>
   );
@@ -123,5 +124,8 @@ const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   },
   headerContainer: {
     backgroundColor: theme.static.background.background_accent_0.background,
+  },
+  saveButton: {
+    marginHorizontal: theme.spacings.medium,
   },
 }));
