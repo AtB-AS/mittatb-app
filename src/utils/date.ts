@@ -164,11 +164,7 @@ export function isRelativeButNotNow(
   const parsed = parseIfNeeded(isoDate);
   const diff = secondsBetween(new Date(), parsed);
 
-  if (diff / 60 >= minuteThreshold || diff / 60 <= 1) {
-    return false;
-  }
-
-  return true;
+  return !(diff / 60 >= minuteThreshold || diff / 60 <= 1);
 }
 
 export function formatLocaleTime(date: Date | string, language: Language) {

@@ -11,7 +11,7 @@ export const getServiceJourneyVehicles = async (
   if (!serviceJourneyIds?.length) {
     return;
   }
-  const url = '/bff/v2/vehicles/service-journey';
+  const url = '/bff/v2/vehicles/service-journeys';
   const query = qs.stringify({
     serviceJourneyIds,
   });
