@@ -39,11 +39,11 @@ import {formatToClock, isDateInRangeFromNow} from '@atb/utils/date';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
 import {usePreferences} from '@atb/preferences';
-import {Button} from '@atb/components/button';
-import {Map} from '@atb/assets/svg/mono-icons/map';
 import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
 import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
 import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
+import {Button} from '@atb/components/button';
+import {Map} from '@atb/assets/svg/mono-icons/map';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -92,28 +92,6 @@ export const DepartureDetailsScreenComponent = ({
   const vehiclePosition = vehiclePositions?.find(
     (s) => s.serviceJourney?.id === activeItem.serviceJourneyId,
   );
-
-  const LiveButton =
-    !screenReaderEnabled && realtimeMapEnabled && mapData ? (
-      <Button
-        type="pill"
-        leftIcon={{svg: Map}}
-        text={t(
-          vehiclePosition
-            ? DepartureDetailsTexts.live
-            : DepartureDetailsTexts.map,
-        )}
-        interactiveColor="interactive_1"
-        onPress={() =>
-          onPressDetailsMap({
-            legs: mapData.mapLegs,
-            fromPlace: mapData.start,
-            toPlace: mapData.stop,
-            vehiclePosition: vehiclePosition,
-          })
-        }
-      />
-    ) : null;
 
   const lastPassedStop = estimatedCallsWithMetadata
     .filter((a) => a.actualDepartureTime)
@@ -172,7 +150,26 @@ export const DepartureDetailsScreenComponent = ({
               message={t(DepartureDetailsTexts.messages.noActiveItem)}
             />
           )}
-          {LiveButton}
+          {!screenReaderEnabled && realtimeMapEnabled && mapData ? (
+            <Button
+              type="pill"
+              leftIcon={{svg: Map}}
+              text={t(
+                vehiclePosition
+                  ? DepartureDetailsTexts.live
+                  : DepartureDetailsTexts.map,
+              )}
+              interactiveColor="interactive_1"
+              onPress={() =>
+                onPressDetailsMap({
+                  legs: mapData.mapLegs,
+                  fromPlace: mapData.start,
+                  toPlace: mapData.stop,
+                  vehiclePosition: vehiclePosition,
+                })
+              }
+            />
+          ) : null}
           {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
           {situations.map((situation) => (
             <SituationMessageBox
