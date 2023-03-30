@@ -33,6 +33,22 @@ class TravelSearchOverviewPage extends Page {
   }
 
   /**
+   * Return the number of legs for a journey
+   * @param tripIndex: index of the journey (default first trip)
+   */
+  async getNumberOfLegs(tripIndex: number = 0) {
+    const tripId = `//*[@resource-id="tripSearchSearchResult${tripIndex}"]`;
+    const legId = `//*[@resource-id="tripLeg"]`;
+    const moreLegsId = `//*[@resource-id="tripLegMore"]`;
+    let noLegs = await $(tripId).$$(legId).length
+    if (await $(tripId).$(moreLegsId).isExisting()){
+      const noLegsExtra = await $(tripId).$(moreLegsId).getText()
+      noLegs = noLegs + parseInt(noLegsExtra.split('+')[1])
+    }
+    return noLegs
+  }
+
+  /**
    * Returns the start time for travel result at index
    * @param resultIndex: travel search result at index
    */

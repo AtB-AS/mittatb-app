@@ -9,6 +9,7 @@ class DepartureOverviewPage extends Page {
   async showAllQuays() {
     const buttonId = `//*[@resource-id="allStopsSelectionButton"]`;
     await $(buttonId).click();
+    await ElementHelper.waitForElement('id', 'quaySection0');
     await ElementHelper.waitForElement('id', 'departureItem0');
   }
 

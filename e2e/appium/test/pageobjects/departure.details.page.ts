@@ -12,6 +12,15 @@ class DepartureDetailPage extends Page {
   }
 
   /**
+   * Expand or hide intermediate stops
+   */
+  async expandAndHideIntermediateStops() {
+    const interId = `//*[@resource-id="intermediateStops"]`;
+    await $(interId).click()
+    await AppHelper.pause(1000);
+  }
+
+  /**
    * Return the quay name
    * @param legType: 'passed' or 'trip'
    * @param legIndex: index of the leg

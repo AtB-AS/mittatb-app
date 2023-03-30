@@ -4,10 +4,18 @@ import AppHelper from '../utils/app.helper';
 
 class OnboardingPage extends Page {
   /**
-   * Next button
+   * Next button on welcome screen
    */
-  get nextButton() {
-    const reqId = `//*[@resource-id="nextButton"]`;
+  get nextButtonOnboardingWelcome() {
+    const reqId = `//*[@resource-id="nextButtonOnboardingWelcome"]`;
+    return $(reqId);
+  }
+
+  /**
+   * Next button on intercom screen
+   */
+  get nextButtonIntercomOnboarding() {
+    const reqId = `//*[@resource-id="nextButtonIntercomOnboarding"]`;
     return $(reqId);
   }
 
@@ -38,11 +46,11 @@ class OnboardingPage extends Page {
    * Tap through the onboarding
    */
   async skipOnboarding() {
-    await ElementHelper.waitForElement('id', 'nextButton');
-    await this.nextButton.click();
+    await ElementHelper.waitForElement('id', 'nextButtonOnboardingWelcome');
+    await this.nextButtonOnboardingWelcome.click();
     await AppHelper.pause(2000);
-    await ElementHelper.waitForElement('id', 'nextButton');
-    await this.nextButton.click();
+    await ElementHelper.waitForElement('id', 'nextButtonIntercomOnboarding');
+    await this.nextButtonIntercomOnboarding.click();
     await ElementHelper.waitForElement('id', 'acceptRestrictionsButton');
     await this.accRestrButton.click();
     await this.denyLocation();
