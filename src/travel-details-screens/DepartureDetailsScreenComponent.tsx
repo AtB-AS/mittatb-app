@@ -35,7 +35,7 @@ import {TicketingMessages} from '@atb/travel-details-screens/components/DetailsM
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
-import {formatToClock} from '@atb/utils/date';
+import {formatToClock, isDateInRangeFromNow} from '@atb/utils/date';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
 import {usePreferences} from '@atb/preferences';
@@ -43,6 +43,7 @@ import {Button} from '@atb/components/button';
 import {Map} from '@atb/assets/svg/mono-icons/map';
 import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
 import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
+import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -80,17 +81,20 @@ export const DepartureDetailsScreenComponent = ({
   const mapData = useMapData(activeItem);
 
   const realtimeMapEnabled = useRealtimeMapEnabled();
+  const screenReaderEnabled = useIsScreenReaderEnabled();
 
-  const serviceJourneyVehicles = useGetServiceJourneyVehicles([
-    activeItem.serviceJourneyId,
-  ]);
+  const shouldShowLive = isDateInRangeFromNow(activeItem.serviceDate, 12 * 60);
 
-  const vehiclePosition = serviceJourneyVehicles.vehiclePositions?.find(
+  const {vehiclePositions} = useGetServiceJourneyVehicles(
+    shouldShowLive ? [activeItem.serviceJourneyId] : undefined,
+  );
+
+  const vehiclePosition = vehiclePositions?.find(
     (s) => s.serviceJourney?.id === activeItem.serviceJourneyId,
   );
 
   const LiveButton =
-    realtimeMapEnabled && mapData ? (
+    !screenReaderEnabled && realtimeMapEnabled && mapData ? (
       <Button
         type="pill"
         leftIcon={{svg: Map}}
@@ -99,7 +103,7 @@ export const DepartureDetailsScreenComponent = ({
             ? DepartureDetailsTexts.live
             : DepartureDetailsTexts.map,
         )}
-        interactiveColor="interactive_3"
+        interactiveColor="interactive_1"
         onPress={() =>
           onPressDetailsMap({
             legs: mapData.mapLegs,

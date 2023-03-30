@@ -21,7 +21,7 @@ import {
 import en from 'date-fns/locale/en-GB';
 import nb from 'date-fns/locale/nb';
 import humanizeDuration from 'humanize-duration';
-import {DEFAULT_LANGUAGE, Language} from '../translations/commons';
+import {DEFAULT_LANGUAGE, Language} from '@atb/translations';
 
 const humanizer = humanizeDuration.humanizer({});
 
@@ -344,6 +344,14 @@ export function dateWithReplacedTime(date: Date | string, time: string) {
     hours: getHours(parsedTime),
     minutes: getMinutes(parsedTime),
   });
+}
+
+export function isDateInRangeFromNow(
+  date: string | Date,
+  numberOfMinutes: number,
+) {
+  const minutesFromNow = differenceInMinutes(parseIfNeeded(date), new Date());
+  return numberOfMinutes > Math.abs(minutesFromNow);
 }
 
 export function differenceInMinutesStrings(

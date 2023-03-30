@@ -1,7 +1,7 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Feedback} from '@atb/components/feedback';
 import {StyleSheet} from '@atb/theme';
-import {secondsBetween} from '@atb/utils/date';
+import {isDateInRangeFromNow, secondsBetween} from '@atb/utils/date';
 import {AxiosError} from 'axios';
 import React from 'react';
 import {View} from 'react-native';
@@ -36,11 +36,17 @@ const Trip: React.FC<TripProps> = ({
   const legs = tripPattern.legs.filter((leg, i) =>
     isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
   );
+  const shouldShowLive = isDateInRangeFromNow(
+    tripPattern.expectedStartTime,
+    12 * 60,
+  );
 
-  const ids = tripPattern.legs
-    .map((leg) => leg.serviceJourney?.id)
-    .filter(Boolean) as string[];
-  const serviceJourneyVehicles = useGetServiceJourneyVehicles(ids);
+  const ids = shouldShowLive
+    ? (tripPattern.legs
+        .map((leg) => leg.serviceJourney?.id)
+        .filter(Boolean) as string[])
+    : undefined;
+  const {vehiclePositions} = useGetServiceJourneyVehicles(ids);
 
   return (
     <View style={styles.container}>
@@ -48,11 +54,10 @@ const Trip: React.FC<TripProps> = ({
       <View style={styles.trip}>
         {tripPattern &&
           legs.map((leg, index) => {
-            const tripVehiclePosition =
-              serviceJourneyVehicles.vehiclePositions?.find(
-                (vehicle) =>
-                  vehicle.serviceJourney?.id === leg.serviceJourney?.id,
-              );
+            const tripVehiclePosition = vehiclePositions?.find(
+              (vehicle) =>
+                vehicle.serviceJourney?.id === leg.serviceJourney?.id,
+            );
 
             return (
               <TripSection

@@ -52,6 +52,7 @@ import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-
 import {Button} from '@atb/components/button';
 import {Map} from '@atb/assets/svg/mono-icons/map';
 import {VehiclePosition} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
+import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -109,6 +110,7 @@ const TripSection: React.FC<TripSectionProps> = ({
   const notices = getNoticesForLeg(leg);
 
   const realtimeMapEnabled = useRealtimeMapEnabled();
+  const screenReaderEnabled = useIsScreenReaderEnabled();
 
   const lastPassedStop = leg.serviceJourneyEstimatedCalls
     ?.filter((a) => !a.predictionInaccurate && a.actualDepartureTime)
@@ -190,7 +192,10 @@ const TripSection: React.FC<TripSectionProps> = ({
             <ThemeText style={style.legLineName}>{getLineName(leg)}</ThemeText>
           </TripRow>
         )}
-        {realtimeMapEnabled && realtimePosition && onExpand ? (
+        {!screenReaderEnabled &&
+        realtimeMapEnabled &&
+        realtimePosition &&
+        onExpand ? (
           <TripRow>
             <Button
               type="pill"
