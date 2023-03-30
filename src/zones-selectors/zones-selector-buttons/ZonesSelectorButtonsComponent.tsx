@@ -42,7 +42,7 @@ export const ZonesSelectorButtonsComponent = ({
   const {t, language} = useTranslation();
 
   return (
-    <Section withPadding>
+    <Section>
       <ButtonSectionItem
         label={
           isApplicableOnSingleZoneOnly

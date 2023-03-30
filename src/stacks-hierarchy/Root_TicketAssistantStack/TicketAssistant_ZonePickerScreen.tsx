@@ -29,6 +29,7 @@ export const TicketAssistant_ZonePickerScreen = ({
         >
           {t(TicketAssistantTexts.zonesSelector.title)}
         </ThemeText>
+
         <View style={styles.bottomView}>
           <Button
             interactiveColor="interactive_0"

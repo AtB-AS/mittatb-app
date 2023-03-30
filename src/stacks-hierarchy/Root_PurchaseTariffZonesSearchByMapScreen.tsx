@@ -99,12 +99,14 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
           leftButton={{type: 'back'}}
         />
 
-        <ZonesSelectorButtonsComponent
-          toTariffZone={selectedZones.to}
-          fromTariffZone={selectedZones.from}
-          onVenueSearchClick={onVenueSearchClick}
-          isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
-        />
+        <View style={styles.buttonSection}>
+          <ZonesSelectorButtonsComponent
+            toTariffZone={selectedZones.to}
+            fromTariffZone={selectedZones.from}
+            onVenueSearchClick={onVenueSearchClick}
+            isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
+          />
+        </View>
       </View>
 
       <ZonesMapSelectorComponent
@@ -127,5 +129,8 @@ const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   },
   saveButton: {
     marginHorizontal: theme.spacings.medium,
+  },
+  buttonSection: {
+    padding: theme.spacings.small,
   },
 }));
