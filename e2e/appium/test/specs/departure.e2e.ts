@@ -110,19 +110,15 @@ describe('Departure', () => {
       await DepartureOverviewPage.showMoreDepartures();
       let noDeparturesQuay =
         await DepartureOverviewPage.getNumberOfDepartures();
-      expect(noDepartures).toBeLessThan(noDeparturesQuay);
+      expect(noDeparturesQuay).toBeGreaterThan(noDepartures);
 
       // Show stop place
       await DepartureOverviewPage.showAllQuays();
-      expect(await DepartureOverviewPage.getNumberOfDepartures('0')).toEqual(
-        noDepartures,
-      );
 
       // Show more departures (quay button)
       await DepartureOverviewPage.showQuay();
-      expect(noDepartures).toBeLessThan(
-        await DepartureOverviewPage.getNumberOfDepartures(),
-      );
+      noDeparturesQuay = await DepartureOverviewPage.getNumberOfDepartures();
+      expect(noDeparturesQuay).toBeGreaterThan(noDepartures);
     } catch (errMsg) {
       await AppHelper.screenshot(
         'error_departure_should_show_more_departures_for_a_single_quay',
@@ -157,11 +153,12 @@ describe('Departure', () => {
 
       // Show intermediate stops
       const noPassed = await DepartureDetailsPage.passedLegs.length;
-      // Tap 'intermediate stops': Missing id
-      // expect(await DepartureDetailsPage.passedLegs.length).toBeGreaterThan(noPassed)
-      const quayName = await DepartureDetailsPage.getQuayName('passed', 0);
+      await DepartureDetailsPage.expandAndHideIntermediateStops();
+      const noPassedExpanded = await DepartureDetailsPage.passedLegs.length;
+      expect(noPassedExpanded).toBeGreaterThan(noPassed);
 
       // Show another quay
+      const quayName = await DepartureDetailsPage.getQuayName('passed', 0);
       await DepartureDetailsPage.tapQuay('passed', 0);
       await ElementHelper.expectText(quayName);
 

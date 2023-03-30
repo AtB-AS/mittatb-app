@@ -77,6 +77,7 @@ describe('Travel search', () => {
       const travelTime: number = await TravelsearchOverviewPage.getTravelTime(
         0,
       );
+      const noLegs = await TravelsearchOverviewPage.getNumberOfLegs(0)
       //NB! Note the rounding gives wrong numbers here
       //TODO Sometimes +1, sometimes not
       //expect(TimeHelper.getTimeDurationInMin(startTime, endTime)).toEqual(travelTime + 1)
@@ -96,10 +97,21 @@ describe('Travel search', () => {
       );
       expect(departureInDetails).toContain(departure);
 
-      // TODO: Check end time and arrival
+      // Check end time and arrival
+      //TODO TEST
+      await AppHelper.scrollDownUntilId(`travelTime`)
+      const endTimeInDetails = await TravelsearchDetailsPage.getTime(
+        'end',
+        noLegs - 1,
+      );
+      expect(endTime).toEqual(endTimeInDetails);
+      const arrivalInDetails = await TravelsearchDetailsPage.getLocation(
+        'end',
+        noLegs - 1,
+      );
+      expect(arrivalInDetails).toContain(arrival);
 
       // Check travel time
-      await AppHelper.scrollDownUntilId('travelTime');
       const travelTimeInDep =
         await TravelsearchDetailsPage.travelTime.getText();
       expect(travelTimeInDep).toContain(travelTime.toString());
@@ -116,12 +128,30 @@ describe('Travel search', () => {
   /**
    * Compare number of legs from overview to details
    */
-  xit('should have correct legs in the details', async () => {
-    const departure = 'Prinsens gate';
-    const arrival = 'Melhus skysstasjon';
+  it('should have correct legs in the details', async () => {
+    const departure = 'Snåsa skole';
+    const arrival = 'Fillan kai';
 
     try {
-      // needs to add ids to each leg including +2/+3/etc
+      await ElementHelper.waitForElement('id', 'searchFromButton');
+      await FrontPagePage.searchFrom.click();
+      await SearchPage.setSearchLocation(departure);
+
+      await ElementHelper.waitForElement('id', 'searchToButton');
+      await FrontPagePage.searchTo.click();
+      await SearchPage.setSearchLocation(arrival);
+
+      // Onboarding
+      await TravelsearchOverviewPage.confirmOnboarding();
+
+      // Number of legs
+      await ElementHelper.waitForElement('id', `tripSearchSearchResult0`);
+      const noLegs = await TravelsearchOverviewPage.getNumberOfLegs(0)
+      await TravelsearchOverviewPage.openFirstSearchResult()
+      await AppHelper.scrollDownUntilId(`legContainer${noLegs - 1}`)
+      await AppHelper.scrollDownUntilId(`travelTime`)
+      const endLocation = await TravelsearchDetailsPage.getLocation('end', noLegs - 1)
+      expect(endLocation).toContain(arrival)
     } catch (errMsg) {
       await AppHelper.screenshot(
         'error_travelsearch_should_have_correct_legs_in_the_details',

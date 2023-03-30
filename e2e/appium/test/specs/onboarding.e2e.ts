@@ -13,12 +13,12 @@ describe('Onboarding', () => {
    */
   it('should onboard', async () => {
     try {
-      await ElementHelper.waitForElement('id', 'nextButton');
-      await OnboardingPage.nextButton.click();
+      await ElementHelper.waitForElement('id', 'nextButtonOnboardingWelcome');
+      await OnboardingPage.nextButtonOnboardingWelcome.click();
       await AppHelper.pause(2000);
 
-      await ElementHelper.waitForElement('id', 'nextButton');
-      await OnboardingPage.nextButton.click();
+      await ElementHelper.waitForElement('id', 'nextButtonIntercomOnboarding');
+      await OnboardingPage.nextButtonIntercomOnboarding.click();
 
       await ElementHelper.waitForElement('id', 'acceptRestrictionsButton');
       await OnboardingPage.accRestrButton.click();
