@@ -29,7 +29,10 @@ export const TicketAssistant_CategoryPickerScreen = () => {
       <View style={styles.backdrop}>
         <DashboardBackground width={'100%'} height={'100%'} />
       </View>
-      <ScrollView>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.contentContainer}
+      >
         <ThemeText
           type={'body__primary--jumbo--bold'}
           style={styles.header}
@@ -39,37 +42,41 @@ export const TicketAssistant_CategoryPickerScreen = () => {
           {t(TicketAssistantTexts.categoryPicker.title)}
         </ThemeText>
 
-        <Sections.Section style={styles.categoriesContainer}>
-          {/*eslint-disable-next-line rulesdir/translations-warning*/}
-          {TicketAssistantTexts.categoryPicker.categories.map(
-            ({title, description}, index) => (
-              <Sections.ExpandableSectionItem
-                key={index}
-                textType={'body__primary--bold'}
-                text={t(title)}
-                showIconText={false}
-                expandContent={
-                  <View>
-                    <ThemeText
-                      type={'body__tertiary'}
-                      style={styles.expandedContent}
-                      isMarkdown={true}
-                    >
-                      {t(description)}
-                    </ThemeText>
-                    <Button
-                      style={styles.chooseButton}
-                      onPress={() => {
-                        updateCategory(index);
-                      }}
-                      text={t(TicketAssistantTexts.categoryPicker.chooseButton)}
-                    />
-                  </View>
-                }
-              />
-            ),
-          )}
-        </Sections.Section>
+        <View style={styles.test}>
+          <Sections.Section style={styles.categoriesContainer}>
+            {/*eslint-disable-next-line rulesdir/translations-warning*/}
+            {TicketAssistantTexts.categoryPicker.categories.map(
+              ({title, description}, index) => (
+                <Sections.ExpandableSectionItem
+                  key={index}
+                  textType={'body__primary--bold'}
+                  text={t(title)}
+                  showIconText={false}
+                  expandContent={
+                    <View>
+                      <ThemeText
+                        type={'body__tertiary'}
+                        style={styles.expandedContent}
+                        isMarkdown={true}
+                      >
+                        {t(description)}
+                      </ThemeText>
+                      <Button
+                        style={styles.chooseButton}
+                        onPress={() => {
+                          updateCategory(index);
+                        }}
+                        text={t(
+                          TicketAssistantTexts.categoryPicker.chooseButton,
+                        )}
+                      />
+                    </View>
+                  }
+                />
+              ),
+            )}
+          </Sections.Section>
+        </View>
       </ScrollView>
     </View>
   );
@@ -84,14 +91,22 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     padding: 0,
     margin: 0,
   },
+  contentContainer: {
+    flexGrow: 1,
+  },
   header: {
     textAlign: 'center',
   },
   container: {
-    height: '100%',
-    flex: 1,
-    //place content at top
+    flex: 1, //place content at top
     backgroundColor: theme.static.background.background_accent_0.background,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  test: {
+    flex: 1,
+    marginTop: theme.spacings.xLarge,
   },
   chooseButton: {
     marginTop: theme.spacings.medium,

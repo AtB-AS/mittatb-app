@@ -78,13 +78,8 @@ const TicketAssistantTexts = {
       ),
     mainButton: _('Neste', 'Next'),
   },
-  intercom: {
-    title: _('Bidra til å gjøre appen bedre', 'Help us make the app better'),
-    description: _(
-      'Vi ønsker dine tilbakemeldinger for å gjøre appen bedre. Dette gjør du enklest i chatten i høyre hjørne. Chatten er anonym.',
-      'We appreciate your feedback to make the app better. Use the chat in the upper right corner. The chat is anonymous.',
-    ),
-    mainButton: _('Neste', 'Next'),
+  zonesSelector: {
+    title: _('Hvor skal du reise?', 'Where do you travel?'),
   },
 };
 export default TicketAssistantTexts;
