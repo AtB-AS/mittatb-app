@@ -192,20 +192,6 @@ const TripSection: React.FC<TripSectionProps> = ({
             <ThemeText style={style.legLineName}>{getLineName(leg)}</ThemeText>
           </TripRow>
         )}
-        {!screenReaderEnabled &&
-        realtimeMapEnabled &&
-        realtimePosition &&
-        onExpand ? (
-          <TripRow>
-            <Button
-              type="pill"
-              leftIcon={{svg: Map}}
-              text={t(TripDetailsTexts.trip.leg.live)}
-              interactiveColor="interactive_3"
-              onPress={onExpand}
-            />
-          </TripRow>
-        ) : null}
         {leg.situations.map((situation) => (
           <TripRow rowLabel={<SituationOrNoticeIcon situation={situation} />}>
             <SituationMessageBox noStatusIcon={true} situation={situation} />
@@ -246,6 +232,20 @@ const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
+        {!screenReaderEnabled &&
+        realtimeMapEnabled &&
+        realtimePosition &&
+        onExpand ? (
+          <TripRow>
+            <Button
+              type="pill"
+              leftIcon={{svg: Map}}
+              text={t(TripDetailsTexts.trip.leg.live)}
+              interactiveColor="interactive_3"
+              onPress={onExpand}
+            />
+          </TripRow>
+        ) : null}
         {lastPassedStop?.quay?.name && (
           <TripRow>
             <View style={style.realtime}>
