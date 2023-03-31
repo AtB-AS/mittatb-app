@@ -10,7 +10,6 @@ import {
   GlobalMessageType,
 } from '@atb/global-messages/types';
 import type {LanguageAndTextType} from '@atb/translations';
-
 export function mapToGlobalMessages(
   result: FirebaseFirestoreTypes.QueryDocumentSnapshot<GlobalMessageRaw>[],
 ): GlobalMessageType[] {
@@ -35,7 +34,10 @@ function mapToGlobalMessage(
   const appVersionMin = result.appVersionMin;
   const appVersionMax = result.appVersionMax;
   const platforms = result.appPlatforms;
+  const startDate = result.startDate;
+  const endDate = result.endDate;
 
+  console.log('Validated');
   if (!result.active) return;
   if (!isAppPlatformValid(platforms)) return;
   if (appVersionMin && appVersionMin > APP_VERSION) return;
@@ -54,6 +56,8 @@ function mapToGlobalMessage(
     body,
     title,
     isDismissable,
+    endDate,
+    startDate,
   };
 }
 
