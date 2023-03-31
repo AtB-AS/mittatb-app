@@ -10,7 +10,6 @@ import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
-import {ContentWithDisappearingHeader} from '@atb/components/disappearing-header';
 import {MessageBox} from '@atb/components/message-box';
 import {LargeFullScreenHeader} from '@atb/components/screen-header/FullScreenHeader';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
@@ -20,7 +19,6 @@ import {usePreferences} from '@atb/preferences';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
-import {CompactTravelDetailsMap} from '@atb/travel-details-map-screen';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
 import CancelledDepartureMessage from '@atb/travel-details-screens/components/CancelledDepartureMessage';
 import {TicketingMessages} from '@atb/travel-details-screens/components/DetailsMessages';
@@ -93,27 +91,9 @@ export const DepartureDetailsScreenComponent = ({
       <LargeFullScreenHeader
         title={title ?? t(DepartureDetailsTexts.header.notFound)}
         globalMessageContext="app-assistant"
-      >
-        <ThemeText>Test</ThemeText>
-      </LargeFullScreenHeader>
-
-      <ContentWithDisappearingHeader
-        header={
-          mapData && (
-            <CompactTravelDetailsMap
-              mapLegs={mapData.mapLegs}
-              fromPlace={mapData.start}
-              toPlace={mapData.stop}
-              onExpand={() =>
-                onPressDetailsMap({
-                  legs: mapData.mapLegs,
-                  fromPlace: mapData.start,
-                  toPlace: mapData.stop,
-                })
-              }
-            />
-          )
-        }
+        headerChildren={<ThemeText>Test</ThemeText>}
+        // color="background_accent_3"
+        buttonProps={{}}
       >
         <View
           style={styles.scrollView__content}
@@ -183,7 +163,26 @@ export const DepartureDetailsScreenComponent = ({
             onPressQuay={onPressQuay}
           />
         </View>
-      </ContentWithDisappearingHeader>
+      </LargeFullScreenHeader>
+
+      {/* <ContentWithDisappearingHeader
+        header={
+          mapData && (
+            <CompactTravelDetailsMap
+              mapLegs={mapData.mapLegs}
+              fromPlace={mapData.start}
+              toPlace={mapData.stop}
+              onExpand={() =>
+                onPressDetailsMap({
+                  legs: mapData.mapLegs,
+                  fromPlace: mapData.start,
+                  toPlace: mapData.stop,
+                })
+              }
+            />
+          )
+        }
+      ></ContentWithDisappearingHeader> */}
       {lastPassedStop?.quay?.name && (
         <View style={styles.realtime}>
           <ThemeIcon

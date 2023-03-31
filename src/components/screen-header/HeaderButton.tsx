@@ -77,9 +77,8 @@ const BaseHeaderButton = ({
   </TouchableOpacity>
 );
 
-export const LargeHeaderButton = (
-  buttonProps: Omit<HeaderButtonProps, 'type'>,
-) => {
+export type LargeHeaderButtonProps = Omit<HeaderButtonProps, 'type' | 'text'>;
+export const LargeHeaderButton = (buttonProps: LargeHeaderButtonProps) => {
   const navigation = useNavigation();
   const {t} = useTranslation();
   const {theme} = useTheme();
@@ -95,7 +94,7 @@ export const LargeHeaderButton = (
       {...props}
     >
       <ThemeIcon
-        color={color}
+        colorType={color}
         svg={ArrowLeft}
         style={{marginRight: theme.spacings.xSmall}}
       />

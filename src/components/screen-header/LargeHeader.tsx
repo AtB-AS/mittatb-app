@@ -5,7 +5,8 @@ import {getStaticColor, StaticColor} from '@atb/theme/colors';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import React from 'react';
 import {View, ViewStyle} from 'react-native';
-import {LargeHeaderButton} from './HeaderButton';
+import {ContentWithDisappearingHeader} from '../disappearing-header';
+import {LargeHeaderButton, LargeHeaderButtonProps} from './HeaderButton';
 
 export {AnimatedScreenHeader} from './AnimatedScreenHeader';
 
@@ -21,7 +22,17 @@ export type LargeScreenHeaderProps = {
   containerStyle?: ViewStyle;
   color?: StaticColor;
   setFocusOnLoad?: boolean;
+  headerChildren?: JSX.Element | JSX.Element[];
   children?: JSX.Element | JSX.Element[];
+};
+
+export const LargeScreenHeaderTop = (props: LargeHeaderButtonProps) => {
+  const styles = useStyles();
+  return (
+    <View style={styles.topContainer}>
+      <LargeHeaderButton {...props}></LargeHeaderButton>
+    </View>
+  );
 };
 
 export const LargeScreenHeader = ({
@@ -32,6 +43,7 @@ export const LargeScreenHeader = ({
   title,
   titleA11yLabel,
   globalMessageContext,
+  headerChildren,
   children,
 }: LargeScreenHeaderProps) => {
   const styles = useStyles();
@@ -41,46 +53,57 @@ export const LargeScreenHeader = ({
   const backgroundColor = getStaticColor(themeName, themeColor).background;
 
   return (
-    <View style={[styles.container, style, {backgroundColor}]}>
-      <View style={styles.button}>
-        <LargeHeaderButton />
-      </View>
-      {title && (
-        <View
-          accessibilityLabel={titleA11yLabel}
-          accessible={!!title}
-          importantForAccessibility={!!title ? 'yes' : 'no-hide-descendants'}
-          accessibilityRole="header"
-          style={styles.headerTitle}
-          ref={focusRef}
-        >
-          <ThemeText
-            accessible={false}
-            type="heading--medium"
-            color={themeColor}
-          >
-            {title}
-          </ThemeText>
-        </View>
-      )}
-      <View style={[styles.childrenContainer, containerStyle]}>{children}</View>
-      <GlobalMessage
-        globalMessageContext={globalMessageContext}
-        style={styles.globalMessageBox}
-      />
+    <View style={[styles.container, style]}>
+      <ContentWithDisappearingHeader
+        header={
+          <View style={[styles.headerContainer, {backgroundColor}]}>
+            {title && (
+              <View
+                accessibilityLabel={titleA11yLabel}
+                accessible={!!title}
+                importantForAccessibility={
+                  !!title ? 'yes' : 'no-hide-descendants'
+                }
+                accessibilityRole="header"
+                style={styles.headerTitle}
+                ref={focusRef}
+              >
+                <ThemeText
+                  accessible={false}
+                  type="heading--medium"
+                  color={themeColor}
+                >
+                  {title}
+                </ThemeText>
+              </View>
+            )}
+            <View style={[styles.childrenContainer, containerStyle]}>
+              {headerChildren}
+            </View>
+            <GlobalMessage
+              globalMessageContext={globalMessageContext}
+              style={styles.globalMessageBox}
+            />
+          </View>
+        }
+      >
+        {children}
+      </ContentWithDisappearingHeader>
     </View>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.medium,
-    borderTopLeftRadius: theme.border.radius.circle,
-    borderTopRightRadius: theme.border.radius.circle,
+    height: '100%',
   },
-  button: {
-    marginBottom: theme.spacings.medium,
+  headerContainer: {
+    paddingHorizontal: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
+  },
+  topContainer: {
+    marginVertical: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
   },
   headerTitle: {
     marginBottom: theme.spacings.medium,
