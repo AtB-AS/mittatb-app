@@ -9,6 +9,8 @@ import {
   isFeaturePoint,
   toCoordinates,
 } from '@atb/components/map/utils';
+import {getStaticColor} from '@atb/theme/colors';
+import {useTheme} from '@atb/theme';
 
 type Props = {
   mapCameraRef: RefObject<MapboxGL.Camera>;
@@ -18,6 +20,8 @@ type Props = {
 
 export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
   const shapeSource = useRef<MapboxGL.ShapeSource>(null);
+  const {themeName} = useTheme();
+  const scooterColor = getStaticColor(themeName, 'transport_scooter');
 
   return (
     <MapboxGL.ShapeSource
@@ -59,7 +63,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
           textField: ['concat', ['get', 'currentFuelPercent'], '%'],
           textAnchor: 'center',
           textOffset: [0.7, -0.25],
-          textColor: '#fff',
+          textColor: scooterColor.text,
           textSize: 11,
           iconImage: {uri: 'PinScooter'},
           iconSize: 0.85,
@@ -82,8 +86,8 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
         minZoomLevel={13.5}
         belowLayerID="clusterIcon"
         style={{
-          circleColor: '#4A753A',
-          circleStrokeColor: '#4A753A',
+          circleColor: scooterColor.background,
+          circleStrokeColor: scooterColor.background,
           circleOpacity: 1,
           circleStrokeOpacity: 0.3,
           circleStrokeWidth: 8,
