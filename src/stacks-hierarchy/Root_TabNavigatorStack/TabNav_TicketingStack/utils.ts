@@ -1,8 +1,7 @@
-import {Language, PurchaseOverviewTexts} from '@atb/translations';
-import {TFunc} from '@leile/lobo-t';
+import {PurchaseOverviewTexts, TranslateFunction} from '@atb/translations';
 
 export function getValidOnTrainNoticeText(
-  t: TFunc<typeof Language>,
+  t: TranslateFunction,
   fareProductType?: string,
 ) {
   if (fareProductType === 'single')

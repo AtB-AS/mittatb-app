@@ -15,7 +15,7 @@ import {
 import {useIsVehiclesEnabled} from '@atb/mobility/use-vehicles-enabled';
 import {
   MapSelectionActionType,
-  VehiclesFilter,
+  VehiclesFilterType,
   VehiclesState,
 } from '@atb/components/map/types';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
@@ -52,7 +52,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
     FeatureCollection<GeoJSON.Point, VehicleFragment>
   >(toFeatureCollection([]));
 
-  const [filter, setFilter] = useState<VehiclesFilter>();
+  const [filter, setFilter] = useState<VehiclesFilterType>();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -105,7 +105,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
     });
   };
 
-  const onFilterChange = (filter: VehiclesFilter) => {
+  const onFilterChange = (filter: VehiclesFilterType) => {
     setFilter(filter);
   };
 

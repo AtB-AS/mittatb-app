@@ -17,9 +17,6 @@ import ErrorBoundary from './error-boundary';
 import {PreferencesContextProvider} from './preferences';
 import configureAndStartBugsnag from './diagnostics/bugsnagConfig';
 import AccessibilityContextProvider from '@atb/AccessibilityContext';
-
-configureAndStartBugsnag();
-
 import {MAPBOX_API_TOKEN} from '@env';
 import MapboxGL from '@rnmapbox/maps';
 import AppLanguageProvider from '@atb/translations/LanguageContext';
@@ -32,6 +29,8 @@ import {FirestoreConfigurationContextProvider} from '@atb/configuration/Firestor
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Platform, UIManager} from 'react-native';
 import FiltersContextProvider from '@atb/travel-search-filters/FiltersContext';
+
+configureAndStartBugsnag();
 
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 

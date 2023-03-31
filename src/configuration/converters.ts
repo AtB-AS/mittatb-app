@@ -5,7 +5,7 @@ import {
   TimeSelectionMode,
   TravellerSelectionMode,
   ZoneSelectionMode,
-} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
+} from './types';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
 import {isArray} from 'lodash';

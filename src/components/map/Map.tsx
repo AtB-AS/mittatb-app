@@ -11,14 +11,14 @@ import {isFeaturePoint, zoomIn, zoomOut} from './utils';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
 import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
-import {MapProps, MapFilter as MapFilterType} from './types';
+import {MapFilterType, MapProps} from './types';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {MapControls} from './components/MapControls';
 import {shadows} from './components/shadows';
 import * as Mobility from '@atb/components/map/components/mobility';
-import {MapFilter} from '@atb/components/map/components/MapFilter';
+import {MapFilter} from '@atb/components/map/components/filter/MapFilter';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -130,15 +130,7 @@ export const Map = (props: MapProps) => {
           )}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
-          {(props.vehicles || props.stations) && (
-            <MapFilter
-              isLoading={{
-                vehicles: props.vehicles?.isLoading ?? false,
-                stations: props.stations?.isLoading ?? false,
-              }}
-              onFilterChange={onFilterChange}
-            />
-          )}
+          <MapFilter onFilterChange={onFilterChange} />
           {currentLocation && (
             <PositionArrow
               onPress={() => {
