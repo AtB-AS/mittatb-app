@@ -1,23 +1,32 @@
 import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
+import {QuayFragment} from '@atb/api/types/generated/fragments/quays';
+import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {QuayFragment} from '@atb/api/types/generated/fragments/quays';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
+import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
+import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {ContentWithDisappearingHeader} from '@atb/components/disappearing-header';
 import {MessageBox} from '@atb/components/message-box';
-import {FullScreenHeader} from '@atb/components/screen-header';
+import {LargeFullScreenHeader} from '@atb/components/screen-header/FullScreenHeader';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import CancelledDepartureMessage from '@atb/travel-details-screens/components/CancelledDepartureMessage';
-import PaginatedDetailsHeader from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
+import {usePreferences} from '@atb/preferences';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
+import {CompactTravelDetailsMap} from '@atb/travel-details-map-screen';
+import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
+import CancelledDepartureMessage from '@atb/travel-details-screens/components/CancelledDepartureMessage';
+import {TicketingMessages} from '@atb/travel-details-screens/components/DetailsMessages';
+import PaginatedDetailsHeader from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
 import {animateNextChange} from '@atb/utils/animation';
+import {formatToClock} from '@atb/utils/date';
 import {getQuayName} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {useIsFocused} from '@react-navigation/native';
@@ -26,19 +35,10 @@ import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import Time from './components/Time';
 import TripLegDecoration from './components/TripLegDecoration';
 import TripRow from './components/TripRow';
-import {CompactTravelDetailsMap} from '@atb/travel-details-map-screen';
 import {ServiceJourneyDeparture} from './types';
 import useDepartureData, {
   EstimatedCallWithMetadata,
 } from './use-departure-data';
-import {TicketingMessages} from '@atb/travel-details-screens/components/DetailsMessages';
-import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
-import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
-import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
-import {formatToClock} from '@atb/utils/date';
-import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
-import {usePreferences} from '@atb/preferences';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -90,10 +90,12 @@ export const DepartureDetailsScreenComponent = ({
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader
-        leftButton={{type: 'back'}}
+      <LargeFullScreenHeader
         title={title ?? t(DepartureDetailsTexts.header.notFound)}
-      />
+        globalMessageContext="app-assistant"
+      >
+        <ThemeText>Test</ThemeText>
+      </LargeFullScreenHeader>
 
       <ContentWithDisappearingHeader
         header={
