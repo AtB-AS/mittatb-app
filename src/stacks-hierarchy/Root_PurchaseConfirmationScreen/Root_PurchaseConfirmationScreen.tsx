@@ -33,7 +33,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {getOtherDeviceIsInspectableWarning} from '../Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
+import {getOtherDeviceIsInspectableWarning} from '../../fare-contracts/utils';
 import useOfferState, {
   UserProfileWithCountAndOffer,
 } from '../Root_PurchaseOverviewScreen/use-offer-state';

@@ -17,12 +17,12 @@ import {useSearchHistory} from '@atb/search-history';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {TripSearchPreferences, usePreferences} from '@atb/preferences';
 import {isValidTripLocations} from '@atb/utils/location';
+import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 import {
   InputMaybe,
   StreetMode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {flatMap} from '@atb/utils/array';
-import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 
 export default function useTripsQuery(
   fromLocation: Location | undefined,

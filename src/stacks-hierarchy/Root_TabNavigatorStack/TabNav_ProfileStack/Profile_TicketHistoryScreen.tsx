@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {filterExpiredFareContracts, useTicketingState} from '@atb/ticketing';
-import FareContractAndReservationsScrollView from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/FareContractAndReservationsScrollView';
+import {FareContractAndReservationsList} from '@atb/fare-contracts';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import TicketHistoryTexts from '@atb/translations/screens/subscreens/TicketHistory';
 
@@ -22,7 +22,7 @@ export const Profile_TicketHistoryScreen: React.FC = () => {
         title={t(TicketHistoryTexts.header)}
         leftButton={{type: 'back'}}
       />
-      <FareContractAndReservationsScrollView
+      <FareContractAndReservationsList
         fareContracts={expiredFareContracts}
         reservations={rejectedReservations}
         isRefreshing={isRefreshingFareContracts}

@@ -1,8 +1,8 @@
 import {
   CameraFocusModeType,
-  MapSelectionMode,
-  MapSelectionActionType,
   MapLeg,
+  MapSelectionActionType,
+  MapSelectionMode,
 } from '../types';
 import {Coordinates} from '@atb/utils/coordinates';
 import {RefObject, useEffect, useState} from 'react';
