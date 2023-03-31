@@ -342,14 +342,6 @@ export function dateWithReplacedTime(date: Date | string, time: string) {
   });
 }
 
-export function isDateInRangeFromNow(
-  date: string | Date,
-  numberOfMinutes: number,
-) {
-  const minutesFromNow = differenceInMinutes(parseIfNeeded(date), new Date());
-  return numberOfMinutes > Math.abs(minutesFromNow);
-}
-
 export function differenceInMinutesStrings(
   dateLeft: string | Date,
   dateRight: string | Date,

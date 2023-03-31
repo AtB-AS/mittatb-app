@@ -51,8 +51,6 @@ import {usePreferences} from '@atb/preferences';
 import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
 import {Button} from '@atb/components/button';
 import {Map} from '@atb/assets/svg/mono-icons/map';
-import {VehiclePosition} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
-import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -62,10 +60,9 @@ type TripSectionProps = {
   interchangeDetails?: InterchangeDetails;
   leg: Leg;
   testID?: string;
-  onExpand?(): void;
+  onPressShowLive?(): void;
   onPressDeparture: TripProps['onPressDeparture'];
   onPressQuay: TripProps['onPressQuay'];
-  realtimePosition?: VehiclePosition;
 };
 
 export type InterchangeDetails = {
@@ -81,10 +78,9 @@ const TripSection: React.FC<TripSectionProps> = ({
   interchangeDetails,
   leg,
   testID,
-  onExpand,
+  onPressShowLive,
   onPressDeparture,
   onPressQuay,
-  realtimePosition,
 }) => {
   const {t, language} = useTranslation();
   const style = useSectionStyles();
@@ -110,7 +106,6 @@ const TripSection: React.FC<TripSectionProps> = ({
   const notices = getNoticesForLeg(leg);
 
   const realtimeMapEnabled = useRealtimeMapEnabled();
-  const screenReaderEnabled = useIsScreenReaderEnabled();
 
   const lastPassedStop = leg.serviceJourneyEstimatedCalls
     ?.filter((a) => !a.predictionInaccurate && a.actualDepartureTime)
@@ -232,17 +227,14 @@ const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
-        {!screenReaderEnabled &&
-        realtimeMapEnabled &&
-        realtimePosition &&
-        onExpand ? (
+        {realtimeMapEnabled && onPressShowLive ? (
           <TripRow>
             <Button
               type="pill"
               leftIcon={{svg: Map}}
               text={t(TripDetailsTexts.trip.leg.live)}
               interactiveColor="interactive_3"
-              onPress={onExpand}
+              onPress={onPressShowLive}
             />
           </TripRow>
         ) : null}

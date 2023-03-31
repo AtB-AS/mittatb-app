@@ -1,7 +1,7 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Feedback} from '@atb/components/feedback';
 import {StyleSheet} from '@atb/theme';
-import {isDateInRangeFromNow, secondsBetween} from '@atb/utils/date';
+import {secondsBetween} from '@atb/utils/date';
 import {AxiosError} from 'axios';
 import React from 'react';
 import {View} from 'react-native';
@@ -14,6 +14,7 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {isSignificantFootLegWalkOrWaitTime} from '@atb/travel-details-screens/utils';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
 import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
+import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -36,10 +37,10 @@ const Trip: React.FC<TripProps> = ({
   const legs = tripPattern.legs.filter((leg, i) =>
     isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
   );
-  const shouldShowLive = isDateInRangeFromNow(
-    tripPattern.expectedStartTime,
-    12 * 60,
-  );
+
+  const realtimeMapEnabled = useRealtimeMapEnabled();
+  const shouldShowLive =
+    !tripPattern.legs.find((a) => !a.realtime) && realtimeMapEnabled;
 
   const ids = shouldShowLive
     ? (tripPattern.legs
@@ -54,7 +55,7 @@ const Trip: React.FC<TripProps> = ({
       <View style={styles.trip}>
         {tripPattern &&
           legs.map((leg, index) => {
-            const tripVehiclePosition = vehiclePositions?.find(
+            const legVehiclePosition = vehiclePositions?.find(
               (vehicle) =>
                 vehicle.serviceJourney?.id === leg.serviceJourney?.id,
             );
@@ -72,15 +73,18 @@ const Trip: React.FC<TripProps> = ({
                 )}
                 leg={leg}
                 testID={'legContainer' + index}
-                realtimePosition={tripVehiclePosition}
-                onExpand={() =>
-                  onPressDetailsMap({
-                    legs: tripPattern.legs,
-                    fromPlace: tripPattern.legs[0].fromPlace,
-                    toPlace:
-                      tripPattern.legs[tripPattern.legs.length - 1].toPlace,
-                    _vehiclePosition: tripVehiclePosition,
-                  })
+                onPressShowLive={
+                  legVehiclePosition
+                    ? () =>
+                        onPressDetailsMap({
+                          legs: tripPattern.legs,
+                          fromPlace: tripPattern.legs[0].fromPlace,
+                          toPlace:
+                            tripPattern.legs[tripPattern.legs.length - 1]
+                              .toPlace,
+                          _initialVehiclePosition: legVehiclePosition,
+                        })
+                    : undefined
                 }
                 onPressDeparture={onPressDeparture}
                 onPressQuay={onPressQuay}

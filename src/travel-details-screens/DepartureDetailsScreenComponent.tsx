@@ -35,13 +35,12 @@ import {TicketingMessages} from '@atb/travel-details-screens/components/DetailsM
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
-import {formatToClock, isDateInRangeFromNow} from '@atb/utils/date';
+import {formatToClock} from '@atb/utils/date';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
 import {usePreferences} from '@atb/preferences';
 import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
 import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
-import useIsScreenReaderEnabled from '@atb/utils/use-is-screen-reader-enabled';
 import {Button} from '@atb/components/button';
 import {Map} from '@atb/assets/svg/mono-icons/map';
 
@@ -81,9 +80,9 @@ export const DepartureDetailsScreenComponent = ({
   const mapData = useMapData(activeItem);
 
   const realtimeMapEnabled = useRealtimeMapEnabled();
-  const screenReaderEnabled = useIsScreenReaderEnabled();
 
-  const shouldShowLive = isDateInRangeFromNow(activeItem.serviceDate, 12 * 60);
+  const shouldShowLive =
+    !estimatedCallsWithMetadata.find((a) => !a.realtime) && realtimeMapEnabled;
 
   const {vehiclePositions} = useGetServiceJourneyVehicles(
     shouldShowLive ? [activeItem.serviceJourneyId] : undefined,
@@ -150,7 +149,7 @@ export const DepartureDetailsScreenComponent = ({
               message={t(DepartureDetailsTexts.messages.noActiveItem)}
             />
           )}
-          {!screenReaderEnabled && realtimeMapEnabled && mapData ? (
+          {realtimeMapEnabled && mapData ? (
             <Button
               type="pill"
               leftIcon={{svg: Map}}
@@ -165,7 +164,7 @@ export const DepartureDetailsScreenComponent = ({
                   legs: mapData.mapLegs,
                   fromPlace: mapData.start,
                   toPlace: mapData.stop,
-                  _vehiclePosition: vehiclePosition,
+                  _initialVehiclePosition: vehiclePosition,
                 })
               }
             />
