@@ -4,7 +4,7 @@ import {
 } from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 
-export type ZonesSelectorButtonsProps = {
+export type TariffZonesSelectorButtonsProps = {
   toTariffZone: TariffZoneWithMetadata;
   fromTariffZone: TariffZoneWithMetadata;
   isApplicableOnSingleZoneOnly: boolean;
@@ -13,7 +13,7 @@ export type ZonesSelectorButtonsProps = {
   ) => void;
 };
 
-export type ZonesSelectorMapsProps = {
+export type TariffZonesSelectorMapsProps = {
   selectedZones: TariffZoneSelection;
   isApplicableOnSingleZoneOnly: boolean;
   setSelectedZones: (selectedZOnes: TariffZoneSelection) => void;
