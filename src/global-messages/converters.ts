@@ -37,7 +37,6 @@ function mapToGlobalMessage(
   const startDate = result.startDate;
   const endDate = result.endDate;
 
-  console.log('Validated');
   if (!result.active) return;
   if (!isAppPlatformValid(platforms)) return;
   if (appVersionMin && appVersionMin > APP_VERSION) return;

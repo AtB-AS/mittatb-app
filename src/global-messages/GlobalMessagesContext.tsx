@@ -40,11 +40,9 @@ const GlobalMessagesContext = createContext<GlobalMessageContextState>(
 
 const GlobalMessagesContextProvider: React.FC = ({children}) => {
   const [globalMessages, setGlobalMessages] = useState<GlobalMessageType[]>([]);
-  const hasTimeActivatedMessages = globalMessages.some(
-    (gl) =>
-      (gl.startDate && gl.startDate.toMillis() < Date.now()) ||
-      (gl.endDate && gl.endDate.toMillis() > Date.now()),
-  );
+  const [upcomingGlobalMessages, setUpcomingGlobalMessages] = useState<
+    GlobalMessageType[]
+  >([]);
   const [dismissedGlobalMessages, setDismissedGlobalMessages] = useState<
     GlobalMessageType[]
   >([]);
@@ -60,9 +58,14 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
         ])
         .onSnapshot(
           async (snapshot) => {
-            const globalMessages = mapToGlobalMessages(snapshot.docs);
-            setGlobalMessages(globalMessages.filter(isWithinTimeRange));
-            await setLatestDismissedGlobalMessages(globalMessages);
+            setDisableInterval(false);
+            const newGlobalMessages = mapToGlobalMessages(snapshot.docs);
+            setGlobalMessages(newGlobalMessages.filter(isWithinTimeRange));
+            await setLatestDismissedGlobalMessages(newGlobalMessages);
+            const newUpcomingGlobalMessages = newGlobalMessages.filter(
+              (gm) => gm.startDate && gm.startDate?.toMillis() > Date.now(),
+            );
+            setUpcomingGlobalMessages(newUpcomingGlobalMessages);
           },
           (err) => {
             console.warn(err);
@@ -78,29 +81,48 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
     return globalMessages.map((gm) => gm.id).indexOf(dismissedMessageId) > -1;
   };
 
-  useInterval(
-    () => {
-      setGlobalMessages(globalMessages.filter(isWithinTimeRange));
-    },
-    2500,
-    [globalMessages, hasTimeActivatedMessages],
-    !hasTimeActivatedMessages,
-  );
-
   const isWithinTimeRange = (globalMessage: GlobalMessageType) => {
     const now = Date.now();
-    const startDate =
-      globalMessage.startDate?.toMillis() ?? new Date(0).getMilliseconds();
-    const endDate =
-      globalMessage.endDate?.toMillis() ??
-      new Date(8640000000000000).getMilliseconds();
-    if (startDate > now) {
-      return false;
-    } else if (endDate < now) {
-      return false;
-    }
-    return true;
+    const startDate = globalMessage.startDate?.toMillis() ?? 0;
+    const endDate = globalMessage.endDate?.toMillis() ?? 8640000000000000;
+
+    return startDate <= now && endDate >= now;
   };
+
+  const [disableInterval, setDisableInterval] = useState(false);
+  var num = 0;
+  useInterval(
+    () => {
+      num++;
+      //Add count to console.log to see how many times this is called
+      console.log('Interval called', num);
+      if (upcomingGlobalMessages.some(isWithinTimeRange)) {
+        const updatedGlobalMessages = globalMessages.filter(isWithinTimeRange);
+        const filteredUpcomingGlobalMessages =
+          upcomingGlobalMessages.filter(isWithinTimeRange);
+        updatedGlobalMessages.push(...filteredUpcomingGlobalMessages);
+        setUpcomingGlobalMessages(
+          upcomingGlobalMessages.filter((gm) => {
+            return !filteredUpcomingGlobalMessages.includes(gm);
+          }),
+        );
+        setGlobalMessages(updatedGlobalMessages);
+      } else if (globalMessages.some((gm) => !isWithinTimeRange(gm))) {
+        setGlobalMessages(globalMessages.filter(isWithinTimeRange));
+      }
+
+      //disable interval if there are no upcoming messages and no active messages that are within its range
+      if (
+        upcomingGlobalMessages.length === 0 &&
+        !globalMessages.some((gm) => isWithinTimeRange(gm))
+      ) {
+        setDisableInterval(true);
+      }
+    },
+    1000,
+    [globalMessages, upcomingGlobalMessages],
+    disableInterval,
+  );
 
   const setLatestDismissedGlobalMessages = async (
     globalMessages: GlobalMessageType[],
@@ -132,9 +154,9 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
 
   const findGlobalMessages = useCallback(
     (context: GlobalMessageContextType) => {
-      return globalMessages
-        .filter((a) => a.context.find((cont) => cont === context))
-        .filter(isWithinTimeRange);
+      return globalMessages.filter((a) =>
+        a.context.find((cont) => cont === context),
+      );
     },
     [globalMessages],
   );
