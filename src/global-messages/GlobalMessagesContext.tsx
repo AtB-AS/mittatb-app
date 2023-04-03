@@ -90,34 +90,29 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   };
 
   const [disableInterval, setDisableInterval] = useState(false);
-  var num = 0;
+
   useInterval(
     () => {
-      num++;
-      //Add count to console.log to see how many times this is called
-      console.log('Interval called', num);
-      if (upcomingGlobalMessages.some(isWithinTimeRange)) {
-        const updatedGlobalMessages = globalMessages.filter(isWithinTimeRange);
-        const filteredUpcomingGlobalMessages =
-          upcomingGlobalMessages.filter(isWithinTimeRange);
-        updatedGlobalMessages.push(...filteredUpcomingGlobalMessages);
-        setUpcomingGlobalMessages(
-          upcomingGlobalMessages.filter((gm) => {
-            return !filteredUpcomingGlobalMessages.includes(gm);
-          }),
-        );
+      const withinTimeRange = upcomingGlobalMessages.filter(isWithinTimeRange);
+      const updatedGlobalMessages = globalMessages
+        .filter(isWithinTimeRange)
+        .concat(withinTimeRange);
+      const updatedUpcomingGlobalMessages = upcomingGlobalMessages.filter(
+        (gm) => !withinTimeRange.includes(gm),
+      );
+
+      if (
+        withinTimeRange.length ||
+        globalMessages.some((gm) => !isWithinTimeRange(gm))
+      ) {
         setGlobalMessages(updatedGlobalMessages);
-      } else if (globalMessages.some((gm) => !isWithinTimeRange(gm))) {
-        setGlobalMessages(globalMessages.filter(isWithinTimeRange));
+        setUpcomingGlobalMessages(updatedUpcomingGlobalMessages);
       }
 
-      //disable interval if there are no upcoming messages and no active messages that are within its range
-      if (
-        upcomingGlobalMessages.length === 0 &&
-        !globalMessages.some((gm) => isWithinTimeRange(gm))
-      ) {
-        setDisableInterval(true);
-      }
+      setDisableInterval(
+        updatedUpcomingGlobalMessages.length === 0 &&
+          !updatedGlobalMessages.some(isWithinTimeRange),
+      );
     },
     1000,
     [globalMessages, upcomingGlobalMessages],
