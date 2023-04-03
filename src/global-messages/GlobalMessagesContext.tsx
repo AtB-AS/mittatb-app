@@ -93,6 +93,7 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
 
   useInterval(
     () => {
+      console.warn('Interval fired');
       const withinTimeRange = upcomingGlobalMessages.filter(isWithinTimeRange);
       const updatedGlobalMessages = globalMessages
         .filter(isWithinTimeRange)
@@ -108,13 +109,14 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
         setGlobalMessages(updatedGlobalMessages);
         setUpcomingGlobalMessages(updatedUpcomingGlobalMessages);
       }
-
+      const noEndDate = globalMessages.every((gm) => !gm.endDate);
       setDisableInterval(
-        updatedUpcomingGlobalMessages.length === 0 &&
-          !updatedGlobalMessages.some(isWithinTimeRange),
+        noEndDate ||
+          (updatedUpcomingGlobalMessages.length === 0 &&
+            !updatedGlobalMessages.some(isWithinTimeRange)),
       );
     },
-    1000,
+    5000,
     [globalMessages, upcomingGlobalMessages],
     disableInterval,
   );
