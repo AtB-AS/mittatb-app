@@ -115,7 +115,7 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
             !updatedGlobalMessages.some(isWithinTimeRange)),
       );
     },
-    5000,
+    2500,
     [globalMessages, upcomingGlobalMessages],
     disableInterval,
   );
