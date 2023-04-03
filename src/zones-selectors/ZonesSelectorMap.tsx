@@ -28,20 +28,11 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import turfCentroid from '@turf/centroid';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {ZonesSelectorMapsProps} from '@atb/zones-selectors/navigation-types';
 
 type RegionEvent = {
   isMoving: boolean;
   region?: GeoJSON.Feature<GeoJSON.Point, RegionPayload>;
-};
-
-type ZonesSelectorMapParams = {
-  selectedZones: TariffZoneSelection;
-  isApplicableOnSingleZoneOnly: boolean;
-};
-
-type Props = ZonesSelectorMapParams & {
-  setSelectedZones: (selectedZOnes: TariffZoneSelection) => void;
-  onSave?: () => void;
 };
 
 const ZonesSelectorMap = ({
@@ -49,7 +40,7 @@ const ZonesSelectorMap = ({
   isApplicableOnSingleZoneOnly,
   setSelectedZones,
   onSave,
-}: Props) => {
+}: ZonesSelectorMapsProps) => {
   const {tariffZones} = useFirestoreConfiguration();
   const styles = useMapStyles();
   const {location: geolocation} = useGeolocationState();
@@ -251,9 +242,6 @@ const ZonesSelectorMap = ({
     </>
   );
 };
-
-export {ZonesSelectorMap};
-
 const mapZonesToFeatureCollection = (
   zones: TariffZone[],
   language: Language,
@@ -271,6 +259,8 @@ const mapZonesToFeatureCollection = (
     geometry: t.geometry,
   })),
 });
+
+export {ZonesSelectorMap};
 
 const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   saveButton: {

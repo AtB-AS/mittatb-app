@@ -8,31 +8,19 @@ import {
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Location} from '@atb/assets/svg/mono-icons/places';
 import React from 'react';
-import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {
   TariffZoneSelection,
   TariffZoneWithMetadata,
 } from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
-
-export type ZonesSelectorButtonsParams = {
-  toTariffZone: TariffZoneWithMetadata;
-  fromTariffZone: TariffZoneWithMetadata;
-  isApplicableOnSingleZoneOnly: boolean;
-};
-
-type Props = ZonesSelectorButtonsParams & {
-  onVenueSearchClick: (
-    callerRouteParam: keyof Root_PurchaseTariffZonesSearchByMapScreenParams,
-  ) => void;
-};
+import {ZonesSelectorButtonsProps} from '@atb/zones-selectors/navigation-types';
 
 const ZonesSelectorButtons = ({
   toTariffZone,
   fromTariffZone,
   onVenueSearchClick,
   isApplicableOnSingleZoneOnly,
-}: Props) => {
+}: ZonesSelectorButtonsProps) => {
   const selectedZones: TariffZoneSelection = {
     from: fromTariffZone,
     to: toTariffZone,
