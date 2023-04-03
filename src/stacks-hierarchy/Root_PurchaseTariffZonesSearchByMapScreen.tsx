@@ -8,8 +8,8 @@ import {
   Root_PurchaseTariffZonesSearchByMapScreenParams,
   RootStackScreenProps,
 } from '@atb/stacks-hierarchy/navigation-types';
-import {ZonesSelectorButtons} from '@atb/zones-selectors/ZonesSelectorButtons';
-import {ZonesSelectorMap} from '@atb/zones-selectors/ZonesSelectorMap';
+import {ZonesSelectorButtons} from '@atb/zones-selector/ZonesSelectorButtons';
+import {ZonesSelectorMap} from '@atb/zones-selector/ZonesSelectorMap';
 
 export type TariffZoneResultType = 'venue' | 'geolocation' | 'zone';
 export type TariffZoneWithMetadata = TariffZone & {

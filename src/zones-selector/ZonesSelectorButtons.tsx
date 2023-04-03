@@ -13,7 +13,7 @@ import {
   TariffZoneSelection,
   TariffZoneWithMetadata,
 } from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
-import {ZonesSelectorButtonsProps} from '@atb/zones-selectors/navigation-types';
+import {ZonesSelectorButtonsProps} from '@atb/zones-selector/navigation-types';
 
 const ZonesSelectorButtons = ({
   toTariffZone,

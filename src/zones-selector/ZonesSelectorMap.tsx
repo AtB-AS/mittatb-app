@@ -28,7 +28,7 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import turfCentroid from '@turf/centroid';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {ZonesSelectorMapsProps} from '@atb/zones-selectors/navigation-types';
+import {ZonesSelectorMapsProps} from '@atb/zones-selector/navigation-types';
 
 type RegionEvent = {
   isMoving: boolean;
