@@ -34,17 +34,17 @@ type RegionEvent = {
   region?: GeoJSON.Feature<GeoJSON.Point, RegionPayload>;
 };
 
-export type ZonesSelectorButtonsComponentParams = {
+type ZonesSelectorMapParams = {
   selectedZones: TariffZoneSelection;
   isApplicableOnSingleZoneOnly: boolean;
 };
 
-type Props = ZonesSelectorButtonsComponentParams & {
+type Props = ZonesSelectorMapParams & {
   setSelectedZones: (selectedZOnes: TariffZoneSelection) => void;
   onSave?: () => void;
 };
 
-export const ZonesMapSelectorComponent = ({
+const ZonesSelectorMap = ({
   selectedZones,
   isApplicableOnSingleZoneOnly,
   setSelectedZones,
@@ -251,6 +251,8 @@ export const ZonesMapSelectorComponent = ({
     </>
   );
 };
+
+export {ZonesSelectorMap};
 
 const mapZonesToFeatureCollection = (
   zones: TariffZone[],

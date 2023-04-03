@@ -8,8 +8,8 @@ import {
   Root_PurchaseTariffZonesSearchByMapScreenParams,
   RootStackScreenProps,
 } from '@atb/stacks-hierarchy/navigation-types';
-import {ZonesSelectorButtonsComponent} from '@atb/zones-selectors/zones-selector-buttons/ZonesSelectorButtonsComponent';
-import {ZonesMapSelectorComponent} from '@atb/zones-selectors/zones-selector-map/ZonesMapSelectorComponent';
+import {ZonesSelectorButtons} from '@atb/zones-selectors/ZonesSelectorButtons';
+import {ZonesSelectorMap} from '@atb/zones-selectors/ZonesSelectorMap';
 
 export type TariffZoneResultType = 'venue' | 'geolocation' | 'zone';
 export type TariffZoneWithMetadata = TariffZone & {
@@ -99,7 +99,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
           leftButton={{type: 'back'}}
         />
 
-        <ZonesSelectorButtonsComponent
+        <ZonesSelectorButtons
           toTariffZone={selectedZones.to}
           fromTariffZone={selectedZones.from}
           onVenueSearchClick={onVenueSearchClick}
@@ -107,7 +107,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
         />
       </View>
 
-      <ZonesMapSelectorComponent
+      <ZonesSelectorMap
         selectedZones={selectedZones}
         isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
         setSelectedZones={setSelectedZones}

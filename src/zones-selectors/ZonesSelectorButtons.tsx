@@ -15,19 +15,19 @@ import {
   TariffZoneWithMetadata,
 } from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 
-export type ZonesSelectorButtonsComponentParams = {
+export type ZonesSelectorButtonsParams = {
   toTariffZone: TariffZoneWithMetadata;
   fromTariffZone: TariffZoneWithMetadata;
   isApplicableOnSingleZoneOnly: boolean;
 };
 
-type Props = ZonesSelectorButtonsComponentParams & {
+type Props = ZonesSelectorButtonsParams & {
   onVenueSearchClick: (
     callerRouteParam: keyof Root_PurchaseTariffZonesSearchByMapScreenParams,
   ) => void;
 };
 
-export const ZonesSelectorButtonsComponent = ({
+const ZonesSelectorButtons = ({
   toTariffZone,
   fromTariffZone,
   onVenueSearchClick,
@@ -178,3 +178,5 @@ const destinationPickerValue = (
     );
   }
 };
+
+export {ZonesSelectorButtons};
