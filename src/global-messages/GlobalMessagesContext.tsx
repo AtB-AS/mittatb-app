@@ -93,7 +93,6 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
 
   useInterval(
     () => {
-      console.warn('Interval fired');
       const withinTimeRange = upcomingGlobalMessages.filter(isWithinTimeRange);
       const updatedGlobalMessages = globalMessages
         .filter(isWithinTimeRange)
