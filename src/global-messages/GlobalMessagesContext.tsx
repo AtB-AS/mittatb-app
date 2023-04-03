@@ -91,8 +91,8 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
 
   const [disableInterval, setDisableInterval] = useState(false);
 
-  // Checks if any global messages should be removed or added based on their time interval, also disables the interval
-  // if there are no upcoming global messages or active global messages with a specified end date
+  // Checks if any global messages should be removed or added based on their time interval
+  // Disables the interval if there are no upcoming global messages or active global messages with a specified end date
   const updateGlobalMessages = () => {
     const withinTimeRange = upcomingGlobalMessages.filter(isWithinTimeRange);
     const updatedGlobalMessages = globalMessages
