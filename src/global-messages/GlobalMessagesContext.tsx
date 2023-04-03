@@ -66,6 +66,8 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
               (gm) => gm.startDate && gm.startDate?.toMillis() > Date.now(),
             );
             setUpcomingGlobalMessages(newUpcomingGlobalMessages);
+            console.log('newGlobalMessages', newGlobalMessages);
+            console.log('newUpcomingGlobalMessages', newUpcomingGlobalMessages);
           },
           (err) => {
             console.warn(err);
@@ -91,30 +93,35 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
 
   const [disableInterval, setDisableInterval] = useState(false);
 
-  useInterval(
-    () => {
-      const withinTimeRange = upcomingGlobalMessages.filter(isWithinTimeRange);
-      const updatedGlobalMessages = globalMessages
-        .filter(isWithinTimeRange)
-        .concat(withinTimeRange);
-      const updatedUpcomingGlobalMessages = upcomingGlobalMessages.filter(
-        (gm) => !withinTimeRange.includes(gm),
-      );
+  // Checks if any global messages should be removed or added based on their time interval, also disables the interval
+  // if there are no upcoming global messages or active global messages with a specified end date
+  const updateGlobalMessages = () => {
+    console.warn('Interval fired', globalMessages, upcomingGlobalMessages);
+    const withinTimeRange = upcomingGlobalMessages.filter(isWithinTimeRange);
+    const updatedGlobalMessages = globalMessages
+      .filter(isWithinTimeRange)
+      .concat(withinTimeRange);
+    const updatedUpcomingGlobalMessages = upcomingGlobalMessages.filter(
+      (gm) => !withinTimeRange.includes(gm),
+    );
 
-      if (
-        withinTimeRange.length ||
-        globalMessages.some((gm) => !isWithinTimeRange(gm))
-      ) {
-        setGlobalMessages(updatedGlobalMessages);
-        setUpcomingGlobalMessages(updatedUpcomingGlobalMessages);
-      }
-      const noEndDate = globalMessages.every((gm) => !gm.endDate);
-      setDisableInterval(
-        noEndDate ||
-          (updatedUpcomingGlobalMessages.length === 0 &&
-            !updatedGlobalMessages.some(isWithinTimeRange)),
-      );
-    },
+    if (
+      withinTimeRange.length ||
+      globalMessages.some((gm) => !isWithinTimeRange(gm))
+    ) {
+      setGlobalMessages(updatedGlobalMessages);
+      setUpcomingGlobalMessages(updatedUpcomingGlobalMessages);
+    }
+    const noEndDate = globalMessages.every((gm) => !gm.endDate);
+    setDisableInterval(
+      (globalMessages.length && noEndDate) ||
+        (updatedUpcomingGlobalMessages.length === 0 &&
+          !updatedGlobalMessages.some(isWithinTimeRange)),
+    );
+  };
+
+  useInterval(
+    updateGlobalMessages,
     2500,
     [globalMessages, upcomingGlobalMessages],
     disableInterval,
