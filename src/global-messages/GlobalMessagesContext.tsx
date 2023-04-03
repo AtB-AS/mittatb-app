@@ -66,8 +66,6 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
               (gm) => gm.startDate && gm.startDate?.toMillis() > Date.now(),
             );
             setUpcomingGlobalMessages(newUpcomingGlobalMessages);
-            console.log('newGlobalMessages', newGlobalMessages);
-            console.log('newUpcomingGlobalMessages', newUpcomingGlobalMessages);
           },
           (err) => {
             console.warn(err);
@@ -96,7 +94,6 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   // Checks if any global messages should be removed or added based on their time interval, also disables the interval
   // if there are no upcoming global messages or active global messages with a specified end date
   const updateGlobalMessages = () => {
-    console.warn('Interval fired', globalMessages, upcomingGlobalMessages);
     const withinTimeRange = upcomingGlobalMessages.filter(isWithinTimeRange);
     const updatedGlobalMessages = globalMessages
       .filter(isWithinTimeRange)
