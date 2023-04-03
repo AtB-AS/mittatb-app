@@ -4,24 +4,18 @@ import {
 } from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 
-type ZonesSelectorButtonsParams = {
+export type ZonesSelectorButtonsProps = {
   toTariffZone: TariffZoneWithMetadata;
   fromTariffZone: TariffZoneWithMetadata;
   isApplicableOnSingleZoneOnly: boolean;
-};
-
-export type ZonesSelectorButtonsProps = ZonesSelectorButtonsParams & {
   onVenueSearchClick: (
     callerRouteParam: keyof Root_PurchaseTariffZonesSearchByMapScreenParams,
   ) => void;
 };
 
-type ZonesSelectorMapParams = {
+export type ZonesSelectorMapsProps = {
   selectedZones: TariffZoneSelection;
   isApplicableOnSingleZoneOnly: boolean;
-};
-
-export type ZonesSelectorMapsProps = ZonesSelectorMapParams & {
   setSelectedZones: (selectedZOnes: TariffZoneSelection) => void;
   onSave?: () => void;
 };
