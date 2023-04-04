@@ -16,6 +16,7 @@ import {
 } from '@entur-private/abt-token-server-javascript-interface';
 import client from '@atb/api/client';
 import {
+  ListResponse,
   RemoteToken,
   RemoveResponse,
   TokenLimitResponse,
@@ -28,10 +29,6 @@ const SignedTokenHeaderName = 'Atb-Signed-Token';
 const AttestationHeaderName = 'Atb-Token-Attestation';
 const AttestationTypeHeaderName = 'Atb-Token-Attestation-Type';
 const IsEmulatorHeaderName = 'Atb-Is-Emulator';
-
-type ListTokensResponse = {
-  tokens: RemoteToken[];
-};
 
 export type TokenService = RemoteTokenServiceWithInitiate & {
   removeToken: (tokenId: string, traceId: string) => Promise<boolean>;
@@ -161,7 +158,7 @@ const service: TokenService = {
   listTokens: async (traceId: string) =>
     handleRemoteError(() =>
       client
-        .get<ListTokensResponse>('/tokens/v3/list', {
+        .get<ListResponse>('/tokens/v3/list', {
           headers: {
             [CorrelationIdHeaderName]: traceId,
           },
@@ -175,7 +172,7 @@ const service: TokenService = {
   toggle: async (tokenId: string, traceId: string) =>
     handleRemoteError(() =>
       client
-        .post<ListTokensResponse>(
+        .post<ListResponse>(
           '/tokens/v3/toggle',
           {tokenId},
           {
