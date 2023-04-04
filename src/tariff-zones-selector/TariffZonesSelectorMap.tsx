@@ -28,11 +28,17 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import turfCentroid from '@turf/centroid';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {TariffZonesSelectorMapsProps} from '@atb/tariff-zones-selector/navigation-types';
 
 type RegionEvent = {
   isMoving: boolean;
   region?: GeoJSON.Feature<GeoJSON.Point, RegionPayload>;
+};
+
+type Props = {
+  selectedZones: TariffZoneSelection;
+  isApplicableOnSingleZoneOnly: boolean;
+  setSelectedZones: (selectedZOnes: TariffZoneSelection) => void;
+  onSave?: () => void;
 };
 
 const TariffZonesSelectorMap = ({
@@ -40,7 +46,7 @@ const TariffZonesSelectorMap = ({
   isApplicableOnSingleZoneOnly,
   setSelectedZones,
   onSave,
-}: TariffZonesSelectorMapsProps) => {
+}: Props) => {
   const {tariffZones} = useFirestoreConfiguration();
   const styles = useMapStyles();
   const {location: geolocation} = useGeolocationState();

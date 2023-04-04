@@ -13,14 +13,23 @@ import {
   TariffZoneSelection,
   TariffZoneWithMetadata,
 } from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
-import {TariffZonesSelectorButtonsProps} from '@atb/tariff-zones-selector/navigation-types';
+import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
+
+type Props = {
+  toTariffZone: TariffZoneWithMetadata;
+  fromTariffZone: TariffZoneWithMetadata;
+  isApplicableOnSingleZoneOnly: boolean;
+  onVenueSearchClick: (
+    callerRouteParam: keyof Root_PurchaseTariffZonesSearchByMapScreenParams,
+  ) => void;
+};
 
 const TariffZonesSelectorButtons = ({
   toTariffZone,
   fromTariffZone,
   onVenueSearchClick,
   isApplicableOnSingleZoneOnly,
-}: TariffZonesSelectorButtonsProps) => {
+}: Props) => {
   const selectedZones: TariffZoneSelection = {
     from: fromTariffZone,
     to: toTariffZone,
