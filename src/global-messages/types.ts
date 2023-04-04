@@ -1,7 +1,5 @@
 import {Statuses} from '@atb/theme';
 import {LanguageAndTextType} from '@atb/translations';
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import Timestamp = FirebaseFirestoreTypes.Timestamp;
 
 export type AppPlatformType = 'ios' | 'android';
 
@@ -23,8 +21,8 @@ export type GlobalMessageRaw = {
   appPlatforms: AppPlatformType[];
   appVersionMin: string;
   appVersionMax: string;
-  startDate?: Timestamp;
-  endDate?: Timestamp;
+  startDate?: number;
+  endDate?: number;
 };
 
 export type GlobalMessageType = Omit<

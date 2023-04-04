@@ -34,8 +34,8 @@ function mapToGlobalMessage(
   const appVersionMin = result.appVersionMin;
   const appVersionMax = result.appVersionMax;
   const platforms = result.appPlatforms;
-  const startDate = result.startDate;
-  const endDate = result.endDate;
+  const startDate = mapToMillis(result.startDate);
+  const endDate = mapToMillis(result.endDate);
 
   if (!result.active) return;
   if (!isAppPlatformValid(platforms)) return;
@@ -55,8 +55,8 @@ function mapToGlobalMessage(
     body,
     title,
     isDismissable,
-    endDate,
     startDate,
+    endDate,
   };
 }
 
@@ -66,6 +66,13 @@ function mapToMessageType(type: any) {
   if (typeof type !== 'string') return;
   if (!options.includes(type)) return;
   return type as Statuses;
+}
+
+function mapToMillis(timestamp: any) {
+  if (!timestamp) return;
+  if (typeof timestamp !== 'object') return;
+  if (!timestamp.toMillis) return;
+  return timestamp.toMillis();
 }
 
 function mapToContexts(data: any): GlobalMessageContextType[] | undefined {

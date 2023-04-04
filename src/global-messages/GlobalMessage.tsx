@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {useGlobalMessagesState} from '@atb/global-messages/GlobalMessagesContext';
 import {MessageBox} from '@atb/components/message-box';
@@ -8,7 +8,7 @@ import {
   GlobalMessageType,
 } from '@atb/global-messages/types';
 import {getTextForLanguage} from '@atb/translations';
-import useInterval from '@atb/utils/use-interval';
+import {useNow} from '@atb/utils/use-now';
 
 type Props = {
   globalMessageContext?: GlobalMessageContextType;
@@ -17,8 +17,7 @@ type Props = {
 
 const GlobalMessage = ({globalMessageContext, style}: Props) => {
   const {language} = useTranslation();
-  const [now, setNow] = useState<number>(Date.now());
-  useInterval(() => setNow(Date.now()), 2500);
+  const now = useNow(2500);
   const {
     findGlobalMessages,
     dismissedGlobalMessages,
@@ -38,8 +37,8 @@ const GlobalMessage = ({globalMessageContext, style}: Props) => {
   };
 
   const isWithinTimeRange = (globalMessage: GlobalMessageType) => {
-    const startDate = globalMessage.startDate?.toMillis() ?? 0;
-    const endDate = globalMessage.endDate?.toMillis() ?? 8640000000000000;
+    const startDate = globalMessage.startDate ?? 0;
+    const endDate = globalMessage.endDate ?? 8640000000000000;
 
     return startDate <= now && endDate >= now;
   };
