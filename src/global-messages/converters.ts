@@ -45,7 +45,6 @@ function mapToGlobalMessage(
   if (!body) return;
   if (!context) return;
   if (!type) return;
-  if (typeof result.active !== 'boolean') return;
 
   return {
     id,
@@ -68,7 +67,9 @@ function mapToMessageType(type: any) {
   return type as Statuses;
 }
 
-function mapToMillis(timestamp: any) {
+function mapToMillis(
+  timestamp?: FirebaseFirestoreTypes.Timestamp,
+): number | undefined {
   if (!timestamp) return;
   if (typeof timestamp !== 'object') return;
   if (!timestamp.toMillis) return;
