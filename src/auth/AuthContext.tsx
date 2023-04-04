@@ -137,7 +137,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
         ) {
           return 'invalid_code';
         }
-        if (isAuthError(error)) Bugsnag.notify(error);
+        Bugsnag.notify(error as any);
         return 'unknown_error';
       }
     },
@@ -221,7 +221,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
         if (isAuthError(error) && error.code === ERROR_INVALID_PHONE_NUMBER) {
           return 'invalid_phone';
         }
-        console.warn(error);
+        Bugsnag.notify(error as any);
         return 'unknown_error';
       }
     },
