@@ -17,7 +17,6 @@ import {
   GlobalMessageRaw,
   GlobalMessageType,
 } from '@atb/global-messages/types';
-import useInterval from '@atb/utils/use-interval';
 
 type GlobalMessageContextState = {
   findGlobalMessages: (
@@ -40,9 +39,6 @@ const GlobalMessagesContext = createContext<GlobalMessageContextState>(
 
 const GlobalMessagesContextProvider: React.FC = ({children}) => {
   const [globalMessages, setGlobalMessages] = useState<GlobalMessageType[]>([]);
-  const [upcomingGlobalMessages, setUpcomingGlobalMessages] = useState<
-    GlobalMessageType[]
-  >([]);
   const [dismissedGlobalMessages, setDismissedGlobalMessages] = useState<
     GlobalMessageType[]
   >([]);
@@ -58,14 +54,9 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
         ])
         .onSnapshot(
           async (snapshot) => {
-            setDisableInterval(false);
             const newGlobalMessages = mapToGlobalMessages(snapshot.docs);
-            setGlobalMessages(newGlobalMessages.filter(isWithinTimeRange));
+            setGlobalMessages(newGlobalMessages);
             await setLatestDismissedGlobalMessages(newGlobalMessages);
-            const newUpcomingGlobalMessages = newGlobalMessages.filter(
-              (gm) => gm.startDate && gm.startDate?.toMillis() > Date.now(),
-            );
-            setUpcomingGlobalMessages(newUpcomingGlobalMessages);
           },
           (err) => {
             console.warn(err);
@@ -80,49 +71,6 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   ) => {
     return globalMessages.map((gm) => gm.id).indexOf(dismissedMessageId) > -1;
   };
-
-  const isWithinTimeRange = (globalMessage: GlobalMessageType) => {
-    const now = Date.now();
-    const startDate = globalMessage.startDate?.toMillis() ?? 0;
-    const endDate = globalMessage.endDate?.toMillis() ?? 8640000000000000;
-
-    return startDate <= now && endDate >= now;
-  };
-
-  const [disableInterval, setDisableInterval] = useState(false);
-
-  // Checks if any global messages should be removed or added based on their time interval
-  // Disables the interval if there are no upcoming global messages or active global messages with a specified end date
-  const updateGlobalMessages = () => {
-    const withinTimeRange = upcomingGlobalMessages.filter(isWithinTimeRange);
-    const updatedGlobalMessages = globalMessages
-      .filter(isWithinTimeRange)
-      .concat(withinTimeRange);
-    const updatedUpcomingGlobalMessages = upcomingGlobalMessages.filter(
-      (gm) => !withinTimeRange.includes(gm),
-    );
-
-    if (
-      withinTimeRange.length ||
-      globalMessages.some((gm) => !isWithinTimeRange(gm))
-    ) {
-      setGlobalMessages(updatedGlobalMessages);
-      setUpcomingGlobalMessages(updatedUpcomingGlobalMessages);
-    }
-    const noEndDate = globalMessages.every((gm) => !gm.endDate);
-    setDisableInterval(
-      (globalMessages.length && noEndDate) ||
-        (updatedUpcomingGlobalMessages.length === 0 &&
-          !updatedGlobalMessages.some(isWithinTimeRange)),
-    );
-  };
-
-  useInterval(
-    updateGlobalMessages,
-    2500,
-    [globalMessages, upcomingGlobalMessages],
-    disableInterval,
-  );
 
   const setLatestDismissedGlobalMessages = async (
     globalMessages: GlobalMessageType[],

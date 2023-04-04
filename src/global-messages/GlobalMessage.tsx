@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useTranslation} from '@atb/translations';
 import {useGlobalMessagesState} from '@atb/global-messages/GlobalMessagesContext';
 import {MessageBox} from '@atb/components/message-box';
@@ -8,6 +8,7 @@ import {
   GlobalMessageType,
 } from '@atb/global-messages/types';
 import {getTextForLanguage} from '@atb/translations';
+import useInterval from '@atb/utils/use-interval';
 
 type Props = {
   globalMessageContext?: GlobalMessageContextType;
@@ -16,6 +17,8 @@ type Props = {
 
 const GlobalMessage = ({globalMessageContext, style}: Props) => {
   const {language} = useTranslation();
+  const [now, setNow] = useState<number>(Date.now());
+  useInterval(() => setNow(Date.now()), 2500);
   const {
     findGlobalMessages,
     dismissedGlobalMessages,
@@ -34,6 +37,13 @@ const GlobalMessage = ({globalMessageContext, style}: Props) => {
     globalMessage.isDismissable && addDismissedGlobalMessages(globalMessage);
   };
 
+  const isWithinTimeRange = (globalMessage: GlobalMessageType) => {
+    const startDate = globalMessage.startDate?.toMillis() ?? 0;
+    const endDate = globalMessage.endDate?.toMillis() ?? 8640000000000000;
+
+    return startDate <= now && endDate >= now;
+  };
+
   const isNotADismissedMessage = (globalMessage: GlobalMessageType) =>
     !globalMessage.isDismissable ||
     dismissedGlobalMessages.map((dga) => dga.id).indexOf(globalMessage.id) < 0;
@@ -42,6 +52,7 @@ const GlobalMessage = ({globalMessageContext, style}: Props) => {
     <>
       {globalMessages
         .filter(isNotADismissedMessage)
+        .filter(isWithinTimeRange)
         .map((globalMessage: GlobalMessageType) => {
           const message = getTextForLanguage(globalMessage.body, language);
           if (!message) return null;
