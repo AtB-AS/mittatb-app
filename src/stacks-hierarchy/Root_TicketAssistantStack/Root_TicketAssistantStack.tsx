@@ -4,7 +4,7 @@ import {
   MaterialTopTabBarProps,
 } from '@react-navigation/material-top-tabs';
 import {PageIndicator} from '@atb/components/page-indicator';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {useTheme} from '@atb/theme';
 
 import {StaticColorByType} from '@atb/theme/colors';
 
@@ -88,10 +88,3 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
     </TicketAssistantProvider>
   );
 };
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.static.background[themeColor].background,
-  },
-}));
