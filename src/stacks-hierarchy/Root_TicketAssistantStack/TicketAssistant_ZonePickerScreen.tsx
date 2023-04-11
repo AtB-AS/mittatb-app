@@ -1,8 +1,11 @@
 import {ScrollView} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {themeColor} from '@atb/stacks-hierarchy/Root_OnboardingStack/Onboarding_WelcomeScreen';
-import React, {useState} from 'react';
-import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
+import React, {useEffect, useState} from 'react';
+import {
+  TicketAssistant_ZonePickerScreenParams,
+  TicketAssistantScreenProps,
+} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {
@@ -11,66 +14,68 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
+import {TariffZoneSelection} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {
-  TariffZoneSelection,
-  TariffZoneWithMetadata,
-} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {ZonesMapSelectorComponent} from '@atb/zones-selectors/zones-selector-map/ZonesMapSelectorComponent';
-import {ZonesSelectorButtonsComponent} from '@atb/zones-selectors/zones-selector-buttons/ZonesSelectorButtonsComponent';
+  TariffZonesSelectorButtons,
+  TariffZonesSelectorMap,
+} from '@atb/tariff-zones-selector';
+import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-defaults';
+import {useFirestoreConfiguration} from '@atb/configuration';
 
-type ZoneSelectorScreenProps =
-  TicketAssistantScreenProps<'TicketAssistant_ZonePickerScreen'>;
+type Props = TicketAssistantScreenProps<'TicketAssistant_ZonePickerScreen'>;
 export const TicketAssistant_ZonePickerScreen = ({
   navigation,
   route,
-}: ZoneSelectorScreenProps) => {
+}: Props) => {
   const styles = useThemeStyles();
-
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const offerDefaults = useOfferDefaults(
+    undefined,
+    fareProductTypeConfigs[0].type,
+  );
   const {t} = useTranslation();
-
-  const {tariffZones} = useFirestoreConfiguration();
-
-  const from: TariffZoneWithMetadata = route.params?.fromTariffZone
-    ? route.params?.fromTariffZone
-    : {
-        id: tariffZones[0].id,
-        name: tariffZones[0].name,
-        resultType: 'zone',
-        geometry: tariffZones[0].geometry,
-        version: tariffZones[0].version,
-      };
-  const to: TariffZoneWithMetadata = route.params?.fromTariffZone
-    ? route.params?.fromTariffZone
-    : {
-        id: tariffZones[0].id,
-        name: tariffZones[0].name,
-        resultType: 'zone',
-        geometry: tariffZones[0].geometry,
-        version: tariffZones[0].version,
-      };
 
   const isApplicableOnSingleZoneOnly = false;
 
+  const {fromTariffZone, toTariffZone} = route.params ?? offerDefaults;
+
   const [selectedZones, setSelectedZones] = useState<TariffZoneSelection>({
-    from: from,
-    to: to,
+    from: fromTariffZone,
+    to: toTariffZone,
     selectNext: isApplicableOnSingleZoneOnly ? 'from' : 'to',
   });
 
-  const onVenueSearchClick = (caller: 'fromTariffZone' | 'toTariffZone') => {
+  useEffect(() => {
+    setSelectedZones({
+      ...selectedZones,
+      from: fromTariffZone,
+    });
+  }, [fromTariffZone]);
+
+  useEffect(() => {
+    setSelectedZones({
+      ...selectedZones,
+      to: toTariffZone,
+    });
+  }, [toTariffZone]);
+
+  const onVenueSearchClick = (
+    callerRouteParam: keyof TicketAssistant_ZonePickerScreenParams,
+  ) => {
     navigation.navigate({
       name: 'Root_PurchaseTariffZonesSearchByTextScreen',
       params: {
-        label: t(TariffZonesTexts.location.zonePicker.labelTo),
+        label:
+          callerRouteParam === 'fromTariffZone'
+            ? t(TariffZonesTexts.location.zonePicker.labelFrom)
+            : t(TariffZonesTexts.location.zonePicker.labelTo),
         callerRouteName: route.name,
-        callerRouteParam: caller,
+        callerRouteParam,
       },
       merge: true,
     });
   };
 
-  // @ts-ignore
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -83,15 +88,15 @@ export const TicketAssistant_ZonePickerScreen = ({
           {t(TicketAssistantTexts.zonesSelector.title)}
         </ThemeText>
         <View style={styles.mapContainer}>
-          <ZonesSelectorButtonsComponent
+          <TariffZonesSelectorButtons
             fromTariffZone={selectedZones.from}
             toTariffZone={selectedZones.to}
-            isApplicableOnSingleZoneOnly={false}
+            isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
             onVenueSearchClick={onVenueSearchClick}
           />
-          <ZonesMapSelectorComponent
-            selectedZones={selectedZones}
+          <TariffZonesSelectorMap
             isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
+            selectedZones={selectedZones}
             setSelectedZones={setSelectedZones}
           />
         </View>

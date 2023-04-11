@@ -14,13 +14,16 @@ import {
   TariffZoneWithMetadata,
 } from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
+import {TicketAssistant_ZonePickerScreenParams} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 
 type Props = {
   toTariffZone: TariffZoneWithMetadata;
   fromTariffZone: TariffZoneWithMetadata;
   isApplicableOnSingleZoneOnly: boolean;
   onVenueSearchClick: (
-    callerRouteParam: keyof Root_PurchaseTariffZonesSearchByMapScreenParams,
+    callerRouteParam:
+      | keyof Root_PurchaseTariffZonesSearchByMapScreenParams
+      | keyof TicketAssistant_ZonePickerScreenParams,
   ) => void;
 };
 
