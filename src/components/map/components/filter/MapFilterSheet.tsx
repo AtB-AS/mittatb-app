@@ -10,6 +10,7 @@ import {Scooter} from '@atb/assets/svg/mono-icons/transportation-entur';
 import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {StyleSheet} from '@atb/theme';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {useIsCityBikesEnabled, useIsVehiclesEnabled} from '@atb/mobility';
 
 type MapFilterSheetProps = {
   close: () => void;
@@ -21,6 +22,8 @@ export const MapFilterSheet = ({
 }: MapFilterSheetProps) => {
   const {t} = useTranslation();
   const style = useStyle();
+  const isVehiclesEnabled = useIsVehiclesEnabled();
+  const isCityBikesEnabled = useIsCityBikesEnabled();
   const {getMapFilter, setMapFilter} = useUserMapFilters();
   const [initialFilter, setInitialFilter] = useState<MapFilterType>();
 
@@ -71,18 +74,22 @@ export const MapFilterSheet = ({
       />
       <View style={style.container}>
         <Section withPadding>
-          <ToggleSectionItem
-            leftIcon={Scooter}
-            text={t(MobilityTexts.scooter)}
-            value={initialFilter?.vehicles?.showVehicles}
-            onValueChange={onScooterToggle}
-          />
-          <ToggleSectionItem
-            leftIcon={Bicycle}
-            text={t(MobilityTexts.bicycle)}
-            value={initialFilter?.stations?.showCityBikeStations}
-            onValueChange={onBicycleToggle}
-          />
+          {isVehiclesEnabled && (
+            <ToggleSectionItem
+              leftIcon={Scooter}
+              text={t(MobilityTexts.scooter)}
+              value={initialFilter?.vehicles?.showVehicles}
+              onValueChange={onScooterToggle}
+            />
+          )}
+          {isCityBikesEnabled && (
+            <ToggleSectionItem
+              leftIcon={Bicycle}
+              text={t(MobilityTexts.bicycle)}
+              value={initialFilter?.stations?.showCityBikeStations}
+              onValueChange={onBicycleToggle}
+            />
+          )}
         </Section>
       </View>
     </BottomSheetContainer>
