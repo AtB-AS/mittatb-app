@@ -38,7 +38,6 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   if (majorVersionIOS < 13) {
     style = {width: undefined, flex: 1};
   }
-
   const contextValue = useContext(TicketAssistantContext);
 
   if (!contextValue) throw new Error('Context is undefined!');
@@ -76,7 +75,6 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   } else {
     resultString = t(TicketAssistantTexts.duration.resultMoreThan180Days);
   }
-
   return (
     <View style={styles.container}>
       <View style={styles.backdrop}>
@@ -143,7 +141,12 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                     type="inline"
                     mode="tertiary"
                     onPress={() => setShowDatePicker(true)}
-                    text={format(parseISO(date), 'dd. MMM. yyyy')}
+                    text={format(
+                      usedSlider
+                        ? parseISO(getDateFromSlider(data.duration))
+                        : parseISO(date),
+                      'dd. MMM. yyyy',
+                    )}
                   />
                 )}
 
