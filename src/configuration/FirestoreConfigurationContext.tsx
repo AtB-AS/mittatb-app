@@ -26,7 +26,7 @@ import {
   defaultVatPercent,
 } from '@atb/configuration/defaults';
 import {PaymentType} from '@atb/ticketing';
-import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
+import {FareProductTypeConfig} from './types';
 import {
   mapLanguageAndTextType,
   mapToFareProductTypeConfigs,

@@ -8,8 +8,10 @@ import {
   Root_PurchaseTariffZonesSearchByMapScreenParams,
   RootStackScreenProps,
 } from '@atb/stacks-hierarchy/navigation-types';
-import {ZonesSelectorButtonsComponent} from '@atb/zones-selectors/zones-selector-buttons/ZonesSelectorButtonsComponent';
-import {ZonesMapSelectorComponent} from '@atb/zones-selectors/zones-selector-map/ZonesMapSelectorComponent';
+import {
+  TariffZonesSelectorButtons,
+  TariffZonesSelectorMap,
+} from '@atb/tariff-zones-selector';
 
 export type TariffZoneResultType = 'venue' | 'geolocation' | 'zone';
 export type TariffZoneWithMetadata = TariffZone & {
@@ -99,17 +101,15 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
           leftButton={{type: 'back'}}
         />
 
-        <View style={styles.buttonSection}>
-          <ZonesSelectorButtonsComponent
-            toTariffZone={selectedZones.to}
-            fromTariffZone={selectedZones.from}
-            onVenueSearchClick={onVenueSearchClick}
-            isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
-          />
-        </View>
+        <TariffZonesSelectorButtons
+          toTariffZone={selectedZones.to}
+          fromTariffZone={selectedZones.from}
+          onVenueSearchClick={onVenueSearchClick}
+          isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
+        />
       </View>
 
-      <ZonesMapSelectorComponent
+      <TariffZonesSelectorMap
         selectedZones={selectedZones}
         isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
         setSelectedZones={setSelectedZones}
@@ -129,8 +129,5 @@ const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   },
   saveButton: {
     marginHorizontal: theme.spacings.medium,
-  },
-  buttonSection: {
-    padding: theme.spacings.small,
   },
 }));

@@ -1,6 +1,6 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import * as Sections from '@atb/components/sections';
-import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
+import {FareProductTypeConfig} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {
   Language,

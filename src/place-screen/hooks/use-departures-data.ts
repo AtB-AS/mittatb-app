@@ -5,13 +5,12 @@ import {
 } from '@atb/api/departures/stops-nearest';
 import * as DepartureTypes from '@atb/api/types/departures';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {useFavorites} from '@atb/favorites';
-import {UserFavoriteDepartures} from '@atb/favorites';
+import {useFavorites, UserFavoriteDepartures} from '@atb/favorites';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {animateNextChange} from '@atb/utils/animation';
 import useInterval from '@atb/utils/use-interval';
 import {differenceInMinutes} from 'date-fns';
-import {useCallback, useEffect} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import useReducerWithSideEffects, {
   NoUpdate,
   ReducerWithSideEffects,
@@ -246,7 +245,7 @@ export function useDeparturesData(
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const {favoriteDepartures} = useFavorites();
-  let queryStartTime = startTime ?? new Date().toISOString();
+  const [queryStartTime, setQueryStartTime] = useState<string | undefined>();
   const activeFavoriteDepartures = showOnlyFavorites
     ? favoriteDepartures
     : undefined;
@@ -255,11 +254,12 @@ export function useDeparturesData(
   const timeout = useTimeoutRequest();
 
   const loadDepartures = useCallback(() => {
-    queryStartTime = startTime ?? new Date().toISOString();
+    const updatedQueryStartTime = startTime ?? new Date().toISOString();
+    setQueryStartTime(updatedQueryStartTime);
     dispatch({
       type: 'LOAD_INITIAL_DEPARTURES',
       quayIds,
-      startTime: queryStartTime,
+      startTime: updatedQueryStartTime,
       limitPerLine,
       limitPerQuay,
       timeRange,
@@ -268,19 +268,25 @@ export function useDeparturesData(
     });
   }, [JSON.stringify(quayIds), startTime, activeFavoriteDepartures, mode]);
 
-  const loadRealTimeData = useCallback(
-    () =>
-      dispatch({
-        type: 'LOAD_REALTIME_DATA',
-        quayIds,
-        startTime: queryStartTime,
-        limitPerLine,
-        limitPerQuay,
-        timeRange,
-        favoriteDepartures: activeFavoriteDepartures,
-      }),
-    [JSON.stringify(activeFavoriteDepartures)],
-  );
+  const loadRealTimeData = useCallback(() => {
+    if (!queryStartTime) return;
+    dispatch({
+      type: 'LOAD_REALTIME_DATA',
+      quayIds,
+      startTime: queryStartTime,
+      limitPerLine,
+      limitPerQuay,
+      timeRange,
+      favoriteDepartures: activeFavoriteDepartures,
+    });
+  }, [
+    JSON.stringify(quayIds),
+    queryStartTime,
+    limitPerLine,
+    limitPerQuay,
+    timeRange,
+    JSON.stringify(activeFavoriteDepartures),
+  ]);
 
   useEffect(() => {
     loadDepartures();

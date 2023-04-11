@@ -31,7 +31,10 @@ export const Root_PurchasePaymentWithVippsScreen = ({
     navigation.navigate('Root_TabNavigatorStack', {
       screen: 'TabNav_TicketingStack',
       params: {
-        screen: 'ActiveFareProductsAndReservationsTab',
+        screen: 'Ticketing_RootScreen',
+        params: {
+          screen: 'TicketTabNav_ActiveFareProductsTabScreen',
+        },
       },
     });
   };

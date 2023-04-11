@@ -4,7 +4,7 @@ import LoginOnboarding from '@atb/login/LoginOnboarding';
 import {AfterLoginParams} from '@atb/login/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {LoginInAppScreenProps} from '../types';
-import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
+import {FareProductTypeConfig} from '@atb/configuration';
 
 export type LoginOnboardingInAppRouteParams = {
   afterLogin:

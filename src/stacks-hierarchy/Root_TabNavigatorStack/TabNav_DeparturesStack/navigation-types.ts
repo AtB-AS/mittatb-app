@@ -11,7 +11,6 @@ export type DeparturesStackParams = {
   Departures_TravelDetailsMapScreen: TravelDetailsMapScreenParams;
   Departures_PlaceScreen: PlaceScreenParams;
   Departures_NearbyStopPlacesScreen: NearbyStopPlacesScreenParams;
-  Departures_OnboardingScreen: undefined;
 };
 
 export type RootDeparturesScreenProps =

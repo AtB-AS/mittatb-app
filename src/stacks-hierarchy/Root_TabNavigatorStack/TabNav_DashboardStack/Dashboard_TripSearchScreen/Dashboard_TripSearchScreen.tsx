@@ -7,8 +7,12 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useFavorites} from '@atb/favorites';
-import {GeoLocation, Location, UserFavorites} from '@atb/favorites';
+import {
+  GeoLocation,
+  Location,
+  useFavorites,
+  UserFavorites,
+} from '@atb/favorites';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {
   SelectableLocationType,
