@@ -100,12 +100,12 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
           }
           leftButton={{type: 'back'}}
         />
+
         <TariffZonesSelectorButtons
           toTariffZone={selectedZones.to}
           fromTariffZone={selectedZones.from}
           onVenueSearchClick={onVenueSearchClick}
           isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
-          withPadding={true}
         />
       </View>
 
