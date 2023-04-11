@@ -37,7 +37,7 @@ export function LargeFullScreenHeader(
   return (
     <>
       <View style={{backgroundColor, paddingTop: top}}>
-        <LargeScreenHeaderTop {...props.buttonProps} color={props.color} />
+        <LargeScreenHeaderTop {...props.buttonProps} color={themeColor} />
       </View>
       <LargeScreenHeader {...props} />
     </>
