@@ -8,7 +8,7 @@ import {
   LargeScreenHeader,
   LargeScreenHeaderProps,
   LargeScreenHeaderTop,
-} from './LargeHeader';
+} from './LargeScreenHeader';
 import {ScreenHeader, ScreenHeaderProps} from './ScreenHeader';
 
 export function FullScreenHeader(props: ScreenHeaderProps) {
