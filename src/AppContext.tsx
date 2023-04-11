@@ -1,10 +1,10 @@
 import React, {
   createContext,
-  useReducer,
-  useContext,
   Dispatch,
+  useContext,
   useEffect,
   useMemo,
+  useReducer,
 } from 'react';
 import RNBootSplash from 'react-native-bootsplash';
 import {getBuildNumber} from 'react-native-device-info';

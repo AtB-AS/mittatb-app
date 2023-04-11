@@ -1,5 +1,5 @@
 import remoteConfig from '@react-native-firebase/remote-config';
-import {PRIVACY_POLICY_URL, ENABLE_TICKETING} from '@env';
+import {ENABLE_TICKETING, PRIVACY_POLICY_URL} from '@env';
 
 export type RemoteConfig = {
   enable_network_logging: boolean;

@@ -8,7 +8,7 @@ import {
 import {useIsCityBikesEnabled} from '@atb/mobility/use-city-bikes-enabled';
 import {
   MapSelectionActionType,
-  StationsFilter,
+  StationsFilterType,
   StationsState,
 } from '@atb/components/map/types';
 import {useUserMapFilters} from '@atb/components/map/hooks/use-map-filter';
@@ -40,7 +40,7 @@ export const useCityBikeStations: () => StationsState | undefined = () => {
     ],
   });
   const isCityBikesEnabled = useIsCityBikesEnabled();
-  const [filter, setFilter] = useState<StationsFilter>();
+  const [filter, setFilter] = useState<StationsFilterType>();
   const [isLoading, setIsLoading] = useState(false);
   const {getMapFilter} = useUserMapFilters();
   const [loadedArea, setLoadedArea] =
@@ -107,7 +107,7 @@ export const useCityBikeStations: () => StationsState | undefined = () => {
     });
   };
 
-  const onFilterChange = (filter: StationsFilter) => {
+  const onFilterChange = (filter: StationsFilterType) => {
     setFilter(filter);
   };
 

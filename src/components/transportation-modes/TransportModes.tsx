@@ -1,5 +1,5 @@
 import {View, ViewStyle} from 'react-native';
-import {TransportationIconBox, CounterIconBox} from '@atb/components/icon-box';
+import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
 import {ThemeText} from '@atb/components/text';
 import {
   FareContractTexts,

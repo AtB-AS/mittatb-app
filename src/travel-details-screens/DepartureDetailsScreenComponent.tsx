@@ -245,6 +245,7 @@ function EstimatedCallRows({
       collapsed={collapsed}
       setCollapsed={collapsePress}
       label={t(DepartureDetailsTexts.collapse.label(passedCalls.length - 1))}
+      testID="intermediateStops"
     />
   ) : null;
 
@@ -399,11 +400,13 @@ type CollapseButtonRowProps = {
   label: string;
   collapsed: boolean;
   setCollapsed(collapsed: boolean): void;
+  testID?: string;
 };
 function CollapseButtonRow({
   label,
   collapsed,
   setCollapsed,
+  testID,
 }: CollapseButtonRowProps) {
   const styles = useCollapseButtonStyle();
   const text = (
@@ -426,6 +429,7 @@ function CollapseButtonRow({
     <TouchableOpacity
       accessibilityRole="button"
       onPress={() => setCollapsed(!collapsed)}
+      testID={testID}
     >
       <View style={styles.container}>{child}</View>
     </TouchableOpacity>

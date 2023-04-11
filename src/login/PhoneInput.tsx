@@ -143,7 +143,7 @@ export default function PhoneInput({
               <MessageBox
                 style={styles.errorMessage}
                 type="error"
-                message={t(LoginTexts.phoneInput.errors.invalid_phone)}
+                message={t(LoginTexts.phoneInput.errors[error])}
               />
             )}
 

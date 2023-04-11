@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import {searchStore, journeyStore} from './storage';
+import {journeyStore, searchStore} from './storage';
 import {
   JourneySearchHistory,
   JourneySearchHistoryEntry,
