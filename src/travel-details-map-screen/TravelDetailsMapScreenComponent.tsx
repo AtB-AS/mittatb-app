@@ -2,13 +2,10 @@ import {
   BackArrow,
   flyToLocation,
   MapCameraConfig,
-  MapControls,
   MapLeg,
   MapViewConfig,
   PositionArrow,
   useControlPositionsStyle,
-  zoomIn,
-  zoomOut,
 } from '@atb/components/map';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {Coordinates} from '@atb/utils/coordinates';
@@ -83,10 +80,6 @@ export const TravelDetailsMapScreenComponent = ({
           onPress={() => {
             flyToLocation(geolocation?.coordinates, mapCameraRef);
           }}
-        />
-        <MapControls
-          zoomIn={() => zoomIn(mapViewRef, mapCameraRef)}
-          zoomOut={() => zoomOut(mapViewRef, mapCameraRef)}
         />
       </View>
     </View>

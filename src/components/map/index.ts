@@ -1,5 +1,4 @@
 export {BackArrow} from './components/BackArrow';
-export {MapControls} from './components/MapControls';
 export {PositionArrow} from './components/PositionArrow';
 export {shadows} from './components/shadows';
 export {MapViewConfig, MapCameraConfig} from './MapConfig';

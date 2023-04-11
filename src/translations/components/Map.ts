@@ -14,20 +14,12 @@ const MapTexts = {
     label: _('Slutt', 'End'),
   },
   controls: {
-    zoomIn: {
-      a11yLabel: _('Zoom inn', 'Zoom in'),
-    },
-    zoomOut: {
-      a11yLabel: _('Zoom ut', 'Zoom out'),
-    },
     filter: {
-      vehicles: {
-        a11yLabel: _('Sparkesykler', 'Electric scooters'),
-        a11yHint: _(
-          'Aktivér visning av elektriske sparkesykler i kartet',
-          'Show or hide electric scooters in the map',
-        ),
-      },
+      a11yLabel: _('Filtrer kartvisningen', 'Map filters'),
+      a11yHint: _(
+        'Aktiver visning av sparkesykler og bysykler i kartet',
+        'Show or hide electric scooters and city bikes in the map',
+      ),
     },
     position: {
       a11yLabel: _('Min posisjon', 'My location'),
