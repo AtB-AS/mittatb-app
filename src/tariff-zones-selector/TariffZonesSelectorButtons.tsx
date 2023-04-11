@@ -25,6 +25,7 @@ type Props = {
       | keyof Root_PurchaseTariffZonesSearchByMapScreenParams
       | keyof TicketAssistant_ZonePickerScreenParams,
   ) => void;
+  withPadding?: boolean;
 };
 
 const TariffZonesSelectorButtons = ({
@@ -32,6 +33,7 @@ const TariffZonesSelectorButtons = ({
   fromTariffZone,
   onVenueSearchClick,
   isApplicableOnSingleZoneOnly,
+  withPadding = false,
 }: Props) => {
   const selectedZones: TariffZoneSelection = {
     from: fromTariffZone,
@@ -42,7 +44,7 @@ const TariffZonesSelectorButtons = ({
   const {t, language} = useTranslation();
 
   return (
-    <Section withPadding>
+    <Section withPadding={withPadding}>
       <ButtonSectionItem
         label={
           isApplicableOnSingleZoneOnly

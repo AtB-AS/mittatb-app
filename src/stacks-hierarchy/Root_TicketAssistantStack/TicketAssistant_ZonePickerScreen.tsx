@@ -88,12 +88,15 @@ export const TicketAssistant_ZonePickerScreen = ({
           {t(TicketAssistantTexts.zonesSelector.title)}
         </ThemeText>
         <View style={styles.mapContainer}>
-          <TariffZonesSelectorButtons
-            fromTariffZone={selectedZones.from}
-            toTariffZone={selectedZones.to}
-            isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
-            onVenueSearchClick={onVenueSearchClick}
-          />
+          <View style={styles.zonesSelectorButtonsContainer}>
+            <TariffZonesSelectorButtons
+              fromTariffZone={selectedZones.from}
+              toTariffZone={selectedZones.to}
+              isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
+              onVenueSearchClick={onVenueSearchClick}
+            />
+          </View>
+
           <TariffZonesSelectorMap
             isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
             selectedZones={selectedZones}
@@ -118,6 +121,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
     textAlign: 'center',
     paddingHorizontal: theme.spacings.xLarge,
+  },
+  zonesSelectorButtonsContainer: {
+    marginBottom: theme.spacings.medium,
   },
   mapContainer: {
     flex: 1,
