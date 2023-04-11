@@ -21,7 +21,7 @@ import {useTextForLanguage} from '@atb/translations/utils';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export default function LoginOnboarding({
+export const LoginOnboarding = ({
   headerLeftButton,
   doAfterSubmit,
   headerRightButton,
@@ -31,7 +31,7 @@ export default function LoginOnboarding({
   headerLeftButton?: LeftButtonProps;
   headerRightButton?: RightButtonProps;
   fareProductTypeConfig: FareProductTypeConfig;
-}) {
+}) => {
   const {t} = useTranslation();
   const navigation = useNavigation();
   const styles = useThemeStyles();
@@ -110,7 +110,7 @@ export default function LoginOnboarding({
       </ScrollView>
     </View>
   );
-}
+};
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

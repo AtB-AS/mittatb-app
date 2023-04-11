@@ -116,8 +116,7 @@ const initialReducerState: TicketingReducerState = {
 };
 
 const TicketingContext = createContext<TicketingState | undefined>(undefined);
-
-const TicketingContextProvider: React.FC = ({children}) => {
+export const TicketingContextProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer(ticketingReducer, initialReducerState);
 
   const {user, abtCustomerId} = useAuthState();
@@ -199,5 +198,3 @@ export function useTicketingState() {
   }
   return context;
 }
-
-export default TicketingContextProvider;

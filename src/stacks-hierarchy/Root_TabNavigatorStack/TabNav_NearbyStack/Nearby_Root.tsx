@@ -34,7 +34,7 @@ import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {Loading} from '@atb/components/loading';
-import DepartureTimeSheet from '../../../place-screen/components/DepartureTimeSheet';
+import {DepartureTimeSheet} from '@atb/place-screen/components/DepartureTimeSheet';
 import {useDepartureData} from './use-departure-data';
 import {SearchTime} from './types';
 import {NearbyScreenProps} from './navigation-types';

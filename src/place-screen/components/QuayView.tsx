@@ -4,7 +4,7 @@ import {SearchTime} from '../types';
 import {StyleSheet} from '@atb/theme';
 import React, {useEffect} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
-import DateSelection from './DateSelection';
+import {DateSelection} from './DateSelection';
 import FavoriteToggle from './FavoriteToggle';
 import QuaySection from './QuaySection';
 import {useDeparturesData} from '../hooks/use-departures-data';

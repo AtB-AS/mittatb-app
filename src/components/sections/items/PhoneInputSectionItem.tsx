@@ -23,7 +23,7 @@ import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
 import {ScrollView} from 'react-native-gesture-handler';
 import {countryPhoneData} from 'phone';
 import {Section} from '../Section';
-import {GenericClickableSectionItem} from './GenericClickableSectionItem';
+import {GenericClickableSectionItem} from '@atb/components/sections';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import {loginPhoneInputId} from '@atb/test-ids';
 

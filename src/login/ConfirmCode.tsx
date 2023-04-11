@@ -25,13 +25,13 @@ import {loginConfirmCodeInputId} from '@atb/test-ids';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export default function ConfirmCode({
+export const ConfirmCode = ({
   phoneNumber,
   doAfterLogin,
 }: {
   phoneNumber: string;
   doAfterLogin: () => void;
-}) {
+}) => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {authenticationType, confirmCode, signInWithPhoneNumber} =
@@ -165,7 +165,7 @@ export default function ConfirmCode({
       </KeyboardAvoidingView>
     </View>
   );
-}
+};
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

@@ -7,7 +7,7 @@ import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import QuaySection from './QuaySection';
 import FavoriteToggle from './FavoriteToggle';
-import DateSelection from './DateSelection';
+import {DateSelection} from './DateSelection';
 import {StopPlacesMode} from '@atb/nearby-stop-places/types';
 import {MessageBox} from '@atb/components/message-box';
 import DeparturesTexts from '@atb/translations/screens/Departures';

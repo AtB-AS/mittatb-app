@@ -18,7 +18,7 @@ import {SimpleFareContract} from '@atb/fare-contracts';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export default function ActiveFareContractPrompt({
+export const ActiveFareContractPrompt = ({
   headerLeftButton,
   doAfterSubmit,
   headerRightButton,
@@ -26,7 +26,7 @@ export default function ActiveFareContractPrompt({
   doAfterSubmit: () => void;
   headerLeftButton?: LeftButtonProps;
   headerRightButton?: RightButtonProps;
-}) {
+}) => {
   const {t} = useTranslation();
   const navigation = useNavigation();
   const styles = useThemeStyles();
@@ -100,7 +100,7 @@ export default function ActiveFareContractPrompt({
       </ScrollView>
     </View>
   );
-}
+};
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

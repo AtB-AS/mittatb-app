@@ -51,7 +51,7 @@ const useRetryIntervalWithBackoff = (): [number, () => void] => {
   ];
 };
 
-const RemoteConfigContextProvider: React.FC = ({children}) => {
+export const RemoteConfigContextProvider: React.FC = ({children}) => {
   const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);
   const [fetchError, setFetchError] = useState(false);
   const {isLoading: isLoadingAppState, newBuildSincePreviousLaunch} =
@@ -159,5 +159,3 @@ const parseJson = (text: string, defaultObject: object) => {
     return defaultObject;
   }
 };
-
-export default RemoteConfigContextProvider;

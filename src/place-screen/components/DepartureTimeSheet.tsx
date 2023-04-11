@@ -31,7 +31,7 @@ type Props = {
   allowTimeInPast?: boolean;
 };
 
-const DepartureTimeSheet = forwardRef<ScrollView, Props>(
+export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
   ({close, initialTime, setSearchTime, allowTimeInPast = true}, focusRef) => {
     const styles = useStyles();
     const {t, language} = useTranslation();
@@ -100,5 +100,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
   };
 });
-
-export default DepartureTimeSheet;

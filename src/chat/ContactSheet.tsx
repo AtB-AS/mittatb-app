@@ -22,7 +22,7 @@ type Props = {
   close: () => void;
 };
 
-const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
+export const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
   const {t} = useTranslation();
   const unreadCount = useChatUnreadCount();
   const {customer_service_url, enable_intercom, customer_feedback_url} =
@@ -151,5 +151,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
   };
 });
-
-export default ContactSheet;

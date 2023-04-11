@@ -1,6 +1,6 @@
 import {useAppState} from '@atb/AppContext';
 import trackNavigation from '@atb/diagnostics/trackNavigation';
-import LoginInAppStack from '@atb/login/in-app/LoginInAppStack';
+import {LoginInAppStack} from '@atb/login/in-app/LoginInAppStack';
 import {Root_OnboardingStack} from './Root_OnboardingStack';
 import FareContractModalScreen from '../fare-contracts/Details';
 import {useTheme} from '@atb/theme';

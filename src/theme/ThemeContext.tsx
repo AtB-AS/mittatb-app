@@ -38,7 +38,7 @@ export function useTheme() {
   return context;
 }
 
-const ThemeContextProvider: React.FC = ({children}) => {
+export const ThemeContextProvider: React.FC = ({children}) => {
   const colorScheme = useColorScheme();
   const {
     setPreference,
@@ -91,5 +91,3 @@ const ThemeContextProvider: React.FC = ({children}) => {
     </ThemeContext.Provider>
   );
 };
-
-export default ThemeContextProvider;

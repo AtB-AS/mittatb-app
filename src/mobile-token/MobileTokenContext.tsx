@@ -66,7 +66,7 @@ const abtClient = createClient({
   logger,
 });
 
-const MobileTokenContextProvider: React.FC = ({children}) => {
+export const MobileTokenContextProvider: React.FC = ({children}) => {
   const {abtCustomerId, userCreationFinished} = useAuthState();
 
   const hasEnabledMobileToken = useHasEnabledMobileToken();
@@ -363,5 +363,3 @@ export function useMobileTokenContextState() {
   }
   return context;
 }
-
-export default MobileTokenContextProvider;
