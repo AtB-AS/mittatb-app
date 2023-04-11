@@ -31,19 +31,20 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
       onPress={async (e) => {
         const [feature, ..._] = e.features;
         if (isClusterFeature(feature)) {
-          const zoom = await shapeSource.current?.getClusterExpansionZoom(
+          const zoomLevel = await shapeSource.current?.getClusterExpansionZoom(
             feature,
           );
-          flyToLocation(
-            toCoordinates(feature.geometry.coordinates),
+          flyToLocation({
+            coordinates: toCoordinates(feature.geometry.coordinates),
             mapCameraRef,
-            zoom,
-          );
+            zoomLevel,
+            animationDuration: 400,
+          });
         } else if (isFeaturePoint(feature)) {
-          flyToLocation(
-            toCoordinates(feature.geometry.coordinates),
+          flyToLocation({
+            coordinates: toCoordinates(feature.geometry.coordinates),
             mapCameraRef,
-          );
+          });
           onPress({
             source: 'map-click',
             feature,
