@@ -30,8 +30,6 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
   const {theme} = useTheme();
 
-  const styles = useStyles();
-
   const [previousTab, setPreviousTab] = useState<any>();
   return (
     <TicketAssistantProvider>
