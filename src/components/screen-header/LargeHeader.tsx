@@ -113,6 +113,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: theme.spacings.medium,
   },
   globalMessageBox: {
-    marginTop: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
 }));
