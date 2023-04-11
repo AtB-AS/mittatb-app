@@ -81,5 +81,35 @@ const TicketAssistantTexts = {
   zonesSelector: {
     title: _('Hvor skal du reise?', 'Where do you travel?'),
   },
+  duration: {
+    title: (amount: {value: number}) =>
+      _(
+        `Hvor langt frem i tid skal du reise ${amount.value} ganger i uka?`,
+        `How far in advance do you want to travel ${amount.value} times a week?`,
+      ),
+    datePickerHeader: _('Frem til', 'Until'),
+    minLimit: _('1 dag', '1 day'),
+    maxLimit: _('180 dager +', '180 days +'),
+    resultMonths: (amount: {value: number}) =>
+      _(
+        `Du skal reise i ${amount.value} mnd.`,
+        `You will travel for ${amount.value} months.`,
+      ),
+    resultWeeks: (amount: {value: number}) =>
+      _(
+        `Du skal reise i ${amount.value} uke(r).`,
+        `You will travel for ${amount.value} week(s).`,
+      ),
+    resultDays: (amount: {value: number}) =>
+      _(
+        `Du skal reise i ${amount.value} dag(er).`,
+        `You will travel for ${amount.value} day(s).`,
+      ),
+    resultMoreThan180Days: _(
+      'Du skal reise i mer enn et halvt år.',
+      'You will travel for more than half a year.',
+    ),
+    mainButton: _('Neste', 'Next'),
+  },
 };
 export default TicketAssistantTexts;

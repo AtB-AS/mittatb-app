@@ -12,6 +12,7 @@ import {useTheme} from '@atb/theme';
 type ColorType = TextColor | StaticColor | ContrastColor;
 
 type Props = {
+  value?: number;
   maximumValue: number;
   minimumValue: number;
   minimumTrackTintColor?: ColorType;
@@ -23,6 +24,7 @@ type Props = {
   style?: ViewStyle;
 };
 export function SliderComponent({
+  value,
   maximumValue,
   minimumValue,
   minimumTrackTintColor = 'background_accent_3',
@@ -37,10 +39,11 @@ export function SliderComponent({
     <View>
       <Slider
         style={style}
+        value={value}
         minimumValue={minimumValue}
         maximumValue={maximumValue}
-        minimumTrackTintColor={useColorBackground(minimumTrackTintColor)}
-        maximumTrackTintColor={useColorBackground(maximumTrackTintColor)}
+        minimumTrackTintColor={useColor(minimumTrackTintColor)}
+        maximumTrackTintColor={useColor(maximumTrackTintColor)}
         step={step}
         tapToSeek={tapToSeek}
         thumbTintColor={useColor(thumbTintColor)}
@@ -49,18 +52,7 @@ export function SliderComponent({
     </View>
   );
 }
-
 const useColor = (color: ColorType): string => {
-  const {theme, themeName} = useTheme();
-
-  if (typeof color !== 'string') {
-    return color.text;
-  }
-  return isStaticColor(color)
-    ? getStaticColor(themeName, color).text
-    : theme.text.colors[color];
-};
-const useColorBackground = (color: ColorType): string => {
   const {theme, themeName} = useTheme();
 
   if (typeof color !== 'string') {
