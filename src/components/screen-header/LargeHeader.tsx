@@ -97,7 +97,7 @@ export const LargeScreenHeader = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    height: '100%',
+    flex: 1,
   },
   headerContainer: {
     paddingHorizontal: theme.spacings.medium,
