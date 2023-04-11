@@ -11,7 +11,7 @@ import TicketAssistantContext from '@atb/stacks-hierarchy/Root_TicketAssistantSt
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 
 type CategoryPickerProps =
-  TicketAssistantScreenProps<'TicketAssistant_FrequencyScreen'>;
+  TicketAssistantScreenProps<'TicketAssistant_CategoryPickerScreen'>;
 export const TicketAssistant_CategoryPickerScreen = ({
   navigation,
 }: CategoryPickerProps) => {

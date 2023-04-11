@@ -110,29 +110,30 @@ const TicketAssistantTexts = {
   },
   summary: {
     title: _('Anbefalt for', 'Recommended for'),
-    datePickerHeader: _('Frem til', 'Until'),
-    minLimit: _('1 dag', '1 day'),
-    maxLimit: _('180 dager +', '180 days +'),
     description: (data: {frequency: number; date: string}) =>
       _(
         `${data.frequency} turer i uka fram til ${data.date}`,
         `${data.frequency} trips per week until ${data.date}`,
       ),
-    resultWeeks: (amount: {value: number}) =>
+    savings: (data: {
+      totalSavings: number;
+      perTripSavings: string;
+      alternative: string;
+    }) =>
       _(
-        `Du skal reise i ${amount.value} uke(r).`,
-        `You will travel for ${amount.value} week(s).`,
+        `Da sparer du ${data.totalSavings} kr totalt (${data.perTripSavings} kr per tur) \n sammenlignet med ${data.alternative}`,
+        `You save ${data.totalSavings} kr in total (${data.perTripSavings} kr per trip) \n compared to ${data.alternative}`,
       ),
-    resultDays: (amount: {value: number}) =>
-      _(
-        `Du skal reise i ${amount.value} dag(er).`,
-        `You will travel for ${amount.value} day(s).`,
-      ),
+    traveller: _('Reisende', 'Traveller'),
+    zones: _('Soner', 'Zones'),
+    price: _('Pris', 'Price'),
+    pricePerTrip: _('Pris pr tur:', 'Price per trip:'),
     resultMoreThan180Days: _(
       'Du skal reise i mer enn et halvt år.',
       'You will travel for more than half a year.',
     ),
-    mainButton: _('Neste', 'Next'),
+    mainButton: _('Lukk', 'Close'),
+    buyButton: _('Kjøp denne billetten', 'Buy this ticket'),
   },
 };
 export default TicketAssistantTexts;
