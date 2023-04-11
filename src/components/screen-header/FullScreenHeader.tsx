@@ -18,7 +18,7 @@ export function FullScreenHeader(props: ScreenHeaderProps) {
   const backgroundColor = getStaticColor(themeName, themeColor).background;
 
   return (
-    <View style={[{backgroundColor}, {paddingTop: top}]}>
+    <View style={{backgroundColor, paddingTop: top}}>
       <ScreenHeader {...props} />
     </View>
   );
@@ -36,7 +36,7 @@ export function LargeFullScreenHeader(
 
   return (
     <>
-      <View style={[{backgroundColor}, {paddingTop: top}]}>
+      <View style={{backgroundColor, paddingTop: top}}>
         <LargeScreenHeaderTop {...props.buttonProps} color={props.color} />
       </View>
       <LargeScreenHeader {...props} />
