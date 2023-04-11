@@ -32,7 +32,7 @@ export type VehiclesState = {
     region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => void;
   isLoading: boolean;
-  onFilterChange: (filter: VehiclesFilter) => void;
+  onFilterChange: (filter: VehiclesFilterType) => void;
   onPress: (type: MapSelectionActionType) => void;
 };
 
@@ -42,7 +42,7 @@ export type StationsState = {
     region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => void;
   isLoading: boolean;
-  onFilterChange: (filter: StationsFilter) => void;
+  onFilterChange: (filter: StationsFilterType) => void;
   onPress: (type: MapSelectionActionType) => void;
 };
 
@@ -129,15 +129,15 @@ export interface MapLine extends Feature<LineString> {
   faded?: boolean;
 }
 
-export type VehiclesFilter = {
+export type VehiclesFilterType = {
   showVehicles: boolean;
 };
 
-export type StationsFilter = {
+export type StationsFilterType = {
   showCityBikeStations: boolean;
 };
 
-export type MapFilter = {
-  vehicles?: VehiclesFilter;
-  stations?: StationsFilter;
+export type MapFilterType = {
+  vehicles?: VehiclesFilterType;
+  stations?: StationsFilterType;
 };

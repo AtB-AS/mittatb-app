@@ -2,7 +2,7 @@ import {useAppState} from '@atb/AppContext';
 import trackNavigation from '@atb/diagnostics/trackNavigation';
 import LoginInAppStack from '@atb/login/in-app/LoginInAppStack';
 import {Root_OnboardingStack} from './Root_OnboardingStack';
-import FareContractModalScreen from './Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/Details';
+import FareContractModalScreen from '../fare-contracts/Details';
 import {useTheme} from '@atb/theme';
 import {APP_SCHEME} from '@env';
 import {
@@ -173,7 +173,12 @@ export const RootStack = () => {
                     TabNav_ProfileStack: 'profile',
                     TabNav_TicketingStack: {
                       screens: {
-                        ActiveFareProductsAndReservationsTab: 'ticketing',
+                        Ticketing_RootScreen: {
+                          screens: {
+                            TicketTabNav_ActiveFareProductsTabScreen:
+                              'ticketing',
+                          },
+                        },
                       },
                     },
                   },
@@ -316,6 +321,9 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_TicketAssistantStack"
                   component={Root_TicketAssistantStack}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                  }}
                 />
                 <Stack.Screen
                   name="Root_TipsAndInformation"

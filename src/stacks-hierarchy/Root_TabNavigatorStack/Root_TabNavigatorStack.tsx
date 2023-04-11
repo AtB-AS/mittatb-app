@@ -15,7 +15,7 @@ import {
 } from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
 import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/stacks-hierarchy/Root_MobileTokenOnboarding/utils';
 import {TabNav_MapStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_MapStack';
-import TicketingScreen from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack';
+import {TabNav_TicketingStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack';
 import {useTheme} from '@atb/theme';
 import {
   settingToRouteName,
@@ -79,7 +79,7 @@ export const Root_TabNavigatorStack = () => {
             t(dictionary.navigation.map),
             MapPin,
             lineHeight,
-            'mapPage',
+            'mapTab',
           )}
         />
       )}
@@ -98,7 +98,7 @@ export const Root_TabNavigatorStack = () => {
       />
       <Tab.Screen
         name="TabNav_TicketingStack"
-        component={TicketingScreen}
+        component={TabNav_TicketingStack}
         options={tabSettings(
           t(dictionary.navigation.ticketing),
           t(dictionary.navigation.ticketing),

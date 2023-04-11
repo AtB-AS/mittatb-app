@@ -78,6 +78,9 @@ const TicketAssistantTexts = {
       ),
     mainButton: _('Neste', 'Next'),
   },
+  zonesSelector: {
+    title: _('Hvor skal du reise?', 'Where do you travel?'),
+  },
   duration: {
     title: (amount: {value: number}) =>
       _(

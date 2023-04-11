@@ -14,7 +14,7 @@ import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
-import SimpleFareContract from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts';
+import {SimpleFareContract} from '@atb/fare-contracts';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 

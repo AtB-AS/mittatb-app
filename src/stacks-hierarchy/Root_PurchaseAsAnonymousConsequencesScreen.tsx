@@ -21,7 +21,10 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
               params: {
                 screen: 'TabNav_TicketingStack',
                 params: {
-                  screen: 'PurchaseTab',
+                  screen: 'Ticketing_RootScreen',
+                  params: {
+                    screen: 'TicketTabNav_PurchaseTabScreen',
+                  },
                 },
               },
             },

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {StyleSheet} from '@atb/theme';
-import {CompactFareContractInfo} from '../../../TabNav_TicketingStack/FareContracts/CompactFareContractInfo';
+import {CompactFareContractInfo} from '../../../../../fare-contracts/CompactFareContractInfo';
 import useInterval from '@atb/utils/use-interval';
 import {
   filterValidRightNowFareContract,
@@ -13,7 +13,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {Button} from '@atb/components/button';
-import {getFareContractInfoDetails} from '../../../TabNav_TicketingStack/FareContracts/FareContractInfo';
+import {getFareContractInfoDetails} from '../../../../../fare-contracts/FareContractInfo';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,

@@ -1,7 +1,6 @@
-import {StopPlace, Quay} from '@atb/api/types/departures';
+import {Quay, StopPlace} from '@atb/api/types/departures';
 import {Feedback} from '@atb/components/feedback';
-import {useFavorites} from '@atb/favorites';
-import {UserFavoriteDepartures} from '@atb/favorites';
+import {useFavorites, UserFavoriteDepartures} from '@atb/favorites';
 import {SearchTime} from '../types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
