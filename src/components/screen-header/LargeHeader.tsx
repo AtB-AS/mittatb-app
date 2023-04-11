@@ -77,9 +77,11 @@ export const LargeScreenHeader = ({
                 </ThemeText>
               </View>
             )}
-            <View style={[styles.childrenContainer, containerStyle]}>
-              {headerChildren}
-            </View>
+            {headerChildren && (
+              <View style={[styles.childrenContainer, containerStyle]}>
+                {headerChildren}
+              </View>
+            )}
             <GlobalMessage
               globalMessageContext={globalMessageContext}
               style={styles.globalMessageBox}
@@ -99,7 +101,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   headerContainer: {
     paddingHorizontal: theme.spacings.medium,
-    paddingBottom: theme.spacings.medium,
   },
   topContainer: {
     marginVertical: theme.spacings.medium,
@@ -108,7 +109,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   headerTitle: {
     marginBottom: theme.spacings.medium,
   },
-  childrenContainer: {},
+  childrenContainer: {
+    paddingBottom: theme.spacings.medium,
+  },
   globalMessageBox: {
     marginTop: theme.spacings.medium,
   },

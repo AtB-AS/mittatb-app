@@ -92,7 +92,6 @@ export const DepartureDetailsScreenComponent = ({
         title={title ?? t(DepartureDetailsTexts.header.notFound)}
         globalMessageContext="app-assistant"
         headerChildren={<ThemeText>Test</ThemeText>}
-        // color="background_accent_3"
         buttonProps={{}}
       >
         <View
