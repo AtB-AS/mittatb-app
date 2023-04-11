@@ -11,20 +11,27 @@ import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
-import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
 import {productIsSellableInApp} from '@atb/reference-data/utils';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {TariffZone} from '@entur/sdk/lib/nsr/types';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
 const interactiveColorName: InteractiveColor = 'interactive_2';
 const themeColor_1: StaticColorByType<'background'> = 'background_accent_1';
 export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
+  const language = useTranslation();
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const {width} = Dimensions.get('window');
-  const {theme} = useTheme();
 
+  const {theme} = useTheme();
+  const {tariffZones} = useFirestoreConfiguration();
+  const {preassignedFareProducts, fareProductTypeConfigs} =
+    useFirestoreConfiguration();
+  const sellableProductsInApp = preassignedFareProducts.filter(
+    productIsSellableInApp,
+  );
   const contextValue = useContext(TicketAssistantContext);
 
   if (!contextValue) throw new Error('Context is undefined!');
@@ -36,7 +43,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       zones: ['ATB:TariffZone:1', 'ATB:TariffZone:2'],
       tickets: [
         {
-          product_id: 'ATB:Product:1',
+          product_id: 'ATB:PreassignedFareProduct:8808c360',
           duration: 10,
           quantity: 2,
           price: 400,
@@ -45,21 +52,13 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       ],
     };
   }
-  const {preassignedFareProducts, fareProductTypeConfigs} =
-    useFirestoreConfiguration();
-  const sellableProductsInApp = preassignedFareProducts.filter(
-    productIsSellableInApp,
-  );
-  const sellableFareProductTypeConfigs = fareProductTypeConfigs.filter(
-    (config) => sellableProductsInApp.some((p) => p.type === config.type),
-  );
-  const groupedConfigs = sellableFareProductTypeConfigs.reduce<
-    [FareProductTypeConfig, FareProductTypeConfig | undefined][]
-  >((grouped, current, index, arr) => {
-    if (index % 2 === 0) return [...grouped, [current, arr[index + 1]]];
-    return grouped;
-  }, []);
 
+  const recommendedTicket = sellableProductsInApp.find(
+    (product) => product.id === response?.tickets[0].product_id,
+  );
+  const recommendedTicketTypeConfig = fareProductTypeConfigs.find(
+    (config) => config.type === recommendedTicket?.type,
+  );
   const startDate = new Date();
   const endDate: string = new Date(
     startDate.getTime() + data.duration * 24 * 60 * 60 * 1000,
@@ -70,6 +69,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     day: 'numeric',
   });
   const savings = calculateSavings(response.totalCost, data.duration);
+  const fromZone = getTariffZone(tariffZones, response.zones[0]);
+  const toZone = getTariffZone(tariffZones, response.zones[1]);
 
   const interactiveColor = theme.interactive[interactiveColorName];
 
@@ -112,11 +113,13 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             <View style={styles.ticketContainer}>
               <View style={[styles.upperPart, {minWidth: width * 0.6}]}>
                 <View style={styles.travelModeWrapper}>
-                  <TransportModes
-                    iconSize={'small'}
-                    modes={groupedConfigs[0][0].transportModes}
-                    style={{flex: 2}}
-                  />
+                  {recommendedTicketTypeConfig?.transportModes && (
+                    <TransportModes
+                      iconSize={'small'}
+                      modes={recommendedTicketTypeConfig?.transportModes}
+                      style={{flex: 2}}
+                    />
+                  )}
                 </View>
 
                 <View style={styles.productName} testID={'Title'}>
@@ -124,7 +127,9 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                     type="body__secondary--bold"
                     color={interactiveColor.default}
                   >
-                    {`${groupedConfigs[0][0].name[0].value}`}
+                    {language.language === 'nb'
+                      ? `${recommendedTicket?.name.value}`
+                      : `${recommendedTicket?.alternativeNames[0].value}`}
                   </ThemeText>
                 </View>
 
@@ -136,7 +141,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                         {t(TicketAssistantTexts.summary.traveller)}
                       </ThemeText>
                       <View>
-                        {response && (
+                        {response && response.tickets[0].traveller && (
                           <>
                             <View>
                               <InfoChip
@@ -151,28 +156,29 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                     </View>
                   </View>
                   {/** Zones **/}
-                  {response.zones && response.zones.length > 0 && (
-                    <View>
-                      <ThemeText type="label__uppercase" color="secondary">
-                        {t(TicketAssistantTexts.summary.zones)}
-                      </ThemeText>
-                      {response.zones[0] === response.zones[1] ? (
-                        <InfoChip
-                          interactiveColor={interactiveColorName}
-                          style={styles.infoChip}
-                          text={`${response.zones[0].split(':')[2]}`}
-                        />
-                      ) : (
-                        <InfoChip
-                          interactiveColor={interactiveColorName}
-                          style={styles.infoChip}
-                          text={`${response.zones[0].split(':')[2]} - ${
-                            response.zones[1].split(':')[2]
-                          }`}
-                        />
-                      )}
-                    </View>
-                  )}
+                  {response.zones &&
+                    response.zones.length > 0 &&
+                    fromZone &&
+                    toZone && (
+                      <View>
+                        <ThemeText type="label__uppercase" color="secondary">
+                          {t(TicketAssistantTexts.summary.zones)}
+                        </ThemeText>
+                        {response.zones[0] === response.zones[1] ? (
+                          <InfoChip
+                            interactiveColor={interactiveColorName}
+                            style={styles.infoChip}
+                            text={`${response.zones[0].split(':')[2]}`}
+                          />
+                        ) : (
+                          <InfoChip
+                            interactiveColor={interactiveColorName}
+                            style={styles.infoChip}
+                            text={`${fromZone.name?.value} - ${toZone.name?.value}`}
+                          />
+                        )}
+                      </View>
+                    )}
                   {/** Total ticket cost **/}
                   {response.totalCost != 0 && (
                     <View>
@@ -222,9 +228,10 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
               interactiveColor="interactive_0"
               onPress={() => {
                 {
-                  /** Navigate to PurchaseConfirmationScreen **/
+                  /** Navigate to PurchaseConfirmationScreen
+                   * navigation.navigate('PurchaseConfirmationScreen'
+                   * **/
                 }
-                console.log('Pressed');
               }}
               text={t(TicketAssistantTexts.summary.buyButton)}
               testID="nextButton"
@@ -241,6 +248,17 @@ function calculateSavings(
   alternativePrice: number,
 ): number {
   return ticketPrice - alternativePrice;
+}
+
+function getTariffZone(
+  zones: TariffZone[],
+  zoneId: string,
+): TariffZone | undefined {
+  const zone = zones.find((zone) => zone.id === zoneId);
+  if (zone) {
+    return zone;
+  }
+  return undefined;
 }
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({

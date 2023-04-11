@@ -26,7 +26,6 @@ export const TicketAssistant_CategoryPickerScreen = ({
   function updateCategory(value: number) {
     const newData = {...data, traveller: convertIndexToTraveller(value)};
     updateData(newData);
-    console.log('Context Data \n' + JSON.stringify(newData, null, 2));
   }
 
   return (

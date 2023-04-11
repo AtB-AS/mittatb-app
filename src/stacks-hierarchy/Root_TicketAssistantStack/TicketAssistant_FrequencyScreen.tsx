@@ -35,7 +35,6 @@ export const TicketAssistant_FrequencyScreen = ({
   function updateFrequency(value: number) {
     const newData = {...data, frequency: value};
     updateData(newData);
-    console.log('Context Data \n' + JSON.stringify(newData, null, 2));
   }
 
   return (
