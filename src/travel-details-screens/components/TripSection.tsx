@@ -48,7 +48,6 @@ import FlexibleTransportContactDetails, {
   ContactDetails as ContactDetails,
 } from './FlexibeTransportContactDetails';
 import {usePreferences} from '@atb/preferences';
-import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
 import {Button} from '@atb/components/button';
 import {Map} from '@atb/assets/svg/mono-icons/map';
 
@@ -104,8 +103,6 @@ const TripSection: React.FC<TripSectionProps> = ({
   const {startTimes, endTimes} = mapLegToTimeValues(leg);
 
   const notices = getNoticesForLeg(leg);
-
-  const realtimeMapEnabled = useRealtimeMapEnabled();
 
   const lastPassedStop = leg.serviceJourneyEstimatedCalls
     ?.filter((a) => !a.predictionInaccurate && a.actualDepartureTime)
@@ -227,7 +224,7 @@ const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
-        {realtimeMapEnabled && onPressShowLive ? (
+        {onPressShowLive ? (
           <TripRow>
             <Button
               type="pill"

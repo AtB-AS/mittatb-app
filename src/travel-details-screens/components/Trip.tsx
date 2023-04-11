@@ -39,13 +39,15 @@ const Trip: React.FC<TripProps> = ({
   );
 
   const realtimeMapEnabled = useRealtimeMapEnabled();
-  const shouldShowLive =
-    !tripPattern.legs.find((a) => !a.realtime) && realtimeMapEnabled;
-
-  const ids = shouldShowLive
-    ? (tripPattern.legs
-        .map((leg) => leg.serviceJourney?.id)
-        .filter(Boolean) as string[])
+  // avoid typescript errors on id
+  const filterLegs = (id?: string): id is string => {
+    return !!id;
+  };
+  // get vehicle position if there is realtime data for leg
+  const ids = realtimeMapEnabled
+    ? tripPattern.legs
+        .map((leg) => (leg.realtime ? leg.serviceJourney?.id : undefined))
+        .filter(filterLegs)
     : undefined;
   const {vehiclePositions} = useGetServiceJourneyVehicles(ids);
 
