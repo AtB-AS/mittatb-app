@@ -26,7 +26,7 @@ export function FullScreenHeader(props: ScreenHeaderProps) {
 
 export function LargeFullScreenHeader(
   props: LargeScreenHeaderProps & {
-    buttonProps: Omit<LargeHeaderButtonProps, 'color'>;
+    buttonProps?: Omit<LargeHeaderButtonProps, 'color'>;
   },
 ) {
   const {top} = useSafeAreaInsets();
