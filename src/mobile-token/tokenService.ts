@@ -1,26 +1,24 @@
 import {
   ActivatedToken,
-  GrpcError,
-  GrpcErrorType,
-  handleReattest,
-  handleRemoteError,
+  handleReattestation,
   RemoteTokenServiceWithInitiate,
 } from '@entur-private/abt-mobile-client-sdk';
-import {
-  ActivateResponse,
-  CompleteResponse,
-  DetailsResponse,
-  InitRequest,
-  InitResponse,
-  RenewResponse,
-} from '@entur-private/abt-token-server-javascript-interface';
+
 import {client} from '@atb/api/client';
 import {
+  CompleteTokenInitializationResponse,
+  CompleteTokenRenawalResponse,
+  GetTokenDetailsResponse,
+  InitiateTokenRenewalResponse,
+  InitiateTokenResponse,
+  InitRequest,
+  ListResponse,
   RemoteToken,
-  RemoveResponse,
+  RemoveTokenResponse,
+  ToggleResponse,
   TokenLimitResponse,
 } from '@atb/mobile-token/types';
-import axios from 'axios';
+import {parseRemoteError} from '@entur-private/abt-token-server-javascript-interface';
 import {getDeviceName} from 'react-native-device-info';
 
 const CorrelationIdHeaderName = 'Atb-Correlation-Id';
@@ -28,10 +26,6 @@ const SignedTokenHeaderName = 'Atb-Signed-Token';
 const AttestationHeaderName = 'Atb-Token-Attestation';
 const AttestationTypeHeaderName = 'Atb-Token-Attestation-Type';
 const IsEmulatorHeaderName = 'Atb-Is-Emulator';
-
-type ListTokensResponse = {
-  tokens: RemoteToken[];
-};
 
 export type TokenService = RemoteTokenServiceWithInitiate & {
   removeToken: (tokenId: string, traceId: string) => Promise<boolean>;
@@ -45,53 +39,48 @@ export type TokenService = RemoteTokenServiceWithInitiate & {
   getTokenToggleDetails: () => Promise<TokenLimitResponse>;
 };
 
-const isGrpcErrorType = (errorData: any): errorData is GrpcErrorType =>
-  errorData && 'grpcErrorCode' in errorData;
-
-const grpcErrorHandler = (err: any) => {
-  if (axios.isAxiosError(err)) {
-    const errorData = err.response?.data as any;
-    if (isGrpcErrorType(errorData)) {
-      return Promise.reject(new GrpcError(errorData.message, errorData));
-    }
-  }
-  return Promise.reject(err);
+const handleError = (err: any) => {
+  throw parseRemoteError(err) || err;
 };
 
 const service: TokenService = {
   initiateNewMobileToken: async (traceId, isEmulator) => {
     const deviceName = await getDeviceName();
     const data: InitRequest = {
-      keyValues: [{key: 'deviceName', value: deviceName}],
+      name: deviceName,
     };
     return client
-      .post<InitResponse>('/tokens/v3/init', data, {
+      .post<InitiateTokenResponse>('/tokens/v4/init', data, {
         headers: {
           [CorrelationIdHeaderName]: traceId,
           [IsEmulatorHeaderName]: String(isEmulator),
         },
         authWithIdToken: true,
-        skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
+        skipErrorLogging: () => true, //TODO: fix this
         timeout: 15000,
       })
       .then((res) => res.data.pendingTokenDetails)
-      .catch(grpcErrorHandler);
+      .catch(handleError);
   },
   activateNewMobileToken: async (pendingToken, correlationId) =>
     client
-      .post<ActivateResponse>('/tokens/v3/activate', pendingToken.toJSON(), {
-        headers: {
-          [CorrelationIdHeaderName]: correlationId,
+      .post<CompleteTokenInitializationResponse>(
+        '/tokens/v4/activate',
+        pendingToken.toJSON(),
+        {
+          headers: {
+            [CorrelationIdHeaderName]: correlationId,
+          },
+          authWithIdToken: true,
+          timeout: 15000,
+          skipErrorLogging: () => true, //TODO: fix this
         },
-        authWithIdToken: true,
-        timeout: 15000,
-        skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
-      })
+      )
       .then((res) => res.data.activeTokenDetails)
-      .catch(grpcErrorHandler),
+      .catch(handleError),
   initiateMobileTokenRenewal: (token, secureContainer, traceId, attestation) =>
     client
-      .post<RenewResponse>('/tokens/v3/renew', undefined, {
+      .post<InitiateTokenRenewalResponse>('/tokens/v4/renew', undefined, {
         headers: {
           [CorrelationIdHeaderName]: traceId,
           [SignedTokenHeaderName]: secureContainer,
@@ -100,10 +89,10 @@ const service: TokenService = {
         },
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
+        skipErrorLogging: () => true, //TODO: fix this
       })
       .then((res) => res.data.pendingTokenDetails)
-      .catch(grpcErrorHandler),
+      .catch(handleError),
   completeMobileTokenRenewal: (
     pendingToken,
     secureContainer,
@@ -112,22 +101,26 @@ const service: TokenService = {
     attestation,
   ) =>
     client
-      .post<CompleteResponse>('/tokens/v3/complete', pendingToken.toJSON(), {
-        headers: {
-          [CorrelationIdHeaderName]: correlationId,
-          [SignedTokenHeaderName]: secureContainer,
-          [AttestationHeaderName]: attestation?.data || '',
-          [AttestationTypeHeaderName]: attestation?.type || '',
+      .post<CompleteTokenRenawalResponse>(
+        '/tokens/v4/complete',
+        pendingToken.toJSON(),
+        {
+          headers: {
+            [CorrelationIdHeaderName]: correlationId,
+            [SignedTokenHeaderName]: secureContainer,
+            [AttestationHeaderName]: attestation?.data || '',
+            [AttestationTypeHeaderName]: attestation?.type || '',
+          },
+          authWithIdToken: true,
+          timeout: 15000,
+          skipErrorLogging: () => true, //TODO: fix this
         },
-        authWithIdToken: true,
-        timeout: 15000,
-        skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
-      })
+      )
       .then((res) => res.data.activeTokenDetails)
-      .catch(grpcErrorHandler),
+      .catch(handleError),
   getMobileTokenDetails: (token, secureContainer, traceId, attestation) =>
     client
-      .get<DetailsResponse>('/tokens/v3/details', {
+      .get<GetTokenDetailsResponse>('/tokens/v4/details', {
         headers: {
           [CorrelationIdHeaderName]: traceId,
           [SignedTokenHeaderName]: secureContainer,
@@ -136,76 +129,70 @@ const service: TokenService = {
         },
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
+        skipErrorLogging: () => true, //TODO: fix this
       })
       .then((res) => res.data.activeTokenDetails)
-      .catch(grpcErrorHandler),
+      .catch(handleError),
   removeToken: async (tokenId: string, traceId: string): Promise<boolean> =>
-    handleRemoteError(() =>
-      client
-        .post<RemoveResponse>(
-          '/tokens/v3/remove',
-          {tokenId},
-          {
-            headers: {
-              [CorrelationIdHeaderName]: traceId,
-            },
-            authWithIdToken: true,
-            timeout: 15000,
-            skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
-          },
-        )
-        .then((res) => res.data.removed)
-        .catch(grpcErrorHandler),
-    ),
-  listTokens: async (traceId: string) =>
-    handleRemoteError(() =>
-      client
-        .get<ListTokensResponse>('/tokens/v3/list', {
+    client
+      .post<RemoveTokenResponse>(
+        '/tokens/v4/remove',
+        {tokenId},
+        {
           headers: {
             [CorrelationIdHeaderName]: traceId,
           },
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
-        })
-        .then((res) => res.data.tokens)
-        .catch(grpcErrorHandler),
-    ),
+          skipErrorLogging: () => true, //TODO: fix this
+        },
+      )
+      .then((res) => res.data.removed)
+      .catch(handleError),
+
+  listTokens: async (traceId: string) =>
+    client
+      .get<ListResponse>('/tokens/v4/list', {
+        headers: {
+          [CorrelationIdHeaderName]: traceId,
+        },
+        authWithIdToken: true,
+        timeout: 15000,
+        skipErrorLogging: () => true, //TODO: fix this
+      })
+      .then((res) => res.data.tokens)
+      .catch(handleError),
   toggle: async (tokenId: string, traceId: string) =>
-    handleRemoteError(() =>
-      client
-        .post<ListTokensResponse>(
-          '/tokens/v3/toggle',
-          {tokenId},
-          {
-            headers: {
-              [CorrelationIdHeaderName]: traceId,
-            },
-            authWithIdToken: true,
-            timeout: 15000,
-            skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
+    client
+      .post<ToggleResponse>(
+        '/tokens/v4/toggle',
+        {tokenId},
+        {
+          headers: {
+            [CorrelationIdHeaderName]: traceId,
           },
-        )
-        .then((res) => res.data.tokens)
-        .catch(grpcErrorHandler),
-    ),
-  getTokenToggleDetails: async () =>
-    handleRemoteError(() =>
-      client
-        .get<TokenLimitResponse>('/tokens/v3/toggle/details', {
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
-        })
-        .then((res) => res.data)
-        .catch(grpcErrorHandler),
-    ),
+          skipErrorLogging: () => true, //TODO: fix this
+        },
+      )
+      .then((res) => res.data.tokens)
+      .catch(handleError),
+
+  getTokenToggleDetails: async () =>
+    client
+      .get<TokenLimitResponse>('/tokens/v4/toggle/details', {
+        authWithIdToken: true,
+        timeout: 15000,
+        skipErrorLogging: () => true, //TODO: fix this
+      })
+      .then((res) => res.data)
+      .catch(handleError),
   validate: async (token, secureContainer, traceId) =>
-    handleReattest<any>(
+    handleReattestation<any>(
       async (attestation) =>
         client
-          .get('/tokens/v3/validate', {
+          .get('/tokens/v4/validate', {
             headers: {
               [CorrelationIdHeaderName]: traceId,
               [SignedTokenHeaderName]: secureContainer,
@@ -214,9 +201,9 @@ const service: TokenService = {
             },
             authWithIdToken: true,
             timeout: 15000,
-            skipErrorLogging: (err) => isGrpcErrorType(err.response?.data),
+            skipErrorLogging: () => true, //TODO: fix this
           })
-          .catch(grpcErrorHandler),
+          .catch(handleError),
       token,
     ),
 };

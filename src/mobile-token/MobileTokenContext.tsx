@@ -10,6 +10,12 @@ import {useAuthState} from '@atb/auth';
 import {useTicketingState} from '@atb/ticketing';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
+import {
+  TokenMustBeReplacedRemoteTokenStateError,
+  TokenNotFoundRemoteTokenStateError,
+  TokenEncodingInvalidRemoteTokenStateError,
+  TokenMustBeRenewedRemoteTokenStateError,
+} from '@entur-private/abt-token-server-javascript-interface';
 import {v4 as uuid} from 'uuid';
 import {storage} from '@atb/storage';
 import Bugsnag from '@bugsnag/react-native';
@@ -19,19 +25,15 @@ import {
   ActivatedToken,
   createClient,
   TokenAction,
-  TokenEncodingInvalidRemoteTokenStateError,
-  TokenMustBeRenewedRemoteTokenStateError,
-  TokenMustBeReplacedRemoteTokenStateError,
-  TokenNotFoundRemoteTokenStateError,
 } from '@entur-private/abt-mobile-client-sdk';
 import {createTokenService} from '@atb/mobile-token/tokenService';
-import {SAFETY_NET_API_KEY} from '@env';
 import {logger} from '@atb/mobile-token/abtClientLogger';
 import {isInspectable} from '@atb/mobile-token/utils';
 
 import DeviceInfo from 'react-native-device-info';
 import {Platform} from 'react-native';
 import {updateMetadata} from '@atb/chat/metadata';
+import {SAFETY_NET_API_KEY} from '@env';
 
 const CONTEXT_ID = 'main';
 
@@ -61,7 +63,10 @@ const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
 const tokenService = createTokenService();
 const abtClient = createClient({
   tokenContextIds: [CONTEXT_ID],
-  googleSafetyNetApiKey: SAFETY_NET_API_KEY,
+  attestation: {
+    attestationType: 'AndroidSafetyNetAttestation',
+    googleSafetyNetApiKey: SAFETY_NET_API_KEY,
+  },
   remoteTokenService: tokenService,
   logger,
 });

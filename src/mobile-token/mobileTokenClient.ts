@@ -1,32 +1,18 @@
-import {useCallback, useEffect, useMemo} from 'react';
+import {useCallback, useMemo} from 'react';
 import {
-  AbtClient,
   encodeAsSecureContainer,
   TokenAction,
-  NoTokenError,
   Token,
   ActivatedToken,
+  createClient,
 } from '@entur-private/abt-mobile-client-sdk';
-import Bugsnag from '@bugsnag/react-native';
 
-export function useMobileTokenClient(abtClient: AbtClient, contextId: string) {
-  useEffect(() => {
-    (async function () {
-      await abtClient.start();
-      return abtClient.close;
-    })();
-  }, []);
-
+export function useMobileTokenClient(
+  abtClient: ReturnType<typeof createClient>,
+  contextId: string,
+) {
   const get = useCallback(async (traceId: string) => {
-    try {
-      return await abtClient.getToken(contextId, traceId);
-    } catch (err) {
-      if (err instanceof NoTokenError) {
-        Bugsnag.leaveBreadcrumb('No native token found');
-        return undefined;
-      }
-      throw err;
-    }
+    return await abtClient.getToken(contextId, traceId);
   }, []);
 
   const create = useCallback(
