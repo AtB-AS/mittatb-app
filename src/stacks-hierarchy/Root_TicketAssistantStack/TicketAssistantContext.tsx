@@ -15,6 +15,7 @@ export interface TicketAssistantData {
 }
 
 export interface TicketAssistantResponse {
+  product_id: string;
   duration: number;
   quantity: number;
   price: number;

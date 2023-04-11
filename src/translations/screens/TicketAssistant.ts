@@ -108,5 +108,31 @@ const TicketAssistantTexts = {
     ),
     mainButton: _('Neste', 'Next'),
   },
+  summary: {
+    title: _('Anbefalt for', 'Recommended for'),
+    datePickerHeader: _('Frem til', 'Until'),
+    minLimit: _('1 dag', '1 day'),
+    maxLimit: _('180 dager +', '180 days +'),
+    description: (data: {frequency: number; date: string}) =>
+      _(
+        `${data.frequency} turer i uka fram til ${data.date}`,
+        `${data.frequency} trips per week until ${data.date}`,
+      ),
+    resultWeeks: (amount: {value: number}) =>
+      _(
+        `Du skal reise i ${amount.value} uke(r).`,
+        `You will travel for ${amount.value} week(s).`,
+      ),
+    resultDays: (amount: {value: number}) =>
+      _(
+        `Du skal reise i ${amount.value} dag(er).`,
+        `You will travel for ${amount.value} day(s).`,
+      ),
+    resultMoreThan180Days: _(
+      'Du skal reise i mer enn et halvt år.',
+      'You will travel for more than half a year.',
+    ),
+    mainButton: _('Neste', 'Next'),
+  },
 };
 export default TicketAssistantTexts;
