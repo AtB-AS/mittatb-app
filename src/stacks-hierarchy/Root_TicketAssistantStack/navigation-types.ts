@@ -18,7 +18,7 @@ export type TicketAssistantStackParams = {
   TicketAssistant_FrequencyScreen: undefined;
   TicketAssistant_CategoryPickerScreen: undefined;
   TicketAssistant_DurationScreen: undefined;
-  TicketAssistant_ZonePickerScreen: TicketAssistant_ZonePickerScreenParams;
+  TicketAssistant_ZonePickerScreen: undefined;
   TicketAssistant_SummaryScreen: undefined;
 };
 
