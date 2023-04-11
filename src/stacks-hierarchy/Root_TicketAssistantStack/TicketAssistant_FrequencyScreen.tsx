@@ -84,6 +84,7 @@ export const TicketAssistant_FrequencyScreen = ({
               maximumValue={14}
               minimumValue={0}
               step={1}
+              value={data.frequency}
               tapToSeek={true}
               thumbTintColor={sliderColorMin}
               onValueChange={(value) => {

@@ -33,9 +33,9 @@ const TicketAssistantContext =
 
 export const TicketAssistantProvider: FunctionComponent = ({children}) => {
   const [data, setData] = useState<TicketAssistantData>({
-    frequency: 0,
+    frequency: 7,
     traveller: {id: 'ADULT', user_type: 'ADULT'},
-    duration: 0,
+    duration: 7,
     zones: ['ATB:TariffZone:1', 'ATB:TariffZone:2'],
   });
   const [response, setResponse] = useState<Response>();

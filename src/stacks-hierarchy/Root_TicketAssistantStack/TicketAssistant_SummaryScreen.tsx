@@ -17,10 +17,6 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
-function isOfFareProductRef(a: any): a is {fareProductRef: string} {
-  return 'fareProductRef' in a;
-}
-
 const interactiveColorName: InteractiveColor = 'interactive_2';
 const themeColor_1: StaticColorByType<'background'> = 'background_accent_1';
 export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
