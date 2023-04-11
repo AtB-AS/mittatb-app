@@ -6,7 +6,7 @@ import TariffZoneResults from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSea
 import {View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {Language, TariffZonesTexts, useTranslation} from '@atb/translations';
-import MapboxGL, {OnPressEvent, RegionPayload} from '@rnmapbox/maps';
+import MapboxGL, {OnPressEvent} from '@rnmapbox/maps';
 import {
   flyToLocation,
   MapCameraConfig,
@@ -17,7 +17,7 @@ import {
   zoomOut,
 } from '@atb/components/map';
 import hexToRgba from 'hex-to-rgba';
-import React, {useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useGeolocationState} from '@atb/GeolocationContext';
@@ -28,11 +28,6 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import turfCentroid from '@turf/centroid';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-
-type RegionEvent = {
-  isMoving: boolean;
-  region?: GeoJSON.Feature<GeoJSON.Point, RegionPayload>;
-};
 
 type Props = {
   selectedZones: TariffZoneSelection;
@@ -50,7 +45,6 @@ const TariffZonesSelectorMap = ({
   const {tariffZones} = useFirestoreConfiguration();
   const styles = useMapStyles();
   const {location: geolocation} = useGeolocationState();
-  const [regionEvent, setRegionEvent] = useState<RegionEvent>();
   const {t, language} = useTranslation();
   const {theme} = useTheme();
   const a11yContext = useAccessibilityContext();
@@ -152,12 +146,6 @@ const TariffZonesSelectorMap = ({
             ref={mapViewRef}
             style={{
               flex: 1,
-            }}
-            onRegionDidChange={(region) => {
-              setRegionEvent({isMoving: false, region});
-            }}
-            onRegionWillChange={() => {
-              setRegionEvent({isMoving: true, region: regionEvent?.region});
             }}
             {...MapViewConfig}
           >
