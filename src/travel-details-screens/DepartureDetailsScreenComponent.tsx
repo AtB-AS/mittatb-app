@@ -39,6 +39,10 @@ import {formatToClock} from '@atb/utils/date';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
 import {usePreferences} from '@atb/preferences';
+import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
+import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
+import {Button} from '@atb/components/button';
+import {Map} from '@atb/assets/svg/mono-icons/map';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -74,6 +78,19 @@ export const DepartureDetailsScreenComponent = ({
     isLoading,
   ] = useDepartureData(activeItem, 20, !isFocused);
   const mapData = useMapData(activeItem);
+
+  const realtimeMapEnabled = useRealtimeMapEnabled();
+
+  const shouldShowLive =
+    !estimatedCallsWithMetadata.find((a) => !a.realtime) && realtimeMapEnabled;
+
+  const {vehiclePositions} = useGetServiceJourneyVehicles(
+    shouldShowLive ? [activeItem.serviceJourneyId] : undefined,
+  );
+
+  const vehiclePosition = vehiclePositions?.find(
+    (s) => s.serviceJourney?.id === activeItem.serviceJourneyId,
+  );
 
   const lastPassedStop = estimatedCallsWithMetadata
     .filter((a) => a.actualDepartureTime)
@@ -132,7 +149,26 @@ export const DepartureDetailsScreenComponent = ({
               message={t(DepartureDetailsTexts.messages.noActiveItem)}
             />
           )}
-
+          {realtimeMapEnabled && mapData ? (
+            <Button
+              type="pill"
+              leftIcon={{svg: Map}}
+              text={t(
+                vehiclePosition
+                  ? DepartureDetailsTexts.live
+                  : DepartureDetailsTexts.map,
+              )}
+              interactiveColor="interactive_1"
+              onPress={() =>
+                onPressDetailsMap({
+                  legs: mapData.mapLegs,
+                  fromPlace: mapData.start,
+                  toPlace: mapData.stop,
+                  _initialVehiclePosition: vehiclePosition,
+                })
+              }
+            />
+          ) : null}
           {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
           {situations.map((situation) => (
             <SituationMessageBox

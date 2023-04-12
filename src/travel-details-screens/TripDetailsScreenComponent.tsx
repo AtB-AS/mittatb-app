@@ -128,6 +128,7 @@ export const TripDetailsScreenComponent = ({
             <Trip
               tripPattern={tripPattern}
               error={error}
+              onPressDetailsMap={onPressDetailsMap}
               onPressDeparture={onPressDeparture}
               onPressQuay={onPressQuay}
             />
