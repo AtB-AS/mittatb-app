@@ -14,10 +14,21 @@ class NavigationHelper {
   }
 
   /**
+   * Cancel
+   */
+  async cancel() {
+    const cancelId = `//*[@resource-id="cancelButton"]`;
+    await $(cancelId).click();
+    await AppHelper.pause(2000);
+  }
+
+  /**
    * Go to the chosen tab
    * @param page: tab to open
    */
-  async tapMenu(page: 'assistant' | 'map' | 'departures' | 'tickets' | 'profile') {
+  async tapMenu(
+    page: 'assistant' | 'map' | 'departures' | 'tickets' | 'profile',
+  ) {
     const menuId = `//*[@resource-id="${page}Tab"]`;
     await $(menuId).click();
     await AppHelper.pause(1000);

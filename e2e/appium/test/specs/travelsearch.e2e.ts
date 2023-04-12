@@ -77,7 +77,7 @@ describe('Travel search', () => {
       const travelTime: number = await TravelsearchOverviewPage.getTravelTime(
         0,
       );
-      const noLegs = await TravelsearchOverviewPage.getNumberOfLegs(0)
+      const noLegs = await TravelsearchOverviewPage.getNumberOfLegs(0);
       //NB! Note the rounding gives wrong numbers here
       //TODO Sometimes +1, sometimes not
       //expect(TimeHelper.getTimeDurationInMin(startTime, endTime)).toEqual(travelTime + 1)
@@ -98,8 +98,7 @@ describe('Travel search', () => {
       expect(departureInDetails).toContain(departure);
 
       // Check end time and arrival
-      //TODO TEST
-      await AppHelper.scrollDownUntilId(`travelTime`)
+      await AppHelper.scrollDownUntilId(`travelTime`);
       const endTimeInDetails = await TravelsearchDetailsPage.getTime(
         'end',
         noLegs - 1,
@@ -146,12 +145,15 @@ describe('Travel search', () => {
 
       // Number of legs
       await ElementHelper.waitForElement('id', `tripSearchSearchResult0`);
-      const noLegs = await TravelsearchOverviewPage.getNumberOfLegs(0)
-      await TravelsearchOverviewPage.openFirstSearchResult()
-      await AppHelper.scrollDownUntilId(`legContainer${noLegs - 1}`)
-      await AppHelper.scrollDownUntilId(`travelTime`)
-      const endLocation = await TravelsearchDetailsPage.getLocation('end', noLegs - 1)
-      expect(endLocation).toContain(arrival)
+      const noLegs = await TravelsearchOverviewPage.getNumberOfLegs(0);
+      await TravelsearchOverviewPage.openFirstSearchResult();
+      await AppHelper.scrollDownUntilId(`legContainer${noLegs - 1}`);
+      await AppHelper.scrollDownUntilId(`travelTime`);
+      const endLocation = await TravelsearchDetailsPage.getLocation(
+        'end',
+        noLegs - 1,
+      );
+      expect(endLocation).toContain(arrival);
     } catch (errMsg) {
       await AppHelper.screenshot(
         'error_travelsearch_should_have_correct_legs_in_the_details',
