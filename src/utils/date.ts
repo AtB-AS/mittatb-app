@@ -21,7 +21,7 @@ import {
 import en from 'date-fns/locale/en-GB';
 import nb from 'date-fns/locale/nb';
 import humanizeDuration from 'humanize-duration';
-import {DEFAULT_LANGUAGE, Language} from '../translations/commons';
+import {DEFAULT_LANGUAGE, Language} from '@atb/translations';
 
 const humanizer = humanizeDuration.humanizer({});
 
@@ -164,11 +164,7 @@ export function isRelativeButNotNow(
   const parsed = parseIfNeeded(isoDate);
   const diff = secondsBetween(new Date(), parsed);
 
-  if (diff / 60 >= minuteThreshold || diff / 60 <= 1) {
-    return false;
-  }
-
-  return true;
+  return !(diff / 60 >= minuteThreshold || diff / 60 <= 1);
 }
 
 export function formatLocaleTime(date: Date | string, language: Language) {

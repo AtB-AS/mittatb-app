@@ -54,6 +54,7 @@ const TripDetailsTexts = {
         a11ylabel: (modeName: string, lineName: string) =>
           _(`${modeName} linje ${lineName}`, `${modeName} line ${lineName}`),
       },
+      live: _('Se live', 'See live'),
       intermediateStops: {
         a11yLabel: (count: number, duration: string) =>
           _(

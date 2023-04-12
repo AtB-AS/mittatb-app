@@ -48,6 +48,8 @@ import FlexibleTransportContactDetails, {
   ContactDetails as ContactDetails,
 } from './FlexibeTransportContactDetails';
 import {usePreferences} from '@atb/preferences';
+import {Button} from '@atb/components/button';
+import {Map} from '@atb/assets/svg/mono-icons/map';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -57,6 +59,7 @@ type TripSectionProps = {
   interchangeDetails?: InterchangeDetails;
   leg: Leg;
   testID?: string;
+  onPressShowLive?(): void;
   onPressDeparture: TripProps['onPressDeparture'];
   onPressQuay: TripProps['onPressQuay'];
 };
@@ -74,6 +77,7 @@ const TripSection: React.FC<TripSectionProps> = ({
   interchangeDetails,
   leg,
   testID,
+  onPressShowLive,
   onPressDeparture,
   onPressQuay,
 }) => {
@@ -220,6 +224,17 @@ const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
+        {onPressShowLive ? (
+          <TripRow>
+            <Button
+              type="pill"
+              leftIcon={{svg: Map}}
+              text={t(TripDetailsTexts.trip.leg.live)}
+              interactiveColor="interactive_3"
+              onPress={onPressShowLive}
+            />
+          </TripRow>
+        ) : null}
         {lastPassedStop?.quay?.name && (
           <TripRow>
             <View style={style.realtime}>

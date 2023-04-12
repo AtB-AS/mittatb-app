@@ -9,7 +9,10 @@ import {
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
+import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
+import {Button} from '@atb/components/button';
+import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
 import {MessageBox} from '@atb/components/message-box';
 import {LargeFullScreenHeader} from '@atb/components/screen-header/FullScreenHeader';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
@@ -17,6 +20,7 @@ import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {usePreferences} from '@atb/preferences';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
+import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {CompactTravelDetailsMap} from '@atb/travel-details-map-screen';
@@ -74,6 +78,19 @@ export const DepartureDetailsScreenComponent = ({
   ] = useDepartureData(activeItem, 20, !isFocused);
   const mapData = useMapData(activeItem);
 
+  const realtimeMapEnabled = useRealtimeMapEnabled();
+
+  const shouldShowLive =
+    !estimatedCallsWithMetadata.find((a) => !a.realtime) && realtimeMapEnabled;
+
+  const {vehiclePositions} = useGetServiceJourneyVehicles(
+    shouldShowLive ? [activeItem.serviceJourneyId] : undefined,
+  );
+
+  const vehiclePosition = vehiclePositions?.find(
+    (s) => s.serviceJourney?.id === activeItem.serviceJourneyId,
+  );
+
   const lastPassedStop = estimatedCallsWithMetadata
     .filter((a) => a.actualDepartureTime)
     .pop();
@@ -126,7 +143,26 @@ export const DepartureDetailsScreenComponent = ({
                 message={t(DepartureDetailsTexts.messages.noActiveItem)}
               />
             )}
-
+            {realtimeMapEnabled && mapData ? (
+              <Button
+                type="pill"
+                leftIcon={{svg: Map}}
+                text={t(
+                  vehiclePosition
+                    ? DepartureDetailsTexts.live
+                    : DepartureDetailsTexts.map,
+                )}
+                interactiveColor="interactive_1"
+                onPress={() =>
+                  onPressDetailsMap({
+                    legs: mapData.mapLegs,
+                    fromPlace: mapData.start,
+                    toPlace: mapData.stop,
+                    _initialVehiclePosition: vehiclePosition,
+                  })
+                }
+              />
+            ) : null}
             {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
             {situations.map((situation) => (
               <SituationMessageBox
