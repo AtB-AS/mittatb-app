@@ -56,6 +56,8 @@ target 'app' do
     # Patch for issue using use_frameworks with hermes
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
+        # Workaround fix for https://github.com/facebook/react-native/issues/34106#issuecomment-1417685116
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.4'
         config.build_settings['ENABLE_BITCODE'] = 'NO'
       end
     end
