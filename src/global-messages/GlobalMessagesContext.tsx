@@ -54,9 +54,9 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
         ])
         .onSnapshot(
           async (snapshot) => {
-            const globalMessages = mapToGlobalMessages(snapshot.docs);
-            setGlobalMessages(globalMessages);
-            await setLatestDismissedGlobalMessages(globalMessages);
+            const newGlobalMessages = mapToGlobalMessages(snapshot.docs);
+            setGlobalMessages(newGlobalMessages);
+            await setLatestDismissedGlobalMessages(newGlobalMessages);
           },
           (err) => {
             console.warn(err);
