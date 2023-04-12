@@ -16,8 +16,8 @@ import {View} from 'react-native';
 import {TripPattern} from '@atb/api/types/trips';
 import {TripPatternWithKey} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {SearchTime} from '@atb/journey-date-picker';
-import ResultItem from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
-import ResultItemOld from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultitemOld';
+import {ResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
+import {ResultItemOld} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultitemOld';
 import {useNewTravelSearchEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
 
 type Props = {
@@ -32,7 +32,7 @@ type Props = {
   anyFiltersApplied: boolean;
 };
 
-const Results: React.FC<Props> = ({
+export const Results: React.FC<Props> = ({
   tripPatterns,
   showEmptyScreen,
   isEmptyResult,
@@ -128,8 +128,6 @@ const Results: React.FC<Props> = ({
     </View>
   );
 };
-
-export default Results;
 
 const getTextForEmptyResult = (
   resultReasons: string[],

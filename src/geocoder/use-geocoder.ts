@@ -1,12 +1,12 @@
 import {useEffect} from 'react';
-import {CancelToken, isCancel} from '../api/client';
+import {CancelToken, isCancel} from '@atb/api';
 import {Coordinates} from '../sdk';
 import {autocomplete} from '../api';
-import useGeocoderReducer, {GeocoderState} from './use-geocoder-reducer';
+import {useGeocoderReducer, GeocoderState} from './use-geocoder-reducer';
 import {mapFeatureToLocation} from './utils';
 import {getAxiosErrorType} from '../api/utils';
 
-export default function useGeocoder(
+export function useGeocoder(
   text: string | null,
   coords: Coordinates | null,
   onlyLocalTariffZoneAuthority?: boolean,

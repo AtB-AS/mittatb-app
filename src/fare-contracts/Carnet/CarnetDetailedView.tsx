@@ -2,7 +2,7 @@ import * as Sections from '@atb/components/sections';
 import {FareContract, isCarnetTravelRight} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import OrderDetails from '@atb/fare-contracts/Details/OrderDetails';
+import {OrderDetails} from '@atb/fare-contracts/Details/OrderDetails';
 import {UnknownFareContractDetails} from '@atb/fare-contracts/Details/UnknownFareContractDetails';
 import {CarnetDetails} from '@atb/fare-contracts/Carnet/CarnetDetails';
 
@@ -13,7 +13,7 @@ type Props = {
   isInspectable: boolean;
 };
 
-const CarnetDetailedView: React.FC<Props> = ({
+export const CarnetDetailedView: React.FC<Props> = ({
   fareContract: fc,
   now,
   onReceiptNavigate,
@@ -45,5 +45,3 @@ const CarnetDetailedView: React.FC<Props> = ({
     return <UnknownFareContractDetails fc={fc} />;
   }
 };
-
-export default CarnetDetailedView;

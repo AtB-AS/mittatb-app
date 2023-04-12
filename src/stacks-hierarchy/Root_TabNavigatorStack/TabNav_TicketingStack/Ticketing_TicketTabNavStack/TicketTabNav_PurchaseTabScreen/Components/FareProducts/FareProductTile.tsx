@@ -13,7 +13,7 @@ import {TransportModes} from '@atb/components/transportation-modes';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 
-const FareProductTile = ({
+export const FareProductTile = ({
   accented = false,
   onPress,
   testID,
@@ -108,5 +108,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   description: {marginBottom: theme.spacings.small},
 }));
-
-export default FareProductTile;

@@ -4,8 +4,8 @@ import {MapCameraConfig, MapLeg, MapViewConfig} from '@atb/components/map';
 
 import {StyleSheet, useTheme} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
-import insets from '@atb/utils/insets';
-import useDisableMapCheck from '@atb/utils/use-disable-map-check';
+import {insets} from '@atb/utils/insets';
+import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef} from 'react';

@@ -19,7 +19,7 @@ import {
 import {MessageBox} from '@atb/components/message-box';
 import {ThemeText} from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
 import {loginConfirmCodeInputId} from '@atb/test-ids';
 

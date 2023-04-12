@@ -15,7 +15,7 @@ export type MoreItemProps = SectionItemProps<{
   onPress(): void;
   accessibility?: AccessibilityProps;
 }>;
-export default function MoreItem({
+export function MoreItem({
   text,
   onPress,
   accessibility,

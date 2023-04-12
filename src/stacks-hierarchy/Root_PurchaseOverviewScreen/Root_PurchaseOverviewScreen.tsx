@@ -12,14 +12,14 @@ import {
 } from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import ProductSelection from './components/ProductSelection';
-import PurchaseMessages from './components/PurchaseMessages';
-import StartTimeSelection from './components/StartTimeSelection';
-import Summary from './components/Summary';
-import TravellerSelection from './components/TravellerSelection';
-import ZonesSelection from './components/ZonesSelection';
+import {ProductSelection} from './components/ProductSelection';
+import {PurchaseMessages} from './components/PurchaseMessages';
+import {StartTimeSelection} from './components/StartTimeSelection';
+import {Summary} from './components/Summary';
+import {TravellerSelection} from './components/TravellerSelection';
+import {ZonesSelection} from './components/ZonesSelection';
 import {useOfferDefaults} from './use-offer-defaults';
-import useOfferState from './use-offer-state';
+import {useOfferState} from './use-offer-state';
 import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 

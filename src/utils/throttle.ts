@@ -1,4 +1,4 @@
-const throttle = <F extends (...args: any[]) => any>(
+export const throttle = <F extends (...args: any[]) => any>(
   func: F,
   waitFor: number,
 ) => {
@@ -24,4 +24,3 @@ const throttle = <F extends (...args: any[]) => any>(
       }
     });
 };
-export default throttle;

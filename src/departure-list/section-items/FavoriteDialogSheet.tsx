@@ -12,7 +12,7 @@ import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import React, {forwardRef} from 'react';
-import StyleSheet from '@atb/theme/StyleSheet';
+import {StyleSheet} from '@atb/theme/StyleSheet';
 
 type Props = {
   lineNumber: string;
@@ -21,7 +21,7 @@ type Props = {
   close: () => void;
 };
 
-const FavoriteDialogSheet = forwardRef<View, Props>(
+export const FavoriteDialogSheet = forwardRef<View, Props>(
   ({lineNumber, lineName, addFavorite, close}, focusRef) => {
     const {t} = useTranslation();
     const styles = useStyles();
@@ -80,5 +80,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     margin: theme.spacings.medium,
   },
 }));
-
-export default FavoriteDialogSheet;

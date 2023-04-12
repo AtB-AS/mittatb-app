@@ -1,12 +1,13 @@
 import React, {useEffect} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
-import useUserCountState, {
+import {
+  useUserCountState,
   UserProfileWithCount,
 } from './Travellers/use-user-count-state';
-import SingleTravellerSelection from './Travellers/SingleTravellerSelection';
-import MultipleTravellersSelection from './Travellers/MultipleTravellersSelection';
+import {SingleTravellerSelection} from './Travellers/SingleTravellerSelection';
+import {MultipleTravellersSelection} from './Travellers/MultipleTravellersSelection';
+import {InfoToggle} from './InfoToggle';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import InfoToggle from './InfoToggle';
 import {TravellerSelectionMode} from '@atb/configuration';
 
 type TravellerSelectionProps = {
@@ -19,7 +20,7 @@ type TravellerSelectionProps = {
   fareProductType: string;
 };
 
-export default function TravellerSelection({
+export function TravellerSelection({
   setTravellerSelection,
   style,
   selectableUserProfiles,

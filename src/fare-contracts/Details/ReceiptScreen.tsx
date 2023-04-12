@@ -29,7 +29,7 @@ type MessageState =
   | 'invalid-field'
   | undefined;
 
-export default function ReceiptScreen({route}: Props) {
+export function ReceiptScreen({route}: Props) {
   const {orderId, orderVersion} = route.params;
   const styles = useStyles();
   const [email, setEmail] = useState('');

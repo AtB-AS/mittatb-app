@@ -34,8 +34,8 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import CompactFareContracts from './components/CompactFareContracts';
-import DeparturesWidget from './components/DeparturesWidget';
+import {CompactFareContracts} from './components/CompactFareContracts';
+import {DeparturesWidget} from './components/DeparturesWidget';
 import {DashboardScreenProps} from '../navigation-types';
 import {GlobalMessage} from '@atb/global-messages';
 

@@ -16,7 +16,7 @@ import {StyleSheet, Theme} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {Alert, Keyboard, ScrollView, View} from 'react-native';
-import EmojiSheet from './EmojiSheet';
+import {EmojiSheet} from './EmojiSheet';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 
 export type Props = RootStackScreenProps<'Root_AddEditFavoritePlaceScreen'>;

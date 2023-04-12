@@ -1,5 +1,5 @@
 import {formatISO} from 'date-fns';
-import client from './client';
+import {client} from './client';
 import qs from 'query-string';
 import {stringifyUrl} from './utils';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';

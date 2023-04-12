@@ -8,7 +8,7 @@ import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavorites, UserFavoriteDepartures} from '@atb/favorites';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {animateNextChange} from '@atb/utils/animation';
-import useInterval from '@atb/utils/use-interval';
+import {useInterval} from '@atb/utils/use-interval';
 import {differenceInMinutes} from 'date-fns';
 import {useCallback, useEffect, useState} from 'react';
 import useReducerWithSideEffects, {

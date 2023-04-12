@@ -1,6 +1,6 @@
 import {useState, useCallback, useEffect} from 'react';
-import useInterval from './use-interval';
-import useIsLoading from './use-is-loading';
+import {useInterval} from './use-interval';
+import {useIsLoading} from './use-is-loading';
 
 type PollableResourceOptions<T> = {
   initialValue: T;

@@ -5,7 +5,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
-import useChatUnreadCount from './use-chat-unread-count';
+import {useChatUnreadCount} from './use-chat-unread-count';
 import {StaticColor, TextColor} from '@atb/theme/colors';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {ContactSheet} from '@atb/chat/ContactSheet';

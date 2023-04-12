@@ -12,7 +12,10 @@ import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchBy
 
 type Props = DashboardScreenProps<'Dashboard_NearbyStopPlacesScreen'>;
 
-const Dashboard_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
+export const Dashboard_NearbyStopPlacesScreen = ({
+  navigation,
+  route,
+}: Props) => {
   const fromLocation = useOnlySingleLocation('location');
   const {t} = useTranslation();
 
@@ -46,5 +49,3 @@ const Dashboard_NearbyStopPlacesScreen = ({navigation, route}: Props) => {
     </>
   );
 };
-
-export default Dashboard_NearbyStopPlacesScreen;

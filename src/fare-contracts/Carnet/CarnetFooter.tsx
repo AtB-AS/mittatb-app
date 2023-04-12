@@ -12,7 +12,7 @@ type Props = {
 
 const CARNET_DIVIDER = 10;
 
-const CarnetFooter: React.FC<Props> = ({
+export const CarnetFooter: React.FC<Props> = ({
   active,
   maximumNumberOfAccesses,
   numberOfUsedAccesses,
@@ -150,5 +150,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background.background_0.background,
   },
 }));
-
-export default CarnetFooter;

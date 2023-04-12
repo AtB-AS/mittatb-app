@@ -19,7 +19,7 @@ import {
   formatLocaleTime,
   isInThePast,
 } from '@atb/utils/date';
-import useKeyboardHeight from '@atb/utils/use-keyboard-height';
+import {useKeyboardHeight} from '@atb/utils/use-keyboard-height';
 import React, {forwardRef, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {SearchTime} from '../types';

@@ -20,7 +20,7 @@ export type QuayHeaderItemProps = SectionItemProps<{
   distance?: number;
   searchDate: string;
 }>;
-export default function QuayHeaderItem({
+export function QuayHeaderItem({
   quay,
   distance,
   searchDate,

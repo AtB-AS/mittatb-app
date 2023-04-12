@@ -6,7 +6,7 @@ import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 
-export default function InfoToggle({
+export function InfoToggle({
   title,
   accessibilityLabel,
 }: {

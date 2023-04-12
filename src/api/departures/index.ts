@@ -12,7 +12,7 @@ import {
 } from '@atb/sdk';
 import {flatMap} from '@atb/utils/array';
 import {onlyUniques} from '@atb/utils/only-uniques';
-import client from '../client';
+import {client} from '../client';
 import {
   DepartureFavoritesQuery,
   DepartureGroupMetadata,

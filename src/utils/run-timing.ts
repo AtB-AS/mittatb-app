@@ -13,7 +13,7 @@ import Animated, {
   Value,
 } from 'react-native-reanimated';
 
-export default function runTiming(timingConfig: {
+export function runTiming(timingConfig: {
   clock: Clock;
   from: number;
   to: number;

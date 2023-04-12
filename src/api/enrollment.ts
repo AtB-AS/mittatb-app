@@ -1,5 +1,5 @@
 import qs from 'query-string';
-import client from './client';
+import {client} from './client';
 import {stringifyUrl} from './utils';
 
 type EnrollmentResponse =

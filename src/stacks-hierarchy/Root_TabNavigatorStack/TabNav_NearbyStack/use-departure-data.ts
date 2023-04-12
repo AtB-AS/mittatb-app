@@ -22,7 +22,7 @@ import {useFavorites} from '@atb/favorites';
 import {Location, UserFavoriteDepartures} from '@atb/favorites';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {differenceInMinutes} from 'date-fns';
-import useInterval from '@atb/utils/use-interval';
+import {useInterval} from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '@atb/departure-list/utils';
 import {SearchTime} from './types';
 import {animateNextChange} from '@atb/utils/animation';

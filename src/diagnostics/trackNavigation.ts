@@ -19,7 +19,7 @@ const getActiveRouteName = (state: NavigationState): string => {
 
 let previousRouteName: string | null = null;
 
-export default function trackNavigation(state: NavigationState | undefined) {
+export function trackNavigation(state: NavigationState | undefined) {
   if (!state) return;
   const currentRouteName = getActiveRouteName(state);
 

@@ -5,7 +5,7 @@ import Bugsnag from '@bugsnag/react-native';
 
 import {useAppState} from './AppContext';
 import {FeedbackConfiguration} from '@atb/components/feedback';
-import useInterval from '@atb/utils/use-interval';
+import {useInterval} from '@atb/utils/use-interval';
 
 /**
  * The retry interval values for retrying Remote Config data fetch with

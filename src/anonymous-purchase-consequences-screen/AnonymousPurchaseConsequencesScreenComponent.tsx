@@ -9,7 +9,7 @@ import {Consequence} from '@atb/anonymous-purchase-consequences-screen/component
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 

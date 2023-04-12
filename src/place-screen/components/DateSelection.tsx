@@ -16,7 +16,7 @@ import {DepartureTimeSheet} from './DepartureTimeSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {SearchTime} from '../types';
-import useFontScale from '@atb/utils/use-font-scale';
+import {useFontScale} from '@atb/utils/use-font-scale';
 
 type DateSelectionProps = {
   searchTime: SearchTime;

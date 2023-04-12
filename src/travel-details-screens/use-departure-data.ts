@@ -32,7 +32,7 @@ export type EstimatedCallWithMetadata = EstimatedCallWithQuayFragment & {
   metadata: EstimatedCallMetadata;
 };
 
-export default function useDepartureData(
+export function useDepartureData(
   activeItem: ServiceJourneyDeparture,
   pollingTimeInSeconds: number = 0,
   disabled?: boolean,

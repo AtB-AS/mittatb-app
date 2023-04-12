@@ -18,7 +18,7 @@ function symmetric(vertical: number, horizontal: number): Insets {
   };
 }
 
-export default {
+export const insets = {
   all,
   symmetric,
 };

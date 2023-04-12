@@ -11,7 +11,7 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import DeparturesList from '@atb/departure-list/DeparturesList';
+import {DeparturesList} from '@atb/departure-list/DeparturesList';
 import {GeoLocation, Location} from '@atb/favorites';
 import {
   RequestPermissionFn,

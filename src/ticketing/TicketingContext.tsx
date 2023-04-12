@@ -4,7 +4,7 @@ import {Reservation, FareContract, PaymentStatus} from './types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {differenceInMinutes} from 'date-fns';
 import {CustomerProfile} from '.';
-import setupFirestoreListener from './firestore';
+import {setupFirestoreListener} from './firestore';
 
 type TicketingReducerState = {
   fareContracts: FareContract[];

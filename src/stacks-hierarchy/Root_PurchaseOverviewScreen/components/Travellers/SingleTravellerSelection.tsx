@@ -10,7 +10,7 @@ import * as Sections from '../../../../components/sections';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {usePreferences} from '@atb/preferences';
 
-export default function SingleTravellerSelection({
+export function SingleTravellerSelection({
   userProfilesWithCount,
   addCount,
   removeCount,
