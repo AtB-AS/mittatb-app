@@ -79,6 +79,7 @@ const DeparturesWidget = ({
                   type="body__secondary"
                   color="secondary"
                   style={styles.noFavouritesText}
+                  testID="noFavoriteWidget"
                 >
                   {t(DeparturesTexts.message.noFavouritesWidget)}
                 </ThemeText>
@@ -90,6 +91,7 @@ const DeparturesWidget = ({
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={onAddFavouriteDeparture}
             icon={<ThemeIcon svg={Add} />}
+            testID="addFavoriteDeparture"
           />
         </Sections.Section>
       )}
@@ -99,7 +101,7 @@ const DeparturesWidget = ({
       )}
 
       {sortedStopPlaceGroups?.map((stopPlaceGroup) => (
-        <View key={stopPlaceGroup.stopPlace.id}>
+        <View key={stopPlaceGroup.stopPlace.id} testID="favoriteDepartures">
           {stopPlaceGroup.quays.map((quay) => (
             <QuaySection
               key={quay.quay.id}
@@ -109,6 +111,7 @@ const DeparturesWidget = ({
               locationOrStopPlace={location || undefined}
               mode="frontpage"
               onPressDeparture={onPressDeparture}
+              testID="stopPlace"
             />
           ))}
         </View>
@@ -122,6 +125,7 @@ const DeparturesWidget = ({
           text={t(DeparturesTexts.button.text)}
           rightIcon={{svg: Edit}}
           ref={closeRef}
+          testID="selectFavoriteDepartures"
         />
       )}
     </View>
