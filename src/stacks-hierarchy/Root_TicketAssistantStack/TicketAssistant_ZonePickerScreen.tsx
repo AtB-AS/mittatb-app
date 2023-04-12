@@ -1,4 +1,4 @@
-import {Image, ScrollView} from 'react-native';
+import {ScrollView} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {themeColor} from '@atb/stacks-hierarchy/Root_OnboardingStack/Onboarding_WelcomeScreen';
 import React, {useContext, useEffect, useState} from 'react';
@@ -49,7 +49,7 @@ export const TicketAssistant_ZonePickerScreen = ({
   const contextValue = useContext(TicketAssistantContext);
   if (!contextValue) throw new Error('Context is undefined!');
 
-  const {data, updateData, setResponse, loading, setLoading} = contextValue;
+  const {data, updateData, setResponse, setLoading} = contextValue;
 
   useEffect(() => {
     const zoneIds = [selectedZones.from.id, selectedZones.to.id];
@@ -90,65 +90,61 @@ export const TicketAssistant_ZonePickerScreen = ({
 
   return (
     <View style={styles.container}>
-      {loading ? (
-        // Gif here
-        <Image source={require('@atb/assets/images/loading/Bus.gif')} />
-      ) : (
-        <ScrollView contentContainerStyle={styles.contentContainer}>
-          <ThemeText
-            type={'body__primary--jumbo--bold'}
-            style={styles.header}
-            color={themeColor}
-            accessibilityLabel={t(TicketAssistantTexts.welcome.titleA11yLabel)}
-          >
-            {t(TicketAssistantTexts.zonesSelector.title)}
-          </ThemeText>
-          <View style={styles.mapContainer}>
-            <View style={styles.zonesSelectorButtonsContainer}>
-              <TariffZonesSelectorButtons
-                fromTariffZone={selectedZones.from}
-                toTariffZone={selectedZones.to}
-                isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
-                onVenueSearchClick={onVenueSearchClick}
-              />
-            </View>
-
-            <TariffZonesSelectorMap
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        <ThemeText
+          type={'body__primary--jumbo--bold'}
+          style={styles.header}
+          color={themeColor}
+          accessibilityLabel={t(TicketAssistantTexts.welcome.titleA11yLabel)}
+        >
+          {t(TicketAssistantTexts.zonesSelector.title)}
+        </ThemeText>
+        <View style={styles.mapContainer}>
+          <View style={styles.zonesSelectorButtonsContainer}>
+            <TariffZonesSelectorButtons
+              fromTariffZone={selectedZones.from}
+              toTariffZone={selectedZones.to}
               isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
-              selectedZones={selectedZones}
-              setSelectedZones={setSelectedZones}
+              onVenueSearchClick={onVenueSearchClick}
             />
           </View>
-          <View style={styles.bottomView}>
-            <Button
-              interactiveColor="interactive_0"
-              onPress={async () => {
-                if (setLoading) {
-                  setLoading(true);
-                }
-                await getRecommendedTicket(data)
-                  .then((response) => {
-                    if (setResponse && response) {
-                      setResponse(response);
-                    }
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-                if (setLoading) {
-                  setLoading(false);
-                }
-                navigation.navigate('TicketAssistant_SummaryScreen');
-              }}
-              text={t(TicketAssistantTexts.frequency.mainButton)}
-              testID="nextButton"
-            />
-          </View>
-        </ScrollView>
-      )}
+
+          <TariffZonesSelectorMap
+            isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
+            selectedZones={selectedZones}
+            setSelectedZones={setSelectedZones}
+          />
+        </View>
+        <View style={styles.bottomView}>
+          <Button
+            interactiveColor="interactive_0"
+            onPress={async () => {
+              navigation.navigate('TicketAssistant_SummaryScreen');
+              if (setLoading) {
+                setLoading(true);
+              }
+              await getRecommendedTicket(data)
+                .then((r) => {
+                  if (setResponse && r) {
+                    setResponse(r);
+                  }
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+              if (setLoading) {
+                setLoading(false);
+              }
+            }}
+            text={t(TicketAssistantTexts.frequency.mainButton)}
+            testID="nextButton"
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };
+
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
     textAlign: 'center',
