@@ -31,6 +31,7 @@ export type UserProfile = {
   description: LanguageAndTextType;
   alternativeDescriptions: LanguageAndTextType[];
   version: string;
+  emoji?: string;
 };
 
 export type TariffZone = {

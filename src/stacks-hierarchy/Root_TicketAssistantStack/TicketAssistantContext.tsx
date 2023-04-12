@@ -7,10 +7,14 @@ export interface TicketAssistantContextValue {
   setResponse?: (response: any) => void;
 }
 
+export interface Traveller {
+  id: string;
+  user_type: string;
+}
 export interface TicketAssistantData {
   frequency: number;
   duration: number;
-  traveller: {id: string; user_type: string};
+  traveller: Traveller;
   zones: string[];
 }
 

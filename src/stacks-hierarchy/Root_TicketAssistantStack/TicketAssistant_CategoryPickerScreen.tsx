@@ -1,14 +1,23 @@
 import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import * as Sections from '@atb/components/sections';
-import {TicketAssistantTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  TicketAssistantTexts,
+  useTranslation,
+} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {Button} from '@atb/components/button';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
-import TicketAssistantContext from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
+import TicketAssistantContext, {
+  Traveller,
+} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
+import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-defaults';
+import {useFirestoreConfiguration} from '@atb/configuration';
+import {getReferenceDataName} from '@atb/reference-data/utils';
 
 type CategoryPickerProps =
   TicketAssistantScreenProps<'TicketAssistant_CategoryPickerScreen'>;
@@ -16,17 +25,27 @@ export const TicketAssistant_CategoryPickerScreen = ({
   navigation,
 }: CategoryPickerProps) => {
   const styles = useThemeStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
+
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+
+  const offerDefaults = useOfferDefaults(
+    undefined,
+    fareProductTypeConfigs[0].type,
+  );
+
+  const {selectableTravellers} = offerDefaults;
 
   const contextValue = useContext(TicketAssistantContext);
 
   if (!contextValue) throw new Error('Context is undefined!');
 
   const {data, updateData} = contextValue;
-  function updateCategory(value: number) {
-    const newData = {...data, traveller: convertIndexToTraveller(value)};
+  function updateCategory(traveller: Traveller) {
+    const newData = {...data, traveller: traveller};
     updateData(newData);
   }
+  const [currentlyOpen, setCurrentlyOpen] = useState<number>(0);
 
   return (
     <View style={styles.container}>
@@ -48,75 +67,48 @@ export const TicketAssistant_CategoryPickerScreen = ({
 
         <Sections.Section style={styles.categoriesContainer}>
           {/*eslint-disable-next-line rulesdir/translations-warning*/}
-          {TicketAssistantTexts.categoryPicker.categories.map(
-            ({title, description}, index) => (
-              <Sections.ExpandableSectionItem
-                key={index}
-                textType={'body__primary--bold'}
-                text={t(title)}
-                showIconText={false}
-                expandContent={
-                  <View>
-                    <ThemeText
-                      type={'body__tertiary'}
-                      style={styles.expandedContent}
-                      isMarkdown={true}
-                    >
-                      {t(description)}
-                    </ThemeText>
-                    <Button
-                      style={styles.chooseButton}
-                      onPress={() => {
-                        updateCategory(index);
-                        navigation.navigate('TicketAssistant_DurationScreen');
-                      }}
-                      text={t(TicketAssistantTexts.categoryPicker.chooseButton)}
-                    />
-                  </View>
-                }
-              />
-            ),
-          )}
+          {selectableTravellers.map((u, index) => (
+            <Sections.ExpandableSectionItem
+              key={index}
+              textType={'body__primary--bold'}
+              text={
+                (u.emoji ? u.emoji + ' ' : '') +
+                getReferenceDataName(u, language)
+              }
+              onPress={() => {
+                setCurrentlyOpen(index);
+              }}
+              showIconText={false}
+              expanded={currentlyOpen === index}
+              expandContent={
+                <View>
+                  <ThemeText
+                    type={'body__tertiary'}
+                    style={styles.expandedContent}
+                    isMarkdown={true}
+                  >
+                    {getTextForLanguage(u.alternativeDescriptions, language)}
+                  </ThemeText>
+                  <Button
+                    style={styles.chooseButton}
+                    onPress={() => {
+                      updateCategory({
+                        id: u.userTypeString,
+                        user_type: u.userTypeString,
+                      });
+                      navigation.navigate('TicketAssistant_DurationScreen');
+                    }}
+                    text={t(TicketAssistantTexts.categoryPicker.chooseButton)}
+                  />
+                </View>
+              }
+            />
+          ))}
         </Sections.Section>
       </ScrollView>
     </View>
   );
 };
-
-function convertIndexToTraveller(index: number) {
-  switch (index) {
-    case 0:
-      return {
-        id: 'ADULT',
-        user_type: 'ADULT',
-      };
-    case 1:
-      return {
-        id: 'YOUTH',
-        user_type: 'YOUTH',
-      };
-    case 2:
-      return {
-        id: 'STUDENT',
-        user_type: 'STUDENT',
-      };
-    case 3:
-      return {
-        id: 'SENIOR',
-        user_type: 'SENIOR',
-      };
-    case 4:
-      return {
-        id: 'MILITARY',
-        user_type: 'MILITARY',
-      };
-    default:
-      return {
-        id: 'ADULT',
-        user_type: 'ADULT',
-      };
-  }
-}
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   backdrop: {
