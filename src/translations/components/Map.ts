@@ -14,13 +14,6 @@ const MapTexts = {
     label: _('Slutt', 'End'),
   },
   controls: {
-    filter: {
-      a11yLabel: _('Filtrer kartvisningen', 'Map filters'),
-      a11yHint: _(
-        'Aktiver visning av sparkesykler og bysykler i kartet',
-        'Show or hide electric scooters and city bikes in the map',
-      ),
-    },
     position: {
       a11yLabel: _('Min posisjon', 'My location'),
       a11yHint: _(
