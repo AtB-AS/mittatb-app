@@ -18,6 +18,7 @@ import {useSectionStyle} from '../use-section-style';
 type BaseProps = {
   favorite: StoredFavoriteDeparture;
   icon?: JSX.Element;
+  testID?: string;
 };
 type WithOnPress = BaseProps & {
   onPress(
@@ -47,6 +48,7 @@ export function FavoriteDepartureSectionItem(props: Props) {
       accessibilityRole="button"
       onPress={(e) => props.onPress(props.favorite, e)}
       {...props.accessibility}
+      testID={props.testID}
     >
       <FavoriteItemContent {...props} />
     </TouchableOpacity>

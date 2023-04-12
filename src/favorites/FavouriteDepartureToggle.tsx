@@ -34,6 +34,7 @@ export const FavouriteDepartureToggle = ({
       hitSlop={insets.symmetric(14, 8)}
       style={style.favoriteButton}
       disabled={!onMarkFavourite}
+      testID={getFavoriteIconTestID(existingFavorite)}
     >
       <ThemeIcon svg={getFavoriteIcon(existingFavorite)} />
     </TouchableOpacity>
@@ -47,6 +48,18 @@ const getFavoriteIcon = (existingFavorite?: StoredType<FavoriteDeparture>) => {
     return SvgFavoriteSemi;
   } else {
     return SvgFavoriteFill;
+  }
+};
+
+const getFavoriteIconTestID = (
+  existingFavorite?: StoredType<FavoriteDeparture>,
+) => {
+  if (!existingFavorite) {
+    return 'noFavorite';
+  } else if (existingFavorite.lineName) {
+    return 'semiFavorite';
+  } else {
+    return 'allFavorite';
   }
 };
 

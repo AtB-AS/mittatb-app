@@ -123,7 +123,7 @@ const SelectFavouritesBottomSheet = ({
   };
 
   return (
-    <BottomSheetContainer>
+    <BottomSheetContainer testID="selectFavoriteBottomSheet">
       <ScreenHeaderWithoutNavigation
         title={t(SelectFavouriteDeparturesText.header.text)}
         leftButton={{
