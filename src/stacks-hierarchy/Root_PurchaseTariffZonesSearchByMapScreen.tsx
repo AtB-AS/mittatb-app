@@ -102,8 +102,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
         />
 
         <TariffZonesSelectorButtons
-          toTariffZone={selectedZones.to}
-          fromTariffZone={selectedZones.from}
+          selectedZones={selectedZones}
           onVenueSearchClick={onVenueSearchClick}
           isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
         />
