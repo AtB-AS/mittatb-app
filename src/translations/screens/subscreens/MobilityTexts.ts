@@ -2,6 +2,8 @@ import {translation as _} from '../../commons';
 import {Platform} from 'react-native';
 
 export const MobilityTexts = {
+  scooter: _('Sparkesykkel', 'Electric scooter'),
+  bicycle: _('Sykkel', 'Bicycle'),
   unknownOperator: _('Ukjent operatør', 'Unknown operator'),
   operatorAppSwitchButton: (operator: string) =>
     _(`Åpne ${operator}`, `Open ${operator}`),
