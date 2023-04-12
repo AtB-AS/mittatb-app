@@ -22,7 +22,7 @@ export const ServiceDisruptionSheet = forwardRef<View, Props>(
     const {t} = useTranslation();
 
     return (
-      <BottomSheetContainer>
+      <BottomSheetContainer testID="serviceDisruptionsBottomSheet">
         <ScreenHeaderWithoutNavigation
           title={t(ServiceDisruptionsTexts.header.title)}
           leftButton={{

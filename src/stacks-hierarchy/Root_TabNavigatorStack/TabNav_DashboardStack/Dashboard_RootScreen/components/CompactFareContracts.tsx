@@ -67,6 +67,7 @@ const CompactFareContracts: React.FC<Props> = ({
           style={itemStyle.buttonSection}
           text={t(DashboardTexts.buyButton)}
           onPress={onPressBuy}
+          testID="buyTicketsButton"
         />
       ) : (
         validFareContracts.map((fareContract, index) => {
