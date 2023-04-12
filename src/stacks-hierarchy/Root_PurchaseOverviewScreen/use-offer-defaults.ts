@@ -23,8 +23,10 @@ export function useOfferDefaults(
   fromTariffZone?: TariffZoneWithMetadata,
   toTariffZone?: TariffZoneWithMetadata,
 ) {
-  const {tariffZones, userProfiles, preassignedFareProducts} =
+  const {tariffZones, userProfiles, preassignedFareProducts, presetTariffZone} =
     useFirestoreConfiguration();
+
+  console.log('fetched presetTariffZone', presetTariffZone);
 
   // Get default PreassignedFareProduct
   const productType = preassignedFareProduct?.type ?? selectableProductType;
@@ -35,9 +37,9 @@ export function useOfferDefaults(
     preassignedFareProduct ?? selectableProducts[0];
 
   // Get default TariffZones
-  const defaultTariffZone = useDefaultTariffZone(tariffZones);
-  const defaultFromTariffZone = fromTariffZone ?? defaultTariffZone;
-  const defaultToTariffZone = toTariffZone ?? defaultTariffZone;
+  const defaultTariffZone = useDefaultTariffZone(tariffZones, presetTariffZone);
+  const defaultFromTariffZone = fromTariffZone;
+  const defaultToTariffZone = toTariffZone;
 
   // Get default SelectableTravellers
   const {
@@ -109,13 +111,26 @@ const useTravellersWithPreselectedCounts = (
  */
 const useDefaultTariffZone = (
   tariffZones: TariffZone[],
+  presetTariffZone: string,
 ): TariffZoneWithMetadata => {
   const tariffZoneFromLocation = useTariffZoneFromLocation(tariffZones);
+
+  console.log('tariffzones!', tariffZones);
+  console.log('defaultTariffZone', presetTariffZone);
+
+  const defaultFromTariffZoneOrFirstZoneInList =
+    tariffZones.find((zone) => zone.id === presetTariffZone) ?? tariffZones[0];
+
+  console.log(
+    'defaultFromTariffZoneOrFirstZoneInList',
+    defaultFromTariffZoneOrFirstZoneInList,
+  );
+
   return useMemo<TariffZoneWithMetadata>(
     () =>
       tariffZoneFromLocation
         ? {...tariffZoneFromLocation, resultType: 'geolocation'}
-        : {...tariffZones[0], resultType: 'zone'},
-    [tariffZones, tariffZoneFromLocation],
+        : {...defaultFromTariffZoneOrFirstZoneInList, resultType: 'zone'},
+    [tariffZones, tariffZoneFromLocation, presetTariffZone],
   );
 };

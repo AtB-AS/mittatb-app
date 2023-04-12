@@ -14,3 +14,4 @@ export const defaultPaymentTypes: PaymentType[] = [
   PaymentType.Mastercard,
 ];
 export const defaultVatPercent: number = 12;
+export const defaultTariffZone: string = 'NOR:TariffZone:8602';

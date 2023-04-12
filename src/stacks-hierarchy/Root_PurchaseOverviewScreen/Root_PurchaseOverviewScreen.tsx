@@ -22,6 +22,7 @@ import {useOfferDefaults} from './use-offer-defaults';
 import useOfferState from './use-offer-state';
 import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {defaultTariffZone} from '@atb/configuration/defaults';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -146,8 +147,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           />
 
           <ZonesSelection
-            fromTariffZone={fromTariffZone}
-            toTariffZone={toTariffZone}
+            fromTariffZone={fromTariffZone || defaultTariffZone}
+            toTariffZone={toTariffZone || defaultTariffZone}
             fareProductTypeConfig={params.fareProductTypeConfig}
             onSelect={(t) =>
               navigation.push('Root_PurchaseTariffZonesSearchByMapScreen', t)

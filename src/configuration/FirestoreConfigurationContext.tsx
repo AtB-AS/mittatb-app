@@ -24,6 +24,7 @@ import {
   defaultModesWeSellTicketsFor,
   defaultPaymentTypes,
   defaultVatPercent,
+  defaultTariffZone,
 } from '@atb/configuration/defaults';
 import {PaymentType} from '@atb/ticketing';
 import {FareProductTypeConfig} from './types';
@@ -48,6 +49,7 @@ type ConfigurableLinks = {
 type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
   tariffZones: TariffZone[];
+  presetTariffZone: string;
   userProfiles: UserProfile[];
   modesWeSellTicketsFor: string[];
   paymentTypes: PaymentType[];
@@ -61,6 +63,7 @@ type ConfigurationContextState = {
 const defaultConfigurationContextState: ConfigurationContextState = {
   preassignedFareProducts: defaultPreassignedFareProducts,
   tariffZones: defaultTariffZones,
+  presetTariffZone: defaultTariffZone,
   userProfiles: defaultUserProfiles,
   modesWeSellTicketsFor: defaultModesWeSellTicketsFor,
   paymentTypes: defaultPaymentTypes,
@@ -80,6 +83,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     defaultPreassignedFareProducts,
   );
   const [tariffZones, setTariffZones] = useState(defaultTariffZones);
+  const [presetTariffZone, setPresetTariffZone] = useState(defaultTariffZone);
   const [userProfiles, setUserProfiles] = useState(defaultUserProfiles);
   const [modesWeSellTicketsFor, setModesWeSellTicketsFor] = useState(
     defaultModesWeSellTicketsFor,
@@ -109,6 +113,12 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           const tariffZones = getTariffZonesFromSnapshot(snapshot);
           if (tariffZones) {
             setTariffZones(tariffZones);
+          }
+
+          const presetTariffZone = getPresetTariffZoneFromSnapshot(snapshot);
+          if (presetTariffZone) {
+            console.log('success setting preset tariffZone', presetTariffZone);
+            setPresetTariffZone(presetTariffZone);
           }
 
           const userProfiles = getUserProfilesFromSnapshot(snapshot);
@@ -167,6 +177,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     return {
       preassignedFareProducts,
       tariffZones,
+      presetTariffZone,
       userProfiles,
       modesWeSellTicketsFor,
       paymentTypes,
@@ -179,6 +190,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   }, [
     preassignedFareProducts,
     tariffZones,
+    presetTariffZone,
     userProfiles,
     modesWeSellTicketsFor,
     paymentTypes,
@@ -237,6 +249,27 @@ function getTariffZonesFromSnapshot(
       return JSON.parse(tariffZonesFromFirestore) as TariffZone[];
     }
   } catch (error: any) {
+    Bugsnag.notify(error);
+  }
+  return undefined;
+}
+
+function getPresetTariffZoneFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): string | undefined {
+  const defaultTariffZoneFromFireStore = snapshot.docs
+    .find((doc) => doc.id == 'other')
+    ?.get<string>('defaultTariffZone');
+
+  console.log('sonee', defaultTariffZoneFromFireStore);
+
+  try {
+    if (defaultTariffZoneFromFireStore) {
+      console.log('setting default tariffzone', defaultTariffZoneFromFireStore);
+      return defaultTariffZoneFromFireStore as string;
+    }
+  } catch (error: any) {
+    console.log('ohnoes error', error);
     Bugsnag.notify(error);
   }
   return undefined;
