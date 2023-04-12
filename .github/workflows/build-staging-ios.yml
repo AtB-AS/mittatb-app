@@ -81,7 +81,9 @@ jobs:
           APP_NAME: 'AtB.app'
 
       - name: Distribute to Firebase app distribution
-        if: 'matrix.org == "nfk" || matrix.org == "fram"'
+        if: |
+          matrix.org == 'nfk' ||
+          matrix.org == 'fram'
         run: |
           echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
           bundle exec fastlane ios firebase_distribution_staging
