@@ -41,7 +41,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
 
   if (!contextValue) throw new Error('Context is undefined!');
 
-  const {data, updateData, setResponse} = contextValue;
+  const {data, updateData} = contextValue;
   const locale = useLocaleContext();
   function updateDuration(value: number, fromPicker?: boolean) {
     let newData = {...data};
