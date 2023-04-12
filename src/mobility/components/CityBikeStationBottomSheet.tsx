@@ -1,6 +1,10 @@
 import {StationFragment} from '@atb/api/types/generated/fragments/stations';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  ScreenHeaderTexts,
+  useTranslation,
+} from '@atb/translations';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
@@ -20,13 +24,15 @@ import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {Parking as ParkingDark} from '@atb/assets/svg/color/icons/vehicles/dark';
 import {Parking as ParkingLight} from '@atb/assets/svg/color/icons/vehicles/light';
 import {VehicleStats} from '@atb/mobility/components/VehicleStats';
+import {ThemeText} from '@atb/components/text';
+import {View} from 'react-native';
 
 type Props = {
   station: StationFragment;
   close: () => void;
 };
 export const CityBikeStationSheet = ({station, close}: Props) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {themeName} = useTheme();
   const style = useSheetStyle();
   const {appStoreUri, brandLogoUrl, operatorName} = useSystem(station);
@@ -36,6 +42,7 @@ export const CityBikeStationSheet = ({station, close}: Props) => {
     appStoreUri,
     rentalAppUri,
   });
+  const stationName = getTextForLanguage(station.name.translation, language);
 
   return (
     <BottomSheetContainer>
@@ -51,6 +58,11 @@ export const CityBikeStationSheet = ({station, close}: Props) => {
       <Section withPadding>
         <GenericSectionItem>
           <OperatorLogo operatorName={operatorName} logoUrl={brandLogoUrl} />
+          {stationName && (
+            <View style={style.stationName}>
+              <ThemeText type="body__secondary">{stationName}</ThemeText>
+            </View>
+          )}
         </GenericSectionItem>
       </Section>
       <VehicleStats
@@ -90,5 +102,9 @@ export const CityBikeStationSheet = ({station, close}: Props) => {
 const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
   button: {
     marginTop: theme.spacings.medium,
+  },
+  stationName: {
+    flex: 1,
+    alignItems: 'center',
   },
 }));
