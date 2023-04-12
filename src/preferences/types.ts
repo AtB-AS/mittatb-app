@@ -34,6 +34,10 @@ export type UserPreferences = {
   tripSearchPreferences?: TripSearchPreferences;
   hideTravellerDescriptions?: boolean;
   debugShowSeconds?: boolean;
+  flexibleTransport?: boolean;
+  useFlexibleTransportOnAccessMode?: boolean;
+  useFlexibleTransportOnDirectMode?: boolean;
+  useFlexibleTransportOnEgressMode?: boolean;
 };
 
 export type PreferenceItem = keyof UserPreferences;

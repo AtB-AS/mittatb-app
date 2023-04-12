@@ -11,7 +11,7 @@ import {
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import TravelDateSheet from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/TravelDate/TravelDateSheet';
 import {RadioSegments} from '@atb/components/radio';
-import {TimeSelectionMode} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
+import {TimeSelectionMode} from '@atb/configuration';
 
 type StartTimeSelectionProps = {
   color: InteractiveColor;

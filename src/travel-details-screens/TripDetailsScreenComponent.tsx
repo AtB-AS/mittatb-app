@@ -1,35 +1,34 @@
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {Leg, TripPattern} from '@atb/api/types/trips';
-import {ContentWithDisappearingHeader} from '@atb/components/disappearing-header';
-import {ScreenHeader} from '@atb/components/screen-header';
-import PaginatedDetailsHeader from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
+import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
+import {Button} from '@atb/components/button';
+import {AnyMode} from '@atb/components/icon-box';
+import {LargeFullScreenHeader} from '@atb/components/screen-header/FullScreenHeader';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
+import {TariffZone} from '@atb/reference-data/types';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
+import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
+import {useFromTravelSearchToTicketEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
-import React, {useState} from 'react';
-import {View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import Trip from './components/Trip';
 import {
   CompactTravelDetailsMap,
   TravelDetailsMapScreenParams,
 } from '@atb/travel-details-map-screen';
-import {useCurrentTripPatternWithUpdates} from '@atb/travel-details-screens/use-current-trip-pattern-with-updates';
+import PaginatedDetailsHeader from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
-import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {Button} from '@atb/components/button';
-import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
-import {useFromTravelSearchToTicketEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
-import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
-import {TariffZone} from '@atb/reference-data/types';
-import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
-import analytics from '@react-native-firebase/analytics';
+import {useCurrentTripPatternWithUpdates} from '@atb/travel-details-screens/use-current-trip-pattern-with-updates';
 import {canSellCollabTicket} from '@atb/travel-details-screens/utils';
-import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {secondsBetween} from '@atb/utils/date';
+import analytics from '@react-native-firebase/analytics';
+import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
+import React, {useState} from 'react';
+import {View} from 'react-native';
+import Trip from './components/Trip';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -66,6 +65,16 @@ export const TripDetailsScreenComponent = ({
     currentIndex,
     tripPatterns,
   );
+  const fromToNames = getFromToName(tripPattern.legs);
+
+  const tripPatternLegs = tripPattern?.legs.map((leg) => {
+    let mode: AnyMode = !!leg.bookingArrangements ? 'flex' : leg.mode;
+    return {
+      ...leg,
+      mode,
+    };
+  });
+
   function navigate(page: number) {
     const newIndex = page - 1;
     if (page > tripPatterns.length || page < 1 || currentIndex === newIndex) {
@@ -74,57 +83,62 @@ export const TripDetailsScreenComponent = ({
     setCurrentIndex(newIndex);
   }
 
-  const {top: paddingTop} = useSafeAreaInsets();
-
   const tripTicketDetails = useGetTicketInfoFromTrip(tripPattern);
   return (
     <View style={styles.container}>
-      <View style={[styles.header, {paddingTop}]}>
-        <ScreenHeader
-          leftButton={{type: 'back'}}
-          title={t(TripDetailsTexts.header.title)}
-          color={themeColor}
-        />
-      </View>
-      <ContentWithDisappearingHeader
-        header={
-          tripPattern?.legs && (
+      <LargeFullScreenHeader
+        title={
+          fromToNames
+            ? t(TripDetailsTexts.header.titleFromTo(fromToNames))
+            : t(TripDetailsTexts.header.title)
+        }
+        titleA11yLabel={
+          fromToNames
+            ? t(TripDetailsTexts.header.titleFromToA11yLabel(fromToNames))
+            : undefined
+        }
+        color={themeColor}
+      >
+        <>
+          {tripPatternLegs && (
             <CompactTravelDetailsMap
-              mapLegs={tripPattern.legs}
-              fromPlace={tripPattern.legs[0].fromPlace}
-              toPlace={tripPattern.legs[tripPattern.legs.length - 1].toPlace}
+              mapLegs={tripPatternLegs}
+              fromPlace={tripPatternLegs[0].fromPlace}
+              toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
               onExpand={() => {
                 onPressDetailsMap({
-                  legs: tripPattern.legs,
-                  fromPlace: tripPattern.legs[0].fromPlace,
-                  toPlace:
-                    tripPattern.legs[tripPattern.legs.length - 1].toPlace,
+                  legs: tripPatternLegs,
+                  fromPlace: tripPatternLegs[0].fromPlace,
+                  toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
                 });
               }}
             />
-          )
-        }
-      >
-        {tripPattern && (
-          <View style={styles.paddedContainer} testID="tripDetailsContentView">
-            {tripPatterns.length > 1 && (
-              <PaginatedDetailsHeader
-                page={currentIndex + 1}
-                totalPages={tripPatterns.length}
-                onNavigate={navigate}
-                style={styles.pagination}
-                currentDate={tripPattern.legs[0]?.aimedStartTime}
+          )}
+          {tripPattern && (
+            <View
+              style={styles.paddedContainer}
+              testID="tripDetailsContentView"
+            >
+              {tripPatterns.length > 1 && (
+                <PaginatedDetailsHeader
+                  page={currentIndex + 1}
+                  totalPages={tripPatterns.length}
+                  onNavigate={navigate}
+                  style={styles.pagination}
+                  currentDate={tripPatternLegs[0]?.aimedStartTime}
+                />
+              )}
+              <Trip
+                tripPattern={tripPattern}
+                error={error}
+                onPressDetailsMap={onPressDetailsMap}
+                onPressDeparture={onPressDeparture}
+                onPressQuay={onPressQuay}
               />
-            )}
-            <Trip
-              tripPattern={tripPattern}
-              error={error}
-              onPressDeparture={onPressDeparture}
-              onPressQuay={onPressQuay}
-            />
-          </View>
-        )}
-      </ContentWithDisappearingHeader>
+            </View>
+          )}
+        </>
+      </LargeFullScreenHeader>
       {tripTicketDetails && singleTicketConfig && (
         <View style={styles.borderTop}>
           <Button
@@ -216,6 +230,14 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
     tariffZoneTo,
     ticketStartTime,
   };
+}
+
+function getFromToName(legs: Leg[]) {
+  if (legs.length === 0) return;
+  const fromName = legs[0].fromPlace.name;
+  const toName = legs[legs.length - 1].toPlace.name;
+  if (!fromName || !toName) return;
+  return {fromName, toName};
 }
 
 function totalWaitTimeIsMoreThanAnHour(legs: Leg[]) {

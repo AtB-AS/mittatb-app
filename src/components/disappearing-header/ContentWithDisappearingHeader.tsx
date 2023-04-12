@@ -55,7 +55,7 @@ export function ContentWithDisappearingHeader({
         }
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
-          {useNativeDriver: true},
+          {useNativeDriver: false},
         )}
         contentContainerStyle={{
           paddingTop: Platform.OS === 'ios' ? 0 : contentHeight,

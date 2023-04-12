@@ -1,7 +1,8 @@
 import {
   CameraFocusModeType,
-  MapSelectionMode,
+  MapLeg,
   MapSelectionActionType,
+  MapSelectionMode,
 } from '../types';
 import {Coordinates} from '@atb/utils/coordinates';
 import {RefObject, useEffect, useState} from 'react';
@@ -106,7 +107,12 @@ const fetchMapLines = async (
     walkingTripPattern?.walkDistance &&
     walkingTripPattern.walkDistance <= MAX_LIMIT_TO_SHOW_WALKING_TRIP
   ) {
-    const tripLegs = walkingTripPattern?.legs;
+    const tripLegs: MapLeg[] = walkingTripPattern?.legs.map((leg) => {
+      return {
+        ...leg,
+        mode: !!leg.bookingArrangements ? 'flex' : leg.mode,
+      };
+    });
     const distance = walkingTripPattern.walkDistance;
     const mapLines = tripLegs ? createMapLines(tripLegs) : undefined;
     return {mapLines, distance};

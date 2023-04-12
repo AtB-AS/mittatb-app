@@ -18,18 +18,16 @@ export const getLimitOfDeparturesPerLineByMode = (mode: StopPlacesMode) =>
 export const getTimeRangeByMode = (mode: StopPlacesMode, startTime?: string) =>
   mode === 'Favourite'
     ? ONE_WEEK_TIME_RANGE
-    : getSecondsUntilMidnightOrMinimum(
-        startTime ?? new Date().toISOString(),
-        MIN_TIME_RANGE,
-      );
+    : getSecondsUntilMidnightOrMinimum(startTime, MIN_TIME_RANGE);
 
 /**
- * Get seconds until midnight, but a minimum of `minSeconds`
+ * Get seconds until midnight, but a minimum of `minimumSeconds`
  */
 function getSecondsUntilMidnightOrMinimum(
-  isoTime: string,
+  isoTime?: string,
   minimumSeconds: number = 0,
 ): number {
+  if (!isoTime) return minimumSeconds;
   const timeUntilMidnight = differenceInSeconds(
     addDays(parseISO(isoTime), 1).setHours(0, 0, 0),
     parseISO(isoTime),

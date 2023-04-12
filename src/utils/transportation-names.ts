@@ -1,7 +1,7 @@
 import {EstimatedCall, Leg, Quay} from '../sdk';
 import {Quay as Quay_v2} from '../api/types/trips';
-import {TranslatedString, dictionary} from '../translations';
-import {AnyMode} from '@atb/components/transportation-icon';
+import {dictionary, TranslatedString} from '../translations';
+import {AnyMode} from '@atb/components/icon-box';
 import {QuayFragment} from '@atb/api/types/generated/fragments/quays';
 
 export function getLineName(leg: Leg) {

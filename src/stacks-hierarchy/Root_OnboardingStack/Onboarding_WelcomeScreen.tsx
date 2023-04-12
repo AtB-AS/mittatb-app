@@ -44,7 +44,7 @@ export const Onboarding_WelcomeScreen = ({navigation}: Props) => {
           interactiveColor="interactive_0"
           onPress={() => navigation.navigate('Onboarding_IntercomInfoScreen')}
           text={t(OnboardingTexts.welcome.mainButton)}
-          testID="nextButton"
+          testID="nextButtonOnboardingWelcome"
         />
       </View>
     </ScrollView>

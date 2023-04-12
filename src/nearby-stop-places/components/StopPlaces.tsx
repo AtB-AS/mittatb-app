@@ -1,5 +1,5 @@
 import {ThemeText} from '@atb/components/text';
-import {StopPlace, NearestStopPlaceNode} from '@atb/api/types/departures';
+import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import {StopPlaceItem} from './StopPlaceItem';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
@@ -30,7 +30,7 @@ export const StopPlaces = ({
       )}
       {stopPlaces.map((node: NearestStopPlaceNode) => (
         <StopPlaceItem
-          key={node?.place?.id}
+          key={node.place.id}
           stopPlaceNode={node}
           onPress={navigateToPlace}
           testID={'stopPlaceItem' + stopPlaces.indexOf(node)}

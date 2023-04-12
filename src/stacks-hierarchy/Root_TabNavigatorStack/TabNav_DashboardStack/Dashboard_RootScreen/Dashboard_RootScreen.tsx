@@ -6,10 +6,10 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {
-  useFavorites,
   FavoriteChips,
   GeoLocation,
   Location,
+  useFavorites,
   UserFavorites,
 } from '@atb/favorites';
 import {useGeolocationState} from '@atb/GeolocationContext';
@@ -292,7 +292,10 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
             }}
             onPressBuy={() =>
               navigation.navigate('TabNav_TicketingStack', {
-                screen: 'PurchaseTab',
+                screen: 'Ticketing_RootScreen',
+                params: {
+                  screen: 'TicketTabNav_PurchaseTabScreen',
+                },
               })
             }
           />

@@ -3,9 +3,23 @@ import {translation as _} from '../../commons';
 const TripDetailsTexts = {
   header: {
     title: _('Reisedetaljer', 'Trip details'),
+    titleFromTo: ({fromName, toName}: {fromName: string; toName: string}) =>
+      _(`${fromName}  -  ${toName}`, `${fromName}  -  ${toName}`),
+    titleFromToA11yLabel: ({
+      fromName,
+      toName,
+    }: {
+      fromName: string;
+      toName: string;
+    }) => _(`Fra ${fromName} til ${toName}`, `From ${fromName} to ${toName}`),
   },
   trip: {
     leg: {
+      contactFlexibleTransportTitle: (phone: string) =>
+        _(
+          `Ring ${phone} for å reserve transport`,
+          `Call ${phone} to make a transport reservation`,
+        ),
       a11yHelper: (stepNumber: number, travelMode: string) =>
         _(
           `Steg ${stepNumber}, ${travelMode}`,
@@ -40,6 +54,7 @@ const TripDetailsTexts = {
         a11ylabel: (modeName: string, lineName: string) =>
           _(`${modeName} linje ${lineName}`, `${modeName} line ${lineName}`),
       },
+      live: _('Se live', 'See live'),
       intermediateStops: {
         a11yLabel: (count: number, duration: string) =>
           _(

@@ -1,6 +1,6 @@
 import {v4 as uuid} from 'uuid';
-import storage, {StorageModelTypes} from '../storage';
 import {FavoriteDeparture, LocationFavorite} from './types';
+import {storage, StorageModelTypes} from '@atb/storage';
 
 export type StoredType<T> = {
   id: string;
@@ -14,10 +14,7 @@ class FavoriteStore<T = LocationFavorite | FavoriteDeparture> {
 
   async getFavorites(): Promise<StoredType<T>[]> {
     const userLocations = await storage.get(this.key);
-    let data = (
-      userLocations ? JSON.parse(userLocations) : []
-    ) as StoredType<T>[];
-    return data;
+    return (userLocations ? JSON.parse(userLocations) : []) as StoredType<T>[];
   }
 
   async setFavorites(favorites: StoredType<T>[]): Promise<StoredType<T>[]> {

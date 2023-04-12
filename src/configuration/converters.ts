@@ -5,7 +5,7 @@ import {
   TimeSelectionMode,
   TravellerSelectionMode,
   ZoneSelectionMode,
-} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
+} from './types';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
 import {isArray} from 'lodash';
@@ -111,7 +111,15 @@ function mapToFareProductConfigSettings(
   fareProductType: string,
   settings: any,
 ): FareProductTypeConfigSettings | undefined {
-  const zoneSelectionModeTypes = ['single', 'multiple', 'none'];
+  const zoneSelectionModeTypes = [
+    'single',
+    'single-zone',
+    'single-stop',
+    'multiple',
+    'multiple-zone',
+    'multiple-stop',
+    'none',
+  ];
   const zoneSelectionMode = mapToStringAlternatives<ZoneSelectionMode>(
     settings.zoneSelectionMode,
     zoneSelectionModeTypes,

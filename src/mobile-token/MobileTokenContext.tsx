@@ -11,18 +11,18 @@ import {useTicketingState} from '@atb/ticketing';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 import {v4 as uuid} from 'uuid';
-import storage from '@atb/storage';
+import {storage} from '@atb/storage';
 import Bugsnag from '@bugsnag/react-native';
 import useMobileTokenClient from '@atb/mobile-token/mobileTokenClient';
 import {RemoteToken, TokenLimitResponse} from './types';
 import {
-  TokenAction,
-  TokenMustBeReplacedRemoteTokenStateError,
   ActivatedToken,
+  createClient,
+  TokenAction,
   TokenEncodingInvalidRemoteTokenStateError,
   TokenMustBeRenewedRemoteTokenStateError,
+  TokenMustBeReplacedRemoteTokenStateError,
   TokenNotFoundRemoteTokenStateError,
-  createClient,
 } from '@entur-private/abt-mobile-client-sdk';
 import createTokenService from '@atb/mobile-token/tokenService';
 import {SAFETY_NET_API_KEY} from '@env';
@@ -300,8 +300,7 @@ const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const getTokenToggleDetails = useCallback(async () => {
     try {
-      const toggleLimitResponse = await tokenService.getTokenToggleDetails();
-      return toggleLimitResponse;
+      return await tokenService.getTokenToggleDetails();
     } catch (err) {
       return undefined;
     }
