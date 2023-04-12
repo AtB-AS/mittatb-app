@@ -13,15 +13,6 @@ const MapTexts = {
   endPoint: {
     label: _('Slutt', 'End'),
   },
-  controls: {
-    position: {
-      a11yLabel: _('Min posisjon', 'My location'),
-      a11yHint: _(
-        'Aktivér for å gå til din gjeldende posisjon',
-        'Activate to use your current position',
-      ),
-    },
-  },
   disabledForScreenReader: {
     title: _('Kart kan ikke vises', 'Map cannot be viewed'),
     description: _(
