@@ -16,7 +16,7 @@ class DepartureDetailPage extends Page {
    */
   async expandAndHideIntermediateStops() {
     const interId = `//*[@resource-id="intermediateStops"]`;
-    await $(interId).click()
+    await $(interId).click();
     await AppHelper.pause(1000);
   }
 

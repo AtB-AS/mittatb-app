@@ -40,12 +40,12 @@ class TravelSearchOverviewPage extends Page {
     const tripId = `//*[@resource-id="tripSearchSearchResult${tripIndex}"]`;
     const legId = `//*[@resource-id="tripLeg"]`;
     const moreLegsId = `//*[@resource-id="tripLegMore"]`;
-    let noLegs = await $(tripId).$$(legId).length
-    if (await $(tripId).$(moreLegsId).isExisting()){
-      const noLegsExtra = await $(tripId).$(moreLegsId).getText()
-      noLegs = noLegs + parseInt(noLegsExtra.split('+')[1])
+    let noLegs = await $(tripId).$$(legId).length;
+    if (await $(tripId).$(moreLegsId).isExisting()) {
+      const noLegsExtra = await $(tripId).$(moreLegsId).getText();
+      noLegs = noLegs + parseInt(noLegsExtra.split('+')[1]);
     }
-    return noLegs
+    return noLegs;
   }
 
   /**
