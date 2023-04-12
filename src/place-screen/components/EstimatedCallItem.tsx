@@ -26,8 +26,8 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {isToday, parseISO} from 'date-fns';
 import {
-  useOnMarkFavouriteDepartures,
   FavouriteDepartureToggle,
+  useOnMarkFavouriteDepartures,
 } from '@atb/favorites';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';

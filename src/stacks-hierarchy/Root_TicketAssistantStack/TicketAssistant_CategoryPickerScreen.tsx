@@ -33,7 +33,10 @@ export const TicketAssistant_CategoryPickerScreen = ({
       <View style={styles.backdrop}>
         <DashboardBackground width={'100%'} height={'100%'} />
       </View>
-      <ScrollView>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.contentContainer}
+      >
         <ThemeText
           type={'body__primary--jumbo--bold'}
           style={styles.header}
@@ -125,14 +128,22 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     padding: 0,
     margin: 0,
   },
+  contentContainer: {
+    flexGrow: 1,
+  },
   header: {
     textAlign: 'center',
   },
   container: {
-    height: '100%',
-    flex: 1,
-    //place content at top
+    flex: 1, //place content at top
     backgroundColor: theme.static.background.background_accent_0.background,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  test: {
+    flex: 1,
+    marginTop: theme.spacings.xLarge,
   },
   chooseButton: {
     marginTop: theme.spacings.medium,

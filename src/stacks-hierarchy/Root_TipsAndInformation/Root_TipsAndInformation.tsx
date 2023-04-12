@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {useTranslation, TipsAndInformationTexts} from '@atb/translations';
+import {TipsAndInformationTexts, useTranslation} from '@atb/translations';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {themeColor} from '@atb/stacks-hierarchy/Root_OnboardingStack/Onboarding_WelcomeScreen';

@@ -68,7 +68,7 @@ export const CounterIconBox = ({
       <ThemeText
         color={'transport_other'}
         type={styling().type}
-        testID="counterBox"
+        testID="tripLegMore"
         style={{
           lineHeight: styling().lineHeight,
         }}

@@ -1,5 +1,5 @@
 import {ThemeText} from '@atb/components/text';
-import {StopPlace, NearestStopPlaceNode} from '@atb/api/types/departures';
+import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import {StopPlaceItem} from './StopPlaceItem';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';

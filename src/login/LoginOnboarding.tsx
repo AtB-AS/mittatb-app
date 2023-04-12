@@ -16,7 +16,7 @@ import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
-import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
+import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';

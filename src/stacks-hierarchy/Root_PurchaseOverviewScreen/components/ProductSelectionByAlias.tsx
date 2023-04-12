@@ -11,7 +11,7 @@ import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {FareProductTypeConfig} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareContracts/utils';
+import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {ProductAliasChip} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductAliasChip';
 
