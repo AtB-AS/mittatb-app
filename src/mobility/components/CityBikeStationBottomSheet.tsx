@@ -1,10 +1,6 @@
 import {StationFragment} from '@atb/api/types/generated/fragments/stations';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {
-  getTextForLanguage,
-  ScreenHeaderTexts,
-  useTranslation,
-} from '@atb/translations';
+import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
@@ -26,13 +22,14 @@ import {Parking as ParkingLight} from '@atb/assets/svg/color/icons/vehicles/ligh
 import {VehicleStats} from '@atb/mobility/components/VehicleStats';
 import {ThemeText} from '@atb/components/text';
 import {View} from 'react-native';
+import {useTextForLanguage} from '@atb/translations/utils';
 
 type Props = {
   station: StationFragment;
   close: () => void;
 };
 export const CityBikeStationSheet = ({station, close}: Props) => {
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const {themeName} = useTheme();
   const style = useSheetStyle();
   const {appStoreUri, brandLogoUrl, operatorName} = useSystem(station);
@@ -42,7 +39,7 @@ export const CityBikeStationSheet = ({station, close}: Props) => {
     appStoreUri,
     rentalAppUri,
   });
-  const stationName = getTextForLanguage(station.name.translation, language);
+  const stationName = useTextForLanguage(station.name.translation);
 
   return (
     <BottomSheetContainer>
