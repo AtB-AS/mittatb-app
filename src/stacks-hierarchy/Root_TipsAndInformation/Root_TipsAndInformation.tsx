@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View} from 'react-native';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {TipsAndInformationTexts, useTranslation} from '@atb/translations';
@@ -14,6 +14,7 @@ type Props = RootStackScreenProps<'Root_TipsAndInformation'>;
 export const Root_TipsAndInformation = ({navigation}: Props) => {
   const styles = useScreenStyle();
   const {t} = useTranslation();
+  const [currentlyOpen, setCurrentlyOpen] = useState<number>(0);
 
   return (
     <View style={styles.container}>
@@ -37,6 +38,10 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
               textType="body__primary--bold"
               text={t(title)}
               showIconText={false}
+              expanded={currentlyOpen === index}
+              onPress={() => {
+                setCurrentlyOpen(index);
+              }}
               expandContent={
                 <ThemeText
                   type="body__tertiary"
