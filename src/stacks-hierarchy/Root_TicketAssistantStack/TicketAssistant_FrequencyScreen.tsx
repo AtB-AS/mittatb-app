@@ -35,7 +35,6 @@ export const TicketAssistant_FrequencyScreen = ({
   function updateFrequency(value: number) {
     const newData = {...data, frequency: value};
     updateData(newData);
-    console.log('Context Data \n' + JSON.stringify(newData, null, 2));
   }
 
   return (
@@ -84,6 +83,7 @@ export const TicketAssistant_FrequencyScreen = ({
               maximumValue={14}
               minimumValue={0}
               step={1}
+              value={data.frequency}
               tapToSeek={true}
               thumbTintColor={sliderColorMin}
               onValueChange={(value) => {

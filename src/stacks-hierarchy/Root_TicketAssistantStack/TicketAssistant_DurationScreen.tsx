@@ -19,6 +19,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgDate from '@atb/assets/svg/mono-icons/time/Date';
 import {addDays, format, parseISO} from 'date-fns';
 import {dateToDateString} from '@atb/components/sections/items/date-input/utils';
+import {getRecommendedTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/api';
 type DurationProps =
   TicketAssistantScreenProps<'TicketAssistant_DurationScreen'>;
 
@@ -37,12 +38,11 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   if (majorVersionIOS < 13) {
     style = {width: undefined, flex: 1};
   }
-
   const contextValue = useContext(TicketAssistantContext);
 
   if (!contextValue) throw new Error('Context is undefined!');
 
-  const {data, updateData} = contextValue;
+  const {data, updateData, setResponse} = contextValue;
   const locale = useLocaleContext();
   function updateDuration(value: number, fromPicker?: boolean) {
     let newData = {...data};
@@ -75,7 +75,6 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   } else {
     resultString = t(TicketAssistantTexts.duration.resultMoreThan180Days);
   }
-
   return (
     <View style={styles.container}>
       <View style={styles.backdrop}>
@@ -142,7 +141,12 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                     type="inline"
                     mode="tertiary"
                     onPress={() => setShowDatePicker(true)}
-                    text={format(parseISO(date), 'dd. MMM. yyyy')}
+                    text={format(
+                      usedSlider
+                        ? parseISO(getDateFromSlider(data.duration))
+                        : parseISO(date),
+                      'dd. MMM. yyyy',
+                    )}
                   />
                 )}
 
@@ -217,9 +221,18 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
         <View style={styles.bottomView}>
           <Button
             interactiveColor="interactive_0"
-            onPress={() =>
-              navigation.navigate('TicketAssistant_ZonePickerScreen')
-            }
+            onPress={async () => {
+              await getRecommendedTicket(data)
+                .then((response) => {
+                  if (setResponse && response) {
+                    setResponse(response);
+                  }
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+              navigation.navigate('TicketAssistant_ZonePickerScreen');
+            }}
             text={t(TicketAssistantTexts.frequency.mainButton)}
             testID="nextButton"
           />

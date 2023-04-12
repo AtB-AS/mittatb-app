@@ -8,8 +8,13 @@ import {Button} from '@atb/components/button';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import TicketAssistantContext from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
+import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 
-export const TicketAssistant_CategoryPickerScreen = () => {
+type CategoryPickerProps =
+  TicketAssistantScreenProps<'TicketAssistant_CategoryPickerScreen'>;
+export const TicketAssistant_CategoryPickerScreen = ({
+  navigation,
+}: CategoryPickerProps) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
@@ -19,9 +24,8 @@ export const TicketAssistant_CategoryPickerScreen = () => {
 
   const {data, updateData} = contextValue;
   function updateCategory(value: number) {
-    const newData = {...data, category: value.toString()};
+    const newData = {...data, traveller: convertIndexToTraveller(value)};
     updateData(newData);
-    console.log('Context Data \n' + JSON.stringify(newData, null, 2));
   }
 
   return (
@@ -42,45 +46,78 @@ export const TicketAssistant_CategoryPickerScreen = () => {
           {t(TicketAssistantTexts.categoryPicker.title)}
         </ThemeText>
 
-        <View style={styles.test}>
-          <Sections.Section style={styles.categoriesContainer}>
-            {/*eslint-disable-next-line rulesdir/translations-warning*/}
-            {TicketAssistantTexts.categoryPicker.categories.map(
-              ({title, description}, index) => (
-                <Sections.ExpandableSectionItem
-                  key={index}
-                  textType={'body__primary--bold'}
-                  text={t(title)}
-                  showIconText={false}
-                  expandContent={
-                    <View>
-                      <ThemeText
-                        type={'body__tertiary'}
-                        style={styles.expandedContent}
-                        isMarkdown={true}
-                      >
-                        {t(description)}
-                      </ThemeText>
-                      <Button
-                        style={styles.chooseButton}
-                        onPress={() => {
-                          updateCategory(index);
-                        }}
-                        text={t(
-                          TicketAssistantTexts.categoryPicker.chooseButton,
-                        )}
-                      />
-                    </View>
-                  }
-                />
-              ),
-            )}
-          </Sections.Section>
-        </View>
+        <Sections.Section style={styles.categoriesContainer}>
+          {/*eslint-disable-next-line rulesdir/translations-warning*/}
+          {TicketAssistantTexts.categoryPicker.categories.map(
+            ({title, description}, index) => (
+              <Sections.ExpandableSectionItem
+                key={index}
+                textType={'body__primary--bold'}
+                text={t(title)}
+                showIconText={false}
+                expandContent={
+                  <View>
+                    <ThemeText
+                      type={'body__tertiary'}
+                      style={styles.expandedContent}
+                      isMarkdown={true}
+                    >
+                      {t(description)}
+                    </ThemeText>
+                    <Button
+                      style={styles.chooseButton}
+                      onPress={() => {
+                        updateCategory(index);
+                        navigation.navigate('TicketAssistant_DurationScreen');
+                      }}
+                      text={t(TicketAssistantTexts.categoryPicker.chooseButton)}
+                    />
+                  </View>
+                }
+              />
+            ),
+          )}
+        </Sections.Section>
       </ScrollView>
     </View>
   );
 };
+
+function convertIndexToTraveller(index: number) {
+  switch (index) {
+    case 0:
+      return {
+        id: 'ADULT',
+        user_type: 'ADULT',
+      };
+    case 1:
+      return {
+        id: 'YOUTH',
+        user_type: 'YOUTH',
+      };
+    case 2:
+      return {
+        id: 'STUDENT',
+        user_type: 'STUDENT',
+      };
+    case 3:
+      return {
+        id: 'SENIOR',
+        user_type: 'SENIOR',
+      };
+    case 4:
+      return {
+        id: 'MILITARY',
+        user_type: 'MILITARY',
+      };
+    default:
+      return {
+        id: 'ADULT',
+        user_type: 'ADULT',
+      };
+  }
+}
+
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   backdrop: {
     position: 'absolute',
