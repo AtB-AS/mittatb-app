@@ -22,7 +22,15 @@ export type LargeScreenHeaderProps = {
   containerStyle?: ViewStyle;
   color?: StaticColor;
   setFocusOnLoad?: boolean;
+  buttonProps?: Omit<LargeHeaderButtonProps, 'color'>;
+  /**
+   * JSX content that will be displayed as part of the disappearing header,
+   * below the title, and above global messages.
+   */
   headerChildren?: JSX.Element | JSX.Element[];
+  /**
+   * Page content, below disappearing header.
+   */
   children?: JSX.Element | JSX.Element[];
 };
 
@@ -38,8 +46,6 @@ export const LargeScreenHeaderTop = (props: LargeHeaderButtonProps) => {
 export const LargeScreenHeader = ({
   color,
   setFocusOnLoad,
-  style,
-  containerStyle,
   title,
   titleA11yLabel,
   globalMessageContext,
@@ -53,7 +59,7 @@ export const LargeScreenHeader = ({
   const backgroundColor = getStaticColor(themeName, themeColor).background;
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={styles.container}>
       <ContentWithDisappearingHeader
         header={
           <View style={[styles.headerContainer, {backgroundColor}]}>
@@ -78,9 +84,7 @@ export const LargeScreenHeader = ({
               </View>
             )}
             {headerChildren && (
-              <View style={[styles.childrenContainer, containerStyle]}>
-                {headerChildren}
-              </View>
+              <View style={styles.childrenContainer}>{headerChildren}</View>
             )}
             <GlobalMessage
               globalMessageContext={globalMessageContext}
