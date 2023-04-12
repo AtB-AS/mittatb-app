@@ -24,7 +24,7 @@
     "unimported": "npx unimported"
   },
   "dependencies": {
-    "@atb-as/theme": "^6.4.0",
+    "@atb-as/theme": "^6.5.1",
     "@bugsnag/react-native": "^7.18.2",
     "@bugsnag/source-maps": "^2.3.1",
     "@entur-private/abt-mobile-client-sdk": "^1.1.6",

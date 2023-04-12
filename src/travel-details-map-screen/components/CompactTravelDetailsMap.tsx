@@ -44,7 +44,11 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
    */
   useEffect(() => {
     if (Platform.OS === 'ios') {
-      cameraRef.current?.fitBounds(bounds.ne, bounds.sw, undefined, 100);
+      setTimeout(
+        () =>
+          cameraRef.current?.fitBounds(bounds.ne, bounds.sw, undefined, 100),
+        100,
+      );
     }
   }, [bounds]);
 

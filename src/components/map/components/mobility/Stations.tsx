@@ -8,6 +8,8 @@ import {
   toCoordinates,
 } from '@atb/components/map/utils';
 import {StationFragment} from '@atb/api/types/generated/fragments/stations';
+import {useTheme} from '@atb/theme';
+import {getStaticColor} from '@atb/theme/colors';
 
 type Props = {
   mapCameraRef: RefObject<MapboxGL.Camera>;
@@ -16,6 +18,9 @@ type Props = {
 };
 
 export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
+  const {themeName} = useTheme();
+  const stationColor = getStaticColor(themeName, 'transport_bike');
+
   return (
     <MapboxGL.ShapeSource
       id={'stations'}
@@ -24,10 +29,10 @@ export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
       onPress={async (e) => {
         const [feature, ..._] = e.features;
         if (isFeaturePoint(feature)) {
-          flyToLocation(
-            toCoordinates(feature.geometry.coordinates),
+          flyToLocation({
+            coordinates: toCoordinates(feature.geometry.coordinates),
             mapCameraRef,
-          );
+          });
           onPress({
             source: 'map-click',
             feature,
@@ -40,12 +45,11 @@ export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
         minZoomLevel={13.5}
         style={{
           textField: ['get', 'numBikesAvailable'],
-          textAnchor: 'top-left',
-          textOffset: [1.25, 0],
-          textColor: '#DE5D00',
+          textAnchor: 'center',
+          textOffset: [0.75, 0],
+          textColor: stationColor.text,
           textSize: 12,
           iconImage: {uri: 'BikeStation'},
-          iconSize: 0.8,
           iconAllowOverlap: true,
         }}
       />
@@ -54,8 +58,8 @@ export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
         maxZoomLevel={13.5}
         minZoomLevel={12}
         style={{
-          circleColor: '#DE5D00',
-          circleStrokeColor: '#fff',
+          circleColor: stationColor.background,
+          circleStrokeColor: stationColor.text,
           circleOpacity: 0.7,
           circleStrokeOpacity: 0.7,
           circleRadius: 4,

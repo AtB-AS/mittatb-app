@@ -21,18 +21,18 @@
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@^6.4.0":
-  version "6.4.4"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-6.4.4.tgz#b6623de80c97c8700b94d70e78831f788545130f"
-  integrity sha512-I9+XqBxTjS7f122MYDFxUNvZDcRTnDP4GtMhwOlzNxkqYOWH2KOFc+5aamAzNaGX6gxFWlnzpvvcBN0ZFpFRaQ==
-  dependencies:
-    hex-to-rgba "^2.0.1"
-    ts-deepmerge "^4.0.0"
-
 "@atb-as/theme@^6.5.0":
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-6.5.0.tgz#b02b6ae600d78cdee07528e8ad6dd3bb036ba9e5"
   integrity sha512-IEHIhOit6jU7dAHMJ6zpGRVMQyRvBQ4UQfU6ODC8upEFkmPd1Mdn1l3AFvVTU3UyjRf1CH9fTbOEvt4wYLwiig==
+  dependencies:
+    hex-to-rgba "^2.0.1"
+    ts-deepmerge "^4.0.0"
+
+"@atb-as/theme@^6.5.1":
+  version "6.5.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-6.5.1.tgz#b252b2a95a23f63fd0c2e9452b01111115abc6d0"
+  integrity sha512-CT9xlSqosmdrYu47Y38d1n7KkPZpmz+PFcZl3i5fhFygk+wAf9+jEx7zWM00mu5R1GAXtDFxrEHq0eJrRqji0w==
   dependencies:
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"

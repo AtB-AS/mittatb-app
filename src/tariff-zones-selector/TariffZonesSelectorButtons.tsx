@@ -17,8 +17,7 @@ import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hiera
 import {TicketAssistant_ZonePickerScreenParams} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 
 type Props = {
-  toTariffZone: TariffZoneWithMetadata;
-  fromTariffZone: TariffZoneWithMetadata;
+  selectedZones: TariffZoneSelection;
   isApplicableOnSingleZoneOnly: boolean;
   onVenueSearchClick: (
     callerRouteParam:
@@ -29,18 +28,11 @@ type Props = {
 };
 
 const TariffZonesSelectorButtons = ({
-  toTariffZone,
-  fromTariffZone,
+  selectedZones,
   onVenueSearchClick,
   isApplicableOnSingleZoneOnly,
   withPadding = false,
 }: Props) => {
-  const selectedZones: TariffZoneSelection = {
-    from: fromTariffZone,
-    to: toTariffZone,
-    selectNext: isApplicableOnSingleZoneOnly ? 'from' : 'to',
-  };
-
   const {t, language} = useTranslation();
 
   return (

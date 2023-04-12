@@ -9,6 +9,8 @@ import {
   isFeaturePoint,
   toCoordinates,
 } from '@atb/components/map/utils';
+import {getStaticColor} from '@atb/theme/colors';
+import {useTheme} from '@atb/theme';
 
 type Props = {
   mapCameraRef: RefObject<MapboxGL.Camera>;
@@ -18,6 +20,8 @@ type Props = {
 
 export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
   const shapeSource = useRef<MapboxGL.ShapeSource>(null);
+  const {themeName} = useTheme();
+  const scooterColor = getStaticColor(themeName, 'transport_scooter');
 
   return (
     <MapboxGL.ShapeSource
@@ -31,19 +35,20 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
       onPress={async (e) => {
         const [feature, ..._] = e.features;
         if (isClusterFeature(feature)) {
-          const zoom = await shapeSource.current?.getClusterExpansionZoom(
+          const zoomLevel = await shapeSource.current?.getClusterExpansionZoom(
             feature,
           );
-          flyToLocation(
-            toCoordinates(feature.geometry.coordinates),
+          flyToLocation({
+            coordinates: toCoordinates(feature.geometry.coordinates),
             mapCameraRef,
-            zoom,
-          );
+            zoomLevel,
+            animationDuration: 400,
+          });
         } else if (isFeaturePoint(feature)) {
-          flyToLocation(
-            toCoordinates(feature.geometry.coordinates),
+          flyToLocation({
+            coordinates: toCoordinates(feature.geometry.coordinates),
             mapCameraRef,
-          );
+          });
           onPress({
             source: 'map-click',
             feature,
@@ -57,12 +62,12 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
         minZoomLevel={13.5}
         style={{
           textField: ['concat', ['get', 'currentFuelPercent'], '%'],
-          textAnchor: 'top-left',
-          textOffset: [0.4, 0.7],
-          textColor: '#920695',
-          textSize: 12,
+          textAnchor: 'center',
+          textOffset: [0.7, -0.25],
+          textColor: scooterColor.text,
+          textSize: 11,
           iconImage: {uri: 'PinScooter'},
-          iconSize: 0.75,
+          iconSize: 0.85,
           iconAllowOverlap: true,
         }}
       />
@@ -72,7 +77,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
         minZoomLevel={13.5}
         style={{
           iconImage: {uri: 'Scooter'},
-          iconSize: 0.75,
+          iconSize: 0.85,
           iconAllowOverlap: true,
         }}
       />
@@ -82,11 +87,11 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
         minZoomLevel={13.5}
         belowLayerID="clusterIcon"
         style={{
-          circleColor: '#920695',
-          circleStrokeColor: '#920695',
-          circleOpacity: 0.7,
-          circleStrokeOpacity: 0.2,
-          circleStrokeWidth: ['min', ['+', 2, ['get', 'point_count']], 12],
+          circleColor: scooterColor.background,
+          circleStrokeColor: scooterColor.background,
+          circleOpacity: 1,
+          circleStrokeOpacity: 0.3,
+          circleStrokeWidth: 8,
           circleRadius: 12,
         }}
       />
