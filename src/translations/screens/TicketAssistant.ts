@@ -130,7 +130,7 @@ const TicketAssistantTexts = {
     traveller: _('Reisende', 'Traveller'),
     zones: _('Soner', 'Zones'),
     price: _('Pris', 'Price'),
-    pricePerTrip: _('Pris pr tur:', 'Price per trip:'),
+    pricePerTrip: _('Pris per tur:', 'Price per trip:'),
     resultMoreThan180Days: _(
       'Du skal reise i mer enn et halvt år.',
       'You will travel for more than half a year.',

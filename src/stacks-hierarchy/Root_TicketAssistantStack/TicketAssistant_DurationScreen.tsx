@@ -19,7 +19,6 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgDate from '@atb/assets/svg/mono-icons/time/Date';
 import {addDays, format, parseISO} from 'date-fns';
 import {dateToDateString} from '@atb/components/sections/items/date-input/utils';
-import {getRecommendedTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/api';
 type DurationProps =
   TicketAssistantScreenProps<'TicketAssistant_DurationScreen'>;
 
@@ -221,16 +220,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
         <View style={styles.bottomView}>
           <Button
             interactiveColor="interactive_0"
-            onPress={async () => {
-              await getRecommendedTicket(data)
-                .then((response) => {
-                  if (setResponse && response) {
-                    setResponse(response);
-                  }
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
+            onPress={() => {
               navigation.navigate('TicketAssistant_ZonePickerScreen');
             }}
             text={t(TicketAssistantTexts.frequency.mainButton)}

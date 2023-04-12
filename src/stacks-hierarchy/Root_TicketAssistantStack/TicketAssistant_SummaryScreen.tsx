@@ -14,6 +14,9 @@ import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssis
 import {productIsSellableInApp} from '@atb/reference-data/utils';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {TariffZone} from '@entur/sdk/lib/nsr/types';
+import {UserProfile} from '@atb/reference-data/types';
+import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
+import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -26,12 +29,17 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const {width} = Dimensions.get('window');
 
   const {theme} = useTheme();
-  const {tariffZones} = useFirestoreConfiguration();
-  const {preassignedFareProducts, fareProductTypeConfigs} =
-    useFirestoreConfiguration();
+  const {
+    tariffZones,
+    userProfiles,
+    preassignedFareProducts,
+    fareProductTypeConfigs,
+  } = useFirestoreConfiguration();
+
   const sellableProductsInApp = preassignedFareProducts.filter(
     productIsSellableInApp,
   );
+
   const contextValue = useContext(TicketAssistantContext);
 
   if (!contextValue) throw new Error('Context is undefined!');
@@ -40,7 +48,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   if (response?.tickets == undefined) {
     response = {
       totalCost: 800,
-      zones: ['ATB:TariffZone:1', 'ATB:TariffZone:2'],
+      zones: ['ATB:TariffZone:1', 'ATB:TariffZone:1'],
       tickets: [
         {
           product_id: 'ATB:PreassignedFareProduct:8808c360',
@@ -69,8 +77,24 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     day: 'numeric',
   });
   const savings = calculateSavings(response.totalCost, data.duration);
-  const fromZone = getTariffZone(tariffZones, response.zones[0]);
-  const toZone = getTariffZone(tariffZones, response.zones[1]);
+  const fromTariffZone = getTariffZone(
+    tariffZones,
+    response.zones[0],
+  ) as TariffZoneWithMetadata;
+  const toTariffZone = getTariffZone(
+    tariffZones,
+    response.zones[1],
+  ) as TariffZoneWithMetadata;
+
+  const traveller = getUserProfile(
+    userProfiles,
+    response.tickets[0].traveller.id,
+  );
+
+  const travellerWithCount: UserProfileWithCount | undefined = {
+    ...(traveller as UserProfile),
+    count: 1,
+  };
 
   const interactiveColor = theme.interactive[interactiveColorName];
 
@@ -98,7 +122,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
         </ThemeText>
         <ThemeText
           color={themeColor}
-          type={'body__primary'}
+          type={'body__primary--big'}
           style={styles.description}
         >
           {t(
@@ -147,7 +171,11 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                               <InfoChip
                                 interactiveColor={interactiveColorName}
                                 style={styles.infoChip}
-                                text={`${response.tickets[0].traveller.user_type}`}
+                                text={
+                                  language.language === 'nb'
+                                    ? `${traveller?.name.value}`
+                                    : `${traveller?.alternativeNames[0].value}`
+                                }
                               />
                             </View>
                           </>
@@ -158,8 +186,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                   {/** Zones **/}
                   {response.zones &&
                     response.zones.length > 0 &&
-                    fromZone &&
-                    toZone && (
+                    fromTariffZone &&
+                    toTariffZone && (
                       <View>
                         <ThemeText type="label__uppercase" color="secondary">
                           {t(TicketAssistantTexts.summary.zones)}
@@ -168,13 +196,13 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                           <InfoChip
                             interactiveColor={interactiveColorName}
                             style={styles.infoChip}
-                            text={`${response.zones[0].split(':')[2]}`}
+                            text={`${fromTariffZone.name?.value}`}
                           />
                         ) : (
                           <InfoChip
                             interactiveColor={interactiveColorName}
                             style={styles.infoChip}
-                            text={`${fromZone.name?.value} - ${toZone.name?.value}`}
+                            text={`${fromTariffZone.name?.value} - ${toTariffZone.name?.value}`}
                           />
                         )}
                       </View>
@@ -228,9 +256,25 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
               interactiveColor="interactive_0"
               onPress={() => {
                 {
-                  /** Navigate to PurchaseConfirmationScreen
-                   * navigation.navigate('PurchaseConfirmationScreen'
-                   * **/
+                  /** Navigate to PurchaseConfirmationScreen **/
+                  if (
+                    fromTariffZone &&
+                    toTariffZone &&
+                    recommendedTicketTypeConfig &&
+                    recommendedTicket &&
+                    travellerWithCount
+                  ) {
+                    navigation.navigate('Root_PurchaseConfirmationScreen', {
+                      fareProductTypeConfig: recommendedTicketTypeConfig,
+                      fromTariffZone,
+                      toTariffZone,
+                      userProfilesWithCount: [travellerWithCount],
+                      preassignedFareProduct: recommendedTicket,
+                      travelDate: undefined,
+                      headerLeftButton: {type: 'back'},
+                      mode: 'Ticket',
+                    });
+                  }
                 }
               }}
               text={t(TicketAssistantTexts.summary.buyButton)}
@@ -261,6 +305,19 @@ function getTariffZone(
   return undefined;
 }
 
+function getUserProfile(
+  profiles: UserProfile[],
+  profileId: string,
+): UserProfile | undefined {
+  const profile = profiles.find(
+    (profile) => profile.userTypeString === profileId,
+  );
+  if (profile) {
+    return profile;
+  }
+  return undefined;
+}
+
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   contentContainer: {
     flexGrow: 1,
@@ -286,7 +343,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   description: {
     textAlign: 'center',
     paddingHorizontal: theme.spacings.xLarge,
-    paddingVertical: theme.spacings.xLarge,
+    paddingTop: theme.spacings.small,
+    paddingBottom: theme.spacings.xLarge,
   },
   ticketContainer: {
     marginHorizontal: theme.spacings.large,
@@ -340,7 +398,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     height: 250,
     left: 0,
     right: 0,
-    top: 70,
+    top: 90,
     padding: 0,
     margin: 0,
   },
