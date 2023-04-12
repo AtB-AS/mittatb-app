@@ -105,6 +105,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
           selectedZones={selectedZones}
           onVenueSearchClick={onVenueSearchClick}
           isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
+          withPadding={true}
         />
       </View>
 

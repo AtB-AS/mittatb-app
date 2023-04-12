@@ -62,12 +62,7 @@ const TariffZonesSelectorButtons = ({
       {!isApplicableOnSingleZoneOnly && (
         <ButtonSectionItem
           label={t(TariffZonesTexts.location.zonePicker.labelTo)}
-          value={destinationPickerValue(
-            selectedZones.from,
-            selectedZones.to,
-            language,
-            t,
-          )}
+          value={destinationPickerValue(selectedZones.to, language, t)}
           accessibilityLabel={destinationPickerAccessibilityLabel(
             selectedZones.to,
             language,
@@ -152,7 +147,6 @@ const departurePickerValue = (
 };
 
 const destinationPickerValue = (
-  fromTariffZone: TariffZoneWithMetadata,
   toTariffZone: TariffZoneWithMetadata,
   language: Language,
   t: TranslateFunction,
