@@ -105,17 +105,24 @@ export const getFeaturesAtClick = async (
   return featuresAtPoint?.features;
 };
 
-export function flyToLocation(
-  coordinates: Coordinates | undefined,
-  mapCameraRef: RefObject<MapboxGL.Camera>,
-  zoomLevel?: number,
-) {
+type FlyToLocationArgs = {
+  coordinates: Coordinates | undefined;
+  mapCameraRef: RefObject<MapboxGL.Camera>;
+  zoomLevel?: number;
+  animationDuration?: number;
+};
+export function flyToLocation({
+  coordinates,
+  mapCameraRef,
+  zoomLevel,
+  animationDuration,
+}: FlyToLocationArgs) {
   coordinates &&
     mapCameraRef.current?.setCamera({
       centerCoordinate: [coordinates.longitude, coordinates.latitude],
       zoomLevel,
       animationMode: 'flyTo',
-      animationDuration: 750,
+      animationDuration: animationDuration ?? 750,
     });
 }
 

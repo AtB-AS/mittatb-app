@@ -85,7 +85,10 @@ export const TravelDetailsMapScreenComponent = ({
       <View style={controlStyles.controlsContainer}>
         <PositionArrow
           onPress={() => {
-            flyToLocation(geolocation?.coordinates, mapCameraRef);
+            flyToLocation({
+              coordinates: geolocation?.coordinates,
+              mapCameraRef,
+            });
           }}
         />
         <MapControls

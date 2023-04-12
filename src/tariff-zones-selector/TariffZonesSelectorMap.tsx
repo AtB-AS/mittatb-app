@@ -51,7 +51,7 @@ const TariffZonesSelectorMap = ({
 
   const selectFeature = (event: OnPressEvent) => {
     const feature = event.features[0];
-    flyToLocation(event.coordinates, mapCameraRef);
+    flyToLocation({coordinates: event.coordinates, mapCameraRef});
     updateSelectedZones(feature.id as string);
   };
 
@@ -67,7 +67,7 @@ const TariffZonesSelectorMap = ({
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
 
   async function flyToCurrentLocation() {
-    flyToLocation(geolocation?.coordinates, mapCameraRef);
+    flyToLocation({coordinates: geolocation?.coordinates, mapCameraRef});
 
     if (mapViewRef.current && geolocation) {
       let point = await mapViewRef.current.getPointInView([
