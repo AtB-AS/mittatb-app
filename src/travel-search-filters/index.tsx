@@ -1,4 +1,1 @@
-export {
-  useFilters,
-  default as FavoritesContextProvider,
-} from './FiltersContext';
+export {useFilters, FiltersContextProvider} from './FiltersContext';

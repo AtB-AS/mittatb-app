@@ -10,7 +10,8 @@ import {ActivityIndicator, View} from 'react-native';
 import {hasNoGroupsWithDepartures, hasNoQuaysWithDepartures} from './utils';
 import {StopPlace} from '@atb/api/types/trips';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import QuaySection, {
+import {
+  QuaySection,
   QuaySectionProps,
 } from '@atb/departure-list/section-items/quay-section';
 
@@ -28,7 +29,7 @@ type DeparturesListProps = {
   onPressDeparture: QuaySectionProps['onPressDeparture'];
 };
 
-export default function DeparturesList({
+export function DeparturesList({
   departures,
   lastUpdated,
   isFetchingMore = false,

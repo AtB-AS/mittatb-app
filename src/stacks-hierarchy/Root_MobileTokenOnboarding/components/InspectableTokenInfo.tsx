@@ -6,7 +6,7 @@ import {Button} from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {StaticColorByType} from '@atb/theme/colors';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {RemoteToken} from '@atb/mobile-token/types';
 import {isTravelCardToken} from '@atb/mobile-token/utils';

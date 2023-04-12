@@ -63,10 +63,7 @@ const initialState: VippsReducerState = {
   state: 'reserving-offer',
 };
 
-export default function useVippsState(
-  offers: ReserveOffer[],
-  dismiss: () => void,
-) {
+export function useVippsState(offers: ReserveOffer[], dismiss: () => void) {
   const [{state, error, reservation}, dispatch] = useReducer(
     vippsReducer,
     initialState,

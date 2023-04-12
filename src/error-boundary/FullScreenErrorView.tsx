@@ -3,7 +3,7 @@ import {Button} from '@atb/components/button';
 import {ScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import useLocalConfig from '@atb/utils/use-local-config';
+import {useLocalConfig} from '@atb/utils/use-local-config';
 import React from 'react';
 import {View} from 'react-native';
 import {getBuildNumber} from 'react-native-device-info';
@@ -14,10 +14,7 @@ type ErrorProps = {
   errorCode?: string;
 };
 
-export default function FullScreenErrorView({
-  onRestartApp,
-  errorCode,
-}: ErrorProps) {
+export function FullScreenErrorView({onRestartApp, errorCode}: ErrorProps) {
   const styles = useStyles();
   const buildNumber = getBuildNumber();
   const config = useLocalConfig();

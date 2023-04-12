@@ -10,7 +10,7 @@ import {
   UserFavorites,
 } from './types';
 
-import WidgetUpdater from '../widget-updater';
+import {RCTWidgetUpdater} from '../widget-updater';
 
 type FavoriteContextState = {
   favorites: UserFavorites;
@@ -86,17 +86,17 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
       }
       const favoritesUpdated = await departures.addFavorite(favoriteDeparture);
       setFavoriteDeparturesState(favoritesUpdated);
-      WidgetUpdater.refreshWidgets();
+      RCTWidgetUpdater.refreshWidgets();
     },
     async removeFavoriteDeparture(id: string) {
       const favorites = await departures.removeFavorite(id);
       setFavoriteDeparturesState(favorites);
-      WidgetUpdater.refreshWidgets();
+      RCTWidgetUpdater.refreshWidgets();
     },
     async setFavoriteDepartures(favorites: UserFavoriteDepartures) {
       setFavoriteDeparturesState(favorites);
       await departures.setFavorites(favorites);
-      WidgetUpdater.refreshWidgets();
+      RCTWidgetUpdater.refreshWidgets();
     },
     async setDashboardFavorite(id: string, value: boolean) {
       const updatedFavorites = favoriteDepartures.map((f) =>

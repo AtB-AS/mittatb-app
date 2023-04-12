@@ -7,7 +7,7 @@ import {InfoChip} from '@atb/components/info-chip';
 
 const themeColor: InteractiveColor = 'interactive_2';
 
-function FareContractDetail({
+export function FareContractDetail({
   header,
   content,
 }: {
@@ -50,5 +50,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.small,
   },
 }));
-
-export default FareContractDetail;

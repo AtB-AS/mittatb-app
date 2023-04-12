@@ -23,7 +23,7 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import hexToRgba from 'hex-to-rgba';
 import LinearGradient from 'react-native-linear-gradient';
-import PaymentBrand from './PaymentBrand';
+import {PaymentBrand} from './PaymentBrand';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {getExpireDate, getPaymentTypeName} from '../../utils';
 import {Checkbox} from '@atb/components/checkbox';

@@ -1,8 +1,8 @@
 import {useAppState} from '@atb/AppContext';
-import trackNavigation from '@atb/diagnostics/trackNavigation';
-import LoginInAppStack from '@atb/login/in-app/LoginInAppStack';
+import {trackNavigation} from '@atb/diagnostics/trackNavigation';
+import {LoginInAppStack} from '@atb/login/in-app/LoginInAppStack';
 import {Root_OnboardingStack} from './Root_OnboardingStack';
-import FareContractModalScreen from '../fare-contracts/Details';
+import {FareContractModalRoot} from '../fare-contracts/Details';
 import {useTheme} from '@atb/theme';
 import {APP_SCHEME} from '@env';
 import {
@@ -19,7 +19,7 @@ import {Host} from 'react-native-portalize';
 import {Root_TabNavigatorStack} from './Root_TabNavigatorStack';
 import {transitionSpec} from '@atb/utils/transition-spec';
 import {RootStackParamList} from './navigation-types';
-import useTestIds from './use-test-ids';
+import {useTestIds} from './use-test-ids';
 import {parse} from 'search-params';
 
 import type {NavigationState, PartialState} from '@react-navigation/routers';
@@ -304,7 +304,7 @@ export const RootStack = () => {
                 />
                 <Stack.Screen
                   name="FareContractModal"
-                  component={FareContractModalScreen}
+                  component={FareContractModalRoot}
                 />
                 <Stack.Screen
                   name="Root_MobileTokenOnboardingStack"

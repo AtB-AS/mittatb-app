@@ -3,7 +3,7 @@ import {lobot} from './';
 import {useRemoteConfig} from '../RemoteConfigContext';
 import {useLocaleContext} from '@atb/LocaleProvider';
 
-const AppLanguageProvider: React.FC = ({children}) => {
+export const AppLanguageProvider: React.FC = ({children}) => {
   const locale = useLocaleContext();
   const {enable_i18n} = useRemoteConfig();
   if (!enable_i18n) {
@@ -16,5 +16,3 @@ const AppLanguageProvider: React.FC = ({children}) => {
     </lobot.LanguageProvider>
   );
 };
-
-export default AppLanguageProvider;

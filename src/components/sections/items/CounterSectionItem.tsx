@@ -4,13 +4,13 @@ import {ThemeText} from '@atb/components/text';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
-import insets from '@atb/utils/insets';
+import {insets} from '@atb/utils/insets';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Add, Subtract} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {InteractiveColor} from '@atb/theme/colors';
-import useFontScale from '@atb/utils/use-font-scale';
+import {useFontScale} from '@atb/utils/use-font-scale';
 
 type Props = SectionItemProps<{
   text: string;

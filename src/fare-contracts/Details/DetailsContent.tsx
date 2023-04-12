@@ -6,15 +6,15 @@ import {
 } from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import FareContractInfo from '../FareContractInfo';
+import {FareContractInfo} from '../FareContractInfo';
 import {ValidityHeader} from '../ValidityHeader';
-import ValidityLine from '../ValidityLine';
+import {ValidityLine} from '../ValidityLine';
 import {getValidityStatus} from '@atb/fare-contracts/utils';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import OrderDetails from '@atb/fare-contracts/Details/OrderDetails';
+import {OrderDetails} from '@atb/fare-contracts/Details/OrderDetails';
 import {UnknownFareContractDetails} from '@atb/fare-contracts/Details/UnknownFareContractDetails';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 
@@ -26,7 +26,7 @@ type Props = {
   hasActiveTravelCard?: boolean;
 };
 
-const DetailsContent: React.FC<Props> = ({
+export const DetailsContent: React.FC<Props> = ({
   fareContract: fc,
   preassignedFareProduct,
   now,
@@ -98,5 +98,3 @@ const DetailsContent: React.FC<Props> = ({
     return <UnknownFareContractDetails fc={fc} />;
   }
 };
-
-export default DetailsContent;

@@ -11,9 +11,9 @@ import sortBy from 'lodash.sortby';
 import React, {Fragment, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {hasNoGroupsWithDepartures, isValidDeparture} from '../utils';
-import LineItem from './line';
-import MoreItem from './more';
-import QuayHeaderItem from './quay-header';
+import {LineItem} from './line';
+import {MoreItem} from './more';
+import {QuayHeaderItem} from './quay-header';
 import {Location} from '@atb/favorites';
 import {StopPlace} from '@atb/api/types/trips';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
@@ -35,7 +35,7 @@ export type QuaySectionProps = {
   ) => void;
 };
 
-const QuaySection = React.memo(function QuaySection({
+export const QuaySection = React.memo(function QuaySection({
   quayGroup,
   stop,
   locationOrStopPlace,
@@ -98,7 +98,6 @@ const QuaySection = React.memo(function QuaySection({
     </Fragment>
   );
 });
-export default QuaySection;
 
 function sortAndLimit(quayGroup: QuayGroup, limit: number) {
   if (hasNoGroupsWithDepartures([quayGroup])) {

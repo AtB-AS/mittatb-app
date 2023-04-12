@@ -6,7 +6,7 @@ import Bugsnag, {Event} from '@bugsnag/react-native';
  * */
 const LOG_BREADCRUMBS_LOCALLY = false;
 
-export default function configureAndStartBugsnag() {
+export function configureAndStartBugsnag() {
   if (!__DEV__) {
     Bugsnag.start();
   } else {

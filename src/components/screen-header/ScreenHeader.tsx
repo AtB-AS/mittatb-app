@@ -14,7 +14,7 @@ import {
   HeaderButtonWithoutNavigationProps,
 } from './HeaderButton';
 import {ThemeText} from '@atb/components/text';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {getStaticColor, StaticColor} from '@atb/theme/colors';
 import {GlobalMessage, GlobalMessageContextType} from '@atb/global-messages';
 

@@ -16,7 +16,7 @@ import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {FullScreenFooter} from '@atb/components/screen-footer';
-import useKeyboardHeight from '@atb/utils/use-keyboard-height';
+import {useKeyboardHeight} from '@atb/utils/use-keyboard-height';
 import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
 
 type Props = {
@@ -25,7 +25,7 @@ type Props = {
   save: (dateString?: string) => void;
 };
 
-const TravelDate = forwardRef<ScrollView, Props>(
+export const TravelDateSheet = forwardRef<ScrollView, Props>(
   ({travelDate, close, save}, focusRef) => {
     const {t, language} = useTranslation();
     const styles = useStyles();
@@ -93,5 +93,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.medium,
   },
 }));
-
-export default TravelDate;

@@ -17,8 +17,8 @@ import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
 import React, {useMemo, useRef} from 'react';
 import {StyleSheet, View} from 'react-native';
-import MapLabel from './components/MapLabel';
-import MapRoute from './components/MapRoute';
+import {MapLabel} from './components/MapLabel';
+import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
 import {VehiclePosition} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
 

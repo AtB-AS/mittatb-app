@@ -107,7 +107,7 @@ const defaultState: GeolocationState = {
   locationError: null,
 };
 
-const GeolocationContextProvider: React.FC = ({children}) => {
+export const GeolocationContextProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer<GeolocationReducer>(
     geolocationReducer,
     defaultState,
@@ -212,8 +212,6 @@ const GeolocationContextProvider: React.FC = ({children}) => {
     </GeolocationContext.Provider>
   );
 };
-
-export default GeolocationContextProvider;
 
 export function useGeolocationState() {
   const context = useContext(GeolocationContext);

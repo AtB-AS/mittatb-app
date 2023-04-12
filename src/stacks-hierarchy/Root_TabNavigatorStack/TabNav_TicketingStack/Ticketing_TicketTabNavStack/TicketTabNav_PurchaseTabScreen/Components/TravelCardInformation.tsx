@@ -10,7 +10,7 @@ type Props = {
   travelCard: TravelCard;
 };
 
-const TravelCardInformation: React.FC<Props> = ({travelCard}) => {
+export const TravelCardInformation: React.FC<Props> = ({travelCard}) => {
   const styles = useStyles();
   const {t} = useTranslation();
 
@@ -148,5 +148,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
   },
 }));
-
-export default TravelCardInformation;

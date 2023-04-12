@@ -23,7 +23,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-export default function Summary({
+export function Summary({
   price,
   isLoading,
   isError,

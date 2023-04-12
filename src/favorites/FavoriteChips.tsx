@@ -7,7 +7,7 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {InteractiveColor} from '@atb/theme/colors';
 import {FavoriteTexts, useTranslation} from '@atb/translations';
-import useDisableMapCheck from '@atb/utils/use-disable-map-check';
+import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';

@@ -2,7 +2,7 @@ import {ThemeText} from '@atb/components/text';
 import {GlobalMessage, GlobalMessageContextType} from '@atb/global-messages';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColor} from '@atb/theme/colors';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import React from 'react';
 import {View, ViewStyle} from 'react-native';
 import {ContentWithDisappearingHeader} from '../disappearing-header';

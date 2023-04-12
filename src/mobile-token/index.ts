@@ -1,1 +1,1 @@
-export {default as MobileTokenContextProvider} from '../mobile-token/MobileTokenContext';
+export {MobileTokenContextProvider} from '../mobile-token/MobileTokenContext';

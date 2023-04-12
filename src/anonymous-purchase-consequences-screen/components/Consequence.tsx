@@ -6,7 +6,13 @@ import {StaticColorByType} from '@atb/theme/colors';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-const Consequence = ({value, icon}: {value: string; icon: JSX.Element}) => {
+export const Consequence = ({
+  value,
+  icon,
+}: {
+  value: string;
+  icon: JSX.Element;
+}) => {
   const styles = useStyle();
   return (
     <View style={styles.consequence}>
@@ -35,4 +41,3 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.medium,
   },
 }));
-export default Consequence;

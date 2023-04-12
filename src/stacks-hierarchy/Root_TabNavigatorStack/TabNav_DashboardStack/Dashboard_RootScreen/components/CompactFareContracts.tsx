@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet} from '@atb/theme';
-import {CompactFareContractInfo} from '../../../../../fare-contracts/CompactFareContractInfo';
-import useInterval from '@atb/utils/use-interval';
+import {CompactFareContractInfo} from '@atb/fare-contracts/CompactFareContractInfo';
+import {useInterval} from '@atb/utils/use-interval';
 import {
   filterValidRightNowFareContract,
   useTicketingState,
@@ -29,7 +29,7 @@ type Props = {
   onPressBuy(): void;
 };
 
-const CompactFareContracts: React.FC<Props> = ({
+export const CompactFareContracts: React.FC<Props> = ({
   onPressDetails,
   onPressBuy,
 }) => {
@@ -114,5 +114,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginRight: theme.spacings.medium,
   },
 }));
-
-export default CompactFareContracts;

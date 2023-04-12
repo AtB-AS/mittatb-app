@@ -3,7 +3,7 @@ import React from 'react';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 
-const Actions = ({
+export const Actions = ({
   primaryAction,
   secondaryAction,
 }: {
@@ -48,5 +48,3 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.large,
   },
 }));
-
-export default Actions;

@@ -14,7 +14,7 @@ import {
   InitResponse,
   RenewResponse,
 } from '@entur-private/abt-token-server-javascript-interface';
-import client from '@atb/api/client';
+import {client} from '@atb/api/client';
 import {
   RemoteToken,
   RemoveResponse,
@@ -221,6 +221,6 @@ const service: TokenService = {
     ),
 };
 
-export default function createTokenService() {
+export function createTokenService() {
   return service;
 }

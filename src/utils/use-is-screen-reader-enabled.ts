@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {AccessibilityInfo} from 'react-native';
 
-export default function useIsScreenReaderEnabled() {
+export function useIsScreenReaderEnabled() {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {

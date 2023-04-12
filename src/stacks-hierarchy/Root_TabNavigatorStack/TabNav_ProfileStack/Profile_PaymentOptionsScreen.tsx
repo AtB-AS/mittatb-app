@@ -3,7 +3,7 @@ import {useAuthState} from '@atb/auth';
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import PaymentBrand from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
+import {PaymentBrand} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
 import {getExpireDate, getPaymentTypeName} from '@atb/stacks-hierarchy/utils';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {
@@ -13,7 +13,7 @@ import {
 } from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
 import PaymentOptionsTexts from '@atb/translations/screens/subscreens/PaymentOptions';
-import useFontScale from '@atb/utils/use-font-scale';
+import {useFontScale} from '@atb/utils/use-font-scale';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {FlatList, TouchableOpacity, View} from 'react-native';

@@ -11,7 +11,7 @@ import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark'
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {usePreferences} from '@atb/preferences';
 
-const Time: React.FC<{
+export const Time: React.FC<{
   timeValues: TimeValues;
   roundingMethod: RoundingMethod;
   showRealtimeIcon?: boolean;
@@ -80,5 +80,3 @@ const Time: React.FC<{
     }
   }
 };
-
-export default Time;

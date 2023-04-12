@@ -1,6 +1,6 @@
 import {getServiceJourneyVehicles} from '@atb/api/vehicles';
 import {useCallback} from 'react';
-import usePollableResource from '@atb/utils/use-pollable-resource';
+import {usePollableResource} from '@atb/utils/use-pollable-resource';
 import {AxiosError} from 'axios';
 import {GetServiceJourneyVehicles} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
 
