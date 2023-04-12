@@ -20,6 +20,9 @@ import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {Parking as ParkingDark} from '@atb/assets/svg/color/icons/vehicles/dark';
 import {Parking as ParkingLight} from '@atb/assets/svg/color/icons/vehicles/light';
 import {VehicleStats} from '@atb/mobility/components/VehicleStats';
+import {ThemeText} from '@atb/components/text';
+import {View} from 'react-native';
+import {useTextForLanguage} from '@atb/translations/utils';
 
 type Props = {
   station: StationFragment;
@@ -36,6 +39,7 @@ export const CityBikeStationSheet = ({station, close}: Props) => {
     appStoreUri,
     rentalAppUri,
   });
+  const stationName = useTextForLanguage(station.name.translation);
 
   return (
     <BottomSheetContainer>
@@ -51,6 +55,11 @@ export const CityBikeStationSheet = ({station, close}: Props) => {
       <Section withPadding>
         <GenericSectionItem>
           <OperatorLogo operatorName={operatorName} logoUrl={brandLogoUrl} />
+          {stationName && (
+            <View style={style.stationName}>
+              <ThemeText type="body__secondary">{stationName}</ThemeText>
+            </View>
+          )}
         </GenericSectionItem>
       </Section>
       <VehicleStats
@@ -90,5 +99,9 @@ export const CityBikeStationSheet = ({station, close}: Props) => {
 const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
   button: {
     marginTop: theme.spacings.medium,
+  },
+  stationName: {
+    flex: 1,
+    alignItems: 'center',
   },
 }));
