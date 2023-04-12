@@ -10,8 +10,8 @@ import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef} from 'react';
 import {Platform, View} from 'react-native';
-import MapLabel from './MapLabel';
-import MapRoute from './MapRoute';
+import {MapLabel} from './MapLabel';
+import {MapRoute} from './MapRoute';
 import {createMapLines, getMapBounds, pointOf} from '../utils';
 import {Coordinates} from '@atb/utils/coordinates';
 

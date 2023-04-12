@@ -6,7 +6,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {MapLine, pointOf} from '../utils';
 
-const MapRoute: React.FC<{lines: MapLine[]}> = ({lines}) => {
+export const MapRoute: React.FC<{lines: MapLine[]}> = ({lines}) => {
   return (
     <>
       {lines.map((line, index) => (
@@ -21,8 +21,6 @@ function getFirstAndLastPoint(line: MapLine): [Point, Point] {
   const {0: first, [coordinates.length - 1]: last} = coordinates;
   return [pointOf(first), pointOf(last)];
 }
-
-export default MapRoute;
 
 type MapLineItemProps = {
   line: MapLine;

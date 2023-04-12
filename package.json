@@ -130,7 +130,7 @@
     "child-process-promise": "^2.2.1",
     "conventional-changelog-cli": "^2.2.2",
     "detox": "^20.1.2",
-    "eslint": "8.32.0",
+    "eslint": "8.38.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-react-hooks": "^4.6.0",

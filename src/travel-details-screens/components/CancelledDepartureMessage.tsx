@@ -3,7 +3,7 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {CancelledDepartureTexts, useTranslation} from '@atb/translations';
 
-const CancelledDepartureMessage = () => {
+export const CancelledDepartureMessage = () => {
   const styles = useStopsStyle();
   const {t} = useTranslation();
 
@@ -21,5 +21,3 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.small,
   },
 }));
-
-export default CancelledDepartureMessage;

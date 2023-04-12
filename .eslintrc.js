@@ -23,6 +23,8 @@ module.exports = {
     'no-console': [1, {allow: ['warn', 'error']}],
     'no-fallthrough': 2,
 
+    'no-restricted-exports': ['warn', {restrictDefaultExports: {direct: true}}],
+
     // React-Hooks Plugin
     // The following rules are made available via `eslint-plugin-react-hooks`
     'react-hooks/rules-of-hooks': 2, // early error
@@ -60,4 +62,22 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      files: [
+        'src/assets/svg/*',
+        'src/assets/svg/*/*',
+        'src/assets/svg/*/*/*',
+        'src/assets/svg/*/*/*/*',
+        'src/assets/svg/*/*/*/*/*',
+        'src/assets/svg/*/*/*/*/*/*',
+      ],
+      rules: {
+        'no-restricted-exports': [
+          'warn',
+          {restrictDefaultExports: {direct: false}},
+        ],
+      },
+    },
+  ],
 };

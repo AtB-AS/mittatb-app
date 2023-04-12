@@ -31,7 +31,8 @@ import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StyleSheet} from '@atb/theme';
 import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data';
 import FlexibleTransportText from '@atb/translations/components/FlexibleTransportDetails';
-import FlexibleTransportContactDetails, {
+import {
+  FlexibleTransportContactDetails,
   ContactDetails,
 } from './FlexibeTransportContactDetails';
 import {useBottomSheet} from '@atb/components/bottom-sheet';

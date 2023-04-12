@@ -18,6 +18,8 @@ import {LargeFullScreenHeader} from '@atb/components/screen-header/FullScreenHea
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
+import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
 import {usePreferences} from '@atb/preferences';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
@@ -35,9 +37,10 @@ import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
-import Time from './components/Time';
-import TripLegDecoration from './components/TripLegDecoration';
-import TripRow from './components/TripRow';
+import {Time} from './components/Time';
+import {TripLegDecoration} from './components/TripLegDecoration';
+import {TripRow} from './components/TripRow';
+import {CompactTravelDetailsMap} from '@atb/travel-details-map-screen';
 import {ServiceJourneyDeparture} from './types';
 import useDepartureData, {
   EstimatedCallWithMetadata,

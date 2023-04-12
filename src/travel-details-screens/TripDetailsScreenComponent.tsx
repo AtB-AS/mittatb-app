@@ -1,6 +1,7 @@
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {Leg, TripPattern} from '@atb/api/types/trips';
+import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import {Button} from '@atb/components/button';
 import {AnyMode} from '@atb/components/icon-box';
@@ -15,20 +16,19 @@ import {useFromTravelSearchToTicketEnabled} from '@atb/stacks-hierarchy/Root_Tab
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import React, {useState} from 'react';
+import {View} from 'react-native';
+import {Trip} from './components/Trip';
 import {
   CompactTravelDetailsMap,
   TravelDetailsMapScreenParams,
 } from '@atb/travel-details-map-screen';
-import PaginatedDetailsHeader from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {useCurrentTripPatternWithUpdates} from '@atb/travel-details-screens/use-current-trip-pattern-with-updates';
 import {canSellCollabTicket} from '@atb/travel-details-screens/utils';
 import {secondsBetween} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
-import React, {useState} from 'react';
-import {View} from 'react-native';
-import Trip from './components/Trip';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 

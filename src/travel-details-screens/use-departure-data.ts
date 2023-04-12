@@ -3,7 +3,7 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import usePollableResource from '@atb/utils/use-pollable-resource';
+import {usePollableResource} from '@atb/utils/use-pollable-resource';
 import {useCallback} from 'react';
 import {ServiceJourneyDeparture} from './types';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';

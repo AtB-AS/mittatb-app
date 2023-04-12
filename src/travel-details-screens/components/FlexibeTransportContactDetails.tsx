@@ -21,7 +21,7 @@ type Props = {
   contactDetails: ContactDetails;
 };
 
-const FlexibleTransportContactDetails = forwardRef<View, Props>(
+export const FlexibleTransportContactDetails = forwardRef<View, Props>(
   ({close, contactDetails}) => {
     const {t, language} = useTranslation();
     const styles = useStyles();
@@ -102,5 +102,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
   };
 });
-
-export default FlexibleTransportContactDetails;

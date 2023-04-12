@@ -28,7 +28,7 @@ import {FeedbackQuestionsProvider} from '@atb/components/feedback';
 import {FirestoreConfigurationContextProvider} from '@atb/configuration/FirestoreConfigurationContext';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Platform, UIManager} from 'react-native';
-import FiltersContextProvider from '@atb/travel-search-filters/FiltersContext';
+import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext';
 
 configureAndStartBugsnag();
 

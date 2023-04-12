@@ -19,10 +19,10 @@ type PollableResourceOptions<T> = {
  * @param opts: PollableResourceOptions<T>
  * @returns [T, () => Promise<void>, boolean, E]
  */
-export default function usePollableResource<T, E extends Error = Error>(
+export const usePollableResource = <T, E extends Error = Error>(
   callback: (signal?: AbortSignal) => Promise<T>,
   opts: PollableResourceOptions<T>,
-): [T, () => Promise<void>, boolean, E?] {
+): [T, () => Promise<void>, boolean, E?] => {
   const {initialValue, pollingTimeInSeconds = 30} = opts;
   const [isLoading, setIsLoading] = useIsLoading(false);
   const [error, setError] = useState<E | undefined>(undefined);
@@ -69,4 +69,4 @@ export default function usePollableResource<T, E extends Error = Error>(
   );
 
   return [state, reload, isLoading, error];
-}
+};
