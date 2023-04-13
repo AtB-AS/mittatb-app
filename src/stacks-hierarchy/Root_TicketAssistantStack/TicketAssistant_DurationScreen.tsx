@@ -55,13 +55,13 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
         value: getDaysWeeksMonths(data.duration),
       }),
     );
-  } else if (data.duration >= 7 && data.duration < 30) {
+  } else if (data.duration < 30) {
     resultString = t(
       TicketAssistantTexts.duration.resultWeeks({
         value: getDaysWeeksMonths(data.duration),
       }),
     );
-  } else if (data.duration >= 30 && data.duration < 180) {
+  } else if (data.duration < 180) {
     resultString = t(
       TicketAssistantTexts.duration.resultMonths({
         value: getDaysWeeksMonths(data.duration),
