@@ -1,7 +1,7 @@
 import {ScrollView} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {themeColor} from '@atb/stacks-hierarchy/Root_OnboardingStack/Onboarding_WelcomeScreen';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   TicketAssistant_ZonePickerScreenParams,
   TicketAssistantScreenProps,
@@ -21,7 +21,7 @@ import {
 } from '@atb/tariff-zones-selector';
 import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-defaults';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import TicketAssistantContext from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
+import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {getRecommendedTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/api';
 
 type Props = TicketAssistantScreenProps<'TicketAssistant_ZonePickerScreen'>;
@@ -48,10 +48,8 @@ export const TicketAssistant_ZonePickerScreen = ({
     to: toTariffZone,
     selectNext: isApplicableOnSingleZoneOnly ? 'from' : 'to',
   });
-  const contextValue = useContext(TicketAssistantContext);
-  if (!contextValue) throw new Error('Context is undefined!');
 
-  const {data, updateData, setResponse, setLoading} = contextValue;
+  const {data, updateData, setResponse, setLoading} = useTicketAssistantState();
 
   useEffect(() => {
     const zoneIds = [selectedZones.from.id, selectedZones.to.id];

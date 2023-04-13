@@ -22,6 +22,7 @@ const TicketAssistantTexts = {
   categoryPicker: {
     title: _('Hvem er du?', 'Who are you?'),
     chooseButton: _('Velg', 'Choose'),
+    chosen: _('Valgt', 'Chosen'),
   },
   frequency: {
     title: _(

@@ -5,10 +5,11 @@ import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {InfoChip} from '@atb/components/info-chip';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {StyleSheet, useTheme} from '@atb/theme';
-import React, {useContext} from 'react';
+import React from 'react';
 import {InteractiveColor, StaticColorByType} from '@atb/theme/colors';
-import TicketAssistantContext, {
+import {
   TicketResponseData,
+  useTicketAssistantState,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 
 export type TicketSummaryProps = {
@@ -25,13 +26,10 @@ export const TicketSummary = (props: TicketSummaryProps) => {
   const {theme} = useTheme();
   const interactiveColor = theme.interactive[interactiveColorName];
   const {duration, frequency} = props;
-  const contextValue = useContext(TicketAssistantContext);
+  let {response, purchaseDetails} = useTicketAssistantState();
 
-  if (!contextValue) throw new Error('Context is undefined!');
+  const index = getIndexOfLongestDurationTicket(response.tickets);
 
-  const index = getIndexOfLongestDurationTicket(contextValue.response.tickets);
-
-  let {response, purchaseDetails} = contextValue;
   const recommendedTicket =
     purchaseDetails?.purchaseTicketDetails[index].preassignedFareProduct;
   const recommendedTicketTypeConfig =

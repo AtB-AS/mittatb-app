@@ -17,7 +17,7 @@ import {TicketAssistant_ZonePickerScreen} from './TicketAssistant_ZonePickerScre
 import {TicketAssistant_SummaryScreen} from './TicketAssistant_SummaryScreen';
 
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {TicketAssistantProvider} from './TicketAssistantContext';
+import TicketAssistantContextProvider from './TicketAssistantContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -32,7 +32,7 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
 
   const [previousTab, setPreviousTab] = useState<any>();
   return (
-    <TicketAssistantProvider>
+    <TicketAssistantContextProvider>
       {activeTab !== 0 ? (
         <FullScreenHeader
           leftButton={{
@@ -85,6 +85,6 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
           component={TicketAssistant_SummaryScreen}
         />
       </Tab.Navigator>
-    </TicketAssistantProvider>
+    </TicketAssistantContextProvider>
   );
 };

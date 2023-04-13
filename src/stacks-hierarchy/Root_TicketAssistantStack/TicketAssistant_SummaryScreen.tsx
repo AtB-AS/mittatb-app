@@ -1,9 +1,10 @@
 import {Image, ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
-import React, {useContext, useEffect} from 'react';
-import TicketAssistantContext, {
+import React, {useEffect} from 'react';
+import {
   TicketResponseData,
+  useTicketAssistantState,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
@@ -26,10 +27,6 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     fareProductTypeConfigs,
   } = useFirestoreConfiguration();
 
-  const contextValue = useContext(TicketAssistantContext);
-
-  if (!contextValue) throw new Error('Context is undefined!');
-
   let {
     response,
     data,
@@ -37,7 +34,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     purchaseDetails,
     setPurchaseDetails,
     setActiveTicket,
-  } = contextValue;
+  } = useTicketAssistantState();
+
   setActiveTicket(0);
 
   useEffect(() => {

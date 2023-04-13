@@ -6,13 +6,13 @@ import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {SliderComponent} from '@atb/components/slider';
 import {Button} from '@atb/components/button';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {
   sliderColorMax,
   sliderColorMin,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_FrequencyScreen';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
-import TicketAssistantContext from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
+import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import {useLocaleContext} from '@atb/LocaleProvider';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -37,11 +37,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   if (majorVersionIOS < 13) {
     style = {width: undefined, flex: 1};
   }
-  const contextValue = useContext(TicketAssistantContext);
-
-  if (!contextValue) throw new Error('Context is undefined!');
-
-  const {data, updateData} = contextValue;
+  const {data, updateData} = useTicketAssistantState();
   const locale = useLocaleContext();
   function updateDuration(value: number, fromPicker?: boolean) {
     let newData = {...data};

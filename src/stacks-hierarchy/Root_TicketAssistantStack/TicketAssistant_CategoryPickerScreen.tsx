@@ -1,18 +1,20 @@
 import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import * as Sections from '@atb/components/sections';
+
 import {
   getTextForLanguage,
   TicketAssistantTexts,
   useTranslation,
 } from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {Button} from '@atb/components/button';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
-import TicketAssistantContext, {
+import {
   Traveller,
+  useTicketAssistantState,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-defaults';
@@ -36,11 +38,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
 
   const {selectableTravellers} = offerDefaults;
 
-  const contextValue = useContext(TicketAssistantContext);
-
-  if (!contextValue) throw new Error('Context is undefined!');
-
-  const {data, updateData} = contextValue;
+  const {data, updateData} = useTicketAssistantState();
   function updateCategory(traveller: Traveller) {
     const newData = {...data, traveller: traveller};
     updateData(newData);
@@ -67,43 +65,50 @@ export const TicketAssistant_CategoryPickerScreen = ({
 
         <Sections.Section style={styles.categoriesContainer}>
           {/*eslint-disable-next-line rulesdir/translations-warning*/}
-          {selectableTravellers.map((u, index) => (
-            <Sections.ExpandableSectionItem
-              key={index}
-              textType={'body__primary--bold'}
-              text={
-                (u.emoji ? u.emoji + ' ' : '') +
-                getReferenceDataName(u, language)
-              }
-              onPress={() => {
-                setCurrentlyOpen(index);
-              }}
-              expanded={currentlyOpen === index}
-              showIconText={false}
-              expandContent={
-                <View>
-                  <ThemeText
-                    type={'body__tertiary'}
-                    style={styles.expandedContent}
-                    isMarkdown={true}
-                  >
-                    {getTextForLanguage(u.alternativeDescriptions, language)}
-                  </ThemeText>
-                  <Button
-                    style={styles.chooseButton}
-                    onPress={() => {
-                      updateCategory({
-                        id: u.userTypeString,
-                        user_type: u.userTypeString,
-                      });
-                      navigation.navigate('TicketAssistant_DurationScreen');
-                    }}
-                    text={t(TicketAssistantTexts.categoryPicker.chooseButton)}
-                  />
-                </View>
-              }
-            />
-          ))}
+          {selectableTravellers.map((u, index) => {
+            const isChosen = data.traveller.user_type === u.userTypeString;
+            return (
+              <Sections.ExpandableSectionItem
+                key={index}
+                textType={'body__primary--bold'}
+                text={
+                  (u.emoji ? u.emoji + ' ' : '') +
+                  getReferenceDataName(u, language)
+                }
+                onPress={() => {
+                  setCurrentlyOpen(index);
+                }}
+                expanded={currentlyOpen === index}
+                showIconText={false}
+                expandContent={
+                  <View>
+                    <ThemeText
+                      type={'body__tertiary'}
+                      style={styles.expandedContent}
+                      isMarkdown={true}
+                    >
+                      {getTextForLanguage(u.alternativeDescriptions, language)}
+                    </ThemeText>
+                    <Button
+                      style={styles.chooseButton}
+                      onPress={() => {
+                        updateCategory({
+                          id: u.userTypeString,
+                          user_type: u.userTypeString,
+                        });
+                        navigation.navigate('TicketAssistant_DurationScreen');
+                      }}
+                      text={
+                        isChosen
+                          ? t(TicketAssistantTexts.categoryPicker.chosen)
+                          : t(TicketAssistantTexts.categoryPicker.chooseButton)
+                      }
+                    />
+                  </View>
+                }
+              />
+            );
+          })}
         </Sections.Section>
       </ScrollView>
     </View>

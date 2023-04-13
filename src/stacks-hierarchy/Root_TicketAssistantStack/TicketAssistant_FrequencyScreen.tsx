@@ -4,12 +4,12 @@ import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Ticket
 import {SliderComponent} from '@atb/components/slider';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
-import React, {useContext} from 'react';
+import React from 'react';
 import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {StaticColorByType} from '@atb/theme/colors';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
-import TicketAssistantContext from './TicketAssistantContext';
+import {useTicketAssistantState} from './TicketAssistantContext';
 
 export const sliderColorMax: StaticColorByType<'background'> =
   'background_accent_2';
@@ -27,11 +27,7 @@ export const TicketAssistant_FrequencyScreen = ({
   const {t} = useTranslation();
   // Create an array of every second number from 1 to 14
   const numbers = Array.from({length: 8}, (_, i) => i * 2);
-  const contextValue = useContext(TicketAssistantContext);
-
-  if (!contextValue) throw new Error('Context is undefined!');
-
-  const {data, updateData} = contextValue;
+  const {data, updateData} = useTicketAssistantState();
   function updateFrequency(value: number) {
     const newData = {...data, frequency: value};
     updateData(newData);

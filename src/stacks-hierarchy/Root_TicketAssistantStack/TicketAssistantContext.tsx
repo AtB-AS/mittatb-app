@@ -1,4 +1,4 @@
-import {createContext, FunctionComponent, useState} from 'react';
+import React, {createContext, useContext, useState} from 'react';
 import {
   FareProductTypeConfig,
   useFirestoreConfiguration,
@@ -8,7 +8,7 @@ import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZ
 import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
 import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-defaults';
 
-export interface TicketAssistantContextValue {
+export type TicketAssistantState = {
   data: TicketAssistantData;
   updateData: (newData: TicketAssistantData) => void;
   response: Response;
@@ -19,7 +19,7 @@ export interface TicketAssistantContextValue {
   setPurchaseDetails: (purchaseDetails: PurchaseDetails) => void;
   activeTicket: number;
   setActiveTicket: (activeTicket: number) => void;
-}
+};
 
 export type Traveller = {
   id: string;
@@ -65,10 +65,11 @@ export type PurchaseDetails = {
   purchaseTicketDetails: PurchaseTicketDetails[];
 };
 
-const TicketAssistantContext =
-  createContext<TicketAssistantContextValue | null>(null);
+const TicketAssistantContext = createContext<TicketAssistantState | undefined>(
+  undefined,
+);
 
-export const TicketAssistantProvider: FunctionComponent = ({children}) => {
+const TicketAssistantContextProvider: React.FC = ({children}) => {
   const {preassignedFareProducts, fareProductTypeConfigs} =
     useFirestoreConfiguration();
 
@@ -144,4 +145,14 @@ export const TicketAssistantProvider: FunctionComponent = ({children}) => {
   );
 };
 
-export default TicketAssistantContext;
+export function useTicketAssistantState() {
+  const context = useContext(TicketAssistantContext);
+  if (context === undefined) {
+    throw new Error(
+      'useTicketAssistantState must be used within a TicketAsssistantContextProvider',
+    );
+  }
+  return context;
+}
+
+export default TicketAssistantContextProvider;
