@@ -35,13 +35,15 @@ export const TicketAssistant_CategoryPickerScreen = ({
   );
 
   const {selectableTravellers} = offerDefaults;
+  const [currentlyOpen, setCurrentlyOpen] = useState<number>(
+    selectableTravellers.findIndex((u) => u.count === 1),
+  );
 
   const {data, updateData} = useTicketAssistantState();
   function updateCategory(traveller: Traveller) {
     const newData = {...data, traveller: traveller};
     updateData(newData);
   }
-  const [currentlyOpen, setCurrentlyOpen] = useState<number>(0);
 
   return (
     <View style={styles.container}>
