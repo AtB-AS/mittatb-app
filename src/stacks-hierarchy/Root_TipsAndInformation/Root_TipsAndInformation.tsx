@@ -16,6 +16,8 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
   const {t} = useTranslation();
   const [currentlyOpen, setCurrentlyOpen] = useState<number>(0);
 
+  const assistantTipIndex = TipsAndInformationTexts.tips.length;
+
   return (
     <View style={styles.container}>
       <FullScreenHeader leftButton={{type: 'close'}} />
@@ -57,6 +59,10 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
             textType="body__primary--bold"
             text={t(TipsAndInformationTexts.ticketAssistantTip.title)}
             showIconText={false}
+            onPress={() => {
+              setCurrentlyOpen(assistantTipIndex);
+            }}
+            expanded={currentlyOpen === assistantTipIndex}
             expandContent={
               <View>
                 <ThemeText
@@ -70,6 +76,7 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
                   style={styles.goToAssistantButton}
                   onPress={() => {
                     navigation.navigate('Root_TicketAssistantStack');
+                    setCurrentlyOpen(assistantTipIndex);
                   }}
                   text={t(TipsAndInformationTexts.goToAssistantButton.title)}
                 />

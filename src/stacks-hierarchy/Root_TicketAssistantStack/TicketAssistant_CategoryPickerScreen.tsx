@@ -78,8 +78,8 @@ export const TicketAssistant_CategoryPickerScreen = ({
               onPress={() => {
                 setCurrentlyOpen(index);
               }}
-              showIconText={false}
               expanded={currentlyOpen === index}
+              showIconText={false}
               expandContent={
                 <View>
                   <ThemeText
