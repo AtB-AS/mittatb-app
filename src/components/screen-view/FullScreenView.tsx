@@ -40,7 +40,7 @@ export function FullScreenView(props: ScreenViewProps) {
         <>
           <View style={{backgroundColor, paddingTop: top}}>
             {/* TODO: Handle title after scroll */}
-            <ScreenHeader {...props} title={undefined} />
+            <ScreenHeader {...props} title={undefined} setFocusOnLoad={false} />
           </View>
           <ScreenWithLargeHeader {...props} />
         </>

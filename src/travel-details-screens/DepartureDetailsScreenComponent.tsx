@@ -167,7 +167,6 @@ export const DepartureDetailsScreenComponent = ({
             }
           />
         )}
-
         <View
           style={styles.scrollView__content}
           testID="departureDetailsContentView"
