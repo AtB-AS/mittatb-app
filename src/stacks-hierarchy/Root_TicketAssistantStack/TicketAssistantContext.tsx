@@ -38,7 +38,7 @@ export type PreassignedFareProductDetails = {
   duration_days: number;
 };
 
-export type TicketAssistantResponse = {
+export type TicketResponseData = {
   product_id: string;
   fare_product: string;
   duration: number;
@@ -49,7 +49,7 @@ export type TicketAssistantResponse = {
 
 export type Response = {
   total_cost: number;
-  tickets: TicketAssistantResponse[];
+  tickets: TicketResponseData[];
   zones: string[];
   single_ticket_price: number;
 };

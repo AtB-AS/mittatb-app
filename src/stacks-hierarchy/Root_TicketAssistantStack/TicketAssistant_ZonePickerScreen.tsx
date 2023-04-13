@@ -126,7 +126,7 @@ export const TicketAssistant_ZonePickerScreen = ({
               }
               await getRecommendedTicket(data)
                 .then((r) => {
-                  if (setResponse && r.length > 0) {
+                  if (setResponse && r) {
                     setResponse(r);
                   }
                 })

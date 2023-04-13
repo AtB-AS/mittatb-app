@@ -42,6 +42,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     const updatePurchaseDetails = () => {
       console.log('updatePurchaseDetails');
       try {
+        console.log('try');
         setPurchaseDetails(
           handleData(
             response,
@@ -52,7 +53,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
           ),
         );
       } catch (e) {
-        console.log(e);
+        console.log('Error changing data ' + e);
       }
     };
     updatePurchaseDetails();
