@@ -47,7 +47,7 @@ export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
           textField: ['get', 'numBikesAvailable'],
           textAnchor: 'center',
           textOffset: [0.75, 0],
-          textColor: stationColor.text,
+          textColor: stationColor.background,
           textSize: 12,
           iconImage: {uri: 'BikeChip'},
           iconAllowOverlap: true,
