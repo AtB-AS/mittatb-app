@@ -88,6 +88,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
         aboveLayerID="clusterIcon"
         style={{
           iconOffset: [1.3, -1.3],
+          iconAllowOverlap: true,
           textField: ['get', 'point_count'],
           textColor: scooterColor.background,
           textSize: 11,
