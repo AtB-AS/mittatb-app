@@ -7,7 +7,7 @@ import {View} from 'react-native';
 import {LocationBar} from './components/LocationBar';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
-import {isFeaturePoint, zoomIn, zoomOut} from './utils';
+import {isFeaturePoint} from './utils';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
 import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
@@ -15,7 +15,6 @@ import {MapFilterType, MapProps} from './types';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
-import {MapControls} from './components/MapControls';
 import {shadows} from './components/shadows';
 import * as Mobility from '@atb/components/map/components/mobility';
 import {MapFilter} from '@atb/components/map/components/filter/MapFilter';
@@ -143,10 +142,6 @@ export const Map = (props: MapProps) => {
               }}
             />
           )}
-          <MapControls
-            zoomIn={() => zoomIn(mapViewRef, mapCameraRef)}
-            zoomOut={() => zoomOut(mapViewRef, mapCameraRef)}
-          />
         </View>
       </View>
     </View>

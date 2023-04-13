@@ -15,7 +15,7 @@ export const PositionArrow: React.FC<
     <Button
       type="inline"
       compact={true}
-      interactiveColor="interactive_0"
+      interactiveColor="interactive_2"
       onPress={onPress}
       hitSlop={insets.symmetric(12, 20)}
       leftIcon={{svg: Location}}

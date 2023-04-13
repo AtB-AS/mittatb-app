@@ -10,11 +10,8 @@ import MapboxGL, {OnPressEvent} from '@rnmapbox/maps';
 import {
   flyToLocation,
   MapCameraConfig,
-  MapControls,
   MapViewConfig,
   PositionArrow,
-  zoomIn,
-  zoomOut,
 } from '@atb/components/map';
 import hexToRgba from 'hex-to-rgba';
 import React, {useRef} from 'react';
@@ -212,10 +209,6 @@ const TariffZonesSelectorMap = ({
             <View>
               <View style={styles.mapControls}>
                 <PositionArrow onPress={flyToCurrentLocation} />
-                <MapControls
-                  zoomIn={() => zoomIn(mapViewRef, mapCameraRef)}
-                  zoomOut={() => zoomOut(mapViewRef, mapCameraRef)}
-                />
               </View>
             </View>
 
