@@ -130,7 +130,13 @@ export const Map = (props: MapProps) => {
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
           {(props.vehicles || props.stations) && (
-            <MapFilter onFilterChange={onFilterChange} />
+            <MapFilter
+              onFilterChange={onFilterChange}
+              isLoading={
+                (props.vehicles?.isLoading || props.stations?.isLoading) ??
+                false
+              }
+            />
           )}
           {currentLocation && (
             <PositionArrow
