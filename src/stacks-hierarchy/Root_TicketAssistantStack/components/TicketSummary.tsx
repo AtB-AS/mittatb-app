@@ -11,6 +11,7 @@ import TicketAssistantContext from '@atb/stacks-hierarchy/Root_TicketAssistantSt
 
 export type TicketSummaryProps = {
   duration: number;
+  frequency: number;
 };
 const interactiveColorName: InteractiveColor = 'interactive_2';
 const themeColor_1: StaticColorByType<'background'> = 'background_accent_1';
@@ -21,13 +22,13 @@ export const TicketSummary = (props: TicketSummaryProps) => {
   const {width} = Dimensions.get('window');
   const {theme} = useTheme();
   const interactiveColor = theme.interactive[interactiveColorName];
-  const {duration} = props;
+  const {duration, frequency} = props;
   const contextValue = useContext(TicketAssistantContext);
 
   if (!contextValue) throw new Error('Context is undefined!');
 
   let {response, purchaseDetails} = contextValue;
-  console.log('responseINCOMPONENT', purchaseDetails.tariffZones[1].name.value);
+  console.log('responseCOMPONENT', response.tickets[0].product_id);
   const recommendedTicket =
     purchaseDetails?.purchaseTicketDetails[0].preassignedFareProduct;
   const recommendedTicketTypeConfig =
@@ -36,7 +37,10 @@ export const TicketSummary = (props: TicketSummaryProps) => {
   const toTariffZone = purchaseDetails?.tariffZones[1];
   const traveller = purchaseDetails?.userProfileWithCount[0];
 
-  const savings = calculateSavings(response?.total_cost, duration);
+  const savings = calculateSavings(
+    response?.total_cost,
+    calculateSingleTickets(duration, frequency) * response.single_ticket_price,
+  );
 
   return (
     <>
@@ -122,9 +126,7 @@ export const TicketSummary = (props: TicketSummaryProps) => {
                 <InfoChip
                   interactiveColor={interactiveColorName}
                   style={styles.infoChip}
-                  text={`${(
-                    response.tickets[0].price / response.tickets[0].quantity
-                  ).toFixed(2)} kr`}
+                  text={`${response.tickets[0].price.toFixed(2)} kr`}
                 />
               </View>
             )}
@@ -139,7 +141,8 @@ export const TicketSummary = (props: TicketSummaryProps) => {
             color={interactiveColor.outline}
           >
             {`${(
-              response.tickets[0].price / response.tickets[0].duration
+              response.tickets[0].price /
+              ((response.tickets[0].duration / 7) * frequency)
             ).toFixed(2)} kr`}
           </ThemeText>
         </View>
@@ -153,8 +156,8 @@ export const TicketSummary = (props: TicketSummaryProps) => {
         {t(
           TicketAssistantTexts.summary.savings({
             totalSavings: savings,
-            perTripSavings: (savings / duration).toFixed(2),
-            alternative: '200 enkeltbilletter',
+            perTripSavings: (savings / ((duration / 7) * frequency)).toFixed(2),
+            alternative: `${calculateSingleTickets(duration, frequency)}`,
           }),
         )}
       </ThemeText>
@@ -166,7 +169,11 @@ function calculateSavings(
   ticketPrice: number,
   alternativePrice: number,
 ): number {
-  return ticketPrice - alternativePrice;
+  return alternativePrice - ticketPrice;
+}
+
+function calculateSingleTickets(duration: number, frequency: number): number {
+  return Math.ceil((duration / 7) * frequency);
 }
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({

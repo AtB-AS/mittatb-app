@@ -104,7 +104,10 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
           </ThemeText>
           {purchaseDetails?.purchaseTicketDetails && (
             <>
-              <TicketSummary duration={data.duration} />
+              <TicketSummary
+                duration={data.duration}
+                frequency={data.frequency}
+              />
               <Button
                 interactiveColor="interactive_0"
                 onPress={() => {

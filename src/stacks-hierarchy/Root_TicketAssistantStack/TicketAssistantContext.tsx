@@ -41,6 +41,7 @@ export interface Response {
   total_cost: number;
   tickets: TicketAssistantResponse[];
   zones: string[];
+  single_ticket_price: number;
 }
 
 export interface PurchaseTicketDetails {
@@ -99,6 +100,7 @@ export const TicketAssistantProvider: FunctionComponent = ({children}) => {
         traveller: {id: 'ADULT', user_type: 'ADULT'},
       },
     ],
+    single_ticket_price: 200,
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [purchaseDetails, setPurchaseDetails] = useState<PurchaseDetails>(
