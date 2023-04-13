@@ -18,6 +18,7 @@ export function handleData(
   fareProductTypeConfigs: FareProductTypeConfig[],
 ) {
   console.log('HandleData', response);
+
   const sellableProductsInApp = preassignedFareProducts.filter(
     productIsSellableInApp,
   );

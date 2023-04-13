@@ -18,6 +18,7 @@ export type PreassignedFareProduct = {
     appVersionMin: string | undefined;
     appVersionMax: string | undefined;
   };
+  durationDays?: number;
 };
 
 export type UserProfile = {

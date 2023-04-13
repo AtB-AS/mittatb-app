@@ -25,7 +25,12 @@ export interface TicketAssistantData {
   duration: number;
   traveller: {id: string; user_type: string};
   zones: string[];
-  products?: string[];
+  preassigned_fare_products?: ProductDetails[];
+}
+
+export interface ProductDetails {
+  id: string;
+  duration_days: number;
 }
 
 export interface TicketAssistantResponse {
@@ -62,21 +67,16 @@ export const TicketAssistantProvider: FunctionComponent = ({children}) => {
   const {preassignedFareProducts} = useFirestoreConfiguration();
 
   // List of preassigned fare products ids
-  let preassignedFareProductsIds: string[] = [];
+  let preassignedFareProductsIds: ProductDetails[] = [];
   for (let i = 0; i < preassignedFareProducts.length; i++) {
     if (
-      preassignedFareProducts[i].type === 'period' ||
       preassignedFareProducts[i].type === 'single' ||
-      preassignedFareProducts[i].type === 'hour24'
+      preassignedFareProducts[i].durationDays
     ) {
-      if (
-        !(
-          preassignedFareProducts[i].name.value?.includes('60') ||
-          preassignedFareProducts[i].name.value?.includes('90')
-        )
-      ) {
-        preassignedFareProductsIds.push(preassignedFareProducts[i].id);
-      }
+      preassignedFareProductsIds.push({
+        id: preassignedFareProducts[i].id,
+        duration_days: preassignedFareProducts[i].durationDays || 0,
+      });
     }
   }
 
@@ -85,7 +85,9 @@ export const TicketAssistantProvider: FunctionComponent = ({children}) => {
     traveller: {id: 'ADULT', user_type: 'ADULT'},
     duration: 7,
     zones: ['ATB:TariffZone:1'],
-    products: preassignedFareProductsIds ? preassignedFareProductsIds : [''],
+    preassigned_fare_products: preassignedFareProductsIds
+      ? preassignedFareProductsIds
+      : [],
   });
   const [response, setResponse] = useState<Response>({
     total_cost: 0,
