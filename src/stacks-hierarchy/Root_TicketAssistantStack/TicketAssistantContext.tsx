@@ -29,7 +29,12 @@ export type TicketAssistantData = {
   duration: number;
   traveller: Traveller;
   zones: string[];
-  products?: string[];
+  preassigned_fare_products: PreassignedFareProductDetails[];
+};
+
+export type PreassignedFareProductDetails = {
+  id: string;
+  duration_days: number;
 };
 
 export type TicketAssistantResponse = {
@@ -89,7 +94,9 @@ export const TicketAssistantProvider: FunctionComponent = ({children}) => {
     traveller: {id: 'ADULT', user_type: 'ADULT'},
     duration: 7,
     zones: ['ATB:TariffZone:1'],
-    products: preassignedFareProductsIds ? preassignedFareProductsIds : [''],
+    preassigned_fare_products: preassignedFareProductsIds
+      ? preassignedFareProductsIds
+      : [],
   });
   const [response, setResponse] = useState<Response>({
     total_cost: 0,
