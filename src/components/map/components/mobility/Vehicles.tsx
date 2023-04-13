@@ -82,29 +82,27 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
         }}
       />
       <MapboxGL.SymbolLayer
-        id="clusterCount"
+        id="clusterCountCircle"
         filter={['has', 'point_count']}
         minZoomLevel={13.5}
         aboveLayerID="clusterIcon"
-        style={{
-          iconOffset: [1.3, -1.3],
-          iconAllowOverlap: true,
-          textField: ['get', 'point_count'],
-          textColor: scooterColor.background,
-          textSize: 11,
-          textOffset: [1.2, -1.2],
-        }}
-      />
-      <MapboxGL.SymbolLayer
-        id="clusterCircle"
-        filter={['has', 'point_count']}
-        minZoomLevel={13.5}
-        aboveLayerID="clusterIcon"
-        belowLayerID="clusterCount"
         style={{
           iconImage: {uri: 'ClusterCount'},
           iconAllowOverlap: true,
           iconTranslate: [13, -13],
+        }}
+      />
+      <MapboxGL.SymbolLayer
+        id="clusterCount"
+        filter={['has', 'point_count']}
+        minZoomLevel={13.5}
+        aboveLayerID="clusterCountCircle"
+        style={{
+          textField: ['get', 'point_count'],
+          textColor: scooterColor.background,
+          textSize: 11,
+          textTranslate: [13, -13],
+          textAllowOverlap: true,
         }}
       />
     </MapboxGL.ShapeSource>

@@ -51,6 +51,7 @@ export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
           textSize: 12,
           iconImage: {uri: 'BikeChip'},
           iconAllowOverlap: true,
+          iconSize: 0.85,
         }}
       />
       <MapboxGL.CircleLayer
