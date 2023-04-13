@@ -29,10 +29,10 @@ export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
       onPress={async (e) => {
         const [feature, ..._] = e.features;
         if (isFeaturePoint(feature)) {
-          flyToLocation(
-            toCoordinates(feature.geometry.coordinates),
+          flyToLocation({
+            coordinates: toCoordinates(feature.geometry.coordinates),
             mapCameraRef,
-          );
+          });
           onPress({
             source: 'map-click',
             feature,

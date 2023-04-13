@@ -8,7 +8,7 @@ import {useEffect, useState} from 'react';
  * @param {number} [delayTimeInMs=400] milliseconds to delay before setting flag to true
  * @returns {[boolean, React.Dispatch<React.SetStateAction<boolean>>]} usual useState return
  */
-export default function useIsLoading(
+export function useIsLoading(
   initialState: boolean,
   delayTimeInMs: number = 400,
 ): [boolean, React.Dispatch<React.SetStateAction<boolean>>] {

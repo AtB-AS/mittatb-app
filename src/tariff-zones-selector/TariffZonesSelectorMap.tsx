@@ -2,11 +2,11 @@ import {
   TariffZoneResultType,
   TariffZoneSelection,
 } from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
-import TariffZoneResults from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen/TariffZoneResults';
+import {TariffZoneResults} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen/TariffZoneResults';
 import {View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {Language, TariffZonesTexts, useTranslation} from '@atb/translations';
-import MapboxGL, {OnPressEvent, RegionPayload} from '@rnmapbox/maps';
+import MapboxGL, {OnPressEvent} from '@rnmapbox/maps';
 import {
   flyToLocation,
   MapCameraConfig,
@@ -14,7 +14,7 @@ import {
   PositionArrow,
 } from '@atb/components/map';
 import hexToRgba from 'hex-to-rgba';
-import React, {useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useGeolocationState} from '@atb/GeolocationContext';
@@ -26,15 +26,10 @@ import turfCentroid from '@turf/centroid';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-type RegionEvent = {
-  isMoving: boolean;
-  region?: GeoJSON.Feature<GeoJSON.Point, RegionPayload>;
-};
-
 type Props = {
   selectedZones: TariffZoneSelection;
   isApplicableOnSingleZoneOnly: boolean;
-  setSelectedZones: (selectedZOnes: TariffZoneSelection) => void;
+  setSelectedZones: (selectedZones: TariffZoneSelection) => void;
   onSave?: () => void;
 };
 
@@ -47,14 +42,13 @@ const TariffZonesSelectorMap = ({
   const {tariffZones} = useFirestoreConfiguration();
   const styles = useMapStyles();
   const {location: geolocation} = useGeolocationState();
-  const [regionEvent, setRegionEvent] = useState<RegionEvent>();
   const {t, language} = useTranslation();
   const {theme} = useTheme();
   const a11yContext = useAccessibilityContext();
 
   const selectFeature = (event: OnPressEvent) => {
     const feature = event.features[0];
-    flyToLocation(event.coordinates, mapCameraRef);
+    flyToLocation({coordinates: event.coordinates, mapCameraRef});
     updateSelectedZones(feature.id as string);
   };
 
@@ -70,7 +64,7 @@ const TariffZonesSelectorMap = ({
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
 
   async function flyToCurrentLocation() {
-    flyToLocation(geolocation?.coordinates, mapCameraRef);
+    flyToLocation({coordinates: geolocation?.coordinates, mapCameraRef});
 
     if (mapViewRef.current && geolocation) {
       let point = await mapViewRef.current.getPointInView([
@@ -149,12 +143,6 @@ const TariffZonesSelectorMap = ({
             ref={mapViewRef}
             style={{
               flex: 1,
-            }}
-            onRegionDidChange={(region) => {
-              setRegionEvent({isMoving: false, region});
-            }}
-            onRegionWillChange={() => {
-              setRegionEvent({isMoving: true, region: regionEvent?.region});
             }}
             {...MapViewConfig}
           >

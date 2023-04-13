@@ -6,7 +6,7 @@ import {TicketingTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
 import React from 'react';
 import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
-import ValidityLine from './ValidityLine';
+import {ValidityLine} from './ValidityLine';
 import {FareContractStatusSymbol} from './Component/FareContractStatusSymbol';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
@@ -16,7 +16,7 @@ type Props = {
   reservation: Reservation;
 };
 
-const PurchaseReservation: React.FC<Props> = ({reservation}) => {
+export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
   const {user} = useAuthState();
@@ -146,5 +146,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginLeft: theme.spacings.small,
   },
 }));
-
-export default PurchaseReservation;

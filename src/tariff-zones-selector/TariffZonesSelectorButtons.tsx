@@ -16,8 +16,7 @@ import {
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 
 type Props = {
-  toTariffZone: TariffZoneWithMetadata;
-  fromTariffZone: TariffZoneWithMetadata;
+  selectedZones: TariffZoneSelection;
   isApplicableOnSingleZoneOnly: boolean;
   onVenueSearchClick: (
     callerRouteParam: keyof Root_PurchaseTariffZonesSearchByMapScreenParams,
@@ -25,17 +24,10 @@ type Props = {
 };
 
 const TariffZonesSelectorButtons = ({
-  toTariffZone,
-  fromTariffZone,
+  selectedZones,
   onVenueSearchClick,
   isApplicableOnSingleZoneOnly,
 }: Props) => {
-  const selectedZones: TariffZoneSelection = {
-    from: fromTariffZone,
-    to: toTariffZone,
-    selectNext: isApplicableOnSingleZoneOnly ? 'from' : 'to',
-  };
-
   const {t, language} = useTranslation();
 
   return (

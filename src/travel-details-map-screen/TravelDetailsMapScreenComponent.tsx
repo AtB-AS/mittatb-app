@@ -14,12 +14,15 @@ import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
 import React, {useMemo, useRef} from 'react';
 import {StyleSheet, View} from 'react-native';
-import MapLabel from './components/MapLabel';
-import MapRoute from './components/MapRoute';
+import {MapLabel} from './components/MapLabel';
+import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
+import {VehiclePosition} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
+  // TODO: update name and use parameter
+  _initialVehiclePosition?: VehiclePosition;
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
 };
@@ -30,6 +33,7 @@ type Props = TravelDetailsMapScreenParams & {
 
 export const TravelDetailsMapScreenComponent = ({
   legs,
+  _initialVehiclePosition,
   toPlace,
   fromPlace,
   onPressBack,
@@ -78,7 +82,10 @@ export const TravelDetailsMapScreenComponent = ({
       <View style={controlStyles.controlsContainer}>
         <PositionArrow
           onPress={() => {
-            flyToLocation(geolocation?.coordinates, mapCameraRef);
+            flyToLocation({
+              coordinates: geolocation?.coordinates,
+              mapCameraRef,
+            });
           }}
         />
       </View>

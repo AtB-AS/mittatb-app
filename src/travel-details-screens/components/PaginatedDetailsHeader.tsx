@@ -15,7 +15,7 @@ type PaginatedDetailsHeader = ViewProps & {
   currentDate?: string | Date;
   isTripCancelled?: boolean;
 };
-const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
+export const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
   page,
   totalPages,
   onNavigate,
@@ -123,4 +123,3 @@ const usePaginateStyles = StyleSheet.createThemeHook((theme) => ({
     textDecorationLine: 'line-through',
   },
 }));
-export default PaginatedDetailsHeader;

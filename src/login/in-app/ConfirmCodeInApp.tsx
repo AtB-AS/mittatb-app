@@ -1,4 +1,4 @@
-import ConfirmCode from '@atb/login/ConfirmCode';
+import {ConfirmCode} from '@atb/login/ConfirmCode';
 import {AfterLoginParams} from '@atb/login/types';
 import {StackActions} from '@react-navigation/native';
 import React from 'react';

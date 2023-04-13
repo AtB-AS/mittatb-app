@@ -6,25 +6,30 @@ import {AxiosError} from 'axios';
 import React from 'react';
 import {View} from 'react-native';
 import {TripMessages} from './DetailsMessages';
-import TripSection, {getPlaceName, InterchangeDetails} from './TripSection';
-import Summary from './TripSummary';
+import {TripSection, getPlaceName, InterchangeDetails} from './TripSection';
+import {Summary} from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {isSignificantFootLegWalkOrWaitTime} from '@atb/travel-details-screens/utils';
+import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
+import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
+import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
 
 export type TripProps = {
   tripPattern: TripPattern;
   error?: AxiosError;
+  onPressDetailsMap: (params: TravelDetailsMapScreenParams) => void;
   onPressDeparture: (
     items: ServiceJourneyDeparture[],
     activeItemIndex: number,
   ) => void;
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
 };
-const Trip: React.FC<TripProps> = ({
+export const Trip: React.FC<TripProps> = ({
   tripPattern,
   error,
+  onPressDetailsMap,
   onPressDeparture,
   onPressQuay,
 }) => {
@@ -32,12 +37,31 @@ const Trip: React.FC<TripProps> = ({
   const legs = tripPattern.legs.filter((leg, i) =>
     isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
   );
+
+  const realtimeMapEnabled = useRealtimeMapEnabled();
+  // avoid typescript errors on id
+  const filterLegs = (id?: string): id is string => {
+    return !!id;
+  };
+  // get vehicle position if there is realtime data for leg
+  const ids = realtimeMapEnabled
+    ? tripPattern.legs
+        .map((leg) => (leg.realtime ? leg.serviceJourney?.id : undefined))
+        .filter(filterLegs)
+    : undefined;
+  const {vehiclePositions} = useGetServiceJourneyVehicles(ids);
+
   return (
     <View style={styles.container}>
       <TripMessages tripPattern={tripPattern} error={error} />
       <View style={styles.trip}>
         {tripPattern &&
           legs.map((leg, index) => {
+            const legVehiclePosition = vehiclePositions?.find(
+              (vehicle) =>
+                vehicle.serviceJourney?.id === leg.serviceJourney?.id,
+            );
+
             return (
               <TripSection
                 key={index}
@@ -51,6 +75,19 @@ const Trip: React.FC<TripProps> = ({
                 )}
                 leg={leg}
                 testID={'legContainer' + index}
+                onPressShowLive={
+                  legVehiclePosition
+                    ? () =>
+                        onPressDetailsMap({
+                          legs: tripPattern.legs,
+                          fromPlace: tripPattern.legs[0].fromPlace,
+                          toPlace:
+                            tripPattern.legs[tripPattern.legs.length - 1]
+                              .toPlace,
+                          _initialVehiclePosition: legVehiclePosition,
+                        })
+                    : undefined
+                }
                 onPressDeparture={onPressDeparture}
                 onPressQuay={onPressQuay}
               />
@@ -104,5 +141,3 @@ function getInterchangeDetails(
   }
   return undefined;
 }
-
-export default Trip;

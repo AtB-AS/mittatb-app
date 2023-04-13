@@ -4,7 +4,7 @@ import {
   useTicketingState,
 } from '@atb/ticketing';
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import useInterval from '@atb/utils/use-interval';
+import {useInterval} from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';

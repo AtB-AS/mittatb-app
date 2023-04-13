@@ -36,18 +36,21 @@ import {
   significantWalkTime,
   TimeValues,
 } from '../utils';
-import Time from './Time';
-import TripLegDecoration from './TripLegDecoration';
-import TripRow from './TripRow';
-import WaitSection, {WaitDetails} from './WaitSection';
+import {Time} from './Time';
+import {TripLegDecoration} from './TripLegDecoration';
+import {TripRow} from './TripRow';
+import {WaitSection, WaitDetails} from './WaitSection';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {TripProps} from '@atb/travel-details-screens/components/Trip';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import FlexibleTransportContactDetails, {
+import {
+  FlexibleTransportContactDetails,
   ContactDetails as ContactDetails,
 } from './FlexibeTransportContactDetails';
 import {usePreferences} from '@atb/preferences';
+import {Button} from '@atb/components/button';
+import {Map} from '@atb/assets/svg/mono-icons/map';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -57,6 +60,7 @@ type TripSectionProps = {
   interchangeDetails?: InterchangeDetails;
   leg: Leg;
   testID?: string;
+  onPressShowLive?(): void;
   onPressDeparture: TripProps['onPressDeparture'];
   onPressQuay: TripProps['onPressQuay'];
 };
@@ -66,7 +70,7 @@ export type InterchangeDetails = {
   fromPlace: string;
 };
 
-const TripSection: React.FC<TripSectionProps> = ({
+export const TripSection: React.FC<TripSectionProps> = ({
   isLast,
   isFirst,
   wait,
@@ -74,6 +78,7 @@ const TripSection: React.FC<TripSectionProps> = ({
   interchangeDetails,
   leg,
   testID,
+  onPressShowLive,
   onPressDeparture,
   onPressQuay,
 }) => {
@@ -220,6 +225,17 @@ const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
+        {onPressShowLive ? (
+          <TripRow>
+            <Button
+              type="pill"
+              leftIcon={{svg: Map}}
+              text={t(TripDetailsTexts.trip.leg.live)}
+              interactiveColor="interactive_3"
+              onPress={onPressShowLive}
+            />
+          </TripRow>
+        ) : null}
         {lastPassedStop?.quay?.name && (
           <TripRow>
             <View style={style.realtime}>
@@ -478,4 +494,3 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
 }));
-export default TripSection;

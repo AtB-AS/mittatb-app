@@ -13,7 +13,7 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {usePreferences} from '@atb/preferences';
 
-export default function MultipleTravellersSelection({
+export function MultipleTravellersSelection({
   userProfilesWithCount,
   addCount,
   removeCount,

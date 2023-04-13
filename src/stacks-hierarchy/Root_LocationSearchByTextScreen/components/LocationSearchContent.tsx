@@ -6,7 +6,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import React, {useEffect, useState} from 'react';
-import useDebounce from '@atb/utils/useDebounce';
+import {useDebounce} from '@atb/utils/useDebounce';
 import {filterCurrentLocation, filterPreviousLocations} from '../utils';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {useGeocoder} from '@atb/geocoder';

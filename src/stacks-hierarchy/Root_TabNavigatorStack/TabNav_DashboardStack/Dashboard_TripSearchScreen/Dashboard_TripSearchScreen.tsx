@@ -23,8 +23,8 @@ import {
   SearchTime,
   useSearchTimeValue,
 } from '@atb/journey-date-picker';
-import Results from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/Results';
-import useTripsQuery from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-trips-query';
+import {Results} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/Results';
+import {useTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-trips-query';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {Language, TripSearchTexts, useTranslation} from '@atb/translations';

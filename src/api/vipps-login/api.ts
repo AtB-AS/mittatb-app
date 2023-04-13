@@ -1,5 +1,5 @@
 import {storage} from '@atb/storage';
-import client from '@atb/api/client';
+import {client} from '@atb/api/client';
 import {VippsSignInErrorCode} from '@atb/auth/AuthContext';
 import {generateNonce, generateState} from '@atb/api/vipps-login/utils';
 import InAppBrowser from 'react-native-inappbrowser-reborn';

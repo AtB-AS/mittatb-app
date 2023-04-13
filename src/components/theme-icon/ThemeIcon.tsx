@@ -7,7 +7,7 @@ import {
   Theme,
 } from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
-import useFontScale from '@atb/utils/use-font-scale';
+import {useFontScale} from '@atb/utils/use-font-scale';
 import {View} from 'react-native';
 import type {IconColor} from './types';
 import {

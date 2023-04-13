@@ -1,6 +1,6 @@
 import {MobileTokenOnboardingScreenProps} from './navigation_types';
 import {useTranslation} from '@atb/translations';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ScrollView, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';

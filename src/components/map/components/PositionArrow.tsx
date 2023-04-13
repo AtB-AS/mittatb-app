@@ -1,6 +1,6 @@
 import {Location} from '@atb/assets/svg/mono-icons/places';
 import {StyleSheet} from '@atb/theme';
-import insets from '@atb/utils/insets';
+import {insets} from '@atb/utils/insets';
 import React from 'react';
 import {AccessibilityProps} from 'react-native';
 import {Button} from '@atb/components/button';

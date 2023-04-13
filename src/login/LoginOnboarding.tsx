@@ -7,7 +7,7 @@ import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
 import {useNavigation} from '@react-navigation/native';
 import {Psst} from '@atb/assets/svg/color/illustrations';
@@ -21,7 +21,7 @@ import {useTextForLanguage} from '@atb/translations/utils';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export default function LoginOnboarding({
+export const LoginOnboarding = ({
   headerLeftButton,
   doAfterSubmit,
   headerRightButton,
@@ -31,7 +31,7 @@ export default function LoginOnboarding({
   headerLeftButton?: LeftButtonProps;
   headerRightButton?: RightButtonProps;
   fareProductTypeConfig: FareProductTypeConfig;
-}) {
+}) => {
   const {t} = useTranslation();
   const navigation = useNavigation();
   const styles = useThemeStyles();
@@ -110,7 +110,7 @@ export default function LoginOnboarding({
       </ScrollView>
     </View>
   );
-}
+};
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

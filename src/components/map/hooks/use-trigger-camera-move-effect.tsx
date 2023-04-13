@@ -98,10 +98,10 @@ const getMapLinesBoundingBox = (data: MapLine[]): BoundingBox => {
 };
 
 const moveCameraToCoordinates = (
-  coords: Coordinates,
+  coordinates: Coordinates,
   mapCameraRef: RefObject<MapboxGL.Camera>,
 ) => {
-  flyToLocation(coords, mapCameraRef);
+  flyToLocation({coordinates, mapCameraRef});
 };
 
 const moveCameraToStopPlace = (

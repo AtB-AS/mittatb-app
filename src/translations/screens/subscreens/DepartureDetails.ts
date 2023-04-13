@@ -14,6 +14,8 @@ const DepartureDetailsTexts = {
       `Passerte ${stopPlaceName} kl. ${time}`,
       `Passed ${stopPlaceName} at ${time}`,
     ),
+  live: _('Se live', 'See live'),
+  map: _('Se i kart', 'Show in map'),
   messages: {
     loading: _('Laster detaljer', 'Loading details'),
     noAlighting: _('Ingen avstigning', 'No disembarking'),

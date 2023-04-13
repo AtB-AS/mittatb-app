@@ -7,7 +7,7 @@ import {
   isStaticColor,
   isStatusColor,
 } from '@atb/theme/colors';
-import useFontScale from '@atb/utils/use-font-scale';
+import {useFontScale} from '@atb/utils/use-font-scale';
 import type {NotificationColor} from './types';
 
 export type NotificationIndicatorProps = {

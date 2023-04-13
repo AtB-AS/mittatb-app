@@ -1,4 +1,4 @@
-import ChangeNative from '@atb/change-native';
+import {RCTChangeNative} from '@atb/change-native';
 import React, {createContext, useContext, useEffect} from 'react';
 import {Platform, useColorScheme} from 'react-native';
 import {usePreferences} from '../preferences';
@@ -38,7 +38,7 @@ export function useTheme() {
   return context;
 }
 
-const ThemeContextProvider: React.FC = ({children}) => {
+export const ThemeContextProvider: React.FC = ({children}) => {
   const colorScheme = useColorScheme();
   const {
     setPreference,
@@ -55,10 +55,10 @@ const ThemeContextProvider: React.FC = ({children}) => {
   useEffect(() => {
     if (Platform.OS !== 'ios') return;
     if (overrideSystemAppearance && colorScheme !== storedColorScheme) {
-      ChangeNative.changeAppearance(storedColorScheme);
+      RCTChangeNative.changeAppearance(storedColorScheme);
     }
     if (!overrideSystemAppearance) {
-      ChangeNative.changeAppearance(null);
+      RCTChangeNative.changeAppearance(null);
     }
   }, [overrideSystemAppearance, storedColorScheme]);
 
@@ -91,5 +91,3 @@ const ThemeContextProvider: React.FC = ({children}) => {
     </ThemeContext.Provider>
   );
 };
-
-export default ThemeContextProvider;

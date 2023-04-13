@@ -12,21 +12,21 @@ import {
 import {ArrowLeft, ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Date as DateIcon} from '@atb/assets/svg/mono-icons/time';
 import {addDays, isSameDay, isToday, parseISO} from 'date-fns';
-import DepartureTimeSheet from './DepartureTimeSheet';
+import {DepartureTimeSheet} from './DepartureTimeSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {SearchTime} from '../types';
-import useFontScale from '@atb/utils/use-font-scale';
+import {useFontScale} from '@atb/utils/use-font-scale';
 
 type DateSelectionProps = {
   searchTime: SearchTime;
   setSearchTime: (searchTime: SearchTime) => void;
 };
 
-export default function DateSelection({
+export const DateSelection = ({
   searchTime,
   setSearchTime,
-}: DateSelectionProps): JSX.Element {
+}: DateSelectionProps): JSX.Element => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const disablePreviousDayNavigation = isToday(parseISO(searchTime.date));
@@ -162,7 +162,7 @@ export default function DateSelection({
       ></Button>
     </View>
   );
-}
+};
 
 function changeDay(searchTime: SearchTime, days: number): SearchTime {
   const date =

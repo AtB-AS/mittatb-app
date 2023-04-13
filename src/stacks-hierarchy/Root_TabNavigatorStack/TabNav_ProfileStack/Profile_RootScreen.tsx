@@ -18,7 +18,7 @@ import {
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import SelectFavouritesBottomSheet from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
+import {SelectFavouritesBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
 import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
@@ -32,8 +32,8 @@ import {
 } from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
-import useCopyWithOpacityFade from '@atb/utils/use-copy-with-countdown';
-import useLocalConfig from '@atb/utils/use-local-config';
+import {useCopyWithOpacityFade} from '@atb/utils/use-copy-with-countdown';
+import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG, IS_QA_ENV} from '@env';
 import parsePhoneNumber from 'libphonenumber-js';
@@ -43,7 +43,7 @@ import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
-import useIsLoading from '@atb/utils/use-is-loading';
+import {useIsLoading} from '@atb/utils/use-is-loading';
 import {useDeparturesV2Enabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
 
 const buildNumber = getBuildNumber();

@@ -7,7 +7,7 @@ import {TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
 import {TariffZoneSearchTexts, useTranslation} from '@atb/translations';
-import insets from '@atb/utils/insets';
+import {insets} from '@atb/utils/insets';
 import React from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {useTariffZoneFromLocation} from '@atb/stacks-hierarchy/utils';
@@ -17,7 +17,7 @@ type Props = {
   onSelect: (tariffZone: TariffZone) => void;
 };
 
-const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
+export const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const tariffZoneFromLocation = useTariffZoneFromLocation(tariffZones);
@@ -69,8 +69,6 @@ const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
     </>
   );
 };
-
-export default TariffZoneResults;
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   subHeader: {

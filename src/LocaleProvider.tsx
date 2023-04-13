@@ -34,7 +34,7 @@ export const LocaleContext = createContext<Locale>(norwegianLocale);
  * and language from settings or from system locale.
  * if system locale language is not supported by the app we fallback to FALLBACK_LANGUAGE
  */
-const LocaleContextProvider: React.FC = ({children}) => {
+export const LocaleContextProvider: React.FC = ({children}) => {
   const locale = useLocale();
   return (
     <LocaleContext.Provider value={locale}>{children}</LocaleContext.Provider>
@@ -100,8 +100,6 @@ function mapLanguageStringToEnum(language: string | undefined): Language {
   }
   return FALLBACK_LANGUAGE;
 }
-
-export default LocaleContextProvider;
 
 export function useLocaleContext() {
   const context = useContext(LocaleContext);

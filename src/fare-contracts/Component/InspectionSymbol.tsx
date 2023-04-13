@@ -19,7 +19,7 @@ export type InspectionSymbolProps = {
   isLoading?: boolean;
 };
 
-const InspectionSymbol = ({
+export const InspectionSymbol = ({
   preassignedFareProduct,
   fromTariffZone,
   toTariffZone,
@@ -146,5 +146,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
 }));
-
-export default InspectionSymbol;

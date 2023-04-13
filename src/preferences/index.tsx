@@ -1,7 +1,7 @@
 export {
   usePreferences,
   usePreferenceItems,
-  default as PreferencesContextProvider,
+  PreferencesContextProvider,
 } from './PreferencesContext';
 
 export * from './types';

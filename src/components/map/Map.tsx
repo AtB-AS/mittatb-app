@@ -6,7 +6,7 @@ import React, {useMemo, useRef} from 'react';
 import {View} from 'react-native';
 import {LocationBar} from './components/LocationBar';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
-import MapRoute from '@atb/travel-details-map-screen/components/MapRoute';
+import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import {isFeaturePoint} from './utils';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
@@ -129,7 +129,9 @@ export const Map = (props: MapProps) => {
           )}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
-          <MapFilter onFilterChange={onFilterChange} />
+          {(props.vehicles || props.stations) && (
+            <MapFilter onFilterChange={onFilterChange} />
+          )}
           {currentLocation && (
             <PositionArrow
               onPress={() => {

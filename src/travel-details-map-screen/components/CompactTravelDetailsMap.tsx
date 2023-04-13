@@ -4,14 +4,14 @@ import {MapCameraConfig, MapLeg, MapViewConfig} from '@atb/components/map';
 
 import {StyleSheet, useTheme} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
-import insets from '@atb/utils/insets';
-import useDisableMapCheck from '@atb/utils/use-disable-map-check';
+import {insets} from '@atb/utils/insets';
+import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef} from 'react';
 import {Platform, View} from 'react-native';
-import MapLabel from './MapLabel';
-import MapRoute from './MapRoute';
+import {MapLabel} from './MapLabel';
+import {MapRoute} from './MapRoute';
 import {createMapLines, getMapBounds, pointOf} from '../utils';
 import {Coordinates} from '@atb/utils/coordinates';
 
@@ -44,7 +44,11 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
    */
   useEffect(() => {
     if (Platform.OS === 'ios') {
-      cameraRef.current?.fitBounds(bounds.ne, bounds.sw, undefined, 100);
+      setTimeout(
+        () =>
+          cameraRef.current?.fitBounds(bounds.ne, bounds.sw, undefined, 100),
+        100,
+      );
     }
   }, [bounds]);
 

@@ -21,7 +21,7 @@ import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import {EstimatedCall, Quay, StopPlace} from '@atb/api/types/departures';
-import useFontScale from '@atb/utils/use-font-scale';
+import {useFontScale} from '@atb/utils/use-font-scale';
 import {StyleSheet, useTheme} from '@atb/theme';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {isToday, parseISO} from 'date-fns';
@@ -61,7 +61,7 @@ type EstimatedCallItemProps = {
   mode: StopPlacesMode;
 };
 
-export default function EstimatedCallItem({
+export function EstimatedCallItem({
   departure,
   testID,
   quay,
