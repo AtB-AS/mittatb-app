@@ -28,7 +28,6 @@ export const TicketSummary = (props: TicketSummaryProps) => {
   if (!contextValue) throw new Error('Context is undefined!');
 
   let {response, purchaseDetails} = contextValue;
-  console.log('responseCOMPONENT', response.tickets[0].product_id);
   const recommendedTicket =
     purchaseDetails?.purchaseTicketDetails[0].preassignedFareProduct;
   const recommendedTicketTypeConfig =

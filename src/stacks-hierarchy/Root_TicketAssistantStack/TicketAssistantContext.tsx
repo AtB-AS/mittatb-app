@@ -71,21 +71,16 @@ export const TicketAssistantProvider: FunctionComponent = ({children}) => {
   const {preassignedFareProducts} = useFirestoreConfiguration();
 
   // List of preassigned fare products ids
-  let preassignedFareProductsIds: string[] = [];
+  let preassignedFareProductsIds: PreassignedFareProductDetails[] = [];
   for (let i = 0; i < preassignedFareProducts.length; i++) {
     if (
-      preassignedFareProducts[i].type === 'period' ||
       preassignedFareProducts[i].type === 'single' ||
-      preassignedFareProducts[i].type === 'hour24'
+      preassignedFareProducts[i].durationDays
     ) {
-      if (
-        !(
-          preassignedFareProducts[i].name.value?.includes('60') ||
-          preassignedFareProducts[i].name.value?.includes('90')
-        )
-      ) {
-        preassignedFareProductsIds.push(preassignedFareProducts[i].id);
-      }
+      preassignedFareProductsIds.push({
+        id: preassignedFareProducts[i].id,
+        duration_days: preassignedFareProducts[i].durationDays || 0,
+      });
     }
   }
 
@@ -103,7 +98,7 @@ export const TicketAssistantProvider: FunctionComponent = ({children}) => {
     zones: ['ATB:TariffZone:1', 'ATB:TariffZone:1'],
     tickets: [
       {
-        product_id: '',
+        product_id: 'ATB:SalesPackage:ded0dc3b',
         fare_product: 'ATB:PreassignedFareProduct:8808c360',
         duration: 10,
         quantity: 2,
