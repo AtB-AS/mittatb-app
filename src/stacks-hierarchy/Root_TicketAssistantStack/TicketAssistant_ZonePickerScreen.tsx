@@ -101,7 +101,7 @@ export const TicketAssistant_ZonePickerScreen = ({
         >
           {t(TicketAssistantTexts.zonesSelector.title)}
         </ThemeText>
-        <View style={styles.mapContainer}>
+        <View style={styles.zonesSelectorContainer}>
           <View style={styles.zonesSelectorButtonsContainer}>
             <TariffZonesSelectorButtons
               selectedZones={selectedZones}
@@ -110,11 +110,13 @@ export const TicketAssistant_ZonePickerScreen = ({
             />
           </View>
 
-          <TariffZonesSelectorMap
-            isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
-            selectedZones={selectedZones}
-            setSelectedZones={setSelectedZones}
-          />
+          <View style={styles.zonesSelectorMapContainer}>
+            <TariffZonesSelectorMap
+              isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
+              selectedZones={selectedZones}
+              setSelectedZones={setSelectedZones}
+            />
+          </View>
         </View>
         <View style={styles.bottomView}>
           <Button
@@ -154,7 +156,12 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   zonesSelectorButtonsContainer: {
     marginBottom: theme.spacings.medium,
   },
-  mapContainer: {
+  zonesSelectorMapContainer: {
+    flexGrow: 1,
+    borderRadius: theme.border.radius.regular,
+    overflow: 'hidden',
+  },
+  zonesSelectorContainer: {
     flex: 1,
     marginHorizontal: theme.spacings.xLarge,
     marginVertical: theme.spacings.medium,
