@@ -125,10 +125,10 @@ export const DepartureDetailsScreenComponent = ({
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
             </View>
-            {lastPassedStop || (realtimeMapEnabled && mapData) ? (
+            {lastPassedStop || (vehiclePosition && mapData) ? (
               <View style={styles.headerSubSection}>
                 <LastPassedStop estimatedCall={lastPassedStop} />
-                {realtimeMapEnabled && mapData ? (
+                {vehiclePosition && mapData ? (
                   <Button
                     type="pill"
                     leftIcon={{svg: Map}}
