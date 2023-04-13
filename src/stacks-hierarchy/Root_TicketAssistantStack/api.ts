@@ -1,6 +1,6 @@
 import {client} from '../../api';
 import {Offer} from '@atb/ticketing';
-import {TicketAssistantData} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
+import {TicketAssistantData} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 
 export async function getRecommendedTicket(
   body: TicketAssistantData,
