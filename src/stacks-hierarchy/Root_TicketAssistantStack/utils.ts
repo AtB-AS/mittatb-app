@@ -1,7 +1,6 @@
 import {
   PurchaseDetails,
   PurchaseTicketDetails,
-  Response,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {productIsSellableInApp} from '@atb/reference-data/utils';

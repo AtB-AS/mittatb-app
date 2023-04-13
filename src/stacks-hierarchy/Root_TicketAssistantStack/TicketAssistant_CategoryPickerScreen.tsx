@@ -66,7 +66,6 @@ export const TicketAssistant_CategoryPickerScreen = ({
         <Sections.Section style={styles.categoriesContainer}>
           {/*eslint-disable-next-line rulesdir/translations-warning*/}
           {selectableTravellers.map((u, index) => {
-            const isChosen = data.traveller.user_type === u.userTypeString;
             return (
               <Sections.ExpandableSectionItem
                 key={index}
@@ -98,11 +97,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
                         });
                         navigation.navigate('TicketAssistant_DurationScreen');
                       }}
-                      text={
-                        isChosen
-                          ? t(TicketAssistantTexts.categoryPicker.chosen)
-                          : t(TicketAssistantTexts.categoryPicker.chooseButton)
-                      }
+                      text={t(TicketAssistantTexts.categoryPicker.chooseButton)}
                     />
                   </View>
                 }

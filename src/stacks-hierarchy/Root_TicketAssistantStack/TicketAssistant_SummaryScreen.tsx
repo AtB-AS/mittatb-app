@@ -12,7 +12,7 @@ import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/components/TicketSummary';
-import {handleData} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/purchaseDetails';
+import {handleData} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/utils';
 import {useFirestoreConfiguration} from '@atb/configuration';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
