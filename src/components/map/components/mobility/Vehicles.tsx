@@ -64,9 +64,9 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
           textField: ['concat', ['get', 'currentFuelPercent'], '%'],
           textAnchor: 'center',
           textOffset: [0.7, -0.25],
-          textColor: scooterColor.text,
+          textColor: scooterColor.background,
           textSize: 11,
-          iconImage: {uri: 'PinScooter'},
+          iconImage: {uri: 'ScooterChip'},
           iconSize: 0.85,
           iconAllowOverlap: true,
         }}
@@ -76,23 +76,34 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
         filter={['has', 'point_count']}
         minZoomLevel={13.5}
         style={{
-          iconImage: {uri: 'Scooter'},
+          iconImage: {uri: 'ScooterCluster'},
           iconSize: 0.85,
           iconAllowOverlap: true,
         }}
       />
-      <MapboxGL.CircleLayer
-        id="cluster"
+      <MapboxGL.SymbolLayer
+        id="clusterCount"
         filter={['has', 'point_count']}
         minZoomLevel={13.5}
-        belowLayerID="clusterIcon"
+        aboveLayerID="clusterIcon"
         style={{
-          circleColor: scooterColor.background,
-          circleStrokeColor: scooterColor.background,
-          circleOpacity: 1,
-          circleStrokeOpacity: 0.3,
-          circleStrokeWidth: 8,
-          circleRadius: 12,
+          iconOffset: [1.3, -1.3],
+          textField: ['get', 'point_count'],
+          textColor: scooterColor.background,
+          textSize: 11,
+          textOffset: [1.2, -1.2],
+        }}
+      />
+      <MapboxGL.SymbolLayer
+        id="clusterCircle"
+        filter={['has', 'point_count']}
+        minZoomLevel={13.5}
+        aboveLayerID="clusterIcon"
+        belowLayerID="clusterCount"
+        style={{
+          iconImage: {uri: 'ClusterCount'},
+          iconAllowOverlap: true,
+          iconTranslate: [13, -13],
         }}
       />
     </MapboxGL.ShapeSource>

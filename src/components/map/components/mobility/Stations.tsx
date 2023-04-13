@@ -49,7 +49,7 @@ export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
           textOffset: [0.75, 0],
           textColor: stationColor.text,
           textSize: 12,
-          iconImage: {uri: 'BikeStation'},
+          iconImage: {uri: 'BikeChip'},
           iconAllowOverlap: true,
         }}
       />
