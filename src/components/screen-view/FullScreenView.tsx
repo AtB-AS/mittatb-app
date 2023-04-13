@@ -1,6 +1,7 @@
 import {useTheme} from '@atb/theme';
 import {getStaticColor} from '@atb/theme/colors';
 import {View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
 import {ScreenWithLargeHeader} from './ScreenWithLargeHeader';
@@ -31,7 +32,7 @@ export function FullScreenView(props: ScreenViewProps) {
           <View style={{backgroundColor, paddingTop: top}}>
             <ScreenHeader {...props} />
           </View>
-          {props.children}
+          <ScrollView>{props.children}</ScrollView>
         </>
       );
     case 'large':
