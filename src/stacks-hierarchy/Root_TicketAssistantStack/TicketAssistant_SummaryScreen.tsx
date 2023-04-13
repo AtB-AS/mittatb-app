@@ -2,18 +2,16 @@ import {Image, ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import React, {useEffect} from 'react';
-import {
-  TicketResponseData,
-  useTicketAssistantState,
-} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
+import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/components/TicketSummary';
-import {handleData} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/utils';
+import {handleRecommendedTicketResponse} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/handle-recommended-ticket-response';
 import {useFirestoreConfiguration} from '@atb/configuration';
+import {TicketResponseData} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -43,7 +41,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       console.log('updatePurchaseDetails');
       try {
         setPurchaseDetails(
-          handleData(
+          handleRecommendedTicketResponse(
             response,
             tariffZones,
             userProfiles,

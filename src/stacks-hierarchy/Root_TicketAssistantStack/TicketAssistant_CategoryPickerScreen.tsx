@@ -12,14 +12,12 @@ import React, {useState} from 'react';
 import {Button} from '@atb/components/button';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
-import {
-  Traveller,
-  useTicketAssistantState,
-} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
+import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-defaults';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {getReferenceDataName} from '@atb/reference-data/utils';
+import {Traveller} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 
 type CategoryPickerProps =
   TicketAssistantScreenProps<'TicketAssistant_CategoryPickerScreen'>;

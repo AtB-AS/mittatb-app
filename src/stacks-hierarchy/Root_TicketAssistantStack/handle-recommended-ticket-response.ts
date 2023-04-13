@@ -1,16 +1,17 @@
-import {
-  PurchaseDetails,
-  PurchaseTicketDetails,
-} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {productIsSellableInApp} from '@atb/reference-data/utils';
 import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
 import {PreassignedFareProduct, UserProfile} from '@atb/reference-data/types';
 import {TariffZone} from '@entur/sdk/lib/nsr/types';
+import {
+  PurchaseDetails,
+  PurchaseTicketDetails,
+  RecommendedTicketResponse,
+} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 
-export function handleData(
-  response: Response,
+export function handleRecommendedTicketResponse(
+  response: RecommendedTicketResponse,
   tariffZones: TariffZone[],
   userProfiles: UserProfile[],
   preassignedFareProducts: PreassignedFareProduct[],
