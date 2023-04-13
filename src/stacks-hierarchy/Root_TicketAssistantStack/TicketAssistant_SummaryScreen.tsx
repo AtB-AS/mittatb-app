@@ -2,7 +2,9 @@ import {Image, ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import React, {useContext, useEffect} from 'react';
-import TicketAssistantContext from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
+import TicketAssistantContext, {
+  TicketResponseData,
+} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
@@ -42,7 +44,6 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     const updatePurchaseDetails = () => {
       console.log('updatePurchaseDetails');
       try {
-        console.log('try');
         setPurchaseDetails(
           handleData(
             response,
@@ -68,6 +69,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     month: 'long',
     day: 'numeric',
   });
+
+  const index = getIndexOfLongestDurationTicket(response.tickets);
 
   return (
     <ScrollView
@@ -120,14 +123,14 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                     /** Navigate to PurchaseConfirmationScreen **/
                     navigation.navigate('Root_PurchaseConfirmationScreen', {
                       fareProductTypeConfig:
-                        purchaseDetails?.purchaseTicketDetails[0]
+                        purchaseDetails?.purchaseTicketDetails[index]
                           .fareProductTypeConfig,
                       fromTariffZone: purchaseDetails?.tariffZones[0],
                       toTariffZone: purchaseDetails?.tariffZones[1],
                       userProfilesWithCount:
                         purchaseDetails?.userProfileWithCount,
                       preassignedFareProduct:
-                        purchaseDetails?.purchaseTicketDetails[0]
+                        purchaseDetails?.purchaseTicketDetails[index]
                           .preassignedFareProduct,
                       travelDate: undefined,
                       headerLeftButton: {type: 'back'},
@@ -145,6 +148,20 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     </ScrollView>
   );
 };
+
+function getIndexOfLongestDurationTicket(
+  tickets: TicketResponseData[],
+): number {
+  let longestDuration = 0;
+  let longestDurationIndex = 0;
+  tickets.forEach((ticket, index) => {
+    if (ticket.duration > longestDuration) {
+      longestDuration = ticket.duration;
+      longestDurationIndex = index;
+    }
+  });
+  return longestDurationIndex;
+}
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   contentContainer: {
