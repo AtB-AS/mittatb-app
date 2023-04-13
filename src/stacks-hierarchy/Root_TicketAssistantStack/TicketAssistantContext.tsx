@@ -20,44 +20,44 @@ export interface TicketAssistantContextValue {
   setActiveTicket: (activeTicket: number) => void;
 }
 
-export interface Traveller {
+export type Traveller = {
   id: string;
   user_type: string;
-}
-export interface TicketAssistantData {
+};
+export type TicketAssistantData = {
   frequency: number;
   duration: number;
   traveller: Traveller;
   zones: string[];
   products?: string[];
-}
+};
 
-export interface TicketAssistantResponse {
+export type TicketAssistantResponse = {
   product_id: string;
   fare_product: string;
   duration: number;
   quantity: number;
   price: number;
   traveller: {id: string; user_type: string};
-}
+};
 
-export interface Response {
+export type Response = {
   total_cost: number;
   tickets: TicketAssistantResponse[];
   zones: string[];
   single_ticket_price: number;
-}
+};
 
-export interface PurchaseTicketDetails {
+export type PurchaseTicketDetails = {
   fareProductTypeConfig: FareProductTypeConfig;
   preassignedFareProduct: PreassignedFareProduct;
-}
+};
 
-export interface PurchaseDetails {
+export type PurchaseDetails = {
   tariffZones: TariffZoneWithMetadata[];
   userProfileWithCount: UserProfileWithCount[];
   purchaseTicketDetails: PurchaseTicketDetails[];
-}
+};
 
 const TicketAssistantContext =
   createContext<TicketAssistantContextValue | null>(null);

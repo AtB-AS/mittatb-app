@@ -41,15 +41,19 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   useEffect(() => {
     const updatePurchaseDetails = () => {
       console.log('updatePurchaseDetails');
-      setPurchaseDetails(
-        handleData(
-          response,
-          tariffZones,
-          userProfiles,
-          preassignedFareProducts,
-          fareProductTypeConfigs,
-        ),
-      );
+      try {
+        setPurchaseDetails(
+          handleData(
+            response,
+            tariffZones,
+            userProfiles,
+            preassignedFareProducts,
+            fareProductTypeConfigs,
+          ),
+        );
+      } catch (e) {
+        console.log(e);
+      }
     };
     updatePurchaseDetails();
   }, [response]);
