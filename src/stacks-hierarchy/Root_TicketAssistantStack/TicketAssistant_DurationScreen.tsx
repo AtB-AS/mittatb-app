@@ -183,11 +183,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                 >
                   {t(TicketAssistantTexts.duration.minLimit)}
                 </ThemeText>
-                <ThemeText
-                  type={'body__primary'}
-                  style={styles.sliderText}
-                  color={'primary'}
-                >
+                <ThemeText type={'body__primary'} style={styles.sliderText}>
                   {t(TicketAssistantTexts.duration.maxLimit)}
                 </ThemeText>
               </View>
@@ -284,7 +280,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     flex: 1,
-    backgroundColor: theme.static.background[themeColor].background,
+    backgroundColor: theme.static.background.background_accent_0.background,
     width: '100%',
   },
   mainView: {
@@ -299,7 +295,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     paddingVertical: theme.spacings.small,
     borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.static.background[themeColor].text,
+    backgroundColor: theme.static.background.background_0.background,
     marginVertical: theme.spacings.xLarge,
   },
   topPart: {
@@ -326,7 +322,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
   },
   datePickerButton: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.static.background.background_3.background,
   },
   sliderContainer: {
     width: '100%',

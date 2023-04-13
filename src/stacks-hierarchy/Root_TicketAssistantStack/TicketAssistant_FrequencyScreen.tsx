@@ -132,10 +132,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   sliderContainer: {
     width: '100%',
+    backgroundColor: theme.static.background.background_0.background,
     paddingVertical: theme.spacings.xSmall,
     paddingHorizontal: theme.spacings.medium,
     borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.static.background[themeColor].text,
     marginVertical: theme.spacings.medium,
   },
   slider: {
