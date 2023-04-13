@@ -1,1 +1,1 @@
-export {default as AuthContextProvider, useAuthState} from './AuthContext';
+export {AuthContextProvider, useAuthState} from './AuthContext';

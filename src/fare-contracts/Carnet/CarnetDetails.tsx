@@ -7,12 +7,12 @@ import {
 import {getValidityStatus} from '@atb/fare-contracts/utils';
 import * as Sections from '@atb/components/sections';
 import {ValidityHeader} from '@atb/fare-contracts/ValidityHeader';
-import UsedAccessValidityHeader from '@atb/fare-contracts/Carnet/UsedAccessValidityHeader';
-import ValidityLine from '@atb/fare-contracts/ValidityLine';
+import {UsedAccessValidityHeader} from '@atb/fare-contracts/Carnet/UsedAccessValidityHeader';
+import {ValidityLine} from '@atb/fare-contracts/ValidityLine';
 import {View} from 'react-native';
 import {SectionSeparator} from '@atb/components/sections';
-import FareContractInfo from '@atb/fare-contracts/FareContractInfo';
-import CarnetFooter from '@atb/fare-contracts/Carnet/CarnetFooter';
+import {FareContractInfo} from '@atb/fare-contracts/FareContractInfo';
+import {CarnetFooter} from '@atb/fare-contracts/Carnet/CarnetFooter';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {UsedAccessStatus} from '@atb/fare-contracts/Carnet/types';

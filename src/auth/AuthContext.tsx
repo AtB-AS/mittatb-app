@@ -122,7 +122,7 @@ type AuthContextState = {
 
 const AuthContext = createContext<AuthContextState | undefined>(undefined);
 
-export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
+export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
   const {language} = useTranslation();
 
@@ -267,7 +267,7 @@ export default function AuthContextProvider({children}: PropsWithChildren<{}>) {
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
 export function useAuthState() {
   const context = useContext(AuthContext);

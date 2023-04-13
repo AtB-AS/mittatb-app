@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {AccessibilityInfo, findNodeHandle} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -10,7 +10,7 @@ import {useNavigation} from '@react-navigation/native';
  * The give focus is delayed by 200ms to allow the render to finish before
  * trying to give focus.
  */
-export default function useFocusOnLoad(setFocusOnLoad: boolean = true) {
+export function useFocusOnLoad(setFocusOnLoad: boolean = true) {
   const focusRef = useRef(null);
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 import {Theme} from '@atb-as/theme';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import StyleSheet from '@atb/theme/StyleSheet';
+import {StyleSheet} from '@atb/theme/StyleSheet';
 import React from 'react';
 import {Linking, ScrollView, TouchableOpacity, View} from 'react-native';
 

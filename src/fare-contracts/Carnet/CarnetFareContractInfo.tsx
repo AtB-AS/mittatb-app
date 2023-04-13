@@ -16,7 +16,7 @@ type Props = {
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
-const CarnetFareContractInfo: React.FC<Props> = ({
+export const CarnetFareContractInfo: React.FC<Props> = ({
   fareContract,
   travelRights,
   now,
@@ -51,5 +51,3 @@ const CarnetFareContractInfo: React.FC<Props> = ({
     </Sections.Section>
   );
 };
-
-export default CarnetFareContractInfo;

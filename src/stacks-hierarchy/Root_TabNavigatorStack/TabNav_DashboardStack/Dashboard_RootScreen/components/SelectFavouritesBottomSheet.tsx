@@ -99,7 +99,7 @@ type SelectFavouritesBottomSheetProps = {
   onEditFavouriteDeparture: () => void;
 };
 
-const SelectFavouritesBottomSheet = ({
+export const SelectFavouritesBottomSheet = ({
   close,
   onEditFavouriteDeparture,
 }: SelectFavouritesBottomSheetProps) => {
@@ -123,7 +123,7 @@ const SelectFavouritesBottomSheet = ({
   };
 
   return (
-    <BottomSheetContainer>
+    <BottomSheetContainer testID="selectFavoriteBottomSheet">
       <ScreenHeaderWithoutNavigation
         title={t(SelectFavouriteDeparturesText.header.text)}
         leftButton={{
@@ -219,8 +219,6 @@ const SelectFavouritesBottomSheet = ({
     </BottomSheetContainer>
   );
 };
-
-export default SelectFavouritesBottomSheet;
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {

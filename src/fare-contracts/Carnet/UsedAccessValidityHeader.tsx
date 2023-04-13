@@ -21,7 +21,7 @@ type Props = {
   isInspectable: boolean;
 };
 
-function UsedAccessValidityHeader(props: Props) {
+export function UsedAccessValidityHeader(props: Props) {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const usedAccessValidityText = getUsedAccessValidityText(props, t, language);
@@ -112,5 +112,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginLeft: theme.spacings.medium,
   },
 }));
-
-export default UsedAccessValidityHeader;

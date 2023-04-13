@@ -23,7 +23,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-export default function ProductSelectionByAlias({
+export function ProductSelectionByAlias({
   color,
   selectedProduct,
   fareProductTypeConfig,

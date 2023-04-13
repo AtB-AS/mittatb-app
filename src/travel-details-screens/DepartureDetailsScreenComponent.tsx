@@ -18,6 +18,8 @@ import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announceme
 import {FullScreenView} from '@atb/components/screen-view';
 import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
+import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
 import {usePreferences} from '@atb/preferences';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
@@ -25,9 +27,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {CompactTravelDetailsMap} from '@atb/travel-details-map-screen';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
-import CancelledDepartureMessage from '@atb/travel-details-screens/components/CancelledDepartureMessage';
 import {TicketingMessages} from '@atb/travel-details-screens/components/DetailsMessages';
-import PaginatedDetailsHeader from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
 import {animateNextChange} from '@atb/utils/animation';
 import {formatToClock} from '@atb/utils/date';
 import {getQuayName} from '@atb/utils/transportation-names';
@@ -35,11 +35,12 @@ import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
-import Time from './components/Time';
-import TripLegDecoration from './components/TripLegDecoration';
-import TripRow from './components/TripRow';
+import {Time} from './components/Time';
+import {TripLegDecoration} from './components/TripLegDecoration';
+import {TripRow} from './components/TripRow';
 import {ServiceJourneyDeparture} from './types';
-import useDepartureData, {
+import {
+  useDepartureData,
   EstimatedCallWithMetadata,
 } from './use-departure-data';
 

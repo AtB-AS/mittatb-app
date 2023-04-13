@@ -5,7 +5,7 @@ import {
   NavigationIconTypes,
 } from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
-import insets from '@atb/utils/insets';
+import {insets} from '@atb/utils/insets';
 import React from 'react';
 import {
   AccessibilityProps,

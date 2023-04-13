@@ -1,2 +1,2 @@
-export {default as useGeocoder} from './use-geocoder';
-export {default as useReverseGeocoder} from './use-reverse-geocoder';
+export {useGeocoder} from './use-geocoder';
+export {useReverseGeocoder} from './use-reverse-geocoder';

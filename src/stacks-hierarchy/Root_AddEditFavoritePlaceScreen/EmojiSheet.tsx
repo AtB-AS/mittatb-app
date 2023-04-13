@@ -185,7 +185,7 @@ type Props = Omit<EmojiCategory, 'category'> & {
   value: string | null;
   close: () => void;
 };
-const EmojiSheet = forwardRef<ScrollView, Props>(
+export const EmojiSheet = forwardRef<ScrollView, Props>(
   ({value, onEmojiSelected, closeOnSelect, close, ...props}, focusRef) => {
     const {t} = useTranslation();
     const onClick = (emoji: string | null) => {
@@ -227,8 +227,6 @@ const EmojiSheet = forwardRef<ScrollView, Props>(
     );
   },
 );
-
-export default EmojiSheet;
 
 type CallbackType = {
   screen: ScaledSize;

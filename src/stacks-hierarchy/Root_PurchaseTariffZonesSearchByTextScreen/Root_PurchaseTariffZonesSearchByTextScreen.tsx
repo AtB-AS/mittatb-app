@@ -13,7 +13,7 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import useDebounce from '@atb/utils/useDebounce';
+import {useDebounce} from '@atb/utils/useDebounce';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
@@ -23,8 +23,8 @@ import {
   View,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import TariffZoneResults from './TariffZoneResults';
-import VenueResults, {LocationAndTariffZone} from './VenueResults';
+import {TariffZoneResults} from './TariffZoneResults';
+import {VenueResults, LocationAndTariffZone} from './VenueResults';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 
 type Props = RootStackScreenProps<'Root_PurchaseTariffZonesSearchByTextScreen'>;

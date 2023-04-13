@@ -7,7 +7,7 @@ import {useAccessibilityContext} from '@atb/AccessibilityContext';
 // when voice over is active. Not ideal by any means,
 // but for now better than crashing the entire application.
 // @TODO This should be removed as soon as possible.
-export default function useDisableMapCheck() {
+export function useDisableMapCheck() {
   const a11yContext = useAccessibilityContext();
   return a11yContext.isScreenReaderEnabled && Platform.OS === 'ios';
 }

@@ -13,30 +13,6 @@ const MapTexts = {
   endPoint: {
     label: _('Slutt', 'End'),
   },
-  controls: {
-    zoomIn: {
-      a11yLabel: _('Zoom inn', 'Zoom in'),
-    },
-    zoomOut: {
-      a11yLabel: _('Zoom ut', 'Zoom out'),
-    },
-    filter: {
-      vehicles: {
-        a11yLabel: _('Sparkesykler', 'Electric scooters'),
-        a11yHint: _(
-          'Aktivér visning av elektriske sparkesykler i kartet',
-          'Show or hide electric scooters in the map',
-        ),
-      },
-    },
-    position: {
-      a11yLabel: _('Min posisjon', 'My location'),
-      a11yHint: _(
-        'Aktivér for å gå til din gjeldende posisjon',
-        'Activate to use your current position',
-      ),
-    },
-  },
   disabledForScreenReader: {
     title: _('Kart kan ikke vises', 'Map cannot be viewed'),
     description: _(

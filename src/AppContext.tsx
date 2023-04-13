@@ -109,7 +109,7 @@ const defaultAppState: AppState = {
   mobileTokenOnboarded: false,
 };
 
-const AppContextProvider: React.FC = ({children}) => {
+export const AppContextProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer<AppReducer>(appReducer, defaultAppState);
 
   useEffect(() => {
@@ -228,5 +228,3 @@ export function useAppDispatch() {
   }
   return context;
 }
-
-export default AppContextProvider;

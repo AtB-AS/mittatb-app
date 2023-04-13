@@ -14,7 +14,7 @@ export const StopPlaces = ({
   header?: string;
   stopPlaces: NearestStopPlaceNode[];
   navigateToPlace: (place: StopPlace) => void;
-  testID: string;
+  testID?: string;
 }) => {
   const styles = useStyles();
   return (

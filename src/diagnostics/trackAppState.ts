@@ -5,6 +5,6 @@ function track(state: AppStateStatus) {
   Bugsnag.leaveBreadcrumb('appState', {state});
 }
 
-export default function trackAppState() {
+export function trackAppState() {
   AppState.addEventListener('change', track);
 }

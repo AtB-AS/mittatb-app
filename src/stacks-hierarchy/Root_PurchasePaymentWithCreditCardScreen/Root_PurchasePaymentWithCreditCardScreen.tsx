@@ -16,8 +16,8 @@ import {
   WebViewErrorEvent,
   WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
-import Processing from './Processing';
-import useTerminalState, {ErrorContext} from './use-terminal-state';
+import {Processing} from './Processing';
+import {useTerminalState, ErrorContext} from './use-terminal-state';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 
 type Props = RootStackScreenProps<'Root_PurchasePaymentWithCreditCardScreen'>;

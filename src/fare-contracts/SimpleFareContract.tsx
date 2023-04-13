@@ -5,9 +5,9 @@ import {
   isPreActivatedTravelRight,
 } from '@atb/ticketing';
 import React from 'react';
-import PreActivatedFareContractInfo from './PreActivatedFareContractInfo';
-import UnknownFareContract from './UnknownFareContract';
-import Carnet from './Carnet';
+import {PreActivatedFareContractInfo} from './PreActivatedFareContractInfo';
+import {UnknownFareContract} from './UnknownFareContract';
+import {CarnetFareContractInfo} from './Carnet/CarnetFareContractInfo';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
@@ -60,7 +60,7 @@ export const SimpleFareContract: React.FC<Props> = ({
     );
   } else if (isCarnetTravelRight(firstTravelRight)) {
     return (
-      <Carnet
+      <CarnetFareContractInfo
         fareContract={fc}
         travelRights={fc.travelRights.filter(isCarnetTravelRight)}
         now={now}

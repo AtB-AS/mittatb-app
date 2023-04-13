@@ -19,19 +19,19 @@ import {
 import {MessageBox} from '@atb/components/message-box';
 import {ThemeText} from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
 import {loginConfirmCodeInputId} from '@atb/test-ids';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export default function ConfirmCode({
+export const ConfirmCode = ({
   phoneNumber,
   doAfterLogin,
 }: {
   phoneNumber: string;
   doAfterLogin: () => void;
-}) {
+}) => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {authenticationType, confirmCode, signInWithPhoneNumber} =
@@ -165,7 +165,7 @@ export default function ConfirmCode({
       </KeyboardAvoidingView>
     </View>
   );
-}
+};
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

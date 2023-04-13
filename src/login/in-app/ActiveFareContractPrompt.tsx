@@ -2,7 +2,7 @@ import React from 'react';
 
 import {AfterLoginParams} from '@atb/login/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import ActiveFareContractPrompt from '../ActiveFareContractPrompt';
+import {ActiveFareContractPrompt} from '../ActiveFareContractPrompt';
 import {LoginInAppScreenProps} from '../types';
 
 export type ActiveFareContractPromptInAppRouteParams = {

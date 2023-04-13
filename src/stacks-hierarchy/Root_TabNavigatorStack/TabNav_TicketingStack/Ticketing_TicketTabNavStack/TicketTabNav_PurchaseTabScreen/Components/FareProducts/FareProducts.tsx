@@ -5,7 +5,7 @@ import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {productIsSellableInApp} from '@atb/reference-data/utils';
-import FareProductTile from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProductTile';
+import {FareProductTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProductTile';
 import {FareProductTypeConfig} from '@atb/configuration';
 
 export const FareProducts = ({

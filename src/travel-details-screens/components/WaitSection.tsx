@@ -9,8 +9,8 @@ import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import React from 'react';
 import {View} from 'react-native';
 import {timeIsShort} from '../utils';
-import TripLegDecoration from './TripLegDecoration';
-import TripRow from './TripRow';
+import {TripLegDecoration} from './TripLegDecoration';
+import {TripRow} from './TripRow';
 import {ThemeIcon} from '@atb/components/theme-icon';
 
 export type WaitDetails = {
@@ -18,7 +18,7 @@ export type WaitDetails = {
   waitTimeInSeconds: number;
 };
 
-const WaitSection: React.FC<WaitDetails> = (wait) => {
+export const WaitSection: React.FC<WaitDetails> = (wait) => {
   const style = useSectionStyles();
   const {t, language} = useTranslation();
   const waitTime = secondsToDuration(wait.waitTimeInSeconds, language);
@@ -51,4 +51,3 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.large,
   },
 }));
-export default WaitSection;

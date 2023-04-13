@@ -3,7 +3,7 @@ import {Dashboard_TripSearchScreen} from '@atb/stacks-hierarchy/Root_TabNavigato
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
 import {DashboardStackParams} from './navigation-types';
-import Dashboard_NearbyStopPlacesScreen from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_NearbyStopPlacesScreen';
+import {Dashboard_NearbyStopPlacesScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_NearbyStopPlacesScreen';
 import {Dashboard_TravelSearchFilterOnboardingScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TravelSearchFilterOnboardingScreen';
 import {Dashboard_DepartureDetailsScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_DepartureDetailsScreen';
 import {Dashboard_TravelDetailsMapScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TravelDetailsMapScreen';

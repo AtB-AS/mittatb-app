@@ -10,7 +10,7 @@ type SnapshotListener<T> = {
   onError: (err: Error) => void;
 };
 
-export default function setupFirestoreListener(
+export function setupFirestoreListener(
   abtCustomerId: string,
   listeners: {
     fareContracts: SnapshotListener<FareContract[]>;

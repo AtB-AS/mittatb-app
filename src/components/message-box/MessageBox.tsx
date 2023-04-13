@@ -14,7 +14,7 @@ import {useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
-import insets from '@atb/utils/insets';
+import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
 
 /**

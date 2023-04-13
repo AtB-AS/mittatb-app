@@ -9,7 +9,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {FavoriteIcon, LocationFavorite, UserFavorites} from '@atb/favorites';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import insets from '@atb/utils/insets';
+import {insets} from '@atb/utils/insets';
 import React, {useCallback} from 'react';
 import {FlatList, TouchableOpacity, View} from 'react-native';
 import {immutableMove} from './sort-utils';
@@ -19,10 +19,7 @@ type SortableListFallbackProps = {
   onSort: (newData: UserFavorites) => void;
 };
 
-export default function SortableList({
-  data,
-  onSort,
-}: SortableListFallbackProps) {
+export function SortableList({data, onSort}: SortableListFallbackProps) {
   const styles = useListStyle();
   const length = data.length;
 

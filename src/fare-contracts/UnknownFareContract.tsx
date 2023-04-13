@@ -3,9 +3,9 @@ import {ThemeText} from '@atb/components/text';
 import {FareContract} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import ValidityLine from './ValidityLine';
+import {ValidityLine} from './ValidityLine';
 
-export default function UnknownFareContract({fc}: {fc: FareContract}) {
+export function UnknownFareContract({fc}: {fc: FareContract}) {
   const {t} = useTranslation();
 
   return (

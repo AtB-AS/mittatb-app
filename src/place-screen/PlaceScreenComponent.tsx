@@ -13,7 +13,7 @@ import {MessageBox} from '@atb/components/message-box';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {useStopsDetailsData} from './hooks/use-stop-details-data';
 import {StopPlaceAndQuaySelection} from './components/StopPlaceAndQuaySelection';
-import QuayView from './components/QuayView';
+import {QuayView} from './components/QuayView';
 import {StopPlaceView} from './components/StopPlaceView';
 
 export type PlaceScreenParams = {

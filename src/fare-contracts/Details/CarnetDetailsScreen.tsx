@@ -2,11 +2,11 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {useTicketingState} from '@atb/ticketing';
 import {useTranslation, FareContractTexts} from '@atb/translations';
-import useInterval from '@atb/utils/use-interval';
+import {useInterval} from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import CarnetDetailedView from '../Carnet/CarnetDetailedView';
+import {CarnetDetailedView} from '../Carnet/CarnetDetailedView';
 import {FareContractModalScreenProps} from './types';
 
 export type CarnetDetailsRouteParams = {
@@ -16,7 +16,7 @@ export type CarnetDetailsRouteParams = {
 
 type Props = FareContractModalScreenProps<'CarnetDetailsScreen'>;
 
-export default function CarnetDetailsScreen({navigation, route}: Props) {
+export function CarnetDetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);

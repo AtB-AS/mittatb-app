@@ -27,7 +27,7 @@ export const MapFilter = ({onFilterChange}: MapFilterProps) => {
       style={style.filterButton}
       type="inline"
       compact={true}
-      interactiveColor={'interactive_2'}
+      interactiveColor="interactive_2"
       accessibilityRole="button"
       onPress={onPress}
       leftIcon={{svg: Filter}}

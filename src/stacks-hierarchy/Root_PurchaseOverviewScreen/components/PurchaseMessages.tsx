@@ -17,7 +17,7 @@ export type PurchaseWarningsProps = {
   toTariffZone: TariffZoneWithMetadata;
 };
 
-const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
+export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
   preassignedFareProductType,
   fromTariffZone,
   toTariffZone,
@@ -87,5 +87,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
   },
 }));
-
-export default PurchaseMessages;

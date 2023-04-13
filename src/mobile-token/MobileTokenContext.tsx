@@ -13,7 +13,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {v4 as uuid} from 'uuid';
 import {storage} from '@atb/storage';
 import Bugsnag from '@bugsnag/react-native';
-import useMobileTokenClient from '@atb/mobile-token/mobileTokenClient';
+import {useMobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import {RemoteToken, TokenLimitResponse} from './types';
 import {
   ActivatedToken,
@@ -24,9 +24,9 @@ import {
   TokenMustBeReplacedRemoteTokenStateError,
   TokenNotFoundRemoteTokenStateError,
 } from '@entur-private/abt-mobile-client-sdk';
-import createTokenService from '@atb/mobile-token/tokenService';
+import {createTokenService} from '@atb/mobile-token/tokenService';
 import {SAFETY_NET_API_KEY} from '@env';
-import logger from '@atb/mobile-token/abtClientLogger';
+import {logger} from '@atb/mobile-token/abtClientLogger';
 import {isInspectable} from '@atb/mobile-token/utils';
 
 import DeviceInfo from 'react-native-device-info';
@@ -66,7 +66,7 @@ const abtClient = createClient({
   logger,
 });
 
-const MobileTokenContextProvider: React.FC = ({children}) => {
+export const MobileTokenContextProvider: React.FC = ({children}) => {
   const {abtCustomerId, userCreationFinished} = useAuthState();
 
   const hasEnabledMobileToken = useHasEnabledMobileToken();
@@ -363,5 +363,3 @@ export function useMobileTokenContextState() {
   }
   return context;
 }
-
-export default MobileTokenContextProvider;

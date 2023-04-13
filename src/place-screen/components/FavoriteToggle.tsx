@@ -8,7 +8,7 @@ type FavoriteToggleProps = {
   setEnabled: (enabled: boolean) => void;
 };
 
-export default function FavoriteToggle({
+export function FavoriteToggle({
   enabled,
   setEnabled,
 }: FavoriteToggleProps): JSX.Element {

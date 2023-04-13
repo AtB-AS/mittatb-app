@@ -5,7 +5,7 @@ import Bugsnag from '@bugsnag/react-native';
 
 import {useAppState} from './AppContext';
 import {FeedbackConfiguration} from '@atb/components/feedback';
-import useInterval from '@atb/utils/use-interval';
+import {useInterval} from '@atb/utils/use-interval';
 
 /**
  * The retry interval values for retrying Remote Config data fetch with
@@ -51,7 +51,7 @@ const useRetryIntervalWithBackoff = (): [number, () => void] => {
   ];
 };
 
-const RemoteConfigContextProvider: React.FC = ({children}) => {
+export const RemoteConfigContextProvider: React.FC = ({children}) => {
   const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);
   const [fetchError, setFetchError] = useState(false);
   const {isLoading: isLoadingAppState, newBuildSincePreviousLaunch} =
@@ -159,5 +159,3 @@ const parseJson = (text: string, defaultObject: object) => {
     return defaultObject;
   }
 };
-
-export default RemoteConfigContextProvider;

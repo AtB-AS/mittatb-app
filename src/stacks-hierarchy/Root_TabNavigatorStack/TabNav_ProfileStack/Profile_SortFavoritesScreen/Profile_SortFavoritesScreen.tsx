@@ -9,7 +9,7 @@ import {FavoriteListTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {ProfileScreenProps} from '../navigation-types';
-import SortableList from './SortableList';
+import {SortableList} from './SortableList';
 
 type Props = ProfileScreenProps<'Profile_SortFavoritesScreen'>;
 

@@ -25,7 +25,7 @@ type ZonesSelectionProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export default function ZonesSelection({
+export function ZonesSelection({
   fareProductTypeConfig,
   fromTariffZone,
   toTariffZone,

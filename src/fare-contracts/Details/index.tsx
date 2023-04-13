@@ -1,8 +1,8 @@
-import CarnetDetailsScreen from '@atb/fare-contracts/Details/CarnetDetailsScreen';
+import {CarnetDetailsScreen} from '@atb/fare-contracts/Details/CarnetDetailsScreen';
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
-import DetailsScreen from './DetailsScreen';
-import ReceiptScreen from './ReceiptScreen';
+import {DetailsScreen} from './DetailsScreen';
+import {ReceiptScreen} from './ReceiptScreen';
 import {
   FareContractModalStackParams,
   FareContractModalStackRootProps,
@@ -10,7 +10,7 @@ import {
 
 const Stack = createStackNavigator<FareContractModalStackParams>();
 
-const FareContractModalRoot = ({}: FareContractModalStackRootProps) => {
+export const FareContractModalRoot = ({}: FareContractModalStackRootProps) => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="FareContractDetails" component={DetailsScreen} />
@@ -22,5 +22,3 @@ const FareContractModalRoot = ({}: FareContractModalStackRootProps) => {
     </Stack.Navigator>
   );
 };
-
-export default FareContractModalRoot;

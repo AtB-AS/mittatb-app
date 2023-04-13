@@ -48,7 +48,7 @@ export const FavoriteDeparturesScreenComponent = ({
       />
 
       <ScrollView>
-        <Sections.Section withFullPadding>
+        <Sections.Section withFullPadding testID="favoritesList">
           {favoriteDepartures.map((favorite) => (
             <Sections.FavoriteDepartureSectionItem
               key={favorite.id}
@@ -59,6 +59,7 @@ export const FavoriteDeparturesScreenComponent = ({
                 ),
               }}
               onPress={onDeletePress}
+              testID={`deleteFavorite${favoriteDepartures.indexOf(favorite)}`}
             />
           ))}
         </Sections.Section>
@@ -66,7 +67,7 @@ export const FavoriteDeparturesScreenComponent = ({
           <Sections.LinkSectionItem
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={onPressAddFavorite}
-            testID="chooseLoginPhone"
+            testID="addFavoriteDeparture"
             icon={<ThemeIcon svg={Add} />}
           />
         </Sections.Section>

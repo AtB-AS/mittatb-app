@@ -52,6 +52,6 @@ const initialState: GeocoderState = {
   error: undefined,
 };
 
-export default function useGeocoderReducer() {
+export function useGeocoderReducer() {
   return useReducer<GeocoderReducer>(geocoderReducer, initialState);
 }

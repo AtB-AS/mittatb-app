@@ -30,7 +30,7 @@ import {
   isRelativeButNotNow,
   isWithinSameDate,
 } from '@atb/utils/date';
-import insets from '@atb/utils/insets';
+import {insets} from '@atb/utils/insets';
 import {TFunc} from '@leile/lobo-t';
 import React from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
@@ -53,7 +53,7 @@ export type LineItemProps = SectionItemProps<{
   mode: QuaySectionMode;
   onPressDeparture: QuaySectionProps['onPressDeparture'];
 }>;
-export default function LineItem({
+export function LineItem({
   group,
   stop,
   quay,
