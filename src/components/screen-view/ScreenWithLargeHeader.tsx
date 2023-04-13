@@ -50,7 +50,12 @@ export const ScreenWithLargeHeader = ({
               </View>
             )}
             {headerChildren && (
-              <View style={styles.childrenContainer}>{headerChildren}</View>
+              <View
+                ref={!title ? focusRef : undefined}
+                style={styles.childrenContainer}
+              >
+                {headerChildren}
+              </View>
             )}
             <GlobalMessage
               globalMessageContext={globalMessageContext}
