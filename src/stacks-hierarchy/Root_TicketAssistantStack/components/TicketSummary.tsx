@@ -7,7 +7,9 @@ import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Ticket
 import {StyleSheet, useTheme} from '@atb/theme';
 import React, {useContext} from 'react';
 import {InteractiveColor, StaticColorByType} from '@atb/theme/colors';
-import TicketAssistantContext from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
+import TicketAssistantContext, {
+  TicketResponseData,
+} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 
 export type TicketSummaryProps = {
   duration: number;
@@ -27,11 +29,13 @@ export const TicketSummary = (props: TicketSummaryProps) => {
 
   if (!contextValue) throw new Error('Context is undefined!');
 
+  const index = getIndexOfLongestDurationTicket(contextValue.response.tickets);
+
   let {response, purchaseDetails} = contextValue;
   const recommendedTicket =
-    purchaseDetails?.purchaseTicketDetails[0].preassignedFareProduct;
+    purchaseDetails?.purchaseTicketDetails[index].preassignedFareProduct;
   const recommendedTicketTypeConfig =
-    purchaseDetails?.purchaseTicketDetails[0]?.fareProductTypeConfig;
+    purchaseDetails?.purchaseTicketDetails[index]?.fareProductTypeConfig;
   const fromTariffZone = purchaseDetails?.tariffZones[0];
   const toTariffZone = purchaseDetails?.tariffZones[1];
   const traveller = purchaseDetails?.userProfileWithCount[0];
@@ -74,7 +78,7 @@ export const TicketSummary = (props: TicketSummaryProps) => {
                   {t(TicketAssistantTexts.summary.traveller)}
                 </ThemeText>
                 <View>
-                  {response && response.tickets[0].traveller && (
+                  {response && response.tickets[index].traveller && (
                     <>
                       <View>
                         <InfoChip
@@ -125,7 +129,7 @@ export const TicketSummary = (props: TicketSummaryProps) => {
                 <InfoChip
                   interactiveColor={interactiveColorName}
                   style={styles.infoChip}
-                  text={`${response.tickets[0].price.toFixed(2)} kr`}
+                  text={`${response.tickets[index].price.toFixed(2)} kr`}
                 />
               </View>
             )}
@@ -140,8 +144,8 @@ export const TicketSummary = (props: TicketSummaryProps) => {
             color={interactiveColor.outline}
           >
             {`${(
-              response.tickets[0].price /
-              ((response.tickets[0].duration / 7) * frequency)
+              response.tickets[index].price /
+              ((response.tickets[index].duration / 7) * frequency)
             ).toFixed(2)} kr`}
           </ThemeText>
         </View>
@@ -173,6 +177,20 @@ function calculateSavings(
 
 function calculateSingleTickets(duration: number, frequency: number): number {
   return Math.ceil((duration / 7) * frequency);
+}
+
+function getIndexOfLongestDurationTicket(
+  tickets: TicketResponseData[],
+): number {
+  let longestDuration = 0;
+  let longestDurationIndex = 0;
+  tickets.forEach((ticket, index) => {
+    if (ticket.duration > longestDuration) {
+      longestDuration = ticket.duration;
+      longestDurationIndex = index;
+    }
+  });
+  return longestDurationIndex;
 }
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
