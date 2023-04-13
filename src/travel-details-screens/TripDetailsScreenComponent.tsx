@@ -4,7 +4,7 @@ import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import {Button} from '@atb/components/button';
 import {AnyMode} from '@atb/components/icon-box';
-import {LargeFullScreenHeader} from '@atb/components/screen-header/FullScreenHeader';
+import {FullScreenView} from '@atb/components/screen-view';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
 import {TariffZone} from '@atb/reference-data/types';
@@ -86,7 +86,9 @@ export const TripDetailsScreenComponent = ({
   const tripTicketDetails = useGetTicketInfoFromTrip(tripPattern);
   return (
     <View style={styles.container}>
-      <LargeFullScreenHeader
+      <FullScreenView
+        type="large"
+        leftButton={{type: 'back', withIcon: true}}
         title={
           fromToNames
             ? t(TripDetailsTexts.header.titleFromTo(fromToNames))
@@ -99,46 +101,41 @@ export const TripDetailsScreenComponent = ({
         }
         color={themeColor}
       >
-        <>
-          {tripPatternLegs && (
-            <CompactTravelDetailsMap
-              mapLegs={tripPatternLegs}
-              fromPlace={tripPatternLegs[0].fromPlace}
-              toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
-              onExpand={() => {
-                onPressDetailsMap({
-                  legs: tripPatternLegs,
-                  fromPlace: tripPatternLegs[0].fromPlace,
-                  toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
-                });
-              }}
-            />
-          )}
-          {tripPattern && (
-            <View
-              style={styles.paddedContainer}
-              testID="tripDetailsContentView"
-            >
-              {tripPatterns.length > 1 && (
-                <PaginatedDetailsHeader
-                  page={currentIndex + 1}
-                  totalPages={tripPatterns.length}
-                  onNavigate={navigate}
-                  style={styles.pagination}
-                  currentDate={tripPatternLegs[0]?.aimedStartTime}
-                />
-              )}
-              <Trip
-                tripPattern={tripPattern}
-                error={error}
-                onPressDetailsMap={onPressDetailsMap}
-                onPressDeparture={onPressDeparture}
-                onPressQuay={onPressQuay}
+        {tripPatternLegs && (
+          <CompactTravelDetailsMap
+            mapLegs={tripPatternLegs}
+            fromPlace={tripPatternLegs[0].fromPlace}
+            toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
+            onExpand={() => {
+              onPressDetailsMap({
+                legs: tripPatternLegs,
+                fromPlace: tripPatternLegs[0].fromPlace,
+                toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
+              });
+            }}
+          />
+        )}
+        {tripPattern && (
+          <View style={styles.paddedContainer} testID="tripDetailsContentView">
+            {tripPatterns.length > 1 && (
+              <PaginatedDetailsHeader
+                page={currentIndex + 1}
+                totalPages={tripPatterns.length}
+                onNavigate={navigate}
+                style={styles.pagination}
+                currentDate={tripPatternLegs[0]?.aimedStartTime}
               />
-            </View>
-          )}
-        </>
-      </LargeFullScreenHeader>
+            )}
+            <Trip
+              tripPattern={tripPattern}
+              error={error}
+              onPressDetailsMap={onPressDetailsMap}
+              onPressDeparture={onPressDeparture}
+              onPressQuay={onPressQuay}
+            />
+          </View>
+        )}
+      </FullScreenView>
       {tripTicketDetails && singleTicketConfig && (
         <View style={styles.borderTop}>
           <Button

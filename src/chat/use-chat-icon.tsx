@@ -27,7 +27,7 @@ export default function useChatIcon(
   };
 
   return {
-    icon: (
+    children: (
       <View style={styles.chatContainer} testID={testID}>
         {unreadCount ? (
           <ThemeIcon colorType={color} svg={ChatUnread} />

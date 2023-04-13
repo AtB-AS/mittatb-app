@@ -1,49 +1,15 @@
 import {ThemeText} from '@atb/components/text';
-import {GlobalMessage, GlobalMessageContextType} from '@atb/global-messages';
+import {GlobalMessage} from '@atb/global-messages';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {getStaticColor, StaticColor} from '@atb/theme/colors';
+import {getStaticColor} from '@atb/theme/colors';
 import useFocusOnLoad from '@atb/utils/use-focus-on-load';
 import React from 'react';
-import {View, ViewStyle} from 'react-native';
+import {View} from 'react-native';
 import {ContentWithDisappearingHeader} from '../disappearing-header';
-import {LargeHeaderButton, LargeHeaderButtonProps} from './HeaderButton';
+import {ScreenViewProps} from './FullScreenView';
+export {AnimatedScreenHeader} from '../screen-header/AnimatedScreenHeader';
 
-export {AnimatedScreenHeader} from './AnimatedScreenHeader';
-
-export type LargeScreenHeaderProps = {
-  title?: string;
-  titleA11yLabel?: string;
-  /**
-   * For specifying the alert context for alerts that should be shown in this
-   * header. If no context is specified then no alerts are shown.
-   */
-  globalMessageContext?: GlobalMessageContextType;
-  style?: ViewStyle;
-  containerStyle?: ViewStyle;
-  color?: StaticColor;
-  setFocusOnLoad?: boolean;
-  buttonProps?: Omit<LargeHeaderButtonProps, 'color'>;
-  /**
-   * JSX content that will be displayed as part of the disappearing header,
-   * below the title, and above global messages.
-   */
-  headerChildren?: JSX.Element | JSX.Element[];
-  /**
-   * Page content, below disappearing header.
-   */
-  children?: JSX.Element | JSX.Element[];
-};
-
-export const LargeScreenHeaderTop = (props: LargeHeaderButtonProps) => {
-  const styles = useStyles();
-  return (
-    <View style={styles.topContainer}>
-      <LargeHeaderButton {...props}></LargeHeaderButton>
-    </View>
-  );
-};
-
-export const LargeScreenHeader = ({
+export const ScreenWithLargeHeader = ({
   color,
   setFocusOnLoad,
   title,
@@ -51,7 +17,7 @@ export const LargeScreenHeader = ({
   globalMessageContext,
   headerChildren,
   children,
-}: LargeScreenHeaderProps) => {
+}: ScreenViewProps) => {
   const styles = useStyles();
   const {themeName} = useTheme();
   const themeColor = color ?? 'background_accent_0';

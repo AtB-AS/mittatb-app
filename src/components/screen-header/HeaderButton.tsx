@@ -3,13 +3,14 @@ import useChatIcon from '@atb/chat/use-chat-icon';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import insets from '@atb/utils/insets';
 import {useNavigation} from '@react-navigation/native';
-import {AccessibilityProps, TouchableOpacity} from 'react-native';
+import {AccessibilityProps, TouchableOpacity, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
+import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {StaticColor, TextColor} from '@atb/theme/colors';
 import ServiceDisruption from '@atb/assets/svg/mono-icons/status/ServiceDisruption';
 import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
 import {useTheme} from '@atb/theme';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 export type ButtonModes =
   | 'back'
@@ -25,14 +26,15 @@ export type HeaderButtonProps = {
   color?: StaticColor | TextColor;
   text?: string;
   testID?: string;
+  withIcon?: boolean;
 } & AccessibilityProps;
 
-export type IconButtonProps = Omit<HeaderButtonProps, 'type'> & {
-  icon: React.ReactNode;
+export type IconButtonProps = Omit<HeaderButtonProps, 'type' | 'withIcon'> & {
+  children: React.ReactNode;
 };
 
 export const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
-  const iconButton = useIconButton(buttonProps);
+  const iconButton = useHeaderButton(buttonProps);
   if (!iconButton) {
     return null;
   }
@@ -54,17 +56,15 @@ export const HeaderButtonWithoutNavigation = ({
   ...accessibilityProps
 }: HeaderButtonWithoutNavigationProps) => {
   return (
-    <BaseHeaderButton
-      icon={<ThemeText color={color}>{text}</ThemeText>}
-      onPress={onPress}
-      {...accessibilityProps}
-    />
+    <BaseHeaderButton onPress={onPress} {...accessibilityProps}>
+      <ThemeText color={color}>{text}</ThemeText>
+    </BaseHeaderButton>
   );
 };
 
 const BaseHeaderButton = ({
-  icon,
   onPress,
+  children,
   ...accessibilityProps
 }: IconButtonProps) => (
   <TouchableOpacity
@@ -73,7 +73,7 @@ const BaseHeaderButton = ({
     accessibilityRole="button"
     {...accessibilityProps}
   >
-    {icon}
+    {children}
   </TouchableOpacity>
 );
 
@@ -105,7 +105,7 @@ export const LargeHeaderButton = (buttonProps: LargeHeaderButtonProps) => {
   );
 };
 
-const useIconButton = (
+const useHeaderButton = (
   buttonProps: HeaderButtonProps,
 ): IconButtonProps | undefined => {
   const navigation = useNavigation();
@@ -116,12 +116,16 @@ const useIconButton = (
     case 'cancel':
     case 'skip':
     case 'close': {
-      const {type, color, onPress, ...accessibilityProps} = buttonProps;
+      const {type, color, onPress, withIcon, ...accessibilityProps} =
+        buttonProps;
       return {
-        icon: (
-          <ThemeText color={color}>
-            {t(ScreenHeaderTexts.headerButton[type].text)}
-          </ThemeText>
+        children: (
+          <View style={{flexDirection: 'row'}}>
+            {withIcon ? <HeaderButtonIcon mode={type} color={color} /> : null}
+            <ThemeText color={color}>
+              {t(ScreenHeaderTexts.headerButton[type].text)}
+            </ThemeText>
+          </View>
         ),
         accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
         onPress: onPress || navigation.goBack,
@@ -131,7 +135,7 @@ const useIconButton = (
     case 'status-disruption': {
       const {type, color, onPress, ...accessibilityProps} = buttonProps;
       return {
-        icon: <ThemeIcon colorType={color} svg={ServiceDisruption} />,
+        children: <ThemeIcon colorType={color} svg={ServiceDisruption} />,
         onPress: onPress,
         testID: 'serviceDisruptionButton',
         accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
@@ -143,10 +147,34 @@ const useIconButton = (
     case 'custom': {
       const {text, color, onPress, ...accessibilityProps} = buttonProps;
       return {
-        icon: <ThemeText color={color}>{text}</ThemeText>,
+        children: <ThemeText color={color}>{text}</ThemeText>,
         onPress: onPress,
         ...accessibilityProps,
       };
     }
+  }
+};
+
+const HeaderButtonIcon = ({
+  mode,
+  color,
+}: {
+  mode: ButtonModes;
+  color?: StaticColor | TextColor;
+}) => {
+  const {theme} = useTheme();
+  const iconProps: Omit<ThemeIconProps, 'svg'> = {
+    colorType: color,
+    style: {marginRight: theme.spacings.xSmall},
+  };
+
+  switch (mode) {
+    case 'back':
+      return <ThemeIcon svg={ArrowLeft} {...iconProps} />;
+    case 'close':
+    case 'cancel':
+      return <ThemeIcon svg={Close} {...iconProps} />;
+    default:
+      return null;
   }
 };
