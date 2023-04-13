@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {AccessibilityProps, TouchableOpacity, View} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
@@ -18,14 +18,15 @@ type Props = SectionItemProps<
     showIconText?: boolean;
     testID?: string;
     accessibility?: AccessibilityProps;
-    expanded?: boolean;
   } & (
     | {
         initiallyExpanded?: boolean;
         expandContent: React.ReactNode;
+        expanded?: boolean;
       }
     | {
         onPress(expanded: boolean): void;
+        expanded: boolean;
       }
   )
 >;
@@ -41,7 +42,6 @@ export function ExpandableSectionItem({
   showIconText = false,
   accessibility,
   testID,
-  expanded = false,
   ...props
 }: Props) {
   const {contentContainer, topContainer} = useSectionItem(props);
@@ -49,9 +49,16 @@ export function ExpandableSectionItem({
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const setExpanded = (e: boolean) => {
-    expanded = e;
-  };
+  const [expanded, setExpanded] = useState<boolean>(
+    'expanded' in props ? props.expanded ?? false : !!props.initiallyExpanded,
+  );
+
+  useEffect(() => {
+    if ('expanded' in props && props.expanded !== expanded) {
+      animateNextChange();
+      setExpanded(props.expanded ?? false);
+    }
+  }, [props.expanded]);
 
   const onPress = () => {
     animateNextChange();
