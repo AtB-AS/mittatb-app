@@ -16,7 +16,7 @@ type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
 export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const styles = useThemeStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {
     tariffZones,
     userProfiles,
@@ -61,7 +61,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const startDate = new Date();
   const endDate: string = new Date(
     startDate.getTime() + data.duration * 24 * 60 * 60 * 1000,
-  ).toLocaleDateString('nb-NO', {
+  ).toLocaleDateString(language, {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
