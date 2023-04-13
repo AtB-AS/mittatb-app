@@ -6,6 +6,7 @@ import {
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
+import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-defaults';
 
 export interface TicketAssistantContextValue {
   data: TicketAssistantData;
@@ -68,7 +69,8 @@ const TicketAssistantContext =
   createContext<TicketAssistantContextValue | null>(null);
 
 export const TicketAssistantProvider: FunctionComponent = ({children}) => {
-  const {preassignedFareProducts} = useFirestoreConfiguration();
+  const {preassignedFareProducts, fareProductTypeConfigs} =
+    useFirestoreConfiguration();
 
   // List of preassigned fare products ids
   let preassignedFareProductsIds: PreassignedFareProductDetails[] = [];
@@ -83,19 +85,25 @@ export const TicketAssistantProvider: FunctionComponent = ({children}) => {
       });
     }
   }
+  const offerDefaults = useOfferDefaults(
+    undefined,
+    fareProductTypeConfigs[0].type,
+  );
+
+  let {fromTariffZone, toTariffZone} = offerDefaults;
 
   const [data, setData] = useState<TicketAssistantData>({
     frequency: 7,
     traveller: {id: 'ADULT', user_type: 'ADULT'},
     duration: 7,
-    zones: ['ATB:TariffZone:1', 'ATB:TariffZone:1'],
+    zones: [fromTariffZone.id, toTariffZone.id],
     preassigned_fare_products: preassignedFareProductsIds
       ? preassignedFareProductsIds
       : [],
   });
   const [response, setResponse] = useState<Response>({
     total_cost: 301,
-    zones: ['ATB:TariffZone:1', 'ATB:TariffZone:1'],
+    zones: [fromTariffZone.id, toTariffZone.id],
     tickets: [
       {
         product_id: 'ATB:SalesPackage:ded0dc3b',
