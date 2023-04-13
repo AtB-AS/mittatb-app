@@ -124,13 +124,13 @@ const TicketAssistantTexts = {
       alternative: string;
     }) =>
       _(
-        `Da sparer du ${data.totalSavings} kr totalt (${data.perTripSavings} kr per tur) \n sammenlignet med ${data.alternative}`,
-        `You save ${data.totalSavings} kr in total (${data.perTripSavings} kr per trip) \n compared to ${data.alternative}`,
+        `Da sparer du ${data.totalSavings} kr totalt (${data.perTripSavings} kr per tur) \n sammenlignet med ${data.alternative} enkeltbilletter`,
+        `You save ${data.totalSavings} kr in total (${data.perTripSavings} kr per trip) \n compared to ${data.alternative} single tickets`,
       ),
     traveller: _('Reisende', 'Traveller'),
     zones: _('Soner', 'Zones'),
     price: _('Pris', 'Price'),
-    pricePerTrip: _('Pris pr tur:', 'Price per trip:'),
+    pricePerTrip: _('Pris per tur:', 'Price per trip:'),
     resultMoreThan180Days: _(
       'Du skal reise i mer enn et halvt år.',
       'You will travel for more than half a year.',

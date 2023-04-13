@@ -22,6 +22,7 @@ import {
 import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-defaults';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import TicketAssistantContext from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
+import {getRecommendedTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/api';
 
 type Props = TicketAssistantScreenProps<'TicketAssistant_ZonePickerScreen'>;
 export const TicketAssistant_ZonePickerScreen = ({
@@ -50,7 +51,7 @@ export const TicketAssistant_ZonePickerScreen = ({
   const contextValue = useContext(TicketAssistantContext);
   if (!contextValue) throw new Error('Context is undefined!');
 
-  const {data, updateData} = contextValue;
+  const {data, updateData, setResponse, setLoading} = contextValue;
 
   useEffect(() => {
     const zoneIds = [selectedZones.from.id, selectedZones.to.id];
@@ -118,7 +119,24 @@ export const TicketAssistant_ZonePickerScreen = ({
         <View style={styles.bottomView}>
           <Button
             interactiveColor="interactive_0"
-            onPress={() => navigation.navigate('TicketAssistant_SummaryScreen')}
+            onPress={async () => {
+              navigation.navigate('TicketAssistant_SummaryScreen');
+              if (setLoading) {
+                setLoading(true);
+              }
+              await getRecommendedTicket(data)
+                .then((r) => {
+                  if (setResponse && r) {
+                    setResponse(r);
+                  }
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+              if (setLoading) {
+                setLoading(false);
+              }
+            }}
             text={t(TicketAssistantTexts.frequency.mainButton)}
             testID="nextButton"
           />
@@ -127,6 +145,7 @@ export const TicketAssistant_ZonePickerScreen = ({
     </View>
   );
 };
+
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   header: {
     textAlign: 'center',
@@ -150,5 +169,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   bottomView: {
     paddingHorizontal: theme.spacings.xLarge,
     paddingBottom: theme.spacings.xLarge,
+  },
+  loadingGif: {
+    width: 200,
+    height: 200,
+    alignSelf: 'center',
+    marginTop: theme.spacings.large,
   },
 }));
