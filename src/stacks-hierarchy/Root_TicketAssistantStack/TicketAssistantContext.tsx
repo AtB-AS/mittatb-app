@@ -88,25 +88,25 @@ export const TicketAssistantProvider: FunctionComponent = ({children}) => {
     frequency: 7,
     traveller: {id: 'ADULT', user_type: 'ADULT'},
     duration: 7,
-    zones: ['ATB:TariffZone:1'],
+    zones: ['ATB:TariffZone:1', 'ATB:TariffZone:1'],
     preassigned_fare_products: preassignedFareProductsIds
       ? preassignedFareProductsIds
       : [],
   });
   const [response, setResponse] = useState<Response>({
-    total_cost: 0,
+    total_cost: 301,
     zones: ['ATB:TariffZone:1', 'ATB:TariffZone:1'],
     tickets: [
       {
         product_id: 'ATB:SalesPackage:ded0dc3b',
         fare_product: 'ATB:PreassignedFareProduct:8808c360',
-        duration: 10,
-        quantity: 2,
-        price: 400,
+        duration: 7,
+        quantity: 1,
+        price: 301,
         traveller: {id: 'ADULT', user_type: 'ADULT'},
       },
     ],
-    single_ticket_price: 200,
+    single_ticket_price: 43,
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [purchaseDetails, setPurchaseDetails] = useState<PurchaseDetails>(
