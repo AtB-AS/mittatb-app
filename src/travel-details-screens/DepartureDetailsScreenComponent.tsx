@@ -8,10 +8,10 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
-import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
+import {TransportationIconBox} from '@atb/components/icon-box';
 import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
 import {MessageBox} from '@atb/components/message-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
@@ -61,16 +61,13 @@ export const DepartureDetailsScreenComponent = ({
   onPressQuay,
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
-  const {theme, themeName} = useTheme();
-  const {
-    preferences: {debugShowSeconds},
-  } = usePreferences();
+  const {theme} = useTheme();
 
   const activeItem = items[activeItemIndexState];
   const hasMultipleItems = items.length > 1;
 
   const styles = useStopsStyle();
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
 
   const isFocused = useIsFocused();
   const [
@@ -110,7 +107,51 @@ export const DepartureDetailsScreenComponent = ({
       <FullScreenView
         type="large"
         leftButton={{type: 'back', withIcon: true}}
-        title={title ?? t(DepartureDetailsTexts.header.notFound)}
+        headerChildren={
+          <>
+            <View style={styles.headerTitle}>
+              {mode && (
+                <TransportationIconBox
+                  mode={mode}
+                  subMode={subMode}
+                  style={styles.headerTitleIcon}
+                />
+              )}
+              <ThemeText
+                type="heading--medium"
+                color="background_accent_0"
+                style={{flexShrink: 1}}
+              >
+                {title ?? t(DepartureDetailsTexts.header.notFound)}
+              </ThemeText>
+            </View>
+            {lastPassedStop || (vehiclePosition && mapData) ? (
+              <View style={styles.headerSubSection}>
+                <LastPassedStop estimatedCall={lastPassedStop} />
+                {vehiclePosition && mapData ? (
+                  <Button
+                    type="pill"
+                    leftIcon={{svg: Map}}
+                    text={t(
+                      vehiclePosition
+                        ? DepartureDetailsTexts.live
+                        : DepartureDetailsTexts.map,
+                    )}
+                    interactiveColor="interactive_1"
+                    onPress={() =>
+                      onPressDetailsMap({
+                        legs: mapData.mapLegs,
+                        fromPlace: mapData.start,
+                        toPlace: mapData.stop,
+                        _initialVehiclePosition: vehiclePosition,
+                      })
+                    }
+                  />
+                ) : null}
+              </View>
+            ) : null}
+          </>
+        }
       >
         {mapData && (
           <CompactTravelDetailsMap
@@ -145,26 +186,6 @@ export const DepartureDetailsScreenComponent = ({
               message={t(DepartureDetailsTexts.messages.noActiveItem)}
             />
           )}
-          {realtimeMapEnabled && mapData ? (
-            <Button
-              type="pill"
-              leftIcon={{svg: Map}}
-              text={t(
-                vehiclePosition
-                  ? DepartureDetailsTexts.live
-                  : DepartureDetailsTexts.map,
-              )}
-              interactiveColor="interactive_1"
-              onPress={() =>
-                onPressDetailsMap({
-                  legs: mapData.mapLegs,
-                  fromPlace: mapData.start,
-                  toPlace: mapData.stop,
-                  _initialVehiclePosition: vehiclePosition,
-                })
-              }
-            />
-          ) : null}
           {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
           {situations.map((situation) => (
             <SituationMessageBox
@@ -214,32 +235,49 @@ export const DepartureDetailsScreenComponent = ({
           />
         </View>
       </FullScreenView>
-
-      {lastPassedStop?.quay?.name && (
-        <View style={styles.realtime}>
-          <ThemeIcon
-            svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
-            size={'small'}
-            style={styles.realtimeIcon}
-          ></ThemeIcon>
-          <ThemeText type={'body__secondary'}>
-            {t(
-              DepartureDetailsTexts.lastPassedStop(
-                lastPassedStop.quay?.name,
-                formatToClock(
-                  lastPassedStop?.actualDepartureTime,
-                  language,
-                  'nearest',
-                  debugShowSeconds,
-                ),
-              ),
-            )}
-          </ThemeText>
-        </View>
-      )}
     </View>
   );
 };
+
+function LastPassedStop({
+  estimatedCall,
+}: {
+  estimatedCall?: EstimatedCallWithMetadata;
+}) {
+  const styles = useStopsStyle();
+  const {t, language} = useTranslation();
+  const {
+    preferences: {debugShowSeconds},
+  } = usePreferences();
+
+  if (!estimatedCall?.quay?.name) return null;
+  return (
+    <View style={styles.passedSection}>
+      <ThemeIcon
+        svg={RealtimeDark}
+        size="small"
+        style={styles.passedSectionRealtimeIcon}
+      />
+      <ThemeText
+        type="body__secondary"
+        color="background_accent_0"
+        style={{flexShrink: 1}}
+      >
+        {t(
+          DepartureDetailsTexts.lastPassedStop(
+            estimatedCall.quay?.name,
+            formatToClock(
+              estimatedCall?.actualDepartureTime,
+              language,
+              'nearest',
+              debugShowSeconds,
+            ),
+          ),
+        )}
+      </ThemeText>
+    </View>
+  );
+}
 
 type CallGroupProps = {
   calls: EstimatedCallWithMetadata[];
@@ -490,17 +528,34 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.static.background.background_0.background,
   },
-  header: {
-    backgroundColor: theme.static.background.background_accent_3.background,
+  headerTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerTitleIcon: {
+    marginRight: theme.spacings.small,
+  },
+  headerSubSection: {
+    marginTop: theme.spacings.medium,
+    borderTopWidth: theme.border.width.slim,
+    borderTopColor: theme.static.background.background_accent_1.background,
+    paddingTop: theme.spacings.medium,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  passedSection: {
+    flexShrink: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  passedSectionRealtimeIcon: {
+    marginRight: theme.spacings.xSmall,
   },
   startPlace: {
     marginTop: theme.spacings.large,
   },
   place: {
     marginBottom: -theme.tripLegDetail.decorationLineWidth,
-  },
-  endPlace: {
-    marginBottom: theme.spacings.large,
   },
   row: {
     paddingVertical: theme.spacings.small,
@@ -529,14 +584,6 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     paddingTop: 0,
     paddingBottom: theme.spacings.xLarge,
   },
-  realtime: {
-    padding: theme.spacings.medium,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    backgroundColor: theme.static.background.background_1.background,
-  },
-  realtimeIcon: {marginRight: theme.spacings.xSmall},
 }));
 
 function useMapData(activeItem: ServiceJourneyDeparture) {
