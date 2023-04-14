@@ -145,7 +145,7 @@ const useHeaderButton = (
             colorType={color}
             svg={ServiceDisruption}
             notification={
-              globalMessages.length > 0 ? {color: 'valid'} : undefined
+              globalMessages.length > 0 ? {color: 'info'} : undefined
             }
           />
         ),
