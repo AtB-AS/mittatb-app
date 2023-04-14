@@ -52,6 +52,7 @@ export const ScreenWithLargeHeader = ({
             {headerChildren && (
               <View
                 ref={!title ? focusRef : undefined}
+                accessible={!title}
                 style={styles.childrenContainer}
               >
                 {headerChildren}
