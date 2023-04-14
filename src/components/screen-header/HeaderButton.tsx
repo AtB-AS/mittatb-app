@@ -144,7 +144,13 @@ const useHeaderButton = (
           <ThemeIcon
             colorType={color}
             svg={ServiceDisruption}
-            notification={{color: globalMessages[0].type}}
+            notification={
+              globalMessages[0]
+                ? {
+                    color: globalMessages[0].type,
+                  }
+                : undefined
+            }
           />
         ),
         onPress: onPress,

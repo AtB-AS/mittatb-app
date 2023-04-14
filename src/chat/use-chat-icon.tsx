@@ -1,15 +1,14 @@
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
-import {ChatUnread} from '@atb/assets/svg/color/icons/actions';
 import {IconButtonProps} from '@atb/components/screen-header';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
-import {useChatUnreadCount} from './use-chat-unread-count';
 import {StaticColor, TextColor} from '@atb/theme/colors';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {ContactSheet} from '@atb/chat/ContactSheet';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {useChatUnreadCount} from '@atb/chat/use-chat-unread-count';
 
 export const useChatIcon = (
   color?: StaticColor | TextColor,
@@ -29,11 +28,17 @@ export const useChatIcon = (
   return {
     children: (
       <View style={styles.chatContainer} testID={testID}>
-        {unreadCount ? (
-          <ThemeIcon colorType={color} svg={ChatUnread} />
-        ) : (
-          <ThemeIcon colorType={color} svg={Chat} />
-        )}
+        <ThemeIcon
+          colorType={color}
+          svg={Chat}
+          notification={
+            unreadCount > 0
+              ? {
+                  color: 'error',
+                }
+              : undefined
+          }
+        />
       </View>
     ),
     accessibilityHint: t(ScreenHeaderTexts.headerButton.chat.a11yHint),
