@@ -1,11 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {
-  Feature,
-  FeatureCollection,
-  GeoJSON,
-  MultiPolygon,
-  Polygon,
-} from 'geojson';
+import React, {useCallback, useEffect, useState} from 'react';
+import {Feature, FeatureCollection, GeoJSON, Point, Polygon} from 'geojson';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
   toFeatureCollection,
@@ -24,11 +18,20 @@ import {ScooterSheet} from '@atb/mobility/components/ScooterSheet';
 import {RegionPayload} from '@rnmapbox/maps';
 import {useUserMapFilters} from '@atb/components/map/hooks/use-map-filter';
 import {getVehicles} from '@atb/api/mobility';
-import {useInterval} from '@atb/utils/use-interval';
+import {usePollableResource} from '@atb/utils/use-pollable-resource';
 
 const MIN_ZOOM_LEVEL = 13.5;
 const BUFFER_DISTANCE_IN_METERS = 500;
-const AUTO_RELOAD_INTERVAL = 10000;
+const AUTO_RELOAD_INTERVAL = 1000;
+
+type VehiclesAndLoadedArea = {
+  vehicles: FeatureCollection<Point, VehicleFragment>;
+  loadedArea: Feature<Polygon> | undefined;
+};
+const emptyVehiclesState: VehiclesAndLoadedArea = {
+  vehicles: toFeatureCollection([]),
+  loadedArea: undefined,
+};
 
 export const useVehicles: () => VehiclesState | undefined = () => {
   const [area, setArea] = useState({
@@ -41,22 +44,10 @@ export const useVehicles: () => VehiclesState | undefined = () => {
       [0, 0],
     ],
   });
-
-  // The area in which vehicles are already loaded
-  const [loadedArea, setLoadedArea] =
-    useState<Feature<Polygon | MultiPolygon>>();
-
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const isVehiclesEnabled = useIsVehiclesEnabled();
   const {getMapFilter} = useUserMapFilters();
-
-  const [vehicles, setVehicles] = useState<
-    FeatureCollection<GeoJSON.Point, VehicleFragment>
-  >(toFeatureCollection([]));
-
   const [filter, setFilter] = useState<VehiclesFilterType>();
-  const [isLoading, setIsLoading] = useState(false);
-  const [lastLoaded, setLastLoaded] = useState(0);
 
   useEffect(() => {
     getMapFilter().then((initialFilter) => {
@@ -64,43 +55,44 @@ export const useVehicles: () => VehiclesState | undefined = () => {
     });
   }, [isVehiclesEnabled]);
 
-  useInterval(
-    () => {
-      const abortCtrl = new AbortController();
-      if (isVehiclesEnabled) {
-        if (area.zoom > MIN_ZOOM_LEVEL && filter?.showVehicles) {
-          const areaChanged = needsReload(area.visibleBounds, loadedArea);
-          const dataExpired =
-            new Date().getTime() - lastLoaded > AUTO_RELOAD_INTERVAL;
-          if (areaChanged || dataExpired) {
-            setIsLoading(areaChanged); // Don't show loading indicator for auto reloads.
-            getVehicles(area, {signal: abortCtrl.signal})
-              .then(toFeaturePoints)
-              .then(toFeatureCollection)
-              .then(setVehicles)
-              .then(() => setIsLoading(false))
-              .then(() => {
-                setLoadedArea(
-                  extend(
-                    toFeaturePoint(area),
-                    getRadius(area.visibleBounds, BUFFER_DISTANCE_IN_METERS),
-                  ),
-                );
-              })
-              .then(() => setLastLoaded(new Date().getTime()));
-          }
-        } else {
-          setVehicles(toFeatureCollection([]));
-          setLoadedArea(undefined);
+  const loadVehicles = useCallback(
+    async (
+      signal,
+      previousState,
+      isInitialLoad,
+    ): Promise<VehiclesAndLoadedArea> => {
+      if (
+        isVehiclesEnabled &&
+        area.zoom > MIN_ZOOM_LEVEL &&
+        filter?.showVehicles
+      ) {
+        if (
+          isInitialLoad &&
+          !needsReload(area.visibleBounds, previousState.loadedArea)
+        ) {
+          return previousState;
         }
+
+        return await getVehicles(area, {signal})
+          .then(toFeaturePoints)
+          .then(toFeatureCollection)
+          .then((vehicles) => ({
+            vehicles,
+            loadedArea: extend(
+              toFeaturePoint(area),
+              getRadius(area.visibleBounds, BUFFER_DISTANCE_IN_METERS),
+            ),
+          }));
       }
-      return () => abortCtrl.abort();
+      return emptyVehiclesState;
     },
-    AUTO_RELOAD_INTERVAL,
     [area, isVehiclesEnabled, filter],
-    false,
-    true,
   );
+
+  const [{vehicles}, isLoading] = usePollableResource(loadVehicles, {
+    initialValue: emptyVehiclesState,
+    pollingTimeInSeconds: AUTO_RELOAD_INTERVAL,
+  });
 
   const fetchVehicles = async (
     region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
