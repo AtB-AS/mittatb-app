@@ -29,9 +29,6 @@ const GlobalMessage = ({
     addDismissedGlobalMessages,
   } = useGlobalMessagesState();
 
-  // If `showAllMessages` is true, retrieve all global messages using `findGlobalMessages()`.
-  // Otherwise, check if a specific `globalMessageContext` is provided. If it is, retrieve the corresponding global messages using `findGlobalMessages(globalMessageContext)`.
-  // If no `globalMessageContext` is provided, default to an empty array.
   const globalMessages = showAllMessages
     ? findGlobalMessages()
     : globalMessageContext
