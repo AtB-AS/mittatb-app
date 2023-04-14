@@ -1,5 +1,6 @@
 import Page from './page';
 import ElementHelper from '../utils/element.helper';
+import AppHelper from '../utils/app.helper';
 
 class SearchPage extends Page {
   /**
@@ -27,6 +28,7 @@ class SearchPage extends Page {
     await this.locationInput.setValue(location);
     await ElementHelper.waitForElement('id', 'locationSearchItem0');
     await this.searchResult.click();
+    await AppHelper.pause();
   }
 }
 

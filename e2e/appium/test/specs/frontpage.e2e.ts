@@ -31,6 +31,7 @@ describe('Frontpage', () => {
 
       // Choose stop place
       await FrontPagePage.addFavoriteDeparture.click();
+      await ElementHelper.waitForElement('id', 'searchFromButton');
       await FrontPagePage.searchFrom.click();
       await SearchPage.setSearchLocation(stopPlace);
 
@@ -54,11 +55,11 @@ describe('Frontpage', () => {
 
       // Verify
       await ElementHelper.waitForElement('id', 'favoriteDepartures');
-      expect(FrontPagePage.getFavoriteStopPlace).toContain(stopPlace);
-      expect(FrontPagePage.favoriteDepartureLine).toContain(
+      expect(await FrontPagePage.getFavoriteStopPlace).toContain(stopPlace);
+      expect(await FrontPagePage.favoriteDepartureLine).toContain(
         `${linePublicCode} ${lineName}`,
       );
-      expect(FrontPagePage.favoriteDeparture).toExist();
+      expect(await FrontPagePage.favoriteDeparture).toExist();
     } catch (errMsg) {
       await AppHelper.screenshot(
         'error_frontpage_should_add_favorite_departure',
@@ -69,6 +70,7 @@ describe('Frontpage', () => {
 
   /**
    * Toggle the visibility of a favorite departure from the frontpage
+   * Note! Depends on former test
    */
   it('should toggle favorite departure', async () => {
     try {
@@ -85,8 +87,8 @@ describe('Frontpage', () => {
 
       // Verify
       await AppHelper.pause(1000);
-      expect(FrontPagePage.favoriteDepartures).not.toExist();
-      expect(FrontPagePage.noFavoriteInfo).not.toExist();
+      expect(await FrontPagePage.favoriteDepartures).not.toExist();
+      expect(await FrontPagePage.noFavoriteInfo).not.toExist();
 
       // Toggle in
       await FrontPagePage.selectFavoriteDeparture.click();
@@ -97,7 +99,7 @@ describe('Frontpage', () => {
 
       // Verify
       await AppHelper.pause(1000);
-      expect(FrontPagePage.favoriteDepartures).toExist();
+      expect(await FrontPagePage.favoriteDepartures).toExist();
     } catch (errMsg) {
       await AppHelper.screenshot(
         'error_frontpage_should_toggle_favorite_departure',
@@ -108,24 +110,27 @@ describe('Frontpage', () => {
 
   /**
    * Remove a favorite departure from the frontpage
+   * Note! Depends on former test
    */
   it('should remove favorite departure', async () => {
     try {
       await ElementHelper.waitForElement('id', 'favoriteDepartures');
-      expect(FrontPagePage.favoriteDepartures).toExist();
-      expect(FrontPagePage.noFavoriteInfo).not.toExist();
+      expect(await FrontPagePage.favoriteDepartures).toExist();
+      expect(await FrontPagePage.noFavoriteInfo).not.toExist();
       await FrontPagePage.selectFavoriteDeparture.click();
       await ElementHelper.waitForElement('id', 'selectFavoriteBottomSheet');
 
       // Delete
       await FavoritePage.editFavorites.click();
       await ElementHelper.waitForElement('id', 'favoritesList');
-      await FavoritePage.deleteFavorite;
+      await FavoritePage.deleteFavorite();
       await NavigationHelper.back();
 
       // Verify
-      expect(FrontPagePage.favoriteDepartures).not.toExist();
-      expect(FrontPagePage.noFavoriteInfo).toExist();
+      await ElementHelper.waitForElement('id', 'noFavoriteWidget');
+      expect(
+        await ElementHelper.isElementExisting('favoriteDepartures', 5),
+      ).toEqual(false);
     } catch (errMsg) {
       await AppHelper.screenshot(
         'error_frontpage_should_remove_favorite_departure',
@@ -162,9 +167,15 @@ describe('Frontpage', () => {
       await FrontPagePage.serviceDisruptionsInfo.click();
 
       await ElementHelper.waitForElement('id', 'serviceDisruptionsBottomSheet');
-      expect(await FrontPagePage.serviceDisruptionsButton).toHaveTextContaining(
-        linkText,
-      );
+      expect(
+        await ElementHelper.isElementExisting(
+          'navigateToServiceDisruptions',
+          2000,
+        ),
+      ).toEqual(true);
+      expect(
+        await FrontPagePage.serviceDisruptionsButton,
+      ).toHaveAttributeContaining('text', linkText);
       await NavigationHelper.cancel();
     } catch (errMsg) {
       await AppHelper.screenshot(
