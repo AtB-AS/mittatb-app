@@ -41,16 +41,24 @@ class ElementHelper {
   }
 
   /**
+   * Wait for pop-up alert
+   */
+  async waitForAlert() {
+    await this.waitForElement('id', 'android:id/button1');
+  }
+
+  /**
    * Checks if an element exists given timeout sec
    * @param id: the test-id
    * @param timeout: sec
    * @return boolean
    */
   async isElementExisting(id: string, timeout: number) {
+    const fullId = `//*[@resource-id="${id}"]`;
     // Checks every 1 sec
     for (let i = 0; i < timeout; i++) {
       await AppHelper.pause(1000);
-      const exists = await $(id).isExisting();
+      const exists = await $(fullId).isExisting();
       if (exists) {
         return true;
       }

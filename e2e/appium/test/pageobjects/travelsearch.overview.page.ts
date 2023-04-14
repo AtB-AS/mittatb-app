@@ -26,7 +26,10 @@ class TravelSearchOverviewPage extends Page {
   async confirmOnboarding(timeoutValue: number = 10) {
     const id = `//*[@resource-id="filterOnboardingConfirmButton"]`;
     // Check for n sec
-    const exists = await ElementHelper.isElementExisting(id, timeoutValue);
+    const exists = await ElementHelper.isElementExisting(
+      'filterOnboardingConfirmButton',
+      timeoutValue,
+    );
     if (exists) {
       await $(id).click();
     }

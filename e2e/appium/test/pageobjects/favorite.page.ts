@@ -1,6 +1,7 @@
 import Page from './page';
 import ElementHelper from '../utils/element.helper';
 import AppHelper from '../utils/app.helper';
+import AlertHelper from '../utils/alert.helper';
 
 class FavoritePage extends Page {
   /**
@@ -35,12 +36,10 @@ class FavoritePage extends Page {
   async deleteFavorite() {
     const reqId = `//*[@resource-id="deleteFavorite0"]`;
     await $(reqId).click();
-    await AppHelper.pause();
-    const isAlert = await driver.isAlertOpen();
-    if (!isAlert) {
-      await AppHelper.pause(2000);
-    }
-    await driver.acceptAlert();
+
+    // Confirm alert
+    await ElementHelper.waitForAlert();
+    await AlertHelper.alertConfirm.click();
     await AppHelper.pause();
   }
 
