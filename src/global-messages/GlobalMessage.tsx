@@ -13,9 +13,14 @@ import {useNow} from '@atb/utils/use-now';
 type Props = {
   globalMessageContext?: GlobalMessageContextType;
   style?: StyleProp<ViewStyle>;
+  showAllMessages?: boolean;
 };
 
-const GlobalMessage = ({globalMessageContext, style}: Props) => {
+const GlobalMessage = ({
+  globalMessageContext,
+  style,
+  showAllMessages = false,
+}: Props) => {
   const {language} = useTranslation();
   const now = useNow(2500);
   const {
@@ -24,11 +29,16 @@ const GlobalMessage = ({globalMessageContext, style}: Props) => {
     addDismissedGlobalMessages,
   } = useGlobalMessagesState();
 
-  const globalMessages = globalMessageContext
+  // If `showAllMessages` is true, retrieve all global messages using `findGlobalMessages()`.
+  // Otherwise, check if a specific `globalMessageContext` is provided. If it is, retrieve the corresponding global messages using `findGlobalMessages(globalMessageContext)`.
+  // If no `globalMessageContext` is provided, default to an empty array.
+  const globalMessages = showAllMessages
+    ? findGlobalMessages()
+    : globalMessageContext
     ? findGlobalMessages(globalMessageContext)
-    : undefined;
+    : [];
 
-  if (!globalMessages?.length) {
+  if (globalMessages.length === 0 && !showAllMessages) {
     return null;
   }
 
@@ -50,7 +60,9 @@ const GlobalMessage = ({globalMessageContext, style}: Props) => {
   return (
     <>
       {globalMessages
-        .filter(isNotADismissedMessage)
+        .filter((gm: GlobalMessageType) => {
+          return showAllMessages || isNotADismissedMessage(gm);
+        })
         .filter(isWithinTimeRange)
         .map((globalMessage: GlobalMessageType) => {
           const message = getTextForLanguage(globalMessage.body, language);
@@ -64,7 +76,7 @@ const GlobalMessage = ({globalMessageContext, style}: Props) => {
               type={globalMessage.type}
               isMarkdown={true}
               onDismiss={
-                globalMessage.isDismissable
+                globalMessage.isDismissable && !showAllMessages
                   ? () => dismissGlobalMessage(globalMessage)
                   : undefined
               }

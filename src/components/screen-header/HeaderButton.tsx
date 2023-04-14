@@ -11,6 +11,7 @@ import ServiceDisruption from '@atb/assets/svg/mono-icons/status/ServiceDisrupti
 import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
 import {useTheme} from '@atb/theme';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {useGlobalMessagesState} from '@atb/global-messages';
 
 export type ButtonModes =
   | 'back'
@@ -110,6 +111,10 @@ const useHeaderButton = (
 ): IconButtonProps | undefined => {
   const navigation = useNavigation();
   const chatIcon = useChatIcon(buttonProps.color, buttonProps.testID);
+  const {findGlobalMessages} = useGlobalMessagesState();
+  const globalMessages = findGlobalMessages('app-assistant').filter((a) =>
+    a.context.some((cont) => cont.includes('app')),
+  );
   const {t} = useTranslation();
   switch (buttonProps.type) {
     case 'back':
@@ -135,7 +140,15 @@ const useHeaderButton = (
     case 'status-disruption': {
       const {type, color, onPress, ...accessibilityProps} = buttonProps;
       return {
-        children: <ThemeIcon colorType={color} svg={ServiceDisruption} />,
+        children: (
+          <ThemeIcon
+            colorType={color}
+            svg={ServiceDisruption}
+            notification={
+              globalMessages.length > 0 ? {color: 'valid'} : undefined
+            }
+          />
+        ),
         onPress: onPress,
         testID: 'serviceDisruptionButton',
         accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
