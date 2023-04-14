@@ -76,7 +76,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
           <FareContractOrReservation
             now={now}
             onPressFareContract={() =>
-              navigation.navigate('FareContractModal', {
+              navigation.navigate('Root_FareContractModal', {
                 screen: 'FareContractDetails',
                 params: {orderId: fcOrReservation.orderId},
               })

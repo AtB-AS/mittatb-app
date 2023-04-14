@@ -2,7 +2,7 @@ import {useAppState} from '@atb/AppContext';
 import {trackNavigation} from '@atb/diagnostics/trackNavigation';
 import {LoginInAppStack} from '@atb/login/in-app/LoginInAppStack';
 import {Root_OnboardingStack} from './Root_OnboardingStack';
-import {FareContractModalRoot} from '../fare-contracts/Details';
+import {Root_FareContractModal} from './Root_FareContractModal';
 import {useTheme} from '@atb/theme';
 import {APP_SCHEME} from '@env';
 import {
@@ -303,8 +303,8 @@ export const RootStack = () => {
                   component={Root_PurchaseAsAnonymousConsequencesScreen}
                 />
                 <Stack.Screen
-                  name="FareContractModal"
-                  component={FareContractModalRoot}
+                  name="Root_FareContractModal"
+                  component={Root_FareContractModal}
                 />
                 <Stack.Screen
                   name="Root_MobileTokenOnboardingStack"

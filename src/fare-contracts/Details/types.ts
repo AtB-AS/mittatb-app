@@ -12,7 +12,7 @@ export type FareContractModalStackParams = {
 };
 
 export type FareContractModalStackRootProps =
-  RootStackScreenProps<'FareContractModal'>;
+  RootStackScreenProps<'Root_FareContractModal'>;
 
 export type FareContractModalScreenProps<
   T extends keyof FareContractModalStackParams,

@@ -56,7 +56,7 @@ export type RootStackParamList = {
     paymentMethod: CardPaymentMethod;
   };
   Root_PurchasePaymentWithVippsScreen: PaymentParams;
-  FareContractModal: NavigatorScreenParams<FareContractModalStackParams>;
+  Root_FareContractModal: NavigatorScreenParams<FareContractModalStackParams>;
   Root_MobileTokenOnboardingStack: undefined;
 };
 
