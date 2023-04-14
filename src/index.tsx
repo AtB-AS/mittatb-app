@@ -29,6 +29,8 @@ import {FirestoreConfigurationContextProvider} from '@atb/configuration/Firestor
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Platform, UIManager} from 'react-native';
 import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext';
+import {ApolloProvider} from '@apollo/client';
+import {client} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/hlp';
 
 configureAndStartBugsnag();
 
@@ -76,17 +78,19 @@ export const App = () => {
                             <RemoteConfigContextProvider>
                               <FirestoreConfigurationContextProvider>
                                 <TicketingContextProvider>
-                                  <MobileTokenContextProvider>
-                                    <AppLanguageProvider>
-                                      <GlobalMessagesContextProvider>
-                                        <BottomSheetProvider>
-                                          <FeedbackQuestionsProvider>
-                                            <RootStack />
-                                          </FeedbackQuestionsProvider>
-                                        </BottomSheetProvider>
-                                      </GlobalMessagesContextProvider>
-                                    </AppLanguageProvider>
-                                  </MobileTokenContextProvider>
+                                  <ApolloProvider client={client}>
+                                    <MobileTokenContextProvider>
+                                      <AppLanguageProvider>
+                                        <GlobalMessagesContextProvider>
+                                          <BottomSheetProvider>
+                                            <FeedbackQuestionsProvider>
+                                              <RootStack />
+                                            </FeedbackQuestionsProvider>
+                                          </BottomSheetProvider>
+                                        </GlobalMessagesContextProvider>
+                                      </AppLanguageProvider>
+                                    </MobileTokenContextProvider>
+                                  </ApolloProvider>
                                 </TicketingContextProvider>
                               </FirestoreConfigurationContextProvider>
                             </RemoteConfigContextProvider>

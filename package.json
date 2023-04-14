@@ -24,6 +24,8 @@
     "unimported": "npx unimported"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.11",
+    "@apollo/react-hooks": "^4.0.0",
     "@atb-as/theme": "^6.5.1",
     "@bugsnag/react-native": "^7.18.2",
     "@bugsnag/source-maps": "^2.3.1",
@@ -58,6 +60,8 @@
     "axios-retry": "^3.3.1",
     "date-fns": "^2.29.3",
     "emoji-datasource": "^14.0.0",
+    "graphql": "^16.6.0",
+    "graphql-subscriptions": "^2.0.0",
     "haversine-distance": "^1.2.1",
     "hex-to-rgba": "^2.0.1",
     "humanize-duration": "^3.28.0",
@@ -94,6 +98,7 @@
     "react-native-webview": "^11.26.0",
     "search-params": "^4.0.1",
     "string.fromcodepoint": "^1.0.0",
+    "subscriptions-transport-ws": "^0.11.0",
     "use-reducer-with-side-effects": "^2.2.0",
     "uuid": "^9.0.0"
   },
