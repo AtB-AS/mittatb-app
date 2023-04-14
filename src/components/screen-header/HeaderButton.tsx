@@ -11,7 +11,8 @@ import ServiceDisruption from '@atb/assets/svg/mono-icons/status/ServiceDisrupti
 import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
 import {useTheme} from '@atb/theme';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {useGlobalMessagesState} from '@atb/global-messages';
+import {GlobalMessageType, useGlobalMessagesState} from '@atb/global-messages';
+import {useNow} from '@atb/utils/use-now';
 
 export type ButtonModes =
   | 'back'
@@ -112,9 +113,17 @@ const useHeaderButton = (
   const navigation = useNavigation();
   const chatIcon = useChatIcon(buttonProps.color, buttonProps.testID);
   const {findGlobalMessages} = useGlobalMessagesState();
-  const globalMessages = findGlobalMessages('app-assistant').filter((a) =>
-    a.context.some((cont) => cont.includes('app')),
-  );
+
+  const now = useNow(2500);
+  const isWithinTimeRange = (globalMessage: GlobalMessageType) => {
+    const startDate = globalMessage.startDate ?? 0;
+    const endDate = globalMessage.endDate ?? 8640000000000000;
+
+    return startDate <= now && endDate >= now;
+  };
+  const globalMessages = findGlobalMessages('app-assistant')
+    .filter((a) => a.context.some((cont) => cont.includes('app')))
+    .filter(isWithinTimeRange);
   const {t} = useTranslation();
   switch (buttonProps.type) {
     case 'back':
