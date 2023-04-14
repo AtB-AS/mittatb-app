@@ -22,7 +22,7 @@ import {usePollableResource} from '@atb/utils/use-pollable-resource';
 
 const MIN_ZOOM_LEVEL = 13.5;
 const BUFFER_DISTANCE_IN_METERS = 500;
-const AUTO_RELOAD_INTERVAL = 1000;
+const AUTO_RELOAD_INTERVAL = 10;
 
 type VehiclesAndLoadedArea = {
   vehicles: FeatureCollection<Point, VehicleFragment>;
