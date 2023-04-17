@@ -175,6 +175,7 @@ platform :ios do
       configuration: 'Release',
       export_method: ENV['EXPORT_METHOD'],
       workspace: './ios/atb.xcworkspace',
+      export_xcargs: '-verbose'
       export_options: {
         signingStyle: "manual",
         provisioningProfiles: {
