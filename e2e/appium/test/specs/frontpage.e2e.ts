@@ -10,7 +10,8 @@ import FavoritePage from '../pageobjects/favorite.page';
 describe('Frontpage', () => {
   before(async () => {
     await AppHelper.launchApp();
-    await OnboardingPage.skipOnboarding();
+    await AppHelper.pause(10000, true);
+    await OnboardingPage.skipOnboarding('frontpage');
   });
   beforeEach(async () => {
     await NavigationHelper.tapMenu('assistant');

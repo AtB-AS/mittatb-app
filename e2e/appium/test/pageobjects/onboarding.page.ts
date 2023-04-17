@@ -45,15 +45,20 @@ class OnboardingPage extends Page {
   /**
    * Tap through the onboarding
    */
-  async skipOnboarding() {
-    await ElementHelper.waitForElement('id', 'nextButtonOnboardingWelcome');
-    await this.nextButtonOnboardingWelcome.click();
-    await AppHelper.pause(2000);
-    await ElementHelper.waitForElement('id', 'nextButtonIntercomOnboarding');
-    await this.nextButtonIntercomOnboarding.click();
-    await ElementHelper.waitForElement('id', 'acceptRestrictionsButton');
-    await this.accRestrButton.click();
-    await this.denyLocation();
+  async skipOnboarding(testName: string = '') {
+    try {
+      await ElementHelper.waitForElement('id', 'nextButtonOnboardingWelcome');
+      await this.nextButtonOnboardingWelcome.click();
+      await AppHelper.pause(10000, true);
+      await ElementHelper.waitForElement('id', 'nextButtonIntercomOnboarding');
+      await this.nextButtonIntercomOnboarding.click();
+      await ElementHelper.waitForElement('id', 'acceptRestrictionsButton');
+      await this.accRestrButton.click();
+      await this.denyLocation();
+    } catch (errMsg) {
+      await AppHelper.screenshot(`error_${testName}_skipOnboarding`);
+      throw errMsg;
+    }
   }
 }
 

@@ -6,6 +6,7 @@ import {HeadingTexts} from '../texts';
 describe('Onboarding', () => {
   before(async () => {
     await AppHelper.launchApp();
+    await AppHelper.pause(10000, true);
   });
 
   /**
@@ -15,7 +16,7 @@ describe('Onboarding', () => {
     try {
       await ElementHelper.waitForElement('id', 'nextButtonOnboardingWelcome');
       await OnboardingPage.nextButtonOnboardingWelcome.click();
-      await AppHelper.pause(2000);
+      await AppHelper.pause(10000);
 
       await ElementHelper.waitForElement('id', 'nextButtonIntercomOnboarding');
       await OnboardingPage.nextButtonIntercomOnboarding.click();
