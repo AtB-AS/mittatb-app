@@ -10,6 +10,7 @@
     "@jridgewell/trace-mapping" "^0.3.0"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 "@atb-as/generate-assets@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-7.0.0.tgz#3da3478a61a75004fdeb69a7fd0697dfee764e93"
@@ -24,6 +25,17 @@
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-1.0.8.tgz#5db17154a60bae8bfa2ac22e23d0e7b962c2e2ca"
   integrity sha512-xbZzqDQskT8OjeeknSkVxglzURgWvdrKEofhTd9YxyNFHzLM1iA+0pX0ugZcSp+sUWL49OqYSSOFRgZjB4hjHg==
+||||||| parent of 29b887be (refactor: use confic-spec types for filter search)
+"@atb-as/config-specs@^1.0.8":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-1.0.8.tgz#5db17154a60bae8bfa2ac22e23d0e7b962c2e2ca"
+  integrity sha512-xbZzqDQskT8OjeeknSkVxglzURgWvdrKEofhTd9YxyNFHzLM1iA+0pX0ugZcSp+sUWL49OqYSSOFRgZjB4hjHg==
+=======
+"@atb-as/config-specs@^2.0.0-alpha.3":
+  version "2.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-2.0.0-alpha.3.tgz#a94570218f4385851f29a51be885584197f24ace"
+  integrity sha512-OX/+OtOzmKm6LWj9OldL/UXdJYz5BKwHN5mlUeh/NcGsiXWSG9JWO0OY/jmcCjzfTRZW99EvIU5yEk5jyc2bFA==
+>>>>>>> 29b887be (refactor: use confic-spec types for filter search)
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"

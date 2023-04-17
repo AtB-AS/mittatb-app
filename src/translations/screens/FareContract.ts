@@ -1,3 +1,4 @@
+import {TransportModeType} from '@atb-as/config-specs';
 import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {translation as _} from '../commons';
 import {orgSpecificTranslations} from '../orgSpecificTranslations';
@@ -157,7 +158,7 @@ const FareContractTexts = {
     a11yLabelMultipleTravelModes: (count: number) =>
       _(`Totalt ${count} reisemåter`, `In total ${count} travel modes`),
   },
-  transportMode: (mode: TransportMode) => {
+  transportMode: (mode: TransportModeType) => {
     switch (mode) {
       case TransportMode.Bus:
       case TransportMode.Coach:
