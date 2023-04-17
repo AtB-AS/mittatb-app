@@ -1,4 +1,5 @@
 require 'uri'
+
 fastlane_version '2.142.0'
 
 before_all do
@@ -114,18 +115,18 @@ platform :ios do
     # App provisioning profile
     app_prefix = "#{ENV['IOS_BUNDLE_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
     app_prov_profile_path = ENV["sigh_#{app_prefix}_profile-path"]
-    app_prov_profile_name = ENV["sigh_#{app_prefix}_profile-name"]
+    app_prov_profile_name = URI.decode(ENV["sigh_#{app_prefix}_profile-name"])
     app_signing_identity_name = URI.decode(ENV["sigh_#{app_prefix}_certificate-name"])
 
     # Widget provisioning profile
     widget_prefix = "#{ENV['IOS_APP_WIDGET_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
     widget_prov_profile_path = ENV["sigh_#{widget_prefix}_profile-path"]
-    widget_prov_profile_name = ENV["sigh_#{widget_prefix}_profile-name"]
+    widget_prov_profile_name = URI.decode(ENV["sigh_#{widget_prefix}_profile-name"])
 
     # Intent provisioning profile
     intent_prefix = "#{ENV['IOS_APP_INTENT_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
     intent_prov_profile_path = ENV["sigh_#{intent_prefix}_profile-path"]
-    intent_prov_profile_name = ENV["sigh_#{intent_prefix}_profile-name"]
+    intent_prov_profile_name = URI.decode(ENV["sigh_#{intent_prefix}_profile-name"])
 
     widget_enabled = ENV["ENABLE_WIDGET"] == "true"
     puts "Is widget enabled: #{widget_enabled}"
