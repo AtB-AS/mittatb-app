@@ -128,6 +128,9 @@ platform :ios do
     intent_prov_profile_path = ENV["sigh_#{intent_prefix}_profile-path"]
     intent_prov_profile_name = URI.decode(ENV["sigh_#{intent_prefix}_profile-name"])
 
+    puts "Identity name: #{app_signing_identity_name}"
+    puts "Certificate names: #{app_prov_profile_name}, #{widget_prov_profile_name}, #{intent_prov_profile_name}"
+
     widget_enabled = ENV["ENABLE_WIDGET"] == "true"
     puts "Is widget enabled: #{widget_enabled}"
 
