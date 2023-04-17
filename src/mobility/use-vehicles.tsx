@@ -19,6 +19,7 @@ import {RegionPayload} from '@rnmapbox/maps';
 import {useUserMapFilters} from '@atb/components/map/hooks/use-map-filter';
 import {getVehicles} from '@atb/api/mobility';
 import {usePollableResource} from '@atb/utils/use-pollable-resource';
+import {useIsFocused} from '@react-navigation/native';
 
 const MIN_ZOOM_LEVEL = 13.5;
 const BUFFER_DISTANCE_IN_METERS = 500;
@@ -48,6 +49,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
   const isVehiclesEnabled = useIsVehiclesEnabled();
   const {getMapFilter} = useUserMapFilters();
   const [filter, setFilter] = useState<VehiclesFilterType>();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     getMapFilter().then((initialFilter) => {
@@ -91,6 +93,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
 
   const [{vehicles}, isLoading] = usePollableResource(loadVehicles, {
     initialValue: emptyVehiclesState,
+    disabled: !isFocused,
     pollingTimeInSeconds: AUTO_RELOAD_INTERVAL,
   });
 
