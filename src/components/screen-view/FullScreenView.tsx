@@ -12,7 +12,7 @@ export type ScreenViewProps = ScreenHeaderProps & {
    * JSX content that will be displayed as part of the disappearing header,
    * below the title, and above global messages.
    */
-  headerChildren?: (ref?: React.MutableRefObject<null>) => React.ReactNode;
+  headerChildren?: (focusRef?: React.MutableRefObject<null>) => React.ReactNode;
   /**
    * Page content, below disappearing header.
    */

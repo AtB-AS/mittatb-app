@@ -104,8 +104,8 @@ export const TripDetailsScreenComponent = ({
             : undefined
         }
         color={themeColor}
-        headerChildren={(ref?: React.MutableRefObject<null>) => (
-          <View style={{flexDirection: 'row'}} ref={ref} accessible={true}>
+        headerChildren={(focusRef?: React.MutableRefObject<null>) => (
+          <View style={{flexDirection: 'row'}} ref={focusRef} accessible={true}>
             <ThemeIcon
               svg={SvgDuration}
               style={{marginRight: 8}}

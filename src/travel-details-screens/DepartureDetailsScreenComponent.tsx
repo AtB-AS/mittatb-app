@@ -107,9 +107,9 @@ export const DepartureDetailsScreenComponent = ({
       <FullScreenView
         type="large"
         leftButton={{type: 'back', withIcon: true}}
-        headerChildren={(ref?: React.MutableRefObject<null>) => (
+        headerChildren={(focusRef?: React.MutableRefObject<null>) => (
           <>
-            <View style={styles.headerTitle} ref={ref} accessible={true}>
+            <View style={styles.headerTitle} ref={focusRef} accessible={true}>
               {mode && (
                 <TransportationIconBox
                   mode={mode}
