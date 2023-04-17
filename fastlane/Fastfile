@@ -75,6 +75,7 @@ platform :ios do
       )
       match(
         type: ENV["FASTLANE_MATCH_TYPE"],
+        verbose: true,
         app_identifier: identifiers,
         storage_mode: 'git',
         git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
@@ -172,6 +173,7 @@ platform :ios do
     cocoapods(podfile: './ios/Podfile')
     build_app(
       scheme: 'atb',
+      verbose: true,
       configuration: 'Release',
       export_method: ENV['EXPORT_METHOD'],
       workspace: './ios/atb.xcworkspace',
