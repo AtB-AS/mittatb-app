@@ -38,7 +38,7 @@ export const ScreenWithLargeHeader = ({
                 }
                 accessibilityRole="header"
                 style={styles.headerTitle}
-                ref={focusRef}
+                ref={title ? focusRef : undefined}
               >
                 <ThemeText
                   accessible={false}
@@ -50,12 +50,8 @@ export const ScreenWithLargeHeader = ({
               </View>
             )}
             {headerChildren && (
-              <View
-                ref={!title ? focusRef : undefined}
-                accessible={true}
-                style={styles.childrenContainer}
-              >
-                {headerChildren}
+              <View style={styles.childrenContainer}>
+                {headerChildren(!title ? focusRef : undefined)}
               </View>
             )}
             <GlobalMessage
