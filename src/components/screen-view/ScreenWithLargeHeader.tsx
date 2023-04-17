@@ -28,7 +28,10 @@ export const ScreenWithLargeHeader = ({
     <View style={styles.container}>
       <ContentWithDisappearingHeader
         header={
-          <View style={[styles.headerContainer, {backgroundColor}]}>
+          <View
+            style={[styles.headerContainer, {backgroundColor}]}
+            ref={focusRef}
+          >
             {title && (
               <View
                 accessibilityLabel={titleA11yLabel}
@@ -38,7 +41,6 @@ export const ScreenWithLargeHeader = ({
                 }
                 accessibilityRole="header"
                 style={styles.headerTitle}
-                ref={focusRef}
               >
                 <ThemeText
                   accessible={false}
@@ -50,13 +52,7 @@ export const ScreenWithLargeHeader = ({
               </View>
             )}
             {headerChildren && (
-              <View
-                ref={!title ? focusRef : undefined}
-                accessible={true}
-                style={styles.childrenContainer}
-              >
-                {headerChildren}
-              </View>
+              <View style={styles.childrenContainer}>{headerChildren}</View>
             )}
             <GlobalMessage
               globalMessageContext={globalMessageContext}
