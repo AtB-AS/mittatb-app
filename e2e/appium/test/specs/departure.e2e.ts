@@ -10,7 +10,8 @@ import DepartureDetailsPage from '../pageobjects/departure.details.page';
 describe('Departure', () => {
   before(async () => {
     await AppHelper.launchApp();
-    await OnboardingPage.skipOnboarding();
+    await AppHelper.pause(10000, true);
+    await OnboardingPage.skipOnboarding('departure');
     await NavigationHelper.tapMenu('departures');
     await DepartureSearchPage.confirmOnboarding();
   });

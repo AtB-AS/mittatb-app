@@ -17,9 +17,15 @@ class AppHelper {
   /***
    * Pause in ms
    * @param ms: how long to pause in ms
+   * @param isLocalDependent: if true, use a lower pause time for local runs - min(2000, ms)
    */
-  async pause(ms: number = 500) {
-    await driver.pause(ms);
+  async pause(ms: number = 500, isLocalDependent: boolean = false) {
+    if (isLocalDependent && process.env.IS_LOCAL === 'true') {
+      const waitTime = Math.min(2000, ms);
+      await driver.pause(waitTime);
+    } else {
+      await driver.pause(ms);
+    }
   }
 
   /**

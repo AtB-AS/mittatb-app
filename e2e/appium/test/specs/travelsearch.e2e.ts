@@ -10,7 +10,8 @@ import NavigationHelper from '../utils/navigation.helper';
 describe('Travel search', () => {
   before(async () => {
     await AppHelper.launchApp();
-    await OnboardingPage.skipOnboarding();
+    await AppHelper.pause(10000, true);
+    await OnboardingPage.skipOnboarding('travelsearch');
   });
   beforeEach(async () => {
     await NavigationHelper.tapMenu('assistant');
