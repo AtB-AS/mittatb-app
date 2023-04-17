@@ -49,7 +49,7 @@ export function ZonesSelection({
     return null;
   }
 
-  // @TODO only support multiple/single zone in app for now
+  // Only support multiple/single zone in app for now. Stop place is built into selector.
   if (selectionMode == 'multiple-stop' || selectionMode == 'multiple-zone') {
     selectionMode = 'multiple';
   }
