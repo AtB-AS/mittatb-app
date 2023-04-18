@@ -43,4 +43,16 @@ export default orgSpecificTranslations(OnboardingTexts, {
       mainButton: _('Begynn å bruk appen', 'Start using the app'),
     },
   },
+  fram: {
+    welcome: {
+      title: _('Velkommen til FRAM-appen', 'Welcome to the FRAM app'),
+      titleA11yLabel: _('Velkommen til FRAM appen', 'Welcome to the FRAM app'),
+      description: {
+        part1: _(
+          'Her kan du planlegge, betale og gjennomføre reisen din i en og samme app. Appen oppdateres jevnlig med flere billettyper og innovative funksjoner!',
+          'Plan trips and buy tickets throughout Møre og Romsdal. The app will be continuously updated with more products and new functionality.',
+        ),
+      },
+    },
+  },
 });
