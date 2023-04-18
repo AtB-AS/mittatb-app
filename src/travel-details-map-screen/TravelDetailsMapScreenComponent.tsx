@@ -48,20 +48,7 @@ export const TravelDetailsMapScreenComponent = ({
 
   const {t} = useTranslation();
   const controlStyles = useControlPositionsStyle();
-  const vehicles = useGetLiveServiceJourneyVehicles(
-    {
-      serviceJourneyId: initialVehiclePosition?.serviceJourney?.id,
-    },
-    initialVehiclePosition,
-  );
-  console.log(
-    initialVehiclePosition?.serviceJourney?.id && vehicles
-      ? vehicles.find(
-          (v) =>
-            v.serviceJourney?.id === initialVehiclePosition.serviceJourney?.id,
-        )?.location
-      : undefined,
-  );
+  const vehicles = useGetLiveServiceJourneyVehicles(initialVehiclePosition);
 
   const [followVehicleMapPoint, setFollowVehicleMapPoint] = useState<
     Coordinates | undefined

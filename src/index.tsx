@@ -1,5 +1,4 @@
 import 'react-native-get-random-values';
-
 import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {AppContextProvider} from './AppContext';
@@ -30,7 +29,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Platform, UIManager} from 'react-native';
 import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext';
 import {ApolloProvider} from '@apollo/client';
-import {client} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/hlp';
+import {apollo_client} from '@atb/api/apollo_client';
 
 configureAndStartBugsnag();
 
@@ -78,7 +77,7 @@ export const App = () => {
                             <RemoteConfigContextProvider>
                               <FirestoreConfigurationContextProvider>
                                 <TicketingContextProvider>
-                                  <ApolloProvider client={client}>
+                                  <ApolloProvider client={apollo_client}>
                                     <MobileTokenContextProvider>
                                       <AppLanguageProvider>
                                         <GlobalMessagesContextProvider>

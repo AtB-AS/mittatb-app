@@ -2,11 +2,11 @@ import {ApolloClient, HttpLink, InMemoryCache, split} from '@apollo/client';
 import {WebSocketLink} from '@apollo/client/link/ws';
 import {getMainDefinition} from '@apollo/client/utilities';
 
-export const getGraphqlEndpoint = () => {
+const getGraphqlEndpoint = () => {
   return 'https://api.staging.entur.io/realtime/v1/vehicles/graphql';
 };
 
-export const getSubscriptionsEndpoint = () => {
+const getSubscriptionsEndpoint = () => {
   return 'wss://api.staging.entur.io/realtime/v1/vehicles/subscriptions';
 };
 const httpLink = new HttpLink({
@@ -32,7 +32,7 @@ const splitLink = split(
   httpLink,
 );
 
-export const client = new ApolloClient({
+export const apollo_client = new ApolloClient({
   link: splitLink,
   cache: new InMemoryCache({
     addTypename: false,
