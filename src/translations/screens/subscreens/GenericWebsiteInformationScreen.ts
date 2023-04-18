@@ -18,5 +18,11 @@ export default orgSpecificTranslations(
         'Current information can be found on www.reisnordland.com',
       ),
     },
+    fram: {
+      message: _(
+        'Gjeldende informasjon finner du på www.frammr.no',
+        'Current information can be found on en.frammr.no',
+      ),
+    },
   },
 );

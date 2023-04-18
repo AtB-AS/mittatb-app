@@ -39,4 +39,11 @@ export default orgSpecificTranslations(ScreenHeaderTexts, {
       },
     },
   },
+  fram: {
+    headerButton: {
+      chat: {
+        a11yHint: _('Kontakt FRAM', 'Contact FRAM'),
+      },
+    },
+  },
 });
