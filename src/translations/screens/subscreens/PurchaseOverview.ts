@@ -151,4 +151,16 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
       ),
     },
   },
+  fram: {
+    warning: _(
+      'Når du er ute og reiser må du ha med reisekortet som er registrert på din profil.',
+      'When traveling, you need to bring the travel card registered on your profile.',
+    ),
+    summary: {
+      messageInZone: _(
+        `Gjelder for buss i valgte soner`,
+        `Applies for bus in selected zones`,
+      ),
+    },
+  },
 });
