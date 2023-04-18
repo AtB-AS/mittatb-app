@@ -11,6 +11,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 "@atb-as/generate-assets@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-7.0.0.tgz#3da3478a61a75004fdeb69a7fd0697dfee764e93"
@@ -36,6 +37,17 @@
   resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-2.0.0-alpha.3.tgz#a94570218f4385851f29a51be885584197f24ace"
   integrity sha512-OX/+OtOzmKm6LWj9OldL/UXdJYz5BKwHN5mlUeh/NcGsiXWSG9JWO0OY/jmcCjzfTRZW99EvIU5yEk5jyc2bFA==
 >>>>>>> 29b887be (refactor: use confic-spec types for filter search)
+||||||| parent of bc12f9d7 (refactor: renames TravelSearchTransport -> TransportModeFilterOptionType)
+"@atb-as/config-specs@^2.0.0-alpha.3":
+  version "2.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-2.0.0-alpha.3.tgz#a94570218f4385851f29a51be885584197f24ace"
+  integrity sha512-OX/+OtOzmKm6LWj9OldL/UXdJYz5BKwHN5mlUeh/NcGsiXWSG9JWO0OY/jmcCjzfTRZW99EvIU5yEk5jyc2bFA==
+=======
+"@atb-as/config-specs@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-3.0.0.tgz#412bef8b2e90d667568db4e0a21ebfd480fbf4e6"
+  integrity sha512-J2kg1v73Id9dnNQQhL5z6hIwcHXa4kELAzqlF09p10hTomBSrsTwu7XQFa6Oa/h2a62ZFjLXL52qbGWcVTtYfQ==
+>>>>>>> bc12f9d7 (refactor: renames TravelSearchTransport -> TransportModeFilterOptionType)
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"

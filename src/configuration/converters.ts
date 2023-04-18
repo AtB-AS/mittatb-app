@@ -1,5 +1,5 @@
 import {FareProductTypeConfig} from '@atb-as/config-specs';
-import {TravelSearchTransport} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+import {TransportModeFilterOptionType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
 import {isArray} from 'lodash';
@@ -35,7 +35,7 @@ function mapToFareProductTypeConfig(
 
 export const mapToTransportModeFilterOptions = (
   filters: any,
-): TravelSearchTransport[] | undefined => {
+): TransportModeFilterOptionType[] | undefined => {
   if (!isArray(filters)) {
     Bugsnag.notify(`Transport mode filters should be of type "array"`);
     return;
@@ -43,13 +43,13 @@ export const mapToTransportModeFilterOptions = (
 
   return filters
     .map(mapToTransportModeFilterOption)
-    .filter((f): f is TravelSearchTransport => !!f?.modes);
+    .filter((f): f is TransportModeFilterOptionType => !!f?.modes);
 };
 
 const mapToTransportModeFilterOption = (
   filter: any,
-): TravelSearchTransport | undefined => {
-  const typeConfigPotential = TravelSearchTransport.safeParse(filter);
+): TransportModeFilterOptionType | undefined => {
+  const typeConfigPotential = TransportModeFilterOptionType.safeParse(filter);
 
   if (!typeConfigPotential.success) {
     Bugsnag.notify('transport mode filter mapping issue', function (event) {
