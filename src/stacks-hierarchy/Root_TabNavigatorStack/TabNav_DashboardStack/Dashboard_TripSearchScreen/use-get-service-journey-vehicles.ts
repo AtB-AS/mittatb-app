@@ -13,7 +13,7 @@ export const useGetServiceJourneyVehicles = (serviceJourneyIds?: string[]) => {
     [JSON.stringify(serviceJourneyIds)],
   );
 
-  const [updatedVehicles, , error] = usePollableResource<
+  const [updatedVehicles, , , error] = usePollableResource<
     GetServiceJourneyVehicles | undefined,
     AxiosError
   >(fetchVehicles, {

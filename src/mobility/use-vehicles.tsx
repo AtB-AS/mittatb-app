@@ -92,7 +92,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
     [area, isVehiclesEnabled, filter],
   );
 
-  const [{vehicles}, isLoading] = usePollableResource(loadVehicles, {
+  const [{vehicles}, reload, isLoading] = usePollableResource(loadVehicles, {
     initialValue: emptyVehiclesState,
     disabled: !isFocused,
     pollingTimeInSeconds: Math.round(pollInterval / 1000),

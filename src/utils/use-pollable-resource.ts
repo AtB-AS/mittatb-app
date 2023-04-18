@@ -27,7 +27,7 @@ export const usePollableResource = <T, E extends Error = Error>(
     isInitialLoad?: boolean,
   ) => Promise<T>,
   opts: PollableResourceOptions<T>,
-): [T, boolean, E?] => {
+): [T, () => Promise<void>, boolean, E?] => {
   const {initialValue, pollingTimeInSeconds = 30} = opts;
   const [isLoading, setIsLoading] = useIsLoading(false);
   const [error, setError] = useState<E | undefined>(undefined);
@@ -79,5 +79,5 @@ export const usePollableResource = <T, E extends Error = Error>(
     opts.disabled,
   );
 
-  return [state, isLoading, error];
+  return [state, reload, isLoading, error];
 };
