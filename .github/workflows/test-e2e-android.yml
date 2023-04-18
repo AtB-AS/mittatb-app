@@ -32,7 +32,7 @@ jobs:
       # Download APK
       - name: Get AppCenter APK
         run: bash ./scripts/get-appcenter-apk.sh
-        working-directory: e2e/appium
+        working-directory: e2e
         env:
           APPCENTER_APP_SECRET: ${{ secrets.APPCENTER_ANDROID_APP_SECRET }}
           APPCENTER_USER_API_TOKEN: ${{ secrets.APPCENTER_USER_API_TOKEN }}
@@ -42,10 +42,10 @@ jobs:
         run: npm install -g appium
       - name: Install E2E tests
         run: yarn install
-        working-directory: e2e/appium
+        working-directory: e2e
       - name: tsc
         run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
-        working-directory: e2e/appium
+        working-directory: e2e
 
       # E2E run
       - name: Run tests on Android emulator
@@ -57,7 +57,7 @@ jobs:
           profile: pixel_5
           emulator-build: 9536276
           disable-spellchecker: true
-          working-directory: e2e/appium
+          working-directory: e2e
           script: yarn test:android
           pre-emulator-launch-script: ./scripts/restart-adb.sh
         env:
@@ -75,7 +75,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-screenshots
-          path: ./e2e/appium/screenshots/*.png
+          path: ./e2e/screenshots/*.png
           retention-days: 1
       - name: Upload test reports
         if: always()
@@ -83,6 +83,6 @@ jobs:
         with:
           name: test-results
           path: |
-            ./e2e/appium/results/*.xml
-            ./e2e/appium/results/results-mochawesome.json
+            ./e2e/results/*.xml
+            ./e2e/results/results-mochawesome.json
           retention-days: 1

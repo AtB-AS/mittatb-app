@@ -1,0 +1,36 @@
+# Missing test-ids:
+x- id for legNumber (earlier trLeg > fLeg > ...) to find number of legs and last leg index - including 2+/3+/etc
+    > add in tests (trip search)
+    DONE: tripLeg && fLeg/trLeg
+    DONE: tripLegMore
+x- Change from 'nextButton' to 'nextButtonOnboardingWelcome' in 'src/stacks-hierarchy/Root_OnboardingStack/Onboarding_WelcomeScreen.tsx'
+    DONE: nextButtonOnboardingWelcome
+x- Change from 'nextButton' to 'nextButtonIntercomOnboarding' in 'src/stacks-hierarchy/Root_OnboardingStack/Onboarding_IntercomInfoScreen.tsx'
+    DONE: nextButtonIntercomOnboarding
+    > and change in test code afterwards
+x- Change 'mapPage' > 'mapTab' and update NavigationHelper
+    DONE: mapTab
+x- Add id to '13 mellomstopp' in detailed departure
+    DONE: intermediateStops
+x- Add favorites
+    - "Legg til favorittavgang" have id 'chooseLoginPhone'
+    - bottom-sheet with "kun linje"/"alle variasjoner" doesn't have ids
+    - 'Cancel' doesn't have id
+
+# Error / Cannot do
+- Tapping a ticket to buy locks everything when test-ids are shown
+    src/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/FareProducts/AvailableFareProducts/FareProductTile.tsx
+
+
+# Start AVD from cmd
+$ emulator -netdelay none -netspeed full -no-snapshot-load -avd Pixel_5_API_30
+
+# If reactivecircus/android-emulator-runner@v2.27.0 is not working:
+- try api 29 (https://github.com/ReactiveCircus/android-emulator-runner/issues/161)
+
+# To find supported images and profiles
+$ cd /Users/tormos/Library/Android/sdk/cmdline-tools/9.0/bin
+$ ./avdmanager list device
+$ ./sdkmanager --list
+ -> system-images;android-30;default;x86_64
+ -> system-images;android-29;default;x86_64
