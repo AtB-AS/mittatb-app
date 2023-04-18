@@ -1,9 +1,9 @@
 import {TripPattern} from '@atb/api/types/trips';
 
+import {TransportModes} from '@atb/api/types/generated/journey_planner_v3_types';
 import {Location} from '@atb/favorites';
 import {SearchTime} from '@atb/journey-date-picker';
-import {TransportModes} from '@atb/api/types/generated/journey_planner_v3_types';
-import {LanguageAndTextType} from '@atb/translations';
+import {TransportModeFilterOptionType} from '@atb-as/config-specs';
 
 export type SearchForLocations = {
   from?: Location;
@@ -31,17 +31,10 @@ export type TransportIconModeType = Omit<
   transportSubMode?: Required<TransportModes>['transportSubModes'][0];
 };
 
-export type TransportModeFilterOptionType = {
-  id: string;
-  icon: TransportIconModeType;
-  text: LanguageAndTextType[];
-  description?: LanguageAndTextType[];
-  modes: TransportModes[];
-};
-
-export type TravelSearchFiltersType = {
-  transportModes?: TransportModeFilterOptionType[];
-};
+export {
+  TransportModeFilterOptionType,
+  TravelSearchFiltersType,
+} from '@atb-as/config-specs';
 
 export type TransportModeFilterOptionWithSelectionType =
   TransportModeFilterOptionType & {selected: boolean};

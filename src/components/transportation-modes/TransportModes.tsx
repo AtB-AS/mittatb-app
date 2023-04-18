@@ -1,19 +1,24 @@
-import {View, ViewStyle} from 'react-native';
+import {TransportModeType, TransportSubmodeType} from '@atb-as/config-specs';
 import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
 import {ThemeText} from '@atb/components/text';
+import {StyleSheet, Theme} from '@atb/theme';
 import {
   FareContractTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
 import React from 'react';
-import {StyleSheet, Theme} from '@atb/theme';
-import {TransportModeType} from '@atb/configuration/types';
+import {View, ViewStyle} from 'react-native';
 
 const modesDisplayLimit: number = 2;
 
+type TransportModePair = {
+  mode: TransportModeType;
+  subMode?: TransportSubmodeType;
+};
+
 export const getTransportModeText = (
-  modes: TransportModeType[],
+  modes: TransportModePair[],
   t: TranslateFunction,
   modesDisplayLimit: number = 2,
 ): string => {
@@ -33,7 +38,7 @@ export const TransportModes = ({
   disabled,
   style,
 }: {
-  modes: TransportModeType[];
+  modes: TransportModePair[];
   iconSize?: keyof Theme['icon']['size'];
   disabled?: boolean;
   style?: ViewStyle;
