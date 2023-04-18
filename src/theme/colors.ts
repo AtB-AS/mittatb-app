@@ -15,13 +15,24 @@ import {
   ThemeVariant,
 } from '@atb-as/theme';
 import {Flattened, flattenObject} from '@atb/utils/object';
+import {AppOrgs} from '../../types/app-orgs';
 
 export type {Statuses, Mode, TextColor, ContrastColor, RadiusSizes, TextNames};
 export {textNames};
 
-const mainThemes = createThemesFor(
-  APP_ORG == 'nfk' ? ThemeVariant.Nfk : ThemeVariant.AtB,
-);
+const appOrgToThemeVariant = (appOrg: AppOrgs): ThemeVariant => {
+  switch (appOrg) {
+    case 'nfk':
+      return ThemeVariant.Nfk;
+    case 'fram':
+      return ThemeVariant.FRAM;
+    case 'atb':
+    default:
+      return ThemeVariant.AtB;
+  }
+};
+
+const mainThemes = createThemesFor(appOrgToThemeVariant(APP_ORG));
 
 // Override semibold with bold to avoid Android Roboto bold bug.
 // See ttps://github.com/facebook/react-native/issues/25696
