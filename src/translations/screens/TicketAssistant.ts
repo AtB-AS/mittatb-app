@@ -61,6 +61,12 @@ const TicketAssistantTexts = {
       'Aktiver for å gå til neste side',
       'Activate to go to next page',
     ),
+    a11ySliderHint(amount: {value: number}) {
+      return _(
+        `Du skal reise i ${amount.value} dager`,
+        `You will travel for ${amount.value} days`,
+      );
+    },
   },
   zonesSelector: {
     title: _('Hvor skal du reise?', 'Where do you travel?'),
@@ -115,6 +121,12 @@ const TicketAssistantTexts = {
       'Aktiver for å gå til neste side',
       'Activate to go to next page',
     ),
+    a11ySliderHint(amount: {value: number}) {
+      return _(
+        `Du skal reise i ${amount.value} dager`,
+        `You will travel for ${amount.value} days`,
+      );
+    },
   },
   summary: {
     title: _('Anbefalt for', 'Recommended for'),
