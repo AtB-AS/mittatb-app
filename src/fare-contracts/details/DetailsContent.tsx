@@ -14,8 +14,8 @@ import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import {OrderDetails} from '@atb/fare-contracts/Details/OrderDetails';
-import {UnknownFareContractDetails} from '@atb/fare-contracts/Details/UnknownFareContractDetails';
+import {OrderDetails} from '@atb/fare-contracts/details/OrderDetails';
+import {UnknownFareContractDetails} from '@atb/fare-contracts/details/UnknownFareContractDetails';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 
 type Props = {

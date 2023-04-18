@@ -2,7 +2,6 @@ import {useAppState} from '@atb/AppContext';
 import {trackNavigation} from '@atb/diagnostics/trackNavigation';
 import {LoginInAppStack} from '@atb/login/in-app/LoginInAppStack';
 import {Root_OnboardingStack} from './Root_OnboardingStack';
-import {Root_FareContractModal} from './Root_FareContractModal';
 import {useTheme} from '@atb/theme';
 import {APP_SCHEME} from '@env';
 import {
@@ -38,6 +37,9 @@ import {Root_PurchasePaymentWithVippsScreen} from '@atb/stacks-hierarchy/Root_Pu
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
 import {Root_TicketAssistantStack} from '@atb/stacks-hierarchy/Root_TicketAssistantStack';
 import {Root_TipsAndInformation} from '@atb/stacks-hierarchy/Root_TipsAndInformation';
+import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
+import {Root_CarnetDetailsScreen} from '@atb/stacks-hierarchy/Root_CarnetDetailsScreen';
+import {Root_ReceiptScreen} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -303,8 +305,16 @@ export const RootStack = () => {
                   component={Root_PurchaseAsAnonymousConsequencesScreen}
                 />
                 <Stack.Screen
-                  name="Root_FareContractModal"
-                  component={Root_FareContractModal}
+                  name="Root_FareContractDetailsScreen"
+                  component={Root_FareContractDetailsScreen}
+                />
+                <Stack.Screen
+                  name="Root_CarnetDetailsScreen"
+                  component={Root_CarnetDetailsScreen}
+                />
+                <Stack.Screen
+                  name="Root_ReceiptScreen"
+                  component={Root_ReceiptScreen}
                 />
                 <Stack.Screen
                   name="Root_MobileTokenOnboardingStack"

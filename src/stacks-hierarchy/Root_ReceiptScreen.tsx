@@ -13,14 +13,14 @@ import {
 import {validateEmail} from '@atb/utils/validation';
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import {FareContractModalScreenProps} from './types';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 
 export type ReceiptScreenRouteParams = {
   orderId: string;
   orderVersion: string;
 };
 
-type Props = FareContractModalScreenProps<'PurchaseReceipt'>;
+type Props = RootStackScreenProps<'Root_ReceiptScreen'>;
 
 type MessageState =
   | 'loading'
@@ -29,7 +29,7 @@ type MessageState =
   | 'invalid-field'
   | undefined;
 
-export function ReceiptScreen({route}: Props) {
+export function Root_ReceiptScreen({route}: Props) {
   const {orderId, orderVersion} = route.params;
   const styles = useStyles();
   const [email, setEmail] = useState('');

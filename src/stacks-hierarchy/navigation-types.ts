@@ -1,5 +1,4 @@
 import {LoginInAppStackParams} from '@atb/login/types';
-import {FareContractModalStackParams} from '@atb/fare-contracts/Details/types';
 import {NavigationProp, NavigatorScreenParams} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {TabNavigatorStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack';
@@ -13,6 +12,9 @@ import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_
 import {ReserveOffer} from '@atb/ticketing';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {CardPaymentMethod} from '@atb/stacks-hierarchy/types';
+import {CarnetDetailsRouteParams} from '@atb/stacks-hierarchy/Root_CarnetDetailsScreen';
+import {ReceiptScreenRouteParams} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
+import {FareContractDetailsRouteParams} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
 
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
@@ -56,8 +58,10 @@ export type RootStackParamList = {
     paymentMethod: CardPaymentMethod;
   };
   Root_PurchasePaymentWithVippsScreen: PaymentParams;
-  Root_FareContractModal: NavigatorScreenParams<FareContractModalStackParams>;
   Root_MobileTokenOnboardingStack: undefined;
+  Root_FareContractDetailsScreen: FareContractDetailsRouteParams;
+  Root_CarnetDetailsScreen: CarnetDetailsRouteParams;
+  Root_ReceiptScreen: ReceiptScreenRouteParams;
 };
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;

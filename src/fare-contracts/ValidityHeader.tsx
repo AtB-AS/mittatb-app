@@ -12,7 +12,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {isValidFareContract, ValidityStatus} from './utils';
 import {TransportModes} from '@atb/components/transportation-modes';
-import {FareContractStatusSymbol} from './Component/FareContractStatusSymbol';
+import {FareContractStatusSymbol} from './components/FareContractStatusSymbol';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 export const ValidityHeader: React.FC<{
