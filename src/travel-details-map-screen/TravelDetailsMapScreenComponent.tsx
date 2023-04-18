@@ -73,9 +73,7 @@ export const TravelDetailsMapScreenComponent = ({
         (v) =>
           v.serviceJourney?.id === initialVehiclePosition.serviceJourney?.id,
       );
-      console.log(vehicle);
       if (vehicle && vehicle !== followVehicleMapPoint) {
-        console.log(vehicle.location);
         setFollowVehicleMapPoint(vehicle.location);
       }
     }
@@ -109,8 +107,8 @@ export const TravelDetailsMapScreenComponent = ({
         {followVehicleMapPoint && (
           <MapLabel
             point={pointOf(followVehicleMapPoint)}
-            id={'stort'}
-            text={'BUSSSSS'}
+            id={'vehicle'}
+            text={initialVehiclePosition?.mode ?? 'UNKNOWN'}
           />
         )}
       </MapboxGL.MapView>

@@ -47,12 +47,12 @@ export function useGetLiveServiceJourneyVehicles(
 const DEFAULT_INACTIVE_VEHICLE_IN_SECONDS = 60;
 
 const _isVehicleInactive = (vehicle: VehiclePosition, options: Options) => {
-  const nowTime = new Date();
+  const nowSeconds = Date.now() / 1000;
   return (
     parseISO(vehicle.lastUpdated).getTime() +
       (options?.markInactiveAfterSeconds ||
         DEFAULT_INACTIVE_VEHICLE_IN_SECONDS) <
-    nowTime.getTime()
+    nowSeconds
   );
 };
 
