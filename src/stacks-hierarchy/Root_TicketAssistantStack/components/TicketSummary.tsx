@@ -165,10 +165,12 @@ export const TicketSummary = (props: TicketSummaryProps) => {
             type="body__secondary--bold"
             color={interactiveColor.outline}
           >
-            {`${(
-              response.tickets[index].price /
-              ((response.tickets[index].duration / 7) * frequency)
-            ).toFixed(2)} kr`}
+            {response.tickets[index].duration
+              ? `${(
+                  response.tickets[index].price /
+                  ((response.tickets[index].duration / 7) * frequency)
+                ).toFixed(2)} kr`
+              : `${response.tickets[index].price.toFixed(2)} kr`}
           </ThemeText>
         </View>
       </View>
@@ -184,13 +186,18 @@ export const TicketSummary = (props: TicketSummaryProps) => {
           }),
         )}
       >
-        {t(
-          TicketAssistantTexts.summary.savings({
-            totalSavings: savings,
-            perTripSavings: (savings / ((duration / 7) * frequency)).toFixed(2),
-            alternative: `${calculateSingleTickets(duration, frequency)}`,
-          }),
-        )}
+        {recommendedTicket?.durationDays !== undefined
+          ? t(
+              TicketAssistantTexts.summary.savings({
+                totalSavings: savings,
+                perTripSavings: (
+                  savings /
+                  ((duration / 7) * frequency)
+                ).toFixed(2),
+                alternative: `${calculateSingleTickets(duration, frequency)}`,
+              }),
+            )
+          : t(TicketAssistantTexts.summary.noticeLabel2)}
       </ThemeText>
     </>
   );

@@ -140,7 +140,16 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
               />
             </>
           )}
-          <ThemeText>{t(TicketAssistantTexts.summary.noticeLabel1)}</ThemeText>
+          {response.tickets[index].duration < data.duration &&
+            response.tickets[index].duration !== 0 && (
+              <ThemeText
+                type={'body__secondary'}
+                style={styles.notice}
+                color={themeColor}
+              >
+                {t(TicketAssistantTexts.summary.noticeLabel1)}
+              </ThemeText>
+            )}
         </View>
       )}
     </ScrollView>
@@ -202,5 +211,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     top: 90,
     padding: 0,
     margin: 0,
+  },
+  notice: {
+    textAlign: 'center',
+    paddingTop: theme.spacings.medium,
   },
 }));
