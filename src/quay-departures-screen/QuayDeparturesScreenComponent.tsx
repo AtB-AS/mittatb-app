@@ -1,6 +1,6 @@
 import {StopPlace} from '@atb/api/types/trips';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import DeparturesList from '@atb/departure-list/DeparturesList';
+import {DeparturesList} from '@atb/departure-list/DeparturesList';
 import {useDepartureData} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_NearbyStack';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';

@@ -11,7 +11,7 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
-import EstimatedCallItem from './EstimatedCallItem';
+import {EstimatedCallItem} from './EstimatedCallItem';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {isSituationValidAtDate, SituationSectionItem} from '@atb/situations';
 
@@ -43,7 +43,7 @@ type EstimatedCallRenderItem = {
   index: number;
 };
 
-export default function QuaySection({
+export function QuaySection({
   quay,
   departuresPerQuay,
   data,

@@ -17,13 +17,13 @@ import {MessageBox} from '@atb/components/message-box';
 import {useNavigation} from '@react-navigation/native';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
 import phone from 'phone';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export default function PhoneInput({
+export const PhoneInput = ({
   doAfterLogin,
   headerLeftButton,
   headerRightButton,
@@ -31,7 +31,7 @@ export default function PhoneInput({
   doAfterLogin: (phoneNumber: string) => void;
   headerLeftButton?: LeftButtonProps;
   headerRightButton?: RightButtonProps;
-}) {
+}) => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {theme} = useTheme();
@@ -163,7 +163,7 @@ export default function PhoneInput({
       </KeyboardAvoidingView>
     </View>
   );
-}
+};
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

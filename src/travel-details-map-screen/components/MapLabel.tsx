@@ -3,7 +3,7 @@ import MapboxGL from '@rnmapbox/maps';
 import {Point} from 'geojson';
 import {useTheme} from '@atb/theme';
 
-const MapLabel: React.FC<{
+export const MapLabel: React.FC<{
   text: string;
   point: Point;
   id: string;
@@ -31,4 +31,3 @@ const MapLabel: React.FC<{
     </>
   );
 };
-export default MapLabel;

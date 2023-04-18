@@ -19,7 +19,7 @@ export type ErrorContext = 'reservation' | 'terminal-loading' | 'capture';
 
 type PaymentError = {context: ErrorContext; type: ErrorType};
 
-export default function useTerminalState(
+export function useTerminalState(
   offers: ReserveOffer[],
   paymentType: PaymentType.Visa | PaymentType.Mastercard,
   recurringPaymentId: number | undefined,

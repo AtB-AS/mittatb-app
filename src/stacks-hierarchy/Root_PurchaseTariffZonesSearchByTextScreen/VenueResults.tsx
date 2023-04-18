@@ -6,7 +6,7 @@ import {TariffZone} from '@atb/reference-data/types';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
 import {TariffZoneSearchTexts, useTranslation} from '@atb/translations';
-import insets from '@atb/utils/insets';
+import {insets} from '@atb/utils/insets';
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
@@ -20,7 +20,10 @@ type Props = {
   onSelect: (l: SearchLocation) => void;
 };
 
-const VenueResults: React.FC<Props> = ({locationsAndTariffZones, onSelect}) => {
+export const VenueResults: React.FC<Props> = ({
+  locationsAndTariffZones,
+  onSelect,
+}) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   return (
@@ -80,8 +83,6 @@ const VenueResults: React.FC<Props> = ({locationsAndTariffZones, onSelect}) => {
     </>
   );
 };
-
-export default VenueResults;
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   subHeader: {

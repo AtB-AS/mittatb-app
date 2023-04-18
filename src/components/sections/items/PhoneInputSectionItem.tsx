@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, useTheme} from '@atb/theme';
-import insets from '@atb/utils/insets';
+import {insets} from '@atb/utils/insets';
 import {ThemeText, MAX_FONT_SCALE} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
@@ -23,8 +23,8 @@ import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
 import {ScrollView} from 'react-native-gesture-handler';
 import {countryPhoneData} from 'phone';
 import {Section} from '../Section';
-import {GenericClickableSectionItem} from './GenericClickableSectionItem';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {GenericClickableSectionItem} from '@atb/components/sections';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {loginPhoneInputId} from '@atb/test-ids';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;

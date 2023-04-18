@@ -2,7 +2,7 @@ import {
   TariffZoneResultType,
   TariffZoneSelection,
 } from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
-import TariffZoneResults from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen/TariffZoneResults';
+import {TariffZoneResults} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen/TariffZoneResults';
 import {View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {Language, TariffZonesTexts, useTranslation} from '@atb/translations';
@@ -10,11 +10,8 @@ import MapboxGL, {OnPressEvent} from '@rnmapbox/maps';
 import {
   flyToLocation,
   MapCameraConfig,
-  MapControls,
   MapViewConfig,
   PositionArrow,
-  zoomIn,
-  zoomOut,
 } from '@atb/components/map';
 import hexToRgba from 'hex-to-rgba';
 import React, {useRef} from 'react';
@@ -212,10 +209,6 @@ const TariffZonesSelectorMap = ({
             <View>
               <View style={styles.mapControls}>
                 <PositionArrow onPress={flyToCurrentLocation} />
-                <MapControls
-                  zoomIn={() => zoomIn(mapViewRef, mapCameraRef)}
-                  zoomOut={() => zoomOut(mapViewRef, mapCameraRef)}
-                />
               </View>
             </View>
 

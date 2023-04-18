@@ -1,4 +1,5 @@
 import {translation as _} from '../../commons';
+import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
 
 const LoginTexts = {
   logInOptions: {
@@ -118,4 +119,20 @@ const LoginTexts = {
     wantToLoginButton: _('Jeg vil logge inn likevel', 'I want to log in'),
   },
 };
-export default LoginTexts;
+
+export default orgSpecificTranslations(LoginTexts, {
+  fram: {
+    activeFareContractPrompt: {
+      body: _(
+        'Billetten kan **ikke** overføres til din bruker og vil slettes ved innlogging. Dersom du trenger billetten, vent til den er utløpt **før** du logger inn.',
+        'This ticket can **not** be transferred to your user, and will be deleted upon login. If you need the ticket, wait until it has expired **before** logging in.',
+      ),
+    },
+    skipLoginWarning: {
+      description: _(
+        'Hvis du bytter eller mister telefonen vil vi ikke kunne finne fram billettene dine igjen.\n\nDu kan også logge inn senere under "Min bruker"',
+        'If you switch or lose your phone your tickets will be lost.\n\nYou can also log in at a later time under "My user"',
+      ),
+    },
+  },
+});

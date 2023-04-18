@@ -33,8 +33,9 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {getOtherDeviceIsInspectableWarning} from '../../fare-contracts/utils';
-import useOfferState, {
+import {getOtherDeviceIsInspectableWarning} from '@atb/fare-contracts/utils';
+import {
+  useOfferState,
   UserProfileWithCountAndOffer,
 } from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {SelectPaymentMethod} from './components/SelectPaymentMethodSheet';

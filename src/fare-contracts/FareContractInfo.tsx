@@ -38,12 +38,12 @@ import {
 import {screenReaderPause} from '@atb/components/text';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import FareContractDetail from '@atb/fare-contracts/Component/FareContractDetail';
-import WarningMessage from '@atb/fare-contracts/Component/WarningMessage';
-import Barcode from '@atb/fare-contracts/Details/Barcode';
+import {FareContractDetail} from '@atb/fare-contracts/Component/FareContractDetail';
+import {WarningMessage} from '@atb/fare-contracts/Component/WarningMessage';
+import {Barcode} from '@atb/fare-contracts/Details/Barcode';
 import {SectionSeparator} from '@atb/components/sections';
 import {getLastUsedAccess} from './Carnet/CarnetDetails';
-import InspectionSymbol from '@atb/fare-contracts/Component/InspectionSymbol';
+import {InspectionSymbol} from '@atb/fare-contracts/Component/InspectionSymbol';
 
 export type FareContractInfoProps = {
   travelRights: PreActivatedTravelRight[];
@@ -69,7 +69,7 @@ export type FareContractInfoDetailsProps = {
   validTo?: number;
 };
 
-const FareContractInfo = ({
+export const FareContractInfo = ({
   travelRights,
   status,
   isInspectable,
@@ -335,5 +335,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.xSmall,
   },
 }));
-
-export default FareContractInfo;

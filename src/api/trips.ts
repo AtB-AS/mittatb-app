@@ -1,9 +1,9 @@
 import {TripPattern} from '@atb/sdk';
-import client from './client';
+import {client} from './client';
 import {Location} from '@atb/favorites';
 import {AxiosRequestConfig} from 'axios';
 
-export default async function search(
+export async function search(
   from: Location,
   to: Location,
   searchDate?: string,

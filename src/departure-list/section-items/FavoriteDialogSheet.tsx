@@ -12,7 +12,7 @@ import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import React, {forwardRef} from 'react';
-import StyleSheet from '@atb/theme/StyleSheet';
+import {StyleSheet} from '@atb/theme/StyleSheet';
 
 type Props = {
   lineNumber: string;
@@ -21,12 +21,12 @@ type Props = {
   close: () => void;
 };
 
-const FavoriteDialogSheet = forwardRef<View, Props>(
+export const FavoriteDialogSheet = forwardRef<View, Props>(
   ({lineNumber, lineName, addFavorite, close}, focusRef) => {
     const {t} = useTranslation();
     const styles = useStyles();
     return (
-      <BottomSheetContainer>
+      <BottomSheetContainer testID="chooseFavoriteBottomSheet">
         <ScreenHeaderWithoutNavigation
           title={t(NearbyTexts.favoriteDialogSheet.title)}
           color="background_1"
@@ -58,6 +58,7 @@ const FavoriteDialogSheet = forwardRef<View, Props>(
                 ),
               )}
               rightIcon={{svg: SvgFavoriteSemi}}
+              testID="onlySelectedDeparture"
             />
             <Button
               interactiveColor="interactive_0"
@@ -67,6 +68,7 @@ const FavoriteDialogSheet = forwardRef<View, Props>(
               }}
               text={t(NearbyTexts.favoriteDialogSheet.buttons.all(lineNumber))}
               rightIcon={{svg: SvgFavoriteFill}}
+              testID="allVariationsOfDeparture"
             />
           </ButtonGroup>
         </FullScreenFooter>
@@ -80,5 +82,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     margin: theme.spacings.medium,
   },
 }));
-
-export default FavoriteDialogSheet;

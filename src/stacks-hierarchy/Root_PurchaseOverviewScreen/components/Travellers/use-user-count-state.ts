@@ -73,7 +73,7 @@ export type UserCountState = {
   fareProductType?: string;
 };
 
-export default function useUserCountState(
+export function useUserCountState(
   userProfilesWithCount: UserProfileWithCount[],
 ): UserCountState {
   const [userCountState, dispatch] = useReducer(countReducer, {

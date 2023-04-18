@@ -7,4 +7,4 @@ interface RCTWidgetUpdaterInterface {
   refreshWidgets(): void;
 }
 
-export default WidgetUpdater as RCTWidgetUpdaterInterface;
+export const RCTWidgetUpdater = WidgetUpdater as RCTWidgetUpdaterInterface;

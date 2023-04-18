@@ -8,7 +8,7 @@ type TripLegDecorationProps = {
   hasEnd?: boolean;
   color: string;
 };
-const TripLegDecoration: React.FC<TripLegDecorationProps> = ({
+export const TripLegDecoration: React.FC<TripLegDecorationProps> = ({
   color,
   hasStart,
   hasCenter,
@@ -70,4 +70,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     bottom: 0,
   },
 }));
-export default TripLegDecoration;

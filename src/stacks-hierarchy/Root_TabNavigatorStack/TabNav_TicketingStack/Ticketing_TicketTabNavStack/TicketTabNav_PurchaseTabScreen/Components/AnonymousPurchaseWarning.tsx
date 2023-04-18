@@ -5,7 +5,7 @@ import AnonymousPurchases from '@atb/translations/screens/subscreens/AnonymousPu
 import React from 'react';
 import {View} from 'react-native';
 
-const AnonymousPurchaseWarning = ({onPress}: {onPress: () => void}) => {
+export const AnonymousPurchaseWarning = ({onPress}: {onPress: () => void}) => {
   const {t} = useTranslation();
   const styles = useStyle();
   return (
@@ -30,5 +30,3 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.medium,
   },
 }));
-
-export default AnonymousPurchaseWarning;

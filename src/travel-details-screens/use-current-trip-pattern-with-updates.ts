@@ -2,7 +2,7 @@ import {TripPattern} from '@atb/api/types/trips';
 import {AxiosError} from 'axios';
 import {useCallback, useEffect, useState} from 'react';
 import {singleTripSearch} from '@atb/api/trips_v2';
-import usePollableResource from '@atb/utils/use-pollable-resource';
+import {usePollableResource} from '@atb/utils/use-pollable-resource';
 import {useIsFocused} from '@react-navigation/native';
 
 type TripPatternUpdate = {
@@ -36,7 +36,7 @@ export const useCurrentTripPatternWithUpdates = (
     [originalTripPatterns, currentIndex],
   );
 
-  const [updatedTripPattern, , , error] = usePollableResource<
+  const [updatedTripPattern, , error] = usePollableResource<
     TripPattern | undefined,
     AxiosError
   >(fetchTripPattern, {

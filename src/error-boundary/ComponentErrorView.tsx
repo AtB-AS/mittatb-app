@@ -7,7 +7,7 @@ type ErrorProps = {
   message: string;
 };
 
-export default function ComponentErrorView({message}: ErrorProps) {
+export function ComponentErrorView({message}: ErrorProps) {
   const styles = useStyles();
 
   return (

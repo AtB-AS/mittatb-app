@@ -6,13 +6,16 @@ import {MapFilterType} from '@atb/components/map/types';
 import {StyleSheet} from '@atb/theme';
 import {shadows} from '@atb/components/map';
 import {Filter} from '@atb/assets/svg/mono-icons/actions';
+import {LoadingSpinner} from '@atb/components/loading';
 
 type MapFilterProps = {
   onFilterChange: (filter: MapFilterType) => void;
+  isLoading: boolean;
 };
-export const MapFilter = ({onFilterChange}: MapFilterProps) => {
+export const MapFilter = ({onFilterChange, isLoading}: MapFilterProps) => {
   const style = useStyle();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+
   const onPress = () => {
     openBottomSheet(() => (
       <MapFilterSheet
@@ -27,10 +30,10 @@ export const MapFilter = ({onFilterChange}: MapFilterProps) => {
       style={style.filterButton}
       type="inline"
       compact={true}
-      interactiveColor={'interactive_2'}
+      interactiveColor="interactive_2"
       accessibilityRole="button"
       onPress={onPress}
-      leftIcon={{svg: Filter}}
+      leftIcon={{svg: isLoading ? LoadingSpinner : Filter}}
     />
   );
 };

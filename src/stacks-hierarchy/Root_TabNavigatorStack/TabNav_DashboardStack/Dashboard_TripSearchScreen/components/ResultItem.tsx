@@ -52,7 +52,7 @@ import {
   significantWalkTime,
 } from '@atb/travel-details-screens/utils';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
-import useFontScale from '@atb/utils/use-font-scale';
+import {useFontScale} from '@atb/utils/use-font-scale';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -120,7 +120,7 @@ const ResultItemHeader: React.FC<{
   );
 };
 
-const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
+export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   tripPattern,
   onDetailsPressed,
   testID,
@@ -656,5 +656,3 @@ function isSignificantDifference(leg: Leg) {
 const DestinationIcon = ({style}: {style?: StyleProp<ViewStyle>}) => {
   return <ThemeIcon style={style} svg={Destination} />;
 };
-
-export default ResultItem;

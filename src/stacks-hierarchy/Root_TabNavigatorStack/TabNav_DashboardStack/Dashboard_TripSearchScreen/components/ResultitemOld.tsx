@@ -129,7 +129,7 @@ const ResultItemHeader: React.FC<{
   );
 };
 
-const ResultItemOld: React.FC<ResultItemProps & AccessibilityProps> = ({
+export const ResultItemOld: React.FC<ResultItemProps & AccessibilityProps> = ({
   tripPattern,
   onDetailsPressed,
   testID,
@@ -460,5 +460,3 @@ const tripSummary = (
       )}  ${screenReaderPause}
   `;
 };
-
-export default ResultItemOld;

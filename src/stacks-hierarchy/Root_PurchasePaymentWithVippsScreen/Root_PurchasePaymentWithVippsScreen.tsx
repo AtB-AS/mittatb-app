@@ -10,8 +10,8 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import Processing from '../Root_PurchasePaymentWithCreditCardScreen/Processing';
-import useVippsState, {ErrorContext, State} from './use-vipps-state';
+import {Processing} from '../Root_PurchasePaymentWithCreditCardScreen/Processing';
+import {useVippsState, ErrorContext, State} from './use-vipps-state';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 
 type Props = RootStackScreenProps<'Root_PurchasePaymentWithVippsScreen'>;

@@ -2,9 +2,9 @@ import * as Sections from '@atb/components/sections';
 import {FareContractState, PreActivatedTravelRight} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import FareContractInfo from './FareContractInfo';
+import {FareContractInfo} from './FareContractInfo';
 import {ValidityHeader} from './ValidityHeader';
-import ValidityLine from './ValidityLine';
+import {ValidityLine} from './ValidityLine';
 import {getValidityStatus} from '@atb/fare-contracts/utils';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {findReferenceDataById} from '@atb/reference-data/utils';
@@ -19,7 +19,7 @@ type Props = {
   testID?: string;
 };
 
-const PreActivatedFareContractInfo: React.FC<Props> = ({
+export const PreActivatedFareContractInfo: React.FC<Props> = ({
   fareContractState,
   travelRights,
   now,
@@ -87,5 +87,3 @@ const PreActivatedFareContractInfo: React.FC<Props> = ({
     </Sections.Section>
   );
 };
-
-export default PreActivatedFareContractInfo;

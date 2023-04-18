@@ -34,12 +34,12 @@ export type LoginOptionsRouteParams = {
 
 type LoginOptionsProps = LoginInAppScreenProps<'LoginOptionsScreen'>;
 
-export default function LoginOptionsScreen({
+export const LoginOptionsScreen = ({
   navigation,
   route: {
     params: {afterLogin},
   },
-}: LoginOptionsProps) {
+}: LoginOptionsProps) => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {signInWithCustomToken} = useAuthState();
@@ -192,7 +192,7 @@ export default function LoginOptionsScreen({
       </ScrollView>
     </View>
   );
-}
+};
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => {
   const {bottom: safeAreaBottom} = useSafeAreaInsets();

@@ -5,7 +5,7 @@ import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 
-const WarningMessage = ({message}: {message: string}) => {
+export const WarningMessage = ({message}: {message: string}) => {
   const style = useStyles();
   return (
     <View style={style.warning}>
@@ -25,5 +25,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginRight: theme.spacings.small,
   },
 }));
-
-export default WarningMessage;

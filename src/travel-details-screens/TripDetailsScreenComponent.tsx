@@ -2,9 +2,12 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
+import SvgDuration from '@atb/assets/svg/mono-icons/time/Duration';
 import {Button} from '@atb/components/button';
 import {AnyMode} from '@atb/components/icon-box';
-import {LargeFullScreenHeader} from '@atb/components/screen-header/FullScreenHeader';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
 import {TariffZone} from '@atb/reference-data/types';
@@ -14,21 +17,21 @@ import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZ
 import {useFromTravelSearchToTicketEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
-import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
 import {
   CompactTravelDetailsMap,
   TravelDetailsMapScreenParams,
 } from '@atb/travel-details-map-screen';
-import PaginatedDetailsHeader from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
+import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {useCurrentTripPatternWithUpdates} from '@atb/travel-details-screens/use-current-trip-pattern-with-updates';
 import {canSellCollabTicket} from '@atb/travel-details-screens/utils';
-import {secondsBetween} from '@atb/utils/date';
+import {formatToClock, secondsBetween} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import Trip from './components/Trip';
+import {Trip} from './components/Trip';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -52,7 +55,7 @@ export const TripDetailsScreenComponent = ({
   onPressDeparture,
   onPressQuay,
 }: Props) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const styles = useStyle();
 
   const [currentIndex, setCurrentIndex] = useState(startIndex ?? 0);
@@ -66,6 +69,7 @@ export const TripDetailsScreenComponent = ({
     tripPatterns,
   );
   const fromToNames = getFromToName(tripPattern.legs);
+  const startEndTime = getStartEndTime(tripPattern, language);
 
   const tripPatternLegs = tripPattern?.legs.map((leg) => {
     let mode: AnyMode = !!leg.bookingArrangements ? 'flex' : leg.mode;
@@ -86,7 +90,9 @@ export const TripDetailsScreenComponent = ({
   const tripTicketDetails = useGetTicketInfoFromTrip(tripPattern);
   return (
     <View style={styles.container}>
-      <LargeFullScreenHeader
+      <FullScreenView
+        type="large"
+        leftButton={{type: 'back', withIcon: true}}
         title={
           fromToNames
             ? t(TripDetailsTexts.header.titleFromTo(fromToNames))
@@ -98,47 +104,60 @@ export const TripDetailsScreenComponent = ({
             : undefined
         }
         color={themeColor}
-      >
-        <>
-          {tripPatternLegs && (
-            <CompactTravelDetailsMap
-              mapLegs={tripPatternLegs}
-              fromPlace={tripPatternLegs[0].fromPlace}
-              toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
-              onExpand={() => {
-                onPressDetailsMap({
-                  legs: tripPatternLegs,
-                  fromPlace: tripPatternLegs[0].fromPlace,
-                  toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
-                });
-              }}
+        headerChildren={
+          <View style={{flexDirection: 'row'}}>
+            <ThemeIcon
+              svg={SvgDuration}
+              style={{marginRight: 8}}
+              colorType={themeColor}
             />
-          )}
-          {tripPattern && (
-            <View
-              style={styles.paddedContainer}
-              testID="tripDetailsContentView"
-            >
-              {tripPatterns.length > 1 && (
-                <PaginatedDetailsHeader
-                  page={currentIndex + 1}
-                  totalPages={tripPatterns.length}
-                  onNavigate={navigate}
-                  style={styles.pagination}
-                  currentDate={tripPatternLegs[0]?.aimedStartTime}
-                />
+            <ThemeText
+              type="body__secondary"
+              color={themeColor}
+              accessibilityLabel={t(
+                TripDetailsTexts.header.startEndTimeA11yLabel(startEndTime),
               )}
-              <Trip
-                tripPattern={tripPattern}
-                error={error}
-                onPressDetailsMap={onPressDetailsMap}
-                onPressDeparture={onPressDeparture}
-                onPressQuay={onPressQuay}
+            >
+              {t(TripDetailsTexts.header.startEndTime(startEndTime))}
+            </ThemeText>
+          </View>
+        }
+      >
+        {tripPatternLegs && (
+          <CompactTravelDetailsMap
+            mapLegs={tripPatternLegs}
+            fromPlace={tripPatternLegs[0].fromPlace}
+            toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
+            onExpand={() => {
+              onPressDetailsMap({
+                legs: tripPatternLegs,
+                fromPlace: tripPatternLegs[0].fromPlace,
+                toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
+              });
+            }}
+          />
+        )}
+        {tripPattern && (
+          <View style={styles.paddedContainer} testID="tripDetailsContentView">
+            {tripPatterns.length > 1 && (
+              <PaginatedDetailsHeader
+                page={currentIndex + 1}
+                totalPages={tripPatterns.length}
+                onNavigate={navigate}
+                style={styles.pagination}
+                currentDate={tripPatternLegs[0]?.aimedStartTime}
               />
-            </View>
-          )}
-        </>
-      </LargeFullScreenHeader>
+            )}
+            <Trip
+              tripPattern={tripPattern}
+              error={error}
+              onPressDetailsMap={onPressDetailsMap}
+              onPressDeparture={onPressDeparture}
+              onPressQuay={onPressQuay}
+            />
+          </View>
+        )}
+      </FullScreenView>
       {tripTicketDetails && singleTicketConfig && (
         <View style={styles.borderTop}>
           <Button
@@ -238,6 +257,16 @@ function getFromToName(legs: Leg[]) {
   const toName = legs[legs.length - 1].toPlace.name;
   if (!fromName || !toName) return;
   return {fromName, toName};
+}
+
+function getStartEndTime(tripPattern: TripPattern, language: Language) {
+  const startTime = formatToClock(
+    tripPattern.expectedStartTime,
+    language,
+    'floor',
+  );
+  const endTime = formatToClock(tripPattern.expectedEndTime, language, 'ceil');
+  return {startTime, endTime};
 }
 
 function totalWaitTimeIsMoreThanAnHour(legs: Leg[]) {

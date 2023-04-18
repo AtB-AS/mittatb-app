@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 import {Coordinates} from '../sdk';
 import {reverse} from '../api';
 import {mapFeatureToLocation} from './utils';
-import useGeocoderReducer, {GeocoderState} from './use-geocoder-reducer';
+import {useGeocoderReducer, GeocoderState} from './use-geocoder-reducer';
 import {getAxiosErrorType} from '../api/utils';
 import {SearchLocation} from '@atb/favorites';
 import {useTimeoutRequest} from '@atb/api/client';
@@ -12,7 +12,7 @@ type ReverseGeocoderState = GeocoderState & {
   forceRefresh(): void;
 };
 
-export default function useReverseGeocoder(
+export function useReverseGeocoder(
   coords: Coordinates | null,
 ): ReverseGeocoderState {
   const [state, dispatch] = useGeocoderReducer();

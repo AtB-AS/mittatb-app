@@ -5,7 +5,7 @@ import {
 } from '@atb/utils/test-visualize-ids';
 import {useEffect} from 'react';
 
-export default function useTestIds() {
+export function useTestIds() {
   const {
     preferences: {showTestIds},
   } = usePreferences();

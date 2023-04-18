@@ -53,4 +53,9 @@ export default orgSpecificTranslations(ContactSheetTexts, {
       title: _('Kontakt Reis Nordland', 'Contact Reis Nordland'),
     },
   },
+  fram: {
+    header: {
+      title: _('Kontakt FRAM', 'Contact FRAM'),
+    },
+  },
 });

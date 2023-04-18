@@ -164,4 +164,21 @@ export default orgSpecificTranslations(ProfileTexts, {
       },
     },
   },
+  fram: {
+    header: {
+      title: _('Min bruker', 'My user'),
+    },
+    sections: {
+      settings: {
+        linkSectionItems: {
+          travelToken: {
+            label: _(
+              'Bruk billett på reisekort / mobil',
+              'Use ticket on travel card / phone',
+            ),
+          },
+        },
+      },
+    },
+  },
 });

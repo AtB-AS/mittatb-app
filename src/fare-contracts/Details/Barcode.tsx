@@ -9,7 +9,7 @@ import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import useInterval from '@atb/utils/use-interval';
+import {useInterval} from '@atb/utils/use-interval';
 import {MessageBox} from '@atb/components/message-box';
 import {
   findInspectable,
@@ -25,7 +25,7 @@ type Props = {
   fc: FareContract;
 };
 
-export default function Barcode({
+export function Barcode({
   validityStatus,
   isInspectable,
   fc,
