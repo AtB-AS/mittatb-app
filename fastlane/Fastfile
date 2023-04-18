@@ -194,7 +194,7 @@ platform :ios do
     cocoapods(podfile: './ios/Podfile')
   end
 
-  desc 'Upload the build to Firebase App Distribution'
+  desc 'Upload the build to Firebase App Distribution NFK'
   lane :firebase_distribution_staging do
     ensure_env_vars(
       env_vars: ['FIREBASE_APP_ID_IOS','GCP_CREDENTIALS_PATH']
@@ -203,6 +203,18 @@ platform :ios do
       app:ENV['FIREBASE_APP_ID_IOS'],
       service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
       groups:"NFK"
+    )
+  end
+
+  desc 'Upload the build to Firebase App Distribution FRAM'
+  lane :firebase_distribution_staging_fram do
+    ensure_env_vars(
+      env_vars: ['FIREBASE_APP_ID_IOS','GCP_CREDENTIALS_PATH']
+    )
+    firebase_app_distribution(
+      app:ENV['FIREBASE_APP_ID_IOS'],
+      service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
+      groups:"FRAM"
     )
   end
 
