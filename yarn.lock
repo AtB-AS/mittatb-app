@@ -9,45 +9,10 @@
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.0"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-"@atb-as/generate-assets@^7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-7.0.0.tgz#3da3478a61a75004fdeb69a7fd0697dfee764e93"
-  integrity sha512-yE2LRGo0LWF4zzK5mM8qhXBacVFDA+3Mw4CkvuqOG6zh5SLvDycL34Z3uSbDIfKE+k9sotE7qdGWlWa8mZO3jw==
-||||||| parent of da6884a5 (refactor: changes to use shared fare product type config package)
-"@atb-as/generate-assets@^6.0.13":
-  version "6.0.13"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-6.0.13.tgz#3bf6d0adf4d0f8c577154e196d64e75902a6c46b"
-  integrity sha512-mFi0iRYJn3aLXaC/O8W8DSypDj9s28MK3vNka21YN6N7ELlWahZoXNbBaAkF/rgXDX2mN1trtmToTI3OrmMfbw==
-=======
-"@atb-as/config-specs@^1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-1.0.8.tgz#5db17154a60bae8bfa2ac22e23d0e7b962c2e2ca"
-  integrity sha512-xbZzqDQskT8OjeeknSkVxglzURgWvdrKEofhTd9YxyNFHzLM1iA+0pX0ugZcSp+sUWL49OqYSSOFRgZjB4hjHg==
-||||||| parent of 29b887be (refactor: use confic-spec types for filter search)
-"@atb-as/config-specs@^1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-1.0.8.tgz#5db17154a60bae8bfa2ac22e23d0e7b962c2e2ca"
-  integrity sha512-xbZzqDQskT8OjeeknSkVxglzURgWvdrKEofhTd9YxyNFHzLM1iA+0pX0ugZcSp+sUWL49OqYSSOFRgZjB4hjHg==
-=======
-"@atb-as/config-specs@^2.0.0-alpha.3":
-  version "2.0.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-2.0.0-alpha.3.tgz#a94570218f4385851f29a51be885584197f24ace"
-  integrity sha512-OX/+OtOzmKm6LWj9OldL/UXdJYz5BKwHN5mlUeh/NcGsiXWSG9JWO0OY/jmcCjzfTRZW99EvIU5yEk5jyc2bFA==
->>>>>>> 29b887be (refactor: use confic-spec types for filter search)
-||||||| parent of bc12f9d7 (refactor: renames TravelSearchTransport -> TransportModeFilterOptionType)
-"@atb-as/config-specs@^2.0.0-alpha.3":
-  version "2.0.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-2.0.0-alpha.3.tgz#a94570218f4385851f29a51be885584197f24ace"
-  integrity sha512-OX/+OtOzmKm6LWj9OldL/UXdJYz5BKwHN5mlUeh/NcGsiXWSG9JWO0OY/jmcCjzfTRZW99EvIU5yEk5jyc2bFA==
-=======
 "@atb-as/config-specs@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-3.0.0.tgz#412bef8b2e90d667568db4e0a21ebfd480fbf4e6"
   integrity sha512-J2kg1v73Id9dnNQQhL5z6hIwcHXa4kELAzqlF09p10hTomBSrsTwu7XQFa6Oa/h2a62ZFjLXL52qbGWcVTtYfQ==
->>>>>>> bc12f9d7 (refactor: renames TravelSearchTransport -> TransportModeFilterOptionType)
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"
@@ -57,11 +22,10 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^6.0.13":
-  version "6.0.13"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-6.0.13.tgz#3bf6d0adf4d0f8c577154e196d64e75902a6c46b"
-  integrity sha512-mFi0iRYJn3aLXaC/O8W8DSypDj9s28MK3vNka21YN6N7ELlWahZoXNbBaAkF/rgXDX2mN1trtmToTI3OrmMfbw==
->>>>>>> da6884a5 (refactor: changes to use shared fare product type config package)
+"@atb-as/generate-assets@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-7.0.0.tgz#3da3478a61a75004fdeb69a7fd0697dfee764e93"
+  integrity sha512-yE2LRGo0LWF4zzK5mM8qhXBacVFDA+3Mw4CkvuqOG6zh5SLvDycL34Z3uSbDIfKE+k9sotE7qdGWlWa8mZO3jw==
   dependencies:
     "@atb-as/theme" "^6.5.2"
     commander "^9.4.0"
@@ -7019,9 +6983,9 @@ glob@^8.0.3:
     once "^1.3.0"
 
 glob@^9.3.2:
-  version "9.3.4"
-  resolved "https://registry.yarnpkg.com/glob/-/glob-9.3.4.tgz#e75dee24891a80c25cc7ee1dd327e126b98679af"
-  integrity sha512-qaSc49hojMOv1EPM4EuyITjDSgSKI0rthoHnvE81tcOi1SCVndHko7auqxdQ14eiQG2NDBJBE86+2xIrbIvrbA==
+  version "9.3.5"
+  resolved "https://registry.yarnpkg.com/glob/-/glob-9.3.5.tgz#ca2ed8ca452781a3009685607fdf025a899dfe21"
+  integrity sha512-e1LleDykUz2Iu+MTYdkSsuWX8lvAjAcs0Xef0lNIu0S2wOAzuTxCJtcd9S3cijlwYF18EsU3rzb8jPVobxDh9Q==
   dependencies:
     fs.realpath "^1.0.0"
     minimatch "^8.0.2"
@@ -8615,10 +8579,10 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
-lru-cache@^7.14.1:
-  version "7.18.3"
-  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-7.18.3.tgz#f793896e0fd0e954a59dfdd82f0773808df6aa89"
-  integrity sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==
+lru-cache@^9.0.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-9.1.0.tgz#19efafa9d08d1c08eb8efd78876075f0b8b1b07b"
+  integrity sha512-qFXQEwchrZcMVen2uIDceR8Tii6kCJak5rzDStfEM0qA3YLMswaxIEZO0DhIbJ3aqaJiDjt+3crlplOb0tDtKQ==
 
 make-dir@^2.0.0, make-dir@^2.1.0:
   version "2.1.0"
@@ -9187,9 +9151,9 @@ minimatch@^5.0.1:
     brace-expansion "^2.0.1"
 
 minimatch@^8.0.2:
-  version "8.0.2"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-8.0.2.tgz#ba35f8afeb255a4cbad4b6677b46132f3278c469"
-  integrity sha512-ikHGF67ODxj7vS5NKU2wvTsFLbExee+KXVCnBWh8Cg2hVJfBMQIrlo50qru/09E0EifjnU8dZhJ/iHhyXJM6Mw==
+  version "8.0.4"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-8.0.4.tgz#847c1b25c014d4e9a7f68aaf63dedd668a626229"
+  integrity sha512-W0Wvr9HyFXZRGIDgCicunpQ299OKXs9RgZfaukz4qAW/pJhcpUfupc9c+OObPOFueNy8VSrZgEmDtk6Kh4WzDA==
   dependencies:
     brace-expansion "^2.0.1"
 
@@ -9212,10 +9176,15 @@ minimist@^1.2.6:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.7.tgz#daa1c4d91f507390437c6a8bc01078e7000c4d18"
   integrity sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==
 
-minipass@^4.0.2, minipass@^4.2.4:
-  version "4.2.5"
-  resolved "https://registry.yarnpkg.com/minipass/-/minipass-4.2.5.tgz#9e0e5256f1e3513f8c34691dd68549e85b2c8ceb"
-  integrity sha512-+yQl7SX3bIT83Lhb4BVorMAHVuqsskxRdlmO9kTpyukp8vsm2Sn/fUOV9xlnG8/a5JsypJzap21lz/y3FBMJ8Q==
+minipass@^4.2.4:
+  version "4.2.8"
+  resolved "https://registry.yarnpkg.com/minipass/-/minipass-4.2.8.tgz#f0010f64393ecfc1d1ccb5f582bcaf45f48e1a3a"
+  integrity sha512-fNzuVyifolSLFL4NzpF+wEF4qrgqaaKX0haXPQEdQ7NKAN+WecoKMHV09YcuL/DHxrUsYQOK3MiuDf7Ip2OXfQ==
+
+minipass@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/minipass/-/minipass-5.0.0.tgz#3e9788ffb90b694a5d0ec94479a45b5d8738133d"
+  integrity sha512-3FnjYuehv9k6ovOEbyOswadCDPX1piCfhV8ncmYtHOjuPwylVWsghTLo7rabjC3Rx5xD4HDx8Wm1xnMF7S5qFQ==
 
 mixin-deep@^1.2.0:
   version "1.3.2"
@@ -9796,12 +9765,12 @@ path-parse@^1.0.6, path-parse@^1.0.7:
   integrity sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==
 
 path-scurry@^1.6.1:
-  version "1.6.3"
-  resolved "https://registry.yarnpkg.com/path-scurry/-/path-scurry-1.6.3.tgz#4eba7183d64ef88b63c7d330bddc3ba279dc6c40"
-  integrity sha512-RAmB+n30SlN+HnNx6EbcpoDy9nwdpcGPnEKrJnu6GZoDWBdIjo1UQMVtW2ybtC7LC2oKLcMq8y5g8WnKLiod9g==
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/path-scurry/-/path-scurry-1.7.0.tgz#99c741a2cfbce782294a39994d63748b5a24f6db"
+  integrity sha512-UkZUeDjczjYRE495+9thsgcVgsaCPkaw80slmfVFgllxY+IO8ubTsOpFVjDPROBqJdHfVPUFRHPBV/WciOVfWg==
   dependencies:
-    lru-cache "^7.14.1"
-    minipass "^4.0.2"
+    lru-cache "^9.0.0"
+    minipass "^5.0.0"
 
 path-type@^1.0.0:
   version "1.1.0"
