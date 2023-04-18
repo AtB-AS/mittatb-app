@@ -153,8 +153,8 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
   },
   fram: {
     warning: _(
-      'Når du er ute og reiser må du ha med reisekortet som er registrert på din profil.',
-      'When traveling, you need to bring the travel card registered on your profile.',
+      'Når du er ute og reiser må du ha med reisekortet som er registrert på din bruker.',
+      'When traveling, you need to bring the travel card registered on your user.',
     ),
     summary: {
       messageInZone: _(

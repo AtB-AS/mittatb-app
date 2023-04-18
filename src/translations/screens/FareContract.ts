@@ -252,8 +252,8 @@ export default orgSpecificTranslations(FareContractTexts, {
         'Please switch to travel card to be able to use this punch card.',
       ),
       tcardIsInspectableWarning: _(
-        'Merk at billetter du kjøper nå vil være tilknyttet ditt reisekort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.',
-        'This ticket will be connected to your travel card. If you would rather use tickets on this phone, you can switch to this device from **My profile**.',
+        'Merk at billetter du kjøper nå vil være tilknyttet ditt reisekort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min bruker**.',
+        'This ticket will be connected to your travel card. If you would rather use tickets on this phone, you can switch to this device from **My user**.',
       ),
     },
   },
