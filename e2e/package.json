@@ -5,7 +5,7 @@
   "license": "EUPL-1.2",
   "scripts": {
     "test:android": "wdio ./conf/android.conf.ts",
-    "test:android:local": "wdio ./conf/android.conf.local.ts"
+    "test:android:local": "IS_LOCAL=true wdio ./conf/android.conf.local.ts"
   },
   "devDependencies": {
     "@wdio/appium-service": "8.3.11",
