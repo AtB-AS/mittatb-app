@@ -1,7 +1,7 @@
 import {
   Feature,
+  GeoJSON,
   GeoJsonProperties,
-  MultiPolygon,
   Point,
   Polygon,
   Position,
@@ -11,12 +11,13 @@ import {
   PricingPlanFragment,
   RentalUrisFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
-import {getVisibleRange} from '@atb/components/map/utils';
+import {getVisibleRange, toFeaturePoint} from '@atb/components/map/utils';
 import buffer from '@turf/buffer';
 import bbox from '@turf/bbox-polygon';
 import difference from '@turf/difference';
 import {StationFragment} from '@atb/api/types/generated/fragments/stations';
 import {Platform} from 'react-native';
+import {RegionPayload} from '@rnmapbox/maps';
 
 export const isVehicle = (
   properties: GeoJsonProperties | undefined,
@@ -47,7 +48,7 @@ export const toBbox = (position: Position[]) => {
  */
 export const needsReload = (
   visibleBounds: Position[],
-  loadedArea: Feature<Polygon | MultiPolygon> | undefined,
+  loadedArea: Feature<Polygon> | undefined,
 ) => {
   if (!loadedArea) return true;
   // If the loaded area totally covers the current loaded bounds,
@@ -71,3 +72,45 @@ export const getRadius = (bbox: Position[], buffer: number) => {
 
 export const extend = (midpoint: Feature<Point>, range: number) =>
   buffer(midpoint, range, {units: 'meters'});
+
+export type AreaState = {
+  lat: number;
+  lon: number;
+  zoom: number;
+  range: number;
+  visibleBounds: Position[];
+  loadedArea: Feature<Polygon> | undefined;
+};
+
+export const emptyAreaState: AreaState = {
+  lat: 0,
+  lon: 0,
+  zoom: 15,
+  range: 0,
+  visibleBounds: [
+    [0, 0],
+    [0, 0],
+  ],
+  loadedArea: undefined,
+};
+
+export const updateAreaState = (
+  region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
+  bufferDistance: number,
+) => {
+  return (previousState: AreaState) => {
+    const visibleBounds = region.properties.visibleBounds;
+    if (!needsReload(visibleBounds, previousState.loadedArea))
+      return previousState;
+    const [lon, lat] = region.geometry.coordinates;
+    const range = getRadius(visibleBounds, bufferDistance);
+    return {
+      lat,
+      lon,
+      zoom: region.properties.zoomLevel,
+      range,
+      visibleBounds,
+      loadedArea: extend(toFeaturePoint({lat, lon}), range),
+    };
+  };
+};
