@@ -46,6 +46,7 @@ export const TicketAssistant_WelcomeScreen = ({
           onPress={() => navigation.navigate('TicketAssistant_FrequencyScreen')}
           text={t(TicketAssistantTexts.welcome.mainButton)}
           testID="nextButton"
+          accessibilityHint={t(TicketAssistantTexts.welcome.a11yStartHint)}
         />
       </View>
     </ScrollView>

@@ -17,15 +17,31 @@ const TicketAssistantTexts = {
       ),
     },
     mainButton: _('Start', 'Start'),
+    a11yStartHint: _(
+      'Aktiver for å starte billettveilederen',
+      'Activate to start the ticket assistant',
+    ),
   },
   closeButton: _('Lukk', 'Close'),
   categoryPicker: {
     title: _('Hvem er du?', 'Who are you?'),
     chooseButton: _('Velg', 'Choose'),
     chosen: _('Valgt', 'Chosen'),
+    a11yChooseButtonHint: _(
+      'Aktiver for å velge kategori og gå videre',
+      'Activate to choose category and go to next page',
+    ),
+    a11yHint: _(
+      'Aktiver for å se mer informasjon om kategorien',
+      'Activate to see more information about the category',
+    ),
   },
   frequency: {
     title: _(
+      'Hvor ofte reiser du i uka? ',
+      'How often do you travel per week?',
+    ),
+    titleA11yLabel: _(
       'Hvor ofte reiser du i uka? ',
       'How often do you travel per week?',
     ),
@@ -41,9 +57,15 @@ const TicketAssistantTexts = {
         `You travel ${amount.value} times a week`,
       ),
     mainButton: _('Neste', 'Next'),
+    a11yNextPageHint: _(
+      'Aktiver for å gå til neste side',
+      'Activate to go to next page',
+    ),
   },
   zonesSelector: {
     title: _('Hvor skal du reise?', 'Where do you travel?'),
+    titleA11yLabel: _('Hvor skal du reise?', 'Where do you travel?'),
+    a11yNextHint: _('Aktiver for å gå videre', 'Activate to go to next page'),
   },
   duration: {
     title: (amount: {value: number}) =>
@@ -51,9 +73,24 @@ const TicketAssistantTexts = {
         `Hvor langt frem i tid skal du reise ${amount.value} ganger i uka?`,
         `How far in advance do you want to travel ${amount.value} times a week?`,
       ),
+    titleA11yLabel: (amount: {value: number}) =>
+      _(
+        `Hvor langt frem i tid skal du reise ${amount.value} ganger i uka?`,
+        `How far in advance do you want to travel ${amount.value} times a week?`,
+      ),
     datePickerHeader: _('Frem til', 'Until'),
+    datePickerHeaderA11yLabel: _('Frem til', 'Until'),
+    a11yDatePickerHint: _(
+      'Aktiver for å åpne kalenderen',
+      'Activate to open calendar',
+    ),
     minLimit: _('1 dag', '1 day'),
+    minLimitA11yLabel: _('Minstegrensen er 1 dag', 'Minimum limit is 1 day'),
     maxLimit: _('180 dager +', '180 days +'),
+    maxLimitA11yLabel: _(
+      'Maksgrensen er 180 dager pluss',
+      'Max limit is 180 days plus',
+    ),
     resultMonths: (amount: {value: number}) =>
       _(
         `Du skal reise i ${amount.value} mnd.`,
@@ -74,10 +111,20 @@ const TicketAssistantTexts = {
       'You will travel for more than half a year.',
     ),
     mainButton: _('Neste', 'Next'),
+    a11yNextPageHint: _(
+      'Aktiver for å gå til neste side',
+      'Activate to go to next page',
+    ),
   },
   summary: {
     title: _('Anbefalt for', 'Recommended for'),
+    titleA11yLabel: _('Anbefalt for', 'Recommended for'),
     description: (data: {frequency: number; date: string}) =>
+      _(
+        `${data.frequency} turer i uka fram til ${data.date}`,
+        `${data.frequency} trips per week until ${data.date}`,
+      ),
+    descriptionA11yLabel: (data: {frequency: number; date: string}) =>
       _(
         `${data.frequency} turer i uka fram til ${data.date}`,
         `${data.frequency} trips per week until ${data.date}`,
@@ -91,6 +138,15 @@ const TicketAssistantTexts = {
         `Da sparer du ${data.totalSavings} kr totalt (${data.perTripSavings} kr per tur) \n sammenlignet med ${data.alternative} enkeltbilletter`,
         `You save ${data.totalSavings} kr in total (${data.perTripSavings} kr per trip) \n compared to ${data.alternative} single tickets`,
       ),
+    savingsA11yLabel: (data: {
+      totalSavings: number;
+      perTripSavings: string;
+      alternative: string;
+    }) =>
+      _(
+        `Da sparer du ${data.totalSavings} kr totalt (${data.perTripSavings} kr per tur) sammenlignet med ${data.alternative} enkeltbilletter`,
+        `You save ${data.totalSavings} kr in total (${data.perTripSavings} kr per trip) compared to ${data.alternative} single tickets`,
+      ),
     traveller: _('Reisende', 'Traveller'),
     zones: _('Soner', 'Zones'),
     price: _('Pris', 'Price'),
@@ -101,6 +157,26 @@ const TicketAssistantTexts = {
     ),
     mainButton: _('Lukk', 'Close'),
     buyButton: _('Kjøp denne billetten', 'Buy this ticket'),
+    a11yBuyButtonHint: _(
+      'Aktiver for å gå til siden hvor du kan kjøpe denne billetten',
+      'Activate to go to the page where you can buy this ticket',
+    ),
+    ticketSummaryA11yLabel: (data: {
+      ticket: string;
+      traveller: string;
+      fromTariffZone: string;
+      toTariffZone: string;
+      price: string;
+      pricePerTrip: string;
+    }) =>
+      _(
+        `Du har valgt ${data.ticket}. \n Reisende: ${data.traveller}. \n Sone: ${data.fromTariffZone} - ${data.toTariffZone}. \n Pris: ${data.price}. \n Pris per tur: ${data.pricePerTrip}.`,
+        `You have selected ${data.ticket}. \n Traveller: ${data.traveller}. \n Zone: ${data.fromTariffZone} - ${data.toTariffZone}. \n Price: ${data.price}. \n Price per trip: ${data.pricePerTrip}.`,
+      ),
+    noticeLabel1: _(
+      'Billetten dekker ikke hele perioden, ta billettveilederen på nytt for å få en ny anbefaling når denne billetten går ut.',
+      'The ticket does not cover the entire period, take the ticket assistant again to get a new recommendation when this ticket expires.',
+    ),
   },
 };
 export default TicketAssistantTexts;

@@ -82,7 +82,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             type={'body__primary--jumbo--bold'}
             style={styles.header}
             color={themeColor}
-            accessibilityLabel={t(TicketAssistantTexts.welcome.titleA11yLabel)}
+            accessibilityLabel={t(TicketAssistantTexts.summary.titleA11yLabel)}
           >
             {t(TicketAssistantTexts.summary.title)}
           </ThemeText>
@@ -90,6 +90,12 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             color={themeColor}
             type={'body__primary--big'}
             style={styles.description}
+            accessibilityLabel={t(
+              TicketAssistantTexts.summary.descriptionA11yLabel({
+                frequency: data.frequency,
+                date: endDate,
+              }),
+            )}
           >
             {t(
               TicketAssistantTexts.summary.description({
@@ -128,9 +134,13 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                 }}
                 text={t(TicketAssistantTexts.summary.buyButton)}
                 testID="nextButton"
+                accessibilityHint={t(
+                  TicketAssistantTexts.summary.a11yBuyButtonHint,
+                )}
               />
             </>
           )}
+          <ThemeText>{t(TicketAssistantTexts.summary.noticeLabel1)}</ThemeText>
         </View>
       )}
     </ScrollView>

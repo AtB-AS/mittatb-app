@@ -95,7 +95,9 @@ export const TicketAssistant_ZonePickerScreen = ({
           type={'body__primary--jumbo--bold'}
           style={styles.header}
           color={themeColor}
-          accessibilityLabel={t(TicketAssistantTexts.welcome.titleA11yLabel)}
+          accessibilityLabel={t(
+            TicketAssistantTexts.zonesSelector.titleA11yLabel,
+          )}
         >
           {t(TicketAssistantTexts.zonesSelector.title)}
         </ThemeText>
@@ -139,6 +141,9 @@ export const TicketAssistant_ZonePickerScreen = ({
             }}
             text={t(TicketAssistantTexts.frequency.mainButton)}
             testID="nextButton"
+            accessibilityHint={t(
+              TicketAssistantTexts.zonesSelector.a11yNextHint,
+            )}
           />
         </View>
       </ScrollView>

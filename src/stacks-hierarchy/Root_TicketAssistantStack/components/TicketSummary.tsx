@@ -43,7 +43,28 @@ export const TicketSummary = (props: TicketSummaryProps) => {
 
   return (
     <>
-      <View style={styles.ticketContainer}>
+      <View
+        style={styles.ticketContainer}
+        accessibilityLabel={t(
+          TicketAssistantTexts.summary.ticketSummaryA11yLabel({
+            ticket:
+              language.language === 'nb'
+                ? `${recommendedTicket?.name.value}`
+                : `${recommendedTicket?.alternativeNames[0].value}`,
+            traveller:
+              language.language === 'nb'
+                ? `${traveller?.name.value}`
+                : `${traveller?.alternativeNames[0].value}`,
+            fromTariffZone: fromTariffZone?.name.value || '',
+            toTariffZone: toTariffZone?.name.value || '',
+            price: response.tickets[index].price.toFixed(2),
+            pricePerTrip: (
+              response.tickets[index].price /
+              ((response.tickets[index].duration / 7) * frequency)
+            ).toFixed(2),
+          }),
+        )}
+      >
         <View style={[styles.upperPart, {minWidth: width * 0.6}]}>
           <View style={styles.travelModeWrapper}>
             {recommendedTicketTypeConfig?.transportModes && (
@@ -59,6 +80,11 @@ export const TicketSummary = (props: TicketSummaryProps) => {
             <ThemeText
               type="body__secondary--bold"
               color={interactiveColor.default}
+              accessibilityLabel={
+                language.language === 'nb'
+                  ? `${recommendedTicket?.name.value}`
+                  : `${recommendedTicket?.alternativeNames[0].value}`
+              }
             >
               {language.language === 'nb'
                 ? `${recommendedTicket?.name.value}`
@@ -75,7 +101,7 @@ export const TicketSummary = (props: TicketSummaryProps) => {
                 </ThemeText>
                 <View>
                   {response && response.tickets[index].traveller && (
-                    <>
+                    <View>
                       <View>
                         <InfoChip
                           interactiveColor={interactiveColorName}
@@ -87,7 +113,7 @@ export const TicketSummary = (props: TicketSummaryProps) => {
                           }
                         />
                       </View>
-                    </>
+                    </View>
                   )}
                 </View>
               </View>
@@ -150,7 +176,13 @@ export const TicketSummary = (props: TicketSummaryProps) => {
         type={'body__secondary'}
         style={styles.savingsText}
         color={themeColor}
-        accessibilityLabel={t(TicketAssistantTexts.welcome.titleA11yLabel)}
+        accessibilityLabel={t(
+          TicketAssistantTexts.summary.savingsA11yLabel({
+            totalSavings: savings,
+            perTripSavings: (savings / ((duration / 7) * frequency)).toFixed(2),
+            alternative: `${calculateSingleTickets(duration, frequency)}`,
+          }),
+        )}
       >
         {t(
           TicketAssistantTexts.summary.savings({

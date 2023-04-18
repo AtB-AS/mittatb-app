@@ -81,7 +81,11 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
             type={'body__primary--jumbo--bold'}
             style={styles.header}
             color={themeColor}
-            accessibilityLabel={t(TicketAssistantTexts.welcome.titleA11yLabel)}
+            accessibilityLabel={t(
+              TicketAssistantTexts.duration.titleA11yLabel({
+                value: data.frequency,
+              }),
+            )}
           >
             {t(TicketAssistantTexts.duration.title({value: data.frequency}))}
           </ThemeText>
@@ -97,6 +101,9 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                   type={'body__primary--bold'}
                   style={styles.sliderText}
                   color={'primary'}
+                  accessibilityLabel={t(
+                    TicketAssistantTexts.duration.datePickerHeaderA11yLabel,
+                  )}
                 >
                   {t(TicketAssistantTexts.duration.datePickerHeader)}
                 </ThemeText>
@@ -128,6 +135,9 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                         updateDuration(dateDiffInDays(currentDate, date), true);
                       }
                     }}
+                    accessibilityHint={t(
+                      TicketAssistantTexts.duration.a11yDatePickerHint,
+                    )}
                   />
                 ) : (
                   <Button
@@ -141,6 +151,9 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                         ? parseISO(getDateFromSlider(data.duration))
                         : parseISO(date),
                       'dd. MMM. yyyy',
+                    )}
+                    accessibilityHint={t(
+                      TicketAssistantTexts.duration.a11yDatePickerHint,
                     )}
                   />
                 )}
@@ -176,10 +189,19 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                   type={'body__primary'}
                   style={styles.sliderText}
                   color={'primary'}
+                  accessibilityLabel={t(
+                    TicketAssistantTexts.duration.minLimitA11yLabel,
+                  )}
                 >
                   {t(TicketAssistantTexts.duration.minLimit)}
                 </ThemeText>
-                <ThemeText type={'body__primary'} style={styles.sliderText}>
+                <ThemeText
+                  type={'body__primary'}
+                  style={styles.sliderText}
+                  accessibilityLabel={t(
+                    TicketAssistantTexts.duration.maxLimitA11yLabel,
+                  )}
+                >
                   {t(TicketAssistantTexts.duration.maxLimit)}
                 </ThemeText>
               </View>
@@ -204,6 +226,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
             type={'body__primary'}
             style={styles.description}
             color={themeColor}
+            accessibilityLabel={resultString}
           >
             {resultString}
           </ThemeText>
@@ -217,6 +240,9 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
             }}
             text={t(TicketAssistantTexts.frequency.mainButton)}
             testID="nextButton"
+            accessibilityHint={t(
+              TicketAssistantTexts.duration.a11yNextPageHint,
+            )}
           />
         </View>
       </ScrollView>

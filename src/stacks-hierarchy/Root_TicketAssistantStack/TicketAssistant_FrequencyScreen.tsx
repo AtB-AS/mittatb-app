@@ -44,7 +44,9 @@ export const TicketAssistant_FrequencyScreen = ({
             type={'body__primary--jumbo--bold'}
             style={styles.header}
             color={themeColor}
-            accessibilityLabel={t(TicketAssistantTexts.welcome.titleA11yLabel)}
+            accessibilityLabel={t(
+              TicketAssistantTexts.frequency.titleA11yLabel,
+            )}
           >
             {t(TicketAssistantTexts.frequency.title)}
           </ThemeText>
@@ -104,6 +106,9 @@ export const TicketAssistant_FrequencyScreen = ({
             }
             text={t(TicketAssistantTexts.frequency.mainButton)}
             testID="nextButton"
+            accessibilityHint={t(
+              TicketAssistantTexts.frequency.a11yNextPageHint,
+            )}
           />
         </View>
       </ScrollView>

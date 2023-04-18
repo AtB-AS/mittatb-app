@@ -79,6 +79,11 @@ export const TicketAssistant_CategoryPickerScreen = ({
                 }}
                 expanded={currentlyOpen === index}
                 showIconText={false}
+                accessibility={{
+                  accessibilityHint: t(
+                    TicketAssistantTexts.categoryPicker.a11yHint,
+                  ),
+                }}
                 expandContent={
                   <View>
                     <ThemeText
@@ -98,6 +103,10 @@ export const TicketAssistant_CategoryPickerScreen = ({
                         navigation.navigate('TicketAssistant_DurationScreen');
                       }}
                       text={t(TicketAssistantTexts.categoryPicker.chooseButton)}
+                      accessibilityHint={t(
+                        TicketAssistantTexts.categoryPicker
+                          .a11yChooseButtonHint,
+                      )}
                     />
                   </View>
                 }
