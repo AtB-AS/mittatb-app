@@ -31,7 +31,7 @@ export const usePollableResource = <T, E extends Error = Error>(
   opts: PollableResourceOptions<T>,
 ): [
   T,
-  (loading: LoadingState, abortController?: AbortController) => Promise<void>,
+  (loading: LoadingState, abortController?: AbortController) => void,
   boolean,
   E?,
 ] => {
@@ -45,7 +45,7 @@ export const usePollableResource = <T, E extends Error = Error>(
   const prevState = usePrevious(state);
 
   const reload = useCallback(
-    async function reload(
+    function reload(
       loading: LoadingState = 'WITH_LOADING',
       abortController?: AbortController,
     ) {
@@ -53,21 +53,19 @@ export const usePollableResource = <T, E extends Error = Error>(
       if (loading === 'WITH_LOADING') {
         setIsLoading(true);
       }
-      try {
-        const newState = await callback(
-          abortController?.signal,
-          prevState,
-          loading === 'WITH_LOADING',
-        );
-        setError(undefined);
-        setState(newState);
-      } catch (e: any) {
-        if (!abortController?.signal.aborted) setError(e);
-      } finally {
-        if (loading === 'WITH_LOADING') {
-          setIsLoading(false);
-        }
-      }
+      callback(abortController?.signal, prevState, loading === 'WITH_LOADING')
+        .then((newState) => {
+          setState(newState);
+          setError(undefined);
+        })
+        .catch((e) => {
+          if (!abortController?.signal.aborted) setError(e);
+        })
+        .finally(() => {
+          if (loading === 'WITH_LOADING') {
+            setIsLoading(false);
+          }
+        });
     },
     [callback],
   );
@@ -75,7 +73,7 @@ export const usePollableResource = <T, E extends Error = Error>(
   useEffect(() => {
     const abortController = new AbortController();
     setAbortController(abortController);
-    reload('WITH_LOADING', abortController).catch(setError);
+    reload('WITH_LOADING', abortController);
     return () => abortController.abort();
   }, [reload]);
 

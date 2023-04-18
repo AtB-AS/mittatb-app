@@ -46,7 +46,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
   useEffect(() => {
     if (isFocused) {
       const abort = new AbortController();
-      reload('WITH_LOADING', abort).catch(() => {});
+      reload('WITH_LOADING', abort);
       return () => abort.abort();
     }
   }, [isFocused]);
