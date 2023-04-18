@@ -25,16 +25,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     fareProductTypeConfigs,
   } = useFirestoreConfiguration();
 
-  let {
-    response,
-    data,
-    loading,
-    purchaseDetails,
-    setPurchaseDetails,
-    setActiveTicket,
-  } = useTicketAssistantState();
-
-  setActiveTicket(0);
+  let {response, data, loading, purchaseDetails, setPurchaseDetails} =
+    useTicketAssistantState();
 
   useEffect(() => {
     const updatePurchaseDetails = () => {

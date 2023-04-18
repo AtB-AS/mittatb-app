@@ -7,10 +7,8 @@ import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Ticket
 import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
 import {InteractiveColor, StaticColorByType} from '@atb/theme/colors';
-import {
-  TicketResponseData,
-  useTicketAssistantState,
-} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
+import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
+import {TicketResponseData} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 
 export type TicketSummaryProps = {
   duration: number;
