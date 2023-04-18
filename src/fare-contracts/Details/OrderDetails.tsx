@@ -8,7 +8,7 @@ import _ from 'lodash';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 
-const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
+export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
   const style = useStyles();
   const {t, language} = useTranslation();
   const orderIdText = t(
@@ -65,8 +65,6 @@ const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
     </View>
   );
 };
-
-export default OrderDetails;
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   marginTop: {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import LoginOnboarding from '@atb/login/LoginOnboarding';
+import {LoginOnboarding} from '@atb/login/LoginOnboarding';
 import {AfterLoginParams} from '@atb/login/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {LoginInAppScreenProps} from '../types';

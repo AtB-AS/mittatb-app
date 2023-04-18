@@ -3,7 +3,7 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import usePollableResource from '@atb/utils/use-pollable-resource';
+import {usePollableResource} from '@atb/utils/use-pollable-resource';
 import {useCallback} from 'react';
 import {ServiceJourneyDeparture} from './types';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
@@ -32,7 +32,7 @@ export type EstimatedCallWithMetadata = EstimatedCallWithQuayFragment & {
   metadata: EstimatedCallMetadata;
 };
 
-export default function useDepartureData(
+export function useDepartureData(
   activeItem: ServiceJourneyDeparture,
   pollingTimeInSeconds: number = 0,
   disabled?: boolean,
@@ -80,7 +80,7 @@ export default function useDepartureData(
     [activeItem],
   );
 
-  const [data, , isLoading] = usePollableResource<DepartureData>(getService, {
+  const [data, isLoading] = usePollableResource<DepartureData>(getService, {
     initialValue: {
       estimatedCallsWithMetadata: [],
       situations: [],

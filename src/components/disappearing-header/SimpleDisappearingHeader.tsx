@@ -1,5 +1,5 @@
 import {StyleSheet, useTheme} from '@atb/theme';
-import throttle from '@atb/utils/throttle';
+import {throttle} from '@atb/utils/throttle';
 import {useLayout} from '@atb/utils/use-layout';
 import {useScrollToTop} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';

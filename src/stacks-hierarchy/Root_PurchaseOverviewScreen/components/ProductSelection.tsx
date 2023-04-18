@@ -1,7 +1,7 @@
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {FareProductTypeConfig} from '@atb/configuration';
-import ProductSelectionByAlias from './ProductSelectionByAlias';
-import ProductSelectionByProducts from './ProductSelectionByProducts';
+import {ProductSelectionByAlias} from './ProductSelectionByAlias';
+import {ProductSelectionByProducts} from './ProductSelectionByProducts';
 import {StyleProp, ViewStyle} from 'react-native';
 
 type ProductSelectionProps = {
@@ -11,7 +11,7 @@ type ProductSelectionProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export default function ProductSelection({
+export function ProductSelection({
   preassignedFareProduct,
   fareProductTypeConfig,
   setSelectedProduct,

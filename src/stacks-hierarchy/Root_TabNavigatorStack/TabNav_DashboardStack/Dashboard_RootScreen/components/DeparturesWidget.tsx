@@ -1,15 +1,15 @@
 import {Add, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {StopPlaceInfo} from '@atb/api/departures/types';
-import {NoFavouriteDeparture} from '@atb/assets/svg/color/images/';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
-import QuaySection, {
+import {
+  QuaySection,
   QuaySectionProps,
 } from '@atb/departure-list/section-items/quay-section';
 import {useFavorites} from '@atb/favorites';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import SelectFavouritesBottomSheet from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
+import {SelectFavouritesBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
 import {StyleSheet} from '@atb/theme';
 import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
@@ -20,6 +20,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {useFavoriteDepartureData} from '../use-favorite-departure-data';
 import * as Sections from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {ThemedNoFavouriteDepartureImage} from '@atb/theme/ThemedAssets';
 
 type Props = {
   onEditFavouriteDeparture: () => void;
@@ -27,7 +28,7 @@ type Props = {
   onPressDeparture: QuaySectionProps['onPressDeparture'];
 };
 
-const DeparturesWidget = ({
+export const DeparturesWidget = ({
   onEditFavouriteDeparture,
   onAddFavouriteDeparture,
   onPressDeparture,
@@ -73,7 +74,7 @@ const DeparturesWidget = ({
         <Sections.Section>
           <Sections.GenericSectionItem>
             <View style={styles.noFavouritesView}>
-              <NoFavouriteDeparture />
+              <ThemedNoFavouriteDepartureImage />
               <View style={styles.noFavouritesTextContainer}>
                 <ThemeText
                   type="body__secondary"
@@ -151,8 +152,6 @@ function compareStopsByDistance(
   );
   return distanceToA - distanceToB;
 }
-
-export default DeparturesWidget;
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

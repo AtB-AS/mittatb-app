@@ -13,7 +13,7 @@ export type NamedStyles<T> = {
 export type ThemedStyles<T> = (theme: Theme, themeName: ThemeMode) => T;
 
 type StyleSheetType = typeof StyleSheetNative;
-interface StyleSheet extends StyleSheetType {
+interface ExtendedStyleSheet extends StyleSheetType {
   createThemeHook<T>(input: ThemedStyles<NamedStyles<T>>): () => NamedStyles<T>;
   createTheme<T>(
     input: ThemedStyles<NamedStyles<T>>,
@@ -34,7 +34,7 @@ function isThemedStyles<T>(style: any): style is ThemedStyles<T> {
   return typeof style === 'function';
 }
 
-const StyleSheetImpl: StyleSheet = {
+export const StyleSheet: ExtendedStyleSheet = {
   ...StyleSheetNative,
   createThemeHook<T>(
     input: ThemedStyles<NamedStyles<T>>,
@@ -50,5 +50,3 @@ const StyleSheetImpl: StyleSheet = {
       StyleSheetNative.create<NamedStyles<T>>(input(theme, themeName));
   },
 };
-
-export default StyleSheetImpl;

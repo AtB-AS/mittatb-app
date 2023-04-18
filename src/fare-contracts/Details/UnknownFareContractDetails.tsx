@@ -1,7 +1,7 @@
 import {FareContract} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import * as Sections from '@atb/components/sections';
-import ValidityLine from '@atb/fare-contracts/ValidityLine';
+import {ValidityLine} from '@atb/fare-contracts/ValidityLine';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 

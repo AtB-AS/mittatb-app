@@ -5,8 +5,8 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ThemeText} from '@atb/components/text';
 import {HeaderButton} from './HeaderButton';
 import {LeftButtonProps, RightButtonProps} from '.';
-import useFontScale from '@atb/utils/use-font-scale';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {useFontScale} from '@atb/utils/use-font-scale';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
 
 type ScreenHeaderProps = ViewProps & {

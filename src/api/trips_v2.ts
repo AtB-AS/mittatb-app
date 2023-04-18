@@ -1,4 +1,4 @@
-import client from './client';
+import {client} from './client';
 import {AxiosRequestConfig} from 'axios';
 import {TripPattern, TripsQuery} from '@atb/api/types/trips';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';

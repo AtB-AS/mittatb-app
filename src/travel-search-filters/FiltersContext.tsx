@@ -12,7 +12,7 @@ const FiltersContext = createContext<FiltersContextState | undefined>(
   undefined,
 );
 
-const FiltersContextProvider: React.FC = ({children}) => {
+export const FiltersContextProvider: React.FC = ({children}) => {
   const [filters, setFiltersState] = useState<
     TransportModeFilterOptionWithSelectionType[]
   >([]);
@@ -43,5 +43,3 @@ export function useFilters() {
   }
   return context;
 }
-
-export default FiltersContextProvider;

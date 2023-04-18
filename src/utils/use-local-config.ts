@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import {LocalConfig, loadLocalConfig} from '../local-config';
 
-export default function useLocalConfig() {
+export function useLocalConfig() {
   const [config, setConfig] = useState<LocalConfig | undefined>(undefined);
   useEffect(() => {
     async function load() {

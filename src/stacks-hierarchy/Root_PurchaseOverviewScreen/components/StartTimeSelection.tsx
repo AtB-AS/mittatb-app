@@ -9,7 +9,7 @@ import {
   formatToVerboseDateTime,
 } from '@atb/utils/date';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import TravelDateSheet from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/TravelDate/TravelDateSheet';
+import {TravelDateSheet} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/TravelDate/TravelDateSheet';
 import {RadioSegments} from '@atb/components/radio';
 import {TimeSelectionMode} from '@atb/configuration';
 
@@ -22,7 +22,7 @@ type StartTimeSelectionProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export default function StartTimeSelection({
+export function StartTimeSelection({
   color,
   setTravelDate,
   validFromTime,

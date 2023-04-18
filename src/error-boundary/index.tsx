@@ -1,8 +1,8 @@
 import React, {ErrorInfo} from 'react';
 import Bugsnag from '@bugsnag/react-native';
 import Intercom from 'react-native-intercom';
-import FullScreenErrorView from './FullScreenErrorView';
-import ComponentErrorView from './ComponentErrorView';
+import {FullScreenErrorView} from './FullScreenErrorView';
+import {ComponentErrorView} from './ComponentErrorView';
 
 type Props =
   | {
@@ -20,7 +20,7 @@ type State = {
   errorCount: number;
 };
 
-export default class ErrorBoundary extends React.Component<Props, State> {
+export class ErrorBoundary extends React.Component<Props, State> {
   state: State = {
     hasError: false,
     errorCount: 0,

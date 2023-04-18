@@ -36,15 +36,16 @@ import {
   significantWalkTime,
   TimeValues,
 } from '../utils';
-import Time from './Time';
-import TripLegDecoration from './TripLegDecoration';
-import TripRow from './TripRow';
-import WaitSection, {WaitDetails} from './WaitSection';
+import {Time} from './Time';
+import {TripLegDecoration} from './TripLegDecoration';
+import {TripRow} from './TripRow';
+import {WaitSection, WaitDetails} from './WaitSection';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {TripProps} from '@atb/travel-details-screens/components/Trip';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import FlexibleTransportContactDetails, {
+import {
+  FlexibleTransportContactDetails,
   ContactDetails as ContactDetails,
 } from './FlexibeTransportContactDetails';
 import {usePreferences} from '@atb/preferences';
@@ -69,7 +70,7 @@ export type InterchangeDetails = {
   fromPlace: string;
 };
 
-const TripSection: React.FC<TripSectionProps> = ({
+export const TripSection: React.FC<TripSectionProps> = ({
   isLast,
   isFirst,
   wait,
@@ -493,4 +494,3 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
 }));
-export default TripSection;

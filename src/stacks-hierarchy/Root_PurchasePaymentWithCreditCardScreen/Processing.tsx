@@ -3,7 +3,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
 
-const Processing: React.FC<{message: string}> = ({message}) => {
+export const Processing: React.FC<{message: string}> = ({message}) => {
   const styles = useStyles();
   const {theme} = useTheme();
 
@@ -31,5 +31,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     margin: theme.spacings.small,
   },
 }));
-
-export default Processing;

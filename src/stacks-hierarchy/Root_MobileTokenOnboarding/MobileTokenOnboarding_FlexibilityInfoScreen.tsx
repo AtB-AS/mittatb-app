@@ -5,7 +5,7 @@ import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {useTranslation} from '@atb/translations';
 import MobileTokenOnboardingTexts from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {MobileTokenOnboardingScreenProps} from './navigation_types';

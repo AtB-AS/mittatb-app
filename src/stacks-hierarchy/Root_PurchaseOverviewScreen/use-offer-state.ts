@@ -118,7 +118,7 @@ const initialState: OfferState = {
   userProfilesWithCountAndOffer: [],
 };
 
-export default function useOfferState(
+export function useOfferState(
   offerEndpoint: 'zones' | 'authority',
   preassignedFareProduct: PreassignedFareProduct,
   fromTariffZone: TariffZone,

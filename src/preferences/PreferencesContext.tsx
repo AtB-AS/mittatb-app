@@ -16,7 +16,7 @@ const PreferencesContext = createContext<PreferencesContextState | undefined>(
   undefined,
 );
 
-const PreferencesContextProvider: React.FC = ({children}) => {
+export const PreferencesContextProvider: React.FC = ({children}) => {
   let [preferences, setPreferencesState] = useState<UserPreferences>({});
   let colorScheme = useColorScheme();
 
@@ -71,5 +71,3 @@ export function usePreferenceItems() {
   }
   return context.preferences;
 }
-
-export default PreferencesContextProvider;

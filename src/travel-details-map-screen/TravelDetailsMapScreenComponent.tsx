@@ -2,13 +2,10 @@ import {
   BackArrow,
   flyToLocation,
   MapCameraConfig,
-  MapControls,
   MapLeg,
   MapViewConfig,
   PositionArrow,
   useControlPositionsStyle,
-  zoomIn,
-  zoomOut,
 } from '@atb/components/map';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {Coordinates} from '@atb/utils/coordinates';
@@ -17,8 +14,8 @@ import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
 import React, {useMemo, useRef} from 'react';
 import {StyleSheet, View} from 'react-native';
-import MapLabel from './components/MapLabel';
-import MapRoute from './components/MapRoute';
+import {MapLabel} from './components/MapLabel';
+import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
 import {VehiclePosition} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
 
@@ -90,10 +87,6 @@ export const TravelDetailsMapScreenComponent = ({
               mapCameraRef,
             });
           }}
-        />
-        <MapControls
-          zoomIn={() => zoomIn(mapViewRef, mapCameraRef)}
-          zoomOut={() => zoomOut(mapViewRef, mapCameraRef)}
         />
       </View>
     </View>

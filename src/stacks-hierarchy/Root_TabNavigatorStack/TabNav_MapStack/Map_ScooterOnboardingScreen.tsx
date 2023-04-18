@@ -7,10 +7,10 @@ import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {storage, StorageModelKeysEnum} from '@atb/storage';
-import useFocusOnLoad from '@atb/utils/use-focus-on-load';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ScooterOnboarding} from '@atb/assets/svg/color/images';
 import {MapScreenProps} from './navigation-types';
-import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -36,7 +36,7 @@ export const Map_ScooterOnboardingScreen = ({navigation}: Props) => {
       >
         <View
           accessible={true}
-          accessibilityLabel={t(ScooterTexts.onboarding.a11yLabel)}
+          accessibilityLabel={t(MobilityTexts.onboarding.a11yLabel)}
           ref={focusRef}
         >
           <ThemeText
@@ -44,17 +44,17 @@ export const Map_ScooterOnboardingScreen = ({navigation}: Props) => {
             color={themeColor}
             type="heading--big"
           >
-            {t(ScooterTexts.onboarding.title)}
+            {t(MobilityTexts.onboarding.title)}
           </ThemeText>
           <View style={styles.illustration}>
             <ScooterOnboarding />
           </View>
           <ThemeText color={themeColor} style={styles.body}>
-            {t(ScooterTexts.onboarding.body)}
+            {t(MobilityTexts.onboarding.body)}
           </ThemeText>
         </View>
         <Button
-          text={t(ScooterTexts.onboarding.button)}
+          text={t(MobilityTexts.onboarding.button)}
           onPress={async () => {
             await setOnboardingCompleted();
             navigation.goBack();

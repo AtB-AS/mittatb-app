@@ -10,7 +10,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {Duration} from '@atb/assets/svg/mono-icons/time';
 
-const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
+export const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
   const styles = useStyle();
   const {t, language} = useTranslation();
   const time = secondsToDuration(duration, language);
@@ -70,4 +70,3 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginRight: theme.spacings.small,
   },
 }));
-export default Summary;

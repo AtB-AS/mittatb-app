@@ -9,10 +9,7 @@ import {
 } from '@entur-private/abt-mobile-client-sdk';
 import Bugsnag from '@bugsnag/react-native';
 
-export default function useMobileTokenClient(
-  abtClient: AbtClient,
-  contextId: string,
-) {
+export function useMobileTokenClient(abtClient: AbtClient, contextId: string) {
   useEffect(() => {
     (async function () {
       await abtClient.start();

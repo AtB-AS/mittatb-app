@@ -5,13 +5,13 @@ import {findReferenceDataById} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
 import {isPreActivatedTravelRight, useTicketingState} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import useInterval from '@atb/utils/use-interval';
+import {useInterval} from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {getValidityStatus} from '../utils';
-import DetailsContent from './DetailsContent';
+import {DetailsContent} from './DetailsContent';
 import {FareContractModalScreenProps} from './types';
-import {getValidOnTrainNoticeText} from '../../stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/utils';
+import {getValidOnTrainNoticeText} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/utils';
 
 export type FareContractDetailsRouteParams = {
   orderId: string;
@@ -23,7 +23,7 @@ function isOfFareProductRef(a: any): a is {fareProductRef: string} {
   return 'fareProductRef' in a;
 }
 
-export default function DetailsScreen({navigation, route}: Props) {
+export function DetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);

@@ -6,8 +6,8 @@ import {AxiosError} from 'axios';
 import React from 'react';
 import {View} from 'react-native';
 import {TripMessages} from './DetailsMessages';
-import TripSection, {getPlaceName, InterchangeDetails} from './TripSection';
-import Summary from './TripSummary';
+import {TripSection, getPlaceName, InterchangeDetails} from './TripSection';
+import {Summary} from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
@@ -26,7 +26,7 @@ export type TripProps = {
   ) => void;
   onPressQuay: (stopPlace: StopPlaceFragment, selectedQuayId?: string) => void;
 };
-const Trip: React.FC<TripProps> = ({
+export const Trip: React.FC<TripProps> = ({
   tripPattern,
   error,
   onPressDetailsMap,
@@ -141,5 +141,3 @@ function getInterchangeDetails(
   }
   return undefined;
 }
-
-export default Trip;

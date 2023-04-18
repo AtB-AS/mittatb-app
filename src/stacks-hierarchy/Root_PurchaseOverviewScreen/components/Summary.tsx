@@ -23,7 +23,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-export default function Summary({
+export function Summary({
   price,
   isLoading,
   isError,
@@ -50,8 +50,12 @@ export default function Summary({
 
   const SummaryText = () => {
     switch (fareProductTypeConfig.configuration.zoneSelectionMode) {
-      case 'single':
       case 'multiple':
+      case 'multiple-stop':
+      case 'multiple-zone':
+      case 'single':
+      case 'single-stop':
+      case 'single-zone':
         return (
           <ThemeText type="body__secondary" style={styles.message}>
             {t(PurchaseOverviewTexts.summary.messageInZone)}

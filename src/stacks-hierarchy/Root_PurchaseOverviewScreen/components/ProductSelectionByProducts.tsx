@@ -24,7 +24,7 @@ type ProductSelectionByProductsProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export default function ProductSelectionByProducts({
+export function ProductSelectionByProducts({
   selectedProduct,
   fareProductTypeConfig,
   setSelectedProduct,

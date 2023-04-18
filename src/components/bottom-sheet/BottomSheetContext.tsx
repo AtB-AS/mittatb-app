@@ -15,7 +15,7 @@ import {
   LayoutChangeEvent,
   View,
 } from 'react-native';
-import useFocusOnLoad, {giveFocus} from '@atb/utils/use-focus-on-load';
+import {useFocusOnLoad, giveFocus} from '@atb/utils/use-focus-on-load';
 import {Backdrop} from './Backdrop';
 import {ClickableBackground} from './ClickableBackground';
 import {AnimatedBottomSheet} from './AnimatedBottomSheet';

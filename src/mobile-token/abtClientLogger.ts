@@ -1,7 +1,7 @@
 import Bugsnag, {Event} from '@bugsnag/react-native';
 import {AbtClientConfig} from '@entur-private/abt-mobile-client-sdk';
 
-const logger: AbtClientConfig['logger'] = {
+export const logger: AbtClientConfig['logger'] = {
   info: (msg, metadata?) => {
     Bugsnag.leaveBreadcrumb(msg, metadata);
   },
@@ -14,5 +14,3 @@ const logger: AbtClientConfig['logger'] = {
     if (err) Bugsnag.notify(err, onError);
   },
 };
-
-export default logger;

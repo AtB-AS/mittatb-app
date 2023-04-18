@@ -19,7 +19,7 @@ type Props =
     }
   | {status: Exclude<ValidityStatus, 'valid'>};
 
-const ValidityLine = (props: Props): ReactElement => {
+export const ValidityLine = (props: Props): ReactElement => {
   const {theme} = useTheme();
   const styles = useStyles();
 
@@ -209,5 +209,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height: '100%',
   },
 }));
-
-export default ValidityLine;

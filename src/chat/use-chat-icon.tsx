@@ -5,16 +5,16 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
-import useChatUnreadCount from './use-chat-unread-count';
+import {useChatUnreadCount} from './use-chat-unread-count';
 import {StaticColor, TextColor} from '@atb/theme/colors';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import ContactSheet from '@atb/chat/ContactSheet';
+import {ContactSheet} from '@atb/chat/ContactSheet';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 
-export default function useChatIcon(
+export const useChatIcon = (
   color?: StaticColor | TextColor,
   testID?: string,
-): IconButtonProps | undefined {
+): IconButtonProps | undefined => {
   const unreadCount = useChatUnreadCount();
   const styles = useStyles();
   const {open: openBottomSheet} = useBottomSheet();
@@ -27,7 +27,7 @@ export default function useChatIcon(
   };
 
   return {
-    icon: (
+    children: (
       <View style={styles.chatContainer} testID={testID}>
         {unreadCount ? (
           <ThemeIcon colorType={color} svg={ChatUnread} />
@@ -39,7 +39,7 @@ export default function useChatIcon(
     accessibilityHint: t(ScreenHeaderTexts.headerButton.chat.a11yHint),
     onPress: () => openContactSheet(),
   };
-}
+};
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   chatContainer: {

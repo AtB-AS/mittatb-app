@@ -13,7 +13,7 @@ import {FullScreenFooter} from '@atb/components/screen-footer';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ChatUnread} from '@atb/assets/svg/color/icons/actions';
-import useChatUnreadCount from './use-chat-unread-count';
+import {useChatUnreadCount} from './use-chat-unread-count';
 import Intercom from 'react-native-intercom';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {screenReaderHidden} from '@atb/utils/accessibility';
@@ -22,7 +22,7 @@ type Props = {
   close: () => void;
 };
 
-const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
+export const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
   const {t} = useTranslation();
   const unreadCount = useChatUnreadCount();
   const {customer_service_url, enable_intercom, customer_feedback_url} =
@@ -151,5 +151,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
   };
 });
-
-export default ContactSheet;

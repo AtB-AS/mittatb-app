@@ -7,7 +7,7 @@ type TripRowProps = {
   alignChildren?: 'flex-start' | 'flex-end' | 'center';
   onPress?(): void;
 } & ViewProps;
-const TripRow: React.FC<TripRowProps> = ({
+export const TripRow: React.FC<TripRowProps> = ({
   rowLabel,
   children,
   alignChildren = 'center',
@@ -56,4 +56,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     width: theme.tripLegDetail.decorationContainerWidth,
   },
 }));
-export default TripRow;

@@ -1,6 +1,6 @@
 import {useRef, useEffect} from 'react';
 
-export default function useInterval(
+export function useInterval(
   callback: Function,
   delay: number,
   deps: React.DependencyList = [],
