@@ -20,6 +20,7 @@ import {
   TripPatternWithKey,
 } from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {flatMap} from '@atb/utils/array';
+import {enumFromString} from '@atb/utils/enum-from-string';
 import {isValidTripLocations} from '@atb/utils/location';
 import Bugsnag from '@bugsnag/react-native';
 import {CancelTokenSource} from 'axios';
@@ -373,10 +374,13 @@ function transportModeToEnum(
 ): Types.TransportModes[] {
   return modes.map((internal) => {
     return {
-      transportMode: internal.transportMode as Types.TransportMode,
-      transportSubModes: internal.transportSubModes?.map(
-        (submode) => submode as Types.TransportSubmode,
+      transportMode: enumFromString(
+        Types.TransportMode,
+        internal.transportMode,
       ),
+      transportSubModes: internal.transportSubModes
+        ?.map((submode) => enumFromString(Types.TransportSubmode, submode))
+        .filter(Boolean) as Types.TransportSubmode[],
     };
   });
 }
