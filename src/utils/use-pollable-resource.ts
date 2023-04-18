@@ -9,6 +9,8 @@ type PollableResourceOptions<T> = {
   disabled?: boolean;
 };
 
+type LoadingState = 'NO_LOADING' | 'WITH_LOADING';
+
 /**
  * Pattern for creating a pollable resource as a hook. Pass data receiver function as first argument. The
  * receiver function may take an AbortSignal if it should be aborted when the callback function changes.
@@ -27,7 +29,12 @@ export const usePollableResource = <T, E extends Error = Error>(
     isInitialLoad?: boolean,
   ) => Promise<T>,
   opts: PollableResourceOptions<T>,
-): [T, () => Promise<void>, boolean, E?] => {
+): [
+  T,
+  (loading: LoadingState, abortController?: AbortController) => Promise<void>,
+  boolean,
+  E?,
+] => {
   const {initialValue, pollingTimeInSeconds = 30} = opts;
   const [isLoading, setIsLoading] = useIsLoading(false);
   const [error, setError] = useState<E | undefined>(undefined);
@@ -39,7 +46,7 @@ export const usePollableResource = <T, E extends Error = Error>(
 
   const reload = useCallback(
     async function reload(
-      loading: 'NO_LOADING' | 'WITH_LOADING' = 'WITH_LOADING',
+      loading: LoadingState = 'WITH_LOADING',
       abortController?: AbortController,
     ) {
       // Only fetch if there is a location and the screen is in focus.
@@ -68,7 +75,7 @@ export const usePollableResource = <T, E extends Error = Error>(
   useEffect(() => {
     const abortController = new AbortController();
     setAbortController(abortController);
-    reload('WITH_LOADING', abortController);
+    reload('WITH_LOADING', abortController).catch(setError);
     return () => abortController.abort();
   }, [reload]);
 
