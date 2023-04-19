@@ -13,12 +13,7 @@ import {
 import {validateEmail} from '@atb/utils/validation';
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-
-export type ReceiptScreenRouteParams = {
-  orderId: string;
-  orderVersion: string;
-};
+import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 
 type Props = RootStackScreenProps<'Root_ReceiptScreen'>;
 

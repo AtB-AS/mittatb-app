@@ -12,9 +12,6 @@ import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_
 import {ReserveOffer} from '@atb/ticketing';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {CardPaymentMethod} from '@atb/stacks-hierarchy/types';
-import {CarnetDetailsRouteParams} from '@atb/stacks-hierarchy/Root_CarnetDetailsScreen';
-import {ReceiptScreenRouteParams} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
-import {FareContractDetailsRouteParams} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
 
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
@@ -36,6 +33,20 @@ export type Root_LocationSearchByMapScreenParams = {
 type PaymentParams = {
   offers: ReserveOffer[];
   preassignedFareProduct: PreassignedFareProduct;
+};
+
+type CarnetDetailsRouteParams = {
+  orderId: string;
+  isInspectable: boolean;
+};
+
+type ReceiptScreenRouteParams = {
+  orderId: string;
+  orderVersion: string;
+};
+
+type FareContractDetailsRouteParams = {
+  orderId: string;
 };
 
 export type RootStackParamList = {

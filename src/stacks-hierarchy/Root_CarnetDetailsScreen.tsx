@@ -7,12 +7,7 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {CarnetDetailedView} from '@atb/fare-contracts';
-import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-
-export type CarnetDetailsRouteParams = {
-  orderId: string;
-  isInspectable: boolean;
-};
+import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 
 type Props = RootStackScreenProps<'Root_CarnetDetailsScreen'>;
 

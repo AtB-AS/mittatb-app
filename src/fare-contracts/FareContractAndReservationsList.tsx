@@ -11,7 +11,7 @@ import React, {useMemo} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
-import {TravelCardInformation} from '../stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/TravelCardInformation';
+import {TravelCardInformation} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/TravelCardInformation';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 

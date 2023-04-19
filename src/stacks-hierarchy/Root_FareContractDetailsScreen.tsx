@@ -9,12 +9,8 @@ import {useInterval} from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {DetailsContent, getValidityStatus} from '@atb/fare-contracts';
-import {getValidOnTrainNoticeText} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/utils';
-import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-
-export type FareContractDetailsRouteParams = {
-  orderId: string;
-};
+import {getValidOnTrainNoticeText} from '../stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/utils';
+import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
