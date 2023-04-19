@@ -1,4 +1,4 @@
-import {Platform, ScrollView, StyleProp, View, ViewStyle} from 'react-native';
+import {Platform, ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
@@ -42,43 +42,29 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   const a11yContext = useAccessibilityContext();
 
   const majorVersionIOS = parseInt(String(Platform.Version), 10);
-  let style: StyleProp<ViewStyle> = {width: 130};
-  if (majorVersionIOS < 13) {
-    style = {width: undefined, flex: 1};
-  }
+  const style =
+    majorVersionIOS < 13 ? {width: undefined, flex: 1} : {width: 130};
+
   const {data, updateData} = useTicketAssistantState();
   const locale = useLocaleContext();
+
   function updateDuration(value: number, fromPicker?: boolean) {
-    let newData = {...data};
-    if (fromPicker) {
-      newData = {...data, duration: value};
-    } else {
-      newData = {...data, duration: durations[value]};
-    }
+    const newData = {...data, duration: fromPicker ? value : durations[value]};
     updateData(newData);
   }
-  let resultString = '';
-  if (data.duration < 7) {
-    resultString = t(
-      TicketAssistantTexts.duration.resultDays({
-        value: getDaysWeeksMonths(data.duration),
-      }),
-    );
-  } else if (data.duration < 30) {
-    resultString = t(
-      TicketAssistantTexts.duration.resultWeeks({
-        value: getDaysWeeksMonths(data.duration),
-      }),
-    );
-  } else if (data.duration < 180) {
-    resultString = t(
-      TicketAssistantTexts.duration.resultMonths({
-        value: getDaysWeeksMonths(data.duration),
-      }),
-    );
-  } else {
-    resultString = t(TicketAssistantTexts.duration.resultMoreThan180Days);
-  }
+
+  const duration = data.duration;
+  const daysWeeksMonths = getDaysWeeksMonths(duration);
+  const resultString = t(
+    duration < 7
+      ? TicketAssistantTexts.duration.resultDays({value: daysWeeksMonths})
+      : duration < 30
+      ? TicketAssistantTexts.duration.resultWeeks({value: daysWeeksMonths})
+      : duration < 180
+      ? TicketAssistantTexts.duration.resultMonths({value: daysWeeksMonths})
+      : TicketAssistantTexts.duration.resultMoreThan180Days,
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.backdrop}>
