@@ -41,9 +41,9 @@ export const FlexibleTransportContactDetails = forwardRef<View, Props>(
         </View>
         <FullScreenFooter>
           <View style={styles.container}>
-            <View style={styles.tittleContainer}>
+            <View style={styles.titleContainer}>
               <ThemeIcon svg={Warning} />
-              <ThemeText type="heading__title" style={styles.tittlePadding}>
+              <ThemeText type="heading__title" style={styles.titlePadding}>
                 {t(
                   FlexibleTransportText.contactMessage.title(
                     contactDetails.phoneNumber,
@@ -88,10 +88,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       borderRadius: theme.border.radius.regular,
       backgroundColor: theme.static.background.background_0.background,
     },
-    tittleContainer: {
+    titleContainer: {
       flexDirection: 'row',
     },
-    tittlePadding: {
+    titlePadding: {
       paddingLeft: theme.spacings.small,
     },
     messageContainer: {
