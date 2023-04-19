@@ -145,6 +145,11 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
             ]);
             await tokenService.validate(token, signedToken, traceId);
           } catch (err) {
+            console.log(
+              'THE THROWN ERROR',
+              err,
+              err instanceof TokenMustBeReplacedRemoteTokenStateError,
+            );
             if (
               err instanceof TokenMustBeReplacedRemoteTokenStateError ||
               err instanceof TokenNotFoundRemoteTokenStateError

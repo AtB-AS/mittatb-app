@@ -40,11 +40,12 @@ export type TokenService = RemoteTokenServiceWithInitiate & {
 };
 
 const handleError = (err: any) => {
-  throw parseRemoteError(err) || err;
+  throw parseRemoteError(err.response?.data) || err;
 };
 
 const service: TokenService = {
   initiateNewMobileToken: async (traceId, isEmulator) => {
+    console.log('IS EMULATOR', isEmulator, String(isEmulator));
     const deviceName = await getDeviceName();
     const data: InitRequest = {
       name: deviceName,
@@ -56,8 +57,9 @@ const service: TokenService = {
           [IsEmulatorHeaderName]: String(isEmulator),
         },
         authWithIdToken: true,
-        skipErrorLogging: () => true, //TODO: fix this
+        skipErrorLogging: () => false, //TODO: fix this
         timeout: 15000,
+        baseURL: 'http://10.100.1.56:8080',
       })
       .then((res) => res.data.pendingTokenDetails)
       .catch(handleError);
@@ -73,7 +75,8 @@ const service: TokenService = {
           },
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: () => true, //TODO: fix this
+          skipErrorLogging: () => false, //TODO: fix this
+          baseURL: 'http://10.100.1.56:8080',
         },
       )
       .then((res) => res.data.activeTokenDetails)
@@ -89,7 +92,8 @@ const service: TokenService = {
         },
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: () => true, //TODO: fix this
+        skipErrorLogging: () => false, //TODO: fix this
+        baseURL: 'http://10.100.1.56:8080',
       })
       .then((res) => res.data.pendingTokenDetails)
       .catch(handleError),
@@ -113,7 +117,8 @@ const service: TokenService = {
           },
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: () => true, //TODO: fix this
+          skipErrorLogging: () => false, //TODO: fix this
+          baseURL: 'http://10.100.1.56:8080',
         },
       )
       .then((res) => res.data.activeTokenDetails)
@@ -129,7 +134,8 @@ const service: TokenService = {
         },
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: () => true, //TODO: fix this
+        skipErrorLogging: () => false, //TODO: fix this
+        baseURL: 'http://10.100.1.56:8080',
       })
       .then((res) => res.data.activeTokenDetails)
       .catch(handleError),
@@ -144,7 +150,8 @@ const service: TokenService = {
           },
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: () => true, //TODO: fix this
+          skipErrorLogging: () => false, //TODO: fix this
+          baseURL: 'http://10.100.1.56:8080',
         },
       )
       .then((res) => res.data.removed)
@@ -158,7 +165,8 @@ const service: TokenService = {
         },
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: () => true, //TODO: fix this
+        skipErrorLogging: () => false, //TODO: fix this
+        baseURL: 'http://10.100.1.56:8080',
       })
       .then((res) => res.data.tokens)
       .catch(handleError),
@@ -173,7 +181,8 @@ const service: TokenService = {
           },
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: () => true, //TODO: fix this
+          skipErrorLogging: () => false, //TODO: fix this
+          baseURL: 'http://10.100.1.56:8080',
         },
       )
       .then((res) => res.data.tokens)
@@ -184,28 +193,29 @@ const service: TokenService = {
       .get<TokenLimitResponse>('/tokens/v4/toggle/details', {
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: () => true, //TODO: fix this
+        skipErrorLogging: () => false, //TODO: fix this
+        baseURL: 'http://10.100.1.56:8080',
       })
       .then((res) => res.data)
       .catch(handleError),
   validate: async (token, secureContainer, traceId) =>
-    handleReattestation<any>(
-      async (attestation) =>
-        client
-          .get('/tokens/v4/validate', {
-            headers: {
-              [CorrelationIdHeaderName]: traceId,
-              [SignedTokenHeaderName]: secureContainer,
-              [AttestationHeaderName]: attestation?.data || '',
-              [AttestationTypeHeaderName]: attestation?.type || '',
-            },
-            authWithIdToken: true,
-            timeout: 15000,
-            skipErrorLogging: () => true, //TODO: fix this
-          })
-          .catch(handleError),
-      token,
-    ),
+    handleReattestation<any>(async (attestation) => {
+      console.log('THE ATTESTATION', attestation);
+      return client
+        .get('/tokens/v4/validate', {
+          headers: {
+            [CorrelationIdHeaderName]: traceId,
+            [SignedTokenHeaderName]: secureContainer,
+            [AttestationHeaderName]: attestation?.data || '',
+            [AttestationTypeHeaderName]: attestation?.type || '',
+          },
+          authWithIdToken: true,
+          timeout: 15000,
+          skipErrorLogging: () => false, //TODO: fix this
+          baseURL: 'http://10.100.1.56:8080',
+        })
+        .catch(handleError);
+    }, token),
 };
 
 export function createTokenService() {
