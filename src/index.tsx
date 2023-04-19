@@ -1,5 +1,4 @@
 import 'react-native-get-random-values';
-
 import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {AppContextProvider} from './AppContext';
@@ -29,6 +28,8 @@ import {FirestoreConfigurationContextProvider} from '@atb/configuration/Firestor
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Platform, UIManager} from 'react-native';
 import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext';
+import {ApolloProvider} from '@apollo/client';
+import {vehiclesClient} from '@atb/api/vehiclesClient';
 
 configureAndStartBugsnag();
 
@@ -76,17 +77,19 @@ export const App = () => {
                             <RemoteConfigContextProvider>
                               <FirestoreConfigurationContextProvider>
                                 <TicketingContextProvider>
-                                  <MobileTokenContextProvider>
-                                    <AppLanguageProvider>
-                                      <GlobalMessagesContextProvider>
-                                        <BottomSheetProvider>
-                                          <FeedbackQuestionsProvider>
-                                            <RootStack />
-                                          </FeedbackQuestionsProvider>
-                                        </BottomSheetProvider>
-                                      </GlobalMessagesContextProvider>
-                                    </AppLanguageProvider>
-                                  </MobileTokenContextProvider>
+                                  <ApolloProvider client={vehiclesClient}>
+                                    <MobileTokenContextProvider>
+                                      <AppLanguageProvider>
+                                        <GlobalMessagesContextProvider>
+                                          <BottomSheetProvider>
+                                            <FeedbackQuestionsProvider>
+                                              <RootStack />
+                                            </FeedbackQuestionsProvider>
+                                          </BottomSheetProvider>
+                                        </GlobalMessagesContextProvider>
+                                      </AppLanguageProvider>
+                                    </MobileTokenContextProvider>
+                                  </ApolloProvider>
                                 </TicketingContextProvider>
                               </FirestoreConfigurationContextProvider>
                             </RemoteConfigContextProvider>
