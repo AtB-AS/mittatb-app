@@ -61,10 +61,10 @@ const TicketAssistantTexts = {
       'Aktiver for å gå til neste side',
       'Activate to go to next page',
     ),
-    a11ySliderHint(amount: {value: number}) {
+    a11yFrequencySelectionHint(amount: {value: number}) {
       return _(
-        `Du skal reise i ${amount.value} dager`,
-        `You will travel for ${amount.value} days`,
+        `Aktiver om du reiser ${amount.value} ganer i uken`,
+        `Activate if you travel ${amount.value} times a week`,
       );
     },
   },

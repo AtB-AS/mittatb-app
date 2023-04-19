@@ -34,11 +34,9 @@ export const TicketAssistant_WelcomeScreen = ({
           {t(TicketAssistantTexts.welcome.title)}
         </ThemeText>
         <TicketSplash width={windowWidth} height={windowWidth * (2 / 3)} />
-        <View>
-          <ThemeText color={themeColor} style={styles.description}>
-            {t(TicketAssistantTexts.welcome.description.part1)}
-          </ThemeText>
-        </View>
+        <ThemeText color={themeColor} style={styles.description}>
+          {t(TicketAssistantTexts.welcome.description.part1)}
+        </ThemeText>
       </View>
       <View style={styles.bottomView}>
         <Button

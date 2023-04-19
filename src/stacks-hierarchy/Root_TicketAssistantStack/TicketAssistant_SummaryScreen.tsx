@@ -1,4 +1,4 @@
-import {Image, ScrollView, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import React, {useEffect} from 'react';
@@ -75,7 +75,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       </View>
       {loading ? (
         // Gif here
-        <Image source={require('@atb/assets/images/loading/Bus.gif')} />
+        <></>
       ) : (
         <View style={styles.mainView}>
           <ThemeText
