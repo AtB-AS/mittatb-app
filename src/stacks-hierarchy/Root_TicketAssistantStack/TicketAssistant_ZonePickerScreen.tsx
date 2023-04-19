@@ -23,6 +23,7 @@ import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScree
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {getRecommendedTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/api';
+import {useAccessibilityContext} from '@atb/AccessibilityContext';
 
 type Props = TicketAssistantScreenProps<'TicketAssistant_ZonePickerScreen'>;
 export const TicketAssistant_ZonePickerScreen = ({
@@ -31,6 +32,8 @@ export const TicketAssistant_ZonePickerScreen = ({
 }: Props) => {
   const styles = useThemeStyles();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const a11yContext = useAccessibilityContext();
+
   const offerDefaults = useOfferDefaults(
     undefined,
     fareProductTypeConfigs[0].type,
@@ -110,13 +113,15 @@ export const TicketAssistant_ZonePickerScreen = ({
             />
           </View>
 
-          <View style={styles.zonesSelectorMapContainer}>
-            <TariffZonesSelectorMap
-              isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
-              selectedZones={selectedZones}
-              setSelectedZones={setSelectedZones}
-            />
-          </View>
+          {!a11yContext.isScreenReaderEnabled && (
+            <View style={styles.zonesSelectorMapContainer}>
+              <TariffZonesSelectorMap
+                isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
+                selectedZones={selectedZones}
+                setSelectedZones={setSelectedZones}
+              />
+            </View>
+          )}
         </View>
         <View style={styles.bottomView}>
           <Button
