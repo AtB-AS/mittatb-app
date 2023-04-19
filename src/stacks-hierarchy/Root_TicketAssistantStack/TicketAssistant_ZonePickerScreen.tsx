@@ -22,7 +22,6 @@ import {
 import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-defaults';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
-import {getRecommendedTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/api';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 
 type Props = TicketAssistantScreenProps<'TicketAssistant_ZonePickerScreen'>;
@@ -52,7 +51,7 @@ export const TicketAssistant_ZonePickerScreen = ({
     selectNext: isApplicableOnSingleZoneOnly ? 'from' : 'to',
   });
 
-  const {data, updateData, setResponse, setLoading} = useTicketAssistantState();
+  const {data, updateData} = useTicketAssistantState();
 
   useEffect(() => {
     const zoneIds = [selectedZones.from.id, selectedZones.to.id];
@@ -128,21 +127,6 @@ export const TicketAssistant_ZonePickerScreen = ({
             interactiveColor="interactive_0"
             onPress={async () => {
               navigation.navigate('TicketAssistant_SummaryScreen');
-              if (setLoading) {
-                setLoading(true);
-              }
-              await getRecommendedTicket(data)
-                .then((r) => {
-                  if (setResponse && r) {
-                    setResponse(r);
-                  }
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-              if (setLoading) {
-                setLoading(false);
-              }
             }}
             text={t(TicketAssistantTexts.frequency.mainButton)}
             testID="nextButton"

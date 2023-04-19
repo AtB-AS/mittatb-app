@@ -12,6 +12,7 @@ import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/com
 import {handleRecommendedTicketResponse} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/handle-recommended-ticket-response';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {TicketResponseData} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
+import {getRecommendedTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/api';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -25,28 +26,53 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     fareProductTypeConfigs,
   } = useFirestoreConfiguration();
 
-  let {response, data, loading, purchaseDetails, setPurchaseDetails} =
-    useTicketAssistantState();
+  let {
+    response,
+    setResponse,
+    data,
+    loading,
+    setLoading,
+    purchaseDetails,
+    setPurchaseDetails,
+  } = useTicketAssistantState();
 
   useEffect(() => {
-    const updatePurchaseDetails = () => {
-      console.log('updatePurchaseDetails');
-      try {
-        setPurchaseDetails(
-          handleRecommendedTicketResponse(
-            response,
-            tariffZones,
-            userProfiles,
-            preassignedFareProducts,
-            fareProductTypeConfigs,
-          ),
-        );
-      } catch (e) {
-        console.log('Error changing data ' + e);
-      }
+    const fetchData = async () => {
+      setLoading(true);
+      await getRecommendedTicket(data)
+        .then((r) => {
+          setResponse(r);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      setLoading(false);
     };
-    updatePurchaseDetails();
-  }, [response]);
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (data) {
+        fetchData();
+      }
+    });
+
+    try {
+      setPurchaseDetails(
+        handleRecommendedTicketResponse(
+          response,
+          tariffZones,
+          userProfiles,
+          preassignedFareProducts,
+          fareProductTypeConfigs,
+        ),
+      );
+    } catch (e) {
+      console.log('Error changing data ' + e);
+    }
+
+    return () => {
+      unsubscribe();
+    };
+  }, [navigation, data, setResponse, setPurchaseDetails, setLoading, response]);
 
   const startDate = new Date();
   const endDate: string = new Date(
@@ -58,7 +84,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     day: 'numeric',
   });
 
-  const index = getIndexOfLongestDurationTicket(response.tickets);
+  let index = getIndexOfLongestDurationTicket(response?.tickets || []);
 
   return (
     <ScrollView
@@ -75,7 +101,16 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       </View>
       {loading ? (
         // Gif here
-        <></>
+        <>
+          <ThemeText
+            type={'body__primary--jumbo--bold'}
+            style={styles.header}
+            color={themeColor}
+            accessibilityLabel={t(TicketAssistantTexts.summary.titleA11yLabel)}
+          >
+            Loading...
+          </ThemeText>
+        </>
       ) : (
         <View style={styles.mainView}>
           <ThemeText
@@ -140,7 +175,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
               />
             </>
           )}
-          {response.tickets[index].duration < data.duration &&
+          {response?.tickets &&
+            response.tickets[index].duration < data.duration &&
             response.tickets[index].duration !== 0 && (
               <ThemeText
                 type={'body__secondary'}
@@ -159,15 +195,20 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
 function getIndexOfLongestDurationTicket(
   tickets: TicketResponseData[],
 ): number {
-  let longestDuration = 0;
-  let longestDurationIndex = 0;
-  tickets.forEach((ticket, index) => {
-    if (ticket.duration > longestDuration) {
-      longestDuration = ticket.duration;
-      longestDurationIndex = index;
-    }
-  });
-  return longestDurationIndex;
+  try {
+    let longestDuration = 0;
+    let longestDurationIndex = 0;
+    tickets.forEach((ticket, index) => {
+      if (ticket.duration > longestDuration) {
+        longestDuration = ticket.duration;
+        longestDurationIndex = index;
+      }
+    });
+    return longestDurationIndex;
+  } catch (e) {
+    console.log('Error getting index of longest duration ticket ' + e);
+    return 0;
+  }
 }
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
