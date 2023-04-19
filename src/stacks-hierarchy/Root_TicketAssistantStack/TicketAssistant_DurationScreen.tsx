@@ -19,6 +19,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgDate from '@atb/assets/svg/mono-icons/time/Date';
 import {addDays, format, parseISO} from 'date-fns';
 import {dateToDateString} from '@atb/components/sections/items/date-input/utils';
+import {useAccessibilityContext} from '@atb/AccessibilityContext';
 type DurationProps =
   TicketAssistantScreenProps<'TicketAssistant_DurationScreen'>;
 
@@ -31,6 +32,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   const [usedSlider, setUsedSlider] = useState(false);
   const styles = useThemeStyles();
   const {t} = useTranslation();
+  const a11yContext = useAccessibilityContext();
 
   const majorVersionIOS = parseInt(String(Platform.Version), 10);
   let style: StyleProp<ViewStyle> = {width: 130};
@@ -205,21 +207,49 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                   {t(TicketAssistantTexts.duration.maxLimit)}
                 </ThemeText>
               </View>
-              <SliderComponent
-                style={styles.slider}
-                value={getSliderIndex(data.duration)}
-                maximumTrackTintColor={sliderColorMax}
-                minimumTrackTintColor={sliderColorMin}
-                maximumValue={durations.length - 1}
-                minimumValue={0}
-                step={1}
-                tapToSeek={true}
-                thumbTintColor={sliderColorMin}
-                onValueChange={(value) => {
-                  setUsedSlider(true);
-                  updateDuration(value, false);
-                }}
-              />
+              {a11yContext.isScreenReaderEnabled ? (
+                <View>
+                  <View>
+                    {durations.map((value) => {
+                      return (
+                        <View key={value}>
+                          <Button
+                            interactiveColor="interactive_0"
+                            onPress={() => {
+                              setUsedSlider(true);
+                              updateDuration(value, false);
+                            }}
+                            text={t(TicketAssistantTexts.frequency.mainButton)}
+                            accessibilityHint={t(
+                              TicketAssistantTexts.duration.a11ySliderHint({
+                                value: value,
+                              }),
+                            )}
+                          >
+                            {value}
+                          </Button>
+                        </View>
+                      );
+                    })}
+                  </View>
+                </View>
+              ) : (
+                <SliderComponent
+                  style={styles.slider}
+                  value={getSliderIndex(data.duration)}
+                  maximumTrackTintColor={sliderColorMax}
+                  minimumTrackTintColor={sliderColorMin}
+                  maximumValue={durations.length - 1}
+                  minimumValue={0}
+                  step={1}
+                  tapToSeek={true}
+                  thumbTintColor={sliderColorMin}
+                  onValueChange={(value) => {
+                    setUsedSlider(true);
+                    updateDuration(value, false);
+                  }}
+                />
+              )}
             </View>
           </View>
           <ThemeText

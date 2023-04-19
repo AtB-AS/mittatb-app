@@ -10,6 +10,7 @@ import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {StaticColorByType} from '@atb/theme/colors';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useTicketAssistantState} from './TicketAssistantContext';
+import {useAccessibilityContext} from '@atb/AccessibilityContext';
 
 export const sliderColorMax: StaticColorByType<'background'> =
   'background_accent_2';
@@ -28,6 +29,7 @@ export const TicketAssistant_FrequencyScreen = ({
   // Create an array of every second number from 1 to 14
   const numbers = Array.from({length: 8}, (_, i) => i * 2);
   const {data, updateData} = useTicketAssistantState();
+  const a11yContext = useAccessibilityContext();
   function updateFrequency(value: number) {
     const newData = {...data, frequency: value};
     updateData(newData);
@@ -57,38 +59,66 @@ export const TicketAssistant_FrequencyScreen = ({
           >
             {t(TicketAssistantTexts.frequency.description)}
           </ThemeText>
-          <View style={styles.horizontalLine}>
-            {numbers.map((number) => {
-              return (
-                <View key={number} style={styles.numberContainer}>
-                  <ThemeText
-                    key={number}
-                    style={styles.number}
-                    type={'body__primary'}
-                    color={themeColor}
-                  >
-                    {number}
-                  </ThemeText>
-                </View>
-              );
-            })}
-          </View>
-          <View style={styles.sliderContainer}>
-            <SliderComponent
-              style={styles.slider}
-              maximumTrackTintColor={sliderColorMax}
-              minimumTrackTintColor={sliderColorMin}
-              maximumValue={14}
-              minimumValue={0}
-              step={1}
-              value={data.frequency}
-              tapToSeek={true}
-              thumbTintColor={sliderColorMin}
-              onValueChange={(value) => {
-                updateFrequency(value);
-              }}
-            />
-          </View>
+          {a11yContext.isScreenReaderEnabled ? (
+            <View>
+              <View style={styles.horizontalLine}>
+                {numbers.map((number) => {
+                  return (
+                    <View key={number} style={styles.numberContainer}>
+                      <Button
+                        interactiveColor="interactive_0"
+                        onPress={() => updateFrequency(number)}
+                        text={t(TicketAssistantTexts.frequency.mainButton)}
+                        accessibilityHint={t(
+                          TicketAssistantTexts.frequency.a11ySliderHint({
+                            value: number,
+                          }),
+                        )}
+                      >
+                        {number}
+                      </Button>
+                    </View>
+                  );
+                })}
+              </View>
+            </View>
+          ) : (
+            <View>
+              <View style={styles.horizontalLine}>
+                {numbers.map((number) => {
+                  return (
+                    <View key={number} style={styles.numberContainer}>
+                      <ThemeText
+                        key={number}
+                        style={styles.number}
+                        type={'body__primary'}
+                        color={themeColor}
+                      >
+                        {number}
+                      </ThemeText>
+                    </View>
+                  );
+                })}
+              </View>
+              <View style={styles.sliderContainer}>
+                <SliderComponent
+                  style={styles.slider}
+                  maximumTrackTintColor={sliderColorMax}
+                  minimumTrackTintColor={sliderColorMin}
+                  maximumValue={14}
+                  minimumValue={0}
+                  step={1}
+                  value={data.frequency}
+                  tapToSeek={true}
+                  thumbTintColor={sliderColorMin}
+                  onValueChange={(value) => {
+                    updateFrequency(value);
+                  }}
+                />
+              </View>
+            </View>
+          )}
+
           <ThemeText
             type={'body__secondary'}
             color={themeColor}
