@@ -22,7 +22,6 @@ import {useGetLiveServiceJourneyVehicles} from '@atb/travel-details-map-screen/u
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
-  // TODO: update name and use parameter
   initialVehiclePosition?: VehiclePosition;
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
