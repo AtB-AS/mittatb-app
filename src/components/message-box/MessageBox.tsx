@@ -16,6 +16,8 @@ import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
+import {SvgProps} from 'react-native-svg';
+import {ContrastColor} from '@atb-as/theme';
 
 /**
  * Configuration for how the onPress on the message box should work. The
@@ -35,6 +37,9 @@ export type MessageBoxProps = {
   type: Statuses;
   title?: string;
   message: string;
+  // When enabled, the Color and the Icon from `type: Statuses` is disabled.
+  color?: ContrastColor;
+  icon?: (props: SvgProps) => JSX.Element;
   noStatusIcon?: boolean;
   onDismiss?: () => void;
   isMarkdown?: boolean;
@@ -50,14 +55,18 @@ export const MessageBox = ({
   title,
   isMarkdown = false,
   onPressConfig,
+  icon,
+  color,
   onDismiss,
 }: MessageBoxProps) => {
   const {theme} = useTheme();
   const styles = useStyles();
   const {t} = useTranslation();
-  const textColor = theme.static.status[type].text;
+  const textColor = color ? color.text : theme.static.status[type].text;
   const colorStyle = {
-    backgroundColor: theme.static.status[type].background,
+    backgroundColor: color
+      ? color.background
+      : theme.static.status[type].background,
   };
 
   const onPress =
@@ -76,12 +85,16 @@ export const MessageBox = ({
       style={[styles.container, colorStyle, style]}
       accessible={false}
     >
-      {!noStatusIcon && (
-        <ThemeIcon
-          fill={textColor}
-          style={styles.icon}
-          svg={messageTypeToIcon(type)}
-        />
+      {icon ? (
+        <ThemeIcon svg={icon} />
+      ) : (
+        !noStatusIcon && (
+          <ThemeIcon
+            fill={textColor}
+            style={styles.icon}
+            svg={messageTypeToIcon(type)}
+          />
+        )
       )}
       <View
         style={styles.content}
@@ -98,18 +111,18 @@ export const MessageBox = ({
         {title && (
           <ThemeText
             type="body__primary--bold"
-            color={type}
+            color={color || type}
             style={styles.title}
           >
             {title}
           </ThemeText>
         )}
-        <ThemeText color={type} isMarkdown={isMarkdown}>
+        <ThemeText color={color || type} isMarkdown={isMarkdown}>
           {message}
         </ThemeText>
         {onPressConfig?.text && (
           <ThemeText
-            color={type}
+            color={color || type}
             style={styles.linkText}
             type="body__primary--underline"
           >

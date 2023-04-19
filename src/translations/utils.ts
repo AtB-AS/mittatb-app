@@ -29,6 +29,24 @@ export const getTextForLanguage = (
   return texts?.[0]?.value;
 };
 
+export function getTextForLanguageWithFormat(
+  texts: LanguageAndTextType[] | undefined,
+  language: Language,
+  ...values: string[]
+) {
+  var text = getTextForLanguage(texts, language);
+
+  if (!text) {
+    return undefined;
+  }
+
+  for (let index = 0; index < values.length; index++) {
+    text = text.replace(`{${index}}`, values[index]);
+  }
+
+  return text;
+}
+
 /**
  * Get the text in the current language. If English is requested, it will
  * fall back to Norwegian if no English text is found. If neither English nor
