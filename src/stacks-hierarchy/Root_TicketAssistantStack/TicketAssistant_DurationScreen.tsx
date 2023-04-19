@@ -20,6 +20,7 @@ import SvgDate from '@atb/assets/svg/mono-icons/time/Date';
 import {addDays, format, parseISO} from 'date-fns';
 import {dateToDateString} from '@atb/components/sections/items/date-input/utils';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
+import {SectionSeparator} from '@atb/components/sections';
 type DurationProps =
   TicketAssistantScreenProps<'TicketAssistant_DurationScreen'>;
 
@@ -185,72 +186,51 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                 )}
               </View>
             </View>
-            <View style={styles.sliderContainer}>
-              <View style={styles.limitHeader}>
-                <ThemeText
-                  type={'body__primary'}
-                  style={styles.sliderText}
-                  color={'primary'}
-                  accessibilityLabel={t(
-                    TicketAssistantTexts.duration.minLimitA11yLabel,
-                  )}
-                >
-                  {t(TicketAssistantTexts.duration.minLimit)}
-                </ThemeText>
-                <ThemeText
-                  type={'body__primary'}
-                  style={styles.sliderText}
-                  accessibilityLabel={t(
-                    TicketAssistantTexts.duration.maxLimitA11yLabel,
-                  )}
-                >
-                  {t(TicketAssistantTexts.duration.maxLimit)}
-                </ThemeText>
-              </View>
-              {a11yContext.isScreenReaderEnabled ? (
-                <View>
-                  <View>
-                    {durations.map((value) => {
-                      return (
-                        <View key={value}>
-                          <Button
-                            interactiveColor="interactive_0"
-                            onPress={() => {
-                              setUsedSlider(true);
-                              updateDuration(value, false);
-                            }}
-                            text={t(TicketAssistantTexts.frequency.mainButton)}
-                            accessibilityHint={t(
-                              TicketAssistantTexts.duration.a11ySliderHint({
-                                value: value,
-                              }),
-                            )}
-                          >
-                            {value}
-                          </Button>
-                        </View>
-                      );
-                    })}
+
+            {!a11yContext.isScreenReaderEnabled && (
+              <>
+                <SectionSeparator />
+                <View style={styles.sliderContainer}>
+                  <View style={styles.limitHeader}>
+                    <ThemeText
+                      type={'body__primary'}
+                      style={styles.sliderText}
+                      color={'primary'}
+                      accessibilityLabel={t(
+                        TicketAssistantTexts.duration.minLimitA11yLabel,
+                      )}
+                    >
+                      {t(TicketAssistantTexts.duration.minLimit)}
+                    </ThemeText>
+                    <ThemeText
+                      type={'body__primary'}
+                      style={styles.sliderText}
+                      accessibilityLabel={t(
+                        TicketAssistantTexts.duration.maxLimitA11yLabel,
+                      )}
+                    >
+                      {t(TicketAssistantTexts.duration.maxLimit)}
+                    </ThemeText>
                   </View>
+
+                  <SliderComponent
+                    style={styles.slider}
+                    value={getSliderIndex(data.duration)}
+                    maximumTrackTintColor={sliderColorMax}
+                    minimumTrackTintColor={sliderColorMin}
+                    maximumValue={durations.length - 1}
+                    minimumValue={0}
+                    step={1}
+                    tapToSeek={true}
+                    thumbTintColor={sliderColorMin}
+                    onValueChange={(value) => {
+                      setUsedSlider(true);
+                      updateDuration(value, false);
+                    }}
+                  />
                 </View>
-              ) : (
-                <SliderComponent
-                  style={styles.slider}
-                  value={getSliderIndex(data.duration)}
-                  maximumTrackTintColor={sliderColorMax}
-                  minimumTrackTintColor={sliderColorMin}
-                  maximumValue={durations.length - 1}
-                  minimumValue={0}
-                  step={1}
-                  tapToSeek={true}
-                  thumbTintColor={sliderColorMin}
-                  onValueChange={(value) => {
-                    setUsedSlider(true);
-                    updateDuration(value, false);
-                  }}
-                />
-              )}
-            </View>
+              </>
+            )}
           </View>
           <ThemeText
             type={'body__primary'}
@@ -355,8 +335,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderBottomColor: theme.border.primary,
-    borderBottomWidth: 1,
     paddingHorizontal: theme.spacings.medium,
   },
   datePickerHeader: {
