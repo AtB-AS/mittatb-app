@@ -45,12 +45,13 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   const style =
     majorVersionIOS < 13 ? {width: undefined, flex: 1} : {width: 130};
 
-  const {data, updateData} = useTicketAssistantState();
+  const {data, updateData, setHasDataChanged} = useTicketAssistantState();
   const locale = useLocaleContext();
 
   function updateDuration(value: number, fromPicker?: boolean) {
     const newData = {...data, duration: fromPicker ? value : durations[value]};
     updateData(newData);
+    setHasDataChanged(true);
   }
 
   const duration = data.duration;
