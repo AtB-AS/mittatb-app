@@ -43,6 +43,9 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       setLoading(true);
       await getRecommendedTicket(data)
         .then((r) => {
+          if (r.length === 0) {
+            return;
+          }
           setResponse(r);
         })
         .catch((error) => {
@@ -59,15 +62,17 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     });
 
     try {
-      setPurchaseDetails(
-        handleRecommendedTicketResponse(
-          response,
-          tariffZones,
-          userProfiles,
-          preassignedFareProducts,
-          fareProductTypeConfigs,
-        ),
-      );
+      if (response?.tickets !== undefined) {
+        setPurchaseDetails(
+          handleRecommendedTicketResponse(
+            response,
+            tariffZones,
+            userProfiles,
+            preassignedFareProducts,
+            fareProductTypeConfigs,
+          ),
+        );
+      }
     } catch (e) {
       console.log('Error changing data ' + e);
     }
@@ -86,8 +91,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     month: 'long',
     day: 'numeric',
   });
-
-  let index = getIndexOfLongestDurationTicket(response?.tickets || []);
+  let index = getIndexOfLongestDurationTicket(response.tickets);
 
   return (
     <ScrollView
