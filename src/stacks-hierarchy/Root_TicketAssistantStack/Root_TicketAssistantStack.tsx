@@ -17,7 +17,7 @@ import {TicketAssistant_ZonePickerScreen} from './TicketAssistant_ZonePickerScre
 import {TicketAssistant_SummaryScreen} from './TicketAssistant_SummaryScreen';
 
 import {FullScreenHeader} from '@atb/components/screen-header';
-import TicketAssistantContextProvider from './TicketAssistantContext';
+import {TicketAssistantContextProvider} from './TicketAssistantContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
