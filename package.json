@@ -26,6 +26,7 @@
   "dependencies": {
     "@apollo/client": "^3.7.11",
     "@apollo/react-hooks": "^4.0.0",
+    "@atb-as/config-specs": "^3.0.0",
     "@atb-as/theme": "^6.5.2",
     "@bugsnag/react-native": "^7.18.2",
     "@bugsnag/source-maps": "^2.3.1",

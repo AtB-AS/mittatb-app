@@ -1,28 +1,30 @@
-import {Location} from '@atb/favorites';
-import {DateString, SearchTime} from '@atb/journey-date-picker';
-import {TripPattern} from '@atb/api/types/trips';
-import {
-  SearchStateType,
-  TravelSearchFiltersSelectionType,
-  TripPatternWithKey,
-} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
-import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {useCallback, useEffect, useRef, useState} from 'react';
+import {TravelSearchTransportModes} from '@atb-as/config-specs';
 import {CancelToken, isCancel} from '@atb/api';
-import {CancelTokenSource} from 'axios';
-import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {tripsSearch} from '@atb/api/trips_v2';
-import Bugsnag from '@bugsnag/react-native';
-import {useSearchHistory} from '@atb/search-history';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {TripSearchPreferences, usePreferences} from '@atb/preferences';
-import {isValidTripLocations} from '@atb/utils/location';
 import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 import {
   InputMaybe,
   StreetMode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
+import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
+import {TripPattern} from '@atb/api/types/trips';
+import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
+import {Location} from '@atb/favorites';
+import {DateString, SearchTime} from '@atb/journey-date-picker';
+import {TripSearchPreferences, usePreferences} from '@atb/preferences';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useSearchHistory} from '@atb/search-history';
+import {
+  SearchStateType,
+  TravelSearchFiltersSelectionType,
+  TripPatternWithKey,
+} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {flatMap} from '@atb/utils/array';
+import {enumFromString} from '@atb/utils/enum-from-string';
+import {isValidTripLocations} from '@atb/utils/location';
+import Bugsnag from '@bugsnag/react-native';
+import {CancelTokenSource} from 'axios';
+import {useCallback, useEffect, useRef, useState} from 'react';
 
 export function useTripsQuery(
   fromLocation: Location | undefined,
@@ -248,7 +250,9 @@ async function doSearch(
     );
     query.modes = {
       ...journeySearchModes,
-      transportModes: flatMap(selectedFilters, (tm) => tm.modes),
+      transportModes: flatMap(selectedFilters, (tm) =>
+        transportModeToEnum(tm.modes),
+      ),
     };
   }
 
@@ -363,4 +367,20 @@ function useJourneySearchModes(
         : defaultValue
       : defaultValue,
   };
+}
+
+function transportModeToEnum(
+  modes: TravelSearchTransportModes[],
+): Types.TransportModes[] {
+  return modes.map((internal) => {
+    return {
+      transportMode: enumFromString(
+        Types.TransportMode,
+        internal.transportMode,
+      ),
+      transportSubModes: internal.transportSubModes
+        ?.map((submode) => enumFromString(Types.TransportSubmode, submode))
+        .filter(Boolean) as Types.TransportSubmode[],
+    };
+  });
 }
