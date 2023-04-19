@@ -29,7 +29,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Platform, UIManager} from 'react-native';
 import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext';
 import {ApolloProvider} from '@apollo/client';
-import {apolloClient} from '@atb/api/apolloClient';
+import {vehiclesClient} from '@atb/api/vehiclesClient';
 
 configureAndStartBugsnag();
 
@@ -77,7 +77,7 @@ export const App = () => {
                             <RemoteConfigContextProvider>
                               <FirestoreConfigurationContextProvider>
                                 <TicketingContextProvider>
-                                  <ApolloProvider client={apolloClient}>
+                                  <ApolloProvider client={vehiclesClient}>
                                     <MobileTokenContextProvider>
                                       <AppLanguageProvider>
                                         <GlobalMessagesContextProvider>
