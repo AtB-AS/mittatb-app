@@ -56,31 +56,35 @@ export const TicketAssistant_FrequencyScreen = ({
             color={themeColor}
             type={'body__secondary'}
             style={styles.description}
+            accessibilityLabel={t(TicketAssistantTexts.frequency.description)}
           >
             {t(TicketAssistantTexts.frequency.description)}
           </ThemeText>
           {a11yContext.isScreenReaderEnabled ? (
-            <View>
-              <View style={styles.horizontalLine}>
-                {numbers.map((number) => {
-                  return (
-                    <View key={number} style={styles.numberContainer}>
-                      <Button
-                        interactiveColor="interactive_0"
-                        onPress={() => updateFrequency(number)}
-                        text={t(TicketAssistantTexts.frequency.mainButton)}
-                        accessibilityHint={t(
-                          TicketAssistantTexts.frequency.a11ySliderHint({
-                            value: number,
-                          }),
-                        )}
-                      >
-                        {number}
-                      </Button>
-                    </View>
-                  );
-                })}
-              </View>
+            <View style={styles.screenReaderButtons}>
+              {numbers.map((number) => {
+                return (
+                  <Button
+                    interactiveColor="interactive_2"
+                    onPress={() => {
+                      updateFrequency(number);
+                      navigation.navigate(
+                        'TicketAssistant_CategoryPickerScreen',
+                      );
+                    }}
+                    text={number.toString()}
+                    accessibilityHint={t(
+                      TicketAssistantTexts.frequency.a11yFrequencySelectionHint(
+                        {
+                          value: number,
+                        },
+                      ),
+                    )}
+                  >
+                    {number}
+                  </Button>
+                );
+              })}
             </View>
           ) : (
             <View>
@@ -116,31 +120,35 @@ export const TicketAssistant_FrequencyScreen = ({
                   }}
                 />
               </View>
+              <ThemeText
+                type={'body__secondary'}
+                color={themeColor}
+                style={styles.number}
+              >
+                {t(
+                  TicketAssistantTexts.frequency.result({
+                    value: data.frequency,
+                  }),
+                )}
+              </ThemeText>
             </View>
           )}
-
-          <ThemeText
-            type={'body__secondary'}
-            color={themeColor}
-            style={styles.number}
-          >
-            {t(TicketAssistantTexts.frequency.result({value: data.frequency}))}
-          </ThemeText>
         </View>
-
-        <View style={styles.bottomView}>
-          <Button
-            interactiveColor="interactive_0"
-            onPress={() =>
-              navigation.navigate('TicketAssistant_CategoryPickerScreen')
-            }
-            text={t(TicketAssistantTexts.frequency.mainButton)}
-            testID="nextButton"
-            accessibilityHint={t(
-              TicketAssistantTexts.frequency.a11yNextPageHint,
-            )}
-          />
-        </View>
+        {!a11yContext.isScreenReaderEnabled && (
+          <View style={styles.bottomView}>
+            <Button
+              interactiveColor="interactive_0"
+              onPress={() =>
+                navigation.navigate('TicketAssistant_CategoryPickerScreen')
+              }
+              text={t(TicketAssistantTexts.frequency.mainButton)}
+              testID="nextButton"
+              accessibilityHint={t(
+                TicketAssistantTexts.frequency.a11yNextPageHint,
+              )}
+            />
+          </View>
+        )}
       </ScrollView>
     </View>
   );
@@ -199,6 +207,14 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
+    alignSelf: 'center',
+    paddingHorizontal: theme.spacings.medium,
+  },
+  screenReaderButtons: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    width: '100%',
+    flex: 1,
     alignSelf: 'center',
     paddingHorizontal: theme.spacings.medium,
   },
