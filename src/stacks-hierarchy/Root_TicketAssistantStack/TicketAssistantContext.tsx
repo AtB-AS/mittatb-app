@@ -2,7 +2,6 @@ import React, {createContext, useContext, useState} from 'react';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-defaults';
 import {
-  PreassignedFareProductDetails,
   PurchaseDetails,
   TicketAssistantData,
   RecommendedTicketResponse,
@@ -30,35 +29,32 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
     useFirestoreConfiguration();
 
   // List of preassigned fare products ids
-  let preassignedFareProductsIds: PreassignedFareProductDetails[] = [];
-  for (let i = 0; i < preassignedFareProducts.length; i++) {
-    if (
-      preassignedFareProducts[i].type === 'single' ||
-      preassignedFareProducts[i].durationDays
-    ) {
-      preassignedFareProductsIds.push({
-        id: preassignedFareProducts[i].id,
-        duration_days: preassignedFareProducts[i].durationDays || 0,
-      });
-    }
-  }
+  const preassignedFareProductsIds = preassignedFareProducts
+    .filter(
+      (product) =>
+        product.type === 'single' || product.durationDays !== undefined,
+    )
+    .map((product) => ({
+      id: product.id,
+      duration_days: product.durationDays || 0,
+    }));
+
   const offerDefaults = useOfferDefaults(
     undefined,
     fareProductTypeConfigs[0].type,
   );
 
-  let {fromTariffZone, toTariffZone} = offerDefaults;
+  const {fromTariffZone, toTariffZone} = offerDefaults;
 
-  const [data, setData] = useState<TicketAssistantData>({
+  const defaultTicketAssistantData: TicketAssistantData = {
     frequency: 7,
     traveller: {id: 'ADULT', user_type: 'ADULT'},
     duration: 7,
     zones: [fromTariffZone.id, toTariffZone.id],
-    preassigned_fare_products: preassignedFareProductsIds
-      ? preassignedFareProductsIds
-      : [],
-  });
-  const [response, setResponse] = useState<RecommendedTicketResponse>({
+    preassigned_fare_products: preassignedFareProductsIds || [],
+  };
+
+  const defaultRecommendedTicketResponse: RecommendedTicketResponse = {
     total_cost: 301,
     zones: [fromTariffZone.id, toTariffZone.id],
     tickets: [
@@ -72,15 +68,22 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
       },
     ],
     single_ticket_price: 43,
-  });
-  const [loading, setLoading] = useState<boolean>(false);
+  };
+
+  const [data, setData] = useState<TicketAssistantData>(
+    defaultTicketAssistantData,
+  );
+  const [response, setResponse] = useState<RecommendedTicketResponse>(
+    defaultRecommendedTicketResponse,
+  );
+
+  const [loading, setLoading] = useState(false);
   const [purchaseDetails, setPurchaseDetails] = useState<PurchaseDetails>(
     {} as PurchaseDetails,
   );
   const [hasDataChanged, setHasDataChanged] = useState<boolean>(false);
-  const updateData = (newData: TicketAssistantData) => {
+  const updateData = (newData: TicketAssistantData) =>
     setData((prevState) => ({...prevState, ...newData}));
-  };
   return (
     <TicketAssistantContext.Provider
       value={{
@@ -111,4 +114,4 @@ export function useTicketAssistantState() {
   return context;
 }
 
-export default TicketAssistantContextProvider;
+export {TicketAssistantContextProvider};
