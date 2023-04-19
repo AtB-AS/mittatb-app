@@ -11,8 +11,8 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {TicketAssistant_WelcomeScreen} from './TicketAssistant_WelcomeScreen';
 import {TicketAssistantStackParams} from './navigation-types';
 import {TicketAssistant_FrequencyScreen} from './TicketAssistant_FrequencyScreen';
+import {TicketAssistant_DurationScreen} from './TicketAssistant_DurationScreen';
 import {TicketAssistant_CategoryPickerScreen} from './TicketAssistant_CategoryPickerScreen';
-import {TicketAssistant_DurationScreen} from './TicketAssistant_DurationScreen/index';
 import {TicketAssistant_ZonePickerScreen} from './TicketAssistant_ZonePickerScreen';
 import {TicketAssistant_SummaryScreen} from './TicketAssistant_SummaryScreen';
 
