@@ -12,6 +12,24 @@ const TripDetailsTexts = {
       fromName: string;
       toName: string;
     }) => _(`Fra ${fromName} til ${toName}`, `From ${fromName} to ${toName}`),
+    startEndTime: ({
+      startTime,
+      endTime,
+    }: {
+      startTime: string;
+      endTime: string;
+    }) => _(`${startTime} - ${endTime}`, `${startTime} - ${endTime}`),
+    startEndTimeA11yLabel: ({
+      startTime,
+      endTime,
+    }: {
+      startTime: string;
+      endTime: string;
+    }) =>
+      _(
+        `Varighet: Fra ${startTime} til ${endTime}`,
+        `Duration: From ${startTime} to ${endTime}`,
+      ),
   },
   trip: {
     leg: {

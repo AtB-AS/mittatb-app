@@ -33,6 +33,21 @@ export const MobilityTexts = {
       ),
     button: _('OK', 'OK'),
   },
+  onboarding: {
+    title: _(
+      'Elsparkesykler og bysykler i kartet 🎉',
+      'Electrical scooters and city bikes in map 🎉',
+    ),
+    body: _(
+      'Se elsparkesykler og bysykler i Trondheim på ett sted. Skru på tjenesten i kartet.',
+      'See electric scooters and city bikes in Trondheim in one app. Enable this feature through the map.',
+    ),
+    button: _('Den er grei!', 'Sounds good!'),
+    a11yLabel: _(
+      'Se elsparkesykler og bysykler i Trondheim på ett sted. Skru på tjenesten i kartet.',
+      'See electric scooters and city bikes in Trondheim in one app. Enable this feature through the map.',
+    ),
+  },
 };
 
 export const ScooterTexts = {
@@ -43,18 +58,6 @@ export const ScooterTexts = {
       price > 0
         ? _(`+ ${price} kr for oppstart`, `+ ${price} kr to unlock`)
         : _('Ingen oppstartskostnad', 'Free to unlock'),
-  },
-  onboarding: {
-    title: _('El-sparkesykler i kartet 🎉', 'Electrical scooters in map 🎉'),
-    body: _(
-      'Nå kan du se alle sparkesyklene i byen på ett sted! Skru på tjenesten i kartet',
-      'You can now see all electric scooters in town in one app! Enable this feature through the map.',
-    ),
-    button: _('Den er grei!', 'Sounds good!'),
-    a11yLabel: _(
-      'Nå kan du se alle el-sparkesyklene i byen på ett sted! Skru på tjenesten i kartet',
-      'You can now see all electric scooters in town in one app! Enable this feature through the map.',
-    ),
   },
 };
 

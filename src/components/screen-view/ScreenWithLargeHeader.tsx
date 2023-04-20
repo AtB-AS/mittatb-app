@@ -1,51 +1,23 @@
 import {ThemeText} from '@atb/components/text';
-import {GlobalMessage, GlobalMessageContextType} from '@atb/global-messages';
+import {GlobalMessage} from '@atb/global-messages';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {getStaticColor, StaticColor} from '@atb/theme/colors';
+import {getStaticColor} from '@atb/theme/colors';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import React from 'react';
-import {View, ViewStyle} from 'react-native';
+import {View} from 'react-native';
 import {ContentWithDisappearingHeader} from '../disappearing-header';
-import {LargeHeaderButton, LargeHeaderButtonProps} from './HeaderButton';
+import {ScreenViewProps} from './FullScreenView';
+export {AnimatedScreenHeader} from '../screen-header/AnimatedScreenHeader';
 
-export {AnimatedScreenHeader} from './AnimatedScreenHeader';
-
-export type LargeScreenHeaderProps = {
-  title?: string;
-  titleA11yLabel?: string;
-  /**
-   * For specifying the alert context for alerts that should be shown in this
-   * header. If no context is specified then no alerts are shown.
-   */
-  globalMessageContext?: GlobalMessageContextType;
-  style?: ViewStyle;
-  containerStyle?: ViewStyle;
-  color?: StaticColor;
-  setFocusOnLoad?: boolean;
-  headerChildren?: JSX.Element | JSX.Element[];
-  children?: JSX.Element | JSX.Element[];
-};
-
-export const LargeScreenHeaderTop = (props: LargeHeaderButtonProps) => {
-  const styles = useStyles();
-  return (
-    <View style={styles.topContainer}>
-      <LargeHeaderButton {...props}></LargeHeaderButton>
-    </View>
-  );
-};
-
-export const LargeScreenHeader = ({
+export const ScreenWithLargeHeader = ({
   color,
   setFocusOnLoad,
-  style,
-  containerStyle,
   title,
   titleA11yLabel,
   globalMessageContext,
   headerChildren,
   children,
-}: LargeScreenHeaderProps) => {
+}: ScreenViewProps) => {
   const styles = useStyles();
   const {themeName} = useTheme();
   const themeColor = color ?? 'background_accent_0';
@@ -53,7 +25,7 @@ export const LargeScreenHeader = ({
   const backgroundColor = getStaticColor(themeName, themeColor).background;
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={styles.container}>
       <ContentWithDisappearingHeader
         header={
           <View style={[styles.headerContainer, {backgroundColor}]}>
@@ -78,7 +50,11 @@ export const LargeScreenHeader = ({
               </View>
             )}
             {headerChildren && (
-              <View style={[styles.childrenContainer, containerStyle]}>
+              <View
+                ref={!title ? focusRef : undefined}
+                accessible={true}
+                style={styles.childrenContainer}
+              >
                 {headerChildren}
               </View>
             )}

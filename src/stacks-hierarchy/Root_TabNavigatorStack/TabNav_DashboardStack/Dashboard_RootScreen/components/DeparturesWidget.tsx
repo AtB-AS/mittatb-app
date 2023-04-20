@@ -1,6 +1,5 @@
 import {Add, Edit} from '@atb/assets/svg/mono-icons/actions';
 import {StopPlaceInfo} from '@atb/api/departures/types';
-import {NoFavouriteDeparture} from '@atb/assets/svg/color/images/';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
@@ -21,6 +20,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {useFavoriteDepartureData} from '../use-favorite-departure-data';
 import * as Sections from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {ThemedNoFavouriteDepartureImage} from '@atb/theme/ThemedAssets';
 
 type Props = {
   onEditFavouriteDeparture: () => void;
@@ -74,7 +74,7 @@ export const DeparturesWidget = ({
         <Sections.Section>
           <Sections.GenericSectionItem>
             <View style={styles.noFavouritesView}>
-              <NoFavouriteDeparture />
+              <ThemedNoFavouriteDepartureImage />
               <View style={styles.noFavouritesTextContainer}>
                 <ThemeText
                   type="body__secondary"
