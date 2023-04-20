@@ -27,12 +27,7 @@ import {Results} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_Dashb
 import {useTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-trips-query';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
-import {
-  Language,
-  TripSearchTexts,
-  getTextForLanguage,
-  useTranslation,
-} from '@atb/translations';
+import {Language, TripSearchTexts, useTranslation} from '@atb/translations';
 import {isInThePast} from '@atb/utils/date';
 import {
   coordinatesAreEqual,
@@ -46,7 +41,6 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
-  Linking,
   RefreshControl,
   ScrollView,
   TouchableOpacity,
@@ -58,13 +52,9 @@ import {Time} from '@atb/assets/svg/mono-icons/time';
 import {storage, StorageModelKeysEnum} from '@atb/storage';
 import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-state';
 import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/SelectedFiltersButtons';
-import * as Sections from '@atb/components/sections';
-import {NoFavouriteDeparture} from '@atb/assets/svg/color/images';
-import {MessageBox} from '@atb/components/message-box';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {useFindCityZoneInLocation} from './utils';
-import {CityZone} from '@atb/reference-data/types';
-import {getTextForLanguageWithFormat} from '@atb/translations/utils';
+import {CityZoneMessage} from './components/CityZoneMessage';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -607,68 +597,7 @@ export const useShouldShowTravelSearchFilterOnboarding = () => {
   return shouldShow;
 };
 
-type CityZoneMessageProps = {
-  cityZone: CityZone;
-};
-
-const CityZoneMessage: React.FC<CityZoneMessageProps> = ({cityZone}) => {
-  const {theme} = useTheme();
-  const {language} = useTranslation();
-  const style = useStyle();
-  const [isClosed, setClosed] = useState(false);
-
-  const zoneName = getTextForLanguage(cityZone.name, language);
-
-  useEffect(() => {
-    setClosed(false);
-
-    return () => {
-      setClosed(false);
-    };
-  }, [zoneName]);
-
-  if (!zoneName || isClosed) {
-    return <></>;
-  }
-
-  const message = getTextForLanguageWithFormat(
-    cityZone.message,
-    language,
-    zoneName,
-  );
-  const actionButtonText = getTextForLanguage(
-    cityZone.actionButtonText,
-    language,
-  );
-  const contactUrl = getTextForLanguage(cityZone.contactUrl, language);
-
-  if (message && actionButtonText && contactUrl) {
-    return (
-      <Sections.Section style={style.cityZoneMessage}>
-        <MessageBox
-          type="info"
-          title={getTextForLanguage(cityZone.title, language)}
-          message={message}
-          color={theme.static.background.background_0}
-          icon={() => <NoFavouriteDeparture />}
-          onDismiss={() => {
-            setClosed(true);
-          }}
-          onPressConfig={{
-            action: () => {
-              Linking.openURL(contactUrl);
-            },
-            text: actionButtonText,
-          }}
-        />
-      </Sections.Section>
-    );
-  }
-
-  return <></>;
-};
-
-const useStyle = StyleSheet.createThemeHook((theme) => ({
+export const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.static.background[ResultsBackgroundColor].background,
     flex: 1,
@@ -711,9 +640,5 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   emptyResultsSpacer: {
     marginTop: theme.spacings.xLarge * 3,
-  },
-  cityZoneMessage: {
-    marginTop: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium,
   },
 }));

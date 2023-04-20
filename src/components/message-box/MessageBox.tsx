@@ -86,7 +86,9 @@ export const MessageBox = ({
       accessible={false}
     >
       {icon ? (
-        <ThemeIcon svg={icon} />
+        <View style={styles.customIcon}>
+          <ThemeIcon svg={icon} />
+        </View>
       ) : (
         !noStatusIcon && (
           <ThemeIcon
@@ -155,6 +157,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   icon: {
     marginRight: theme.spacings.medium,
+  },
+  customIcon: {
+    marginRight: theme.spacings.medium,
+    justifyContent: 'center',
   },
   content: {
     flex: 1,
