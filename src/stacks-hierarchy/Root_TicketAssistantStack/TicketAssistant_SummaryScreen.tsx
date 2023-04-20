@@ -7,12 +7,14 @@ import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Ticket
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
+import SvgFeedback from '@atb/assets/svg/mono-icons/actions/Feedback';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/components/TicketSummary';
 import {handleRecommendedTicketResponse} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/handle-recommended-ticket-response';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {TicketResponseData} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {getRecommendedTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/api';
+import {MessageBox} from '@atb/components/message-box';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -120,79 +122,94 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
         </>
       ) : (
         <View style={styles.mainView}>
-          <ThemeText
-            type={'body__primary--jumbo--bold'}
-            style={styles.header}
-            color={themeColor}
-            accessibilityLabel={t(TicketAssistantTexts.summary.titleA11yLabel)}
-          >
-            {t(TicketAssistantTexts.summary.title)}
-          </ThemeText>
-          <ThemeText
-            color={themeColor}
-            type={'body__primary--big'}
-            style={styles.description}
-            accessibilityLabel={t(
-              TicketAssistantTexts.summary.descriptionA11yLabel({
-                frequency: data.frequency,
-                date: endDate,
-              }),
+          <View>
+            <ThemeText
+              type={'body__primary--jumbo--bold'}
+              style={styles.header}
+              color={themeColor}
+              accessibilityLabel={t(
+                TicketAssistantTexts.summary.titleA11yLabel,
+              )}
+            >
+              {t(TicketAssistantTexts.summary.title)}
+            </ThemeText>
+            <ThemeText
+              color={themeColor}
+              type={'body__primary--big'}
+              style={styles.description}
+              accessibilityLabel={t(
+                TicketAssistantTexts.summary.descriptionA11yLabel({
+                  frequency: data.frequency,
+                  date: endDate,
+                }),
+              )}
+            >
+              {t(
+                TicketAssistantTexts.summary.description({
+                  frequency: data.frequency,
+                  date: endDate,
+                }),
+              )}
+            </ThemeText>
+            {purchaseDetails?.purchaseTicketDetails && (
+              <>
+                <TicketSummary
+                  duration={data.duration}
+                  frequency={data.frequency}
+                />
+                <Button
+                  interactiveColor="interactive_0"
+                  onPress={() => {
+                    {
+                      /** Navigate to PurchaseConfirmationScreen **/
+                      navigation.navigate('Root_PurchaseConfirmationScreen', {
+                        fareProductTypeConfig:
+                          purchaseDetails?.purchaseTicketDetails[index]
+                            .fareProductTypeConfig,
+                        fromTariffZone: purchaseDetails?.tariffZones[0],
+                        toTariffZone: purchaseDetails?.tariffZones[1],
+                        userProfilesWithCount:
+                          purchaseDetails?.userProfileWithCount,
+                        preassignedFareProduct:
+                          purchaseDetails?.purchaseTicketDetails[index]
+                            .preassignedFareProduct,
+                        travelDate: undefined,
+                        headerLeftButton: {type: 'back'},
+                        mode: 'Ticket',
+                      });
+                    }
+                  }}
+                  text={t(TicketAssistantTexts.summary.buyButton)}
+                  testID="nextButton"
+                  accessibilityHint={t(
+                    TicketAssistantTexts.summary.a11yBuyButtonHint,
+                  )}
+                />
+              </>
             )}
-          >
-            {t(
-              TicketAssistantTexts.summary.description({
-                frequency: data.frequency,
-                date: endDate,
-              }),
-            )}
-          </ThemeText>
-          {purchaseDetails?.purchaseTicketDetails && (
-            <>
-              <TicketSummary
-                duration={data.duration}
-                frequency={data.frequency}
-              />
-              <Button
-                interactiveColor="interactive_0"
-                onPress={() => {
-                  {
-                    /** Navigate to PurchaseConfirmationScreen **/
-                    navigation.navigate('Root_PurchaseConfirmationScreen', {
-                      fareProductTypeConfig:
-                        purchaseDetails?.purchaseTicketDetails[index]
-                          .fareProductTypeConfig,
-                      fromTariffZone: purchaseDetails?.tariffZones[0],
-                      toTariffZone: purchaseDetails?.tariffZones[1],
-                      userProfilesWithCount:
-                        purchaseDetails?.userProfileWithCount,
-                      preassignedFareProduct:
-                        purchaseDetails?.purchaseTicketDetails[index]
-                          .preassignedFareProduct,
-                      travelDate: undefined,
-                      headerLeftButton: {type: 'back'},
-                      mode: 'Ticket',
-                    });
-                  }
-                }}
-                text={t(TicketAssistantTexts.summary.buyButton)}
-                testID="nextButton"
-                accessibilityHint={t(
-                  TicketAssistantTexts.summary.a11yBuyButtonHint,
-                )}
-              />
-            </>
-          )}
-          {response?.tickets &&
-            response.tickets[index].duration < data.duration &&
-            response.tickets[index].duration !== 0 && (
-              <ThemeText
-                type={'body__secondary'}
-                style={styles.notice}
-                color={themeColor}
-              >
-                {t(TicketAssistantTexts.summary.noticeLabel1)}
-              </ThemeText>
-            )}
+            {response?.tickets &&
+              response.tickets[index].duration < data.duration &&
+              response.tickets[index].duration !== 0 && (
+                <View style={styles.notice}>
+                  <MessageBox
+                    type="info"
+                    message={t(TicketAssistantTexts.summary.noticeLabel1)}
+                  />
+                </View>
+              )}
+          </View>
+          <Button
+            style={styles.feedback}
+            interactiveColor="interactive_0"
+            mode="secondary"
+            text={t(TicketAssistantTexts.summary.feedback)}
+            onPress={() => {
+              console.log('Feedback');
+            }}
+            rightIcon={{
+              svg: SvgFeedback,
+            }}
+          />
         </View>
       )}
     </ScrollView>
@@ -232,6 +249,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.large,
     paddingBottom: theme.spacings.xLarge,
     width: '100%',
+    justifyContent: 'space-between',
   },
   bottomView: {
     paddingHorizontal: theme.spacings.xLarge,
@@ -262,6 +280,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   notice: {
     textAlign: 'center',
-    paddingTop: theme.spacings.medium,
+    paddingTop: theme.spacings.large,
+  },
+  feedback: {
+    marginTop: theme.spacings.large,
   },
 }));
