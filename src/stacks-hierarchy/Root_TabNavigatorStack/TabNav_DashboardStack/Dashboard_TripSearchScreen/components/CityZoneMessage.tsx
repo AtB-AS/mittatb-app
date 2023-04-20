@@ -1,7 +1,7 @@
 import {useTheme, StyleSheet} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
-import {Linking, View} from 'react-native';
+import {Linking} from 'react-native';
 import * as Sections from '@atb/components/sections';
 import {MessageBox} from '@atb/components/message-box';
 import {getTextForLanguageWithFormat} from '@atb/translations/utils';
