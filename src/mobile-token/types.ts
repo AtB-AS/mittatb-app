@@ -44,7 +44,6 @@ export type RemoveResponse = {
 
 export type PendingToken = {
   tokenId: string;
-  commandUuid: string;
   attestation: string;
   attestationType: string;
   encryptionCertificateChain?: string[];

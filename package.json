@@ -30,7 +30,7 @@
     "@atb-as/theme": "^6.5.2",
     "@bugsnag/react-native": "^7.18.2",
     "@bugsnag/source-maps": "^2.3.1",
-    "@entur-private/abt-mobile-client-sdk": "^1.1.10",
+    "@entur-private/abt-mobile-client-sdk": "^1.1.11-SNAPSHOT-d91990a",
     "@entur/sdk": "^5.3.0",
     "@leile/lobo-t": "^1.0.5",
     "@mapbox/polyline": "^1.1.1",
