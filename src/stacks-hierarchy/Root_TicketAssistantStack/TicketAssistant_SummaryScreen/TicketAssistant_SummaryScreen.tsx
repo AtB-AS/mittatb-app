@@ -9,7 +9,7 @@ import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import SvgFeedback from '@atb/assets/svg/mono-icons/actions/Feedback';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
-import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/TicketSummary';
+import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary';
 import {MessageBox} from '@atb/components/message-box';
 import {getIndexOfLongestDurationTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
 import {useTicketAssistantDataFetch} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/fetch-data';
@@ -23,6 +23,27 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   let {response, data, loading, purchaseDetails} = useTicketAssistantState();
 
   useTicketAssistantDataFetch(navigation);
+
+  const endDate: string = new Date(
+    Date.now() + data.duration * 24 * 60 * 60 * 1000,
+  ).toLocaleDateString(language, {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  let index = getIndexOfLongestDurationTicket(response.tickets);
+  const description = t(
+    TicketAssistantTexts.summary.description({
+      frequency: data.frequency,
+      date: endDate,
+    }),
+  );
+
+  const doesTicketCoverEntirePeriod =
+    response.tickets[index].duration < data.duration &&
+    response.tickets[index].duration !== 0;
 
   const onBuyButtonPress = () => {
     navigation.navigate('Root_PurchaseConfirmationScreen', {
@@ -39,17 +60,6 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     });
   };
 
-  const endDate: string = new Date(
-    Date.now() + data.duration * 24 * 60 * 60 * 1000,
-  ).toLocaleDateString(language, {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-
-  let index = getIndexOfLongestDurationTicket(response.tickets);
-
   return (
     <ScrollView
       style={styles.container}
@@ -60,7 +70,6 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       </View>
       {loading ? (
         // Gif here
-
         <ThemeText
           type={'body__primary--jumbo--bold'}
           style={styles.header}
@@ -86,19 +95,9 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
               color={themeColor}
               type={'body__primary--big'}
               style={styles.description}
-              accessibilityLabel={t(
-                TicketAssistantTexts.summary.descriptionA11yLabel({
-                  frequency: data.frequency,
-                  date: endDate,
-                }),
-              )}
+              accessibilityLabel={description}
             >
-              {t(
-                TicketAssistantTexts.summary.description({
-                  frequency: data.frequency,
-                  date: endDate,
-                }),
-              )}
+              {description}
             </ThemeText>
             {purchaseDetails?.purchaseTicketDetails && (
               <>
@@ -114,16 +113,14 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                 />
               </>
             )}
-            {response?.tickets &&
-              response.tickets[index].duration < data.duration &&
-              response.tickets[index].duration !== 0 && (
-                <View style={styles.notice}>
-                  <MessageBox
-                    type="info"
-                    message={t(TicketAssistantTexts.summary.noticeLabel1)}
-                  />
-                </View>
-              )}
+            {doesTicketCoverEntirePeriod && (
+              <View style={styles.notice}>
+                <MessageBox
+                  type="info"
+                  message={t(TicketAssistantTexts.summary.noticeLabel1)}
+                />
+              </View>
+            )}
           </View>
           <Button
             style={styles.feedback}

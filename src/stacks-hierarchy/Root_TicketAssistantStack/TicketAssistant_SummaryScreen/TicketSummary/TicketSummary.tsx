@@ -7,11 +7,7 @@ import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Ticket
 import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
 import {InteractiveColor, StaticColorByType} from '@atb/theme/colors';
-import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
-import {
-  calculateSingleTickets,
-  perTripSavings,
-} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
+
 import {useTicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/use-ticket-summary';
 
 const interactiveColorName: InteractiveColor = 'interactive_2';
@@ -21,28 +17,17 @@ export const TicketSummary = () => {
   const {t} = useTranslation();
   const {theme} = useTheme();
   const interactiveColor = theme.interactive[interactiveColorName];
-  let {data} = useTicketAssistantState();
-  const {duration, frequency} = data;
 
   const {
     ticketName,
     travellerName,
     zonesString,
-    savings,
     ticketPriceString,
     perTripPriceString,
     transportModes,
+    savingsText,
+    a11ySummary,
   } = useTicketSummary();
-
-  const a11ySummary = t(
-    TicketAssistantTexts.summary.ticketSummaryA11yLabel({
-      ticket: ticketName,
-      traveller: travellerName,
-      tariffZones: zonesString,
-      price: ticketPriceString,
-      pricePerTrip: perTripPriceString,
-    }),
-  );
 
   return (
     <>
@@ -118,23 +103,9 @@ export const TicketSummary = () => {
         type={'body__secondary'}
         style={styles.savingsText}
         color={themeColor}
-        accessibilityLabel={t(
-          TicketAssistantTexts.summary.savings({
-            totalSavings: savings,
-            perTripSavings: perTripSavings(savings, duration, frequency),
-            alternative: `${calculateSingleTickets(duration, frequency)}`,
-          }),
-        )}
+        accessibilityLabel={savingsText}
       >
-        {duration !== undefined
-          ? t(
-              TicketAssistantTexts.summary.savings({
-                totalSavings: savings,
-                perTripSavings: perTripSavings(savings, duration, frequency),
-                alternative: `${calculateSingleTickets(duration, frequency)}`,
-              }),
-            )
-          : t(TicketAssistantTexts.summary.noticeLabel2)}
+        {savingsText}
       </ThemeText>
     </>
   );

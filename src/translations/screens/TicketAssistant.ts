@@ -138,11 +138,6 @@ const TicketAssistantTexts = {
         `${data.frequency} turer i uka fram til ${data.date}`,
         `${data.frequency} trips per week until ${data.date}`,
       ),
-    descriptionA11yLabel: (data: {frequency: number; date: string}) =>
-      _(
-        `${data.frequency} turer i uka fram til ${data.date}`,
-        `${data.frequency} trips per week until ${data.date}`,
-      ),
     savings: (data: {
       totalSavings: number;
       perTripSavings: string;
