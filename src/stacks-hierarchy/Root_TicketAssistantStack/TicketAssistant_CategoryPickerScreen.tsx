@@ -1,4 +1,4 @@
-import {ScrollView, View} from 'react-native';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import * as Sections from '@atb/components/sections';
 
@@ -18,6 +18,7 @@ import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScree
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {Traveller} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
+import {useAccessibilityContext} from '@atb/AccessibilityContext';
 
 type CategoryPickerProps =
   TicketAssistantScreenProps<'TicketAssistant_CategoryPickerScreen'>;
@@ -26,6 +27,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
 }: CategoryPickerProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
+  const a11yContext = useAccessibilityContext();
 
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
 
@@ -58,62 +60,98 @@ export const TicketAssistant_CategoryPickerScreen = ({
           type={'body__primary--jumbo--bold'}
           style={styles.header}
           color={themeColor}
-          accessibilityLabel={t(TicketAssistantTexts.welcome.titleA11yLabel)}
+          accessibilityLabel={t(TicketAssistantTexts.categoryPicker.title)}
         >
           {t(TicketAssistantTexts.categoryPicker.title)}
         </ThemeText>
 
-        <Sections.Section style={styles.categoriesContainer}>
-          {/*eslint-disable-next-line rulesdir/translations-warning*/}
-          {selectableTravellers.map((u, index) => {
-            return (
-              <Sections.ExpandableSectionItem
-                key={index}
-                textType={'body__primary--bold'}
-                text={
-                  (u.emoji ? u.emoji + ' ' : '') +
-                  getReferenceDataName(u, language)
-                }
-                onPress={() => {
-                  setCurrentlyOpen(index);
-                }}
-                expanded={currentlyOpen === index}
-                showIconText={false}
-                accessibility={{
-                  accessibilityHint: t(
-                    TicketAssistantTexts.categoryPicker.a11yHint,
-                  ),
-                }}
-                expandContent={
-                  <View>
-                    <ThemeText
-                      type={'body__tertiary'}
-                      style={styles.expandedContent}
-                      isMarkdown={true}
-                    >
-                      {getTextForLanguage(u.alternativeDescriptions, language)}
-                    </ThemeText>
-                    <Button
-                      style={styles.chooseButton}
-                      onPress={() => {
-                        updateCategory({
-                          id: u.userTypeString,
-                          user_type: u.userTypeString,
-                        });
-                        navigation.navigate('TicketAssistant_DurationScreen');
-                      }}
-                      text={t(TicketAssistantTexts.categoryPicker.chooseButton)}
-                      accessibilityHint={t(
-                        TicketAssistantTexts.categoryPicker
-                          .a11yChooseButtonHint,
-                      )}
-                    />
-                  </View>
-                }
-              />
-            );
-          })}
-        </Sections.Section>
+        {!a11yContext.isScreenReaderEnabled ? (
+          <Sections.Section style={styles.categoriesContainer}>
+            {selectableTravellers.map((u, index) => {
+              console.log('u', u);
+              return (
+                <Sections.ExpandableSectionItem
+                  key={index}
+                  textType={'body__primary--bold'}
+                  text={
+                    (u.emoji ? u.emoji + ' ' : '') +
+                    getReferenceDataName(u, language)
+                  }
+                  onPress={() => {
+                    setCurrentlyOpen(index);
+                  }}
+                  expanded={currentlyOpen === index}
+                  showIconText={false}
+                  expandContent={
+                    <View>
+                      <ThemeText
+                        type={'body__tertiary'}
+                        style={styles.expandedContent}
+                        isMarkdown={true}
+                      >
+                        {getTextForLanguage(
+                          u.alternativeDescriptions,
+                          language,
+                        )}
+                      </ThemeText>
+                      <Button
+                        style={styles.chooseButton}
+                        onPress={() => {
+                          /*updateCategory({
+                            id: u.userTypeString,
+                            user_type: u.userTypeString,
+                          });*/
+                          navigation.navigate('TicketAssistant_DurationScreen');
+                        }}
+                        text={t(
+                          TicketAssistantTexts.categoryPicker.chooseButton,
+                        )}
+                      />
+                    </View>
+                  }
+                />
+              );
+            })}
+          </Sections.Section>
+        ) : (
+          <>
+            {selectableTravellers.map((u, index) => {
+              return (
+                <View key={index} style={styles.a11yCategoryCards}>
+                  <TouchableOpacity
+                    onPress={() => {}}
+                    accessible={true}
+                    accessibilityHint={t(
+                      TicketAssistantTexts.categoryPicker.a11yChooseButtonHint({
+                        value: getReferenceDataName(u, language),
+                      }),
+                    )}
+                  >
+                    <View style={styles.contentContainer}>
+                      <ThemeText
+                        style={styles.a11yTitle}
+                        type={'body__primary--bold'}
+                        isMarkdown={true}
+                      >
+                        {getReferenceDataName(u, language)}
+                      </ThemeText>
+                      <ThemeText
+                        type={'body__tertiary'}
+                        style={styles.expandedContent}
+                        isMarkdown={true}
+                      >
+                        {getTextForLanguage(
+                          u.alternativeDescriptions,
+                          language,
+                        )}
+                      </ThemeText>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+          </>
+        )}
       </ScrollView>
     </View>
   );
@@ -131,6 +169,18 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   contentContainer: {
     flexGrow: 1,
+  },
+
+  a11yCategoryCards: {
+    flexDirection: 'row',
+    padding: theme.spacings.medium,
+    backgroundColor: theme.static.background.background_0.background,
+    margin: theme.spacings.medium,
+    borderRadius: theme.border.radius.regular,
+    gap: theme.spacings.medium,
+  },
+  a11yTitle: {
+    marginBottom: theme.spacings.small,
   },
   header: {
     textAlign: 'center',
