@@ -28,12 +28,11 @@ export const TicketAssistant_FrequencyScreen = ({
   const {t} = useTranslation();
   // Create an array of every second number from 1 to 14
   const numbers = Array.from({length: 8}, (_, i) => i * 2);
-  const {data, updateData, setHasDataChanged} = useTicketAssistantState();
+  const {data, updateData} = useTicketAssistantState();
   const a11yContext = useAccessibilityContext();
   function updateFrequency(value: number) {
     const newData = {...data, frequency: value};
     updateData(newData);
-    setHasDataChanged(true);
   }
 
   return (

@@ -35,7 +35,6 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     purchaseDetails,
     setPurchaseDetails,
     hasDataChanged,
-    setHasDataChanged,
   } = useTicketAssistantState();
 
   useEffect(() => {
@@ -57,7 +56,6 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (hasDataChanged) {
         fetchData();
-        setHasDataChanged(false);
       }
     });
 

@@ -39,11 +39,10 @@ export const TicketAssistant_CategoryPickerScreen = ({
     selectableTravellers.findIndex((u) => u.count === 1),
   );
 
-  const {data, updateData, setHasDataChanged} = useTicketAssistantState();
+  const {data, updateData} = useTicketAssistantState();
   function updateCategory(traveller: Traveller) {
     const newData = {...data, traveller: traveller};
     updateData(newData);
-    setHasDataChanged(true);
   }
 
   return (
