@@ -9,58 +9,38 @@ import React from 'react';
 import {InteractiveColor, StaticColorByType} from '@atb/theme/colors';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {
-  calculateSavings,
   calculateSingleTickets,
-  getIndexOfLongestDurationTicket,
   perTripSavings,
-} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/utils';
-import {useTextForLanguage} from '@atb/translations/utils';
-import {getReferenceDataName} from '@atb/reference-data/utils';
+} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
+import {useTicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/use-ticket-summary';
 
 const interactiveColorName: InteractiveColor = 'interactive_2';
 const themeColor_1: StaticColorByType<'background'> = 'background_accent_1';
 export const TicketSummary = () => {
   const styles = useThemeStyles();
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const {theme} = useTheme();
   const interactiveColor = theme.interactive[interactiveColorName];
-  let {response, purchaseDetails, data} = useTicketAssistantState();
-  const {tickets, zones, total_cost, single_ticket_price} = response;
+  let {data} = useTicketAssistantState();
   const {duration, frequency} = data;
 
-  const index = getIndexOfLongestDurationTicket(tickets);
-  const ticket = tickets[index];
-
-  const recommendedTicketTypeConfig =
-    purchaseDetails?.purchaseTicketDetails[index]?.fareProductTypeConfig;
-  const traveller = purchaseDetails?.userProfileWithCount[0];
-
-  const ticketName = useTextForLanguage(recommendedTicketTypeConfig.name) ?? '';
-  const travellerName = getReferenceDataName(traveller, language);
-  const [fromTariffZone, toTariffZone] = purchaseDetails?.tariffZones ?? [];
-
-  const zonesString =
-    zones[0] === zones[1]
-      ? `${fromTariffZone.name?.value}`
-      : `${fromTariffZone.name?.value} - ${toTariffZone.name?.value}`;
-
-  const savings = calculateSavings(
-    total_cost,
-    calculateSingleTickets(duration, frequency) * single_ticket_price,
-  );
-  const ticketPrice = ticket.price;
-  const perTripPrice = ticket.duration
-    ? ticket.price
-    : ticket.price / ((ticket.duration / 7) * frequency);
+  const {
+    ticketName,
+    travellerName,
+    zonesString,
+    savings,
+    ticketPriceString,
+    perTripPriceString,
+    transportModes,
+  } = useTicketSummary();
 
   const a11ySummary = t(
     TicketAssistantTexts.summary.ticketSummaryA11yLabel({
       ticket: ticketName,
       traveller: travellerName,
-      fromTariffZone: fromTariffZone?.name.value || '',
-      toTariffZone: toTariffZone?.name.value || '',
-      price: ticket.price.toFixed(2),
-      pricePerTrip: perTripPrice.toFixed(2),
+      tariffZones: zonesString,
+      price: ticketPriceString,
+      pricePerTrip: perTripPriceString,
     }),
   );
 
@@ -68,15 +48,13 @@ export const TicketSummary = () => {
     <>
       <View style={styles.ticketContainer} accessibilityLabel={a11ySummary}>
         <View style={styles.upperPart}>
-          {recommendedTicketTypeConfig?.transportModes && (
-            <View style={styles.travelModeWrapper}>
-              <TransportModes
-                iconSize={'small'}
-                modes={recommendedTicketTypeConfig?.transportModes}
-                style={{flex: 2}}
-              />
-            </View>
-          )}
+          <View style={styles.travelModeWrapper}>
+            <TransportModes
+              iconSize={'small'}
+              modes={transportModes}
+              style={{flex: 2}}
+            />
+          </View>
 
           <View style={styles.productName} testID={'Title'}>
             <ThemeText
@@ -119,7 +97,7 @@ export const TicketSummary = () => {
               <InfoChip
                 interactiveColor={interactiveColorName}
                 style={styles.infoChip}
-                text={ticketPrice.toFixed(2) + 'kr'}
+                text={ticketPriceString}
               />
             </View>
           </View>
@@ -132,7 +110,7 @@ export const TicketSummary = () => {
             type="body__secondary--bold"
             color={interactiveColor.outline}
           >
-            {perTripPrice.toFixed(2) + 'kr'}
+            {perTripPriceString}
           </ThemeText>
         </View>
       </View>
@@ -148,7 +126,7 @@ export const TicketSummary = () => {
           }),
         )}
       >
-        {ticket.duration !== undefined
+        {duration !== undefined
           ? t(
               TicketAssistantTexts.summary.savings({
                 totalSavings: savings,

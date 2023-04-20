@@ -9,9 +9,9 @@ import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import SvgFeedback from '@atb/assets/svg/mono-icons/actions/Feedback';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
-import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/components/TicketSummary/TicketSummary';
+import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/TicketSummary';
 import {MessageBox} from '@atb/components/message-box';
-import {getIndexOfLongestDurationTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/utils';
+import {getIndexOfLongestDurationTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
 import {useTicketAssistantDataFetch} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/fetch-data';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
@@ -56,25 +56,19 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       contentContainerStyle={styles.contentContainer}
     >
       <View style={styles.backdrop}>
-        <DashboardBackground
-          width={'100%'}
-          height={'100%'}
-          fill={'#AAE6EC'}
-          fillOpacity={1}
-        />
+        <DashboardBackground width={'100%'} height={'100%'} />
       </View>
       {loading ? (
         // Gif here
-        <>
-          <ThemeText
-            type={'body__primary--jumbo--bold'}
-            style={styles.header}
-            color={themeColor}
-            accessibilityLabel={t(TicketAssistantTexts.summary.titleA11yLabel)}
-          >
-            Loading...
-          </ThemeText>
-        </>
+
+        <ThemeText
+          type={'body__primary--jumbo--bold'}
+          style={styles.header}
+          color={themeColor}
+          accessibilityLabel={t(TicketAssistantTexts.summary.titleA11yLabel)}
+        >
+          Loading...
+        </ThemeText>
       ) : (
         <View style={styles.mainView}>
           <View>

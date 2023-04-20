@@ -178,14 +178,13 @@ const TicketAssistantTexts = {
     ticketSummaryA11yLabel: (data: {
       ticket: string;
       traveller: string;
-      fromTariffZone: string;
-      toTariffZone: string;
+      tariffZones: string;
       price: string;
       pricePerTrip: string;
     }) =>
       _(
-        `Du har valgt ${data.ticket}. \n Reisende: ${data.traveller}. \n Sone: ${data.fromTariffZone} - ${data.toTariffZone}. \n Pris: ${data.price}kr. \n Pris per tur: ${data.pricePerTrip}kr.`,
-        `You have selected ${data.ticket}. \n Traveller: ${data.traveller}. \n Zone: ${data.fromTariffZone} - ${data.toTariffZone}. \n Price: ${data.price}. \n Price per trip: ${data.pricePerTrip}.`,
+        `Du har valgt ${data.ticket}. \n Reisende: ${data.traveller}. \n Soner: ${data.tariffZones}. \n Pris: ${data.price}kr. \n Pris per tur: ${data.pricePerTrip}kr.`,
+        `You have selected ${data.ticket}. \n Traveller: ${data.traveller}. \n Zones: ${data.tariffZones}. \n Price: ${data.price}. \n Price per trip: ${data.pricePerTrip}.`,
       ),
     noticeLabel1: _(
       'Billetten dekker ikke hele perioden, ta billettveilederen på nytt for å få en ny anbefaling når denne billetten går ut.',
