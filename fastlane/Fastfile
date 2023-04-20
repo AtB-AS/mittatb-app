@@ -291,7 +291,7 @@ platform :android do
     sh("cp", "../android/app/build/intermediates/sourcemaps/react/#{build_type}/index.android.bundle.packager.map", "../bundle/index.android.bundle.map")
   end
 
-  lane :firebase_distribution_staging do
+  lane :firebase_distribution_staging_nfk do
     ensure_env_vars(
       env_vars: ['FIREBASE_APP_ID','GCP_CREDENTIALS_PATH','APK_FILE_NAME']
     )
@@ -301,6 +301,19 @@ platform :android do
       android_artifact_type:'APK',
       android_artifact_path:ENV['APK_FILE_NAME'],
       groups:"NFK"
+    )
+  end
+
+  lane :firebase_distribution_staging_fram do
+    ensure_env_vars(
+      env_vars: ['FIREBASE_APP_ID','GCP_CREDENTIALS_PATH','APK_FILE_NAME']
+    )
+    firebase_app_distribution(
+      app:ENV['FIREBASE_APP_ID'],
+      service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
+      android_artifact_type:'APK',
+      android_artifact_path:ENV['APK_FILE_NAME'],
+      groups:"FRAM"
     )
   end
 
