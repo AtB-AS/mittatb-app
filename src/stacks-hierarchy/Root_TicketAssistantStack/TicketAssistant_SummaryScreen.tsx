@@ -10,9 +10,14 @@ import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/components/TicketSummary';
 import {handleRecommendedTicketResponse} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/handle-recommended-ticket-response';
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {
+  FareProductTypeConfig,
+  useFirestoreConfiguration,
+} from '@atb/configuration';
 import {TicketResponseData} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {getRecommendedTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/api';
+import {useAuthState} from '@atb/auth';
+import {productIsSellableInApp} from '@atb/reference-data/utils';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -91,6 +96,57 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   });
   let index = getIndexOfLongestDurationTicket(response.tickets);
 
+  const onProductSelect = (fareProductTypeConfig: FareProductTypeConfig) => {
+    if (
+      fareProductTypeConfig.configuration.requiresLogin &&
+      authenticationType !== 'phone'
+    ) {
+      navigation.navigate('LoginInApp', {
+        screen: 'LoginOnboardingInApp',
+        params: {
+          fareProductTypeConfig,
+          afterLogin: {
+            screen: 'Root_PurchaseOverviewScreen',
+            params: {
+              fareProductTypeConfig,
+              mode: 'Ticket',
+            },
+          },
+        },
+      });
+    } else {
+      navigation.navigate('Root_PurchaseConfirmationScreen', {
+        fareProductTypeConfig:
+          purchaseDetails?.purchaseTicketDetails[index].fareProductTypeConfig,
+        fromTariffZone: purchaseDetails?.tariffZones[0],
+        toTariffZone: purchaseDetails?.tariffZones[1],
+        userProfilesWithCount: purchaseDetails?.userProfileWithCount,
+        preassignedFareProduct:
+          purchaseDetails?.purchaseTicketDetails[index].preassignedFareProduct,
+        travelDate: undefined,
+        headerLeftButton: {type: 'back'},
+        mode: 'Ticket',
+      });
+    }
+  };
+
+  const sellableProductsInApp = preassignedFareProducts.filter(
+    productIsSellableInApp,
+  );
+
+  const sellableFareProductTypeConfigs = fareProductTypeConfigs.filter(
+    (config) => sellableProductsInApp.some((p) => p.type === config.type),
+  );
+
+  const groupedConfigs = sellableFareProductTypeConfigs.reduce<
+    [FareProductTypeConfig, FareProductTypeConfig | undefined][]
+  >((grouped, current, index, arr) => {
+    if (index % 2 === 0) return [...grouped, [current, arr[index + 1]]];
+    return grouped;
+  }, []);
+  // Period ticket Config
+  const config = groupedConfigs[0][1];
+
   return (
     <ScrollView
       style={styles.container}
@@ -150,34 +206,23 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                 duration={data.duration}
                 frequency={data.frequency}
               />
-              <Button
-                interactiveColor="interactive_0"
-                onPress={() => {
-                  {
-                    /** Navigate to PurchaseConfirmationScreen **/
-                    navigation.navigate('Root_PurchaseConfirmationScreen', {
-                      fareProductTypeConfig:
-                        purchaseDetails?.purchaseTicketDetails[index]
-                          .fareProductTypeConfig,
-                      fromTariffZone: purchaseDetails?.tariffZones[0],
-                      toTariffZone: purchaseDetails?.tariffZones[1],
-                      userProfilesWithCount:
-                        purchaseDetails?.userProfileWithCount,
-                      preassignedFareProduct:
-                        purchaseDetails?.purchaseTicketDetails[index]
-                          .preassignedFareProduct,
-                      travelDate: undefined,
-                      headerLeftButton: {type: 'back'},
-                      mode: 'Ticket',
-                    });
-                  }
-                }}
-                text={t(TicketAssistantTexts.summary.buyButton)}
-                testID="nextButton"
-                accessibilityHint={t(
-                  TicketAssistantTexts.summary.a11yBuyButtonHint,
+              <View>
+                {config && (
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={() => {
+                      {
+                        onProductSelect(config);
+                      }
+                    }}
+                    text={t(TicketAssistantTexts.summary.buyButton)}
+                    testID="nextButton"
+                    accessibilityHint={t(
+                      TicketAssistantTexts.summary.a11yBuyButtonHint,
+                    )}
+                  />
                 )}
-              />
+              </View>
             </>
           )}
           {response?.tickets &&
