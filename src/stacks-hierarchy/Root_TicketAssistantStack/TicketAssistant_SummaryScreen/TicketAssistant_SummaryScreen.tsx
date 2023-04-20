@@ -128,7 +128,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             mode="secondary"
             text={t(TicketAssistantTexts.summary.feedback)}
             onPress={() => {
-              console.log('Feedback');
+              //TODO
             }}
             rightIcon={{
               svg: SvgFeedback,

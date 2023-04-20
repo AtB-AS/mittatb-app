@@ -28,7 +28,6 @@ export function getIndexOfLongestDurationTicket(
     });
     return longestDurationIndex;
   } catch (e) {
-    console.log('Error getting index of longest duration ticket ' + e);
     return 0;
   }
 }

@@ -34,9 +34,7 @@ export const useTicketAssistantDataFetch = (navigation: any) => {
           }
           setResponse(r);
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch(() => {});
       setLoading(false);
     };
 
@@ -57,9 +55,7 @@ export const useTicketAssistantDataFetch = (navigation: any) => {
           ),
         );
       }
-    } catch (e) {
-      console.log('Error changing data ' + e);
-    }
+    } catch (e) {}
 
     return () => {
       unsubscribe();
