@@ -9,12 +9,7 @@ import {
   VehiclesState,
 } from '@atb/components/map/types';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {
-  AreaState,
-  emptyAreaState,
-  isVehicle,
-  updateAreaState,
-} from '@atb/mobility/utils';
+import {AreaState, isVehicle, updateAreaState} from '@atb/mobility/utils';
 import {ScooterSheet} from '@atb/mobility/components/ScooterSheet';
 import {RegionPayload} from '@rnmapbox/maps';
 import {useUserMapFilters} from '@atb/components/map/hooks/use-map-filter';
@@ -29,7 +24,7 @@ const BUFFER_DISTANCE_IN_METERS = 500;
 const emptyVehicles = toFeatureCollection<Point, VehicleFragment>([]);
 
 export const useVehicles: () => VehiclesState | undefined = () => {
-  const [area, setArea] = useState<AreaState>(emptyAreaState);
+  const [area, setArea] = useState<AreaState>();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const isVehiclesEnabled = useIsVehiclesEnabled();
   const {getMapFilter} = useUserMapFilters();
@@ -53,11 +48,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
 
   const loadVehicles = useCallback(
     async (signal) => {
-      if (
-        isVehiclesEnabled &&
-        area.zoom > MIN_ZOOM_LEVEL &&
-        filter?.showVehicles
-      ) {
+      if (isVehiclesEnabled && area && filter?.showVehicles) {
         return await getVehicles(area, {signal})
           .then(toFeaturePoints)
           .then(toFeatureCollection);
@@ -76,7 +67,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
   const updateRegion = async (
     region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => {
-    setArea(updateAreaState(region, BUFFER_DISTANCE_IN_METERS));
+    setArea(updateAreaState(region, BUFFER_DISTANCE_IN_METERS, MIN_ZOOM_LEVEL));
   };
 
   const onFilterChange = (filter: VehiclesFilterType) => {

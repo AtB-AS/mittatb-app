@@ -1,10 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  AreaState,
-  emptyAreaState,
-  isStation,
-  updateAreaState,
-} from '@atb/mobility/utils';
+import {AreaState, isStation, updateAreaState} from '@atb/mobility/utils';
 import {toFeatureCollection, toFeaturePoints} from '@atb/components/map/utils';
 import {useIsCityBikesEnabled} from '@atb/mobility/use-city-bikes-enabled';
 import {
@@ -25,7 +20,7 @@ import {useIsFocused} from '@react-navigation/native';
 const MIN_ZOOM_LEVEL = 12;
 const BUFFER_DISTANCE_IN_METERS = 500;
 export const useCityBikeStations: () => StationsState | undefined = () => {
-  const [area, setArea] = useState<AreaState>(emptyAreaState);
+  const [area, setArea] = useState<AreaState>();
   const isCityBikesEnabled = useIsCityBikesEnabled();
   const [filter, setFilter] = useState<StationsFilterType>();
   const [isLoading, setIsLoading] = useState(false);
@@ -47,7 +42,7 @@ export const useCityBikeStations: () => StationsState | undefined = () => {
     if (
       isCityBikesEnabled &&
       isFocused &&
-      area.zoom > MIN_ZOOM_LEVEL &&
+      area &&
       filter?.showCityBikeStations
     ) {
       const abortCtrl = new AbortController();
@@ -72,7 +67,7 @@ export const useCityBikeStations: () => StationsState | undefined = () => {
   const updateRegion = async (
     region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => {
-    setArea(updateAreaState(region, BUFFER_DISTANCE_IN_METERS));
+    setArea(updateAreaState(region, BUFFER_DISTANCE_IN_METERS, MIN_ZOOM_LEVEL));
   };
 
   const onFilterChange = (filter: StationsFilterType) => {

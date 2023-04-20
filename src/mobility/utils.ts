@@ -82,26 +82,21 @@ export type AreaState = {
   loadedArea: Feature<Polygon> | undefined;
 };
 
-export const emptyAreaState: AreaState = {
-  lat: 0,
-  lon: 0,
-  zoom: 15,
-  range: 0,
-  visibleBounds: [
-    [0, 0],
-    [0, 0],
-  ],
-  loadedArea: undefined,
-};
-
 export const updateAreaState = (
   region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   bufferDistance: number,
+  minZoomLevel: number,
 ) => {
-  return (previousState: AreaState) => {
+  return (previousState: AreaState | undefined) => {
+    if (region.properties.zoomLevel < minZoomLevel) {
+      return undefined;
+    }
+
     const visibleBounds = region.properties.visibleBounds;
-    if (!needsReload(visibleBounds, previousState.loadedArea))
+    if (!needsReload(visibleBounds, previousState?.loadedArea)) {
       return previousState;
+    }
+
     const [lon, lat] = region.geometry.coordinates;
     const range = getRadius(visibleBounds, bufferDistance);
     return {
