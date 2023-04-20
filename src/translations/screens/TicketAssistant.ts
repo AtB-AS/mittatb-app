@@ -184,7 +184,7 @@ const TicketAssistantTexts = {
       pricePerTrip: string;
     }) =>
       _(
-        `Du har valgt ${data.ticket}. \n Reisende: ${data.traveller}. \n Sone: ${data.fromTariffZone} - ${data.toTariffZone}. \n Pris: ${data.price}. \n Pris per tur: ${data.pricePerTrip}.`,
+        `Du har valgt ${data.ticket}. \n Reisende: ${data.traveller}. \n Sone: ${data.fromTariffZone} - ${data.toTariffZone}. \n Pris: ${data.price}kr. \n Pris per tur: ${data.pricePerTrip}kr.`,
         `You have selected ${data.ticket}. \n Traveller: ${data.traveller}. \n Zone: ${data.fromTariffZone} - ${data.toTariffZone}. \n Price: ${data.price}. \n Price per trip: ${data.pricePerTrip}.`,
       ),
     noticeLabel1: _(
