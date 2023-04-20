@@ -2510,7 +2510,7 @@
   resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-mobile-barcode-javascript-lib/-/@entur-private/abt-mobile-barcode-javascript-lib-1.1.11-SNAPSHOT-d91990a.tgz#467a19705e9a07db1cb36ccca015eaf42ff9d874"
   integrity sha512-uisAmX5FNU36AFJKpM/YyczJPd5TCyl04x8f4FhK+8WCxh/V0bBzN+LZ4J3EAqLOKE2oHM8c7PJNOHurOUFqGA==
 
-"@entur-private/abt-mobile-client-sdk@^1.1.11-SNAPSHOT-d91990a":
+"@entur-private/abt-mobile-client-sdk@^1.1.11-SNAPSHOT-92780e5":
   version "1.1.11-SNAPSHOT-d91990a"
   resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-mobile-client-sdk/-/@entur-private/abt-mobile-client-sdk-1.1.11-SNAPSHOT-d91990a.tgz#9b047fc900d9c5907375d41a07e2750b68c20dc0"
   integrity sha512-NKuvgYRfoxiCQzqMWZqxvZ8vOGkjbsJYeGjVSYE8SJryh1kL8nGNHio35G4S3O3FF5qpTtBjX0shuPxydw8bsA==
