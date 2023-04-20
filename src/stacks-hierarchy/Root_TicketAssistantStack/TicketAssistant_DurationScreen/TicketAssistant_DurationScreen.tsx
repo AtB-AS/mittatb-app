@@ -6,7 +6,7 @@ import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {SliderComponent} from '@atb/components/slider';
 import {Button} from '@atb/components/button';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   sliderColorMax,
   sliderColorMin,
@@ -34,18 +34,30 @@ const currentDate = new Date();
 const durations = [1, 7, 14, 21, 30, 60, 90, 120, 150, 180];
 
 export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
+  const {data, updateData} = useTicketAssistantState();
   const [date, setDate] = useState(dateToDateString(currentDate));
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [usedSlider, setUsedSlider] = useState(false);
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const a11yContext = useAccessibilityContext();
+  const [sliderValue, setSliderValue] = useState(data.duration);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      if (usedSlider) {
+        updateData({...data, duration: sliderValue});
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [navigation, data, sliderValue, updateData]);
 
   const majorVersionIOS = parseInt(String(Platform.Version), 10);
   const style =
     majorVersionIOS < 13 ? {width: undefined, flex: 1} : {width: 130};
 
-  const {data, updateData} = useTicketAssistantState();
   const locale = useLocaleContext();
 
   function updateDuration(value: number, fromPicker?: boolean) {
@@ -53,7 +65,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
     updateData(newData);
   }
 
-  const duration = data.duration;
+  const duration = usedSlider ? sliderValue : data.duration;
   const daysWeeksMonths = getDaysWeeksMonths(duration);
   const resultString = t(
     duration < 7
@@ -217,7 +229,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                     thumbTintColor={sliderColorMin}
                     onValueChange={(value) => {
                       setUsedSlider(true);
-                      updateDuration(value, false);
+                      setSliderValue(durations[value]);
                     }}
                   />
                 </View>

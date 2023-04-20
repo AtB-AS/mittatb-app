@@ -4,7 +4,7 @@ import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Ticket
 import {SliderComponent} from '@atb/components/slider';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {StaticColorByType} from '@atb/theme/colors';
@@ -26,15 +26,32 @@ export const TicketAssistant_FrequencyScreen = ({
 }: FrequencyScreenProps) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
+  const {data, updateData} = useTicketAssistantState();
+  const [sliderValue, setSliderValue] = useState(data.frequency);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      updateData({...data, frequency: sliderValue});
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [navigation, data, sliderValue, updateData]);
+
   // Create an array of every second number from 1 to 14
   const numbers = Array.from({length: 8}, (_, i) => i * 2);
   numbers.shift();
-  const {data, updateData} = useTicketAssistantState();
+  const numbersAsStrings = numbers.map((number) => number.toString());
+  // Add a + on the last number
+  numbersAsStrings[numbersAsStrings.length - 1] = '14+';
+
   const a11yContext = useAccessibilityContext();
-  function updateFrequency(value: number) {
-    const newData = {...data, frequency: value};
-    updateData(newData);
-  }
+
+  const resultString = t(
+    sliderValue === 14
+      ? TicketAssistantTexts.frequency.resultMoreThan14
+      : TicketAssistantTexts.frequency.result({value: sliderValue}),
+  );
 
   return (
     <View style={styles.container}>
@@ -68,7 +85,6 @@ export const TicketAssistant_FrequencyScreen = ({
                   <Button
                     interactiveColor="interactive_2"
                     onPress={() => {
-                      updateFrequency(number);
                       navigation.navigate(
                         'TicketAssistant_CategoryPickerScreen',
                       );
@@ -90,7 +106,7 @@ export const TicketAssistant_FrequencyScreen = ({
           ) : (
             <View>
               <View style={styles.horizontalLine}>
-                {numbers.map((number) => {
+                {numbersAsStrings.map((number) => {
                   return (
                     <View key={number} style={styles.numberContainer}>
                       <ThemeText
@@ -113,11 +129,11 @@ export const TicketAssistant_FrequencyScreen = ({
                   maximumValue={14}
                   minimumValue={2}
                   step={1}
-                  value={data.frequency}
+                  value={sliderValue}
                   tapToSeek={true}
                   thumbTintColor={sliderColorMin}
                   onValueChange={(value) => {
-                    updateFrequency(value);
+                    setSliderValue(value);
                   }}
                 />
               </View>
@@ -126,11 +142,7 @@ export const TicketAssistant_FrequencyScreen = ({
                 color={themeColor}
                 style={styles.number}
               >
-                {t(
-                  TicketAssistantTexts.frequency.result({
-                    value: data.frequency,
-                  }),
-                )}
+                {resultString}
               </ThemeText>
             </View>
           )}

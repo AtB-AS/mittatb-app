@@ -56,6 +56,10 @@ const TicketAssistantTexts = {
         `Du reiser ${amount.value} ganger i uka`,
         `You travel ${amount.value} times a week`,
       ),
+    resultMoreThan14: _(
+      'Du reiser 14 ganger eller mer i uka',
+      'You travel 14 times or more per week',
+    ),
     mainButton: _('Neste', 'Next'),
     a11yNextPageHint: _(
       'Aktiver for å gå til neste side',
