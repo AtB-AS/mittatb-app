@@ -1,7 +1,7 @@
 import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
@@ -10,89 +10,44 @@ import {DashboardBackground} from '@atb/assets/svg/color/images';
 import SvgFeedback from '@atb/assets/svg/mono-icons/actions/Feedback';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary';
-import {handleRecommendedTicketResponse} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/handle-recommended-ticket-response';
-import {useFirestoreConfiguration} from '@atb/configuration';
-import {getRecommendedTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/api';
 import {MessageBox} from '@atb/components/message-box';
 import {getIndexOfLongestDurationTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/utils';
+import {useTicketAssistantDataFetch} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/fetch-data';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
 export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
-  const {
-    tariffZones,
-    userProfiles,
-    preassignedFareProducts,
-    fareProductTypeConfigs,
-  } = useFirestoreConfiguration();
 
-  let {
-    response,
-    setResponse,
-    data,
-    loading,
-    setLoading,
-    purchaseDetails,
-    setPurchaseDetails,
-    hasDataChanged,
-    setHasDataChanged,
-  } = useTicketAssistantState();
+  let {response, data, loading, purchaseDetails} = useTicketAssistantState();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      await getRecommendedTicket(data)
-        .then((r) => {
-          setHasDataChanged(false);
-          if (r.length === 0) {
-            return;
-          }
-          setResponse(r);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      setLoading(false);
-    };
+  useTicketAssistantDataFetch(navigation);
 
-    const unsubscribe = navigation.addListener('focus', () => {
-      if (hasDataChanged) {
-        fetchData();
-      }
+  const onBuyButtonPress = () => {
+    navigation.navigate('Root_PurchaseConfirmationScreen', {
+      fareProductTypeConfig:
+        purchaseDetails?.purchaseTicketDetails[index].fareProductTypeConfig,
+      fromTariffZone: purchaseDetails?.tariffZones[0],
+      toTariffZone: purchaseDetails?.tariffZones[1],
+      userProfilesWithCount: purchaseDetails?.userProfileWithCount,
+      preassignedFareProduct:
+        purchaseDetails?.purchaseTicketDetails[index].preassignedFareProduct,
+      travelDate: undefined,
+      headerLeftButton: {type: 'back'},
+      mode: 'Ticket',
     });
+  };
 
-    try {
-      if (response?.tickets !== undefined) {
-        setPurchaseDetails(
-          handleRecommendedTicketResponse(
-            response,
-            tariffZones,
-            userProfiles,
-            preassignedFareProducts,
-            fareProductTypeConfigs,
-          ),
-        );
-      }
-    } catch (e) {
-      console.log('Error changing data ' + e);
-    }
-
-    return () => {
-      unsubscribe();
-    };
-  }, [data, hasDataChanged]);
-
-  const startDate = new Date();
   const endDate: string = new Date(
-    startDate.getTime() + data.duration * 24 * 60 * 60 * 1000,
+    Date.now() + data.duration * 24 * 60 * 60 * 1000,
   ).toLocaleDateString(language, {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
+
   let index = getIndexOfLongestDurationTicket(response.tickets);
 
   return (
@@ -156,26 +111,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                 <TicketSummary />
                 <Button
                   interactiveColor="interactive_0"
-                  onPress={() => {
-                    {
-                      /** Navigate to PurchaseConfirmationScreen **/
-                      navigation.navigate('Root_PurchaseConfirmationScreen', {
-                        fareProductTypeConfig:
-                          purchaseDetails?.purchaseTicketDetails[index]
-                            .fareProductTypeConfig,
-                        fromTariffZone: purchaseDetails?.tariffZones[0],
-                        toTariffZone: purchaseDetails?.tariffZones[1],
-                        userProfilesWithCount:
-                          purchaseDetails?.userProfileWithCount,
-                        preassignedFareProduct:
-                          purchaseDetails?.purchaseTicketDetails[index]
-                            .preassignedFareProduct,
-                        travelDate: undefined,
-                        headerLeftButton: {type: 'back'},
-                        mode: 'Ticket',
-                      });
-                    }
-                  }}
+                  onPress={() => onBuyButtonPress()}
                   text={t(TicketAssistantTexts.summary.buyButton)}
                   testID="nextButton"
                   accessibilityHint={t(
