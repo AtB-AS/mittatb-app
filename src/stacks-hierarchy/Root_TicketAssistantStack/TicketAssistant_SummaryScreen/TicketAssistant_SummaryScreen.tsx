@@ -82,7 +82,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     return () => {
       unsubscribe();
     };
-  }, [navigation, data, setResponse, setPurchaseDetails, setLoading, response]);
+  }, [data, hasDataChanged]);
 
   const startDate = new Date();
   const endDate: string = new Date(

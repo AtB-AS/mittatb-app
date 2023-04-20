@@ -12,6 +12,7 @@ import {
   calculateSavings,
   calculateSingleTickets,
   getIndexOfLongestDurationTicket,
+  perTripSavings,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/utils';
 
 const interactiveColorName: InteractiveColor = 'interactive_2';
@@ -32,8 +33,7 @@ export const TicketSummary = () => {
     purchaseDetails?.purchaseTicketDetails[index].preassignedFareProduct;
   const recommendedTicketTypeConfig =
     purchaseDetails?.purchaseTicketDetails[index]?.fareProductTypeConfig;
-  const fromTariffZone = purchaseDetails?.tariffZones[0];
-  const toTariffZone = purchaseDetails?.tariffZones[1];
+  const [fromTariffZone, toTariffZone] = purchaseDetails?.tariffZones ?? [];
   const traveller = purchaseDetails?.userProfileWithCount[0];
 
   const savings = calculateSavings(
@@ -43,28 +43,7 @@ export const TicketSummary = () => {
 
   return (
     <>
-      <View
-        style={styles.ticketContainer}
-        accessibilityLabel={t(
-          TicketAssistantTexts.summary.ticketSummaryA11yLabel({
-            ticket:
-              language.language === 'nb'
-                ? `${recommendedTicket?.name.value}`
-                : `${recommendedTicket?.alternativeNames[0].value}`,
-            traveller:
-              language.language === 'nb'
-                ? `${traveller?.name.value}`
-                : `${traveller?.alternativeNames[0].value}`,
-            fromTariffZone: fromTariffZone?.name.value || '',
-            toTariffZone: toTariffZone?.name.value || '',
-            price: response.tickets[index].price.toFixed(2),
-            pricePerTrip: (
-              response.tickets[index].price /
-              ((response.tickets[index].duration / 7) * frequency)
-            ).toFixed(2),
-          }),
-        )}
-      >
+      <View style={styles.ticketContainer} accessibilityLabel={a11ySummary()}>
         <View style={[styles.upperPart, {minWidth: width * 0.6}]}>
           <View style={styles.travelModeWrapper}>
             {recommendedTicketTypeConfig?.transportModes && (
@@ -102,17 +81,15 @@ export const TicketSummary = () => {
                 <View>
                   {response && response.tickets[index].traveller && (
                     <View>
-                      <View>
-                        <InfoChip
-                          interactiveColor={interactiveColorName}
-                          style={styles.infoChip}
-                          text={
-                            language.language === 'nb'
-                              ? `${traveller?.name.value}`
-                              : `${traveller?.alternativeNames[0].value}`
-                          }
-                        />
-                      </View>
+                      <InfoChip
+                        interactiveColor={interactiveColorName}
+                        style={styles.infoChip}
+                        text={
+                          language.language === 'nb'
+                            ? `${traveller?.name.value}`
+                            : `${traveller?.alternativeNames[0].value}`
+                        }
+                      />
                     </View>
                   )}
                 </View>
@@ -181,7 +158,7 @@ export const TicketSummary = () => {
         accessibilityLabel={t(
           TicketAssistantTexts.summary.savingsA11yLabel({
             totalSavings: savings,
-            perTripSavings: (savings / ((duration / 7) * frequency)).toFixed(2),
+            perTripSavings: perTripSavings(savings, duration, frequency),
             alternative: `${calculateSingleTickets(duration, frequency)}`,
           }),
         )}
@@ -190,10 +167,7 @@ export const TicketSummary = () => {
           ? t(
               TicketAssistantTexts.summary.savings({
                 totalSavings: savings,
-                perTripSavings: (
-                  savings /
-                  ((duration / 7) * frequency)
-                ).toFixed(2),
+                perTripSavings: perTripSavings(savings, duration, frequency),
                 alternative: `${calculateSingleTickets(duration, frequency)}`,
               }),
             )
@@ -201,6 +175,28 @@ export const TicketSummary = () => {
       </ThemeText>
     </>
   );
+
+  function a11ySummary(): string {
+    return t(
+      TicketAssistantTexts.summary.ticketSummaryA11yLabel({
+        ticket:
+          language.language === 'nb'
+            ? `${recommendedTicket?.name.value}`
+            : `${recommendedTicket?.alternativeNames[0].value}`,
+        traveller:
+          language.language === 'nb'
+            ? `${traveller?.name.value}`
+            : `${traveller?.alternativeNames[0].value}`,
+        fromTariffZone: fromTariffZone?.name.value || '',
+        toTariffZone: toTariffZone?.name.value || '',
+        price: response.tickets[index].price.toFixed(2),
+        pricePerTrip: (
+          response.tickets[index].price /
+          ((response.tickets[index].duration / 7) * frequency)
+        ).toFixed(2),
+      }),
+    );
+  }
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({

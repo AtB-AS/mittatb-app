@@ -32,3 +32,11 @@ export function getIndexOfLongestDurationTicket(
     return 0;
   }
 }
+
+export function perTripSavings(
+  savings: number,
+  duration: number,
+  frequency: number,
+): string {
+  return (savings / ((duration / 7) * frequency)).toFixed(2);
+}
