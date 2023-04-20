@@ -68,7 +68,6 @@ export const TicketAssistant_CategoryPickerScreen = ({
         {!a11yContext.isScreenReaderEnabled ? (
           <Sections.Section style={styles.categoriesContainer}>
             {selectableTravellers.map((u, index) => {
-              console.log('u', u);
               return (
                 <Sections.ExpandableSectionItem
                   key={index}
@@ -101,7 +100,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
                             id: u.userTypeString,
                             user_type: u.userTypeString,
                           });*/
-                          navigation.navigate('TicketAssistant_DurationScreen');
+                          navigation.navigate('TicketAssistant_FrequencyScreen');
                         }}
                         text={t(
                           TicketAssistantTexts.categoryPicker.chooseButton,

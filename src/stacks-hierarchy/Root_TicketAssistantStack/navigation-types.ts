@@ -15,8 +15,8 @@ export type TicketAssistantStackProps =
 
 export type TicketAssistantStackParams = {
   TicketAssistant_WelcomeScreen: undefined;
-  TicketAssistant_FrequencyScreen: undefined;
   TicketAssistant_CategoryPickerScreen: undefined;
+  TicketAssistant_FrequencyScreen: undefined;
   TicketAssistant_DurationScreen: undefined;
   TicketAssistant_ZonePickerScreen: undefined;
   TicketAssistant_SummaryScreen: undefined;
