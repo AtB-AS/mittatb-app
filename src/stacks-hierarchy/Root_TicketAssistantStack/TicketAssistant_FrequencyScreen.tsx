@@ -28,6 +28,7 @@ export const TicketAssistant_FrequencyScreen = ({
   const {t} = useTranslation();
   // Create an array of every second number from 1 to 14
   const numbers = Array.from({length: 8}, (_, i) => i * 2);
+  numbers.shift();
   const {data, updateData} = useTicketAssistantState();
   const a11yContext = useAccessibilityContext();
   function updateFrequency(value: number) {
@@ -110,7 +111,7 @@ export const TicketAssistant_FrequencyScreen = ({
                   maximumTrackTintColor={sliderColorMax}
                   minimumTrackTintColor={sliderColorMin}
                   maximumValue={14}
-                  minimumValue={0}
+                  minimumValue={2}
                   step={1}
                   value={data.frequency}
                   tapToSeek={true}
