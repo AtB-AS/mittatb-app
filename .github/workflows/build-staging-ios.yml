@@ -104,12 +104,11 @@ jobs:
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: sh ./scripts/ios/create-sourcemaps.sh
       - name: Upload bundle and source maps
-        if: matrix.org == 'atb'
         run: sh ./scripts/ios/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
       - name: Upload dSYMs
-        if: matrix.org == 'atb'
+        if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: sh ./scripts/ios/upload-dsyms.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
