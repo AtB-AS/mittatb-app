@@ -85,9 +85,7 @@ export const TicketAssistant_FrequencyScreen = ({
                   <Button
                     interactiveColor="interactive_2"
                     onPress={() => {
-                      navigation.navigate(
-                        'TicketAssistant_CategoryPickerScreen',
-                      );
+                      navigation.navigate('TicketAssistant_DurationScreen');
                     }}
                     text={number.toString()}
                     accessibilityHint={t(

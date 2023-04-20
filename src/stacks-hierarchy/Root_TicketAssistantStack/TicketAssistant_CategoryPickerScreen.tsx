@@ -96,11 +96,13 @@ export const TicketAssistant_CategoryPickerScreen = ({
                       <Button
                         style={styles.chooseButton}
                         onPress={() => {
-                          /*updateCategory({
+                          updateCategory({
                             id: u.userTypeString,
                             user_type: u.userTypeString,
-                          });*/
-                          navigation.navigate('TicketAssistant_FrequencyScreen');
+                          });
+                          navigation.navigate(
+                            'TicketAssistant_FrequencyScreen',
+                          );
                         }}
                         text={t(
                           TicketAssistantTexts.categoryPicker.chooseButton,
@@ -118,7 +120,13 @@ export const TicketAssistant_CategoryPickerScreen = ({
               return (
                 <View key={index} style={styles.a11yCategoryCards}>
                   <TouchableOpacity
-                    onPress={() => {}}
+                    onPress={() => {
+                      updateCategory({
+                        id: u.userTypeString,
+                        user_type: u.userTypeString,
+                      });
+                      navigation.navigate('TicketAssistant_FrequencyScreen');
+                    }}
                     accessible={true}
                     accessibilityHint={t(
                       TicketAssistantTexts.categoryPicker.a11yChooseButtonHint({

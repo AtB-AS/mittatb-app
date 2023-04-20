@@ -27,14 +27,11 @@ const TicketAssistantTexts = {
     title: _('Hvem er du?', 'Who are you?'),
     chooseButton: _('Velg', 'Choose'),
     chosen: _('Valgt', 'Chosen'),
-    a11yChooseButtonHint: _(
-      'Aktiver for å velge kategori og gå videre',
-      'Activate to choose category and go to next page',
-    ),
-    a11yHint: _(
-      'Aktiver for å se mer informasjon om kategorien',
-      'Activate to see more information about the category',
-    ),
+    a11yChooseButtonHint: (category: {value: string}) =>
+      _(
+        `Aktiver for å velge ${category.value} som kategori, og gå videre`,
+        `Activate to choose ${category.value} as category and navigate to next page`,
+      ),
   },
   frequency: {
     title: _(
