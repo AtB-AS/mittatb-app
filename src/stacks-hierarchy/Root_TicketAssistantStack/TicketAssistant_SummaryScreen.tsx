@@ -35,6 +35,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     purchaseDetails,
     setPurchaseDetails,
     hasDataChanged,
+    setHasDataChanged,
   } = useTicketAssistantState();
 
   useEffect(() => {
@@ -42,6 +43,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       setLoading(true);
       await getRecommendedTicket(data)
         .then((r) => {
+          setHasDataChanged(false);
           if (r.length === 0) {
             return;
           }
