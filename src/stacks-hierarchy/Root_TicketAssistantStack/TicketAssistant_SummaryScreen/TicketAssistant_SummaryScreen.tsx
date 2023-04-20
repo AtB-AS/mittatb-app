@@ -9,12 +9,12 @@ import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import SvgFeedback from '@atb/assets/svg/mono-icons/actions/Feedback';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
-import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/components/TicketSummary';
+import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary';
 import {handleRecommendedTicketResponse} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/handle-recommended-ticket-response';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import {TicketResponseData} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {getRecommendedTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/api';
 import {MessageBox} from '@atb/components/message-box';
+import {getIndexOfLongestDurationTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/utils';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -153,10 +153,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             </ThemeText>
             {purchaseDetails?.purchaseTicketDetails && (
               <>
-                <TicketSummary
-                  duration={data.duration}
-                  frequency={data.frequency}
-                />
+                <TicketSummary />
                 <Button
                   interactiveColor="interactive_0"
                   onPress={() => {
@@ -215,25 +212,6 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     </ScrollView>
   );
 };
-
-function getIndexOfLongestDurationTicket(
-  tickets: TicketResponseData[],
-): number {
-  try {
-    let longestDuration = 0;
-    let longestDurationIndex = 0;
-    tickets.forEach((ticket, index) => {
-      if (ticket.duration > longestDuration) {
-        longestDuration = ticket.duration;
-        longestDurationIndex = index;
-      }
-    });
-    return longestDurationIndex;
-  } catch (e) {
-    console.log('Error getting index of longest duration ticket ' + e);
-    return 0;
-  }
-}
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   contentContainer: {

@@ -8,23 +8,23 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
 import {InteractiveColor, StaticColorByType} from '@atb/theme/colors';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
-import {TicketResponseData} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
+import {
+  calculateSavings,
+  calculateSingleTickets,
+  getIndexOfLongestDurationTicket,
+} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/utils';
 
-export type TicketSummaryProps = {
-  duration: number;
-  frequency: number;
-};
 const interactiveColorName: InteractiveColor = 'interactive_2';
 const themeColor_1: StaticColorByType<'background'> = 'background_accent_1';
-export const TicketSummary = (props: TicketSummaryProps) => {
+export const TicketSummary = () => {
   const language = useTranslation();
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const {width} = Dimensions.get('window');
   const {theme} = useTheme();
   const interactiveColor = theme.interactive[interactiveColorName];
-  const {duration, frequency} = props;
-  let {response, purchaseDetails} = useTicketAssistantState();
+  let {response, purchaseDetails, data} = useTicketAssistantState();
+  const {duration, frequency} = data;
 
   const index = getIndexOfLongestDurationTicket(response.tickets);
 
@@ -202,31 +202,6 @@ export const TicketSummary = (props: TicketSummaryProps) => {
     </>
   );
 };
-
-function calculateSavings(
-  ticketPrice: number,
-  alternativePrice: number,
-): number {
-  return alternativePrice - ticketPrice;
-}
-
-function calculateSingleTickets(duration: number, frequency: number): number {
-  return Math.ceil((duration / 7) * frequency);
-}
-
-function getIndexOfLongestDurationTicket(
-  tickets: TicketResponseData[],
-): number {
-  let longestDuration = 0;
-  let longestDurationIndex = 0;
-  tickets.forEach((ticket, index) => {
-    if (ticket.duration > longestDuration) {
-      longestDuration = ticket.duration;
-      longestDurationIndex = index;
-    }
-  });
-  return longestDurationIndex;
-}
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   ticketContainer: {
