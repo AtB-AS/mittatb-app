@@ -35,15 +35,25 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
         style={styles.spreadContent}
       >
         <View style={styles.contentContainer}>
-          <ThemeText
-            type="body__secondary--bold"
-            style={styles.title}
-            accessibilityLabel={t(TicketingTexts.ticketAssistantTile.title)}
-            color={themeColor}
-            testID={testID + 'Title'}
-          >
-            {t(TicketingTexts.ticketAssistantTile.title)}
-          </ThemeText>
+          <View style={styles.titleContainer}>
+            <ThemeText
+              type="body__secondary--bold"
+              accessibilityLabel={t(TicketingTexts.ticketAssistantTile.title)}
+              color={themeColor}
+              testID={testID + 'Title'}
+            >
+              {t(TicketingTexts.ticketAssistantTile.title)}
+            </ThemeText>
+            <View style={styles.betaLabel}>
+              <ThemeText
+                color="background_accent_3"
+                style={styles.betaLabelText}
+              >
+                BETA
+              </ThemeText>
+            </View>
+          </View>
+
           <ThemeText type="body__tertiary" color={'secondary'}>
             {t(TicketingTexts.ticketAssistantTile.description)}
           </ThemeText>
@@ -62,8 +72,22 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.large,
   },
+  betaLabel: {
+    backgroundColor: theme.static.background.background_accent_3.background,
+    marginHorizontal: theme.spacings.small,
+    paddingHorizontal: theme.spacings.small,
+    paddingVertical: theme.spacings.small,
+    borderRadius: theme.border.radius.regular,
+    flexShrink: 1,
+  },
+  betaLabelText: {
+    fontSize: 8,
+    lineHeight: 9,
+  },
 
-  title: {
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: theme.spacings.small,
   },
 
