@@ -152,7 +152,7 @@ export const TicketAssistant_FrequencyScreen = ({
             <Button
               interactiveColor="interactive_0"
               onPress={() =>
-                navigation.navigate('TicketAssistant_CategoryPickerScreen')
+                navigation.navigate('TicketAssistant_DurationScreen')
               }
               text={t(TicketAssistantTexts.frequency.mainButton)}
               testID="nextButton"

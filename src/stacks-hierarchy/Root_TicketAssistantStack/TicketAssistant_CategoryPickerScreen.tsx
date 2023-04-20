@@ -100,7 +100,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
                           id: u.userTypeString,
                           user_type: u.userTypeString,
                         });
-                        navigation.navigate('TicketAssistant_DurationScreen');
+                        navigation.navigate('TicketAssistant_FrequencyScreen');
                       }}
                       text={t(TicketAssistantTexts.categoryPicker.chooseButton)}
                       accessibilityHint={t(

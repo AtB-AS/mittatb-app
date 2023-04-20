@@ -41,7 +41,9 @@ export const TicketAssistant_WelcomeScreen = ({
       <View style={styles.bottomView}>
         <Button
           interactiveColor="interactive_0"
-          onPress={() => navigation.navigate('TicketAssistant_FrequencyScreen')}
+          onPress={() =>
+            navigation.navigate('TicketAssistant_CategoryPickerScreen')
+          }
           text={t(TicketAssistantTexts.welcome.mainButton)}
           testID="nextButton"
           accessibilityHint={t(TicketAssistantTexts.welcome.a11yStartHint)}
