@@ -17,6 +17,7 @@ type TicketAssistantState = {
   purchaseDetails: PurchaseDetails;
   setPurchaseDetails: (purchaseDetails: PurchaseDetails) => void;
   hasDataChanged: boolean;
+  setHasDataChanged: (hasDataChanged: boolean) => void;
 };
 
 const TicketAssistantContext = createContext<TicketAssistantState | undefined>(
@@ -99,6 +100,7 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
         purchaseDetails,
         setPurchaseDetails,
         hasDataChanged,
+        setHasDataChanged,
       }}
     >
       {children}
