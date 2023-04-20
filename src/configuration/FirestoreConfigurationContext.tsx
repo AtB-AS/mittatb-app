@@ -9,10 +9,11 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import {
-  PreassignedFareProduct,
-  TariffZone,
   CityZone,
+  TariffZone,
   UserProfile,
+  CityZoneMessageTexts,
+  PreassignedFareProduct,
 } from '@atb/reference-data/types';
 import Bugsnag from '@bugsnag/react-native';
 import {
@@ -20,6 +21,7 @@ import {
   defaultPreassignedFareProducts,
   defaultTariffZones,
   defaultCityZones,
+  defaultCityZoneMessageTexts,
   defaultUserProfiles,
 } from '@atb/reference-data/defaults';
 import {
@@ -51,6 +53,7 @@ type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
   tariffZones: TariffZone[];
   cityZones: CityZone[];
+  cityZoneMessageTexts: CityZoneMessageTexts;
   userProfiles: UserProfile[];
   modesWeSellTicketsFor: string[];
   paymentTypes: PaymentType[];
@@ -65,6 +68,7 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   preassignedFareProducts: defaultPreassignedFareProducts,
   tariffZones: defaultTariffZones,
   cityZones: defaultCityZones,
+  cityZoneMessageTexts: defaultCityZoneMessageTexts,
   userProfiles: defaultUserProfiles,
   modesWeSellTicketsFor: defaultModesWeSellTicketsFor,
   paymentTypes: defaultPaymentTypes,
@@ -85,6 +89,9 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   );
   const [tariffZones, setTariffZones] = useState(defaultTariffZones);
   const [cityZones, setCityZones] = useState(defaultCityZones);
+  const [cityZoneMessageTexts, setCityZoneMessageTexts] = useState(
+    defaultCityZoneMessageTexts,
+  );
   const [userProfiles, setUserProfiles] = useState(defaultUserProfiles);
   const [modesWeSellTicketsFor, setModesWeSellTicketsFor] = useState(
     defaultModesWeSellTicketsFor,
@@ -119,6 +126,12 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           const cityZones = getCityZonesFromSnapshot(snapshot);
           if (cityZones) {
             setCityZones(cityZones);
+          }
+
+          const cityZoneMessageTexts =
+            getCityZoneMessageTextsFromSnapshot(snapshot);
+          if (cityZoneMessageTexts) {
+            setCityZoneMessageTexts(cityZoneMessageTexts);
           }
 
           const userProfiles = getUserProfilesFromSnapshot(snapshot);
@@ -178,6 +191,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       preassignedFareProducts,
       tariffZones,
       cityZones,
+      cityZoneMessageTexts,
       userProfiles,
       modesWeSellTicketsFor,
       paymentTypes,
@@ -191,6 +205,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     preassignedFareProducts,
     tariffZones,
     cityZones,
+    cityZoneMessageTexts,
     userProfiles,
     modesWeSellTicketsFor,
     paymentTypes,
@@ -264,6 +279,26 @@ function getCityZonesFromSnapshot(
   try {
     if (cityZonesFromFirestore) {
       return JSON.parse(cityZonesFromFirestore) as CityZone[];
+    }
+  } catch (error: any) {
+    Bugsnag.notify(error);
+  }
+
+  return undefined;
+}
+
+function getCityZoneMessageTextsFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): CityZoneMessageTexts | undefined {
+  const cityZoneMessageTextsFromFirestore = snapshot.docs
+    .find((doc) => doc.id == 'referenceData')
+    ?.get<string>('cityZoneMessageTexts');
+
+  try {
+    if (cityZoneMessageTextsFromFirestore) {
+      return JSON.parse(
+        cityZoneMessageTextsFromFirestore,
+      ) as CityZoneMessageTexts;
     }
   } catch (error: any) {
     Bugsnag.notify(error);

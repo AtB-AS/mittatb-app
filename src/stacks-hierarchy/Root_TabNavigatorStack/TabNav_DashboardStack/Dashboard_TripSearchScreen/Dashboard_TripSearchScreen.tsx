@@ -52,9 +52,8 @@ import {Time} from '@atb/assets/svg/mono-icons/time';
 import {storage, StorageModelKeysEnum} from '@atb/storage';
 import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-state';
 import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/SelectedFiltersButtons';
-import {useFirestoreConfiguration} from '@atb/configuration';
-import {useFindCityZoneInLocation} from './utils';
 import {CityZoneMessage} from './components/CityZoneMessage';
+import {useFindCityZonesInLocations} from './utils';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -72,7 +71,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const {theme} = useTheme();
   const {language, t} = useTranslation();
   const [updatingLocation] = useState<boolean>(false);
-  const {cityZones} = useFirestoreConfiguration();
 
   const shouldShowTravelSearchFilterOnboarding =
     useShouldShowTravelSearchFilterOnboarding();
@@ -94,10 +92,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   });
 
   const filtersState = useTravelSearchFiltersState();
-
-  const fromCityZone = useFindCityZoneInLocation(from, cityZones);
-  const toCityZone = useFindCityZoneInLocation(to, cityZones);
-  const selectedCityZone = fromCityZone ?? toCityZone;
+  const selectedCityZones = useFindCityZonesInLocations(from, to);
 
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
     useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);
@@ -368,8 +363,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 resetTransportModes={filtersState.resetTransportModes}
               />
             )}
-            {selectedCityZone && !isSearching && !error && (
-              <CityZoneMessage cityZone={selectedCityZone} />
+            {selectedCityZones && tripPatterns.length > 0 && !error && (
+              <CityZoneMessage cityZones={selectedCityZones} />
             )}
             <Results
               tripPatterns={tripPatterns}

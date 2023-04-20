@@ -40,11 +40,20 @@ export type TariffZone = {
   geometry: Omit<Polygon, 'type'> & {type: any};
 };
 
-export type CityZone = {
-  name: LanguageAndTextType[];
+export type CityZoneMessageTexts = {
+  singleZone: CityZoneMessage;
+  multipleZones: CityZoneMessage;
+};
+
+export type CityZoneMessage = {
   title?: LanguageAndTextType[];
-  actionButtonText: LanguageAndTextType[];
   message: LanguageAndTextType[];
+  actionButtonText: LanguageAndTextType[];
+};
+
+export type CityZone = {
+  name: string;
+  enabled: boolean;
   contactUrl: LanguageAndTextType[];
   geometry: Omit<Polygon, 'type'> & {type: any};
 };

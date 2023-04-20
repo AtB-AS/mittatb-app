@@ -7,18 +7,26 @@ import {MessageBox} from '@atb/components/message-box';
 import {getTextForLanguageWithFormat} from '@atb/translations/utils';
 import {FlexBuss} from '@atb/assets/svg/color/illustrations';
 import {CityZone} from '@atb/reference-data/types';
+import {useFirestoreConfiguration} from '@atb/configuration';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export type CityZoneMessageProps = {
-  cityZone: CityZone;
+  cityZones: CityZone[];
 };
 
-export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({cityZone}) => {
+export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
+  cityZones,
+}) => {
+  const style = useStyle();
   const {theme} = useTheme();
   const {language} = useTranslation();
-  const style = useStyle();
-  const [isClosed, setClosed] = useState(false);
 
-  const zoneName = getTextForLanguage(cityZone.name, language);
+  const {
+    cityZoneMessageTexts: {singleZone, multipleZones},
+  } = useFirestoreConfiguration();
+  const {enable_flexible_transport} = useRemoteConfig();
+
+  const [isClosed, setClosed] = useState(false);
 
   useEffect(() => {
     setClosed(false);
@@ -26,29 +34,38 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({cityZone}) => {
     return () => {
       setClosed(false);
     };
-  }, [zoneName]);
+  }, [cityZones]);
 
-  if (!zoneName || isClosed) {
-    return <></>;
+  if (cityZones.length === 0 || isClosed) {
+    return null;
   }
 
+  if (!enable_flexible_transport) {
+    return null;
+  }
+
+  const cityZonesNames = cityZones.map((cityZone) => cityZone.name);
+  const contactUrls = cityZones
+    .map((cityZone) => getTextForLanguage(cityZone.contactUrl, language))
+    .filter(Boolean) as string[];
+
+  const messageTexts = cityZones.length == 1 ? singleZone : multipleZones;
+
   const message = getTextForLanguageWithFormat(
-    cityZone.message,
+    messageTexts.message,
     language,
-    zoneName,
+    ...cityZonesNames,
   );
   const actionButtonText = getTextForLanguage(
-    cityZone.actionButtonText,
+    messageTexts.actionButtonText,
     language,
   );
-  const contactUrl = getTextForLanguage(cityZone.contactUrl, language);
 
-  if (message && actionButtonText && contactUrl) {
+  if (message && actionButtonText && contactUrls.length > 0) {
     return (
       <Sections.Section style={style.cityZoneMessage}>
         <MessageBox
           type="info"
-          title={getTextForLanguage(cityZone.title, language)}
           message={message}
           color={theme.static.background.background_0}
           icon={() => <FlexBuss />}
@@ -57,7 +74,11 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({cityZone}) => {
           }}
           onPressConfig={{
             action: () => {
-              Linking.openURL(contactUrl);
+              if (contactUrls.length === 1) {
+                return Linking.openURL(contactUrls[0]);
+              }
+
+              // TODO: What if more?
             },
             text: actionButtonText,
           }}
@@ -66,7 +87,7 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({cityZone}) => {
     );
   }
 
-  return <></>;
+  return null;
 };
 
 export const useStyle = StyleSheet.createThemeHook((theme) => ({
