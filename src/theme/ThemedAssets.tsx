@@ -5,6 +5,8 @@ import {Phone as DarkPhone} from '@atb/assets/svg/color/illustrations/token/mobi
 import {Phone as LightPhone} from '@atb/assets/svg/color/illustrations/token/mobile/light/';
 import {Map as LightMap} from '@atb/assets/svg/color/images/light';
 import {Map as DarkMap} from '@atb/assets/svg/color/images/dark';
+import {NoFavouriteDeparture as LightNoFavouriteDeparture} from '@atb/assets/svg/color/images/light';
+import {NoFavouriteDeparture as DarkNoFavouriteDeparture} from '@atb/assets/svg/color/images/dark';
 import {useTheme} from '@atb/theme/ThemeContext';
 
 export const ThemedTokenTravelCard = () => {
@@ -23,4 +25,11 @@ export const ThemedMapImage = () => {
   const {themeName} = useTheme();
   const Map = themeName === 'dark' ? DarkMap : LightMap;
   return <Map />;
+};
+
+export const ThemedNoFavouriteDepartureImage = () => {
+  const {themeName} = useTheme();
+  const NoFavouriteDeparture =
+    themeName === 'dark' ? DarkNoFavouriteDeparture : LightNoFavouriteDeparture;
+  return <NoFavouriteDeparture />;
 };

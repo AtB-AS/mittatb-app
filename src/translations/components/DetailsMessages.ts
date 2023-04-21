@@ -26,4 +26,12 @@ export default orgSpecificTranslations(DetailsMessages, {
       ),
     },
   },
+  fram: {
+    messages: {
+      ticketsWeDontSell: _(
+        'Reisen krever billett som ikke er tilgjengelig i denne appen, eller som må kjøpes fra et annet selskap enn FRAM.',
+        'This journey requires a ticket that is not available from this app, or must be purchased from a provider other than FRAM.',
+      ),
+    },
+  },
 });

@@ -1,6 +1,7 @@
-import {useState, useCallback, useEffect} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {useInterval} from './use-interval';
 import {useIsLoading} from './use-is-loading';
+import {usePrevious} from '@atb/utils/use-previous';
 
 type PollableResourceOptions<T> = {
   initialValue: T;
@@ -20,15 +21,21 @@ type PollableResourceOptions<T> = {
  * @returns [T, () => Promise<void>, boolean, E]
  */
 export const usePollableResource = <T, E extends Error = Error>(
-  callback: (signal?: AbortSignal) => Promise<T>,
+  callback: (
+    signal?: AbortSignal,
+    previousState?: T,
+    isInitialLoad?: boolean,
+  ) => Promise<T>,
   opts: PollableResourceOptions<T>,
-): [T, () => Promise<void>, boolean, E?] => {
+): [T, boolean, E?] => {
   const {initialValue, pollingTimeInSeconds = 30} = opts;
   const [isLoading, setIsLoading] = useIsLoading(false);
   const [error, setError] = useState<E | undefined>(undefined);
   const [state, setState] = useState<T>(initialValue);
   const [abortController, setAbortController] = useState<AbortController>();
   const pollTime = pollingTimeInSeconds * 1000;
+
+  const prevState = usePrevious(state);
 
   const reload = useCallback(
     async function reload(
@@ -40,7 +47,11 @@ export const usePollableResource = <T, E extends Error = Error>(
         setIsLoading(true);
       }
       try {
-        const newState = await callback(abortController?.signal);
+        const newState = await callback(
+          abortController?.signal,
+          prevState,
+          loading === 'WITH_LOADING',
+        );
         setError(undefined);
         setState(newState);
       } catch (e: any) {
@@ -68,5 +79,5 @@ export const usePollableResource = <T, E extends Error = Error>(
     opts.disabled,
   );
 
-  return [state, reload, isLoading, error];
+  return [state, isLoading, error];
 };

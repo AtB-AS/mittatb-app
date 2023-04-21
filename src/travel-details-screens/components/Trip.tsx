@@ -61,7 +61,6 @@ export const Trip: React.FC<TripProps> = ({
               (vehicle) =>
                 vehicle.serviceJourney?.id === leg.serviceJourney?.id,
             );
-
             return (
               <TripSection
                 key={index}
@@ -79,12 +78,10 @@ export const Trip: React.FC<TripProps> = ({
                   legVehiclePosition
                     ? () =>
                         onPressDetailsMap({
-                          legs: tripPattern.legs,
-                          fromPlace: tripPattern.legs[0].fromPlace,
-                          toPlace:
-                            tripPattern.legs[tripPattern.legs.length - 1]
-                              .toPlace,
-                          _initialVehiclePosition: legVehiclePosition,
+                          legs: [leg],
+                          fromPlace: leg.fromPlace,
+                          toPlace: leg.toPlace,
+                          initialVehiclePosition: legVehiclePosition,
                         })
                     : undefined
                 }
