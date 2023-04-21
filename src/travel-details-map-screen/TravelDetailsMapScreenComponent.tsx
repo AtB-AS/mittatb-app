@@ -43,11 +43,18 @@ export const TravelDetailsMapScreenComponent = ({
   const {location: geolocation} = useGeolocationState();
 
   const features = useMemo(() => createMapLines(legs), [legs]);
-  const bounds = getMapBounds(features);
+  const bounds = !initialVehiclePosition ? getMapBounds(features) : undefined;
+  const centerPosition = initialVehiclePosition?.location
+    ? [
+        initialVehiclePosition?.location?.longitude,
+        initialVehiclePosition?.location?.latitude,
+      ]
+    : undefined;
 
   const {t} = useTranslation();
   const controlStyles = useControlPositionsStyle();
   const vehicles = useGetLiveServiceJourneyVehicles(initialVehiclePosition);
+  const [shouldTrack, setShouldTrack] = useState<boolean>(true);
 
   const [followVehicleMapPoint, setFollowVehicleMapPoint] = useState<
     Coordinates | undefined
@@ -61,17 +68,34 @@ export const TravelDetailsMapScreenComponent = ({
       );
       if (vehicle && vehicle !== followVehicleMapPoint) {
         setFollowVehicleMapPoint(vehicle.location);
+        if (shouldTrack) {
+          flyToLocation({
+            coordinates: vehicle.location,
+            mapCameraRef,
+            zoomLevel: 13.5,
+            animationDuration: 400,
+          });
+        }
       }
     }
-  }, [vehicles, followVehicleMapPoint]);
+  }, [vehicles, followVehicleMapPoint, shouldTrack]);
 
   return (
     <View style={styles.mapView}>
-      <MapboxGL.MapView ref={mapViewRef} style={styles.map} {...MapViewConfig}>
+      <MapboxGL.MapView
+        ref={mapViewRef}
+        style={styles.map}
+        {...MapViewConfig}
+        onTouchMove={() => {
+          setShouldTrack(false);
+        }}
+      >
         <MapboxGL.Camera
           ref={mapCameraRef}
           bounds={bounds}
           {...MapCameraConfig}
+          zoomLevel={13.5}
+          centerCoordinate={centerPosition}
           animationDuration={0}
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
@@ -91,10 +115,9 @@ export const TravelDetailsMapScreenComponent = ({
           />
         )}
         {followVehicleMapPoint && (
-          <MapLabel
-            point={pointOf(followVehicleMapPoint)}
-            id={'vehicle'}
-            text={initialVehiclePosition?.mode ?? 'UNKNOWN'}
+          <LiveVehicle
+            vehicles={followVehicleMapPoint}
+            setShouldTrack={setShouldTrack}
           />
         )}
       </MapboxGL.MapView>
@@ -121,3 +144,49 @@ const styles = StyleSheet.create({
   mapView: {flex: 1},
   map: {flex: 1},
 });
+
+type VehicleIconProps = {
+  vehicles: Coordinates;
+  setShouldTrack: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const LiveVehicle = ({vehicles, setShouldTrack}: VehicleIconProps) => {
+  const shapeSource = useRef<MapboxGL.ShapeSource>(null);
+
+  if (!vehicles) return null;
+  return (
+    <MapboxGL.ShapeSource
+      id={'vehicle'}
+      ref={shapeSource}
+      shape={pointOf(vehicles)}
+      cluster
+      onPress={() => {
+        setShouldTrack(true);
+      }}
+    >
+      <MapboxGL.SymbolLayer
+        id="icon"
+        minZoomLevel={1}
+        style={{
+          iconImage: {uri: 'ClusterCount'},
+          iconSize: 2,
+          iconAllowOverlap: true,
+          iconTranslate: [13, -13],
+        }}
+      />
+      <MapboxGL.SymbolLayer
+        id="clusterCount"
+        minZoomLevel={1}
+        aboveLayerID="icon"
+        style={{
+          textField: 'BUS',
+          textColor: 'black',
+          textSize: 11,
+          textTranslate: [13, -13],
+          textAnchor: 'center',
+          textAllowOverlap: true,
+        }}
+      />
+    </MapboxGL.ShapeSource>
+  );
+};
