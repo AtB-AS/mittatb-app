@@ -142,6 +142,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       flex: isInline ? undefined : 1,
       alignItems: 'center',
       marginHorizontal: textMarginHorizontal,
+      flexShrink: isInline ? 1 : undefined,
     };
     const leftStyling: ViewStyle = {
       position: isInline ? 'relative' : 'absolute',
