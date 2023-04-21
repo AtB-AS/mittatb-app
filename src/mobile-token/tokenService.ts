@@ -59,7 +59,7 @@ const service: TokenService = {
         authWithIdToken: true,
         skipErrorLogging: () => false, //TODO: fix this
         timeout: 15000,
-        baseURL: 'http://10.100.1.56:8080',
+        baseURL: 'http://10.100.0.115:8080',
       })
       .then((res) => res.data.pendingTokenDetails)
       .catch(handleError);
@@ -76,7 +76,7 @@ const service: TokenService = {
           authWithIdToken: true,
           timeout: 15000,
           skipErrorLogging: () => false, //TODO: fix this
-          baseURL: 'http://10.100.1.56:8080',
+          baseURL: 'http://10.100.0.115:8080',
         },
       )
       .then((res) => res.data.activeTokenDetails)
@@ -93,7 +93,7 @@ const service: TokenService = {
         authWithIdToken: true,
         timeout: 15000,
         skipErrorLogging: () => false, //TODO: fix this
-        baseURL: 'http://10.100.1.56:8080',
+        baseURL: 'http://10.100.0.115:8080',
       })
       .then((res) => res.data.pendingTokenDetails)
       .catch(handleError),
@@ -118,7 +118,7 @@ const service: TokenService = {
           authWithIdToken: true,
           timeout: 15000,
           skipErrorLogging: () => false, //TODO: fix this
-          baseURL: 'http://10.100.1.56:8080',
+          baseURL: 'http://10.100.0.115:8080',
         },
       )
       .then((res) => res.data.activeTokenDetails)
@@ -135,7 +135,7 @@ const service: TokenService = {
         authWithIdToken: true,
         timeout: 15000,
         skipErrorLogging: () => false, //TODO: fix this
-        baseURL: 'http://10.100.1.56:8080',
+        baseURL: 'http://10.100.0.115:8080',
       })
       .then((res) => res.data.activeTokenDetails)
       .catch(handleError),
@@ -151,7 +151,7 @@ const service: TokenService = {
           authWithIdToken: true,
           timeout: 15000,
           skipErrorLogging: () => false, //TODO: fix this
-          baseURL: 'http://10.100.1.56:8080',
+          baseURL: 'http://10.100.0.115:8080',
         },
       )
       .then((res) => res.data.removed)
@@ -166,7 +166,7 @@ const service: TokenService = {
         authWithIdToken: true,
         timeout: 15000,
         skipErrorLogging: () => false, //TODO: fix this
-        baseURL: 'http://10.100.1.56:8080',
+        baseURL: 'http://10.100.0.115:8080',
       })
       .then((res) => res.data.tokens)
       .catch(handleError),
@@ -182,7 +182,7 @@ const service: TokenService = {
           authWithIdToken: true,
           timeout: 15000,
           skipErrorLogging: () => false, //TODO: fix this
-          baseURL: 'http://10.100.1.56:8080',
+          baseURL: 'http://10.100.0.115:8080',
         },
       )
       .then((res) => res.data.tokens)
@@ -194,7 +194,7 @@ const service: TokenService = {
         authWithIdToken: true,
         timeout: 15000,
         skipErrorLogging: () => false, //TODO: fix this
-        baseURL: 'http://10.100.1.56:8080',
+        baseURL: 'http://10.100.0.115:8080',
       })
       .then((res) => res.data)
       .catch(handleError),
@@ -212,7 +212,7 @@ const service: TokenService = {
           authWithIdToken: true,
           timeout: 15000,
           skipErrorLogging: () => false, //TODO: fix this
-          baseURL: 'http://10.100.1.56:8080',
+          baseURL: 'http://10.100.0.115:8080',
         })
         .catch(handleError);
     }, token),

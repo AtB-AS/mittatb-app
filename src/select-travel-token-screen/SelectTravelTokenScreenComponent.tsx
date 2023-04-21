@@ -157,8 +157,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
               isMarkdown={false}
             />
           )}
-
-        {selectedType === 'mobile' && mobileTokens?.length && (
+        {selectedType === 'mobile' && mobileTokens?.length ? (
           <Sections.Section type="spacious" style={styles.selectDeviceSection}>
             <Sections.RadioGroupSection<RemoteToken>
               items={mobileTokens}
@@ -180,7 +179,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
               )}
             />
           </Sections.Section>
-        )}
+        ) : null}
 
         {saveState.error && (
           <MessageBox
