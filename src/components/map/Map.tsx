@@ -16,8 +16,8 @@ import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {shadows} from './components/shadows';
-import * as Mobility from '@atb/components/map/components/mobility';
-import {MapFilter} from '@atb/components/map/components/filter/MapFilter';
+import * as Mobility from './components/mobility';
+import {MapFilter} from './components/filter/MapFilter';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;

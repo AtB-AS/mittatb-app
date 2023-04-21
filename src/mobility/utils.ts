@@ -11,7 +11,7 @@ import {
   PricingPlanFragment,
   RentalUrisFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
-import {getVisibleRange} from '@atb/components/map/utils';
+import {getVisibleRange} from '@atb/components/map';
 import buffer from '@turf/buffer';
 import bbox from '@turf/bbox-polygon';
 import difference from '@turf/difference';
