@@ -4,7 +4,6 @@ export const config: WebdriverIO.Config = {
   ...sharedConfig,
   ...{
     port: 4723,
-    //path: '/wd/hub',
     services: [
       // For options and arguments see
       // https://github.com/webdriverio/webdriverio/tree/master/packages/wdio-appium-service
@@ -26,11 +25,11 @@ export const config: WebdriverIO.Config = {
       'appium:isHeadless': true,
       'appium:automationName': 'UiAutomator2',
       'appium:deviceName': 'Android',
-      'appium:appPackage': 'no.mittatb.staging',
-      'appium:appWaitPackage': 'no.mittatb.staging',
+      'appium:appPackage': 'no.mittatb.debug',
+      'appium:appWaitPackage': 'no.mittatb.debug',
       'appium:appActivity': 'no.mittatb.MainActivity',
       'appium:appWaitActivity': 'no.mittatb.MainActivity',
-      'appium:app': `${process.env.APP_PATH || "EMPTY_ENV_APP_PATH"}/e2e/apk/app-staging.apk`,
+      'appium:app': `${process.env.PWD}/android/app/build/outputs/apk/debug/app-debug.apk`,
 
       //'appium:appWaitForLaunch': true,
       //'appium:skipDeviceInitialization': true,

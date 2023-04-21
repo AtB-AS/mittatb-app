@@ -30,28 +30,28 @@ Two alternatives.
 0) Pre-requisite: Android emulator with a ready to go AVD
 1) As for the GH action, an Android APK can be downloaded from AppCenter to `e2e/apk/app-staging.apk`
 ```bash
-## update the absolute path in e2e/conf/android.conf.local.ts
-'appium:app': '/Users/.../mittatb-app/e2e/apk/app-staging.apk',
-
 ## start emulator (name of the AVD is here 'Pixel_5_API_30')
 $ emulator -netdelay none -netspeed full -no-snapshot-load -avd Pixel_5_API_30
 
 ## run tests
-$ yarn test:android:local
+$ yarn test:android:local:appcenter
 ```
 2) Start the app in developer mode with Metro. To avoid error messages, the `index.js` should be replaced
 ```bash
 ## remove error messages in the app
 $ ./e2e/scripts/removeLogsFromDevApp.sh
 
-## update the absolute path in e2e/conf/android.conf.local.ts
-'appium:app': '/Users/.../mittatb-app/android/app/build/outputs/apk/debug/app-debug.apk',
+## Set dev mode
+$ yarn setup dev atb
+
+## Start app locally
+$ yarn android
 
 ## start emulator (name of the AVD is here 'Pixel_5_API_30')
 $ emulator -netdelay none -netspeed full -no-snapshot-load -avd Pixel_5_API_30
 
 ## run tests
-yarn test:android:local
+yarn test:android:local:dev
 ```
 
 ## Errors and reporting

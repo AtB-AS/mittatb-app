@@ -150,13 +150,13 @@ export const config: WebdriverIO.Config = {
     reporters: [
         'spec',
         ['junit', {
-            outputDir: './results',
+            outputDir: './e2e/results',
             outputFileFormat: function(opts) {
                 return `results-junit-${opts.capabilities['platformName']}-${opts.cid}.xml`
             }
         }],
         ['mochawesome', {
-            outputDir: './results',
+            outputDir: './e2e/results',
             outputFileFormat: function(opts) {
                 return `results-mochawesome-${opts.capabilities['platformName']}-${opts.cid}.json`
             }

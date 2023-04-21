@@ -16,7 +16,7 @@ describe('Onboarding', () => {
     try {
       await ElementHelper.waitForElement('id', 'nextButtonOnboardingWelcome');
       await OnboardingPage.nextButtonOnboardingWelcome.click();
-      await AppHelper.pause(10000);
+      await AppHelper.pause(10000, true);
 
       await ElementHelper.waitForElement('id', 'nextButtonIntercomOnboarding');
       await OnboardingPage.nextButtonIntercomOnboarding.click();

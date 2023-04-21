@@ -4,7 +4,7 @@ import {Leg} from '@atb/api/types/trips';
 import {Flattened, flattenObject} from '@atb/utils/object';
 import {onlyUniques, onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {compareVersion} from '@atb/utils/compare-version';
-import {expectNumber, expectStringEqual} from '../e2e/utils/jestAssertions';
+import {expectNumber, expectStringEqual} from '../e2e/test/utils/jestAssertions';
 import {
   hasShortWaitTime,
   TIME_LIMIT_IN_MINUTES,

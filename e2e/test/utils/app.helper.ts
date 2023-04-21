@@ -1,6 +1,6 @@
 import ElementHelper from './element.helper';
 
-const screenshotsFolder: string = './screenshots';
+const screenshotsFolder: string = './e2e/screenshots';
 
 /**
  * Different helper methods related to the app in general
