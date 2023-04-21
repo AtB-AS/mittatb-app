@@ -19,9 +19,11 @@ export const useServiceDisruptionIcon = (
   const {findGlobalMessages} = useGlobalMessagesState();
   const {open: openBottomSheet} = useBottomSheet();
   const {service_disruption_url} = useRemoteConfig();
-  //const hasValidServiceDisruptionUrl = !!service_disruption_url;
-
+  const hasValidServiceDisruptionUrl = !!service_disruption_url;
   const now = useNow(2500);
+
+  if (!hasValidServiceDisruptionUrl) return undefined;
+
   const globalMessages = findGlobalMessages()
     .filter((a) => a.context.some((cont) => cont.includes('app')))
     .filter((gm) => isWithinTimeRange(gm, now));
