@@ -42,7 +42,7 @@ jobs:
         run: npm install -g appium
       - name: Install E2E tests
         run: yarn install
-        working-directory: e2e
+        # working-directory: e2e
       - name: tsc
         run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
         working-directory: e2e
