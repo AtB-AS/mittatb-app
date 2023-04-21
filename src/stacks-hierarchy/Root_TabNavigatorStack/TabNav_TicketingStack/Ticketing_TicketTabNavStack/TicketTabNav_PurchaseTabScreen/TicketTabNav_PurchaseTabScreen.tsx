@@ -2,7 +2,7 @@ import {useAuthState} from '@atb/auth';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {AnonymousPurchaseWarning} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/AnonymousPurchaseWarning';
 import {FareProducts} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProducts';
-import {useTheme} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {RecentFareContracts} from './Components/RecentFareContracts/RecentFareContracts';
@@ -26,6 +26,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {recentFareContracts} = useRecentFareContracts();
   const hasRecentFareContracts =
     enable_recent_tickets && !!recentFareContracts.length;
+  const styles = useStyles();
 
   const showTipsAndInformation = useTipsAndInformationEnabled();
   const showTicketAssistant = useTicketingAssistantEnabled();
@@ -84,11 +85,13 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         <RecentFareContracts onSelect={onFareContractSelect} />
       )}
       <View
-        style={{
-          backgroundColor: hasRecentFareContracts
-            ? theme.static.background.background_2.background
-            : undefined,
-        }}
+        style={
+          styles.container && {
+            backgroundColor: hasRecentFareContracts
+              ? theme.static.background.background_2.background
+              : undefined,
+          }
+        }
       >
         {authenticationType !== 'phone' && (
           <AnonymousPurchaseWarning
@@ -119,3 +122,9 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     </ScrollView>
   ) : null;
 };
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    paddingBottom: theme.spacings.medium,
+  },
+}));

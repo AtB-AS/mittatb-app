@@ -64,12 +64,12 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
           component={TicketAssistant_WelcomeScreen}
         />
         <Tab.Screen
-          name="TicketAssistant_FrequencyScreen"
-          component={TicketAssistant_FrequencyScreen}
-        />
-        <Tab.Screen
           name="TicketAssistant_CategoryPickerScreen"
           component={TicketAssistant_CategoryPickerScreen}
+        />
+        <Tab.Screen
+          name="TicketAssistant_FrequencyScreen"
+          component={TicketAssistant_FrequencyScreen}
         />
         <Tab.Screen
           name="TicketAssistant_DurationScreen"

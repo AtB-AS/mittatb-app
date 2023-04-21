@@ -67,9 +67,6 @@ export const FareProducts = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    paddingBottom: theme.spacings.medium,
-  },
   heading: {
     margin: theme.spacings.medium,
     marginLeft: theme.spacings.xLarge,

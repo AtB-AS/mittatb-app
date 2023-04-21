@@ -27,14 +27,11 @@ const TicketAssistantTexts = {
     title: _('Hvem er du?', 'Who are you?'),
     chooseButton: _('Velg', 'Choose'),
     chosen: _('Valgt', 'Chosen'),
-    a11yChooseButtonHint: _(
-      'Aktiver for å velge kategori og gå videre',
-      'Activate to choose category and go to next page',
-    ),
-    a11yHint: _(
-      'Aktiver for å se mer informasjon om kategorien',
-      'Activate to see more information about the category',
-    ),
+    a11yChooseButtonHint: (category: {value: string}) =>
+      _(
+        `Aktiver for å velge ${category.value} som kategori, og gå videre`,
+        `Activate to choose ${category.value} as category and navigate to next page`,
+      ),
   },
   frequency: {
     title: _(
@@ -56,6 +53,10 @@ const TicketAssistantTexts = {
         `Du reiser ${amount.value} ganger i uka`,
         `You travel ${amount.value} times a week`,
       ),
+    resultMoreThan14: _(
+      'Du reiser 14 ganger eller mer i uka',
+      'You travel 14 times or more per week',
+    ),
     mainButton: _('Neste', 'Next'),
     a11yNextPageHint: _(
       'Aktiver for å gå til neste side',
@@ -186,13 +187,14 @@ const TicketAssistantTexts = {
         `You have selected ${data.ticket}. \n Traveller: ${data.traveller}. \n Zone: ${data.fromTariffZone} - ${data.toTariffZone}. \n Price: ${data.price}. \n Price per trip: ${data.pricePerTrip}.`,
       ),
     noticeLabel1: _(
-      '*Billetten dekker ikke hele perioden, ta billettveilederen på nytt for å få en ny anbefaling når denne billetten går ut.',
-      '*The ticket does not cover the entire period, take the ticket assistant again to get a new recommendation when this ticket expires.',
+      'Billetten dekker ikke hele perioden, ta billettveilederen på nytt for å få en ny anbefaling når denne billetten går ut.',
+      'The ticket does not cover the entire period, take the ticket assistant again to get a new recommendation when this ticket expires.',
     ),
     noticeLabel2: _(
       'Siden du ikke reiser så ofte, anbefaler vi deg å kjøpe enkeltbilletter.',
       'Since you do not travel so often, we recommend that you buy single tickets.',
     ),
+    feedback: _('Gi tilbakemelding', 'Give feedback'),
   },
 };
 export default TicketAssistantTexts;
