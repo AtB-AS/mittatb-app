@@ -53,10 +53,11 @@ const TicketAssistantTexts = {
         `Du reiser ${amount.value} ganger i uka`,
         `You travel ${amount.value} times a week`,
       ),
-    resultMoreThan14: _(
-      'Du reiser 14 ganger eller mer i uka',
-      'You travel 14 times or more per week',
-    ),
+    resultMoreThanMax: (max: {value: number}) =>
+      _(
+        `Du reiser ${max} ganger eller mer i uka`,
+        `You travel ${max} times or more per week`,
+      ),
     mainButton: _('Neste', 'Next'),
     a11yNextPageHint: _(
       'Aktiver for å gå til neste side',
@@ -137,11 +138,6 @@ const TicketAssistantTexts = {
         `${data.frequency} turer i uka fram til ${data.date}`,
         `${data.frequency} trips per week until ${data.date}`,
       ),
-    descriptionA11yLabel: (data: {frequency: number; date: string}) =>
-      _(
-        `${data.frequency} turer i uka fram til ${data.date}`,
-        `${data.frequency} trips per week until ${data.date}`,
-      ),
     savings: (data: {
       totalSavings: number;
       perTripSavings: string;
@@ -177,14 +173,13 @@ const TicketAssistantTexts = {
     ticketSummaryA11yLabel: (data: {
       ticket: string;
       traveller: string;
-      fromTariffZone: string;
-      toTariffZone: string;
+      tariffZones: string;
       price: string;
       pricePerTrip: string;
     }) =>
       _(
-        `Du har valgt ${data.ticket}. \n Reisende: ${data.traveller}. \n Sone: ${data.fromTariffZone} - ${data.toTariffZone}. \n Pris: ${data.price}. \n Pris per tur: ${data.pricePerTrip}.`,
-        `You have selected ${data.ticket}. \n Traveller: ${data.traveller}. \n Zone: ${data.fromTariffZone} - ${data.toTariffZone}. \n Price: ${data.price}. \n Price per trip: ${data.pricePerTrip}.`,
+        `Du har valgt ${data.ticket}. \n Reisende: ${data.traveller}. \n Soner: ${data.tariffZones}. \n Pris: ${data.price}kr. \n Pris per tur: ${data.pricePerTrip}kr.`,
+        `You have selected ${data.ticket}. \n Traveller: ${data.traveller}. \n Zones: ${data.tariffZones}. \n Price: ${data.price}. \n Price per trip: ${data.pricePerTrip}.`,
       ),
     noticeLabel1: _(
       'Billetten dekker ikke hele perioden, ta billettveilederen på nytt for å få en ny anbefaling når denne billetten går ut.',

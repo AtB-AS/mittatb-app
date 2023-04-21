@@ -17,29 +17,20 @@ export function handleRecommendedTicketResponse(
   preassignedFareProducts: PreassignedFareProduct[],
   fareProductTypeConfigs: FareProductTypeConfig[],
 ) {
-  console.log('HandleData', response);
   const sellableProductsInApp = preassignedFareProducts.filter(
     productIsSellableInApp,
   );
   // TariffZones
-  const fromTariffZone = getTariffZone(
-    tariffZones,
-    response.zones[0],
-  ) as TariffZoneWithMetadata;
-  const toTariffZone = getTariffZone(
-    tariffZones,
-    response.zones[1],
-  ) as TariffZoneWithMetadata;
-  // Traveller
-  const traveller = getUserProfile(
-    userProfiles,
-    response.tickets[0].traveller.id,
+  const tariffZonesWithMetaData = response.zones.map(
+    (zone) => getTariffZone(tariffZones, zone) as TariffZoneWithMetadata,
   );
 
   const travellerWithCount: UserProfileWithCount | undefined = {
-    ...(traveller as UserProfile),
+    ...(getUserProfile(userProfiles, response.tickets?.[0]?.traveller?.id) ??
+      {}),
     count: 1,
   };
+
   let ticketDetails: PurchaseTicketDetails[] = [];
 
   response.tickets.forEach((ticket) => {
@@ -55,8 +46,9 @@ export function handleRecommendedTicketResponse(
     };
     ticketDetails.push(ticketDetail);
   });
+
   let purchaseDetailsData: PurchaseDetails = {
-    tariffZones: [fromTariffZone, toTariffZone],
+    tariffZones: tariffZonesWithMetaData,
     userProfileWithCount: [travellerWithCount],
     purchaseTicketDetails: ticketDetails,
   };

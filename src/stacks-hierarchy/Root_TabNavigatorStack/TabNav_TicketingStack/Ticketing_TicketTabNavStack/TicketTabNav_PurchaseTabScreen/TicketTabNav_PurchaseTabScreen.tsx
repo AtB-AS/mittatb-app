@@ -85,13 +85,14 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         <RecentFareContracts onSelect={onFareContractSelect} />
       )}
       <View
-        style={
-          styles.container && {
+        style={[
+          styles.container,
+          {
             backgroundColor: hasRecentFareContracts
               ? theme.static.background.background_2.background
               : undefined,
-          }
-        }
+          },
+        ]}
       >
         {authenticationType !== 'phone' && (
           <AnonymousPurchaseWarning
@@ -125,6 +126,6 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    paddingBottom: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
   },
 }));
