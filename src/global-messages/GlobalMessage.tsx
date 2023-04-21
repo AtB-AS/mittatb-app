@@ -9,6 +9,7 @@ import {
 } from '@atb/global-messages/types';
 import {getTextForLanguage} from '@atb/translations';
 import {useNow} from '@atb/utils/use-now';
+import {isWithinTimeRange} from '@atb/global-messages/is-within-time-range';
 
 type Props = {
   globalMessageContext?: GlobalMessageContextType;
@@ -42,14 +43,6 @@ const GlobalMessage = ({
   const dismissGlobalMessage = (globalMessage: GlobalMessageType) => {
     globalMessage.isDismissable && addDismissedGlobalMessages(globalMessage);
   };
-
-  const isWithinTimeRange = (globalMessage: GlobalMessageType) => {
-    const startDate = globalMessage.startDate ?? 0;
-    const endDate = globalMessage.endDate ?? 8640000000000000;
-
-    return startDate <= now && endDate >= now;
-  };
-
   const isNotADismissedMessage = (globalMessage: GlobalMessageType) =>
     !globalMessage.isDismissable ||
     dismissedGlobalMessages.map((dga) => dga.id).indexOf(globalMessage.id) < 0;
@@ -60,7 +53,7 @@ const GlobalMessage = ({
         .filter((gm: GlobalMessageType) => {
           return showAllMessages || isNotADismissedMessage(gm);
         })
-        .filter(isWithinTimeRange)
+        .filter((gm) => isWithinTimeRange(gm, now))
         .map((globalMessage: GlobalMessageType) => {
           const message = getTextForLanguage(globalMessage.body, language);
           if (!message) return null;

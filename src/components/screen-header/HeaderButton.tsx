@@ -7,12 +7,10 @@ import {AccessibilityProps, TouchableOpacity, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {StaticColor, TextColor} from '@atb/theme/colors';
-import ServiceDisruption from '@atb/assets/svg/mono-icons/status/ServiceDisruption';
 import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
 import {useTheme} from '@atb/theme';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
-import {GlobalMessageType, useGlobalMessagesState} from '@atb/global-messages';
-import {useNow} from '@atb/utils/use-now';
+import {useServiceDisruptionIcon} from '@atb/service-disruptions/use-service-disruption-icon';
 
 export type ButtonModes =
   | 'back'
@@ -112,18 +110,11 @@ const useHeaderButton = (
 ): IconButtonProps | undefined => {
   const navigation = useNavigation();
   const chatIcon = useChatIcon(buttonProps.color, buttonProps.testID);
-  const {findGlobalMessages} = useGlobalMessagesState();
+  const serviceDisruptionIcon = useServiceDisruptionIcon(
+    buttonProps.color,
+    buttonProps.testID,
+  );
 
-  const now = useNow(2500);
-  const isWithinTimeRange = (globalMessage: GlobalMessageType) => {
-    const startDate = globalMessage.startDate ?? 0;
-    const endDate = globalMessage.endDate ?? 8640000000000000;
-
-    return startDate <= now && endDate >= now;
-  };
-  const globalMessages = findGlobalMessages('app-assistant')
-    .filter((a) => a.context.some((cont) => cont.includes('app')))
-    .filter(isWithinTimeRange);
   const {t} = useTranslation();
   switch (buttonProps.type) {
     case 'back':
@@ -147,26 +138,7 @@ const useHeaderButton = (
       };
     }
     case 'status-disruption': {
-      const {type, color, onPress, ...accessibilityProps} = buttonProps;
-      return {
-        children: (
-          <ThemeIcon
-            colorType={color}
-            svg={ServiceDisruption}
-            notification={
-              globalMessages[0]
-                ? {
-                    color: globalMessages[0].type,
-                  }
-                : undefined
-            }
-          />
-        ),
-        onPress: onPress,
-        testID: 'serviceDisruptionButton',
-        accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
-        ...accessibilityProps,
-      };
+      return serviceDisruptionIcon;
     }
     case 'chat':
       return chatIcon;

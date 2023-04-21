@@ -20,7 +20,6 @@ import {
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SearchForLocations} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
 import {useDoOnceWhen} from '@atb/stacks-hierarchy/utils';
-import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {
@@ -55,7 +54,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
   const {theme} = useTheme();
   const {t} = useTranslation();
   const {enable_ticketing} = useRemoteConfig();
-  const {leftButton: serviceDisruptionButton} = useServiceDisruptionSheet();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
 
   const {
@@ -178,7 +176,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
       <FullScreenHeader
         title={t(DashboardTexts.header.title)}
         rightButton={{type: 'chat'}}
-        leftButton={serviceDisruptionButton}
+        leftButton={{type: 'status-disruption'}}
       />
 
       <View style={style.backdrop}>
