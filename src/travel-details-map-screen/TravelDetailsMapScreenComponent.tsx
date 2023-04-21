@@ -31,6 +31,9 @@ type Props = TravelDetailsMapScreenParams & {
   onPressBack: () => void;
 };
 
+const FOLLOW_ZOOM_LEVEL = 14.5;
+const FOLLOW_ANIMATION_DURATION = 500;
+
 export const TravelDetailsMapScreenComponent = ({
   legs,
   initialVehiclePosition,
@@ -72,8 +75,7 @@ export const TravelDetailsMapScreenComponent = ({
           flyToLocation({
             coordinates: vehicle.location,
             mapCameraRef,
-            zoomLevel: 13.5,
-            animationDuration: 400,
+            animationDuration: FOLLOW_ANIMATION_DURATION,
           });
         }
       }
@@ -94,7 +96,7 @@ export const TravelDetailsMapScreenComponent = ({
           ref={mapCameraRef}
           bounds={bounds}
           {...MapCameraConfig}
-          zoomLevel={13.5}
+          zoomLevel={FOLLOW_ZOOM_LEVEL}
           centerCoordinate={centerPosition}
           animationDuration={0}
         />
@@ -171,7 +173,7 @@ const LiveVehicle = ({vehicles, setShouldTrack}: VehicleIconProps) => {
           iconImage: {uri: 'ClusterCount'},
           iconSize: 2,
           iconAllowOverlap: true,
-          iconTranslate: [13, -13],
+          iconAnchor: 'center',
         }}
       />
       <MapboxGL.SymbolLayer
@@ -182,7 +184,6 @@ const LiveVehicle = ({vehicles, setShouldTrack}: VehicleIconProps) => {
           textField: 'BUS',
           textColor: 'black',
           textSize: 11,
-          textTranslate: [13, -13],
           textAnchor: 'center',
           textAllowOverlap: true,
         }}
