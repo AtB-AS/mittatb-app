@@ -14,12 +14,14 @@ import {
   NotificationIndicator,
   NotificationIndicatorProps,
 } from '@atb/components/theme-icon/NotificationIndicator';
+import {LoadingSpinner} from '@atb/components/loading';
 
 export type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
   colorType?: IconColor;
   size?: keyof Theme['icon']['size'];
   notification?: Omit<NotificationIndicatorProps, 'iconSize'>;
+  loading?: boolean;
 } & SvgProps;
 
 export const ThemeIcon = ({
@@ -29,6 +31,7 @@ export const ThemeIcon = ({
   fill,
   notification,
   style,
+  loading,
   ...props
 }: ThemeIconProps): JSX.Element => {
   const {theme, themeName} = useTheme();
@@ -47,9 +50,15 @@ export const ThemeIcon = ({
 
   return (
     <View style={style}>
-      {svg(settings)}
-      {notification && (
-        <NotificationIndicator {...notification} iconSize={size} />
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          {svg(settings)}
+          {notification && (
+            <NotificationIndicator {...notification} iconSize={size} />
+          )}
+        </>
       )}
     </View>
   );
