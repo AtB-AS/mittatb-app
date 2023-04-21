@@ -28,7 +28,7 @@ export const useChatIcon = (
         testID={testID}
         colorType={color}
         svg={Chat}
-        notification={unreadCount > 0 ? {color: 'error'} : undefined}
+        notification={unreadCount > 0 ? {color: 'valid'} : undefined}
       />
     ),
     accessibilityHint: t(ScreenHeaderTexts.headerButton.chat.a11yHint),
