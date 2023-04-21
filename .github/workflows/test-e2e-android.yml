@@ -57,19 +57,12 @@ jobs:
           profile: pixel_5
           emulator-build: 9536276
           disable-spellchecker: true
-          working-directory: e2e
+          # working-directory: e2e
           script: yarn test:android
-          pre-emulator-launch-script: ./scripts/restart-adb.sh
+          # pre-emulator-launch-script: ./scripts/restart-adb.sh
+          pre-emulator-launch-script: ./e2e/scripts/restart-adb.sh
         env:
           APP_PATH: ${{ github.workspace }}
-      #- name: Upload apk
-      #  if: always()
-      #  uses: actions/upload-artifact@v3
-      #  with:
-      #    name: apk
-      #    path: |
-      #      app-staging.apk
-      #    retention-days: 1
       - name: Upload screenshots
         if: failure()
         uses: actions/upload-artifact@v3
