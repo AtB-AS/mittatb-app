@@ -1,9 +1,7 @@
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {IconButtonProps} from '@atb/components/screen-header';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {StyleSheet} from '@atb/theme';
 import React from 'react';
-import {View} from 'react-native';
 import {StaticColor, TextColor} from '@atb/theme/colors';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {ContactSheet} from '@atb/chat/ContactSheet';
@@ -15,7 +13,6 @@ export const useChatIcon = (
   testID?: string,
 ): IconButtonProps | undefined => {
   const unreadCount = useChatUnreadCount();
-  const styles = useStyles();
   const {open: openBottomSheet} = useBottomSheet();
   const {t} = useTranslation();
 
@@ -27,31 +24,14 @@ export const useChatIcon = (
 
   return {
     children: (
-      <View style={styles.chatContainer} testID={testID}>
-        <ThemeIcon
-          colorType={color}
-          svg={Chat}
-          notification={
-            unreadCount > 0
-              ? {
-                  color: 'error',
-                }
-              : undefined
-          }
-        />
-      </View>
+      <ThemeIcon
+        testID={testID}
+        colorType={color}
+        svg={Chat}
+        notification={unreadCount > 0 ? {color: 'error'} : undefined}
+      />
     ),
     accessibilityHint: t(ScreenHeaderTexts.headerButton.chat.a11yHint),
     onPress: () => openContactSheet(),
   };
 };
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  chatContainer: {
-    width: 36,
-    height: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: theme.border.radius.regular,
-  },
-}));
