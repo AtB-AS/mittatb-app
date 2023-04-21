@@ -13,6 +13,7 @@ import {Linking, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {GlobalMessage} from '@atb/global-messages';
 import {StyleSheet} from '@atb/theme';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 
 type Props = {
   close: () => void;
@@ -54,6 +55,7 @@ export const ServiceDisruptionSheet = forwardRef<View, Props>(
             mode="secondary"
             text={t(ServiceDisruptionsTexts.button.text)}
             accessibilityHint={t(ServiceDisruptionsTexts.button.a11yHint)}
+            rightIcon={{svg: ExternalLink}}
             onPress={() => {
               Linking.openURL(serviceDisruptionUrl);
               close();
