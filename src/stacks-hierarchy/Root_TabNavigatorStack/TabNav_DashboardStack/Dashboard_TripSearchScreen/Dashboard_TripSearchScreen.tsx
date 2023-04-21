@@ -592,7 +592,7 @@ export const useShouldShowTravelSearchFilterOnboarding = () => {
   return shouldShow;
 };
 
-export const useStyle = StyleSheet.createThemeHook((theme) => ({
+const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.static.background[ResultsBackgroundColor].background,
     flex: 1,
