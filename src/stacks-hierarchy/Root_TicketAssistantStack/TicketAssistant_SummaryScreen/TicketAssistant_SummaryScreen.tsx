@@ -114,17 +114,17 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                 />
               </>
             )}
-            {(doesTicketCoverEntirePeriod || true) && (
+            {doesTicketCoverEntirePeriod && (
               <View style={styles.notice}>
                 <ThemeIcon style={styles.icon} svg={SvgInfo} />
                 <ThemeText
                   color={themeColor}
                   type={'body__secondary'}
                   accessibilityLabel={t(
-                    TicketAssistantTexts.summary.a11yNoticeLabel,
+                    TicketAssistantTexts.summary.a11yNoticeLabel2,
                   )}
                 >
-                  {t(TicketAssistantTexts.summary.noticeLabel1)}
+                  {t(TicketAssistantTexts.summary.noticeLabel2)}
                 </ThemeText>
               </View>
             )}
