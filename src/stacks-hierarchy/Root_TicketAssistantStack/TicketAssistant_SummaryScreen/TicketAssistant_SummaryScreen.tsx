@@ -149,6 +149,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                 <ThemeText
                   style={styles.noticeText}
                   type={'body__tertiary'}
+                  color={themeColor}
                   accessibilityLabel={t(
                     TicketAssistantTexts.summary.a11yNoticeLabel2,
                   )}
@@ -218,6 +219,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.large,
   },
   noticeText: {
+    textAlign: 'center',
     flexShrink: 1,
   },
   feedback: {
