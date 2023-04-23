@@ -191,6 +191,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   slider: {
     width: '100%',
     alignSelf: 'center',
+    marginVertical: theme.spacings.medium,
   },
   description: {
     textAlign: 'center',
