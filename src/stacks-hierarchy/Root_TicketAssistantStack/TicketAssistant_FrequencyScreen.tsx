@@ -62,7 +62,7 @@ export const TicketAssistant_FrequencyScreen = ({
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.mainView}>
           <ThemeText
-            type={'body__primary--jumbo--bold'}
+            type={'heading--big'}
             style={styles.header}
             color={themeColor}
             accessibilityLabel={t(

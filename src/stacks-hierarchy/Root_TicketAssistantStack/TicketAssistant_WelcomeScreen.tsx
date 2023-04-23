@@ -26,7 +26,7 @@ export const TicketAssistant_WelcomeScreen = ({
     >
       <View style={styles.mainView}>
         <ThemeText
-          type="body__primary--jumbo--bold"
+          type="heading--big"
           style={styles.header}
           color={themeColor}
           accessibilityLabel={t(TicketAssistantTexts.welcome.titleA11yLabel)}

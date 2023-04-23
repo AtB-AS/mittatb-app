@@ -57,7 +57,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
         contentContainerStyle={styles.contentContainer}
       >
         <ThemeText
-          type={'body__primary--jumbo--bold'}
+          type={'heading--big'}
           style={styles.header}
           color={themeColor}
           accessibilityLabel={t(TicketAssistantTexts.categoryPicker.title)}
