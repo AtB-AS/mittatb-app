@@ -60,5 +60,15 @@ export const useTicketAssistantDataFetch = (navigation: any) => {
     return () => {
       unsubscribe();
     };
-  }, [data, hasDataChanged]);
+  }, [
+    data,
+    hasDataChanged,
+    response,
+    setResponse,
+    data,
+    setLoading,
+    setPurchaseDetails,
+    hasDataChanged,
+    setHasDataChanged,
+  ]);
 };
