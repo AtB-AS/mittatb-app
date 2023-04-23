@@ -121,7 +121,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                   <RNDateTimePicker
                     value={
                       usedSlider
-                        ? parseISO(getDateFromSlider(data.duration))
+                        ? parseISO(getDateFromSlider(sliderValue))
                         : parseISO(date)
                     }
                     mode="date"
