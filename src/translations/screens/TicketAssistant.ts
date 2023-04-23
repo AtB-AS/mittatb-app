@@ -185,14 +185,18 @@ const TicketAssistantTexts = {
         `You have selected ${data.ticket}. \n Traveller: ${data.traveller}. \n Zones: ${data.tariffZones}. \n Price: ${data.price}. \n Price per trip: ${data.pricePerTrip}.`,
       ),
     noticeLabel1: _(
-      'NB: denne veilederen fungerer kunn for reise med buss og trikk, ikke båt. ',
+      'NB: denne veilederen fungerer kun for reise med buss og trikk, ikke båt. ',
       'NB: this guide only works for travel by bus and tram, not boat.',
     ),
     a11yNoticeLabel: _(
-      'NB: denne veilederen fungerer kunn for reise med buss og trikk, ikke båt. ',
+      'NB: denne veilederen fungerer kun for reise med buss og trikk, ikke båt. ',
       'NB: this guide only works for travel by bus and tram, not boat.',
     ),
     noticeLabel2: _(
+      'Siden du ikke reiser så ofte, anbefaler vi deg å kjøpe enkeltbilletter.',
+      'Since you do not travel so often, we recommend that you buy single tickets.',
+    ),
+    a11yNoticeLabel2: _(
       'Siden du ikke reiser så ofte, anbefaler vi deg å kjøpe enkeltbilletter.',
       'Since you do not travel so often, we recommend that you buy single tickets.',
     ),
