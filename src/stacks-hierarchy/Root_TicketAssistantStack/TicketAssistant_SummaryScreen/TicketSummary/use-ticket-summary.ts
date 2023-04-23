@@ -5,7 +5,6 @@ import {
   getIndexOfLongestDurationTicket,
   perTripSavings,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
-import {useTextForLanguage} from '@atb/translations/utils';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 
@@ -18,9 +17,12 @@ export const useTicketSummary = () => {
   const ticket = tickets[index];
   const recommendedTicketTypeConfig =
     purchaseDetails?.purchaseTicketDetails[index]?.fareProductTypeConfig;
+  const preassignedFareProduct =
+    purchaseDetails?.purchaseTicketDetails[index]?.preassignedFareProduct;
   const traveller = purchaseDetails?.userProfileWithCount[0];
 
-  const ticketName = useTextForLanguage(recommendedTicketTypeConfig.name) ?? '';
+  const ticketName =
+    getReferenceDataName(preassignedFareProduct, language) ?? '';
   const travellerName = getReferenceDataName(traveller, language);
   const [fromTariffZone, toTariffZone] = purchaseDetails?.tariffZones ?? [];
 
