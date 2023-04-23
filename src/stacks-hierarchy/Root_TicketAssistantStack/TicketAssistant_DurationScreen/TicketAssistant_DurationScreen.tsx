@@ -63,6 +63,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   function updateDuration(value: number, fromPicker?: boolean) {
     const newData = {...data, duration: fromPicker ? value : durations[value]};
     updateData(newData);
+    setSliderValue(newData.duration);
   }
 
   const duration = usedSlider ? sliderValue : data.duration;
