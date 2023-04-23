@@ -84,7 +84,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
                   expandContent={
                     <View>
                       <ThemeText
-                        type={'body__tertiary'}
+                        type={'body__secondary'}
                         style={styles.expandedContent}
                         isMarkdown={true}
                       >

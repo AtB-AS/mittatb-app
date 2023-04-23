@@ -17,7 +17,6 @@ export const useTicketAssistantDataFetch = (navigation: any) => {
     response,
     setResponse,
     data,
-    setLoading,
     setPurchaseDetails,
     hasDataChanged,
     setHasDataChanged,
@@ -26,7 +25,6 @@ export const useTicketAssistantDataFetch = (navigation: any) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       setCrashed(false);
       await getRecommendedTicket(data)
         .then((r) => {
@@ -41,7 +39,6 @@ export const useTicketAssistantDataFetch = (navigation: any) => {
           console.log('Error fetching recommended ticket');
           setCrashed(true);
         });
-      setLoading(false);
     };
 
     const unsubscribe = navigation.addListener('focus', () => {
@@ -75,7 +72,6 @@ export const useTicketAssistantDataFetch = (navigation: any) => {
     response,
     setResponse,
     data,
-    setLoading,
     setPurchaseDetails,
     hasDataChanged,
     setHasDataChanged,

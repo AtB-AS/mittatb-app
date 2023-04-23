@@ -31,7 +31,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     ));
   };
 
-  let {response, data, loading, purchaseDetails, crashed} =
+  let {response, data, hasDataChanged, purchaseDetails, crashed} =
     useTicketAssistantState();
 
   useTicketAssistantDataFetch(navigation);
@@ -80,7 +80,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       <View style={styles.backdrop}>
         <DashboardBackground width={'100%'} height={'100%'} />
       </View>
-      {loading ? (
+      {hasDataChanged ? (
         // Gif here
         <ThemeText
           type={'body__primary--jumbo--bold'}
@@ -152,6 +152,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                 <ThemeText
                   style={styles.noticeText}
                   type={'body__tertiary'}
+                  color={themeColor}
                   accessibilityLabel={t(
                     TicketAssistantTexts.summary.a11yNoticeLabel2,
                   )}
@@ -203,8 +204,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   description: {
     textAlign: 'center',
     paddingHorizontal: theme.spacings.xLarge,
-    paddingTop: theme.spacings.small,
-    paddingBottom: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
+    marginBottom: theme.spacings.large,
   },
   backdrop: {
     position: 'absolute',
@@ -221,6 +222,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.large,
   },
   noticeText: {
+    textAlign: 'center',
     flexShrink: 1,
   },
   feedback: {

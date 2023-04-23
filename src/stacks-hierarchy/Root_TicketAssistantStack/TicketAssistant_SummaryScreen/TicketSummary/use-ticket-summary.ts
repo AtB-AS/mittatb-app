@@ -37,8 +37,8 @@ export const useTicketSummary = () => {
 
   const ticketPriceString = `${ticket.price.toFixed(2)}kr`;
   const perTripPriceString = `${(ticket.duration
-    ? ticket.price
-    : ticket.price / ((ticket.duration / 7) * frequency)
+    ? ticket.price / ((ticket.duration / 7) * frequency)
+    : ticket.price
   ).toFixed(2)}kr`;
 
   const transportModes = recommendedTicketTypeConfig.transportModes;
