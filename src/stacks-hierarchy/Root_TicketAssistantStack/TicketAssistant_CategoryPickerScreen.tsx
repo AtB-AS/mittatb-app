@@ -170,7 +170,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     height: 250,
     left: 0,
     right: 0,
-    bottom: 250,
+    bottom: 45,
     padding: 0,
     margin: 0,
   },
