@@ -157,7 +157,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   savingsText: {
     textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingVertical: theme.spacings.xLarge,
+    paddingVertical: theme.spacings.large,
   },
 }));

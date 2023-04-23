@@ -14,6 +14,8 @@ import {getIndexOfLongestDurationTicket} from '@atb/stacks-hierarchy/Root_Ticket
 import {useTicketAssistantDataFetch} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/fetch-data';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {ContactSheet} from '@atb/chat/ContactSheet';
 import {LoadingSpinner} from '@atb/components/loading';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
@@ -21,6 +23,13 @@ type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
+  const {open: openBottomSheet} = useBottomSheet();
+
+  const openContactSheet = () => {
+    openBottomSheet((close, focusRef) => (
+      <ContactSheet close={close} ref={focusRef} />
+    ));
+  };
 
   let {response, data, loading, purchaseDetails} = useTicketAssistantState();
 
@@ -121,13 +130,13 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
               <View style={styles.notice}>
                 <ThemeIcon style={styles.icon} svg={SvgInfo} />
                 <ThemeText
-                  color={themeColor}
-                  type={'body__secondary'}
+                  style={styles.noticeText}
+                  type={'body__tertiary'}
                   accessibilityLabel={t(
                     TicketAssistantTexts.summary.a11yNoticeLabel2,
                   )}
                 >
-                  {t(TicketAssistantTexts.summary.noticeLabel2)}
+                  {t(TicketAssistantTexts.summary.noticeLabel1)}
                 </ThemeText>
               </View>
             )}
@@ -137,9 +146,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             interactiveColor="interactive_0"
             mode="secondary"
             text={t(TicketAssistantTexts.summary.feedback)}
-            onPress={() => {
-              //TODO
-            }}
+            onPress={() => openContactSheet()}
             rightIcon={{
               svg: SvgFeedback,
             }}
@@ -177,12 +184,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
     paddingHorizontal: theme.spacings.xLarge,
     paddingTop: theme.spacings.small,
-    paddingBottom: theme.spacings.xLarge,
-  },
-  savingsText: {
-    textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingVertical: theme.spacings.xLarge,
+    paddingBottom: theme.spacings.medium,
   },
   backdrop: {
     position: 'absolute',
@@ -194,13 +196,12 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     margin: 0,
   },
   notice: {
-    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    textAlign: 'left',
-    paddingTop: theme.spacings.large,
-    color: theme.static.status.info,
-    paddingHorizontal: theme.spacings.xLarge,
+    marginTop: theme.spacings.large,
+  },
+  noticeText: {
+    flexShrink: 1,
   },
   feedback: {
     marginTop: theme.spacings.large,
