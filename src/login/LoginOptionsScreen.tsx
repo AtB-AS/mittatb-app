@@ -29,7 +29,8 @@ const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 export type LoginOptionsRouteParams = {
   afterLogin:
     | AfterLoginParams<'Root_TabNavigatorStack'>
-    | AfterLoginParams<'Root_PurchaseOverviewScreen'>;
+    | AfterLoginParams<'Root_PurchaseOverviewScreen'>
+    | AfterLoginParams<'Root_TicketAssistantStack'>;
 };
 
 type LoginOptionsProps = LoginInAppScreenProps<'LoginOptionsScreen'>;

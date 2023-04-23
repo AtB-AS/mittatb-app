@@ -13,6 +13,7 @@ import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_
 import {ReserveOffer} from '@atb/ticketing';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {CardPaymentMethod} from '@atb/stacks-hierarchy/types';
+import {TicketAssistantStackParams} from './Root_TicketAssistantStack/navigation-types';
 
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
@@ -40,7 +41,7 @@ export type RootStackParamList = {
   NotFound: undefined;
   Root_OnboardingStack: undefined;
   Root_TipsAndInformation: undefined;
-  Root_TicketAssistantStack: undefined;
+  Root_TicketAssistantStack: NavigatorScreenParams<TicketAssistantStackParams>;
   Root_TabNavigatorStack: NavigatorScreenParams<TabNavigatorStackParams>;
   Root_LocationSearchByTextScreen: Root_LocationSearchByTextScreenParams;
   Root_LocationSearchByMapScreen: Root_LocationSearchByMapScreenParams;

@@ -3,6 +3,7 @@ import {CompositeScreenProps, NavigationProp} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {FareProductTypeConfig} from '@atb/configuration';
+import {TicketAssistantData} from './types';
 
 export type TicketAssistant_ZonePickerScreenParams = {
   fromTariffZone: TariffZoneWithMetadata;
@@ -19,7 +20,7 @@ export type TicketAssistantStackParams = {
   TicketAssistant_FrequencyScreen: undefined;
   TicketAssistant_DurationScreen: undefined;
   TicketAssistant_ZonePickerScreen: undefined;
-  TicketAssistant_SummaryScreen: undefined;
+  TicketAssistant_SummaryScreen: TicketAssistantData;
 };
 
 export type TicketAssistantStackRootProps =

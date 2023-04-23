@@ -17,6 +17,10 @@ import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {ContactSheet} from '@atb/chat/ContactSheet';
 import {LoadingSpinner} from '@atb/components/loading';
+import {FareProductTypeConfig} from '@atb-as/config-specs';
+import {useAuthState} from '@atb/auth';
+import {useFirestoreConfiguration} from '@atb/configuration';
+import {productIsSellableInApp} from '@atb/reference-data/utils';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -24,6 +28,9 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
+
+  const {fareProductTypeConfigs, preassignedFareProducts} =
+    useFirestoreConfiguration();
 
   const openContactSheet = () => {
     openBottomSheet((close, focusRef) => (
@@ -56,20 +63,54 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     response.tickets[index].duration < data.duration &&
     response.tickets[index].duration !== 0;
 
-  const onBuyButtonPress = () => {
-    navigation.navigate('Root_PurchaseConfirmationScreen', {
-      fareProductTypeConfig:
-        purchaseDetails?.purchaseTicketDetails[index].fareProductTypeConfig,
-      fromTariffZone: purchaseDetails?.tariffZones[0],
-      toTariffZone: purchaseDetails?.tariffZones[1],
-      userProfilesWithCount: purchaseDetails?.userProfileWithCount,
-      preassignedFareProduct:
-        purchaseDetails?.purchaseTicketDetails[index].preassignedFareProduct,
-      travelDate: undefined,
-      headerLeftButton: {type: 'back'},
-      mode: 'Ticket',
-    });
+  const {authenticationType} = useAuthState();
+
+  const onBuyButtonPress = (fareProductTypeConfig: FareProductTypeConfig) => {
+    if (
+      fareProductTypeConfig.configuration.requiresLogin &&
+      authenticationType !== 'phone'
+    ) {
+      navigation.navigate('LoginInApp', {
+        screen: 'LoginOnboardingInApp',
+        params: {
+          fareProductTypeConfig,
+          afterLogin: {
+            screen: 'Root_TicketAssistantStack',
+          },
+        },
+      });
+    } else {
+      navigation.navigate('Root_PurchaseConfirmationScreen', {
+        fareProductTypeConfig:
+          purchaseDetails?.purchaseTicketDetails[index].fareProductTypeConfig,
+        fromTariffZone: purchaseDetails?.tariffZones[0],
+        toTariffZone: purchaseDetails?.tariffZones[1],
+        userProfilesWithCount: purchaseDetails?.userProfileWithCount,
+        preassignedFareProduct:
+          purchaseDetails?.purchaseTicketDetails[index].preassignedFareProduct,
+        travelDate: undefined,
+        headerLeftButton: {type: 'back'},
+        mode: 'Ticket',
+      });
+    }
   };
+
+  const sellableProductsInApp = preassignedFareProducts.filter(
+    productIsSellableInApp,
+  );
+
+  const sellableFareProductTypeConfigs = fareProductTypeConfigs.filter(
+    (config) => sellableProductsInApp.some((p) => p.type === config.type),
+  );
+
+  const groupedConfigs = sellableFareProductTypeConfigs.reduce<
+    [FareProductTypeConfig, FareProductTypeConfig | undefined][]
+  >((grouped, current, index, arr) => {
+    if (index % 2 === 0) return [...grouped, [current, arr[index + 1]]];
+    return grouped;
+  }, []);
+  // Period ticket Config
+  const config = groupedConfigs[0][1];
 
   return (
     <ScrollView
@@ -115,15 +156,17 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             {purchaseDetails?.purchaseTicketDetails && (
               <>
                 <TicketSummary />
-                <Button
-                  interactiveColor="interactive_0"
-                  onPress={() => onBuyButtonPress()}
-                  text={t(TicketAssistantTexts.summary.buyButton)}
-                  testID="nextButton"
-                  accessibilityHint={t(
-                    TicketAssistantTexts.summary.a11yBuyButtonHint,
-                  )}
-                />
+                {config && (
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={() => onBuyButtonPress(config)}
+                    text={t(TicketAssistantTexts.summary.buyButton)}
+                    testID="nextButton"
+                    accessibilityHint={t(
+                      TicketAssistantTexts.summary.a11yBuyButtonHint,
+                    )}
+                  />
+                )}
               </>
             )}
             {doesTicketCoverEntirePeriod && (
