@@ -10,7 +10,6 @@ import {DashboardBackground} from '@atb/assets/svg/color/images';
 import SvgFeedback from '@atb/assets/svg/mono-icons/actions/Feedback';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary';
-import {MessageBox} from '@atb/components/message-box';
 import {getIndexOfLongestDurationTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
 import {useTicketAssistantDataFetch} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/fetch-data';
 
@@ -115,10 +114,16 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             )}
             {doesTicketCoverEntirePeriod && (
               <View style={styles.notice}>
-                <MessageBox
-                  type="info"
-                  message={t(TicketAssistantTexts.summary.noticeLabel1)}
-                />
+                <ThemeText
+                  color={themeColor}
+                  type={'body__secondary'}
+                  style={styles.noticeText}
+                  accessibilityLabel={t(
+                    TicketAssistantTexts.summary.a11yNoticeLabel,
+                  )}
+                >
+                  {t(TicketAssistantTexts.summary.noticeLabel1)}
+                </ThemeText>
               </View>
             )}
           </View>
@@ -186,6 +191,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   notice: {
     textAlign: 'center',
     paddingTop: theme.spacings.large,
+    color: theme.static.status.info,
+  },
+  noticeText: {
+    textAlign: 'left',
   },
   feedback: {
     marginTop: theme.spacings.large,
