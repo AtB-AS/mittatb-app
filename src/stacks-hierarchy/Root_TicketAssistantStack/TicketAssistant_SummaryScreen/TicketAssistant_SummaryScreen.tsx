@@ -1,4 +1,4 @@
-import {ScrollView, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
@@ -16,7 +16,6 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {ContactSheet} from '@atb/chat/ContactSheet';
-import {LoadingSpinner} from '@atb/components/loading';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -81,17 +80,9 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
         <DashboardBackground width={'100%'} height={'100%'} />
       </View>
       {hasDataChanged ? (
-        // Gif here
-        <ThemeText
-          type={'body__primary--jumbo--bold'}
-          style={styles.header}
-          color={themeColor}
-          accessibilityLabel={t(TicketAssistantTexts.summary.titleA11yLabel)}
-        >
-          <View style={styles.loadingSpinner}>
-            <LoadingSpinner />
-          </View>
-        </ThemeText>
+        <View style={styles.loadingSpinner}>
+          <ActivityIndicator animating={true} size="large" />
+        </View>
       ) : crashed ? (
         <View style={styles.mainView}>
           <View>
@@ -232,6 +223,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginRight: theme.spacings.small,
   },
   loadingSpinner: {
-    height: '100%',
+    flex: 1,
+    justifyContent: 'center',
   },
 }));
