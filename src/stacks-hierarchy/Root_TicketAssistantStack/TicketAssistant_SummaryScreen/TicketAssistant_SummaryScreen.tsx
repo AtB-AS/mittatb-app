@@ -14,6 +14,7 @@ import {getIndexOfLongestDurationTicket} from '@atb/stacks-hierarchy/Root_Ticket
 import {useTicketAssistantDataFetch} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/fetch-data';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
+import {LoadingSpinner} from '@atb/components/loading';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -77,7 +78,9 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
           color={themeColor}
           accessibilityLabel={t(TicketAssistantTexts.summary.titleA11yLabel)}
         >
-          Loading...
+          <View style={styles.loadingSpinner}>
+            <LoadingSpinner />
+          </View>
         </ThemeText>
       ) : (
         <View style={styles.mainView}>
@@ -204,5 +207,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   icon: {
     marginRight: theme.spacings.small,
+  },
+  loadingSpinner: {
+    height: '100%',
   },
 }));
