@@ -14,12 +14,21 @@ import {getIndexOfLongestDurationTicket} from '@atb/stacks-hierarchy/Root_Ticket
 import {useTicketAssistantDataFetch} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/fetch-data';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {ContactSheet} from '@atb/chat/ContactSheet';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
 export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
+  const {open: openBottomSheet} = useBottomSheet();
+
+  const openContactSheet = () => {
+    openBottomSheet((close, focusRef) => (
+      <ContactSheet close={close} ref={focusRef} />
+    ));
+  };
 
   let {response, data, loading, purchaseDetails} = useTicketAssistantState();
 
@@ -134,9 +143,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             interactiveColor="interactive_0"
             mode="secondary"
             text={t(TicketAssistantTexts.summary.feedback)}
-            onPress={() => {
-              //TODO
-            }}
+            onPress={() => openContactSheet()}
             rightIcon={{
               svg: SvgFeedback,
             }}
