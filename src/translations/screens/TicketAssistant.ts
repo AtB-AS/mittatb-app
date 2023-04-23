@@ -10,12 +10,15 @@ const TicketAssistantTexts = {
       'Velkommen til billettveilederen',
       'Welcome to the ticket assistant',
     ),
-    description: {
-      part1: _(
-        'Få hjelp til å velge billetten som passer deg.',
-        'Get help choosing the ticket that suits you.',
-      ),
-    },
+    description: _(
+      'Få hjelp til å velge billetten som passer deg.',
+      'Get help choosing the ticket that suits you.',
+    ),
+
+    boatInfo: _(
+      'Akkurat nå gjelder veilederen kun for reiser med buss & trikk, og ikke båt.',
+      'Right now, the assistant applies only to travel by bus & tram, and not by boat.',
+    ),
     mainButton: _('Start', 'Start'),
     a11yStartHint: _(
       'Aktiver for å starte billettveilederen',
@@ -94,10 +97,10 @@ const TicketAssistantTexts = {
     ),
     minLimit: _('1 dag', '1 day'),
     minLimitA11yLabel: _('Minstegrensen er 1 dag', 'Minimum limit is 1 day'),
-    maxLimit: _('180 dager +', '180 days +'),
+    maxLimit: _('6mnd +', '180 days +'),
     maxLimitA11yLabel: _(
-      'Maksgrensen er 180 dager pluss',
-      'Max limit is 180 days plus',
+      'Maksgrensen er 6 måneder pluss',
+      'Max limit is 6 months days plus',
     ),
     resultMonths: (amount: {value: number}) =>
       _(
