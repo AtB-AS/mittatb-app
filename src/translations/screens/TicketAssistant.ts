@@ -185,8 +185,12 @@ const TicketAssistantTexts = {
         `You have selected ${data.ticket}. \n Traveller: ${data.traveller}. \n Zones: ${data.tariffZones}. \n Price: ${data.price}. \n Price per trip: ${data.pricePerTrip}.`,
       ),
     noticeLabel1: _(
-      'Billetten dekker ikke hele perioden, ta billettveilederen på nytt for å få en ny anbefaling når denne billetten går ut.',
-      'The ticket does not cover the entire period, take the ticket assistant again to get a new recommendation when this ticket expires.',
+      'NB: denne veilederen fungerer kunn for reise med buss og trikk, ikke båt. ',
+      'NB: this guide only works for travel by bus and tram, not boat.',
+    ),
+    a11yNoticeLabel: _(
+      'NB: denne veilederen fungerer kunn for reise med buss og trikk, ikke båt. ',
+      'NB: this guide only works for travel by bus and tram, not boat.',
     ),
     noticeLabel2: _(
       'Siden du ikke reiser så ofte, anbefaler vi deg å kjøpe enkeltbilletter.',

@@ -10,9 +10,10 @@ import {DashboardBackground} from '@atb/assets/svg/color/images';
 import SvgFeedback from '@atb/assets/svg/mono-icons/actions/Feedback';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary';
-import {MessageBox} from '@atb/components/message-box';
 import {getIndexOfLongestDurationTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
 import {useTicketAssistantDataFetch} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/fetch-data';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -113,12 +114,18 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                 />
               </>
             )}
-            {doesTicketCoverEntirePeriod && (
+            {(doesTicketCoverEntirePeriod || true) && (
               <View style={styles.notice}>
-                <MessageBox
-                  type="info"
-                  message={t(TicketAssistantTexts.summary.noticeLabel1)}
-                />
+                <ThemeIcon style={styles.icon} svg={SvgInfo} />
+                <ThemeText
+                  color={themeColor}
+                  type={'body__secondary'}
+                  accessibilityLabel={t(
+                    TicketAssistantTexts.summary.a11yNoticeLabel,
+                  )}
+                >
+                  {t(TicketAssistantTexts.summary.noticeLabel1)}
+                </ThemeText>
               </View>
             )}
           </View>
@@ -184,10 +191,18 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     margin: 0,
   },
   notice: {
-    textAlign: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    textAlign: 'left',
     paddingTop: theme.spacings.large,
+    color: theme.static.status.info,
+    paddingHorizontal: theme.spacings.xLarge,
   },
   feedback: {
     marginTop: theme.spacings.large,
+  },
+  icon: {
+    marginRight: theme.spacings.small,
   },
 }));
