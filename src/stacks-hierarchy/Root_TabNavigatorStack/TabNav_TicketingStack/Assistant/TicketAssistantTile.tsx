@@ -22,6 +22,7 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
 }) => {
   const styles = useStyles();
   const {themeName} = useTheme();
+  const iconColor: StaticColor = 'background_accent_2';
   const color: StaticColor = accented ? 'background_accent_3' : 'background_0';
   const themeColor = getStaticColor(themeName, color);
   const {t} = useTranslation();
@@ -66,6 +67,7 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
                 <ThemeIcon
                   size={'small'}
                   svg={TicketMultiple}
+                  colorType={iconColor}
                   testID={testID}
                 />
               </View>
@@ -115,8 +117,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.status.info.background,
     display: 'flex',
     flexDirection: 'row',
-    paddingVertical: theme.spacings.xSmall,
-    paddingHorizontal: theme.spacings.xSmall,
+    padding: theme.spacings.xSmall,
     borderRadius: theme.border.radius.small,
     marginRight: theme.spacings.xSmall,
   },
