@@ -235,15 +235,16 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                 </View>
               </>
             )}
+
+            <SectionSeparator />
+            <ThemeText
+              type={'body__primary'}
+              style={styles.description}
+              accessibilityLabel={resultString}
+            >
+              {resultString}
+            </ThemeText>
           </View>
-          <ThemeText
-            type={'body__primary'}
-            style={styles.description}
-            color={themeColor}
-            accessibilityLabel={resultString}
-          >
-            {resultString}
-          </ThemeText>
         </View>
 
         <View style={styles.bottomView}>
@@ -284,6 +285,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     paddingVertical: theme.spacings.small,
+    paddingHorizontal: theme.spacings.medium,
     borderRadius: theme.border.radius.regular,
     backgroundColor: theme.static.background.background_0.background,
     marginVertical: theme.spacings.xLarge,
@@ -293,7 +295,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: theme.spacings.medium,
   },
   datePickerHeader: {
     flexDirection: 'row',
@@ -334,8 +335,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   description: {
     textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingVertical: theme.spacings.small,
+    paddingVertical: theme.spacings.medium,
   },
   header: {
     textAlign: 'center',
