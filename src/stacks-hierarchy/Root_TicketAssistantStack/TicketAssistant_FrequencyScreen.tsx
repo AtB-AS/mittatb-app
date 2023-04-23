@@ -11,6 +11,7 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useTicketAssistantState} from './TicketAssistantContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
+import {SectionSeparator} from '@atb/components/sections';
 
 export const sliderColorMax: StaticColorByType<'background'> =
   'background_accent_2';
@@ -62,7 +63,7 @@ export const TicketAssistant_FrequencyScreen = ({
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.mainView}>
           <ThemeText
-            type={'body__primary--jumbo--bold'}
+            type={'heading--big'}
             style={styles.header}
             color={themeColor}
             accessibilityLabel={t(
@@ -104,23 +105,23 @@ export const TicketAssistant_FrequencyScreen = ({
             </View>
           ) : (
             <View>
-              <View style={styles.horizontalLine}>
-                {numbersAsStrings.map((number) => {
-                  return (
-                    <View key={number} style={styles.numberContainer}>
-                      <ThemeText
-                        key={number}
-                        style={styles.number}
-                        type={'body__primary'}
-                        color={themeColor}
-                      >
-                        {number}
-                      </ThemeText>
-                    </View>
-                  );
-                })}
-              </View>
               <View style={styles.sliderContainer}>
+                <View style={styles.horizontalLine}>
+                  {numbersAsStrings.map((number) => {
+                    return (
+                      <View key={number} style={styles.numberContainer}>
+                        <ThemeText
+                          key={number}
+                          style={styles.number}
+                          type={'body__primary'}
+                          color={themeColor}
+                        >
+                          {number}
+                        </ThemeText>
+                      </View>
+                    );
+                  })}
+                </View>
                 <SliderComponent
                   style={styles.slider}
                   maximumTrackTintColor={sliderColorMax}
@@ -135,14 +136,12 @@ export const TicketAssistant_FrequencyScreen = ({
                     setSliderValue(value);
                   }}
                 />
+                <SectionSeparator />
+
+                <ThemeText type={'body__secondary'} style={styles.travelText}>
+                  {resultString}
+                </ThemeText>
               </View>
-              <ThemeText
-                type={'body__secondary'}
-                color={themeColor}
-                style={styles.number}
-              >
-                {resultString}
-              </ThemeText>
             </View>
           )}
         </View>
@@ -184,7 +183,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   sliderContainer: {
     width: '100%',
     backgroundColor: theme.static.background.background_0.background,
-    paddingVertical: theme.spacings.xSmall,
+    paddingVertical: theme.spacings.medium,
     paddingHorizontal: theme.spacings.medium,
     borderRadius: theme.border.radius.regular,
     marginVertical: theme.spacings.medium,
@@ -220,7 +219,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     width: '100%',
     alignSelf: 'center',
-    paddingHorizontal: theme.spacings.medium,
   },
   screenReaderButtons: {
     flexDirection: 'column',
@@ -237,5 +235,12 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   number: {
     width: '100%',
     textAlign: 'center',
+    color: theme.text.colors.primary,
+  },
+
+  travelText: {
+    width: '100%',
+    textAlign: 'center',
+    marginTop: theme.spacings.medium,
   },
 }));

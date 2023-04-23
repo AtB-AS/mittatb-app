@@ -94,7 +94,7 @@ export const TicketAssistant_ZonePickerScreen = ({
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <ThemeText
-          type={'body__primary--jumbo--bold'}
+          type={'heading--big'}
           style={styles.header}
           color={themeColor}
           accessibilityLabel={t(

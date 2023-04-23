@@ -81,7 +81,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
         <View style={styles.mainView}>
           <View>
             <ThemeText
-              type={'body__primary--jumbo--bold'}
+              type={'heading--big'}
               style={styles.header}
               color={themeColor}
               accessibilityLabel={t(
@@ -92,7 +92,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             </ThemeText>
             <ThemeText
               color={themeColor}
-              type={'body__primary--big'}
+              type={'body__primary'}
               style={styles.description}
               accessibilityLabel={description}
             >

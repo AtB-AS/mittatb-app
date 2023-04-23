@@ -88,7 +88,7 @@ export const TicketSummary = () => {
           </View>
         </View>
         <View style={styles.ticketFooter}>
-          <ThemeText color={interactiveColor.outline}>
+          <ThemeText type={'body__secondary'} color={interactiveColor.outline}>
             {t(TicketAssistantTexts.summary.pricePerTrip)}
           </ThemeText>
           <ThemeText
