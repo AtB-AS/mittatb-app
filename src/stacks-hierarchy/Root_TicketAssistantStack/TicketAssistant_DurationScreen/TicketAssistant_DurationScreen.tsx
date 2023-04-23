@@ -156,7 +156,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                     onPress={() => setShowDatePicker(true)}
                     text={format(
                       usedSlider
-                        ? parseISO(getDateFromSlider(data.duration))
+                        ? parseISO(getDateFromSlider(sliderValue))
                         : parseISO(date),
                       'dd. MMM. yyyy',
                     )}
