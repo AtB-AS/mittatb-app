@@ -133,7 +133,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                     TicketAssistantTexts.summary.a11yNoticeLabel2,
                   )}
                 >
-                  {t(TicketAssistantTexts.summary.noticeLabel2)}
+                  {t(TicketAssistantTexts.summary.noticeLabel1)}
                 </ThemeText>
               </View>
             )}
@@ -204,7 +204,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'left',
     paddingTop: theme.spacings.large,
     color: theme.static.status.info,
-    paddingHorizontal: theme.spacings.xLarge,
+    width: '100%',
+    paddingHorizontal: theme.spacings.medium,
   },
   feedback: {
     marginTop: theme.spacings.large,
