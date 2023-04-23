@@ -127,8 +127,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
               <View style={styles.notice}>
                 <ThemeIcon style={styles.icon} svg={SvgInfo} />
                 <ThemeText
-                  color={themeColor}
-                  type={'body__secondary'}
+                  style={styles.noticeText}
+                  type={'body__tertiary'}
                   accessibilityLabel={t(
                     TicketAssistantTexts.summary.a11yNoticeLabel2,
                   )}
@@ -181,12 +181,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
     paddingHorizontal: theme.spacings.xLarge,
     paddingTop: theme.spacings.small,
-    paddingBottom: theme.spacings.xLarge,
-  },
-  savingsText: {
-    textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingVertical: theme.spacings.xLarge,
+    paddingBottom: theme.spacings.medium,
   },
   backdrop: {
     position: 'absolute',
@@ -198,14 +193,12 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     margin: 0,
   },
   notice: {
-    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    textAlign: 'left',
-    paddingTop: theme.spacings.large,
-    color: theme.static.status.info,
-    width: '100%',
-    paddingHorizontal: theme.spacings.medium,
+    marginTop: theme.spacings.large,
+  },
+  noticeText: {
+    flexShrink: 1,
   },
   feedback: {
     marginTop: theme.spacings.large,
