@@ -17,7 +17,6 @@ export const useTicketAssistantDataFetch = (navigation: any) => {
     response,
     setResponse,
     data,
-    setLoading,
     setPurchaseDetails,
     hasDataChanged,
     setHasDataChanged,
@@ -25,7 +24,6 @@ export const useTicketAssistantDataFetch = (navigation: any) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       await getRecommendedTicket(data)
         .then((r) => {
           setHasDataChanged(false);
@@ -35,7 +33,6 @@ export const useTicketAssistantDataFetch = (navigation: any) => {
           setResponse(r);
         })
         .catch(() => {});
-      setLoading(false);
     };
 
     const unsubscribe = navigation.addListener('focus', () => {
@@ -66,7 +63,6 @@ export const useTicketAssistantDataFetch = (navigation: any) => {
     response,
     setResponse,
     data,
-    setLoading,
     setPurchaseDetails,
     hasDataChanged,
     setHasDataChanged,

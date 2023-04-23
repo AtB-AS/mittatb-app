@@ -30,7 +30,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     ));
   };
 
-  let {response, data, loading, purchaseDetails} = useTicketAssistantState();
+  let {response, data, purchaseDetails, hasDataChanged} =
+    useTicketAssistantState();
 
   useTicketAssistantDataFetch(navigation);
 
@@ -78,7 +79,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       <View style={styles.backdrop}>
         <DashboardBackground width={'100%'} height={'100%'} />
       </View>
-      {loading ? (
+      {hasDataChanged ? (
         // Gif here
         <ThemeText
           type={'body__primary--jumbo--bold'}
@@ -180,8 +181,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   description: {
     textAlign: 'center',
     paddingHorizontal: theme.spacings.xLarge,
-    paddingTop: theme.spacings.small,
-    paddingBottom: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
+    marginBottom: theme.spacings.large,
   },
   backdrop: {
     position: 'absolute',
