@@ -25,7 +25,6 @@ export const useTicketAssistantDataFetch = (navigation: any) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       setCrashed(false);
       await getRecommendedTicket(data)
         .then((r) => {
