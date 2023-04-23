@@ -45,6 +45,7 @@ import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
 import {useIsLoading} from '@atb/utils/use-is-loading';
 import {useDeparturesV2Enabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
+import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -103,6 +104,15 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
       });
       setPreference({newDepartures: value});
     }
+  };
+
+  const {enable_ticketing_assistant} = useRemoteConfig();
+  const showTicketAssistant = useTicketingAssistantEnabled();
+  const setShowTicketAssistant = (value: boolean) => {
+    updateMetadata({
+      'AtB-Ticket-Assistant': value ? 'enabled' : 'disabled',
+    });
+    setPreference({showTicketAssistant: value});
   };
 
   function copyInstallId() {
@@ -355,6 +365,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             onValueChange={setDeparturesV2Enabled}
             testID="newDeparturesToggle"
           />
+          {enable_ticketing_assistant && (
+            <Sections.ToggleSectionItem
+              text={t(ProfileTexts.sections.newFeatures.ticketAssistant)}
+              value={showTicketAssistant}
+              onValueChange={setShowTicketAssistant}
+              testID="newDeparturesToggle"
+            />
+          )}
 
           <Sections.LinkSectionItem
             text={t(
