@@ -55,8 +55,8 @@ const TicketAssistantTexts = {
       ),
     resultMoreThanMax: (max: {value: number}) =>
       _(
-        `Du reiser ${max} ganger eller mer i uka`,
-        `You travel ${max} times or more per week`,
+        `Du reiser ${max.value} ganger eller mer i uka`,
+        `You travel ${max.value} times or more per week`,
       ),
     mainButton: _('Neste', 'Next'),
     a11yNextPageHint: _(
