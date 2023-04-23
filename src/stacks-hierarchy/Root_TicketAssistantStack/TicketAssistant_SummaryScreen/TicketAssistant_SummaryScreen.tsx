@@ -128,7 +128,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                 <TicketSummary />
                 <Button
                   interactiveColor="interactive_0"
-                  onPress={() => onBuyButtonPress}
+                  onPress={onBuyButtonPress}
                   text={t(TicketAssistantTexts.summary.buyButton)}
                   testID="nextButton"
                   accessibilityHint={t(
