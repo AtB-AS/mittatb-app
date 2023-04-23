@@ -8,6 +8,10 @@ import {themeColor} from '@atb/stacks-hierarchy/Root_OnboardingStack/Onboarding_
 import * as Sections from '@atb/components/sections';
 import {Button} from '@atb/components/button';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {FareProductTypeConfig} from '@atb-as/config-specs';
+import {useFirestoreConfiguration} from '@atb/configuration';
+import {productIsSellableInApp} from '@atb/reference-data/utils';
+import {useAuthState} from '@atb/auth';
 
 type Props = RootStackScreenProps<'Root_TipsAndInformation'>;
 
@@ -15,8 +19,51 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
   const styles = useScreenStyle();
   const {t} = useTranslation();
   const [currentlyOpen, setCurrentlyOpen] = useState<number>(0);
+  const {authenticationType} = useAuthState();
 
   const assistantTipIndex = TipsAndInformationTexts.tips.length;
+
+  const {fareProductTypeConfigs, preassignedFareProducts} =
+    useFirestoreConfiguration();
+
+  const sellableProductsInApp = preassignedFareProducts.filter(
+    productIsSellableInApp,
+  );
+
+  const sellableFareProductTypeConfigs = fareProductTypeConfigs.filter(
+    (config) => sellableProductsInApp.some((p) => p.type === config.type),
+  );
+
+  const groupedConfigs = sellableFareProductTypeConfigs.reduce<
+    [FareProductTypeConfig, FareProductTypeConfig | undefined][]
+  >((grouped, current, index, arr) => {
+    if (index % 2 === 0) return [...grouped, [current, arr[index + 1]]];
+    return grouped;
+  }, []);
+  // Period ticket Config
+  const config = groupedConfigs[0][1];
+
+  const onTicketAssistantSelect = (
+    fareProductTypeConfig: FareProductTypeConfig,
+  ) => {
+    if (
+      fareProductTypeConfig.configuration.requiresLogin &&
+      authenticationType !== 'phone'
+    ) {
+      navigation.navigate('LoginInApp', {
+        screen: 'LoginOnboardingInApp',
+        params: {
+          fareProductTypeConfig,
+          afterLogin: {
+            screen: 'Root_TicketAssistantStack',
+          },
+        },
+      });
+    } else {
+      setCurrentlyOpen(assistantTipIndex);
+      navigation.navigate('Root_TicketAssistantStack');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -55,34 +102,35 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
               }
             />
           ))}
-          <Sections.ExpandableSectionItem
-            textType="body__primary--bold"
-            text={t(TipsAndInformationTexts.ticketAssistantTip.title)}
-            showIconText={false}
-            onPress={() => {
-              setCurrentlyOpen(assistantTipIndex);
-            }}
-            expanded={currentlyOpen === assistantTipIndex}
-            expandContent={
-              <View>
-                <ThemeText
-                  type="body__tertiary"
-                  style={styles.expandedContent}
-                  isMarkdown={true}
-                >
-                  {t(TipsAndInformationTexts.ticketAssistantTip.tip)}
-                </ThemeText>
-                <Button
-                  style={styles.goToAssistantButton}
-                  onPress={() => {
-                    navigation.navigate('Root_TicketAssistantStack');
-                    setCurrentlyOpen(assistantTipIndex);
-                  }}
-                  text={t(TipsAndInformationTexts.goToAssistantButton.title)}
-                />
-              </View>
-            }
-          />
+          {config && (
+            <Sections.ExpandableSectionItem
+              textType="body__primary--bold"
+              text={t(TipsAndInformationTexts.ticketAssistantTip.title)}
+              showIconText={false}
+              onPress={() => {
+                setCurrentlyOpen(assistantTipIndex);
+              }}
+              expanded={currentlyOpen === assistantTipIndex}
+              expandContent={
+                <View>
+                  <ThemeText
+                    type="body__tertiary"
+                    style={styles.expandedContent}
+                    isMarkdown={true}
+                  >
+                    {t(TipsAndInformationTexts.ticketAssistantTip.tip)}
+                  </ThemeText>
+                  <Button
+                    style={styles.goToAssistantButton}
+                    onPress={() => {
+                      onTicketAssistantSelect(config);
+                    }}
+                    text={t(TipsAndInformationTexts.goToAssistantButton.title)}
+                  />
+                </View>
+              }
+            />
+          )}
         </Sections.Section>
       </View>
     </View>

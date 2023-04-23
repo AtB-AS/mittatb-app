@@ -6,10 +6,13 @@ import React from 'react';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TicketMultiple} from '@atb/assets/svg/mono-icons/ticketing';
+import {FareProductTypeConfig} from '@atb-as/config-specs';
+import {useFirestoreConfiguration} from '@atb/configuration';
+import {productIsSellableInApp} from '@atb/reference-data/utils';
 
 type TicketAssistantProps = {
   accented?: boolean;
-  onPress: () => void;
+  onPress: (preassignedFareProduct: FareProductTypeConfig) => void;
   testID: string;
 };
 export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
@@ -23,6 +26,26 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
   const themeColor = getStaticColor(themeName, color);
   const {t} = useTranslation();
 
+  const {fareProductTypeConfigs, preassignedFareProducts} =
+    useFirestoreConfiguration();
+
+  const sellableProductsInApp = preassignedFareProducts.filter(
+    productIsSellableInApp,
+  );
+
+  const sellableFareProductTypeConfigs = fareProductTypeConfigs.filter(
+    (config) => sellableProductsInApp.some((p) => p.type === config.type),
+  );
+
+  const groupedConfigs = sellableFareProductTypeConfigs.reduce<
+    [FareProductTypeConfig, FareProductTypeConfig | undefined][]
+  >((grouped, current, index, arr) => {
+    if (index % 2 === 0) return [...grouped, [current, arr[index + 1]]];
+    return grouped;
+  }, []);
+  // Period ticket Config
+  const config = groupedConfigs[0][1];
+
   return (
     <View
       style={[
@@ -31,44 +54,50 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
       ]}
       testID={testID}
     >
-      <TouchableOpacity
-        onPress={onPress}
-        accessible={true}
-        style={styles.spreadContent}
-      >
-        <View style={styles.contentContainer}>
-          <View style={styles.titleContainer}>
-            <View style={styles.iconBox}>
-              <ThemeIcon size={'small'} svg={TicketMultiple} testID={testID} />
-            </View>
-            <ThemeText type="label__uppercase" color={'secondary'}>
-              {t(TicketingTexts.ticketAssistantTile.label)}
-            </ThemeText>
-          </View>
-          <View style={styles.titleContainer}>
-            <ThemeText
-              type="body__secondary--bold"
-              accessibilityLabel={t(TicketingTexts.ticketAssistantTile.title)}
-              color={themeColor}
-              testID={testID + 'Title'}
-            >
-              {t(TicketingTexts.ticketAssistantTile.title)}
-            </ThemeText>
-            <View style={styles.betaLabel}>
-              <ThemeText
-                color="background_accent_3"
-                style={styles.betaLabelText}
-              >
-                BETA
+      {config && (
+        <TouchableOpacity
+          onPress={() => onPress(config)}
+          accessible={true}
+          style={styles.spreadContent}
+        >
+          <View style={styles.contentContainer}>
+            <View style={styles.titleContainer}>
+              <View style={styles.iconBox}>
+                <ThemeIcon
+                  size={'small'}
+                  svg={TicketMultiple}
+                  testID={testID}
+                />
+              </View>
+              <ThemeText type="label__uppercase" color={'secondary'}>
+                {t(TicketingTexts.ticketAssistantTile.label)}
               </ThemeText>
             </View>
-          </View>
+            <View style={styles.titleContainer}>
+              <ThemeText
+                type="body__secondary--bold"
+                accessibilityLabel={t(TicketingTexts.ticketAssistantTile.title)}
+                color={themeColor}
+                testID={testID + 'Title'}
+              >
+                {t(TicketingTexts.ticketAssistantTile.title)}
+              </ThemeText>
+              <View style={styles.betaLabel}>
+                <ThemeText
+                  color="background_accent_3"
+                  style={styles.betaLabelText}
+                >
+                  BETA
+                </ThemeText>
+              </View>
+            </View>
 
-          <ThemeText type="body__tertiary" color={'secondary'}>
-            {t(TicketingTexts.ticketAssistantTile.description)}
-          </ThemeText>
-        </View>
-      </TouchableOpacity>
+            <ThemeText type="body__tertiary" color={'secondary'}>
+              {t(TicketingTexts.ticketAssistantTile.description)}
+            </ThemeText>
+          </View>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
