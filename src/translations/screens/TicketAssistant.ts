@@ -201,6 +201,11 @@ const TicketAssistantTexts = {
       'Since you do not travel so often, we recommend that you buy single tickets.',
     ),
     feedback: _('Gi tilbakemelding', 'Give feedback'),
+    crashedHeader: _('Oisann!', 'Oops!'),
+    crashedDescription: _(
+      'Det skjedde en feil. Kunne ikke hente billetten for deg.',
+      'An error occurred. Could not get the ticket for you.',
+    ),
   },
 };
 export default TicketAssistantTexts;

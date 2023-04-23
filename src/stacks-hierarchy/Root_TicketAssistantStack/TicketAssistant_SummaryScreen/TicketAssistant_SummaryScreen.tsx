@@ -38,7 +38,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     ));
   };
 
-  let {response, data, loading, purchaseDetails} = useTicketAssistantState();
+  let {response, data, loading, purchaseDetails, crashed} =
+    useTicketAssistantState();
 
   useTicketAssistantDataFetch(navigation);
 
@@ -132,6 +133,25 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             <LoadingSpinner />
           </View>
         </ThemeText>
+      ) : crashed ? (
+        <View style={styles.mainView}>
+          <View>
+            <ThemeText
+              type={'heading--big'}
+              color={themeColor}
+              style={styles.header}
+            >
+              {t(TicketAssistantTexts.summary.crashedHeader)}
+            </ThemeText>
+            <ThemeText
+              type={'body__primary'}
+              color={themeColor}
+              style={styles.description}
+            >
+              {t(TicketAssistantTexts.summary.crashedDescription)}
+            </ThemeText>
+          </View>
+        </View>
       ) : (
         <View style={styles.mainView}>
           <View>
