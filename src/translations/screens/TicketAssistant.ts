@@ -105,7 +105,7 @@ const TicketAssistantTexts = {
     resultMonths: (amount: {value: number}) =>
       _(
         `Du skal reise i ${amount.value} mnd.`,
-        `You will travel for ${amount.value} months.`,
+        `You will travel for ${amount.value} month(s).`,
       ),
     resultWeeks: (amount: {value: number}) =>
       _(
