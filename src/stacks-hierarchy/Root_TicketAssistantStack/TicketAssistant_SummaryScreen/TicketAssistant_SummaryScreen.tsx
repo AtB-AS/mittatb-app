@@ -21,7 +21,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
 
-  let {response, data, loading, purchaseDetails} = useTicketAssistantState();
+  let {response, data, loading, purchaseDetails, crashed} =
+    useTicketAssistantState();
 
   useTicketAssistantDataFetch(navigation);
 
@@ -61,6 +62,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     });
   };
 
+  console.log('Crashed: ', crashed);
+
   return (
     <ScrollView
       style={styles.container}
@@ -79,6 +82,25 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
         >
           Loading...
         </ThemeText>
+      ) : crashed ? (
+        <View style={styles.mainView}>
+          <View>
+            <ThemeText
+              type={'heading--big'}
+              color={themeColor}
+              style={styles.header}
+            >
+              {t(TicketAssistantTexts.summary.crashedHeader)}
+            </ThemeText>
+            <ThemeText
+              type={'body__primary'}
+              color={themeColor}
+              style={styles.description}
+            >
+              {t(TicketAssistantTexts.summary.crashedDescription)}
+            </ThemeText>
+          </View>
+        </View>
       ) : (
         <View style={styles.mainView}>
           <View>
