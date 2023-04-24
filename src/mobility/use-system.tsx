@@ -8,8 +8,8 @@ import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts'
 import {Appearance, Platform} from 'react-native';
 
 export const useSystem = <T extends {system: SystemFragment}>(
-  entity: T,
-  operator: TranslatedStringFragment = entity.system.name,
+  entity: T | undefined,
+  operator: TranslatedStringFragment | undefined = entity?.system.name,
 ) => {
   const {t, language} = useTranslation();
   const [appStoreUri, setAppStoreUri] = useState<string>();
@@ -19,16 +19,16 @@ export const useSystem = <T extends {system: SystemFragment}>(
   useEffect(() => {
     setAppStoreUri(
       Platform.OS === 'ios'
-        ? entity.system.rentalApps?.ios?.storeUri
-        : entity.system.rentalApps?.android?.storeUri,
+        ? entity?.system.rentalApps?.ios?.storeUri
+        : entity?.system.rentalApps?.android?.storeUri,
     );
     setBrandLogoUrl(
       Appearance.getColorScheme() === 'dark'
-        ? entity.system.brandAssets?.brandImageUrlDark
-        : entity.system.brandAssets?.brandImageUrl,
+        ? entity?.system.brandAssets?.brandImageUrlDark
+        : entity?.system.brandAssets?.brandImageUrl,
     );
     setOperatorName(
-      getTextForLanguage(operator.translation, language) ??
+      getTextForLanguage(operator?.translation, language) ??
         t(MobilityTexts.unknownOperator) ??
         '',
     );
