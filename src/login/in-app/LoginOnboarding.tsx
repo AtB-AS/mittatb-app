@@ -31,7 +31,7 @@ export const LoginOnboardingInApp = ({
           navigation.navigate('ActiveFareContractPromptInApp', {
             afterLogin,
           });
-        } else if (!hasActiveFareContracts) {
+        } else {
           navigation.navigate(
             enable_vipps_login ? 'LoginOptionsScreen' : 'PhoneInputInApp',
             {
