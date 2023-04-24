@@ -12,7 +12,7 @@ export const useTicketSummary = () => {
   const {t, language} = useTranslation();
   const {response, purchaseDetails, data} = useTicketAssistantState();
   const {tickets, zones, total_cost, single_ticket_price} = response;
-  const {duration, frequency} = data;
+  const {frequency} = data;
   const index = getIndexOfLongestDurationTicket(tickets);
   const ticket = tickets[index];
   const recommendedTicketTypeConfig =
@@ -32,7 +32,7 @@ export const useTicketSummary = () => {
 
   const savings = calculateSavings(
     total_cost,
-    calculateSingleTickets(duration, frequency) * single_ticket_price,
+    calculateSingleTickets(ticket.duration, frequency) * single_ticket_price,
   );
 
   const ticketPriceString = `${ticket.price.toFixed(2)}kr`;
@@ -48,8 +48,11 @@ export const useTicketSummary = () => {
         ? TicketAssistantTexts.summary.equalPriceNotice
         : TicketAssistantTexts.summary.savings({
             totalSavings: savings,
-            perTripSavings: perTripSavings(savings, duration, frequency),
-            alternative: `${calculateSingleTickets(duration, frequency)}`,
+            perTripSavings: perTripSavings(savings, ticket.duration, frequency),
+            alternative: `${calculateSingleTickets(
+              ticket.duration,
+              frequency,
+            )}`,
           })
       : TicketAssistantTexts.summary.singleTicketNotice,
   );
