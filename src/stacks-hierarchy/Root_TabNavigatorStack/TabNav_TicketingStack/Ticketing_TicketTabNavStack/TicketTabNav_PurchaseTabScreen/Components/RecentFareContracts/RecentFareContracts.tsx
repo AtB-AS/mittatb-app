@@ -79,16 +79,9 @@ export const RecentFareContracts = ({onSelect}: Props) => {
             testID="recentTicketsScrollView"
           >
             {memoizedRecentFareContracts.map((rfc) => {
-              const componentKey =
-                rfc.preassignedFareProduct.id +
-                rfc.userProfilesWithCount
-                  .map((traveller) => {
-                    return traveller.count + traveller.userTypeString;
-                  })
-                  .join();
               return (
                 <RecentFareContractComponent
-                  key={componentKey}
+                  key={rfc.id}
                   recentFareContract={rfc}
                   onSelect={onSelect}
                   testID={'recent' + memoizedRecentFareContracts.indexOf(rfc)}

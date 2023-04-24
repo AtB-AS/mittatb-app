@@ -6,7 +6,6 @@ import {MapFilterType} from '@atb/components/map/types';
 import {StyleSheet} from '@atb/theme';
 import {shadows} from '@atb/components/map';
 import {Filter} from '@atb/assets/svg/mono-icons/actions';
-import {LoadingSpinner} from '@atb/components/loading';
 
 type MapFilterProps = {
   onFilterChange: (filter: MapFilterType) => void;
@@ -33,7 +32,7 @@ export const MapFilter = ({onFilterChange, isLoading}: MapFilterProps) => {
       interactiveColor="interactive_2"
       accessibilityRole="button"
       onPress={onPress}
-      leftIcon={{svg: isLoading ? LoadingSpinner : Filter}}
+      leftIcon={{svg: Filter, loading: isLoading}}
     />
   );
 };
