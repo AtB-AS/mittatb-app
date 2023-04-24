@@ -232,201 +232,217 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           },
         }}
       />
-
-      <View style={style.searchHeader}>
-        <View style={style.paddedContainer}>
-          <Section>
-            <LocationInputSectionItem
-              accessibilityLabel={
-                t(TripSearchTexts.location.departurePicker.a11yLabel) +
-                screenReaderPause
-              }
-              accessibilityHint={
-                t(TripSearchTexts.location.departurePicker.a11yHint) +
-                screenReaderPause
-              }
-              updatingLocation={updatingLocation && !to}
-              location={from}
-              label={t(TripSearchTexts.location.departurePicker.label)}
-              onPress={() => openLocationSearch('fromLocation', from)}
-              icon={<ThemeIcon svg={LocationIcon} />}
-              onIconPress={setCurrentLocationOrRequest}
-              iconAccessibility={{
-                accessible: true,
-                accessibilityLabel:
-                  from?.resultType == 'geolocation'
-                    ? t(
-                        TripSearchTexts.location.locationButton.a11yLabel
-                          .update,
-                      )
-                    : t(TripSearchTexts.location.locationButton.a11yLabel.use),
-                accessibilityRole: 'button',
-              }}
-              testID="searchFromButton"
-            />
-
-            <LocationInputSectionItem
-              accessibilityLabel={t(
-                TripSearchTexts.location.destinationPicker.a11yLabel,
-              )}
-              label={t(TripSearchTexts.location.destinationPicker.label)}
-              location={to}
-              onPress={() => openLocationSearch('toLocation', to)}
-              icon={<ThemeIcon svg={Swap} />}
-              onIconPress={swap}
-              iconAccessibility={{
-                accessible: true,
-                accessibilityLabel:
-                  t(TripSearchTexts.location.swapButton.a11yLabel) +
-                  screenReaderPause,
-                accessibilityRole: 'button',
-              }}
-              testID="searchToButton"
-            />
-          </Section>
-        </View>
-        <View style={style.searchParametersButtons}>
-          <Button
-            text={getSearchTimeLabel(searchTime, timeOfLastSearch, t, language)}
-            accessibilityHint={t(TripSearchTexts.dateInput.a11yHint)}
-            accessibilityLabel={getSearchTimeLabel(
-              searchTime,
-              timeOfLastSearch,
-              t,
-              language,
-            )}
-            interactiveColor="interactive_0"
-            mode="secondary"
-            compact={true}
-            onPress={onSearchTimePress}
-            testID="dashboardDateTimePicker"
-            rightIcon={{
-              svg: Time,
-              notification:
-                searchTime.option !== 'now'
-                  ? {color: 'valid', backgroundColor: 'background_accent_0'}
-                  : undefined,
-            }}
-            viewContainerStyle={style.searchTimeButton}
-          />
-          {filtersState.enabled && (
-            <Button
-              text={t(TripSearchTexts.filterButton.text)}
-              accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
-              interactiveColor="interactive_1"
-              mode="secondary"
-              type="inline"
-              compact={true}
-              onPress={filtersState.openBottomSheet}
-              testID="dashboardDateTimePicker"
-              rightIcon={{
-                svg: Filter,
-                notification: filtersState.anyFiltersApplied
-                  ? {color: 'valid', backgroundColor: 'background_accent_0'}
-                  : undefined,
-              }}
-              viewContainerStyle={style.filterButton}
-              ref={filtersState.closeRef}
-            />
-          )}
-        </View>
-      </View>
-
-      <ScrollView
-        contentContainerStyle={style.scrollView}
-        refreshControl={
-          <RefreshControl
-            refreshing={searchState === 'searching' && !tripPatterns.length}
-            onRefresh={refresh}
-            tintColor={theme.text.colors.secondary}
-          />
-        }
+      <View
+        style={{
+          backgroundColor:
+            theme.static.background[headerBackgroundColor].background,
+        }}
       >
-        <ScreenReaderAnnouncement message={searchStateMessage} />
-        {(!from || !to) && (
-          <ThemeText
-            color="secondary"
-            style={style.missingLocationText}
-            testID="missingLocation"
-          >
-            {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
-          </ThemeText>
-        )}
-        {from && to && (
-          <View>
-            {filtersState.enabled && (
-              <SelectedFiltersButtons
-                filtersSelection={filtersState.filtersSelection}
-                resetTransportModes={filtersState.resetTransportModes}
-              />
-            )}
-            <Results
-              tripPatterns={tripPatterns}
-              isSearching={isSearching}
-              showEmptyScreen={showEmptyScreen}
-              isEmptyResult={isEmptyResult}
-              resultReasons={noResultReasons}
-              onDetailsPressed={onPressed}
-              errorType={error}
-              searchTime={searchTime}
-              anyFiltersApplied={
-                filtersState.enabled && filtersState.anyFiltersApplied
-              }
+        <ScrollView
+          contentContainerStyle={style.scrollView}
+          refreshControl={
+            <RefreshControl
+              refreshing={searchState === 'searching' && !tripPatterns.length}
+              onRefresh={refresh}
+              tintColor={theme.interactive.interactive_0.default.text}
             />
-          </View>
-        )}
-        {!tripPatterns.length && <View style={style.emptyResultsSpacer}></View>}
-        {!error && isValidLocations && (
-          <TouchableOpacity
-            onPress={loadMore}
-            disabled={searchState === 'searching'}
-            style={style.loadMoreButton}
-            testID="loadMoreButton"
-          >
-            {searchState === 'searching' ? (
-              <View style={style.loadingIndicator}>
-                {tripPatterns.length ? (
-                  <>
-                    <ActivityIndicator
-                      color={theme.text.colors.secondary}
-                      style={{
-                        marginRight: theme.spacings.medium,
-                      }}
-                    />
-                    <ThemeText color="secondary" testID="searchingForResults">
-                      {t(TripSearchTexts.results.fetchingMore)}
-                    </ThemeText>
-                  </>
-                ) : (
-                  <ThemeText
-                    color="secondary"
-                    style={style.loadingText}
-                    testID="searchingForResults"
-                  >
-                    {t(TripSearchTexts.searchState.searching)}
-                  </ThemeText>
+          }
+        >
+          <View style={style.searchHeader}>
+            <View style={style.paddedContainer}>
+              <Section>
+                <LocationInputSectionItem
+                  accessibilityLabel={
+                    t(TripSearchTexts.location.departurePicker.a11yLabel) +
+                    screenReaderPause
+                  }
+                  accessibilityHint={
+                    t(TripSearchTexts.location.departurePicker.a11yHint) +
+                    screenReaderPause
+                  }
+                  updatingLocation={updatingLocation && !to}
+                  location={from}
+                  label={t(TripSearchTexts.location.departurePicker.label)}
+                  onPress={() => openLocationSearch('fromLocation', from)}
+                  icon={<ThemeIcon svg={LocationIcon} />}
+                  onIconPress={setCurrentLocationOrRequest}
+                  iconAccessibility={{
+                    accessible: true,
+                    accessibilityLabel:
+                      from?.resultType == 'geolocation'
+                        ? t(
+                            TripSearchTexts.location.locationButton.a11yLabel
+                              .update,
+                          )
+                        : t(
+                            TripSearchTexts.location.locationButton.a11yLabel
+                              .use,
+                          ),
+                    accessibilityRole: 'button',
+                  }}
+                  testID="searchFromButton"
+                />
+
+                <LocationInputSectionItem
+                  accessibilityLabel={t(
+                    TripSearchTexts.location.destinationPicker.a11yLabel,
+                  )}
+                  label={t(TripSearchTexts.location.destinationPicker.label)}
+                  location={to}
+                  onPress={() => openLocationSearch('toLocation', to)}
+                  icon={<ThemeIcon svg={Swap} />}
+                  onIconPress={swap}
+                  iconAccessibility={{
+                    accessible: true,
+                    accessibilityLabel:
+                      t(TripSearchTexts.location.swapButton.a11yLabel) +
+                      screenReaderPause,
+                    accessibilityRole: 'button',
+                  }}
+                  testID="searchToButton"
+                />
+              </Section>
+            </View>
+            <View style={style.searchParametersButtons}>
+              <Button
+                text={getSearchTimeLabel(
+                  searchTime,
+                  timeOfLastSearch,
+                  t,
+                  language,
                 )}
-              </View>
-            ) : (
-              <>
-                {loadMore ? (
-                  <>
-                    <ThemeIcon
-                      colorType="secondary"
-                      svg={ExpandMore}
-                      size={'normal'}
-                    />
-                    <ThemeText color="secondary" testID="resultsLoaded">
-                      {' '}
-                      {t(TripSearchTexts.results.fetchMore)}
+                accessibilityHint={t(TripSearchTexts.dateInput.a11yHint)}
+                accessibilityLabel={getSearchTimeLabel(
+                  searchTime,
+                  timeOfLastSearch,
+                  t,
+                  language,
+                )}
+                interactiveColor="interactive_0"
+                mode="secondary"
+                compact={true}
+                onPress={onSearchTimePress}
+                testID="dashboardDateTimePicker"
+                rightIcon={{
+                  svg: Time,
+                  notification:
+                    searchTime.option !== 'now'
+                      ? {color: 'valid', backgroundColor: 'background_accent_0'}
+                      : undefined,
+                }}
+                viewContainerStyle={style.searchTimeButton}
+              />
+              {filtersState.enabled && (
+                <Button
+                  text={t(TripSearchTexts.filterButton.text)}
+                  accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
+                  interactiveColor="interactive_1"
+                  mode="secondary"
+                  type="inline"
+                  compact={true}
+                  onPress={filtersState.openBottomSheet}
+                  testID="dashboardDateTimePicker"
+                  rightIcon={{
+                    svg: Filter,
+                    notification: filtersState.anyFiltersApplied
+                      ? {color: 'valid', backgroundColor: 'background_accent_0'}
+                      : undefined,
+                  }}
+                  viewContainerStyle={style.filterButton}
+                  ref={filtersState.closeRef}
+                />
+              )}
+            </View>
+          </View>
+
+          <ScreenReaderAnnouncement message={searchStateMessage} />
+          {(!from || !to) && (
+            <ThemeText
+              color="secondary"
+              style={style.missingLocationText}
+              testID="missingLocation"
+            >
+              {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
+            </ThemeText>
+          )}
+          {from && to && (
+            <View>
+              {filtersState.enabled && (
+                <SelectedFiltersButtons
+                  filtersSelection={filtersState.filtersSelection}
+                  resetTransportModes={filtersState.resetTransportModes}
+                />
+              )}
+              <Results
+                tripPatterns={tripPatterns}
+                isSearching={isSearching}
+                showEmptyScreen={showEmptyScreen}
+                isEmptyResult={isEmptyResult}
+                resultReasons={noResultReasons}
+                onDetailsPressed={onPressed}
+                errorType={error}
+                searchTime={searchTime}
+                anyFiltersApplied={
+                  filtersState.enabled && filtersState.anyFiltersApplied
+                }
+              />
+            </View>
+          )}
+          {!tripPatterns.length && (
+            <View style={style.emptyResultsSpacer}></View>
+          )}
+          {!error && isValidLocations && (
+            <TouchableOpacity
+              onPress={loadMore}
+              disabled={searchState === 'searching'}
+              style={style.loadMoreButton}
+              testID="loadMoreButton"
+            >
+              {searchState === 'searching' ? (
+                <View style={style.loadingIndicator}>
+                  {tripPatterns.length ? (
+                    <>
+                      <ActivityIndicator
+                        color={theme.text.colors.secondary}
+                        style={{
+                          marginRight: theme.spacings.medium,
+                        }}
+                      />
+                      <ThemeText color="secondary" testID="searchingForResults">
+                        {t(TripSearchTexts.results.fetchingMore)}
+                      </ThemeText>
+                    </>
+                  ) : (
+                    <ThemeText
+                      color="secondary"
+                      style={style.loadingText}
+                      testID="searchingForResults"
+                    >
+                      {t(TripSearchTexts.searchState.searching)}
                     </ThemeText>
-                  </>
-                ) : null}
-              </>
-            )}
-          </TouchableOpacity>
-        )}
-      </ScrollView>
+                  )}
+                </View>
+              ) : (
+                <>
+                  {loadMore ? (
+                    <>
+                      <ThemeIcon
+                        colorType="secondary"
+                        svg={ExpandMore}
+                        size={'normal'}
+                      />
+                      <ThemeText color="secondary" testID="resultsLoaded">
+                        {' '}
+                        {t(TripSearchTexts.results.fetchMore)}
+                      </ThemeText>
+                    </>
+                  ) : null}
+                </>
+              )}
+            </TouchableOpacity>
+          )}
+        </ScrollView>
+      </View>
     </View>
   );
 };
