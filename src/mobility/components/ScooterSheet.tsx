@@ -48,62 +48,6 @@ export const ScooterSheet = ({vehicleId: id, position, close}: Props) => {
     rentalAppUri,
   });
 
-  const Content = () => {
-    if (isLoading) {
-      return <ActivityIndicator size="large" />;
-    }
-
-    if (error || !vehicle) {
-      return (
-        <View style={style.errorMessage}>
-          <MessageBox
-            type="error"
-            message={t(ScooterTexts.loadingFailed)}
-            onPressConfig={{
-              action: close,
-              text: t(ScreenHeaderTexts.headerButton.close.text),
-            }}
-          />
-        </View>
-      );
-    }
-
-    return (
-      <>
-        <Section>
-          <GenericSectionItem>
-            <OperatorLogo operatorName={operatorName} logoUrl={brandLogoUrl} />
-          </GenericSectionItem>
-        </Section>
-
-        <VehicleStats
-          left={
-            <VehicleStat
-              svg={Battery}
-              primaryStat={vehicle.currentFuelPercent + '%'}
-              secondaryStat={getRange(vehicle.currentRangeMeters, language)}
-            />
-          }
-          right={
-            <PricingPlan operator={operatorName} plan={vehicle.pricingPlan} />
-          }
-        />
-
-        {rentalAppUri && (
-          <FullScreenFooter>
-            <Button
-              style={style.button}
-              text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
-              onPress={openOperatorApp}
-              mode="primary"
-              interactiveColor={'interactive_0'}
-            />
-          </FullScreenFooter>
-        )}
-      </>
-    );
-  };
-
   return (
     <BottomSheetContainer>
       <ScreenHeaderWithoutNavigation
@@ -116,7 +60,57 @@ export const ScooterSheet = ({vehicleId: id, position, close}: Props) => {
         setFocusOnLoad={false}
       />
       <View style={style.container}>
-        <Content />
+        {isLoading && <ActivityIndicator size="large" />}
+        {!isLoading && !error && vehicle && (
+          <>
+            <Section>
+              <GenericSectionItem>
+                <OperatorLogo
+                  operatorName={operatorName}
+                  logoUrl={brandLogoUrl}
+                />
+              </GenericSectionItem>
+            </Section>
+            <VehicleStats
+              left={
+                <VehicleStat
+                  svg={Battery}
+                  primaryStat={vehicle.currentFuelPercent + '%'}
+                  secondaryStat={getRange(vehicle.currentRangeMeters, language)}
+                />
+              }
+              right={
+                <PricingPlan
+                  operator={operatorName}
+                  plan={vehicle.pricingPlan}
+                />
+              }
+            />
+            {rentalAppUri && (
+              <FullScreenFooter>
+                <Button
+                  style={style.button}
+                  text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
+                  onPress={openOperatorApp}
+                  mode="primary"
+                  interactiveColor={'interactive_0'}
+                />
+              </FullScreenFooter>
+            )}
+          </>
+        )}
+        {!isLoading && (error || !vehicle) && (
+          <View style={style.errorMessage}>
+            <MessageBox
+              type="error"
+              message={t(ScooterTexts.loadingFailed)}
+              onPressConfig={{
+                action: close,
+                text: t(ScreenHeaderTexts.headerButton.close.text),
+              }}
+            />
+          </View>
+        )}
       </View>
     </BottomSheetContainer>
   );
