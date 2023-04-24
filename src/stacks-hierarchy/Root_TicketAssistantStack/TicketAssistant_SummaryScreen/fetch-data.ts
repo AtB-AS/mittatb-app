@@ -29,11 +29,26 @@ export const useTicketAssistantDataFetch = (navigation: any) => {
       await getRecommendedTicket(data)
         .then((r) => {
           setHasDataChanged(false);
-          if (r.length === 0) {
+          if (r.tickets.length === 0) {
             setCrashed(true);
             return;
           }
           setResponse(r);
+          try {
+            if (r.tickets !== undefined) {
+              setPurchaseDetails(
+                handleRecommendedTicketResponse(
+                  r,
+                  tariffZones,
+                  userProfiles,
+                  preassignedFareProducts,
+                  fareProductTypeConfigs,
+                ),
+              );
+            }
+          } catch (e) {
+            setCrashed(true);
+          }
         })
         .catch(() => {
           setCrashed(true);
@@ -45,21 +60,6 @@ export const useTicketAssistantDataFetch = (navigation: any) => {
         fetchData();
       }
     });
-    try {
-      if (response?.tickets !== undefined) {
-        setPurchaseDetails(
-          handleRecommendedTicketResponse(
-            response,
-            tariffZones,
-            userProfiles,
-            preassignedFareProducts,
-            fareProductTypeConfigs,
-          ),
-        );
-      }
-    } catch (e) {
-      setCrashed(true);
-    }
 
     return () => {
       unsubscribe();

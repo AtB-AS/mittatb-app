@@ -11,7 +11,7 @@ type TicketAssistantState = {
   data: TicketAssistantData;
   updateData: (newData: TicketAssistantData) => void;
   response: RecommendedTicketResponse;
-  setResponse: (response: any) => void;
+  setResponse: (response: RecommendedTicketResponse) => void;
   purchaseDetails: PurchaseDetails;
   setPurchaseDetails: (purchaseDetails: PurchaseDetails) => void;
   hasDataChanged: boolean;
