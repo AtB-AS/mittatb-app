@@ -44,10 +44,9 @@ export const useFindCityZonesInLocations = (
   return filteredCityZones.filter(onlyUniquesBasedOnField('name'));
 };
 
-export function useJourneyModes(defaultValue: StreetMode = StreetMode.Foot): {
-  isFlexibleTransportEnabled: boolean;
-  modes: Types.Modes;
-} {
+export function useJourneyModes(
+  defaultValue: StreetMode = StreetMode.Foot,
+): Types.Modes {
   const flexibleTransportEnabled = useFlexibleTransportEnabled();
   const flexibleTransportAccessModeEnabled =
     useFlexibleTransportAccessModeEnabled();
@@ -57,20 +56,17 @@ export function useJourneyModes(defaultValue: StreetMode = StreetMode.Foot): {
     useFlexibleTransportEgressModeEnabled();
 
   return {
-    isFlexibleTransportEnabled: flexibleTransportEnabled,
-    modes: {
-      accessMode:
-        flexibleTransportEnabled && flexibleTransportAccessModeEnabled
-          ? StreetMode.Flexible
-          : defaultValue,
-      directMode:
-        flexibleTransportEnabled && flexibleTransportDirectModeEnabled
-          ? StreetMode.Flexible
-          : defaultValue,
-      egressMode:
-        flexibleTransportEnabled && flexibleTransportEgressModeEnabled
-          ? StreetMode.Flexible
-          : defaultValue,
-    },
+    accessMode:
+      flexibleTransportEnabled && flexibleTransportAccessModeEnabled
+        ? StreetMode.Flexible
+        : defaultValue,
+    directMode:
+      flexibleTransportEnabled && flexibleTransportDirectModeEnabled
+        ? StreetMode.Flexible
+        : defaultValue,
+    egressMode:
+      flexibleTransportEnabled && flexibleTransportEgressModeEnabled
+        ? StreetMode.Flexible
+        : defaultValue,
   };
 }

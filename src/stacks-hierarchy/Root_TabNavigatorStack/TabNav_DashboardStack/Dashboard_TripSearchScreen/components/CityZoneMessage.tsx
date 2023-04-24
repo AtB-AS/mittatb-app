@@ -8,22 +8,23 @@ import {getTextForLanguageWithFormat} from '@atb/translations/utils';
 import {FlexibleTransport} from '@atb/assets/svg/color/illustrations';
 import {CityZone} from '@atb/reference-data/types';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import {useJourneyModes} from '../utils';
+import {Location} from '@atb/favorites';
+import {useFindCityZonesInLocations} from '../utils';
 
 export type CityZoneMessageProps = {
-  cityZones: CityZone[];
+  from: Location | undefined;
+  to: Location | undefined;
 };
 
-export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
-  cityZones,
-}) => {
+export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({from, to}) => {
   const style = useStyle();
   const {language} = useTranslation();
 
   const {
     cityZoneMessageTexts: {singleZone, multipleZones},
   } = useFirestoreConfiguration();
-  const {isFlexibleTransportEnabled} = useJourneyModes();
+
+  const selectedCityZones = useFindCityZonesInLocations(from, to);
 
   const [isClosed, setClosed] = useState(false);
 
@@ -33,22 +34,23 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
     return () => {
       setClosed(false);
     };
-  }, [cityZones]);
+  }, [selectedCityZones]);
 
-  if (cityZones.length === 0 || isClosed) {
+  if (!selectedCityZones) {
     return null;
   }
 
-  if (!isFlexibleTransportEnabled) {
+  if (selectedCityZones.length === 0 || isClosed) {
     return null;
   }
 
-  const messageTemplate = cityZones.length == 1 ? singleZone : multipleZones;
+  const messageTemplate =
+    selectedCityZones.length == 1 ? singleZone : multipleZones;
 
   const message = getTextForLanguageWithFormat(
     messageTemplate.message,
     language,
-    ...cityZones.map((cityZone) => cityZone.name),
+    ...selectedCityZones.map((cityZone) => cityZone.name),
   );
 
   const openUrlForCityZone = (cityZone: CityZone) => {
@@ -58,7 +60,7 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
     }
   };
 
-  const messageActions = cityZones.map(
+  const messageActions = selectedCityZones.map(
     (cityZone) =>
       ({
         text: cityZone.name,

@@ -63,7 +63,7 @@ export function useTripsQuery(
     setTripPatterns([]);
   }, [setTripPatterns]);
 
-  const {modes: journeySearchModes} = useJourneyModes();
+  const journeySearchModes = useJourneyModes();
 
   const search = useCallback(
     (cursor?: string, existingTrips?: TripPatternWithKey[]) => {
