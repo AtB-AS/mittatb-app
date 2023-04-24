@@ -11,7 +11,7 @@ export const useTicketingAssistantEnabled = () => {
   } = usePreferences();
   const [debugOverride] = useTicketingAssistantDebugOverride();
 
-  if (debugOverride !== undefined) return debugOverride;
+  if (debugOverride !== undefined && !debugOverride) return false;
 
   if (enable_ticketing_assistant == undefined) {
     return false;
