@@ -10,7 +10,6 @@ export async function getRecommendedTicket(
     const response = await client.post<Offer[]>(url, body);
     return response.data;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
