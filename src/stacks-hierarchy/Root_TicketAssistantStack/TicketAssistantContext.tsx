@@ -10,7 +10,7 @@ import {
 type TicketAssistantState = {
   data: TicketAssistantData;
   updateData: (newData: TicketAssistantData) => void;
-  response: RecommendedTicketResponse | undefined;
+  response: RecommendedTicketResponse;
   setResponse: (response: any) => void;
   purchaseDetails: PurchaseDetails;
   setPurchaseDetails: (purchaseDetails: PurchaseDetails) => void;
@@ -54,10 +54,28 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
     preassigned_fare_products: preassignedFareProductsIds || [],
   };
 
+  const defaultRecommendedTicketResponse: RecommendedTicketResponse = {
+    total_cost: 301,
+    zones: [fromTariffZone.id, toTariffZone.id],
+    tickets: [
+      {
+        product_id: 'ATB:SalesPackage:ded0dc3b',
+        fare_product: 'ATB:PreassignedFareProduct:8808c360',
+        duration: 7,
+        quantity: 1,
+        price: 301,
+        traveller: {id: 'ADULT', user_type: 'ADULT'},
+      },
+    ],
+    single_ticket_price: 43,
+  };
+
   const [data, setData] = useState<TicketAssistantData>(
     defaultTicketAssistantData,
   );
-  const [response, setResponse] = useState<RecommendedTicketResponse>();
+  const [response, setResponse] = useState<RecommendedTicketResponse>(
+    defaultRecommendedTicketResponse,
+  );
 
   const [purchaseDetails, setPurchaseDetails] = useState<PurchaseDetails>(
     {} as PurchaseDetails,
