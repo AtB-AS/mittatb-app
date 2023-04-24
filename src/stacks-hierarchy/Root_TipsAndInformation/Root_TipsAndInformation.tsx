@@ -62,15 +62,16 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
         <Sections.Section style={styles.tipsContainer}>
           {tips.map((tip, index) => {
             const title = getTextForLanguage(tip.title, language);
+            const emoji = tip.emoji;
             const description = getTextForLanguage(tip.description, language);
 
-            if (!title || !description) return null;
+            if (!emoji || !title || !description) return null;
 
             return (
               <Sections.ExpandableSectionItem
                 key={index}
                 textType="body__primary--bold"
-                text={title}
+                text={emoji + ' ' + title}
                 showIconText={false}
                 expanded={currentlyOpen === index}
                 onPress={() => {
@@ -78,7 +79,7 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
                 }}
                 expandContent={
                   <ThemeText
-                    type="body__tertiary"
+                    type="body__secondary"
                     style={styles.expandedContent}
                     isMarkdown={true}
                   >
