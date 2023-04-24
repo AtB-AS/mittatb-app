@@ -28,19 +28,11 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({from, to}) => {
 
   const [isClosed, setClosed] = useState(false);
 
-  useEffect(() => {
-    setClosed(false);
-
-    return () => {
-      setClosed(false);
-    };
-  }, [selectedCityZones]);
-
-  if (!selectedCityZones) {
+  if (!selectedCityZones || isClosed) {
     return null;
   }
 
-  if (selectedCityZones.length === 0 || isClosed) {
+  if (selectedCityZones.length === 0) {
     return null;
   }
 
