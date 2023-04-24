@@ -39,7 +39,6 @@ export const getVehicle = (
   return client
     .get<GetVehicleQuery>(stringifyUrl(url, query), {
       ...opts,
-      baseURL: 'http://localhost:8080',
     })
     .then((res) => res.data);
 };
