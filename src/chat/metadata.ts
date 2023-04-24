@@ -20,6 +20,7 @@ type Metadata = {
   'AtB-Mobile-Token-Error-Correlation-Id': string;
   'AtB-Beta-Departures': string;
   'AtB-Beta-TripSearch': string;
+  'AtB-Ticket-Assistant': string;
 };
 
 export async function updateMetadata(metadata: Partial<Metadata>) {

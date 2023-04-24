@@ -57,7 +57,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
         contentContainerStyle={styles.contentContainer}
       >
         <ThemeText
-          type={'body__primary--jumbo--bold'}
+          type={'heading--big'}
           style={styles.header}
           color={themeColor}
           accessibilityLabel={t(TicketAssistantTexts.categoryPicker.title)}
@@ -84,7 +84,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
                   expandContent={
                     <View>
                       <ThemeText
-                        type={'body__tertiary'}
+                        type={'body__secondary'}
                         style={styles.expandedContent}
                         isMarkdown={true}
                       >
@@ -170,7 +170,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     height: 250,
     left: 0,
     right: 0,
-    bottom: 250,
+    bottom: 45,
     padding: 0,
     margin: 0,
   },

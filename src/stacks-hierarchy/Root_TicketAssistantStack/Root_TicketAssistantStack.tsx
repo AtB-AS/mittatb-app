@@ -20,6 +20,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {TicketAssistantContextProvider} from './TicketAssistantContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Platform} from 'react-native';
 
 const Tab = createMaterialTopTabNavigator<TicketAssistantStackParams>();
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -78,6 +79,8 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
         <Tab.Screen
           name="TicketAssistant_ZonePickerScreen"
           component={TicketAssistant_ZonePickerScreen}
+          //TODO: Find better fix here for scroll view on android
+          options={{swipeEnabled: Platform.OS === 'ios'}}
         />
         <Tab.Screen
           name="TicketAssistant_SummaryScreen"

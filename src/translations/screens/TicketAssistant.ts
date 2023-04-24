@@ -10,12 +10,15 @@ const TicketAssistantTexts = {
       'Velkommen til billettveilederen',
       'Welcome to the ticket assistant',
     ),
-    description: {
-      part1: _(
-        'Få hjelp til å velge billetten som passer deg.',
-        'Get help choosing the ticket that suits you.',
-      ),
-    },
+    description: _(
+      'Få hjelp til å velge billetten som passer deg.',
+      'Get help choosing the ticket that suits you.',
+    ),
+
+    boatInfo: _(
+      'Akkurat nå gjelder veilederen kun for reiser med buss & trikk, og ikke båt.',
+      'Right now, the assistant applies only to travel by bus & tram, and not by boat.',
+    ),
     mainButton: _('Start', 'Start'),
     a11yStartHint: _(
       'Aktiver for å starte billettveilederen',
@@ -53,10 +56,11 @@ const TicketAssistantTexts = {
         `Du reiser ${amount.value} ganger i uka`,
         `You travel ${amount.value} times a week`,
       ),
-    resultMoreThan14: _(
-      'Du reiser 14 ganger eller mer i uka',
-      'You travel 14 times or more per week',
-    ),
+    resultMoreThanMax: (max: {value: number}) =>
+      _(
+        `Du reiser ${max.value} ganger eller mer i uka`,
+        `You travel ${max.value} times or more per week`,
+      ),
     mainButton: _('Neste', 'Next'),
     a11yNextPageHint: _(
       'Aktiver for å gå til neste side',
@@ -93,15 +97,15 @@ const TicketAssistantTexts = {
     ),
     minLimit: _('1 dag', '1 day'),
     minLimitA11yLabel: _('Minstegrensen er 1 dag', 'Minimum limit is 1 day'),
-    maxLimit: _('180 dager +', '180 days +'),
+    maxLimit: _('6mnd +', '6 months +'),
     maxLimitA11yLabel: _(
-      'Maksgrensen er 180 dager pluss',
-      'Max limit is 180 days plus',
+      'Maksgrensen er 6 måneder pluss',
+      'Max limit is 6 months plus',
     ),
     resultMonths: (amount: {value: number}) =>
       _(
         `Du skal reise i ${amount.value} mnd.`,
-        `You will travel for ${amount.value} months.`,
+        `You will travel for ${amount.value} month(s).`,
       ),
     resultWeeks: (amount: {value: number}) =>
       _(
@@ -133,11 +137,6 @@ const TicketAssistantTexts = {
     title: _('Anbefalt for', 'Recommended for'),
     titleA11yLabel: _('Anbefalt for', 'Recommended for'),
     description: (data: {frequency: number; date: string}) =>
-      _(
-        `${data.frequency} turer i uka fram til ${data.date}`,
-        `${data.frequency} trips per week until ${data.date}`,
-      ),
-    descriptionA11yLabel: (data: {frequency: number; date: string}) =>
       _(
         `${data.frequency} turer i uka fram til ${data.date}`,
         `${data.frequency} trips per week until ${data.date}`,
@@ -177,24 +176,40 @@ const TicketAssistantTexts = {
     ticketSummaryA11yLabel: (data: {
       ticket: string;
       traveller: string;
-      fromTariffZone: string;
-      toTariffZone: string;
+      tariffZones: string;
       price: string;
       pricePerTrip: string;
     }) =>
       _(
-        `Du har valgt ${data.ticket}. \n Reisende: ${data.traveller}. \n Sone: ${data.fromTariffZone} - ${data.toTariffZone}. \n Pris: ${data.price}. \n Pris per tur: ${data.pricePerTrip}.`,
-        `You have selected ${data.ticket}. \n Traveller: ${data.traveller}. \n Zone: ${data.fromTariffZone} - ${data.toTariffZone}. \n Price: ${data.price}. \n Price per trip: ${data.pricePerTrip}.`,
+        `Du har valgt ${data.ticket}. \n Reisende: ${data.traveller}. \n Soner: ${data.tariffZones}. \n Pris: ${data.price}kr. \n Pris per tur: ${data.pricePerTrip}kr.`,
+        `You have selected ${data.ticket}. \n Traveller: ${data.traveller}. \n Zones: ${data.tariffZones}. \n Price: ${data.price}. \n Price per trip: ${data.pricePerTrip}.`,
       ),
-    noticeLabel1: _(
-      'Billetten dekker ikke hele perioden, ta billettveilederen på nytt for å få en ny anbefaling når denne billetten går ut.',
-      'The ticket does not cover the entire period, take the ticket assistant again to get a new recommendation when this ticket expires.',
+    durationNotice: _(
+      'NB: denne billetten dekker ikke hele perioden du har satt. Ta veilederen på nytt når denne billetten utløper.',
+      'NB: this ticket does not cover the entire period you have set. Take the guide again when this ticket expires.',
     ),
-    noticeLabel2: _(
+    a11yDurationNoticeLabel: _(
+      'NB: denne veilederen fungerer kun for reise med buss og trikk, ikke båt. ',
+      'NB: this guide only works for travel by bus and tram, not boat.',
+    ),
+    singleTicketNotice: _(
       'Siden du ikke reiser så ofte, anbefaler vi deg å kjøpe enkeltbilletter.',
       'Since you do not travel so often, we recommend that you buy single tickets.',
     ),
+    a11ySingleTicketNoticeLabel: _(
+      'Siden du ikke reiser så ofte, anbefaler vi deg å kjøpe enkeltbilletter.',
+      'Since you do not travel so often, we recommend that you buy single tickets.',
+    ),
+    equalPriceNotice: _(
+      'Denne billetten koster like mye som enkeltbilletter, men en periodebillett er anbefalt fordi den er mer fleksibel.',
+      'This ticket costs the same as single tickets, but a period ticket is recommended because it is more flexible.',
+    ),
     feedback: _('Gi tilbakemelding', 'Give feedback'),
+    crashedHeader: _('Oisann!', 'Oops!'),
+    crashedDescription: _(
+      'Det skjedde en feil. Kunne ikke hente billetten for deg.',
+      'An error occurred. Could not get the ticket for you.',
+    ),
   },
 };
 export default TicketAssistantTexts;

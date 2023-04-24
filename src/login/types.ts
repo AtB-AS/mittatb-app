@@ -24,5 +24,5 @@ export type LoginInAppScreenProps<T extends keyof LoginInAppStackParams> =
 
 export type AfterLoginParams<T extends keyof RootStackParamList> = {
   screen: T;
-  params: RootStackParamList[T];
+  params?: RootStackParamList[T];
 };

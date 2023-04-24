@@ -9,7 +9,8 @@ import {FareProductTypeConfig} from '@atb/configuration';
 export type LoginOnboardingInAppRouteParams = {
   afterLogin:
     | AfterLoginParams<'Root_TabNavigatorStack'>
-    | AfterLoginParams<'Root_PurchaseOverviewScreen'>;
+    | AfterLoginParams<'Root_PurchaseOverviewScreen'>
+    | AfterLoginParams<'Root_TicketAssistantStack'>;
   fareProductTypeConfig: FareProductTypeConfig;
 };
 
@@ -30,7 +31,7 @@ export const LoginOnboardingInApp = ({
           navigation.navigate('ActiveFareContractPromptInApp', {
             afterLogin,
           });
-        } else {
+        } else if (!hasActiveFareContracts) {
           navigation.navigate(
             enable_vipps_login ? 'LoginOptionsScreen' : 'PhoneInputInApp',
             {

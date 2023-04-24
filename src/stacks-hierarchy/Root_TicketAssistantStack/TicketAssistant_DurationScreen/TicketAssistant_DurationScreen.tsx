@@ -63,6 +63,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   function updateDuration(value: number, fromPicker?: boolean) {
     const newData = {...data, duration: fromPicker ? value : durations[value]};
     updateData(newData);
+    setSliderValue(newData.duration);
   }
 
   const duration = usedSlider ? sliderValue : data.duration;
@@ -85,7 +86,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.mainView}>
           <ThemeText
-            type={'body__primary--jumbo--bold'}
+            type={'heading--big'}
             style={styles.header}
             color={themeColor}
             accessibilityLabel={t(
@@ -120,7 +121,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                   <RNDateTimePicker
                     value={
                       usedSlider
-                        ? parseISO(getDateFromSlider(data.duration))
+                        ? parseISO(getDateFromSlider(sliderValue))
                         : parseISO(date)
                     }
                     mode="date"
@@ -155,7 +156,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                     onPress={() => setShowDatePicker(true)}
                     text={format(
                       usedSlider
-                        ? parseISO(getDateFromSlider(data.duration))
+                        ? parseISO(getDateFromSlider(sliderValue))
                         : parseISO(date),
                       'dd. MMM. yyyy',
                     )}
@@ -235,15 +236,16 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                 </View>
               </>
             )}
+
+            <SectionSeparator />
+            <ThemeText
+              type={'body__primary'}
+              style={styles.description}
+              accessibilityLabel={resultString}
+            >
+              {resultString}
+            </ThemeText>
           </View>
-          <ThemeText
-            type={'body__primary'}
-            style={styles.description}
-            color={themeColor}
-            accessibilityLabel={resultString}
-          >
-            {resultString}
-          </ThemeText>
         </View>
 
         <View style={styles.bottomView}>
@@ -284,6 +286,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     paddingVertical: theme.spacings.small,
+    paddingHorizontal: theme.spacings.medium,
     borderRadius: theme.border.radius.regular,
     backgroundColor: theme.static.background.background_0.background,
     marginVertical: theme.spacings.xLarge,
@@ -293,7 +296,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: theme.spacings.medium,
   },
   datePickerHeader: {
     flexDirection: 'row',
@@ -334,8 +336,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   description: {
     textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingVertical: theme.spacings.small,
+    paddingVertical: theme.spacings.medium,
   },
   header: {
     textAlign: 'center',

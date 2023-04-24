@@ -24,18 +24,30 @@ export const TicketAssistant_WelcomeScreen = ({
       style={styles.container}
       contentContainerStyle={styles.contentContainer}
     >
+      <ThemeText
+        type="heading--big"
+        style={styles.header}
+        color={themeColor}
+        accessibilityLabel={t(TicketAssistantTexts.welcome.titleA11yLabel)}
+      >
+        {t(TicketAssistantTexts.welcome.title)}
+      </ThemeText>
       <View style={styles.mainView}>
+        <TicketSplash width={windowWidth} height={windowWidth / 2} />
+
         <ThemeText
-          type="body__primary--jumbo--bold"
-          style={styles.header}
+          style={styles.description}
+          type={'body__primary'}
           color={themeColor}
-          accessibilityLabel={t(TicketAssistantTexts.welcome.titleA11yLabel)}
         >
-          {t(TicketAssistantTexts.welcome.title)}
+          {t(TicketAssistantTexts.welcome.description)}
         </ThemeText>
-        <TicketSplash width={windowWidth} height={windowWidth * (2 / 3)} />
-        <ThemeText color={themeColor} style={styles.description}>
-          {t(TicketAssistantTexts.welcome.description.part1)}
+        <ThemeText
+          style={styles.boatInfo}
+          type={'body__secondary'}
+          color={themeColor}
+        >
+          {t(TicketAssistantTexts.welcome.boatInfo)}
         </ThemeText>
       </View>
       <View style={styles.bottomView}>
@@ -58,19 +70,25 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     backgroundColor: theme.static.background[themeColor].background,
+    alignContent: 'center',
   },
   mainView: {
-    justifyContent: 'space-between',
     flex: 1,
+    justifyContent: 'center',
   },
   header: {
     textAlign: 'center',
     paddingHorizontal: theme.spacings.xLarge,
   },
   description: {
+    marginTop: theme.spacings.medium,
+    marginHorizontal: theme.spacings.xLarge,
     textAlign: 'center',
-    paddingHorizontal: theme.spacings.xLarge,
-    paddingBottom: theme.spacings.xLarge,
+  },
+  boatInfo: {
+    marginTop: theme.spacings.medium,
+    textAlign: 'center',
+    marginHorizontal: theme.spacings.xLarge,
   },
   bottomView: {
     paddingHorizontal: theme.spacings.xLarge,
