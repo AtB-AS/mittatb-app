@@ -1,25 +1,14 @@
-import {useTheme, StyleSheet} from '@atb/theme';
-import {
-  ScreenHeaderTexts,
-  getTextForLanguage,
-  useTranslation,
-} from '@atb/translations';
+import {StyleSheet} from '@atb/theme';
+import {getTextForLanguage, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
-import {Linking, View} from 'react-native';
+import {Linking} from 'react-native';
 import * as Sections from '@atb/components/sections';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageBoxAction, MessageBoxV2} from '@atb/components/message-box';
 import {getTextForLanguageWithFormat} from '@atb/translations/utils';
 import {FlexibleTransport} from '@atb/assets/svg/color/illustrations';
 import {CityZone} from '@atb/reference-data/types';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {useJourneyModes} from '../utils';
-import {
-  BottomSheetContainer,
-  useBottomSheet,
-} from '@atb/components/bottom-sheet';
-import {Button} from '@atb/components/button';
-import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 
 export type CityZoneMessageProps = {
   cityZones: CityZone[];
@@ -29,9 +18,7 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
   cityZones,
 }) => {
   const style = useStyle();
-  const {theme} = useTheme();
-  const {t, language} = useTranslation();
-  const {open: openBottomSheet} = useBottomSheet();
+  const {language} = useTranslation();
 
   const {
     cityZoneMessageTexts: {singleZone, multipleZones},
@@ -56,16 +43,12 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
     return null;
   }
 
-  const messageTexts = cityZones.length == 1 ? singleZone : multipleZones;
+  const messageTemplate = cityZones.length == 1 ? singleZone : multipleZones;
 
   const message = getTextForLanguageWithFormat(
-    messageTexts.message,
+    messageTemplate.message,
     language,
     ...cityZones.map((cityZone) => cityZone.name),
-  );
-  const actionButtonText = getTextForLanguage(
-    messageTexts.actionButtonText,
-    language,
   );
 
   const openUrlForCityZone = (cityZone: CityZone) => {
@@ -75,57 +58,26 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
     }
   };
 
-  const openWebsites = () => {
-    if (cityZones.length == 1) {
-      return;
-    }
+  const messageActions = cityZones.map(
+    (cityZone) =>
+      ({
+        text: cityZone.name,
+        type: 'button',
+        onPress: () => openUrlForCityZone(cityZone),
+      } as MessageBoxAction),
+  );
 
-    openBottomSheet((close) => (
-      <BottomSheetContainer>
-        <View>
-          <ScreenHeaderWithoutNavigation
-            leftButton={{
-              type: 'close',
-              onPress: close,
-              text: t(ScreenHeaderTexts.headerButton.close.text),
-            }}
-            color={'background_1'}
-            setFocusOnLoad={false}
-          />
-        </View>
-        <View>
-          {cityZones.map((cityZone) => (
-            <Button
-              style={style.websiteButton}
-              interactiveColor="interactive_0"
-              text={cityZone.name}
-              onPress={() => {
-                openUrlForCityZone(cityZone);
-                close();
-              }}
-              rightIcon={{svg: ExternalLink}}
-            />
-          ))}
-        </View>
-      </BottomSheetContainer>
-    ));
-  };
-
-  if (message && actionButtonText) {
+  if (message && messageActions) {
     return (
       <Sections.Section style={style.cityZoneMessage}>
-        <MessageBox
-          type="info"
+        <MessageBoxV2
+          type="default"
           message={message}
-          color={theme.static.background.background_0}
           icon={() => <FlexibleTransport />}
           onDismiss={() => {
             setClosed(true);
           }}
-          onPressConfig={{
-            action: openWebsites,
-            text: actionButtonText,
-          }}
+          actions={messageActions}
         />
       </Sections.Section>
     );
