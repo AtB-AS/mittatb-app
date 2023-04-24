@@ -32,7 +32,7 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
   useEffect(
     () =>
       firestore()
-        .collection<TipRaw>('TipsAndInformation')
+        .collection<TipRaw>('tipsAndInformation')
         .onSnapshot(
           async (snapshot) => {
             const newTips = mapToTips(snapshot.docs);
