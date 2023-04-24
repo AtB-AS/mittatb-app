@@ -36,7 +36,6 @@ export const useTicketAssistantDataFetch = (navigation: any) => {
           setResponse(r);
         })
         .catch(() => {
-          console.log('Error fetching recommended ticket');
           setCrashed(true);
         });
     };
@@ -59,7 +58,6 @@ export const useTicketAssistantDataFetch = (navigation: any) => {
         );
       }
     } catch (e) {
-      console.log(e);
       setCrashed(true);
     }
 

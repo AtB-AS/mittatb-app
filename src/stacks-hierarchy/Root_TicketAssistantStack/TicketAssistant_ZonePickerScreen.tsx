@@ -125,7 +125,7 @@ export const TicketAssistant_ZonePickerScreen = ({
         <View style={styles.bottomView}>
           <Button
             interactiveColor="interactive_0"
-            onPress={async () => {
+            onPress={() => {
               navigation.navigate('TicketAssistant_SummaryScreen');
             }}
             text={t(TicketAssistantTexts.frequency.mainButton)}
