@@ -1,69 +1,47 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {TipsAndInformationTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  TipsAndInformationTexts,
+  useTranslation,
+} from '@atb/translations';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {themeColor} from '@atb/stacks-hierarchy/Root_OnboardingStack/Onboarding_WelcomeScreen';
 import * as Sections from '@atb/components/sections';
-import {Button} from '@atb/components/button';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {FareProductTypeConfig} from '@atb-as/config-specs';
-import {useFirestoreConfiguration} from '@atb/configuration';
-import {productIsSellableInApp} from '@atb/reference-data/utils';
-import {useAuthState} from '@atb/auth';
+import firestore from '@react-native-firebase/firestore';
+import {
+  TipRaw,
+  TipType,
+} from '@atb/stacks-hierarchy/Root_TipsAndInformation/types';
+import {mapToTips} from '@atb/stacks-hierarchy/Root_TipsAndInformation/converters';
 
 type Props = RootStackScreenProps<'Root_TipsAndInformation'>;
 
-export const Root_TipsAndInformation = ({navigation}: Props) => {
+export const Root_TipsAndInformation = ({}: Props) => {
   const styles = useScreenStyle();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const [currentlyOpen, setCurrentlyOpen] = useState<number>(0);
-  const {authenticationType} = useAuthState();
 
-  const assistantTipIndex = TipsAndInformationTexts.tips.length;
+  const [tips, setTips] = useState<TipType[]>([]);
 
-  const {fareProductTypeConfigs, preassignedFareProducts} =
-    useFirestoreConfiguration();
-
-  const sellableProductsInApp = preassignedFareProducts.filter(
-    productIsSellableInApp,
-  );
-
-  const sellableFareProductTypeConfigs = fareProductTypeConfigs.filter(
-    (config) => sellableProductsInApp.some((p) => p.type === config.type),
-  );
-
-  const groupedConfigs = sellableFareProductTypeConfigs.reduce<
-    [FareProductTypeConfig, FareProductTypeConfig | undefined][]
-  >((grouped, current, index, arr) => {
-    if (index % 2 === 0) return [...grouped, [current, arr[index + 1]]];
-    return grouped;
-  }, []);
-  // Period ticket Config
-  const config = groupedConfigs[0][1];
-
-  const onTicketAssistantSelect = (
-    fareProductTypeConfig: FareProductTypeConfig,
-  ) => {
-    if (
-      fareProductTypeConfig.configuration.requiresLogin &&
-      authenticationType !== 'phone'
-    ) {
-      navigation.navigate('LoginInApp', {
-        screen: 'LoginOnboardingInApp',
-        params: {
-          fareProductTypeConfig,
-          afterLogin: {
-            screen: 'Root_TicketAssistantStack',
+  useEffect(
+    () =>
+      firestore()
+        .collection<TipRaw>('tipsAndInformation')
+        .onSnapshot(
+          async (snapshot) => {
+            const newTips = mapToTips(snapshot.docs);
+            setTips(newTips);
           },
-        },
-      });
-    } else {
-      setCurrentlyOpen(assistantTipIndex);
-      navigation.navigate('Root_TicketAssistantStack');
-    }
-  };
+          (err) => {
+            console.warn(err);
+          },
+        ),
+    [],
+  );
 
   return (
     <View style={styles.container}>
@@ -80,57 +58,35 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
 
       <View style={styles.innerContainer}>
         <Sections.Section style={styles.tipsContainer}>
-          {/* eslint-disable-next-line rulesdir/translations-warning */}
-          {TipsAndInformationTexts.tips.map(({title, tip}, index) => (
-            <Sections.ExpandableSectionItem
-              key={index}
-              textType="body__primary--bold"
-              text={t(title)}
-              showIconText={false}
-              expanded={currentlyOpen === index}
-              onPress={() => {
-                setCurrentlyOpen(index);
-              }}
-              expandContent={
-                <ThemeText
-                  type="body__tertiary"
-                  style={styles.expandedContent}
-                  isMarkdown={true}
-                >
-                  {t(tip)}
-                </ThemeText>
-              }
-            />
-          ))}
-          {config && (
-            <Sections.ExpandableSectionItem
-              textType="body__primary--bold"
-              text={t(TipsAndInformationTexts.ticketAssistantTip.title)}
-              showIconText={false}
-              onPress={() => {
-                setCurrentlyOpen(assistantTipIndex);
-              }}
-              expanded={currentlyOpen === assistantTipIndex}
-              expandContent={
-                <View>
+          {tips.map((tip, index) => {
+            const title = getTextForLanguage(tip.title, language);
+            const emoji = tip.emoji;
+            const description = getTextForLanguage(tip.description, language);
+
+            if (!emoji || !title || !description) return null;
+
+            return (
+              <Sections.ExpandableSectionItem
+                key={index}
+                textType="body__primary--bold"
+                text={emoji + ' ' + title}
+                showIconText={false}
+                expanded={currentlyOpen === index}
+                onPress={() => {
+                  setCurrentlyOpen(index);
+                }}
+                expandContent={
                   <ThemeText
-                    type="body__tertiary"
+                    type="body__secondary"
                     style={styles.expandedContent}
                     isMarkdown={true}
                   >
-                    {t(TipsAndInformationTexts.ticketAssistantTip.tip)}
+                    {description}
                   </ThemeText>
-                  <Button
-                    style={styles.goToAssistantButton}
-                    onPress={() => {
-                      onTicketAssistantSelect(config);
-                    }}
-                    text={t(TipsAndInformationTexts.goToAssistantButton.title)}
-                  />
-                </View>
-              }
-            />
-          )}
+                }
+              />
+            );
+          })}
         </Sections.Section>
       </View>
     </View>
@@ -141,9 +97,6 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.static.background.background_accent_0.background,
-  },
-  goToAssistantButton: {
-    marginTop: theme.spacings.medium,
   },
   expandedContent: {
     color: theme.text.colors.secondary,
