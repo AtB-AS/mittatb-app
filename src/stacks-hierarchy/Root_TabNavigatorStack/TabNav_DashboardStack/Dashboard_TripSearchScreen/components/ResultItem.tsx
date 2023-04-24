@@ -303,13 +303,11 @@ function ResultItemFooter() {
   const {t} = useTranslation();
 
   return (
-    <View style={styles.resultFooter}>
-      <View style={styles.detailsTextWrapper}>
-        <ThemeText type="body__secondary">
-          {t(TripSearchTexts.results.resultItem.footer.detailsLabel)}
-        </ThemeText>
-        <ThemeIcon svg={ArrowRight} style={styles.detailsIcon} />
-      </View>
+    <View style={[styles.resultFooter, styles.detailsTextWrapper]}>
+      <ThemeText type="body__secondary">
+        {t(TripSearchTexts.results.resultItem.footer.detailsLabel)}
+      </ThemeText>
+      <ThemeIcon svg={ArrowRight} style={styles.detailsIcon} />
     </View>
   );
 }
@@ -318,7 +316,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   result: {
     backgroundColor: theme.static.background.background_0.background,
     borderRadius: theme.border.radius.regular,
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacings.small,
   },
   resultInPast: {
     backgroundColor: theme.static.background.background_2.background,
@@ -389,9 +387,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     padding: theme.spacings.medium,
-    paddingBottom: theme.spacings.medium,
-    borderBottomColor: theme.border.primary,
-    borderBottomWidth: theme.border.width.slim,
+    paddingBottom: 0,
   },
   row: {
     flexDirection: 'row',
@@ -425,7 +421,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
     borderTopColor: theme.border.primary,
     borderTopWidth: theme.border.width.slim,
-    padding: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
+    paddingVertical: theme.spacings.small,
     alignItems: 'flex-end',
   },
   fromPlaceText: {
