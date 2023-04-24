@@ -2,9 +2,9 @@ import * as Sections from '@atb/components/sections';
 import {FareContract, isCarnetTravelRight} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {OrderDetails} from '@atb/fare-contracts/Details/OrderDetails';
-import {UnknownFareContractDetails} from '@atb/fare-contracts/Details/UnknownFareContractDetails';
-import {CarnetDetails} from '@atb/fare-contracts/Carnet/CarnetDetails';
+import {OrderDetails} from '@atb/fare-contracts/details/OrderDetails';
+import {UnknownFareContractDetails} from '@atb/fare-contracts/details/UnknownFareContractDetails';
+import {CarnetDetails} from '@atb/fare-contracts/carnet/CarnetDetails';
 
 type Props = {
   fareContract: FareContract;

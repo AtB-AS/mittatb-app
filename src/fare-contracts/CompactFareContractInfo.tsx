@@ -15,7 +15,7 @@ import {secondsToDuration} from '@atb/utils/date';
 import {FareContractInfoDetailsProps} from './FareContractInfo';
 import * as Sections from '@atb/components/sections';
 import {screenReaderPause} from '@atb/components/text';
-import {InspectionSymbol} from '@atb/fare-contracts/Component/InspectionSymbol';
+import {InspectionSymbol} from '@atb/fare-contracts/components/InspectionSymbol';
 
 type CompactFareContractInfoProps = FareContractInfoDetailsProps & {
   onPressDetails?: () => void;

@@ -1,6 +1,6 @@
 import * as Sections from '@atb/components/sections';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
-import {CarnetDetails} from '@atb/fare-contracts/Carnet/CarnetDetails';
+import {CarnetDetails} from '@atb/fare-contracts/carnet/CarnetDetails';
 import {CarnetTravelRight, FareContract} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
@@ -38,8 +38,8 @@ export const CarnetFareContractInfo: React.FC<Props> = ({
       <Sections.LinkSectionItem
         text={t(FareContractTexts.detailsLink.notValid)}
         onPress={() =>
-          navigation.navigate('FareContractModal', {
-            screen: 'CarnetDetailsScreen',
+          navigation.navigate({
+            name: 'Root_CarnetDetailsScreen',
             params: {
               orderId: fareContract.orderId,
               isInspectable: isInspectable,
