@@ -59,37 +59,45 @@ export const ScooterSheet = ({vehicleId: id, position, close}: Props) => {
         color={'background_1'}
         setFocusOnLoad={false}
       />
-      <View style={style.container}>
-        {isLoading && <ActivityIndicator size="large" />}
+      <>
+        {isLoading && (
+          <View style={style.activityIndicator}>
+            <ActivityIndicator size="large" />
+          </View>
+        )}
         {!isLoading && !error && vehicle && (
           <>
-            <Section>
-              <GenericSectionItem>
-                <OperatorLogo
-                  operatorName={operatorName}
-                  logoUrl={brandLogoUrl}
-                />
-              </GenericSectionItem>
-            </Section>
-            <VehicleStats
-              left={
-                <VehicleStat
-                  svg={Battery}
-                  primaryStat={vehicle.currentFuelPercent + '%'}
-                  secondaryStat={getRange(vehicle.currentRangeMeters, language)}
-                />
-              }
-              right={
-                <PricingPlan
-                  operator={operatorName}
-                  plan={vehicle.pricingPlan}
-                />
-              }
-            />
+            <View style={style.container}>
+              <Section>
+                <GenericSectionItem>
+                  <OperatorLogo
+                    operatorName={operatorName}
+                    logoUrl={brandLogoUrl}
+                  />
+                </GenericSectionItem>
+              </Section>
+              <VehicleStats
+                left={
+                  <VehicleStat
+                    svg={Battery}
+                    primaryStat={vehicle.currentFuelPercent + '%'}
+                    secondaryStat={getRange(
+                      vehicle.currentRangeMeters,
+                      language,
+                    )}
+                  />
+                }
+                right={
+                  <PricingPlan
+                    operator={operatorName}
+                    plan={vehicle.pricingPlan}
+                  />
+                }
+              />
+            </View>
             {rentalAppUri && (
               <FullScreenFooter>
                 <Button
-                  style={style.button}
                   text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
                   onPress={openOperatorApp}
                   mode="primary"
@@ -111,7 +119,7 @@ export const ScooterSheet = ({vehicleId: id, position, close}: Props) => {
             />
           </View>
         )}
-      </View>
+      </>
     </BottomSheetContainer>
   );
 };
@@ -125,13 +133,13 @@ const getRange = (rangeInMeters: number, language: Language) => {
 };
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
+  activityIndicator: {
+    marginBottom: theme.spacings.xLarge,
+  },
   container: {
-    paddingBottom: theme.spacings.xLarge,
+    paddingHorizontal: theme.spacings.medium,
   },
   errorMessage: {
     marginHorizontal: theme.spacings.medium,
-  },
-  button: {
-    marginTop: theme.spacings.medium,
   },
 }));

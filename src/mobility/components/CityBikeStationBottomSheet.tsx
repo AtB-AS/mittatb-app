@@ -52,39 +52,41 @@ export const CityBikeStationSheet = ({station, close}: Props) => {
         color={'background_1'}
         setFocusOnLoad={false}
       />
-      <Section withPadding>
-        <GenericSectionItem>
-          <OperatorLogo operatorName={operatorName} logoUrl={brandLogoUrl} />
-          {stationName && (
-            <View style={style.stationName}>
-              <ThemeText type="body__secondary">{stationName}</ThemeText>
-            </View>
-          )}
-        </GenericSectionItem>
-      </Section>
-      <VehicleStats
-        left={
-          <VehicleStat
-            svg={Bicycle}
-            primaryStat={station.numBikesAvailable}
-            secondaryStat={t(BicycleTexts.stations.numBikesAvailable)}
-          />
-        }
-        right={
-          <VehicleStat
-            svg={themeName === 'dark' ? ParkingDark : ParkingLight}
-            primaryStat={
-              station.numDocksAvailable ??
-              t(BicycleTexts.stations.unknownDocksAvailable)
-            }
-            secondaryStat={t(BicycleTexts.stations.numDocksAvailable)}
-          />
-        }
-      />
+      <View style={style.container}>
+        <Section>
+          <GenericSectionItem>
+            <OperatorLogo operatorName={operatorName} logoUrl={brandLogoUrl} />
+            {stationName && (
+              <View style={style.stationName}>
+                <ThemeText type="body__secondary">{stationName}</ThemeText>
+              </View>
+            )}
+          </GenericSectionItem>
+        </Section>
+        <VehicleStats
+          left={
+            <VehicleStat
+              svg={Bicycle}
+              primaryStat={station.numBikesAvailable}
+              secondaryStat={t(BicycleTexts.stations.numBikesAvailable)}
+            />
+          }
+          right={
+            <VehicleStat
+              svg={themeName === 'dark' ? ParkingDark : ParkingLight}
+              primaryStat={
+                station.numDocksAvailable ??
+                t(BicycleTexts.stations.unknownDocksAvailable)
+              }
+              secondaryStat={t(BicycleTexts.stations.numDocksAvailable)}
+            />
+          }
+        />
+      </View>
+
       {rentalAppUri && (
         <FullScreenFooter>
           <Button
-            style={style.button}
             text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
             onPress={openOperatorApp}
             mode="primary"
@@ -97,9 +99,10 @@ export const CityBikeStationSheet = ({station, close}: Props) => {
 };
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
-  button: {
-    marginTop: theme.spacings.medium,
+  container: {
+    paddingHorizontal: theme.spacings.medium,
   },
+
   stationName: {
     flex: 1,
     alignItems: 'center',
