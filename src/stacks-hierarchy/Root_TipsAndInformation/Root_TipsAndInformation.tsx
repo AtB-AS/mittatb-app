@@ -94,7 +94,7 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
             text={t(TipsAndInformationTexts.ticketAssistantTip.title)}
             showIconText={false}
             onPress={() => {
-              setCurrentlyOpen(assistantTipIndex);
+              setCurrentlyOpen(100);
             }}
             expanded={currentlyOpen === assistantTipIndex}
             expandContent={
