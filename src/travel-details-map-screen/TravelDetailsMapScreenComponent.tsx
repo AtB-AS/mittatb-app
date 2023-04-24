@@ -12,17 +12,17 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {MapTexts, useTranslation} from '@atb/translations';
 import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useMemo, useRef} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
 import {VehiclePosition} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
-import {useGetLiveServiceJourneyVehicles} from '@atb/travel-details-map-screen/use-get-live-service-journey-vehicles';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
-  initialVehiclePosition?: VehiclePosition;
+  // TODO: update name and use parameter
+  _initialVehiclePosition?: VehiclePosition;
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
 };
@@ -33,7 +33,7 @@ type Props = TravelDetailsMapScreenParams & {
 
 export const TravelDetailsMapScreenComponent = ({
   legs,
-  initialVehiclePosition,
+  _initialVehiclePosition,
   toPlace,
   fromPlace,
   onPressBack,
@@ -47,24 +47,6 @@ export const TravelDetailsMapScreenComponent = ({
 
   const {t} = useTranslation();
   const controlStyles = useControlPositionsStyle();
-  const vehicles = useGetLiveServiceJourneyVehicles(initialVehiclePosition);
-
-  const [followVehicleMapPoint, setFollowVehicleMapPoint] = useState<
-    Coordinates | undefined
-  >(undefined);
-
-  useEffect(() => {
-    if (initialVehiclePosition?.serviceJourney?.id) {
-      const vehicle = vehicles.find(
-        (v) =>
-          v.serviceJourney?.id === initialVehiclePosition.serviceJourney?.id,
-      );
-      if (vehicle && vehicle !== followVehicleMapPoint) {
-        setFollowVehicleMapPoint(vehicle.location);
-      }
-    }
-  }, [vehicles, followVehicleMapPoint]);
-
   return (
     <View style={styles.mapView}>
       <MapboxGL.MapView ref={mapViewRef} style={styles.map} {...MapViewConfig}>
@@ -88,13 +70,6 @@ export const TravelDetailsMapScreenComponent = ({
             point={pointOf(fromPlace)}
             id={'start'}
             text={t(MapTexts.startPoint.label)}
-          />
-        )}
-        {followVehicleMapPoint && (
-          <MapLabel
-            point={pointOf(followVehicleMapPoint)}
-            id={'vehicle'}
-            text={initialVehiclePosition?.mode ?? 'UNKNOWN'}
           />
         )}
       </MapboxGL.MapView>
