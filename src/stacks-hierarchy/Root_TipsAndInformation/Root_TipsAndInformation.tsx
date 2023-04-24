@@ -48,7 +48,7 @@ export const Root_TipsAndInformation = ({}: Props) => {
       <FullScreenHeader leftButton={{type: 'close'}} />
 
       <ThemeText
-        type="body__primary--jumbo--bold"
+        type="heading--jumbo"
         style={styles.title}
         accessibilityLabel={t(TipsAndInformationTexts.title)}
         color={themeColor}
