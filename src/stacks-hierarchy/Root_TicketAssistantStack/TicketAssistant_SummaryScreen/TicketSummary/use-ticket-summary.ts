@@ -43,13 +43,15 @@ export const useTicketSummary = () => {
 
   const transportModes = recommendedTicketTypeConfig.transportModes;
   const savingsText = t(
-    duration !== undefined
-      ? TicketAssistantTexts.summary.savings({
-          totalSavings: savings,
-          perTripSavings: perTripSavings(savings, duration, frequency),
-          alternative: `${calculateSingleTickets(duration, frequency)}`,
-        })
-      : TicketAssistantTexts.summary.noticeLabel2,
+    ticket.duration !== 0
+      ? savings === 0
+        ? TicketAssistantTexts.summary.equalPriceNotice
+        : TicketAssistantTexts.summary.savings({
+            totalSavings: savings,
+            perTripSavings: perTripSavings(savings, duration, frequency),
+            alternative: `${calculateSingleTickets(duration, frequency)}`,
+          })
+      : TicketAssistantTexts.summary.singleTicketNotice,
   );
 
   const a11ySummary = t(

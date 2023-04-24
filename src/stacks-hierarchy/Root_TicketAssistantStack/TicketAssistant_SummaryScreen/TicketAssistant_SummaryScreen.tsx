@@ -145,10 +145,10 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                   type={'body__tertiary'}
                   color={themeColor}
                   accessibilityLabel={t(
-                    TicketAssistantTexts.summary.a11yNoticeLabel2,
+                    TicketAssistantTexts.summary.a11yDurationNoticeLabel,
                   )}
                 >
-                  {t(TicketAssistantTexts.summary.noticeLabel1)}
+                  {t(TicketAssistantTexts.summary.durationNotice)}
                 </ThemeText>
               </View>
             )}

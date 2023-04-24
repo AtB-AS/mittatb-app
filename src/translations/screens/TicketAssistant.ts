@@ -184,21 +184,25 @@ const TicketAssistantTexts = {
         `Du har valgt ${data.ticket}. \n Reisende: ${data.traveller}. \n Soner: ${data.tariffZones}. \n Pris: ${data.price}kr. \n Pris per tur: ${data.pricePerTrip}kr.`,
         `You have selected ${data.ticket}. \n Traveller: ${data.traveller}. \n Zones: ${data.tariffZones}. \n Price: ${data.price}. \n Price per trip: ${data.pricePerTrip}.`,
       ),
-    noticeLabel1: _(
+    durationNotice: _(
       'NB: denne billetten dekker ikke hele perioden du har satt. Ta veilederen på nytt når denne billetten utløper.',
       'NB: this ticket does not cover the entire period you have set. Take the guide again when this ticket expires.',
     ),
-    a11yNoticeLabel: _(
+    a11yDurationNoticeLabel: _(
       'NB: denne veilederen fungerer kun for reise med buss og trikk, ikke båt. ',
       'NB: this guide only works for travel by bus and tram, not boat.',
     ),
-    noticeLabel2: _(
+    singleTicketNotice: _(
       'Siden du ikke reiser så ofte, anbefaler vi deg å kjøpe enkeltbilletter.',
       'Since you do not travel so often, we recommend that you buy single tickets.',
     ),
-    a11yNoticeLabel2: _(
+    a11ySingleTicketNoticeLabel: _(
       'Siden du ikke reiser så ofte, anbefaler vi deg å kjøpe enkeltbilletter.',
       'Since you do not travel so often, we recommend that you buy single tickets.',
+    ),
+    equalPriceNotice: _(
+      'Denne billetten koster like mye som enkeltbilletter, men en periodebillett er anbefalt fordi den er mer fleksibel.',
+      'This ticket costs the same as single tickets, but a period ticket is recommended because it is more flexible.',
     ),
     feedback: _('Gi tilbakemelding', 'Give feedback'),
     crashedHeader: _('Oisann!', 'Oops!'),
