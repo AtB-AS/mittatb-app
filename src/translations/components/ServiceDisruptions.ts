@@ -31,4 +31,13 @@ export default orgSpecificTranslations(ServiceDisruptionsTexts, {
       text: _('Åpne i nettleser', 'Open in browser'),
     },
   },
+  fram: {
+    body: _(
+      'Oversikt over endringer, forsinkelser og avvik finner du på frammr.no:',
+      'Get an overview of changes, delays and service disruptions at en.frammr.no:',
+    ),
+    button: {
+      text: _('Åpne i nettleser', 'Open in browser'),
+    },
+  },
 });

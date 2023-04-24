@@ -116,4 +116,54 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
       ),
     },
   },
+  fram: {
+    optionsInfo: {
+      heading: _(
+        'Velg mellom reisekort eller mobil',
+        'Choose between travel card or phone',
+      ),
+      description: _(
+        'Du kan bruke billetten din på et reisekort eller en mobil med FRAM-appen installert — men kun en av gangen.',
+        'You can use your ticket on a travel card or a phone with the FRAM app installed — but only one at a time.',
+      ),
+    },
+    ticketSafetyInfo: {
+      description: _(
+        'Billetten din er trygt lagret på **Min bruker**. Dermed vil du aldri miste den — selv om du mister reisekortet eller bytter mobil.',
+        "Your ticket is safely stored on **My user**. That way you won't lose your ticket even if you lose your travel card or switch phones.",
+      ),
+    },
+    tCard: {
+      label: _('Reisekort', 'Travel card'),
+      heading: _(
+        'Du bruker nå **reisekort**',
+        'You are now using your **travel card**',
+      ),
+      description: _(
+        'Du kan alltid bytte til en mobil ved å logge inn og gå til **Min bruker**.',
+        'You can always switch to a phone by logging in, and heading over to **My user**.',
+      ),
+
+      reminder: _(
+        'Ta med deg reisekortet når du er ute og reiser.',
+        'Remember to bring your travel card while travelling.',
+      ),
+    },
+    phone: {
+      description: _(
+        'Du kan alltid bytte til reisekort eller en annen mobil ved logge inn og gå til **Min bruker**.',
+        'You can always switch to a travel card or a different phone by logging in, and heading over to **My user**.',
+      ),
+      button: _(
+        'Bytt til reisekort eller annen mobil',
+        'Switch to travel card or phone',
+      ),
+    },
+    error: {
+      description: _(
+        'Vi får ikke knyttet et reisekort eller en mobil til bruker din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med FRAM kundeservice om problemet vedvarer.',
+        "We can't connect a travel card or phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact FRAM customer service.",
+      ),
+    },
+  },
 });

@@ -215,4 +215,28 @@ export default orgSpecificTranslations(TicketingTexts, {
       ),
     },
   },
+  fram: {
+    activeFareProductsAndReservationsTab: {
+      noItemsHistoryHelpText: _(
+        'Du har ingen aktive billetter. Billetthistorikk finner du under Min bruker-fanen.',
+        'You have no active tickets right now. Ticket history can be found under the My user tab.',
+      ),
+    },
+    travelCardInformation: {
+      illustrationa11yLabel: (travelCardId: string) =>
+        _(
+          `Illustrasjon av reisekort med kortnummer som inneholder ${travelCardId}`,
+          `Illustration of travel card with card number that contains ${travelCardId}`,
+        ),
+      cardType: _('reisekort', 'travel card'),
+      onInspection: _(
+        'I billettkontroll må du vise reisekortet ditt',
+        'In the event of an inspection, please present your travel card',
+      ),
+      changeInstructions: _(
+        'Kan endres fra "Min bruker"',
+        'Can be changed from "My user"',
+      ),
+    },
+  },
 });

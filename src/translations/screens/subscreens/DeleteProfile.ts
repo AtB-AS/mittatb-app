@@ -53,4 +53,44 @@ export default orgSpecificTranslations(DeleteProfileTexts, {
       'Unable to delete My profile while you have active tickets. Please contact Reis Nordland customer support for refund or wait until tickets expire.',
     ),
   },
+  fram: {
+    unableToDeleteWithFareContracts: _(
+      'Kan ikke slette din bruker mens du har aktive billetter. Kontakt FRAM kundeservice for refusjon eller vent til billettene har utløpt.',
+      'Unable to delete your user while you have active tickets. Please contact FRAM customer support for refund or wait until tickets expire.',
+    ),
+    header: {
+      title: _('Slett min bruker', 'Delete my user'),
+    },
+    deleteInfo: _(
+      'Når du sletter din bruker mister du tilgang på billett- og kjøpshistorikk, kvitteringer og dine innstillinger.',
+      'When deleting your user you will lose access to recent tickets, receipts and settings',
+    ),
+    buttonA11ytext: (customerNumber: string | undefined) =>
+      _(
+        `Aktiver for å slette brukeren ${
+          customerNumber
+            ? 'med kundenummer ' + customerNumber?.split('').join(', ')
+            : ''
+        }`,
+
+        `Activate to delete user ${
+          customerNumber
+            ? 'with customer number ' + customerNumber?.split('').join(', ')
+            : ''
+        }`,
+      ),
+    deleteConfirmation: {
+      title: _('Slett min bruker', 'Delete my user'),
+      message: _(
+        'Dette vil slette brukeren din og alle dine lagrede data.',
+        'This will erase you user and all your stored data.',
+      ),
+    },
+    deleteError: {
+      message: _(
+        'Det oppstod en feil når vi prøvde å slette din bruker. Prøv igjen senere, og hvis det ikke hjelper, vennligst kontakt kundeservice.',
+        'An error occured when we tried deleting your user. Try again later and if it still does not work, please contact customer service.',
+      ),
+    },
+  },
 });

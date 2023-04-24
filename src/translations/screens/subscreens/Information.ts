@@ -3,7 +3,7 @@ import {translation as _} from '../../commons';
 
 const bulletPoint = '\u2022';
 
-const SelectStartScreenTexts = {
+const InformationTexts = {
   ticketing: {
     title: _('Billettkjøp', 'Ticketing'),
     texts: {
@@ -177,7 +177,7 @@ const SelectStartScreenTexts = {
   },
 };
 
-export default orgSpecificTranslations(SelectStartScreenTexts, {
+export default orgSpecificTranslations(InformationTexts, {
   nfk: {
     payment: {
       texts: {

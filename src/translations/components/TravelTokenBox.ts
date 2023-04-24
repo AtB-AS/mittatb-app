@@ -78,4 +78,32 @@ export default orgSpecificTranslations(TravelTokenBoxTexts, {
       ),
     },
   },
+  fram: {
+    tcard: {
+      title: _('Reisekort', 'Travelcard'),
+      description: _(
+        `Ta med deg reisekortet når du er ute og reiser`,
+        `Remember to bring your travel card when you travel`,
+      ),
+
+      a11yLabel: _(
+        'Du bruker nå reisekort. Ta med deg reisekortet når du er ute og reiser',
+        'You are using travel card. Remember to bring your travel card when you travel',
+      ),
+    },
+    errorMessages: {
+      tokensNotLoadedTitle: _(
+        'Klarer ikke hente informasjon om reisekort / mobil.',
+        'Unable to retrieve information about your travel card / phone.',
+      ),
+      tokensNotLoaded: _(
+        'Billetter må brukes på enten et reisekort eller en mobil, men akkurat nå klarer vi ikke finne ut hvor den er i bruk. Sjekk at du har tilgang på nett der du er.',
+        `Tickets must be used on either a travel card or phone, but right now we are unable to find where the ticket is in use. Check that you have internet access.`,
+      ),
+      noInspectableToken: _(
+        'Billetter må brukes på enten et reisekort eller en mobil, og det ser ikke ut som du har valgt en av dem.\n\nGå til **Min bruker, Bytt mellom reisekort / mobil** for å velge.',
+        `Tickets must be used on either a travel card or a phone, and it looks like you haven't chosen one. Go to **My user, switch between travel card / phone** to select`,
+      ),
+    },
+  },
 });

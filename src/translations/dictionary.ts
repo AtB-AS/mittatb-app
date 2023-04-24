@@ -1,5 +1,6 @@
 import {Platform} from 'react-native';
 import {translation as _} from './commons';
+import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
 
 const softhyphen = Platform.OS === 'ios' ? '\u00AD' : '\u200B';
 
@@ -75,4 +76,11 @@ const dictionary = {
   readMore: _('Les mer', 'Read more'),
 };
 
-export default dictionary;
+export default orgSpecificTranslations(dictionary, {
+  fram: {
+    navigation: {
+      profile: _('Min bruker', 'My user'),
+      profile_a11y: _('Min bruker', 'My user'),
+    },
+  },
+});

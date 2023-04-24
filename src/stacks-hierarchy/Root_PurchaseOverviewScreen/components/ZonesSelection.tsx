@@ -43,10 +43,18 @@ export function ZonesSelection({
     accessibilityHint: t(PurchaseOverviewTexts.zones.a11yHint),
   };
 
-  const selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
+  let selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
 
   if (selectionMode === 'none') {
-    return <></>;
+    return null;
+  }
+
+  // Only support multiple/single zone in app for now. Stop place is built into selector.
+  if (selectionMode == 'multiple-stop' || selectionMode == 'multiple-zone') {
+    selectionMode = 'multiple';
+  }
+  if (selectionMode == 'single-stop' || selectionMode == 'single-zone') {
+    selectionMode = 'single';
   }
 
   const displayAsOneZone =
