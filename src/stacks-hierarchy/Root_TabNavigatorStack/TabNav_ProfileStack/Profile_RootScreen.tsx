@@ -360,7 +360,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               text={t(ProfileTexts.sections.newFeatures.ticketAssistant)}
               value={showTicketAssistant}
               onValueChange={setShowTicketAssistant}
-              testID="newDeparturesToggle"
+              testID="ticketAssistantToggle"
             />
           )}
 
