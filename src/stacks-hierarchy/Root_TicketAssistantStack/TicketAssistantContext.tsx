@@ -10,9 +10,9 @@ import {
 type TicketAssistantState = {
   data: TicketAssistantData;
   updateData: (newData: TicketAssistantData) => void;
-  response: RecommendedTicketResponse | undefined;
+  response?: RecommendedTicketResponse;
   setResponse: (response: RecommendedTicketResponse) => void;
-  purchaseDetails: PurchaseDetails;
+  purchaseDetails?: PurchaseDetails;
   setPurchaseDetails: (purchaseDetails: PurchaseDetails) => void;
   hasDataChanged: boolean;
   setHasDataChanged: (hasDataChanged: boolean) => void;
@@ -55,9 +55,7 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
   });
   const [response, setResponse] = useState<RecommendedTicketResponse>();
 
-  const [purchaseDetails, setPurchaseDetails] = useState<PurchaseDetails>(
-    {} as PurchaseDetails,
-  );
+  const [purchaseDetails, setPurchaseDetails] = useState<PurchaseDetails>();
   const [hasDataChanged, setHasDataChanged] = useState<boolean>(false);
   const [crashed, setCrashed] = useState<boolean>(false);
   const updateData = (newData: TicketAssistantData) => {
