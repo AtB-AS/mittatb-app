@@ -35,8 +35,10 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
 
   useTicketAssistantDataFetch(navigation);
 
+  const durationDays = data.duration * 24 * 60 * 60 * 1000;
+
   const endDate: string = new Date(
-    Date.now() + data.duration * 24 * 60 * 60 * 1000,
+    Date.now() + durationDays,
   ).toLocaleDateString(language, {
     weekday: 'long',
     year: 'numeric',
@@ -88,22 +90,20 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
         </View>
       ) : error ? (
         <View style={styles.mainView}>
-          <View>
-            <ThemeText
-              type={'heading--big'}
-              color={themeColor}
-              style={styles.header}
-            >
-              {t(TicketAssistantTexts.summary.crashedHeader)}
-            </ThemeText>
-            <ThemeText
-              type={'body__primary'}
-              color={themeColor}
-              style={styles.description}
-            >
-              {t(TicketAssistantTexts.summary.crashedDescription)}
-            </ThemeText>
-          </View>
+          <ThemeText
+            type={'heading--big'}
+            color={themeColor}
+            style={styles.header}
+          >
+            {t(TicketAssistantTexts.summary.crashedHeader)}
+          </ThemeText>
+          <ThemeText
+            type={'body__primary'}
+            color={themeColor}
+            style={styles.description}
+          >
+            {t(TicketAssistantTexts.summary.crashedDescription)}
+          </ThemeText>
         </View>
       ) : (
         <View style={styles.mainView}>

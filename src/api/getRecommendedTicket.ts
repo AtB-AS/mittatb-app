@@ -1,4 +1,4 @@
-import {client} from '@atb/api';
+import {client} from '@atb/api/index';
 import {
   RecommendedTicketResponse,
   TicketAssistantData,
