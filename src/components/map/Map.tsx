@@ -47,10 +47,10 @@ export const Map = (props: MapProps) => {
     region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => {
     if (props.vehicles) {
-      props.vehicles.fetchVehicles(region);
+      props.vehicles.updateRegion(region);
     }
     if (props.stations) {
-      props.stations.fetchStations(region);
+      props.stations.updateRegion(region);
     }
   };
 
