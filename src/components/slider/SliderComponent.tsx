@@ -1,5 +1,4 @@
-import {View, ViewStyle} from 'react-native';
-import Slider from '@react-native-community/slider';
+import {Slider} from '@miblanchard/react-native-slider';
 import {
   getStaticColor,
   isStaticColor,
@@ -8,6 +7,7 @@ import {
 } from '@atb/theme/colors';
 import {ContrastColor} from '@atb-as/theme';
 import {useTheme} from '@atb/theme';
+import {View, ViewStyle} from 'react-native';
 
 type ColorType = TextColor | StaticColor | ContrastColor;
 
@@ -21,7 +21,9 @@ type Props = {
   tapToSeek: boolean;
   thumbTintColor: ColorType;
   onValueChange: (value: number) => void;
-  style?: ViewStyle;
+  thumbStyle?: ViewStyle;
+  trackStyle?: ViewStyle;
+  trackMarks?: number[];
 };
 export function SliderComponent({
   value,
@@ -30,24 +32,54 @@ export function SliderComponent({
   minimumTrackTintColor = 'background_accent_3',
   maximumTrackTintColor,
   step,
-  tapToSeek,
   thumbTintColor,
   onValueChange,
-  style,
+  thumbStyle,
+  trackStyle,
+  trackMarks,
 }: Props) {
+  const minColor = useColor(minimumTrackTintColor);
+  const maxColor = useColor(maximumTrackTintColor);
+
   return (
     <View>
       <Slider
-        style={style}
+        thumbStyle={thumbStyle}
+        trackStyle={trackStyle}
         value={value}
         minimumValue={minimumValue}
         maximumValue={maximumValue}
         minimumTrackTintColor={useColor(minimumTrackTintColor)}
         maximumTrackTintColor={useColor(maximumTrackTintColor)}
         step={step}
-        tapToSeek={tapToSeek}
         thumbTintColor={useColor(thumbTintColor)}
-        onValueChange={onValueChange}
+        onValueChange={(value) => {
+          onValueChange(value[0]);
+        }}
+        containerStyle={{width: '100%'}}
+        trackMarks={trackMarks}
+        thumbTouchSize={{width: 30, height: 40}}
+        trackClickable={true}
+        renderTrackMarkComponent={
+          trackMarks
+            ? (index) => {
+                return (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: -5,
+                      right: -10,
+                      width: 2,
+                      height: 5,
+                      backgroundColor:
+                        value && index > value - 3 ? maxColor : minColor,
+                      borderRadius: 1,
+                    }}
+                  />
+                );
+              }
+            : undefined
+        }
       />
     </View>
   );

@@ -116,6 +116,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                   {t(TicketAssistantTexts.duration.datePickerHeader)}
                 </ThemeText>
               </View>
+
               <View style={styles.datePicker}>
                 {Platform.OS === 'ios' ? (
                   <RNDateTimePicker
@@ -219,8 +220,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                   </View>
 
                   <SliderComponent
-                    style={styles.slider}
-                    value={getSliderIndex(data.duration, durations)}
+                    value={getSliderIndex(sliderValue, durations)}
                     maximumTrackTintColor={sliderColorMax}
                     minimumTrackTintColor={sliderColorMin}
                     maximumValue={durations.length - 1}
@@ -319,11 +319,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
     paddingHorizontal: theme.spacings.medium,
     paddingVertical: theme.spacings.large,
-  },
-  slider: {
-    width: '100%',
-    alignSelf: 'center',
-    marginTop: theme.spacings.medium,
   },
   limitHeader: {
     width: '100%',

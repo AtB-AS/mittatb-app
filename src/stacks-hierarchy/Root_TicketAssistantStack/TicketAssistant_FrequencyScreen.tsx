@@ -122,20 +122,27 @@ export const TicketAssistant_FrequencyScreen = ({
                     );
                   })}
                 </View>
-                <SliderComponent
-                  style={styles.slider}
-                  maximumTrackTintColor={sliderColorMax}
-                  minimumTrackTintColor={sliderColorMin}
-                  maximumValue={sliderMax}
-                  minimumValue={2}
-                  step={1}
-                  value={sliderValue}
-                  tapToSeek={true}
-                  thumbTintColor={sliderColorMin}
-                  onValueChange={(value) => {
-                    setSliderValue(value);
-                  }}
-                />
+                <View style={styles.sliderInnerContainer}>
+                  <SliderComponent
+                    maximumTrackTintColor={sliderColorMax}
+                    minimumTrackTintColor={sliderColorMin}
+                    maximumValue={sliderMax}
+                    minimumValue={2}
+                    step={1}
+                    value={sliderValue}
+                    tapToSeek={true}
+                    thumbTintColor={sliderColorMin}
+                    onValueChange={(value) => {
+                      setSliderValue(value);
+                    }}
+                    thumbStyle={styles.sliderThumb}
+                    trackMarks={[3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]}
+                    trackStyle={{
+                      width: '98%',
+                    }}
+                  />
+                </View>
+
                 <SectionSeparator />
 
                 <ThemeText type={'body__secondary'} style={styles.travelText}>
@@ -192,6 +199,14 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
     alignSelf: 'center',
     marginVertical: theme.spacings.medium,
+  },
+  sliderThumb: {
+    width: 20,
+    height: 20,
+  },
+  sliderInnerContainer: {
+    width: '97%',
+    alignSelf: 'center',
   },
   description: {
     textAlign: 'center',

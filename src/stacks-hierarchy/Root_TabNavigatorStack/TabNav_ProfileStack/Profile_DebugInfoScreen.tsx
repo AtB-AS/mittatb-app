@@ -14,7 +14,6 @@ import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import Slider from '@react-native-community/slider';
 import {usePreferences, UserPreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import {Button} from '@atb/components/button';
@@ -36,6 +35,7 @@ import {useMapDebugOverride} from '@atb/components/map/hooks/use-map-page';
 import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {useTipsAndInformationDebugOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information-enabled';
 import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
+import {Slider} from '@miblanchard/react-native-slider';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -703,13 +703,14 @@ function LabeledSlider({
         {label}: {pref?.toFixed(1)}
       </ThemeText>
       <Slider
-        style={{width: '100%'}}
+        containerStyle={{width: '100%'}}
         minimumValue={min}
         maximumValue={max}
         step={step}
         value={pref}
-        onValueChange={setPref}
-        onSlidingComplete={onSetValue}
+        //number is an array but it only contains one element
+        onValueChange={(number) => setPref(number[0])}
+        onSlidingComplete={(number) => onSetValue(number[0])}
       />
     </Sections.GenericSectionItem>
   );
