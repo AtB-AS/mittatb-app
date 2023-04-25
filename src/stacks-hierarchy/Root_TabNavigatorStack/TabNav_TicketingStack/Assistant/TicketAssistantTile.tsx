@@ -37,15 +37,10 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
   const sellableFareProductTypeConfigs = fareProductTypeConfigs.filter(
     (config) => sellableProductsInApp.some((p) => p.type === config.type),
   );
-
-  const groupedConfigs = sellableFareProductTypeConfigs.reduce<
-    [FareProductTypeConfig, FareProductTypeConfig | undefined][]
-  >((grouped, current, index, arr) => {
-    if (index % 2 === 0) return [...grouped, [current, arr[index + 1]]];
-    return grouped;
-  }, []);
   // Period ticket Config
-  const config = groupedConfigs[0][1];
+  const config = sellableFareProductTypeConfigs.find(
+    (config) => config.configuration.requiresLogin,
+  );
 
   return (
     <View

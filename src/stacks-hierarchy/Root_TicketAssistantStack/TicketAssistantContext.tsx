@@ -10,14 +10,14 @@ import {
 type TicketAssistantState = {
   data: TicketAssistantData;
   updateData: (newData: TicketAssistantData) => void;
-  response: RecommendedTicketResponse;
+  response?: RecommendedTicketResponse;
   setResponse: (response: RecommendedTicketResponse) => void;
-  purchaseDetails: PurchaseDetails;
+  purchaseDetails?: PurchaseDetails;
   setPurchaseDetails: (purchaseDetails: PurchaseDetails) => void;
   hasDataChanged: boolean;
   setHasDataChanged: (hasDataChanged: boolean) => void;
-  crashed: boolean;
-  setCrashed: (crashed: boolean) => void;
+  error: boolean;
+  setError: (crashed: boolean) => void;
 };
 
 const TicketAssistantContext = createContext<TicketAssistantState | undefined>(
@@ -46,42 +46,18 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
 
   const {fromTariffZone, toTariffZone} = offerDefaults;
 
-  const defaultTicketAssistantData: TicketAssistantData = {
+  const [data, setData] = useState<TicketAssistantData>({
     frequency: 7,
     traveller: {id: 'ADULT', user_type: 'ADULT'},
     duration: 7,
     zones: [fromTariffZone.id, toTariffZone.id],
     preassigned_fare_products: preassignedFareProductsIds || [],
-  };
+  });
+  const [response, setResponse] = useState<RecommendedTicketResponse>();
 
-  const defaultRecommendedTicketResponse: RecommendedTicketResponse = {
-    total_cost: 301,
-    zones: [fromTariffZone.id, toTariffZone.id],
-    tickets: [
-      {
-        product_id: 'ATB:SalesPackage:ded0dc3b',
-        fare_product: 'ATB:PreassignedFareProduct:8808c360',
-        duration: 7,
-        quantity: 1,
-        price: 301,
-        traveller: {id: 'ADULT', user_type: 'ADULT'},
-      },
-    ],
-    single_ticket_price: 43,
-  };
-
-  const [data, setData] = useState<TicketAssistantData>(
-    defaultTicketAssistantData,
-  );
-  const [response, setResponse] = useState<RecommendedTicketResponse>(
-    defaultRecommendedTicketResponse,
-  );
-
-  const [purchaseDetails, setPurchaseDetails] = useState<PurchaseDetails>(
-    {} as PurchaseDetails,
-  );
+  const [purchaseDetails, setPurchaseDetails] = useState<PurchaseDetails>();
   const [hasDataChanged, setHasDataChanged] = useState<boolean>(false);
-  const [crashed, setCrashed] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
   const updateData = (newData: TicketAssistantData) => {
     setData((prevState) => ({...prevState, ...newData}));
     if (newData !== data) {
@@ -99,8 +75,8 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
         setPurchaseDetails,
         hasDataChanged,
         setHasDataChanged,
-        crashed,
-        setCrashed,
+        error,
+        setError,
       }}
     >
       {children}

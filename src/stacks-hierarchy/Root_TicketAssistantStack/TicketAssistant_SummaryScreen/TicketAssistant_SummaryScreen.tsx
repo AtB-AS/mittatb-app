@@ -30,7 +30,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     ));
   };
 
-  let {response, data, hasDataChanged, purchaseDetails, crashed} =
+  let {response, data, hasDataChanged, purchaseDetails, error} =
     useTicketAssistantState();
 
   useTicketAssistantDataFetch(navigation);
@@ -46,27 +46,30 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     day: 'numeric',
   });
 
-  let index = getIndexOfLongestDurationTicket(response.tickets);
   const description = t(
     TicketAssistantTexts.summary.description({
       frequency: data.frequency,
       date: endDate,
     }),
   );
+  let index = response ? getIndexOfLongestDurationTicket(response.tickets) : 0;
 
-  const doesTicketCoverEntirePeriod =
-    response.tickets[index].duration < data.duration &&
-    response.tickets[index].duration !== 0;
+  const ticket = response?.tickets[index];
+
+  const doesTicketCoverEntirePeriod = ticket
+    ? ticket.duration < data.duration && ticket.duration !== 0
+    : false;
 
   const onBuyButtonPress = () => {
+    if (!purchaseDetails?.purchaseTicketDetails) return;
     navigation.navigate('Root_PurchaseConfirmationScreen', {
       fareProductTypeConfig:
-        purchaseDetails?.purchaseTicketDetails[index].fareProductTypeConfig,
-      fromTariffZone: purchaseDetails?.tariffZones[0],
-      toTariffZone: purchaseDetails?.tariffZones[1],
-      userProfilesWithCount: purchaseDetails?.userProfileWithCount,
+        purchaseDetails.purchaseTicketDetails[index].fareProductTypeConfig,
+      fromTariffZone: purchaseDetails.tariffZones[0],
+      toTariffZone: purchaseDetails.tariffZones[1],
+      userProfilesWithCount: purchaseDetails.userProfileWithCount,
       preassignedFareProduct:
-        purchaseDetails?.purchaseTicketDetails[index].preassignedFareProduct,
+        purchaseDetails.purchaseTicketDetails[index].preassignedFareProduct,
       travelDate: undefined,
       headerLeftButton: {type: 'back'},
       mode: 'Ticket',
@@ -85,7 +88,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
         <View style={styles.loadingSpinner}>
           <ActivityIndicator animating={true} size="large" />
         </View>
-      ) : crashed ? (
+      ) : error ? (
         <View style={styles.mainView}>
           <ThemeText
             type={'heading--big'}
