@@ -14,7 +14,7 @@ export const useSystem = <T extends {system: SystemFragment}>(
   const {t, language} = useTranslation();
   const {themeName} = useTheme();
 
-  const appStoreUri = () =>
+  const appStoreUri =
     Platform.OS === 'ios'
       ? entity?.system.rentalApps?.ios?.storeUri
       : entity?.system.rentalApps?.android?.storeUri;
