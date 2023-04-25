@@ -12,7 +12,7 @@ import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistan
 import {
   calculateSavings,
   calculateSingleTickets,
-  getIndexOfLongestDurationTicket,
+  getLongestDurationTicket,
   perTripSavings,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
 import {getReferenceDataName} from '@atb/reference-data/utils';
@@ -29,12 +29,15 @@ export const TicketSummary = () => {
   if (!response || !purchaseDetails || !data) return null;
   const {tickets, zones, total_cost, single_ticket_price} = response;
   const {frequency} = data;
-  const index = getIndexOfLongestDurationTicket(tickets);
-  const ticket = tickets[index];
-  const recommendedTicketTypeConfig =
-    purchaseDetails.purchaseTicketDetails[index]?.fareProductTypeConfig;
-  const preassignedFareProduct =
-    purchaseDetails.purchaseTicketDetails[index]?.preassignedFareProduct;
+  const ticket = getLongestDurationTicket(tickets);
+
+  const details = purchaseDetails.purchaseTicketDetails.find(
+    (p) => p.preassignedFareProduct.id === ticket.fare_product,
+  );
+  if (!details) return null;
+  const recommendedTicketTypeConfig = details.fareProductTypeConfig;
+  const preassignedFareProduct = details.preassignedFareProduct;
+
   const traveller = purchaseDetails?.userProfileWithCount[0];
 
   const ticketName =

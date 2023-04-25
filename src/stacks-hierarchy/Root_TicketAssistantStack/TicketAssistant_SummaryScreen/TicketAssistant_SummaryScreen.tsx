@@ -15,7 +15,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {ContactSheet} from '@atb/chat/ContactSheet';
-import {getIndexOfLongestDurationTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
+import {getLongestDurationTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -23,6 +23,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
+  useTicketAssistantDataFetch(navigation);
 
   const openContactSheet = () => {
     openBottomSheet((close, focusRef) => (
@@ -33,7 +34,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   let {response, data, hasDataChanged, purchaseDetails, error} =
     useTicketAssistantState();
 
-  useTicketAssistantDataFetch(navigation);
+  if (!response || !purchaseDetails) return null;
 
   const durationDays = data.duration * 24 * 60 * 60 * 1000;
 
@@ -52,9 +53,14 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       date: endDate,
     }),
   );
-  let index = response ? getIndexOfLongestDurationTicket(response.tickets) : 0;
+  const ticket = getLongestDurationTicket(response.tickets);
 
-  const ticket = response?.tickets[index];
+  const details = purchaseDetails.purchaseTicketDetails.find(
+    (p) => p.preassignedFareProduct.id === ticket.fare_product,
+  );
+  if (!details) return null;
+  const recommendedTicketTypeConfig = details.fareProductTypeConfig;
+  const preassignedFareProduct = details.preassignedFareProduct;
 
   const doesTicketCoverEntirePeriod = ticket
     ? ticket.duration < data.duration && ticket.duration !== 0
@@ -63,13 +69,11 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const onBuyButtonPress = () => {
     if (!purchaseDetails?.purchaseTicketDetails) return;
     navigation.navigate('Root_PurchaseConfirmationScreen', {
-      fareProductTypeConfig:
-        purchaseDetails.purchaseTicketDetails[index].fareProductTypeConfig,
+      fareProductTypeConfig: recommendedTicketTypeConfig,
       fromTariffZone: purchaseDetails.tariffZones[0],
       toTariffZone: purchaseDetails.tariffZones[1],
       userProfilesWithCount: purchaseDetails.userProfileWithCount,
-      preassignedFareProduct:
-        purchaseDetails.purchaseTicketDetails[index].preassignedFareProduct,
+      preassignedFareProduct: preassignedFareProduct,
       travelDate: undefined,
       headerLeftButton: {type: 'back'},
       mode: 'Ticket',
