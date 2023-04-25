@@ -52,6 +52,7 @@ import {Time} from '@atb/assets/svg/mono-icons/time';
 import {storage, StorageModelKeysEnum} from '@atb/storage';
 import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-state';
 import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/SelectedFiltersButtons';
+import {FullScreenView} from '@atb/components/screen-view';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -211,11 +212,15 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   return (
     <View style={style.container}>
-      <FullScreenHeader
+      <FullScreenView
         title={t(TripSearchTexts.header.title)}
+        type={'large'}
+        onRefresh={refresh}
+        isRefreshing={searchState === 'searching' && !tripPatterns.length}
         rightButton={{type: 'chat'}}
         leftButton={{
           type: 'back',
+          withIcon: true,
           onPress: () => {
             if (callerRoute?.name) {
               navigation.setParams({
@@ -231,23 +236,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             navigation.goBack();
           },
         }}
-      />
-      <View
-        style={{
-          backgroundColor:
-            theme.static.background[headerBackgroundColor].background,
-        }}
-      >
-        <ScrollView
-          contentContainerStyle={style.scrollView}
-          refreshControl={
-            <RefreshControl
-              refreshing={searchState === 'searching' && !tripPatterns.length}
-              onRefresh={refresh}
-              tintColor={theme.interactive.interactive_0.default.text}
-            />
-          }
-        >
+        headerChildren={
           <View style={style.searchHeader}>
             <View style={style.paddedContainer}>
               <Section>
@@ -354,95 +343,93 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               )}
             </View>
           </View>
-
-          <ScreenReaderAnnouncement message={searchStateMessage} />
-          {(!from || !to) && (
-            <ThemeText
-              color="secondary"
-              style={style.missingLocationText}
-              testID="missingLocation"
-            >
-              {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
-            </ThemeText>
-          )}
-          {from && to && (
-            <View>
-              {filtersState.enabled && (
-                <SelectedFiltersButtons
-                  filtersSelection={filtersState.filtersSelection}
-                  resetTransportModes={filtersState.resetTransportModes}
-                />
-              )}
-              <Results
-                tripPatterns={tripPatterns}
-                isSearching={isSearching}
-                showEmptyScreen={showEmptyScreen}
-                isEmptyResult={isEmptyResult}
-                resultReasons={noResultReasons}
-                onDetailsPressed={onPressed}
-                errorType={error}
-                searchTime={searchTime}
-                anyFiltersApplied={
-                  filtersState.enabled && filtersState.anyFiltersApplied
-                }
+        }
+      >
+        <ScreenReaderAnnouncement message={searchStateMessage} />
+        {(!from || !to) && (
+          <ThemeText
+            color="secondary"
+            style={style.missingLocationText}
+            testID="missingLocation"
+          >
+            {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
+          </ThemeText>
+        )}
+        {from && to && (
+          <View>
+            {filtersState.enabled && (
+              <SelectedFiltersButtons
+                filtersSelection={filtersState.filtersSelection}
+                resetTransportModes={filtersState.resetTransportModes}
               />
-            </View>
-          )}
-          {!tripPatterns.length && (
-            <View style={style.emptyResultsSpacer}></View>
-          )}
-          {!error && isValidLocations && (
-            <TouchableOpacity
-              onPress={loadMore}
-              disabled={searchState === 'searching'}
-              style={style.loadMoreButton}
-              testID="loadMoreButton"
-            >
-              {searchState === 'searching' ? (
-                <View style={style.loadingIndicator}>
-                  {tripPatterns.length ? (
-                    <>
-                      <ActivityIndicator
-                        color={theme.text.colors.secondary}
-                        style={{
-                          marginRight: theme.spacings.medium,
-                        }}
-                      />
-                      <ThemeText color="secondary" testID="searchingForResults">
-                        {t(TripSearchTexts.results.fetchingMore)}
-                      </ThemeText>
-                    </>
-                  ) : (
-                    <ThemeText
-                      color="secondary"
-                      style={style.loadingText}
-                      testID="searchingForResults"
-                    >
-                      {t(TripSearchTexts.searchState.searching)}
+            )}
+            <Results
+              tripPatterns={tripPatterns}
+              isSearching={isSearching}
+              showEmptyScreen={showEmptyScreen}
+              isEmptyResult={isEmptyResult}
+              resultReasons={noResultReasons}
+              onDetailsPressed={onPressed}
+              errorType={error}
+              searchTime={searchTime}
+              anyFiltersApplied={
+                filtersState.enabled && filtersState.anyFiltersApplied
+              }
+            />
+          </View>
+        )}
+        {!tripPatterns.length && <View style={style.emptyResultsSpacer}></View>}
+        {!error && isValidLocations && (
+          <TouchableOpacity
+            onPress={loadMore}
+            disabled={searchState === 'searching'}
+            style={style.loadMoreButton}
+            testID="loadMoreButton"
+          >
+            {searchState === 'searching' ? (
+              <View style={style.loadingIndicator}>
+                {tripPatterns.length ? (
+                  <>
+                    <ActivityIndicator
+                      color={theme.text.colors.secondary}
+                      style={{
+                        marginRight: theme.spacings.medium,
+                      }}
+                    />
+                    <ThemeText color="secondary" testID="searchingForResults">
+                      {t(TripSearchTexts.results.fetchingMore)}
                     </ThemeText>
-                  )}
-                </View>
-              ) : (
-                <>
-                  {loadMore ? (
-                    <>
-                      <ThemeIcon
-                        colorType="secondary"
-                        svg={ExpandMore}
-                        size={'normal'}
-                      />
-                      <ThemeText color="secondary" testID="resultsLoaded">
-                        {' '}
-                        {t(TripSearchTexts.results.fetchMore)}
-                      </ThemeText>
-                    </>
-                  ) : null}
-                </>
-              )}
-            </TouchableOpacity>
-          )}
-        </ScrollView>
-      </View>
+                  </>
+                ) : (
+                  <ThemeText
+                    color="secondary"
+                    style={style.loadingText}
+                    testID="searchingForResults"
+                  >
+                    {t(TripSearchTexts.searchState.searching)}
+                  </ThemeText>
+                )}
+              </View>
+            ) : (
+              <>
+                {loadMore ? (
+                  <>
+                    <ThemeIcon
+                      colorType="secondary"
+                      svg={ExpandMore}
+                      size={'normal'}
+                    />
+                    <ThemeText color="secondary" testID="resultsLoaded">
+                      {' '}
+                      {t(TripSearchTexts.results.fetchMore)}
+                    </ThemeText>
+                  </>
+                ) : null}
+              </>
+            )}
+          </TouchableOpacity>
+        )}
+      </FullScreenView>
     </View>
   );
 };

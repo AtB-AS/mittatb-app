@@ -1,10 +1,11 @@
 import {useTheme} from '@atb/theme';
 import {getStaticColor} from '@atb/theme/colors';
-import {View} from 'react-native';
+import {RefreshControl, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
 import {ScreenWithLargeHeader} from './ScreenWithLargeHeader';
+import React from 'react';
 
 export type ScreenViewProps = ScreenHeaderProps & {
   type: 'large' | 'small';
@@ -17,11 +18,13 @@ export type ScreenViewProps = ScreenHeaderProps & {
    * Page content, below disappearing header.
    */
   children?: React.ReactNode;
+  onRefresh?(): void;
+  isRefreshing?: boolean;
 };
 
 export function FullScreenView(props: ScreenViewProps) {
   const {top} = useSafeAreaInsets();
-  const {themeName} = useTheme();
+  const {themeName, theme} = useTheme();
   const themeColor = props.color ?? 'background_accent_0';
   const backgroundColor = getStaticColor(themeName, themeColor).background;
 
@@ -32,7 +35,19 @@ export function FullScreenView(props: ScreenViewProps) {
           <View style={{backgroundColor, paddingTop: top}}>
             <ScreenHeader {...props} />
           </View>
-          <ScrollView>{props.children}</ScrollView>
+          <ScrollView
+            refreshControl={
+              props.onRefresh && (
+                <RefreshControl
+                  refreshing={props.isRefreshing ?? false}
+                  onRefresh={props.onRefresh}
+                  tintColor={theme.text.colors.primary}
+                />
+              )
+            }
+          >
+            {props.children}
+          </ScrollView>
         </>
       );
     case 'large':

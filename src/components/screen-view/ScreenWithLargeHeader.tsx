@@ -17,6 +17,8 @@ export const ScreenWithLargeHeader = ({
   globalMessageContext,
   headerChildren,
   children,
+  onRefresh,
+  isRefreshing,
 }: ScreenViewProps) => {
   const styles = useStyles();
   const {themeName} = useTheme();
@@ -27,6 +29,7 @@ export const ScreenWithLargeHeader = ({
   return (
     <View style={styles.container}>
       <ContentWithDisappearingHeader
+        {...{onRefresh, isRefreshing}}
         header={
           <View style={[styles.headerContainer, {backgroundColor}]}>
             {title && (
