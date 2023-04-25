@@ -11,6 +11,7 @@ import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 export const useTicketSummary = () => {
   const {t, language} = useTranslation();
   const {response, purchaseDetails, data} = useTicketAssistantState();
+  if (!response || !purchaseDetails || !data) return null;
   const {tickets, zones, total_cost, single_ticket_price} = response;
   const {frequency} = data;
   const index = getIndexOfLongestDurationTicket(tickets);
