@@ -59,14 +59,15 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     : false;
 
   const onBuyButtonPress = () => {
+    if (!purchaseDetails?.purchaseTicketDetails) return;
     navigation.navigate('Root_PurchaseConfirmationScreen', {
       fareProductTypeConfig:
-        purchaseDetails?.purchaseTicketDetails[index].fareProductTypeConfig,
-      fromTariffZone: purchaseDetails?.tariffZones[0],
-      toTariffZone: purchaseDetails?.tariffZones[1],
-      userProfilesWithCount: purchaseDetails?.userProfileWithCount,
+        purchaseDetails.purchaseTicketDetails[index].fareProductTypeConfig,
+      fromTariffZone: purchaseDetails.tariffZones[0],
+      toTariffZone: purchaseDetails.tariffZones[1],
+      userProfilesWithCount: purchaseDetails.userProfileWithCount,
       preassignedFareProduct:
-        purchaseDetails?.purchaseTicketDetails[index].preassignedFareProduct,
+        purchaseDetails.purchaseTicketDetails[index].preassignedFareProduct,
       travelDate: undefined,
       headerLeftButton: {type: 'back'},
       mode: 'Ticket',
