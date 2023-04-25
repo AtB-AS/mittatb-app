@@ -2,7 +2,6 @@ import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {useAuthState} from '@atb/auth';
-import {updateMetadata} from '@atb/chat/metadata';
 import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {FullScreenHeader} from '@atb/components/screen-header';
@@ -94,14 +93,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {enable_departures_v2_as_default} = useRemoteConfig();
   const setDeparturesV2Enabled = (value: boolean) => {
     if (enable_departures_v2_as_default) {
-      updateMetadata({
-        'AtB-Departures-V2': value ? 'enabled' : 'disabled',
-      });
       setPreference({departuresV2: value});
     } else {
-      updateMetadata({
-        'AtB-Beta-Departures': value ? 'enabled' : 'disabled',
-      });
       setPreference({newDepartures: value});
     }
   };
@@ -109,9 +102,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {enable_ticketing_assistant} = useRemoteConfig();
   const showTicketAssistant = useTicketingAssistantEnabled();
   const setShowTicketAssistant = (value: boolean) => {
-    updateMetadata({
-      'AtB-Ticket-Assistant': value ? 'enabled' : 'disabled',
-    });
     setPreference({showTicketAssistant: value});
   };
 
