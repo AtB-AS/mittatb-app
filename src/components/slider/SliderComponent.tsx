@@ -40,6 +40,7 @@ export function SliderComponent({
 }: Props) {
   const minColor = useColor(minimumTrackTintColor);
   const maxColor = useColor(maximumTrackTintColor);
+  const thumbColor = useColor(thumbTintColor);
 
   return (
     <View>
@@ -49,10 +50,10 @@ export function SliderComponent({
         value={value}
         minimumValue={minimumValue}
         maximumValue={maximumValue}
-        minimumTrackTintColor={useColor(minimumTrackTintColor)}
-        maximumTrackTintColor={useColor(maximumTrackTintColor)}
+        minimumTrackTintColor={minColor}
+        maximumTrackTintColor={maxColor}
         step={step}
-        thumbTintColor={useColor(thumbTintColor)}
+        thumbTintColor={thumbColor}
         onValueChange={(value) => {
           onValueChange(value[0]);
         }}
