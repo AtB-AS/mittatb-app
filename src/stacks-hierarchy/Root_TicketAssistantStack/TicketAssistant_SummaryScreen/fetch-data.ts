@@ -12,7 +12,6 @@ export const useTicketAssistantDataFetch = (nav: any) => {
     fareProductTypeConfigs,
   } = useFirestoreConfiguration();
   const {
-    response,
     setResponse,
     data,
     setPurchaseDetails,
@@ -21,44 +20,37 @@ export const useTicketAssistantDataFetch = (nav: any) => {
     setError,
   } = useTicketAssistantState();
 
-  const fetchData = async () => {
-    try {
-      setError(false);
-      const r = await getRecommendedTicket(data);
-      setHasDataChanged(false);
-
-      if (!r.tickets.length) {
-        setError(true);
-      } else {
-        setResponse(r);
-        setPurchaseDetails(
-          handleRecommendedTicketResponse(
-            r,
-            tariffZones,
-            userProfiles,
-            preassignedFareProducts,
-            fareProductTypeConfigs,
-          ),
-        );
-      }
-    } catch (e) {
-      setError(true);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setError(false);
+        const r = await getRecommendedTicket(data);
+        setHasDataChanged(false);
+
+        if (!r.tickets.length) {
+          setError(true);
+        } else {
+          setResponse(r);
+          setPurchaseDetails(
+            handleRecommendedTicketResponse(
+              r,
+              tariffZones,
+              userProfiles,
+              preassignedFareProducts,
+              fareProductTypeConfigs,
+            ),
+          );
+        }
+      } catch (e) {
+        setError(true);
+      }
+    };
+
     const unsub = nav.addListener('focus', async () => {
       if (hasDataChanged) await fetchData();
     });
     return () => {
       unsub();
     };
-  }, [
-    data,
-    hasDataChanged,
-    response,
-    setResponse,
-    setPurchaseDetails,
-    setHasDataChanged,
-  ]);
+  }, [data]);
 };
