@@ -58,22 +58,18 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const details = purchaseDetails.purchaseTicketDetails.find(
     (p) => p.preassignedFareProduct.id === ticket.fare_product,
   );
-  if (!details) return null;
-  const recommendedTicketTypeConfig = details.fareProductTypeConfig;
-  const preassignedFareProduct = details.preassignedFareProduct;
-
   const doesTicketCoverEntirePeriod = ticket
     ? ticket.duration < data.duration && ticket.duration !== 0
     : false;
 
   const onBuyButtonPress = () => {
-    if (!purchaseDetails?.purchaseTicketDetails) return;
+    if (!details || !purchaseDetails) return;
     navigation.navigate('Root_PurchaseConfirmationScreen', {
-      fareProductTypeConfig: recommendedTicketTypeConfig,
+      fareProductTypeConfig: details?.fareProductTypeConfig,
       fromTariffZone: purchaseDetails.tariffZones[0],
       toTariffZone: purchaseDetails.tariffZones[1],
       userProfilesWithCount: purchaseDetails.userProfileWithCount,
-      preassignedFareProduct: preassignedFareProduct,
+      preassignedFareProduct: details?.preassignedFareProduct,
       travelDate: undefined,
       headerLeftButton: {type: 'back'},
       mode: 'Ticket',
