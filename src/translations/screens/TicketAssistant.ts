@@ -97,7 +97,7 @@ const TicketAssistantTexts = {
     ),
     minLimit: _('1 dag', '1 day'),
     minLimitA11yLabel: _('Minstegrensen er 1 dag', 'Minimum limit is 1 day'),
-    maxLimit: _('6mnd +', '6 months +'),
+    maxLimit: _('6 mnd. +', '6 months +'),
     maxLimitA11yLabel: _(
       'Maksgrensen er 6 måneder pluss',
       'Max limit is 6 months plus',
