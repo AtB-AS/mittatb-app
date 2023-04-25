@@ -4,14 +4,14 @@ import {
   toFeatureCollection,
   toFeaturePoint,
   toFeaturePoints,
-} from '@atb/components/map/utils';
+} from '@atb/components/map';
 import {useIsCityBikesEnabled} from '@atb/mobility/use-city-bikes-enabled';
 import {
   MapSelectionActionType,
   StationsFilterType,
   StationsState,
-} from '@atb/components/map/types';
-import {useUserMapFilters} from '@atb/components/map/hooks/use-map-filter';
+} from '@atb/components/map';
+import {useUserMapFilters} from '@atb/components/map';
 import {
   Feature,
   FeatureCollection,

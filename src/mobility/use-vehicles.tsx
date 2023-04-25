@@ -2,21 +2,19 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Feature, FeatureCollection, GeoJSON, Point, Polygon} from 'geojson';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
+  MapSelectionActionType,
   toFeatureCollection,
   toFeaturePoint,
   toFeaturePoints,
-} from '@atb/components/map/utils';
-import {useIsVehiclesEnabled} from '@atb/mobility/use-vehicles-enabled';
-import {
-  MapSelectionActionType,
+  useUserMapFilters,
   VehiclesFilterType,
   VehiclesState,
-} from '@atb/components/map/types';
+} from '@atb/components/map';
+import {useIsVehiclesEnabled} from '@atb/mobility/use-vehicles-enabled';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {extend, getRadius, isVehicle, needsReload} from '@atb/mobility/utils';
 import {ScooterSheet} from '@atb/mobility/components/ScooterSheet';
 import {RegionPayload} from '@rnmapbox/maps';
-import {useUserMapFilters} from '@atb/components/map/hooks/use-map-filter';
 import {getVehicles} from '@atb/api/mobility';
 import {usePollableResource} from '@atb/utils/use-pollable-resource';
 
@@ -118,9 +116,15 @@ export const useVehicles: () => VehiclesState | undefined = () => {
     if (type.source !== 'map-click') return;
     const vehicle = type.feature.properties;
     if (isVehicle(vehicle)) {
-      openBottomSheet(() => (
-        <ScooterSheet vehicle={vehicle} close={closeBottomSheet} />
-      ));
+      openBottomSheet(() => {
+        return (
+          <ScooterSheet
+            vehicleId={vehicle.id}
+            position={{lat: area.lat, lon: area.lon}}
+            close={closeBottomSheet}
+          />
+        );
+      });
     }
   };
 

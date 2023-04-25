@@ -11,7 +11,7 @@ import {
   PricingPlanFragment,
   RentalUrisFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
-import {getVisibleRange} from '@atb/components/map/utils';
+import {getVisibleRange} from '@atb/components/map';
 import buffer from '@turf/buffer';
 import bbox from '@turf/bbox-polygon';
 import difference from '@turf/difference';
@@ -20,15 +20,15 @@ import {Platform} from 'react-native';
 
 export const isVehicle = (
   properties: GeoJsonProperties | undefined,
-): properties is VehicleFragment => properties?.__typename === 'Vehicle';
+): properties is VehicleFragment => 'currentFuelPercent' in (properties ?? {});
 
 export const isStation = (
   properties: GeoJsonProperties | undefined,
 ): properties is StationFragment => properties?.__typename === 'Station';
 
 export const getRentalAppUri = <T extends {rentalUris?: RentalUrisFragment}>(
-  t: T,
-) => (Platform.OS === 'ios' ? t.rentalUris?.ios : t.rentalUris?.android);
+  t: T | undefined,
+) => (Platform.OS === 'ios' ? t?.rentalUris?.ios : t?.rentalUris?.android);
 
 export const hasMultiplePricingPlans = (plan: PricingPlanFragment) =>
   (plan.perKmPricing && plan.perMinPricing) ||

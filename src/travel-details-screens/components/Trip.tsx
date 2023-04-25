@@ -14,7 +14,7 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {isSignificantFootLegWalkOrWaitTime} from '@atb/travel-details-screens/utils';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
 import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
-import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
+import {useRealtimeMapEnabled} from '@atb/components/map';
 
 export type TripProps = {
   tripPattern: TripPattern;
