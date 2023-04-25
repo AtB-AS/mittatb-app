@@ -118,9 +118,15 @@ export const useVehicles: () => VehiclesState | undefined = () => {
     if (type.source !== 'map-click') return;
     const vehicle = type.feature.properties;
     if (isVehicle(vehicle)) {
-      openBottomSheet(() => (
-        <ScooterSheet vehicle={vehicle} close={closeBottomSheet} />
-      ));
+      openBottomSheet(() => {
+        return (
+          <ScooterSheet
+            vehicleId={vehicle.id}
+            position={{lat: area.lat, lon: area.lon}}
+            close={closeBottomSheet}
+          />
+        );
+      });
     }
   };
 
