@@ -34,8 +34,6 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   let {response, data, hasDataChanged, purchaseDetails, error} =
     useTicketAssistantState();
 
-  if (!response || !purchaseDetails) return null;
-
   const durationDays = data.duration * 24 * 60 * 60 * 1000;
 
   const endDate: string = new Date(
@@ -53,17 +51,20 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       date: endDate,
     }),
   );
-  const ticket = getLongestDurationTicket(response.tickets);
+  const ticket = response
+    ? getLongestDurationTicket(response.tickets)
+    : undefined;
 
-  const details = purchaseDetails.purchaseTicketDetails.find(
-    (p) => p.preassignedFareProduct.id === ticket.fare_product,
-  );
   const doesTicketCoverEntirePeriod = ticket
     ? ticket.duration < data.duration && ticket.duration !== 0
     : false;
 
   const onBuyButtonPress = () => {
-    if (!details || !purchaseDetails) return;
+    if (!purchaseDetails || !ticket) return;
+    const details = purchaseDetails.purchaseTicketDetails.find(
+      (p) => p.preassignedFareProduct.id === ticket.fare_product,
+    );
+    if (!details) return;
     navigation.navigate('Root_PurchaseConfirmationScreen', {
       fareProductTypeConfig: details?.fareProductTypeConfig,
       fromTariffZone: purchaseDetails.tariffZones[0],
