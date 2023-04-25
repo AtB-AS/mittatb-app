@@ -16,8 +16,8 @@ type TicketAssistantState = {
   setPurchaseDetails: (purchaseDetails: PurchaseDetails) => void;
   hasDataChanged: boolean;
   setHasDataChanged: (hasDataChanged: boolean) => void;
-  crashed: boolean;
-  setCrashed: (crashed: boolean) => void;
+  error: boolean;
+  setError: (crashed: boolean) => void;
 };
 
 const TicketAssistantContext = createContext<TicketAssistantState | undefined>(
@@ -57,7 +57,7 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
 
   const [purchaseDetails, setPurchaseDetails] = useState<PurchaseDetails>();
   const [hasDataChanged, setHasDataChanged] = useState<boolean>(false);
-  const [crashed, setCrashed] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
   const updateData = (newData: TicketAssistantData) => {
     setData((prevState) => ({...prevState, ...newData}));
     if (newData !== data) {
@@ -75,8 +75,8 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
         setPurchaseDetails,
         hasDataChanged,
         setHasDataChanged,
-        crashed,
-        setCrashed,
+        error,
+        setError,
       }}
     >
       {children}

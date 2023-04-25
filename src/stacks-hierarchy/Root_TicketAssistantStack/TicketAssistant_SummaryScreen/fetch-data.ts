@@ -18,17 +18,17 @@ export const useTicketAssistantDataFetch = (nav: any) => {
     setPurchaseDetails,
     hasDataChanged,
     setHasDataChanged,
-    setCrashed,
+    setError,
   } = useTicketAssistantState();
 
   const fetchData = async () => {
     try {
-      setCrashed(false);
+      setError(false);
       const r = await getRecommendedTicket(data);
       setHasDataChanged(false);
 
       if (!r.tickets.length) {
-        setCrashed(true);
+        setError(true);
       } else {
         setResponse(r);
         setPurchaseDetails(
@@ -42,7 +42,7 @@ export const useTicketAssistantDataFetch = (nav: any) => {
         );
       }
     } catch (e) {
-      setCrashed(true);
+      setError(true);
     }
   };
 

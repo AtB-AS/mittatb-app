@@ -30,7 +30,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     ));
   };
 
-  let {response, data, hasDataChanged, purchaseDetails, crashed} =
+  let {response, data, hasDataChanged, purchaseDetails, error} =
     useTicketAssistantState();
 
   useTicketAssistantDataFetch(navigation);
@@ -86,7 +86,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
         <View style={styles.loadingSpinner}>
           <ActivityIndicator animating={true} size="large" />
         </View>
-      ) : crashed ? (
+      ) : error ? (
         <View style={styles.mainView}>
           <View>
             <ThemeText
