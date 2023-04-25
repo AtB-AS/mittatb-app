@@ -15,6 +15,7 @@ import {
 } from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 import {TicketAssistant_ZonePickerScreenParams} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
+import {ViewStyle} from 'react-native';
 
 type Props = {
   selectedZones: TariffZoneSelection;
@@ -24,19 +25,19 @@ type Props = {
       | keyof Root_PurchaseTariffZonesSearchByMapScreenParams
       | keyof TicketAssistant_ZonePickerScreenParams,
   ) => void;
-  withPadding?: boolean;
+  style?: ViewStyle;
 };
 
 const TariffZonesSelectorButtons = ({
   selectedZones,
   onVenueSearchClick,
   isApplicableOnSingleZoneOnly,
-  withPadding = false,
+  style,
 }: Props) => {
   const {t, language} = useTranslation();
 
   return (
-    <Section withPadding={withPadding}>
+    <Section style={style}>
       <ButtonSectionItem
         label={
           isApplicableOnSingleZoneOnly
