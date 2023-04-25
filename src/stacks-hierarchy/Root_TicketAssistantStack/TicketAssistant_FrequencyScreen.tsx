@@ -7,17 +7,10 @@ import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
-import {StaticColorByType} from '@atb/theme/colors';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useTicketAssistantState} from './TicketAssistantContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {SectionSeparator} from '@atb/components/sections';
-
-export const sliderColorMax: StaticColorByType<'background'> =
-  'background_accent_2';
-
-export const sliderColorMin: StaticColorByType<'background'> =
-  'background_accent_3';
 
 type FrequencyScreenProps =
   TicketAssistantScreenProps<'TicketAssistant_FrequencyScreen'>;
@@ -124,14 +117,14 @@ export const TicketAssistant_FrequencyScreen = ({
                 </View>
                 <SliderComponent
                   style={styles.slider}
-                  maximumTrackTintColor={sliderColorMax}
-                  minimumTrackTintColor={sliderColorMin}
+                  maximumTrackTintColor={'interactive_0'}
+                  minimumTrackTintColor={'interactive_0'}
                   maximumValue={sliderMax}
                   minimumValue={2}
                   step={1}
                   value={sliderValue}
                   tapToSeek={true}
-                  thumbTintColor={sliderColorMin}
+                  thumbTintColor={'interactive_0'}
                   onValueChange={(value) => {
                     setSliderValue(value);
                   }}

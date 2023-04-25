@@ -1,25 +1,17 @@
 import {View, ViewStyle} from 'react-native';
 import Slider from '@react-native-community/slider';
-import {
-  getStaticColor,
-  isStaticColor,
-  StaticColor,
-  TextColor,
-} from '@atb/theme/colors';
-import {ContrastColor} from '@atb-as/theme';
+import {InteractiveColor} from '@atb/theme/colors';
 import {useTheme} from '@atb/theme';
-
-type ColorType = TextColor | StaticColor | ContrastColor;
 
 type Props = {
   value?: number;
   maximumValue: number;
   minimumValue: number;
-  minimumTrackTintColor?: ColorType;
-  maximumTrackTintColor: ColorType;
+  minimumTrackTintColor: InteractiveColor;
+  maximumTrackTintColor: InteractiveColor;
   step: number;
   tapToSeek: boolean;
-  thumbTintColor: ColorType;
+  thumbTintColor: InteractiveColor;
   onValueChange: (value: number) => void;
   style?: ViewStyle;
 };
@@ -27,7 +19,7 @@ export function SliderComponent({
   value,
   maximumValue,
   minimumValue,
-  minimumTrackTintColor = 'background_accent_3',
+  minimumTrackTintColor,
   maximumTrackTintColor,
   step,
   tapToSeek,
@@ -35,6 +27,11 @@ export function SliderComponent({
   onValueChange,
   style,
 }: Props) {
+  const {theme} = useTheme();
+  const minColor = theme.interactive[minimumTrackTintColor].default.background;
+  const maxColor = theme.interactive[maximumTrackTintColor].active.background;
+  const thumbColor = theme.interactive[thumbTintColor].default.background;
+
   return (
     <View>
       <Slider
@@ -42,23 +39,13 @@ export function SliderComponent({
         value={value}
         minimumValue={minimumValue}
         maximumValue={maximumValue}
-        minimumTrackTintColor={useColor(minimumTrackTintColor)}
-        maximumTrackTintColor={useColor(maximumTrackTintColor)}
+        minimumTrackTintColor={minColor}
+        maximumTrackTintColor={maxColor}
         step={step}
         tapToSeek={tapToSeek}
-        thumbTintColor={useColor(thumbTintColor)}
+        thumbTintColor={thumbColor}
         onValueChange={onValueChange}
       />
     </View>
   );
 }
-const useColor = (color: ColorType): string => {
-  const {theme, themeName} = useTheme();
-
-  if (typeof color !== 'string') {
-    return color.background;
-  }
-  return isStaticColor(color)
-    ? getStaticColor(themeName, color).background
-    : theme.text.colors[color];
-};

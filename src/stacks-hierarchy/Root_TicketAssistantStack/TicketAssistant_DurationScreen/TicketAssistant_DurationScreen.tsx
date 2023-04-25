@@ -7,10 +7,6 @@ import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {SliderComponent} from '@atb/components/slider';
 import {Button} from '@atb/components/button';
 import React, {useEffect, useState} from 'react';
-import {
-  sliderColorMax,
-  sliderColorMin,
-} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_FrequencyScreen';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
@@ -221,13 +217,13 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
                   <SliderComponent
                     style={styles.slider}
                     value={getSliderIndex(data.duration, durations)}
-                    maximumTrackTintColor={sliderColorMax}
-                    minimumTrackTintColor={sliderColorMin}
+                    maximumTrackTintColor={'interactive_0'}
+                    minimumTrackTintColor={'interactive_0'}
                     maximumValue={durations.length - 1}
                     minimumValue={0}
                     step={1}
                     tapToSeek={true}
-                    thumbTintColor={sliderColorMin}
+                    thumbTintColor={'interactive_0'}
                     onValueChange={(value) => {
                       setUsedSlider(true);
                       setSliderValue(durations[value]);
