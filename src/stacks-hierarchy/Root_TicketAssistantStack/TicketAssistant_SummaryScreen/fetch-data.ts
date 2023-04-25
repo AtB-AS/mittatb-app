@@ -1,7 +1,7 @@
 // TicketAssistant_SummaryScreenHooks.ts
 import {useEffect} from 'react';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
-import {getRecommendedTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/api';
+import {getRecommendedTicket} from '@atb/api/getRecommendedTicket';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {handleRecommendedTicketResponse} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/handle-recommended-ticket-response';
 
