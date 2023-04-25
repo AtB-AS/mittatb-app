@@ -10,12 +10,12 @@ import {DashboardBackground} from '@atb/assets/svg/color/images';
 import SvgFeedback from '@atb/assets/svg/mono-icons/actions/Feedback';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary';
-import {getIndexOfLongestDurationTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
 import {useTicketAssistantDataFetch} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/fetch-data';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {ContactSheet} from '@atb/chat/ContactSheet';
+import {getIndexOfLongestDurationTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
