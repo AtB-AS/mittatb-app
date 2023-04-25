@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {FetchResult, useApolloClient} from '@apollo/client';
 import {VehiclePosition} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
-import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
+import {useRealtimeMapEnabled} from '@atb/components/map';
 import {getLiveVehicleSubscription} from '@atb/api/vehicles';
 
 export function useGetLiveServiceJourneyVehicles(

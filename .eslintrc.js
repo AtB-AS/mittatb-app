@@ -28,6 +28,8 @@ module.exports = {
       {restrictDefaultExports: {direct: true}},
     ],
 
+    'no-restricted-imports': ['warn', {patterns: ['@atb/components/*/']}],
+
     // React-Hooks Plugin
     // The following rules are made available via `eslint-plugin-react-hooks`
     'react-hooks/rules-of-hooks': 2, // early error
