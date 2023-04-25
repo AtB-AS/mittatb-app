@@ -44,17 +44,19 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     day: 'numeric',
   });
 
-  let index = getIndexOfLongestDurationTicket(response.tickets);
   const description = t(
     TicketAssistantTexts.summary.description({
       frequency: data.frequency,
       date: endDate,
     }),
   );
+  let index = response ? getIndexOfLongestDurationTicket(response.tickets) : 0;
 
-  const doesTicketCoverEntirePeriod =
-    response.tickets[index].duration < data.duration &&
-    response.tickets[index].duration !== 0;
+  const ticket = response?.tickets[index];
+
+  const doesTicketCoverEntirePeriod = ticket
+    ? ticket.duration < data.duration && ticket.duration !== 0
+    : false;
 
   const onBuyButtonPress = () => {
     navigation.navigate('Root_PurchaseConfirmationScreen', {
