@@ -40,6 +40,11 @@ jobs:
       # E2E init
       - name: Install Appium
         run: npm install -g appium
+      - name: Add Entur private registry credentials
+        run: bash ./scripts/add-entur-private-registry.sh
+        env:
+          ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Install E2E tests
         run: yarn install
         # working-directory: e2e
