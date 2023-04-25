@@ -41,7 +41,7 @@ export function getSliderIndex(days: number, durations: number[]) {
 }
 
 // Functions for getting the date from the slider
-export function getDateFromSlider(days: number) {
+export function addDaysToCurrent(days: number) {
   // Current date + days from slider
   const date = addDays(new Date(), days);
   return dateToDateString(date);
