@@ -5,7 +5,7 @@ import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {DurationPicker} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/durationPicker';
@@ -19,23 +19,18 @@ type DurationProps =
 
 const currentDate = new Date();
 export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
-  const {data, updateData} = useTicketAssistantState();
-  // current Date + data.duration
-  const [date, setDate] = useState(addDaysToCurrent(data.duration));
+  const {inputParams, updateInputParams} = useTicketAssistantState();
+  const [date, setDate] = useState(addDaysToCurrent(inputParams.duration ?? 0));
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('blur', () => {
-      updateData({
-        ...data,
-        duration: dateDiffInDays(currentDate, parseISO(date)),
-      });
+  navigation.addListener('blur', () => {
+    updateInputParams({
+      ...inputParams,
+      duration: dateDiffInDays(currentDate, parseISO(date)),
     });
-    return () => {
-      unsubscribe();
-    };
-  }, [navigation, data, updateData]);
+  });
+  const travelFrequency = inputParams.frequency ?? 0;
 
   return (
     <View style={styles.container}>
@@ -50,11 +45,11 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
             color={themeColor}
             accessibilityLabel={t(
               TicketAssistantTexts.duration.titleA11yLabel({
-                value: data.frequency,
+                value: travelFrequency,
               }),
             )}
           >
-            {t(TicketAssistantTexts.duration.title({value: data.frequency}))}
+            {t(TicketAssistantTexts.duration.title({value: travelFrequency}))}
           </ThemeText>
           <DurationPicker
             date={date}

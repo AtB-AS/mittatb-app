@@ -12,7 +12,6 @@ import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistan
 import {
   calculateSavings,
   calculateSingleTickets,
-  getLongestDurationTicket,
   perTripSavings,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
 import {getReferenceDataName} from '@atb/reference-data/utils';
@@ -25,18 +24,13 @@ export const TicketSummary = () => {
   const {theme} = useTheme();
   const interactiveColor = theme.interactive[interactiveColorName];
 
-  const {response, purchaseDetails, data} = useTicketAssistantState();
-  if (!response || !purchaseDetails || !data) return null;
-  const {tickets, zones, total_cost, single_ticket_price} = response;
-  const {frequency} = data;
-  const ticket = getLongestDurationTicket(tickets);
+  const {purchaseDetails, inputParams} = useTicketAssistantState();
+  if (!purchaseDetails) return null;
+  const frequency = inputParams.frequency ?? 1;
+  const ticket = purchaseDetails.ticket;
 
-  const details = purchaseDetails.purchaseTicketDetails.find(
-    (p) => p.preassignedFareProduct.id === ticket.fare_product,
-  );
-  if (!details) return null;
-  const recommendedTicketTypeConfig = details.fareProductTypeConfig;
-  const preassignedFareProduct = details.preassignedFareProduct;
+  const recommendedTicketTypeConfig = purchaseDetails.fareProductTypeConfig;
+  const preassignedFareProduct = purchaseDetails.preassignedFareProduct;
 
   const traveller = purchaseDetails?.userProfileWithCount[0];
 
@@ -46,12 +40,15 @@ export const TicketSummary = () => {
   const [fromTariffZone, toTariffZone] = purchaseDetails.tariffZones ?? [];
 
   const zonesString = `${fromTariffZone.name?.value}${
-    zones[0] !== zones[1] ? ` - ${toTariffZone.name?.value}` : ''
+    fromTariffZone.name !== toTariffZone.name
+      ? ` - ${toTariffZone.name?.value}`
+      : ''
   }`;
 
   const savings = calculateSavings(
-    total_cost,
-    calculateSingleTickets(ticket.duration, frequency) * single_ticket_price,
+    ticket.price,
+    calculateSingleTickets(ticket.duration, frequency) *
+      purchaseDetails.singleTicketPrice,
   );
 
   const ticketPriceString = `${ticket.price.toFixed(2)}kr`;

@@ -15,7 +15,7 @@ import {dateToDateString} from '@atb/components/sections/items/date-input/utils'
 import {Button} from '@atb/components/button';
 import {SectionSeparator} from '@atb/components/sections';
 import {SliderComponent} from '@atb/components/slider';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet} from '@atb/theme';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {useLocaleContext} from '@atb/LocaleProvider';
@@ -33,7 +33,7 @@ export const DurationPicker = (props: DurationPickerProps) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const a11yContext = useAccessibilityContext();
-  const {data, updateData} = useTicketAssistantState();
+  const {inputParams, updateInputParams} = useTicketAssistantState();
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const majorVersionIOS = parseInt(String(Platform.Version), 10);
@@ -46,12 +46,20 @@ export const DurationPicker = (props: DurationPickerProps) => {
       setDate(addDaysToCurrent(value));
     } else {
       const newData = {
-        ...data,
+        ...inputParams,
         duration: fromPicker ? value : durations[value],
       };
-      updateData(newData);
+      updateInputParams(newData);
     }
   }
+
+  const [sliderIndex, setSliderIndex] = useState<number>(
+    getSliderIndex(inputParams.duration ?? 7, durations),
+  );
+
+  useEffect(() => {
+    updateDuration(durations[sliderIndex], false);
+  }, [sliderIndex]);
 
   const duration = dateDiffInDays(currentDate, parseISO(date));
   const resultString = t(getResultString(duration));
@@ -161,7 +169,7 @@ export const DurationPicker = (props: DurationPickerProps) => {
 
             <SliderComponent
               style={styles.slider}
-              value={getSliderIndex(data.duration, durations)}
+              value={sliderIndex}
               maximumTrackTintColor={'interactive_0'}
               minimumTrackTintColor={'interactive_0'}
               maximumValue={durations.length - 1}
@@ -170,7 +178,7 @@ export const DurationPicker = (props: DurationPickerProps) => {
               tapToSeek={true}
               thumbTintColor={'interactive_0'}
               onValueChange={(value) => {
-                updateDuration(durations[value], false);
+                setSliderIndex(value);
               }}
             />
           </View>

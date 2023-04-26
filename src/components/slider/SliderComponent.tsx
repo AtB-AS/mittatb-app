@@ -12,7 +12,8 @@ type Props = {
   step: number;
   tapToSeek: boolean;
   thumbTintColor: InteractiveColor;
-  onValueChange: (value: number) => void;
+  onValueChange?: (value: number) => void;
+  onSlidingComplete?: (value: number) => void;
   style?: ViewStyle;
 };
 export function SliderComponent({
@@ -25,6 +26,7 @@ export function SliderComponent({
   tapToSeek,
   thumbTintColor,
   onValueChange,
+  onSlidingComplete,
   style,
 }: Props) {
   const {theme} = useTheme();
@@ -35,6 +37,7 @@ export function SliderComponent({
   return (
     <View>
       <Slider
+        onSlidingComplete={onSlidingComplete}
         style={style}
         value={value}
         minimumValue={minimumValue}

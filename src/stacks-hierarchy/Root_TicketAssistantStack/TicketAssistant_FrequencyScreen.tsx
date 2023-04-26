@@ -4,7 +4,7 @@ import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Ticket
 import {SliderComponent} from '@atb/components/slider';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
@@ -20,8 +20,8 @@ export const TicketAssistant_FrequencyScreen = ({
 }: FrequencyScreenProps) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const {data, updateData} = useTicketAssistantState();
-  const [sliderValue, setSliderValue] = useState(data.frequency);
+  const {inputParams, updateInputParams} = useTicketAssistantState();
+  const [sliderValue, setSliderValue] = useState(inputParams.frequency ?? 7);
   const a11yContext = useAccessibilityContext();
 
   const sliderMax = 14;
@@ -37,21 +37,15 @@ export const TicketAssistant_FrequencyScreen = ({
   const endIndex = numbersAsStrings.length - 1;
   numbersAsStrings[endIndex] = numbersAsStrings[endIndex] + '+';
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('blur', () => {
-      updateData({...data, frequency: sliderValue});
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, [navigation, data, sliderValue, updateData]);
-
   const resultString = t(
     sliderValue === sliderMax
       ? TicketAssistantTexts.frequency.resultMoreThanMax({value: sliderMax})
       : TicketAssistantTexts.frequency.result({value: sliderValue}),
   );
 
+  navigation.addListener('blur', () => {
+    updateInputParams({...inputParams, frequency: sliderValue});
+  });
   return (
     <View style={styles.container}>
       <View style={styles.backdrop}>
@@ -129,6 +123,9 @@ export const TicketAssistant_FrequencyScreen = ({
                   value={sliderValue}
                   tapToSeek={true}
                   thumbTintColor={'interactive_0'}
+                  onSlidingComplete={() => {
+                    updateInputParams({...inputParams, frequency: sliderValue});
+                  }}
                   onValueChange={(value) => {
                     setSliderValue(value);
                   }}

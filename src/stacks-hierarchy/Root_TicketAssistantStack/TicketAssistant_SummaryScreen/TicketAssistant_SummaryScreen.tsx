@@ -10,12 +10,10 @@ import {DashboardBackground} from '@atb/assets/svg/color/images';
 import SvgFeedback from '@atb/assets/svg/mono-icons/actions/Feedback';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary';
-import {useTicketAssistantDataFetch} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/fetch-data';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {ContactSheet} from '@atb/chat/ContactSheet';
-import {getLongestDurationTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -23,7 +21,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
-  useTicketAssistantDataFetch(navigation);
+  let {hasDataChanged, inputParams, purchaseDetails, error} =
+    useTicketAssistantState();
 
   const openContactSheet = () => {
     openBottomSheet((close, focusRef) => (
@@ -31,10 +30,9 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     ));
   };
 
-  let {response, data, hasDataChanged, purchaseDetails, error} =
-    useTicketAssistantState();
-
-  const durationDays = data.duration * 24 * 60 * 60 * 1000;
+  const durationDays = inputParams.duration
+    ? inputParams.duration * 24 * 60 * 60 * 1000
+    : 0;
 
   const endDate: string = new Date(
     Date.now() + durationDays,
@@ -47,30 +45,25 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
 
   const description = t(
     TicketAssistantTexts.summary.description({
-      frequency: data.frequency,
+      frequency: inputParams.frequency ?? 0,
       date: endDate,
     }),
   );
-  const ticket = response
-    ? getLongestDurationTicket(response.tickets)
-    : undefined;
 
-  const doesTicketCoverEntirePeriod = ticket
-    ? ticket.duration < data.duration && ticket.duration !== 0
-    : false;
+  const doesTicketCoverEntirePeriod =
+    purchaseDetails && inputParams.duration
+      ? purchaseDetails.ticket.duration < inputParams.duration &&
+        purchaseDetails.ticket.duration !== 0
+      : false;
 
   const onBuyButtonPress = () => {
-    if (!purchaseDetails || !ticket) return;
-    const details = purchaseDetails.purchaseTicketDetails.find(
-      (p) => p.preassignedFareProduct.id === ticket.fare_product,
-    );
-    if (!details) return;
+    if (!purchaseDetails) return;
     navigation.navigate('Root_PurchaseConfirmationScreen', {
-      fareProductTypeConfig: details?.fareProductTypeConfig,
+      fareProductTypeConfig: purchaseDetails.fareProductTypeConfig,
       fromTariffZone: purchaseDetails.tariffZones[0],
       toTariffZone: purchaseDetails.tariffZones[1],
       userProfilesWithCount: purchaseDetails.userProfileWithCount,
-      preassignedFareProduct: details?.preassignedFareProduct,
+      preassignedFareProduct: purchaseDetails.preassignedFareProduct,
       travelDate: undefined,
       headerLeftButton: {type: 'back'},
       mode: 'Ticket',
@@ -127,20 +120,18 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             >
               {description}
             </ThemeText>
-            {purchaseDetails?.purchaseTicketDetails && (
-              <>
-                <TicketSummary />
-                <Button
-                  interactiveColor="interactive_0"
-                  onPress={onBuyButtonPress}
-                  text={t(TicketAssistantTexts.summary.buyButton)}
-                  testID="nextButton"
-                  accessibilityHint={t(
-                    TicketAssistantTexts.summary.a11yBuyButtonHint,
-                  )}
-                />
-              </>
-            )}
+
+            <TicketSummary />
+            <Button
+              interactiveColor="interactive_0"
+              onPress={onBuyButtonPress}
+              text={t(TicketAssistantTexts.summary.buyButton)}
+              testID="nextButton"
+              accessibilityHint={t(
+                TicketAssistantTexts.summary.a11yBuyButtonHint,
+              )}
+            />
+
             {doesTicketCoverEntirePeriod && (
               <View style={styles.notice}>
                 <ThemeIcon style={styles.icon} svg={SvgInfo} />
