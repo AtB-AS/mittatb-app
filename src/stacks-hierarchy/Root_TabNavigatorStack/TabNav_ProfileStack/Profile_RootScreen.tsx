@@ -44,7 +44,10 @@ import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
 import {useIsLoading} from '@atb/utils/use-is-loading';
 import {useDeparturesV2Enabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
-import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant-enabled';
+import {
+  useTicketingAssistantDebugOverride,
+  useTicketingAssistantEnabled,
+} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {BetaTag} from '@atb/components/beta-tag';
 
 const buildNumber = getBuildNumber();
@@ -100,7 +103,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     }
   };
 
-  const {enable_ticketing_assistant} = useRemoteConfig();
+  let {enable_ticketing_assistant} = useRemoteConfig();
+  const [debugOverride] = useTicketingAssistantDebugOverride();
+  if (debugOverride !== undefined) {
+    enable_ticketing_assistant = debugOverride;
+  }
   const showTicketAssistant = useTicketingAssistantEnabled();
   const setShowTicketAssistant = (value: boolean) => {
     setPreference({showTicketAssistant: value});
