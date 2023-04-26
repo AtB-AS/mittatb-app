@@ -194,27 +194,15 @@ platform :ios do
     cocoapods(podfile: './ios/Podfile')
   end
 
-  desc 'Upload the build to Firebase App Distribution NFK'
+  desc 'Upload the build to Firebase App Distribution'
   lane :firebase_distribution_staging do
     ensure_env_vars(
-      env_vars: ['FIREBASE_APP_ID_IOS','GCP_CREDENTIALS_PATH']
+      env_vars: ['FIREBASE_APP_ID_IOS','GCP_CREDENTIALS_PATH', 'APP_DISTRIBUTION_GROUP_NAME']
     )
     firebase_app_distribution(
       app:ENV['FIREBASE_APP_ID_IOS'],
       service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
-      groups:"NFK"
-    )
-  end
-
-  desc 'Upload the build to Firebase App Distribution FRAM'
-  lane :firebase_distribution_staging_fram do
-    ensure_env_vars(
-      env_vars: ['FIREBASE_APP_ID_IOS','GCP_CREDENTIALS_PATH']
-    )
-    firebase_app_distribution(
-      app:ENV['FIREBASE_APP_ID_IOS'],
-      service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
-      groups:"FRAM"
+      groups:ENV['APP_DISTRIBUTION_GROUP_NAME']
     )
   end
 
@@ -291,7 +279,7 @@ platform :android do
     sh("cp", "../android/app/build/intermediates/sourcemaps/react/#{build_type}/index.android.bundle.packager.map", "../bundle/index.android.bundle.map")
   end
 
-  lane :firebase_distribution_staging_nfk do
+  lane :firebase_distribution_staging do
     ensure_env_vars(
       env_vars: ['FIREBASE_APP_ID','GCP_CREDENTIALS_PATH','APK_FILE_NAME']
     )
@@ -300,20 +288,7 @@ platform :android do
       service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
       android_artifact_type:'APK',
       android_artifact_path:ENV['APK_FILE_NAME'],
-      groups:"NFK"
-    )
-  end
-
-  lane :firebase_distribution_staging_fram do
-    ensure_env_vars(
-      env_vars: ['FIREBASE_APP_ID','GCP_CREDENTIALS_PATH','APK_FILE_NAME']
-    )
-    firebase_app_distribution(
-      app:ENV['FIREBASE_APP_ID'],
-      service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
-      android_artifact_type:'APK',
-      android_artifact_path:ENV['APK_FILE_NAME'],
-      groups:"FRAM"
+      groups:ENV['APP_DISTRIBUTION_GROUP_NAME']
     )
   end
 
