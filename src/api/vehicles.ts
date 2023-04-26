@@ -3,9 +3,7 @@ import {stringifyUrl} from '@atb/api/utils';
 import qs from 'query-string';
 import {AxiosRequestConfig} from 'axios';
 import {GetServiceJourneyVehicles} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
-import {ApolloClient, gql} from '@apollo/client';
-
-const DEFAULT_FETCH_POLICY = 'no-cache';
+import {WS_API_BASE_URL} from '@env';
 
 export const getServiceJourneyVehicles = async (
   serviceJourneyIds?: string[],
@@ -28,41 +26,9 @@ export const getServiceJourneyVehicles = async (
   return result.data;
 };
 
-export const getLiveVehicleSubscription = (
-  serviceJourneyId: string,
-  client: ApolloClient<object>,
-) => {
-  return client.subscribe({
-    query: VEHICLE_UPDATES_SUBSCRIPTION,
-    fetchPolicy: DEFAULT_FETCH_POLICY,
-    variables: {
-      serviceJourneyId: serviceJourneyId,
-      includePointsOnLink: false,
-    },
-  });
-};
+export const getLiveVehicleSubscription = (serviceJourneyId: string) => {
+  const url = `${WS_API_BASE_URL}ws/v2/vehicles/service-journey/subscription`;
+  const query = qs.stringify({serviceJourneyId});
 
-export const VEHICLE_FRAGMENT = gql`
-  fragment VehicleFragment on VehicleUpdate {
-    serviceJourney {
-      id
-    }
-    mode
-    lastUpdated
-    lastUpdatedEpochSecond
-    monitored
-    bearing
-    location {
-      latitude
-      longitude
-    }
-  }
-`;
-export const VEHICLE_UPDATES_SUBSCRIPTION = gql`
-  subscription VehicleUpdates($serviceJourneyId: String, $monitored: Boolean) {
-    vehicleUpdates(serviceJourneyId: $serviceJourneyId, monitored: $monitored) {
-      ...VehicleFragment
-    }
-  }
-  ${VEHICLE_FRAGMENT}
-`;
+  return new WebSocket(stringifyUrl(url, query));
+};

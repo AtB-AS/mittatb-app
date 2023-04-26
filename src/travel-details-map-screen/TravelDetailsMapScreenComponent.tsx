@@ -56,31 +56,35 @@ export const TravelDetailsMapScreenComponent = ({
 
   const {t} = useTranslation();
   const controlStyles = useControlPositionsStyle();
-  const vehicles = useGetLiveServiceJourneyVehicles(initialVehiclePosition);
+
+  const [vehicle, setVehicle] = useState<VehiclePosition | undefined>(
+    initialVehiclePosition,
+  );
+  useGetLiveServiceJourneyVehicles(
+    setVehicle,
+    initialVehiclePosition?.serviceJourney?.id,
+  );
+
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
 
   const [followVehicleMapPoint, setFollowVehicleMapPoint] = useState<
     Coordinates | undefined
-  >(undefined);
+  >();
 
   useEffect(() => {
-    if (initialVehiclePosition?.serviceJourney?.id) {
-      const vehicle = vehicles.find(
-        (v) =>
-          v.serviceJourney?.id === initialVehiclePosition.serviceJourney?.id,
-      );
-      if (vehicle && vehicle !== followVehicleMapPoint) {
-        setFollowVehicleMapPoint(vehicle.location);
-        if (shouldTrack) {
-          flyToLocation({
-            coordinates: vehicle.location,
-            mapCameraRef,
-            animationDuration: FOLLOW_ANIMATION_DURATION,
-          });
-        }
-      }
+    const location = vehicle?.location;
+
+    if (vehicle === followVehicleMapPoint || !location) return;
+
+    setFollowVehicleMapPoint(location);
+    if (shouldTrack) {
+      flyToLocation({
+        coordinates: location,
+        mapCameraRef,
+        animationDuration: FOLLOW_ANIMATION_DURATION,
+      });
     }
-  }, [vehicles, followVehicleMapPoint, shouldTrack]);
+  }, [vehicle, shouldTrack]);
 
   return (
     <View style={styles.mapView}>
@@ -105,14 +109,14 @@ export const TravelDetailsMapScreenComponent = ({
         {toPlace && (
           <MapLabel
             point={pointOf(toPlace)}
-            id={'end'}
+            id="end"
             text={t(MapTexts.endPoint.label)}
           />
         )}
         {fromPlace && (
           <MapLabel
             point={pointOf(fromPlace)}
-            id={'start'}
+            id="start"
             text={t(MapTexts.startPoint.label)}
           />
         )}

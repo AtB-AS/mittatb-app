@@ -1,37 +1,33 @@
-import {useEffect, useState} from 'react';
-import {FetchResult, useApolloClient} from '@apollo/client';
-import {VehiclePosition} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
+import {useEffect} from 'react';
+import {
+  GetServiceJourneyVehicleQuery,
+  VehiclePosition,
+} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
 import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
 import {getLiveVehicleSubscription} from '@atb/api/vehicles';
 
 export function useGetLiveServiceJourneyVehicles(
-  initialVehiclePosition?: VehiclePosition,
+  setVehicle: (vehicle: VehiclePosition) => void,
+  serviceJourneyId?: string,
 ) {
-  const [vehicles, setVehicles] = useState<VehiclePosition[]>([]);
-  const client = useApolloClient();
   const realtimeMapEnabled = useRealtimeMapEnabled();
-  useEffect(() => {
-    if (initialVehiclePosition) {
-      setVehicles([initialVehiclePosition]);
-    }
-  }, [initialVehiclePosition]);
 
   // Set up subscription to receive updates on vehicles
   useEffect(() => {
-    if (!realtimeMapEnabled || !initialVehiclePosition?.serviceJourney?.id)
-      return;
+    if (!realtimeMapEnabled) return;
+    if (!serviceJourneyId) return;
 
-    const subscription = getLiveVehicleSubscription(
-      initialVehiclePosition?.serviceJourney?.id,
-      client,
-    ).subscribe((fetchResult: FetchResult) => {
-      if (fetchResult?.data?.vehicleUpdates.length > 0) {
-        setVehicles(fetchResult?.data?.vehicleUpdates as VehiclePosition[]);
+    const subscription = getLiveVehicleSubscription(serviceJourneyId);
+
+    subscription.onmessage = (event) => {
+      const vehicles = JSON.parse(event.data) as GetServiceJourneyVehicleQuery;
+      const vehicle = vehicles.vehicles?.find((v) => {
+        return v.serviceJourney?.id === serviceJourneyId;
+      });
+      if (vehicle) {
+        setVehicle(vehicle);
       }
-    });
-
-    return subscription.unsubscribe;
-  }, [initialVehiclePosition, client, realtimeMapEnabled]);
-
-  return vehicles;
+    };
+    return () => subscription.close(1000);
+  }, [serviceJourneyId, realtimeMapEnabled]);
 }
