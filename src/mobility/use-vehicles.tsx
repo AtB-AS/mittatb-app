@@ -80,13 +80,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
     const vehicle = type.feature.properties;
     if (isVehicle(vehicle)) {
       openBottomSheet(() => {
-        return (
-          <ScooterSheet
-            vehicleId={vehicle.id}
-            position={{lat: vehicle.lat, lon: vehicle.lon}}
-            close={closeBottomSheet}
-          />
-        );
+        return <ScooterSheet vehicleId={vehicle.id} close={closeBottomSheet} />;
       });
     }
   };
