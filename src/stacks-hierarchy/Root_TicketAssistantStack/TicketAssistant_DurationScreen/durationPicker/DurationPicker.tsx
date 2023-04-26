@@ -15,7 +15,7 @@ import {dateToDateString} from '@atb/components/sections/items/date-input/utils'
 import {Button} from '@atb/components/button';
 import {SectionSeparator} from '@atb/components/sections';
 import {Slider} from '@atb/components/slider';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet} from '@atb/theme';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {useLocaleContext} from '@atb/LocaleProvider';
@@ -49,6 +49,7 @@ export const DurationPicker = (props: DurationPickerProps) => {
         ...inputParams,
         duration: fromPicker ? value : durations[value],
       };
+      setSliderIndex(getSliderIndex(newData.duration, durations));
       updateInputParams(newData);
     }
   }
@@ -56,10 +57,6 @@ export const DurationPicker = (props: DurationPickerProps) => {
   const [sliderIndex, setSliderIndex] = useState<number>(
     getSliderIndex(inputParams.duration ?? 7, durations),
   );
-
-  useEffect(() => {
-    updateDuration(durations[sliderIndex], false);
-  }, [sliderIndex]);
 
   const duration = dateDiffInDays(currentDate, parseISO(date));
   const resultString = getResultString(duration, t);
@@ -178,7 +175,7 @@ export const DurationPicker = (props: DurationPickerProps) => {
               tapToSeek={true}
               thumbTintColor={'interactive_0'}
               onValueChange={(value) => {
-                setSliderIndex(value);
+                updateDuration(durations[value], false);
               }}
             />
           </View>
