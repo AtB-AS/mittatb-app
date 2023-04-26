@@ -92,6 +92,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
           fareProductTypeConfig,
           afterLogin: {
             screen: 'Root_TicketAssistantStack',
+            params: undefined,
           },
         },
       });
