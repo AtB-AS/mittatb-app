@@ -12,12 +12,7 @@ export type TicketAssistantData = {
   duration: number;
   traveller: Traveller;
   zones: string[];
-  preassigned_fare_products: PreassignedFareProductDetails[];
-};
-
-export type PreassignedFareProductDetails = {
-  id: string;
-  duration_days: number;
+  preassigned_fare_products: string[];
 };
 
 export type TicketResponseData = {

@@ -1,16 +1,18 @@
+// TicketAssistant_SummaryScreenHooks.ts
 import {useEffect} from 'react';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
-import {getRecommendedTicket} from '@atb/api/getRecommendedTicket';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {handleRecommendedTicketResponse} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/handle-recommended-ticket-response';
+import {getRecommendedTicket} from '@atb/api/getRecommendedTicket';
 
-export const useTicketAssistantDataFetch = (nav: any) => {
+export const useTicketAssistantDataFetch = (navigation: any) => {
   const {
     tariffZones,
     userProfiles,
     preassignedFareProducts,
     fareProductTypeConfigs,
   } = useFirestoreConfiguration();
+
   const {
     setResponse,
     data,
@@ -22,33 +24,44 @@ export const useTicketAssistantDataFetch = (nav: any) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        setError(false);
-        const r = await getRecommendedTicket(data);
-        setHasDataChanged(false);
-
-        if (!r.tickets.length) {
-          setError(true);
-        } else {
+      setError(false);
+      await getRecommendedTicket(data)
+        .then((r) => {
+          setHasDataChanged(false);
+          if (r.tickets.length === 0) {
+            setError(true);
+            return;
+          }
           setResponse(r);
-          setPurchaseDetails(
-            handleRecommendedTicketResponse(
-              r,
-              tariffZones,
-              userProfiles,
-              preassignedFareProducts,
-              fareProductTypeConfigs,
-            ),
-          );
-        }
-      } catch (e) {
-        setError(true);
-      }
+          try {
+            if (r.tickets !== undefined) {
+              setPurchaseDetails(
+                handleRecommendedTicketResponse(
+                  r,
+                  tariffZones,
+                  userProfiles,
+                  preassignedFareProducts,
+                  fareProductTypeConfigs,
+                ),
+              );
+            }
+          } catch (e) {
+            setError(true);
+          }
+        })
+        .catch(() => {
+          setError(true);
+        });
     };
 
-    const unsub = nav.addListener('focus', async () => {
-      if (hasDataChanged) await fetchData();
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (hasDataChanged) {
+        fetchData();
+      }
     });
-    return unsub();
+
+    return () => {
+      unsubscribe();
+    };
   }, [data]);
 };

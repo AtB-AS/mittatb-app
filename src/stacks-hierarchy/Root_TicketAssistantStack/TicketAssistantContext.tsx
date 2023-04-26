@@ -28,16 +28,14 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
   const {preassignedFareProducts, fareProductTypeConfigs} =
     useFirestoreConfiguration();
 
-  // List of preassigned fare products ids
   const preassignedFareProductsIds = preassignedFareProducts
     .filter(
       (product) =>
-        product.type === 'single' || product.durationDays !== undefined,
+        product.type === 'single' ||
+        product.type === 'period' ||
+        product.type === 'hour24',
     )
-    .map((product) => ({
-      id: product.id,
-      duration_days: product.durationDays || 0,
-    }));
+    .map((product) => product.id);
 
   const offerDefaults = useOfferDefaults(
     undefined,
