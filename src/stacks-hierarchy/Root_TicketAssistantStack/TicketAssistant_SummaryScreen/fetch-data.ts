@@ -49,8 +49,6 @@ export const useTicketAssistantDataFetch = (nav: any) => {
     const unsub = nav.addListener('focus', async () => {
       if (hasDataChanged) await fetchData();
     });
-    return () => {
-      unsub();
-    };
+    return unsub();
   }, [data]);
 };
