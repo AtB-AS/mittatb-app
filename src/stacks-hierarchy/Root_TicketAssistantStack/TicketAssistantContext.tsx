@@ -11,7 +11,7 @@ type TicketAssistantState = {
   inputParams: TicketAssistantData;
   updateInputParams: (newData: TicketAssistantData) => void;
   purchaseDetails?: PurchaseDetails;
-  hasDataChanged: boolean;
+  loading: boolean;
   error: boolean;
 };
 
@@ -40,12 +40,17 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
   });
 
   const [purchaseDetails, setPurchaseDetails] = useState<PurchaseDetails>();
-  const [hasDataChanged, setHasDataChanged] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const updateInputParams = (newData: TicketAssistantData) => {
-    setInputParams((prevState) => ({...prevState, ...newData}));
-    if (newData !== inputParams) {
-      setHasDataChanged(true);
+    if (
+      newData.traveller != inputParams.traveller ||
+      newData.frequency != inputParams.frequency ||
+      newData.duration != inputParams.duration ||
+      newData.zones != inputParams.zones
+    ) {
+      setInputParams((prevState) => ({...prevState, ...newData}));
+      setLoading(true);
     }
   };
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
@@ -63,7 +68,7 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
               fareProductTypeConfigs,
             ),
           );
-          setHasDataChanged(false);
+          setLoading(false);
         })
         .catch(() => {
           setError(true);
@@ -85,7 +90,7 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
         inputParams,
         updateInputParams,
         purchaseDetails,
-        hasDataChanged,
+        loading,
         error,
       }}
     >

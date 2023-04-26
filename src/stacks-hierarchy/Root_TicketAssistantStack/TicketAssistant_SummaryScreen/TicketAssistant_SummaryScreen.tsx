@@ -21,7 +21,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
-  let {hasDataChanged, inputParams, purchaseDetails, error} =
+  let {loading, inputParams, purchaseDetails, error} =
     useTicketAssistantState();
 
   const openContactSheet = () => {
@@ -78,7 +78,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       <View style={styles.backdrop}>
         <DashboardBackground width={'100%'} height={'100%'} />
       </View>
-      {hasDataChanged ? (
+
+      {loading ? (
         <View style={styles.loadingSpinner}>
           <ActivityIndicator animating={true} size="large" />
         </View>
