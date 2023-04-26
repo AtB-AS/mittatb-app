@@ -9,6 +9,7 @@ import {TicketMultiple} from '@atb/assets/svg/mono-icons/ticketing';
 import {FareProductTypeConfig} from '@atb-as/config-specs';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {productIsSellableInApp} from '@atb/reference-data/utils';
+import {BetaTag} from '@atb/components/beta-tag';
 
 type TicketAssistantProps = {
   accented?: boolean;
@@ -79,14 +80,7 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
               >
                 {t(TicketingTexts.ticketAssistantTile.title)}
               </ThemeText>
-              <View style={styles.betaLabel}>
-                <ThemeText
-                  color="background_accent_3"
-                  style={styles.betaLabelText}
-                >
-                  BETA
-                </ThemeText>
-              </View>
+              <BetaTag />
             </View>
 
             <ThemeText type="body__tertiary" color={'secondary'}>
@@ -115,18 +109,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.xSmall,
     borderRadius: theme.border.radius.small,
     marginRight: theme.spacings.xSmall,
-  },
-  betaLabel: {
-    backgroundColor: theme.static.background.background_accent_3.background,
-    marginHorizontal: theme.spacings.small,
-    paddingHorizontal: theme.spacings.small,
-    paddingVertical: theme.spacings.small,
-    borderRadius: theme.border.radius.regular,
-    flexShrink: 1,
-  },
-  betaLabelText: {
-    fontSize: 8,
-    lineHeight: 9,
   },
   titleContainer: {
     flexDirection: 'row',
