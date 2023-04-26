@@ -3,7 +3,6 @@ import {useFirestoreConfiguration} from '@atb/configuration';
 import {
   PurchaseDetails,
   TicketAssistantData,
-  RecommendedTicketResponse,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {getRecommendedTicket} from '@atb/api/getRecommendedTicket';
 import {handleRecommendedTicketResponse} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/handle-recommended-ticket-response';
@@ -11,7 +10,6 @@ import {handleRecommendedTicketResponse} from '@atb/stacks-hierarchy/Root_Ticket
 type TicketAssistantState = {
   inputParams: TicketAssistantData;
   updateInputParams: (newData: TicketAssistantData) => void;
-  response?: RecommendedTicketResponse;
   purchaseDetails?: PurchaseDetails;
   hasDataChanged: boolean;
   error: boolean;
