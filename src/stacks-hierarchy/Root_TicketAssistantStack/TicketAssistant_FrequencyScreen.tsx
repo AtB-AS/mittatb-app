@@ -1,7 +1,7 @@
 import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
-import {SliderComponent} from '@atb/components/slider';
+import {Slider} from '@atb/components/slider';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
@@ -113,7 +113,7 @@ export const TicketAssistant_FrequencyScreen = ({
                     );
                   })}
                 </View>
-                <SliderComponent
+                <Slider
                   style={styles.slider}
                   maximumTrackTintColor={'interactive_0'}
                   minimumTrackTintColor={'interactive_0'}

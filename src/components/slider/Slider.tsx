@@ -1,5 +1,5 @@
 import {View, ViewStyle} from 'react-native';
-import Slider from '@react-native-community/slider';
+import RNSlider from '@react-native-community/slider';
 import {InteractiveColor} from '@atb/theme/colors';
 import {useTheme} from '@atb/theme';
 
@@ -16,7 +16,7 @@ type Props = {
   onSlidingComplete?: (value: number) => void;
   style?: ViewStyle;
 };
-export function SliderComponent({
+export function Slider({
   value,
   maximumValue,
   minimumValue,
@@ -36,7 +36,7 @@ export function SliderComponent({
 
   return (
     <View>
-      <Slider
+      <RNSlider
         onSlidingComplete={onSlidingComplete}
         style={style}
         value={value}

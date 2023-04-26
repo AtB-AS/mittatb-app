@@ -14,7 +14,7 @@ import {
 import {dateToDateString} from '@atb/components/sections/items/date-input/utils';
 import {Button} from '@atb/components/button';
 import {SectionSeparator} from '@atb/components/sections';
-import {SliderComponent} from '@atb/components/slider';
+import {Slider} from '@atb/components/slider';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet} from '@atb/theme';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
@@ -167,7 +167,7 @@ export const DurationPicker = (props: DurationPickerProps) => {
               </ThemeText>
             </View>
 
-            <SliderComponent
+            <Slider
               style={styles.slider}
               value={sliderIndex}
               maximumTrackTintColor={'interactive_0'}
