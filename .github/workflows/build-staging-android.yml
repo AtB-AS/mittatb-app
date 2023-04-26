@@ -92,22 +92,15 @@ jobs:
         run: bundle exec fastlane android appcenter_staging
         env:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
-      - name: Distribute to Firebase app distribution (NFK)
-        if: matrix.org == 'nfk'
+      - name: Distribute to Firebase App Distribution
+        if: matrix.org != 'atb'
         run: |
           echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
-          bundle exec fastlane android firebase_distribution_staging_nfk
+          bundle exec fastlane android firebase_distribution_staging
         env:
           GCP_CREDENTIALS_PATH: google-services.json
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
-      - name: Distribute to Firebase app distribution (FRAM)
-        if: matrix.org == 'fram'
-        run: |
-          echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
-          bundle exec fastlane android firebase_distribution_staging_fram
-        env:
-          GCP_CREDENTIALS_PATH: google-services.json
-          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          APP_DISTRIBUTION_GROUP_NAME: ${{ secrets.APP_DISTRIBUTION_GROUP_NAME }}
       - name: Upload bundle and source maps
         run: bash ./scripts/android/upload-sourcemaps.sh
         env:

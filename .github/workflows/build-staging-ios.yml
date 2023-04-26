@@ -79,14 +79,15 @@ jobs:
         env:
           IPA_FILE_NAME: 'AtB.ipa'
           APP_NAME: 'AtB.app'
-      - name: Distribute to Firebase app distribution (NFK)
-        if: matrix.org == 'nfk'
+      - name: Distribute to Firebase App Distribution
+        if: matrix.org != 'nfk'
         run: |
           echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
           bundle exec fastlane ios firebase_distribution_staging
         env:
           GCP_CREDENTIALS_PATH: google-services.json
           FIREBASE_APP_ID_IOS: ${{ secrets.FIREBASE_APP_ID_IOS }}
+          APP_DISTRIBUTION_GROUP_NAME: ${{ secrets.APP_DISTRIBUTION_GROUP_NAME }}
       - name: Distribute to AppCenter
         if: matrix.org == 'atb'
         run: bundle exec fastlane ios appcenter_staging
