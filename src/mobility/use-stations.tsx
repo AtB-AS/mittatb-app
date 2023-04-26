@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {AreaState, isStation, updateAreaState} from '@atb/mobility/utils';
+import {AreaState, isBikeStation, updateAreaState} from '@atb/mobility/utils';
 import {useIsCityBikesEnabled} from '@atb/mobility/use-city-bikes-enabled';
 import {
   MapSelectionActionType,
@@ -7,10 +7,10 @@ import {
   StationsState,
   toFeatureCollection,
   toFeaturePoints,
+  useUserMapFilters,
 } from '@atb/components/map';
-import {useUserMapFilters} from '@atb/components/map/hooks/use-map-filter';
 import {FeatureCollection, GeoJSON} from 'geojson';
-import {StationFragment} from '@atb/api/types/generated/fragments/stations';
+import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {getStations} from '@atb/api/stations';
 import {RegionPayload} from '@rnmapbox/maps';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
@@ -20,7 +20,7 @@ import {useIsFocused} from '@react-navigation/native';
 
 const MIN_ZOOM_LEVEL = 12;
 const BUFFER_DISTANCE_IN_METERS = 500;
-export const useCityBikeStations: () => StationsState | undefined = () => {
+export const useStations: () => StationsState | undefined = () => {
   const [area, setArea] = useState<AreaState>();
   const isCityBikesEnabled = useIsCityBikesEnabled();
   const [filter, setFilter] = useState<StationsFilterType>();
@@ -30,7 +30,7 @@ export const useCityBikeStations: () => StationsState | undefined = () => {
   const isFocused = useIsFocused();
 
   const [stations, setStations] = useState<
-    FeatureCollection<GeoJSON.Point, StationFragment>
+    FeatureCollection<GeoJSON.Point, StationBasicFragment>
   >(toFeatureCollection([]));
 
   useEffect(() => {
@@ -38,6 +38,10 @@ export const useCityBikeStations: () => StationsState | undefined = () => {
       setFilter(initialFilter.stations);
     });
   }, [isCityBikesEnabled]);
+
+  const formFactorsFromFilter = (filter: StationsFilterType) => {
+    return filter.showCityBikeStations ? FormFactor.Bicycle : undefined;
+  };
 
   useEffect(() => {
     if (
@@ -51,7 +55,7 @@ export const useCityBikeStations: () => StationsState | undefined = () => {
       getStations(
         {
           ...area,
-          availableFormFactors: FormFactor.Bicycle,
+          availableFormFactors: formFactorsFromFilter(filter),
         },
         {signal: abortCtrl.signal},
       )
@@ -78,9 +82,9 @@ export const useCityBikeStations: () => StationsState | undefined = () => {
   const onPress = (type: MapSelectionActionType) => {
     if (type.source !== 'map-click') return;
     const station = type.feature.properties;
-    if (isStation(station)) {
+    if (isBikeStation(station)) {
       openBottomSheet(() => (
-        <CityBikeStationSheet station={station} close={closeBottomSheet} />
+        <CityBikeStationSheet stationId={station.id} close={closeBottomSheet} />
       ));
     }
   };

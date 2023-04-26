@@ -1,4 +1,3 @@
-import {StationFragment} from '@atb/api/types/generated/fragments/stations';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -12,7 +11,7 @@ import {
   BicycleTexts,
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {getRentalAppUri} from '@atb/mobility/utils';
+import {getAvailableVehicles, getRentalAppUri} from '@atb/mobility/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useOperatorApp} from '@atb/mobility/use-operator-app';
 import {VehicleStat} from '@atb/mobility/components/VehicleStat';
@@ -21,17 +20,21 @@ import {Parking as ParkingDark} from '@atb/assets/svg/color/icons/vehicles/dark'
 import {Parking as ParkingLight} from '@atb/assets/svg/color/icons/vehicles/light';
 import {VehicleStats} from '@atb/mobility/components/VehicleStats';
 import {ThemeText} from '@atb/components/text';
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {useTextForLanguage} from '@atb/translations/utils';
+import {useBikeStation} from '@atb/mobility/use-bike-station';
+import {MessageBox} from '@atb/components/message-box';
 
 type Props = {
-  station: StationFragment;
+  stationId: string;
   close: () => void;
 };
-export const CityBikeStationSheet = ({station, close}: Props) => {
+
+export const CityBikeStationSheet = ({stationId, close}: Props) => {
   const {t} = useTranslation();
   const {themeName} = useTheme();
   const style = useSheetStyle();
+  const {station, isLoading, error} = useBikeStation(stationId);
   const {appStoreUri, brandLogoUrl, operatorName} = useSystem(station);
   const rentalAppUri = getRentalAppUri(station);
   const {openOperatorApp} = useOperatorApp({
@@ -39,7 +42,8 @@ export const CityBikeStationSheet = ({station, close}: Props) => {
     appStoreUri,
     rentalAppUri,
   });
-  const stationName = useTextForLanguage(station.name.translation);
+  const stationName = useTextForLanguage(station?.name.translation);
+  const availableBikes = getAvailableVehicles(station?.vehicleTypesAvailable);
 
   return (
     <BottomSheetContainer>
@@ -52,59 +56,91 @@ export const CityBikeStationSheet = ({station, close}: Props) => {
         color={'background_1'}
         setFocusOnLoad={false}
       />
-      <View style={style.container}>
-        <Section>
-          <GenericSectionItem>
-            <OperatorLogo operatorName={operatorName} logoUrl={brandLogoUrl} />
-            {stationName && (
-              <View style={style.stationName}>
-                <ThemeText type="body__secondary">{stationName}</ThemeText>
-              </View>
+      <>
+        {isLoading && (
+          <View style={style.activityIndicator}>
+            <ActivityIndicator size="large" />
+          </View>
+        )}
+        {!isLoading && !error && station && (
+          <>
+            <View style={style.container}>
+              <Section>
+                <GenericSectionItem>
+                  <OperatorLogo
+                    operatorName={operatorName}
+                    logoUrl={brandLogoUrl}
+                  />
+                  {stationName && (
+                    <View style={style.stationName}>
+                      <ThemeText type="body__secondary">
+                        {stationName}
+                      </ThemeText>
+                    </View>
+                  )}
+                </GenericSectionItem>
+              </Section>
+              <VehicleStats
+                left={
+                  <VehicleStat
+                    svg={Bicycle}
+                    primaryStat={availableBikes}
+                    secondaryStat={t(BicycleTexts.stations.numBikesAvailable)}
+                  />
+                }
+                right={
+                  <VehicleStat
+                    svg={themeName === 'dark' ? ParkingDark : ParkingLight}
+                    primaryStat={
+                      station.numDocksAvailable ??
+                      t(BicycleTexts.stations.unknownDocksAvailable)
+                    }
+                    secondaryStat={t(BicycleTexts.stations.numDocksAvailable)}
+                  />
+                }
+              />
+            </View>
+            {rentalAppUri && (
+              <FullScreenFooter>
+                <Button
+                  text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
+                  onPress={openOperatorApp}
+                  mode="primary"
+                  interactiveColor={'interactive_0'}
+                />
+              </FullScreenFooter>
             )}
-          </GenericSectionItem>
-        </Section>
-        <VehicleStats
-          left={
-            <VehicleStat
-              svg={Bicycle}
-              primaryStat={station.numBikesAvailable}
-              secondaryStat={t(BicycleTexts.stations.numBikesAvailable)}
+          </>
+        )}
+        {!isLoading && (error || !station) && (
+          <View style={style.errorMessage}>
+            <MessageBox
+              type="error"
+              message={t(BicycleTexts.loadingFailed)}
+              onPressConfig={{
+                action: close,
+                text: t(ScreenHeaderTexts.headerButton.close.text),
+              }}
             />
-          }
-          right={
-            <VehicleStat
-              svg={themeName === 'dark' ? ParkingDark : ParkingLight}
-              primaryStat={
-                station.numDocksAvailable ??
-                t(BicycleTexts.stations.unknownDocksAvailable)
-              }
-              secondaryStat={t(BicycleTexts.stations.numDocksAvailable)}
-            />
-          }
-        />
-      </View>
-
-      {rentalAppUri && (
-        <FullScreenFooter>
-          <Button
-            text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
-            onPress={openOperatorApp}
-            mode="primary"
-            interactiveColor={'interactive_0'}
-          />
-        </FullScreenFooter>
-      )}
+          </View>
+        )}
+      </>
     </BottomSheetContainer>
   );
 };
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
+  activityIndicator: {
+    marginBottom: theme.spacings.xLarge,
+  },
   container: {
     paddingHorizontal: theme.spacings.medium,
   },
-
   stationName: {
     flex: 1,
     alignItems: 'center',
+  },
+  errorMessage: {
+    marginHorizontal: theme.spacings.medium,
   },
 }));
