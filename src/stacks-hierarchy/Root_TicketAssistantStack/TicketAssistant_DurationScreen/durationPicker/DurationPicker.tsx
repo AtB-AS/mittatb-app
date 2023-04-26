@@ -28,8 +28,11 @@ type DurationPickerProps = {
 };
 
 const durations = [1, 7, 14, 21, 30, 60, 90, 120, 150, 180];
-export const DurationPicker = (props: DurationPickerProps) => {
-  const {date, setDate, currentDate} = props;
+export const DurationPicker = ({
+  date,
+  setDate,
+  currentDate,
+}: DurationPickerProps) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const a11yContext = useAccessibilityContext();
