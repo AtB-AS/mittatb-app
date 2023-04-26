@@ -79,12 +79,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
         <DashboardBackground width={'100%'} height={'100%'} />
       </View>
 
-      {loading ? (
-        <View style={styles.loadingSpinner}>
-          <ActivityIndicator animating={true} size="large" />
-        </View>
-      ) : error ? (
-        <View style={styles.mainView}>
+      {error ? (
+        <View>
           <ThemeText
             type={'heading--big'}
             color={themeColor}
@@ -99,6 +95,10 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
           >
             {t(TicketAssistantTexts.summary.crashedDescription)}
           </ThemeText>
+        </View>
+      ) : loading ? (
+        <View style={styles.loadingSpinner}>
+          <ActivityIndicator animating={true} size="large" />
         </View>
       ) : (
         <View style={styles.mainView}>
