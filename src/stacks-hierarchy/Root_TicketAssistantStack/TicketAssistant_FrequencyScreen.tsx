@@ -76,6 +76,7 @@ export const TicketAssistant_FrequencyScreen = ({
               {numbers.map((number) => {
                 return (
                   <Button
+                    key={number}
                     interactiveColor="interactive_2"
                     onPress={() => {
                       navigation.navigate('TicketAssistant_DurationScreen');
