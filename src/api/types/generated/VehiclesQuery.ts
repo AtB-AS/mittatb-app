@@ -2,9 +2,10 @@ import * as Types from './mobility-types_v2';
 import {
   VehicleBasicFragment,
   VehicleExtendedFragment,
+  VehicleFragment,
 } from './fragments/vehicles';
 
-export type GetVehiclesQueryVariables = Types.Exact<{
+export type GetVehiclesBasicQueryVariables = Types.Exact<{
   lat: Types.Scalars['Float'];
   lon: Types.Scalars['Float'];
   range: Types.Scalars['Int'];
@@ -13,13 +14,27 @@ export type GetVehiclesQueryVariables = Types.Exact<{
     | Types.InputMaybe<Types.FormFactor>
   >;
 }>;
-
-export type GetVehiclesQuery = {vehicles?: Array<VehicleBasicFragment>};
-
-export type GetVehicleQueryVariables = Types.Exact<{
-  ids?: Types.InputMaybe<
-    Array<Types.Scalars['String']> | Types.Scalars['String']
+export type GetVehiclesExtendedQueryVariables = Types.Exact<{
+  lat: Types.Scalars['Float'];
+  lon: Types.Scalars['Float'];
+  range: Types.Scalars['Int'];
+  formFactors?: Types.InputMaybe<
+    | Array<Types.InputMaybe<Types.FormFactor>>
+    | Types.InputMaybe<Types.FormFactor>
   >;
 }>;
+export type GetVehiclesBasicQuery = {vehicles?: Array<VehicleBasicFragment>};
 
-export type GetVehicleQuery = {vehicles?: Array<VehicleExtendedFragment>};
+export type GetVehicleQueryVariables = Omit<
+  GetVehiclesBasicQueryVariables,
+  'range'
+> & {
+  id: Types.Scalars['String'];
+  range?: Types.Scalars['Int'];
+};
+export type GetVehicleQuery = VehicleExtendedFragment | undefined;
+
+export type GetVehiclesQueryVariables = GetVehiclesExtendedQueryVariables;
+export type GetVehiclesQuery = Omit<GetVehiclesBasicQuery, 'vehicles'> & {
+  vehicles?: Array<VehicleFragment>;
+};

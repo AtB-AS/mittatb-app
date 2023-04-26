@@ -26,12 +26,17 @@ import {MessageBox} from '@atb/components/message-box';
 
 type Props = {
   vehicleId: VehicleId;
+  position: {lat: number; lon: number};
   close: () => void;
 };
-export const ScooterSheet = ({vehicleId: id, close}: Props) => {
+export const ScooterSheet = ({vehicleId: id, position, close}: Props) => {
   const {t, language} = useTranslation();
   const style = useSheetStyle();
-  const {vehicle, isLoading, error} = useVehicle(id);
+  const {vehicle, isLoading, error} = useVehicle(
+    id,
+    position.lat,
+    position.lon,
+  );
   const {appStoreUri, brandLogoUrl, operatorName} = useSystem(
     vehicle,
     vehicle?.system.operator.name,
