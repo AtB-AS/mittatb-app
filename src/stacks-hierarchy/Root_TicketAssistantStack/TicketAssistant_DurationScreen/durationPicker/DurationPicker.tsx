@@ -62,7 +62,7 @@ export const DurationPicker = (props: DurationPickerProps) => {
   }, [sliderIndex]);
 
   const duration = dateDiffInDays(currentDate, parseISO(date));
-  const resultString = t(getResultString(duration));
+  const resultString = getResultString(duration, t);
 
   return (
     <View style={styles.durationPickerContainer}>

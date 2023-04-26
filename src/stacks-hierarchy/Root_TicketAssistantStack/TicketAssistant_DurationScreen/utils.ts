@@ -1,7 +1,7 @@
 // Functions to calculate days between two dates
 import {addDays} from 'date-fns';
 import {dateToDateString} from '@atb/components/sections/items/date-input/utils';
-import {TicketAssistantTexts, TranslatedString} from '@atb/translations';
+import {TicketAssistantTexts, TranslateFunction} from '@atb/translations';
 
 const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -14,19 +14,27 @@ export function dateDiffInDays(a: Date, b: Date) {
 }
 
 // Function for getting days weeks or months from days
-export function getResultString(days: number): TranslatedString {
+export function getResultString(days: number, t: TranslateFunction): string {
   if (days < 7) {
-    return TicketAssistantTexts.duration.resultDays({value: days});
+    return t(TicketAssistantTexts.duration.resultDays({value: days}));
   } else if (days < 30) {
     const weeks = Math.round(days / 7);
     const formattedWeeks = weeks === 0 ? weeks + 1 : weeks;
-    return TicketAssistantTexts.duration.resultWeeks({value: formattedWeeks});
+    return t(
+      TicketAssistantTexts.duration.resultWeeks({
+        value: formattedWeeks,
+      }),
+    );
   } else if (days < 180) {
     const months = Math.round(days / 30);
     const formattedMonths = months === 0 ? months + 1 : months;
-    return TicketAssistantTexts.duration.resultMonths({value: formattedMonths});
+    return t(
+      TicketAssistantTexts.duration.resultMonths({
+        value: formattedMonths,
+      }),
+    );
   } else {
-    return TicketAssistantTexts.duration.resultMoreThan180Days;
+    return t(TicketAssistantTexts.duration.resultMoreThan180Days);
   }
 }
 
