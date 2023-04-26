@@ -54,11 +54,6 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
     const fetchData = () => {
       getRecommendedTicket(inputParams)
         .then((r) => {
-          setHasDataChanged(false);
-          if (r.tickets.length === 0) {
-            setError(true);
-            return;
-          }
           setPurchaseDetails(
             handleRecommendedTicketResponse(
               r,
@@ -68,6 +63,7 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
               fareProductTypeConfigs,
             ),
           );
+          setHasDataChanged(false);
         })
         .catch(() => {
           setError(true);
