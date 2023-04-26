@@ -5,7 +5,7 @@ import {
   QuayGroup,
   StopPlaceGroup,
 } from '@atb/api/departures/types';
-import * as DepartureTypes from '@atb/api/types/departures';
+import {EstimatedCall} from '@atb/api/types/departures';
 import {DepartureRealtimeData, DeparturesRealtimeData} from '@atb/sdk';
 import {isNumberOfMinutesInThePast} from '@atb/utils/date';
 
@@ -102,9 +102,9 @@ function updateDeparturesWithRealtime(
 }
 
 export function updateDeparturesWithRealtimeV2(
-  estimatedCalls: DepartureTypes.EstimatedCall[] | null,
+  estimatedCalls: EstimatedCall[] | null,
   realtime?: DeparturesRealtimeData,
-): DepartureTypes.EstimatedCall[] | null {
+): EstimatedCall[] | null {
   if (!estimatedCalls) return null;
   if (!realtime) return estimatedCalls;
 

@@ -11,11 +11,11 @@ import {
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import * as Sections from '../../../components/sections';
 import {ThemeText} from '@atb/components/text';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {StyleSheet} from '@atb/theme';
+import {RadioGroupSection, Section} from '@atb/components/sections';
 
 type ProductSelectionByProductsProps = {
   selectedProduct: PreassignedFareProduct;
@@ -48,8 +48,8 @@ export function ProductSelectionByProducts({
       <ThemeText type="body__secondary" color="secondary" style={styles.title}>
         {title || t(PurchaseOverviewTexts.productSelection.title)}
       </ThemeText>
-      <Sections.Section>
-        <Sections.RadioGroupSection<PreassignedFareProduct>
+      <Section>
+        <RadioGroupSection<PreassignedFareProduct>
           items={selectableProducts}
           keyExtractor={(u) => u.id}
           itemToText={(fp) => getReferenceDataName(fp, language)}
@@ -79,7 +79,7 @@ export function ProductSelectionByProducts({
             PurchaseOverviewTexts.productSelection.a11yTitle,
           )}
         />
-      </Sections.Section>
+      </Section>
     </View>
   );
 }

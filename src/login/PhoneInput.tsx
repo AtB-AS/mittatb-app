@@ -8,7 +8,6 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import * as Sections from '@atb/components/sections';
 import {Button} from '@atb/components/button';
 import {useAuthState} from '@atb/auth';
 import {ThemeText} from '@atb/components/text';
@@ -20,6 +19,7 @@ import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
 import phone from 'phone';
+import {PhoneInputSectionItem, Section} from '@atb/components/sections';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -116,8 +116,8 @@ export const PhoneInput = ({
               {t(LoginTexts.phoneInput.description)}
             </ThemeText>
           </View>
-          <Sections.Section>
-            <Sections.PhoneInputSectionItem
+          <Section>
+            <PhoneInputSectionItem
               label={t(LoginTexts.phoneInput.input.heading)}
               value={phoneNumber}
               onChangeText={setPhoneNumber}
@@ -129,7 +129,7 @@ export const PhoneInput = ({
               autoFocus={true}
               textContentType="telephoneNumber"
             />
-          </Sections.Section>
+          </Section>
           <View style={styles.buttonView}>
             {isSubmitting && (
               <ActivityIndicator

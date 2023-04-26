@@ -2,7 +2,6 @@ import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {Button} from '@atb/components/button';
 import {MessageBox, MessageBoxProps} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import * as Sections from '@atb/components/sections';
 import {StyleSheet} from '@atb/theme';
 import {sendReceipt} from '@atb/ticketing';
 import {
@@ -14,6 +13,7 @@ import {validateEmail} from '@atb/utils/validation';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
+import {Section, TextInputSectionItem} from '@atb/components/sections';
 
 type Props = RootStackScreenProps<'Root_ReceiptScreen'>;
 
@@ -70,8 +70,8 @@ export function Root_ReceiptScreen({route}: Props) {
             {...translateStateToMessage(state, t, email, reference)}
           />
         </View>
-        <Sections.Section withTopPadding withBottomPadding>
-          <Sections.TextInputSectionItem
+        <Section withTopPadding withBottomPadding>
+          <TextInputSectionItem
             label={t(FareContractTexts.receipt.inputLabel)}
             value={email}
             onChangeText={setEmail}
@@ -81,7 +81,7 @@ export function Root_ReceiptScreen({route}: Props) {
             autoCorrect={false}
             autoFocus={!a11yContext.isScreenReaderEnabled}
           />
-        </Sections.Section>
+        </Section>
         <Button
           text={t(FareContractTexts.receipt.sendButton)}
           onPress={onSend}

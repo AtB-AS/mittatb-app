@@ -5,12 +5,11 @@ import {
   flattenCarnetTravelRightAccesses,
 } from '@atb/ticketing';
 import {getValidityStatus} from '@atb/fare-contracts/utils';
-import * as Sections from '@atb/components/sections';
 import {ValidityHeader} from '@atb/fare-contracts/ValidityHeader';
 import {UsedAccessValidityHeader} from '@atb/fare-contracts/carnet/UsedAccessValidityHeader';
 import {ValidityLine} from '@atb/fare-contracts/ValidityLine';
 import {View} from 'react-native';
-import {SectionSeparator} from '@atb/components/sections';
+import {GenericSectionItem, SectionSeparator} from '@atb/components/sections';
 import {FareContractInfo} from '@atb/fare-contracts/FareContractInfo';
 import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
 import React from 'react';
@@ -46,7 +45,7 @@ export function CarnetDetails(props: {
 
   return (
     <>
-      <Sections.GenericSectionItem radius="top">
+      <GenericSectionItem radius="top">
         {fareContractValidityStatus !== 'valid' ? (
           <ValidityHeader
             now={now}
@@ -87,14 +86,14 @@ export function CarnetDetails(props: {
           testID={props.testID}
           fareProductType={'carnet'}
         />
-      </Sections.GenericSectionItem>
-      <Sections.GenericSectionItem>
+      </GenericSectionItem>
+      <GenericSectionItem>
         <CarnetFooter
           active={usedAccessValidityStatus === 'valid'}
           maximumNumberOfAccesses={maximumNumberOfAccesses}
           numberOfUsedAccesses={numberOfUsedAccesses}
         />
-      </Sections.GenericSectionItem>
+      </GenericSectionItem>
     </>
   );
 }
