@@ -8,8 +8,8 @@ import {format, parseISO} from 'date-fns';
 import {
   dateDiffInDays,
   addDaysToCurrent,
-  getDaysWeeksMonths,
   getSliderIndex,
+  getResultString,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/utils';
 import {dateToDateString} from '@atb/components/sections/items/date-input/utils';
 import {Button} from '@atb/components/button';
@@ -54,16 +54,7 @@ export const DurationPicker = (props: DurationPickerProps) => {
   }
 
   const duration = dateDiffInDays(currentDate, parseISO(date));
-  const daysWeeksMonths = getDaysWeeksMonths(duration);
-  const resultString = t(
-    duration < 7
-      ? TicketAssistantTexts.duration.resultDays({value: daysWeeksMonths})
-      : duration < 30
-      ? TicketAssistantTexts.duration.resultWeeks({value: daysWeeksMonths})
-      : duration < 180
-      ? TicketAssistantTexts.duration.resultMonths({value: daysWeeksMonths})
-      : TicketAssistantTexts.duration.resultMoreThan180Days,
-  );
+  const resultString = t(getResultString(duration));
 
   return (
     <View style={styles.durationPickerContainer}>
