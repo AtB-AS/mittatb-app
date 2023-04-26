@@ -80,7 +80,7 @@ jobs:
           IPA_FILE_NAME: 'AtB.ipa'
           APP_NAME: 'AtB.app'
       - name: Distribute to Firebase App Distribution
-        if: matrix.org != 'nfk'
+        if: matrix.org != 'atb'
         run: |
           echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
           bundle exec fastlane ios firebase_distribution_staging
