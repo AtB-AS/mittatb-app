@@ -26,12 +26,15 @@ export const TicketAssistant_FrequencyScreen = ({
 
   const sliderMax = 14;
 
-  const numbers = Array.from(
-    {length: (sliderMax - 1) / 2 + 1},
-    (_, i) => i * 2 + 2,
-  );
+  //Creating an array of numbers to sliderMax with a step size of 2, and adding a '+' to the last element
+  //if it is odd, it starts at 1 and if it is even it starts at 2
+  const numbers = [];
+  for (let i = sliderMax % 2 ? 1 : 2; i <= sliderMax; i += 2) {
+    numbers.push(i);
+  }
   const numbersAsStrings = numbers.map((num) => num.toString());
-  numbersAsStrings[numbersAsStrings.length - 1] = '14+';
+  const endIndex = numbersAsStrings.length - 1;
+  numbersAsStrings[endIndex] = numbersAsStrings[endIndex] + '+';
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
