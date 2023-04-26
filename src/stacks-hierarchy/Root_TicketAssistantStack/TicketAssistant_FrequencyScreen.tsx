@@ -26,12 +26,13 @@ export const TicketAssistant_FrequencyScreen = ({
 
   const sliderMax = 14;
 
-  //Creating an array of numbers to sliderMax with a step size of 2, and adding a '+' to the last element
-  //if it is odd, it starts at 1 and if it is even it starts at 2
+  //Creating an array of numbers to sliderMax with a step size of 2
+  // if it is odd, it starts at 1 and if it is even it starts at 2
   const numbers = [];
   for (let i = sliderMax % 2 ? 1 : 2; i <= sliderMax; i += 2) {
     numbers.push(i);
   }
+  //Numbers as strings and adding a '+' to the last element
   const numbersAsStrings = numbers.map((num) => num.toString());
   const endIndex = numbersAsStrings.length - 1;
   numbersAsStrings[endIndex] = numbersAsStrings[endIndex] + '+';
