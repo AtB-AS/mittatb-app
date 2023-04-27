@@ -18,7 +18,10 @@ import {
   formatToSimpleDate,
 } from '@atb/utils/date';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
+import {
+  TransportMode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
 import {EstimatedCall, Quay, StopPlace} from '@atb/api/types/departures';
 import {useFontScale} from '@atb/utils/use-font-scale';
@@ -327,8 +330,8 @@ function getLineA11yLabel(departure: EstimatedCall, t: TranslateFunction) {
 
 type LineChipProps = {
   publicCode?: string;
-  transportMode?: Types.TransportMode;
-  transportSubmode?: Types.TransportSubmode;
+  transportMode?: TransportMode;
+  transportSubmode?: TransportSubmode;
   icon?: (props: SvgProps) => JSX.Element;
   testID?: string;
 };

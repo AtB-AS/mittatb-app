@@ -5,7 +5,7 @@ import {TipsAndInformationTexts, useTranslation} from '@atb/translations';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {themeColor} from '@atb/stacks-hierarchy/Root_OnboardingStack/Onboarding_WelcomeScreen';
-import * as Sections from '@atb/components/sections';
+import {ExpandableSectionItem, Section} from '@atb/components/sections';
 import {Button} from '@atb/components/button';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 
@@ -29,10 +29,10 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
       </ThemeText>
 
       <View style={styles.innerContainer}>
-        <Sections.Section style={styles.tipsContainer}>
+        <Section style={styles.tipsContainer}>
           {/* eslint-disable-next-line rulesdir/translations-warning */}
           {TipsAndInformationTexts.tips.map(({title, tip}, index) => (
-            <Sections.ExpandableSectionItem
+            <ExpandableSectionItem
               key={index}
               textType="body__primary--bold"
               text={t(title)}
@@ -48,7 +48,7 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
               }
             />
           ))}
-          <Sections.ExpandableSectionItem
+          <ExpandableSectionItem
             textType="body__primary--bold"
             text={t(TipsAndInformationTexts.ticketAssistantTip.title)}
             showIconText={false}
@@ -71,7 +71,7 @@ export const Root_TipsAndInformation = ({navigation}: Props) => {
               </View>
             }
           />
-        </Sections.Section>
+        </Section>
       </View>
     </View>
   );

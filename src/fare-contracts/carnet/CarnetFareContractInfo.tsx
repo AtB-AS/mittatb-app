@@ -1,10 +1,10 @@
-import * as Sections from '@atb/components/sections';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {CarnetDetails} from '@atb/fare-contracts/carnet/CarnetDetails';
 import {CarnetTravelRight, FareContract} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
+import {LinkSectionItem, Section} from '@atb/components/sections';
 
 type Props = {
   fareContract: FareContract;
@@ -27,7 +27,7 @@ export const CarnetFareContractInfo: React.FC<Props> = ({
   const navigation = useNavigation<RootNavigationProp>();
 
   return (
-    <Sections.Section withBottomPadding testID={testID}>
+    <Section withBottomPadding testID={testID}>
       <CarnetDetails
         now={now}
         inspectable={isInspectable}
@@ -35,7 +35,7 @@ export const CarnetFareContractInfo: React.FC<Props> = ({
         testID={testID}
         fareContract={fareContract}
       />
-      <Sections.LinkSectionItem
+      <LinkSectionItem
         text={t(FareContractTexts.detailsLink.notValid)}
         onPress={() =>
           navigation.navigate({
@@ -48,6 +48,6 @@ export const CarnetFareContractInfo: React.FC<Props> = ({
         }
         testID={testID + 'Details'}
       />
-    </Sections.Section>
+    </Section>
   );
 };
