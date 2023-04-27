@@ -169,13 +169,11 @@ export const DurationPicker = ({
             <Slider
               style={styles.slider}
               value={sliderIndex}
-              maximumTrackTintColor={'interactive_0'}
-              minimumTrackTintColor={'interactive_0'}
+              interactiveColor={'interactive_0'}
               maximumValue={durations.length - 1}
               minimumValue={0}
               step={1}
               tapToSeek={true}
-              thumbTintColor={'interactive_0'}
               onValueChange={(value) => {
                 updateDurationFromSlider(value);
               }}

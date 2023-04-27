@@ -116,14 +116,12 @@ export const TicketAssistant_FrequencyScreen = ({
                 </View>
                 <Slider
                   style={styles.slider}
-                  maximumTrackTintColor={'interactive_0'}
-                  minimumTrackTintColor={'interactive_0'}
+                  interactiveColor={'interactive_0'}
                   maximumValue={sliderMax}
                   minimumValue={2}
                   step={1}
                   value={sliderValue}
                   tapToSeek={true}
-                  thumbTintColor={'interactive_0'}
                   onSlidingComplete={() => {
                     updateInputParams({...inputParams, frequency: sliderValue});
                   }}
