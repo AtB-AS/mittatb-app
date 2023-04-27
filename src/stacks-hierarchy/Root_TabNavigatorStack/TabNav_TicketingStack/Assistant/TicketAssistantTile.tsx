@@ -38,8 +38,8 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
   const sellableFareProductTypeConfigs = fareProductTypeConfigs.filter(
     (config) => sellableProductsInApp.some((p) => p.type === config.type),
   );
-  // Period ticket Config
-  const config = sellableFareProductTypeConfigs.find(
+
+  const requiresLoginConfig = sellableFareProductTypeConfigs.find(
     (config) => config.configuration.requiresLogin,
   );
 
@@ -51,9 +51,9 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
       ]}
       testID={testID}
     >
-      {config && (
+      {requiresLoginConfig && (
         <TouchableOpacity
-          onPress={() => onPress(config)}
+          onPress={() => onPress(requiresLoginConfig)}
           accessible={true}
           style={styles.spreadContent}
         >
