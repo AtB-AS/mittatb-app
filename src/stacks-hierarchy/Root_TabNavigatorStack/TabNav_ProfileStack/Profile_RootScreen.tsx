@@ -347,7 +347,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               <ThemeText type="heading__component">
                 {t(ProfileTexts.sections.newFeatures.heading)}
               </ThemeText>
-              <BetaTag />
+              <BetaTag style={style.betaTag} />
             </View>
           </Sections.GenericSectionItem>
           <Sections.ToggleSectionItem
@@ -606,6 +606,9 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     backgroundColor: theme.static.background.background_1.background,
     flex: 1,
+  },
+  betaTag: {
+    marginHorizontal: theme.spacings.small,
   },
   customerNumberHeading: {
     marginBottom: theme.spacings.xSmall,

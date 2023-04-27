@@ -80,7 +80,7 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
               >
                 {t(TicketingTexts.ticketAssistantTile.title)}
               </ThemeText>
-              <BetaTag />
+              <BetaTag style={styles.betaTag} />
             </View>
 
             <ThemeText type="body__tertiary" color={'secondary'}>
@@ -101,6 +101,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.large,
+  },
+  betaTag: {
+    marginHorizontal: theme.spacings.small,
   },
   iconBox: {
     backgroundColor: theme.static.status.info.background,

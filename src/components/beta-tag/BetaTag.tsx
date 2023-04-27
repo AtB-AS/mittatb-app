@@ -1,12 +1,15 @@
-import {View} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
 
-export const BetaTag = () => {
+type Props = {
+  style?: StyleProp<ViewStyle>;
+};
+export const BetaTag = ({style}: Props) => {
   const styles = useStyles();
   return (
-    <View style={styles.betaLabel}>
+    <View style={[styles.betaLabel, style]}>
       <ThemeText color="background_accent_3" style={styles.betaLabelText}>
         BETA
       </ThemeText>
@@ -17,7 +20,6 @@ export const BetaTag = () => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   betaLabel: {
     backgroundColor: theme.static.background.background_accent_3.background,
-    marginHorizontal: theme.spacings.small,
     paddingHorizontal: theme.spacings.small,
     paddingVertical: theme.spacings.small,
     borderRadius: theme.border.radius.regular,
