@@ -46,6 +46,7 @@ export type RemoteConfig = {
   use_flexible_on_accessMode: boolean;
   use_flexible_on_directMode: boolean;
   use_flexible_on_egressMode: boolean;
+  use_trygg_overgang_qr_code: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -97,6 +98,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   use_flexible_on_accessMode: true,
   use_flexible_on_directMode: true,
   use_flexible_on_egressMode: true,
+  use_trygg_overgang_qr_code: false,
 };
 
 export function getConfig(): RemoteConfig {
@@ -240,6 +242,10 @@ export function getConfig(): RemoteConfig {
     values['use_flexible_on_egressMode']?.asBoolean() ??
     defaultRemoteConfig.use_flexible_on_egressMode;
 
+  const use_trygg_overgang_qr_code =
+    values['use_trygg_overgang_qr_code']?.asBoolean() ??
+    defaultRemoteConfig.use_trygg_overgang_qr_code;
+
   return {
     enable_network_logging,
     enable_ticketing,
@@ -285,6 +291,7 @@ export function getConfig(): RemoteConfig {
     use_flexible_on_accessMode,
     use_flexible_on_directMode,
     use_flexible_on_egressMode,
+    use_trygg_overgang_qr_code,
   };
 }
 
