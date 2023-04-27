@@ -9,7 +9,7 @@ import {
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {RegionPayload} from '@rnmapbox/maps';
 import {AnyMode} from '@atb/components/icon-box';
-import {StationFragment} from '@atb/api/types/generated/fragments/stations';
+import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -35,7 +35,7 @@ export type VehiclesState = {
 };
 
 export type StationsState = {
-  stations: FeatureCollection<GeoJSON.Point, StationFragment>;
+  stations: FeatureCollection<GeoJSON.Point, StationBasicFragment>;
   updateRegion: (region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>) => void;
   isLoading: boolean;
   onFilterChange: (filter: StationsFilterType) => void;

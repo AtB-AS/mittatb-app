@@ -1,5 +1,5 @@
 export {useVehicles} from './use-vehicles';
-export {useCityBikeStations} from './use-city-bike-stations';
+export {useStations} from './use-stations';
 export {
   useIsVehiclesEnabled,
   useVehiclesInMapDebugOverride,

@@ -15,9 +15,13 @@ import {getVisibleRange, toFeaturePoint} from '@atb/components/map';
 import buffer from '@turf/buffer';
 import bbox from '@turf/bbox-polygon';
 import difference from '@turf/difference';
-import {StationFragment} from '@atb/api/types/generated/fragments/stations';
 import {Platform} from 'react-native';
 import {RegionPayload} from '@rnmapbox/maps';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {
+  StationBasicFragment,
+  VehicleTypeAvailabilityBasicFragment,
+} from '@atb/api/types/generated/fragments/stations';
 
 export const isVehicle = (
   properties: GeoJsonProperties | undefined,
@@ -25,7 +29,25 @@ export const isVehicle = (
 
 export const isStation = (
   properties: GeoJsonProperties | undefined,
-): properties is StationFragment => properties?.__typename === 'Station';
+): properties is StationBasicFragment => properties?.__typename === 'Station';
+
+export const isBikeStation = (
+  properties: GeoJsonProperties | undefined,
+): properties is StationBasicFragment =>
+  (isStation(properties) &&
+    properties?.vehicleTypesAvailable?.some(
+      (types) => types.vehicleType.formFactor === FormFactor.Bicycle,
+    )) ??
+  false;
+
+export const getAvailableVehicles = (
+  types: VehicleTypeAvailabilityBasicFragment[] | undefined,
+  formFactor: FormFactor,
+) =>
+  types
+    ?.filter((type) => type.vehicleType.formFactor === formFactor)
+    .map((type) => type.count)
+    .reduce((sum, count) => sum + count, 0) ?? 0;
 
 export const getRentalAppUri = <T extends {rentalUris?: RentalUrisFragment}>(
   t: T | undefined,
