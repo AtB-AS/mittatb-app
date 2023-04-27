@@ -7,9 +7,9 @@ import RNDateTimePicker from '@react-native-community/datetimepicker';
 import {format, parseISO} from 'date-fns';
 import {
   dateDiffInDays,
-  addDaysToCurrent,
   getSliderIndex,
   getResultString,
+  addDaysToCurrent,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/utils';
 import {dateToDateString} from '@atb/components/sections/items/date-input/utils';
 import {Button} from '@atb/components/button';
@@ -19,12 +19,13 @@ import React, {useState} from 'react';
 import {StyleSheet} from '@atb/theme';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {useLocaleContext} from '@atb/LocaleProvider';
-import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 
 type DurationPickerProps = {
   date: string;
   setDate: (date: string) => void;
   currentDate: Date;
+  duration: number;
+  setDuration: (duration: number) => void;
 };
 
 const durations = [1, 7, 14, 21, 30, 60, 90, 120, 150, 180];
@@ -32,11 +33,12 @@ export const DurationPicker = ({
   date,
   setDate,
   currentDate,
+  duration,
+  setDuration,
 }: DurationPickerProps) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const a11yContext = useAccessibilityContext();
-  const {inputParams, updateInputParams} = useTicketAssistantState();
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const majorVersionIOS = parseInt(String(Platform.Version), 10);
@@ -44,24 +46,21 @@ export const DurationPicker = ({
     majorVersionIOS < 13 ? {width: undefined, flex: 1} : {width: 130};
 
   const locale = useLocaleContext();
-  function updateDuration(value: number, fromPicker?: boolean) {
-    if (!fromPicker) {
-      setDate(addDaysToCurrent(value));
-    } else {
-      const newData = {
-        ...inputParams,
-        duration: fromPicker ? value : durations[value],
-      };
-      setSliderIndex(getSliderIndex(newData.duration, durations));
-      updateInputParams(newData);
-    }
+
+  function updateDurationFromPicker(value: number) {
+    setDuration(value);
+    setSliderIndex(getSliderIndex(value, durations));
+  }
+
+  function updateDurationFromSlider(value: number) {
+    setDate(addDaysToCurrent(value));
+    setDuration(durations[value]);
   }
 
   const [sliderIndex, setSliderIndex] = useState<number>(
-    getSliderIndex(inputParams.duration ?? 7, durations),
+    getSliderIndex(duration ?? 7, durations),
   );
 
-  const duration = dateDiffInDays(currentDate, parseISO(date));
   const resultString = getResultString(duration, t);
 
   return (
@@ -99,7 +98,7 @@ export const DurationPicker = ({
               onChange={(_, date) => {
                 if (date) {
                   setDate(dateToDateString(date));
-                  updateDuration(dateDiffInDays(currentDate, date), true);
+                  updateDurationFromPicker(dateDiffInDays(currentDate, date));
                 }
               }}
               accessibilityHint={t(
@@ -133,7 +132,7 @@ export const DurationPicker = ({
                 setShowDatePicker(false);
                 if (date) {
                   setDate(dateToDateString(date));
-                  updateDuration(dateDiffInDays(currentDate, date), true);
+                  updateDurationFromPicker(dateDiffInDays(currentDate, date));
                 }
               }}
             />
@@ -178,7 +177,7 @@ export const DurationPicker = ({
               tapToSeek={true}
               thumbTintColor={'interactive_0'}
               onValueChange={(value) => {
-                updateDuration(durations[value], false);
+                updateDurationFromSlider(value);
               }}
             />
           </View>

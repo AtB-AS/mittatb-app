@@ -9,11 +9,7 @@ import React, {useState} from 'react';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {DurationPicker} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/durationPicker';
-import {
-  dateDiffInDays,
-  addDaysToCurrent,
-} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/utils';
-import {parseISO} from 'date-fns';
+import {addDaysToCurrent} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/utils';
 type DurationProps =
   TicketAssistantScreenProps<'TicketAssistant_DurationScreen'>;
 
@@ -24,12 +20,12 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
+  const [duration, setDuration] = useState(inputParams.duration ?? 7);
+
   navigation.addListener('blur', () => {
-    updateInputParams({
-      ...inputParams,
-      duration: dateDiffInDays(currentDate, parseISO(date)),
-    });
+    updateInputParams({...inputParams, duration: duration});
   });
+
   const travelFrequency = inputParams.frequency ?? 0;
 
   return (
@@ -55,6 +51,8 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
             date={date}
             setDate={setDate}
             currentDate={currentDate}
+            setDuration={setDuration}
+            duration={duration}
           />
         </View>
 
