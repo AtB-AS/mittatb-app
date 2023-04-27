@@ -96,51 +96,49 @@ export const TicketAssistant_FrequencyScreen = ({
               })}
             </View>
           ) : (
-            <View>
-              <View style={styles.sliderContainer}>
-                <Slider
-                  trackClickable={true}
-                  containerStyle={styles.sliderInnerContainer}
-                  maximumTrackTintColor={'interactive_0'}
-                  minimumTrackTintColor={'interactive_0'}
-                  maximumValue={sliderMax}
-                  minimumValue={2}
-                  thumbStyle={styles.thumbStyle}
-                  thumbTouchSize={{width: 40, height: 40}}
-                  step={1}
-                  value={sliderValue}
-                  thumbTintColor={'interactive_0'}
-                  onSlidingComplete={() => {
-                    updateInputParams({...inputParams, frequency: sliderValue});
-                  }}
-                  onValueChange={(value) => {
-                    setSliderValue(value);
-                  }}
-                  trackMarks={numbers}
-                  trackMarkComponent={(index) => {
-                    return (
-                      <ThemeText
-                        style={{
-                          textAlign: 'center',
-                          position: 'absolute',
-                          minWidth: 20,
-                          borderStyle: 'solid',
-                          borderColor: 'interactive_0',
-                          top: -40,
-                        }}
-                      >
-                        {numbersAsStrings[index]}
-                      </ThemeText>
-                    );
-                  }}
-                />
+            <View style={styles.sliderContainer}>
+              <Slider
+                trackClickable={true}
+                containerStyle={styles.slider}
+                maximumTrackTintColor={'interactive_0'}
+                minimumTrackTintColor={'interactive_0'}
+                maximumValue={sliderMax}
+                minimumValue={2}
+                thumbStyle={styles.thumbStyle}
+                thumbTouchSize={{width: 40, height: 40}}
+                step={1}
+                value={sliderValue}
+                thumbTintColor={'interactive_0'}
+                onSlidingComplete={() => {
+                  updateInputParams({...inputParams, frequency: sliderValue});
+                }}
+                onValueChange={(value) => {
+                  setSliderValue(value);
+                }}
+                trackMarks={numbers}
+                trackMarkComponent={(index) => {
+                  return (
+                    <ThemeText
+                      style={{
+                        textAlign: 'center',
+                        position: 'absolute',
+                        minWidth: 20,
+                        borderStyle: 'solid',
+                        borderColor: 'interactive_0',
+                        top: -40,
+                      }}
+                    >
+                      {numbersAsStrings[index]}
+                    </ThemeText>
+                  );
+                }}
+              />
 
-                <SectionSeparator />
+              <SectionSeparator />
 
-                <ThemeText type={'body__secondary'} style={styles.travelText}>
-                  {resultString}
-                </ThemeText>
-              </View>
+              <ThemeText type={'body__secondary'} style={styles.travelText}>
+                {resultString}
+              </ThemeText>
             </View>
           )}
         </View>
@@ -176,31 +174,22 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   mainView: {
     flex: 1,
     paddingHorizontal: theme.spacings.large,
-    paddingBottom: theme.spacings.xLarge,
     width: '100%',
-  },
-  sliderContainer: {
-    width: '100%',
-    height: 130,
-    justifyContent: 'center',
-    backgroundColor: theme.static.background.background_0.background,
-    paddingVertical: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium,
-    borderRadius: theme.border.radius.regular,
-    marginVertical: theme.spacings.medium,
   },
   slider: {
-    width: '100%',
-    alignSelf: 'center',
+    marginTop: theme.spacings.medium,
+  },
+  sliderContainer: {
+    backgroundColor: theme.static.background.background_0.background,
+    paddingBottom: theme.spacings.medium,
+    paddingTop: theme.spacings.large,
+    paddingHorizontal: theme.spacings.large,
+    borderRadius: theme.border.radius.regular,
     marginVertical: theme.spacings.medium,
   },
   thumbStyle: {
     width: 20,
     height: 20,
-  },
-  sliderInnerContainer: {
-    width: '95%',
-    alignSelf: 'center',
   },
   description: {
     textAlign: 'center',
@@ -224,12 +213,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     padding: 0,
     margin: 0,
   },
-  horizontalLine: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    alignSelf: 'center',
-  },
+
   screenReaderButtons: {
     flexDirection: 'column',
     justifyContent: 'space-between',

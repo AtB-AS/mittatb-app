@@ -1,4 +1,4 @@
-import {View, ViewStyle} from 'react-native';
+import {ViewStyle} from 'react-native';
 import {Slider as RNSlider} from '@miblanchard/react-native-slider';
 import {InteractiveColor} from '@atb/theme/colors';
 import {useTheme} from '@atb/theme';
@@ -47,33 +47,31 @@ export function Slider({
   const thumbColor = theme.interactive[thumbTintColor].default.background;
 
   return (
-    <View>
-      <RNSlider
-        thumbStyle={thumbStyle}
-        thumbTouchSize={thumbTouchSize}
-        trackStyle={trackStyle}
-        onSlidingComplete={(number) =>
-          onSlidingComplete && onSlidingComplete(number[0])
-        }
-        onValueChange={(number) => onValueChange(number[0])}
-        containerStyle={containerStyle}
-        value={value}
-        minimumValue={minimumValue}
-        maximumValue={maximumValue}
-        minimumTrackTintColor={minColor}
-        maximumTrackTintColor={maxColor}
-        step={step}
-        trackClickable={trackClickable}
-        thumbTintColor={thumbColor}
-        trackMarks={trackMarks}
-        renderTrackMarkComponent={
-          trackMarks && trackMarkComponent
-            ? (index) => {
-                return trackMarkComponent(index);
-              }
-            : undefined
-        }
-      />
-    </View>
+    <RNSlider
+      thumbStyle={thumbStyle}
+      thumbTouchSize={thumbTouchSize}
+      trackStyle={trackStyle}
+      onSlidingComplete={(number) =>
+        onSlidingComplete && onSlidingComplete(number[0])
+      }
+      onValueChange={(number) => onValueChange(number[0])}
+      containerStyle={containerStyle}
+      value={value}
+      minimumValue={minimumValue}
+      maximumValue={maximumValue}
+      minimumTrackTintColor={minColor}
+      maximumTrackTintColor={maxColor}
+      step={step}
+      trackClickable={trackClickable}
+      thumbTintColor={thumbColor}
+      trackMarks={trackMarks}
+      renderTrackMarkComponent={
+        trackMarks && trackMarkComponent
+          ? (index) => {
+              return trackMarkComponent(index);
+            }
+          : undefined
+      }
+    />
   );
 }
