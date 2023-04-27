@@ -176,7 +176,7 @@ export const DurationPicker = ({
               thumbTouchSize={{width: 40, height: 40}}
               thumbStyle={styles.sliderThumb}
               onSlidingComplete={() => {
-                updateInputParams({...inputParams, frequency: sliderIndex});
+                updateInputParams({...inputParams, duration: sliderIndex});
               }}
               value={sliderIndex}
               maximumTrackTintColor={'interactive_0'}
