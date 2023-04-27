@@ -7,6 +7,7 @@ import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations'
 import {useTheme} from '@atb/theme';
 import {getStaticColor} from '@atb/theme/colors';
 import {getAvailableVehicles} from '@atb/mobility/utils';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type Props = {
   mapCameraRef: RefObject<MapboxGL.Camera>;
@@ -24,7 +25,10 @@ export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
       ...feature,
       properties: {
         ...feature.properties,
-        count: getAvailableVehicles(feature.properties.vehicleTypesAvailable),
+        count: getAvailableVehicles(
+          feature.properties.vehicleTypesAvailable,
+          FormFactor.Bicycle,
+        ),
       },
     })),
   };

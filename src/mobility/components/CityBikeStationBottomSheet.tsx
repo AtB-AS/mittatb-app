@@ -24,6 +24,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {useBikeStation} from '@atb/mobility/use-bike-station';
 import {MessageBox} from '@atb/components/message-box';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type Props = {
   stationId: string;
@@ -43,7 +44,10 @@ export const CityBikeStationSheet = ({stationId, close}: Props) => {
     rentalAppUri,
   });
   const stationName = useTextForLanguage(station?.name.translation);
-  const availableBikes = getAvailableVehicles(station?.vehicleTypesAvailable);
+  const availableBikes = getAvailableVehicles(
+    station?.vehicleTypesAvailable,
+    FormFactor.Bicycle,
+  );
 
   return (
     <BottomSheetContainer>

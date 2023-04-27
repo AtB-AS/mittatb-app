@@ -42,8 +42,12 @@ export const isBikeStation = (
 
 export const getAvailableVehicles = (
   types: VehicleTypeAvailabilityBasicFragment[] | undefined,
+  formFactor: FormFactor,
 ) =>
-  types?.map((type) => type.count).reduce((sum, count) => sum + count, 0) ?? 0;
+  types
+    ?.filter((type) => type.vehicleType.formFactor === formFactor)
+    .map((type) => type.count)
+    .reduce((sum, count) => sum + count, 0) ?? 0;
 
 export const getRentalAppUri = <T extends {rentalUris?: RentalUrisFragment}>(
   t: T | undefined,
