@@ -2,7 +2,6 @@ import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {useAuthState} from '@atb/auth';
-import {updateMetadata} from '@atb/chat/metadata';
 import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {FullScreenHeader} from '@atb/components/screen-header';
@@ -45,7 +44,11 @@ import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
 import {useIsLoading} from '@atb/utils/use-is-loading';
 import {useDeparturesV2Enabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
-import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant-enabled';
+import {
+  useTicketingAssistantDebugOverride,
+  useTicketingAssistantEnabled,
+} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant-enabled';
+import {BetaTag} from '@atb/components/beta-tag';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -94,24 +97,19 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {enable_departures_v2_as_default} = useRemoteConfig();
   const setDeparturesV2Enabled = (value: boolean) => {
     if (enable_departures_v2_as_default) {
-      updateMetadata({
-        'AtB-Departures-V2': value ? 'enabled' : 'disabled',
-      });
       setPreference({departuresV2: value});
     } else {
-      updateMetadata({
-        'AtB-Beta-Departures': value ? 'enabled' : 'disabled',
-      });
       setPreference({newDepartures: value});
     }
   };
 
-  const {enable_ticketing_assistant} = useRemoteConfig();
+  let {enable_ticketing_assistant} = useRemoteConfig();
+  const [debugOverride] = useTicketingAssistantDebugOverride();
+  if (debugOverride !== undefined) {
+    enable_ticketing_assistant = debugOverride;
+  }
   const showTicketAssistant = useTicketingAssistantEnabled();
   const setShowTicketAssistant = (value: boolean) => {
-    updateMetadata({
-      'AtB-Ticket-Assistant': value ? 'enabled' : 'disabled',
-    });
     setPreference({showTicketAssistant: value});
   };
 
@@ -349,14 +347,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               <ThemeText type="heading__component">
                 {t(ProfileTexts.sections.newFeatures.heading)}
               </ThemeText>
-              <View style={style.betaLabel}>
-                <ThemeText
-                  color="background_accent_3"
-                  style={style.betaLabelText}
-                >
-                  BETA
-                </ThemeText>
-              </View>
+              <BetaTag />
             </View>
           </Sections.GenericSectionItem>
           <Sections.ToggleSectionItem
@@ -370,7 +361,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               text={t(ProfileTexts.sections.newFeatures.ticketAssistant)}
               value={showTicketAssistant}
               onValueChange={setShowTicketAssistant}
-              testID="newDeparturesToggle"
+              testID="ticketAssistantToggle"
             />
           )}
 
@@ -629,16 +620,5 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   betaSectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  betaLabel: {
-    backgroundColor: theme.static.background.background_accent_3.background,
-    marginHorizontal: theme.spacings.small,
-    paddingHorizontal: theme.spacings.small,
-    paddingVertical: theme.spacings.small,
-    borderRadius: theme.border.radius.regular,
-  },
-  betaLabelText: {
-    fontSize: 8,
-    lineHeight: 9,
   },
 }));

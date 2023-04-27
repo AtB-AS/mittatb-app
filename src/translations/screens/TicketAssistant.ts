@@ -97,7 +97,7 @@ const TicketAssistantTexts = {
     ),
     minLimit: _('1 dag', '1 day'),
     minLimitA11yLabel: _('Minstegrensen er 1 dag', 'Minimum limit is 1 day'),
-    maxLimit: _('6mnd +', '6 months +'),
+    maxLimit: _('6 mnd. +', '6 months +'),
     maxLimitA11yLabel: _(
       'Maksgrensen er 6 måneder pluss',
       'Max limit is 6 months plus',
@@ -147,7 +147,7 @@ const TicketAssistantTexts = {
       alternative: string;
     }) =>
       _(
-        `Da sparer du ${data.totalSavings} kr totalt (${data.perTripSavings} kr per tur) \n sammenlignet med ${data.alternative} enkeltbilletter`,
+        `Da sparer du ${data.totalSavings} kr totalt (${data.perTripSavings} kr per tur) sammenlignet med ${data.alternative} enkeltbilletter`,
         `You save ${data.totalSavings} kr in total (${data.perTripSavings} kr per trip) \n compared to ${data.alternative} single tickets`,
       ),
     savingsA11yLabel: (data: {

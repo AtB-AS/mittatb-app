@@ -41,11 +41,19 @@ export const TicketAssistant_CategoryPickerScreen = ({
     selectableTravellers.findIndex((u) => u.count === 1),
   );
 
-  const {data, updateData} = useTicketAssistantState();
+  const {inputParams, updateInputParams} = useTicketAssistantState();
   function updateCategory(traveller: Traveller) {
-    const newData = {...data, traveller: traveller};
-    updateData(newData);
+    const newData = {...inputParams, traveller: traveller};
+    updateInputParams(newData);
   }
+
+  navigation.addListener('blur', () => {
+    const traveller = selectableTravellers[currentlyOpen];
+    updateCategory({
+      id: traveller.userTypeString,
+      user_type: traveller.userTypeString,
+    });
+  });
 
   return (
     <View style={styles.container}>

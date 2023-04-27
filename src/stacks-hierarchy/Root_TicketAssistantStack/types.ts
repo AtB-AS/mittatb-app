@@ -8,16 +8,11 @@ export type Traveller = {
   user_type: string;
 };
 export type TicketAssistantData = {
-  frequency: number;
-  duration: number;
-  traveller: Traveller;
-  zones: string[];
-  preassigned_fare_products: PreassignedFareProductDetails[];
-};
-
-export type PreassignedFareProductDetails = {
-  id: string;
-  duration_days: number;
+  frequency?: number;
+  duration?: number;
+  traveller?: Traveller;
+  zones?: string[];
+  preassigned_fare_products: string[];
 };
 
 export type TicketResponseData = {
@@ -36,13 +31,11 @@ export type RecommendedTicketResponse = {
   single_ticket_price: number;
 };
 
-export type PurchaseTicketDetails = {
-  fareProductTypeConfig: FareProductTypeConfig;
-  preassignedFareProduct: PreassignedFareProduct;
-};
-
 export type PurchaseDetails = {
   tariffZones: TariffZoneWithMetadata[];
   userProfileWithCount: UserProfileWithCount[];
-  purchaseTicketDetails: PurchaseTicketDetails[];
+  fareProductTypeConfig: FareProductTypeConfig;
+  preassignedFareProduct: PreassignedFareProduct;
+  ticket: TicketResponseData;
+  singleTicketPrice: number;
 };

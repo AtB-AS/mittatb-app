@@ -10,8 +10,6 @@ import {DashboardBackground} from '@atb/assets/svg/color/images';
 import SvgFeedback from '@atb/assets/svg/mono-icons/actions/Feedback';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary';
-import {getIndexOfLongestDurationTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
-import {useTicketAssistantDataFetch} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/fetch-data';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
@@ -23,6 +21,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
+  let {loading, inputParams, purchaseDetails, error} =
+    useTicketAssistantState();
 
   const openContactSheet = () => {
     openBottomSheet((close, focusRef) => (
@@ -30,13 +30,12 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     ));
   };
 
-  let {response, data, hasDataChanged, purchaseDetails, crashed} =
-    useTicketAssistantState();
-
-  useTicketAssistantDataFetch(navigation);
+  const durationDays = inputParams.duration
+    ? inputParams.duration * 24 * 60 * 60 * 1000
+    : 0;
 
   const endDate: string = new Date(
-    Date.now() + data.duration * 24 * 60 * 60 * 1000,
+    Date.now() + durationDays,
   ).toLocaleDateString(language, {
     weekday: 'long',
     year: 'numeric',
@@ -44,27 +43,27 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
     day: 'numeric',
   });
 
-  let index = getIndexOfLongestDurationTicket(response.tickets);
   const description = t(
     TicketAssistantTexts.summary.description({
-      frequency: data.frequency,
+      frequency: inputParams.frequency ?? 0,
       date: endDate,
     }),
   );
 
   const doesTicketCoverEntirePeriod =
-    response.tickets[index].duration < data.duration &&
-    response.tickets[index].duration !== 0;
+    purchaseDetails && inputParams.duration
+      ? purchaseDetails.ticket.duration < inputParams.duration &&
+        purchaseDetails.ticket.duration !== 0
+      : false;
 
   const onBuyButtonPress = () => {
+    if (!purchaseDetails) return;
     navigation.navigate('Root_PurchaseConfirmationScreen', {
-      fareProductTypeConfig:
-        purchaseDetails?.purchaseTicketDetails[index].fareProductTypeConfig,
-      fromTariffZone: purchaseDetails?.tariffZones[0],
-      toTariffZone: purchaseDetails?.tariffZones[1],
-      userProfilesWithCount: purchaseDetails?.userProfileWithCount,
-      preassignedFareProduct:
-        purchaseDetails?.purchaseTicketDetails[index].preassignedFareProduct,
+      fareProductTypeConfig: purchaseDetails.fareProductTypeConfig,
+      fromTariffZone: purchaseDetails.tariffZones[0],
+      toTariffZone: purchaseDetails.tariffZones[1],
+      userProfilesWithCount: purchaseDetails.userProfileWithCount,
+      preassignedFareProduct: purchaseDetails.preassignedFareProduct,
       travelDate: undefined,
       headerLeftButton: {type: 'back'},
       mode: 'Ticket',
@@ -79,28 +78,27 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       <View style={styles.backdrop}>
         <DashboardBackground width={'100%'} height={'100%'} />
       </View>
-      {hasDataChanged ? (
+
+      {error ? (
+        <View>
+          <ThemeText
+            type={'heading--big'}
+            color={themeColor}
+            style={styles.header}
+          >
+            {t(TicketAssistantTexts.summary.crashedHeader)}
+          </ThemeText>
+          <ThemeText
+            type={'body__primary'}
+            color={themeColor}
+            style={styles.description}
+          >
+            {t(TicketAssistantTexts.summary.crashedDescription)}
+          </ThemeText>
+        </View>
+      ) : loading ? (
         <View style={styles.loadingSpinner}>
           <ActivityIndicator animating={true} size="large" />
-        </View>
-      ) : crashed ? (
-        <View style={styles.mainView}>
-          <View>
-            <ThemeText
-              type={'heading--big'}
-              color={themeColor}
-              style={styles.header}
-            >
-              {t(TicketAssistantTexts.summary.crashedHeader)}
-            </ThemeText>
-            <ThemeText
-              type={'body__primary'}
-              color={themeColor}
-              style={styles.description}
-            >
-              {t(TicketAssistantTexts.summary.crashedDescription)}
-            </ThemeText>
-          </View>
         </View>
       ) : (
         <View style={styles.mainView}>
@@ -123,20 +121,18 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             >
               {description}
             </ThemeText>
-            {purchaseDetails?.purchaseTicketDetails && (
-              <>
-                <TicketSummary />
-                <Button
-                  interactiveColor="interactive_0"
-                  onPress={onBuyButtonPress}
-                  text={t(TicketAssistantTexts.summary.buyButton)}
-                  testID="nextButton"
-                  accessibilityHint={t(
-                    TicketAssistantTexts.summary.a11yBuyButtonHint,
-                  )}
-                />
-              </>
-            )}
+
+            <TicketSummary />
+            <Button
+              interactiveColor="interactive_0"
+              onPress={onBuyButtonPress}
+              text={t(TicketAssistantTexts.summary.buyButton)}
+              testID="nextButton"
+              accessibilityHint={t(
+                TicketAssistantTexts.summary.a11yBuyButtonHint,
+              )}
+            />
+
             {doesTicketCoverEntirePeriod && (
               <View style={styles.notice}>
                 <ThemeIcon style={styles.icon} svg={SvgInfo} />

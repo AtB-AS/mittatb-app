@@ -26,10 +26,45 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
       ) : (
         <FullScreenHeader rightButton={{type: 'close'}} />
       )}
-      <TicketAssistantTabScreen
-        setActiveTab={setActiveTab}
-        setPreviousTab={setPreviousTab}
-      />
+      <Tab.Navigator
+        tabBar={(props: MaterialTopTabBarProps) => {
+          setActiveTab(props.state.index);
+          setPreviousTab(props.state.routes[props.state.index - 1]);
+          return <PageIndicator {...props} />;
+        }}
+        style={{
+          paddingBottom: Math.max(safeAreaBottom, theme.spacings.medium),
+          backgroundColor: theme.static.background[themeColor].background,
+        }}
+        tabBarPosition="bottom"
+        initialRouteName="TicketAssistant_WelcomeScreen"
+      >
+        <Tab.Screen
+          name="TicketAssistant_WelcomeScreen"
+          component={TicketAssistant_WelcomeScreen}
+        />
+        <Tab.Screen
+          name="TicketAssistant_CategoryPickerScreen"
+          component={TicketAssistant_CategoryPickerScreen}
+        />
+        <Tab.Screen
+          name="TicketAssistant_FrequencyScreen"
+          component={TicketAssistant_FrequencyScreen}
+        />
+        <Tab.Screen
+          name="TicketAssistant_DurationScreen"
+          component={TicketAssistant_DurationScreen}
+        />
+        <Tab.Screen
+          name="TicketAssistant_ZonePickerScreen"
+          component={TicketAssistant_ZonePickerScreen}
+          options={{swipeEnabled: Platform.OS === 'ios'}}
+        />
+        <Tab.Screen
+          name="TicketAssistant_SummaryScreen"
+          component={TicketAssistant_SummaryScreen}
+        />
+      </Tab.Navigator>
     </TicketAssistantContextProvider>
   );
 };

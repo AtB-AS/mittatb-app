@@ -1,23 +1,16 @@
 import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
-import {SliderComponent} from '@atb/components/slider';
+import {Slider} from '@atb/components/slider';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
-import {StaticColorByType} from '@atb/theme/colors';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useTicketAssistantState} from './TicketAssistantContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {SectionSeparator} from '@atb/components/sections';
-
-export const sliderColorMax: StaticColorByType<'background'> =
-  'background_accent_2';
-
-export const sliderColorMin: StaticColorByType<'background'> =
-  'background_accent_3';
 
 type FrequencyScreenProps =
   TicketAssistantScreenProps<'TicketAssistant_FrequencyScreen'>;
@@ -27,27 +20,22 @@ export const TicketAssistant_FrequencyScreen = ({
 }: FrequencyScreenProps) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const {data, updateData} = useTicketAssistantState();
-  const [sliderValue, setSliderValue] = useState(data.frequency);
+  const {inputParams, updateInputParams} = useTicketAssistantState();
+  const [sliderValue, setSliderValue] = useState(inputParams.frequency ?? 7);
   const a11yContext = useAccessibilityContext();
 
   const sliderMax = 14;
 
-  const numbers = Array.from(
-    {length: (sliderMax - 1) / 2 + 1},
-    (_, i) => i * 2 + 2,
-  );
+  //Creating an array of numbers to sliderMax with a step size of 2
+  // if it is odd, it starts at 1 and if it is even it starts at 2
+  const numbers = [];
+  for (let i = sliderMax % 2 ? 1 : 2; i <= sliderMax; i += 2) {
+    numbers.push(i);
+  }
+  //Numbers as strings and adding a '+' to the last element
   const numbersAsStrings = numbers.map((num) => num.toString());
-  numbersAsStrings[numbersAsStrings.length - 1] = '14+';
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('blur', () => {
-      updateData({...data, frequency: sliderValue});
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, [navigation, data, sliderValue, updateData]);
+  const endIndex = numbersAsStrings.length - 1;
+  numbersAsStrings[endIndex] = numbersAsStrings[endIndex] + '+';
 
   const resultString = t(
     sliderValue === sliderMax
@@ -55,6 +43,9 @@ export const TicketAssistant_FrequencyScreen = ({
       : TicketAssistantTexts.frequency.result({value: sliderValue}),
   );
 
+  navigation.addListener('blur', () => {
+    updateInputParams({...inputParams, frequency: sliderValue});
+  });
   return (
     <View style={styles.container}>
       <View style={styles.backdrop}>
@@ -85,6 +76,7 @@ export const TicketAssistant_FrequencyScreen = ({
               {numbers.map((number) => {
                 return (
                   <Button
+                    key={number}
                     interactiveColor="interactive_2"
                     onPress={() => {
                       navigation.navigate('TicketAssistant_DurationScreen');
@@ -122,27 +114,23 @@ export const TicketAssistant_FrequencyScreen = ({
                     );
                   })}
                 </View>
-                <View style={styles.sliderInnerContainer}>
-                  <SliderComponent
-                    maximumTrackTintColor={sliderColorMax}
-                    minimumTrackTintColor={sliderColorMin}
-                    maximumValue={sliderMax}
-                    minimumValue={2}
-                    step={1}
-                    value={sliderValue}
-                    tapToSeek={true}
-                    thumbTintColor={sliderColorMin}
-                    onValueChange={(value) => {
-                      setSliderValue(value);
-                    }}
-                    thumbStyle={styles.sliderThumb}
-                    trackMarks={[3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]}
-                    trackStyle={{
-                      width: '98%',
-                    }}
-                  />
-                </View>
-
+                <Slider
+                  style={styles.slider}
+                  maximumTrackTintColor={'interactive_0'}
+                  minimumTrackTintColor={'interactive_0'}
+                  maximumValue={sliderMax}
+                  minimumValue={2}
+                  step={1}
+                  value={sliderValue}
+                  tapToSeek={true}
+                  thumbTintColor={'interactive_0'}
+                  onSlidingComplete={() => {
+                    updateInputParams({...inputParams, frequency: sliderValue});
+                  }}
+                  onValueChange={(value) => {
+                    setSliderValue(value);
+                  }}
+                />
                 <SectionSeparator />
 
                 <ThemeText type={'body__secondary'} style={styles.travelText}>

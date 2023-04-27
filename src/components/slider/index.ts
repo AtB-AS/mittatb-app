@@ -1,1 +1,1 @@
-export {SliderComponent} from './SliderComponent';
+export {Slider} from './Slider';

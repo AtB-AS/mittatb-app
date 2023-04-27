@@ -1,4 +1,3 @@
-import {FareProductTypeConfig} from '@atb/configuration';
 import {productIsSellableInApp} from '@atb/reference-data/utils';
 import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
@@ -6,9 +5,10 @@ import {PreassignedFareProduct, UserProfile} from '@atb/reference-data/types';
 import {TariffZone} from '@entur/sdk/lib/nsr/types';
 import {
   PurchaseDetails,
-  PurchaseTicketDetails,
   RecommendedTicketResponse,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
+import {getLongestDurationTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
+import {FareProductTypeConfig} from '@atb-as/config-specs';
 
 export function handleRecommendedTicketResponse(
   response: RecommendedTicketResponse,
@@ -31,26 +31,27 @@ export function handleRecommendedTicketResponse(
     count: 1,
   };
 
-  let ticketDetails: PurchaseTicketDetails[] = [];
+  const ticket = response
+    ? getLongestDurationTicket(response.tickets)
+    : undefined;
 
-  response.tickets.forEach((ticket) => {
-    const recommendedTicket = sellableProductsInApp.find(
-      (product) => product.id === ticket.fare_product,
-    );
-    if (!recommendedTicket) return;
-    const ticketDetail: PurchaseTicketDetails = {
-      fareProductTypeConfig: fareProductTypeConfigs.find(
-        (config) => config.type === recommendedTicket?.type,
-      ) as FareProductTypeConfig,
-      preassignedFareProduct: recommendedTicket,
-    };
-    ticketDetails.push(ticketDetail);
-  });
+  const preAssignedFareProduct = sellableProductsInApp.find(
+    (p) => p.id === ticket?.fare_product,
+  );
+
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (config) => config.type === preAssignedFareProduct?.type,
+  );
+
+  if (!ticket || !preAssignedFareProduct || !fareProductTypeConfig) return;
 
   let purchaseDetailsData: PurchaseDetails = {
     tariffZones: tariffZonesWithMetaData,
     userProfileWithCount: [travellerWithCount],
-    purchaseTicketDetails: ticketDetails,
+    preassignedFareProduct: preAssignedFareProduct,
+    fareProductTypeConfig: fareProductTypeConfig,
+    ticket: ticket,
+    singleTicketPrice: response.single_ticket_price,
   };
   return purchaseDetailsData;
 }

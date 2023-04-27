@@ -14,22 +14,18 @@ export function calculateSingleTickets(
   return Math.ceil((duration / 7) * frequency);
 }
 
-export function getIndexOfLongestDurationTicket(
+export function getLongestDurationTicket(
   tickets: TicketResponseData[],
-): number {
-  try {
-    let longestDuration = 0;
-    let longestDurationIndex = 0;
-    tickets.forEach((ticket, index) => {
-      if (ticket.duration > longestDuration) {
-        longestDuration = ticket.duration;
-        longestDurationIndex = index;
-      }
-    });
-    return longestDurationIndex;
-  } catch (e) {
-    return 0;
-  }
+): TicketResponseData {
+  let longestDuration = 0;
+  let longestDurationIndex = 0;
+  tickets.forEach((ticket, index) => {
+    if (ticket.duration > longestDuration) {
+      longestDuration = ticket.duration;
+      longestDurationIndex = index;
+    }
+  });
+  return tickets[longestDurationIndex];
 }
 
 export function perTripSavings(
