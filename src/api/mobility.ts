@@ -40,5 +40,5 @@ export const getVehicle = (
     .get<GetVehicleQuery>(stringifyUrl(url, query), {
       ...opts,
     })
-    .then((res) => (res.data.vehicles ? res.data.vehicles[0] : undefined));
+    .then((res) => res.data.vehicles?.[0]);
 };

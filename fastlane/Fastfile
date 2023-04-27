@@ -113,18 +113,21 @@ platform :ios do
     # App provisioning profile
     app_prefix = "#{ENV['IOS_BUNDLE_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
     app_prov_profile_path = ENV["sigh_#{app_prefix}_profile-path"]
-    app_prov_profile_name = ENV["sigh_#{app_prefix}_profile-name"]
-    app_signing_identity_name = ENV["sigh_#{app_prefix}_certificate-name"]
+    app_prov_profile_name = (ENV["sigh_#{app_prefix}_profile-name"]).gsub('\xC3\xB8', 'ø')
+    app_signing_identity_name = (ENV["sigh_#{app_prefix}_certificate-name"]).gsub('\xC3\xB8', 'ø')
 
     # Widget provisioning profile
     widget_prefix = "#{ENV['IOS_APP_WIDGET_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
     widget_prov_profile_path = ENV["sigh_#{widget_prefix}_profile-path"]
-    widget_prov_profile_name = ENV["sigh_#{widget_prefix}_profile-name"]
+    widget_prov_profile_name = (ENV["sigh_#{widget_prefix}_profile-name"]).gsub('\xC3\xB8', 'ø')
 
     # Intent provisioning profile
     intent_prefix = "#{ENV['IOS_APP_INTENT_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
     intent_prov_profile_path = ENV["sigh_#{intent_prefix}_profile-path"]
-    intent_prov_profile_name = ENV["sigh_#{intent_prefix}_profile-name"]
+    intent_prov_profile_name = (ENV["sigh_#{intent_prefix}_profile-name"]).gsub('\xC3\xB8', 'ø')
+
+    puts "Identity name: #{app_signing_identity_name}"
+    puts "Certificate names: #{app_prov_profile_name}, #{widget_prov_profile_name}, #{intent_prov_profile_name}"
 
     widget_enabled = ENV["ENABLE_WIDGET"] == "true"
     puts "Is widget enabled: #{widget_enabled}"
@@ -194,12 +197,12 @@ platform :ios do
   desc 'Upload the build to Firebase App Distribution'
   lane :firebase_distribution_staging do
     ensure_env_vars(
-      env_vars: ['FIREBASE_APP_ID_IOS','GCP_CREDENTIALS_PATH']
+      env_vars: ['FIREBASE_APP_ID_IOS','GCP_CREDENTIALS_PATH', 'APP_DISTRIBUTION_GROUP_NAME']
     )
     firebase_app_distribution(
       app:ENV['FIREBASE_APP_ID_IOS'],
       service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
-      groups:"NFK"
+      groups:ENV['APP_DISTRIBUTION_GROUP_NAME']
     )
   end
 
@@ -285,7 +288,7 @@ platform :android do
       service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
       android_artifact_type:'APK',
       android_artifact_path:ENV['APK_FILE_NAME'],
-      groups:"NFK"
+      groups:ENV['APP_DISTRIBUTION_GROUP_NAME']
     )
   end
 

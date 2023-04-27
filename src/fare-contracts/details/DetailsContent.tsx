@@ -1,11 +1,10 @@
-import * as Sections from '@atb/components/sections';
+import React from 'react';
 import {
   FareContract,
   isInspectableTravelRight,
   isPreActivatedTravelRight,
 } from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import React from 'react';
 import {FareContractInfo} from '../FareContractInfo';
 import {ValidityHeader} from '../ValidityHeader';
 import {ValidityLine} from '../ValidityLine';
@@ -17,6 +16,11 @@ import {
 import {OrderDetails} from '@atb/fare-contracts/details/OrderDetails';
 import {UnknownFareContractDetails} from '@atb/fare-contracts/details/UnknownFareContractDetails';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {
+  GenericSectionItem,
+  LinkSectionItem,
+  Section,
+} from '@atb/components/sections';
 
 type Props = {
   fareContract: FareContract;
@@ -57,8 +61,8 @@ export const DetailsContent: React.FC<Props> = ({
 
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
     return (
-      <Sections.Section withBottomPadding>
-        <Sections.GenericSectionItem>
+      <Section withBottomPadding>
+        <GenericSectionItem>
           <ValidityHeader
             status={validityStatus}
             now={now}
@@ -82,17 +86,17 @@ export const DetailsContent: React.FC<Props> = ({
             fareContract={fc}
             fareProductType={preassignedFareProduct?.type}
           />
-        </Sections.GenericSectionItem>
-        <Sections.GenericSectionItem>
+        </GenericSectionItem>
+        <GenericSectionItem>
           <OrderDetails fareContract={fc} />
-        </Sections.GenericSectionItem>
-        <Sections.LinkSectionItem
+        </GenericSectionItem>
+        <LinkSectionItem
           text={t(FareContractTexts.details.askForReceipt)}
           onPress={onReceiptNavigate}
           accessibility={{accessibilityRole: 'button'}}
           testID="receiptButton"
         />
-      </Sections.Section>
+      </Section>
     );
   } else {
     return <UnknownFareContractDetails fc={fc} />;

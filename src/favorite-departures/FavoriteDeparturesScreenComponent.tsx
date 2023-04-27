@@ -1,4 +1,3 @@
-import * as Sections from '@atb/components/sections';
 import {useFavorites} from '@atb/favorites';
 import {StoredFavoriteDeparture} from '@atb/favorites';
 import {StyleSheet, Theme} from '@atb/theme';
@@ -10,6 +9,11 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {animateNextChange} from '@atb/utils/animation';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {
+  FavoriteDepartureSectionItem,
+  LinkSectionItem,
+  Section,
+} from '@atb/components/sections';
 
 type Props = {onPressAddFavorite: () => void};
 
@@ -48,9 +52,9 @@ export const FavoriteDeparturesScreenComponent = ({
       />
 
       <ScrollView>
-        <Sections.Section withFullPadding testID="favoritesList">
+        <Section withFullPadding testID="favoritesList">
           {favoriteDepartures.map((favorite) => (
-            <Sections.FavoriteDepartureSectionItem
+            <FavoriteDepartureSectionItem
               key={favorite.id}
               favorite={favorite}
               accessibility={{
@@ -62,15 +66,15 @@ export const FavoriteDeparturesScreenComponent = ({
               testID={`deleteFavorite${favoriteDepartures.indexOf(favorite)}`}
             />
           ))}
-        </Sections.Section>
-        <Sections.Section withPadding>
-          <Sections.LinkSectionItem
+        </Section>
+        <Section withPadding>
+          <LinkSectionItem
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={onPressAddFavorite}
             testID="addFavoriteDeparture"
             icon={<ThemeIcon svg={Add} />}
           />
-        </Sections.Section>
+        </Section>
       </ScrollView>
     </View>
   );

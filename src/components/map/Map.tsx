@@ -16,8 +16,8 @@ import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {shadows} from './components/shadows';
-import * as Mobility from './components/mobility';
 import {MapFilter} from './components/filter/MapFilter';
+import {Stations, Vehicles} from '@atb/components/map/components/mobility';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -114,14 +114,14 @@ export const Map = (props: MapProps) => {
             </MapboxGL.PointAnnotation>
           )}
           {props.vehicles && (
-            <Mobility.Vehicles
+            <Vehicles
               mapCameraRef={mapCameraRef}
               vehicles={props.vehicles.vehicles}
               onPress={props.vehicles.onPress}
             />
           )}
           {props.stations && (
-            <Mobility.Stations
+            <Stations
               mapCameraRef={mapCameraRef}
               stations={props.stations.stations}
               onPress={props.stations.onPress}

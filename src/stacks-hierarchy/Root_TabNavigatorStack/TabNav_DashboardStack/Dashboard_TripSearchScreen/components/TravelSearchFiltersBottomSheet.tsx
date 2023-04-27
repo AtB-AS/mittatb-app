@@ -7,7 +7,6 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import * as Sections from '@atb/components/sections';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
@@ -21,6 +20,12 @@ import type {
 import {useFilters} from '@atb/travel-search-filters';
 import {ThemeText} from '@atb/components/text';
 import {Checkbox} from '@atb/components/checkbox';
+import {
+  GenericClickableSectionItem,
+  HeaderSectionItem,
+  Section,
+  ToggleSectionItem,
+} from '@atb/components/sections';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
@@ -66,11 +71,11 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
         setFocusOnLoad={false}
       />
       <ScrollView style={styles.filtersContainer} ref={focusRef}>
-        <Sections.Section>
-          <Sections.HeaderSectionItem
+        <Section>
+          <HeaderSectionItem
             text={t(TripSearchTexts.filters.bottomSheet.modes.heading)}
           />
-          <Sections.ToggleSectionItem
+          <ToggleSectionItem
             text={t(TripSearchTexts.filters.bottomSheet.modes.all)}
             value={allModesSelected}
             onValueChange={(checked) => {
@@ -89,7 +94,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
               language,
             );
             return text ? (
-              <Sections.ToggleSectionItem
+              <ToggleSectionItem
                 key={option.id}
                 text={text}
                 leftIcon={getTransportModeSvg(
@@ -110,9 +115,9 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
               />
             ) : null;
           })}
-        </Sections.Section>
-        <Sections.Section style={styles.saveFiltersContainer}>
-          <Sections.GenericClickableSectionItem
+        </Section>
+        <Section style={styles.saveFiltersContainer}>
+          <GenericClickableSectionItem
             onPress={() => {
               setSaveFilters(!saveFilters);
             }}
@@ -134,8 +139,8 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                 {t(TripSearchTexts.filters.bottomSheet.saveFilters.text)}
               </ThemeText>
             </View>
-          </Sections.GenericClickableSectionItem>
-        </Sections.Section>
+          </GenericClickableSectionItem>
+        </Section>
       </ScrollView>
 
       <FullScreenFooter>
