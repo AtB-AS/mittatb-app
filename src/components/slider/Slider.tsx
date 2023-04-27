@@ -1,7 +1,8 @@
 import {View, ViewStyle} from 'react-native';
-import RNSlider from '@react-native-community/slider';
+import {Slider as RNSlider} from '@miblanchard/react-native-slider';
 import {InteractiveColor} from '@atb/theme/colors';
 import {useTheme} from '@atb/theme';
+import {Dimensions} from '@miblanchard/react-native-slider/lib/types';
 
 type Props = {
   value?: number;
@@ -10,11 +11,15 @@ type Props = {
   minimumTrackTintColor: InteractiveColor;
   maximumTrackTintColor: InteractiveColor;
   step: number;
-  tapToSeek: boolean;
+  trackClickable: boolean;
   thumbTintColor: InteractiveColor;
-  onValueChange?: (value: number) => void;
+  onValueChange: (value: number) => void;
   onSlidingComplete?: (value: number) => void;
-  style?: ViewStyle;
+  thumbStyle?: ViewStyle;
+  trackStyle?: ViewStyle;
+  thumbTouchSize?: Dimensions | undefined;
+  containerStyle?: ViewStyle;
+  trackMarks?: number[];
 };
 export function Slider({
   value,
@@ -23,11 +28,15 @@ export function Slider({
   minimumTrackTintColor,
   maximumTrackTintColor,
   step,
-  tapToSeek,
+  trackClickable,
   thumbTintColor,
   onValueChange,
   onSlidingComplete,
-  style,
+  thumbStyle,
+  trackMarks,
+  trackStyle,
+  thumbTouchSize,
+  containerStyle,
 }: Props) {
   const {theme} = useTheme();
   const minColor = theme.interactive[minimumTrackTintColor].default.background;
@@ -37,17 +46,25 @@ export function Slider({
   return (
     <View>
       <RNSlider
-        onSlidingComplete={onSlidingComplete}
-        style={style}
+        thumbStyle={thumbStyle}
+        thumbTouchSize={thumbTouchSize}
+        trackStyle={trackStyle}
+        onSlidingComplete={(number) =>
+          onSlidingComplete && onSlidingComplete(number[0])
+        }
+        containerStyle={containerStyle}
         value={value}
         minimumValue={minimumValue}
         maximumValue={maximumValue}
         minimumTrackTintColor={minColor}
         maximumTrackTintColor={maxColor}
         step={step}
-        tapToSeek={tapToSeek}
+        trackClickable={trackClickable}
         thumbTintColor={thumbColor}
-        onValueChange={onValueChange}
+        trackMarks={trackMarks}
+        onValueChange={(value) => {
+          onValueChange(value[0]);
+        }}
       />
     </View>
   );

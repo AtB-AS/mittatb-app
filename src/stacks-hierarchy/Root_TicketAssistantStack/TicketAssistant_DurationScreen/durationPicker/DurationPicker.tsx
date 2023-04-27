@@ -46,6 +46,7 @@ export const DurationPicker = ({
   const locale = useLocaleContext();
   function updateDuration(value: number, fromPicker?: boolean) {
     if (!fromPicker) {
+      setSliderIndex(getSliderIndex(value, durations));
       setDate(addDaysToCurrent(value));
     } else {
       const newData = {
@@ -168,14 +169,21 @@ export const DurationPicker = ({
             </View>
 
             <Slider
-              style={styles.slider}
+              maximumValue={durations.length - 1}
+              minimumValue={2}
+              step={1}
+              trackClickable={true}
+              thumbTouchSize={{width: 40, height: 40}}
+              trackStyle={{
+                width: '98%',
+              }}
+              thumbStyle={styles.sliderThumb}
+              onSlidingComplete={() => {
+                updateInputParams({...inputParams, frequency: sliderIndex});
+              }}
               value={sliderIndex}
               maximumTrackTintColor={'interactive_0'}
               minimumTrackTintColor={'interactive_0'}
-              maximumValue={durations.length - 1}
-              minimumValue={0}
-              step={1}
-              tapToSeek={true}
               thumbTintColor={'interactive_0'}
               onValueChange={(value) => {
                 updateDuration(durations[value], false);
@@ -236,6 +244,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
     paddingHorizontal: theme.spacings.medium,
     paddingVertical: theme.spacings.large,
+  },
+  sliderThumb: {
+    width: 20,
+    height: 20,
   },
   slider: {
     width: '100%',

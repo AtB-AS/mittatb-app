@@ -115,14 +115,15 @@ export const TicketAssistant_FrequencyScreen = ({
                   })}
                 </View>
                 <Slider
-                  style={styles.slider}
+                  trackClickable={true}
                   maximumTrackTintColor={'interactive_0'}
                   minimumTrackTintColor={'interactive_0'}
                   maximumValue={sliderMax}
                   minimumValue={2}
+                  thumbStyle={styles.thumbStyle}
+                  thumbTouchSize={{width: 40, height: 40}}
                   step={1}
                   value={sliderValue}
-                  tapToSeek={true}
                   thumbTintColor={'interactive_0'}
                   onSlidingComplete={() => {
                     updateInputParams({...inputParams, frequency: sliderValue});
@@ -188,7 +189,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'center',
     marginVertical: theme.spacings.medium,
   },
-  sliderThumb: {
+  thumbStyle: {
     width: 20,
     height: 20,
   },
@@ -221,7 +222,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   horizontalLine: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '100%',
+    width: '103%',
     alignSelf: 'center',
   },
   screenReaderButtons: {
