@@ -3,6 +3,7 @@ import {Slider as RNSlider} from '@miblanchard/react-native-slider';
 import {InteractiveColor} from '@atb/theme/colors';
 import {useTheme} from '@atb/theme';
 import {Dimensions} from '@miblanchard/react-native-slider/lib/types';
+import {ThemeText} from '../text';
 
 type Props = {
   value?: number;
@@ -52,6 +53,7 @@ export function Slider({
         onSlidingComplete={(number) =>
           onSlidingComplete && onSlidingComplete(number[0])
         }
+        onValueChange={(number) => onValueChange(number[0])}
         containerStyle={containerStyle}
         value={value}
         minimumValue={minimumValue}
@@ -62,9 +64,28 @@ export function Slider({
         trackClickable={trackClickable}
         thumbTintColor={thumbColor}
         trackMarks={trackMarks}
-        onValueChange={(value) => {
-          onValueChange(value[0]);
-        }}
+        renderTrackMarkComponent={
+          trackMarks
+            ? (index) => {
+                return (
+                  <ThemeText
+                    style={{
+                      textAlign: 'center',
+                      position: 'absolute',
+                      minWidth: 20,
+                      top: -40,
+                    }}
+                  >
+                    {index % 2 == 0
+                      ? index == 12
+                        ? '14+'
+                        : index + 2
+                      : undefined}
+                  </ThemeText>
+                );
+              }
+            : undefined
+        }
       />
     </View>
   );

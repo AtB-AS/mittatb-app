@@ -98,30 +98,16 @@ export const TicketAssistant_FrequencyScreen = ({
           ) : (
             <View>
               <View style={styles.sliderContainer}>
-                <View style={styles.horizontalLine}>
-                  {numbersAsStrings.map((number) => {
-                    return (
-                      <View key={number} style={styles.numberContainer}>
-                        <ThemeText
-                          key={number}
-                          style={styles.number}
-                          type={'body__primary'}
-                          color={themeColor}
-                        >
-                          {number}
-                        </ThemeText>
-                      </View>
-                    );
-                  })}
-                </View>
                 <Slider
                   trackClickable={true}
+                  containerStyle={styles.sliderInnerContainer}
                   maximumTrackTintColor={'interactive_0'}
                   minimumTrackTintColor={'interactive_0'}
                   maximumValue={sliderMax}
                   minimumValue={2}
                   thumbStyle={styles.thumbStyle}
                   thumbTouchSize={{width: 40, height: 40}}
+                  trackMarks={[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]}
                   step={1}
                   value={sliderValue}
                   thumbTintColor={'interactive_0'}
@@ -178,6 +164,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   sliderContainer: {
     width: '100%',
+    height: 130,
+    justifyContent: 'center',
     backgroundColor: theme.static.background.background_0.background,
     paddingVertical: theme.spacings.medium,
     paddingHorizontal: theme.spacings.medium,
@@ -194,7 +182,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     height: 20,
   },
   sliderInnerContainer: {
-    width: '97%',
+    width: '95%',
     alignSelf: 'center',
   },
   description: {
@@ -222,7 +210,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   horizontalLine: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '103%',
+    width: '100%',
     alignSelf: 'center',
   },
   screenReaderButtons: {

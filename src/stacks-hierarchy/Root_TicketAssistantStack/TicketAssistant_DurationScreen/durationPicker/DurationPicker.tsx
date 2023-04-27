@@ -174,9 +174,6 @@ export const DurationPicker = ({
               step={1}
               trackClickable={true}
               thumbTouchSize={{width: 40, height: 40}}
-              trackStyle={{
-                width: '98%',
-              }}
               thumbStyle={styles.sliderThumb}
               onSlidingComplete={() => {
                 updateInputParams({...inputParams, frequency: sliderIndex});
