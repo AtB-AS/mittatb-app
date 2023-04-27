@@ -28,9 +28,7 @@ export type SelectionLocationCallback = (
 
 export type VehiclesState = {
   vehicles: FeatureCollection<GeoJSON.Point, VehicleFragment>;
-  fetchVehicles: (
-    region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
-  ) => void;
+  updateRegion: (region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>) => void;
   isLoading: boolean;
   onFilterChange: (filter: VehiclesFilterType) => void;
   onPress: (type: MapSelectionActionType) => void;
@@ -38,9 +36,7 @@ export type VehiclesState = {
 
 export type StationsState = {
   stations: FeatureCollection<GeoJSON.Point, StationFragment>;
-  fetchStations: (
-    region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
-  ) => void;
+  updateRegion: (region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>) => void;
   isLoading: boolean;
   onFilterChange: (filter: StationsFilterType) => void;
   onPress: (type: MapSelectionActionType) => void;

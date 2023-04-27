@@ -30,9 +30,9 @@ import {useTravelSearchFiltersDebugOverride} from '@atb/stacks-hierarchy/Root_Ta
 import {useVehiclesInMapDebugOverride} from '@atb/mobility';
 import {DebugOverride} from './components/DebugOverride';
 import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
-import {useRealtimeMapDebugOverride} from '@atb/components/map/hooks/use-realtime-map-enabled';
+import {useRealtimeMapDebugOverride} from '@atb/components/map';
 import {useFromTravelSearchToTicketDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
-import {useMapDebugOverride} from '@atb/components/map/hooks/use-map-page';
+import {useMapDebugOverride} from '@atb/components/map';
 import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {useTipsAndInformationDebugOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information-enabled';
 import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
