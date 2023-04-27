@@ -50,13 +50,13 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
       newData.zones != inputParams.zones
     ) {
       setInputParams((prevState) => ({...prevState, ...newData}));
-      setLoading(true);
     }
   };
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
 
   useEffect(() => {
     const fetchData = () => {
+      setLoading(true);
       getRecommendedTicket(inputParams)
         .then((r) => {
           setPurchaseDetails(
