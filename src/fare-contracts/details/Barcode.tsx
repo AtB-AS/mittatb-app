@@ -18,6 +18,8 @@ import {
 } from '@atb/mobile-token/utils';
 import {FareContract} from '@atb/ticketing';
 import {renderAztec} from '@entur-private/abt-mobile-client-sdk';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import QRCode from 'qrcode';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -43,6 +45,8 @@ export function Barcode({
       return <MobileTokenAztec fc={fc} />;
     case 'other':
       return <DeviceNotInspectable />;
+    case 'staticQrCode':
+      return <StaticQrCode fc={fc} />;
   }
 }
 
@@ -53,9 +57,13 @@ const useBarcodeCodeStatus = (
   const {remoteTokens, deviceIsInspectable, isLoading, isError} =
     useMobileTokenContextState();
   const mobileTokenEnabled = useHasEnabledMobileToken();
+  const {use_trygg_overgang_qr_code: useTryggOvergangQrCode} =
+    useRemoteConfig();
 
   if (!isInspectable) return 'none';
   if (validityStatus !== 'valid') return 'none';
+
+  if (useTryggOvergangQrCode) return 'staticQrCode';
 
   if (!mobileTokenEnabled) return 'static';
 
@@ -193,6 +201,33 @@ const StaticAztec = ({fc}: {fc: FareContract}) => {
         testID="staticBarcode"
       >
         <SvgXml xml={aztecXml} width="100%" height="100%" />
+      </View>
+    </Sections.GenericSectionItem>
+  );
+};
+
+const StaticQrCode = ({fc}: {fc: FareContract}) => {
+  const styles = useStyles();
+  const {t} = useTranslation();
+  const [qrCodeSvg, setQrCodeSvg] = useState<string>();
+
+  useEffect(() => {
+    if (fc.qrCode) {
+      QRCode.toString(fc.qrCode, {type: 'svg'}).then(setQrCodeSvg);
+    }
+  }, [fc.qrCode, setQrCodeSvg]);
+
+  if (!qrCodeSvg) return null;
+
+  return (
+    <Sections.GenericSectionItem>
+      <View
+        style={styles.aztecCode}
+        accessible={true}
+        accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
+        testID="staticQRCode"
+      >
+        <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
       </View>
     </Sections.GenericSectionItem>
   );
