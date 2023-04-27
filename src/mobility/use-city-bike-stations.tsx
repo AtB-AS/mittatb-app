@@ -7,8 +7,8 @@ import {
   StationsState,
   toFeatureCollection,
   toFeaturePoints,
+  useUserMapFilters,
 } from '@atb/components/map';
-import {useUserMapFilters} from '@atb/components/map/hooks/use-map-filter';
 import {FeatureCollection, GeoJSON} from 'geojson';
 import {StationFragment} from '@atb/api/types/generated/fragments/stations';
 import {getStations} from '@atb/api/stations';

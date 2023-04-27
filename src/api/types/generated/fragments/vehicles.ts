@@ -1,18 +1,10 @@
-import * as Types from '../mobility-types_v2';
 import {
   PricingPlanFragment,
   RentalUrisFragment,
   SystemFragment,
-  TranslatedStringFragment,
+  VehicleRangeFragment,
+  VehicleTypeFragment,
 } from './mobility-shared';
-
-export type VehicleRangeFragment = {maxRangeMeters?: number};
-
-export type VehicleTypeFragment = {
-  id: string;
-  formFactor: Types.FormFactor;
-  name?: TranslatedStringFragment;
-} & VehicleRangeFragment;
 
 export type VehicleBasicFragment = {
   id: string;
