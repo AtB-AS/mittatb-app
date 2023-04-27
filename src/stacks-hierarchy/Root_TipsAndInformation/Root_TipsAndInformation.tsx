@@ -9,7 +9,6 @@ import {
 import {StyleSheet, Theme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {themeColor} from '@atb/stacks-hierarchy/Root_OnboardingStack/Onboarding_WelcomeScreen';
-import * as Sections from '@atb/components/sections';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import firestore from '@react-native-firebase/firestore';
 import {
@@ -17,6 +16,7 @@ import {
   TipType,
 } from '@atb/stacks-hierarchy/Root_TipsAndInformation/types';
 import {mapToTips} from '@atb/stacks-hierarchy/Root_TipsAndInformation/converters';
+import {ExpandableSectionItem, Section} from '@atb/components/sections';
 
 type Props = RootStackScreenProps<'Root_TipsAndInformation'>;
 
@@ -57,7 +57,7 @@ export const Root_TipsAndInformation = ({}: Props) => {
       </ThemeText>
 
       <View style={styles.innerContainer}>
-        <Sections.Section style={styles.tipsContainer}>
+        <Section style={styles.tipsContainer}>
           {tips.map((tip, index) => {
             const title = getTextForLanguage(tip.title, language);
             const emoji = tip.emoji;
@@ -66,7 +66,7 @@ export const Root_TipsAndInformation = ({}: Props) => {
             if (!emoji || !title || !description) return null;
 
             return (
-              <Sections.ExpandableSectionItem
+              <ExpandableSectionItem
                 key={index}
                 textType="body__primary--bold"
                 text={emoji + ' ' + title}
@@ -87,7 +87,7 @@ export const Root_TipsAndInformation = ({}: Props) => {
               />
             );
           })}
-        </Sections.Section>
+        </Section>
       </View>
     </View>
   );

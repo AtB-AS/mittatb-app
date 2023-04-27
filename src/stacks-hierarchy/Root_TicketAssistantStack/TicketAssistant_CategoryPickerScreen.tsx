@@ -1,6 +1,5 @@
 import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import * as Sections from '@atb/components/sections';
 
 import {
   getTextForLanguage,
@@ -12,13 +11,14 @@ import React, {useState} from 'react';
 import {Button} from '@atb/components/button';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
-import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-defaults';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import {Traveller} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
+import {Traveller} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
+import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
+import {ExpandableSectionItem, Section} from '@atb/components/sections';
 
 type CategoryPickerProps =
   TicketAssistantScreenProps<'TicketAssistant_CategoryPickerScreen'>;
@@ -74,10 +74,10 @@ export const TicketAssistant_CategoryPickerScreen = ({
         </ThemeText>
 
         {!a11yContext.isScreenReaderEnabled ? (
-          <Sections.Section style={styles.categoriesContainer}>
+          <Section style={styles.categoriesContainer}>
             {selectableTravellers.map((u, index) => {
               return (
-                <Sections.ExpandableSectionItem
+                <ExpandableSectionItem
                   key={index}
                   textType={'body__primary--bold'}
                   text={
@@ -121,7 +121,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
                 />
               );
             })}
-          </Sections.Section>
+          </Section>
         ) : (
           <>
             {selectableTravellers.map((u, index) => {
