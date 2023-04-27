@@ -107,7 +107,6 @@ export const TicketAssistant_FrequencyScreen = ({
                   minimumValue={2}
                   thumbStyle={styles.thumbStyle}
                   thumbTouchSize={{width: 40, height: 40}}
-                  trackMarks={[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]}
                   step={1}
                   value={sliderValue}
                   thumbTintColor={'interactive_0'}
@@ -117,7 +116,25 @@ export const TicketAssistant_FrequencyScreen = ({
                   onValueChange={(value) => {
                     setSliderValue(value);
                   }}
+                  trackMarks={numbers}
+                  trackMarkComponent={(index) => {
+                    return (
+                      <ThemeText
+                        style={{
+                          textAlign: 'center',
+                          position: 'absolute',
+                          minWidth: 20,
+                          borderStyle: 'solid',
+                          borderColor: 'interactive_0',
+                          top: -40,
+                        }}
+                      >
+                        {numbersAsStrings[index]}
+                      </ThemeText>
+                    );
+                  }}
                 />
+
                 <SectionSeparator />
 
                 <ThemeText type={'body__secondary'} style={styles.travelText}>

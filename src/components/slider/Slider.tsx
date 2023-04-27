@@ -3,7 +3,7 @@ import {Slider as RNSlider} from '@miblanchard/react-native-slider';
 import {InteractiveColor} from '@atb/theme/colors';
 import {useTheme} from '@atb/theme';
 import {Dimensions} from '@miblanchard/react-native-slider/lib/types';
-import {ThemeText} from '../text';
+import React from 'react';
 
 type Props = {
   value?: number;
@@ -21,6 +21,7 @@ type Props = {
   thumbTouchSize?: Dimensions | undefined;
   containerStyle?: ViewStyle;
   trackMarks?: number[];
+  trackMarkComponent?: (texts: number) => React.ReactNode;
 };
 export function Slider({
   value,
@@ -34,10 +35,11 @@ export function Slider({
   onValueChange,
   onSlidingComplete,
   thumbStyle,
-  trackMarks,
   trackStyle,
   thumbTouchSize,
   containerStyle,
+  trackMarkComponent,
+  trackMarks,
 }: Props) {
   const {theme} = useTheme();
   const minColor = theme.interactive[minimumTrackTintColor].default.background;
@@ -65,24 +67,9 @@ export function Slider({
         thumbTintColor={thumbColor}
         trackMarks={trackMarks}
         renderTrackMarkComponent={
-          trackMarks
+          trackMarks && trackMarkComponent
             ? (index) => {
-                return (
-                  <ThemeText
-                    style={{
-                      textAlign: 'center',
-                      position: 'absolute',
-                      minWidth: 20,
-                      top: -40,
-                    }}
-                  >
-                    {index % 2 == 0
-                      ? index == 12
-                        ? '14+'
-                        : index + 2
-                      : undefined}
-                  </ThemeText>
-                );
+                return trackMarkComponent(index);
               }
             : undefined
         }
