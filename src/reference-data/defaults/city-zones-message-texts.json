@@ -1,9 +1,5 @@
 {
   "singleZone": {
-    "title": [
-      {"lang": "nob", "value": "Bestillingstransport tilgjengelig"},
-      {"lang": "eng", "value": "Order transport available"}
-    ],
     "message": [
       {"lang": "nob", "value": "Bestillingstransport tilgjengelig i {0}."},
       {

@@ -46,7 +46,6 @@ export type CityZoneMessageTexts = {
 };
 
 export type CityZoneMessage = {
-  title?: LanguageAndTextType[];
   message: LanguageAndTextType[];
 };
 
