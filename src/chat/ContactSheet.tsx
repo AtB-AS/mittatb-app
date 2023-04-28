@@ -12,11 +12,11 @@ import {AccessibilityProps, Linking, View} from 'react-native';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {ChatUnread} from '@atb/assets/svg/color/icons/actions';
 import {useChatUnreadCount} from './use-chat-unread-count';
 import Intercom from 'react-native-intercom';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {screenReaderHidden} from '@atb/utils/accessibility';
-import {ChatUnread} from '@atb/assets/svg/color/icons/actions';
 
 type Props = {
   close: () => void;
