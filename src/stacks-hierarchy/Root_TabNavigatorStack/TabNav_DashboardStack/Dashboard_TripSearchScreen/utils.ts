@@ -4,8 +4,10 @@ import {CityZone} from '@atb/reference-data/types';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {useMemo} from 'react';
-import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
-import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {
+  Modes,
+  StreetMode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 import {useFlexibleTransportAccessModeEnabled} from './use-flexible-transport-access-mode-enabled';
 import {useFlexibleTransportEnabled} from './use-flexible-transport-enabled';
 import {useFlexibleTransportEgressModeEnabled} from './use-flexible-transport-egress-mode-enabled';
@@ -46,7 +48,7 @@ export const useFindCityZonesInLocations = (
 
 export function useJourneyModes(
   defaultValue: StreetMode = StreetMode.Foot,
-): Types.Modes {
+): Modes {
   const flexibleTransportEnabled = useFlexibleTransportEnabled();
   const flexibleTransportAccessModeEnabled =
     useFlexibleTransportAccessModeEnabled();

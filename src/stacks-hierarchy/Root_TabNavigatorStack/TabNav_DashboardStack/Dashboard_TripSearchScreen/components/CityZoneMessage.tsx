@@ -2,7 +2,6 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {Linking, TouchableOpacity, View} from 'react-native';
-import * as Sections from '@atb/components/sections';
 import {getTextForLanguageWithFormat} from '@atb/translations/utils';
 import {FlexibleTransport} from '@atb/assets/svg/color/illustrations';
 import {CityZone} from '@atb/reference-data/types';
@@ -17,6 +16,7 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {insets} from '@atb/utils/insets';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {Section} from '@atb/components/sections';
 
 type ActionButton = {
   text: string;
@@ -75,7 +75,7 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({from, to}) => {
 
   if (message && messageActions) {
     return (
-      <Sections.Section style={style.cityZoneMessage}>
+      <Section style={style.cityZoneMessage}>
         <MessageBoxWithActionButtons
           message={message}
           icon={() => <FlexibleTransport />}
@@ -84,7 +84,7 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({from, to}) => {
           }}
           actionButtons={messageActions}
         />
-      </Sections.Section>
+      </Section>
     );
   }
 
