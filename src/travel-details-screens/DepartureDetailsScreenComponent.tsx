@@ -417,7 +417,6 @@ function EstimatedCallRow({
               missingRealTime: !call.realtime && isStartOfServiceJourney,
             }}
             roundingMethod="floor"
-            showRealtimeIcon={false}
           />
         }
         alignChildren={

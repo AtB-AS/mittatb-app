@@ -7,14 +7,19 @@ import React from 'react';
 import {View} from 'react-native';
 import {TripMessages} from './DetailsMessages';
 import {TripSection, getPlaceName, InterchangeDetails} from './TripSection';
-import {Summary} from './TripSummary';
+import {TripSummary} from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {isSignificantFootLegWalkOrWaitTime} from '@atb/travel-details-screens/utils';
-import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
+import {
+  CompactTravelDetailsMap,
+  TravelDetailsMapScreenParams,
+} from '@atb/travel-details-map-screen';
 import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
 import {useRealtimeMapEnabled} from '@atb/components/map';
+import {AnyMode} from '@atb/components/icon-box';
+import {Divider} from '@atb/components/divider';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -50,6 +55,14 @@ export const Trip: React.FC<TripProps> = ({
         .filter(filterLegs)
     : undefined;
   const {vehiclePositions} = useGetServiceJourneyVehicles(ids);
+
+  const tripPatternLegs = tripPattern?.legs.map((leg) => {
+    let mode: AnyMode = !!leg.bookingArrangements ? 'flex' : leg.mode;
+    return {
+      ...leg,
+      mode,
+    };
+  });
 
   return (
     <View style={styles.container}>
@@ -94,7 +107,22 @@ export const Trip: React.FC<TripProps> = ({
             );
           })}
       </View>
-      <Summary {...tripPattern} />
+      <Divider />
+      {tripPatternLegs && (
+        <CompactTravelDetailsMap
+          mapLegs={tripPatternLegs}
+          fromPlace={tripPatternLegs[0]?.fromPlace}
+          toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
+          onExpand={() => {
+            onPressDetailsMap({
+              legs: tripPatternLegs,
+              fromPlace: tripPatternLegs[0]?.fromPlace,
+              toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
+            });
+          }}
+        />
+      )}
+      <TripSummary {...tripPattern} />
       <Feedback metadata={tripPattern} viewContext="assistant" />
     </View>
   );
