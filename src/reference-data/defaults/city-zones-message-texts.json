@@ -10,10 +10,6 @@
         "lang": "eng",
         "value": "Ordered transport is available in {0}."
       }
-    ],
-    "actionButtonText": [
-      {"lang": "nob", "value": "Se flere detaljer"},
-      {"lang": "eng", "value": "See more details"}
     ]
   },
   "multipleZones": {
@@ -23,13 +19,6 @@
         "value": "Bestillingstransport tilgjengelig i {0} og {1}."
       },
       {"lang": "eng", "value": "Ordered transport is available in {0} and {1}."}
-    ],
-    "actionButtonText": [
-      {"lang": "nob", "value": "Se flere detaljer"},
-      {
-        "lang": "eng",
-        "value": "See more details"
-      }
     ]
   }
 }

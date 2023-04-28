@@ -48,7 +48,6 @@ export type CityZoneMessageTexts = {
 export type CityZoneMessage = {
   title?: LanguageAndTextType[];
   message: LanguageAndTextType[];
-  actionButtonText: LanguageAndTextType[];
 };
 
 export type CityZone = {
