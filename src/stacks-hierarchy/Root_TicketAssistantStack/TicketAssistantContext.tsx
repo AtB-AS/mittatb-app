@@ -36,7 +36,7 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
     traveller: undefined,
     duration: undefined,
     zones: undefined,
-    preassignedFareProducts: preassignedFareProductsIds ?? [],
+    preassigned_fare_products: preassignedFareProductsIds ?? [],
   });
 
   const [recommendedTicketSummary, setRecommendedTicketSummary] =
