@@ -107,7 +107,7 @@ export const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
 type ContactProps = {
   onPress: () => void;
   icon?: () => JSX.Element;
-  title: string;
+  title?: string;
   body: string;
   buttonText: string;
   accessibilityHint: string;
@@ -130,9 +130,11 @@ const ContactItem: React.FC<ContactProps> = ({
   return (
     <View {...screenReaderHidden}>
       <View style={styles.descriptionSection} ref={focusRef} accessible>
-        <ThemeText type="body__secondary" color="secondary">
-          {title}
-        </ThemeText>
+        {title && (
+          <ThemeText type="body__secondary" color="secondary">
+            {title}
+          </ThemeText>
+        )}
         <ThemeText>{body}</ThemeText>
       </View>
       <Button
