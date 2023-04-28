@@ -53,7 +53,6 @@ import {storage, StorageModelKeysEnum} from '@atb/storage';
 import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-state';
 import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/SelectedFiltersButtons';
 import {CityZoneMessage} from './components/CityZoneMessage';
-import {useJourneyModes} from './utils';
 import {useFlexibleTransportEnabled} from './use-flexible-transport-enabled';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
