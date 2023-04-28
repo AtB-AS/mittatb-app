@@ -2,7 +2,6 @@ import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {Button} from '@atb/components/button';
 import {MessageBox, MessageBoxProps} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import * as Sections from '@atb/components/sections';
 import {StyleSheet} from '@atb/theme';
 import {sendReceipt} from '@atb/ticketing';
 import {
@@ -13,14 +12,10 @@ import {
 import {validateEmail} from '@atb/utils/validation';
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import {FareContractModalScreenProps} from './types';
+import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
+import {Section, TextInputSectionItem} from '@atb/components/sections';
 
-export type ReceiptScreenRouteParams = {
-  orderId: string;
-  orderVersion: string;
-};
-
-type Props = FareContractModalScreenProps<'PurchaseReceipt'>;
+type Props = RootStackScreenProps<'Root_ReceiptScreen'>;
 
 type MessageState =
   | 'loading'
@@ -29,7 +24,7 @@ type MessageState =
   | 'invalid-field'
   | undefined;
 
-export function ReceiptScreen({route}: Props) {
+export function Root_ReceiptScreen({route}: Props) {
   const {orderId, orderVersion} = route.params;
   const styles = useStyles();
   const [email, setEmail] = useState('');
@@ -75,8 +70,8 @@ export function ReceiptScreen({route}: Props) {
             {...translateStateToMessage(state, t, email, reference)}
           />
         </View>
-        <Sections.Section withTopPadding withBottomPadding>
-          <Sections.TextInputSectionItem
+        <Section withTopPadding withBottomPadding>
+          <TextInputSectionItem
             label={t(FareContractTexts.receipt.inputLabel)}
             value={email}
             onChangeText={setEmail}
@@ -86,7 +81,7 @@ export function ReceiptScreen({route}: Props) {
             autoCorrect={false}
             autoFocus={!a11yContext.isScreenReaderEnabled}
           />
-        </Sections.Section>
+        </Section>
         <Button
           text={t(FareContractTexts.receipt.sendButton)}
           onPress={onSend}

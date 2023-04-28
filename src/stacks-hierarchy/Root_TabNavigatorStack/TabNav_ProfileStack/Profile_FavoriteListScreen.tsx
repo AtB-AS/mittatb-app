@@ -2,7 +2,6 @@ import {Add} from '@atb/assets/svg/mono-icons/actions';
 import SvgReorder from '@atb/assets/svg/mono-icons/actions/Reorder';
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import * as Sections from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StoredLocationFavorite, useFavorites} from '@atb/favorites';
 import {StyleSheet, Theme} from '@atb/theme';
@@ -11,6 +10,11 @@ import React from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from './navigation-types';
+import {
+  FavoriteSectionItem,
+  LinkSectionItem,
+  Section,
+} from '@atb/components/sections';
 
 type Props = ProfileScreenProps<'Profile_FavoriteListScreen'>;
 
@@ -44,9 +48,9 @@ export const Profile_FavoriteListScreen = ({navigation}: Props) => {
           />
         )}
 
-        <Sections.Section withTopPadding withPadding>
+        <Section withTopPadding withPadding>
           {items.map((favorite, i) => (
-            <Sections.FavoriteSectionItem
+            <FavoriteSectionItem
               key={favorite.id}
               favorite={favorite}
               accessibility={{
@@ -56,24 +60,24 @@ export const Profile_FavoriteListScreen = ({navigation}: Props) => {
               testID={'favorite' + i}
             />
           ))}
-        </Sections.Section>
+        </Section>
 
-        <Sections.Section withPadding>
+        <Section withPadding>
           {!!items.length && (
-            <Sections.LinkSectionItem
+            <LinkSectionItem
               text={t(FavoriteListTexts.buttons.changeOrder)}
               onPress={onSortClick}
               icon={<ThemeIcon svg={SvgReorder} />}
               testID="changeOrderButton"
             />
           )}
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text={t(FavoriteListTexts.buttons.addFavorite)}
             onPress={onAddButtonClick}
             icon={<ThemeIcon svg={Add} />}
             testID="addFavoriteButton"
           />
-        </Sections.Section>
+        </Section>
       </ScrollView>
     </View>
   );

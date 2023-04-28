@@ -10,7 +10,7 @@ const PaymentOptionsTexts = {
   ),
   genericError: _(
     'Det oppstod en feil. Vennligst prøv igjen.',
-    'An error occured. Please try again.',
+    'An error occurred. Please try again.',
   ),
   deleteModal: {
     title: _('Fjerne betalingsmåte?', 'Delete payment option?'),

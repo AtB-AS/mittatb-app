@@ -1,4 +1,3 @@
-import * as Sections from '@atb/components/sections';
 import {FareContractState, PreActivatedTravelRight} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -8,6 +7,11 @@ import {ValidityLine} from './ValidityLine';
 import {getValidityStatus} from '@atb/fare-contracts/utils';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {findReferenceDataById} from '@atb/reference-data/utils';
+import {
+  GenericSectionItem,
+  LinkSectionItem,
+  Section,
+} from '@atb/components/sections';
 
 type Props = {
   fareContractState: FareContractState;
@@ -47,8 +51,8 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
     fareContractState,
   );
   return (
-    <Sections.Section withBottomPadding testID={testID}>
-      <Sections.GenericSectionItem>
+    <Section withBottomPadding testID={testID}>
+      <GenericSectionItem>
         <ValidityHeader
           status={validityStatus}
           isInspectable={isInspectable}
@@ -72,9 +76,9 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
           testID={testID}
           fareProductType={preassignedFareProduct?.type}
         />
-      </Sections.GenericSectionItem>
+      </GenericSectionItem>
       {!hideDetails && (
-        <Sections.LinkSectionItem
+        <LinkSectionItem
           text={t(
             validityStatus === 'valid' && isInspectable
               ? FareContractTexts.detailsLink.valid
@@ -84,6 +88,6 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
           testID={testID + 'Details'}
         />
       )}
-    </Sections.Section>
+    </Section>
   );
 };

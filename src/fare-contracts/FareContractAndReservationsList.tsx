@@ -9,7 +9,7 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useMemo} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {TravelCardInformation} from '../stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/TravelCardInformation';
+import {TravelCardInformation} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/TravelCardInformation';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -73,8 +73,8 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
           <FareContractOrReservation
             now={now}
             onPressFareContract={() =>
-              navigation.navigate('FareContractModal', {
-                screen: 'FareContractDetails',
+              navigation.navigate({
+                name: 'Root_FareContractDetailsScreen',
                 params: {orderId: fcOrReservation.orderId},
               })
             }
