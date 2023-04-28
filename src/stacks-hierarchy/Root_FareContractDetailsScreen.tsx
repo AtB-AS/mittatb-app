@@ -8,22 +8,17 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useInterval} from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {getValidityStatus} from '../utils';
-import {DetailsContent} from './DetailsContent';
-import {FareContractModalScreenProps} from './types';
-import {getValidOnTrainNoticeText} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/utils';
+import {DetailsContent, getValidityStatus} from '@atb/fare-contracts';
+import {getValidOnTrainNoticeText} from '../stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/utils';
+import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 
-export type FareContractDetailsRouteParams = {
-  orderId: string;
-};
-
-type Props = FareContractModalScreenProps<'FareContractDetails'>;
+type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
 function isOfFareProductRef(a: any): a is {fareProductRef: string} {
   return 'fareProductRef' in a;
 }
 
-export function DetailsScreen({navigation, route}: Props) {
+export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
@@ -42,7 +37,7 @@ export function DetailsScreen({navigation, route}: Props) {
 
   const onReceiptNavigate = () =>
     fc &&
-    navigation.push('PurchaseReceipt', {
+    navigation.push('Root_ReceiptScreen', {
       orderId: fc.orderId,
       orderVersion: fc.version,
     });

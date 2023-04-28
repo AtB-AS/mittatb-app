@@ -13,9 +13,9 @@ import {
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {secondsToDuration} from '@atb/utils/date';
 import {FareContractInfoDetailsProps} from './FareContractInfo';
-import * as Sections from '@atb/components/sections';
 import {screenReaderPause} from '@atb/components/text';
-import {InspectionSymbol} from '@atb/fare-contracts/Component/InspectionSymbol';
+import {InspectionSymbol} from '@atb/fare-contracts/components/InspectionSymbol';
+import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 
 type CompactFareContractInfoProps = FareContractInfoDetailsProps & {
   onPressDetails?: () => void;
@@ -54,16 +54,16 @@ export const CompactFareContractInfo = (
   };
 
   return (
-    <Sections.Section withPadding {...accessibility}>
-      <Sections.GenericClickableSectionItem onPress={props.onPressDetails}>
+    <Section withPadding {...accessibility}>
+      <GenericClickableSectionItem onPress={props.onPressDetails}>
         <View style={styles.container}>
           <View style={styles.ticketDetails}>
             <CompactFareContractInfoTexts {...fareContractInfoTextsProps} />
             {isValid && <InspectionSymbol {...props} isLoading={isLoading} />}
           </View>
         </View>
-      </Sections.GenericClickableSectionItem>
-    </Sections.Section>
+      </GenericClickableSectionItem>
+    </Section>
   );
 };
 

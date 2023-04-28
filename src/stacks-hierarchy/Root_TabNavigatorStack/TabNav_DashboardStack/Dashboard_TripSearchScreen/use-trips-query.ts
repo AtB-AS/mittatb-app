@@ -1,7 +1,12 @@
 import {TravelSearchTransportModes} from '@atb-as/config-specs';
 import {CancelToken, isCancel} from '@atb/api';
 import {tripsSearch} from '@atb/api/trips_v2';
-import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
+import {
+  Modes,
+  TransportModes,
+  TransportSubmode,
+  TransportMode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {TripPattern} from '@atb/api/types/trips';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
@@ -211,7 +216,7 @@ async function doSearch(
   cancelToken: CancelTokenSource,
   tripSearchPreferences: TripSearchPreferences | undefined,
   travelSearchFiltersSelection: TravelSearchFiltersSelectionType | undefined,
-  journeySearchModes: Types.Modes,
+  journeySearchModes: Modes,
 ) {
   const from = {
     ...fromLocation,
@@ -315,16 +320,13 @@ function filterDuplicateTripPatterns(
 
 function transportModeToEnum(
   modes: TravelSearchTransportModes[],
-): Types.TransportModes[] {
+): TransportModes[] {
   return modes.map((internal) => {
     return {
-      transportMode: enumFromString(
-        Types.TransportMode,
-        internal.transportMode,
-      ),
+      transportMode: enumFromString(TransportMode, internal.transportMode),
       transportSubModes: internal.transportSubModes
-        ?.map((submode) => enumFromString(Types.TransportSubmode, submode))
-        .filter(Boolean) as Types.TransportSubmode[],
+        ?.map((submode) => enumFromString(TransportSubmode, submode))
+        .filter(Boolean) as TransportSubmode[],
     };
   });
 }

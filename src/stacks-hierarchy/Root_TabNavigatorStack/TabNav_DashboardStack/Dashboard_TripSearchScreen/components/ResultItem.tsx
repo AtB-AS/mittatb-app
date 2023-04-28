@@ -318,13 +318,15 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   result: {
     backgroundColor: theme.static.background.background_0.background,
     borderRadius: theme.border.radius.regular,
-    marginTop: theme.spacings.medium,
+    marginTop: theme.spacings.small,
   },
   resultInPast: {
     backgroundColor: theme.static.background.background_2.background,
   },
   detailsContainer: {
-    padding: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
+    paddingTop: theme.spacings.medium,
+    paddingBottom: theme.spacings.small,
     flexDirection: 'row',
   },
   lineContainer: {
@@ -388,10 +390,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    padding: theme.spacings.medium,
-    paddingBottom: theme.spacings.medium,
-    borderBottomColor: theme.border.primary,
-    borderBottomWidth: theme.border.width.slim,
+    paddingHorizontal: theme.spacings.medium,
+    paddingTop: theme.spacings.medium,
   },
   row: {
     flexDirection: 'row',
@@ -425,7 +425,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
     borderTopColor: theme.border.primary,
     borderTopWidth: theme.border.width.slim,
-    padding: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
+    paddingVertical: theme.spacings.small,
     alignItems: 'flex-end',
   },
   fromPlaceText: {

@@ -36,7 +36,7 @@ export const useCurrentTripPatternWithUpdates = (
     [originalTripPatterns, currentIndex],
   );
 
-  const [updatedTripPattern, , error] = usePollableResource<
+  const [updatedTripPattern, , , error] = usePollableResource<
     TripPattern | undefined,
     AxiosError
   >(fetchTripPattern, {

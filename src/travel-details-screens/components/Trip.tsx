@@ -14,7 +14,7 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {isSignificantFootLegWalkOrWaitTime} from '@atb/travel-details-screens/utils';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
 import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
-import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
+import {useRealtimeMapEnabled} from '@atb/components/map';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -61,6 +61,7 @@ export const Trip: React.FC<TripProps> = ({
               (vehicle) =>
                 vehicle.serviceJourney?.id === leg.serviceJourney?.id,
             );
+
             return (
               <TripSection
                 key={index}
@@ -78,10 +79,12 @@ export const Trip: React.FC<TripProps> = ({
                   legVehiclePosition
                     ? () =>
                         onPressDetailsMap({
-                          legs: [leg],
-                          fromPlace: leg.fromPlace,
-                          toPlace: leg.toPlace,
-                          initialVehiclePosition: legVehiclePosition,
+                          legs: tripPattern.legs,
+                          fromPlace: tripPattern.legs[0].fromPlace,
+                          toPlace:
+                            tripPattern.legs[tripPattern.legs.length - 1]
+                              .toPlace,
+                          _initialVehiclePosition: legVehiclePosition,
                         })
                     : undefined
                 }

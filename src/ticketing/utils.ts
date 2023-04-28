@@ -1,4 +1,4 @@
-import {getLastUsedAccess} from '@atb/fare-contracts/Carnet/CarnetDetails';
+import {getLastUsedAccess} from '@atb/fare-contracts';
 import {flatten, sumBy} from 'lodash';
 import {
   CarnetTravelRightUsedAccess,

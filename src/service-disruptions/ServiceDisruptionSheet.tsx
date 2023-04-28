@@ -2,7 +2,6 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import * as Sections from '@atb/components/sections';
 import {
   ScreenHeaderTexts,
   ServiceDisruptionsTexts,
@@ -11,6 +10,7 @@ import {
 import React, {forwardRef} from 'react';
 import {Linking, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
+import {Section} from '@atb/components/sections';
 
 type Props = {
   close: () => void;
@@ -35,11 +35,11 @@ export const ServiceDisruptionSheet = forwardRef<View, Props>(
           setFocusOnLoad={false}
         />
 
-        <Sections.Section withFullPadding>
+        <Section withFullPadding>
           <View ref={focusRef} accessible>
             <ThemeText>{t(ServiceDisruptionsTexts.body)}</ThemeText>
           </View>
-        </Sections.Section>
+        </Section>
 
         <FullScreenFooter>
           <Button

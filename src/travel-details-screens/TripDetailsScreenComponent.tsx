@@ -104,8 +104,8 @@ export const TripDetailsScreenComponent = ({
             : undefined
         }
         color={themeColor}
-        headerChildren={
-          <View style={{flexDirection: 'row'}}>
+        headerChildren={(focusRef?: React.MutableRefObject<null>) => (
+          <View style={{flexDirection: 'row'}} ref={focusRef} accessible={true}>
             <ThemeIcon
               svg={SvgDuration}
               style={{marginRight: 8}}
@@ -121,7 +121,7 @@ export const TripDetailsScreenComponent = ({
               {t(TripDetailsTexts.header.startEndTime(startEndTime))}
             </ThemeText>
           </View>
-        }
+        )}
       >
         {tripPatternLegs && (
           <CompactTravelDetailsMap

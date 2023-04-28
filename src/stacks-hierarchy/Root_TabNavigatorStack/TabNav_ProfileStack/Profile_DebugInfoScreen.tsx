@@ -1,5 +1,4 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import React, {useEffect, useState} from 'react';
@@ -30,9 +29,9 @@ import {useTravelSearchFiltersDebugOverride} from '@atb/stacks-hierarchy/Root_Ta
 import {useVehiclesInMapDebugOverride} from '@atb/mobility';
 import {DebugOverride} from './components/DebugOverride';
 import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
-import {useRealtimeMapDebugOverride} from '@atb/components/map/hooks/use-realtime-map-enabled';
+import {useRealtimeMapDebugOverride} from '@atb/components/map';
 import {useFromTravelSearchToTicketDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
-import {useMapDebugOverride} from '@atb/components/map/hooks/use-map-page';
+import {useMapDebugOverride} from '@atb/components/map';
 import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {useTipsAndInformationDebugOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information-enabled';
 import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
@@ -40,6 +39,14 @@ import {useFlexibleTransportDebugOverride} from '../TabNav_DashboardStack/Dashbo
 import {useFlexibleTransportDirectModeDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-flexible-transport-direct-mode-enabled';
 import {useFlexibleTransportEgressModeDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-flexible-transport-egress-mode-enabled';
 import {useFlexibleTransportAccessModeDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-flexible-transport-access-mode-enabled';
+import {
+  ExpandableSectionItem,
+  GenericSectionItem,
+  HeaderSectionItem,
+  LinkSectionItem,
+  Section,
+  ToggleSectionItem,
+} from '@atb/components/sections';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -139,67 +146,67 @@ export const Profile_DebugInfoScreen = () => {
       />
 
       <ScrollView testID="debugInfoScrollView">
-        <Sections.Section withPadding withTopPadding>
-          <Sections.ToggleSectionItem
+        <Section withPadding withTopPadding>
+          <ToggleSectionItem
             text="Toggle test-ID"
             value={showTestIds}
             onValueChange={(showTestIds) => {
               setPreference({showTestIds});
             }}
           />
-          <Sections.ToggleSectionItem
+          <ToggleSectionItem
             text="Display seconds in trip planner"
             value={debugShowSeconds}
             onValueChange={(debugShowSeconds) => {
               setPreference({debugShowSeconds});
             }}
           />
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text="Restart onboarding"
             onPress={() => {
               appDispatch({type: 'RESTART_ONBOARDING'});
             }}
           />
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text="Set mobile token onboarded to false"
             onPress={restartMobileTokenOnboarding}
           />
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text="Reset dismissed Global messages"
             onPress={resetDismissedGlobalMessages}
           />
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text="Copy link to customer in Firestore (staging)"
             icon="arrow-upleft"
             onPress={() => copyFirestoreLink()}
           />
 
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text="Force refresh id token"
             onPress={() => auth().currentUser?.getIdToken(true)}
           />
 
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text="Force refresh remote config"
             onPress={remoteConfig.refresh}
           />
 
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text="Reset feedback displayStats"
             onPress={() => storage.set('@ATB_feedback_display_stats', '')}
           />
 
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text="Reset frontpage favourite departures"
             onPress={() => storage.set('@ATB_user_frontpage_departures', '[]')}
           />
 
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text="Reset user map filters"
             onPress={() => storage.set('@ATB_user_map_filters', '')}
           />
 
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text="Reset has read filter onboarding"
             onPress={() =>
               storage.set(
@@ -208,7 +215,7 @@ export const Profile_DebugInfoScreen = () => {
               )
             }
           />
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text="Reset has read scooter onboarding"
             onPress={() =>
               storage.set(
@@ -217,95 +224,95 @@ export const Profile_DebugInfoScreen = () => {
               )
             }
           />
-        </Sections.Section>
-        <Sections.Section withPadding withTopPadding>
-          <Sections.HeaderSectionItem
+        </Section>
+        <Section withPadding withTopPadding>
+          <HeaderSectionItem
             text="Remote config override"
             subtitle="If undefined the value
         from Remote Config will be used. Needs reload of app after change."
           />
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             <DebugOverride
               description="Flexible transport enabled"
               override={flexibleTransportDebugOverride}
             />
-          </Sections.GenericSectionItem>
-          <Sections.GenericSectionItem>
+          </GenericSectionItem>
+          <GenericSectionItem>
             <DebugOverride
               description="Use Flexible on AccessMode"
               override={flexibleTransportAccessModeDebugOverride}
             />
-          </Sections.GenericSectionItem>
-          <Sections.GenericSectionItem>
+          </GenericSectionItem>
+          <GenericSectionItem>
             <DebugOverride
               description="Use Flexible on DirectMode"
               override={flexibleTransportDirectModeDebugOverride}
             />
-          </Sections.GenericSectionItem>
-          <Sections.GenericSectionItem>
+          </GenericSectionItem>
+          <GenericSectionItem>
             <DebugOverride
               description="Use Flexible on EgressMode"
               override={flexibleTransportEgressModeDebugOverride}
             />
-          </Sections.GenericSectionItem>
-          <Sections.GenericSectionItem>
+          </GenericSectionItem>
+          <GenericSectionItem>
             <DebugOverride
               description="Enable travel search filter."
               override={travelSearchDebugOverride}
             />
-          </Sections.GenericSectionItem>
-          <Sections.GenericSectionItem>
+          </GenericSectionItem>
+          <GenericSectionItem>
             <DebugOverride
               description="Enable new travel search."
               override={newTravelSearchDebugOverride}
             />
-          </Sections.GenericSectionItem>
-          <Sections.GenericSectionItem>
+          </GenericSectionItem>
+          <GenericSectionItem>
             <DebugOverride
               description="Enable from travel search to ticket purchase."
               override={fromTravelSearchToTicketDebugOverride}
             />
-          </Sections.GenericSectionItem>
-          <Sections.GenericSectionItem>
+          </GenericSectionItem>
+          <GenericSectionItem>
             <DebugOverride
               description="Enable vehicles in map."
               override={vehiclesInMapDebugOverride}
             />
-          </Sections.GenericSectionItem>
-          <Sections.GenericSectionItem>
+          </GenericSectionItem>
+          <GenericSectionItem>
             <DebugOverride
               description="Enable city bike stations in map."
               override={cityBikesInMapDebugOverride}
             />
-          </Sections.GenericSectionItem>
-          <Sections.GenericSectionItem>
+          </GenericSectionItem>
+          <GenericSectionItem>
             <DebugOverride
               description="Enable realtime positions in map."
               override={realtimeMapDebugOverride}
             />
-          </Sections.GenericSectionItem>
-          <Sections.GenericSectionItem>
+          </GenericSectionItem>
+          <GenericSectionItem>
             <DebugOverride
               description="Enable map"
               override={mapDebugOverride}
             />
-          </Sections.GenericSectionItem>
-          <Sections.GenericSectionItem>
+          </GenericSectionItem>
+          <GenericSectionItem>
             <DebugOverride
               description="Enable ticketing assistant"
               override={ticketingAssistantOverride}
             />
-          </Sections.GenericSectionItem>
-          <Sections.GenericSectionItem>
+          </GenericSectionItem>
+          <GenericSectionItem>
             <DebugOverride
               description="Enable tips and information for tickets"
               override={tipsAndInformationOverride}
             />
-          </Sections.GenericSectionItem>
-        </Sections.Section>
+          </GenericSectionItem>
+        </Section>
 
-        <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableSectionItem
+        <Section withPadding withTopPadding>
+          <ExpandableSectionItem
             text={'Trip search parameters'}
             showIconText={true}
             expandContent={
@@ -373,10 +380,10 @@ export const Profile_DebugInfoScreen = () => {
               </View>
             }
           />
-        </Sections.Section>
+        </Section>
 
-        <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableSectionItem
+        <Section withPadding withTopPadding>
+          <ExpandableSectionItem
             text="Firebase Auth user info"
             showIconText={true}
             expandContent={
@@ -387,10 +394,10 @@ export const Profile_DebugInfoScreen = () => {
               </View>
             }
           />
-        </Sections.Section>
+        </Section>
 
-        <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableSectionItem
+        <Section withPadding withTopPadding>
+          <ExpandableSectionItem
             text="Firebase Auth user claims"
             showIconText={true}
             expandContent={
@@ -405,10 +412,10 @@ export const Profile_DebugInfoScreen = () => {
               </View>
             }
           />
-        </Sections.Section>
+        </Section>
 
-        <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableSectionItem
+        <Section withPadding withTopPadding>
+          <ExpandableSectionItem
             text="Remote config"
             showIconText={true}
             expandContent={
@@ -427,10 +434,10 @@ export const Profile_DebugInfoScreen = () => {
               )
             }
           />
-        </Sections.Section>
+        </Section>
 
-        <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableSectionItem
+        <Section withPadding withTopPadding>
+          <ExpandableSectionItem
             text="Storage"
             showIconText={true}
             expandContent={
@@ -448,10 +455,10 @@ export const Profile_DebugInfoScreen = () => {
               </>
             }
           />
-        </Sections.Section>
+        </Section>
 
-        <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableSectionItem
+        <Section withPadding withTopPadding>
+          <ExpandableSectionItem
             text="Preferences"
             showIconText={true}
             expandContent={
@@ -475,10 +482,10 @@ export const Profile_DebugInfoScreen = () => {
               )
             }
           />
-        </Sections.Section>
+        </Section>
 
-        <Sections.Section withPadding withTopPadding>
-          <Sections.ExpandableSectionItem
+        <Section withPadding withTopPadding>
+          <ExpandableSectionItem
             text="Mobile token state"
             showIconText={true}
             expandContent={
@@ -529,7 +536,7 @@ export const Profile_DebugInfoScreen = () => {
                       onPress={renewToken}
                     />
                   )}
-                  <Sections.ExpandableSectionItem
+                  <ExpandableSectionItem
                     text="Remote tokens"
                     showIconText={true}
                     expandContent={remoteTokens?.map((token) => (
@@ -552,7 +559,7 @@ export const Profile_DebugInfoScreen = () => {
               )
             }
           />
-        </Sections.Section>
+        </Section>
       </ScrollView>
     </View>
   );
@@ -664,7 +671,7 @@ function LabeledSlider({
   const [pref, setPref] = useState(initialValue || defaultValue);
 
   return (
-    <Sections.GenericSectionItem>
+    <GenericSectionItem>
       <ThemeText
         onPress={
           defaultValue
@@ -686,7 +693,7 @@ function LabeledSlider({
         onValueChange={setPref}
         onSlidingComplete={onSetValue}
       />
-    </Sections.GenericSectionItem>
+    </GenericSectionItem>
   );
 }
 

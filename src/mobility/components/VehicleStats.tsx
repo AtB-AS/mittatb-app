@@ -21,7 +21,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
     flexShrink: 0,
     flexDirection: 'row',
-    padding: theme.spacings.medium,
+    paddingVertical: theme.spacings.medium,
   },
   vehicleStat: {
     flex: 1,
@@ -32,9 +32,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   // Hack until 'gap' is supported properly.
   // https://github.com/styled-components/styled-components/issues/3628
   vehicleStat__first: {
-    marginRight: theme.spacings.medium,
+    marginRight: theme.spacings.medium / 2,
   },
   vehicleStat__last: {
-    marginLeft: theme.spacings.medium,
+    marginLeft: theme.spacings.medium / 2,
   },
 }));

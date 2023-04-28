@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import * as Sections from '@atb/components/sections';
 import {Button} from '@atb/components/button';
 import {useAuthState} from '@atb/auth';
 import {
@@ -22,6 +21,7 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
 import {loginConfirmCodeInputId} from '@atb/test-ids';
+import {Section, TextInputSectionItem} from '@atb/components/sections';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -103,8 +103,8 @@ export const ConfirmCode = ({
               {t(LoginTexts.confirmCode.description(phoneNumber))}
             </ThemeText>
           </View>
-          <Sections.Section>
-            <Sections.TextInputSectionItem
+          <Section>
+            <TextInputSectionItem
               label={t(LoginTexts.confirmCode.input.label)}
               placeholder={t(LoginTexts.confirmCode.input.placeholder)}
               onChangeText={setCode}
@@ -116,7 +116,7 @@ export const ConfirmCode = ({
               autoFocus={true}
               testID={loginConfirmCodeInputId}
             />
-          </Sections.Section>
+          </Section>
           <View style={styles.buttonView}>
             {isLoading && (
               <ActivityIndicator

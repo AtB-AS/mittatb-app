@@ -1,4 +1,4 @@
-import * as RNLocalize from 'react-native-localize';
+import RNLocalize from 'react-native-localize';
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {Language} from '@atb/translations';
 import {usePreferences} from '@atb/preferences';
