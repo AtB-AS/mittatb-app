@@ -51,9 +51,9 @@ const NearbyTexts = {
       ),
     },
     locationButton: {
-      a11yLabel: _('Bruk min posisjon', 'Use my current location'),
+      a11yLabel: _('Bruk min posisjon', 'Use my location'),
     },
-    updatingLocation: _('Oppdaterer posisjon', 'Updating current location'),
+    updatingLocation: _('Oppdaterer posisjon', 'Updating location'),
   },
   dateInput: {
     departureNow: (time: string) =>
@@ -84,7 +84,7 @@ const NearbyTexts = {
   stateAnnouncements: {
     updatingLocation: _(
       'Oppdaterer posisjon for å finne avganger i nærheten.',
-      'Updating your current location to find nearby departures',
+      'Updating your location to find nearby departures',
     ),
     loadingFromCurrentLocation: _(
       'Laster avganger i nærheten av gjeldende posisjon',
