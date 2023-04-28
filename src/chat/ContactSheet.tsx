@@ -16,7 +16,7 @@ import {useChatUnreadCount} from './use-chat-unread-count';
 import Intercom from 'react-native-intercom';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {screenReaderHidden} from '@atb/utils/accessibility';
-import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import {ChatUnread} from '@atb/assets/svg/color/icons/actions';
 
 type Props = {
   close: () => void;
@@ -88,11 +88,7 @@ export const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
             }}
             icon={() =>
               unreadCount ? (
-                <ThemeIcon
-                  colorType="background_accent_3"
-                  svg={Chat}
-                  notification={{color: 'valid'}}
-                />
+                <ThemeIcon colorType="background_accent_3" svg={ChatUnread} />
               ) : (
                 <></>
               )
