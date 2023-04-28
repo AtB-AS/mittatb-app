@@ -26,6 +26,7 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
+import {useFlexibleTransportEnabled} from '../use-flexible-transport-enabled';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
@@ -40,6 +41,12 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
 
   const {setFilters} = useFilters();
   const [saveFilters, setSaveFilters] = useState(false);
+
+  const isFlexibleTransportEnabledInRemoteConfig =
+    useFlexibleTransportEnabled();
+  const [isFlexibleTransportEnabled, setFlexibleTranportState] = useState<
+    boolean | undefined
+  >(filtersSelection.flexibleTransport);
 
   const [selectedModes, setSelectedModes] = useState<
     TransportModeFilterOptionWithSelectionType[] | undefined
@@ -116,7 +123,31 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
             ) : null;
           })}
         </Section>
-        <Section style={styles.saveFiltersContainer}>
+
+        {isFlexibleTransportEnabledInRemoteConfig && (
+          <Section style={styles.sectionContainer}>
+            <ToggleSectionItem
+              text={t(TripSearchTexts.filters.selection.flexibleTransport)}
+              subtext={t(
+                TripSearchTexts.filters.selection.flexibleTransportDescription,
+              )}
+              infoChipLabel={t(TripSearchTexts.filters.selection.newFilter)}
+              value={isFlexibleTransportEnabled}
+              onValueChange={(checked) => {
+                if (checked) {
+                  setSelectedModes(
+                    selectedModes?.map((m) =>
+                      m.id === 'bus' ? {...m, selected: checked} : m,
+                    ),
+                  );
+                }
+                setFlexibleTranportState(checked);
+              }}
+            />
+          </Section>
+        )}
+
+        <Section style={styles.sectionContainer}>
           <GenericClickableSectionItem
             onPress={() => {
               setSaveFilters(!saveFilters);
@@ -159,7 +190,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
-  saveFiltersContainer: {
+  sectionContainer: {
     marginTop: theme.spacings.medium,
   },
   saveOptionSection: {

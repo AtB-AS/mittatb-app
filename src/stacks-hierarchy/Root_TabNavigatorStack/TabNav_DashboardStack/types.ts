@@ -41,4 +41,5 @@ export type TransportModeFilterOptionWithSelectionType =
 
 export type TravelSearchFiltersSelectionType = {
   transportModes?: TransportModeFilterOptionWithSelectionType[];
+  flexibleTransport?: boolean;
 };

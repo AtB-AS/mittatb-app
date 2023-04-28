@@ -9,10 +9,12 @@ import {useSectionStyle} from '../use-section-style';
 import {Toggle} from '@atb/components/toggle';
 import {InteractiveColor} from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
+import {InfoChip} from '@atb/components/info-chip';
 
 type Props = SectionItemProps<{
   text: string;
   subtext?: string;
+  infoChipLabel?: string;
   onValueChange: (checked: boolean) => void;
   value?: boolean;
   leftIcon?: (props: SvgProps) => JSX.Element;
@@ -22,6 +24,7 @@ type Props = SectionItemProps<{
 export function ToggleSectionItem({
   text,
   subtext,
+  infoChipLabel,
   onValueChange,
   leftIcon,
   value = false,
@@ -51,7 +54,7 @@ export function ToggleSectionItem({
 
   return (
     <View
-      style={[sectionStyle.spaceBetween, topContainer]}
+      style={topContainer}
       accessible={true}
       accessibilityRole="switch"
       accessibilityState={{checked: checked}}
@@ -59,27 +62,35 @@ export function ToggleSectionItem({
       onAccessibilityAction={() => onChange(!checked)}
       {...accessibility}
     >
-      {leftIcon && <ThemeIcon svg={leftIcon} style={styles.leftIcon} />}
-      <View style={styles.textContainer}>
-        <ThemeText>{text}</ThemeText>
-        {subtext && (
-          <ThemeText
-            type="body__secondary"
-            color="secondary"
-            style={styles.subtext}
-          >
-            {subtext}
-          </ThemeText>
+      <View style={sectionStyle.spaceBetween}>
+        {leftIcon && <ThemeIcon svg={leftIcon} style={styles.leftIcon} />}
+        <View style={styles.textContainer}>
+          <ThemeText>{text}</ThemeText>
+        </View>
+        {infoChipLabel && (
+          <InfoChip
+            text={infoChipLabel}
+            interactiveColor={interactiveColor ?? 'interactive_0'}
+          />
         )}
+        <Toggle
+          importantForAccessibility="no-hide-descendants"
+          accessible={false}
+          value={checked}
+          onValueChange={onChange}
+          testID={testID}
+          interactiveColor={interactiveColor}
+        />
       </View>
-      <Toggle
-        importantForAccessibility="no-hide-descendants"
-        accessible={false}
-        value={checked}
-        onValueChange={onChange}
-        testID={testID}
-        interactiveColor={interactiveColor}
-      />
+      {subtext && (
+        <ThemeText
+          type="body__secondary"
+          color="secondary"
+          style={styles.subtext}
+        >
+          {subtext}
+        </ThemeText>
+      )}
     </View>
   );
 }

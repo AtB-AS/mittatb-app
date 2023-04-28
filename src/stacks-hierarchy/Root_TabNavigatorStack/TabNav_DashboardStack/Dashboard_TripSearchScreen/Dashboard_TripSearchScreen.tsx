@@ -92,7 +92,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   });
 
   const filtersState = useTravelSearchFiltersState();
-  const isFlexibleTransportEnabled = useFlexibleTransportEnabled();
+  const isFlexibleTransportEnabledInRemoteConfig =
+    useFlexibleTransportEnabled();
 
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
     useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);
@@ -363,7 +364,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 resetTransportModes={filtersState.resetTransportModes}
               />
             )}
-            {isFlexibleTransportEnabled &&
+            {isFlexibleTransportEnabledInRemoteConfig &&
               tripPatterns.length > 0 &&
               !error && <CityZoneMessage from={from} to={to} />}
             <Results

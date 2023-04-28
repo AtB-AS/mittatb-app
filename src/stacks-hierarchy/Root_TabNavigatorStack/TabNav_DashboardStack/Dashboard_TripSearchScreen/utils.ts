@@ -49,25 +49,29 @@ export const useFindCityZonesInLocations = (
 export function useJourneyModes(
   defaultValue: StreetMode = StreetMode.Foot,
 ): Modes {
-  const flexibleTransportEnabled = useFlexibleTransportEnabled();
-  const flexibleTransportAccessModeEnabled =
+  const isFlexibleTransportEnabledInRemoteConfig =
+    useFlexibleTransportEnabled();
+  const flexibleTransportAccessModeEnabledInRemoteConfig =
     useFlexibleTransportAccessModeEnabled();
-  const flexibleTransportDirectModeEnabled =
+  const flexibleTransportDirectModeEnabledInRemoteConfig =
     useFlexibleTransportDirectModeEnabled();
-  const flexibleTransportEgressModeEnabled =
+  const flexibleTransportEgressModeEnabledInRemoteConfig =
     useFlexibleTransportEgressModeEnabled();
 
   return {
     accessMode:
-      flexibleTransportEnabled && flexibleTransportAccessModeEnabled
+      isFlexibleTransportEnabledInRemoteConfig &&
+      flexibleTransportAccessModeEnabledInRemoteConfig
         ? StreetMode.Flexible
         : defaultValue,
     directMode:
-      flexibleTransportEnabled && flexibleTransportDirectModeEnabled
+      isFlexibleTransportEnabledInRemoteConfig &&
+      flexibleTransportDirectModeEnabledInRemoteConfig
         ? StreetMode.Flexible
         : defaultValue,
     egressMode:
-      flexibleTransportEnabled && flexibleTransportEgressModeEnabled
+      isFlexibleTransportEnabledInRemoteConfig &&
+      flexibleTransportEgressModeEnabledInRemoteConfig
         ? StreetMode.Flexible
         : defaultValue,
   };

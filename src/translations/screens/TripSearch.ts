@@ -265,6 +265,15 @@ const TripSearchTexts = {
           `${selected} av ${total} transportmidler er valgt`,
           `${selected} of ${total} transportation modes are selected`,
         ),
+      newFilter: _('Ny', 'New'),
+      flexibleTransport: _(
+        'Tips om Fleksibel transport',
+        'Tips for Flexible transport',
+      ),
+      flexibleTransportDescription: _(
+        'Vis tips om bestillingstransport som kjøres fra adresse til adresse i Steinkjer, Verdal, Rørs og Overhalla.',
+        'Show tips about ordered transport that is driven from address to address in Steinkjer, Verdal, Rørs and Overhalla.',
+      ),
       a11yLabelPrefix: _('Filter: ', 'Filter: '),
       a11yHint: _('Aktiver for å fjerne filter.', 'Activate to remove filter.'),
     },
