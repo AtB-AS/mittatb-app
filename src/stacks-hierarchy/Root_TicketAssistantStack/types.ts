@@ -31,7 +31,7 @@ export type RecommendedTicketResponse = {
   single_ticket_price: number;
 };
 
-export type PurchaseDetails = {
+export type RecommendedTicketSummary = {
   tariffZones: TariffZoneWithMetadata[];
   userProfileWithCount: UserProfileWithCount[];
   fareProductTypeConfig: FareProductTypeConfig;

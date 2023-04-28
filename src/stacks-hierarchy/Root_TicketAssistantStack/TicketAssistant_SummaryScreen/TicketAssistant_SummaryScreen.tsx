@@ -21,7 +21,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
-  let {loading, inputParams, purchaseDetails, error} =
+  let {loading, inputParams, recommendedTicketSummary, error} =
     useTicketAssistantState();
 
   const openContactSheet = () => {
@@ -51,19 +51,19 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   );
 
   const doesTicketCoverEntirePeriod =
-    purchaseDetails && inputParams.duration
-      ? purchaseDetails.ticket.duration < inputParams.duration &&
-        purchaseDetails.ticket.duration !== 0
+    recommendedTicketSummary && inputParams.duration
+      ? recommendedTicketSummary.ticket.duration < inputParams.duration &&
+        recommendedTicketSummary.ticket.duration !== 0
       : false;
 
   const onBuyButtonPress = () => {
-    if (!purchaseDetails) return;
+    if (!recommendedTicketSummary) return;
     navigation.navigate('Root_PurchaseConfirmationScreen', {
-      fareProductTypeConfig: purchaseDetails.fareProductTypeConfig,
-      fromTariffZone: purchaseDetails.tariffZones[0],
-      toTariffZone: purchaseDetails.tariffZones[1],
-      userProfilesWithCount: purchaseDetails.userProfileWithCount,
-      preassignedFareProduct: purchaseDetails.preassignedFareProduct,
+      fareProductTypeConfig: recommendedTicketSummary.fareProductTypeConfig,
+      fromTariffZone: recommendedTicketSummary.tariffZones[0],
+      toTariffZone: recommendedTicketSummary.tariffZones[1],
+      userProfilesWithCount: recommendedTicketSummary.userProfileWithCount,
+      preassignedFareProduct: recommendedTicketSummary.preassignedFareProduct,
       travelDate: undefined,
       headerLeftButton: {type: 'back'},
       mode: 'Ticket',

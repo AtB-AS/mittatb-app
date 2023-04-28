@@ -4,7 +4,7 @@ import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewS
 import {PreassignedFareProduct, UserProfile} from '@atb/reference-data/types';
 import {TariffZone} from '@entur/sdk/lib/nsr/types';
 import {
-  PurchaseDetails,
+  RecommendedTicketSummary,
   RecommendedTicketResponse,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {getLongestDurationTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
@@ -22,7 +22,8 @@ export function handleRecommendedTicketResponse(
   );
   // TariffZones
   const tariffZonesWithMetaData = response.zones.map(
-    (zone) => getTariffZone(tariffZones, zone) as TariffZoneWithMetadata,
+    (zoneId) =>
+      tariffZones.find((z) => z.id === zoneId) as TariffZoneWithMetadata,
   );
 
   const travellerWithCount: UserProfileWithCount | undefined = {
@@ -45,7 +46,7 @@ export function handleRecommendedTicketResponse(
 
   if (!ticket || !preAssignedFareProduct || !fareProductTypeConfig) return;
 
-  let purchaseDetailsData: PurchaseDetails = {
+  let purchaseDetailsData: RecommendedTicketSummary = {
     tariffZones: tariffZonesWithMetaData,
     userProfileWithCount: [travellerWithCount],
     preassignedFareProduct: preAssignedFareProduct,
@@ -67,14 +68,4 @@ function getUserProfile(
     return profile;
   }
   return profiles[0];
-}
-function getTariffZone(
-  zones: TariffZone[],
-  zoneId: string,
-): TariffZone | undefined {
-  const zone = zones.find((zone) => zone.id === zoneId);
-  if (zone) {
-    return zone;
-  }
-  return undefined;
 }

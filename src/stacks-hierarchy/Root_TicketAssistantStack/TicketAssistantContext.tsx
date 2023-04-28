@@ -1,7 +1,7 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {
-  PurchaseDetails,
+  RecommendedTicketSummary,
   TicketAssistantData,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {getRecommendedTicket} from '@atb/api/getRecommendedTicket';
@@ -10,7 +10,7 @@ import {handleRecommendedTicketResponse} from '@atb/stacks-hierarchy/Root_Ticket
 type TicketAssistantState = {
   inputParams: TicketAssistantData;
   updateInputParams: (newData: TicketAssistantData) => void;
-  purchaseDetails?: PurchaseDetails;
+  recommendedTicketSummary?: RecommendedTicketSummary;
   loading: boolean;
   error: boolean;
 };
@@ -36,10 +36,11 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
     traveller: undefined,
     duration: undefined,
     zones: undefined,
-    preassigned_fare_products: preassignedFareProductsIds ?? [],
+    preassignedFareProducts: preassignedFareProductsIds ?? [],
   });
 
-  const [purchaseDetails, setPurchaseDetails] = useState<PurchaseDetails>();
+  const [recommendedTicketSummary, setRecommendedTicketSummary] =
+    useState<RecommendedTicketSummary>();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const updateInputParams = (newData: TicketAssistantData) => {
@@ -59,7 +60,7 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
       setLoading(true);
       getRecommendedTicket(inputParams)
         .then((r) => {
-          setPurchaseDetails(
+          setRecommendedTicketSummary(
             handleRecommendedTicketResponse(
               r,
               tariffZones,
@@ -89,7 +90,7 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
       value={{
         inputParams,
         updateInputParams,
-        purchaseDetails,
+        recommendedTicketSummary,
         loading,
         error,
       }}

@@ -24,20 +24,23 @@ export const TicketSummary = () => {
   const {theme} = useTheme();
   const interactiveColor = theme.interactive[interactiveColorName];
 
-  const {purchaseDetails, inputParams} = useTicketAssistantState();
-  if (!purchaseDetails) return null;
+  const {recommendedTicketSummary, inputParams} = useTicketAssistantState();
+  if (!recommendedTicketSummary) return null;
   const frequency = inputParams.frequency ?? 1;
-  const ticket = purchaseDetails.ticket;
+  const ticket = recommendedTicketSummary.ticket;
 
-  const recommendedTicketTypeConfig = purchaseDetails.fareProductTypeConfig;
-  const preassignedFareProduct = purchaseDetails.preassignedFareProduct;
+  const recommendedTicketTypeConfig =
+    recommendedTicketSummary.fareProductTypeConfig;
+  const preassignedFareProduct =
+    recommendedTicketSummary.preassignedFareProduct;
 
-  const traveller = purchaseDetails?.userProfileWithCount[0];
+  const traveller = recommendedTicketSummary?.userProfileWithCount[0];
 
   const ticketName =
     getReferenceDataName(preassignedFareProduct, language) ?? '';
   const travellerName = getReferenceDataName(traveller, language);
-  const [fromTariffZone, toTariffZone] = purchaseDetails.tariffZones ?? [];
+  const [fromTariffZone, toTariffZone] =
+    recommendedTicketSummary.tariffZones ?? [];
 
   const zonesString = `${fromTariffZone.name?.value}${
     fromTariffZone.name !== toTariffZone.name
@@ -48,7 +51,7 @@ export const TicketSummary = () => {
   const savings = calculateSavings(
     ticket.price,
     calculateSingleTickets(ticket.duration, frequency) *
-      purchaseDetails.singleTicketPrice,
+      recommendedTicketSummary.singleTicketPrice,
   );
 
   const ticketPriceString = `${ticket.price.toFixed(2)}kr`;
