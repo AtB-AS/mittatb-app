@@ -66,7 +66,6 @@ const dictionary = {
     m: _('m', 'm'),
   },
   messageTypes: {
-    default: _('Til beskjed', 'Message'),
     info: _('Til info', 'Info'),
     warning: _('Advarsel', 'Warning'),
     valid: _('Suksess', 'Success'),
