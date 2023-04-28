@@ -20,7 +20,7 @@ import {
 
 type GlobalMessageContextState = {
   findGlobalMessages: (
-    context?: GlobalMessageContextType,
+    context: GlobalMessageContextType | 'all',
   ) => GlobalMessageType[];
   dismissedGlobalMessages: GlobalMessageType[];
   addDismissedGlobalMessages: (dismissedMessage: GlobalMessageType) => void;
@@ -101,11 +101,9 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   };
 
   const findGlobalMessages = useCallback(
-    (context?: GlobalMessageContextType) => {
-      if (!context) {
-        return globalMessages.filter((a) =>
-          a.context.some((cont) => cont.includes('app')),
-        );
+    (context: GlobalMessageContextType | 'all') => {
+      if (context === 'all') {
+        return globalMessages;
       }
       return globalMessages.filter((a) =>
         a.context.find((cont) => cont === context),

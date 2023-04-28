@@ -3,7 +3,7 @@ import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
 const ServiceDisruptionsTexts = {
   header: {
-    title: _('Driftsavvik', 'Service disruptions'),
+    title: _('Statusmeldinger', 'Status messages'),
   },
   body: _(
     'Fullstendig oversikt over endringer, forsinkelser og avvik finner du på våre nettsider:',

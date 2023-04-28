@@ -12,15 +12,15 @@ import {useNow} from '@atb/utils/use-now';
 import {isWithinTimeRange} from '@atb/global-messages/is-within-time-range';
 
 type Props = {
-  globalMessageContext?: GlobalMessageContextType;
+  globalMessageContext: GlobalMessageContextType | 'all';
   style?: StyleProp<ViewStyle>;
-  showAllMessages?: boolean;
+  includeDismissed?: boolean;
 };
 
 const GlobalMessage = ({
   globalMessageContext,
   style,
-  showAllMessages = false,
+  includeDismissed,
 }: Props) => {
   const {language} = useTranslation();
   const now = useNow(2500);
@@ -30,15 +30,7 @@ const GlobalMessage = ({
     addDismissedGlobalMessages,
   } = useGlobalMessagesState();
 
-  const globalMessages = showAllMessages
-    ? findGlobalMessages()
-    : globalMessageContext
-    ? findGlobalMessages(globalMessageContext)
-    : [];
-
-  if (globalMessages.length === 0 && !showAllMessages) {
-    return null;
-  }
+  const globalMessages = findGlobalMessages(globalMessageContext);
 
   const dismissGlobalMessage = (globalMessage: GlobalMessageType) => {
     globalMessage.isDismissable && addDismissedGlobalMessages(globalMessage);
@@ -51,7 +43,7 @@ const GlobalMessage = ({
     <>
       {globalMessages
         .filter((gm: GlobalMessageType) => {
-          return showAllMessages || isNotADismissedMessage(gm);
+          return includeDismissed || isNotADismissedMessage(gm);
         })
         .filter((gm) => isWithinTimeRange(gm, now))
         .map((globalMessage: GlobalMessageType) => {
@@ -66,7 +58,7 @@ const GlobalMessage = ({
               type={globalMessage.type}
               isMarkdown={true}
               onDismiss={
-                globalMessage.isDismissable && !showAllMessages
+                globalMessage.isDismissable && !includeDismissed
                   ? () => dismissGlobalMessage(globalMessage)
                   : undefined
               }

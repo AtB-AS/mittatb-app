@@ -9,7 +9,6 @@ import {isWithinTimeRange} from '@atb/global-messages/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
 import {ServiceDisruptionSheet} from '@atb/service-disruptions/ServiceDisruptionSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export const useServiceDisruptionIcon = (
   color?: StaticColor | TextColor,
@@ -18,23 +17,15 @@ export const useServiceDisruptionIcon = (
   const {t} = useTranslation();
   const {findGlobalMessages} = useGlobalMessagesState();
   const {open: openBottomSheet} = useBottomSheet();
-  const {service_disruption_url} = useRemoteConfig();
-  const hasValidServiceDisruptionUrl = !!service_disruption_url;
   const now = useNow(2500);
 
-  if (!hasValidServiceDisruptionUrl) return undefined;
-
-  const globalMessages = findGlobalMessages()
-    .filter((a) => a.context.some((cont) => cont.includes('app')))
-    .filter((gm) => isWithinTimeRange(gm, now));
+  const globalMessages = findGlobalMessages('all').filter((gm) =>
+    isWithinTimeRange(gm, now),
+  );
 
   const openServiceDisruptionSheet = () => {
     openBottomSheet((close, focusRef) => (
-      <ServiceDisruptionSheet
-        close={close}
-        serviceDisruptionUrl={service_disruption_url}
-        ref={focusRef}
-      />
+      <ServiceDisruptionSheet close={close} ref={focusRef} />
     ));
   };
 

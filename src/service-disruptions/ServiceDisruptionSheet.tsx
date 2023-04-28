@@ -1,6 +1,5 @@
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
-import {FullScreenFooter} from '@atb/components/screen-footer';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import * as Sections from '@atb/components/sections';
 import {
@@ -14,15 +13,18 @@ import {ThemeText} from '@atb/components/text';
 import {GlobalMessage} from '@atb/global-messages';
 import {StyleSheet} from '@atb/theme';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {FullScreenFooter} from '@atb/components/screen-footer';
 
 type Props = {
   close: () => void;
-  serviceDisruptionUrl: string;
 };
 
 export const ServiceDisruptionSheet = forwardRef<View, Props>(
-  ({close, serviceDisruptionUrl}, focusRef) => {
+  ({close}, focusRef) => {
     const {t} = useTranslation();
+    const {service_disruption_url} = useRemoteConfig();
+    const hasValidServiceDisruptionUrl = true;
     const style = useStyle();
 
     return (
@@ -38,30 +40,34 @@ export const ServiceDisruptionSheet = forwardRef<View, Props>(
           color={'background_1'}
           setFocusOnLoad={false}
         />
-        <GlobalMessage
-          style={style.globalMessages}
-          globalMessageContext="app-assistant"
-          showAllMessages={true}
-        />
-        <Sections.Section style={style.serviceDisruptionText}>
-          <View ref={focusRef} accessible>
-            <ThemeText>{t(ServiceDisruptionsTexts.body)}</ThemeText>
-          </View>
-        </Sections.Section>
-
         <FullScreenFooter>
-          <Button
-            interactiveColor="interactive_3"
-            mode="secondary"
-            text={t(ServiceDisruptionsTexts.button.text)}
-            accessibilityHint={t(ServiceDisruptionsTexts.button.a11yHint)}
-            rightIcon={{svg: ExternalLink}}
-            onPress={() => {
-              Linking.openURL(serviceDisruptionUrl);
-              close();
-            }}
-            testID="navigateToServiceDisruptions"
+          <GlobalMessage
+            style={style.globalMessages}
+            globalMessageContext="app-assistant"
+            includeDismissed={true}
           />
+
+          {hasValidServiceDisruptionUrl && (
+            <>
+              <Sections.Section style={style.serviceDisruptionText}>
+                <View ref={focusRef} accessible>
+                  <ThemeText>{t(ServiceDisruptionsTexts.body)}</ThemeText>
+                </View>
+              </Sections.Section>
+              <Button
+                interactiveColor="interactive_3"
+                mode="secondary"
+                text={t(ServiceDisruptionsTexts.button.text)}
+                accessibilityHint={t(ServiceDisruptionsTexts.button.a11yHint)}
+                rightIcon={{svg: ExternalLink}}
+                onPress={() => {
+                  Linking.openURL(service_disruption_url);
+                  close();
+                }}
+                testID="navigateToServiceDisruptions"
+              />
+            </>
+          )}
         </FullScreenFooter>
       </BottomSheetContainer>
     );
@@ -70,11 +76,9 @@ export const ServiceDisruptionSheet = forwardRef<View, Props>(
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   globalMessages: {
-    marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
   serviceDisruptionText: {
-    marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
 }));
