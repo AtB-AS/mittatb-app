@@ -12,7 +12,7 @@ import {useNow} from '@atb/utils/use-now';
 import {isWithinTimeRange} from '@atb/global-messages/is-within-time-range';
 
 type Props = {
-  globalMessageContext: GlobalMessageContextType | 'all';
+  globalMessageContext?: GlobalMessageContextType | 'all';
   style?: StyleProp<ViewStyle>;
   includeDismissed?: boolean;
 };
@@ -29,6 +29,8 @@ const GlobalMessage = ({
     dismissedGlobalMessages,
     addDismissedGlobalMessages,
   } = useGlobalMessagesState();
+
+  if (!globalMessageContext) return null;
 
   const globalMessages = findGlobalMessages(globalMessageContext);
 
