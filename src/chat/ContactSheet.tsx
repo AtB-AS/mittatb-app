@@ -101,7 +101,6 @@ export const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
 type ContactProps = {
   onPress: () => void;
   icon?: () => JSX.Element;
-  title?: string;
   body: string;
   buttonText: string;
   accessibilityHint: string;
