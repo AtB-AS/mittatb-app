@@ -68,7 +68,6 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({from, to}) => {
     (cityZone) =>
       ({
         text: cityZone.name,
-        type: 'button',
         onPress: () => openUrlForCityZone(cityZone),
       } as ActionButton),
   );
