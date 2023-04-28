@@ -2,13 +2,13 @@ import React, {RefObject, useRef} from 'react';
 import {FeatureCollection, GeoJSON} from 'geojson';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import MapboxGL from '@rnmapbox/maps';
-import {MapSelectionActionType} from '@atb/components/map/types';
+import {MapSelectionActionType} from '../../types';
 import {
   flyToLocation,
   isClusterFeature,
   isFeaturePoint,
   toCoordinates,
-} from '@atb/components/map/utils';
+} from '../../utils';
 import {getStaticColor} from '@atb/theme/colors';
 import {useTheme} from '@atb/theme';
 

@@ -3,7 +3,6 @@ import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {useAuthState} from '@atb/auth';
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import * as Sections from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
@@ -16,6 +15,7 @@ import React, {useEffect, useState} from 'react';
 import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from './navigation-types';
+import {LinkSectionItem, Section} from '@atb/components/sections';
 
 type DeleteProfileScreenProps =
   ProfileScreenProps<'Profile_DeleteProfileScreen'>;
@@ -91,8 +91,8 @@ export const Profile_DeleteProfileScreen = ({
           />
         )}
 
-        <Sections.Section withPadding>
-          <Sections.LinkSectionItem
+        <Section withPadding>
+          <LinkSectionItem
             subtitle={`${customerNumber}`}
             text={t(DeleteProfileTexts.customerNumber)}
             accessibility={{
@@ -104,7 +104,7 @@ export const Profile_DeleteProfileScreen = ({
             disabled={activeFareContracts}
             icon={<ThemeIcon svg={Delete} colorType="error" />}
           />
-        </Sections.Section>
+        </Section>
       </ScrollView>
     </View>
   );

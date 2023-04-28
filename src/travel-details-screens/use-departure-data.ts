@@ -80,7 +80,7 @@ export function useDepartureData(
     [activeItem],
   );
 
-  const [data, isLoading] = usePollableResource<DepartureData>(getService, {
+  const [data, , isLoading] = usePollableResource<DepartureData>(getService, {
     initialValue: {
       estimatedCallsWithMetadata: [],
       situations: [],

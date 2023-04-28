@@ -16,12 +16,12 @@ import {Linking, TouchableOpacity, View} from 'react-native';
 import {InfoLinkFragment} from '@atb/api/types/generated/fragments/shared';
 import {StyleSheet} from '@atb/theme';
 import {SituationType} from './types';
-import * as Sections from '@atb/components/sections';
 import {SituationOrNoticeIcon} from './SituationOrNoticeIcon';
 import {daysBetween, formatToLongDateTime} from '@atb/utils/date';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 import {screenReaderPause} from '@atb/components/text';
+import {GenericSectionItem, Section} from '@atb/components/sections';
 
 type Props = {
   situation: SituationType;
@@ -53,8 +53,8 @@ export const SituationBottomSheet = forwardRef<View, Props>(
 
         <ScrollView centerContent={true}>
           <View>
-            <Sections.Section style={styles.section}>
-              <Sections.GenericSectionItem type="spacious">
+            <Section style={styles.section}>
+              <GenericSectionItem type="spacious">
                 <View
                   accessibilityLabel={[summary, description, advice].join(
                     screenReaderPause,
@@ -104,8 +104,8 @@ export const SituationBottomSheet = forwardRef<View, Props>(
                     </ThemeText>
                   </View>
                 )}
-              </Sections.GenericSectionItem>
-            </Sections.Section>
+              </GenericSectionItem>
+            </Section>
           </View>
         </ScrollView>
         <FullScreenFooter>

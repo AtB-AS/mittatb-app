@@ -1,7 +1,6 @@
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import * as Sections from '@atb/components/sections';
 import {
   ScreenHeaderTexts,
   ServiceDisruptionsTexts,
@@ -10,6 +9,7 @@ import {
 import React, {forwardRef} from 'react';
 import {Linking, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
+import {Section} from '@atb/components/sections';
 import {GlobalMessage} from '@atb/global-messages';
 import {StyleSheet} from '@atb/theme';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
@@ -34,7 +34,7 @@ export const ServiceDisruptionSheet = forwardRef<View, Props>(
           leftButton={{
             type: 'cancel',
             onPress: close,
-            text: t(ScreenHeaderTexts.headerButton.cancel.text),
+            text: t(ScreenHeaderTexts.headerButton.close.text),
             testID: 'cancelButton',
           }}
           color={'background_1'}
@@ -49,11 +49,11 @@ export const ServiceDisruptionSheet = forwardRef<View, Props>(
 
           {hasValidServiceDisruptionUrl && (
             <>
-              <Sections.Section style={style.serviceDisruptionText}>
+              <Section style={style.serviceDisruptionText}>
                 <View ref={focusRef} accessible>
                   <ThemeText>{t(ServiceDisruptionsTexts.body)}</ThemeText>
                 </View>
-              </Sections.Section>
+              </Section>
               <Button
                 interactiveColor="interactive_3"
                 mode="secondary"

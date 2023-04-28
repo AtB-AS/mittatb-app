@@ -274,8 +274,8 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
               orderId: string,
             ) => {
               if (isCarnet) {
-                return navigation.navigate('FareContractModal', {
-                  screen: 'CarnetDetailsScreen',
+                return navigation.navigate({
+                  name: 'Root_CarnetDetailsScreen',
                   params: {
                     orderId,
                     isInspectable,
@@ -283,8 +283,8 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
                 });
               }
 
-              return navigation.navigate('FareContractModal', {
-                screen: 'FareContractDetails',
+              return navigation.navigate({
+                name: 'Root_FareContractDetailsScreen',
                 params: {orderId},
               });
             }}

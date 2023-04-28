@@ -6,9 +6,9 @@ import {
   PurchaseOverviewTexts,
   getTextForLanguage,
 } from '@atb/translations';
-import * as Sections from '../../../../components/sections';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {usePreferences} from '@atb/preferences';
+import {RadioGroupSection, Section} from '@atb/components/sections';
 
 export function SingleTravellerSelection({
   userProfilesWithCount,
@@ -38,8 +38,8 @@ export function SingleTravellerSelection({
   }
 
   return (
-    <Sections.Section>
-      <Sections.RadioGroupSection<UserProfileWithCount>
+    <Section>
+      <RadioGroupSection<UserProfileWithCount>
         items={userProfilesWithCount}
         keyExtractor={(u) => u.userTypeString}
         itemToText={(u) => getReferenceDataName(u, language)}
@@ -50,6 +50,6 @@ export function SingleTravellerSelection({
         color="interactive_2"
         accessibilityHint={t(PurchaseOverviewTexts.travellerSelection.a11yHint)}
       />
-    </Sections.Section>
+    </Section>
   );
 }

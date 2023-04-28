@@ -7,7 +7,6 @@ import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overl
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
-import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {LoginInAppStackParams} from '@atb/login/types';
@@ -45,6 +44,13 @@ import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
 import {useIsLoading} from '@atb/utils/use-is-loading';
 import {useDeparturesV2Enabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
+import {
+  GenericSectionItem,
+  HeaderSectionItem,
+  LinkSectionItem,
+  Section,
+  ToggleSectionItem,
+} from '@atb/components/sections';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -139,22 +145,22 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
         testID="profileHomeScrollView"
       >
         {enable_login ? (
-          <Sections.Section withPadding>
-            <Sections.HeaderSectionItem
+          <Section withPadding>
+            <HeaderSectionItem
               text={t(ProfileTexts.sections.account.heading)}
             />
             {authenticationType === 'phone' && (
-              <Sections.GenericSectionItem>
+              <GenericSectionItem>
                 <ThemeText style={style.customerNumberHeading}>
                   {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
                 </ThemeText>
                 <ThemeText type="body__secondary" color="secondary">
                   {phoneNumber?.formatInternational()}
                 </ThemeText>
-              </Sections.GenericSectionItem>
+              </GenericSectionItem>
             )}
             {customerNumber && (
-              <Sections.GenericSectionItem>
+              <GenericSectionItem>
                 <ThemeText style={style.customerNumberHeading}>
                   {t(ProfileTexts.sections.account.infoItems.customerNumber)}
                 </ThemeText>
@@ -167,11 +173,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 >
                   {customerNumber}
                 </ThemeText>
-              </Sections.GenericSectionItem>
+              </GenericSectionItem>
             )}
 
             {authenticationType == 'phone' && (
-              <Sections.LinkSectionItem
+              <LinkSectionItem
                 text={t(
                   ProfileTexts.sections.account.linkSectionItems.paymentOptions
                     .label,
@@ -182,7 +188,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               />
             )}
 
-            <Sections.LinkSectionItem
+            <LinkSectionItem
               text={t(
                 ProfileTexts.sections.account.linkSectionItems.ticketHistory
                   .label,
@@ -191,7 +197,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               testID="ticketHistoryButton"
             />
             {authenticationType !== 'phone' && (
-              <Sections.LinkSectionItem
+              <LinkSectionItem
                 text={t(
                   ProfileTexts.sections.account.linkSectionItems.login.label,
                 )}
@@ -221,7 +227,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               />
             )}
             {authenticationType === 'phone' && (
-              <Sections.LinkSectionItem
+              <LinkSectionItem
                 text={t(DeleteProfileTexts.header.title)}
                 onPress={() =>
                   navigation.navigate('Profile_DeleteProfileScreen')
@@ -229,7 +235,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               />
             )}
             {authenticationType === 'phone' && (
-              <Sections.LinkSectionItem
+              <LinkSectionItem
                 text={t(
                   ProfileTexts.sections.account.linkSectionItems.logout.label,
                 )}
@@ -274,14 +280,12 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 testID="logoutButton"
               />
             )}
-          </Sections.Section>
+          </Section>
         ) : null}
-        <Sections.Section withPadding>
-          <Sections.HeaderSectionItem
-            text={t(ProfileTexts.sections.settings.heading)}
-          />
+        <Section withPadding>
+          <HeaderSectionItem text={t(ProfileTexts.sections.settings.heading)} />
           {enable_ticketing ? (
-            <Sections.LinkSectionItem
+            <LinkSectionItem
               text={t(
                 ProfileTexts.sections.settings.linkSectionItems.userProfile
                   .label,
@@ -294,7 +298,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           ) : null}
 
           {authenticationType === 'phone' && hasEnabledMobileToken && (
-            <Sections.LinkSectionItem
+            <LinkSectionItem
               text={t(
                 ProfileTexts.sections.settings.linkSectionItems.travelToken
                   .label,
@@ -307,14 +311,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               testID="travelTokenButton"
             />
           )}
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text={t(
               ProfileTexts.sections.settings.linkSectionItems.appearance.label,
             )}
             onPress={() => navigation.navigate('Profile_AppearanceScreen')}
             testID="appearanceButton"
           />
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text={t(
               ProfileTexts.sections.settings.linkSectionItems.startScreen.label,
             )}
@@ -324,7 +328,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             testID="startScreenButton"
           />
           {enable_i18n && (
-            <Sections.LinkSectionItem
+            <LinkSectionItem
               text={t(
                 ProfileTexts.sections.settings.linkSectionItems.language.label,
               )}
@@ -332,9 +336,9 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               testID="languageButton"
             />
           )}
-        </Sections.Section>
-        <Sections.Section withPadding>
-          <Sections.GenericSectionItem>
+        </Section>
+        <Section withPadding>
+          <GenericSectionItem>
             <View style={style.betaSectionHeader}>
               <ThemeText type="heading__component">
                 {t(ProfileTexts.sections.newFeatures.heading)}
@@ -348,27 +352,27 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 </ThemeText>
               </View>
             </View>
-          </Sections.GenericSectionItem>
-          <Sections.ToggleSectionItem
+          </GenericSectionItem>
+          <ToggleSectionItem
             text={t(ProfileTexts.sections.newFeatures.departures)}
             value={isDeparturesV2Enabled}
             onValueChange={setDeparturesV2Enabled}
             testID="newDeparturesToggle"
           />
 
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text={t(
               ProfileTexts.sections.settings.linkSectionItems.enrollment.label,
             )}
             onPress={() => navigation.navigate('Profile_EnrollmentScreen')}
             testID="invitationCodeButton"
           />
-        </Sections.Section>
-        <Sections.Section withPadding>
-          <Sections.HeaderSectionItem
+        </Section>
+        <Section withPadding>
+          <HeaderSectionItem
             text={t(ProfileTexts.sections.favorites.heading)}
           />
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text={t(
               ProfileTexts.sections.favorites.linkSectionItems.places.label,
             )}
@@ -381,7 +385,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             testID="favoriteLocationsButton"
             onPress={() => navigation.navigate('Profile_FavoriteListScreen')}
           />
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text={t(
               ProfileTexts.sections.favorites.linkSectionItems.departures.label,
             )}
@@ -396,12 +400,10 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               navigation.navigate('Profile_FavoriteDeparturesScreen')
             }
           />
-        </Sections.Section>
-        <Sections.Section withPadding>
-          <Sections.HeaderSectionItem
-            text={t(ProfileTexts.sections.privacy.heading)}
-          />
-          <Sections.LinkSectionItem
+        </Section>
+        <Section withPadding>
+          <HeaderSectionItem text={t(ProfileTexts.sections.privacy.heading)} />
+          <LinkSectionItem
             text={t(
               ProfileTexts.sections.privacy.linkSectionItems.privacy.label,
             )}
@@ -414,7 +416,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             testID="privacyButton"
             onPress={() => Linking.openURL(privacy_policy_url)}
           />
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text={t(
               ProfileTexts.sections.privacy.linkSectionItems.clearHistory.label,
             )}
@@ -446,14 +448,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               })
             }
           />
-        </Sections.Section>
+        </Section>
         {enable_ticketing && (
-          <Sections.Section withPadding>
-            <Sections.HeaderSectionItem
+          <Section withPadding>
+            <HeaderSectionItem
               text={t(ProfileTexts.sections.information.heading)}
             />
             {ticketingInfoUrl ? (
-              <Sections.LinkSectionItem
+              <LinkSectionItem
                 icon={<ThemeIcon svg={ExternalLink} />}
                 text={t(
                   ProfileTexts.sections.information.linkSectionItems.ticketing
@@ -463,7 +465,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 onPress={() => Linking.openURL(ticketingInfoUrl)}
               />
             ) : (
-              <Sections.LinkSectionItem
+              <LinkSectionItem
                 text={t(
                   ProfileTexts.sections.information.linkSectionItems.ticketing
                     .label,
@@ -479,7 +481,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               />
             )}
             {termsInfoUrl ? (
-              <Sections.LinkSectionItem
+              <LinkSectionItem
                 icon={<ThemeIcon svg={ExternalLink} />}
                 text={t(
                   ProfileTexts.sections.information.linkSectionItems.terms
@@ -489,7 +491,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 onPress={() => Linking.openURL(termsInfoUrl)}
               />
             ) : (
-              <Sections.LinkSectionItem
+              <LinkSectionItem
                 text={t(
                   ProfileTexts.sections.information.linkSectionItems.terms
                     .label,
@@ -506,7 +508,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             )}
 
             {inspectionInfoUrl ? (
-              <Sections.LinkSectionItem
+              <LinkSectionItem
                 icon={<ThemeIcon svg={ExternalLink} />}
                 text={t(
                   ProfileTexts.sections.information.linkSectionItems.inspection
@@ -516,7 +518,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 onPress={() => Linking.openURL(inspectionInfoUrl)}
               />
             ) : (
-              <Sections.LinkSectionItem
+              <LinkSectionItem
                 text={t(
                   ProfileTexts.sections.information.linkSectionItems.inspection
                     .label,
@@ -531,14 +533,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 }
               />
             )}
-          </Sections.Section>
+          </Section>
         )}
         {(!!JSON.parse(IS_QA_ENV || 'false') ||
           __DEV__ ||
           customerProfile?.debug) && (
-          <Sections.Section withPadding>
-            <Sections.HeaderSectionItem text="Developer menu" />
-            <Sections.LinkSectionItem
+          <Section withPadding>
+            <HeaderSectionItem text="Developer menu" />
+            <LinkSectionItem
               text={t(
                 ProfileTexts.sections.favorites.linkSectionItems
                   .frontpageFavourites.label,
@@ -552,17 +554,17 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               testID="favoriteDeparturesButton"
               onPress={selectFavourites}
             />
-            <Sections.LinkSectionItem
+            <LinkSectionItem
               text="Design system"
               testID="designSystemButton"
               onPress={() => navigation.navigate('Profile_DesignSystemScreen')}
             />
-            <Sections.LinkSectionItem
+            <LinkSectionItem
               text="Debug"
               testID="debugButton"
               onPress={() => navigation.navigate('Profile_DebugInfoScreen')}
             />
-          </Sections.Section>
+          </Section>
         )}
         <View style={style.debugInfoContainer}>
           <ThemeText>

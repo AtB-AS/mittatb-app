@@ -1,10 +1,14 @@
-import * as Sections from '@atb/components/sections';
 import {FareContract, isCarnetTravelRight} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {OrderDetails} from '@atb/fare-contracts/Details/OrderDetails';
-import {UnknownFareContractDetails} from '@atb/fare-contracts/Details/UnknownFareContractDetails';
-import {CarnetDetails} from '@atb/fare-contracts/Carnet/CarnetDetails';
+import {OrderDetails} from '@atb/fare-contracts/details/OrderDetails';
+import {UnknownFareContractDetails} from '@atb/fare-contracts/details/UnknownFareContractDetails';
+import {CarnetDetails} from '@atb/fare-contracts/carnet/CarnetDetails';
+import {
+  GenericSectionItem,
+  LinkSectionItem,
+  Section,
+} from '@atb/components/sections';
 
 type Props = {
   fareContract: FareContract;
@@ -23,23 +27,23 @@ export const CarnetDetailedView: React.FC<Props> = ({
   const firstTravelRight = fc.travelRights[0];
   if (isCarnetTravelRight(firstTravelRight)) {
     return (
-      <Sections.Section withBottomPadding>
+      <Section withBottomPadding>
         <CarnetDetails
           now={now}
           inspectable={isInspectable}
           travelRights={fc.travelRights.filter(isCarnetTravelRight)}
           fareContract={fc}
         />
-        <Sections.GenericSectionItem>
+        <GenericSectionItem>
           <OrderDetails fareContract={fc} />
-        </Sections.GenericSectionItem>
-        <Sections.LinkSectionItem
+        </GenericSectionItem>
+        <LinkSectionItem
           text={t(FareContractTexts.details.askForReceipt)}
           onPress={onReceiptNavigate}
           accessibility={{accessibilityRole: 'button'}}
           testID="receiptButton"
         />
-      </Sections.Section>
+      </Section>
     );
   } else {
     return <UnknownFareContractDetails fc={fc} />;

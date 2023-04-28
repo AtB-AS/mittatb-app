@@ -1,7 +1,9 @@
 import {useTheme} from '@atb/theme';
 import React from 'react';
+/* eslint-disable no-restricted-syntax, no-param-reassign */
 import * as Light from '@atb/assets/svg/color/illustrations/ticket-type/light';
 import * as Dark from '@atb/assets/svg/color/illustrations/ticket-type/dark';
+/* eslint-enable no-restricted-syntax, no-param-reassign */
 import {SvgProps} from 'react-native-svg';
 import {FareProductTypeConfig} from '@atb/configuration';
 

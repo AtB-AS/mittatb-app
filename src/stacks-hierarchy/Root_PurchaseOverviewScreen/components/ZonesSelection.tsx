@@ -1,5 +1,4 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import * as Sections from '@atb/components/sections';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -12,6 +11,7 @@ import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {TariffZoneWithMetadata} from '../../Root_PurchaseTariffZonesSearchByMapScreen';
 import {getReferenceDataName} from '@atb/reference-data/utils';
+import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 
 type ZonesSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -73,8 +73,8 @@ export function ZonesSelection({
       >
         {t(PurchaseOverviewTexts.zones.title[selectionMode].text)}
       </ThemeText>
-      <Sections.Section {...accessibility}>
-        <Sections.GenericClickableSectionItem
+      <Section {...accessibility}>
+        <GenericClickableSectionItem
           onPress={() =>
             onSelect({
               fromTariffZone,
@@ -110,8 +110,8 @@ export function ZonesSelection({
               </View>
             </>
           )}
-        </Sections.GenericClickableSectionItem>
-      </Sections.Section>
+        </GenericClickableSectionItem>
+      </Section>
     </View>
   );
 }

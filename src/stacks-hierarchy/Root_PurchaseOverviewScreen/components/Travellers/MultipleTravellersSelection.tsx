@@ -8,10 +8,10 @@ import {
   Language,
   getTextForLanguage,
 } from '@atb/translations';
-import * as Sections from '../../../../components/sections';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {usePreferences} from '@atb/preferences';
+import {CounterSectionItem, Section} from '@atb/components/sections';
 
 export function MultipleTravellersSelection({
   userProfilesWithCount,
@@ -42,9 +42,9 @@ export function MultipleTravellersSelection({
   );
 
   return (
-    <Sections.Section>
+    <Section>
       {userProfilesWithCount.map((u) => (
-        <Sections.CounterSectionItem
+        <CounterSectionItem
           key={u.userTypeString}
           text={getReferenceDataName(u, language)}
           count={u.count}
@@ -65,7 +65,7 @@ export function MultipleTravellersSelection({
           ].join(' ')}
         />
       ))}
-    </Sections.Section>
+    </Section>
   );
 }
 
