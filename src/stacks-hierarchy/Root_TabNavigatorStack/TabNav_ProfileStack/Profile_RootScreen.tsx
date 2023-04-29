@@ -116,10 +116,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     }
   };
 
-  let {enable_ticketing_assistant} = useRemoteConfig();
+  //Ticketing assistant toggle
+  // The toggle should be shown if the ticket assistant is enabled in the remote config,
+  // or if the debug override is enabled.
+  const {enable_ticketing_assistant} = useRemoteConfig();
+  let showTicketAssistantToggle = enable_ticketing_assistant;
   const [debugOverride] = useTicketingAssistantDebugOverride();
   if (debugOverride !== undefined) {
-    enable_ticketing_assistant = debugOverride;
+    showTicketAssistantToggle = debugOverride;
   }
   const showTicketAssistant = useTicketingAssistantEnabled();
   const setShowTicketAssistant = (value: boolean) => {
@@ -367,7 +371,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             onValueChange={setDeparturesV2Enabled}
             testID="newDeparturesToggle"
           />
-          {enable_ticketing_assistant && (
+          {showTicketAssistantToggle && (
             <ToggleSectionItem
               text={t(ProfileTexts.sections.newFeatures.ticketAssistant)}
               value={showTicketAssistant}

@@ -4,21 +4,21 @@ import {StorageModelKeysEnum} from '@atb/storage';
 import {usePreferences} from '@atb/preferences';
 
 export const useTicketingAssistantEnabled = () => {
-  let {enable_ticketing_assistant} = useRemoteConfig();
+  const {enable_ticketing_assistant} = useRemoteConfig();
 
   const {
     preferences: {showTicketAssistant},
   } = usePreferences();
   const [debugOverride] = useTicketingAssistantDebugOverride();
-  if (debugOverride !== undefined) {
-    enable_ticketing_assistant = debugOverride;
+
+  if (debugOverride) {
+    return showTicketAssistant;
   }
 
   if (enable_ticketing_assistant) {
     return showTicketAssistant;
-  } else {
-    return false;
   }
+  return false;
 };
 
 export const useTicketingAssistantDebugOverride = () => {
