@@ -14,7 +14,7 @@ export function dateDiffInDays(a: Date, b: Date) {
 }
 
 // Function for getting days weeks or months from days
-export function getResultString(days: number, t: TranslateFunction): string {
+export function getDurationText(days: number, t: TranslateFunction): string {
   if (days < 7) {
     return t(TicketAssistantTexts.duration.resultDays({value: days}));
   } else if (days < 30) {

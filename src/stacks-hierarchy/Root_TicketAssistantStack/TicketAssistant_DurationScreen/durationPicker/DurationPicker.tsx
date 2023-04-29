@@ -8,10 +8,9 @@ import {format, parseISO} from 'date-fns';
 import {
   dateDiffInDays,
   getSliderIndex,
-  getResultString,
   addDaysToCurrent,
+  getDurationText,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/utils';
-import {dateToDateString} from '@atb/components/sections/items/date-input/utils';
 import {Button} from '@atb/components/button';
 import {SectionSeparator} from '@atb/components/sections';
 import {Slider} from '@atb/components/slider';
@@ -19,6 +18,7 @@ import React, {useState} from 'react';
 import {StyleSheet} from '@atb/theme';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {useLocaleContext} from '@atb/LocaleProvider';
+import {dateToDateString} from '@atb/utils/date-to-date-string';
 
 type DurationPickerProps = {
   date: string;
@@ -61,7 +61,7 @@ export const DurationPicker = ({
     getSliderIndex(duration ?? 7, durations),
   );
 
-  const resultString = getResultString(duration, t);
+  const durationText = getDurationText(duration, t);
 
   return (
     <View style={styles.durationPickerContainer}>
@@ -186,9 +186,9 @@ export const DurationPicker = ({
       <ThemeText
         type={'body__primary'}
         style={styles.description}
-        accessibilityLabel={resultString}
+        accessibilityLabel={durationText}
       >
-        {resultString}
+        {durationText}
       </ThemeText>
     </View>
   );
