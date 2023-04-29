@@ -82,7 +82,7 @@ const TicketAssistantTexts = {
     title: (amount: {value: number}) =>
       _(
         `Hvor langt frem i tid skal du reise ${amount.value} ganger i uka?`,
-        `How far in advance do you want to travel ${amount.value} times a week?`,
+        `How far ahead in time do you want to travel ${amount.value} times a week?`,
       ),
     titleA11yLabel: (amount: {value: number}) =>
       _(
