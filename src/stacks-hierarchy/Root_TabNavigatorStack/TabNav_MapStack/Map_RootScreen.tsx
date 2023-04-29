@@ -8,7 +8,7 @@ import {Quay, StopPlace} from '@atb/api/types/departures';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {StatusBarOnFocus} from '@atb/components/status-bar-on-focus';
-import {useCityBikeStations, useVehicles} from '@atb/mobility';
+import {useStations, useVehicles} from '@atb/mobility';
 import {useShouldShowScooterOnboarding} from './use-should-show-scooter-onboarding';
 
 export const Map_RootScreen = ({
@@ -16,7 +16,7 @@ export const Map_RootScreen = ({
 }: MapScreenProps<'Map_RootScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const vehicles = useVehicles();
-  const cityBikeStations = useCityBikeStations();
+  const stations = useStations();
 
   const shouldShowScooterOnboarding = useShouldShowScooterOnboarding();
   useEffect(() => {
@@ -75,7 +75,7 @@ export const Map_RootScreen = ({
       <Map
         selectionMode={'ExploreStops'}
         vehicles={vehicles}
-        stations={cityBikeStations}
+        stations={stations}
         navigateToQuay={navigateToQuay}
         navigateToDetails={navigateToDetails}
         navigateToTripSearch={navigateToTripSearch}

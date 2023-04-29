@@ -57,7 +57,7 @@ const TripSearchTexts = {
     locationButton: {
       a11yLabel: {
         update: _('Oppdater posisjon', 'Update position'),
-        use: _('Bruk min posisjon', 'Use my current location'),
+        use: _('Bruk min posisjon', 'Use my location'),
       },
     },
     swapButton: {

@@ -2,7 +2,7 @@ import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicl
 import {useEffect, useState} from 'react';
 import {getVehicle} from '@atb/api/mobility';
 
-export const useVehicle = (id: string, lat: number, lon: number) => {
+export const useVehicle = (id: string) => {
   const [vehicle, setVehicle] = useState<VehicleExtendedFragment | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error>();
@@ -10,12 +10,12 @@ export const useVehicle = (id: string, lat: number, lon: number) => {
   useEffect(() => {
     setIsLoading(true);
     const abortCtrl = new AbortController();
-    getVehicle({id, lat, lon}, {signal: abortCtrl.signal})
+    getVehicle(id, {signal: abortCtrl.signal})
       .then(setVehicle)
       .then(() => setIsLoading(false))
       .catch(setError);
     return () => abortCtrl.abort();
-  }, [id, lat, lon]);
+  }, [id]);
 
   return {vehicle, isLoading, error};
 };

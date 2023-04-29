@@ -72,12 +72,12 @@ export const App = () => {
                     <FavoritesContextProvider>
                       <FiltersContextProvider>
                         <SearchHistoryContextProvider>
-                          <GeolocationContextProvider>
-                            <RemoteConfigContextProvider>
-                              <FirestoreConfigurationContextProvider>
-                                <TicketingContextProvider>
-                                  <MobileTokenContextProvider>
-                                    <AppLanguageProvider>
+                          <RemoteConfigContextProvider>
+                            <FirestoreConfigurationContextProvider>
+                              <TicketingContextProvider>
+                                <MobileTokenContextProvider>
+                                  <AppLanguageProvider>
+                                    <GeolocationContextProvider>
                                       <GlobalMessagesContextProvider>
                                         <BottomSheetProvider>
                                           <FeedbackQuestionsProvider>
@@ -85,12 +85,12 @@ export const App = () => {
                                           </FeedbackQuestionsProvider>
                                         </BottomSheetProvider>
                                       </GlobalMessagesContextProvider>
-                                    </AppLanguageProvider>
-                                  </MobileTokenContextProvider>
-                                </TicketingContextProvider>
-                              </FirestoreConfigurationContextProvider>
-                            </RemoteConfigContextProvider>
-                          </GeolocationContextProvider>
+                                    </GeolocationContextProvider>
+                                  </AppLanguageProvider>
+                                </MobileTokenContextProvider>
+                              </TicketingContextProvider>
+                            </FirestoreConfigurationContextProvider>
+                          </RemoteConfigContextProvider>
                         </SearchHistoryContextProvider>
                       </FiltersContextProvider>
                     </FavoritesContextProvider>

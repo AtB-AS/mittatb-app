@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [atb, nfk]
+        org: [atb, nfk, fram]
     environment: ${{ matrix.org }}
     timeout-minutes: 180
     runs-on: ubuntu-latest
@@ -92,8 +92,8 @@ jobs:
         run: bundle exec fastlane android appcenter_staging
         env:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
-      - name: Distribute to Firebase app distribution
-        if: matrix.org == 'nfk'
+      - name: Distribute to Firebase App Distribution
+        if: matrix.org != 'atb'
         run: |
           echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
           bundle exec fastlane android firebase_distribution_staging
