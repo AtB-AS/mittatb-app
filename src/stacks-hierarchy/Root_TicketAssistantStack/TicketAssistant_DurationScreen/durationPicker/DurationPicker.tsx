@@ -4,38 +4,35 @@ import SvgDate from '@atb/assets/svg/mono-icons/time/Date';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
-import {format, parseISO} from 'date-fns';
+import {addDays, format} from 'date-fns';
 import {
   dateDiffInDays,
   getSliderIndex,
-  addDaysToCurrent,
   getDurationText,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/utils';
-import {Button} from '@atb/components/button';
 import {SectionSeparator} from '@atb/components/sections';
 import {Slider} from '@atb/components/slider';
 import React, {useState} from 'react';
 import {StyleSheet} from '@atb/theme';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {useLocaleContext} from '@atb/LocaleProvider';
-import {dateToDateString} from '@atb/utils/date-to-date-string';
+import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
+import {Button} from '@atb/components/button';
 
 type DurationPickerProps = {
-  date: string;
-  setDate: (date: string) => void;
-  currentDate: Date;
   duration: number;
   setDuration: (duration: number) => void;
 };
-
+const currentDate = new Date();
 const durations = [1, 7, 14, 21, 30, 60, 90, 120, 150, 180];
 export const DurationPicker = ({
-  date,
-  setDate,
-  currentDate,
   duration,
   setDuration,
 }: DurationPickerProps) => {
+  const {inputParams} = useTicketAssistantState();
+  const [date, setDate] = useState(
+    addDays(currentDate, inputParams.duration ?? 0),
+  );
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const a11yContext = useAccessibilityContext();
@@ -53,7 +50,7 @@ export const DurationPicker = ({
   }
 
   function updateDurationFromSlider(sliderValue: number) {
-    setDate(addDaysToCurrent(sliderValue));
+    setDate(addDays(currentDate, durations[sliderValue]));
     setDuration(durations[sliderValue]);
   }
 
@@ -82,7 +79,7 @@ export const DurationPicker = ({
         <View style={styles.datePicker}>
           {Platform.OS === 'ios' ? (
             <RNDateTimePicker
-              value={parseISO(date)}
+              value={date}
               mode="date"
               locale={locale.localeString}
               style={{
@@ -97,7 +94,7 @@ export const DurationPicker = ({
               minimumDate={new Date()}
               onChange={(_, date) => {
                 if (date) {
-                  setDate(dateToDateString(date));
+                  setDate(date);
                   updateDurationFromPicker(dateDiffInDays(currentDate, date));
                 }
               }}
@@ -112,7 +109,7 @@ export const DurationPicker = ({
               type="inline"
               mode="tertiary"
               onPress={() => setShowDatePicker(true)}
-              text={format(parseISO(date), 'dd. MMM. yyyy')}
+              text={format(date, 'dd. MMM. yyyy')}
               accessibilityHint={t(
                 TicketAssistantTexts.duration.a11yDatePickerHint,
               )}
@@ -121,7 +118,7 @@ export const DurationPicker = ({
 
           {Platform.OS === 'android' && showDatePicker && (
             <RNDateTimePicker
-              value={parseISO(date)}
+              value={date}
               mode="date"
               locale={locale.localeString}
               textColor={'primary'}
@@ -131,7 +128,7 @@ export const DurationPicker = ({
               onChange={(_, date) => {
                 setShowDatePicker(false);
                 if (date) {
-                  setDate(dateToDateString(date));
+                  setDate(date);
                   updateDurationFromPicker(dateDiffInDays(currentDate, date));
                 }
               }}
@@ -226,7 +223,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
   },
   datePickerButton: {
-    backgroundColor: theme.static.background.background_3.background,
+    backgroundColor: theme.static.background.background_1.background,
   },
   sliderContainer: {
     width: '100%',

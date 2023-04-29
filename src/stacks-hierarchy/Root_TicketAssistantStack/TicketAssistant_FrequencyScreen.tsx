@@ -21,7 +21,9 @@ export const TicketAssistant_FrequencyScreen = ({
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const {inputParams, updateInputParams} = useTicketAssistantState();
-  const [sliderValue, setSliderValue] = useState(inputParams.frequency ?? 7);
+  const [sliderValue, setSliderValue] = useState<number>(
+    inputParams.frequency ?? 7,
+  );
   const a11yContext = useAccessibilityContext();
 
   const sliderMax = 14;
@@ -43,9 +45,14 @@ export const TicketAssistant_FrequencyScreen = ({
       : TicketAssistantTexts.frequency.result({value: sliderValue}),
   );
 
-  navigation.addListener('blur', () => {
+  const updateFrequency = () => {
     updateInputParams({...inputParams, frequency: sliderValue});
+  };
+
+  navigation.addListener('blur', () => {
+    updateFrequency();
   });
+
   return (
     <View style={styles.container}>
       <View style={styles.backdrop}>
@@ -122,9 +129,6 @@ export const TicketAssistant_FrequencyScreen = ({
                   step={1}
                   value={sliderValue}
                   tapToSeek={true}
-                  onSlidingComplete={() => {
-                    updateInputParams({...inputParams, frequency: sliderValue});
-                  }}
                   onValueChange={(value) => {
                     setSliderValue(value);
                   }}
@@ -142,9 +146,9 @@ export const TicketAssistant_FrequencyScreen = ({
           <View style={styles.bottomView}>
             <Button
               interactiveColor="interactive_0"
-              onPress={() =>
-                navigation.navigate('TicketAssistant_DurationScreen')
-              }
+              onPress={() => {
+                navigation.navigate('TicketAssistant_DurationScreen');
+              }}
               text={t(TicketAssistantTexts.frequency.mainButton)}
               testID="nextButton"
               accessibilityHint={t(

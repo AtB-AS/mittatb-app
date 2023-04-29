@@ -54,12 +54,6 @@ export const TicketAssistant_ZonePickerScreen = ({
   const {inputParams, updateInputParams} = useTicketAssistantState();
 
   useEffect(() => {
-    const zoneIds = [selectedZones.from.id, selectedZones.to.id];
-    const newData = {...inputParams, zones: zoneIds};
-    updateInputParams(newData);
-  }, [selectedZones]);
-
-  useEffect(() => {
     setSelectedZones({
       ...selectedZones,
       from: fromTariffZone,
@@ -72,6 +66,11 @@ export const TicketAssistant_ZonePickerScreen = ({
       to: toTariffZone,
     });
   }, [toTariffZone]);
+
+  navigation.addListener('blur', () => {
+    const zoneIds = [selectedZones.from.id, selectedZones.to.id];
+    updateInputParams({...inputParams, zones: zoneIds});
+  });
 
   const onVenueSearchClick = (
     callerRouteParam: keyof TicketAssistant_ZonePickerScreenParams,

@@ -11,6 +11,10 @@ export async function getRecommendedTicket(
   const url = 'ticket/v3/assistant';
   const body = {
     ...inputParams,
+    traveller: {
+      id: inputParams.traveller?.id,
+      user_type: inputParams.traveller?.userType,
+    },
     preassigned_fare_products: preassignedFareProductIds,
   };
   try {

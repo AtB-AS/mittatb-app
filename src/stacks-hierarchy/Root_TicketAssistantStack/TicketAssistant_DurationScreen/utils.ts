@@ -1,6 +1,4 @@
-import {addDays} from 'date-fns';
 import {TicketAssistantTexts, TranslateFunction} from '@atb/translations';
-import {dateToDateString} from '@atb/utils/date-to-date-string';
 
 const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -51,11 +49,4 @@ export function getSliderIndex(days: number, durations: number[]) {
   }
 
   return closestIndex;
-}
-
-// Function for getting the date from the slider
-export function addDaysToCurrent(days: number) {
-  // Current date + days from slider
-  const date = addDays(new Date(), days);
-  return dateToDateString(date);
 }

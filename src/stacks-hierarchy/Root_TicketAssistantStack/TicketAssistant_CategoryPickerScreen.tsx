@@ -41,15 +41,14 @@ export const TicketAssistant_CategoryPickerScreen = ({
 
   const {inputParams, updateInputParams} = useTicketAssistantState();
   function updateCategory(traveller: Traveller) {
-    const newData = {...inputParams, traveller: traveller};
-    updateInputParams(newData);
+    updateInputParams({...inputParams, traveller: traveller});
   }
 
   navigation.addListener('blur', () => {
     const traveller = selectableTravellers[currentlyOpen];
     updateCategory({
       id: traveller.userTypeString,
-      user_type: traveller.userTypeString,
+      userType: traveller.userTypeString,
     });
   });
 
@@ -104,7 +103,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
                         onPress={() => {
                           updateCategory({
                             id: u.userTypeString,
-                            user_type: u.userTypeString,
+                            userType: u.userTypeString,
                           });
                           navigation.navigate(
                             'TicketAssistant_FrequencyScreen',
@@ -129,7 +128,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
                     onPress={() => {
                       updateCategory({
                         id: u.userTypeString,
-                        user_type: u.userTypeString,
+                        userType: u.userTypeString,
                       });
                       navigation.navigate('TicketAssistant_FrequencyScreen');
                     }}

@@ -43,12 +43,7 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const updateInputParams = (newData: InputParams) => {
-    if (
-      newData.traveller != inputParams.traveller ||
-      newData.frequency != inputParams.frequency ||
-      newData.duration != inputParams.duration ||
-      newData.zones != inputParams.zones
-    ) {
+    if (JSON.stringify(newData) !== JSON.stringify(inputParams)) {
       setInputParams((prevState) => ({...prevState, ...newData}));
     }
   };
@@ -56,6 +51,7 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     const fetchData = () => {
+      setError(false);
       setLoading(true);
       getRecommendedTicket(inputParams, preassignedFareProductsIds)
         .then((r) => {

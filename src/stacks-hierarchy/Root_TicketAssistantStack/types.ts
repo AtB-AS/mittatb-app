@@ -5,7 +5,7 @@ import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewS
 
 export type Traveller = {
   id: string;
-  user_type: string;
+  userType: string;
 };
 export type InputParams = {
   frequency?: number;

@@ -9,22 +9,19 @@ import React, {useState} from 'react';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {DurationPicker} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/durationPicker';
-import {addDaysToCurrent} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/utils';
 type DurationProps =
   TicketAssistantScreenProps<'TicketAssistant_DurationScreen'>;
 
-const currentDate = new Date();
 export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   const {inputParams, updateInputParams} = useTicketAssistantState();
-  const [date, setDate] = useState(addDaysToCurrent(inputParams.duration ?? 0));
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
-  const [duration, setDuration] = useState(inputParams.duration ?? 7);
+  const [duration, setDuration] = useState(7);
 
-  navigation.addListener('blur', () => {
+  const updateDuration = () => {
     updateInputParams({...inputParams, duration: duration});
-  });
+  };
 
   const travelFrequency = inputParams.frequency ?? 0;
 
@@ -47,19 +44,14 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
           >
             {t(TicketAssistantTexts.duration.title({value: travelFrequency}))}
           </ThemeText>
-          <DurationPicker
-            date={date}
-            setDate={setDate}
-            currentDate={currentDate}
-            setDuration={setDuration}
-            duration={duration}
-          />
+          <DurationPicker setDuration={setDuration} duration={duration} />
         </View>
 
         <View style={styles.bottomView}>
           <Button
             interactiveColor="interactive_0"
             onPress={() => {
+              updateDuration();
               navigation.navigate('TicketAssistant_ZonePickerScreen');
             }}
             text={t(TicketAssistantTexts.frequency.mainButton)}
