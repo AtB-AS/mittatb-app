@@ -10,8 +10,8 @@ export const BetaTag = ({style}: Props) => {
   const styles = useStyles();
   return (
     <View style={[styles.betaLabel, style]}>
-      <ThemeText color="background_accent_3" style={styles.betaLabelText}>
-        BETA
+      <ThemeText type={'body__tertiary'} color="background_accent_3">
+        Beta
       </ThemeText>
     </View>
   );
@@ -21,11 +21,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   betaLabel: {
     backgroundColor: theme.static.background.background_accent_3.background,
     paddingHorizontal: theme.spacings.small,
-    paddingVertical: theme.spacings.small,
+    paddingVertical: theme.spacings.xSmall,
     borderRadius: theme.border.radius.regular,
-  },
-  betaLabelText: {
-    fontSize: 8,
-    lineHeight: 9,
   },
 }));
