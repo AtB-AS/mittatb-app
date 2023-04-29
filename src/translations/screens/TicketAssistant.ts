@@ -74,7 +74,7 @@ const TicketAssistantTexts = {
     },
   },
   zonesSelector: {
-    title: _('Hvor skal du reise?', 'Where do you travel?'),
+    title: _('Hvor skal du reise?', 'Where are you traveling to?'),
     titleA11yLabel: _('Hvor skal du reise?', 'Where do you travel?'),
     a11yNextHint: _('Aktiver for å gå videre', 'Activate to go to next page'),
   },
@@ -82,7 +82,7 @@ const TicketAssistantTexts = {
     title: (amount: {value: number}) =>
       _(
         `Hvor langt frem i tid skal du reise ${amount.value} ganger i uka?`,
-        `How far in advance do you want to travel ${amount.value} times a week?`,
+        `How far ahead in time do you want to travel ${amount.value} times a week?`,
       ),
     titleA11yLabel: (amount: {value: number}) =>
       _(
@@ -186,7 +186,7 @@ const TicketAssistantTexts = {
       ),
     durationNotice: _(
       'NB: denne billetten dekker ikke hele perioden du har satt. Ta veilederen på nytt når denne billetten utløper.',
-      'NB: this ticket does not cover the entire period you have set. Take the guide again when this ticket expires.',
+      'NB: this ticket does not cover the entire period you have set. Take the assistant again when this ticket expires.',
     ),
     a11yDurationNoticeLabel: _(
       'NB: denne veilederen fungerer kun for reise med buss og trikk, ikke båt. ',
