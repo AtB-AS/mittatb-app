@@ -37,7 +37,7 @@ export function handleRecommendedTicketResponse(
     : undefined;
 
   const preAssignedFareProduct = sellableProductsInApp.find(
-    (p) => p.id === ticket?.fare_product,
+    (p) => p.id === ticket?.fareProduct,
   );
 
   const fareProductTypeConfig = fareProductTypeConfigs.find(
@@ -52,7 +52,7 @@ export function handleRecommendedTicketResponse(
     preassignedFareProduct: preAssignedFareProduct,
     fareProductTypeConfig: fareProductTypeConfig,
     ticket: ticket,
-    singleTicketPrice: response.single_ticket_price,
+    singleTicketPrice: response.singleTicketPrice,
   };
   return purchaseDetailsData;
 }

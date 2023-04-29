@@ -15,19 +15,19 @@ export type InputParams = {
 };
 
 export type TicketResponseData = {
-  product_id: string;
-  fare_product: string;
+  productId: string;
+  fareProduct: string;
   duration: number;
   quantity: number;
   price: number;
-  traveller: {id: string; user_type: string};
+  traveller: {id: string; userType: string};
 };
 
 export type RecommendedTicketResponse = {
-  total_cost: number;
+  totalCost: number;
   tickets: TicketResponseData[];
   zones: string[];
-  single_ticket_price: number;
+  singleTicketPrice: number;
 };
 
 export type RecommendedTicketSummary = {
