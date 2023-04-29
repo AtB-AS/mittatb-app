@@ -5,8 +5,9 @@ import RNDateTimePicker from '@react-native-community/datetimepicker';
 import {parseISO} from 'date-fns';
 import React, {useState} from 'react';
 import {ButtonSectionItem} from '../ButtonSectionItem';
-import {DateInputSectionItemProps, dateToDateString} from './utils';
+import {DateInputSectionItemProps} from './utils';
 import {useLocaleContext} from '@atb/LocaleProvider';
+import {dateToDateString} from '@atb/utils/date-to-date-string';
 
 export function DateInputSectionItem(props: DateInputSectionItemProps) {
   const {value, onChange, ...innerProps} = props;

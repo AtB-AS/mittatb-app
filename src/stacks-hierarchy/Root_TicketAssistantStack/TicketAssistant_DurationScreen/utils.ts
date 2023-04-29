@@ -1,7 +1,7 @@
 // Functions to calculate days between two dates
 import {addDays} from 'date-fns';
-import {dateToDateString} from '@atb/components/sections/items/date-input/utils';
 import {TicketAssistantTexts, TranslateFunction} from '@atb/translations';
+import {dateToDateString} from '@atb/utils/date-to-date-string';
 
 const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 

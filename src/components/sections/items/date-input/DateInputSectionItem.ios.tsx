@@ -5,8 +5,9 @@ import {parseISO} from 'date-fns';
 import React from 'react';
 import {Platform, StyleProp, ViewStyle} from 'react-native';
 import {InternalLabeledSectionItem} from '../InternalLabeledSectionItem';
-import {DateInputSectionItemProps, dateToDateString} from './utils';
+import {DateInputSectionItemProps} from './utils';
 import {useLocaleContext} from '@atb/LocaleProvider';
+import {dateToDateString} from '@atb/utils/date-to-date-string';
 
 export function DateInputSectionItem(props: DateInputSectionItemProps) {
   const {value, onChange, ...innerprops} = props;
