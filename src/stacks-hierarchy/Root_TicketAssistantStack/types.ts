@@ -7,12 +7,11 @@ export type Traveller = {
   id: string;
   user_type: string;
 };
-export type TicketAssistantData = {
+export type InputParams = {
   frequency?: number;
   duration?: number;
   traveller?: Traveller;
   zones?: string[];
-  preassigned_fare_products: string[];
 };
 
 export type TicketResponseData = {

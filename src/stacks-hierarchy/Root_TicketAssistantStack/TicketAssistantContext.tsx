@@ -2,14 +2,14 @@ import React, {createContext, useContext, useEffect, useState} from 'react';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {
   RecommendedTicketSummary,
-  TicketAssistantData,
+  InputParams,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {getRecommendedTicket} from '@atb/api/getRecommendedTicket';
 import {handleRecommendedTicketResponse} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/handle-recommended-ticket-response';
 
 type TicketAssistantState = {
-  inputParams: TicketAssistantData;
-  updateInputParams: (newData: TicketAssistantData) => void;
+  inputParams: InputParams;
+  updateInputParams: (newData: InputParams) => void;
   recommendedTicketSummary?: RecommendedTicketSummary;
   loading: boolean;
   error: boolean;
@@ -31,19 +31,18 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
     )
     .map((product) => product.id);
 
-  const [inputParams, setInputParams] = useState<TicketAssistantData>({
+  const [inputParams, setInputParams] = useState<InputParams>({
     frequency: undefined,
     traveller: undefined,
     duration: undefined,
     zones: undefined,
-    preassigned_fare_products: preassignedFareProductsIds ?? [],
   });
 
   const [recommendedTicketSummary, setRecommendedTicketSummary] =
     useState<RecommendedTicketSummary>();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const updateInputParams = (newData: TicketAssistantData) => {
+  const updateInputParams = (newData: InputParams) => {
     if (
       newData.traveller != inputParams.traveller ||
       newData.frequency != inputParams.frequency ||
@@ -58,7 +57,7 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
   useEffect(() => {
     const fetchData = () => {
       setLoading(true);
-      getRecommendedTicket(inputParams)
+      getRecommendedTicket(inputParams, preassignedFareProductsIds)
         .then((r) => {
           setRecommendedTicketSummary(
             handleRecommendedTicketResponse(
