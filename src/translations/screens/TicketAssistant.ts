@@ -74,7 +74,7 @@ const TicketAssistantTexts = {
     },
   },
   zonesSelector: {
-    title: _('Hvor skal du reise?', 'Where do you travel?'),
+    title: _('Hvor skal du reise?', 'Where are you traveling to?'),
     titleA11yLabel: _('Hvor skal du reise?', 'Where do you travel?'),
     a11yNextHint: _('Aktiver for å gå videre', 'Activate to go to next page'),
   },
