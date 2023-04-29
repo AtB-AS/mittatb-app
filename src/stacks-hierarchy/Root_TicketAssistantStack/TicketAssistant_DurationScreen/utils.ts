@@ -1,4 +1,3 @@
-// Functions to calculate days between two dates
 import {addDays} from 'date-fns';
 import {TicketAssistantTexts, TranslateFunction} from '@atb/translations';
 import {dateToDateString} from '@atb/utils/date-to-date-string';
@@ -54,7 +53,7 @@ export function getSliderIndex(days: number, durations: number[]) {
   return closestIndex;
 }
 
-// Functions for getting the date from the slider
+// Function for getting the date from the slider
 export function addDaysToCurrent(days: number) {
   // Current date + days from slider
   const date = addDays(new Date(), days);
