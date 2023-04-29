@@ -199,7 +199,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
   },
   container: {
-    flex: 1, //place content at top
+    flex: 1,
     backgroundColor: theme.static.background.background_accent_0.background,
   },
   scrollView: {

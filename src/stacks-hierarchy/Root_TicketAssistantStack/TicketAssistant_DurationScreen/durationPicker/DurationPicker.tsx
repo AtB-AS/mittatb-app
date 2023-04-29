@@ -47,14 +47,14 @@ export const DurationPicker = ({
 
   const locale = useLocaleContext();
 
-  function updateDurationFromPicker(value: number) {
-    setDuration(value);
-    setSliderIndex(getSliderIndex(value, durations));
+  function updateDurationFromPicker(duration: number) {
+    setDuration(duration);
+    setSliderIndex(getSliderIndex(duration, durations));
   }
 
-  function updateDurationFromSlider(value: number) {
-    setDate(addDaysToCurrent(value));
-    setDuration(durations[value]);
+  function updateDurationFromSlider(sliderValue: number) {
+    setDate(addDaysToCurrent(sliderValue));
+    setDuration(durations[sliderValue]);
   }
 
   const [sliderIndex, setSliderIndex] = useState<number>(
