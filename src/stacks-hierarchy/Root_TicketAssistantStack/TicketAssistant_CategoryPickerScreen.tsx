@@ -7,7 +7,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button} from '@atb/components/button';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
@@ -35,22 +35,26 @@ export const TicketAssistant_CategoryPickerScreen = ({
     undefined,
     fareProductTypeConfigs[0].type,
   );
+  const {updateInputParams} = useTicketAssistantState();
 
   const {selectableTravellers} = offerDefaults;
   const [currentlyOpen, setCurrentlyOpen] = useState<number>(0);
 
-  const {inputParams, updateInputParams} = useTicketAssistantState();
   function updateCategory(traveller: Traveller) {
-    updateInputParams({...inputParams, traveller: traveller});
+    updateInputParams({traveller: traveller});
   }
 
-  navigation.addListener('blur', () => {
+  const unsubscribe = navigation.addListener('blur', () => {
     const traveller = selectableTravellers[currentlyOpen];
     updateCategory({
       id: traveller.userTypeString,
       userType: traveller.userTypeString,
     });
   });
+
+  useEffect(() => {
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <View style={styles.container}>

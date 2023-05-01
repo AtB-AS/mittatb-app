@@ -51,7 +51,7 @@ export const TicketAssistant_ZonePickerScreen = ({
     selectNext: isApplicableOnSingleZoneOnly ? 'from' : 'to',
   });
 
-  const {inputParams, updateInputParams} = useTicketAssistantState();
+  const {updateInputParams} = useTicketAssistantState();
 
   useEffect(() => {
     setSelectedZones({
@@ -67,10 +67,14 @@ export const TicketAssistant_ZonePickerScreen = ({
     });
   }, [toTariffZone]);
 
-  navigation.addListener('blur', () => {
+  const unsubscribe = navigation.addListener('blur', () => {
     const zoneIds = [selectedZones.from.id, selectedZones.to.id];
-    updateInputParams({...inputParams, zones: zoneIds});
+    updateInputParams({zones: zoneIds});
   });
+
+  useEffect(() => {
+    return unsubscribe;
+  }, [navigation]);
 
   const onVenueSearchClick = (
     callerRouteParam: keyof TicketAssistant_ZonePickerScreenParams,

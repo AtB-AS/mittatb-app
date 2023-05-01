@@ -43,9 +43,14 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const updateInputParams = (newData: InputParams) => {
-    if (JSON.stringify(newData) !== JSON.stringify(inputParams)) {
-      setInputParams((prevState) => ({...prevState, ...newData}));
-    }
+    setInputParams((prevState) => {
+      const newState = {...prevState, ...newData};
+      if (JSON.stringify(newState) != JSON.stringify(prevState)) {
+        return newState;
+      } else {
+        return prevState;
+      }
+    });
   };
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
 

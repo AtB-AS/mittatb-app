@@ -95,7 +95,13 @@ const TicketAssistantTexts = {
       'Aktiver for å åpne kalenderen',
       'Activate to open calendar',
     ),
-    minLimit: _('1 dag', '1 day'),
+    minLimit: (days: number) => {
+      if (days === 1) {
+        return _('{1} dag', '1 day');
+      } else {
+        return _(`${days} dager`, `${days} days`);
+      }
+    },
     minLimitA11yLabel: _('Minstegrensen er 1 dag', 'Minimum limit is 1 day'),
     maxLimit: _('6 mnd. +', '6 months +'),
     maxLimitA11yLabel: _(

@@ -5,7 +5,7 @@ import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {DurationPicker} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/durationPicker';
@@ -20,8 +20,16 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   const [duration, setDuration] = useState(7);
 
   const updateDuration = () => {
-    updateInputParams({...inputParams, duration: duration});
+    updateInputParams({duration: duration});
   };
+
+  const unsubscribe = navigation.addListener('blur', () => {
+    updateDuration();
+  });
+
+  useEffect(() => {
+    return unsubscribe;
+  }, [navigation]);
 
   const travelFrequency = inputParams.frequency ?? 0;
 

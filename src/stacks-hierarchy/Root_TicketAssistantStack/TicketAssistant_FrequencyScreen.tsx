@@ -4,7 +4,7 @@ import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Ticket
 import {Slider} from '@atb/components/slider';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
@@ -46,12 +46,16 @@ export const TicketAssistant_FrequencyScreen = ({
   );
 
   const updateFrequency = () => {
-    updateInputParams({...inputParams, frequency: sliderValue});
+    updateInputParams({frequency: sliderValue});
   };
 
-  navigation.addListener('blur', () => {
+  const unsubscribe = navigation.addListener('blur', () => {
     updateFrequency();
   });
+
+  useEffect(() => {
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <View style={styles.container}>

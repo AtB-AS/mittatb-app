@@ -24,7 +24,7 @@ type DurationPickerProps = {
   setDuration: (duration: number) => void;
 };
 const currentDate = new Date();
-const durations = [1, 7, 14, 21, 30, 60, 90, 120, 150, 180];
+const durations = [3, 4, 5, 6, 7, 14, 21, 30, 60, 90, 120, 150, 180];
 export const DurationPicker = ({
   duration,
   setDuration,
@@ -150,7 +150,7 @@ export const DurationPicker = ({
                   TicketAssistantTexts.duration.minLimitA11yLabel,
                 )}
               >
-                {t(TicketAssistantTexts.duration.minLimit)}
+                {t(TicketAssistantTexts.duration.minLimit(durations[0]))}
               </ThemeText>
               <ThemeText
                 type={'body__primary'}
