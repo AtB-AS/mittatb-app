@@ -20,10 +20,10 @@ import {useTextForLanguage} from '@atb/translations/utils';
 import {MessageBox} from '@atb/components/message-box';
 import {useCarSharingStation} from '@atb/mobility/use-car-sharing-station';
 import {VehicleStat} from '@atb/mobility/components/VehicleStat';
-import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {VehicleStats} from '@atb/mobility/components/VehicleStats';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {Unknown} from '@atb/assets/svg/mono-icons/status';
+import {Car} from '@atb/assets/svg/mono-icons/transportation';
 
 type Props = {
   stationId: string;
@@ -81,7 +81,7 @@ export const CarSharingStationSheet = ({stationId, close}: Props) => {
               <VehicleStats
                 left={
                   <VehicleStat
-                    svg={Bicycle}
+                    svg={Car}
                     primaryStat={getAvailableVehicles(
                       station.vehicleTypesAvailable,
                       FormFactor.Car,
