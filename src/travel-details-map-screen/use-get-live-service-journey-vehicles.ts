@@ -1,10 +1,10 @@
 import {useEffect} from 'react';
-import {VehiclePosition} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
 import {useRealtimeMapEnabled} from '@atb/components/map';
 import {getLiveVehicleSubscription} from '@atb/api/vehicles';
+import {VehicleWithPosition} from '@atb/api/types/vehicles';
 
 export function useGetLiveServiceJourneyVehicles(
-  setVehicle: (vehicle: VehiclePosition) => void,
+  setVehicle: (vehicle: VehicleWithPosition) => void,
   serviceJourneyId?: string,
 ) {
   const realtimeMapEnabled = useRealtimeMapEnabled();
@@ -16,7 +16,7 @@ export function useGetLiveServiceJourneyVehicles(
     const subscription = getLiveVehicleSubscription(serviceJourneyId);
 
     subscription.onmessage = (event) => {
-      const vehicle = JSON.parse(event.data) as VehiclePosition;
+      const vehicle = JSON.parse(event.data) as VehicleWithPosition;
       setVehicle(vehicle);
     };
     return () => subscription.close(1000);

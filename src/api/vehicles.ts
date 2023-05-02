@@ -2,8 +2,8 @@ import {client} from '@atb/api/index';
 import {stringifyUrl} from '@atb/api/utils';
 import qs from 'query-string';
 import {AxiosRequestConfig} from 'axios';
-import {GetServiceJourneyVehicles} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
 import {WS_API_BASE_URL} from '@env';
+import {GetServiceJourneyVehicles} from './types/vehicles';
 
 export const getServiceJourneyVehicles = async (
   serviceJourneyIds?: string[],

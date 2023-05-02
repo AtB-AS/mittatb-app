@@ -84,7 +84,7 @@ export const Trip: React.FC<TripProps> = ({
                           toPlace:
                             tripPattern.legs[tripPattern.legs.length - 1]
                               .toPlace,
-                          initialVehiclePosition: legVehiclePosition,
+                          vehicleWithPosition: legVehiclePosition,
                         })
                     : undefined
                 }

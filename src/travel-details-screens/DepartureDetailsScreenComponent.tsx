@@ -143,7 +143,7 @@ export const DepartureDetailsScreenComponent = ({
                         legs: mapData.mapLegs,
                         fromPlace: mapData.start,
                         toPlace: mapData.stop,
-                        initialVehiclePosition: vehiclePosition,
+                        vehicleWithPosition: vehiclePosition,
                       })
                     }
                   />

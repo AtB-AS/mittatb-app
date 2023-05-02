@@ -17,12 +17,12 @@ import {StyleSheet, View} from 'react-native';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
-import {VehiclePosition} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
+import {VehicleWithPosition} from '@atb/api/types/vehicles';
 import {useGetLiveServiceJourneyVehicles} from './use-get-live-service-journey-vehicles';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
-  initialVehiclePosition?: VehiclePosition;
+  vehicleWithPosition?: VehicleWithPosition;
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
 };
@@ -36,7 +36,7 @@ const FOLLOW_ANIMATION_DURATION = 500;
 
 export const TravelDetailsMapScreenComponent = ({
   legs,
-  initialVehiclePosition,
+  vehicleWithPosition,
   toPlace,
   fromPlace,
   onPressBack,
@@ -46,23 +46,23 @@ export const TravelDetailsMapScreenComponent = ({
   const {location: geolocation} = useGeolocationState();
 
   const features = useMemo(() => createMapLines(legs), [legs]);
-  const bounds = !initialVehiclePosition ? getMapBounds(features) : undefined;
-  const centerPosition = initialVehiclePosition?.location
+  const bounds = !vehicleWithPosition ? getMapBounds(features) : undefined;
+  const centerPosition = vehicleWithPosition?.location
     ? [
-        initialVehiclePosition?.location?.longitude,
-        initialVehiclePosition?.location?.latitude,
+        vehicleWithPosition?.location?.longitude,
+        vehicleWithPosition?.location?.latitude,
       ]
     : undefined;
 
   const {t} = useTranslation();
   const controlStyles = useControlPositionsStyle();
 
-  const [vehicle, setVehicle] = useState<VehiclePosition | undefined>(
-    initialVehiclePosition,
+  const [vehicle, setVehicle] = useState<VehicleWithPosition | undefined>(
+    vehicleWithPosition,
   );
   useGetLiveServiceJourneyVehicles(
     setVehicle,
-    initialVehiclePosition?.serviceJourney?.id,
+    vehicleWithPosition?.serviceJourney?.id,
   );
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
