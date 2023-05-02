@@ -1283,6 +1283,9 @@ PODS:
     - React-Core
   - SocketRocket (0.6.0)
   - SwiftProtobuf (1.20.3)
+  - TimeReactNativeLib (1.1.12):
+    - Kronos
+    - React-Core
   - TokenCore (1.0.0):
     - AbtProtobufTokenIosStubs
     - Kronos
@@ -1387,8 +1390,9 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
-  - "TokenCore (from `git@github.com:entur/abt-mobile-client-sdk.git`)"
-  - "TokenStateReactNativeLib (from `git@github.com:entur/abt-mobile-client-sdk.git`)"
+  - "TimeReactNativeLib (from `../node_modules/@entur-private/abt-time-react-native-lib`)"
+  - "TokenCore (from `git@github.com:entur/abt-mobile-client-sdk.git`, branch `develop`)"
+  - "TokenStateReactNativeLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, branch `develop`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1563,9 +1567,13 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  TimeReactNativeLib:
+    :path: "../node_modules/@entur-private/abt-time-react-native-lib"
   TokenCore:
+    :branch: develop
     :git: "git@github.com:entur/abt-mobile-client-sdk.git"
   TokenStateReactNativeLib:
+    :branch: develop
     :git: "git@github.com:entur/abt-mobile-client-sdk.git"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
@@ -1575,10 +1583,10 @@ CHECKOUT OPTIONS:
     :git: "git@github.com:entur/abt-protobuf-pods.git"
     :tag: 2.661.0
   TokenCore:
-    :commit: d91990a6da7a7c5d3824df2cc4db41d9050731f7
+    :commit: 3dfdd845d2b247e1ea64c62cf7595f27488a0d6b
     :git: "git@github.com:entur/abt-mobile-client-sdk.git"
   TokenStateReactNativeLib:
-    :commit: d91990a6da7a7c5d3824df2cc4db41d9050731f7
+    :commit: 3dfdd845d2b247e1ea64c62cf7595f27488a0d6b
     :git: "git@github.com:entur/abt-mobile-client-sdk.git"
 
 SPEC CHECKSUMS:
@@ -1685,12 +1693,13 @@ SPEC CHECKSUMS:
   RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   SwiftProtobuf: b02b5075dcf60c9f5f403000b3b0c202a11b6ae1
+  TimeReactNativeLib: bad4b7256bf5084899c5a8938d8458cbd9ee2ca1
   TokenCore: 1579a2a2179a283048d9c0a007b4fd38861f4555
   TokenStateReactNativeLib: cba98cbdb61af0255d2e636565a0feedb6cda069
   Turf: 469ce2c3d22e5e8e4818d5a3b254699a5c89efa4
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 4fd1869606c1414e2dfcd9924d31c121d9579feb
+PODFILE CHECKSUM: 384b88c31afd1d2b9a56c14a062ba9c7e259488a
 
 COCOAPODS: 1.12.0
