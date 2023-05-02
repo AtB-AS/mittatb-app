@@ -43,10 +43,6 @@ const ProfileTexts = {
       heading: _('Ny funksjonalitet', 'New features'),
       departures: _('Prøv ny avganger-visning', 'Try the new departure view'),
       assistant: _('Prøv ny reisesøkmotor', 'Try the new travel search engine'),
-      ticketAssistant: _(
-        'Vis ny billettveileder',
-        'Show the new ticket assistant',
-      ),
       map: _('Prøv ny kartside', 'Try the new map page'),
     },
     settings: {
