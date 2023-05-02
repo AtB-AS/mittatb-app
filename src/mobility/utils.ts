@@ -35,6 +35,15 @@ export const isBikeStation = (
     )) ??
   false;
 
+export const isCarStation = (
+  properties: GeoJsonProperties | undefined,
+): properties is StationBasicFragment =>
+  (isStation(properties) &&
+    properties?.vehicleTypesAvailable?.some(
+      (types) => types.vehicleType.formFactor === FormFactor.Car,
+    )) ??
+  false;
+
 export const getAvailableVehicles = (
   types: VehicleTypeAvailabilityBasicFragment[] | undefined,
   formFactor: FormFactor,

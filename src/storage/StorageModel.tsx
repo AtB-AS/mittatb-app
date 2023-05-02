@@ -14,6 +14,7 @@ export enum StorageModelKeysEnum {
   EnableFromTravelSearchToTicketDebugOverride = '@ATB_enable_from_travel_search_to_ticket_debug_override',
   EnableVehiclesInMapDebugOverride = '@ATB_enable_vehicles_in_map_debug_override',
   EnableCityBikesInMapDebugOverride = 'ATB_enable_city_bikes_in_map_debug_override',
+  EnableCarSharingInMapDebugOverride = 'ATB_enable_car_sharing_in_map_debug_override',
   EnableRealtimeMapDebugOverride = '@ATB_enable_realtime_map_debug_override',
   EnableMapDebugOverride = '@ATB_enable_map_debug_override',
   EnableTicketingAssistantOverride = '@ATB_enable_ticketing_assistant_override',

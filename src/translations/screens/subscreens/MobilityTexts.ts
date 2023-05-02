@@ -4,6 +4,7 @@ import {Platform} from 'react-native';
 export const MobilityTexts = {
   scooter: _('Sparkesykkel', 'Electric scooter'),
   bicycle: _('Sykkel', 'Bicycle'),
+  car: _('Bildeling', 'Car sharing'),
   unknownOperator: _('Ukjent operatør', 'Unknown operator'),
   operatorAppSwitchButton: (operator: string) =>
     _(`Åpne ${operator}`, `Open ${operator}`),
@@ -74,5 +75,15 @@ export const BicycleTexts = {
   loadingFailed: _(
     'Ops! Vi fant ikke denne sykkelstasjonen',
     "Ops! We couldn't find this bike station",
+  ),
+};
+
+export const CarSharingTexts = {
+  stations: {
+    numCarsAvailable: _('Tilgjengelige biler', 'Available cars'),
+  },
+  loadingFailed: _(
+    'Ops! Vi fant ikke denne parkeringen',
+    "Ops! We couldn't find this car sharing station",
   ),
 };

@@ -29,9 +29,11 @@ import {useTravelSearchFiltersDebugOverride} from '@atb/stacks-hierarchy/Root_Ta
 import {useVehiclesInMapDebugOverride} from '@atb/mobility';
 import {DebugOverride} from './components/DebugOverride';
 import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
-import {useRealtimeMapDebugOverride} from '@atb/components/map';
+import {
+  useMapDebugOverride,
+  useRealtimeMapDebugOverride,
+} from '@atb/components/map';
 import {useFromTravelSearchToTicketDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
-import {useMapDebugOverride} from '@atb/components/map';
 import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {useTipsAndInformationDebugOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information-enabled';
 import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
@@ -45,6 +47,7 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {useDebugOverride} from '@atb/debug';
+import {useCarSharingInMapDebugOverride} from '@atb/mobility/use-car-sharing-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -77,6 +80,7 @@ export const Profile_DebugInfoScreen = () => {
     useFromTravelSearchToTicketDebugOverride();
   const vehiclesInMapDebugOverride = useVehiclesInMapDebugOverride();
   const cityBikesInMapDebugOverride = useCityBikesInMapDebugOverride();
+  const carSharingInMapDebugOverride = useCarSharingInMapDebugOverride();
   const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
   const mapDebugOverride = useMapDebugOverride();
   const ticketingAssistantOverride = useTicketingAssistantDebugOverride();
@@ -292,6 +296,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable city bike stations in map."
               override={cityBikesInMapDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable car sharing in map."
+              override={carSharingInMapDebugOverride}
             />
           </GenericSectionItem>
           <GenericSectionItem>

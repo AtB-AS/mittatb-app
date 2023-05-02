@@ -131,7 +131,8 @@ export type VehiclesFilterType = {
 };
 
 export type StationsFilterType = {
-  showCityBikeStations: boolean;
+  showCityBikeStations?: boolean;
+  showCarSharingStations?: boolean;
 };
 
 export type MapFilterType = {
