@@ -18,7 +18,7 @@ import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
 import {VehiclePosition} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
-import {useGetLiveServiceJourneyVehicles} from '@atb/travel-details-map-screen/use-get-live-service-journey-vehicles';
+import {useGetLiveServiceJourneyVehicles} from './use-get-live-service-journey-vehicles';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];

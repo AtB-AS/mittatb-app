@@ -65,7 +65,7 @@ const FareContractTexts = {
         ),
       },
       generic: {
-        title: _('En feil har oppstått', 'An error has ocurred'),
+        title: _('En feil har oppstått', 'An error has occurred'),
         text: _('Får ikke generert barkode.', 'Cannot generate a barcode.'),
         retry: _('Prøv på nytt.', 'Try again.'),
       },

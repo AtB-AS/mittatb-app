@@ -1,5 +1,4 @@
-import * as Sections from '@atb/components/sections';
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {ThemeText} from '@atb/components/text';
 import {Linking, StyleProp, View, ViewStyle} from 'react-native';
 import {InfoChip} from '@atb/components/info-chip';
@@ -14,6 +13,12 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {StyleSheet} from '@atb/theme';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {
+  ExpandableSectionItem,
+  GenericSectionItem,
+  LinkSectionItem,
+  Section,
+} from '@atb/components/sections';
 
 type Props = {
   userProfiles: UserProfileWithCountAndOffer[];
@@ -41,17 +46,17 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
       >
         {t(PurchaseOverviewTexts.flexDiscount.heading)}
       </ThemeText>
-      <Sections.Section>
-        <Sections.ExpandableSectionItem
+      <Section>
+        <ExpandableSectionItem
           text={t(PurchaseOverviewTexts.flexDiscount.expandableLabel)}
           textType="heading__component"
           expanded={expanded}
           onPress={setExpanded}
         />
         {expanded && (
-          <Sections.GenericSectionItem accessibility={{accessible: true}}>
+          <GenericSectionItem accessibility={{accessible: true}}>
             <ThemeText>{description}</ThemeText>
-          </Sections.GenericSectionItem>
+          </GenericSectionItem>
         )}
         {expanded &&
           [...userProfiles].map((u) => {
@@ -73,7 +78,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
               ) + ' kr';
 
             return (
-              <Sections.GenericSectionItem
+              <GenericSectionItem
                 accessibility={{
                   accessible: true,
                   accessibilityLabel: `${userProfileName}, ${discountText}, ${priceText}`,
@@ -100,11 +105,11 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                     />
                   </View>
                 </View>
-              </Sections.GenericSectionItem>
+              </GenericSectionItem>
             );
           })}
         {expanded && (
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text={t(PurchaseOverviewTexts.flexDiscount.link)}
             icon={'external-link'}
             onPress={() => Linking.openURL(flex_ticket_url)}
@@ -113,7 +118,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
             }}
           />
         )}
-      </Sections.Section>
+      </Section>
     </View>
   );
 };

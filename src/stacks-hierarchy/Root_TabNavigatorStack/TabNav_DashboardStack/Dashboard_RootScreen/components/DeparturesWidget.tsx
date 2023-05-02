@@ -18,9 +18,13 @@ import haversineDistance from 'haversine-distance';
 import React, {useEffect, useRef} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useFavoriteDepartureData} from '../use-favorite-departure-data';
-import * as Sections from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemedNoFavouriteDepartureImage} from '@atb/theme/ThemedAssets';
+import {
+  GenericSectionItem,
+  LinkSectionItem,
+  Section,
+} from '@atb/components/sections';
 
 type Props = {
   onEditFavouriteDeparture: () => void;
@@ -71,8 +75,8 @@ export const DeparturesWidget = ({
       </ThemeText>
 
       {!favoriteDepartures.length && (
-        <Sections.Section>
-          <Sections.GenericSectionItem>
+        <Section>
+          <GenericSectionItem>
             <View style={styles.noFavouritesView}>
               <ThemedNoFavouriteDepartureImage />
               <View style={styles.noFavouritesTextContainer}>
@@ -86,15 +90,15 @@ export const DeparturesWidget = ({
                 </ThemeText>
               </View>
             </View>
-          </Sections.GenericSectionItem>
-          <Sections.LinkSectionItem
+          </GenericSectionItem>
+          <LinkSectionItem
             textType="body__secondary"
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={onAddFavouriteDeparture}
             icon={<ThemeIcon svg={Add} />}
             testID="addFavoriteDeparture"
           />
-        </Sections.Section>
+        </Section>
       )}
 
       {state.isLoading && (

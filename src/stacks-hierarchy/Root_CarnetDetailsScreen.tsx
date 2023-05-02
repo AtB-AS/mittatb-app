@@ -6,17 +6,12 @@ import {useInterval} from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {CarnetDetailedView} from '../Carnet/CarnetDetailedView';
-import {FareContractModalScreenProps} from './types';
+import {CarnetDetailedView} from '@atb/fare-contracts';
+import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 
-export type CarnetDetailsRouteParams = {
-  orderId: string;
-  isInspectable: boolean;
-};
+type Props = RootStackScreenProps<'Root_CarnetDetailsScreen'>;
 
-type Props = FareContractModalScreenProps<'CarnetDetailsScreen'>;
-
-export function CarnetDetailsScreen({navigation, route}: Props) {
+export function Root_CarnetDetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
@@ -26,7 +21,7 @@ export function CarnetDetailsScreen({navigation, route}: Props) {
 
   const onReceiptNavigate = () =>
     fc &&
-    navigation.push('PurchaseReceipt', {
+    navigation.push('Root_ReceiptScreen', {
       orderId: fc.orderId,
       orderVersion: fc.version,
     });

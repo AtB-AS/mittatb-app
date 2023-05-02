@@ -1,12 +1,11 @@
 import React from 'react';
 import {Button} from '@atb/components/button';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {MapFilterSheet} from '@atb/components/map/components/filter/MapFilterSheet';
-import {MapFilterType} from '@atb/components/map/types';
+import {MapFilterSheet} from './MapFilterSheet';
+import {MapFilterType} from '../../types';
 import {StyleSheet} from '@atb/theme';
-import {shadows} from '@atb/components/map';
+import {shadows} from '../shadows';
 import {Filter} from '@atb/assets/svg/mono-icons/actions';
-import {LoadingSpinner} from '@atb/components/loading';
 
 type MapFilterProps = {
   onFilterChange: (filter: MapFilterType) => void;
@@ -33,7 +32,7 @@ export const MapFilter = ({onFilterChange, isLoading}: MapFilterProps) => {
       interactiveColor="interactive_2"
       accessibilityRole="button"
       onPress={onPress}
-      leftIcon={{svg: isLoading ? LoadingSpinner : Filter}}
+      leftIcon={{svg: Filter, loading: isLoading}}
     />
   );
 };

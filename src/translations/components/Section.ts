@@ -2,8 +2,8 @@ import {translation as _} from '../commons';
 
 const SectionTexts = {
   LocationInputSectionItem: {
-    myPosition: _('Min posisjon', 'My current position'),
-    updatingLocation: _('Oppdaterer posisjon', 'Updating current location'),
+    myPosition: _('Min posisjon', 'My position'),
+    updatingLocation: _('Oppdaterer posisjon', 'Updating location'),
     placeholder: _('Sted eller adresse', 'Place or address'),
     a11yValue: (currentLocation: string) =>
       _(`${currentLocation} er valgt.`, `${currentLocation} is selected.`),

@@ -8,12 +8,16 @@ import React from 'react';
 import Warning from '@atb/assets/svg/color/icons/status/Warning';
 import Info from '@atb/assets/svg/color/icons/status/Info';
 import Error from '@atb/assets/svg/color/icons/status/Error';
-import * as Sections from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
+import {
+  GenericSectionItem,
+  LinkSectionItem,
+  Section,
+} from '@atb/components/sections';
 
 const ChangeTokenAction = ({
   onChange,
@@ -71,8 +75,8 @@ const ChangeTokenAction = ({
   };
 
   return (
-    <Sections.Section style={styles.changeTokenButton}>
-      <Sections.LinkSectionItem
+    <Section style={styles.changeTokenButton}>
+      <LinkSectionItem
         type="spacious"
         text={t(TravelTokenTexts.travelToken.changeTokenButton)}
         disabled={isError || isLoading || toggleLimit === 0}
@@ -82,11 +86,11 @@ const ChangeTokenAction = ({
       />
 
       {shouldShowLoader ? (
-        <Sections.GenericSectionItem>
+        <GenericSectionItem>
           <ActivityIndicator style={styles.loader} />
-        </Sections.GenericSectionItem>
+        </GenericSectionItem>
       ) : toggleLimit !== undefined ? (
-        <Sections.GenericSectionItem>
+        <GenericSectionItem>
           <View style={styles.tokenInfoView}>
             <ThemeIcon svg={getToggleInfoIcon(toggleLimit)} />
             <ThemeText
@@ -100,9 +104,9 @@ const ChangeTokenAction = ({
               {getToggleInfo(toggleLimit, countRenewalDate)}
             </ThemeText>
           </View>
-        </Sections.GenericSectionItem>
+        </GenericSectionItem>
       ) : null}
-    </Sections.Section>
+    </Section>
   );
 };
 

@@ -9,6 +9,8 @@ type PollableResourceOptions<T> = {
   disabled?: boolean;
 };
 
+type LoadingState = 'NO_LOADING' | 'WITH_LOADING';
+
 /**
  * Pattern for creating a pollable resource as a hook. Pass data receiver function as first argument. The
  * receiver function may take an AbortSignal if it should be aborted when the callback function changes.
@@ -27,7 +29,12 @@ export const usePollableResource = <T, E extends Error = Error>(
     isInitialLoad?: boolean,
   ) => Promise<T>,
   opts: PollableResourceOptions<T>,
-): [T, boolean, E?] => {
+): [
+  T,
+  (loading: LoadingState, abortController?: AbortController) => void,
+  boolean,
+  E?,
+] => {
   const {initialValue, pollingTimeInSeconds = 30} = opts;
   const [isLoading, setIsLoading] = useIsLoading(false);
   const [error, setError] = useState<E | undefined>(undefined);
@@ -38,29 +45,27 @@ export const usePollableResource = <T, E extends Error = Error>(
   const prevState = usePrevious(state);
 
   const reload = useCallback(
-    async function reload(
-      loading: 'NO_LOADING' | 'WITH_LOADING' = 'WITH_LOADING',
+    function reload(
+      loading: LoadingState = 'WITH_LOADING',
       abortController?: AbortController,
     ) {
       // Only fetch if there is a location and the screen is in focus.
       if (loading === 'WITH_LOADING') {
         setIsLoading(true);
       }
-      try {
-        const newState = await callback(
-          abortController?.signal,
-          prevState,
-          loading === 'WITH_LOADING',
-        );
-        setError(undefined);
-        setState(newState);
-      } catch (e: any) {
-        if (!abortController?.signal.aborted) setError(e);
-      } finally {
-        if (loading === 'WITH_LOADING') {
-          setIsLoading(false);
-        }
-      }
+      callback(abortController?.signal, prevState, loading === 'WITH_LOADING')
+        .then((newState) => {
+          setState(newState);
+          setError(undefined);
+        })
+        .catch((e) => {
+          if (!abortController?.signal.aborted) setError(e);
+        })
+        .finally(() => {
+          if (loading === 'WITH_LOADING') {
+            setIsLoading(false);
+          }
+        });
     },
     [callback],
   );
@@ -79,5 +84,5 @@ export const usePollableResource = <T, E extends Error = Error>(
     opts.disabled,
   );
 
-  return [state, isLoading, error];
+  return [state, reload, isLoading, error];
 };

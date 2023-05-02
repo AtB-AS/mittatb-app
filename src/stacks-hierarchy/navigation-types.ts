@@ -1,5 +1,4 @@
 import {LoginInAppStackParams} from '@atb/login/types';
-import {FareContractModalStackParams} from '@atb/fare-contracts/Details/types';
 import {NavigationProp, NavigatorScreenParams} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {TabNavigatorStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack';
@@ -36,6 +35,20 @@ type PaymentParams = {
   preassignedFareProduct: PreassignedFareProduct;
 };
 
+type CarnetDetailsRouteParams = {
+  orderId: string;
+  isInspectable: boolean;
+};
+
+type ReceiptScreenRouteParams = {
+  orderId: string;
+  orderVersion: string;
+};
+
+type FareContractDetailsRouteParams = {
+  orderId: string;
+};
+
 export type RootStackParamList = {
   NotFound: undefined;
   Root_OnboardingStack: undefined;
@@ -56,8 +69,10 @@ export type RootStackParamList = {
     paymentMethod: CardPaymentMethod;
   };
   Root_PurchasePaymentWithVippsScreen: PaymentParams;
-  FareContractModal: NavigatorScreenParams<FareContractModalStackParams>;
   Root_MobileTokenOnboardingStack: undefined;
+  Root_FareContractDetailsScreen: FareContractDetailsRouteParams;
+  Root_CarnetDetailsScreen: CarnetDetailsRouteParams;
+  Root_ReceiptScreen: ReceiptScreenRouteParams;
 };
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;

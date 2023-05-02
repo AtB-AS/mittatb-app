@@ -1,19 +1,17 @@
 import React, {RefObject} from 'react';
 import {FeatureCollection, GeoJSON} from 'geojson';
 import MapboxGL from '@rnmapbox/maps';
-import {MapSelectionActionType} from '@atb/components/map/types';
-import {
-  flyToLocation,
-  isFeaturePoint,
-  toCoordinates,
-} from '@atb/components/map/utils';
-import {StationFragment} from '@atb/api/types/generated/fragments/stations';
+import {MapSelectionActionType} from '../../types';
+import {flyToLocation, isFeaturePoint, toCoordinates} from '../../utils';
+import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {useTheme} from '@atb/theme';
 import {getStaticColor} from '@atb/theme/colors';
+import {getAvailableVehicles} from '@atb/mobility/utils';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type Props = {
   mapCameraRef: RefObject<MapboxGL.Camera>;
-  stations: FeatureCollection<GeoJSON.Point, StationFragment>;
+  stations: FeatureCollection<GeoJSON.Point, StationBasicFragment>;
   onPress: (type: MapSelectionActionType) => void;
 };
 
@@ -21,10 +19,24 @@ export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
   const {themeName} = useTheme();
   const stationColor = getStaticColor(themeName, 'transport_bike');
 
+  const stationsWithCount = {
+    ...stations,
+    features: stations.features.map((feature) => ({
+      ...feature,
+      properties: {
+        ...feature.properties,
+        count: getAvailableVehicles(
+          feature.properties.vehicleTypesAvailable,
+          FormFactor.Bicycle,
+        ),
+      },
+    })),
+  };
+
   return (
     <MapboxGL.ShapeSource
       id={'stations'}
-      shape={stations}
+      shape={stationsWithCount}
       tolerance={0}
       onPress={async (e) => {
         const [feature, ..._] = e.features;
@@ -44,7 +56,7 @@ export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
         id="stationPin"
         minZoomLevel={13.5}
         style={{
-          textField: ['get', 'numBikesAvailable'],
+          textField: ['get', 'count'],
           textAnchor: 'center',
           textOffset: [0.75, 0],
           textColor: stationColor.background,

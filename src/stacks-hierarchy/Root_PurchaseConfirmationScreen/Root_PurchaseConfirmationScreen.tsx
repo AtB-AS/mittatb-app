@@ -4,7 +4,6 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {
@@ -43,6 +42,7 @@ import {usePreviousPaymentMethod} from '../saved-payment-utils';
 import {CardPaymentMethod, PaymentMethod, SavedPaymentOption} from '../types';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import analytics from '@react-native-firebase/analytics';
+import {GenericSectionItem, Section} from '@atb/components/sections';
 
 function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
@@ -265,8 +265,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               style={styles.errorMessage}
             />
           )}
-          <Sections.Section>
-            <Sections.GenericSectionItem>
+          <Section>
+            <GenericSectionItem>
               <View accessible={true}>
                 <ThemeText>
                   {getReferenceDataName(preassignedFareProduct, language)}
@@ -310,13 +310,13 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   {travelDateText}
                 </ThemeText>
               </View>
-            </Sections.GenericSectionItem>
-          </Sections.Section>
+            </GenericSectionItem>
+          </Section>
         </View>
 
-        <Sections.Section style={styles.paymentSummaryContainer}>
+        <Section style={styles.paymentSummaryContainer}>
           {travellerSelectionMode !== 'none' && (
-            <Sections.GenericSectionItem>
+            <GenericSectionItem>
               {userProfilesWithCountAndOffer.map((u, i) => (
                 <PricePerUserProfile
                   key={u.id}
@@ -324,9 +324,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   style={i != 0 ? styles.smallTopMargin : undefined}
                 />
               ))}
-            </Sections.GenericSectionItem>
+            </GenericSectionItem>
           )}
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             <View style={styles.totalPaymentContainer} accessible={true}>
               <View style={styles.totalContainerHeadings}>
                 <ThemeText type="body__primary">
@@ -354,8 +354,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 />
               )}
             </View>
-          </Sections.GenericSectionItem>
-        </Sections.Section>
+          </GenericSectionItem>
+        </Section>
 
         <MessageBox
           type="info"

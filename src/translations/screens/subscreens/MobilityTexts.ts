@@ -59,6 +59,10 @@ export const ScooterTexts = {
         ? _(`+ ${price} kr for oppstart`, `+ ${price} kr to unlock`)
         : _('Ingen oppstartskostnad', 'Free to unlock'),
   },
+  loadingFailed: _(
+    'Ops! Vi fant ikke denne sparkesykkelen',
+    "Ops! We couldn't find this scooter",
+  ),
 };
 
 export const BicycleTexts = {
@@ -67,4 +71,8 @@ export const BicycleTexts = {
     numDocksAvailable: _('Ledige plasser', 'Available docks'),
     unknownDocksAvailable: _('Ukjent antall', 'Unknown'),
   },
+  loadingFailed: _(
+    'Ops! Vi fant ikke denne sykkelstasjonen',
+    "Ops! We couldn't find this bike station",
+  ),
 };

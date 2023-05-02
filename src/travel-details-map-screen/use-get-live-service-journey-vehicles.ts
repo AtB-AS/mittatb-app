@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 import {VehiclePosition} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
-import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
+import {useRealtimeMapEnabled} from '@atb/components/map';
 import {getLiveVehicleSubscription} from '@atb/api/vehicles';
 
 export function useGetLiveServiceJourneyVehicles(

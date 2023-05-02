@@ -3,9 +3,11 @@ import {stringifyUrl} from '@atb/api/utils';
 import qs from 'query-string';
 import {AxiosRequestConfig} from 'axios';
 import {
+  GetBikeStationQuery,
   GetStationsQuery,
   GetStationsQueryVariables,
 } from '@atb/api/types/generated/StationsQuery';
+import {BikeStationFragment} from '@atb/api/types/generated/fragments/stations';
 
 export const getStations = (
   {lat, lon, range, availableFormFactors}: GetStationsQueryVariables,
@@ -23,4 +25,17 @@ export const getStations = (
       ...opts,
     })
     .then((res) => res.data.stations ?? []);
+};
+
+export const getBikeStation = (
+  id: string,
+  opts?: AxiosRequestConfig,
+): Promise<BikeStationFragment | undefined> => {
+  const url = '/bff/v2/mobility/station/bike';
+  const query = qs.stringify({ids: id});
+  return client
+    .get<GetBikeStationQuery>(stringifyUrl(url, query), {
+      ...opts,
+    })
+    .then((res) => (res.data.stations ? res.data.stations[0] : undefined));
 };

@@ -12,7 +12,7 @@ import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
+import {useRealtimeMapEnabled} from '@atb/components/map';
 import {MessageBox} from '@atb/components/message-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -107,9 +107,9 @@ export const DepartureDetailsScreenComponent = ({
       <FullScreenView
         type="large"
         leftButton={{type: 'back', withIcon: true}}
-        headerChildren={
+        headerChildren={(focusRef?: React.MutableRefObject<null>) => (
           <>
-            <View style={styles.headerTitle}>
+            <View style={styles.headerTitle} ref={focusRef} accessible={true}>
               {mode && (
                 <TransportationIconBox
                   mode={mode}
@@ -151,7 +151,7 @@ export const DepartureDetailsScreenComponent = ({
               </View>
             ) : null}
           </>
-        }
+        )}
       >
         {mapData && (
           <CompactTravelDetailsMap

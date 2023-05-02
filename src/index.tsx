@@ -1,4 +1,5 @@
 import 'react-native-get-random-values';
+
 import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {AppContextProvider} from './AppContext';
@@ -71,12 +72,12 @@ export const App = () => {
                     <FavoritesContextProvider>
                       <FiltersContextProvider>
                         <SearchHistoryContextProvider>
-                          <GeolocationContextProvider>
-                            <RemoteConfigContextProvider>
-                              <FirestoreConfigurationContextProvider>
-                                <TicketingContextProvider>
-                                  <MobileTokenContextProvider>
-                                    <AppLanguageProvider>
+                          <RemoteConfigContextProvider>
+                            <FirestoreConfigurationContextProvider>
+                              <TicketingContextProvider>
+                                <MobileTokenContextProvider>
+                                  <AppLanguageProvider>
+                                    <GeolocationContextProvider>
                                       <GlobalMessagesContextProvider>
                                         <BottomSheetProvider>
                                           <FeedbackQuestionsProvider>
@@ -84,12 +85,12 @@ export const App = () => {
                                           </FeedbackQuestionsProvider>
                                         </BottomSheetProvider>
                                       </GlobalMessagesContextProvider>
-                                    </AppLanguageProvider>
-                                  </MobileTokenContextProvider>
-                                </TicketingContextProvider>
-                              </FirestoreConfigurationContextProvider>
-                            </RemoteConfigContextProvider>
-                          </GeolocationContextProvider>
+                                    </GeolocationContextProvider>
+                                  </AppLanguageProvider>
+                                </MobileTokenContextProvider>
+                              </TicketingContextProvider>
+                            </FirestoreConfigurationContextProvider>
+                          </RemoteConfigContextProvider>
                         </SearchHistoryContextProvider>
                       </FiltersContextProvider>
                     </FavoritesContextProvider>
