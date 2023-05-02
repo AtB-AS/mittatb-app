@@ -97,7 +97,7 @@ const TicketAssistantTexts = {
     ),
     minLimit: (days: number) => {
       if (days === 1) {
-        return _('{1} dag', '1 day');
+        return _('1 dag', '1 day');
       } else {
         return _(`${days} dager`, `${days} days`);
       }
