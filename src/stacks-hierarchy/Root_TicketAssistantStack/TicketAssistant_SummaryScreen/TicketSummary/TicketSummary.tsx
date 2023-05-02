@@ -61,6 +61,16 @@ export const TicketSummary = () => {
   ).toFixed(2)}kr`;
 
   const transportModes = recommendedTicketTypeConfig.transportModes;
+
+  // If the ticket duration is longer than the input duration,
+  // we want to calculate based on the input duration instead
+  const compareDuration = () => {
+    if (ticket.duration > (inputParams.duration ?? 0)) {
+      return inputParams.duration ?? 0;
+    }
+    return ticket.duration;
+  };
+
   const savingsText = t(
     ticket.duration !== 0
       ? savings === 0
@@ -69,7 +79,7 @@ export const TicketSummary = () => {
             totalSavings: savings,
             perTripSavings: perTripSavings(savings, ticket.duration, frequency),
             alternative: `${calculateSingleTickets(
-              ticket.duration,
+              compareDuration(),
               frequency,
             )}`,
           })
