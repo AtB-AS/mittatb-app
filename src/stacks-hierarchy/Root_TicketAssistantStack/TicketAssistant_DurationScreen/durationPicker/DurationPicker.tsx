@@ -24,7 +24,7 @@ type DurationPickerProps = {
   setDuration: (duration: number) => void;
 };
 const currentDate = new Date();
-const durations = [3, 4, 5, 6, 7, 14, 21, 30, 60, 90, 120, 150, 180];
+const durations = [1, 2, 3, 4, 5, 6, 7, 14, 21, 30, 60, 90, 120, 150, 180];
 export const DurationPicker = ({
   duration,
   setDuration,

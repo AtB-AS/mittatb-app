@@ -51,10 +51,6 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
-import {
-  useTicketingAssistantDebugOverride,
-  useTicketingAssistantEnabled,
-} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {BetaTag} from '@atb/components/beta-tag';
 
 const buildNumber = getBuildNumber();
@@ -114,20 +110,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
       });
       setPreference({newDepartures: value});
     }
-  };
-
-  //Ticketing assistant toggle
-  // The toggle should be shown if the ticket assistant is enabled in the remote config,
-  // or if the debug override is enabled.
-  const {enable_ticketing_assistant} = useRemoteConfig();
-  let showTicketAssistantToggle = enable_ticketing_assistant;
-  const [debugOverride] = useTicketingAssistantDebugOverride();
-  if (debugOverride !== undefined) {
-    showTicketAssistantToggle = debugOverride;
-  }
-  const showTicketAssistant = useTicketingAssistantEnabled();
-  const setShowTicketAssistant = (value: boolean) => {
-    setPreference({showTicketAssistant: value});
   };
 
   function copyInstallId() {
@@ -371,14 +353,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             onValueChange={setDeparturesV2Enabled}
             testID="newDeparturesToggle"
           />
-          {showTicketAssistantToggle && (
-            <ToggleSectionItem
-              text={t(ProfileTexts.sections.newFeatures.ticketAssistant)}
-              value={showTicketAssistant}
-              onValueChange={setShowTicketAssistant}
-              testID="ticketAssistantToggle"
-            />
-          )}
 
           <LinkSectionItem
             text={t(

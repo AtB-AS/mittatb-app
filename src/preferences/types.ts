@@ -38,7 +38,6 @@ export type UserPreferences = {
   useFlexibleTransportOnAccessMode?: boolean;
   useFlexibleTransportOnDirectMode?: boolean;
   useFlexibleTransportOnEgressMode?: boolean;
-  showTicketAssistant?: boolean;
 };
 
 export type PreferenceItem = keyof UserPreferences;
