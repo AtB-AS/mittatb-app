@@ -1,49 +1,107 @@
-import {useTheme} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor} from '@atb/theme/colors';
-import {View} from 'react-native';
+import {RefreshControlProps, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
-import {ScreenWithLargeHeader} from './ScreenWithLargeHeader';
+import * as React from 'react';
+import {ParallaxScroll} from '@atb/components/parallax-scroll';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
-export type ScreenViewProps = ScreenHeaderProps & {
-  type: 'large' | 'small';
+type Props = {
+  headerProps: ScreenHeaderProps;
   /**
-   * JSX content that will be displayed as part of the disappearing header,
-   * below the title, and above global messages.
+   * JSX content that will be displayed between header and children, and will
+   * disappear with a parallax effect when scrolling.
    */
-  headerChildren?: (focusRef?: React.MutableRefObject<null>) => React.ReactNode;
-  /**
-   * Page content, below disappearing header.
-   */
+  parallaxContent?: (
+    focusRef?: React.MutableRefObject<null>,
+  ) => React.ReactNode;
+
   children?: React.ReactNode;
+  refreshControl?: React.ReactElement<RefreshControlProps>;
 };
 
-export function FullScreenView(props: ScreenViewProps) {
+type PropsWithParallaxContent = Props &
+  Required<Pick<Props, 'parallaxContent'>>;
+
+export function FullScreenView(props: Props) {
   const {top} = useSafeAreaInsets();
   const {themeName} = useTheme();
-  const themeColor = props.color ?? 'background_accent_0';
+  const themeColor = props.headerProps.color ?? 'background_accent_0';
   const backgroundColor = getStaticColor(themeName, themeColor).background;
 
-  switch (props.type) {
-    case 'small':
-      return (
-        <>
-          <View style={{backgroundColor, paddingTop: top}}>
-            <ScreenHeader {...props} />
-          </View>
-          <ScrollView>{props.children}</ScrollView>
-        </>
-      );
-    case 'large':
-      return (
-        <>
-          <View style={{backgroundColor, paddingTop: top}}>
-            {/* TODO: Handle title after scroll */}
-            <ScreenHeader {...props} title={undefined} setFocusOnLoad={false} />
-          </View>
-          <ScreenWithLargeHeader {...props} />
-        </>
-      );
-  }
+  return (
+    <>
+      <View style={{backgroundColor, paddingTop: top}}>
+        <ScreenHeader
+          {...props.headerProps}
+          setFocusOnLoad={!props.parallaxContent}
+        />
+      </View>
+      {hasParallaxContent(props) ? (
+        <ChildrenWithParallaxScrollContent
+          {...props}
+          backgroundColor={backgroundColor}
+        />
+      ) : (
+        <ChildrenInNormalScrollView {...props} />
+      )}
+    </>
+  );
 }
+
+const hasParallaxContent = (props: Props): props is PropsWithParallaxContent =>
+  !!props.parallaxContent;
+
+const ChildrenWithParallaxScrollContent = ({
+  parallaxContent,
+  refreshControl,
+  children,
+  backgroundColor,
+}: PropsWithParallaxContent & {backgroundColor: string}) => {
+  const focusRef = useFocusOnLoad();
+  const styles = useStyles();
+  return (
+    <View style={styles.container}>
+      <ParallaxScroll
+        header={
+          <View style={[styles.headerContainer, {backgroundColor}]}>
+            <View style={styles.childrenContainer}>
+              {parallaxContent(focusRef)}
+            </View>
+          </View>
+        }
+        refreshControl={refreshControl}
+      >
+        {children}
+      </ParallaxScroll>
+    </View>
+  );
+};
+
+const ChildrenInNormalScrollView = ({refreshControl, children}: Props) => (
+  <ScrollView refreshControl={refreshControl}>{children}</ScrollView>
+);
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    flex: 1,
+  },
+  headerContainer: {
+    paddingHorizontal: theme.spacings.medium,
+  },
+  topContainer: {
+    marginVertical: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
+  },
+  headerTitle: {
+    marginBottom: theme.spacings.medium,
+  },
+  childrenContainer: {
+    paddingBottom: theme.spacings.medium,
+  },
+  globalMessageBox: {
+    marginBottom: theme.spacings.medium,
+  },
+}));
