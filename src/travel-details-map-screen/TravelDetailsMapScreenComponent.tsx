@@ -82,6 +82,7 @@ export const TravelDetailsMapScreenComponent = ({
         coordinates: location,
         mapCameraRef,
         animationDuration: FOLLOW_ANIMATION_DURATION,
+        animationMode: 'easeTo',
       });
     }
   }, [vehicle, shouldTrack]);
