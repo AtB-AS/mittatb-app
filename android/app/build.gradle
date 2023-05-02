@@ -338,13 +338,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0"
 
-    implementation project(":tokencore")
+    implementation project(":libs:token:token-state-react-native-lib")
 
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
-    implementation "no.entur.abt.client.sdk:token-state-react-native-android-lib:1.1.11-SNAPSHOT"
+    implementation "no.entur.abt.client.sdk:token-state-react-native-android-lib:1.1.13-SNAPSHOT"
 
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
