@@ -100,7 +100,7 @@ export const TripDetailsScreenComponent = ({
             <ThemeText
               color={themeColor}
               type="heading--medium"
-              style={{marginBottom: 12}} // TODO
+              style={styles.heading}
               accessibilityLabel={
                 fromToNames
                   ? t(TripDetailsTexts.header.titleFromToA11yLabel(fromToNames))
@@ -118,7 +118,7 @@ export const TripDetailsScreenComponent = ({
             >
               <ThemeIcon
                 svg={SvgDuration}
-                style={{marginRight: 8}}
+                style={styles.durationIcon}
                 colorType={themeColor}
               />
               <ThemeText
@@ -321,6 +321,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.static.background.background_0.background,
   },
+  heading: {marginBottom: theme.spacings.medium},
   paddedContainer: {
     paddingHorizontal: theme.spacings.medium,
   },
@@ -349,4 +350,5 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   pagination: {
     marginVertical: theme.spacings.medium,
   },
+  durationIcon: {marginRight: theme.spacings.small},
 }));
