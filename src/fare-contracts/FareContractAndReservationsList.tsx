@@ -2,15 +2,13 @@ import {MessageBox} from '@atb/components/message-box';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {FareContract, Reservation, TravelCard} from '@atb/ticketing';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import hexToRgba from 'hex-to-rgba';
 import React, {useMemo} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import LinearGradient from 'react-native-linear-gradient';
 import {TravelCardInformation} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/TravelCardInformation';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
@@ -36,7 +34,6 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   travelCard,
   showTokenInfo,
 }) => {
-  const {theme} = useTheme();
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProp>();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
@@ -87,24 +84,13 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
           />
         ))}
       </ScrollView>
-      <LinearGradient
-        style={{position: 'absolute', bottom: 0, width: '100%', height: 30}}
-        colors={[
-          hexToRgba(theme.static.background.background_1.background, 0.1),
-          hexToRgba(theme.static.background.background_1.background, 1),
-        ]}
-        pointerEvents={'none'}
-      />
     </View>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1, marginBottom: theme.spacings.small},
+  container: {flex: 1},
   scrollView: {flex: 1, padding: theme.spacings.medium},
-  gradient: {
-    backgroundColor: theme.static.background.background_1.background,
-  },
   messageBox: {
     marginBottom: theme.spacings.large,
   },

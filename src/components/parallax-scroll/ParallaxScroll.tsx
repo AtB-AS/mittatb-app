@@ -1,19 +1,13 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {useLayout} from '@atb/utils/use-layout';
 import React, {PropsWithChildren, useEffect, useRef} from 'react';
-import {Animated, Platform, RefreshControl, View} from 'react-native';
+import {Animated, RefreshControlProps, View} from 'react-native';
 
-export type ContentWithDisappearingHeaderProps = PropsWithChildren<{
+type Props = PropsWithChildren<{
   header: React.ReactNode;
-  onRefresh?(): void;
-  isRefreshing?: boolean;
+  refreshControl?: React.ReactElement<RefreshControlProps>;
 }>;
-export function ContentWithDisappearingHeader({
-  header,
-  children,
-  isRefreshing = false,
-  onRefresh,
-}: ContentWithDisappearingHeaderProps) {
+export function ParallaxScroll({header, children, refreshControl}: Props) {
   const {onLayout: onHeaderContentLayout, height: contentHeight} = useLayout();
   const contentHeightRef = React.useRef(contentHeight);
   useEffect(() => {
@@ -21,17 +15,18 @@ export function ContentWithDisappearingHeader({
   }, [contentHeight]);
 
   const styles = useThemeStyles();
-  const {theme} = useTheme();
   const scrollYRef = useRef(new Animated.Value(0)).current;
 
   const headerTranslate = scrollYRef.interpolate({
-    // iOS and Android behaves differently here, so to match scrolling half speed
-    // there are two different ways to do it.
-    inputRange: [Platform.OS === 'ios' ? -contentHeight : 0, contentHeight],
-    outputRange: [0, -(contentHeight / (Platform.OS === 'ios' ? 1 : 2))],
+    inputRange: [0, contentHeight],
+    outputRange: [0, -(contentHeight / 2)],
     extrapolateRight: 'extend',
     extrapolateLeft: 'clamp',
   });
+
+  if (refreshControl) {
+    refreshControl.props.progressViewOffset = contentHeight;
+  }
 
   return (
     <View style={styles.content}>
@@ -43,26 +38,12 @@ export function ContentWithDisappearingHeader({
 
       <Animated.ScrollView
         scrollEventThrottle={10}
-        refreshControl={
-          onRefresh && (
-            <RefreshControl
-              refreshing={isRefreshing}
-              onRefresh={onRefresh}
-              progressViewOffset={contentHeight}
-              tintColor={theme.text.colors.primary}
-            />
-          )
-        }
+        refreshControl={refreshControl}
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
           {useNativeDriver: false},
         )}
-        contentContainerStyle={{
-          paddingTop: Platform.OS === 'ios' ? 0 : contentHeight,
-        }}
-        contentInset={{top: contentHeight}}
-        contentOffset={{x: 0, y: -contentHeight}}
-        automaticallyAdjustContentInsets={false}
+        contentContainerStyle={{paddingTop: contentHeight}}
       >
         {children}
       </Animated.ScrollView>
