@@ -1,21 +1,18 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {storedFilters} from './storage';
-import {TransportModeFilterOptionWithSelectionType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+import {TravelSearchFiltersSelectionType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 
 type FiltersContextState = {
-  filters: TransportModeFilterOptionWithSelectionType[];
-  setFilters(
-    filters: TransportModeFilterOptionWithSelectionType[] | undefined,
-  ): void;
+  filters: TravelSearchFiltersSelectionType | undefined;
+  setFilters(filters: TravelSearchFiltersSelectionType | undefined): void;
 };
 const FiltersContext = createContext<FiltersContextState | undefined>(
   undefined,
 );
 
 export const FiltersContextProvider: React.FC = ({children}) => {
-  const [filters, setFiltersState] = useState<
-    TransportModeFilterOptionWithSelectionType[]
-  >([]);
+  const [filters, setFiltersState] =
+    useState<TravelSearchFiltersSelectionType>();
 
   useEffect(() => {
     storedFilters.getFilters().then((filters) => setFiltersState(filters));
@@ -23,7 +20,7 @@ export const FiltersContextProvider: React.FC = ({children}) => {
 
   const contextValue: FiltersContextState = {
     filters,
-    async setFilters(filters: TransportModeFilterOptionWithSelectionType[]) {
+    async setFilters(filters: TravelSearchFiltersSelectionType) {
       const setFilters = await storedFilters.setFilters(filters);
       setFiltersState(setFilters);
     },

@@ -14,6 +14,7 @@ import {getTransportModeSvg} from '@atb/components/icon-box';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {StyleSheet} from '@atb/theme';
 import type {
+  FlexibleTransportOptionTypeWithSelectionType,
   TransportModeFilterOptionWithSelectionType,
   TravelSearchFiltersSelectionType,
 } from '../../types';
@@ -44,25 +45,30 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
 
   const isFlexibleTransportEnabledInRemoteConfig =
     useFlexibleTransportEnabled();
-  const [isFlexibleTransportEnabled, setFlexibleTranportState] = useState<
-    boolean | undefined
-  >(filtersSelection.flexibleTransport);
 
-  const [selectedModes, setSelectedModes] = useState<
+  const [selectedModeOptions, setSelectedModes] = useState<
     TransportModeFilterOptionWithSelectionType[] | undefined
   >(filtersSelection.transportModes);
 
+  const [selectedFlexibleTransportOption, setFlexibleTranportFilter] = useState<
+    FlexibleTransportOptionTypeWithSelectionType | undefined
+  >(filtersSelection.flexibleTransport);
+
+  console.log('>>> asdxz', filtersSelection.flexibleTransport);
+
   const save = () => {
-    onSave({
-      transportModes: selectedModes,
-    });
+    const selectedFilters = {
+      transportModes: selectedModeOptions,
+      flexibleTransport: selectedFlexibleTransportOption,
+    };
+    onSave(selectedFilters);
     if (saveFilters) {
-      setFilters(selectedModes);
+      setFilters(selectedFilters);
     }
     close();
   };
 
-  const allModesSelected = selectedModes?.every((m) => m.selected);
+  const allModesSelected = selectedModeOptions?.every((m) => m.selected);
 
   return (
     <BottomSheetContainer maxHeightValue={0.9}>
@@ -110,11 +116,12 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                 )}
                 subtext={description}
                 value={
-                  selectedModes?.find(({id}) => id === option.id)?.selected
+                  selectedModeOptions?.find(({id}) => id === option.id)
+                    ?.selected
                 }
                 onValueChange={(checked) => {
                   setSelectedModes(
-                    selectedModes?.map((m) =>
+                    selectedModeOptions?.map((m) =>
                       m.id === option.id ? {...m, selected: checked} : m,
                     ),
                   );
@@ -124,28 +131,42 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
           })}
         </Section>
 
-        {isFlexibleTransportEnabledInRemoteConfig && (
-          <Section style={styles.sectionContainer}>
-            <ToggleSectionItem
-              text={t(TripSearchTexts.filters.selection.flexibleTransport)}
-              subtext={t(
-                TripSearchTexts.filters.selection.flexibleTransportDescription,
-              )}
-              infoChipLabel={t(TripSearchTexts.filters.selection.newFilter)}
-              value={isFlexibleTransportEnabled}
-              onValueChange={(checked) => {
-                if (checked) {
-                  setSelectedModes(
-                    selectedModes?.map((m) =>
-                      m.id === 'bus' ? {...m, selected: checked} : m,
-                    ),
-                  );
+        {isFlexibleTransportEnabledInRemoteConfig &&
+          selectedFlexibleTransportOption && (
+            <Section style={styles.sectionContainer}>
+              <ToggleSectionItem
+                text={
+                  getTextForLanguage(
+                    selectedFlexibleTransportOption.title,
+                    language,
+                  ) ?? ''
                 }
-                setFlexibleTranportState(checked);
-              }}
-            />
-          </Section>
-        )}
+                subtext={getTextForLanguage(
+                  selectedFlexibleTransportOption.description,
+                  language,
+                )}
+                infoChipLabel={
+                  selectedFlexibleTransportOption.isNew
+                    ? t(TripSearchTexts.filters.selection.newFilter)
+                    : undefined
+                }
+                value={selectedFlexibleTransportOption?.enabled}
+                onValueChange={(checked) => {
+                  if (checked) {
+                    setSelectedModes(
+                      selectedModeOptions?.map((m) =>
+                        m.id === 'bus' ? {...m, selected: checked} : m,
+                      ),
+                    );
+                  }
+                  setFlexibleTranportFilter({
+                    ...selectedFlexibleTransportOption,
+                    enabled: checked,
+                  });
+                }}
+              />
+            </Section>
+          )}
 
         <Section style={styles.sectionContainer}>
           <GenericClickableSectionItem
