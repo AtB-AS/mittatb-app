@@ -1,6 +1,6 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Feedback} from '@atb/components/feedback';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {secondsBetween} from '@atb/utils/date';
 import {AxiosError} from 'axios';
 import React from 'react';
@@ -39,6 +39,8 @@ export const Trip: React.FC<TripProps> = ({
   onPressQuay,
 }) => {
   const styles = useStyle();
+  const {theme} = useTheme();
+
   const legs = tripPattern.legs.filter((leg, i) =>
     isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
   );
@@ -107,7 +109,7 @@ export const Trip: React.FC<TripProps> = ({
             );
           })}
       </View>
-      <Divider />
+      <Divider style={{marginVertical: theme.spacings.medium}} />
       {tripPatternLegs && (
         <CompactTravelDetailsMap
           mapLegs={tripPatternLegs}
