@@ -15,7 +15,7 @@ jobs:
     runs-on: macOS-12
     steps:
       - name: Exit for AtB and NFK
-        if: ${{ (matrix.org == 'atb') || ${{ (matrix.org == 'nfk') }}
+        if: ${{ (matrix.org == 'atb') || (matrix.org == 'nfk') }}
         run: exit 1
       - name: Checkout project
         uses: actions/checkout@v3
