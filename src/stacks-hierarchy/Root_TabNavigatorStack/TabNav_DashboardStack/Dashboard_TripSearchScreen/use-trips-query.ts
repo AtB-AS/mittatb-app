@@ -26,7 +26,7 @@ import {isValidTripLocations} from '@atb/utils/location';
 import Bugsnag from '@bugsnag/react-native';
 import {CancelTokenSource} from 'axios';
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {useJourneyModes} from './utils';
+import {useJourneyModes} from './hooks';
 
 export function useTripsQuery(
   fromLocation: Location | undefined,
