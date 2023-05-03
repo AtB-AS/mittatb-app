@@ -259,13 +259,16 @@ const TripSearchTexts = {
         },
       },
     },
+    labels: {
+      new: _('Ny', 'New'),
+      beta: _('Beta', 'Beta'),
+    },
     selection: {
       transportModes: (selected: number, total: number) =>
         _(
           `${selected} av ${total} transportmidler er valgt`,
           `${selected} of ${total} transportation modes are selected`,
         ),
-      newFilter: _('Ny', 'New'),
       flexibleTransport: _(
         'Tips om Fleksibel transport',
         'Tips for Flexible transport',

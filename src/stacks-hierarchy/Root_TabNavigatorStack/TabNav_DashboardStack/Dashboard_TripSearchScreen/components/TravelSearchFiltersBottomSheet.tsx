@@ -144,19 +144,16 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                   language,
                 )}
                 infoChipLabel={
-                  selectedFlexibleTransportOption.isNew
-                    ? t(TripSearchTexts.filters.selection.newFilter)
+                  selectedFlexibleTransportOption.label
+                    ? t(
+                        TripSearchTexts.filters.labels[
+                          selectedFlexibleTransportOption.label
+                        ],
+                      )
                     : undefined
                 }
                 value={selectedFlexibleTransportOption?.enabled}
                 onValueChange={(checked) => {
-                  if (checked) {
-                    setSelectedModes(
-                      selectedModeOptions?.map((m) =>
-                        m.id === 'bus' ? {...m, selected: checked} : m,
-                      ),
-                    );
-                  }
                   setFlexibleTranportFilter({
                     ...selectedFlexibleTransportOption,
                     enabled: checked,

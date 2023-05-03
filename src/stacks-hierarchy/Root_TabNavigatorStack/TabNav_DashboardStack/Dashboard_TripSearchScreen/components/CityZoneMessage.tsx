@@ -1,6 +1,6 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import React, {useState} from 'react';
+import React from 'react';
 import {Linking, TouchableOpacity, View} from 'react-native';
 import {getTextForLanguageWithFormat} from '@atb/translations/utils';
 import {FlexibleTransport} from '@atb/assets/svg/color/illustrations';
@@ -26,9 +26,14 @@ type ActionButton = {
 export type CityZoneMessageProps = {
   from: Location | undefined;
   to: Location | undefined;
+  onDismiss: () => void;
 };
 
-export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({from, to}) => {
+export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
+  from,
+  to,
+  onDismiss,
+}) => {
   const style = useStyle();
   const {language} = useTranslation();
 
@@ -38,9 +43,7 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({from, to}) => {
 
   const selectedCityZones = useFindCityZonesInLocations(from, to);
 
-  const [isClosed, setClosed] = useState(false);
-
-  if (!selectedCityZones || isClosed) {
+  if (!selectedCityZones) {
     return null;
   }
 
@@ -78,9 +81,7 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({from, to}) => {
         <MessageBoxWithActionButtons
           message={message}
           icon={() => <FlexibleTransport />}
-          onDismiss={() => {
-            setClosed(true);
-          }}
+          onDismiss={onDismiss}
           actionButtons={messageActions}
         />
       </Section>

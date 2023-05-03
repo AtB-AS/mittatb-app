@@ -16,6 +16,7 @@ type TravelSearchFiltersState =
       filtersSelection: TravelSearchFiltersSelectionType;
       anyFiltersApplied: boolean;
       resetTransportModes: () => void;
+      disableFlexibleTransport: () => void;
       closeRef: React.Ref<any>;
     }
   | {enabled: false; filtersSelection?: undefined};
@@ -50,13 +51,13 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
   const initialTransportModeSelection =
     filters?.transportModes ?? defaultTransportModeFilterOptions;
 
-  const initialFlexibleTransportFilter =
+  const initialFlexibleTransportFilterOption =
     filters?.flexibleTransport ?? defaultFlexibleTransportFilterOption;
 
   const [filtersSelection, setFiltersSelection] =
     useState<TravelSearchFiltersSelectionType>({
       transportModes: initialTransportModeSelection,
-      flexibleTransport: initialFlexibleTransportFilter,
+      flexibleTransport: initialFlexibleTransportFilterOption,
     });
   const closeRef = useRef();
 
@@ -83,15 +84,26 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
     filtersSelection,
     anyFiltersApplied:
       filtersSelection.transportModes?.some((m) => !m.selected) ||
-      filtersSelection.flexibleTransport?.enabled == true ||
+      !filtersSelection.flexibleTransport?.enabled ||
       false,
     resetTransportModes: () => {
-      const initialFilters = {
-        transportModes: defaultTransportModeFilterOptions,
+      const filters = {
+        ...filtersSelection,
         flexibleTransport: filtersSelection.flexibleTransport,
       };
-      setFilters(initialFilters);
-      setFiltersSelection(initialFilters);
+      setFilters(filters);
+      setFiltersSelection(filters);
+    },
+    disableFlexibleTransport: () => {
+      const filters = {
+        ...filtersSelection,
+        flexibleTransport: {
+          ...filtersSelection.flexibleTransport,
+          enabled: false,
+        },
+      };
+      setFilters(filters);
+      setFiltersSelection(filters);
     },
     closeRef,
   };
