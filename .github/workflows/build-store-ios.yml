@@ -1,22 +1,29 @@
 name: Build store iOS project
+#on:
+#release:
+#  types: [published]
 on:
-  release:
-    types: [published]
-
+  push:
+    branches:
+      - morten/fram-testflight-gpi
 jobs:
   build-ios:
     name: Build iOS
     strategy:
       fail-fast: false
       matrix:
-        org: [atb, nfk]
+        #org: [atb, nfk]
+        org: [fram]
     environment: ${{ matrix.org }}
     timeout-minutes: 360
     runs-on: macOS-12
     steps:
-      - name: Check if release tag is org specific and exit for other orgs
-        if: ${{ (matrix.org == 'atb' && contains(github.ref, 'nfk')) || (matrix.org == 'nfk' && contains(github.ref, 'atb')) }}
-        run: exit 1
+      #- name: Check if release tag is org specific and exit for other orgs
+      #  if: ${{ (matrix.org == 'atb' && contains(github.ref, 'nfk')) || (matrix.org == 'nfk' && contains(github.ref, 'atb')) }}
+      #  run: exit 1
+      - name: Exit for AtB and NFK
+        if: ${{ (matrix.org == 'atb') || ${{ (matrix.org == 'nfk') }}
+        runt: exit 1
       - name: Checkout project
         uses: actions/checkout@v3
       - name: Add Entur private registry credentials
@@ -42,7 +49,7 @@ jobs:
       - name: Run fastlane build
         run: bundle exec fastlane ios build
         env:
-          # A workaround for Github Actions which breaks for a timeout in some cases, 
+          # A workaround for Github Actions which breaks for a timeout in some cases,
           # so this sets a higher value for TIMEOUT and reduces the number of retries
           FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
           FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 1
