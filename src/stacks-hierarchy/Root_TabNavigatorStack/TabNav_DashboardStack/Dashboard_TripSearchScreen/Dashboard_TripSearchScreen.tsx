@@ -52,6 +52,7 @@ import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigat
 import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/SelectedFiltersButtons';
 import {FullScreenView} from '@atb/components/screen-view';
 import {CityZoneMessage} from './components/CityZoneMessage';
+import {useFlexibleTransportEnabled} from './use-flexible-transport-enabled';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -90,7 +91,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   });
 
   const filtersState = useTravelSearchFiltersState();
-
+  const isFlexibleTransportEnabledInRemoteConfig =
+    useFlexibleTransportEnabled();
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
     useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);
 
@@ -100,7 +102,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
   const isValidLocations = isValidTripLocations(from, to);
   const isFlexibleTransportEnabled =
-    filtersState.enabled &&
+    isFlexibleTransportEnabledInRemoteConfig &&
     filtersState?.filtersSelection?.flexibleTransport?.enabled === true;
 
   const [searchStateMessage, setSearchStateMessage] = useState<
