@@ -87,23 +87,23 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
       !filtersSelection.flexibleTransport?.enabled ||
       false,
     resetTransportModes: () => {
-      const filters = {
+      const filtersWithInitialTransportModes = {
         ...filtersSelection,
         flexibleTransport: filtersSelection.flexibleTransport,
       };
-      setFilters(filters);
-      setFiltersSelection(filters);
+      setFilters(filtersWithInitialTransportModes);
+      setFiltersSelection(filtersWithInitialTransportModes);
     },
     disableFlexibleTransport: () => {
-      const filters = {
+      const filtersWithFlexibleTransportDisabled = {
         ...filtersSelection,
         flexibleTransport: {
           ...filtersSelection.flexibleTransport,
           enabled: false,
-        },
+        } as FlexibleTransportOptionTypeWithSelectionType,
       };
-      setFilters(filters);
-      setFiltersSelection(filters);
+      setFilters(filtersWithFlexibleTransportDisabled);
+      setFiltersSelection(filtersWithFlexibleTransportDisabled);
     },
     closeRef,
   };
