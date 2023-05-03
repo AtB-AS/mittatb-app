@@ -5,7 +5,7 @@ import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations
 const softhyphen = Platform.OS === 'ios' ? '\u00AD' : '\u200B';
 
 const dictionary = {
-  myPosition: _('Min posisjon', 'My current position'),
+  myPosition: _('Min posisjon', 'My position'),
   fromPlace: _('Avreisested', 'Place of departure'),
   toPlace: _('Destinasjon', 'Destination'),
   navigation: {

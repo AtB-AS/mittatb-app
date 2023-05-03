@@ -21,8 +21,6 @@ import {useAuthState} from '@atb/auth';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
-import hexToRgba from 'hex-to-rgba';
-import LinearGradient from 'react-native-linear-gradient';
 import {PaymentBrand} from './PaymentBrand';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {getExpireDate, getPaymentTypeName} from '../../utils';
@@ -220,15 +218,6 @@ export const SelectPaymentMethod: React.FC<Props> = ({
               );
             })}
           </ScrollView>
-
-          <LinearGradient
-            style={styles.gradient}
-            colors={[
-              hexToRgba(theme.static.background.background_1.background, 0),
-              hexToRgba(theme.static.background.background_1.background, 1),
-            ]}
-            pointerEvents={'none'}
-          />
         </View>
         <FullScreenFooter>
           <Button
@@ -528,11 +517,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   saveOptionTextPadding: {
     paddingTop: theme.spacings.medium,
     opacity: 0.6,
-  },
-  gradient: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    height: 30,
   },
 }));

@@ -91,35 +91,46 @@ export const TripDetailsScreenComponent = ({
   return (
     <View style={styles.container}>
       <FullScreenView
-        type="large"
-        leftButton={{type: 'back', withIcon: true}}
-        title={
-          fromToNames
-            ? t(TripDetailsTexts.header.titleFromTo(fromToNames))
-            : t(TripDetailsTexts.header.title)
-        }
-        titleA11yLabel={
-          fromToNames
-            ? t(TripDetailsTexts.header.titleFromToA11yLabel(fromToNames))
-            : undefined
-        }
-        color={themeColor}
-        headerChildren={(focusRef?: React.MutableRefObject<null>) => (
-          <View style={{flexDirection: 'row'}} ref={focusRef} accessible={true}>
-            <ThemeIcon
-              svg={SvgDuration}
-              style={{marginRight: 8}}
-              colorType={themeColor}
-            />
+        headerProps={{
+          leftButton: {type: 'back', withIcon: true},
+          color: themeColor,
+        }}
+        parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
+          <View>
             <ThemeText
-              type="body__secondary"
               color={themeColor}
-              accessibilityLabel={t(
-                TripDetailsTexts.header.startEndTimeA11yLabel(startEndTime),
-              )}
+              type="heading--medium"
+              style={styles.heading}
+              accessibilityLabel={
+                fromToNames
+                  ? t(TripDetailsTexts.header.titleFromToA11yLabel(fromToNames))
+                  : undefined
+              }
             >
-              {t(TripDetailsTexts.header.startEndTime(startEndTime))}
+              {fromToNames
+                ? t(TripDetailsTexts.header.titleFromTo(fromToNames))
+                : t(TripDetailsTexts.header.title)}
             </ThemeText>
+            <View
+              style={{flexDirection: 'row'}}
+              ref={focusRef}
+              accessible={true}
+            >
+              <ThemeIcon
+                svg={SvgDuration}
+                style={styles.durationIcon}
+                colorType={themeColor}
+              />
+              <ThemeText
+                type="body__secondary"
+                color={themeColor}
+                accessibilityLabel={t(
+                  TripDetailsTexts.header.startEndTimeA11yLabel(startEndTime),
+                )}
+              >
+                {t(TripDetailsTexts.header.startEndTime(startEndTime))}
+              </ThemeText>
+            </View>
           </View>
         )}
       >
@@ -310,6 +321,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.static.background.background_0.background,
   },
+  heading: {marginBottom: theme.spacings.medium},
   paddedContainer: {
     paddingHorizontal: theme.spacings.medium,
   },
@@ -338,4 +350,5 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   pagination: {
     marginVertical: theme.spacings.medium,
   },
+  durationIcon: {marginRight: theme.spacings.small},
 }));

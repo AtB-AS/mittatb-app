@@ -105,9 +105,10 @@ export const DepartureDetailsScreenComponent = ({
   return (
     <View style={styles.container}>
       <FullScreenView
-        type="large"
-        leftButton={{type: 'back', withIcon: true}}
-        headerChildren={(focusRef?: React.MutableRefObject<null>) => (
+        headerProps={{
+          leftButton: {type: 'back', withIcon: true},
+        }}
+        parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
           <>
             <View style={styles.headerTitle} ref={focusRef} accessible={true}>
               {mode && (
