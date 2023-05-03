@@ -40,10 +40,12 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
       ...option,
       selected: true,
     }));
-  const defaultFlexibleTransportFilterOption = flexibleTransportFilterOptionFromFirestore && {
-    ...flexibleTransportFilterOptionFromFirestore,
-    enabled: true,
-  } as FlexibleTransportOptionTypeWithSelectionType;
+  const defaultFlexibleTransportFilterOption =
+    flexibleTransportFilterOptionFromFirestore &&
+    ({
+      ...flexibleTransportFilterOptionFromFirestore,
+      enabled: true,
+    } as FlexibleTransportOptionTypeWithSelectionType);
 
   const initialTransportModeSelection =
     filters?.transportModes ?? defaultTransportModeFilterOptions;

@@ -54,8 +54,6 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
     FlexibleTransportOptionTypeWithSelectionType | undefined
   >(filtersSelection.flexibleTransport);
 
-  console.log('>>> asdxz', filtersSelection.flexibleTransport);
-
   const save = () => {
     const selectedFilters = {
       transportModes: selectedModeOptions,
