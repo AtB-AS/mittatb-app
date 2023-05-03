@@ -19,17 +19,19 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
-import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
 import {usePreferences} from '@atb/preferences';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
-import {CompactTravelDetailsMap} from '@atb/travel-details-map-screen';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
 import {TicketingMessages} from '@atb/travel-details-screens/components/DetailsMessages';
 import {animateNextChange} from '@atb/utils/animation';
-import {formatToClock} from '@atb/utils/date';
+import {
+  formatToClock,
+  formatToVerboseFullDate,
+  isWithinSameDate,
+} from '@atb/utils/date';
 import {getQuayName} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {useIsFocused} from '@react-navigation/native';
@@ -43,6 +45,8 @@ import {
   useDepartureData,
   EstimatedCallWithMetadata,
 } from './use-departure-data';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -67,7 +71,7 @@ export const DepartureDetailsScreenComponent = ({
   const hasMultipleItems = items.length > 1;
 
   const styles = useStopsStyle();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const isFocused = useIsFocused();
   const [
@@ -77,6 +81,7 @@ export const DepartureDetailsScreenComponent = ({
   const mapData = useMapData(activeItem);
 
   const realtimeMapEnabled = useRealtimeMapEnabled();
+  const screenReaderEnabled = useIsScreenReaderEnabled();
 
   const shouldShowLive =
     !estimatedCallsWithMetadata.find((a) => !a.realtime) && realtimeMapEnabled;
@@ -153,39 +158,33 @@ export const DepartureDetailsScreenComponent = ({
           </>
         )}
       >
-        {mapData && (
-          <CompactTravelDetailsMap
-            mapLegs={mapData.mapLegs}
-            fromPlace={mapData.start}
-            toPlace={mapData.stop}
-            onExpand={() =>
-              onPressDetailsMap({
-                legs: mapData.mapLegs,
-                fromPlace: mapData.start,
-                toPlace: mapData.stop,
-              })
-            }
-          />
-        )}
         <View
           style={styles.scrollView__content}
           testID="departureDetailsContentView"
         >
-          {activeItem ? (
-            <PaginatedDetailsHeader
-              page={activeItemIndexState + 1}
-              totalPages={items.length}
-              onNavigate={onPaginationPress}
-              showPagination={hasMultipleItems}
-              currentDate={activeItem?.date}
-              isTripCancelled={activeItem?.isTripCancelled}
-            />
-          ) : (
-            <MessageBox
-              type="error"
-              message={t(DepartureDetailsTexts.messages.noActiveItem)}
-            />
-          )}
+          {screenReaderEnabled ? (
+            activeItem ? (
+              <PaginatedDetailsHeader
+                page={activeItemIndexState + 1}
+                totalPages={items.length}
+                onNavigate={onPaginationPress}
+                showPagination={hasMultipleItems}
+                currentDate={activeItem?.date}
+                isTripCancelled={activeItem?.isTripCancelled}
+              />
+            ) : (
+              <MessageBox
+                type="error"
+                message={t(DepartureDetailsTexts.messages.noActiveItem)}
+              />
+            )
+          ) : !isWithinSameDate(new Date(), activeItem.date) ? (
+            <View style={styles.headerDate}>
+              <ThemeText type={'body__primary'} color={'secondary'}>
+                {formatToVerboseFullDate(activeItem.date, language)}
+              </ThemeText>
+            </View>
+          ) : null}
           {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
           {situations.map((situation) => (
             <SituationMessageBox
@@ -526,7 +525,7 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
 const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.static.background.background_1.background,
   },
   headerTitle: {
     flexDirection: 'row',
@@ -542,6 +541,13 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     paddingTop: theme.spacings.medium,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  headerDate: {
+    marginBottom: theme.spacings.medium,
+    borderBottomWidth: theme.border.width.slim,
+    borderBottomColor: theme.static.background.background_3.background,
+    paddingBottom: theme.spacings.medium,
+    alignItems: 'center',
   },
   passedSection: {
     flexShrink: 1,
@@ -564,7 +570,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     minHeight: 60,
   },
   estimatedCallRows: {
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.static.background.background_1.background,
     marginBottom: theme.spacings.xLarge,
   },
   spinner: {
