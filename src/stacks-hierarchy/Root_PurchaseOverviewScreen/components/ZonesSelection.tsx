@@ -12,11 +12,13 @@ import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {TariffZoneWithMetadata} from '../../Root_PurchaseTariffZonesSearchByMapScreen';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
+import {PreassignedFareProduct} from '@atb/reference-data/types';
 
 type ZonesSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
+  preassignedFareProduct: PreassignedFareProduct;
   onSelect: (t: {
     fromTariffZone: TariffZoneWithMetadata;
     toTariffZone: TariffZoneWithMetadata;
@@ -29,6 +31,7 @@ export function ZonesSelection({
   fareProductTypeConfig,
   fromTariffZone,
   toTariffZone,
+  preassignedFareProduct,
   onSelect,
   style,
 }: ZonesSelectionProps) {
@@ -53,7 +56,11 @@ export function ZonesSelection({
   if (selectionMode == 'multiple-stop' || selectionMode == 'multiple-zone') {
     selectionMode = 'multiple';
   }
-  if (selectionMode == 'single-stop' || selectionMode == 'single-zone') {
+  if (
+    preassignedFareProduct.isApplicableOnSingleZoneOnly ||
+    selectionMode == 'single-stop' ||
+    selectionMode == 'single-zone'
+  ) {
     selectionMode = 'single';
   }
 

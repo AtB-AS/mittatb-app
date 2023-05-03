@@ -13,6 +13,7 @@ export type PreassignedFareProduct = {
   productAlias?: LanguageAndTextType[];
   distributionChannel: DistributionChannel[];
   alternativeNames: LanguageAndTextType[];
+  isApplicableOnSingleZoneOnly: boolean;
   limitations: {
     userProfileRefs: string[];
     appVersionMin: string | undefined;
