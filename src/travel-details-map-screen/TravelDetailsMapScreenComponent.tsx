@@ -67,16 +67,9 @@ export const TravelDetailsMapScreenComponent = ({
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
 
-  const [followVehicleMapPoint, setFollowVehicleMapPoint] = useState<
-    Coordinates | undefined
-  >();
-
   useEffect(() => {
     const location = vehicle?.location;
-
-    if (vehicle === followVehicleMapPoint || !location) return;
-
-    setFollowVehicleMapPoint(location);
+    if (!location) return;
     if (shouldTrack) {
       flyToLocation({
         coordinates: location,
@@ -121,9 +114,9 @@ export const TravelDetailsMapScreenComponent = ({
             text={t(MapTexts.startPoint.label)}
           />
         )}
-        {followVehicleMapPoint && (
+        {vehicle?.location && (
           <LiveVehicle
-            vehicles={followVehicleMapPoint}
+            coordinates={vehicle.location}
             setShouldTrack={setShouldTrack}
           />
         )}
@@ -153,19 +146,19 @@ const styles = StyleSheet.create({
 });
 
 type VehicleIconProps = {
-  vehicles: Coordinates;
+  coordinates: Coordinates;
   setShouldTrack: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const LiveVehicle = ({vehicles, setShouldTrack}: VehicleIconProps) => {
+const LiveVehicle = ({coordinates, setShouldTrack}: VehicleIconProps) => {
   const shapeSource = useRef<MapboxGL.ShapeSource>(null);
 
-  if (!vehicles) return null;
+  if (!coordinates) return null;
   return (
     <MapboxGL.ShapeSource
       id={'vehicle'}
       ref={shapeSource}
-      shape={pointOf(vehicles)}
+      shape={pointOf(coordinates)}
       cluster
       onPress={() => {
         setShouldTrack(true);
