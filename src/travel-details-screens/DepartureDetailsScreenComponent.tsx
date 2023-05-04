@@ -43,6 +43,7 @@ import {
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
+import {Divider} from '@atb/components/divider';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -174,11 +175,14 @@ export const DepartureDetailsScreenComponent = ({
               />
             )
           ) : !isWithinSameDate(new Date(), activeItem.date) ? (
-            <View style={styles.headerDate}>
-              <ThemeText type={'body__primary'} color={'secondary'}>
-                {formatToVerboseFullDate(activeItem.date, language)}
-              </ThemeText>
-            </View>
+            <>
+              <View style={styles.date}>
+                <ThemeText type={'body__primary'} color={'secondary'}>
+                  {formatToVerboseFullDate(activeItem.date, language)}
+                </ThemeText>
+              </View>
+              <Divider style={styles.border} />
+            </>
           ) : null}
           {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
           {situations.map((situation) => (
@@ -506,6 +510,9 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  date: {
+    alignItems: 'center',
+  },
   headerTitleIcon: {
     marginRight: theme.spacings.small,
   },
@@ -517,12 +524,9 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  headerDate: {
-    marginBottom: theme.spacings.medium,
-    borderBottomWidth: theme.border.width.slim,
-    borderBottomColor: theme.static.background.background_3.background,
-    paddingBottom: theme.spacings.medium,
-    alignItems: 'center',
+  border: {
+    borderColor: theme.static.background.background_3.background,
+    marginVertical: theme.spacings.medium,
   },
   passedSection: {
     flexShrink: 1,
