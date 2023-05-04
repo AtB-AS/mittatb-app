@@ -7,7 +7,7 @@ import {FlexibleTransport} from '@atb/assets/svg/color/illustrations';
 import {CityZone} from '@atb/reference-data/types';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {Location} from '@atb/favorites';
-import {useFindCityZonesInLocations} from '../utils';
+import {useFindCityZonesInLocations} from '../hooks';
 import {SvgProps} from 'react-native-svg';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemeText} from '@atb/components/text';

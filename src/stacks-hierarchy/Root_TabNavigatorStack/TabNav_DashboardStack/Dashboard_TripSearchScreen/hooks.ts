@@ -8,10 +8,11 @@ import {
   Modes,
   StreetMode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {useFlexibleTransportAccessModeEnabled} from './use-flexible-transport-access-mode-enabled';
 import {useFlexibleTransportEnabled} from './use-flexible-transport-enabled';
-import {useFlexibleTransportEgressModeEnabled} from './use-flexible-transport-egress-mode-enabled';
-import {useFlexibleTransportDirectModeEnabled} from './use-flexible-transport-direct-mode-enabled';
+import {StorageModelKeysEnum} from '@atb/storage';
+import {useDebugOverride} from '@atb/debug';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {RemoteConfigKeys} from '@atb/remote-config';
 
 export const useFindCityZoneInLocation = (
   location: Location | undefined,
@@ -76,3 +77,38 @@ export function useJourneyModes(
         : defaultValue,
   };
 }
+
+export const useFlexibleTransportDebugOverrideOrRemote = (
+  remoteConfigKey: RemoteConfigKeys,
+  storageModelKey: StorageModelKeysEnum,
+) => {
+  const [debugOverride] = useDebugOverride(storageModelKey);
+  const remoteConfig = useRemoteConfig();
+
+  if (debugOverride !== undefined) {
+    return debugOverride;
+  }
+
+  return remoteConfig[remoteConfigKey];
+};
+
+export const useFlexibleTransportAccessModeEnabled = () => {
+  return useFlexibleTransportDebugOverrideOrRemote(
+    'use_flexible_on_accessMode',
+    StorageModelKeysEnum.UseFlexibleTransportAccessModeDebugOverride,
+  );
+};
+
+export const useFlexibleTransportDirectModeEnabled = () => {
+  return useFlexibleTransportDebugOverrideOrRemote(
+    'use_flexible_on_directMode',
+    StorageModelKeysEnum.UseFlexibleTransportDirectModeDebugOverride,
+  );
+};
+
+export const useFlexibleTransportEgressModeEnabled = () => {
+  return useFlexibleTransportDebugOverrideOrRemote(
+    'use_flexible_on_egressMode',
+    StorageModelKeysEnum.UseFlexibleTransportEgressModeDebugOverride,
+  );
+};

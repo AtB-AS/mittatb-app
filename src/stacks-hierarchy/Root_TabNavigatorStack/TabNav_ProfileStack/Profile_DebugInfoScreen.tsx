@@ -36,9 +36,6 @@ import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStac
 import {useTipsAndInformationDebugOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information-enabled';
 import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
 import {useFlexibleTransportDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-flexible-transport-enabled';
-import {useFlexibleTransportDirectModeDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-flexible-transport-direct-mode-enabled';
-import {useFlexibleTransportEgressModeDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-flexible-transport-egress-mode-enabled';
-import {useFlexibleTransportAccessModeDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-flexible-transport-access-mode-enabled';
 import {
   ExpandableSectionItem,
   GenericSectionItem,
@@ -47,6 +44,7 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
+import {useDebugOverride} from '@atb/debug';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -65,12 +63,15 @@ export const Profile_DebugInfoScreen = () => {
 
   const travelSearchDebugOverride = useTravelSearchFiltersDebugOverride();
   const flexibleTransportDebugOverride = useFlexibleTransportDebugOverride();
-  const flexibleTransportAccessModeDebugOverride =
-    useFlexibleTransportAccessModeDebugOverride();
-  const flexibleTransportDirectModeDebugOverride =
-    useFlexibleTransportDirectModeDebugOverride();
-  const flexibleTransportEgressModeDebugOverride =
-    useFlexibleTransportEgressModeDebugOverride();
+  const flexibleTransportAccessModeDebugOverride = useDebugOverride(
+    StorageModelKeysEnum.UseFlexibleTransportAccessModeDebugOverride,
+  );
+  const flexibleTransportDirectModeDebugOverride = useDebugOverride(
+    StorageModelKeysEnum.UseFlexibleTransportDirectModeDebugOverride,
+  );
+  const flexibleTransportEgressModeDebugOverride = useDebugOverride(
+    StorageModelKeysEnum.UseFlexibleTransportEgressModeDebugOverride,
+  );
   const newTravelSearchDebugOverride = useNewTravelSearchDebugOverride();
   const fromTravelSearchToTicketDebugOverride =
     useFromTravelSearchToTicketDebugOverride();
