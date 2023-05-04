@@ -1,7 +1,11 @@
 name: Build store Android project
+#on:
+#  release:
+#    types: [published]
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - morten/fram-testflight-gpi
 
 jobs:
   build-android:
@@ -9,14 +13,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [atb, nfk]
+        org: [fram]
+        #org: [atb, nfk]
     environment: ${{ matrix.org }}
     timeout-minutes: 180
     runs-on: ubuntu-latest
     steps:
-      - name: Check if release tag is org specific and exit for other orgs
-        if: ${{ (matrix.org == 'atb' && contains(github.ref, 'nfk')) || (matrix.org == 'nfk' && contains(github.ref, 'atb')) }}
+      - name: Exit for AtB and NFK
+        if: ${{ (matrix.org == 'atb') || (matrix.org == 'nfk') }}$
         run: exit 1
+      #- name: Check if release tag is org specific and exit for other orgs
+      #  if: ${{ (matrix.org == 'atb' && contains(github.ref, 'nfk')) || (matrix.org == 'nfk' && contains(github.ref, 'atb')) }}
+      #  run: exit 1
       - name: Checkout project
         uses: actions/checkout@v1
       - name: Set global env vars
@@ -79,7 +87,7 @@ jobs:
           RELEASE_NOTES: ${{ steps.get_release.outputs.body }}
           RELEASE_URL: ${{ steps.get_release.outputs.html_url }}
       - name: Distrubute to Google Play Internal Testing
-        if: matrix.org == 'nfk'
+        if: (matrix.org == 'nfk') || (matrix.org == 'fram')
         run: |
           echo ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT}} | base64 --decode > google-play-service-account.json
           bundle exec fastlane android playstore_internal
