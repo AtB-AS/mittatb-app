@@ -376,7 +376,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     from={from}
                     to={to}
                     onDismiss={() => {
-                      filtersState.disableFlexibleTransport();
+                      filtersState.enabled &&
+                        filtersState.disableFlexibleTransport();
                     }}
                   />
                 )}
