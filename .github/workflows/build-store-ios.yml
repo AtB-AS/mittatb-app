@@ -1,21 +1,24 @@
 name: Build store iOS project
 on:
-  push:
-    branches:
-      - morten/fram-testflight-gpi
+  release:
+    types: [published]
+
 jobs:
   build-ios:
     name: Build iOS
     strategy:
       fail-fast: false
       matrix:
-        org: [fram]
+        org: [atb, nfk, fram]
     environment: ${{ matrix.org }}
     timeout-minutes: 360
     runs-on: macOS-12
     steps:
-      - name: Exit for AtB and NFK
-        if: ${{ (matrix.org == 'atb') || (matrix.org == 'nfk') }}
+      - name: Check if release tag is org specific and exit for other orgs
+        if: >
+          ${{ (contains(github.ref, 'atb') && matrix.org != 'atb') 
+          || (contains(github.ref, 'nfk') && matrix.org != 'nfk') 
+          || (contains(github.ref, 'fram') && matrix.org != 'fram') }}
         run: exit 1
       - name: Checkout project
         uses: actions/checkout@v3
