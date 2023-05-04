@@ -18,10 +18,7 @@ import {useFromTravelSearchToTicketEnabled} from '@atb/stacks-hierarchy/Root_Tab
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
-import {
-  CompactTravelDetailsMap,
-  TravelDetailsMapScreenParams,
-} from '@atb/travel-details-map-screen';
+import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
 import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {useCurrentTripPatternWithUpdates} from '@atb/travel-details-screens/use-current-trip-pattern-with-updates';
@@ -134,20 +131,6 @@ export const TripDetailsScreenComponent = ({
           </View>
         )}
       >
-        {tripPatternLegs && (
-          <CompactTravelDetailsMap
-            mapLegs={tripPatternLegs}
-            fromPlace={tripPatternLegs[0].fromPlace}
-            toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
-            onExpand={() => {
-              onPressDetailsMap({
-                legs: tripPatternLegs,
-                fromPlace: tripPatternLegs[0].fromPlace,
-                toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
-              });
-            }}
-          />
-        )}
         {tripPattern && (
           <View style={styles.paddedContainer} testID="tripDetailsContentView">
             {tripPatterns.length > 1 && (
