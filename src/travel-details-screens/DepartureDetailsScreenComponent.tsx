@@ -19,7 +19,6 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
-import {usePreferences} from '@atb/preferences';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -27,11 +26,7 @@ import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
 import {TicketingMessages} from '@atb/travel-details-screens/components/DetailsMessages';
 import {animateNextChange} from '@atb/utils/animation';
-import {
-  formatToClock,
-  formatToVerboseFullDate,
-  isWithinSameDate,
-} from '@atb/utils/date';
+import {formatToVerboseFullDate, isWithinSameDate} from '@atb/utils/date';
 import {getQuayName} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {useIsFocused} from '@react-navigation/native';
@@ -47,6 +42,7 @@ import {
 } from './use-departure-data';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
+import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -94,9 +90,7 @@ export const DepartureDetailsScreenComponent = ({
     (s) => s.serviceJourney?.id === activeItem.serviceJourneyId,
   );
 
-  const lastPassedStop = estimatedCallsWithMetadata
-    .filter((a) => a.actualDepartureTime)
-    .pop();
+  const realtimeText = useRealtimeText(estimatedCallsWithMetadata);
 
   const onPaginationPress = (newPage: number) => {
     animateNextChange();
@@ -130,9 +124,9 @@ export const DepartureDetailsScreenComponent = ({
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
             </View>
-            {lastPassedStop || (vehiclePosition && mapData) ? (
+            {realtimeText || (vehiclePosition && mapData) ? (
               <View style={styles.headerSubSection}>
-                <LastPassedStop estimatedCall={lastPassedStop} />
+                {realtimeText && <LastPassedStop realtimeText={realtimeText} />}
                 {vehiclePosition && mapData ? (
                   <Button
                     type="pill"
@@ -162,7 +156,7 @@ export const DepartureDetailsScreenComponent = ({
           style={styles.scrollView__content}
           testID="departureDetailsContentView"
         >
-          {screenReaderEnabled ? (
+          {screenReaderEnabled ? ( // Let users navigate other departures if screen reader is enabled
             activeItem ? (
               <PaginatedDetailsHeader
                 page={activeItemIndexState + 1}
@@ -238,18 +232,9 @@ export const DepartureDetailsScreenComponent = ({
   );
 };
 
-function LastPassedStop({
-  estimatedCall,
-}: {
-  estimatedCall?: EstimatedCallWithMetadata;
-}) {
+function LastPassedStop({realtimeText}: {realtimeText: string}) {
   const styles = useStopsStyle();
-  const {t, language} = useTranslation();
-  const {
-    preferences: {debugShowSeconds},
-  } = usePreferences();
 
-  if (!estimatedCall?.quay?.name) return null;
   return (
     <View style={styles.passedSection}>
       <ThemeIcon
@@ -262,17 +247,7 @@ function LastPassedStop({
         color="background_accent_0"
         style={{flexShrink: 1}}
       >
-        {t(
-          DepartureDetailsTexts.lastPassedStop(
-            estimatedCall.quay?.name,
-            formatToClock(
-              estimatedCall?.actualDepartureTime,
-              language,
-              'nearest',
-              debugShowSeconds,
-            ),
-          ),
-        )}
+        {realtimeText}
       </ThemeText>
     </View>
   );

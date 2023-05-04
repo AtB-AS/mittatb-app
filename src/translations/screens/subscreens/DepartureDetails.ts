@@ -14,6 +14,13 @@ const DepartureDetailsTexts = {
       `Passerte ${stopPlaceName} kl. ${time}`,
       `Passed ${stopPlaceName} at ${time}`,
     ),
+  noPassedStop: (stopPlaceName: string, time: string) =>
+    _(
+      `Kjører fra ${stopPlaceName} kl. ${time}`,
+      `Leaves ${stopPlaceName} at ${time}`,
+    ),
+  onTime: () => _(`I rute`, `On time`),
+  notOnTime: () => _(`Forsinket`, `Delayed`),
   live: _('Se live', 'See live'),
   map: _('Se i kart', 'Show in map'),
   messages: {
