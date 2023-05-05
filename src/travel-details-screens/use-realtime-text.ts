@@ -49,9 +49,9 @@ export const useRealtimeText = (
     }
     switch (timeRepType) {
       case 'no-significant-difference':
-        return t(DepartureDetailsTexts.onTime());
+        return t(DepartureDetailsTexts.onTime);
       case 'significant-difference':
-        return t(DepartureDetailsTexts.notOnTime());
+        return t(DepartureDetailsTexts.notOnTime);
     }
   }
   return undefined;
