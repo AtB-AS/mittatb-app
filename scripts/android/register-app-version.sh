@@ -30,8 +30,6 @@ if [[
   exit 2
 fi
 
-concat_app_version="${APP_VERSION}-${BUILD_ID}"
-
 # Get values based on environment
 case ${APP_ENVIRONMENT} in
   staging)
@@ -87,7 +85,7 @@ json=$(cat <<EOJ
     },
     android: {
       "apk_package_name": "$ANDROID_APPLICATION_ID",
-      "version_name": "$concat_app_version",
+      "version_name": "$APP_VERSION",
       "version_code": "$BUILD_ID",
       "certificate_digests": [
         "$certificate_digest"
@@ -101,7 +99,7 @@ EOJ
 
 echo "Registering app"
 # Register app
-echo "Registering mitt-atb version $concat_app_version, command_id / x-correlation-id: $request_id"
+echo "Registering mitt-atb version $APP_VERSION, version code: $BUILD_ID, command_id / x-correlation-id: $request_id"
 register=$(curl -v --header "Content-Type: application/json" \
   --header "Authorization: Bearer $access_token" \
   --header "X-Correlation-Id: $request_id" \
@@ -121,4 +119,4 @@ if [[ $register != {} ]]; then
   exit 8
 fi
 
-echo "Registration complete for version $concat_app_version with checksum"
+echo "Registration complete for version $APP_VERSION with version code $BUILD_ID with checksum"
