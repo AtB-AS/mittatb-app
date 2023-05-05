@@ -101,6 +101,8 @@ export const defaultRemoteConfig: RemoteConfig = {
   use_trygg_overgang_qr_code: false,
 };
 
+export type RemoteConfigKeys = keyof RemoteConfig;
+
 export function getConfig(): RemoteConfig {
   const values = remoteConfig().getAll();
   const enable_network_logging =
