@@ -20,7 +20,7 @@ const DepartureDetailsTexts = {
       `Leaves ${stopPlaceName} at ${time}`,
     ),
   onTime: () => _(`I rute`, `On time`),
-  notOnTime: () => _(`Forsinket`, `Delayed`),
+  notOnTime: () => _(`Etter rutetid`, `Behind scheduled time`),
   live: _('Se live', 'See live'),
   map: _('Se i kart', 'Show in map'),
   messages: {
