@@ -195,7 +195,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
               style={style.dashboardGlobalmessages}
               globalMessageContext="app-assistant"
             />
-            <Section>
+            <Section style={style.locationInputSection}>
               <LocationInputSectionItem
                 accessibilityLabel={
                   t(TripSearchTexts.location.departurePicker.a11yLabel) +
@@ -437,6 +437,10 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     bottom: 0,
     padding: 0,
     margin: 0,
+  },
+  locationInputSection: {
+    backgroundColor: theme.static.background.background_2.background,
+    borderRadius: theme.border.radius.regular,
   },
   paddedContainer: {
     marginHorizontal: theme.spacings.medium,
