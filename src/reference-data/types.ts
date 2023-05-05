@@ -40,15 +40,6 @@ export type TariffZone = {
   geometry: Omit<Polygon, 'type'> & {type: any};
 };
 
-export type CityZoneMessageTexts = {
-  singleZone: CityZoneMessage;
-  multipleZones: CityZoneMessage;
-};
-
-export type CityZoneMessage = {
-  message: LanguageAndTextType[];
-};
-
 export type CityZone = {
   name: string;
   enabled: boolean;

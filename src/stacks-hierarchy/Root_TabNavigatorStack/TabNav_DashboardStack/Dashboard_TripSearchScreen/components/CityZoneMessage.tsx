@@ -2,10 +2,8 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
 import {Linking, TouchableOpacity, View} from 'react-native';
-import {getTextForLanguageWithFormat} from '@atb/translations/utils';
 import {FlexibleTransport} from '@atb/assets/svg/color/illustrations';
 import {CityZone} from '@atb/reference-data/types';
-import {useFirestoreConfiguration} from '@atb/configuration';
 import {Location} from '@atb/favorites';
 import {useFindCityZonesInLocations} from '../hooks';
 import {SvgProps} from 'react-native-svg';
@@ -17,6 +15,7 @@ import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {insets} from '@atb/utils/insets';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {Section} from '@atb/components/sections';
+import CityBoxMessageTexts from '@atb/translations/components/CityBoxMessage';
 
 type ActionButton = {
   text: string;
@@ -30,11 +29,7 @@ export type CityZoneMessageProps = {
 
 export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({from, to}) => {
   const style = useStyle();
-  const {language} = useTranslation();
-
-  const {
-    cityZoneMessageTexts: {singleZone, multipleZones},
-  } = useFirestoreConfiguration();
+  const {t, language} = useTranslation();
 
   const selectedCityZones = useFindCityZonesInLocations(from, to);
 
@@ -43,15 +38,6 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({from, to}) => {
   if (!selectedCityZones?.length || isClosed) {
     return null;
   }
-
-  const messageTemplate =
-    selectedCityZones.length == 1 ? singleZone : multipleZones;
-
-  const message = getTextForLanguageWithFormat(
-    messageTemplate.message,
-    language,
-    ...selectedCityZones.map((cityZone) => cityZone.name),
-  );
 
   const openUrlForCityZone = (cityZone: CityZone) => {
     const contactUrl = getTextForLanguage(cityZone.contactUrl, language);
@@ -65,11 +51,11 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({from, to}) => {
     onPress: () => openUrlForCityZone(cityZone),
   }));
 
-  if (message && messageActions) {
+  if (messageActions) {
     return (
       <Section style={style.cityZoneMessage}>
         <CityZoneBox
-          message={message}
+          message={t(CityBoxMessageTexts.message)}
           icon={() => <FlexibleTransport />}
           onDismiss={() => {
             setClosed(true);
