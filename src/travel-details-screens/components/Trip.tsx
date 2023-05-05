@@ -20,6 +20,7 @@ import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNaviga
 import {useRealtimeMapEnabled} from '@atb/components/map';
 import {AnyMode} from '@atb/components/icon-box';
 import {Divider} from '@atb/components/divider';
+import {MapTexts, useTranslation} from '@atb/translations';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -40,6 +41,7 @@ export const Trip: React.FC<TripProps> = ({
 }) => {
   const styles = useStyle();
   const {theme} = useTheme();
+  const {t} = useTranslation();
 
   const legs = tripPattern.legs.filter((leg, i) =>
     isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
@@ -115,6 +117,7 @@ export const Trip: React.FC<TripProps> = ({
           mapLegs={tripPatternLegs}
           fromPlace={tripPatternLegs[0]?.fromPlace}
           toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
+          buttonText={t(MapTexts.showTrip.label)}
           onExpand={() => {
             onPressDetailsMap({
               legs: tripPatternLegs,

@@ -19,6 +19,7 @@ export type MapProps = {
   mapLegs: MapLeg[];
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
+  buttonText: string;
   onExpand?(): void;
 };
 
@@ -26,6 +27,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   mapLegs,
   fromPlace,
   toPlace,
+  buttonText,
   onExpand,
 }) => {
   const {themeName} = useTheme();
@@ -95,9 +97,9 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
           )}
         </MapboxGL.MapView>
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={onExpand}>
         <ThemeText type={'body__secondary--bold'} color={'primary'}>
-          {t(MapTexts.showTrip.label)}
+          {buttonText}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} />
       </TouchableOpacity>
