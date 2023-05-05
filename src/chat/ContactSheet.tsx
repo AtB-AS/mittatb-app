@@ -1,3 +1,4 @@
+import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
@@ -16,7 +17,6 @@ import {useChatUnreadCount} from './use-chat-unread-count';
 import Intercom from 'react-native-intercom';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {screenReaderHidden} from '@atb/utils/accessibility';
-import {Button} from '@atb/components/button';
 
 type Props = {
   close: () => void;
