@@ -4,14 +4,14 @@ const MapTexts = {
   exitButton: {
     a11yLabel: _('Gå tilbake', 'Go back'),
   },
-  expandButton: {
-    label: _('Utvid kart', 'Expand map'),
-  },
   startPoint: {
     label: _('Start', 'Start'),
   },
   endPoint: {
     label: _('Slutt', 'End'),
+  },
+  showTrip: {
+    label: _('Vis reiserute i kart', 'Show trip in map'),
   },
   disabledForScreenReader: {
     title: _('Kart kan ikke vises', 'Map cannot be viewed'),
