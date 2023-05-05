@@ -27,15 +27,17 @@ export type CityZoneMessageProps = {
   onDismiss: () => void;
 };
 
-export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({from, to}) => {
+export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
+  from,
+  to,
+  onDismiss,
+}) => {
   const style = useStyle();
   const {t, language} = useTranslation();
 
   const selectedCityZones = useFindCityZonesInLocations(from, to);
 
-  const [isClosed, setClosed] = useState(false);
-
-  if (!selectedCityZones?.length || isClosed) {
+  if (!selectedCityZones?.length) {
     return null;
   }
 
@@ -57,9 +59,7 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({from, to}) => {
         <CityZoneBox
           message={t(CityBoxMessageTexts.message)}
           icon={() => <FlexibleTransport />}
-          onDismiss={() => {
-            setClosed(true);
-          }}
+          onDismiss={onDismiss}
           actionButtons={messageActions}
         />
       </Section>
