@@ -5,7 +5,6 @@ const ContactSheetTexts = {
     title: _('Kontakt AtB', 'Contact AtB'),
   },
   customer_service: {
-    title: _('Spørsmål til kundeservice', 'Questions for customer service'),
     body: _(
       'Har du spørsmål eller trenger hjelp?',
       'Do you have questions or need help?',
@@ -17,7 +16,6 @@ const ContactSheetTexts = {
     ),
   },
   customer_feedback_website: {
-    title: _('Tilbakemelding om appen', 'Feedback about the app'),
     body: _(
       'Vil du foreslå forbedringer til appen?',
       'Do you have suggestions on how we can improve the app?',
@@ -32,7 +30,6 @@ const ContactSheetTexts = {
     ),
   },
   customer_feedback: {
-    title: _('Tilbakemelding om appen', 'Feedback about the app'),
     body: _(
       'Vil du foreslå forbedringer eller rapportere feil i appen?',
       'Would you like to suggest improvements or report errors in the app?',
