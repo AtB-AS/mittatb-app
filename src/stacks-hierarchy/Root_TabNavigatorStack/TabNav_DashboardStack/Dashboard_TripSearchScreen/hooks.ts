@@ -40,15 +40,9 @@ export const useFindCityZonesInLocations = (
   const fromCityZone = useFindCityZoneInLocation(from, cityZones);
   const toCityZone = useFindCityZoneInLocation(to, cityZones);
 
-  const filteredCityZones: CityZone[] = [];
-  fromCityZone &&
-    fromCityZone.enabled == true &&
-    filteredCityZones.push(fromCityZone);
-  toCityZone &&
-    toCityZone.enabled === true &&
-    filteredCityZones.push(toCityZone);
-
-  return filteredCityZones.filter(onlyUniquesBasedOnField('name'));
+  return [fromCityZone, toCityZone]
+    .filter((cityZone): cityZone is CityZone => !!cityZone?.enabled)
+    .filter(onlyUniquesBasedOnField('name'));
 };
 
 export function useJourneyModes(
