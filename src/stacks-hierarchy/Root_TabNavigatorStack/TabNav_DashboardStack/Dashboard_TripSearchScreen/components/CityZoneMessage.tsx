@@ -1,11 +1,8 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import React from 'react';
 import {Linking, TouchableOpacity, View} from 'react-native';
-import {getTextForLanguageWithFormat} from '@atb/translations/utils';
 import {FlexibleTransport} from '@atb/assets/svg/color/illustrations';
 import {CityZone} from '@atb/reference-data/types';
-import {useFirestoreConfiguration} from '@atb/configuration';
 import {Location} from '@atb/favorites';
 import {useFindCityZonesInLocations} from '../hooks';
 import {SvgProps} from 'react-native-svg';
@@ -17,6 +14,7 @@ import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {insets} from '@atb/utils/insets';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {Section} from '@atb/components/sections';
+import CityBoxMessageTexts from '@atb/translations/components/CityBoxMessage';
 
 type ActionButton = {
   text: string;
@@ -29,59 +27,39 @@ export type CityZoneMessageProps = {
   onDismiss: () => void;
 };
 
-export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
-  from,
-  to,
-  onDismiss,
-}) => {
+export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({from, to}) => {
   const style = useStyle();
-  const {language} = useTranslation();
-
-  const {
-    cityZoneMessageTexts: {singleZone, multipleZones},
-  } = useFirestoreConfiguration();
+  const {t, language} = useTranslation();
 
   const selectedCityZones = useFindCityZonesInLocations(from, to);
 
-  if (!selectedCityZones) {
+  const [isClosed, setClosed] = useState(false);
+
+  if (!selectedCityZones?.length || isClosed) {
     return null;
   }
-
-  if (selectedCityZones.length === 0) {
-    return null;
-  }
-
-  const messageTemplate =
-    selectedCityZones.length == 1 ? singleZone : multipleZones;
-
-  const message = getTextForLanguageWithFormat(
-    messageTemplate.message,
-    language,
-    ...selectedCityZones.map((cityZone) => cityZone.name),
-  );
 
   const openUrlForCityZone = (cityZone: CityZone) => {
     const contactUrl = getTextForLanguage(cityZone.contactUrl, language);
     if (contactUrl) {
-      return Linking.openURL(contactUrl);
+      Linking.openURL(contactUrl);
     }
   };
 
-  const messageActions = selectedCityZones.map(
-    (cityZone) =>
-      ({
-        text: cityZone.name,
-        onPress: () => openUrlForCityZone(cityZone),
-      } as ActionButton),
-  );
+  const messageActions = selectedCityZones.map((cityZone) => ({
+    text: cityZone.name,
+    onPress: () => openUrlForCityZone(cityZone),
+  }));
 
-  if (message && messageActions) {
+  if (messageActions) {
     return (
       <Section style={style.cityZoneMessage}>
-        <MessageBoxWithActionButtons
-          message={message}
+        <CityZoneBox
+          message={t(CityBoxMessageTexts.message)}
           icon={() => <FlexibleTransport />}
-          onDismiss={onDismiss}
+          onDismiss={() => {
+            setClosed(true);
+          }}
           actionButtons={messageActions}
         />
       </Section>
@@ -91,19 +69,19 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
   return null;
 };
 
-type MessageBoxWithActionButtonsProps = {
+type CityZoneBoxProps = {
   icon: (props: SvgProps) => JSX.Element;
   message: string;
   onDismiss?: () => void;
   actionButtons?: ActionButton[];
 };
 
-const MessageBoxWithActionButtons = ({
+const CityZoneBox = ({
   icon,
   message,
   actionButtons,
   onDismiss,
-}: MessageBoxWithActionButtonsProps) => {
+}: CityZoneBoxProps) => {
   const {theme} = useTheme();
   const styles = useStyle();
   const {t} = useTranslation();
