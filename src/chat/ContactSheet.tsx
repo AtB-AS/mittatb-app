@@ -1,4 +1,3 @@
-import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
@@ -18,6 +17,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {screenReaderHidden} from '@atb/utils/accessibility';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {Button, ButtonProps} from '@atb/components/button';
 
 type Props = {
   close: () => void;
@@ -106,7 +106,7 @@ type ContactProps = {
   accessibilityHint: string;
   focusRef?: React.ForwardedRef<View>;
   screenReaderHidden?: AccessibilityProps;
-  buttonMode?: 'primary' | 'secondary';
+  buttonMode?: ButtonProps['mode'];
 };
 
 const ContactItem: React.FC<ContactProps> = ({
