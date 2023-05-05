@@ -24,7 +24,7 @@ export const ServiceDisruptionSheet = forwardRef<View, Props>(
   ({close}, focusRef) => {
     const {t} = useTranslation();
     const {service_disruption_url} = useRemoteConfig();
-    const hasValidServiceDisruptionUrl = true;
+    const hasValidServiceDisruptionUrl = !!service_disruption_url;
     const style = useStyle();
 
     return (
@@ -43,7 +43,7 @@ export const ServiceDisruptionSheet = forwardRef<View, Props>(
         <FullScreenFooter>
           <GlobalMessage
             style={style.globalMessages}
-            globalMessageContext="app-assistant"
+            globalMessageContext={'all'}
             includeDismissed={true}
           />
 
