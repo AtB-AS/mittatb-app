@@ -111,7 +111,7 @@ export const TicketSummary = () => {
             <TransportModes
               iconSize={'small'}
               modes={transportModes}
-              style={{flex: 2}}
+              style={styles.transportModes}
             />
           </View>
 
@@ -191,6 +191,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.interactive[interactiveColorName].default.background,
     borderRadius: theme.border.radius.regular,
     overflow: 'hidden',
+  },
+  transportModes: {
+    flex: 2,
   },
   upperPart: {
     padding: theme.spacings.xLarge,
