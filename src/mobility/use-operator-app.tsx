@@ -2,7 +2,7 @@ import {useTranslation} from '@atb/translations';
 import {Alert, AlertButton, Linking} from 'react-native';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useCallback} from 'react';
-import {useEventCapture} from '@atb/analytics';
+import {useAnalytics} from '@atb/analytics';
 
 type AppMissingAlertArgs = {
   operatorName: string;
@@ -14,7 +14,7 @@ export const useOperatorApp = ({
   appStoreUri,
   rentalAppUri,
 }: AppMissingAlertArgs) => {
-  const {capture} = useEventCapture();
+  const {logAnalyticsEvent} = useAnalytics();
   const {t} = useTranslation();
 
   const appStoreOpenError = (operatorName: string) => {
@@ -60,7 +60,7 @@ export const useOperatorApp = ({
   };
 
   const openOperatorApp = useCallback(async () => {
-    capture('Open mobility operator app', {operatorName});
+    logAnalyticsEvent('Open mobility operator app', {operatorName});
     if (!rentalAppUri) return;
     await Linking.openURL(rentalAppUri).catch(() => appMissingAlert());
   }, [rentalAppUri, operatorName, appStoreUri]);

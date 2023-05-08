@@ -1,2 +1,4 @@
-export {AnalyticsContextProvider} from '@atb/analytics/AnalyticsContext';
-export {useEventCapture} from './captureUserEvents';
+export {
+  AnalyticsContextProvider,
+  useAnalytics,
+} from '@atb/analytics/AnalyticsContext';
