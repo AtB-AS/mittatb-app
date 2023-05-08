@@ -18,9 +18,9 @@ export const useRealtimeText = (
   if (lastPassedStop && lastPassedStop.quay?.name) {
     return t(
       DepartureDetailsTexts.lastPassedStop(
-        lastPassedStop.quay?.name,
+        lastPassedStop.quay.name,
         formatToClock(
-          lastPassedStop?.actualDepartureTime,
+          lastPassedStop.actualDepartureTime,
           language,
           'nearest',
           debugShowSeconds,
@@ -40,7 +40,7 @@ export const useRealtimeText = (
       DepartureDetailsTexts.noPassedStop(
         firstStop.quay.name,
         formatToClock(
-          firstStop?.expectedDepartureTime,
+          firstStop.expectedDepartureTime,
           language,
           'floor',
           debugShowSeconds,
@@ -49,7 +49,7 @@ export const useRealtimeText = (
     );
   }
   const timeRepType = getTimeRepresentationType({
-    missingRealTime: !firstStop.realtime,
+    missingRealTime: !firstStop?.realtime,
     aimedTime: firstStop?.aimedDepartureTime,
     expectedTime: firstStop?.expectedDepartureTime,
   });
