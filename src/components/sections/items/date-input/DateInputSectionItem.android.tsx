@@ -7,7 +7,6 @@ import React, {useState} from 'react';
 import {ButtonSectionItem} from '../ButtonSectionItem';
 import {DateInputSectionItemProps} from './utils';
 import {useLocaleContext} from '@atb/LocaleProvider';
-import {dateToDateString} from '@atb/utils/date-to-date-string';
 
 export function DateInputSectionItem(props: DateInputSectionItemProps) {
   const {value, onChange, ...innerProps} = props;
@@ -33,7 +32,7 @@ export function DateInputSectionItem(props: DateInputSectionItemProps) {
           minimumDate={new Date()}
           textColor={theme.text.colors.primary}
           onChange={(_: Event, date?: Date) => {
-            onChange(dateToDateString(date));
+            if (date) onChange(date.toISOString());
             setShow(false);
           }}
         />
