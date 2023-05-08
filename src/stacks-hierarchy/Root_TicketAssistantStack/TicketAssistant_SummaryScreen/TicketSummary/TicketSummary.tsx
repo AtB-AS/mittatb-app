@@ -15,6 +15,7 @@ import {
   perTripSavings,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
 import {getReferenceDataName} from '@atb/reference-data/utils';
+import {daysInWeek} from 'date-fns';
 
 const interactiveColorName: InteractiveColor = 'interactive_2';
 const themeColor_1: StaticColorByType<'background'> = 'background_accent_1';
@@ -56,7 +57,7 @@ export const TicketSummary = () => {
 
   const ticketPriceString = `${ticket.price.toFixed(2)}kr`;
   const perTripPriceString = `${(ticket.duration
-    ? ticket.price / ((ticket.duration / 7) * frequency)
+    ? ticket.price / ((ticket.duration / daysInWeek) * frequency)
     : ticket.price
   ).toFixed(2)}kr`;
 
@@ -64,12 +65,9 @@ export const TicketSummary = () => {
 
   // If the ticket duration is longer than the input duration,
   // we want to calculate based on the input duration instead
-  const compareDuration = () => {
-    if (ticket.duration > (inputParams.duration ?? 0)) {
-      return inputParams.duration ?? 0;
-    }
-    return ticket.duration;
-  };
+  const inputDuration = inputParams.duration ?? 0;
+  const comparedDuration =
+    ticket.duration > inputDuration ? inputDuration : ticket.duration;
 
   const savingsText = t(
     ticket.duration !== 0
@@ -79,7 +77,7 @@ export const TicketSummary = () => {
             totalSavings: savings,
             perTripSavings: perTripSavings(savings, ticket.duration, frequency),
             alternative: `${calculateSingleTickets(
-              compareDuration(),
+              comparedDuration,
               frequency,
             )}`,
           })

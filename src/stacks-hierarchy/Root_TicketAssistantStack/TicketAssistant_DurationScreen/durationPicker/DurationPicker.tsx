@@ -4,7 +4,7 @@ import SvgDate from '@atb/assets/svg/mono-icons/time/Date';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
-import {addDays, format} from 'date-fns';
+import {addDays, daysInWeek, format} from 'date-fns';
 import {
   dateDiffInDays,
   getSliderIndex,
@@ -55,7 +55,7 @@ export const DurationPicker = ({
   }
 
   const [sliderIndex, setSliderIndex] = useState<number>(
-    getSliderIndex(duration ?? 7, durations),
+    getSliderIndex(duration ?? daysInWeek, durations),
   );
 
   const durationText = getDurationText(duration, t);

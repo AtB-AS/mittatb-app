@@ -1,4 +1,5 @@
 import {TicketAssistantTexts, TranslateFunction} from '@atb/translations';
+import {daysInWeek} from 'date-fns';
 
 const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -12,10 +13,10 @@ export function dateDiffInDays(a: Date, b: Date) {
 
 // Function for getting days weeks or months from days
 export function getDurationText(days: number, t: TranslateFunction): string {
-  if (days < 7) {
+  if (days < daysInWeek) {
     return t(TicketAssistantTexts.duration.resultDays({value: days}));
   } else if (days < 30) {
-    const weeks = Math.round(days / 7);
+    const weeks = Math.round(days / daysInWeek);
     const formattedWeeks = weeks === 0 ? weeks + 1 : weeks;
     return t(
       TicketAssistantTexts.duration.resultWeeks({

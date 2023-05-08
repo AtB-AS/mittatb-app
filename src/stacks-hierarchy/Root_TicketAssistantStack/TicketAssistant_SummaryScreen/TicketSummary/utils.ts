@@ -1,4 +1,5 @@
 import {TicketResponseData} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
+import {daysInWeek} from 'date-fns';
 
 export function calculateSavings(
   ticketPrice: number,
@@ -11,7 +12,7 @@ export function calculateSingleTickets(
   duration: number,
   frequency: number,
 ): number {
-  return Math.ceil((duration / 7) * frequency);
+  return Math.ceil((duration / daysInWeek) * frequency);
 }
 
 export function getLongestDurationTicket(
@@ -33,5 +34,5 @@ export function perTripSavings(
   duration: number,
   frequency: number,
 ): string {
-  return (savings / ((duration / 7) * frequency)).toFixed(2);
+  return (savings / ((duration / daysInWeek) * frequency)).toFixed(2);
 }

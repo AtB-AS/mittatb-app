@@ -9,6 +9,7 @@ import React, {useEffect, useState} from 'react';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {DurationPicker} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/durationPicker';
+import {daysInWeek} from 'date-fns';
 type DurationProps =
   TicketAssistantScreenProps<'TicketAssistant_DurationScreen'>;
 
@@ -17,7 +18,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
-  const [duration, setDuration] = useState(7);
+  const [duration, setDuration] = useState(daysInWeek);
 
   const updateDuration = () => {
     updateInputParams({duration: duration});
