@@ -1,16 +1,10 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {storedFilters} from './storage';
-import {
-  TravelSearchFilterOptionWithHitsType,
-  TravelSearchFiltersSelectionType,
-} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
-import {storedFilterHits} from './filter-hits-storage';
+import {TravelSearchFiltersSelectionType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 
 type FiltersContextState = {
   filters: TravelSearchFiltersSelectionType | undefined;
   setFilters(filters: TravelSearchFiltersSelectionType | undefined): void;
-  filterHits: TravelSearchFilterOptionWithHitsType[];
-  setFilterHits(filters: TravelSearchFilterOptionWithHitsType[]): void;
 };
 
 const FiltersContext = createContext<FiltersContextState | undefined>(
@@ -20,15 +14,9 @@ const FiltersContext = createContext<FiltersContextState | undefined>(
 export const FiltersContextProvider: React.FC = ({children}) => {
   const [filters, setFiltersState] =
     useState<TravelSearchFiltersSelectionType>();
-  const [filterHits, setFilterHitsState] = useState<
-    TravelSearchFilterOptionWithHitsType[]
-  >([]);
 
   useEffect(() => {
     storedFilters.getFilters().then((filters) => setFiltersState(filters));
-    storedFilterHits
-      .getFilterHits()
-      .then((filterHits) => setFilterHitsState(filterHits));
   }, []);
 
   const contextValue: FiltersContextState = {
@@ -36,11 +24,6 @@ export const FiltersContextProvider: React.FC = ({children}) => {
     async setFilters(filters: TravelSearchFiltersSelectionType) {
       const setFilters = await storedFilters.setFilters(filters);
       setFiltersState(setFilters);
-    },
-    filterHits,
-    async setFilterHits(filters: TravelSearchFilterOptionWithHitsType[]) {
-      const setFilterHits = await storedFilterHits.setFilterHits(filters);
-      setFilterHitsState(setFilterHits);
     },
   };
 

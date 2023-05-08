@@ -1,5 +1,5 @@
 import {ScrollView, View} from 'react-native';
-import React, {forwardRef, useEffect, useState} from 'react';
+import React, {forwardRef, useState} from 'react';
 import {
   getTextForLanguage,
   ScreenHeaderTexts,
@@ -11,10 +11,7 @@ import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {getTransportModeSvg} from '@atb/components/icon-box';
-import {
-  BottomSheetContainer,
-  useBottomSheet,
-} from '@atb/components/bottom-sheet';
+import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {StyleSheet} from '@atb/theme';
 import type {
   FlexibleTransportOptionTypeWithSelectionType,
@@ -31,9 +28,6 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {useFlexibleTransportEnabled} from '../use-flexible-transport-enabled';
-import {useFilterHits} from '../use-filter-hits';
-
-const MAX_NUMBER_OF_HITS_FOR_FILTER_OPTION = 3;
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
@@ -47,7 +41,6 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   const styles = useStyles();
 
   const {setFilters} = useFilters();
-  const {isOpen} = useBottomSheet();
   const [saveFilters, setSaveFilters] = useState(false);
 
   const isFlexibleTransportEnabledInRemoteConfig =
@@ -60,8 +53,6 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   const [selectedFlexibleTransportOption, setFlexibleTranportFilter] = useState<
     FlexibleTransportOptionTypeWithSelectionType | undefined
   >(filtersSelection.flexibleTransport);
-
-  const filterHits = useFilterHits();
 
   const save = () => {
     const selectedFilters = {
@@ -79,15 +70,6 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
 
   const showFlexibleTransportFilterOption =
     isFlexibleTransportEnabledInRemoteConfig && selectedFlexibleTransportOption;
-  const hitsForFlexibleTransportFilterOption = filterHits.hitsForFilter(
-    selectedFlexibleTransportOption?.id,
-  );
-
-  useEffect(() => {
-    if (showFlexibleTransportFilterOption && isOpen()) {
-      filterHits.incrementHints(selectedFlexibleTransportOption.id);
-    }
-  }, [isOpen]);
 
   return (
     <BottomSheetContainer maxHeightValue={0.9}>
@@ -164,8 +146,6 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                 language,
               )}
               infoChipLabel={
-                hitsForFlexibleTransportFilterOption <
-                  MAX_NUMBER_OF_HITS_FOR_FILTER_OPTION &&
                 selectedFlexibleTransportOption.label
                   ? t(
                       TripSearchTexts.filters.labels[

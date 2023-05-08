@@ -225,11 +225,6 @@ export const Profile_DebugInfoScreen = () => {
           />
 
           <LinkSectionItem
-            text="Reset travel search filters hits"
-            onPress={() => storage.set('@ATB_user_filter_hits', '[]')}
-          />
-
-          <LinkSectionItem
             text="Reset has read scooter onboarding"
             onPress={() =>
               storage.set(
