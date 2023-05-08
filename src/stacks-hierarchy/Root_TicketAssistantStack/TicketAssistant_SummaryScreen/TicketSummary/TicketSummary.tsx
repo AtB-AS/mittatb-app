@@ -16,6 +16,7 @@ import {
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {daysInWeek} from 'date-fns';
+import {formatDecimalNumber} from '@atb/utils/numbers';
 
 const interactiveColorName: InteractiveColor = 'interactive_2';
 const themeColor_1: StaticColorByType<'background'> = 'background_accent_1';
@@ -55,11 +56,16 @@ export const TicketSummary = () => {
       recommendedTicketSummary.singleTicketPrice,
   );
 
-  const ticketPriceString = `${ticket.price.toFixed(2)}kr`;
-  const perTripPriceString = `${(ticket.duration
+  const ticketPriceString = `${formatDecimalNumber(ticket.price, language)} kr`;
+
+  const perTripPrice = ticket.duration
     ? ticket.price / ((ticket.duration / daysInWeek) * frequency)
-    : ticket.price
-  ).toFixed(2)}kr`;
+    : ticket.price;
+
+  const perTripPriceString = `${formatDecimalNumber(
+    perTripPrice,
+    language,
+  )} kr`;
 
   const transportModes = recommendedTicketTypeConfig.transportModes;
 
@@ -75,7 +81,10 @@ export const TicketSummary = () => {
         ? TicketAssistantTexts.summary.equalPriceNotice
         : TicketAssistantTexts.summary.savings({
             totalSavings: savings,
-            perTripSavings: perTripSavings(savings, ticket.duration, frequency),
+            perTripSavings: formatDecimalNumber(
+              perTripSavings(savings, ticket.duration, frequency),
+              language,
+            ),
             alternative: `${calculateSingleTickets(
               comparedDuration,
               frequency,

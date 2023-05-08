@@ -33,6 +33,6 @@ export function perTripSavings(
   savings: number,
   duration: number,
   frequency: number,
-): string {
-  return (savings / ((duration / daysInWeek) * frequency)).toFixed(2);
+): number {
+  return savings / ((duration / daysInWeek) * frequency);
 }
