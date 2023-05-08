@@ -84,21 +84,21 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
           {toPlace && (
             <MapLabel
               point={pointOf(toPlace)}
-              id={'end'}
+              id="end"
               text={t(MapTexts.endPoint.label)}
             />
           )}
           {fromPlace && (
             <MapLabel
               point={pointOf(fromPlace)}
-              id={'start'}
+              id="start"
               text={t(MapTexts.startPoint.label)}
             />
           )}
         </MapboxGL.MapView>
       </View>
       <TouchableOpacity style={styles.button} onPress={onExpand}>
-        <ThemeText type={'body__secondary--bold'} color={'primary'}>
+        <ThemeText type="body__secondary--bold" color="primary">
           {buttonText}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} />
@@ -124,27 +124,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   map: {
     width: '100%',
     height: '100%',
-  },
-  togglerContainer: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-  },
-  toggler: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.small,
-  },
-  toggleText: {
-    textShadowColor: theme.static.background.background_0.background,
-    textShadowOffset: {
-      height: 1,
-      width: 1,
-    },
-    textShadowRadius: 1,
-  },
-  toggleIcon: {
-    marginLeft: theme.spacings.xSmall,
   },
 }));
