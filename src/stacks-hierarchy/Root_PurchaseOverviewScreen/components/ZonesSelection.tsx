@@ -23,6 +23,7 @@ type ZonesSelectionProps = {
     fromTariffZone: TariffZoneWithMetadata;
     toTariffZone: TariffZoneWithMetadata;
     fareProductTypeConfig: FareProductTypeConfig;
+    preassignedFareProduct: PreassignedFareProduct;
   }) => void;
   style?: StyleProp<ViewStyle>;
 };
@@ -87,6 +88,7 @@ export function ZonesSelection({
               fromTariffZone,
               toTariffZone,
               fareProductTypeConfig,
+              preassignedFareProduct,
             })
           }
           testID="selectZonesButton"
