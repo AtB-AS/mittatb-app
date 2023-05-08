@@ -37,7 +37,6 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
     fareProductTypeConfig,
     preassignedFareProduct,
   } = route.params;
-  console.log('preassproduct', preassignedFareProduct);
   const selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
   const isApplicableOnSingleZoneOnly =
     preassignedFareProduct.isApplicableOnSingleZoneOnly ||
