@@ -40,7 +40,7 @@ import {Root_TipsAndInformation} from '@atb/stacks-hierarchy/Root_TipsAndInforma
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
 import {Root_CarnetDetailsScreen} from '@atb/stacks-hierarchy/Root_CarnetDetailsScreen';
 import {Root_ReceiptScreen} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
-import {PostHogProvider} from 'posthog-react-native';
+import {AnalyticsContextProvider} from '@atb/analytics';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -226,12 +226,7 @@ export const RootStack = () => {
             },
           }}
         >
-          <PostHogProvider
-            apiKey="phc_s51zXjw9aCfMG5AevOXk394AG5zIIBnh2ENdYcaaAJh"
-            options={{
-              host: 'https://eu.posthog.com',
-            }}
-          >
+          <AnalyticsContextProvider>
             <Stack.Navigator
               screenOptions={{
                 headerShown: false,
@@ -356,7 +351,7 @@ export const RootStack = () => {
                 </Stack.Group>
               )}
             </Stack.Navigator>
-          </PostHogProvider>
+          </AnalyticsContextProvider>
         </NavigationContainer>
       </Host>
     </>

@@ -18,6 +18,7 @@ import {getVehicles} from '@atb/api/mobility';
 import {usePollableResource} from '@atb/utils/use-pollable-resource';
 import {useIsFocused} from '@react-navigation/native';
 import {useVehiclesPollInterval} from '@atb/mobility/use-vehicles-poll-interval';
+import {useEventCapture} from '@atb/analytics';
 
 const MIN_ZOOM_LEVEL = 13.5;
 const BUFFER_DISTANCE_IN_METERS = 500;
@@ -32,6 +33,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
   const [filter, setFilter] = useState<VehiclesFilterType>();
   const isFocused = useIsFocused();
   const pollInterval = useVehiclesPollInterval();
+  const {capture} = useEventCapture();
 
   useEffect(() => {
     getMapFilter().then((initialFilter) => {
@@ -75,10 +77,11 @@ export const useVehicles: () => VehiclesState | undefined = () => {
     setFilter(filter);
   };
 
-  const onPress = (type: MapSelectionActionType) => {
+  const onPress = async (type: MapSelectionActionType) => {
     if (type.source !== 'map-click') return;
     const vehicle = type.feature.properties;
     if (isVehicle(vehicle)) {
+      await capture('Vehicle selected', {vehicle});
       openBottomSheet(() => {
         return <ScooterSheet vehicleId={vehicle.id} close={closeBottomSheet} />;
       });
