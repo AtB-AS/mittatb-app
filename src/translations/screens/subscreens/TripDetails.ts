@@ -127,6 +127,9 @@ const TripDetailsTexts = {
       },
     },
     summary: {
+      showTripInMap: {
+        label: _('Vis reiserute i kart', 'Show trip in map'),
+      },
       travelTime: {
         label: (time: string) =>
           _(`Total reisetid: ${time}`, `Total trip time: ${time}`),
