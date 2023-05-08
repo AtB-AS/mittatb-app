@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {
   getTextForLanguage,
-  TipsAndInformationTexts,
+  TicketingTexts,
   useTranslation,
 } from '@atb/translations';
 import {StyleSheet, Theme} from '@atb/theme';
@@ -50,10 +50,10 @@ export const Root_TipsAndInformation = ({}: Props) => {
       <ThemeText
         type="heading--jumbo"
         style={styles.title}
-        accessibilityLabel={t(TipsAndInformationTexts.title)}
+        accessibilityLabel={t(TicketingTexts.tipsAndInformationTile.title)}
         color={themeColor}
       >
-        {t(TipsAndInformationTexts.title)}
+        {t(TicketingTexts.tipsAndInformationTile.title)}
       </ThemeText>
 
       <View style={styles.innerContainer}>

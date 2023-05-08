@@ -15,6 +15,8 @@ import {SectionSeparator} from '@atb/components/sections';
 type FrequencyScreenProps =
   TicketAssistantScreenProps<'TicketAssistant_FrequencyScreen'>;
 
+// This would be travelling to and from work 4 days a week
+const DEFAULT_SLIDER_VALUE = 8;
 export const TicketAssistant_FrequencyScreen = ({
   navigation,
 }: FrequencyScreenProps) => {
@@ -22,7 +24,7 @@ export const TicketAssistant_FrequencyScreen = ({
   const {t} = useTranslation();
   const {inputParams, updateInputParams} = useTicketAssistantState();
   const [sliderValue, setSliderValue] = useState<number>(
-    inputParams.frequency ?? 7,
+    inputParams.frequency ?? DEFAULT_SLIDER_VALUE,
   );
   const a11yContext = useAccessibilityContext();
 
