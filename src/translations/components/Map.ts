@@ -4,9 +4,6 @@ const MapTexts = {
   exitButton: {
     a11yLabel: _('Gå tilbake', 'Go back'),
   },
-  expandButton: {
-    label: _('Utvid kart', 'Expand map'),
-  },
   startPoint: {
     label: _('Start', 'Start'),
   },
