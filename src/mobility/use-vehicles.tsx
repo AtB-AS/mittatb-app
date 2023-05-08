@@ -77,11 +77,11 @@ export const useVehicles: () => VehiclesState | undefined = () => {
     setFilter(filter);
   };
 
-  const onPress = async (type: MapSelectionActionType) => {
+  const onPress = (type: MapSelectionActionType) => {
     if (type.source !== 'map-click') return;
     const vehicle = type.feature.properties;
     if (isVehicle(vehicle)) {
-      await capture('Vehicle selected', {vehicle});
+      capture('Vehicle selected', {vehicle});
       openBottomSheet(() => {
         return <ScooterSheet vehicleId={vehicle.id} close={closeBottomSheet} />;
       });
