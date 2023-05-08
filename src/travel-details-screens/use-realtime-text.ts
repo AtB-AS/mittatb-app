@@ -10,7 +10,6 @@ export const useRealtimeText = (
   const lastPassedStop = estimatedCallsWithMetadata
     .filter((a) => a.actualDepartureTime)
     .pop();
-  const firstStop = estimatedCallsWithMetadata[0];
   const {t, language} = useTranslation();
   const {
     preferences: {debugShowSeconds},
@@ -28,31 +27,38 @@ export const useRealtimeText = (
         ),
       ),
     );
-  } else if (firstStop && firstStop.quay?.name && firstStop.realtime) {
-    const timeRepType = getTimeRepresentationType({
-      missingRealTime: false,
-      aimedTime: firstStop.aimedDepartureTime,
-      expectedTime: firstStop.expectedDepartureTime,
-    });
-    if (!isInThePast(firstStop.expectedDepartureTime)) {
-      return t(
-        DepartureDetailsTexts.noPassedStop(
-          firstStop.quay.name,
-          formatToClock(
-            firstStop?.expectedDepartureTime,
-            language,
-            'floor',
-            debugShowSeconds,
-          ),
-        ),
-      );
-    }
-    switch (timeRepType) {
-      case 'no-significant-difference':
-        return t(DepartureDetailsTexts.onTime);
-      case 'significant-difference':
-        return t(DepartureDetailsTexts.notOnTime);
-    }
   }
-  return undefined;
+
+  const firstStop = estimatedCallsWithMetadata[0];
+
+  if (
+    firstStop?.quay?.name &&
+    firstStop.realtime &&
+    !isInThePast(firstStop.expectedDepartureTime)
+  ) {
+    return t(
+      DepartureDetailsTexts.noPassedStop(
+        firstStop.quay.name,
+        formatToClock(
+          firstStop?.expectedDepartureTime,
+          language,
+          'floor',
+          debugShowSeconds,
+        ),
+      ),
+    );
+  }
+  const timeRepType = getTimeRepresentationType({
+    missingRealTime: !firstStop.realtime,
+    aimedTime: firstStop?.aimedDepartureTime,
+    expectedTime: firstStop?.expectedDepartureTime,
+  });
+  switch (timeRepType) {
+    case 'no-significant-difference':
+      return t(DepartureDetailsTexts.onTime);
+    case 'significant-difference':
+      return t(DepartureDetailsTexts.notOnTime);
+    default:
+      return undefined;
+  }
 };
