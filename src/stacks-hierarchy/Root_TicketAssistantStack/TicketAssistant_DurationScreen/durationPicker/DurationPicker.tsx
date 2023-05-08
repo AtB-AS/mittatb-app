@@ -40,7 +40,9 @@ export const DurationPicker = ({
 
   const majorVersionIOS = parseInt(String(Platform.Version), 10);
   const style =
-    majorVersionIOS < 13 ? {width: undefined, flex: 1} : {width: 130};
+    majorVersionIOS < 13 && Platform.OS == 'ios'
+      ? {width: undefined, flex: 1}
+      : {width: 130};
 
   const locale = useLocaleContext();
 
