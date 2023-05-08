@@ -10,9 +10,6 @@ const MapTexts = {
   endPoint: {
     label: _('Slutt', 'End'),
   },
-  showTrip: {
-    label: _('Vis reiserute i kart', 'Show trip in map'),
-  },
   disabledForScreenReader: {
     title: _('Kart kan ikke vises', 'Map cannot be viewed'),
     description: _(
