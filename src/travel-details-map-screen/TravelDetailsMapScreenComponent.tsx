@@ -151,13 +151,10 @@ type VehicleIconProps = {
 };
 
 const LiveVehicle = ({coordinates, setShouldTrack}: VehicleIconProps) => {
-  const shapeSource = useRef<MapboxGL.ShapeSource>(null);
-
   if (!coordinates) return null;
   return (
     <MapboxGL.ShapeSource
-      id={'vehicle'}
-      ref={shapeSource}
+      id="vehicle"
       shape={pointOf(coordinates)}
       cluster
       onPress={() => {
