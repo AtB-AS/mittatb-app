@@ -101,7 +101,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@atb-as/generate-assets": "^7.0.0",
+    "@atb-as/generate-assets": "^7.1.0",
     "@babel/core": "^7.20.12",
     "@babel/plugin-transform-template-literals": "^7.18.9",
     "@babel/preset-env": "^7.20.2",
