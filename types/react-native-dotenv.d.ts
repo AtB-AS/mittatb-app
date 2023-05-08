@@ -16,4 +16,5 @@ declare module '@env' {
   export const SAFETY_NET_API_KEY: string;
   export const ENABLE_TICKETING: string | undefined;
   export const POSTHOG_API_KEY: string | undefined;
+  export const POSTHOG_HOST: string | undefined;
 }
