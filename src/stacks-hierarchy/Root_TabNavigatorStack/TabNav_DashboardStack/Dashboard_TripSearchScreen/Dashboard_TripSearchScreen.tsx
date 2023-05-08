@@ -103,7 +103,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const isValidLocations = isValidTripLocations(from, to);
   const isFlexibleTransportEnabled =
     isFlexibleTransportEnabledInRemoteConfig &&
-    filtersState?.filtersSelection?.flexibleTransport?.enabled === true;
+    filtersState?.filtersSelection?.flexibleTransport?.enabled;
 
   const [searchStateMessage, setSearchStateMessage] = useState<
     string | undefined
