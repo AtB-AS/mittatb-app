@@ -1,8 +1,9 @@
 import PostHog from 'posthog-react-native';
+import {POSTHOG_API_KEY} from '@env';
 
-export const postHog = PostHog.initAsync(
-  'phc_s51zXjw9aCfMG5AevOXk394AG5zIIBnh2ENdYcaaAJh',
-  {
-    host: 'https://eu.posthog.com',
-  },
-);
+export const initPostHog = () =>
+  POSTHOG_API_KEY
+    ? PostHog.initAsync(POSTHOG_API_KEY, {
+        host: 'https://eu.posthog.com',
+      })
+    : Promise.resolve(undefined);
