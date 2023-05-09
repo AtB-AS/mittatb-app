@@ -23,12 +23,13 @@ type DurationPickerProps = {
   duration: number;
   setDuration: (duration: number) => void;
 };
-const currentDate = new Date();
 const durations = [1, 2, 3, 4, 5, 6, 7, 14, 21, 30, 60, 90, 120, 150, 180];
 export const DurationPicker = ({
   duration,
   setDuration,
 }: DurationPickerProps) => {
+  const currentDate = new Date();
+
   const {inputParams} = useTicketAssistantState();
   const [date, setDate] = useState(
     addDays(currentDate, inputParams.duration ?? 0),
