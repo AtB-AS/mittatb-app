@@ -16,7 +16,7 @@ export const LabelInfo = ({label}: LabelInfoProps) => {
   const flagTranslated = t(LabelInfoTexts.labels[label]);
 
   if (!flagTranslated) {
-    return <></>;
+    return null;
   }
 
   return (
