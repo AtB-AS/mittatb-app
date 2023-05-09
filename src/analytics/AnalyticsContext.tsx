@@ -1,11 +1,13 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import PostHog, {PostHogProvider} from 'posthog-react-native';
 import {POSTHOG_API_KEY, POSTHOG_HOST} from '@env';
+import {useNavigationSafe} from '@atb/utils/use-navigation-safe';
 
 export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
 
 export const AnalyticsContextProvider: React.FC = ({children}) => {
   const [client, setClient] = useState<PostHog>();
+  const navigation = useNavigationSafe();
 
   useEffect(() => {
     if (POSTHOG_HOST && POSTHOG_API_KEY) {
@@ -15,9 +17,17 @@ export const AnalyticsContextProvider: React.FC = ({children}) => {
     }
   }, []);
 
+  // Since PostHog offers auto capture of navigation events,
+  // the PostHog provider expects to be setup inside a React Navigation object.
+  // In cases where the no navigation is available, e.g. the bottom sheet,
+  // the PostHog provider will throw an error.
   return (
     <AnalyticsContext.Provider value={client}>
-      <PostHogProvider client={client}>{children}</PostHogProvider>
+      {navigation ? (
+        <PostHogProvider client={client}>{children}</PostHogProvider>
+      ) : (
+        <>{children}</>
+      )}
     </AnalyticsContext.Provider>
   );
 };
