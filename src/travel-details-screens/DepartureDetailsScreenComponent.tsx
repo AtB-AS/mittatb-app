@@ -133,6 +133,7 @@ export const DepartureDetailsScreenComponent = ({
                   <Button
                     type="pill"
                     leftIcon={{svg: Map}}
+                    style={styles.liveButton}
                     text={t(
                       vehiclePosition
                         ? DepartureDetailsTexts.live
@@ -537,7 +538,10 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     marginRight: theme.spacings.xSmall,
   },
   startPlace: {
-    marginTop: theme.spacings.large,
+    marginTop: theme.spacings.medium,
+  },
+  liveButton: {
+    marginLeft: theme.spacings.medium,
   },
   place: {
     marginBottom: -theme.tripLegDetail.decorationLineWidth,
