@@ -148,7 +148,7 @@ const TicketAssistantTexts = {
         `${data.frequency} trips per week until ${data.date}`,
       ),
     savings: (data: {
-      totalSavings: number;
+      totalSavings: string;
       perTripSavings: string;
       alternative: string;
     }) =>

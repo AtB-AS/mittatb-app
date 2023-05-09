@@ -42,10 +42,8 @@ export const DurationPicker = ({
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const majorVersionIOS = parseInt(String(Platform.Version), 10);
-  const style =
-    majorVersionIOS < 13 && Platform.OS == 'ios'
-      ? {width: undefined, flex: 1}
-      : {width: 130};
+  const iosStyle =
+    majorVersionIOS < 13 ? {width: undefined, flex: 1} : {width: 130};
 
   const locale = useLocaleContext();
 
@@ -88,7 +86,7 @@ export const DurationPicker = ({
               mode="date"
               locale={locale.localeString}
               style={{
-                ...style,
+                ...iosStyle,
                 alignItems: 'flex-end',
                 justifyContent: 'flex-end',
                 alignSelf: 'flex-end',

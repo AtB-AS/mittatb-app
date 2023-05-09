@@ -56,7 +56,11 @@ export const TicketSummary = () => {
       recommendedTicketSummary.singleTicketPrice,
   );
 
-  const ticketPriceString = `${formatDecimalNumber(ticket.price, language)} kr`;
+  const ticketPriceString = `${formatDecimalNumber(
+    ticket.price,
+    language,
+    2,
+  )} kr`;
 
   const perTripPrice = ticket.duration
     ? ticket.price / ((ticket.duration / daysInWeek) * frequency)
@@ -65,6 +69,7 @@ export const TicketSummary = () => {
   const perTripPriceString = `${formatDecimalNumber(
     perTripPrice,
     language,
+    2,
   )} kr`;
 
   const transportModes = recommendedTicketTypeConfig.transportModes;
@@ -80,10 +85,11 @@ export const TicketSummary = () => {
       ? savings === 0
         ? TicketAssistantTexts.summary.equalPriceNotice
         : TicketAssistantTexts.summary.savings({
-            totalSavings: savings,
+            totalSavings: formatDecimalNumber(savings, language, 2),
             perTripSavings: formatDecimalNumber(
               perTripSavings(savings, ticket.duration, frequency),
               language,
+              2,
             ),
             alternative: `${calculateSingleTickets(
               comparedDuration,
