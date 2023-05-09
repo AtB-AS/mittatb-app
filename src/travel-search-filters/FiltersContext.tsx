@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import {storedFilters} from './storage';
+import {oldStoredFilters, storedFilters} from './storage';
 import {TravelSearchFiltersSelectionType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 
 type FiltersContextState = {
@@ -16,7 +16,19 @@ export const FiltersContextProvider: React.FC = ({children}) => {
     useState<TravelSearchFiltersSelectionType>();
 
   useEffect(() => {
-    storedFilters.getFilters().then((filters) => setFiltersState(filters));
+    async function getFiltersAndMigrateToV2IfNeeded() {
+      // Migrate old filters
+      const oldFilters = await oldStoredFilters.getFilters();
+      if (oldFilters) {
+        setFiltersState(oldFilters);
+        // Reset old filters
+        await oldStoredFilters.setFilters({});
+      } else {
+        storedFilters.getFilters().then((filters) => setFiltersState(filters));
+      }
+    }
+
+    getFiltersAndMigrateToV2IfNeeded();
   }, []);
 
   const contextValue: FiltersContextState = {

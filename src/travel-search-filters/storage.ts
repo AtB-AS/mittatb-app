@@ -26,3 +26,8 @@ class FilterStore<TravelSearchFiltersSelectionType> {
 export const storedFilters = new FilterStore<TravelSearchFiltersSelectionType>(
   '@ATB_user_travel_search_filters_v2',
 );
+
+export const oldStoredFilters =
+  new FilterStore<TravelSearchFiltersSelectionType>(
+    '@ATB_user_travel_search_filters',
+  );
