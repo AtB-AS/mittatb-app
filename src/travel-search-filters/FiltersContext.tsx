@@ -19,7 +19,7 @@ export const FiltersContextProvider: React.FC = ({children}) => {
     async function getFiltersAndMigrateToV2IfNeeded() {
       // Migrate old filters
       const oldFilters = await oldStoredFilters.getFilters();
-      if (oldFilters) {
+      if (oldFilters.transportModes) {
         setFiltersState(oldFilters);
         // Reset old filters
         await oldStoredFilters.setFilters({});

@@ -93,7 +93,9 @@ const CityZoneBox = ({
         <ThemeIcon svg={icon} />
       </View>
       <View style={styles.content}>
-        <ThemeText color={generalColor}>{message}</ThemeText>
+        <ThemeText style={styles.message} color={generalColor}>
+          {message}
+        </ThemeText>
         {actionButtons && (
           <View style={styles.actions}>
             {actionButtons.map((actionButton) => (
@@ -131,16 +133,6 @@ export const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
   },
-  flexIcon: {
-    marginRight: theme.spacings.medium,
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  websiteButton: {
-    margin: theme.spacings.medium,
-  },
-  // Message Box styles
   container: {
     padding: theme.spacings.medium,
     borderRadius: theme.border.radius.regular,
@@ -152,6 +144,9 @@ export const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   content: {
     flex: 1,
+  },
+  message: {
+    paddingRight: theme.spacings.small,
   },
   action: {
     marginTop: theme.spacings.medium,
