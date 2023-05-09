@@ -145,15 +145,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                 selectedFlexibleTransportOption.description,
                 language,
               )}
-              infoChipLabel={
-                selectedFlexibleTransportOption.label
-                  ? t(
-                      TripSearchTexts.filters.labels[
-                        selectedFlexibleTransportOption.label
-                      ],
-                    )
-                  : undefined
-              }
+              label={selectedFlexibleTransportOption.label}
               value={selectedFlexibleTransportOption?.enabled}
               onValueChange={(checked) => {
                 setFlexibleTranportFilter({

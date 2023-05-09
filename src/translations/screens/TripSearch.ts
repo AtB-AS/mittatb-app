@@ -259,10 +259,6 @@ const TripSearchTexts = {
         },
       },
     },
-    labels: {
-      new: _('Ny', 'New'),
-      beta: _('Beta', 'Beta'),
-    },
     selection: {
       transportModes: (selected: number, total: number) =>
         _(

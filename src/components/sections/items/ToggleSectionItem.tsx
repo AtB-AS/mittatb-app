@@ -10,11 +10,13 @@ import {Toggle} from '@atb/components/toggle';
 import {InteractiveColor} from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 import {InfoChip} from '@atb/components/info-chip';
+import {LabelType} from '@atb-as/config-specs';
+import {LabelInfo} from '@atb/components/label-info';
 
 type Props = SectionItemProps<{
   text: string;
   subtext?: string;
-  infoChipLabel?: string;
+  label?: LabelType;
   onValueChange: (checked: boolean) => void;
   value?: boolean;
   leftIcon?: (props: SvgProps) => JSX.Element;
@@ -24,7 +26,7 @@ type Props = SectionItemProps<{
 export function ToggleSectionItem({
   text,
   subtext,
-  infoChipLabel,
+  label,
   onValueChange,
   leftIcon,
   value = false,
@@ -67,12 +69,7 @@ export function ToggleSectionItem({
         <View style={styles.textContainer}>
           <ThemeText>{text}</ThemeText>
         </View>
-        {infoChipLabel && (
-          <InfoChip
-            text={infoChipLabel}
-            interactiveColor={interactiveColor ?? 'interactive_0'}
-          />
-        )}
+        {label && <LabelInfo label={label} />}
         <Toggle
           importantForAccessibility="no-hide-descendants"
           accessible={false}
