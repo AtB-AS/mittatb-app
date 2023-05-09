@@ -17,7 +17,7 @@ import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {shadows} from './components/shadows';
 import {MapFilter} from './components/filter/MapFilter';
-import {Stations, Vehicles} from '../map/components/mobility';
+import {Stations, Vehicles} from './components/mobility';
 import {useAnalytics} from '@atb/analytics';
 
 export const Map = (props: MapProps) => {

@@ -1,24 +1,25 @@
-import {MapIcon} from '@atb/assets/svg/color/map';
-import {Button} from '@atb/components/button';
 import {MapCameraConfig, MapLeg, MapViewConfig} from '@atb/components/map';
 
 import {StyleSheet, useTheme} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
-import {insets} from '@atb/utils/insets';
 import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef} from 'react';
-import {Platform, View} from 'react-native';
+import {Platform, TouchableOpacity, View} from 'react-native';
 import {MapLabel} from './MapLabel';
 import {MapRoute} from './MapRoute';
 import {createMapLines, getMapBounds, pointOf} from '../utils';
 import {Coordinates} from '@atb/utils/coordinates';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 export type MapProps = {
   mapLegs: MapLeg[];
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
+  buttonText: string;
   onExpand?(): void;
 };
 
@@ -26,6 +27,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   mapLegs,
   fromPlace,
   toPlace,
+  buttonText,
   onExpand,
 }) => {
   const {themeName} = useTheme();
@@ -61,77 +63,66 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
   }
 
   return (
-    <View style={styles.container}>
-      <MapboxGL.MapView
-        style={styles.map}
-        scrollEnabled={false}
-        rotateEnabled={false}
-        zoomEnabled={false}
-        {...MapViewConfig}
-        styleURL={darkmode ? 'mapbox://styles/mapbox/dark-v10' : undefined}
-        compassEnabled={false}
-        onPress={onExpand}
-      >
-        <MapboxGL.Camera
-          {...MapCameraConfig}
-          defaultSettings={{bounds}}
-          ref={cameraRef}
-        />
-        <MapRoute lines={features}></MapRoute>
-        {toPlace && (
-          <MapLabel
-            point={pointOf(toPlace)}
-            id={'end'}
-            text={t(MapTexts.endPoint.label)}
+    <>
+      <View style={styles.mapContainer}>
+        <MapboxGL.MapView
+          style={styles.map}
+          scrollEnabled={false}
+          rotateEnabled={false}
+          zoomEnabled={false}
+          {...MapViewConfig}
+          styleURL={darkmode ? 'mapbox://styles/mapbox/dark-v10' : undefined}
+          compassEnabled={false}
+          onPress={onExpand}
+        >
+          <MapboxGL.Camera
+            {...MapCameraConfig}
+            defaultSettings={{bounds}}
+            ref={cameraRef}
           />
-        )}
-        {fromPlace && (
-          <MapLabel
-            point={pointOf(fromPlace)}
-            id={'start'}
-            text={t(MapTexts.startPoint.label)}
-          />
-        )}
-      </MapboxGL.MapView>
-      {onExpand && (
-        <View style={styles.togglerContainer}>
-          <Button
-            style={styles.toggler}
-            type="inline"
-            mode="tertiary"
-            onPress={onExpand}
-            hitSlop={insets.symmetric(8, 12)}
-            text={t(MapTexts.expandButton.label)}
-            leftIcon={{svg: MapIcon}}
-          ></Button>
-        </View>
-      )}
-    </View>
+          <MapRoute lines={features}></MapRoute>
+          {toPlace && (
+            <MapLabel
+              point={pointOf(toPlace)}
+              id="end"
+              text={t(MapTexts.endPoint.label)}
+            />
+          )}
+          {fromPlace && (
+            <MapLabel
+              point={pointOf(fromPlace)}
+              id="start"
+              text={t(MapTexts.startPoint.label)}
+            />
+          )}
+        </MapboxGL.MapView>
+      </View>
+      <TouchableOpacity style={styles.button} onPress={onExpand}>
+        <ThemeText type="body__secondary--bold" color="primary">
+          {buttonText}
+        </ThemeText>
+        <ThemeIcon svg={ArrowRight} />
+      </TouchableOpacity>
+    </>
   );
 };
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {height: 160},
+  mapContainer: {
+    height: 120,
+    borderTopRightRadius: theme.border.radius.regular,
+    borderTopLeftRadius: theme.border.radius.regular,
+    overflow: 'hidden',
+  },
+  button: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: theme.spacings.medium,
+    backgroundColor: theme.static.background.background_1.background,
+    borderBottomRightRadius: theme.border.radius.regular,
+    borderBottomLeftRadius: theme.border.radius.regular,
+  },
   map: {
     width: '100%',
     height: '100%',
-  },
-  togglerContainer: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-  },
-  toggler: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.small,
-  },
-  toggleText: {
-    textShadowColor: theme.static.background.background_0.background,
-    textShadowOffset: {height: 1, width: 1},
-    textShadowRadius: 1,
-  },
-  toggleIcon: {
-    marginLeft: theme.spacings.xSmall,
   },
 }));

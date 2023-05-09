@@ -35,6 +35,7 @@ import {useMapDebugOverride} from '@atb/components/map';
 import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {useTipsAndInformationDebugOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information-enabled';
 import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
+import {useFlexibleTransportDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-flexible-transport-enabled';
 import {
   ExpandableSectionItem,
   GenericSectionItem,
@@ -43,6 +44,7 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
+import {useDebugOverride} from '@atb/debug';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -60,6 +62,16 @@ export const Profile_DebugInfoScreen = () => {
   >(undefined);
 
   const travelSearchDebugOverride = useTravelSearchFiltersDebugOverride();
+  const flexibleTransportDebugOverride = useFlexibleTransportDebugOverride();
+  const flexibleTransportAccessModeDebugOverride = useDebugOverride(
+    StorageModelKeysEnum.UseFlexibleTransportAccessModeDebugOverride,
+  );
+  const flexibleTransportDirectModeDebugOverride = useDebugOverride(
+    StorageModelKeysEnum.UseFlexibleTransportDirectModeDebugOverride,
+  );
+  const flexibleTransportEgressModeDebugOverride = useDebugOverride(
+    StorageModelKeysEnum.UseFlexibleTransportEgressModeDebugOverride,
+  );
   const newTravelSearchDebugOverride = useNewTravelSearchDebugOverride();
   const fromTravelSearchToTicketDebugOverride =
     useFromTravelSearchToTicketDebugOverride();
@@ -117,15 +129,7 @@ export const Profile_DebugInfoScreen = () => {
   }
 
   const {setPreference, preferences} = usePreferences();
-  const {
-    showTestIds,
-    tripSearchPreferences,
-    debugShowSeconds,
-    flexibleTransport,
-    useFlexibleTransportOnAccessMode,
-    useFlexibleTransportOnDirectMode,
-    useFlexibleTransportOnEgressMode,
-  } = preferences;
+  const {showTestIds, tripSearchPreferences, debugShowSeconds} = preferences;
 
   const tripSearchDefaults = {
     transferPenalty: 10,
@@ -224,62 +228,34 @@ export const Profile_DebugInfoScreen = () => {
         </Section>
         <Section withPadding withTopPadding>
           <HeaderSectionItem
-            text="Flexible transport"
-            subtitle={
-              'If undefined, the value from Remote Config will be used. Works when the app is either QA or Debug, ONLY!.\n\nNOTE: When enabled, this value has more preference than remote config.'
-            }
-          />
-          <GenericSectionItem>
-            <MapEntry
-              title="Flexible transport enabled"
-              value={flexibleTransport}
-            />
-          </GenericSectionItem>
-          <ToggleSectionItem
-            text="Flexible transport enabled"
-            value={flexibleTransport}
-            onValueChange={(flexibleTransport) => {
-              setPreference({flexibleTransport});
-            }}
-          />
-        </Section>
-        {flexibleTransport && (
-          <Section withPadding withTopPadding>
-            <HeaderSectionItem
-              text="Flexible transport modes"
-              subtitle={
-                'If `Flexible transport is enabled`, these values will take effect when the app is either QA or Debug ONLY!.\n\nThe default values are `Foot`.'
-              }
-            />
-            <ToggleSectionItem
-              text="Use Flexible on AccessMode"
-              value={useFlexibleTransportOnAccessMode}
-              onValueChange={(useFlexibleTransportOnAccessMode) => {
-                setPreference({useFlexibleTransportOnAccessMode});
-              }}
-            />
-            <ToggleSectionItem
-              text="Use Flexible on DirectMode"
-              value={useFlexibleTransportOnDirectMode}
-              onValueChange={(useFlexibleTransportOnDirectMode) => {
-                setPreference({useFlexibleTransportOnDirectMode});
-              }}
-            />
-            <ToggleSectionItem
-              text="Use Flexible on EgreessMode"
-              value={useFlexibleTransportOnEgressMode}
-              onValueChange={(useFlexibleTransportOnEgressMode) => {
-                setPreference({useFlexibleTransportOnEgressMode});
-              }}
-            />
-          </Section>
-        )}
-        <Section withPadding withTopPadding>
-          <HeaderSectionItem
             text="Remote config override"
             subtitle="If undefined the value
         from Remote Config will be used. Needs reload of app after change."
           />
+          <GenericSectionItem>
+            <DebugOverride
+              description="Flexible transport enabled"
+              override={flexibleTransportDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Use Flexible on AccessMode"
+              override={flexibleTransportAccessModeDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Use Flexible on DirectMode"
+              override={flexibleTransportDirectModeDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Use Flexible on EgressMode"
+              override={flexibleTransportEgressModeDebugOverride}
+            />
+          </GenericSectionItem>
           <GenericSectionItem>
             <DebugOverride
               description="Enable travel search filter."
