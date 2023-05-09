@@ -7,28 +7,21 @@ import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Ticket
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
-import SvgFeedback from '@atb/assets/svg/mono-icons/actions/Feedback';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {ContactSheet} from '@atb/chat/ContactSheet';
+import {useAuthState} from '@atb/auth';
+import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
 export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
-  const {open: openBottomSheet} = useBottomSheet();
+  const {authenticationType} = useAuthState();
   let {loading, inputParams, recommendedTicketSummary, error} =
     useTicketAssistantState();
-
-  const openContactSheet = () => {
-    openBottomSheet((close, focusRef) => (
-      <ContactSheet close={close} ref={focusRef} />
-    ));
-  };
 
   const durationDays = inputParams.duration
     ? inputParams.duration * 24 * 60 * 60 * 1000
@@ -58,16 +51,38 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
 
   const onBuyButtonPress = () => {
     if (!recommendedTicketSummary) return;
-    navigation.navigate('Root_PurchaseConfirmationScreen', {
-      fareProductTypeConfig: recommendedTicketSummary.fareProductTypeConfig,
-      fromTariffZone: recommendedTicketSummary.tariffZones[0],
-      toTariffZone: recommendedTicketSummary.tariffZones[1],
-      userProfilesWithCount: recommendedTicketSummary.userProfileWithCount,
-      preassignedFareProduct: recommendedTicketSummary.preassignedFareProduct,
-      travelDate: undefined,
-      headerLeftButton: {type: 'back'},
-      mode: 'Ticket',
-    });
+    const purchaseConfirmationScreenParams: Root_PurchaseConfirmationScreenParams =
+      {
+        fareProductTypeConfig: recommendedTicketSummary.fareProductTypeConfig,
+        fromTariffZone: recommendedTicketSummary.tariffZones[0],
+        toTariffZone: recommendedTicketSummary.tariffZones[1],
+        userProfilesWithCount: recommendedTicketSummary.userProfileWithCount,
+        preassignedFareProduct: recommendedTicketSummary.preassignedFareProduct,
+        travelDate: undefined,
+        headerLeftButton: {type: 'close'},
+        mode: 'Ticket',
+      };
+    const {fareProductTypeConfig} = recommendedTicketSummary;
+    if (
+      fareProductTypeConfig.configuration.requiresLogin &&
+      authenticationType !== 'phone'
+    ) {
+      navigation.navigate('LoginInApp', {
+        screen: 'LoginOnboardingInApp',
+        params: {
+          fareProductTypeConfig,
+          afterLogin: {
+            screen: 'Root_PurchaseConfirmationScreen',
+            params: purchaseConfirmationScreenParams,
+          },
+        },
+      });
+    } else {
+      navigation.navigate(
+        'Root_PurchaseConfirmationScreen',
+        purchaseConfirmationScreenParams,
+      );
+    }
   };
 
   return (
@@ -153,10 +168,9 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             style={styles.feedback}
             interactiveColor="interactive_0"
             mode="secondary"
-            text={t(TicketAssistantTexts.summary.feedback)}
-            onPress={() => openContactSheet()}
-            rightIcon={{
-              svg: SvgFeedback,
+            text={t(TicketAssistantTexts.closeButton)}
+            onPress={() => {
+              navigation.pop(2);
             }}
           />
         </View>

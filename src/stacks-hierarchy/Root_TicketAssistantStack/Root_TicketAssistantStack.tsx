@@ -33,20 +33,20 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
   const [previousTab, setPreviousTab] = useState<any>();
   return (
     <TicketAssistantContextProvider>
-      {activeTab !== 0 ? (
-        <FullScreenHeader
-          leftButton={{
-            type: 'back',
-            //Navigate to previous tab
-            onPress: () => {
-              navigation.navigate(previousTab);
-            },
-          }}
-          rightButton={{type: 'close'}}
-        />
-      ) : (
-        <FullScreenHeader rightButton={{type: 'close'}} />
-      )}
+      <FullScreenHeader
+        leftButton={
+          activeTab === 0
+            ? {type: 'close'}
+            : {
+                type: 'back',
+                //Navigate to previous tab
+                onPress: () => {
+                  navigation.navigate(previousTab);
+                },
+              }
+        }
+        rightButton={{type: 'chat'}}
+      />
       <Tab.Navigator
         tabBar={(props: MaterialTopTabBarProps) => {
           setActiveTab(props.state.index);

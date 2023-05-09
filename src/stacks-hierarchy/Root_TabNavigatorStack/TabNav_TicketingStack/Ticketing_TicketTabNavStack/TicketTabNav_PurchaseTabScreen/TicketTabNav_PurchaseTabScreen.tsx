@@ -79,28 +79,6 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     });
   };
 
-  const onTicketAssistantSelect = (
-    fareProductTypeConfig: FareProductTypeConfig,
-  ) => {
-    if (
-      fareProductTypeConfig.configuration.requiresLogin &&
-      authenticationType !== 'phone'
-    ) {
-      navigation.navigate('LoginInApp', {
-        screen: 'LoginOnboardingInApp',
-        params: {
-          fareProductTypeConfig,
-          afterLogin: {
-            screen: 'Root_TicketAssistantStack',
-            params: undefined,
-          },
-        },
-      });
-    } else {
-      navigation.navigate('Root_TicketAssistantStack');
-    }
-  };
-
   return isSignedInAsAbtCustomer ? (
     <ScrollView>
       {hasRecentFareContracts && (
@@ -135,7 +113,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         <FareProducts onProductSelect={onProductSelect} />
         {showTicketAssistant && (
           <TicketAssistantTile
-            onPress={onTicketAssistantSelect}
+            onPress={() => navigation.navigate('Root_TicketAssistantStack')}
             testID="ticketAssistant"
           />
         )}

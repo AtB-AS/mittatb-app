@@ -9,7 +9,7 @@ export type ActiveFareContractPromptInAppRouteParams = {
   afterLogin:
     | AfterLoginParams<'Root_TabNavigatorStack'>
     | AfterLoginParams<'Root_PurchaseOverviewScreen'>
-    | AfterLoginParams<'Root_TicketAssistantStack'>;
+    | AfterLoginParams<'Root_PurchaseConfirmationScreen'>;
 };
 
 type Props = LoginInAppScreenProps<'ActiveFareContractPromptInApp'>;
