@@ -170,7 +170,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             mode="secondary"
             text={t(TicketAssistantTexts.closeButton)}
             onPress={() => {
-              navigation.pop(2);
+              navigation.popToTop();
             }}
           />
         </View>
