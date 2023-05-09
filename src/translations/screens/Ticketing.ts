@@ -187,7 +187,7 @@ const TicketingTexts = {
       'Get help choosing the ticket that suits you the best',
     ),
     a11yHint: _(
-      'Aktiver for å åpne bilettveilederen',
+      'Aktiver for å åpne billettveilederen',
       'Activate to get tips and information about tickets',
     ),
     label: _('FORSLAG', 'SUGGESTIONS'),
