@@ -9,7 +9,6 @@ import {useSectionStyle} from '../use-section-style';
 import {Toggle} from '@atb/components/toggle';
 import {InteractiveColor} from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
-import {InfoChip} from '@atb/components/info-chip';
 import {LabelType} from '@atb-as/config-specs';
 import {LabelInfo} from '@atb/components/label-info';
 
