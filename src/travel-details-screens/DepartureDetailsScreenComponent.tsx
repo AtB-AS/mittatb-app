@@ -133,7 +133,7 @@ export const DepartureDetailsScreenComponent = ({
                   <Button
                     type="pill"
                     leftIcon={{svg: Map}}
-                    style={styles.liveButton}
+                    style={realtimeText ? styles.liveButton : undefined}
                     text={t(
                       vehiclePosition
                         ? DepartureDetailsTexts.live
