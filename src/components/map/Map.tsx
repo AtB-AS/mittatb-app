@@ -18,6 +18,7 @@ import {PositionArrow} from './components/PositionArrow';
 import {shadows} from './components/shadows';
 import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from '../map/components/mobility';
+import {useAnalytics} from '@atb/analytics';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -26,6 +27,7 @@ export const Map = (props: MapProps) => {
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
+  const analytics = useAnalytics();
 
   const startingCoordinates = useMemo(
     () =>
@@ -55,6 +57,7 @@ export const Map = (props: MapProps) => {
   };
 
   const onFilterChange = (filter: MapFilterType) => {
+    analytics.logEvent('Map filter changed', {filter});
     if (filter.vehicles) {
       props.vehicles?.onFilterChange(filter.vehicles);
     }

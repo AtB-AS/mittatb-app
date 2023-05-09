@@ -81,7 +81,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
     if (type.source !== 'map-click') return;
     const vehicle = type.feature.properties;
     if (isVehicle(vehicle)) {
-      analytics.logEvent('Vehicle selected', {vehicle});
+      analytics.logEvent('Scooter selected', {id: vehicle.id});
       openBottomSheet(() => {
         return <ScooterSheet vehicleId={vehicle.id} close={closeBottomSheet} />;
       });

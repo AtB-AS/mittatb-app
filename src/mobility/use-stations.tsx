@@ -17,6 +17,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {CityBikeStationSheet} from '@atb/mobility/components/CityBikeStationBottomSheet';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useIsFocused} from '@react-navigation/native';
+import {useAnalytics} from '@atb/analytics';
 
 const MIN_ZOOM_LEVEL = 12;
 const BUFFER_DISTANCE_IN_METERS = 500;
@@ -28,6 +29,7 @@ export const useStations: () => StationsState | undefined = () => {
   const {getMapFilter} = useUserMapFilters();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const isFocused = useIsFocused();
+  const analytics = useAnalytics();
 
   const [stations, setStations] = useState<
     FeatureCollection<GeoJSON.Point, StationBasicFragment>
@@ -83,6 +85,7 @@ export const useStations: () => StationsState | undefined = () => {
     if (type.source !== 'map-click') return;
     const station = type.feature.properties;
     if (isBikeStation(station)) {
+      analytics.logEvent('City bike station selected', {station});
       openBottomSheet(() => (
         <CityBikeStationSheet stationId={station.id} close={closeBottomSheet} />
       ));
