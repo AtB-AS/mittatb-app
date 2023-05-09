@@ -23,7 +23,9 @@ type DurationPickerProps = {
   duration: number;
   setDuration: (duration: number) => void;
 };
-const durations = [1, 2, 3, 4, 5, 6, 7, 14, 21, 30, 60, 90, 120, 150, 180];
+const DURATIONS_IN_DAYS = [
+  1, 2, 3, 4, 5, 6, 7, 14, 21, 30, 60, 90, 120, 150, 180,
+];
 export const DurationPicker = ({
   duration,
   setDuration,
@@ -49,16 +51,16 @@ export const DurationPicker = ({
 
   function updateDurationFromPicker(duration: number) {
     setDuration(duration);
-    setSliderIndex(getSliderIndex(duration, durations));
+    setSliderIndex(getSliderIndex(duration, DURATIONS_IN_DAYS));
   }
 
   function updateDurationFromSlider(sliderValue: number) {
-    setDate(addDays(currentDate, durations[sliderValue]));
-    setDuration(durations[sliderValue]);
+    setDate(addDays(currentDate, DURATIONS_IN_DAYS[sliderValue]));
+    setDuration(DURATIONS_IN_DAYS[sliderValue]);
   }
 
   const [sliderIndex, setSliderIndex] = useState<number>(
-    getSliderIndex(duration ?? daysInWeek, durations),
+    getSliderIndex(duration ?? daysInWeek, DURATIONS_IN_DAYS),
   );
 
   const durationText = getDurationText(duration, t);
@@ -153,7 +155,9 @@ export const DurationPicker = ({
                   TicketAssistantTexts.duration.minLimitA11yLabel,
                 )}
               >
-                {t(TicketAssistantTexts.duration.minLimit(durations[0]))}
+                {t(
+                  TicketAssistantTexts.duration.minLimit(DURATIONS_IN_DAYS[0]),
+                )}
               </ThemeText>
               <ThemeText
                 type={'body__primary'}
@@ -170,7 +174,7 @@ export const DurationPicker = ({
               style={styles.slider}
               value={sliderIndex}
               interactiveColor={'interactive_0'}
-              maximumValue={durations.length - 1}
+              maximumValue={DURATIONS_IN_DAYS.length - 1}
               minimumValue={0}
               step={1}
               tapToSeek={true}
