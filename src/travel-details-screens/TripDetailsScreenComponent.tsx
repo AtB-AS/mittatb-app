@@ -18,10 +18,7 @@ import {useFromTravelSearchToTicketEnabled} from '@atb/stacks-hierarchy/Root_Tab
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
-import {
-  CompactTravelDetailsMap,
-  TravelDetailsMapScreenParams,
-} from '@atb/travel-details-map-screen';
+import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
 import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {useCurrentTripPatternWithUpdates} from '@atb/travel-details-screens/use-current-trip-pattern-with-updates';
@@ -91,52 +88,49 @@ export const TripDetailsScreenComponent = ({
   return (
     <View style={styles.container}>
       <FullScreenView
-        type="large"
-        leftButton={{type: 'back', withIcon: true}}
-        title={
-          fromToNames
-            ? t(TripDetailsTexts.header.titleFromTo(fromToNames))
-            : t(TripDetailsTexts.header.title)
-        }
-        titleA11yLabel={
-          fromToNames
-            ? t(TripDetailsTexts.header.titleFromToA11yLabel(fromToNames))
-            : undefined
-        }
-        color={themeColor}
-        headerChildren={(focusRef?: React.MutableRefObject<null>) => (
-          <View style={{flexDirection: 'row'}} ref={focusRef} accessible={true}>
-            <ThemeIcon
-              svg={SvgDuration}
-              style={{marginRight: 8}}
-              colorType={themeColor}
-            />
+        headerProps={{
+          leftButton: {type: 'back', withIcon: true},
+          color: themeColor,
+        }}
+        parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
+          <View>
             <ThemeText
-              type="body__secondary"
               color={themeColor}
-              accessibilityLabel={t(
-                TripDetailsTexts.header.startEndTimeA11yLabel(startEndTime),
-              )}
+              type="heading--medium"
+              style={styles.heading}
+              accessibilityLabel={
+                fromToNames
+                  ? t(TripDetailsTexts.header.titleFromToA11yLabel(fromToNames))
+                  : undefined
+              }
             >
-              {t(TripDetailsTexts.header.startEndTime(startEndTime))}
+              {fromToNames
+                ? t(TripDetailsTexts.header.titleFromTo(fromToNames))
+                : t(TripDetailsTexts.header.title)}
             </ThemeText>
+            <View
+              style={{flexDirection: 'row'}}
+              ref={focusRef}
+              accessible={true}
+            >
+              <ThemeIcon
+                svg={SvgDuration}
+                style={styles.durationIcon}
+                colorType={themeColor}
+              />
+              <ThemeText
+                type="body__secondary"
+                color={themeColor}
+                accessibilityLabel={t(
+                  TripDetailsTexts.header.startEndTimeA11yLabel(startEndTime),
+                )}
+              >
+                {t(TripDetailsTexts.header.startEndTime(startEndTime))}
+              </ThemeText>
+            </View>
           </View>
         )}
       >
-        {tripPatternLegs && (
-          <CompactTravelDetailsMap
-            mapLegs={tripPatternLegs}
-            fromPlace={tripPatternLegs[0].fromPlace}
-            toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
-            onExpand={() => {
-              onPressDetailsMap({
-                legs: tripPatternLegs,
-                fromPlace: tripPatternLegs[0].fromPlace,
-                toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
-              });
-            }}
-          />
-        )}
         {tripPattern && (
           <View style={styles.paddedContainer} testID="tripDetailsContentView">
             {tripPatterns.length > 1 && (
@@ -310,6 +304,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.static.background.background_0.background,
   },
+  heading: {marginBottom: theme.spacings.medium},
   paddedContainer: {
     paddingHorizontal: theme.spacings.medium,
   },
@@ -338,4 +333,5 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   pagination: {
     marginVertical: theme.spacings.medium,
   },
+  durationIcon: {marginRight: theme.spacings.small},
 }));

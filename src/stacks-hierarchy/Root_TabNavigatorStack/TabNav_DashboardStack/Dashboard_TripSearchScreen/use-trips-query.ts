@@ -3,8 +3,6 @@ import {CancelToken, isCancel} from '@atb/api';
 import {tripsSearch} from '@atb/api/trips_v2';
 import {
   Modes,
-  InputMaybe,
-  StreetMode,
   TransportModes,
   TransportSubmode,
   TransportMode,
@@ -28,6 +26,7 @@ import {isValidTripLocations} from '@atb/utils/location';
 import Bugsnag from '@bugsnag/react-native';
 import {CancelTokenSource} from 'axios';
 import {useCallback, useEffect, useRef, useState} from 'react';
+import {useJourneyModes} from './hooks';
 
 export function useTripsQuery(
   fromLocation: Location | undefined,
@@ -69,7 +68,7 @@ export function useTripsQuery(
     setTripPatterns([]);
   }, [setTripPatterns]);
 
-  const journeySearchModes = useJourneySearchModes(StreetMode.Foot);
+  const journeySearchModes = useJourneyModes();
 
   const search = useCallback(
     (cursor?: string, existingTrips?: TripPatternWithKey[]) => {
@@ -317,57 +316,6 @@ function filterDuplicateTripPatterns(
     existing.set(tp.key, tp);
     return true;
   });
-}
-
-function useJourneySearchModes(defaultValue: InputMaybe<StreetMode>): Modes {
-  const {
-    preferences: {
-      flexibleTransport,
-      useFlexibleTransportOnAccessMode,
-      useFlexibleTransportOnDirectMode,
-      useFlexibleTransportOnEgressMode,
-    },
-  } = usePreferences();
-
-  const {
-    enable_flexible_transport,
-    use_flexible_on_accessMode,
-    use_flexible_on_directMode,
-    use_flexible_on_egressMode,
-  } = useRemoteConfig();
-
-  // Prioritizes local configurations
-  if (!!flexibleTransport) {
-    return {
-      accessMode: !!useFlexibleTransportOnAccessMode
-        ? StreetMode.Flexible
-        : StreetMode.Foot,
-      directMode: !!useFlexibleTransportOnDirectMode
-        ? StreetMode.Flexible
-        : StreetMode.Foot,
-      egressMode: !!useFlexibleTransportOnEgressMode
-        ? StreetMode.Flexible
-        : StreetMode.Foot,
-    };
-  }
-
-  return {
-    accessMode: enable_flexible_transport
-      ? use_flexible_on_accessMode
-        ? StreetMode.Flexible
-        : defaultValue
-      : defaultValue,
-    directMode: enable_flexible_transport
-      ? use_flexible_on_directMode
-        ? StreetMode.Flexible
-        : defaultValue
-      : defaultValue,
-    egressMode: enable_flexible_transport
-      ? use_flexible_on_egressMode
-        ? StreetMode.Flexible
-        : defaultValue
-      : defaultValue,
-  };
 }
 
 function transportModeToEnum(
