@@ -33,7 +33,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
   const [filter, setFilter] = useState<VehiclesFilterType>();
   const isFocused = useIsFocused();
   const pollInterval = useVehiclesPollInterval();
-  const {logAnalyticsEvent} = useAnalytics();
+  const analytics = useAnalytics();
 
   useEffect(() => {
     getMapFilter().then((initialFilter) => {
@@ -81,7 +81,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
     if (type.source !== 'map-click') return;
     const vehicle = type.feature.properties;
     if (isVehicle(vehicle)) {
-      logAnalyticsEvent('Vehicle selected', {vehicle});
+      analytics.logEvent('Vehicle selected', {vehicle});
       openBottomSheet(() => {
         return <ScooterSheet vehicleId={vehicle.id} close={closeBottomSheet} />;
       });

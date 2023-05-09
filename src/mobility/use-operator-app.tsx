@@ -14,7 +14,7 @@ export const useOperatorApp = ({
   appStoreUri,
   rentalAppUri,
 }: AppMissingAlertArgs) => {
-  const {logAnalyticsEvent} = useAnalytics();
+  const analytics = useAnalytics();
   const {t} = useTranslation();
 
   const appStoreOpenError = (operatorName: string) => {
@@ -60,7 +60,7 @@ export const useOperatorApp = ({
   };
 
   const openOperatorApp = useCallback(async () => {
-    logAnalyticsEvent('Open mobility operator app', {operatorName});
+    analytics.logEvent('Open mobility operator app', {operatorName});
     if (!rentalAppUri) return;
     await Linking.openURL(rentalAppUri).catch(() => appMissingAlert());
   }, [rentalAppUri, operatorName, appStoreUri]);

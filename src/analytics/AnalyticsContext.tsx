@@ -24,14 +24,11 @@ export const AnalyticsContextProvider: React.FC = ({children}) => {
 
 export const useAnalytics = () => {
   const postHog = useContext(AnalyticsContext);
-  const logAnalyticsEvent = (
-    event: string,
-    properties?: {[key: string]: any},
-  ) => {
+  const logEvent = (event: string, properties?: {[key: string]: any}) => {
     postHog?.capture(event, properties);
   };
 
   return {
-    logAnalyticsEvent,
+    logEvent,
   };
 };
