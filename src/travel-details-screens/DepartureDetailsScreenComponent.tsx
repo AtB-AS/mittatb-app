@@ -541,7 +541,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.medium,
   },
   liveButton: {
-    marginLeft: theme.spacings.medium,
+    marginLeft: theme.spacings.small,
   },
   place: {
     marginBottom: -theme.tripLegDetail.decorationLineWidth,
