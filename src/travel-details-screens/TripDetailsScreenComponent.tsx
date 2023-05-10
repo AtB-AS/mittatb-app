@@ -4,7 +4,6 @@ import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import SvgDuration from '@atb/assets/svg/mono-icons/time/Duration';
 import {Button} from '@atb/components/button';
-import {AnyMode} from '@atb/components/icon-box';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -19,16 +18,21 @@ import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
-import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {useCurrentTripPatternWithUpdates} from '@atb/travel-details-screens/use-current-trip-pattern-with-updates';
 import {canSellCollabTicket} from '@atb/travel-details-screens/utils';
-import {formatToClock, secondsBetween} from '@atb/utils/date';
+import {
+  formatToClock,
+  formatToVerboseFullDate,
+  isWithinSameDate,
+  secondsBetween,
+} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
-import React, {useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import {Trip} from './components/Trip';
+import {Divider} from '@atb/components/divider';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -55,34 +59,17 @@ export const TripDetailsScreenComponent = ({
   const {t, language} = useTranslation();
   const styles = useStyle();
 
-  const [currentIndex, setCurrentIndex] = useState(startIndex ?? 0);
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const singleTicketConfig = fareProductTypeConfigs.find(
     (fareProductTypeConfig) => fareProductTypeConfig.type === 'single',
   );
 
   const {tripPattern, error} = useCurrentTripPatternWithUpdates(
-    currentIndex,
+    startIndex ?? 0,
     tripPatterns,
   );
   const fromToNames = getFromToName(tripPattern.legs);
   const startEndTime = getStartEndTime(tripPattern, language);
-
-  const tripPatternLegs = tripPattern?.legs.map((leg) => {
-    let mode: AnyMode = !!leg.bookingArrangements ? 'flex' : leg.mode;
-    return {
-      ...leg,
-      mode,
-    };
-  });
-
-  function navigate(page: number) {
-    const newIndex = page - 1;
-    if (page > tripPatterns.length || page < 1 || currentIndex === newIndex) {
-      return;
-    }
-    setCurrentIndex(newIndex);
-  }
 
   const tripTicketDetails = useGetTicketInfoFromTrip(tripPattern);
   return (
@@ -133,14 +120,18 @@ export const TripDetailsScreenComponent = ({
       >
         {tripPattern && (
           <View style={styles.paddedContainer} testID="tripDetailsContentView">
-            {tripPatterns.length > 1 && (
-              <PaginatedDetailsHeader
-                page={currentIndex + 1}
-                totalPages={tripPatterns.length}
-                onNavigate={navigate}
-                style={styles.pagination}
-                currentDate={tripPatternLegs[0]?.aimedStartTime}
-              />
+            {!isWithinSameDate(new Date(), tripPattern.expectedStartTime) && (
+              <>
+                <View style={styles.date}>
+                  <ThemeText type={'body__primary'} color={'secondary'}>
+                    {formatToVerboseFullDate(
+                      tripPattern.expectedStartTime,
+                      language,
+                    )}
+                  </ThemeText>
+                </View>
+                <Divider style={styles.divider} />
+              </>
             )}
             <Trip
               tripPattern={tripPattern}
@@ -326,12 +317,16 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.xSmall,
     flexDirection: 'row',
   },
+  date: {
+    alignItems: 'center',
+    marginTop: theme.spacings.medium,
+  },
+  divider: {
+    marginVertical: theme.spacings.medium,
+  },
   borderTop: {
     borderTopColor: theme.border.primary,
     borderTopWidth: theme.border.width.slim,
-  },
-  pagination: {
-    marginVertical: theme.spacings.medium,
   },
   durationIcon: {marginRight: theme.spacings.small},
 }));
