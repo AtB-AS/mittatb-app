@@ -13,12 +13,15 @@ export function useGetLiveServiceJourneyVehicles(
   useEffect(() => {
     if (!serviceJourneyId || !realtimeMapEnabled) return;
 
-    const subscription = getLiveVehicleSubscription(serviceJourneyId);
-
-    subscription.onmessage = (event) => {
-      const vehicle = JSON.parse(event.data) as VehicleWithPosition;
-      setVehicle(vehicle);
-    };
-    return () => subscription.close(1000);
+    let close = () => {};
+    getLiveVehicleSubscription(serviceJourneyId).then((subscription) => {
+      if (!subscription) return; // TODO: Handle case where socket couldn't be opened
+      subscription.onmessage = (event) => {
+        const vehicle = JSON.parse(event.data) as VehicleWithPosition;
+        setVehicle(vehicle);
+      };
+      close = subscription.close;
+    });
+    return close;
   }, [serviceJourneyId, realtimeMapEnabled]);
 }
