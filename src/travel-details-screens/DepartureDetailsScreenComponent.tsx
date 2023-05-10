@@ -146,6 +146,8 @@ export const DepartureDetailsScreenComponent = ({
                         fromPlace: mapData.start,
                         toPlace: mapData.stop,
                         vehicleWithPosition: vehiclePosition,
+                        mode: mode,
+                        subMode: subMode,
                       })
                     }
                   />

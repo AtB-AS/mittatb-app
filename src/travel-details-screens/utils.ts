@@ -9,6 +9,7 @@ import {differenceInSeconds, parseISO} from 'date-fns';
 import {
   Mode,
   TariffZone,
+  TransportMode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {APP_ORG} from '@env';
 
@@ -159,4 +160,15 @@ export function canSellCollabTicket(tripPattern: TripPattern) {
 
 function someLegsAreByTrain(tripPattern: TripPattern): boolean {
   return tripPattern.legs.some((leg) => leg.mode === Mode.Rail);
+}
+
+/**
+ * Convert a `Mode` value to `TransportMode`. If the mode isn't a valid
+ * transport mode, return 'unknown'.
+ */
+export function modeToTransportMode(mode: Mode): TransportMode {
+  if (Object.values(TransportMode as any).includes(mode)) {
+    return mode as any as TransportMode;
+  }
+  return TransportMode.Unknown;
 }
