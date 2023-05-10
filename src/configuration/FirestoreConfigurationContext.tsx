@@ -32,6 +32,7 @@ import {FareProductTypeConfig} from './types';
 import {
   mapLanguageAndTextType,
   mapToFareProductTypeConfigs,
+  mapToFlexibleTransportOption,
   mapToTransportModeFilterOptions,
 } from './converters';
 import type {TravelSearchFiltersType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
@@ -349,16 +350,23 @@ function getFareProductTypeConfigsFromSnapshot(
 function getTravelSearchFiltersFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
 ): TravelSearchFiltersType | undefined {
-  const transportModeOptions = snapshot.docs
-    .find((doc) => doc.id == 'travelSearchFilters')
-    ?.get('transportModes');
+  const travelSearchFiltersDoc = snapshot.docs.find(
+    (doc) => doc.id == 'travelSearchFilters',
+  );
+
+  const transportModeOptions = travelSearchFiltersDoc?.get('transportModes');
+  const flexibleTransport = travelSearchFiltersDoc?.get('flexibleTransport');
 
   const mappedTransportModes =
     mapToTransportModeFilterOptions(transportModeOptions);
 
+  const mappedFlexibleTransport =
+    mapToFlexibleTransportOption(flexibleTransport);
+
   if (mappedTransportModes) {
     return {
       transportModes: mappedTransportModes,
+      flexibleTransport: mappedFlexibleTransport,
     };
   }
 

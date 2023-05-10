@@ -303,10 +303,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 ProfileTexts.sections.settings.linkSectionItems.travelToken
                   .label,
               )}
-              flag={t(
-                ProfileTexts.sections.settings.linkSectionItems.travelToken
-                  .flag,
-              )}
+              label={'new'}
               onPress={() => navigation.navigate('Profile_TravelTokenScreen')}
               testID="travelTokenButton"
             />
