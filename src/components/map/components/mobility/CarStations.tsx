@@ -22,34 +22,17 @@ export const CarStations = ({stations, onPress}: Props) => {
       onPress={onPress}
     >
       <MapboxGL.SymbolLayer
-        id="carClusterIcon"
+        id="carStationPin"
         minZoomLevel={13.5}
-        style={{
-          iconImage: {uri: 'CarCluster'},
-          iconSize: 0.85,
-          iconAllowOverlap: true,
-        }}
-      />
-      <MapboxGL.SymbolLayer
-        id="carClusterCountCircle"
-        minZoomLevel={13.5}
-        aboveLayerID="carClusterIcon"
-        style={{
-          iconImage: {uri: 'ClusterCount'},
-          iconAllowOverlap: true,
-          iconTranslate: [13, -13],
-        }}
-      />
-      <MapboxGL.SymbolLayer
-        id="carClusterCount"
-        minZoomLevel={13.5}
-        aboveLayerID="carClusterCountCircle"
         style={{
           textField: ['get', 'count'],
+          textAnchor: 'center',
+          textOffset: [0.75, 0],
           textColor: stationColor.background,
-          textSize: 11,
-          textTranslate: [13, -13],
-          textAllowOverlap: true,
+          textSize: 12,
+          iconImage: {uri: 'CarChip'},
+          iconAllowOverlap: true,
+          iconSize: 0.85,
         }}
       />
     </MapboxGL.ShapeSource>
