@@ -203,6 +203,10 @@ const LiveVehicle = ({
   );
 };
 
+/**
+ * Get the name of the transportation mode icon which is stored under the
+ * "Images" section in Mapbox Studio.
+ */
 function vehicleIconName(mode?: AnyMode) {
   switch (mode) {
     case TransportMode.Bus:
