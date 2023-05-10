@@ -38,7 +38,7 @@ export const FareProducts = ({
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View>
       <ThemeText type="body__secondary" style={styles.heading}>
         {t(TicketingTexts.availableFareProducts.allTickets)}
       </ThemeText>
@@ -67,13 +67,9 @@ export const FareProducts = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    paddingBottom: theme.spacings.medium,
-  },
   heading: {
     margin: theme.spacings.medium,
     marginLeft: theme.spacings.xLarge,
-    marginTop: theme.spacings.xLarge,
   },
   fareProductsContainer: {
     flex: 1,

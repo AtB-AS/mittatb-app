@@ -105,6 +105,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
           selectedZones={selectedZones}
           onVenueSearchClick={onVenueSearchClick}
           isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
+          style={styles.selectorButtons}
         />
       </View>
 
@@ -128,5 +129,8 @@ const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   },
   saveButton: {
     marginHorizontal: theme.spacings.medium,
+  },
+  selectorButtons: {
+    margin: theme.spacings.medium,
   },
 }));
