@@ -35,6 +35,19 @@ export const CarStations = ({stations, onPress}: Props) => {
           iconSize: 0.85,
         }}
       />
+      <MapboxGL.CircleLayer
+        id="carStationMini"
+        maxZoomLevel={13.5}
+        minZoomLevel={12}
+        style={{
+          circleColor: stationColor.background,
+          circleStrokeColor: stationColor.text,
+          circleOpacity: 0.7,
+          circleStrokeOpacity: 0.7,
+          circleRadius: 4,
+          circleStrokeWidth: 1,
+        }}
+      />
     </MapboxGL.ShapeSource>
   );
 };
