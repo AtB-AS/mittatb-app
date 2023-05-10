@@ -2,7 +2,8 @@ import {client} from '@atb/api/index';
 import {stringifyUrl} from '@atb/api/utils';
 import qs from 'query-string';
 import {AxiosRequestConfig} from 'axios';
-import {GetServiceJourneyVehicles} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
+import {WS_API_BASE_URL} from '@env';
+import {GetServiceJourneyVehicles} from './types/vehicles';
 
 export const getServiceJourneyVehicles = async (
   serviceJourneyIds?: string[],
@@ -23,4 +24,11 @@ export const getServiceJourneyVehicles = async (
   );
 
   return result.data;
+};
+
+export const getLiveVehicleSubscription = (serviceJourneyId: string) => {
+  const url = `${WS_API_BASE_URL}ws/v2/vehicles/service-journey/subscription`;
+  const query = qs.stringify({serviceJourneyId});
+
+  return new WebSocket(stringifyUrl(url, query));
 };

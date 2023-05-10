@@ -36,17 +36,19 @@ export function ParallaxScroll({header, children, refreshControl}: Props) {
         <View onLayout={onHeaderContentLayout}>{header}</View>
       </Animated.View>
 
-      <Animated.ScrollView
-        scrollEventThrottle={10}
-        refreshControl={refreshControl}
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
-          {useNativeDriver: false},
-        )}
-        contentContainerStyle={{paddingTop: contentHeight}}
-      >
-        {children}
-      </Animated.ScrollView>
+      <View style={{paddingTop: contentHeight}}>
+        <Animated.ScrollView
+          scrollEventThrottle={10}
+          refreshControl={refreshControl}
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
+            {useNativeDriver: false},
+          )}
+          style={styles.children}
+        >
+          {children}
+        </Animated.ScrollView>
+      </View>
     </View>
   );
 }
@@ -66,5 +68,8 @@ const useThemeStyles = StyleSheet.createThemeHook(() => ({
     zIndex: 2,
     elevation: 4,
     justifyContent: 'space-between',
+  },
+  children: {
+    overflow: 'visible',
   },
 }));

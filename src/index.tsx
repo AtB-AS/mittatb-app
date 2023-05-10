@@ -29,6 +29,7 @@ import {FirestoreConfigurationContextProvider} from '@atb/configuration/Firestor
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Platform, UIManager} from 'react-native';
 import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext';
+import {AnalyticsContextProvider} from '@atb/analytics';
 
 configureAndStartBugsnag();
 
@@ -78,13 +79,15 @@ export const App = () => {
                                 <MobileTokenContextProvider>
                                   <AppLanguageProvider>
                                     <GeolocationContextProvider>
-                                      <GlobalMessagesContextProvider>
-                                        <BottomSheetProvider>
-                                          <FeedbackQuestionsProvider>
-                                            <RootStack />
-                                          </FeedbackQuestionsProvider>
-                                        </BottomSheetProvider>
-                                      </GlobalMessagesContextProvider>
+                                      <AnalyticsContextProvider>
+                                        <GlobalMessagesContextProvider>
+                                          <BottomSheetProvider>
+                                            <FeedbackQuestionsProvider>
+                                              <RootStack />
+                                            </FeedbackQuestionsProvider>
+                                          </BottomSheetProvider>
+                                        </GlobalMessagesContextProvider>
+                                      </AnalyticsContextProvider>
                                     </GeolocationContextProvider>
                                   </AppLanguageProvider>
                                 </MobileTokenContextProvider>

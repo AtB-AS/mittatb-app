@@ -51,8 +51,8 @@ import {storage, StorageModelKeysEnum} from '@atb/storage';
 import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-state';
 import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/SelectedFiltersButtons';
 import {FullScreenView} from '@atb/components/screen-view';
-import {useFlexibleTransportEnabled} from './use-flexible-transport-enabled';
 import {CityZoneMessage} from './components/CityZoneMessage';
+import {useFlexibleTransportEnabled} from './use-flexible-transport-enabled';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -91,7 +91,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   });
 
   const filtersState = useTravelSearchFiltersState();
-
+  const isFlexibleTransportEnabledInRemoteConfig =
+    useFlexibleTransportEnabled();
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
     useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);
 
@@ -100,8 +101,9 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
   const isValidLocations = isValidTripLocations(from, to);
-  const isFlexibleTransportEnabledInRemoteConfig =
-    useFlexibleTransportEnabled();
+  const isFlexibleTransportEnabled =
+    isFlexibleTransportEnabledInRemoteConfig &&
+    filtersState?.filtersSelection?.flexibleTransport?.enabled;
 
   const [searchStateMessage, setSearchStateMessage] = useState<
     string | undefined
@@ -367,9 +369,18 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   resetTransportModes={filtersState.resetTransportModes}
                 />
               )}
-              {isFlexibleTransportEnabledInRemoteConfig &&
+              {isFlexibleTransportEnabled &&
                 tripPatterns.length > 0 &&
-                !error && <CityZoneMessage from={from} to={to} />}
+                !error && (
+                  <CityZoneMessage
+                    from={from}
+                    to={to}
+                    onDismiss={() => {
+                      filtersState.enabled &&
+                        filtersState.disableFlexibleTransport();
+                    }}
+                  />
+                )}
               <Results
                 tripPatterns={tripPatterns}
                 isSearching={isSearching}

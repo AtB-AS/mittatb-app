@@ -133,6 +133,7 @@ export const DepartureDetailsScreenComponent = ({
                   <Button
                     type="pill"
                     leftIcon={{svg: Map}}
+                    style={realtimeText ? styles.liveButton : undefined}
                     text={t(
                       vehiclePosition
                         ? DepartureDetailsTexts.live
@@ -144,7 +145,7 @@ export const DepartureDetailsScreenComponent = ({
                         legs: mapData.mapLegs,
                         fromPlace: mapData.start,
                         toPlace: mapData.stop,
-                        _initialVehiclePosition: vehiclePosition,
+                        vehicleWithPosition: vehiclePosition,
                       })
                     }
                   />
@@ -250,7 +251,7 @@ function LastPassedStop({realtimeText}: {realtimeText: string}) {
       <ThemeText
         type="body__secondary"
         color="background_accent_0"
-        style={{flexShrink: 1}}
+        style={styles.passedText}
       >
         {realtimeText}
       </ThemeText>
@@ -523,21 +524,29 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     paddingTop: theme.spacings.medium,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    flexWrap: 'wrap',
   },
   border: {
     borderColor: theme.static.background.background_3.background,
     marginVertical: theme.spacings.medium,
   },
   passedSection: {
-    flexShrink: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    minWidth: '60%',
+    flex: 1,
   },
   passedSectionRealtimeIcon: {
     marginRight: theme.spacings.xSmall,
   },
+  passedText: {
+    flexShrink: 1,
+  },
   startPlace: {
-    marginTop: theme.spacings.large,
+    marginTop: theme.spacings.medium,
+  },
+  liveButton: {
+    marginLeft: theme.spacings.small,
   },
   place: {
     marginBottom: -theme.tripLegDetail.decorationLineWidth,
