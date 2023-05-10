@@ -16,12 +16,14 @@ import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {InteractiveColor, TextNames} from '@atb/theme/colors';
+import {LabelInfo} from '@atb/components/label-info';
+import {LabelType} from '@atb-as/config-specs';
 
 type Props = SectionItemProps<{
   text: string;
   subtitle?: string;
-  /* Text for a flag that will be placed by the icon. "Beta", "New", etc. */
-  flag?: string;
+  /* Label will be placed by the icon. "Beta", "New", etc. */
+  label?: LabelType;
   onPress?(event: GestureResponderEvent): void;
   icon?: NavigationIconTypes | JSX.Element;
   disabled?: boolean;
@@ -33,7 +35,7 @@ export function LinkSectionItem({
   text,
   onPress,
   subtitle,
-  flag,
+  label,
   icon,
   accessibility,
   disabled,
@@ -75,13 +77,7 @@ export function LinkSectionItem({
         >
           {text}
         </ThemeText>
-        {flag && (
-          <View style={linkSectionItemStyle.flag}>
-            <ThemeText color="background_accent_3" type="body__tertiary">
-              {flag}
-            </ThemeText>
-          </View>
-        )}
+        {label && <LabelInfo label={label} />}
         {iconEl}
       </View>
       {subtitle && (

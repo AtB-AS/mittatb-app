@@ -14,6 +14,7 @@ import {getTransportModeSvg} from '@atb/components/icon-box';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {StyleSheet} from '@atb/theme';
 import type {
+  FlexibleTransportOptionTypeWithSelectionType,
   TransportModeFilterOptionWithSelectionType,
   TravelSearchFiltersSelectionType,
 } from '../../types';
@@ -26,6 +27,7 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
+import {useFlexibleTransportEnabled} from '../use-flexible-transport-enabled';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
@@ -41,21 +43,33 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   const {setFilters} = useFilters();
   const [saveFilters, setSaveFilters] = useState(false);
 
-  const [selectedModes, setSelectedModes] = useState<
+  const isFlexibleTransportEnabledInRemoteConfig =
+    useFlexibleTransportEnabled();
+
+  const [selectedModeOptions, setSelectedModes] = useState<
     TransportModeFilterOptionWithSelectionType[] | undefined
   >(filtersSelection.transportModes);
 
+  const [selectedFlexibleTransportOption, setFlexibleTranportFilter] = useState<
+    FlexibleTransportOptionTypeWithSelectionType | undefined
+  >(filtersSelection.flexibleTransport);
+
   const save = () => {
-    onSave({
-      transportModes: selectedModes,
-    });
+    const selectedFilters = {
+      transportModes: selectedModeOptions,
+      flexibleTransport: selectedFlexibleTransportOption,
+    };
+    onSave(selectedFilters);
     if (saveFilters) {
-      setFilters(selectedModes);
+      setFilters(selectedFilters);
     }
     close();
   };
 
-  const allModesSelected = selectedModes?.every((m) => m.selected);
+  const allModesSelected = selectedModeOptions?.every((m) => m.selected);
+
+  const showFlexibleTransportFilterOption =
+    isFlexibleTransportEnabledInRemoteConfig && selectedFlexibleTransportOption;
 
   return (
     <BottomSheetContainer maxHeightValue={0.9}>
@@ -103,11 +117,12 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                 )}
                 subtext={description}
                 value={
-                  selectedModes?.find(({id}) => id === option.id)?.selected
+                  selectedModeOptions?.find(({id}) => id === option.id)
+                    ?.selected
                 }
                 onValueChange={(checked) => {
                   setSelectedModes(
-                    selectedModes?.map((m) =>
+                    selectedModeOptions?.map((m) =>
                       m.id === option.id ? {...m, selected: checked} : m,
                     ),
                   );
@@ -116,7 +131,33 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
             ) : null;
           })}
         </Section>
-        <Section style={styles.saveFiltersContainer}>
+
+        {showFlexibleTransportFilterOption && (
+          <Section style={styles.sectionContainer}>
+            <ToggleSectionItem
+              text={
+                getTextForLanguage(
+                  selectedFlexibleTransportOption.title,
+                  language,
+                ) ?? ''
+              }
+              subtext={getTextForLanguage(
+                selectedFlexibleTransportOption.description,
+                language,
+              )}
+              label={selectedFlexibleTransportOption.label}
+              value={selectedFlexibleTransportOption?.enabled}
+              onValueChange={(checked) => {
+                setFlexibleTranportFilter({
+                  ...selectedFlexibleTransportOption,
+                  enabled: checked,
+                });
+              }}
+            />
+          </Section>
+        )}
+
+        <Section style={styles.sectionContainer}>
           <GenericClickableSectionItem
             onPress={() => {
               setSaveFilters(!saveFilters);
@@ -159,7 +200,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
-  saveFiltersContainer: {
+  sectionContainer: {
     marginTop: theme.spacings.medium,
   },
   saveOptionSection: {

@@ -1,4 +1,7 @@
-import {FareProductTypeConfig} from '@atb-as/config-specs';
+import {
+  FareProductTypeConfig,
+  FlexibleTransportOptionType,
+} from '@atb-as/config-specs';
 import {TransportModeFilterOptionType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
@@ -32,6 +35,29 @@ function mapToFareProductTypeConfig(
   }
   return typeConfigPotential.data;
 }
+
+export const mapToFlexibleTransportOption = (
+  filter: any,
+): FlexibleTransportOptionType | undefined => {
+  const safeParseReturnObject =
+    filter && FlexibleTransportOptionType.safeParse(filter);
+
+  if (!safeParseReturnObject) {
+    return undefined;
+  }
+
+  if (!safeParseReturnObject.success) {
+    Bugsnag.notify('flexible transport filter mapping issue', function (event) {
+      event.addMetadata('decode_errors', {
+        issues: safeParseReturnObject.error.issues,
+      });
+    });
+
+    return undefined;
+  }
+
+  return safeParseReturnObject.data;
+};
 
 export const mapToTransportModeFilterOptions = (
   filters: any,
