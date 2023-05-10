@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {AccessibilityInfo, findNodeHandle} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigationSafe} from '@atb/utils/use-navigation-safe';
 
 /**
  * Return a ref which can be set on a component to make it be focused by screen
@@ -36,18 +36,6 @@ export function useFocusOnLoad(setFocusOnLoad: boolean = true) {
 
   return focusRef;
 }
-
-const useNavigationSafe = () => {
-  try {
-    return useNavigation();
-  } catch (ex) {
-    /*
-    Navigation is not available as the current context is not inside a screen in
-    a navigator
-     */
-    return undefined;
-  }
-};
 
 export const giveFocus = (focusRef: React.MutableRefObject<any>) => {
   if (focusRef.current) {

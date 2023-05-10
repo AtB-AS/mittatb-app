@@ -9930,6 +9930,11 @@ posix-character-classes@^0.1.0:
   resolved "https://registry.npmjs.org/posix-character-classes/-/posix-character-classes-0.1.1.tgz"
   integrity sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=
 
+posthog-react-native@^2.5.2:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/posthog-react-native/-/posthog-react-native-2.5.2.tgz#dcbbd6490376a238e77993d92c5ddd38a5f152d0"
+  integrity sha512-HYwFivdvsKNq/MSnoGXq+O1Ym4iLsb759TlgigU0Ya6Ctho0wdy+niQhb+yfS7quq+nSNg35vDj+L8Wg2DGa3g==
+
 postinstall-postinstall@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/postinstall-postinstall/-/postinstall-postinstall-2.1.0.tgz"
