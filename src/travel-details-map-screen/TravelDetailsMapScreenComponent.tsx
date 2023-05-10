@@ -175,7 +175,7 @@ const LiveVehicle = ({
   if (!coordinates) return null;
   return (
     <MapboxGL.ShapeSource
-      id="vehicle"
+      id="liveVehicle"
       shape={pointOf(coordinates)}
       cluster
       onPress={() => {
@@ -183,17 +183,17 @@ const LiveVehicle = ({
       }}
     >
       <MapboxGL.CircleLayer
-        id="icon"
-        minZoomLevel={1}
+        id="liveVehicleCircle"
+        minZoomLevel={4}
         style={{
           circleColor,
           circleRadius: 22,
         }}
       />
       <MapboxGL.SymbolLayer
-        id="transportIcon"
-        aboveLayerID="icon"
-        minZoomLevel={1}
+        id="liveVehicleIcon"
+        aboveLayerID="liveVehicleCircle"
+        minZoomLevel={4}
         style={{
           iconImage: {uri: iconName},
           iconAnchor: 'center',
