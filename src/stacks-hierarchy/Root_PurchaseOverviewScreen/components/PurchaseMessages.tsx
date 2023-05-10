@@ -5,11 +5,16 @@ import {
 } from '@atb/mobile-token/MobileTokenContext';
 import {StyleSheet} from '@atb/theme';
 import {useTicketingState} from '@atb/ticketing';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  PurchaseOverviewTexts,
+  useTranslation,
+} from '@atb/translations';
 import React from 'react';
 import {getOtherDeviceIsInspectableWarning} from '../../../fare-contracts/utils';
 import {getValidOnTrainNoticeText} from '../../Root_TabNavigatorStack/TabNav_TicketingStack/utils';
 import {TariffZoneWithMetadata} from '../../Root_PurchaseTariffZonesSearchByMapScreen';
+import {useFirestoreConfiguration} from '@atb/configuration';
 
 export type PurchaseWarningsProps = {
   preassignedFareProductType: string;
@@ -22,7 +27,7 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
   fromTariffZone,
   toTariffZone,
 }) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const styles = useStyles();
 
   const {
@@ -42,6 +47,14 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
     t,
     remoteTokens,
     deviceIsInspectable,
+  );
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const purchaseMessageFromFareProductTypeConfig = fareProductTypeConfigs.find(
+    (config) => config.type === preassignedFareProductType,
+  )?.description;
+  const localizedFareProductTypePurchaseMessage = getTextForLanguage(
+    purchaseMessageFromFareProductTypeConfig,
+    language,
   );
 
   const shouldShowValidTrainTicketNotice =
@@ -74,6 +87,14 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
         <MessageBox
           style={styles.warning}
           message={getValidOnTrainNoticeText(t, preassignedFareProductType)}
+          type="info"
+        />
+      )}
+
+      {localizedFareProductTypePurchaseMessage && (
+        <MessageBox
+          style={styles.warning}
+          message={localizedFareProductTypePurchaseMessage}
           type="info"
         />
       )}
