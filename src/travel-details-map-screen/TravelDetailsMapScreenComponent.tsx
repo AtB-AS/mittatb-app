@@ -184,7 +184,7 @@ const LiveVehicle = ({
     >
       <MapboxGL.CircleLayer
         id="liveVehicleCircle"
-        minZoomLevel={4}
+        minZoomLevel={8}
         style={{
           circleColor,
           circleRadius: 22,
@@ -193,7 +193,7 @@ const LiveVehicle = ({
       <MapboxGL.SymbolLayer
         id="liveVehicleIcon"
         aboveLayerID="liveVehicleCircle"
-        minZoomLevel={4}
+        minZoomLevel={8}
         style={{
           iconImage: {uri: iconName},
           iconAnchor: 'center',
