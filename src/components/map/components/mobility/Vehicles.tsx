@@ -48,6 +48,9 @@ export const Vehicles = ({mapCameraRef, vehicles, onPress}: Props) => {
           flyToLocation({
             coordinates: toCoordinates(feature.geometry.coordinates),
             mapCameraRef,
+            // Default animationMode 'flyTo' will zoom slightly in and out,
+            // causing points to cluster and de-cluster on camera move.
+            animationMode: 'easeTo',
           });
           onPress({
             source: 'map-click',
