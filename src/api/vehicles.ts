@@ -4,6 +4,7 @@ import qs from 'query-string';
 import {AxiosRequestConfig} from 'axios';
 import {WS_API_BASE_URL} from '@env';
 import {GetServiceJourneyVehicles} from './types/vehicles';
+import Bugsnag from '@bugsnag/react-native';
 
 export const getServiceJourneyVehicles = async (
   serviceJourneyIds?: string[],
@@ -27,6 +28,9 @@ export const getServiceJourneyVehicles = async (
 };
 
 export const getLiveVehicleSubscription = (serviceJourneyId: string) => {
+  const baseUrl = WS_API_BASE_URL;
+  Bugsnag.notify(`WebSocket URL was ${baseUrl}`);
+
   const url = `${WS_API_BASE_URL}ws/v2/vehicles/service-journey/subscription`;
   const query = qs.stringify({serviceJourneyId});
 
