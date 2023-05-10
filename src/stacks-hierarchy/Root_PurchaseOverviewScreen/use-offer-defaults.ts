@@ -104,18 +104,24 @@ const useTravellersWithPreselectedCounts = (
 };
 
 /**
- * Get the default tariff zone, either based on current location or else the
- * first tariff zone in the provided tariff zones list.
+ * Get the default tariff zone, either based on current location, default tariff
+ * zone set in firestore configuration or else the first tariff zone in the
+ * provided tariff zones list.
  */
 const useDefaultTariffZone = (
   tariffZones: TariffZone[],
 ): TariffZoneWithMetadata => {
+  const {defaultTariffZone} = useFirestoreConfiguration();
   const tariffZoneFromLocation = useTariffZoneFromLocation(tariffZones);
-  return useMemo<TariffZoneWithMetadata>(
-    () =>
-      tariffZoneFromLocation
-        ? {...tariffZoneFromLocation, resultType: 'geolocation'}
-        : {...tariffZones[0], resultType: 'zone'},
-    [tariffZones, tariffZoneFromLocation],
-  );
+  return useMemo<TariffZoneWithMetadata>(() => {
+    if (tariffZoneFromLocation) {
+      return {...tariffZoneFromLocation, resultType: 'geolocation'};
+    }
+
+    if (defaultTariffZone) {
+      return {...defaultTariffZone, resultType: 'zone'};
+    }
+
+    return {...tariffZones[0], resultType: 'zone'};
+  }, [tariffZones, tariffZoneFromLocation, defaultTariffZone]);
 };
