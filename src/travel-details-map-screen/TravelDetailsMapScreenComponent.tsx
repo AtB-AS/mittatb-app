@@ -19,19 +19,17 @@ import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
 import {VehicleWithPosition} from '@atb/api/types/vehicles';
 import {useGetLiveServiceJourneyVehicles} from './use-get-live-service-journey-vehicles';
-import {
-  TransportMode,
-  TransportSubmode,
-} from '@atb/api/types/generated/journey_planner_v3_types';
+import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
   vehicleWithPosition?: VehicleWithPosition;
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
-  mode?: TransportMode;
-  subMode?: TransportSubmode;
+  mode?: AnyMode;
+  subMode?: AnySubMode;
 };
 
 type Props = TravelDetailsMapScreenParams & {
@@ -158,8 +156,8 @@ const styles = StyleSheet.create({
 
 type VehicleIconProps = {
   coordinates: Coordinates;
-  mode?: TransportMode;
-  subMode?: TransportSubmode;
+  mode?: AnyMode;
+  subMode?: AnySubMode;
   setShouldTrack: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -205,7 +203,7 @@ const LiveVehicle = ({
   );
 };
 
-function vehicleIconName(mode?: TransportMode) {
+function vehicleIconName(mode?: AnyMode) {
   switch (mode) {
     case TransportMode.Bus:
       return 'Bus';
