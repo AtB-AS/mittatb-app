@@ -22,7 +22,7 @@ const DEFAULT_PADDING_DISPLACEMENT = 0.003;
 /**
  * Trigger camera move based on the camera focus mode. When the camera focus
  * mode is 'coordinates' the camera movement happens instantly, but when the
- * camera focus mode is 'stop-place' or 'map-lines' it will wait until the
+ * camera focus mode is 'entity' or 'map-lines' it will wait until the
  * bottom sheet is shown.
  */
 export const useTriggerCameraMoveEffect = (
@@ -50,7 +50,7 @@ export const useTriggerCameraMoveEffect = (
 
     if (cameraFocusMode?.mode === 'map-lines') {
       moveCameraToMapLines(cameraFocusMode.mapLines, padding, mapCameraRef);
-    } else if (cameraFocusMode?.mode === 'stop-place') {
+    } else if (cameraFocusMode?.mode === 'entity') {
       moveCameraToStopPlace(
         cameraFocusMode.stopPlaceFeature,
         padding,

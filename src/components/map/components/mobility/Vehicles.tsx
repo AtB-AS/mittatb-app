@@ -1,17 +1,19 @@
 import React, {RefObject, useRef} from 'react';
-import {FeatureCollection, GeoJSON} from 'geojson';
+import {Feature, FeatureCollection, GeoJSON, Point} from 'geojson';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import MapboxGL from '@rnmapbox/maps';
 import {flyToLocation, isClusterFeature, toCoordinates} from '../../utils';
 import {getStaticColor} from '@atb/theme/colors';
 import {useTheme} from '@atb/theme';
+import {Cluster} from '../../types';
 
 type Props = {
   mapCameraRef: RefObject<MapboxGL.Camera>;
   vehicles: FeatureCollection<GeoJSON.Point, VehicleFragment>;
+  onClusterClick: (feature: Feature<Point, Cluster>) => void;
 };
 
-export const Vehicles = ({mapCameraRef, vehicles}: Props) => {
+export const Vehicles = ({mapCameraRef, vehicles, onClusterClick}: Props) => {
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
   const vehiclesSource = useRef<MapboxGL.ShapeSource>(null);
   const {themeName} = useTheme();
@@ -38,6 +40,7 @@ export const Vehicles = ({mapCameraRef, vehicles}: Props) => {
               zoomLevel,
               animationDuration: 400,
             });
+            onClusterClick(feature);
           }
         }}
       >

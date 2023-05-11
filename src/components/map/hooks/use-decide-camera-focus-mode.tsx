@@ -47,6 +47,11 @@ export const useDecideCameraFocusMode = (
         return;
       }
 
+      if (mapSelectionAction.source === 'cluster-click') {
+        setCameraFocusMode(undefined);
+        return;
+      }
+
       switch (selectionMode) {
         case 'ExploreLocation': {
           setCameraFocusMode({
@@ -57,7 +62,7 @@ export const useDecideCameraFocusMode = (
           });
           break;
         }
-        case 'ExploreStops': {
+        case 'ExploreEntities': {
           const stopPlaceFeature = await findEntityAtClick(
             mapSelectionAction.feature,
             mapViewRef,
@@ -70,7 +75,7 @@ export const useDecideCameraFocusMode = (
               distance: result.distance,
             });
           } else if (stopPlaceFeature) {
-            setCameraFocusMode({mode: 'stop-place', stopPlaceFeature});
+            setCameraFocusMode({mode: 'entity', stopPlaceFeature});
           } else {
             setCameraFocusMode(undefined);
           }

@@ -5,13 +5,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
 import MapboxGL from '@rnmapbox/maps';
 import {Feature, Point} from 'geojson';
-import {
-  findEntityAtClick,
-  flyToLocation,
-  isClusterFeature,
-  isStopPlace,
-  toCoordinates,
-} from '../utils';
+import {findEntityAtClick, isStopPlace} from '../utils';
 import {isBikeStation, isVehicle} from '@atb/mobility/utils';
 import {CityBikeStationSheet} from '@atb/mobility/components/CityBikeStationBottomSheet';
 import {ScooterSheet} from '@atb/mobility/components/ScooterSheet';
@@ -50,7 +44,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   useEffect(() => {
     (async function () {
       if (!isFocused) return;
-      if (mapProps.selectionMode !== 'ExploreStops') return;
+      if (mapProps.selectionMode !== 'ExploreEntities') return;
       if (!selectedFeature) {
         closeBottomSheet();
         return;
