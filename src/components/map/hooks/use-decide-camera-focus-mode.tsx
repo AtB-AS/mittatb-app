@@ -8,7 +8,12 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {RefObject, useEffect, useState} from 'react';
 import {Feature, Point} from 'geojson';
 import {createMapLines} from '@atb/travel-details-map-screen/utils';
-import {findEntityAtClick, mapPositionToCoordinates} from '../utils';
+import {
+  findEntityAtClick,
+  mapPositionToCoordinates,
+  shouldShowMapLines,
+  shouldZoomToFeature,
+} from '../utils';
 import {tripsSearch} from '@atb/api/trips_v2';
 import {StreetMode} from '@entur/sdk/lib/journeyPlanner/types';
 import MapboxGL from '@rnmapbox/maps';
@@ -32,6 +37,7 @@ export const useDecideCameraFocusMode = (
   mapViewRef: RefObject<MapboxGL.MapView>,
 ) => {
   const [cameraFocusMode, setCameraFocusMode] = useState<CameraFocusModeType>();
+
   useEffect(() => {
     (async function () {
       if (!mapSelectionAction) {
@@ -63,22 +69,11 @@ export const useDecideCameraFocusMode = (
           break;
         }
         case 'ExploreEntities': {
-          const stopPlaceFeature = await findEntityAtClick(
+          const entityFeature = await findEntityAtClick(
             mapSelectionAction.feature,
             mapViewRef,
           );
-          const result = await fetchMapLines(fromCoords, stopPlaceFeature);
-          if (result && result.mapLines) {
-            setCameraFocusMode({
-              mode: 'map-lines',
-              mapLines: result.mapLines,
-              distance: result.distance,
-            });
-          } else if (stopPlaceFeature) {
-            setCameraFocusMode({mode: 'entity', stopPlaceFeature});
-          } else {
-            setCameraFocusMode(undefined);
-          }
+          setCameraFocusMode(await getFocusMode(entityFeature, fromCoords));
         }
       }
     })();
@@ -123,4 +118,26 @@ const fetchMapLines = async (
     return {mapLines, distance};
   }
   return undefined;
+};
+
+const getFocusMode = async (
+  entityFeature: Feature<Point> | undefined,
+  fromCoords: Coordinates | undefined,
+): Promise<CameraFocusModeType | undefined> => {
+  if (!entityFeature) return undefined;
+  if (shouldShowMapLines(entityFeature)) {
+    const result = await fetchMapLines(fromCoords, entityFeature);
+    if (result?.mapLines) {
+      return {
+        mode: 'map-lines',
+        mapLines: result.mapLines,
+        distance: result.distance,
+      };
+    }
+  }
+  return {
+    mode: 'entity',
+    entityFeature,
+    zoomTo: shouldZoomToFeature(entityFeature),
+  };
 };

@@ -99,7 +99,10 @@ export type CameraFocusModeType =
     }
   | {
       mode: 'entity';
-      stopPlaceFeature: Feature<Point>;
+      entityFeature: Feature<Point>;
+      mapLines?: MapLine[];
+      distance?: number;
+      zoomTo?: boolean;
     }
   | {
       mode: 'coordinates';

@@ -12,6 +12,7 @@ import {
 } from 'geojson';
 import {Cluster, MapSelectionActionType} from './types';
 import distance from '@turf/distance';
+import {isVehicle} from '@atb/mobility/utils';
 
 export async function zoomIn(
   mapViewRef: RefObject<MapboxGL.MapView>,
@@ -166,3 +167,9 @@ export const getVisibleRange = (visibleBounds: Position[]) => {
   const [[_, latNE], [lonSW, latSW]] = visibleBounds;
   return distance([lonSW, latSW], [lonSW, latNE], {units: 'meters'});
 };
+
+export const shouldShowMapLines = (entityFeature: Feature<Point>) =>
+  !isVehicle(entityFeature);
+
+export const shouldZoomToFeature = (entityFeature: Feature<Point>) =>
+  !isVehicle(entityFeature);

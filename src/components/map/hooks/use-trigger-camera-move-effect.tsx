@@ -47,13 +47,12 @@ export const useTriggerCameraMoveEffect = (
    */
   useEffect(() => {
     if (!bottomSheetHeight) return;
-
     if (cameraFocusMode?.mode === 'map-lines') {
       moveCameraToMapLines(cameraFocusMode.mapLines, padding, mapCameraRef);
     } else if (cameraFocusMode?.mode === 'entity') {
-      moveCameraToStopPlace(
-        cameraFocusMode.stopPlaceFeature,
-        padding,
+      moveCameraToEntity(
+        cameraFocusMode.entityFeature,
+        cameraFocusMode.zoomTo ? padding : undefined,
         mapCameraRef,
       );
     }
@@ -104,15 +103,23 @@ const moveCameraToCoordinates = (
   flyToLocation({coordinates, mapCameraRef});
 };
 
-const moveCameraToStopPlace = (
-  stopPlaceFeature: Feature<Point>,
-  padding: MapboxGL.Padding,
+const moveCameraToEntity = (
+  entityFeature: Feature<Point>,
+  padding: MapboxGL.Padding | undefined,
   mapCameraRef: RefObject<MapboxGL.Camera>,
 ) => {
-  const stopPlaceCoordinates = mapPositionToCoordinates(
-    stopPlaceFeature.geometry.coordinates,
+  const coordinates = mapPositionToCoordinates(
+    entityFeature.geometry.coordinates,
   );
-  fitCameraWithinLocation(stopPlaceCoordinates, mapCameraRef, padding, 0.001);
+  if (!padding) {
+    flyToLocation({
+      coordinates,
+      mapCameraRef,
+      animationMode: 'easeTo',
+    });
+  } else {
+    fitCameraWithinLocation(coordinates, mapCameraRef, padding, 0.001);
+  }
 };
 
 /**
