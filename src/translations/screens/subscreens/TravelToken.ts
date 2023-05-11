@@ -396,8 +396,8 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
         },
         {
           question: _(
-            `Jeg får ikke logget inn i appen AtB med e-post`,
-            `I can not log into the AtB app with e-mail`,
+            `Jeg får ikke logget inn i FRAM-appen med e-post`,
+            `I can not log into the FRAM app with e-mail`,
           ),
           answer: _(
             `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye bruker. Du kan kontakte kundesenteret vedrørende refusjon dersom du likevel vil lage en ny bruker i appen.`,
