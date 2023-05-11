@@ -8,7 +8,7 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {RefObject, useEffect, useState} from 'react';
 import {Feature, Point} from 'geojson';
 import {createMapLines} from '@atb/travel-details-map-screen/utils';
-import {findStopPlaceAtClick, mapPositionToCoordinates} from '../utils';
+import {findEntityAtClick, mapPositionToCoordinates} from '../utils';
 import {tripsSearch} from '@atb/api/trips_v2';
 import {StreetMode} from '@entur/sdk/lib/journeyPlanner/types';
 import MapboxGL from '@rnmapbox/maps';
@@ -58,7 +58,7 @@ export const useDecideCameraFocusMode = (
           break;
         }
         case 'ExploreStops': {
-          const stopPlaceFeature = await findStopPlaceAtClick(
+          const stopPlaceFeature = await findEntityAtClick(
             mapSelectionAction.feature,
             mapViewRef,
           );

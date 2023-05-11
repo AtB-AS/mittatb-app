@@ -31,7 +31,6 @@ export type VehiclesState = {
   updateRegion: (region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>) => void;
   isLoading: boolean;
   onFilterChange: (filter: VehiclesFilterType) => void;
-  onPress: (type: MapSelectionActionType) => void;
 };
 
 export type StationsState = {
@@ -39,7 +38,6 @@ export type StationsState = {
   updateRegion: (region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>) => void;
   isLoading: boolean;
   onFilterChange: (filter: StationsFilterType) => void;
-  onPress: (type: MapSelectionActionType) => void;
 };
 
 export type NavigateToTripSearchCallback = (

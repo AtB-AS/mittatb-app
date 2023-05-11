@@ -24,18 +24,20 @@ import {
 } from '@atb/api/types/generated/fragments/stations';
 
 export const isVehicle = (
-  properties: GeoJsonProperties | undefined,
-): properties is VehicleFragment => 'currentFuelPercent' in (properties ?? {});
+  feature: Feature<Point> | undefined,
+): feature is Feature<Point, VehicleFragment> =>
+  'currentFuelPercent' in (feature?.properties ?? {});
 
 export const isStation = (
-  properties: GeoJsonProperties | undefined,
-): properties is StationBasicFragment => properties?.__typename === 'Station';
+  feature: Feature<Point> | undefined,
+): feature is Feature<Point, StationBasicFragment> =>
+  feature?.properties?.__typename === 'Station';
 
 export const isBikeStation = (
-  properties: GeoJsonProperties | undefined,
-): properties is StationBasicFragment =>
-  (isStation(properties) &&
-    properties?.vehicleTypesAvailable?.some(
+  feature: Feature<Point> | undefined,
+): feature is Feature<Point, StationBasicFragment> =>
+  (isStation(feature) &&
+    feature.properties?.vehicleTypesAvailable?.some(
       (types) => types.vehicleType.formFactor === FormFactor.Bicycle,
     )) ??
   false;

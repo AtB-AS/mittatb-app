@@ -43,7 +43,7 @@ export function fitBounds(
   );
 }
 
-export const findStopPlaceAtClick = async (
+export const findEntityAtClick = async (
   clickedFeature: Feature<Point>,
   mapViewRef: RefObject<MapboxGL.MapView>,
 ) => {
@@ -52,9 +52,7 @@ export const findStopPlaceAtClick = async (
     mapViewRef,
     ['==', ['geometry-type'], 'Point'],
   );
-  return renderedFeatures
-    ?.filter(isFeaturePoint)
-    .find((feature) => feature?.properties?.entityType === 'StopPlace');
+  return renderedFeatures?.filter(isFeaturePoint)[0];
 };
 
 export const isFeaturePoint = (f: Feature): f is Feature<Point> =>
@@ -64,6 +62,9 @@ export const isClusterFeature = (
   feature: Feature,
 ): feature is Feature<Point, Cluster> =>
   isFeaturePoint(feature) && feature.properties?.cluster;
+
+export const isStopPlace = (f: Feature<Point>) =>
+  f.properties?.entityType === 'StopPlace';
 
 export const isFeatureCollection = (obj: unknown): obj is FeatureCollection =>
   typeof obj === 'object' &&
