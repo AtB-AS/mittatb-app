@@ -158,11 +158,6 @@ export const toFeatureCollection = <
   features,
 });
 
-export const toCoordinates = (position: Position): Coordinates => {
-  const [longitude, latitude] = position;
-  return {longitude, latitude};
-};
-
 /**
  * Calculates the distance in meters between the northern most point and the southern most point of the given bounds.
  * @param visibleBounds

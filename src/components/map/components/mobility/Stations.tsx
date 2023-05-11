@@ -1,8 +1,6 @@
-import React, {RefObject} from 'react';
+import React from 'react';
 import {FeatureCollection, GeoJSON} from 'geojson';
 import MapboxGL from '@rnmapbox/maps';
-import {MapSelectionActionType} from '../../types';
-import {flyToLocation, isFeaturePoint, toCoordinates} from '../../utils';
 import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {useTheme} from '@atb/theme';
 import {getStaticColor} from '@atb/theme/colors';

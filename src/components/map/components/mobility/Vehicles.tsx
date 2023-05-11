@@ -2,7 +2,11 @@ import React, {RefObject, useRef} from 'react';
 import {Feature, FeatureCollection, GeoJSON, Point} from 'geojson';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import MapboxGL from '@rnmapbox/maps';
-import {flyToLocation, isClusterFeature, toCoordinates} from '../../utils';
+import {
+  flyToLocation,
+  isClusterFeature,
+  mapPositionToCoordinates,
+} from '../../utils';
 import {getStaticColor} from '@atb/theme/colors';
 import {useTheme} from '@atb/theme';
 import {Cluster} from '../../types';
@@ -35,7 +39,9 @@ export const Vehicles = ({mapCameraRef, vehicles, onClusterClick}: Props) => {
             const zoomLevel =
               await clustersSource.current?.getClusterExpansionZoom(feature);
             flyToLocation({
-              coordinates: toCoordinates(feature.geometry.coordinates),
+              coordinates: mapPositionToCoordinates(
+                feature.geometry.coordinates,
+              ),
               mapCameraRef,
               zoomLevel,
               animationDuration: 400,
