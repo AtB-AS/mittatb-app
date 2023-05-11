@@ -8,7 +8,7 @@ const SelectTravelTokenTexts = {
         'Bruk billett på t:kort / mobil',
         'Use ticket on t:card / phone',
       ),
-      titleWithoutTravelcard: _('Bruk billett mobil', 'Use ticket on phone'),
+      titleWithoutTravelcard: _('Bruk billett på mobil', 'Use ticket on phone'),
     },
     changeTokenButton: _(
       'Bytt mellom t:kort / mobil',

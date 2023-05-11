@@ -66,7 +66,20 @@ export const shouldOnboardMobileToken = (
   hasEnabledMobileToken: boolean,
   authenticationType: string,
   mobileTokenOnboarded: boolean,
+  disableTravelcard: boolean,
 ) =>
   hasEnabledMobileToken &&
   authenticationType === 'phone' &&
-  !mobileTokenOnboarded;
+  !mobileTokenOnboarded &&
+  !disableTravelcard;
+
+export const shouldOnboardMobileTokenWithoutTravelcard = (
+  hasEnabledMobileToken: boolean,
+  authenticationType: string,
+  mobileTokenWithoutTravelcardOnboarded: boolean,
+  disableTravelcard: boolean,
+) =>
+  hasEnabledMobileToken &&
+  authenticationType === 'phone' &&
+  !mobileTokenWithoutTravelcardOnboarded &&
+  disableTravelcard;
