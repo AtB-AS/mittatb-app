@@ -39,6 +39,7 @@ export type TariffZone = {
   name: LanguageAndTextType;
   version: string;
   geometry: Omit<Polygon, 'type'> & {type: any};
+  isDefault?: boolean;
 };
 
 export type CityZone = {

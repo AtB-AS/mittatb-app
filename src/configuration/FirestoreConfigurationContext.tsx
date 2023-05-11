@@ -60,7 +60,6 @@ type ConfigurationContextState = {
   travelSearchFilters: TravelSearchFiltersType | undefined;
   appTexts: AppTexts | undefined;
   configurableLinks: ConfigurableLinks | undefined;
-  defaultTariffZone: TariffZone | undefined;
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
@@ -75,7 +74,6 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   travelSearchFilters: undefined,
   appTexts: undefined,
   configurableLinks: undefined,
-  defaultTariffZone: undefined,
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
@@ -102,7 +100,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [appTexts, setAppTexts] = useState<AppTexts>();
   const [configurableLinks, setConfigurableLinks] =
     useState<ConfigurableLinks>();
-  const [defaultTariffZone, setDefaultTariffZone] = useState<TariffZone>();
 
   useEffect(() => {
     firestore()
@@ -167,15 +164,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (configurableLinks) {
             setConfigurableLinks(configurableLinks);
           }
-
-          const defaultTariffZoneId =
-            getDefaultTariffZoneFromSnapshot(snapshot);
-          if (defaultTariffZoneId && tariffZones) {
-            const defaultTariffZone = tariffZones.find(
-              (tariffZone) => tariffZone.id == defaultTariffZoneId,
-            );
-            setDefaultTariffZone(defaultTariffZone);
-          }
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -199,7 +187,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       travelSearchFilters,
       appTexts,
       configurableLinks,
-      defaultTariffZone,
     };
   }, [
     preassignedFareProducts,
@@ -213,7 +200,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     travelSearchFilters,
     appTexts,
     configurableLinks,
-    defaultTariffZone,
   ]);
 
   return (
@@ -420,12 +406,4 @@ function getConfigurableLinksFromSnapshot(
     termsInfo,
     inspectionInfo,
   };
-}
-
-function getDefaultTariffZoneFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): string | undefined {
-  return snapshot.docs
-    .find((doc) => doc.id == 'other')
-    ?.get<string>('defaultTariffZone');
 }
