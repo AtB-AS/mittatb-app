@@ -102,6 +102,8 @@ export const Trip: React.FC<TripProps> = ({
                             tripPattern.legs[tripPattern.legs.length - 1]
                               .toPlace,
                           vehicleWithPosition: legVehiclePosition,
+                          mode: leg.mode,
+                          subMode: leg.transportSubmode,
                         })
                     : undefined
                 }
