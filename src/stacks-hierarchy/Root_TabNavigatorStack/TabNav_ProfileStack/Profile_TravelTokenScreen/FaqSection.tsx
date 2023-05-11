@@ -7,10 +7,12 @@ import {
   HeaderSectionItem,
   Section,
 } from '@atb/components/sections';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const FaqSection = ({toggleMaxLimit}: {toggleMaxLimit?: number}) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const {disable_travelcard} = useRemoteConfig();
 
   return (
     <Section style={styles.faqSection}>
@@ -30,8 +32,12 @@ const FaqSection = ({toggleMaxLimit}: {toggleMaxLimit?: number}) => {
           }
         />
       ) : null}
-      {/*eslint-disable-next-line rulesdir/translations-warning*/}
-      {TravelTokenTexts.travelToken.faqs.map(({question, answer}, index) => (
+      {(disable_travelcard
+        ? // eslint-disable-next-line rulesdir/translations-warning
+          TravelTokenTexts.travelToken.faqsWithoutTravelcard
+        : // eslint-disable-next-line rulesdir/translations-warning
+          TravelTokenTexts.travelToken.faqs
+      ).map(({question, answer}, index) => (
         <ExpandableSectionItem
           key={index}
           text={t(question)}

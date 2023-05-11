@@ -47,6 +47,7 @@ export type RemoteConfig = {
   use_flexible_on_directMode: boolean;
   use_flexible_on_egressMode: boolean;
   use_trygg_overgang_qr_code: boolean;
+  disable_travelcard: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -99,6 +100,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   use_flexible_on_directMode: true,
   use_flexible_on_egressMode: true,
   use_trygg_overgang_qr_code: false,
+  disable_travelcard: false,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -248,6 +250,10 @@ export function getConfig(): RemoteConfig {
     values['use_trygg_overgang_qr_code']?.asBoolean() ??
     defaultRemoteConfig.use_trygg_overgang_qr_code;
 
+  const disable_travelcard =
+    values['disable_travelcard']?.asBoolean() ??
+    defaultRemoteConfig.disable_travelcard;
+
   return {
     enable_network_logging,
     enable_ticketing,
@@ -294,6 +300,7 @@ export function getConfig(): RemoteConfig {
     use_flexible_on_directMode,
     use_flexible_on_egressMode,
     use_trygg_overgang_qr_code,
+    disable_travelcard,
   };
 }
 

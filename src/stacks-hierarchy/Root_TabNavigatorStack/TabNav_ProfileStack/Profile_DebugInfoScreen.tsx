@@ -54,7 +54,10 @@ function setClipboard(content: string) {
 export const Profile_DebugInfoScreen = () => {
   const style = useProfileHomeStyle();
   const appDispatch = useAppDispatch();
-  const {restartMobileTokenOnboarding} = useAppState();
+  const {
+    restartMobileTokenOnboarding,
+    restartMobileTokenWithoutTravelcardOnboarding,
+  } = useAppState();
   const {resetDismissedGlobalMessages} = useGlobalMessagesState();
   const {user, abtCustomerId} = useAuthState();
   const [idToken, setIdToken] = useState<
@@ -171,6 +174,10 @@ export const Profile_DebugInfoScreen = () => {
           <LinkSectionItem
             text="Set mobile token onboarded to false"
             onPress={restartMobileTokenOnboarding}
+          />
+          <LinkSectionItem
+            text="Set mobile token without travelcard onboarded to false"
+            onPress={restartMobileTokenWithoutTravelcardOnboarding}
           />
           <LinkSectionItem
             text="Reset dismissed Global messages"
