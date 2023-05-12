@@ -14,13 +14,13 @@ import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations'
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
  * should behave
- *  - ExploreStops: If only the Stop Places (Bus, Trams stops etc.) should be
- *    interactable, and will open a bottom sheet with departures for the stop.
+ *  - ExploreEntities: If only the map entities (Bus, Trams stops etc.) should be
+ *    interactable, and will open a bottom sheet with details for the entity.
  *  - ExploreLocation: If every selected location should be interactable. It
  *    also shows the Location bar on top of the Map to show the currently
  *    selected location
  */
-export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
+export type MapSelectionMode = 'ExploreEntities' | 'ExploreLocation';
 
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
@@ -31,7 +31,6 @@ export type VehiclesState = {
   updateRegion: (region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>) => void;
   isLoading: boolean;
   onFilterChange: (filter: VehiclesFilterType) => void;
-  onPress: (type: MapSelectionActionType) => void;
 };
 
 export type StationsState = {
@@ -39,7 +38,6 @@ export type StationsState = {
   updateRegion: (region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>) => void;
   isLoading: boolean;
   onFilterChange: (filter: StationsFilterType) => void;
-  onPress: (type: MapSelectionActionType) => void;
 };
 
 export type NavigateToTripSearchCallback = (
@@ -65,7 +63,7 @@ export type MapProps = {
       onLocationSelect: SelectionLocationCallback;
     }
   | {
-      selectionMode: 'ExploreStops';
+      selectionMode: 'ExploreEntities';
       navigateToQuay: NavigateToQuayCallback;
       navigateToDetails: NavigateToDetailsCallback;
       navigateToTripSearch: NavigateToTripSearchCallback;
@@ -100,8 +98,11 @@ export type CameraFocusModeType =
       distance: number;
     }
   | {
-      mode: 'stop-place';
-      stopPlaceFeature: Feature<Point>;
+      mode: 'entity';
+      entityFeature: Feature<Point>;
+      mapLines?: MapLine[];
+      distance?: number;
+      zoomTo?: boolean;
     }
   | {
       mode: 'coordinates';

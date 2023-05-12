@@ -120,16 +120,15 @@ export const Map = (props: MapProps) => {
             <Vehicles
               mapCameraRef={mapCameraRef}
               vehicles={props.vehicles.vehicles}
-              onPress={props.vehicles.onPress}
+              onClusterClick={(feature) => {
+                onMapClick({
+                  source: 'cluster-click',
+                  feature,
+                });
+              }}
             />
           )}
-          {props.stations && (
-            <Stations
-              mapCameraRef={mapCameraRef}
-              stations={props.stations.stations}
-              onPress={props.stations.onPress}
-            />
-          )}
+          {props.stations && <Stations stations={props.stations.stations} />}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
           {(props.vehicles || props.stations) && (

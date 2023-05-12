@@ -73,7 +73,7 @@ export const Map_RootScreen = ({
     <>
       <StatusBarOnFocus barStyle="dark-content" />
       <Map
-        selectionMode={'ExploreStops'}
+        selectionMode={'ExploreEntities'}
         vehicles={vehicles}
         stations={stations}
         navigateToQuay={navigateToQuay}

@@ -1,8 +1,6 @@
-import React, {RefObject} from 'react';
+import React from 'react';
 import {FeatureCollection, GeoJSON} from 'geojson';
 import MapboxGL from '@rnmapbox/maps';
-import {MapSelectionActionType} from '../../types';
-import {flyToLocation, isFeaturePoint, toCoordinates} from '../../utils';
 import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {useTheme} from '@atb/theme';
 import {getStaticColor} from '@atb/theme/colors';
@@ -10,12 +8,10 @@ import {getAvailableVehicles} from '@atb/mobility/utils';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type Props = {
-  mapCameraRef: RefObject<MapboxGL.Camera>;
   stations: FeatureCollection<GeoJSON.Point, StationBasicFragment>;
-  onPress: (type: MapSelectionActionType) => void;
 };
 
-export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
+export const Stations = ({stations}: Props) => {
   const {themeName} = useTheme();
   const stationColor = getStaticColor(themeName, 'transport_bike');
 
@@ -38,19 +34,6 @@ export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
       id={'stations'}
       shape={stationsWithCount}
       tolerance={0}
-      onPress={async (e) => {
-        const [feature, ..._] = e.features;
-        if (isFeaturePoint(feature)) {
-          flyToLocation({
-            coordinates: toCoordinates(feature.geometry.coordinates),
-            mapCameraRef,
-          });
-          onPress({
-            source: 'map-click',
-            feature,
-          });
-        }
-      }}
     >
       <MapboxGL.SymbolLayer
         id="stationPin"

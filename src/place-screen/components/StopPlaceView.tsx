@@ -2,7 +2,7 @@ import {Quay, StopPlace} from '@atb/api/types/departures';
 import {Feedback} from '@atb/components/feedback';
 import {useFavorites, UserFavoriteDepartures} from '@atb/favorites';
 import {SearchTime} from '../types';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useMemo} from 'react';
 import {RefreshControl, SectionList, SectionListData, View} from 'react-native';
 import {QuaySection} from './QuaySection';
@@ -15,10 +15,8 @@ import {dictionary, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {Walk} from '@atb/assets/svg/mono-icons/transportation';
-import {useHumanizeDistance} from '@atb/utils/location';
 import {useDeparturesData} from '../hooks/use-departures-data';
+import {WalkingDistance} from '@atb/components/walking-distance';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 const NUMBER_OF_DEPARTURES_IN_BUFFER = 5;
@@ -75,7 +73,6 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
   const styles = useStyles();
   const {favoriteDepartures} = useFavorites();
   const {t} = useTranslation();
-  const {theme} = useTheme();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
   const {state, forceRefresh} = useDeparturesData(
@@ -85,9 +82,6 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
     isFocused,
     mode,
     searchStartTime,
-  );
-  const humanizedDistance = useHumanizeDistance(
-    'distance' in props ? props.distance : undefined,
   );
   const didLoadingDataFail = !!state.error;
   const quayListData: SectionListData<Quay>[] = stopPlace.quays
@@ -139,17 +133,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
           )}
           {mode === 'Map' ? (
             <>
-              {humanizedDistance && (
-                <View style={styles.distanceLabel}>
-                  <ThemeIcon
-                    svg={Walk}
-                    fill={theme.text.colors.secondary}
-                  ></ThemeIcon>
-                  <ThemeText type="body__secondary" color="secondary">
-                    {humanizedDistance}
-                  </ThemeText>
-                </View>
-              )}
+              <WalkingDistance distance={props.distance} />
               <View style={styles.buttonsContainer}>
                 <View style={styles.travelButton}>
                   <Button
@@ -301,10 +285,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   title: {
     marginTop: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
-  },
-  distanceLabel: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingBottom: theme.spacings.medium,
   },
 }));
