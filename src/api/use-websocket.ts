@@ -1,73 +1,73 @@
 import Bugsnag from '@bugsnag/react-native';
 import {useEffect, useState} from 'react';
 
-export type WebSocketConnectionState =
+export type SubscriptionState =
   | 'CONNECTING'
   | 'OPEN'
   | 'CLOSING'
   | 'CLOSED'
   | 'NOT_STARTED';
 
-export type WebSocketEventProps = {
+export type SubscriptionEventProps = {
   onMessage?: (event: WebSocketMessageEvent) => void;
   onError?: (event: WebSocketErrorEvent) => void;
   onOpen?: () => void;
   onClose?: (event: WebSocketCloseEvent) => void;
 };
 
-export function useWebSocket({
+export function useSubscription({
   url,
   onMessage,
   onError,
   onClose,
   onOpen,
-}: {url: string | null} & WebSocketEventProps) {
-  const [state, setState] = useState<WebSocketConnectionState>('NOT_STARTED');
-  const [subscription, setSubscription] = useState<WebSocket | null>(null);
+}: {url: string | null} & SubscriptionEventProps) {
+  const [state, setState] = useState<SubscriptionState>('NOT_STARTED');
+  const [webSocket, setWebSocket] = useState<WebSocket | null>(null);
 
   useEffect(() => {
     if (url) {
-      const ws = new WebSocket(url);
-      ws.onmessage = (event) => {
-        setState(getWebSocketStateCode(ws.readyState));
+      const webSocket = new WebSocket(url);
+      webSocket.onmessage = (event) => {
+        setState(getSubscriptionStateCode(webSocket.readyState));
         onMessage && onMessage(event);
       };
-      ws.onerror = (event) => {
-        setState(getWebSocketStateCode(ws.readyState));
+      webSocket.onerror = (event) => {
+        setState(getSubscriptionStateCode(webSocket.readyState));
         Bugsnag.notify(`WebSocket error "${event.message}" with url: ${url}`);
         onError && onError(event);
       };
-      ws.onclose = (event) => {
-        setState(getWebSocketStateCode(ws.readyState));
+      webSocket.onclose = (event) => {
+        setState(getSubscriptionStateCode(webSocket.readyState));
         Bugsnag.leaveBreadcrumb(`WebSocket closed with url: ${url}`);
         onClose && onClose(event);
       };
-      ws.onopen = () => {
-        setState(getWebSocketStateCode(ws.readyState));
+      webSocket.onopen = () => {
+        setState(getSubscriptionStateCode(webSocket.readyState));
         Bugsnag.leaveBreadcrumb(`WebSocket opened with url: ${url}`);
         onOpen && onOpen();
       };
-      setSubscription(ws);
+      setWebSocket(webSocket);
     }
 
     // Cleanup
     return () => {
-      if (subscription) {
-        subscription.onclose = null;
+      if (webSocket) {
+        webSocket.onclose = null;
         onClose && onClose({code: 1000, reason: 'Cleanup'});
-        subscription.close();
+        webSocket.close();
       }
     };
   }, [url]);
 
   return {
     state,
-    send: (message: string) => subscription?.send(message),
-    close: subscription?.close,
+    send: (message: string) => webSocket?.send(message),
+    close: webSocket?.close,
   };
 }
 
-function getWebSocketStateCode(readyState?: number): WebSocketConnectionState {
+function getSubscriptionStateCode(readyState?: number): SubscriptionState {
   if (readyState === 0) return 'CONNECTING';
   if (readyState === 1) return 'OPEN';
   if (readyState === 2) return 'CLOSING';
