@@ -1,3 +1,7 @@
+import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {VehicleWithPosition} from '@atb/api/types/vehicles';
+import {useLiveVehicleSubscription} from '@atb/api/vehicles';
+import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {
   BackArrow,
   flyToLocation,
@@ -8,8 +12,9 @@ import {
   useControlPositionsStyle,
 } from '@atb/components/map';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {Coordinates} from '@atb/utils/coordinates';
 import {MapTexts, useTranslation} from '@atb/translations';
+import {Coordinates} from '@atb/utils/coordinates';
+import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
@@ -17,14 +22,14 @@ import {StyleSheet, View} from 'react-native';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
-import {VehicleWithPosition} from '@atb/api/types/vehicles';
-import {useLiveVehicleSubscription} from '@atb/api/vehicles';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
   vehicleWithPosition?: VehicleWithPosition;
   fromPlace?: Coordinates | Position;
   toPlace?: Coordinates | Position;
+  mode?: AnyMode;
+  subMode?: AnySubMode;
 };
 
 type Props = TravelDetailsMapScreenParams & {
@@ -40,6 +45,8 @@ export const TravelDetailsMapScreenComponent = ({
   toPlace,
   fromPlace,
   onPressBack,
+  mode,
+  subMode,
 }: Props) => {
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
@@ -122,6 +129,8 @@ export const TravelDetailsMapScreenComponent = ({
           <LiveVehicle
             coordinates={vehicle.location}
             setShouldTrack={setShouldTrack}
+            mode={mode}
+            subMode={subMode}
           />
         )}
       </MapboxGL.MapView>
@@ -151,42 +160,70 @@ const styles = StyleSheet.create({
 
 type VehicleIconProps = {
   coordinates: Coordinates;
+  mode?: AnyMode;
+  subMode?: AnySubMode;
   setShouldTrack: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const LiveVehicle = ({coordinates, setShouldTrack}: VehicleIconProps) => {
+const LiveVehicle = ({
+  coordinates,
+  setShouldTrack,
+  mode,
+  subMode,
+}: VehicleIconProps) => {
+  const circleColor = useTransportationColor(mode, subMode);
+  const iconName = vehicleIconName(mode);
+
   if (!coordinates) return null;
   return (
     <MapboxGL.ShapeSource
-      id="vehicle"
+      id="liveVehicle"
       shape={pointOf(coordinates)}
       cluster
       onPress={() => {
         setShouldTrack(true);
       }}
     >
-      <MapboxGL.SymbolLayer
-        id="icon"
-        minZoomLevel={1}
+      <MapboxGL.CircleLayer
+        id="liveVehicleCircle"
+        minZoomLevel={8}
         style={{
-          iconImage: {uri: 'ClusterCount'},
-          iconSize: 2,
-          iconAllowOverlap: true,
-          iconAnchor: 'center',
+          circleColor,
+          circleRadius: 22,
         }}
       />
       <MapboxGL.SymbolLayer
-        id="clusterCount"
-        minZoomLevel={1}
-        aboveLayerID="icon"
+        id="liveVehicleIcon"
+        aboveLayerID="liveVehicleCircle"
+        minZoomLevel={8}
         style={{
-          textField: 'BUS',
-          textColor: 'black',
-          textSize: 11,
-          textAnchor: 'center',
-          textAllowOverlap: true,
+          iconImage: {uri: iconName},
+          iconAnchor: 'center',
+          iconAllowOverlap: true,
+          iconSize: 0.6,
         }}
       />
     </MapboxGL.ShapeSource>
   );
 };
+
+/**
+ * Get the name of the transportation mode icon which is stored under the
+ * "Images" section in Mapbox Studio.
+ */
+function vehicleIconName(mode?: AnyMode) {
+  switch (mode) {
+    case TransportMode.Bus:
+      return 'Bus';
+    case TransportMode.Tram:
+      return 'Tram';
+    case TransportMode.Water:
+      return 'Boat';
+    case TransportMode.Rail:
+      return 'Train';
+    case TransportMode.Metro:
+      return 'Subway';
+    default:
+      return 'Unknown';
+  }
+}

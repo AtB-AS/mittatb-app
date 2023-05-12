@@ -18,6 +18,7 @@ import {PositionArrow} from './components/PositionArrow';
 import {shadows} from './components/shadows';
 import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from './components/mobility';
+import {useAnalytics} from '@atb/analytics';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -26,6 +27,7 @@ export const Map = (props: MapProps) => {
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
+  const analytics = useAnalytics();
 
   const startingCoordinates = useMemo(
     () =>
@@ -55,6 +57,7 @@ export const Map = (props: MapProps) => {
   };
 
   const onFilterChange = (filter: MapFilterType) => {
+    analytics.logEvent('Map filter changed', {filter});
     if (filter.vehicles) {
       props.vehicles?.onFilterChange(filter.vehicles);
     }
@@ -117,16 +120,15 @@ export const Map = (props: MapProps) => {
             <Vehicles
               mapCameraRef={mapCameraRef}
               vehicles={props.vehicles.vehicles}
-              onPress={props.vehicles.onPress}
+              onClusterClick={(feature) => {
+                onMapClick({
+                  source: 'cluster-click',
+                  feature,
+                });
+              }}
             />
           )}
-          {props.stations && (
-            <Stations
-              mapCameraRef={mapCameraRef}
-              stations={props.stations.stations}
-              onPress={props.stations.onPress}
-            />
-          )}
+          {props.stations && <Stations stations={props.stations.stations} />}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
           {(props.vehicles || props.stations) && (

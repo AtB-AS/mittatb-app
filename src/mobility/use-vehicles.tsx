@@ -1,18 +1,15 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {GeoJSON, Point} from 'geojson';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
-  MapSelectionActionType,
   toFeatureCollection,
   toFeaturePoints,
+  useUserMapFilters,
   VehiclesFilterType,
   VehiclesState,
-  useUserMapFilters,
 } from '@atb/components/map';
 import {useIsVehiclesEnabled} from '@atb/mobility/use-vehicles-enabled';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {AreaState, isVehicle, updateAreaState} from '@atb/mobility/utils';
-import {ScooterSheet} from '@atb/mobility/components/ScooterSheet';
+import {AreaState, updateAreaState} from '@atb/mobility/utils';
 import {RegionPayload} from '@rnmapbox/maps';
 import {getVehicles} from '@atb/api/mobility';
 import {usePollableResource} from '@atb/utils/use-pollable-resource';
@@ -26,7 +23,6 @@ const emptyVehicles = toFeatureCollection<Point, VehicleFragment>([]);
 
 export const useVehicles: () => VehiclesState | undefined = () => {
   const [area, setArea] = useState<AreaState>();
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const isVehiclesEnabled = useIsVehiclesEnabled();
   const {getMapFilter} = useUserMapFilters();
   const [filter, setFilter] = useState<VehiclesFilterType>();
@@ -75,21 +71,10 @@ export const useVehicles: () => VehiclesState | undefined = () => {
     setFilter(filter);
   };
 
-  const onPress = (type: MapSelectionActionType) => {
-    if (type.source !== 'map-click') return;
-    const vehicle = type.feature.properties;
-    if (isVehicle(vehicle)) {
-      openBottomSheet(() => {
-        return <ScooterSheet vehicleId={vehicle.id} close={closeBottomSheet} />;
-      });
-    }
-  };
-
   return isVehiclesEnabled
     ? {
         vehicles,
         onFilterChange,
-        onPress,
         updateRegion,
         isLoading,
       }

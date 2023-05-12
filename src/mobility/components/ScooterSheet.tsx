@@ -1,8 +1,13 @@
 import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {Language, ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  Language,
+  ScreenHeaderTexts,
+  useTranslation,
+} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {Battery} from '@atb/assets/svg/mono-icons/vehicles';
 import {Button} from '@atb/components/button';
@@ -21,8 +26,9 @@ import {useSystem} from '@atb/mobility/use-system';
 import {useOperatorApp} from '@atb/mobility/use-operator-app';
 import {VehicleStats} from '@atb/mobility/components/VehicleStats';
 import {useVehicle} from '@atb/mobility/use-vehicle';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
+import {useAnalytics} from '@atb/analytics';
 
 type Props = {
   vehicleId: VehicleId;
@@ -42,9 +48,19 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
     appStoreUri,
     rentalAppUri,
   });
+  const analytics = useAnalytics();
+
+  useEffect(() => {
+    analytics.logEvent('Scooter selected', {
+      operator: getTextForLanguage(
+        vehicle?.system?.operator?.name.translation,
+        language,
+      ),
+    });
+  }, [vehicle]);
 
   return (
-    <BottomSheetContainer>
+    <BottomSheetContainer maxHeightValue={0.5}>
       <ScreenHeaderWithoutNavigation
         leftButton={{
           type: 'close',
@@ -62,7 +78,7 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
         )}
         {!isLoading && !error && vehicle && (
           <>
-            <View style={style.container}>
+            <ScrollView style={style.container}>
               <Section>
                 <GenericSectionItem>
                   <OperatorLogo
@@ -89,7 +105,7 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
                   />
                 }
               />
-            </View>
+            </ScrollView>
             {rentalAppUri && (
               <FullScreenFooter>
                 <Button

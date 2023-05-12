@@ -1,6 +1,5 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import React, {useState} from 'react';
 import {Linking, TouchableOpacity, View} from 'react-native';
 import {FlexibleTransport} from '@atb/assets/svg/color/illustrations';
 import {CityZone} from '@atb/reference-data/types';
@@ -25,17 +24,20 @@ type ActionButton = {
 export type CityZoneMessageProps = {
   from: Location | undefined;
   to: Location | undefined;
+  onDismiss: () => void;
 };
 
-export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({from, to}) => {
+export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
+  from,
+  to,
+  onDismiss,
+}) => {
   const style = useStyle();
   const {t, language} = useTranslation();
 
   const selectedCityZones = useFindCityZonesInLocations(from, to);
 
-  const [isClosed, setClosed] = useState(false);
-
-  if (!selectedCityZones?.length || isClosed) {
+  if (!selectedCityZones?.length) {
     return null;
   }
 
@@ -57,9 +59,7 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({from, to}) => {
         <CityZoneBox
           message={t(CityBoxMessageTexts.message)}
           icon={() => <FlexibleTransport />}
-          onDismiss={() => {
-            setClosed(true);
-          }}
+          onDismiss={onDismiss}
           actionButtons={messageActions}
         />
       </Section>
@@ -93,7 +93,9 @@ const CityZoneBox = ({
         <ThemeIcon svg={icon} />
       </View>
       <View style={styles.content}>
-        <ThemeText color={generalColor}>{message}</ThemeText>
+        <ThemeText style={styles.message} color={generalColor}>
+          {message}
+        </ThemeText>
         {actionButtons && (
           <View style={styles.actions}>
             {actionButtons.map((actionButton) => (
@@ -131,16 +133,6 @@ export const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
   },
-  flexIcon: {
-    marginRight: theme.spacings.medium,
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  websiteButton: {
-    margin: theme.spacings.medium,
-  },
-  // Message Box styles
   container: {
     padding: theme.spacings.medium,
     borderRadius: theme.border.radius.regular,
@@ -152,6 +144,9 @@ export const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   content: {
     flex: 1,
+  },
+  message: {
+    paddingRight: theme.spacings.small,
   },
   action: {
     marginTop: theme.spacings.medium,

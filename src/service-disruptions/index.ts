@@ -1,1 +1,1 @@
-export {useServiceDisruptionSheet} from './use-service-disruption';
+export {useServiceDisruptionIcon} from './use-service-disruption-icon';

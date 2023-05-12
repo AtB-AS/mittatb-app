@@ -19,7 +19,6 @@ import {
 } from '@atb/GeolocationContext';
 import {usePreferences} from '@atb/preferences';
 import {useDoOnceWhen} from '@atb/stacks-hierarchy/utils';
-import {useServiceDisruptionSheet} from '@atb/service-disruptions';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {
@@ -185,7 +184,6 @@ const NearbyOverview: React.FC<Props> = ({
       }
     }
   }
-  const {leftButton} = useServiceDisruptionSheet();
 
   useEffect(() => {
     if (updatingLocation)
@@ -216,7 +214,7 @@ const NearbyOverview: React.FC<Props> = ({
     <SimpleDisappearingHeader
       onRefresh={refresh}
       isRefreshing={isLoading}
-      leftButton={leftButton}
+      leftButton={{type: 'status-disruption'}}
       header={
         <Header
           fromLocation={fromLocation}

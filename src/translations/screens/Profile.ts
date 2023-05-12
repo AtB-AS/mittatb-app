@@ -56,7 +56,6 @@ const ProfileTexts = {
             'Bruk billett på t:kort / mobil',
             'Use ticket on t:card / phone',
           ),
-          flag: _('Ny', 'New'),
         },
         appearance: {
           label: _('Utseende', 'Appearance'),

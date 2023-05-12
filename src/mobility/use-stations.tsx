@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {AreaState, isBikeStation, updateAreaState} from '@atb/mobility/utils';
+import {useEffect, useState} from 'react';
+import {AreaState, updateAreaState} from '@atb/mobility/utils';
 import {useIsCityBikesEnabled} from '@atb/mobility/use-city-bikes-enabled';
 import {
-  MapSelectionActionType,
   StationsFilterType,
   StationsState,
   toFeatureCollection,
@@ -13,8 +12,6 @@ import {FeatureCollection, GeoJSON} from 'geojson';
 import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {getStations} from '@atb/api/stations';
 import {RegionPayload} from '@rnmapbox/maps';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {CityBikeStationSheet} from '@atb/mobility/components/CityBikeStationBottomSheet';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useIsFocused} from '@react-navigation/native';
 
@@ -26,7 +23,6 @@ export const useStations: () => StationsState | undefined = () => {
   const [filter, setFilter] = useState<StationsFilterType>();
   const [isLoading, setIsLoading] = useState(false);
   const {getMapFilter} = useUserMapFilters();
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const isFocused = useIsFocused();
 
   const [stations, setStations] = useState<
@@ -79,21 +75,10 @@ export const useStations: () => StationsState | undefined = () => {
     setFilter(filter);
   };
 
-  const onPress = (type: MapSelectionActionType) => {
-    if (type.source !== 'map-click') return;
-    const station = type.feature.properties;
-    if (isBikeStation(station)) {
-      openBottomSheet(() => (
-        <CityBikeStationSheet stationId={station.id} close={closeBottomSheet} />
-      ));
-    }
-  };
-
   return isCityBikesEnabled
     ? {
         stations,
         onFilterChange,
-        onPress,
         updateRegion,
         isLoading,
       }

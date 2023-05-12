@@ -31,6 +31,7 @@ export type UserProfile = {
   description: LanguageAndTextType;
   alternativeDescriptions: LanguageAndTextType[];
   version: string;
+  emoji?: string;
 };
 
 export type TariffZone = {
@@ -38,6 +39,7 @@ export type TariffZone = {
   name: LanguageAndTextType;
   version: string;
   geometry: Omit<Polygon, 'type'> & {type: any};
+  isDefault?: boolean;
 };
 
 export type CityZone = {

@@ -1,6 +1,6 @@
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
@@ -19,19 +19,21 @@ import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {Parking as ParkingDark} from '@atb/assets/svg/color/icons/vehicles/dark';
 import {Parking as ParkingLight} from '@atb/assets/svg/color/icons/vehicles/light';
 import {VehicleStats} from '@atb/mobility/components/VehicleStats';
-import {ThemeText} from '@atb/components/text';
 import {ActivityIndicator, View} from 'react-native';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {useBikeStation} from '@atb/mobility/use-bike-station';
 import {MessageBox} from '@atb/components/message-box';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {WalkingDistance} from '@atb/components/walking-distance';
+import {useAnalytics} from '@atb/analytics';
 
 type Props = {
   stationId: string;
+  distance: number | undefined;
   close: () => void;
 };
 
-export const CityBikeStationSheet = ({stationId, close}: Props) => {
+export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
   const {t} = useTranslation();
   const {themeName} = useTheme();
   const style = useSheetStyle();
@@ -48,6 +50,11 @@ export const CityBikeStationSheet = ({stationId, close}: Props) => {
     station?.vehicleTypesAvailable,
     FormFactor.Bicycle,
   );
+  const analytics = useAnalytics();
+
+  useEffect(() => {
+    analytics.logEvent('City bike station selected', {station});
+  }, [station]);
 
   return (
     <BottomSheetContainer>
@@ -57,6 +64,7 @@ export const CityBikeStationSheet = ({stationId, close}: Props) => {
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
+        title={stationName ?? ''}
         color={'background_1'}
         setFocusOnLoad={false}
       />
@@ -68,6 +76,7 @@ export const CityBikeStationSheet = ({stationId, close}: Props) => {
         )}
         {!isLoading && !error && station && (
           <>
+            <WalkingDistance distance={distance} />
             <View style={style.container}>
               <Section>
                 <GenericSectionItem>
@@ -75,13 +84,6 @@ export const CityBikeStationSheet = ({stationId, close}: Props) => {
                     operatorName={operatorName}
                     logoUrl={brandLogoUrl}
                   />
-                  {stationName && (
-                    <View style={style.stationName}>
-                      <ThemeText type="body__secondary">
-                        {stationName}
-                      </ThemeText>
-                    </View>
-                  )}
                 </GenericSectionItem>
               </Section>
               <VehicleStats

@@ -5,14 +5,17 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
 import MapboxGL from '@rnmapbox/maps';
 import {Feature, Point} from 'geojson';
-import {findStopPlaceAtClick} from '../utils';
+import {findEntityAtClick, isStopPlace} from '../utils';
+import {isBikeStation, isVehicle} from '@atb/mobility/utils';
+import {CityBikeStationSheet} from '@atb/mobility/components/CityBikeStationBottomSheet';
+import {ScooterSheet} from '@atb/mobility/components/ScooterSheet';
 
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also
  * close the bottom sheet when navigating to other places, but it will be
  * reopened when the `isFocused` value becomes `true`.
  */
-export const useUpdateBottomSheetWhenSelectedStopPlaceChanges = (
+export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   mapProps: MapProps,
   distance: number | undefined,
   mapSelectionAction: MapSelectionActionType | undefined,
@@ -20,7 +23,7 @@ export const useUpdateBottomSheetWhenSelectedStopPlaceChanges = (
   closeCallback: () => void,
 ) => {
   const isFocused = useIsFocused();
-  const [stopPlaceFeature, setStopPlaceFeature] = useState<Feature<Point>>();
+  const [selectedFeature, setSelectedFeature] = useState<Feature<Point>>();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
 
   const closeWithCallback = () => {
@@ -30,26 +33,29 @@ export const useUpdateBottomSheetWhenSelectedStopPlaceChanges = (
 
   useEffect(() => {
     (async function () {
-      const stopPlace =
+      const selectedFeature =
         mapSelectionAction?.source === 'map-click'
-          ? await findStopPlaceAtClick(mapSelectionAction.feature, mapViewRef)
+          ? await findEntityAtClick(mapSelectionAction.feature, mapViewRef)
           : undefined;
-      setStopPlaceFeature(stopPlace);
+      setSelectedFeature(selectedFeature);
     })();
   }, [mapSelectionAction]);
 
   useEffect(() => {
     (async function () {
       if (!isFocused) return;
-      if (mapProps.selectionMode !== 'ExploreStops') return;
-
-      if (stopPlaceFeature) {
+      if (mapProps.selectionMode !== 'ExploreEntities') return;
+      if (!selectedFeature) {
+        closeBottomSheet();
+        return;
+      }
+      if (isStopPlace(selectedFeature)) {
         openBottomSheet(
           () => (
             <DeparturesDialogSheet
               close={closeWithCallback}
               distance={distance}
-              stopPlaceFeature={stopPlaceFeature}
+              stopPlaceFeature={selectedFeature}
               navigateToDetails={(...params) => {
                 closeBottomSheet();
                 mapProps.navigateToDetails(...params);
@@ -67,9 +73,34 @@ export const useUpdateBottomSheetWhenSelectedStopPlaceChanges = (
           undefined,
           false,
         );
+      } else if (isBikeStation(selectedFeature)) {
+        openBottomSheet(
+          () => (
+            <CityBikeStationSheet
+              stationId={selectedFeature.properties.id}
+              distance={distance}
+              close={closeWithCallback}
+            />
+          ),
+          undefined,
+          false,
+        );
+      } else if (isVehicle(selectedFeature)) {
+        openBottomSheet(
+          () => {
+            return (
+              <ScooterSheet
+                vehicleId={selectedFeature.properties?.id}
+                close={closeWithCallback}
+              />
+            );
+          },
+          undefined,
+          false,
+        );
       } else {
         closeBottomSheet();
       }
     })();
-  }, [stopPlaceFeature, isFocused, distance]);
+  }, [selectedFeature, isFocused, distance]);
 };
