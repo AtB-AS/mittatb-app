@@ -78,6 +78,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           () => (
             <CityBikeStationSheet
               stationId={selectedFeature.properties.id}
+              distance={distance}
               close={closeWithCallback}
             />
           ),

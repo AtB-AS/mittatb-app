@@ -34,19 +34,6 @@ export const Stations = ({stations}: Props) => {
       id={'stations'}
       shape={stationsWithCount}
       tolerance={0}
-      // onPress={async (e) => {
-      //   const [feature, ..._] = e.features;
-      //   if (isFeaturePoint(feature)) {
-      //     flyToLocation({
-      //       coordinates: toCoordinates(feature.geometry.coordinates),
-      //       mapCameraRef,
-      //     });
-      //     onPress({
-      //       source: 'map-click',
-      //       feature,
-      //     });
-      //   }
-      // }}
     >
       <MapboxGL.SymbolLayer
         id="stationPin"
