@@ -333,6 +333,9 @@ export const RootStack = () => {
                   <Stack.Screen
                     name="Root_TicketAssistantStack"
                     component={Root_TicketAssistantStack}
+                    options={{
+                      ...TransitionPresets.SlideFromRightIOS,
+                    }}
                   />
                   <Stack.Screen
                     name="Root_TipsAndInformation"

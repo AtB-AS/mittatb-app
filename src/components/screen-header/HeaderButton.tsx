@@ -7,10 +7,10 @@ import {AccessibilityProps, TouchableOpacity, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {StaticColor, TextColor} from '@atb/theme/colors';
-import ServiceDisruption from '@atb/assets/svg/mono-icons/status/ServiceDisruption';
 import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
 import {useTheme} from '@atb/theme';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {useServiceDisruptionIcon} from '@atb/service-disruptions/use-service-disruption-icon';
 
 export type ButtonModes =
   | 'back'
@@ -110,6 +110,11 @@ const useHeaderButton = (
 ): IconButtonProps | undefined => {
   const navigation = useNavigation();
   const chatIcon = useChatIcon(buttonProps.color, buttonProps.testID);
+  const serviceDisruptionIcon = useServiceDisruptionIcon(
+    buttonProps.color,
+    buttonProps.testID,
+  );
+
   const {t} = useTranslation();
   switch (buttonProps.type) {
     case 'back':
@@ -133,14 +138,7 @@ const useHeaderButton = (
       };
     }
     case 'status-disruption': {
-      const {type, color, onPress, ...accessibilityProps} = buttonProps;
-      return {
-        children: <ThemeIcon colorType={color} svg={ServiceDisruption} />,
-        onPress: onPress,
-        testID: 'serviceDisruptionButton',
-        accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
-        ...accessibilityProps,
-      };
+      return serviceDisruptionIcon;
     }
     case 'chat':
       return chatIcon;

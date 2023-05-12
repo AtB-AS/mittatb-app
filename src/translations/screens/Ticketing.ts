@@ -181,15 +181,16 @@ const TicketingTexts = {
     approved: _('Godkjent billett', 'Approved ticket'),
   },
   ticketAssistantTile: {
-    title: _('Bilettveileder', 'Ticket assistant'),
+    title: _('Billettveileder', 'Ticket assistant'),
     description: _(
       'Få hjelp til å velge billetten som passer deg best.',
       'Get help choosing the ticket that suits you the best',
     ),
     a11yHint: _(
-      'Aktiver for å åpne bilettveilederen',
+      'Aktiver for å åpne billettveilederen',
       'Activate to get tips and information about tickets',
     ),
+    label: _('FORSLAG', 'SUGGESTIONS'),
   },
   tipsAndInformationTile: {
     title: _('Tips og informasjon', 'Tips and information'),

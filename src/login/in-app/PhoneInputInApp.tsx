@@ -8,7 +8,8 @@ import {LoginInAppScreenProps} from '../types';
 export type PhoneInputInAppRouteParams = {
   afterLogin:
     | AfterLoginParams<'Root_TabNavigatorStack'>
-    | AfterLoginParams<'Root_PurchaseOverviewScreen'>;
+    | AfterLoginParams<'Root_PurchaseOverviewScreen'>
+    | AfterLoginParams<'Root_PurchaseConfirmationScreen'>;
 };
 
 type PhoneInputInAppProps = LoginInAppScreenProps<'PhoneInputInApp'>;

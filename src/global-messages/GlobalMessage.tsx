@@ -9,13 +9,19 @@ import {
 } from '@atb/global-messages/types';
 import {getTextForLanguage} from '@atb/translations';
 import {useNow} from '@atb/utils/use-now';
+import {isWithinTimeRange} from '@atb/global-messages/is-within-time-range';
 
 type Props = {
-  globalMessageContext?: GlobalMessageContextType;
+  globalMessageContext?: GlobalMessageContextType | 'all';
   style?: StyleProp<ViewStyle>;
+  includeDismissed?: boolean;
 };
 
-const GlobalMessage = ({globalMessageContext, style}: Props) => {
+const GlobalMessage = ({
+  globalMessageContext,
+  style,
+  includeDismissed,
+}: Props) => {
   const {language} = useTranslation();
   const now = useNow(2500);
   const {
@@ -24,25 +30,13 @@ const GlobalMessage = ({globalMessageContext, style}: Props) => {
     addDismissedGlobalMessages,
   } = useGlobalMessagesState();
 
-  const globalMessages = globalMessageContext
-    ? findGlobalMessages(globalMessageContext)
-    : undefined;
+  if (!globalMessageContext) return null;
 
-  if (!globalMessages?.length) {
-    return null;
-  }
+  const globalMessages = findGlobalMessages(globalMessageContext);
 
   const dismissGlobalMessage = (globalMessage: GlobalMessageType) => {
     globalMessage.isDismissable && addDismissedGlobalMessages(globalMessage);
   };
-
-  const isWithinTimeRange = (globalMessage: GlobalMessageType) => {
-    const startDate = globalMessage.startDate ?? 0;
-    const endDate = globalMessage.endDate ?? 8640000000000000;
-
-    return startDate <= now && endDate >= now;
-  };
-
   const isNotADismissedMessage = (globalMessage: GlobalMessageType) =>
     !globalMessage.isDismissable ||
     dismissedGlobalMessages.map((dga) => dga.id).indexOf(globalMessage.id) < 0;
@@ -50,8 +44,10 @@ const GlobalMessage = ({globalMessageContext, style}: Props) => {
   return (
     <>
       {globalMessages
-        .filter(isNotADismissedMessage)
-        .filter(isWithinTimeRange)
+        .filter((gm: GlobalMessageType) => {
+          return includeDismissed || isNotADismissedMessage(gm);
+        })
+        .filter((gm) => isWithinTimeRange(gm, now))
         .map((globalMessage: GlobalMessageType) => {
           const message = getTextForLanguage(globalMessage.body, language);
           if (!message) return null;
@@ -64,7 +60,7 @@ const GlobalMessage = ({globalMessageContext, style}: Props) => {
               type={globalMessage.type}
               isMarkdown={true}
               onDismiss={
-                globalMessage.isDismissable
+                globalMessage.isDismissable && !includeDismissed
                   ? () => dismissGlobalMessage(globalMessage)
                   : undefined
               }
