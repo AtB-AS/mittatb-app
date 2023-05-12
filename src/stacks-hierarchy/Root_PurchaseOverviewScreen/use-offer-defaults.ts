@@ -104,18 +104,27 @@ const useTravellersWithPreselectedCounts = (
 };
 
 /**
- * Get the default tariff zone, either based on current location or else the
- * first tariff zone in the provided tariff zones list.
+ * Get the default tariff zone, either based on current location, default tariff
+ * zone set on tariff zone in reference data or else the first tariff zone in the
+ * provided tariff zones list.
  */
 const useDefaultTariffZone = (
   tariffZones: TariffZone[],
 ): TariffZoneWithMetadata => {
   const tariffZoneFromLocation = useTariffZoneFromLocation(tariffZones);
-  return useMemo<TariffZoneWithMetadata>(
-    () =>
-      tariffZoneFromLocation
-        ? {...tariffZoneFromLocation, resultType: 'geolocation'}
-        : {...tariffZones[0], resultType: 'zone'},
-    [tariffZones, tariffZoneFromLocation],
-  );
+  return useMemo<TariffZoneWithMetadata>(() => {
+    if (tariffZoneFromLocation) {
+      return {...tariffZoneFromLocation, resultType: 'geolocation'};
+    }
+
+    const defaultTariffZone = tariffZones.find(
+      (tariffZone) => tariffZone.isDefault,
+    );
+
+    if (defaultTariffZone) {
+      return {...defaultTariffZone, resultType: 'zone'};
+    }
+
+    return {...tariffZones[0], resultType: 'zone'};
+  }, [tariffZones, tariffZoneFromLocation]);
 };
