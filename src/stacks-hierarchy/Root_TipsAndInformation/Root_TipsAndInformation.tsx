@@ -18,6 +18,7 @@ import {
 import {mapToTips} from '@atb/stacks-hierarchy/Root_TipsAndInformation/converters';
 import {ExpandableSectionItem, Section} from '@atb/components/sections';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {sortTipsByTitle} from '@atb/stacks-hierarchy/Root_TipsAndInformation/sort-tips-by-title';
 
 type Props = RootStackScreenProps<'Root_TipsAndInformation'>;
 
@@ -36,20 +37,8 @@ export const Root_TipsAndInformation = ({}: Props) => {
         .onSnapshot(
           async (snapshot) => {
             const newTips = mapToTips(snapshot.docs);
-            //Sorting by alphabetical order of title
-            newTips.sort((a, b) => {
-              const titleA = getTextForLanguage(a.title, language);
-              const titleB = getTextForLanguage(b.title, language);
-              if (!titleA || !titleB) return 0;
-              if (titleA < titleB) {
-                return -1;
-              }
-              if (titleA > titleB) {
-                return 1;
-              }
-              return 0;
-            });
-            setTips(newTips);
+            const sortedTips = sortTipsByTitle(newTips, language);
+            setTips(sortedTips);
           },
           (err) => {
             console.warn(err);
