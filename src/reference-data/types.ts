@@ -1,5 +1,6 @@
 import {Polygon} from 'geojson';
 import {LanguageAndTextType} from '@atb/translations';
+import {ZoneSelectionMode} from '@atb-as/config-specs';
 
 export type DistributionChannel = 'web' | 'app';
 
@@ -13,7 +14,7 @@ export type PreassignedFareProduct = {
   productAlias?: LanguageAndTextType[];
   distributionChannel: DistributionChannel[];
   alternativeNames: LanguageAndTextType[];
-  isApplicableOnSingleZoneOnly: boolean;
+  zoneSelectionMode: ZoneSelectionMode;
   limitations: {
     userProfileRefs: string[];
     appVersionMin: string | undefined;

@@ -39,7 +39,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
   } = route.params;
   const selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
   const isApplicableOnSingleZoneOnly =
-    preassignedFareProduct.isApplicableOnSingleZoneOnly ||
+    preassignedFareProduct.zoneSelectionMode === 'single' ||
     selectionMode === 'single';
   const [selectedZones, setSelectedZones] = useState<TariffZoneSelection>({
     from: fromTariffZone,
