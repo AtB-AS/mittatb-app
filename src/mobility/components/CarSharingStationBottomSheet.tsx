@@ -14,7 +14,6 @@ import {
 import {getAvailableVehicles, getRentalAppUri} from '@atb/mobility/utils';
 import {StyleSheet} from '@atb/theme';
 import {useOperatorApp} from '@atb/mobility/use-operator-app';
-import {ThemeText} from '@atb/components/text';
 import {ActivityIndicator, View} from 'react-native';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {MessageBox} from '@atb/components/message-box';
@@ -24,13 +23,15 @@ import {VehicleStats} from '@atb/mobility/components/VehicleStats';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {Unknown} from '@atb/assets/svg/mono-icons/status';
 import {Car} from '@atb/assets/svg/mono-icons/transportation';
+import {WalkingDistance} from '@atb/components/walking-distance';
 
 type Props = {
   stationId: string;
+  distance: number | undefined;
   close: () => void;
 };
 
-export const CarSharingStationSheet = ({stationId, close}: Props) => {
+export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
   const {t} = useTranslation();
   const style = useSheetStyle();
   const {station, isLoading, error} = useCarSharingStation(stationId);
@@ -41,7 +42,7 @@ export const CarSharingStationSheet = ({stationId, close}: Props) => {
     appStoreUri,
     rentalAppUri,
   });
-  const stationName = useTextForLanguage(station?.name.translation);
+  const stationName = useTextForLanguage(station?.name.translation) ?? '';
 
   return (
     <BottomSheetContainer>
@@ -51,6 +52,7 @@ export const CarSharingStationSheet = ({stationId, close}: Props) => {
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
+        title={stationName}
         color={'background_1'}
         setFocusOnLoad={false}
       />
@@ -62,6 +64,7 @@ export const CarSharingStationSheet = ({stationId, close}: Props) => {
         )}
         {!isLoading && !error && station && (
           <>
+            <WalkingDistance distance={distance} />
             <View style={style.container}>
               <Section>
                 <GenericSectionItem>
@@ -69,13 +72,6 @@ export const CarSharingStationSheet = ({stationId, close}: Props) => {
                     operatorName={operatorName}
                     logoUrl={brandLogoUrl}
                   />
-                  {stationName && (
-                    <View style={style.stationName}>
-                      <ThemeText type="body__secondary">
-                        {stationName}
-                      </ThemeText>
-                    </View>
-                  )}
                 </GenericSectionItem>
               </Section>
               <VehicleStats
@@ -133,10 +129,6 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
   },
   container: {
     paddingHorizontal: theme.spacings.medium,
-  },
-  stationName: {
-    flex: 1,
-    alignItems: 'center',
   },
   errorMessage: {
     marginHorizontal: theme.spacings.medium,

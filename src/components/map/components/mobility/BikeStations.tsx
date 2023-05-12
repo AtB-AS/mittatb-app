@@ -1,26 +1,19 @@
-import MapboxGL, {OnPressEvent} from '@rnmapbox/maps';
-import React, {RefObject} from 'react';
+import MapboxGL from '@rnmapbox/maps';
+import React from 'react';
 import {getStaticColor} from '@atb/theme/colors';
 import {useTheme} from '@atb/theme';
 import {StationsWithCount} from './Stations';
 
 type Props = {
-  mapCameraRef: RefObject<MapboxGL.Camera>;
   stations: StationsWithCount;
-  onPress: (type: OnPressEvent) => void;
 };
 
-export const BikeStations = ({stations, onPress}: Props) => {
+export const BikeStations = ({stations}: Props) => {
   const {themeName} = useTheme();
   const stationColor = getStaticColor(themeName, 'transport_bike');
 
   return (
-    <MapboxGL.ShapeSource
-      id={'bikeStations'}
-      shape={stations}
-      tolerance={0}
-      onPress={onPress}
-    >
+    <MapboxGL.ShapeSource id={'bikeStations'} shape={stations} tolerance={0}>
       <MapboxGL.SymbolLayer
         id="bikeStationPin"
         minZoomLevel={13.5}

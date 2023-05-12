@@ -36,10 +36,10 @@ export const isBikeStation = (
   false;
 
 export const isCarStation = (
-  properties: GeoJsonProperties | undefined,
-): properties is StationBasicFragment =>
-  (isStation(properties) &&
-    properties?.vehicleTypesAvailable?.some(
+  feature: Feature<Point> | undefined,
+): feature is Feature<Point, StationBasicFragment> =>
+  (isStation(feature) &&
+    feature.properties?.vehicleTypesAvailable?.some(
       (types) => types.vehicleType.formFactor === FormFactor.Car,
     )) ??
   false;

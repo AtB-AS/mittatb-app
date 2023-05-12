@@ -1,8 +1,5 @@
 import {useEffect, useState} from 'react';
-import {AreaState, updateAreaState} from '@atb/mobility/utils';
-import {useIsCityBikesEnabled} from '@atb/mobility/use-city-bikes-enabled';
-import React, {useEffect, useState} from 'react';
-import {AreaState, isBikeStation, isCarStation, updateAreaState} from './utils';
+import {AreaState, updateAreaState} from './utils';
 import {useIsCityBikesEnabled} from './use-city-bikes-enabled';
 import {
   StationsFilterType,
@@ -15,9 +12,6 @@ import {FeatureCollection, GeoJSON} from 'geojson';
 import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {getStations} from '@atb/api/stations';
 import {RegionPayload} from '@rnmapbox/maps';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {CityBikeStationSheet} from './components/CityBikeStationBottomSheet';
-import {CarSharingStationSheet} from './components/CarSharingStationBottomSheet';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useIsFocused} from '@react-navigation/native';
 import {useIsCarSharingEnabled} from './use-car-sharing-enabled';
