@@ -14,7 +14,7 @@ export type PreassignedFareProduct = {
   productAlias?: LanguageAndTextType[];
   distributionChannel: DistributionChannel[];
   alternativeNames: LanguageAndTextType[];
-  zoneSelectionMode: ZoneSelectionMode;
+  zoneSelectionMode?: ZoneSelectionMode;
   limitations: {
     userProfileRefs: string[];
     appVersionMin: string | undefined;
