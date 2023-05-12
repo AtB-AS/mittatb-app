@@ -186,7 +186,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 onPress={() =>
                   navigation.navigate('Profile_PaymentOptionsScreen')
                 }
-              ></LinkSectionItem>
+              />
             )}
 
             <LinkSectionItem
