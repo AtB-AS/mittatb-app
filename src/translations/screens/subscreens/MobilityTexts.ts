@@ -1,5 +1,6 @@
 import {translation as _} from '../../commons';
 import {Platform} from 'react-native';
+import {PropulsionType} from '@atb/api/types/generated/mobility-types_v2';
 
 export const MobilityTexts = {
   scooter: _('Sparkesykkel', 'Electric scooter'),
@@ -86,4 +87,22 @@ export const CarSharingTexts = {
     'Ops! Vi fant ikke denne parkeringen',
     "Ops! We couldn't find this car sharing station",
   ),
+  propultionType: (type: PropulsionType) => {
+    switch (type) {
+      case PropulsionType.Electric:
+        return _('Elektrisk', 'Electric');
+      case PropulsionType.CombustionDiesel:
+        return _('Diesel', 'Diesel');
+      case PropulsionType.Combustion:
+        return _('Bensin', 'Petrol');
+      case PropulsionType.PlugInHybrid:
+        return _('Plug-in hybrid', 'Plug-in hybrid');
+      case PropulsionType.HydrogenFuelCell:
+        return _('Hydrogen', 'Hydrogen');
+      case PropulsionType.Hybrid:
+        return _('Hybrid', 'Hybrid');
+      default:
+        return _('Ukjent drivstofftype', 'Unknown propultion type');
+    }
+  },
 };

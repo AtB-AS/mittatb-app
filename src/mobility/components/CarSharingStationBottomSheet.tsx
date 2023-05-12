@@ -1,5 +1,10 @@
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  Language,
+  ScreenHeaderTexts,
+  useTranslation,
+} from '@atb/translations';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
@@ -11,19 +16,18 @@ import {
   CarSharingTexts,
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {getAvailableVehicles, getRentalAppUri} from '@atb/mobility/utils';
+import {getRentalAppUri} from '@atb/mobility/utils';
 import {StyleSheet} from '@atb/theme';
 import {useOperatorApp} from '@atb/mobility/use-operator-app';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {MessageBox} from '@atb/components/message-box';
 import {useCarSharingStation} from '@atb/mobility/use-car-sharing-station';
-import {VehicleStat} from '@atb/mobility/components/VehicleStat';
-import {VehicleStats} from '@atb/mobility/components/VehicleStats';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {Unknown} from '@atb/assets/svg/mono-icons/status';
-import {Car} from '@atb/assets/svg/mono-icons/transportation';
 import {WalkingDistance} from '@atb/components/walking-distance';
+import {CarName} from '@atb/mobility/components/CarName';
+import {ThemeText} from '@atb/components/text';
+import {CarAvailabilityFragment} from '@atb/api/types/generated/fragments/stations';
+import {CarImage} from '@atb/mobility/components/CarImage';
 
 type Props = {
   stationId: string;
@@ -32,7 +36,7 @@ type Props = {
 };
 
 export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const style = useSheetStyle();
   const {station, isLoading, error} = useCarSharingStation(stationId);
   const {appStoreUri, brandLogoUrl, operatorName} = useSystem(station);
@@ -45,7 +49,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
   const stationName = useTextForLanguage(station?.name.translation) ?? '';
 
   return (
-    <BottomSheetContainer>
+    <BottomSheetContainer maxHeightValue={0.5}>
       <ScreenHeaderWithoutNavigation
         leftButton={{
           type: 'close',
@@ -65,7 +69,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
         {!isLoading && !error && station && (
           <>
             <WalkingDistance distance={distance} />
-            <View style={style.container}>
+            <ScrollView style={style.container}>
               <Section>
                 <GenericSectionItem>
                   <OperatorLogo
@@ -74,26 +78,31 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
                   />
                 </GenericSectionItem>
               </Section>
-              <VehicleStats
-                left={
-                  <VehicleStat
-                    svg={Car}
-                    primaryStat={getAvailableVehicles(
-                      station.vehicleTypesAvailable,
-                      FormFactor.Car,
-                    )}
-                    secondaryStat={t(CarSharingTexts.stations.numCarsAvailable)}
-                  />
-                }
-                right={
-                  <VehicleStat
-                    svg={Unknown}
-                    primaryStat={'Ingen'}
-                    secondaryStat={'ting her enda'}
-                  />
-                }
-              />
-            </View>
+
+              {station.vehicleTypesAvailable
+                ?.sort(byName(language))
+                .map((vehicle, i) => (
+                  <Section key={'vehicle' + i} withTopPadding>
+                    <GenericSectionItem>
+                      <View style={style.carDetailsContainer}>
+                        <View style={style.carImage}>
+                          <CarImage uri={vehicle.vehicleType.vehicleImage} />
+                        </View>
+                        <View style={style.carDetails}>
+                          <CarName vehicleType={vehicle.vehicleType} />
+                          <ThemeText type={'body__secondary'}>
+                            {t(
+                              CarSharingTexts.propultionType(
+                                vehicle.vehicleType.propulsionType,
+                              ),
+                            )}
+                          </ThemeText>
+                        </View>
+                      </View>
+                    </GenericSectionItem>
+                  </Section>
+                ))}
+            </ScrollView>
             {rentalAppUri && (
               <FullScreenFooter>
                 <Button
@@ -127,10 +136,34 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
   activityIndicator: {
     marginBottom: theme.spacings.xLarge,
   },
+  carDetailsContainer: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'row',
+  },
+  carImage: {
+    flexShrink: 1,
+    flexGrow: 0,
+    marginRight: theme.spacings.medium,
+  },
+  carDetails: {
+    flexGrow: 0,
+    flexShrink: 4,
+  },
   container: {
     paddingHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
   errorMessage: {
     marginHorizontal: theme.spacings.medium,
   },
 }));
+
+const byName =
+  (language: Language) =>
+  (a: CarAvailabilityFragment, b: CarAvailabilityFragment) =>
+    (
+      getTextForLanguage(a.vehicleType.name?.translation, language) ?? ''
+    ).localeCompare(
+      getTextForLanguage(b.vehicleType.name?.translation, language) ?? '',
+    ) ?? 0;
