@@ -18,7 +18,7 @@ import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
 import {VehicleWithPosition} from '@atb/api/types/vehicles';
-import {useGetLiveServiceJourneyVehicles} from './use-get-live-service-journey-vehicles';
+import {useLiveVehicleSubscription} from '@atb/api/vehicles';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
@@ -60,10 +60,14 @@ export const TravelDetailsMapScreenComponent = ({
   const [vehicle, setVehicle] = useState<VehicleWithPosition | undefined>(
     vehicleWithPosition,
   );
-  useGetLiveServiceJourneyVehicles(
-    setVehicle,
-    vehicleWithPosition?.serviceJourney?.id,
-  );
+
+  useLiveVehicleSubscription({
+    serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
+    onMessage: (event: WebSocketMessageEvent) => {
+      const vehicle = JSON.parse(event.data) as VehicleWithPosition;
+      setVehicle(vehicle);
+    },
+  });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
 
