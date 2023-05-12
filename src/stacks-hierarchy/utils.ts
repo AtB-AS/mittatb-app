@@ -49,6 +49,6 @@ export function getExpireDate(iso: string): string {
   // This must be done since the expiry date stored is the date the card expires,
   // and the date that shows on the card is the month before the card expires
   // Example: The card expires the moment the date is 02.2021, but the date on the card is 01.2021
-  date.setMonth(date.getMonth() - 1);
+  date.setDate(date.getDate() - 1);
   return format(date, 'MM/yy');
 }
