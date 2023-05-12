@@ -45,7 +45,7 @@ export function getPaymentTypeName(paymentType: PaymentType) {
 
 export function getExpireDate(iso: string): string {
   let date = parseISO(iso);
-  // Subtract one month to get the correct expiry date
+  // Subtract one day to get the correct expiry date
   // This must be done since the expiry date stored is the date the card expires,
   // and the date that shows on the card is the month before the card expires
   // Example: The card expires the moment the date is 02.2021, but the date on the card is 01.2021
