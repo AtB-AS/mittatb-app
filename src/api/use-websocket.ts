@@ -1,3 +1,4 @@
+import Bugsnag from '@bugsnag/react-native';
 import {useEffect, useState} from 'react';
 
 export type WebSocketConnectionState =
@@ -33,14 +34,17 @@ export function useWebSocket({
       };
       ws.onerror = (event) => {
         setState(getWebSocketStateCode(ws.readyState));
+        Bugsnag.notify(`WebSocket error "${event.message}" with url: ${url}`);
         onError && onError(event);
       };
       ws.onclose = (event) => {
         setState(getWebSocketStateCode(ws.readyState));
+        Bugsnag.leaveBreadcrumb(`WebSocket closed with url: ${url}`);
         onClose && onClose(event);
       };
       ws.onopen = () => {
         setState(getWebSocketStateCode(ws.readyState));
+        Bugsnag.leaveBreadcrumb(`WebSocket opened with url: ${url}`);
         onOpen && onOpen();
       };
       setSubscription(ws);
