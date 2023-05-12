@@ -75,7 +75,7 @@ export const DeparturesWidget = ({
       </ThemeText>
 
       {!favoriteDepartures.length && (
-        <Section style={styles.addFavoriteSection}>
+        <Section>
           <GenericSectionItem>
             <View style={styles.noFavouritesView}>
               <ThemedNoFavouriteDepartureImage />
@@ -164,10 +164,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
     marginTop: theme.spacings.large,
     marginBottom: theme.spacings.medium,
-  },
-  addFavoriteSection: {
-    backgroundColor: theme.static.background.background_2.background,
-    borderRadius: theme.border.radius.regular,
   },
   noFavouritesView: {
     flexDirection: 'row',

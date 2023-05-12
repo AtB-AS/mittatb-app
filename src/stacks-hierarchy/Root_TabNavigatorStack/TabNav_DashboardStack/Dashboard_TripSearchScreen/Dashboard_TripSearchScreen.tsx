@@ -240,7 +240,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
         }
         parallaxContent={() => (
           <View style={style.searchHeader}>
-            <Section style={style.locationInputSection}>
+            <Section>
               <LocationInputSectionItem
                 accessibilityLabel={
                   t(TripSearchTexts.location.departurePicker.a11yLabel) +
@@ -608,10 +608,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   loadingIndicator: {
     flexDirection: 'row',
-  },
-  locationInputSection: {
-    backgroundColor: theme.static.background.background_2.background,
-    borderRadius: theme.border.radius.regular,
   },
   missingLocationText: {
     padding: theme.spacings.xLarge,
