@@ -1,11 +1,4 @@
-import {
-  Feature,
-  GeoJSON,
-  GeoJsonProperties,
-  Point,
-  Polygon,
-  Position,
-} from 'geojson';
+import {Feature, GeoJSON, Point, Polygon, Position} from 'geojson';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
   PricingPlanFragment,

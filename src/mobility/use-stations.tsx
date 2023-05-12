@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {AreaState, updateAreaState} from '@atb/mobility/utils';
 import {useIsCityBikesEnabled} from '@atb/mobility/use-city-bikes-enabled';
 import {
