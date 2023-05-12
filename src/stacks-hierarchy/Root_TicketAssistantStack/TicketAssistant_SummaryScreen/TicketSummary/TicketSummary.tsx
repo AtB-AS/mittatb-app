@@ -45,12 +45,15 @@ export const TicketSummary = () => {
       : ''
   }`;
 
-  const inputDur = inputParams.duration || 0;
-  const compDur = Math.min(ticket.duration, inputDur);
+  const inputDuration = inputParams.duration || 0;
+  const effectiveDuration = Math.min(ticket.duration, inputDuration);
 
-  const numTickets = Math.ceil(compDur * (frequency / daysInWeek));
+  const numberOfTravels = Math.ceil(
+    effectiveDuration * (frequency / daysInWeek),
+  );
+
   const savings =
-    numTickets * recommendedTicketSummary.singleTicketPrice - ticket.price;
+    numberOfTravels * recommendedTicketSummary.singleTicketPrice - ticket.price;
 
   const ticketPriceString = `${formatDecimalNumber(
     ticket.price,
@@ -59,7 +62,7 @@ export const TicketSummary = () => {
   )} kr`;
 
   const perTripPrice = ticket.duration
-    ? ticket.price / numTickets
+    ? ticket.price / numberOfTravels
     : ticket.price;
 
   const perTripPriceString = `${formatDecimalNumber(
@@ -81,7 +84,7 @@ export const TicketSummary = () => {
               language,
               2,
             ),
-            alternative: numTickets.toString(),
+            alternative: numberOfTravels.toString(),
           })
       : TicketAssistantTexts.summary.singleTicketNotice,
   );
