@@ -1,4 +1,3 @@
-// import Bugsnag from '@bugsnag/react-native';
 import {useEffect, useState} from 'react';
 
 export type WebSocketConnectionState =
@@ -28,31 +27,26 @@ export function useWebSocket({
   useEffect(() => {
     if (url) {
       const ws = new WebSocket(url);
-
       ws.onmessage = (event) => {
         setState(getWebSocketStateCode(ws.readyState));
         onMessage && onMessage(event);
       };
-
       ws.onerror = (event) => {
         setState(getWebSocketStateCode(ws.readyState));
         onError && onError(event);
       };
-
       ws.onclose = (event) => {
         setState(getWebSocketStateCode(ws.readyState));
         onClose && onClose(event);
       };
-
       ws.onopen = () => {
         setState(getWebSocketStateCode(ws.readyState));
         onOpen && onOpen();
       };
-
       setSubscription(ws);
     }
 
-    // Cleanup function
+    // Cleanup
     return () => {
       if (subscription) {
         subscription.onclose = null;
@@ -65,7 +59,7 @@ export function useWebSocket({
   return {
     state,
     send: (message: string) => subscription?.send(message),
-    close: () => subscription && subscription.close(),
+    close: subscription?.close,
   };
 }
 
