@@ -9,9 +9,14 @@ import React from 'react';
 import {InteractiveColor, StaticColorByType} from '@atb/theme/colors';
 
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
+import {
+  calculateSavings,
+  calculateSingleTickets,
+  perTripSavings,
+} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import {formatDecimalNumber} from '@atb/utils/numbers';
 import {daysInWeek} from 'date-fns';
+import {formatDecimalNumber} from '@atb/utils/numbers';
 
 const interactiveColorName: InteractiveColor = 'interactive_2';
 const themeColor_1: StaticColorByType<'background'> = 'background_accent_1';
@@ -45,12 +50,11 @@ export const TicketSummary = () => {
       : ''
   }`;
 
-  const inputDur = inputParams.duration || 0;
-  const compDur = Math.min(ticket.duration, inputDur);
-
-  const numTickets = Math.ceil(compDur * (frequency / daysInWeek));
-  const savings =
-    numTickets * recommendedTicketSummary.singleTicketPrice - ticket.price;
+  const savings = calculateSavings(
+    ticket.price,
+    calculateSingleTickets(ticket.duration, frequency) *
+      recommendedTicketSummary.singleTicketPrice,
+  );
 
   const ticketPriceString = `${formatDecimalNumber(
     ticket.price,
@@ -59,7 +63,7 @@ export const TicketSummary = () => {
   )} kr`;
 
   const perTripPrice = ticket.duration
-    ? ticket.price / numTickets
+    ? ticket.price / ((ticket.duration / daysInWeek) * frequency)
     : ticket.price;
 
   const perTripPriceString = `${formatDecimalNumber(
@@ -70,6 +74,12 @@ export const TicketSummary = () => {
 
   const transportModes = recommendedTicketTypeConfig.transportModes;
 
+  // If the ticket duration is longer than the input duration,
+  // we want to calculate based on the input duration instead
+  const inputDuration = inputParams.duration ?? 0;
+  const comparedDuration =
+    ticket.duration > inputDuration ? inputDuration : ticket.duration;
+
   const savingsText = t(
     ticket.duration !== 0
       ? savings === 0
@@ -77,11 +87,14 @@ export const TicketSummary = () => {
         : TicketAssistantTexts.summary.savings({
             totalSavings: formatDecimalNumber(savings, language, 2),
             perTripSavings: formatDecimalNumber(
-              recommendedTicketSummary.singleTicketPrice - perTripPrice,
+              perTripSavings(savings, ticket.duration, frequency),
               language,
               2,
             ),
-            alternative: numTickets.toString(),
+            alternative: `${calculateSingleTickets(
+              comparedDuration,
+              frequency,
+            )}`,
           })
       : TicketAssistantTexts.summary.singleTicketNotice,
   );
