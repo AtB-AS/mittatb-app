@@ -38,7 +38,6 @@ export function ZonesSelection({
 }: ZonesSelectionProps) {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  console.log('preass', preassignedFareProduct);
 
   const accessibility: AccessibilityProps = {
     accessible: true,
@@ -59,9 +58,7 @@ export function ZonesSelection({
     selectionMode = 'multiple';
   }
   if (
-    preassignedFareProduct.zoneSelectionMode === 'single' ||
-    preassignedFareProduct.zoneSelectionMode === 'single-stop' ||
-    preassignedFareProduct.zoneSelectionMode === 'single-zone' ||
+    preassignedFareProduct.zoneSelectionMode?.includes('single') ||
     selectionMode == 'single-stop' ||
     selectionMode == 'single-zone'
   ) {
