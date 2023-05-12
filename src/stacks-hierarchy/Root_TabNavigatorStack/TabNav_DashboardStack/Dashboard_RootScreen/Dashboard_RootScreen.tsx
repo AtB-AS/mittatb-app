@@ -438,7 +438,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     padding: 0,
     margin: 0,
   },
-
   paddedContainer: {
     marginHorizontal: theme.spacings.medium,
   },
