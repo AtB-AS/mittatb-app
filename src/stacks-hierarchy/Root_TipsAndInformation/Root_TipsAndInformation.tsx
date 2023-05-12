@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {
   getTextForLanguage,
@@ -17,13 +17,15 @@ import {
 } from '@atb/stacks-hierarchy/Root_TipsAndInformation/types';
 import {mapToTips} from '@atb/stacks-hierarchy/Root_TipsAndInformation/converters';
 import {ExpandableSectionItem, Section} from '@atb/components/sections';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = RootStackScreenProps<'Root_TipsAndInformation'>;
 
 export const Root_TipsAndInformation = ({}: Props) => {
   const styles = useScreenStyle();
   const {t, language} = useTranslation();
-  const [currentlyOpen, setCurrentlyOpen] = useState<number>(0);
+  const [currentlyOpen, setCurrentlyOpen] = useState<number>();
+  const {bottom: safeAreaBottom} = useSafeAreaInsets();
 
   const [tips, setTips] = useState<TipType[]>([]);
 
@@ -44,51 +46,52 @@ export const Root_TipsAndInformation = ({}: Props) => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {paddingBottom: safeAreaBottom}]}>
       <FullScreenHeader leftButton={{type: 'close'}} />
 
-      <ThemeText
-        type="heading--jumbo"
-        style={styles.title}
-        accessibilityLabel={t(TicketingTexts.tipsAndInformationTile.title)}
-        color={themeColor}
-      >
-        {t(TicketingTexts.tipsAndInformationTile.title)}
-      </ThemeText>
+      <ScrollView>
+        <ThemeText
+          type="heading--jumbo"
+          style={styles.title}
+          accessibilityLabel={t(TicketingTexts.tipsAndInformationTile.title)}
+          color={themeColor}
+        >
+          {t(TicketingTexts.tipsAndInformationTile.title)}
+        </ThemeText>
+        <View style={styles.innerContainer}>
+          <Section style={styles.tipsContainer}>
+            {tips.map((tip, index) => {
+              const title = getTextForLanguage(tip.title, language);
+              const emoji = tip.emoji;
+              const description = getTextForLanguage(tip.description, language);
 
-      <View style={styles.innerContainer}>
-        <Section style={styles.tipsContainer}>
-          {tips.map((tip, index) => {
-            const title = getTextForLanguage(tip.title, language);
-            const emoji = tip.emoji;
-            const description = getTextForLanguage(tip.description, language);
+              if (!emoji || !title || !description) return null;
 
-            if (!emoji || !title || !description) return null;
-
-            return (
-              <ExpandableSectionItem
-                key={index}
-                textType="body__primary--bold"
-                text={emoji + ' ' + title}
-                showIconText={false}
-                expanded={currentlyOpen === index}
-                onPress={() => {
-                  setCurrentlyOpen(index);
-                }}
-                expandContent={
-                  <ThemeText
-                    type="body__secondary"
-                    style={styles.expandedContent}
-                    isMarkdown={true}
-                  >
-                    {description}
-                  </ThemeText>
-                }
-              />
-            );
-          })}
-        </Section>
-      </View>
+              return (
+                <ExpandableSectionItem
+                  key={index}
+                  textType="body__primary--bold"
+                  text={emoji + ' ' + title}
+                  showIconText={false}
+                  expanded={currentlyOpen === index}
+                  onPress={() => {
+                    setCurrentlyOpen(index);
+                  }}
+                  expandContent={
+                    <ThemeText
+                      type="body__secondary"
+                      style={styles.expandedContent}
+                      isMarkdown={true}
+                    >
+                      {description}
+                    </ThemeText>
+                  }
+                />
+              );
+            })}
+          </Section>
+        </View>
+      </ScrollView>
     </View>
   );
 };
