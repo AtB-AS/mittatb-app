@@ -36,6 +36,19 @@ export const Root_TipsAndInformation = ({}: Props) => {
         .onSnapshot(
           async (snapshot) => {
             const newTips = mapToTips(snapshot.docs);
+            //Sorting by alphabetical order of title
+            newTips.sort((a, b) => {
+              const titleA = getTextForLanguage(a.title, language);
+              const titleB = getTextForLanguage(b.title, language);
+              if (!titleA || !titleB) return 0;
+              if (titleA < titleB) {
+                return -1;
+              }
+              if (titleA > titleB) {
+                return 1;
+              }
+              return 0;
+            });
             setTips(newTips);
           },
           (err) => {
