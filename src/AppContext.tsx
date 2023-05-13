@@ -122,12 +122,12 @@ export const AppContextProvider: React.FC = ({children}) => {
         ? false
         : JSON.parse(savedTicketingAccepted);
 
-      const savedmobileTokenOnboarded = await storage.get(
+      const savedMobileTokenOnboarded = await storage.get(
         storeKey.mobileTokenOnboarding,
       );
-      const mobileTokenOnboarded = !savedmobileTokenOnboarded
+      const mobileTokenOnboarded = !savedMobileTokenOnboarded
         ? false
-        : JSON.parse(savedmobileTokenOnboarded);
+        : JSON.parse(savedMobileTokenOnboarded);
 
       const previousBuildNumber = await storage.get(
         storeKey.previousBuildNumber,

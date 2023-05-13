@@ -18,6 +18,7 @@ import {
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const ChangeTokenAction = ({
   onChange,
@@ -31,6 +32,7 @@ const ChangeTokenAction = ({
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {isError, isLoading} = useMobileTokenContextState();
+  const {disable_travelcard} = useRemoteConfig();
   const now = new Date();
   const nextMonthStartDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
   const countRenewalDate = formatToShortDateWithYear(
@@ -78,7 +80,11 @@ const ChangeTokenAction = ({
     <Section style={styles.changeTokenButton}>
       <LinkSectionItem
         type="spacious"
-        text={t(TravelTokenTexts.travelToken.changeTokenButton)}
+        text={
+          disable_travelcard
+            ? t(TravelTokenTexts.travelToken.changeTokenWithoutTravelcardButton)
+            : t(TravelTokenTexts.travelToken.changeTokenButton)
+        }
         disabled={isError || isLoading || toggleLimit === 0}
         onPress={onChange}
         testID="switchTokenButton"

@@ -8,10 +8,15 @@ const SelectTravelTokenTexts = {
         'Bruk billett på t:kort / mobil',
         'Use ticket on t:card / phone',
       ),
+      titleWithoutTravelcard: _('Bruk billett mobil', 'Use ticket on phone'),
     },
     changeTokenButton: _(
       'Bytt mellom t:kort / mobil',
       'Switch between t:card / phone',
+    ),
+    changeTokenWithoutTravelcardButton: _(
+      'Bytt mellom mobiler',
+      'Switch between phones',
     ),
     toggleCountLimitInfo: (
       remainingToggleCount: number,
@@ -86,6 +91,58 @@ const SelectTravelTokenTexts = {
         ),
       },
     ],
+    faqsWithoutTravelcard: [
+      {
+        question: _(
+          'Hva skjer om jeg mister mobilen?',
+          'What happens if I lose my phone?',
+        ),
+        answer: _(
+          'Billetten din ligger trygt lagret i Min profil. Velg å bruke billetten på en annen mobil.',
+          'Your ticket is safely stored in My profile. Switch to use the ticket on another mobile phone.',
+        ),
+      },
+      {
+        question: _(
+          'Kan jeg bruke billetten på flere mobiler samtidig?',
+          'Can I use the ticket on several mobile phones at the same time?',
+        ),
+        answer: _(
+          'Nei, du kan kun bruke en av gangen, og billetten kan ikke deles med andre reisende.',
+          'No, you can only use one at a time and the ticket cannot be shared with other travellers.',
+        ),
+      },
+      {
+        question: _(
+          'Kan jeg reise uten mobil?',
+          'Can I travel without my phone?',
+        ),
+        answer: _(
+          'Du må alltid ha med deg det mobilen du har valgt å bruke billetten på.',
+          'You must always travel with the mobile phone you have chosen to use the ticket on.',
+        ),
+      },
+      {
+        question: _(
+          `Jeg får ikke logget inn i appen AtB med e-post`,
+          `I can not log into the AtB app with e-mail`,
+        ),
+        answer: _(
+          `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke t:kort eller opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret vedrørende refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
+          `It is not possible to log into the app with e-mail as of today. You can continue to use your t:card or create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user profile. You can contact customer service regarding a refund if you still want to create a new user profile in the app.`,
+        ),
+      },
+      {
+        question: _(
+          `Har du flere spørsmål om billettkjøp?`,
+          `Do you have any other questions about ticket purchases?`,
+        ),
+        answer: _(
+          `Se flere måter å kontakte oss på atb.no/kontakt`,
+          `See how to contact us at atb.no/en/contact`,
+        ),
+      },
+    ],
     tokenToggleFaq: {
       question: _(
         `Hvor mange ganger kan jeg bytte?`,
@@ -100,6 +157,7 @@ const SelectTravelTokenTexts = {
   },
   toggleToken: {
     title: _('Bytt mellom t:kort / mobil', 'Switch between t:card / phone'),
+    titleWithoutTravelcard: _('Bytt mellom mobiler', 'Switch between phones'),
     radioBox: {
       tCard: {
         title: _('t:kort', 't:card'),
@@ -292,6 +350,58 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
           answer: _(
             `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke reisekort eller opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye bruker. Du kan kontakte kundesenteret vedrørende refusjon dersom du likevel vil lage en ny bruker i appen.`,
             `It is not possible to log into the app with e-mail as of today. You can continue to use your travel card or create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user. You can contact customer service regarding a refund if you still want to create a new user in the app.`,
+          ),
+        },
+        {
+          question: _(
+            `Har du flere spørsmål om billettkjøp?`,
+            `Do you have any other questions about ticket purchases?`,
+          ),
+          answer: _(
+            `Se flere måter å kontakte oss på frammr.no/kontakt-oss`,
+            `See how to contact us at en.frammr.no/contact-us`,
+          ),
+        },
+      ],
+      faqsWithoutTravelcard: [
+        {
+          question: _(
+            'Hva skjer om jeg mister mobilen?',
+            'What happens if I lose my phone?',
+          ),
+          answer: _(
+            'Billetten din ligger trygt lagret i Min profil. Velg å bruke billetten på en annen mobil.',
+            'Your ticket is safely stored in My profile. Switch to use the ticket on another mobile phone.',
+          ),
+        },
+        {
+          question: _(
+            'Kan jeg bruke billetten på flere mobiler samtidig?',
+            'Can I use the ticket on several mobile phones at the same time?',
+          ),
+          answer: _(
+            'Nei, du kan kun bruke en av gangen, og billetten kan ikke deles med andre reisende.',
+            'No, you can only use one at a time and the ticket cannot be shared with other travellers.',
+          ),
+        },
+        {
+          question: _(
+            'Kan jeg reise uten mobil?',
+            'Can I travel without my phone?',
+          ),
+          answer: _(
+            'Du må alltid ha med deg det mobilen du har valgt å bruke billetten på.',
+            'You must always travel with the mobile phone you have chosen to use the ticket on.',
+          ),
+        },
+        {
+          question: _(
+            `Jeg får ikke logget inn i FRAM-appen med e-post`,
+            `I can not log into the FRAM app with e-mail`,
+          ),
+          answer: _(
+            `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye bruker. Du kan kontakte kundesenteret vedrørende refusjon dersom du likevel vil lage en ny bruker i appen.`,
+            `It is not possible to log into the app with e-mail as of today. You can create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user. You can contact customer service regarding a refund if you still want to create a new user in the app.`,
           ),
         },
         {

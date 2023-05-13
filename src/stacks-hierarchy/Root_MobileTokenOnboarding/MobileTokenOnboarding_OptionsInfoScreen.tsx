@@ -10,6 +10,7 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -22,6 +23,7 @@ export const MobileTokenOnboarding_OptionsInfoScreen = ({
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
+  const {disable_travelcard} = useRemoteConfig();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -34,26 +36,40 @@ export const MobileTokenOnboarding_OptionsInfoScreen = ({
                 style={styles.header}
                 color={themeColor}
               >
-                {t(MobileTokenOnboardingTexts.optionsInfo.heading)}
+                {disable_travelcard
+                  ? t(
+                      MobileTokenOnboardingTexts.withoutTravelcard.optionsInfo
+                        .heading,
+                    )
+                  : t(MobileTokenOnboardingTexts.optionsInfo.heading)}
               </ThemeText>
             </View>
 
             <View style={styles.illustration}>
               <View style={styles.cardOrPhoneIllustration}>
-                <ThemedTokenTravelCard />
-                <ThemeText
-                  color={themeColor}
-                  style={styles.cardOrPhoneText}
-                  accessible={false}
-                  importantForAccessibility="no"
-                >
-                  {t(MobileTokenOnboardingTexts.optionsInfo.or)}
-                </ThemeText>
+                {!disable_travelcard && (
+                  <>
+                    <ThemedTokenTravelCard />
+                    <ThemeText
+                      color={themeColor}
+                      style={styles.cardOrPhoneText}
+                      accessible={false}
+                      importantForAccessibility="no"
+                    >
+                      {t(MobileTokenOnboardingTexts.optionsInfo.or)}
+                    </ThemeText>
+                  </>
+                )}
                 <ThemedTokenPhone />
               </View>
             </View>
             <ThemeText color={themeColor} style={styles.description}>
-              {t(MobileTokenOnboardingTexts.optionsInfo.description)}
+              {disable_travelcard
+                ? t(
+                    MobileTokenOnboardingTexts.withoutTravelcard.optionsInfo
+                      .description,
+                  )
+                : t(MobileTokenOnboardingTexts.optionsInfo.description)}
             </ThemeText>
           </View>
 

@@ -12,6 +12,7 @@ import {RemoteToken} from '@atb/mobile-token/types';
 import {isTravelCardToken} from '@atb/mobile-token/utils';
 import {useAppState} from '@atb/AppContext';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -28,6 +29,8 @@ export function InspectableTokenInfo({
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
   const {completeMobileTokenOnboarding} = useAppState();
+  const {disable_travelcard} = useRemoteConfig();
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.containerContent}>
@@ -53,7 +56,12 @@ export function InspectableTokenInfo({
               color={themeColor}
               isMarkdown={true}
             >
-              {isTravelCardToken(inspectableToken)
+              {disable_travelcard
+                ? t(
+                    MobileTokenOnboardingTexts.withoutTravelcard.phone
+                      .description,
+                  )
+                : isTravelCardToken(inspectableToken)
                 ? t(MobileTokenOnboardingTexts.tCard.description)
                 : t(MobileTokenOnboardingTexts.phone.description)}
             </ThemeText>
@@ -76,7 +84,9 @@ export function InspectableTokenInfo({
                 navigateToSelectToken();
               }}
               text={
-                isTravelCardToken(inspectableToken)
+                disable_travelcard
+                  ? t(MobileTokenOnboardingTexts.withoutTravelcard.phone.button)
+                  : isTravelCardToken(inspectableToken)
                   ? t(MobileTokenOnboardingTexts.tCard.button)
                   : t(MobileTokenOnboardingTexts.phone.button)
               }

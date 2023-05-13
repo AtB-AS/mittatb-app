@@ -101,7 +101,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
   const refundInfoUrl = getTextForLanguage(refundInfo, language);
 
-  const {enable_departures_v2_as_default} = useRemoteConfig();
+  const {enable_departures_v2_as_default, disable_travelcard} =
+    useRemoteConfig();
   const setDeparturesV2Enabled = (value: boolean) => {
     if (enable_departures_v2_as_default) {
       updateMetadata({
@@ -304,10 +305,17 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
           {authenticationType === 'phone' && hasEnabledMobileToken && (
             <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.travelToken
-                  .label,
-              )}
+              text={
+                disable_travelcard
+                  ? t(
+                      ProfileTexts.sections.settings.linkSectionItems
+                        .travelToken.labelWithoutTravelcard,
+                    )
+                  : t(
+                      ProfileTexts.sections.settings.linkSectionItems
+                        .travelToken.label,
+                    )
+              }
               label={'new'}
               onPress={() => navigation.navigate('Profile_TravelTokenScreen')}
               testID="travelTokenButton"
