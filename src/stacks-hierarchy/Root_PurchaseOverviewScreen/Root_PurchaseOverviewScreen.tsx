@@ -148,6 +148,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             fromTariffZone={fromTariffZone}
             toTariffZone={toTariffZone}
             fareProductTypeConfig={params.fareProductTypeConfig}
+            preassignedFareProduct={preassignedFareProduct}
             onSelect={(t) =>
               navigation.push('Root_PurchaseTariffZonesSearchByMapScreen', t)
             }

@@ -22,6 +22,7 @@ export type Root_PurchaseTariffZonesSearchByMapScreenParams = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
   fareProductTypeConfig: FareProductTypeConfig;
+  preassignedFareProduct: PreassignedFareProduct;
 };
 
 export type Root_LocationSearchByMapScreenParams = {

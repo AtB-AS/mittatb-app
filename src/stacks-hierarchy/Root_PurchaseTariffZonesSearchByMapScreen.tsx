@@ -31,9 +31,16 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
   navigation,
   route,
 }: Props) => {
-  const {fromTariffZone, toTariffZone, fareProductTypeConfig} = route.params;
+  const {
+    fromTariffZone,
+    toTariffZone,
+    fareProductTypeConfig,
+    preassignedFareProduct,
+  } = route.params;
   const selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
-  const isApplicableOnSingleZoneOnly = selectionMode === 'single';
+  const isApplicableOnSingleZoneOnly =
+    preassignedFareProduct.zoneSelectionMode?.includes('single') ||
+    selectionMode === 'single';
   const [selectedZones, setSelectedZones] = useState<TariffZoneSelection>({
     from: fromTariffZone,
     to: toTariffZone,
