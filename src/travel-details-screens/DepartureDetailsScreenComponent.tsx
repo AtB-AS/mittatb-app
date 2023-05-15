@@ -126,10 +126,10 @@ export const DepartureDetailsScreenComponent = ({
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
             </View>
-            {mapData || realtimeText ? (
+            {(mapData && !screenReaderEnabled) || realtimeText ? (
               <View style={styles.headerSubSection}>
                 {realtimeText && <LastPassedStop realtimeText={realtimeText} />}
-                {mapData && !screenReaderEnabled ? (
+                {mapData ? (
                   <Button
                     type="pill"
                     leftIcon={{svg: Map}}
