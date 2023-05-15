@@ -102,6 +102,8 @@ export const DepartureDetailsScreenComponent = ({
     .map((s) => s.situationNumber)
     .filter((s): s is string => !!s);
 
+  const shouldShowMapButton = mapData && !screenReaderEnabled;
+
   return (
     <View style={styles.container}>
       <FullScreenView
@@ -126,10 +128,10 @@ export const DepartureDetailsScreenComponent = ({
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
             </View>
-            {mapData || realtimeText ? (
+            {shouldShowMapButton || realtimeText ? (
               <View style={styles.headerSubSection}>
                 {realtimeText && <LastPassedStop realtimeText={realtimeText} />}
-                {mapData ? (
+                {shouldShowMapButton ? (
                   <Button
                     type="pill"
                     leftIcon={{svg: Map}}
@@ -535,7 +537,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   passedSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    minWidth: '60%',
+    minWidth: '50%',
     flex: 1,
   },
   passedSectionRealtimeIcon: {
