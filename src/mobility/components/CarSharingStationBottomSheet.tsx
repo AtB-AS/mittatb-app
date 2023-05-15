@@ -97,6 +97,9 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
                               ),
                             )}
                           </ThemeText>
+                          <ThemeText
+                            type={'body__secondary--bold'}
+                          >{`${vehicle.count} tilgjengelig`}</ThemeText>
                         </View>
                       </View>
                     </GenericSectionItem>
