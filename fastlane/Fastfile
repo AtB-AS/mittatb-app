@@ -337,7 +337,8 @@ platform :android do
       track: "internal",
       json_key: ENV['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH'],
       aab: ENV['AAB_FILE_NAME'],
-      package_name: ENV['ANDROID_PACKAGE_NAME']
+      package_name: ENV['ANDROID_PACKAGE_NAME'],
+      release_status: "draft"
     )
   end
 
