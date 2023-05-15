@@ -535,7 +535,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   passedSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    minWidth: '60%',
+    minWidth: '50%',
     flex: 1,
   },
   passedSectionRealtimeIcon: {
