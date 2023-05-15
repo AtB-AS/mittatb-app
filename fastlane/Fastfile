@@ -279,6 +279,29 @@ platform :android do
     sh("cp", "../android/app/build/intermediates/sourcemaps/react/#{build_type}/index.android.bundle.packager.map", "../bundle/index.android.bundle.map")
   end
 
+  lane :build_aab do
+    ensure_env_vars(
+      env_vars: ['BUILD_ID','KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT', 'CI','KEYSTORE_PATH']
+    )
+    build_type = ENV['APP_ENVIRONMENT']
+    gradle(task: 'clean', project_dir: 'android/')
+    gradle(
+      task: 'bundle',
+      build_type: build_type,
+      project_dir: 'android/',
+      print_command: false, #don't print my passwords please
+      properties: {
+        "android.injected.signing.store.file" => File.expand_path(ENV["KEYSTORE_PATH"], Dir.pwd + "/../"),
+        "android.injected.signing.store.password" => ENV["KEYSTORE_PASS"],
+        "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
+        "android.injected.signing.key.password" => ENV["KEY_PASS"],
+      })
+    sh("cp", "../android/app/build/outputs/bundle/#{build_type}/app-#{build_type}.aab", "../")
+    sh("mkdir", "-p", "../bundle")
+    sh("cp", "../android/app/build/generated/assets/react/#{build_type}/index.android.bundle", "../bundle")
+    sh("cp", "../android/app/build/intermediates/sourcemaps/react/#{build_type}/index.android.bundle.packager.map", "../bundle/index.android.bundle.map")
+  end
+
   lane :firebase_distribution_staging do
     ensure_env_vars(
       env_vars: ['FIREBASE_APP_ID','GCP_CREDENTIALS_PATH','APK_FILE_NAME']
@@ -301,6 +324,19 @@ platform :android do
       track: "internal",
       json_key:ENV['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH'],
       apk: ENV['APK_FILE_NAME'],
+      package_name: ENV['ANDROID_PACKAGE_NAME']
+    )
+  end
+
+  lane :playstore_internal_aab do
+    ensure_env_vars(
+      env_vars: ['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH','AAB_FILE_NAME','ANDROID_PACKAGE_NAME']
+    )
+
+    upload_to_play_store(
+      track: "internal",
+      json_key: ENV['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH'],
+      aab: ENV['AAB_FILE_NAME'],
       package_name: ENV['ANDROID_PACKAGE_NAME']
     )
   end
