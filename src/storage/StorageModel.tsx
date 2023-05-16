@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Bugsnag from '@bugsnag/react-native';
 import {Platform} from 'react-native';
+import {useFirestoreConfiguration} from '@atb/configuration';
 
 export enum StorageModelKeysEnum {
   HasReadTravelSearchFilterOnboarding = '@ATB_has_read_travel_search_filter_onboarding',
@@ -63,26 +64,39 @@ const leaveBreadCrumb = (
 
 export type KeyValuePair = [string, string | null];
 
-export const storage = {
-  /** Necessary for communication between App and iOS Widget */
-  setAppGroupName: async (groupName?: string) => {
-    if (Platform.OS === 'ios') {
-      await AsyncStorage.setAppGroupName(groupName).catch(errorHandler);
-    }
-  },
-  get: async (key: string) => {
-    const value = await AsyncStorage.getItem(key).catch(errorHandler);
-    leaveBreadCrumb('read-single', key, value);
-    return value;
-  },
-  set: async (key: string, value: string) => {
-    leaveBreadCrumb('save-single', key, value);
-    return AsyncStorage.setItem(key, value).catch(errorHandler);
-  },
-  getAll: async () => {
-    leaveBreadCrumb('read-all');
-    return AsyncStorage.getAllKeys()
-      .then((keys) => AsyncStorage.multiGet(keys))
-      .catch(errorHandler);
-  },
+export const useStorage = () => {
+  const {localStorageVersions: versions} = useFirestoreConfiguration();
+  return {
+    /** Necessary for communication between App and iOS Widget */
+    setAppGroupName: async (groupName?: string) => {
+      if (Platform.OS === 'ios') {
+        await AsyncStorage.setAppGroupName(groupName).catch(errorHandler);
+      }
+    },
+    get: async (key: string) => {
+      const keyAndVersion = appendVersion(key, versions);
+      const value = await AsyncStorage.getItem(keyAndVersion).catch(
+        errorHandler,
+      );
+      leaveBreadCrumb('read-single', keyAndVersion, value);
+      return value;
+    },
+    set: async (key: string, value: string) => {
+      const keyAndVersion = appendVersion(key, versions);
+      leaveBreadCrumb('save-single', keyAndVersion, value);
+      return AsyncStorage.setItem(keyAndVersion, value).catch(errorHandler);
+    },
+    getAll: async () => {
+      leaveBreadCrumb('read-all');
+      return AsyncStorage.getAllKeys()
+        .then((keys) => keys.map((k) => appendVersion(k, versions)))
+        .then((keys) => AsyncStorage.multiGet(keys))
+        .catch(errorHandler);
+    },
+  };
+};
+
+const appendVersion = (key: string, versions: Record<string, number>) => {
+  const version = versions[key];
+  return version ? `${key}_v${version}` : key;
 };
