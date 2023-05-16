@@ -48,9 +48,8 @@ export const TicketSummary = () => {
   const inputDuration = inputParams.duration || 0;
   const effectiveDuration = Math.min(ticket.duration, inputDuration);
 
-  const numberOfTravels = Math.ceil(
-    effectiveDuration * (frequency / daysInWeek),
-  );
+  const days = Math.min(inputDuration, daysInWeek);
+  const numberOfTravels = Math.ceil(effectiveDuration * (frequency / days));
 
   const savings =
     numberOfTravels * recommendedTicketSummary.singleTicketPrice - ticket.price;
