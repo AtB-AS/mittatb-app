@@ -54,5 +54,5 @@ export const getCarStation = (
     .get<GetCarStationQuery>(stringifyUrl(url, query), {
       ...opts,
     })
-    .then((res) => (res.data.stations ? res.data.stations[0] : undefined));
+    .then((res) => res.data.stations?.[0]);
 };
