@@ -52,6 +52,14 @@ const PurchaseOverviewTexts = {
       '24 hour pass can not be used on trains nor night buses.',
     ),
   },
+  nfkNightBusPeriodNotice: _(
+    '3- og 7-dagers billett inkluderer ikke nattbuss.',
+    '3 and 7 day periodic tickets does not include night bus.',
+  ),
+  nfkNightBusHour24Notice: _(
+    '24-timersbilletten inkluderer ikke nattbuss.',
+    'The 24 hour pass does not include night bus.',
+  ),
   zones: {
     title: {
       single: {
