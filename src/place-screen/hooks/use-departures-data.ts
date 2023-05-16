@@ -246,30 +246,33 @@ export function useDeparturesData(
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const {favoriteDepartures} = useFavorites();
   const [queryStartTime, setQueryStartTime] = useState<string | undefined>();
+  const [timeRange, setTimeRange] = useState<number | undefined>();
   const activeFavoriteDepartures = showOnlyFavorites
     ? favoriteDepartures
     : undefined;
   const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
-  const timeRange = getTimeRangeByMode(mode, queryStartTime);
+
   const timeout = useTimeoutRequest();
 
   const loadDepartures = useCallback(() => {
     const updatedQueryStartTime = startTime ?? new Date().toISOString();
     setQueryStartTime(updatedQueryStartTime);
+    const updatedTimeRange = getTimeRangeByMode(mode, updatedQueryStartTime);
+    setTimeRange(updatedTimeRange);
     dispatch({
       type: 'LOAD_INITIAL_DEPARTURES',
       quayIds,
       startTime: updatedQueryStartTime,
       limitPerLine,
       limitPerQuay,
-      timeRange,
+      timeRange: updatedTimeRange,
       favoriteDepartures: activeFavoriteDepartures,
       timeout,
     });
   }, [JSON.stringify(quayIds), startTime, activeFavoriteDepartures, mode]);
 
   const loadRealTimeData = useCallback(() => {
-    if (!queryStartTime) return;
+    if (!queryStartTime || !timeRange) return;
     dispatch({
       type: 'LOAD_REALTIME_DATA',
       quayIds,
