@@ -42,7 +42,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
     (a) => a.count > 0,
   );
   const [currentlyOpen, setCurrentlyOpen] = useState<number>(
-    defaultTravellerIndex,
+    defaultTravellerIndex > 0 ? defaultTravellerIndex : 0,
   );
 
   function updateCategory(traveller: Traveller) {
