@@ -1,11 +1,7 @@
 name: Build store Android project
-#on:
-#  release:
-#    types: [published]
 on:
-  push:
-    branches:
-      - morten/fram-testflight-gpi
+  release:
+    types: [published]
 
 jobs:
   build-android:
@@ -13,18 +9,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [fram]
-        #org: [atb, nfk]
+        org: [atb, nfk, fram]
     environment: ${{ matrix.org }}
     timeout-minutes: 180
     runs-on: ubuntu-latest
     steps:
-      - name: Exit for AtB and NFK
-        if: ${{ (matrix.org == 'atb') || (matrix.org == 'nfk') }}
+      - name: Check if release tag is org specific and exit for other orgs
+        if: >
+          ${{ (contains(github.ref, 'atb') && matrix.org != 'atb') 
+          || (contains(github.ref, 'nfk') && matrix.org != 'nfk') 
+          || (contains(github.ref, 'fram') && matrix.org != 'fram') }}
         run: exit 1
-      #- name: Check if release tag is org specific and exit for other orgs
-      #  if: ${{ (matrix.org == 'atb' && contains(github.ref, 'nfk')) || (matrix.org == 'nfk' && contains(github.ref, 'atb')) }}
-      #  run: exit 1
       - name: Checkout project
         uses: actions/checkout@v1
       - name: Set global env vars
