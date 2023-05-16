@@ -41,7 +41,7 @@ jobs:
         with:
           node-version: 16
       - name: Install node_modules
-        run: yarn install
+        run: yarn install --frozen-lockfile
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
         with:
