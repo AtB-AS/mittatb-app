@@ -1,3 +1,7 @@
+import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {VehicleWithPosition} from '@atb/api/types/vehicles';
+import {useLiveVehicleSubscription} from '@atb/api/vehicles';
+import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {
   BackArrow,
   flyToLocation,
@@ -8,8 +12,9 @@ import {
   useControlPositionsStyle,
 } from '@atb/components/map';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {Coordinates} from '@atb/utils/coordinates';
 import {MapTexts, useTranslation} from '@atb/translations';
+import {Coordinates} from '@atb/utils/coordinates';
+import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
@@ -17,11 +22,6 @@ import {StyleSheet, View} from 'react-native';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
-import {VehicleWithPosition} from '@atb/api/types/vehicles';
-import {useGetLiveServiceJourneyVehicles} from './use-get-live-service-journey-vehicles';
-import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
@@ -67,10 +67,14 @@ export const TravelDetailsMapScreenComponent = ({
   const [vehicle, setVehicle] = useState<VehicleWithPosition | undefined>(
     vehicleWithPosition,
   );
-  useGetLiveServiceJourneyVehicles(
-    setVehicle,
-    vehicleWithPosition?.serviceJourney?.id,
-  );
+
+  useLiveVehicleSubscription({
+    serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
+    onMessage: (event: WebSocketMessageEvent) => {
+      const vehicle = JSON.parse(event.data) as VehicleWithPosition;
+      setVehicle(vehicle);
+    },
+  });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
 
