@@ -1,4 +1,7 @@
-import {TravelSearchFiltersSelectionType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+import {
+  TravelSearchFiltersSelectionType,
+  TransportModeFilterOptionWithSelectionType,
+} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {storage, StorageModelTypes} from '@atb/storage';
 
 class FilterStore<TravelSearchFiltersSelectionType> {
@@ -21,13 +24,31 @@ class FilterStore<TravelSearchFiltersSelectionType> {
     await storage.set(this.key, JSON.stringify(filters));
     return filters;
   }
+
+  async getFiltersAndMigrateFromV1IfNeeded(): Promise<TravelSearchFiltersSelectionType> {
+    const filtersV1Key: StorageModelTypes = '@ATB_user_travel_search_filters';
+    const userFiltersV1JSON = await storage.get(filtersV1Key);
+    const userFiltersV1 = (
+      userFiltersV1JSON ? JSON.parse(userFiltersV1JSON) : {}
+    ) as TransportModeFilterOptionWithSelectionType[];
+
+    const userFilters = await this.getFilters();
+
+    if (Array.isArray(userFiltersV1)) {
+      await storage.set(filtersV1Key, '{}');
+      const migratedFilters = {
+        ...userFilters,
+        transportModes: userFiltersV1,
+      };
+      await this.setFilters(migratedFilters);
+
+      return migratedFilters;
+    }
+
+    return userFilters;
+  }
 }
 
 export const storedFilters = new FilterStore<TravelSearchFiltersSelectionType>(
   '@ATB_user_travel_search_filters_v2',
 );
-
-export const oldStoredFilters =
-  new FilterStore<TravelSearchFiltersSelectionType>(
-    '@ATB_user_travel_search_filters',
-  );
