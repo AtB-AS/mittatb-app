@@ -43,6 +43,7 @@ export type RemoteConfig = {
   enable_ticketing_assistant: boolean;
   enable_tips_and_information: boolean;
   enable_flexible_transport: boolean;
+  enable_nfk_nightbus_warning: boolean;
   use_flexible_on_accessMode: boolean;
   use_flexible_on_directMode: boolean;
   use_flexible_on_egressMode: boolean;
@@ -95,6 +96,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_ticketing_assistant: false,
   enable_tips_and_information: false,
   enable_flexible_transport: false,
+  enable_nfk_nightbus_warning: false,
   use_flexible_on_accessMode: true,
   use_flexible_on_directMode: true,
   use_flexible_on_egressMode: true,
@@ -232,6 +234,10 @@ export function getConfig(): RemoteConfig {
     values['enable_flexible_transport']?.asBoolean() ??
     defaultRemoteConfig.enable_flexible_transport;
 
+  const enable_nfk_nightbus_warning =
+    values['enable_nfk_nightbus_warning']?.asBoolean() ??
+    defaultRemoteConfig.enable_nfk_nightbus_warning;
+
   const use_flexible_on_accessMode =
     values['use_flexible_on_accessMode']?.asBoolean() ??
     defaultRemoteConfig.use_flexible_on_accessMode;
@@ -290,6 +296,7 @@ export function getConfig(): RemoteConfig {
     enable_ticketing_assistant,
     enable_tips_and_information,
     enable_flexible_transport,
+    enable_nfk_nightbus_warning,
     use_flexible_on_accessMode,
     use_flexible_on_directMode,
     use_flexible_on_egressMode,

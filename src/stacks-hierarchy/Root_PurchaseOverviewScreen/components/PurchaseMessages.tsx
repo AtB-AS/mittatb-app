@@ -10,6 +10,7 @@ import React from 'react';
 import {getOtherDeviceIsInspectableWarning} from '../../../fare-contracts/utils';
 import {getValidOnTrainNoticeText} from '../../Root_TabNavigatorStack/TabNav_TicketingStack/utils';
 import {TariffZoneWithMetadata} from '../../Root_PurchaseTariffZonesSearchByMapScreen';
+import { useRemoteConfig } from '@atb/RemoteConfigContext';
 
 export type PurchaseWarningsProps = {
   preassignedFareProductType: string;
@@ -43,6 +44,7 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
     remoteTokens,
     deviceIsInspectable,
   );
+  const {enable_nfk_nightbus_warning} = useRemoteConfig()
 
   const shouldShowValidTrainTicketNotice =
     (preassignedFareProductType === 'single' ||
@@ -50,6 +52,8 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
       preassignedFareProductType === 'hour24') &&
     fromTariffZone.id === 'ATB:TariffZone:1' &&
     toTariffZone.id === 'ATB:TariffZone:1';
+
+  const shouldShowNFKNightBusNotice =  preassignedFareProductType === "period" && enable_nfk_nightbus_warning
 
   return (
     <>
@@ -76,6 +80,14 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
           message={getValidOnTrainNoticeText(t, preassignedFareProductType)}
           type="info"
         />
+      )}
+
+      {shouldShowNFKNightBusNotice && (
+        <MessageBox
+        style={styles.warning}
+        message={}
+        type="info"
+      />
       )}
     </>
   );
