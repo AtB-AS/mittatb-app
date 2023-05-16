@@ -81,7 +81,9 @@ export const BicycleTexts = {
 
 export const CarSharingTexts = {
   stations: {
-    numCarsAvailable: _('Tilgjengelige biler', 'Available cars'),
+    carsAvailable: (amount: number) =>
+      _(`${amount} ledig`, `${amount} available`),
+    noCarsAvailable: _('Ingen ledige biler', 'No available cars'),
   },
   loadingFailed: _(
     'Ops! Vi fant ikke denne parkeringen',
