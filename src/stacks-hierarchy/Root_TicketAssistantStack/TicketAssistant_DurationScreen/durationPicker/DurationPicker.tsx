@@ -4,7 +4,7 @@ import SvgDate from '@atb/assets/svg/mono-icons/time/Date';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
-import {addDays, daysInWeek, format} from 'date-fns';
+import {addDays, daysInWeek} from 'date-fns';
 import {
   dateDiffInDays,
   getSliderIndex,
@@ -18,6 +18,7 @@ import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {useLocaleContext} from '@atb/LocaleProvider';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {Button} from '@atb/components/button';
+import {formatToVerboseFullDate} from '@atb/utils/date';
 
 type DurationPickerProps = {
   duration: number;
@@ -37,7 +38,7 @@ export const DurationPicker = ({
     addDays(currentDate, inputParams.duration ?? 0),
   );
   const styles = useThemeStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const a11yContext = useAccessibilityContext();
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -112,7 +113,7 @@ export const DurationPicker = ({
               type="inline"
               mode="tertiary"
               onPress={() => setShowDatePicker(true)}
-              text={format(date, 'dd. MMM. yyyy')}
+              text={formatToVerboseFullDate(date, language)}
               accessibilityHint={t(
                 TicketAssistantTexts.duration.a11yDatePickerHint,
               )}
