@@ -1,7 +1,7 @@
 import {StyleSheet} from '@atb/theme';
 import {useLayout} from '@atb/utils/use-layout';
 import React, {PropsWithChildren, useEffect, useRef} from 'react';
-import {Animated, RefreshControlProps, View} from 'react-native';
+import {Animated, Platform, RefreshControlProps, View} from 'react-native';
 
 type Props = PropsWithChildren<{
   header: React.ReactNode;
@@ -14,7 +14,7 @@ export function ParallaxScroll({header, children, refreshControl}: Props) {
     contentHeightRef.current = contentHeight;
   }, [contentHeight]);
 
-  const styles = useThemeStyles();
+  const styles = useStyles();
   const scrollYRef = useRef(new Animated.Value(0)).current;
 
   const headerTranslate = scrollYRef.interpolate({
@@ -28,48 +28,94 @@ export function ParallaxScroll({header, children, refreshControl}: Props) {
     refreshControl.props.progressViewOffset = contentHeight;
   }
 
+  const onScroll = Animated.event(
+    [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
+    {useNativeDriver: false},
+  );
+
+  const childrenProps: ChildrenProps = {
+    refreshControl,
+    contentHeight,
+    children,
+    onScroll,
+  };
+
   return (
     <View style={styles.content}>
+      {Platform.OS === 'android' ? (
+        <ScrollChildrenAndroid {...childrenProps} />
+      ) : (
+        <ScrollChildrenIOS {...childrenProps} />
+      )}
+
+      {/* Header component declared after children to make it render on top of children*/}
       <Animated.View
         style={[styles.header, {transform: [{translateY: headerTranslate}]}]}
       >
         <View onLayout={onHeaderContentLayout}>{header}</View>
       </Animated.View>
-
-      <View style={{paddingTop: contentHeight}}>
-        <Animated.ScrollView
-          scrollEventThrottle={10}
-          refreshControl={refreshControl}
-          onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
-            {useNativeDriver: false},
-          )}
-          style={styles.children}
-        >
-          {children}
-        </Animated.ScrollView>
-      </View>
     </View>
   );
 }
 
-const useThemeStyles = StyleSheet.createThemeHook(() => ({
+type ChildrenProps = PropsWithChildren<{
+  refreshControl: Props['refreshControl'];
+  contentHeight: number;
+  onScroll: () => void;
+}>;
+
+const ScrollChildrenAndroid = ({
+  refreshControl,
+  children,
+  contentHeight,
+  onScroll,
+}: ChildrenProps) => (
+  <Animated.ScrollView
+    scrollEventThrottle={10}
+    refreshControl={refreshControl}
+    onScroll={onScroll}
+    contentContainerStyle={{paddingTop: contentHeight}}
+  >
+    {children}
+  </Animated.ScrollView>
+);
+
+/*
+  On iOS The Animated ScrollView needs the padding applied to a wrapping View
+  to be able to work correctly with Voice Over. This can't be done on Android
+  since overflow visible is buggy there.
+ */
+const ScrollChildrenIOS = ({
+  refreshControl,
+  children,
+  contentHeight,
+  onScroll,
+}: ChildrenProps) => {
+  const styles = useStyles();
+  return (
+    <View style={{paddingTop: contentHeight}}>
+      <Animated.ScrollView
+        scrollEventThrottle={10}
+        refreshControl={refreshControl}
+        onScroll={onScroll}
+        style={styles.childrenIOS}
+      >
+        {children}
+      </Animated.ScrollView>
+    </View>
+  );
+};
+
+const useStyles = StyleSheet.createThemeHook(() => ({
   content: {
     flex: 1,
     overflow: 'hidden',
-    position: 'relative',
   },
   header: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    overflow: 'hidden',
-    zIndex: 2,
-    elevation: 4,
-    justifyContent: 'space-between',
   },
-  children: {
-    overflow: 'visible',
-  },
+  childrenIOS: {overflow: 'visible'},
 }));
