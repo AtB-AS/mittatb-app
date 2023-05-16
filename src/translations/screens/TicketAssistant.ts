@@ -46,20 +46,20 @@ const TicketAssistantTexts = {
       'How often do you travel per week?',
     ),
     description: _(
-      'Tur-retur teller som 2 ganger. \n' +
+      'Tur-retur teller som 2 reiser. \n' +
         'Eksempel: Til og fra jobb 3 ganger i uka, er 6 reiser.',
-      'Round trip counts as 2 times. \n' +
+      'Round trip counts as 2 trips. \n' +
         'Example: To and from work 3 times a week, is 6 trips.',
     ),
     result: (amount: {value: number}) =>
       _(
-        `Du reiser ${amount.value} ganger i uka`,
-        `You travel ${amount.value} times a week`,
+        `Du har ${amount.value} reiser i uka`,
+        `You have ${amount.value} trips per week`,
       ),
     resultMoreThanMax: (max: {value: number}) =>
       _(
-        `Du reiser ${max.value} ganger eller mer i uka`,
-        `You travel ${max.value} times or more per week`,
+        `Du har ${max.value} reiser eller mer i uka`,
+        `You have ${max.value} trips or more per week`,
       ),
     mainButton: _('Neste', 'Next'),
     a11yNextPageHint: _(
@@ -81,13 +81,13 @@ const TicketAssistantTexts = {
   duration: {
     title: (amount: {value: number}) =>
       _(
-        `Hvor langt frem i tid skal du reise ${amount.value} ganger i uka?`,
-        `How far ahead in time do you want to travel ${amount.value} times a week?`,
+        `Hvor lenge skal du ha ${amount.value} reiser i uka?`,
+        `For how long are you planning to have ${amount.value} trips per week?`,
       ),
     titleA11yLabel: (amount: {value: number}) =>
       _(
-        `Hvor langt frem i tid skal du reise ${amount.value} ganger i uka?`,
-        `How far in advance do you want to travel ${amount.value} times a week?`,
+        `Hvor lenge skal du ha ${amount.value} reiser i uka?`,
+        `For how long are you planning to have ${amount.value} trips per week?`,
       ),
     datePickerHeader: _('Frem til', 'Until'),
     datePickerHeaderA11yLabel: _('Frem til', 'Until'),
@@ -110,22 +110,34 @@ const TicketAssistantTexts = {
     ),
     resultMonths: (amount: {value: number}) =>
       _(
-        `Du skal reise i ${amount.value} mnd.`,
-        `You will travel for ${amount.value} month(s).`,
+        `Du skal reise i ${amount.value} ${
+          amount.value == 1 ? 'måned' : 'måneder'
+        }.`,
+        `You will travel for ${amount.value} ${
+          amount.value == 1 ? 'month' : 'months'
+        }.`,
       ),
     resultWeeks: (amount: {value: number}) =>
       _(
-        `Du skal reise i ${amount.value} uke(r).`,
-        `You will travel for ${amount.value} week(s).`,
+        `Du skal reise i ${amount.value} ${
+          amount.value == 1 ? 'uke' : 'uker'
+        }.`,
+        `You will travel for ${amount.value} ${
+          amount.value == 1 ? 'week' : 'weeks'
+        }.`,
       ),
     resultDays: (amount: {value: number}) =>
       _(
-        `Du skal reise i ${amount.value} dag(er).`,
-        `You will travel for ${amount.value} day(s).`,
+        `Du skal reise i ${amount.value} ${
+          amount.value == 1 ? 'dag' : 'dager'
+        }.`,
+        `You will travel for ${amount.value} ${
+          amount.value == 1 ? 'day' : 'days'
+        }.`,
       ),
     resultMoreThan180Days: _(
-      'Du skal reise i mer enn et halvt år.',
-      'You will travel for more than half a year.',
+      'Du skal reise i mer enn 6 måneder.',
+      'You will travel for more than 6 months.',
     ),
     mainButton: _('Neste', 'Next'),
     a11yNextPageHint: _(
@@ -191,8 +203,8 @@ const TicketAssistantTexts = {
         `You have selected ${data.ticket}. \n Traveller: ${data.traveller}. \n Zones: ${data.tariffZones}. \n Price: ${data.price} kr. \n Price per trip: ${data.pricePerTrip} kr.`,
       ),
     durationNotice: _(
-      'NB: denne billetten dekker ikke hele perioden du har satt. Ta veilederen på nytt når denne billetten utløper.',
-      'NB: this ticket does not cover the entire period you have set. Take the assistant again when this ticket expires.',
+      'Merk deg: Denne billetten dekker ikke hele den valgte perioden. Ta veilederen på nytt når denne billetten utløper.',
+      'Please note: This ticket does not cover the entire selected period. Take the assistant again when this ticket expires.',
     ),
     a11yDurationNoticeLabel: _(
       'NB: denne veilederen fungerer kun for reise med buss og trikk, ikke båt. ',
