@@ -1,7 +1,11 @@
-import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {SubscriptionState} from '@atb/api';
 import {VehicleWithPosition} from '@atb/api/types/vehicles';
 import {useLiveVehicleSubscription} from '@atb/api/vehicles';
-import {AnyMode, AnySubMode} from '@atb/components/icon-box';
+import {
+  AnyMode,
+  AnySubMode,
+  getTransportModeSvg,
+} from '@atb/components/icon-box';
 import {
   BackArrow,
   flyToLocation,
@@ -11,14 +15,17 @@ import {
   PositionArrow,
   useControlPositionsStyle,
 } from '@atb/components/map';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {useGeolocationState} from '@atb/GeolocationContext';
+import {useTheme} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
@@ -37,6 +44,7 @@ type Props = TravelDetailsMapScreenParams & {
 };
 
 const FOLLOW_ZOOM_LEVEL = 14.5;
+const FOLLOW_MIN_ZOOM_LEVEL = 8;
 const FOLLOW_ANIMATION_DURATION = 500;
 
 export const TravelDetailsMapScreenComponent = ({
@@ -68,7 +76,7 @@ export const TravelDetailsMapScreenComponent = ({
     vehicleWithPosition,
   );
 
-  useLiveVehicleSubscription({
+  const {state: subscriptionState} = useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
     onMessage: (event: WebSocketMessageEvent) => {
       const vehicle = JSON.parse(event.data) as VehicleWithPosition;
@@ -77,6 +85,7 @@ export const TravelDetailsMapScreenComponent = ({
   });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
+  const [zoomLevel, setZoomLevel] = useState<number>(FOLLOW_ZOOM_LEVEL);
 
   useEffect(() => {
     const location = vehicle?.location;
@@ -100,6 +109,7 @@ export const TravelDetailsMapScreenComponent = ({
         onTouchMove={() => {
           setShouldTrack(false);
         }}
+        onRegionIsChanging={(event) => setZoomLevel(event.properties.zoomLevel)}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
@@ -125,12 +135,14 @@ export const TravelDetailsMapScreenComponent = ({
             text={t(MapTexts.startPoint.label)}
           />
         )}
-        {vehicle?.location && (
+        {vehicle && (
           <LiveVehicle
-            coordinates={vehicle.location}
+            vehicle={vehicle}
             setShouldTrack={setShouldTrack}
             mode={mode}
             subMode={subMode}
+            subscriptionState={subscriptionState}
+            zoomLevel={zoomLevel}
           />
         )}
       </MapboxGL.MapView>
@@ -159,71 +171,76 @@ const styles = StyleSheet.create({
 });
 
 type VehicleIconProps = {
-  coordinates: Coordinates;
+  vehicle: VehicleWithPosition;
   mode?: AnyMode;
   subMode?: AnySubMode;
   setShouldTrack: React.Dispatch<React.SetStateAction<boolean>>;
+  subscriptionState: SubscriptionState;
+  zoomLevel: number;
 };
 
 const LiveVehicle = ({
-  coordinates,
+  vehicle,
   setShouldTrack,
   mode,
   subMode,
+  subscriptionState,
+  zoomLevel,
 }: VehicleIconProps) => {
   const circleColor = useTransportationColor(mode, subMode);
-  const iconName = vehicleIconName(mode);
+  const textColor = useTransportationColor(mode, subMode, 'text');
+  const {theme} = useTheme();
 
-  if (!coordinates) return null;
+  const error =
+    subscriptionState === 'CLOSING' || subscriptionState === 'CLOSED';
+
+  const circleStyle = error
+    ? {
+        circleColor:
+          theme.interactive.interactive_destructive.disabled.background,
+        circleRadius: 20,
+        circleStrokeColor:
+          theme.interactive.interactive_destructive.default.background,
+        circleStrokeWidth: 2,
+      }
+    : {
+        circleColor,
+        circleRadius: 22,
+        circleStrokeWidth: 0,
+      };
+
+  if (!vehicle.location || zoomLevel < FOLLOW_MIN_ZOOM_LEVEL) return null;
   return (
-    <MapboxGL.ShapeSource
-      id="liveVehicle"
-      shape={pointOf(coordinates)}
-      cluster
-      onPress={() => {
-        setShouldTrack(true);
-      }}
-    >
-      <MapboxGL.CircleLayer
-        id="liveVehicleCircle"
-        minZoomLevel={8}
-        style={{
-          circleColor,
-          circleRadius: 22,
-        }}
-      />
-      <MapboxGL.SymbolLayer
+    <>
+      <MapboxGL.ShapeSource id="liveVehicle" shape={pointOf(vehicle.location)}>
+        <MapboxGL.CircleLayer id="liveVehicleCircle" style={circleStyle} />
+      </MapboxGL.ShapeSource>
+      <MapboxGL.MarkerView
         id="liveVehicleIcon"
-        aboveLayerID="liveVehicleCircle"
-        minZoomLevel={8}
-        style={{
-          iconImage: {uri: iconName},
-          iconAnchor: 'center',
-          iconAllowOverlap: true,
-          iconSize: 0.6,
-        }}
-      />
-    </MapboxGL.ShapeSource>
+        coordinate={[vehicle.location.longitude, vehicle.location.latitude]}
+        allowOverlap={true}
+      >
+        <TouchableOpacity
+          style={{padding: 20}}
+          onPressOut={() => {
+            setShouldTrack(true);
+          }}
+        >
+          {subscriptionState === 'CONNECTING' ||
+          subscriptionState === 'NOT_STARTED' ? (
+            <ActivityIndicator color={textColor} />
+          ) : (
+            <ThemeIcon
+              svg={getTransportModeSvg(mode, subMode)}
+              fill={
+                error
+                  ? theme.interactive.interactive_destructive.default.background
+                  : textColor
+              }
+            />
+          )}
+        </TouchableOpacity>
+      </MapboxGL.MarkerView>
+    </>
   );
 };
-
-/**
- * Get the name of the transportation mode icon which is stored under the
- * "Images" section in Mapbox Studio.
- */
-function vehicleIconName(mode?: AnyMode) {
-  switch (mode) {
-    case TransportMode.Bus:
-      return 'Bus';
-    case TransportMode.Tram:
-      return 'Tram';
-    case TransportMode.Water:
-      return 'Boat';
-    case TransportMode.Rail:
-      return 'Train';
-    case TransportMode.Metro:
-      return 'Subway';
-    default:
-      return 'Unknown';
-  }
-}
