@@ -184,7 +184,7 @@ const TicketingTexts = {
     title: _('Billettveileder', 'Ticket assistant'),
     description: _(
       'Få hjelp til å velge billetten som passer deg best.',
-      'Get help choosing the ticket that suits you the best',
+      'Get help choosing the ticket that suits you the best.',
     ),
     a11yHint: _(
       'Aktiver for å åpne billettveilederen',
