@@ -53,7 +53,8 @@ const PurchaseOverviewTexts = {
     ),
   },
   nfkNightBusNotice: _(
-    "3- og 7-dagers billett inkluderer ikke nattbuss.", "3 and 7 day periodic tickets does not include night bus."
+    '3- og 7-dagers billett inkluderer ikke nattbuss.',
+    '3 and 7 day periodic tickets does not include night bus.',
   ),
   zones: {
     title: {

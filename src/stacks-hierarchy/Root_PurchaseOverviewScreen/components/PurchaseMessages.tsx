@@ -53,7 +53,8 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
     fromTariffZone.id === 'ATB:TariffZone:1' &&
     toTariffZone.id === 'ATB:TariffZone:1';
 
-  const shouldShowNFKNightBusNotice = preassignedFareProductType === "period" && enable_nfk_nightbus_warning
+  const shouldShowNFKNightBusNotice =
+    preassignedFareProductType === 'period' && enable_nfk_nightbus_warning;
 
   return (
     <>
