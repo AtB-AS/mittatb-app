@@ -28,14 +28,16 @@ class FilterStore<TravelSearchFiltersSelectionType> {
   async getFiltersAndMigrateFromV1IfNeeded(): Promise<TravelSearchFiltersSelectionType> {
     const filtersV1Key: StorageModelTypes = '@ATB_user_travel_search_filters';
     const userFiltersV1JSON = await storage.get(filtersV1Key);
-    const userFiltersV1 = (
-      userFiltersV1JSON ? JSON.parse(userFiltersV1JSON) : {}
-    ) as TransportModeFilterOptionWithSelectionType[];
+    const userFiltersV1 =
+      userFiltersV1JSON &&
+      (JSON.parse(
+        userFiltersV1JSON,
+      ) as TransportModeFilterOptionWithSelectionType[]);
 
     const userFilters = await this.getFilters();
 
     if (Array.isArray(userFiltersV1)) {
-      await storage.set(filtersV1Key, '{}');
+      await storage.remove(filtersV1Key);
       const migratedFilters = {
         ...userFilters,
         transportModes: userFiltersV1,
