@@ -35,6 +35,15 @@ export const isBikeStation = (
     )) ??
   false;
 
+export const isCarStation = (
+  feature: Feature<Point> | undefined,
+): feature is Feature<Point, StationBasicFragment> =>
+  (isStation(feature) &&
+    feature.properties?.vehicleTypesAvailable?.some(
+      (types) => types.vehicleType.formFactor === FormFactor.Car,
+    )) ??
+  false;
+
 export const getAvailableVehicles = (
   types: VehicleTypeAvailabilityBasicFragment[] | undefined,
   formFactor: FormFactor,

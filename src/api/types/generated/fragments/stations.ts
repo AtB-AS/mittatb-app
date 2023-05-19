@@ -34,6 +34,7 @@ export type CarVehicleTypeFragment = {
   make?: string;
   model?: string;
   vehicleAccessories?: Array<Types.VehicleAccessory>;
+  vehicleImage?: string;
   name?: TranslatedStringFragment;
 };
 

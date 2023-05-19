@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@atb-as/config-specs": "^3.1.0",
-    "@atb-as/theme": "^6.5.2",
+    "@atb-as/theme": "^6.5.3",
     "@bugsnag/react-native": "^7.18.2",
     "@bugsnag/source-maps": "^2.3.1",
     "@entur-private/abt-mobile-client-sdk": "^1.1.6",

@@ -6,9 +6,10 @@ import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
 import MapboxGL from '@rnmapbox/maps';
 import {Feature, Point} from 'geojson';
 import {findEntityAtClick, isStopPlace} from '../utils';
-import {isBikeStation, isVehicle} from '@atb/mobility/utils';
+import {isBikeStation, isCarStation, isVehicle} from '@atb/mobility/utils';
 import {CityBikeStationSheet} from '@atb/mobility/components/CityBikeStationBottomSheet';
 import {ScooterSheet} from '@atb/mobility/components/ScooterSheet';
+import {CarSharingStationSheet} from '@atb/mobility/components/CarSharingStationBottomSheet';
 
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also
@@ -77,6 +78,18 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
         openBottomSheet(
           () => (
             <CityBikeStationSheet
+              stationId={selectedFeature.properties.id}
+              distance={distance}
+              close={closeWithCallback}
+            />
+          ),
+          undefined,
+          false,
+        );
+      } else if (isCarStation(selectedFeature)) {
+        openBottomSheet(
+          () => (
+            <CarSharingStationSheet
               stationId={selectedFeature.properties.id}
               distance={distance}
               close={closeWithCallback}

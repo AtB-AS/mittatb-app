@@ -1,9 +1,11 @@
 import {translation as _} from '../../commons';
 import {Platform} from 'react-native';
+import {PropulsionType} from '@atb/api/types/generated/mobility-types_v2';
 
 export const MobilityTexts = {
   scooter: _('Sparkesykkel', 'Electric scooter'),
   bicycle: _('Sykkel', 'Bicycle'),
+  car: _('Bildeling', 'Car sharing'),
   unknownOperator: _('Ukjent operatør', 'Unknown operator'),
   operatorAppSwitchButton: (operator: string) =>
     _(`Åpne ${operator}`, `Open ${operator}`),
@@ -75,4 +77,34 @@ export const BicycleTexts = {
     'Ops! Vi fant ikke denne sykkelstasjonen',
     "Ops! We couldn't find this bike station",
   ),
+};
+
+export const CarSharingTexts = {
+  stations: {
+    carsAvailable: (amount: number) =>
+      _(`${amount} ledig`, `${amount} available`),
+    noCarsAvailable: _('Ingen ledige biler', 'No available cars'),
+  },
+  loadingFailed: _(
+    'Ops! Vi fant ikke denne parkeringen',
+    "Ops! We couldn't find this car sharing station",
+  ),
+  propultionType: (type: PropulsionType) => {
+    switch (type) {
+      case PropulsionType.Electric:
+        return _('Elektrisk', 'Electric');
+      case PropulsionType.CombustionDiesel:
+        return _('Diesel', 'Diesel');
+      case PropulsionType.Combustion:
+        return _('Bensin', 'Petrol');
+      case PropulsionType.PlugInHybrid:
+        return _('Plug-in hybrid', 'Plug-in hybrid');
+      case PropulsionType.HydrogenFuelCell:
+        return _('Hydrogen', 'Hydrogen');
+      case PropulsionType.Hybrid:
+        return _('Hybrid', 'Hybrid');
+      default:
+        return _('Ukjent drivstofftype', 'Unknown propultion type');
+    }
+  },
 };
