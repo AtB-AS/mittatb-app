@@ -2,7 +2,7 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import MapboxGL, {RegionPayload} from '@rnmapbox/maps';
 import {Feature, GeoJSON} from 'geojson';
-import React, {useMemo, useRef} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {LocationBar} from './components/LocationBar';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
@@ -28,6 +28,15 @@ export const Map = (props: MapProps) => {
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
   const analytics = useAnalytics();
+  const [startTime, setStartTime] = useState<number>(performance.now());
+
+  useEffect(() => {
+    console.log(
+      'Map component loaded after',
+      Math.round(performance.now() - startTime),
+      'ms',
+    );
+  }, []);
 
   const startingCoordinates = useMemo(
     () =>
@@ -48,6 +57,11 @@ export const Map = (props: MapProps) => {
   const onRegionChange = (
     region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => {
+    console.log(
+      'onRegionDidChange triggered after',
+      Math.round(performance.now() - startTime),
+      'ms',
+    );
     if (props.vehicles) {
       props.vehicles.updateRegion(region);
     }
@@ -81,6 +95,13 @@ export const Map = (props: MapProps) => {
             flex: 1,
           }}
           onRegionDidChange={onRegionChange}
+          onDidFinishLoadingMap={() => {
+            console.log(
+              'onDidFinishLoadingMap triggered after',
+              Math.round(performance.now() - startTime),
+              'ms',
+            );
+          }}
           onPress={async (feature: Feature) => {
             if (isFeaturePoint(feature)) {
               onMapClick({
