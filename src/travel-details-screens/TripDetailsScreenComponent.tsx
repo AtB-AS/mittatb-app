@@ -37,8 +37,7 @@ import {Divider} from '@atb/components/divider';
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export type TripDetailsScreenParams = {
-  tripPatterns: TripPattern[];
-  startIndex?: number;
+  tripPattern: TripPattern;
 };
 
 type Props = TripDetailsScreenParams & {
@@ -49,8 +48,7 @@ type Props = TripDetailsScreenParams & {
 };
 
 export const TripDetailsScreenComponent = ({
-  tripPatterns,
-  startIndex,
+  tripPattern,
   onPressDetailsMap,
   onPressBuyTicket,
   onPressDeparture,
@@ -64,14 +62,13 @@ export const TripDetailsScreenComponent = ({
     (fareProductTypeConfig) => fareProductTypeConfig.type === 'single',
   );
 
-  const {tripPattern, error} = useCurrentTripPatternWithUpdates(
-    startIndex ?? 0,
-    tripPatterns,
-  );
-  const fromToNames = getFromToName(tripPattern.legs);
-  const startEndTime = getStartEndTime(tripPattern, language);
+  const {updatedTripPattern, error} =
+    useCurrentTripPatternWithUpdates(tripPattern);
 
-  const tripTicketDetails = useGetTicketInfoFromTrip(tripPattern);
+  const tripTicketDetails = useGetTicketInfoFromTrip(updatedTripPattern);
+  const fromToNames = getFromToName(updatedTripPattern.legs);
+  const startEndTime = getStartEndTime(updatedTripPattern, language);
+
   return (
     <View style={styles.container}>
       <FullScreenView
@@ -118,14 +115,17 @@ export const TripDetailsScreenComponent = ({
           </View>
         )}
       >
-        {tripPattern && (
+        {updatedTripPattern && (
           <View style={styles.paddedContainer} testID="tripDetailsContentView">
-            {!isWithinSameDate(new Date(), tripPattern.expectedStartTime) && (
+            {!isWithinSameDate(
+              new Date(),
+              updatedTripPattern.expectedStartTime,
+            ) && (
               <>
                 <View style={styles.date}>
                   <ThemeText type={'body__primary'} color={'secondary'}>
                     {formatToVerboseFullDate(
-                      tripPattern.expectedStartTime,
+                      updatedTripPattern.expectedStartTime,
                       language,
                     )}
                   </ThemeText>
@@ -134,7 +134,7 @@ export const TripDetailsScreenComponent = ({
               </>
             )}
             <Trip
-              tripPattern={tripPattern}
+              tripPattern={updatedTripPattern}
               error={error}
               onPressDetailsMap={onPressDetailsMap}
               onPressDeparture={onPressDeparture}

@@ -6,7 +6,7 @@ import {usePollableResource} from '@atb/utils/use-pollable-resource';
 import {useIsFocused} from '@react-navigation/native';
 
 type TripPatternUpdate = {
-  tp?: TripPattern;
+  tp: TripPattern;
   error?: AxiosError;
 };
 
@@ -20,49 +20,41 @@ type TripPatternUpdate = {
  * indexes.
  */
 export const useCurrentTripPatternWithUpdates = (
-  currentIndex: number,
-  originalTripPatterns: TripPattern[],
-) => {
+  originalTripPattern: TripPattern,
+): {updatedTripPattern: TripPattern; error?: AxiosError} => {
   const isFocused = useIsFocused();
-  const [tripPatternUpdates, setTripPatternUpdates] = useState<
-    TripPatternUpdate[]
-  >(originalTripPatterns.map(() => ({})));
+  const [tripPatternUpdates, setTripPatternUpdates] =
+    useState<TripPatternUpdate>({tp: originalTripPattern});
 
   const fetchTripPattern = useCallback(
     (signal?: AbortSignal) =>
-      singleTripSearch(originalTripPatterns[currentIndex].compressedQuery, {
+      singleTripSearch(originalTripPattern.compressedQuery, {
         signal,
       }),
-    [originalTripPatterns, currentIndex],
+    [originalTripPattern],
   );
 
   const [updatedTripPattern, , , error] = usePollableResource<
     TripPattern | undefined,
     AxiosError
   >(fetchTripPattern, {
-    initialValue: originalTripPatterns[currentIndex],
+    initialValue: originalTripPattern,
     pollingTimeInSeconds: 20,
     disabled: !isFocused,
   });
 
   useEffect(() => {
-    const updated = tripPatternUpdates.map((existingUpdate, index) => {
-      if (index === currentIndex) {
-        if (error) {
-          return {...existingUpdate, error};
-        } else {
-          return {tp: updatedTripPattern, error: undefined};
-        }
-      }
-      return existingUpdate;
-    });
-
-    setTripPatternUpdates(updated);
+    if (error) {
+      setTripPatternUpdates({tp: originalTripPattern, error});
+    } else if (updatedTripPattern) {
+      setTripPatternUpdates({tp: updatedTripPattern, error: undefined});
+    } else {
+      setTripPatternUpdates({tp: originalTripPattern, error: undefined});
+    }
   }, [updatedTripPattern, error]);
 
   return {
-    tripPattern:
-      tripPatternUpdates[currentIndex].tp ?? originalTripPatterns[currentIndex],
-    error: tripPatternUpdates[currentIndex].error,
+    updatedTripPattern: tripPatternUpdates.tp,
+    error: tripPatternUpdates.error,
   };
 };
