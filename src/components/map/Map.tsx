@@ -2,7 +2,7 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import MapboxGL, {RegionPayload} from '@rnmapbox/maps';
 import {Feature, GeoJSON} from 'geojson';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useMemo, useRef} from 'react';
 import {View} from 'react-native';
 import {LocationBar} from './components/LocationBar';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
@@ -11,7 +11,7 @@ import {isFeaturePoint} from './utils';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
 import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
-import {MapFilterType, MapProps} from './types';
+import {MapFilterType, MapProps, MapRegion} from './types';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
@@ -28,15 +28,6 @@ export const Map = (props: MapProps) => {
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
   const analytics = useAnalytics();
-  const [startTime, setStartTime] = useState<number>(performance.now());
-
-  useEffect(() => {
-    console.log(
-      'Map component loaded after',
-      Math.round(performance.now() - startTime),
-      'ms',
-    );
-  }, []);
 
   const startingCoordinates = useMemo(
     () =>
@@ -54,20 +45,37 @@ export const Map = (props: MapProps) => {
       startingCoordinates,
     );
 
+  const loadMobility = (mapRegion: MapRegion) => {
+    if (props.vehicles) {
+      props.vehicles.updateRegion(mapRegion);
+    }
+    if (props.stations) {
+      props.stations.updateRegion(mapRegion);
+    }
+  };
+
+  const onDidFinishLoadingMap = async () => {
+    const visibleBounds = await mapViewRef.current?.getVisibleBounds();
+    const zoomLevel = await mapViewRef.current?.getZoom();
+    const center = await mapViewRef.current?.getCenter();
+
+    if (!visibleBounds || !zoomLevel || !center) return;
+
+    loadMobility({
+      visibleBounds,
+      zoomLevel,
+      center,
+    });
+  };
+
   const onRegionChange = (
     region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => {
-    console.log(
-      'onRegionDidChange triggered after',
-      Math.round(performance.now() - startTime),
-      'ms',
-    );
-    if (props.vehicles) {
-      props.vehicles.updateRegion(region);
-    }
-    if (props.stations) {
-      props.stations.updateRegion(region);
-    }
+    loadMobility({
+      visibleBounds: region.properties.visibleBounds,
+      zoomLevel: region.properties.zoomLevel,
+      center: region.geometry.coordinates,
+    });
   };
 
   const onFilterChange = (filter: MapFilterType) => {
@@ -94,14 +102,8 @@ export const Map = (props: MapProps) => {
           style={{
             flex: 1,
           }}
+          onDidFinishLoadingMap={onDidFinishLoadingMap}
           onRegionDidChange={onRegionChange}
-          onDidFinishLoadingMap={() => {
-            console.log(
-              'onDidFinishLoadingMap triggered after',
-              Math.round(performance.now() - startTime),
-              'ms',
-            );
-          }}
           onPress={async (feature: Feature) => {
             if (isFeaturePoint(feature)) {
               onMapClick({

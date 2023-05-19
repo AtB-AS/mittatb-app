@@ -1,15 +1,14 @@
-import {Feature, GeoJSON, Point, Polygon, Position} from 'geojson';
+import {Feature, Point, Polygon, Position} from 'geojson';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
   PricingPlanFragment,
   RentalUrisFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
-import {getVisibleRange, toFeaturePoint} from '@atb/components/map';
+import {getVisibleRange, MapRegion, toFeaturePoint} from '@atb/components/map';
 import buffer from '@turf/buffer';
 import bbox from '@turf/bbox-polygon';
 import difference from '@turf/difference';
 import {Platform} from 'react-native';
-import {RegionPayload} from '@rnmapbox/maps';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {
   StationBasicFragment,
@@ -109,26 +108,26 @@ export type AreaState = {
 };
 
 export const updateAreaState = (
-  region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
+  region: MapRegion,
   bufferDistance: number,
   minZoomLevel: number,
 ) => {
   return (previousState: AreaState | undefined) => {
-    if (region.properties.zoomLevel < minZoomLevel) {
+    if (region.zoomLevel < minZoomLevel) {
       return undefined;
     }
 
-    const visibleBounds = region.properties.visibleBounds;
+    const visibleBounds = region.visibleBounds;
     if (!needsReload(visibleBounds, previousState?.loadedArea)) {
       return previousState;
     }
 
-    const [lon, lat] = region.geometry.coordinates;
+    const [lon, lat] = region.center;
     const range = getRadius(visibleBounds, bufferDistance);
     return {
       lat,
       lon,
-      zoom: region.properties.zoomLevel,
+      zoom: region.zoomLevel,
       range,
       visibleBounds,
       loadedArea: extend(toFeaturePoint({lat, lon}), range),
