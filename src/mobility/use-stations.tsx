@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {AreaState, updateAreaState} from './utils';
 import {useIsCityBikesEnabled} from './use-city-bikes-enabled';
 import {
+  MapRegion,
   StationsFilterType,
   StationsState,
   toFeatureCollection,
@@ -11,7 +12,6 @@ import {
 import {FeatureCollection, GeoJSON} from 'geojson';
 import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {getStations} from '@atb/api/stations';
-import {RegionPayload} from '@rnmapbox/maps';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useIsFocused} from '@react-navigation/native';
 import {useIsCarSharingEnabled} from './use-car-sharing-enabled';
@@ -70,9 +70,7 @@ export const useStations: () => StationsState | undefined = () => {
     setStations(toFeatureCollection([]));
   }, [area, isCityBikesEnabled, isCarSharingEnabled, filter, isFocused]);
 
-  const updateRegion = async (
-    region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
-  ) => {
+  const updateRegion = async (region: MapRegion) => {
     setArea(updateAreaState(region, BUFFER_DISTANCE_IN_METERS, MIN_ZOOM_LEVEL));
   };
 

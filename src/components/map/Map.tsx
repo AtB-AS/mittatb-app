@@ -11,7 +11,7 @@ import {isFeaturePoint} from './utils';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
 import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
-import {MapFilterType, MapProps} from './types';
+import {MapFilterType, MapProps, MapRegion} from './types';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
@@ -45,15 +45,37 @@ export const Map = (props: MapProps) => {
       startingCoordinates,
     );
 
+  const loadMobility = (mapRegion: MapRegion) => {
+    if (props.vehicles) {
+      props.vehicles.updateRegion(mapRegion);
+    }
+    if (props.stations) {
+      props.stations.updateRegion(mapRegion);
+    }
+  };
+
+  const onDidFinishLoadingMap = async () => {
+    const visibleBounds = await mapViewRef.current?.getVisibleBounds();
+    const zoomLevel = await mapViewRef.current?.getZoom();
+    const center = await mapViewRef.current?.getCenter();
+
+    if (!visibleBounds || !zoomLevel || !center) return;
+
+    loadMobility({
+      visibleBounds,
+      zoomLevel,
+      center,
+    });
+  };
+
   const onRegionChange = (
     region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => {
-    if (props.vehicles) {
-      props.vehicles.updateRegion(region);
-    }
-    if (props.stations) {
-      props.stations.updateRegion(region);
-    }
+    loadMobility({
+      visibleBounds: region.properties.visibleBounds,
+      zoomLevel: region.properties.zoomLevel,
+      center: region.geometry.coordinates,
+    });
   };
 
   const onFilterChange = (filter: MapFilterType) => {
@@ -80,6 +102,7 @@ export const Map = (props: MapProps) => {
           style={{
             flex: 1,
           }}
+          onDidFinishLoadingMap={onDidFinishLoadingMap}
           onRegionDidChange={onRegionChange}
           onPress={async (feature: Feature) => {
             if (isFeaturePoint(feature)) {

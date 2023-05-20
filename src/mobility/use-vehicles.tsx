@@ -1,7 +1,8 @@
 import {useCallback, useEffect, useState} from 'react';
-import {GeoJSON, Point} from 'geojson';
+import {Point} from 'geojson';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
+  MapRegion,
   toFeatureCollection,
   toFeaturePoints,
   useUserMapFilters,
@@ -10,7 +11,6 @@ import {
 } from '@atb/components/map';
 import {useIsVehiclesEnabled} from '@atb/mobility/use-vehicles-enabled';
 import {AreaState, updateAreaState} from '@atb/mobility/utils';
-import {RegionPayload} from '@rnmapbox/maps';
 import {getVehicles} from '@atb/api/mobility';
 import {usePollableResource} from '@atb/utils/use-pollable-resource';
 import {useIsFocused} from '@react-navigation/native';
@@ -61,9 +61,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
     pollingTimeInSeconds: Math.round(pollInterval / 1000),
   });
 
-  const updateRegion = async (
-    region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
-  ) => {
+  const updateRegion = async (region: MapRegion) => {
     setArea(updateAreaState(region, BUFFER_DISTANCE_IN_METERS, MIN_ZOOM_LEVEL));
   };
 
