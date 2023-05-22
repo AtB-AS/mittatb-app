@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
-import {getCarStation} from '@atb/api/stations';
 import {CarStationFragment} from '@atb/api/types/generated/fragments/stations';
+import {getCarStation} from '@atb/api/mobility';
 
 export const useCarSharingStation = (id: string) => {
   const [station, setStation] = useState<CarStationFragment | undefined>();
