@@ -27,7 +27,7 @@ export const Actions = ({
         testID="loginButton"
       />
       <Button
-        interactiveColor="interactive_1"
+        interactiveColor="interactive_0"
         mode="secondary"
         onPress={secondaryAction}
         text={t(AnonymousPurchasesTexts.consequences.button.accept.label)}
