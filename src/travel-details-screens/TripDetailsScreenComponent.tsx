@@ -94,25 +94,27 @@ export const TripDetailsScreenComponent = ({
         }}
         parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
           <View>
-            <ThemeText
-              color={themeColor}
-              type="heading--medium"
-              style={styles.heading}
-              accessibilityLabel={
-                fromToNames
-                  ? t(TripDetailsTexts.header.titleFromToA11yLabel(fromToNames))
-                  : undefined
-              }
-            >
-              {fromToNames
-                ? t(TripDetailsTexts.header.titleFromTo(fromToNames))
-                : t(TripDetailsTexts.header.title)}
-            </ThemeText>
-            <View
-              style={{flexDirection: 'row'}}
-              ref={focusRef}
-              accessible={true}
-            >
+            <View accessible={true} ref={focusRef}>
+              <ThemeText
+                color={themeColor}
+                type="heading--medium"
+                style={styles.heading}
+                accessibilityLabel={
+                  fromToNames
+                    ? t(
+                        TripDetailsTexts.header.titleFromToA11yLabel(
+                          fromToNames,
+                        ),
+                      )
+                    : undefined
+                }
+              >
+                {fromToNames
+                  ? t(TripDetailsTexts.header.titleFromTo(fromToNames))
+                  : t(TripDetailsTexts.header.title)}
+              </ThemeText>
+            </View>
+            <View style={{flexDirection: 'row'}} accessible={true}>
               <ThemeIcon
                 svg={SvgDuration}
                 style={styles.durationIcon}
