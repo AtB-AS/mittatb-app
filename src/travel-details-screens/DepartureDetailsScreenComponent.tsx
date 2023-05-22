@@ -80,6 +80,7 @@ export const DepartureDetailsScreenComponent = ({
   const realtimeMapEnabled = useRealtimeMapEnabled();
   const screenReaderEnabled = useIsScreenReaderEnabled();
 
+  console.log(JSON.stringify(estimatedCallsWithMetadata));
   const shouldShowLive =
     !estimatedCallsWithMetadata.find((a) => !a.realtime) && realtimeMapEnabled;
 
@@ -243,6 +244,7 @@ export const DepartureDetailsScreenComponent = ({
 };
 
 function LastPassedStop({realtimeText}: {realtimeText: string}) {
+  // shared component?
   const styles = useStopsStyle();
 
   return (

@@ -135,6 +135,7 @@ export type TripsQuery = {
           actualDepartureTime?: any;
           predictionInaccurate: boolean;
           quay: {name: string};
+          // 3 new fields
         }>;
         bookingArrangements?: {
           bookingMethods?: Array<Types.BookingMethod>;

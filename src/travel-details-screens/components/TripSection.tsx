@@ -48,9 +48,9 @@ import {
   FlexibleTransportContactDetails,
   ContactDetails as ContactDetails,
 } from './FlexibeTransportContactDetails';
-import {usePreferences} from '@atb/preferences';
 import {Button} from '@atb/components/button';
 import {Map} from '@atb/assets/svg/mono-icons/map';
+import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -63,6 +63,17 @@ type TripSectionProps = {
   onPressShowLive?(): void;
   onPressDeparture: TripProps['onPressDeparture'];
   onPressQuay: TripProps['onPressQuay'];
+};
+
+type TripType = {
+  actualDepartureTime: any;
+  realtime: boolean; // new
+  aimedDepartureTime: string; // new
+  expectedDepartureTime: string; // new
+  quay: {
+    name: string;
+  };
+  predictionInaccurate: false;
 };
 
 export type InterchangeDetails = {
@@ -86,9 +97,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const style = useSectionStyles();
   const {open: openBottomSheet} = useBottomSheet();
   const {themeName} = useTheme();
-  const {
-    preferences: {debugShowSeconds},
-  } = usePreferences();
 
   const isWalkSection = leg.mode === 'foot';
   const isFlexible = !!leg.bookingArrangements;
@@ -105,9 +113,13 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const notices = getNoticesForLeg(leg);
 
+  // LastPassedStop
   const lastPassedStop = leg.serviceJourneyEstimatedCalls
     ?.filter((a) => !a.predictionInaccurate && a.actualDepartureTime)
     .pop();
+
+  console.log(JSON.stringify(leg));
+  const realtimeText = 'hello'; // useRealtimeText(lastPassedStop);
 
   const bookingDetails: ContactDetails | undefined = leg?.bookingArrangements
     ?.bookingContact?.phone &&
@@ -236,7 +248,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         ) : null}
-        {lastPassedStop?.quay?.name && (
+        {realtimeText && (
           <TripRow>
             <View style={style.realtime}>
               <ThemeIcon
@@ -249,17 +261,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 type="body__secondary"
                 color="secondary"
               >
-                {t(
-                  TripDetailsTexts.trip.leg.lastPassedStop(
-                    lastPassedStop.quay.name,
-                    formatToClock(
-                      lastPassedStop.actualDepartureTime,
-                      language,
-                      'nearest',
-                      debugShowSeconds,
-                    ),
-                  ),
-                )}
+                {realtimeText}
               </ThemeText>
             </View>
           </TripRow>
