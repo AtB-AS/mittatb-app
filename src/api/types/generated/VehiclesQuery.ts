@@ -12,6 +12,10 @@ export type GetVehiclesQueryVariables = Types.Exact<{
     | Array<Types.InputMaybe<Types.FormFactor>>
     | Types.InputMaybe<Types.FormFactor>
   >;
+  operators?: Types.InputMaybe<
+    | Array<Types.InputMaybe<Types.Scalars['String']>>
+    | Types.InputMaybe<Types.Scalars['String']>
+  >;
 }>;
 
 export type GetVehiclesQuery = {vehicles?: Array<VehicleBasicFragment>};

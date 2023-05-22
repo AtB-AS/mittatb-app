@@ -1,5 +1,5 @@
 import {z} from 'zod';
-import {FormFactor} from '@entur/sdk/lib/mobility/types';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export const MobilityOperator = z.object({
   id: z.string().nonempty(),

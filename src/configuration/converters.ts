@@ -99,8 +99,8 @@ export function mapLanguageAndTextType(text?: any) {
 }
 
 export function mapToMobilityOperators(operators?: any) {
-  if (!operators) return [];
-  if (!Array.isArray(operators)) return [];
+  if (!operators) return;
+  if (!Array.isArray(operators)) return;
   return operators
     .map((operator) => {
       const parseResult = MobilityOperator.safeParse(operator);

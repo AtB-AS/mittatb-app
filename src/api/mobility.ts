@@ -23,7 +23,7 @@ import {
 type VehicleRequestOpts = Pick<AxiosRequestConfig, 'signal'>;
 
 export const getVehicles = (
-  {lat, lon, range}: GetVehiclesQueryVariables,
+  {lat, lon, range, operators}: GetVehiclesQueryVariables,
   opts?: VehicleRequestOpts,
 ) => {
   const url = '/bff/v2/mobility/vehicles';
@@ -32,6 +32,7 @@ export const getVehicles = (
     lon,
     range: Math.ceil(range),
     formFactors: FormFactor.Scooter, //TODO: Read from variables
+    operators,
   });
   return client
     .get<GetVehiclesQuery>(stringifyUrl(url, query), {
@@ -54,7 +55,7 @@ export const getVehicle = (
 };
 
 export const getStations = (
-  {lat, lon, range, availableFormFactors}: GetStationsQueryVariables,
+  {lat, lon, range, availableFormFactors, operators}: GetStationsQueryVariables,
   opts?: AxiosRequestConfig,
 ) => {
   const url = '/bff/v2/mobility/stations';
@@ -63,6 +64,7 @@ export const getStations = (
     lon,
     range: Math.ceil(range),
     availableFormFactors,
+    operators,
   });
   return client
     .get<GetStationsQuery>(stringifyUrl(url, query), {
