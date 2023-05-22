@@ -11,13 +11,11 @@ type TripPatternUpdate = {
 };
 
 /**
- * Hook for using the current trip pattern with updated data. The current trip
- * pattern is based on the current index, and every 30 seconds the trip pattern
+ * Hook for using the current trip pattern with updated data. Every 20 seconds the trip pattern
  * is updated with a query to the single trip search endpoint.
  *
  * The updated data for all trip patterns is persisted in the state, so it
- * doesn't go back to the original outdated trip pattern when navigating between
- * indexes.
+ * doesn't go back to the original outdated trip pattern.
  */
 export const useCurrentTripPatternWithUpdates = (
   originalTripPattern: TripPattern,
