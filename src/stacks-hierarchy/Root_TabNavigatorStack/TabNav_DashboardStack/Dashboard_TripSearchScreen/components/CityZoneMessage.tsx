@@ -106,7 +106,7 @@ const CityZoneBox = ({
                 onPress={actionButton.onPress}
                 style={styles.action}
                 accessibilityRole="link"
-                accessibilityHint={t(CityBoxMessageTexts.a11yLabel)}
+                accessibilityHint={t(CityBoxMessageTexts.a11yHint)}
                 rightIcon={{svg: ExternalLink}}
               />
             ))}
