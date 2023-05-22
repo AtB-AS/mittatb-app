@@ -56,9 +56,8 @@ const service: TokenService = {
           [IsEmulatorHeaderName]: String(isEmulator),
         },
         authWithIdToken: true,
-        skipErrorLogging: () => false, //TODO: fix this
+        skipErrorLogging: () => true,
         timeout: 15000,
-        baseURL: 'http://10.100.1.46:8080',
       })
       .then((res) => res.data.pendingTokenDetails)
       .catch(handleError);
@@ -74,8 +73,7 @@ const service: TokenService = {
           },
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: () => false, //TODO: fix this
-          baseURL: 'http://10.100.1.46:8080',
+          skipErrorLogging: () => true,
         },
       )
       .then((res) => res.data.activeTokenDetails)
@@ -91,8 +89,7 @@ const service: TokenService = {
         },
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: () => false, //TODO: fix this
-        baseURL: 'http://10.100.1.46:8080',
+        skipErrorLogging: () => true,
       })
       .then((res) => res.data.pendingTokenDetails)
       .catch(handleError),
@@ -116,8 +113,7 @@ const service: TokenService = {
           },
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: () => false, //TODO: fix this
-          baseURL: 'http://10.100.1.46:8080',
+          skipErrorLogging: () => true,
         },
       )
       .then((res) => res.data.activeTokenDetails)
@@ -133,8 +129,7 @@ const service: TokenService = {
         },
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: () => false, //TODO: fix this
-        baseURL: 'http://10.100.1.46:8080',
+        skipErrorLogging: () => true,
       })
       .then((res) => res.data.activeTokenDetails)
       .catch(handleError),
@@ -149,8 +144,7 @@ const service: TokenService = {
           },
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: () => false, //TODO: fix this
-          baseURL: 'http://10.100.1.46:8080',
+          skipErrorLogging: () => true,
         },
       )
       .then((res) => res.data.removed)
@@ -164,8 +158,7 @@ const service: TokenService = {
         },
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: () => false, //TODO: fix this
-        baseURL: 'http://10.100.1.46:8080',
+        skipErrorLogging: () => true,
       })
       .then((res) => res.data.tokens)
       .catch(handleError),
@@ -180,8 +173,7 @@ const service: TokenService = {
           },
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: () => false, //TODO: fix this
-          baseURL: 'http://10.100.1.46:8080',
+          skipErrorLogging: () => true,
         },
       )
       .then((res) => res.data.tokens)
@@ -192,8 +184,7 @@ const service: TokenService = {
       .get<TokenLimitResponse>('/tokens/v4/toggle/details', {
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: () => false, //TODO: fix this
-        baseURL: 'http://10.100.1.46:8080',
+        skipErrorLogging: () => true,
       })
       .then((res) => res.data)
       .catch(handleError),
@@ -209,8 +200,7 @@ const service: TokenService = {
           },
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: () => false, //TODO: fix this
-          baseURL: 'http://10.100.1.46:8080',
+          skipErrorLogging: () => true,
         })
         .catch(handleError);
     }, token),

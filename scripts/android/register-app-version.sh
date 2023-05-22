@@ -15,6 +15,7 @@ if [[
   || -z ${ANDROID_SIGNING_CERTIFICATE_FINGERPRINT}
   || -z ${APP_VERSION}
   || -z ${BUILD_ID}
+  || -z ${DISABLE_LISTED_ON_PLAY_STORE}
 ]]; then
   echo "Argument error!"
   echo "Expected environment variables:
@@ -26,6 +27,7 @@ if [[
   - ANDROID_SIGNING_CERTIFICATE_FINGERPRINT
   - APP_VERSION
   - BUILD_ID
+  - DISABLE_LISTED_ON_PLAY_STORE
   "
   exit 2
 fi
@@ -90,6 +92,7 @@ json=$(cat <<EOJ
       "certificate_digests": [
         "$certificate_digest"
       ],
+      "disable_listed_on_play_store": "$DISABLE_LISTED_ON_PLAY_STORE"
     },
     "active": true
   }
