@@ -6,6 +6,8 @@ import {TransportModeFilterOptionType} from '@atb/stacks-hierarchy/Root_TabNavig
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
 import {isArray} from 'lodash';
+import {MobilityOperator} from '@atb/mobility';
+import {isDefined} from '@atb/utils/presence';
 
 export function mapToFareProductTypeConfigs(
   config: any,
@@ -94,4 +96,23 @@ export function mapLanguageAndTextType(text?: any) {
     return;
 
   return text as LanguageAndTextType[];
+}
+
+export function mapToMobilityOperators(operators?: any) {
+  if (!operators) return [];
+  if (!Array.isArray(operators)) return [];
+  return operators
+    .map((operator) => {
+      const parseResult = MobilityOperator.safeParse(operator);
+      if (!parseResult.success) {
+        Bugsnag.notify('Mobility operator mapping issue', function (event) {
+          event.addMetadata('decode_errors', {
+            issues: parseResult.error.issues,
+          });
+        });
+        return;
+      }
+      return parseResult.data;
+    })
+    .filter(isDefined);
 }
