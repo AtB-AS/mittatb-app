@@ -62,6 +62,7 @@ type ConfigurationContextState = {
   travelSearchFilters: TravelSearchFiltersType | undefined;
   appTexts: AppTexts | undefined;
   configurableLinks: ConfigurableLinks | undefined;
+  mobilityOperators: MobilityOperatorType[] | undefined;
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
@@ -76,6 +77,7 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   travelSearchFilters: undefined,
   appTexts: undefined,
   configurableLinks: undefined,
+  mobilityOperators: undefined,
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
@@ -422,7 +424,7 @@ function getConfigurableLinksFromSnapshot(
 
 function getMobilityOperatorsFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): MobilityOperatorType[] {
+): MobilityOperatorType[] | undefined {
   const operators = snapshot.docs.find((doc) => doc.id == 'mobility');
   return mapToMobilityOperators(operators?.get('operators'));
 }

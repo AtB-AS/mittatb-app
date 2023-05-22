@@ -15,6 +15,7 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useIsFocused} from '@react-navigation/native';
 import {useIsCarSharingEnabled} from './use-car-sharing-enabled';
 import {getStations} from '@atb/api/mobility';
+import {useOperators} from '@atb/mobility/use-operators';
 
 const MIN_ZOOM_LEVEL = 12;
 const BUFFER_DISTANCE_IN_METERS = 500;
@@ -26,6 +27,7 @@ export const useStations: () => StationsState | undefined = () => {
   const [isLoading, setIsLoading] = useState(false);
   const {getMapFilter} = useUserMapFilters();
   const isFocused = useIsFocused();
+  const {whitelistedOperatorIds} = useOperators();
 
   const [stations, setStations] = useState<
     FeatureCollection<GeoJSON.Point, StationBasicFragment>
@@ -53,10 +55,12 @@ export const useStations: () => StationsState | undefined = () => {
     ) {
       const abortCtrl = new AbortController();
       setIsLoading(true);
+      const formFactors = formFactorsFromFilter(filter);
       getStations(
         {
           ...area,
-          availableFormFactors: formFactorsFromFilter(filter),
+          availableFormFactors: formFactors,
+          operators: whitelistedOperatorIds(formFactors),
         },
         {signal: abortCtrl.signal},
       )
