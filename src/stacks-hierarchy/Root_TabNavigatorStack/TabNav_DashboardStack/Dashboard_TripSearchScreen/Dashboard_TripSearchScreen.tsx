@@ -330,7 +330,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 <Button
                   text={t(TripSearchTexts.filterButton.text)}
                   accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
-                  interactiveColor="interactive_1"
+                  interactiveColor="interactive_0"
                   mode="secondary"
                   type="inline"
                   compact={true}
