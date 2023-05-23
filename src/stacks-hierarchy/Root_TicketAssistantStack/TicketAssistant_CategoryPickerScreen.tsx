@@ -146,10 +146,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
                 <View key={index} style={styles.a11yCategoryCards}>
                   <TouchableOpacity
                     onPress={() => {
-                      updateCategory({
-                        id: u.userTypeString,
-                        userType: u.userTypeString,
-                      });
+                      setCurrentlyOpen(index);
                       navigation.navigate('TicketAssistant_FrequencyScreen');
                     }}
                     accessible={true}
