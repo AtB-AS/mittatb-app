@@ -20,8 +20,11 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {useTheme} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
+import {secondsBetween} from '@atb/utils/date';
+import {useInterval} from '@atb/utils/use-interval';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import MapboxGL from '@rnmapbox/maps';
+import {CircleLayerStyleProps} from '@rnmapbox/maps/javascript/utils/MapboxStyles';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
@@ -46,6 +49,7 @@ type Props = TravelDetailsMapScreenParams & {
 const FOLLOW_ZOOM_LEVEL = 14.5;
 const FOLLOW_MIN_ZOOM_LEVEL = 8;
 const FOLLOW_ANIMATION_DURATION = 500;
+const STALE_DATA_THRESHOLD_IN_SECONDS = 10;
 
 export const TravelDetailsMapScreenComponent = ({
   legs,
@@ -187,27 +191,73 @@ const LiveVehicle = ({
   subscriptionState,
   zoomLevel,
 }: VehicleIconProps) => {
-  const circleColor = useTransportationColor(mode, subMode);
-  const textColor = useTransportationColor(mode, subMode, 'text');
   const {theme} = useTheme();
 
-  const error =
+  const isError =
     subscriptionState === 'CLOSING' || subscriptionState === 'CLOSED';
+  const isLoading =
+    subscriptionState === 'CONNECTING' || subscriptionState === 'NOT_STARTED';
+  const [isStale, setIsStale] = useState(false);
 
-  const circleStyle = error
-    ? {
+  useInterval(
+    () => {
+      const secondsSinceUpdate = secondsBetween(
+        vehicle.lastUpdated,
+        new Date(),
+      );
+      setIsStale(STALE_DATA_THRESHOLD_IN_SECONDS < secondsSinceUpdate);
+    },
+    1000,
+    [vehicle.lastUpdated],
+    false,
+    true,
+  );
+
+  const circleColor = useTransportationColor(mode, subMode);
+  const textColor = useTransportationColor(mode, subMode, 'text');
+  const svg = getTransportModeSvg(mode, subMode);
+
+  const circleStyle = ((): CircleLayerStyleProps => {
+    if (isError)
+      return {
         circleColor:
           theme.interactive.interactive_destructive.disabled.background,
         circleRadius: 20,
         circleStrokeColor:
           theme.interactive.interactive_destructive.default.background,
         circleStrokeWidth: 2,
-      }
-    : {
-        circleColor,
+      };
+    if (isStale)
+      return {
+        circleColor: theme.interactive.interactive_1.disabled.background,
         circleRadius: 22,
         circleStrokeWidth: 0,
       };
+    return {
+      circleColor,
+      circleRadius: 22,
+      circleStrokeWidth: 0,
+    };
+  })();
+
+  const LiveVehicleIcon = (): JSX.Element => {
+    if (isLoading) return <ActivityIndicator color={textColor} />;
+    if (isError)
+      return (
+        <ThemeIcon
+          svg={svg}
+          fill={theme.interactive.interactive_destructive.default.background}
+        />
+      );
+    if (isStale)
+      return (
+        <ThemeIcon
+          svg={svg}
+          fill={theme.interactive.interactive_1.disabled.text}
+        />
+      );
+    return <ThemeIcon svg={svg} fill={textColor} />;
+  };
 
   if (!vehicle.location || zoomLevel < FOLLOW_MIN_ZOOM_LEVEL) return null;
   return (
@@ -222,23 +272,9 @@ const LiveVehicle = ({
       >
         <TouchableOpacity
           style={{padding: 20}}
-          onPressOut={() => {
-            setShouldTrack(true);
-          }}
+          onPressOut={() => setShouldTrack(true)}
         >
-          {subscriptionState === 'CONNECTING' ||
-          subscriptionState === 'NOT_STARTED' ? (
-            <ActivityIndicator color={textColor} />
-          ) : (
-            <ThemeIcon
-              svg={getTransportModeSvg(mode, subMode)}
-              fill={
-                error
-                  ? theme.interactive.interactive_destructive.default.background
-                  : textColor
-              }
-            />
-          )}
+          <LiveVehicleIcon />
         </TouchableOpacity>
       </MapboxGL.MarkerView>
     </>
