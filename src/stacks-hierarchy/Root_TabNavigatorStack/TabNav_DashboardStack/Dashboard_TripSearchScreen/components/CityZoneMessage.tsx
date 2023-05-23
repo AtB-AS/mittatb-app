@@ -17,6 +17,7 @@ import {Section} from '@atb/components/sections';
 import CityBoxMessageTexts from '@atb/translations/components/CityBoxMessage';
 
 type ActionButton = {
+  id: string;
   text: string;
   onPress: () => void;
 };
@@ -49,9 +50,12 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
   };
 
   const messageActions = selectedCityZones.map((cityZone) => ({
+    id: `${cityZone.id}_action`,
     text: cityZone.name,
     onPress: () => openUrlForCityZone(cityZone),
   }));
+
+  console.log(messageActions);
 
   if (messageActions) {
     return (
@@ -98,9 +102,9 @@ const CityZoneBox = ({
         </ThemeText>
         {actionButtons && (
           <View style={styles.actions}>
-            {actionButtons.map((actionButton, index) => (
+            {actionButtons.map((actionButton) => (
               <Button
-                key={index}
+                key={actionButton.id}
                 type="pill"
                 interactiveColor="interactive_3"
                 text={actionButton.text}
