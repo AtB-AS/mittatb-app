@@ -10,6 +10,7 @@ import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssis
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {DurationPicker} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/durationPicker';
 import {daysInWeek} from 'date-fns';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 type DurationProps =
   TicketAssistantScreenProps<'TicketAssistant_DurationScreen'>;
 
@@ -17,6 +18,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   const {inputParams, updateInputParams} = useTicketAssistantState();
   const styles = useThemeStyles();
   const {t} = useTranslation();
+  const focusRef = useFocusOnLoad();
 
   const [duration, setDuration] = useState(daysInWeek);
 
@@ -41,18 +43,21 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
       </View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.mainView}>
-          <ThemeText
-            type={'heading--big'}
-            style={styles.header}
-            color={themeColor}
-            accessibilityLabel={t(
-              TicketAssistantTexts.duration.titleA11yLabel({
-                value: travelFrequency,
-              }),
-            )}
-          >
-            {t(TicketAssistantTexts.duration.title({value: travelFrequency}))}
-          </ThemeText>
+          <View ref={focusRef}>
+            <ThemeText
+              type={'heading--big'}
+              style={styles.header}
+              color={themeColor}
+              accessibilityRole={'header'}
+              accessibilityLabel={t(
+                TicketAssistantTexts.duration.titleA11yLabel({
+                  value: travelFrequency,
+                }),
+              )}
+            >
+              {t(TicketAssistantTexts.duration.title({value: travelFrequency}))}
+            </ThemeText>
+          </View>
           <DurationPicker setDuration={setDuration} duration={duration} />
         </View>
 
