@@ -55,8 +55,6 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
     onPress: () => openUrlForCityZone(cityZone),
   }));
 
-  console.log(messageActions);
-
   if (messageActions) {
     return (
       <Section style={style.cityZoneMessage}>
