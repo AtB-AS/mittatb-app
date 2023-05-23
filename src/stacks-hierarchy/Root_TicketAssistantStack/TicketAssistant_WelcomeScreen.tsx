@@ -27,7 +27,7 @@ export const TicketAssistant_WelcomeScreen = ({
       style={styles.container}
       contentContainerStyle={styles.contentContainer}
     >
-      <View ref={focusRef}>
+      <View ref={focusRef} accessible={true}>
         <ThemeText
           type="heading--big"
           style={styles.header}

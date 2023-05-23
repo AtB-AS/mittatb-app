@@ -97,7 +97,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       </View>
 
       {error ? (
-        <View ref={focusRef}>
+        <View ref={focusRef} accessible={true}>
           <ThemeText
             type={'heading--big'}
             color={themeColor}
@@ -114,7 +114,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
           </ThemeText>
         </View>
       ) : loading ? (
-        <View style={styles.loadingSpinner} ref={focusRef}>
+        <View style={styles.loadingSpinner} ref={focusRef} accessible={true}>
           <ActivityIndicator animating={true} size="large" />
         </View>
       ) : (

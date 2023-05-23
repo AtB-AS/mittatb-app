@@ -72,7 +72,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
         style={styles.scrollView}
         contentContainerStyle={styles.contentContainer}
       >
-        <View ref={focusRef}>
+        <View ref={focusRef} accessible={true}>
           <ThemeText
             type={'heading--big'}
             style={styles.header}
@@ -136,6 +136,12 @@ export const TicketAssistant_CategoryPickerScreen = ({
         ) : (
           <>
             {selectableTravellers.map((u, index) => {
+              const title = getReferenceDataName(u, language);
+              const description = getTextForLanguage(
+                u.alternativeDescriptions,
+                language,
+              );
+              const accessibilityLabel = [title, description].join('. ');
               return (
                 <View key={index} style={styles.a11yCategoryCards}>
                   <TouchableOpacity
@@ -147,6 +153,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
                       navigation.navigate('TicketAssistant_FrequencyScreen');
                     }}
                     accessible={true}
+                    accessibilityLabel={accessibilityLabel}
                     accessibilityHint={t(
                       TicketAssistantTexts.categoryPicker.a11yChooseButtonHint({
                         value: getReferenceDataName(u, language),
@@ -159,17 +166,14 @@ export const TicketAssistant_CategoryPickerScreen = ({
                         type={'body__primary--bold'}
                         isMarkdown={true}
                       >
-                        {getReferenceDataName(u, language)}
+                        {title}
                       </ThemeText>
                       <ThemeText
                         type={'body__tertiary'}
                         style={styles.expandedContent}
                         isMarkdown={true}
                       >
-                        {getTextForLanguage(
-                          u.alternativeDescriptions,
-                          language,
-                        )}
+                        {description}
                       </ThemeText>
                     </View>
                   </TouchableOpacity>

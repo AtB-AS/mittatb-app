@@ -98,7 +98,7 @@ export const TicketAssistant_ZonePickerScreen = ({
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <View ref={focusRef}>
+        <View ref={focusRef} accessible={true}>
           <ThemeText
             type={'heading--big'}
             style={styles.header}
