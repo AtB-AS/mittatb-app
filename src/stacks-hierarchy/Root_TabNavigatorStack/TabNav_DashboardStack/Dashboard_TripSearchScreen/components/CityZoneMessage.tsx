@@ -98,8 +98,9 @@ const CityZoneBox = ({
         </ThemeText>
         {actionButtons && (
           <View style={styles.actions}>
-            {actionButtons.map((actionButton) => (
+            {actionButtons.map((actionButton, index) => (
               <Button
+                key={index}
                 type="pill"
                 interactiveColor="interactive_3"
                 text={actionButton.text}
