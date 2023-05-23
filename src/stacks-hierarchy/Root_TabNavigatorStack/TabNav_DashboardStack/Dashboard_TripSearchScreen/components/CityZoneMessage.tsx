@@ -15,6 +15,8 @@ import {insets} from '@atb/utils/insets';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {Section} from '@atb/components/sections';
 import CityBoxMessageTexts from '@atb/translations/components/CityBoxMessage';
+import {useAnalytics} from '@atb/analytics';
+import {useEffect} from 'react';
 
 type ActionButton = {
   text: string;
@@ -36,6 +38,15 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
   const {t, language} = useTranslation();
 
   const selectedCityZones = useFindCityZonesInLocations(from, to);
+  const analytics = useAnalytics();
+
+  useEffect(() => {
+    analytics.logEvent(
+      'Flexible transport',
+      'Message box shown',
+      selectedCityZones?.map((zone) => ({name: zone.name})),
+    );
+  }, []);
 
   if (!selectedCityZones?.length) {
     return null;
@@ -44,6 +55,10 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
   const openUrlForCityZone = (cityZone: CityZone) => {
     const contactUrl = getTextForLanguage(cityZone.contactUrl, language);
     if (contactUrl) {
+      analytics.logEvent('Flexible transport', 'Info url opened', {
+        name: cityZone.name,
+        contactUrl: cityZone.contactUrl,
+      });
       Linking.openURL(contactUrl);
     }
   };

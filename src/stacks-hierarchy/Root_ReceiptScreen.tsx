@@ -14,6 +14,7 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
+import {useAnalytics} from '@atb/analytics';
 
 type Props = RootStackScreenProps<'Root_ReceiptScreen'>;
 
@@ -32,6 +33,7 @@ export function Root_ReceiptScreen({route}: Props) {
   const [state, setState] = useState<MessageState>(undefined);
   const {t} = useTranslation();
   const a11yContext = useAccessibilityContext();
+  const analytics = useAnalytics();
 
   async function onSend() {
     if (validateEmail(email.trim())) {
@@ -43,7 +45,7 @@ export function Root_ReceiptScreen({route}: Props) {
           parseInt(orderVersion, 10),
           email,
         );
-
+        analytics.logEvent('Receipt', 'Email sent');
         if (!response.reference) throw new Error('No response reference');
 
         setReference(response.reference);

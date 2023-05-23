@@ -41,8 +41,8 @@ import {SelectPaymentMethod} from './components/SelectPaymentMethodSheet';
 import {usePreviousPaymentMethod} from '../saved-payment-utils';
 import {CardPaymentMethod, PaymentMethod, SavedPaymentOption} from '../types';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import analytics from '@react-native-firebase/analytics';
 import {GenericSectionItem, Section} from '@atb/components/sections';
+import {useAnalytics} from '@atb/analytics';
 
 function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
@@ -99,6 +99,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     isError: mobileTokenError,
   } = useMobileTokenContextState();
   const tokensEnabled = useHasEnabledMobileToken();
+  const analytics = useAnalytics();
 
   const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
     tokensEnabled,
@@ -175,6 +176,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
       } else {
+        analytics.logEvent('Ticketing', 'Pay with Vipps selected');
         navigation.push('Root_PurchasePaymentWithVippsScreen', {
           offers,
           preassignedFareProduct: params.preassignedFareProduct,
@@ -188,6 +190,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
       } else {
+        analytics.logEvent('Ticketing', 'Pay with card selected', {
+          paymentMethod: option,
+        });
         navigation.push('Root_PurchasePaymentWithCreditCardScreen', {
           offers,
           preassignedFareProduct: params.preassignedFareProduct,
@@ -402,7 +407,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   viewContainerStyle={styles.paymentButton}
                   onPress={() => {
                     params.mode === 'TravelSearch' &&
-                      analytics().logEvent('purchase_from_travel_search');
+                      analytics.logEvent(
+                        'Ticketing',
+                        'Confirm purchase with previous method clicked',
+                        {
+                          paymentMethod: previousMethod?.paymentType,
+                          mode: params.mode,
+                        },
+                      );
                     selectPaymentOption(previousMethod);
                   }}
                 />
@@ -410,6 +422,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   style={styles.buttonTopSpacing}
                   disabled={!!error}
                   onPress={() => {
+                    analytics.logEvent(
+                      'Ticketing',
+                      'Change payment method clicked',
+                      {
+                        paymentMethod: previousMethod?.paymentType,
+                        mode: params.mode,
+                      },
+                    );
                     selectPaymentMethod();
                   }}
                   accessibilityHint={t(
@@ -432,8 +452,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   PurchaseConfirmationTexts.choosePaymentOption.a11yHint,
                 )}
                 onPress={() => {
-                  params.mode === 'TravelSearch' &&
-                    analytics().logEvent('purchase_from_travel_search');
+                  analytics.logEvent('Ticketing', 'Confirm purchase clicked', {
+                    mode: params.mode,
+                  });
                   selectPaymentMethod();
                 }}
                 viewContainerStyle={styles.paymentButton}

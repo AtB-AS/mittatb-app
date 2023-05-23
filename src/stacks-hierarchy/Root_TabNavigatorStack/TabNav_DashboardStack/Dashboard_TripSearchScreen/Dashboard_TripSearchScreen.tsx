@@ -53,6 +53,7 @@ import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorSta
 import {FullScreenView} from '@atb/components/screen-view';
 import {CityZoneMessage} from './components/CityZoneMessage';
 import {useFlexibleTransportEnabled} from './use-flexible-transport-enabled';
+import {useAnalytics} from '@atb/analytics';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -70,11 +71,13 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const {theme} = useTheme();
   const {language, t} = useTranslation();
   const [updatingLocation] = useState<boolean>(false);
+  const analytics = useAnalytics();
 
   const shouldShowTravelSearchFilterOnboarding =
     useShouldShowTravelSearchFilterOnboarding();
   useEffect(() => {
     if (shouldShowTravelSearchFilterOnboarding) {
+      analytics.logEvent('Trip search', 'Filter onboarding shown');
       navigation.navigate('Dashboard_TravelSearchFilterOnboardingScreen');
     }
   }, [shouldShowTravelSearchFilterOnboarding]);
@@ -173,11 +176,15 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   );
 
   const onPressed = useCallback(
-    (tripPatterns, startIndex) =>
+    (tripPatterns, startIndex) => {
+      analytics.logEvent('Trip search', 'Trip details opened', {
+        resultIndex: startIndex,
+      });
       navigation.navigate('Dashboard_TripDetailsScreen', {
         tripPatterns,
         startIndex,
-      }),
+      });
+    },
     [navigation, from, to],
   );
 
@@ -186,6 +193,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       newFrom: translateLocation(to),
       newTo: translateLocation(from),
     });
+    analytics.logEvent('Trip search', 'Locations to/from swapped');
     navigation.setParams({
       fromLocation: to,
       toLocation: from,
@@ -378,6 +386,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     onDismiss={() => {
                       filtersState.enabled &&
                         filtersState.disableFlexibleTransport();
+                      analytics.logEvent(
+                        'Flexible transport',
+                        'Message box dismissed',
+                      );
                     }}
                   />
                 )}
