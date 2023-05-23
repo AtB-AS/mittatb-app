@@ -6,7 +6,7 @@ import {
   TicketAssistantTexts,
   useTranslation,
 } from '@atb/translations';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import React, {useEffect, useState} from 'react';
 import {Button} from '@atb/components/button';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
@@ -141,7 +141,9 @@ export const TicketAssistant_CategoryPickerScreen = ({
                 u.alternativeDescriptions,
                 language,
               );
-              const accessibilityLabel = [title, description].join('. ');
+              const accessibilityLabel = [title, description].join(
+                screenReaderPause,
+              );
               return (
                 <View key={index} style={styles.a11yCategoryCards}>
                   <TouchableOpacity
