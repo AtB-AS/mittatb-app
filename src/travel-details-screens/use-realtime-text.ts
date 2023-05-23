@@ -1,15 +1,9 @@
 import {usePreferences} from '@atb/preferences';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
-import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data';
 import {formatToClock, isInThePast} from '@atb/utils/date';
 import {getTimeRepresentationType} from '@atb/travel-details-screens/utils';
 
-export const useRealtimeText = (
-  estimatedCallsWithMetadata: EstimatedCallWithMetadata[],
-) => {
-  const lastPassedStop = estimatedCallsWithMetadata
-    .filter((a) => a.actualDepartureTime)
-    .pop();
+export const useRealtimeText = (lastPassedStop: any, firstStop: any) => {
   const {t, language} = useTranslation();
   const {
     preferences: {debugShowSeconds},
@@ -28,8 +22,6 @@ export const useRealtimeText = (
       ),
     );
   }
-
-  const firstStop = estimatedCallsWithMetadata[0];
 
   if (
     firstStop?.quay?.name &&

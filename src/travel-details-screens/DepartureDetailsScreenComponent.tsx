@@ -80,7 +80,6 @@ export const DepartureDetailsScreenComponent = ({
   const realtimeMapEnabled = useRealtimeMapEnabled();
   const screenReaderEnabled = useIsScreenReaderEnabled();
 
-  console.log(JSON.stringify(estimatedCallsWithMetadata));
   const shouldShowLive =
     !estimatedCallsWithMetadata.find((a) => !a.realtime) && realtimeMapEnabled;
 
@@ -92,7 +91,14 @@ export const DepartureDetailsScreenComponent = ({
     (s) => s.serviceJourney?.id === activeItem.serviceJourneyId,
   );
 
-  const realtimeText = useRealtimeText(estimatedCallsWithMetadata);
+  const lastPassedStop = estimatedCallsWithMetadata
+    .filter((a) => a.actualDepartureTime)
+    .pop();
+
+  const realtimeText = useRealtimeText(
+    lastPassedStop,
+    estimatedCallsWithMetadata[0],
+  );
 
   const onPaginationPress = (newPage: number) => {
     animateNextChange();
@@ -244,7 +250,6 @@ export const DepartureDetailsScreenComponent = ({
 };
 
 function LastPassedStop({realtimeText}: {realtimeText: string}) {
-  // shared component?
   const styles = useStopsStyle();
 
   return (

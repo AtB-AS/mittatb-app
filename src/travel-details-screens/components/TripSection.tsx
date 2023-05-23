@@ -65,17 +65,6 @@ type TripSectionProps = {
   onPressQuay: TripProps['onPressQuay'];
 };
 
-type TripType = {
-  actualDepartureTime: any;
-  realtime: boolean; // new
-  aimedDepartureTime: string; // new
-  expectedDepartureTime: string; // new
-  quay: {
-    name: string;
-  };
-  predictionInaccurate: false;
-};
-
 export type InterchangeDetails = {
   publicCode: string;
   fromPlace: string;
@@ -113,13 +102,14 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const notices = getNoticesForLeg(leg);
 
-  // LastPassedStop
   const lastPassedStop = leg.serviceJourneyEstimatedCalls
     ?.filter((a) => !a.predictionInaccurate && a.actualDepartureTime)
     .pop();
 
-  console.log(JSON.stringify(leg));
-  const realtimeText = 'hello'; // useRealtimeText(lastPassedStop);
+  const realtimeText = useRealtimeText(
+    lastPassedStop,
+    leg.serviceJourneyEstimatedCalls[0],
+  );
 
   const bookingDetails: ContactDetails | undefined = leg?.bookingArrangements
     ?.bookingContact?.phone &&
