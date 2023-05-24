@@ -68,14 +68,14 @@ const TicketAssistantTexts = {
     ),
     a11yFrequencySelectionHint(amount: {value: number}) {
       return _(
-        `Aktiver om du reiser ${amount.value} ganer i uken`,
+        `Aktiver om du reiser ${amount.value} ganger i uken`,
         `Activate if you travel ${amount.value} times a week`,
       );
     },
   },
   zonesSelector: {
-    title: _('Hvor skal du reise?', 'Where are you traveling to?'),
-    titleA11yLabel: _('Hvor skal du reise?', 'Where do you travel?'),
+    title: _('Hvor skal du reise?', 'Where are you traveling?'),
+    titleA11yLabel: _('Hvor skal du reise?', 'Where are you traveling'),
     a11yNextHint: _('Aktiver for å gå videre', 'Activate to go to next page'),
   },
   duration: {

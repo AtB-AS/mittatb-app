@@ -13,6 +13,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
 import {useAuthState} from '@atb/auth';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -22,6 +23,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const {authenticationType} = useAuthState();
   let {loading, inputParams, recommendedTicketSummary, error} =
     useTicketAssistantState();
+  const focusRef = useFocusOnLoad();
 
   const durationDays = inputParams.duration
     ? inputParams.duration * 24 * 60 * 60 * 1000
@@ -95,7 +97,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       </View>
 
       {error ? (
-        <View>
+        <View ref={focusRef} accessible={true}>
           <ThemeText
             type={'heading--big'}
             color={themeColor}
@@ -112,22 +114,26 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
           </ThemeText>
         </View>
       ) : loading ? (
-        <View style={styles.loadingSpinner}>
+        <View style={styles.loadingSpinner} ref={focusRef} accessible={true}>
           <ActivityIndicator animating={true} size="large" />
         </View>
       ) : (
         <View style={styles.mainView}>
           <View>
-            <ThemeText
-              type={'heading--big'}
-              style={styles.header}
-              color={themeColor}
-              accessibilityLabel={t(
-                TicketAssistantTexts.summary.titleA11yLabel,
-              )}
-            >
-              {t(TicketAssistantTexts.summary.title)}
-            </ThemeText>
+            <View ref={focusRef} accessible={true}>
+              <ThemeText
+                type={'heading--big'}
+                style={styles.header}
+                color={themeColor}
+                accessibilityRole={'header'}
+                accessibilityLabel={t(
+                  TicketAssistantTexts.summary.titleA11yLabel,
+                )}
+              >
+                {t(TicketAssistantTexts.summary.title)}
+              </ThemeText>
+            </View>
+
             <ThemeText
               color={themeColor}
               type={'body__primary'}

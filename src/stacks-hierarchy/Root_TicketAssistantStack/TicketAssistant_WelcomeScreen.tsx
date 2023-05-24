@@ -7,6 +7,7 @@ import React from 'react';
 import {Button} from '@atb/components/button';
 import {StaticColorByType} from '@atb/theme/colors';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export const themeColor: StaticColorByType<'background'> =
   'background_accent_0';
@@ -19,19 +20,25 @@ export const TicketAssistant_WelcomeScreen = ({
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {width: windowWidth} = useWindowDimensions();
+  const focusRef = useFocusOnLoad();
+
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.contentContainer}
     >
-      <ThemeText
-        type="heading--big"
-        style={styles.header}
-        color={themeColor}
-        accessibilityLabel={t(TicketAssistantTexts.welcome.titleA11yLabel)}
-      >
-        {t(TicketAssistantTexts.welcome.title)}
-      </ThemeText>
+      <View ref={focusRef} accessible={true}>
+        <ThemeText
+          type="heading--big"
+          style={styles.header}
+          color={themeColor}
+          accessibilityRole={'header'}
+          accessibilityLabel={t(TicketAssistantTexts.welcome.titleA11yLabel)}
+        >
+          {t(TicketAssistantTexts.welcome.title)}
+        </ThemeText>
+      </View>
+
       <View style={styles.mainView}>
         <TicketSplash width={windowWidth} height={windowWidth / 2} />
 
