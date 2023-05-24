@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Walk} from '@atb/assets/svg/mono-icons/transportation';
 import {ThemeText} from '@atb/components/text';
@@ -8,16 +8,17 @@ import {StyleSheet, useTheme} from '@atb/theme';
 
 type Props = {
   distance: number | undefined;
+  style?: StyleProp<ViewStyle>;
 };
-export const WalkingDistance = ({distance}: Props) => {
-  const style = useSheetStyle();
+export const WalkingDistance = ({style, distance}: Props) => {
+  const sheetStyles = useSheetStyle();
   const humanizedDistance = useHumanizeDistance(distance);
   const {theme} = useTheme();
 
   if (!humanizedDistance) return null;
 
   return (
-    <View style={style.distanceLabel}>
+    <View style={[style, sheetStyles.distanceLabel]}>
       <ThemeIcon svg={Walk} fill={theme.text.colors.secondary}></ThemeIcon>
       <ThemeText type="body__secondary" color="secondary">
         {humanizedDistance}
