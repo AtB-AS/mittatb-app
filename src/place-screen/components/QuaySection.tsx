@@ -85,7 +85,6 @@ export function QuaySection({
   const hasMoreItemsThanDisplayLimit =
     departuresPerQuay && departuresToDisplay.length > departuresPerQuay;
 
-  console.log(navigateToQuay);
   const shouldShowMoreItemsLink =
     navigateToQuay &&
     !isMinimized &&
