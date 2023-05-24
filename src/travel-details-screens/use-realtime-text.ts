@@ -3,13 +3,28 @@ import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {formatToClock, isInThePast} from '@atb/utils/date';
 import {getTimeRepresentationType} from '@atb/travel-details-screens/utils';
 
-export const useRealtimeText = (lastPassedStop: any, firstStop: any) => {
+export type EstimatedCall = {
+  lastPassedStop: {quay?: {name?: string}; actualDepartureTime?: string};
+  firstStop: {
+    quay: {name?: string};
+    expectedDepartureTime: string;
+    aimedDepartureTime: string;
+    realtime: boolean;
+  };
+};
+
+export const useRealtimeText = (estimatedCall: EstimatedCall) => {
+  const {lastPassedStop, firstStop} = estimatedCall;
   const {t, language} = useTranslation();
   const {
     preferences: {debugShowSeconds},
   } = usePreferences();
 
-  if (lastPassedStop && lastPassedStop.quay?.name) {
+  if (
+    lastPassedStop &&
+    lastPassedStop.quay?.name &&
+    lastPassedStop?.actualDepartureTime
+  ) {
     return t(
       DepartureDetailsTexts.lastPassedStop(
         lastPassedStop.quay.name,
