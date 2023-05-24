@@ -42,10 +42,7 @@ import {
 } from './use-departure-data';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
-import {
-  EstimatedCall,
-  useRealtimeText,
-} from '@atb/travel-details-screens/use-realtime-text';
+import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 import {Divider} from '@atb/components/divider';
 
 export type DepartureDetailsScreenParams = {
@@ -94,20 +91,7 @@ export const DepartureDetailsScreenComponent = ({
     (s) => s.serviceJourney?.id === activeItem.serviceJourneyId,
   );
 
-  const lastPassedStop = estimatedCallsWithMetadata
-    .filter((a) => a.actualDepartureTime)
-    .pop();
-  const firstStop = estimatedCallsWithMetadata[0];
-  const estimatedCall: EstimatedCall = {
-    lastPassedStop: {...lastPassedStop},
-    firstStop: {
-      expectedDepartureTime: firstStop.expectedDepartureTime,
-      quay: {name: firstStop.quay?.name},
-      aimedDepartureTime: firstStop.aimedDepartureTime,
-      realtime: firstStop.realtime,
-    },
-  };
-  const realtimeText = useRealtimeText(estimatedCall);
+  const realtimeText = useRealtimeText(estimatedCallsWithMetadata);
 
   const onPaginationPress = (newPage: number) => {
     animateNextChange();

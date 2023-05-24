@@ -2,29 +2,20 @@ import {usePreferences} from '@atb/preferences';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {formatToClock, isInThePast} from '@atb/utils/date';
 import {getTimeRepresentationType} from '@atb/travel-details-screens/utils';
+import {ServiceJourneyEstimatedCall} from '@atb/api/types/trips';
 
-export type EstimatedCall = {
-  lastPassedStop: {quay?: {name?: string}; actualDepartureTime?: string};
-  firstStop: {
-    quay: {name?: string};
-    expectedDepartureTime: string;
-    aimedDepartureTime: string;
-    realtime: boolean;
-  };
-};
-
-export const useRealtimeText = (estimatedCall: EstimatedCall) => {
-  const {lastPassedStop, firstStop} = estimatedCall;
+export const useRealtimeText = (
+  estimatedCalls: Omit<ServiceJourneyEstimatedCall, 'predictionInaccurate'>[],
+) => {
+  const lastPassedStop = estimatedCalls
+    .filter((a) => a.actualDepartureTime)
+    .pop();
   const {t, language} = useTranslation();
   const {
     preferences: {debugShowSeconds},
   } = usePreferences();
 
-  if (
-    lastPassedStop &&
-    lastPassedStop.quay?.name &&
-    lastPassedStop?.actualDepartureTime
-  ) {
+  if (lastPassedStop && lastPassedStop.quay?.name) {
     return t(
       DepartureDetailsTexts.lastPassedStop(
         lastPassedStop.quay.name,
@@ -37,6 +28,8 @@ export const useRealtimeText = (estimatedCall: EstimatedCall) => {
       ),
     );
   }
+
+  const firstStop = estimatedCalls[0];
 
   if (
     firstStop?.quay?.name &&

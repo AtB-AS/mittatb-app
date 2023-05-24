@@ -50,10 +50,7 @@ import {
 } from './FlexibeTransportContactDetails';
 import {Button} from '@atb/components/button';
 import {Map} from '@atb/assets/svg/mono-icons/map';
-import {
-  EstimatedCall,
-  useRealtimeText,
-} from '@atb/travel-details-screens/use-realtime-text';
+import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -105,17 +102,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const notices = getNoticesForLeg(leg);
 
-  const lastPassedStop = leg.serviceJourneyEstimatedCalls
-    ?.filter((a) => !a.predictionInaccurate && a.actualDepartureTime)
-    .pop();
-
-  const estimatedCall: EstimatedCall = {
-    lastPassedStop: {...lastPassedStop},
-    firstStop: {
-      ...leg.serviceJourneyEstimatedCalls[0],
-    },
-  };
-  const realtimeText = useRealtimeText(estimatedCall);
+  const realtimeText = useRealtimeText(leg.serviceJourneyEstimatedCalls);
 
   const bookingDetails: ContactDetails | undefined = leg?.bookingArrangements
     ?.bookingContact?.phone &&
