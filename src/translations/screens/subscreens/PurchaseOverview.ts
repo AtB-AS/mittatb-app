@@ -40,16 +40,16 @@ const PurchaseOverviewTexts = {
   ),
   samarbeidsbillettenInfo: {
     single: _(
-      'Enkeltbilletter i sone A kan også brukes på tog i sone A. De kan imidlertid ikke brukes på nattbusser.',
-      'Single tickets in zone A can also be used on train in zone A. However they cannot be used on night buses.',
+      'Enkeltbilletter i sone A kan også brukes på tog i sone A, men ikke på nattbuss.',
+      'Single tickets in zone A can also be used on train in zone A, but not on night buses.',
     ),
     period: _(
       'Periodebilletter i sone A kan også brukes på tog i sone A.',
       'Periodic tickets in zone A can also be used on train in zone A.',
     ),
     hour24: _(
-      '24-timersbillett kan ikke brukes på tog eller nattbuss.',
-      '24 hour pass can not be used on trains nor night buses.',
+      '24-timersbillett i sone A kan også brukes på tog i sone A, men ikke på nattbuss.',
+      '24 hour pass in zone A can also be used on train in zone A, but not on night buses.',
     ),
   },
   nfkNightBusPeriodNotice: _(
