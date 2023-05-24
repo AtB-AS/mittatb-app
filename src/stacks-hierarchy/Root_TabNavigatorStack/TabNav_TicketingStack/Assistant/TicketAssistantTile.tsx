@@ -1,7 +1,7 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColor} from '@atb/theme/colors';
 import {TouchableOpacity, View} from 'react-native';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import React from 'react';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -45,7 +45,9 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
 
   const title = t(TicketingTexts.ticketAssistantTile.title);
   const description = t(TicketingTexts.ticketAssistantTile.description);
-  const accessibilityLabel = [title, 'Beta', description].join('. ');
+  const accessibilityLabel = [title, 'Beta', description].join(
+    screenReaderPause,
+  );
 
   return (
     <View
