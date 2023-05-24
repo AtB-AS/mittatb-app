@@ -95,30 +95,29 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       <View style={styles.backdrop}>
         <DashboardBackground width={'100%'} height={'100%'} />
       </View>
-
-      {error ? (
-        <View ref={focusRef} accessible={true}>
-          <ThemeText
-            type={'heading--big'}
-            color={themeColor}
-            style={styles.header}
-          >
-            {t(TicketAssistantTexts.summary.crashedHeader)}
-          </ThemeText>
-          <ThemeText
-            type={'body__primary'}
-            color={themeColor}
-            style={styles.description}
-          >
-            {t(TicketAssistantTexts.summary.crashedDescription)}
-          </ThemeText>
-        </View>
-      ) : loading ? (
-        <View style={styles.loadingSpinner} ref={focusRef} accessible={true}>
-          <ActivityIndicator animating={true} size="large" />
-        </View>
-      ) : (
-        <View style={styles.mainView}>
+      <View style={styles.mainView}>
+        {error ? (
+          <View ref={focusRef} accessible={true}>
+            <ThemeText
+              type={'heading--big'}
+              color={themeColor}
+              style={styles.header}
+            >
+              {t(TicketAssistantTexts.summary.crashedHeader)}
+            </ThemeText>
+            <ThemeText
+              type={'body__primary'}
+              color={themeColor}
+              style={styles.description}
+            >
+              {t(TicketAssistantTexts.summary.crashedDescription)}
+            </ThemeText>
+          </View>
+        ) : loading ? (
+          <View style={styles.loadingSpinner} ref={focusRef} accessible={true}>
+            <ActivityIndicator animating={true} size="large" />
+          </View>
+        ) : (
           <View>
             <View ref={focusRef} accessible={true}>
               <ThemeText
@@ -170,6 +169,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
               </View>
             )}
           </View>
+        )}
+        {(error || !loading) && (
           <Button
             style={styles.feedback}
             interactiveColor="interactive_0"
@@ -179,8 +180,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
               navigation.popToTop();
             }}
           />
-        </View>
-      )}
+        )}
+      </View>
     </ScrollView>
   );
 };
