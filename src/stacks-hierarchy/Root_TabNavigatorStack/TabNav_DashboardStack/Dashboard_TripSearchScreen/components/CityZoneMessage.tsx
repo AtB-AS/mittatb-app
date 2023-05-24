@@ -63,20 +63,16 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
     },
   ];
 
-  if (messageActions) {
-    return (
-      <Section style={style.cityZoneMessage}>
-        <CityZoneBox
-          message={t(CityBoxMessageTexts.message)}
-          icon={() => <FlexibleTransport />}
-          onDismiss={onDismiss}
-          actionButtons={messageActions}
-        />
-      </Section>
-    );
-  }
-
-  return null;
+  return (
+    <Section style={style.cityZoneMessage}>
+      <CityZoneBox
+        message={t(CityBoxMessageTexts.message)}
+        icon={() => <FlexibleTransport />}
+        onDismiss={onDismiss}
+        actionButtons={messageActions}
+      />
+    </Section>
+  );
 };
 
 type CityZoneBoxProps = {
