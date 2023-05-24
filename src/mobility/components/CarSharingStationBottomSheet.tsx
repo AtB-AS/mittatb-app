@@ -10,7 +10,6 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
 import {useSystem} from '@atb/mobility/use-system';
-import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import {
   CarSharingTexts,
@@ -29,6 +28,7 @@ import {ThemeText} from '@atb/components/text';
 import {CarAvailabilityFragment} from '@atb/api/types/generated/fragments/stations';
 import {CarImage} from '@atb/mobility/components/CarImage';
 import {InfoChip} from '@atb/components/info-chip';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
   stationId: string;
@@ -71,7 +71,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
           <>
             <ScrollView style={style.container}>
               <WalkingDistance distance={distance} />
-              <Section withPadding>
+              <Section>
                 <GenericSectionItem>
                   <OperatorLogo
                     operatorName={operatorName}
@@ -84,7 +84,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
                   ?.filter(isAvailable)
                   .sort(byName(language))
                   .map((vehicle, i) => (
-                    <Section key={'vehicle' + i} withPadding>
+                    <Section key={'vehicle' + i} style={style.carSection}>
                       <GenericSectionItem>
                         <View style={style.carDetailsContainer}>
                           <View style={style.carImage}>
@@ -124,16 +124,17 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
                 </Section>
               )}
             </ScrollView>
-            {rentalAppUri && (
-              <FullScreenFooter>
+            <View style={style.footer}>
+              {rentalAppUri && (
                 <Button
+                  style={style.operatorButton}
                   text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
                   onPress={openOperatorApp}
                   mode="primary"
                   interactiveColor={'interactive_0'}
                 />
-              </FullScreenFooter>
-            )}
+              )}
+            </View>
           </>
         )}
         {!isLoading && (error || !station) && (
@@ -153,38 +154,52 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
   );
 };
 
-const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
-  activityIndicator: {
-    marginBottom: theme.spacings.xLarge,
-  },
-  availabilityChip: {
-    flex: 1,
-    alignItems: 'flex-end',
-  },
-  carDetailsContainer: {
-    display: 'flex',
-    flex: 1,
-    flexDirection: 'row',
-  },
-  carImage: {
-    flexShrink: 1,
-    flexGrow: 0,
-    marginRight: theme.spacings.medium,
-  },
-  carDetails: {
-    flex: 4,
-  },
-  container: {
-    marginBottom: theme.spacings.medium,
-  },
-  errorMessage: {
-    marginHorizontal: theme.spacings.medium,
-  },
-  noCarsAvailable: {
-    flex: 1,
-    alignItems: 'center',
-  },
-}));
+const useSheetStyle = StyleSheet.createThemeHook((theme) => {
+  const {bottom} = useSafeAreaInsets();
+  return {
+    activityIndicator: {
+      marginBottom: theme.spacings.xLarge,
+    },
+    availabilityChip: {
+      flex: 1,
+      alignItems: 'flex-end',
+    },
+    carDetailsContainer: {
+      display: 'flex',
+      flex: 1,
+      flexDirection: 'row',
+    },
+    carSection: {
+      marginTop: theme.spacings.medium,
+    },
+    carImage: {
+      flexShrink: 1,
+      flexGrow: 0,
+      marginRight: theme.spacings.medium,
+    },
+    carDetails: {
+      flex: 4,
+    },
+    container: {
+      marginHorizontal: theme.spacings.medium,
+      //marginBottom: theme.spacings.medium,
+    },
+    errorMessage: {
+      marginHorizontal: theme.spacings.medium,
+    },
+    footer: {
+      marginBottom: Math.max(bottom, theme.spacings.medium),
+      marginHorizontal: theme.spacings.medium,
+    },
+    noCarsAvailable: {
+      flex: 1,
+      alignItems: 'center',
+    },
+    operatorButton: {
+      marginTop: theme.spacings.medium,
+    },
+  };
+});
 
 const isAnyAvailable = (
   vehicleTypesAvailable: CarAvailabilityFragment[] | undefined,
