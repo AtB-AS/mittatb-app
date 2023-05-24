@@ -21,18 +21,12 @@ import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {useCurrentTripPatternWithUpdates} from '@atb/travel-details-screens/use-current-trip-pattern-with-updates';
 import {canSellCollabTicket} from '@atb/travel-details-screens/utils';
-import {
-  formatToClock,
-  formatToVerboseFullDate,
-  isWithinSameDate,
-  secondsBetween,
-} from '@atb/utils/date';
+import {formatToClock, secondsBetween} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
 import {Trip} from './components/Trip';
-import {Divider} from '@atb/components/divider';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -119,22 +113,6 @@ export const TripDetailsScreenComponent = ({
       >
         {updatedTripPattern && (
           <View style={styles.paddedContainer} testID="tripDetailsContentView">
-            {!isWithinSameDate(
-              new Date(),
-              updatedTripPattern.expectedStartTime,
-            ) && (
-              <>
-                <View style={styles.date}>
-                  <ThemeText type={'body__primary'} color={'secondary'}>
-                    {formatToVerboseFullDate(
-                      updatedTripPattern.expectedStartTime,
-                      language,
-                    )}
-                  </ThemeText>
-                </View>
-                <Divider style={styles.divider} />
-              </>
-            )}
             <Trip
               tripPattern={updatedTripPattern}
               error={error}
@@ -290,9 +268,6 @@ function useGetFirstTariffZoneWeSellTicketFor(
 }
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
-  header: {
-    backgroundColor: theme.static.background[themeColor].background,
-  },
   container: {
     flex: 1,
     backgroundColor: theme.static.background.background_0.background,
@@ -318,13 +293,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacings.medium,
     marginVertical: theme.spacings.xSmall,
     flexDirection: 'row',
-  },
-  date: {
-    alignItems: 'center',
-    marginTop: theme.spacings.medium,
-  },
-  divider: {
-    marginVertical: theme.spacings.medium,
   },
   borderTop: {
     borderTopColor: theme.border.primary,

@@ -1,7 +1,11 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Feedback} from '@atb/components/feedback';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {secondsBetween} from '@atb/utils/date';
+import {StyleSheet} from '@atb/theme';
+import {
+  formatToVerboseFullDate,
+  isWithinSameDate,
+  secondsBetween,
+} from '@atb/utils/date';
 import {AxiosError} from 'axios';
 import React from 'react';
 import {View} from 'react-native';
@@ -21,6 +25,8 @@ import {useRealtimeMapEnabled} from '@atb/components/map';
 import {AnyMode} from '@atb/components/icon-box';
 import {Divider} from '@atb/components/divider';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import {ThemeText} from '@atb/components/text';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -40,7 +46,8 @@ export const Trip: React.FC<TripProps> = ({
   onPressQuay,
 }) => {
   const styles = useStyle();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   const legs = tripPattern.legs.filter((leg, i) =>
     isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
@@ -67,47 +74,65 @@ export const Trip: React.FC<TripProps> = ({
     };
   });
 
+  const shouldShowDate =
+    !isWithinSameDate(new Date(), tripPattern.expectedStartTime) ||
+    isScreenReaderEnabled;
+
   return (
     <View style={styles.container}>
+      {shouldShowDate && (
+        <>
+          <View style={styles.date}>
+            <ThemeText type="body__secondary" color="secondary">
+              {formatToVerboseFullDate(tripPattern.expectedStartTime, language)}
+            </ThemeText>
+          </View>
+          <Divider style={styles.divider} />
+        </>
+      )}
       <TripMessages tripPattern={tripPattern} error={error} />
-      {tripPattern &&
-        legs.map((leg, index) => {
-          const legVehiclePosition = vehiclePositions?.find(
-            (vehicle) => vehicle.serviceJourney?.id === leg.serviceJourney?.id,
-          );
+      <View style={styles.trip}>
+        {tripPattern &&
+          legs.map((leg, index) => {
+            const legVehiclePosition = vehiclePositions?.find(
+              (vehicle) =>
+                vehicle.serviceJourney?.id === leg.serviceJourney?.id,
+            );
 
-          return (
-            <TripSection
-              key={index}
-              isFirst={index == 0}
-              wait={legWaitDetails(index, legs)}
-              isLast={index == legs.length - 1}
-              step={index + 1}
-              interchangeDetails={getInterchangeDetails(
-                legs,
-                leg.interchangeTo?.toServiceJourney?.id,
-              )}
-              leg={leg}
-              testID={'legContainer' + index}
-              onPressShowLive={
-                legVehiclePosition
-                  ? () =>
-                      onPressDetailsMap({
-                        legs: tripPattern.legs,
-                        fromPlace: tripPattern.legs[0].fromPlace,
-                        toPlace:
-                          tripPattern.legs[tripPattern.legs.length - 1].toPlace,
-                        vehicleWithPosition: legVehiclePosition,
-                        mode: leg.mode,
-                        subMode: leg.transportSubmode,
-                      })
-                  : undefined
-              }
-              onPressDeparture={onPressDeparture}
-              onPressQuay={onPressQuay}
-            />
-          );
-        })}
+            return (
+              <TripSection
+                key={index}
+                isFirst={index == 0}
+                wait={legWaitDetails(index, legs)}
+                isLast={index == legs.length - 1}
+                step={index + 1}
+                interchangeDetails={getInterchangeDetails(
+                  legs,
+                  leg.interchangeTo?.toServiceJourney?.id,
+                )}
+                leg={leg}
+                testID={'legContainer' + index}
+                onPressShowLive={
+                  legVehiclePosition
+                    ? () =>
+                        onPressDetailsMap({
+                          legs: tripPattern.legs,
+                          fromPlace: tripPattern.legs[0].fromPlace,
+                          toPlace:
+                            tripPattern.legs[tripPattern.legs.length - 1]
+                              .toPlace,
+                          vehicleWithPosition: legVehiclePosition,
+                          mode: leg.mode,
+                          subMode: leg.transportSubmode,
+                        })
+                    : undefined
+                }
+                onPressDeparture={onPressDeparture}
+                onPressQuay={onPressQuay}
+              />
+            );
+          })}
+      </View>
       <Divider style={styles.divider} />
       {tripPatternLegs && (
         <CompactTravelDetailsMap
@@ -147,12 +172,19 @@ function legWaitDetails(index: number, legs: Leg[]): WaitDetails | undefined {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginTop: theme.spacings.xLarge,
+    marginTop: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
+  },
+  date: {
+    alignItems: 'center',
     marginBottom: theme.spacings.medium,
   },
   divider: {
-    marginTop: theme.spacings.xSmall,
     marginBottom: theme.spacings.medium,
+  },
+  trip: {
+    marginTop: theme.spacings.medium,
+    marginBottom: theme.spacings.xSmall,
   },
 }));
 
