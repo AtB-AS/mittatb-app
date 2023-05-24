@@ -40,7 +40,6 @@ export const Trip: React.FC<TripProps> = ({
   onPressQuay,
 }) => {
   const styles = useStyle();
-  const {theme} = useTheme();
   const {t} = useTranslation();
 
   const legs = tripPattern.legs.filter((leg, i) =>
@@ -71,49 +70,45 @@ export const Trip: React.FC<TripProps> = ({
   return (
     <View style={styles.container}>
       <TripMessages tripPattern={tripPattern} error={error} />
-      <View style={styles.trip}>
-        {tripPattern &&
-          legs.map((leg, index) => {
-            const legVehiclePosition = vehiclePositions?.find(
-              (vehicle) =>
-                vehicle.serviceJourney?.id === leg.serviceJourney?.id,
-            );
+      {tripPattern &&
+        legs.map((leg, index) => {
+          const legVehiclePosition = vehiclePositions?.find(
+            (vehicle) => vehicle.serviceJourney?.id === leg.serviceJourney?.id,
+          );
 
-            return (
-              <TripSection
-                key={index}
-                isFirst={index == 0}
-                wait={legWaitDetails(index, legs)}
-                isLast={index == legs.length - 1}
-                step={index + 1}
-                interchangeDetails={getInterchangeDetails(
-                  legs,
-                  leg.interchangeTo?.toServiceJourney?.id,
-                )}
-                leg={leg}
-                testID={'legContainer' + index}
-                onPressShowLive={
-                  legVehiclePosition
-                    ? () =>
-                        onPressDetailsMap({
-                          legs: tripPattern.legs,
-                          fromPlace: tripPattern.legs[0].fromPlace,
-                          toPlace:
-                            tripPattern.legs[tripPattern.legs.length - 1]
-                              .toPlace,
-                          vehicleWithPosition: legVehiclePosition,
-                          mode: leg.mode,
-                          subMode: leg.transportSubmode,
-                        })
-                    : undefined
-                }
-                onPressDeparture={onPressDeparture}
-                onPressQuay={onPressQuay}
-              />
-            );
-          })}
-      </View>
-      <Divider style={{marginVertical: theme.spacings.medium}} />
+          return (
+            <TripSection
+              key={index}
+              isFirst={index == 0}
+              wait={legWaitDetails(index, legs)}
+              isLast={index == legs.length - 1}
+              step={index + 1}
+              interchangeDetails={getInterchangeDetails(
+                legs,
+                leg.interchangeTo?.toServiceJourney?.id,
+              )}
+              leg={leg}
+              testID={'legContainer' + index}
+              onPressShowLive={
+                legVehiclePosition
+                  ? () =>
+                      onPressDetailsMap({
+                        legs: tripPattern.legs,
+                        fromPlace: tripPattern.legs[0].fromPlace,
+                        toPlace:
+                          tripPattern.legs[tripPattern.legs.length - 1].toPlace,
+                        vehicleWithPosition: legVehiclePosition,
+                        mode: leg.mode,
+                        subMode: leg.transportSubmode,
+                      })
+                  : undefined
+              }
+              onPressDeparture={onPressDeparture}
+              onPressQuay={onPressQuay}
+            />
+          );
+        })}
+      <Divider style={styles.divider} />
       {tripPatternLegs && (
         <CompactTravelDetailsMap
           mapLegs={tripPatternLegs}
@@ -151,11 +146,13 @@ function legWaitDetails(index: number, legs: Leg[]): WaitDetails | undefined {
 }
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
-  trip: {
-    paddingTop: theme.spacings.medium,
-  },
   container: {
-    paddingBottom: theme.spacings.medium,
+    marginTop: theme.spacings.xLarge,
+    marginBottom: theme.spacings.medium,
+  },
+  divider: {
+    marginTop: theme.spacings.xSmall,
+    marginBottom: theme.spacings.medium,
   },
 }));
 
