@@ -42,6 +42,15 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
     return null;
   }
 
+  if (
+    selectedCityZones.length > 0 &&
+    !selectedCityZones.every(
+      (cityZone) => cityZone.id === selectedCityZones[0].id,
+    )
+  ) {
+    return null;
+  }
+
   const openUrlForCityZone = (cityZone: CityZone) => {
     const contactUrl = getTextForLanguage(cityZone.contactUrl, language);
     if (contactUrl) {
@@ -49,11 +58,14 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
     }
   };
 
-  const messageActions = selectedCityZones.map((cityZone) => ({
-    id: `${cityZone.id}_action`,
-    text: cityZone.name,
-    onPress: () => openUrlForCityZone(cityZone),
-  }));
+  const cityZone = selectedCityZones[0];
+  const messageActions = [
+    {
+      id: `${cityZone.id}_action`,
+      text: cityZone.name,
+      onPress: () => openUrlForCityZone(cityZone),
+    },
+  ];
 
   if (messageActions) {
     return (
