@@ -43,7 +43,7 @@ const handleError = (err: any) => {
   throw parseRemoteError(err.response?.data) || err;
 };
 
-const service: TokenService = {
+export const tokenService: TokenService = {
   initiateNewMobileToken: async (traceId, isEmulator) => {
     const deviceName = await getDeviceName();
     const data: InitRequest = {
@@ -205,7 +205,3 @@ const service: TokenService = {
         .catch(handleError);
     }, token),
 };
-
-export function createTokenService() {
-  return service;
-}
