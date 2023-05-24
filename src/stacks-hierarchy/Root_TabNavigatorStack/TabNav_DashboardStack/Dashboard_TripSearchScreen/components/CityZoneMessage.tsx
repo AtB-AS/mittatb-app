@@ -1,5 +1,10 @@
 import {StyleSheet, useTheme} from '@atb/theme';
-import {getTextForLanguage, useTranslation} from '@atb/translations';
+import {
+  Language,
+  TranslateFunction,
+  getTextForLanguage,
+  useTranslation,
+} from '@atb/translations';
 import {Linking, TouchableOpacity, View} from 'react-native';
 import {FlexibleTransport} from '@atb/assets/svg/color/illustrations';
 import {Location} from '@atb/favorites';
@@ -17,6 +22,7 @@ import CityBoxMessageTexts from '@atb/translations/components/CityBoxMessage';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {InteractiveColor} from '@atb/theme/colors';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
+import {CityZone} from '@atb/reference-data/types';
 
 type ActionButton = {
   id: string;
@@ -41,10 +47,11 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
   const style = useStyle();
   const {t, language} = useTranslation();
   const {cityZones} = useFirestoreConfiguration();
-  const fromCityZone = useFindCityZoneInLocation(from, cityZones);
-  const toCityZone = useFindCityZoneInLocation(to, cityZones);
+  const enabledCityZones = cityZones.filter((cityZone) => cityZone.enabled);
+  const fromCityZone = useFindCityZoneInLocation(from, enabledCityZones);
+  const toCityZone = useFindCityZoneInLocation(to, enabledCityZones);
 
-  if (!fromCityZone?.enabled || !toCityZone?.enabled) {
+  if (!fromCityZone || !toCityZone) {
     return null;
   }
 
@@ -52,43 +59,7 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
     return null;
   }
 
-  const actionButtons: ActionButton[] = [];
-
-  const orderUrl = getTextForLanguage(fromCityZone.orderUrl, language);
-  if (orderUrl) {
-    actionButtons.push({
-      id: `book_online_action`,
-      text: t(CityBoxMessageTexts.actionButtons.bookOnline),
-      icon: ExternalLink,
-      interactiveColor: 'interactive_0',
-      accessibilityHint: t(CityBoxMessageTexts.a11yHintForExternalContent),
-      onPress: () => Linking.openURL(orderUrl),
-    });
-  }
-
-  const phoneNumber = fromCityZone.phoneNumber;
-  if (phoneNumber && !orderUrl) {
-    actionButtons.push({
-      id: `book_by_phone_action`,
-      icon: Phone,
-      text: t(CityBoxMessageTexts.actionButtons.bookByPhone),
-      interactiveColor: 'interactive_0',
-      accessibilityHint: t(CityBoxMessageTexts.a11yHintForPhone),
-      onPress: () => Linking.openURL(`tel:${phoneNumber}`),
-    });
-  }
-
-  const moreInfoUrl = getTextForLanguage(fromCityZone.moreInfoUrl, language);
-  if (moreInfoUrl && moreInfoUrl) {
-    actionButtons.push({
-      id: `more_info_action`,
-      icon: ExternalLink,
-      text: t(CityBoxMessageTexts.actionButtons.moreInfo),
-      interactiveColor: 'interactive_3',
-      accessibilityHint: t(CityBoxMessageTexts.a11yHintForExternalContent),
-      onPress: () => Linking.openURL(moreInfoUrl),
-    });
-  }
+  const actionButtons = buildActionButtons(fromCityZone, t, language);
 
   if (actionButtons.length > 0) {
     return (
@@ -168,6 +139,52 @@ const CityZoneBox = ({
       )}
     </View>
   );
+};
+
+const buildActionButtons = (
+  cityZone: CityZone,
+  t: TranslateFunction,
+  language: Language,
+) => {
+  const actionButtons: ActionButton[] = [];
+
+  const orderUrl = getTextForLanguage(cityZone.orderUrl, language);
+  if (orderUrl) {
+    actionButtons.push({
+      id: `book_online_action`,
+      text: t(CityBoxMessageTexts.actionButtons.bookOnline),
+      icon: ExternalLink,
+      interactiveColor: 'interactive_0',
+      accessibilityHint: t(CityBoxMessageTexts.a11yHintForExternalContent),
+      onPress: () => Linking.openURL(orderUrl),
+    });
+  }
+
+  const phoneNumber = cityZone.phoneNumber;
+  if (phoneNumber && !orderUrl) {
+    actionButtons.push({
+      id: `book_by_phone_action`,
+      icon: Phone,
+      text: t(CityBoxMessageTexts.actionButtons.bookByPhone),
+      interactiveColor: 'interactive_0',
+      accessibilityHint: t(CityBoxMessageTexts.a11yHintForPhone),
+      onPress: () => Linking.openURL(`tel:${phoneNumber}`),
+    });
+  }
+
+  const moreInfoUrl = getTextForLanguage(cityZone.moreInfoUrl, language);
+  if (moreInfoUrl && moreInfoUrl) {
+    actionButtons.push({
+      id: `more_info_action`,
+      icon: ExternalLink,
+      text: t(CityBoxMessageTexts.actionButtons.moreInfo),
+      interactiveColor: 'interactive_3',
+      accessibilityHint: t(CityBoxMessageTexts.a11yHintForExternalContent),
+      onPress: () => Linking.openURL(moreInfoUrl),
+    });
+  }
+
+  return actionButtons;
 };
 
 export const useStyle = StyleSheet.createThemeHook((theme) => ({
