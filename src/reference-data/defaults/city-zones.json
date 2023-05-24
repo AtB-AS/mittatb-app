@@ -11,8 +11,8 @@
       {"lang": "eng", "value": "https://www.atb.no/en/flex/"}
     ],
     "orderUrl": [
-      {"lang": "nob", "value": " https://fleksibel.atb.no/dashboard"},
-      {"lang": "eng", "value": " https://fleksibel.atb.no/dashboard"}
+      {"lang": "nob", "value": "https://fleksibel.atb.no/dashboard"},
+      {"lang": "eng", "value": "https://fleksibel.atb.no/dashboard"}
     ],
     "phoneNumber": "02867",
     "geometry": {
@@ -153,8 +153,8 @@
       {"lang": "eng", "value": "https://www.atb.no/en/flex/"}
     ],
     "orderUrl": [
-      {"lang": "nob", "value": " https://fleksibel.atb.no/dashboard"},
-      {"lang": "eng", "value": " https://fleksibel.atb.no/dashboard"}
+      {"lang": "nob", "value": "https://fleksibel.atb.no/dashboard"},
+      {"lang": "eng", "value": "https://fleksibel.atb.no/dashboard"}
     ],
     "phoneNumber": "02867",
     "geometry": {
@@ -314,8 +314,8 @@
       {"lang": "eng", "value": "https://www.atb.no/en/flex/"}
     ],
     "orderUrl": [
-      {"lang": "nob", "value": " https://fleksibel.atb.no/dashboard"},
-      {"lang": "eng", "value": " https://fleksibel.atb.no/dashboard"}
+      {"lang": "nob", "value": "https://fleksibel.atb.no/dashboard"},
+      {"lang": "eng", "value": "https://fleksibel.atb.no/dashboard"}
     ],
     "phoneNumber": "02867",
     "geometry": {
