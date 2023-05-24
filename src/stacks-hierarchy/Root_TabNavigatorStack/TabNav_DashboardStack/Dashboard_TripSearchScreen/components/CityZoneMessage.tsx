@@ -4,7 +4,7 @@ import {Linking, TouchableOpacity, View} from 'react-native';
 import {FlexibleTransport} from '@atb/assets/svg/color/illustrations';
 import {CityZone} from '@atb/reference-data/types';
 import {Location} from '@atb/favorites';
-import {useFindCityZonesInLocations} from '../hooks';
+import {useFindCityZoneInLocation} from '../hooks';
 import {SvgProps} from 'react-native-svg';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemeText} from '@atb/components/text';
@@ -15,6 +15,7 @@ import {insets} from '@atb/utils/insets';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {Section} from '@atb/components/sections';
 import CityBoxMessageTexts from '@atb/translations/components/CityBoxMessage';
+import {useFirestoreConfiguration} from '@atb/configuration';
 
 type ActionButton = {
   id: string;
@@ -35,19 +36,15 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
 }) => {
   const style = useStyle();
   const {t, language} = useTranslation();
+  const {cityZones} = useFirestoreConfiguration();
+  const fromCityZone = useFindCityZoneInLocation(from, cityZones);
+  const toCityZone = useFindCityZoneInLocation(to, cityZones);
 
-  const selectedCityZones = useFindCityZonesInLocations(from, to);
-
-  if (!selectedCityZones?.length) {
+  if (!fromCityZone || !toCityZone) {
     return null;
   }
 
-  if (
-    selectedCityZones.length > 0 &&
-    !selectedCityZones.every(
-      (cityZone) => cityZone.id === selectedCityZones[0].id,
-    )
-  ) {
+  if (fromCityZone.id !== toCityZone.id) {
     return null;
   }
 
@@ -58,12 +55,11 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
     }
   };
 
-  const cityZone = selectedCityZones[0];
   const messageActions = [
     {
-      id: `${cityZone.id}_action`,
-      text: cityZone.name,
-      onPress: () => openUrlForCityZone(cityZone),
+      id: `${fromCityZone.id}_action`,
+      text: fromCityZone.name,
+      onPress: () => openUrlForCityZone(fromCityZone),
     },
   ];
 
