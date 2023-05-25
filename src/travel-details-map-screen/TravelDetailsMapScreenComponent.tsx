@@ -301,7 +301,7 @@ const LiveVehicleIcon = ({
   return <ThemeIcon svg={svg} fill={fillColor} />;
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   mapView: {
     flex: 1,
   },
