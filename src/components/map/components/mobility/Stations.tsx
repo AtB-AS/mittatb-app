@@ -1,72 +1,70 @@
-import React, {RefObject} from 'react';
+import React from 'react';
 import {FeatureCollection, GeoJSON} from 'geojson';
-import MapboxGL from '@rnmapbox/maps';
-import {MapSelectionActionType} from '@atb/components/map/types';
-import {
-  flyToLocation,
-  isFeaturePoint,
-  toCoordinates,
-} from '@atb/components/map/utils';
-import {StationFragment} from '@atb/api/types/generated/fragments/stations';
-import {useTheme} from '@atb/theme';
-import {getStaticColor} from '@atb/theme/colors';
+import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {BikeStations} from './BikeStations';
+import {getAvailableVehicles} from '@atb/mobility/utils';
+import {CarStations} from './CarStations';
 
 type Props = {
-  mapCameraRef: RefObject<MapboxGL.Camera>;
-  stations: FeatureCollection<GeoJSON.Point, StationFragment>;
-  onPress: (type: MapSelectionActionType) => void;
+  stations: FeatureCollection<GeoJSON.Point, StationBasicFragment>;
 };
 
-export const Stations = ({mapCameraRef, stations, onPress}: Props) => {
-  const {themeName} = useTheme();
-  const stationColor = getStaticColor(themeName, 'transport_bike');
+export type StationsWithCount = FeatureCollection<
+  GeoJSON.Point,
+  StationBasicFragment & {count: number}
+>;
+
+export const Stations = ({stations}: Props) => {
+  const bikeStations = stationsWithCount(stations, FormFactor.Bicycle);
+  const carStations = stationsWithCount(stations, FormFactor.Car);
 
   return (
-    <MapboxGL.ShapeSource
-      id={'stations'}
-      shape={stations}
-      tolerance={0}
-      onPress={async (e) => {
-        const [feature, ..._] = e.features;
-        if (isFeaturePoint(feature)) {
-          flyToLocation({
-            coordinates: toCoordinates(feature.geometry.coordinates),
-            mapCameraRef,
-          });
-          onPress({
-            source: 'map-click',
-            feature,
-          });
-        }
-      }}
-    >
-      <MapboxGL.SymbolLayer
-        id="stationPin"
-        minZoomLevel={13.5}
-        style={{
-          textField: ['get', 'numBikesAvailable'],
-          textAnchor: 'center',
-          textOffset: [0.75, 0],
-          textColor: stationColor.background,
-          textSize: 12,
-          iconImage: {uri: 'BikeChip'},
-          iconAllowOverlap: true,
-          iconSize: 0.85,
-        }}
-      />
-      <MapboxGL.CircleLayer
-        id="stationMini"
-        maxZoomLevel={13.5}
-        minZoomLevel={12}
-        style={{
-          circleColor: stationColor.background,
-          circleStrokeColor: stationColor.text,
-          circleOpacity: 0.7,
-          circleStrokeOpacity: 0.7,
-          circleRadius: 4,
-          circleStrokeWidth: 1,
-        }}
-      />
-    </MapboxGL.ShapeSource>
+    <>
+      <BikeStations stations={bikeStations} />
+      <CarStations stations={carStations} />
+    </>
   );
+};
+
+/**
+ * Filters the collection of stations to return only those with the given form factor
+ * @param stations
+ * @param formFactor
+ */
+const getFeaturesOfType = (
+  stations: FeatureCollection<GeoJSON.Point, StationBasicFragment>,
+  formFactor: FormFactor,
+): FeatureCollection<GeoJSON.Point, StationBasicFragment> => ({
+  ...stations,
+  features: stations.features.filter((station) =>
+    station.properties.vehicleTypesAvailable?.some(
+      (type) => type.vehicleType.formFactor === formFactor,
+    ),
+  ),
+});
+
+/**
+ * Adds a 'count' property with the number of available vehicles for each station.
+ * @param allStations
+ * @param formFactor
+ */
+const stationsWithCount = (
+  allStations: FeatureCollection<GeoJSON.Point, StationBasicFragment>,
+  formFactor: FormFactor,
+): StationsWithCount => {
+  const stationWithFormFactor = getFeaturesOfType(allStations, formFactor);
+  return {
+    ...stationWithFormFactor,
+    features: stationWithFormFactor.features.map((feature) => ({
+      ...feature,
+      properties: {
+        ...feature.properties,
+        count: getAvailableVehicles(
+          feature.properties.vehicleTypesAvailable,
+          formFactor,
+        ),
+      },
+    })),
+  };
 };

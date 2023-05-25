@@ -6,10 +6,15 @@ export enum StorageModelKeysEnum {
   HasReadTravelSearchFilterOnboarding = '@ATB_has_read_travel_search_filter_onboarding',
   HasReadScooterOnboarding = '@ATB_has_read_scooter_onboarding',
   EnableTravelSearchFiltersDebugOverride = '@ATB_enable_travel_search_filters_debug_override',
+  EnableFlexibleTransportDebugOverride = '@ATB_enable_flexible_transport',
+  UseFlexibleTransportAccessModeDebugOverride = '@ATB_use_flexible_on_accessMode',
+  UseFlexibleTransportDirectModeDebugOverride = '@ATB_use_flexible_on_directMode',
+  UseFlexibleTransportEgressModeDebugOverride = '@ATB_use_flexible_on_egressMode',
   EnableNewTravelSearchDebugOverride = '@ATB_enable_new_travel_search_debug_override',
   EnableFromTravelSearchToTicketDebugOverride = '@ATB_enable_from_travel_search_to_ticket_debug_override',
   EnableVehiclesInMapDebugOverride = '@ATB_enable_vehicles_in_map_debug_override',
   EnableCityBikesInMapDebugOverride = 'ATB_enable_city_bikes_in_map_debug_override',
+  EnableCarSharingInMapDebugOverride = 'ATB_enable_car_sharing_in_map_debug_override',
   EnableRealtimeMapDebugOverride = '@ATB_enable_realtime_map_debug_override',
   EnableMapDebugOverride = '@ATB_enable_map_debug_override',
   EnableTicketingAssistantOverride = '@ATB_enable_ticketing_assistant_override',
@@ -30,6 +35,7 @@ export type StorageModel = {
   '@ATB_journey_search-history': string;
   '@ATB_ticket_informational_accepted': string;
   '@ATB_user_travel_search_filters': string;
+  '@ATB_user_travel_search_filters_v2': string;
   '@ATB_previous_build_number': string;
   '@ATB_saved_payment_methods': string;
   '@ATB_feedback_display_stats': string;
@@ -45,7 +51,7 @@ const errorHandler = (error: any) => {
 };
 
 const leaveBreadCrumb = (
-  action: 'read-single' | 'save-single' | 'read-all',
+  action: 'read-single' | 'save-single' | 'remove-single' | 'read-all',
   key?: string,
   value?: string | null,
 ) => {
@@ -73,6 +79,10 @@ export const storage = {
   set: async (key: string, value: string) => {
     leaveBreadCrumb('save-single', key, value);
     return AsyncStorage.setItem(key, value).catch(errorHandler);
+  },
+  remove: async (key: string) => {
+    leaveBreadCrumb('remove-single', key);
+    return AsyncStorage.removeItem(key).catch(errorHandler);
   },
   getAll: async () => {
     leaveBreadCrumb('read-all');

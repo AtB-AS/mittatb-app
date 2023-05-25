@@ -7,7 +7,7 @@ import Bugsnag from '@bugsnag/react-native';
 import React from 'react';
 import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
 import {ValidityLine} from './ValidityLine';
-import {FareContractStatusSymbol} from './Component/FareContractStatusSymbol';
+import {FareContractStatusSymbol} from './components/FareContractStatusSymbol';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import {useAuthState} from '@atb/auth';

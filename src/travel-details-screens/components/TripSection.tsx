@@ -48,9 +48,11 @@ import {
   FlexibleTransportContactDetails,
   ContactDetails as ContactDetails,
 } from './FlexibeTransportContactDetails';
-import {usePreferences} from '@atb/preferences';
 import {Button} from '@atb/components/button';
 import {Map} from '@atb/assets/svg/mono-icons/map';
+import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
+import {useMapData} from '@atb/travel-details-screens/use-map-data';
+import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -60,7 +62,7 @@ type TripSectionProps = {
   interchangeDetails?: InterchangeDetails;
   leg: Leg;
   testID?: string;
-  onPressShowLive?(): void;
+  onPressShowLive?(mapData: ServiceJourneyMapInfoData_v3): void;
   onPressDeparture: TripProps['onPressDeparture'];
   onPressQuay: TripProps['onPressQuay'];
 };
@@ -86,9 +88,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const style = useSectionStyles();
   const {open: openBottomSheet} = useBottomSheet();
   const {themeName} = useTheme();
-  const {
-    preferences: {debugShowSeconds},
-  } = usePreferences();
 
   const isWalkSection = leg.mode === 'foot';
   const isFlexible = !!leg.bookingArrangements;
@@ -105,9 +104,13 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const notices = getNoticesForLeg(leg);
 
-  const lastPassedStop = leg.serviceJourneyEstimatedCalls
-    ?.filter((a) => !a.predictionInaccurate && a.actualDepartureTime)
-    .pop();
+  const realtimeText = useRealtimeText(leg.serviceJourneyEstimatedCalls);
+
+  const mapData = useMapData(
+    leg.serviceJourney?.id,
+    leg.fromPlace.quay?.id,
+    leg.toPlace.quay?.id,
+  );
 
   const bookingDetails: ContactDetails | undefined = leg?.bookingArrangements
     ?.bookingContact?.phone &&
@@ -225,18 +228,18 @@ export const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
-        {onPressShowLive ? (
+        {onPressShowLive && mapData ? (
           <TripRow>
             <Button
               type="pill"
               leftIcon={{svg: Map}}
               text={t(TripDetailsTexts.trip.leg.live)}
               interactiveColor="interactive_3"
-              onPress={onPressShowLive}
+              onPress={() => onPressShowLive(mapData)}
             />
           </TripRow>
         ) : null}
-        {lastPassedStop?.quay?.name && (
+        {realtimeText && (
           <TripRow>
             <View style={style.realtime}>
               <ThemeIcon
@@ -249,17 +252,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 type="body__secondary"
                 color="secondary"
               >
-                {t(
-                  TripDetailsTexts.trip.leg.lastPassedStop(
-                    lastPassedStop.quay.name,
-                    formatToClock(
-                      lastPassedStop.actualDepartureTime,
-                      language,
-                      'nearest',
-                      debugShowSeconds,
-                    ),
-                  ),
-                )}
+                {realtimeText}
               </ThemeText>
             </View>
           </TripRow>

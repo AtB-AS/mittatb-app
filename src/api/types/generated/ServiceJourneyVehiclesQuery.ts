@@ -9,9 +9,3 @@ export type GetServiceJourneyVehicleQuery = {
     serviceJourney?: {id: string};
   }>;
 };
-
-export type GetServiceJourneyVehicles = Required<
-  Required<GetServiceJourneyVehicleQuery>['vehicles']
->;
-
-export type VehiclePosition = GetServiceJourneyVehicles[0];

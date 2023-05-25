@@ -2,7 +2,7 @@ import {getServiceJourneyVehicles} from '@atb/api/vehicles';
 import {useCallback} from 'react';
 import {usePollableResource} from '@atb/utils/use-pollable-resource';
 import {AxiosError} from 'axios';
-import {GetServiceJourneyVehicles} from '@atb/api/types/generated/ServiceJourneyVehiclesQuery';
+import {GetServiceJourneyVehicles} from '@atb/api/types/vehicles';
 
 export const useGetServiceJourneyVehicles = (serviceJourneyIds?: string[]) => {
   const fetchVehicles = useCallback(
@@ -13,7 +13,7 @@ export const useGetServiceJourneyVehicles = (serviceJourneyIds?: string[]) => {
     [JSON.stringify(serviceJourneyIds)],
   );
 
-  const [updatedVehicles, , error] = usePollableResource<
+  const [updatedVehicles, , , error] = usePollableResource<
     GetServiceJourneyVehicles | undefined,
     AxiosError
   >(fetchVehicles, {

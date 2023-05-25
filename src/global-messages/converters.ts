@@ -9,7 +9,7 @@ import {
   GlobalMessageRaw,
   GlobalMessageType,
 } from '@atb/global-messages/types';
-import type {LanguageAndTextType} from '@atb/translations';
+import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
 export function mapToGlobalMessages(
   result: FirebaseFirestoreTypes.QueryDocumentSnapshot<GlobalMessageRaw>[],
 ): GlobalMessageType[] {
@@ -102,23 +102,4 @@ function mapToContext(data: any): GlobalMessageContextType | undefined {
 
   if (!options.includes(data)) return;
   return data;
-}
-
-function mapToLanguageAndTexts(data: any): LanguageAndTextType[] | undefined {
-  if (!data) return;
-  if (!isArray(data)) return;
-
-  return data
-    .map((ls: any) => mapToLanguageAndText(ls))
-    .filter((lv): lv is LanguageAndTextType => !!lv);
-}
-
-function mapToLanguageAndText(data: any): LanguageAndTextType | undefined {
-  if (!data) return;
-  if (data.lang != 'nob' && data.lang != 'eng') return;
-
-  return {
-    lang: data.lang,
-    value: data.value,
-  };
 }

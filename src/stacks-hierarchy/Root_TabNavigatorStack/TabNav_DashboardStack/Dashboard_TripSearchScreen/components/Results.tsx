@@ -26,7 +26,7 @@ type Props = {
   isEmptyResult: boolean;
   isSearching: boolean;
   resultReasons: string[];
-  onDetailsPressed(tripPatterns?: TripPattern[], index?: number): void;
+  onDetailsPressed(tripPattern?: TripPattern, resultIndex?: number): void;
   errorType?: ErrorType;
   searchTime: SearchTime;
   anyFiltersApplied: boolean;
@@ -107,7 +107,7 @@ export const Results: React.FC<Props> = ({
             <ResultItem
               tripPattern={tripPattern}
               onDetailsPressed={() => {
-                onDetailsPressed(tripPatterns, i);
+                onDetailsPressed(tripPattern, i);
               }}
               searchTime={searchTime}
               testID={'tripSearchSearchResult' + i}
@@ -117,7 +117,7 @@ export const Results: React.FC<Props> = ({
             <ResultItemOld
               tripPattern={tripPattern}
               onDetailsPressed={() => {
-                onDetailsPressed(tripPatterns, i);
+                onDetailsPressed(tripPattern, i);
               }}
               searchTime={searchTime}
               testID={'tripSearchSearchResult' + i}

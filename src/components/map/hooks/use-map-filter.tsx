@@ -1,4 +1,4 @@
-import {MapFilterType} from '@atb/components/map/types';
+import {MapFilterType} from '../types';
 import {storage} from '@atb/storage';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 

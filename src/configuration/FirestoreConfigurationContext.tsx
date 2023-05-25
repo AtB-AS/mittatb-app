@@ -9,15 +9,17 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import {
-  PreassignedFareProduct,
+  CityZone,
   TariffZone,
   UserProfile,
+  PreassignedFareProduct,
 } from '@atb/reference-data/types';
 import Bugsnag from '@bugsnag/react-native';
 import {
   defaultFareProductTypeConfig,
   defaultPreassignedFareProducts,
   defaultTariffZones,
+  defaultCityZones,
   defaultUserProfiles,
 } from '@atb/reference-data/defaults';
 import {
@@ -30,6 +32,7 @@ import {FareProductTypeConfig} from './types';
 import {
   mapLanguageAndTextType,
   mapToFareProductTypeConfigs,
+  mapToFlexibleTransportOption,
   mapToTransportModeFilterOptions,
 } from './converters';
 import type {TravelSearchFiltersType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
@@ -48,6 +51,7 @@ type ConfigurableLinks = {
 type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
   tariffZones: TariffZone[];
+  cityZones: CityZone[];
   userProfiles: UserProfile[];
   modesWeSellTicketsFor: string[];
   paymentTypes: PaymentType[];
@@ -61,6 +65,7 @@ type ConfigurationContextState = {
 const defaultConfigurationContextState: ConfigurationContextState = {
   preassignedFareProducts: defaultPreassignedFareProducts,
   tariffZones: defaultTariffZones,
+  cityZones: defaultCityZones,
   userProfiles: defaultUserProfiles,
   modesWeSellTicketsFor: defaultModesWeSellTicketsFor,
   paymentTypes: defaultPaymentTypes,
@@ -80,6 +85,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     defaultPreassignedFareProducts,
   );
   const [tariffZones, setTariffZones] = useState(defaultTariffZones);
+  const [cityZones, setCityZones] = useState(defaultCityZones);
   const [userProfiles, setUserProfiles] = useState(defaultUserProfiles);
   const [modesWeSellTicketsFor, setModesWeSellTicketsFor] = useState(
     defaultModesWeSellTicketsFor,
@@ -109,6 +115,11 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           const tariffZones = getTariffZonesFromSnapshot(snapshot);
           if (tariffZones) {
             setTariffZones(tariffZones);
+          }
+
+          const cityZones = getCityZonesFromSnapshot(snapshot);
+          if (cityZones) {
+            setCityZones(cityZones);
           }
 
           const userProfiles = getUserProfilesFromSnapshot(snapshot);
@@ -167,6 +178,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     return {
       preassignedFareProducts,
       tariffZones,
+      cityZones,
       userProfiles,
       modesWeSellTicketsFor,
       paymentTypes,
@@ -179,6 +191,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   }, [
     preassignedFareProducts,
     tariffZones,
+    cityZones,
     userProfiles,
     modesWeSellTicketsFor,
     paymentTypes,
@@ -239,6 +252,24 @@ function getTariffZonesFromSnapshot(
   } catch (error: any) {
     Bugsnag.notify(error);
   }
+  return undefined;
+}
+
+function getCityZonesFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): CityZone[] | undefined {
+  const cityZonesFromFirestore = snapshot.docs
+    .find((doc) => doc.id == 'referenceData')
+    ?.get<string>('cityZones');
+
+  try {
+    if (cityZonesFromFirestore) {
+      return JSON.parse(cityZonesFromFirestore) as CityZone[];
+    }
+  } catch (error: any) {
+    Bugsnag.notify(error);
+  }
+
   return undefined;
 }
 
@@ -319,16 +350,23 @@ function getFareProductTypeConfigsFromSnapshot(
 function getTravelSearchFiltersFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
 ): TravelSearchFiltersType | undefined {
-  const transportModeOptions = snapshot.docs
-    .find((doc) => doc.id == 'travelSearchFilters')
-    ?.get('transportModes');
+  const travelSearchFiltersDoc = snapshot.docs.find(
+    (doc) => doc.id == 'travelSearchFilters',
+  );
+
+  const transportModeOptions = travelSearchFiltersDoc?.get('transportModes');
+  const flexibleTransport = travelSearchFiltersDoc?.get('flexibleTransport');
 
   const mappedTransportModes =
     mapToTransportModeFilterOptions(transportModeOptions);
 
+  const mappedFlexibleTransport =
+    mapToFlexibleTransportOption(flexibleTransport);
+
   if (mappedTransportModes) {
     return {
       transportModes: mappedTransportModes,
+      flexibleTransport: mappedFlexibleTransport,
     };
   }
 

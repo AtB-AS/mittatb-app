@@ -133,6 +133,9 @@ export type TripsQuery = {
         authority?: {id: string};
         serviceJourneyEstimatedCalls: Array<{
           actualDepartureTime?: any;
+          realtime: boolean;
+          aimedDepartureTime: any;
+          expectedDepartureTime: any;
           predictionInaccurate: boolean;
           quay: {name: string};
         }>;

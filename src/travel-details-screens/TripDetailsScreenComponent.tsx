@@ -4,7 +4,6 @@ import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import SvgDuration from '@atb/assets/svg/mono-icons/time/Duration';
 import {Button} from '@atb/components/button';
-import {AnyMode} from '@atb/components/icon-box';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -18,26 +17,27 @@ import {useFromTravelSearchToTicketEnabled} from '@atb/stacks-hierarchy/Root_Tab
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
-import {
-  CompactTravelDetailsMap,
-  TravelDetailsMapScreenParams,
-} from '@atb/travel-details-map-screen';
-import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
+import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {useCurrentTripPatternWithUpdates} from '@atb/travel-details-screens/use-current-trip-pattern-with-updates';
 import {canSellCollabTicket} from '@atb/travel-details-screens/utils';
-import {formatToClock, secondsBetween} from '@atb/utils/date';
+import {
+  formatToClock,
+  formatToVerboseFullDate,
+  isWithinSameDate,
+  secondsBetween,
+} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
-import React, {useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import {Trip} from './components/Trip';
+import {Divider} from '@atb/components/divider';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export type TripDetailsScreenParams = {
-  tripPatterns: TripPattern[];
-  startIndex?: number;
+  tripPattern: TripPattern;
 };
 
 type Props = TripDetailsScreenParams & {
@@ -48,8 +48,7 @@ type Props = TripDetailsScreenParams & {
 };
 
 export const TripDetailsScreenComponent = ({
-  tripPatterns,
-  startIndex,
+  tripPattern,
   onPressDetailsMap,
   onPressBuyTicket,
   onPressDeparture,
@@ -58,98 +57,86 @@ export const TripDetailsScreenComponent = ({
   const {t, language} = useTranslation();
   const styles = useStyle();
 
-  const [currentIndex, setCurrentIndex] = useState(startIndex ?? 0);
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const singleTicketConfig = fareProductTypeConfigs.find(
     (fareProductTypeConfig) => fareProductTypeConfig.type === 'single',
   );
 
-  const {tripPattern, error} = useCurrentTripPatternWithUpdates(
-    currentIndex,
-    tripPatterns,
-  );
-  const fromToNames = getFromToName(tripPattern.legs);
-  const startEndTime = getStartEndTime(tripPattern, language);
+  const {updatedTripPattern, error} =
+    useCurrentTripPatternWithUpdates(tripPattern);
 
-  const tripPatternLegs = tripPattern?.legs.map((leg) => {
-    let mode: AnyMode = !!leg.bookingArrangements ? 'flex' : leg.mode;
-    return {
-      ...leg,
-      mode,
-    };
-  });
+  const tripTicketDetails = useGetTicketInfoFromTrip(updatedTripPattern);
+  const fromToNames = getFromToName(updatedTripPattern.legs);
+  const startEndTime = getStartEndTime(updatedTripPattern, language);
 
-  function navigate(page: number) {
-    const newIndex = page - 1;
-    if (page > tripPatterns.length || page < 1 || currentIndex === newIndex) {
-      return;
-    }
-    setCurrentIndex(newIndex);
-  }
-
-  const tripTicketDetails = useGetTicketInfoFromTrip(tripPattern);
   return (
     <View style={styles.container}>
       <FullScreenView
-        type="large"
-        leftButton={{type: 'back', withIcon: true}}
-        title={
-          fromToNames
-            ? t(TripDetailsTexts.header.titleFromTo(fromToNames))
-            : t(TripDetailsTexts.header.title)
-        }
-        titleA11yLabel={
-          fromToNames
-            ? t(TripDetailsTexts.header.titleFromToA11yLabel(fromToNames))
-            : undefined
-        }
-        color={themeColor}
-        headerChildren={
-          <View style={{flexDirection: 'row'}}>
-            <ThemeIcon
-              svg={SvgDuration}
-              style={{marginRight: 8}}
-              colorType={themeColor}
-            />
-            <ThemeText
-              type="body__secondary"
-              color={themeColor}
-              accessibilityLabel={t(
-                TripDetailsTexts.header.startEndTimeA11yLabel(startEndTime),
-              )}
-            >
-              {t(TripDetailsTexts.header.startEndTime(startEndTime))}
-            </ThemeText>
-          </View>
-        }
-      >
-        {tripPatternLegs && (
-          <CompactTravelDetailsMap
-            mapLegs={tripPatternLegs}
-            fromPlace={tripPatternLegs[0].fromPlace}
-            toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
-            onExpand={() => {
-              onPressDetailsMap({
-                legs: tripPatternLegs,
-                fromPlace: tripPatternLegs[0].fromPlace,
-                toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
-              });
-            }}
-          />
-        )}
-        {tripPattern && (
-          <View style={styles.paddedContainer} testID="tripDetailsContentView">
-            {tripPatterns.length > 1 && (
-              <PaginatedDetailsHeader
-                page={currentIndex + 1}
-                totalPages={tripPatterns.length}
-                onNavigate={navigate}
-                style={styles.pagination}
-                currentDate={tripPatternLegs[0]?.aimedStartTime}
+        headerProps={{
+          leftButton: {type: 'back', withIcon: true},
+          color: themeColor,
+        }}
+        parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
+          <View>
+            <View accessible={true} ref={focusRef}>
+              <ThemeText
+                color={themeColor}
+                type="heading--medium"
+                style={styles.heading}
+                accessibilityLabel={
+                  fromToNames
+                    ? t(
+                        TripDetailsTexts.header.titleFromToA11yLabel(
+                          fromToNames,
+                        ),
+                      )
+                    : undefined
+                }
+              >
+                {fromToNames
+                  ? t(TripDetailsTexts.header.titleFromTo(fromToNames))
+                  : t(TripDetailsTexts.header.title)}
+              </ThemeText>
+            </View>
+            <View style={{flexDirection: 'row'}} accessible={true}>
+              <ThemeIcon
+                svg={SvgDuration}
+                style={styles.durationIcon}
+                colorType={themeColor}
               />
+              <ThemeText
+                type="body__secondary"
+                color={themeColor}
+                accessibilityLabel={t(
+                  TripDetailsTexts.header.startEndTimeA11yLabel(startEndTime),
+                )}
+              >
+                {t(TripDetailsTexts.header.startEndTime(startEndTime))}
+              </ThemeText>
+            </View>
+          </View>
+        )}
+      >
+        {updatedTripPattern && (
+          <View style={styles.paddedContainer} testID="tripDetailsContentView">
+            {!isWithinSameDate(
+              new Date(),
+              updatedTripPattern.expectedStartTime,
+            ) && (
+              <>
+                <View style={styles.date}>
+                  <ThemeText type={'body__primary'} color={'secondary'}>
+                    {formatToVerboseFullDate(
+                      updatedTripPattern.expectedStartTime,
+                      language,
+                    )}
+                  </ThemeText>
+                </View>
+                <Divider style={styles.divider} />
+              </>
             )}
             <Trip
-              tripPattern={tripPattern}
+              tripPattern={updatedTripPattern}
               error={error}
               onPressDetailsMap={onPressDetailsMap}
               onPressDeparture={onPressDeparture}
@@ -310,6 +297,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.static.background.background_0.background,
   },
+  heading: {marginBottom: theme.spacings.medium},
   paddedContainer: {
     paddingHorizontal: theme.spacings.medium,
   },
@@ -331,11 +319,16 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.xSmall,
     flexDirection: 'row',
   },
+  date: {
+    alignItems: 'center',
+    marginTop: theme.spacings.medium,
+  },
+  divider: {
+    marginVertical: theme.spacings.medium,
+  },
   borderTop: {
     borderTopColor: theme.border.primary,
     borderTopWidth: theme.border.width.slim,
   },
-  pagination: {
-    marginVertical: theme.spacings.medium,
-  },
+  durationIcon: {marginRight: theme.spacings.small},
 }));

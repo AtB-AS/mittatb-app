@@ -53,6 +53,8 @@ export const Root_TabNavigatorStack = () => {
           theme.interactive.interactive_2.outline.background,
         tabBarInactiveTintColor: theme.text.colors.secondary,
         tabBarStyle: {
+          borderTopWidth: theme.border.width.slim,
+          borderTopColor: theme.border.primary,
           backgroundColor: theme.interactive.interactive_2.default.background,
           ...useBottomNavigationStyles(),
         },

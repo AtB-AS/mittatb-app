@@ -236,8 +236,8 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
         },
       },
       noTravelCard: _(
-        'Du har ikke et reisekort registrert. Hvis du ønsker å bruke reisekort kan du legge til dette på din profil i [nettbutikken](https://nettbutikk.atb.no).',
-        'You have no travel card registered, if you wish to use travel card as travel token you may add this to your profile in the [webshop](https://nettbutikk.atb.no).',
+        'Du har ikke et reisekort registrert. Hvis du ønsker å bruke reisekort kan du legge til dette på din profil i [nettbutikken](https://nettbutikk.reisnordland.no/).',
+        'You have no travel card registered, if you wish to use travel card as travel token you may add this to your profile in the [webshop](https://nettbutikk.reisnordland.no/).',
       ),
     },
   },

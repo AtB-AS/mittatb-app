@@ -1,10 +1,11 @@
 import {TravelSearchTransportModes} from '@atb-as/config-specs';
 import {CancelToken, isCancel} from '@atb/api';
 import {tripsSearch} from '@atb/api/trips_v2';
-import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
 import {
-  InputMaybe,
-  StreetMode,
+  Modes,
+  TransportMode,
+  TransportModes,
+  TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {TripPattern} from '@atb/api/types/trips';
@@ -25,6 +26,8 @@ import {isValidTripLocations} from '@atb/utils/location';
 import Bugsnag from '@bugsnag/react-native';
 import {CancelTokenSource} from 'axios';
 import {useCallback, useEffect, useRef, useState} from 'react';
+import {useJourneyModes} from './hooks';
+import {useAnalytics} from '@atb/analytics';
 
 export function useTripsQuery(
   fromLocation: Location | undefined,
@@ -55,10 +58,11 @@ export function useTripsQuery(
   const {
     preferences: {tripSearchPreferences},
   } = usePreferences();
+  const analytics = useAnalytics();
 
   const {
     tripsSearch_max_number_of_chained_searches: config_max_performed_searches,
-    tripsSearch_target_number_of_initial_hits: config_target_inital_hits,
+    tripsSearch_target_number_of_initial_hits: config_target_initial_hits,
     tripsSearch_target_number_of_page_hits: config_target_page_hits,
   } = useRemoteConfig();
 
@@ -66,7 +70,7 @@ export function useTripsQuery(
     setTripPatterns([]);
   }, [setTripPatterns]);
 
-  const journeySearchModes = useJourneySearchModes(StreetMode.Foot);
+  const journeySearchModes = useJourneyModes();
 
   const search = useCallback(
     (cursor?: string, existingTrips?: TripPatternWithKey[]) => {
@@ -77,7 +81,7 @@ export function useTripsQuery(
 
       const targetNumberOfHits = cursor
         ? config_target_page_hits
-        : config_target_inital_hits;
+        : config_target_initial_hits;
 
       const sanitizedSearchTime =
         searchTime.option === 'now'
@@ -157,6 +161,11 @@ export function useTripsQuery(
                 ? 'search-empty-result'
                 : 'search-success',
             );
+            analytics.logEvent('Trip search', 'Search performed', {
+              searchTime,
+              filtersSelection: toLoggableFiltersSelection(filtersSelection),
+              numberOfHits: allTripPatterns.length,
+            });
           } catch (e) {
             setTripPatterns([]);
             setPageCursor(undefined);
@@ -214,7 +223,7 @@ async function doSearch(
   cancelToken: CancelTokenSource,
   tripSearchPreferences: TripSearchPreferences | undefined,
   travelSearchFiltersSelection: TravelSearchFiltersSelectionType | undefined,
-  journeySearchModes: Types.Modes,
+  journeySearchModes: Modes,
 ) {
   const from = {
     ...fromLocation,
@@ -316,71 +325,27 @@ function filterDuplicateTripPatterns(
   });
 }
 
-function useJourneySearchModes(
-  defaultValue: InputMaybe<StreetMode>,
-): Types.Modes {
-  const {
-    preferences: {
-      flexibleTransport,
-      useFlexibleTransportOnAccessMode,
-      useFlexibleTransportOnDirectMode,
-      useFlexibleTransportOnEgressMode,
-    },
-  } = usePreferences();
-
-  const {
-    enable_flexible_transport,
-    use_flexible_on_accessMode,
-    use_flexible_on_directMode,
-    use_flexible_on_egressMode,
-  } = useRemoteConfig();
-
-  // Prioritizes local configurations
-  if (!!flexibleTransport) {
-    return {
-      accessMode: !!useFlexibleTransportOnAccessMode
-        ? StreetMode.Flexible
-        : StreetMode.Foot,
-      directMode: !!useFlexibleTransportOnDirectMode
-        ? StreetMode.Flexible
-        : StreetMode.Foot,
-      egressMode: !!useFlexibleTransportOnEgressMode
-        ? StreetMode.Flexible
-        : StreetMode.Foot,
-    };
-  }
-
-  return {
-    accessMode: enable_flexible_transport
-      ? use_flexible_on_accessMode
-        ? StreetMode.Flexible
-        : defaultValue
-      : defaultValue,
-    directMode: enable_flexible_transport
-      ? use_flexible_on_directMode
-        ? StreetMode.Flexible
-        : defaultValue
-      : defaultValue,
-    egressMode: enable_flexible_transport
-      ? use_flexible_on_egressMode
-        ? StreetMode.Flexible
-        : defaultValue
-      : defaultValue,
-  };
-}
-
 function transportModeToEnum(
   modes: TravelSearchTransportModes[],
-): Types.TransportModes[] {
+): TransportModes[] {
   return modes.map((internal) => {
     return {
-      transportMode: enumFromString(
-        Types.TransportMode,
-        internal.transportMode,
-      ),
+      transportMode: enumFromString(TransportMode, internal.transportMode),
       transportSubModes: internal.transportSubModes
-        ?.map((submode) => enumFromString(Types.TransportSubmode, submode))
-        .filter(Boolean) as Types.TransportSubmode[],
+        ?.map((submode) => enumFromString(TransportSubmode, submode))
+        .filter(Boolean) as TransportSubmode[],
     };
   });
+}
+
+function toLoggableFiltersSelection(
+  filterSelection: TravelSearchFiltersSelectionType | undefined,
+) {
+  if (!filterSelection) return;
+  return {
+    transportModes: filterSelection.transportModes?.map((t) => ({
+      [t.id]: t.selected,
+    })),
+    flexibleTransportEnabled: filterSelection.flexibleTransport?.enabled,
+  };
 }

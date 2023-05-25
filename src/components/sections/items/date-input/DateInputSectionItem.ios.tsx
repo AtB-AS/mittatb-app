@@ -5,7 +5,7 @@ import {parseISO} from 'date-fns';
 import React from 'react';
 import {Platform, StyleProp, ViewStyle} from 'react-native';
 import {InternalLabeledSectionItem} from '../InternalLabeledSectionItem';
-import {DateInputSectionItemProps, dateToDateString} from './utils';
+import {DateInputSectionItemProps} from './utils';
 import {useLocaleContext} from '@atb/LocaleProvider';
 
 export function DateInputSectionItem(props: DateInputSectionItemProps) {
@@ -40,7 +40,7 @@ export function DateInputSectionItem(props: DateInputSectionItemProps) {
         testID="dateInput"
         minimumDate={new Date()}
         onChange={(_, date) => {
-          onChange(dateToDateString(date));
+          if (date) onChange(date.toISOString());
         }}
       />
     </InternalLabeledSectionItem>

@@ -1,20 +1,27 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Feedback} from '@atb/components/feedback';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {secondsBetween} from '@atb/utils/date';
 import {AxiosError} from 'axios';
 import React from 'react';
 import {View} from 'react-native';
 import {TripMessages} from './DetailsMessages';
 import {TripSection, getPlaceName, InterchangeDetails} from './TripSection';
-import {Summary} from './TripSummary';
+import {TripSummary} from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {isSignificantFootLegWalkOrWaitTime} from '@atb/travel-details-screens/utils';
-import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
+import {
+  CompactTravelDetailsMap,
+  TravelDetailsMapScreenParams,
+} from '@atb/travel-details-map-screen';
 import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
-import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
+import {useRealtimeMapEnabled} from '@atb/components/map';
+import {AnyMode} from '@atb/components/icon-box';
+import {Divider} from '@atb/components/divider';
+import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -34,6 +41,9 @@ export const Trip: React.FC<TripProps> = ({
   onPressQuay,
 }) => {
   const styles = useStyle();
+  const {theme} = useTheme();
+  const {t} = useTranslation();
+
   const legs = tripPattern.legs.filter((leg, i) =>
     isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
   );
@@ -51,6 +61,14 @@ export const Trip: React.FC<TripProps> = ({
     : undefined;
   const {vehiclePositions} = useGetServiceJourneyVehicles(ids);
 
+  const tripPatternLegs = tripPattern?.legs.map((leg) => {
+    let mode: AnyMode = !!leg.bookingArrangements ? 'flex' : leg.mode;
+    return {
+      ...leg,
+      mode,
+    };
+  });
+
   return (
     <View style={styles.container}>
       <TripMessages tripPattern={tripPattern} error={error} />
@@ -61,6 +79,7 @@ export const Trip: React.FC<TripProps> = ({
               (vehicle) =>
                 vehicle.serviceJourney?.id === leg.serviceJourney?.id,
             );
+
             return (
               <TripSection
                 key={index}
@@ -76,12 +95,14 @@ export const Trip: React.FC<TripProps> = ({
                 testID={'legContainer' + index}
                 onPressShowLive={
                   legVehiclePosition
-                    ? () =>
+                    ? (mapData: ServiceJourneyMapInfoData_v3) =>
                         onPressDetailsMap({
-                          legs: [leg],
-                          fromPlace: leg.fromPlace,
-                          toPlace: leg.toPlace,
-                          initialVehiclePosition: legVehiclePosition,
+                          legs: mapData.mapLegs,
+                          fromPlace: mapData.start,
+                          toPlace: mapData.stop,
+                          vehicleWithPosition: legVehiclePosition,
+                          mode: leg.mode,
+                          subMode: leg.transportSubmode,
                         })
                     : undefined
                 }
@@ -91,7 +112,23 @@ export const Trip: React.FC<TripProps> = ({
             );
           })}
       </View>
-      <Summary {...tripPattern} />
+      <Divider style={{marginVertical: theme.spacings.medium}} />
+      {tripPatternLegs && (
+        <CompactTravelDetailsMap
+          mapLegs={tripPatternLegs}
+          fromPlace={tripPatternLegs[0]?.fromPlace}
+          toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
+          buttonText={t(TripDetailsTexts.trip.summary.showTripInMap.label)}
+          onExpand={() => {
+            onPressDetailsMap({
+              legs: tripPatternLegs,
+              fromPlace: tripPatternLegs[0]?.fromPlace,
+              toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
+            });
+          }}
+        />
+      )}
+      <TripSummary {...tripPattern} />
       <Feedback metadata={tripPattern} viewContext="assistant" />
     </View>
   );

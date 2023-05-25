@@ -13,7 +13,7 @@ import type {IconColor} from './types';
 import {
   NotificationIndicator,
   NotificationIndicatorProps,
-} from '@atb/components/theme-icon/NotificationIndicator';
+} from './NotificationIndicator';
 import {LoadingSpinner} from '@atb/components/loading';
 
 export type ThemeIconProps = {

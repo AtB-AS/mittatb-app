@@ -9,7 +9,8 @@ import {FareProductTypeConfig} from '@atb/configuration';
 export type LoginOnboardingInAppRouteParams = {
   afterLogin:
     | AfterLoginParams<'Root_TabNavigatorStack'>
-    | AfterLoginParams<'Root_PurchaseOverviewScreen'>;
+    | AfterLoginParams<'Root_PurchaseOverviewScreen'>
+    | AfterLoginParams<'Root_PurchaseConfirmationScreen'>;
   fareProductTypeConfig: FareProductTypeConfig;
 };
 

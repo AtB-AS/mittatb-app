@@ -56,6 +56,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     marginTop: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
-    flexDirection: 'row',
   },
 }));

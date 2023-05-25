@@ -1,5 +1,6 @@
 declare module '@env' {
   export const API_BASE_URL: string;
+  export const WS_API_BASE_URL: string;
   export const APP_VERSION: string;
   export const IOS_BUNDLE_IDENTIFIER: string;
   export const PRIVACY_POLICY_URL: string;
@@ -15,4 +16,6 @@ declare module '@env' {
   export const IS_QA_ENV: string | undefined;
   export const SAFETY_NET_API_KEY: string;
   export const ENABLE_TICKETING: string | undefined;
+  export const POSTHOG_API_KEY: string | undefined;
+  export const POSTHOG_HOST: string | undefined;
 }

@@ -4,7 +4,7 @@ import {
   StopPlaceInfo,
 } from '@atb/api/departures/types';
 import {Section} from '@atb/components/sections';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {useTheme} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import haversineDistance from 'haversine-distance';
 import sortBy from 'lodash.sortby';
@@ -48,7 +48,6 @@ export const QuaySection = React.memo(function QuaySection({
   const [limit, setLimit] = useState(LIMIT_SIZE);
   const {t} = useTranslation();
   const {theme} = useTheme();
-  const styles = useStyles();
 
   useEffect(() => {
     setLimit(LIMIT_SIZE);
@@ -67,7 +66,7 @@ export const QuaySection = React.memo(function QuaySection({
 
   return (
     <Fragment>
-      <Section testID={testID} style={styles.quaySection}>
+      <Section testID={testID}>
         <QuayHeaderItem
           quay={quayGroup.quay}
           distance={getDistanceInfo(quayGroup, locationOrStopPlace)}
@@ -140,10 +139,3 @@ function getDistanceInfo(
 
   return 0;
 }
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  quaySection: {
-    backgroundColor: theme.static.background.background_1.background,
-    borderRadius: theme.border.radius.regular,
-  },
-}));

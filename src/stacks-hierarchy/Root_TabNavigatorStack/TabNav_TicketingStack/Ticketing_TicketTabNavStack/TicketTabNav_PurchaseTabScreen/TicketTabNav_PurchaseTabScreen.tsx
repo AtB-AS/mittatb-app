@@ -2,7 +2,7 @@ import {useAuthState} from '@atb/auth';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {AnonymousPurchaseWarning} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/AnonymousPurchaseWarning';
 import {FareProducts} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProducts';
-import {useTheme} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {RecentFareContracts} from './Components/RecentFareContracts/RecentFareContracts';
@@ -15,6 +15,7 @@ import {useTipsAndInformationEnabled} from '@atb/stacks-hierarchy/Root_TipsAndIn
 import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {TipsAndInformationTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TipsAndInformationTile';
 import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
+import {useAnalytics} from '@atb/analytics';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -26,13 +27,18 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {recentFareContracts} = useRecentFareContracts();
   const hasRecentFareContracts =
     enable_recent_tickets && !!recentFareContracts.length;
+  const styles = useStyles();
 
   const showTipsAndInformation = useTipsAndInformationEnabled();
   const showTicketAssistant = useTicketingAssistantEnabled();
+  const analytics = useAnalytics();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
   const onProductSelect = (fareProductTypeConfig: FareProductTypeConfig) => {
+    analytics.logEvent('Ticketing', 'Fare product selected', {
+      type: fareProductTypeConfig.type,
+    });
     if (
       fareProductTypeConfig.configuration.requiresLogin &&
       authenticationType !== 'phone'
@@ -62,6 +68,9 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     rfc: RecentFareContract,
     fareProductTypeConfig: FareProductTypeConfig,
   ) => {
+    analytics.logEvent('Ticketing', 'Recently used fare product selected', {
+      type: fareProductTypeConfig.type,
+    });
     navigation.navigate('Root_PurchaseOverviewScreen', {
       fareProductTypeConfig,
       preassignedFareProduct: rfc.preassignedFareProduct,
@@ -84,11 +93,14 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         <RecentFareContracts onSelect={onFareContractSelect} />
       )}
       <View
-        style={{
-          backgroundColor: hasRecentFareContracts
-            ? theme.static.background.background_2.background
-            : undefined,
-        }}
+        style={[
+          styles.container,
+          {
+            backgroundColor: hasRecentFareContracts
+              ? theme.static.background.background_2.background
+              : undefined,
+          },
+        ]}
       >
         {authenticationType !== 'phone' && (
           <AnonymousPurchaseWarning
@@ -109,9 +121,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         <FareProducts onProductSelect={onProductSelect} />
         {showTicketAssistant && (
           <TicketAssistantTile
-            onPress={() => {
-              navigation.navigate('Root_TicketAssistantStack');
-            }}
+            onPress={() => navigation.navigate('Root_TicketAssistantStack')}
             testID="ticketAssistant"
           />
         )}
@@ -119,3 +129,9 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     </ScrollView>
   ) : null;
 };
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    marginTop: theme.spacings.medium,
+  },
+}));

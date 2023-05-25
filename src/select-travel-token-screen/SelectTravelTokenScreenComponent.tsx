@@ -2,7 +2,6 @@ import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import {RadioBox} from '@atb/components/radio';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import * as Sections from '@atb/components/sections';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {RemoteToken} from '@atb/mobile-token/types';
 import {
@@ -25,6 +24,7 @@ import {flatMap} from '@atb/utils/array';
 import React, {useCallback, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {RadioGroupSection, Section} from '@atb/components/sections';
 
 type Props = {onAfterSave: () => void};
 
@@ -158,8 +158,8 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             />
           )}
         {selectedType === 'mobile' && mobileTokens?.length ? (
-          <Sections.Section type="spacious" style={styles.selectDeviceSection}>
-            <Sections.RadioGroupSection<RemoteToken>
+          <Section type="spacious" style={styles.selectDeviceSection}>
+            <RadioGroupSection<RemoteToken>
               items={mobileTokens}
               keyExtractor={(rt) => rt.id}
               itemToText={(rt) =>
@@ -178,7 +178,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
                 TravelTokenTexts.toggleToken.radioBox.phone.selection.heading,
               )}
             />
-          </Sections.Section>
+          </Section>
         ) : null}
 
         {saveState.error && (

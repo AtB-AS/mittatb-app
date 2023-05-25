@@ -1,5 +1,4 @@
-fastlane documentation
-----
+## fastlane documentation
 
 # Installation
 
@@ -95,8 +94,7 @@ Upload the build to AppCenter
 
 Upload the build to AppCenter for distribution to TestFlight
 
-----
-
+---
 
 ## Android
 
@@ -114,15 +112,11 @@ Upload the build to AppCenter
 [bundle exec] fastlane android firebase_distribution_staging
 ```
 
-
-
 ### android playstore_internal
 
 ```sh
 [bundle exec] fastlane android playstore_internal
 ```
-
-
 
 ### android appcenter_staging
 
@@ -130,17 +124,13 @@ Upload the build to AppCenter
 [bundle exec] fastlane android appcenter_staging
 ```
 
-
-
 ### android appcenter_alpha
 
 ```sh
 [bundle exec] fastlane android appcenter_alpha
 ```
 
-
-
-----
+---
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
 

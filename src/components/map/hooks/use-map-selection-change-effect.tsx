@@ -5,7 +5,7 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {MapProps, MapSelectionActionType} from '../types';
 import {useTriggerCameraMoveEffect} from './use-trigger-camera-move-effect';
 import {useDecideCameraFocusMode} from './use-decide-camera-focus-mode';
-import {useUpdateBottomSheetWhenSelectedStopPlaceChanges} from './use-update-bottom-sheet-when-selected-stop-place-changes';
+import {useUpdateBottomSheetWhenSelectedEntityChanges} from './use-update-bottom-sheet-when-selected-entity-changes';
 import {Coordinates} from '@atb/utils/coordinates';
 
 /**
@@ -42,7 +42,7 @@ export const useMapSelectionChangeEffect = (
       : undefined;
 
   useTriggerCameraMoveEffect(cameraFocusMode, mapCameraRef);
-  useUpdateBottomSheetWhenSelectedStopPlaceChanges(
+  useUpdateBottomSheetWhenSelectedEntityChanges(
     mapProps,
     distance,
     mapSelectionAction,

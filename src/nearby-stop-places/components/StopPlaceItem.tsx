@@ -3,7 +3,6 @@ import {useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import * as Sections from '@atb/components/sections';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import DeparturesTexts from '@atb/translations/screens/Departures';
@@ -16,6 +15,7 @@ import {
 } from '@atb/situations';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
+import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 
 type StopPlaceItemProps = {
   stopPlaceNode: NearestStopPlaceNode;
@@ -61,8 +61,8 @@ export const StopPlaceItem = ({
     .join(',');
 
   return (
-    <Sections.Section withPadding>
-      <Sections.GenericClickableSectionItem
+    <Section withPadding>
+      <GenericClickableSectionItem
         onPress={() => onPress(place)}
         accessibilityLabel={a11yLabel}
         accessibilityHint={t(
@@ -93,8 +93,8 @@ export const StopPlaceItem = ({
             />
           ))}
         </View>
-      </Sections.GenericClickableSectionItem>
-    </Sections.Section>
+      </GenericClickableSectionItem>
+    </Section>
   );
 };
 

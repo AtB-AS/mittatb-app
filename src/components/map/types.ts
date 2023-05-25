@@ -1,49 +1,55 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
-import {Feature, FeatureCollection, GeoJSON, LineString, Point} from 'geojson';
+import {
+  Feature,
+  FeatureCollection,
+  GeoJSON,
+  LineString,
+  Point,
+  Position,
+} from 'geojson';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   PointsOnLink,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
-import {RegionPayload} from '@rnmapbox/maps';
 import {AnyMode} from '@atb/components/icon-box';
-import {StationFragment} from '@atb/api/types/generated/fragments/stations';
+import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
  * should behave
- *  - ExploreStops: If only the Stop Places (Bus, Trams stops etc.) should be
- *    interactable, and will open a bottom sheet with departures for the stop.
+ *  - ExploreEntities: If only the map entities (Bus, Trams stops etc.) should be
+ *    interactable, and will open a bottom sheet with details for the entity.
  *  - ExploreLocation: If every selected location should be interactable. It
  *    also shows the Location bar on top of the Map to show the currently
  *    selected location
  */
-export type MapSelectionMode = 'ExploreStops' | 'ExploreLocation';
+export type MapSelectionMode = 'ExploreEntities' | 'ExploreLocation';
 
 export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
 ) => void;
 
+export type MapRegion = {
+  visibleBounds: Position[];
+  zoomLevel: number;
+  center: Position;
+};
+
 export type VehiclesState = {
   vehicles: FeatureCollection<GeoJSON.Point, VehicleFragment>;
-  fetchVehicles: (
-    region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
-  ) => void;
+  updateRegion: (region: MapRegion) => void;
   isLoading: boolean;
   onFilterChange: (filter: VehiclesFilterType) => void;
-  onPress: (type: MapSelectionActionType) => void;
 };
 
 export type StationsState = {
-  stations: FeatureCollection<GeoJSON.Point, StationFragment>;
-  fetchStations: (
-    region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
-  ) => void;
+  stations: FeatureCollection<GeoJSON.Point, StationBasicFragment>;
+  updateRegion: (region: MapRegion) => void;
   isLoading: boolean;
   onFilterChange: (filter: StationsFilterType) => void;
-  onPress: (type: MapSelectionActionType) => void;
 };
 
 export type NavigateToTripSearchCallback = (
@@ -69,7 +75,7 @@ export type MapProps = {
       onLocationSelect: SelectionLocationCallback;
     }
   | {
-      selectionMode: 'ExploreStops';
+      selectionMode: 'ExploreEntities';
       navigateToQuay: NavigateToQuayCallback;
       navigateToDetails: NavigateToDetailsCallback;
       navigateToTripSearch: NavigateToTripSearchCallback;
@@ -104,8 +110,11 @@ export type CameraFocusModeType =
       distance: number;
     }
   | {
-      mode: 'stop-place';
-      stopPlaceFeature: Feature<Point>;
+      mode: 'entity';
+      entityFeature: Feature<Point>;
+      mapLines?: MapLine[];
+      distance?: number;
+      zoomTo?: boolean;
     }
   | {
       mode: 'coordinates';
@@ -134,7 +143,8 @@ export type VehiclesFilterType = {
 };
 
 export type StationsFilterType = {
-  showCityBikeStations: boolean;
+  showCityBikeStations?: boolean;
+  showCarSharingStations?: boolean;
 };
 
 export type MapFilterType = {

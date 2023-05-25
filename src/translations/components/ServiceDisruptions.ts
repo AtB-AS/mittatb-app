@@ -3,17 +3,14 @@ import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
 const ServiceDisruptionsTexts = {
   header: {
-    title: _('Driftsavvik', 'Service disruptions'),
+    title: _('Statusmeldinger', 'Status messages'),
   },
   body: _(
-    'Oversikt over endringer, forsinkelser og avvik finner du på atb.no:',
-    'Get an overview of changes, delays and service disruptions at atb.no (Norwegian only):',
+    'Fullstendig oversikt over endringer, forsinkelser og avvik finner du på våre nettsider:',
+    'You will find a complete overview of changes, delays, and deviations on our website.:',
   ),
   button: {
-    text: _(
-      'atb.no/driftsavvik (åpnes i nettleser)',
-      'atb.no/driftsavvik (opens in browser)',
-    ),
+    text: _('atb.no/driftsavvik', 'atb.no/driftsavvik'),
     a11yHint: _(
       'Naviger til oversikt over driftsavvik i et nettleservindu',
       'Navigate to an overview of service disruptions in a browser window',

@@ -8,7 +8,6 @@ import {useAuthState} from '@atb/auth';
 import {VippsSignInErrorCode} from '@atb/auth/AuthContext';
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {VippsLoginButton} from '@atb/components/vipps-login-button';
 import {AfterLoginParams, LoginInAppScreenProps} from '@atb/login/types';
@@ -23,13 +22,15 @@ import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {parseUrl} from 'query-string/base';
+import {LinkSectionItem, Section} from '@atb/components/sections';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export type LoginOptionsRouteParams = {
   afterLogin:
     | AfterLoginParams<'Root_TabNavigatorStack'>
-    | AfterLoginParams<'Root_PurchaseOverviewScreen'>;
+    | AfterLoginParams<'Root_PurchaseOverviewScreen'>
+    | AfterLoginParams<'Root_PurchaseConfirmationScreen'>;
 };
 
 type LoginOptionsProps = LoginInAppScreenProps<'LoginOptionsScreen'>;
@@ -176,8 +177,8 @@ export const LoginOptionsScreen = ({
         <ThemeText style={styles.description} color={themeColor}>
           {t(LoginTexts.logInOptions.or)}
         </ThemeText>
-        <Sections.Section>
-          <Sections.LinkSectionItem
+        <Section>
+          <LinkSectionItem
             text={t(LoginTexts.logInOptions.options.phoneAndCode)}
             onPress={() => {
               navigation.navigate('LoginInApp', {
@@ -188,7 +189,7 @@ export const LoginOptionsScreen = ({
             disabled={isLoading}
             testID="chooseLoginPhone"
           />
-        </Sections.Section>
+        </Section>
       </ScrollView>
     </View>
   );

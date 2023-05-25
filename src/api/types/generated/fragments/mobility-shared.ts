@@ -1,3 +1,5 @@
+import * as Types from '../mobility-types_v2';
+
 export type OperatorFragment = {id: string; name: TranslatedStringFragment};
 
 export type PricingPlanFragment = {
@@ -40,3 +42,11 @@ export type SystemFragment = {
   brandAssets?: BrandAssetsFragment;
   rentalApps?: RentalAppsFragment;
 };
+
+export type VehicleRangeFragment = {maxRangeMeters?: number};
+
+export type VehicleTypeFragment = {
+  id: string;
+  formFactor: Types.FormFactor;
+  name?: TranslatedStringFragment;
+} & VehicleRangeFragment;

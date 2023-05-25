@@ -3,7 +3,7 @@ import {
   DeparturesVariables,
   getDepartures,
 } from '@atb/api/departures/stops-nearest';
-import * as DepartureTypes from '@atb/api/types/departures';
+import {EstimatedCall} from '@atb/api/types/departures';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavorites, UserFavoriteDepartures} from '@atb/favorites';
 import {DeparturesRealtimeData} from '@atb/sdk';
@@ -32,7 +32,7 @@ import {DepartureRealtimeQuery} from '@atb/api/departures/departure-group';
 const HARD_REFRESH_LIMIT_IN_MINUTES = 10;
 
 export type DepartureDataState = {
-  data: DepartureTypes.EstimatedCall[] | null;
+  data: EstimatedCall[] | null;
   tick?: Date;
   error?: {type: ErrorType};
   locationId?: string[];
@@ -79,7 +79,7 @@ type DepartureDataActions =
       type: 'UPDATE_DEPARTURES';
       locationId?: string[];
       reset?: boolean;
-      result: DepartureTypes.EstimatedCall[];
+      result: EstimatedCall[];
     }
   | {
       type: 'SET_ERROR';
@@ -246,30 +246,33 @@ export function useDeparturesData(
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const {favoriteDepartures} = useFavorites();
   const [queryStartTime, setQueryStartTime] = useState<string | undefined>();
+  const [timeRange, setTimeRange] = useState<number | undefined>();
   const activeFavoriteDepartures = showOnlyFavorites
     ? favoriteDepartures
     : undefined;
   const limitPerLine = getLimitOfDeparturesPerLineByMode(mode);
-  const timeRange = getTimeRangeByMode(mode, queryStartTime);
+
   const timeout = useTimeoutRequest();
 
   const loadDepartures = useCallback(() => {
     const updatedQueryStartTime = startTime ?? new Date().toISOString();
     setQueryStartTime(updatedQueryStartTime);
+    const updatedTimeRange = getTimeRangeByMode(mode, updatedQueryStartTime);
+    setTimeRange(updatedTimeRange);
     dispatch({
       type: 'LOAD_INITIAL_DEPARTURES',
       quayIds,
       startTime: updatedQueryStartTime,
       limitPerLine,
       limitPerQuay,
-      timeRange,
+      timeRange: updatedTimeRange,
       favoriteDepartures: activeFavoriteDepartures,
       timeout,
     });
   }, [JSON.stringify(quayIds), startTime, activeFavoriteDepartures, mode]);
 
   const loadRealTimeData = useCallback(() => {
-    if (!queryStartTime) return;
+    if (!queryStartTime || !timeRange) return;
     dispatch({
       type: 'LOAD_REALTIME_DATA',
       quayIds,
@@ -332,10 +335,7 @@ async function fetchEstimatedCalls(
   queryInput: DeparturesVariables,
   favoriteDepartures?: UserFavoriteDepartures,
   opts?: AxiosRequestConfig,
-): Promise<DepartureTypes.EstimatedCall[]> {
+): Promise<EstimatedCall[]> {
   const result = await getDepartures(queryInput, favoriteDepartures, opts);
-  return flatMap(
-    result.quays,
-    (q) => q.estimatedCalls,
-  ) as DepartureTypes.EstimatedCall[];
+  return flatMap(result.quays, (q) => q.estimatedCalls) as EstimatedCall[];
 }

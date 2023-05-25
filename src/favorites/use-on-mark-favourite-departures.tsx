@@ -5,15 +5,18 @@ import {Quay, StopPlace} from '@atb/api/types/departures';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import React, {useRef} from 'react';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import * as Types from '@atb/api/types/generated/journey_planner_v3_types';
+import {
+  TransportSubmode,
+  TransportMode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 import {animateNextChange} from '@atb/utils/animation';
 
 type FavouriteDepartureLine = {
   id?: string;
   description?: string;
   lineNumber?: string;
-  transportMode?: Types.TransportMode;
-  transportSubmode?: Types.TransportSubmode;
+  transportMode?: TransportMode;
+  transportSubmode?: TransportSubmode;
   lineName?: string;
 };
 
