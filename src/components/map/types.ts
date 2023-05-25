@@ -138,13 +138,18 @@ export interface MapLine extends Feature<LineString> {
   faded?: boolean;
 }
 
+export type OperatorFilterType = {
+  showAll: boolean;
+  operators?: string[];
+};
+
 export type VehiclesFilterType = {
-  showVehicles: boolean;
+  scooters?: OperatorFilterType;
 };
 
 export type StationsFilterType = {
-  showCityBikeStations?: boolean;
-  showCarSharingStations?: boolean;
+  cityBikeStations?: OperatorFilterType;
+  carSharingStations?: OperatorFilterType;
 };
 
 export type MapFilterType = {

@@ -1,7 +1,12 @@
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
-import {View} from 'react-native';
+import {
+  MapTexts,
+  ScreenHeaderTexts,
+  TripSearchTexts,
+  useTranslation,
+} from '@atb/translations';
+import {ScrollView} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {MapFilterType} from '../../types';
 import {useUserMapFilters} from '@atb/components/map';
@@ -13,6 +18,9 @@ import {StyleSheet} from '@atb/theme';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useIsCityBikesEnabled, useIsVehiclesEnabled} from '@atb/mobility';
 import {useIsCarSharingEnabled} from '@atb/mobility/use-car-sharing-enabled';
+import {FullScreenFooter} from '@atb/components/screen-footer';
+import {Button} from '@atb/components/button';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 
 type MapFilterSheetProps = {
   close: () => void;
@@ -82,50 +90,100 @@ export const MapFilterSheet = ({
   };
 
   return (
-    <BottomSheetContainer>
+    <BottomSheetContainer maxHeightValue={0.9}>
       <ScreenHeaderWithoutNavigation
-        title=" "
+        title={t(MapTexts.filters.bottomSheet.heading)}
         color="background_1"
         leftButton={{
-          text: t(ScreenHeaderTexts.headerButton.close.text),
-          type: 'close',
+          text: t(ScreenHeaderTexts.headerButton.cancel.text),
+          type: 'cancel',
           onPress: close,
         }}
       />
-      <View style={style.container}>
-        <Section withPadding>
+      <ScrollView style={style.container}>
+        <Section>
           {isVehiclesEnabled && (
-            <ToggleSectionItem
-              leftIcon={Scooter}
-              text={t(MobilityTexts.scooter)}
-              value={initialFilter?.vehicles?.showVehicles}
-              onValueChange={onScooterToggle}
-            />
+            <Section>
+              <ToggleSectionItem
+                text={t(MobilityTexts.scooter)}
+                textType={'body__primary--bold'}
+                leftIcon={Scooter}
+                value={initialFilter?.vehicles?.showVehicles}
+                onValueChange={onScooterToggle}
+              />
+              <ToggleSectionItem
+                text={'Ryde'}
+                value={true}
+                onValueChange={onScooterToggle}
+              />
+              <ToggleSectionItem
+                text={'Tier'}
+                value={true}
+                onValueChange={onScooterToggle}
+              />
+              <ToggleSectionItem
+                text={'Voi'}
+                value={true}
+                onValueChange={onScooterToggle}
+              />
+            </Section>
           )}
           {isCityBikesEnabled && (
-            <ToggleSectionItem
-              leftIcon={Bicycle}
-              text={t(MobilityTexts.bicycle)}
-              value={initialFilter?.stations?.showCityBikeStations}
-              onValueChange={onBicycleToggle}
-            />
+            <Section style={style.filterGroup}>
+              <ToggleSectionItem
+                text={t(MobilityTexts.bicycle)}
+                textType={'body__primary--bold'}
+                leftIcon={Bicycle}
+                value={initialFilter?.stations?.showCityBikeStations}
+                onValueChange={() => {}}
+              />
+              <ToggleSectionItem
+                text={'Trondheim Bysykkel'}
+                value={true}
+                onValueChange={() => {}}
+              />
+            </Section>
           )}
           {isCarSharingEnabled && (
-            <ToggleSectionItem
-              leftIcon={Car}
-              text={t(MobilityTexts.car)}
-              value={initialFilter?.stations?.showCarSharingStations}
-              onValueChange={onCarToggle}
-            />
+            <Section style={style.filterGroup}>
+              <ToggleSectionItem
+                text={t(MobilityTexts.car)}
+                textType={'body__primary--bold'}
+                leftIcon={Car}
+                value={initialFilter?.stations?.showCarSharingStations}
+                onValueChange={() => {}}
+              />
+              <ToggleSectionItem
+                text={'Hertz'}
+                value={true}
+                onValueChange={() => {}}
+              />
+              <ToggleSectionItem
+                text={'Otto'}
+                value={true}
+                onValueChange={() => {}}
+              />
+            </Section>
           )}
         </Section>
-      </View>
+      </ScrollView>
+      <FullScreenFooter>
+        <Button
+          text={t(TripSearchTexts.filters.bottomSheet.use)}
+          onPress={() => {}}
+          rightIcon={{svg: Confirm}}
+        />
+      </FullScreenFooter>
     </BottomSheetContainer>
   );
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginBottom: theme.spacings.large,
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
+  },
+  filterGroup: {
+    marginTop: theme.spacings.medium,
   },
 }));
