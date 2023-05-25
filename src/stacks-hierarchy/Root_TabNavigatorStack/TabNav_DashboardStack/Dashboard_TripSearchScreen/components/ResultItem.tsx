@@ -188,6 +188,8 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       accessibilityHint={t(
         TripSearchTexts.results.resultItem.footer.detailsHint,
       )}
+      accessibilityRole={'button'}
+      style={styles.touchableOpacity}
       onPress={onDetailsPressed}
       accessible={true}
       testID={testID}
@@ -315,10 +317,12 @@ function ResultItemFooter() {
 }
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+  touchableOpacity: {
+    marginTop: theme.spacings.small,
+  },
   result: {
     backgroundColor: theme.static.background.background_0.background,
     borderRadius: theme.border.radius.regular,
-    marginTop: theme.spacings.small,
   },
   resultInPast: {
     backgroundColor: theme.static.background.background_2.background,
