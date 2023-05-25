@@ -527,21 +527,22 @@ const tripSummary = (
   isInPast: boolean,
   listPosition: number,
 ) => {
-  let start = '';
+  const distance = Math.round(tripPattern.legs[0].distance);
+  let humanizedDistance;
+  if (distance >= 1000) {
+    humanizedDistance = `${distance / 1000} ${t(dictionary.distance.km)}`;
+  } else {
+    humanizedDistance = `${distance} ${t(dictionary.distance.m)}`;
+  }
+
+  let startText = '';
 
   if (tripPattern.legs[0]?.mode === 'foot' && tripPattern.legs[1]) {
-    const distance = Math.round(tripPattern.legs[0].distance);
-    let humanizedDistance;
-    if (distance >= 1000) {
-      humanizedDistance = `${distance / 1000} ${t(dictionary.distance.km)}`;
-    } else {
-      humanizedDistance = `${distance} ${t(dictionary.distance.m)}`;
-    }
     const quayName = getQuayName(tripPattern.legs[1]?.fromPlace.quay);
 
     {
       quayName
-        ? (start = t(
+        ? (startText = t(
             TripSearchTexts.results.resultItem.footLeg.walkToStopLabel(
               humanizedDistance,
               quayName,
@@ -552,7 +553,7 @@ const tripSummary = (
   } else {
     const quayName = getQuayName(tripPattern.legs[0]?.fromPlace.quay);
     if (quayName) {
-      start = t(
+      startText = t(
         TripSearchTexts.results.resultItem.header.title(
           t(getTranslatedModeName(tripPattern.legs[0].mode)),
           quayName,
@@ -564,88 +565,88 @@ const tripSummary = (
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
   const firstLeg = nonFootLegs[0];
 
-  return `
-    ${t(
-      TripSearchTexts.results.resultItem.journeySummary.resultNumber(
-        listPosition,
-      ),
-    )}
-    ${isInPast ? t(TripSearchTexts.results.resultItem.passedTrip) : ''}
-    ${start}
-    
-        ${
-          firstLeg
-            ? t(getTranslatedModeName(firstLeg.mode)) +
-              (firstLeg.line?.publicCode
-                ? t(
-                    TripSearchTexts.results.resultItem.journeySummary.prefixedLineNumber(
-                      firstLeg.line.publicCode,
-                    ),
-                  )
-                : '') +
-              (isSignificantDifference(firstLeg)
-                ? t(
-                    TripSearchTexts.results.resultItem.journeySummary.realtime(
-                      firstLeg.fromPlace?.name ?? '',
-                      formatToClock(
-                        firstLeg.expectedStartTime,
-                        language,
-                        'floor',
-                      ),
-                      formatToClock(firstLeg.aimedStartTime, language, 'floor'),
-                    ),
-                  )
-                : t(
-                    TripSearchTexts.results.resultItem.journeySummary.noRealTime(
-                      firstLeg.fromPlace?.name ?? '',
-                      formatToClock(
-                        firstLeg.expectedStartTime,
-                        language,
-                        'floor',
-                      ),
-                    ),
-                  ))
-            : ''
-        }
+  const resultNumberText = t(
+    TripSearchTexts.results.resultItem.journeySummary.resultNumber(
+      listPosition,
+    ),
+  );
+  const passedTripText = isInPast
+    ? t(TripSearchTexts.results.resultItem.passedTrip)
+    : undefined;
 
-      ${
-        !nonFootLegs.length
-          ? t(
-              TripSearchTexts.results.resultItem.journeySummary.legsDescription
-                .footLegsOnly,
-            )
-          : nonFootLegs.length === 1
-          ? t(
-              TripSearchTexts.results.resultItem.journeySummary.legsDescription
-                .noSwitching,
-            )
-          : nonFootLegs.length === 2
-          ? t(
-              TripSearchTexts.results.resultItem.journeySummary.legsDescription
-                .oneSwitch,
-            )
-          : t(
-              TripSearchTexts.results.resultItem.journeySummary.legsDescription.someSwitches(
-                nonFootLegs.length - 1,
-              ),
-            )
-      }
-      ${t(
-        TripSearchTexts.results.resultItem.journeySummary.totalWalkDistance(
-          (tripPattern.walkDistance ?? 0).toFixed(),
-        ),
-      )}
-      
-      ${t(
-        TripSearchTexts.results.resultItem.journeySummary.travelTimes(
-          formatToClock(tripPattern.expectedStartTime, language, 'floor'),
-          formatToClock(tripPattern.expectedEndTime, language, 'ceil'),
-          secondsToDuration(tripPattern.duration, language),
-        ),
-      )}
+  const modeAndNumberText = firstLeg
+    ? t(getTranslatedModeName(firstLeg.mode)) +
+      (firstLeg.line?.publicCode
+        ? t(
+            TripSearchTexts.results.resultItem.journeySummary.prefixedLineNumber(
+              firstLeg.line.publicCode,
+            ),
+          )
+        : '')
+    : '';
 
-        ${screenReaderPause}
-  `;
+  const realTimeText = isSignificantDifference(firstLeg)
+    ? t(
+        TripSearchTexts.results.resultItem.journeySummary.realtime(
+          firstLeg.fromPlace?.name ?? '',
+          formatToClock(firstLeg.expectedStartTime, language, 'floor'),
+          formatToClock(firstLeg.aimedStartTime, language, 'floor'),
+        ),
+      )
+    : t(
+        TripSearchTexts.results.resultItem.journeySummary.noRealTime(
+          firstLeg.fromPlace?.name ?? '',
+          formatToClock(firstLeg.expectedStartTime, language, 'floor'),
+        ),
+      );
+
+  const numberOfFootLegsText = !nonFootLegs.length
+    ? t(
+        TripSearchTexts.results.resultItem.journeySummary.legsDescription
+          .footLegsOnly,
+      )
+    : nonFootLegs.length === 1
+    ? t(
+        TripSearchTexts.results.resultItem.journeySummary.legsDescription
+          .noSwitching,
+      )
+    : nonFootLegs.length === 2
+    ? t(
+        TripSearchTexts.results.resultItem.journeySummary.legsDescription
+          .oneSwitch,
+      )
+    : t(
+        TripSearchTexts.results.resultItem.journeySummary.legsDescription.someSwitches(
+          nonFootLegs.length - 1,
+        ),
+      );
+
+  const walkDistanceText = t(
+    TripSearchTexts.results.resultItem.journeySummary.totalWalkDistance(
+      (tripPattern.walkDistance ?? 0).toFixed(),
+    ),
+  );
+
+  const traveltimesText = t(
+    TripSearchTexts.results.resultItem.journeySummary.travelTimes(
+      formatToClock(tripPattern.expectedStartTime, language, 'floor'),
+      formatToClock(tripPattern.expectedEndTime, language, 'ceil'),
+      secondsToDuration(tripPattern.duration, language),
+    ),
+  );
+
+  const texts = [
+    resultNumberText,
+    passedTripText,
+    startText,
+    modeAndNumberText,
+    realTimeText,
+    numberOfFootLegsText,
+    walkDistanceText,
+    traveltimesText,
+  ].filter((text) => text !== undefined);
+
+  return texts.join(screenReaderPause);
 };
 
 function isSignificantDifference(leg: Leg) {
