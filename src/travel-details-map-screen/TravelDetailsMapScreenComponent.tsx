@@ -17,6 +17,7 @@ import {
 } from '@atb/components/map';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useGeolocationState} from '@atb/GeolocationContext';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useTheme, StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
@@ -49,7 +50,6 @@ type Props = TravelDetailsMapScreenParams & {
 const FOLLOW_ZOOM_LEVEL = 14.5;
 const FOLLOW_MIN_ZOOM_LEVEL = 8;
 const FOLLOW_ANIMATION_DURATION = 500;
-const STALE_DATA_THRESHOLD_IN_SECONDS = 10;
 
 export const TravelDetailsMapScreenComponent = ({
   legs,
@@ -189,6 +189,7 @@ const LiveVehicle = ({
   zoomLevel,
 }: VehicleIconProps) => {
   const {theme} = useTheme();
+  const {live_vehicle_stale_threshold} = useRemoteConfig();
 
   const isError =
     subscriptionState === 'CLOSING' || subscriptionState === 'CLOSED';
@@ -202,7 +203,7 @@ const LiveVehicle = ({
         vehicle.lastUpdated,
         new Date(),
       );
-      setIsStale(STALE_DATA_THRESHOLD_IN_SECONDS < secondsSinceUpdate);
+      setIsStale(live_vehicle_stale_threshold < secondsSinceUpdate);
     },
     1000,
     [vehicle.lastUpdated],

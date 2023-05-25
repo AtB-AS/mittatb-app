@@ -47,6 +47,7 @@ export type RemoteConfig = {
   use_flexible_on_directMode: boolean;
   use_flexible_on_egressMode: boolean;
   use_trygg_overgang_qr_code: boolean;
+  live_vehicle_stale_threshold: number;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -99,6 +100,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   use_flexible_on_directMode: true,
   use_flexible_on_egressMode: true,
   use_trygg_overgang_qr_code: false,
+  live_vehicle_stale_threshold: 15,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -248,6 +250,10 @@ export function getConfig(): RemoteConfig {
     values['use_trygg_overgang_qr_code']?.asBoolean() ??
     defaultRemoteConfig.use_trygg_overgang_qr_code;
 
+  const live_vehicle_stale_threshold =
+    values['live_vehicle_stale_threshold']?.asNumber() ??
+    defaultRemoteConfig.live_vehicle_stale_threshold;
+
   return {
     enable_network_logging,
     enable_ticketing,
@@ -294,6 +300,7 @@ export function getConfig(): RemoteConfig {
     use_flexible_on_directMode,
     use_flexible_on_egressMode,
     use_trygg_overgang_qr_code,
+    live_vehicle_stale_threshold,
   };
 }
 
