@@ -30,8 +30,11 @@ else
     echo "Compile JS to Hermes Bytecode"
     ./node_modules/react-native/sdks/hermesc/linux64-bin/hermesc -emit-binary -source-map=bundle/temp.bundle.map -output-source-map -out bundle/index.android.bundle bundle/temp.bundle
 
-    brew update
-    brew install apktool yq
+    echo "Brew install apktool"
+    brew install apktool
+    
+    echo "Brew install yq"
+    brew install yq
 
     echo "Decompile Android APK"
     apktool d $APK_FILE_NAME --output decompiled-apk
