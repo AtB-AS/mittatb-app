@@ -36,6 +36,7 @@ export function secondsToDurationShort(
   return getShortHumanizer(seconds * 1000, language, {
     units: ['d', 'h', 'm'],
     round: true,
+    conjunction: " ",
   });
 }
 // Translates seconds to minutes without postfix. Returns minimum 1
