@@ -207,7 +207,7 @@ export function QuaySection({
         {isLoading && !isMinimized && (
           <GenericSectionItem>
             <View style={{width: '100%'}}>
-              <ActivityIndicator></ActivityIndicator>
+              <ActivityIndicator />
             </View>
           </GenericSectionItem>
         )}
@@ -221,7 +221,7 @@ export function QuaySection({
               accessibilityHint: t(DeparturesTexts.quaySection.a11yToQuayHint),
             }}
             testID={testID + 'More'}
-          ></LinkSectionItem>
+          />
         )}
       </Section>
     </View>
