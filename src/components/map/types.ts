@@ -1,13 +1,19 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
-import {Feature, FeatureCollection, GeoJSON, LineString, Point} from 'geojson';
+import {
+  Feature,
+  FeatureCollection,
+  GeoJSON,
+  LineString,
+  Point,
+  Position,
+} from 'geojson';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   PointsOnLink,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
-import {RegionPayload} from '@rnmapbox/maps';
 import {AnyMode} from '@atb/components/icon-box';
 import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 
@@ -26,16 +32,22 @@ export type SelectionLocationCallback = (
   selectedLocation?: GeoLocation | SearchLocation,
 ) => void;
 
+export type MapRegion = {
+  visibleBounds: Position[];
+  zoomLevel: number;
+  center: Position;
+};
+
 export type VehiclesState = {
   vehicles: FeatureCollection<GeoJSON.Point, VehicleFragment>;
-  updateRegion: (region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>) => void;
+  updateRegion: (region: MapRegion) => void;
   isLoading: boolean;
   onFilterChange: (filter: VehiclesFilterType) => void;
 };
 
 export type StationsState = {
   stations: FeatureCollection<GeoJSON.Point, StationBasicFragment>;
-  updateRegion: (region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>) => void;
+  updateRegion: (region: MapRegion) => void;
   isLoading: boolean;
   onFilterChange: (filter: StationsFilterType) => void;
 };
@@ -131,7 +143,8 @@ export type VehiclesFilterType = {
 };
 
 export type StationsFilterType = {
-  showCityBikeStations: boolean;
+  showCityBikeStations?: boolean;
+  showCarSharingStations?: boolean;
 };
 
 export type MapFilterType = {

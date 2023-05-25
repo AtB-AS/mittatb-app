@@ -37,6 +37,7 @@ export type RemoteConfig = {
   enable_vehicles_in_map: boolean;
   vehicles_poll_interval: number;
   enable_city_bikes_in_map: boolean;
+  enable_car_sharing_in_map: boolean;
   enable_vehicle_operator_logo: boolean;
   default_map_filter: string;
   enable_realtime_map: boolean;
@@ -87,6 +88,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_vehicles_in_map: false,
   vehicles_poll_interval: 20000,
   enable_city_bikes_in_map: false,
+  enable_car_sharing_in_map: false,
   enable_vehicle_operator_logo: false,
   default_map_filter: JSON.stringify({
     vehicles: {
@@ -212,6 +214,10 @@ export function getConfig(): RemoteConfig {
     values['enable_city_bikes_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_city_bikes_in_map;
 
+  const enable_car_sharing_in_map =
+    values['enable_car_sharing_in_map']?.asBoolean() ??
+    defaultRemoteConfig.enable_car_sharing_in_map;
+
   const enable_vehicle_operator_logo =
     values['enable_vehicle_operator_logo']?.asBoolean() ??
     defaultRemoteConfig.enable_vehicle_operator_logo;
@@ -296,6 +302,7 @@ export function getConfig(): RemoteConfig {
     enable_vehicles_in_map,
     vehicles_poll_interval,
     enable_city_bikes_in_map,
+    enable_car_sharing_in_map,
     enable_vehicle_operator_logo,
     default_map_filter,
     enable_realtime_map,

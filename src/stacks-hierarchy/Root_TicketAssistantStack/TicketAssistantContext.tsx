@@ -40,7 +40,7 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
 
   const [recommendedTicketSummary, setRecommendedTicketSummary] =
     useState<RecommendedTicketSummary>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const updateInputParams = (newData: InputParams) => {
     setInputParams((prevState) => {
@@ -69,10 +69,12 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
               fareProductTypeConfigs,
             ),
           );
-          setLoading(false);
         })
         .catch(() => {
           setError(true);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     };
     if (

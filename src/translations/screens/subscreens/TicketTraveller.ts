@@ -23,6 +23,12 @@ const SpecificExtensions = orgSpecificTranslations(SpecificExtensionsInternal, {
     singleChild: _('', ''),
     periodAdult: _('Gyldig på nattbuss.', 'Valid for night bus.'),
   },
+  fram: {
+    singleChild: _('', ''),
+    periodChild: _('', ''),
+    periodStudent: _('', ''),
+    periodSenior: _('', ''),
+  },
 });
 
 function specificOverrides(

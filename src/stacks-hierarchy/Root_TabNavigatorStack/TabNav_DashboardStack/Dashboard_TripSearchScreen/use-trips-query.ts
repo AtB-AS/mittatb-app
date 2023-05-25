@@ -60,7 +60,7 @@ export function useTripsQuery(
 
   const {
     tripsSearch_max_number_of_chained_searches: config_max_performed_searches,
-    tripsSearch_target_number_of_initial_hits: config_target_inital_hits,
+    tripsSearch_target_number_of_initial_hits: config_target_initial_hits,
     tripsSearch_target_number_of_page_hits: config_target_page_hits,
   } = useRemoteConfig();
 
@@ -79,7 +79,7 @@ export function useTripsQuery(
 
       const targetNumberOfHits = cursor
         ? config_target_page_hits
-        : config_target_inital_hits;
+        : config_target_initial_hits;
 
       const sanitizedSearchTime =
         searchTime.option === 'now'

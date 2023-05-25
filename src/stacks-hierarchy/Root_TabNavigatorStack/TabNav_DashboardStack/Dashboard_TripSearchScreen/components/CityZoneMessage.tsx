@@ -4,7 +4,7 @@ import {Linking, TouchableOpacity, View} from 'react-native';
 import {FlexibleTransport} from '@atb/assets/svg/color/illustrations';
 import {CityZone} from '@atb/reference-data/types';
 import {Location} from '@atb/favorites';
-import {useFindCityZonesInLocations} from '../hooks';
+import {useFindCityZoneInLocation} from '../hooks';
 import {SvgProps} from 'react-native-svg';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemeText} from '@atb/components/text';
@@ -15,8 +15,10 @@ import {insets} from '@atb/utils/insets';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {Section} from '@atb/components/sections';
 import CityBoxMessageTexts from '@atb/translations/components/CityBoxMessage';
+import {useFirestoreConfiguration} from '@atb/configuration';
 
 type ActionButton = {
+  id: string;
   text: string;
   onPress: () => void;
 };
@@ -34,10 +36,15 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
 }) => {
   const style = useStyle();
   const {t, language} = useTranslation();
+  const {cityZones} = useFirestoreConfiguration();
+  const fromCityZone = useFindCityZoneInLocation(from, cityZones);
+  const toCityZone = useFindCityZoneInLocation(to, cityZones);
 
-  const selectedCityZones = useFindCityZonesInLocations(from, to);
+  if (!fromCityZone || !toCityZone) {
+    return null;
+  }
 
-  if (!selectedCityZones?.length) {
+  if (fromCityZone.id !== toCityZone.id) {
     return null;
   }
 
@@ -48,25 +55,24 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
     }
   };
 
-  const messageActions = selectedCityZones.map((cityZone) => ({
-    text: cityZone.name,
-    onPress: () => openUrlForCityZone(cityZone),
-  }));
+  const messageActions = [
+    {
+      id: `${fromCityZone.id}_action`,
+      text: fromCityZone.name,
+      onPress: () => openUrlForCityZone(fromCityZone),
+    },
+  ];
 
-  if (messageActions) {
-    return (
-      <Section style={style.cityZoneMessage}>
-        <CityZoneBox
-          message={t(CityBoxMessageTexts.message)}
-          icon={() => <FlexibleTransport />}
-          onDismiss={onDismiss}
-          actionButtons={messageActions}
-        />
-      </Section>
-    );
-  }
-
-  return null;
+  return (
+    <Section style={style.cityZoneMessage}>
+      <CityZoneBox
+        message={t(CityBoxMessageTexts.message)}
+        icon={() => <FlexibleTransport />}
+        onDismiss={onDismiss}
+        actionButtons={messageActions}
+      />
+    </Section>
+  );
 };
 
 type CityZoneBoxProps = {
@@ -100,11 +106,15 @@ const CityZoneBox = ({
           <View style={styles.actions}>
             {actionButtons.map((actionButton) => (
               <Button
+                key={actionButton.id}
                 type="pill"
                 interactiveColor="interactive_3"
                 text={actionButton.text}
                 onPress={actionButton.onPress}
                 style={styles.action}
+                accessibilityLabel={actionButton.text}
+                accessibilityRole="link"
+                accessibilityHint={t(CityBoxMessageTexts.a11yHint)}
                 rightIcon={{svg: ExternalLink}}
               />
             ))}

@@ -11,6 +11,7 @@ import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssis
 import {useTicketAssistantState} from './TicketAssistantContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {SectionSeparator} from '@atb/components/sections';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type FrequencyScreenProps =
   TicketAssistantScreenProps<'TicketAssistant_FrequencyScreen'>;
@@ -27,6 +28,7 @@ export const TicketAssistant_FrequencyScreen = ({
     inputParams.frequency ?? DEFAULT_SLIDER_VALUE,
   );
   const a11yContext = useAccessibilityContext();
+  const focusRef = useFocusOnLoad();
 
   const sliderMax = 14;
 
@@ -66,24 +68,27 @@ export const TicketAssistant_FrequencyScreen = ({
       </View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.mainView}>
-          <ThemeText
-            type={'heading--big'}
-            style={styles.header}
-            color={themeColor}
-            accessibilityLabel={t(
-              TicketAssistantTexts.frequency.titleA11yLabel,
-            )}
-          >
-            {t(TicketAssistantTexts.frequency.title)}
-          </ThemeText>
-          <ThemeText
-            color={themeColor}
-            type={'body__secondary'}
-            style={styles.description}
-            accessibilityLabel={t(TicketAssistantTexts.frequency.description)}
-          >
-            {t(TicketAssistantTexts.frequency.description)}
-          </ThemeText>
+          <View ref={focusRef} accessible={true}>
+            <ThemeText
+              type={'heading--big'}
+              style={styles.header}
+              color={themeColor}
+              accessibilityRole={'header'}
+              accessibilityLabel={t(
+                TicketAssistantTexts.frequency.titleA11yLabel,
+              )}
+            >
+              {t(TicketAssistantTexts.frequency.title)}
+            </ThemeText>
+            <ThemeText
+              color={themeColor}
+              type={'body__secondary'}
+              style={styles.description}
+              accessibilityLabel={t(TicketAssistantTexts.frequency.description)}
+            >
+              {t(TicketAssistantTexts.frequency.description)}
+            </ThemeText>
+          </View>
           {a11yContext.isScreenReaderEnabled ? (
             <View style={styles.screenReaderButtons}>
               {numbers.map((number) => {
@@ -92,6 +97,7 @@ export const TicketAssistant_FrequencyScreen = ({
                     key={number}
                     interactiveColor="interactive_2"
                     onPress={() => {
+                      setSliderValue(number);
                       navigation.navigate('TicketAssistant_DurationScreen');
                     }}
                     text={number.toString()}

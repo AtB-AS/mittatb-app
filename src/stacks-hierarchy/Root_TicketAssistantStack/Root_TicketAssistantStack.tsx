@@ -46,6 +46,7 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
               }
         }
         rightButton={{type: 'chat'}}
+        setFocusOnLoad={false}
       />
       <Tab.Navigator
         tabBar={(props: MaterialTopTabBarProps) => {

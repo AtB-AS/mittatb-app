@@ -4,13 +4,15 @@ import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {MapFilterType} from '../../types';
-import {useUserMapFilters} from '../../hooks/use-map-filter';
+import {useUserMapFilters} from '@atb/components/map';
 import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {Scooter} from '@atb/assets/svg/mono-icons/transportation-entur';
 import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
+import {Car} from '@atb/assets/svg/mono-icons/transportation';
 import {StyleSheet} from '@atb/theme';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useIsCityBikesEnabled, useIsVehiclesEnabled} from '@atb/mobility';
+import {useIsCarSharingEnabled} from '@atb/mobility/use-car-sharing-enabled';
 
 type MapFilterSheetProps = {
   close: () => void;
@@ -24,6 +26,7 @@ export const MapFilterSheet = ({
   const style = useStyle();
   const isVehiclesEnabled = useIsVehiclesEnabled();
   const isCityBikesEnabled = useIsCityBikesEnabled();
+  const isCarSharingEnabled = useIsCarSharingEnabled();
   const {getMapFilter, setMapFilter} = useUserMapFilters();
   const [initialFilter, setInitialFilter] = useState<MapFilterType>();
 
@@ -52,7 +55,24 @@ export const MapFilterSheet = ({
         const newFilter = {
           ...currentFilter,
           stations: {
+            ...currentFilter.stations,
             showCityBikeStations: checked,
+          },
+        };
+        onFilterChange(newFilter);
+        return newFilter;
+      })
+      .then(setMapFilter);
+  };
+
+  const onCarToggle = async (checked: boolean) => {
+    getMapFilter()
+      .then((currentFilter) => {
+        const newFilter = {
+          ...currentFilter,
+          stations: {
+            ...currentFilter.stations,
+            showCarSharingStations: checked,
           },
         };
         onFilterChange(newFilter);
@@ -88,6 +108,14 @@ export const MapFilterSheet = ({
               text={t(MobilityTexts.bicycle)}
               value={initialFilter?.stations?.showCityBikeStations}
               onValueChange={onBicycleToggle}
+            />
+          )}
+          {isCarSharingEnabled && (
+            <ToggleSectionItem
+              leftIcon={Car}
+              text={t(MobilityTexts.car)}
+              value={initialFilter?.stations?.showCarSharingStations}
+              onValueChange={onCarToggle}
             />
           )}
         </Section>

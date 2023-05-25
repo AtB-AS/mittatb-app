@@ -14,14 +14,14 @@ export type ServiceJourneyWithEstCallsFragment = {
     aimedArrivalTime: any;
     aimedDepartureTime: any;
     cancellation: boolean;
-    date?: any;
+    date: any;
     expectedDepartureTime: any;
     expectedArrivalTime: any;
     forAlighting: boolean;
     forBoarding: boolean;
     realtime: boolean;
     destinationDisplay?: {frontText?: string};
-    quay?: {
+    quay: {
       id: string;
       name: string;
       publicCode?: string;
