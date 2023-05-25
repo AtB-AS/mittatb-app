@@ -2,6 +2,7 @@ import React, {createContext, useContext, useEffect, useState} from 'react';
 import PostHog, {PostHogProvider} from 'posthog-react-native';
 import {POSTHOG_API_KEY, POSTHOG_HOST} from '@env';
 import {useNavigationSafe} from '@atb/utils/use-navigation-safe';
+import {AnalyticsEventContext} from '@atb/analytics/analytics-event-context';
 
 export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
 
@@ -37,8 +38,12 @@ export const AnalyticsContextProvider: React.FC = ({children}) => {
 
 export const useAnalytics = () => {
   const postHog = useContext(AnalyticsContext);
-  const logEvent = (event: string, properties?: {[key: string]: any}) => {
-    postHog?.capture(event, properties);
+  const logEvent = (
+    context: AnalyticsEventContext,
+    event: string,
+    properties?: {[key: string]: any},
+  ) => {
+    postHog?.capture(`${context}: ${event}`, properties);
   };
 
   return {

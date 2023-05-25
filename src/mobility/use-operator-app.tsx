@@ -60,7 +60,7 @@ export const useOperatorApp = ({
   };
 
   const openOperatorApp = useCallback(async () => {
-    analytics.logEvent('Open mobility operator app', {operatorName});
+    analytics.logEvent('Mobility', 'Open operator app', {operatorName});
     if (!rentalAppUri) return;
     await Linking.openURL(rentalAppUri).catch(() => appMissingAlert());
   }, [rentalAppUri, operatorName, appStoreUri]);

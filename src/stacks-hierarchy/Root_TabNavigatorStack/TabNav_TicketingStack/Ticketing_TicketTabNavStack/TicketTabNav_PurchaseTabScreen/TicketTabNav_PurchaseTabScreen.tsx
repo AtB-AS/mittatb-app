@@ -15,6 +15,7 @@ import {useTipsAndInformationEnabled} from '@atb/stacks-hierarchy/Root_TipsAndIn
 import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {TipsAndInformationTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TipsAndInformationTile';
 import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
+import {useAnalytics} from '@atb/analytics';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -30,10 +31,14 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
   const showTipsAndInformation = useTipsAndInformationEnabled();
   const showTicketAssistant = useTicketingAssistantEnabled();
+  const analytics = useAnalytics();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
   const onProductSelect = (fareProductTypeConfig: FareProductTypeConfig) => {
+    analytics.logEvent('Ticketing', 'Fare product selected', {
+      type: fareProductTypeConfig.type,
+    });
     if (
       fareProductTypeConfig.configuration.requiresLogin &&
       authenticationType !== 'phone'
@@ -63,6 +68,9 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     rfc: RecentFareContract,
     fareProductTypeConfig: FareProductTypeConfig,
   ) => {
+    analytics.logEvent('Ticketing', 'Recently used fare product selected', {
+      type: fareProductTypeConfig.type,
+    });
     navigation.navigate('Root_PurchaseOverviewScreen', {
       fareProductTypeConfig,
       preassignedFareProduct: rfc.preassignedFareProduct,

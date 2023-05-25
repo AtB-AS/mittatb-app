@@ -16,6 +16,7 @@ import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {Section} from '@atb/components/sections';
 import CityBoxMessageTexts from '@atb/translations/components/CityBoxMessage';
 import {useFirestoreConfiguration} from '@atb/configuration';
+import {useAnalytics} from '@atb/analytics';
 
 type ActionButton = {
   id: string;
@@ -39,6 +40,7 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
   const {cityZones} = useFirestoreConfiguration();
   const fromCityZone = useFindCityZoneInLocation(from, cityZones);
   const toCityZone = useFindCityZoneInLocation(to, cityZones);
+  const analytics = useAnalytics();
 
   if (!fromCityZone || !toCityZone) {
     return null;
@@ -51,6 +53,10 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
   const openUrlForCityZone = (cityZone: CityZone) => {
     const contactUrl = getTextForLanguage(cityZone.contactUrl, language);
     if (contactUrl) {
+      analytics.logEvent('Flexible transport', 'Info url opened', {
+        name: cityZone.name,
+        contactUrl: cityZone.contactUrl,
+      });
       Linking.openURL(contactUrl);
     }
   };

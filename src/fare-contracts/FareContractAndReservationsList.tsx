@@ -10,6 +10,7 @@ import React, {useMemo} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {TravelCardInformation} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/TravelCardInformation';
+import {useAnalytics} from '@atb/analytics';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -37,6 +38,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProp>();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
+  const analytics = useAnalytics();
   const hasActiveTravelCard = !!travelCard;
 
   const fareContractsAndReservationsSorted = useMemo(() => {
@@ -72,12 +74,13 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
         {fareContractsAndReservationsSorted?.map((fcOrReservation, index) => (
           <FareContractOrReservation
             now={now}
-            onPressFareContract={() =>
+            onPressFareContract={() => {
+              analytics.logEvent('Ticketing', 'Ticket details clicked');
               navigation.navigate({
                 name: 'Root_FareContractDetailsScreen',
                 params: {orderId: fcOrReservation.orderId},
-              })
-            }
+              });
+            }}
             key={fcOrReservation.orderId}
             fcOrReservation={fcOrReservation}
             index={index}

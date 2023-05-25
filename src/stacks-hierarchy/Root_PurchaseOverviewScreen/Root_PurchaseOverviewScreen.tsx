@@ -22,6 +22,7 @@ import {useOfferDefaults} from './use-offer-defaults';
 import {useOfferState} from './use-offer-state';
 import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {useAnalytics} from '@atb/analytics';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -56,6 +57,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const [travelDate, setTravelDate] = useState<string | undefined>(
     params.travelDate,
   );
+  const analytics = useAnalytics();
 
   const {timeSelectionMode, travellerSelectionMode, zoneSelectionMode} =
     params.fareProductTypeConfig.configuration;
@@ -183,7 +185,17 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             price={totalPrice}
             userProfilesWithCount={travellerSelection}
             fareProductTypeConfig={params.fareProductTypeConfig}
-            onPressBuy={() =>
+            onPressBuy={() => {
+              analytics.logEvent('Ticketing', 'Purchase confirmation clicked', {
+                fareProduct: params.fareProductTypeConfig.name,
+                tariffZone: {from: fromTariffZone.id, to: toTariffZone.id},
+                userProfilesWithCount: travellerSelection.map((t) => ({
+                  userType: t.userTypeString,
+                  count: t.count,
+                })),
+                travelDate,
+                mode: params.mode,
+              });
               navigation.navigate('Root_PurchaseConfirmationScreen', {
                 fareProductTypeConfig: params.fareProductTypeConfig,
                 fromTariffZone,
@@ -193,8 +205,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 travelDate,
                 headerLeftButton: {type: 'back'},
                 mode: params.mode,
-              })
-            }
+              });
+            }}
             style={styles.summary}
           />
         </FullScreenFooter>

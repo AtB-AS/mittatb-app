@@ -79,7 +79,7 @@ export const Map = (props: MapProps) => {
   };
 
   const onFilterChange = (filter: MapFilterType) => {
-    analytics.logEvent('Map filter changed', {filter});
+    analytics.logEvent('Map', 'Filter changed', {filter});
     if (filter.vehicles) {
       props.vehicles?.onFilterChange(filter.vehicles);
     }

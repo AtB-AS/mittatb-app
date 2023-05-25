@@ -53,7 +53,7 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
   const analytics = useAnalytics();
 
   useEffect(() => {
-    analytics.logEvent('City bike station selected', {station});
+    analytics.logEvent('Mobility', 'City bike station selected', {station});
   }, [station]);
 
   return (
