@@ -93,9 +93,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const inspectionInfo = configurableLinks?.inspectionInfo
     ? configurableLinks?.inspectionInfo
     : undefined;
+  const refundInfo = configurableLinks?.refundInfo
+    ? configurableLinks?.refundInfo
+    : undefined;
   const ticketingInfoUrl = getTextForLanguage(ticketingInfo, language);
   const termsInfoUrl = getTextForLanguage(termsInfo, language);
   const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
+  const refundInfoUrl = getTextForLanguage(refundInfo, language);
 
   const {enable_departures_v2_as_default} = useRemoteConfig();
   const setDeparturesV2Enabled = (value: boolean) => {
@@ -522,6 +526,18 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                       : 'Profile_GenericWebsiteInformationScreen',
                   )
                 }
+              />
+            )}
+
+            {refundInfoUrl && (
+              <LinkSectionItem
+                icon={<ThemeIcon svg={ExternalLink} />}
+                text={t(
+                  ProfileTexts.sections.information.linkSectionItems.refund
+                    .label,
+                )}
+                testID="refundInfoButton"
+                onPress={() => Linking.openURL(refundInfoUrl)}
               />
             )}
           </Section>
