@@ -1,10 +1,5 @@
 import {StyleSheet, useTheme} from '@atb/theme';
-import {
-  Language,
-  TranslateFunction,
-  getTextForLanguage,
-  useTranslation,
-} from '@atb/translations';
+import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {Linking, TouchableOpacity, View} from 'react-native';
 import {FlexibleTransport} from '@atb/assets/svg/color/illustrations';
 import {Location} from '@atb/favorites';
@@ -23,6 +18,7 @@ import {useFirestoreConfiguration} from '@atb/configuration';
 import {InteractiveColor} from '@atb/theme/colors';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {CityZone} from '@atb/reference-data/types';
+import {useAnalytics} from '@atb/analytics';
 
 type ActionButton = {
   id: string;
@@ -45,11 +41,12 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
   onDismiss,
 }) => {
   const style = useStyle();
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const {cityZones} = useFirestoreConfiguration();
   const enabledCityZones = cityZones.filter((cityZone) => cityZone.enabled);
   const fromCityZone = useFindCityZoneInLocation(from, enabledCityZones);
   const toCityZone = useFindCityZoneInLocation(to, enabledCityZones);
+  const actionButtons = useActionButtons(fromCityZone);
 
   if (!fromCityZone || !toCityZone) {
     return null;
@@ -58,8 +55,6 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
   if (fromCityZone.id !== toCityZone.id) {
     return null;
   }
-
-  const actionButtons = buildActionButtons(fromCityZone, t, language);
 
   if (actionButtons.length > 0) {
     return (
@@ -141,13 +136,15 @@ const CityZoneBox = ({
   );
 };
 
-const buildActionButtons = (
-  cityZone: CityZone,
-  t: TranslateFunction,
-  language: Language,
-) => {
-  const actionButtons: ActionButton[] = [];
+const useActionButtons = (cityZone?: CityZone) => {
+  const {t, language} = useTranslation();
+  const analytics = useAnalytics();
 
+  if (!cityZone) {
+    return [];
+  }
+
+  const actionButtons: ActionButton[] = [];
   const orderUrl = getTextForLanguage(cityZone.orderUrl, language);
   if (orderUrl) {
     actionButtons.push({
@@ -156,7 +153,13 @@ const buildActionButtons = (
       icon: ExternalLink,
       interactiveColor: 'interactive_0',
       accessibilityHint: t(CityBoxMessageTexts.a11yHintForExternalContent),
-      onPress: () => Linking.openURL(orderUrl),
+      onPress: () => {
+        analytics.logEvent('Flexible transport', 'Book online url opened', {
+          name: 'book_online_action',
+          orderUrl: orderUrl,
+        });
+        Linking.openURL(orderUrl);
+      },
     });
   }
 
@@ -168,7 +171,13 @@ const buildActionButtons = (
       text: t(CityBoxMessageTexts.actionButtons.bookByPhone),
       interactiveColor: 'interactive_0',
       accessibilityHint: t(CityBoxMessageTexts.a11yHintForPhone),
-      onPress: () => Linking.openURL(`tel:${phoneNumber}`),
+      onPress: () => {
+        analytics.logEvent('Flexible transport', 'Book by phone url opened', {
+          name: 'book_by_phone_action',
+          phoneNumber: phoneNumber,
+        });
+        Linking.openURL(`tel:${phoneNumber}`);
+      },
     });
   }
 
@@ -180,7 +189,13 @@ const buildActionButtons = (
       text: t(CityBoxMessageTexts.actionButtons.moreInfo),
       interactiveColor: 'interactive_3',
       accessibilityHint: t(CityBoxMessageTexts.a11yHintForExternalContent),
-      onPress: () => Linking.openURL(moreInfoUrl),
+      onPress: () => {
+        analytics.logEvent('Flexible transport', 'More info url opened', {
+          name: 'more_info_action',
+          moreInfoUrl: moreInfoUrl,
+        });
+        Linking.openURL(moreInfoUrl);
+      },
     });
   }
 

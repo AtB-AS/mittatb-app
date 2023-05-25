@@ -1,4 +1,3 @@
-import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {QuayFragment} from '@atb/api/types/generated/fragments/quays';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
@@ -6,7 +5,6 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
@@ -30,7 +28,7 @@ import {formatToVerboseFullDate, isWithinSameDate} from '@atb/utils/date';
 import {getQuayName} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {useIsFocused} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {Time} from './components/Time';
 import {TripLegDecoration} from './components/TripLegDecoration';
@@ -44,6 +42,7 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 import {Divider} from '@atb/components/divider';
+import {useMapData} from '@atb/travel-details-screens/use-map-data';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -75,7 +74,12 @@ export const DepartureDetailsScreenComponent = ({
     {estimatedCallsWithMetadata, title, mode, subMode, situations, notices},
     isLoading,
   ] = useDepartureData(activeItem, 20, !isFocused);
-  const mapData = useMapData(activeItem);
+
+  const mapData = useMapData(
+    activeItem.serviceJourneyId,
+    activeItem.fromQuayId,
+    activeItem.toQuayId,
+  );
 
   const realtimeMapEnabled = useRealtimeMapEnabled();
   const screenReaderEnabled = useIsScreenReaderEnabled();
@@ -583,26 +587,3 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: theme.spacings.xLarge,
   },
 }));
-
-function useMapData(activeItem: ServiceJourneyDeparture) {
-  const [mapData, setMapData] = useState<ServiceJourneyMapInfoData_v3>();
-  useEffect(() => {
-    const getData = async () => {
-      if (!activeItem) {
-        return;
-      }
-
-      try {
-        const result = await getServiceJourneyMapLegs(
-          activeItem.serviceJourneyId,
-          activeItem.fromQuayId,
-          activeItem.toQuayId,
-        );
-        setMapData(result);
-      } catch (e) {}
-    };
-
-    getData();
-  }, [activeItem]);
-  return mapData;
-}

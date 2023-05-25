@@ -19,6 +19,7 @@ import {
 import {Processing} from './Processing';
 import {useTerminalState, ErrorContext} from './use-terminal-state';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {useAnalytics} from '@atb/analytics';
 
 type Props = RootStackScreenProps<'Root_PurchasePaymentWithCreditCardScreen'>;
 
@@ -30,6 +31,7 @@ export const Root_PurchasePaymentWithCreditCardScreen: React.FC<Props> = ({
   const {t} = useTranslation();
   const {offers} = route.params;
   const [showWebView, setShowWebView] = useState<boolean>(true);
+  const analytics = useAnalytics();
 
   React.useEffect(
     () => navigation.addListener('blur', () => setShowWebView(false)),
@@ -37,6 +39,9 @@ export const Root_PurchasePaymentWithCreditCardScreen: React.FC<Props> = ({
   );
 
   const navigateBackFromTerminal = () => {
+    analytics.logEvent('Ticketing', 'Payment cancelled', {
+      paymentMethod: route.params.paymentMethod,
+    });
     navigation.pop();
   };
 
@@ -84,6 +89,7 @@ export const Root_PurchasePaymentWithCreditCardScreen: React.FC<Props> = ({
           type: 'cancel',
           onPress: async () => {
             await cancelPayment();
+            analytics.logEvent('Ticketing', 'Payment cancelled');
             navigateBackFromTerminal();
           },
         }}
