@@ -45,6 +45,7 @@ export type TariffZone = {
 };
 
 export type CityZone = {
+  id: string;
   name: string;
   enabled: boolean;
   contactUrl: LanguageAndTextType[];

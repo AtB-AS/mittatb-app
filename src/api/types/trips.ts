@@ -10,6 +10,8 @@ export type TripPattern =
 export type TripMetadata = Required<Types.TripsQuery>['trip']['metadata'];
 export type Leg =
   Required<Types.TripsQuery>['trip']['tripPatterns'][0]['legs'][0];
+export type ServiceJourneyEstimatedCall =
+  Required<Types.TripsQuery>['trip']['tripPatterns'][0]['legs'][0]['serviceJourneyEstimatedCalls'][0];
 export type Place =
   Required<Types.TripsQuery>['trip']['tripPatterns'][0]['legs'][0]['fromPlace'];
 

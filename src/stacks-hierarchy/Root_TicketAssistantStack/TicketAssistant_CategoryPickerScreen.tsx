@@ -6,7 +6,7 @@ import {
   TicketAssistantTexts,
   useTranslation,
 } from '@atb/translations';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import React, {useEffect, useState} from 'react';
 import {Button} from '@atb/components/button';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
@@ -19,6 +19,7 @@ import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {Traveller} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {ExpandableSectionItem, Section} from '@atb/components/sections';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type CategoryPickerProps =
   TicketAssistantScreenProps<'TicketAssistant_CategoryPickerScreen'>;
@@ -28,6 +29,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const a11yContext = useAccessibilityContext();
+  const focusRef = useFocusOnLoad();
 
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
 
@@ -70,14 +72,17 @@ export const TicketAssistant_CategoryPickerScreen = ({
         style={styles.scrollView}
         contentContainerStyle={styles.contentContainer}
       >
-        <ThemeText
-          type={'heading--big'}
-          style={styles.header}
-          color={themeColor}
-          accessibilityLabel={t(TicketAssistantTexts.categoryPicker.title)}
-        >
-          {t(TicketAssistantTexts.categoryPicker.title)}
-        </ThemeText>
+        <View ref={focusRef} accessible={true}>
+          <ThemeText
+            type={'heading--big'}
+            style={styles.header}
+            accessibilityRole={'header'}
+            color={themeColor}
+            accessibilityLabel={t(TicketAssistantTexts.categoryPicker.title)}
+          >
+            {t(TicketAssistantTexts.categoryPicker.title)}
+          </ThemeText>
+        </View>
 
         {!a11yContext.isScreenReaderEnabled ? (
           <Section style={styles.categoriesContainer}>
@@ -131,17 +136,23 @@ export const TicketAssistant_CategoryPickerScreen = ({
         ) : (
           <>
             {selectableTravellers.map((u, index) => {
+              const title = getReferenceDataName(u, language);
+              const description = getTextForLanguage(
+                u.alternativeDescriptions,
+                language,
+              );
+              const accessibilityLabel = [title, description].join(
+                screenReaderPause,
+              );
               return (
                 <View key={index} style={styles.a11yCategoryCards}>
                   <TouchableOpacity
                     onPress={() => {
-                      updateCategory({
-                        id: u.userTypeString,
-                        userType: u.userTypeString,
-                      });
+                      setCurrentlyOpen(index);
                       navigation.navigate('TicketAssistant_FrequencyScreen');
                     }}
                     accessible={true}
+                    accessibilityLabel={accessibilityLabel}
                     accessibilityHint={t(
                       TicketAssistantTexts.categoryPicker.a11yChooseButtonHint({
                         value: getReferenceDataName(u, language),
@@ -154,17 +165,14 @@ export const TicketAssistant_CategoryPickerScreen = ({
                         type={'body__primary--bold'}
                         isMarkdown={true}
                       >
-                        {getReferenceDataName(u, language)}
+                        {title}
                       </ThemeText>
                       <ThemeText
                         type={'body__tertiary'}
                         style={styles.expandedContent}
                         isMarkdown={true}
                       >
-                        {getTextForLanguage(
-                          u.alternativeDescriptions,
-                          language,
-                        )}
+                        {description}
                       </ThemeText>
                     </View>
                   </TouchableOpacity>

@@ -5,7 +5,6 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
 import {useSystem} from '@atb/mobility/use-system';
-import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import {
   BicycleTexts,
@@ -26,6 +25,7 @@ import {MessageBox} from '@atb/components/message-box';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {useAnalytics} from '@atb/analytics';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
   stationId: string;
@@ -76,7 +76,10 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
         )}
         {!isLoading && !error && station && (
           <>
-            <WalkingDistance distance={distance} />
+            <WalkingDistance
+              style={style.walkingDistance}
+              distance={distance}
+            />
             <View style={style.container}>
               <Section>
                 <GenericSectionItem>
@@ -107,14 +110,14 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
               />
             </View>
             {rentalAppUri && (
-              <FullScreenFooter>
+              <View style={style.footer}>
                 <Button
                   text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
                   onPress={openOperatorApp}
                   mode="primary"
                   interactiveColor={'interactive_0'}
                 />
-              </FullScreenFooter>
+              </View>
             )}
           </>
         )}
@@ -135,18 +138,28 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
   );
 };
 
-const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
-  activityIndicator: {
-    marginBottom: theme.spacings.xLarge,
-  },
-  container: {
-    paddingHorizontal: theme.spacings.medium,
-  },
-  stationName: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  errorMessage: {
-    marginHorizontal: theme.spacings.medium,
-  },
-}));
+const useSheetStyle = StyleSheet.createThemeHook((theme) => {
+  const {bottom} = useSafeAreaInsets();
+  return {
+    activityIndicator: {
+      marginBottom: Math.max(bottom, theme.spacings.medium),
+    },
+    container: {
+      paddingHorizontal: theme.spacings.medium,
+    },
+    stationName: {
+      flex: 1,
+      alignItems: 'center',
+    },
+    errorMessage: {
+      marginHorizontal: theme.spacings.medium,
+    },
+    footer: {
+      marginBottom: Math.max(bottom, theme.spacings.medium),
+      marginHorizontal: theme.spacings.medium,
+    },
+    walkingDistance: {
+      marginBottom: theme.spacings.medium,
+    },
+  };
+});

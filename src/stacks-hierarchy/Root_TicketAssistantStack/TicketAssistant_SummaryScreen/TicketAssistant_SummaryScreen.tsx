@@ -13,6 +13,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
 import {useAuthState} from '@atb/auth';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -22,6 +23,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const {authenticationType} = useAuthState();
   let {loading, inputParams, recommendedTicketSummary, error} =
     useTicketAssistantState();
+  const focusRef = useFocusOnLoad();
 
   const durationDays = inputParams.duration
     ? inputParams.duration * 24 * 60 * 60 * 1000
@@ -93,41 +95,44 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       <View style={styles.backdrop}>
         <DashboardBackground width={'100%'} height={'100%'} />
       </View>
-
-      {error ? (
-        <View>
-          <ThemeText
-            type={'heading--big'}
-            color={themeColor}
-            style={styles.header}
-          >
-            {t(TicketAssistantTexts.summary.crashedHeader)}
-          </ThemeText>
-          <ThemeText
-            type={'body__primary'}
-            color={themeColor}
-            style={styles.description}
-          >
-            {t(TicketAssistantTexts.summary.crashedDescription)}
-          </ThemeText>
-        </View>
-      ) : loading ? (
-        <View style={styles.loadingSpinner}>
-          <ActivityIndicator animating={true} size="large" />
-        </View>
-      ) : (
-        <View style={styles.mainView}>
-          <View>
+      <View style={styles.mainView}>
+        {error ? (
+          <View ref={focusRef} accessible={true}>
             <ThemeText
               type={'heading--big'}
-              style={styles.header}
               color={themeColor}
-              accessibilityLabel={t(
-                TicketAssistantTexts.summary.titleA11yLabel,
-              )}
+              style={styles.header}
             >
-              {t(TicketAssistantTexts.summary.title)}
+              {t(TicketAssistantTexts.summary.crashedHeader)}
             </ThemeText>
+            <ThemeText
+              type={'body__primary'}
+              color={themeColor}
+              style={styles.description}
+            >
+              {t(TicketAssistantTexts.summary.crashedDescription)}
+            </ThemeText>
+          </View>
+        ) : loading ? (
+          <View style={styles.loadingSpinner} ref={focusRef} accessible={true}>
+            <ActivityIndicator animating={true} size="large" />
+          </View>
+        ) : (
+          <View>
+            <View ref={focusRef} accessible={true}>
+              <ThemeText
+                type={'heading--big'}
+                style={styles.header}
+                color={themeColor}
+                accessibilityRole={'header'}
+                accessibilityLabel={t(
+                  TicketAssistantTexts.summary.titleA11yLabel,
+                )}
+              >
+                {t(TicketAssistantTexts.summary.title)}
+              </ThemeText>
+            </View>
+
             <ThemeText
               color={themeColor}
               type={'body__primary'}
@@ -164,6 +169,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
               </View>
             )}
           </View>
+        )}
+        {(error || !loading) && (
           <Button
             style={styles.feedback}
             interactiveColor="interactive_0"
@@ -173,8 +180,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
               navigation.popToTop();
             }}
           />
-        </View>
-      )}
+        )}
+      </View>
     </ScrollView>
   );
 };

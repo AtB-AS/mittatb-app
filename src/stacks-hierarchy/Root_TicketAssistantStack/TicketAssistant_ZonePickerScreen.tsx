@@ -23,6 +23,7 @@ import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScree
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = TicketAssistantScreenProps<'TicketAssistant_ZonePickerScreen'>;
 export const TicketAssistant_ZonePickerScreen = ({
@@ -32,6 +33,7 @@ export const TicketAssistant_ZonePickerScreen = ({
   const styles = useThemeStyles();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const a11yContext = useAccessibilityContext();
+  const focusRef = useFocusOnLoad();
 
   const offerDefaults = useOfferDefaults(
     undefined,
@@ -96,16 +98,19 @@ export const TicketAssistant_ZonePickerScreen = ({
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <ThemeText
-          type={'heading--big'}
-          style={styles.header}
-          color={themeColor}
-          accessibilityLabel={t(
-            TicketAssistantTexts.zonesSelector.titleA11yLabel,
-          )}
-        >
-          {t(TicketAssistantTexts.zonesSelector.title)}
-        </ThemeText>
+        <View ref={focusRef} accessible={true}>
+          <ThemeText
+            type={'heading--big'}
+            style={styles.header}
+            color={themeColor}
+            accessibilityRole={'header'}
+            accessibilityLabel={t(
+              TicketAssistantTexts.zonesSelector.titleA11yLabel,
+            )}
+          >
+            {t(TicketAssistantTexts.zonesSelector.title)}
+          </ThemeText>
+        </View>
         <View style={styles.zonesSelectorContainer}>
           <View style={styles.zonesSelectorButtonsContainer}>
             <TariffZonesSelectorButtons

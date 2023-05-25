@@ -1,7 +1,7 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColor} from '@atb/theme/colors';
 import {TouchableOpacity, View} from 'react-native';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import React from 'react';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -43,6 +43,12 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
     (config) => config.configuration.requiresLogin,
   );
 
+  const title = t(TicketingTexts.ticketAssistantTile.title);
+  const description = t(TicketingTexts.ticketAssistantTile.description);
+  const accessibilityLabel = [title, 'Beta', description].join(
+    screenReaderPause,
+  );
+
   return (
     <View
       style={[
@@ -55,6 +61,8 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
         <TouchableOpacity
           onPress={() => onPress(requiresLoginConfig)}
           accessible={true}
+          accessibilityLabel={accessibilityLabel}
+          accessibilityHint={t(TicketingTexts.ticketAssistantTile.a11yHint)}
           style={styles.spreadContent}
         >
           <View style={styles.contentContainer}>
@@ -67,7 +75,11 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
                   testID={testID}
                 />
               </View>
-              <ThemeText type="label__uppercase" color={'secondary'}>
+              <ThemeText
+                type="label__uppercase"
+                accessible={false}
+                color={'secondary'}
+              >
                 {t(TicketingTexts.ticketAssistantTile.label)}
               </ThemeText>
             </View>
@@ -78,7 +90,7 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
                 color={themeColor}
                 testID={testID + 'Title'}
               >
-                {t(TicketingTexts.ticketAssistantTile.title)}
+                {title}
               </ThemeText>
               <BetaTag style={styles.betaTag} />
             </View>

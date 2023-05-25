@@ -53,6 +53,7 @@ import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorSta
 import {FullScreenView} from '@atb/components/screen-view';
 import {CityZoneMessage} from './components/CityZoneMessage';
 import {useFlexibleTransportEnabled} from './use-flexible-transport-enabled';
+import {TripPattern} from '@atb/api/types/trips';
 import {useAnalytics} from '@atb/analytics';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
@@ -176,13 +177,12 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   );
 
   const onPressed = useCallback(
-    (tripPatterns, startIndex) => {
+    (tripPattern: TripPattern, resultIndex) => {
       analytics.logEvent('Trip search', 'Trip details opened', {
-        resultIndex: startIndex,
+        resultIndex,
       });
       navigation.navigate('Dashboard_TripDetailsScreen', {
-        tripPatterns,
-        startIndex,
+        tripPattern,
       });
     },
     [navigation, from, to],
