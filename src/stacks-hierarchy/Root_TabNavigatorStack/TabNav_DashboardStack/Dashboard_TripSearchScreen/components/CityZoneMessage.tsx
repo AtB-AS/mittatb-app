@@ -2,7 +2,6 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {Linking, TouchableOpacity, View} from 'react-native';
 import {FlexibleTransport} from '@atb/assets/svg/color/illustrations';
-import {CityZone} from '@atb/reference-data/types';
 import {Location} from '@atb/favorites';
 import {useFindCityZoneInLocation} from '../hooks';
 import {SvgProps} from 'react-native-svg';
@@ -16,11 +15,17 @@ import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {Section} from '@atb/components/sections';
 import CityBoxMessageTexts from '@atb/translations/components/CityBoxMessage';
 import {useFirestoreConfiguration} from '@atb/configuration';
+import {InteractiveColor} from '@atb/theme/colors';
+import {Phone} from '@atb/assets/svg/mono-icons/devices';
+import {CityZone} from '@atb/reference-data/types';
 import {useAnalytics} from '@atb/analytics';
 
 type ActionButton = {
   id: string;
   text: string;
+  interactiveColor: InteractiveColor;
+  icon?: (props: SvgProps) => JSX.Element;
+  accessibilityHint?: string;
   onPress: () => void;
 };
 
@@ -36,11 +41,12 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
   onDismiss,
 }) => {
   const style = useStyle();
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const {cityZones} = useFirestoreConfiguration();
-  const fromCityZone = useFindCityZoneInLocation(from, cityZones);
-  const toCityZone = useFindCityZoneInLocation(to, cityZones);
-  const analytics = useAnalytics();
+  const enabledCityZones = cityZones.filter((cityZone) => cityZone.enabled);
+  const fromCityZone = useFindCityZoneInLocation(from, enabledCityZones);
+  const toCityZone = useFindCityZoneInLocation(to, enabledCityZones);
+  const actionButtons = useActionButtons(fromCityZone);
 
   if (!fromCityZone || !toCityZone) {
     return null;
@@ -50,35 +56,20 @@ export const CityZoneMessage: React.FC<CityZoneMessageProps> = ({
     return null;
   }
 
-  const openUrlForCityZone = (cityZone: CityZone) => {
-    const contactUrl = getTextForLanguage(cityZone.contactUrl, language);
-    if (contactUrl) {
-      analytics.logEvent('Flexible transport', 'Info url opened', {
-        name: cityZone.name,
-        contactUrl: cityZone.contactUrl,
-      });
-      Linking.openURL(contactUrl);
-    }
-  };
+  if (actionButtons.length > 0) {
+    return (
+      <Section style={style.cityZoneMessage}>
+        <CityZoneBox
+          message={t(CityBoxMessageTexts.message(fromCityZone.name))}
+          icon={() => <FlexibleTransport />}
+          onDismiss={onDismiss}
+          actionButtons={actionButtons}
+        />
+      </Section>
+    );
+  }
 
-  const messageActions = [
-    {
-      id: `${fromCityZone.id}_action`,
-      text: fromCityZone.name,
-      onPress: () => openUrlForCityZone(fromCityZone),
-    },
-  ];
-
-  return (
-    <Section style={style.cityZoneMessage}>
-      <CityZoneBox
-        message={t(CityBoxMessageTexts.message)}
-        icon={() => <FlexibleTransport />}
-        onDismiss={onDismiss}
-        actionButtons={messageActions}
-      />
-    </Section>
-  );
+  return null;
 };
 
 type CityZoneBoxProps = {
@@ -114,14 +105,15 @@ const CityZoneBox = ({
               <Button
                 key={actionButton.id}
                 type="pill"
-                interactiveColor="interactive_3"
+                compact={true}
+                interactiveColor={actionButton.interactiveColor}
                 text={actionButton.text}
                 onPress={actionButton.onPress}
                 style={styles.action}
                 accessibilityLabel={actionButton.text}
                 accessibilityRole="link"
-                accessibilityHint={t(CityBoxMessageTexts.a11yHint)}
-                rightIcon={{svg: ExternalLink}}
+                accessibilityHint={actionButton.accessibilityHint}
+                rightIcon={actionButton.icon && {svg: actionButton.icon}}
               />
             ))}
           </View>
@@ -142,6 +134,72 @@ const CityZoneBox = ({
       )}
     </View>
   );
+};
+
+const useActionButtons = (cityZone?: CityZone) => {
+  const {t, language} = useTranslation();
+  const analytics = useAnalytics();
+
+  if (!cityZone) {
+    return [];
+  }
+
+  const actionButtons: ActionButton[] = [];
+  const orderUrl = getTextForLanguage(cityZone.orderUrl, language);
+  if (orderUrl) {
+    actionButtons.push({
+      id: `book_online_action`,
+      text: t(CityBoxMessageTexts.actionButtons.bookOnline),
+      icon: ExternalLink,
+      interactiveColor: 'interactive_0',
+      accessibilityHint: t(CityBoxMessageTexts.a11yHintForExternalContent),
+      onPress: () => {
+        analytics.logEvent('Flexible transport', 'Book online url opened', {
+          name: 'book_online_action',
+          orderUrl: orderUrl,
+        });
+        Linking.openURL(orderUrl);
+      },
+    });
+  }
+
+  const phoneNumber = cityZone.phoneNumber;
+  if (phoneNumber && !orderUrl) {
+    actionButtons.push({
+      id: `book_by_phone_action`,
+      icon: Phone,
+      text: t(CityBoxMessageTexts.actionButtons.bookByPhone),
+      interactiveColor: 'interactive_0',
+      accessibilityHint: t(CityBoxMessageTexts.a11yHintForPhone),
+      onPress: () => {
+        analytics.logEvent('Flexible transport', 'Book by phone url opened', {
+          name: 'book_by_phone_action',
+          phoneNumber: phoneNumber,
+        });
+        Linking.openURL(`tel:${phoneNumber}`);
+      },
+    });
+  }
+
+  const moreInfoUrl = getTextForLanguage(cityZone.moreInfoUrl, language);
+  if (moreInfoUrl && moreInfoUrl) {
+    actionButtons.push({
+      id: `more_info_action`,
+      icon: ExternalLink,
+      text: t(CityBoxMessageTexts.actionButtons.moreInfo),
+      interactiveColor: 'interactive_3',
+      accessibilityHint: t(CityBoxMessageTexts.a11yHintForExternalContent),
+      onPress: () => {
+        analytics.logEvent('Flexible transport', 'More info url opened', {
+          name: 'more_info_action',
+          moreInfoUrl: moreInfoUrl,
+        });
+        Linking.openURL(moreInfoUrl);
+      },
+    });
+  }
+
+  return actionButtons;
 };
 
 export const useStyle = StyleSheet.createThemeHook((theme) => ({

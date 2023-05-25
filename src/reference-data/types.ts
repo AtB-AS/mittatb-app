@@ -48,6 +48,8 @@ export type CityZone = {
   id: string;
   name: string;
   enabled: boolean;
-  contactUrl: LanguageAndTextType[];
+  moreInfoUrl?: LanguageAndTextType[];
+  orderUrl?: LanguageAndTextType[];
+  phoneNumber?: string;
   geometry: Omit<Polygon, 'type'> & {type: any};
 };
