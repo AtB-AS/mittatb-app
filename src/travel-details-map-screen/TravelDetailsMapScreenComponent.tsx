@@ -17,7 +17,7 @@ import {
 } from '@atb/components/map';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {useTheme} from '@atb/theme';
+import {useTheme, StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
 import {secondsBetween} from '@atb/utils/date';
@@ -27,7 +27,7 @@ import MapboxGL from '@rnmapbox/maps';
 import {CircleLayerStyleProps} from '@rnmapbox/maps/javascript/utils/MapboxStyles';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
@@ -75,6 +75,7 @@ export const TravelDetailsMapScreenComponent = ({
 
   const {t} = useTranslation();
   const controlStyles = useControlPositionsStyle();
+  const styles = useStyles();
 
   const [vehicle, setVehicle] = useState<VehicleWithPosition | undefined>(
     vehicleWithPosition,
@@ -169,10 +170,6 @@ export const TravelDetailsMapScreenComponent = ({
     </View>
   );
 };
-const styles = StyleSheet.create({
-  mapView: {flex: 1},
-  map: {flex: 1},
-});
 
 type VehicleIconProps = {
   vehicle: VehicleWithPosition;
@@ -214,9 +211,6 @@ const LiveVehicle = ({
   );
 
   const circleColor = useTransportationColor(mode, subMode);
-  const textColor = useTransportationColor(mode, subMode, 'text');
-  const svg = getTransportModeSvg(mode, subMode);
-
   const circleStyle = ((): CircleLayerStyleProps => {
     if (isError)
       return {
@@ -240,25 +234,6 @@ const LiveVehicle = ({
     };
   })();
 
-  const LiveVehicleIcon = (): JSX.Element => {
-    if (isLoading) return <ActivityIndicator color={textColor} />;
-    if (isError)
-      return (
-        <ThemeIcon
-          svg={svg}
-          fill={theme.interactive.interactive_destructive.default.background}
-        />
-      );
-    if (isStale)
-      return (
-        <ThemeIcon
-          svg={svg}
-          fill={theme.interactive.interactive_1.disabled.text}
-        />
-      );
-    return <ThemeIcon svg={svg} fill={textColor} />;
-  };
-
   if (!vehicle.location || zoomLevel < FOLLOW_MIN_ZOOM_LEVEL) return null;
   return (
     <>
@@ -274,9 +249,63 @@ const LiveVehicle = ({
           style={{padding: 20}}
           onPressOut={() => setShouldTrack(true)}
         >
-          <LiveVehicleIcon />
+          <LiveVehicleIcon
+            mode={mode}
+            subMode={subMode}
+            isError={isError}
+            isStale={isStale}
+            isLoading={isLoading}
+          />
         </TouchableOpacity>
       </MapboxGL.MarkerView>
     </>
   );
 };
+
+type LiveVehicleIconProps = {
+  isLoading: boolean;
+  isStale: boolean;
+  isError: boolean;
+  mode?: AnyMode;
+  subMode?: AnySubMode;
+};
+const LiveVehicleIcon = ({
+  mode,
+  subMode,
+  isLoading,
+  isStale,
+  isError,
+}: LiveVehicleIconProps): JSX.Element => {
+  const {theme} = useTheme();
+  const fillColor = useTransportationColor(mode, subMode, 'text');
+  const svg = getTransportModeSvg(mode, subMode);
+
+  if (isLoading) return <ActivityIndicator color={fillColor} />;
+
+  if (isError)
+    return (
+      <ThemeIcon
+        svg={svg}
+        fill={theme.interactive.interactive_destructive.default.background}
+      />
+    );
+
+  if (isStale)
+    return (
+      <ThemeIcon
+        svg={svg}
+        fill={theme.interactive.interactive_1.disabled.text}
+      />
+    );
+
+  return <ThemeIcon svg={svg} fill={fillColor} />;
+};
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  mapView: {
+    flex: 1,
+  },
+  map: {
+    flex: 1,
+  },
+}));
