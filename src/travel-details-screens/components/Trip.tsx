@@ -21,6 +21,7 @@ import {useRealtimeMapEnabled} from '@atb/components/map';
 import {AnyMode} from '@atb/components/icon-box';
 import {Divider} from '@atb/components/divider';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -94,13 +95,11 @@ export const Trip: React.FC<TripProps> = ({
                 testID={'legContainer' + index}
                 onPressShowLive={
                   legVehiclePosition
-                    ? () =>
+                    ? (mapData: ServiceJourneyMapInfoData_v3) =>
                         onPressDetailsMap({
-                          legs: tripPattern.legs,
-                          fromPlace: tripPattern.legs[0].fromPlace,
-                          toPlace:
-                            tripPattern.legs[tripPattern.legs.length - 1]
-                              .toPlace,
+                          legs: mapData.mapLegs,
+                          fromPlace: mapData.start,
+                          toPlace: mapData.stop,
                           vehicleWithPosition: legVehiclePosition,
                           mode: leg.mode,
                           subMode: leg.transportSubmode,
