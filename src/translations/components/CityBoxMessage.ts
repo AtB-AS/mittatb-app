@@ -3,8 +3,8 @@ import {translation as _} from '../commons';
 const CityBoxMessageTexts = {
   message: (city: string) =>
     _(
-      `Travel from address to address in ${city} with AtB Bestill.`,
       `Reis fra adresse til adresse i ${city} med AtB Bestill.`,
+      `Travel from address to address in ${city} with AtB Bestill.`,
     ),
   actionButtons: {
     bookByPhone: _('Bestill på telefon', 'Book by phone'),
