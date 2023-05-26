@@ -129,7 +129,7 @@ const BaseHeader = ({
           css.headerTitle,
           {
             // Make space for absolute positioned buttons in case they are offset below title
-            marginBottom: buttonsTopOffset,
+            marginBottom: theme.spacings.medium + buttonsTopOffset,
           },
         ]}
         onLayout={setLayoutFor('container')}
@@ -168,7 +168,8 @@ const BaseHeader = ({
 const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.large,
+    paddingTop: theme.spacings.large,
+    paddingBottom: theme.spacings.medium,
     borderTopLeftRadius: theme.border.radius.circle,
     borderTopRightRadius: theme.border.radius.circle,
   },
