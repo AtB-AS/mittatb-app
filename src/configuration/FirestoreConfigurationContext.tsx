@@ -43,10 +43,10 @@ export type AppTexts = {
 };
 
 type ConfigurableLinks = {
-  ticketingInfo: LanguageAndTextType[];
-  termsInfo: LanguageAndTextType[];
-  inspectionInfo: LanguageAndTextType[];
-  refundInfo: LanguageAndTextType[];
+  ticketingInfo?: LanguageAndTextType[];
+  termsInfo?: LanguageAndTextType[];
+  inspectionInfo?: LanguageAndTextType[];
+  refundInfo?: LanguageAndTextType[];
 };
 
 type ConfigurationContextState = {
@@ -400,9 +400,6 @@ function getConfigurableLinksFromSnapshot(
   const inspectionInfo = mapLanguageAndTextType(urls?.get('inspectionInfo'));
   const termsInfo = mapLanguageAndTextType(urls?.get('termsInfo'));
   const refundInfo = mapLanguageAndTextType(urls?.get('refundInfo'));
-
-  if (!ticketingInfo || !inspectionInfo || !termsInfo || !refundInfo)
-    return undefined;
 
   return {
     ticketingInfo,
