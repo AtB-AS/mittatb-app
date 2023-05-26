@@ -39,12 +39,12 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
   tripPattern,
   error,
 }) => {
+  const {t} = useTranslation();
   const {modesWeSellTicketsFor} = useFirestoreConfiguration();
   const someTicketsAreUnavailableInApp = hasLegsWeCantSellTicketsFor(
     tripPattern,
     modesWeSellTicketsFor,
   );
-  const {t} = useTranslation();
   const styles = useStyles();
   const canSellCollab = canSellCollabTicket(tripPattern);
   const shortWaitTime = hasShortWaitTime(tripPattern.legs);
