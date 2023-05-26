@@ -18,7 +18,10 @@ import {
   ToggleResponse,
   TokenLimitResponse,
 } from '@atb/mobile-token/types';
-import {parseRemoteError} from '@entur-private/abt-token-server-javascript-interface';
+import {
+  parseRemoteError,
+  RemoteTokenStateError,
+} from '@entur-private/abt-token-server-javascript-interface';
 import {getDeviceName} from 'react-native-device-info';
 
 const CorrelationIdHeaderName = 'Atb-Correlation-Id';
@@ -43,6 +46,9 @@ const handleError = (err: any) => {
   throw parseRemoteError(err.response?.data) || err;
 };
 
+const isRemoteTokenStateError = (err: Error) =>
+  err instanceof RemoteTokenStateError;
+
 export const tokenService: TokenService = {
   initiateNewMobileToken: async (traceId, isEmulator) => {
     const deviceName = await getDeviceName();
@@ -56,7 +62,7 @@ export const tokenService: TokenService = {
           [IsEmulatorHeaderName]: String(isEmulator),
         },
         authWithIdToken: true,
-        skipErrorLogging: () => true,
+        skipErrorLogging: isRemoteTokenStateError,
         timeout: 15000,
       })
       .then((res) => res.data.pendingTokenDetails)
@@ -73,7 +79,7 @@ export const tokenService: TokenService = {
           },
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: () => true,
+          skipErrorLogging: isRemoteTokenStateError,
         },
       )
       .then((res) => res.data.activeTokenDetails)
@@ -89,7 +95,7 @@ export const tokenService: TokenService = {
         },
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: () => true,
+        skipErrorLogging: isRemoteTokenStateError,
       })
       .then((res) => res.data.pendingTokenDetails)
       .catch(handleError),
@@ -113,7 +119,7 @@ export const tokenService: TokenService = {
           },
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: () => true,
+          skipErrorLogging: isRemoteTokenStateError,
         },
       )
       .then((res) => res.data.activeTokenDetails)
@@ -129,7 +135,7 @@ export const tokenService: TokenService = {
         },
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: () => true,
+        skipErrorLogging: isRemoteTokenStateError,
       })
       .then((res) => res.data.activeTokenDetails)
       .catch(handleError),
@@ -144,7 +150,7 @@ export const tokenService: TokenService = {
           },
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: () => true,
+          skipErrorLogging: isRemoteTokenStateError,
         },
       )
       .then((res) => res.data.removed)
@@ -158,7 +164,7 @@ export const tokenService: TokenService = {
         },
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: () => true,
+        skipErrorLogging: isRemoteTokenStateError,
       })
       .then((res) => res.data.tokens)
       .catch(handleError),
@@ -173,7 +179,7 @@ export const tokenService: TokenService = {
           },
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: () => true,
+          skipErrorLogging: isRemoteTokenStateError,
         },
       )
       .then((res) => res.data.tokens)
@@ -184,7 +190,7 @@ export const tokenService: TokenService = {
       .get<TokenLimitResponse>('/tokens/v4/toggle/details', {
         authWithIdToken: true,
         timeout: 15000,
-        skipErrorLogging: () => true,
+        skipErrorLogging: isRemoteTokenStateError,
       })
       .then((res) => res.data)
       .catch(handleError),
@@ -200,7 +206,7 @@ export const tokenService: TokenService = {
           },
           authWithIdToken: true,
           timeout: 15000,
-          skipErrorLogging: () => true,
+          skipErrorLogging: isRemoteTokenStateError,
         })
         .catch(handleError);
     }, token),
