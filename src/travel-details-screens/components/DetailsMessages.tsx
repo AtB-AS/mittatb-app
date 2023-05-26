@@ -9,7 +9,6 @@ import {
 } from '@atb/translations';
 import {AxiosError} from 'axios';
 import React from 'react';
-import {ViewStyle} from 'react-native';
 import {
   canSellTicketsForSubMode,
   hasLegsWeCantSellTicketsFor,
@@ -33,7 +32,6 @@ import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departu
 type TripMessagesProps = {
   tripPattern: TripPattern;
   error?: AxiosError;
-  messageStyle?: ViewStyle;
 };
 export const TripMessages: React.FC<TripMessagesProps> = ({
   tripPattern,
