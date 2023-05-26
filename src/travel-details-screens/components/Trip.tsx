@@ -157,7 +157,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     paddingTop: theme.spacings.medium,
   },
   container: {
-    paddingBottom: theme.spacings.medium,
+    paddingVertical: theme.spacings.medium,
   },
 }));
 
