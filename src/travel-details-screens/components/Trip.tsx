@@ -11,7 +11,10 @@ import {TripSummary} from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {isSignificantFootLegWalkOrWaitTime} from '@atb/travel-details-screens/utils';
+import {
+  isLegFlexibleTransport,
+  isSignificantFootLegWalkOrWaitTime,
+} from '@atb/travel-details-screens/utils';
 import {
   CompactTravelDetailsMap,
   TravelDetailsMapScreenParams,
@@ -62,7 +65,7 @@ export const Trip: React.FC<TripProps> = ({
   const {vehiclePositions} = useGetServiceJourneyVehicles(ids);
 
   const tripPatternLegs = tripPattern?.legs.map((leg) => {
-    let mode: AnyMode = !!leg.bookingArrangements ? 'flex' : leg.mode;
+    let mode: AnyMode = isLegFlexibleTransport(leg) ? 'flex' : leg.mode;
     return {
       ...leg,
       mode,

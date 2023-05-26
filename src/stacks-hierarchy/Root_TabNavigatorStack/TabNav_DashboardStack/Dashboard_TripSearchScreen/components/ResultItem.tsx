@@ -50,6 +50,7 @@ import {
   isSignificantFootLegWalkOrWaitTime,
   significantWaitTime,
   significantWalkTime,
+  isLegFlexibleTransport,
 } from '@atb/travel-details-screens/utils';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
@@ -508,7 +509,7 @@ const TransportationLeg = ({
   return (
     <TransportationIconBox
       style={style}
-      mode={!!leg.bookingArrangements ? 'flex' : leg.mode}
+      mode={isLegFlexibleTransport(leg) ? 'flex' : leg.mode}
       subMode={leg.line?.transportSubmode}
       lineNumber={leg.line?.publicCode}
       testID="trLeg"
