@@ -32,6 +32,7 @@ import {
   getLineName,
   getNoticesForLeg,
   getTimeRepresentationType,
+  isLegFlexibleTransport,
   significantWaitTime,
   significantWalkTime,
   TimeValues,
@@ -50,6 +51,8 @@ import {
 } from './FlexibeTransportContactDetails';
 import {Button} from '@atb/components/button';
 import {Map} from '@atb/assets/svg/mono-icons/map';
+import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
+import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 
 type TripSectionProps = {
@@ -60,7 +63,7 @@ type TripSectionProps = {
   interchangeDetails?: InterchangeDetails;
   leg: Leg;
   testID?: string;
-  onPressShowLive?(): void;
+  onPressShowLive?(mapData: ServiceJourneyMapInfoData_v3): void;
   onPressDeparture: TripProps['onPressDeparture'];
   onPressQuay: TripProps['onPressQuay'];
 };
@@ -88,7 +91,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const {themeName} = useTheme();
 
   const isWalkSection = leg.mode === 'foot';
-  const isFlexible = !!leg.bookingArrangements;
+  const isFlexible = isLegFlexibleTransport(leg);
   const legColor = useTransportationColor(
     isFlexible ? 'flex' : leg.mode,
     leg.line?.transportSubmode,
@@ -103,6 +106,12 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const notices = getNoticesForLeg(leg);
 
   const realtimeText = useRealtimeText(leg.serviceJourneyEstimatedCalls);
+
+  const mapData = useMapData(
+    leg.serviceJourney?.id,
+    leg.fromPlace.quay?.id,
+    leg.toPlace.quay?.id,
+  );
 
   const bookingDetails: ContactDetails | undefined = leg?.bookingArrangements
     ?.bookingContact?.phone &&
@@ -172,7 +181,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             )}
             rowLabel={
               <TransportationIconBox
-                mode={!!leg.bookingArrangements ? 'flex' : leg.mode}
+                mode={isLegFlexibleTransport(leg) ? 'flex' : leg.mode}
                 subMode={leg.line?.transportSubmode}
               />
             }
@@ -220,14 +229,14 @@ export const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
-        {onPressShowLive ? (
+        {onPressShowLive && mapData ? (
           <TripRow>
             <Button
               type="pill"
               leftIcon={{svg: Map}}
               text={t(TripDetailsTexts.trip.leg.live)}
               interactiveColor="interactive_3"
-              onPress={onPressShowLive}
+              onPress={() => onPressShowLive(mapData)}
             />
           </TripRow>
         ) : null}

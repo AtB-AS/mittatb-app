@@ -17,7 +17,6 @@ import {
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {VehicleStat} from '@atb/mobility/components/VehicleStat';
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {FullScreenFooter} from '@atb/components/screen-footer';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {PricingPlan} from '@atb/mobility/components/PricingPlan';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
@@ -29,6 +28,7 @@ import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
 import {useAnalytics} from '@atb/analytics';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
   vehicleId: VehicleId;
@@ -51,7 +51,7 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
   const analytics = useAnalytics();
 
   useEffect(() => {
-    analytics.logEvent('Scooter selected', {
+    analytics.logEvent('Mobility', 'Scooter selected', {
       operator: getTextForLanguage(
         vehicle?.system?.operator?.name.translation,
         language,
@@ -107,14 +107,14 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
               />
             </ScrollView>
             {rentalAppUri && (
-              <FullScreenFooter>
+              <View style={style.footer}>
                 <Button
                   text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
                   onPress={openOperatorApp}
                   mode="primary"
                   interactiveColor={'interactive_0'}
                 />
-              </FullScreenFooter>
+              </View>
             )}
           </>
         )}
@@ -143,14 +143,21 @@ const getRange = (rangeInMeters: number, language: Language) => {
   return `ca. ${rangeInKm} km`;
 };
 
-const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
-  activityIndicator: {
-    marginBottom: theme.spacings.xLarge,
-  },
-  container: {
-    paddingHorizontal: theme.spacings.medium,
-  },
-  errorMessage: {
-    marginHorizontal: theme.spacings.medium,
-  },
-}));
+const useSheetStyle = StyleSheet.createThemeHook((theme) => {
+  const {bottom} = useSafeAreaInsets();
+  return {
+    activityIndicator: {
+      marginBottom: Math.max(bottom, theme.spacings.medium),
+    },
+    container: {
+      paddingHorizontal: theme.spacings.medium,
+    },
+    errorMessage: {
+      marginHorizontal: theme.spacings.medium,
+    },
+    footer: {
+      marginBottom: Math.max(bottom, theme.spacings.medium),
+      marginHorizontal: theme.spacings.medium,
+    },
+  };
+});

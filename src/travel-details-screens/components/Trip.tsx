@@ -15,7 +15,10 @@ import {TripSummary} from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {isSignificantFootLegWalkOrWaitTime} from '@atb/travel-details-screens/utils';
+import {
+  isLegFlexibleTransport,
+  isSignificantFootLegWalkOrWaitTime,
+} from '@atb/travel-details-screens/utils';
 import {
   CompactTravelDetailsMap,
   TravelDetailsMapScreenParams,
@@ -27,6 +30,7 @@ import {Divider} from '@atb/components/divider';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -67,7 +71,7 @@ export const Trip: React.FC<TripProps> = ({
   const {vehiclePositions} = useGetServiceJourneyVehicles(ids);
 
   const tripPatternLegs = tripPattern?.legs.map((leg) => {
-    let mode: AnyMode = !!leg.bookingArrangements ? 'flex' : leg.mode;
+    let mode: AnyMode = isLegFlexibleTransport(leg) ? 'flex' : leg.mode;
     return {
       ...leg,
       mode,
@@ -114,13 +118,11 @@ export const Trip: React.FC<TripProps> = ({
                 testID={'legContainer' + index}
                 onPressShowLive={
                   legVehiclePosition
-                    ? () =>
+                    ? (mapData: ServiceJourneyMapInfoData_v3) =>
                         onPressDetailsMap({
-                          legs: tripPattern.legs,
-                          fromPlace: tripPattern.legs[0].fromPlace,
-                          toPlace:
-                            tripPattern.legs[tripPattern.legs.length - 1]
-                              .toPlace,
+                          legs: mapData.mapLegs,
+                          fromPlace: mapData.start,
+                          toPlace: mapData.stop,
                           vehicleWithPosition: legVehiclePosition,
                           mode: leg.mode,
                           subMode: leg.transportSubmode,

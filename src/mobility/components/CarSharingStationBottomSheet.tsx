@@ -70,7 +70,10 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
         {!isLoading && !error && station && (
           <>
             <ScrollView style={style.container}>
-              <WalkingDistance distance={distance} />
+              <WalkingDistance
+                style={style.walkingDistance}
+                distance={distance}
+              />
               <Section>
                 <GenericSectionItem>
                   <OperatorLogo
@@ -158,7 +161,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
     activityIndicator: {
-      marginBottom: theme.spacings.xLarge,
+      marginBottom: Math.max(bottom, theme.spacings.medium),
     },
     availabilityChip: {
       flex: 1,
@@ -197,6 +200,9 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     operatorButton: {
       marginTop: theme.spacings.medium,
+    },
+    walkingDistance: {
+      marginBottom: theme.spacings.medium,
     },
   };
 });

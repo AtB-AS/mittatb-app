@@ -3,9 +3,9 @@ import {CancelToken, isCancel} from '@atb/api';
 import {tripsSearch} from '@atb/api/trips_v2';
 import {
   Modes,
+  TransportMode,
   TransportModes,
   TransportSubmode,
-  TransportMode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {TripPattern} from '@atb/api/types/trips';
@@ -27,6 +27,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {CancelTokenSource} from 'axios';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {useJourneyModes} from './hooks';
+import {useAnalytics} from '@atb/analytics';
 
 export function useTripsQuery(
   fromLocation: Location | undefined,
@@ -57,6 +58,7 @@ export function useTripsQuery(
   const {
     preferences: {tripSearchPreferences},
   } = usePreferences();
+  const analytics = useAnalytics();
 
   const {
     tripsSearch_max_number_of_chained_searches: config_max_performed_searches,
@@ -159,6 +161,11 @@ export function useTripsQuery(
                 ? 'search-empty-result'
                 : 'search-success',
             );
+            analytics.logEvent('Trip search', 'Search performed', {
+              searchTime,
+              filtersSelection: toLoggableFiltersSelection(filtersSelection),
+              numberOfHits: allTripPatterns.length,
+            });
           } catch (e) {
             setTripPatterns([]);
             setPageCursor(undefined);
@@ -329,4 +336,16 @@ function transportModeToEnum(
         .filter(Boolean) as TransportSubmode[],
     };
   });
+}
+
+function toLoggableFiltersSelection(
+  filterSelection: TravelSearchFiltersSelectionType | undefined,
+) {
+  if (!filterSelection) return;
+  return {
+    transportModes: filterSelection.transportModes?.map((t) => ({
+      [t.id]: t.selected,
+    })),
+    flexibleTransportEnabled: filterSelection.flexibleTransport?.enabled,
+  };
 }
