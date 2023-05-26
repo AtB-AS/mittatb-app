@@ -168,7 +168,8 @@ const BaseHeader = ({
 const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.large,
+    paddingTop: theme.spacings.large,
+    paddingBottom: theme.spacings.medium,
     borderTopLeftRadius: theme.border.radius.circle,
     borderTopRightRadius: theme.border.radius.circle,
   },
