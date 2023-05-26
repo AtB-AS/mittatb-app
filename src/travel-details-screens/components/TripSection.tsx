@@ -32,6 +32,7 @@ import {
   getLineName,
   getNoticesForLeg,
   getTimeRepresentationType,
+  isLegFlexibleTransport,
   significantWaitTime,
   significantWalkTime,
   TimeValues,
@@ -90,7 +91,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const {themeName} = useTheme();
 
   const isWalkSection = leg.mode === 'foot';
-  const isFlexible = !!leg.bookingArrangements;
+  const isFlexible = isLegFlexibleTransport(leg);
   const legColor = useTransportationColor(
     isFlexible ? 'flex' : leg.mode,
     leg.line?.transportSubmode,
@@ -180,7 +181,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             )}
             rowLabel={
               <TransportationIconBox
-                mode={!!leg.bookingArrangements ? 'flex' : leg.mode}
+                mode={isLegFlexibleTransport(leg) ? 'flex' : leg.mode}
                 subMode={leg.line?.transportSubmode}
               />
             }

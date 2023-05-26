@@ -160,3 +160,7 @@ export function canSellCollabTicket(tripPattern: TripPattern) {
 function someLegsAreByTrain(tripPattern: TripPattern): boolean {
   return tripPattern.legs.some((leg) => leg.mode === Mode.Rail);
 }
+
+export function isLegFlexibleTransport(leg: Leg): boolean {
+  return leg.line?.id.toLowerCase().includes('flexible') ?? false;
+}

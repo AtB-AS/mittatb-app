@@ -17,6 +17,7 @@ import {
 import {tripsSearch} from '@atb/api/trips_v2';
 import {StreetMode} from '@entur/sdk/lib/journeyPlanner/types';
 import MapboxGL from '@rnmapbox/maps';
+import {isLegFlexibleTransport} from '@atb/travel-details-screens/utils';
 
 const MAX_LIMIT_TO_SHOW_WALKING_TRIP = 5000;
 
@@ -110,7 +111,7 @@ const fetchMapLines = async (
     const tripLegs: MapLeg[] = walkingTripPattern?.legs.map((leg) => {
       return {
         ...leg,
-        mode: !!leg.bookingArrangements ? 'flex' : leg.mode,
+        mode: isLegFlexibleTransport(leg) ? 'flex' : leg.mode,
       };
     });
     const distance = walkingTripPattern.walkDistance;
