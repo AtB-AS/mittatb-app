@@ -36,7 +36,6 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {CompactFareContracts} from './components/CompactFareContracts';
 import {DeparturesWidget} from './components/DeparturesWidget';
 import {DashboardScreenProps} from '../navigation-types';
-import {GlobalMessage} from '@atb/global-messages';
 import {useAnalytics} from '@atb/analytics';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
@@ -179,6 +178,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
         title={t(DashboardTexts.header.title)}
         rightButton={{type: 'chat'}}
         leftButton={{type: 'status-disruption'}}
+        globalMessageContext="app-assistant"
       />
 
       <View style={style.backdrop}>
@@ -191,10 +191,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
       >
         <View style={style.searchHeader}>
           <View style={style.paddedContainer}>
-            <GlobalMessage
-              style={style.dashboardGlobalmessages}
-              globalMessageContext="app-assistant"
-            />
             <Section>
               <LocationInputSectionItem
                 accessibilityLabel={
