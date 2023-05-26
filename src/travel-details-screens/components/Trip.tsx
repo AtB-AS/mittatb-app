@@ -1,7 +1,11 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Feedback} from '@atb/components/feedback';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {secondsBetween} from '@atb/utils/date';
+import {StyleSheet} from '@atb/theme';
+import {
+  formatToVerboseFullDate,
+  isWithinSameDate,
+  secondsBetween,
+} from '@atb/utils/date';
 import {AxiosError} from 'axios';
 import React from 'react';
 import {View} from 'react-native';
@@ -24,6 +28,8 @@ import {useRealtimeMapEnabled} from '@atb/components/map';
 import {AnyMode} from '@atb/components/icon-box';
 import {Divider} from '@atb/components/divider';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import {ThemeText} from '@atb/components/text';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 
 export type TripProps = {
@@ -44,8 +50,8 @@ export const Trip: React.FC<TripProps> = ({
   onPressQuay,
 }) => {
   const styles = useStyle();
-  const {theme} = useTheme();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   const legs = tripPattern.legs.filter((leg, i) =>
     isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
@@ -72,8 +78,22 @@ export const Trip: React.FC<TripProps> = ({
     };
   });
 
+  const shouldShowDate =
+    !isWithinSameDate(new Date(), tripPattern.expectedStartTime) ||
+    isScreenReaderEnabled;
+
   return (
     <View style={styles.container}>
+      {shouldShowDate && (
+        <>
+          <View style={styles.date}>
+            <ThemeText type="body__secondary" color="secondary">
+              {formatToVerboseFullDate(tripPattern.expectedStartTime, language)}
+            </ThemeText>
+          </View>
+          <Divider style={styles.divider} />
+        </>
+      )}
       <TripMessages tripPattern={tripPattern} error={error} />
       <View style={styles.trip}>
         {tripPattern &&
@@ -115,7 +135,7 @@ export const Trip: React.FC<TripProps> = ({
             );
           })}
       </View>
-      <Divider style={{marginVertical: theme.spacings.medium}} />
+      <Divider style={styles.divider} />
       {tripPatternLegs && (
         <CompactTravelDetailsMap
           mapLegs={tripPatternLegs}
@@ -153,11 +173,20 @@ function legWaitDetails(index: number, legs: Leg[]): WaitDetails | undefined {
 }
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
-  trip: {
-    paddingTop: theme.spacings.medium,
-  },
   container: {
-    paddingBottom: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
+  },
+  date: {
+    alignItems: 'center',
+    marginBottom: theme.spacings.medium,
+  },
+  divider: {
+    marginBottom: theme.spacings.medium,
+  },
+  trip: {
+    marginTop: theme.spacings.medium,
+    marginBottom: theme.spacings.xSmall,
   },
 }));
 
