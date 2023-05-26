@@ -302,6 +302,8 @@ export function useDeparturesData(
     const timeSinceLastRealtimeRefresh = differenceInSeconds(
       state.tick,
       state.lastRealtimeRefreshTime,
+      // Rounding up makes ticks 10, 20 and 30s instead of 9, 19, and 29
+      {roundingMethod: 'ceil'},
     );
 
     if (timeSinceLastHardRefresh >= HARD_REFRESH_LIMIT_IN_MINUTES) {
