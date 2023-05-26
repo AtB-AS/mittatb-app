@@ -129,7 +129,7 @@ const BaseHeader = ({
           css.headerTitle,
           {
             // Make space for absolute positioned buttons in case they are offset below title
-            marginBottom: buttonsTopOffset,
+            marginBottom: theme.spacings.medium + buttonsTopOffset,
           },
         ]}
         onLayout={setLayoutFor('container')}
