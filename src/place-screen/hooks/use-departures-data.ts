@@ -9,7 +9,7 @@ import {useFavorites, UserFavoriteDepartures} from '@atb/favorites';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {animateNextChange} from '@atb/utils/animation';
 import {useInterval} from '@atb/utils/use-interval';
-import {differenceInMinutes} from 'date-fns';
+import {differenceInMinutes, differenceInSeconds} from 'date-fns';
 import {useCallback, useEffect, useState} from 'react';
 import useReducerWithSideEffects, {
   NoUpdate,
@@ -36,7 +36,8 @@ export type DepartureDataState = {
   error?: {type: ErrorType};
   locationId?: string[];
   isLoading: boolean;
-  lastRefreshTime: Date;
+  lastHardRefreshTime: Date;
+  lastRealtimeRefreshTime: Date;
 };
 
 const initialState: DepartureDataState = {
@@ -44,7 +45,8 @@ const initialState: DepartureDataState = {
   error: undefined,
   locationId: undefined,
   isLoading: false,
-  lastRefreshTime: new Date(),
+  lastHardRefreshTime: new Date(),
+  lastRealtimeRefreshTime: new Date(),
 
   // Store date as update tick to know when to rerender
   // and re-sort objects.
@@ -186,9 +188,6 @@ const reducer: ReducerWithSideEffects<
     case 'TICK_TICK': {
       return Update<DepartureDataState>({
         ...state,
-
-        // We set lastUpdated here to count as a "tick" to
-        // know when to update components while still being performant.
         tick: new Date(),
       });
     }
@@ -201,7 +200,8 @@ const reducer: ReducerWithSideEffects<
         locationId: action.locationId,
         data: action.result,
         tick: new Date(),
-        lastRefreshTime: new Date(),
+        lastHardRefreshTime: new Date(),
+        lastRealtimeRefreshTime: new Date(),
       });
     }
 
@@ -210,9 +210,7 @@ const reducer: ReducerWithSideEffects<
       return Update<DepartureDataState>({
         ...state,
         data: updateDeparturesWithRealtimeV2(state.data, action.realtimeData),
-
-        // We set lastUpdated here to count as a "tick" to
-        // know when to update components while still being performant.
+        lastRealtimeRefreshTime: new Date(),
         tick: new Date(),
       });
     }
@@ -295,21 +293,23 @@ export function useDeparturesData(
     return () => timeout.abort();
   }, [loadDepartures]);
   useEffect(() => {
-    if (!state.tick) {
-      return;
-    }
-    const diff = differenceInMinutes(state.tick, state.lastRefreshTime);
+    if (!state.tick) return;
 
-    if (diff >= HARD_REFRESH_LIMIT_IN_MINUTES) {
+    const timeSinceLastHardRefresh = differenceInMinutes(
+      state.tick,
+      state.lastHardRefreshTime,
+    );
+    const timeSinceLastRealtimeRefresh = differenceInSeconds(
+      state.tick,
+      state.lastRealtimeRefreshTime,
+    );
+
+    if (timeSinceLastHardRefresh >= HARD_REFRESH_LIMIT_IN_MINUTES) {
       loadDepartures();
+    } else if (timeSinceLastRealtimeRefresh >= updateFrequencyInSeconds) {
+      loadRealTimeData();
     }
   }, [state.tick]);
-  useInterval(
-    loadRealTimeData,
-    updateFrequencyInSeconds * 1000,
-    [JSON.stringify(quayIds)],
-    !isFocused || mode === 'Favourite',
-  );
   useInterval(
     () => {
       if (isFocused) dispatch({type: 'TICK_TICK'});
