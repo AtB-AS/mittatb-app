@@ -51,6 +51,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       firstTravelRight.endDateTime.toMillis(),
       fc.state,
     ) === 'valid' &&
+    !!firstTravelRight.tariffZoneRefs?.length &&
     firstTravelRight.tariffZoneRefs?.every(
       (val: string) => val === 'ATB:TariffZone:1',
     ) === true;

@@ -37,6 +37,7 @@ import {CompactFareContracts} from './components/CompactFareContracts';
 import {DeparturesWidget} from './components/DeparturesWidget';
 import {DashboardScreenProps} from '../navigation-types';
 import {GlobalMessage} from '@atb/global-messages';
+import {useAnalytics} from '@atb/analytics';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
@@ -55,6 +56,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
   const {t} = useTranslation();
   const {enable_ticketing} = useRemoteConfig();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
+  const analytics = useAnalytics();
 
   const {
     status,
@@ -288,14 +290,15 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
                 params: {orderId},
               });
             }}
-            onPressBuy={() =>
+            onPressBuy={() => {
+              analytics.logEvent('Dashboard', 'Purchase ticket button clicked');
               navigation.navigate('TabNav_TicketingStack', {
                 screen: 'Ticketing_RootScreen',
                 params: {
                   screen: 'TicketTabNav_PurchaseTabScreen',
                 },
-              })
-            }
+              });
+            }}
           />
         )}
         <DeparturesWidget

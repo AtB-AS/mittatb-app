@@ -1,7 +1,11 @@
-import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {SubscriptionState} from '@atb/api';
 import {VehicleWithPosition} from '@atb/api/types/vehicles';
 import {useLiveVehicleSubscription} from '@atb/api/vehicles';
-import {AnyMode, AnySubMode} from '@atb/components/icon-box';
+import {
+  AnyMode,
+  AnySubMode,
+  getTransportModeSvg,
+} from '@atb/components/icon-box';
 import {
   BackArrow,
   flyToLocation,
@@ -11,14 +15,21 @@ import {
   PositionArrow,
   useControlPositionsStyle,
 } from '@atb/components/map';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {useGeolocationState} from '@atb/GeolocationContext';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useTheme, StyleSheet} from '@atb/theme';
 import {MapTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
+import {secondsBetween} from '@atb/utils/date';
+import {useInterval} from '@atb/utils/use-interval';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import MapboxGL from '@rnmapbox/maps';
+import {CircleLayerStyleProps} from '@rnmapbox/maps/javascript/utils/MapboxStyles';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
@@ -37,6 +48,7 @@ type Props = TravelDetailsMapScreenParams & {
 };
 
 const FOLLOW_ZOOM_LEVEL = 14.5;
+const FOLLOW_MIN_ZOOM_LEVEL = 8;
 const FOLLOW_ANIMATION_DURATION = 500;
 
 export const TravelDetailsMapScreenComponent = ({
@@ -63,12 +75,13 @@ export const TravelDetailsMapScreenComponent = ({
 
   const {t} = useTranslation();
   const controlStyles = useControlPositionsStyle();
+  const styles = useStyles();
 
   const [vehicle, setVehicle] = useState<VehicleWithPosition | undefined>(
     vehicleWithPosition,
   );
 
-  useLiveVehicleSubscription({
+  const {state: subscriptionState} = useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
     onMessage: (event: WebSocketMessageEvent) => {
       const vehicle = JSON.parse(event.data) as VehicleWithPosition;
@@ -77,6 +90,7 @@ export const TravelDetailsMapScreenComponent = ({
   });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
+  const [zoomLevel, setZoomLevel] = useState<number>(FOLLOW_ZOOM_LEVEL);
 
   useEffect(() => {
     const location = vehicle?.location;
@@ -100,6 +114,7 @@ export const TravelDetailsMapScreenComponent = ({
         onTouchMove={() => {
           setShouldTrack(false);
         }}
+        onRegionIsChanging={(event) => setZoomLevel(event.properties.zoomLevel)}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
@@ -125,12 +140,14 @@ export const TravelDetailsMapScreenComponent = ({
             text={t(MapTexts.startPoint.label)}
           />
         )}
-        {vehicle?.location && (
+        {vehicle && (
           <LiveVehicle
-            coordinates={vehicle.location}
+            vehicle={vehicle}
             setShouldTrack={setShouldTrack}
             mode={mode}
             subMode={subMode}
+            subscriptionState={subscriptionState}
+            zoomLevel={zoomLevel}
           />
         )}
       </MapboxGL.MapView>
@@ -153,77 +170,140 @@ export const TravelDetailsMapScreenComponent = ({
     </View>
   );
 };
-const styles = StyleSheet.create({
-  mapView: {flex: 1},
-  map: {flex: 1},
-});
 
 type VehicleIconProps = {
-  coordinates: Coordinates;
+  vehicle: VehicleWithPosition;
   mode?: AnyMode;
   subMode?: AnySubMode;
   setShouldTrack: React.Dispatch<React.SetStateAction<boolean>>;
+  subscriptionState: SubscriptionState;
+  zoomLevel: number;
 };
 
 const LiveVehicle = ({
-  coordinates,
+  vehicle,
   setShouldTrack,
   mode,
   subMode,
+  subscriptionState,
+  zoomLevel,
 }: VehicleIconProps) => {
-  const circleColor = useTransportationColor(mode, subMode);
-  const iconName = vehicleIconName(mode);
+  const {theme} = useTheme();
+  const {live_vehicle_stale_threshold} = useRemoteConfig();
 
-  if (!coordinates) return null;
+  const isError =
+    subscriptionState === 'CLOSING' || subscriptionState === 'CLOSED';
+  const isLoading =
+    subscriptionState === 'CONNECTING' || subscriptionState === 'NOT_STARTED';
+  const [isStale, setIsStale] = useState(false);
+
+  useInterval(
+    () => {
+      const secondsSinceUpdate = secondsBetween(
+        vehicle.lastUpdated,
+        new Date(),
+      );
+      setIsStale(live_vehicle_stale_threshold < secondsSinceUpdate);
+    },
+    1000,
+    [vehicle.lastUpdated],
+    false,
+    true,
+  );
+
+  const circleColor = useTransportationColor(mode, subMode);
+  const circleStyle = ((): CircleLayerStyleProps => {
+    if (isError)
+      return {
+        circleColor:
+          theme.interactive.interactive_destructive.disabled.background,
+        circleRadius: 20,
+        circleStrokeColor:
+          theme.interactive.interactive_destructive.default.background,
+        circleStrokeWidth: 2,
+      };
+    if (isLoading || isStale)
+      return {
+        circleColor: theme.interactive.interactive_1.disabled.background,
+        circleRadius: 20,
+        circleStrokeColor: theme.interactive.interactive_1.default.background,
+        circleStrokeWidth: 2,
+      };
+    return {
+      circleColor,
+      circleRadius: 22,
+      circleStrokeWidth: 0,
+    };
+  })();
+
+  if (!vehicle.location || zoomLevel < FOLLOW_MIN_ZOOM_LEVEL) return null;
   return (
-    <MapboxGL.ShapeSource
-      id="liveVehicle"
-      shape={pointOf(coordinates)}
-      cluster
-      onPress={() => {
-        setShouldTrack(true);
-      }}
-    >
-      <MapboxGL.CircleLayer
-        id="liveVehicleCircle"
-        minZoomLevel={8}
-        style={{
-          circleColor,
-          circleRadius: 22,
-        }}
-      />
-      <MapboxGL.SymbolLayer
+    <>
+      <MapboxGL.ShapeSource id="liveVehicle" shape={pointOf(vehicle.location)}>
+        <MapboxGL.CircleLayer id="liveVehicleCircle" style={circleStyle} />
+      </MapboxGL.ShapeSource>
+      <MapboxGL.MarkerView
         id="liveVehicleIcon"
-        aboveLayerID="liveVehicleCircle"
-        minZoomLevel={8}
-        style={{
-          iconImage: {uri: iconName},
-          iconAnchor: 'center',
-          iconAllowOverlap: true,
-          iconSize: 0.6,
-        }}
-      />
-    </MapboxGL.ShapeSource>
+        coordinate={[vehicle.location.longitude, vehicle.location.latitude]}
+        allowOverlap={true}
+      >
+        <TouchableOpacity
+          style={{padding: 20}}
+          onPressOut={() => setShouldTrack(true)}
+        >
+          <LiveVehicleIcon
+            mode={mode}
+            subMode={subMode}
+            isError={isError}
+            isStale={isStale}
+            isLoading={isLoading}
+          />
+        </TouchableOpacity>
+      </MapboxGL.MarkerView>
+    </>
   );
 };
 
-/**
- * Get the name of the transportation mode icon which is stored under the
- * "Images" section in Mapbox Studio.
- */
-function vehicleIconName(mode?: AnyMode) {
-  switch (mode) {
-    case TransportMode.Bus:
-      return 'Bus';
-    case TransportMode.Tram:
-      return 'Tram';
-    case TransportMode.Water:
-      return 'Boat';
-    case TransportMode.Rail:
-      return 'Train';
-    case TransportMode.Metro:
-      return 'Subway';
-    default:
-      return 'Unknown';
-  }
-}
+type LiveVehicleIconProps = {
+  isLoading: boolean;
+  isStale: boolean;
+  isError: boolean;
+  mode?: AnyMode;
+  subMode?: AnySubMode;
+};
+const LiveVehicleIcon = ({
+  mode,
+  subMode,
+  isLoading,
+  isStale,
+  isError,
+}: LiveVehicleIconProps): JSX.Element => {
+  const {theme} = useTheme();
+  const fillColor = useTransportationColor(mode, subMode, 'text');
+  const svg = getTransportModeSvg(mode, subMode);
+
+  if (isError)
+    return (
+      <ThemeIcon
+        svg={svg}
+        fill={theme.interactive.interactive_destructive.default.background}
+      />
+    );
+  if (isLoading || isStale)
+    return (
+      <ActivityIndicator
+        color={theme.interactive.interactive_1.disabled.text}
+      />
+    );
+
+  return <ThemeIcon svg={svg} fill={fillColor} />;
+};
+
+const useStyles = StyleSheet.createThemeHook(() => ({
+  mapView: {
+    flex: 1,
+  },
+  map: {
+    flex: 1,
+  },
+}));

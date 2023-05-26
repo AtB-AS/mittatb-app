@@ -3,10 +3,18 @@
     "id": "steinkjer",
     "name": "Steinkjer",
     "enabled": true,
-    "contactUrl": [
-      {"lang": "nob", "value": "https://www.atb.no/fleksibel-transport/"},
+    "moreInfoUrl": [
+      {
+        "lang": "nob",
+        "value": "https://www.atb.no/fleksibel-transport/steinkjer/#adressetiladresse"
+      },
       {"lang": "eng", "value": "https://www.atb.no/en/flex/"}
     ],
+    "orderUrl": [
+      {"lang": "nob", "value": "https://fleksibel.atb.no/dashboard"},
+      {"lang": "eng", "value": "https://fleksibel.atb.no/dashboard"}
+    ],
+    "phoneNumber": "02867",
     "geometry": {
       "type": "Polygon",
       "coordinates": [
@@ -137,10 +145,18 @@
     "id": "verdal",
     "name": "Verdal",
     "enabled": true,
-    "contactUrl": [
-      {"lang": "nob", "value": "https://www.atb.no/fleksibel-transport/"},
+    "moreInfoUrl": [
+      {
+        "lang": "nob",
+        "value": "https://www.atb.no/fleksibel-transport/verdal/#adressetiladresse"
+      },
       {"lang": "eng", "value": "https://www.atb.no/en/flex/"}
     ],
+    "orderUrl": [
+      {"lang": "nob", "value": "https://fleksibel.atb.no/dashboard"},
+      {"lang": "eng", "value": "https://fleksibel.atb.no/dashboard"}
+    ],
+    "phoneNumber": "02867",
     "geometry": {
       "type": "Polygon",
       "coordinates": [
@@ -290,10 +306,18 @@
     "id": "overhalla",
     "name": "Overhalla",
     "enabled": true,
-    "contactUrl": [
-      {"lang": "nob", "value": "https://www.atb.no/fleksibel-transport/"},
+    "moreInfoUrl": [
+      {
+        "lang": "nob",
+        "value": "https://www.atb.no/fleksibel-transport/overhalla/#adressetiladresse"
+      },
       {"lang": "eng", "value": "https://www.atb.no/en/flex/"}
     ],
+    "orderUrl": [
+      {"lang": "nob", "value": "https://fleksibel.atb.no/dashboard"},
+      {"lang": "eng", "value": "https://fleksibel.atb.no/dashboard"}
+    ],
+    "phoneNumber": "02867",
     "geometry": {
       "type": "Polygon",
       "coordinates": [
@@ -317,10 +341,18 @@
     "id": "roros",
     "name": "Røros",
     "enabled": true,
-    "contactUrl": [
-      {"lang": "nob", "value": "https://www.atb.no/fleksibel-transport/"},
+    "moreInfoUrl": [
+      {
+        "lang": "nob",
+        "value": "https://www.atb.no/fleksibel-transport/roros/#adressetiladresse"
+      },
       {"lang": "eng", "value": "https://www.atb.no/en/flex/"}
     ],
+    "orderUrl": [
+      {"lang": "nob", "value": "https://fleksibel.atb.no/dashboard"},
+      {"lang": "eng", "value": "https://fleksibel.atb.no/dashboard"}
+    ],
+    "phoneNumber": "02867",
     "geometry": {
       "type": "Polygon",
       "coordinates": [
