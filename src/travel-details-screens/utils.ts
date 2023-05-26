@@ -162,5 +162,5 @@ function someLegsAreByTrain(tripPattern: TripPattern): boolean {
 }
 
 export function isLegFlexibleTransport(leg: Leg): boolean {
-  return leg.line?.id.toLowerCase().includes('flexible') ?? false;
+  return !!leg.line?.flexibleLineType;
 }
