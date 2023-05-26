@@ -27,6 +27,7 @@ export type {
   StationsState,
   MapFilterType,
   MapRegion,
+  OperatorFilterType,
 } from './types';
 export {
   useRealtimeMapEnabled,

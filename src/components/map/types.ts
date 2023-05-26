@@ -140,7 +140,7 @@ export interface MapLine extends Feature<LineString> {
 
 export type OperatorFilterType = {
   showAll: boolean;
-  operators?: string[];
+  operators: string[];
 };
 
 export type VehiclesFilterType = {

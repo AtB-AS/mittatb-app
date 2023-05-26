@@ -27,7 +27,7 @@ export const useStations: () => StationsState | undefined = () => {
   const [isLoading, setIsLoading] = useState(false);
   const {getMapFilter} = useUserMapFilters();
   const isFocused = useIsFocused();
-  const {whitelistedOperatorIds} = useOperators();
+  const allOperatorsOfType = useOperators();
 
   const [stations, setStations] = useState<
     FeatureCollection<GeoJSON.Point, StationBasicFragment>
@@ -39,28 +39,24 @@ export const useStations: () => StationsState | undefined = () => {
     });
   }, [isCityBikesEnabled, isCarSharingEnabled]);
 
-  const formFactorsFromFilter = (filter: StationsFilterType) => {
-    const formFactors = [];
-    if (filter.showCityBikeStations) formFactors.push(FormFactor.Bicycle);
-    if (filter.showCarSharingStations) formFactors.push(FormFactor.Car);
-    return formFactors;
-  };
-
   useEffect(() => {
     if (
       isCityBikesEnabled &&
       isFocused &&
       area &&
-      (filter?.showCityBikeStations || filter?.showCarSharingStations)
+      (showBikes(filter) || showCars(filter))
     ) {
       const abortCtrl = new AbortController();
       setIsLoading(true);
-      const formFactors = formFactorsFromFilter(filter);
+      const formFactors = getFormFactorsFromFilter(filter);
+      const operatorsFromFilter = getOperatorsFromFilter(filter);
       getStations(
         {
           ...area,
           availableFormFactors: formFactors,
-          operators: whitelistedOperatorIds(formFactors),
+          operators: operatorsFromFilter.length
+            ? operatorsFromFilter
+            : allOperatorsOfType(formFactors).map((o) => o.id),
         },
         {signal: abortCtrl.signal},
       )
@@ -90,4 +86,28 @@ export const useStations: () => StationsState | undefined = () => {
         isLoading,
       }
     : undefined;
+};
+
+const showBikes = (filter: StationsFilterType | undefined) =>
+  filter?.cityBikeStations?.showAll ||
+  filter?.cityBikeStations?.operators.length;
+
+const showCars = (filter: StationsFilterType | undefined) =>
+  filter?.carSharingStations?.showAll ||
+  filter?.carSharingStations?.operators.length;
+
+const getFormFactorsFromFilter = (
+  filter: StationsFilterType | undefined,
+): FormFactor[] => {
+  const formFactors = [];
+  if (showBikes(filter)) formFactors.push(FormFactor.Bicycle);
+  if (showCars(filter)) formFactors.push(FormFactor.Car);
+  return formFactors;
+};
+
+const getOperatorsFromFilter = (filter: StationsFilterType | undefined) => {
+  return [
+    ...(filter?.cityBikeStations?.operators ?? []),
+    ...(filter?.carSharingStations?.operators ?? []),
+  ];
 };

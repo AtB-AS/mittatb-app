@@ -30,7 +30,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
   const [filter, setFilter] = useState<VehiclesFilterType>();
   const isFocused = useIsFocused();
   const pollInterval = useVehiclesPollInterval();
-  const {whitelistedOperatorIds} = useOperators();
+  const allOperatorsOfType = useOperators();
 
   useEffect(() => {
     getMapFilter().then((initialFilter) => {
@@ -48,12 +48,17 @@ export const useVehicles: () => VehiclesState | undefined = () => {
 
   const loadVehicles = useCallback(
     async (signal) => {
-      if (isVehiclesEnabled && area && filter?.showVehicles) {
-        const query = {
-          ...area,
-          operators: whitelistedOperatorIds([FormFactor.Scooter]),
-        };
-        return await getVehicles(query, {signal})
+      if (isVehiclesEnabled && area && shouldShowVehicles(filter)) {
+        const operators = filter?.scooters?.operators.length
+          ? filter?.scooters?.operators
+          : allOperatorsOfType(FormFactor.Scooter).map((o) => o.id);
+        return await getVehicles(
+          {
+            ...area,
+            operators,
+          },
+          {signal},
+        )
           .then(toFeaturePoints)
           .then(toFeatureCollection);
       }
@@ -85,3 +90,6 @@ export const useVehicles: () => VehiclesState | undefined = () => {
       }
     : undefined;
 };
+
+const shouldShowVehicles = (filter: VehiclesFilterType | undefined) =>
+  filter?.scooters?.showAll || filter?.scooters?.operators.length;
