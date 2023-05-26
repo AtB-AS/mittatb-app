@@ -3,7 +3,6 @@ import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announceme
 import {MessageBox} from '@atb/components/message-box';
 import {
   DetailsMessages,
-  dictionary,
   TranslateFunction,
   TripDetailsTexts,
   useTranslation,
@@ -30,12 +29,6 @@ import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StyleSheet} from '@atb/theme';
 import {EstimatedCallWithMetadata} from '@atb/travel-details-screens/use-departure-data';
-import FlexibleTransportText from '@atb/translations/components/FlexibleTransportDetails';
-import {
-  FlexibleTransportContactDetails,
-  ContactDetails,
-} from './FlexibeTransportContactDetails';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
 
 type TripMessagesProps = {
   tripPattern: TripPattern;
@@ -46,17 +39,15 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
   tripPattern,
   error,
 }) => {
-  const {t, language} = useTranslation();
-  const {open: openBottomSheet} = useBottomSheet();
   const {modesWeSellTicketsFor} = useFirestoreConfiguration();
   const someTicketsAreUnavailableInApp = hasLegsWeCantSellTicketsFor(
     tripPattern,
     modesWeSellTicketsFor,
   );
+  const {t} = useTranslation();
   const styles = useStyles();
   const canSellCollab = canSellCollabTicket(tripPattern);
   const shortWaitTime = hasShortWaitTime(tripPattern.legs);
-  const leg = tripPattern.legs.filter((leg) => leg.bookingArrangements).shift();
 
   const {enable_ticketing} = useRemoteConfig();
   const isTicketingEnabledAndSomeTicketsAreUnavailableInApp =
@@ -64,23 +55,6 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
   const tripIncludesRailReplacementBus = tripPattern.legs.some(
     (leg) => leg.transportSubmode === TransportSubmode.RailReplacementBus,
   );
-
-  const contactDetails: ContactDetails | undefined = leg?.bookingArrangements
-    ?.bookingContact?.phone &&
-    leg.aimedEndTime && {
-      phoneNumber: leg.bookingArrangements.bookingContact.phone,
-      aimedStartTime: leg.aimedStartTime,
-    };
-
-  const openContactFlexibleTransport = (contactDetails: ContactDetails) => {
-    openBottomSheet((close, focusRef) => (
-      <FlexibleTransportContactDetails
-        close={close}
-        contactDetails={contactDetails}
-        ref={focusRef}
-      />
-    ));
-  };
 
   return (
     <>
@@ -107,28 +81,6 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
               ? t(DetailsMessages.messages.collabTicketInfo)
               : t(DetailsMessages.messages.ticketsWeDontSell)
           }
-        />
-      )}
-      {contactDetails && (
-        <MessageBox
-          type="warning"
-          title={t(
-            TripDetailsTexts.trip.leg.contactFlexibleTransportTitle(
-              contactDetails.phoneNumber,
-            ),
-          )}
-          message={t(
-            FlexibleTransportText.infoMessage(
-              contactDetails.aimedStartTime,
-              language,
-            ),
-          )}
-          onPressConfig={{
-            text: t(dictionary.seeMore),
-            action: () => {
-              openContactFlexibleTransport(contactDetails);
-            },
-          }}
         />
       )}
       {error && (
