@@ -222,11 +222,12 @@ const LiveVehicle = ({
           theme.interactive.interactive_destructive.default.background,
         circleStrokeWidth: 2,
       };
-    if (isStale)
+    if (isLoading || isStale)
       return {
         circleColor: theme.interactive.interactive_1.disabled.background,
-        circleRadius: 22,
-        circleStrokeWidth: 0,
+        circleRadius: 20,
+        circleStrokeColor: theme.interactive.interactive_1.default.background,
+        circleStrokeWidth: 2,
       };
     return {
       circleColor,
@@ -281,8 +282,6 @@ const LiveVehicleIcon = ({
   const fillColor = useTransportationColor(mode, subMode, 'text');
   const svg = getTransportModeSvg(mode, subMode);
 
-  if (isLoading) return <ActivityIndicator color={fillColor} />;
-
   if (isError)
     return (
       <ThemeIcon
@@ -290,12 +289,10 @@ const LiveVehicleIcon = ({
         fill={theme.interactive.interactive_destructive.default.background}
       />
     );
-
-  if (isStale)
+  if (isLoading || isStale)
     return (
-      <ThemeIcon
-        svg={svg}
-        fill={theme.interactive.interactive_1.disabled.text}
+      <ActivityIndicator
+        color={theme.interactive.interactive_1.disabled.text}
       />
     );
 
