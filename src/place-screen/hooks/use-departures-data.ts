@@ -23,7 +23,6 @@ import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {getLimitOfDeparturesPerLineByMode, getTimeRangeByMode} from '../utils';
 import {TimeoutRequest, useTimeoutRequest} from '@atb/api/client';
 import {AxiosRequestConfig} from 'axios';
-import {useRefreshOnFocus} from '@atb/utils/use-refresh-on-focus';
 import {flatMap} from '@atb/utils/array';
 import {DepartureRealtimeQuery} from '@atb/api/departures/departure-group';
 
@@ -304,7 +303,7 @@ export function useDeparturesData(
     if (diff >= HARD_REFRESH_LIMIT_IN_MINUTES) {
       loadDepartures();
     }
-  }, [state.tick, state.lastRefreshTime]);
+  }, [state.tick]);
   useInterval(
     loadRealTimeData,
     updateFrequencyInSeconds * 1000,
@@ -312,17 +311,14 @@ export function useDeparturesData(
     !isFocused || mode === 'Favourite',
   );
   useInterval(
-    () => dispatch({type: 'TICK_TICK'}),
+    () => {
+      if (isFocused) dispatch({type: 'TICK_TICK'});
+    },
     tickRateInSeconds * 1000,
-    [],
+    [isFocused],
     !isFocused || mode === 'Favourite',
-  );
-  useRefreshOnFocus(
-    isFocused,
-    state.tick,
-    HARD_REFRESH_LIMIT_IN_MINUTES * 60,
-    loadDepartures,
-    loadRealTimeData,
+    // Trigger immediately on focus only if the view is already initialized
+    !!state.tick,
   );
 
   return {
