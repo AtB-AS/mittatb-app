@@ -16,6 +16,7 @@ import {
   StaticColorByType,
   textNames,
   TextNames,
+  TransportColor,
 } from '@atb/theme/colors';
 import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
@@ -82,11 +83,16 @@ export const Profile_DesignSystemScreen = () => {
     },
   );
 
-  const transportSwatches = Object.keys(theme.static.transport).map((color) => {
-    const staticColor =
-      theme.static.transport[color as StaticColorByType<'transport'>];
-    return <Swatch color={staticColor} name={color} key={color} />;
+  const transportSwatches = Object.keys(theme.transport).map((color) => {
+    const staticColor = theme.transport[color as TransportColor];
+    return <Swatch color={staticColor.primary} name={color} key={color} />;
   });
+  const secondaryTransportSwatches = Object.keys(theme.transport).map(
+    (color) => {
+      const staticColor = theme.transport[color as TransportColor];
+      return <Swatch color={staticColor.secondary} name={color} key={color} />;
+    },
+  );
 
   const statusSwatches = Object.keys(theme.static.status).map((color) => {
     const staticColor =
@@ -1295,6 +1301,7 @@ export const Profile_DesignSystemScreen = () => {
 
         <View style={style.swatchGroup}>{backgroundSwatches}</View>
         <View style={style.swatchGroup}>{transportSwatches}</View>
+        <View style={style.swatchGroup}>{secondaryTransportSwatches}</View>
         <View style={style.swatchGroup}>{statusSwatches}</View>
         <View style={style.swatchGroup}>
           <ThemeText>Text colors:</ThemeText>
@@ -1325,6 +1332,7 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   icons: {
     flexDirection: 'row',
     marginBottom: theme.spacings.small,
+    flexWrap: 'wrap',
   },
   section: {
     margin: theme.spacings.medium,
