@@ -584,7 +584,7 @@ const tripSummary = (
             ),
           )
         : '')
-    : '';
+    : undefined;
 
   const realTimeText = firstLeg
     ? isSignificantDifference(firstLeg)
