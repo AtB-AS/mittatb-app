@@ -30,6 +30,8 @@ function MapLineItem({line, index}: MapLineItemProps) {
   const lineColorInput = useTransportationColor(
     line?.faded ? undefined : line?.travelType,
     line?.subMode,
+    undefined,
+    'secondary',
   );
 
   const lineColor = line?.faded

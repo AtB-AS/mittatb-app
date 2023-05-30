@@ -1,17 +1,20 @@
 import MapboxGL from '@rnmapbox/maps';
 import React from 'react';
-import {getStaticColor} from '@atb/theme/colors';
-import {useTheme} from '@atb/theme';
 import {StationsWithCount} from './Stations';
+import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type Props = {
   stations: StationsWithCount;
 };
 
 export const BikeStations = ({stations}: Props) => {
-  const {themeName} = useTheme();
-  const stationColor = getStaticColor(themeName, 'transport_bike');
-
+  const stationBackgroundColor = useTransportationColor(Mode.Bicycle);
+  const stationTextColor = useTransportationColor(
+    Mode.Bicycle,
+    undefined,
+    'text',
+  );
   return (
     <MapboxGL.ShapeSource id={'bikeStations'} shape={stations} tolerance={0}>
       <MapboxGL.SymbolLayer
@@ -21,7 +24,7 @@ export const BikeStations = ({stations}: Props) => {
           textField: ['get', 'count'],
           textAnchor: 'center',
           textOffset: [0.75, 0],
-          textColor: stationColor.background,
+          textColor: stationBackgroundColor,
           textSize: 12,
           iconImage: {uri: 'BikeChip'},
           iconAllowOverlap: true,
@@ -33,8 +36,8 @@ export const BikeStations = ({stations}: Props) => {
         maxZoomLevel={13.5}
         minZoomLevel={12}
         style={{
-          circleColor: stationColor.background,
-          circleStrokeColor: stationColor.text,
+          circleColor: stationBackgroundColor,
+          circleStrokeColor: stationTextColor,
           circleOpacity: 0.7,
           circleStrokeOpacity: 0.7,
           circleRadius: 4,

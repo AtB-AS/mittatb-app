@@ -1,21 +1,22 @@
 import {useTheme} from '@atb/theme';
 import {AnyMode, AnySubMode} from '@atb/components/icon-box';
-import {StaticColorByType} from '@atb/theme/colors';
+import {TransportColor} from '@atb/theme/colors';
 
 export function useTransportationColor(
   mode?: AnyMode,
   subMode?: AnySubMode,
   colorType: 'background' | 'text' = 'background',
+  colorMode: 'primary' | 'secondary' = 'primary',
 ): string {
   const themeColor = useThemeColorForTransportMode(mode, subMode);
   const {theme} = useTheme();
-  return theme.static.transport[themeColor][colorType];
+  return theme.transport[themeColor][colorMode][colorType];
 }
 
 export const useThemeColorForTransportMode = (
   mode?: AnyMode,
   subMode?: AnySubMode,
-): StaticColorByType<'transport'> => {
+): TransportColor => {
   switch (mode) {
     case 'flex':
       return 'transport_flexible';

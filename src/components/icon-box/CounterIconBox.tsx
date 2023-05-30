@@ -3,7 +3,7 @@ import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {iconSizes} from '@atb-as/theme';
-import {TextNames} from '@atb/theme/colors';
+import {getTransportationColor, TextNames} from '@atb/theme/colors';
 
 interface CounterStyling {
   padding: number;
@@ -21,7 +21,7 @@ export const CounterIconBox = ({
   style?: StyleProp<ViewStyle>;
 } & AccessibilityProps) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
 
   if (count < 1) return null;
 
@@ -66,7 +66,11 @@ export const CounterIconBox = ({
       {...a11yProps}
     >
       <ThemeText
-        color={'transport_other'}
+        color={getTransportationColor(
+          themeName,
+          'transport_other',
+          'secondary',
+        )}
         type={styling().type}
         testID="tripLegMore"
         style={{
@@ -81,7 +85,7 @@ export const CounterIconBox = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   counterContainer: {
-    backgroundColor: theme.static.transport.transport_other.background,
+    backgroundColor: theme.transport.transport_other.primary.background,
     borderRadius: theme.border.radius.small,
   },
 }));

@@ -7,9 +7,9 @@ import {
   isClusterFeature,
   mapPositionToCoordinates,
 } from '../../utils';
-import {getStaticColor} from '@atb/theme/colors';
-import {useTheme} from '@atb/theme';
 import {Cluster} from '../../types';
+import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type Props = {
   mapCameraRef: RefObject<MapboxGL.Camera>;
@@ -20,8 +20,7 @@ type Props = {
 export const Vehicles = ({mapCameraRef, vehicles, onClusterClick}: Props) => {
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
   const vehiclesSource = useRef<MapboxGL.ShapeSource>(null);
-  const {themeName} = useTheme();
-  const scooterColor = getStaticColor(themeName, 'transport_scooter');
+  const scooterColor = useTransportationColor(Mode.Scooter);
 
   return (
     <>
@@ -78,7 +77,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onClusterClick}: Props) => {
           aboveLayerID="clusterCountCircle"
           style={{
             textField: ['get', 'point_count'],
-            textColor: scooterColor.background,
+            textColor: scooterColor,
             textSize: 11,
             textTranslate: [13, -13],
             textAllowOverlap: true,
@@ -102,7 +101,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onClusterClick}: Props) => {
             textField: ['concat', ['get', 'currentFuelPercent'], '%'],
             textAnchor: 'center',
             textOffset: [0.7, -0.25],
-            textColor: scooterColor.background,
+            textColor: scooterColor,
             textSize: 11,
             iconImage: {uri: 'ScooterChip'},
             iconSize: 0.85,

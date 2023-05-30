@@ -87,6 +87,7 @@ export type Themes = typeof themes;
 export type Theme = Themes['light'];
 
 export type InteractiveColor = keyof Theme['interactive'];
+export type TransportColor = keyof Theme['transport'];
 
 export const isInteractiveColor = (
   color?: string,
@@ -141,6 +142,13 @@ export const isStaticColor = (color?: string): color is StaticColor => {
 
 export const getStaticColor = (mode: Mode, color: StaticColor) => {
   return flatStaticColors[mode][color];
+};
+export const getTransportationColor = (
+  mode: Mode,
+  color: TransportColor,
+  type?: 'primary' | 'secondary',
+) => {
+  return themes[mode].transport[color][type ?? 'primary'];
 };
 
 export const getStaticColorType = (color: StaticColor): StaticColorType => {
