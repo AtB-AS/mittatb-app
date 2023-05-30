@@ -193,6 +193,10 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                   userType: t.userTypeString,
                   count: t.count,
                 })),
+                preassignedFareProduct: {
+                  id: preassignedFareProduct.id,
+                  name: preassignedFareProduct.name.value,
+                },
                 travelDate,
                 mode: params.mode,
               });
