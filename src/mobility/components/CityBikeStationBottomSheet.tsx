@@ -1,5 +1,9 @@
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  ScreenHeaderTexts,
+  useTranslation,
+} from '@atb/translations';
 import React, {useEffect} from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
@@ -34,7 +38,7 @@ type Props = {
 };
 
 export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {themeName} = useTheme();
   const style = useSheetStyle();
   const {station, isLoading, error} = useBikeStation(stationId);
@@ -53,7 +57,17 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
   const analytics = useAnalytics();
 
   useEffect(() => {
-    analytics.logEvent('Mobility', 'City bike station selected', {station});
+    analytics.logEvent('Mobility', 'City bike station selected', {
+      id: station?.id,
+      name: getTextForLanguage(station?.name?.translation, language),
+      operator: {
+        id: station?.system.operator.id,
+        name: getTextForLanguage(
+          station?.system.operator.name.translation,
+          language,
+        ),
+      },
+    });
   }, [station]);
 
   return (
