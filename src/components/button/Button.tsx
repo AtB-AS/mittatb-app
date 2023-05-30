@@ -112,12 +112,9 @@ export const Button = React.forwardRef<any, ButtonProps>(
     const styleContainer: ViewStyle[] = [
       css.button,
       {
-        backgroundColor:
-          type === 'pill' && mode === 'secondary'
-            ? theme.interactive['interactive_3'].active.background
-            : modeData.withBackground
-            ? backgroundColor
-            : 'transparent',
+        backgroundColor: modeData.withBackground
+          ? backgroundColor
+          : 'transparent',
         borderColor:
           active && type === 'pill' && mode === 'primary'
             ? theme.interactive[themeColor].default.background
