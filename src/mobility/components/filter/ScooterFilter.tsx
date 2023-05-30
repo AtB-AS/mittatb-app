@@ -15,7 +15,9 @@ export const ScooterFilter = ({
 }: MapFilterProps) => {
   const {t} = useTranslation();
   const operators = useOperators();
+  const scooterOperators = operators(FormFactor.Scooter);
   const {showAll, isChecked, onAllToggle, onOperatorToggle} = useOperatorToggle(
+    scooterOperators,
     initialFilter,
     onFilterChange,
   );
@@ -29,7 +31,7 @@ export const ScooterFilter = ({
         value={showAll()}
         onValueChange={onAllToggle}
       />
-      {operators(FormFactor.Scooter).map((operator) => (
+      {scooterOperators.map((operator) => (
         <ToggleSectionItem
           key={operator.id}
           text={operator.name}

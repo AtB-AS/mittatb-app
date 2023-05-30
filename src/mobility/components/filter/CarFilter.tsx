@@ -15,7 +15,9 @@ export const CarFilter = ({
 }: MapFilterProps) => {
   const {t} = useTranslation();
   const operators = useOperators();
+  const carOperators = operators(FormFactor.Car);
   const {showAll, isChecked, onAllToggle, onOperatorToggle} = useOperatorToggle(
+    carOperators,
     initialFilter,
     onFilterChange,
   );
@@ -29,14 +31,15 @@ export const CarFilter = ({
         value={showAll()}
         onValueChange={onAllToggle}
       />
-      {operators(FormFactor.Car).map((operator) => (
-        <ToggleSectionItem
-          key={operator.id}
-          text={operator.name}
-          value={isChecked(operator.id)}
-          onValueChange={onOperatorToggle(operator.id)}
-        />
-      ))}
+      {carOperators.length > 1 &&
+        carOperators.map((operator) => (
+          <ToggleSectionItem
+            key={operator.id}
+            text={operator.name}
+            value={isChecked(operator.id)}
+            onValueChange={onOperatorToggle(operator.id)}
+          />
+        ))}
     </Section>
   );
 };

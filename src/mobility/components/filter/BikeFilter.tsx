@@ -15,7 +15,9 @@ export const BikeFilter = ({
 }: MapFilterProps) => {
   const {t} = useTranslation();
   const operators = useOperators();
+  const bikeOperators = operators(FormFactor.Bicycle);
   const {showAll, isChecked, onAllToggle, onOperatorToggle} = useOperatorToggle(
+    bikeOperators,
     initialFilter,
     onFilterChange,
   );
@@ -29,14 +31,15 @@ export const BikeFilter = ({
         value={showAll()}
         onValueChange={onAllToggle}
       />
-      {operators(FormFactor.Bicycle).map((operator) => (
-        <ToggleSectionItem
-          key={operator.id}
-          text={operator.name}
-          value={isChecked(operator.id)}
-          onValueChange={onOperatorToggle(operator.id)}
-        />
-      ))}
+      {bikeOperators.length > 1 &&
+        bikeOperators.map((operator) => (
+          <ToggleSectionItem
+            key={operator.id}
+            text={operator.name}
+            value={isChecked(operator.id)}
+            onValueChange={onOperatorToggle(operator.id)}
+          />
+        ))}
     </Section>
   );
 };
