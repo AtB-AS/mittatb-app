@@ -98,7 +98,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacings.medium,
     },
     filterGroup: {
-      marginTop: theme.spacings.medium,
+      marginTop: theme.spacings.large,
     },
   };
 });

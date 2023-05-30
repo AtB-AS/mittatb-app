@@ -7,6 +7,9 @@ import {Car} from '@atb/assets/svg/mono-icons/transportation';
 import React from 'react';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useOperators} from '@atb/mobility/use-operators';
+import {ThemeText} from '@atb/components/text';
+import {useFilterStyle} from '@atb/mobility/components/filter/use-filter-style';
+import {View} from 'react-native';
 
 export const CarFilter = ({
   initialFilter,
@@ -14,6 +17,7 @@ export const CarFilter = ({
   style,
 }: MapFilterProps) => {
   const {t} = useTranslation();
+  const filterStyle = useFilterStyle();
   const operators = useOperators();
   const carOperators = operators(FormFactor.Car);
   const {showAll, isChecked, onAllToggle, onOperatorToggle} = useOperatorToggle(
@@ -23,23 +27,28 @@ export const CarFilter = ({
   );
 
   return (
-    <Section style={style}>
-      <ToggleSectionItem
-        text={t(MobilityTexts.car)}
-        textType={'body__primary--bold'}
-        leftIcon={Car}
-        value={showAll()}
-        onValueChange={onAllToggle}
-      />
-      {carOperators.length > 1 &&
-        carOperators.map((operator) => (
+    <View style={style}>
+      <ThemeText style={filterStyle.sectionHeader} type={'body__secondary'}>
+        {t(MobilityTexts.car)}
+      </ThemeText>
+      <Section>
+        {carOperators.length > 1 && (
+          <ToggleSectionItem
+            text={t(MobilityTexts.filter.selectAll)}
+            value={showAll()}
+            onValueChange={onAllToggle}
+          />
+        )}
+        {carOperators.map((operator) => (
           <ToggleSectionItem
             key={operator.id}
             text={operator.name}
+            leftIcon={Car}
             value={isChecked(operator.id)}
             onValueChange={onOperatorToggle(operator.id)}
           />
         ))}
-    </Section>
+      </Section>
+    </View>
   );
 };

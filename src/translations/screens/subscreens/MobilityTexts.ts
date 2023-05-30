@@ -50,6 +50,9 @@ export const MobilityTexts = {
       'See electric scooters and city bikes in Trondheim in one app. Enable this feature through the map.',
     ),
   },
+  filter: {
+    selectAll: _('Alle', 'All'),
+  },
 };
 
 export const ScooterTexts = {

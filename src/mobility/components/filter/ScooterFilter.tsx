@@ -7,6 +7,9 @@ import {useOperatorToggle} from './use-operator-toggle';
 import {MapFilterProps} from './types';
 import {useOperators} from '../../use-operators';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {ThemeText} from '@atb/components/text';
+import {useFilterStyle} from '@atb/mobility/components/filter/use-filter-style';
+import {View} from 'react-native';
 
 export const ScooterFilter = ({
   initialFilter,
@@ -14,6 +17,7 @@ export const ScooterFilter = ({
   style,
 }: MapFilterProps) => {
   const {t} = useTranslation();
+  const filterStyle = useFilterStyle();
   const operators = useOperators();
   const scooterOperators = operators(FormFactor.Scooter);
   const {showAll, isChecked, onAllToggle, onOperatorToggle} = useOperatorToggle(
@@ -23,22 +27,26 @@ export const ScooterFilter = ({
   );
 
   return (
-    <Section style={style}>
-      <ToggleSectionItem
-        text={t(MobilityTexts.scooter)}
-        textType={'body__primary--bold'}
-        leftIcon={Scooter}
-        value={showAll()}
-        onValueChange={onAllToggle}
-      />
-      {scooterOperators.map((operator) => (
+    <View style={style}>
+      <ThemeText style={filterStyle.sectionHeader} type={'body__secondary'}>
+        {t(MobilityTexts.scooter)}
+      </ThemeText>
+      <Section style={style}>
         <ToggleSectionItem
-          key={operator.id}
-          text={operator.name}
-          value={isChecked(operator.id)}
-          onValueChange={onOperatorToggle(operator.id)}
+          text={t(MobilityTexts.filter.selectAll)}
+          value={showAll()}
+          onValueChange={onAllToggle}
         />
-      ))}
-    </Section>
+        {scooterOperators.map((operator) => (
+          <ToggleSectionItem
+            key={operator.id}
+            text={operator.name}
+            leftIcon={Scooter}
+            value={isChecked(operator.id)}
+            onValueChange={onOperatorToggle(operator.id)}
+          />
+        ))}
+      </Section>
+    </View>
   );
 };
