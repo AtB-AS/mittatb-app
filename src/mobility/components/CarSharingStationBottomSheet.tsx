@@ -5,7 +5,7 @@ import {
   ScreenHeaderTexts,
   useTranslation,
 } from '@atb/translations';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
@@ -29,6 +29,7 @@ import {CarAvailabilityFragment} from '@atb/api/types/generated/fragments/statio
 import {CarImage} from '@atb/mobility/components/CarImage';
 import {InfoChip} from '@atb/components/info-chip';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useAnalytics} from '@atb/analytics';
 
 type Props = {
   stationId: string;
@@ -48,6 +49,21 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
     rentalAppUri,
   });
   const stationName = useTextForLanguage(station?.name.translation) ?? '';
+  const analytics = useAnalytics();
+
+  useEffect(() => {
+    analytics.logEvent('Mobility', 'Car sharing station selected', {
+      id: station?.id,
+      name: stationName,
+      operator: {
+        id: station?.system.operator.id,
+        name: getTextForLanguage(
+          station?.system.operator.name.translation,
+          language,
+        ),
+      },
+    });
+  }, [station]);
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
