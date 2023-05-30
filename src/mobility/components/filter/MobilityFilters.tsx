@@ -79,7 +79,7 @@ export const MobilityFilters = ({initialFilter, onFilterChanged}: Props) => {
       {isCarSharingEnabled && (
         <CarFilter
           style={style.filterGroup}
-          initialFilter={initialFilter.stations?.cityBikeStations}
+          initialFilter={initialFilter.stations?.carSharingStations}
           onFilterChange={onCarFilterChanged}
         />
       )}
