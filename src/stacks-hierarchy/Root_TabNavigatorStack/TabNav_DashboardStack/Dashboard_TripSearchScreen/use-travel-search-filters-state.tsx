@@ -89,7 +89,7 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
     resetTransportModes: () => {
       const filtersWithInitialTransportModes = {
         ...filtersSelection,
-        flexibleTransport: filtersSelection.flexibleTransport,
+        transportModes: defaultTransportModeFilterOptions,
       };
       setFilters(filtersWithInitialTransportModes);
       setFiltersSelection(filtersWithInitialTransportModes);
