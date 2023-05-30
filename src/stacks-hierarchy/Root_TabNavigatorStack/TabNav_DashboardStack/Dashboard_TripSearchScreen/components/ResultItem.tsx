@@ -564,7 +564,7 @@ const tripSummary = (
   }
 
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
-  const firstLeg = nonFootLegs[0];
+  const firstLeg = nonFootLegs.length > 0 ? nonFootLegs[0] : undefined;
 
   const resultNumberText = t(
     TripSearchTexts.results.resultItem.journeySummary.resultNumber(
@@ -584,22 +584,24 @@ const tripSummary = (
             ),
           )
         : '')
-    : '';
+    : undefined;
 
-  const realTimeText = isSignificantDifference(firstLeg)
-    ? t(
-        TripSearchTexts.results.resultItem.journeySummary.realtime(
-          firstLeg.fromPlace?.name ?? '',
-          formatToClock(firstLeg.expectedStartTime, language, 'floor'),
-          formatToClock(firstLeg.aimedStartTime, language, 'floor'),
-        ),
-      )
-    : t(
-        TripSearchTexts.results.resultItem.journeySummary.noRealTime(
-          firstLeg.fromPlace?.name ?? '',
-          formatToClock(firstLeg.expectedStartTime, language, 'floor'),
-        ),
-      );
+  const realTimeText = firstLeg
+    ? isSignificantDifference(firstLeg)
+      ? t(
+          TripSearchTexts.results.resultItem.journeySummary.realtime(
+            firstLeg.fromPlace?.name ?? '',
+            formatToClock(firstLeg.expectedStartTime, language, 'floor'),
+            formatToClock(firstLeg.aimedStartTime, language, 'floor'),
+          ),
+        )
+      : t(
+          TripSearchTexts.results.resultItem.journeySummary.noRealTime(
+            firstLeg.fromPlace?.name ?? '',
+            formatToClock(firstLeg.expectedStartTime, language, 'floor'),
+          ),
+        )
+    : undefined;
 
   const numberOfFootLegsText = !nonFootLegs.length
     ? t(
