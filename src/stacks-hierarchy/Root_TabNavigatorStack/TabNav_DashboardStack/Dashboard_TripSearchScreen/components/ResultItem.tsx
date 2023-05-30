@@ -564,7 +564,7 @@ const tripSummary = (
   }
 
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
-  const firstLeg = nonFootLegs.length ? nonFootLegs[0] : undefined;
+  const firstLeg = nonFootLegs.length > 0 ? nonFootLegs[0] : undefined;
 
   const resultNumberText = t(
     TripSearchTexts.results.resultItem.journeySummary.resultNumber(
