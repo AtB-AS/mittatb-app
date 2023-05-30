@@ -46,10 +46,13 @@ export function TravellerSelection({
   }, [selectableUserProfiles]);
 
   useEffect(() => {
-    if (
-      !userCountState.userProfilesWithCount.length &&
-      selectionMode === 'none'
-    ) {
+    if (selectionMode === "none") {
+      if (userCountState.userProfilesWithCount.length) {
+        const selectedProfile = userCountState.userProfilesWithCount.find((u) => u.count);
+        if (selectedProfile) {
+          userCountState.removeCount(selectedProfile.userTypeString)
+        }
+      }
       userCountState.addCount(selectableUserProfiles[0].userTypeString);
     }
   }, [selectionMode, selectableUserProfiles]);
