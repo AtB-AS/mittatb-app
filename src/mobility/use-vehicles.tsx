@@ -15,8 +15,6 @@ import {getVehicles} from '@atb/api/mobility';
 import {usePollableResource} from '@atb/utils/use-pollable-resource';
 import {useIsFocused} from '@react-navigation/native';
 import {useVehiclesPollInterval} from '@atb/mobility/use-vehicles-poll-interval';
-import {useOperators} from '@atb/mobility/use-operators';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 const MIN_ZOOM_LEVEL = 13.5;
 const BUFFER_DISTANCE_IN_METERS = 500;
@@ -30,7 +28,6 @@ export const useVehicles: () => VehiclesState | undefined = () => {
   const [filter, setFilter] = useState<VehiclesFilterType>();
   const isFocused = useIsFocused();
   const pollInterval = useVehiclesPollInterval();
-  const allOperatorsOfType = useOperators();
 
   useEffect(() => {
     getMapFilter().then((initialFilter) => {
@@ -49,13 +46,10 @@ export const useVehicles: () => VehiclesState | undefined = () => {
   const loadVehicles = useCallback(
     async (signal) => {
       if (isVehiclesEnabled && area && shouldShowVehicles(filter)) {
-        const operators = filter?.scooters?.operators.length
-          ? filter?.scooters?.operators
-          : allOperatorsOfType(FormFactor.Scooter).map((o) => o.id);
         return await getVehicles(
           {
             ...area,
-            operators,
+            operators: filter?.scooters?.operators,
           },
           {signal},
         )
