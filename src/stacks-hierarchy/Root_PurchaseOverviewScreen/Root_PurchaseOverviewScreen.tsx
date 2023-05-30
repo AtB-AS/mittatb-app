@@ -186,7 +186,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             userProfilesWithCount={travellerSelection}
             fareProductTypeConfig={params.fareProductTypeConfig}
             onPressBuy={() => {
-              analytics.logEvent('Ticketing', 'Purchase confirmation clicked', {
+              analytics.logEvent('Ticketing', 'Purchase summary clicked', {
                 fareProduct: params.fareProductTypeConfig.name,
                 tariffZone: {from: fromTariffZone.id, to: toTariffZone.id},
                 userProfilesWithCount: travellerSelection.map((t) => ({

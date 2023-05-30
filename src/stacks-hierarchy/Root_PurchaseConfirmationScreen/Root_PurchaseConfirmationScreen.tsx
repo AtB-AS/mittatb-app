@@ -406,15 +406,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   }}
                   viewContainerStyle={styles.paymentButton}
                   onPress={() => {
-                    params.mode === 'TravelSearch' &&
-                      analytics.logEvent(
-                        'Ticketing',
-                        'Confirm purchase with previous method clicked',
-                        {
-                          paymentMethod: previousMethod?.paymentType,
-                          mode: params.mode,
-                        },
-                      );
+                    analytics.logEvent(
+                      'Ticketing',
+                      'Pay with previous payment method clicked',
+                      {
+                        paymentMethod: previousMethod?.paymentType,
+                        mode: params.mode,
+                      },
+                    );
                     selectPaymentOption(previousMethod);
                   }}
                 />
