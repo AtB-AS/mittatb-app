@@ -42,6 +42,7 @@ export type TripsQuery = {
           name?: string;
           transportSubmode?: Types.TransportSubmode;
           publicCode?: string;
+          flexibleLineType?: string;
           notices: Array<{id: string; text?: string}>;
         };
         fromEstimatedCall?: {

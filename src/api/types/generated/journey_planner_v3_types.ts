@@ -35,6 +35,50 @@ export enum AbsoluteDirection {
   West = 'west',
 }
 
+export type AffectedLine = {
+  line?: Maybe<Line>;
+};
+
+export type AffectedServiceJourney = {
+  datedServiceJourney?: Maybe<DatedServiceJourney>;
+  operatingDay?: Maybe<Scalars['Date']>;
+  serviceJourney?: Maybe<ServiceJourney>;
+};
+
+export type AffectedStopPlace = {
+  quay?: Maybe<Quay>;
+  stopConditions: Array<StopCondition>;
+  stopPlace?: Maybe<StopPlace>;
+};
+
+export type AffectedStopPlaceOnLine = {
+  line?: Maybe<Line>;
+  quay?: Maybe<Quay>;
+  stopConditions: Array<StopCondition>;
+  stopPlace?: Maybe<StopPlace>;
+};
+
+export type AffectedStopPlaceOnServiceJourney = {
+  datedServiceJourney?: Maybe<DatedServiceJourney>;
+  operatingDay?: Maybe<Scalars['Date']>;
+  quay?: Maybe<Quay>;
+  serviceJourney?: Maybe<ServiceJourney>;
+  stopConditions: Array<StopCondition>;
+  stopPlace?: Maybe<StopPlace>;
+};
+
+export type AffectedUnknown = {
+  description?: Maybe<Scalars['String']>;
+};
+
+export type Affects =
+  | AffectedLine
+  | AffectedServiceJourney
+  | AffectedStopPlace
+  | AffectedStopPlaceOnLine
+  | AffectedStopPlaceOnServiceJourney
+  | AffectedUnknown;
+
 export enum AlternativeLegsFilter {
   NoFilter = 'noFilter',
   SameAuthority = 'sameAuthority',
@@ -198,9 +242,9 @@ export enum DirectionType {
 
 /** List of visits to quays as part of vehicle journeys. Updated with real time information where available */
 export type EstimatedCall = {
-  /** Actual time of arrival at quay. Updated from real time information if available. NOT IMPLEMENTED */
+  /** Actual time of arrival at quay. Updated from real time information if available. */
   actualArrivalTime?: Maybe<Scalars['DateTime']>;
-  /** Actual time of departure from quay. Updated with real time information if available. NOT IMPLEMENTED */
+  /** Actual time of departure from quay. Updated with real time information if available. */
   actualDepartureTime?: Maybe<Scalars['DateTime']>;
   /** Scheduled time of arrival at quay. Not affected by read time updated */
   aimedArrivalTime: Scalars['DateTime'];
@@ -211,7 +255,7 @@ export type EstimatedCall = {
   /** Whether stop is cancelled. This means that either the ServiceJourney has a planned cancellation, the ServiceJourney has been cancelled by realtime data, or this particular StopPoint has been cancelled. This also means that both boarding and alighting has been cancelled. */
   cancellation: Scalars['Boolean'];
   /** The date the estimated call is valid for. */
-  date?: Maybe<Scalars['Date']>;
+  date: Scalars['Date'];
   datedServiceJourney?: Maybe<DatedServiceJourney>;
   destinationDisplay?: Maybe<DestinationDisplay>;
   /** Expected time of arrival at quay. Updated with real time information if available. Will be null if an actualArrivalTime exists */
@@ -226,13 +270,13 @@ export type EstimatedCall = {
   occupancyStatus: OccupancyStatus;
   /** Whether the updated estimates are expected to be inaccurate. */
   predictionInaccurate: Scalars['Boolean'];
-  quay?: Maybe<Quay>;
+  quay: Quay;
   /** Whether this call has been updated with real time information. */
   realtime: Scalars['Boolean'];
   realtimeState: RealtimeState;
   /** Whether vehicle will only stop on request. */
   requestStop: Scalars['Boolean'];
-  serviceJourney?: Maybe<ServiceJourney>;
+  serviceJourney: ServiceJourney;
   /** Get all relevant situations for this EstimatedCall. */
   situations: Array<PtSituationElement>;
   stopPositionInPattern: Scalars['Int'];
@@ -295,6 +339,7 @@ export type InputCoordinates = {
 export enum InputField {
   DateTime = 'dateTime',
   From = 'from',
+  IntermediatePlace = 'intermediatePlace',
   To = 'to',
 }
 
@@ -358,15 +403,44 @@ export enum InterchangeWeighting {
   RecommendedInterchange = 'recommendedInterchange',
 }
 
+/**
+ * Enable this to attach a system notice to itineraries instead of removing them. This is very
+ * convenient when tuning the itinerary-filter-chain.
+ */
+export enum ItineraryFilterDebugProfile {
+  /**
+   * Only return the requested number of itineraries, counting both actual and deleted ones.
+   * The top `numItineraries` using the request sort order is returned. This does not work
+   * with paging, itineraries after the limit, but inside the search-window are skipped when
+   * moving to the next page.
+   */
+  LimitToNumOfItineraries = 'limitToNumOfItineraries',
+  /**
+   * Return all itineraries, including deleted ones, inside the actual search-window used
+   * (the requested search-window may differ).
+   */
+  LimitToSearchWindow = 'limitToSearchWindow',
+  /** List all itineraries, including all deleted itineraries. */
+  ListAll = 'listAll',
+  /** By default, the debug itinerary filters is turned off. */
+  Off = 'off',
+}
+
 /** Parameters for the OTP Itinerary Filter Chain. These parameters SHOULD be configured on the server side and should not be used by the client. They are made available here to be able to experiment and tune the server. */
 export type ItineraryFilters = {
+  /**
+   * Use this parameter to debug the itinerary-filter-chain. The default is `off`
+   * (itineraries are filtered and not returned). For all other values the unwanted
+   * itineraries are returned with a system notice, and not deleted.
+   */
+  debug?: InputMaybe<ItineraryFilterDebugProfile>;
   /** Pick ONE itinerary from each group after putting itineraries that is 85% similar together. */
   groupSimilarityKeepOne?: InputMaybe<Scalars['Float']>;
   /** Reduce the number of itineraries in each group to to maximum 3 itineraries. The itineraries are grouped by similar legs (on board same journey). So, if  68% of the distance is traveled by similar legs, then two itineraries are in the same group. Default value is 68%, must be at least 50%. */
   groupSimilarityKeepThree?: InputMaybe<Scalars['Float']>;
   /** Of the itineraries grouped to maximum of three itineraries, how much worse can the non-grouped legs be compared to the lowest cost. 2.0 means that they can be double the cost, and any itineraries having a higher cost will be filtered. Default value is 2.0, use a value lower than 1.0 to turn off */
   groupedOtherThanSameLegsMaxCostMultiplier?: InputMaybe<Scalars['Float']>;
-  /** Set a relative limit for all transit itineraries. The limit is calculated based on the transit itinerary generalized-cost and the time between itineraries Itineraries without transit legs are excluded from this filter. Example: costLimitFunction(x) = 3600 + 2.0 x and intervalRelaxFactor = 0.5. If the lowest cost returned is 10 000, then the limit is set to: 3 600 + 2 * 10 000 = 26 600 plus half of the time between either departure or arrival times of the itinerary. Default: {"costLimitFunction": 900.0 + 1.5 x, "intervalRelaxFactor": 0.4} */
+  /** Set a relative limit for all transit itineraries. The limit is calculated based on the transit itinerary generalized-cost and the time between itineraries Itineraries without transit legs are excluded from this filter. Example: costLimitFunction(x) = 3600 + 2.0 x and intervalRelaxFactor = 0.5. If the lowest cost returned is 10 000, then the limit is set to: 3 600 + 2 * 10 000 = 26 600 plus half of the time between either departure or arrival times of the itinerary. Default: {"costLimitFunction": 900.0 + 1.5 x, "intervalRelaxFactor": 0.75} */
   transitGeneralizedCostLimit?: InputMaybe<TransitGeneralizedCostFilterParams>;
 };
 
@@ -690,34 +764,49 @@ export type Presentation = {
 export type PtSituationElement = {
   /** Advice of situation in all different translations available */
   advice: Array<MultilingualString>;
-  /** Get affected authority for this situation element */
+  /** Get all affected entities for the situation */
+  affects: Array<Affects>;
+  /**
+   * Get affected authority for this situation element
+   * @deprecated Use affects instead
+   */
   authority?: Maybe<Authority>;
+  /** Timestamp for when the situation was created. */
+  creationTime?: Maybe<Scalars['DateTime']>;
   /** Description of situation in all different translations available */
   description: Array<MultilingualString>;
   id: Scalars['ID'];
   /** Optional links to more information. */
   infoLinks?: Maybe<Array<InfoLink>>;
+  /** @deprecated Use affects instead */
   lines: Array<Maybe<Line>>;
+  /** Codespace of the data source. */
+  participant?: Maybe<Scalars['String']>;
   /** Priority of this situation  */
   priority?: Maybe<Scalars['Int']>;
+  /** @deprecated Use affects instead */
   quays: Array<Quay>;
   /**
-   * Authority that reported this situation
+   * Authority that reported this situation. Always returns the first agency in the codespace
    * @deprecated Not yet officially supported. May be removed or renamed.
    */
   reportAuthority?: Maybe<Authority>;
   /** ReportType of this situation */
   reportType?: Maybe<ReportType>;
+  /** @deprecated Use affects instead */
   serviceJourneys: Array<Maybe<ServiceJourney>>;
   /** Severity of this situation  */
   severity?: Maybe<Severity>;
   /** Operator's internal id for this situation */
   situationNumber?: Maybe<Scalars['String']>;
+  /** @deprecated Use affects instead */
   stopPlaces: Array<StopPlace>;
   /** Summary of situation in all different translations available */
   summary: Array<MultilingualString>;
   /** Period this situation is in effect */
   validityPeriod?: Maybe<ValidityPeriod>;
+  /** Timestamp when the situation element was updated. */
+  versionedAtTime?: Maybe<Scalars['DateTime']>;
 };
 
 export enum PurchaseWhen {
@@ -823,7 +912,7 @@ export type QueryType = {
   quays: Array<Maybe<Quay>>;
   /** Get all quays within the specified bounding box */
   quaysByBbox: Array<Maybe<Quay>>;
-  /** Get all quays within the specified walking radius from a location. The returned type has two fields quay and distance */
+  /** Get all quays within the specified walking radius from a location. There are no maximum limits for the input parameters, but the query will timeout and return if the parameters are too high. */
   quaysByRadius?: Maybe<QuayAtDistanceConnection>;
   /** Get default routing parameters. */
   routingParameters?: Maybe<RoutingParameters>;
@@ -845,10 +934,7 @@ export type QueryType = {
   stopPlacesByBbox: Array<Maybe<StopPlace>>;
   /** Input type for executing a travel search for a trip between two locations. Returns trip patterns describing suggested alternatives for the trip. */
   trip: Trip;
-  /**
-   * Input type for executing a travel search for a trip between three or more locations. Returns trip patterns describing suggested alternatives for the trip.
-   * @deprecated This API is under development, expect the contract to change
-   */
+  /** Via trip search. Find trip patterns traveling via one or more intermediate (via) locations. */
   viaTrip: ViaTrip;
 };
 
@@ -976,7 +1062,7 @@ export type QueryTypeSituationArgs = {
 };
 
 export type QueryTypeSituationsArgs = {
-  authorities?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  codespaces?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   severities?: InputMaybe<Array<InputMaybe<Severity>>>;
 };
 
@@ -1010,11 +1096,14 @@ export type QueryTypeTripArgs = {
   dateTime?: InputMaybe<Scalars['DateTime']>;
   debugItineraryFilter?: InputMaybe<Scalars['Boolean']>;
   extraSearchCoachReluctance?: InputMaybe<Scalars['Float']>;
+  filters?: InputMaybe<Array<TripFilterInput>>;
   from: Location;
   ignoreRealtimeUpdates?: InputMaybe<Scalars['Boolean']>;
   includePlannedCancellations?: InputMaybe<Scalars['Boolean']>;
+  includeRealtimeCancellations?: InputMaybe<Scalars['Boolean']>;
   itineraryFilters?: InputMaybe<ItineraryFilters>;
   locale?: InputMaybe<Locale>;
+  maxAccessEgressDurationForMode?: InputMaybe<Array<StreetModeDurationInput>>;
   maximumAdditionalTransfers?: InputMaybe<Scalars['Int']>;
   maximumTransfers?: InputMaybe<Scalars['Int']>;
   modes?: InputMaybe<Modes>;
@@ -1042,9 +1131,9 @@ export type QueryTypeViaTripArgs = {
   numTripPatterns?: InputMaybe<Scalars['Int']>;
   pageCursor?: InputMaybe<Scalars['String']>;
   searchWindow: Scalars['Duration'];
+  segments?: InputMaybe<Array<ViaSegmentInput>>;
   to: Location;
-  viaLocations: Array<ViaLocation>;
-  viaRequests?: InputMaybe<Array<ViaRequest>>;
+  via: Array<ViaLocationInput>;
   wheelchairAccessible?: InputMaybe<Scalars['Boolean']>;
 };
 
@@ -1124,6 +1213,8 @@ export enum RoutingErrorCode {
   OutsideBounds = 'outsideBounds',
   /** The date specified is outside the range of data currently loaded into the system */
   OutsideServicePeriod = 'outsideServicePeriod',
+  /** The routing request timed out. */
+  ProcessingTimeout = 'processingTimeout',
   /** An unknown error happened during the search. The details have been logged to the server logs */
   SystemError = 'systemError',
   /** The origin and destination are so close to each other, that walking is always better, but no direct mode was specified for the search */
@@ -1168,6 +1259,7 @@ export type RoutingParameters = {
   carSpeed?: Maybe<Scalars['Float']>;
   /** @deprecated NOT IN USE IN OTP2. */
   compactLegsByReversedSearch?: Maybe<Scalars['Boolean']>;
+  /** @deprecated Use `itineraryFilter.debug` instead. */
   debugItineraryFilter?: Maybe<Scalars['Boolean']>;
   /**
    * Option to disable the default filtering of GTFS-RT alerts by time.
@@ -1332,6 +1424,19 @@ export enum Severity {
   VerySlight = 'verySlight',
 }
 
+export enum StopCondition {
+  /** Situation applies when stop is the destination of the leg. */
+  Destination = 'destination',
+  /** Situation applies when transfering to another leg at the stop. */
+  ExceptionalStop = 'exceptionalStop',
+  /** Situation applies when passing the stop, without stopping. */
+  NotStopping = 'notStopping',
+  /** Situation applies when at the stop, and the stop requires a request to stop. */
+  RequestStop = 'requestStop',
+  /** Situation applies when stop is the startpoint of the leg. */
+  StartPoint = 'startPoint',
+}
+
 /** Named place where public transport may be accessed. May be a building complex (e.g. a station) or an on-street location. */
 export type StopPlace = PlaceInterface & {
   description?: Maybe<Scalars['String']>;
@@ -1345,6 +1450,8 @@ export type StopPlace = PlaceInterface & {
   parent?: Maybe<StopPlace>;
   /** Returns all quays that are children of this stop place */
   quays?: Maybe<Array<Maybe<Quay>>>;
+  /** Get all situations active for the stop place. Situations affecting individual quays are not returned, and should be fetched directly from the quay. */
+  situations: Array<PtSituationElement>;
   tariffZones: Array<Maybe<TariffZone>>;
   timeZone?: Maybe<Scalars['String']>;
   /** The transport modes of quays under this stop place. */
@@ -1408,7 +1515,33 @@ export enum StreetMode {
   ScooterRental = 'scooter_rental',
 }
 
-/** A system notice is used to tag elements with system information for debugging or other system related purpose. One use-case is to run a routing search with 'itineraryFilters.debug: true'. This will then tag itineraries instead of removing them from the result. This make it possible to inspect the itinerary-filter-chain. A SystemNotice only have english text, because the primary user are technical staff, like testers and developers. */
+/** A combination of street mode and corresponding duration */
+export type StreetModeDurationInput = {
+  duration: Scalars['Duration'];
+  streetMode: StreetMode;
+};
+
+/** Input format for specifying which modes will be allowed for this search. If this element is not present, it will default to all to foot. */
+export type StreetModes = {
+  /** The mode used to get from the origin to the access stops in the transit network the transit network (first-mile). If the element is not present or null,only transit that can be immediately boarded from the origin will be used. */
+  accessMode?: InputMaybe<StreetMode>;
+  /** The mode used to get from the origin to the destination directly, without using the transit network. If the element is not present or null,direct travel without using transit will be disallowed. */
+  directMode?: InputMaybe<StreetMode>;
+  /** The mode used to get from the egress stops in the transit network tothe destination (last-mile). If the element is not present or null,only transit that can immediately arrive at the origin will be used. */
+  egressMode?: InputMaybe<StreetMode>;
+};
+
+/**
+ * A system notice is used to tag elements with system information for debugging or other
+ * system related purpose. One use-case is to run a routing search with
+ * `itineraryFilters.debug=listAll`. This will then tag itineraries instead of removing
+ * them from the result. This make it possible to inspect the itinerary-filter-chain. A
+ * SystemNotice only have english text, because the primary user are technical staff, like
+ * testers and developers.
+ *
+ * **NOTE!** _A SystemNotice is for debugging the system, avoid putting logic on it in the
+ * client. The tags and usage may change without notice._
+ */
 export type SystemNotice = {
   tag?: Maybe<Scalars['String']>;
   text?: Maybe<Scalars['String']>;
@@ -1438,18 +1571,18 @@ export type TimetabledPassingTime = {
   /** Earliest possible departure time for a service journey with a service window. */
   earliestDepartureTime?: Maybe<TimeAndDayOffset>;
   /** Whether vehicle may be alighted at quay. */
-  forAlighting?: Maybe<Scalars['Boolean']>;
+  forAlighting: Scalars['Boolean'];
   /** Whether vehicle may be boarded at quay. */
-  forBoarding?: Maybe<Scalars['Boolean']>;
+  forBoarding: Scalars['Boolean'];
   /** Latest possible (planned) arrival time for a service journey with a service window. */
   latestArrivalTime?: Maybe<TimeAndDayOffset>;
   notices: Array<Notice>;
-  quay?: Maybe<Quay>;
+  quay: Quay;
   /** Whether vehicle will only stop on request. */
-  requestStop?: Maybe<Scalars['Boolean']>;
-  serviceJourney?: Maybe<ServiceJourney>;
+  requestStop: Scalars['Boolean'];
+  serviceJourney: ServiceJourney;
   /** Whether this is a timing point or not. Boarding and alighting is not allowed at timing points. */
-  timingPoint?: Maybe<Scalars['Boolean']>;
+  timingPoint: Scalars['Boolean'];
 };
 
 export type TransitGeneralizedCostFilterParams = {
@@ -1662,6 +1795,28 @@ export type TripMessageStringsArgs = {
   language?: InputMaybe<Scalars['String']>;
 };
 
+/** A collection of selectors for what lines/trips should be included in / excluded from search */
+export type TripFilterInput = {
+  /** A list of selectors for what lines/trips should be excluded during the search. If line/trip matches with at least one selector it will be excluded. */
+  not?: InputMaybe<Array<TripFilterSelectInput>>;
+  /** A list of selectors for what lines/trips should be allowed during search. In order to be accepted a trip/line has to match with at least one selector. An empty list means that everything should be allowed.  */
+  select?: InputMaybe<Array<TripFilterSelectInput>>;
+};
+
+/** A list of selectors for filter allow-list / exclude-list. An empty list means that everything is allowed. A trip/line will match with selectors if it matches with all non-empty lists. The `select` is always applied first, then `not`. If only `not` not is present, the exclude is applied to the existing set of lines.  */
+export type TripFilterSelectInput = {
+  /** Set of ids for authorities that should be included in/excluded from search */
+  authorities?: InputMaybe<Array<Scalars['ID']>>;
+  /** Set of ids for group of lines that should be included in/excluded from the search */
+  groupOfLines?: InputMaybe<Array<Scalars['ID']>>;
+  /** Set of ids for lines that should be included in/excluded from search */
+  lines?: InputMaybe<Array<Scalars['ID']>>;
+  /** Set of ids for service journeys that should be included in/excluded from search */
+  serviceJourneys?: InputMaybe<Array<Scalars['ID']>>;
+  /** The allowed modes for the transit part of the trip. Use an empty list to disallow transit for this search. If the element is not present or null, it will default to all transport modes. */
+  transportModes?: InputMaybe<Array<TransportModes>>;
+};
+
 /** List of legs constituting a suggested sequence of rides and links for a specific trip. */
 export type TripPattern = {
   /** The aimed date and time the trip ends. */
@@ -1736,8 +1891,16 @@ export enum VertexType {
   Transit = 'transit',
 }
 
-/** Input format for specifying a location through either a place reference (id), coordinates or both. If both place and coordinates are provided the place ref will be used if found, coordinates will only be used if place is not known. */
-export type ViaLocation = {
+/** An acceptable combination of trip patterns between two segments of the via search */
+export type ViaConnection = {
+  /** The index of the trip pattern in the segment before the via point */
+  from?: Maybe<Scalars['Int']>;
+  /** The index of the trip pattern in the segment after the via point */
+  to?: Maybe<Scalars['Int']>;
+};
+
+/** Input format for specifying a location through either a place reference (id), coordinates or both. If both place and coordinates are provided the place ref will be used if found, coordinates will only be used if place is not known. The location also contain information about the minimum and maximum time the user is willing to stay at the via location. */
+export type ViaLocationInput = {
   /** Coordinates for the location. This can be used alone or as fallback if the place id is not found. */
   coordinates?: InputMaybe<InputCoordinates>;
   /** The maximum time the user wants to stay in the via location before continuing his journey */
@@ -1750,19 +1913,27 @@ export type ViaLocation = {
   place?: InputMaybe<Scalars['String']>;
 };
 
-export type ViaRequest = {
-  /** The set of access/egress/direct/transit modes to be used for this search. Note that this only works at the Line level. If individual ServiceJourneys have modes that differ from the Line mode, this will NOT be accounted for. */
-  modes?: InputMaybe<Modes>;
+export type ViaSegmentInput = {
+  /** A list of filters for which trips should be included. A trip will be included if it matches with at least one filter. An empty list of filters means that all trips should be included. */
+  filters?: InputMaybe<Array<TripFilterInput>>;
+  /** The set of access/egress/direct modes to be used for this search. */
+  modes?: InputMaybe<StreetModes>;
 };
 
-/** Description of a travel between three or more places. */
+/** Description of a trip via one or more intermediate locations. For example from A, via B, then C to D. */
 export type ViaTrip = {
   /** A list of routing errors, and fields which caused them */
   routingErrors: Array<RoutingError>;
-  /** A list of lists of which indices of the next segment the trip pattern can be combined with */
-  tripPatternCombinations: Array<Array<Array<Scalars['Int']>>>;
-  /** A list of lists of the trip patterns for each segment of the journey */
-  tripPatterns: Array<Array<TripPattern>>;
+  /** A list of the acceptable combinations of the trip patterns in this segment and the next segment. */
+  tripPatternCombinations: Array<Array<ViaConnection>>;
+  /** A list of segments of the via search. The first segment is from the start location to the first entry in the locations list and the last is from the last entry in the locations list to the end location. */
+  tripPatternsPerSegment: Array<ViaTripPatternSegment>;
+};
+
+/** A segment of the via search. The first segment is from the start location to the first entry in the locations list and the last is from the last entry in the locations list to the end location. */
+export type ViaTripPatternSegment = {
+  /** A list of trip patterns for this segment of the search */
+  tripPatterns: Array<TripPattern>;
 };
 
 export enum WheelchairBoarding {
