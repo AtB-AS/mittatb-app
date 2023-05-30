@@ -20,7 +20,7 @@ export async function getServiceJourneyWithEstimatedCalls(
 
 export async function getServiceJourneyMapLegs(
   id: string,
-  fromQuayId?: string,
+  fromQuayId: string,
   toQuayId?: string,
 ): Promise<ServiceJourneyMapInfoData_v3> {
   const url = `bff/v2/servicejourney/${encodeURIComponent(id)}/polyline`;
