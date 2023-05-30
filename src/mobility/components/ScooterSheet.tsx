@@ -51,13 +51,15 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
   const analytics = useAnalytics();
 
   useEffect(() => {
-    analytics.logEvent('Mobility', 'Scooter selected', {
-      id: vehicle?.id,
-      operator: getTextForLanguage(
-        vehicle?.system?.operator?.name.translation,
-        language,
-      ),
-    });
+    if (vehicle) {
+      analytics.logEvent('Mobility', 'Scooter selected', {
+        id,
+        operator: getTextForLanguage(
+          vehicle.system.operator.name.translation,
+          language,
+        ),
+      });
+    }
   }, [vehicle]);
 
   return (

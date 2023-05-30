@@ -52,17 +52,19 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
   const analytics = useAnalytics();
 
   useEffect(() => {
-    analytics.logEvent('Mobility', 'Car sharing station selected', {
-      id: station?.id,
-      name: stationName,
-      operator: {
-        id: station?.system.operator.id,
-        name: getTextForLanguage(
-          station?.system.operator.name.translation,
-          language,
-        ),
-      },
-    });
+    if (station) {
+      analytics.logEvent('Mobility', 'Car sharing station selected', {
+        id: stationId,
+        name: stationName,
+        operator: {
+          id: station.system.operator.id,
+          name: getTextForLanguage(
+            station.system.operator.name.translation,
+            language,
+          ),
+        },
+      });
+    }
   }, [station]);
 
   return (

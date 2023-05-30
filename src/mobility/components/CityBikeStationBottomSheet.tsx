@@ -57,17 +57,19 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
   const analytics = useAnalytics();
 
   useEffect(() => {
-    analytics.logEvent('Mobility', 'City bike station selected', {
-      id: station?.id,
-      name: getTextForLanguage(station?.name?.translation, language),
-      operator: {
-        id: station?.system.operator.id,
-        name: getTextForLanguage(
-          station?.system.operator.name.translation,
-          language,
-        ),
-      },
-    });
+    if (station) {
+      analytics.logEvent('Mobility', 'City bike station selected', {
+        id: stationId,
+        name: getTextForLanguage(station.name.translation, language),
+        operator: {
+          id: station.system.operator.id,
+          name: getTextForLanguage(
+            station.system.operator.name.translation,
+            language,
+          ),
+        },
+      });
+    }
   }, [station]);
 
   return (
