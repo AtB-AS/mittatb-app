@@ -29,6 +29,7 @@ export const TripSummary: React.FC<TripPattern> = ({
         <ThemeText
           color="secondary"
           accessible={true}
+          style={styles.detailText}
           accessibilityLabel={t(
             TripDetailsTexts.trip.summary.travelTime.a11yLabel(time),
           )}
@@ -42,6 +43,7 @@ export const TripSummary: React.FC<TripPattern> = ({
         <ThemeText
           color="secondary"
           accessible={true}
+          style={styles.detailText}
           accessibilityLabel={t(
             TripDetailsTexts.trip.summary.walkDistance.a11yLabel(
               readableDistance,
@@ -58,6 +60,9 @@ export const TripSummary: React.FC<TripPattern> = ({
   );
 };
 const useStyle = StyleSheet.createThemeHook((theme) => ({
+  detailText: {
+    flex: 1,
+  },
   summaryDetail: {
     padding: theme.spacings.medium,
     flex: 1,
