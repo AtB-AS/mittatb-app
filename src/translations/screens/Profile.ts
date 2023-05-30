@@ -136,6 +136,9 @@ const ProfileTexts = {
         inspection: {
           label: _('Billettkontroll', 'Ticket inspection'),
         },
+        refund: {
+          label: _('Refusjon', 'Refund'),
+        },
       },
     },
   },

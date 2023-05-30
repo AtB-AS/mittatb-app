@@ -93,9 +93,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const inspectionInfo = configurableLinks?.inspectionInfo
     ? configurableLinks?.inspectionInfo
     : undefined;
+  const refundInfo = configurableLinks?.refundInfo
+    ? configurableLinks?.refundInfo
+    : undefined;
   const ticketingInfoUrl = getTextForLanguage(ticketingInfo, language);
   const termsInfoUrl = getTextForLanguage(termsInfo, language);
   const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
+  const refundInfoUrl = getTextForLanguage(refundInfo, language);
 
   const {enable_departures_v2_as_default} = useRemoteConfig();
   const setDeparturesV2Enabled = (value: boolean) => {
@@ -445,17 +449,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             <HeaderSectionItem
               text={t(ProfileTexts.sections.information.heading)}
             />
-            {ticketingInfoUrl ? (
-              <LinkSectionItem
-                icon={<ThemeIcon svg={ExternalLink} />}
-                text={t(
-                  ProfileTexts.sections.information.linkSectionItems.ticketing
-                    .label,
-                )}
-                testID="ticketingInfoButton"
-                onPress={() => Linking.openURL(ticketingInfoUrl)}
-              />
-            ) : (
+            {APP_ORG === 'atb' ? (
               <LinkSectionItem
                 text={t(
                   ProfileTexts.sections.information.linkSectionItems.ticketing
@@ -463,52 +457,49 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 )}
                 testID="ticketingInfoButton"
                 onPress={() =>
-                  navigation.navigate(
-                    APP_ORG === 'atb'
-                      ? 'Profile_TicketingInformationScreen'
-                      : 'Profile_GenericWebsiteInformationScreen',
-                  )
+                  navigation.navigate('Profile_TicketingInformationScreen')
                 }
-              />
-            )}
-            {termsInfoUrl ? (
-              <LinkSectionItem
-                icon={<ThemeIcon svg={ExternalLink} />}
-                text={t(
-                  ProfileTexts.sections.information.linkSectionItems.terms
-                    .label,
-                )}
-                testID="termsInfoButton"
-                onPress={() => Linking.openURL(termsInfoUrl)}
               />
             ) : (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.information.linkSectionItems.terms
-                    .label,
-                )}
-                testID="termsInfoButton"
-                onPress={() =>
-                  navigation.navigate(
-                    APP_ORG === 'atb'
-                      ? 'Profile_TermsInformationScreen'
-                      : 'Profile_GenericWebsiteInformationScreen',
-                  )
-                }
-              />
+              ticketingInfoUrl && (
+                <LinkSectionItem
+                  icon={<ThemeIcon svg={ExternalLink} />}
+                  text={t(
+                    ProfileTexts.sections.information.linkSectionItems.ticketing
+                      .label,
+                  )}
+                  testID="ticketingInfoButton"
+                  onPress={() => Linking.openURL(ticketingInfoUrl)}
+                />
+              )
             )}
 
-            {inspectionInfoUrl ? (
+            {APP_ORG === 'atb' ? (
               <LinkSectionItem
-                icon={<ThemeIcon svg={ExternalLink} />}
                 text={t(
-                  ProfileTexts.sections.information.linkSectionItems.inspection
+                  ProfileTexts.sections.information.linkSectionItems.terms
                     .label,
                 )}
-                testID="inspectionInfoButton"
-                onPress={() => Linking.openURL(inspectionInfoUrl)}
+                testID="termsInfoButton"
+                onPress={() =>
+                  navigation.navigate('Profile_TermsInformationScreen')
+                }
               />
             ) : (
+              termsInfoUrl && (
+                <LinkSectionItem
+                  icon={<ThemeIcon svg={ExternalLink} />}
+                  text={t(
+                    ProfileTexts.sections.information.linkSectionItems.terms
+                      .label,
+                  )}
+                  testID="termsInfoButton"
+                  onPress={() => Linking.openURL(termsInfoUrl)}
+                />
+              )
+            )}
+
+            {APP_ORG === 'atb' ? (
               <LinkSectionItem
                 text={t(
                   ProfileTexts.sections.information.linkSectionItems.inspection
@@ -522,6 +513,30 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                       : 'Profile_GenericWebsiteInformationScreen',
                   )
                 }
+              />
+            ) : (
+              inspectionInfoUrl && (
+                <LinkSectionItem
+                  icon={<ThemeIcon svg={ExternalLink} />}
+                  text={t(
+                    ProfileTexts.sections.information.linkSectionItems
+                      .inspection.label,
+                  )}
+                  testID="inspectionInfoButton"
+                  onPress={() => Linking.openURL(inspectionInfoUrl)}
+                />
+              )
+            )}
+
+            {refundInfoUrl && (
+              <LinkSectionItem
+                icon={<ThemeIcon svg={ExternalLink} />}
+                text={t(
+                  ProfileTexts.sections.information.linkSectionItems.refund
+                    .label,
+                )}
+                testID="refundInfoButton"
+                onPress={() => Linking.openURL(refundInfoUrl)}
               />
             )}
           </Section>
