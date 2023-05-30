@@ -72,6 +72,7 @@ export const getStations = (
     })
     .then((res) => res.data.stations ?? []);
 };
+
 export const getBikeStation = (
   id: string,
   opts?: AxiosRequestConfig,
@@ -84,6 +85,7 @@ export const getBikeStation = (
     })
     .then((res) => (res.data.stations ? res.data.stations[0] : undefined));
 };
+
 export const getCarStation = (
   id: string,
   opts?: AxiosRequestConfig,
