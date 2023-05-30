@@ -52,6 +52,7 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
 
   useEffect(() => {
     analytics.logEvent('Mobility', 'Scooter selected', {
+      id: vehicle?.id,
       operator: getTextForLanguage(
         vehicle?.system?.operator?.name.translation,
         language,
