@@ -45,6 +45,12 @@ export function TravellerSelection({
     userCountState.updateSelectable(selectableUserProfiles);
   }, [selectableUserProfiles]);
 
+  useEffect(() => {
+    if (!userCountState.userProfilesWithCount.length && selectionMode === "none") {
+      userCountState.addCount(selectableUserProfiles[0].userTypeString)
+    }
+  }, [selectionMode, selectableUserProfiles])
+
   if (selectionMode === 'none') {
     return <></>;
   }
