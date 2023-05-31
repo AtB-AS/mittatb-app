@@ -43,8 +43,8 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
                 onPress: () => {
                   navigation.pop();
                   analytics.logEvent(
-                    'Ticketing',
-                    'Ticket assistant closed from welcome screen',
+                    'Ticket assistant',
+                    'Closed from welcome screen',
                   );
                 },
               }

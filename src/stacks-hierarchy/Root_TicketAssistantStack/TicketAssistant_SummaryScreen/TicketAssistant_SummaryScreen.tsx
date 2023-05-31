@@ -54,7 +54,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       : false;
 
   const onBuyButtonPress = () => {
-    analytics.logEvent('Ticketing', 'Ticket assistant buy recommended ticket');
+    analytics.logEvent('Ticket assistant', 'Clicked buy recommended ticket');
     if (!recommendedTicketSummary) return;
     const purchaseConfirmationScreenParams: Root_PurchaseConfirmationScreenParams =
       {
@@ -181,8 +181,8 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             text={t(TicketAssistantTexts.closeButton)}
             onPress={() => {
               analytics.logEvent(
-                'Ticketing',
-                'Ticket assistant closed from summary screen',
+                'Ticket assistant',
+                'Closed from summary screen',
               );
               navigation.popToTop();
             }}
