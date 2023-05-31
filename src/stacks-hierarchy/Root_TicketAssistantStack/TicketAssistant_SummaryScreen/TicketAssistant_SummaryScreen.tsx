@@ -180,7 +180,10 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             mode="secondary"
             text={t(TicketAssistantTexts.closeButton)}
             onPress={() => {
-              analytics.logEvent('Ticketing', 'Ticket assistant closed');
+              analytics.logEvent(
+                'Ticketing',
+                'Ticket assistant closed from summary screen',
+              );
               navigation.popToTop();
             }}
           />
