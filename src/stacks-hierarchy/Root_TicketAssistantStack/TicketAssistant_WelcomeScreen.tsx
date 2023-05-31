@@ -52,15 +52,16 @@ export const TicketAssistant_WelcomeScreen = ({
           {t(TicketAssistantTexts.welcome.description)}
         </ThemeText>
 
-        <View style={styles.notice}>
+        <View
+          style={styles.notice}
+          accessible={true}
+          accessibilityLabel={t(TicketAssistantTexts.welcome.boatInfo)}
+        >
           <ThemeIcon style={styles.icon} svg={SvgInfo} />
           <ThemeText
             style={styles.noticeText}
             type={'body__tertiary'}
             color={themeColor}
-            accessibilityLabel={t(
-              TicketAssistantTexts.summary.a11yDurationNoticeLabel,
-            )}
           >
             {t(TicketAssistantTexts.welcome.boatInfo)}
           </ThemeText>
