@@ -1,10 +1,6 @@
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {
-  getTextForLanguage,
-  ScreenHeaderTexts,
-  useTranslation,
-} from '@atb/translations';
-import React, {useEffect} from 'react';
+import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
@@ -28,7 +24,6 @@ import {useBikeStation} from '@atb/mobility/use-bike-station';
 import {MessageBox} from '@atb/components/message-box';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {WalkingDistance} from '@atb/components/walking-distance';
-import {useAnalytics} from '@atb/analytics';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
@@ -38,7 +33,7 @@ type Props = {
 };
 
 export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const {themeName} = useTheme();
   const style = useSheetStyle();
   const {station, isLoading, error} = useBikeStation(stationId);
@@ -54,23 +49,6 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
     station?.vehicleTypesAvailable,
     FormFactor.Bicycle,
   );
-  const analytics = useAnalytics();
-
-  useEffect(() => {
-    if (station) {
-      analytics.logEvent('Mobility', 'City bike station selected', {
-        id: stationId,
-        name: getTextForLanguage(station.name.translation, language),
-        operator: {
-          id: station.system.operator.id,
-          name: getTextForLanguage(
-            station.system.operator.name.translation,
-            language,
-          ),
-        },
-      });
-    }
-  }, [station]);
 
   return (
     <BottomSheetContainer>

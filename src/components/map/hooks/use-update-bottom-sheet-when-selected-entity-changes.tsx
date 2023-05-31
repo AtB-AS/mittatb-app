@@ -10,6 +10,7 @@ import {isBikeStation, isCarStation, isVehicle} from '@atb/mobility/utils';
 import {CityBikeStationSheet} from '@atb/mobility/components/CityBikeStationBottomSheet';
 import {ScooterSheet} from '@atb/mobility/components/ScooterSheet';
 import {CarSharingStationSheet} from '@atb/mobility/components/CarSharingStationBottomSheet';
+import {useAnalytics} from '@atb/analytics';
 
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also
@@ -26,6 +27,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   const isFocused = useIsFocused();
   const [selectedFeature, setSelectedFeature] = useState<Feature<Point>>();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const analytics = useAnalytics();
 
   const closeWithCallback = () => {
     closeBottomSheet();
@@ -51,6 +53,9 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
         return;
       }
       if (isStopPlace(selectedFeature)) {
+        analytics.logEvent('Map', 'Stop place selected', {
+          id: selectedFeature.id,
+        });
         openBottomSheet(
           () => (
             <DeparturesDialogSheet
@@ -75,6 +80,9 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           false,
         );
       } else if (isBikeStation(selectedFeature)) {
+        analytics.logEvent('Map', 'City bike station selected', {
+          id: selectedFeature.properties.id,
+        });
         openBottomSheet(
           () => (
             <CityBikeStationSheet
@@ -87,6 +95,9 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           false,
         );
       } else if (isCarStation(selectedFeature)) {
+        analytics.logEvent('Map', 'Car sharing station selected', {
+          id: selectedFeature.properties.id,
+        });
         openBottomSheet(
           () => (
             <CarSharingStationSheet
@@ -99,11 +110,14 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           false,
         );
       } else if (isVehicle(selectedFeature)) {
+        analytics.logEvent('Map', 'Scooter selected', {
+          id: selectedFeature.properties.id,
+        });
         openBottomSheet(
           () => {
             return (
               <ScooterSheet
-                vehicleId={selectedFeature.properties?.id}
+                vehicleId={selectedFeature.properties.id}
                 close={closeWithCallback}
               />
             );
@@ -115,5 +129,5 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
         closeBottomSheet();
       }
     })();
-  }, [selectedFeature, isFocused, distance]);
+  }, [selectedFeature, isFocused, distance, analytics]);
 };
