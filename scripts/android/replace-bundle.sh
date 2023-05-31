@@ -3,16 +3,16 @@
 # Security wise trying to avoid secrets being sent in via command line to the script
 # Safer to do it by env variable according to Github Actions docs
 
-if [[ 
-  -z "${APK_FILE_NAME}" || 
-  -z "${KEYSTORE_PATH}" || 
+if [[
+  -z "${APK_FILE_NAME}" ||
+  -z "${KEYSTORE_PATH}" ||
   -z "${KEYSTORE_PASS}" ||
   -z "${KEY_PASS}" ||
   -z "${KEY_ALIAS}" ||
   -z "${BUILD_ID}"
    ]]; then
     echo "Argument error!"
-    echo "Expected six env variables: 
+    echo "Expected six env variables:
   - BUILD_ID
   - APK_FILE_NAME
   - KEYSTORE_PATH
@@ -21,7 +21,7 @@ if [[
   - KEY_ALIAS"
 
     exit 1
-else 
+else
     mkdir -p bundle
 
     echo "Re-generate bundle"
@@ -30,7 +30,11 @@ else
     echo "Compile JS to Hermes Bytecode"
     ./node_modules/react-native/sdks/hermesc/linux64-bin/hermesc -emit-binary -source-map=bundle/temp.bundle.map -output-source-map -out bundle/index.android.bundle bundle/temp.bundle
 
-    brew install apktool yq
+    # Temporary brew update until Ubuntu runner image uses brew >= 4.0.19
+    brew update
+
+    brew install apktool
+    brew install yq
 
     echo "Decompile Android APK"
     apktool d $APK_FILE_NAME --output decompiled-apk

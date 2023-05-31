@@ -2,8 +2,8 @@ import {translation as _} from '../commons';
 
 const CancelledDepartureTexts = {
   message: _(
-    'Denne avgangen er kansellert.',
-    'This departure has been cancelled.',
+    'Avgangen fra denne holdeplassen er kansellert.',
+    'The departure from this stop has been cancelled.',
   ),
   cancelled: _('Kansellert', 'Cancelled'),
 };

@@ -89,7 +89,9 @@ export const TravelDetailsMapScreenComponent = ({
     },
   });
 
-  const [shouldTrack, setShouldTrack] = useState<boolean>(true);
+  const [shouldTrack, setShouldTrack] = useState<boolean>(
+    !!vehicleWithPosition,
+  );
   const [zoomLevel, setZoomLevel] = useState<number>(FOLLOW_ZOOM_LEVEL);
 
   useEffect(() => {
@@ -120,8 +122,8 @@ export const TravelDetailsMapScreenComponent = ({
           ref={mapCameraRef}
           bounds={bounds}
           {...MapCameraConfig}
-          zoomLevel={FOLLOW_ZOOM_LEVEL}
-          centerCoordinate={centerPosition}
+          zoomLevel={vehicleWithPosition ? FOLLOW_ZOOM_LEVEL : undefined}
+          centerCoordinate={vehicleWithPosition ? centerPosition : undefined}
           animationDuration={0}
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
@@ -287,6 +289,7 @@ const LiveVehicleIcon = ({
       <ThemeIcon
         svg={svg}
         fill={theme.interactive.interactive_destructive.default.background}
+        allowFontScaling={false}
       />
     );
   if (isLoading || isStale)
@@ -296,7 +299,7 @@ const LiveVehicleIcon = ({
       />
     );
 
-  return <ThemeIcon svg={svg} fill={fillColor} />;
+  return <ThemeIcon svg={svg} fill={fillColor} allowFontScaling={false} />;
 };
 
 const useStyles = StyleSheet.createThemeHook(() => ({

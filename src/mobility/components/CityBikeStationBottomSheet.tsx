@@ -1,6 +1,6 @@
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
@@ -24,7 +24,6 @@ import {useBikeStation} from '@atb/mobility/use-bike-station';
 import {MessageBox} from '@atb/components/message-box';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {WalkingDistance} from '@atb/components/walking-distance';
-import {useAnalytics} from '@atb/analytics';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
@@ -50,11 +49,6 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
     station?.vehicleTypesAvailable,
     FormFactor.Bicycle,
   );
-  const analytics = useAnalytics();
-
-  useEffect(() => {
-    analytics.logEvent('Mobility', 'City bike station selected', {station});
-  }, [station]);
 
   return (
     <BottomSheetContainer>

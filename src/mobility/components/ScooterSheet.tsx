@@ -1,13 +1,8 @@
 import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {
-  getTextForLanguage,
-  Language,
-  ScreenHeaderTexts,
-  useTranslation,
-} from '@atb/translations';
+import {Language, ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {Battery} from '@atb/assets/svg/mono-icons/vehicles';
 import {Button} from '@atb/components/button';
@@ -27,7 +22,6 @@ import {VehicleStats} from '@atb/mobility/components/VehicleStats';
 import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
-import {useAnalytics} from '@atb/analytics';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
@@ -48,16 +42,6 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
     appStoreUri,
     rentalAppUri,
   });
-  const analytics = useAnalytics();
-
-  useEffect(() => {
-    analytics.logEvent('Mobility', 'Scooter selected', {
-      operator: getTextForLanguage(
-        vehicle?.system?.operator?.name.translation,
-        language,
-      ),
-    });
-  }, [vehicle]);
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
