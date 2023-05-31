@@ -20,7 +20,7 @@ export type TicketResponseData = {
   duration: number;
   quantity: number;
   price: number;
-  traveller: {id: string; userType: string};
+  userProfileId: string;
 };
 
 export type RecommendedTicketResponse = {
