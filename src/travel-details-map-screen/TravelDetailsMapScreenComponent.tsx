@@ -28,7 +28,7 @@ import MapboxGL from '@rnmapbox/maps';
 import {CircleLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, Platform, View} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
@@ -256,6 +256,8 @@ const LiveVehicle = ({
   const bearingRadians = ((90 - vehicle.bearing + heading) * Math.PI) / 180; // start at 90 degrees, go counter clockwise and convert from degrees to radians
   const directionArrowOffsetFromCenter = 28;
 
+  const iconSize = Platform.OS === 'android' ? 80 : 40; // kinda hacky fix due to lots of android bugs with transform
+
   return (
     <>
       <MapboxGL.ShapeSource id="liveVehicle" shape={pointOf(vehicle.location)}>
@@ -266,11 +268,16 @@ const LiveVehicle = ({
         coordinate={[vehicle.location.longitude, vehicle.location.latitude]}
         //allowOverlap={true}
       >
-        <>
-          <TouchableOpacity
-            style={{position: 'absolute'}}
-            onPressOut={() => setShouldTrack(true)}
-          >
+        <View
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: iconSize,
+            height: iconSize,
+          }}
+        >
+          <TouchableOpacity onPressOut={() => setShouldTrack(true)}>
             <LiveVehicleIcon
               mode={mode}
               subMode={subMode}
@@ -282,44 +289,35 @@ const LiveVehicle = ({
 
           <View
             style={{
-              transform: [
-                {
-                  translateX:
-                    Math.cos(bearingRadians) * directionArrowOffsetFromCenter,
-                },
-                {
-                  translateY:
-                    -Math.sin(bearingRadians) * directionArrowOffsetFromCenter,
-                },
-              ],
+              shadowColor: '#000000',
+              shadowOffset: {width: 0, height: 2},
+              shadowOpacity: 0.2,
+              shadowRadius: 2,
+              position: 'absolute',
+              top: -Math.sin(bearingRadians) * directionArrowOffsetFromCenter,
+              left: Math.cos(bearingRadians) * directionArrowOffsetFromCenter,
             }}
           >
-            <View
+            <ThemeIcon
+              svg={BusLiveArrow}
+              fill={
+                isError
+                  ? theme.interactive.interactive_destructive.default.background
+                  : isStale
+                  ? theme.interactive.interactive_1.default.background
+                  : fillColor
+              }
+              width={iconSize}
+              height={iconSize}
               style={{
                 transform: [
                   {rotate: `${vehicle.bearing - heading} deg`},
-                  {scale: 1.8},
+                  {scale: Platform.OS === 'android' ? 0.5 : 1},
                 ],
-                shadowColor: '#000000',
-                shadowOffset: {width: 0, height: 2},
-                shadowOpacity: 0.2,
-                shadowRadius: 2,
               }}
-            >
-              <ThemeIcon
-                svg={BusLiveArrow}
-                fill={
-                  isError
-                    ? theme.interactive.interactive_destructive.default
-                        .background
-                    : isStale
-                    ? theme.interactive.interactive_1.default.background
-                    : fillColor
-                }
-              />
-            </View>
+            />
           </View>
-        </>
+        </View>
       </MapboxGL.MarkerView>
     </>
   );
@@ -342,10 +340,14 @@ const LiveVehicleIcon = ({
   const {theme} = useTheme();
   const fillColor = useTransportationColor(mode, subMode, 'text');
   const svg = getTransportModeSvg(mode, subMode);
+  const iOS_scaleBackDown = {
+    transform: [{scale: Platform.OS === 'android' ? 1 : 0.55}],
+  }; // due to android arrow bugfix, need to scale iOS back down. Should maybe be 0.5, but it 0.55 looks better?
 
   if (isError)
     return (
       <ThemeIcon
+        style={iOS_scaleBackDown}
         svg={svg}
         fill={theme.interactive.interactive_destructive.default.background}
       />
@@ -357,7 +359,7 @@ const LiveVehicleIcon = ({
       />
     );
 
-  return <ThemeIcon svg={svg} fill={fillColor} />;
+  return <ThemeIcon style={iOS_scaleBackDown} svg={svg} fill={fillColor} />;
 };
 
 const useStyles = StyleSheet.createThemeHook(() => ({
