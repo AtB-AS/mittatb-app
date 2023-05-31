@@ -41,6 +41,7 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
             ? {
                 type: 'close',
                 onPress: () => {
+                  navigation.pop();
                   analytics.logEvent(
                     'Ticketing',
                     'Ticket assistant closed from welcome screen',
