@@ -43,6 +43,7 @@ import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/Pag
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 import {Divider} from '@atb/components/divider';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
+import {useAnalytics} from '@atb/analytics';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -62,6 +63,7 @@ export const DepartureDetailsScreenComponent = ({
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useTheme();
+  const analytics = useAnalytics();
 
   const activeItem = items[activeItemIndexState];
   const hasMultipleItems = items.length > 1;
@@ -146,7 +148,18 @@ export const DepartureDetailsScreenComponent = ({
                         : DepartureDetailsTexts.map,
                     )}
                     interactiveColor="interactive_1"
-                    onPress={() =>
+                    onPress={() => {
+                      vehiclePosition &&
+                        analytics.logEvent(
+                          'Trip search',
+                          'See live bus clicked',
+                          {
+                            fromPlace: mapData.start,
+                            toPlace: mapData?.stop,
+                            mode: mode,
+                            subMode: subMode,
+                          },
+                        );
                       onPressDetailsMap({
                         legs: mapData.mapLegs,
                         fromPlace: mapData.start,
@@ -154,8 +167,8 @@ export const DepartureDetailsScreenComponent = ({
                         vehicleWithPosition: vehiclePosition,
                         mode: mode,
                         subMode: subMode,
-                      })
-                    }
+                      });
+                    }}
                   />
                 ) : null}
               </View>
