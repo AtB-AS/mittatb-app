@@ -27,7 +27,7 @@ export function handleRecommendedTicketResponse(
   );
 
   const travellerWithCount: UserProfileWithCount | undefined = {
-    ...(getUserProfile(userProfiles, response.tickets?.[0]?.traveller?.id) ??
+    ...(getUserProfile(userProfiles, response.tickets?.[0]?.userProfileId) ??
       {}),
     count: 1,
   };
@@ -61,9 +61,7 @@ function getUserProfile(
   profiles: UserProfile[],
   profileId: string,
 ): UserProfile {
-  const profile = profiles.find(
-    (profile) => profile.userTypeString === profileId,
-  );
+  const profile = profiles.find((profile) => profile.id === profileId);
   if (profile) {
     return profile;
   }
