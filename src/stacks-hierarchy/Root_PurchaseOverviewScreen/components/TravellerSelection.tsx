@@ -35,10 +35,22 @@ export function TravellerSelection({
       selectableUserProfiles.some((b) => a.id === b.id),
     );
   useEffect(() => {
-    const filteredSelection = userCountState.userProfilesWithCount.filter((u) =>
-      selectableUserProfiles.find((i) => i.id === u.id),
-    );
-    setTravellerSelection(filteredSelection);
+    if (selectionMode == 'none' && selectableUserProfiles.length > 0) {
+      // If selectionMode is none, we should default to the first item.
+      // selectableUserProfiles should be only have one item, but this
+      // is specified by the fare product and reference data in firestore.
+      setTravellerSelection([
+        {
+          ...selectableUserProfiles[0],
+          count: 1,
+        },
+      ]);
+    } else {
+      const filteredSelection = userCountState.userProfilesWithCount.filter(
+        (u) => selectableUserProfiles.find((i) => i.id === u.id),
+      );
+      setTravellerSelection(filteredSelection);
+    }
   }, [userCountState.userProfilesWithCount, fareProductType, selectionMode]);
 
   useEffect(() => {
