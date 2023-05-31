@@ -1391,7 +1391,7 @@ DEPENDENCIES:
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - "TimeReactNativeLib (from `../node_modules/@entur-private/abt-time-react-native-lib`)"
-  - "TokenCore (from `git@github.com:entur/abt-mobile-client-sdk.git`, branch `develop`)"
+  - "TokenCore (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-1.1.13`)"
   - "TokenStateReactNativeLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, branch `develop`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1570,8 +1570,8 @@ EXTERNAL SOURCES:
   TimeReactNativeLib:
     :path: "../node_modules/@entur-private/abt-time-react-native-lib"
   TokenCore:
-    :branch: develop
     :git: "git@github.com:entur/abt-mobile-client-sdk.git"
+    :tag: release-1.1.13
   TokenStateReactNativeLib:
     :branch: develop
     :git: "git@github.com:entur/abt-mobile-client-sdk.git"
@@ -1583,8 +1583,8 @@ CHECKOUT OPTIONS:
     :git: "git@github.com:entur/abt-protobuf-pods.git"
     :tag: 2.661.0
   TokenCore:
-    :commit: 3dfdd845d2b247e1ea64c62cf7595f27488a0d6b
     :git: "git@github.com:entur/abt-mobile-client-sdk.git"
+    :tag: release-1.1.13
   TokenStateReactNativeLib:
     :commit: 3dfdd845d2b247e1ea64c62cf7595f27488a0d6b
     :git: "git@github.com:entur/abt-mobile-client-sdk.git"
@@ -1700,6 +1700,6 @@ SPEC CHECKSUMS:
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 4130b60623e12cb6a82d238c486b22671e3070bc
+PODFILE CHECKSUM: 1b4e9b93908c458955a86893701859f838b1383e
 
 COCOAPODS: 1.11.3
