@@ -156,7 +156,7 @@ export const Map = (props: MapProps) => {
         <View style={controlStyles.controlsContainer}>
           {(props.vehicles || props.stations) && (
             <MapFilter
-              onFilterChange={onFilterChange}
+              onFilterChanged={onFilterChange}
               isLoading={
                 (props.vehicles?.isLoading || props.stations?.isLoading) ??
                 false

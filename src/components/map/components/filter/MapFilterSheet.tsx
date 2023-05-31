@@ -8,7 +8,7 @@ import {
 } from '@atb/translations';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {MapFilterType} from '../../types';
+import {MapFilterType, OperatorFilterType} from '../../types';
 import {useUserMapFilters} from '@atb/components/map';
 import {StyleSheet} from '@atb/theme';
 import {FullScreenFooter} from '@atb/components/screen-footer';
@@ -19,11 +19,11 @@ import {MobilityFilters} from '@atb/mobility/components/filter/MobilityFilters';
 
 type MapFilterSheetProps = {
   close: () => void;
-  onFilterChange: (filter: MapFilterType) => void;
+  onFilterChanged: (filter: MapFilterType) => void;
 };
 export const MapFilterSheet = ({
   close,
-  onFilterChange,
+  onFilterChanged,
 }: MapFilterSheetProps) => {
   const {t} = useTranslation();
   const style = useStyle();
@@ -46,6 +46,42 @@ export const MapFilterSheet = ({
     );
   }
 
+  const onScootersChanged = (operatorFilter: OperatorFilterType) => {
+    const newFilter = {
+      ...filter,
+      vehicles: {
+        ...filter?.vehicles,
+        scooters: operatorFilter,
+      },
+    };
+    setFilter(newFilter);
+    onFilterChanged(newFilter);
+  };
+
+  const onCityBikeStationsChanged = (operatorFilter: OperatorFilterType) => {
+    const newFilter = {
+      ...filter,
+      stations: {
+        ...filter?.stations,
+        cityBikeStations: operatorFilter,
+      },
+    };
+    setFilter(newFilter);
+    onFilterChanged(newFilter);
+  };
+
+  const onCarSharingStationsChanged = (operatorFilter: OperatorFilterType) => {
+    const newFilter = {
+      ...filter,
+      stations: {
+        ...filter?.stations,
+        carSharingStations: operatorFilter,
+      },
+    };
+    setFilter(newFilter);
+    onFilterChanged(newFilter);
+  };
+
   return (
     <BottomSheetContainer maxHeightValue={0.9}>
       <ScreenHeaderWithoutNavigation
@@ -59,8 +95,12 @@ export const MapFilterSheet = ({
       />
       <ScrollView style={style.container}>
         <MobilityFilters
-          initialFilter={initialFilter}
-          onFilterChanged={setFilter}
+          scooters={initialFilter.vehicles?.scooters}
+          cityBikeStations={initialFilter.stations?.cityBikeStations}
+          carSharingStations={initialFilter.stations?.carSharingStations}
+          onScootersChanged={onScootersChanged}
+          onCityBikeStationsChanged={onCityBikeStationsChanged}
+          onCarSharingStationsChanged={onCarSharingStationsChanged}
         />
       </ScrollView>
       <FullScreenFooter>
@@ -68,7 +108,7 @@ export const MapFilterSheet = ({
           text={t(TripSearchTexts.filters.bottomSheet.use)}
           onPress={() => {
             setMapFilter(filter);
-            onFilterChange(filter);
+            onFilterChanged(filter);
             close();
           }}
           rightIcon={{svg: Confirm}}
