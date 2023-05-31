@@ -73,7 +73,7 @@ const MobileTokenOnboardingTexts = {
     optionsInfo: {
       heading: _('Bruk din mobil', 'Use your phone'),
       description: _(
-        'Du kan bruke billetten din på en mobil med appen AtB installert — men kun en av gangen.',
+        'Du kan bruke billetten din på en mobil med appen AtB installert — men kun én av gangen.',
         'You can use your ticket on a phone with the app AtB installed — but only one at a time.',
       ),
     },
@@ -146,7 +146,7 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
     withoutTravelcard: {
       optionsInfo: {
         description: _(
-          'Du kan bruke billetten din på en mobil med Reis-appen installert — men kun en av gangen.',
+          'Du kan bruke billetten din på en mobil med Reis-appen installert — men kun én av gangen.',
           'You can use your ticket on a phone with the Reis app installed — but only one at a time.',
         ),
       },
