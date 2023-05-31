@@ -48,9 +48,7 @@ export const getVehicle = (
   const url = '/bff/v2/mobility/vehicle';
   const query = qs.stringify({ids: id});
   return client
-    .get<GetVehicleQuery>(stringifyUrl(url, query), {
-      ...opts,
-    })
+    .get<GetVehicleQuery>(stringifyUrl(url, query), opts)
     .then((res) => res.data.vehicles?.[0]);
 };
 
@@ -67,9 +65,7 @@ export const getStations = (
     operators,
   });
   return client
-    .get<GetStationsQuery>(stringifyUrl(url, query), {
-      ...opts,
-    })
+    .get<GetStationsQuery>(stringifyUrl(url, query), opts)
     .then((res) => res.data.stations ?? []);
 };
 
@@ -80,10 +76,8 @@ export const getBikeStation = (
   const url = '/bff/v2/mobility/station/bike';
   const query = qs.stringify({ids: id});
   return client
-    .get<GetBikeStationQuery>(stringifyUrl(url, query), {
-      ...opts,
-    })
-    .then((res) => (res.data.stations ? res.data.stations[0] : undefined));
+    .get<GetBikeStationQuery>(stringifyUrl(url, query), opts)
+    .then((res) => res.data.stations?.[0]);
 };
 
 export const getCarStation = (
@@ -93,8 +87,6 @@ export const getCarStation = (
   const url = '/bff/v2/mobility/station/car';
   const query = qs.stringify({ids: id});
   return client
-    .get<GetCarStationQuery>(stringifyUrl(url, query), {
-      ...opts,
-    })
+    .get<GetCarStationQuery>(stringifyUrl(url, query), opts)
     .then((res) => res.data.stations?.[0]);
 };
