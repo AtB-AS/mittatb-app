@@ -65,11 +65,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = (props) => {
     <View />
   );
 
-  return (
-    <Animated.View style={{opacity: props.textOpacity}}>
-      <BaseHeader leftIcon={leftIcon} rightIcon={rightIcon} {...props} />
-    </Animated.View>
-  );
+  return <BaseHeader leftIcon={leftIcon} rightIcon={rightIcon} {...props} />;
 };
 
 type ScreenHeaderWithoutNavigationProps = ScreenHeaderProps & {
@@ -114,6 +110,7 @@ const BaseHeader = ({
   globalMessageContext,
   leftIcon,
   rightIcon,
+  textOpacity,
 }: BaseHeaderProps) => {
   const css = useHeaderStyle();
   const {theme, themeName} = useTheme();
@@ -141,14 +138,16 @@ const BaseHeader = ({
         onLayout={setLayoutFor('container')}
         ref={focusRef}
       >
-        <ThemeText
-          accessible={false}
-          onLayout={setLayoutFor('title')}
-          type="body__primary--bold"
-          color={themeColor}
-        >
-          {title ?? '\u00a0'}
-        </ThemeText>
+        <Animated.View style={{opacity: textOpacity}}>
+          <ThemeText
+            accessible={false}
+            onLayout={setLayoutFor('title')}
+            type="body__primary--bold"
+            color={themeColor}
+          >
+            {title ?? '\u00a0'}
+          </ThemeText>
+        </Animated.View>
       </View>
 
       <View
