@@ -9,8 +9,14 @@ import {useFavorites, UserFavoriteDepartures} from '@atb/favorites';
 import {DeparturesRealtimeData} from '@atb/sdk';
 import {animateNextChange} from '@atb/utils/animation';
 import {useInterval} from '@atb/utils/use-interval';
-import {differenceInMinutes} from 'date-fns';
-import {useCallback, useEffect, useState} from 'react';
+import {differenceInMinutes, differenceInSeconds} from 'date-fns';
+import {
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import useReducerWithSideEffects, {
   NoUpdate,
   ReducerWithSideEffects,
@@ -23,7 +29,6 @@ import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {getLimitOfDeparturesPerLineByMode, getTimeRangeByMode} from '../utils';
 import {TimeoutRequest, useTimeoutRequest} from '@atb/api/client';
 import {AxiosRequestConfig} from 'axios';
-import {useRefreshOnFocus} from '@atb/utils/use-refresh-on-focus';
 import {flatMap} from '@atb/utils/array';
 import {DepartureRealtimeQuery} from '@atb/api/departures/departure-group';
 
@@ -37,7 +42,6 @@ export type DepartureDataState = {
   error?: {type: ErrorType};
   locationId?: string[];
   isLoading: boolean;
-  lastRefreshTime: Date;
 };
 
 const initialState: DepartureDataState = {
@@ -45,7 +49,6 @@ const initialState: DepartureDataState = {
   error: undefined,
   locationId: undefined,
   isLoading: false,
-  lastRefreshTime: new Date(),
 
   // Store date as update tick to know when to rerender
   // and re-sort objects.
@@ -62,6 +65,8 @@ type DepartureDataActions =
       limitPerLine?: number;
       timeRange?: number;
       timeout: TimeoutRequest;
+      lastHardRefreshTime: MutableRefObject<Date>;
+      lastRealtimeRefreshTime: MutableRefObject<Date>;
     }
   | {
       type: 'LOAD_REALTIME_DATA';
@@ -71,6 +76,7 @@ type DepartureDataActions =
       limitPerLine?: number;
       timeRange: number;
       favoriteDepartures?: UserFavoriteDepartures;
+      lastRealtimeRefreshTime: MutableRefObject<Date>;
     }
   | {
       type: 'STOP_LOADER';
@@ -129,6 +135,8 @@ const reducer: ReducerWithSideEffects<
               },
             );
             action.timeout.clear();
+            action.lastHardRefreshTime.current = new Date();
+            action.lastRealtimeRefreshTime.current = new Date();
             dispatch({
               type: 'UPDATE_DEPARTURES',
               reset: true,
@@ -166,6 +174,7 @@ const reducer: ReducerWithSideEffects<
         async (_, dispatch) => {
           try {
             const realtimeData = await getRealtimeDepartures(queryInput);
+            action.lastRealtimeRefreshTime.current = new Date();
             dispatch({
               type: 'UPDATE_REALTIME',
               realtimeData,
@@ -187,9 +196,6 @@ const reducer: ReducerWithSideEffects<
     case 'TICK_TICK': {
       return Update<DepartureDataState>({
         ...state,
-
-        // We set lastUpdated here to count as a "tick" to
-        // know when to update components while still being performant.
         tick: new Date(),
       });
     }
@@ -202,7 +208,6 @@ const reducer: ReducerWithSideEffects<
         locationId: action.locationId,
         data: action.result,
         tick: new Date(),
-        lastRefreshTime: new Date(),
       });
     }
 
@@ -211,9 +216,6 @@ const reducer: ReducerWithSideEffects<
       return Update<DepartureDataState>({
         ...state,
         data: updateDeparturesWithRealtimeV2(state.data, action.realtimeData),
-
-        // We set lastUpdated here to count as a "tick" to
-        // know when to update components while still being performant.
         tick: new Date(),
       });
     }
@@ -247,6 +249,8 @@ export function useDeparturesData(
   const {favoriteDepartures} = useFavorites();
   const [queryStartTime, setQueryStartTime] = useState<string | undefined>();
   const [timeRange, setTimeRange] = useState<number | undefined>();
+  const lastHardRefreshTime = useRef<Date>(new Date());
+  const lastRealtimeRefreshTime = useRef<Date>(new Date());
   const activeFavoriteDepartures = showOnlyFavorites
     ? favoriteDepartures
     : undefined;
@@ -268,6 +272,8 @@ export function useDeparturesData(
       timeRange: updatedTimeRange,
       favoriteDepartures: activeFavoriteDepartures,
       timeout,
+      lastHardRefreshTime,
+      lastRealtimeRefreshTime,
     });
   }, [JSON.stringify(quayIds), startTime, activeFavoriteDepartures, mode]);
 
@@ -281,6 +287,7 @@ export function useDeparturesData(
       limitPerQuay,
       timeRange,
       favoriteDepartures: activeFavoriteDepartures,
+      lastRealtimeRefreshTime,
     });
   }, [
     JSON.stringify(quayIds),
@@ -296,33 +303,34 @@ export function useDeparturesData(
     return () => timeout.abort();
   }, [loadDepartures]);
   useEffect(() => {
-    if (!state.tick) {
-      return;
-    }
-    const diff = differenceInMinutes(state.tick, state.lastRefreshTime);
+    if (!state.tick) return;
 
-    if (diff >= HARD_REFRESH_LIMIT_IN_MINUTES) {
+    const timeSinceLastHardRefresh = differenceInMinutes(
+      state.tick,
+      lastHardRefreshTime.current,
+    );
+    const timeSinceLastRealtimeRefresh = differenceInSeconds(
+      state.tick,
+      lastRealtimeRefreshTime.current,
+      // Rounding up makes ticks 10, 20 and 30s instead of 9, 19, and 29
+      {roundingMethod: 'ceil'},
+    );
+
+    if (timeSinceLastHardRefresh >= HARD_REFRESH_LIMIT_IN_MINUTES) {
       loadDepartures();
+    } else if (timeSinceLastRealtimeRefresh >= updateFrequencyInSeconds) {
+      loadRealTimeData();
     }
-  }, [state.tick, state.lastRefreshTime]);
+  }, [state.tick]);
   useInterval(
-    loadRealTimeData,
-    updateFrequencyInSeconds * 1000,
-    [JSON.stringify(quayIds)],
-    !isFocused || mode === 'Favourite',
-  );
-  useInterval(
-    () => dispatch({type: 'TICK_TICK'}),
+    () => {
+      if (isFocused) dispatch({type: 'TICK_TICK'});
+    },
     tickRateInSeconds * 1000,
-    [],
+    [isFocused],
     !isFocused || mode === 'Favourite',
-  );
-  useRefreshOnFocus(
-    isFocused,
-    state.tick,
-    HARD_REFRESH_LIMIT_IN_MINUTES * 60,
-    loadDepartures,
-    loadRealTimeData,
+    // Trigger immediately on focus only if the view is already initialized
+    !!state.tick,
   );
 
   return {
