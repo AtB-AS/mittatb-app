@@ -8,15 +8,18 @@ import React from 'react';
 import {StaticColorByType} from '@atb/theme/colors';
 import {CrashSmall} from '@atb/assets/svg/color/images';
 import {useAppState} from '@atb/AppContext';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export function NoTokenInfo({close}: {close: () => void}): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const {completeMobileTokenOnboarding} = useAppState();
+  const {
+    completeMobileTokenOnboarding,
+    completeMobileTokenWithoutTravelcardOnboarding,
+  } = useAppState();
   const {disable_travelcard} = useRemoteConfig();
 
   return (
@@ -47,7 +50,9 @@ export function NoTokenInfo({close}: {close: () => void}): JSX.Element {
             <Button
               interactiveColor="interactive_0"
               onPress={() => {
-                completeMobileTokenOnboarding();
+                disable_travelcard
+                  ? completeMobileTokenWithoutTravelcardOnboarding()
+                  : completeMobileTokenOnboarding();
                 close();
               }}
               text={t(MobileTokenOnboardingTexts.next)}

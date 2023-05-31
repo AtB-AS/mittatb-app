@@ -4,6 +4,7 @@ import {InspectableTokenInfo} from './components/InspectableTokenInfo';
 import {NoTokenInfo} from './components/NoTokenInfo';
 import React from 'react';
 import {MobileTokenOnboardingScreenProps} from './navigation_types';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 type Props =
   MobileTokenOnboardingScreenProps<'MobileTokenOnboarding_CurrentTokenScreen'>;

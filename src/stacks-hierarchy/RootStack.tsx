@@ -40,7 +40,6 @@ import {Root_TipsAndInformation} from '@atb/stacks-hierarchy/Root_TipsAndInforma
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
 import {Root_CarnetDetailsScreen} from '@atb/stacks-hierarchy/Root_CarnetDetailsScreen';
 import {Root_ReceiptScreen} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
-import {Root_MobileTokenWithoutTravelcardOnboardingStack} from '@atb/stacks-hierarchy/Root_MobileTokenWithoutTravelcardOnboarding';
 import {AnalyticsContextProvider} from '@atb/analytics';
 
 type ResultState = PartialState<NavigationState> & {
@@ -322,10 +321,6 @@ export const RootStack = () => {
                   <Stack.Screen
                     name="Root_MobileTokenOnboardingStack"
                     component={Root_MobileTokenOnboardingStack}
-                  />
-                  <Stack.Screen
-                    name="Root_MobileTokenWithoutTravelcardOnboardingStack"
-                    component={Root_MobileTokenWithoutTravelcardOnboardingStack}
                   />
                   <Stack.Screen
                     name="Root_AddEditFavoritePlaceScreen"

@@ -28,7 +28,10 @@ export function InspectableTokenInfo({
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
-  const {completeMobileTokenOnboarding} = useAppState();
+  const {
+    completeMobileTokenOnboarding,
+    completeMobileTokenWithoutTravelcardOnboarding,
+  } = useAppState();
   const {disable_travelcard} = useRemoteConfig();
 
   return (
@@ -69,7 +72,9 @@ export function InspectableTokenInfo({
           <View style={styles.buttons}>
             <Button
               onPress={() => {
-                completeMobileTokenOnboarding();
+                disable_travelcard
+                  ? completeMobileTokenWithoutTravelcardOnboarding()
+                  : completeMobileTokenOnboarding();
                 close();
               }}
               text={t(MobileTokenOnboardingTexts.ok)}
@@ -80,7 +85,9 @@ export function InspectableTokenInfo({
               interactiveColor="interactive_1"
               mode="secondary"
               onPress={() => {
-                completeMobileTokenOnboarding();
+                disable_travelcard
+                  ? completeMobileTokenWithoutTravelcardOnboarding()
+                  : completeMobileTokenOnboarding();
                 navigateToSelectToken();
               }}
               text={

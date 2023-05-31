@@ -1,10 +1,7 @@
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import {useAuthState} from '@atb/auth';
 import {useAppState} from '@atb/AppContext';
-import {
-  shouldOnboardMobileToken,
-  shouldOnboardMobileTokenWithoutTravelcard,
-} from '@atb/api/utils';
+import {shouldOnboardMobileToken} from '@atb/api/utils';
 import {useNavigation} from '@react-navigation/native';
 import {useEffect} from 'react';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
@@ -22,21 +19,13 @@ export const useGoToMobileTokenOnboardingWhenNecessary = () => {
     hasEnabledMobileToken,
     authenticationType,
     mobileTokenOnboarded,
+    mobileTokenWithoutTravelcardOnboarded,
     disable_travelcard,
   );
-  const shouldOnboardWithoutTravelcard =
-    shouldOnboardMobileTokenWithoutTravelcard(
-      hasEnabledMobileToken,
-      authenticationType,
-      mobileTokenWithoutTravelcardOnboarded,
-      disable_travelcard,
-    );
 
   useEffect(() => {
-    if (shouldOnboardWithoutTravelcard) {
-      navigation.navigate('Root_MobileTokenWithoutTravelcardOnboardingStack');
-    } else if (shouldOnboard) {
+    if (shouldOnboard) {
       navigation.navigate('Root_MobileTokenOnboardingStack');
     }
-  }, [shouldOnboardWithoutTravelcard, shouldOnboard]);
+  }, [shouldOnboard]);
 };
