@@ -25,7 +25,7 @@ import {secondsBetween} from '@atb/utils/date';
 import {useInterval} from '@atb/utils/use-interval';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import MapboxGL from '@rnmapbox/maps';
-import {CircleLayerStyleProps} from '@rnmapbox/maps/javascript/utils/MapboxStyles';
+import {CircleLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
@@ -33,6 +33,8 @@ import {TouchableOpacity} from 'react-native';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
+
+import {BusLiveArrow} from '@atb/assets/svg/mono-icons/navigation';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
@@ -91,6 +93,7 @@ export const TravelDetailsMapScreenComponent = ({
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
   const [zoomLevel, setZoomLevel] = useState<number>(FOLLOW_ZOOM_LEVEL);
+  const [heading, setHeading] = useState<number>(0);
 
   useEffect(() => {
     const location = vehicle?.location;
@@ -114,7 +117,10 @@ export const TravelDetailsMapScreenComponent = ({
         onTouchMove={() => {
           setShouldTrack(false);
         }}
-        onRegionIsChanging={(event) => setZoomLevel(event.properties.zoomLevel)}
+        onCameraChanged={(event) => {
+          setHeading(event.properties.heading);
+          console.log('heading', event.properties.heading);
+        }}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
@@ -148,6 +154,7 @@ export const TravelDetailsMapScreenComponent = ({
             subMode={subMode}
             subscriptionState={subscriptionState}
             zoomLevel={zoomLevel}
+            heading={heading}
           />
         )}
       </MapboxGL.MapView>
@@ -187,8 +194,10 @@ const LiveVehicle = ({
   subMode,
   subscriptionState,
   zoomLevel,
+  heading,
 }: VehicleIconProps) => {
   const {theme} = useTheme();
+  const fillColor = useTransportationColor(mode, subMode, 'background');
   const {live_vehicle_stale_threshold} = useRemoteConfig();
 
   const isError =
@@ -236,19 +245,28 @@ const LiveVehicle = ({
     };
   })();
 
-  if (!vehicle.location || zoomLevel < FOLLOW_MIN_ZOOM_LEVEL) return null;
+  if (
+    !vehicle.location ||
+    zoomLevel < FOLLOW_MIN_ZOOM_LEVEL ||
+    vehicle.bearing === undefined
+  )
+    return null;
+
+  const bearingRadians = ((90 - vehicle.bearing + heading) * Math.PI) / 180; // start at 90 degrees, go counter clockwise and convert from degrees to radians
+  const directionArrowOffsetFromCenter = 28;
+
   return (
     <>
       <MapboxGL.ShapeSource id="liveVehicle" shape={pointOf(vehicle.location)}>
         <MapboxGL.CircleLayer id="liveVehicleCircle" style={circleStyle} />
       </MapboxGL.ShapeSource>
       <MapboxGL.MarkerView
-        id="liveVehicleIcon"
+        //id="liveVehicleIcon"
         coordinate={[vehicle.location.longitude, vehicle.location.latitude]}
         allowOverlap={true}
       >
         <TouchableOpacity
-          style={{padding: 20}}
+          style={{position: 'absolute'}}
           onPressOut={() => setShouldTrack(true)}
         >
           <LiveVehicleIcon
@@ -259,6 +277,45 @@ const LiveVehicle = ({
             isLoading={isLoading}
           />
         </TouchableOpacity>
+
+        <View
+          style={{
+            transform: [
+              {
+                translateX:
+                  Math.cos(bearingRadians) * directionArrowOffsetFromCenter,
+              },
+              {
+                translateY:
+                  -Math.sin(bearingRadians) * directionArrowOffsetFromCenter,
+              },
+            ],
+          }}
+        >
+          <View
+            style={{
+              transform: [
+                {rotate: `${vehicle.bearing - heading} deg`},
+                {scale: 1.8},
+              ],
+              shadowColor: '#000000',
+              shadowOffset: {width: 0, height: 2},
+              shadowOpacity: 0.2,
+              shadowRadius: 2,
+            }}
+          >
+            <ThemeIcon
+              svg={BusLiveArrow}
+              fill={
+                isError
+                  ? theme.interactive.interactive_destructive.default.background
+                  : isStale
+                  ? theme.interactive.interactive_1.default.background
+                  : fillColor
+              }
+            />
+          </View>
+        </View>
       </MapboxGL.MarkerView>
     </>
   );
