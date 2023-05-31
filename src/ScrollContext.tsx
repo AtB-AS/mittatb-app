@@ -9,7 +9,6 @@ export interface ScrollContextInterface {
   titleShowing: boolean;
   updateOffset(val: number): void;
 }
-// ScrollContext definition with default values
 
 export interface ChildProps {
   children: any;
@@ -23,7 +22,7 @@ export const ScrollContext = createContext<ScrollContextInterface>({
   maxOffset: 0,
   offset: 0,
   titleShowing: false,
-  updateOffset: (val: number) => {},
+  updateOffset: () => {},
 });
 
 export const useScroller = () => useContext(ScrollContext);
