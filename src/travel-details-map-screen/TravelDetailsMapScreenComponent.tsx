@@ -119,7 +119,7 @@ export const TravelDetailsMapScreenComponent = ({
         }}
         onCameraChanged={(event) => {
           setHeading(event.properties.heading);
-          console.log('heading', event.properties.heading);
+          setZoomLevel(event.properties.zoom);
         }}
       >
         <MapboxGL.Camera
@@ -185,6 +185,7 @@ type VehicleIconProps = {
   setShouldTrack: React.Dispatch<React.SetStateAction<boolean>>;
   subscriptionState: SubscriptionState;
   zoomLevel: number;
+  heading: number;
 };
 
 const LiveVehicle = ({
@@ -263,59 +264,62 @@ const LiveVehicle = ({
       <MapboxGL.MarkerView
         //id="liveVehicleIcon"
         coordinate={[vehicle.location.longitude, vehicle.location.latitude]}
-        allowOverlap={true}
+        //allowOverlap={true}
       >
-        <TouchableOpacity
-          style={{position: 'absolute'}}
-          onPressOut={() => setShouldTrack(true)}
-        >
-          <LiveVehicleIcon
-            mode={mode}
-            subMode={subMode}
-            isError={isError}
-            isStale={isStale}
-            isLoading={isLoading}
-          />
-        </TouchableOpacity>
+        <>
+          <TouchableOpacity
+            style={{position: 'absolute'}}
+            onPressOut={() => setShouldTrack(true)}
+          >
+            <LiveVehicleIcon
+              mode={mode}
+              subMode={subMode}
+              isError={isError}
+              isStale={isStale}
+              isLoading={isLoading}
+            />
+          </TouchableOpacity>
 
-        <View
-          style={{
-            transform: [
-              {
-                translateX:
-                  Math.cos(bearingRadians) * directionArrowOffsetFromCenter,
-              },
-              {
-                translateY:
-                  -Math.sin(bearingRadians) * directionArrowOffsetFromCenter,
-              },
-            ],
-          }}
-        >
           <View
             style={{
               transform: [
-                {rotate: `${vehicle.bearing - heading} deg`},
-                {scale: 1.8},
+                {
+                  translateX:
+                    Math.cos(bearingRadians) * directionArrowOffsetFromCenter,
+                },
+                {
+                  translateY:
+                    -Math.sin(bearingRadians) * directionArrowOffsetFromCenter,
+                },
               ],
-              shadowColor: '#000000',
-              shadowOffset: {width: 0, height: 2},
-              shadowOpacity: 0.2,
-              shadowRadius: 2,
             }}
           >
-            <ThemeIcon
-              svg={BusLiveArrow}
-              fill={
-                isError
-                  ? theme.interactive.interactive_destructive.default.background
-                  : isStale
-                  ? theme.interactive.interactive_1.default.background
-                  : fillColor
-              }
-            />
+            <View
+              style={{
+                transform: [
+                  {rotate: `${vehicle.bearing - heading} deg`},
+                  {scale: 1.8},
+                ],
+                shadowColor: '#000000',
+                shadowOffset: {width: 0, height: 2},
+                shadowOpacity: 0.2,
+                shadowRadius: 2,
+              }}
+            >
+              <ThemeIcon
+                svg={BusLiveArrow}
+                fill={
+                  isError
+                    ? theme.interactive.interactive_destructive.default
+                        .background
+                    : isStale
+                    ? theme.interactive.interactive_1.default.background
+                    : fillColor
+                }
+              />
+            </View>
           </View>
-        </View>
+        </>
       </MapboxGL.MarkerView>
     </>
   );
