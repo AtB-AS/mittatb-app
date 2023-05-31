@@ -340,14 +340,10 @@ const LiveVehicleIcon = ({
   const {theme} = useTheme();
   const fillColor = useTransportationColor(mode, subMode, 'text');
   const svg = getTransportModeSvg(mode, subMode);
-  const iOS_scaleBackDown = {
-    transform: [{scale: Platform.OS === 'android' ? 1 : 0.55}],
-  }; // due to android arrow bugfix, need to scale iOS back down. Should maybe be 0.5, but it 0.55 looks better?
 
   if (isError)
     return (
       <ThemeIcon
-        style={iOS_scaleBackDown}
         svg={svg}
         fill={theme.interactive.interactive_destructive.default.background}
       />
@@ -359,7 +355,7 @@ const LiveVehicleIcon = ({
       />
     );
 
-  return <ThemeIcon style={iOS_scaleBackDown} svg={svg} fill={fillColor} />;
+  return <ThemeIcon svg={svg} fill={fillColor} />;
 };
 
 const useStyles = StyleSheet.createThemeHook(() => ({
