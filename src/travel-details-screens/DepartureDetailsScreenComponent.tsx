@@ -151,7 +151,7 @@ export const DepartureDetailsScreenComponent = ({
                     onPress={() => {
                       vehiclePosition &&
                         analytics.logEvent(
-                          'Trip search',
+                          'Departure details',
                           'See live bus clicked',
                           {
                             fromPlace: mapData.start,
