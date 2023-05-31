@@ -1,4 +1,5 @@
 import {
+  Animated,
   LayoutChangeEvent,
   LayoutRectangle,
   View,
@@ -47,6 +48,7 @@ export type ScreenHeaderProps = {
   style?: ViewStyle;
   color?: StaticColor;
   setFocusOnLoad?: boolean;
+  textOpacity?: Animated.Value;
 };
 
 export const ScreenHeader: React.FC<ScreenHeaderProps> = (props) => {
@@ -63,7 +65,11 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = (props) => {
     <View />
   );
 
-  return <BaseHeader leftIcon={leftIcon} rightIcon={rightIcon} {...props} />;
+  return (
+    <Animated.View style={{opacity: props.textOpacity}}>
+      <BaseHeader leftIcon={leftIcon} rightIcon={rightIcon} {...props} />
+    </Animated.View>
+  );
 };
 
 type ScreenHeaderWithoutNavigationProps = ScreenHeaderProps & {
