@@ -1,6 +1,6 @@
 import {TravelSearchTransportModes} from '@atb-as/config-specs';
 import {CancelToken, isCancel} from '@atb/api';
-import {tripsSearch} from '@atb/api/trips_v2';
+import {tripsSearch} from '@atb/api/trips';
 import {
   Modes,
   TransportMode,
