@@ -7,7 +7,7 @@ export type OnboardingStackParams = {
   Onboarding_IntercomInfoScreen: undefined;
   Onboarding_AnonymousPurchaseConsequencesScreen: undefined;
   Onboarding_GoodToKnowScreen: undefined;
-  Onboarding_AlsoGoodtToKnowScreen: undefined;
+  Onboarding_AlsoGoodToKnowScreen: undefined;
 };
 
 export type OnboardingStackRootProps =
