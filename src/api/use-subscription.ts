@@ -30,13 +30,13 @@ export function useSubscription({
 
   const [reconnectCount, setReconnectCount] = useState(0);
   const [retryCount, setRetryCount] = useState(0);
-  let retryTimeout: NodeJS.Timeout | null = null;
   const exponentialBackoff = () => {
     const delay = Math.pow(2, retryCount) * 1000;
     return setTimeout(() => setRetryCount(retryCount + 1), delay);
   };
 
   useEffect(() => {
+    let retryTimeout: NodeJS.Timeout | null = null;
     if (url) {
       const webSocket = new WebSocket(url);
 
