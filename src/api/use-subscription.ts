@@ -29,8 +29,10 @@ export function useSubscription({
   const [webSocket, setWebSocket] = useState<WebSocket | null>(null);
 
   const [reconnectCount, setReconnectCount] = useState(0);
+  const reconnect = () => setReconnectCount(reconnectCount + 1);
+
   const [retryCount, setRetryCount] = useState(0);
-  const exponentialBackoff = () => {
+  const retryWithExponentialBackoff = () => {
     const delay = Math.pow(2, retryCount) * 1000;
     return setTimeout(() => setRetryCount(retryCount + 1), delay);
   };
@@ -58,9 +60,9 @@ export function useSubscription({
         // Reconnect immediately if close event is end of stream, otherwise use
         // exponetial backoff to retry.
         if (event.code === 1001 && reconnectCount < MAX_NUMBER_OF_RECONNECTS) {
-          setReconnectCount(reconnectCount + 1);
+          reconnect();
         } else if (retryCount < MAX_NUMBER_OF_RETRIES) {
-          retryTimeout = exponentialBackoff();
+          retryTimeout = retryWithExponentialBackoff();
         }
 
         onClose && onClose(event);
