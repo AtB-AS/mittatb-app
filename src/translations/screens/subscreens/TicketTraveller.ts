@@ -17,12 +17,12 @@ const SpecificExtensionsInternal = {
   periodStudent: _('Gyldig på nattbuss.', 'Valid for night bus. '),
   periodSenior: _('Gyldig på nattbuss.', 'Valid for night bus.'),
   travelpassAdult: _(
-    'For Sommerpass er voksen over 18 år.',
-    'For Summer Pass, adults are aged 18 or older.',
+    'Egne aldersgrenser kan gjelde for SommerPass',
+    'Separate age limits may apply for SommerPass',
   ),
   travelpassChild: _(
-    'For Sommerpass er barn under 18 år.',
-    'For Summer Pass, children are aged 17 or below.',
+    'Egne aldersgrenser kan gjelde for SommerPass',
+    'Separate age limits may apply for SommerPass',
   ),
 };
 
