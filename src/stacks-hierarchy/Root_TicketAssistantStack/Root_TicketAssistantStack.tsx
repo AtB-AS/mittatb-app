@@ -21,7 +21,6 @@ import {TicketAssistantContextProvider} from './TicketAssistantContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Platform} from 'react-native';
-import {useAnalytics} from '@atb/analytics';
 
 const Tab = createMaterialTopTabNavigator<TicketAssistantStackParams>();
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -30,7 +29,6 @@ type Props = RootStackScreenProps<'Root_TicketAssistantStack'>;
 export const Root_TicketAssistantStack = ({navigation}: Props) => {
   const [activeTab, setActiveTab] = useState(0);
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
-  const analytics = useAnalytics();
   const {theme} = useTheme();
   const [previousTab, setPreviousTab] = useState<any>();
   return (
@@ -40,13 +38,7 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
           activeTab === 0
             ? {
                 type: 'close',
-                onPress: () => {
-                  navigation.pop();
-                  analytics.logEvent(
-                    'Ticket assistant',
-                    'Closed from welcome screen',
-                  );
-                },
+                analyticsEventContext: 'Ticket assistant',
               }
             : {
                 type: 'back',
