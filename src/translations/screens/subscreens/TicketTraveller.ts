@@ -16,18 +16,36 @@ const SpecificExtensionsInternal = {
   periodChild: _('Gyldig på nattbuss.', 'Valid for night bus.'),
   periodStudent: _('Gyldig på nattbuss.', 'Valid for night bus. '),
   periodSenior: _('Gyldig på nattbuss.', 'Valid for night bus.'),
+  travelpassAdult: _(
+    'For Sommerpass er voksen over 18 år.',
+    'For Summer Pass, adults are aged 18 or older.',
+  ),
+  travelpassChild: _(
+    'For Sommerpass er barn under 18 år.',
+    'For Summer Pass, children are aged 17 or below.',
+  ),
 };
 
 const SpecificExtensions = orgSpecificTranslations(SpecificExtensionsInternal, {
   nfk: {
     singleChild: _('', ''),
     periodAdult: _('Gyldig på nattbuss.', 'Valid for night bus.'),
+    travelpassAdult: _(
+      'For Travel Pass Nordland er voksen over 18 år.',
+      'For Travel Pass Nordland, adults are aged 18 or older.',
+    ),
+    travelpassChild: _(
+      'For Travel Pass Nordland er barn til og med 17 år.',
+      'For Travel Pass Nordland, children are aged 17 or below.',
+    ),
   },
   fram: {
     singleChild: _('', ''),
     periodChild: _('', ''),
     periodStudent: _('', ''),
     periodSenior: _('', ''),
+    travelpassAdult: _('', ''),
+    travelpassChild: _('', ''),
   },
 });
 
@@ -55,6 +73,15 @@ function specificOverrides(
           return SpecificExtensions.periodStudent;
         case TravellerType.senior:
           return SpecificExtensions.periodSenior;
+        default:
+          return _('', '');
+      }
+    case 'travel-pass':
+      switch (travellerType) {
+        case TravellerType.adult:
+          return SpecificExtensions.travelpassAdult;
+        case TravellerType.child:
+          return SpecificExtensions.travelpassChild;
         default:
           return _('', '');
       }
