@@ -8,4 +8,5 @@ export type AnalyticsEventContext =
   | 'Receipt'
   | 'Ticketing'
   | 'Trip details'
-  | 'Trip search';
+  | 'Trip search'
+  | 'Ticket assistant';

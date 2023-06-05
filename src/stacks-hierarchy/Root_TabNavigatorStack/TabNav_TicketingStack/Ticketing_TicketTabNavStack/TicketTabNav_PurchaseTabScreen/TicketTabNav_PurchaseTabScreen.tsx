@@ -121,7 +121,10 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         <FareProducts onProductSelect={onProductSelect} />
         {showTicketAssistant && (
           <TicketAssistantTile
-            onPress={() => navigation.navigate('Root_TicketAssistantStack')}
+            onPress={() => {
+              analytics.logEvent('Ticketing', 'Ticket assistant opened');
+              navigation.navigate('Root_TicketAssistantStack');
+            }}
             testID="ticketAssistant"
           />
         )}
