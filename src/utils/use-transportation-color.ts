@@ -25,6 +25,12 @@ export const useThemeColorForTransportMode = (
       if (subMode === 'localBus') return 'transport_city';
       if (subMode === 'airportLinkBus') return 'transport_airport_express';
       return 'transport_region';
+    case 'bicycle':
+      return 'transport_bike';
+    case 'car':
+      return 'transport_car';
+    case 'scooter':
+      return 'transport_scooter';
     case 'rail':
       if (subMode === 'airportLinkRail') return 'transport_airport_express';
       return 'transport_train';
