@@ -26,10 +26,7 @@ export async function getRecommendedTicket(
         ...ticket,
         productId: ticket.product_id,
         fareProduct: ticket.fare_product,
-        traveller: {
-          id: ticket.traveller.id,
-          userType: ticket.traveller.user_type,
-        },
+        userProfileId: ticket.user_profile_id,
       })),
       zones: apiResponse.zones,
       singleTicketPrice: apiResponse.single_ticket_price,
@@ -47,7 +44,7 @@ type RecommendedTicketResponseRaw = {
       duration: number;
       quantity: number;
       price: number;
-      traveller: {id: string; user_type: string};
+      user_profile_id: string;
     },
   ];
   zones: string[];
