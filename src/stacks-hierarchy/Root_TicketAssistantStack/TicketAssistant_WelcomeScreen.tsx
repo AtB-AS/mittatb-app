@@ -8,6 +8,8 @@ import {Button} from '@atb/components/button';
 import {StaticColorByType} from '@atb/theme/colors';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
 
 export const themeColor: StaticColorByType<'background'> =
   'background_accent_0';
@@ -49,13 +51,21 @@ export const TicketAssistant_WelcomeScreen = ({
         >
           {t(TicketAssistantTexts.welcome.description)}
         </ThemeText>
-        <ThemeText
-          style={styles.boatInfo}
-          type={'body__secondary'}
-          color={themeColor}
+
+        <View
+          style={styles.notice}
+          accessible={true}
+          accessibilityLabel={t(TicketAssistantTexts.welcome.boatInfo)}
         >
-          {t(TicketAssistantTexts.welcome.boatInfo)}
-        </ThemeText>
+          <ThemeIcon style={styles.icon} svg={SvgInfo} />
+          <ThemeText
+            style={styles.noticeText}
+            type={'body__tertiary'}
+            color={themeColor}
+          >
+            {t(TicketAssistantTexts.welcome.boatInfo)}
+          </ThemeText>
+        </View>
       </View>
       <View style={styles.bottomView}>
         <Button
@@ -91,6 +101,19 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.medium,
     marginHorizontal: theme.spacings.xLarge,
     textAlign: 'center',
+  },
+  notice: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: theme.spacings.large,
+    marginHorizontal: theme.spacings.xLarge,
+  },
+  noticeText: {
+    textAlign: 'left',
+    flexShrink: 1,
+  },
+  icon: {
+    marginRight: theme.spacings.small,
   },
   boatInfo: {
     marginTop: theme.spacings.medium,
