@@ -1,9 +1,9 @@
 import {Language, translation as _} from '../../commons';
 import {APP_ORG} from '@env';
 import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
-import { UserProfileWithCount } from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
-import { TFunc } from '@leile/lobo-t';
-import { getTextForLanguage } from '@atb/translations/utils';
+import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
+import {TFunc} from '@leile/lobo-t';
+import {getTextForLanguage} from '@atb/translations/utils';
 
 enum TravellerType {
   adult = 'ADULT',
