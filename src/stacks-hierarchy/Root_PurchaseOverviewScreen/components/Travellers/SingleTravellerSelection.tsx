@@ -4,7 +4,6 @@ import {
   useTranslation,
   TicketTravellerTexts,
   PurchaseOverviewTexts,
-  getTextForLanguage,
 } from '@atb/translations';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {usePreferences} from '@atb/preferences';
@@ -32,7 +31,12 @@ export function SingleTravellerSelection({
   function travellerInfoByFareProductType(fareProductType: string | undefined) {
     return (u: UserProfileWithCount) =>
       [
-        getTextForLanguage(u.alternativeDescriptions, language),
+        TicketTravellerTexts.userProfileDescription(
+          u,
+          fareProductType,
+          language,
+          t,
+        ),
         t(TicketTravellerTexts.information(u.userTypeString, fareProductType)),
       ].join(' ');
   }

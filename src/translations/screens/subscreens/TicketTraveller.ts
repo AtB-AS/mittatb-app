@@ -1,6 +1,9 @@
-import {translation as _} from '../../commons';
+import {Language, translation as _} from '../../commons';
 import {APP_ORG} from '@env';
 import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
+import { UserProfileWithCount } from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
+import { TFunc } from '@leile/lobo-t';
+import { getTextForLanguage } from '@atb/translations/utils';
 
 enum TravellerType {
   adult = 'ADULT',
@@ -95,11 +98,42 @@ function generic(travellerType: string) {
   }
 }
 
+function specificUserProfileDescription(
+  travellerType: string,
+  ticketType: string | undefined,
+) {
+  if (ticketType === undefined) return false;
+  switch (ticketType) {
+    case 'travel-pass':
+      if (travellerType === TravellerType.adult) {
+        return _('Over 18 år', 'Age 18 or older');
+      } else if (travellerType === TravellerType.child) {
+        return _('Til og med 17 år', 'Age 17 or younger');
+      }
+      return false;
+    default:
+      return false;
+  }
+}
+
 const TicketTravellerTexts = {
   information: (travellerType: string, ticketType: string | undefined) => {
     return (
       specificOverrides(travellerType, ticketType) || generic(travellerType)
     );
+  },
+  userProfileDescription: (
+    userProfile: UserProfileWithCount,
+    ticketType: string | undefined,
+    language: Language,
+    t: TFunc<typeof Language>,
+  ) => {
+    const specificDescription = specificUserProfileDescription(
+      userProfile.userTypeString,
+      ticketType,
+    );
+    if (specificDescription) return t(specificDescription);
+    return getTextForLanguage(userProfile.alternativeDescriptions, language);
   },
 };
 
