@@ -9,7 +9,6 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {LoginInAppStackParams} from '@atb/login/types';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
@@ -52,6 +51,7 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {BetaTag} from '@atb/components/beta-tag';
+import {RootStackParamList} from '@atb/stacks-hierarchy';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -207,25 +207,15 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   ProfileTexts.sections.account.linkSectionItems.login.label,
                 )}
                 onPress={() => {
-                  let screen: keyof LoginInAppStackParams = 'PhoneInputInApp';
+                  let screen: keyof RootStackParamList =
+                    'Root_LoginPhoneInputScreen';
                   if (hasActiveFareContracts) {
-                    screen = 'ActiveFareContractPromptInApp';
+                    screen = 'Root_LoginActiveFareContractWarningScreen';
                   } else if (enable_vipps_login) {
-                    screen = 'LoginOptionsScreen';
+                    screen = 'Root_LoginOptionsScreen';
                   }
 
-                  return navigation.navigate('LoginInApp', {
-                    screen,
-                    params: {
-                      afterLogin: {
-                        screen: 'Root_TabNavigatorStack',
-                        params: {
-                          screen: 'TabNav_ProfileStack',
-                          params: {screen: 'Profile_RootScreen'},
-                        },
-                      },
-                    },
-                  });
+                  return navigation.navigate(screen, {});
                 }}
                 icon={<ThemeIcon svg={LogIn} />}
                 testID="loginButton"

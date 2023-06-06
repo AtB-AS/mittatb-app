@@ -1,46 +1,43 @@
-import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useState} from 'react';
+import {FullScreenHeader} from '@atb/components/screen-header';
+import {LoginTexts, useTranslation} from '@atb/translations';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {useAuthState} from '@atb/auth';
+import {PhoneSignInErrorCode} from '@atb/auth/AuthContext';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import phone from 'phone';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
   ScrollView,
   View,
 } from 'react-native';
-import {Button} from '@atb/components/button';
-import {useAuthState} from '@atb/auth';
 import {ThemeText} from '@atb/components/text';
-import {PhoneSignInErrorCode} from '@atb/auth/AuthContext';
-import {MessageBox} from '@atb/components/message-box';
-import {useNavigation} from '@react-navigation/native';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {StaticColorByType} from '@atb/theme/colors';
-import phone from 'phone';
 import {PhoneInputSectionItem, Section} from '@atb/components/sections';
+import {MessageBox} from '@atb/components/message-box';
+import {Button} from '@atb/components/button';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
+import {StaticColorByType} from '@atb/theme/colors';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export const PhoneInput = ({
-  doAfterLogin,
-  headerLeftButton,
-  headerRightButton,
-}: {
-  doAfterLogin: (phoneNumber: string) => void;
-  headerLeftButton?: LeftButtonProps;
-  headerRightButton?: RightButtonProps;
-}) => {
+type Props = RootStackScreenProps<'Root_LoginPhoneInputScreen'>;
+
+export const Root_LoginPhoneInputScreen = ({
+  navigation,
+  route: {
+    params: {afterLogin},
+  },
+}: Props) => {
   const {t} = useTranslation();
-  const styles = useThemeStyles();
+  const styles = useStyles();
   const {theme} = useTheme();
   const {signInWithPhoneNumber} = useAuthState();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [prefix, setPrefix] = useState('47');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<PhoneSignInErrorCode>();
-  const navigation = useNavigation();
   const focusRef = useFocusOnLoad();
 
   const phoneValidationParams = {
@@ -78,7 +75,10 @@ export const PhoneInput = ({
     const errorCode = await signInWithPhoneNumber(phoneValidation.phoneNumber);
     if (!errorCode) {
       setError(undefined);
-      doAfterLogin(phoneValidation.phoneNumber);
+      navigation.navigate('Root_LoginConfirmCodeScreen', {
+        afterLogin,
+        phoneNumber: phoneValidation.phoneNumber,
+      });
     } else {
       setIsSubmitting(false);
       setError(errorCode);
@@ -88,8 +88,7 @@ export const PhoneInput = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        leftButton={headerLeftButton}
-        rightButton={headerRightButton}
+        leftButton={{type: 'close'}}
         setFocusOnLoad={false}
         color={themeColor}
         title={t(LoginTexts.phoneInput.title)}
@@ -165,7 +164,7 @@ export const PhoneInput = ({
   );
 };
 
-const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.static.background[themeColor].background,
     flex: 1,

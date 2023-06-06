@@ -172,6 +172,7 @@ export const AppContextProvider: React.FC = ({children}) => {
         registerChatUser();
       },
       restartOnboarding: async () => {
+        await storage.set(storeKey.onboarding, JSON.stringify(false));
         dispatch({type: 'RESTART_ONBOARDING'});
       },
       acceptTicketing: async () => {

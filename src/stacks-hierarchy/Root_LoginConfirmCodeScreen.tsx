@@ -1,7 +1,11 @@
-import {FullScreenHeader} from '@atb/components/screen-header';
-import {StyleSheet} from '@atb/theme';
-import {LoginTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
+import {LoginTexts, useTranslation} from '@atb/translations';
+import {useAuthState} from '@atb/auth';
+import {
+  ConfirmationErrorCode,
+  PhoneSignInErrorCode,
+} from '@atb/auth/AuthContext';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -9,31 +13,25 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Button} from '@atb/components/button';
-import {useAuthState} from '@atb/auth';
-import {
-  ConfirmationErrorCode,
-  PhoneSignInErrorCode,
-} from '@atb/auth/AuthContext';
-import {MessageBox} from '@atb/components/message-box';
+import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {StaticColorByType} from '@atb/theme/colors';
-import {loginConfirmCodeInputId} from '@atb/test-ids';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
+import {loginConfirmCodeInputId} from '@atb/test-ids';
+import {MessageBox} from '@atb/components/message-box';
+import {Button} from '@atb/components/button';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {StyleSheet} from '@atb/theme';
+import {StaticColorByType} from '@atb/theme/colors';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export const ConfirmCode = ({
-  phoneNumber,
-  doAfterLogin,
-}: {
-  phoneNumber: string;
-  doAfterLogin: () => void;
-}) => {
+type Props = RootStackScreenProps<'Root_LoginConfirmCodeScreen'>;
+
+export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
+  const {phoneNumber, afterLogin} = route.params;
   const {t} = useTranslation();
-  const styles = useThemeStyles();
+  const styles = useStyles();
   const {authenticationType, confirmCode, signInWithPhoneNumber} =
     useAuthState();
   const [code, setCode] = useState('');
@@ -46,9 +44,7 @@ export const ConfirmCode = ({
   const onLogin = async () => {
     setIsLoading(true);
     const errorCode = await confirmCode(code);
-    if (!errorCode) {
-      doAfterLogin();
-    } else {
+    if (errorCode) {
       setError(errorCode);
       setIsLoading(false);
     }
@@ -69,7 +65,10 @@ export const ConfirmCode = ({
   // Check authentication from state and see if it is updated while we wait
   useEffect(() => {
     if (authenticationType === 'phone') {
-      doAfterLogin();
+      navigation.popToTop();
+      if (afterLogin) {
+        navigation.navigate(afterLogin.screen, afterLogin.params as any);
+      }
     }
   }, [authenticationType]);
 
@@ -167,7 +166,7 @@ export const ConfirmCode = ({
   );
 };
 
-const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.static.background[themeColor].background,
     flex: 1,

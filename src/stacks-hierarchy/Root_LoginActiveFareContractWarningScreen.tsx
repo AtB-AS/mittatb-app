@@ -6,30 +6,28 @@ import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
-import {useNavigation} from '@react-navigation/native';
 import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
 import {SimpleFareContract} from '@atb/fare-contracts';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export const ActiveFareContractPrompt = ({
-  headerLeftButton,
-  doAfterSubmit,
-  headerRightButton,
-}: {
-  doAfterSubmit: () => void;
-  headerLeftButton?: LeftButtonProps;
-  headerRightButton?: RightButtonProps;
-}) => {
+type Props = RootStackScreenProps<'Root_LoginActiveFareContractWarningScreen'>;
+
+export const Root_LoginActiveFareContractWarningScreen = ({
+  navigation,
+  route,
+}: Props) => {
+  const {afterLogin} = route.params;
+  const {enable_vipps_login} = useRemoteConfig();
   const {t} = useTranslation();
-  const navigation = useNavigation();
-  const styles = useThemeStyles();
+  const styles = useStyles();
   const focusRef = useFocusOnLoad();
   const {fareContracts} = useTicketingState();
   const activeFareContracts =
@@ -38,14 +36,20 @@ export const ActiveFareContractPrompt = ({
   const now = Date.now();
 
   const onNext = async () => {
-    doAfterSubmit();
+    navigation.navigate(
+      enable_vipps_login
+        ? 'Root_LoginOptionsScreen'
+        : 'Root_LoginPhoneInputScreen',
+      {
+        afterLogin,
+      },
+    );
   };
 
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        leftButton={headerLeftButton}
-        rightButton={headerRightButton}
+        leftButton={{type: 'back'}}
         setFocusOnLoad={false}
         color={themeColor}
       />
@@ -102,7 +106,7 @@ export const ActiveFareContractPrompt = ({
   );
 };
 
-const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.static.background[themeColor].background,
     flex: 1,
