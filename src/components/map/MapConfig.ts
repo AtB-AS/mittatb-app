@@ -1,8 +1,9 @@
-import {CameraStop, MapViewProps} from '@rnmapbox/maps';
+//import {CameraStop, MapViewProps} from '@rnmapbox/maps';
 import {Platform} from 'react-native';
 import {MAPBOX_STOP_PLACES_STYLE_URL} from '@env';
+import {CameraStop} from '@rnmapbox/maps/lib/typescript/components/Camera';
 
-export const MapViewConfig: MapViewProps = {
+export const MapViewConfig = {
   compassViewPosition: 1, // Upper right
   compassEnabled: true,
   scaleBarEnabled: false,
