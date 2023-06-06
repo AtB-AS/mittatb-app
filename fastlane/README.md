@@ -39,21 +39,13 @@ Generate new certificates
 
 Generate new certificates without nuking old ones
 
-### ios get_cert
+### ios get_certs
 
 ```sh
-[bundle exec] fastlane ios get_cert
+[bundle exec] fastlane ios get_certs
 ```
 
 Match certificates
-
-### ios set_group_identifiers
-
-```sh
-[bundle exec] fastlane ios set_group_identifiers
-```
-
-Change build groups
 
 ### ios setup_certificates
 

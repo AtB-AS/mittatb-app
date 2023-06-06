@@ -39,7 +39,7 @@ platform :ios do
       skip_confirmation: true,
       username: ENV['FASTLANE_MATCH_USERNAME'],
     )
-    get_cert
+    get_certs
   end
 
   desc 'Generate new certificates without nuking old ones'
@@ -59,7 +59,7 @@ platform :ios do
   end
 
   desc 'Match certificates'
-  lane :get_cert do
+  lane :get_certs do
     ensure_env_vars(
       env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_SSH_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
     )
@@ -97,23 +97,9 @@ platform :ios do
   
   # iOS Lanes
 
-  desc 'Change build groups'
-  lane :set_group_identifiers do
-    ensure_env_vars(
-      env_vars: ['APP_GROUP_NAME']
-    )
-
-    Dir[File.join(Dir.pwd, '..', 'ios', '**', '*.entitlements')].each do |entitlements| 
-      update_app_group_identifiers(
-        entitlements_file: entitlements,
-        app_group_identifiers: [ENV["APP_GROUP_NAME"]]
-      )
-    end
-  end
-
   desc 'Setup certificates'
   lane :setup_certificates do
-    get_cert
+    get_certs
 
     ensure_env_vars(
       env_vars: ['FASTLANE_MATCH_TYPE', 'BUILD_CONFIGURATION', 'ENABLE_WIDGET', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER']
@@ -185,7 +171,6 @@ platform :ios do
     )
     setup_certificates
     cocoapods(podfile: './ios/Podfile')
-    set_group_identifiers
     build_app(
       scheme: 'atb',
       configuration: ENV['BUILD_CONFIGURATION'],

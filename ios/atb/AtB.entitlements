@@ -12,6 +12,8 @@
 		<string>TAG</string>
 	</array>
 	<key>com.apple.security.application-groups</key>
-	<array/>
+	<array>
+		<string>$(APP_GROUP_NAME)</string>
+	</array>
 </dict>
 </plist>
