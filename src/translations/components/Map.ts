@@ -17,5 +17,10 @@ const MapTexts = {
       'The map is not visible while using screen reader.',
     ),
   },
+  filters: {
+    bottomSheet: {
+      heading: _('Filter', 'Filter'),
+    },
+  },
 };
 export default MapTexts;
