@@ -47,6 +47,7 @@ We love feedback and suggestions. The AtB app and service is continously improve
        ```
    1. Pod install: `cd ios/` and `pod install`
 1. From root folder run: `yarn setup dev <organization>` where organization is either `atb` or `nfk`, to set root .env for local development and generate all icons and launch screens for iOS and Android
+1. Run `yarn setup-xcode` to install certificates and update group identifiers. NOTE: In order to be able to set up this step you must have `MATCH_PASSWORD` and have access to the certs' repo for the organization you are working on, it could be found in the `.env` file with the key name `FASTLANE_MATCH_GIT_URL`
 
 For external contributors, we need to fix [#35](https://github.com/AtB-AS/mittatb-app/issues/35) before they are able to run the app.
 

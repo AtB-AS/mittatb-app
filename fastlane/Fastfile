@@ -96,16 +96,29 @@ platform :ios do
   end
   
   # iOS Lanes
-  desc 'Build the iOS application.'
-  lane :build do
+
+  desc 'Change build groups'
+  lane :set_group_identifiers do
     ensure_env_vars(
-      env_vars: ['BUILD_ID', 'EXPORT_METHOD']
+      env_vars: ['APP_GROUP_NAME']
     )
+
+    Dir[File.join(Dir.pwd, '..', 'ios', '**', '*.entitlements')].each do |entitlements| 
+      update_app_group_identifiers(
+        entitlements_file: entitlements,
+        app_group_identifiers: [ENV["APP_GROUP_NAME"]]
+      )
+    end
+  end
+
+  desc 'Setup certificates'
+  lane :setup_certificates do
     get_cert
-    increment_build_number(
-      build_number: ENV["BUILD_ID"],
-      xcodeproj: './ios/atb.xcodeproj/'
+
+    ensure_env_vars(
+      env_vars: ['FASTLANE_MATCH_TYPE', 'BUILD_CONFIGURATION', 'ENABLE_WIDGET', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER']
     )
+
     update_code_signing_settings(
       use_automatic_signing: false,
       path: "./ios/atb.xcodeproj"
@@ -140,7 +153,7 @@ platform :ios do
       xcodeproj: "./ios/atb.xcodeproj",
       target_filter: "app",
       profile: app_prov_profile_path,
-      build_configuration: "Release",
+      build_configuration: ENV['BUILD_CONFIGURATION'],
       code_signing_identity: app_signing_identity_name
     )
     if widget_enabled
@@ -148,34 +161,34 @@ platform :ios do
         xcodeproj: "./ios/atb.xcodeproj",
         target_filter: "departureWidget",
         profile: widget_prov_profile_path,
-        build_configuration: "Release",
+        build_configuration: ENV['BUILD_CONFIGURATION'],
         code_signing_identity: app_signing_identity_name
       )
       update_project_provisioning(
         xcodeproj: "./ios/atb.xcodeproj",
         target_filter: "AtbAppIntent",
         profile: intent_prov_profile_path,
-        build_configuration: "Release",
+        build_configuration: ENV['BUILD_CONFIGURATION'],
         code_signing_identity: app_signing_identity_name
       )
-      update_app_group_identifiers(
-        entitlements_file: "./ios/departureWidget.entitlements",
-        app_group_identifiers: [ENV["APP_GROUP_NAME"]]
-      )
-      update_app_group_identifiers(
-        entitlements_file: "./ios/AtbAppIntent/AtbAppIntentRelease.entitlements",
-        app_group_identifiers: [ENV["APP_GROUP_NAME"]]
-      )
     end
+  end
 
-    update_app_group_identifiers(
-      entitlements_file: "./ios/atb/AtB.entitlements",
-      app_group_identifiers: [ENV["APP_GROUP_NAME"]]
+  desc 'Build the iOS application.'
+  lane :build do
+    ensure_env_vars(
+      env_vars: ['BUILD_ID', 'EXPORT_METHOD', 'BUILD_CONFIGURATION']
     )
+    increment_build_number(
+      build_number: ENV["BUILD_ID"],
+      xcodeproj: './ios/atb.xcodeproj/'
+    )
+    setup_certificates
     cocoapods(podfile: './ios/Podfile')
+    set_group_identifiers
     build_app(
       scheme: 'atb',
-      configuration: 'Release',
+      configuration: ENV['BUILD_CONFIGURATION'],
       export_method: ENV['EXPORT_METHOD'],
       workspace: './ios/atb.xcworkspace',
       export_options: {

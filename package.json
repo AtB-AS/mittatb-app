@@ -19,6 +19,7 @@
     "clean": "rm -rf node_modules/ **/node_modules/ yarn-error.log",
     "clean:install": "yarn clean && yarn install",
     "setup": "sh ./setup.sh",
+    "setup-xcode": "sh ./scripts/ios/setup-xcode.sh",
     "generate-native-assets": "sh ./scripts/generate-native-assets.sh",
     "link-assets": "react-native link",
     "unimported": "npx unimported"
