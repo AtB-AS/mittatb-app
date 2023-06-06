@@ -25,7 +25,6 @@ import {secondsBetween} from '@atb/utils/date';
 import {useInterval} from '@atb/utils/use-interval';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import MapboxGL from '@rnmapbox/maps';
-import {CircleLayerStyleProps} from '@rnmapbox/maps/javascript/utils/MapboxStyles';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
@@ -33,6 +32,7 @@ import {TouchableOpacity} from 'react-native';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
+import {CircleLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
@@ -243,7 +243,6 @@ const LiveVehicle = ({
         <MapboxGL.CircleLayer id="liveVehicleCircle" style={circleStyle} />
       </MapboxGL.ShapeSource>
       <MapboxGL.MarkerView
-        id="liveVehicleIcon"
         coordinate={[vehicle.location.longitude, vehicle.location.latitude]}
         allowOverlap={true}
       >
