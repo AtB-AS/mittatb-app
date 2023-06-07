@@ -22,20 +22,30 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@file:.yalc/@atb-as/generate-assets":
-  version "7.2.1"
+"@atb-as/generate-assets@^7.5.1":
+  version "7.5.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-7.5.1.tgz#2d187823424309ece3fa0084e4592e5c5b4daaf3"
+  integrity sha512-hAFOwq8dQvDF6c+jVoKmhUxfPV7sD9b9Anf5y9tu7wsiT9gbirHdxU6T8cUE02xN2r5UsstzgcV1SMIBK53N5w==
   dependencies:
-    "@atb-as/theme" "^7.0.0"
+    "@atb-as/theme" "^7.1.0"
     commander "^9.4.0"
     fast-glob "^3.2.11"
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@^7.0.0", "@atb-as/theme@^7.0.1":
+"@atb-as/theme@^7.0.1":
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-7.0.1.tgz#02facf17b25eea841286e88edfdadaeb93a7f4df"
   integrity sha512-7lhDDqdquoI8Zy0FmLWTQm3Ua6utPOREdPpZOIsyKLMh6/RuJLK3K5f6TBiGMU1H2MXZWh+fR1bXAnmM+NT2/w==
+  dependencies:
+    hex-to-rgba "^2.0.1"
+    ts-deepmerge "^4.0.0"
+
+"@atb-as/theme@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-7.1.0.tgz#ae2025d9b20fb36f97f079c07896bc9022cace82"
+  integrity sha512-JEX3ixJ07djS2Kduh3XjE/2A3ovGdzo/ewVe84uV9UX3SuTqVj0bWeJJDAGpyQd/LSgMnwZ1PINxmBC6kPIDbw==
   dependencies:
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
