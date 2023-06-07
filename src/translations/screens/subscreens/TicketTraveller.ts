@@ -96,7 +96,7 @@ function generic(travellerType: string) {
   }
 }
 
-function UserProfileDescriptionOverrides(
+function userProfileDescriptionOverrides(
   travellerType: string,
   ticketType: string | undefined,
 ) {
@@ -124,7 +124,7 @@ const TicketTravellerTexts = {
     userProfile: UserProfileWithCount,
     ticketType: string | undefined,
   ) => {
-    return UserProfileDescriptionOverrides(
+    return userProfileDescriptionOverrides(
       userProfile.userTypeString,
       ticketType,
     );
