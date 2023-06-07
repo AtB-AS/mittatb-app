@@ -634,6 +634,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   searchTimeButton: {flex: 1},
   filterButton: {marginLeft: theme.spacings.medium},
   searchHeader: {
+    marginHorizontal: theme.spacings.medium,
     backgroundColor: theme.static.background[headerBackgroundColor].background,
   },
   loadingIndicator: {

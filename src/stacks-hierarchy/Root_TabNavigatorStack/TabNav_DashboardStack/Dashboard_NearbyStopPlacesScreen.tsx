@@ -7,7 +7,6 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {NearbyStopPlacesScreenComponent} from '@atb/nearby-stop-places';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 
 type Props = DashboardScreenProps<'Dashboard_NearbyStopPlacesScreen'>;
@@ -20,32 +19,30 @@ export const Dashboard_NearbyStopPlacesScreen = ({
   const {t} = useTranslation();
 
   return (
-    <>
-      <FullScreenHeader
-        title={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
-        leftButton={{type: 'close'}}
-      />
-      <NearbyStopPlacesScreenComponent
-        location={fromLocation}
-        mode={route.params.mode}
-        onPressLocationSearch={(location) =>
-          navigation.navigate('Root_LocationSearchByTextScreen', {
-            label: t(NearbyTexts.search.label),
-            callerRouteName: route.name,
-            callerRouteParam: 'location',
-            initialLocation: location,
-          })
-        }
-        onSelectStopPlace={(place: StopPlace) => {
-          navigation.navigate('Dashboard_PlaceScreen', {
-            place,
-            mode: route.params.mode,
-            onCloseRoute: route.params.onCloseRoute,
-          });
-        }}
-        onUpdateLocation={(location) => navigation.setParams({location})}
-        onAddFavorite={() => navigation.navigate('Root_SearchStopPlaceScreen')}
-      />
-    </>
+    <NearbyStopPlacesScreenComponent
+      location={fromLocation}
+      mode={route.params.mode}
+      headerProps={{
+        title: t(FavoriteDeparturesTexts.favoriteItemAdd.label),
+        leftButton: {type: 'close'},
+      }}
+      onPressLocationSearch={(location) =>
+        navigation.navigate('Root_LocationSearchByTextScreen', {
+          label: t(NearbyTexts.search.label),
+          callerRouteName: route.name,
+          callerRouteParam: 'location',
+          initialLocation: location,
+        })
+      }
+      onSelectStopPlace={(place: StopPlace) => {
+        navigation.navigate('Dashboard_PlaceScreen', {
+          place,
+          mode: route.params.mode,
+          onCloseRoute: route.params.onCloseRoute,
+        });
+      }}
+      onUpdateLocation={(location) => navigation.setParams({location})}
+      onAddFavorite={() => navigation.navigate('Root_SearchStopPlaceScreen')}
+    />
   );
 };
