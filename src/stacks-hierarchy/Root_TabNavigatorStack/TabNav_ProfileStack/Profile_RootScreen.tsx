@@ -51,6 +51,7 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
+import {BetaTag} from '@atb/components/beta-tag';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -342,14 +343,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               <ThemeText type="heading__component">
                 {t(ProfileTexts.sections.newFeatures.heading)}
               </ThemeText>
-              <View style={style.betaLabel}>
-                <ThemeText
-                  color="background_accent_3"
-                  style={style.betaLabelText}
-                >
-                  BETA
-                </ThemeText>
-              </View>
+              <BetaTag style={style.betaTag} />
             </View>
           </GenericSectionItem>
           <ToggleSectionItem
@@ -613,6 +607,9 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   customerNumberHeading: {
     marginBottom: theme.spacings.xSmall,
   },
+  betaTag: {
+    marginHorizontal: theme.spacings.small,
+  },
   scrollView: {
     paddingVertical: theme.spacings.medium,
   },
@@ -623,16 +620,5 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   betaSectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  betaLabel: {
-    backgroundColor: theme.static.background.background_accent_3.background,
-    marginHorizontal: theme.spacings.small,
-    paddingHorizontal: theme.spacings.small,
-    paddingVertical: theme.spacings.small,
-    borderRadius: theme.border.radius.regular,
-  },
-  betaLabelText: {
-    fontSize: 8,
-    lineHeight: 9,
   },
 }));
