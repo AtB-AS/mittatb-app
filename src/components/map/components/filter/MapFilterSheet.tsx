@@ -55,7 +55,6 @@ export const MapFilterSheet = ({
       },
     };
     setFilter(newFilter);
-    onFilterChanged(newFilter);
   };
 
   const onCityBikeStationsChanged = (operatorFilter: OperatorFilterType) => {
@@ -67,7 +66,6 @@ export const MapFilterSheet = ({
       },
     };
     setFilter(newFilter);
-    onFilterChanged(newFilter);
   };
 
   const onCarSharingStationsChanged = (operatorFilter: OperatorFilterType) => {
@@ -79,7 +77,6 @@ export const MapFilterSheet = ({
       },
     };
     setFilter(newFilter);
-    onFilterChanged(newFilter);
   };
 
   return (
