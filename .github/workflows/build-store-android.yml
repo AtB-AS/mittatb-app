@@ -15,10 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check if release tag is org specific and exit for other orgs
-        if: >
-          ${{ (contains(github.ref, 'atb') && matrix.org != 'atb') 
-          || (contains(github.ref, 'nfk') && matrix.org != 'nfk') 
-          || (contains(github.ref, 'fram') && matrix.org != 'fram') }}
+        if: ${{ (contains(github.ref, 'atb') && matrix.org != 'atb') ||
+          (contains(github.ref, 'nfk') && matrix.org != 'nfk') ||
+          (contains(github.ref, 'fram') && matrix.org != 'fram') }}
         run: exit 1
       - name: Checkout project
         uses: actions/checkout@v1
