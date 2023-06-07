@@ -100,7 +100,7 @@ function specificUserProfileDescription(
   travellerType: string,
   ticketType: string | undefined,
 ) {
-  if (ticketType === undefined) return false;
+  if (ticketType === undefined) return _('', '');
   switch (ticketType) {
     case 'travel-pass':
       if (travellerType === TravellerType.adult) {
