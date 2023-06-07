@@ -119,8 +119,8 @@ export const TravelDetailsMapScreenComponent = ({
         }}
         onMapIdle={(state) => {
           setHeading(state.properties.heading);
-          setZoomLevel(state.properties.zoom)
-        }
+          setZoomLevel(state.properties.zoom);
+        }}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
