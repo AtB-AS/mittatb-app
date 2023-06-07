@@ -1,6 +1,6 @@
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
-import MapboxGL from '@rnmapbox/maps';
+import MapboxGL, {RegionPayload} from '@rnmapbox/maps';
 import {Feature, GeoJSON} from 'geojson';
 import React, {useMemo, useRef} from 'react';
 import {View} from 'react-native';
@@ -19,7 +19,6 @@ import {shadows} from './components/shadows';
 import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from './components/mobility';
 import {useAnalytics} from '@atb/analytics';
-import {RegionPayload} from '@rnmapbox/maps/lib/typescript/components/MapView';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
