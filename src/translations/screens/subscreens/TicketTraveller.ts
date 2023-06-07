@@ -108,9 +108,9 @@ function specificUserProfileDescription(
       } else if (travellerType === TravellerType.child) {
         return _('Til og med 17 år', 'Age 17 or younger');
       }
-      return false;
+      return _('', '');
     default:
-      return false;
+      return _('', '');
   }
 }
 
@@ -124,11 +124,10 @@ const TicketTravellerTexts = {
     userProfile: UserProfileWithCount,
     ticketType: string | undefined,
   ) => {
-    const specificDescription = specificUserProfileDescription(
+    return specificUserProfileDescription(
       userProfile.userTypeString,
       ticketType,
     );
-    return specificDescription ? specificDescription : _('', '');
   },
 };
 
