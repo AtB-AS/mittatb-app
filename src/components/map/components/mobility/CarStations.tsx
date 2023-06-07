@@ -23,7 +23,7 @@ export const CarStations = ({stations}: Props) => {
           textColor: stationBackgroundColor,
           textSize: 12,
           textAllowOverlap: true,
-          iconImage: {uri: 'CarChip'},
+          iconImage: 'CarChip',
           iconAllowOverlap: true,
           iconSize: 0.85,
         }}

@@ -54,7 +54,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onClusterClick}: Props) => {
           filter={['has', 'point_count']}
           minZoomLevel={13.5}
           style={{
-            iconImage: {uri: 'ScooterCluster'},
+            iconImage: 'ScooterCluster',
             iconSize: 0.85,
             iconAllowOverlap: true,
           }}
@@ -65,7 +65,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onClusterClick}: Props) => {
           minZoomLevel={13.5}
           aboveLayerID="clusterIcon"
           style={{
-            iconImage: {uri: 'ClusterCount'},
+            iconImage: 'ClusterCount',
             iconAllowOverlap: true,
             iconTranslate: [13, -13],
           }}
@@ -103,7 +103,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onClusterClick}: Props) => {
             textOffset: [0.7, -0.25],
             textColor: scooterColor,
             textSize: 11,
-            iconImage: {uri: 'ScooterChip'},
+            iconImage: 'ScooterChip',
             iconSize: 0.85,
             iconAllowOverlap: true,
           }}

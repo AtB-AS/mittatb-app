@@ -33,6 +33,7 @@ export type SelectionLocationCallback = (
 ) => void;
 
 export type MapRegion = {
+  // The coordinate bounds (ne, sw) visible in the user’s viewport.
   visibleBounds: Position[];
   zoomLevel: number;
   center: Position;
