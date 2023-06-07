@@ -11,7 +11,7 @@ import {
   Point,
   Position,
 } from 'geojson';
-import {Cluster, MapSelectionActionType, MappPadding} from './types';
+import {Cluster, MapSelectionActionType, MapPadding} from './types';
 import distance from '@turf/distance';
 import {isVehicle} from '@atb/mobility/utils';
 
@@ -35,7 +35,7 @@ export function fitBounds(
   fromCoordinates: Coordinates,
   toCoordinates: Coordinates,
   mapCameraRef: RefObject<MapboxGL.Camera>,
-  padding: MappPadding = [100, 100],
+  padding: MapPadding = [100, 100],
 ) {
   mapCameraRef.current?.fitBounds(
     [fromCoordinates.longitude, fromCoordinates.latitude],

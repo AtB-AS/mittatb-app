@@ -38,7 +38,10 @@ export type MapRegion = {
   center: Position;
 };
 
-export type MappPadding = number | number[];
+export type MapPadding =
+  | number
+  | [number, number]
+  | [number, number, number, number];
 
 export type VehiclesState = {
   vehicles: FeatureCollection<GeoJSON.Point, VehicleFragment>;
