@@ -150,37 +150,35 @@ export const NearbyStopPlacesScreenComponent = ({
   }
 
   return (
-    <>
-      <FullScreenView
-        refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={refresh} />
-        }
-        headerProps={headerProps}
-        parallaxContent={() => (
-          <Header
-            fromLocation={location}
-            updatingLocation={updatingLocation}
-            openLocationSearch={openLocationSearch}
-            setCurrentLocationOrRequest={setCurrentLocationOrRequest}
-            setLocation={(location: Location) => {
-              location.resultType === 'search' && location.layer === 'venue'
-                ? onSelectStopPlace(location)
-                : onUpdateLocation(location);
-            }}
-            mode={mode}
-            onAddFavorite={onAddFavorite}
-          />
-        )}
-      >
-        <ScreenReaderAnnouncement message={loadAnnouncement} />
-        <StopPlaces
-          header={getListDescription()}
-          stopPlaces={orderedStopPlaces}
-          navigateToPlace={onSelectStopPlace}
-          testID={'nearbyStopsContainerView'}
+    <FullScreenView
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={refresh} />
+      }
+      headerProps={headerProps}
+      parallaxContent={() => (
+        <Header
+          fromLocation={location}
+          updatingLocation={updatingLocation}
+          openLocationSearch={openLocationSearch}
+          setCurrentLocationOrRequest={setCurrentLocationOrRequest}
+          setLocation={(location: Location) => {
+            location.resultType === 'search' && location.layer === 'venue'
+              ? onSelectStopPlace(location)
+              : onUpdateLocation(location);
+          }}
+          mode={mode}
+          onAddFavorite={onAddFavorite}
         />
-      </FullScreenView>
-    </>
+      )}
+    >
+      <ScreenReaderAnnouncement message={loadAnnouncement} />
+      <StopPlaces
+        header={getListDescription()}
+        stopPlaces={orderedStopPlaces}
+        navigateToPlace={onSelectStopPlace}
+        testID={'nearbyStopsContainerView'}
+      />
+    </FullScreenView>
   );
 };
 
