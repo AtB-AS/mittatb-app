@@ -183,7 +183,7 @@ const TariffZonesSelectorMap = ({
             </MapboxGL.ShapeSource>
             {featureCollection.features.map((f) => (
               <MapboxGL.ShapeSource
-                key={typeof f.id === 'number' ? f.id?.toString() : f.id}
+                key={String(f.id)}
                 id={`label-shape-${f.id}`}
                 shape={f.properties!.midPoint}
               >
