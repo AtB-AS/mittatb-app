@@ -104,9 +104,9 @@ function specificUserProfileDescription(
   switch (ticketType) {
     case 'travel-pass':
       if (travellerType === TravellerType.adult) {
-        return _('Over 18 år', 'Age 18 or older');
+        return _('Over 16 år', 'Age 16 or older');
       } else if (travellerType === TravellerType.child) {
-        return _('Til og med 17 år', 'Age 17 or younger');
+        return _('Til og med 15 år', 'Age 15 or younger');
       }
       return _('', '');
     default:
