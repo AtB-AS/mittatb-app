@@ -56,6 +56,10 @@ const ProfileTexts = {
             'Bruk billett på t:kort / mobil',
             'Use ticket on t:card / phone',
           ),
+          labelWithoutTravelcard: _(
+            'Bruk billett på mobil',
+            'Use ticket on phone',
+          ),
         },
         appearance: {
           label: _('Utseende', 'Appearance'),

@@ -5,17 +5,23 @@ import {shouldOnboardMobileToken} from '@atb/api/utils';
 import {useNavigation} from '@react-navigation/native';
 import {useEffect} from 'react';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export const useGoToMobileTokenOnboardingWhenNecessary = () => {
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {authenticationType} = useAuthState();
-  const {mobileTokenOnboarded} = useAppState();
+  const {mobileTokenOnboarded, mobileTokenWithoutTravelcardOnboarded} =
+    useAppState();
+  const {disable_travelcard} = useRemoteConfig();
+  const navigation = useNavigation<RootNavigationProps>();
+
   const shouldOnboard = shouldOnboardMobileToken(
     hasEnabledMobileToken,
     authenticationType,
     mobileTokenOnboarded,
+    mobileTokenWithoutTravelcardOnboarded,
+    disable_travelcard,
   );
-  const navigation = useNavigation<RootNavigationProps>();
 
   useEffect(() => {
     if (shouldOnboard) {
