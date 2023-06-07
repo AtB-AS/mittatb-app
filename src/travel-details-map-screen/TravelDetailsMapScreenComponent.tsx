@@ -94,6 +94,7 @@ export const TravelDetailsMapScreenComponent = ({
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
   const [zoomLevel, setZoomLevel] = useState<number>(FOLLOW_ZOOM_LEVEL);
   const [heading, setHeading] = useState<number>(0);
+  const [pitch, setPitch] = useState<number>(0);
 
   useEffect(() => {
     const location = vehicle?.location;
@@ -120,6 +121,7 @@ export const TravelDetailsMapScreenComponent = ({
         onCameraChanged={(state) => {
           setHeading(state.properties.heading);
           setZoomLevel(state.properties.zoom);
+          setPitch(state.properties.pitch);
         }}
       >
         <MapboxGL.Camera
@@ -155,6 +157,7 @@ export const TravelDetailsMapScreenComponent = ({
             subscriptionState={subscriptionState}
             zoomLevel={zoomLevel}
             heading={heading}
+            pitch={pitch}
           />
         )}
       </MapboxGL.MapView>
@@ -186,6 +189,7 @@ type VehicleIconProps = {
   subscriptionState: SubscriptionState;
   zoomLevel: number;
   heading: number;
+  pitch: number;
 };
 
 const LiveVehicle = ({
@@ -196,6 +200,7 @@ const LiveVehicle = ({
   subscriptionState,
   zoomLevel,
   heading,
+  pitch,
 }: VehicleIconProps) => {
   const {theme} = useTheme();
   const fillColor = useTransportationColor(mode, subMode, 'background');
@@ -287,36 +292,39 @@ const LiveVehicle = ({
             />
           </TouchableOpacity>
 
-          <View
-            style={{
-              shadowColor: '#000000',
-              shadowOffset: {width: 0, height: 2},
-              shadowOpacity: 0.2,
-              shadowRadius: 2,
-              position: 'absolute',
-              top: -Math.sin(bearingRadians) * directionArrowOffsetFromCenter,
-              left: Math.cos(bearingRadians) * directionArrowOffsetFromCenter,
-            }}
-          >
-            <ThemeIcon
-              svg={BusLiveArrow}
-              fill={
-                isError
-                  ? theme.interactive.interactive_destructive.default.background
-                  : isStale
-                  ? theme.interactive.interactive_1.default.background
-                  : fillColor
-              }
-              width={iconSize}
-              height={iconSize}
+          {pitch < 7 && ( // allow just a tiny bit of pitch before hiding the live bus direction arrow
+            <View
               style={{
-                transform: [
-                  {rotate: `${vehicle.bearing - heading} deg`},
-                  {scale: Platform.OS === 'android' ? 0.5 : 1},
-                ],
+                shadowColor: '#000000',
+                shadowOffset: {width: 0, height: 2},
+                shadowOpacity: 0.2,
+                shadowRadius: 2,
+                position: 'absolute',
+                top: -Math.sin(bearingRadians) * directionArrowOffsetFromCenter,
+                left: Math.cos(bearingRadians) * directionArrowOffsetFromCenter,
               }}
-            />
-          </View>
+            >
+              <ThemeIcon
+                svg={BusLiveArrow}
+                fill={
+                  isError
+                    ? theme.interactive.interactive_destructive.default
+                        .background
+                    : isStale
+                    ? theme.interactive.interactive_1.default.background
+                    : fillColor
+                }
+                width={iconSize}
+                height={iconSize}
+                style={{
+                  transform: [
+                    {rotate: `${vehicle.bearing - heading} deg`},
+                    {scale: Platform.OS === 'android' ? 0.5 : 1},
+                  ],
+                }}
+              />
+            </View>
+          )}
         </View>
       </MapboxGL.MarkerView>
     </>
