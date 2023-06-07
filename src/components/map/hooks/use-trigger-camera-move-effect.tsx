@@ -6,7 +6,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {Coordinates} from '@atb/utils/coordinates';
 import {fitBounds, flyToLocation, mapPositionToCoordinates} from '../utils';
-import {CameraFocusModeType, MappPadding} from '../types';
+import {CameraFocusModeType, MapPadding} from '../types';
 import {Dimensions, PixelRatio, Platform, StatusBar} from 'react-native';
 
 type BoundingBox = {
@@ -61,7 +61,7 @@ export const useTriggerCameraMoveEffect = (
 
 const moveCameraToMapLines = (
   mapLines: MapLine[],
-  padding: MappPadding,
+  padding: MapPadding,
   mapCameraRef: RefObject<MapboxGL.Camera>,
 ) => {
   const bbox = getMapLinesBoundingBox(mapLines);
@@ -105,7 +105,7 @@ const moveCameraToCoordinates = (
 
 const moveCameraToEntity = (
   entityFeature: Feature<Point>,
-  padding: MappPadding | undefined,
+  padding: MapPadding | undefined,
   mapCameraRef: RefObject<MapboxGL.Camera>,
 ) => {
   const coordinates = mapPositionToCoordinates(
@@ -133,7 +133,7 @@ const moveCameraToEntity = (
 export const fitCameraWithinLocation = (
   centerCoordinate: Coordinates,
   mapCameraRef: RefObject<MapboxGL.Camera>,
-  padding: MappPadding = 0,
+  padding: MapPadding = 0,
   displacement: number = DEFAULT_PADDING_DISPLACEMENT,
 ) => {
   const northEast: Coordinates = {
@@ -147,7 +147,7 @@ export const fitCameraWithinLocation = (
   fitBounds(northEast, southWest, mapCameraRef, padding);
 };
 
-const useCalculatePaddings = (): MappPadding => {
+const useCalculatePaddings = (): MapPadding => {
   const {height: bottomSheetHeight} = useBottomSheet();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   const {height: screenHeight} = Dimensions.get('screen');
@@ -163,7 +163,7 @@ const useCalculatePaddings = (): MappPadding => {
       padding,
       padding + scaledBottomSheetPadding,
       padding,
-    ].map((p) => p / PixelRatio.getFontScale()) as MappPadding;
+    ].map((p) => p / PixelRatio.getFontScale()) as MapPadding;
   }
 
   return [

@@ -1,15 +1,15 @@
-//import {CameraStop, MapViewProps} from '@rnmapbox/maps';
 import {Platform} from 'react-native';
 import {MAPBOX_STOP_PLACES_STYLE_URL} from '@env';
 import {CameraStop} from '@rnmapbox/maps/lib/typescript/components/Camera';
 
 export const MapViewConfig = {
-  compassViewPosition: 1, // Upper right
   compassEnabled: true,
   scaleBarEnabled: false,
-  compassViewMargins: {
-    x: Platform.select({default: 10, android: 6}),
-    y: 60,
+  // `mapbox` (v10) Adds compass offset `compassViewMargins` is still supported but generates issues:
+  // Mapbox error fireEvent failed: <rnmapbox_maps.RCTMGLEvent: 0x6000028a0fe0>
+  compassPosition: {
+    top: 60,
+    right: Platform.select({default: 10, android: 6}),
   },
   attributionPosition: Platform.select({
     default: {bottom: 8, left: 95},

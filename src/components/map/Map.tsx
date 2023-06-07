@@ -1,7 +1,7 @@
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import MapboxGL from '@rnmapbox/maps';
-import {Feature, GeoJSON} from 'geojson';
+import {Feature} from 'geojson';
 import React, {useMemo, useRef} from 'react';
 import {View} from 'react-native';
 import {LocationBar} from './components/LocationBar';
@@ -19,7 +19,7 @@ import {shadows} from './components/shadows';
 import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from './components/mobility';
 import {useAnalytics} from '@atb/analytics';
-import {RegionPayload} from '@rnmapbox/maps/lib/typescript/components/MapView';
+import {MapState} from '@rnmapbox/maps/lib/typescript/components/MapView';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -69,13 +69,11 @@ export const Map = (props: MapProps) => {
     });
   };
 
-  const onRegionChange = (
-    region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
-  ) => {
+  const onMapIdle = (state: MapState) => {
     loadMobility({
-      visibleBounds: region.properties.visibleBounds,
-      zoomLevel: region.properties.zoomLevel,
-      center: region.geometry.coordinates,
+      visibleBounds: [state.properties.bounds.ne, state.properties.bounds.sw],
+      zoomLevel: state.properties.zoom,
+      center: state.properties.center,
     });
   };
 
@@ -104,7 +102,7 @@ export const Map = (props: MapProps) => {
             flex: 1,
           }}
           onDidFinishLoadingMap={onDidFinishLoadingMap}
-          onRegionDidChange={onRegionChange}
+          onMapIdle={onMapIdle}
           onPress={async (feature: Feature) => {
             if (isFeaturePoint(feature)) {
               onMapClick({

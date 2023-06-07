@@ -33,12 +33,16 @@ export type SelectionLocationCallback = (
 ) => void;
 
 export type MapRegion = {
+  // The coordinate bounds (ne, sw) visible in the user’s viewport.
   visibleBounds: Position[];
   zoomLevel: number;
   center: Position;
 };
 
-export type MappPadding = number | number[];
+export type MapPadding =
+  | number
+  | [number, number]
+  | [number, number, number, number];
 
 export type VehiclesState = {
   vehicles: FeatureCollection<GeoJSON.Point, VehicleFragment>;
