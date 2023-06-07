@@ -51,7 +51,6 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
-import {BetaTag} from '@atb/components/beta-tag';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -101,7 +100,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
   const refundInfoUrl = getTextForLanguage(refundInfo, language);
 
-  const {enable_departures_v2_as_default} = useRemoteConfig();
+  const {enable_departures_v2_as_default, disable_travelcard} =
+    useRemoteConfig();
   const setDeparturesV2Enabled = (value: boolean) => {
     if (enable_departures_v2_as_default) {
       updateMetadata({
@@ -304,10 +304,17 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
           {authenticationType === 'phone' && hasEnabledMobileToken && (
             <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.travelToken
-                  .label,
-              )}
+              text={
+                disable_travelcard
+                  ? t(
+                      ProfileTexts.sections.settings.linkSectionItems
+                        .travelToken.labelWithoutTravelcard,
+                    )
+                  : t(
+                      ProfileTexts.sections.settings.linkSectionItems
+                        .travelToken.label,
+                    )
+              }
               label={'new'}
               onPress={() => navigation.navigate('Profile_TravelTokenScreen')}
               testID="travelTokenButton"
@@ -345,7 +352,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               <ThemeText type="heading__component">
                 {t(ProfileTexts.sections.newFeatures.heading)}
               </ThemeText>
-              <BetaTag style={style.betaTag} />
+              <View style={style.betaLabel}>
+                <ThemeText
+                  color="background_accent_3"
+                  style={style.betaLabelText}
+                >
+                  BETA
+                </ThemeText>
+              </View>
             </View>
           </GenericSectionItem>
           <ToggleSectionItem
@@ -606,9 +620,6 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
-  betaTag: {
-    marginHorizontal: theme.spacings.small,
-  },
   customerNumberHeading: {
     marginBottom: theme.spacings.xSmall,
   },
@@ -622,5 +633,16 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   betaSectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  betaLabel: {
+    backgroundColor: theme.static.background.background_accent_3.background,
+    marginHorizontal: theme.spacings.small,
+    paddingHorizontal: theme.spacings.small,
+    paddingVertical: theme.spacings.small,
+    borderRadius: theme.border.radius.regular,
+  },
+  betaLabelText: {
+    fontSize: 8,
+    lineHeight: 9,
   },
 }));

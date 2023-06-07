@@ -71,6 +71,7 @@ export type RootStackParamList = {
   };
   Root_PurchasePaymentWithVippsScreen: PaymentParams;
   Root_MobileTokenOnboardingStack: undefined;
+  Root_MobileTokenWithoutTravelcardOnboardingStack: undefined;
   Root_FareContractDetailsScreen: FareContractDetailsRouteParams;
   Root_CarnetDetailsScreen: CarnetDetailsRouteParams;
   Root_ReceiptScreen: ReceiptScreenRouteParams;

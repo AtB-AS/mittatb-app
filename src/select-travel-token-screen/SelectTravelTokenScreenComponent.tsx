@@ -25,6 +25,7 @@ import React, {useCallback, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {RadioGroupSection, Section} from '@atb/components/sections';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 type Props = {onAfterSave: () => void};
 
@@ -33,6 +34,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const {t} = useTranslation();
 
   const {fareContracts} = useTicketingState();
+  const {disable_travelcard} = useRemoteConfig();
 
   const {token, remoteTokens, toggleToken} = useMobileTokenContextState();
   const inspectableToken = findInspectable(remoteTokens);
@@ -77,7 +79,11 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title={t(TravelTokenTexts.toggleToken.title)}
+        title={
+          disable_travelcard
+            ? t(TravelTokenTexts.toggleToken.titleWithoutTravelcard)
+            : t(TravelTokenTexts.toggleToken.title)
+        }
         leftButton={{type: 'back'}}
       />
       <ScrollView
@@ -85,25 +91,29 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         testID="selectTokenScrollView"
       >
         <View style={styles.radioArea}>
-          <RadioBox
-            title={t(TravelTokenTexts.toggleToken.radioBox.tCard.title)}
-            description={t(
-              TravelTokenTexts.toggleToken.radioBox.tCard.description,
-            )}
-            a11yLabel={t(TravelTokenTexts.toggleToken.radioBox.tCard.a11yLabel)}
-            a11yHint={t(TravelTokenTexts.toggleToken.radioBox.tCard.a11yHint)}
-            disabled={false}
-            selected={selectedType === 'travelCard'}
-            icon={<ThemedTokenTravelCard />}
-            type="spacious"
-            onPress={() => {
-              animateNextChange();
-              setSelectedType('travelCard');
-              setSelectedToken(travelCardToken);
-            }}
-            style={styles.leftRadioBox}
-            testID="selectTravelcard"
-          />
+          {!disable_travelcard && (
+            <RadioBox
+              title={t(TravelTokenTexts.toggleToken.radioBox.tCard.title)}
+              description={t(
+                TravelTokenTexts.toggleToken.radioBox.tCard.description,
+              )}
+              a11yLabel={t(
+                TravelTokenTexts.toggleToken.radioBox.tCard.a11yLabel,
+              )}
+              a11yHint={t(TravelTokenTexts.toggleToken.radioBox.tCard.a11yHint)}
+              disabled={false}
+              selected={selectedType === 'travelCard'}
+              icon={<ThemedTokenTravelCard />}
+              type="spacious"
+              onPress={() => {
+                animateNextChange();
+                setSelectedType('travelCard');
+                setSelectedToken(travelCardToken);
+              }}
+              style={styles.leftRadioBox}
+              testID="selectTravelcard"
+            />
+          )}
           <RadioBox
             title={t(TravelTokenTexts.toggleToken.radioBox.phone.title)}
             description={t(
