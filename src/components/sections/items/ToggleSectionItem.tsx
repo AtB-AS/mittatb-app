@@ -7,7 +7,7 @@ import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 import {Toggle} from '@atb/components/toggle';
-import {InteractiveColor} from '@atb/theme/colors';
+import {InteractiveColor, TextNames} from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 import {LabelType} from '@atb-as/config-specs';
 import {LabelInfo} from '@atb/components/label-info';
@@ -21,6 +21,7 @@ type Props = SectionItemProps<{
   leftIcon?: (props: SvgProps) => JSX.Element;
   interactiveColor?: InteractiveColor;
   accessibility?: AccessibilityProps;
+  textType?: TextNames;
 }>;
 export function ToggleSectionItem({
   text,
@@ -32,6 +33,7 @@ export function ToggleSectionItem({
   accessibility,
   testID,
   interactiveColor,
+  textType,
   ...props
 }: Props) {
   const {topContainer} = useSectionItem(props);
@@ -66,7 +68,7 @@ export function ToggleSectionItem({
       <View style={sectionStyle.spaceBetween}>
         {leftIcon && <ThemeIcon svg={leftIcon} style={styles.leftIcon} />}
         <View style={styles.textContainer}>
-          <ThemeText>{text}</ThemeText>
+          <ThemeText type={textType}>{text}</ThemeText>
         </View>
         {label && <LabelInfo label={label} />}
         <Toggle

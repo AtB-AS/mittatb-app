@@ -45,8 +45,14 @@ export const useVehicles: () => VehiclesState | undefined = () => {
 
   const loadVehicles = useCallback(
     async (signal) => {
-      if (isVehiclesEnabled && area && filter?.showVehicles) {
-        return await getVehicles(area, {signal})
+      if (isVehiclesEnabled && area && shouldShowVehicles(filter)) {
+        return await getVehicles(
+          {
+            ...area,
+            operators: filter?.scooters?.operators,
+          },
+          {signal},
+        )
           .then(toFeaturePoints)
           .then(toFeatureCollection);
       }
@@ -78,3 +84,6 @@ export const useVehicles: () => VehiclesState | undefined = () => {
       }
     : undefined;
 };
+
+const shouldShowVehicles = (filter: VehiclesFilterType | undefined) =>
+  filter?.scooters?.showAll || filter?.scooters?.operators.length;

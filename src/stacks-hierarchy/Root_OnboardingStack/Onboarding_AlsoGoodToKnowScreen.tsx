@@ -1,4 +1,4 @@
-import {Onboarding1} from '@atb/assets/svg/color/images/';
+import {Onboarding5} from '@atb/assets/svg/color/images';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
@@ -7,18 +7,18 @@ import {OnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, useWindowDimensions, View} from 'react-native';
 import {OnboardingScreenProps} from './navigation-types';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
-export const themeColor: StaticColorByType<'background'> =
-  'background_accent_0';
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export type Props = OnboardingScreenProps<'Onboarding_WelcomeScreen'>;
+export type AlsoGoodToKnowScreenProps =
+  OnboardingScreenProps<'Onboarding_AlsoGoodToKnowScreen'>;
 
-export const Onboarding_WelcomeScreen = ({navigation}: Props) => {
+export const Onboarding_AlsoGoodToKnowScreen = ({
+  navigation,
+}: AlsoGoodToKnowScreenProps) => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {width: windowWidth} = useWindowDimensions();
-  const {enable_extended_onboarding} = useRemoteConfig();
 
   return (
     <ScrollView
@@ -28,29 +28,22 @@ export const Onboarding_WelcomeScreen = ({navigation}: Props) => {
       <View style={styles.mainView}>
         <ThemeText
           type={'body__primary--jumbo--bold'}
-          style={styles.header}
           color={themeColor}
-          accessibilityLabel={t(OnboardingTexts.welcome.titleA11yLabel)}
+          style={styles.header}
         >
-          {t(OnboardingTexts.welcome.title)}
+          {t(OnboardingTexts.alsoGoodToKnow.title)}
         </ThemeText>
-        <Onboarding1 width={windowWidth} height={windowWidth * (2 / 3)} />
-        <View accessible={true}>
-          <ThemeText style={styles.description} color={themeColor}>
-            {t(OnboardingTexts.welcome.description.part1)}
-          </ThemeText>
-        </View>
+        <Onboarding5 width={windowWidth} height={windowWidth * (4 / 5)} />
+        <ThemeText style={styles.description} color={themeColor}>
+          {t(OnboardingTexts.alsoGoodToKnow.description)}
+        </ThemeText>
       </View>
       <View style={styles.bottomView}>
         <Button
           interactiveColor="interactive_0"
-          onPress={() =>
-            enable_extended_onboarding
-              ? navigation.navigate('Onboarding_GoodToKnowScreen')
-              : navigation.navigate('Onboarding_IntercomInfoScreen')
-          }
-          text={t(OnboardingTexts.welcome.mainButton)}
-          testID="nextButtonOnboardingWelcome"
+          onPress={() => navigation.navigate('Onboarding_IntercomInfoScreen')}
+          text={t(OnboardingTexts.alsoGoodToKnow.mainButton)}
+          testID="nextButtonAlsoGoodToKnowOnboarding"
         />
       </View>
     </ScrollView>
@@ -67,8 +60,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingTop: theme.spacings.xLarge,
   },
   mainView: {
-    justifyContent: 'space-between',
     flex: 1,
+    justifyContent: 'space-between',
   },
   header: {
     textAlign: 'center',
