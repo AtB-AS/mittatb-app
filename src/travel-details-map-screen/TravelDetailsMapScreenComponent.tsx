@@ -114,7 +114,7 @@ export const TravelDetailsMapScreenComponent = ({
         onTouchMove={() => {
           setShouldTrack(false);
         }}
-        onRegionIsChanging={(event) => setZoomLevel(event.properties.zoomLevel)}
+        onMapIdle={(state) => setZoomLevel(state.properties.zoom)}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
