@@ -69,14 +69,11 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       fareProductTypeConfig.configuration.requiresLogin &&
       authenticationType !== 'phone'
     ) {
-      navigation.navigate('LoginInApp', {
-        screen: 'LoginOnboardingInApp',
-        params: {
-          fareProductTypeConfig,
-          afterLogin: {
-            screen: 'Root_PurchaseConfirmationScreen',
-            params: purchaseConfirmationScreenParams,
-          },
+      navigation.navigate('Root_LoginRequiredForFareProductScreen', {
+        fareProductTypeConfig,
+        afterLogin: {
+          screen: 'Root_PurchaseConfirmationScreen',
+          params: purchaseConfirmationScreenParams,
         },
       });
     } else {

@@ -3,51 +3,41 @@ import {
   getOrCreateVippsUserCustomToken,
   VIPPS_CALLBACK_URL,
 } from '@atb/api/vipps-login/api';
-import {useAppState} from '@atb/AppContext';
 import {useAuthState} from '@atb/auth';
 import {VippsSignInErrorCode} from '@atb/auth/AuthContext';
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {VippsLoginButton} from '@atb/components/vipps-login-button';
-import {AfterLoginParams, LoginInAppScreenProps} from '@atb/login/types';
 import {storage} from '@atb/storage';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
-import {StackActions} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {parseUrl} from 'query-string/base';
 import {LinkSectionItem, Section} from '@atb/components/sections';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export type LoginOptionsRouteParams = {
-  afterLogin:
-    | AfterLoginParams<'Root_TabNavigatorStack'>
-    | AfterLoginParams<'Root_PurchaseOverviewScreen'>
-    | AfterLoginParams<'Root_PurchaseConfirmationScreen'>;
-};
+type Props = RootStackScreenProps<'Root_LoginOptionsScreen'>;
 
-type LoginOptionsProps = LoginInAppScreenProps<'LoginOptionsScreen'>;
-
-export const LoginOptionsScreen = ({
+export const Root_LoginOptionsScreen = ({
   navigation,
   route: {
     params: {afterLogin},
   },
-}: LoginOptionsProps) => {
+}: Props) => {
   const {t} = useTranslation();
-  const styles = useThemeStyles();
+  const styles = useStyles();
   const {signInWithCustomToken} = useAuthState();
   const [error, setError] = useState<VippsSignInErrorCode>();
   const [isLoading, setIsLoading] = useState(false);
   const appStatus = useAppStateStatus();
-  const {completeOnboarding, onboarded} = useAppState();
   const [authorizationCode, setAuthorizationCode] = useState<
     string | undefined
   >(undefined);
@@ -73,12 +63,10 @@ export const LoginOptionsScreen = ({
   const signInUsingCustomToken = async (token: string) => {
     const response = await signInWithCustomToken(token);
     if (!response.error) {
-      if (!onboarded) {
-        await completeOnboarding();
+      navigation.popToTop();
+      if (afterLogin) {
+        navigation.navigate(afterLogin.screen, afterLogin.params as any);
       }
-      navigation.dispatch(
-        StackActions.replace(afterLogin.screen, afterLogin.params),
-      );
     } else {
       setError(response.error);
       setIsLoading(false);
@@ -181,9 +169,8 @@ export const LoginOptionsScreen = ({
           <LinkSectionItem
             text={t(LoginTexts.logInOptions.options.phoneAndCode)}
             onPress={() => {
-              navigation.navigate('LoginInApp', {
-                screen: 'PhoneInputInApp',
-                params: {afterLogin: afterLogin},
+              navigation.navigate('Root_LoginPhoneInputScreen', {
+                afterLogin: afterLogin,
               });
             }}
             disabled={isLoading}
@@ -195,7 +182,7 @@ export const LoginOptionsScreen = ({
   );
 };
 
-const useThemeStyles = StyleSheet.createThemeHook((theme) => {
+const useStyles = StyleSheet.createThemeHook((theme) => {
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
   return {
     container: {

@@ -6,7 +6,7 @@ import {Alert, TouchableOpacity, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
-import {useAppDispatch, useAppState} from '@atb/AppContext';
+import {useAppState} from '@atb/AppContext';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {KeyValuePair, storage, StorageModelKeysEnum} from '@atb/storage';
 import {
@@ -56,10 +56,10 @@ function setClipboard(content: string) {
 
 export const Profile_DebugInfoScreen = () => {
   const style = useProfileHomeStyle();
-  const appDispatch = useAppDispatch();
   const {
     restartMobileTokenOnboarding,
     restartMobileTokenWithoutTravelcardOnboarding,
+    restartOnboarding,
   } = useAppState();
   const {resetDismissedGlobalMessages} = useGlobalMessagesState();
   const {user, abtCustomerId} = useAuthState();
@@ -171,9 +171,7 @@ export const Profile_DebugInfoScreen = () => {
           />
           <LinkSectionItem
             text="Restart onboarding"
-            onPress={() => {
-              appDispatch({type: 'RESTART_ONBOARDING'});
-            }}
+            onPress={restartOnboarding}
           />
           <LinkSectionItem
             text="Set mobile token onboarded to false"
