@@ -96,7 +96,7 @@ function generic(travellerType: string) {
   }
 }
 
-function specificUserProfileDescription(
+function UserProfileDescriptionOverrides(
   travellerType: string,
   ticketType: string | undefined,
 ) {
@@ -120,11 +120,11 @@ const TicketTravellerTexts = {
       specificOverrides(travellerType, ticketType) || generic(travellerType)
     );
   },
-  userProfileDescription: (
+  userProfileDescriptionOverride: (
     userProfile: UserProfileWithCount,
     ticketType: string | undefined,
   ) => {
-    return specificUserProfileDescription(
+    return UserProfileDescriptionOverrides(
       userProfile.userTypeString,
       ticketType,
     );
