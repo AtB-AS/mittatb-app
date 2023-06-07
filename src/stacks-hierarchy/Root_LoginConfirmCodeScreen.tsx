@@ -23,6 +23,7 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
+import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -32,8 +33,12 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
   const {phoneNumber, afterLogin} = route.params;
   const {t} = useTranslation();
   const styles = useStyles();
-  const {authenticationType, confirmCode, signInWithPhoneNumber} =
-    useAuthState();
+  const {
+    authenticationType,
+    confirmCode,
+    signInWithPhoneNumber,
+    userCreationFinished,
+  } = useAuthState();
   const [code, setCode] = useState('');
   const [error, setError] = useState<
     ConfirmationErrorCode | PhoneSignInErrorCode
@@ -64,13 +69,16 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
   // User might be automatically logged in with Firebase auth, but only on Android
   // Check authentication from state and see if it is updated while we wait
   useEffect(() => {
-    if (authenticationType === 'phone') {
+    console.log('authenticationType: ' + authenticationType);
+    console.log('userCreationFinished: ' + userCreationFinished);
+    if (authenticationType === 'phone' && userCreationFinished) {
+      console.log('pop.to.top!');
       navigation.popToTop();
       if (afterLogin) {
         navigation.navigate(afterLogin.screen, afterLogin.params as any);
       }
     }
-  }, [authenticationType]);
+  }, [authenticationType, userCreationFinished]);
 
   return (
     <View style={styles.container}>
@@ -162,6 +170,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+      {!userCreationFinished && <ActivityIndicatorOverlay />}
     </View>
   );
 };

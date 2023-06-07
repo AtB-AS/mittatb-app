@@ -72,6 +72,10 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
       };
     }
     case 'SET_USER_CREATION_FINISHED': {
+      console.log(
+        'SET_USER_CREATION_FINISHED, customer_number: ' +
+          action.customer_number,
+      );
       return {
         ...prevState,
         userCreationFinished: true,
@@ -156,6 +160,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
           'AtB-Auth-Type': getAuthenticationType(user),
         });
       }
+      // console.log('onUserChanged, user: ' + JSON.stringify(user));
       dispatch({type: 'SET_USER', user});
     },
     [dispatch],
@@ -183,24 +188,31 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
    */
   // And this is where we want to check whether user profile with Entur has been created
   // If we retry for more than 10 sec. we should log this in bugsnag and intercom
-  // When we initiate the call to create a new customer account we should navigate to a page with a pinner for instance.
+  // When we initiate the call to create a new customer account we should navigate to a page with a spinner for instance.
   // --> Then once we have confirmed that hasCustomerClaims / account was created with Entur we can navigate them to correct place in the app.
   // This navigation to new screen should be in a toggle, so that we can turn it off in case we see that many users are stuck with the spinner.
 
   // her er kanskje SET_USER_CREATION_FINISHED tom eller på en måte ikke satt i state helt man gjør det her, så man kan sjekke opp i mot den om man skal navigere videre
   useEffect(() => {
     let retryCount = 0;
+    console.log('state.user?.uid: ' + state.user?.uid);
+
     const checkCustomClaims = async () => {
       const token = await state.user?.getIdTokenResult(true);
+      console.log('token: ' + JSON.stringify(token));
       const abt_id = token?.claims['abt_id'];
       const customer_number = token?.claims['customer_number'];
       const hasCustomClaims = !!abt_id && !!customer_number;
+
       if (hasCustomClaims) {
         dispatch({type: 'SET_USER_CREATION_FINISHED', customer_number});
       } else {
         if (retryCount < 10) {
+          console.log('retryCount: ' + retryCount);
+          console.log('retry, hasCustomClaims: ' + hasCustomClaims);
+          // if retry cont 10 --> log to bugsnag that there must have been an error and we need to investigate backend
           retryCount++;
-          setTimeout(() => checkCustomClaims(), 1000);
+          setTimeout(() => checkCustomClaims(), 10000);
         }
       }
     };
