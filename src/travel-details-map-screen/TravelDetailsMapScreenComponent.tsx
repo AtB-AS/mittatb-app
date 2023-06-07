@@ -117,7 +117,7 @@ export const TravelDetailsMapScreenComponent = ({
         onTouchMove={() => {
           setShouldTrack(false);
         }}
-        onMapIdle={(state) => {
+        onCameraChanged={(state) => {
           setHeading(state.properties.heading);
           setZoomLevel(state.properties.zoom);
         }}
