@@ -180,7 +180,7 @@ export const TravelDetailsMapScreenComponent = ({
   );
 };
 
-export type DirectionArrowParams = {
+export type DirectionArrowProps = {
   bearingRadians: number;
   rotateDegrees: number;
   directionArrowOffsetFromCenter: number;
@@ -194,7 +194,7 @@ const DirectionArrow = ({
   directionArrowOffsetFromCenter,
   iconSize,
   fill,
-}: DirectionArrowParams): JSX.Element => (
+}: DirectionArrowProps): JSX.Element => (
   <View
     style={{
       shadowColor: '#000000',
