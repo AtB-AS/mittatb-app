@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [atb, nfk]
+        org: [atb, nfk, fram]
     environment: ${{ matrix.org }}
     timeout-minutes: 180
     runs-on: ubuntu-latest
@@ -27,6 +27,7 @@ jobs:
           echo "APP_ENVIRONMENT=store" >> $GITHUB_ENV
           echo "KEYSTORE_PATH=./android/app/keystore.jks" >> $GITHUB_ENV
           echo "APK_FILE_NAME=app-store.apk" >> $GITHUB_ENV
+          echo "AAB_FILE_NAME=app-store.aab" >> $GITHUB_ENV
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
           echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
       - name: Decrypt env files
@@ -67,8 +68,16 @@ jobs:
           KEYSTORE: ${{ secrets.KEYSTORE }}
       - name: Generate native assets
         run: yarn generate-native-assets
-      - name: Run fastlane build
+      - name: Run fastlane build APK
+        if: (matrix.org == 'atb') || (matrix.org == 'nfk')
         run: bundle exec fastlane android build
+        env:
+          KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
+          KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
+          KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+      - name: Run fastlane build AAB
+        if: matrix.org == 'fram'
+        run: bundle exec fastlane android build_aab
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
@@ -80,11 +89,19 @@ jobs:
           APPCENTER_API_KEY: ${{ secrets.APPCENTER_ANDROID_API_KEY }}
           RELEASE_NOTES: ${{ steps.get_release.outputs.body }}
           RELEASE_URL: ${{ steps.get_release.outputs.html_url }}
-      - name: Distrubute to Google Play Internal Testing
+      - name: Distrubute APK to Google Play Internal Testing
         if: matrix.org == 'nfk'
         run: |
           echo ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT}} | base64 --decode > google-play-service-account.json
           bundle exec fastlane android playstore_internal
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT_PATH: google-play-service-account.json
+          ANDROID_PACKAGE_NAME: ${{ env.ANDROID_APPLICATION_ID }}
+      - name: Distrubute AAB to Google Play Internal Testing
+        if: matrix.org == 'fram'
+        run: |
+          echo ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT}} | base64 --decode > google-play-service-account.json
+          bundle exec fastlane android playstore_internal_aab
         env:
           GOOGLE_PLAY_SERVICE_ACCOUNT_PATH: google-play-service-account.json
           ANDROID_PACKAGE_NAME: ${{ env.ANDROID_APPLICATION_ID }}

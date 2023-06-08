@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [atb, nfk]
+        org: [atb, nfk, fram]
     environment: ${{ matrix.org }}
     timeout-minutes: 360
     runs-on: macOS-12
