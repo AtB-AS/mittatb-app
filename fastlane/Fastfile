@@ -159,7 +159,7 @@ platform :ios do
       )
     end
 
-    return app_prov_profile_name, widget_prov_profile_name, intent_prov_profile_name
+    app_prov_profile_name, widget_prov_profile_name, intent_prov_profile_name
   end
 
   desc 'Build the iOS application.'
